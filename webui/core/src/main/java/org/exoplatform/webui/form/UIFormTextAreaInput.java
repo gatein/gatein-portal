@@ -21,7 +21,6 @@ package org.exoplatform.webui.form;
 
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.gatein.common.text.EntityEncoder;
 
 import java.io.Writer;
 
@@ -41,11 +40,6 @@ public class UIFormTextAreaInput extends UIFormInputBase<String>
     * number of columns
     */
    private int columns = 30;
-
-   /**
-    * HTML Entity Encoder
-    */
-   private EntityEncoder entityEncoder = EntityEncoder.FULL;
 
    public UIFormTextAreaInput()
    {
@@ -78,7 +72,9 @@ public class UIFormTextAreaInput extends UIFormInputBase<String>
       w.append(" cols=\"").append(String.valueOf(columns)).append("\"");
       w.write(">");
       if (value != null)
-         w.write(entityEncoder.encode(value));
+         //TODO: remove from other components and than encode here
+         //w.write(org.gatein.common.text.EntityEncoder.FULL.encode(value));
+         w.write(value);
       w.write("</textarea>");
       if (this.isMandatory())
          w.write(" *");
