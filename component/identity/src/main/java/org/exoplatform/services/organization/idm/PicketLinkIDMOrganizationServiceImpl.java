@@ -166,7 +166,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
    }
 
 
-   public void commitTransaction()
+   public void flush()
    {
       try
       {
@@ -188,15 +188,9 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
          }
          else
          {
-
             if (idmService_.getIdentitySession().getTransaction().isActive())
             {
-               idmService_.getIdentitySession().getTransaction().commit();
-            }
-
-            if (!idmService_.getIdentitySession().getTransaction().isActive())
-            {
-               idmService_.getIdentitySession().beginTransaction();
+               idmService_.getIdentitySession().save();
             }
          }
 

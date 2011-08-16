@@ -236,7 +236,7 @@ public class GroupDAOImpl implements GroupHandler
       try
       {
 
-         orgService.commitTransaction();
+         orgService.flush();
 
          jbidGroup =
             getIdentitySession().getPersistenceManager().
@@ -256,7 +256,7 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
-         orgService.commitTransaction();
+         orgService.flush();
 
          Collection<org.picketlink.idm.api.Group> oneLevelChilds =
             getIdentitySession().getRelationshipManager().findAssociatedGroups(jbidGroup, null, true, false);
@@ -313,7 +313,7 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
-         orgService.commitTransaction();
+         orgService.flush();
 
          allRoles = getIdentitySession().getRoleManager().findRoles(userName, membershipType);
       }
@@ -340,7 +340,7 @@ public class GroupDAOImpl implements GroupHandler
 
          try
          {
-            orgService.commitTransaction();
+            orgService.flush();
 
             groups = getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
          }
@@ -471,7 +471,7 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
-         orgService.commitTransaction();
+         orgService.flush();
 
          plGroups.addAll(getIdentitySession().getRelationshipManager().
                findAssociatedGroups(jbidGroup, null, true, false));
@@ -602,7 +602,7 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
-         orgService.commitTransaction();
+         orgService.flush();
 
          allGroups = getIdentitySession().getRelationshipManager().findRelatedGroups(user, null, null);
       }
@@ -652,7 +652,7 @@ public class GroupDAOImpl implements GroupHandler
       try
       {
 
-         orgService.commitTransaction();
+         orgService.flush();
 
          plGroups
             .addAll(getIdentitySession().getRelationshipManager().findAssociatedGroups(getRootGroup(), null, true, true));
@@ -762,7 +762,7 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
-         orgService.commitTransaction();
+         orgService.flush();
 
          attrs = getIdentitySession().getAttributesManager().getAttributes(jbidGroup);
       }
@@ -887,7 +887,7 @@ public class GroupDAOImpl implements GroupHandler
 
       try
       {
-         orgService.commitTransaction();
+         orgService.flush();
 
          parents = getIdentitySession().getRelationshipManager().findAssociatedGroups(jbidGroup, null, false, false);
       }

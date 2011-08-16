@@ -120,7 +120,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
-      orgService.commitTransaction();
+      orgService.flush();
 
       if (g == null)
       {
@@ -199,7 +199,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
-      orgService.commitTransaction();
+      orgService.flush();
 
       String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
 
@@ -281,7 +281,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
-      orgService.commitTransaction();
+      orgService.flush();
 
       Membership m = new MembershipImpl(id);
 
@@ -381,7 +381,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
-      orgService.commitTransaction();
+      orgService.flush();
 
       Collection<Role> roles = new HashSet();
 
@@ -478,7 +478,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
-      orgService.commitTransaction();
+      orgService.flush();
 
       String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
 
@@ -571,7 +571,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
-      orgService.commitTransaction();
+      orgService.flush();
 
       if (userName == null)
       {
@@ -675,7 +675,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
-      orgService.commitTransaction();
+      orgService.flush();
 
       Collection<Role> roles = new HashSet();
 
@@ -768,7 +768,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
-      orgService.commitTransaction();
+      orgService.flush();
 
       String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
 
@@ -868,7 +868,7 @@ public class MembershipDAOImpl implements MembershipHandler
          );
       }
 
-      orgService.commitTransaction();
+      orgService.flush();
 
       Membership m = new MembershipImpl(id);
 

@@ -84,7 +84,7 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
 
       if (fullResults == null)
       {
-         userDAO.getOrgService().commitTransaction();
+         userDAO.getOrgService().flush();
 
          userQueryBuilder.page(index, length);
          UserQuery query = userQueryBuilder.sort(SortOrder.ASCENDING).createQuery();
@@ -131,7 +131,7 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
          );
       }
 
-      userDAO.getOrgService().commitTransaction();
+      userDAO.getOrgService().flush();
 
       int result;
 
