@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/portal/public/classic/</td>
+	<td>/portal/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -73,7 +73,7 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteMap']/div[2]/div/div[4]/div[1]/a</td>
+	<td>//div[@id='UISiteMap']//a[text()='Organization']</td>
 	<td></td>
 </tr>
 <tr>
@@ -83,12 +83,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//a[@href='/portal/private/classic/organization/management']</td>
+	<td>//a[@href='/portal/groups/:organization:management:executive-board/organization/management']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@href='/portal/private/classic/organization/management']</td>
+	<td>//a[@href='/portal/groups/:organization:management:executive-board/organization/management']</td>
 	<td></td>
 </tr>
 <tr>
