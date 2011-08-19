@@ -273,28 +273,6 @@
     <url-pattern>/</url-pattern>
   </servlet-mapping>
 
-  <!-- Explicit mappings (due to portal servlet on '/') for UIHomePagePortlet, need to find out how to improve that -->
-  <servlet-mapping>
-    <servlet-name>default</servlet-name>
-    <url-pattern>*.jpg</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>default</servlet-name>
-    <url-pattern>*.png</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>default</servlet-name>
-    <url-pattern>*.gif</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>default</servlet-name>
-    <url-pattern>*.ico</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
-    <servlet-name>default</servlet-name>
-    <url-pattern>*.css</url-pattern>
-  </servlet-mapping>
-
   <servlet-mapping>
     <servlet-name>GateInServlet</servlet-name>
     <url-pattern>/gateinservlet</url-pattern>

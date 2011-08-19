@@ -109,6 +109,11 @@
       <set-method>register</set-method>
       <type>org.exoplatform.portal.application.DefaultRequestHandler</type>
    </component-plugin>    
+   <component-plugin>
+      <name>StaticResourceRequestHandler</name>
+      <set-method>register</set-method>
+      <type>org.exoplatform.portal.application.StaticResourceRequestHandler</type>
+   </component-plugin>
   </external-component-plugins>
 
 </configuration>
