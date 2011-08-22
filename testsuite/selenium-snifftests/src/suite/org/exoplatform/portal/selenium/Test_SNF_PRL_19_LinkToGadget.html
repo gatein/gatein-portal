@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/portal/classic/</td>
+	<td>/portal/public/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPortalLoginFormAction']</td>
+	<td>//a[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -58,12 +58,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//ul[@id='PortalNavigationTopContainer']/li[2]/span/a</td>
+	<td>//div[@class='UISiteBody']//a[text()='SiteMap']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//ul[@id='PortalNavigationTopContainer']/li[2]/span/a</td>
+	<td>//div[@class='UISiteBody']//a[text()='SiteMap']</td>
 	<td></td>
 </tr>
 <tr>
@@ -83,12 +83,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//a[@href='/portal/groups/:organization:management:executive-board/organization/management']</td>
+	<td>//a[@href='/portal/private/classic/organization/management']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@href='/portal/groups/:organization:management:executive-board/organization/management']</td>
+	<td>//a[@href='/portal/private/classic/organization/management']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Check position of page --</td>
 	<td></td>
 </tr>
 <tr>
