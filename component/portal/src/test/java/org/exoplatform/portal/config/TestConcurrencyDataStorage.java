@@ -23,7 +23,7 @@ import java.util.concurrent.CountDownLatch;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.config.MOPSessionManager;
 
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
@@ -35,7 +35,7 @@ public class TestConcurrencyDataStorage extends AbstractConfigTest
 
    private DataStorage storage_;
 
-   private POMSessionManager mgr;
+   private MOPSessionManager mgr;
 
    public TestConcurrencyDataStorage(String name)
    {
@@ -48,7 +48,7 @@ public class TestConcurrencyDataStorage extends AbstractConfigTest
       begin();
       PortalContainer container = PortalContainer.getInstance();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      mgr = (MOPSessionManager)container.getComponentInstanceOfType(MOPSessionManager.class);
       
    }
    
@@ -88,7 +88,7 @@ public class TestConcurrencyDataStorage extends AbstractConfigTest
    {
       private DataStorage dataStorage;
       
-      private POMSessionManager sessionManager;
+      private MOPSessionManager sessionManager;
       
       private String pageName;
       
@@ -98,7 +98,7 @@ public class TestConcurrencyDataStorage extends AbstractConfigTest
 
       private final CountDownLatch stopSignal;
       
-      public CreatePageTask(POMSessionManager _sessionManager, DataStorage _dataStorage, CountDownLatch _startSignal, CountDownLatch stopSignal, String _pageName, String _pageTitle)
+      public CreatePageTask(MOPSessionManager _sessionManager, DataStorage _dataStorage, CountDownLatch _startSignal, CountDownLatch stopSignal, String _pageName, String _pageTitle)
       {
          dataStorage = _dataStorage;
          pageName = _pageName;

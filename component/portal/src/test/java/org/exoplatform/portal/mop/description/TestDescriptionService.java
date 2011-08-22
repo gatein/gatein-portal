@@ -27,7 +27,7 @@ import org.exoplatform.portal.AbstractPortalTest;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.i18n.I18Nized;
 import org.exoplatform.portal.mop.navigation.NavigationServiceImpl;
-import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.config.MOPSessionManager;
 import org.gatein.common.util.Tools;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
@@ -51,7 +51,7 @@ public class TestDescriptionService extends AbstractPortalTest
 {
 
    /** . */
-   protected POMSessionManager mgr;
+   protected MOPSessionManager mgr;
 
    /** . */
    protected NavigationServiceImpl service;
@@ -63,7 +63,7 @@ public class TestDescriptionService extends AbstractPortalTest
 
       //
       PortalContainer container = PortalContainer.getInstance();
-      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      mgr = (MOPSessionManager)container.getComponentInstanceOfType(MOPSessionManager.class);
       service = new NavigationServiceImpl(mgr);
 //      dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
 

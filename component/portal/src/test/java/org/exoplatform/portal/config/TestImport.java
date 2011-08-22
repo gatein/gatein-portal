@@ -25,7 +25,7 @@ import org.exoplatform.component.test.KernelBootstrap;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.mop.importer.Imported;
-import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.config.MOPSessionManager;
 import org.gatein.mop.api.workspace.Workspace;
 
 /**
@@ -50,7 +50,7 @@ public class TestImport extends AbstractGateInTest
       //
       bootstrap.boot();
       PortalContainer container = bootstrap.getContainer();
-      POMSessionManager mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      MOPSessionManager mgr = (MOPSessionManager)container.getComponentInstanceOfType(MOPSessionManager.class);
 
       //
       RequestLifeCycle.begin(container);

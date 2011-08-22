@@ -66,12 +66,12 @@ public class POMDataStorage implements ModelDataStorage
 {
 
    /** . */
-   private final POMSessionManager pomMgr;
+   private final MOPSessionManager pomMgr;
 
    /** . */
    private ConfigurationManager confManager_;
 
-   public POMDataStorage(POMSessionManager pomMgr, ConfigurationManager confManager)
+   public POMDataStorage(MOPSessionManager pomMgr, ConfigurationManager confManager)
    {
       this.pomMgr = pomMgr;
       this.confManager_ = confManager;

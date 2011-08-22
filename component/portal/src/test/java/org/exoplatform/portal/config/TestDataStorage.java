@@ -43,7 +43,7 @@ import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.config.MOPSessionManager;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
@@ -87,7 +87,7 @@ public class TestDataStorage extends AbstractConfigTest
    private NavigationService navService;
 
    /** . */
-   private POMSessionManager mgr;
+   private MOPSessionManager mgr;
 
    /** . */
    private LinkedList<Event> events;
@@ -118,7 +118,7 @@ public class TestDataStorage extends AbstractConfigTest
       super.setUp();
       PortalContainer container = PortalContainer.getInstance();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      mgr = (MOPSessionManager)container.getComponentInstanceOfType(MOPSessionManager.class);
       navService = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       events = new LinkedList<Event>();
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);

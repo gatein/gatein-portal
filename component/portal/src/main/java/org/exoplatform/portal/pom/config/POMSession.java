@@ -72,7 +72,7 @@ public final class POMSession
    }
 
    /** . */
-   final POMSessionManager mgr;
+   final MOPSessionManager mgr;
 
    /** . */
    private ModelImpl model;
@@ -98,7 +98,7 @@ public final class POMSession
    /** . */
    private MOPChromatticLifeCycle configurator;
 
-   public POMSession(POMSessionManager mgr, MOPChromatticLifeCycle configurator, SessionContext context)
+   public POMSession(MOPSessionManager mgr, MOPChromatticLifeCycle configurator, SessionContext context)
    {
       // Register for cache eviction
       context.addSynchronizationListener(listener);
@@ -242,7 +242,7 @@ public final class POMSession
       return prefs;
    }
 
-   public POMSessionManager getManager()
+   public MOPSessionManager getManager()
    {
       return mgr;
    }

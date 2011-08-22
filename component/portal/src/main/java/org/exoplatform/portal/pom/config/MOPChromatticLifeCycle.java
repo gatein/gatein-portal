@@ -33,7 +33,7 @@ public class MOPChromatticLifeCycle extends ChromatticLifeCycle
 {
 
    /** . */
-   POMSessionManager manager;
+   MOPSessionManager manager;
 
    public MOPChromatticLifeCycle(InitParams params)
    {

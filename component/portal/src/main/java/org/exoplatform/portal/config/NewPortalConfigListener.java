@@ -44,7 +44,7 @@ import org.exoplatform.portal.config.model.Version;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.config.MOPSessionManager;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.workspace.Workspace;
@@ -106,7 +106,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    private Logger log = LoggerFactory.getLogger(getClass());
 
    /** . */
-   private final POMSessionManager pomMgr;
+   private final MOPSessionManager pomMgr;
 
    /** . */
    private NavigationService navigationService_;
@@ -115,7 +115,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    private DescriptionService descriptionService_;
 
    public NewPortalConfigListener(
-      POMSessionManager pomMgr,
+      MOPSessionManager pomMgr,
       DataStorage dataStorage,
       ConfigurationManager cmanager,
       InitParams params,

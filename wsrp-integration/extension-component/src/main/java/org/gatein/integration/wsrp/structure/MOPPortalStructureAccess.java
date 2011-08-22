@@ -24,7 +24,7 @@
 package org.gatein.integration.wsrp.structure;
 
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.config.MOPSessionManager;
 import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.gatein.mop.api.workspace.ObjectType;
@@ -44,9 +44,9 @@ import java.util.List;
 public class MOPPortalStructureAccess implements PortalStructureAccess
 {
    private static final String PAGES_CHILD_NAME = "pages";
-   private final POMSessionManager pomManager;
+   private final MOPSessionManager pomManager;
 
-   public MOPPortalStructureAccess(POMSessionManager pomManager)
+   public MOPPortalStructureAccess(MOPSessionManager pomManager)
    {
       this.pomManager = pomManager;
    }

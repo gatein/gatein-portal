@@ -33,7 +33,7 @@ import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationType;
-import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.config.MOPSessionManager;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.gatein.common.i18n.LocalizedString;
@@ -83,13 +83,13 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
    private final Logger log = LoggerFactory.getLogger(ApplicationRegistryServiceImpl.class);
 
    /** . */
-   final POMSessionManager mopManager;
+   final MOPSessionManager mopManager;
 
    /** Should match WSRPPortletInfo.PRODUCER_NAME_META_INFO_KEY */
    private static final String PRODUCER_NAME_META_INFO_KEY = "producer-name";
    public static final String PRODUCER_CATEGORY_NAME_SUFFIX = " Producer";
 
-   public ApplicationRegistryServiceImpl(ChromatticManager manager, POMSessionManager mopManager)
+   public ApplicationRegistryServiceImpl(ChromatticManager manager, MOPSessionManager mopManager)
    {
       ApplicationRegistryChromatticLifeCycle lifeCycle = (ApplicationRegistryChromatticLifeCycle)manager.getLifeCycle("app");
       lifeCycle.registry = this;

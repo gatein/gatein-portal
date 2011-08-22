@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import org.exoplatform.commons.cache.CacheManager;
+import org.exoplatform.commons.cache.future.FutureCacheManager;
 import org.exoplatform.commons.cache.future.FutureExoCache;
 import org.exoplatform.commons.cache.future.Loader;
 import org.exoplatform.portal.mop.SiteKey;
@@ -38,10 +40,10 @@ public class ExoDataCache extends DataCache
 {
 
    /** . */
-   protected ExoCache<Serializable, Serializable> cache;
+   protected CacheManager cacheManager;
 
    /** . */
-   protected FutureExoCache<Serializable, Serializable, POMSession> objects;
+   protected FutureCacheManager<Serializable, Serializable, POMSession> objects;
 
    /** . */
    private Loader<Serializable, Serializable, POMSession> navigationLoader = new Loader<Serializable, Serializable, POMSession>()
@@ -59,10 +61,10 @@ public class ExoDataCache extends DataCache
       }
    };
 
-   public ExoDataCache(CacheService cacheService)
+   public ExoDataCache(CacheManager cacheManager)
    {
-      this.cache = cacheService.getCacheInstance("NavigationService");
-      this.objects = new FutureExoCache<Serializable, Serializable, POMSession>(navigationLoader, cache);
+      this.cacheManager = cacheManager;
+      this.objects = new FutureCacheManager<Serializable, Serializable, POMSession>(NavigationService.class, navigationLoader, cacheManager);
    }
 
    @Override
@@ -70,7 +72,7 @@ public class ExoDataCache extends DataCache
    {
       for (String key : keys)
       {
-         cache.remove(key);
+         objects.remove(key);
       }
    }
 
@@ -83,7 +85,7 @@ public class ExoDataCache extends DataCache
    @Override
    protected void removeNavigation(SiteKey key)
    {
-      cache.remove(key);
+      objects.remove(key);
    }
 
    @Override
@@ -95,6 +97,6 @@ public class ExoDataCache extends DataCache
    @Override
    protected void clear()
    {
-      cache.clearCache();
+      objects.clear();
    }
 }

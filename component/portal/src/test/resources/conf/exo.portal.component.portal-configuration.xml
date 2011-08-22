@@ -43,6 +43,11 @@
   </component>
 
   <component>
+    <key>org.exoplatform.commons.cache.CacheManager</key>
+    <type>org.exoplatform.commons.cache.CacheManager</type>
+  </component>
+
+  <component>
      <key>org.exoplatform.services.security.Authenticator</key>
      <type>org.exoplatform.services.organization.auth.OrganizationAuthenticatorImpl</type>
   </component>
@@ -58,8 +63,8 @@
   </component>
 
   <component>
-    <key>org.exoplatform.portal.pom.config.POMSessionManager</key>
-    <type>org.exoplatform.portal.pom.config.POMSessionManager</type>
+    <key>org.exoplatform.portal.pom.config.MOPSessionManager</key>
+    <type>org.exoplatform.portal.pom.config.MOPSessionManager</type>
   </component>
 
   <component>

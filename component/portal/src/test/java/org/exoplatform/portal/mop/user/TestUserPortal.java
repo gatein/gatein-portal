@@ -33,9 +33,8 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.mop.user.UserNodeFilterConfig.Builder;
 import org.exoplatform.portal.pom.config.POMDataStorage;
-import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.config.MOPSessionManager;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
@@ -79,7 +78,7 @@ public class TestUserPortal extends AbstractPortalTest
    private DataStorage storage_;
 
    /** . */
-   private POMSessionManager mgr;
+   private MOPSessionManager mgr;
 
    /** . */
    private Authenticator authenticator;
@@ -120,7 +119,7 @@ public class TestUserPortal extends AbstractPortalTest
       userPortalConfigSer_ =
          (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       orgService_ = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
-      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      mgr = (MOPSessionManager)container.getComponentInstanceOfType(MOPSessionManager.class);
       authenticator = (Authenticator)container.getComponentInstanceOfType(Authenticator.class);
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
       events = new LinkedList<Event>();

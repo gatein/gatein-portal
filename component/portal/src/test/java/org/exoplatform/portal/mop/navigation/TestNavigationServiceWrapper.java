@@ -22,7 +22,7 @@ package org.exoplatform.portal.mop.navigation;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.config.MOPSessionManager;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
@@ -44,7 +44,7 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService
    private ListenerService listenerService;
 
    /** . */
-   private POMSessionManager mgr;
+   private MOPSessionManager mgr;
 
    @Override
    protected void setUp() throws Exception
@@ -57,7 +57,7 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService
       //
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
       navigationService = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
-      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      mgr = (MOPSessionManager)container.getComponentInstanceOfType(MOPSessionManager.class);
    }
 
    public void testNotification() throws NavigationServiceException

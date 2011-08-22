@@ -23,7 +23,7 @@ import org.chromattic.api.query.QueryResult;
 import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.config.MOPSessionManager;
 import org.exoplatform.portal.pom.config.POMTask;
 import org.exoplatform.portal.pom.data.Mapper;
 import org.exoplatform.portal.pom.data.PageData;
@@ -39,7 +39,7 @@ public abstract class MOPAccess<E, I> implements ListAccess<E>
 {
 
    /** . */
-   private final POMSessionManager mgr;
+   private final MOPSessionManager mgr;
 
    /** . */
    private final ObjectType<Site> ownerType;
@@ -53,7 +53,7 @@ public abstract class MOPAccess<E, I> implements ListAccess<E>
    /** . */
    private Integer size;
 
-   MOPAccess(POMSessionManager mgr, Query<E> query)
+   MOPAccess(MOPSessionManager mgr, Query<E> query)
    {
       String ownerType = query.getOwnerType();
       ObjectType<Site> siteType = null;
@@ -131,7 +131,7 @@ public abstract class MOPAccess<E, I> implements ListAccess<E>
    public static class PageAccess extends MOPAccess<PageData, Page>
    {
 
-      public PageAccess(POMSessionManager mgr, Query<PageData> pageDataQuery)
+      public PageAccess(MOPSessionManager mgr, Query<PageData> pageDataQuery)
       {
          super(mgr, pageDataQuery);
       }

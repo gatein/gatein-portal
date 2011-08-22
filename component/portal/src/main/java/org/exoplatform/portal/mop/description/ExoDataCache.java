@@ -19,12 +19,11 @@
 
 package org.exoplatform.portal.mop.description;
 
-import org.exoplatform.commons.cache.future.FutureExoCache;
+import org.exoplatform.commons.cache.CacheManager;
+import org.exoplatform.commons.cache.future.FutureCacheManager;
 import org.exoplatform.commons.cache.future.Loader;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.services.cache.CacheService;
-import org.exoplatform.services.cache.ExoCache;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -33,10 +32,10 @@ public class ExoDataCache extends DataCache
 {
 
    /** . */
-   protected ExoCache<CacheKey, CacheValue> cache;
+   protected CacheManager cacheManager;
 
    /** . */
-   protected FutureExoCache<CacheKey, CacheValue, POMSession> values;
+   protected FutureCacheManager<CacheKey, CacheValue, POMSession> values;
 
    /** . */
    private Loader<CacheKey, CacheValue, POMSession> valueLoader = new Loader<CacheKey, CacheValue, POMSession>()
@@ -47,25 +46,16 @@ public class ExoDataCache extends DataCache
       }
    };
 
-   public ExoDataCache(CacheService cacheService)
+   public ExoDataCache(CacheManager cacheManager)
    {
-      this.cache = cacheService.getCacheInstance("NavigationService");
-      this.values = new FutureExoCache<CacheKey, CacheValue, POMSession>(valueLoader, cache)
-      {
-         @Override
-         protected void put(CacheKey key, CacheValue entry)
-         {
-            // Do nothing on purpose
-            // as data in inserted with the putValue method
-            // during the getValue method
-         }
-      };
+      this.cacheManager = cacheManager;
+      this.values = new FutureCacheManager<CacheKey, CacheValue, POMSession>(DescriptionService.class, valueLoader, cacheManager);
    }
 
    @Override
    protected void removeState(CacheKey key)
    {
-      cache.remove(key);
+      values.remove(key);
    }
 
    @Override
@@ -78,6 +68,7 @@ public class ExoDataCache extends DataCache
    @Override
    protected void putValue(CacheKey key, CacheValue value)
    {
-      cache.put(key, value);
+      // Do nothing on purpose
+      // as data was inserted with the put(CacheKey, CacheValue) method
    }
 }
