@@ -25,6 +25,8 @@ import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
@@ -34,11 +36,13 @@ import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.MOPSessionManager;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 
 import java.util.Arrays;
 import java.util.GregorianCalendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 /**
@@ -55,7 +59,7 @@ public class TestLoadedPOM extends AbstractConfigTest
    private DataStorage storage;
 
    /** . */
-   private MOPSessionManager mgr;
+   private POMSessionManager mgr;
 
    /** . */
    private POMSession session;
@@ -75,7 +79,7 @@ public class TestLoadedPOM extends AbstractConfigTest
       PortalContainer container = getContainer();
       portalConfigService = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       storage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      mgr = (MOPSessionManager)container.getComponentInstanceOfType(MOPSessionManager.class);
+      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       navService = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       session = mgr.openSession();
    }

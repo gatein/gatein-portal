@@ -26,8 +26,8 @@
    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 				  
   <component>
-    <key>org.exoplatform.portal.pom.config.MOPSessionManager</key>
-    <type>org.exoplatform.portal.pom.config.MOPSessionManager</type>
+    <key>org.exoplatform.portal.pom.config.POMSessionManager</key>
+    <type>org.exoplatform.portal.pom.config.POMSessionManager</type>
   </component>
 
   <component>
@@ -330,7 +330,7 @@
           <description>The JBoss Cache configuration for the MOP session Manager</description>
           <object type="org.exoplatform.services.cache.ExoCacheConfig">
             <field name="name">
-              <string>MOPSessionManager.repository</string>
+              <string>MOPSessionManager</string>
             </field>
             <field name="maxSize">
               <int>5000</int>
@@ -353,7 +353,7 @@
           <description>The JBoss Cache configuration for the MOP session Manager</description>
           <object type="org.exoplatform.services.cache.impl.jboss.ea.EAExoCacheConfig">
             <field name="name">
-              <string>MOPSessionManager.repository</string>
+              <string>MOPSessionManager</string>
             </field>
             <field name="expirationTimeout">
               <long>600</long>
@@ -378,7 +378,7 @@
           <description>The JBoss Cache configuration for the navigation service</description>
           <object type="org.exoplatform.services.cache.ExoCacheConfig">
             <field name="name">
-              <string>NavigationService.repository</string>
+              <string>NavigationService</string>
             </field>
             <field name="maxSize">
               <int>5000</int>
@@ -401,7 +401,7 @@
           <description>The JBoss Cache configuration for the navigation service</description>
           <object type="org.exoplatform.services.cache.impl.jboss.ea.EAExoCacheConfig">
             <field name="name">
-              <string>NavigationService.repository</string>
+              <string>NavigationService</string>
             </field>
             <field name="expirationTimeout">
               <long>600000</long>
@@ -429,7 +429,7 @@
           <description>The JBoss Cache configuration for the dezcription service</description>
           <object type="org.exoplatform.services.cache.ExoCacheConfig">
             <field name="name">
-              <string>DescriptionService.repository</string>
+              <string>DescriptionService</string>
             </field>
             <field name="maxSize">
               <int>5000</int>
@@ -452,7 +452,7 @@
           <description>The JBoss Cache configuration for the description service</description>
           <object type="org.exoplatform.services.cache.impl.jboss.ea.EAExoCacheConfig">
             <field name="name">
-              <string>DescriptionService.repository</string>
+              <string>DescriptionService</string>
             </field>
             <field name="expirationTimeout">
               <long>600000</long>

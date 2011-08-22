@@ -29,13 +29,16 @@ import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
+import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.MOPSessionManager;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.config.cache.DataCache;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
@@ -51,6 +54,7 @@ import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationState;
 import org.gatein.common.util.Tools;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -76,7 +80,7 @@ public class TestUserPortalConfigService extends AbstractConfigTest
    private DataStorage storage_;
 
    /** . */
-   private MOPSessionManager mgr;
+   private POMSessionManager mgr;
 
    /** . */
    private Authenticator authenticator;
@@ -117,7 +121,7 @@ public class TestUserPortalConfigService extends AbstractConfigTest
       userPortalConfigSer_ =
          (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       orgService_ = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
-      mgr = (MOPSessionManager)container.getComponentInstanceOfType(MOPSessionManager.class);
+      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       authenticator = (Authenticator)container.getComponentInstanceOfType(Authenticator.class);
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
       events = new LinkedList<Event>();
@@ -324,7 +328,7 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             }
             catch (Exception ex)
             {
-               fail("Exception while querying pages with new portal", ex);
+               assertTrue("Exception while querying pages with new portal", false);
             }
          }
 

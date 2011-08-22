@@ -29,7 +29,7 @@ import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.pc.ExoKernelIntegration;
-import org.exoplatform.portal.pom.config.MOPSessionManager;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
@@ -306,7 +306,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          consumerRegistry.setSessionEventBroadcaster(sessionEventBroadcaster);
 
          // create ConsumerStructureProvider and register it to listen to page events
-         MOPSessionManager sessionManager = (MOPSessionManager)container.getComponentInstanceOfType(MOPSessionManager.class);
+         POMSessionManager sessionManager = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
          PortalStructureAccess structureAccess = new MOPPortalStructureAccess(sessionManager);
          MOPConsumerStructureProvider structureprovider = new MOPConsumerStructureProvider(structureAccess);
          listenerService.addListener(DataStorage.PAGE_CREATED, structureprovider);

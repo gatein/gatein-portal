@@ -23,7 +23,7 @@ import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visible;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.MOPSessionManager;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import static org.exoplatform.portal.mop.navigation.Utils.*;
 import static org.exoplatform.portal.pom.config.Utils.split;
@@ -53,7 +53,7 @@ public class NavigationServiceImpl implements NavigationService
 {
 
    /** . */
-   final MOPSessionManager manager;
+   final POMSessionManager manager;
 
    /** . */
    private final DataCache dataCache;
@@ -61,12 +61,12 @@ public class NavigationServiceImpl implements NavigationService
    /** . */
    final Logger log = LoggerFactory.getLogger(NavigationServiceImpl.class);
 
-   public NavigationServiceImpl(MOPSessionManager manager) throws NullPointerException
+   public NavigationServiceImpl(POMSessionManager manager) throws NullPointerException
    {
       this(manager, new SimpleDataCache());
    }
 
-   public NavigationServiceImpl(MOPSessionManager manager, DataCache dataCache) throws NullPointerException
+   public NavigationServiceImpl(POMSessionManager manager, DataCache dataCache) throws NullPointerException
    {
       if (manager == null)
       {

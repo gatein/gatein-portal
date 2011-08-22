@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.pom.config;
 
-import org.exoplatform.commons.cache.CacheManager;
-import org.exoplatform.commons.cache.CacheProvider;
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.chromattic.SessionContext;
@@ -28,6 +26,7 @@ import org.exoplatform.portal.pom.config.cache.DataCache;
 import org.exoplatform.portal.pom.config.cache.PortalNamesCache;
 import org.exoplatform.portal.pom.data.OwnerKey;
 import org.exoplatform.portal.pom.data.PortalKey;
+import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.CachedObjectSelector;
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.cache.ObjectCacheInfo;
@@ -44,17 +43,17 @@ import java.lang.reflect.UndeclaredThrowableException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class MOPSessionManager implements Startable
+public class POMSessionManager implements Startable
 {
 
    /** . */
-   private final Logger log = LoggerFactory.getLogger(MOPSessionManager.class);
+   private final Logger log = LoggerFactory.getLogger(POMSessionManager.class);
 
    /** . */
    private MOPService pomService;
 
    /** . */
-   private final CacheManager cacheManager;
+   private final ExoCache<GlobalKey, Object> cache;
 
    /** . */
    final ChromatticManager manager;
@@ -68,12 +67,12 @@ public class MOPSessionManager implements Startable
    /** . */
    private final RepositoryService repositoryService;
 
-   public MOPSessionManager(RepositoryService repositoryService, ChromatticManager manager, CacheManager cacheManager)
+   public POMSessionManager(RepositoryService repositoryService, ChromatticManager manager, CacheService cacheService)
    {
       //
       this.repositoryService = repositoryService;
       this.manager = manager;
-      this.cacheManager = cacheManager;
+      this.cache = cacheService.getCacheInstance("MOPSessionManager");
       this.pomService = null;
       this.executor = new PortalNamesCache(new DataCache(new ExecutorDispatcher()));
    }
@@ -85,29 +84,29 @@ public class MOPSessionManager implements Startable
 
    public void cachePut(Serializable key, Object value)
    {
-      CacheProvider provider = cacheManager.getCurrentProvider();
+      GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
 
       //
       if (log.isTraceEnabled())
       {
-         log.trace("Updating cache key=" + key + " with value=" + value);
+         log.trace("Updating cache key=" + globalKey + " with value=" + value);
       }
 
       //
-      provider.put(MOPSessionManager.class, key, value);
+      cache.put(globalKey, value);
    }
 
    public Object cacheGet(Serializable key)
    {
-      CacheProvider provider = cacheManager.getCurrentProvider();
+      GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
 
       //
-      Object value = provider.get(MOPSessionManager.class, key);
+      Object value = cache.get(globalKey);
 
       //
       if (log.isTraceEnabled())
       {
-         log.trace("Obtained for cache key=" + key + " value=" + value);
+         log.trace("Obtained for cache key=" + globalKey + " value=" + value);
       }
 
       //
@@ -116,40 +115,42 @@ public class MOPSessionManager implements Startable
 
    public void cacheRemove(Serializable key)
    {
+      final GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
+
+      //
       if (log.isTraceEnabled())
       {
-         log.trace("Removing cache key=" + key);
+         log.trace("Removing cache key=" + globalKey);
       }
 
       //
       if (key instanceof PortalKey)
       {
-         final ExoCache cache = cacheManager.getCurrentProvider().getCache(MOPSessionManager.class);
-
-         //
-         if (cache != null)
-         {
          // This code seems complex but actually it tries to find all objects in cache that have the same
          // owner key than the portal key, for instance if we remove (portal,classic) then all pages
          // related to (portal,classic) are also evicted
          final PortalKey portalKey = (PortalKey)key;
          try
          {
-            cache.select(new CachedObjectSelector<Serializable, Object>()
+            cache.select(new CachedObjectSelector<GlobalKey, Object>()
             {
-               public boolean select(Serializable key, ObjectCacheInfo<?> ocinfo)
+               public boolean select(GlobalKey selectedGlobalKey, ObjectCacheInfo<?> ocinfo)
                {
-                  if (key instanceof OwnerKey)
+                  if (globalKey.getRepositoryId().equals(selectedGlobalKey.getRepositoryId()))
                   {
-                     OwnerKey selectedOwnerKey = (OwnerKey)key;
-                     if (selectedOwnerKey.getType().equals(portalKey.getType()) && selectedOwnerKey.getId().equals(portalKey.getId()))
+                     Serializable selectedLocalKey = selectedGlobalKey.getLocalKey();
+                     if (selectedLocalKey instanceof OwnerKey)
                      {
-                        return true;
+                        OwnerKey selectedOwnerKey = (OwnerKey)selectedLocalKey;
+                        if (selectedOwnerKey.getType().equals(portalKey.getType()) && selectedOwnerKey.getId().equals(portalKey.getId()))
+                        {
+                           return true;
+                        }
                      }
                   }
                   return false;
                }
-               public void onSelect(ExoCache<? extends Serializable, ?> exoCache, Serializable key, ObjectCacheInfo<?> ocinfo) throws Exception
+               public void onSelect(ExoCache<? extends GlobalKey, ?> exoCache, GlobalKey key, ObjectCacheInfo<?> ocinfo) throws Exception
                {
                   cache.remove(key);
                }
@@ -159,11 +160,10 @@ public class MOPSessionManager implements Startable
          {
             log.error("Unexpected error when clearing pom cache", e);
          }
-         }
       }
       else
       {
-         cacheManager.getCurrentProvider().put(MOPSessionManager.class, key, null);
+         cache.remove(globalKey);
       }
    }
 
@@ -200,7 +200,7 @@ public class MOPSessionManager implements Startable
       }
 
       //
-      cacheManager.getCurrentProvider().clear(MOPSessionManager.class);
+      cache.clearCache();
    }
 
    public MOPService getPOMService()

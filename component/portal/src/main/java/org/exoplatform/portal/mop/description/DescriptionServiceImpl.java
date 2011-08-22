@@ -19,11 +19,10 @@
 
 package org.exoplatform.portal.mop.description;
 
-import org.exoplatform.commons.cache.CacheManager;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.i18n.I18NAdapter;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.MOPSessionManager;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.mop.api.workspace.WorkspaceObject;
 
 import java.util.Collection;
@@ -38,22 +37,17 @@ public class DescriptionServiceImpl implements DescriptionService
 {
 
    /** . */
-   private final MOPSessionManager manager;
+   private final POMSessionManager manager;
 
    /** . */
    private DataCache cache;
 
-   public DescriptionServiceImpl(MOPSessionManager manager)
+   public DescriptionServiceImpl(POMSessionManager manager)
    {
       this(manager, new SimpleDataCache());
    }
 
-   public DescriptionServiceImpl(MOPSessionManager manager, CacheManager cacheManager)
-   {
-      this(manager, new ExoDataCache(cacheManager));
-   }
-
-   public DescriptionServiceImpl(MOPSessionManager manager, DataCache cache)
+   public DescriptionServiceImpl(POMSessionManager manager, DataCache cache)
    {
       this.manager = manager;
       this.cache = cache;

@@ -33,7 +33,7 @@ import org.exoplatform.portal.mop.navigation.Node;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.pom.config.MOPSessionManager;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.mop.api.workspace.Workspace;
 
 /**
@@ -153,7 +153,7 @@ public abstract class AbstractImportTest extends AbstractGateInTest
       bootstrap.boot();
       container = bootstrap.getContainer();
       service = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
-      MOPSessionManager mgr = (MOPSessionManager)container.getComponentInstanceOfType(MOPSessionManager.class);
+      POMSessionManager mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       RequestLifeCycle.begin(container);
       nav = service.loadNavigation(SiteKey.portal("classic"));
       root = service.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);

@@ -37,7 +37,7 @@ import org.exoplatform.portal.mop.management.exportimport.SiteLayoutExportTask;
 import org.exoplatform.portal.mop.management.exportimport.SiteLayoutImportTask;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.MOPSessionManager;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.management.api.ContentType;
@@ -80,7 +80,7 @@ public class MopImportResource implements OperationHandler
       InputStream inputStream = attachment.getStream();
       if (inputStream == null) throw new OperationException(operationContext.getOperationName(), "No data stream available for import.");
 
-      MOPSessionManager mgr = operationContext.getRuntimeContext().getRuntimeComponent(MOPSessionManager.class);
+      POMSessionManager mgr = operationContext.getRuntimeContext().getRuntimeComponent(POMSessionManager.class);
       POMSession session = mgr.getSession();
       if (session == null) throw new OperationException(operationName, "MOP session was null");
 

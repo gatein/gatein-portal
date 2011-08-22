@@ -22,7 +22,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.MOPSessionManager;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
@@ -36,7 +36,7 @@ public class TestCache extends AbstractConfigTest
    DataStorage storage_;
 
    /** . */
-   private MOPSessionManager mgr;
+   private POMSessionManager mgr;
 
    /** . */
    private POMSession session;
@@ -46,7 +46,7 @@ public class TestCache extends AbstractConfigTest
       super.setUp();
       PortalContainer container = getContainer();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      mgr = (MOPSessionManager)container.getComponentInstanceOfType(MOPSessionManager.class);
+      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
    }
 
    public void testGetNullInvalidation() throws Exception
@@ -144,9 +144,7 @@ public class TestCache extends AbstractConfigTest
       end(true);
 
       // Clear cache
-      begin();
       mgr.clearCache();
-      end();
 
       // The first transaction
       begin();

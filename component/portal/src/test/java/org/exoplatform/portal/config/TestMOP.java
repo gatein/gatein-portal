@@ -37,7 +37,7 @@ import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.MOPSessionManager;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.Navigation;
@@ -70,7 +70,7 @@ public class TestMOP extends AbstractConfigTest
    private DataStorage storage;
 
    /** . */
-   private MOPSessionManager mgr;
+   private POMSessionManager mgr;
 
    /** . */
    private POMSession session;
@@ -90,7 +90,7 @@ public class TestMOP extends AbstractConfigTest
       PortalContainer container = getContainer();
       portalConfigService = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       storage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      mgr = (MOPSessionManager)container.getComponentInstanceOfType(MOPSessionManager.class);
+      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       navService = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       session = mgr.openSession();
    }

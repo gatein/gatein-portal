@@ -25,7 +25,7 @@ package org.exoplatform.portal.mop.management.operations;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.MOPSessionManager;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.management.api.PathAddress;
 import org.gatein.management.api.exceptions.OperationException;
 import org.gatein.management.api.exceptions.ResourceNotFoundException;
@@ -57,7 +57,7 @@ public abstract class AbstractMopOperationHandler implements OperationHandler
          throw new ResourceNotFoundException("No site type found for " + siteType);
       }
 
-      MOPSessionManager mgr = operationContext.getRuntimeContext().getRuntimeComponent(MOPSessionManager.class);
+      POMSessionManager mgr = operationContext.getRuntimeContext().getRuntimeComponent(POMSessionManager.class);
       POMSession session = mgr.getSession();
       if (session == null) throw new OperationException(operationName, "MOP session was null");
 

@@ -20,7 +20,7 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.MOPSessionManager;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -33,7 +33,7 @@ public class TestContentRegistry extends AbstractConfigTest
    private DataStorage storage;
 
    /** . */
-   private MOPSessionManager mgr;
+   private POMSessionManager mgr;
 
    /** . */
    private POMSession session;
@@ -44,7 +44,7 @@ public class TestContentRegistry extends AbstractConfigTest
       begin();
       PortalContainer container = PortalContainer.getInstance();
       storage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      mgr = (MOPSessionManager)container.getComponentInstanceOfType(MOPSessionManager.class);
+      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       session = mgr.openSession();
    }
 
