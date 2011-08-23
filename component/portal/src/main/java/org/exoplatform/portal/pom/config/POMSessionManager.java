@@ -22,6 +22,7 @@ package org.exoplatform.portal.pom.config;
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.chromattic.SessionContext;
+import org.exoplatform.commons.scope.ScopedKey;
 import org.exoplatform.portal.pom.config.cache.DataCache;
 import org.exoplatform.portal.pom.config.cache.PortalNamesCache;
 import org.exoplatform.portal.pom.data.OwnerKey;
@@ -53,7 +54,7 @@ public class POMSessionManager implements Startable
    private MOPService pomService;
 
    /** . */
-   private final ExoCache<GlobalKey, Object> cache;
+   private final ExoCache<ScopedKey<?>, Object> cache;
 
    /** . */
    final ChromatticManager manager;
@@ -84,7 +85,7 @@ public class POMSessionManager implements Startable
 
    public void cachePut(Serializable key, Object value)
    {
-      GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
+      ScopedKey<?> globalKey = ScopedKey.create(key);
 
       //
       if (log.isTraceEnabled())
@@ -98,7 +99,7 @@ public class POMSessionManager implements Startable
 
    public Object cacheGet(Serializable key)
    {
-      GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
+      ScopedKey globalKey = ScopedKey.create(key);
 
       //
       Object value = cache.get(globalKey);
@@ -115,7 +116,7 @@ public class POMSessionManager implements Startable
 
    public void cacheRemove(Serializable key)
    {
-      final GlobalKey globalKey = GlobalKey.wrap(configurator.getRepositoryName(), key);
+      final ScopedKey<?> globalKey = ScopedKey.create(key);
 
       //
       if (log.isTraceEnabled())
@@ -132,13 +133,13 @@ public class POMSessionManager implements Startable
          final PortalKey portalKey = (PortalKey)key;
          try
          {
-            cache.select(new CachedObjectSelector<GlobalKey, Object>()
+            cache.select(new CachedObjectSelector<ScopedKey<?>, Object>()
             {
-               public boolean select(GlobalKey selectedGlobalKey, ObjectCacheInfo<?> ocinfo)
+               public boolean select(ScopedKey<?> selectedGlobalKey, ObjectCacheInfo<?> ocinfo)
                {
-                  if (globalKey.getRepositoryId().equals(selectedGlobalKey.getRepositoryId()))
+                  if (globalKey.getScope().equals(selectedGlobalKey.getScope()))
                   {
-                     Serializable selectedLocalKey = selectedGlobalKey.getLocalKey();
+                     Serializable selectedLocalKey = selectedGlobalKey.getKey();
                      if (selectedLocalKey instanceof OwnerKey)
                      {
                         OwnerKey selectedOwnerKey = (OwnerKey)selectedLocalKey;
@@ -150,7 +151,8 @@ public class POMSessionManager implements Startable
                   }
                   return false;
                }
-               public void onSelect(ExoCache<? extends GlobalKey, ?> exoCache, GlobalKey key, ObjectCacheInfo<?> ocinfo) throws Exception
+
+               public void onSelect(ExoCache<? extends ScopedKey<?>, ?> exoCache, ScopedKey<?> key, ObjectCacheInfo<?> ocinfo) throws Exception
                {
                   cache.remove(key);
                }

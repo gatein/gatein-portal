@@ -49,7 +49,7 @@ public class ExoDataCache extends DataCache
 
    public ExoDataCache(CacheService cacheService)
    {
-      this.cache = cacheService.getCacheInstance("NavigationService");
+      this.cache = cacheService.getCacheInstance(DescriptionService.class.getSimpleName());
       this.values = new FutureExoCache<CacheKey, CacheValue, POMSession>(valueLoader, cache)
       {
          @Override

@@ -19,13 +19,15 @@
 
 package org.exoplatform.portal.mop.description;
 
+import org.exoplatform.commons.scope.AbstractScopedKey;
+
 import java.io.Serializable;
 import java.util.Locale;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public final class CacheKey implements Serializable
+public final class CacheKey extends AbstractScopedKey implements Serializable
 {
 
    /** . */
@@ -53,11 +55,7 @@ public final class CacheKey implements Serializable
    @Override
    public boolean equals(Object obj)
    {
-      if (obj == this)
-      {
-         return true;
-      }
-      if (obj instanceof CacheKey)
+      if (super.equals(obj))
       {
          CacheKey that = (CacheKey)obj;
          return locale.equals(that.locale) && id.equals(that.id);
@@ -68,6 +66,6 @@ public final class CacheKey implements Serializable
    @Override
    public int hashCode()
    {
-      return locale.hashCode() ^ id.hashCode();
+      return super.hashCode() ^ locale.hashCode() ^ id.hashCode();
    }
 }

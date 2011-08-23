@@ -21,6 +21,7 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.commons.cache.future.FutureExoCache;
 import org.exoplatform.commons.cache.future.Loader;
+import org.exoplatform.commons.scope.ScopedKey;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.services.cache.CacheService;
@@ -38,16 +39,17 @@ public class ExoDataCache extends DataCache
 {
 
    /** . */
-   protected ExoCache<Serializable, Serializable> cache;
+   protected ExoCache<ScopedKey<?>, Serializable> cache;
 
    /** . */
-   protected FutureExoCache<Serializable, Serializable, POMSession> objects;
+   protected FutureExoCache<ScopedKey<?>, Serializable, POMSession> objects;
 
    /** . */
-   private Loader<Serializable, Serializable, POMSession> navigationLoader = new Loader<Serializable, Serializable, POMSession>()
+   private Loader<ScopedKey<?>, Serializable, POMSession> navigationLoader = new Loader<ScopedKey<?>, Serializable, POMSession>()
    {
-      public Serializable retrieve(POMSession session, Serializable key) throws Exception
+      public Serializable retrieve(POMSession session, ScopedKey<?> scopedKey) throws Exception
       {
+         Object key = scopedKey.getKey();
          if (key instanceof SiteKey)
          {
             return loadNavigation(session, (SiteKey)key);
@@ -61,8 +63,8 @@ public class ExoDataCache extends DataCache
 
    public ExoDataCache(CacheService cacheService)
    {
-      this.cache = cacheService.getCacheInstance("NavigationService");
-      this.objects = new FutureExoCache<Serializable, Serializable, POMSession>(navigationLoader, cache);
+      this.cache = cacheService.getCacheInstance(NavigationService.class.getSimpleName());
+      this.objects = new FutureExoCache<ScopedKey<?>, Serializable, POMSession>(navigationLoader, cache);
    }
 
    @Override
@@ -70,26 +72,26 @@ public class ExoDataCache extends DataCache
    {
       for (String key : keys)
       {
-         cache.remove(key);
+         cache.remove(ScopedKey.create(key));
       }
    }
 
    @Override
    protected NodeData getNode(POMSession session, String key)
    {
-      return (NodeData)objects.get(session, key);
+      return (NodeData)objects.get(session, ScopedKey.create(key));
    }
 
    @Override
    protected void removeNavigation(SiteKey key)
    {
-      cache.remove(key);
+      cache.remove(ScopedKey.create(key));
    }
 
    @Override
    protected NavigationData getNavigation(POMSession session, SiteKey key)
    {
-      return (NavigationData)objects.get(session, key);
+      return (NavigationData)objects.get(session, ScopedKey.create(key));
    }
 
    @Override

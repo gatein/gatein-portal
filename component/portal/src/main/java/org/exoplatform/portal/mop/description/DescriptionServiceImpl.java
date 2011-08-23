@@ -23,6 +23,7 @@ import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.i18n.I18NAdapter;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.services.cache.CacheService;
 import org.gatein.mop.api.workspace.WorkspaceObject;
 
 import java.util.Collection;
@@ -51,6 +52,11 @@ public class DescriptionServiceImpl implements DescriptionService
    {
       this.manager = manager;
       this.cache = cache;
+   }
+
+   public DescriptionServiceImpl(POMSessionManager manager, CacheService cacheService)
+   {
+      this(manager, new ExoDataCache(cacheService));
    }
 
    public Described.State resolveDescription(String id, Locale locale) throws NullPointerException

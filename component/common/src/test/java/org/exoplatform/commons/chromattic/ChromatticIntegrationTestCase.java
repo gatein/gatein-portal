@@ -32,7 +32,7 @@ import javax.jcr.Workspace;
  */
 @ConfiguredBy({
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.common-configuration.xml")
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/commons/chromattic/configuration.xml")
 })
 public class ChromatticIntegrationTestCase extends AbstractKernelTest
 {
