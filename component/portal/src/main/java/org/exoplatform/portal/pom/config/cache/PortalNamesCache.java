@@ -52,12 +52,13 @@ public class PortalNamesCache extends TaskExecutionDecorator
       {
          if (task instanceof SearchTask.FindSiteKey)
          {
-            List<PortalKey> data = (List<PortalKey>)session.getFromCache(SearchTask.FindSiteKey.class);
+            SearchTask.FindSiteKey find = (SearchTask.FindSiteKey)task;
+            List<PortalKey> data = (List<PortalKey>)session.getFromCache(find.getKey());
             if (data == null)
             {
                V result = super.execute(session, task);
                LazyPageList<PortalKey> list = (LazyPageList<PortalKey>)result;
-               session.putInCache(SearchTask.FindSiteKey.class, Collections.unmodifiableList(new ArrayList<PortalKey>(list.getAll())));
+               session.putInCache(find.getKey(), Collections.unmodifiableList(new ArrayList<PortalKey>(list.getAll())));
                return result;
             }
             else
@@ -68,7 +69,8 @@ public class PortalNamesCache extends TaskExecutionDecorator
          else if (task instanceof PortalConfigTask.Save || task instanceof PortalConfigTask.Remove)
          {
             V result = super.execute(session, task);
-            session.scheduleForEviction(SearchTask.FindSiteKey.class);
+            session.scheduleForEviction(SearchTask.FindSiteKey.PORTAL_KEY);
+            session.scheduleForEviction(SearchTask.FindSiteKey.GROUP_KEY);
             return result;
          }
       }

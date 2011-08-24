@@ -32,6 +32,7 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -119,19 +120,63 @@ public abstract class SearchTask<T> implements POMTask<LazyPageList<T>>
    public static class FindSiteKey extends SearchTask<PortalKey>
    {
 
+      /** . */
+      public static Serializable PORTAL_KEY = "FindPortalSiteKey";
+
+      /** . */
+      public static Serializable GROUP_KEY = "FindGroupSiteKey";
+
+      /** . */
+      private final ObjectType<Site> type;
+
+      /** . */
+      private final Serializable key;
+
       public FindSiteKey(Query<PortalKey> siteQuery)
       {
          super(siteQuery);
+
+         //
+         ObjectType<Site> type;
+         Serializable key;
+         if ("portal".equals(siteQuery.getOwnerType()))
+         {
+            type = ObjectType.PORTAL_SITE;
+            key = PORTAL_KEY;
+         }
+         else if ("group".equals(siteQuery.getOwnerType()))
+         {
+            type = ObjectType.GROUP_SITE;
+            key = GROUP_KEY;
+         }
+         else
+         {
+            throw new IllegalArgumentException("Invalid site type " + siteQuery.getOwnerType());
+         }
+
+         //
+         this.type = type;
+         this.key = key;
+      }
+
+      public ObjectType<Site> getType()
+      {
+         return type;
+      }
+
+      public Serializable getKey()
+      {
+         return key;
       }
 
       public LazyPageList<PortalKey> run(final POMSession session) throws Exception
       {
          Workspace workspace = session.getWorkspace();
-         Collection<Site> sites = workspace.getSites(ObjectType.PORTAL_SITE);
+         Collection<Site> sites = workspace.getSites(type);
          final ArrayList<PortalKey> keys = new ArrayList<PortalKey>(sites.size());
          for (Site site : sites)
          {
-            keys.add(new PortalKey("portal", site.getName()));
+            keys.add(new PortalKey(q.getOwnerType(), site.getName()));
          }
          ListAccess<PortalKey> la = new ListAccess<PortalKey>()
          {

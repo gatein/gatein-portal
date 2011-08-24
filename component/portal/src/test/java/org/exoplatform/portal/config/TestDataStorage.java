@@ -785,16 +785,26 @@ public class TestDataStorage extends AbstractConfigTest
 
    public void testGetAllPortalNames() throws Exception
    {
-      final List<String> names = storage_.getAllPortalNames();
+      testGetAllSiteNames("portal", "getAllPortalNames");
+   }
+
+   public void testGetAllGroupNames() throws Exception
+   {
+      testGetAllSiteNames("group", "getAllGroupNames");
+   }
+
+   private void testGetAllSiteNames(String siteType, final String methodName) throws Exception
+   {
+      final List<String> names = (List<String>)storage_.getClass().getMethod(methodName).invoke(storage_);
 
       // Create new portal
-      storage_.create(new PortalConfig("portal", "testGetAllPortalNames"));
+      storage_.create(new PortalConfig(siteType, "testGetAllSiteNames"));
 
       // Test during tx we see the good names
-      List<String> transientNames = storage_.getAllPortalNames();
-      assertTrue(transientNames.containsAll(names));
+      List<String> transientNames = (List<String>)storage_.getClass().getMethod(methodName).invoke(storage_);
+      assertTrue("Was expecting " + transientNames + " to contain " + names, transientNames.containsAll(names));
       transientNames.removeAll(names);
-      assertEquals(Collections.singletonList("testGetAllPortalNames"), transientNames);
+      assertEquals(Collections.singletonList("testGetAllSiteNames"), transientNames);
 
       // Test we have not seen anything yet outside of tx
       final CountDownLatch addSync = new CountDownLatch(1);
@@ -807,7 +817,7 @@ public class TestDataStorage extends AbstractConfigTest
             begin();
             try
             {
-               List<String> isolatedNames = storage_.getAllPortalNames();
+               List<String> isolatedNames = (List<String>)storage_.getClass().getMethod(methodName).invoke(storage_);
                assertEquals(new HashSet<String>(names), new HashSet<String>(isolatedNames));
             }
             catch (Throwable t)
@@ -836,17 +846,17 @@ public class TestDataStorage extends AbstractConfigTest
 
       // We test we observe the change
       begin();
-      List<String> afterNames = storage_.getAllPortalNames();
+      List<String> afterNames = (List<String>)storage_.getClass().getMethod(methodName).invoke(storage_);
       assertTrue(afterNames.containsAll(names));
       afterNames.removeAll(names);
-      assertEquals(Collections.singletonList("testGetAllPortalNames"), afterNames);
+      assertEquals(Collections.singletonList("testGetAllSiteNames"), afterNames);
 
       // Then we remove the newly created portal
-      storage_.remove(new PortalConfig("portal", "testGetAllPortalNames"));
+      storage_.remove(new PortalConfig(siteType, "testGetAllSiteNames"));
 
       // Test we are syeing the transient change
       transientNames.clear();
-      transientNames = storage_.getAllPortalNames();
+      transientNames = (List<String>)storage_.getClass().getMethod(methodName).invoke(storage_);
       assertEquals(names, transientNames);
 
       // Test we have not seen anything yet outside of tx
@@ -859,10 +869,10 @@ public class TestDataStorage extends AbstractConfigTest
             begin();
             try
             {
-               List<String> isolatedNames = storage_.getAllPortalNames();
-               assertTrue(isolatedNames.containsAll(names));
+               List<String> isolatedNames = (List<String>)storage_.getClass().getMethod(methodName).invoke(storage_);
+               assertTrue("Was expecting " + isolatedNames + " to contain " + names, isolatedNames.containsAll(names));
                isolatedNames.removeAll(names);
-               assertEquals(Collections.singletonList("testGetAllPortalNames"), isolatedNames);
+               assertEquals(Collections.singletonList("testGetAllSiteNames"), isolatedNames);
             }
             catch (Throwable t)
             {
@@ -890,7 +900,7 @@ public class TestDataStorage extends AbstractConfigTest
 
       // Now test it is still removed
       begin();
-      afterNames = storage_.getAllPortalNames();
+      afterNames = (List<String>)storage_.getClass().getMethod(methodName).invoke(storage_);
       assertEquals(new HashSet<String>(names), new HashSet<String>(afterNames));
    }
 

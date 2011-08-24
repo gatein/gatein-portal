@@ -30,6 +30,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
@@ -510,18 +511,45 @@ public class UserPortalConfigService implements Startable
    }
 
    /**
-    * Returns the list of all portal names.
+    * Returns the list of all portal site names.
     *
-    * @return the list of all portal names
+    * @return the list of all portal site names
     * @throws Exception any exception
     */
    public List<String> getAllPortalNames() throws Exception
    {
-      List<String> list = storage_.getAllPortalNames();
+      return getAllSiteNames(SiteType.PORTAL);
+   }
+
+   /**
+    * Returns the list of all group site names.
+    *
+    * @return the list of all group site names
+    * @throws Exception any exception
+    */
+   public List<String> getAllGroupNames() throws Exception
+   {
+      return getAllSiteNames(SiteType.GROUP);
+   }
+
+   private List<String> getAllSiteNames(SiteType siteType) throws Exception
+   {
+      List<String> list;
+      switch (siteType)
+      {
+         case PORTAL:
+            list = storage_.getAllPortalNames();
+            break;
+         case GROUP:
+            list = storage_.getAllGroupNames();
+            break;
+         default:
+            throw new AssertionError();
+      }
       for (Iterator<String> i = list.iterator();i.hasNext();)
       {
          String name = i.next();
-         PortalConfig config = storage_.getPortalConfig(name);
+         PortalConfig config = storage_.getPortalConfig(siteType.getName(), name);
          if (config == null || !userACL_.hasPermission(config))
          {
             i.remove();

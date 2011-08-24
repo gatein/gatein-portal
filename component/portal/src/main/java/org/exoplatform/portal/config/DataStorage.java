@@ -227,6 +227,8 @@ public interface DataStorage
     */
    public List<String> getAllPortalNames() throws Exception;
    
+   public List<String> getAllGroupNames() throws Exception;
+
    /*************************************************************
      Public API to access/modify MOP mixin, temporarily put here
    **************************************************************/

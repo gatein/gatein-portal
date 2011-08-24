@@ -227,6 +227,18 @@ public class DataStorageImpl implements DataStorage
       return list;
    }
 
+   public List<String> getAllGroupNames() throws Exception {
+
+      Query<PortalKey> q = new Query<PortalKey>("group", null,PortalKey.class);
+      List<PortalKey> keys = delegate.find(q).getAll();
+      LinkedList<String> list = new LinkedList<String>();
+      for (PortalKey key : keys)
+      {
+         list.add(key.getId());
+      }
+      return list;
+   }
+
    public <T> ListAccess<T> find2(Query<T> q) throws Exception
    {
       return find2(q, null);

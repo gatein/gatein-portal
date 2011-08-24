@@ -253,6 +253,10 @@ public class POMDataStorage implements ModelDataStorage
       {
          return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindSiteKey((Query<PortalKey>)q));
       }
+      else if (PortalKey.class.equals(type) && "group".equals(q.getOwnerType()))
+      {
+         return (LazyPageList<T>)pomMgr.execute(new SearchTask.FindSiteKey((Query<PortalKey>)q));
+      }
       else
       {
          throw new UnsupportedOperationException("Could not perform search on query " + q);
