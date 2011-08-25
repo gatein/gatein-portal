@@ -89,11 +89,13 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
    private static final String PRODUCER_CONFIG_LOCATION = "producerConfigLocation";
    private static final String CONSUMERS_CONFIG_LOCATION = "consumersConfigLocation";
 
-   private final InputStream configurationIS;
+   private final InputStream producerConfigurationIS;
    private final String producerConfigLocation;
    private WSRPProducer producer;
 
-   private ConsumerRegistry consumerRegistry;
+   private final InputStream consumersConfigurationIS;
+   private final String consumersConfigLocation;
+   private JCRConsumerRegistry consumerRegistry;
    private ExoContainer container;
    private final ExoKernelIntegration exoKernelIntegration;
    private final boolean bypass;
@@ -107,7 +109,6 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
 
       // todo: we currently only allow the service to go through initialization if we are running in the default portal
       // as this service is not meant to work with extensions yet...
-      String consumersConfigLocation;
       if ("portal".equals(context.getName()))
       {
          if (params != null)
@@ -121,7 +122,8 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
                + PRODUCER_CONFIG_LOCATION + "and " + CONSUMERS_CONFIG_LOCATION);
          }
 
-         configurationIS = configurationManager.getInputStream(CLASSPATH + producerConfigLocation);
+         producerConfigurationIS = configurationManager.getInputStream(CLASSPATH + producerConfigLocation);
+         consumersConfigurationIS = configurationManager.getInputStream(CLASSPATH + consumersConfigLocation);
 
          container = context.getContainer();
 
@@ -136,7 +138,8 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
 
          producerConfigLocation = null;
          consumersConfigLocation = null;
-         configurationIS = null;
+         producerConfigurationIS = null;
+         consumersConfigurationIS = null;
          exoKernelIntegration = null;
          bypass = true;
       }
@@ -176,7 +179,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          persister.initializeBuilderFor(JCRProducerConfigurationService.mappingClasses);
 
          producerConfigurationService = new JCRProducerConfigurationService(persister);
-         producerConfigurationService.setDefaultConfigurationIS(configurationIS);
+         producerConfigurationService.setConfigurationIS(producerConfigurationIS);
          producerConfigurationService.reloadConfiguration();
       }
       catch (Exception e)
@@ -304,6 +307,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          consumerRegistry = new JCRConsumerRegistry(persister);
          consumerRegistry.setFederatingPortletInvoker(federatingPortletInvoker);
          consumerRegistry.setSessionEventBroadcaster(sessionEventBroadcaster);
+         consumerRegistry.setConfigurationIS(consumersConfigurationIS);
 
          // create ConsumerStructureProvider and register it to listen to page events
          POMSessionManager sessionManager = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
@@ -330,7 +334,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       }
       catch (Exception e)
       {
-         throw new RuntimeException("Couldn't start WSRP consumers registry.", e);
+         throw new RuntimeException("Couldn't start WSRP consumers registry from configuration " + consumersConfigLocation, e);
       }
       container.registerComponentInstance(ConsumerRegistry.class, consumerRegistry);
 
