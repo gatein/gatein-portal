@@ -22,9 +22,9 @@
   -->
 
 <!-- Configuration using registration with default registration property validator. -->
-<producer-configuration xmlns="urn:jboss:portal:wsrp:producer:v2_7"
+<producer-configuration xmlns="http://www.gatein.org/xml/ns/gatein_wsrp_producer_1_0"
                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                        xsi:schemaLocation="urn:jboss:portal:wsrp:producer:v2_7 http://www.jboss.org/portal/xsd/jboss-wsrp-producer_2_7.xsd">
+                        xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_producer_1_0 http://www.gatein.org/xml/ns/gatein_wsrp_producer_1_0.xsd">
    <registration-configuration fullServiceDescriptionRequiresRegistration="true">
       <registration-property-validator>org.gatein.registration.policies.DefaultRegistrationPropertyValidator
       </registration-property-validator>
