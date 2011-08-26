@@ -85,8 +85,14 @@
                                 If checked the page or the page node appears on on the navigation bar, the page navigation and the site map. If "visible" is checked the visibility depends on the "publication date &amp; time" attribute.
                             </para>
                             <para>
-                                If unchecked, the page is not shown in the site map or navigation bar. However, <emphasis role="bold">the page will still be accessible using its direct URL</emphasis>.
+                                If unchecked, the page is not shown in the site map or navigation bar.
                             </para>
+                            <important>
+                                <title>Non-visible Pages and Security</title>
+                                    <para>
+                                        The <guilabel>Visible</guilabel> checkbox should <emphasis role="bold">not</emphasis> be used as a security measure, as <emphasis role="bold">non-visible pages will still be accessible using a direct URL</emphasis>, such as <ulink type="http" url="http://localhost:8080/portal/private/classic/pagename"></ulink>.
+                                    </para>
+                            </important>
                         </listitem>
                     </varlistentry>
                     <varlistentry>
