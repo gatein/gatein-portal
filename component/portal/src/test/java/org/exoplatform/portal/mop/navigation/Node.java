@@ -63,6 +63,11 @@ public class Node
       return context.getId();
    }
 
+   public String getHandle()
+   {
+      return context.handle;
+   }
+
    public String getName()
    {
       return context.getName();

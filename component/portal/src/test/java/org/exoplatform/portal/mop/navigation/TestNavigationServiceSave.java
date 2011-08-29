@@ -1056,7 +1056,34 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("remove_added"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN, null).getNode();
-      root.addChild("foo");
+      root.addChild("foo").getHandle();
+      root.removeChild("foo");
+      service.saveNode(root.context, null);
+
+      //
+      root.assertConsistent();
+
+      //
+      sync(true);
+
+      //
+      root = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN, null).getNode();
+      assertEquals(0, root.getChildren().size());
+   }
+
+   public void testTransitiveRemoveTransient() throws Exception
+   {
+      MOPService mop = mgr.getPOMService();
+      Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "transitive_remove_transient");
+      portal.getRootNavigation().addChild("default");
+
+      //
+      sync(true);
+
+      //
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("transitive_remove_transient"));
+      Node root = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN, null).getNode();
+      root.addChild("foo").addChild("bar");
       root.removeChild("foo");
       service.saveNode(root.context, null);
 
