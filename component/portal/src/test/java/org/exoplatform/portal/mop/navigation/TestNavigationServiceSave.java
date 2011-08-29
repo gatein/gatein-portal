@@ -1056,7 +1056,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService
       //
       NavigationContext navigation = service.loadNavigation(SiteKey.portal("remove_added"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.GRANDCHILDREN, null).getNode();
-      root.addChild("foo").getHandle();
+      root.addChild("foo");
       root.removeChild("foo");
       service.saveNode(root.context, null);
 
