@@ -226,7 +226,7 @@ public class UIGadgetEditor extends UIForm
          String gadgetUrl = GadgetUtil.reproduceUrl(gadget.getUrl(), gadget.isLocal());
          String metadataUrl = gadgetServerUrl + (gadgetServerUrl.endsWith("/") ? "" : "/") + "metadata";
          String queryString = "{\"context\":{\"ignoreCache\":\"true\"},\"gadgets\":[" + "{\"url\":\"" + gadgetUrl + "\"}]}";
-         event.getRequestContext().getJavascriptManager().addJavascript("ajaxRequest('" + metadataUrl + "', true, 'POST', '" + queryString + "');");
+         event.getRequestContext().getJavascriptManager().addJavascript("ajaxRequest('POST', '" + metadataUrl + "', true, '" + queryString + "');");
       }
 
    }

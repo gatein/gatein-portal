@@ -730,7 +730,7 @@ function ajaxAbort() {
  * @return {String} response text if request is not async
  */
 function ajaxAsyncGetRequest(url, async) {
-	ajaxRequest("GET", url, async);
+	return ajaxRequest("GET", url, async);
 }
 
 /**
