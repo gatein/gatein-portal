@@ -87,8 +87,7 @@ public class UIPageActionListener
                      if (targetNode != null)
                      {
                         uiPortalApp.setLastRequestURI(null);
-                        String doLoginPath = pcontext.getRequest().getContextPath() + "/dologin?initialURI=" + pcontext.getRequestURI();
-                        pcontext.sendRedirect(doLoginPath);
+                        pcontext.requestAuthenticationLogin();
                         return;
                      }
                   }
