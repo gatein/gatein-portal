@@ -40,7 +40,6 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.UnmarshalledObject;
-import org.exoplatform.portal.config.model.Version;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.pom.config.POMSession;
@@ -68,6 +67,9 @@ import java.util.regex.Pattern;
 
 public class NewPortalConfigListener extends BaseComponentPlugin
 {
+
+   /** . */
+   private final UserPortalConfigService owner_;
 
    /** . */
    private ConfigurationManager cmanager_;
@@ -115,6 +117,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    private DescriptionService descriptionService_;
 
    public NewPortalConfigListener(
+      UserPortalConfigService owner,
       POMSessionManager pomMgr,
       DataStorage dataStorage,
       ConfigurationManager cmanager,
@@ -123,6 +126,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       DescriptionService descriptionService)
       throws Exception
    {
+      owner_ = owner;
       cmanager_ = cmanager;
       dataStorage_ = dataStorage;
       navigationService_ = navigationService;
@@ -538,7 +542,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
       //
       PageNavigation navigation = obj.getObject();
-      boolean extendedNavigation = obj.getVersion() == Version.V_1_2;
 
       //
       ImportMode importMode;
@@ -548,7 +551,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
       else
       {
-         importMode = ImportMode.CONSERVE;
+         importMode = owner_.getDefaultImportMode();
       }
 
       //

@@ -195,15 +195,15 @@ public class NavigationServiceImpl implements NavigationService
    {
       if (model == null)
       {
-         throw new NullPointerException();
+         throw new NullPointerException("No null model accepted");
       }
       if (navigation == null)
       {
-         throw new NullPointerException();
+         throw new NullPointerException("No null navigation accepted");
       }
       if (scope == null)
       {
-         throw new NullPointerException();
+         throw new NullPointerException("No null scope accepted");
       }
       String nodeId = navigation.data.rootId;
       if (navigation.data.rootId != null)

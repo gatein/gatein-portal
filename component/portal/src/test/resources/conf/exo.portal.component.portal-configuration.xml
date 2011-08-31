@@ -119,6 +119,12 @@
   <component>
     <key>org.exoplatform.portal.config.UserPortalConfigService</key>
     <type>org.exoplatform.portal.config.UserPortalConfigService</type>
+    <init-params>
+      <value-param>
+        <name>default.import.mode</name>
+        <value>merge</value>
+      </value-param>
+    </init-params>
   </component>
 
   <external-component-plugins>
