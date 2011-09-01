@@ -263,9 +263,12 @@ UIPortalNavigation.prototype.toggleSubMenu = function(e, tab, menuItemContainer)
       if (eXo.portal.UIPortalNavigation.currentOpenedMenu) eXo.portal.UIPortalNavigation.hideMenu();
       
       eXo.portal.UIPortalNavigation.superClass.pushVisibleContainer(menuItemContainer.id);
-      var offParent = item.offsetParent ;
-      var y = item.offsetHeight + item.offsetTop;
-      var x = item.offsetLeft + 2;
+      //Need this code to make menuItemContainer.offsetParent works correctly
+      menuItemContainer.style.display = "block";
+      menuItemContainer.style.position = "absolute";
+      var offParent = menuItemContainer.offsetParent ;
+      var y = item.offsetHeight + eXo.core.Browser.findPosYInContainer(item, offParent);
+      var x = eXo.core.Browser.findPosXInContainer(item, offParent) + 2;
       if(eXo.core.I18n.isRT()) {
       	x = eXo.core.Browser.findPosX(offParent) + offParent.offsetWidth - eXo.core.Browser.findPosX(item) - item.offsetWidth;
 //      	if(eXo.core.Browser.isIE6()) x += parseInt(document.getElementById("UIWorkingWorkspace").style.marginRight) ;
