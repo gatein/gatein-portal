@@ -142,7 +142,7 @@ public class UINavigationPortlet extends UIPortletApplication
       json.put("icon", node.getIcon());      
       
       ResourceURL rsURL = res.createResourceURL();
-      rsURL.setResourceID(res.encodeURL(node.getURI()));
+      rsURL.setResourceID(node.getURI());
       json.put("getNodeURL", rsURL.toString());            
             
       if (node.getPageRef() != null)

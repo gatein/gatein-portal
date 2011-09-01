@@ -62,7 +62,7 @@
 		if (hasChild) {
 			MimeResponse res = _ctx.getRequestContext().getResponse();
 			ResourceURL resourceURL = res.createResourceURL();
-			resourceURL.setResourceID(res.encodeURL(node.getURI()));	
+			resourceURL.setResourceID(node.getURI());	
 			getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
 		}
 		

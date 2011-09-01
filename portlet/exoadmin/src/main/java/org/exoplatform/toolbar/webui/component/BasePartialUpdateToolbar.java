@@ -171,7 +171,7 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
       json.put("icon", node.getIcon());       
       
       ResourceURL rsURL = res.createResourceURL();
-      rsURL.setResourceID(res.encodeURL(getResourceIdFromNode(node, navId)));
+      rsURL.setResourceID(getResourceIdFromNode(node, navId));
       json.put("getNodeURL", rsURL.toString());                  
 
       if (node.getPageRef() != null)

@@ -65,7 +65,7 @@
 		    def groupId = node.getNavigation().getKey().getName();
 			MimeResponse res = _ctx.getRequestContext().getResponse();
 			ResourceURL resourceURL = res.createResourceURL();			
-			resourceURL.setResourceID(res.encodeURL(groupId + "::" + node.getURI()));	
+			resourceURL.setResourceID(groupId + "::" + node.getURI());	
 			getNodeURL = "exo:getNodeURL='" + resourceURL.toString() + "'";
 		}
 		
