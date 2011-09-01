@@ -42,9 +42,6 @@ public class DateTimeValidator implements Validator
 {
    static private final String SPLIT_REGEX = "/|\\s+|:";
 
-   static private final String DATETIME_REGEX =
-      "^(\\d{1,2}\\/\\d{1,2}\\/\\d{1,4})\\s*(\\s+\\d{1,2}:\\d{1,2}:\\d{1,2})?$";
-
    public void validate(UIFormInput uiInput) throws Exception
    {
       if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0)
@@ -76,9 +73,5 @@ public class DateTimeValidator implements Validator
       {
          throw new MessageException(new ApplicationMessage("DateTimeValidator.msg.Invalid-input", args, ApplicationMessage.WARNING));
       }
-      if (s.matches(DATETIME_REGEX))
-         return;
-
-      throw new MessageException(new ApplicationMessage("DateTimeValidator.msg.Invalid-input", args, ApplicationMessage.WARNING));
    }
 }
