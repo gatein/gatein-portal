@@ -249,7 +249,55 @@ public class TestOrganizationService extends AbstractKernelTest
       }
    }
 
-   //
+   public void testFindUsers() throws Exception
+   {
+      if (userHandler_ instanceof UserDAOImpl)
+      {
+         UserDAOImpl ud = (UserDAOImpl)userHandler_;
+         User user1 = ud.createUserInstance("foo");
+         user1.setFirstName("foo");
+         user1.setLastName("bar");
+         user1.setEmail("foo@bar.com");
+         ud.createUser(user1, true);
+
+         User user2 = ud.createUserInstance("foobar");
+         user2.setFirstName("foobar");
+         user2.setLastName("foobar");
+         user2.setEmail("foobar@foobar.com");
+         ud.createUser(user2, true);
+
+         Query query = new Query();
+         List<User> users = ud.findUsers(query).getAll();
+         assertEquals(3, users.size());
+         assertEquals("demo", users.get(0).getUserName());
+         assertEquals("foo", users.get(1).getUserName());
+         assertEquals("foobar", users.get(2).getUserName());
+
+         query.setEmail("*foo*");
+         users = ud.findUsers(query).getAll();
+         assertEquals(2, users.size());
+         assertEquals("foo", users.get(0).getUserName());
+         assertEquals("foobar", users.get(1).getUserName());
+
+         query.setEmail("*bar*");
+         users = ud.findUsers(query).getAll();
+         assertEquals(2, users.size());
+         assertEquals("foo", users.get(0).getUserName());
+         assertEquals("foobar", users.get(1).getUserName());
+
+         query.setEmail("*bar.com*");
+         users = ud.findUsers(query).getAll();
+         assertEquals(2, users.size());
+         assertEquals("foo", users.get(0).getUserName());
+         assertEquals("foobar", users.get(1).getUserName());
+
+         query.setEmail("*foobar*");
+         users = ud.findUsers(query).getAll();
+         assertEquals(1, users.size());
+         assertEquals("foobar", users.get(0).getUserName());
+      }
+   }
+      //
    public void testGroup() throws Exception
    {
       /* Create a parent group with name is: GroupParent */

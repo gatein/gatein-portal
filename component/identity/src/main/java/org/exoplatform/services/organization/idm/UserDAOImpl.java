@@ -440,21 +440,6 @@ public class UserDAOImpl implements UserHandler
                }
             }, 1);
          }
-         else
-         {
-            return new LazyPageList<User>( new ListAccess<User>()
-            {
-               public User[] load(int index, int length) throws Exception, IllegalArgumentException
-               {
-                  return new User[0];
-               }
-
-               public int getSize() throws Exception
-               {
-                  return 0;
-               }
-            }, 1);
-         }
       }
 
 
