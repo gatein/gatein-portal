@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -68,12 +68,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Edit Navigation</td>
+	<td>//td/div[text()='Executive Board']/ancestor::tr/td/a[text()='Edit Navigation']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Edit Navigation</td>
+	<td>//td/div[text()='Executive Board']/ancestor::tr/td/a[text()='Edit Navigation']</td>
 	<td></td>
 </tr>
 <tr>
@@ -113,12 +113,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[text()='Page Selector']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[text()='Page Selector']</td>
 	<td></td>
 </tr>
 <tr>
@@ -153,22 +153,22 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UIPageSearchForm']/div[2]/a</td>
+	<td>//a[@title='Quick Search']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UIPageSearchForm']/div[2]/a</td>
+	<td>//a[@title='Quick Search']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//img[@title='Select Page']</td>
+	<td>xpath=//img[@title='Select Page']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//img[@title='Select Page']</td>
+	<td>xpath=//img[@title='Select Page']</td>
 	<td></td>
 </tr>
 <tr>
@@ -223,12 +223,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div/a</td>
+	<td>//div[@id='UINavigationNodeSelector']//a[@title='Organization']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div/a</td>
+	<td>//div[@id='UINavigationNodeSelector']//a[@title='Organization']</td>
 	<td></td>
 </tr>
 <tr>
@@ -242,13 +242,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='NavigationNodePopupMenu']/div/div[2]/div/div/div[7]/a</td>
-	<td></td>
-</tr>
-<tr>
 	<td>click</td>
-	<td>//div[@id='NavigationNodePopupMenu']/div/div[2]/div/div/div[7]/a</td>
+	<td>//div[@id='NavigationNodePopupMenu']//a[contains(text(),'Paste Node')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -258,17 +253,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div/a</td>
+	<td>//div[2]/div/div/div[3]/div/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div/a</td>
+	<td>//div[2]/div/div/div[3]/div/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div/a</td>
+	<td>//div[@id='UINavigationNodeSelector']//a[@title='Test_SNF_PRL_46']</td>
 	<td></td>
 </tr>
 <tr>
@@ -278,12 +273,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[5]/a</td>
+	<td>link=Cut Node</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[5]/a</td>
+	<td>link=Cut Node</td>
 	<td></td>
 </tr>
 <tr>
@@ -293,12 +288,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div/a</td>
+	<td>//div[@id='UINavigationNodeSelector']//a[@title='Organization']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[2]/div/a</td>
+	<td>//div[@id='UINavigationNodeSelector']//a[@title='Organization']</td>
 	<td></td>
 </tr>
 <tr>
@@ -313,12 +308,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//html/body/div/div[2]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div/div/div[4]/div/div/div/div/div/div/div/div/div/div/div/div[4]/div/div[2]/div/div/div/div/div/div/div[2]/div[3]/div/div/div/div/div/div/div/div[2]/div/div/div[7]/a</td>
+	<td>//div[@id='NavigationNodePopupMenu']//a[contains(text(),'Paste Node')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//html/body/div/div[2]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div/div/div/div/div[4]/div/div/div/div/div/div/div/div/div/div/div/div[4]/div/div[2]/div/div/div/div/div/div/div[2]/div[3]/div/div/div/div/div/div/div/div[2]/div/div/div[7]/a</td>
+	<td>//div[@id='NavigationNodePopupMenu']//a[contains(text(),'Paste Node')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -358,12 +353,22 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[1]/a</td>
+	<td>//div[@id='UINavigationNodeSelector']//a[@class='LevelUpArrowIcon']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[1]/a</td>
+	<td>//div[@id='UINavigationNodeSelector']//a[@class='LevelUpArrowIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//div[@id='UINavigationNodeSelector']//a[@class='LevelUpArrowIcon']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='UINavigationNodeSelector']//a[@class='LevelUpArrowIcon']</td>
 	<td></td>
 </tr>
 <tr>
@@ -378,12 +383,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Paste Node</td>
+	<td>//div[@id='NavigationNodePopupMenu']//a[contains(text(),'Paste Node')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>link=Paste Node</td>
+	<td>//div[@id='UINavigationManagement']//a[contains(text(),'Paste Node')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -392,13 +397,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div/a</td>
-	<td></td>
-</tr>
-<tr>
 	<td>click</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div/a</td>
+	<td>link=Test_SNF_PRL_46</td>
 	<td></td>
 </tr>
 <tr>
@@ -489,6 +489,16 @@
 <tr>
 	<td>echo</td>
 	<td>-- Delete node is copied--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>css=a.NodeIcon.DefaultPageIcon</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>css=a.NodeIcon.DefaultPageIcon</td>
 	<td></td>
 </tr>
 <tr>

@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/portal/public/classic/</td>
+	<td>/portal/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -68,12 +68,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageNodeSelector']/div/div/div[2]/div/div/div/div[1]/a</td>
+	<td>//a[@title='Up Level']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPageNodeSelector']/div/div/div[2]/div/div/div/div[1]/a</td>
+	<td>//a[@title='Up Level']</td>
 	<td></td>
 </tr>
 <tr>
@@ -98,12 +98,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/a[2]</td>
+	<td>//div[contains(text(),'Next')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/a[2]</td>
+	<td>//div[contains(text(),'Next')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -113,12 +113,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/a[2]</td>
+	<td>//div[contains(text(),'Next')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/a[2]</td>
+	<td>//div[contains(text(),'Next')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -138,7 +138,7 @@
 </tr>
 <tr>
 	<td>open</td>
-	<td>http://localhost:8080/portal/private/classic/Test_SNF_PRL_30</td>
+	<td>http://localhost:8080/portal/classic/Test_SNF_PRL_30</td>
 	<td></td>
 </tr>
 <tr>
@@ -243,6 +243,16 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
+	<td>link=Gadgets</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Gadgets</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
 	<td>//div[@id='Gadgets/Calculator']/div/div/img</td>
 	<td>//div[2]/div/div/div/div/div/div[2]/div/div/div/div/div[1]/div/div/div[1]/div/div/div</td>
 </tr>
@@ -328,12 +338,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UIPortletForm']/div[3]/div/div/div[2]/div[2]/div/a[1]/div</td>
+	<td>//div[@class='Icon AcrobatFile']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UIPortletForm']/div[3]/div/div/div[2]/div[2]/div/a[1]/div</td>
+	<td>//div[@class='Icon AcrobatFile']</td>
 	<td></td>
 </tr>
 <tr>
@@ -384,6 +394,11 @@
 <tr>
 	<td>click</td>
 	<td>link=Switch View mode</td>
+	<td></td>
+</tr>
+<tr>
+	<td>mouseOver</td>
+	<td>//div[@title=&quot;Hold this area to drag this portlet&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -528,12 +543,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[8]/div/a</td>
+	<td>css=div.LastNode.Node &gt; div.NullItemIcon &gt; a.NodeIcon.DefaultPageIcon</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[8]/div/a</td>
+	<td>css=div.LastNode.Node &gt; div.NullItemIcon &gt; a.NodeIcon.DefaultPageIcon</td>
 	<td></td>
 </tr>
 <tr>
@@ -583,12 +598,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=Pages Manager</td>
+	<td>link=Page Management</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=Pages Manager</td>
+	<td>link=Page Management</td>
 	<td></td>
 </tr>
 <tr>
@@ -648,12 +663,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[5]/div/div[2]/div/div/div/div/div/div[3]/div/a</td>
+	<td>//div[contains(@onclick,&quot;action=Close&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[5]/div/div[2]/div/div/div/div/div/div[3]/div/a</td>
+	<td>//div[contains(@onclick,&quot;action=Close&quot;)]</td>
 	<td></td>
 </tr>
 <tr>

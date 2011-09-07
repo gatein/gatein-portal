@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/portal/public/classic</td>
+	<td>/portal/classic</td>
 	<td></td>
 </tr>
 <tr>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -123,13 +123,23 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>pageTitle</td>
-	<td></td>
+	<td>//form[@id='UIPageSearchForm']/div[2]/input</td>
+	<td>Community Management</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>pageTitle</td>
+	<td>//form[@id='UIPageSearchForm']/div[2]/input</td>
 	<td>Community Management</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>name=searchOption</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=searchOption</td>
+	<td>label=group</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -218,12 +228,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[8]/div/a</td>
+	<td>//a[@title='Test_SNF_PRL_33']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[8]/div/a</td>
+	<td>//a[@title='Test_SNF_PRL_33']</td>
 	<td></td>
 </tr>
 <tr>

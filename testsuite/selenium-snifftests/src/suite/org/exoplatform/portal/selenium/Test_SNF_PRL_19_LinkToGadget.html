@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/portal/public/classic/</td>
+	<td>/portal/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -68,7 +68,7 @@
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Click on link to move to another page--</td>
+	<td>-- Click on link to move to another page-- </td>
 	<td></td>
 </tr>
 <tr>
@@ -83,12 +83,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//a[@href='/portal/private/classic/organization/management']</td>
+	<td>//div[@class='ClearFix']/a[text()='Users and groups management']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@href='/portal/private/classic/organization/management']</td>
+	<td>//div[@class='ClearFix']/a[text()='Users and groups management']</td>
 	<td></td>
 </tr>
 <tr>
@@ -98,12 +98,12 @@
 </tr>
 <tr>
 	<td>verifyElementPresent</td>
-	<td>//li[4]/ul/li[2]/a</td>
+	<td>//div[4]/div/div[2]/div/div[2]/div/a</td>
 	<td></td>
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//li[4]/ul/li[2]/a</td>
+	<td>//div[4]/div/div[2]/div/div[2]/div/a</td>
 	<td></td>
 </tr>
 <tr>

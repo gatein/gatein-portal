@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/portal/public/classic/</td>
+	<td>/portal/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -273,12 +273,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;Test_SNF_PRL_28&quot;) and text()=&quot;Edit Portal's Config&quot;]</td>
+	<td>//a[contains(@href,'Test_SNF_PRL_28') and contains(text(),'Edit Portal')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;Test_SNF_PRL_28&quot;) and text()=&quot;Edit Portal's Config&quot;]</td>
+	<td>//a[contains(@href,'Test_SNF_PRL_28') and contains(text(),'Edit Portal')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -398,7 +398,7 @@
 </tr>
 <tr>
 	<td>assertLocation</td>
-	<td>http://localhost:8080/portal/private/Test_SNF_PRL_28/</td>
+	<td>http://localhost:8080/portal/Test_SNF_PRL_28/</td>
 	<td></td>
 </tr>
 <tr>
@@ -408,7 +408,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=classic</td>
+	<td>link=Classic</td>
 	<td></td>
 </tr>
 <tr>
@@ -423,12 +423,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;objectId=Test_SNF_PRL_28&quot;) and text()=&quot;Delete&quot;]</td>
+	<td>//a[contains(@href,'Test_SNF_PRL_28')]/following-sibling::a[text()='Delete']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;objectId=Test_SNF_PRL_28&quot;) and text()=&quot;Delete&quot;]</td>
+	<td>//a[contains(@href,'Test_SNF_PRL_28')]/following-sibling::a[text()='Delete']</td>
 	<td></td>
 </tr>
 <tr>

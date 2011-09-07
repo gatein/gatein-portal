@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/portal/public/classic</td>
+	<td>/portal/classic</td>
 	<td></td>
 </tr>
 <tr>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -122,19 +122,24 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForText</td>
-	<td>link=Test_SNF_PRL_34</td>
-	<td>Test_SNF_PRL_34</td>
-</tr>
-<tr>
 	<td>waitForElementPresent</td>
-	<td>pageTitle</td>
-	<td></td>
+	<td>//form[@id='UIPageSearchForm']/div[2]/input</td>
+	<td>Community Management</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>pageTitle</td>
+	<td>//form[@id='UIPageSearchForm']/div[2]/input</td>
 	<td>Community Management</td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>name=searchOption</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=searchOption</td>
+	<td>label=group</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
@@ -522,8 +527,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>clickAndWait</td>
-	<td>//div[@id='PortalNavigationTopContainer']/div[3]/div/div/div/div/div/div/a</td>
+	<td>open</td>
+	<td>http://localhost:8080/portal/classic/Test_SNF_PRL_34</td>
 	<td></td>
 </tr>
 <tr>
@@ -554,11 +559,6 @@
 <tr>
 	<td>click</td>
 	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[8]/div/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>pause</td>
-	<td>10000</td>
 	<td></td>
 </tr>
 <tr>

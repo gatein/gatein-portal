@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -83,7 +83,7 @@
 </tr>
 <tr>
 	<td>type</td>
-	<td>pageDisplayName</td>
+	<td>i18nizedLabel</td>
 	<td>Test_SNF_PRL_55</td>
 </tr>
 <tr>
@@ -93,12 +93,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td>//div[contains(text(),'Next')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td>//div[contains(text(),'Next')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -108,12 +108,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td>//div[contains(text(),'Next')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td>//div[contains(text(),'Next')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -123,17 +123,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td>//a[@title='Finish']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td>//a[@title='Finish']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>assertLocation</td>
-	<td>http://localhost:8080/portal/private/classic/Test_SNF_PRL_55</td>
+	<td>http://localhost:8080/portal/users/root/Test_SNF_PRL_55</td>
 	<td></td>
 </tr>
 <tr>
@@ -193,12 +193,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
@@ -223,17 +223,27 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[1]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Applications&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[1]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Applications&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>-- Drag &amp; drop application into the container added above--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Gadgets</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Gadgets</td>
 	<td></td>
 </tr>
 <tr>
@@ -283,17 +293,17 @@
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/div[2]</td>
-	<td>Calculator</td>
+	<td>//div[text()='Calculator']/following-sibling::a[@title='Edit Portlet']</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[1]</td>
+	<td>//div[text()='Calculator']/following-sibling::a[@title='Edit Portlet']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[1]</td>
+	<td>//div[text()='Calculator']/following-sibling::a[@title='Edit Portlet']</td>
 	<td></td>
 </tr>
 <tr>
@@ -313,22 +323,22 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div[1]/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()=&quot;Select Icon&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div[1]/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()=&quot;Select Icon&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UIPortletForm']/div[3]/div/div/div[2]/div[2]/div/a[1]/div</td>
+	<td>//div[@class='Icon AcrobatFile']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UIPortletForm']/div[3]/div/div/div[2]/div[2]/div/a[1]/div</td>
+	<td>//div[@class='Icon AcrobatFile']</td>
 	<td></td>
 </tr>
 <tr>
@@ -338,22 +348,22 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div[1]/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()=&quot;Decoration Themes&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIMaskWorkspace']/div[2]/div/div/div/div/div/div/div[1]/div/div/div/div/div[3]/div/div/div/div</td>
+	<td>//div[@id='UIMaskWorkspace']//div[text()=&quot;Decoration Themes&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIItemThemeSelector']/div[2]/div[1]/div/div[2]/div/div/div</td>
+	<td>//div[@id='UIItemThemeSelector']//div[text()=&quot;Pink Simple&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIItemThemeSelector']/div[2]/div[1]/div/div[2]/div/div/div</td>
+	<td>//div[@id='UIItemThemeSelector']//div[text()=&quot;Pink Simple&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -413,17 +423,17 @@
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/div[2]</td>
-	<td>Calculator</td>
+	<td>//div[text()='Test_SNF_PRL_55']/following-sibling::a[@title='Delete Portlet']</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[text()='Test_SNF_PRL_55']/following-sibling::a[@title='Delete Portlet']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[text()='Test_SNF_PRL_55']/following-sibling::a[@title='Delete Portlet']</td>
 	<td></td>
 </tr>
 <tr>
@@ -443,27 +453,27 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/div[2]</td>
-	<td>Container</td>
+	<td>//div[text()='Container']/following-sibling::a[@title='Delete Container']</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[text()='Container']/following-sibling::a[@title='Delete Container']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[text()='Container']/following-sibling::a[@title='Delete Container']</td>
 	<td></td>
 </tr>
 <tr>
@@ -483,12 +493,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td>//div[@id='UIPageEditor']//a[@title='Finish']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td>//div[@id='UIPageEditor']//a[@title='Finish']</td>
 	<td></td>
 </tr>
 <tr>
@@ -498,7 +508,7 @@
 </tr>
 <tr>
 	<td>assertLocation</td>
-	<td>http://localhost:8080/portal/private/classic/Test_SNF_PRL_55</td>
+	<td>http://localhost:8080/portal/users/root/Test_SNF_PRL_55</td>
 	<td></td>
 </tr>
 <tr>
@@ -524,71 +534,6 @@
 <tr>
 	<td>assertConfirmation</td>
 	<td>Really want to remove this dashboard?</td>
-	<td></td>
-</tr>
-<tr>
-	<td>echo</td>
-	<td>-- Go to Page Management --</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>link=Page Management</td>
-	<td></td>
-</tr>
-<tr>
-	<td>clickAndWait</td>
-	<td>link=Page Management</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>searchTerm</td>
-	<td></td>
-</tr>
-<tr>
-	<td>type</td>
-	<td>searchTerm</td>
-	<td>Test_SNF_PRL_55</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>searchOption</td>
-	<td></td>
-</tr>
-<tr>
-	<td>select</td>
-	<td>searchOption</td>
-	<td>label=Title</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//form[@id='UIPageSearch']/div[2]/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//form[@id='UIPageSearch']/div[2]/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForTextPresent</td>
-	<td>No result found.</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyTextPresent</td>
-	<td>No result found.</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[5]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[5]/div/div[2]/div/div/div/div/div/div[3]/div/table/tbody/tr/td/div/div/div/div/a</td>
 	<td></td>
 </tr>
 <tr>

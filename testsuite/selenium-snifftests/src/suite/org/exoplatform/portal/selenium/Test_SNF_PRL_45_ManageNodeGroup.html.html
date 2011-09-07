@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -113,12 +113,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div/div/div/div[1]//div[text()=&quot;Page Selector&quot;]</td>
+	<td>//div[text()='Page Selector']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div/div/div/div/div/div[1]//div[text()=&quot;Page Selector&quot;]</td>
+	<td>//div[text()='Page Selector']</td>
 	<td></td>
 </tr>
 <tr>
@@ -137,33 +137,23 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//form[@id='UIPageSearchForm']/div[2]/input</td>
-	<td></td>
-</tr>
-<tr>
 	<td>type</td>
-	<td>//form[@id='UIPageSearchForm']/div[2]/input</td>
-	<td>New Account</td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>name=searchOption</td>
-	<td></td>
+	<td>//input[@id='pageTitle' and @value='Register']</td>
+	<td>Register</td>
 </tr>
 <tr>
 	<td>select</td>
 	<td>name=searchOption</td>
-	<td>label=group</td>
+	<td>label=portal</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UIPageSearchForm']/div[2]/a</td>
+	<td>//a[@title='Quick Search']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UIPageSearchForm']/div[2]/a</td>
+	<td>//a[@title='Quick Search']</td>
 	<td></td>
 </tr>
 <tr>
@@ -288,17 +278,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div/div/div/div[1]//div[text()=&quot;Page Selector&quot;]</td>
+	<td>//div[text()='Page Selector']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div/div/div/div/div/div[1]//div[text()=&quot;Page Selector&quot;]</td>
+	<td>//div[text()='Page Selector']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
-	<td>-- Choose new page for this node--</td>
+	<td>-- Select a page for ndoe--</td>
 	<td></td>
 </tr>
 <tr>
@@ -313,12 +303,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIRepeater']/table/tbody/tr[4]/td[5]/div/img</td>
+	<td>//tr[5]/td[5]/div/img</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIRepeater']/table/tbody/tr[4]/td[5]/div/img</td>
+	<td>//tr[5]/td[5]/div/img</td>
 	<td></td>
 </tr>
 <tr>

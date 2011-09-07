@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -68,27 +68,22 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UITabPaneDashboard']/a</td>
+	<td>css=div.AddDashboard</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UITabPaneDashboard']/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UITabPaneDashboard']/div[2]/input</td>
+	<td>css=div.AddDashboard</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//div[@id='UITabPaneDashboard']/div[2]/input</td>
+	<td>//input</td>
 	<td>Test_SNF_PRL_52</td>
 </tr>
 <tr>
 	<td>keyPress</td>
-	<td>//div[@id='UITabPaneDashboard']/div[2]/input</td>
+	<td>//input</td>
 	<td>\13</td>
 </tr>
 <tr>
@@ -107,28 +102,23 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UITabPaneDashboard']/div[2]/span</td>
-	<td></td>
-</tr>
-<tr>
 	<td>doubleClick</td>
-	<td>//div[@id='UITabPaneDashboard']/div[2]/span</td>
+	<td>css=div.MiddleTab &gt; span</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UITabPaneDashboard']/div[2]/input</td>
+	<td>//input</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>//div[@id='UITabPaneDashboard']/div[2]/input</td>
+	<td>//input</td>
 	<td>Test_SNF_PRL_52_edit</td>
 </tr>
 <tr>
 	<td>keyPress</td>
-	<td>//div[@id='UITabPaneDashboard']/div[2]/input</td>
+	<td>//input</td>
 	<td>\13</td>
 </tr>
 <tr>
@@ -142,23 +132,13 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UITabPaneDashboard']/div[2]/a</td>
-	<td></td>
-</tr>
-<tr>
 	<td>echo</td>
 	<td>-- Delete tab--</td>
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[@id='UITabPaneDashboard']/div[2]/a</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[@id='UITabPaneDashboard']/div[2]/a</td>
+	<td>clickAndWait</td>
+	<td>//div[2]/div/div/div/div/a/img</td>
 	<td></td>
 </tr>
 <tr>
@@ -168,7 +148,7 @@
 </tr>
 <tr>
 	<td>assertConfirmation</td>
-	<td>Are you sure you want to remove this dashboard?</td>
+	<td>Really want to remove this dashboard?</td>
 	<td></td>
 </tr>
 <tr>

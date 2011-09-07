@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/portal/public/classic/</td>
+	<td>/portal/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -248,12 +248,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;objectId=Test_SNF_PRL_26&quot;) and text()=&quot;Edit Layout&quot;]</td>
+	<td>//a[contains(@href,'Test_SNF_PRL_26')]/preceding-sibling::a[text()='Edit Layout']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;objectId=Test_SNF_PRL_26&quot;) and text()=&quot;Edit Layout&quot;]</td>
+	<td>//a[contains(@href,'Test_SNF_PRL_26')]/preceding-sibling::a[text()='Edit Layout']</td>
 	<td></td>
 </tr>
 <tr>
@@ -294,6 +294,16 @@
 <tr>
 	<td>echo</td>
 	<td>-- Drag &amp; drop applcation in portal--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Gadgets</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Gadgets</td>
 	<td></td>
 </tr>
 <tr>
@@ -378,12 +388,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UIPortletForm']/div[3]/div/div/div[2]/div[2]/div/a[1]/div</td>
+	<td>//div[@class='Icon AcrobatFile']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UIPortletForm']/div[3]/div/div/div[2]/div[2]/div/a[1]/div</td>
+	<td>//div[@class='Icon AcrobatFile']</td>
 	<td></td>
 </tr>
 <tr>
@@ -472,6 +482,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>waitForElementPresent</td>
+	<td>link=Switch View Mode</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Switch View Mode</td>
+	<td></td>
+</tr>
+<tr>
 	<td>echo</td>
 	<td>-- Delete application --</td>
 	<td></td>
@@ -487,18 +507,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[text()='Test_SNF_PRL_26']/ancestor::div/a[@title='Delete Portlet']</td>
-	<td></td>
-</tr>
-<tr>
-	<td>mouseOver</td>
-	<td>//div[text()='Test_SNF_PRL_26']/ancestor::div/a[@title='Delete Portlet']</td>
-	<td></td>
-</tr>
-<tr>
 	<td>click</td>
-	<td>//div[text()='Test_SNF_PRL_26']/ancestor::div/a[@title='Delete Portlet']</td>
+	<td>//div[4]/div/div[2]/div/div/div[2]/div/div/div/div/div/div/a[2]</td>
 	<td></td>
 </tr>
 <tr>
@@ -528,12 +538,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;objectId=Test_SNF_PRL_26&quot;) and text()=&quot;Delete&quot;]</td>
+	<td>//a[contains(@href,'Test_SNF_PRL_26')]/following-sibling::a[text()='Delete']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;objectId=Test_SNF_PRL_26&quot;) and text()=&quot;Delete&quot;]</td>
+	<td>//a[contains(@href,'Test_SNF_PRL_26')]/following-sibling::a[text()='Delete']</td>
 	<td></td>
 </tr>
 <tr>

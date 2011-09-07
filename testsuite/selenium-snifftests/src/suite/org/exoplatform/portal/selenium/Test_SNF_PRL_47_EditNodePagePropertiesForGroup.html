@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -103,12 +103,17 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[text()='Page Selector']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[text()='Page Selector']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>echo</td>
+	<td>-- Select a page for ndoe--</td>
 	<td></td>
 </tr>
 <tr>
@@ -122,13 +127,33 @@
 	<td></td>
 </tr>
 <tr>
+	<td>type</td>
+	<td>//input[@id='pageTitle' and @value='Register']</td>
+	<td>Register</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>name=searchOption</td>
+	<td>label=portal</td>
+</tr>
+<tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//img[@title='Select Page']</td>
+	<td>//a[@title='Quick Search']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//img[@title='Select Page']</td>
+	<td>//a[@title='Quick Search']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>//img[@title='Select Page']</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//img[@title='Select Page']</td>
 	<td></td>
 </tr>
 <tr>
@@ -163,12 +188,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[4]/div[2]/div/a</td>
+	<td>link=Test_SNF_PRL_47</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[4]/div[2]/div/a</td>
+	<td>link=Test_SNF_PRL_47</td>
 	<td></td>
 </tr>
 <tr>
@@ -208,12 +233,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div[3]/div/a</td>
+	<td>xpath=//a[@title='Test_SNF_PRL_47']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div/div/div[3]/div/a</td>
+	<td>xpath=//a[@title='Test_SNF_PRL_47']</td>
 	<td></td>
 </tr>
 <tr>
@@ -313,7 +338,7 @@
 </tr>
 <tr>
 	<td>assertLocation</td>
-	<td>http://localhost:8080/portal/private/classic/Test_SNF_PRL_47</td>
+	<td>http://localhost:8080/portal/groups/:platform:administrators/Test_SNF_PRL_47</td>
 	<td></td>
 </tr>
 <tr>
@@ -338,12 +363,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div/a</td>
+	<td>xpath=//a[@title='Test_SNF_PRL_47']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div/a</td>
+	<td>xpath=//a[@title='Test_SNF_PRL_47']</td>
 	<td></td>
 </tr>
 <tr>
@@ -438,7 +463,7 @@
 </tr>
 <tr>
 	<td>assertLocation</td>
-	<td>http://localhost:8080/portal/private/classic/Test_SNF_PRL_47</td>
+	<td>http://localhost:8080/portal/groups/:platform:administrators/Test_SNF_PRL_47</td>
 	<td></td>
 </tr>
 <tr>

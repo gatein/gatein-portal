@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -103,12 +103,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[text()='Page Selector']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div/div/div/div/div/div[1]/div/div/div/div/div/div/div/div/div[2]/div/div/div/div</td>
+	<td>//div[text()='Page Selector']</td>
 	<td></td>
 </tr>
 <tr>
@@ -119,46 +119,36 @@
 <tr>
 	<td>click</td>
 	<td>link=Search and Select Page</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>searchTerm</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>searchTerm</td>
+	<td>//form[@id='UIPageSearchForm']/div[2]/input</td>
 	<td>Community Management</td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>searchOption</td>
-	<td></td>
-</tr>
-<tr>
 	<td>select</td>
-	<td>searchOption</td>
-	<td>label=Title</td>
+	<td>name=searchOption</td>
+	<td>label=group</td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//form[@id='UIPageSearch']/div[2]/a</td>
+	<td>//a[@title='Quick Search']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//form[@id='UIPageSearch']/div[2]/a</td>
+	<td>//a[@title='Quick Search']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>xpath=//img[@title='Select Page']</td>
+	<td>//img[@title='Select Page']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>xpath=//img[@title='Select Page']</td>
+	<td>//img[@title='Select Page']</td>
 	<td></td>
 </tr>
 <tr>
@@ -192,13 +182,8 @@
 	<td></td>
 </tr>
 <tr>
-	<td>waitForElementPresent</td>
-	<td>//div[4]/div[2]/div/a</td>
-	<td></td>
-</tr>
-<tr>
 	<td>clickAndWait</td>
-	<td>//div[4]/div[2]/div/a</td>
+	<td>link=Test_SNF_PRL_50</td>
 	<td></td>
 </tr>
 <tr>
@@ -238,12 +223,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div[3]/div/a</td>
+	<td>xpath=//a[@title='Test_SNF_PRL_50']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[2]/div/div/div[3]/div/a</td>
+	<td>xpath=//a[@title='Test_SNF_PRL_50']</td>
 	<td></td>
 </tr>
 <tr>
@@ -284,16 +269,6 @@
 <tr>
 	<td>click</td>
 	<td>link=Switch View mode</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[2]/div/div/div/div/div/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div[1]</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>//div[2]/div/div/div/div/div/div[2]/div/div/div/div/div/div/div/div/div/div[2]/div/div/div[1]</td>
 	<td></td>
 </tr>
 <tr>
@@ -343,12 +318,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
@@ -373,17 +348,27 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[1]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Applications&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[1]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Applications&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>echo</td>
 	<td>-- Drag &amp; drop application into the container added above--</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForElementPresent</td>
+	<td>link=Gadgets</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>link=Gadgets</td>
 	<td></td>
 </tr>
 <tr>
@@ -433,17 +418,17 @@
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/div[2]</td>
-	<td>Calculator</td>
+	<td>//div[text()='Calculator']/following-sibling::a[@title='Delete Portlet']</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[text()='Calculator']/following-sibling::a[@title='Delete Portlet']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[text()='Calculator']/following-sibling::a[@title='Delete Portlet']</td>
 	<td></td>
 </tr>
 <tr>
@@ -463,27 +448,27 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/div[2]</td>
-	<td>Container</td>
+	<td>//div[text()='Container']/following-sibling::a[@title='Delete Container']</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[text()='Container']/following-sibling::a[@title='Delete Container']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[text()='Container']/following-sibling::a[@title='Delete Container']</td>
 	<td></td>
 </tr>
 <tr>
@@ -503,12 +488,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td>//div[@id='UIPageEditor']//a[@title=&quot;Finish&quot;]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td>//div[@id='UIPageEditor']//a[@title=&quot;Finish&quot;]</td>
 	<td></td>
 </tr>
 <tr>
@@ -553,12 +538,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div/a</td>
+	<td>xpath=//a[@title='Test_SNF_PRL_50']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UINavigationNodeSelector']/div/div/div/div[2]/div/div/div[3]/div/a</td>
+	<td>xpath=//a[@title='Test_SNF_PRL_50']</td>
 	<td></td>
 </tr>
 <tr>

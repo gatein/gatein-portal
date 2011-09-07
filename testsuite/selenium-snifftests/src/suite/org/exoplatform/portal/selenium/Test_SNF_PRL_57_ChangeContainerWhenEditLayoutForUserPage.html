@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -83,7 +83,7 @@
 </tr>
 <tr>
 	<td>type</td>
-	<td>pageDisplayName</td>
+	<td>i18nizedLabel</td>
 	<td>Test_SNF_PRL_57</td>
 </tr>
 <tr>
@@ -93,12 +93,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td>//div[contains(text(),'Next')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td>//div[contains(text(),'Next')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -108,12 +108,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td>//div[contains(text(),'Next')]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPageCreationWizard']/div/div[3]/div/div/div/div[2]/div/table/tbody/tr/td/div[2]/div/div/div</td>
+	<td>//div[contains(text(),'Next')]</td>
 	<td></td>
 </tr>
 <tr>
@@ -123,12 +123,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td>//a[@title='Finish']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//div[@id='UIPageEditor']/div[1]/div/div/div/a[2]</td>
+	<td>//a[@title='Finish']</td>
 	<td></td>
 </tr>
 <tr>
@@ -198,12 +198,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposerTab']/div[1]/div/div[2]/div/div/div/div</td>
+	<td>//div[contains(text(),&quot;Containers&quot;)]</td>
 	<td></td>
 </tr>
 <tr>
@@ -253,12 +253,12 @@
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[1]</td>
+	<td>//div[text()='Container']/following-sibling::a[@title='Edit Container']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/a[1]</td>
+	<td>//div[text()='Container']/following-sibling::a[@title='Edit Container']</td>
 	<td></td>
 </tr>
 <tr>
@@ -308,8 +308,8 @@
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div/div/div[2]/div/div/div/div/div/div/div[2]</td>
-	<td>Test_SNF_PRL_57</td>
+	<td>//div[text()='Test_SNF_PRL_57']/following-sibling::a[@title='Edit Container']</td>
+	<td></td>
 </tr>
 <tr>
 	<td>dragAndDropToObject</td>
@@ -348,17 +348,17 @@
 </tr>
 <tr>
 	<td>mouseOver</td>
-	<td>//div[3]/div/div/div/div[2]/div/div/div[2]/div/div/div/div/div/div/div[2]</td>
-	<td>Test_SNF_PRL_57</td>
+	<td>//div[text()='Test_SNF_PRL_57']/following-sibling::a[@title='Delete Container']</td>
+	<td></td>
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[3]/div/div/div/div[2]/div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[text()='Test_SNF_PRL_57']/following-sibling::a[@title='Delete Container']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[3]/div/div/div/div[2]/div/div/div[2]/div/div/div/div/div/div/a[2]</td>
+	<td>//div[text()='Test_SNF_PRL_57']/following-sibling::a[@title='Delete Container']</td>
 	<td></td>
 </tr>
 <tr>
@@ -373,12 +373,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[2]</td>
+	<td>//div[@id='UIPortalComposer']//a[@title='Finish']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposer']/div[1]/div/div/div/a[2]</td>
+	<td>//div[@id='UIPortalComposer']//a[@title='Finish']</td>
 	<td></td>
 </tr>
 <tr>

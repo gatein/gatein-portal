@@ -13,7 +13,7 @@
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/portal/public/classic/</td>
+	<td>/portal/classic/</td>
 	<td></td>
 </tr>
 <tr>
@@ -48,7 +48,7 @@
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>//a[@id='UIPortalLoginFormAction']</td>
+	<td>//div[@id='UIPortalLoginFormAction']</td>
 	<td></td>
 </tr>
 <tr>
@@ -243,12 +243,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;objectId=Test_SNF_PRL_25&quot;) and text()=&quot;Edit Layout&quot;]</td>
+	<td>//a[contains(@href,'Test_SNF_PRL_25')]/preceding-sibling::a[text()='Edit Layout']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;objectId=Test_SNF_PRL_25&quot;) and text()=&quot;Edit Layout&quot;]</td>
+	<td>//a[contains(@href,'Test_SNF_PRL_25')]/preceding-sibling::a[text()='Edit Layout']</td>
 	<td></td>
 </tr>
 <tr>
@@ -418,8 +418,8 @@
 </tr>
 <tr>
 	<td>dragAndDropToObject</td>
-	<td>//div/div/div[2]/div/div[2]/div/div</td>
-	<td>//div[4]/div/div[2]/div/div[2]/div</td>
+	<td>//div[@title=&quot;Hold this area to drag this container&quot;]</td>
+	<td>//div[contains(text(),'Navigation Portlet')]</td>
 </tr>
 <tr>
 	<td>echo</td>
@@ -438,12 +438,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UIPortalComposer']/div[3]/div/div/div[1]/table/tbody/tr/td/div[2]/div/div/div/div</td>
+	<td>link=Switch View Mode</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UIPortalComposer']/div[3]/div/div/div[1]/table/tbody/tr/td/div[2]/div/div/div/div</td>
+	<td>link=Switch View Mode</td>
 	<td></td>
 </tr>
 <tr>
@@ -493,12 +493,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>link=classic</td>
+	<td>link=Classic</td>
 	<td></td>
 </tr>
 <tr>
 	<td>clickAndWait</td>
-	<td>link=classic</td>
+	<td>link=Classic</td>
 	<td></td>
 </tr>
 <tr>
@@ -523,12 +523,12 @@
 </tr>
 <tr>
 	<td>waitForElementPresent</td>
-	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;objectId=Test_SNF_PRL_25&quot;) and text()=&quot;Delete&quot;]</td>
+	<td>//a[contains(@href,'Test_SNF_PRL_25')]/following-sibling::a[text()='Delete']</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>//div[@id='UISiteManagement']//a[contains(@href,&quot;objectId=Test_SNF_PRL_25&quot;) and text()=&quot;Delete&quot;]</td>
+	<td>//a[contains(@href,'Test_SNF_PRL_25')]/following-sibling::a[text()='Delete']</td>
 	<td></td>
 </tr>
 <tr>
@@ -559,21 +559,6 @@
 <tr>
 	<td>clickAndWait</td>
 	<td>link=Sign out</td>
-	<td></td>
-</tr>
-<tr>
-	<td>verifyElementPresent</td>
-	<td>//div/div/div[2]/div/div[2]/div/div</td>
-	<td></td>
-</tr>
-<tr>
-	<td>waitForElementPresent</td>
-	<td>//div[4]/div/div[2]/div/div[2]/div/div</td>
-	<td></td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>//div[4]/div/div[2]/div/div[2]/div/div</td>
 	<td></td>
 </tr>
 </tbody></table>
