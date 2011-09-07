@@ -20,10 +20,10 @@
 package org.exoplatform.portal.webui.workspace;
 
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.UserPortalConfig;
-import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -47,7 +47,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
 import java.lang.reflect.Method;
 
 /**
@@ -193,44 +192,32 @@ public class UIMainActionListener
    {
       public void execute(Event<UIWorkingWorkspace> event) throws Exception
       {
-         UIPortalApplication uiApp = Util.getUIPortalApplication();
+         PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
+         UIPortalApplication portalApp = (UIPortalApplication)pcontext.getUIApplication();
+         UIPortal currentPortal = portalApp.getCurrentSite();
+         UIWorkingWorkspace uiWorkingWS = event.getSource();
 
-         UIPortal uiPortal = uiApp.getCurrentSite();
-
-         UserPortalConfigService service = uiApp.getApplicationComponent(UserPortalConfigService.class);
-         UserPortalConfig userConfig =
-            service.getUserPortalConfig(uiPortal.getName(), event.getRequestContext().getRemoteUser());
-         if (userConfig == null)
-            userConfig = uiApp.getUserPortalConfig();
-         
-         //Todo nguyenanhkien2a@gmail.com
-         //Check editing permission
-         UIPortalApplication portalApp = Util.getUIPortalApplication();
-         UIPortal currentUIPortal = event.getSource().findFirstComponentOfType(UIPortal.class);
          UserACL userACL = portalApp.getApplicationComponent(UserACL.class);
-         if(!userACL.hasEditPermissionOnPortal(currentUIPortal.getSiteType().getName(), currentUIPortal.getName(), 
-                                                currentUIPortal.getEditPermission()))
+         if (!userACL.hasEditPermissionOnPortal(currentPortal.getSiteType().getName(), currentPortal.getName(),
+            currentPortal.getEditPermission()))
          {
-            uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-EditLayout-Permission",
-               new String[]{uiPortal.getName()}));
+            portalApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-EditLayout-Permission",
+               new String[]{currentPortal.getName()}));
             return;
          }
-         
-         PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
-         UIWorkingWorkspace uiWorkingWS = event.getSource();
-         uiWorkingWS.setBackupUIPortal(uiPortal);
-         uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
 
-         UIPortal newPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
-         PortalDataMapper.toUIPortal(newPortal, userConfig.getPortalConfig());
-//         newPortal.setSelectedNode(uiPortal.getSelectedNode());
-//         newPortal.setNavigation(uiPortal.getNavigation());
-//         newPortal.setSelectedPath(uiPortal.getSelectedPath());
-         newPortal.setNavPath(uiPortal.getNavPath());
-         newPortal.refreshUIPage();
+         DataStorage dataStorage = portalApp.getApplicationComponent(DataStorage.class);
+         PortalConfig portalConfig = dataStorage.getPortalConfig(pcontext.getSiteType().getName(), pcontext.getSiteName());
+         UIPortal transientPortal = uiWorkingWS.createUIComponent(UIPortal.class, null, null);
+         PortalDataMapper.toUIPortal(transientPortal, portalConfig);
+         transientPortal.setNavPath(currentPortal.getNavPath());
+         transientPortal.refreshUIPage();
+
+         uiWorkingWS.setBackupUIPortal(currentPortal);
+         portalApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
 
          UIEditInlineWorkspace uiEditWS = uiWorkingWS.getChild(UIEditInlineWorkspace.class);
-         uiEditWS.setUIComponent(newPortal);
+         uiEditWS.setUIComponent(transientPortal);
          UISiteBody siteBody = uiWorkingWS.findFirstComponentOfType(UISiteBody.class);
          siteBody.setUIComponent(null);
 
