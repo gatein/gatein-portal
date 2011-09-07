@@ -69,4 +69,16 @@ public class NavigationData implements Serializable
       this.state = state;
       this.rootId = rootId;
    }
+
+   protected Object readResolve()
+   {
+      if (key == null && state == null && rootId == null)
+      {
+         return EMPTY;
+      }
+      else
+      {
+         return this;
+      }
+   }
 }

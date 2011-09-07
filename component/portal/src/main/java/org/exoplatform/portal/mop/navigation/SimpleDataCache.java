@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import org.exoplatform.commons.serialization.MarshalledObject;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.config.POMSession;
 
@@ -35,57 +36,78 @@ public class SimpleDataCache extends DataCache
 {
 
    /** . */
-   protected Map<SiteKey, NavigationData> navigations;
+   protected Map<MarshalledObject<SiteKey>, MarshalledObject<NavigationData>> navigations;
 
    /** . */
-   protected Map<String, NodeData> nodes;
+   protected Map<MarshalledObject<String>, MarshalledObject<NodeData>> nodes;
 
    public SimpleDataCache()
    {
-      this.navigations = new ConcurrentHashMap<SiteKey, NavigationData>();
-      this.nodes = new ConcurrentHashMap<String, NodeData>();
+      this.navigations = new ConcurrentHashMap<MarshalledObject<SiteKey>, MarshalledObject<NavigationData>>();
+      this.nodes = new ConcurrentHashMap<MarshalledObject<String>, MarshalledObject<NodeData>>();
    }
 
    @Override
    protected void removeNodes(Collection<String> keys)
    {
-      nodes.keySet().removeAll(keys);
+      for (String key : keys)
+      {
+         nodes.remove(MarshalledObject.marshall(key));
+      }
    }
 
    @Override
    protected NodeData getNode(POMSession session, String key)
    {
-      NodeData node = nodes.get(key);
-      if (node == null)
+      MarshalledObject<String> marshalledKey = MarshalledObject.marshall(key);
+      MarshalledObject<NodeData> marshalledNode = nodes.get(marshalledKey);
+      if (marshalledNode == null)
       {
-         node = loadNode(session, key);
+         NodeData node = loadNode(session, key);
          if (node != null)
          {
-            nodes.put(key, node);
+            nodes.put(marshalledKey, MarshalledObject.marshall(node));
+            return node;
+         }
+         else
+         {
+            return null;
          }
       }
-      return node;
+      else
+      {
+         return marshalledNode.unmarshall();
+      }
    }
 
    @Override
    protected void removeNavigation(SiteKey key)
    {
-      navigations.remove(key);
+      navigations.remove(MarshalledObject.marshall(key));
    }
 
    @Override
    protected NavigationData getNavigation(POMSession session, SiteKey key)
    {
-      NavigationData navigation = navigations.get(key);
-      if (navigation == null)
+      MarshalledObject<SiteKey> marshalledKey = MarshalledObject.marshall(key);
+      MarshalledObject<NavigationData> marshalledNavigation = navigations.get(marshalledKey);
+      if (marshalledNavigation == null)
       {
-         navigation = loadNavigation(session, key);
+         NavigationData navigation = loadNavigation(session, key);
          if (navigation != null)
          {
-            navigations.put(key, navigation);
+            navigations.put(marshalledKey, MarshalledObject.marshall(navigation));
+            return navigation;
+         }
+         else
+         {
+            return null;
          }
       }
-      return navigations.get(key);
+      else
+      {
+         return marshalledNavigation.unmarshall();
+      }
    }
 
    @Override
