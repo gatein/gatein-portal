@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop.description;
 
+import org.exoplatform.commons.serialization.MarshalledObject;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.pom.config.POMSession;
 
@@ -31,33 +32,46 @@ public class SimpleDataCache extends DataCache
 {
 
    /** . */
-   private final ConcurrentHashMap<CacheKey, CacheValue> map;
+   private final ConcurrentHashMap<MarshalledObject<CacheKey>, MarshalledObject<CacheValue>> map;
 
    public SimpleDataCache()
    {
-      this.map = new ConcurrentHashMap<CacheKey, CacheValue>();
+      this.map = new ConcurrentHashMap<MarshalledObject<CacheKey>, MarshalledObject<CacheValue>>();
    }
 
    @Override
    protected Described.State getState(POMSession session, CacheKey key)
    {
-      CacheValue value = map.get(key);
-      if (value == null)
+      MarshalledObject<CacheKey> marshalledKey = MarshalledObject.marshall(key);
+      MarshalledObject<CacheValue> marshalledValue = map.get(marshalledKey);
+      if (marshalledValue == null)
       {
-         value = getValue(session, key);
+         CacheValue value = getValue(session, key);
+         if (value != null)
+         {
+            map.put(marshalledKey, MarshalledObject.marshall(value));
+            return value.state;
+         }
+         else
+         {
+            return null;
+         }
       }
-      return value != null ? value.state : null;
+      else
+      {
+         return marshalledValue.unmarshall().state;
+      }
    }
 
    @Override
    protected void removeState(CacheKey key)
    {
-      map.remove(key);
+      map.remove(MarshalledObject.marshall(key));
    }
 
    @Override
    protected void putValue(CacheKey key, CacheValue value)
    {
-      map.put(key, value);
+      map.put(MarshalledObject.marshall(key), MarshalledObject.marshall(value));
    }
 }

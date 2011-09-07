@@ -21,12 +21,13 @@ package org.exoplatform.portal.mop.description;
 
 import org.exoplatform.portal.mop.Described;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class CacheValue
+public class CacheValue implements Serializable
 {
 
    /** . */
