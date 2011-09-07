@@ -130,6 +130,7 @@
             </field>
           </object>
         </object-param>
+<!--
         <object-param>
           <name>user.configuration</name>
           <object type="org.exoplatform.portal.config.NewPortalConfig">
@@ -148,6 +149,7 @@
             </field>
           </object>
         </object-param>
+-->
       </init-params>
     </component-plugin>
   </external-component-plugins>
@@ -293,6 +295,18 @@
                     <field  name="firstName"><string>Mary</string></field>
                     <field  name="lastName"><string>Kelly</string></field>
                     <field  name="email"><string>mary@localhost</string></field>
+                    <field  name="groups">
+                      <string>member:/platform/users</string>
+                    </field>
+                  </object>
+                </value>
+                <value>
+                  <object type="org.exoplatform.services.organization.OrganizationConfig$User">
+                    <field  name="userName"><string>overwritelayout</string></field>
+                    <field  name="password"><string>gtn</string></field>
+                    <field  name="firstName"><string>Overwrite</string></field>
+                    <field  name="lastName"><string>Layout</string></field>
+                    <field  name="email"><string>overwrite@localhost</string></field>
                     <field  name="groups">
                       <string>member:/platform/users</string>
                     </field>

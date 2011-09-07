@@ -20,6 +20,8 @@
 package org.exoplatform.portal.config;
 
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Author : Nhu Dinh Thuan
@@ -42,6 +44,8 @@ public final class NewPortalConfig
    private String description;
 
    private String importMode;
+
+   final Set<String> createdOwners = new HashSet<String>();
 
    /**
     * @deprecated use the location instead

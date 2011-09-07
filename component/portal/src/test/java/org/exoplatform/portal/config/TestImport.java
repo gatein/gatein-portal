@@ -24,6 +24,11 @@ import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.component.test.KernelBootstrap;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
+import org.exoplatform.portal.config.model.Application;
+import org.exoplatform.portal.config.model.ApplicationState;
+import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.importer.Imported;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
@@ -32,6 +37,7 @@ import org.exoplatform.portal.mop.navigation.Node;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.gatein.mop.api.workspace.Workspace;
 
 import java.io.File;
@@ -96,6 +102,72 @@ public class TestImport extends AbstractGateInTest
       assertNotNull(root.get("foo"));
       assertNotNull(root.get("daa"));
       assertNotNull(root.get("bar"));
+      RequestLifeCycle.end();
+      bootstrap.dispose();
+   }
+
+   public void testNoMixin() throws Exception
+   {
+      KernelBootstrap bootstrap = new KernelBootstrap();
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
+      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestImport1-configuration.xml");
+
+      //
+      System.setProperty("override.1", "false");
+      System.setProperty("import.mode.1", "conserve");
+      System.setProperty("import.portal.1", "site1");
+
+      //
+      bootstrap.boot();
+      PortalContainer container = bootstrap.getContainer();
+      DataStorage service = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      RequestLifeCycle.begin(container);
+      POMSessionManager mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      Workspace workspace = mgr.getSession().getWorkspace();
+      assertTrue(workspace.isAdapted(Imported.class));
+      long when1 = workspace.adapt(Imported.class).getCreationDate().getTime();
+      PortalConfig portal = service.getPortalConfig("classic");
+      Container layout = portal.getPortalLayout();
+      assertEquals(1, layout.getChildren().size());
+      Application<Portlet> layoutPortlet = (Application<Portlet>)layout.getChildren().get(0);
+      assertEquals("site1/layout", service.getId(layoutPortlet.getState()));
+      Page page1 = service.getPage("portal::classic::page1");
+      assertEquals(1, page1.getChildren().size());
+      Application<Portlet> page1Portlet = (Application<Portlet>)page1.getChildren().get(0);
+      assertEquals("site1/page1", service.getId(page1Portlet.getState()));
+      workspace.removeAdapter(Imported.class);
+      mgr.getSession().save();
+      RequestLifeCycle.end();
+      bootstrap.dispose();
+
+      //
+      System.setProperty("override.1", "false");
+      System.setProperty("import.mode.1", "conserve");
+      System.setProperty("import.portal.1", "site2");
+
+      //
+      bootstrap.boot();
+      container = bootstrap.getContainer();
+      service = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      RequestLifeCycle.begin(container);
+      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+      workspace = mgr.getSession().getWorkspace();
+      assertTrue(workspace.isAdapted(Imported.class));
+      long when2 = workspace.adapt(Imported.class).getCreationDate().getTime();
+      assertTrue(when2 > when1);
+      portal = service.getPortalConfig("classic");
+      layout = portal.getPortalLayout();
+      assertEquals(1, layout.getChildren().size());
+      layoutPortlet = (Application<Portlet>)layout.getChildren().get(0);
+      assertEquals("site1/layout", service.getId(layoutPortlet.getState()));
+      page1 = service.getPage("portal::classic::page1");
+      assertEquals(1, page1.getChildren().size());
+      page1Portlet = (Application<Portlet>)page1.getChildren().get(0);
+      assertEquals("site1/page1", service.getId(page1Portlet.getState()));
+      Page page2 = service.getPage("portal::classic::page2");
+      assertNull(page2);
       RequestLifeCycle.end();
       bootstrap.dispose();
    }
