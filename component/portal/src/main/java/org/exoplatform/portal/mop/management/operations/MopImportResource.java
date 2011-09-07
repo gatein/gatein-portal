@@ -107,6 +107,7 @@ public class MopImportResource implements OperationHandler
       Map<SiteKey, MopImport> importMap = new HashMap<SiteKey, MopImport>();
       final NonCloseableZipInputStream zis = new NonCloseableZipInputStream(inputStream);
       ZipEntry entry;
+      boolean empty = false;
       try
       {
          log.info("Preparing data for import.");
@@ -114,6 +115,9 @@ public class MopImportResource implements OperationHandler
          {
             // Skip directories
             if (entry.isDirectory()) continue;
+            // Skip empty entries (this allows empty zip files to not cause exceptions).
+            empty = entry.getName().equals("");
+            if (empty) continue;
 
             // Parse zip entry
             String[] parts = parseEntry(entry);
@@ -184,6 +188,12 @@ public class MopImportResource implements OperationHandler
          {
             log.warn("Exception closing underlying data stream from import.");
          }
+      }
+
+      if (empty)
+      {
+         log.info("Nothing to import, zip file empty.");
+         return;
       }
 
       // Perform import
