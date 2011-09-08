@@ -423,13 +423,10 @@ public class UIPageBrowser extends UIContainer
          UIPortalApplication uiApp = (UIPortalApplication)prContext.getUIApplication();
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          UIPageForm uiPageForm = uiMaskWS.createUIComponent(UIPageForm.class, "UIBrowserPageForm", "UIPageForm");
+         uiPageForm.buildForm(null);
          uiMaskWS.setUIComponent(uiPageForm);
          uiMaskWS.setShow(true);
-         
-         uiPageForm.removeChild(UIFormInputItemSelector.class);
-         UIPageTemplateOptions uiTemplateConfig = uiPageForm.createUIComponent(UIPageTemplateOptions.class, null, null);
-         uiPageForm.addUIFormInput(uiTemplateConfig);
-         
+
          UIFormSelectBox slcOwnerType = uiPageForm.getUIFormSelectBox(UIPageForm.OWNER_TYPE);
          List<SelectItemOption<String>> types = slcOwnerType.getOptions();         
          for (int i = 0; i < types.size(); i++)
@@ -440,7 +437,7 @@ public class UIPageBrowser extends UIContainer
                break;
             }
          }
-         slcOwnerType.setOptions(types);         
+         slcOwnerType.setOptions(types);
          Event<UIComponent> slcEvent = uiPageForm.createEvent("ChangeOwnerType", Phase.DECODE, event.getRequestContext());
          slcEvent.broadcast();
                   

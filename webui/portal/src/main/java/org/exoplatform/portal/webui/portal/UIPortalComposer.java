@@ -627,8 +627,8 @@ public class UIPortalComposer extends UIContainer
          UIMaskWorkspace uiMaskWS = uiPortalApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          UIPageForm uiPageForm = uiPortalApp.createUIComponent(UIPageForm.class, null, null);
 
-         UIComponent uiPage = uiToolPanel.findFirstComponentOfType(UIPage.class);
-         uiPageForm.setValues((UIPage)uiPage);
+         UIPage uiPage = uiToolPanel.findFirstComponentOfType(UIPage.class);
+         uiPageForm.buildForm(uiPage);
          uiMaskWS.setUIComponent(uiPageForm);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);
       }
