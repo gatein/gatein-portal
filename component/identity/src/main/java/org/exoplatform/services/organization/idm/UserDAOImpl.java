@@ -154,6 +154,11 @@ public class UserDAOImpl implements UserHandler
 
       }
 
+      if (getIntegrationCache() != null)
+      {
+         getIntegrationCache().invalidateAll();
+      }
+
       persistUserInfo(user, session);
 
       if (broadcast)
