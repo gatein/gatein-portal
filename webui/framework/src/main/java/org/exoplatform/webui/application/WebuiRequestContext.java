@@ -178,13 +178,14 @@ abstract public class WebuiRequestContext extends RequestContext
    public ResourceResolver getResourceResolver(String uri)
    {
       Application app = getApplication();
+      RequestContext pcontext = this;
       while (app != null)
       {
          ApplicationResourceResolver appResolver = app.getResourceResolver();
          ResourceResolver resolver = appResolver.getResourceResolver(uri);
          if (resolver != null)
             return resolver;
-         RequestContext pcontext = getParentAppRequestContext();
+       	 pcontext = pcontext.getParentAppRequestContext();
          if (pcontext != null)
             app = pcontext.getApplication();
          else
