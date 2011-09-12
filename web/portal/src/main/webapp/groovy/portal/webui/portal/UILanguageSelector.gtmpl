@@ -78,30 +78,8 @@
 						</div>
 						
 		 				<div class="UIAction"> 
-							<table class="ActionContainer">
-								<tr>
-									<td>
-										<div onclick="javascript:eXo.portal.UIPortal.changeLanguage('<%=uicomponent.url("Save");%>');" class="ActionButton LightBlueStyle">
-											<div class="ButtonLeft">
-												<div class="ButtonRight">
-													<div class="ButtonMiddle">
-														<a href="#"><%=_ctx.appRes("UIChangeLanguage.action.save");%></a>
-													</div>
-												</div>
-											</div>
-										</div>
-										<div onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle">
-											<div class="ButtonLeft">
-												<div class="ButtonRight">
-													<div class="ButtonMiddle">
-														<a href="javascript:void(0);"><%=_ctx.appRes("UIChangeLanguage.action.close");%></a>
-													</div>
-												</div>
-											</div>
-										</div>
-									</td>
-								</tr>
-					 		</table>
+							<a href="javascript:void(0);" onclick="javascript:eXo.portal.UIPortal.changeLanguage('<%=uicomponent.url("Save");%>');" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.save");%></a>
+							<a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.close");%></a>
 						</div>
 	
 					</div>

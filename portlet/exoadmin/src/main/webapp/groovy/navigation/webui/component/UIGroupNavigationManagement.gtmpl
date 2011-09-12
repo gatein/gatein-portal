@@ -9,21 +9,7 @@
 		if(uicomponent.userHasRightToAddNavigation()){ %> 	  	
   
 	<div class="UIAction"> 
-    <table class="ActionContainer">
-	    <tr>
-	    	<td>
-		      <div onclick="<%=uicomponent.event("AddNavigation")%>" class="ActionButton BlueButton">
-		        <div class="ButtonLeft">
-		          <div class="ButtonRight">
-		            <div class="ButtonMiddle">
-		              <a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".Action.Add")%></a>
-		            </div>
-		          </div>
-		        </div>
-		      </div>
-		    </td>
-      </tr>
- 	  </table>
+    <a href="javascript:void(0);" onclick="<%=uicomponent.event("AddNavigation")%>" class="ActionButton DarkGrayButton"><%=_ctx.appRes(uicomponent.getId() + ".Action.Add")%></a>
 	</div>
 	<%
 		}

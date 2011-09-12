@@ -160,15 +160,8 @@
 }
 .UIWizard .UIWizardContent .UIAction {
 	padding: 8px 0 0;
-}
-
-.UIWizard .WizardControlBar .UIAction .ActionButton {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-}
-
-.UIWizard .WizardControlBar .UIAction .ActionContainer {
-	width: 100%;
+	text-align: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
 }
 
 /*========================== Start UIWizard Welcome ==============================*/

@@ -41,95 +41,49 @@
 	
 	void printMessage(String message, String messageType)
 	{
-		println "<div class=\"UITabContent\">";
-		println "	<div class=\"PopupMessageBox\">";
-		println "		<div class=\"$messageType\">";
-		println "			<div class=\"PopupMessageContainer\">";
-		println "				<div class=\"MessageContainer\">";
-		println "				<div class=\"PopupIcon ${messageType}Icon\"><span></span></div>";
-		println "					<div class=\"PopupMessage\">";
+		println "    <ul class=\"UITabContent PopupMessageBox $messageType\">";
+		println "        <li class=\"MessageContainer\">";
+		println "          <span class=\"PopupIcon ${messageType}Icon\">";
 		println message;
-		println "					</div>";
-		println "					<div style=\"clear:left\"><span></span></div>";
-		println "				</div>";
-		println "			</div>";
-		println "		</div>";
-		println "	</div>";
-		println "</div>";
-	}
+		println "          </span>";
+		println "        </li>";
+		println "      </ul>";
+		}
 	
 	void printAction(List actions)
 	{
 		for(act in actions)
 		{
-			println "<td>";
-			println "	<div onclick="+uicomponent.event("Click", act.getEventId())+" class=\"ActionButton LightBlueStyle\">";
-			println "		<div class=\"ButtonLeft\">";
-			println "			<div class=\"ButtonRight\">";
-			println "				<div class=\"ButtonMiddle\">";
-			println "					<a href=\"javascript:void(0);\"> ${act.getActionKey()} </a>";
-			println "				</div>";
-			println "			</div>";
-			println "		</div>";
-			println "	</div>";
-			println "</td>";			
+			println "	<a href=\"javascript:void(0);\" onclick="+uicomponent.event("Click", act.getEventId())+" class=\"ActionButton LightBlueStyle\"> ${act.getActionKey()} </a>";
 		}
 	}
 %>
-	<div class="UIPopupWindow UIDragObject" id="$popupId" style="width: 550px; display: none;">
-		<div class="ExoMessageDecorator">
-			<div class="TopLeftCornerDecorator">
-				<div class="TopRightCornerDecorator">
-					<div class="TopCenterDecorator">
-						<div class="OverflowContainer">
-							<div class="PopupTitleIcon"><span></span></div>
-							<div class="CloseButton" title="<%=_ctx.appRes("UIConfirmation.Close")%>" onclick="<%=uicomponent.event("Close")%>"><span></span></div>
-							<div class="PopupTitle"><%= _ctx.appRes("UIConfirmation.title.exoMessages") %></div>
-						</div>
+	<div class="UIPopupWindow UIDragObject ExoMessageDecorator" id="$popupId" style="width: 550px; display: none;">
+		<div class="OverflowContainer ClearFix">
+			<span class="PopupTitleIcon"></span>
+			<a class="CloseButton" title="<%=_ctx.appRes("UIConfirmation.Close")%>" onclick="<%=uicomponent.event("Close")%>"></a>
+			<span class="PopupTitle"><%= _ctx.appRes("UIConfirmation.title.exoMessages") %></span>
+		</div>
+		
+		<div class="UIWindowContent">
+			<div class="PopupContent UIPopupMessages">
+				<div class="UIHorizontalTabs">
+					<div class="TabsContainer">
+					<%	
+						boolean flag = true
+						flag = printTab(message, "Warning", flag);
+					%>
 					</div>
 				</div>
-			</div>
-			
-			<div class="MiddleLeftSideDecorator">
-				<div class="MiddleRightSideDecorator">
-					<div class="MiddleCenterDecorator">
-						<div class="UIWindowContent">
-							<div class="PopupContent">
-								<div class="UIPopupMessages">	
-									<div class="UIHorizontalTabs">
-										<div class="TabsContainer">
-										<%	
-											boolean flag = true
-											flag = printTab(message, "Warning", flag);
-										%>
-										</div>
-									</div>
-									<div class="UITabContentContainer">
-										<%
-											printMessage(message, "ErrorMessage");
-										%>
-									</div>
-									<div class="MessageActionBar">
-										<div class="UIAction"> 
-											<table class="ActionContainer">
-												<tr>
-													<%
-														printAction(actions);
-													%>
-												</tr>
-									 		</table>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
+				<div class="UITabContentContainer">
+					<%
+						printMessage(message, "ErrorMessage");
+					%>
 				</div>
-			</div>
-			<div><span></span></div>
-			<div class="BottomLeftCornerDecorator">
-				<div class="BottomRightCornerDecorator">
-					<div class="BottomCenterDecorator"><span></span></div>
+				<div class="UIAction MessageActionBar">
+					<%
+						printAction(actions);
+					%>
 				</div>
 			</div>
 		</div>

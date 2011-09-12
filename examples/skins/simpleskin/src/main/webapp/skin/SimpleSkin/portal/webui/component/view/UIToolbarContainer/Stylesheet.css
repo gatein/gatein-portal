@@ -17,37 +17,8 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-.UIToolbarContainer {	
-	padding: 0px;
-	height: auto;
-}
-
-.UIToolbarContainer .UserInfoPortletTDContainer {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-}
-
-.UIToolbarContainer .LAYOUT-CONTAINER {
-	overflow: hidden;
-}
-
-.UIToolbarContainer .LAYOUT-BLOCK .UIRowContainer {
-	height: auto;
-	min-height: inherit;
-	border: none;
-	background: none;
-}
-
-.UIToolbarContainer .ToolbarContainer .TRContainer {
+.UIToolbarContainer .ToolbarContainer .TRContainer,.UIToolbarContainer .UIHorizontalTabs {
 	height: 30px;
-}
-
-.UIToolbarContainer .UIContainer {
-	padding: 0px;
-}
-
-.UIToolbarContainer .UITableColumnContainer {
-	margin: 0px;
 }
 
 .UIToolbarContainer .NormalContainerBlock .ToolbarContainer {
@@ -56,17 +27,12 @@
 	border: none;
 }
 
-.UIToolbarContainer .ToolbarContainer a {
+.UIToolbarContainer .ToolbarContainer .TBIcon {
 	padding: 0px 15px 0px 35px; /* orientation=lt */
 	padding: 0px 35px 0px 15px; /* orientation=rt */
 	color: #fff;
-	display: block;
-	white-space: nowrap;
 }
 
-.UIToolbarContainer .UITab a:hover {
-	color: #9fc5ff;
-}
 
 .UIToolbarContainer .UIHorizontalTabs .TabsContainer {
 	height: 30px; /* orientation=lt */
@@ -74,71 +40,32 @@
 }
 
 .UIToolbarContainer .UIHorizontalTabs .UITab {
-	line-height: 30px;
 	background: none;
 	font-weight: normal;
-	padding-right: 2px; /* orientation=lt */
-	padding-left: 2px; /* orientation=rt */
-	text-align: left; /* orientation=lt */
-	text-align: right; /* orientation=rt */
-    float: none;
-	!float: left;/* orientation=rt */
-	_float: none;/* orientation=rt */
-	cursor: pointer;
 }
-
-.UserToolBarSitePortletTDContainer {
-	position: relative;
-}
-
-.UserToolBarGroupPortletTDContainer {
-	position: relative;
-}
-
-.UserToolBarGroupPortletTDContainer {
-	position: relative;
-}
-
-.UserToolBarDashboardPortletTDContainer {
-	position: relative;
-}
-
-.AdminToolBarPortletTDContainer {
-	position: relative;
-}
-
 
 /****************************/
 
 .UIToolbarContainer .MenuItemContainer {	
 	border: 1px solid #e7e6eb;
 	background: #e7e6eb;
-	position: absolute;
-	z-index: 1;
 }
 
 .UIToolbarContainer .TitleBar {
 	color: #232d36;
 	background: #cccccc;
 	font-weight: normal;
-    height: 23px;
-    line-height: 23px;
-    opacity: 0.9;
-    padding: 0 5px;
-    white-space: nowrap;
-	filter: alpha(opacity=90);
 }
 
 .UIToolbarContainer .MenuItem {	
-	background: none;
-	height: 28px;
-    line-height: 28px;
-    opacity: 0.9;
-	filter: alpha(opacity=90);
-    width: 100%;
+	background: none;	
 }
 
-.UIToolbarContainer .MenuItem .ArrowIcon {
+.UIToolbarContainer .MenuItem:hover {
+	background-color: #d7d7d7;
+}
+
+.UIToolbarContainer  .ArrowIcon {
 	background: url('background/ToolbarContainer.gif') no-repeat right bottom; /* orientation=lt */
 	background: url('background/ToolbarContainer-rt.gif') no-repeat -5px bottom; /* orientation=rt */
 }
@@ -147,11 +74,6 @@
 	padding: 0px 25px 0px 30px; /* orientation=lt */
 	padding: 0px 30px 0px 25px; /* orientation=rt */
 	color: #232d36;
-}
-
-.UIToolbarContainer .MenuItem a:hover {
-	color: #000;
-	background-color: #d7d7d7;
 }
 
 .UIToolbarContainer .ItemIcon {	
@@ -167,7 +89,7 @@
 }
 
 .UIToolbarContainer .SiteIcon {
-	background: url('background/ToolbarContainer.gif') no-repeat 5px -97px; /* orientation=lt */
+	background: url('background/ToolbarContainer.gif') no-repeat 0px -97px; /* orientation=lt */
 	background: url('background/ToolbarContainer.gif') no-repeat 100% -97px; /* orientation=rt */
 }
 
@@ -226,11 +148,6 @@
 .UIToolbarContainer .Name a {
 	background: url('background/UseIcon.gif') no-repeat left center; /* orientation=lt */
 	background: url('background/UseIcon.gif') no-repeat right center; /* orientation=rt */
-	padding: 0px 10px 0px 25px; /* orientation=lt */
-	padding: 0px 25px 0px 10px; /* orientation=rt */
-	color: #fff;
-	cursor: pointer;
-    font-weight: bold;
     line-height: 30px;
 }
 
@@ -242,27 +159,13 @@
 .UIStarToolBarPortlet {
 	background: url('background/GateinLogo.jpg') no-repeat 10px 6px; /* orientation=lt */
 	background: url('background/GateinLogo.jpg') no-repeat 23px 5px; /* orientation=rt */
-	width: 64px;
-	height: 30px;
 }
 
 .UIStarToolBarPortlet .UITab {
-	height: 30px;
 	float: none; /* orientation=rt */
 }
 
 /***************UIUserToolBarPortlet*****************/
-.UIUserToolbarPortlet .MenuItemContainer .SelectedItem {
-	line-height: 24px;
-	width: auto; 
-	background: #c7c7c7;
-	color: #3e8df0;
-}
-
-.UIToolbarContainer .UIAdminToolbarPortlet .UIHorizontalTabs .UITab {
-	background: none;
-	padding: 0px;
-}
 
 .UIToolbarContainer .UIUserToolbarPortlet .UIHorizontalTabs .TabsContainer {
 	width: 400px; /* orientation=rt */

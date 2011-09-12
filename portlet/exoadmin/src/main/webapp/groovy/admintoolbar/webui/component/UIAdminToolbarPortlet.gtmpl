@@ -29,35 +29,27 @@
 	}
 	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
 %>
-<div class="UIAdminToolbarPortlet" id="$uicomponent.id" >
-	<div class="UIHorizontalTabs">
-		<div class="TabsContainer" >
-			<div class="UITab NormalToolbarTab portlet-menu-item">
-				<div class="">
-					<a class="EditorIcon TBIcon" href="#">$editorLabel</a>
-				</div>
-				<div class="MenuItemContainer portlet-menu-cascade" style="display:none;">
-					<div class="SubBlock">
-						<% if(userCouldEditNavigation){ %>
-							<div class="MenuItem portlet-menu-cascade-item">	
-								<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'PageCreationWizard', true))" title="" class="ItemIcon AddPageIcon">$addPageLabel</a>
-							</div>
-						<% } %>
+<ul class="UIAdminToolbarPortlet UIHorizontalTabs" id="$uicomponent.id" >
+	<li class="UITab NormalToolbarTab portlet-menu-item">
+		<a class="EditorIcon TBIcon" href="#">$editorLabel</a>
+		<ul class="MenuItemContainer portlet-menu-cascade" style="display:none;">
+			<% if(userCouldEditNavigation){ %>
+				<li class="MenuItem portlet-menu-cascade-item">	
+					<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'PageCreationWizard', true))" title="" class="ItemIcon AddPageIcon">$addPageLabel</a>
+				</li>
+			<% } %>
+   			
+   			<% if(userCouldEditPage){ %>
+				<li class="MenuItem portlet-menu-cascade-item">
+					<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditCurrentPage', true))" title="" class="ItemIcon EditPageIcon">$editPageLabel</a>
+				</li>
+			<% } %>					
 						
-						<% if(userCouldEditPage){ %>
-							<div class="MenuItem portlet-menu-cascade-item">
-								<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditCurrentPage', true))" title="" class="ItemIcon EditPageIcon">$editPageLabel</a>
-							</div>
-						<% } %>
-						
-						<% if(userCouldEditPortal){ %>
-							<div class="MenuItem portlet-menu-cascade-item">	
-								<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditInline', true))" title="" class="ItemIcon EditSiteIcon">$editSiteLayout</a>
-							</div>
-						<% } %>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+			<% if(userCouldEditPortal){ %>								 
+				<li class="MenuItem portlet-menu-cascade-item">	
+					<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditInline', true))" title="" class="ItemIcon EditSiteIcon">$editSiteLayout</a>
+				</li>
+			<% } %>
+		</ul>
+	</li>
+</ul>			

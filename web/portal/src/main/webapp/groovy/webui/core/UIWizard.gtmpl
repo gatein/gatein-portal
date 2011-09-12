@@ -61,62 +61,28 @@
 						<div class="ActionBar">
 						
 							<div class="UIAction">
-								<table class="ActionContainer">
-									<tr>
-										<td>
-										  <% if (uicomponent.isShowActions()) { %>
-											<div onclick="<%=uicomponent.event("Abort", "");%>" class="ActionButton LightBlueStyle">
-												<div class="ButtonLeft">
-													<div class="ButtonRight">
-														<div class="ButtonMiddle">
-															<a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".label.abort")%></a>
-														</div>
-													</div>
-												</div>
-											</div>
-											<%
-												String action = "next";
-												if(step == children.size()){
-													action = "done";						
-													actionLink = uicomponent.event("ViewStep" + String.valueOf(step+1), "");
-												} else {
-														actionLink = uicomponent.url("ViewStep" + String.valueOf(step+1));
-													}
-											%>	
-																							
-											<div onclick="$actionLink" class="ActionButton LightBlueStyle">
-												<div class="ButtonLeft">
-													<div class="ButtonRight">
-														<div class="ButtonMiddle">
-															<%=_ctx.appRes(uicomponent.getId() + ".label."+action)%>
-														</div>
-													</div>
-												</div>
-											</div>
-							
-											<% 
-											int showBack = step;
-											if (uicomponent.getClass().getName().contains("Edit"))	showBack++; 
-											if(showBack > 2) {
-												actionLink = uicomponent.url("ViewStep" + String.valueOf(step-1));
-												String display = "LightBlueStyle";
-											%>
-											<div onclick="$actionLink" class="ActionButton $display">
-												<div class="ButtonLeft">
-													<div class="ButtonRight">
-														<div class="ButtonMiddle">
-															<%=_ctx.appRes(uicomponent.getId() + ".label.back")%>
-														</div>
-													</div>
-												</div>
-											</div>
-											<% } %>									
-											
-											
-											<%} // End if (step != 3)%> 
-										</td>
-									</tr>
-								</table>
+								<% if (uicomponent.isShowActions()) { %>
+											<a href="javascript:void(0);" onclick="<%=uicomponent.event("Abort", "");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getId() + ".label.abort")%></a>
+								<%
+									String action = "next";
+									if(step == children.size()){
+										action = "done";						
+										actionLink = uicomponent.event("ViewStep" + String.valueOf(step+1), "");
+									} else {
+											actionLink = uicomponent.url("ViewStep" + String.valueOf(step+1));
+										}
+								%>	
+										<a href="javascript:void(0);" onclick="$actionLink" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getId() + ".label."+action)%></a>
+								<% 
+								int showBack = step;
+								if (uicomponent.getClass().getName().contains("Edit"))	showBack++; 
+								if(showBack > 2) {
+									actionLink = uicomponent.url("ViewStep" + String.valueOf(step-1));
+									String display = "LightBlueStyle";
+								%>
+										<a  onclick="$actionLink" class="ActionButton $display"><%=_ctx.appRes(uicomponent.getId() + ".label.back")%></a>
+								<% } %>
+								<%} // End if (step != 3)%> 
 							</div>
 														
 						</div>		

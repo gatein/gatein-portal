@@ -8,85 +8,36 @@
 	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopup.setAlign('$popupId', 2, 5, 5);");
 %>
 <div class="UIPopupWindow UIDragObject UIPortalComposer" exo:minWidth="200" exo:minHeight="200" id="$uicomponent.id" style="width: 320px; display: block;">
-	<div class="TLPortalComposer">
-		<div class="TRPortalComposer">
-			<div class="TCPortalComposer">
-				<div class="OverflowContainer">
-					<div class="<%=uicomponent.isCollapsed ? "CollapseIcon" : "ExpandIcon"%>" onclick="eXo.portal.UIPortal.toggleComposer(this)"><span></span></div>
-						<% if(uicomponent.isShowControl) { %>
-						<a class="CloseButton" title="<%=_ctx.appRes("word.abort")%>" href="<%=uicomponent.event("CloseComposer")%>"><span></span></a>
-							<% if (uicomponent.isUsedInWizard()) { %>
-								<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="<%=uicomponent.url("Finish")%>" onclick="eXo.core.DOMUtil.disableOnClick(this);" ><span></span></a>
-								<a class="BackButton"" title="<%=_ctx.appRes("word.back")%>" href="<%=uicomponent.event("Back")%>">
-									<span></span>
-								</a>
-							<% } else {%>
-								<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="<%=uicomponent.event("Finish")%>"><span></span></a>
-						<%	 }
-							 } %>
-					<div class="PopupTitle"><%=_ctx.appRes(popupId + ".title."+ popupId)%></div>
-				</div>
-			</div>
-		</div>
+	<div class="OverflowContainer ClearFix">
+		<span class="<%=uicomponent.isCollapsed ? "CollapseIcon" : "ExpandIcon"%>" onclick="eXo.portal.UIPortal.toggleComposer(this)"></span>
+			<% if(uicomponent.isShowControl) { %>
+			<a class="CloseButton" title="<%=_ctx.appRes("word.abort")%>" href="<%=uicomponent.event("CloseComposer")%>"><span></span></a>
+				<% if (uicomponent.isUsedInWizard()) { %>
+					<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="<%=uicomponent.url("Finish")%>" onclick="eXo.core.DOMUtil.disableOnClick(this);" ></a>
+					<a class="BackButton" title="<%=_ctx.appRes("word.back")%>" href="<%=uicomponent.event("Back")%>"></a>
+				<% } else {%>
+					<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="<%=uicomponent.event("Finish")%>"></a>
+			<%	 }
+				 } %>
+		<span class="PopupTitle"><%=_ctx.appRes(popupId + ".title."+ popupId)%></span>
 	</div>
-
-	<div class="MLPortalComposer" style="display: <%=uicomponent.isCollapsed ? "none": "block"%>">
-		<div class="MRPortalComposer">
-			<div class="MCPortalComposer">
-				<div class="UIWindowContent">
-					<div style="width: 100%;">
-						<div class="PopupContent" style="height: 390px">
-							<div class="Component"><% uicomponent.renderChildren(); %></div>
-						</div>
-					</div>
-				</div>
-			</div>
+	
+	<div class="UIWindowContent" style="display: <%=uicomponent.isCollapsed ? "none": "block"%>" >
+		<div class="PopupContent Component" style="height: 390px">
+			<% uicomponent.renderChildren(); %>
 		</div>
-	</div>
-
-	<div class="BLPortalComposer" style="display: <%=uicomponent.isCollapsed ? "none": "block"%>">
-		<div class="BRPortalComposer">
-			<div class="BCPortalComposer ClearFix">
-				<div class="UIAction"> 
-					<table class="ActionContainer">
-						<tr>
-							<td>
-								
-								<div onclick="<%= uicomponent.event("ViewProperties") %>;" class="ActionButton SimpleStyle1">
-									<div class="ButtonLeft">
-										<div class="ButtonRight">
-											<div class="ButtonMiddle">
-												<div class="PageProfileIcon">
-													<a href="javascript:void(0);"><%=_ctx.appRes(popupId + ".action.ViewProperties")%></a>
-												</div>
-											</div>
-										</div>
-									</div>
-						 		</div>
-			
-								<% String changeEditMode = uicomponent.event("SwitchMode", null, null); %>
-								<div onclick="$changeEditMode" class="ActionButton SimpleStyle1" onmouseover="this.style.color = '#058ee6'" onmouseout="this.style.color='black'">
-									<div class="ButtonLeft">
-										<div class="ButtonRight">
-											<div class="ButtonMiddle">
-												<div class="ViewAsBlockIcon">
-													<a href="javascript:void(0);"><%=_ctx.appRes(popupId + ".action.SwitchMode")%></a>
-												</div>
-											</div>
-										</div>
-									</div>
-						 		</div>
-			
-							</td>
-						</tr>	
-					</table>
-				</div>
-				<div class="ResizeButton"><span></span></div>
-			</div>
+		
+		<div class="UIAction" style="display: <%=uicomponent.isCollapsed ? "none": "block"%>"> 
+			<span onclick="<%= uicomponent.event("ViewProperties") %>;eXo.portal.UIPortal.changeComposerSaveButton()" class="ActionButton SimpleStyle1">
+				<a href="javascript:void(0);" class="PageProfileIcon"><%=_ctx.appRes(popupId + ".action.ViewProperties")%></a>
+			</span>
+			<% String changeEditMode = uicomponent.event("SwitchMode", null, null); %>
+			<span onclick="$changeEditMode" class="ActionButton SimpleStyle1" onmouseover="this.style.color = '#058ee6'" onmouseout="this.style.color='black'">
+				<a href="javascript:void(0);" class="ViewAsBlockIcon"><%=_ctx.appRes(popupId + ".action.SwitchMode")%></a>
+			</span>						
 		</div>
+		<span class="ResizeButton"></span>
 	</div>
-	<div class="Bottom" style="display: none;"><span></span></div>
-
 </div>
 <script language="javascript">
 	eXo.portal.portalMode = <%=uicomponent.getPortalMode();%>;

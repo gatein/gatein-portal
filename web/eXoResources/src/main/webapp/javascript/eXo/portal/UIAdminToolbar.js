@@ -19,8 +19,8 @@
 
 function UIAdminToolbar() {} ;
 UIAdminToolbar.prototype.onLoad = function(baseId) {
-  var uiNavPortlet = document.getElementById(baseId) ;
-  var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiNavPortlet, "div", "TabsContainer");
+  var uiNavPortlet = document.getElementById(baseId).parentNode ;
+  var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiNavPortlet, "ul", "UIHorizontalTabs");
   if(mainContainer) eXo.portal.UIPortalNavigation.init(uiNavPortlet, mainContainer, 0, 0);
 } ;
 

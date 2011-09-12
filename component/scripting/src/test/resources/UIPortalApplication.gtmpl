@@ -92,32 +92,16 @@
 	<div class="$uicomponent.skin" id="UIPortalApplication" style="!height: 100%;">
 
 		<div class="AjaxLoadingMask" id="AjaxLoadingMask" style="display: none; margin: auto;">
-      <div class="LoadingContainer">
-        <div class="CenterLoadingContainer">
-          <div class="LoadingText"><%=_ctx.appRes("UIPortalApplication.label.Loading")%></div>
-          <div class="LoadingProgressBar"><span></span></div>
-
-          <div class="UIAction">
-				    <table class="ActionContainer">
-					    <tr>
-					    	<td>
-						      <div onclick="javascript:ajaxAbort();" class="ActionButton LightBlueStyle">
-						        <div class="ButtonLeft">
-						          <div class="ButtonRight">
-						            <div class="ButtonMiddle">
-						              <a href="javascript:void(0);"><%=_ctx.appRes("UIPortalApplication.label.Abort")%></a>
-						            </div>
-						          </div>
-						        </div>
-						      </div>
-						    </td>
-				      </tr>
-				 	  </table>
-					</div>
-
-        </div>
-      </div>
-	  </div>
+			<div class="LoadingContainer">
+				<div class="LoadingText"><%=_ctx.appRes("UIPortalApplication.label.Loading")%></div>
+				<span class="LoadingProgressBar"></span>
+				
+				<div class="UIAction"> 
+					<a href="javascript:ajaxAbort();" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIPortalApplication.label.Abort")%></a>
+				</div>
+			
+			</div>
+		</div>
 
 	  <%uicomponent.renderChildren();%>
 	</div>

@@ -35,47 +35,24 @@
 	String unmaxiTitle = _ctx.appRes("UIGadget.tooltip.Unmaximize");
 %>
 <div class="UIGadget" id="$id" style="left: $posX; top: $posY; z-Index: $zIndex; width: 100%" >
-	<div class="GadgetControl" style="visibility: visible;">
-		<div class="LeftControlBar">
-			<div class="RightControlBar">
-				<div class="CenterControlBar ClearFix">
-					<div class="CloseGadget IconControl" onclick="eXo.gadget.UIGadget.deleteGadget(this)" onmousedown="event.cancelBubble=true;" title="<%=_ctx.appRes("UIGadget.tooltip.deleteGadget")%>"><span></span></div>
-					<div class="<%=view.equals(uicomponent.HOME_VIEW) ? "MaximizeGadget" : "RestoreGadget";%> IconControl"
-                                    onclick="eXo.gadget.UIGadget.maximizeGadget(this)" onmousedown="event.cancelBubble=true;"
-                                    title="<%=view.equals(uicomponent.HOME_VIEW) ? maxiTitle : unmaxiTitle%>"><span></span></div>
-					<div class="<%=isMini ? "RestoreGadget": "MinimizeGadget";%> MinimizeAction IconControl" 
-									onclick="eXo.gadget.UIGadget.minimizeGadget(this)" onmousedown="event.cancelBubble=true;" style="display:none;" 
-									title="<%=isMini ? unminiTitle : miniTitle%>" miniTitle="$miniTitle" unminiTitle="$unminiTitle"><span></span></div>
-					<% if(uicomponent.isSettingUserPref()) { %>
-                       <div class="EditGadget IconControl" onclick="eXo.gadget.UIGadget.editGadget('$id')" onmousedown="event.cancelBubble=true;" title="<%=_ctx.appRes("UIGadget.tooltip.editGadget")%>"><span></span></div>
-					<% } %>
-                    <div class="GadgetDragHandleArea"><span></span></div>
-					<div class="GadgetTitle" style="display: <%=isLossData ? "block" : "none"; %> ; float: none; width: auto; margin-right: 75px"><%= uicomponent.getApplicationName() %></div>
-				</div>
-			</div>
-		</div>
+	<div class="GadgetControl ClearFix" style="visibility: visible;">		
+		<span class="CloseGadget IconControl" onclick="eXo.gadget.UIGadget.deleteGadget(this)" onmousedown="event.cancelBubble=true;" title="<%=_ctx.appRes("UIGadget.tooltip.deleteGadget")%>"></span>
+		<span class="<%=view.equals(uicomponent.HOME_VIEW) ? "MaximizeGadget" : "RestoreGadget";%> IconControl"
+                     onclick="eXo.gadget.UIGadget.maximizeGadget(this)" onmousedown="event.cancelBubble=true;"
+                     title="<%=view.equals(uicomponent.HOME_VIEW) ? maxiTitle : unmaxiTitle%>"></span>
+		<span class="<%=isMini ? "RestoreGadget": "MinimizeGadget";%> MinimizeAction IconControl" 
+			onclick="eXo.gadget.UIGadget.minimizeGadget(this)" onmousedown="event.cancelBubble=true;" style="display:none;" 
+			title="<%=isMini ? unminiTitle : miniTitle%>" miniTitle="$miniTitle" unminiTitle="$unminiTitle"></span>
+		<% if(uicomponent.isSettingUserPref()) { %>
+		   <span class="EditGadget IconControl" onclick="eXo.gadget.UIGadget.editGadget('$id')" onmousedown="event.cancelBubble=true;" title="<%=_ctx.appRes("UIGadget.tooltip.editGadget")%>"></span>
+		<% } %>
+		<span class="GadgetDragHandleArea" style="display: none;"></span>
+		<span class="GadgetTitle" style="display: <%=isLossData ? "block" : "none"; %> ; float: none; width: auto; margin-right: 75px"><%= uicomponent.getApplicationName() %></span>
 	</div>
- 	<div class="ClearBoth"><span></span></div>
-	<div class="GadgetApplication" style="display:<%= Boolean.parseBoolean(uicomponent.getProperties().get("minimized")) ? "none": "block"; %>">
-		<div class="TLGadget">
-			<div class="TRGadget">
-				<div class="TCGadget"><span></span></div>
-			</div>
-		</div>
-		<div class="MLGadget">
-			<div class="MRGadget">
+	<div class="GadgetApplication" id="content-$id" style="display:<%= Boolean.parseBoolean(uicomponent.getProperties().get("minimized")) ? "none": "block"; %>">
          <% if(isLossData) {%>
-				<div id="content-$id" class="MCGadget"><%=_ctx.appRes("UIGadget.message.isLossData")%></div>
-         <% } else {%>
-            <div id="content-$id" class="MCGadget"></div>
-         <% } %>
-            </div>
-		</div>
-		<div class="BLGadget">
-			<div class="BRGadget">
-				<div class="BCGadget"><span></span></div>
-			</div>
-		</div>
+				<%=_ctx.appRes("UIGadget.message.isLossData")%>
+         <% } %>            
 	</div>
 	<div class="UIMask" style="display: none; border:solid 1px red"><span></span></div>
 </div>

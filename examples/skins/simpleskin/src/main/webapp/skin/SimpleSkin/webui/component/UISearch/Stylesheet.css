@@ -17,30 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-.UISearch {
-	height: 39px;
-	line-height: 39px;
-	padding-bottom: 2px;
-}
-
-.UISearch .UISearchForm {
-	height: 36px; line-height: 36px;
-}
-
-.UISearch .UISearchForm .QuickSet {
-	overflow: hidden;
-	width: 100%;
-	padding-top: 9px;
-}
-
 .UISearch .UISearchForm .QuickSet .SearchTitle {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	font-weight: bold;
-	height: 20px;
-	line-height: 20px;
-	padding-left: 10px; /* orientation=lt */
-	padding-right: 10px; /* orientation=rt */
 	color: #565656;
 }
 
@@ -56,14 +33,8 @@
 }
 
 .UISearch .UISearchForm .QuickSet .SimpleSearchIcon {
-	margin-left: 5px; /* orientation=lt */
-	margin-right: 5px; /* orientation=rt */
-	width: 24px;	
-	height: 24px;
 	background: url('background/QuickSearch.gif') no-repeat; /* orientation=lt */
 	background: url('background/QuickSearch-rt.gif') no-repeat; /* orientation=rt */
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
 }
 
 .UISearch .UISearchForm .QuickSet .SimpleSearchIcon:hover {
@@ -81,25 +52,13 @@
 }
 
 .UISearch .UISearchForm .QuickSet select {
-	float: left;	 /* orientation=lt */
-	float: right; /* orientation=rt */
-	width: 115px; 
-	padding: 1px;
 	border: 1px solid #cccccc;
-	font-size: 11px;
 	color: #565656;
 	height: 20px;
 }
 
 .UISearch .UISearchForm .QuickSet input {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	margin: 0px 5px 0px 10px; /* orientation=lt */ 
-	margin: 0px 10px 0px 5px; /* orientation=rt */
-	padding-left: 4px; /* orientation=lt */
-	padding-right: 4px; /* orientation=rt */
 	border: 1px solid #cccccc;
-	width: 180px; height: 16px;
 }
 
 .UIFormTabPane .UISearch .UISearchForm .QuickSet select {

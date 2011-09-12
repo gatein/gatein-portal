@@ -17,16 +17,12 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-@import url(../../skinIcons/Stylesheet.css);
 
 @import url(UIBreadcumbs/Stylesheet.css);
 @import url(UISearch/Stylesheet.css);
 @import url(UITree/Stylesheet.css);
-
-@import url(UIForms/Stylesheet.css);
 @import url(UITabSystem/Stylesheet.css);
 @import url(UISelector/Stylesheet.css);
 @import url(UIBarDecorator/Stylesheet.css);
-
 @import url(UIToolbar/Stylesheet.css);
 

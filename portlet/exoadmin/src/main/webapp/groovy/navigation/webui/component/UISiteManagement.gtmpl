@@ -51,21 +51,7 @@
 		if(uicomponent.getPortalConfigs() != null && uicomponent.getPortalConfigs().size() > 0){
 	%>
 	<div class="UIAction"> 
-    <table class="ActionContainer">
-	    <tr>
-	    	<td>
-		      <div onclick="ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'CreatePortal', true))" class="ActionButton BlueButton">
-		        <div class="ButtonLeft">
-		          <div class="ButtonRight">
-		            <div class="ButtonMiddle">
-		              <a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".action.addNewPortal")%></a>
-		            </div>
-		          </div>
-		        </div>
-		       </div>
-		    </td>
-      </tr>
- 	  </table>
+		<a href="javascript:void(0);" onclick="ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'CreatePortal', true))" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getId() + ".action.addNewPortal")%></a>
 	</div>
 	<%
 		}

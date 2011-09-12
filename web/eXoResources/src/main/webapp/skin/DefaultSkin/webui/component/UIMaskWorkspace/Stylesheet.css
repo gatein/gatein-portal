@@ -18,53 +18,24 @@
  */
 
 .UIMaskWorkspace {
-	border: none;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	border: solid 8px #c5c5c5;
 	width: 650px;
-}
-
-.UIMaskWorkspace .TopLeftDecorator {
-	background: url('background/MaskWorkspace.png') no-repeat left top;
-	padding: 0px 0px 0px 13px;
-}
-
-.UIMaskWorkspace .TopRightDecorator {
-	background: url('background/MaskWorkspace.png') no-repeat right -13px;
-	padding: 0px 13px 0px 0px;
-}
-
-.UIMaskWorkspace .TopLeftDecorator .TopCenterDecorator {
-	height: 13px;
-	background: url('background/MaskWorkspace.png') repeat-x center -26px;
-}
-
-.UIMaskWorkspace .MiddleLeftDecorator {
-	background: url('background/MiddleMaskWorkspace.png') repeat-y left top;
-	padding: 0px 0px 0px 10px;
-}
-
-.UIMaskWorkspace .MiddleRightDecorator {
-	background: url('background/MiddleMaskWorkspace.png') repeat-y right top;
-	padding: 0px 11px 0px 0px;
+	-moz-box-shadow: 0px 0px 5px #909090;
+	-webkit-box-shadow: 0px 0px 5px #909090;
+	box-shadow: 0px 0px 5px #909090;
+	background: #c5c5c5;
 }
 
 .UIMaskWorkspace .MaskContainer {
 	background: #f5f5f5;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
 }
 
-.UIMaskWorkspace .BottomLeftDecorator {
-	background: url('background/MaskWorkspace.png') no-repeat left -39px;
-	padding: 0px 0px 0px 13px;
-}
-
-.UIMaskWorkspace .BottomRightDecorator {
-	padding: 0px 13px 0px 0px;
-	background: url('background/MaskWorkspace.png') no-repeat right -52px;
-}
-
-.UIMaskWorkspace .BottomLeftDecorator .BottomCenterDecorator {
-	height: 13px;
-	background: url('background/MaskWorkspace.png') repeat-x center -65px;
-}
 
 .UIMaskWorkspace .UIAddApplication .UIItemSelector .ItemDetailList {
 	margin-right: 0px; /* orientation=lt */

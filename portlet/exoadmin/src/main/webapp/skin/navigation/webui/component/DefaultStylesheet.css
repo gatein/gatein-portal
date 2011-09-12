@@ -126,32 +126,6 @@
 	background: url('background/MiniIcon-rt.gif') no-repeat right 2px; /* orientation=rt */
 }
 
-.UIManagement .UIAction .ButtonLeft {
-	background: url('background/Button.gif') no-repeat left top;
-	padding-left: 5px;
-}
-
-.UIManagement .UIAction .ButtonRight {
-	background: url('background/Button.gif') no-repeat right top;
-	padding-right: 5px;
-}
-
-.UIManagement .UIAction .ButtonMiddle {
-	background: url('background/Button.gif') repeat-x left -24px;
-	font-size: 11px;
-	line-height: 24px;
-	padding: 0px 10px;
-}
-
-.UIManagement .UIAction .ButtonMiddle a {
-	font-weight: normal;
-}
-
-.UIManagement .UIAction .ButtonMiddle a:hover {
-	color: #9b9b9b;
-}
-
-
 /***********************UIAddGroupNavigation************************/
 
 .UIAddGroupNavigation {

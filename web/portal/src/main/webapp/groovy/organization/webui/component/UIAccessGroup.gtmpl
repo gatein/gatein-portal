@@ -11,23 +11,9 @@
 	%>
 	
 	<div class="UIAction"> 
-		<table class="ActionContainer">
-			<tr>
-				<td>
-					<div onclick="javascript: eXo.webui.UIPopupWindow.show('<%=uicomponent.getChild(UIFormPopupWindow.class).getId();%>');" class="ActionButton SimpleStyle">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-								<div class="ButtonMiddle">
-									<div class="Icon SmallGroup16x16Icon">
-										<a href="javascript:void(0);">Select Access Group</a>
-									</div>	
-								</div>
-							</div>
-						</div>
-					</div>
-				</td>
-			</tr>
- 		</table>
+		<span onclick="javascript: eXo.webui.UIPopupWindow.show('<%=uicomponent.getChild(UIFormPopupWindow.class).getId();%>');" class="ActionButton SimpleStyle">
+			<a href="javascript:void(0);" class="Icon SmallGroup16x16Icon">Select Access Group</a>
+		</span>				
 	</div>
 	
 </div>

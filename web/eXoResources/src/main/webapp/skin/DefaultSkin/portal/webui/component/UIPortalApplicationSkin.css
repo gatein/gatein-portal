@@ -138,10 +138,6 @@ a {
   margin: auto;
 }
 
-.AjaxLoadingMask .UIAction .ActionButton{
-  float: none;
-}
-
 .FloatLeft {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */

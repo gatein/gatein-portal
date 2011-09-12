@@ -19,28 +19,22 @@
 
 .UIAction {
 	padding: 8px 0px;
+	text-align: center;
 }
 
-.UIAction .ActionContainer {
-	width: auto;
-	margin: auto;
-}	
-
 .UIAction .ActionButton {
-	display: block;
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
+	display: inline-block;
 	margin: 0px 3px;
 	cursor: pointer;
 }
 
 .UIAction a {
+	display: inline-block;
 }
 
-.UIAction a:hover {
+.UIAction .ActionButton:hover {
 	color: #058ee6;
 }
-
 
 .UIAction .ActionButton .Icon {
 	padding-left: 20px; /* orientation=lt */
@@ -54,22 +48,16 @@
 
 /*##############################-LightBlueStyle ActionButton-################################*/
 
-.UIAction .LightBlueStyle .ButtonLeft {
-	background: url('background/LightBlueStyle.gif') no-repeat left top;
-	padding: 0px 0px 0px 3px;
-}
-
-.UIAction .LightBlueStyle .ButtonRight {
-	background: url('background/LightBlueStyle.gif') no-repeat right top;
-	padding: 0px 3px 0px 0px ;
-}
-
-.UIAction .LightBlueStyle .ButtonMiddle {
- 	line-height: 22px; text-align: center; 
-	background: url('background/LightBlueStyle.gif') repeat-x bottom;
+.UIAction .LightBlueStyle {
+ 	line-height: 19px; text-align: center; 
+	background: url('background/LightBlueStyle.gif') repeat-x center;
 	white-space: nowrap;
-	display: table-cell;
 	padding: 0px 12px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px solid #8a8a8a;
+	border-bottom: 1px solid #5d5d5d;
 }
 
 /*##############################-SimpleStyle ActionButton-################################*/
@@ -77,23 +65,16 @@
 .UIAction .SimpleStyle {
 }
 
-.UIAction .SimpleStyle .ButtonLeft {
-	background: url('background/SimpleStyle.gif') no-repeat left top;
-	padding: 0px 0px 0px 10px;
-}
-
-.UIAction .SimpleStyle .ButtonRight {
-	background: url('background/SimpleStyle.gif') no-repeat right top;
-	padding: 0px 10px 0px 0px ;
-}
-
-.UIAction .SimpleStyle .ButtonMiddle {
-	line-height: 21px;
-	background: url('background/SimpleStyle.gif') repeat-x bottom;
+.UIAction .SimpleStyle {
+	line-height: 20px;
+	background: url('background/SimpleStyle.gif') repeat-x center;
 	text-align: center;	
 	padding: 0px 12px;
-	display: table-cell;	
 	white-space: nowrap;
+	border: 1px solid #c9c9c9;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
 }
 
 .UIAction a.SimpleStyle {
@@ -102,54 +83,56 @@
 	white-space: nowrap;
 }
 
-.UIAction a:hover.SimpleStyle {
+.UIAction .SimpleStyle:hover {
 	color: #1273df;
 }
 
+/********************** DarkGrayButton **********************/
+
+.UIAction .DarkGrayButton {
+	font-weight: normal;
+	background: url('background/DarkGrayButton.gif') repeat-x left center;
+	font-size: 11px;
+	line-height: 22px;
+	padding: 0px 10px;
+	border: 1px solid #e2e2e2;
+	border-bottom: 1px solid #d9d9d9;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
+.UIAction .DarkGrayButton:hover {
+	color: #9b9b9b;
+}
+
+
 /*************************SimpleStyle1********************/
 
-.UIAction .SimpleStyle1 .ButtonLeft	{
-	background: transparent url(background/SimpleStyle1.gif) no-repeat left top;
-	padding-left: 3px;
-}
-
-.UIAction .SimpleStyle1 .ButtonRight {
-	background: transparent url(background/SimpleStyle1.gif) no-repeat right top;
-	padding-right: 3px;
-}
-
-.UIAction .SimpleStyle1 .ButtonMiddle	{
-	background: transparent url(background/SimpleStyle1.gif) repeat-x left -20px;
+.UIAction .SimpleStyle1	{
+	background: transparent url(background/SimpleStyle1.gif) repeat-x center;
 	line-height: 20px;
 	padding: 0px 4px;
+	border: 1px solid #b8babf;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
 }
 
-.UIAction .SimpleStyle1 .ButtonMiddle .PageProfileIcon {
+.UIAction .SimpleStyle1 .PageProfileIcon {
 	background: transparent url(background/PageProfileIcon.gif) no-repeat left; /* orientation=lt */
 	background: transparent url(background/PageProfileIcon.gif) no-repeat right; /* orientation=rt */
 	line-height: 20px;
 	padding-left: 22px; /* orientation=lt */
 	padding-right: 22px; /* orientation=rt */
-    white-space: nowrap;
+	white-space: nowrap;
 }
 
-.UIAction .SimpleStyle1 .ButtonMiddle .ViewAsBlockIcon {
+.UIAction .SimpleStyle1 .ViewAsBlockIcon {
 	background: transparent url(background/ViewAsBlockIcon.gif) no-repeat left; /* orientation=lt */
 	background: transparent url(background/ViewAsBlockIcon.gif) no-repeat right; /* orientation=rt */
 	line-height: 20px;
 	padding-left: 22px; /* orientation=lt */
 	padding-right: 22px; /* orientation=rt */
-    white-space: nowrap;
-}
-
-.UIAction .portlet-form-button {
-    -moz-border-radius: 0px;
-    background: none;
-    border: none;
-    display: block;
-    line-height: auto;
-    margin: 0px 3px;
-    padding: 0px;
-    text-align: center;
-    white-space: nowrap;
+	white-space: nowrap;
 }

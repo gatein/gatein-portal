@@ -26,19 +26,15 @@
 	void renderGroupPageNavigation(UserNavigation navigation, PortalURL nodeURL) {
 			def nodes = uicomponent.getNavigationNodes(navigation);
 			if(nodes.size() < 1) return ;
-			String navTitle = _ctx.appRes("UIPageNavigation.label.titleBar") ;		
+			String navTitle = _ctx.appRes("UIPageNavigation.label.titleBar") ;
 			def ownerId = navigation.getKey().getName();
 			navTitle = navTitle.replace("{0}", OrganizationUtils.getGroupLabel(ownerId));
 			print """
-						<div class="TitleBar portlet-menu-description"><div style="width: 99%" title="$ownerId">$navTitle</div></div>
-						<div class="SubBlock">
+						<li class="TitleBar portlet-menu-description" title="$ownerId">$navTitle</li>						
 			""" ;
-							for(UserNode node : nodes) {
-								renderPageNode(node, nodeURL);
-							}
-							print """
-						</div>
-			""" ;		
+						for(UserNode node : nodes) {
+						   renderPageNode(node, nodeURL);
+						}	
 	}
 	
 	void renderPageNode(UserNode node, PortalURL nodeURL) {
@@ -70,54 +66,40 @@
 		}
 		
 		print """
-			<div class="MenuItem $tabStyleNavigation portlet-menu-cascade-item" $getNodeURL>
-				<div class="$clazz">
+		   <li class="MenuItem $clazz $tabStyleNavigation portlet-menu-cascade-item" $getNodeURL>
 		""";
 						if(node.pageRef != null) {
 								print """<a class="ItemIcon $icon" href="$actionLink" $title>$label</a>""";
 						} else {
 								print """<a class="ItemIcon $icon" href="#" $title>$label</a>""";
 						}
-		print """
-				</div>
-		""" ;
 		if(hasChild) {
 			print """
-				<div class="MenuItemContainer portlet-menu-cascade-separator" style="position: absolute; display:none">			
-					<div class="SubBlock">
+				<ul class="MenuItemContainer portlet-menu-cascade-separator" style="position: absolute; display:none">					
 			""" ;
 				for(UserNode child : node.getChildren()) {
 					renderPageNode(child, nodeURL);
 				}
-			print """
-					</div>
-				</div>
+			print """				
+				</ul>
 			""" ;
 			
 		}
 		print """
-			</div>
-		""" ;			
+	       </li>  						
+	    """ ;
 	}	
 	def currentPortal = pcontext.getPortalOwner();
 %> 	
-<div class="UIUserToolBarGroupPortlet" id="$uicomponent.id" >
-	<div class="UIHorizontalTabs">
-		<div class="TabsContainer">	
-			<div class="UITab NormalToolbarTab portlet-menu-item">
-				<div class="">
-							<a class="GroupIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "groupnavigation")).toString() %>" ><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
-				</div>
-				<% 
-					if (!groupNavigations.isEmpty()) {					   
-				%>
-				<div style="display:none" class="MenuItemContainer portlet-menu-cascade">
-				<% for(nav in groupNavigations) {
-				   		renderGroupPageNavigation(nav, nodeURL);
-				} %>
-				</div>
-				<% } %>
-			</div>
-		</div>
-	</div>	
-</div>
+<ul class="UIUserToolBarGroupPortlet UIHorizontalTabs" id="$uicomponent.id" >
+	<li class="UITab NormalToolbarTab portlet-menu-item">
+		<a class="GroupIcon TBIcon" href="<%=nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "groupnavigation")).toString() %>"><%=_ctx.appRes("UIUserToolBarGroupPortlet.header.group")%></a>
+		<% if (!groupNavigations.isEmpty()) { %>
+		<ul style="display:none" class="MenuItemContainer portlet-menu-cascade">
+		<% for(nav in groupNavigations) {
+				renderGroupPageNavigation(nav, nodeURL);
+		} %>
+		</ul>
+		<% } %>
+	</li>
+</ul>

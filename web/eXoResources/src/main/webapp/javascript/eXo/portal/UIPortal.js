@@ -645,19 +645,13 @@ UIPortal.prototype.changeComposerSaveButton = function() {
 
 UIPortal.prototype.toggleComposer = function(clickedEle) {
 	var portalComposer = eXo.core.DOMUtil.findAncestorByClass(clickedEle, "UIPortalComposer");
-	var middleBlock = eXo.core.DOMUtil.findFirstChildByClass(portalComposer, "div", "MLPortalComposer");
-	var bottomBlock = eXo.core.DOMUtil.findFirstChildByClass(portalComposer, "div", "BLPortalComposer");
-	var fakeBottom = eXo.core.DOMUtil.findFirstChildByClass(portalComposer, "div", "Bottom");
-	if(middleBlock && middleBlock.style.display != "none") {
-		middleBlock.style.display = "none";
-		bottomBlock.style.display = "none";
-		fakeBottom.style.display = "block";
-		eXo.core.DOMUtil.replaceClass(clickedEle, "ExpandIcon", "CollapseIcon");
+	var content = eXo.core.DOMUtil.findFirstChildByClass(portalComposer, "div", "UIWindowContent");
+	if(content && content.style.display != "none") {
+	content.style.display = "none";
+	eXo.core.DOMUtil.replaceClass(clickedEle, "ExpandIcon", "CollapseIcon");
 	} else {
-		middleBlock.style.display = "block";
-		bottomBlock.style.display = "block";
-		fakeBottom.style.display = "none";
-		eXo.core.DOMUtil.replaceClass(clickedEle, "CollapseIcon", "ExpandIcon");
+	content.style.display = "block";
+	eXo.core.DOMUtil.replaceClass(clickedEle, "CollapseIcon", "ExpandIcon");
 	}
 	var requestStr = eXo.env.server.createPortalURL(portalComposer.id, "Toggle", true);
 	ajaxAsyncGetRequest(requestStr);

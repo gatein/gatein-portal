@@ -10,23 +10,18 @@
 	String accountSetting = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));";
 	String changeSkinAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeSkin', true));";
 %>
-<div class="UIStarToolBarPortlet" id="$uicomponent.id" >
-	<div class="UIHorizontalTabs">
-		<div class="TabsContainer">
-			<div class="UITab portlet-menu-item" style="width: 62px">
-				<div class=""></div>
-				<div class="MenuItemContainer portlet-menu-cascade" style="display:none;">
-					<div class="MenuItem portlet-menu-cascade-item" onclick="$changeLanguageAction">
-						<a href="#" class="ChangeLanguageIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.ChangeLanguage")%></a>
-					</div>
-					<div class="MenuItem portlet-menu-cascade-item" onclick="$changeSkinAction">
-						<a href="#" class="ChangeSkinIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.ChangeSkin")%></a>
-					</div>
-					<div class="MenuItem portlet-menu-cascade-item" onclick="eXo.portal.logout();">
-						<a href="#" class="SignOutIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.Logout")%></a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+<ul class="UIStarToolBarPortlet UIHorizontalTabs" id="$uicomponent.id" >
+	<li class="UITab portlet-menu-item" style="width: 62px">
+		<ul class="MenuItemContainer portlet-menu-cascade" style="display:none;">
+			<li class="MenuItem portlet-menu-cascade-item" onclick="$changeLanguageAction">
+				<a href="#" class="ChangeLanguageIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.ChangeLanguage")%></a>
+			</li>
+			<li class="MenuItem portlet-menu-cascade-item" onclick="$changeSkinAction">
+				<a href="#" class="ChangeSkinIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.ChangeSkin")%></a>
+			</li>
+			<li class="MenuItem portlet-menu-cascade-item" onclick="eXo.portal.logout();">
+				<a href="#" class="SignOutIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.Logout")%></a>
+			</li>
+		</ul>
+	</li>
+</ul>

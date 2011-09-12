@@ -20,14 +20,18 @@
 .UIPopupWindow {	
 	position: absolute;
 	visibility: hidden;
+	background: #E1E1E1;
+	border: 1px solid #CACACA;
+    box-shadow: 0 0 5px #AFAFAF;
 }
 
 .UIPopupWindow .PopupTitleIcon {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	margin: 5px 0px 0px 3px; /* orientation=lt */
-	margin: 5px 3px 0px 0px; /* orientation=rt */
-	width: 16px; height: 16px;
+	margin: 5px 0px 0px 8px; /* orientation=lt */
+	margin: 5px 8px 0px 0px; /* orientation=rt */
+	width: 16px; 
+	height: 16px;
 	background: url('background/PopupWindow.gif') no-repeat left bottom;
 }
 
@@ -39,18 +43,19 @@
 }
 
 .UIPopupWindow .PopupTitle {
-	margin: 4px 26px 0px 26px;
-	line-height: 16px; 
+	margin: 0px 30px 0px;
+	line-height: 26px; 
 	vertical-align: middle;
 	cursor: move;
 	color: #000;
+	display: block;
 }
 
 .UIPopupWindow .CloseButton {
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
-	margin: 5px 3px 0px 0px; /* orientation=lt */
-	margin: 5px 0px 0px 3px; /* orientation=rt */
+	margin: 5px 8px 0px 0px; /* orientation=lt */
+	margin: 5px 0px 0px 8px; /* orientation=rt */
 	cursor: pointer;
 	width: 23px; height: 17px;
 	background: url('background/CloseIcon.gif') no-repeat right top;
@@ -66,39 +71,13 @@
 	background: url('background/Back.gif') no-repeat right bottom;
 }
 
-.UIPopupWindow .TopLeftCornerDecorator {
-	background: url('background/TopPopup.png') no-repeat left top;
-	padding-left: 8px;
-}
-
-.UIPopupWindow .TopCenterDecorator {
-	background: url('background/TopPopup.png') repeat-x left -66px;
-	height: 28px;
-	padding-top: 5px;
-}
-
-.UIPopupWindow .TopRightCornerDecorator {
-	background: url('background/TopPopup.png') no-repeat right -33px;
-	padding-right: 8px;
-}
-
-.UIPopupWindow .MiddleLeftSideDecorator {
-	background: url('background/MiddlePopup.png') repeat-y left top;
-	padding-left: 8px;	
-}
-
-.UIPopupWindow .MiddleCenterDecorator {
-	background: #e1e1e1;
-	padding: 0px 3px 5px 3px;
-}
-
-.UIPopupWindow .MiddleRightSideDecorator {
-	background: url('background/MiddlePopup.png') repeat-y right top;
-	padding-right: 8px;
-	}
-
 .UIPopupWindow .UIWindowContent {
 	border: 1px solid #bdbcbd;
+	background: #EBEBEB;
+	-moz-border-radius: 0px;
+	-webkit-border-radius: 0px;
+    border-radius: 0px;
+    margin: 5px 8px 8px 8px;
 }
 
 .UIPopupWindow .PopupContent {
@@ -117,19 +96,9 @@
   cursor: ne-resize; /* orientation=rt */
 }
 
-.UIPopupWindow .BottomLeftCornerDecorator {
-	background:  url('background/BottomPopup.png') no-repeat left top;
-	padding-left: 7px;
-}
-
-.UIPopupWindow .BottomCenterDecorator {
-	background:  url('background/BottomPopup.png') repeat-x left -14px;
-	height: 7px;
-}
-
-.UIPopupWindow .BottomRightCornerDecorator {
-	background:  url('background/BottomPopup.png') no-repeat right -7px;
-	padding-right: 7px;	
+.UIPopupWindow > .OverflowContainer{
+	background: #e1e1e1;
+	height: 25px;
 }
 
 .UIPopupWindow .Content .UIPageBrowser {
@@ -141,21 +110,9 @@
 /************************** UIPortalComposer **************************/
 
 .UIPortalComposer {
-}
-
-.UIPortalComposer .TLPortalComposer {
-	background: transparent url(background/PortalComposer.gif) no-repeat left top;
-	padding-left: 7px;
-}
-
-.UIPortalComposer .TRPortalComposer {
-	background: transparent url(background/PortalComposer.gif) no-repeat right top;
-	padding-right: 7px;
-}
-
-.UIPortalComposer .TCPortalComposer {
-	background: transparent url(background/PortalComposer.gif) repeat-x left -34px;
-	height: 34px;
+	border: 1px solid #A2A3A9;
+	border-top: none;
+	background: #ececec;
 }
 
 .UIPortalComposer .CollapseIcon {
@@ -187,8 +144,8 @@
 	height: 17px;
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
-	margin: 6px 0px 0px 2px; /* orientation=lt */
-	margin: 6px 2px 0px 0px; /* orientation=rt */
+	margin: 6px 5px 0px 2px; /* orientation=lt */
+	margin: 6px 2px 0px 5px; /* orientation=rt */
 }
 
 .UIPortalComposer .SaveButton {
@@ -227,8 +184,8 @@
 
 .UIPortalComposer .PopupTitle {
 	background: none;
-	margin: 0px 42px 0px 26px; /* orientation=lt */
-	margin: 0px 26px 0px 42px; /* orientation=rt */
+	margin: 0px 42px 0px 0px; /* orientation=lt */
+	margin: 0px 0px 0px 42px; /* orientation=rt */
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
 	color: #000;
@@ -237,45 +194,16 @@
 	cursor: move;
 	line-height: 30px;
 	height: 30px;
-}
-
-.UIPortalComposer .MLPortalComposer {
-	background: url(background/MiddlePortalComposer.gif) repeat-y left top;
-	padding-left: 3px;
-}
-
-.UIPortalComposer .MRPortalComposer {
-	background: url(background/MiddlePortalComposer.gif) repeat-y right top;
-	padding-right: 3px;
-}
-
-.UIPortalComposer .MCPortalComposer {
-	background: #d8dae1 url(background/CenterMiddleWindow.gif) repeat-x left top;
-	padding: 4px;
-	padding-bottom: 0px;
-}
-
-.UIPortalComposer .BLPortalComposer {
-	border: 1px solid #a2a3a9;
-	border-top: none;
-	background: #d8dae1;
-}
-
-.UIPortalComposer .BRPortalComposer {
-	padding: 0px 6px 6px 6px;
-}
-
-.UIPortalComposer .BCPortalComposer {
-	background: #ececec;
-	border: 1px solid #bbbcc2;
+	display: block;
 }
 
 .UIPortalComposer .Bottom {
 	border-bottom: 1px solid #a2a3a9;
 }
 
-.UIPortalComposer .UIWindowContent	{
+.UIPortalComposer .UIWindowContent{
 	border: none;
+	margin: 5px 4px 8px;
 }
 
 .UIPortalComposer .PopupContent {
@@ -304,6 +232,36 @@
 }
 
 .UIPortalComposer .ResizeButton {
-	width: 13px; height: 13px;
-	margin: 0;
+	width: 13px; 
+	height: 13px;
+	margin: 0px 0px 5px 0px;
+}
+
+.UIPortalComposer > .OverflowContainer{
+	background: url(background/PortalComposer.gif) repeat-x left -34px;
+	height: 30px;
+}
+
+.ExoMessageDecorator{
+	-moz-border-radius: 5px 5px 0px 0px;
+	-webkit-border-radius: 5px 5px 0px 0px;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.ExoMessageDecorator .OverflowContainer{
+	background: #f3f3f3;
+	height: 26px;
+	padding-top: 5px;
+	-moz-border-radius: 5px 5px 0px 0px;
+	-webkit-border-radius: 5px 5px 0px 0px;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.ExoMessageDecorator .UIWindowContent{
+	border: none;
+	background: #e1e1e1;
+}
+
+.ExoMessageDecorator .PopupContent{
+	background: none;
 }

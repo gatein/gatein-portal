@@ -37,21 +37,7 @@
 			<%// start render action%>
 			
 			<div class="UIAction"> 
-				<table class="ActionContainer">
-					<tr>
-						<td>
-							<div onclick="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle">
-								<div class="ButtonLeft">
-									<div class="ButtonRight">
-										<div class="ButtonMiddle">
-											<a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".action.Save")%></a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</td>
-					</tr>
-		 		</table>
+				<a href="javascript:void(0);" onclick="<%=uicomponent.event("Save")%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getId() + ".action.Save")%></a>
 			</div>
 			
 		</div>

@@ -8,21 +8,7 @@
 	uicomponent.renderChild(UIVirtualList.class); %>
 	 
 	<div class="UIAction"> 
-    <table class="ActionContainer">
-	    <tr>
-	    	<td>
-		      <div onclick="<%=uicomponent.event("Close")%>" class="ActionButton DarkGrayButton">
-		        <div class="ButtonLeft">
-		          <div class="ButtonRight">
-		            <div class="ButtonMiddle">
-		              <a href="javascript:void(0);"><%=_ctx.appRes("word.cancel")%></a>
-		            </div>
-		          </div>
-		        </div>
-		      </div>
-		    </td>
-      </tr>
- 	  </table>
+    <a href="javascript:void(0);" onclick="<%=uicomponent.event("Close")%>" class="ActionButton DarkGrayButton"><%=_ctx.appRes("word.cancel")%></a>
 	</div>
 	
 	<% uicomponent.renderChild(UIPopupWindow.class); %>   

@@ -42,43 +42,24 @@
 			
 			<% if(uicomponent.isEditable()) { %>	
 				<div class="UIAction">
-					<table class="ActionContainer">
-						<tr>
-							<td>
-								<%/*Click on this action button will pop up the permission selector*/%>
-								<%
-								String deletePermissionEvent = "javascript:void(0)";
-								String css = "FloatBlockHidden ActionButton SimpleStyle";
-								if(permission.getExpression() != null && permission.getExpression().length() > 0) {
-									deletePermissionEvent = uiForm.event("DeletePermission", uicomponent.getId(), "");
-									css = "ActionButton SimpleStyle";
-								} 
-								%>
-							 	<div onclick="<%=deletePermissionEvent%>" class="<%=css%>">
-									<div class="ButtonLeft">
-										<div class="ButtonRight">
-											<div class="ButtonMiddle">
-												<div class="DeletePermissionIcon">
-													<a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".action.DeletePermission")%></a>
-												</div>
-										 	</div>
-										</div>
-									</div>					
-								</div> 
-								<div onclick="javascript: eXo.webui.UIPopupWindow.show('<%=uicomponent.getChild(UIPopupWindow.class).getId();%>', true);" class="ActionButton SimpleStyle">
-									<div class="ButtonLeft">
-										<div class="ButtonRight">
-											<div class="ButtonMiddle">
-												<div class="SelectPermissionIcon">
-													<a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".action.SelectPermission")%></a>
-												</div>
-											</div>
-										</div>
-									</div>					
-								</div> 
-							</td>
-						</tr>
-					</table>	 				
+					
+					<%/*Click on this action button will pop up the permission selector*/%>
+					<%
+					String deletePermissionEvent = "#";
+					String css = "FloatBlockHidden ActionButton SimpleStyle";
+					if(permission.getExpression() != null && permission.getExpression().length() > 0) {
+						deletePermissionEvent = uiForm.event("DeletePermission", uicomponent.getId(), "");
+						css = "ActionButton SimpleStyle";
+					} 
+					%>
+				 	
+					<span onclick="<%=deletePermissionEvent%>" class="<%=css%>">
+						<a href="javascript:void(0);" class="DeletePermissionIcon"><%=_ctx.appRes(uicomponent.getId() + ".action.DeletePermission")%></a>
+					</span>
+					<span onclick="javascript: eXo.webui.UIPopupWindow.show('<%=uicomponent.getChild(UIPopupWindow.class).getId();%>', true);" class="ActionButton SimpleStyle">
+						<a href="javascript:void(0);" class="SelectPermissionIcon"><%=_ctx.appRes(uicomponent.getId() + ".action.SelectPermission")%></a>
+					</span>
+												
 				</div>
 			<% } %>
 		</div>

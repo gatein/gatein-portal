@@ -70,58 +70,26 @@
 		</div>
 	</div>
 	<div class="UIAction">
-		<table class="ActionContainer">
-			<tr>
-				<td>
-				 <%
-					String clearPageEvent = "javascript:void(0);"; 
-					String css = "FloatBlockHidden ActionButton SimpleStyle"; 
-					def uiForm = uicomponent.getAncestorOfType(UIForm.class);
-					createPageEvent = uiForm.event("CreatePage"); 
-					if(page != null) {
-						clearPageEvent = uiForm.event("ClearPage"); 
-						css = "ActionButton SimpleStyle"; 
-					} 
-					%>
-					<div onclick="<%=clearPageEvent%>" class="<%=css%>">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-								<div class="ButtonMiddle">
-									<div class="DustBin16x16Icon Icon" title="<%=_ctx.appRes(uicomponent.getId()+".label.clearPage")%>">
-										<a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".label.clearPage")%></a>
-									</div>
-							 	</div>
-							</div>
-						</div>					
-					</div>
-					<% if(page == null) { %>		
-					<div onclick="<%=createPageEvent%>" class="ActionButton SimpleStyle">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-								<div class="ButtonMiddle">
-									<div class="GreenPlusPage16x16Icon Icon" title="<%=_ctx.appRes(uicomponent.getId()+".label.createPage")%>">
-										<a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId() + ".label.createPage")%></a>
-									</div>
-							 	</div>
-							</div>
-						</div>					
-					</div> 
-					<% } %>
-					
-					<div class="ActionButton SimpleStyle" onclick="<%=uicomponent.event("OpenSelectPagePopUp")%>">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-								<div class="ButtonMiddle">
-									<div class="Icon SelectPageIcon" title="<%=_ctx.appRes(uicomponent.getId()+".label.searchandSelectPage")%>">
-										<a href="javascript:void(0);"><%=_ctx.appRes(uicomponent.getId()+".label.searchandSelectPage")%></a>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					
-				</td>
-			</tr>
-		</table>
+		 <%
+		String clearPageEvent = "javascript:void(0);"; 
+		String css = "FloatBlockHidden ActionButton SimpleStyle"; 
+		def uiForm = uicomponent.getAncestorOfType(UIForm.class);
+		createPageEvent = uiForm.event("CreatePage"); 
+		if(page != null) {
+			clearPageEvent = uiForm.event("ClearPage"); 
+			css = "ActionButton SimpleStyle"; 
+		} 
+		%>
+			<span onclick="<%=clearPageEvent%>" class="<%=css%>" title="<%=_ctx.appRes(uicomponent.getId()+".label.clearPage")%>">
+				<a href="javascript:void(0);" class="DustBin16x16Icon Icon"><%=_ctx.appRes(uicomponent.getId() + ".label.clearPage")%></a>
+			</span>
+		<% if(page == null) { %>
+			<span onclick="<%=createPageEvent%>" class="ActionButton SimpleStyle" title="<%=_ctx.appRes(uicomponent.getId()+".label.createPage")%>">
+				<a href="javascript:void(0);" class="GreenPlusPage16x16Icon Icon"><%=_ctx.appRes(uicomponent.getId() + ".label.createPage")%></a>
+			</span> 	
+		<% } %>
+			<span class="ActionButton SimpleStyle" onclick="<%=uicomponent.event("OpenSelectPagePopUp")%>" title="<%=_ctx.appRes(uicomponent.getId()+".label.searchandSelectPage")%>">
+				<a href="javascript:void(0);" class="Icon SelectPageIcon"><%=_ctx.appRes(uicomponent.getId()+".label.searchandSelectPage")%></a>
+			</span>		
 	</div>
 </div>

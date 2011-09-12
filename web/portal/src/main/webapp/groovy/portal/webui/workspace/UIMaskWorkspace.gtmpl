@@ -24,23 +24,5 @@
 	rcontext.getJavascriptManager().addOnResizeJavascript("eXo.portal.UIMaskWorkspace.resetPosition") ;
 %>
 <div class="UIMaskWorkspace" id="$maskId" style="display: none;">
-  <div class="TopLeftDecorator" >
-    <div class="TopRightDecorator">
-      <div class="TopCenterDecorator"><span></span></div>
-    </div>
-  </div>
-  
-  <div class="MiddleLeftDecorator">
-    <div class="MiddleRightDecorator">
-      <div class="MaskContainer">    
-        <%uicomponent.renderChildren();%>
-   		</div>
-    </div>
-  </div>
-  
-  <div class="BottomLeftDecorator">
-    <div class="BottomRightDecorator">
-      <div class="BottomCenterDecorator"><span></span></div>
-    </div>
-  </div>
+	<div class="MaskContainer"><%uicomponent.renderChildren();%></div>
 </div>

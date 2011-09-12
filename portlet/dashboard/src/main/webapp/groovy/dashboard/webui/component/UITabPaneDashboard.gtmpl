@@ -18,12 +18,7 @@
 	JavascriptManager jsManager = pcontext.getJavascriptManager();
 	jsManager.importJavascript("eXo.webui.UITabbedDashboard");
 %>
-<div id="$uicomponent.id" class="UITabPaneDashboard">
-	<div class="LtTabDashboard">
-		<div class="RtTabDashboard">
-			<div class="CtTabDashboard">
-				<div class="UIHorizontalTabs">
-					<div class="TabsContainer ClearFix">
+<div id="$uicomponent.id" class="UITabPaneDashboard UIHorizontalTabs ClearFix">
 			<%
 			int i = 0;
 			for(UserNode node : nodes){
@@ -36,45 +31,20 @@
 			    String param = node.getName();
 			    if(node.getURI().equals(selectedNode.getURI())){ 
 			%>
-			<div class="UITab GrayTabStyle">
-					<div class="SelectedTab">
-							<div class="LeftTab">
-									<div class="RightTab">
-											<div class="MiddleTab">
-												<% 
-													String ondblclick = "eXo.webui.UITabbedDashboard.showEditLabelInput(this,\"" + param + "\",this.innerHTML)"; 
-												%>
-												<span ondblclick='$ondblclick'>$tabLabel</span>		
-												<a href="<%= uicomponent.url("DeleteTab",param); %>">
-													<img class="CloseIcon" src="/eXoResources/skin/sharedImages/Blank.gif" alt="DEL" />
-												</a>
-											</div>
-									</div>
-							</div>
-					</div>
+			<div class="UITab SelectedTab">
+				<% 
+					String ondblclick = "eXo.webui.UITabbedDashboard.showEditLabelInput(this,\"" + param + "\",this.innerHTML)"; 
+				%>
+				<span ondblclick='$ondblclick'>$tabLabel</span>		
+				<a href="<%= uicomponent.url("DeleteTab",param); %>" class="CloseIcon" title="DEL"></a>
 			</div>
 				<%}else{ %>
-				<div class="UITab GrayTabStyle">
-					<div class="NormalTab">
-						<div class="LeftTab">
-							<div class="RightTab">
-								<div class="MiddleTab">
-									<a	href="<%= nodeURL.toString()%>"><span>$tabLabel</span></a>
-									<a  href="<%= uicomponent.url("DeleteTab",param); %>">
-										<img class="CloseIcon" src="/eXoResources/skin/sharedImages/Blank.gif" alt="DEL" />
-									</a>	
-								</div>
-							</div>		
-						</div>
-					</div>
-				</div>
+		    <div class="UITab NormalTab">
+		    	<a href="<%= nodeURL.toString()%>" class="Tablabel">$tabLabel</a>
+		    	<a href="<%= uicomponent.url("DeleteTab",param); %>" class="CloseIcon" title="DEL" ></a>
+
+			</div>
 				<%} %>	
 	<% } %>
-						<div class="AddDashboard" onclick="eXo.webui.UITabbedDashboard.createTabDashboard(this)"><span></span></div>
-					</div>
-				</div>
-				
-			</div>
-		</div>
-	</div>						
+	<a class="AddDashboard" onclick="eXo.webui.UITabbedDashboard.createTabDashboard(this)"></a>										
 </div>

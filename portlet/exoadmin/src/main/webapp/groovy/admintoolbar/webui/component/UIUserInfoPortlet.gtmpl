@@ -6,15 +6,15 @@
 	
 	String accountSetting = "javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"
 %>
-<div class="UIUserInfoPortlet" id="$uicomponent.id">
-	<div class="Name">
+<ul class="UIUserInfoPortlet" id="$uicomponent.id">
+	<li class="Name">
 	<% if(rcontext.getRemoteUser() != null) { 
-		EntityEncoder encoder = EntityEncoder.FULL;
-                fullName = encoder.encode(uicomponent.getUser().getFullName());
+	   	EntityEncoder encoder = EntityEncoder.FULL;
+      	fullName = encoder.encode(uicomponent.getUser().getFullName());
 	%>
 		<a href="$accountSetting"><%=fullName%></a>
 	<%} else {%>
 		<span></span>
 	<%}%>
-	</div>
-</div>
+	</li>
+</li>

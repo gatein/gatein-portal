@@ -92,38 +92,30 @@
 					%>
 					</div>
 					<div class="UIAction">
-						<table class="ActionContainer">
-							<tr>
-								<td>
+						
 									<%for(action in uicomponent.getActions()) { 
 										String actionLabel = _ctx.appRes(uicomponent.getName() + ".action." + action);
 										String link = uicomponent.event(action); 
 										if(uicomponent.hasEditMode() && (selTabId.equals("") || selTabId.equals("EditMode")) && action.contains("Save")) {
 									%>
-									<div onclick="$link" class="ActionButton LightBlueStyle" style="display : none;">
+											<%if(action.contains("Close")) {
+													String closeLabel = _ctx.appRes("word.close");
+											%>
+													<a style="display: none;" class="ActionButton LightBlueStyle" href="$link" id="$action" closeLabel="$closeLabel" cancelLabel="$actionLabel"><%=(uicomponent.hasEditMode() && (selTabId.equals("") || selTabId.equals("EditMode"))) ? closeLabel : actionLabel%></a>
 											<%} else {%>
-									<div onclick="$link" class="ActionButton LightBlueStyle">
+													<a style="display: none;" class="ActionButton LightBlueStyle" href="$link" id="$action" >$actionLabel</a>
 											<%}%>
-										<div class="ButtonLeft">
-											<div class="ButtonRight">
-												<%if(action.contains("Close")) {
-														String closeLabel = _ctx.appRes("word.close");
-												%>
-												<div class="ButtonMiddle" id="$action" closeLabel="$closeLabel" cancelLabel="$actionLabel">
-													<a href="javascript:void(0);"><%=(uicomponent.hasEditMode() && (selTabId.equals("") || selTabId.equals("EditMode"))) ? closeLabel : actionLabel%></a>
-												</div>
-												<%} else {%>
-												<div class="ButtonMiddle" id="$action" >
-													<a href="javascript:void(0);">$actionLabel</a>
-												</div>
+									<%} else {%>
+											<%if(action.contains("Close")) {
+													String closeLabel = _ctx.appRes("word.close");
+											%>
+													<a class="ActionButton LightBlueStyle" href="$link" id="$action" closeLabel="$closeLabel" cancelLabel="$actionLabel"><%=(uicomponent.hasEditMode() && (selTabId.equals("") || selTabId.equals("EditMode"))) ? closeLabel : actionLabel%></a>
+											<%} else {%>
+													<a class="ActionButton LightBlueStyle" href="$link" id="$action" >$actionLabel</a>
 											<%}%>
-											</div>
-										</div>
-									</div>
+									<%}%>
 								<%}%>
-								</td>
-							</tr>
-						</table>
+							
 					
 					</div>
 				</div>
@@ -138,10 +130,10 @@
 						var workingArea = DOMUtil.findAncestorByClass(comp, "WorkingArea");
 						var horLayout = DOMUtil.findFirstChildByClass(workingArea, "div", "HorizontalLayout");
 						var uiAction = DOMUtil.findFirstChildByClass(horLayout, "div", "UIAction");
-						var buttons = DOMUtil.findDescendantsByClass(uiAction, "div", "ButtonMiddle");
+						var buttons = DOMUtil.findChildrenByClass(uiAction, "a", "ActionButton");
 						for (var i = 0; i < buttons.length; i++) {
 								if (buttons[i].id.indexOf("Save") >= 0) {
-										DOMUtil.findAncestorByClass(buttons[i], "ActionButton").style.display = "none";
+										buttons[i].style.display = "none";
 								}
 								if (buttons[i].id.indexOf("Close") >= 0) {
 										buttons[i].innerHTML = buttons[i].getAttribute("closeLabel");
@@ -154,10 +146,10 @@
 						var workingArea = DOMUtil.findAncestorByClass(comp, "WorkingArea");
 						var horLayout = DOMUtil.findFirstChildByClass(workingArea, "div", "HorizontalLayout");
 						var uiAction = DOMUtil.findFirstChildByClass(horLayout, "div", "UIAction");
-						var buttons = DOMUtil.findDescendantsByClass(uiAction, "div", "ButtonMiddle");
+						var buttons = DOMUtil.findChildrenByClass(uiAction, "a", "ActionButton");
 						for (var i = 0; i < buttons.length; i++) {
 								if (buttons[i].id.indexOf("Save") >= 0) {
-										DOMUtil.findAncestorByClass(buttons[i], "ActionButton").style.display = "block";
+										buttons[i].style.display = "inline-block";
 								}
 								if (buttons[i].id.indexOf("Close") >= 0) {
 										buttons[i].innerHTML = buttons[i].getAttribute("cancelLabel");

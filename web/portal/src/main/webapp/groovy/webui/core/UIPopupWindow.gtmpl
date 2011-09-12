@@ -32,40 +32,17 @@
 	if(uicomponent.isShow()) show = "block";
 %>
 
-<div class="UIPopupWindow UIDragObject" exo:minWidth="200" exo:minHeight="200" id="$popupId" style="$widthStyle display: $show;">
-	<div class="NormalStyle">
-		<div class="TopLeftCornerDecorator">
-			<div class="TopRightCornerDecorator">
-				<div class="TopCenterDecorator">
-					<div class="OverflowContainer">
-						<div class="PopupTitleIcon"><span></span></div>
-						<%if (showCloseButton) {%>
-							<!-- <div class="CloseButton" title="Close Window" onclick="<%=uicomponent.event("ClosePopup")%>"><span></span></div> -->
-							<div class="CloseButton" title="<%=_ctx.appRes("UIPopupWindow.Close")%>" onclick="<%=uicomponent.event(uicomponent.getCloseEvent())%>"><span></span></div>
-						<% } else { %>
-							<div class="PopupTitleIconRight"><span></span></div>
-						<% } %>
-						<div class="PopupTitle"><%=_ctx.appRes(rsId + ".title."+ title)%></div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="MiddleLeftSideDecorator">
-			<div class="MiddleRightSideDecorator">
-				<div class="MiddleCenterDecorator">
-					<div class="UIWindowContent">
-						<div style="width: 100%;"><div class="PopupContent" style="$heightStyle"><% uicomponent.renderChildren(); %></div></div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div><span></span></div>
-		<div class="BottomLeftCornerDecorator">
-			<div class="BottomRightCornerDecorator">
-				<div class="BottomCenterDecorator">
-					<div class="ResizeButton"><span></span></div>
-				</div>
-			</div>
-		</div>
+<div class="UIPopupWindow UIDragObject NormalStyle" exo:minWidth="200" exo:minHeight="200" id="$popupId" style="$widthStyle display: $show;">
+	<div class="OverflowContainer ClearFix">
+		<span class="PopupTitleIcon"></span>
+		<%if (showCloseButton) {%>
+			<a class="CloseButton" title="<%=_ctx.appRes("UIPopupWindow.Close")%>" onclick="<%=uicomponent.event(uicomponent.getCloseEvent())%>"></a>
+		<% } else { %>
+			<div class="PopupTitleIconRight"><span></span></div>
+		<% } %>
+		<span class="PopupTitle"><%=_ctx.appRes(rsId + ".title."+ title)%></span>
+	</div>
+	<div class="UIWindowContent">
+		<div class="PopupContent" style="$heightStyle"><% uicomponent.renderChildren(); %></div>
 	</div>
 </div>

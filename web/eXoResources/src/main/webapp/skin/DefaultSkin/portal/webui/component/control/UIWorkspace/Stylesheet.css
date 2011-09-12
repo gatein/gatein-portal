@@ -34,9 +34,17 @@
 }
 
 .UIWorkingWorkspace .UIPageBody {
-
+	background: #DEDFDF;
 }
 
+.UIWorkingWorkspace .UIPageBody .VIEW-PAGEBODY{
+	background: #b5b6b6;
+	-moz-border-radius:0px 0px 9px 9px;
+	-webkit-border-radius:0px 0px 9px 9px;
+	border-radius:0px 0px 9px 9px;
+	padding: 0px 8px 8px;
+}
+  
 .MaskLayer {
 	background: black;
 	text-align: center;

@@ -23,8 +23,7 @@
   
 	void renderPortalNavigations(PortalURL nodeURL) {
 			print """
-					<div style="position: absolute; display:none" class="MenuItemContainer portlet-menu-cascade">
-						<div class="SubBlock">
+				<ul style="position: absolute; display:none" class="MenuItemContainer portlet-menu-cascade">
 			""";
 			boolean isCurrent = false;
 			String clazz = "";
@@ -46,36 +45,32 @@
                 label = uicomponent.getPortalLabel(portalName);
                 label = entityEncoder.encode(label);
 				print """
-					<div class="MenuItem portlet-menu-cascade-item">
-						<div class="$clazz">
-							<a href="$href" class="ItemIcon SiteIcon">$label</a>
-						</div>
+					<li class="MenuItem $clazz portlet-menu-cascade-item">
+						<a href="$href" class="ItemIcon SiteIcon">$label</a>					
 				""";
 						if(isCurrent) {
 							renderCurrentPortal(nodeURL);
 						}
 				print """
-					</div>
+					</li>
 				""";
 			}
 			print """
-					</div>
-				</div>
+				
+				</ul>
 			""";
 	}
 	
 	void renderCurrentPortal(PortalURL nodeURL) {
 	    def nodes = _ctx.getRequestContext().getAttribute("nodes");
 		print """
-			<div style="position: absolute; display:none" class="MenuItemContainer portlet-menu-cascade">
-				<div class="SubBlock">
+			<ul style="position: absolute; display:none" class="MenuItemContainer portlet-menu-cascade">
 		""";
 		for(UserNode node : nodes) {
 			renderPageNode(nodeURL, node);
 		}
 		print """
-				</div>
-			</div>
+			</ul>
 		""";
 	}
 	
@@ -107,8 +102,7 @@
 		}
 		
 		print """
-			<div class="MenuItem $tabStyleNavigation portlet-menu-cascade-item" $getNodeURL>
-				<div class="$clazz">
+			<li class="MenuItem $tabStyleNavigation $clazz portlet-menu-cascade-item" $getNodeURL>
 		""";
 						if(node.pageRef != null) {
 								print """<a class="ItemIcon $icon" href="$href" $title>$label</a>""";
@@ -116,44 +110,35 @@
 								print """<a class="ItemIcon $icon" href="#" $title>$label</a>""";
 						}
 		print """
-				</div>
+
 		""" ;
 		if(hasChild) {
 			print """
-				<div class="MenuItemContainer portlet-menu-indicator" style="position: absolute; display:none">			
-					<div class="SubBlock">
+				<ul class="MenuItemContainer portlet-menu-indicator" style="position: absolute; display:none">
 			""" ;
 				for(UserNode child : node.getChildren()) {
 					renderPageNode(nodeURL, child);
 				}
 			print """
-					</div>
-				</div>
+				</ul>
 			""" ;
 			
 		}
 		print """
-			</div>
+			</li>
 		""" ;			
 	}
-	
 	def currentPortal = uicomponent.getCurrentPortal();
 	def navigation = uicomponent.getNavigation(SiteKey.portal(currentPortal));
 	def nodes = uicomponent.getNavigationNodes(navigation);
 	_ctx.getRequestContext().setAttribute("nodes", nodes);
 %> 
 
-<div class="UIUserToolBarSitePortlet" id="$uicomponent.id" >
-	<div class="UIHorizontalTabs">
-			<div class="TabsContainer">
-				<div class="UITab NormalToolbarTab portlet-menu-item">
-					<div class="">
-								<a class="SitesIcon TBIcon" href="<%= nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "portalnavigation")).toString() %>">
-									<%=_ctx.appRes("UIUserToolBarSitePortlet.header.site")%>
-								</a>
-					</div>
-					<% renderPortalNavigations(nodeURL) %>
-				</div>
-			</div>
-	</div>		
-</div>	
+<ul class="UIUserToolBarSitePortlet UIHorizontalTabs" id="$uicomponent.id" >
+	<li class="UITab NormalToolbarTab portlet-menu-item">
+		<a class="SitesIcon TBIcon" href="<%= nodeURL.setResource(new NavigationResource(SiteType.PORTAL, currentPortal, "portalnavigation")).toString() %>">
+			<%=_ctx.appRes("UIUserToolBarSitePortlet.header.site")%>
+		</a>		
+		<% renderPortalNavigations(nodeURL) %>
+	</li>
+</ul>	

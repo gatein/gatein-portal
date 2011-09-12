@@ -99,7 +99,7 @@ eXo.gadget.UIGadget = {
         } else {
             var gadgetControl = eXo.core.DOMUtil.findFirstDescendantByClass(uiGadget, "div", "GadgetControl");
             gadgetControl.style.display = "block";
-            var gadgetTitle = eXo.core.DOMUtil.findFirstDescendantByClass(gadgetControl, "div", "GadgetTitle") ;
+            var gadgetTitle = eXo.core.DOMUtil.findFirstDescendantByClass(gadgetControl, "span", "GadgetTitle") ;
             gadgetTitle.style.display = "block";
             if (metadata && metadata.modulePrefs.title != null && metadata.modulePrefs.title.length > 0) gadgetTitle.innerHTML = metadata.modulePrefs.title;
         }

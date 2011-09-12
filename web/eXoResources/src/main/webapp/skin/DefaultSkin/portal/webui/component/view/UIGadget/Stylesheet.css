@@ -36,38 +36,30 @@
 }
 
 .UIGadget .GadgetControl {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 100px; height: 20px;
-	padding-right: 6px; /* orientation=lt */
-	padding-left: 6px; /* orientation=rt */
+	background: url('/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIDashboard/background/BgTitleGadget.gif') repeat-x left top;
+	height: 23px;
+	line-height: 23px;
+	padding: 0 9px;
+	border: 1px solid #dbdbdb;
+	border-top: none;
+	cursor: move;
+	text-align: left;
 }
 
-.UIGadget .GadgetControl .LeftControlBar {
-	background: url('background/Gadget.png') no-repeat left top; /* orientation=lt */
-	background: url('background/Gadget-rt.png') no-repeat right top; /* orientation=rt */
-	padding-left: 23px; /* orientation=lt */
-	padding-right: 23px; /* orientation=rt */
-}
-
-.UIGadget .GadgetControl .RightControlBar{
-	background: url('background/Gadget.png') no-repeat right top;	/* orientation=lt */
-	background: url('background/Gadget-rt.png') no-repeat left top; /* orientation=rt */
-	padding-right: 4px; /* orientation=lt */
-	padding-left: 4px; /* orientation=rt */
-}
-
-.UIGadget .GadgetControl .CenterControlBar {
-	height: 19px;
-	background: url('background/Gadget.png') repeat-x center -19px;	
+.UIGadget .GadgetTitle {
+	padding: 0px 5px;
+	color: #5b5b5b;
+	font-weight: normal;
+	cursor: move;
+	overflow: hidden;
+	white-space: nowrap;
+	width: auto;
+	margin-right: 75px !important; /* orientation=lt */
+	margin: 0px 0px 0px 75px !important; /* orientation=rt */
 }
 
 .UIGadget .GadgetControl .GadgetDragHandleArea {
-	float: right; /* orientation=lt */
-	float: left; /* orientation=rt */
-	width: 13px; height: 13px;
 	cursor: move;
-	margin: 3px 3px 0px 3px;
 	background: url('background/Gadget.png') left -78px;
 }
 
@@ -102,48 +94,11 @@
 	background-position: 65px top;
 }
 
-.UIGadget .TLGadget {
-	background: url('background/Gadget.png') no-repeat left -38px;
-	padding-left: 8px;
-}
-
-.UIGadget .TRGadget {
-	background: url('background/Gadget.png') no-repeat right -38px;
-	padding-right: 8px;
-}
-
-.UIGadget .TCGadget {
-	background: url('background/Gadget.png') repeat-x center -43px;
-	height: 5px;
-}
-
-.UIGadget .MLGadget {
-	background: url('background/MiddleGadget.png') repeat-y left;
-	padding-left: 6px;
-}
-
-.UIGadget .MRGadget {
-	background: url('background/MiddleGadget.png') repeat-y right;
-	padding-right: 6px;
-}
-
-.UIGadget .MCGadget {
-	background: white;
-}
-
-.UIGadget .BLGadget {
-	background: url('background/Gadget.png') no-repeat left -58px;
-	padding-left: 9px;
-}
-
-.UIGadget .BRGadget {
-	background: url('background/Gadget.png') no-repeat right -68px;
-	padding-right: 9px;
-}
-
-.UIGadget .BCGadget {
-	background: url('background/Gadget.png') repeat-x center -48px;
-	height: 10px;
+.UIGadget .GadgetApplication {
+	background: #f2f2f3;
+	border: 1px solid #c3c3c3;
+	border-top: none;
+	padding: 3px;
 }
 
 .UIGadget iframe {

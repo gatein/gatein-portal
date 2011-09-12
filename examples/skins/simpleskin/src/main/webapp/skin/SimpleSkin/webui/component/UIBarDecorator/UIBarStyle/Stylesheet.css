@@ -19,20 +19,14 @@
 
 /*###########################-BarStyle2-###########################*/
 
-.UIBarStyle .BarStyle2 {
-	height: 39px;
-}
-
 .UIBarStyle .BarStyle2 .LeftBar {
 	background: #e7e7e7;
-	padding: 0px 0px 0px 6px;
 	height: 36px;
 	border: 1px solid #dedede;
 }
 
 .UIBarStyle .BarStyle2 .RightBar {
 	background: none;
-	padding: 0px 6px 0px 0px;
 	height: 36px;
 }
 
@@ -40,70 +34,4 @@
 	height: 36px;
 	line-height: 36px;
 	background: none;
-}
-/*###########################-SmoothNavy40Style-###########################*/
-
-.UIBarStyle .SmoothNavy40Style {
-	height: 40px;
-}
-
-.UIBarStyle .SmoothNavy40Style .LeftBar {
-	background: url('background/SmoothNavy40Style.gif') no-repeat top left;
-	padding: 0px 0px 0px 13px;
-}
-
-.UIBarStyle .SmoothNavy40Style .RightBar {
-	background: url('background/SmoothNavy40Style.gif') no-repeat top right;
-	padding: 0px 14px 0px 0px;
-}
-
-.UIBarStyle .SmoothNavy40Style .MiddleBar {
-	height: 40px;
-	line-height: 40px;
-	vertical-align: middle;
-	background: url('background/SmoothNavy40Style.gif') repeat-x bottom;
-}
-
-/*============================== Title Bar ========================================*/
-
-.UIBarStyle .TitleBar .LeftBar {
-	background: url('background/TitleBar.gif') no-repeat top left;
-	padding-left: 11px;
-	height: 30px;
-}
-
-.UIBarStyle .TitleBar .RightBar {
-	padding-right: 11px;
-	background: url('background/TitleBar.gif') no-repeat top right;
-	height: 30px;
-}
-
-.UIBarStyle .TitleBar .MiddleBar {
-	background: url('background/TitleBar.gif') repeat-x bottom;
-	padding-left: 8px;
-	height: 30px; line-height: 30px;
-	color: #058ee6; font-weight: bold;
-	font-size: 14px; font-family: arial;
-}
-
-/*======================================== NormalBarStyle ==================================*/
-
-.UIBarStyle .NormalBarStyle {
-	height: 38px;
-}
-
-.UIBarStyle .NormalBarStyle .LeftBar {
-	background: url('background/NormalBarStyle.gif') no-repeat top left;
-	padding: 0px 0px 0px 6px;
-}
-
-.UIBarStyle .NormalBarStyle .RightBar {
-	background: url('background/NormalBarStyle.gif') no-repeat top right;
-	padding: 0px 6px 0px 0px;
-}
-
-.UIBarStyle .NormalBarStyle .MiddleBar {
-	background: url('background/NormalBarStyle.gif') repeat-x bottom;
-	height: 38px;
-	line-height: 38px;
 }

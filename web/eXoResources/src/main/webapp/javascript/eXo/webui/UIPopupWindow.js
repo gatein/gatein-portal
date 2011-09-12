@@ -44,7 +44,7 @@ UIPopupWindow.prototype.init = function(popupId, isShow, isResizable, showCloseB
 	if(contentBlock && (eXo.core.Browser.getBrowserHeight() - 100 < contentBlock.offsetHeight)) {
 		contentBlock.style.height = (eXo.core.Browser.getBrowserHeight() - 100) + "px";
 	}
-	var popupBar = DOMUtil.findFirstDescendantByClass(popup, 'div' ,'PopupTitle') ;
+	var popupBar = DOMUtil.findFirstDescendantByClass(popup, 'span' ,'PopupTitle') ;
 
 	popupBar.onmousedown = this.initDND ;
 	
@@ -54,7 +54,7 @@ UIPopupWindow.prototype.init = function(popupId, isShow, isResizable, showCloseB
 	} 
 	
 	if(isResizable) {
-		var resizeBtn = DOMUtil.findFirstDescendantByClass(popup, "div", "ResizeButton");
+		var resizeBtn = DOMUtil.findFirstDescendantByClass(popup, "span", "ResizeButton");
 		resizeBtn.style.display = 'block' ;
 		resizeBtn.onmousedown = this.startResizeEvt ;
 	}
@@ -256,7 +256,7 @@ UIPopupWindow.prototype.initDND = function(evt) {
 		if(!dragObject.uiWindowContent) return;
 		if(eXo.core.Browser.browserType == "mozilla") {
 			dragObject.uiWindowContent.style.overflow = "hidden" ;
-			var elements = eXo.core.DOMUtil.findDescendantsByClass(dragObject.uiWindowContent,  "div" ,"PopupMessageBox") ;
+			var elements = eXo.core.DOMUtil.findDescendantsByClass(dragObject.uiWindowContent,  "ul" ,"PopupMessageBox") ;
   		for(var i = 0; i < elements.length; i++) {
      	  elements[i].style.overflow  = "hidden" ;
 			}
@@ -270,7 +270,7 @@ UIPopupWindow.prototype.initDND = function(evt) {
   	var dragObject = dndEvent.dragObject ;
 		if(eXo.core.Browser.browserType == "mozilla" && dragObject.uiWindowContent) {
 			dragObject.uiWindowContent.style.overflow = "auto" ;
-   		var elements = eXo.core.DOMUtil.findDescendantsByClass(dragObject.uiWindowContent,  "div" ,"PopupMessageBox") ;
+   		var elements = eXo.core.DOMUtil.findDescendantsByClass(dragObject.uiWindowContent,  "ul" ,"PopupMessageBox") ;
   		for(var i = 0; i < elements.length; i++) {
      	  elements[i].style.overflow  = "auto" ;
 			}

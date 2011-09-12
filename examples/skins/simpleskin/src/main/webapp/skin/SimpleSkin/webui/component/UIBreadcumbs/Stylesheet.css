@@ -17,17 +17,6 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-.UIBreadcumbs {
-	padding: 0 40px;
-}
-
-.UIBreadcumbs a {
-	line-height: 16px;
-}
-
-.UIBreadcumbs a.Selected {
-	color: #777777;
-}
 
 .UIBreadcumbs .LeftBreadcumbsBar {
 	background: none;
@@ -40,16 +29,9 @@
 	line-height: 16px;
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	margin: 0px 5px 0 0; /* orientation=lt */
-	margin: 0px 0 0 5px; /* orientation=rt */
 }
 
-.UIBreadcumbs .BreadcumbsInfoBar {
-	padding-top: 6px;
-}
 
 .UIBreadcumbs .RightBlackGridArrowIcon {
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	margin: 5px 0px 0px 0px;
+	margin: 4px 0px 0px 0px;
 }

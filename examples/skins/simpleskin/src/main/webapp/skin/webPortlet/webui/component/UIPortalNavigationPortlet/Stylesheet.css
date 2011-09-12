@@ -27,181 +27,78 @@
 .UINavigationPortlet {
   border-bottom: 1px solid #e5e5e5;
 }
+
+.UINavigationPortlet ul { 
+	list-style:none;	
+	padding:0px;
+	margin:0px;
+}
 	
 .UINavigationPortlet .UINavigationBar {
-	white-space: nowrap;
-}
-
-.UINavigationPortlet .UINavigationBar .UIHorizontalTabs {
-	height: 30px;
-}
-
-.UINavigationPortlet .UINavigationBar .UIHorizontalTabs .TabsContainer {
+	white-space: nowrap;	
+	padding: 0px 24px;
+	background: #f9f9f9;
 	float: none;
 	!position: relative;
 	height: 30px;
 }
 
-.UINavigationPortlet .UINavigationBar .LeftNavigationBar {
+.UINavigationPortlet .UINavigationBar  .UITab  {
+	font-weight:normal;
 }
 
-.UINavigationPortlet .UINavigationBar .RightNavigationBar {
-}
-
-.UINavigationPortlet .UINavigationBar .MiddleNavigationBar {
-	padding: 0px 24px;
-	background: #f9f9f9;
-}
-
-.UINavigationPortlet .UITab a.TabLabel {
+.UINavigationPortlet .UITab   a.TabIcon {	
 	display: block;
-	padding: 0px 0px 0px 20px; /* orientation=lt */
-	padding: 0px 20px 0px 0px; /* orientation=rt */
-	background-position: left; /* orientation=lt */
-	background-position: right; /* orientation=rt */
+	padding-left: 23px;/* orientation=lt */
+	padding-right: 23px;/* orientation=rt */
+	line-height: 27px;
+	background-position: right ;/* orientation=rt */
 }
 
-.UINavigationPortlet .UITab a.DefaultPageIcon {
+.UINavigationPortlet .UITab > span  a.DefaultPageIcon {
 	background: none;
 	padding: 0px;
 }
 
-/*###########################--NavigationTabTab--############################*/
-
-.UINavigationPortlet .UITab .NormalNavigationTab {
-	line-height: 230px; 
-	margin: 0px 8px 0px 0px; 
+.UINavigationPortlet .SelectedNavigationTab   .TabIcon {
+	font-weight:bold;
 }
 
-.UINavigationPortlet .UITab .NormalNavigationTab .LeftTab {
-	line-height: 30px;
+.UINavigationPortlet .UITab  > span {
+	display:block;
+	padding: 0px;
+	margin-right: 28px;/* orientation=lt */
+	margin-left: 28px;/* orientation=rt */
 }
 
-.UINavigationPortlet .UITab .NormalNavigationTab .RightTab {
-	line-height: 30px; 
+.UINavigationPortlet  .UITab .DropDownArrowIcon   {	
+	background: url('background/NavDownArrow.gif') no-repeat right center;	/* orientation=lt */
+	background: url('background/NavDownArrow_ar.gif') no-repeat left center; /* orientation=rt */	
+	padding: 0 17px 0 0px; /* orientation=lt */
+	padding: 0 0px 0 17px; /* orientation=rt */
 }
 
-.UINavigationPortlet .UITab .NormalNavigationTab .MiddleTab {
-	line-height: 30px;
-	text-align: center;
-	padding: 0px 10px;
-}
-
-.UINavigationPortlet .UITab .NormalNavigationTab .TabIcon {
-	line-height: 27px;
-}
-
-.UINavigationPortlet .UITab .NormalNavigationTab a {
-	color: #565656;
-	font-weight: normal;
-}
-
-.UINavigationPortlet .UITab .NormalNavigationTab .DropDownArrowIcon {
-	padding-right: 12px; /* orientation=lt */
-	padding-left: 12px; /* orientation=rt */
-	background: url('background/NavDownArrow.gif') no-repeat right; /* orientation=lt */
-	background: url('background/NavDownArrow.gif') no-repeat left; /* orientation=rt */
-	cursor: pointer;
-}
-
-/*###############-Hightlight Navigation Tab	-################*/
-
-.UINavigationPortlet .UITab .HighlightNavigationTab {
-	line-height: 30px;  
-	margin: 0px 8px 0px 0px; 
-}
-
-.UINavigationPortlet .UITab .HighlightNavigationTab .LeftTab {
-	line-height: 30px;
-}
-
-.UINavigationPortlet .UITab .HighlightNavigationTab .RightTab {
-	line-height: 30px;
-}
-
-.UINavigationPortlet .UITab .HighlightNavigationTab .MiddleTab {
-	height: 30px; 
-	text-align: center;
-	padding: 0px 10px;
-}
-
-.UINavigationPortlet .UITab .HighlightNavigationTab .TabIcon {
-	color: #000;
-	line-height: 27px;
+.UINavigationPortlet  .HighlightNavigationTab   > span,.UINavigationPortlet  .SelectedNavigationTab   > span {	
 	border-bottom:3px solid #E5E5E5;
 }
 
-.UINavigationPortlet .UITab .HighlightNavigationTab a {
-	color: #000;
-	font-weight: normal;
-}
+/*============ Submenu  =====================*/
 
-.UINavigationPortlet .UITab .HighlightNavigationTab .DropDownArrowIcon {
-	padding-right: 12px; /* orientation=lt */
-	padding-left: 12px; /* orientation=rt */
-	background: url('background/NavDownArrow.gif') no-repeat right; /* orientation=lt */
-	background: url('background/NavDownArrow.gif') no-repeat left; /* orientation=rt */
-	cursor: pointer;
-}
-
-/*###############-Selected Navigation Tab-################*/
-
-.UINavigationPortlet .UITab .SelectedNavigationTab {
-	line-height: 30px; 
-	margin: 0px 8px 0px 0px; 
-}
-
-
-.UINavigationPortlet .UITab .SelectedNavigationTab .LeftTab {
-	line-height: 30px;
-}
-
-.UINavigationPortlet .UITab .SelectedNavigationTab .RightTab {
-	line-height: 30px;
-}
-
-.UINavigationPortlet .UITab .SelectedNavigationTab .MiddleTab {
-	line-height: 30px;
-	text-align: center;
-	padding: 0px 10px;
-}
-
-.UINavigationPortlet .UITab .SelectedNavigationTab .TabIcon {
-	color: #000;
-	line-height: 27px;
-	border-bottom: 3px solid #E5E5E5;
-}
-
-.UINavigationPortlet .UITab .SelectedNavigationTab a {
-	color: #000;
-}
-
-.UINavigationPortlet .UITab .SelectedNavigationTab .DropDownArrowIcon {
-	padding-right: 12px; /* orientation=lt */
-	padding-left: 12px; /* orientation=rt */
-	background: url('background/NavDownArrow.gif') no-repeat right center;	/* orientation=lt */
-	background: url('background/NavDownArrow.gif') no-repeat left center; /* orientation=rt */
-	cursor: pointer;
-}
 
 .UINavigationPortlet .MenuItemContainer {
 	white-space: nowrap;
 	border: solid #b7b7b7 1px; /*fix for IE*/
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
-}
-
-.UINavigationPortlet .MenuItemContainer .MenuItemDecorator {
-	border: 1px solid #fcfcfc;
-	background: white;
-	padding-bottom: 6px;
+	padding: 1px 1px 6px 1px;
+	background-color: #FFF;
 }
 
 .UINavigationPortlet .MenuItemContainer .MenuItem {
-	border-bottom: 1px solid #fff;
 	cursor: pointer;
 	line-height: 24px;
-	height: 24px; width: auto;
+	height: 24px; 
+	width: auto;
 	display: block;
 	white-space: nowrap;
 	font-weight: normal;
@@ -219,11 +116,13 @@
 	color: #3e8df0;
 }
 
+.UINavigationPortlet .MenuItemContainer  .ArrowIcon {
+	background: url('background/Button.gif') no-repeat right -48px; /* orientation=lt */ 
+	background: url('background/Button-rt.gif') no-repeat left -48px; /* orientation=rt */ 
+}	
+
 .UINavigationPortlet .MenuItemContainer .SelectedItem {
-	line-height: 24px;
-	width: auto; 
 	background: #c7c7c7;
-	color: #3e8df0;
 }
 
 .UINavigationPortlet .MenuItemContainer .SelectedItem a {
@@ -243,85 +142,61 @@
 }
 
 .UINavigationPortlet .MenuItemContainer .ItemIcon {
-	height: 24px; width: auto;
-}
-
-.UINavigationPortlet .MenuItemContainer .MenuItem .ArrowIcon {
 	height: 24px; 
 	width: auto;
-	background: url('background/Button.gif') no-repeat right -48px; /* orientation=lt */ 
-	background: url('background/Button-rt.gif') no-repeat left -48px; /* orientation=rt */ 
-}	
+	background-position: right;/* orientation=rt */
+}
+
 
 /*============ Scroll Buttons =====================*/
 
 .UINavigationPortlet .ScrollButtons {
+	margin: 10px 0 0 0;
+	display: none;	
+	cursor:pointer;
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
-	padding-top: 10px;
-	display: none;
+	height: 15px;	
+	width: 20px;
+}
+
+.UINavigationPortlet .ScrollButtons a {
+	display:block;
+	cursor:pointer;
+	width: 10px;
+	height: 15px;	
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
 }
 
 .UINavigationPortlet .ScrollLeftButton {
-	cursor: pointer;
 	background: url('background/Button.gif') no-repeat left -15px; /* orientation=lt */
 	background: url('background/Button-rt.gif') no-repeat right -15px; /* orientation=rt */
-	width: 10px;
-	height: 15px;
-	padding-left: 12px; /* orientation=lt */
-	padding-right: 12px; /* orientation=rt */
-	margin: 0px 5px;
+
 }
 
 .UINavigationPortlet .ScrollRightButton {
-	cursor: pointer;
 	background: url('background/Button.gif') no-repeat right -15px; /* orientation=lt */
 	background: url('background/Button-rt.gif') no-repeat left -15px; /* orientation=rt */
-	width: 10px;
-	height: 15px;
 }
 
 .UINavigationPortlet .DisableScrollLeftButton {
-	cursor: pointer;
 	background: url('background/Button.gif') no-repeat left -30px; /* orientation=lt */
 	background: url('background/Button-rt.gif') no-repeat right -30px; /* orientation=rt */
-	width: 10px;
-	height: 15px;
-	padding-left: 12px; /* orientation=lt */
-	padding-right: 12px; /* orientation=rt */
-	margin: 0px 5px;
 }
 
 .UINavigationPortlet .DisableScrollRightButton { 
-	cursor: pointer;
 	background: url('background/Button.gif') no-repeat right -30px; /* orientation=lt */
 	background: url('background/Button-rt.gif') no-repeat left -30px; /* orientation=rt */
-	width: 10px;
-	height: 15px;
 }
 
-.UINavigationPortlet .HighlightScrollLeftButton {
-	cursor: pointer;
+.UINavigationPortlet .HighlightScrollLeftButton ,.UINavigationPortlet .ScrollLeftButton:hover{
 	background: url('background/Button.gif') no-repeat left top; /* orientation=lt */
 	background: url('background/Button-rt.gif') no-repeat right top; /* orientation=rt */
-	width: 10px;
-	height: 15px;
-	padding-left: 12px; /* orientation=lt */
-	padding-right: 12px; /* orientation=rt */
-	margin: 0px 5px;
 }
 
-.UINavigationPortlet .HighlightScrollRightButton {
-	cursor: pointer;
+.UINavigationPortlet .HighlightScrollRightButton ,.UINavigationPortlet .ScrollRightButton:hover{
 	background: url('background/Button.gif') no-repeat right top; /* orientation=lt */
 	background: url('background/Button-rt.gif') no-repeat left top; /* orientation=rt */
-	width: 10px;
-	height: 15px;
-}
-
-/***********GroupNavigation*************/
-
-.UINavigationPortlet .GroupNavigation {
-	background: #f9f9f9;
 }
 

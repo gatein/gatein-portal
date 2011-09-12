@@ -5,73 +5,33 @@
 %>
 <div class="UIPageBody" id="${uicomponent.id}">		
 	<div class="UIComponent UIComponentBlock">
-	
 	<%if(portalMode == UIPortalApplication.APP_BLOCK_EDIT_MODE || portalMode == UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE) {%>
-		<div class="LAYOUT-BLOCK LAYOUT-PAGEBODY DragControlArea" onmousedown="if(eXo.portal.portalMode == <%=UIPortalApplication.APP_BLOCK_EDIT_MODE%>){eXo.portal.PortalDragDrop.init.call(this, event);} return false">
-			<div class="PageLayoutDecorator" onmouseover="if(eXo.portal.portalMode == <%=UIPortalApplication.APP_BLOCK_EDIT_MODE%>){this.style.cursor ='move';} else this.style.cursor ='default';">
+		<div class="LAYOUT-BLOCK LAYOUT-PAGEBODY DragControlArea PageLayoutDecorator" onmouseover="if(eXo.portal.portalMode == <%=UIPortalApplication.APP_BLOCK_EDIT_MODE%>){this.style.cursor ='move';} else this.style.cursor ='default';" onmousedown="if(eXo.portal.portalMode == <%=UIPortalApplication.APP_BLOCK_EDIT_MODE%>){eXo.portal.PortalDragDrop.init.call(this, event);} return false">
 				<%/*Begin Top Decorator*/%>
-				<div class="TopLeftPage">
-					<div class="TopRightPage">
-						<div class="TopCenterPage">
+				<div class="LeftPage">
+					<div class="RightPage">
+						<div class="CenterPage">
 							<%=_ctx.appRes("UIPage.label.pageContent")%>
 						</div>												
 					</div>
-				</div>
-				
-				<%/*Begin Middle Decorator*/%>
-				<div class="MiddleLeftPage">
-					<div class="MiddleRightPage">
-						<div class="MiddlePageBG">
-							<div class="FixBug"><span></span></div>
-						</div>
-					</div>
-				</div>
-				
-				<%/*Begin Bottom Decorator*/%>
-				<div class="BottomLeftPage">
-					<div class="BottomRightPage">
-						<div class="BottomCenterPage">
-							<div class="FixBug"><span></span></div>
-						</div>												
-					</div>
-				</div>
-					
-			</div>		
+				</div>	
 		</div>
 	<%} else {%>
 		<div class="VIEW-PAGEBODY VIEW-BLOCK DragControlArea" id="PAGEBODY-VIEW-BLOCK">
 			<% if(uicomponent.getUIComponent() == null){ %>
-			<div class="Empty">
-				<div class="UIPortalWarning">
-					<div class="LeftTopWarning">
-						<div class="RightTopWarning">
-							<div class="CenterTopWaring">
-								<div class="TitleWaring"><%=_ctx.appRes("UIPageBody.msg.pageNotFoundLine1")%></div>
-							</div>
-						</div>
-					</div>
-					<div class="LeftMiddleWarning">
-						<div class="RightMiddleWarning">
-							<div class="WarningContent">
-								<div class="Icon"><%=_ctx.appRes("UIPageBody.msg.pageNotFoundLine2")%></div>
-								<div class="Icon"><%=_ctx.appRes("UIPageBody.msg.pageNotFoundLine3")%></div>
-								<div class="Icon"><%=_ctx.appRes("UIPageBody.msg.pageNotFoundLine4")%></div>
-							</div>
-						</div>
-					</div>
-					<div class="LeftBottomWarning">
-						<div class="RightBottomWarning">
-							<div class="CenterBottomWaring"><span></span></div>
-						</div>
-					</div>
+				<div class="UIPortalWarning Empty">
+				
+					<h3 class="TitleWaring"><%=_ctx.appRes("UIPageBody.msg.pageNotFoundLine1")%></h3>
+
+					<ul>
+            <li class="Icon"><%=_ctx.appRes("UIPageBody.msg.pageNotFoundLine2")%></li>
+            <li class="Icon"><%=_ctx.appRes("UIPageBody.msg.pageNotFoundLine3")%></li>
+            <li class="Icon"><%=_ctx.appRes("UIPageBody.msg.pageNotFoundLine4")%></li>
+          </ul>
+
 				</div>
-			</div>
+			
 			<% } else { uicomponent.renderChildren(); }%>
-			<div class="BLPagebody">
-				<div class="BRPagebody">
-					<div class="BMPagebody"><span></span></div>
-				</div>
-			</div>
 			
 			<%if(portalMode != UIPortalApplication.NORMAL_MODE) {%>
 			<div class="MaskParent" style="height: 0px;position:relative;">
@@ -85,5 +45,5 @@
 			<div class="CONTROL-PAGEBODY CONTROL-BLOCK" style="display: none"><span></span></div>
 		</div>
 	<%} %>
-	</div>
+</div>
 </div>

@@ -11,7 +11,7 @@
 	def uiParentComponent = uicomponent.getParent() ;
 %>
 <div class="UIItemSelector UIFormInputThemeSelector" id="$uicomponent.id">
-	<div class="LeftColumnStyle">
+	<div class="LeftColumnStyle ClearFix">
 		<div class="ItemListContainer"><%uicomponent.renderChild(UIItemThemeSelector.class);%></div> 
 		<div class="ItemDetailList">
 			<div class="ItemDetailTitle">
@@ -20,7 +20,6 @@
   	    <div class="SetDefault" onclick="eXo.webui.UIFormInputThemeSelector.setDefaultTheme(this,'DefaultTheme')">
   	    	<a href="#"><%= _ctx.appRes(uiParentComponent.getId() + "." + uicomponent.getId() + ".title.SetDefault") %></a>
   	    </div>
-  	    <div class="ClearBoth"><span></span></div>
     	</div>
 			<div class="DetailView">					
 					<%
@@ -31,16 +30,13 @@
 					<div class="UIThemeSelector $selectedThemeName">
 					  <div class="WindowBarLeft">
 					    <div class="WindowBarRight">
-					      <div class="WindowBarCenter">
-					      	<div class="FixHeight">
+					      <div class="WindowBarCenter ClearFix">
 					          <div class="ControlIcon MaximizedIcon"><span></span></div>
 					          <div class="ControlIcon RestoreIcon"><span></span></div>
 					          <div class="ControlIcon MinimizedIcon"><span></span></div>
-					          <div class="PortletIcon WindowPortletIcon WindowPortletInfo">
-					            <div class="PortletName">Title</div>
+					          <div class="PortletIcon WindowPortletIcon WindowPortletInfo PortletName">
+					          	Title
 					          </div>
-						        <div class="ClearBoth"><span></span></div>
-									</div>
 					      </div>
 					    </div>
 					  </div>
@@ -55,13 +51,10 @@
 					  
 					  <div class="BottomDecoratorLeft">
 					    <div class="BottomDecoratorRight">
-					      <div class="BottomDecoratorCenter">
-					      	<div class="FixHeight">
-										<div class="ResizeArea" title="<%=_ctx.appRes("UIPortlet.tooltip.ResizeWindow");%>"><span></span></div>
+					      <div class="BottomDecoratorCenter ClearFix">
+								<div class="ResizeArea" title="<%=_ctx.appRes("UIPortlet.tooltip.ResizeWindow");%>"><span></span></div>
 						        <div class="Information">Done</div>
-						        <div class="ClearRight"><span></span></div>
-									</div>
-								</div>
+							</div>
 					    </div>
 					  </div>
 					  
@@ -70,6 +63,5 @@
 			
 			</div>
 		</div>
-		<div class="ClearLeft"></div>
 	</div>
 </div>

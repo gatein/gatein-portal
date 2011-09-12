@@ -48,23 +48,8 @@ inputName = uicomponent.getInputName();
 		      <tr>
 					<td>
   						<div class="UIAction"> 
-							<table class="ActionContainer">
-								<tr>
-									<td>
-									  
-									<div onclick="<%=uicomponent.event("Submit")%>" class="ActionButton LightBlueStyle" onmouseover="this.style.color = '#058ee6'" onmouseout="this.style.color='black'">
-									<div class="ButtonLeft">
-									  <div class="ButtonRight">
-										<div class="ButtonMiddle">
-										  <a href="javascript:void(0);">Save</a>
-										</div>
-									  </div>
-									</div>
-									</div>       
-								</td>
-							  </tr>  
-							</table>
-						  </div>
+							  <a href="javascript:void(0);" onclick="<%=uicomponent.event("Submit")%>" class="ActionButton LightBlueStyle">Save</a>
+							</div>
 					</td>
 				</tr>
 	      </table>

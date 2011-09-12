@@ -29,65 +29,22 @@
 	top: 15px;
 	left: -85px; /* orientation=lt */
 	right: -85px; /* orientation=rt */
+	border: 1px solid #787878;
+	box-shadow: 1px 1px 2px #787878; /* orientation=lt */
+	-moz-box-shadow: 1px 1px 2px #787878; /* orientation=lt */
+	-webkit-box-shadow: 1px 1px 2px #787878; /* orientation=lt */
+	box-shadow: -1px 1px 2px #787878; /* orientation=rt */
+	-moz-box-shadow: -1px 1px 2px #787878; /* orientation=rt */
+	-webkit-box-shadow: -1px 1px 2px #787878; /* orientation=rt */
+	margin-top: 8px;
+	background: #ffffff;
 }
 
 .UIPopupCategory .PopupCategoryDecorator {
-}
-
-.UIPopupCategory .PopupCategoryDecorator .PopupCategoryTL {
-	background: url('background/PopupCategory.gif') no-repeat left top; /* orientation=lt */
-	background: url('background/PopupCategory-rt.gif') no-repeat right top; /* orientation=rt */
-	padding-left: 6px; /* orientation=lt */
-	padding-right: 6px; /* orientation=rt */
-}
-
-.UIPopupCategory .PopupCategoryDecorator .PopupCategoryTC {
-	height: 16px;
-	background: url('background/PopupCategory.gif') repeat-x left -39px;
-}
-
-.UIPopupCategory .PopupCategoryDecorator .PopupCategoryTR {
-	background: url('background/PopupCategory.gif') no-repeat right -16px; /* orientation=lt */
-	background: url('background/PopupCategory-rt.gif') no-repeat left -16px; /* orientation=rt */
-	padding-right: 35px; /* orientation=lt */
-	padding-left: 35px; /* orientation=rt */
-}
-
-.UIPopupCategory .PopupCategoryDecorator .PopupCategoryML {
-	background: url('background/MidlePopupCategory.gif') repeat-y left; /* orientation=lt */
-	background: url('background/MidlePopupCategory-rt.gif') repeat-y right; /* orientation=rt */
-	padding-left: 6px; /* orientation=lt */
-	padding-right: 6px; /* orientation=rt */
-}
-
-.UIPopupCategory .PopupCategoryDecorator .PopupCategoryMC {
-	background: #efefef;
-}
-
-.UIPopupCategory .PopupCategoryDecorator .PopupCategoryMR {
-	background: url('background/MidlePopupCategory.gif') repeat-y right; /* orientation=lt */
-	background: url('background/MidlePopupCategory-rt.gif') repeat-y left; /* orientation=rt */
-	padding-right: 8px; /* orientation=lt */
-	padding-left: 8px; /* orientation=rt */
-}
-
-.UIPopupCategory .PopupCategoryDecorator .PopupCategoryBL {
-	background: url('background/PopupCategory.gif') no-repeat left -32px; /* orientation=lt */
-	background: url('background/PopupCategory-rt.gif') no-repeat right -32px; /* orientation=rt */
-	padding-left: 6px; /* orientation=lt */
-	padding-right: 6px; /* orientation=rt */
-}
-
-.UIPopupCategory .PopupCategoryDecorator .PopupCategoryBC {
-	height: 7px;
-	background: url('background/PopupCategory.gif') repeat-x left -55px;
-}
-
-.UIPopupCategory .PopupCategoryDecorator .PopupCategoryBR {
-	background: url('background/PopupCategory.gif') no-repeat right -32px; /* orientation=lt */
-	background: url('background/PopupCategory-rt.gif') no-repeat left -32px; /* orientation=rt */
-	padding-right: 8px; /* orientation=lt */
-	padding-left: 8px; /* orientation=rt */
+	background: url('background/PopupCategory.gif') no-repeat 88% top; /* orientation=lt */
+	background: url('background/PopupCategory-rt.gif') no-repeat 8px top; /* orientation=rt */
+	margin-top: -11px;
+	padding: 15px 4px 4px;
 }
 
 .UIPopupCategory .CategoryItem .Icon {
@@ -110,21 +67,23 @@
 	border-bottom: 1px #cdcdcd solid;
 	cursor: pointer;
 	display: block;
-	text-align: left;
-	width: auto;
-}
-
-.UIPopupCategory .CategoryItem:hover {
-	background: #cbcff2;
-	color: #2569dc;
-}
-
-.UIPopupCategory .CategoryItem .CategoryItemLabel {
 	padding-left: 18px; /* orientation=lt */
 	padding-right: 18px; /* orientation=rt */
 	height: 22px;
 	line-height: 22px;
-	overflow: hidden;
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/GrayNextArrow.gif') no-repeat left center; /* orientation=lt */
-	background: url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/GrayNextArrow-rt.gif') no-repeat right center; /* orientation=rt */
+	background: #efefef url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/GrayNextArrow.gif') no-repeat left center; /* orientation=lt */
+	background: #efefef url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/GrayNextArrow-rt.gif') no-repeat right center; /* orientation=rt */
+}
+
+.UIPopupCategory .CategoryItem:hover {
+	color: #2569dc;
+	border-bottom: 1px #cdcdcd solid;
+	cursor: pointer;
+	display: block;
+	padding-left: 18px; /* orientation=lt */
+	padding-right: 18px; /* orientation=rt */
+	height: 22px;
+	line-height: 22px;
+	background: #cbcff2 url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/GrayNextArrow.gif') no-repeat left center; /* orientation=lt */
+	background: #cbcff2 url('/eXoResources/skin/DefaultSkin/skinIcons/16x16/icons/GrayNextArrow-rt.gif') no-repeat right center; /* orientation=rt */
 }

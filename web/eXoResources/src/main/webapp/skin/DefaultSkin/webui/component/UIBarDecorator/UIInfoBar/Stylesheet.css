@@ -23,61 +23,22 @@
 /*######################-Blue Rounded Style-######################*/
 
 .UIInfoBar .BlueRoundedStyle {
-	padding: 0px; margin: 0px;
-}
-
-.UIInfoBar .BlueRoundedStyle .LeftBar {
-	background: url('background/ViewBlockBar.png') no-repeat left top; /* orientation=lt */
-	background: url('background/ViewBlockBar-rt.png') no-repeat left -26px; /* orientation=rt */
-	padding-left: 5px; /* orientation=lt */
-	padding-left: 9px; /* orientation=rt */
-}
-
-.UIInfoBar .BlueRoundedStyle .RightBar {
-	background: url('background/ViewBlockBar.png') no-repeat right -26px; /* orientation=lt */
-	background: url('background/ViewBlockBar-rt.png') no-repeat right top; /* orientation=rt */
-	padding-right: 9px; /* orientation=lt */
-	padding-right: 5px; /* orientation=rt */
-}
-
-.UIInfoBar .BlueRoundedStyle .MiddleBar {
-	background: url('background/ViewBlockBar.png') repeat-x center -52px;
-}
-	
-.UIInfoBar .BlueRoundedStyle .FixHeight {
-	height: 26px;
-	white-space: nowrap;
-}
-
-.UIInfoBar .BlueRoundedStyle .PortletIcon {
-	background: url('background/Earth.gif') no-repeat left center; /* orientation=lt */
-	background: url('background/Earth.gif') no-repeat right center; /* orientation=rt */
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	text-overflow: ellipsis;
-	width: auto; 
-	line-height: 23px;
-	padding-left: 25px; /* orientation=lt */
-	padding-right: 25px; /* orientation=rt */
-	margin: 0px 0px 0px 6px; /* orientation=lt */
-	margin: 0px 6px 0px 0px; /* orientation=rt */
-	color: black;
-}
-
-.UIInfoBar .BlueRoundedStyle .ContainerIcon {
-	background: url('background/DefaultContainerIcon.gif') no-repeat left center; /* orientation=lt */
-	background: url('background/DefaultContainerIcon.gif') no-repeat right center; /* orientation=rt */
-	float: left; /* orientation=lt */
-	float: right; /* orientation=rt */
-	text-overflow: ellipsis;
-	width: auto; 
-	line-height: 23px;
-	padding-left: 25px; /* orientation=lt */
-	padding-right: 25px; /* orientation=rt */
-	margin: 0px 0px 0px 6px; /* orientation=lt */
-	margin: 0px 6px 0px 0px; /* orientation=rt */
-	height: auto;
-	color: black;
+	padding: 0px 3px; margin: 0px;
+	background: url('background/BlueRoundedStyle.png') repeat-x center;
+	height: 19px; line-height: 19px;
+	border: 1px solid #b8babf;
+	-moz-border-radius: 0 0 5px 0;
+	-webkit-border-radius: 0 0 5px 0;
+	border-radius: 0 0 5px 0;
+	-moz-box-shadow: 1px 0px rgba(255, 255, 255, 0.6), -1px 0px rgba(255, 255, 255, 0.6),
+							0px 1px rgba(255, 255, 255, 0.6), 0px -1px rgba(255, 255, 255, 0.6), 
+							2px 2px 2px rgba(0, 0, 0, 0.3);
+	-webkit-box-shadow: 1px 0px rgba(255, 255, 255, 0.6), -1px 0px rgba(255, 255, 255, 0.6),
+							0px 1px rgba(255, 255, 255, 0.6), 0px -1px rgba(255, 255, 255, 0.6), 
+							2px 2px 2px rgba(0, 0, 0, 0.3);
+	box-shadow: 1px 0px rgba(255, 255, 255, 0.6), -1px 0px rgba(255, 255, 255, 0.6),
+							0px 1px rgba(255, 255, 255, 0.6), 0px -1px rgba(255, 255, 255, 0.6), 
+							2px 2px 2px rgba(0, 0, 0, 0.3);
 }
 
 /*######################-Polygon Navyblue Style-######################*/

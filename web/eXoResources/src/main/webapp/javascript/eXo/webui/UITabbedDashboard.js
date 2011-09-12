@@ -62,8 +62,6 @@ eXo.webui.UITabbedDashboard = {
 	showEditLabelInput : function(selectedElement, nodeName, currentContent){
 		eXo.webui.UITabbedDashboard.backupElement = selectedElement;
 		var prNode = selectedElement.parentNode;
-		var tabContainer = eXo.core.DOMUtil.findAncestorByClass(prNode, "TabsContainer");
-		var addButton = eXo.core.DOMUtil.findFirstChildByClass(tabContainer, "div", "AddDashboard");
 		
 		var inputElement = document.createElement("input");
 		inputElement.type = "text";
@@ -81,10 +79,9 @@ eXo.webui.UITabbedDashboard = {
 		prNode.replaceChild(inputElement, selectedElement);
 		inputElement.focus();
 		
-		 //find Middle tab of MiddleTab
 		var DOMUtil = eXo.core.DOMUtil;
-		var middleTab = DOMUtil.findAncestorByClass(inputElement, "MiddleTab");
-		middleTab.className = "MiddleTab EditTab";	
+		var uiTab = DOMUtil.findAncestorByClass(inputElement, "UITab");
+		DOMUtil.addClass(uiTab, "EditTab");	
 	},
 	
 	createDashboardPage : function(e){
@@ -113,7 +110,7 @@ eXo.webui.UITabbedDashboard = {
 		//If user presses on ESCAPE button
 		else if(keyNum == 27){
 			var inputElement = eXo.core.Browser.getEventSource(e);
-			var editingTabElement = eXo.core.DOMUtil.findAncestorByClass(inputElement, "UITab GrayTabStyle");
+			var editingTabElement = eXo.core.DOMUtil.findAncestorByClass(inputElement, "UITab");
 			
 			//Remove the editing tab
 			editingTabElement.parentNode.removeChild(editingTabElement);
@@ -125,7 +122,7 @@ eXo.webui.UITabbedDashboard = {
 			e = window.event;
 		}
 		var inputElement = eXo.core.Browser.getEventSource(e);
-		var editingTabElement = eXo.core.DOMUtil.findAncestorByClass(inputElement, "UITab GrayTabStyle");
+		var editingTabElement = eXo.core.DOMUtil.findAncestorByClass(inputElement, "UITab");
 		
 		//Remove the editing tab
 		editingTabElement.parentNode.removeChild(editingTabElement);
@@ -134,11 +131,11 @@ eXo.webui.UITabbedDashboard = {
 	createTabDashboard : function(addTabElement){
 		var DOMUtil = eXo.core.DOMUtil;
 		var tabContainer = addTabElement.parentNode;
-		var tabElements = DOMUtil.findChildrenByClass(tabContainer, "div", "UITab GrayTabStyle");
+		var tabElements = DOMUtil.findChildrenByClass(tabContainer, "div", "UITab");
 		var portletFrag = DOMUtil.findAncestorByClass(tabContainer, "PORTLET-FRAGMENT");
 		var selectedTabElement = DOMUtil.findFirstDescendantByClass(tabContainer, "div", "SelectedTab");
 		
-		var newTabElement = selectedTabElement.parentNode.cloneNode(true);
+		var newTabElement = selectedTabElement.cloneNode(true);
 		tabContainer.insertBefore(newTabElement, addTabElement);
 		
 		var inputElement = document.createElement("input");
@@ -157,8 +154,8 @@ eXo.webui.UITabbedDashboard = {
 		DOMUtil.findNextElementByTagName(inputElement, "a").href = "#";
 		inputElement.focus();	
 		
-		  //find Middle tab of MiddleTab
-		  var middleTab = DOMUtil.findAncestorByClass(inputElement, "MiddleTab");
-		  middleTab.className = "MiddleTab EditTab";	
+		var DOMUtil = eXo.core.DOMUtil;
+		var uiTab = DOMUtil.findAncestorByClass(inputElement, "UITab");
+		DOMUtil.addClass(uiTab, "EditTab");	
 	}
 }

@@ -21,15 +21,13 @@
 	PortalURL nodeURL = nodeurl();
 	void renderDashboards(PortalURL nodeURL, PortalRequestContext pcontext, Collection nodes) {
 		print """
-			<div style="display:none" class="MenuItemContainer">
-				<div class="SubBlock">
+			<ul style="display:none" class="MenuItemContainer">
 		""";
 					for(UserNode node : nodes) {
 						renderPageNode(nodeURL, pcontext, node);
 					}
 		print """
-				</div>
-			</div>
+			</ul>
 		""" ;
 	}
 	
@@ -67,33 +65,27 @@
 		}
 		
 		print """
-			<div class="MenuItem $tabStyleNavigation" $getNodeURL>
-				<div class="$clazz">
+			<li class="MenuItem $clazz $tabStyleNavigation" $getNodeURL>
 		""";
 						if(node.pageRef != null) {
 								print """<a class="ItemIcon $icon" href="$href" $title>$label</a>""";
 						} else {
 								print """<a class="ItemIcon $icon" href="#" $title>$label</a>""";
 						}
-		print """
-				</div>
-		""" ;
 		if(hasChild) {
 			print """
-				<div class="MenuItemContainer">			
-					<div class="SubBlock">
+				<ul class="MenuItemContainer">			
 			""" ;
 					for(UserNode child : node.getChildren()) {
 						renderPageNode(nodeURL, pcontext, child);
 					}
 			print """
-					</div>
-				</div>
+				</ul>
 			""" ;
 			
 		}
 		print """
-			</div>
+			</li>
 		""" ;			
 	}	
 %>
@@ -103,31 +95,19 @@
 	if(userNodes.size() < 1) {
 		String createDashboardLink = nodeURL.setResource(new NavigationResource(SiteType.USER, rcontext.getRemoteUser(), null)).toString();
 %>
-	<div class="UIUserToolBarDashboardPortlet" id="$uicomponent.id">	
-		<div class="UIHorizontalTabs">
-			<div class="TabsContainer">
-				<div class="UITab NormalToolbarTab">
-					<div class="">
-						<a class="DashboardIcon TBIcon" href="<%= createDashboardLink%>">Dashboard</a>
-					</div>
-				</div>
-			</div>
-		</div>	
-	</div>	
+	<ul class="UIUserToolBarDashboardPortlet UIHorizontalTabs" id="$uicomponent.id">
+		<li class="UITab NormalToolbarTab">
+			<a class="DashboardIcon TBIcon" href="<%= createDashboardLink%>">Dashboard</a>
+		</li>
+	</ul>	
 <% 
 	}else{
 		String link = nodeURL.setResource(new NavigationResource(SiteType.USER, rcontext.getRemoteUser(), null)).toString();
 %>
-	<div class="UIUserToolBarDashboardPortlet" id="$uicomponent.id" >	
-		<div class="UIHorizontalTabs">
-			<div class="TabsContainer" >
-				<div class="UITab NormalToolbarTab">
-						<div class="">
-								<a class="DashboardIcon TBIcon" href="<%= link%>">Dashboard</a>
-						</div>
-						<% renderDashboards(nodeURL, pcontext, userNodes); %>
-				</div>
-			</div>
-		</div>	
-	</div>		
+	<ul class="UIUserToolBarDashboardPortlet UIHorizontalTabs" id="$uicomponent.id" >	
+		<li class="UITab NormalToolbarTab">
+			<a class="DashboardIcon TBIcon" href="<%= link%>">Dashboard</a>
+				<% renderDashboards(nodeURL, pcontext, userNodes); %>
+		</li>
+	</ul>
 <% } %>

@@ -50,7 +50,7 @@ UIPortalNavigation.prototype.onLoad = function() {
   var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
   var uiNavPortlets = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "UINavigationPortlet");
   if (uiNavPortlets.length) {
-		var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiNavPortlets[0], "div", "TabsContainer");
+		var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiNavPortlets[0], "ul", "UIHorizontalTabs");
  		eXo.portal.UIPortalNavigation.init(uiNavPortlets[0], mainContainer, 0, 0);
 		for (var i = 1; i < uiNavPortlets.length; ++i) {
 				uiNavPortlets[i].style.display = "none";
@@ -71,10 +71,10 @@ UIPortalNavigation.prototype.onLoad = function() {
  */
 UIPortalNavigation.prototype.buildMenu = function(popupMenu) {
   var DOMUtil = eXo.core.DOMUtil;
-  var topContainer = DOMUtil.findFirstDescendantByClass(popupMenu, "div", "TabsContainer");
+  var topContainer = DOMUtil.findFirstDescendantByClass(popupMenu, "ul", "UIHorizontalTabs");
   topContainer.id = "PortalNavigationTopContainer";
   // Top menu items
-  var topItems = DOMUtil.findDescendantsByClass(topContainer, "div", "UITab");
+  var topItems = DOMUtil.findDescendantsByClass(topContainer, "li", "UITab");
   for (var i = 0; i < topItems.length; i++) {
     var item = topItems[i];
     item.onmouseover = eXo.portal.UIPortalNavigation.setTabStyleOnMouseOver ;
@@ -88,7 +88,7 @@ UIPortalNavigation.prototype.buildMenu = function(popupMenu) {
   /**
    * TODO: fix IE7;
    */
-  var container = DOMUtil.findFirstDescendantByClass(item, "div", this.containerStyleClass);
+  var container = DOMUtil.findFirstDescendantByClass(item, "ul", this.containerStyleClass);
   if (container) {
 	  if (eXo.core.Browser.isIE6()) {
 		  container.style.width = item.offsetWidth + "px";
@@ -97,20 +97,19 @@ UIPortalNavigation.prototype.buildMenu = function(popupMenu) {
 	  }
   }
 
-  var itemConts = DOMUtil.findDescendantsByClass(topContainer, "div", this.containerStyleClass);
+  var itemConts = DOMUtil.findDescendantsByClass(topContainer, "ul", this.containerStyleClass);
   for (var i = 0; i < itemConts.length; i++) {
 	  var cont = itemConts[i];
 	  if(!cont.id) cont.id = DOMUtil.generateId("PortalNavigationContainer");
 	  cont.resized = false;
 
-	  var items = DOMUtil.findDescendantsByClass(cont, "div", this.tabStyleClass);
+	  var items = DOMUtil.findDescendantsByClass(cont, "li", this.tabStyleClass);
 	  if(items.length == 0) cont.parentNode.removeChild(cont);
 	  for(var j = 0; j < items.length; j ++) {
 		  items[j].onmouseover = eXo.portal.UIPortalNavigation.onMenuItemOver;
 		  items[j].onmouseout = eXo.portal.UIPortalNavigation.onMenuItemOut;
 	  }
   }
-
 };
 /**
  * Sets the tab style on mouse over and mouse out
@@ -132,31 +131,25 @@ UIPortalNavigation.prototype.buildMenu = function(popupMenu) {
 //}
 
 UIPortalNavigation.prototype.generateContainer = function(data) {		
-	var htmlFrags = "<div class='" + this.containerStyleClass + "' style='display: none;' id='"; 
+	var htmlFrags = "<ul class='" + this.containerStyleClass + "' style='display: none;' id='"; 
 	htmlFrags += eXo.core.DOMUtil.generateId("PortalNavigationContainer") + "' resized='false'>";	
-	htmlFrags += "<div class='MenuItemDecorator'>";
-	htmlFrags += "<div class='LeftTopMenuDecorator'><div class='RightTopMenuDecorator'>";
-	htmlFrags += "<div class='CenterTopMenuDecorator'><span></span></div></div></div>";
-	htmlFrags += "<div class='LeftMiddleMenuDecorator'><div class='RightMiddleMenuDecorator'>";
-	htmlFrags += "<div class='CenterMiddleMenuDecorator'>";	
+
 	for (var i = 0; i < data.length; i++) {
 		var node = data[i];
 		var actionLink = node.actionLink ? node.actionLink : "javascript:void(0);";
 				
-		htmlFrags += ("<div class='MenuItem " + (node.isSelected ? "SelectedItem'" : "NormalItem'")); 
+		htmlFrags += ("<li class='MenuItem " + (node.hasChild ? "ArrowIcon " : "") + (node.isSelected ? "SelectedItem'" : "NormalItem'")); 
 		htmlFrags += (node.hasChild ? (" exo:getNodeURL='" + node.getNodeURL + "' ") : "" ); 
-		htmlFrags += ("onmouseover='eXo.portal.UIPortalNavigation.onMenuItemOver(this)' onmouseout='eXo.portal.UIPortalNavigation.onMenuItemOut(this)'>");
-		htmlFrags += ("<div class='" + (node.hasChild ? "ArrowIcon" : "") + "' title='" + node.label + "'>");
-		htmlFrags += ("<div class='ItemIcon " + (node.icon ? node.icon : "DefaultPageIcon") + "'>");
-		htmlFrags += ("<a href='" + actionLink + "'>" + (node.label.length > 40 ? node.label.substring(0,37) + "..." : node.label) + "</a>");
-		htmlFrags += ("</div></div>");
+		htmlFrags += ("onmouseover='eXo.portal.UIPortalNavigation.onMenuItemOver(this)' onmouseout='eXo.portal.UIPortalNavigation.onMenuItemOut(this)'");
+		htmlFrags += ("' title='" + node.label + "'>");
+		htmlFrags += ("<a class='ItemIcon " + (node.icon ? node.icon : "DefaultPageIcon") + "'" +
+				"href='" + actionLink + "'>" + (node.label.length > 40 ? node.label.substring(0,37) + "..." : node.label) + "</a>");
 		if (node.childs.length) {
 			htmlFrags += eXo.portal.UIPortalNavigation.generateContainer(node.childs);			
 		}
-		htmlFrags += "</div>";
+		htmlFrags += "</li>";
 	}
-	htmlFrags += "</div></div></div><div class='LeftBottomMenuDecorator'><div class='RightBottomMenuDecorator'>";
-	htmlFrags += "<div class='CenterBottomMenuDecorator'><span></span></div></div></div></div></div>";
+	htmlFrags += "</ul>";
 	return htmlFrags;
 };
 
@@ -169,7 +162,7 @@ UIPortalNavigation.prototype.setTabStyleOnMouseOver = function(e) {
   eXo.portal.UIPortalNavigation.previousMenuItem = tab ;    
   
   var getNodeURL = tab.getAttribute("exo:getNodeURL");
-  var menuItemContainer = eXo.core.DOMUtil.findFirstDescendantByClass(tab, "div", eXo.portal.UIPortalNavigation.containerStyleClass);
+  var menuItemContainer = eXo.core.DOMUtil.findFirstDescendantByClass(tab, "ul", eXo.portal.UIPortalNavigation.containerStyleClass);
   if (getNodeURL && !menuItemContainer) {
 	  var jsChilds = ajaxAsyncGetRequest(getNodeURL,false)
 	  try {
@@ -181,12 +174,12 @@ UIPortalNavigation.prototype.setTabStyleOnMouseOver = function(e) {
 	  }
 	  var temp = document.createElement("div");
 	  temp.innerHTML = eXo.portal.UIPortalNavigation.generateContainer(data); 		  
-	  tab.appendChild(eXo.core.DOMUtil.findFirstChildByClass(temp, "div", eXo.portal.UIPortalNavigation.containerStyleClass));
+	  tab.appendChild(eXo.core.DOMUtil.findFirstChildByClass(temp, "ul", eXo.portal.UIPortalNavigation.containerStyleClass));
   }
   
   if (!eXo.portal.UIPortalNavigation.menuVisible) {    
     var hideSubmenu = tab.getAttribute('hideSubmenu') ;
-    menuItemContainer = eXo.core.DOMUtil.findFirstDescendantByClass(tab, "div", eXo.portal.UIPortalNavigation.containerStyleClass);
+    menuItemContainer = eXo.core.DOMUtil.findFirstDescendantByClass(tab, "ul", eXo.portal.UIPortalNavigation.containerStyleClass);
     if (menuItemContainer && !hideSubmenu) {
       var DOMUtil = eXo.core.DOMUtil ;
 		  if(eXo.core.Browser.browserType == "ie") {
@@ -197,7 +190,7 @@ UIPortalNavigation.prototype.setTabStyleOnMouseOver = function(e) {
 		    	for(var i = 0; i < uicomponents.length; i ++) {
 		      	var navPortlet = DOMUtil.findFirstDescendantByClass(uicomponents[i], "div", "UINavigationPortlet") ;
 		      	if(navPortlet && (navAncestor != navPortlet)) {
-		      		var tabsContainer = DOMUtil.findFirstDescendantByClass(navPortlet, "div", "TabsContainer");
+		      		var tabsContainer = DOMUtil.findFirstDescendantByClass(navPortlet, "ul", "UIHorizontalTabs");
 		      		tabsContainer.style.position = "static" ;
 		      	}
 		    	}	
@@ -213,15 +206,11 @@ UIPortalNavigation.prototype.setTabStyleOnMouseOver = function(e) {
 
 UIPortalNavigation.prototype.setTabStyleOnMouseOut = function(e, src) {
   var tab = src || this;
-  var tabChildren = eXo.core.DOMUtil.getChildrenByTagName(tab, "div") ;
-  if (tabChildren.length <= 0) {
-    return ;
-  }
-  if (tabChildren[0].className != "HighlightNavigationTab") {
+  if (!eXo.core.DOMUtil.hasClass(tab, "HighlightNavigationTab")) {
     // highlights the tab
     eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab, true);
   } else {
-    if(tabChildren.length <= 1 || tabChildren[1].id != eXo.portal.UIPortalNavigation.currentOpenedMenu) {
+    if(tab.id != eXo.portal.UIPortalNavigation.currentOpenedMenu) {
       // de-highlights the tab if it doesn't have a submenu (cond 1) or its submenu isn't visible (cond 2)
       eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab, false);
     }
@@ -357,7 +346,7 @@ UIPortalNavigation.prototype.hideMenu = function() {
     for(var i = 0; i < uicomponents.length; i ++) {
       var navPortlet = DOMUtil.findFirstDescendantByClass(uicomponents[i], "div", "UINavigationPortlet") ;
       if(navPortlet) {
-      	var tabsContainer = DOMUtil.findFirstDescendantByClass(navPortlet, "div", "TabsContainer");
+      	var tabsContainer = DOMUtil.findFirstDescendantByClass(navPortlet, "ul", "UIHorizontalTabs");
       	tabsContainer.style.position = "relative" ;
       }
     }
@@ -373,7 +362,7 @@ UIPortalNavigation.prototype.onMenuItemOver = function(menuItem) {
   var DOMUtil = eXo.core.DOMUtil;
   
   var getNodeURL = menuItem.getAttribute("exo:getNodeURL");
-  var subContainer = DOMUtil.findFirstDescendantByClass(menuItem, "div", eXo.portal.UIPortalNavigation.containerStyleClass);
+  var subContainer = DOMUtil.findFirstDescendantByClass(menuItem, "ul", eXo.portal.UIPortalNavigation.containerStyleClass);
   if (getNodeURL && !subContainer) {
 	  var jsChilds = ajaxAsyncGetRequest(getNodeURL,false)
 	  try {
@@ -381,17 +370,16 @@ UIPortalNavigation.prototype.onMenuItemOver = function(menuItem) {
 	  } catch (e) {
 	  }	
 	  if (!data || !data.length) {
-		  var arrow = DOMUtil.findFirstChildByClass(menuItem, "div", "ArrowIcon");
-		  DOMUtil.removeClass(arrow, "ArrowIcon");
+		  DOMUtil.removeClass(menuItem, "ArrowIcon");
 		  menuItem.removeAttribute("exo:getNodeURL");
 		  return;
 	  }
 	  var temp = document.createElement("div");
 	  temp.innerHTML = eXo.portal.UIPortalNavigation.generateContainer(data); 		  
-	  menuItem.appendChild(eXo.core.DOMUtil.findFirstChildByClass(temp, "div", eXo.portal.UIPortalNavigation.containerStyleClass));
+	  menuItem.appendChild(eXo.core.DOMUtil.findFirstChildByClass(temp, "ul", eXo.portal.UIPortalNavigation.containerStyleClass));
   }
     
-  subContainer = DOMUtil.findFirstDescendantByClass(menuItem, "div", eXo.portal.UIPortalNavigation.containerStyleClass);
+  subContainer = DOMUtil.findFirstDescendantByClass(menuItem, "ul", eXo.portal.UIPortalNavigation.containerStyleClass);
   if (subContainer) {
     eXo.portal.UIPortalNavigation.superClass.pushVisibleContainer(subContainer.id);
     eXo.portal.UIPortalNavigation.showMenuItemContainer(menuItem, subContainer) ;
@@ -422,7 +410,7 @@ UIPortalNavigation.prototype.showMenuItemContainer = function(menuItem, menuItem
 UIPortalNavigation.prototype.onMenuItemOut = function(menuItem) {
   if (!menuItem || !menuItem.nodeName) menuItem = this;
   
-  var subContainer = eXo.core.DOMUtil.findFirstDescendantByClass(menuItem, "div", eXo.portal.UIPortalNavigation.containerStyleClass);
+  var subContainer = eXo.core.DOMUtil.findFirstDescendantByClass(menuItem, "ul", eXo.portal.UIPortalNavigation.containerStyleClass);
   if (subContainer) {
     eXo.portal.UIPortalNavigation.superClass.pushHiddenContainer(subContainer.id);
     eXo.portal.UIPortalNavigation.superClass.popVisibleContainer();
@@ -446,12 +434,11 @@ UIPortalNavigation.prototype.loadScroll = function(e) {
     uiNav.scrollMgr = eXo.portal.UIPortalControl.newScrollManager("PortalNavigationTopContainer");
     uiNav.scrollMgr.initFunction = uiNav.initScroll;
     // Adds the tab elements to the manager
-    var tabs = eXo.core.DOMUtil.findAncestorByClass(portalNav, "UIHorizontalTabs");
-    uiNav.scrollMgr.mainContainer = tabs;
-    uiNav.scrollMgr.arrowsContainer = eXo.core.DOMUtil.findFirstDescendantByClass(tabs, "div", "ScrollButtons");
+    uiNav.scrollMgr.mainContainer = portalNav;
+    uiNav.scrollMgr.arrowsContainer = eXo.core.DOMUtil.findFirstDescendantByClass(portalNav, "li", "ScrollButtons");
     uiNav.scrollMgr.loadElements("UITab");
     // Configures the arrow buttons
-    var arrowButtons = eXo.core.DOMUtil.findDescendantsByTagName(uiNav.scrollMgr.arrowsContainer, "div");
+    var arrowButtons = eXo.core.DOMUtil.findDescendantsByTagName(uiNav.scrollMgr.arrowsContainer, "a");
     if (arrowButtons.length == 2) {
       uiNav.scrollMgr.initArrowButton(arrowButtons[0], "left", "ScrollLeftButton", "HighlightScrollLeftButton", "DisableScrollLeftButton");
       uiNav.scrollMgr.initArrowButton(arrowButtons[1], "right", "ScrollRightButton", "HighlightScrollRightButton", "DisableScrollRightButton");

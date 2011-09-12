@@ -134,23 +134,9 @@
 	</div>
 	<% if(isMulti) { %>
 	<div class="UIAction"> 
-		<table class="ActionContainer" align="center">
-			<tr>
-				<td align="center">
-				<%for(String action : uicomponent.getActions()){%>
-				 <a href="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle">
-						<div class="ButtonLeft">
-							<div class="ButtonRight">
-								<div class="ButtonMiddle">
-									<%=uiform.getLabel(action)%>
-								</div>
-							</div>
-						</div>
-					</a>
-				 <%}%>
-				</td>
-			</tr>
-		</table>
+		<%for(String action : uicomponent.getActions()){%>
+				<a href="<%=uicomponent.event(action)%>" class="ActionButton LightBlueStyle"><%=uiform.getLabel(action)%></a>
+		<%}%>
 	</div>
 	<% } %>	
 	<%uicomponent.renderChild(UIPopupWindow.class);%> 

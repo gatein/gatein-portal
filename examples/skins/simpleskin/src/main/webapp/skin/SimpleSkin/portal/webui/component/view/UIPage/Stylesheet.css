@@ -19,123 +19,25 @@
 
 /*##############################-Page Layout Decorator-################################*/
 
-.LAYOUT-BLOCK .PageLayoutDecorator {
-	cursor: move;
-}
 
 .UIPageBody .PageLayoutDecorator	{
-	padding: 0px;
 	margin: 0px 2px auto 2px;
 	overflow: hidden;
 }
 
-.UIPageBody .PageLayoutDecorator .MiddlePageBG {
-	background: white;
-	height: 80px; 
-}
-
-.UIPageBody .PageLayoutDecorator .TopLeftPage {
-	background: url('background/ViewPage.gif') no-repeat left -113px; /* orientation=lt */
-	background: url('background/ViewPage-rt.gif') no-repeat right -113px; /* orientation=rt */
-	padding: 0px 0px 0px 143px; /* orientation=lt */
-	padding: 0px 143px 0px 0px; /* orientation=rt */
-}
-
-.UIPageBody .PageLayoutDecorator .TopRightPage {
-	background: url('background/ViewPage.gif') no-repeat right -226px; /* orientation=lt */
-	background: url('background/ViewPage-rt.gif') no-repeat left -226px; /* orientation=rt */
-	padding: 0px 47px 0px 0px; /* orientation=lt */
-	padding: 0px 0px 0px 47px; /* orientation=rt */
-}
-
-.UIPageBody .PageLayoutDecorator .TopCenterPage {
-	height: 112px; line-height: 98px;	
-	background: url('background/ViewPage.gif') repeat-x center top;	
-	color: #525252; text-align: center;
-	font-weight: bold;
-	padding: 0px; white-space: nowrap;
-}
-
-.UIPageBody .PageLayoutDecorator .MiddleLeftPage {
-	background: url('background/ViewPageRepeat.gif') repeat-y left; /* orientation=lt */
-	background: url('background/ViewPageRepeat-rt.gif') repeat-y right; /* orientation=rt */
-	padding: 0px 0px 0px 22px; /* orientation=lt */
-	padding: 0px 22px 0px 0px; /* orientation=rt */
-}
-
-.UIPageBody .PageLayoutDecorator .MiddleRightPage {
- background: url('background/ViewPageRepeat.gif') repeat-y right; /* orientation=lt */
- background: url('background/ViewPageRepeat-rt.gif') repeat-y left; /* orientation=rt */
- padding: 0px 23px 0px 0px; /* orientation=lt */
- padding: 0px 0px 0px 23px; /* orientation=rt */
-}
-
-.UIPageBody .PageLayoutDecorator .BottomLeftPage {	
-	background: url('background/ViewPage.gif') no-repeat left -378px; /* orientation=lt */
-	background: url('background/ViewPage-rt.gif') no-repeat right -378px; /* orientation=rt */
-	padding: 0px 0px 0px 46px; /* orientation=lt */
-	padding: 0px 46px 0px 0px; /* orientation=rt */
-}
-
-.UIPageBody .PageLayoutDecorator .BottomRightPage {
-	background: url('background/ViewPage.gif') no-repeat right -378px; /* orientation=lt */
-	background: url('background/ViewPage-rt.gif') no-repeat left -378px; /* orientation=rt */
-	padding: 0px 35px 0px 0px; /* orientation=lt */
-	padding: 0px 0px 0px 35px; /* orientation=rt */
-}
-
-.UIPageBody .PageLayoutDecorator .BottomCenterPage {
-	line-height: 38px;
-	background: url('background/ViewPage.gif') repeat-x center -339px; 
-}
-
-.UIPageBody .PageLayoutDecorator .BottomCenterPage .FixBug {
-	height: 38px;	 
-}
-
 .UIPageBody .VIEW-PAGEBODY .UIPage {
-	padding: 8px;
+	padding: 0 8px;
 }
 
-.UIPageBody .VIEW-PAGEBODY .UIPage .UIComponentBlock {
-	background: white;
-	height: 100%;
-}
-
-.UIPageBody .BLPagebody {
-	background: url('background/BgPagebody.gif') no-repeat left top;
-	padding-left: 6px;
-	height: 16px;
-}
-
-.UIPageBody .BRPagebody {
-	background: url('background/BgPagebody.gif') no-repeat right top; 
-	padding-right: 6px;
-	height: 16px;
-}
-
-.UIPageBody .BMPagebody {
-	background: url('background/BgPagebody.gif') repeat-x center bottom; 
-	height: 16px;
-}
 
 .UIPage .UIRowContainer {
 	padding: 0px;
 }
 
-.BottomDecoratorHome .BottomDecoratorLeft{
-	background: url('background/BottomDecoratorHome.gif') no-repeat left;
-	padding-left: 7px;
-	height: 7px;
-}
-
-.BottomDecoratorHome .BottomDecoratorRight{
-	background: url('background/BottomDecoratorHome.gif') no-repeat right;
-	padding-right: 7px;
-	height: 7px;
-}
-
-.BottomDecoratorHome .BottomDecoratorMiddle{
-	background: white;
-	height: 7px;
+.UIWorkingWorkspace .UIPageBody .VIEW-PAGEBODY {
+	-moz-border-radius:0;
+	-webkit-border-radius:0;
+	border-radius:0;
+	background: #fff;
+	padding:0;
 }

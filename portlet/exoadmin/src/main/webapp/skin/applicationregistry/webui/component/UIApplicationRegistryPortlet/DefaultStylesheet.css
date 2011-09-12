@@ -484,9 +484,7 @@
 /******************************** UIGadgetManagement ******************************/
 .UIApplicationRegistryPortlet .UIGadgetManagement .PortletIcons {
 	width: 150px;
-	padding: 10px 0px; 
-	text-align: center;
-	height: auto;
+	padding-top: 20px; text-align: center;
 }
 
 .UIApplicationRegistryPortlet .UIGadgetManagement .PortletIcons img {

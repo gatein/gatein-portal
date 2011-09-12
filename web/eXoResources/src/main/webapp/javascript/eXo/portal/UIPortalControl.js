@@ -183,7 +183,7 @@ ScrollManager.prototype.init = function() {
 ScrollManager.prototype.loadElements = function(elementClass, clean) {
 	if (clean) this.cleanElements();
 	this.elements.clear();
-	this.elements.pushAll(eXo.core.DOMUtil.findDescendantsByClass(this.mainContainer, "div", elementClass));
+	this.elements.pushAll(eXo.core.DOMUtil.findDescendantsByClass(this.mainContainer, "li", elementClass));
 };
 /**
  * Calculates the available space for the elements, and inits the elements array like this :
