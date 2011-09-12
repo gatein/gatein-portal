@@ -19,7 +19,9 @@
 
 package org.exoplatform.services.organization.idm;
 
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.commons.utils.ListenerStack;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.MembershipEventListener;
@@ -66,6 +68,11 @@ public class MembershipDAOImpl implements MembershipHandler
    public void addMembershipEventListener(MembershipEventListener listener)
    {
       listeners_.add(listener);
+   }
+
+   public void removeMembershipEventListener(MembershipEventListener listener)
+   {
+      listeners_.remove(listener);
    }
 
    final public Membership createMembershipInstance()
@@ -749,9 +756,15 @@ public class MembershipDAOImpl implements MembershipHandler
       return result;
    }
 
+
    public Collection findMembershipsByGroup(Group group) throws Exception
    {
       return findMembershipsByGroupId(group.getId());
+   }
+
+   public ListAccess<Membership> findAllMembershipsByGroup(Group group) throws Exception
+   {
+      return new ListAccessImpl(Membership.class, (List)findMembershipsByGroup(group));
    }
 
    public Collection findMembershipsByGroupId(String groupId) throws Exception

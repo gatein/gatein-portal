@@ -74,6 +74,11 @@ public class GroupDAOImpl implements GroupHandler
       listeners_.add(listener);
    }
 
+   public void removeGroupEventListener(GroupEventListener listener)
+   {
+      listeners_.remove(listener);
+   }
+
    final public Group createGroupInstance()
    {
       if (log.isTraceEnabled())

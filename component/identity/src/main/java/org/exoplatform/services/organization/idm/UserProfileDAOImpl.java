@@ -69,6 +69,11 @@ public class UserProfileDAOImpl implements UserProfileHandler
       listeners_.add(listener);
    }
 
+   public void removeUserProfileEventListener(UserProfileEventListener listener)
+   {
+      listeners_.remove(listener);
+   }
+
    final public UserProfile createUserProfileInstance()
    {
       return new UserProfileImpl();
