@@ -107,11 +107,19 @@ public class UserDAOImpl implements UserHandler
 
    public void addUserEventListener(UserEventListener listener)
    {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
       listeners_.add(listener);
    }
 
    public void removeUserEventListener(UserEventListener listener)
    {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
       listeners_.remove(listener);
    }
 

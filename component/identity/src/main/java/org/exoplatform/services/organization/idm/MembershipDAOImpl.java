@@ -67,11 +67,19 @@ public class MembershipDAOImpl implements MembershipHandler
 
    public void addMembershipEventListener(MembershipEventListener listener)
    {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
       listeners_.add(listener);
    }
 
    public void removeMembershipEventListener(MembershipEventListener listener)
    {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
       listeners_.remove(listener);
    }
 

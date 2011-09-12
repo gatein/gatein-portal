@@ -71,11 +71,19 @@ public class GroupDAOImpl implements GroupHandler
 
    public void addGroupEventListener(GroupEventListener listener)
    {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
       listeners_.add(listener);
    }
 
    public void removeGroupEventListener(GroupEventListener listener)
    {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
       listeners_.remove(listener);
    }
 
