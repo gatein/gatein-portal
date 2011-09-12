@@ -23,6 +23,7 @@
 package org.exoplatform.portal.mop.management.exportimport;
 
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.management.operations.navigation.NavigationKey;
 import org.exoplatform.portal.mop.management.operations.navigation.NavigationUtils;
@@ -55,6 +56,15 @@ public class NavigationExportTask extends AbstractExportTask
       this.marshaller = marshaller;
    }
 
+   // TODO: This is a little sloppy to support filtering, fix if we have time.
+   private PageNavigation navigation;
+   public NavigationExportTask(PageNavigation navigation, Marshaller<PageNavigation> marshaller)
+   {
+      super(new SiteKey(navigation.getOwnerType(), navigation.getOwnerId()));
+      this.navigation = navigation;
+      this.marshaller = marshaller;
+   }
+
    @Override
    protected String getXmlFileName()
    {
@@ -64,7 +74,11 @@ public class NavigationExportTask extends AbstractExportTask
    @Override
    public void export(OutputStream outputStream) throws IOException
    {
-      PageNavigation navigation = NavigationUtils.loadPageNavigation(navigationKey, navigationService, descriptionService);
+      if (navigation == null)
+      {
+         navigation = NavigationUtils.loadPageNavigation(navigationKey, navigationService, descriptionService);
+      }
+
       marshaller.marshal(navigation, outputStream);
    }
 }

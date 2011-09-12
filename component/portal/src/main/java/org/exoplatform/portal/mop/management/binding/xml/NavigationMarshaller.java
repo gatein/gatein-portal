@@ -99,10 +99,10 @@ public class NavigationMarshaller implements Marshaller<PageNavigation>
       writer.writeElement(Element.PRIORITY, WritableValueTypes.INTEGER, navigation.getPriority());
 
       // Page nodes
-      writer.writeStartElement(Element.PAGE_NODES);
       ArrayList<NavigationFragment> fragments = navigation.getFragments();
       for (NavigationFragment fragment : fragments)
       {
+         writer.writeStartElement(Element.PAGE_NODES);
          if (fragment.getParentURI() != null)
          {
             String parentUri = fragment.getParentURI();
@@ -117,9 +117,10 @@ public class NavigationMarshaller implements Marshaller<PageNavigation>
                marshallNode(writer, node);
             }
          }
+         writer.writeEndElement(); // End page-nodes
       }
 
-      writer.writeEndElement().writeEndElement(); // End page-nodes and node-navigation
+      writer.writeEndElement(); // End node-navigation
    }
 
    public void marshallNode(StaxWriter<Element> writer, PageNode node) throws XMLStreamException

@@ -26,6 +26,8 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.management.exportimport.PageExportTask;
 import org.gatein.management.api.ContentType;
+import org.gatein.management.api.PathAddress;
+import org.gatein.management.api.PathTemplateFilter;
 import org.gatein.management.api.binding.BindingProvider;
 import org.gatein.management.api.exceptions.OperationException;
 import org.gatein.management.api.exceptions.ResourceNotFoundException;
@@ -35,8 +37,10 @@ import org.gatein.management.api.operation.model.ExportResourceModel;
 import org.gatein.management.api.operation.model.ExportTask;
 import org.gatein.mop.api.workspace.Page;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -55,6 +59,7 @@ public class PageExportResource extends AbstractPageOperationHandler
 
       Collection<Page> pagesList = pages.getChildren();
       List<ExportTask> tasks = new ArrayList<ExportTask>(pagesList.size());
+
       PageExportTask pageExportTask =
          new PageExportTask(siteKey, dataStorage, bindingProvider.getMarshaller(
             org.exoplatform.portal.config.model.Page.PageSet.class, ContentType.XML));
@@ -64,7 +69,24 @@ public class PageExportResource extends AbstractPageOperationHandler
       {
          if (pageName == null)
          {
-            pageExportTask.addPageName(page.getName());
+            PathAddress pageAddress = operationContext.getAddress().append(page.getName());
+            // We need to look up the subresource because this sets the path template resolver to be used by the filter.
+            operationContext.getManagedResource().getSubResource(pageAddress);
+
+            PathTemplateFilter filter;
+            try
+            {
+               filter = PathTemplateFilter.parse(operationContext.getAttributes().getValues("filter"));
+            }
+            catch (ParseException e)
+            {
+               throw new OperationException(operationContext.getOperationName(), "Could not parse filter attributes.", e);
+            }
+
+            if (pageAddress.accepts(filter))
+            {
+               pageExportTask.addPageName(page.getName());
+            }
          }
          else if (pageName.equals(page.getName()))
          {
@@ -76,9 +98,14 @@ public class PageExportResource extends AbstractPageOperationHandler
       {
          throw new ResourceNotFoundException("No page found for " + new PageKey(siteKey, pageName));
       }
-
-      tasks.add(pageExportTask);
-
-      resultHandler.completed(new ExportResourceModel(tasks));
+      else if (pageExportTask.getPageNames().isEmpty())
+      {
+         resultHandler.completed(new ExportResourceModel(Collections.<ExportTask>emptyList()));
+      }
+      else
+      {
+         tasks.add(pageExportTask);
+         resultHandler.completed(new ExportResourceModel(tasks));
+      }
    }
 }

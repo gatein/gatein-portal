@@ -28,6 +28,7 @@ import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.management.exportimport.NavigationExportTask;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.gatein.management.api.ContentType;
+import org.gatein.management.api.PathTemplateFilter;
 import org.gatein.management.api.binding.BindingProvider;
 import org.gatein.management.api.binding.Marshaller;
 import org.gatein.management.api.exceptions.OperationException;
@@ -38,26 +39,49 @@ import org.gatein.management.api.operation.model.ExportResourceModel;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.Site;
 
+import java.text.ParseException;
+import java.util.List;
+
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
 public class NavigationExportResource extends AbstractNavigationOperationHandler
 {
+   private static final FilteredNavigationExportResource filtered = new FilteredNavigationExportResource();
+
    @Override
    protected void execute(OperationContext operationContext, ResultHandler resultHandler, Navigation navigation) throws ResourceNotFoundException, OperationException
    {
-      Site site = navigation.getSite();
-      String navUri = operationContext.getAddress().resolvePathTemplate("nav-uri");
-      SiteKey siteKey = getSiteKey(site);
+      List<String> filterAttributes = operationContext.getAttributes().getValues("filter");
+      PathTemplateFilter filter;
+      try
+      {
+         filter = PathTemplateFilter.parse(filterAttributes);
+      }
+      catch (ParseException e)
+      {
+         throw new OperationException(operationContext.getOperationName(), "Could not parse filter attributes.", e);
+      }
 
-      DescriptionService descriptionService = operationContext.getRuntimeContext().getRuntimeComponent(DescriptionService.class);
-      NavigationService navigationService = operationContext.getRuntimeContext().getRuntimeComponent(NavigationService.class);
-      BindingProvider bindingProvider = operationContext.getBindingProvider();
-      Marshaller<PageNavigation> marshaller = bindingProvider.getMarshaller(PageNavigation.class, ContentType.XML);
+      if (filter.hasPathTemplate("nav-uri"))
+      {
+         filtered.execute(operationContext, resultHandler, filter);
+      }
+      else
+      {
+         Site site = navigation.getSite();
+         String navUri = operationContext.getAddress().resolvePathTemplate("nav-uri");
+         SiteKey siteKey = getSiteKey(site);
 
-      NavigationExportTask exportTask = new NavigationExportTask(new NavigationKey(siteKey, navUri), navigationService, descriptionService, marshaller);
+         DescriptionService descriptionService = operationContext.getRuntimeContext().getRuntimeComponent(DescriptionService.class);
+         NavigationService navigationService = operationContext.getRuntimeContext().getRuntimeComponent(NavigationService.class);
+         BindingProvider bindingProvider = operationContext.getBindingProvider();
+         Marshaller<PageNavigation> marshaller = bindingProvider.getMarshaller(PageNavigation.class, ContentType.XML);
 
-      resultHandler.completed(new ExportResourceModel(exportTask));
+         NavigationExportTask exportTask = new NavigationExportTask(new NavigationKey(siteKey, navUri), navigationService, descriptionService, marshaller);
+
+         resultHandler.completed(new ExportResourceModel(exportTask));
+      }
    }
 }
