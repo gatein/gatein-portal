@@ -103,4 +103,19 @@
       <show-info-bar>false</show-info-bar>
     </gadget-application>
   </page>
+
+  <page>
+    <name>siteExportImport</name>
+    <title>Site Export/Import</title>
+    <access-permissions>manager:/platform/administrators</access-permissions>
+    <edit-permission>manager:/platform/administrators</edit-permission>
+    <gadget-application>
+      <gadget>
+        <gadget-ref>SiteExportImport</gadget-ref>
+      </gadget>
+      <title>Site Export/Import</title>
+      <access-permissions>manager:/platform/administrators</access-permissions>
+      <show-info-bar>false</show-info-bar>
+    </gadget-application>
+  </page>
 </page-set>

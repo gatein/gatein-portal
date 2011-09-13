@@ -35,5 +35,6 @@
 	<module>core</module>
 	<module>server</module>
 	<module>eXoGadgets</module>
+   <module>gwtGadgets</module>
   </modules>
 </project>

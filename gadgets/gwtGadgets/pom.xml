@@ -1,0 +1,104 @@
+<!--
+  ~ JBoss, Home of Professional Open Source.
+  ~ Copyright 2011, Red Hat, Inc., and individual contributors
+  ~ as indicated by the @author tags. See the copyright.txt file in the
+  ~ distribution for a full listing of individual contributors.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.gadgets</artifactId>
+      <version>3.2.0-M02-SNAPSHOT</version>
+   </parent>
+
+   <artifactId>exo.portal.gwtGadgets</artifactId>
+   <packaging>war</packaging>
+   <name>GateIn Portal GWT Gadgets Application</name>
+
+   <properties>
+      <com.google.gwt.version>2.1.0</com.google.gwt.version>
+      <com.googlecode.gwtupload.version>0.6.3-compat</com.googlecode.gwtupload.version>
+   </properties>
+
+   <dependencies>
+      <dependency>
+         <groupId>org.gatein.management</groupId>
+         <artifactId>gatein-management-api</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.common</groupId>
+         <artifactId>common-logging</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.exoplatform.kernel</groupId>
+         <artifactId>exo.kernel.container</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <!-- GWT Dependencies -->
+      <dependency>
+         <groupId>com.google.gwt</groupId>
+         <artifactId>gwt-servlet</artifactId>
+         <version>${com.google.gwt.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>com.google.gwt</groupId>
+         <artifactId>gwt-user</artifactId>
+         <version>${com.google.gwt.version}</version>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>com.googlecode.gwtupload</groupId>
+         <artifactId>gwtupload</artifactId>
+         <version>${com.googlecode.gwtupload.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>com.google.gwt.google-apis</groupId>
+         <artifactId>gwt-gadgets</artifactId>
+         <version>1.2.0</version>
+         <scope>system</scope>
+         <systemPath>${project.basedir}/mvn-dependencies/gwt-gadgets-1.2.0.jar</systemPath>
+      </dependency>
+   </dependencies>
+
+   <build>
+      <finalName>gwtGadgets</finalName>
+
+      <!-- dev mode doesn't seem to work for gadgets, so just including the gwt plugin for compile -->
+      <plugins>
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>gwt-maven-plugin</artifactId>
+            <version>2.1.0</version>
+            <executions>
+               <execution>
+                  <goals>
+                     <goal>compile</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+</project>

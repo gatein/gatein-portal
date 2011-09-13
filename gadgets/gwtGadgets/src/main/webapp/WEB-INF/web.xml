@@ -1,0 +1,80 @@
+<!--
+  ~ JBoss, Home of Professional Open Source.
+  ~ Copyright 2011, Red Hat, Inc., and individual contributors
+  ~ as indicated by the @author tags. See the copyright.txt file in the
+  ~ distribution for a full listing of individual contributors.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+
+<!DOCTYPE web-app PUBLIC
+   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+   "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+
+   <display-name>gwtGadgets</display-name>
+
+   <!-- TODO: Determine if these parameters (maxSize and slowUploads) is what we want for this -->
+   <context-param>
+      <!-- max size of the upload request -->
+      <param-name>maxSize</param-name>
+      <param-value>3145728</param-value>
+   </context-param>
+
+   <context-param>
+      <!--
+         Useful in development mode to slow down the uploads in fast networks.
+         Put the number of milliseconds to sleep in each block received in the server.
+         false or 0, means don't use slow uploads
+      -->
+      <param-name>slowUploads</param-name>
+      <param-value>50</param-value>
+   </context-param>
+
+   <!-- GateIn service servlet -->
+   <servlet>
+      <servlet-name>gtnService</servlet-name>
+      <servlet-class>org.gatein.management.gadget.mop.exportimport.server.GateInServiceImpl</servlet-class>
+   </servlet>
+
+   <!-- file upload servlet-->
+   <servlet>
+      <servlet-name>uploadServlet</servlet-name>
+      <servlet-class>org.gatein.management.gadget.mop.exportimport.server.FileUploadServlet</servlet-class>
+   </servlet>
+
+   <servlet>
+      <servlet-name>downloadServlet</servlet-name>
+      <servlet-class>org.gatein.management.gadget.mop.exportimport.server.FileDownloadServlet</servlet-class>
+   </servlet>
+
+   <servlet-mapping>
+      <servlet-name>gtnService</servlet-name>
+      <url-pattern>/exportimport/GateInService</url-pattern>
+   </servlet-mapping>
+
+   <servlet-mapping>
+      <servlet-name>uploadServlet</servlet-name>
+      <url-pattern>/exportimport/upload</url-pattern>
+   </servlet-mapping>
+
+   <servlet-mapping>
+      <servlet-name>downloadServlet</servlet-name>
+      <url-pattern>/exportimport/download</url-pattern>
+   </servlet-mapping>
+
+</web-app>

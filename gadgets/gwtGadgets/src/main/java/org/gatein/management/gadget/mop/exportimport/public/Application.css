@@ -1,0 +1,460 @@
+/*
+ * JBoss, Home of Professional Open Source.
+ * Copyright 2011, Red Hat, Inc., and individual contributors
+ * as indicated by the @author tags. See the copyright.txt file in the
+ * distribution for a full listing of individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
+/** Add css rules here for your application. */
+
+/*
+button {
+    display: block;
+    font-size: 16pt
+}
+
+.widePanel {
+    width: 100%
+}
+
+img {
+    margin-top: 20px;
+}
+
+.gwt-TabLayoutPanel .gwt-TabLayoutPanelContent {
+    overflow: hidden;
+    padding: 5px 5px 5px 5px;
+    border-style: solid;
+    border-width: 2px 2px 2px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -khtml-border-radius: 4px;
+    border-radius: 4px;
+}
+
+.gwt-StackPanel {
+    cursor:default;
+}
+
+.gwt-StackPanel .gwt-StackPanelItem {
+    cursor:default;
+}
+
+body {
+	background-color: white;
+	color: black;
+	font-family: Arial, sans-serif;
+	font-size: small;
+	margin: 5px;
+}
+*/
+
+.rootpanelstyle {
+   border: #AAAAAA solid 2px;
+   -moz-border-radius: 4px;
+   -webkit-border-radius: 4px;
+   -khtml-border-radius: 4px;
+   border-radius: 4px;
+   padding: 5px;
+}
+
+.download-frame {
+   border: 0px;
+   visibility: hidden;
+}
+
+.header-style {
+   text-decoration: none;
+   color: #ff8800;
+   font: bold;
+}
+
+.success-style {
+   text-decoration: none;
+   color: #00ff00;
+   font-weight: bold;
+   height: 35px;
+   padding-left: 10px;
+}
+
+.success-style-icon {
+   text-decoration: none;
+   background-image: url('images/success-icon.png');
+   background-repeat: no-repeat;
+   background-position: left top;
+   padding-right: 5px;
+   height: 35px;
+}
+
+.error-style {
+   text-decoration: none;
+   color: #ff0000;
+   height: 35px;
+   font-weight: bold;
+   padding-left: 10px;
+}
+
+.error-style-icon {
+   background-image: url('images/error-icon.png');
+   background-repeat: no-repeat;
+   background-position: left top;
+   text-decoration: none;
+   height: 35px;
+   padding-right: 5px;
+}
+
+.warn-style {
+   text-decoration: none;
+   color: #ff8800;
+   height: 35px;
+   font-weight: bold;
+   padding-left: 10px;
+}
+
+.warn-style-icon {
+   background-image: url('images/warning-icon.png');
+   background-repeat: no-repeat;
+   background-position: left top;
+   text-decoration: none;
+   height: 35px;
+   padding-right: 5px;
+}
+
+.progress-style{
+   text-decoration: none;
+   color: #0000ff;
+   height: 35px;
+   font-weight: bold;
+   padding-left: 10px;
+}
+
+.progress-style-icon{
+   background-image: url('images/loading.gif');
+   background-repeat: no-repeat;
+   background-position: left top;
+   text-decoration: none;
+   padding-right: 5px;
+   height: 35px;
+}
+
+.blank-style {
+   background-image: url("images/blank.png");
+   background-repeat: no-repeat;
+}
+
+.status-panel {
+   border: #AAAAAA solid 1px;
+   -moz-border-radius: 4px;
+   -webkit-border-radius: 4px;
+   -khtml-border-radius: 4px;
+   border-radius: 4px;
+}
+
+status-panel-no-border {
+   border: #AAAAAA solid 0px;
+}
+
+a {
+   color: darkblue;
+}
+
+a:visited {
+   color: darkblue;
+}
+
+.gwt-DialogBox {
+   /*
+   border: 2px solid #AAAAAA;
+   background-color: white;
+   */
+}
+
+.gwt-DialogBox .Caption {
+   background-image: url(gray_gradient.gif);
+   background-repeat: repeat-x;
+   padding: 4px;
+   padding-bottom: 8px;
+   font-weight: bold;
+   cursor: default;
+}
+
+.gwt-MenuBar {
+   background-color: #C3D9FF;
+   cursor: default;
+}
+
+.gwt-MenuItem {
+   font-size: 80%;
+   margin: 1px;
+   cursor: default;
+}
+
+.gwt-MenuItem-selected {
+   background-color: #E8EEF7;
+}
+
+.gwt-Tree {
+}
+
+.gwt-Tree .gwt-TreeItem {
+   font-size: 80%;
+   cursor: default;
+}
+
+.gwt-Tree .gwt-TreeItem-selected {
+   background-color: #C3D9FF;
+}
+
+.gwt-StackPanel {
+   background-color: white;
+   border: 1px solid #AAAAAA;
+   width: 15em;
+}
+
+.gwt-StackPanel .gwt-StackPanelItem {
+   background-image: url(blue_gradient.gif);
+   background-repeat: repeat-x;
+   background-color: #EEEEEE;
+
+}
+
+.gwt-StackPanel .gwt-StackPanelItem-selected {
+}
+
+.gwt-TabPanel {
+
+}
+
+.gwt-TabPanelBottom {
+   border-left: 1px solid #87b3ff;
+   border-right: 1px solid #87b3ff;
+   border-bottom: 1px solid #87b3ff;
+}
+
+.gwt-TabBar {
+   font-size: smaller;
+}
+
+.gwt-TabBar .gwt-TabBarFirst {
+   height: 100%;
+   border-bottom: 1px solid #87b3ff;
+   border-right: 1px solid #87b3ff;
+   padding-left: 3px;
+}
+
+.gwt-TabBar .gwt-TabBarRest {
+   border-bottom: 1px solid #87b3ff;
+   padding-right: 3px;
+}
+
+.gwt-TabBar .gwt-TabBarItem {
+   border-top: 1px solid #87b3ff;
+   border-bottom: 1px solid #87b3ff;
+   padding: 2px;
+   cursor: hand;
+   white-space: nowrap;
+   border-right: 1px solid #87b3ff;
+}
+
+.gwt-TabBar .gwt-TabBarItem-selected {
+   font-weight: bold;
+   background-color: #e8eef7;
+   border-top: 1px solid #87b3ff;
+   border-right: 1px solid #87b3ff;
+   border-bottom: 1px solid #e8eef7;
+   padding: 2px;
+   cursor: default;
+   white-space: nowrap;
+}
+
+.gwt-PushButton-up {
+   background-color: #C3D9FF;
+   padding: 2px;
+   border: 2px solid transparent;
+   border-color: #E8F1FF rgb(157, 174, 205) rgb(157, 174, 205) rgb(232, 241, 255);
+   cursor: pointer;
+   cursor: hand;
+}
+
+.gwt-PushButton-up-hovering {
+   background-color: #C3D9FF;
+   padding: 2px;
+   border: 2px solid transparent;
+   border-color: #E8F1FF rgb(157, 174, 205) rgb(157, 174, 205) rgb(232, 241, 255);
+   cursor: pointer;
+   cursor: hand;
+}
+
+.gwt-PushButton-down {
+   background-color: #C3D9FF;
+   padding: 2px;
+   border: 2px solid transparent;
+   border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+   cursor: pointer;
+   cursor: hand;
+}
+
+.gwt-PushButton-down-hovering {
+   background-color: #C3D9FF;
+   padding: 2px;
+   border: 2px solid transparent;
+   border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+   cursor: pointer;
+   cursor: hand;
+}
+
+.gwt-ToggleButton-up {
+   background-color: #C3D9FF;
+   padding: 2px;
+   border: 2px solid transparent;
+   border-color: #E8F1FF rgb(157, 174, 205) rgb(157, 174, 205) rgb(232, 241, 255);
+   cursor: pointer;
+   cursor: hand;
+}
+
+.gwt-ToggleButton-up-hovering {
+   background-color: #C3D9FF;
+   padding: 2px;
+   border: 2px solid transparent;
+   border-color: #E8F1FF rgb(157, 174, 205) rgb(157, 174, 205) rgb(232, 241, 255);
+   cursor: pointer;
+   cursor: hand;
+}
+
+.gwt-ToggleButton-down {
+   background-color: #C3D9FF;
+   padding: 2px;
+   background-color: #E8F1FF;
+   border: 2px solid transparent;
+   border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+   cursor: pointer;
+   cursor: hand;
+}
+
+.gwt-ToggleButton-down-hovering {
+   background-color: #C3D9FF;
+   padding: 2px;
+   background-color: #E8F1FF;
+   border: 2px solid transparent;
+   border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+   cursor: pointer;
+   cursor: hand;
+}
+
+.gwt-RichTextArea {
+   border: 1px solid black;
+   background-color: white;
+}
+
+.gwt-RichTextToolbar {
+   background-color: #C3D9FF;
+   padding: 2px;
+}
+
+.gwt-RichTextToolbar .gwt-PushButton-up {
+   margin-right: 2px;
+   border: 1px solid #C3D9FF;
+}
+
+.gwt-RichTextToolbar .gwt-PushButton-up-hovering {
+   margin-right: 2px;
+   border: 1px solid #C3D9FF;
+   border-color: #E8F1FF rgb(157, 174, 205) rgb(157, 174, 205) rgb(232, 241, 255);
+}
+
+.gwt-RichTextToolbar .gwt-PushButton-down {
+   margin-right: 2px;
+   border: 1px solid #C3D9FF;
+   border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+}
+
+.gwt-RichTextToolbar .gwt-PushButton-down-hovering {
+   margin-right: 2px;
+   border: 1px solid #C3D9FF;
+   border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+}
+
+.gwt-RichTextToolbar .gwt-ToggleButton-up {
+   margin-right: 2px;
+   border: 1px solid #C3D9FF;
+}
+
+.gwt-RichTextToolbar .gwt-ToggleButton-up-hovering {
+   margin-right: 2px;
+   border: 1px solid #C3D9FF;
+   border-color: #E8F1FF rgb(157, 174, 205) rgb(157, 174, 205) rgb(232, 241, 255);
+}
+
+.gwt-RichTextToolbar .gwt-ToggleButton-down {
+   margin-right: 2px;
+   background-color: #E8F1FF;
+   border: 1px solid #C3D9FF;
+   border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+}
+
+.gwt-RichTextToolbar .gwt-ToggleButton-down-hovering {
+   margin-right: 2px;
+   background-color: #E8F1FF;
+   border: 1px solid #C3D9FF;
+   border-color: #9DAECD rgb(232, 241, 255) rgb(232, 241, 255) rgb(157, 174, 205);
+}
+
+.gwt-HorizontalSplitPanel {
+   border: 8px solid #C3D9FF;
+}
+
+.gwt-HorizontalSplitPanel .splitter {
+   background-color: #C3D9FF;
+   cursor: move;
+}
+
+.gwt-HorizontalSplitPanel .left {
+   background-color: #E8EEF7;
+}
+
+.gwt-VerticalSplitPanel {
+   border: 8px solid #C3D9FF;
+}
+
+.gwt-VerticalSplitPanel .splitter {
+   background-color: #C3D9FF;
+   height: 8px;
+   cursor: move;
+}
+
+.gwt-SuggestBoxPopup {
+   border: 2px solid #C3D9FF;
+}
+
+.gwt-SuggestBoxPopup .item {
+   padding: 2px;
+}
+
+.gwt-SuggestBoxPopup .item-selected {
+   background-color: #C3D9FF;
+   padding: 2px;
+}
+
+.gwt-DisclosurePanel {
+   border: 2px solid #C3D9FF;
+}
+
+.gwt-DisclosurePanel .header {
+   background-color: #e8eef7;
+   cursor: hand;
+}

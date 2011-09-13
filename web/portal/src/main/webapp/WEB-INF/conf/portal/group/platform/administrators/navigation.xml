@@ -52,6 +52,12 @@
          <label>Services Management</label>
          <page-reference>group::/platform/administrators::servicesManagement</page-reference>
       </node>
+
+      <node>
+        <name>siteExportImport</name>
+        <label>Site Export/Import</label>
+        <page-reference>group::/platform/administrators::siteExportImport</page-reference>
+      </node>
     </node>                        
   </page-nodes>
 </node-navigation>

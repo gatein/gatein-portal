@@ -781,6 +781,12 @@
       <type>war</type>
     </dependency>
     <dependency>
+      <?rename gwtGadgets.war?>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.gwtGadgets</artifactId>
+      <type>war</type>
+    </dependency>
+    <dependency>
       <?rename web.war?>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.portlet.web</artifactId>
