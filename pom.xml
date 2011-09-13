@@ -645,6 +645,13 @@
             <groupId>org.chromattic</groupId>
             <artifactId>chromattic.core</artifactId>
             <version>${version.chromattic}</version>
+            <!-- GTNPORTAL-2095: temporary exclusion for missing dependency -->
+            <exclusions>
+               <exclusion>
+                  <groupId>com.google.code.javaparser</groupId>
+                  <artifactId>javaparser</artifactId>
+               </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.chromattic</groupId>
