@@ -19,31 +19,22 @@
 
 package org.exoplatform.portal.webui.page;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.UserPortalConfig;
-import org.exoplatform.portal.config.model.ModelObject;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
-import org.exoplatform.portal.webui.portal.UIPortal;
-import org.exoplatform.portal.webui.portal.UIPortalComposer;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.InitParams;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -69,7 +60,6 @@ import org.exoplatform.webui.organization.UIGroupMembershipSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
 import org.exoplatform.webui.organization.UIPermissionSelector;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -283,59 +273,23 @@ public class UIPageForm extends UIFormTabPane
       {
          UIPageForm uiPageForm = event.getSource();
          UIPortalApplication uiPortalApp = uiPageForm.getAncestorOfType(UIPortalApplication.class);
-         PortalRequestContext pcontext = Util.getPortalRequestContext();
+         PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
          UIMaskWorkspace uiMaskWS = uiPortalApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-         uiMaskWS.setUIComponent(null);
-         uiMaskWS.setShow(false);         
-         pcontext.addUIComponentToUpdateByAjax(uiMaskWS);
-
          UIPage uiPage = uiPageForm.getUIPage();
          if (uiPage == null)
             return;
-         String storageId = uiPage.getStorageId();
+
          Page page = new Page();
-         page.setPageId(uiPage.getPageId());
          uiPageForm.invokeSetBindingBean(page);
-         page.setOwnerType(uiPage.getSiteKey().getTypeName());
-         List<UIPortlet> uiPortlets = new ArrayList<UIPortlet>();
-         findAllPortlet(uiPortlets, uiPage);
-         ArrayList<ModelObject> applications = new ArrayList<ModelObject>();
-         for (UIPortlet uiPortlet : uiPortlets)
-         {
-            applications.add(PortalDataMapper.buildModelObject(uiPortlet));
-         }
+         uiPage.setAccessPermissions(page.getAccessPermissions());
+         uiPage.setEditPermission(page.getEditPermission());
+         uiPage.setTitle(page.getTitle());
+         uiPage.setShowMaxWindow(page.isShowMaxWindow());
 
-         List<UIComponent> uiChildren = uiPage.getChildren();
-         if (uiChildren == null)
-         {
-            PortalDataMapper.toUIPage(uiPage, page);
-            return;
-         }
-         ArrayList<ModelObject> children = new ArrayList<ModelObject>();
-         for (UIComponent child : uiChildren)
-         {
-            ModelObject component = PortalDataMapper.buildModelObject(child);
-            if (component != null)
-               children.add(component);
-         }
-         page.setChildren(children);
-         uiPage.getChildren().clear();
-
-         try{
-            PortalDataMapper.toUIPage(uiPage, page);
-            pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
-         } catch(NoSuchDataException de){
-            uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.notExistOrDeleted", null, ApplicationMessage.ERROR));
-            UIPortalComposer uiPortalComposer = (UIPortalComposer)uiPortalApp.findComponentById(UIPortalComposer.UIPAGE_EDITOR);
-            if(uiPortalComposer != null){
-               Event aboutEvent = new Event<UIPortalComposer>(uiPortalComposer, "Abort", event.getRequestContext());
-               uiPortalComposer.broadcast(aboutEvent, event.getExecutionPhase());
-            }
-         }
-         
-         uiPage.setStorageId(storageId);
-         if (page.getChildren() == null)
-            page.setChildren(new ArrayList<ModelObject>());
+         uiMaskWS.setUIComponent(null);
+         uiMaskWS.setShow(false);
+         pcontext.addUIComponentToUpdateByAjax(uiMaskWS);
+         pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
       }
 
       protected void findAllPortlet(List<UIPortlet> list, UIContainer uiContainer)
