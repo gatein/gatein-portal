@@ -27,8 +27,6 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
-import org.exoplatform.web.url.navigation.NodeURL;
-import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -50,16 +48,16 @@ import org.exoplatform.web.login.InitiateLoginServlet;
 import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
+import org.exoplatform.web.url.navigation.NavigationResource;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.portlet.WindowState;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -214,8 +212,8 @@ public class UIPortal extends UIContainer
    
    public UserNavigation getUserNavigation() throws Exception
    {
-      UIPortalApplication uiPortalApp = getAncestorOfType(UIPortalApplication.class);
-      return uiPortalApp.getUserPortalConfig().getUserPortal().getNavigation(siteKey);
+      PortalRequestContext prc = Util.getPortalRequestContext();
+      return prc.getUserPortalConfig().getUserPortal().getNavigation(siteKey);
    }
    
    /**
