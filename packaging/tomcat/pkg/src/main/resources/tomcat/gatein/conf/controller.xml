@@ -89,7 +89,7 @@
     <request-param qname="gtn:objectid" name="objectId"/>
 
     <!-- The group access -->
-    <route path="/groups/{gtn:sitename}/{gtn:path}">
+    <route path="/g/{gtn:sitename}/{gtn:path}">
       <request-param qname="gtn:lang" name="lang" value-mapping="never-empty">
         <pattern>([A-Za-z]{2}(-[A-Za-z]{2})?)?</pattern>
       </request-param>
@@ -102,7 +102,7 @@
     </route>
 
     <!-- The user access -->
-    <route path="/users/{gtn:sitename}/{gtn:path}">
+    <route path="/u/{gtn:sitename}/{gtn:path}">
       <request-param qname="gtn:lang" name="lang" value-mapping="never-empty">
         <pattern>([A-Za-z]{2}(-[A-Za-z]{2})?)?</pattern>
       </request-param>

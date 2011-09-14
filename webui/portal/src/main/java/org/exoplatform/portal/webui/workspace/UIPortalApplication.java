@@ -801,7 +801,7 @@ public class UIPortalApplication extends UIApplication
     * and used for JS based portal url generation.
     * 
     * <p>The portal url template are calculated base on the current request and site state.
-    * Something like : <code>"/portal/groups/:platform:administrators/administration/registry?portal:componentId={portal:uicomponentId}&portal:action={portal:action}" ;</code>
+    * Something like : <code>"/portal/g/:platform:administrators/administration/registry?portal:componentId={portal:uicomponentId}&portal:action={portal:action}" ;</code>
     * 
     * @return return portal url template
     * @throws UnsupportedEncodingException
