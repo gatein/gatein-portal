@@ -343,25 +343,28 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
       public Boolean call() throws Exception
       {
          chromatticLifeCycle.openContext();
+         boolean done = true;
          try
-         {
-            boolean done = false;
+         {            
             if (getRegistry().getGadget(importer.getGadgetName()) == null)
             {
                GadgetDefinition def = getRegistry().addGadget(importer.getGadgetName());
                importer.doImport(def);
-               done = true;
             }
             else
             {
                log.debug("Will not import existing gagdet " + importer.getGadgetName());
             }
-            return done;
+         }
+         catch (Exception e)
+         {
+            done = false;
          }
          finally
          {
-            chromatticLifeCycle.closeContext(true);
+            chromatticLifeCycle.closeContext(done);
          }
+         return done;
       }
    }
 }

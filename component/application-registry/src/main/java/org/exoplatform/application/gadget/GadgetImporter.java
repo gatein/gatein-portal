@@ -90,7 +90,7 @@ public abstract class GadgetImporter
       if (bytes == null)
       {
          log.error("Cannot import gadget " + gadgetURI + " because its data could not be found");
-         return;
+         throw new IOException();
       }
       
       //
