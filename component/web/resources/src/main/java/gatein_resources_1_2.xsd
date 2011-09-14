@@ -45,8 +45,8 @@
 			<xs:element name="skin-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
 			<xs:element name="skin-module" type="xs:string" minOccurs="0" maxOccurs="1"/>
 			<xs:element name="css-path" type="xs:string" minOccurs="1" maxOccurs="1"/>
-			<xs:element name="css-priority" type="xs:string" minOccurs="0" maxOccurs="1"/>
-			<xs:element name="overwrite" type="xs:integer" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="css-priority" type="xs:integer" minOccurs="0" maxOccurs="1"/>
+			<xs:element name="overwrite" type="xs:string" minOccurs="0" maxOccurs="1"/>
 		</xs:sequence>
 	</xs:complexType>
 	
