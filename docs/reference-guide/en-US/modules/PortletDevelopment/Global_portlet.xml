@@ -4,24 +4,24 @@
         %BOOK_ENTITIES;
         ]>
 <section id="sect-Reference_Guide-Global_Portlet">
-  <title>Global porlet.xml file</title>
+  <title>Global portlet.xml file</title>
   <section id="sect-Reference_Guide-Global_Portlet-Global_usecase">
       <title>Global portlet.xml usecase</title>
       <para>The Portlet Specification introduces PortletFilter as a standard approach to extend the behaviors of portlet
           objects. For example, a filter can transform the content of portlet requests and portlet responses.
           According to the Portlet Specification, normally there are three steps in setting up a portlet filter:
       </para>
-      <orderedlist>
-          <listitem>
+      <procedure>
+          <step>
               <para>Implement a PortletFilter object</para>
-          </listitem>
-          <listitem>
+          </step>
+          <step>
               <para>Define the filter in portlet application deployment descriptor</para>
-          </listitem>
-          <listitem>
+          </step>
+          <step>
               <para>Define the filter mapping in portlet definitions</para>
-          </listitem>
-      </orderedlist>
+          </step>
+      </procedure>
       <para>Two first steps are quite simple and easy to be done, however, at the step 3, developers/administrators
           need to replicate the filter mapping in many portlet definitions, that makes work error and tedious in
           several use cases.
