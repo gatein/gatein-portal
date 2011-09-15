@@ -35,7 +35,7 @@ eXo.gadget.UIGadget = {
 		eXo.gadgets = window.gadgets;
 		//window.gadgets = eXo.gadget.Gadgets;
 		if (!eXo.gadgets || !eXo.gadgets.rpc) {
-			eXo.core.Loader.register('rpc', '1.0.0',true, 0, hostName + '/js/rpc.js?c=1');
+			eXo.core.Loader.register('rpc', '1.0.0',true, 0, hostName + '/js/pubsub.js?c=1');
 			eXo.core.Loader.register('eXo.gadgets.Gadgets', '/eXoResources/javascript/eXo/gadget/Gadgets.js');
 			eXo.core.Loader.register('eXo.gadgets.ExoBasedUserPrefStore', '/eXoResources/javascript/eXo/gadget/ExoBasedUserPrefStore.js');
 		}
@@ -82,8 +82,9 @@ eXo.gadget.UIGadget = {
             }
             else uiGadget.style.width = "auto";
             eXo.gadget.UIGadget.init(uiGadget, isDesktop, gadget.metadata);
-        }
-
+        }        
+        //setup for pubsub mechanism
+        gadgets.pubsubrouter.init(function(id){return url;}, {});
     },
     /**
      * Initialize data of gadget such as title, style, etc
