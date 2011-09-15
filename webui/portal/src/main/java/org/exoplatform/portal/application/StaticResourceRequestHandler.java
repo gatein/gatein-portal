@@ -39,7 +39,7 @@ public class StaticResourceRequestHandler extends WebRequestHandler
    }
 
    @Override
-   public void execute(ControllerContext context) throws Exception
+   public boolean execute(ControllerContext context) throws Exception
    {
       PortalContainer portalContainer = PortalContainer.getInstance();
       ServletContext mergedContext = portalContainer.getPortalContext();
@@ -47,5 +47,6 @@ public class StaticResourceRequestHandler extends WebRequestHandler
       HttpServletRequest req = context.getRequest();
       HttpServletResponse res = context.getResponse();
       mergedContext.getNamedDispatcher("default").forward(req, res);
+      return true;
    }
 }

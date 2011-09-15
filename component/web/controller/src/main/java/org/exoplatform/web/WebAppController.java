@@ -35,14 +35,13 @@ import org.exoplatform.management.jmx.annotations.Property;
 import org.exoplatform.management.rest.annotations.RESTEndpoint;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.DescriptorBuilder;
 import org.exoplatform.web.controller.metadata.ControllerDescriptor;
-import org.exoplatform.web.controller.router.RouterConfigException;
+import org.exoplatform.web.controller.metadata.DescriptorBuilder;
 import org.exoplatform.web.controller.router.Router;
+import org.exoplatform.web.controller.router.RouterConfigException;
 import org.gatein.common.http.QueryStringParser;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,7 +55,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -320,50 +318,56 @@ public class WebAppController
          Iterator<Map<QualifiedName, String>> matcher = router.matcher(portalPath, req.getParameterMap());
 
          //
-         Map<QualifiedName, String> parameters = null;
-         if (matcher.hasNext())
-         {
-            parameters = matcher.next();
-         }
+         boolean started = false;
+         boolean processed = false;
 
          //
-         if (parameters != null)
+         try
          {
-            String handlerKey = parameters.get(HANDLER_PARAM);
-            if (handlerKey != null)
+            while (matcher.hasNext() && !processed)
             {
-               WebRequestHandler handler = handlers.get(handlerKey);
-               if (handler != null)
+               if (!started)
                {
-                  if (debug)
-                  {
-                     log.debug("Serving request path=" + portalPath + ", parameters=" + parameters + " with handler " + handler);
-                  }
-
-                  //
                   RequestLifeCycle.begin(ExoContainerContext.getCurrentContainer());
-
-                  //
-                  try
-                  {
-                     handler.execute(new ControllerContext(this, router, req, res, parameters));
-                  }
-                  finally
-                  {
-                     RequestLifeCycle.end();
-                  }
+                  started = true;
                }
-               else
+
+               //
+               Map<QualifiedName, String> parameters = matcher.next();
+               String handlerKey = parameters.get(HANDLER_PARAM);
+               if (handlerKey != null)
                {
-                  log.error("Invalid handler " + handlerKey + " for request path=" + portalPath + ", parameters=" + parameters);
-                  res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                  WebRequestHandler handler = handlers.get(handlerKey);
+                  if (handler != null)
+                  {
+                     if (debug)
+                     {
+                        log.debug("Serving request path=" + portalPath + ", parameters=" + parameters + " with handler " + handler);
+                     }
+
+                     //
+                     processed = handler.execute(new ControllerContext(this, router, req, res, parameters));
+                  }
+                  else
+                  {
+                     log.debug("No handler " + handlerKey + " for request path=" + portalPath + ", parameters=" + parameters);
+                  }
                }
             }
          }
-         else
+         finally
          {
-            log.error("Could not associate the request path=" + portalPath + ", parameters=" + parameters + " with an handler");
-            res.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            if (started)
+            {
+               RequestLifeCycle.end();
+            }
+         }
+
+         //
+         if (!processed)
+         {
+            log.error("Could not associate the request path=" + portalPath + " with an handler");
+            res.sendError(HttpServletResponse.SC_NOT_FOUND);
          }
       }
       else

@@ -56,7 +56,7 @@ public class DefaultRequestHandler extends WebRequestHandler
    }
 
    @Override
-   public void execute(ControllerContext context) throws Exception
+   public boolean execute(ControllerContext context) throws Exception
    {
       String defaultPortal = configService.getDefaultPortal();
       PortalURLContext urlContext = new PortalURLContext(context, SiteKey.portal(defaultPortal));
@@ -64,5 +64,6 @@ public class DefaultRequestHandler extends WebRequestHandler
       String s = url.setResource(new NavigationResource(SiteType.PORTAL, defaultPortal, "")).toString();
       HttpServletResponse resp = context.getResponse();
       resp.sendRedirect(resp.encodeRedirectURL(s));
+      return true;
    }
 }

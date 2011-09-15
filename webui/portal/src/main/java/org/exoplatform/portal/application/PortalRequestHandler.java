@@ -28,7 +28,6 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.ControllerContext;
-import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
 import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.web.application.ApplicationRequestPhaseLifecycle;
@@ -37,10 +36,8 @@ import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
-
 import java.util.List;
 import java.util.Locale;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -98,7 +95,7 @@ public class PortalRequestHandler extends WebRequestHandler
     */
    @SuppressWarnings("unchecked")
    @Override
-   public void execute(ControllerContext controllerContext) throws Exception
+   public boolean execute(ControllerContext controllerContext) throws Exception
    {
       HttpServletRequest req = controllerContext.getRequest();
       HttpServletResponse res = controllerContext.getResponse();
@@ -126,7 +123,7 @@ public class PortalRequestHandler extends WebRequestHandler
 
       if (requestSiteName == null) {
          res.sendRedirect(req.getContextPath());
-         return;
+         return true;
       }
 
       PortalApplication app = controllerContext.getController().getApplication(PortalApplication.PORTAL_APPLICATION_ID);
@@ -137,7 +134,7 @@ public class PortalRequestHandler extends WebRequestHandler
          PortalConfig persistentPortalConfig = storage.getPortalConfig(requestSiteType, requestSiteName);
          if (persistentPortalConfig == null)
          {
-            context.sendError(HttpServletResponse.SC_NOT_FOUND);
+            return false;
          }
          else if(req.getRemoteUser() == null)
          {
@@ -152,6 +149,7 @@ public class PortalRequestHandler extends WebRequestHandler
       {
          processRequest(context, app);
       }
+      return true;
    }
 
    @SuppressWarnings("unchecked")

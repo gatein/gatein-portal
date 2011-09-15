@@ -53,9 +53,10 @@ public class UploadHandler extends WebRequestHandler
    }
 
    @Override
-   public void execute(ControllerContext context) throws Exception
+   public boolean execute(ControllerContext context) throws Exception
    {
       execute(context.getController(), context.getRequest(), context.getResponse());
+      return true;
    }
 
    public void execute(WebAppController controller, HttpServletRequest req, HttpServletResponse res) throws Exception

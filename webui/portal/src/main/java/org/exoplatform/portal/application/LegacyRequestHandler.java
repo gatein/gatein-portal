@@ -84,7 +84,7 @@ public class LegacyRequestHandler extends WebRequestHandler
    }
 
    @Override
-   public void execute(ControllerContext context) throws Exception
+   public boolean execute(ControllerContext context) throws Exception
    {
       String requestSiteName = context.getParameter(PortalRequestHandler.REQUEST_SITE_NAME);
       String requestPath = context.getParameter(PortalRequestHandler.REQUEST_PATH);
@@ -129,5 +129,6 @@ public class LegacyRequestHandler extends WebRequestHandler
 
       HttpServletResponse resp = context.getResponse();
       resp.sendRedirect(resp.encodeRedirectURL(s));
+      return true;
    }
 }
