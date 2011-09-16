@@ -160,8 +160,7 @@ public abstract class AbstractImportTest extends AbstractGateInTest
       afterTwoPhaseNoOverrideReboot(root);
       Workspace workspace = mgr.getSession().getWorkspace();
       assertTrue(workspace.isAdapted(Imported.class));
-      workspace.removeAdapter(Imported.class);
-      assertFalse(workspace.isAdapted(Imported.class));
+      workspace.adapt(Imported.class).setStatus(Imported.WANT_REIMPORT);
       mgr.getSession().save();
       RequestLifeCycle.end();
       bootstrap.dispose();

@@ -22,45 +22,67 @@
   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
-  <external-component-plugins>
-    <target-component>org.exoplatform.portal.config.UserPortalConfigService</target-component>
-    <component-plugin>
-      <name>new.portal.config.user.listener</name>
-      <set-method>initListener</set-method>
-      <type>org.exoplatform.portal.config.NewPortalConfigListener</type>
-      <priority>1</priority>
-      <init-params>
-        <value-param>
-          <name>default.portal</name>
-          <value>classic</value>
-        </value-param>
-        <value-param>
-          <name>override</name>
-          <value>${override_2}</value>
-        </value-param>
-        <object-param>
-          <name>portal.configuration</name>
-          <object type="org.exoplatform.portal.config.NewPortalConfig">
-            <field name="predefinedOwner">
-              <collection type="java.util.HashSet">
-                <value>
-                  <string>classic</string>
-                </value>
-              </collection>
-            </field>
-            <field name="ownerType">
-              <string>portal</string>
-            </field>
-            <field name="templateLocation">
-              <string>classpath:/org/exoplatform/portal/config/${import.portal_2}-conf</string>
-            </field>
-            <field name="importMode">
-              <string>${import.mode_2}</string>
-            </field>
-          </object>
-        </object-param>
-      </init-params>
-    </component-plugin>
-  </external-component-plugins>
+   <external-component-plugins>
+      <target-component>org.exoplatform.portal.config.UserPortalConfigService</target-component>
+      <component-plugin>
+         <name>new.portal.config.user.listener</name>
+         <set-method>initListener</set-method>
+         <type>org.exoplatform.portal.config.NewPortalConfigListener</type>
+         <priority>2</priority>
+         <init-params>
+            <value-param>
+               <name>default.portal</name>
+               <value>classic</value>
+            </value-param>
+            <value-param>
+               <name>override</name>
+               <value>${override_2}</value>
+            </value-param>
+            <object-param>
+               <name>portal.configuration</name>
+               <object type="org.exoplatform.portal.config.NewPortalConfig">
+                  <field name="predefinedOwner">
+                     <collection type="java.util.HashSet">
+                        <value>
+                           <string>classic</string>
+                        </value>
+                     </collection>
+                  </field>
+                  <field name="ownerType">
+                     <string>portal</string>
+                  </field>
+                  <field name="templateLocation">
+                     <string>classpath:/org/exoplatform/portal/config/${import.portal_2}-conf</string>
+                  </field>
+                  <field name="importMode">
+                     <string>${import.mode_2}</string>
+                  </field>
+               </object>
+            </object-param>
+            <object-param>
+               <name>user.configuration</name>
+               <description>description</description>
+               <object type="org.exoplatform.portal.config.NewPortalConfig">
+                  <field name="predefinedOwner">
+                     <collection type="java.util.HashSet">
+                        <value>
+                           <string>root</string>
+                        </value>
+                     </collection>
+                  </field>
+                  <field name="ownerType">
+                     <string>user</string>
+                  </field>
+                  <field name="templateLocation">
+                     <string>classpath:/org/exoplatform/portal/config/${import.portal_2}-conf</string>
+                  </field>
+                  <field name="importMode">
+                     <string>${import.mode_2}</string>
+                  </field>
+               </object>
+            </object-param>
+         </init-params>
+      </component-plugin>
+   </external-component-plugins>
 
 </configuration>

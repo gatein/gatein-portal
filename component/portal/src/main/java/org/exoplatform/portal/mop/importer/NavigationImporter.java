@@ -53,7 +53,7 @@ public class NavigationImporter
 
    /** . */
    private final DescriptionService descriptionService;
-
+   
    public NavigationImporter(
       Locale portalLocale,
       ImportMode mode,

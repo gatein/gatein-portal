@@ -33,8 +33,39 @@ public class TestImportNavigationOverwrite extends AbstractImportNavigationTest
    {
       return ImportMode.OVERWRITE;
    }
+   
+   @Override
+   protected final void afterOnePhaseBoot(NodeContext<?> root)
+   {
+      assertState(root);
+   }
 
    @Override
+   protected final void afterTwoPhasesBoot(NodeContext<?> root)
+   {
+      assertEquals(2, root.getNodeCount());
+      NodeContext<?> foo = root.get("foo");
+      assertNotNull(foo);
+      assertEquals("foo_icon_1", foo.getState().getIcon());
+      assertEquals(1, foo.getNodeCount());
+      NodeContext<?> bar = root.get("daa");
+      assertNotNull(bar);
+      assertEquals("daa_icon", bar.getState().getIcon());
+      assertEquals(0, bar.getNodeCount());
+   }
+
+   @Override
+   protected final void afterTwoPhaseOverrideReboot(NodeContext<?> root)
+   {
+      assertState(root);
+   }
+
+   @Override
+   protected final void afterTwoPhaseNoOverrideReconfigure(NodeContext<?> root)
+   {
+      assertState(root);
+   }
+   
    protected void assertState(NodeContext<?> root)
    {
       assertEquals(2, root.getNodeCount());

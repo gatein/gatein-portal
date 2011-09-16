@@ -28,7 +28,6 @@
       <name>new.portal.config.user.listener</name>
       <set-method>initListener</set-method>
       <type>org.exoplatform.portal.config.NewPortalConfigListener</type>
-      <priority>1</priority>
       <init-params>
         <value-param>
           <name>default.portal</name>

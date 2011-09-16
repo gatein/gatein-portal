@@ -45,8 +45,6 @@ public final class NewPortalConfig
 
    private String importMode;
 
-   final Set<String> createdOwners = new HashSet<String>();
-
    /**
     * @deprecated use the location instead
     */

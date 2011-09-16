@@ -19,38 +19,25 @@
 
 package org.exoplatform.portal.config;
 
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.importer.ImportMode;
-import org.exoplatform.portal.mop.navigation.NodeContext;
 
 /**
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @author <a href="trongtt@gmail.com">Trong Tran</a>
+ * @version $Revision$
  */
-public class TestImportFragmentOverwrite extends AbstractImportFragmentTest
+public class TestSiteDataImportConserve extends AbstractSiteDataImportTest
 {
-
+   
    @Override
    protected ImportMode getMode()
    {
-      return ImportMode.OVERWRITE;
+      return ImportMode.CONSERVE;
    }
-
+   
    @Override
-   protected final void afterOnePhaseBoot(NodeContext<?> root)
+   protected void afterSecondBootWithOverride(PortalContainer container) throws Exception
    {
-      assertState(root);
-   }
-
-   @Override
-   protected void assertState(NodeContext<?> root)
-   {
-      assertEquals(1, root.getNodeSize());
-      NodeContext<?> foo = root.get("foo");
-      assertNotNull(foo);
-      assertEquals("foo_icon", foo.getState().getIcon());
-      assertEquals(1, foo.getNodeSize());
-      NodeContext<?> bar = foo.get("bar");
-      assertNotNull(bar);
-      assertEquals("bar_icon", bar.getState().getIcon());
-      assertEquals(0, bar.getNodeSize());
+      afterSecondBoot(container);
    }
 }

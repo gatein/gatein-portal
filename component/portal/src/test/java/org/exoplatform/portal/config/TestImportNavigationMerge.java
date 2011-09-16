@@ -33,8 +33,33 @@ public class TestImportNavigationMerge extends AbstractImportNavigationTest
    {
       return ImportMode.MERGE;
    }
+   
+   @Override
+   protected final void afterOnePhaseBoot(NodeContext<?> root)
+   {
+      assertState(root);
+   }
 
    @Override
+   protected final void afterTwoPhasesBoot(NodeContext<?> root)
+   {
+      assertEquals(2, root.getNodeCount());
+      assertNotNull(root.get("foo"));
+      assertNotNull(root.get("daa"));
+   }
+
+   @Override
+   protected final void afterTwoPhaseOverrideReboot(NodeContext<?> root)
+   {
+      assertState(root);
+   }
+
+   @Override
+   protected final void afterTwoPhaseNoOverrideReconfigure(NodeContext<?> root)
+   {
+      assertState(root);
+   }
+   
    protected void assertState(NodeContext<?> root)
    {
       assertEquals(3, root.getNodeCount());

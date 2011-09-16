@@ -62,12 +62,6 @@ public abstract class AbstractImportFragmentTest extends AbstractImportTest
    }
 
    @Override
-   protected final void afterOnePhaseBoot(NodeContext<?> root)
-   {
-      assertState(root);
-   }
-
-   @Override
    protected final void afterTwoPhaseOverrideReboot(NodeContext<?> root)
    {
       assertState(root);

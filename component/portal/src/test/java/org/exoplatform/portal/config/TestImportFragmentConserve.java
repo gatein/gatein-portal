@@ -35,6 +35,16 @@ public class TestImportFragmentConserve extends AbstractImportFragmentTest
    }
 
    @Override
+   protected final void afterOnePhaseBoot(NodeContext<?> root)
+   {
+      assertEquals(1, root.getNodeSize());
+      NodeContext<?> foo = root.get("foo");
+      assertNotNull(foo);
+      assertEquals("foo_icon", foo.getState().getIcon());
+      assertEquals(1, foo.getNodeSize());
+   }
+
+   @Override
    protected void assertState(NodeContext<?> root)
    {
       assertEquals(1, root.getNodeSize());

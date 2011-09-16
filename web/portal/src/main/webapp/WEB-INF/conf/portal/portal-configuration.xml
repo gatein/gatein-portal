@@ -180,7 +180,6 @@
 	            </field>
 	            <field name="ownerType"><string>portal</string></field>
 	            <field name="templateLocation"><string>war:/conf/portal/</string></field>
-              <field name="importMode"><string>conserve</string></field>
 	          </object>
 	        </object-param> 
 	        <object-param>
@@ -197,7 +196,6 @@
 	            </field>
 	            <field name="ownerType"><string>group</string></field>
 	            <field name="templateLocation"><string>war:/conf/portal</string></field>
-              <field name="importMode"><string>conserve</string></field>
 	          </object>
 	        </object-param>       
 	        <object-param>
@@ -211,7 +209,6 @@
 	            </field>
 	            <field name="ownerType"><string>user</string></field>
 	            <field name="templateLocation"><string>war:/conf/portal</string></field>
-              <field name="importMode"><string>conserve</string></field>
 	          </object>
 	        </object-param>
 	      </init-params>

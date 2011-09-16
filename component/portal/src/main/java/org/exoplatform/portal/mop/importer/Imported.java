@@ -32,7 +32,17 @@ import java.util.Date;
 @MixinType(name = "gtn:imported")
 public abstract class Imported
 {
+   final public static String FAILED = "failed";
+   
+   final public static String DONE = "done";
+   
+   final public static String WANT_REIMPORT = "want_reimport";
+   
+   @Property(name = "gtn:status")
+   public abstract String getStatus();
 
+   public abstract void setStatus(String status);
+   
    @Property(name = "gtn:creationdate")
    public abstract Date getCreationDate();
 

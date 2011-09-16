@@ -20,35 +20,20 @@
 
 -->
 
-<page-set
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
-   xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
+<page-set xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_0 http://www.gatein.org/xml/ns/gatein_objects_1_0"
+   xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_0">
 
    <page>
-      <name>page1</name>
+      <name>dashboard1</name>
       <title>site 2</title>
       <portlet-application>
          <portlet>
             <application-ref>site2</application-ref>
-            <portlet-ref>page1</portlet-ref>
+            <portlet-ref>dashboard1</portlet-ref>
          </portlet>
          <access-permissions>Everyone</access-permissions>
          <show-info-bar>true</show-info-bar>
       </portlet-application>
    </page>
-
-   <page>
-      <name>page2</name>
-      <title>site 2</title>
-      <portlet-application>
-         <portlet>
-            <application-ref>site2</application-ref>
-            <portlet-ref>page2</portlet-ref>
-         </portlet>
-         <access-permissions>Everyone</access-permissions>
-         <show-info-bar>true</show-info-bar>
-      </portlet-application>
-   </page>
-
 </page-set>
+
