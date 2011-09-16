@@ -27,6 +27,7 @@ import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.importer.Imported;
+import org.exoplatform.portal.mop.importer.Imported.Status;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.Node;
@@ -160,7 +161,7 @@ public abstract class AbstractImportTest extends AbstractGateInTest
       afterTwoPhaseNoOverrideReboot(root);
       Workspace workspace = mgr.getSession().getWorkspace();
       assertTrue(workspace.isAdapted(Imported.class));
-      workspace.adapt(Imported.class).setStatus(Imported.WANT_REIMPORT);
+      workspace.adapt(Imported.class).setStatus(Status.WANT_REIMPORT.status());
       mgr.getSession().save();
       RequestLifeCycle.end();
       bootstrap.dispose();

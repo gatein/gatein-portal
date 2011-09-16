@@ -31,6 +31,7 @@ import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesS
 import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.importer.Imported;
+import org.exoplatform.portal.mop.importer.Imported.Status;
 import org.exoplatform.portal.mop.importer.NavigationImporter;
 import org.exoplatform.portal.mop.importer.PageImporter;
 import org.exoplatform.portal.mop.importer.PortalConfigImporter;
@@ -194,7 +195,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          Workspace workspace = session.getWorkspace();
          Imported imported = workspace.adapt(Imported.class);
          imported.setLastModificationDate(new Date());
-         imported.setStatus(Imported.DONE);
+         imported.setStatus(Status.DONE.status());
          session.save();
       }
       finally
@@ -236,7 +237,8 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          else
          {
             Imported imported = workspace.adapt(Imported.class);
-            perform = Imported.WANT_REIMPORT.equals(imported.getStatus());
+            Status status = Status.getStatus(imported.getStatus());
+            perform = (Status.WANT_REIMPORT == status);
          }
          
          if (overrideExistingData)

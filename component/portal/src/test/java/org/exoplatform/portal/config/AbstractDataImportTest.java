@@ -26,6 +26,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.importer.Imported;
+import org.exoplatform.portal.mop.importer.Imported.Status;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.mop.api.workspace.Workspace;
 
@@ -194,7 +195,7 @@ public abstract class AbstractDataImportTest extends AbstractGateInTest
       POMSessionManager mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       Workspace workspace = mgr.getSession().getWorkspace();
       assertTrue(workspace.isAdapted(Imported.class));
-      workspace.adapt(Imported.class).setStatus(Imported.WANT_REIMPORT);
+      workspace.adapt(Imported.class).setStatus(Status.WANT_REIMPORT.status());
       long creationTime1 = workspace.adapt(Imported.class).getCreationDate().getTime();
       long lastModificationTime1 = workspace.adapt(Imported.class).getLastModificationDate().getTime();
       mgr.getSession().save();
