@@ -116,9 +116,7 @@ public class FilteredNavigationExportResource
 
    private void executeHandlers(ManagedResource resource, final OperationContext operationContext, PathAddress address, String operationName, StepResultHandler<PageNavigation> stepResultHandler, PathTemplateFilter filter, boolean root)
    {
-      //resource.getSubResource(address);
       OperationHandler handler = resource.getOperationHandler(address, operationName);
-      System.out.println("Filter: " + filter + " accepted ? " + address.accepts(filter) + " for address " + address + " and nav-uri template " + address.resolvePathTemplate("nav-uri"));
       if (handler != null && !root && address.accepts(filter))
       {
          handler.execute(operationContext, stepResultHandler);
