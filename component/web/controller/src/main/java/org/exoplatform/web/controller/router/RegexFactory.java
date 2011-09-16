@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -19,37 +19,30 @@
 
 package org.exoplatform.web.controller.router;
 
-import junit.framework.TestCase;
-
-/**
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
- */
-public class TestPatternBuilder extends TestCase
+/** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
+public abstract class RegexFactory implements Cloneable
 {
 
-   public void testEscapeReservedChar() throws Exception
+   public static RegexFactory JAVA = new RegexFactory()
    {
-      assertLiteral('^');
-      assertLiteral('*');
-      assertLiteral('$');
-      assertLiteral('[');
-      assertLiteral(']');
-      assertLiteral('.');
-      assertLiteral('|');
-      assertLiteral('+');
-      assertLiteral('(');
-      assertLiteral(')');
-      assertLiteral('?');
+      @Override
+      public Regex compile(String pattern)
+      {
+         return new Regex.Java(pattern);
+      }
+
+      @Override
+      public String getName()
+      {
+         return "java";
+      }
+   };
+
+   protected RegexFactory()
+   {
    }
 
-   private void assertLiteral(char c)
-   {
-      PatternBuilder pb = new PatternBuilder();
-      pb.expr("^");
-      pb.literal(c);
-      pb.expr("$");
-      Regex pattern = RegexFactory.JAVA.compile(pb.build());
-      assertTrue(pattern.matcher().matches(Character.toString(c)));
-   }
+   public abstract Regex compile(String pattern);
+
+   public abstract String getName();
 }

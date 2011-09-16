@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.regex.Matcher;
 
 /**
  * The implementation of the routing algorithm.
@@ -88,7 +87,7 @@ class Route
       }
 
       //
-      for (RouteParam routeParam : routeParams.values())
+      for (RouteParam routeParam : routeParamArray)
       {
          writer.writeStartElement("route-param");
          writer.writeAttribute("qname", routeParam.name.getValue());
@@ -97,14 +96,14 @@ class Route
       }
 
       //
-      for (RequestParam requestParam : requestParams.values())
+      for (RequestParam requestParam : requestParamArray)
       {
          writer.writeStartElement("request-param");
          writer.writeAttribute("qname", requestParam.name.getValue());
          writer.writeAttribute("name", requestParam.matchName);
          if (requestParam.matchPattern != null)
          {
-            writer.writeAttribute("value", requestParam.matchPattern.pattern());
+            writer.writeAttribute("value", requestParam.matchPattern.getPattern());
          }
          writer.writeEndElement();
       }
@@ -155,6 +154,12 @@ class Route
    private static final Route[] EMPTY_ROUTE_ARRAY = new Route[0];
 
    /** . */
+   private static final RouteParam[] EMPTY_ROUTE_PARAM_ARRAY = new RouteParam[0];
+
+   /** . */
+   private static final RequestParam[] EMPTY_REQUEST_PARAM_ARRAY = new RequestParam[0];
+
+   /** . */
    private final Router router;
 
    /** . */
@@ -167,10 +172,16 @@ class Route
    private Route[] children;
 
    /** . */
-   private final Map<QualifiedName, RouteParam> routeParams;
+   private Map<QualifiedName, RouteParam> routeParamMap;
 
    /** . */
-   private final Map<String, RequestParam> requestParams;
+   private RouteParam[] routeParamArray;
+
+   /** . */
+   private Map<String, RequestParam> requestParamMap;
+
+   /** . */
+   private RequestParam[] requestParamArray;
 
    Route(Router router)
    {
@@ -178,8 +189,10 @@ class Route
       this.parent = null;
       this.terminal = true;
       this.children = EMPTY_ROUTE_ARRAY;
-      this.routeParams = new HashMap<QualifiedName, RouteParam>();
-      this.requestParams = new HashMap<String, RequestParam>();
+      this.routeParamMap = Collections.emptyMap();
+      this.routeParamArray = EMPTY_ROUTE_PARAM_ARRAY;
+      this.requestParamMap = Collections.emptyMap();
+      this.requestParamArray = EMPTY_REQUEST_PARAM_ARRAY;
    }
 
    final boolean isTerminal()
@@ -191,27 +204,27 @@ class Route
     * Ok, so this is not the fastest way to do it, but for now it's OK, it's what is needed, we'll find
     * a way to optimize it later with some precompilation. 
     */
-   final void render(Map<QualifiedName, String> blah, URIWriter writer) throws IOException
+   final void render(RenderContext context, URIWriter writer) throws IOException
    {
-      Route r = find(blah);
+      Route r = find(context);
 
       // We found a route we need to render it now
       if (r != null)
       {
          // Append path first
-         r.renderPath(blah, writer, false);
+         r.renderPath(context, writer, false);
 
          // Append query parameters after
-         r.renderQueryString(blah, writer);
+         r.renderQueryString(context, writer);
       }
    }
 
-   private boolean renderPath(Map<QualifiedName, String> blah, URIWriter writer, boolean hasChildren) throws IOException
+   private boolean renderPath(RenderContext context, URIWriter writer, boolean hasChildren) throws IOException
    {
       boolean endWithSlash;
       if (parent != null)
       {
-         endWithSlash = parent.renderPath(blah, writer, true);
+         endWithSlash = parent.renderPath(context, writer, true);
       }
       else
       {
@@ -251,7 +264,7 @@ class Route
 
             //
             PathParam def = pr.params[i];
-            String value = blah.get(def.name);
+            String value = context.getParameterValue(def.name);
             count += value.length();
 
             // Write value
@@ -303,57 +316,58 @@ class Route
       return endWithSlash;
    }
 
-   private void renderQueryString(Map<QualifiedName, String> blah, URIWriter writer) throws IOException
+   private void renderQueryString(RenderContext context, URIWriter writer) throws IOException
    {
       if (parent != null)
       {
-         parent.renderQueryString(blah, writer);
+         parent.renderQueryString(context, writer);
       }
 
       //
-      if (requestParams.size() > 0)
+      for (RequestParam requestParamDef : requestParamArray)
       {
-         for (RequestParam requestParamDef : requestParams.values())
+         String s = context.getParameterValue(requestParamDef.name);
+         switch (requestParamDef.valueMapping)
          {
-            String s = blah.get(requestParamDef.name);
-            switch (requestParamDef.valueMapping)
-            {
-               case CANONICAL:
-                  break;
-               case NEVER_EMPTY:
-                  if (s != null && s.length() == 0)
-                  {
-                     s = null;
-                  }
-                  break;
-               case NEVER_NULL:
-                  if (s == null)
-                  {
-                     s = "";
-                  }
-                  break;
-            }
-            if (s != null)
-            {
-               writer.appendQueryParameter(requestParamDef.matchName, s);
-            }
+            case CANONICAL:
+               break;
+            case NEVER_EMPTY:
+               if (s != null && s.length() == 0)
+               {
+                  s = null;
+               }
+               break;
+            case NEVER_NULL:
+               if (s == null)
+               {
+                  s = "";
+               }
+               break;
+         }
+         if (s != null)
+         {
+            writer.appendQueryParameter(requestParamDef.matchName, s);
          }
       }
    }
 
-   final Route find(Map<QualifiedName, String> blah)
+   final Route find(RenderContext context)
    {
+      context.enter();
+      Route route = _find(context);
+      context.leave();
+      return route;
+   }
 
-      // Remove what is matched
-      Map<QualifiedName, String> abc = new HashMap<QualifiedName, String>(blah);
-
+   private Route _find(RenderContext context)
+   {
       // Match first the static parameteters
-      for (RouteParam param : routeParams.values())
+      for (RouteParam param : routeParamArray)
       {
-         String value = blah.get(param.name);
-         if (param.value.equals(value))
+         RenderContext.Parameter entry = context.getParameter(param.name);
+         if (entry != null && param.value.equals(entry.getValue()))
          {
-            abc.remove(param.name);
+            entry.remove();
          }
          else
          {
@@ -362,35 +376,32 @@ class Route
       }
 
       // Match any request parameter
-      if (requestParams.size() > 0)
+      for (RequestParam requestParamDef : requestParamArray)
       {
-         for (RequestParam requestParamDef : requestParams.values())
+         RenderContext.Parameter entry = context.getParameter(requestParamDef.name);
+         boolean matched = false;
+         if (entry != null)
          {
-            String a = blah.get(requestParamDef.name);
-            boolean matched = false;
-            if (a != null)
+            if (requestParamDef.matchPattern == null || context.matcher(requestParamDef.matchPattern).matches(entry.getValue()))
             {
-               if (requestParamDef.matchValue(a))
-               {
-                  matched = true;
-               }
+               matched = true;
             }
-            if (matched)
+         }
+         if (matched)
+         {
+            entry.remove();
+         }
+         else
+         {
+            switch (requestParamDef.controlMode)
             {
-               abc.remove(requestParamDef.name);
-            }
-            else
-            {
-               switch (requestParamDef.controlMode)
-               {
-                  case OPTIONAL:
-                     // Do nothing
-                     break;
-                  case REQUIRED:
-                     return null;
-                  default:
-                     throw new AssertionError();
-               }
+               case OPTIONAL:
+                  // Do nothing
+                  break;
+               case REQUIRED:
+                  return null;
+               default:
+                  throw new AssertionError();
             }
          }
       }
@@ -402,17 +413,17 @@ class Route
          for (int i = 0;i < prt.params.length;i++)
          {
             PathParam param = prt.params[i];
-            String s = blah.get(param.name);
+            RenderContext.Parameter s = context.getParameter(param.name);
             boolean matched = false;
             if (s != null)
             {
                switch (param.encodingMode)
                {
                   case FORM:
-                     matched = param.renderingPattern.matcher(s).matches();
+                     matched = context.matcher(param.renderingPattern).matches(s.getValue());
                      break;
                   case PRESERVE_PATH:
-                     matched = param.renderingPattern.matcher(s).matches();
+                     matched = context.matcher(param.renderingPattern).matches(s.getValue());
                      break;
                   default:
                      throw new AssertionError();
@@ -420,7 +431,7 @@ class Route
             }
             if (matched)
             {
-               abc.remove(param.name);
+               s.remove();
             }
             else
             {
@@ -430,7 +441,7 @@ class Route
       }
 
       //
-      if (abc.isEmpty() && terminal)
+      if (context.isEmpty() && terminal)
       {
          return this;
       }
@@ -438,7 +449,7 @@ class Route
       //
       for (Route route : children)
       {
-         Route a = route.find(abc);
+         Route a = route.find(context);
          if (a != null)
          {
             return a;
@@ -526,16 +537,13 @@ class Route
                }
                parameters.putAll(frame.matches);
             }
-            if (frame.route.routeParams.size() > 0)
+            for (RouteParam param : frame.route.routeParamArray)
             {
                if (parameters == null)
                {
                   parameters = new HashMap<QualifiedName, String>();
                }
-               for (RouteParam param : frame.route.routeParams.values())
-               {
-                  parameters.put(param.name, param.value);
-               }
+               parameters.put(param.name, param.value);
             }
          }
          return parameters != null ? parameters : Collections.<QualifiedName, String>emptyMap();
@@ -622,58 +630,55 @@ class Route
             boolean matched = true;
 
             // We enter a frame
-            if (current.route.requestParams.size() > 0)
+            for (RequestParam requestParamDef : current.route.requestParamArray)
             {
-               for (RequestParam requestParamDef : current.route.requestParams.values())
+               String value = null;
+               String[] values = requestParams.get(requestParamDef.matchName);
+               if (values != null && values.length > 0 && values[0] != null)
                {
-                  String value = null;
-                  String[] values = requestParams.get(requestParamDef.matchName);
-                  if (values != null && values.length > 0 && values[0] != null)
+                  value = values[0];
+               }
+               if (value == null)
+               {
+                  switch (requestParamDef.controlMode)
                   {
-                     value = values[0];
+                     case OPTIONAL:
+                        // Do nothing
+                        break;
+                     case REQUIRED:
+                        matched = false;
+                        break;
                   }
-                  if (value == null)
-                  {
-                     switch (requestParamDef.controlMode)
-                     {
-                        case OPTIONAL:
-                           // Do nothing
-                           break;
-                        case REQUIRED:
-                           matched = false;
-                           break;
-                     }
-                  }
-                  else if (!requestParamDef.matchValue(value))
-                  {
-                     matched = false;
+               }
+               else if (!requestParamDef.matchValue(value))
+               {
+                  matched = false;
+                  break;
+               }
+               switch (requestParamDef.valueMapping)
+               {
+                  case CANONICAL:
                      break;
-                  }
-                  switch (requestParamDef.valueMapping)
-                  {
-                     case CANONICAL:
-                        break;
-                     case NEVER_EMPTY:
-                        if (value != null && value.length() == 0)
-                        {
-                           value = null;
-                        }
-                        break;
-                     case NEVER_NULL:
-                        if (value == null)
-                        {
-                           value = "";
-                        }
-                        break;
-                  }
-                  if (value != null)
-                  {
-                     if (current.matches == null)
+                  case NEVER_EMPTY:
+                     if (value != null && value.length() == 0)
                      {
-                        current.matches = new HashMap<QualifiedName, String>();
+                        value = null;
                      }
-                     current.matches.put(requestParamDef.name, value);
+                     break;
+                  case NEVER_NULL:
+                     if (value == null)
+                     {
+                        value = "";
+                     }
+                     break;
+               }
+               if (value != null)
+               {
+                  if (current.matches == null)
+                  {
+                     current.matches = new HashMap<QualifiedName, String>();
                   }
+                  current.matches.put(requestParamDef.name, value);
                }
             }
 
@@ -774,13 +779,13 @@ class Route
                   PatternRoute patternRoute = (PatternRoute)child;
 
                   //
-                  Matcher matcher = patternRoute.pattern.matcher(current.path.getValue());
+                  Regex.Match[] matches = patternRoute.pattern.matcher().find(current.path.getValue());
 
                   // We match
-                  if (matcher.find())
+                  if (matches.length > 0)
                   {
                      // Build next controller context
-                     int nextPos = matcher.end();
+                     int nextPos = matches[0].getEnd();
                      Path nextPath;
                      if (current.path.length() == nextPos)
                      {
@@ -802,22 +807,19 @@ class Route
 
                      // JULIEN : this can be done lazily
                      // Append parameters
-                     int group = 1;
                      for (int i = 0;i < patternRoute.params.length;i++)
                      {
                         PathParam param = patternRoute.params[i];
+                        Regex.Match match = matches[1 + i];
 
                         //
-                        int end = matcher.end(group);
-
-                        //
-                        if (end != -1)
+                        if (match.getEnd() != -1)
                         {
                            String value;
                            if (param.encodingMode == EncodingMode.FORM)
                            {
                               StringBuilder sb = new StringBuilder();
-                              for (int from = matcher.start(group);from < end;from++)
+                              for (int from = match.getStart();from < match.getEnd();from++)
                               {
                                  char c = current.path.charAt(from);
                                  if (c == child.router.separatorEscape && current.path.getRawLength(from) == 1)
@@ -830,7 +832,7 @@ class Route
                            }
                            else
                            {
-                              value = matcher.group(group);
+                              value = match.getValue();
                            }
                            if (next.matches == null)
                            {
@@ -842,9 +844,6 @@ class Route
                         {
                            // We have an optional match
                         }
-
-                        //
-                        group++;
                      }
                   }
                   else
@@ -1034,7 +1033,7 @@ class Route
       //
       for (RequestParamDescriptor requestParamDesc : descriptor.getRequestParams())
       {
-         route.add(RequestParam.create(requestParamDesc));
+         route.add(RequestParam.create(requestParamDesc, router));
       }
 
       //
@@ -1054,7 +1053,12 @@ class Route
       {
          throw new MalformedRouteException("Duplicate parameter " + param.name);
       }
-      routeParams.put(param.name, param);
+      if (routeParamArray.length == 0)
+      {
+         routeParamMap = new HashMap<QualifiedName, RouteParam>();
+      }
+      routeParamMap.put(param.name, param);
+      routeParamArray = Tools.appendTo(routeParamArray, param);
       return this;
    }
 
@@ -1065,7 +1069,12 @@ class Route
       {
          throw new MalformedRouteException("Duplicate parameter " + param.name);
       }
-      requestParams.put(param.matchName, param);
+      if (requestParamArray.length == 0)
+      {
+         requestParamMap = new HashMap<String, RequestParam>();
+      }
+      requestParamMap.put(param.matchName, param);
+      requestParamArray = Tools.appendTo(requestParamArray, param);
       return this;
    }
 
@@ -1151,11 +1160,11 @@ class Route
                PathParam param;
                if (parameterDescriptor != null)
                {
-                  param = PathParam.create(parameterDescriptor);
+                  param = PathParam.create(parameterDescriptor, router);
                }
                else
                {
-                  param = PathParam.create(parameterQName);
+                  param = PathParam.create(parameterQName, router);
                }
 
                // Append routing regex to the route regex
@@ -1177,7 +1186,7 @@ class Route
 
             //
             chunks.add(path.substring(previous, pos));
-            PatternRoute route = new PatternRoute(router, builder.build(), parameterPatterns, chunks);
+            PatternRoute route = new PatternRoute(router, router.compile(builder.build()), parameterPatterns, chunks);
 
             // Wire
             add(route);
@@ -1204,31 +1213,30 @@ class Route
 
    private Param getParam(QualifiedName name)
    {
-      if (routeParams.containsKey(name))
+      Param param = routeParamMap.get(name);
+      if (param == null)
       {
-         return routeParams.get(name);
-      }
-      else
-      {
-         for (RequestParam param : requestParams.values())
+         for (RequestParam requestParam : requestParamArray)
          {
-            if (param.name.equals(name))
+            if (requestParam.name.equals(name))
             {
-               return param;
+               param = requestParam;
+               break;
+            }
+         }
+         if (param == null && this instanceof PatternRoute)
+         {
+            for (PathParam pathParam : ((PatternRoute)this).params)
+            {
+               if  (pathParam.name.equals(name))
+               {
+                  param = pathParam;
+                  break;
+               }
             }
          }
       }
-      if (this instanceof PatternRoute)
-      {
-         for (PathParam param : ((PatternRoute)this).params)
-         {
-            if  (param.name.equals(name))
-            {
-               return param;
-            }
-         }
-      }
-      return null;
+      return param;
    }
 
    private Param findParam(QualifiedName name)
@@ -1243,11 +1251,8 @@ class Route
 
    private void findParams(List<Param> params)
    {
-      for (RouteParam param : routeParams.values())
-      {
-         params.add(param);
-      }
-      for (RequestParam param : requestParams.values())
+      Collections.addAll(params, routeParamArray);
+      for (RequestParam param : requestParamArray)
       {
          params.add(param);
       }

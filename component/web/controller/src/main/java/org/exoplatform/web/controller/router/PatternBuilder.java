@@ -21,8 +21,6 @@ package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.regexp.Literal;
 
-import java.util.regex.Pattern;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -32,6 +30,11 @@ class PatternBuilder
 
    /** . */
    private final StringBuilder buffer = new StringBuilder();
+
+   /** . */
+   PatternBuilder()
+   {
+   }
 
    public PatternBuilder expr(CharSequence s)
    {
@@ -93,8 +96,8 @@ class PatternBuilder
       return literal(Character.toString(c));
    }
 
-   public Pattern build()
+   public String build()
    {
-      return Pattern.compile(buffer.toString());
+      return buffer.toString();
    }
 }

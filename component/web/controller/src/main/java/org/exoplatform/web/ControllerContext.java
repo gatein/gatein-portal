@@ -20,6 +20,7 @@
 package org.exoplatform.web;
 
 import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.router.RenderContext;
 import org.exoplatform.web.controller.router.Router;
 import org.exoplatform.web.controller.router.URIWriter;
 
@@ -53,6 +54,9 @@ public class ControllerContext
    /** . */
    private final String contextName;
 
+   /** . */
+   private final RenderContext renderContext;
+
    public ControllerContext(
       WebAppController controller,
       Router router,
@@ -66,6 +70,7 @@ public class ControllerContext
       this.parameters = parameters;
       this.contextName = request.getContextPath().substring(1);
       this.router = router;
+      this.renderContext = new RenderContext();
    }
 
    public WebAppController getController()
@@ -88,14 +93,11 @@ public class ControllerContext
       return parameters.get(parameter);
    }
 
-   public void renderURL(Map<QualifiedName, String> parameters, URIWriter renderContext) throws IOException
+   public void renderURL(Map<QualifiedName, String> parameters, URIWriter uriWriter) throws IOException
    {
-      renderContext.append('/');
-
-      //
-      renderContext.appendSegment(contextName);
-
-      //
-      router.render(parameters, renderContext);
+      renderContext.reset(parameters);
+      uriWriter.append('/');
+      uriWriter.appendSegment(contextName);
+      router.render(renderContext, uriWriter);
    }
 }

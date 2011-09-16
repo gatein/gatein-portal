@@ -22,8 +22,6 @@ package org.exoplatform.web.controller.router;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.metadata.RequestParamDescriptor;
 
-import java.util.regex.Pattern;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -31,7 +29,7 @@ import java.util.regex.Pattern;
 class RequestParam extends Param
 {
 
-   static RequestParam create(RequestParamDescriptor descriptor)
+   static RequestParam create(RequestParamDescriptor descriptor, Router router)
    {
       if (descriptor == null)
       {
@@ -39,7 +37,7 @@ class RequestParam extends Param
       }
 
       //
-      Pattern matchValue = null;
+      Regex matchValue = null;
       if (descriptor.getValue() != null)
       {
          PatternBuilder matchValueBuilder = new PatternBuilder();
@@ -53,7 +51,7 @@ class RequestParam extends Param
             matchValueBuilder.literal(descriptor.getValue());
          }
          matchValueBuilder.expr("$");
-         matchValue = matchValueBuilder.build();
+         matchValue = router.compile(matchValueBuilder.build());
       }
 
       //
@@ -72,7 +70,7 @@ class RequestParam extends Param
    final String matchName;
 
    /** . */
-   final Pattern matchPattern;
+   final Regex matchPattern;
 
    /** . */
    final ControlMode controlMode;
@@ -80,7 +78,7 @@ class RequestParam extends Param
    /** . */
    final ValueMapping valueMapping;
 
-   RequestParam(QualifiedName name, String matchName, Pattern matchPattern, ControlMode controlMode, ValueMapping valueMapping)
+   RequestParam(QualifiedName name, String matchName, Regex matchPattern, ControlMode controlMode, ValueMapping valueMapping)
    {
       super(name);
 
@@ -108,6 +106,6 @@ class RequestParam extends Param
 
    boolean matchValue(String value)
    {
-      return matchPattern == null || matchPattern.matcher(value).matches();
+      return matchPattern == null || matchPattern.matcher().matches(value);
    }
 }

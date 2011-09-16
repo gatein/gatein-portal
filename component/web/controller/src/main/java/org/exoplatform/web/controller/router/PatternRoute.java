@@ -20,7 +20,6 @@
 package org.exoplatform.web.controller.router;
 
 import java.util.List;
-import java.util.regex.Pattern;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -30,7 +29,7 @@ class PatternRoute extends Route
 {
 
    /** . */
-   final Pattern pattern;
+   final Regex pattern;
 
    /** . */
    final PathParam[] params;
@@ -43,7 +42,7 @@ class PatternRoute extends Route
 
    PatternRoute(
       Router router,
-      Pattern pattern,
+      Regex pattern,
       List<PathParam> params,
       List<String> chunks)
    {

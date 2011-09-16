@@ -19,6 +19,7 @@
 
 package org.exoplatform.web.controller.router;
 
+import org.exoplatform.web.controller.regexp.GroupType;
 import org.exoplatform.web.controller.regexp.RENode;
 
 /**
@@ -89,12 +90,10 @@ public class RouteEscaper
       else if (expr instanceof RENode.Group)
       {
          RENode.Group group = (RENode.Group)expr;
-/*
          if (group.getType() == GroupType.CAPTURING_GROUP)
          {
             group.setType(GroupType.NON_CAPTURING_GROUP);
          }
-*/
          visit(group.getDisjunction());
       }
       else if (expr instanceof RENode.Any)
@@ -108,9 +107,9 @@ public class RouteEscaper
          RENode.CharacterClass characterClass = (RENode.CharacterClass)expr;
          RENode.CharacterClassExpr ccExpr = characterClass.getExpr();
          ccExpr = ccExpr.replace(src, dst);
-         RENode.CharacterClassExpr.And ccRepl = new RENode.CharacterClassExpr.And(null, new RENode.CharacterClassExpr.Not(new RENode.CharacterClassExpr.Char('/')));
-         ccExpr.replaceBy(ccRepl);
-         ccRepl.setLeft(ccExpr);
+//         RENode.CharacterClassExpr.And ccRepl = new RENode.CharacterClassExpr.And(null, new RENode.CharacterClassExpr.Not(new RENode.CharacterClassExpr.Char('/')));
+//         ccExpr.replaceBy(ccRepl);
+//         ccRepl.setLeft(ccExpr);
       }
    }
 }

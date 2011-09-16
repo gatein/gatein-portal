@@ -17,39 +17,36 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.controller.router;
+package org.exoplatform.web.controller.performance;
 
-import junit.framework.TestCase;
+import java.io.IOException;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestPatternBuilder extends TestCase
+public class NullAppendable implements Appendable
 {
 
-   public void testEscapeReservedChar() throws Exception
+   /** . */
+   public static final NullAppendable INSTANCE = new NullAppendable();
+
+   private NullAppendable()
    {
-      assertLiteral('^');
-      assertLiteral('*');
-      assertLiteral('$');
-      assertLiteral('[');
-      assertLiteral(']');
-      assertLiteral('.');
-      assertLiteral('|');
-      assertLiteral('+');
-      assertLiteral('(');
-      assertLiteral(')');
-      assertLiteral('?');
    }
 
-   private void assertLiteral(char c)
+   public Appendable append(CharSequence csq) throws IOException
    {
-      PatternBuilder pb = new PatternBuilder();
-      pb.expr("^");
-      pb.literal(c);
-      pb.expr("$");
-      Regex pattern = RegexFactory.JAVA.compile(pb.build());
-      assertTrue(pattern.matcher().matches(Character.toString(c)));
+      return this;
+   }
+
+   public Appendable append(CharSequence csq, int start, int end) throws IOException
+   {
+      return this;
+   }
+
+   public Appendable append(char c) throws IOException
+   {
+      return this;
    }
 }

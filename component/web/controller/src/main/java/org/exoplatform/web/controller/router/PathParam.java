@@ -27,7 +27,6 @@ import org.exoplatform.web.controller.regexp.RERenderer;
 import org.exoplatform.web.controller.regexp.SyntaxException;
 
 import java.io.IOException;
-import java.util.regex.Pattern;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -36,12 +35,12 @@ import java.util.regex.Pattern;
 class PathParam extends Param
 {
 
-   static PathParam create(QualifiedName name)
+   static PathParam create(QualifiedName name, Router router)
    {
-      return create(new PathParamDescriptor(name));
+      return create(new PathParamDescriptor(name), router);
    }
 
-   static PathParam create(PathParamDescriptor descriptor)
+   static PathParam create(PathParamDescriptor descriptor, Router router)
    {
       if (descriptor == null)
       {
@@ -111,7 +110,7 @@ class PathParam extends Param
          descriptor.getQualifiedName(),
          encodingMode,
          routingRegex.toString(),
-         renderingRegex.toString());
+         router.compile(renderingRegex.toString()));
    }
 
    /** . */
@@ -121,13 +120,13 @@ class PathParam extends Param
    final String routingRegex;
 
    /** . */
-   final Pattern renderingPattern;
+   final Regex renderingPattern;
 
    PathParam(
       QualifiedName name,
       EncodingMode encodingMode,
       String routingRegex,
-      String renderingRegex)
+      Regex renderingRegex)
    {
       super(name);
 
@@ -140,7 +139,7 @@ class PathParam extends Param
       //
       this.encodingMode = encodingMode;
       this.routingRegex = routingRegex;
-      this.renderingPattern = Pattern.compile(renderingRegex);
+      this.renderingPattern = renderingRegex;
    }
 
    @Override

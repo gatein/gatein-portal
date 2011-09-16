@@ -92,6 +92,9 @@ public class QualifiedName implements Comparable<QualifiedName>
    /** The name. */
    private final String name;
 
+   /** The cached hash code. */
+   private int hashCode;
+
    private QualifiedName(String name) throws NullPointerException, IllegalArgumentException
    {
       this("", name);
@@ -119,6 +122,7 @@ public class QualifiedName implements Comparable<QualifiedName>
       //
       this.qualifier = qualifier;
       this.name = name;
+      this.hashCode = qualifier.hashCode() ^ name.hashCode();
    }
 
    /**
@@ -161,7 +165,7 @@ public class QualifiedName implements Comparable<QualifiedName>
    @Override
    public int hashCode()
    {
-      return qualifier.hashCode() ^ name.hashCode();
+      return hashCode;
    }
 
    @Override

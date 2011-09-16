@@ -24,12 +24,16 @@ import org.exoplatform.web.controller.metadata.RouteDescriptor;
 import org.exoplatform.web.controller.metadata.ControllerDescriptor;
 import org.exoplatform.web.url.MimeType;
 import org.gatein.common.io.UndeclaredIOException;
+import org.gatein.common.util.Tools;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * The router takes care of mapping a request to a a map.
@@ -62,6 +66,9 @@ public class Router
       escapeSet = bs;
    }
 
+   /** . */
+   private final RegexFactory regexFactory;
+
    /** The root route. */
    final Route root;
 
@@ -74,7 +81,15 @@ public class Router
    /** . */
    final char separatorEscapeNible2;
 
+   /** . */
+   private Regex[] regexes;
+
    public Router(ControllerDescriptor metaData) throws RouterConfigException
+   {
+      this(metaData, RegexFactory.JAVA);
+   }
+
+   public Router(ControllerDescriptor metaData, RegexFactory regexFactory) throws RouterConfigException
    {
       char separtorEscape = metaData.getSeparatorEscape();
 
@@ -91,33 +106,59 @@ public class Router
       separatorEscapeNible2 = s.charAt(1);
 
       //
+      this.regexFactory = regexFactory;
       this.root = new Route(this);
       this.separatorEscape = separtorEscape;
+      this.regexes = new Regex[0];
 
       //
       for (RouteDescriptor routeMetaData : metaData.getRoutes())
       {
-         addRoute(routeMetaData);
+         root.append(routeMetaData);
       }
    }
 
-   public void addRoute(RouteDescriptor routeMetaData) throws RouterConfigException
+   Regex compile(String pattern)
    {
-      root.append(routeMetaData);
+      for (Regex regex : regexes)
+      {
+         if (regex.getPattern().equals(pattern))
+         {
+            return regex;
+         }
+      }
+      Regex regex = regexFactory.compile(pattern);
+      regex.index = regexes.length;
+      regexes = Tools.appendTo(regexes, regex);
+      return regex;
    }
 
    public void render(Map<QualifiedName, String> parameters, URIWriter writer) throws IOException
    {
-      root.render(parameters, writer);
+      render(new RenderContext(parameters), writer);
    }
 
    public String render(Map<QualifiedName, String> parameters)
+   {
+      return render(new RenderContext(parameters));
+   }
+
+   public void render(RenderContext context, URIWriter writer) throws IOException
+   {
+      if (context.matchers == null)
+      {
+         context.matchers = new Regex.Matcher[regexes.length];
+      }
+      root.render(context, writer);
+   }
+
+   public String render(RenderContext context)
    {
       try
       {
          StringBuilder sb = new StringBuilder();
          URIWriter renderContext = new URIWriter(sb, MimeType.PLAIN);
-         render(parameters, renderContext);
+         render(context, renderContext);
          return sb.toString();
       }
       catch (IOException e)

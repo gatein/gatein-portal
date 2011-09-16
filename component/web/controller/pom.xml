@@ -31,6 +31,11 @@
   <description>The GateIn web controller takes care of managing portal requests and delegate the processing to
     the appropriate subsystem.</description>
 
+  <properties>
+    <japex.runIterations>100000</japex.runIterations>
+    <japex.numberOfThreads>1</japex.numberOfThreads>
+  </properties>
+
   <dependencies>
     <dependency>
         <groupId>org.exoplatform.kernel</groupId>
@@ -44,6 +49,7 @@
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.component.portal</artifactId>
     </dependency>
+
     <!-- Used only for pretty printing, need to find a better solution than this -->
 <!--
     <dependency>
@@ -67,5 +73,104 @@
        <groupId>org.staxnav</groupId>
        <artifactId>staxnav.core</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>net.sourceforge.jregex</groupId>
+      <artifactId>jregex</artifactId>
+      <version>1.2_01</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.japex</groupId>
+      <artifactId>japex</artifactId>
+      <version>1.2.3</version>
+      <scope>test</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-simple</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>com.sun.japex</groupId>
+        <artifactId>japex-maven-plugin</artifactId>
+        <version>1.2.3</version>
+        <executions>
+          <execution>
+            <id>japex</id>
+            <goals>
+              <goal>japex</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <japexConfig>
+            <testSuite name="ParsingPerformance" xmlns="http://www.sun.com/japex/testSuite">
+              <param name="japex.namedClassPath" value="maven.test.classpath"/>
+              <param name="japex.resultUnit" value="ms"/>
+              <param name="japex.warmupIterations" value="10000"/>
+              <param name="japex.runIterations" value="${japex.runIterations}"/>
+              <param name="japex.numberOfThreads" value="${japex.numberOfThreads}"/>
+              <driver name="JavaUtilRegex">
+                <param name="japex.driverClass" value="org.exoplatform.web.controller.performance.ControllerRendererDriver"/>
+                <param name="description" value="Controller performance with the java.util.regex package"/>
+                <param name="regex" value="java"/>
+              </driver>
+              <driver name="JRegex">
+                <param name="japex.driverClass" value="org.exoplatform.web.controller.performance.ControllerRendererDriver"/>
+                <param name="description" value="Controller performance with the jregex package"/>
+                <param name="regex" value="jregex"/>
+              </driver>
+              <testCase name="classic">
+                <param name="parameters" value="{ 'gtn:handler' : 'portal', 'gtn:sitetype' : 'portal' ,  'gtn:sitename' : 'classic', 'gtn:path' : 'page' }"/>
+              </testCase>
+              <testCase name="fr/classic">
+                <param name="parameters" value="{ 'gtn:handler' : 'portal', 'gtn:lang' : 'fr', 'gtn:sitetype' : 'portal' ,  'gtn:sitename' : 'classic', 'gtn:path' : 'page' }"/>
+              </testCase>
+              <testCase name="group">
+                <param name="parameters" value="{ 'gtn:handler' : 'portal', 'gtn:sitetype' : 'group' ,  'gtn:sitename' : '/platform/administrator', 'gtn:path' : 'page' }"/>
+              </testCase>
+              <testCase name="user">
+                <param name="parameters" value="{ 'gtn:handler' : 'portal', 'gtn:sitetype' : 'user' ,  'gtn:sitename' : 'root', 'gtn:path' : 'page' }"/>
+              </testCase>
+            </testSuite>
+          </japexConfig>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+
+    <profile>
+      <id>japex</id>
+      <properties>
+        <japex.runIterations>1000000</japex.runIterations>
+        <japex.numberOfThreads>4</japex.numberOfThreads>
+      </properties>
+    </profile>
+    <profile>
+      <!-- A never ending test used to profile the rendering execution -->
+      <id>standalone</id>
+      <build>
+        <pluginManagement>
+          <plugins>
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-surefire-plugin</artifactId>
+              <configuration>
+                <includes>
+                  <include>**/Standalone.java</include>
+                </includes>
+              </configuration>
+            </plugin>
+          </plugins>
+        </pluginManagement>
+      </build>
+    </profile>
+  </profiles>
 </project>

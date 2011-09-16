@@ -19,6 +19,7 @@
 
 package org.exoplatform.web.controller.metadata;
 
+import org.exoplatform.web.controller.router.RegexFactory;
 import org.exoplatform.web.controller.router.RouterConfigException;
 import org.exoplatform.web.controller.router.Router;
 
@@ -93,5 +94,10 @@ public class ControllerDescriptor
    public Router build() throws RouterConfigException
    {
       return new Router(this);
+   }
+
+   public Router build(RegexFactory regexFactory) throws RouterConfigException
+   {
+      return new Router(this, regexFactory);
    }
 }
