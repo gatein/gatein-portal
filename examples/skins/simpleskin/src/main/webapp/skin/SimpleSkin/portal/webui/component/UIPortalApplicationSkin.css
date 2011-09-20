@@ -144,6 +144,7 @@ a {
   width: 32px; height: 40px;
   background: url('../../../background/LoadingProgress.gif') no-repeat center;
   margin: auto;
+  display: block;
 }
 
 .AjaxLoadingMask .UIAction .ActionButton{
