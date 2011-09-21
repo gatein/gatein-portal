@@ -318,45 +318,6 @@ public class UIPortalNavigation extends UIComponent
    {
       this.navigationScope = scope;
    }   
-
-   //Now we use serveSource method to expand a node
-/*   
-   static public class ExpandNodeActionListener extends EventListener<UIPortalNavigation>
-   {
-      public void execute(Event<UIPortalNavigation> event) throws Exception
-      {
-         String treePath = event.getRequestContext().getRequestParameter(OBJECTID);
-                                                        
-         TreeNode treeNode = event.getSource().getTreeNodes();
-         TreeNode expandTree = treeNode.findNodes(treePath);
-         //There're may be interuption between browser and server
-         if (expandTree == null)
-         {
-            event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource());
-            return;
-         }
-
-         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
-
-         UserNode node = expandTree.getNode();
-         userPortal.updateNode(node, event.getSource().navigationScope, null);
-         if (node == null)
-         {
-            event.getSource().loadTreeNodes();
-            event.getRequestContext().getUIApplication().addMessage(new
-               ApplicationMessage("UIPortalNavigation.msg.staleData", null, ApplicationMessage.WARNING));
-         }
-         else
-         {
-            node.filter(event.getSource().NAVIGATION_FILTER_CONFIG);
-            expandTree.setChildren(node.getChildren());
-            expandTree.setExpanded(true);
-         }
-                               
-         event.getRequestContext().addUIComponentToUpdateByAjax(event.getSource());
-      }
-   }
-*/
    
    static public class CollapseNodeActionListener extends EventListener<UIPortalNavigation>
    {
@@ -388,45 +349,4 @@ public class UIPortalNavigation extends UIComponent
          event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigation);
       }
    }
-
-   //Expand all will not be allowed - The nodes are lazy loaded now
-/*   
-   static public class ExpandAllNodeActionListener extends EventListener<UIPortalNavigation>
-   {
-      public void execute(Event<UIPortalNavigation> event) throws Exception
-      {
-         UIPortalNavigation uiNavigation = event.getSource();
-         // reload TreeNodes
-         uiNavigation.loadTreeNodes();
-         TreeNode treeNode = uiNavigation.getTreeNodes();
-
-         expandAllNode(treeNode);
-
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiNavigation);
-      }
-
-      public void expandAllNode(TreeNode treeNode) throws Exception
-      {
-
-         if (treeNode.getChildren().size() > 0)
-         {
-            for (TreeNode child : treeNode.getChildren())
-            {
-//               PageNode expandNode = child.getNode();
-//               PageNavigation selectNav = child.getNavigation();
-//
-//               // set node to child tree
-//               if (expandNode.getChildren().size() > 0)
-//               {
-//                  child.setChildren(expandNode.getChildren(), selectNav);
-//               }
-
-               // expand child tree
-               expandAllNode(child);
-            }
-         }
-      }
-   }
-*/
-
 }

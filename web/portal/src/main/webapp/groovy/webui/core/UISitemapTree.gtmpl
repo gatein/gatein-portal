@@ -17,7 +17,6 @@
 	UIPortletApplication siteMapPortlet = uicomponent.getParent();
 	def useAJAX = siteMapPortlet.isUseAjax();
 
-	def actionExpandAll = uicomponent.event("ExpandAllNode");
 	def actionCollapseAll = uicomponent.event("CollapseAllNode");
 
 	PortalURL nodeURL = nodeurl();
@@ -112,9 +111,6 @@
 		<div class="CollapseAll FloatLeft" onclick="$actionCollapseAll">
 			<%=_ctx.appRes(siteMapPortlet.getName() + ".label.CollapseAll")%>
 		</div>
-  <div class="ExpandAll FloatLeft" onclick="{$actionExpandAll}">
-			<%//_ctx.appRes(siteMapPortlet.getName() + ".label.ExpandAll")%>
-	</div>
 	</div>
 	<div class="SitemapContent">
 		<div class="UISiteTree">

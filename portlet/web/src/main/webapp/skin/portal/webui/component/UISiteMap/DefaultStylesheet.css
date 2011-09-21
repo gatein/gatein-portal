@@ -66,13 +66,6 @@
 	cursor: pointer;
 }
 
-.UISitemap .ExpandAll {
-	background: url('DefaultSkin/background/ExpandAllIcon.gif') no-repeat left center; /* orientation=lt */
-	background: url('DefaultSkin/background/ExpandAllIcon-rt.gif') no-repeat right center; /* orientation=rt */
-	padding: 0px 20px;
-	cursor: pointer;
-}
-
 .UISitemap .SitemapContent {
 	background: url('DefaultSkin/background/RootTree.gif') no-repeat left top; /* orientation=lt */
 	background: url('DefaultSkin/background/RootTree-rt.gif') no-repeat right top; /* orientation=rt */
