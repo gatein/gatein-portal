@@ -698,6 +698,13 @@ public class Mapper
                // object
                // will be processed
             }
+            else if(hierarchyRelationships.containsKey(dstChildId))
+            {
+               // The dstChild is placed under transient Chromattic entity whose storageId == null. However,
+               // the hierachyRelationships contains dstChildId in key set, so we have to mark dstChild as
+               // moved object
+               modelObjectMap.put(dstChildId, null);
+            }
          }
       }
 
