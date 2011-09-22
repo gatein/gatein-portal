@@ -88,4 +88,22 @@
 			</init-params>
 		</component-plugin>
 	</external-component-plugins>
+	<external-component-plugins>
+		<target-component>org.exoplatform.upload.UploadService</target-component>
+		<component-plugin>
+			<name>MIME type Plugins for UploadService</name>
+			<set-method>register</set-method>
+			<type>org.exoplatform.upload.MimeTypeUploadPlugin</type>
+			<init-params>
+				<value-param>
+					<name>mimetype-path</name>
+					<value>war:/conf/mimetype/mimetypes.properties</value>
+				</value-param>
+				<value-param>
+					<name>mimetype-default</name>
+					<value>application/octet-stream</value>
+				</value-param>
+			</init-params>
+		</component-plugin>
+	</external-component-plugins>
 </configuration>
