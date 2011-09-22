@@ -371,7 +371,58 @@ public class TestDataStorage extends AbstractConfigTest
       assertEquals(application2.getStorageId(), application.getStorageId());
    }
 
-   // Need to make window move 3 unit test
+   // Test for issue GTNPORTAL-2074
+   public void testWindowMove3() throws Exception
+   {
+      assertNull(storage_.getPage("portal::test::testWindowMove3"));
+
+      Page page = new Page();
+      page.setOwnerType(PortalConfig.PORTAL_TYPE);
+      page.setOwnerId("test");
+      page.setName("testWindowMove3");
+      Application app1 = new Application(ApplicationType.PORTLET);
+      app1.setState(new TransientApplicationState<Portlet>());
+      Application app2 = new Application(ApplicationType.PORTLET);
+      app2.setState(new TransientApplicationState<Portlet>());
+      Container parentOfApp2 = new Container();
+      parentOfApp2.getChildren().add(app2);
+
+      page.getChildren().add(app1);
+      page.getChildren().add(parentOfApp2);
+
+      storage_.save(page);
+
+      Page page2 = storage_.getPage("portal::test::testWindowMove3");
+      assertNotNull(page2);
+
+      assertTrue(page2.getChildren().get(1) instanceof Container);
+      Container container = (Container)page2.getChildren().get(1);
+
+      assertTrue(container.getChildren().get(0) instanceof Application);
+      Application persistedApp2 = (Application)container.getChildren().remove(0);
+
+      Container transientContainer = new Container();
+      transientContainer.getChildren().add(persistedApp2);
+
+      page2.getChildren().add(transientContainer);
+
+      storage_.save(page2);
+
+      Page page3 = storage_.getPage("portal::test::testWindowMove3");
+
+      assertEquals(container.getStorageId(), page3.getChildren().get(1).getStorageId());
+
+      assertTrue(page3.getChildren().get(2) instanceof Container);
+      Container formerTransientCont = (Container)page3.getChildren().get(2);
+      assertEquals(1, formerTransientCont.getChildren().size());
+      assertTrue(formerTransientCont.getChildren().get(0) instanceof Application);
+
+      assertEquals(persistedApp2.getStorageId(), formerTransientCont.getChildren().get(0).getStorageId());
+
+      storage_.remove(page3);
+
+      assertNull(storage_.getPage("portal::test::testWindowMove3"));
+   }
 
    /**
     * Test that setting a page reference to null will actually remove the page reference from the PageNode
