@@ -19,18 +19,17 @@
 
 package org.exoplatform.portal.webui.component;
 
+import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
-
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
 
@@ -72,16 +71,19 @@ public class UIBreadcumbsPortlet extends UIPortletApplication
    public List<UserNode> getSelectedPath() throws Exception
    {
       UserNode node = Util.getUIPortal().getSelectedUserNode();
-      List<UserNode> paths = new ArrayList<UserNode>();
+      UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
+      UserNavigation nav = userPortal.getNavigation(node.getNavigation().getKey());
       
+      UserNode targetNode = userPortal.resolvePath(nav, null, node.getURI());
+      LinkedList<UserNode> paths = new LinkedList<UserNode>();
+
       do
       {
-         paths.add(node);
-         node = node.getParent();
+         paths.addFirst(targetNode);
+         targetNode = targetNode.getParent();
       }
-      while (node != null && node.getParent() != null);      
-      Collections.reverse(paths);
-      
+      while (targetNode != null && targetNode.getParent() != null);      
+
       return paths;
    }   
 
