@@ -55,7 +55,7 @@ public class UIPageNodeSelector extends UIContainer
       uiTree.setBeanIconField("icon");
       uiTree.setBeanChildCountField("childrenCount");
 
-      userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();      
+      userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();      
    }  
    
    public void configure(UserNode node) throws Exception

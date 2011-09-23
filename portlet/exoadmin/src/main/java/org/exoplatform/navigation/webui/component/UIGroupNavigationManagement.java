@@ -97,7 +97,7 @@ public class UIGroupNavigationManagement extends UIContainer
 
    public void loadNavigations() throws Exception
    {
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
 
       List<UserNavigation> allNavs = userPortal.getNavigations();
       List<UserNavigation> groupNav = new ArrayList<UserNavigation>();
@@ -154,7 +154,7 @@ public class UIGroupNavigationManagement extends UIContainer
    {
       public void execute(Event<UIGroupNavigationManagement> event) throws Exception
       {
-         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
          UIGroupNavigationManagement uicomp = event.getSource();
          WebuiRequestContext context = event.getRequestContext();
          UIApplication uiApplication = context.getUIApplication();
@@ -192,7 +192,7 @@ public class UIGroupNavigationManagement extends UIContainer
       @Override
       protected void doEdit(UserNavigation nav, Event<UIGroupNavigationManagement> event) throws Exception
       {         
-         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
          UIGroupNavigationManagement uicomp = event.getSource();
          SiteKey siteKey = nav.getKey();
 

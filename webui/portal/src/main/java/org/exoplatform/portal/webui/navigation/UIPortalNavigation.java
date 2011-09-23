@@ -19,11 +19,6 @@
 
 package org.exoplatform.portal.webui.navigation;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NodeChange;
@@ -33,16 +28,17 @@ import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
-import org.exoplatform.portal.webui.portal.PageNodeEvent;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com
@@ -134,7 +130,7 @@ public class UIPortalNavigation extends UIComponent
       }
       else
       {
-         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
          List<UserNavigation> navigations = userPortal.getNavigations();
          for (UserNavigation userNav : navigations)
          {
@@ -157,7 +153,7 @@ public class UIPortalNavigation extends UIComponent
    {
       treeNode_ = new TreeNode();
 
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
       List<UserNavigation> listNavigations = userPortal.getNavigations();
 
       List<UserNode> childNodes = new LinkedList<UserNode>();
@@ -186,7 +182,7 @@ public class UIPortalNavigation extends UIComponent
    public UserNode resolvePath(String path) throws Exception
    {
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
       
       UserNode node;
       if (context.getRemoteUser() != null)
@@ -212,7 +208,7 @@ public class UIPortalNavigation extends UIComponent
       {
          return null;
       }
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
       NodeChangeQueue<UserNode> queue = new NodeChangeQueue<UserNode>();
       userPortal.updateNode(node, navigationScope, queue);
       for (NodeChange<UserNode> change : queue)
@@ -300,7 +296,7 @@ public class UIPortalNavigation extends UIComponent
 
    private UserNode getCurrentNavigation() throws Exception
    {
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
       UserNavigation userNavigation = Util.getUIPortal().getUserNavigation();
       try 
       {

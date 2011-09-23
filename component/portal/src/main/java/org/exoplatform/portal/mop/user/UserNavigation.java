@@ -89,4 +89,10 @@ public class UserNavigation
    {
       return modifiable;
    }
+
+   @Override
+   public String toString()
+   {
+      return "UserNavigation[key=" + navigation.getKey() + "]";
+   }
 }

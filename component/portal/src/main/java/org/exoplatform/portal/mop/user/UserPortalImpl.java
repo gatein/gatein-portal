@@ -194,7 +194,12 @@ public class UserPortalImpl implements UserPortal
       return null;
    }
 
-   public UserNode getNode(
+   public void refresh()
+   {
+      navigations = null;
+   }
+
+  public UserNode getNode(
       UserNavigation userNavigation,
       Scope scope,
       UserNodeFilterConfig filterConfig,

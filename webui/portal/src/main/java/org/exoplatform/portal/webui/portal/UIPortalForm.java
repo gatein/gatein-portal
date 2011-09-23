@@ -331,7 +331,7 @@ public class UIPortalForm extends UIFormTabPane
                UserPortalConfigService service = uiForm.getApplicationComponent(UserPortalConfigService.class);
                if (prContext.getPortalOwner().equals(uiForm.getPortalOwner()))
                {
-                  uiPortalApp.setUserPortalConfig(service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser(), PortalRequestContext.USER_PORTAL_CONTEXT));
+                  prContext.setUserPortalConfig(service.getUserPortalConfig(uiForm.getPortalOwner(), prContext.getRemoteUser(), PortalRequestContext.USER_PORTAL_CONTEXT));
                   uiPortalApp.reloadPortalProperties();
                }
                

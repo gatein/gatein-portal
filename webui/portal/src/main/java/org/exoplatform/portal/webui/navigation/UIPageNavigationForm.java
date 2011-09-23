@@ -147,7 +147,7 @@ public class UIPageNavigationForm extends UIForm
 
          // Check existed
          PortalRequestContext prContext = Util.getPortalRequestContext();
-         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         UserPortal userPortal = prContext.getUserPortalConfig().getUserPortal();
 
          userNav = userPortal.getNavigation(userNav.getKey());
 

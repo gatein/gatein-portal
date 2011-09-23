@@ -17,47 +17,35 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.user;
+package org.exoplatform.web.portal;
 
 import org.exoplatform.portal.mop.SiteKey;
-
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-import java.util.ResourceBundle;
+import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.user.UserPortal;
+import org.exoplatform.services.listener.Event;
+import org.exoplatform.services.listener.Listener;
+import org.exoplatform.web.application.RequestContext;
 
 /**
- * A simple implementation for unit tests.
+ * This listener attempts to find the {@link UserPortal} associated with the current request
+ * and invalidate it when the navigation service emits an event for a navigation modification.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class SimpleUserPortalContext implements UserPortalContext
+public class RefreshCurrentUserPortal extends Listener<NavigationService, SiteKey>
 {
 
-   /** . */
-   private final Map<SiteKey, ResourceBundle> bundles;
-
-   /** . */
-   private final Locale locale;
-
-   public SimpleUserPortalContext(Locale locale)
+   @Override
+   public void onEvent(Event<NavigationService, SiteKey> event) throws Exception
    {
-      this.locale = locale;
-      this.bundles = new HashMap<SiteKey, ResourceBundle>();
-   }
-
-   void add(SiteKey key, ResourceBundle bundle)
-   {
-      bundles.put(key, bundle);
-   }
-
-   public ResourceBundle getBundle(UserNavigation navigation)
-   {
-      return bundles.get(navigation.getKey());
-   }
-
-   public Locale getUserLocale()
-   {
-      return locale;
+      RequestContext ctx = RequestContext.getCurrentInstance();
+      if (ctx != null)
+      {
+         UserPortal userPortal = ctx.getUserPortal();
+         if (userPortal != null)
+         {
+            userPortal.refresh();
+         }
+      }
    }
 }

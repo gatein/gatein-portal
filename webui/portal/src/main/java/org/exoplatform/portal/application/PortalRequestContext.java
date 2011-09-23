@@ -33,6 +33,7 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.web.url.navigation.NavigationResource;
@@ -266,6 +267,19 @@ public class PortalRequestContext extends WebuiRequestContext
       return url;
    }
    
+   public UserPortal getUserPortal()
+   {
+      UserPortalConfig upc = getUserPortalConfig();
+      if (upc != null)
+      {
+         return upc.getUserPortal();
+      }
+      else
+      {
+         return null;
+      }
+   }
+
    public UserPortalConfig getUserPortalConfig()
    {
       if (userPortalConfig == null)

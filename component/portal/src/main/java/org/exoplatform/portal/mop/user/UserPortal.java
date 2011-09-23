@@ -65,6 +65,11 @@ public interface UserPortal
    UserNavigation getNavigation(SiteKey key)
       throws NullPointerException, UserPortalException, NavigationServiceException;
 
+  /**
+   * Refresh the current user portal.
+   */
+   void refresh();
+
    /**
     * Load a user node from a specified user navigation with a custom scope.
     * The returned node is the root node of the navigation.

@@ -28,6 +28,7 @@ import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceURL;
 
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.NodeChange;
@@ -193,8 +194,8 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication
 
    protected UserPortal getUserPortal()
    {
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
-      return uiApp.getUserPortalConfig().getUserPortal();
+      PortalRequestContext prc = Util.getPortalRequestContext();
+      return prc.getUserPortalConfig().getUserPortal();
    }
    
    protected UserNode getSelectedNode() throws Exception

@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.application;
 
+import org.exoplatform.portal.config.UserPortalConfig;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.url.URLFactory;
 import org.exoplatform.web.url.PortalURL;
@@ -190,6 +192,8 @@ abstract public class RequestContext
    {
       return parentAppRequestContext_;
    }
+
+   public abstract UserPortal getUserPortal();
 
    @SuppressWarnings("unchecked")
    public static <T extends RequestContext> T getCurrentInstance()

@@ -182,8 +182,8 @@ public class UITabPaneDashboard extends UIContainer
 
    private UserPortal getUserPortal()
    {
-      UIPortalApplication uiApp = Util.getUIPortalApplication();
-      return uiApp.getUserPortalConfig().getUserPortal();
+      PortalRequestContext prc = Util.getPortalRequestContext();
+      return prc.getUserPortalConfig().getUserPortal();
    }
 
    /**

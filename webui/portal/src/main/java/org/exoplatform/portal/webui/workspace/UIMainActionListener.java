@@ -169,7 +169,7 @@ public class UIMainActionListener
       private UserNode resolveNode(UserNode selectedNode, UserNodeFilterConfig filterConfig) throws Exception
       {         
          UserNavigation currNav = selectedNode.getNavigation();
-         UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+         UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
          if (currNav.getKey().getType().equals(SiteType.USER))
          {            
             return userPortal.getNode(currNav, Scope.CHILDREN, filterConfig, null);

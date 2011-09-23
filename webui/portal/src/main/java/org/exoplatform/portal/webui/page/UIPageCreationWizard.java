@@ -111,7 +111,7 @@ public class UIPageCreationWizard extends UIPageWizard
       DataStorage dataService = getApplicationComponent(DataStorage.class); 
       dataService.create(page);
 
-      UserPortal userPortal = Util.getUIPortalApplication().getUserPortalConfig().getUserPortal();
+      UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
       userPortal.saveNode(selectedNode, null);
       
       DescriptionService descriptionService = getApplicationComponent(DescriptionService.class);

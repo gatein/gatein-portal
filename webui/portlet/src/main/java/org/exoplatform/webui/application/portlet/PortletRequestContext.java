@@ -20,6 +20,7 @@
 package org.exoplatform.webui.application.portlet;
 
 import org.exoplatform.commons.utils.WriterPrinter;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.web.application.URLBuilder;
@@ -209,6 +210,12 @@ public class PortletRequestContext extends WebuiRequestContext
       setResponseComplete(true);
       if (response_ instanceof ActionResponse)
          ((ActionResponse)response_).sendRedirect(url);
+   }
+
+   @Override
+   public UserPortal getUserPortal()
+   {
+      return getParentAppRequestContext().getUserPortal();
    }
 
    public boolean hasProcessAction()

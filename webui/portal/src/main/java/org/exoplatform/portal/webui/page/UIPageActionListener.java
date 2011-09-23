@@ -59,10 +59,10 @@ public class UIPageActionListener
    {
       public void execute(Event<UIPortalApplication> event) throws Exception
       {
-         UIPortalApplication uiPortalApp = event.getSource();
-         UserPortal userPortal = uiPortalApp.getUserPortalConfig().getUserPortal();
-         UIPortal showedUIPortal = uiPortalApp.getCurrentSite();
          PortalRequestContext pcontext = PortalRequestContext.getCurrentInstance();
+         UserPortal userPortal = pcontext.getUserPortalConfig().getUserPortal();
+         UIPortalApplication uiPortalApp = event.getSource();
+         UIPortal showedUIPortal = uiPortalApp.getCurrentSite();
    
          UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
          builder.withReadCheck();
@@ -144,14 +144,14 @@ public class UIPageActionListener
                
                DataStorage storageService = uiPortalApp.getApplicationComponent(DataStorage.class);
                PortalConfig associatedPortalConfig = storageService.getPortalConfig(targetNav.getKey().getTypeName(), targetNav.getKey().getName());
-               UserPortalConfig userPortalConfig = uiPortalApp.getUserPortalConfig();
+               UserPortalConfig userPortalConfig = pcontext.getUserPortalConfig();
                
                //Update layout-related data on UserPortalConfig
                userPortalConfig.setPortalConfig(associatedPortalConfig);
             }
             else
             {
-               showedUIPortal = buildUIPortal(targetNav.getKey(), uiPortalApp, uiPortalApp.getUserPortalConfig());
+               showedUIPortal = buildUIPortal(targetNav.getKey(), uiPortalApp, pcontext.getUserPortalConfig());
                if(showedUIPortal == null)
                {
                   return;

@@ -470,4 +470,23 @@
     </component-plugin>
   </external-component-plugins>
 
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.listener.ListenerService</target-component>
+    <component-plugin>
+      <name>org.exoplatform.portal.mop.navigation.navigation_created</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.web.portal.RefreshCurrentUserPortal</type>
+    </component-plugin>
+    <component-plugin>
+      <name>org.exoplatform.portal.mop.navigation.navigation_updated</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.web.portal.RefreshCurrentUserPortal</type>
+    </component-plugin>
+    <component-plugin>
+      <name>org.exoplatform.portal.mop.navigation.navigation_destroyed</name>
+      <set-method>addListener</set-method>
+      <type>org.exoplatform.web.portal.RefreshCurrentUserPortal</type>
+    </component-plugin>
+  </external-component-plugins>
+
 </configuration>

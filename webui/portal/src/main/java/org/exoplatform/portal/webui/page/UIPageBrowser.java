@@ -341,8 +341,8 @@ public class UIPageBrowser extends UIContainer
        */
       private void removePageNode(Page page, Event<UIPageBrowser> event) throws Exception
       {
-         UIPortalApplication portalApplication = Util.getUIPortalApplication();
-         UserPortal userPortal = portalApplication.getUserPortalConfig().getUserPortal();
+         PortalRequestContext prc = Util.getPortalRequestContext();
+         UserPortal userPortal = prc.getUserPortalConfig().getUserPortal();
 
          UserNavigation userNav = userPortal.getNavigation(SiteKey.user(event.getRequestContext().getRemoteUser()));
          UserNode rootNode = userPortal.getNode(userNav, Scope.CHILDREN, null, null);
