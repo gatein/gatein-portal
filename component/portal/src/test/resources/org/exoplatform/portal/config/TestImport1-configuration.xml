@@ -59,6 +59,28 @@
                </object>
             </object-param>
             <object-param>
+               <name>group.configuration</name>
+               <description>description</description>
+               <object type="org.exoplatform.portal.config.NewPortalConfig">
+                  <field name="predefinedOwner">
+                     <collection type="java.util.HashSet">
+                        <value>
+                           <string>/platform/administrators</string>
+                        </value>
+                     </collection>
+                  </field>
+                  <field name="ownerType">
+                     <string>group</string>
+                  </field>
+                  <field name="templateLocation">
+                     <string>classpath:/org/exoplatform/portal/config/${import.portal.1}-conf</string>
+                  </field>
+                  <field name="importMode">
+                     <string>${import.mode.1}</string>
+                  </field>
+               </object>
+            </object-param>
+            <object-param>
                <name>user.configuration</name>
                <description>description</description>
                <object type="org.exoplatform.portal.config.NewPortalConfig">

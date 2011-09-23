@@ -495,15 +495,24 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       String type = config.getOwnerType();
       UnmarshalledObject<PortalConfig> obj = getConfig(config, owner, type, PortalConfig.class);
       
-      ImportMode importMode = getRightMode(config.getImportMode());
-      
-      PortalConfig pConfig = (obj != null) ? obj.getObject() : null;
-      if (pConfig == null)
+      PortalConfig pConfig;
+      if (obj == null)
       {
-         pConfig = new PortalConfig(type);
-         pConfig.setPortalLayout(new Container());
-         pConfig.setName(owner);
+         if (dataStorage_.getPortalConfig(type, owner) != null)
+         {
+            return true;
+         }
+         else
+         {
+            pConfig = new PortalConfig(type, owner);
+         }
       }
+      else
+      {
+         pConfig = obj.getObject();
+      }
+      
+      ImportMode importMode = getRightMode(config.getImportMode());
       
       PortalConfigImporter portalImporter = new PortalConfigImporter(importMode, pConfig, dataStorage_);
       try
