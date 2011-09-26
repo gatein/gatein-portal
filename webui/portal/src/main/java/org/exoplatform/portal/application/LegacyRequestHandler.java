@@ -19,8 +19,11 @@
 
 package org.exoplatform.portal.application;
 
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -91,6 +94,29 @@ public class LegacyRequestHandler extends WebRequestHandler
 
       // Resolve the user node
       UserPortalConfig cfg = userPortalService.getUserPortalConfig(requestSiteName, context.getRequest().getRemoteUser(), userPortalContext);
+      
+      if (cfg == null)
+      {
+    	  HttpServletRequest req = context.getRequest();
+    	  DataStorage storage = (DataStorage)PortalContainer.getComponent(DataStorage.class);
+          PortalConfig persistentPortalConfig = storage.getPortalConfig(requestSiteName);
+          if (persistentPortalConfig == null)
+          {
+             return false;
+          }
+          if(req.getRemoteUser() == null)
+          {
+        	  String doLoginPath = req.getContextPath() + "/" + "dologin" + "?initialURI=" + req.getRequestURI();
+        	  context.getResponse().sendRedirect(doLoginPath);
+          }
+          else
+          {
+             context.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
+          }
+    	  return true;
+      }
+      
+      
       UserPortal userPortal = cfg.getUserPortal();
       UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder().withAuthMode(UserNodeFilterConfig.AUTH_READ);
       UserNode userNode = userPortal.resolvePath(builder.build(), requestPath);
