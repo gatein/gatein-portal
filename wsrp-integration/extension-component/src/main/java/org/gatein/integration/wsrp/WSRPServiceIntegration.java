@@ -30,6 +30,7 @@ import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.pc.ExoKernelIntegration;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
@@ -40,6 +41,7 @@ import org.gatein.integration.wsrp.structure.MOPPortalStructureAccess;
 import org.gatein.integration.wsrp.structure.PortalStructureAccess;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.federation.FederatingPortletInvoker;
+import org.gatein.pc.federation.PortletInvokerResolver;
 import org.gatein.pc.portlet.PortletInvokerInterceptor;
 import org.gatein.pc.portlet.aspects.EventPayloadInterceptor;
 import org.gatein.pc.portlet.container.ContainerPortletInvoker;
@@ -61,9 +63,9 @@ import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.gatein.wsrp.WSRPConstants;
 import org.gatein.wsrp.consumer.migration.JCRMigrationService;
 import org.gatein.wsrp.consumer.migration.MigrationService;
-import org.gatein.wsrp.consumer.registry.ActivatingNullInvokerHandler;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
 import org.gatein.wsrp.consumer.registry.JCRConsumerRegistry;
+import org.gatein.wsrp.consumer.registry.RegisteringPortletInvokerResolver;
 import org.gatein.wsrp.payload.WSRPEventPayloadInterceptor;
 import org.gatein.wsrp.producer.ProducerHolder;
 import org.gatein.wsrp.producer.WSRPProducer;
@@ -184,6 +186,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       }
       catch (Exception e)
       {
+         log.debug("Couldn't load WSRP producer configuration from " + producerConfigLocation, e);
          throw new RuntimeException("Couldn't load WSRP producer configuration from " + producerConfigLocation, e);
       }
       container.registerComponentInstance(ProducerConfigurationService.class, producerConfigurationService);
@@ -198,6 +201,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       }
       catch (Exception e)
       {
+         log.debug("Couldn't instantiate RegistrationPersistenceManager", e);
          throw new RuntimeException("Couldn't instantiate RegistrationPersistenceManager", e);
       }
       RegistrationManager registrationManager = new RegistrationManagerImpl();
@@ -251,6 +255,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       }
       catch (Exception e)
       {
+         log.debug("Couldn't instantiate PortletStatePersistenceManager", e);
          throw new RuntimeException("Couldn't instantiate PortletStatePersistenceManager", e);
       }
 
@@ -309,6 +314,14 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          consumerRegistry.setSessionEventBroadcaster(sessionEventBroadcaster);
          consumerRegistry.setConfigurationIS(consumersConfigurationIS);
 
+         // if we run in a cluster, use a distributed cache for consumers
+         /*if (ExoContainer.getProfiles().contains("cluster"))
+         {
+            CacheService cacheService = (CacheService)container.getComponentInstanceOfType(CacheService.class);
+            DistributedConsumerCache consumerCache = new DistributedConsumerCache(cacheService);
+            consumerRegistry.setConsumerCache(consumerCache);
+         }*/
+
          // create ConsumerStructureProvider and register it to listen to page events
          POMSessionManager sessionManager = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
          PortalStructureAccess structureAccess = new MOPPortalStructureAccess(sessionManager);
@@ -327,13 +340,14 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
 
          consumerRegistry.start();
 
-         // set up a NullInvokerHandler so that when a remote producer is queried, we can start it if needed
-         ActivatingNullInvokerHandler handler = new ActivatingNullInvokerHandler();
-         handler.setConsumerRegistry(consumerRegistry);
-         federatingPortletInvoker.setNullInvokerHandler(handler);
+         // set up a PortletInvokerResolver so that when a remote producer is queried, we can start it if needed
+         RegisteringPortletInvokerResolver resolver = new RegisteringPortletInvokerResolver();
+         resolver.setConsumerRegistry(consumerRegistry);
+         federatingPortletInvoker.setPortletInvokerResolver(resolver);
       }
       catch (Exception e)
       {
+         log.debug(e);
          throw new RuntimeException("Couldn't start WSRP consumers registry from configuration " + consumersConfigLocation, e);
       }
       container.registerComponentInstance(ConsumerRegistry.class, consumerRegistry);
@@ -370,6 +384,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       }
       catch (Exception e)
       {
+         log.debug(e);
          throw new RuntimeException("Couldn't stop WSRP consumers registry.", e);
       }
 

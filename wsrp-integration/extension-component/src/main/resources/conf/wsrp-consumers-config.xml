@@ -25,7 +25,7 @@
 
 <deployments xmlns="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0 http://www.jboss.org/portal/xsd/gatein_wsrp_consumer_1_0.xsd">
+             xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0 http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0.xsd">
    <deployment>
       <wsrp-producer id="selfv1" expiration-cache="500" ws-timeout="50000">
          <endpoint-wsdl-url>http://localhost:8080/wsrp-producer/v1/MarkupService?wsdl</endpoint-wsdl-url>
