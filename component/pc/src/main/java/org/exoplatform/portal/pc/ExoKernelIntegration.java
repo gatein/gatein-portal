@@ -19,9 +19,12 @@
 
 package org.exoplatform.portal.pc;
 
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.resources.ResourceBundleService;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.bridge.BridgeInterceptor;
 import org.gatein.pc.federation.FederatingPortletInvoker;
@@ -54,6 +57,7 @@ import org.picocontainer.Startable;
 public class ExoKernelIntegration implements Startable
 {
 
+   /** . */
    protected PortletApplicationDeployer portletApplicationRegistry;
 
    /** Exo Context */
@@ -61,6 +65,9 @@ public class ExoKernelIntegration implements Startable
 
    /** DO NOT REMOVE ME, OTHERWISE YOU'LL BREAK THINGS. */
    private final ResourceBundleService resourceBundleService;
+
+   /** . */
+   private Logger log = LoggerFactory.getLogger(ExoKernelIntegration.class);
 
    /**
     * We enforce the dependency with the ResourceBundleService since it must be stared before the
@@ -83,6 +90,12 @@ public class ExoKernelIntegration implements Startable
       // The portlet application deployer
       portletApplicationRegistry = new ExoPortletApplicationDeployer();
       portletApplicationRegistry.setContainerPortletInvoker(containerPortletInvoker);
+
+      //
+      String validation = PropertyManager.getProperty("gatein.portlet.validation");
+      boolean validated = validation == null || "true".equals(validation.trim().toLowerCase());
+      log.debug("portlet xml validation is " + (validated ? "enabled" : " disabled"));
+      portletApplicationRegistry.setSchemaValidated(validated);
 
       //Container Stack
       ContainerPortletDispatcher portletContainerDispatcher = new ContainerPortletDispatcher();
