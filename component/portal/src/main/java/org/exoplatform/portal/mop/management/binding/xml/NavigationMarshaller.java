@@ -132,6 +132,8 @@ public class NavigationMarshaller implements Marshaller<PageNavigation>
       {
          for (LocalizedString label : node.getLabels())
          {
+            if (label.getValue() == null) continue;
+            
             writer.writeStartElement(Element.LABEL);
             if (label.getLang() != null)
             {
