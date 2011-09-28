@@ -32,10 +32,13 @@ import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormInputWithActions;
+import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
+import org.exoplatform.webui.form.validator.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,21 +130,27 @@ public class UIAccountForm extends UIFormTabPane
          WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
          UIApplication uiApp = context.getUIApplication();
          OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class);
-         String userName = uiForm.getChild(UIAccountInputSet.class).getUserName();
-         if (userName == null)
+         UIFormStringInput usernameInput = uiForm.getChild(UIAccountInputSet.class).getUIStringInput(UIAccountInputSet.USERNAME);
+         for (Validator validator : usernameInput.getValidators())
          {
-            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.empty-input", null,
-               ApplicationMessage.WARNING));
-            return;
+            try
+            {
+               validator.validate(usernameInput);
+            }
+            catch (MessageException e)
+            {
+               uiApp.addMessage(e.getDetailMessage());
+               return;
+            }
          }
+
+         String userName = usernameInput.getValue();
          if (service.getUserHandler().findUserByName(userName) != null)
          {
-            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-exist", null,
-               ApplicationMessage.WARNING));
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-exist", null, ApplicationMessage.WARNING));
             return;
          }
-         uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-not-exist", null,
-            ApplicationMessage.WARNING));
+         uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-not-exist", null, ApplicationMessage.INFO));
       }
    }
 }

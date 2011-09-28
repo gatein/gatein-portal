@@ -19,9 +19,8 @@
 
 package org.exoplatform.account.webui.component;
 
-import org.exoplatform.portal.webui.CaptchaValidator;
-import org.exoplatform.portal.webui.UICaptcha;
-import org.exoplatform.portal.webui.util.Util;
+import nl.captcha.Captcha;
+
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -33,22 +32,17 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputWithActions;
-import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
-import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.Validator;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import nl.captcha.Captcha;
 
 /**
  * 
@@ -91,7 +85,6 @@ public class UIRegisterForm extends UIForm
    @Override
    public void processAction(WebuiRequestContext context) throws Exception
    {
-      // TODO Auto-generated method stub
       super.processAction(context);
       
       UIApplication uiApp = context.getUIApplication();
@@ -147,15 +140,18 @@ public class UIRegisterForm extends UIForm
          OrganizationService orgService = registerForm.getApplicationComponent(OrganizationService.class);
          UIRegisterInputSet registerInput = registerForm.getChild(UIRegisterInputSet.class);
          UIFormStringInput userNameInput = registerInput.getUIStringInput(UIRegisterInputSet.USER_NAME);
-         MandatoryValidator validator = new MandatoryValidator();
-         try
+         List<Validator> validators = userNameInput.getValidators();
+         for (Validator validator  : validators)
          {
-            validator.validate(userNameInput);
-         }
-         catch (MessageException e)
-         {
-            event.getRequestContext().getUIApplication().addMessage(e.getDetailMessage());
-            return;
+            try
+            {
+               validator.validate(userNameInput);
+            }
+            catch (MessageException e)
+            {
+               event.getRequestContext().getUIApplication().addMessage(e.getDetailMessage());
+               return;
+            }
          }
 
          String typedUsername = userNameInput.getValue();
@@ -168,7 +164,7 @@ public class UIRegisterForm extends UIForm
          }
          else
          {
-            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-not-exist", new String[]{typedUsername}));
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.user-not-exist", new String[]{typedUsername}, ApplicationMessage.INFO));
          }
       }
 
@@ -195,7 +191,6 @@ public class UIRegisterForm extends UIForm
       @Override
       public void execute(Event<UIRegisterForm> event) throws Exception
       {
-         // TODO Auto-generated method stub
          UIRegisterForm registerForm = event.getSource();
          registerForm.resetInput();
       }
