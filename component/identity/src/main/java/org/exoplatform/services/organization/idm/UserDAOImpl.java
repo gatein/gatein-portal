@@ -337,7 +337,7 @@ public class UserDAOImpl implements UserHandler
 
       UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
 
-      return new LazyPageList(new IDMUserListAccess(this, service_, qb, pageSize, true), pageSize);
+      return new LazyPageList(new IDMUserListAccess(qb, pageSize, true), pageSize);
    }
 
    public ListAccess<User> findAllUsers() throws Exception
@@ -354,7 +354,7 @@ public class UserDAOImpl implements UserHandler
 
       UserQueryBuilder qb = service_.getIdentitySession().createUserQueryBuilder();
 
-      return new IDMUserListAccess(this, service_, qb, 20, true);
+      return new IDMUserListAccess(qb, 20, true);
    }
 
 //
@@ -540,11 +540,11 @@ public class UserDAOImpl implements UserHandler
          q.getFirstName() == null &&
          q.getLastName() == null)
       {
-         list = new IDMUserListAccess(this, service_, qb, 20, true);
+         list = new IDMUserListAccess(qb, 20, true);
       }
       else
       {
-         list = new IDMUserListAccess(this, service_, qb, 20, false);
+         list = new IDMUserListAccess(qb, 20, false);
       }
 
       if (cache != null)
@@ -655,7 +655,7 @@ public class UserDAOImpl implements UserHandler
 
       qb.addRelatedGroup(jbidGroup);
 
-      return new IDMUserListAccess(this, service_, qb, 20, false);
+      return new IDMUserListAccess(qb, 20, false);
    }
 
 //

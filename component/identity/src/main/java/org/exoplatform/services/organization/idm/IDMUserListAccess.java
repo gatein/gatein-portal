@@ -20,6 +20,8 @@
 package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.commons.utils.ListAccess;
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.impl.UserImpl;
 
@@ -41,10 +43,6 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
 {
    private static Logger log = LoggerFactory.getLogger(IDMUserListAccess.class);
 
-   private final UserDAOImpl userDAO;
-
-   private final PicketLinkIDMService idmService;
-
    private final UserQueryBuilder userQueryBuilder;
 
    private final int pageSize;
@@ -55,11 +53,8 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
 
    private int size = -1;
 
-   public IDMUserListAccess(UserDAOImpl userDAO, PicketLinkIDMService idmService, UserQueryBuilder userQueryBuilder,
-      int pageSize, boolean countAll)
+   public IDMUserListAccess(UserQueryBuilder userQueryBuilder, int pageSize, boolean countAll)
    {
-      this.userDAO = userDAO;
-      this.idmService = idmService;
       this.userQueryBuilder = userQueryBuilder;
       this.pageSize = pageSize;
       this.countAll = countAll;
@@ -84,11 +79,11 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
 
       if (fullResults == null)
       {
-         userDAO.getOrgService().flush();
+         getOrganizationService().flush();
 
          userQueryBuilder.page(index, length);
          UserQuery query = userQueryBuilder.sort(SortOrder.ASCENDING).createQuery();
-         users = idmService.getIdentitySession().list(query);
+         users = getIDMService().getIdentitySession().list(query);
       }
       else
       {
@@ -102,7 +97,8 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
          org.picketlink.idm.api.User user = users.get(i);
 
          User gtnUser = new UserImpl(user.getId());
-         userDAO.populateUser(gtnUser, idmService.getIdentitySession());
+         ((UserDAOImpl)getOrganizationService().getUserHandler())
+            .populateUser(gtnUser, getIDMService().getIdentitySession());
          exoUsers[i] = gtnUser;
       }
 
@@ -131,7 +127,7 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
          );
       }
 
-      userDAO.getOrgService().flush();
+      getOrganizationService().flush();
 
       int result;
 
@@ -144,13 +140,13 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
          }
          else if (countAll)
          {
-            result = idmService.getIdentitySession().getPersistenceManager().getUserCount();
+            result = getIDMService().getIdentitySession().getPersistenceManager().getUserCount();
          }
          else
          {
             userQueryBuilder.page(0, 0);
             UserQuery query = userQueryBuilder.sort(SortOrder.ASCENDING).createQuery();
-            fullResults = idmService.getIdentitySession().list(query);
+            fullResults = getIDMService().getIdentitySession().list(query);
             result = fullResults.size();
          }
 
@@ -173,5 +169,17 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
 
       return result;
 
+   }
+
+   PicketLinkIDMService getIDMService()
+   {
+      return (PicketLinkIDMService)
+         PortalContainer.getInstance().getComponentInstanceOfType(PicketLinkIDMService.class);
+   }
+
+   PicketLinkIDMOrganizationServiceImpl getOrganizationService()
+   {
+      return (PicketLinkIDMOrganizationServiceImpl)
+         PortalContainer.getInstance().getComponentInstanceOfType(OrganizationService.class);
    }
 }
