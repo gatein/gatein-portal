@@ -30,6 +30,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.PageData;
 import org.mockito.ArgumentMatcher;
@@ -66,7 +67,7 @@ public class PageImportTaskTest extends TestCase
       when(dataStorage.find(Matchers.<Query<Page>>any())).thenReturn(list);
       when(list.getAvailable()).thenReturn(0); // no pages exist
 
-      task.importData(ImportStrategy.CONSERVE);
+      task.importData(ImportMode.CONSERVE);
 
       verify(dataStorage).find(query("user", "foo"));
       verify(list).getAvailable();
@@ -88,6 +89,90 @@ public class PageImportTaskTest extends TestCase
    public void testConserve_SamePages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage);
+
+      when(dataStorage.find(Matchers.<Query<Page>>any())).thenReturn(list);
+      when(list.getAvailable()).thenReturn(3);
+
+      task.importData(ImportMode.CONSERVE);
+
+      verify(dataStorage).find(query("user", "foo"));
+      verify(list).getAvailable();
+
+      verifyNoMoreInteractions(dataStorage, list);
+
+      assertNullOrEmpty(task.getRollbackDeletes());
+      assertNullOrEmpty(task.getRollbackSaves());
+   }
+
+   public void testConserve_NewPages() throws Exception
+   {
+      Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage);
+
+      when(dataStorage.find(Matchers.<Query<Page>>any())).thenReturn(list);
+      when(list.getAvailable()).thenReturn(3);
+
+      task.importData(ImportMode.CONSERVE);
+
+      verify(dataStorage).find(query("user", "foo"));
+      verify(list).getAvailable();
+
+      verifyNoMoreInteractions(dataStorage, list);
+
+      assertNullOrEmpty(task.getRollbackDeletes());
+      assertNullOrEmpty(task.getRollbackSaves());
+   }
+
+   public void testConserve_NewAndSamePages() throws Exception
+   {
+      Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").addPage("page4").build();
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage);
+
+      when(dataStorage.find(Matchers.<Query<Page>>any())).thenReturn(list);
+      when(list.getAvailable()).thenReturn(3);
+
+      task.importData(ImportMode.CONSERVE);
+
+      verify(dataStorage).find(query("user", "foo"));
+      verify(list).getAvailable();
+
+      verifyNoMoreInteractions(dataStorage, list);
+
+      assertNullOrEmpty(task.getRollbackDeletes());
+      assertNullOrEmpty(task.getRollbackSaves());
+   }
+   
+   public void testInsert_NoPages() throws Exception
+   {
+      Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage);
+
+      when(dataStorage.find(Matchers.<Query<Page>>any())).thenReturn(list);
+      when(list.getAvailable()).thenReturn(0); // no pages exist
+
+      task.importData(ImportMode.INSERT);
+
+      verify(dataStorage).find(query("user", "foo"));
+      verify(list).getAvailable();
+      verify(list, never()).getAll();
+
+      for (Page page : importing.getPages())
+      {
+         verify(dataStorage).save(page);
+      }
+      verify(dataStorage, times(3)).save();
+
+      verifyNoMoreInteractions(dataStorage, list);
+
+      Assert.assertNotNull(task.getRollbackDeletes());
+      Assert.assertEquals(importing, task.getRollbackDeletes());
+      Assert.assertNull(task.getRollbackSaves());
+   }
+
+   public void testInsert_SamePages() throws Exception
+   {
+      Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
       Page.PageSet existing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
       PageImportTask task = new PageImportTask(importing, siteKey, dataStorage);
 
@@ -95,7 +180,7 @@ public class PageImportTaskTest extends TestCase
       when(list.getAvailable()).thenReturn(3);
       when(list.getAll()).thenReturn(existing.getPages());
 
-      task.importData(ImportStrategy.CONSERVE);
+      task.importData(ImportMode.INSERT);
 
       verify(dataStorage).find(query("user", "foo"));
       verify(list).getAvailable();
@@ -107,7 +192,7 @@ public class PageImportTaskTest extends TestCase
       assertNullOrEmpty(task.getRollbackSaves());
    }
 
-   public void testConserve_NewPages() throws Exception
+   public void testInsert_NewPages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
       Page.PageSet existing = new Builder().addPage("foo").addPage("bar").addPage("baz").build();
@@ -117,7 +202,7 @@ public class PageImportTaskTest extends TestCase
       when(list.getAvailable()).thenReturn(3);
       when(list.getAll()).thenReturn(existing.getPages());
 
-      task.importData(ImportStrategy.CONSERVE);
+      task.importData(ImportMode.INSERT);
 
       verify(dataStorage).find(query("user", "foo"));
       verify(list).getAvailable();
@@ -136,7 +221,7 @@ public class PageImportTaskTest extends TestCase
       Assert.assertNull(task.getRollbackSaves());
    }
 
-   public void testConserve_NewAndSamePages() throws Exception
+   public void testInsert_NewAndSamePages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").addPage("page4").build();
       Page.PageSet existing = new Builder().addPage("page2").addPage("bar").addPage("page3").build();
@@ -146,7 +231,7 @@ public class PageImportTaskTest extends TestCase
       when(list.getAvailable()).thenReturn(3);
       when(list.getAll()).thenReturn(existing.getPages());
 
-      task.importData(ImportStrategy.CONSERVE);
+      task.importData(ImportMode.INSERT);
 
       verify(dataStorage).find(query("user", "foo"));
       verify(list).getAvailable();
@@ -174,7 +259,7 @@ public class PageImportTaskTest extends TestCase
       when(dataStorage.find(Matchers.<Query<Page>>any())).thenReturn(list);
       when(list.getAvailable()).thenReturn(0); // no pages exist
 
-      task.importData(ImportStrategy.MERGE);
+      task.importData(ImportMode.MERGE);
 
       verify(dataStorage).find(query("user", "foo"));
       verify(list).getAvailable();
@@ -203,7 +288,7 @@ public class PageImportTaskTest extends TestCase
       when(list.getAvailable()).thenReturn(3);
       when(list.getAll()).thenReturn(existing.getPages());
 
-      task.importData(ImportStrategy.MERGE);
+      task.importData(ImportMode.MERGE);
 
       verify(dataStorage).find(query("user", "foo"));
       verify(list).getAvailable();
@@ -233,7 +318,7 @@ public class PageImportTaskTest extends TestCase
       when(list.getAvailable()).thenReturn(3);
       when(list.getAll()).thenReturn(existing.getPages());
 
-      task.importData(ImportStrategy.MERGE);
+      task.importData(ImportMode.MERGE);
 
       verify(dataStorage).find(query("user", "foo"));
       verify(list).getAvailable();
@@ -262,7 +347,7 @@ public class PageImportTaskTest extends TestCase
       when(list.getAvailable()).thenReturn(3);
       when(list.getAll()).thenReturn(existing.getPages());
 
-      task.importData(ImportStrategy.MERGE);
+      task.importData(ImportMode.MERGE);
 
       verify(dataStorage).find(query("user", "foo"));
       verify(list).getAvailable();
@@ -295,7 +380,7 @@ public class PageImportTaskTest extends TestCase
       when(dataStorage.find(Matchers.<Query<Page>>any())).thenReturn(list);
       when(list.getAvailable()).thenReturn(0); // no pages exist
 
-      task.importData(ImportStrategy.OVERWRITE);
+      task.importData(ImportMode.OVERWRITE);
 
       verify(dataStorage).find(query("user", "foo"));
       verify(list).getAvailable();
@@ -324,7 +409,7 @@ public class PageImportTaskTest extends TestCase
       when(list.getAvailable()).thenReturn(3);
       when(list.getAll()).thenReturn(existing.getPages());
 
-      task.importData(ImportStrategy.OVERWRITE);
+      task.importData(ImportMode.OVERWRITE);
 
       verify(dataStorage).find(query("user", "foo"));
       verify(list).getAvailable();
@@ -360,7 +445,7 @@ public class PageImportTaskTest extends TestCase
       when(list.getAvailable()).thenReturn(3);
       when(list.getAll()).thenReturn(existing.getPages());
 
-      task.importData(ImportStrategy.OVERWRITE);
+      task.importData(ImportMode.OVERWRITE);
 
       verify(dataStorage).find(query("user", "foo"));
       verify(list).getAvailable();
@@ -397,7 +482,7 @@ public class PageImportTaskTest extends TestCase
       when(list.getAvailable()).thenReturn(3);
       when(list.getAll()).thenReturn(existing.getPages());
 
-      task.importData(ImportStrategy.OVERWRITE);
+      task.importData(ImportMode.OVERWRITE);
 
       verify(dataStorage).find(query("user", "foo"));
       verify(list).getAvailable();

@@ -28,7 +28,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
-import org.exoplatform.portal.mop.management.exportimport.ImportStrategy;
+import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.management.exportimport.NavigationExportTask;
 import org.exoplatform.portal.mop.management.exportimport.NavigationImportTask;
 import org.exoplatform.portal.mop.management.exportimport.PageExportTask;
@@ -96,12 +96,18 @@ public class MopImportResource implements OperationHandler
       DescriptionService descriptionService = operationContext.getRuntimeContext().getRuntimeComponent(DescriptionService.class);
       if (descriptionService == null) throw new OperationException(operationName, "Description service was null");
 
-      String strategyAttribute = operationContext.getAttributes().getValue("import-strategy");
-      ImportStrategy strategy = ImportStrategy.MERGE;
-      if (strategyAttribute != null)
+      ImportMode importMode = ImportMode.MERGE;
+      String mode = operationContext.getAttributes().getValue("importMode");
+      if (mode != null)
       {
-         strategy = ImportStrategy.forName(strategyAttribute);
-         if (strategy == null) throw new OperationException(operationName, "Unknown import strategy " + strategyAttribute);
+         try
+         {
+            importMode = ImportMode.valueOf(mode.trim().toUpperCase());
+         }
+         catch (Exception e)
+         {
+            throw new OperationException(operationName, "Unknown importMode " + mode);
+         }
       }
 
       Map<SiteKey, MopImport> importMap = new HashMap<SiteKey, MopImport>();
@@ -200,7 +206,7 @@ public class MopImportResource implements OperationHandler
       Map<SiteKey, MopImport> importsRan = new HashMap<SiteKey, MopImport>();
       try
       {
-         log.info("Performing import using strategy '" + strategy.getName() + "'");
+         log.info("Performing import using importMode '" + mode + "'");
          for (Map.Entry<SiteKey, MopImport> mopImportEntry : importMap.entrySet())
          {
             SiteKey siteKey = mopImportEntry.getKey();
@@ -220,7 +226,7 @@ public class MopImportResource implements OperationHandler
             {
                log.debug("Importing site layout data.");
                ran.siteTask = mopImport.siteTask;
-               mopImport.siteTask.importData(strategy);
+               mopImport.siteTask.importData(importMode);
             }
 
             // Page import
@@ -228,7 +234,7 @@ public class MopImportResource implements OperationHandler
             {
                log.debug("Importing page data.");
                ran.pageTask = mopImport.pageTask;
-               mopImport.pageTask.importData(strategy);
+               mopImport.pageTask.importData(importMode);
             }
 
             // Navigation import
@@ -236,7 +242,7 @@ public class MopImportResource implements OperationHandler
             {
                log.debug("Importing navigation data.");
                ran.navigationTask = mopImport.navigationTask;
-               mopImport.navigationTask.importData(strategy);
+               mopImport.navigationTask.importData(importMode);
             }
          }
          log.info("Import successful !");

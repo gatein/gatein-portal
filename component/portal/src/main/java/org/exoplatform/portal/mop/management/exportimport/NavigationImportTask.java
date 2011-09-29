@@ -67,24 +67,8 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation>
    }
 
    @Override
-   public void importData(ImportStrategy importStrategy) throws Exception
+   public void importData(ImportMode importMode) throws Exception
    {
-      ImportMode mode;
-      switch (importStrategy)
-      {
-         case CONSERVE:
-            mode = ImportMode.INSERT;
-            break;
-         case MERGE:
-            mode = ImportMode.MERGE;
-            break;
-         case OVERWRITE:
-            mode = ImportMode.OVERWRITE;
-            break;
-         default:
-            throw new Exception("Could not map import strategy " + importStrategy.getName() + " to import mode.");
-      }
-
       PortalConfig portalConfig = dataStorage.getPortalConfig(siteKey.getTypeName(), siteKey.getName());
       if (portalConfig == null) throw new Exception("Cannot import navigation because site does not exist for " + siteKey);
 
@@ -154,7 +138,7 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation>
       }
 
       // Import navigation using gatein navigation importer.
-      NavigationImporter importer = new NavigationImporter(locale, mode, data, navigationService, descriptionService);
+      NavigationImporter importer = new NavigationImporter(locale, importMode, data, navigationService, descriptionService);
       importer.perform();
    }
 

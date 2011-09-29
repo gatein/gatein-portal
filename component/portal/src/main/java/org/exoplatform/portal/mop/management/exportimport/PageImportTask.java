@@ -27,6 +27,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.management.operations.page.PageUtils;
 
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
    }
 
    @Override
-   public void importData(ImportStrategy strategy) throws Exception
+   public void importData(ImportMode importMode) throws Exception
    {
       if (data == null || data.getPages() == null || data.getPages().isEmpty()) return;
 
@@ -58,9 +59,20 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
       int size = list.getAvailable();
 
       Page.PageSet dst = null;
-      switch (strategy)
+      switch (importMode)
       {
          case CONSERVE:
+            if (size == 0)
+            {
+               dst = data; // No pages exist yet.
+               rollbackDeletes = data;
+            }
+            else
+            {
+               dst = null;
+            }
+            break;
+         case INSERT:
             if (size == 0)
             {
                dst = data; // No pages exist yet.

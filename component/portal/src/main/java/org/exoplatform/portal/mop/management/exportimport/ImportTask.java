@@ -22,6 +22,8 @@
 
 package org.exoplatform.portal.mop.management.exportimport;
 
+import org.exoplatform.portal.mop.importer.ImportMode;
+
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
@@ -34,7 +36,7 @@ public abstract class ImportTask<T>
       this.data = data;
    }
 
-   public abstract void importData(ImportStrategy importStrategy) throws Exception;
+   public abstract void importData(ImportMode importMode) throws Exception;
 
    public abstract void rollback() throws Exception;
 }

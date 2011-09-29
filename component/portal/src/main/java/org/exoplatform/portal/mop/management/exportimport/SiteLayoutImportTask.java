@@ -25,6 +25,7 @@ package org.exoplatform.portal.mop.management.exportimport;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.management.operations.page.PageUtils;
 
 /**
@@ -44,11 +45,11 @@ public class SiteLayoutImportTask extends AbstractImportTask<PortalConfig>
    }
 
    @Override
-   public void importData(ImportStrategy importStrategy) throws Exception
+   public void importData(ImportMode importMode) throws Exception
    {
       PortalConfig dst = dataStorage.getPortalConfig(siteKey.getTypeName(), siteKey.getName());
 
-      switch (importStrategy)
+      switch (importMode)
       {
          // Really doesn't make sense to "merge" site layout data.  Really two modes, conserve (keep) and overwrite.
          case CONSERVE:
@@ -62,6 +63,7 @@ public class SiteLayoutImportTask extends AbstractImportTask<PortalConfig>
                dst = null;
             }
             break;
+         case INSERT:
          case MERGE:
          case OVERWRITE:
             if (dst == null)
