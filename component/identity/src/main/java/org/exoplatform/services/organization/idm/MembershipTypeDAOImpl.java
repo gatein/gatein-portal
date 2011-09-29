@@ -21,7 +21,7 @@ package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.commons.utils.ListenerStack;
 import org.exoplatform.services.organization.MembershipType;
-//import org.exoplatform.services.organization.MembershipTypeEventListener;
+import org.exoplatform.services.organization.MembershipTypeEventListener;
 import org.exoplatform.services.organization.MembershipTypeHandler;
 import org.exoplatform.services.organization.impl.MembershipTypeImpl;
 import org.gatein.common.logging.LogLevel;
@@ -70,24 +70,24 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
       this.orgService = orgService;
    }
 
-//   public void addMembershipTypeEventListener(MembershipTypeEventListener listener)
-//   {
-//      if (listener == null)
-//      {
-//         throw new IllegalArgumentException("Listener cannot be null");
-//      }
-//
-//      listeners_.add(listener);
-//   }
-//
-//   public void removeMembershipTypeEventListener(MembershipTypeEventListener listener)
-//   {
-//      if (listener == null)
-//      {
-//         throw new IllegalArgumentException("Listener cannot be null");
-//      }
-//      listeners_.remove(listener);
-//   }
+   public void addMembershipTypeEventListener(MembershipTypeEventListener listener)
+   {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
+
+      listeners_.add(listener);
+   }
+
+   public void removeMembershipTypeEventListener(MembershipTypeEventListener listener)
+   {
+      if (listener == null)
+      {
+         throw new IllegalArgumentException("Listener cannot be null");
+      }
+      listeners_.remove(listener);
+   }
 
    final public MembershipType createMembershipTypeInstance()
    {
@@ -116,14 +116,14 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
 
       if (broadcast)
       {
-//         preSave(mt, true);
+         preSave(mt, true);
       }
 
       getIdentitySession().getRoleManager().createRoleType(mt.getName());
 
       if (broadcast)
       {
-//         postSave(mt, true);
+         postSave(mt, true);
       }
 
 
@@ -151,14 +151,14 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
 
       if (broadcast)
       {
-//         preSave(mt, true);
+         preSave(mt, true);
       }
 
       updateMembershipType(mt);
 
       if (broadcast)
       {
-//         postSave(mt, true);
+         postSave(mt, true);
       }
 
       return mt;
@@ -223,14 +223,14 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
       {
          if (broadcast)
          {
-//            preDelete(mt);
+            preDelete(mt);
          }
 
          getIdentitySession().getRoleManager().removeRoleType(mt.getName());
 
          if (broadcast)
          {
-//            postDelete(mt);
+            postDelete(mt);
          }
 
       }
@@ -356,40 +356,40 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
       return;
    }
 
-//   private void preSave(MembershipType membershipType, boolean isNew) throws Exception
-//   {
-//      for (int i = 0; i < listeners_.size(); i++)
-//      {
-//         MembershipTypeEventListener listener = (MembershipTypeEventListener)listeners_.get(i);
-//         listener.preSave(membershipType, isNew);
-//      }
-//   }
-//
-//   private void postSave(MembershipType membershipType, boolean isNew) throws Exception
-//   {
-//      for (int i = 0; i < listeners_.size(); i++)
-//      {
-//         MembershipTypeEventListener listener = (MembershipTypeEventListener)listeners_.get(i);
-//         listener.postSave(membershipType, isNew);
-//      }
-//   }
-//
-//   private void preDelete(MembershipType membershipType) throws Exception
-//   {
-//      for (int i = 0; i < listeners_.size(); i++)
-//      {
-//         MembershipTypeEventListener listener = (MembershipTypeEventListener)listeners_.get(i);
-//         listener.preDelete(membershipType);
-//      }
-//   }
-//
-//   private void postDelete(MembershipType membershipType) throws Exception
-//   {
-//      for (int i = 0; i < listeners_.size(); i++)
-//      {
-//         MembershipTypeEventListener listener = (MembershipTypeEventListener)listeners_.get(i);
-//         listener.postDelete(membershipType);
-//      }
-//   }
+   private void preSave(MembershipType membershipType, boolean isNew) throws Exception
+   {
+      for (int i = 0; i < listeners_.size(); i++)
+      {
+         MembershipTypeEventListener listener = (MembershipTypeEventListener)listeners_.get(i);
+         listener.preSave(membershipType, isNew);
+      }
+   }
+
+   private void postSave(MembershipType membershipType, boolean isNew) throws Exception
+   {
+      for (int i = 0; i < listeners_.size(); i++)
+      {
+         MembershipTypeEventListener listener = (MembershipTypeEventListener)listeners_.get(i);
+         listener.postSave(membershipType, isNew);
+      }
+   }
+
+   private void preDelete(MembershipType membershipType) throws Exception
+   {
+      for (int i = 0; i < listeners_.size(); i++)
+      {
+         MembershipTypeEventListener listener = (MembershipTypeEventListener)listeners_.get(i);
+         listener.preDelete(membershipType);
+      }
+   }
+
+   private void postDelete(MembershipType membershipType) throws Exception
+   {
+      for (int i = 0; i < listeners_.size(); i++)
+      {
+         MembershipTypeEventListener listener = (MembershipTypeEventListener)listeners_.get(i);
+         listener.postDelete(membershipType);
+      }
+   }
 
 }
