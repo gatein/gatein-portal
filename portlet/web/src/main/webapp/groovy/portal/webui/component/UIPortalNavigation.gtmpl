@@ -83,7 +83,7 @@
 		if(rootNodes != null) {
 			for(nav in rootNodes) {					
 				def childs = nav.getChildren();              
-				for(Node node in childs) {
+				for(UserNode node in childs) {
 					String tabStyleNavigation = "NormalNavigationTab";
 					if(selectedNode != null && node.getId() == selectedNode.getId()) {
 							tabStyleNavigation = "SelectedNavigationTab";
