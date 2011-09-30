@@ -164,9 +164,6 @@
                <name>group.configuration</name>
                <description>description</description>
                <object type="org.exoplatform.portal.config.NewPortalConfig">
-                  <field name="importMode">
-                     <string>merge</string>
-                  </field>
                   <field name="predefinedOwner">
                      <collection type="java.util.HashSet">
                         <value>
