@@ -414,29 +414,31 @@ PortalDragDrop.prototype.scrollOnDrag = function(dndEvent) {
  * @param layout {string} the layout type which is "row" or "column"
  */
 PortalDragDrop.prototype.findInsertPosition = function(components, layout, mouseEvent) {
-   var Browser = eXo.core.Browser;
-   if (layout == "row") {
-      for (var i = 0; i < components.length; i++) {
-         var componentTop = Browser.findPosY(components[i]);
-         var mouseYInPage = Browser.findMouseYInPage(mouseEvent);
-         var componentMIddle = componentTop + Math.round(components[i].offsetHeight / 2);
-         if (mouseYInPage > componentMIddle) continue;
-         else return i;
-      }
-      
-      return -1;
-   } else {
-      for (var i = 0; i < components.length; i++) {
-         var mouseXInPage = Browser.findMouseXInPage(mouseEvent);
-         var componentInTD = eXo.core.DOMUtil.getChildrenByTagName(components[i], "div")[0];
-         var componentX = Browser.findPosX(components[i]);
-         if (mouseXInPage > componentX) continue;
-         else return i
-      }
-      
-      return -1
-   }  
-};
+	   var Browser = eXo.core.Browser;
+	   if (layout == "row") {
+	      for (var i = 0; i < components.length; i++) {
+	         var componentTop = Browser.findPosY(components[i]);
+	         var mouseYInPage = Browser.findMouseYInPage(mouseEvent);
+	         var componentMIddle = componentTop + Math.round(components[i].offsetHeight / 2);
+	         if (mouseYInPage > componentMIddle) continue;
+	         else return i;
+	      }
+	      
+	      return -1;
+	   } else {
+	      for (var i = 0; i < components.length; i++) {
+	         var mouseXInPage = Browser.findMouseXInPage(mouseEvent);
+	         var componentX = Browser.findPosX(components[i], eXo.core.I18n.isRT());
+	         if (eXo.core.I18n.isRT()) {
+	        	 if (mouseXInPage < componentX) continue;        	 
+	         } else if (mouseXInPage > componentX ) continue;
+	                  
+	         return i; 
+	      }
+	      
+	      return -1;
+	   }  
+	};
 
 /**
  * Create a div block which show the preview block

@@ -40,11 +40,11 @@
 				<div class="VIEW-CONTAINER VIEW-BLOCK">
 			<%} %> 
 					<%if(hasPermission) {%>
+ 						<div>								
 						  <div class="UIRowContainer <%=(portalMode != UIPortalApplication.NORMAL_MODE && uicomponent.getChildren().size() == 0) ? "EmptyContainer" : ""%>">
-							<div>								
 								<%uicomponent.renderChildren();%>
-							</div>
 						  </div>
+						</div>
 						<%} else out.print("<div class='ProtectedContent'>"+_ctx.appRes("UIPortlet.label.protectedContent")+"</div>");%>
 				</div>
 				
