@@ -55,16 +55,16 @@
 						<div class="CONTROL-CONTAINER CONTROL-BLOCK UIInfoBar">
 							<%/*Begin InfoBar*/%>
 							<div class="BlueRoundedStyle ClearFix">
-								<div class="DragControlArea" title="<%=_ctx.appRes("UIContainer.tooltip.drag")%>" onmousedown="eXo.portal.PortalDragDrop.init.call(this,event);"><span></span></div>
+								<div class="DragControlArea" title="<%=_ctx.appRes("UITableColumnContainer.title.DragControlArea")%>" onmousedown="eXo.portal.PortalDragDrop.init.call(this,event);"><span></span></div>
 								<% 
 									String strTitle = uicomponent.getTitle() != null ?
 												ExpressionUtil.getExpressionValue(res, uicomponent.getTitle()) :
-												_ctx.appRes("UIContainer.title.Container");
+												_ctx.appRes("UITableColumnContainer.title.Container");
 								%>
 								<div class="ContainerIcon DefaultContainer16x16Icon"><%=hasPermission ? strTitle : _ctx.appRes("UIPortlet.label.protectedContent")%></div>
 								<%if(hasPermission) {%>
-									<a href="<%=uicomponent.event("EditContainer","$uicomponent.id")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditIcon" title="<%=_ctx.appRes("UIContainer.tooltip.editContainer")%>"></a>
-									<a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeleteIcon" title="<%=_ctx.appRes("UIContainer.tooltip.closeContainer")%>"></a>
+									<a href="<%=uicomponent.event("EditContainer","$uicomponent.id")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditIcon" title="<%=_ctx.appRes("UITableColumnContainer.tooltip.editContainer")%>"></a>
+									<a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeleteIcon" title="<%=_ctx.appRes("UITableColumnContainer.tooltip.closeContainer")%>"></a>
 								<%}%>
 					</div>
 					<%/*End InfoBar*/ %>

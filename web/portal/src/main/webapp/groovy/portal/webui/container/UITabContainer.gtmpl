@@ -84,12 +84,12 @@
 															                  <div class="PopupCategoryMC">
 															                     <% if (!tabState.equals(org.exoplatform.portal.webui.container.UITabContainer.FIRST_TAB)) {%>
 															                     <a class="CategoryItem">
-															                        <div class="CategoryItemLabel" onclick="$moveLeftAction"><%= _ctx.appRes("UITabContainer.label.moveLeft") %></div>
+															                        <div class="CategoryItemLabel" onclick="$moveLeftAction;eXo.portal.UIPortal.changeComposerSaveButton()"><%= _ctx.appRes("UITabContainer.label.moveLeft") %></div>
 															                     </a>
 															                     <% } %>
 															                     <% if (!tabState.equals(org.exoplatform.portal.webui.container.UITabContainer.LAST_TAB)) { %>															                      
 															                     <a class="CategoryItem">
-															                        <div class="CategoryItemLabel" onclick="$moveRightAction"><%= _ctx.appRes("UITabContainer.label.moveRight") %></div>
+															                        <div class="CategoryItemLabel" onclick="$moveRightAction;eXo.portal.UIPortal.changeComposerSaveButton()"><%= _ctx.appRes("UITabContainer.label.moveRight") %></div>
 															                     </a>
 															                     <% } %>
 															                  </div>
@@ -120,7 +120,7 @@
 						<% String addTabLink = uicomponent.event("AddTab"); 
 						   if (uicomponent.isShowEditControl()) {
 						%>
-						   <div class="AddTab" onclick="$addTabLink">
+						   <div class="AddTab" onclick="$addTabLink;eXo.portal.UIPortal.changeComposerSaveButton()">
 						      <span></span>
 						   </div>
 						<% } %>	 

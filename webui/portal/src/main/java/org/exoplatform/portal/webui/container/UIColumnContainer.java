@@ -79,10 +79,7 @@ public class UIColumnContainer extends UIContainer
          Util.showComponentLayoutMode(uiSelectedColumn.getClass());
 
          PortalRequestContext pcontext = (PortalRequestContext) event.getRequestContext();
-         UIPortalApplication uiPortalApp = uiParent.getAncestorOfType(UIPortalApplication.class);
-         UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-         pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         pcontext.ignoreAJAXUpdateOnPortlets(true);
+         pcontext.addUIComponentToUpdateByAjax(uiParent);
       }
 
    }

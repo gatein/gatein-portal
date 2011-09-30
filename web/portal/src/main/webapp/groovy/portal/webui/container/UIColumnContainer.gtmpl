@@ -73,10 +73,10 @@
 													<div class="UIPopupCategory" style="display: none;">
 														<div class="PopupCategoryDecorator">
 		
-															<a class="CategoryItem" href="<%= uicomponent.event("InsertColumn", org.exoplatform.portal.webui.container.UIColumnContainer.INSERT_BEFORE) %>"  title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertLeft") %>">
+															<a class="CategoryItem" href="<%= uicomponent.event("InsertColumn", org.exoplatform.portal.webui.container.UIColumnContainer.INSERT_BEFORE) %>;eXo.portal.UIPortal.changeComposerSaveButton()"  title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertLeft") %>">
 																<div class="CategoryItemLabel"><%= _ctx.appRes("UIColumnContainer.label.insertLeft") %></div>
 															</a>
-															<a class="CategoryItem" href="<%= uicomponent.event("InsertColumn", org.exoplatform.portal.webui.container.UIColumnContainer.INSERT_AFTER) %>"  title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertRight") %>">
+															<a class="CategoryItem" href="<%= uicomponent.event("InsertColumn", org.exoplatform.portal.webui.container.UIColumnContainer.INSERT_AFTER) %>;eXo.portal.UIPortal.changeComposerSaveButton()"  title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertRight") %>">
 																<div class="CategoryItemLabel"><%= _ctx.appRes("UIColumnContainer.label.insertRight") %></div>
 															</a>
 
