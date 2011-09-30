@@ -23,7 +23,8 @@
 <Module>
 <ModulePrefs title="RSS Reader" title_url="http://www.exoplatform.com" directory_title="RSS Reader" 
 	description="RSS Reader"
-	thumbnail="images/rssAggregator.png">
+	thumbnail="images/rssAggregator.png"
+	height="229">
 <Require feature="dynamic-height" />
 <Require feature="setprefs"/>
 <Require feature="settitle"/>
@@ -35,7 +36,7 @@
 <link rel="stylesheet" type="text/css" href="style.css"></link>
 
 <script type="text/javascript" src="script.js"></script>
-<div id="feedContainer" style="height:229px;overflow:auto;"></div>
+<div id="feedContainer" style="height:auto;overflow:auto;"></div>
 
 <script type="text/javascript">
 // Get userprefs
