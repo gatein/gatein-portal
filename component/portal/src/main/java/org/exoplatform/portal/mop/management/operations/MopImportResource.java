@@ -96,18 +96,17 @@ public class MopImportResource implements OperationHandler
       DescriptionService descriptionService = operationContext.getRuntimeContext().getRuntimeComponent(DescriptionService.class);
       if (descriptionService == null) throw new OperationException(operationName, "Description service was null");
 
-      ImportMode importMode = ImportMode.MERGE;
       String mode = operationContext.getAttributes().getValue("importMode");
-      if (mode != null)
+      if (mode == null || "".equals(mode)) mode = "merge";
+
+      ImportMode importMode;
+      try
       {
-         try
-         {
-            importMode = ImportMode.valueOf(mode.trim().toUpperCase());
-         }
-         catch (Exception e)
-         {
-            throw new OperationException(operationName, "Unknown importMode " + mode);
-         }
+         importMode = ImportMode.valueOf(mode.trim().toUpperCase());
+      }
+      catch (Exception e)
+      {
+         throw new OperationException(operationName, "Unknown importMode " + mode);
       }
 
       Map<SiteKey, MopImport> importMap = new HashMap<SiteKey, MopImport>();
