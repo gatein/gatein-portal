@@ -146,7 +146,6 @@ public class UIContainerForm extends UIFormTabPane
          pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
          pcontext.ignoreAJAXUpdateOnPortlets(true);
-         Util.showComponentLayoutMode(UIContainer.class);
       }
    }
 }

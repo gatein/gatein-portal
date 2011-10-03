@@ -1,6 +1,7 @@
 <%	
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.commons.utils.ExpressionUtil;	
+	import org.exoplatform.portal.webui.util.Util;
 	
 	def rcontext = _ctx.getRequestContext(); 
 	ResourceBundle res = rcontext.getApplicationResourceBundle(); 
@@ -33,7 +34,8 @@
 		}
 	}
 	
-	String id = uicomponent.getId();
+	String id = uicomponent.getId();	
+	def modeState = Util.getUIPortalApplication().getModeState();
 %>
 <% if(children != null && children.size() > 0) { %>
 <div class="UITabContainer" id="$id">
@@ -62,7 +64,7 @@
 										<div class="LeftTab">
 											<div class="RightTab">
 									 				<%
-														if(uiChild.isShowEditControl()){
+														if(modeState > 0){
 															String actionLink = uicomponent.event("EditContainer", "$uiChild.id") - "javascript:";
 															String showCategory = "eXo.webui.UIPopupSelectCategory.show(this, event);"
 															String moveLeftAction = uicomponent.event("MoveLeft", tabId);
@@ -118,7 +120,7 @@
 							}
 						%>	
 						<% String addTabLink = uicomponent.event("AddTab"); 
-						   if (uicomponent.isShowEditControl()) {
+						   if (modeState > 0) {
 						%>
 						   <div class="AddTab" onclick="$addTabLink;eXo.portal.UIPortal.changeComposerSaveButton()">
 						      <span></span>

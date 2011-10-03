@@ -76,8 +76,6 @@ public class UIColumnContainer extends UIContainer
             UIColumnContainer.insertColumn(uiSelectedColumn, false);
          }
 
-         Util.showComponentLayoutMode(uiSelectedColumn.getClass());
-
          PortalRequestContext pcontext = (PortalRequestContext) event.getRequestContext();
          pcontext.addUIComponentToUpdateByAjax(uiParent);
       }

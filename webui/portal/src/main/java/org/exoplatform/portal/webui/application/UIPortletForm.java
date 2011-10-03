@@ -403,7 +403,6 @@ public class UIPortletForm extends UIFormTabPane
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
          pcontext.ignoreAJAXUpdateOnPortlets(true);
-         Util.showComponentLayoutMode(UIPortlet.class);
       }
    }
 
@@ -425,7 +424,6 @@ public class UIPortletForm extends UIFormTabPane
          uiMaskWorkspace.setWindowSize(-1, -1);
          pcontext.addUIComponentToUpdateByAjax(uiMaskWorkspace);
          pcontext.ignoreAJAXUpdateOnPortlets(true);
-         Util.showComponentLayoutMode(UIPortlet.class);
       }
    }
 

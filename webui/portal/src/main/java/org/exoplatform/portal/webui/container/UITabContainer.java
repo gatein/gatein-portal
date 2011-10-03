@@ -169,7 +169,6 @@ public class UITabContainer extends UIContainer
                child.setRendered(false);
                newTabContainer.setRendered(true);
                newTabContainer.setId(String.valueOf(newTabContainer.hashCode()));
-               newTabContainer.setShowEditControl(true);
                pcontext.addUIComponentToUpdateByAjax(container);
                return;
             }

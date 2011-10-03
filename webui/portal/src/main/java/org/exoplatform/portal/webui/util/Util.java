@@ -71,39 +71,6 @@ public class Util
       return getUIPortalApplication().findFirstComponentOfType(UIPortalToolPanel.class);
    }
 
-   private static void setShowEditControl(UIComponent uiComponent, Class clazz)
-   {
-      if (uiComponent == null)
-         return;
-      if (uiComponent instanceof UIPortalComponent)
-      {
-         UIPortalComponent uiContainer = (UIPortalComponent)uiComponent;
-         if (clazz.isInstance(uiContainer))
-         {
-            uiContainer.setShowEditControl(true);
-         }
-         else
-         {
-            uiContainer.setShowEditControl(false);
-         }
-      }
-      if (uiComponent instanceof org.exoplatform.webui.core.UIContainer)
-      {
-         List<UIComponent> children = ((org.exoplatform.webui.core.UIContainer)uiComponent).getChildren();
-         for (UIComponent comp : children)
-            setShowEditControl(comp, clazz);
-         return;
-      }
-
-      if (uiComponent instanceof UIComponentDecorator)
-      {
-         UIComponentDecorator uiDecorator = (UIComponentDecorator)uiComponent;
-         if (uiDecorator.getUIComponent() == null)
-            return;
-         setShowEditControl(uiDecorator.getUIComponent(), clazz);
-      }
-   }
-
    /**
     * View component on UIWorkspaceWorking
     * $uicomp : current component on UIWorkspaceWorking
@@ -221,15 +188,9 @@ public class Util
       if (uiParent == null)
          return;
       String layoutMode = clazz.getSimpleName();
-      setShowEditControl(uiParent, clazz);
 
       PortalRequestContext context = Util.getPortalRequestContext();
-      if (uiParent instanceof UIPortal)
-      {
-         context.getJavascriptManager().addCustomizedOnLoadScript(
-            "eXo.portal.UIPortal.showLayoutModeForPortal('" + layoutMode + "');");
-      }
-      else
+      if (uiParent instanceof UIPage)
       {
          context.getJavascriptManager().addCustomizedOnLoadScript(
             "eXo.portal.UIPortal.showLayoutModeForPage('" + layoutMode + "');");
@@ -242,25 +203,15 @@ public class Util
          return;
       UIPortalApplication portalApp = getUIPortalApplication();
       UIEditInlineWorkspace uiEditWS = portalApp.findFirstComponentOfType(UIEditInlineWorkspace.class);
-      UIContainer uiParent = null;
 
       UIComponent uiComponent = uiEditWS.getUIComponent();
       if (uiComponent instanceof UIPortal)
       {
          UIPortal uiPortal = (UIPortal)uiComponent;
          uiPortal.setMaximizedUIComponent(null);
-         uiParent = uiPortal;
       }
-      else
-      {
-         UIPortalToolPanel uiPortalToolPanel = getUIPortalToolPanel();
-         UIPage uiPage = uiPortalToolPanel.findFirstComponentOfType(UIPage.class);
-         uiParent = uiPage;
-      }
-      if (uiParent == null)
-         return;
+
       String layoutMode = clazz.getSimpleName();
-      setShowEditControl(uiParent, clazz);
 
       PortalRequestContext context = Util.getPortalRequestContext();
       context.getJavascriptManager().addCustomizedOnLoadScript(

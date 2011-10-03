@@ -47,8 +47,6 @@ public class UIPortalComponent extends UIContainer
 
    private String[] accessPermissions = {UserACL.EVERYONE};
 
-   private boolean showEditControl_ = false;
-
    protected int mode_ = COMPONENT_VIEW_MODE;
 
    final static public int COMPONENT_VIEW_MODE = 1;
@@ -132,16 +130,6 @@ public class UIPortalComponent extends UIContainer
    public void setTitle(String s)
    {
       title_ = s;
-   }
-
-   public boolean isShowEditControl()
-   {
-      return showEditControl_;
-   }
-
-   public void setShowEditControl(boolean show)
-   {
-      showEditControl_ = show;
    }
 
    public String getName()

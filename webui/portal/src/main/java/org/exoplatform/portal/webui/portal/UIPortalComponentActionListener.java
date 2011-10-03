@@ -135,7 +135,6 @@ public class UIPortalComponentActionListener
                }
             }
          }
-         Util.showComponentLayoutMode(uiComponentTobeRemoved.getClass());
 
          PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
 
@@ -333,7 +332,6 @@ public class UIPortalComponentActionListener
                   uiPortlet.setState(new PortletState(state, applicationType));
                }
                uiPortlet.setPortletInPortal(uiTarget instanceof UIPortal);
-               uiPortlet.setShowEditControl(true);
                
                //TODO Wait to fix issue EXOGTN-213 and then
                //we should get "showInfobar" from current UI portal instead of Storage service
