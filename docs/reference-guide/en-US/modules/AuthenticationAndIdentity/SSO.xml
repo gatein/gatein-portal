@@ -104,8 +104,8 @@
       | local authentication strategy.  You might accomplish this by coding a new such handler and declaring
       | edu.someschool.its.cas.MySpecialHandler here, or you might use one of the handlers provided in the adaptors modules.
       +--&#62;
-     &#60;bean
-        class=&#34;org.jasig.cas.authentication.handler.support.SimpleTestUsernamePasswordAuthenticationHandler&#34; /&#62;
+     <emphasis role="bold">&#60;bean
+        class=&#34;org.jasig.cas.authentication.handler.support.SimpleTestUsernamePasswordAuthenticationHandler&#34; /&#62;</emphasis>
    &#60;/list&#62;
  &#60;/property&#62;
 </programlisting>
@@ -143,11 +143,11 @@
       | Note: Modify the Plugin Configuration based on the actual information of a GateIn instance.
       | The instance can be anywhere on the internet...Not necessarily on localhost where CAS is running 
       +--&#62;
-     &#60;bean class=&#34;org.gatein.sso.cas.plugin.AuthenticationPlugin&#34;&#62;
+     <emphasis role="bold">&#60;bean class=&#34;org.gatein.sso.cas.plugin.AuthenticationPlugin&#34;&#62;
         &#60;property name=&#34;gateInHost&#34;&#62;&#60;value&#62;localhost&#60;/value&#62;&#60;/property&#62;
         &#60;property name=&#34;gateInPort&#34;&#62;&#60;value&#62;8080&#60;/value&#62;&#60;/property&#62;
         &#60;property name=&#34;gateInContext&#34;&#62;&#60;value&#62;portal&#60;/value&#62;&#60;/property&#62;
-     &#60;/bean&#62;
+     &#60;/bean&#62;</emphasis>
    &#60;/list&#62;
  &#60;/property&#62;
 </programlisting>
@@ -194,7 +194,21 @@
 					</step>
 				</procedure>
 			</section>
+			<note>
+				<para>
+				  By default on logout the CAS server will display the CAS logout page with a link to return to the portal. To make the CAS server redirect to the portal page after a logout, modify the 
+                                  <filename>cas.war/WEB-INF/cas-servlet.xml</filename> to include the follow line :
+				</para>
+                                <programlisting>
+		&#60;bean id=&#34;logoutController&#34; class=&#34;org.jasig.cas.web.LogoutController&#34;
+                  p:centralAuthenticationService-ref=&#34;centralAuthenticationService&#34;
+                  p:logoutView=&#34;casLogoutView&#34;
+                  p:warnCookieGenerator-ref=&#34;warnCookieGenerator&#34;
+                  p:ticketGrantingTicketCookieGenerator-ref=&#34;ticketGrantingTicketCookieGenerator&#34;
+                <emphasis role="bold">p:followServiceRedirects=&#34;true&#34;/&#62;</emphasis>
 
+				</programlisting>
+			</note>
 		</section>
 		
 		<section id="sect-Reference_Guide-CAS_Central_Authentication_Service-Setup_the_CAS_client">
@@ -319,13 +333,12 @@ realmName=gatein-domain;
 		  <!--
 		      If casRenewTicket param value of InitiateLoginServlet is:  not specified or false
 		  -->
-		  <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/private/classic</param-value>
+		  <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/initiatessologin</param-value>
 		  <!--
 		      If casRenewTicket param value of InitiateLoginServlet is : true
 		  -->
 		  <!--
-		  <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/private
-		  /classic&amp;renew=true</param-value>      		  
+		  <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/initiatessologin&amp;renew=true</param-value>      		  
 		  -->
 		</init-param>
 	</filter>
@@ -337,7 +350,27 @@ realmName=gatein-domain;
 		  <param-name>LOGOUT_URL</param-name>                                                                                                
 		  <param-value>http://localhost:8888/cas/logout</param-value>                                                                                                         
 		</init-param>                                                                                                                              
-	</filter>   
+	</filter>
+	<filter>
+		<filter-name>InitiateLoginFilter</filter-name>
+		<filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
+		<init-param>
+		  <param-name>ssoServerUrl</param-name>
+		  <param-value>http://localhost:8888/cas</param-value>
+		</init-param>    
+		<init-param>
+		  <param-name>casRenewTicket</param-name>
+		  <param-value>false</param-value>
+		</init-param>
+		<init-param>
+		  <param-name>casServiceUrl</param-name>
+		  <param-value>http://localhost:8080/portal/initiatessologin</param-value>
+		</init-param>
+		<init-param>
+		  <param-name>loginUrl</param-name>
+		  <param-value>http://localhost:8080/portal/dologin</param-value>
+		</init-param>
+	</filter>
 	
 	<!-- Mapping the filters at the very top of the filter chain -->
 	<filter-mapping>
@@ -348,25 +381,11 @@ realmName=gatein-domain;
 	  <filter-name>CASLogoutFilter</filter-name>
 	  <url-pattern>/*</url-pattern>
 	</filter-mapping>
+        <filter-mapping>
+          <filter-name>InitiateLoginFilter</filter-name>
+          <url-pattern>/initiatessologin</url-pattern>
+        </filter-mapping>
 ]]>  
-</programlisting>
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-							Replace the <literal>InitiateLoginServlet</literal> declaration in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename> with:
-<programlisting>&#60;servlet&#62;
-  &#60;servlet-name&#62;InitiateLoginServlet&#60;/servlet-name&#62;
-  &#60;servlet-class&#62;org.gatein.sso.agent.GenericSSOAgent&#60;/servlet-class&#62;
-  &#60;init-param&#62;
-    &#60;param-name&#62;ssoServerUrl&#60;/param-name&#62;
-    &#60;param-value&#62;http://localhost:8888/cas&#60;/param-value&#62;
-  &#60;/init-param&#62;    
-  &#60;init-param&#62;
-    &#60;param-name&#62;casRenewTicket&#60;/param-name&#62;
-    &#60;param-value&#62;false&#60;/param-value&#62;
-  &#60;/init-param&#62;
-&#60;/servlet&#62;
 </programlisting>
 						</para>
 					</listitem>
