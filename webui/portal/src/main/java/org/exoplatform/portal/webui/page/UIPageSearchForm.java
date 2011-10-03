@@ -29,6 +29,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
+import org.exoplatform.webui.form.validator.ExpressionValidator;
 
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class UIPageSearchForm extends UIForm
    {
       UIFormInputSet uiQuickSearchSet = new UIFormInputSet(QUICK_SEARCH_SET);
       uiQuickSearchSet.addUIFormInput(new UIFormStringInput("pageTitle", "pageTitle", null));
-      uiQuickSearchSet.addUIFormInput(new UIFormStringInput("siteName", "siteName", null));
+      uiQuickSearchSet.addUIFormInput(new UIFormStringInput("siteName", "siteName", null).addValidator(ExpressionValidator.class, "[^\\'\"]*", "UISearchForm.msg.empty"));
       uiQuickSearchSet.addUIFormInput(new UIFormSelectBox("searchOption", null, null));
       addChild(uiQuickSearchSet);
    }

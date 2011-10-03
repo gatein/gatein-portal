@@ -21,7 +21,7 @@
  * @author Nguyen Ba Uoc
  */
 // 4test
-if (eXo.require) eXo.require('eXo.core.html.HTMLEntities');
+//if (eXo.require) eXo.require('eXo.core.html.HTMLEntities');
 
 function HTMLUtil() {
   this.entities = eXo.core.html.HTMLEntities ;

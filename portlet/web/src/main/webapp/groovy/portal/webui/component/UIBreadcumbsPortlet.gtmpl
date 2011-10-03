@@ -3,7 +3,8 @@
 	import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.portal.application.PortalRequestContext;
-	import org.gatein.common.text.EntityEncoder;
+  import org.gatein.common.text.EntityEncoder;
+	import org.exoplatform.commons.utils.HTMLEntityEncoder;
   import org.exoplatform.web.url.PortalURL;
   import org.exoplatform.web.url.navigation.NavigationResource;
  

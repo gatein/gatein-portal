@@ -19,8 +19,9 @@
 
 package org.exoplatform.webui.form;
 
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
+import org.exoplatform.webui.application.WebuiRequestContext;
 
 import java.io.Writer;
 
@@ -88,7 +89,6 @@ public class UIFormStringInput extends UIFormInputBase<String>
       return maxLength;
    }
 
-   @SuppressWarnings("unused")
    public void decode(Object input, WebuiRequestContext context) throws Exception
    {
       String val = (String)input;
@@ -101,6 +101,7 @@ public class UIFormStringInput extends UIFormInputBase<String>
 
    public void processRender(WebuiRequestContext context) throws Exception
    {
+      String value = getValue();
       Writer w = context.getWriter();
       w.write("<input name='");
       w.write(getName());
@@ -112,10 +113,11 @@ public class UIFormStringInput extends UIFormInputBase<String>
       w.write(" id='");
       w.write(getId());
       w.write('\'');
-      if (value_ != null && value_.length() > 0)
+      if (value != null && value.length() > 0)
       {
+         value = HTMLEntityEncoder.getInstance().encodeHTMLAttribute(value);
          w.write(" value='");
-         w.write(encodeValue(value_).toString());
+         w.write(value);
          w.write('\'');
       }
       if (maxLength > 0)
@@ -127,35 +129,5 @@ public class UIFormStringInput extends UIFormInputBase<String>
       w.write("/>");
       if (this.isMandatory())
          w.write(" *");
-   }
-
-   private StringBuilder encodeValue(String value)
-   {
-      char[] chars = {'\'', '"'};
-      String[] refs = {"&#39;", "&#34;"};
-      StringBuilder builder = new StringBuilder(value);
-      int idx;
-      for (int i = 0; i < chars.length; i++)
-      {
-         idx = indexOf(builder, chars[i], 0);
-         while (idx > -1)
-         {
-            builder = builder.replace(idx, idx + 1, refs[i]);
-            idx = indexOf(builder, chars[i], idx);
-         }
-      }
-      return builder;
-   }
-
-   private int indexOf(StringBuilder builder, char c, int from)
-   {
-      int i = from;
-      while (i < builder.length())
-      {
-         if (builder.charAt(i) == c)
-            return i;
-         i++;
-      }
-      return -1;
    }
 }

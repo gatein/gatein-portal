@@ -42,6 +42,7 @@ import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PortalContainerInfo;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.common.text.EntityEncoder;
 
 public class UploadService
 {
@@ -85,7 +86,6 @@ public class UploadService
     *           the webapp's {@link javax.servlet.http.HttpServletRequest}
     * @throws FileUploadException
     */
-   @SuppressWarnings("unchecked")
    public void createUploadResource(HttpServletRequest request) throws FileUploadException
    {
       String uploadId = request.getParameter("uploadId");
@@ -122,8 +122,10 @@ public class UploadService
       if (fileName == null)
          fileName = uploadId;
       fileName = fileName.substring(fileName.lastIndexOf('\\') + 1);
+      fileName = EntityEncoder.FULL.encode(fileName);
       String storeLocation = uploadLocation_ + "/" + uploadId + "." + fileName;
 
+      
       // commons-fileupload will store the temp file with name *.tmp
       // we need to rename it to our desired name
       fileItem.getStoreLocation().renameTo(new File(storeLocation));

@@ -132,6 +132,16 @@
 			<js-path>/javascript/eXo/core/DOMUtil.js</js-path>
 			<js-priority>1</js-priority>
 		</param>
+        <param>
+            <js-module>eXo.core.HTMLUtil</js-module>
+            <js-path>/javascript/eXo/core/HTMLUtil.js</js-path>
+            <js-priority>2</js-priority>
+        </param>
+        <param>
+            <js-module>eXo.core.html.HTMLEntities</js-module>
+            <js-path>/javascript/eXo/core/html/HTMLEntities.js</js-path>
+            <js-priority>1</js-priority>
+        </param>
 		<param>
 			<js-module>eXo.core.Browser</js-module>
 			<js-path>/javascript/eXo/core/Browser.js</js-path>

@@ -20,6 +20,7 @@
 package org.exoplatform.webui.core;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.exoplatform.util.ReflectionUtil;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -117,6 +118,11 @@ public class UITree extends UIComponent
     * A right click popup menu
     */
    private UIRightClickPopupMenu uiPopupMenu_;
+   
+   /**
+    * Encode the value before rendering or not
+    */
+   private boolean escapeHTML_ = false;
 
    public Object getFieldValue(Object bean, String field) throws Exception
    {
@@ -260,6 +266,16 @@ public class UITree extends UIComponent
          uiPopupMenu_.setParent(this);
    }
 
+   public void setEscapeHTML(boolean escape)
+   {
+      escapeHTML_ = escape;
+   }
+   
+   public boolean getEscapeHTML()
+   {
+      return escapeHTML_;
+   }
+
    public String event(String name, String beanId) throws Exception
    {
       UIForm uiForm = getAncestorOfType(UIForm.class);
@@ -305,6 +321,12 @@ public class UITree extends UIComponent
       {
          fieldValue = fieldValue.substring(0, getMaxTitleCharacter() - 3) + "...";
       }
+      
+      if (escapeHTML_)
+      {
+         fieldValue = fieldValue != null ? HTMLEntityEncoder.getInstance().encode(fieldValue) : fieldValue; 
+      }
+      
       if (nodeIcon.equals(expandIcon))
       {
          builder.append(" <div class=\"").append(nodeIcon).append("\" onclick=\"").append(actionLink).append("\">");

@@ -22,9 +22,9 @@ package org.exoplatform.applicationregistry.webui.component;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -36,6 +36,7 @@ import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.NotHTMLTagValidator;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
@@ -74,7 +75,7 @@ public class UICategoryForm extends UIFormTabPane
          MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30).addValidator(
          IdentifierValidator.class));
       uiCategorySetting.addUIFormInput(new UIFormStringInput(FIELD_DISPLAY_NAME, FIELD_DISPLAY_NAME, null)
-         .addValidator(StringLengthValidator.class, 3, 30));
+         .addValidator(StringLengthValidator.class, 3, 30).addValidator(NotHTMLTagValidator.class));
       uiCategorySetting.addUIFormInput(new UIFormTextAreaInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null)
          .addValidator(StringLengthValidator.class, 0, 255));
       addChild(uiCategorySetting);

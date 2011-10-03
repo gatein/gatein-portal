@@ -2,11 +2,12 @@
 	import java.util.Iterator;
 	import java.util.Map.Entry;
 	import org.exoplatform.applicationregistry.webui.component.UICategorySelector;
-        import org.gatein.common.text.EntityEncoder;
+	import org.gatein.common.text.EntityEncoder;
+  import org.exoplatform.commons.utils.HTMLEntityEncoder;
     
 	boolean selectorRender = uicomponent.getChild(UICategorySelector.class).isRendered();
 	String categoryNames = uicomponent.getCategorieNames();
-        EntityEncoder encoder = EntityEncoder.FULL;
+        EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 	def portlet = uicomponent.getPortlet();
 	def portletPreferences = portlet.getPortletPreferences();
 	String srcBG = "/" + portlet.getPortletGroup() + "/skin/DefaultSkin/portletIcons/" + portlet.getName() + ".png";

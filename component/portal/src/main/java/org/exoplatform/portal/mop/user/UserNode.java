@@ -20,12 +20,12 @@
 package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.commons.utils.ExpressionUtil;
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeState;
-import org.gatein.common.text.EntityEncoder;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -230,7 +230,7 @@ public class UserNode
    {
       if (encodedResolvedLabel == null)
       {
-         encodedResolvedLabel = EntityEncoder.FULL.encode(getResolvedLabel());
+         encodedResolvedLabel = HTMLEntityEncoder.getInstance().encode(getResolvedLabel());
       }
       return encodedResolvedLabel;
    }

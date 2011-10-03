@@ -43,7 +43,7 @@ UIUpload.prototype.initUploadEntry = function(uploadId, isAutoUpload) {
 		//eXo.webui.UIUpload.listLimitMB.push();
 		this.createUploadEntry(uploadId, isAutoUpload);
 	} else if(response.upload[uploadId].percent == 100)  {
-		this.showUploaded(uploadId, decodeURIComponent(response.upload[uploadId].fileName));
+		this.showUploaded(uploadId, (response.upload[uploadId].fileName));
 	} 
 };
 
@@ -97,11 +97,10 @@ UIUpload.prototype.refeshProgress = function(elementId) {
   if(list.length < 1) return;
   var url = eXo.env.server.context + "/upload?" ;
 	url += "action=progress" ;
-//  var url =  eXo.env.server.context + "/upload?action=progress";  
+//  var url =  eXo.env.server.context + "/upload?action=progress";
   for(var i = 0; i < list.length; i++){
     url = url + "&uploadId=" + list[i];
   }
-
   var responseText = ajaxAsyncGetRequest(url, false);
   if(list.length > 0) {
     setTimeout("eXo.webui.UIUpload.refeshProgress('" + elementId + "');", 1000); 
@@ -111,16 +110,15 @@ UIUpload.prototype.refeshProgress = function(elementId) {
   try {
     eval("response = "+responseText);
   }catch(err) {
-    return;  
+    return;
   }
-  
+
+
   for(id in response.upload) {
     var container = parent.document.getElementById(elementId);
   	if (response.upload[id].status == "failed") {
   		this.abortUpload(id);
   		var message = eXo.core.DOMUtil.findFirstChildByClass(container, "div", "LimitMessage").innerHTML ;
-  		alert(message.replace("{0}", response.upload[id].size)) ;
-//  		alert(response.upload[id].message);
   		continue;
   	}
     var element = document.getElementById(id+"ProgressIframe");
@@ -129,9 +127,11 @@ UIUpload.prototype.refeshProgress = function(elementId) {
     var blueProgressBar = eXo.core.DOMUtil.findFirstChildByClass(progressBarMiddle, "div", "BlueProgressBar") ;
     var progressBarLabel = eXo.core.DOMUtil.findFirstChildByClass(blueProgressBar, "div", "ProgressBarLabel") ;
     blueProgressBar.style.width = percent + "%" ;
+
     progressBarLabel.innerHTML = percent + "%" ;
-    
-    if(percent == 100) this.showUploaded(id, "");
+    if(percent == 100) {
+       this.showUploaded(id, response.upload[id].fileName);
+    }
   }
   
   if(eXo.webui.UIUpload.listUpload.length < 1) return;
@@ -160,7 +160,7 @@ UIUpload.prototype.showUploaded = function(id, fileName) {
   var selectFileFrame = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "SelectFileFrame") ;
   selectFileFrame.style.display = "block" ;
   var fileNameLabel = eXo.core.DOMUtil.findFirstDescendantByClass(selectFileFrame, "div", "FileNameLabel") ;
-  if(fileName != null) fileNameLabel.innerHTML += " " + fileName;
+  if(fileName != null) fileNameLabel.innerHTML = decodeURIComponent(fileName);
   var progressBarFrame = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "ProgressBarFrame") ;
   progressBarFrame.style.display = "none" ;
   var tmp = element.parentNode;
@@ -246,18 +246,6 @@ UIUpload.prototype.upload = function(clickEle, id) {
 
   var file  = DOMUtil.findDescendantById(form, "file");
   if(file.value == null || file.value == '') return;  
-  var infoUploaded = eXo.core.DOMUtil.findFirstDescendantByClass(container, "div", "FileNameLabel") ;
-  var temp = file.value;
-
-  if (temp.indexOf('/') != -1) {
-    temp = temp.substr((temp.lastIndexOf('/') + 1), temp.length - 1) ;
-  }
-  
-  if (temp.indexOf('\\') != -1) {
-    temp = temp.substr((temp.lastIndexOf('\\') + 1), temp.length - 1) ;
-  }
-  
-  infoUploaded.innerHTML = temp ;
 
   var progressBarFrame = DOMUtil.findFirstDescendantByClass(container, "div", "ProgressBarFrame") ;
   progressBarFrame.style.display = "block" ;  

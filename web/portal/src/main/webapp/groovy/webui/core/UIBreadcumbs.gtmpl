@@ -2,7 +2,8 @@
 	import java.util.List;
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.portal.application.PortalRequestContext;
-	import org.gatein.common.text.EntityEncoder;
+  import org.gatein.common.text.EntityEncoder;
+	import org.exoplatform.commons.utils.HTMLEntityEncoder;
  
 	List list = uicomponent.getPath();
 	def styleBread = uicomponent.getBreadcumbsStyle();
@@ -27,7 +28,7 @@
 								actionLink = uicomponent.event("SelectPath", localPath.getId());
 							else
 								actionLink = portalURI + localPath.getId();	
-							EntityEncoder entityEncoder = EntityEncoder.FULL;
+							EntityEncoder entityEncoder = HTMLEntityEncoder.getInstance();
 							String label = entityEncoder.encode(localPath.label) 
 							if(i == list.size()-1) note = "Selected";
 				%>

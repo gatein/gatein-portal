@@ -152,9 +152,13 @@ public class UIPageBrowser extends UIContainer
       String title = titleInput.getValue();
       String ownerType = select.getValue();      
       if (title != null && title != "")
-         query.setTitle(title);
+      {
+         query.setTitle(title.trim());
+      }
       if (siteName != null && siteName != "")
-         query.setOwnerId(siteName);
+      {
+         query.setOwnerId(siteName.trim());
+      }
 
       query.setOwnerType(ownerType);
       query.setName(null);

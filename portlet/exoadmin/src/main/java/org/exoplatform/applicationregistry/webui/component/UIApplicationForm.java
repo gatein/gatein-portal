@@ -22,22 +22,20 @@ package org.exoplatform.applicationregistry.webui.component;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
-import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.webui.portal.UIPortal;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.event.MonitorEvent;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
+import org.exoplatform.webui.form.validator.NotHTMLTagValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
@@ -56,7 +54,7 @@ import java.util.Calendar;
 @Serialized
 public class UIApplicationForm extends UIForm
 {
-
+   
    private Application application_;
 
    public UIApplicationForm() throws Exception
@@ -64,9 +62,10 @@ public class UIApplicationForm extends UIForm
       addUIFormInput(new UIFormStringInput("applicationName", "applicationName", null).addValidator(
          MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30).addValidator(NameValidator.class));
       addUIFormInput(new UIFormStringInput("displayName", "displayName", null).addValidator(
-         StringLengthValidator.class, 3, 30));
-      addUIFormInput(new UIFormTextAreaInput("description", "description", null).addValidator(
-         StringLengthValidator.class, 0, 255));
+         StringLengthValidator.class, 3, 30).addValidator(NotHTMLTagValidator.class));
+      addUIFormInput(new UIFormTextAreaInput("description", "description", null)
+         .addValidator(StringLengthValidator.class, 0, 255)
+         .addValidator(NotHTMLTagValidator.class));
    }
 
    public void setValues(Application app) throws Exception

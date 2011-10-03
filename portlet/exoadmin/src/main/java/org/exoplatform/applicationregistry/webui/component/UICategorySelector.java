@@ -1,26 +1,24 @@
 package org.exoplatform.applicationregistry.webui.component;
 
-import org.apache.shindig.gadgets.Gadget;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
 import org.exoplatform.applicationregistry.webui.Util;
-import org.exoplatform.commons.utils.SerializablePageList;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
+import org.exoplatform.commons.utils.SerializablePageList;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputInfo;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormPageIterator;
-
-import org.gatein.common.text.EntityEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,7 +78,7 @@ public class UICategorySelector extends UIForm
       UIFormCheckBoxInput<Boolean> checkBoxInput;
       UIFormInputInfo uiInfo;
 
-      EntityEncoder encoder = EntityEncoder.FULL;
+      HTMLEntityEncoder encoder = HTMLEntityEncoder.getInstance();
 
       //
       ApplicationRegistryService appRegService = getApplicationComponent(ApplicationRegistryService.class);

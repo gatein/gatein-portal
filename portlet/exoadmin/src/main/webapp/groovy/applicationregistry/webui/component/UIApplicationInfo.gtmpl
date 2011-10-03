@@ -1,12 +1,13 @@
 <%
-import org.gatein.common.text.EntityEncoder;	
+import org.gatein.common.text.EntityEncoder;
+import org.exoplatform.commons.utils.HTMLEntityEncoder;	
 def application = uicomponent.getApplication();
 def category = uicomponent.getApplicationCategory();
 String name = application.getApplicationName();
 String srcBG = application.getIconURL();
 String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
 
-EntityEncoder encoder = EntityEncoder.FULL;
+EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 
 String categoryDisplayName = encoder.encode(category.getDisplayName());
 String applicationDisplayName = encoder.encode(application.getDisplayName());

@@ -1,9 +1,9 @@
 package org.exoplatform.webui.organization;
 
-import java.io.Serializable;
-
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.exoplatform.services.organization.Group;
-import org.gatein.common.text.EntityEncoder;
+
+import java.io.Serializable;
 
 public class UIGroup implements Serializable {
 
@@ -16,8 +16,7 @@ public class UIGroup implements Serializable {
 	
 	public String getEncodedLabel()
 	{
-		EntityEncoder encoder = EntityEncoder.FULL;
-		return encoder.encode(getLabel());
+		return HTMLEntityEncoder.getInstance().encode(getLabel());
 	}
 	
 	public String getLabel()

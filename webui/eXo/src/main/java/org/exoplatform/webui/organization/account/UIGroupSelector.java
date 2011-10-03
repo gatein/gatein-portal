@@ -75,6 +75,7 @@ public class UIGroupSelector extends UIContainer
       tree.setBeanIdField("id");
       //tree.setBeanLabelField("groupName");
       tree.setBeanLabelField("label");
+      tree.setEscapeHTML(true);
       uiBreadcumbs.setBreadcumbsStyle("UIExplorerHistoryPath");
    }
 

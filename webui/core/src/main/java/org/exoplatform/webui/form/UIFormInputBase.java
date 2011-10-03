@@ -19,8 +19,8 @@
 
 package org.exoplatform.webui.form;
 
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
@@ -90,7 +90,7 @@ abstract public class UIFormInputBase<T> extends UIContainer implements UIFormIn
     * Whether this field is in read only mode
     */
    protected boolean readonly_ = false;
-
+   
    public UIFormInputBase(String name, String bindingField, Class<T> typeValue)
    {
       this.name = name;
@@ -237,5 +237,4 @@ abstract public class UIFormInputBase<T> extends UIContainer implements UIFormIn
    {
       this.label = label;
    }
-
 }

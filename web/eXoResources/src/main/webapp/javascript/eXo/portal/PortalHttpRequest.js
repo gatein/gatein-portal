@@ -61,6 +61,7 @@
 * which is itself placed inside an array to provide an OO view of the
 * AJAX response
 */
+
 function PortletResponse(responseDiv) {
   var  DOMUtil = eXo.core.DOMUtil ;
   var div = eXo.core.DOMUtil.getChildrenByTagName(responseDiv, "div") ;
@@ -125,7 +126,7 @@ function PortalResponse(responseDiv) {
         this.blocksToUpdate[j] = obj ;
         
         /*
-        * handle embeded javascripts to dynamically add them to the page head
+        * handle embedded javascripts to dynamically add them to the page head
         *
         * This is needed when we refresh an entire portal page that contains some 
         * standard JSR 168 / 286 portlets with embeded <script> tag
@@ -406,6 +407,8 @@ function HttpResponseHandler(){
 	instance.executeScript = function(script) {
 	  if(script == null || script == "") return ;
 	  try {
+		var HTMLUtil = eXo.core.HTMLUtil;
+		script = HTMLUtil.entitiesDecode(script);
 	    eval(script) ;       
 	    return;
 	  } catch(err) {                  
@@ -421,7 +424,7 @@ function HttpResponseHandler(){
 		  }
 	  } 
 	} ;
-	
+
 	instance.updateHtmlHead = function(response) {
       if (!response) return;      
 		cleanHtmlHead(response);

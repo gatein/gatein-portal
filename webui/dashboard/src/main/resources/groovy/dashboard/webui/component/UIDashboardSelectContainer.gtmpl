@@ -1,11 +1,15 @@
 <% 
+  import org.gatein.common.text.EntityEncoder;
+  import org.exoplatform.commons.utils.HTMLEntityEncoder;
+
 	def uiDashboard = uicomponent.getAncestorOfType(org.exoplatform.dashboard.webui.component.UIDashboard.class);
 	if(!uiDashboard.canEdit()) return;
 		
 	def uiPopup = uicomponent.getAncestorOfType(org.exoplatform.webui.core.UIPopupWindow.class);
 	def rcontext = _ctx.getRequestContext();
 	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIDashboard.initPopup('"+uiPopup.getId()+"');");
-	
+
+	EntityEncoder encoder = HTMLEntityEncoder.getInstance();
  %>
 <div class="$uicomponent.id" id="UIDashboardSelectContainer" style="display: <%= uiDashboard.isShowSelectPopup()? "block" : "none"; %>;">
 	<div class="DashboardItemContainer ItemContainer">
@@ -21,13 +25,15 @@
 			<% List categories = uicomponent.getCategories();
 				 if(categories != null && categories.size() > 0){
 					for(category in categories){
+					   String categoryName = category.getDisplayName();
+					   categoryName = categoryName == null ? "" : encoder.encode(categoryName);
 			%>
 							<div class="GadgetCategory" id="${category.getName()}">
 								<div class="GadgetTab SelectedTab" onclick="eXo.webui.UIDashboard.onTabClick(this, 'NormalTab', 'SelectedTab')">
 									<div class="LeftCategoryTitleBar">
 										<div class="RightCategoryTitleBar">
 											<div class="MiddleCategoryTitleBar">
-												<div class="ArrowIcon" title="${category.getDisplayName()}">${category.getDisplayName()}</div>
+												<div class="ArrowIcon" title="$categoryName">$categoryName</div>
 											</div>								
 										</div>
 									</div>
@@ -40,12 +46,13 @@
 //                                              uiPopup.setWindowSize(-1, 600);
                                         
 											for(gadget in lstGadgets){
+											   String gadgetName = gadget.getDisplayName();
+											   gadgetName = gadgetName == null ? "" : encoder.encode(gadgetName);
 									%>
 													 	<div class="UIGadget SelectItem Item" id="${gadget.getId()}" style="top:0px; left:0px;">
 													 		<div class="GadgetControl">
-											 					<% def label = gadget.getDisplayName() %> 
-												 				<div class="GadgetTitle" style="cursor:move;" title="$label">
-												 					<%= (label.length() <= 23) ? label : label.substring(0, 20)+"..." %>
+												 				<div class="GadgetTitle" style="cursor:move;" title="$gadgetName">
+												 					<%= (gadgetName.length() <= 23) ? gadgetName : gadgetName.substring(0, 20)+"..." %>
 												 				</div>
 												 			</div>
 														</div>

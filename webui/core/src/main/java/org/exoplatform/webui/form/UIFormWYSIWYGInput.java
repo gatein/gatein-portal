@@ -28,11 +28,10 @@ import java.io.Writer;
  * Author : Tran The Trong
  *          trongtt@gmail.com
  * November 07, 2007
+
+ * @deprecated should use {@link org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput} instead
  */
 @Deprecated
-/**
- * Should use org.exoplatform.webui.form.wysiwyg.UIFormWYSIWYGInput
- * */
 public class UIFormWYSIWYGInput extends UIFormInputBase<String>
 {
 

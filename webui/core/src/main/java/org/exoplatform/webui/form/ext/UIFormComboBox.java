@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.form.ext;
 
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
@@ -193,6 +194,12 @@ public class UIFormComboBox extends UIFormInputBase<String>
       }
       text += "</div></div></div>";
       options = options.substring(0, options.length() - 1) + "]";
+
+      String value = getValue();
+      if (value != null)
+      {
+         value = HTMLEntityEncoder.getInstance().encode(value);
+      }
       text += "<input type='hidden'  name='" + getName() + "' id='" + getId() + "'";
       if (value_ != null && value_.trim().length() > 0)
       {

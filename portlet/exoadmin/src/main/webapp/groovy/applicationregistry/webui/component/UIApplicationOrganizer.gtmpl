@@ -1,5 +1,6 @@
-<%	
+<%
 import org.gatein.common.text.EntityEncoder;
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
 def categories = uicomponent.getCategories();
 def selectedCategory = uicomponent.getSelectedCategory();
 def apps = uicomponent.getApplications();
@@ -29,7 +30,7 @@ def selectedApp = uicomponent.getSelectedApplication();
 								cName	= category.getName();
 								displayName =category.getDisplayName();
 								if(displayName == null || displayName.length() < 1 ) displayName = cName;
-								EntityEncoder encoder = EntityEncoder.FULL;
+								EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 								displayName = encoder.encode(displayName);
 								if(selectedCategory != null && cName == selectedCategory.getName()) {
 									isSelected = true;

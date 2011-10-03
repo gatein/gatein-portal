@@ -19,9 +19,9 @@
 
 package org.exoplatform.commons.xml;
 
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.common.text.EntityEncoder;
 import org.w3c.dom.Attr;
 import org.w3c.dom.CDATASection;
 import org.w3c.dom.CharacterData;
@@ -30,12 +30,12 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import javax.xml.stream.FactoryConfigurationError;
+import java.io.IOException;
+import java.io.Writer;
+
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.IOException;
-import java.io.Writer;
 
 /**
  * An high performance and custom DOM serializer based on stax {@link XMLStreamWriter}.
@@ -173,7 +173,7 @@ public class DOMSerializer
       for(int i = 0; i < data.length(); i++)
       {
          char c = data.charAt(i);
-         String encodedValue = EntityEncoder.FULL.lookup(c);
+         String encodedValue = HTMLEntityEncoder.getInstance().lookupEntityName(c);
          
          if(encodedValue == null)
          {

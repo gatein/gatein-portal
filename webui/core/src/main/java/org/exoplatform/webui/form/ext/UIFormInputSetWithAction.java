@@ -19,7 +19,6 @@
 
 package org.exoplatform.webui.form.ext;
 
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
@@ -87,14 +86,6 @@ public class UIFormInputSetWithAction extends UIFormInputSet implements UIFormIn
    public void showActionInfo(boolean isShow)
    {
       isShowActionInfo = isShow;
-   }
-
-   /* (non-Javadoc)
-    * @see org.exoplatform.webui.form.UIFormInputSet#processRender(org.exoplatform.webui.application.WebuiRequestContext)
-    */
-   public void processRender(WebuiRequestContext context) throws Exception
-   {
-      super.processRender(context);
    }
 
    /**

@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.form;
 
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 
@@ -58,11 +59,6 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
    private String datePattern_;
 
    /**
-    * The date
-    */
-   private Date date;
-
-   /**
     * List of month's name
     */
    private String[] months_;
@@ -70,7 +66,7 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
    public UIFormDateTimeInput(String name, String bindField, Date date, boolean isDisplayTime)
    {
       super(name, bindField, String.class);
-      this.date = date;
+      setDate(date);
       setDisplayTime(isDisplayTime);
 
       WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
@@ -93,21 +89,28 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
       isDisplayTime_ = isDisplayTime;
    }
 
-   public void setCalendar(Calendar date)
+   public void setCalendar(Calendar calendar)
    {
       WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
       formatPattern(requestContext.getLocale());
+      Date date = null;
+      if (calendar != null)
+      {
+         date = calendar.getTime();
+      }
+      setDate(date);
+   }
+   
+   private void setDate(Date date)
+   {
       if (date != null)
       {
-         this.date = date.getTime();
-         value_ = dateFormat_.format(date.getTime());
+         value_ = dateFormat_.format(date);
       }
       else
       {
-         this.date = null;
          value_ = null;
       }
-
    }
 
    public Calendar getCalendar()
@@ -184,8 +187,9 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
    @SuppressWarnings("unused")
    public void decode(Object input, WebuiRequestContext context) throws Exception
    {
-      if (input != null)
+      if (input != null) {
          value_ = ((String)input).trim();
+      }
    }
 
    public void processRender(WebuiRequestContext context) throws Exception
@@ -203,27 +207,30 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
          }
       }
 
-      if (date != null)
+      String value = getValue();
+      
+      if (value != null && value.length() > 0)
       {
-         value_ = dateFormat_.format(date);
+         value = HTMLEntityEncoder.getInstance().encodeHTMLAttribute(value);
       }
-      else if (value_ == null)
+      else
       {
-         value_ = "";
+         value = "";
       }
+      
 
       JavascriptManager jsManager = context.getJavascriptManager();
       jsManager.importJavascript("eXo.webui.UICalendar");
       jsManager.addJavascript("eXo.webui.UICalendar.setFirstDayOfWeek(" + Calendar.getInstance(context.getLocale()).getFirstDayOfWeek() + ");");
       Writer w = context.getWriter();
 
-      w.write("<input type='text' onfocus='eXo.webui.UICalendar.init(this,");
+      w.write("<input type=\"text\" onfocus='eXo.webui.UICalendar.init(this,");
       w.write(String.valueOf(isDisplayTime_));
       w.write(",\"");
       w.write(getDatePattern_());
       w.write("\"");
       w.write(",\"");
-      w.write(value_.toString());
+      w.write(value);
       w.write("\"");
       w.write(",\"");
       w.write(monthNames_);
@@ -231,12 +238,9 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
       w.write(");' onkeyup='eXo.webui.UICalendar.show();' name='");
       w.write(getName());
       w.write('\'');
-      if (value_ != null && value_.length() > 0)
-      {
-         w.write(" value='");
-         w.write(value_.toString());
-         w.write('\'');
-      }
+      w.write(" value=\"");
+      w.write(value);
+      w.write('\"');
       w.write(" onclick='event.cancelBubble = true' onkeydown='eXo.webui.UICalendar.onTabOut(event)'/>");
    }
 }

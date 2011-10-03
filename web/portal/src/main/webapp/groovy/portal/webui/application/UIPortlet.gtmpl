@@ -1,8 +1,10 @@
 <%	
-	import org.exoplatform.portal.webui.page.UIPage;
-	import javax.portlet.WindowState;
-	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+	import org.exoplatform.web.application.JavascriptManager;
+  import org.gatein.common.text.EntityEncoder;
+	import org.exoplatform.commons.utils.HTMLEntityEncoder;
+
+	import javax.portlet.WindowState;
 	
 	def rcontext = _ctx.getRequestContext();
 	
@@ -20,6 +22,9 @@
 
 	WindowState windowState = uicomponent.getCurrentWindowState();
 	String portletId = uicomponent.getId();
+	EntityEncoder encoder = HTMLEntityEncoder.getInstance();
+	
+	String title = encoder.encode(uicomponent.getDisplayTitle());
 	if(uiPortalApp.isEditing()) {
 %>
 	<div class="UIPortlet <%=hasPermission?"":"ProtectedPortlet"%>" id="UIPortlet-$portletId" onmouseover="eXo.portal.UIPortal.blockOnMouseOver(event, this, true);" onmouseout="eXo.portal.UIPortal.blockOnMouseOver(event, this, false);"
@@ -35,7 +40,7 @@
 							<div class="CPortletLayoutDecorator">
 									<%
 									if(hasPermission) {
-										print uicomponent.getDisplayTitle();
+										print title;
 									} else print "<div class='ProtectedContent'>"+_ctx.appRes("UIPortlet.label.protectedContent")+"</div>";
 									%>
 							</div>
@@ -52,7 +57,6 @@
 		
 	if(portalMode != uiPortalApp.CONTAINER_BLOCK_EDIT_MODE && portalMode != uiPortalApp.APP_BLOCK_EDIT_MODE) {
 		if(uicomponent.getShowInfoBar()) {
-			String title = uicomponent.getDisplayTitle();
 			if(title == null || title.trim().length() < 1)
 				title = portletId;
 			/*Begin Window Portlet Bar*/
@@ -225,7 +229,6 @@
 								String portletIcon = uicomponent.getIcon();
 								if(portletIcon == null) portletIcon = "PortletIcon";
 								
-								String title = uicomponent.getDisplayTitle();
 								if(title.length() > 30) title = title.substring(0,27) + "...";
 							%>
 							<div class="PortletIcon $portletIcon"><%=hasPermission ? title : _ctx.appRes("UIPortlet.label.protectedContent")%></div>

@@ -1,8 +1,9 @@
 <%
 	import org.exoplatform.applicationregistry.webui.component.UICategorySelector;
-	import org.gatein.common.text.EntityEncoder;
+  import org.gatein.common.text.EntityEncoder;
+	import org.exoplatform.commons.utils.HTMLEntityEncoder;
 
-        EntityEncoder encoder = EntityEncoder.FULL;
+	EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 	def gadget = uicomponent.getGadget();
 	boolean selectorRender = uicomponent.getChild(UICategorySelector.class).isRendered();
 	String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
