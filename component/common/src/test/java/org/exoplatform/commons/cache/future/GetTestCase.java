@@ -23,6 +23,7 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -67,5 +68,33 @@ public class GetTestCase extends TestCase
          }
       }, "foo"));
       Assert.assertFalse(futureCache.data.containsKey("foo"));
+   }
+
+   public void testReentrancy()
+   {
+      final FutureMap<Callable<String>> futureCache = new FutureMap<Callable<String>>(new StringLoader());
+      String res = futureCache.get(new Callable<String>()
+      {
+         public String call() throws Exception
+         {
+            try
+            {
+               futureCache.get(new Callable<String>()
+               {
+                  public String call() throws Exception
+                  {
+                     // Should not go there
+                     throw new AssertionError();
+                  }
+               }, "foo");
+               return "fail";
+            }
+            catch (IllegalStateException expected)
+            {
+               return "pass";
+            }
+         }
+      }, "foo");
+      assertEquals("pass", res);
    }
 }

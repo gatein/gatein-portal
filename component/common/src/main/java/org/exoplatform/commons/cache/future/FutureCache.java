@@ -49,10 +49,10 @@ public abstract class FutureCache<K, V, C>
 {
 
    /** . */
-   private final Loader<K, V, C> loader;
+   final Loader<K, V, C> loader;
 
    /** . */
-   private final ConcurrentMap<K, FutureTask<V>> futureEntries;
+   private final ConcurrentMap<K, Retrieval<K, V, C>> futureEntries;
 
    /** . */
    private final Logger log = LoggerFactory.getLogger(FutureCache.class);
@@ -60,7 +60,7 @@ public abstract class FutureCache<K, V, C>
    public FutureCache(Loader<K, V, C> loader)
    {
       this.loader = loader;
-      this.futureEntries = new ConcurrentHashMap<K, FutureTask<V>>();
+      this.futureEntries = new ConcurrentHashMap<K, Retrieval<K, V, C>>();
    }
 
    /**
@@ -99,28 +99,7 @@ public abstract class FutureCache<K, V, C>
       if (value == null)
       {
          // Create our future
-         FutureTask<V> future = new FutureTask<V>(new Callable<V>()
-         {
-            public V call() throws Exception
-            {
-               // Retrieve the value from the loader
-               V value = loader.retrieve(context, key);
-
-               //
-               if (value != null)
-               {
-                  // Cache it, it is made available to other threads (unless someone removes it)
-                  put(key, value);
-
-                  // Return value
-                  return value;
-               }
-               else
-               {
-                  return null;
-               }
-            }
-         });
+         Retrieval<K, V, C> retrieval = new Retrieval<K, V, C>(context, key, this);
 
          // This boolean means we inserted in the local
          boolean inserted = true;
@@ -128,36 +107,59 @@ public abstract class FutureCache<K, V, C>
          //
          try
          {
-            FutureTask<V> phantom = futureEntries.putIfAbsent(key, future);
+            Retrieval<K, V, C> phantom = futureEntries.putIfAbsent(key, retrieval);
 
             // Use the value that could have been inserted by another thread
             if (phantom != null)
             {
-               future = phantom;
+               retrieval = phantom;
                inserted = false;
             }
             else
             {
-               future.run();
+               try
+               {
+                  retrieval.current = Thread.currentThread();
+                  retrieval.future.run();
+               }
+               catch (Exception e)
+               {
+                  log.error("Retrieval of resource " + key + " threw an exception", e);
+               }
+               finally
+               {
+                  retrieval.current = null;
+               }
             }
 
             // Returns the value
-            value = future.get();
-         }
-         catch (ExecutionException e)
-         {
-            log.error("Computing of resource " + key + " threw an exception", e.getCause());
-         }
-         catch (Exception e)
-         {
-            log.error("Retrieval of resource " + key + " threw an exception", e);
+            if (retrieval.current == Thread.currentThread())
+            {
+               throw new IllegalStateException("Reentrancy detected when obtaining key " + key + " with context " + context + " detected");
+            }
+            else
+            {
+               try
+               {
+                  value = retrieval.future.get();
+               }
+               catch (ExecutionException e)
+               {
+                  log.error("Computing of resource " + key + " threw an exception", e.getCause());
+               }
+               catch (InterruptedException e)
+               {
+                  // We should handle interruped exception in some manner
+                  log.error("Retrieval of resource " + key + " threw an exception", e);
+               }
+            }
          }
          finally
          {
             // Clean up the per key map but only if our insertion succeeded and with our future
             if (inserted)
             {
-               futureEntries.remove(key, future);
+               futureEntries.remove(key, retrieval);
             }
          }
       }
