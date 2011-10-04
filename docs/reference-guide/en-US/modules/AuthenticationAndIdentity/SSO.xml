@@ -333,12 +333,14 @@ realmName=gatein-domain;
 		  <!--
 		      If casRenewTicket param value of InitiateLoginServlet is:  not specified or false
 		  -->
-		  <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/initiatessologin</param-value>
+		  <param-value>http://localhost:8888/cas/login?service=
+		  http://localhost:8080/portal/initiatessologin</param-value>
 		  <!--
 		      If casRenewTicket param value of InitiateLoginServlet is : true
 		  -->
 		  <!--
-		  <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/initiatessologin&amp;renew=true</param-value>      		  
+		  <param-value>http://localhost:8888/cas/login?
+		  service=http://localhost:8080/portal/initiatessologin&amp;renew=true</param-value>
 		  -->
 		</init-param>
 	</filter>
@@ -381,10 +383,10 @@ realmName=gatein-domain;
 	  <filter-name>CASLogoutFilter</filter-name>
 	  <url-pattern>/*</url-pattern>
 	</filter-mapping>
-        <filter-mapping>
-          <filter-name>InitiateLoginFilter</filter-name>
-          <url-pattern>/initiatessologin</url-pattern>
-        </filter-mapping>
+  <filter-mapping>
+    <filter-name>InitiateLoginFilter</filter-name>
+    <url-pattern>/initiatessologin</url-pattern>
+  </filter-mapping>
 ]]>  
 </programlisting>
 						</para>
@@ -605,24 +607,36 @@ realmName=gatein-domain;
 <programlisting>
 <![CDATA[
   <filter>
-      <filter-name>LoginRedirectFilter</filter-name>
-      <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
-      <init-param>                                 
-		<!-- This should point to your SSO authentication server -->                                                                                              
-		<param-name>LOGIN_URL</param-name>                                                                                                
-		<param-value>http://localhost:8888/josso/signon/login.do?josso_back_to=http://localhost:8080/portal
-		/private/classic</param-value>                                                                                                         
-      </init-param>
+    <filter-name>LoginRedirectFilter</filter-name>
+    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
+    <init-param>
+		  <!-- This should point to your SSO authentication server -->
+		  <param-name>LOGIN_URL</param-name>
+		  <param-value>http://localhost:8888/josso/signon/login.do?
+		  josso_back_to=http://localhost:8080/portal/initiatessologin</param-value>
+    </init-param>
   </filter>
   <filter>
-      <filter-name>JOSSOLogoutFilter</filter-name>                                                                                              
-      <filter-class>org.gatein.sso.agent.filter.JOSSOLogoutFilter</filter-class>                                                      
-      <init-param>                                 
-        <!-- This should point to your JOSSO authentication server -->                                                                                              
-        <param-name>LOGOUT_URL</param-name>                                                                                                
-        <param-value>http://localhost:8888/josso/signon/logout.do</param-value>                                                                                                         
-      </init-param>                                                                                                                              
-  </filter>   
+    <filter-name>JOSSOLogoutFilter</filter-name>
+    <filter-class>org.gatein.sso.agent.filter.JOSSOLogoutFilter</filter-class>
+    <init-param>
+      <!-- This should point to your JOSSO authentication server -->
+      <param-name>LOGOUT_URL</param-name>
+      <param-value>http://localhost:8888/josso/signon/logout.do</param-value>
+    </init-param>
+  </filter>
+  <filter>
+		<filter-name>InitiateLoginFilter</filter-name>
+		<filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
+		<init-param>
+		  <param-name>ssoServerUrl</param-name>
+		  <param-value>http://localhost:8888/josso/signon/login.do</param-value>
+		</init-param>
+		<init-param>
+		  <param-name>loginUrl</param-name>
+		  <param-value>http://localhost:8080/portal/dologin</param-value>
+		</init-param>
+	</filter>
   
   <!-- filters should be placed at the very top of the filter chain -->
   <filter-mapping>
@@ -630,30 +644,15 @@ realmName=gatein-domain;
 	  <url-pattern>/*</url-pattern>	         
   </filter-mapping>	
   <filter-mapping>
-     <filter-name>JOSSOLogoutFilter</filter-name>
-     <url-pattern>/*</url-pattern>
+    <filter-name>JOSSOLogoutFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>InitiateLoginFilter</filter-name>
+    <url-pattern>/initiatessologin</url-pattern>
   </filter-mapping>
 ]]> 
 </programlisting>
-						</para>
-					</listitem>
-					<listitem>
-						<para>
-						Replace the <literal>InitiateLoginServlet</literal> declaration in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename> with:
-						</para>
-<programlisting>&#60;servlet&#62;
-  &#60;servlet-name&#62;InitiateLoginServlet&#60;/servlet-name&#62;
-  &#60;servlet-class&#62;org.gatein.sso.agent.GenericSSOAgent&#60;/servlet-class&#62;
-  &#60;init-param&#62;
-    &#60;param-name&#62;ssoServerUrl&#60;/param-name&#62;
-    &#60;param-value&#62;http://localhost:8888/josso/signon/login.do&#60;/param-value&#62;
-  &#60;/init-param&#62;    
-&#60;/servlet&#62;
-</programlisting>
-					</listitem>
-					<listitem>
-						<para>
-							Remove the <literal>PortalLoginController</literal> servlet declaration and mapping in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>
 						</para>
 					</listitem>
 				</itemizedlist>
@@ -933,24 +932,40 @@ realmName=gatein-domain;
 <programlisting>
 <![CDATA[
   <filter>
-      <filter-name>LoginRedirectFilter</filter-name>
-      <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
-      <init-param>                                 
-	<!-- This should point to your SSO authentication server -->                                                                                              
-	<param-name>LOGIN_URL</param-name>                                                                                                
-	<param-value>http://localhost:8888/opensso/UI/Login?realm=gatein&amp;goto=http://localhost:8080
-	/portal/private/classic</param-value>                                                                                                         
-      </init-param>
+    <filter-name>LoginRedirectFilter</filter-name>
+    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
+    <init-param>
+	    <!-- This should point to your SSO authentication server -->
+	    <param-name>LOGIN_URL</param-name>
+	    <param-value>http://localhost:8888/opensso/UI/Login?
+	    realm=gatein&amp;goto=http://localhost:8080/portal/initiatessologin</param-value>
+    </init-param>
   </filter>
   <filter>	
-      <filter-name>OpenSSOLogoutFilter</filter-name>                                                                                              
-      <filter-class>org.gatein.sso.agent.filter.OpenSSOLogoutFilter</filter-class>                                                      
-      <init-param>                                 
-        <!-- This should point to your OpenSSO authentication server -->                                                                                              
-        <param-name>LOGOUT_URL</param-name>                                                                                                
-        <param-value>http://localhost:8888/opensso/UI/Logout</param-value>                                                                                                         
-      </init-param>                                                                                                                              
-  </filter>   
+    <filter-name>OpenSSOLogoutFilter</filter-name>
+    <filter-class>org.gatein.sso.agent.filter.OpenSSOLogoutFilter</filter-class>
+    <init-param>
+      <!-- This should point to your OpenSSO authentication server -->
+      <param-name>LOGOUT_URL</param-name>
+      <param-value>http://localhost:8888/opensso/UI/Logout</param-value>
+    </init-param>
+  </filter>
+  <filter>
+		<filter-name>InitiateLoginFilter</filter-name>
+		<filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
+		<init-param>
+		  <param-name>ssoServerUrl</param-name>
+		  <param-value>hhttp://localhost:8888/opensso</param-value>
+		</init-param>
+		<init-param>
+		  <param-name>loginUrl</param-name>
+		  <param-value>http://localhost:8080/portal/dologin</param-value>
+		</init-param>
+		<init-param>
+      <param-name>ssoCookieName</param-name>
+      <param-value>iPlanetDirectoryPro</param-value>
+    </init-param>
+	</filter>
   
   <!-- place the filters at the top of the filter chain -->
   <filter-mapping>
@@ -958,30 +973,16 @@ realmName=gatein-domain;
 	  <url-pattern>/*</url-pattern>	         
   </filter-mapping>
   <filter-mapping>
-     <filter-name>OpenSSOLogoutFilter</filter-name>
-     <url-pattern>/*</url-pattern>
+    <filter-name>OpenSSOLogoutFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+    <filter-name>InitiateLoginFilter</filter-name>
+    <url-pattern>/initiatessologin</url-pattern>
   </filter-mapping>
 ]]> 
 </programlisting>
 						</para>
-					</listitem>
-					<listitem>
-						<para>
-						Replace the <literal>InitiateLoginServlet</literal> declaration in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename> with:
-						</para>
-<programlisting>&#60;servlet&#62;
-  &#60;servlet-name&#62;InitiateLoginServlet&#60;/servlet-name&#62;
-  &#60;servlet-class&#62;org.gatein.sso.agent.GenericSSOAgent&#60;/servlet-class&#62;
-  &#60;init-param&#62;
-    &#60;param-name&#62;ssoServerUrl&#60;/param-name&#62;
-    &#60;param-value&#62;http://localhost:8888/opensso&#60;/param-value&#62;
-  &#60;/init-param&#62; 
-  &#60;init-param&#62;
-    &#60;param-name&#62;ssoCookieName&#60;/param-name&#62;
-    &#60;param-value&#62;iPlanetDirectoryPro&#60;/param-value&#62;
-  &#60;/init-param&#62;   
-&#60;/servlet&#62;
-</programlisting>
 					</listitem>
 				</itemizedlist>
 			</para>
