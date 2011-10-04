@@ -66,11 +66,18 @@ public class GateinWCIController extends WCIController
 
    public void showErrorLoginForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException
    {
-      String initialURI = req.getHeader("referer");
+      //we need to check of the 'initialURI' value is specified or not already for the request. This can occur if an
+      //incorrect login was used on the ErrorLoginForm itself, since we don't want to redirect back to the errorloginform 
+      //when the correct login is entered.
+      String initialURI = req.getParameter("initialURI");
       if (initialURI == null || initialURI.length() == 0)
       {
-         initialURI = req.getContextPath();
-      }      
+         initialURI = req.getHeader("referer");
+         if (initialURI == null || initialURI.length() == 0)
+         {
+            initialURI = req.getContextPath();
+         }
+      }
 
       //
       try
