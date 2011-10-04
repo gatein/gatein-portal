@@ -1,0 +1,116 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <parent>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.packaging</artifactId>
+      <version>3.2.0-M02-SNAPSHOT</version>
+   </parent>
+
+   <artifactId>exo.portal.packaging.jboss7</artifactId>
+   <packaging>pom</packaging>
+
+   <name>GateIn JBoss AS 7.x.x packaging</name>
+
+   <properties>
+      <version.jboss.as.release>7.0.2.Final</version.jboss.as.release>
+      <version.jboss.as>7.0.2.Final</version.jboss.as>
+      <version.org.jboss.vfs>3.0.0.GA</version.org.jboss.vfs>
+      <version.org.gatein.wci.as7>2.1.0-Beta07-AS7-Beta01</version.org.gatein.wci.as7>
+      <version.exo.kernel.as7>2.3.1-GA-AS7-Beta01</version.exo.kernel.as7>
+      <version.org.gatein.naming>1.0.0-Beta01</version.org.gatein.naming>
+   </properties>
+   <build>
+      <defaultGoal>package</defaultGoal>
+      <plugins>
+	<plugin>
+	    <artifactId>maven-antrun-plugin</artifactId>
+	    <executions>
+		<execution>
+		    <phase>generate-resources</phase>
+		    <goals>
+		        <goal>run</goal>
+		    </goals>
+		    <configuration>
+		        <tasks>
+		            <echo>"
+
+
+DON'T FORGET TO FIRST READ packaging/jboss-as7/README.txt
+
+
+"
+</echo>
+		        </tasks>
+		    </configuration>
+		</execution>
+	    </executions>
+	</plugin>
+      </plugins>
+   </build>
+
+   <dependencyManagement>
+      <dependencies>
+         <dependency>
+            <groupId>org.exoplatform.portal</groupId>
+            <artifactId>jboss-as7-integration-extension</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.naming</groupId>
+            <artifactId>gatein-naming</artifactId>
+            <version>${version.org.gatein.naming}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.exoplatform.portal</groupId>
+            <artifactId>jboss-as7-integration-modules</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.jboss.as</groupId>
+            <artifactId>jboss-as-controller</artifactId>
+            <version>${version.jboss.as}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.jboss.as</groupId>
+            <artifactId>jboss-as-server</artifactId>
+            <version>${version.jboss.as}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.jboss.as</groupId>
+            <artifactId>jboss-as-ee</artifactId>
+            <version>${version.jboss.as}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.jboss.as</groupId>
+            <artifactId>jboss-as-web</artifactId>
+            <version>${version.jboss.as}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.jboss</groupId>
+            <artifactId>jboss-vfs</artifactId>
+            <version>${version.org.jboss.vfs}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wci</groupId>
+            <artifactId>wci-jboss7</artifactId>
+            <version>${version.org.gatein.wci.as7}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wci</groupId>
+            <artifactId>wci-wci</artifactId>
+            <version>${version.org.gatein.wci.as7}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.exoplatform.kernel</groupId>
+            <artifactId>exo.kernel.container</artifactId>
+            <version>${version.exo.kernel.as7}</version>
+         </dependency>
+      </dependencies>
+   </dependencyManagement>
+   <modules>
+      <module>extension</module>
+      <module>modules</module>
+      <module>pkg</module>
+   </modules>
+
+</project>

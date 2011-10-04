@@ -1,0 +1,415 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.packaging.jboss7</artifactId>
+      <version>3.2.0-M02-SNAPSHOT</version>
+   </parent>
+
+   <artifactId>exo.portal.packaging.jboss7.pkg</artifactId>
+   <packaging>pom</packaging>
+
+   <name>GateIn for JBoss AS 7.x.x packaging</name>
+
+   <properties>
+      <version.jboss.as>7.0.2.Final</version.jboss.as>
+      <jbossas.dist.version>${version.jboss.as}</jbossas.dist.version>
+      <servers.dir>${project.basedir}/servers</servers.dir>
+      <jbossas.path>${servers.dir}</jbossas.path>
+      <jbossas.name>jboss-${version.jboss.as}</jbossas.name>
+      <jbossas.dir>${jbossas.path}/${jbossas.name}</jbossas.dir>
+      <gatein.working.dir>${project.build.directory}/${jbossas.name}</gatein.working.dir>
+      <jbossas.target.dir>${gatein.working.dir}</jbossas.target.dir>
+   </properties>
+
+   <dependencies>
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>jboss-as7-integration-extension</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>jboss-as7-integration-modules</artifactId>
+      </dependency>
+
+      <!--                    -->
+      <!-- Deployment Modules -->
+      <!--                    -->
+
+      <!-- Default Portal -->
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.web.eXoResources</artifactId>
+         <type>war</type>
+      </dependency>
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.web.portal</artifactId>
+         <type>war</type>
+      </dependency>
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.gadgets-server</artifactId>
+         <type>war</type>
+      </dependency>
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.eXoGadgets</artifactId>
+         <type>war</type>
+      </dependency>
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.portlet.web</artifactId>
+         <type>war</type>
+      </dependency>
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.web.rest</artifactId>
+         <type>war</type>
+      </dependency>
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.portlet.exoadmin</artifactId>
+         <type>war</type>
+      </dependency>
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.portlet.dashboard</artifactId>
+         <type>war</type>
+      </dependency>
+
+
+      <!--         -->
+      <!-- Samples -->
+      <!--         -->
+
+      <!-- Sample Portal -->
+      <!--dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>gatein-sample-portal</artifactId>
+         <type>ear</type>
+         <version>${project.version}</version>
+      </dependency-->
+      <dependency>
+        <groupId>org.exoplatform.portal</groupId>
+        <artifactId>exo.portal.sample.portal.config</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.exoplatform.portal</groupId>
+        <artifactId>exo.portal.sample.portal.jar</artifactId>
+         <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.exoplatform.portal</groupId>
+        <artifactId>exo.portal.sample.portal.war</artifactId>
+         <version>${project.version}</version>
+        <type>war</type>
+      </dependency>
+      <dependency>
+        <groupId>org.exoplatform.portal</groupId>
+        <artifactId>exo.portal.sample.portal.rest-war</artifactId>
+         <version>${project.version}</version>
+        <type>war</type>
+      </dependency>
+
+
+      <!-- Sample Extension -->
+      <!--dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>gatein-sample-extension</artifactId>
+         <type>ear</type>
+         <version>${project.version}</version>
+      </dependency-->
+      <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.sample.extension.config</artifactId>
+         <version>${project.version}</version>
+       </dependency>
+       <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.sample.extension.jar</artifactId>
+          <version>${project.version}</version>
+       </dependency>
+       <dependency>
+         <groupId>org.exoplatform.portal</groupId>
+         <artifactId>exo.portal.sample.extension.war</artifactId>
+          <version>${project.version}</version>
+         <type>war</type>
+       </dependency>
+
+      <!-- Sample Skin -->
+      <dependency>
+         <groupId>org.gatein.portal.examples.skins</groupId>
+         <artifactId>gatein-sample-skin</artifactId>
+         <type>war</type>
+      </dependency>
+
+   </dependencies>
+
+   <build>
+      <plugins>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>check-jboss-environment-ready</id>
+                  <goals>
+                     <goal>enforce</goal>
+                  </goals>
+                  <configuration>
+                     <rules>
+                        <requireProperty>
+                           <property>jbossas.path</property>
+                           <message>"
+You must define the property 'jbossas.path'
+to give the path to the directory where you store your applications servers.
+"
+                           </message>
+                        </requireProperty>
+                        <requireProperty>
+                           <property>jbossas.name</property>
+                           <message>"
+You must define the property 'jbossas.name'
+to give the name of the directory where JBoss AS is stored.
+"
+                           </message>
+                        </requireProperty>
+                        <requireFilesExist>
+                           <files>
+                              <file>${jbossas.path}/${jbossas.name}/</file>
+                           </files>
+                           <message>"
+The following JBoss AS directory doesn't exist :
+                              ${jbossas.path}/${jbossas.name}
+
+Make JBoss AS instance available at that location, or use -Dservers.dir=PATH to point to the correct location of servers directory
+and/or -Djbossas.name=NAME to point to the correct directory under the servers directory.
+You can also use -Pdownload to automatically provide JBoss AS instance.
+"
+                           </message>
+                        </requireFilesExist>
+                     </rules>
+                     <fail>true</fail>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>2.4.1</version>
+            <executions>
+               <execution>
+                  <id>auto-clean</id>
+                  <phase>initialize</phase>
+                  <goals>
+                     <goal>clean</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.6</version>
+            <executions>
+               <execution>
+                  <id>prepare-package</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                     <target>
+                        <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
+                           <target name="package"/>
+                           <property name="maven.project.basedir" value="${project.basedir}"/>
+                           <property name="maven.project.build.directory" value="${project.build.directory}"/>
+                        </ant>
+                     </target>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+
+
+   <profiles>
+      <profile>
+         <id>pkg-jbossas7</id>
+         <activation>
+            <activeByDefault>true</activeByDefault>
+         </activation>
+
+         <properties>
+            <exo.projects.app.jboss7.version>jboss-as-7.0.2.Final</exo.projects.app.jboss7.version>
+            <servers.dir>${exo.projects.directory.dependencies}</servers.dir>
+            <jbossas.name>${exo.projects.app.jboss7.version}</jbossas.name>
+         </properties>
+
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-enforcer-plugin</artifactId>
+                  <executions>
+                     <execution>
+                        <id>check-jboss-legacy-environment-dependencies-dir</id>
+                        <goals>
+                           <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                           <rules>
+                              <requireProperty>
+                                 <property>exo.projects.directory.dependencies</property>
+                                 <message>"
+You must define the property 'exo.projects.directory.dependencies'
+to specify the path to the directory where you store your application servers.
+"
+                                 </message>
+                              </requireProperty>
+                           </rules>
+                           <fail>true</fail>
+                        </configuration>
+                     </execution>
+                     <execution>
+                        <id>check-jboss-legacy-environment-jboss-name</id>
+                        <goals>
+                           <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                           <rules>
+                              <requireProperty>
+                                 <property>exo.projects.app.jboss7.version</property>
+                                 <message>"
+You must define the property 'exo.projects.app.jboss7.version'
+to specify the name of the directory where JBoss AS is stored.
+"
+                                 </message>
+                              </requireProperty>
+                           </rules>
+                           <fail>true</fail>
+                        </configuration>
+                     </execution>
+
+                     <execution>
+                        <id>check-jboss-dir-exists</id>
+                        <goals>
+                           <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                           <rules>
+                              <requireFilesExist>
+                                 <files>
+                                    <file>${exo.projects.directory.dependencies}/${exo.projects.app.jboss7.version}/
+                                    </file>
+                                 </files>
+                                 <message>"
+The following JBoss AS directory doesn't exist :
+                                    ${exo.projects.directory.dependencies}/${exo.projects.app.jboss7.version}
+
+Make JBoss AS instance available at that location, or use -Dexo.projects.directory.dependencies=PATH to point to the correct location
+of servers directory and/or -Dexo.projects.app.jboss7.version=NAME to point to the correct directory under the servers directory.
+You can also use -Pdownload to automatically provide JBoss AS instance.
+"
+                                 </message>
+                              </requireFilesExist>
+                           </rules>
+                           <fail>true</fail>
+                        </configuration>
+                     </execution>
+                     <execution>
+                        <id>check-jboss-environment-ready</id>
+                        <phase>none</phase>
+                     </execution>
+                  </executions>
+               </plugin>
+
+            </plugins>
+         </build>
+      </profile>
+
+      <profile>
+         <id>download</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-enforcer-plugin</artifactId>
+                  <executions>
+                     <execution>
+                        <id>check-jboss-environment-ready</id>
+                        <phase>none</phase>
+                     </execution>
+                     <execution>
+                        <id>check-jboss-legacy-environment-jboss-name</id>
+                        <phase>none</phase>
+                     </execution>
+                     <execution>
+                        <id>check-jboss-dir-exists</id>
+                        <phase>none</phase>
+                     </execution>
+                  </executions>
+               </plugin>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-antrun-plugin</artifactId>
+                  <version>1.6</version>
+                  <executions>
+                     <execution>
+                        <id>prepare-package</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                           <goal>run</goal>
+                        </goals>
+                        <configuration>
+                           <target>
+                              <available property="jbossas.dir.exists" type="dir" file="${jbossas.dir}"/>
+
+                              <fail if="jbossas.dir.exists">"
+Destination JBossAS directory exists already:
+                                 ${jbossas.dir}
+
+Either rename it, delete it, or deactivate -Pdownload profile.
+"
+                              </fail>
+
+                              <property name="jbossas.zip"
+                                        value="${jbossas.path}/jboss-as-${jbossas.dist.version}.zip"/>
+
+                              <!-- Autocreate servers.dir if necessary -->
+                              <mkdir dir="${jbossas.path}"/>
+
+                              <!-- Download JBossAS unless already downloaded -->
+                              <ant antfile="${project.basedir}/download-jboss.xml">
+                                 <target name="download-jboss"/>
+                                 <property name="url"
+                                           value="http://download.jboss.org/jbossas/7.0/jboss-as-${jbossas.dist.version}/jboss-as-${jbossas.dist.version}.zip"/>
+                                 <property name="dest" value="${jbossas.zip}"/>
+                              </ant>
+
+                              <!-- Extract downloaded JBossAS to servers dir -->
+                              <unzip src="${jbossas.zip}" dest="${jbossas.path}" overwrite="false"/>
+
+                              <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
+                                 <target name="package"/>
+                                 <property name="maven.project.basedir" value="${project.basedir}"/>
+                                 <property name="maven.project.build.directory" value="${project.build.directory}"/>
+                              </ant>
+                           </target>
+                        </configuration>
+                     </execution>
+                  </executions>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+   </profiles>
+</project>

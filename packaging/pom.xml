@@ -93,5 +93,11 @@
                 <module>jboss-as5</module>
             </modules>
         </profile>
+        <profile>
+            <id>pkg-jbossas7</id>
+            <modules>
+                <module>jboss-as7</module>
+            </modules>
+        </profile>
     </profiles>
 </project>
