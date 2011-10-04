@@ -6,7 +6,8 @@
 	jsmanager.importJavascript('eXo.portal.UIPortalControl'); 
 	jsmanager.addCustomizedOnLoadScript('document.getElementById("UIPortalComponentLogin").username.focus();');
 	HttpSession session = rcontext.getRequest().getSession();
-    String initialURI = rcontext.getRequestParameter("initialURI");
+	String requestPath = rcontext.getInitialURI();
+	//session.setAttribute("initialURI", requestPath);
 %>
 <div class="UILoginForm">
 	<div class="LoginDecorator">
@@ -22,7 +23,7 @@
 				<div class="LoginDecoratorBackground">
 					<div class="LoginDetailBox">
 						<form class="UIForm" id="$uicomponent.id" name="loginForm" action="<%= rcontext.getRequestContextPath() + "/login"%>" method="post" style="margin: 0px;">
-							<input type="hidden" name="initialURI" value="<%=initialURI %>"/>
+							<input type="hidden" name="initialURI" value="<%=requestPath %>"/>
 							<div class="VerticalLayout">
 								<table class="UIFormGrid">
 									<tr class="UserNameField">
