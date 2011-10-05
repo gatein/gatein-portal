@@ -55,7 +55,7 @@
       <rhino.version>1.6R5</rhino.version>
       <org.codehaus.groovy.version>1.7.6</org.codehaus.groovy.version>
       <javax.servlet.version>2.5</javax.servlet.version>
-      <version.chromattic>1.1.0-beta7</version.chromattic>
+      <version.chromattic>1.1.0</version.chromattic>
       <version.reflext>1.1.0-beta12</version.reflext>
       <org.staxnav.version>0.9.6</org.staxnav.version>
       <jcip.version>1.0</jcip.version>
