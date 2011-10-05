@@ -146,9 +146,20 @@ public class GroupManagement
    {
       if (username == null)
          username = org.exoplatform.portal.webui.util.Util.getPortalRequestContext().getRemoteUser();
-      if (username.equals(getUserACL().getSuperUser())) 
+      
+      //if getRemoteUser() returns null, then there isn't a logged in user, which means they are not an admin
+      if (username == null)
+      {
+         return false;
+      }
+      else if (username.equals(getUserACL().getSuperUser()))
+      {
          return true;
-      return isMemberOfGroup(username, getUserACL().getAdminGroups());
+      }
+      else
+      {
+         return isMemberOfGroup(username, getUserACL().getAdminGroups());
+      }
    }
 
    //  public static boolean isSuperUser(String username) throws Exception {
