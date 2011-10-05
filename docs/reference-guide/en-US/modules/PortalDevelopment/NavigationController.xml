@@ -1,0 +1,750 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<section id="sect-Reference_Guide-Navigation_Controller">
+      <title>Navigation Controller </title>
+      <section>
+        <title>Description</title>
+        <para>The navigation controller is a major enhancement of GateIn that has several goals</para>
+        <itemizedlist>
+          <listitem>
+            <para>Provide non ambiguous urls for portal managed resources such as navigation. Previously different resources were possible for a single url, even worse, the set of resources available for an url was depending on one's private navigation (groups and dashboard)</para>
+          </listitem>
+          <listitem>
+            <para>Decouple the http request from the portal request. Previously both were tightly coupled, for instance the url for a site had to begin with /public/{sitename} or /private/{sitename} .The navigation controller provides a flexible and configurable mapping.</para>
+          </listitem>
+          <listitem>
+            <para>Provide more friendly url and give a degree of freedom for the portal administrator by letting him configure how http request should look like.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+      <section>
+        <title>Controller in Action</title>
+        <section>
+          <title>Controller</title>
+          <para>The <code>WebAppController</code> is the component of GateIn that process http invocations and transforms them into a portal request. It has been improved with the addition of a request mapping engine (<emphasis role="bold">controller</emphasis>) whose role is to make the decoupling of the http request and create a portal request. The mapping engine makes two essential tasks</para>
+          <itemizedlist>
+            <listitem>
+              <para>Create a Map&lt;QualifiedName, String&gt; from an incoming http request</para>
+            </listitem>
+            <listitem>
+              <para>Render a Map&lt;QualifiedName, String&gt; as an http URL</para>
+            </listitem>
+          </itemizedlist>
+          <para>The goal of the controller (mapping engine) is to <emphasis role="bold">decouple</emphasis> the request processed by GateIn from the incoming HTTP request. Indeed a  request contain data that determine how the request will be processed  and such data can be encoded in various places in the request such as  the request path or a query parameter. The controller allows GateIn route a  request according to a set of parameters (a map) instead of the servlet  request.</para>
+          <para>The controller configuration is declarative in an XML file, allowing easy reconfiguration of the routing table and it is processed into an internal data structure that is used to perform resolution (routing or rendering)</para>
+        </section>
+        <section>
+          <title>Building controller</title>
+          <para>The controller configuration that contains the routing rules is loaded from a file named <emphasis role="bold">controller.xml</emphasis> that is retrieved in the GateIn configuration directory. Its location is determined by the <emphasis role="bold">gatein.controller.config</emphasis> property.</para>
+          <para>
+            <emphasis role="bold">WebAppController</emphasis> loads and initializes the mapping engine</para>
+          <programlistingco>
+            <areaspec units="linecolumn"/>
+            <programlisting language="xml"><![CDATA[
+<!-- conf/portal/controller-configuration.xml of portal.war -->
+<component>
+  <type>org.exoplatform.web.WebAppController</type>
+    <init-params>
+      <value-param>
+        <name>controller.config</name>
+        <value>${gatein.portal.controller.config}</value>
+      </value-param>
+    </init-params>
+</component>
+]]></programlisting>
+          </programlistingco>
+          <para>GateIn's extension project can define their own routing table, thanks to the extension mechanism.</para>
+          <para>The controller.xml can be changed and reloaded at runtime, this help the testing of different configurations easily (configuration loading  operations) and provide more insight into the routing engine (the  findRoutes operation). see <emphasis role="bold">Rebuiding controller</emphasis> for more detail</para>
+          <itemizedlist>
+            <listitem>
+              <para>
+                <emphasis role="bold">ReBuilding controller</emphasis>
+              </para>
+            </listitem>
+          </itemizedlist>
+          <para>The WebAppController is annotated with <code>@Managed</code> annotations and is bound under the <code>view=portal,service=controller</code> JMX name and under the "portalcontroller" REST name.</para>
+          <para>It provides the following attributes and operations</para>
+          <itemizedlist>
+            <listitem>
+              <para>Attribute configurationPath : the read only the configuration path of the controller xml file</para>
+            </listitem>
+            <listitem>
+              <para>Operation loadConfiguration : load a new configuration file from a specified xml path</para>
+            </listitem>
+            <listitem>
+              <para>Operation reloadConfiguration : reload the configuration file</para>
+            </listitem>
+            <listitem>
+              <para>Operation findRoutes : route the request argument through the controller and returns a list of all parameter map resolution. The argument  is a request uri such as  "/groups/:platform:administrators/administration/registry". It returns a  string representation (<code>List&lt;Map&gt;</code>) of the matched routes.</para>
+            </listitem>
+          </itemizedlist>
+        </section>
+        <section>
+          <title>Controller Configuration (controller.xml)</title>
+          <para>Most of the controller configuration cares about defining rules (Routing table - contains routes object) that will drive the resolution. Routes are processed during the controller initialization to give a tree of node. Each node</para>
+          <itemizedlist>
+            <listitem>
+              <para>is related to its parent with a matching rule that can either be an <emphasis role="bold">exact string matching</emphasis> or a <emphasis role="bold">regular expression matching</emphasis>
+              </para>
+            </listitem>
+            <listitem>
+              <para>is associated with a set of parameters</para>
+            </listitem>
+          </itemizedlist>
+          <para>A parameter is defined by a qualified name and there are three kind of parameters</para>
+          <section>
+            <title>
+              <emphasis role="bold">Route parameters</emphasis>
+            </title>
+            <para>Route parameters defines a fixed value associate with a qualified name.</para>
+            <itemizedlist>
+              <listitem>
+                <para>Routing: route parameters allow the controller to distinguish branches easily and route the request accordingly.</para>
+              </listitem>
+              <listitem>
+                <para>Rendering: selection occurs when always.</para>
+              </listitem>
+            </itemizedlist>
+            <para>
+              <emphasis role="bold">Example:</emphasis>
+            </para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="xml"><![CDATA[
+<route path="/foo">
+  <route-param qname="gtn:handler">
+    <value>portal</value>
+  </route-param>
+</route>
+]]></programlisting>
+            </programlistingco>
+            <para>This configuration matches the request path "/foo" to the map (gtn:handler=portal). Conversely it renders the (gtn:handler=portal) map as the "/foo" url. In this example we see two concepts</para>
+            <itemizedlist>
+              <listitem>
+                <para>exact path matching ("/foo")</para>
+              </listitem>
+              <listitem>
+                <para>route parameters ("gtn:handler")</para>
+              </listitem>
+            </itemizedlist>
+          </section>
+          <section>
+            <title>
+              <emphasis role="bold">Path parameters - <emphasis role="italic">Regular expression support</emphasis>
+              </emphasis>
+            </title>
+            <para>Path parameters allow to associate a portion of the request path with a parameter. Such parameter will match any non empty portion of text except the <emphasis role="bold">/</emphasis> character (that is the [^/]+ regular expression) otherwise they can be associated with a regular expression for matching specific patterns. Path parameters are mandatory for matching since they are part of the request path, however it is allowed to write regular expression matching an empty value.</para>
+            <itemizedlist>
+              <listitem>
+                <para>Routing: route is accepted if the regular expression is matched.</para>
+              </listitem>
+              <listitem>
+                <para>Rendering: selection occurs when the regular expression matches the parameter.</para>
+              </listitem>
+            </itemizedlist>
+            <para>
+              <emphasis role="bold">Encoding</emphasis>
+            </para>
+            <para>Path parameters may contain '/' character which is a reserved char for URI path. This case is specially handled by the navigation controller by using a special character to replace '/' literals. By default the character is the semi colon <emphasis role="bold">:</emphasis> and can be changed to other possible values (see controller XML schema for possible values) to give a greater amount of flexibility.</para>
+            <para>This encoding is applied only when the encoding performed for parameter having a mode set to the <code>default-form</code> value, for instance it does not happen for navigation node URI (for which <emphasis role="bold">/</emphasis> are encoded literally). The separator escape char can still be used but under it's percent escaped form, so by default a path parameter value containing <emphasis role="bold">:</emphasis> would be encoded as <code>%3A</code> and conversely the <code>%3A</code> value will be decoded as <emphasis role="bold">:</emphasis>.</para>
+            <para>
+              <emphasis role="bold">Example:</emphasis>
+            </para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="xml"><![CDATA[
+<route path="/{gtn:path}">
+</route>
+]]></programlisting>
+            </programlistingco>
+            <para>No pattern defined, used the default one [^/]+</para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting><![CDATA[
+Routing and Rendering
+Path "/foo"      <--> the map (gtn:path=foo)
+
+Path "/foo:bar"  <--> the map (gtn:path=foo/bar)
+]]></programlisting>
+            </programlistingco>
+            <para>If the request path contains another "/" char it will not work,default encoding mode is : <emphasis role="bold">default-form</emphasis>. For example:"/foo/bar" --&gt; not matched, return empty parameter map</para>
+            <para>However this could be solved with the following configuration:</para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="xml"><![CDATA[
+<route path="/{gtn:path}">
+  <path-param encoding="preserve-path" qname="gtn:path">
+    <pattern>.*</pattern>
+  </path-param>
+</route>
+]]></programlisting>
+            </programlistingco>
+            <orderedlist>
+              <listitem>
+                <para>The .* declaration allows to match any char sequence.</para>
+              </listitem>
+              <listitem>
+                <para>The <emphasis role="italic">preserve-path</emphasis> <emphasis role="bold">encoding</emphasis> tells the engine that the "/" chars should be handled by the path parameter itself as they have a special meaning for the router. Without this special encoding, "/" would be rendered as the ":<emphasis role="italic">" character and conversely the ":</emphasis>" character would be matched as the "/" character.</para>
+              </listitem>
+            </orderedlist>
+          </section>
+          <section>
+            <title>Request parameters</title>
+            <para>Request parameters are matched from the request parameters (GET or POST). The match can be optional as their representation in the request allows it.</para>
+            <itemizedlist>
+              <listitem>
+                <para>Routing</para>
+                <itemizedlist>
+                  <listitem>
+                    <para>route is accepted when a required parameter is present and matched in the request.</para>
+                  </listitem>
+                  <listitem>
+                    <para>route is accepted when an optional parameter is absent or matched in the request.</para>
+                  </listitem>
+                </itemizedlist>
+              </listitem>
+              <listitem>
+                <para>Rendering:</para>
+                <itemizedlist>
+                  <listitem>
+                    <para>selection occurs for required parameters when is the parameter is present and matched in the map.</para>
+                  </listitem>
+                  <listitem>
+                    <para>selection occurs for optional parameters when is the parameter is absent or matched in the map.</para>
+                  </listitem>
+                </itemizedlist>
+              </listitem>
+            </itemizedlist>
+            <para>
+              <emphasis role="bold">Example:</emphasis>
+            </para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="xml"><![CDATA[
+<route path="/">
+  <request-param name="path" qname="gtn:path"/>
+</route>
+]]></programlisting>
+            </programlistingco>
+            <para>Request parameters are declared by a <code>request-param</code> element and by default will match any value. A request like "/?path=foo" is mapped to the (gtn:path=foo) map. The <code>name</code> attribute of the <code>request-param</code> tag defines the request parameter value. This element accepts more configuration</para>
+            <itemizedlist>
+              <listitem>
+                <para>a <code>value</code> or a <code>pattern</code> element a child element to match a constant or a pattern</para>
+              </listitem>
+              <listitem>
+                <para>a <code>control-mode</code> attribute with the value <code>optional</code> or <code>required</code> to indicate if matching is mandatory or not</para>
+              </listitem>
+              <listitem>
+                <para>a <code>value-mapping</code> attribute with the possible values <code>canonical</code>, <code>never-empty</code>, <code>never-null</code> can be used to filter filter values after matching is done. For instance a parameter configured with <code>value-mapping="never-empty"</code> and matching the empty string value will not put the empty string in the map.</para>
+              </listitem>
+            </itemizedlist>
+          </section>
+          <section>
+            <title>Route precedence</title>
+            <para>The order of route declaration is important as it influence how rules are matched. Sometimes the same request could be matched by several routes and the routing table is ambiguous.</para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="xml"><![CDATA[
+<route path="/foo">
+  <route-param qname="gtn:handler">
+    <value>portal</value>
+  </route-param>
+</route>
+<route path="/{gtn:path}">
+  <path-param encoding="preserve-path" qname="gtn:path">
+    <pattern>.*</pattern>
+  </path-param>
+</route>
+]]></programlisting>
+            </programlistingco>
+            <para>In that case, the request path "/foo" will always be matched by the first rule before the second rule. This can be misleading since the map (gtn:path=foo) would be rendered as "/foo" as well and would not be matched by the first rule. Such ambiguit can happen, it can be desirable or not.</para>
+          </section>
+          <section>
+            <title>Route nesting</title>
+            <para>Route nesting is possible and often desirable as it helps to</para>
+            <itemizedlist>
+              <listitem>
+                <para>factor common parameters in a common rule</para>
+              </listitem>
+              <listitem>
+                <para>perform more efficient matching as the match of the common rule is done once for all the sub routes</para>
+              </listitem>
+            </itemizedlist>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="xml"><![CDATA[
+<route path="/foo">
+  <route-param qname="gtn:handler">
+    <value>portal</value>
+  </route-param>
+  <route path="/bar">
+    <route-param qname="gtn:path">
+      <value>bar</value>
+    </route-param>
+  </route>
+  <route path="/juu">
+    <route-param qname="gtn:path">
+      <value>juu</value>
+    </route-param>
+  </route>
+</route>
+]]></programlisting>
+            </programlistingco>
+            <itemizedlist>
+              <listitem>
+                <para>The request path "/foo/bar" is mapped to the (gtn:handler=portal,gtn:path=bar) map</para>
+              </listitem>
+              <listitem>
+                <para>The request path "/foo/juu" is mapped to the (gtn:handler=portal,gtn:path=juu) map</para>
+              </listitem>
+              <listitem>
+                <para>The request path "/foo" is not mapped as non leaf routes do not perform matches.</para>
+              </listitem>
+            </itemizedlist>
+          </section>
+        </section>
+      </section>
+      <section>
+        <title>Integrate to GateIn WebUI framework</title>
+        <section>
+          <title>Routing</title>
+          <para>GateIn defines a set of parameters in its routing table, for each client request, the mapping engine processes the request path and return the defined parameters with their values as a Map&lt;QualifiedName, String&gt;</para>
+          <para>
+            <emphasis role="bold">gtn:handler</emphasis>
+          </para>
+          <para>The gtn:handler names is one of the most important qualified name as it determines which handler will take care of the request processing just after the controller has determined the parameter map. The handler value is used to make a lookup in the handler map of the controller. An handler is a class that extends the <code>WebRequestHandler</code> class and implements the <code>execute(ControllerContext)</code> method. Several handlers are available by default:</para>
+          <itemizedlist>
+            <listitem>
+              <para>portal : process aggregated portal requests</para>
+            </listitem>
+            <listitem>
+              <para>upload / download : process file upload and file download</para>
+            </listitem>
+            <listitem>
+              <para>legacy : handle legacy URL redirection (see <emphasis role="bold">Legacy handler</emphasis> section)</para>
+            </listitem>
+            <listitem>
+              <para>default : http redirection to the default portal of the container</para>
+            </listitem>
+            <listitem>
+              <para>staticResource: serve static resources like image, css or javascript... files in portal.war (see <emphasis role="bold">Static Resource Handler</emphasis> section)</para>
+            </listitem>
+          </itemizedlist>
+          <para>
+            <emphasis role="bold">gtn:sitetype / gtn:sitename / gtn:path</emphasis>
+          </para>
+          <para>Those qualified names drives a request for the portal handler. They are used to determine which site to show and which path to resolve against a navigation. For instance the (gtn:sitetype=portal,gtn:sitename=classic,gtn:path=home) instruct the portal handler to show the home page of the classic portal site.</para>
+          <para>
+            <emphasis role="bold">gtn:lang</emphasis>
+          </para>
+          <para>The language in the url for the portal handler. This is a new feature offered, now language can be specified on URL. that mean user can bookmark that URL (with the information about language) or he can changed language simply by modifying the URL address</para>
+          <para>
+            <emphasis role="bold">gtn:componentid / gtn:action / gtn:objectid</emphasis>
+          </para>
+          <para>The webui parameters used by the portal handler for managing webui component URLs for portal applications (and not for portlet applications).</para>
+        </section>
+        <section>
+          <title>Rendering</title>
+          <para>The <emphasis role="bold">controller</emphasis> is designed to render a Map&lt;QualifiedName, String&gt; as an http URL according to its routing table. But to integrate it for using easily in WebUI Framework of GateIn, we need some more components</para>
+          <section>
+            <title>
+              <emphasis role="bold">PortalURL</emphasis>
+            </title>
+            <para>
+              <code>PortalURL</code> play a similar role at the portal level, its main role is to abstract the creation of an URL for a resource managed by the portal.</para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="java"><![CDATA[
+public abstract class PortalURL<R, U extends PortalURL<U>>
+{
+   ...
+}
+]]></programlisting>
+            </programlistingco>
+            <para>The <code>PortalURL</code> declaration may seem a bit strange at first sight with two generic types <code>U</code> and <code>R</code> and the circular recursion of the <code>U</code> generic parameter, but it's because most of the time you will not use the <code>PortalURL</code> object but instead subclasses.</para>
+            <itemizedlist>
+              <listitem>
+                <para>The <code>R</code> generic type represents the type of the resource managed by the portal</para>
+              </listitem>
+              <listitem>
+                <para>The <code>U</code> generic type is also described as <emphasis role="bold">self bound generic type</emphasis>. This design pattern allows a class to return subtypes of itself in the class declaring the generic type. Java Enums are based on this principle (<code>class Enum&lt;E extends Enum&lt;E&gt;&gt;</code>)</para>
+              </listitem>
+            </itemizedlist>
+            <para>A portal URL has various methods but certainly the most important method is the <code>toString()</code> method that generates an URL representing that will target the resource associated with the url. The remaining methods are getter and setter for mutating the url configuration, those options will affect the URL representation when it is generated.</para>
+            <itemizedlist>
+              <listitem>
+                <para>resource : the mandatory resource associated with the url</para>
+              </listitem>
+              <listitem>
+                <para>locale : the optional locale used in the URL allowing the creation of bookmarkable URL containing a language</para>
+              </listitem>
+              <listitem>
+                <para>confirm : the optional confirm message displayed by the portal in the context of the portal UI</para>
+              </listitem>
+              <listitem>
+                <para>ajax : the optional ajax option allowing an ajax invocation of the URL</para>
+              </listitem>
+            </itemizedlist>
+            <para>
+              <emphasis role="bold">Obtaining a PortalURL</emphasis>
+            </para>
+            <para>
+              <code>PortalURL</code> objects are obtained from <code>RequestContext</code> instance such as the <code>PortalRequestContext</code> or the PortletRequestContext. Usually those are obtained thanks to <code>getCurrentInstance</code> method of the <code>RequestContext</code> class:</para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="java"><![CDATA[
+RequestContext ctx = RequestContext.getCurrentInstance();
+]]></programlisting>
+            </programlistingco>
+            <para>
+              <code>PortalURL</code> are created via to the <code>createURL</code> method that takes as input a resource type. A resource type is usually a constant and is a type safe object that allow to retrieve <code>PortalURL</code> subclasses:</para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="java"><![CDATA[
+RequestContext ctx = RequestContext.getCurrentInstance();
+PortalURL<R, U> url = ctx.createURL(type);
+]]></programlisting>
+            </programlistingco>
+            <para>In reality you will use a concrete type constant and have instead more concrete code like:</para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="java"><![CDATA[
+RequestContext ctx = RequestContext.getCurrentInstance();
+NodeURL url = ctx.createURL(NodeURL.TYPE);
+]]></programlisting>
+            </programlistingco>
+            <note>
+              <para>The <code>NodeURL.TYPE</code> is actually declared as <code>new ResourceType&lt;NavigationResource, NodeURL&gt;()</code> that can be described as a <emphasis role="bold">type literal</emphasis> object emulated by a Java anonymous inner class. Such literal were introduced by Neil Gafter as Super Type Token and popularized by Google Guice as Type Literal. It's an interesting way to create a literal representing a kind of Java type.</para>
+            </note>
+          </section>
+          <section>
+            <title>
+              <emphasis role="bold">Node URL</emphasis>
+            </title>
+            <para>The class <code>NodeURL</code> is one of the subclass of <code>PortalURL</code> that is specialized for navigation node resources:</para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="java"><![CDATA[
+public class NodeURL extends PortalURL<NavigationResource, NodeURL>
+{
+   ...
+}
+]]></programlisting>
+            </programlistingco>
+            <para>The good news is that the NodeURL does not carry any generic type of its super class, which means that a NodeURL is type safe and one does not have to worry about generic types.</para>
+            <para>Using a NodeURL is pretty straightforward:</para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="java"><![CDATA[
+NodeURL url = RequestContext.getCurrentInstance().createURL(NodeURL.TYPE);
+url.setResource(new NavigationResource("portal", "classic, "home"));
+String s = url.toString();
+]]></programlisting>
+            </programlistingco>
+            <para>The <code>NodeURL</code> subclass contains specialized setter to make its usage even easier:</para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="java"><![CDATA[
+UserNode node = ...;
+NodeURL url = RequestContext.getCurrentInstance().createURL(NodeURL.TYPE);
+url.setNode(node);
+String s = url.toString();
+]]></programlisting>
+            </programlistingco>
+          </section>
+          <section>
+            <title>
+              <emphasis role="bold">Component URL</emphasis>
+            </title>
+            <para>The <code>ComponentURL</code> subclass is another specialization of <code>PortalURL</code> that allows the creation of WebUI components URLs. <code>ComponentURL</code> is commonly used to trigger WebUI events from client side:</para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting><![CDATA[
+<% def componentURL = uicomponent.event(...); /*or uicomponent.url(...) */ %>
+  <a href=$componentURL>Click me</a>
+]]></programlisting>
+            </programlistingco>
+            <para>Normally you should not have to deal with it as the WebUI framework has already an abstraction for managing URL known as <code>URLBuilder</code>. The <code>URLBuilder</code> implementation delegates URL creation to <code>ComponentURL</code> objects.</para>
+          </section>
+          <section>
+            <title>Portlet URLs</title>
+            <para>Portlet URLs API implementation delegates to the portal <code>ComponentURL</code> (via the portlet container SPI). It is possible to control the language in the URL from a <code>PortletURL</code> object by setting a property named <code>gtn:lang</code>:</para>
+            <itemizedlist>
+              <listitem>
+                <para>when the property value is set to a value returned by <code>Locale#toString()</code> method for locale objects having a non null language value and a null variant value, the url generated by the <code>PortletURL#toString()</code> method will contain the locale in the url.</para>
+              </listitem>
+              <listitem>
+                <para>when the property value is set to an empty string, the generated URL will not contain a language. If the incoming URL was carrying a language, this language will be erased.</para>
+              </listitem>
+              <listitem>
+                <para>when the property value is not set, it will not affect the generated URL.</para>
+              </listitem>
+            </itemizedlist>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="java"><![CDATA[
+PortletURL url = resp.createRenderURL();
+url.setProperty("gtn:lang", "fr");
+writer.print("<a href='" + url + "'>French</a>");
+]]></programlisting>
+            </programlistingco>
+          </section>
+          <section>
+            <title>Webui <code>URLBuilder</code>
+            </title>
+            <para>This internal API for creating URL works as before and delegates to the <code>PortletURL</code> API when the framework is executed in a portlet and to a <code>ComponentURL</code> API when the framework is executed in the portal context. The API has been modified to take in account the language in URL with two properties on the builder:</para>
+            <itemizedlist>
+              <listitem>
+                <para>locale : a locale for setting on the URL</para>
+              </listitem>
+              <listitem>
+                <para>removeLocale : a boolean for removing the locale present on the URL</para>
+              </listitem>
+            </itemizedlist>
+          </section>
+          <section>
+            <title>Groovy Templates</title>
+            <para>Within a Groovy template the mechanism is the same, however a splash of integration has been done to make creation of NodeURL simpler. A closure is bound under the <code>nodeurl</code> name and is available for invocation anytime. It will simply create a NodeURL object and return it:</para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="java"><![CDATA[
+UserNode node = ...;
+NodeURL url = nodeurl();
+url.setNode(node);
+String s = url.toString();
+]]></programlisting>
+            </programlistingco>
+            <para>The closure <code>nodeurl</code> is bound to Groovy template in <code>WebuiBindingContext</code>
+            </para>
+            <programlistingco>
+              <areaspec units="linecolumn"/>
+              <programlisting language="java"><![CDATA[
+// Closure nodeurl()
+put("nodeurl", new Closure(this)
+{
+  @Override
+  public Object call(Object[] args)
+  {
+    return context.createURL(NodeURL.TYPE);
+  }
+});
+]]></programlisting>
+            </programlistingco>
+          </section>
+        </section>
+      </section>
+      <section>
+        <title>Changes and migration from GateIn 3.1.x</title>
+        <para>The navication controller implies a migration of the client code that is coupled to several internal APIs of GateIn. As far as we know the major impact is related to anything dealing with URL:</para>
+        <itemizedlist>
+          <listitem>
+            <para>Creation of an URL representing a resource managed by the portal: navigation node or ui component.</para>
+          </listitem>
+          <listitem>
+            <para>Using http request related information</para>
+          </listitem>
+        </itemizedlist>
+        <para>There are also changes in the configuration, because there is a change of how things are internally.</para>
+        <section>
+          <title>Migration of navigation node URL</title>
+          <para>
+            <emphasis role="bold">Using free form node</emphasis>
+          </para>
+          <para>Previously code for creating navigation node was like:</para>
+          <programlistingco>
+            <areaspec units="linecolumn"/>
+            <programlisting language="java"><![CDATA[
+String uri = Util.getPortalRequestContext().getPortalURI() + "home";
+]]></programlisting>
+          </programlistingco>
+          <para>The new code will look like</para>
+          <programlistingco>
+            <areaspec units="linecolumn"/>
+            <programlisting language="java"><![CDATA[
+PortalURL nodeURL = nodeurl();
+NavigationResource resource = new NavigationResource(SiteType.PORTAL, pcontext.getPortalOwner(), "home");
+String uri = nodeURL.setResource(resource).toString();
+]]></programlisting>
+          </programlistingco>
+          <para>
+            <emphasis role="bold">Using UserNode object</emphasis>
+          </para>
+          <programlistingco>
+            <areaspec units="linecolumn"/>
+            <programlisting language="java"><![CDATA[
+UserNode node = ...;
+String uri = Util.getPortalRequestContext().getPortalURI() + node.getURI()";
+]]></programlisting>
+          </programlistingco>
+          <para>The new code will look like</para>
+          <programlistingco>
+            <areaspec units="linecolumn"/>
+            <programlisting language="java"><![CDATA[
+UserNode node = ...;
+PortalURL nodeURL = nodeurl();
+String uri = nodeURL.setNode(node).toString();
+]]></programlisting>
+          </programlistingco>
+        </section>
+        <section>
+          <title>Security changes</title>
+          <para>Security configuration change in order to keep with the flexibility added by the navigation controller. In particular the authentication does not depend anymore on path specified in <code>web.xml</code> but instead rely on the security mandated by the underlying resource. Here are the noticeable changes for security</para>
+          <itemizedlist>
+            <listitem>
+              <para>Authentication is now triggered on the /login URL when it does not have a username or a password specified. Therefore the URL <code>/login?initialURI=/classic/home</code> is (more or less) equivalent to <code>/private/classic/home</code>
+              </para>
+            </listitem>
+            <listitem>
+              <para>When a resource cannot be viewed due to security constraint</para>
+              <itemizedlist>
+                <listitem>
+                  <para>If the user is not logged, the authentication will be triggered</para>
+                </listitem>
+                <listitem>
+                  <para>Otherwise a special page (the usual one) will be displayed instead</para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </section>
+        <section>
+          <title>Default handler</title>
+          <para>Redirection to the default portal used to be done by the <code>index.jsp</code> JSP page. This is not the case anymore, the index.jsp has been removed and the welcome file in <code>web.xml</code> was removed too. Instead a specific handler in the routing table has been configured, the sole role of this handler is to redirect the request to default portal when no other request has been matched previously:</para>
+          <programlistingco>
+            <areaspec units="linecolumn"/>
+            <programlisting language="xml"><![CDATA[
+<controller>
+  ...
+  <route path="/">
+    <route-param qname="gtn:handler">
+      <value>default</value>
+    </route-param>
+  </route>
+</controller>
+]]></programlisting>
+          </programlistingco>
+        </section>
+        <section>
+          <title>Legacy handler</title>
+          <para>Legacy urls such as <code>/public/...</code> and <code>/private/...</code> are now emulated to determine the best resource with the same resolution algorithm than before but instead of displaying the page, will make an http 302 redirection to the correct URL. This handler is present in the controller configuration. There is a noticeable difference between the two routes</para>
+          <itemizedlist>
+            <listitem>
+              <para>The public redirection attempt to find a node with the legacy resolution algorithm without authentication, which means that secured nodes will not be resolved and the redirection of a secured node will likely redirect to another page. For instance resolving the URL /public/classic/administration/registry path will likely resolve to another node if the user is not authenticated and is not part of the platform administrator group.</para>
+            </listitem>
+            <listitem>
+              <para>The private redirection performs first an authentication before doing the redirection. In that case the /private/classic/administration/registry path will resolve be redirected to the /portal/groups/:platform:administrators/administration/registry page if the user has the sufficient security rights.</para>
+            </listitem>
+          </itemizedlist>
+        </section>
+        <section>
+          <title>Static resource handler</title>
+          <para>The "/" mapping for "default" servlet  is now replaced by mapping for  org.exoplatform.portal.application.PortalController servlet, that mean  we need a handler (<emphasis role="bold">org.exoplatform.portal.application.StaticResourceRequestHandler</emphasis>) to serve static resources like image, css or javascript... files in portal.war. And it should be configured, and extended easily. Thanks to the controller.xml. This file can be overridden and can be changed and reloaded at runtime (WebAppController is MBean with some operations such as : reloadConfiguration() ...)</para>
+          <para>Declare StaticResourceHandler in controller.xml</para>
+          <programlistingco>
+            <areaspec units="linecolumn"/>
+            <programlisting language="xml"><![CDATA[
+<route path="/{gtn:path}">
+  <route-param qname="gtn:handler">
+    <value>staticResource</value>
+  </route-param>
+  <path-param encoding="preserve-path" qname="gtn:path">
+    <pattern>.*\.(jpg|png|gif|ico|css)</pattern>
+  </path-param>
+</route>
+]]></programlisting>
+          </programlistingco>
+          <para>And we don't need these kind of following mapping in portal.war's web.xml anymore :</para>
+          <programlistingco>
+            <areaspec units="linecolumn"/>
+            <programlisting language="xml"><![CDATA[
+<servlet-mapping>
+  <servlet-name>default</servlet-name>
+  <url-pattern>*.jpg</url-pattern>
+</servlet-mapping>
+...
+]]></programlisting>
+          </programlistingco>
+        </section>
+        <section>
+          <title>portal.war's web.xml changes</title>
+          <para>DoLoginServlet declaration</para>
+          <programlistingco>
+            <areaspec units="linecolumn"/>
+            <programlisting language="xml"><![CDATA[
+<servlet>
+  <servlet-name>DoLoginServlet</servlet-name>
+  <servlet-class>org.exoplatform.web.login.DoLoginServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>DoLoginServlet</servlet-name>
+  <url-pattern>/dologin</url-pattern>
+</servlet-mapping>
+]]></programlisting>
+          </programlistingco>
+          <para>Delare <emphasis role="bold">portal servlet</emphasis> as default servlet</para>
+          <programlistingco>
+            <areaspec units="linecolumn"/>
+            <programlisting language="xml"><![CDATA[
+<servlet-mapping>
+   <servlet-name>portal</servlet-name>
+   <url-pattern>/</url-pattern>
+</servlet-mapping>
+]]></programlisting>
+          </programlistingco>
+          <para>So there are some mapping declaration for portal servlet are unused, we should also remove them: <emphasis role="bold">
+              <emphasis role="italic">/private/* /public/* /admin/* /upload/* /download/*</emphasis>
+            </emphasis>
+          </para>
+          <para>Add some security constraints</para>
+          <programlistingco>
+            <areaspec units="linecolumn"/>
+            <programlisting language="xml"><![CDATA[
+<security-constraint>
+  <web-resource-collection>
+    <web-resource-name>user authentication</web-resource-name>
+      <url-pattern>/dologin</url-pattern>      
+      <url-pattern>/groups/*</url-pattern>
+      <url-pattern>/users/*</url-pattern>
+...
+  </web-resource-collection>
+</security-constraint>
+]]></programlisting>
+          </programlistingco>
+          <para>We can remove the index.jsp, and its declaration in web.xml now, thank to the Default request handler</para>
+          <programlistingco>
+            <areaspec units="linecolumn"/>
+            <programlisting language="xml"><![CDATA[
+<welcome-file-list>
+  <welcome-file>/index.jsp</welcome-file>
+</welcome-file-list>
+]]></programlisting>
+          </programlistingco>
+        </section>
+        <section>
+          <title>Dashboard changes</title>
+          <para>There are several important changes to take in account</para>
+          <itemizedlist>
+            <listitem>
+              <para>dashboard are now bound to a single URL (/users/root by default) and dashboard pages are leaf of this path</para>
+            </listitem>
+            <listitem>
+              <para>dashboard life cycle can be decoupled (create / destroy) from the identity creation in a configurable manner in <code>UserPortalConfigService</code> and exposed in configuration.properties under <code>gatein.portal.idm.createuserportal</code> and <code>gatein.portal.idm.destroyuserportal</code>.</para>
+            </listitem>
+            <listitem>
+              <para>by default dashboard are not created when a user is registered</para>
+            </listitem>
+            <listitem>
+              <para>a dashboard is created when the user access his dashboard URL</para>
+            </listitem>
+          </itemizedlist>
+        </section>
+        <section>
+          <title>Remove unused files</title>
+          <para>1/ portal-unavailable.jsp: this file was presented before if user goes to a non-available portal. Now the server sends a 404 status code instead.</para>
+          <para>2/ portal-warning.jsp: this file is not used in any place</para>
+        </section>
+      </section>
+</section>
