@@ -116,8 +116,9 @@ import org.exoplatform.webui.core.model.SelectItemOption ;
     mixed.addSelectItemOption(new SelectItemOption("twoColumnsOneRow",
         "<container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\">" +
         "  <container template=\"system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl\">" +
-        "    <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
-        "    <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
+        "    <factory-id>TableColumnContainer</factory-id>" +
+        "    <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
+        "    <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
         "  </container>" +
         "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
         "</container>",
@@ -127,8 +128,8 @@ import org.exoplatform.webui.core.model.SelectItemOption ;
         "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
         "  <container template=\"system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl\">" +
         "    <factory-id>TableColumnContainer</factory-id>" +
-        "    <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
-        "    <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
+        "    <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
+        "    <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
         "  </container>" +
         "</container>",
         "OneRowTwoColumnContainerLayout")) ;
@@ -137,8 +138,8 @@ import org.exoplatform.webui.core.model.SelectItemOption ;
         "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
         "  <container template=\"system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl\">" +
         "    <factory-id>TableColumnContainer</factory-id>" +
-        "    <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
-        "    <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
+        "    <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
+        "    <container template=\"system:/groovy/portal/webui/container/UIColumnContainer.gtmpl\"><factory-id>ColumnContainer</factory-id></container>" +
         "  </container>" +
         "  <container template=\"system:/groovy/portal/webui/container/UIContainer.gtmpl\"></container>" +
         "</container>",
