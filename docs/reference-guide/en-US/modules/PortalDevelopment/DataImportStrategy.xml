@@ -1,0 +1,262 @@
+<?xml version='1.0' encoding='utf-8' ?>
+<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
+%BOOK_ENTITIES;
+]>
+<section id="sect-Reference_Guide-Data_Import_Strategy">
+   <title>Data Import Strategy</title>
+   <section id="sect-Reference_Guide-Introduction">
+      <title>Introduction</title>
+      <para>
+        In the Portal extension mechanism, developers can define an extension
+        that Portal data can be customized by configurations in the extension. There
+        are several cases which an extension developer wants to define how to customize the Portal data, 
+        for example modifying, overwriting or just inserting a bit into the data defined by the portal. 
+        Therefore, GateIn also defines several modes for each case and the only thing which a developer has to do is to clarify the
+        usecase and reasonably configure extensions. 
+      </para>
+      <para>
+        This section shows you how data are changes in each mode.
+      </para>
+   </section>
+   
+   <section id="sect-Reference_Guide-Import_Mode">
+      <title>Import Mode</title>
+      In this section, the following modes for the import strategy are introduced:
+      <itemizedlist>
+         <listitem>
+            <para>
+               <literal>CONSERVE</literal>           
+            </para>
+         </listitem>
+         <listitem>
+            <para>
+               <literal>MERGE</literal>           
+            </para>
+         </listitem>
+         <listitem>
+            <para>
+               <literal>INSERT</literal>           
+            </para>
+         </listitem>
+         <listitem>
+            <para>
+               <literal>OVERWRITE</literal>           
+            </para>
+         </listitem>
+      </itemizedlist> 
+      <para>
+        Each mode indicates how the Portal data are imported. The import mode value is
+        set whenever NewPortalConfigListener is initiated. If the mode is not set,
+        the default value will be used in this case. The default value is configurable as
+        a UserPortalConfigService initial param. For example, the bellow configuration
+        means that default value is <literal>MERGE</literal>
+      </para>
+      <programlisting role="XML"><![CDATA[
+<component>
+  <key>org.exoplatform.portal.config.UserPortalConfigService</key>
+  <type>org.exoplatform.portal.config.UserPortalConfigService</type>
+  <component-plugins>
+  ............
+  </component-plugins>
+  <init-params>
+    <value-param>
+      <name>default.import.mode</name>
+      <value>merge</value>
+    </value-param>
+  </init-params>
+</component>
+      ]]>
+      </programlisting>
+      <para>
+      The way that the import strategy works with the import mode will be clearly demonstrated in next sections for each type of data.
+      </para>
+   </section>
+   <section id="sect-Reference_Guide-Import_Strategy">
+      <title>Data Import Strategy</title>
+      The 'Portal Data' term which has been referred in the previous sections can be
+      classified into three types of object data: Portal Config, Page Data and
+      Navigation Data; each of which has some differences in the import strategy.
+      <section id="sect-Reference_Guide-Navigation_Data">
+         <title>Navigation Data</title>
+         The navigation data import strategy will be processed to the import mode level as the followings:
+         <itemizedlist>
+            <listitem>
+               <literal>CONSERVE</literal>: If the navigation exists, leave it untouched. Otherwise, import data.
+            </listitem>
+            <listitem>
+               <literal>INSERT</literal>: Insert the missing description data, but add only new nodes. Other modifications remains untouched.
+            </listitem>
+            <listitem>
+               <literal>MERGE</literal>: Merge the description data, add missing nodes and update same name nodes.
+            </listitem>
+            <listitem>
+               <literal>OVERWRITE</literal>: Always destroy the previous data and recreate it.
+            </listitem>
+         </itemizedlist>
+         <para>
+            In the GateIn navigation structure, each navigation can be referred
+            to a tree which each node links to a page content. Each node contains some
+            description data, such as label, icon, page reference, and more. Therefore, GateIn
+            provides a way to insert or merge new data to the initiated navigation tree or a
+            sub-tree.
+         </para>
+         <para>
+            The merge strategy performs the recursive comparison of child nodes between the
+            existing persistent nodes of a navigation and the transient nodes provided by
+            a descriptor:
+            <procedure id="proc-Reference_Guide-Merge_Strategy">
+               <step>
+                  Start with the root nodes (which is the effective root node or another node if the parent URI is specified).
+               </step>
+               <step>
+                  Compare the set of child nodes and insert the missing nodes in the persistent nodes.
+               </step>
+               <step>
+                  Proceed recursively for each child having the same name.
+               </step>
+            </procedure>
+         </para>
+            Let's see the example with two navigation nodes in each import mode. In this case, there are 2 navigation definitions:
+         <programlisting role="XML"><![CDATA[<node-navigation>
+  <page-nodes>
+    <node>
+      <name>foo</name>
+      <icon>foo_icon_1</icon>
+      <node>
+        <name>juu</name>
+        <icon>juu_icon</icon>
+      </node>
+    </node>
+    <node>
+      <name>daa</name>
+      <icon>daa_icon</icon>
+    </node>
+  </page-nodes>
+</node-navigation>]]></programlisting>
+      Navigation node tree hierarchy
+      <mediaobject>
+         <imageobject>
+            <imagedata fileref="images/DataImportStrategy/navigation1.png" format="PNG" align="center"/>
+         </imageobject>
+      </mediaobject>
+      <programlisting role="XML"><![CDATA[<node-navigation>
+  <page-nodes>
+    <node>
+      <name>foo</name>
+      <icon>foo_icon_2</icon>
+    </node>
+    <node>
+      <name>bar</name>
+      <icon>bar_icon</icon>
+    </node>
+  </page-nodes>
+</node-navigation>]]></programlisting>
+      Navigation node tree hierarchy
+      <mediaobject>
+         <imageobject>
+            <imagedata fileref="images/DataImportStrategy/navigation2.png" format="PNG" align="center"/>
+         </imageobject>
+      </mediaobject>
+      <para>
+         For example, the <emphasis>navigation1</emphasis> is loaded before <emphasis>navigation2</emphasis>. The Navigation
+         Importer processes on two navigation definitions, depending on the Import Mode defined in portal configuration.
+         <itemizedlist>
+            <listitem>
+               <para>
+                  Case 1: Import mode is <literal>CONSERVE</literal>.
+               </para>
+               <para>
+                  With the <literal>CONSERVE</literal> mode, data are only imported when they do not exist. So, if
+                  the navigation has been created by the <emphasis>navigation1</emphasis> definition, the <emphasis>navigation2</emphasis> definition
+                  does not affect anything on it. We have the result as following
+               </para>
+               <mediaobject>
+                  <imageobject>
+                     <imagedata fileref="images/DataImportStrategy/navigation1.png" format="PNG" align="center"/>
+                  </imageobject>
+               </mediaobject>
+            </listitem>
+            <listitem>
+               <para>
+                  Case 2: Import mode is <literal>INSERT</literal>.
+               </para>
+               <para>
+                  If a node does not exist, the importer will add new nodes to the navigation tree. You will see the following result:
+               </para>
+               <mediaobject>
+                  <imageobject>
+                     <imagedata fileref="images/DataImportStrategy/navigation_insert.png" format="PNG" align="center"/>
+                  </imageobject>
+               </mediaobject>
+               <para>
+                  Hereafter, the node 'bar' is added to the navigation tree, because it does not exist in the initiated data.
+                  Other nodes are kept in the import process.
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                  Case 3: Import mode is <literal>MERGE</literal>.
+               </para>
+               <para>
+                  The <literal>MERGE</literal> mode indicates that a new node is added to the navigation tree, and
+                  updates the node data (such node label and node icon in the example) if it exists. 
+               </para>
+               <mediaobject>
+                  <imageobject>
+                     <imagedata fileref="images/DataImportStrategy/navigation_merge.png" format="PNG" align="center"/>
+                  </imageobject>
+               </mediaobject>
+            </listitem>
+            <listitem>
+               <para>
+                  Case 4: Import mode is <literal>OVERWRITE</literal>.
+               </para>
+               <para>
+                  Everything will be destroyed and replaced with new data if the <literal>OVERWRITE</literal> mode is used.
+               </para>
+               <mediaobject>
+                  <imageobject>
+                     <imagedata fileref="images/DataImportStrategy/navigation2.png" format="PNG" align="center"/>
+                  </imageobject>
+               </mediaobject>
+            </listitem>
+         </itemizedlist>
+      </para>
+      </section>
+      <section id="sect-Reference_Guide-Portal_Config">
+         <title>Portal Config</title>
+         <para>
+            PortalConfig defines the portal name, permission, layout and some properties
+            of a site. These information are configured in the <emphasis>portal.xml</emphasis>, <emphasis>group.xml</emphasis> or
+            <emphasis>user.xml</emphasis>, depending on the site type. The PortalConfig importer performs a strategy
+            that is based on the mode defined in NewPortalConfigListener, including <literal>CONSERVE</literal>,
+            <literal>INSERT</literal>, <literal>MERGE</literal> or <literal>OVERWRITE</literal>. Let's see how the import mode affects in the process of
+            portal data performance:
+         </para>
+         <itemizedlist>
+            <listitem>
+               <literal>CONSERVE</literal>: There is nothing to be imported. The existing data will be kept without any changes.
+            </listitem>
+            <listitem>
+               <literal>INSERT</literal>: When the portal config does not exist, create the new portal defined by the portal config definition. Otherwise, do nothing.
+            </listitem>
+            <listitem>
+               <literal>MERGE</literal> and <literal>OVERWRITE</literal> have the same behavior. The new portal config will be created if it does not exist or update portal properties defined by the portal config definition.
+            </listitem>
+         </itemizedlist>
+      </section>
+      <section id="sect-Reference_Guide-Page_Data">
+         <title>Page Data</title>
+         <para>
+            The import mode affects the page data import as the same as Portal Config.
+         </para>
+      </section>
+      <note>
+         <para>
+            If the Import mode is <literal>CONSERVE</literal> or <literal>INSERT</literal>, the data import strategy always performs
+            as the <literal>MERGE</literal> mode in the first data initialization of the Portal.
+         </para>
+      </note>
+   </section>
+</section>
