@@ -50,7 +50,6 @@ public class FindMembershipByGroupPageList extends PageListAccess<Membership, St
       OrganizationService service = (OrganizationService)container.getComponentInstance(OrganizationService.class);
       MembershipHandler handler = service.getMembershipHandler();
       Group group = service.getGroupHandler().findGroupById(state);
-      List<Membership> memberships = (List<Membership>)handler.findMembershipsByGroup(group);
-      return new ListAccessImpl<Membership>(Membership.class, memberships);
+      return handler.findAllMembershipsByGroup(group);
    }
 }

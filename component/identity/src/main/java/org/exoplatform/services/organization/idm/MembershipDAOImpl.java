@@ -763,7 +763,18 @@ public class MembershipDAOImpl implements MembershipHandler
 
       return result;
    }
-
+   
+   public ListAccess<Membership> findAllMembershipsByUser(User user) throws Exception
+   {
+      org.picketlink.idm.api.User gtnUser = service_.getIdentitySession().getPersistenceManager().findUser(user.getUserName());
+      
+      if (gtnUser == null)
+      {
+         log.log(LogLevel.ERROR, "Internal ERROR. Cannot obtain user: " + user.getUserName());
+         return new ListAccessImpl(Membership.class, Collections.emptyList());
+      }
+      return new IDMMembershipListAccess(gtnUser);
+   }
 
    public Collection findMembershipsByGroup(Group group) throws Exception
    {
@@ -772,7 +783,20 @@ public class MembershipDAOImpl implements MembershipHandler
 
    public ListAccess<Membership> findAllMembershipsByGroup(Group group) throws Exception
    {
-      return new ListAccessImpl(Membership.class, (List)findMembershipsByGroup(group));
+      String plGroupName = getPLIDMGroupName(getGroupNameFromId(group.getId()));
+      
+      String gid =
+         getIdentitySession().getPersistenceManager().
+            createGroupKey(plGroupName, getGroupTypeFromId(group.getId()));
+      
+      org.picketlink.idm.api.Group gtnGroup = service_.getIdentitySession().getPersistenceManager().findGroupByKey(gid);
+
+      if (gtnGroup == null)
+      {
+         log.log(LogLevel.ERROR, "Internal ERROR. Cannot obtain group: " + group.getId());
+         return new ListAccessImpl(Membership.class, Collections.emptyList());
+      }
+      return new IDMMembershipListAccess(gtnGroup);
    }
 
    public Collection findMembershipsByGroupId(String groupId) throws Exception
