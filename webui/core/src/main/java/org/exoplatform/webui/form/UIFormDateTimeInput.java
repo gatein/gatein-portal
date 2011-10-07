@@ -66,11 +66,11 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
    public UIFormDateTimeInput(String name, String bindField, Date date, boolean isDisplayTime)
    {
       super(name, bindField, String.class);
+      setDisplayTime(isDisplayTime);
+      
       WebuiRequestContext requestContext = WebuiRequestContext.getCurrentInstance();
       formatPattern(requestContext.getLocale());
-      
       setDate(date);
-      setDisplayTime(isDisplayTime);
    }
 
    public UIFormDateTimeInput(String name, String bindField, Date date)
