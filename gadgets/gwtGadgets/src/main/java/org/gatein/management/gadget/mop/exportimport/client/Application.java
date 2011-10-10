@@ -42,7 +42,6 @@ import com.google.gwt.user.client.rpc.ServiceDefTarget;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.CheckBox;
 import com.google.gwt.user.client.ui.DecoratedTabPanel;
 import com.google.gwt.user.client.ui.DecoratorPanel;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -77,7 +76,7 @@ import java.util.List;
  * @version 1.0
  */
 @ModulePrefs(title = "Export/Import Tool", author = "Nabil Benothman", author_email = "nbenothm@redhat.com",
-   description = "This gadget allows the administrator to export/import sites")
+   description = "This gadget allows the administrator to export/import sites", width = 870, height = 480)
 @Gadget.AllowHtmlQuirksMode(false)
 @Gadget.UseLongManifestName(false)
 public class Application extends Gadget<UserPreferences>
@@ -109,9 +108,6 @@ public class Application extends Gadget<UserPreferences>
       TreeImages images = GWT.create(TreeImages.class);
 
       RootPanel rootPanel = RootPanel.get();
-      rootPanel.setSize("885px", "490px");
-      rootPanel.addStyleName("rootpanelstyle");
-
       DecoratedTabPanel decoratedTabPanel = new DecoratedTabPanel();
       decoratedTabPanel.setAnimationEnabled(true);
       rootPanel.add(decoratedTabPanel, 10, 10);
