@@ -20,9 +20,8 @@
 package org.exoplatform.commons.cache.future;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -39,7 +38,7 @@ public class FutureMap<K extends Serializable, V, C> extends FutureCache<K, V, C
       super(loader);
 
       //
-      this.data = Collections.synchronizedMap(new HashMap<K, V>());
+      this.data = new ConcurrentHashMap<K, V>();
    }
 
    public void clear()
