@@ -29,12 +29,4 @@
       <jgroupsConfig multiplexerStack="jcr.stack" />
       <sync />
    </clustering>
-   <!-- Eviction configuration -->
-   <eviction wakeUpInterval="5000">
-      <default algorithmClass="org.jboss.cache.eviction.FIFOAlgorithm" eventQueueSize="1000000">
-         <property name="maxNodes" value="5000" />
-         <property name="minTimeToLive" value="20000" />
-      </default>
-   </eviction>
-
 </jbosscache>
