@@ -58,6 +58,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
+import gwtupload.client.IUploadStatus;
 import gwtupload.client.IUploader;
 import gwtupload.client.MultiUploader;
 
@@ -302,37 +303,40 @@ public class Application extends Gadget<UserPreferences>
 
          public void onStart(IUploader uploader)
          {
-            statusLabel.setText("Process in progress...");
-            statusLabel.setStyleName("progress-style");
-            statusImg.setStyleName("progress-style-icon");
-            importModeListBox.setEnabled(false);
-            importButton.setEnabled(false);
-            if (!isShwon)
+            if (uploader.getStatus() == IUploadStatus.Status.INPROGRESS)
             {
-               statusPanel.setStyleName("status-panel");
-               statusPanel.setSize("380px", "0px");
-               absolutePanel.add(statusPanel, 10, 120);
-
-               Timer t = new Timer()
+               statusLabel.setText("Process in progress...");
+               statusLabel.setStyleName("progress-style");
+               statusImg.setStyleName("progress-style-icon");
+               importModeListBox.setEnabled(false);
+               importButton.setEnabled(false);
+               if (!isShwon)
                {
+                  statusPanel.setStyleName("status-panel");
+                  statusPanel.setSize("380px", "0px");
+                  absolutePanel.add(statusPanel, 10, 120);
 
-                  int dx = 5;
-                  int height = 0;
-
-                  public void run()
+                  Timer t = new Timer()
                   {
-                     height += dx;
-                     statusPanel.setHeight(height + "px");
-                     if (height >= 45)
-                     {
-                        cancel(); // Stop the timer
-                     }
-                  }
-               };
 
-               // Schedule the timer to run once in 100 milliseconds.
-               t.scheduleRepeating(100);
-               isShwon = true;
+                     int dx = 5;
+                     int height = 0;
+
+                     public void run()
+                     {
+                        height += dx;
+                        statusPanel.setHeight(height + "px");
+                        if (height >= 45)
+                        {
+                           cancel(); // Stop the timer
+                        }
+                     }
+                  };
+
+                  // Schedule the timer to run once in 100 milliseconds.
+                  t.scheduleRepeating(100);
+                  isShwon = true;
+               }
             }
          }
       });
