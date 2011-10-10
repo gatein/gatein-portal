@@ -22,18 +22,19 @@ import org.exoplatform.services.resources.Orientation;
 
 import java.util.Arrays;
 
+
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
 
-public class TestSkinService extends AbstractSkinServiceTest
+public class TestSkinServiceInDevelopingMode extends AbstractSkinServiceTest
 {
    private static boolean isFirstStartup = true;
-
+   
    boolean isDevelopingMode()
    {
-      return false;
+      return true;
    }
 
    @Override
@@ -59,16 +60,12 @@ public class TestSkinService extends AbstractSkinServiceTest
       SkinURL url = merged.createURL();
 
       url.setOrientation(Orientation.LT);
-      assertEquals(
-         ".FirstPortlet {foo1 : bar1}\n" +
-         ".SecondPortlet {foo2 : bar2}",
-         skinService.getCSS(url.toString()));
+      assertEquals("@import url(/mockwebapp/skin/FirstPortlet-lt.css);\n"
+         + "@import url(/mockwebapp/skin/SecondPortlet-lt.css);", skinService.getCSS(url.toString()));
 
       url.setOrientation(Orientation.RT);
-      assertEquals(
-         ".FirstPortlet {foo1 : bar1}\n" +
-         ".SecondPortlet {foo2 : bar2}",
-         skinService.getCSS(url.toString()));
+      assertEquals("@import url(/mockwebapp/skin/FirstPortlet-rt.css);\n"
+         + "@import url(/mockwebapp/skin/SecondPortlet-rt.css);", skinService.getCSS(url.toString()));
    }
 
    public void testCache()
@@ -79,32 +76,18 @@ public class TestSkinService extends AbstractSkinServiceTest
       assertEquals("foo", skinService.getCSS(path));
 
       resResolver.addResource(path, "bar");
-      assertEquals("foo", skinService.getCSS(path));
-   }
-   
-   public void testInvalidateCache()
-   {
-      String path = "/path/to/test/caching.css";
-
-      resResolver.addResource(path, "foo");
-      assertEquals("foo", skinService.getCSS(path));
-
-      resResolver.addResource(path, "bar");
-      skinService.invalidateCachedSkin(path);
       assertEquals("bar", skinService.getCSS(path));
    }
-
+   
    public void testProcessImportCSS()
    {
       String parent = "/process/import/css.css";
 
       resResolver.addResource(parent, "@import url(Portlet/Stylesheet.css); aaa;");
-      assertEquals(" aaa;", skinService.getCSS(parent));
-      skinService.invalidateCachedSkin(parent);
+      assertEquals("@import url(/process/import/Portlet/Stylesheet-lt.css); aaa;", skinService.getCSS(parent));
       
       resResolver.addResource(parent, "@import url('/Portlet/Stylesheet.css'); aaa;");
-      assertEquals(" aaa;", skinService.getCSS(parent));
-      skinService.invalidateCachedSkin(parent);
+      assertEquals("@import url('/Portlet/Stylesheet-lt.css'); aaa;", skinService.getCSS(parent));
 
       //parent file import child css file
       resResolver.addResource(parent, "@import url(childCSS/child.css);  background:url(images/foo.gif);");
@@ -113,12 +96,12 @@ public class TestSkinService extends AbstractSkinServiceTest
 
       /*
        * Now test merge and process recursively (run in non-dev mode)
-       * We have folder /path/to/parent.css
+       * We have folder /process/import/css.css
        *                                        /images/foo.gif
        *                                        /childCSS/child.css
        *                                                        /bar.gif
        */
-      assertEquals("background:url(/process/import/childCSS/bar.gif);  background:url(/process/import/images/foo.gif);",
+      assertEquals("@import url(/process/import/childCSS/child-lt.css);  background:url(/process/import/images/foo.gif);",
          skinService.getCSS(parent));
    }
 
@@ -128,6 +111,6 @@ public class TestSkinService extends AbstractSkinServiceTest
       resResolver.addResource(path, "foo");
 
       assertTrue(skinService.getCSS(path).length() > 0);
-      assertTrue(skinService.getLastModified(path) < System.currentTimeMillis());
+      assertEquals(Long.MAX_VALUE, skinService.getLastModified(path));
    }
 }

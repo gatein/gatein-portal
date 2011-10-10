@@ -31,8 +31,10 @@ import java.io.Writer;
 
 public interface ResourceCompressor
 {
-
+   public boolean isSupported(ResourceType resourceType);
+   
    public void compress(Reader input, Writer output, ResourceType resourceType) throws ResourceCompressorException,
          IOException;
 
+   public String compress(String input, ResourceType resourceType) throws ResourceCompressorException, IOException;
 }

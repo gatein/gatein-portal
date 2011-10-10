@@ -40,31 +40,26 @@ class SimpleSkin implements SkinConfig
 
    private final String id_;
    
-   private final int cssPriority_;
+   private final int priority;
 
    public SimpleSkin(SkinService service, String module, String name, String cssPath)
    {
-      service_ = service;
-      module_ = module;
-      name_ = name;
-      cssPath_ = cssPath;
-      id_ = module.replace('/', '_');
-      cssPriority_ = -1;
+      this(service, module, name, cssPath, Integer.MAX_VALUE);
    }
 
-   public SimpleSkin(SkinService service, String module, String name, String cssPath, Integer cssPriority)
+   public SimpleSkin(SkinService service, String module, String name, String cssPath, int cssPriority)
    {
       service_ = service;
       module_ = module;
       name_ = name;
       cssPath_ = cssPath;
       id_ = module.replace('/', '_');
-      cssPriority_ = cssPriority != null ? cssPriority : -1;
+      priority = cssPriority;
    }
    
    public int getCSSPriority()
    {
-      return cssPriority_;
+      return priority;
    }
    
    public String getId()
@@ -89,7 +84,7 @@ class SimpleSkin implements SkinConfig
 
    public String toString()
    {
-      return "SimpleSkin[id=" + id_ + ",module=" + module_ + ",name=" + name_ + ",cssPath=" + cssPath_ + "]";
+      return "SimpleSkin[id=" + id_ + ",module=" + module_ + ",name=" + name_ + ",cssPath=" + cssPath_ + ", priority=" + priority +"]";
    }
    
    public SkinURL createURL()

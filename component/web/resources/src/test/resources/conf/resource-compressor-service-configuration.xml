@@ -24,50 +24,47 @@
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd http://www.exoplaform.org/xml/ns/kernel_1_1.xsd"
    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_1.xsd">
+   
+   <external-component-plugins>
+      <target-component>org.exoplatform.portal.resource.compressor.ResourceCompressor</target-component>
+      <component-plugin>
+         <name>MockCompressorPlugin</name>
+         <set-method>registerCompressorPlugin</set-method>
+         <type>org.exoplatform.portal.resource.compressor.MockCompressorPlugin</type>
+         <init-params>
+            <value-param>
+               <name>plugin.priority</name>
+               <value>5</value>
+            </value-param>
+         </init-params>
+      </component-plugin>
 
-   <component>
-      <key>org.exoplatform.portal.resource.compressor.ResourceCompressor</key>
-      <type>org.exoplatform.portal.resource.compressor.impl.ResourceCompressorService</type>
-      <component-plugins>
-         <component-plugin>
-            <name>MockCompressorPlugin</name>
-            <set-method>registerCompressorPlugin</set-method>
-            <type>org.exoplatform.portal.resource.compressor.MockCompressorPlugin</type>
-            <init-params>
-               <value-param>
-                  <name>plugin.priority</name>
-                  <value>5</value>
-               </value-param>
-            </init-params>
-         </component-plugin>
-         
-         <component-plugin>
-            <name>JSMinCompressorPlugin</name>
-            <set-method>registerCompressorPlugin</set-method>
-            <type>org.exoplatform.portal.resource.compressor.impl.JSMinCompressorPlugin</type>
-            <init-params>
-               <value-param>
-                  <name>plugin.priority</name>
-                  <value>9</value>
-               </value-param>
-            </init-params>
-         </component-plugin>
-         
-         <component-plugin>
-            <name>YUICSSCompressorPlugin</name>
-            <set-method>registerCompressorPlugin</set-method>
-            <type>org.exoplatform.portal.resource.compressor.css.YUICSSCompressorPlugin</type>
-            <init-params>
-               <value-param>
-                  <name>plugin.priority</name>
-                  <value>1</value>
-               </value-param>
-               <value-param>
-                  <name>line.break.position</name>
-                  <value>100</value>
-               </value-param>
-            </init-params>
-         </component-plugin>
-      </component-plugins>
-   </component>
+      <component-plugin>
+         <name>JSMinCompressorPlugin</name>
+         <set-method>registerCompressorPlugin</set-method>
+         <type>org.exoplatform.portal.resource.compressor.impl.JSMinCompressorPlugin</type>
+         <init-params>
+            <value-param>
+               <name>plugin.priority</name>
+               <value>9</value>
+            </value-param>
+         </init-params>
+      </component-plugin>
+
+      <component-plugin>
+         <name>YUICSSCompressorPlugin</name>
+         <set-method>registerCompressorPlugin</set-method>
+         <type>org.exoplatform.portal.resource.compressor.css.YUICSSCompressorPlugin</type>
+         <init-params>
+            <value-param>
+               <name>plugin.priority</name>
+               <value>1</value>
+            </value-param>
+            <value-param>
+               <name>line.break.position</name>
+               <value>100</value>
+            </value-param>
+         </init-params>
+      </component-plugin>
+   </external-component-plugins>
 </configuration>

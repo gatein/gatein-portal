@@ -19,6 +19,7 @@
 
 package org.exoplatform.commons.cache.future;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,28 +28,38 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class FutureMap<C> extends FutureCache<String, String, C>
+public class FutureMap<K extends Serializable, V, C> extends FutureCache<K, V, C>
 {
 
    /** . */
-   final Map<String, String> data;
+   final Map<K, V> data;
 
-   public FutureMap(Loader<String, String, C> loader)
+   public FutureMap(Loader<K, V, C> loader)
    {
       super(loader);
 
       //
-      this.data = Collections.synchronizedMap(new HashMap<String, String>());
+      this.data = Collections.synchronizedMap(new HashMap<K, V>());
+   }
+
+   public void clear()
+   {
+      data.clear();
+   }
+
+   public void remove(K key)
+   {
+      data.remove(key);
    }
 
    @Override
-   protected String get(String key)
+   protected V get(K key)
    {
       return data.get(key);
    }
 
    @Override
-   protected void put(String key, String value)
+   protected void put(K key, V value)
    {
       data.put(key, value);
    }

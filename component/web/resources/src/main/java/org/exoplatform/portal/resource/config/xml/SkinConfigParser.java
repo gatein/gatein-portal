@@ -152,7 +152,7 @@ public class SkinConfigParser
       NodeList nodes = rootElement.getElementsByTagName(tagName);
       SkinConfigTask task;
 
-      for (int i = nodes.getLength() - 1; i >= 0; i--)
+      for (int i = 0; i < nodes.getLength(); i++)
       {
          task = (SkinConfigTask)elemtToTask(tagName);
          if (task != null)

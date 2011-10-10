@@ -31,9 +31,6 @@ import org.picocontainer.Startable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -319,11 +316,8 @@ public class JavascriptConfigService implements Startable
          // Minify
          try
          {
-            Reader input = new StringReader(s);
-            StringWriter output = new StringWriter();
-            compressor.compress(input, output, ResourceType.JAVASCRIPT);
-            
-            jsBytes = output.toString().getBytes();
+            String output = compressor.compress(s, ResourceType.JAVASCRIPT);
+            jsBytes = output.getBytes();
          }
          catch (Exception e)
          {

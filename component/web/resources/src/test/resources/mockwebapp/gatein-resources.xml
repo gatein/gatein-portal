@@ -21,128 +21,93 @@
 -->
 <gatein-resources
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_1 http://www.gatein.org/xml/ns/gatein_resources_1_1"
-    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_1">
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2 http://www.gatein.org/xml/ns/gatein_resources_1_2"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2">
 
-	<portal-skin>
-		<skin-name>TestSkin</skin-name>
-		<css-path>/skin/Stylesheet.css</css-path>
-	</portal-skin>
+   <portal-skin>
+      <skin-name>TestSkin</skin-name>
+      <css-path>/skin/core/Stylesheet.css</css-path>
+      <css-priority>0</css-priority>
+   </portal-skin>
 
-  <portlet-skin>
-		<application-name>mockwebapp</application-name>
-		<portlet-name>FirstPortlet</portlet-name>
-		<skin-name>TestSkin</skin-name>
-		<css-path>/skin/portlet/FirstPortlet/Stylesheet.css</css-path>
-	</portlet-skin>
+   <portal-skin>
+      <skin-name>TestSkin</skin-name>
+      <skin-module>Module1</skin-module>
+      <css-path>/skin/module1/Stylesheet.css</css-path>
+   </portal-skin>
 
-	<!-- Simple window style -->
-	<window-style>
-		<style-name>Simple</style-name>
-		<style-theme>
-			<theme-name>SimpleBlue</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>SimpleViolet</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>SimpleOrange</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>SimplePink</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>SimpleGreen</theme-name>
-		</style-theme>
-	</window-style>
-	
-	<!-- RoundConer window style -->
-	<window-style>
-		<style-name>RoundConer</style-name>
-		<style-theme>
-			<theme-name>RoundConerBlue</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>RoundConerViolet</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>RoundConerOrange</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>RoundConerPink</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>RoundConerGreen</theme-name>
-		</style-theme>
-	</window-style>
-	
-	<!-- Shadow window style -->
-	<window-style>
-		<style-name>Shadow</style-name>
-		<style-theme>
-			<theme-name>ShadowBlue</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>ShadowViolet</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>ShadowOrange</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>ShadowPink</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>ShadowGreen</theme-name>
-		</style-theme>
-	</window-style>
-	
-	<!-- MacStyle window style -->
-	<window-style>
-		<style-name>MacStyle</style-name>
-		<style-theme>
-			<theme-name>MacTheme</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>MacGray</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>MacGreenSteel</theme-name>
-		</style-theme>
-	</window-style>
-	
-	<!-- VistaStyle window style -->
-	<window-style>
-		<style-name>VistaStyle</style-name>
-		<style-theme>
-			<theme-name>VistaTheme</theme-name>
-		</style-theme>
-	</window-style>
-	
-	<javascript>
-		<param>
-			<js-module>js.test1</js-module>
-			<js-path>/js/test1.js</js-path>	
-			<js-priority>-1</js-priority>		
-		</param>
-	</javascript>	
-	<javascript>
-		<param>
-			<js-module>js.test2</js-module>
-			<js-path>/js/test2.js</js-path>
-			<js-priority>1</js-priority>
-		</param>
-	</javascript>	
-	<javascript>
-		<param>
-			<js-module>js.test3</js-module>
-			<js-path>/js/test3.js</js-path>
-		</param>
-	</javascript>	
-	<javascript>
-		<param>
-			<js-module>js.test4</js-module>
-			<js-path>/js/test4.js</js-path>
-			<js-priority>2</js-priority>
-		</param>
-	</javascript>
+   <portal-skin>
+      <skin-name>TestSkin</skin-name>
+      <skin-module>Module2</skin-module>
+      <css-path>/skin/module2/Stylesheet.css</css-path>
+      <css-priority>1</css-priority>
+   </portal-skin>
+
+   <portal-skin>
+      <skin-name>TestSkin</skin-name>
+      <skin-module>Module3</skin-module>
+      <css-path>/skin/module3/Stylesheet.css</css-path>
+      <css-priority>1</css-priority>
+   </portal-skin>
+
+   <portlet-skin>
+      <application-name>mockwebapp</application-name>
+      <portlet-name>FirstPortlet</portlet-name>
+      <skin-name>TestSkin</skin-name>
+      <css-path>/skin/FirstPortlet.css</css-path>
+   </portlet-skin>
+
+   <portlet-skin>
+      <application-name>mockwebapp</application-name>
+      <portlet-name>SecondPortlet</portlet-name>
+      <skin-name>TestSkin</skin-name>
+      <css-path>/skin/SecondPortlet.css</css-path>
+   </portlet-skin>
+
+   <!-- Simple window style -->
+   <window-style>
+      <style-name>Simple</style-name>
+      <style-theme>
+         <theme-name>SimpleBlue</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>SimpleViolet</theme-name>
+      </style-theme>
+   </window-style>
+
+   <!-- VistaStyle window style -->
+   <window-style>
+      <style-name>VistaStyle</style-name>
+      <style-theme>
+         <theme-name>VistaTheme</theme-name>
+      </style-theme>
+   </window-style>
+
+   <javascript>
+      <param>
+         <js-module>js.test1</js-module>
+         <js-path>/js/test1.js</js-path>
+         <js-priority>-1</js-priority>
+      </param>
+   </javascript>
+   <javascript>
+      <param>
+         <js-module>js.test2</js-module>
+         <js-path>/js/test2.js</js-path>
+         <js-priority>1</js-priority>
+      </param>
+   </javascript>
+   <javascript>
+      <param>
+         <js-module>js.test3</js-module>
+         <js-path>/js/test3.js</js-path>
+      </param>
+   </javascript>
+   <javascript>
+      <param>
+         <js-module>js.test4</js-module>
+         <js-path>/js/test4.js</js-path>
+         <js-priority>2</js-priority>
+      </param>
+   </javascript>
 </gatein-resources>

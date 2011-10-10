@@ -23,7 +23,6 @@ import junit.framework.Assert;
 import junit.framework.TestCase;
 
 import java.util.concurrent.Callable;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -33,7 +32,7 @@ public class GetTestCase extends TestCase
 {
    public void testGet()
    {
-      FutureMap<Callable<String>> futureCache = new FutureMap<Callable<String>>(new StringLoader());
+      FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(new StringLoader());
       Assert.assertEquals("foo_value", futureCache.get(new Callable<String>()
       {
          public String call() throws Exception
@@ -46,7 +45,7 @@ public class GetTestCase extends TestCase
 
    public void testNullValue()
    {
-      FutureMap<Callable<String>> futureCache = new FutureMap<Callable<String>>(new StringLoader());
+      FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(new StringLoader());
       Assert.assertEquals(null, futureCache.get(new Callable<String>()
       {
          public String call() throws Exception
@@ -59,7 +58,7 @@ public class GetTestCase extends TestCase
 
    public void testThrowException()
    {
-      FutureMap<Callable<String>> futureCache = new FutureMap<Callable<String>>(new StringLoader());
+      FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(new StringLoader());
       Assert.assertEquals(null, futureCache.get(new Callable<String>()
       {
          public String call() throws Exception
@@ -72,7 +71,7 @@ public class GetTestCase extends TestCase
 
    public void testReentrancy()
    {
-      final FutureMap<Callable<String>> futureCache = new FutureMap<Callable<String>>(new StringLoader());
+      final FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(new StringLoader());
       String res = futureCache.get(new Callable<String>()
       {
          public String call() throws Exception

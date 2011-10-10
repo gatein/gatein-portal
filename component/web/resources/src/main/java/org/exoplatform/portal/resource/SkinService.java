@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.resource;
 
-import org.exoplatform.commons.cache.future.FutureExoCache;
+import org.exoplatform.commons.cache.future.FutureMap;
 import org.exoplatform.commons.cache.future.Loader;
 import org.exoplatform.commons.utils.BinaryOutput;
 import org.exoplatform.commons.utils.ByteArrayOutput;
@@ -36,7 +36,6 @@ import org.exoplatform.management.jmx.annotations.Property;
 import org.exoplatform.management.rest.annotations.RESTEndpoint;
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.portal.resource.compressor.ResourceType;
-import org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
@@ -46,13 +45,10 @@ import org.picocontainer.Startable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -123,9 +119,9 @@ public class SkinService implements Startable
 
    private final HashSet<String> availableSkins_;
 
-   private final FutureExoCache<String, CachedStylesheet, Orientation> ltCache;
+   private final FutureMap<String, CachedStylesheet, Orientation> ltCache;
 
-   private final FutureExoCache<String, CachedStylesheet, Orientation> rtCache;
+   private final FutureMap<String, CachedStylesheet, Orientation> rtCache;
 
    private final Map<String, Set<String>> portletThemes_;
 
@@ -152,19 +148,25 @@ public class SkinService implements Startable
       {
          public CachedStylesheet retrieve(Orientation context, String key) throws Exception
          {
+            Resource skin = getCSSResource(key, key);
+            if (skin == null)
+            {
+               return null;
+            }
+            
             StringBuffer sb = new StringBuffer();
-            processCSS(sb, key, context, true);
-            String css;
+            processCSSRecursively(sb, true, skin, context);
+            String css = sb.toString();;
             try
             {
-               StringWriter output = new StringWriter();
-               SkinService.this.compressor.compress(new StringReader(sb.toString()), output, ResourceType.STYLESHEET);
-               css = output.toString();
+               if (SkinService.this.compressor.isSupported(ResourceType.STYLESHEET))
+               {
+                  css = SkinService.this.compressor.compress(css, ResourceType.STYLESHEET);
+               }
             }
             catch (Exception e)
             {
                log.warn("Error when compressing CSS " + key + " for orientation " + context + " will use normal CSS instead", e);
-               css = sb.toString();
             }
 
             return new CachedStylesheet(css);
@@ -176,8 +178,8 @@ public class SkinService implements Startable
       portalSkins_ = new LinkedHashMap<SkinKey, SkinConfig>();
       skinConfigs_ = new LinkedHashMap<SkinKey, SkinConfig>(20);
       availableSkins_ = new HashSet<String>(5);
-      ltCache = new FutureExoCache<String, CachedStylesheet, Orientation>(loader, new ConcurrentFIFOExoCache<String, CachedStylesheet>(200));
-      rtCache = new FutureExoCache<String, CachedStylesheet, Orientation>(loader, new ConcurrentFIFOExoCache<String, CachedStylesheet>(200));
+      ltCache = new FutureMap<String, CachedStylesheet, Orientation>(loader);
+      rtCache = new FutureMap<String, CachedStylesheet, Orientation>(loader);
       portletThemes_ = new HashMap<String, Set<String>>();
       portalContainerName = context.getPortalContainerName();
       mainResolver = new MainResourceResolver(portalContainerName, skinConfigs_);
@@ -186,97 +188,39 @@ public class SkinService implements Startable
    }
 
    /**
-    * add category into portletThemes_ if portletThemes does not contain one
-    * @param categoryName: category's name that wangt to add into portletThemes
+    * Add a new category for portlet themes if it does not exist
+    * 
+    * @param categoryName the category name
     */
    public void addCategoryTheme(String categoryName)
    {
       if (!portletThemes_.containsKey(categoryName))
+      {
          portletThemes_.put(categoryName, new HashSet<String>());
+      }
    }
 
    /**
-    * Register the stylesheet for a portal Skin. Do not replace any previous skin 
-    * 
-    * @param module
-    *           skin module identifier
-    * @param skinName
-    *           skin name
-    * @param cssPath
-    *           path uri to the css file. This is relative to the root context,
-    *           use leading '/'
-    * @param scontext
-    *           the webapp's {@link javax.servlet.ServletContext}
+    * @deprecated use {@link #addPortalSkin(String, String, String, int, boolean)} instead 
     */
+   @Deprecated
    public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext)
    {
-      addPortalSkin(module, skinName, cssPath, scontext, false);
+      addPortalSkin(module, skinName, cssPath, Integer.MAX_VALUE, false);
    }
+   
 
    /**
-    * Register the stylesheet for a portal Skin.
-    * 
-    * @param module
-    *           skin module identifier
-    * @param skinName
-    *           skin name
-    * @param cssPath
-    *           path uri to the css file. This is relative to the root context,
-    *           use leading '/'
-    * @param scontext
-    *           the webapp's {@link javax.servlet.ServletContext}
-    * @param overwrite
-    *           if any previous skin should be replaced by that one
+    * @deprecated use {@link #addPortalSkin(String, String, String, int, boolean)} instead
     */
+   @Deprecated
    public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)
    {
-      availableSkins_.add(skinName);
-      SkinKey key = new SkinKey(module, skinName);
-      SkinConfig skinConfig = portalSkins_.get(key);
-      if (skinConfig == null || overwrite)
-      {
-         skinConfig = new SimpleSkin(this, module, skinName, cssPath);
-         portalSkins_.put(key, skinConfig);
-         
-         if (log.isDebugEnabled())
-         {
-            log.debug("Adding Portal skin : Bind " + key + " to " + skinConfig);
-         }
-      }
-   }
-   
-   /**
-    * Register the stylesheet for a portal Skin.
-    * 
-    * @param module
-    *           skin module identifier
-    * @param skinName
-    *           skin name
-    * @param cssPath
-    *           path uri to the css file. This is relative to the root context,
-    *           use leading '/'
-    * @param cssData
-    *           the content of css
-    */
-   public void addPortalSkin(String module, String skinName, String cssPath, String cssData)
-   {
-      SkinKey key = new SkinKey(module, skinName);
-      SkinConfig skinConfig = portalSkins_.get(key);
-      if (skinConfig == null)
-      {
-         portalSkins_.put(key, new SimpleSkin(this, module, skinName, cssPath));
-
-         if (log.isDebugEnabled())
-         {
-            log.debug("Adding Portal skin : Bind " + key + " to " + skinConfig);
-         }
-      }
-      ltCache.remove(cssPath);
-      rtCache.remove(cssPath);
+      addPortalSkin(module, skinName, cssPath, Integer.MAX_VALUE, overwrite);
    }
 
    /**
-    * Register the stylesheet for a portal Skin. Do not replace any previous skin. Support priority
+    * Register a portal skin
     * 
     * @param module
     *           skin module identifier
@@ -285,34 +229,12 @@ public class SkinService implements Startable
     * @param cssPath
     *           path uri to the css file. This is relative to the root context,
     *           use leading '/'
-    * @param scontext
-    *           the webapp's {@link javax.servlet.ServletContext}
-    * @param cssPriority          
-    *           priority to support sorting in skin list
-    */
-   public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext, Integer cssPriority)
-   {
-      addPortalSkin(module, skinName, cssPath, scontext, false, cssPriority);
-   }
-   
-   /**
-    * Register the stylesheet for a portal Skin. Support priority
-    * 
-    * @param module
-    *           skin module identifier
-    * @param skinName
-    *           skin name
-    * @param cssPath
-    *           path uri to the css file. This is relative to the root context,
-    *           use leading '/'
-    * @param scontext
-    *           the webapp's {@link javax.servlet.ServletContext}
     * @param overwrite
     *           if any previous skin should be replaced by that one
     * @param cssPriority          
     *           priority to support sorting in skin list
     */
-   public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite, Integer cssPrioriry)
+   public void addPortalSkin(String module, String skinName, String cssPath, int cssPrioriry, boolean overwrite)
    {
       availableSkins_.add(skinName);
       SkinKey key = new SkinKey(module, skinName);
@@ -330,8 +252,10 @@ public class SkinService implements Startable
    }
    
    /**
-    * Register the stylesheet for a portal Skin. Support priority
+    * Register a portal skin with the specific <code>cssData</code>
     * 
+    * @deprecated This method is not supported anymore.
+    *             The resource resolver pluggability mechanism should be used somehow
     * @param module
     *           skin module identifier
     * @param skinName
@@ -341,37 +265,62 @@ public class SkinService implements Startable
     *           use leading '/'
     * @param cssData
     *           the content of css
-    * @param cssPriority          
-    *           priority to support sorting in skin list
     */
-   public void addPortalSkin(String module, String skinName, String cssPath, String cssData, Integer cssPriority)
+   @Deprecated
+   public void addPortalSkin(String module, String skinName, String cssPath, String cssData)
    {
-      SkinKey key = new SkinKey(module, skinName);
-      SkinConfig skinConfig = portalSkins_.get(key);
-      if (skinConfig == null)
-      {
-         portalSkins_.put(key, new SimpleSkin(this, module, skinName, cssPath, cssPriority));
-
-         if (log.isDebugEnabled())
-         {
-            log.debug("Adding Portal skin : Bind " + key + " to " + skinConfig);
-         }
-      }
-      try
-      {
-         StringWriter output = new StringWriter();
-         compressor.compress(new StringReader(cssData), output, ResourceType.STYLESHEET);
-         cssData = output.toString();
-      }
-      catch (Exception e)
-      {
-         log.debug("Error when compressing CSS, will use normal CSS instead", e);
-      }
+      throw new UnsupportedOperationException("This method is not supported anymore.");
    }
    
    /**
+    * @deprecated use {@link #addSkin(String, String, String, int, boolean)} instead
+    */
+   @Deprecated
+   public void addSkin(String module, String skinName, String cssPath, ServletContext scontext)
+   {
+      addSkin(module, skinName, cssPath, Integer.MAX_VALUE, false);
+   }
+
+   /**
+    * @deprecated use {@link #addSkin(String, String, String, int, boolean)} instead
+    */
+   @Deprecated
+   public void addSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)
+   {
+      addSkin(module, skinName, cssPath, Integer.MAX_VALUE, overwrite);
+   }
+
+   /**
     * 
-    * Register the Skin for available portal Skins. Do not override previous skin 
+    * Register the Skin for available portal Skins. Support priority
+    * 
+    * @param module
+    *           skin module identifier
+    * @param skinName
+    *           skin name
+    * @param cssPath
+    *           path uri to the css file. This is relative to the root context,
+    *           use leading '/'
+    * @param overwrite
+    *           if any previous skin should be replaced by that one
+    * @param priority
+    *           priority to support sorting in skin list
+    */
+   public void addSkin(String module, String skinName, String cssPath, int priority, boolean overwrite)
+   {
+      availableSkins_.add(skinName);
+      SkinKey key = new SkinKey(module, skinName);
+      SkinConfig skinConfig = skinConfigs_.get(key);
+      if (skinConfig == null || overwrite)
+      {
+         skinConfig = new SimpleSkin(this, module, skinName, cssPath, priority);
+         skinConfigs_.put(key, skinConfig);
+      }
+   }
+
+   /**
+    * 
+    * Register the Skin for available portal Skins. Do not replace existed Skin
     * 
     * @param module
     *           skin module identifier
@@ -383,11 +332,20 @@ public class SkinService implements Startable
     * @param scontext
     *           the webapp's {@link javax.servlet.ServletContext}
     */
-   public void addSkin(String module, String skinName, String cssPath, ServletContext scontext)
+   @Deprecated
+   public void addSkin(String module, String skinName, String cssPath, String cssData)
    {
-      addSkin(module, skinName, cssPath, scontext, false);
+      availableSkins_.add(skinName);
+      SkinKey key = new SkinKey(module, skinName);
+      SkinConfig skinConfig = skinConfigs_.get(key);
+      if (skinConfig == null)
+      {
+         skinConfigs_.put(key, new SimpleSkin(this, module, skinName, cssPath));
+      }
+      ltCache.remove(cssPath);
+      rtCache.remove(cssPath);
    }
-
+   
    /**
     * Merge several skins into one single skin.
     * 
@@ -409,91 +367,6 @@ public class SkinService implements Startable
    public void addResourceResolver(ResourceResolver resolver)
    {
       mainResolver.resolvers.addIfAbsent(resolver);
-   }
-
-   /**
-    * 
-    * Register the Skin for available portal Skins.
-    * 
-    * @param module
-    *           skin module identifier
-    * @param skinName
-    *           skin name
-    * @param cssPath
-    *           path uri to the css file. This is relative to the root context,
-    *           use leading '/'
-    * @param scontext
-    *           the webapp's {@link javax.servlet.ServletContext}
-    * @param overwrite
-    *           if any previous skin should be replaced by that one
-    */
-   public void addSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)
-   {
-      availableSkins_.add(skinName);
-      SkinKey key = new SkinKey(module, skinName);
-      SkinConfig skinConfig = skinConfigs_.get(key);
-      if (skinConfig == null || overwrite)
-      {
-         skinConfig = new SimpleSkin(this, module, skinName, cssPath);
-         skinConfigs_.put(key, skinConfig);
-      }
-   }
-   
-   /**
-    * 
-    * Register the Skin for available portal Skins. Support priority
-    * 
-    * @param module
-    *           skin module identifier
-    * @param skinName
-    *           skin name
-    * @param cssPath
-    *           path uri to the css file. This is relative to the root context,
-    *           use leading '/'
-    * @param scontext
-    *           the webapp's {@link javax.servlet.ServletContext}
-    * @param overwrite
-    *           if any previous skin should be replaced by that one
-    * @param cssPriority
-    *           priority to support sorting in skin list
-    */
-   public void addSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite, Integer cssPriority)
-   {
-      availableSkins_.add(skinName);
-      SkinKey key = new SkinKey(module, skinName);
-      SkinConfig skinConfig = skinConfigs_.get(key);
-      if (skinConfig == null || overwrite)
-      {
-         skinConfig = new SimpleSkin(this, module, skinName, cssPath, cssPriority);
-         skinConfigs_.put(key, skinConfig);
-      }
-   }
-
-   /**
-    * 
-    * Register the Skin for available portal Skins. Do not replace existed Skin
-    * 
-    * @param module
-    *           skin module identifier
-    * @param skinName
-    *           skin name
-    * @param cssPath
-    *           path uri to the css file. This is relative to the root context,
-    *           use leading '/'
-    * @param scontext
-    *           the webapp's {@link javax.servlet.ServletContext}
-    */
-   public void addSkin(String module, String skinName, String cssPath, String cssData)
-   {
-      availableSkins_.add(skinName);
-      SkinKey key = new SkinKey(module, skinName);
-      SkinConfig skinConfig = skinConfigs_.get(key);
-      if (skinConfig == null)
-      {
-         skinConfigs_.put(key, new SimpleSkin(this, module, skinName, cssPath));
-      }
-      ltCache.remove(cssPath);
-      rtCache.remove(cssPath);
    }
 
    /**
@@ -525,16 +398,16 @@ public class SkinService implements Startable
    /**
     * Return the CSS content of the file specified by the given URI.
     * 
-    * @param cssPath
+    * @param path
     *           path of the css to find
     * @return the css contet or null if not found.
     */
-   public String getCSS(String cssPath)
+   public String getCSS(String path)
    {
       try
       {
          final ByteArrayOutput output = new ByteArrayOutput();
-         renderCSS(new ResourceRenderer()
+         boolean success = renderCSS(new ResourceRenderer()
          {
             public BinaryOutput getOutput() throws IOException
             {
@@ -543,20 +416,29 @@ public class SkinService implements Startable
             public void setExpiration(long seconds)
             {
             }
-         }, cssPath);
-         return output.getString();
+         }, path);
+         
+         if (success)
+         {
+            return output.getString();
+         }
+         else
+         {
+            return null;
+         }
       }
       catch (IOException e)
       {
-         log.error("Error while rendering css " + cssPath, e);
+         log.error("Error while rendering css " + path, e);
          return null;
       }
       catch (RenderingException e)
       {
-         log.error("Error while rendering css " + cssPath, e);
+         log.error("Error while rendering css " + path, e);
          return null;
       }
    }
+
    /**
     * Render css content of the file specified by the given URI
     * @param renderer
@@ -565,8 +447,10 @@ public class SkinService implements Startable
     *          path uri to the css file
     * @throws RenderingException
     * @throws IOException
+    * @return <code>true</code> if the <code>CSS resource </code>is found and rendered;
+    *         <code>false</code> otherwise.
     */
-   public void renderCSS(ResourceRenderer renderer, String path) throws RenderingException, IOException
+   public boolean renderCSS(ResourceRenderer renderer, String path) throws RenderingException, IOException
    {
       Orientation orientation = Orientation.LT;
       if (path.endsWith("-lt.css"))
@@ -579,13 +463,30 @@ public class SkinService implements Startable
          orientation = Orientation.RT;
       }
 
-      // Try cache first
-      if (!PropertyManager.isDevelopping())
+      // Check if it is running under developing mode
+      if (PropertyManager.isDevelopping())
+      {
+         StringBuffer sb = new StringBuffer();
+         Resource skin = getCSSResource(path, path);
+         if (skin == null)
+         {
+            return false;
+         }
+         processCSSRecursively(sb, false, skin, orientation);
+         byte[] bytes = sb.toString().getBytes("UTF-8");
+         renderer.getOutput().write(bytes);
+      }
+      else
       {
          //
-         FutureExoCache<String, CachedStylesheet, Orientation> cache = orientation == Orientation.LT ? ltCache : rtCache;
+         FutureMap<String, CachedStylesheet, Orientation> cache = orientation == Orientation.LT ? ltCache : rtCache;
          CachedStylesheet cachedCss = cache.get(orientation, path);
-
+         
+         if (cachedCss == null)
+         {
+            return false;
+         }
+         
          if (path.startsWith("/" + portalContainerName + "/resource"))
          {
             renderer.setExpiration(ONE_MONTH);
@@ -597,29 +498,25 @@ public class SkinService implements Startable
          
          cachedCss.writeTo(renderer.getOutput());
       }
-      else
-      {
-         StringBuffer sb = new StringBuffer();
-         processCSS(sb, path, orientation, false);
-         byte[] bytes = sb.toString().getBytes("UTF-8");
-         renderer.getOutput().write(bytes);
-      }
+      return true;
    }
 
    /**
-    * get css content of URI file
-    * @param cssPath
+    * Return CSS data corresponding to the <code>path</code>
+    * 
+    * @param path
     *          path uri to the css file
     * @return css content of URI file or null if not found
     */
-   public String getMergedCSS(String cssPath)
+   @Deprecated
+   public String getMergedCSS(String path)
    {
-      CachedStylesheet stylesheet = ltCache.get(Orientation.LT, cssPath);
-      return stylesheet != null ? stylesheet.getText() : null;
+      return getCSS(path);
    }
 
    /**
-    * Get all SkinConfig of Portal Skin
+    * Return a collection of Portal Skins that its elements are ordered by CSS priority
+    * 
     * @param skinName
     *          name of Portal Skin
     * @return 
@@ -638,22 +535,16 @@ public class SkinService implements Startable
       {
          public int compare(SkinConfig o1, SkinConfig o2)
          {
-            if (o1.getCSSPriority() == o2.getCSSPriority())
-               return 1;//Can indicate others condition here
-            else if (o1.getCSSPriority() < 0)
-               return 1;
-            else if (o2.getCSSPriority() < 0)
-               return -1;
-            else
-               return o1.getCSSPriority() - o2.getCSSPriority();
+            return o1.getCSSPriority() - o2.getCSSPriority();
          }
       });
       return portalSkins;
    }
 
    /**
-    * Get all portlet's themes
-    * @return portlet's themes
+    * Return the map of portlet themes
+    * 
+    * @return the map of portlet themes
     */
    public Map<String, Set<String>> getPortletThemes()
    {
@@ -661,7 +552,8 @@ public class SkinService implements Startable
    }
 
    /**
-    * Get SkinConfig by module and skin name
+    * Return a SkinConfig mapping by the module and skin name
+    * 
     * @param module
     * @param skinName
     * @return SkinConfig by SkinKey(module, skinName), or SkinConfig by SkinKey(module, SkinService.DEFAULT_SKIN)
@@ -676,13 +568,29 @@ public class SkinService implements Startable
 
    /**
     * Remove SkinKey from SkinCache by portalName and skinName
+    * 
+    * @deprecated the method name is wrong to the behaviour it does.
+    *             Use {@link #removeSkin(String, String)} instead
+    * 
     * @param portalName
     * @param skinName
     */
+   @Deprecated
    public void invalidatePortalSkinCache(String portalName, String skinName)
    {
       SkinKey key = new SkinKey(portalName, skinName);
       skinConfigs_.remove(key);
+   }
+   
+   /**
+    * Invalidate skin from the cache
+    * 
+    * @param path the key
+    */
+   public void invalidateCachedSkin(String path)
+   {
+      ltCache.remove(path);
+      rtCache.remove(path);
    }
 
    /**
@@ -696,8 +604,13 @@ public class SkinService implements Startable
       {
          throw new IllegalArgumentException("path must not be null");
       }
+      
+      if (PropertyManager.isDevelopping())
+      {
+         return Long.MAX_VALUE;
+      }
 
-      FutureExoCache<String, CachedStylesheet, Orientation> cache = ltCache;
+      FutureMap<String, CachedStylesheet, Orientation> cache = ltCache;
       Orientation orientation = Orientation.LT;
       if (path.endsWith("-lt.css"))
       {
@@ -721,20 +634,85 @@ public class SkinService implements Startable
    }
 
    /**
-    * Remove SkinConfig from Portal Skin Configs  by module and skin name
+    * @deprecated The method name is not clear.
+    *             Using {@link #removeSkin(String, String)} instead
+    */
+   @Deprecated
+   public void remove(String module, String skinName)
+   {
+      removeSkin(module, skinName);
+   }
+   
+   /**
+    * Remove a Skin from the service as well as its cache
+    * 
     * @param module
     * @param skinName
-    * @throws Exception
     */
-   public void remove(String module, String skinName) throws Exception
+   public void removeSkin(String module, String skinName)
    {
       SkinKey key;
       if (skinName.length() == 0)
+      {
          key = new SkinKey(module, DEFAULT_SKIN);
+      }
       else
+      {
          key = new SkinKey(module, skinName);
-      skinConfigs_.remove(key);
+      }
+      
+      removeSkin(key);
    }
+   
+   /**
+    * Remove a Skin mapped to the <code>key</code>
+    * 
+    * @param key key whose mapping skin is to be removed from the service
+    */
+   public void removeSkin(SkinKey key)
+   {
+      if (key == null)
+      {
+         return;
+      }
+      
+      SkinConfig remove = skinConfigs_.remove(key);
+      
+      if (remove != null)
+      {
+         invalidateCachedSkin(remove.getCSSPath());
+      }
+   }
+   
+   /**
+    * @deprecated This is deprecated as its name was not clear.
+    *             Use {@link #removeSkins(List)} instead
+    */
+   @Deprecated
+   public void remove(List<SkinKey> keys) throws Exception
+   {
+      removeSkins(keys);
+   }
+   
+   /**
+    * Remove SkinConfig from Portal Skin Config by SkinKey
+    * @param keys
+    *          SkinKey list these will be removed
+    * @throws Exception
+    */
+   public void removeSkins(List<SkinKey> keys) throws Exception
+   {
+      if (keys == null)
+      {
+         return;
+      }
+      
+      for (SkinKey key : keys)
+      {
+         removeSkin(key);
+      }
+   }
+
 
    /**
     * Remove Skin from Portal available Skin by skin name
@@ -748,26 +726,9 @@ public class SkinService implements Startable
    }
 
    /**
-    * Remove SkinConfig from Portal Skin Config by SkinKey
-    * @param keys
-    *          SkinKey list these will be removed
-    * @throws Exception
-    */
-   public void remove(List<SkinKey> keys) throws Exception
-   {
-      if (keys == null)
-      {
-         return;
-      }
-      for (SkinKey key : keys)
-      {
-         skinConfigs_.remove(key);
-      }
-   }
-
-   /**
-    * get quantity of Portal Skin Config
-    * @return
+    * Return the number of skin config maintaining in this SkinService
+    * 
+    * @return the number of skin config maintaining in this SkinService
     */
    public int size()
    {
@@ -800,7 +761,7 @@ public class SkinService implements Startable
    private Resource getCSSResource(String cssPath, String outerCssFile)
    {
       Resource resource = mainResolver.resolve(cssPath);
-      if (resource == null)
+      if (resource == null && log.isErrorEnabled())
       {
          String logMessage;
          if (!cssPath.equals(outerCssFile))
@@ -820,22 +781,6 @@ public class SkinService implements Startable
          log.error(logMessage);
       }
       return resource;
-   }
-   
-   /**
-    * Apply CSS of skin
-    * @param appendable
-    * @param cssPath
-    * @param orientation
-    * @param merge
-    * @throws RenderingException
-    * @throws IOException
-    */
-   private void processCSS(Appendable appendable, String cssPath, Orientation orientation, boolean merge)
-      throws RenderingException, IOException
-   {
-      Resource skin = getCSSResource(cssPath, cssPath);      
-      processCSSRecursively(appendable, merge, skin, orientation);
    }
 
    /**
@@ -859,7 +804,6 @@ public class SkinService implements Startable
       String basePath = skin.getContextPath() + skin.getParentPath();
 
       //
-      String line = "";
       Reader tmp = skin.read();
       if (tmp == null)
       {
@@ -868,7 +812,8 @@ public class SkinService implements Startable
       BufferedReader reader = new SkipCommentReader(tmp, new CommentBlockHandler.OrientationCommentBlockHandler());
       try
       {
-         while ((line = reader.readLine()) != null)
+         String line = reader.readLine();
+         while (line != null)
          {            
             line = proccessOrientation(line, orientation);            
             line = proccessBackgroundUrl(line, basePath);                       
@@ -900,7 +845,11 @@ public class SkinService implements Startable
                matcher.appendReplacement((StringBuffer)appendable, str);
             }
             matcher.appendTail((StringBuffer)appendable);
-            appendable.append("\n");
+            
+            if ((line = reader.readLine()) != null)
+            {
+               appendable.append("\n");
+            }
          }         
       }
       finally

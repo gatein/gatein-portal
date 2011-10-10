@@ -28,9 +28,8 @@ import org.exoplatform.component.test.ContainerScope;
  * @date 7/5/11
  */
 @ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/resource-compressor-service-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/js-service-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/skin-service-configuration.xml")
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/resource-compressor-service-configuration.xml")
 })
 public abstract class AbstractWebResourceTest extends AbstractKernelTest
 {
