@@ -97,11 +97,10 @@ public class FileUploadServlet extends UploadAction
                receivedFiles.put(item.getFieldName(), file);
                receivedContentTypes.put(item.getFieldName(), item.getContentType());
 
-               String overwriteVal = request.getParameter("overwrite");
-               boolean overwrite = Boolean.parseBoolean(overwriteVal);
+               String importMode = request.getParameter("importMode");
 
                // process the uploaded file
-               processImport(request.getParameter("pc"), new FileInputStream(file), overwrite);
+               processImport(request.getParameter("pc"), new FileInputStream(file), importMode);
                
                // Compose a xml message with the full file information which can be parsed in client side
                response.append("<file-").append(count).append("-field>").append(item.getFieldName()).append("</file-").append(count).append("-field>\n");
@@ -159,7 +158,7 @@ public class FileUploadServlet extends UploadAction
       }
    }
 
-   private void processImport(final String containerName, final InputStream in, final boolean overwrite) throws Exception
+   private void processImport(final String containerName, final InputStream in, final String importMode) throws Exception
    {
 
       doInRequest(containerName, new ContainerCallback<Void>()
@@ -170,12 +169,9 @@ public class FileUploadServlet extends UploadAction
          {
             ManagementController controller = getComponent(container, ManagementController.class);
 
-            Map<String, List<String>> attributes = Collections.emptyMap();
-            if (overwrite)
-            {
-               attributes = new HashMap<String, List<String>>(1);
-               attributes.put("import-strategy", Collections.singletonList("overwrite"));
-            }
+            Map<String, List<String>> attributes = new HashMap<String, List<String>>(1);
+            attributes.put("importMode", Collections.singletonList(importMode));
+
             ManagedRequest request = ManagedRequest.Factory.create(
                OperationNames.IMPORT_RESOURCE, PathAddress.pathAddress("mop"),
                attributes, in, ContentType.ZIP);

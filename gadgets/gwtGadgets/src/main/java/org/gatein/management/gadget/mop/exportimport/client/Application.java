@@ -23,6 +23,8 @@
 package org.gatein.management.gadget.mop.exportimport.client;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ChangeEvent;
+import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.logical.shared.OpenEvent;
@@ -50,6 +52,7 @@ import com.google.gwt.user.client.ui.HasVerticalAlignment;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.NamedFrame;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -222,7 +225,14 @@ public class Application extends Gadget<UserPreferences>
       absolutePanel.setSize("400px", "220px");
 
       final Button importButton = new Button("Import");
-      final CheckBox overwriteBox = new CheckBox("Overwrite the existing site");
+      final Label importModeLabel = new Label("Import Mode:");
+      final ListBox importModeListBox = new ListBox(false);
+      importModeListBox.addItem("Conserve", "conserve");
+      importModeListBox.addItem("Insert", "insert");
+      importModeListBox.addItem("Merge", "merge");
+      importModeListBox.addItem("Overwrite", "overwrite");
+      importModeListBox.setSelectedIndex(2); // set default to 'merge'
+
       final HTML statusImg = new HTML("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;", true);
       final Label statusLabel = new Label("status label");
       final Label headerLabel = new Label("Select file to import :");
@@ -280,7 +290,7 @@ public class Application extends Gadget<UserPreferences>
                   break;
             }
 
-            overwriteBox.setEnabled(true);
+            importModeListBox.setEnabled(true);
             importButton.setEnabled(true);
          }
       });
@@ -295,7 +305,7 @@ public class Application extends Gadget<UserPreferences>
             statusLabel.setText("Process in progress...");
             statusLabel.setStyleName("progress-style");
             statusImg.setStyleName("progress-style-icon");
-            overwriteBox.setEnabled(false);
+            importModeListBox.setEnabled(false);
             importButton.setEnabled(false);
             if (!isShwon)
             {
@@ -331,18 +341,19 @@ public class Application extends Gadget<UserPreferences>
       // You can add customized parameters to servlet call
       uploader.setServletPath(UPLOAD_ACTION_URL + "?pc=" + getPortalContainerName());
 
-      overwriteBox.setTitle("If you want to force overwriting an existing site, check this checkbox");
-      overwriteBox.addClickHandler(new ClickHandler()
+      importModeListBox.setTitle("The import mode to use during import.");
+      importModeListBox.addChangeHandler(new ChangeHandler()
       {
-
-         public void onClick(ClickEvent event)
+         @Override
+         public void onChange(ChangeEvent changeEvent)
          {
-            String url = UPLOAD_ACTION_URL + "?pc=" + getPortalContainerName() + "&overwrite=" + overwriteBox.getValue();
+            String url = UPLOAD_ACTION_URL + "?pc=" + getPortalContainerName() + "&importMode=" + importModeListBox.getValue(importModeListBox.getSelectedIndex());
             uploader.setServletPath(url);
          }
       });
 
-      absolutePanel.add(overwriteBox, 10, 84);
+      absolutePanel.add(importModeLabel, 10, 88);
+      absolutePanel.add(importModeListBox, 95, 84);
       Button closeButton = new Button("Close", new ClickHandler()
       {
 
