@@ -201,20 +201,45 @@ public class SkinService implements Startable
    }
 
    /**
-    * @deprecated use {@link #addPortalSkin(String, String, String, int, boolean)} instead 
+    * @deprecated use {@link #addPortalSkin(String, String, String)} instead 
     */
    @Deprecated
    public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext)
    {
-      addPortalSkin(module, skinName, cssPath, Integer.MAX_VALUE, false);
+      addPortalSkin(module, skinName, cssPath);
    }
    
+   /**
+    * Add a portal skin with the <code>priority</code> is Integer.MAX_VALUE
+    * and the <code>overwrite</code> is false by default
+    * 
+    * @param module
+    * @param skinName
+    * @param cssPath
+    */
+   public void addPortalSkin(String module, String skinName, String cssPath)
+   {
+      addPortalSkin(module, skinName, cssPath, Integer.MAX_VALUE, false);
+   }
 
    /**
-    * @deprecated use {@link #addPortalSkin(String, String, String, int, boolean)} instead
+    * @deprecated use {@link #addPortalSkin(String, String, String, boolean)} instead
     */
    @Deprecated
    public void addPortalSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)
+   {
+      addPortalSkin(module, skinName, cssPath, overwrite);
+   }
+
+   /**
+    * Add a portal skin with the <code>priority</code> is Integer.MAX_VALUE by default
+    * 
+    * @param module
+    * @param skinName
+    * @param cssPath
+    * @param overwrite
+    */
+   public void addPortalSkin(String module, String skinName, String cssPath, boolean overwrite)
    {
       addPortalSkin(module, skinName, cssPath, Integer.MAX_VALUE, overwrite);
    }
@@ -234,14 +259,19 @@ public class SkinService implements Startable
     * @param cssPriority          
     *           priority to support sorting in skin list
     */
-   public void addPortalSkin(String module, String skinName, String cssPath, int cssPrioriry, boolean overwrite)
+   public void addPortalSkin(String module, String skinName, String cssPath, int priority, boolean overwrite)
    {
       availableSkins_.add(skinName);
       SkinKey key = new SkinKey(module, skinName);
       SkinConfig skinConfig = portalSkins_.get(key);
       if (skinConfig == null || overwrite)
       {
-         skinConfig = new SimpleSkin(this, module, skinName, cssPath, cssPrioriry);
+         if (priority < 0)
+         {
+            priority = Integer.MAX_VALUE;
+         }
+         
+         skinConfig = new SimpleSkin(this, module, skinName, cssPath, priority);
          portalSkins_.put(key, skinConfig);
          
          if (log.isDebugEnabled())
@@ -273,19 +303,45 @@ public class SkinService implements Startable
    }
    
    /**
-    * @deprecated use {@link #addSkin(String, String, String, int, boolean)} instead
+    * @deprecated use {@link #addSkin(String, String, String)} instead
     */
    @Deprecated
    public void addSkin(String module, String skinName, String cssPath, ServletContext scontext)
+   {
+      addSkin(module, skinName, cssPath);
+   }
+   
+   /**
+    * Add a skin with the <code>priority</code> is Integer.MAX_VALUE
+    * and the <code>overwrite</code> is false by default
+    * 
+    * @param module
+    * @param skinName
+    * @param cssPath
+    */
+   public void addSkin(String module, String skinName, String cssPath)
    {
       addSkin(module, skinName, cssPath, Integer.MAX_VALUE, false);
    }
 
    /**
-    * @deprecated use {@link #addSkin(String, String, String, int, boolean)} instead
+    * @deprecated use {@link #addSkin(String, String, String, boolean)} instead
     */
    @Deprecated
    public void addSkin(String module, String skinName, String cssPath, ServletContext scontext, boolean overwrite)
+   {
+      addSkin(module, skinName, cssPath, overwrite);
+   }
+   
+   /**
+    * Add a portal skin with the <code>priority</code> is Integer.MAX_VALUE
+    * 
+    * @param module
+    * @param skinName
+    * @param cssPath
+    * @param overwrite
+    */
+   public void addSkin(String module, String skinName, String cssPath, boolean overwrite)
    {
       addSkin(module, skinName, cssPath, Integer.MAX_VALUE, overwrite);
    }
@@ -313,8 +369,18 @@ public class SkinService implements Startable
       SkinConfig skinConfig = skinConfigs_.get(key);
       if (skinConfig == null || overwrite)
       {
+         if (priority < 0)
+         {
+            priority = Integer.MAX_VALUE;
+         }
+         
          skinConfig = new SimpleSkin(this, module, skinName, cssPath, priority);
          skinConfigs_.put(key, skinConfig);
+
+         if (log.isDebugEnabled())
+         {
+            log.debug("Adding skin : Bind " + key + " to " + skinConfig);
+         }
       }
    }
 
