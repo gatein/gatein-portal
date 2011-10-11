@@ -22,6 +22,7 @@ package org.exoplatform.portal.webui.application;
 import org.exoplatform.Constants;
 import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.web.url.MimeType;
 import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.url.ComponentURL;
@@ -285,6 +286,10 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
 
       // Confirm messsage
       url.setConfirm(props.get("gtn:confirm"));
+
+      //
+      MimeType mimeType = Boolean.TRUE.equals(format.getWantEscapeXML()) ? MimeType.XHTML : MimeType.PLAIN;
+      url.setMimeType(mimeType);
 
       //
       return url.toString();
