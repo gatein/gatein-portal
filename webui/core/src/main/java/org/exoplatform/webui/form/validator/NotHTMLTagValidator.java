@@ -18,11 +18,13 @@
  */
 package org.exoplatform.webui.form.validator;
 
+import java.io.Serializable;
+
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class NotHTMLTagValidator extends ExpressionValidator
+public class NotHTMLTagValidator extends ExpressionValidator implements Serializable
 {
    private static final String REGEX = "[^\\<\\>]*";
    
