@@ -136,7 +136,7 @@ public class MopImportResource implements OperationHandler
                importMap.put(siteKey, mopImport);
             }
 
-            if (file.equals(SiteLayoutExportTask.FILE))
+            if (SiteLayoutExportTask.FILES.contains(file))
             {
                // Unmarshal site layout data
                Marshaller<PortalConfig> marshaller = operationContext.getBindingProvider().getMarshaller(PortalConfig.class, ContentType.XML);
@@ -314,7 +314,7 @@ public class MopImportResource implements OperationHandler
    private static String[] parseEntry(ZipEntry entry) throws IOException
    {
       String name = entry.getName();
-      if (name.endsWith(SiteLayoutExportTask.FILE) || name.endsWith(PageExportTask.FILE) || name.endsWith(NavigationExportTask.FILE))
+      if (isSiteLayoutEntry(name) || name.endsWith(PageExportTask.FILE) || name.endsWith(NavigationExportTask.FILE))
       {
          String[] parts = new String[3];
          parts[0] = name.substring(0, name.indexOf("/"));
@@ -326,6 +326,16 @@ public class MopImportResource implements OperationHandler
       {
          throw new IOException("Unknown entry " + name + " in zip file.");
       }
+   }
+
+   private static boolean isSiteLayoutEntry(String zipEntryName)
+   {
+      for (String file : SiteLayoutExportTask.FILES)
+      {
+         if (zipEntryName.endsWith(file)) return true;
+      }
+
+      return false;
    }
 
    // Bug in SUN's JDK XMLStreamReader implementation closes the underlying stream when

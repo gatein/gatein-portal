@@ -64,7 +64,22 @@ public class SiteReadResource extends AbstractSiteOperationHandler
 
       if (pageOrNav)
       {
-         children.add("portal");
+         if (site.getObjectType() == ObjectType.PORTAL_SITE)
+         {
+            children.add("portal");
+         }
+         else if (site.getObjectType() == ObjectType.GROUP_SITE)
+         {
+            children.add("group");
+         }
+         else if (site.getObjectType() == ObjectType.USER_SITE)
+         {
+            children.add("user");
+         }
+         else
+         {
+            throw new OperationException(operationContext.getOperationName(), "Unknown site type " + site.getObjectType());
+         }
       }
       else
       {

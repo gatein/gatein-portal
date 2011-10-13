@@ -79,7 +79,7 @@ public class MopManagementExtension implements ManagementExtension
    private void siteLayoutManagementRegistration(ManagedResource.Registration sites)
    {
       // This allows us to filter based on path template site-layout.
-      ManagedResource.Registration siteLayout = sites.registerSubResource("{site-layout: portal}", description("Management resource responsible for handling management operations for a site's layout."));
+      ManagedResource.Registration siteLayout = sites.registerSubResource("{site-layout: portal|group|user}", description("Management resource responsible for handling management operations for a site's layout."));
       siteLayout.registerOperationHandler(OperationNames.READ_RESOURCE, new SiteLayoutReadResource(), description("The site layout resource."));
       siteLayout.registerOperationHandler(OperationNames.READ_CONFIG_AS_XML, new SiteLayoutReadConfigAsXml(), description("Reads site layout data for a specific site as configuration xml."));
       siteLayout.registerOperationHandler(OperationNames.EXPORT_RESOURCE, new SiteLayoutExportResource(), description("Exports site layout configuration xml as a zip file."));

@@ -25,15 +25,14 @@ package org.exoplatform.portal.mop.management.exportimport;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
-import org.exoplatform.portal.pom.data.PortalData;
-import org.exoplatform.portal.pom.data.PortalKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.gatein.management.api.binding.Marshaller;
 import org.gatein.management.api.operation.model.ExportTask;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
@@ -41,7 +40,15 @@ import java.io.OutputStream;
  */
 public class SiteLayoutExportTask extends AbstractExportTask implements ExportTask
 {
-   public static final String FILE = "portal.xml";
+   public static final Set<String> FILES;
+   static
+   {
+      HashSet<String> tmp = new HashSet<String>(3);
+      tmp.add("portal.xml");
+      tmp.add("group.xml");
+      tmp.add("user.xml");
+      FILES = tmp;
+   }
 
    private final DataStorage dataStorage;
    private final Marshaller<PortalConfig> marshaller;
@@ -56,7 +63,22 @@ public class SiteLayoutExportTask extends AbstractExportTask implements ExportTa
    @Override
    protected String getXmlFileName()
    {
-      return FILE;
+      if (siteKey.getType() == SiteType.PORTAL)
+      {
+         return "portal.xml";
+      }
+      else if (siteKey.getType() == SiteType.GROUP)
+      {
+         return "group.xml";
+      }
+      else if (siteKey.getType() == SiteType.USER)
+      {
+         return "user.xml";
+      }
+      else
+      {
+         throw new RuntimeException("Unknown site type " + siteKey.getType());
+      }
    }
 
    @Override
