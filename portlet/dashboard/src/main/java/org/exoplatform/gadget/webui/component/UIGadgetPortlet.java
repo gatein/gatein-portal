@@ -26,14 +26,18 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.application.GadgetUtil;
 import org.exoplatform.portal.webui.application.UIGadget;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
+import org.exoplatform.webui.event.Event;
+import org.exoplatform.webui.event.EventListener;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.json.JSONArray;
@@ -49,7 +53,8 @@ import javax.portlet.PortletRequest;
  *          tungcnw@gmail.com
  * June 27, 2008
  */
-@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/gadget/webui/component/UIGadgetPortlet.gtmpl")
+@ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/gadget/webui/component/UIGadgetPortlet.gtmpl", events = {
+   @EventConfig(listeners = UIGadgetPortlet.SaveUserPrefActionListener.class)})
 public class UIGadgetPortlet extends UIPortletApplication
 {
    final static public String LOCAL_STRING = "local://";
@@ -68,34 +73,10 @@ public class UIGadgetPortlet extends UIPortletApplication
    {
       return userPref;
    }
-
-   @Override
-   public void processAction(WebuiRequestContext context) throws Exception
+   
+   public void setUserPref(String pref)
    {
-      super.processAction(context);
-
-      //
-      PortletRequest req = context.getRequest();
-
-      //
-      userPref = req.getParameter("userPref");
-      if (userPref != null && !userPref.isEmpty())
-      {
-         PortletPreferences prefs = req.getPreferences();
-         prefs.setValue("userPref", userPref);
-         prefs.store();
-      }
-   }
-
-   @Override
-   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception
-   {
-      PortletRequest req = context.getRequest();
-      PortletPreferences prefs = req.getPreferences();
-      userPref = prefs.getValue("userPref", null);
-
-      //
-      super.processRender(app, context);
+      this.userPref = pref;
    }
 
    public String getUrl()
@@ -161,5 +142,24 @@ public class UIGadgetPortlet extends UIPortletApplication
          e.printStackTrace(); //To change body of catch statement use File | Settings | File Templates.
       }
       return metadata_.toString();
+   }
+   
+   static public class SaveUserPrefActionListener extends EventListener<UIGadgetPortlet>
+   {
+      public void execute(Event<UIGadgetPortlet> event) throws Exception
+      {
+         PortletRequest req = event.getRequestContext().getRequest();
+         String userPref = req.getParameter("userPref");
+         if (userPref != null && !userPref.isEmpty())
+         {
+            PortletPreferences prefs = req.getPreferences();
+            prefs.setValue("userPref", userPref);
+            prefs.store();
+            
+            UIGadgetPortlet gadgetPortlet = (UIGadgetPortlet) event.getSource();
+            gadgetPortlet.setUserPref(userPref);
+         }
+         Util.getPortalRequestContext().setResponseComplete(true);
+      }
    }
 }
