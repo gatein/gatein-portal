@@ -19,19 +19,6 @@
 
 package org.exoplatform.upload;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.ProgressListener;
@@ -43,6 +30,17 @@ import org.exoplatform.container.xml.PortalContainerInfo;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.text.EntityEncoder;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 public class UploadService
 {
@@ -258,6 +256,7 @@ public class UploadService
 
       // Create a new file upload handler
       ServletFileUpload upload = new ServletFileUpload(factory);
+      upload.setHeaderEncoding("UTF-8");
       ProgressListener listener = new ProgressListener()
       {
          public void update(long pBytesRead, long pContentLength, int pItems)
