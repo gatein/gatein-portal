@@ -145,7 +145,7 @@
                     You do not have to enter values in these fields. They are automatically populated after selecting an existing page by clicking the <emphasis role="bold">Search and Select Page</emphasis> button.
                 </para>
                 <para>
-                    The <emphasis role="bold">Select a page</emphasis> form appears:
+                    The <emphasis role="bold">Select Page</emphasis> form appears:
                 </para>
                 <mediaobject>
                     <imageobject role="html">
@@ -156,15 +156,17 @@
                     </imageobject>
                 </mediaobject>
                         <para>
-                            This window lists of all existing pages, each displayed with basic information. You can follow this guide to select a page for creating a node:
+                            This window lists all existing pages of <emphasis role="bold">Portal</emphasis> or <emphasis role="bold">Group</emphasis> with basic information for each page.
                         </para>
                         <para>
-                            Select a page from list or search a specific page :
+                            To select a page for creating a node, simply select a page from the list or search for a specific page as follows:
                         </para>
                             <procedure id="proc-User_Guide-Manage_Navigation_Nodes-Search_for_a_page">
                                 <step>
                                     <para>
-                                        Enter a search term related to the page which you want to search for:
+                                        Enter your page title into the
+                                        <emphasis role="bold">Title</emphasis>
+                                        field to do search to Title;
                                     </para>
                                     <mediaobject>
                                         <imageobject role="html">
@@ -174,41 +176,60 @@
                                             <imagedata fileref="images/NewSearch1.png" format="PNG" align="center" contentwidth="150mm"/>
                                         </imageobject>
                                     </mediaobject>
-                                </step>
-                                <step>
                                     <para>
-                                        Choose the field you wish to search in:
+                                        Or, enter the site name into the
+                                        <emphasis role="bold">Site Name</emphasis>
+                                        field to do search to the page's site name;
                                     </para>
-                                    <mediaobject>
-                                        <imageobject role="html">
-                                            <imagedata fileref="images/NewSearch2.png" format="PNG" align="center" scale="130"/>
-                                        </imageobject>
-                                        <imageobject role="fo">
-                                            <imagedata fileref="images/NewSearch2.png" format="PNG" contentwidth="150mm"/>
-                                        </imageobject>
-                                    </mediaobject>
-                                </step>
-                                <step>
+                        
                                     <para>
-                                        Click the 'find' icon to perform the search. All pages matching with search term will be listed.
+                                        Or, enter values into both fields to futher limit your search results by both
+                                        <emphasis role="bold">Title</emphasis>
+                                        and <emphasis role="bold">Site Name</emphasis>.
                                     </para>
                                 </step>
                                 <step>
                                     <para>
-                                        Click the OK icon on the row of the page you wish to select.
+                                        Select the area in which you wish to search into the <emphasis role="bold">Type</emphasis> field.
                                     </para>
                                 </step>
                                 <step>
                                     <para>
-                                        After selecting a page, the details of this page will be displayed in the <emphasis role="bold">Page Selector</emphasis> form.
+                                        Click
+                                        <inlinemediaobject>
+                                            <imageobject>
+                                                <imagedata fileref="images/Search_button.png" format="PNG"/>
+                                            </imageobject>
+                                        </inlinemediaobject>
+                                        to perform your search. All pages matching your search criteria will be listed.
+                                    </para>
+                                </step>
+                                <step>
+                                    <para>
+                                        Click
+                                        <inlinemediaobject>
+                                            <imageobject>
+                                                <imagedata fileref="images/Select_page_icon.png" format="PNG"/>
+                                            </imageobject>
+                                        </inlinemediaobject>
+                                        on the row of the page you wish to select.
                                     </para>
                                 </step>
                             </procedure>
-                            <para>
-                                After configuring the page node settings, the page selector and the node's icon, click the <emphasis role="bold">Save</emphasis> button to accept or the <emphasis role="bold">Cancel</emphasis> button to quit without creating a new node.
-                            </para>
                 </step>
             </procedure>
+            <para>
+                After selecting a page, the details of this page will be displayed in the
+                <emphasis role="bold">Page Selector</emphasis>
+                form.
+            </para>
+            <para>
+                After configuring the page node settings, the page selector and the node's icon, click the
+                <emphasis role="bold">Save</emphasis>
+                button to accept or the
+                <emphasis role="bold">Cancel</emphasis>
+                button to quit without creating a new node.
+            </para>
         </section>
 
         <section id="sect-User_Guide-Manage_Navigation_Nodes-Edit_a_node">
@@ -216,7 +237,7 @@
                 <procedure>
                     <step>
                         <para>
-                            Click on <emphasis role="bold">Site</emphasis> then click on <emphasis role="bold">Edit Navigation</emphasis> of the portal you want to modify.
+                            Click <emphasis role="bold">Site</emphasis>, then click <emphasis role="bold">Edit Navigation</emphasis> of the portal you want to modify.
                         </para>
                     </step>
                     <step>
@@ -356,14 +377,6 @@ You can see more details on how to select a page for a node in <xref linkend="se
                                 <imagedata fileref="images/PasteNode3.png" format="PNG" align="center" contentwidth="130mm"/>
                             </imageobject>
                         </mediaobject>
-                        <para>
-                            The new pages will appear in the page lists:
-                        </para>
-                <!--        <mediaobject>
-                            <imageobject>
-                                <imagedata fileref="images/ManagePage2.png" format="PNG" align="center" width="444" />
-                            </imageobject>
-                        </mediaobject> -->
                     </step>
                 </procedure>
         </section>
