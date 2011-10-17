@@ -194,37 +194,37 @@
                     </step>
                 </procedure>
             </section>
-			<note>
-				<para>
-				  By default on logout the CAS server will display the CAS logout page with a link to return to the portal. To make the CAS server redirect to the portal page after a logout, modify the 
+            <note>
+                <para>
+                  By default on logout the CAS server will display the CAS logout page with a link to return to the portal. To make the CAS server redirect to the portal page after a logout, modify the 
                                   <filename>cas.war/WEB-INF/cas-servlet.xml</filename> to include the follow line :
-				</para>
+                </para>
                                 <programlisting>
-		&#60;bean id=&#34;logoutController&#34; class=&#34;org.jasig.cas.web.LogoutController&#34;
+        &#60;bean id=&#34;logoutController&#34; class=&#34;org.jasig.cas.web.LogoutController&#34;
                   p:centralAuthenticationService-ref=&#34;centralAuthenticationService&#34;
                   p:logoutView=&#34;casLogoutView&#34;
                   p:warnCookieGenerator-ref=&#34;warnCookieGenerator&#34;
                   p:ticketGrantingTicketCookieGenerator-ref=&#34;ticketGrantingTicketCookieGenerator&#34;
                 <emphasis role="bold">p:followServiceRedirects=&#34;true&#34;/&#62;</emphasis>
 
-				</programlisting>
-			</note>
-		</section>
-		
-		<section id="sect-Reference_Guide-CAS_Central_Authentication_Service-Setup_the_CAS_client">
-			<title>Setup the CAS client</title>
-			<procedure>
-				<step>
-					<para>
-						Copy all libraries from <filename>GATEIN_SSO_HOME/cas/gatein.ear/lib</filename> into <filename>JBOSS_HOME/server/default/deploy/gatein.ear/lib</filename> (Or in Tomcat, into $<filename>GATEIN_HOME/lib</filename>)
-					</para>
-				</step>
-				<step>
-					<itemizedlist>
-						<listitem>
-							<para>
-							In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment this section:
-							</para>
+                </programlisting>
+            </note>
+        </section>
+        
+        <section id="sect-Reference_Guide-CAS_Central_Authentication_Service-Setup_the_CAS_client">
+            <title>Setup the CAS client</title>
+            <procedure>
+                <step>
+                    <para>
+                        Copy all libraries from <filename>GATEIN_SSO_HOME/cas/gatein.ear/lib</filename> into <filename>JBOSS_HOME/server/default/deploy/gatein.ear/lib</filename> (Or in Tomcat, into $<filename>GATEIN_HOME/lib</filename>)
+                    </para>
+                </step>
+                <step>
+                    <itemizedlist>
+                        <listitem>
+                            <para>
+                            In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment this section:
+                            </para>
 <programlisting>&#60;authentication&#62;
   &#60;login-module code=&#34;org.gatein.sso.agent.login.SSOLoginModule&#34; flag=&#34;required&#34;&#62;
   &#60;/login-module&#62;      
@@ -324,79 +324,79 @@ realmName=gatein-domain;
 
 <programlisting>
 <![CDATA[
-	<filter>
-		<filter-name>LoginRedirectFilter</filter-name>
-		<filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
-		<init-param>                                 
-		  <!-- This should point to your SSO authentication server -->                                                                                              
-		  <param-name>LOGIN_URL</param-name>   
-		  <!--
-		      If casRenewTicket param value of InitiateLoginServlet is:  not specified or false
-		  -->
-		  <param-value>http://localhost:8888/cas/login?service=
-		  http://localhost:8080/portal/initiatessologin</param-value>
-		  <!--
-		      If casRenewTicket param value of InitiateLoginServlet is : true
-		  -->
-		  <!--
-		  <param-value>http://localhost:8888/cas/login?
-		  service=http://localhost:8080/portal/initiatessologin&amp;renew=true</param-value>
-		  -->
-		</init-param>
-	</filter>
-	<filter>
-		<filter-name>CASLogoutFilter</filter-name>                                                                                              
-		<filter-class>org.gatein.sso.agent.filter.CASLogoutFilter</filter-class>                                                      
-		<init-param>                                 
-		  <!-- This should point to your JOSSO authentication server -->                                                                                              
-		  <param-name>LOGOUT_URL</param-name>                                                                                                
-		  <param-value>http://localhost:8888/cas/logout</param-value>                                                                                                         
-		</init-param>                                                                                                                              
-	</filter>
-	<filter>
-		<filter-name>InitiateLoginFilter</filter-name>
-		<filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
-		<init-param>
-		  <param-name>ssoServerUrl</param-name>
-		  <param-value>http://localhost:8888/cas</param-value>
-		</init-param>    
-		<init-param>
-		  <param-name>casRenewTicket</param-name>
-		  <param-value>false</param-value>
-		</init-param>
-		<init-param>
-		  <param-name>casServiceUrl</param-name>
-		  <param-value>http://localhost:8080/portal/initiatessologin</param-value>
-		</init-param>
-		<init-param>
-		  <param-name>loginUrl</param-name>
-		  <param-value>http://localhost:8080/portal/dologin</param-value>
-		</init-param>
-	</filter>
-	
-	<!-- Mapping the filters at the very top of the filter chain -->
-	<filter-mapping>
-	  <filter-name>LoginRedirectFilter</filter-name>
-	  <url-pattern>/*</url-pattern>	         
-	</filter-mapping>
-	<filter-mapping>
-	  <filter-name>CASLogoutFilter</filter-name>
-	  <url-pattern>/*</url-pattern>
-	</filter-mapping>
+    <filter>
+        <filter-name>LoginRedirectFilter</filter-name>
+        <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
+        <init-param>                                 
+          <!-- This should point to your SSO authentication server -->                                                                                              
+          <param-name>LOGIN_URL</param-name>   
+          <!--
+              If casRenewTicket param value of InitiateLoginServlet is:  not specified or false
+          -->
+          <param-value>http://localhost:8888/cas/login?service=
+          http://localhost:8080/portal/initiatessologin</param-value>
+          <!--
+              If casRenewTicket param value of InitiateLoginServlet is : true
+          -->
+          <!--
+          <param-value>http://localhost:8888/cas/login?
+          service=http://localhost:8080/portal/initiatessologin&amp;renew=true</param-value>
+          -->
+        </init-param>
+    </filter>
+    <filter>
+        <filter-name>CASLogoutFilter</filter-name>                                                                                              
+        <filter-class>org.gatein.sso.agent.filter.CASLogoutFilter</filter-class>                                                      
+        <init-param>                                 
+          <!-- This should point to your JOSSO authentication server -->                                                                                              
+          <param-name>LOGOUT_URL</param-name>                                                                                                
+          <param-value>http://localhost:8888/cas/logout</param-value>                                                                                                         
+        </init-param>                                                                                                                              
+    </filter>
+    <filter>
+        <filter-name>InitiateLoginFilter</filter-name>
+        <filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
+        <init-param>
+          <param-name>ssoServerUrl</param-name>
+          <param-value>http://localhost:8888/cas</param-value>
+        </init-param>    
+        <init-param>
+          <param-name>casRenewTicket</param-name>
+          <param-value>false</param-value>
+        </init-param>
+        <init-param>
+          <param-name>casServiceUrl</param-name>
+          <param-value>http://localhost:8080/portal/initiatessologin</param-value>
+        </init-param>
+        <init-param>
+          <param-name>loginUrl</param-name>
+          <param-value>http://localhost:8080/portal/dologin</param-value>
+        </init-param>
+    </filter>
+    
+    <!-- Mapping the filters at the very top of the filter chain -->
+    <filter-mapping>
+      <filter-name>LoginRedirectFilter</filter-name>
+      <url-pattern>/*</url-pattern>          
+    </filter-mapping>
+    <filter-mapping>
+      <filter-name>CASLogoutFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+    </filter-mapping>
   <filter-mapping>
     <filter-name>InitiateLoginFilter</filter-name>
     <url-pattern>/initiatessologin</url-pattern>
   </filter-mapping>
 ]]>  
 </programlisting>
-						</para>
-					</listitem>
-				</itemizedlist>
-			</para>
-			<para>
-				Once these changes have been made, all links to the user authentication pages will redirect to the CAS centralized authentication form.
-			</para>
-		</section>
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                Once these changes have been made, all links to the user authentication pages will redirect to the CAS centralized authentication form.
+            </para>
+        </section>
 
     </section>
     
@@ -610,10 +610,10 @@ realmName=gatein-domain;
     <filter-name>LoginRedirectFilter</filter-name>
     <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
     <init-param>
-		  <!-- This should point to your SSO authentication server -->
-		  <param-name>LOGIN_URL</param-name>
-		  <param-value>http://localhost:8888/josso/signon/login.do?
-		  josso_back_to=http://localhost:8080/portal/initiatessologin</param-value>
+          <!-- This should point to your SSO authentication server -->
+          <param-name>LOGIN_URL</param-name>
+          <param-value>http://localhost:8888/josso/signon/login.do?
+          josso_back_to=http://localhost:8080/portal/initiatessologin</param-value>
     </init-param>
   </filter>
   <filter>
@@ -626,17 +626,17 @@ realmName=gatein-domain;
     </init-param>
   </filter>
   <filter>
-		<filter-name>InitiateLoginFilter</filter-name>
-		<filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
-		<init-param>
-		  <param-name>ssoServerUrl</param-name>
-		  <param-value>http://localhost:8888/josso/signon/login.do</param-value>
-		</init-param>
-		<init-param>
-		  <param-name>loginUrl</param-name>
-		  <param-value>http://localhost:8080/portal/dologin</param-value>
-		</init-param>
-	</filter>
+        <filter-name>InitiateLoginFilter</filter-name>
+        <filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
+        <init-param>
+          <param-name>ssoServerUrl</param-name>
+          <param-value>http://localhost:8888/josso/signon/login.do</param-value>
+        </init-param>
+        <init-param>
+          <param-name>loginUrl</param-name>
+          <param-value>http://localhost:8080/portal/dologin</param-value>
+        </init-param>
+    </filter>
   
   <!-- filters should be placed at the very top of the filter chain -->
   <filter-mapping>
@@ -653,22 +653,19 @@ realmName=gatein-domain;
   </filter-mapping>
 ]]> 
 </programlisting>
-						</para>
-					</listitem>
-				</itemizedlist>
-			</para>
-			<para>
-				From now on, all links redirecting to the user authentication pages will redirect to the JOSSO centralized authentication form.
-			</para>
-		</section>
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                From now on, all links redirecting to the user authentication pages will redirect to the JOSSO centralized authentication form.
+            </para>
+        </section>
 
     </section>
     
     <section id="sect-Reference_Guide-Single_Sign_On-OpenSSO_The_Open_Web_SSO_project">
         <title>OpenSSO - The Open Web SSO project</title>
-        <para>
-            This Single Sign On plugin enables seamless integration between &PRODUCT; and the OpenSSO Single Sign On Framework. Details about OpenSSO can be found <ulink url="https://opensso.dev.java.net/">here</ulink>.
-        </para>
         <para>
             Setting up this integration involves two steps. The first step is to install or configure an OpenSSO server, and the second is to set up the portal to use the OpenSSO server.
         </para>
@@ -682,11 +679,14 @@ realmName=gatein-domain;
             </para>
             <section id="sect-Reference_Guide-OpenSSO_server-Obtaining_OpenSSO">
                 <title>Obtaining OpenSSO</title>
-                <para>
+                <!--<para>
                     OpenSSO can be downloaded from <ulink type="http" url="http://download.oracle.com/otn/nt/middleware/11g/oracle_opensso_80U2.zip">http://download.oracle.com/otn/nt/middleware/11g/oracle_opensso_80U2.zip</ulink>.
                 </para>
                 <para>
                     Once downloaded, extract the package into a suitable location. This location will be referred to as <filename>OPENSSO_HOME</filename> in this example.
+                </para> -->
+                <para>
+                    OpenSSO must be purchased from <ulink type="http" url="http://www.oracle.com/technetwork/middleware/id-mgmt/overview/index.html">Oracle</ulink>.
                 </para>
             </section>
             
@@ -935,10 +935,10 @@ realmName=gatein-domain;
     <filter-name>LoginRedirectFilter</filter-name>
     <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
     <init-param>
-	    <!-- This should point to your SSO authentication server -->
-	    <param-name>LOGIN_URL</param-name>
-	    <param-value>http://localhost:8888/opensso/UI/Login?
-	    realm=gatein&amp;goto=http://localhost:8080/portal/initiatessologin</param-value>
+        <!-- This should point to your SSO authentication server -->
+        <param-name>LOGIN_URL</param-name>
+        <param-value>http://localhost:8888/opensso/UI/Login?
+        realm=gatein&amp;goto=http://localhost:8080/portal/initiatessologin</param-value>
     </init-param>
   </filter>
   <filter>  
@@ -951,21 +951,21 @@ realmName=gatein-domain;
     </init-param>
   </filter>
   <filter>
-		<filter-name>InitiateLoginFilter</filter-name>
-		<filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
-		<init-param>
-		  <param-name>ssoServerUrl</param-name>
-		  <param-value>hhttp://localhost:8888/opensso</param-value>
-		</init-param>
-		<init-param>
-		  <param-name>loginUrl</param-name>
-		  <param-value>http://localhost:8080/portal/dologin</param-value>
-		</init-param>
-		<init-param>
+        <filter-name>InitiateLoginFilter</filter-name>
+        <filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
+        <init-param>
+          <param-name>ssoServerUrl</param-name>
+          <param-value>hhttp://localhost:8888/opensso</param-value>
+        </init-param>
+        <init-param>
+          <param-name>loginUrl</param-name>
+          <param-value>http://localhost:8080/portal/dologin</param-value>
+        </init-param>
+        <init-param>
       <param-name>ssoCookieName</param-name>
       <param-value>iPlanetDirectoryPro</param-value>
     </init-param>
-	</filter>
+    </filter>
   
   <!-- place the filters at the top of the filter chain -->
   <filter-mapping>
@@ -982,14 +982,14 @@ realmName=gatein-domain;
   </filter-mapping>
 ]]> 
 </programlisting>
-						</para>
-					</listitem>
-				</itemizedlist>
-			</para>
-			<para>
-				From now on, all links redirecting to the user authentication pages will redirect to the OpenSSO centralized authentication form.
-			</para>
-		</section>
+                        </para>
+                    </listitem>
+                </itemizedlist>
+            </para>
+            <para>
+                From now on, all links redirecting to the user authentication pages will redirect to the OpenSSO centralized authentication form.
+            </para>
+        </section>
 
     </section>
 
