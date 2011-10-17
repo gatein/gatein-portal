@@ -45,4 +45,5 @@
 	<div class="UIWindowContent">
 		<div class="PopupContent" style="$heightStyle"><% uicomponent.renderChildren(); %></div>
 	</div>
+	<span class="ResizeButton"></span>
 </div>

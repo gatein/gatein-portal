@@ -107,6 +107,12 @@
 	margin: auto;
 }
 
+.UIPopupWindow .ResizeButton {
+	width: 13px;
+	height: 13px;
+	margin: 0px 5px 5px 0px;
+}
+
 /************************** UIPortalComposer **************************/
 
 .UIPortalComposer {
@@ -229,12 +235,6 @@
 .UIPortalComposer .UITabPane .UITabContentContainer .UITabContent {
 	background: none;
 	border: none;
-}
-
-.UIPortalComposer .ResizeButton {
-	width: 13px; 
-	height: 13px;
-	margin: 0px 0px 5px 0px;
 }
 
 .UIPortalComposer > .OverflowContainer{

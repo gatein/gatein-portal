@@ -36,8 +36,8 @@
 				<a href="javascript:void(0);" class="ViewAsBlockIcon"><%=_ctx.appRes(popupId + ".action.SwitchMode")%></a>
 			</span>						
 		</div>
-		<span class="ResizeButton"></span>
 	</div>
+	<span class="ResizeButton"></span>
 </div>
 <script language="javascript">
 	eXo.portal.portalMode = <%=uicomponent.getPortalMode();%>;
