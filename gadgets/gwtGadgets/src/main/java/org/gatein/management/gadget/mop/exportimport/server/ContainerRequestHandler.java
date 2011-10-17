@@ -62,6 +62,8 @@ public class ContainerRequestHandler
          {
             log.warn("Illegal state exception ending RequestLifeCycle", e);
          }
+
+         ExoContainerContext.setCurrentContainer(null);
       }
    }
 }
