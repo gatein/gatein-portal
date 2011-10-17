@@ -30,6 +30,7 @@ import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -88,6 +89,9 @@ public class UISiteManagement extends UIContainer
    private LazyPageList<PortalConfig> pageList;
 
    private UINavigationManagement naviManager;
+   
+   //set navigationScope to GrandChildren for default value
+   private Scope navigationScope = Scope.GRANDCHILDREN;
 
    public UISiteManagement() throws Exception
    {
@@ -183,6 +187,16 @@ public class UISiteManagement extends UIContainer
 
       }, 10);
 
+   }
+   
+   public void setScope(Scope scope)
+   {
+      this.navigationScope = scope;
+   } 
+   
+   public Scope getScope()
+   {
+      return this.navigationScope;
    }
 
    private boolean stillKeptInPageList(String portalName) throws Exception {
@@ -387,6 +401,7 @@ public class UISiteManagement extends UIContainer
          UserNavigation edittedNavigation = userPortal.getNavigation(SiteKey.portal(portalName));
 
          UINavigationNodeSelector selector = naviManager.getChild(UINavigationNodeSelector.class);
+         selector.setScope(uicomp.getScope());
          selector.setEdittedNavigation(edittedNavigation);
          selector.setUserPortal(userPortal);
          selector.initTreeData();
@@ -408,6 +423,7 @@ public class UISiteManagement extends UIContainer
 
          UINavigationNodeSelector selector = navigationManager.getChild(UINavigationNodeSelector.class);
          TreeNode selectedParent = (TreeNode)uiPageNodeForm.getSelectedParent();
+         selector.setScope(uiSiteManagement.getScope());
          selector.selectNode(selectedParent);
 
          WebuiRequestContext context = event.getRequestContext();

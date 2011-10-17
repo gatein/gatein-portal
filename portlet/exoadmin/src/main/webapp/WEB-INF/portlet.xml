@@ -172,6 +172,14 @@
          <short-title>Portal Navigation Portlet</short-title>
          <keywords>System</keywords>
       </portlet-info>
+
+      <portlet-preferences>
+        <preference>
+          <name>level</name>
+          <value>2</value>
+        </preference>
+      </portlet-preferences>
+
    </portlet>
 
    <portlet>
