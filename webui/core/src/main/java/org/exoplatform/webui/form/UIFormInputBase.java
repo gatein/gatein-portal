@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
@@ -27,9 +28,13 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.Validator;
 
+import java.io.IOException;
+import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by The eXo Platform SARL
@@ -90,6 +95,11 @@ abstract public class UIFormInputBase<T> extends UIContainer implements UIFormIn
     * Whether this field is in read only mode
     */
    protected boolean readonly_ = false;
+
+   /**
+    * A map of HTML attribute
+    */
+   private Map<String, String> attribute;
    
    public UIFormInputBase(String name, String bindingField, Class<T> typeValue)
    {
@@ -236,5 +246,37 @@ abstract public class UIFormInputBase<T> extends UIContainer implements UIFormIn
    public void setLabel(String label)
    {
       this.label = label;
+   }
+   
+   public String getHTMLAttribute(String name)
+   {
+      if (attribute != null)
+      {
+         return attribute.get(name);
+      }
+      return null;
+   }
+   
+   public void setHTMLAttribute(String name, String value)
+   {
+      if (attribute == null)
+      {
+         attribute = new HashMap<String, String>();
+      }
+      attribute.put(name, value);
+   }
+   
+   protected void renderHTMLAttribute(Writer w) throws IOException
+   {
+      if (attribute != null)
+      {
+         w.write(" ");
+         for (String name : attribute.keySet())
+         {
+            String value = HTMLEntityEncoder.getInstance().encodeHTMLAttribute(attribute.get(name));
+            w.write(name + "=\"" + value + "\"");
+         }
+         w.write(" ");
+      }
    }
 }

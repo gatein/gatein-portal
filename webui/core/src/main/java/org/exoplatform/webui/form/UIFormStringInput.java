@@ -126,6 +126,9 @@ public class UIFormStringInput extends UIFormInputBase<String>
          w.write(" readonly ");
       if (!enable_)
          w.write(" disabled ");
+      
+      renderHTMLAttribute(w);
+      
       w.write("/>");
       if (this.isMandatory())
          w.write(" *");
