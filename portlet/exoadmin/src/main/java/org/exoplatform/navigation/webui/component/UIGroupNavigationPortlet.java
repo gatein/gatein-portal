@@ -19,6 +19,13 @@
 
 package org.exoplatform.navigation.webui.component;
 
+import javax.portlet.PortletPreferences;
+import javax.portlet.PortletRequest;
+
+import org.exoplatform.portal.mop.navigation.GenericScope;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
@@ -26,8 +33,31 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class)
 public class UIGroupNavigationPortlet extends UIPortletApplication
 {
+   public static final int DEFAULT_LEVEL = 2;
+   
    public UIGroupNavigationPortlet() throws Exception
    {
-      addChild(UIGroupNavigationManagement.class, null, null);
+      PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
+      PortletRequest prequest = context.getRequest();
+      PortletPreferences prefers = prequest.getPreferences();
+      int level = DEFAULT_LEVEL; 
+      try 
+      {
+         level = Integer.valueOf(prefers.getValue("level", String.valueOf(DEFAULT_LEVEL)));       
+      }
+      catch (Exception ex) 
+      {
+         log.warn("Preference for navigation level can only be integer");
+      }
+
+      UIGroupNavigationManagement groupNavigationManagement = addChild(UIGroupNavigationManagement.class, null, null);
+      if (level <= 0)
+      {
+         groupNavigationManagement.setScope(Scope.ALL);                     
+      }
+      else
+      {
+         groupNavigationManagement.setScope(GenericScope.treeShape(level));
+      }
    }
 }

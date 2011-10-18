@@ -27,6 +27,7 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.navigation.UIAddGroupNavigation;
@@ -84,6 +85,9 @@ public class UIGroupNavigationManagement extends UIContainer
 {
 
    private UINavigationManagement naviManager;
+   
+   //set navigationScope to GrandChildren for default value
+   private Scope navigationScope = Scope.GRANDCHILDREN;
 
    public UIGroupNavigationManagement() throws Exception
    {
@@ -113,6 +117,16 @@ public class UIGroupNavigationManagement extends UIContainer
       virtualList.dataBind(new ObjectPageList<UserNavigation>(groupNav, groupNav.size()));
    }
 
+   public void setScope(Scope scope)
+   {
+      this.navigationScope = scope;
+   } 
+   
+   public Scope getScope()
+   {
+      return this.navigationScope;
+   }
+   
    /**
     * User has right to add navigation to a group in below cases
     * 
@@ -205,6 +219,7 @@ public class UIGroupNavigationManagement extends UIContainer
          UINavigationNodeSelector selector = naviManager.getChild(UINavigationNodeSelector.class);
          selector.setEdittedNavigation(nav);
          selector.setUserPortal(userPortal);
+         selector.setScope(uicomp.getScope());
          selector.initTreeData();
 
          popUp.setUIComponent(naviManager);
