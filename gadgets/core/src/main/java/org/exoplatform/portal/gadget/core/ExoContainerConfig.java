@@ -88,7 +88,7 @@ public class
    
    private void initializeTokenKeyFile()
    {
-      String keyPath = PropertyManager.getProperty("gatein.gadgets.securityTokenKeyFile");
+      String keyPath = PropertyManager.getProperty("gatein.gadgets.securitytokenkeyfile");
       
       File tokenKeyFile = null;      
       if (keyPath == null) 
@@ -101,21 +101,60 @@ public class
          tokenKeyFile = new File(keyPath);
       }
       
-      boolean isCreated = initializeKeyFile(tokenKeyFile);
-      if (isCreated)
+      keyPath = tokenKeyFile.getAbsolutePath();
+      if (tokenKeyFile.exists())
       {
-         setTokenKeyPath(tokenKeyFile.getAbsolutePath());
+         if (tokenKeyFile.isFile())
+         {
+            setTokenKeyPath(keyPath);
+            log.info("Found token key file " + keyPath + " for gadgets security");
+         }
+         else
+         {
+            log.error("Found token path file " + keyPath + " but it's not a key file");
+         }
+      }
+      else
+      {
+         log.debug("No token key file found at path " + keyPath + ". it's generating a new key and saving it");
+         File fic = tokenKeyFile.getAbsoluteFile();
+         File parentFolder = fic.getParentFile();
+         if (!parentFolder.exists()) {
+            if (!parentFolder.mkdirs())
+            {
+               log.error("Coult not create parent folder/s for the token key file " + keyPath);
+               return;
+            }
+         }
+         String key = generateKey();
+         Writer out = null;
+         try
+         {
+            out = new FileWriter(tokenKeyFile);
+            out.write(key);
+            out.write('\n');
+            setTokenKeyPath(keyPath);
+            log.debug("Generated token key file " + keyPath + " for eXo Gadgets");
+         }
+         catch (IOException e)
+         {
+            log.error("Could not create token key file " + keyPath, e);
+         }
+         finally
+         {
+            Safe.close(out);
+         }
       }
    }
 
    private void initializeSigningKeyFile()
    {
-      String signingKey = PropertyManager.getProperty("gatein.gadgets.signingKeyFile");
+      String signingKey = PropertyManager.getProperty("gatein.gadgets.signingkeyfile");
       
       File signingKeyFile;
       if (signingKey == null)
       {
-         log.warn("The gadgets signing key is not configured. The default oauthkey.pem file in /bin will be used");
+         log.warn("The gadgets signing key is not configured. The default signing key in /bin directory will be used.");
          signingKeyFile = new File("oauthkey.pem");
       }
       else
@@ -123,59 +162,18 @@ public class
          signingKeyFile = new File(signingKey);
       }
       
-      boolean isCreated = initializeKeyFile(signingKeyFile);
-      if (isCreated)
+      if (signingKeyFile.exists())
       {
-         signingKey_ = signingKeyFile.getAbsolutePath();
-      }
-   }
-   
-   private boolean initializeKeyFile(File file)
-   {
-      String keyPath = file.getAbsolutePath();
-      if (file.exists())
-      {
-         if (file.isFile())
+         if (signingKeyFile.isFile())
          {
-            log.info("Found key file " + keyPath + " for gadgets security");
+            signingKey_ = signingKeyFile.getAbsolutePath();
+            log.info("Use signing key " +  signingKey_ + " for gadget security");
          }
          else
          {
-            log.error("Found path file " + keyPath + " but it's not a key file");
+            log.error("Found signing path file " + signingKeyFile.getAbsolutePath() + " but it's not a key file");
          }
       }
-      else
-      {
-         log.debug("No key file found at path " + keyPath + ". it's generating a new key and saving it");
-         File fic = file.getAbsoluteFile();
-         File parentFolder = fic.getParentFile();
-         if (!parentFolder.exists()) {
-            if (!parentFolder.mkdirs())
-            {
-               log.error("Coult not create parent folder/s for the key file " + keyPath);
-               return false;
-            }
-         }
-         String key = generateKey();
-         Writer out = null;
-         try
-         {
-            out = new FileWriter(file);
-            out.write(key);
-            out.write('\n');
-            log.debug("Generated key file " + keyPath + " for eXo Gadgets");
-         }
-         catch (IOException e)
-         {
-            log.error("Could not create key file " + keyPath, e);
-            return false;
-         }
-         finally
-         {
-            Safe.close(out);
-         }
-      }
-      return true;
    }
    
    private void setTokenKeyPath(String keyPath)

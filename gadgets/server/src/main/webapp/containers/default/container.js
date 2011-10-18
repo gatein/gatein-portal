@@ -97,7 +97,7 @@
 "gadgets.osDataUri" : "http://%host%/rpc",
 
 "gadgets.signingKeyFile" : "oauthkey.pem",
-"gadgets.signingKeyName" : "mytestkey",
+"gadgets.signingKeyName" : "exokey",
 
 "gadgets.signedFetchDomain" : "eXo",
 
