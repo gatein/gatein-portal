@@ -33,12 +33,20 @@ import org.exoplatform.webui.form.UIFormInput;
  * Jun 7, 2006
  * 
  * Validates whether an email is in the correct format
+ * Valid characters that can be used in a domain name are:
+ *     a-z
+ *     0-9
+ *     - (dash) or . (dot) but not as a starting or ending character
+ *     . (dot) as a separator for the textual portions of a domain name
+ *     
+ * Valid characters that can be used in a domain name are:
+ *     a-z
+ *     0-9
+ *     _ (underscore) or .  (dot) but not as a starting or ending character
  */
 @Serialized
 public class EmailAddressValidator implements Validator
 {
-
-   static private final String EMAIL_REGEX = "[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-.]+";
 
    public void validate(UIFormInput uiInput) throws Exception
    {
@@ -48,19 +56,118 @@ public class EmailAddressValidator implements Validator
       String label;
       try
       {
-    	  label = uiForm.getId() + ".label." + uiInput.getName();
+        label = uiForm.getId() + ".label." + uiInput.getName();
       }
       catch (Exception e)
       {
          label = uiInput.getName();
       }
-      if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0)
-         return;
-      String s = (String)uiInput.getValue();
-      if (s.matches(EMAIL_REGEX))
-         return;
       Object[] args = {label};
-      throw new MessageException(new ApplicationMessage("EmailAddressValidator.msg.Invalid-input", args,
-         ApplicationMessage.WARNING));
+      
+      if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0)
+      {
+         return;
+      }
+      
+      String s = (String)uiInput.getValue();
+      int atIndex = s.indexOf('@');
+      if (atIndex == -1)
+      {
+         throw new MessageException(new ApplicationMessage("EmailAddressValidator.msg.Invalid-input", args,
+            ApplicationMessage.WARNING));
+      }
+      
+      String localPart = s.substring(0, atIndex);
+      String domainName = s.substring(atIndex + 1);
+
+      if (!validateLocalPart(localPart.toCharArray()) || !validateDomainName(domainName.toCharArray()))
+      {
+         throw new MessageException(new ApplicationMessage("EmailAddressValidator.msg.Invalid-input", args,
+            ApplicationMessage.WARNING));
+      }
+   }
+
+   private boolean validateLocalPart(char[] localPart)
+   {
+      if(!isAlphabet(localPart[0]) || !isAlphabetOrDigit(localPart[localPart.length -1]))
+      {
+         return false;
+      }
+
+      for(int i = 1; i < localPart.length -1; i++)
+      {
+         char c = localPart[i];
+         char next = localPart[i+1];
+
+         if(isAlphabetOrDigit(c) || (isLocalPartSymbol(c) && isAlphabetOrDigit(next)))
+         {
+            continue;
+         }
+         else
+         {
+            return false;
+         }
+      }
+      return true;
+   }
+
+   private boolean validateDomainName(char[] domainName)
+   {
+      if(!isAlphabet(domainName[0]) || !isAlphabetOrDigit(domainName[domainName.length -1]))
+      {
+         return false;
+      }
+
+      //Check if there is no non-alphabet following the last dot
+      boolean foundValidLastDot = false;
+      for(int i = 1; i < domainName.length -1; i++)
+      {
+         char c = domainName[i];
+         char next = domainName[i+1];
+
+         if(c == '.')
+         {
+            foundValidLastDot = true;
+         }
+         else if(!isAlphabet(c))
+         {
+            foundValidLastDot = false;
+         }
+
+         if(isAlphabetOrDigit(c) || (isDomainNameSymbol(c) && isAlphabetOrDigit(next)))
+         {
+            continue;
+         }
+         else
+         {
+            return false;
+         }
+      }
+      return foundValidLastDot;
+   }
+   
+   private boolean isAlphabet(char c)
+   {
+      return c >= 'a' && c <= 'z';
+   }
+   
+   private boolean isDigit(char c)
+   {
+      return c >= '0' && c <= '9';
+   }
+
+   private boolean isAlphabetOrDigit(char c)
+   {
+      return isAlphabet(c) || isDigit(c);
+   }
+   
+   private boolean isLocalPartSymbol(char c)
+   {
+      return c == '_' || c == '.';
+   }
+   
+   private boolean isDomainNameSymbol(char c)
+   {
+      return c == '-' || c == '.';
    }
 }

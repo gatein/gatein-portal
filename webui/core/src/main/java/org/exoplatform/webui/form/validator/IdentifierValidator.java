@@ -33,7 +33,8 @@ import java.io.Serializable;
  *          minhdv81@yahoo.com
  * Jun 7, 2006
  * 
- * Validates whether the value is composed of letters, numbers or '_'
+ * Validates whether the value is composed of letters, digit , '_' or '-'h
+ * First character could not be digit or '-'
  */
 public class IdentifierValidator implements Validator, Serializable
 {

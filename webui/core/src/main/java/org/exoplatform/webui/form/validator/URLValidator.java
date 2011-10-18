@@ -35,15 +35,12 @@ import java.io.Serializable;
  */
 public class URLValidator implements Validator, Serializable
 {
-
+   
    static private final String IP_REGEX =
-      "(((25[0-5])|(2[0-4][0-9])|([01]?[0-9]?[0-9]))\\.){3}((25[0-5])|(2[0-4][0-9])|([01]?[0-9]?[0-9]))";
-
-   //  static public final String URL_REGEX = 
-   //    "^(ht|f)tp(s?)://(\\w+:\\w+@)?(("+ IP_REGEX +")|((www.)?(\\S+\\.){1,2}(\\w{2,5}))|([a-zA-Z][-a-zA-Z0-9]+))" +
-   //    "(:\\d{1,5})?($|((/[-+%.\\w\\d ]+)*/?((\\.\\w+)?($|\\?([-.:+\\w\\d%/]+=[-.:+\\w\\d%/]+)(&[-.:+\\w\\d%/]+=[-.:+\\w\\d%/]+)*))?))" ;
+      "(((((25[0-5])|(2[0-4][0-9])|([01]?[0-9]?[0-9]))\\.){3}((25[0-4])|(2[0-4][0-9])|((1?[1-9]?[1-9])|([1-9]0))))|(0\\.){3}0)";
+      
    static public final String URL_REGEX = "^((ht|f)tp(s?)://)" //protocol 
-      + "(\\w+:\\w+@)?" //username:password@
+      + "(\\w+(:\\w+)?@)?" //username:password@
       + "(" + IP_REGEX //ip 
       + "|([0-9a-z_!~*'()-]+\\.)*([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\.[a-z]{2,6}" //domain like www.exoplatform.org 
       + "|([a-zA-Z][-a-zA-Z0-9]+))" // domain like localhost

@@ -40,37 +40,48 @@ public class PositiveNumberFormatValidator implements Validator
    public void validate(UIFormInput uiInput) throws Exception
    {
       if (uiInput.getValue() == null || ((String)uiInput.getValue()).length() == 0)
+      {
          return;
+      }
       //  modified by Pham Dinh Tan
       UIComponent uiComponent = (UIComponent)uiInput;
       UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
       String label;
       try
       {
-    	  label = uiForm.getId() + ".label." + uiInput.getName();
+        label = uiForm.getId() + ".label." + uiInput.getName();
       }
       catch (Exception e)
       {
          label = uiInput.getName();
       }
+      Object[] args = {label, uiInput.getBindingField()};
+      
       String s = (String)uiInput.getValue();
-      boolean error = false;
-      for (int i = 0; i < s.length(); i++)
+      
+      if(s.charAt(0) == '0' && s.length() > 1)
       {
-         char c = s.charAt(i);
-         if (Character.isDigit(c) || (s.charAt(0) == '-' && i == 0))
-         {
-            error = true;
-            continue;
-         }
-         error = false;
-         Object[] args = {label, uiInput.getBindingField()};
          throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
       }
-      if (error == true && s.charAt(0) == '-')
+      else if(s.charAt(0) == '-' && s.length() > 1 && s.charAt(1) == '0')
       {
-         Object[] args = {label};
-         throw new MessageException(new ApplicationMessage("PositiveNumberFormatValidator.msg.Invalid-number", args));
+         throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
       }
+      
+      int value;
+      try 
+      {
+         value = Integer.parseInt(s);
+      } 
+      catch(NumberFormatException e) 
+      {
+         throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
+      }
+      
+      if(value >= 0) 
+      {
+         return;
+      }
+      throw new MessageException(new ApplicationMessage("PositiveNumberFormatValidator.msg.Invalid-number", args));
    }
 }
