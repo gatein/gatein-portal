@@ -102,30 +102,21 @@ UIUserSelector.prototype.getKeynum = function(event) {
   }
   return keynum ;
 } ;
+
 /**
- * Process event when user presses a key
- * @param {Object} evt event
+ * Return true if the key pressed is the Enter.
+ * Otherwise return false.
  */
-UIUserSelector.prototype.captureInput = function(input, action) {
-  if(typeof(input) == "string") input = document.getElementById(input) ;
-	input.form.onsubmit = eXo.webui.UIUserSelector.cancelSubmit ;
-  input.onkeypress= eXo.webui.UIUserSelector.onEnter ;
-} ;
-/**
- * Process event when user presses a Enter key
- * @param {Object} evt event
- */
-UIUserSelector.prototype.onEnter = function(evt) {
+UIUserSelector.prototype.isEnterPress = function(evt) {
   var _e = evt || window.event ;
-  _e.cancelBubble = true ;
   var keynum = eXo.webui.UIUserSelector.getKeynum(_e) ;
-  if (keynum == 13) {
-    var action = eXo.core.DOMUtil.findNextElementByTagName(this, "a");
-		if(!action) action = eXo.core.DOMUtil.findPreviousElementByTagName(this, "a")  ;
-    action = String(action.href).replace("javascript:","").replace("%20","") ;
-    eval(action) ;
+  if (keynum == 13)
+  {
+    return true;
   }
+  return false;
 } ;
+
 /**
  * Cancel submit action
  */

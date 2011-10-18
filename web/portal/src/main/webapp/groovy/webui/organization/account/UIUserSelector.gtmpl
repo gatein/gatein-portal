@@ -5,8 +5,16 @@
  def rcontext = _ctx.getRequestContext(); 
  boolean isMulti = uicomponent.getMulti();
  rcontext.getJavascriptManager().addJavascript('eXo.webui.UIUserSelector.init("'+uiform.id+'"); '); 
- rcontext.getJavascriptManager().addJavascript('eXo.webui.UIUserSelector.captureInput("'+uiform.FIELD_KEYWORD+'","'+uicomponent.event('Search')+'"); '); 
- if(uicomponent.isShowSearchGroup()) rcontext.getJavascriptManager().addJavascript('eXo.webui.UIUserSelector.captureInput("'+uiform.FIELD_GROUP+'","'+uicomponent.event('FindGroup',uicomponent.getSelectedGroup())+'"); '); 
+
+  String js = "if (eXo.webui.UIUserSelector.isEnterPress(event)) {" + uicomponent.event('Search') + "; return false;}";
+  uiform.getUIStringInput(uiform.FIELD_KEYWORD).setHTMLAttribute("onkeypress", js);
+ 
+  if(uicomponent.isShowSearchGroup())
+  {
+    js = "if (eXo.webui.UIUserSelector.isEnterPress(event)) {" + uicomponent.event('FindGroup',uicomponent.getSelectedGroup()) + "; return false;}";
+    uiform.getUIStringInput(uiform.FIELD_GROUP).setHTMLAttribute("onkeypress", js);
+  }
+
 %> 
 <div class="UIUserSelector">
 	<div class="SelectUserContainer">
