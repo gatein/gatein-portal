@@ -23,13 +23,27 @@ UIVirtualList.prototype.init = function(componentId) {
   var uiVirtualList = document.getElementById(componentId);
   if (uiVirtualList == null) return;  
   uiVirtualList.style.height = "300px";    
-  var children = eXo.core.DOMUtil.getChildrenByTagName(uiVirtualList,"div");
+  
+  //If parent of virtualList have style.display = none --> can't get virtualList's height
+  var tmp = uiVirtualList;
+  if (uiVirtualList.offsetHeight == 0) {
+	  tmp = uiVirtualList.cloneNode(true);
+	  tmp.style.visibility = "hidden";
+	  document.body.appendChild(tmp);
+  }
+  var virtualHeight = tmp.offsetHeight;
+  
+  var children = eXo.core.DOMUtil.getChildrenByTagName(tmp,"div");  
   var childrenHeight = 0;
   for (var i=0; i<children.length;i++) {
   	childrenHeight += children[i].offsetHeight;  	
   }
   
-  if (!uiVirtualList.isFinished && childrenHeight <= uiVirtualList.offsetHeight && childrenHeight != 0) {
+  if (tmp !== uiVirtualList) {
+	  document.body.removeChild(tmp);	  
+  }
+  
+  if (!uiVirtualList.isFinished && childrenHeight <= virtualHeight && childrenHeight != 0) {
 		uiVirtualList.onscroll();
   } else {  	
   	uiVirtualList.isInitiated = true;
