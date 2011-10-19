@@ -78,11 +78,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Serialized
 public class UIUserSelector extends UIForm implements UIPopupComponent
 {
-   final public static String FIELD_KEYWORD = "Quick Search".intern();
+   final public static String FIELD_KEYWORD = "Quick Search";
 
-   final public static String FIELD_FILTER = "filter".intern();
+   final public static String FIELD_FILTER = "filter";
 
-   final public static String FIELD_GROUP = "group".intern();
+   final public static String FIELD_GROUP = "group";
 
    public static String USER_NAME = "userName";
 
