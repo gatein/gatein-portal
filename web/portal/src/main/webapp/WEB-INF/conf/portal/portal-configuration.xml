@@ -339,6 +339,9 @@
             <field name="liveTime">
               <long>600</long>
             </field>
+            <field name="implementation">
+              <string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string>  	
+            </field>
           </object>
         </object-param>
       </init-params>
@@ -386,6 +389,9 @@
             </field>
             <field name="liveTime">
               <long>600</long>
+            </field>
+            <field name="implementation">
+              <string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string>   
             </field>
           </object>
         </object-param>
@@ -437,6 +443,9 @@
             </field>
             <field name="liveTime">
               <long>600</long>
+            </field>
+            <field name="implementation">
+              <string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string>   
             </field>
           </object>
         </object-param>
