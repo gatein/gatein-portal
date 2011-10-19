@@ -321,7 +321,7 @@
 .UIDashboardContainer .GadgetContainer .UIColumn {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
-	width: 325px;
+	width: auto;
 	padding: 2px;
 }
 

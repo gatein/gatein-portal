@@ -306,10 +306,6 @@ function UIDashboard() {
 		var gadgetControls = DOMUtil.findDescendantsByClass(portletWindow, "div", "GadgetControl");
 		for(var j=0; j<gadgetControls.length; j++) {
 			var uiGadget = DOMUtil.findAncestorByClass(gadgetControls[j],"UIGadget");
-			var iframe = DOMUtil.findFirstDescendantByClass(uiGadget, "iframe", "gadgets-gadget") ;
-			if (iframe) {
-				iframe.style.width = "99.9%" ;
-			}
 			var minimizeButton = DOMUtil.findFirstDescendantByClass(gadgetControls[j], "span", "MinimizeAction") ;
 			if(canEdit) {
 				eXo.webui.UIDashboard.init(gadgetControls[j], uiGadget);
