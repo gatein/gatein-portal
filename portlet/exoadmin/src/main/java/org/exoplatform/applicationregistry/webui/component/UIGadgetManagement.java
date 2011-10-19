@@ -193,9 +193,9 @@ public class UIGadgetManagement extends UIContainer
          removeFromApplicationRegistry(name);
          UIApplicationOrganizer uiOrganizer =
             uiManagement.getParent().findFirstComponentOfType(UIApplicationOrganizer.class);
-         ApplicationCategory selectedCate = uiOrganizer.getSelectedCategory();
+         String selectedCateName = uiOrganizer.getSelectedCategory().getName();
          uiOrganizer.reload();
-         uiOrganizer.setSelectedCategory(selectedCate);
+         uiOrganizer.setSelectedCategory(selectedCateName);
 
          ctx.addUIComponentToUpdateByAjax(uiManagement);
       }
