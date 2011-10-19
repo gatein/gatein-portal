@@ -19,11 +19,8 @@
 
 package org.exoplatform.portal.application;
 
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -91,55 +88,32 @@ public class LegacyRequestHandler extends WebRequestHandler
    {
       String requestSiteName = context.getParameter(PortalRequestHandler.REQUEST_SITE_NAME);
       String requestPath = context.getParameter(PortalRequestHandler.REQUEST_PATH);
+      
+      SiteKey siteKey = SiteKey.portal(requestSiteName);
+      String uri = requestPath;
 
-      // Resolve the user node
-      UserPortalConfig cfg = userPortalService.getUserPortalConfig(requestSiteName, context.getRequest().getRemoteUser(), userPortalContext);
-      
-      if (cfg == null)
+      // Resolve the user node if node path is indicated
+      if (!requestPath.equals(""))
       {
-    	  HttpServletRequest req = context.getRequest();
-    	  DataStorage storage = (DataStorage)PortalContainer.getComponent(DataStorage.class);
-          PortalConfig persistentPortalConfig = storage.getPortalConfig(requestSiteName);
-          if (persistentPortalConfig == null)
-          {
-             return false;
-          }
-          if(req.getRemoteUser() == null)
-          {
-        	  String doLoginPath = req.getContextPath() + "/" + "dologin" + "?initialURI=" + req.getRequestURI();
-        	  context.getResponse().sendRedirect(doLoginPath);
-          }
-          else
-          {
-             context.getResponse().sendError(HttpServletResponse.SC_FORBIDDEN);
-          }
-    	  return true;
-      }
-      
-      
-      UserPortal userPortal = cfg.getUserPortal();
-      UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder().withAuthMode(UserNodeFilterConfig.AUTH_READ);
-      UserNode userNode = userPortal.resolvePath(builder.build(), requestPath);
+         UserPortalConfig cfg = userPortalService.getUserPortalConfig(requestSiteName, context.getRequest().getRemoteUser(), userPortalContext);
+         if (cfg != null)
+         {
+            UserPortal userPortal = cfg.getUserPortal();
+            UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder().withAuthMode(UserNodeFilterConfig.AUTH_READ);
+            UserNode userNode = userPortal.resolvePath(builder.build(), requestPath);
 
-      //
-      SiteKey siteKey;
-      String uri;
-      if (userNode != null)
-      {
-         siteKey = userNode.getNavigation().getKey();
-         uri = userNode.getURI();
-      }
-      else
-      {
-         siteKey = SiteKey.portal("classic");
-         uri = "";
+            if (userNode != null)
+            {
+               siteKey = userNode.getNavigation().getKey();
+               uri = userNode.getURI();
+            }
+         }
       }
 
-      //
+     //
       PortalURLContext urlContext = new PortalURLContext(context, siteKey);
       NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
 
-      // For now we redirect on the default classic site
       url.setResource(new NavigationResource(siteKey.getType(), siteKey.getName(), uri));
       url.setMimeType(MimeType.PLAIN);
 
