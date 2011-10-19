@@ -1,0 +1,53 @@
+<%
+	String[] uploadId = uicomponent.getUploadId();
+	boolean isAutoUpload = uicomponent.isAutoUpload();
+	int limitFile = uicomponent.getLimitFile();
+	def rcontext = _ctx.getRequestContext();
+	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIUploadInput');
+	StringBuilder b = new StringBuilder();
+	b.append("[") ;
+	for(int i = 0; i < uploadId.length; i++) {
+		b.append("\'").append(uploadId[i]).append("\'") ;
+		if(i < uploadId.length - 1) b.append(",");
+	}
+	b.append("]");
+	rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.webui.UIUploadInput.initUploadEntry("+b.toString()+","+isAutoUpload+");");
+%>
+<%for(int i = 0; i < uploadId.length; i++) {%>
+<div class="UIUploadInput" id="UploadInputContainer<%=uploadId[i];%>">
+	<div class="LimitMessage" style="display: none;"><%= _ctx.appRes("UIFormUploadInput.msg.limit"); %></div>
+	<div id="UploadInput<%=uploadId[i];%>" class="UploadInput">		
+	</div>
+	<div id="ProgressIframe<%=uploadId[i];%>" class="ProgressIframe" style="display: none;"></div>			
+	<div class="ProgressBarFrame" style="display: none;">
+		<div class="ProgressBar">
+			<div class="ProgressBarLeft">
+				<div class="ProgressBarMiddle">
+					<div class="BlueProgressBar">
+						<div class="ProgressBarLabel">0%</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="DeleteFileFrame">
+			<div class="DeleteFileLable" onclick="eXo.webui.UIUploadInput.abortUpload('<%=uploadId[i];%>', <%=isAutoUpload;%>);"><%=_ctx.appRes("UIFormUploadInput.label.Cancel")%></div>
+		</div>
+	</div>
+	<div class="SelectFileFrame" style="display: none;">
+		<div class="FileName">
+			<div class="FileNameLabel"><span></span></div>
+		</div>
+		<div class="RemoveFile" title="<%= _ctx.appRes("UIFormUploadInput.label.remove"); %>" onclick="eXo.webui.UIUploadInput.deleteUpload('<%=uploadId[i];%>', <%=isAutoUpload;%>);"></div>
+	</div>
+	<iframe height="0" width="0" name="UploadIFrame<%=uploadId[i];%>" id="UploadIFrame<%=uploadId[i];%>" style="display: none;">
+		<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>
+		<html xmlns='http://www.w3.org/1999/xhtml'>
+			<head></head>
+			<body></body>
+		</html>
+	</iframe>
+</div>
+<%}%>
+<%if(!isAutoUpload) {%>
+<img id="IconUpload<%=uploadId[0]%>" class="UploadButton" style="width : 20px; height: 20px; float: left; cursor: pointer; vertical-align: bottom; background: url('/eXoResources/skin/DefaultSkin/webui/component/UIUpload/background/UpArrow16x16.gif') no-repeat left;" onclick="eXo.webui.UIUploadInput.upload(<%=b.toString();%>, <%=isAutoUpload;%>)" alt='' src='/eXoResources/skin/sharedImages/Blank.gif'/>
+<%}%>

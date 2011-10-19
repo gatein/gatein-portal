@@ -92,7 +92,7 @@ UIUpload.prototype.createUploadEntry = function(uploadId, isAutoUpload) {
  * Refresh progress bar to update state of upload progress
  * @param {String} elementId identifier of upload bar frame
  */
-UIUpload.prototype.refeshProgress = function(elementId) {
+UIUpload.prototype.refreshProgress = function(elementId) {
   var list =  eXo.webui.UIUpload.listUpload;
   if(list.length < 1) return;
   var url = eXo.env.server.context + "/upload?" ;
@@ -103,7 +103,7 @@ UIUpload.prototype.refeshProgress = function(elementId) {
   }
   var responseText = ajaxAsyncGetRequest(url, false);
   if(list.length > 0) {
-    setTimeout("eXo.webui.UIUpload.refeshProgress('" + elementId + "');", 1000); 
+    setTimeout("eXo.webui.UIUpload.refreshProgress('" + elementId + "');", 1000); 
   }
     
   var response;
@@ -119,6 +119,9 @@ UIUpload.prototype.refeshProgress = function(elementId) {
   	if (response.upload[id].status == "failed") {
   		this.abortUpload(id);
   		var message = eXo.core.DOMUtil.findFirstChildByClass(container, "div", "LimitMessage").innerHTML ;
+  		message = message.replace("{0}", response.upload[id].size);
+  		message = message.replace("{1}", response.upload[id].unit);
+  		alert(message);
   		continue;
   	}
     var element = document.getElementById(id+"ProgressIframe");
@@ -271,7 +274,7 @@ UIUpload.prototype.upload = function(clickEle, id) {
   var list = eXo.webui.UIUpload.listUpload;
   if(list.length == 0) {
     eXo.webui.UIUpload.listUpload.push(form.id);
-    setTimeout("eXo.webui.UIUpload.refeshProgress('" + id + "');", 1000);
+    setTimeout("eXo.webui.UIUpload.refreshProgress('" + id + "');", 1000);
   } else {
     eXo.webui.UIUpload.listUpload.push(form.id);  
   }

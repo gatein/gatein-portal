@@ -24,6 +24,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.upload.UploadResource;
 import org.exoplatform.upload.UploadService;
+import org.exoplatform.upload.UploadService.UploadLimit;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.WebRequestHandler;
@@ -66,7 +67,7 @@ public class UploadHandler extends WebRequestHandler
       String[] uploadIds = req.getParameterValues("uploadId");
       
       res.setHeader("Cache-Control", "no-cache");
-
+      
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       UploadService service = (UploadService)container.getComponentInstanceOfType(UploadService.class);
       if (action == null || action.length() < 1)
@@ -87,10 +88,11 @@ public class UploadHandler extends WebRequestHandler
                continue;
             if (upResource.getStatus() == UploadResource.FAILED_STATUS)
             {
-               int limitMB = service.getUploadLimitsMB().get(uploadIds[i]).intValue();
+               UploadLimit limit = service.getUploadLimits().get(uploadIds[i]);
                value.append("\n    \"").append(uploadIds[i]).append("\": {");
                value.append("\n      \"status\":").append('\"').append("failed").append("\",");
-               value.append("\n      \"size\":").append('\"').append(limitMB).append("\"");
+               value.append("\n      \"size\":").append('\"').append(limit.getLimit()).append("\",");
+               value.append("\n      \"unit\":").append('\"').append(limit.getUnit()).append("\"");
                value.append("\n    }");
                continue;
             }
@@ -101,7 +103,8 @@ public class UploadHandler extends WebRequestHandler
             }
             value.append("\n    \"").append(uploadIds[i]).append("\": {");
             value.append("\n      \"percent\":").append('\"').append((int)percent).append("\",");
-            value.append("\n      \"fileName\":").append('\"').append(encodeName(upResource.getFileName()))
+            String fileName = EntityEncoder.FULL.encode(upResource.getFileName());
+            value.append("\n      \"fileName\":").append('\"').append(encodeName(fileName))
                .append("\"");
             value.append("\n    }");
             if (i < uploadIds.length - 1)
