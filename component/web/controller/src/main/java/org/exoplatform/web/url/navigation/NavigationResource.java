@@ -40,12 +40,7 @@ public class NavigationResource
    
    /** . */
    private final String nodeURI;
-   
-   public NavigationResource(String siteName)
-   {
-      this(null, siteName, null);
-   }
-   
+
    public NavigationResource(UserNode node)
    {
       this(node.getNavigation().getKey().getType(), node.getNavigation().getKey().getName(), node.getURI());
