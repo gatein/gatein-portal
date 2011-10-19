@@ -22,12 +22,15 @@ package org.exoplatform.dashboard.webui.component;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.exoplatform.application.registry.ApplicationRegistryService;
+import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -59,21 +62,28 @@ public class UIDashboardSelectContainer extends UIContainer
    public final List<ApplicationCategory> getCategories() throws Exception
    {
       ApplicationRegistryService service = getApplicationComponent(ApplicationRegistryService.class);
+      UserACL acl = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
 
       String remoteUser = ((WebuiRequestContext)WebuiRequestContext.getCurrentInstance()).getRemoteUser();
-      List<ApplicationCategory> listCategories =
-         service.getApplicationCategories(remoteUser, ApplicationType.GADGET);
+      List<ApplicationCategory> listCategories = new ArrayList<ApplicationCategory>();
 
-      Iterator<ApplicationCategory> appCateIte = listCategories.iterator();
+      Iterator<ApplicationCategory> appCateIte = service.getApplicationCategories(remoteUser, ApplicationType.GADGET).iterator();
       while (appCateIte.hasNext())
       {
          ApplicationCategory cate = appCateIte.next();
-         List<Application> listGadgets = cate.getApplications();
-         if (listGadgets == null || listGadgets.size() == 0)
+         for(String p : cate.getAccessPermissions())
          {
-            appCateIte.remove();
-            continue;
+            if(acl.hasPermission(p))
+            {
+               List<Application> listGadgets = cate.getApplications();
+               if (listGadgets != null && listGadgets.size() > 0)
+               {
+                  listCategories.add(cate);
+                  break;
+               }               
+            }
          }
+         
       }
       Collections.sort(listCategories, new Comparator<ApplicationCategory>()
       {
@@ -93,7 +103,21 @@ public class UIDashboardSelectContainer extends UIContainer
 
    public List<Application> getGadgetsOfCategory(final ApplicationCategory appCategory) throws Exception
    {
-      List<Application> listGadgets = appCategory.getApplications();
+      UserACL acl = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
+      List<Application> listGadgets = new ArrayList<Application>();
+      Iterator<Application> gadgetIterator = appCategory.getApplications().iterator();
+      while(gadgetIterator.hasNext())
+      {
+         Application app = gadgetIterator.next();
+         for(String p : app.getAccessPermissions())
+         {
+            if(acl.hasPermission(p))
+            {
+               listGadgets.add(app);
+               break;
+            }
+         }
+      }
       Collections.sort(listGadgets, new Comparator<Application>()
       {
          public int compare(Application app1, Application app2)
