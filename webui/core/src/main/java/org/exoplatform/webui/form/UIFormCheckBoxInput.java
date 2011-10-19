@@ -56,7 +56,7 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
       super(name, bindingExpression, null);
       if (value != null)
          typeValue_ = (Class<T>)value.getClass();
-      value_ = value;
+      setValue(value);
       setId(name);
    }
 
@@ -120,7 +120,6 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
    {
       if (!isEnable())
          return;
-      
       if (input != null) {
          if(input.equals("true"))
             checked = true;

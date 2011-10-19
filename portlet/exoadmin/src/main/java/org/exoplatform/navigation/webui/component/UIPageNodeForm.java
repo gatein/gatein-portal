@@ -174,7 +174,7 @@ public class UIPageNodeForm extends UIFormTabPane
          getUIStringInput("name").setEditable(UIFormStringInput.ENABLE);
          getChild(UIFormInputIconSelector.class).setSelectedIcon("Default");
          setShowPublicationDate(false);
-         switchLabelMode(false);
+         switchLabelMode(true);
          return;
       }
       getUIStringInput("name").setEditable(UIFormStringInput.DISABLE);
@@ -392,9 +392,11 @@ public class UIPageNodeForm extends UIFormTabPane
       }
       
       node.setI18nizedLabels(labels);
-      
+
       if (getUIFormCheckBoxInput(SWITCH_MODE).getValue().toString().equals("true"))
          node.setLabel(null);
+      else if (node.getLabel() == null)
+         node.setLabel(node.getName());
    }
 
    public void setShowCheckPublicationDate(boolean show)
