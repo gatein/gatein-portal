@@ -4,7 +4,7 @@
 	import org.exoplatform.portal.webui.application.GadgetUtil;
 	import org.exoplatform.webui.application.portlet.PortletRequestContext;
 	
-	def hostName = GadgetUtil.getRelGadgetServerUrl();
+	def hostName = GadgetUtil.getGadgetServerUrl();
 	def rcontext = _ctx.getRequestContext() ;
 	def windowId = rcontext.getWindowId();
 	def id = uicomponent.getId() + "-" + windowId ;

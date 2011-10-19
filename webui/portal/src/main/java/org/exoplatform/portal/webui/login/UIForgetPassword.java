@@ -45,6 +45,8 @@ import java.net.URLEncoder;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by The eXo Platform SARL
  * Author : dang.tung
@@ -75,7 +77,6 @@ public class UIForgetPassword extends UIForm
          UILogin uilogin = uiForm.getParent();
          WebuiRequestContext requestContext = event.getRequestContext();
          PortalRequestContext portalContext = PortalRequestContext.getCurrentInstance();
-         String url = portalContext.getRequest().getRequestURL().toString();
          MailService mailSrc = uiForm.getApplicationComponent(MailService.class);
          OrganizationService orgSrc = uiForm.getApplicationComponent(OrganizationService.class);
          String userName = uiForm.getUIStringInput(Username).getValue();
@@ -141,7 +142,8 @@ public class UIForgetPassword extends UIForm
          {
             e.printStackTrace();
          }
-         String host = url.substring(0, url.indexOf(requestContext.getRequestContextPath()));
+         HttpServletRequest request = portalContext.getRequest();
+         String host = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
          String activeLink = host + requestContext.getRequestContextPath() + "/public/" + portalName
         	 		+ "?portal:componentId=UIPortal&portal:action=RecoveryPasswordAndUsername&tokenId=" 
         	 		+ tokenId;

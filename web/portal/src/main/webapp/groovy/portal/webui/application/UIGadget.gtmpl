@@ -4,7 +4,7 @@
 	
     def rcontext = _ctx.getRequestContext();
     JavascriptManager jsmanager = rcontext.getJavascriptManager();
-    def hostName = GadgetUtil.getRelGadgetServerUrl();
+    def hostName = GadgetUtil.getGadgetServerUrl();
     def url = null;
     def metadata = "";
     def posX = uicomponent.getProperties().getIntValue("locationX") + "px";

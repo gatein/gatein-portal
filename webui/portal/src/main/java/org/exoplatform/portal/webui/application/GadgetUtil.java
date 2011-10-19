@@ -40,6 +40,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * Created by The eXo Platform SAS Author : Pham Thanh Tung
  * thanhtungty@gmail.com Oct 2, 2008
@@ -200,71 +202,35 @@ public class GadgetUtil
       return getLocalHostBase() + "/" + PortalContainer.getCurrentRestContextName() + "/private/" + uri;
    }
 
-   //  TODO: TanPham:Replace by getGadgetServerUrl to make server url
-   //  static private String getHostBase() {
-   //    String hostName = getHostName();
-   //    URL url = null;
-   //    try {
-   //       url = new URL(hostName);
-   //    } catch (Exception e) {}
-   //    if(url == null) return hostName ;
-   //    int index = hostName.indexOf(url.getPath()) ;
-   //    if(index < 1) return hostName ;
-   //    return hostName.substring(0, index) ;
-   //  }
+   /**
+    * Make full URL of gadget server
+    * @return URL String
+    */
    public static String getGadgetServerUrl()
    {
-      String hostName = getHostName();
+      String uriString = getGadgetServerURI();
       try
       {
-         new URL(hostName);
+         new URL(uriString);
       }
       catch (Exception e)
       {
-         try
-         {
-            String newHostName = getLocalHostName() + "/" + hostName;
-            new URL(newHostName);
-            hostName = newHostName;
-         }
-         catch (Exception e2)
-         {
-         }
+         return getLocalHostBase() + (uriString.startsWith("/") ? uriString : ("/" + uriString));
       }
-      return hostName;
+      return uriString;
    }
 
-   //  TODO: Using in gtmpl templates
+   /**
+    * See getGadgetServerUrl()
+    * @return URL String
+    */
+   @Deprecated
    public static String getRelGadgetServerUrl()
    {
-      String url = getGadgetServerUrl();
-      String localHostBase = getLocalHostBase();
-      int index = url.indexOf(localHostBase);
-      if (index >= 0)
-         return url.substring(index + localHostBase.length());
-      return url;
+      return getGadgetServerUrl();
    }
 
-   static private String getLocalHostBase()
-   {
-      String hostName = getLocalHostName();
-      URL url = null;
-      try
-      {
-         url = new URL(hostName);
-      }
-      catch (Exception e)
-      {
-      }
-      if (url == null)
-         return hostName;
-      int index = hostName.indexOf(url.getPath());
-      if (index < 1)
-         return hostName;
-      return hostName.substring(0, index);
-   }
-
-   static private String getHostName()
+   static private String getGadgetServerURI()
    {
       ExoContainer container = ExoContainerContext.getCurrentContainer();
       GadgetRegistryService gadgetService =
@@ -272,12 +238,10 @@ public class GadgetUtil
       return gadgetService.getHostName();
    }
 
-   static private String getLocalHostName()
+   static private String getLocalHostBase()
    {
-      PortalRequestContext pContext = Util.getPortalRequestContext();
-      StringBuffer requestUrl = pContext.getRequest().getRequestURL();
-      int index = requestUrl.indexOf(pContext.getRequestContextPath());
-      return requestUrl.substring(0, index);
+      HttpServletRequest request = Util.getPortalRequestContext().getRequest();
+      return request.getScheme() + "://" + request.getServerName() + ((request.getServerPort() != 80) ? ":" + request.getServerPort() : "");
    }
 
 }
