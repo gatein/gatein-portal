@@ -53,6 +53,8 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
 
    private int size = -1;
 
+   private User lastExisting;
+
    public IDMUserListAccess(UserQueryBuilder userQueryBuilder, int pageSize, boolean countAll)
    {
       this.userQueryBuilder = userQueryBuilder;
@@ -90,9 +92,11 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
          users = fullResults.subList(index, index + length);
       }
 
-      User[] exoUsers = new User[users.size()];
+      User[] exoUsers = new User[length];
 
-      for (int i = 0; i < users.size(); i++)
+      int i = 0;
+
+      for (; i < users.size(); i++)
       {
          org.picketlink.idm.api.User user = users.get(i);
 
@@ -100,6 +104,16 @@ public class IDMUserListAccess implements ListAccess<User>, Serializable
          ((UserDAOImpl)getOrganizationService().getUserHandler())
             .populateUser(gtnUser, getIDMService().getIdentitySession());
          exoUsers[i] = gtnUser;
+         lastExisting = gtnUser;
+      }
+
+      if (length > users.size())
+      {
+
+         for(; i < length; i++)
+         {
+            exoUsers[i] = lastExisting;
+         }
       }
 
       if (log.isTraceEnabled())

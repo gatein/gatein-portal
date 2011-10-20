@@ -53,6 +53,8 @@ public class IDMMembershipListAccess implements ListAccess<Membership>, Serializ
 
    private int size = -1;
 
+   private Membership lastExisting;
+
    public IDMMembershipListAccess(Group group)
    {
       this.group = group;
@@ -95,9 +97,13 @@ public class IDMMembershipListAccess implements ListAccess<Membership>, Serializ
          roles = new LinkedList<Role>(getIDMService().getIdentitySession().getRoleManager().findRoles(user, null, crit));
       }
 
-      Membership[] memberships = new Membership[roles.size()];
 
-      for (int i = 0; i < roles.size(); i++)
+      Membership[] memberships = new Membership[length];
+
+      //
+      int i = 0;
+
+      for (; i < roles.size(); i++)
       {
          
          Role role = roles.get(i);
@@ -108,9 +114,29 @@ public class IDMMembershipListAccess implements ListAccess<Membership>, Serializ
          MembershipImpl memb = new MembershipImpl();
          memb.setGroupId(exoGroup.getId());
          memb.setUserName(role.getUser().getId());
-         memb.setMembershipType(role.getRoleType().getName());
+
+         // LDAP store may return raw membership type as role type
+         if(role.getRoleType().getName().equals("JBOSS_IDENTITY_MEMBERSHIP"))
+         {
+            memb.setMembershipType(getOrganizationService().getConfiguration().getAssociationMembershipType());
+         }
+         else
+         {
+            memb.setMembershipType(role.getRoleType().getName());
+         }
+
+         lastExisting = memb;
          
          memberships[i] = memb;
+      }
+
+      // Size can be greater then number of existing memberships
+      if (length > roles.size())
+      {
+         for (; i < length; i++)
+         {
+            memberships[i] = lastExisting;
+         }
       }
 
       if (log.isTraceEnabled())
