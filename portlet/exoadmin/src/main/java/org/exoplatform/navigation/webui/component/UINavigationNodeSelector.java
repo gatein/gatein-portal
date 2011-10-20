@@ -595,6 +595,12 @@ public class UINavigationNodeSelector extends UIContainer
 
          String nodeID = context.getRequestParameter(UIComponent.OBJECTID);
          TreeNode node = uiNodeSelector.findNode(nodeID);
+         if (Visibility.SYSTEM.equals(node.getVisibility()))
+         {
+            UIApplication uiApp = context.getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("UINavigationNodeSelector.msg.systemnode-copyclone", null));
+            return;
+         }
          try
          {
             node = rebaseNode(node, Scope.ALL, uiNodeSelector);
@@ -662,7 +668,9 @@ public class UINavigationNodeSelector extends UIContainer
          UINavigationNodeSelector uiNodeSelector = event.getSource().getAncestorOfType(UINavigationNodeSelector.class);
          TreeNode currNode = uiNodeSelector.getCopyNode();
          String nodeID = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
-         if (currNode != null && currNode.getId().equals(nodeID))
+         if (currNode == null) 
+            return;
+         else if (currNode.getId().equals(nodeID))
             currNode.setCloneNode(true);
          
          if (currNode.getI18nizedLabels() == null)
