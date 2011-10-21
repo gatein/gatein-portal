@@ -135,7 +135,7 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
             }
             else
             {
-               List<Page> existingPages = list.getAll();
+               List<Page> existingPages = new ArrayList<Page>(list.getAll());
                rollbackSaves = new Page.PageSet();
                rollbackSaves.setPages(new ArrayList<Page>(size));
                rollbackDeletes = new Page.PageSet();
