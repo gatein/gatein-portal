@@ -138,7 +138,7 @@ public class TestJIBXXmlMapping extends AbstractGateInTest
    {
       UnmarshalledObject<PageNavigation> obj = ModelUnmarshaller.unmarshall(PageNavigation.class, new FileInputStream("src/test/resources/jibx/simple-navigation.xml"));;
       PageNavigation nav = obj.getObject();
-      assertEquals(Version.V_1_1, obj.getVersion());
+      assertEquals(Version.V_1_2, obj.getVersion());
 
       //
       PageNode bar = nav.getFragment().getNode("bar");
