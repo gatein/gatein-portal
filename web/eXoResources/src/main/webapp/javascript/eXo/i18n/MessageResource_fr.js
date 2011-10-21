@@ -18,7 +18,7 @@
  */
 
 eXo.i18n.I18NMessage.SessionTimeout = "La session a expir\u00e9 ! Veuillez recharger la page.";
-eXo.i18n.I18NMessage.TargetBlockNotFound = "The target blockId to update is not found : {0}";
+eXo.i18n.I18NMessage.TargetBlockNotFound = "Cannot complete request as the component to update cannot be found (blockId: {0}). If the page's contents have changed, a page refresh may be needed." 
 eXo.i18n.I18NMessage.BlockUpdateNotFound = "The blockId to update is not found : {0}";
 eXo.i18n.I18NMessage.DefaultTheme = "Style par Défaut";
 eXo.i18n.I18NMessage.PreviousMonth="Mois précédent";
