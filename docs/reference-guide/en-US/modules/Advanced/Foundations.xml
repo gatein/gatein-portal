@@ -76,9 +76,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
-                          http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-      xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+      xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd
+                          http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+      xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
    <component>
       <key>org.exoplatform.services.database.HibernateService</key>
       <type>org.exoplatform.services.database.impl.HibernateServiceImpl</type>
@@ -106,9 +106,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
-                          http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-      xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+      xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd
+                          http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+      xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
    <external-component-plugins>
       <target-component>org.exoplatform.container.definition.PortalContainerConfig</target-component>
@@ -139,9 +139,9 @@
          <para>An example configuration.xml that 'outsources' its content into several files:</para>
          <programlisting role="XML"><![CDATA[
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
-                          http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-      xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+      xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd
+                          http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+      xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
    <import>war:/conf/sample-ext/jcr/jcr-configuration.xml</import>
    <import>war:/conf/sample-ext/portal/portal-configuration.xml</import>
@@ -171,9 +171,9 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <configuration
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
-                       http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd
+                       http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
    <component>
       <key>org.exoplatform.services.database.HibernateService</key>
@@ -401,9 +401,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd
-                       http://www.exoplaform.org/xml/ns/kernel_1_0.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_0.xsd">
+   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd
+                       http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
    <external-component-plugins>
       <!-- The full qualified name of the PortalContainerConfig -->
