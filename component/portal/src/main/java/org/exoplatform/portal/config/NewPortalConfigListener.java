@@ -28,15 +28,9 @@ import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesSet;
-import org.exoplatform.portal.config.model.NavigationFragment;
-import org.exoplatform.portal.mop.importer.ImportMode;
-import org.exoplatform.portal.mop.importer.Imported;
-import org.exoplatform.portal.mop.importer.Imported.Status;
-import org.exoplatform.portal.mop.importer.NavigationImporter;
-import org.exoplatform.portal.mop.importer.PageImporter;
-import org.exoplatform.portal.mop.importer.PortalConfigImporter;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelUnmarshaller;
+import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.Page.PageSet;
 import org.exoplatform.portal.config.model.PageNavigation;
@@ -44,13 +38,19 @@ import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.UnmarshalledObject;
 import org.exoplatform.portal.mop.description.DescriptionService;
+import org.exoplatform.portal.mop.importer.ImportMode;
+import org.exoplatform.portal.mop.importer.Imported;
+import org.exoplatform.portal.mop.importer.Imported.Status;
+import org.exoplatform.portal.mop.importer.NavigationImporter;
+import org.exoplatform.portal.mop.importer.PageImporter;
+import org.exoplatform.portal.mop.importer.PortalConfigImporter;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.workspace.Workspace;
-import org.jibx.runtime.*;
+import org.jibx.runtime.JiBXException;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -447,6 +447,95 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       //The override is true if and only if one of the plugin NewPortalConfigListener configures its
       //override param as true
       overrideExistingData = overrideExistingData || other.overrideExistingData;
+   }
+
+   /**
+    * This is used to delete an already loaded NewPortalConfigListener(s)
+    * 
+    * @param other
+    */
+   public void deleteListenerElements(NewPortalConfigListener other)
+   {
+      if (configs == null)
+      {
+         log.warn("No Portal configurations was loaded, nothing to delete !");
+      }
+      else if (other.configs != null && !other.configs.isEmpty())
+      {
+         List<NewPortalConfig> result = new ArrayList<NewPortalConfig>(configs);
+         for (NewPortalConfig newPortalConfigToDelete : other.configs)
+         {
+            int i = 0;
+            while (i < result.size())
+            {
+               NewPortalConfig newPortalConfig = result.get(i);
+               if (newPortalConfigToDelete.getOwnerType().equals(newPortalConfig.getOwnerType()))
+               {
+                  for (String owner : newPortalConfigToDelete.getPredefinedOwner())
+                  {
+                     newPortalConfig.getPredefinedOwner().remove(owner);
+                  }
+               }
+               // if the configuration has no owner definitions, then delete it
+               if (newPortalConfig.getPredefinedOwner().size() == 0)
+               {
+                  result.remove(newPortalConfig);
+               }
+               else
+               {
+                  i++;
+               }
+            }
+         }
+         this.configs = Collections.unmodifiableList(result);
+      }
+
+      if (templateConfigs == null)
+      {
+         log.warn("No Portal templates configurations was loaded, nothing to delete !");
+      }
+      else if (other.templateConfigs != null && !other.templateConfigs.isEmpty())
+      {
+         List<SiteConfigTemplates> result = new ArrayList<SiteConfigTemplates>(templateConfigs);
+         deleteSiteConfigTemplates(other, result, PortalConfig.PORTAL_TYPE);
+         deleteSiteConfigTemplates(other, result, PortalConfig.GROUP_TYPE);
+         deleteSiteConfigTemplates(other, result, PortalConfig.USER_TYPE);
+         this.templateConfigs = Collections.unmodifiableList(result);
+      }
+   }
+
+   private void deleteSiteConfigTemplates(NewPortalConfigListener other, List<SiteConfigTemplates> result, String templateType)
+   {
+      for (SiteConfigTemplates siteConfigTemplatesToDelete : other.templateConfigs)
+      {
+         Set<String> portalTemplatesToDelete = siteConfigTemplatesToDelete.getTemplates(templateType);
+         if (portalTemplatesToDelete != null && portalTemplatesToDelete.size() > 0)
+         {
+            int i = 0;
+            while (i < result.size())
+            {
+               SiteConfigTemplates siteConfigTemplates = result.get(i);
+               Set<String> portalTemplates = siteConfigTemplates.getTemplates(templateType);
+               if (portalTemplatesToDelete != null && portalTemplatesToDelete.size() > 0)
+               {
+                  portalTemplates.removeAll(portalTemplatesToDelete);
+               }
+               if ((siteConfigTemplates.getTemplates(PortalConfig.PORTAL_TYPE) == null
+                        || siteConfigTemplates.getTemplates(PortalConfig.PORTAL_TYPE).size() == 0)
+                     && (siteConfigTemplates.getTemplates(PortalConfig.GROUP_TYPE) == null
+                        || siteConfigTemplates.getTemplates(PortalConfig.GROUP_TYPE).size() == 0)
+                     && (siteConfigTemplates.getTemplates(PortalConfig.USER_TYPE) == null 
+                        || siteConfigTemplates.getTemplates(PortalConfig.USER_TYPE).size() == 0))
+               {
+                  result.remove(siteConfigTemplates);
+               }
+               else
+               {
+                  i++;
+               }
+            }
+         }
+      }
    }
 
    public void initPortalConfigDB(NewPortalConfig config) throws Exception

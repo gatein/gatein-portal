@@ -45,7 +45,14 @@ import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.picocontainer.Startable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Set;
 
 /**
  * Created by The eXo Platform SAS Apr 19, 2007 This service is used to load the PortalConfig, Page config and
@@ -621,6 +628,20 @@ public class UserPortalConfigService implements Startable
             else
             {
                newPortalConfigListener_.mergePlugin((NewPortalConfigListener)listener);
+            }
+         }
+      }
+   }
+
+   public void deleteListenerElements(ComponentPlugin listener)
+   {
+      if (listener instanceof NewPortalConfigListener)
+      {
+         synchronized (this)
+         {
+            if (newPortalConfigListener_ != null)
+            {
+               newPortalConfigListener_.deleteListenerElements((NewPortalConfigListener) listener);
             }
          }
       }
