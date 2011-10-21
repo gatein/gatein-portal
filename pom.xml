@@ -975,27 +975,6 @@
             </plugins>
          </build>
       </profile>
-      <profile>
-         <id>jrebel</id>
-         <build>
-            <plugins>
-               <plugin>
-                  <groupId>org.zeroturnaround</groupId>
-                  <artifactId>javarebel-maven-plugin</artifactId>
-                  <version>1.0.5</version>
-                  <executions>
-                     <execution>
-                        <id>generate-rebel-xml</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                           <goal>generate</goal>
-                        </goals>
-                     </execution>
-                  </executions>
-               </plugin>
-            </plugins>
-         </build>
-      </profile>
    </profiles>
 
    <!-- To be removed and replaced by settings in user config -->
