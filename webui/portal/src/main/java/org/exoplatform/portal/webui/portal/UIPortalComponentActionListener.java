@@ -288,14 +288,6 @@ public class UIPortalComponentActionListener
 
                //
                UIPortlet uiPortlet = uiTarget.createUIComponent(UIPortlet.class, null, null);
-               if (app.getDisplayName() != null)
-               {
-                  uiPortlet.setTitle(app.getDisplayName());
-               }
-               else if (app.getApplicationName() != null)
-               {
-                  uiPortlet.setTitle(app.getApplicationName());
-               }
                uiPortlet.setDescription(app.getDescription());
                List<String> accessPersList = app.getAccessPermissions();
                String[] accessPers = accessPersList.toArray(new String[accessPersList.size()]);
