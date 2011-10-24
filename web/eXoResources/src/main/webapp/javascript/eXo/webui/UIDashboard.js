@@ -267,12 +267,6 @@ function UIDashboard() {
 		var uiContainer = DOMUtil.findFirstDescendantByClass(uiDashboard, "div", "UIDashboardContainer");
 		if(!uiContainer) return;
 		
-		var uiWindow = DOMUtil.findAncestorByClass(portletWindow, "UIWindow") ;
-		if(uiWindow) {
-			if(!uiWindow.resizeCallback) uiWindow.resizeCallback = new eXo.core.HashMap() ;
-			uiWindow.resizeCallback.put(DOMUtil.generateId(windowId), eXo.webui.UIDashboard.initHeight) ;
-		}
-		
 		var gadgetContainer = DOMUtil.findFirstChildByClass(uiContainer, "div", "GadgetContainer");
 		uiDashboard.style.overflow = "hidden";
 		portletFragment.style.overflow = "hidden" ;
@@ -292,8 +286,6 @@ function UIDashboard() {
 		//else colsContainer.style.width = "100%" ;
 		colsContainer.style.width = "100%" ;
 
-		eXo.webui.UIDashboard.initHeight(windowId) ;
-		
 		//Todo: nguyenanhkien2a@gmail.com
 		//We set and increase waiting time for initDragDrop function to make sure all UI (tag, div, iframe, etc) 
 		//was loaded and to avoid some potential bugs (ex: GTNPORTAL-1068)
@@ -311,7 +303,6 @@ function UIDashboard() {
 				eXo.webui.UIDashboard.init(gadgetControls[j], uiGadget);
 				
 				if(minimizeButton) minimizeButton.style.display = "block" ;
-				uiGadget.minimizeCallback = eXo.webui.UIDashboard.initHeight ;
 			} else{
 				if(minimizeButton) {
 					minimizeButton.style.display = "none" ;
@@ -320,68 +311,6 @@ function UIDashboard() {
 					var editButton = DOMUtil.findFirstChildByClass(controlBar, "div", "EditGadget") ;
 					closeButton.style.display = "none" ;
 					editButton.style.display = "none" ;
-				}
-			}
-		}
-	};
-	
-	UIDashboard.prototype.initHeight = function(windowId) {
-		var DOMUtil = eXo.core.DOMUtil;
-		var portletWindow, uiWindow ;
-		if(typeof(windowId) != "string") {
-			uiWindow = eXo.desktop.UIWindow.portletWindow ;
-			portletWindow = document.getElementById(uiWindow.id.replace(/^UIWindow-/, "")) ;
-		} else {
-			portletWindow = document.getElementById(windowId) ;
-			uiWindow = DOMUtil.findAncestorByClass("UIWindow") ;
-		}
-		var uiDashboard = DOMUtil.findFirstDescendantByClass(portletWindow, "div", "UIDashboard") ;
-		var uiSelect = DOMUtil.findFirstDescendantByClass(uiDashboard, "div", "UIDashboardSelectContainer");
-		
-		if(uiSelect && document.getElementById("UIPageDesktop")) {
-			var itemCont = DOMUtil.findFirstChildByClass(uiSelect, "div", "DashboardItemContainer");
-			var middleItemCont = DOMUtil.findFirstDescendantByClass(uiSelect, "div", "MiddleItemContainer");
-			var topItemCont = DOMUtil.findNextElementByTagName(middleItemCont, "div");
-			var bottomItemCont = DOMUtil.findPreviousElementByTagName(middleItemCont, "div");
-			
-			var uiContainer = DOMUtil.findFirstDescendantByClass(uiDashboard, "div", "UIDashboardContainer");
-			
-			var minusHeight = 0 ;
-			var minusHeightEle = DOMUtil.findPreviousElementByTagName(middleItemCont.parentNode, "div") ; 
-			while(minusHeightEle) {
-				minusHeight += minusHeightEle.offsetHeight ;
-				minusHeightEle = DOMUtil.findPreviousElementByTagName(minusHeightEle, "div") ;
-			}
-			minusHeightEle = DOMUtil.findPreviousElementByTagName(itemCont, "div") ;
-			while(minusHeightEle) {
-				minusHeight += minusHeightEle.offsetHeight ;
-				minusHeightEle = DOMUtil.findPreviousElementByTagName(minusHeightEle, "div") ;
-			}
-			minusHeightEle = null;
-			var windowHeight = portletWindow.offsetHeight ; 
-			if(uiWindow && uiWindow.style.display == "none") {
-				windowHeight = parseInt(DOMUtil.getStyle(portletFragment, "height")) ;
-			}
-			var middleItemContHeight = windowHeight - minusHeight
-																- parseInt(DOMUtil.getStyle(itemCont,"paddingTop"))
-																- parseInt(DOMUtil.getStyle(itemCont,"paddingBottom"))
-																- 5 ;
-	    // fix bug IE 6
-		  if (middleItemContHeight < 0) {
-		  	middleItemContHeight = 0;
-		  }
-			middleItemCont.style.height = middleItemContHeight + "px";
-			
-			//TODO: tan.pham: fix bug WEBOS-272: Ie7 can get positive scrollHeight value althrought portlet doesn't display
-			if(middleItemCont.offsetHeight > 0) {
-				if(middleItemCont.scrollHeight > middleItemCont.offsetHeight) {
-					topItemCont.style.display = "block";
-					bottomItemCont.style.display = "block";
-					middleItemCont.style.height = middleItemCont.offsetHeight - topItemCont.offsetHeight - bottomItemCont.offsetHeight + "px";
-				} else {
-					topItemCont.style.display = "none";
-					bottomItemCont.style.display = "none";
-					middleItemCont.scrollTop = 0 ;
 				}
 			}
 		}
