@@ -42,7 +42,7 @@
 	background: url('background/TemplateContainer.jpg') no-repeat center -836px;
 }
 
-.UIItemSelector .ItemDetailList .TemplateContainer .classicImage {
+.UIItemSelector .ItemDetailList .TemplateContainer .ClassicPortalImage {
 	height: 222px;
 	background: url('background/TemplateContainer.jpg') no-repeat center -392px;
 	margin-top: 9px;
@@ -54,9 +54,9 @@
 	margin-top: 9px;
 }
 
-.UIItemSelector .ItemDetailList .TemplateContainer .basicImage {
+.UIItemSelector .ItemDetailList .TemplateContainer .BasicPortalImage {
 	height: 222px;
-	background: url('background/TemplateContainer.jpg') no-repeat center -1052px;
+	background: url('background/TemplateContainer.jpg') no-repeat center -1059px;
 	margin-top: 9px;
 }
 
