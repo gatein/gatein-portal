@@ -9,7 +9,7 @@
 %>
 <div class="UIWizardPageSetInfo">
 	<%uiform.begin()%>
-	<div class="<%=isNoSelecter ? "NoPageSelecter" : ""%>">
+	<div class="<%=isNoSelecter ? "NoPageSelecter" : "ClearFix"%>">
   <%if(!isNoSelecter) {
    	def pageNode = uicomponent.getSelectedPageNode();
    	if( pageNode != null && pageNode.getResolvedLabel() != null ) nodeName += pageNode.getResolvedLabel();
