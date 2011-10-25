@@ -88,6 +88,7 @@
 	margin: 0px 5px 0px 0px; /* orientation=rt */
 	background: url('background/DefaultContainerIcon.gif') no-repeat left 3px; /* orientation=lt */
 	background: url('background/DefaultContainerIcon.gif') no-repeat right 1px; /* orientation=rt */
+	width:auto;
 }
 
 .UIColumnContainer .ControlIcon {
