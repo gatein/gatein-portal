@@ -109,6 +109,7 @@ public class UIPageNodeSelector extends UIContainer
          return null;
       }
       
+      
       NodeChangeQueue<UserNode> queue = new NodeChangeQueue<UserNode>();
       userPortal.updateNode(node, Scope.GRANDCHILDREN, queue);
       for (NodeChange<UserNode> change : queue)
@@ -122,7 +123,9 @@ public class UIPageNodeSelector extends UIContainer
             }
          }
       }
-      return node;
+      
+      UserNavigation nav = userPortal.getNavigation(node.getNavigation().getKey());
+      return userPortal.resolvePath(nav, null, node.getURI());
    }
    
    public void setSelectedURI(String uri) throws Exception
