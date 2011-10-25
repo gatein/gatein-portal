@@ -311,6 +311,13 @@ public class Mapper
                boolean showMode = attrs.getValue(MappedAttributes.SHOW_MODE, false);
                boolean showWindowState = attrs.getValue(MappedAttributes.SHOW_WINDOW_STATE, false);
                String theme = attrs.getValue(MappedAttributes.THEME, null);
+               
+               Described described = srcContainer.adapt(Described.class);
+               
+               String id = attrs.getValue(MappedAttributes.ID, null);
+               String icon = attrs.getValue(MappedAttributes.ICON, null);
+               String width = attrs.getValue(MappedAttributes.WIDTH, null);
+               String height = attrs.getValue(MappedAttributes.HEIGHT, null);
 
                //
                List<String> a = Collections.singletonList(UserACL.EVERYONE);
@@ -325,16 +332,16 @@ public class Mapper
                   component.getName(),
                   ApplicationType.PORTLET,
                   state,
-                  null,
-                  null,
-                  null,
-                  null,
+                  id,
+                  described.getName(),
+                  icon,
+                  described.getDescription(),
                   showInfoBar,
                   showWindowState,
                   showMode,
                   theme,
-                  null,
-                  null,
+                  width,
+                  height,
                   Collections.<String, String>emptyMap(),
                   a);
             }
@@ -533,6 +540,8 @@ public class Mapper
       for (ModelData srcChild : src.getChildren())
       {
          String srcChildId = srcChild.getStorageId();
+         //Flag variable, become non null if and only if we are saving a transient dashboard
+         ApplicationData<?> transientDashboardData  = null;
 
          // Replace dashboard application by container if needed
          // this should be removed once we make the dashboard as first class
@@ -564,20 +573,36 @@ public class Mapper
                   else
                   {
                      data = DashboardData.INITIAL_DASHBOARD;
+                     transientDashboardData = (ApplicationData<?>)srcChild;
                   }
 
                   //
+                  String icon = data.getIcon();
+                  if(icon == null) icon = app.getIcon();
+                  
+                  String title = data.getTitle();
+                  if(title == null) title = app.getTitle();
+                  
+                  String description = data.getDescription();
+                  if(description == null) description = app.getDescription();
+                  
+                  String width = data.getWidth();
+                  if(width == null) width = app.getWidth();
+                  
+                  String height = data.getHeight();
+                  if(height == null) height = app.getHeight();
+                  
                   data = new DashboardData(
                      data.getStorageId(),
                      data.getId(),
                      data.getName(),
-                     data.getIcon(),
+                     icon,
                      data.getTemplate(),
                      data.getFactoryId(),
-                     data.getTitle(),
-                     data.getDescription(),
-                     data.getWidth(),
-                     data.getHeight(),
+                     title,
+                     description,
+                     width,
+                     height,
                      app.getAccessPermissions(),
                      data.getChildren()
                   );
@@ -667,6 +692,14 @@ public class Mapper
          }
 
          //
+         if(transientDashboardData != null)
+         {
+            Attributes attrs = dstChild.getAttributes();
+            attrs.setValue(MappedAttributes.SHOW_INFO_BAR, transientDashboardData.isShowInfoBar());
+            attrs.setValue(MappedAttributes.SHOW_MODE, transientDashboardData.isShowApplicationMode());
+            attrs.setValue(MappedAttributes.SHOW_WINDOW_STATE, transientDashboardData.isShowApplicationState());
+            attrs.setValue(MappedAttributes.THEME, transientDashboardData.getTheme());
+         }
          save(srcChild, dstChild, changes, hierarchyRelationships);
 
          //

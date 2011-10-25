@@ -692,6 +692,76 @@ public class TestDataStorage extends AbstractConfigTest
       assertEquals("foo/bar", storage_.getId(app.getState()));
    }
 
+   @SuppressWarnings("unchecked")
+   public void testInitialDashboard() throws Exception
+   {
+      // Add dashboard portlet to a page first time
+      String dashboardTheme = "dashboardTheme";
+      String dashboardIcon = "dashboardIcon";
+      String dashboardTitle = "dashboardTitle";
+      String dashboardDesc = "dashboardDesc";
+      String dashboardWidth = "dashboardWidth";
+      String dashboardHeight = "dashboardHeight";
+      
+      String normalTheme = "normalTheme";
+      
+      
+      Page page = new Page();
+      String pageId = "portal::test::bit";
+      page.setPageId(pageId );
+      Application<Portlet> dashboardPortlet = Application.createPortletApplication();
+      Application<Portlet> normalPortlet = Application.createPortletApplication();
+
+      dashboardPortlet.setState(new TransientApplicationState<Portlet>("dashboard/DashboardPortlet"));
+      dashboardPortlet.setTheme(dashboardTheme);
+      dashboardPortlet.setIcon(dashboardIcon);
+      dashboardPortlet.setTitle(dashboardTitle);
+      dashboardPortlet.setDescription(dashboardDesc);
+      dashboardPortlet.setWidth(dashboardWidth);
+      dashboardPortlet.setHeight(dashboardHeight);
+
+      normalPortlet.setState(new TransientApplicationState<Portlet>("normalPortlet"));
+      normalPortlet.setTheme(normalTheme);
+
+      page.getChildren().add(dashboardPortlet);
+      page.getChildren().add(normalPortlet);
+      storage_.save(page);
+
+      //
+      page = storage_.getPage("portal::test::bit");
+      assertEquals(2, page.getChildren().size());
+      dashboardPortlet = (Application<Portlet>) page.getChildren().get(0);
+      normalPortlet = (Application<Portlet>) page.getChildren().get(1);
+      assertNotNull(dashboardPortlet);
+      assertNotNull(normalPortlet);
+      
+      assertEquals(normalTheme, normalPortlet.getTheme());
+      assertEquals(dashboardTheme, dashboardPortlet.getTheme());
+      assertEquals(dashboardIcon, dashboardPortlet.getIcon());
+      assertEquals(dashboardTitle, dashboardPortlet.getTitle());
+      assertEquals(dashboardDesc, dashboardPortlet.getDescription());
+      assertEquals(dashboardWidth, dashboardPortlet.getWidth());
+      assertEquals(dashboardHeight, dashboardPortlet.getHeight());
+
+      // Update the dashboard portlet and save
+      dashboardPortlet.setTheme(dashboardTheme);
+      page.getChildren().clear();
+      page.getChildren().add(dashboardPortlet);
+      storage_.save(page);
+
+      //
+      page = storage_.getPage("portal::test::bit");
+      assertEquals(1, page.getChildren().size());
+      dashboardPortlet = (Application<Portlet>) page.getChildren().get(0);
+      assertNotNull(dashboardPortlet);
+      assertEquals(dashboardTheme, dashboardPortlet.getTheme());
+      assertEquals(dashboardIcon, dashboardPortlet.getIcon());
+      assertEquals(dashboardTitle, dashboardPortlet.getTitle());
+      assertEquals(dashboardDesc, dashboardPortlet.getDescription());
+      assertEquals(dashboardWidth, dashboardPortlet.getWidth());
+      assertEquals(dashboardHeight, dashboardPortlet.getHeight());
+   }
+
    public void testDashboardLayout() throws Exception
    {
       Application<Portlet> dashboardPortlet = Application.createPortletApplication();
