@@ -127,7 +127,7 @@ public class UIGroupForm extends UIForm
                currentGroup.setLabel(currentGroup.getGroupName());
             }
             
-            service.getGroupHandler().saveGroup(currentGroup, false);
+            service.getGroupHandler().saveGroup(currentGroup, true);
             uiGroupForm.reset();
             uiGroupForm.setGroup(null);
             uiGroupExplorer.changeGroup(currentGroup.getId());
