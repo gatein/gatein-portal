@@ -212,7 +212,7 @@ public class UIFormSelectBox extends UIFormStringInput
 
    protected String renderOnChangeEvent(UIForm uiForm) throws Exception
    {
-      return uiForm.event(onchange_, (String)null);
+      return uiForm.event(onchange_, (String)getId());
    }
 
    public void processRender(WebuiRequestContext context) throws Exception
