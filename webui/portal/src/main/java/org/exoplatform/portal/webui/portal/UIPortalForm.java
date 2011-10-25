@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.webui.portal; 
+package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
@@ -35,19 +35,14 @@ import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
-import org.exoplatform.services.organization.Group;
-import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.config.InitParams;
-import org.exoplatform.webui.config.Param;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
-import org.exoplatform.webui.config.annotation.ParamConfig;
 import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemCategory;
@@ -78,13 +73,14 @@ import java.util.List;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 @ComponentConfigs({
    @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
       @EventConfig(listeners = UIPortalForm.SaveActionListener.class),
       @EventConfig(listeners = UIMaskWorkspace.CloseActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPortalForm.CheckShowActionListener.class)}),
-   @ComponentConfig(id = "CreatePortal", lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", initParams = @ParamConfig(name = "PortalTemplateConfigOption", value = "system:/WEB-INF/conf/uiconf/portal/webui/portal/PortalTemplateConfigOption.groovy"), events = {
+   @ComponentConfig(id = "CreatePortal", lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
       @EventConfig(name = "Save", listeners = UIPortalForm.CreateActionListener.class),
       @EventConfig(listeners = UIPortalForm.SelectItemOptionActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIMaskWorkspace.CloseActionListener.class, phase = Phase.DECODE)}),
@@ -110,14 +106,11 @@ public class UIPortalForm extends UIFormTabPane
 
    private List<SelectItemOption<String>> languages = new ArrayList<SelectItemOption<String>>();
 
-   @SuppressWarnings("unchecked")
-   public UIPortalForm(InitParams initParams) throws Exception
+   public void initPortalTemplateTab() throws Exception
    {
-      super("UIPortalForm");
       UIFormInputItemSelector uiTemplateInput = new UIFormInputItemSelector("PortalTemplate", null);
       addUIFormInput(uiTemplateInput);
       setSelectedTab(uiTemplateInput.getId());
-      createDefaultItem();
 
       UIFormInputSet uiPortalSetting = this.<UIFormInputSet> getChildById("PortalSetting");
       UIFormStringInput uiNameInput = uiPortalSetting.getUIStringInput(FIELD_NAME);
@@ -127,16 +120,18 @@ public class UIPortalForm extends UIFormTabPane
 
       setActions(new String[]{"Save", "Close"});
 
-      if (initParams == null)
+      UserPortalConfigService configService = this.getApplicationComponent(UserPortalConfigService.class);
+      Set<String> portalTemplates = configService.getPortalTemplates();
+      for (String tempName : portalTemplates)
       {
-         return;
-      }
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      Param param = initParams.getParam("PortalTemplateConfigOption");
-      List<SelectItemCategory> portalTemplates = (List<SelectItemCategory>)param.getFreshObject(context);
-      for (SelectItemCategory itemCategory : portalTemplates)
-      {
-         uiTemplateInput.getItemCategories().add(itemCategory);
+         SelectItemCategory category = new SelectItemCategory(tempName);
+         PortalConfig config = configService.getPortalConfigFromTemplate(tempName);
+         if(config != null)
+         {
+            SelectItemOption<String> option = new SelectItemOption<String>(config.getLabel(), tempName, config.getDescription(), tempName);
+            category.addSelectItemOption(option);
+            uiTemplateInput.getItemCategories().add(category);
+         }
       }
       if (uiTemplateInput.getSelectedItemOption() == null)
       {
@@ -149,7 +144,6 @@ public class UIPortalForm extends UIFormTabPane
       super("UIPortalForm");
       createDefaultItem();
       setSelectedTab("PortalSetting");
-
    }
 
    public void setBindingBean() throws Exception
@@ -413,15 +407,6 @@ public class UIPortalForm extends UIFormTabPane
          UIPortalForm uiForm = event.getSource();
          UIFormInputItemSelector templateInput = uiForm.getChild(UIFormInputItemSelector.class);
          uiForm.setSelectedTab(templateInput.getId());
-         PortalTemplateConfigOption selectItem =
-            (PortalTemplateConfigOption)templateInput.getSelectedCategory().getSelectItemOptions().get(0);
-         List<String> groupIds = selectItem.getGroups();
-         Group[] groups = new Group[groupIds.size()];
-         OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class);
-         for (int i = 0; i < groupIds.size(); i++)
-         {
-            groups[i] = service.getGroupHandler().findGroupById(groupIds.get(i));
-         }
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }
    }

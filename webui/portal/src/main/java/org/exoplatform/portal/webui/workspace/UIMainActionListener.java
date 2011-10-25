@@ -248,6 +248,7 @@ public class UIMainActionListener
          }
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          UIPortalForm uiNewPortal = uiMaskWS.createUIComponent(UIPortalForm.class, "CreatePortal", "UIPortalForm");
+         uiNewPortal.initPortalTemplateTab();
          uiMaskWS.setUIComponent(uiNewPortal);
          uiMaskWS.setShow(true);
          prContext.addUIComponentToUpdateByAjax(uiMaskWS);
