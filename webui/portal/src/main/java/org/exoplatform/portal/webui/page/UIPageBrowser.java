@@ -108,20 +108,17 @@ public class UIPageBrowser extends UIContainer
 
    protected String pageSelectedId_;
 
-   private static List<SelectItemOption<String>> OPTIONS = new ArrayList<SelectItemOption<String>>(2);
-
-   static
-   {
-      WebuiRequestContext contextui = WebuiRequestContext.getCurrentInstance();
-      ResourceBundle res = contextui.getApplicationResourceBundle();
-      OPTIONS.add(new SelectItemOption<String>(res.getString("UIPageSearchForm.label.option.portal"), "portal"));
-      OPTIONS.add(new SelectItemOption<String>(res.getString("UIPageSearchForm.label.option.group"), "group"));
-   }
+   private List<SelectItemOption<String>> OPTIONS = new ArrayList<SelectItemOption<String>>(2);
 
    private Query<Page> lastQuery_;
 
    public UIPageBrowser() throws Exception
    {
+      WebuiRequestContext contextui = WebuiRequestContext.getCurrentInstance();
+      ResourceBundle res = contextui.getApplicationResourceBundle();
+      OPTIONS.add(new SelectItemOption<String>(res.getString("UIPageSearchForm.label.option.portal"), "portal"));
+      OPTIONS.add(new SelectItemOption<String>(res.getString("UIPageSearchForm.label.option.group"), "group"));
+      
       UIPageSearchForm uiSearchForm = addChild(UIPageSearchForm.class, null, null);
       uiSearchForm.setOptions(OPTIONS);
       uiSearchForm.setId("UIPageSearchForm");
