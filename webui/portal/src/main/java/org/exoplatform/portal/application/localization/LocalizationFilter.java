@@ -26,6 +26,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.RootContainer;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.container.component.RequestLifeCycle;
+import org.exoplatform.container.web.AbstractFilter;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.services.log.ExoLogger;
@@ -37,7 +38,12 @@ import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.LocalePolicy;
 
-import javax.servlet.Filter;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
@@ -45,11 +51,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
 
 /**
  * This filter provides {@link HttpServletRequest#getLocale()} and {@link HttpServletRequest#getLocales()}
@@ -79,17 +80,18 @@ import java.util.Set;
  * 
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class LocalizationFilter implements Filter
+public class LocalizationFilter extends AbstractFilter
 {
    private static Log log = ExoLogger.getLogger("portal:LocalizationFilter");
 
    private static ThreadLocal<Locale> currentLocale = new ThreadLocal<Locale>();
 
    private Locale portalLocale = Locale.ENGLISH;
-
-   public void init(FilterConfig filterConfig) throws ServletException
+   
+   @Override
+   protected void afterInit(FilterConfig config) throws ServletException
    {
-      String locale = filterConfig.getInitParameter("PortalLocale");
+      String locale = config.getInitParameter("PortalLocale");
       locale = locale != null ? locale.trim() : null;
       if (locale != null && locale.length() > 0)
          portalLocale = LocaleContextInfo.getLocale(locale);
@@ -129,16 +131,13 @@ public class LocalizationFilter implements Filter
 
 
          // Initialize currentLocale
-         ExoContainer container = ExoContainerContext.getCurrentContainerIfPresent();
+         ExoContainer container = getContainer();
          if (container == null)
          {
             // Nothing we can do, move on
             chain.doFilter(req, res);
             return;
          }
-
-         if (container instanceof RootContainer)
-            container = (ExoContainer) container.getComponentInstance("portal");
 
          LocaleConfigService localeConfigService = (LocaleConfigService)
                container.getComponentInstanceOfType(LocaleConfigService.class);
