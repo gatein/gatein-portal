@@ -25,6 +25,8 @@
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
   <portal-name>@owner@</portal-name>
+  <label>Basic Portal</label>
+  <description>This is basic portal template</description>
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
   <edit-permission>*:/platform/administrators</edit-permission>

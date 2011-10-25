@@ -44,7 +44,6 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.picocontainer.Startable;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -672,5 +671,15 @@ public class UserPortalConfigService implements Startable
    public String getDefaultPortal()
    {
       return newPortalConfigListener_.getDefaultPortal();
+   }
+
+   public Set<String> getPortalTemplates()
+   {
+      return newPortalConfigListener_.getTemplateConfigs(PortalConfig.PORTAL_TYPE);
+   }
+
+   public PortalConfig getPortalConfigFromTemplate(String templateName)
+   {
+      return newPortalConfigListener_.getPortalConfigFromTemplate(PortalConfig.PORTAL_TYPE, templateName);
    }
 }
