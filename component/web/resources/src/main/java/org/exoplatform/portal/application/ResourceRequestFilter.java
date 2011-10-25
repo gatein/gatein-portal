@@ -34,6 +34,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.SocketException;
 import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.Date;
@@ -149,8 +150,15 @@ public class ResourceRequestFilter extends AbstractFilter
          }
          catch (Exception e)
          {
-            log.error("Could not render css " + uri, e);
-            httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            if (e instanceof SocketException)
+            {
+               //Should we print something/somewhere exception message
+            }
+            else
+            {
+               log.error("Could not render css " + uri, e);
+               httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
+            }
          }
       }
       else
