@@ -138,7 +138,7 @@ UIRightClickPopupMenu.prototype.clickRightMouse = function(event, elemt, menuId,
 	if(tmpCustomItem) {
 		if(customItem) {
 			tmpCustomItem.innerHTML = customItem.innerHTML ;
-			tmpCustomItem.style.display = "block" ;
+			tmpCustomItem.style.display = "inline" ;
 		} else {
 			tmpCustomItem.style.display = "none" ;
 		}
