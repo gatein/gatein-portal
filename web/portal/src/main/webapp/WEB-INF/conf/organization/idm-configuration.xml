@@ -116,7 +116,7 @@
 
       <value-param profiles="cluster">
         <name>jgroups-multiplexer-stack</name>
-        <value>true</value>
+        <value>false</value>
       </value-param>
 
       <value-param>

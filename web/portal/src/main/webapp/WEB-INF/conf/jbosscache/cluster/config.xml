@@ -20,7 +20,8 @@
 <jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
   <!-- The cluster name should be changed by the kernel cache configuration -->
-  <clustering mode="replication" clusterName="gatein">
+  <clustering mode="replication" clusterName="${jboss.partition.name:DefaultPartition}-gatein">
+    <jgroupsConfig configFile="jgroups/gatein-${gatein.default.jgroups.stack:udp}.xml" />
   </clustering>
 
 </jbosscache>

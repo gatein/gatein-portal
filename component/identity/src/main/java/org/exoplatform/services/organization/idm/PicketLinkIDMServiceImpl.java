@@ -19,6 +19,7 @@
 
 package org.exoplatform.services.organization.idm;
 
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
@@ -30,6 +31,7 @@ import org.jboss.cache.Cache;
 import org.jboss.cache.CacheFactory;
 import org.jboss.cache.DefaultCacheFactory;
 
+import org.jboss.cache.config.Configuration;
 import org.jgroups.JChannelFactory;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.IdentitySessionFactory;
@@ -97,6 +99,7 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
    }
 
    public PicketLinkIDMServiceImpl(
+      ExoContainerContext exoContainerContext,
       InitParams initParams,
       HibernateService hibernateService,
       ConfigurationManager confManager,
@@ -164,7 +167,16 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
                throw new IllegalArgumentException("JBoss Cache configuration InputStream is null");
             }
 
-            Cache cache = factory.createCache(configStream);
+            Cache cache = factory.createCache(configStream, false);
+
+            Configuration cfg = cache.getConfiguration();
+            // we need unique cluster name for each portal container
+            String clusterName = cfg.getClusterName();
+            if (clusterName != null && (clusterName = clusterName.trim()).length() > 0)
+            {
+                cfg.setClusterName(clusterName + "-" + exoContainerContext.getName());
+            }
+
 
             applyJGroupsConfig(cache, confManager, jgroupsStack, jgroupsConfig);
 
@@ -200,7 +212,15 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
                throw new IllegalArgumentException("JBoss Cache configuration InputStream is null");
             }
 
-            Cache cache = factory.createCache(configStream);
+            Cache cache = factory.createCache(configStream, false);
+
+            Configuration cfg = cache.getConfiguration();
+            // we need unique cluster name for each portal container
+            String clusterName = cfg.getClusterName();
+            if (clusterName != null && (clusterName = clusterName.trim()).length() > 0)
+            {
+                cfg.setClusterName(clusterName + "-" + exoContainerContext.getName());
+            }
 
             applyJGroupsConfig(cache, confManager, jgroupsStack, jgroupsConfig);
 

@@ -21,9 +21,9 @@
 
   <locking useLockStriping="false" concurrencyLevel="64" lockParentForChildInsertRemove="false" lockAcquisitionTimeout="20000" />
 
-  <clustering mode="replication" clusterName="${jbosscache-cluster-name}">
+  <clustering mode="replication" clusterName="${jboss.partition.name:DefaultPartition}-${jbosscache-cluster-name}">
     <stateRetrieval timeout="20000" fetchInMemoryState="false" />
-    <jgroupsConfig multiplexerStack="jcr.stack" />
+    <jgroupsConfig configFile="jgroups/gatein-${gatein.default.jgroups.stack:udp}.xml" />
     <sync />
   </clustering>
 

@@ -1,5 +1,9 @@
 <!--
-  ~ Copyright (C) 2009 eXo Platform SAS.
+  ~ JBoss, a division of Red Hat
+  ~ Copyright 2011, Red Hat Middleware, LLC, and individual
+  ~ contributors as indicated by the @authors tag. See the
+  ~ copyright.txt in the distribution for a full listing of
+  ~ individual contributors.
   ~
   ~ This is free software; you can redistribute it and/or modify it
   ~ under the terms of the GNU Lesser General Public License as
@@ -16,13 +20,15 @@
   ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
-<protocol_stacks>
-   <stack name="jcr.stack">
       <config>
-         <UDP mcast_addr="228.10.10.10" mcast_port="45588" tos="8" ucast_recv_buf_size="20000000"
+         <UDP
+            singleton_name="gatein-udp"
+            bind_port="${gatein.jgroups.udp.bind_port:56200}"
+            mcast_addr="${jboss.jgroups.udp_async.mcast_addr:228.10.10.10}" mcast_port="${jboss.jgroups.udp_async.mcast_port:45588}" tos="8" ucast_recv_buf_size="20000000"
             ucast_send_buf_size="640000" mcast_recv_buf_size="25000000" mcast_send_buf_size="640000" loopback="false"
             discard_incompatible_packets="true" max_bundle_size="64000" max_bundle_timeout="30"
-            use_incoming_packet_handler="true" ip_ttl="2" enable_bundling="true" enable_diagnostics="true"
+            use_incoming_packet_handler="true" ip_ttl="${jgroups.udp.ip_ttl:2}" enable_bundling="false" enable_diagnostics="${jboss.jgroups.enable_diagnostics:true}"
+	         diagnostics_addr="${jboss.jgroups.diagnostics_addr:224.0.75.75}" diagnostics_port="${jboss.jgroups.diagnostics_port:7500}"
             thread_naming_pattern="cl" use_concurrent_stack="true" thread_pool.enabled="true" thread_pool.min_threads="2"
             thread_pool.max_threads="8" thread_pool.keep_alive_time="5000" thread_pool.queue_enabled="true"
             thread_pool.queue_max_size="1000" thread_pool.rejection_policy="discard" oob_thread_pool.enabled="true"
@@ -45,7 +51,6 @@
          <FRAG2 frag_size="60000" />
          <!--pbcast.STREAMING_STATE_TRANSFER /-->
          <pbcast.STATE_TRANSFER />
-         <!-- pbcast.FLUSH  /-->
+         <pbcast.FLUSH />
       </config>
-   </stack>
-</protocol_stacks>
+

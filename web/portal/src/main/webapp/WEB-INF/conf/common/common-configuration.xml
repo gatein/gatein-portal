@@ -132,11 +132,11 @@
     <init-params>
       <value-param>
         <name>cache.config.template</name>
-        <value>classpath:/conf/jbosscache/local/config.xml</value>
+        <value>war:/conf/jbosscache/local/config.xml</value>
       </value-param>
       <value-param profiles="cluster">
         <name>cache.config.template</name>
-        <value>classpath:/conf/jbosscache/cluster/config.xml</value>
+        <value>war:/conf/jbosscache/cluster/config.xml</value>
       </value-param>
     </init-params>
   </component>

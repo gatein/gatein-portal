@@ -59,8 +59,9 @@
             <properties>
               <property name="jbosscache-configuration" value="${gatein.jcr.cache.config}" />
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}" />
-              <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="jcr-${container.name.suffix}-system" />
+              <property name="jgroups-multiplexer-stack" value="false" />
+              <property name="jbosscache-cluster-name" value="jcr${container.name.suffix}" />
+              <property name="jbosscache-shareable" value="true" />
             </properties>
           </cache>
           <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -69,8 +70,9 @@
               <property name="changesfilter-class" value="${gatein.jcr.index.changefilterclass}" />
               <property name="jbosscache-configuration" value="${gatein.jcr.index.cache.config}" />
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}" />
-              <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="jcrindexer-${container.name.suffix}-system" />
+              <property name="jgroups-multiplexer-stack" value="false" />
+              <property name="jbosscache-cluster-name" value="jcrindexer${container.name.suffix}" />
+              <property name="jbosscache-shareable" value="true" />
               <property name="max-volatile-time" value="60" />
             </properties>
           </query-handler>
@@ -79,9 +81,10 @@
               <property name="time-out" value="15m" />
               <property name="jbosscache-configuration" value="${gatein.jcr.lock.cache.config}" />
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}" />
-              <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-system" />
-              <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_system" />
+              <property name="jgroups-multiplexer-stack" value="false" />
+              <property name="jbosscache-cluster-name" value="jcrlock${container.name.suffix}" />
+              <property name="jbosscache-shareable" value="true" />
+              <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock" />
               <property name="jbosscache-cl-cache.jdbc.table.create" value="true" />
               <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
               <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="pk" />
@@ -125,8 +128,9 @@
             <properties>
               <property name="jbosscache-configuration" value="${gatein.jcr.cache.config}" />
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}" />
-              <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="jcr-${container.name.suffix}-portal-system" />
+              <property name="jgroups-multiplexer-stack" value="false" />
+              <property name="jbosscache-cluster-name" value="jcr${container.name.suffix}" />
+              <property name="jbosscache-shareable" value="true" />
             </properties>
           </cache>
           <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -135,8 +139,9 @@
               <property name="changesfilter-class" value="${gatein.jcr.index.changefilterclass}" />
               <property name="jbosscache-configuration" value="${gatein.jcr.index.cache.config}" />
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}" />
-              <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="jcrindexer-${container.name.suffix}-portal-system" />
+              <property name="jgroups-multiplexer-stack" value="false" />
+              <property name="jbosscache-cluster-name" value="jcrindexer${container.name.suffix}" />
+              <property name="jbosscache-shareable" value="true" />
               <property name="max-volatile-time" value="60" />
             </properties>
           </query-handler>
@@ -145,9 +150,10 @@
               <property name="time-out" value="15m" />
               <property name="jbosscache-configuration" value="${gatein.jcr.lock.cache.config}" />
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}" />
-              <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-portal-system" />
-              <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_portal_system" />
+              <property name="jgroups-multiplexer-stack" value="false" />
+              <property name="jbosscache-cluster-name" value="jcrlock${container.name.suffix}" />
+              <property name="jbosscache-shareable" value="true" />
+              <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock" />
               <property name="jbosscache-cl-cache.jdbc.table.create" value="true" />
               <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
               <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="pk" />
@@ -191,8 +197,9 @@
             <properties>
               <property name="jbosscache-configuration" value="${gatein.jcr.cache.config}" />
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}" />
-              <property name="jgroups-multiplexer-stack" value="true" />
-              <property name="jbosscache-cluster-name" value="jcr-${container.name.suffix}-portal-work" />
+              <property name="jgroups-multiplexer-stack" value="false" />
+              <property name="jbosscache-cluster-name" value="jcr${container.name.suffix}" />
+              <property name="jbosscache-shareable" value="true" />
             </properties>
           </cache>
          <query-handler class="org.exoplatform.services.jcr.impl.core.query.lucene.SearchIndex">
@@ -201,8 +208,9 @@
             <property name="changesfilter-class" value="${gatein.jcr.index.changefilterclass}" />
             <property name="jbosscache-configuration" value="${gatein.jcr.index.cache.config}" />
             <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}" />
-            <property name="jgroups-multiplexer-stack" value="true" />
-            <property name="jbosscache-cluster-name" value="jcrindexer-${container.name.suffix}-portal-work" />
+            <property name="jgroups-multiplexer-stack" value="false" />
+            <property name="jbosscache-cluster-name" value="jcrindexer${container.name.suffix}" />
+            <property name="jbosscache-shareable" value="true" />
             <property name="max-volatile-time" value="60" />
           </properties>
          </query-handler>
@@ -211,9 +219,10 @@
              <property name="time-out" value="15m" />
              <property name="jbosscache-configuration" value="${gatein.jcr.lock.cache.config}" />
              <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}" />
-             <property name="jgroups-multiplexer-stack" value="true" />
-             <property name="jbosscache-cluster-name" value="jcrlock-${container.name.suffix}-portal-work" />
-             <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock_portal_work" />
+             <property name="jgroups-multiplexer-stack" value="false" />
+             <property name="jbosscache-cluster-name" value="jcrlock${container.name.suffix}" />
+             <property name="jbosscache-shareable" value="true" />
+             <property name="jbosscache-cl-cache.jdbc.table.name" value="jcrlock" />
              <property name="jbosscache-cl-cache.jdbc.table.create" value="true" />
              <property name="jbosscache-cl-cache.jdbc.table.drop" value="false" />
              <property name="jbosscache-cl-cache.jdbc.table.primarykey" value="pk" />
