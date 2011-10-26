@@ -45,7 +45,7 @@
 					
 					<%/*Click on this action button will pop up the permission selector*/%>
 					<%
-					String deletePermissionEvent = "#";
+					String deletePermissionEvent = "javascript:void(0)";
 					String css = "FloatBlockHidden ActionButton SimpleStyle";
 					if(permission.getExpression() != null && permission.getExpression().length() > 0) {
 						deletePermissionEvent = uiForm.event("DeletePermission", uicomponent.getId(), "");
