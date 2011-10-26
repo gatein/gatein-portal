@@ -308,4 +308,6 @@
 
 .UIWizard .TreeContainer {
 	height: 259px;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
