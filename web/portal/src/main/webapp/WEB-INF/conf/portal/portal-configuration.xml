@@ -334,10 +334,10 @@
               <string>MOPSessionManager</string>
             </field>
             <field name="maxSize">
-              <int>${cache.config.MOPSessionManager.maxSize:5000}</int>
+              <int>${gatein.cache.mop.maxsize:5000}</int>
             </field>
             <field name="liveTime">
-              <long>${cache.config.MOPSessionManager.liveTime:600}</long>
+              <long>${gatein.cache.mop.livetime:600}</long>
             </field>
             <field name="implementation">
               <string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string>  	
@@ -360,10 +360,10 @@
               <string>MOPSessionManager</string>
             </field>
             <field name="expirationTimeout">
-              <long>${cache.config.MOPSessionManager.expirationTimeout:600000}</long>
+              <long>${gatein.cache.mop.expiration:600000}</long>
             </field>
             <field name="maxNodes">
-             <int>${cache.config.MOPSessionManager.maxNodes:5000}</int>
+             <int>${gatein.cache.mop.maxnodes:5000}</int>
             </field>
             <field name="distributed">
               <boolean>true</boolean>
@@ -388,10 +388,10 @@
               <string>NavigationService</string>
             </field>
             <field name="maxSize">
-              <int>${cache.config.NavigationService.maxSize:5000}</int>
+              <int>${gatein.cache.navigation.maxsize:5000}</int>
             </field>
             <field name="liveTime">
-              <long>${cache.config.NavigationService.liveTime:600}</long>
+              <long>${gatein.cache.navigation.livetime:600}</long>
             </field>
             <field name="implementation">
               <string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string>   
@@ -414,10 +414,10 @@
               <string>NavigationService</string>
             </field>
             <field name="expirationTimeout">
-              <long>${cache.config.NavigationService.expirationTimeout:600000}</long>
+              <long>${gatein.cache.navigation.expiration:600000}</long>
             </field>
             <field name="maxNodes">
-             <int>${cache.config.NavigationService.maxNodes:5000}</int>
+             <int>${gatein.cache.navigation.maxnodes:5000}</int>
             </field>
             <field name="distributed">
               <boolean>true</boolean>
@@ -442,10 +442,10 @@
               <string>DescriptionService</string>
             </field>
             <field name="maxSize">
-              <int>${cache.config.DescriptionService.maxSize:5000}</int>
+              <int>${gatein.cache.description.maxsize:5000}</int>
             </field>
             <field name="liveTime">
-              <long>${cache.config.DescriptionService.liveTime:600}</long>
+              <long>${gatein.cache.description.livetime:600}</long>
             </field>
             <field name="implementation">
               <string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string>   
@@ -468,10 +468,10 @@
               <string>DescriptionService</string>
             </field>
             <field name="expirationTimeout">
-              <long>${cache.config.DescriptionService.expirationTimeout:600000}</long>
+              <long>${gatein.cache.description.expiration:600000}</long>
             </field>
             <field name="maxNodes">
-             <int>${cache.config.DescriptionService.maxNodes:5000}</int>
+             <int>${gatein.cache.description.maxnodes:5000}</int>
             </field>
             <field name="distributed">
               <boolean>true</boolean>
