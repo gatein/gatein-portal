@@ -63,7 +63,7 @@
 								%>
 								<div class="ContainerIcon DefaultContainer16x16Icon"><%=hasPermission ? strTitle : _ctx.appRes("UIPortlet.label.protectedContent")%></div>
 								<%if(hasPermission) {%>
-									<a href="<%=uicomponent.event("EditContainer","$uicomponent.id")%>;eXo.portal.UIPortal.changeComposerSaveButton()" class="EditIcon" title="<%=_ctx.appRes("UITableColumnContainer.tooltip.editContainer")%>"><span></span></a>
+									<a href="<%=uicomponent.event("EditContainer","$uicomponent.id")%>" class="EditIcon" title="<%=_ctx.appRes("UITableColumnContainer.tooltip.editContainer")%>"><span></span></a>
 									<a href="<%=uicomponent.event("DeleteComponent","$uicomponent.id")%>" class="DeleteIcon" title="<%=_ctx.appRes("UITableColumnContainer.tooltip.closeContainer")%>"><span></span></a>
 								<%}%>
 					</div>

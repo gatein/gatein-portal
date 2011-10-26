@@ -28,7 +28,7 @@
 		</div>
 		
 		<div class="UIAction" style="display: <%=uicomponent.isCollapsed ? "none": "block"%>"> 
-			<span onclick="<%= uicomponent.event("ViewProperties") %>;eXo.portal.UIPortal.changeComposerSaveButton()" class="ActionButton SimpleStyle1">
+			<span onclick="<%= uicomponent.event("ViewProperties") %>" class="ActionButton SimpleStyle1">
 				<a href="javascript:void(0);" class="PageProfileIcon"><%=_ctx.appRes(popupId + ".action.ViewProperties")%></a>
 			</span>
 			<% String changeEditMode = uicomponent.event("SwitchMode", null, null); %>
