@@ -24,15 +24,15 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.validator.Validator;
 
 import java.io.Writer;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Author : Nhu Dinh Thuan
@@ -210,8 +210,11 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
 
       UIForm uiForm = getAncestorOfType(UIForm.class);
       int size = getChildren().size();
-      //    ResourceBundle res = context.getApplicationResourceBundle() ;
-
+      
+      ResourceBundle res = context.getApplicationResourceBundle() ;
+      String addItem = res.getString("UIFormMultiValueInputSet.label.add");
+      String removeItem = res.getString("UIFormMultiValueInputSet.label.remove");
+      
       for (int i = 0; i < size; i++)
       {
          UIFormInputBase uiInput = getChild(i);
@@ -225,7 +228,7 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
          if ((size >= 2) || ((size == 1) && (uiInput.getValue() != null)))
          {
             writer.append("<img onclick=\"");
-            writer.append(uiForm.event("Remove", uiInput.getId())).append("\" title=\"Remove Item\" alt=\"\"");
+            writer.append(uiForm.event("Remove", uiInput.getId())).append("\" title=\"" + removeItem + "\" alt=\"\"");
             writer
                .append(" class=\"MultiFieldAction Remove16x16Icon\" src=\"/eXoResources/skin/sharedImages/Blank.gif\" />");
          }
@@ -233,7 +236,7 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
          {
 
             writer.append("<img onclick=\"");
-            writer.append(uiForm.event("Add", getId())).append("\" title=\"Add Item\" alt=\"\"");
+            writer.append(uiForm.event("Add", getId())).append("\" title=\"" + addItem + "\" alt=\"\"");
             writer
                .append(" class=\"MultiFieldAction AddNewNodeIcon\" src=\"/eXoResources/skin/sharedImages/Blank.gif\" />");
          }
