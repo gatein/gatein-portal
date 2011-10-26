@@ -53,7 +53,7 @@
 		boolean toolong = (node.getEncodedResolvedLabel().length() > 60);
 		String label = ( toolong ? node.getEncodedResolvedLabel().substring(0, 57) + "..." : node.getEncodedResolvedLabel());
 		String title = "";
-		if(toolong) title = "title='$node.encodedResolvedLabel'";
+		if(toolong) title = "title='" + node.getEncodedResolvedLabel()  + "'";
 		else title = "";
 		
 		def getNodeURL = "";

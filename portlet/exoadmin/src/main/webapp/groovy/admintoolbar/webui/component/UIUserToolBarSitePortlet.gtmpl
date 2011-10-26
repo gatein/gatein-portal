@@ -1,7 +1,7 @@
 <%	
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util ;
-  import org.gatein.common.text.EntityEncoder;
+    import org.gatein.common.text.EntityEncoder;
 	import org.exoplatform.commons.utils.HTMLEntityEncoder;
 	import org.exoplatform.portal.mop.user.UserNode;
 	import javax.portlet.MimeResponse;
@@ -91,7 +91,7 @@
 		boolean toolong = (node.getEncodedResolvedLabel().length() > 60);
 		String label = ( toolong ? node.getEncodedResolvedLabel().substring(0, 57) + "..." : node.getEncodedResolvedLabel());
 		String title = "";
-		if(toolong) title = "title='$node.encodedResolvedLabel()'";
+		if(toolong) title = "title='" + node.getEncodedResolvedLabel()  + "'";
 		else title = "";
 		
 		def getNodeURL = "";
