@@ -50,16 +50,10 @@ public class UIEditInlineWorkspace extends UIContainer
       addChild(UIPortalComposer.class, null, null);
       addChild(UIPortalToolPanel.class, null, null);
  
-      ResourceBundle resourceBundle = WebuiRequestContext.getCurrentInstance().getApplicationResourceBundle();
-      String yes = resourceBundle.getString("UIEditInlineWorkspace.confirm.yes");
-      String no = resourceBundle.getString("UIEditInlineWorkspace.confirm.no");
-      
-      List<ActionConfirm> actionConfirms = new ArrayList<ActionConfirm>();
-      actionConfirms.add(new ActionConfirm("ConfirmClose", yes));
-      actionConfirms.add(new ActionConfirm("AbortClose", no));
       UIConfirmation uiConfirmation = addChild(UIConfirmation.class, null, null);
       uiConfirmation.setCaller(this);
-      uiConfirmation.setActions(actionConfirms);      
+
+      createActionConfirms(uiConfirmation) ;
    }
 
    public void setUIComponent(UIComponent uiComp)
@@ -81,7 +75,19 @@ public class UIEditInlineWorkspace extends UIContainer
    {
       UIConfirmation uiConfirmation = getChild(UIConfirmation.class);
       uiConfirmation.setMessage(message);
+      createActionConfirms(uiConfirmation) ;
       ((WebuiRequestContext)WebuiRequestContext.getCurrentInstance()).addUIComponentToUpdateByAjax(uiConfirmation);
+   }
+
+   public void createActionConfirms(UIConfirmation uiConfirmation) {
+      ResourceBundle resourceBundle = WebuiRequestContext.getCurrentInstance().getApplicationResourceBundle();
+      String yes = resourceBundle.getString("UIEditInlineWorkspace.confirm.yes");
+      String no = resourceBundle.getString("UIEditInlineWorkspace.confirm.no");
+
+      List<ActionConfirm> actionConfirms = new ArrayList<ActionConfirm>();
+      actionConfirms.add(new ActionConfirm("ConfirmClose", yes));
+      actionConfirms.add(new ActionConfirm("AbortClose", no));
+      uiConfirmation.setActions(actionConfirms);
    }
 
    static public class ConfirmCloseActionListener extends EventListener<UIEditInlineWorkspace>
