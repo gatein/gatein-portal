@@ -37,8 +37,6 @@ public class Lifecycle<E extends UIComponent>
 
    protected static Log log = ExoLogger.getLogger("portal:Lifecycle");
 
-   private Decorator decorator_ = new Decorator();
-
    // public void init(UIComponent uicomponent, WebuiRequestContext context)
    // throws Exception {}
 
@@ -103,7 +101,6 @@ public class Lifecycle<E extends UIComponent>
    protected void renderTemplate(String template, WebuiBindingContext bcontext) throws Exception
    {      
       WebuiRequestContext context = bcontext.getRequestContext();
-      bcontext.put("decorator", decorator_);
       bcontext.put("locale", context.getLocale());
       ExoContainer pcontainer = context.getApplication().getApplicationServiceContainer();
       TemplateService service = (TemplateService)pcontainer.getComponentInstanceOfType(TemplateService.class);
