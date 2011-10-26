@@ -105,6 +105,8 @@ public class UIGadget extends UIComponent
    public static final String METADATA_USERPREFS_TYPE_LIST = "list";
 
    public String view = HOME_VIEW;
+   
+   public static String SAVE_PREF_FAIL = "UIGadget.savePrefFail";
 
    /**
     * Initializes a newly created <code>UIGadget</code> object
@@ -438,6 +440,7 @@ public class UIGadget extends UIComponent
          {                        
             UIPortletApplication uiPortlet = uiGadget.getAncestorOfType(UIPortletApplication.class);
             context.addUIComponentToUpdateByAjax(uiPortlet);
+            context.setAttribute(UIGadget.SAVE_PREF_FAIL, true);
             throw new MessageException(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null, ApplicationMessage.ERROR));
          }
 

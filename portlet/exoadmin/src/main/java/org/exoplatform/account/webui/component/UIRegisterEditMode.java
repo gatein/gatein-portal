@@ -19,7 +19,6 @@
 package org.exoplatform.account.webui.component;
 
 import org.exoplatform.portal.webui.CaptchaValidator;
-import org.exoplatform.portal.webui.UICaptcha;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;

@@ -19,28 +19,24 @@
 
 package org.exoplatform.webui.core;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.webui.application.WebuiApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
+
 import java.io.Writer;
-import java.util.Map;
 import java.util.Set;
 
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
 
-import org.apache.commons.collections.map.HashedMap;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.webui.application.WebuiApplication;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.application.portlet.PortletRequestContext;
-
 @Serialized
 abstract public class UIPortletApplication extends UIApplication
 {
    private int minWidth = 300;
 
-   private int minHeight = 300;
-   
-   private Map<String, UIPopupMessages> _uiPopupMessages;
+   private int minHeight = 300;   
 
    static public String VIEW_MODE = "ViewMode";
 
@@ -52,29 +48,14 @@ abstract public class UIPortletApplication extends UIApplication
 
    public UIPortletApplication() throws Exception
    {
-      _uiPopupMessages = new HashedMap();
    }
 
    @Override
    public UIPopupMessages getUIPopupMessages()
    {
-      PortletRequestContext pContext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
-      String currMode = pContext.getApplicationMode().toString();
-      
-      if (!_uiPopupMessages.containsKey(currMode)) {
-         try
-         {
-            UIPopupMessages popMsg = createUIComponent(UIPopupMessages.class, null, null);
-            popMsg.setId("_" + popMsg.hashCode());
-            _uiPopupMessages.put(currMode, popMsg);
-         }
-         catch (Exception e)
-         {
-            return null;
-         }         
-      }
-      
-      return _uiPopupMessages.get(currMode);
+      WebuiRequestContext context = PortletRequestContext.getCurrentInstance();      
+      WebuiRequestContext portalContext = (WebuiRequestContext)context.getParentAppRequestContext();
+      return portalContext.getUIApplication().getUIPopupMessages();
    }
 
    @Deprecated
@@ -101,6 +82,14 @@ abstract public class UIPortletApplication extends UIApplication
       this.minHeight = minHeight;
    }
 
+   //
+   @Override
+   public void renderChildren() throws Exception
+   {
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      super.renderChildren(context);
+   }
+   
    /**
     * The default processRender for an UIPortletApplication does nothing if the current WindowState in the 
     * render request is MINIMIZED. Otherwise, it handles two cases:
@@ -136,8 +125,6 @@ abstract public class UIPortletApplication extends UIApplication
          //      if(list == null) list = app.getDefaultUIComponentToUpdateByAjax(context) ;
          if (list != null)
          {
-            if (getUIPopupMessages().hasMessage())
-               context.addUIComponentToUpdateByAjax(getUIPopupMessages());
             for (UIComponent uicomponent : list)
             {
                renderBlockToUpdate(uicomponent, context, w);

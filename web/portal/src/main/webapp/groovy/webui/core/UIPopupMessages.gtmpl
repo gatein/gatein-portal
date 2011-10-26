@@ -52,30 +52,16 @@
 			println "      <ul class=\"UITabContent PopupMessageBox $messType\" $style>";
 		for(mess in messages) {
 			if(mess.messageKey == null) continue;
-			println "            <li class=\"MessageContainer\">";
-			println "              <span class=\"PopupIcon ${messType}Icon\">";
-			String msgValue = _ctx.appRes(mess.messageKey);
-			Object[] msgArguments = mess.getMessageAruments();
-			if(msgArguments != null && msgArguments.length > 0) {
-			    if (mess.isArgsLocalized()) {
-					for(i in 0..msgArguments.length-1) { 				   
-						msgValue = msgValue.replace("{" + i + "}", _ctx.appRes(msgArguments [i]));
-					}
-			    } else {
-			        for(i in 0..msgArguments.length-1) { 				   
-						msgValue = msgValue.replace("{" + i + "}", msgArguments [i]);
-					}
-			    }
-			}
-                        EntityEncoder encoder = HTMLEntityEncoder.getInstance();
-			msgValue = encoder.encode(msgValue);
-				println msgValue;
-
-				println "             </span>";
-				println "           </li>";
-			}
-				println "    </ul>";
-			return isSelected;
+			println "						<li class=\"MessageContainer\">";
+			println "							<span class=\"PopupIcon ${messType}Icon\">";
+			String msgValue = mess.getMessage();
+			EntityEncoder entityEncoder = EntityEncoder.FULL;
+			println entityEncoder.encode(msgValue);
+			println "						 </span>";
+			println "					 </li>";
+		}
+		println "		</ul>";
+		return isSelected;
 	}
 
 %>

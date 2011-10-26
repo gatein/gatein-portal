@@ -117,7 +117,6 @@ public class UIFormLifecycle extends Lifecycle<UIForm>
 
       if (context.getProcessRender())
       {
-         context.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
          return;
       }
       event.broadcast();

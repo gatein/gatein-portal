@@ -23,8 +23,4 @@
 			</td>
 		</tr>
 	</table>
-	<%
-	   UIPopupMessages uiPopupMessages = uicomponent.getUIPopupMessages();
-	   uiPopupMessages.processRender(_ctx.getRequestContext());
-	%>
 </div>

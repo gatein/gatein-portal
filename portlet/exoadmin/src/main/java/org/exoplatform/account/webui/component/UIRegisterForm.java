@@ -19,6 +19,9 @@
 
 package org.exoplatform.account.webui.component;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import nl.captcha.Captcha;
 
 import org.exoplatform.services.organization.OrganizationService;
@@ -29,7 +32,6 @@ import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
@@ -40,9 +42,6 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.Validator;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 
@@ -87,9 +86,7 @@ public class UIRegisterForm extends UIForm
    {
       super.processAction(context);
       
-      UIApplication uiApp = context.getUIApplication();
-      UIPopupMessages popupMessages = uiApp.getUIPopupMessages();
-      if(popupMessages.getWarnings().size() > 0 || popupMessages.getErrors().size() > 0)
+      if(context.getProcessRender())
       {
          //Invalidate the capcha
          if (context instanceof PortletRequestContext)

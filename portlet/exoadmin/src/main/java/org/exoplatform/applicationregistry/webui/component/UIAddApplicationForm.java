@@ -238,7 +238,6 @@ public class UIAddApplicationForm extends UIForm
          {
             UIApplication uiApp = event.getRequestContext().getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UIAddApplicationForm.msg.typeNoApps", null));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             uiForm.getChild(UIFormTableIteratorInputSet.class).setRendered(false);
          }
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);

@@ -92,6 +92,8 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
    public static final String COLINDEX = "colIndex";
 
    public static final String ROWINDEX = "rowIndex";
+   
+   public static String SAVE_FAIL = "UIDashboardContainer.saveFail";
 
    /**
     * Constructs new UIDashboardContainer which belongs to a UIDashboardPortlet
@@ -490,8 +492,10 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
          }
          catch (StaleModelException e)
          {
-            getAncestorOfType(UIPortletApplication.class).addMessage(
+            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();            
+            context.getUIApplication().addMessage(
                new ApplicationMessage("UIDashboard.msg.StaleData", null, ApplicationMessage.ERROR));            
+            context.setAttribute(SAVE_FAIL, true);
          }
       }
    }
@@ -517,6 +521,7 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
          {
             UIApplication uiApplication = context.getUIApplication();
             uiApplication.addMessage(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null));
+            context.setAttribute(UIDashboard.APP_NOT_EXIST, true);
             return;
          }
          UIGadget uiGadget = event.getSource().createUIComponent(context, UIGadget.class, null, null);
@@ -546,7 +551,7 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
 
          uiDashboardContainer.moveUIGadget(objectId, col, row);
          uiDashboardContainer.save();
-         if (uiDashboard.getAncestorOfType(UIPortletApplication.class).getUIPopupMessages().hasMessage()) 
+         if (context.getAttribute(SAVE_FAIL) != null) 
          {
             return;
          }
@@ -577,9 +582,7 @@ public class UIDashboardContainer extends org.exoplatform.webui.core.UIContainer
             isMaximized = true;
          }
          uiDashboardContainer.save();
-         UIPopupMessages uiPopupMessages = 
-            uiDashboard.getAncestorOfType(UIPortletApplication.class).getUIPopupMessages();
-         if (!isMaximized && !uiPopupMessages.hasMessage())
+         if (!isMaximized && context.getAttribute(SAVE_FAIL) == null)
          {
             Util.getPortalRequestContext().setResponseComplete(true);
          }

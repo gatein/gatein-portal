@@ -197,7 +197,6 @@ public class UIGroupSelector extends UIContainer
          {
             UIApplication uiApp = pcontext.getUIApplication();
             uiApp.addMessage(new ApplicationMessage("UIGroupSelector.msg.selectGroup", null));
-            pcontext.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             uiPopup.setShow(true);
             return;
          }

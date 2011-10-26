@@ -19,7 +19,13 @@
 
 package org.exoplatform.web.application;
 
+import org.exoplatform.commons.utils.PropertyManager;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+
 import java.io.Serializable;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * Created by The eXo Platform SARL
@@ -29,11 +35,15 @@ import java.io.Serializable;
  */
 public class ApplicationMessage implements Serializable
 {
+   private static Log log = ExoLogger.getLogger(ApplicationMessage.class);
+   
    final public static int ERROR = 0, WARNING = 1, INFO = 2;
 
    private int type_ = INFO;
-
+   
    private String messageKey_;
+   
+   private ResourceBundle resourceBundle;
 
    private Object[] messageArgs_;
    
@@ -49,6 +59,30 @@ public class ApplicationMessage implements Serializable
    {
       this(key, args);
       type_ = type;
+   }
+
+   public String getMessage()
+   {
+      String msg = resolveMessage(messageKey_);
+      if (msg != null && messageArgs_ != null)
+      {
+         for(int i = 0; i < messageArgs_.length; i++) 
+         {
+            String arg = messageArgs_ [i].toString();
+            if (isArgsLocalized()) 
+            {
+               arg = resolveMessage(arg);
+            }
+            msg = msg.replace("{" + i + "}", arg);            
+         }           
+      }      
+      
+      return msg;
+   }     
+   
+   public void setResourceBundle(ResourceBundle resourceBundle)
+   {
+      this.resourceBundle = resourceBundle;
    }
 
    public String getMessageKey()
@@ -81,4 +115,26 @@ public class ApplicationMessage implements Serializable
       return argsLocalized;
    }
 
+   private String resolveMessage(String key)
+   {
+      if (key == null && resourceBundle == null)
+      {
+         return key;
+      }
+      
+      String value;
+      try
+      {         
+         value = resourceBundle.getString(key);         
+      }
+      catch (MissingResourceException ex)
+      {
+         if (PropertyManager.isDevelopping())
+         {
+            log.warn("Can not find resource bundle for key : " + key);            
+         }
+          value = key.substring(key.lastIndexOf('.') + 1);
+      }
+      return value;
+   }
 }

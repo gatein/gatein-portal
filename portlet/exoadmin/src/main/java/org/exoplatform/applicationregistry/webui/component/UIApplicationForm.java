@@ -101,7 +101,6 @@ public class UIApplicationForm extends UIForm
             uiOrganizer.reload();
             uiOrganizer.setSelectedCategory(application.getCategoryName());
             ctx.addUIComponentToUpdateByAjax(uiOrganizer);
-            ctx.addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
          }
          uiForm.invokeSetBindingBean(application);

@@ -1,7 +1,6 @@
 <% 	import javax.portlet.PortletMode ; 
 		import org.exoplatform.gadget.webui.component.UIGadgetViewMode;
 		def rcontext = _ctx.getRequestContext() ;
-  	def popupMsgs = uicomponent.getUIPopupMessages();
 %>
 <div class="UIGadgetPortlet" id="$uicomponent.id">
 <%
@@ -9,5 +8,5 @@
 		uicomponent.renderChild(UIGadgetViewMode.class) ;
   }
 	
-	if(popupMsgs != null) popupMsgs.processRender(rcontext); %>
+%>
 </div>

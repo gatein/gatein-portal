@@ -20,6 +20,7 @@
 package org.exoplatform.webui.core;
 
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -29,6 +30,7 @@ import org.exoplatform.webui.event.EventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Created by The eXo Platform SARL
@@ -104,6 +106,7 @@ public class UIPopupMessages extends UIPopupWindow
 
    public void addMessage(ApplicationMessage msg)
    {
+      msg.setResourceBundle(getResourceBundle());
       switch (msg.getType())
       {
          case ApplicationMessage.ERROR :
@@ -115,6 +118,16 @@ public class UIPopupMessages extends UIPopupWindow
          default :
             infos_.add(msg);
       }
+   }
+   
+   private ResourceBundle getResourceBundle()
+   {
+      RequestContext context = RequestContext.getCurrentInstance();
+      if (context == null)
+      {
+         return null;
+      }
+      return context.getApplicationResourceBundle();
    }
 
    public boolean hasMessage()

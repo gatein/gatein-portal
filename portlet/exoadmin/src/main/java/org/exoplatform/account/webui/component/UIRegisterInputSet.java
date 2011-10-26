@@ -22,7 +22,6 @@ import javax.portlet.PortletPreferences;
 
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.webui.CaptchaValidator;
-import org.exoplatform.portal.webui.UICaptcha;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;

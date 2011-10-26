@@ -733,7 +733,6 @@ public class UIPageNodeForm extends UIFormTabPane
          if (existPage != null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.sameName", null));
-            pcontext.addUIComponentToUpdateByAjax(uiPortalApp.getUIPopupMessages());
             return;
          }
 

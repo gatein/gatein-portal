@@ -46,9 +46,7 @@ abstract public class UIApplication extends UIContainer
    private static final String UIAPPLICATION = "uiapplication";
 
    public UIApplication() throws Exception
-   {
-      uiPopupMessages_ = createUIComponent(UIPopupMessages.class, null, null);
-      uiPopupMessages_.setId("_" + uiPopupMessages_.hashCode());
+   {      
    }
 
    //TODO this looks like not to be used anymore
@@ -65,11 +63,22 @@ abstract public class UIApplication extends UIContainer
 
    /**
     * Return the common UIPopupMessages
-    * UIPortletApplication will override this method an return difference UIPopupMessage for difference Portlet modes
     * @return UIPopupMessages
     */
    public UIPopupMessages getUIPopupMessages()
    {
+      if (uiPopupMessages_ == null)
+      {
+         try
+         {
+            uiPopupMessages_ = createUIComponent(UIPopupMessages.class, null, null);
+            uiPopupMessages_.setId("_" + uiPopupMessages_.hashCode());
+         }
+         catch (Exception e)
+         {
+            log.error(e.getMessage(), e);
+         }
+      }
       return uiPopupMessages_;
    }
 
@@ -123,13 +132,13 @@ abstract public class UIApplication extends UIContainer
       }
       catch (MessageException ex)
       {
-         getUIPopupMessages().addMessage(ex.getDetailMessage());
+         addMessage(ex.getDetailMessage());
       }
       catch (Throwable t)
       {
          ApplicationMessage msg =
             new ApplicationMessage("UIApplication.msg.unknown-error", null, ApplicationMessage.ERROR);
-         uiPopupMessages_.addMessage(msg);
+         addMessage(msg);
          log.error("Error during the processAction phase", t);
       }
    }

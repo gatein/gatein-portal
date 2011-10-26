@@ -336,7 +336,6 @@ public class UIUserSelector extends UIForm implements UIPopupComponent
          {
             UIApplication uiApp = uiForm.getAncestorOfType(UIApplication.class);
             uiApp.addMessage(new ApplicationMessage("UIUserSelector.msg.user-required", null));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiApp.getUIPopupMessages());
             return;
          }
          String[] arrItems = items.toArray(new String[items.size()]);
