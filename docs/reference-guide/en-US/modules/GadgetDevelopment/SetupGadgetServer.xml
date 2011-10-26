@@ -33,23 +33,67 @@
 			It is also possible to have multiple rendering servers. This helps to balance the rendering load across multiple servers.
 		</para>
 		<para>
-			When deploying on the same server ensure the gadget initiates before anything that calls it (for example; the webapp <literal>GateInGadgets</literal> which uses <literal>org.exoplatform.application.gadget.GadgetRegister</literal>).
+			When deploying on the same server, ensure the gadget initiates before anything that calls it (for example; the webapp <literal>GateInGadgets</literal> which uses <literal>org.exoplatform.application.gadget.GadgetRegister</literal>).
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Setup_a_Gadget_Server-Configuration">
 		<title>Configuration</title>
 		<section id="sect-Reference_Guide-Configuration-Security_key">
-			<title>Security key</title>
-			<para>
-				A file called <emphasis role="bold">key.txt</emphasis> has to be generated for every installation of &PRODUCT; to be secure. This file contains a secret key used to encrypt the security token used for authenticating the user.
-			</para>
-			<para>
-				In Linux systems this file can be generated with:
-			</para>
-			
-<programlisting><command>dd if=/dev/random bs=32 count=1 | openssl base64 &#62; /tmp/key.txt</command>
-</programlisting>
+      <title>Security key</title>
+      <para>In GateIn, the gadget container is using three security files for authentication and authorization
+        gadgets:
+      </para>
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>key.txt</emphasis>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <emphasis>oauthkey.pem</emphasis>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <emphasis>oauthkey_pub.pem</emphasis>
+          </para>
+        </listitem>
+      </itemizedlist>
+      <para>By default, they are located in the
+        <emphasis>$JBOSS_HOME/server/default/conf/gatein/gadgets</emphasis> or For Tomcat: <emphasis>$TOMCAT_HOME/gatein/conf/gadgets</emphasis>
+        folder and are configured by system variables in the 
+        <emphasis>$JBOSS_HOME/server/default/conf/gatein/configuration.properties</emphasis> or For Tomcat: <emphasis>$TOMCAT_HOME/gatein/conf/configuration.properties</emphasis>
+        file:
+      </para>
+      <programlisting>
+        <command>gatein.gadgets.securitytokenkeyfile=${gatein.conf.dir}/gadgets/key.txt</command>
+        <command>gatein.gadgets.signingkeyfile=${gatein.conf.dir}/gadgets/oauthkey.pem</command>
+      </programlisting>
+      <para>In case you have other files, you can change these variables to point to them.</para>
+      <para>The
+        <emphasis>key.txt</emphasis>
+        file contains a secret key used to encrypt the security token used for the user authentication. When starting
+        GateIn, this file is read via the
+        <emphasis>gatein.gadgets.securitytokenkeyfile</emphasis>
+        path. In case the <emphasis>key.txt</emphasis> file is not found, GateIn automatically generates a new
+        <emphasis>key.txt</emphasis>
+        one and save it to the
+        <emphasis>gatein.gadgets.securitytokenkeyfile</emphasis>
+        path.
+      </para>
+      <para>
+        <emphasis>oauthkey.pem</emphasis>
+        and
+        <emphasis>oauthkey_pub.pem</emphasis>
+        are a key pair of RSA cryptography standard.
+        <emphasis>oauthkey.pem</emphasis>
+        is known as a private key and
+        <emphasis>oauthkey_pub.pem</emphasis>
+        is a public key. They are the default keys of the gadget container which OAuth gadgets will use to authorize
+        with external service providers.
+      </para>
 		</section>
 		
 		<section id="sect-Reference_Guide-Configuration-Gadget_proxy_and_concat_configuration">
