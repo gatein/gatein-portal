@@ -142,7 +142,7 @@ a {
 
 .AjaxLoadingMask .LoadingProgressBar {
   width: 32px; height: 40px;
-  background: url('../../../background/LoadingProgress.gif') no-repeat center;
+  background: url("/eXoResources/skin/DefaultSkin/background/LoadingProgress.gif") no-repeat center;    
   margin: auto;
   display: block;
 }
