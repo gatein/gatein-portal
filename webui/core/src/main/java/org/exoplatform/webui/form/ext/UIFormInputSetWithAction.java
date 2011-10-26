@@ -97,7 +97,7 @@ public class UIFormInputSetWithAction extends UIFormInputSet implements UIFormIn
    public void setActions(String[] actionList, String[] values)
    {
       actions = actionList;
-      values = values;
+      this.values = values;
    }
 
    /**
@@ -148,7 +148,7 @@ public class UIFormInputSetWithAction extends UIFormInputSet implements UIFormIn
     */
    public void setIsShowOnly(boolean isShowOnly)
    {
-      isShowOnly = isShowOnly;
+      this.isShowOnly = isShowOnly;
    }
 
    /**
@@ -168,7 +168,7 @@ public class UIFormInputSetWithAction extends UIFormInputSet implements UIFormIn
     */
    public void setIsDeleteOnly(boolean isDeleteOnly)
    {
-      isDeleteOnly = isDeleteOnly;
+      this.isDeleteOnly = isDeleteOnly;
    }
 
    /**
@@ -272,7 +272,7 @@ public class UIFormInputSetWithAction extends UIFormInputSet implements UIFormIn
     */
    public void setIsView(boolean isView)
    {
-      isView = isView;
+      this.isView = isView;
    }
 
    /**
