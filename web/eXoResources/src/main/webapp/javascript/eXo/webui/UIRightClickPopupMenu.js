@@ -181,10 +181,13 @@ UIRightClickPopupMenu.prototype.clickRightMouse = function(event, elemt, menuId,
 		case 4:
 			break;
 		default:
-			if((eXo.core.Mouse.mouseyInClient + ctxMenuContainer.offsetHeight) > eXo.core.Browser.getBrowserHeight()) {
-				intTop -= ctxMenuContainer.offsetHeight ;
-			}
-			break;
+      // if it isn't fit to be showed down BUT is fit to to be showed up
+      if((eXo.core.Mouse.mouseyInClient + ctxMenuContainer.offsetHeight) > eXo.core.Browser.getBrowserHeight()
+          && (intTop > ctxMenuContainer.offsetHeight))
+      {
+        intTop -= ctxMenuContainer.offsetHeight ;
+      }
+      break;
 	}
 	
 	if(eXo.core.I18n.isLT()) {
