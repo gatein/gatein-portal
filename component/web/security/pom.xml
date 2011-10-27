@@ -105,6 +105,10 @@
              <groupId>trove</groupId>
              <artifactId>trove</artifactId>
            </exclusion>
+           <exclusion>
+              <groupId>apache-log4j</groupId>
+              <artifactId>log4j</artifactId>
+           </exclusion>
         </exclusions>
      </dependency>
     <dependency>
