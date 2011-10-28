@@ -30,7 +30,7 @@ Provides packaging for the build, with automated JBoss AS7 download support.
 Known Issues
 ============
 
-- JBoss AS 7.0.2.Final and higher are supported. It does not work with JBoss AS 7.0.0.Final.
+- Only JBoss AS 7.0.2.Final is supported at the moment. It does not work with JBoss AS 7.0.0.Final or with more recent JBoss AS 7.1.0-Alpha versions.
 - WSRP is not yet supported
 - <distributable/> is not yet supported
 - Sample ears have been repackaged as their current default packaging is not supported
