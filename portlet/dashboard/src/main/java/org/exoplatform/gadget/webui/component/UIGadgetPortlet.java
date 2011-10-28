@@ -79,6 +79,32 @@ public class UIGadgetPortlet extends UIPortletApplication
       this.userPref = pref;
    }
 
+   @Override
+   public void processAction(WebuiRequestContext context) throws Exception
+   {
+      super.processAction(context);
+
+      PortletRequest req = context.getRequest();
+      userPref = req.getParameter("userPref");
+
+      if (userPref != null && !userPref.isEmpty())
+      {
+         PortletPreferences prefs = req.getPreferences();
+         prefs.setValue("userPref", userPref);
+         prefs.store();
+      }
+   }
+   
+   @Override
+   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception
+   {
+      PortletRequest req = context.getRequest();
+      PortletPreferences prefs = req.getPreferences();
+      userPref = prefs.getValue("userPref", null);
+      
+      super.processRender(app, context);
+   }
+
    public String getUrl()
    {
       PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
