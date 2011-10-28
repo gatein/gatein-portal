@@ -40,7 +40,6 @@ import java.util.List;
 
 @ComponentConfig(id = "UIWorkingWorkspace", template = "system:/groovy/portal/webui/workspace/UIWorkingWorkspace.gtmpl", events = {
    @EventConfig(listeners = UIMainActionListener.CreatePortalActionListener.class),
-   @EventConfig(listeners = UIMainActionListener.EditCurrentPageActionListener.class),
    @EventConfig(listeners = UIMainActionListener.PageCreationWizardActionListener.class),
    @EventConfig(listeners = UIMainActionListener.EditBackgroundActionListener.class),
    @EventConfig(listeners = UIMainActionListener.EditInlineActionListener.class)})

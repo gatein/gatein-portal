@@ -57,59 +57,6 @@ import java.lang.reflect.Method;
  */
 public class UIMainActionListener
 {
-
-   static public class EditCurrentPageActionListener extends EventListener<UIWorkingWorkspace>
-   {
-      public void execute(Event<UIWorkingWorkspace> event) throws Exception
-      {
-         UIPortalApplication uiApp = Util.getUIPortalApplication();
-         UIWorkingWorkspace uiWorkingWS = event.getSource();
-
-         // check edit permission for page
-         UIPageBody pageBody = uiWorkingWS.findFirstComponentOfType(UIPageBody.class);
-         UIPage uiPage = (UIPage)pageBody.getUIComponent();
-         if (uiPage == null)
-         {
-            uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", null));
-            return;
-         }
-         Page page = PortalDataMapper.toPageModel(uiPage);
-
-         UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
-         if (!userACL.hasEditPermission(page))
-         {
-            uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.Invalid-EditPage-Permission", null));
-            return;
-         }
-
-         uiWorkingWS.setRenderedChild(UIEditInlineWorkspace.class);
-
-         UIPortalComposer portalComposer =
-            uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(true);
-         portalComposer.setComponentConfig(UIPortalComposer.class, UIPortalComposer.UIPAGE_EDITOR);
-         portalComposer.setId(UIPortalComposer.UIPAGE_EDITOR);
-         portalComposer.setShowControl(true);
-         portalComposer.setEditted(false);
-         portalComposer.setCollapse(false);
-
-         UIPortalToolPanel uiToolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
-         uiToolPanel.setShowMaskLayer(false);
-         uiApp.setModeState(UIPortalApplication.APP_BLOCK_EDIT_MODE);
-
-         // We clone the edited UIPage object, that is required for Abort action
-         UIPageFactory clazz = UIPageFactory.getInstance(page.getFactoryId());
-         UIPage newUIPage = clazz.createUIPage(null);
-         PortalDataMapper.toUIPage(newUIPage, page);
-         uiToolPanel.setWorkingComponent(newUIPage);
-
-         // Remove current UIPage from UIPageBody
-         pageBody.setUIComponent(null);
-
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
-         Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
-      }
-   }
-
    static public class PageCreationWizardActionListener extends EventListener<UIWorkingWorkspace>
    {
       public void execute(Event<UIWorkingWorkspace> event) throws Exception
