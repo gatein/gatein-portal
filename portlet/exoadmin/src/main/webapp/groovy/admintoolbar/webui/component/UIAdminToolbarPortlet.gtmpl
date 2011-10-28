@@ -38,13 +38,18 @@
 					<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'PageCreationWizard', true))" title="" class="ItemIcon AddPageIcon">$addPageLabel</a>
 				</li>
 			<% } %>
-   			
-   			<% if(userCouldEditPage){ %>
-				<li class="MenuItem portlet-menu-cascade-item">
-					<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditCurrentPage', true))" title="" class="ItemIcon EditPageIcon">$editPageLabel</a>
+   		
+			<% if(userCouldEditPage){ 
+			
+				UIPortalApplication portalApp = Util.getUIPortalApplication();
+				UIPage uiPage = portalApp.findFirstComponentOfType(UIPage.class);//TODO: Find a better solution than this traversing
+				String editPageRequest = "javascript:ajaxGet(eXo.env.server.createPortalURL('" + uiPage.getId() + "', 'EditCurrentPage', true))";
+			%>
+				<li class="MenuItem">
+					<a href="$editPageRequest" title="" class="ItemIcon EditPageIcon">$editPageLabel</a>
 				</li>
-			<% } %>					
-						
+			<% } %>
+
 			<% if(userCouldEditPortal){ %>								 
 				<li class="MenuItem portlet-menu-cascade-item">	
 					<a href="javascript:ajaxGet(eXo.env.server.createPortalURL('UIWorkingWorkspace', 'EditInline', true))" title="" class="ItemIcon EditSiteIcon">$editSiteLayout</a>
