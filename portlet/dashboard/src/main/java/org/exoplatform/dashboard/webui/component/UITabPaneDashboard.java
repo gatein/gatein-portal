@@ -252,11 +252,6 @@ public class UITabPaneDashboard extends UIContainer
    {
       try
       {
-         if (nodeLabel == null || nodeLabel.length() == 0)
-         {
-            nodeLabel = "Tab_" + getCurrentNumberOfTabs();
-         }
-
          UserNavigation userNav = getCurrentUserNavigation();
          UserNode parentNode = getParentTab();
          if (userNav == null || parentNode == null)
@@ -264,8 +259,7 @@ public class UITabPaneDashboard extends UIContainer
             return null;
          }
 
-         String uniqueNodeName = nodeLabel.toLowerCase().replace(' ', '_');
-
+         String uniqueNodeName = buildName(nodeLabel);
          SiteKey siteKey = userNav.getKey();
          Page page =
             configService.createPageTemplate(UITabPaneDashboard.PAGE_TEMPLATE, siteKey.getTypeName(), siteKey.getName());
@@ -304,16 +298,23 @@ public class UITabPaneDashboard extends UIContainer
       {
          return false;
       }
+      return true;
+   }
+   
+   private String buildName(String label)
+   {
+      StringBuffer nodeName = new StringBuffer();
       for (int i = 0; i < label.length(); i++)
       {
          char c = label.charAt(i);
-         if (Character.isLetter(c) || Character.isDigit(c) || c == '_' || c == '-' || Character.isSpaceChar(c))
+         if (Character.isLetter(c) || Character.isDigit(c) || c == '_' || c == '-')
          {
+            nodeName.append(c);
             continue;
          }
-         return false;
+         nodeName.append("_");
       }
-      return true;
+      return nodeName.toString();
    }
 
    public UserNode renamePageNode(String nodeName, String newNodeLabel)
@@ -328,7 +329,7 @@ public class UITabPaneDashboard extends UIContainer
          UserNode renamedNode = parentNode.getChild(nodeName);
          renamedNode.setLabel(newNodeLabel);
 
-         String newNodeName = newNodeLabel.toLowerCase().replace(' ', '_');
+         String newNodeName = buildName(newNodeLabel);
          if (parentNode.getChild(newNodeName) != null)
          {
             newNodeName = newNodeName + "_" + System.currentTimeMillis();
