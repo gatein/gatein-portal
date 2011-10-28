@@ -78,6 +78,9 @@ import org.picocontainer.Startable;
 
 import javax.servlet.ServletContext;
 import java.io.InputStream;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -90,6 +93,8 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
    private static final String CLASSPATH = "classpath:/";
    private static final String PRODUCER_CONFIG_LOCATION = "producerConfigLocation";
    private static final String CONSUMERS_CONFIG_LOCATION = "consumersConfigLocation";
+   public static final String CONSUMERS_INIT_DELAY = "consumersInitDelay";
+   public static final int DEFAULT_DELAY = 2;
 
    private final InputStream producerConfigurationIS;
    private final String producerConfigLocation;
@@ -102,6 +107,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
    private final ExoKernelIntegration exoKernelIntegration;
    private final boolean bypass;
    private static final String WSRP_ADMIN_GUI_CONTEXT_PATH = "/wsrp-admin-gui";
+   private int consumersInitDelay;
 
    public WSRPServiceIntegration(ExoContainerContext context, InitParams params, ConfigurationManager configurationManager,
                                  ExoKernelIntegration pc, NodeHierarchyCreator nhc) throws Exception
@@ -117,6 +123,15 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          {
             producerConfigLocation = params.getValueParam(PRODUCER_CONFIG_LOCATION).getValue();
             consumersConfigLocation = params.getValueParam(CONSUMERS_CONFIG_LOCATION).getValue();
+            String delayString = params.getValueParam(CONSUMERS_INIT_DELAY).getValue();
+            try
+            {
+               consumersInitDelay = Integer.parseInt(delayString);
+            }
+            catch (NumberFormatException e)
+            {
+               consumersInitDelay = DEFAULT_DELAY;
+            }
          }
          else
          {
@@ -338,7 +353,22 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          migrationService.setStructureProvider(structureprovider);
          consumerRegistry.setMigrationService(migrationService);
 
-         consumerRegistry.start();
+         // wait 'delay' seconds before starting the consumers to give JBoss WS a chance to publish the WSDL and not deadlock
+         ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(1);
+         scheduledExecutorService.schedule(new Runnable()
+         {
+            public void run()
+            {
+               try
+               {
+                  consumerRegistry.start();
+               }
+               catch (Exception e)
+               {
+                  throw new RuntimeException(e);
+               }
+            }
+         }, consumersInitDelay, TimeUnit.SECONDS);
 
          // set up a PortletInvokerResolver so that when a remote producer is queried, we can start it if needed
          RegisteringPortletInvokerResolver resolver = new RegisteringPortletInvokerResolver();

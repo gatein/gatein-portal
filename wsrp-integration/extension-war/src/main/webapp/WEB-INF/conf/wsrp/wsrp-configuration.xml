@@ -41,6 +41,11 @@
             <description>Location of the default consumers configuration file</description>
             <value>conf/wsrp-consumers-config.xml</value>
          </value-param>
+         <value-param>
+            <name>consumersInitDelay</name>
+            <description>Time (in seconds) after the start of the WSRP extension, waited before the consumers are started</description>
+            <value>2</value>
+         </value-param>
       </init-params>
    </component>
 
