@@ -85,7 +85,7 @@
    <appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
       <errorHandler class="org.jboss.logging.util.OnlyOnceErrorHandler"/>
       <param name="Target" value="System.out"/>
-      <param name="Threshold" value="INFO"/>
+      <!--<param name="Threshold" value="INFO"/>-->
 
       <layout class="org.apache.log4j.PatternLayout">
          <!-- The default pattern: Date Priority [Category] Message\n -->
@@ -179,6 +179,10 @@
    <!-- ================ -->
    <!-- Limit categories -->
    <!-- ================ -->
+
+   <category name="org.gatein.management">
+      <priority value="DEBUG"/>
+   </category>
 
    <!-- Limit the org.apache category to INFO as its DEBUG is verbose -->
    <category name="org.apache">
@@ -296,6 +300,7 @@
    <!-- ======================= -->
 
    <root>
+      <priority value="INFO" />
       <appender-ref ref="CONSOLE"/>
       <appender-ref ref="FILE"/>
    </root>
