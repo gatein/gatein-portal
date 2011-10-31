@@ -266,6 +266,15 @@ abstract public class UIFormInputBase<T> extends UIContainer implements UIFormIn
       attribute.put(name, value);
    }
    
+   public boolean hasHTMLAttribute()
+   {
+      if(attribute == null) 
+      {
+         return false;
+      }
+      return attribute.size() > 0 ;
+   }
+   
    protected void renderHTMLAttribute(Writer w) throws IOException
    {
       if (attribute != null)
