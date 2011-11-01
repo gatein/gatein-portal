@@ -546,129 +546,139 @@ skin/Stylesheet.css</programlisting>
     <programlisting>
 /*---- MyTheme ----*/
 .MyTheme .WindowBarCenter .WindowPortletInfo {
-  margin-right: 80px; /* orientation=lt */
-  margin-left: 80px; /* orientation=rt */
+	margin-right: 80px; /* orientation=lt */
+	margin-left: 80px; /* orientation=rt */
 }
+
 .MyTheme .WindowBarCenter .ControlIcon {
-  float: right;/* orientation=lt */
-  float: left;/* orientation=rt */
-  width: 24px; 
-  height: 17px;
-  cursor: pointer;
-  background-image: url('background/MyTheme.png');
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	width: 24px; 
+	height: 17px;
+	cursor: pointer;
+	background-image: url('background/MyTheme.png');
 }
+
 .MyTheme .ArrowDownIcon {
-  background-position: center 20px;
+	background-position: center 20px;
 }
+
 .MyTheme .OverArrowDownIcon {
-  background-position: center 116px;
+	background-position: center 116px;
 }
+
 .MyTheme .MinimizedIcon {
-  background-position: center 44px;
+	background-position: center 44px;
 }
+
 .MyTheme .OverMinimizedIcon {
-  background-position: center 140px;
+	background-position: center 140px;
 }
+
 .MyTheme .MaximizedIcon {
-  background-position: center 68px;
+	background-position: center 68px;
 }
+
 .MyTheme .OverMaximizedIcon {
-  background-position: center 164px;
+	background-position: center 164px;
 }
+
 .MyTheme .RestoreIcon {
-  background-position: center 92px;
+	background-position: center 92px;
 }
+
 .MyTheme .OverRestoreIcon {
-  background-position: center 188px;
+	background-position: center 188px;
 }
+
 .MyTheme .NormalIcon {
-  background-position: center 92px;
+	background-position: center 92px;
 }
+
 .MyTheme .OverNormalIcon {
-  background-position: center 188px;
+	background-position: center 188px;
 }
-.UIPageDesktop .MyTheme .ResizeArea {
-  float: right;/* orientation=lt */
-  float: left;/* orientation=rt */
-  width: 18px; height: 18px;
-  cursor: nw-resize;
-  background: url('background/ResizeArea18x18.gif') no-repeat left top; /* orientation=lt */
-  background: url('background/ResizeArea18x18-rt.gif') no-repeat right top; /* orientation=rt */
-}
+
 .MyTheme .Information {
-  height: 18px; line-height: 18px;
-  vertical-align: middle; font-size: 10px;
-  padding-left: 5px;/* orientation=lt */
-  padding-right: 5px;/* orientation=rt */
-  margin-right: 18px;/* orientation=lt */
-  margin-left: 18px;/* orientation=rt */
+	height: 18px; line-height: 18px;
+	vertical-align: middle; font-size: 10px;
+	padding-left: 5px; /* orientation=lt */
+	padding-right: 5px; /* orientation=rt */
+	margin-right: 18px; /* orientation=lt */
+	margin-left: 18px; /* orientation=rt */
 }
+
 .MyTheme .WindowBarCenter .WindowPortletIcon {
-  background-position: left top; /* orientation=lt */
-  background-position: right top; /* orientation=rt */
-  padding-left: 20px; /* orientation=lt */
-  padding-right: 20px; /* orientation=rt */
-  height: 16px;
-  line-height: 16px;
+	background-position: left top; /* orientation=lt */
+	background-position: right top; /* orientation=rt */
+	padding-left: 20px; /* orientation=lt */
+	padding-right: 20px; /* orientation=rt */
+	height: 16px;
+	line-height: 16px;
 }
+
 .MyTheme .WindowBarCenter .PortletName {
-  font-weight: bold;
-  color: #333333;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 100%;
+	font-weight: bold;
+	color: #333333;
+	overflow: hidden;
+	white-space: nowrap;
 }
+
 .MyTheme .WindowBarLeft {
-  padding-left: 12px;
-  background-image: url('background/MyTheme.png');
-  background-repeat: no-repeat;
-  background-position: left -148px;
+	padding-left: 12px;
+	background-image: url('background/MyTheme.png');
+	background-repeat: no-repeat;
+	background-position: left -148px;
 }
+
 .MyTheme .WindowBarRight {
-  padding-right: 11px;
-  background-image: url('background/MyTheme.png');
-  background-repeat: no-repeat;
-  background-position: right -119px;
+	padding-right: 11px;
+	background-image: url('background/MyTheme.png');
+	background-repeat: no-repeat;
+	background-position: right -119px;
 }
+
 .MyTheme .WindowBarCenter {
-  background-image: url('background/MyTheme.png');
-  background-repeat: repeat-x;
-  background-position: left -90px;
+	background-image: url('background/MyTheme.png');
+	background-repeat: repeat-x;
+	background-position: left -90px;
+	height: 21px;
+	padding-top: 8px;
 }
-.MyTheme .WindowBarCenter .FixHeight {
-  height: 21px;
-  padding-top: 8px;
-}
+
 .MyTheme .MiddleDecoratorLeft {
-  padding-left: 12px;
-  background: url('background/MyTheme.png') repeat-y left;
+	padding-left: 12px;
+	background: url('background/MMyTheme.png') repeat-y left;
 }
+
 .MyTheme .MiddleDecoratorRight {
-  padding-right: 11px;
-  background: url('background/MyTheme.png') repeat-y right;
+	padding-right: 11px;
+	background: url('background/MMyTheme.png') repeat-y right;
 }
+
 .MyTheme .MiddleDecoratorCenter {
-  background: #ffffff;
+	background: #ffffff;
 }
+
 .MyTheme .BottomDecoratorLeft {
-  MyTheme: 12px;
-  background-image: url('background/MyTheme.png');
-  background-repeat: no-repeat;
-  background-position: left -60px;
+	padding-left: 12px;
+	background-image: url('background/MyTheme.png');
+	background-repeat: no-repeat;
+	background-position: left -60px;
 }
+
 .MyTheme .BottomDecoratorRight {
-  padding-right: 11px;
-  background-image: url('background/MyTheme.png');
-  background-repeat: no-repeat;
-  background-position: right -30px;
+	padding-right: 11px;
+	background-image: url('background/MyTheme.png');
+	background-repeat: no-repeat;
+	background-position: right -30px;
 }
+
 .MyTheme .BottomDecoratorCenter {
-  background-image: url('background/MyTheme.png');
-  background-repeat: repeat-x;
-  background-position: left top;
-}
-.MyTheme .BottomDecoratorCenter .FixHeight {
-  height: 30px;
+	background-image: url('background/MyTheme.png');
+	background-repeat: repeat-x;
+	background-position: left top;
+	height: 30px;
 }
 </programlisting>
 </section>
