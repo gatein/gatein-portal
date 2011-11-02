@@ -20,16 +20,8 @@
 package org.exoplatform.portal.webui.portal;
 
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.webui.application.UIPortlet;
-import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.web.login.LogoutControl;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
-import java.net.URLEncoder;
-
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -39,34 +31,6 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class UIPortalActionListener
 {
-
-   @SuppressWarnings("unused")
-   static public class LogoutActionListener extends EventListener<UIComponent>
-   {
-      public void execute(Event<UIComponent> event) throws Exception
-      {
-         PortalRequestContext prContext = Util.getPortalRequestContext();
-         LogoutControl.wantLogout();
-         HttpServletRequest request = prContext.getRequest();
-         String portalName = URLEncoder.encode(Util.getUIPortal().getName(), "UTF-8");
-         String redirect = request.getContextPath() + "/public/" + portalName + "/";
-         prContext.getResponse().sendRedirect(redirect);
-         prContext.setResponseComplete(true);
-      }
-   }
-
-   //TODO This method seems not to be used
-   static public class ChangeWindowStateActionListener extends EventListener<UIPortal>
-   {
-      public void execute(Event<UIPortal> event) throws Exception
-      {
-         UIPortal uiPortal = event.getSource();
-         String portletId = event.getRequestContext().getRequestParameter("portletId");
-         UIPortlet uiPortlet = uiPortal.findComponentById(portletId);
-         WebuiRequestContext context = event.getRequestContext();
-         uiPortlet.createEvent("ChangeWindowState", event.getExecutionPhase(), context).broadcast();
-      }
-   }
 
    static public class PingActionListener extends EventListener<UIPortal>
    {
