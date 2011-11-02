@@ -23,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javassist.bytecode.analysis.Type;
-
 import javax.portlet.ActionResponse;
 import javax.xml.namespace.QName;
 
@@ -71,17 +69,9 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormInputItemSelector;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ResourceBundle;
-
-import javax.portlet.ActionResponse;
-import javax.xml.namespace.QName;
 
 @ComponentConfigs({
    @ComponentConfig(template = "system:/groovy/portal/webui/page/UIPageBrowser.gtmpl", events = {
@@ -230,7 +220,7 @@ public class UIPageBrowser extends UIContainer
    {
       this.showAddNewPage = showAddNewPage;
    }
-
+   
    public void processDecode(WebuiRequestContext context) throws Exception
    {
       super.processDecode(context);

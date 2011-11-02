@@ -162,3 +162,7 @@ a {
 .ClearBoth {
   clear: both;
 }
+
+.UIVirtualList {
+	height: 300px;
+}

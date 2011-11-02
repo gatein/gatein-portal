@@ -539,6 +539,32 @@ Browser.prototype.isDesktop = function() {
 	if(document.getElementById("UIPageDesktop")) return true ;
 	return false ;
 }
+
+/**
+ * Return the height of free space in the page if it is available.
+ * Otherwise, returns a negative which is equal to the height of content not visible on the screen.
+ */
+Browser.prototype.getHeightOfFreeSpace = function() {
+  var elements = document.body.children;
+  var height = 0; 
+  var ln = elements.length ;
+  for(var k = 0; k < ln; k++) {
+    height += elements[k].offsetHeight ;
+  }
+  return (this.getBrowserHeight() - height);
+}
+
+/**
+ * Adjust height of the element to fill up free space if any
+ */
+Browser.prototype.fillUpFreeSpace = function(elemt) {
+  var height = eXo.core.Browser.getHeightOfFreeSpace();
+  if (height > 0)
+  {
+    height += elemt.offsetHeight;
+    elemt.style.height = height + "px";
+  }
+}
 /************************************************************************************/
 eXo.core.Browser = new Browser() ;
 eXo.core.Mouse = new MouseObject() ;

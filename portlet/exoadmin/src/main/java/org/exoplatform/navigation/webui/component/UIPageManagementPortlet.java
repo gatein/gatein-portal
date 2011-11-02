@@ -19,10 +19,11 @@
 
 package org.exoplatform.navigation.webui.component;
 
-import org.exoplatform.portal.webui.page.UIPageBrowser;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.portal.webui.page.UIPageBrowser;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
+import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
 /**
@@ -36,8 +37,13 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 @Serialized
 public class UIPageManagementPortlet extends UIPortletApplication
 {
+   public static String PAGE_LIST_HEIGHT = "pageListHeight";
+   
    public UIPageManagementPortlet() throws Exception
    {
-      addChild(UIPageBrowser.class, null, null).setShowAddNewPage(true);
+      UIPageBrowser pageBrowser = addChild(UIPageBrowser.class, null, null);
+      pageBrowser.setShowAddNewPage(true);
+      UIVirtualList virtualList = pageBrowser.getChild(UIVirtualList.class);
+      virtualList.setAutoAdjustHeight(true);
    }
 }

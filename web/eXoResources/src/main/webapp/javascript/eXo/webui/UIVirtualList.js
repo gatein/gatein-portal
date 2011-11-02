@@ -19,19 +19,30 @@
 
 function UIVirtualList() {}
 
-UIVirtualList.prototype.init = function(componentId) {
+UIVirtualList.prototype.init = function(componentId, hasNext, autoAdjustHeight) {
   var uiVirtualList = document.getElementById(componentId);
   if (uiVirtualList == null) return;  
-  uiVirtualList.style.height = "300px";    
   
+  var virtualHeight = 300;     
+
   //If parent of virtualList have style.display = none --> can't get virtualList's height
   var tmp = uiVirtualList;
-  if (uiVirtualList.offsetHeight == 0) {
+  if (tmp.offsetHeight == 0) {
 	  tmp = uiVirtualList.cloneNode(true);
 	  tmp.style.visibility = "hidden";
+	  tmp.style.display = "block";
 	  document.body.appendChild(tmp);
   }
-  var virtualHeight = tmp.offsetHeight;
+  
+  if (eXo.core.DOMUtil.getStyle(tmp, "height")) {
+	  virtualHeight = tmp.offsetHeight;	  
+  }    
+  uiVirtualList.style.height = virtualHeight + "px";
+
+  if (autoAdjustHeight)
+  {
+    eXo.core.Browser.fillUpFreeSpace(uiVirtualList);
+  }
   
   var children = eXo.core.DOMUtil.getChildrenByTagName(tmp,"div");  
   var childrenHeight = 0;
@@ -43,12 +54,23 @@ UIVirtualList.prototype.init = function(componentId) {
 	  document.body.removeChild(tmp);	  
   }
   
-  if (!uiVirtualList.isFinished && childrenHeight <= virtualHeight && childrenHeight != 0) {
-		uiVirtualList.onscroll();
-  } else {  	
-  	uiVirtualList.isInitiated = true;
-  	uiVirtualList.scrollTop = 0;   	
+  if (childrenHeight <= uiVirtualList.offsetHeight)
+  {
+    if (hasNext && childrenHeight != 0)
+    {
+      uiVirtualList.onscroll();
+    }
+    else
+    {
+      uiVirtualList.isFinished = true;
+      if (autoAdjustHeight)
+      {
+        uiVirtualList.style.height = "auto";
+      }
+    }
   }
+  uiVirtualList.isInitiated = true;
+  uiVirtualList.scrollTop = 0;
 }
 
 UIVirtualList.prototype.getFeedBox = function(componentId) {
@@ -61,7 +83,7 @@ UIVirtualList.prototype.getFeedBox = function(componentId) {
 	return feedBox;
 }
 
-UIVirtualList.prototype.scrollMove = function(uiVirtualList, url) {
+UIVirtualList.prototype.onScroll = function(uiVirtualList, url) {
 	if (uiVirtualList.isFinished || uiVirtualList.isLocked) return;
 	var DOMUtil = eXo.core.DOMUtil;	
 	var componentHeight = uiVirtualList.offsetHeight;
@@ -78,11 +100,16 @@ UIVirtualList.prototype.scrollMove = function(uiVirtualList, url) {
 	}
 }
 
-UIVirtualList.prototype.updateList = function(componentId) {
+UIVirtualList.prototype.updateList = function(componentId, hasNext) {
   var DOMUtil = eXo.core.DOMUtil;
-var uiVirtualList = document.getElementById(componentId);
+  var uiVirtualList = document.getElementById(componentId);
   if (uiVirtualList == null) return;
  
+  if (!hasNext)
+  {
+    uiVirtualList.isFinished = true;
+  }
+
   var feedBox = this.getFeedBox(uiVirtualList.id);
   var loadedContent = uiVirtualList.storeHTML;
   
@@ -99,12 +126,6 @@ var uiVirtualList = document.getElementById(componentId);
   if (!uiVirtualList.isFinished && !uiVirtualList.isInitiated) {
   	this.init(componentId);
   }
-}
-
-UIVirtualList.prototype.loadFinished = function(componentId) {  
-  var uiVirtualList = document.getElementById(componentId);
-  if (uiVirtualList == null) return;
-  uiVirtualList.isFinished = true;
 }
 
 eXo.webui.UIVirtualList = new UIVirtualList();
