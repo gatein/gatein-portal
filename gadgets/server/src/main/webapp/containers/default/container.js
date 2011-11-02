@@ -111,7 +111,7 @@
 },
 
 // Default Js Uri config: also must be overridden.
-"gadgets.uri.js.host" : "http://%host%/",
+"gadgets.uri.js.host" : "//%host%/",
 "gadgets.uri.js.path" : "/eXoGadgetServer/gadgets/js",
 
 // Default concat Uri config; used for testing.
