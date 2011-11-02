@@ -124,11 +124,11 @@
 }
 
 .UIOrganizationPortlet .UIPersonalInfo .UIItemSelector .ItemDetailList {
-	height: 320px;
+	height: 345px;
 }
 
 .UIOrganizationPortlet .UIPersonalInfo .UIItemSelector .ItemList {
-	height: 300px;
+	height: 324px;
 }
 
 .UIOrganizationPortlet .UIPersonalInfo .UIFormInputSet {
@@ -310,7 +310,7 @@
 }
 
 .UIOrganizationPortlet .UIGroupManagement .UIGroupMembershipForm td.FieldComponent {
-	width: 278px;
+        width: auto;
 }
 
 /*#######################	UIMemberShipManagement #################################*/
