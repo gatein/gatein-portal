@@ -61,7 +61,7 @@ public class UIChangePassword extends UIForm
    
    public UIChangePassword() throws Exception
    {
-      addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).setEditable(false));
+      addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).setReadOnly(true));
       addUIFormInput(new UIFormStringInput(PASSWORD, PASSWORD, null).setType(UIFormStringInput.PASSWORD_TYPE)
          .addValidator(MandatoryValidator.class));
       addUIFormInput(((UIFormStringInput)new UIFormStringInput(NEW_PASSWORD, NEW_PASSWORD, null)).setType(

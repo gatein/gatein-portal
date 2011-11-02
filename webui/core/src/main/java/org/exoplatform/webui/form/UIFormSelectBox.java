@@ -170,8 +170,7 @@ public class UIFormSelectBox extends UIFormStringInput
    @SuppressWarnings("deprecation")
    public UIFormSelectBox setDisabled(boolean disabled)
    {
-      setEnable(!disabled);
-      return this;
+      return (UIFormSelectBox)super.setDisabled(disabled);
    }
 
    @SuppressWarnings("unused")
@@ -239,8 +238,10 @@ public class UIFormSelectBox extends UIFormStringInput
       if (size_ > 1)
          w.write(" size=\"" + size_ + "\"");
 
-      if (!enable_)
+      if (isDisabled())
          w.write(" disabled ");
+
+      renderHTMLAttributes(w);
 
       w.write(">\n");
 

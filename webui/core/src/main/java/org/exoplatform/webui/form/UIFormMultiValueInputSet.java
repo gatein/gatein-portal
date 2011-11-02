@@ -220,8 +220,8 @@ public class UIFormMultiValueInputSet extends UIFormInputContainer<List>
          UIFormInputBase uiInput = getChild(i);
          writer.append("<div class=\"MultiValueContainer\">");
 
-         uiInput.setEditable(!readonly_);
-         uiInput.setEnable(enable_);
+         uiInput.setReadOnly(readonly_);
+         uiInput.setDisabled(!enable_);
 
          uiInput.processRender(context);
 

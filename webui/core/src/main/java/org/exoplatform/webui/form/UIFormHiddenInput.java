@@ -56,21 +56,24 @@ public class UIFormHiddenInput extends UIFormInputBase<String>
 
    public void processRender(WebuiRequestContext context) throws Exception
    {
-      Writer print = context.getWriter();
-      print.write("<input name='");
-      print.write(getName());
-      print.write("'  type='hidden'");
-      print.write(" id='");
-      print.write(getId());
-      print.write("'");
+      Writer w = context.getWriter();
+      w.write("<input name='");
+      w.write(getName());
+      w.write("'  type='hidden'");
+      w.write(" id='");
+      w.write(getId());
+      w.write("'");
       String value = getValue();
       if (value != null && value.length() > 0)
       {
-         print.write(" value='");
+         w.write(" value='");
          value = HTMLEntityEncoder.getInstance().encodeHTMLAttribute(value);
-         print.write(value);
-         print.write("'");
+         w.write(value);
+         w.write("'");
       }
-      print.write(" />");
+
+      renderHTMLAttributes(w);
+
+      w.write(" />");
    }
 }

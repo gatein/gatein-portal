@@ -103,31 +103,31 @@ public class UIFormStringInput extends UIFormInputBase<String>
    {
       String value = getValue();
       Writer w = context.getWriter();
-      w.write("<input name='");
+      w.write("<input name=\"");
       w.write(getName());
-      w.write('\'');
+      w.write("\"");
       if (type_ == PASSWORD_TYPE)
-         w.write(" type='password'");
+         w.write(" type=\"password\"");
       else
-         w.write(" type='text'");
-      w.write(" id='");
+         w.write(" type=\"text\"");
+      w.write(" id=\"");
       w.write(getId());
-      w.write('\'');
+      w.write("\"");
       if (value != null && value.length() > 0)
       {
          value = HTMLEntityEncoder.getInstance().encodeHTMLAttribute(value);
-         w.write(" value='");
+         w.write(" value=\"");
          w.write(value);
-         w.write('\'');
+         w.write("\"");
       }
       if (maxLength > 0)
-         w.write(" maxlength='" + maxLength + "'");
+         w.write(" maxlength=\"" + maxLength + "\"");
       if (readonly_)
          w.write(" readonly ");
-      if (!enable_)
+      if (isDisabled())
          w.write(" disabled ");
       
-      renderHTMLAttribute(w);
+      renderHTMLAttributes(w);
       
       w.write("/>");
       if (this.isMandatory())

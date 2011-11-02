@@ -80,8 +80,8 @@ public class UIPageNavigationForm extends UIForm
       {
          priorties.add(new SelectItemOption<String>(String.valueOf(i), String.valueOf(i)));
       }
-      addUIFormInput(new UIFormStringInput("ownerType", "ownerType", getOwnerType()).setEditable(false))
-         .addUIFormInput(new UIFormStringInput("ownerId", "ownerId", ownerId).setEditable(false)).addUIFormInput(
+      addUIFormInput(new UIFormStringInput("ownerType", "ownerType", getOwnerType()).setReadOnly(true))
+         .addUIFormInput(new UIFormStringInput("ownerId", "ownerId", ownerId).setReadOnly(true)).addUIFormInput(
             new UIFormSelectBox("priority", null, priorties).setValue(getPriority()));
    }
 
@@ -91,7 +91,7 @@ public class UIPageNavigationForm extends UIForm
       invokeGetBindingBean(userNavigation);
       removeChildById("ownerId");
       UIFormStringInput ownerId = new UIFormStringInput("ownerId", "ownerId", userNavigation.getKey().getName());
-      ownerId.setEditable(false);
+      ownerId.setReadOnly(true);
       ownerId.setParent(this);
       getChildren().add(1, ownerId);
       UIFormSelectBox uiSelectBox = findComponentById("priority");

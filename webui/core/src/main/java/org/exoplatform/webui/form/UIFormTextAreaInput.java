@@ -63,13 +63,16 @@ public class UIFormTextAreaInput extends UIFormInputBase<String>
       String value = getValue();
       if (value == null)
          value = getDefaultValue();
-      w.append("<textarea class='textarea' name='").append(getName()).append("' id='").append(getId()).append("'");
+      w.append("<textarea class=\"textarea\" name=\"").append(getName()).append("\" id=\"").append(getId()).append("\"");
       if (readonly_)
          w.write(" readonly ");
-      if (!enable_)
+      if (isDisabled())
          w.write(" disabled ");
       w.append(" rows=\"").append(String.valueOf(rows)).append("\"");
       w.append(" cols=\"").append(String.valueOf(columns)).append("\"");
+      
+      renderHTMLAttributes(w);
+      
       w.write(">");
       if (value != null)
       {

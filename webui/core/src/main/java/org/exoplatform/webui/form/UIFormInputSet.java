@@ -27,6 +27,7 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
 
 import java.io.Writer;
 import java.util.MissingResourceException;
@@ -105,6 +106,11 @@ public class UIFormInputSet extends UIContainer
       return (UIFormCheckBoxInput)findComponentById(name);
    }
 
+   public UICheckBoxInput getUICheckBoxInput(String name)
+   {
+      return (UICheckBoxInput)findComponentById(name);
+   }
+   
    public UIFormSelectBox getUIFormSelectBox(String name)
    {
       return (UIFormSelectBox)findComponentById(name);

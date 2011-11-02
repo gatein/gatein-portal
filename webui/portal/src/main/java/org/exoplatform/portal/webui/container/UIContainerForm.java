@@ -108,7 +108,7 @@ public class UIContainerForm extends UIFormTabPane
    {
       uiContainer_ = uiContainer;
       Container container = (Container)PortalDataMapper.buildModelObject(uiContainer);
-      getUIStringInput("id").setEditable(false);
+      getUIStringInput("id").setReadOnly(true);
       invokeGetBindingBean(container);
    }
 

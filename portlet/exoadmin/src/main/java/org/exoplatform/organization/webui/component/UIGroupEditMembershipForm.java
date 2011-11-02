@@ -68,7 +68,7 @@ public class UIGroupEditMembershipForm extends UIForm
 
    public UIGroupEditMembershipForm() throws Exception
    {
-      addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).setEditable(false));
+      addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).setReadOnly(true));
       addUIFormInput(new UIFormSelectBox(MEMBER_SHIP, MEMBER_SHIP, listOption).setSize(1));
    }
 

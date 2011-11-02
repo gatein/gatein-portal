@@ -112,7 +112,7 @@ public class UICheckBoxInput extends UIFormInputBase<Boolean>
 
    public void decode(Object input, WebuiRequestContext context) throws Exception
    {
-      if (!isEnable())
+      if (isDisabled())
          return;
       
       if (input == null || "false".equals(input.toString()))
@@ -128,9 +128,9 @@ public class UICheckBoxInput extends UIFormInputBase<Boolean>
    public void processRender(WebuiRequestContext context) throws Exception
    {
       Writer w = context.getWriter();
-      w.write("<input type='checkbox' name='");
+      w.write("<input type=\"checkbox\" class=\"checkbox\" name=\"");
       w.write(name);
-      w.write("'");
+      w.write("\"");
       if (onchange_ != null)
       {
          UIForm uiForm = getAncestorOfType(UIForm.class);
@@ -138,9 +138,12 @@ public class UICheckBoxInput extends UIFormInputBase<Boolean>
       }
       if (isChecked())
          w.write(" checked");
-      if (!enable_)
+      if (isDisabled())
          w.write(" disabled");
-      w.write(" class='checkbox'/>");
+
+      renderHTMLAttributes(w);
+
+      w.write("/>");
       if (this.isMandatory())
          w.write(" *");
    }

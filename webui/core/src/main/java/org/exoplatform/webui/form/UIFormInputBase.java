@@ -48,7 +48,10 @@ import java.util.Map;
 @Serialized
 abstract public class UIFormInputBase<T> extends UIContainer implements UIFormInput<T>
 {
-
+   /**
+    * @deprecated According to deprecation of the {@link #setEditable(boolean)} and {@link #setEnable(boolean)} methods
+    */
+   @Deprecated
    final static public boolean ENABLE = true, DISABLE = false;
 
    /**
@@ -87,9 +90,17 @@ abstract public class UIFormInputBase<T> extends UIContainer implements UIFormIn
    protected Class<T> typeValue_;
 
    /**
+    * @deprecated According to the deprecation of the {@link #setEnable(boolean)} method
+    * 
     * Whether this field is enabled
     */
+   @Deprecated
    protected boolean enable_ = true;
+   
+   /**
+    * Whether this field is disabled.
+    */
+   protected boolean disabled = false;
 
    /**
     * Whether this field is in read only mode
@@ -99,7 +110,7 @@ abstract public class UIFormInputBase<T> extends UIContainer implements UIFormIn
    /**
     * A map of HTML attribute
     */
-   private Map<String, String> attribute;
+   private Map<String, String> attributes;
    
    public UIFormInputBase(String name, String bindingField, Class<T> typeValue)
    {
@@ -164,31 +175,101 @@ abstract public class UIFormInputBase<T> extends UIContainer implements UIFormIn
       value_ = defaultValue_;
    }
 
+   /**
+    * @deprecated Use {@link #isDisabled()} instead
+    * @return
+    */
+   @Deprecated
    public boolean isEnable()
    {
-      return enable_;
+      return !isDisabled();
    }
 
+   /**
+    * @deprecated Use {@link #setDisabled(boolean)} instead
+    * 
+    * @param enable
+    * @return
+    */
+   @Deprecated
    public UIFormInputBase<T> setEnable(boolean enable)
    {
-      enable_ = enable;
+      return setDisabled(!enable);
+   }
+
+   /**
+    * Return <code>true</code> if this input field is disabled.
+    * Otherwise, return <code>false</code>.
+    * 
+    * @return True if this input field is disabled. Otherwise, return false.
+    */
+   public boolean isDisabled()
+   {
+      return disabled;
+   }
+
+   /**
+    * Specifies that this input field should be disabled OR NOT.
+    * 
+    * @param disabled
+    * @return
+    */
+   public UIFormInputBase<T> setDisabled(boolean disabled)
+   {
+      this.disabled = disabled;
+      enable_ = !disabled; // for compatibility
       return this;
    }
 
+   /**
+    * @deprecated Use {@link #isReadOnly()} instead
+    * 
+    * @return True if the input is read only. Otherwise, return false.
+    */
+   @Deprecated
    public boolean isEditable()
    {
-      return !readonly_;
+      return !isReadOnly();
    }
 
+   /**
+    * @deprecated Use {@link #setReadOnly(boolean)} instead
+    * 
+    * @param editable
+    * @return
+    */
+   @Deprecated
    public UIFormInputBase<T> setEditable(boolean editable)
    {
-      readonly_ = !editable;
+      return setReadOnly(!editable);
+   }
+
+   /**
+    * Return <code>true</code> if this input field is read only.
+    * Otherwise, return <code>false</code>.
+    * 
+    * @return True if the input is read only. Otherwise, return false.
+    */
+   public boolean isReadOnly()
+   {
+      return readonly_;
+   }
+
+   /**
+    * Specifies that this input field should be read-only OR NOT.
+    * 
+    * @param readonly
+    * @return
+    */
+   public UIFormInputBase<T> setReadOnly(boolean readonly)
+   {
+      readonly_ = readonly;
       return this;
    }
 
    public boolean isValid()
    {
-      return (isRendered() && isEditable() && isEnable());
+      return (isRendered() && !isReadOnly() && !isDisabled());
    }
 
    public <E extends Validator> UIFormInputBase<T> addValidator(Class<E> clazz, Object... params) throws Exception
@@ -250,42 +331,33 @@ abstract public class UIFormInputBase<T> extends UIContainer implements UIFormIn
    
    public String getHTMLAttribute(String name)
    {
-      if (attribute != null)
+      if (attributes != null)
       {
-         return attribute.get(name);
+         return attributes.get(name);
       }
       return null;
    }
    
    public void setHTMLAttribute(String name, String value)
    {
-      if (attribute == null)
+      if (attributes == null)
       {
-         attribute = new HashMap<String, String>();
+         attributes = new HashMap<String, String>();
       }
-      attribute.put(name, value);
+      attributes.put(name, value);
    }
    
-   public boolean hasHTMLAttribute()
+   protected void renderHTMLAttributes(Writer w) throws IOException
    {
-      if(attribute == null) 
+      if (attributes != null)
       {
-         return false;
-      }
-      return attribute.size() > 0 ;
-   }
-   
-   protected void renderHTMLAttribute(Writer w) throws IOException
-   {
-      if (attribute != null)
-      {
-         w.write(" ");
-         for (String name : attribute.keySet())
+         w.append(" ");
+         for (String name : attributes.keySet())
          {
-            String value = HTMLEntityEncoder.getInstance().encodeHTMLAttribute(attribute.get(name));
-            w.write(name + "=\"" + value + "\"");
+            String value = HTMLEntityEncoder.getInstance().encodeHTMLAttribute(attributes.get(name));
+            w.append(name + "=\"" + value + "\"");
          }
-         w.write(" ");
+         w.append(" ");
       }
    }
 }

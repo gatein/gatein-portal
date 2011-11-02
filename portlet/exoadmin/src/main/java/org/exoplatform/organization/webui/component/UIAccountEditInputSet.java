@@ -61,7 +61,7 @@ public class UIAccountEditInputSet extends UIFormInputSet
    public UIAccountEditInputSet(String name) throws Exception
    {
       super(name);
-      addUIFormInput(new UIFormStringInput(USERNAME, "userName", null).setEditable(false).addValidator(
+      addUIFormInput(new UIFormStringInput(USERNAME, "userName", null).setReadOnly(true).addValidator(
          MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30).addValidator(
          ResourceValidator.class).addValidator(ExpressionValidator.class, Utils.USER_NAME_VALIDATOR_REGEX,
          "ResourceValidator.msg.Invalid-char"));

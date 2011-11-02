@@ -90,7 +90,7 @@ public class UIAccountInputSet extends UIFormInputWithActions
       if (user == null)
          return;
       invokeGetBindingField(user);
-      getUIStringInput(USERNAME).setEditable(false);
+      getUIStringInput(USERNAME).setReadOnly(true);
    }
 
    public boolean save(OrganizationService service, boolean newUser) throws Exception

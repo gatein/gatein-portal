@@ -114,7 +114,7 @@ public class UIPortalForm extends UIFormTabPane
 
       UIFormInputSet uiPortalSetting = this.<UIFormInputSet> getChildById("PortalSetting");
       UIFormStringInput uiNameInput = uiPortalSetting.getUIStringInput(FIELD_NAME);
-      uiNameInput.setEditable(true);
+      uiNameInput.setReadOnly(false);
 
       setSelectedTab(uiPortalSetting.getId());
 
@@ -235,7 +235,7 @@ public class UIPortalForm extends UIFormTabPane
       UIFormInputSet uiPropertiesSet = new UIFormInputSet("Properties");
       uiSettingSet.addUIFormInput(
          new UIFormStringInput(FIELD_NAME, FIELD_NAME, null).addValidator(MandatoryValidator.class).addValidator(
-            StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class).setEditable(false));
+            StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class).setReadOnly(true));
       
       uiSettingSet.addUIFormInput(new UIFormStringInput(FIELD_LABEL, FIELD_LABEL, null).addValidator(SpecialCharacterValidator.class));
       uiSettingSet.addUIFormInput(new UIFormStringInput(FIELD_DESCRIPTION, FIELD_DESCRIPTION, null));

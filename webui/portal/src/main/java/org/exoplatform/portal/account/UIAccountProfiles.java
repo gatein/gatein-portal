@@ -65,7 +65,7 @@ public class UIAccountProfiles extends UIForm
       User useraccount = service.getUserHandler().findUserByName(username);
 
       UIFormStringInput userName = new UIFormStringInput("userName", "userName", username);
-      userName.setEditable(false);
+      userName.setReadOnly(true);
       addUIFormInput(userName.addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30)
          .addValidator(ResourceValidator.class).addValidator(ExpressionValidator.class,
             Utils.USER_NAME_VALIDATOR_REGEX, "ResourceValidator.msg.Invalid-char"));

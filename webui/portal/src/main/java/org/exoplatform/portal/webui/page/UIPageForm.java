@@ -199,7 +199,7 @@ public class UIPageForm extends UIFormTabPane
       UserACL acl = (UserACL)container.getComponentInstanceOfType(UserACL.class);
 
       UIFormInputSet uiSettingSet = new UIFormInputSet("PageSetting");
-      uiSettingSet.addUIFormInput(new UIFormStringInput("pageId", "pageId", null).setEditable(false));
+      uiSettingSet.addUIFormInput(new UIFormStringInput("pageId", "pageId", null).setReadOnly(true));
       
       List<SelectItemOption<String>> ownerTypes = new ArrayList<SelectItemOption<String>>();
       if (pConfig != null && acl.hasEditPermission(pConfig))
@@ -213,7 +213,7 @@ public class UIPageForm extends UIFormTabPane
       uiSettingSet.addUIFormInput(uiSelectBoxOwnerType);
       
       ownerIdInput = new UIFormStringInput(OWNER_ID, OWNER_ID, null);
-      ownerIdInput.setEditable(false).setValue(pcontext.getRemoteUser());
+      ownerIdInput.setReadOnly(true).setValue(pcontext.getRemoteUser());
       uiSettingSet.addUIFormInput(ownerIdInput);
       
       uiSettingSet.addUIFormInput(
@@ -258,11 +258,11 @@ public class UIPageForm extends UIFormTabPane
          uiPage_ = uiPage;
          Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
          invokeGetBindingBean(page);
-         getUIStringInput("name").setEditable(false);
+         getUIStringInput("name").setReadOnly(true);
          getUIStringInput("pageId").setValue(uiPage.getPageId());
          getUIStringInput("title").setValue(uiPage.getTitle());
          getUIFormCheckBoxInput("showMaxWindow").setValue(uiPage.isShowMaxWindow());
-         getUIFormSelectBox(OWNER_TYPE).setEnable(false).setValue(uiPage.getSiteKey().getTypeName());
+         getUIFormSelectBox(OWNER_TYPE).setDisabled(true).setValue(uiPage.getSiteKey().getTypeName());
       }
 
    }

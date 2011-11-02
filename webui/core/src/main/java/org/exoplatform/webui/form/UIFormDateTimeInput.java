@@ -242,14 +242,13 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
       w.write(value);
       w.write('\"');
       w.write(" onclick='event.cancelBubble = true' onkeydown='eXo.webui.UICalendar.onTabOut(event)'");
-      if(!isEditable())
+      if(isReadOnly())
       {
          w.write(" readonly ");
       }
-      if(hasHTMLAttribute())
-      {
-         renderHTMLAttribute(w);
-      }
+
+      renderHTMLAttributes(w);
+
       w.write("/>");
    }
 }

@@ -118,7 +118,7 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
    @SuppressWarnings("unused")
    public void decode(Object input, WebuiRequestContext context) throws Exception
    {
-      if (!isEnable())
+      if (isDisabled())
          return;
       if (input != null) {
          if(input.equals("true"))
@@ -149,8 +149,11 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
       }
       if (checked)
          w.write(" checked ");
-      if (!enable_)
+      if (isDisabled())
          w.write(" disabled ");
+
+      renderHTMLAttributes(w);
+
       w.write(" class='checkbox'/>");
       if (this.isMandatory())
          w.write(" *");

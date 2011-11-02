@@ -73,10 +73,10 @@ public class UIApplicationForm extends UIForm
       application_ = app;
       if (application_ == null)
       {
-         getUIStringInput("applicationName").setEditable(true);
+         getUIStringInput("applicationName").setReadOnly(false);
          return;
       }
-      getUIStringInput("applicationName").setEditable(false);
+      getUIStringInput("applicationName").setReadOnly(true);
       invokeGetBindingBean(app);
    }
 

@@ -122,7 +122,7 @@ public class UIGadgetEditor extends UIForm
       UIFormStringInput uiInputName = getUIStringInput(FIELD_NAME);
       uiInputSource.setValue(uiInputSource.getValue());
       if(this.isEdit()) {
-    	  uiInputName.setEditable(false);
+    	  uiInputName.setReadOnly(true);
       }
       
       super.processRender(context);

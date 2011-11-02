@@ -100,7 +100,7 @@ public class UIFormRadioBoxInput extends UIFormInputBase<String>
    @SuppressWarnings("unused")
    public void decode(Object input, WebuiRequestContext context) throws Exception
    {
-      if (!enable_)
+      if (isDisabled())
          return;
       if (input != null)
          value_ = (String)input;
@@ -132,7 +132,7 @@ public class UIFormRadioBoxInput extends UIFormInputBase<String>
          w.write("<input class='radio' type='radio'");
          if (readonly_)
             w.write(" readonly ");
-         if (!enable_)
+         if (isDisabled())
             w.write(" disabled ");
          w.write(checked);
          w.write(" name='");

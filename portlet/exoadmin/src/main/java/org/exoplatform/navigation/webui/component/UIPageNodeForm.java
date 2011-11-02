@@ -136,7 +136,7 @@ public class UIPageNodeForm extends UIFormTabPane
       initLanguageSelectBox(uiFormLanguagesSelectBox);
       uiFormLanguagesSelectBox.setOnChange(LANGUAGES_ONCHANGE);
       
-      uiSettingSet.addUIFormInput(new UIFormStringInput("URI", "URI", null).setEditable(false))
+      uiSettingSet.addUIFormInput(new UIFormStringInput("URI", "URI", null).setReadOnly(true))
       				.addUIFormInput(new UIFormStringInput("name", "name", null).addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class))
       				.addUIFormInput(uiSwitchLabelMode)
       				.addUIFormInput(new UIFormStringInput(LABEL, LABEL, null).addValidator(StringLengthValidator.class, 3, 120))
@@ -171,13 +171,13 @@ public class UIPageNodeForm extends UIFormTabPane
       cachedLabels = new HashMap<String, Described.State>();
       if (pageNode == null)
       {
-         getUIStringInput("name").setEditable(UIFormStringInput.ENABLE);
+         getUIStringInput("name").setReadOnly(false);
          getChild(UIFormInputIconSelector.class).setSelectedIcon("Default");
          setShowPublicationDate(false);
          switchLabelMode(true);
          return;
       }
-      getUIStringInput("name").setEditable(UIFormStringInput.DISABLE);
+      getUIStringInput("name").setReadOnly(true);
       invokeGetBindingBean(pageNode_);
    }
 

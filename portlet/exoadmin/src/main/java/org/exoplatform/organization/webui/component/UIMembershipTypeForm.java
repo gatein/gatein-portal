@@ -51,9 +51,9 @@ public class UIMembershipTypeForm extends UIForm
 
    public UIMembershipTypeForm() throws Exception
    {
-      addUIFormInput(new UIFormStringInput(MEMBERSHIP_TYPE_NAME, MEMBERSHIP_TYPE_NAME, null).setEditable(
-         UIFormStringInput.ENABLE).addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class, 3,
-         30).addValidator(NameValidator.class).addValidator(SpecialCharacterValidator.class));
+      addUIFormInput(new UIFormStringInput(MEMBERSHIP_TYPE_NAME, MEMBERSHIP_TYPE_NAME, null).setReadOnly(false)
+         .addValidator(MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30)
+         .addValidator(NameValidator.class).addValidator(SpecialCharacterValidator.class));
 
       addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, DESCRIPTION, null));
    }
@@ -63,13 +63,13 @@ public class UIMembershipTypeForm extends UIForm
       if (membershipType == null)
       {
          membershipTypeName = null;
-         getUIStringInput(MEMBERSHIP_TYPE_NAME).setEditable(UIFormStringInput.ENABLE);
+         getUIStringInput(MEMBERSHIP_TYPE_NAME).setReadOnly(false);
          return;
       }
       else
       {
          membershipTypeName = membershipType.getName();
-         getUIStringInput(MEMBERSHIP_TYPE_NAME).setEditable(UIFormStringInput.DISABLE);
+         getUIStringInput(MEMBERSHIP_TYPE_NAME).setReadOnly(true);
       }
       invokeGetBindingBean(membershipType);
    }
@@ -121,7 +121,7 @@ public class UIMembershipTypeForm extends UIForm
          }
 
          uiMembershipManagement.getChild(UIListMembershipType.class).loadData();
-         uiForm.getUIStringInput(MEMBERSHIP_TYPE_NAME).setEditable(UIFormStringInput.ENABLE);
+         uiForm.getUIStringInput(MEMBERSHIP_TYPE_NAME).setReadOnly(false);
          uiForm.setMembershipType(null);
          uiForm.reset();
       }
@@ -132,7 +132,7 @@ public class UIMembershipTypeForm extends UIForm
       public void execute(Event<UIMembershipTypeForm> event) throws Exception
       {
          UIMembershipTypeForm uiForm = event.getSource();
-         uiForm.getUIStringInput(MEMBERSHIP_TYPE_NAME).setEditable(UIFormStringInput.ENABLE);
+         uiForm.getUIStringInput(MEMBERSHIP_TYPE_NAME).setReadOnly(false);
          uiForm.setMembershipType(null);
          uiForm.reset();
       }

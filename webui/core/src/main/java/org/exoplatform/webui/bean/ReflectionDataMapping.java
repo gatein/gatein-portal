@@ -124,7 +124,7 @@ public class ReflectionDataMapping implements BeanDataMapping
       if (uiFormInput instanceof UIFormInputBase)
       {
          UIFormInputBase uiStringBase = (UIFormInputBase)uiFormInput;
-         if (!uiStringBase.isEditable())
+         if (uiStringBase.isReadOnly())
          {
             return;
          }

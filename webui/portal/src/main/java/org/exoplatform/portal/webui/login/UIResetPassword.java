@@ -62,7 +62,7 @@ public class UIResetPassword extends UIForm
 
    public UIResetPassword() throws Exception
    {
-      addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).setEditable(false));
+      addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).setReadOnly(true));
       addUIFormInput(((UIFormStringInput)new UIFormStringInput(NEW_PASSWORD, NEW_PASSWORD, null)).setType(
          UIFormStringInput.PASSWORD_TYPE).addValidator(MandatoryValidator.class).addValidator(
          StringLengthValidator.class, 6, 30));

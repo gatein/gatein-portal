@@ -74,13 +74,13 @@ public class UIGroupForm extends UIForm
       if (group != null)
       {
          this.groupId = group.getId();
-         getUIStringInput(GROUP_NAME).setEditable(UIFormStringInput.DISABLE);
+         getUIStringInput(GROUP_NAME).setReadOnly(true);
          invokeGetBindingBean(group);
       }
       else
       {
          this.groupId = null;
-         getUIStringInput(GROUP_NAME).setEditable(UIFormStringInput.ENABLE);
+         getUIStringInput(GROUP_NAME).setReadOnly(false);
          reset();
       }
    }

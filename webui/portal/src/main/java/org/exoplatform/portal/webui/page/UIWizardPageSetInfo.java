@@ -159,7 +159,7 @@ public class UIWizardPageSetInfo extends UIForm
    {
       isEditMode = true;
       UIFormStringInput uiNameInput = getChildById(PAGE_NAME);
-      uiNameInput.setEditable(false);
+      uiNameInput.setReadOnly(true);
    }
 
    public boolean isEditMode()
@@ -181,9 +181,9 @@ public class UIWizardPageSetInfo extends UIForm
    {
       UIFormStringInput nameTextBox = getUIStringInput(PAGE_NAME);
       //this help to ignore name textbox
-      nameTextBox.setEditable(false);
+      nameTextBox.setReadOnly(true);
       super.invokeSetBindingBean(bean);
-      nameTextBox.setEditable(true);
+      nameTextBox.setReadOnly(false);
 
       UserNode node = (UserNode)bean;
       
