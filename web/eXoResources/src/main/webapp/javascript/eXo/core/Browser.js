@@ -287,6 +287,15 @@ Browser.prototype.initOpera = function() {
   this.getBrowserWidth = function() {
     return document.body.clientWidth ;
   }
+  this.eventListener = function(object, event, operation) {
+    object.addEventListener(event, operation, false);
+  }
+  this.setOpacity = function(component, value) {
+    component.style.opacity = value/100 ;
+  }
+  this.getEventSource = function(e) {
+    return e.target ;
+  }
 } ;
 
 Browser.prototype.isIE6 = function() {
