@@ -89,7 +89,7 @@
 .UIPopupWindow .ResizeButton {
   background: url('background/ResizeBtn.gif') no-repeat right top; /* orientation=lt */
   background: url('background/ResizeBtn-rt.gif') no-repeat left top; /* orientation=rt */
-  display: block;
+  display: none;
   float: right; /* orientation=lt */
   float: left; /* orientation=rt */
   cursor: nw-resize; /* orientation=lt */
