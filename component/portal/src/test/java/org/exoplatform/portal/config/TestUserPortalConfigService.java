@@ -40,6 +40,7 @@ import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.config.cache.DataCache;
+import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.exoplatform.services.listener.Event;
@@ -758,6 +759,33 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             userPortalConfigSer_.getPage("portal::test::test1");
             long readCount2 = cache.getReadCount();
             assertEquals(readCount1, readCount2);
+         }
+      }.execute(null);
+   }
+
+   public void testCachePageEviction()
+   {
+      new UnitTest()
+      {
+         public void execute() throws Exception
+         {
+            mgr.clearCache();
+            DataCache cache = mgr.getDecorator(DataCache.class);
+            long readCount0 = cache.getReadCount();
+            userPortalConfigSer_.getPage("portal::test::test1");
+            long readCount1 = cache.getReadCount();
+            assertTrue(readCount1 > readCount0);
+            userPortalConfigSer_.getPage("portal::test::test1");
+            long readCount2 = cache.getReadCount();
+            assertEquals(readCount1, readCount2);
+
+            // schedule for eviction, we shouldn't hit the cache anymore
+            final POMSession session = mgr.getSession();
+            session.scheduleForEviction(new PageKey("portal", "test", "test1"));
+            session.save();
+
+            userPortalConfigSer_.getPage("portal::test::test1");
+            assertTrue(readCount2 < cache.getReadCount());
          }
       }.execute(null);
    }
