@@ -75,11 +75,9 @@
 								<value>
 									<string>web</string>
 								</value>
-								<!-- No wsrp in beta02
-                                <value>
-									<string>wsrp-producer</string>
-								</value>
-                                -->
+                        <!--<value profiles="jboss">
+                           <string>gatein-wsrp-integration</string>
+                        </value>-->
 								<value>
 									<string>sample-portal</string>
 								</value>
