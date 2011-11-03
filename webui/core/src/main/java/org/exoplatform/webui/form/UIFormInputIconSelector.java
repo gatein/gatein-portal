@@ -190,7 +190,6 @@ public class UIFormInputIconSelector extends UIFormInputBase<String>
       return selectedIcon;
    }
 
-   @SuppressWarnings("unused")
    public void decode(Object input, WebuiRequestContext context) throws Exception
    {
       if (input == null || String.valueOf(input).length() < 1)
@@ -205,7 +204,6 @@ public class UIFormInputIconSelector extends UIFormInputBase<String>
          UIFormInputIconSelector uiForm = event.getSource();
          String paramName = event.getRequestContext().getRequestParameter(OBJECTID);
          uiForm.setValues(paramName);
-         //uiForm.setRenderSibbling(UIFormInputIconSelector.class);     
       }
    }
 
@@ -223,10 +221,9 @@ public class UIFormInputIconSelector extends UIFormInputBase<String>
                uiIconSelector.setSelectedIconSet(set);
             }
          }
-         //uiIconSelector.setRenderSibbling(UIFormInputIconSelector.class) ;
 
          UIForm uiForm = uiIconSelector.getAncestorOfType(UIForm.class);
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }
    }
 
@@ -246,21 +243,18 @@ public class UIFormInputIconSelector extends UIFormInputBase<String>
                   uiIconSelector.setSelectedIconSet(set);
                }
             }
-            //uiIconSelector.setRenderSibbling(UIFormInputIconSelector.class) ;
 
             UIForm uiForm = uiIconSelector.getAncestorOfType(UIForm.class);
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
             return;
          }
          uiIconSelector.setSelectedIcon(iconName);
-         //uiIconSelector.setRenderSibbling(UIFormInputIconSelector.class) ;
 
          UIForm uiForm = uiIconSelector.getAncestorOfType(UIForm.class);
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm.getParent());
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }
    }
 
-   //TODO  Rename this to CategoryIconSet
    static public class CategoryIcon
    {
 

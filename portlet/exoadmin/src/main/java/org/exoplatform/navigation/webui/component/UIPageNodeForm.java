@@ -19,6 +19,20 @@
 
 package org.exoplatform.navigation.webui.component;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
+
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.navigation.webui.TreeNode;
@@ -27,7 +41,6 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
@@ -51,7 +64,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInputBase;
 import org.exoplatform.webui.form.UIFormInputIconSelector;
@@ -59,25 +71,12 @@ import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.validator.DateTimeValidator;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.Validator;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.EnumSet;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
 
 /**
  * Author : Dang Van Minh, Pham Tuan minhdv81@yahoo.com Jun 14, 2006
@@ -121,12 +120,11 @@ public class UIPageNodeForm extends UIFormTabPane
    public UIPageNodeForm() throws Exception
    {
       super("UIPageNodeForm");
-      
-      UIFormInputSet uiSettingSet = new UIFormInputSet("PageNodeSetting");
-      UIFormCheckBoxInput<Boolean> uiDateInputCheck =
-         new UIFormCheckBoxInput<Boolean>(SHOW_PUBLICATION_DATE, null, false);
-      UIFormCheckBoxInput<Boolean> uiVisibleCheck = new UIFormCheckBoxInput<Boolean>(VISIBLE, null, true);
-      UIFormCheckBoxInput<Boolean> uiSwitchLabelMode = new UIFormCheckBoxInput<Boolean>(SWITCH_MODE, null, true);
+      UIFormInputSet uiSettingSet = new UIFormInputSet("PageNodeSetting");      
+      UICheckBoxInput uiDateInputCheck =
+         new UICheckBoxInput(SHOW_PUBLICATION_DATE, null, false);
+      UICheckBoxInput uiVisibleCheck = new UICheckBoxInput(VISIBLE, null, true);
+      UICheckBoxInput uiSwitchLabelMode = new UICheckBoxInput(SWITCH_MODE, null, true);
       
       uiDateInputCheck.setOnChange("SwitchPublicationDate");
       uiVisibleCheck.setOnChange("SwitchVisible");
@@ -307,8 +305,8 @@ public class UIPageNodeForm extends UIFormTabPane
       {
          Visibility visibility = pageNode.getVisibility();
          boolean isVisible = visibility == null || EnumSet.of(Visibility.DISPLAYED, Visibility.TEMPORAL).contains(visibility);
-         getUIFormCheckBoxInput(VISIBLE).setChecked(isVisible);
-         getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).setChecked(Visibility.TEMPORAL.equals(visibility));
+         getUICheckBoxInput(VISIBLE).setChecked(isVisible);
+         getUICheckBoxInput(SHOW_PUBLICATION_DATE).setChecked(Visibility.TEMPORAL.equals(visibility));
          setShowCheckPublicationDate(isVisible);
          Calendar cal = Calendar.getInstance();
          if (pageNode.getStartPublicationTime() != -1)
@@ -333,7 +331,7 @@ public class UIPageNodeForm extends UIFormTabPane
          isExtendedMode = false;
       }
       
-      getUIFormCheckBoxInput(SWITCH_MODE).setChecked(isExtendedMode);
+      getUICheckBoxInput(SWITCH_MODE).setChecked(isExtendedMode);
       this.switchLabelMode(isExtendedMode);
    }
 
@@ -345,9 +343,9 @@ public class UIPageNodeForm extends UIFormTabPane
       if (node.getVisibility() != Visibility.SYSTEM)
       {
          Visibility visibility;
-         if (getUIFormCheckBoxInput(VISIBLE).isChecked())
+         if (getUICheckBoxInput(VISIBLE).isChecked())
          {
-            UIFormCheckBoxInput showPubDate = getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE);
+            UICheckBoxInput showPubDate = getUICheckBoxInput(SHOW_PUBLICATION_DATE);
             visibility = showPubDate.isChecked() ?  Visibility.TEMPORAL : Visibility.DISPLAYED;  
          }
          else
@@ -393,7 +391,7 @@ public class UIPageNodeForm extends UIFormTabPane
       
       node.setI18nizedLabels(labels);
 
-      if (getUIFormCheckBoxInput(SWITCH_MODE).getValue().toString().equals("true"))
+      if (getUICheckBoxInput(SWITCH_MODE).getValue().toString().equals("true"))
          node.setLabel(null);
       else if (node.getLabel() == null)
          node.setLabel(node.getName());
@@ -401,8 +399,8 @@ public class UIPageNodeForm extends UIFormTabPane
 
    public void setShowCheckPublicationDate(boolean show)
    {
-      getUIFormCheckBoxInput(VISIBLE).setChecked(show);
-      UIFormCheckBoxInput<Boolean> uiForm = getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE);
+      getUICheckBoxInput(VISIBLE).setChecked(show);
+      UICheckBoxInput uiForm = getUICheckBoxInput(SHOW_PUBLICATION_DATE);
       uiForm.setRendered(show);
       setShowPublicationDate(show && uiForm.isChecked());
    }
@@ -466,7 +464,7 @@ public class UIPageNodeForm extends UIFormTabPane
          TreeNode pageNode = uiPageNodeForm.getPageNode();
          
          if (pageNode == null || (pageNode.getVisibility() != Visibility.SYSTEM &&
-            uiPageNodeForm.getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked()))
+            uiPageNodeForm.getUICheckBoxInput(SHOW_PUBLICATION_DATE).isChecked()))
          {
             Calendar currentCalendar = Calendar.getInstance();
             currentCalendar.set(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH), currentCalendar.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
@@ -572,6 +570,7 @@ public class UIPageNodeForm extends UIFormTabPane
          
          uiForm.setSelectedLocale(languageSelection.getValue());
          label.setValue(uiForm.getLabelOnLocale(uiForm.getSelectedLocale()));
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }
    }
    
@@ -590,7 +589,6 @@ public class UIPageNodeForm extends UIFormTabPane
       cachedLabels.put(locale, new Described.State(label, null));
    }
 
-
    public void setSelectedLocale(String selectedLocale)
    {
       this.selectedLocale = selectedLocale;
@@ -606,7 +604,7 @@ public class UIPageNodeForm extends UIFormTabPane
       public void execute(Event<UIPageNodeForm> event) throws Exception
       {
          UIPageNodeForm uiForm = event.getSource();
-         boolean isCheck = uiForm.getUIFormCheckBoxInput(SHOW_PUBLICATION_DATE).isChecked();
+         boolean isCheck = uiForm.getUICheckBoxInput(SHOW_PUBLICATION_DATE).isChecked();
          uiForm.setShowPublicationDate(isCheck);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }
@@ -618,7 +616,7 @@ public class UIPageNodeForm extends UIFormTabPane
 		public void execute(Event<UIPageNodeForm> event) throws Exception
 		{
 			UIPageNodeForm uiForm = event.getSource();
-			boolean isCheck = uiForm.getUIFormCheckBoxInput(VISIBLE).isChecked();
+			boolean isCheck = uiForm.getUICheckBoxInput(VISIBLE).isChecked();
 			uiForm.setShowCheckPublicationDate(isCheck);
 			event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
 		}
@@ -630,7 +628,7 @@ public class UIPageNodeForm extends UIFormTabPane
       public void execute(Event<UIPageNodeForm> event) throws Exception
       {
          UIPageNodeForm uiForm = event.getSource();
-         boolean isExtendedMode = uiForm.getUIFormCheckBoxInput(SWITCH_MODE).isChecked();
+         boolean isExtendedMode = uiForm.getUICheckBoxInput(SWITCH_MODE).isChecked();
          uiForm.switchLabelMode(isExtendedMode);
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }
@@ -654,7 +652,6 @@ public class UIPageNodeForm extends UIFormTabPane
          UIPageNodeForm uiForm = event.getSource();
          UIPageSelector pageSelector = uiForm.findFirstComponentOfType(UIPageSelector.class);
 
-         PortalRequestContext pcontext = Util.getPortalRequestContext();
          UIPortalApplication uiPortalApp = Util.getUIPortalApplication();
 
          UIFormInputSet uiInputSet = pageSelector.getChild(UIFormInputSet.class);
@@ -735,8 +732,18 @@ public class UIPageNodeForm extends UIFormTabPane
             uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.sameName", null));
             return;
          }
-
          pageSelector.setPage(page);
+         event.getRequestContext().addUIComponentToUpdateByAjax(pageSelector);
+      }
+   }
+   
+   static public class SelectTabActionListener extends UIFormTabPane.SelectTabActionListener
+   {
+      public void execute(Event<UIFormTabPane> event) throws Exception
+      {
+         super.execute(event);
+         PortalRequestContext pcontext = Util.getPortalRequestContext();
+         pcontext.setResponseComplete(true);
       }
    }
    

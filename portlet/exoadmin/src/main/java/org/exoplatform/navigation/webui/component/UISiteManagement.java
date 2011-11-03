@@ -72,13 +72,14 @@ import javax.servlet.http.HttpServletRequest;
       @EventConfig(listeners = UISiteManagement.DeletePortalActionListener.class, confirm = "UIPortalBrowser.deletePortal")}),
    @ComponentConfig(type = UIPageNodeForm.class, lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormTabPane.gtmpl", events = {
       @EventConfig(listeners = UIPageNodeForm.SaveActionListener.class),
-      @EventConfig(listeners = UIPageNodeForm.ChangeLanguageActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIPageNodeForm.ChangeLanguageActionListener.class, phase = Phase.DECODE),      
       @EventConfig(listeners = UISiteManagement.BackActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.SwitchLabelModeActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.SwitchPublicationDateActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.SwitchVisibleActionListener.class, phase = Phase.DECODE),
       @EventConfig(listeners = UIPageNodeForm.ClearPageActionListener.class, phase = Phase.DECODE),
-      @EventConfig(listeners = UIPageNodeForm.CreatePageActionListener.class, phase = Phase.DECODE)}),
+      @EventConfig(listeners = UIPageNodeForm.CreatePageActionListener.class, phase = Phase.DECODE), 
+      @EventConfig(listeners = UIPageNodeForm.SelectTabActionListener.class, phase = Phase.DECODE)}),
    @ComponentConfig(type = UIPopupWindow.class, template = "system:/groovy/webui/core/UIPopupWindow.gtmpl", 
       events = @EventConfig(listeners = UISiteManagement.CloseActionListener.class, name = "ClosePopup"))})
 public class UISiteManagement extends UIContainer
