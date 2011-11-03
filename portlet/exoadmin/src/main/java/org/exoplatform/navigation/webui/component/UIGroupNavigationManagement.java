@@ -115,6 +115,7 @@ public class UIGroupNavigationManagement extends UIContainer
 
       UIVirtualList virtualList = getChild(UIVirtualList.class);                  
       virtualList.dataBind(new ObjectPageList<UserNavigation>(groupNav, groupNav.size()));
+      virtualList.setAutoAdjustHeight(true);
    }
 
    public void setScope(Scope scope)
