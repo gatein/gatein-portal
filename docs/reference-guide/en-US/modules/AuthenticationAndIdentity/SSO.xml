@@ -19,7 +19,7 @@
                 In this tutorial, the SSO server is installed in a Tomcat installation. Tomcat can be obtained from <ulink type="http" url="http://tomcat.apache.org">http://tomcat.apache.org</ulink>.
             </para>
             <para>
-                All the packages required for setup can be found in a zip file located at: <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.0.1-GA/sso-packaging-1.0.1-GA.zip">https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.0.1-GA/sso-packaging-1.0.1-GA.zip</ulink>. In this document we will call $GATEIN_SSO_HOME the directory where the file is extracted.
+				All the packages required for setup can be found in a zip file located at <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.1.0-Beta02/sso-packaging-1.1.0-Beta02.zip">here</ulink>. In this document, $GATEIN_SSO_HOME is called as the directory where the file is extracted.
             </para>
             <para>
                 Users are advised to not run any portal extensions that could override the data when manipulating the <filename>gatein.ear</filename> file directly.
@@ -42,7 +42,7 @@
         <section id="sect-Reference_Guide-CAS_Central_Authentication_Service-CAS_server">
             <title>CAS server</title>
             <para>
-                First, set up the server to authenticate against the portal login module. In this example the CAS server will be installed on Tomcat.
+				First, set up the server to authenticate against the portal login module. In this example, the CAS server is installed on Tomcat.
             </para>
             <section id="sect-Reference_Guide-CAS_server-Obtaining_CAS">
                 <title>Obtaining CAS</title>
@@ -57,7 +57,7 @@
             <section id="sect-Reference_Guide-CAS_server-Modifying_CAS_server">
                 <title>Modifying the CAS server</title>
                 <para>
-                    To configure the web archive as desired, the simplest way is to make the necessary changes directly in CAS codebase.
+					To configure the web archive as desired, the simplest way is to make the necessary changes directly in the CAS codebase.
                 </para>
             <note>
                <para>
@@ -66,10 +66,10 @@
                </para>
             </note>
                 <para>
-                    First, we need to change the default authentication handler with the one provided by &PRODUCT;.
+					First, change the default authentication handler with the one provided by &PRODUCT;.
                 </para>
                 <para>
-                    The CAS Server Plugin makes secure authentication callbacks to a RESTful service installed on the remote GateIn server in order to authenticate a user.
+					The CAS Server Plugin makes secure authentication callbacks to a RESTful service installed on the remote &PRODUCT; server to authenticate a user.
                 </para>
                 <para>
                     In order for the plugin to function correctly, it needs to be properly configured to connect to this service. This configuration is done via the <filename>cas.war/WEB-INF/deployerConfigContext.xml </filename> file.
@@ -108,14 +108,10 @@
         class=&#34;org.jasig.cas.authentication.handler.support.SimpleTestUsernamePasswordAuthenticationHandler&#34; /&#62;</emphasis>
    &#60;/list&#62;
  &#60;/property&#62;
-</programlisting>
-                        </para>
-                    </step>
-                    <step>
+</programlisting>                        
                         <para>
                             With the following (Make sure to set the host, port and context with the values corresponding to your portal). Also available in <filename>GATEIN_SSO_HOME/cas/plugin/WEB-INF/deployerConfigContext.xml</filename>.
                         </para>
-                        <para>
 
 <programlisting>&#60;!--
  | Whereas CredentialsToPrincipalResolvers identify who it is some Credentials might authenticate, 
@@ -166,7 +162,7 @@
                             Change the default port to avoid a conflict with the default &PRODUCT; (for testing purposes). Edit <filename>TOMCAT_HOME/conf/server.xml</filename> and replace the 8080 port to 8888.
                             <note>
                                 <para>
-                                    If &PRODUCT; is running on the same machine as Tomcat, other ports need to be changed in addition to 8080 in order to avoid port conflicts.
+									If &PRODUCT; is running on the same machine as Tomcat, other ports need to be changed in addition to 8080 to avoid port conflicts.
                            They can be changed to any free port. For example, you can change admin port from 8005 to 8805, and AJP port from 8009 to 8809.
                                 </para>
                             </note>
@@ -206,7 +202,6 @@
                   p:warnCookieGenerator-ref=&#34;warnCookieGenerator&#34;
                   p:ticketGrantingTicketCookieGenerator-ref=&#34;ticketGrantingTicketCookieGenerator&#34;
                 <emphasis role="bold">p:followServiceRedirects=&#34;true&#34;/&#62;</emphasis>
-
                 </programlisting>
             </note>
         </section>
@@ -223,7 +218,7 @@
                     <itemizedlist>
                         <listitem>
                             <para>
-                            In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment this section:
+							In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment on this section:
                             </para>
 <programlisting>&#60;authentication&#62;
   &#60;login-module code=&#34;org.gatein.sso.agent.login.SSOLoginModule&#34; flag=&#34;required&#34;&#62;
@@ -238,7 +233,7 @@
                         </listitem>
                         <listitem>
                             <para>
-                            In Tomcat, edit <filename>GATEIN_HOME/conf/jaas.conf</filename> and uncomment this section:
+							In Tomcat, edit <filename>GATEIN_HOME/conf/jaas.conf</filename>, uncomment on this section and comment other parts:
                             </para>         
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required;
 org.exoplatform.services.security.j2ee.TomcatLoginModule required
@@ -291,7 +286,7 @@ realmName=gatein-domain;
                     </listitem>
                     <listitem>
                         <para>
-                        In the <filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file modify the 'Sign In' link as follows:
+                        In the <filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file, modify the 'Sign In' link as follows:
 <programlisting>
 <![CDATA[
 <!--
@@ -322,73 +317,62 @@ realmName=gatein-domain;
                             Add the following Filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
 
 
-<programlisting>
-<![CDATA[
-    <filter>
-        <filter-name>LoginRedirectFilter</filter-name>
-        <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
-        <init-param>                                 
-          <!-- This should point to your SSO authentication server -->                                                                                              
-          <param-name>LOGIN_URL</param-name>   
-          <!--
-              If casRenewTicket param value of InitiateLoginServlet is:  not specified or false
-          -->
-          <param-value>http://localhost:8888/cas/login?service=
-          http://localhost:8080/portal/initiatessologin</param-value>
-          <!--
-              If casRenewTicket param value of InitiateLoginServlet is : true
-          -->
-          <!--
-          <param-value>http://localhost:8888/cas/login?
-          service=http://localhost:8080/portal/initiatessologin&amp;renew=true</param-value>
-          -->
-        </init-param>
-    </filter>
-    <filter>
-        <filter-name>CASLogoutFilter</filter-name>                                                                                              
-        <filter-class>org.gatein.sso.agent.filter.CASLogoutFilter</filter-class>                                                      
-        <init-param>                                 
-          <!-- This should point to your JOSSO authentication server -->                                                                                              
-          <param-name>LOGOUT_URL</param-name>                                                                                                
-          <param-value>http://localhost:8888/cas/logout</param-value>                                                                                                         
-        </init-param>                                                                                                                              
-    </filter>
-    <filter>
-        <filter-name>InitiateLoginFilter</filter-name>
-        <filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
-        <init-param>
-          <param-name>ssoServerUrl</param-name>
-          <param-value>http://localhost:8888/cas</param-value>
-        </init-param>    
-        <init-param>
-          <param-name>casRenewTicket</param-name>
-          <param-value>false</param-value>
-        </init-param>
-        <init-param>
-          <param-name>casServiceUrl</param-name>
-          <param-value>http://localhost:8080/portal/initiatessologin</param-value>
-        </init-param>
-        <init-param>
-          <param-name>loginUrl</param-name>
-          <param-value>http://localhost:8080/portal/dologin</param-value>
-        </init-param>
-    </filter>
-    
-    <!-- Mapping the filters at the very top of the filter chain -->
-    <filter-mapping>
-      <filter-name>LoginRedirectFilter</filter-name>
-      <url-pattern>/*</url-pattern>          
-    </filter-mapping>
-    <filter-mapping>
-      <filter-name>CASLogoutFilter</filter-name>
-      <url-pattern>/*</url-pattern>
-    </filter-mapping>
-  <filter-mapping>
-    <filter-name>InitiateLoginFilter</filter-name>
-    <url-pattern>/initiatessologin</url-pattern>
-  </filter-mapping>
-]]>  
-</programlisting>
+                            <programlisting><![CDATA[<filter>
+   <filter-name>LoginRedirectFilter</filter-name>
+   <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
+   <init-param>
+      <!-- This should point to your SSO authentication server -->
+      <param-name>LOGIN_URL</param-name>
+      <!-- If casRenewTicket param value of InitiateLoginServlet is: not specified or false -->
+      <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/initiatessologin</param-value>
+      <!-- If casRenewTicket param value of InitiateLoginServlet is : true -->
+      <!-- <param-value>http://localhost:8888/cas/login? service=http://localhost:8080/portal/initiatessologin&amp;renew=true</param-value> -->
+   </init-param>
+</filter>
+<filter>
+   <filter-name>CASLogoutFilter</filter-name>
+   <filter-class>org.gatein.sso.agent.filter.CASLogoutFilter</filter-class>
+   <init-param>
+      <!-- This should point to your JOSSO authentication server -->
+      <param-name>LOGOUT_URL</param-name>
+      <param-value>http://localhost:8888/cas/logout</param-value>
+   </init-param>
+</filter>
+<filter>
+   <filter-name>InitiateLoginFilter</filter-name>
+   <filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
+   <init-param>
+      <param-name>ssoServerUrl</param-name>
+      <param-value>http://localhost:8888/cas</param-value>
+   </init-param>
+   <init-param>
+      <param-name>casRenewTicket</param-name>
+      <param-value>false</param-value>
+   </init-param>
+   <init-param>
+      <param-name>casServiceUrl</param-name>
+      <param-value>http://localhost:8080/portal/initiatessologin</param-value>
+   </init-param>
+   <init-param>
+      <param-name>loginUrl</param-name>
+      <param-value>http://localhost:8080/portal/dologin</param-value>
+   </init-param>
+</filter>
+
+<!-- Mapping the filters at the very top of the filter chain -->
+<filter-mapping>
+   <filter-name>LoginRedirectFilter</filter-name>
+   <url-pattern>/*</url-pattern>
+</filter-mapping>
+<filter-mapping>
+   <filter-name>CASLogoutFilter</filter-name>
+   <url-pattern>/*</url-pattern>
+</filter-mapping>
+<filter-mapping>
+   <filter-name>InitiateLoginFilter</filter-name>
+   <url-pattern>/initiatessologin</url-pattern>
+</filter-mapping>]]>  
+                            </programlisting>
                         </para>
                     </listitem>
                 </itemizedlist>
@@ -403,18 +387,18 @@ realmName=gatein-domain;
     <section id="sect-Reference_Guide-Single_Sign_On-JOSSO">
         <title>JOSSO</title>
         <para>
-            This Single Sign On plugin enables seamless integration between &PRODUCT; and the JOSSO Single Sign On Framework. Details about JOSSO can be found <ulink url="http://www.josso.org">here</ulink>.
+			This Single-Sign-On plugin enables the seamless integration between &PRODUCT; and the JOSSO Single-Sign-On Framework. Details about JOSSO can be found <ulink url="http://www.josso.org">here</ulink>.
         </para>
         <para>
-            Setting up this integration involves two steps. The first step is to install or configure a JOSSO server, and the second is to set up the portal to use the JOSSO server.
+			Setting up this integration consists of two steps: installing/configuring a JOSSO server, and setting up the portal to use the JOSSO server.
         </para>
         <section id="sect-Reference_Guide-JOSSO-JOSSO_server">
             <title>JOSSO server</title>
             <para>
-                This section details setting up the JOSSO server to authenticate against the &PRODUCT; login module.
+				This section describes how to set up the JOSSO server to authenticate against the &PRODUCT; login module.
             </para>
             <para>
-                In this example the JOSSO server will be installed on Tomcat.
+				In this example, the JOSSO server will be installed on Tomcat.
             </para>
             <section id="sect-Reference_Guide-JOSSO_server-Obtaining_JOSSO">
                 <title>Obtaining JOSSO</title>
@@ -468,8 +452,8 @@ realmName=gatein-domain;
                             <note>
                                 <title>Port Conflicts</title>
                                 <para>
-                           If &PRODUCT; is running on the same machine as Tomcat, other ports need to be changed in addition to 8080 in order to avoid port conflicts.
-                           They can be changed to any free port. For example, you can change admin port from 8005 to 8805, and AJP port from 8009 to 8809.
+                           If &PRODUCT; is running on the same machine as Tomcat, other ports need to be changed in addition to 8080 to avoid port conflicts.
+                           They can be changed to any free port. For example, you can change the admin port from 8005 to 8805, and AJP port from 8009 to 8809.
                                 </para>
                             </note>
                         </para>
@@ -604,55 +588,50 @@ realmName=gatein-domain;
                             Add the following Filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
 
 
-<programlisting>
-<![CDATA[
-  <filter>
-    <filter-name>LoginRedirectFilter</filter-name>
-    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
-    <init-param>
-          <!-- This should point to your SSO authentication server -->
-          <param-name>LOGIN_URL</param-name>
-          <param-value>http://localhost:8888/josso/signon/login.do?
-          josso_back_to=http://localhost:8080/portal/initiatessologin</param-value>
-    </init-param>
-  </filter>
-  <filter>
-    <filter-name>JOSSOLogoutFilter</filter-name>
-    <filter-class>org.gatein.sso.agent.filter.JOSSOLogoutFilter</filter-class>
-    <init-param>
+<programlisting><![CDATA[<filter>
+   <filter-name>LoginRedirectFilter</filter-name>
+   <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
+   <init-param>
+      <!-- This should point to your SSO authentication server -->
+      <param-name>LOGIN_URL</param-name>
+      <param-value>http://localhost:8888/josso/signon/login.do?josso_back_to=http://localhost:8080/portal/initiatessologin</param-value>
+   </init-param>
+</filter>
+<filter>
+   <filter-name>JOSSOLogoutFilter</filter-name>
+   <filter-class>org.gatein.sso.agent.filter.JOSSOLogoutFilter</filter-class>
+   <init-param>
       <!-- This should point to your JOSSO authentication server -->
       <param-name>LOGOUT_URL</param-name>
       <param-value>http://localhost:8888/josso/signon/logout.do</param-value>
-    </init-param>
-  </filter>
-  <filter>
-        <filter-name>InitiateLoginFilter</filter-name>
-        <filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
-        <init-param>
-          <param-name>ssoServerUrl</param-name>
-          <param-value>http://localhost:8888/josso/signon/login.do</param-value>
-        </init-param>
-        <init-param>
-          <param-name>loginUrl</param-name>
-          <param-value>http://localhost:8080/portal/dologin</param-value>
-        </init-param>
-    </filter>
-  
-  <!-- filters should be placed at the very top of the filter chain -->
-  <filter-mapping>
-      <filter-name>LoginRedirectFilter</filter-name>
-      <url-pattern>/*</url-pattern>          
-  </filter-mapping> 
-  <filter-mapping>
-    <filter-name>JOSSOLogoutFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>InitiateLoginFilter</filter-name>
-    <url-pattern>/initiatessologin</url-pattern>
-  </filter-mapping>
-]]> 
-</programlisting>
+   </init-param>
+</filter>
+<filter>
+   <filter-name>InitiateLoginFilter</filter-name>
+   <filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
+   <init-param>
+      <param-name>ssoServerUrl</param-name>
+      <param-value>http://localhost:8888/josso/signon/login.do</param-value>
+   </init-param>
+   <init-param>
+      <param-name>loginUrl</param-name>
+      <param-value>http://localhost:8080/portal/dologin</param-value>
+   </init-param>
+</filter>
+
+<!-- Mapping the filters at the very top of the filter chain -->
+<filter-mapping>
+   <filter-name>LoginRedirectFilter</filter-name>
+   <url-pattern>/*</url-pattern>
+</filter-mapping>
+<filter-mapping>
+   <filter-name>JOSSOLogoutFilter</filter-name>
+   <url-pattern>/*</url-pattern>
+</filter-mapping>
+<filter-mapping>
+   <filter-name>InitiateLoginFilter</filter-name>
+   <url-pattern>/initiatessologin</url-pattern>
+</filter-mapping>]]></programlisting>
                         </para>
                     </listitem>
                 </itemizedlist>
@@ -679,19 +658,19 @@ realmName=gatein-domain;
             </para>
             <section id="sect-Reference_Guide-OpenSSO_server-Obtaining_OpenSSO">
                 <title>Obtaining OpenSSO</title>
-                <!--<para>
-                    OpenSSO can be downloaded from <ulink type="http" url="http://download.oracle.com/otn/nt/middleware/11g/oracle_opensso_80U2.zip">http://download.oracle.com/otn/nt/middleware/11g/oracle_opensso_80U2.zip</ulink>.
+                <para>
+                    OpenSSO must be purchased from <ulink type="http" url="http://www.oracle.com/technetwork/middleware/id-mgmt/overview/index.html">Oracle</ulink>.
+                </para>
+                <para>
+                    For testing purpose, we will use OpenSSO_80U2 can be downloaded from <ulink type="http" url="http://download.oracle.com/otn/nt/middleware/11g/oracle_opensso_80U2.zip">Oracle</ulink>.
                 </para>
                 <para>
                     Once downloaded, extract the package into a suitable location. This location will be referred to as <filename>OPENSSO_HOME</filename> in this example.
-                </para> -->
-                <para>
-                    OpenSSO must be purchased from <ulink type="http" url="http://www.oracle.com/technetwork/middleware/id-mgmt/overview/index.html">Oracle</ulink>.
                 </para>
             </section>
             
             <section id="sect-Reference_Guide-OpenSSO_server-Modifying_OpenSSO_server">
-                <title>Modifying OpenSSO server</title>
+				<title>Modifying the OpenSSO server</title>
                 <para>
                      To configure the web server as desired, it is simpler to directly modify the sources. 
                 </para>
@@ -699,7 +678,7 @@ realmName=gatein-domain;
                     The first step is to add the &PRODUCT; Authentication Plugin:
                 </para>
                 <para>
-                    The plugin makes secure authentication callbacks to a RESTful service installed on the remote &PRODUCT; server in order to authenticate a user.
+					The plugin makes secure authentication callbacks to a RESTful service installed on the remote &PRODUCT; server to authenticate a user.
                 </para>
                 <para>
                     In order for the plugin to function correctly, it needs to be properly configured to connect to this service. This configuration is done via the <filename>opensso.war/config/auth/default/AuthenticationPlugin.xml</filename> file.
@@ -712,11 +691,11 @@ realmName=gatein-domain;
                     </step>
                     <step>
                         <para>
-                            Change the default port to avoid a conflict with the default &PRODUCT; port (for testing purposes). Do this by editing <filename>TOMCAT_HOME/conf/server.xml</filename> and replacing the 8080 port to 8888.
+							Change the default port to avoid a conflict with the default &PRODUCT; port (for testing purposes) by editing <filename>TOMCAT_HOME/conf/server.xml</filename> and replacing the 8080 port with 8888.
                             <note>
                                 <para>
-                           If &PRODUCT; is running on the same machine as Tomcat, other ports need to be changed in addition to 8080 in order to avoid port conflicts.
-                           They can be changed to any free port. For example, you can change admin port from 8005 to 8805, and AJP port from 8009 to 8809.
+                           If &PRODUCT; is running on the same machine as Tomcat, other ports need to be changed in addition to 8080 to avoid port conflicts.
+                           They can be changed to any free port. For example, you can change the admin port from 8005 to 8805, and AJP port from 8009 to 8809.
                                 </para>
                             </note>
                         </para>
@@ -815,7 +794,6 @@ realmName=gatein-domain;
                   <para>Do the same for "gatein" realm.</para>
                </step>
             </procedure>
-            <para>Also, instead of configuring OpenSSO manually as above, you can refer to the available configuration files <ulink url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.0.1-GA/sso-packaging-1.0.1-GA.zip">here</ulink>.</para>
          </section>
         </section>
         
@@ -846,7 +824,7 @@ realmName=gatein-domain;
                         </listitem>
                         <listitem>
                             <para>
-                                If you are running &PRODUCT; in Tomcat, edit $GATEIN_HOME/conf/jaas.conf and uncomment this section
+								If you are running &PRODUCT; in Tomcat, edit $GATEIN_HOME/conf/jaas.conf, uncomment on this section and comment other parts:
                             </para>
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required;
 org.exoplatform.services.security.j2ee.TomcatLoginModule required
@@ -929,59 +907,54 @@ realmName=gatein-domain;
                             Add the following Filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
 
 
-<programlisting>
-<![CDATA[
-  <filter>
-    <filter-name>LoginRedirectFilter</filter-name>
-    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
-    <init-param>
-        <!-- This should point to your SSO authentication server -->
-        <param-name>LOGIN_URL</param-name>
-        <param-value>http://localhost:8888/opensso/UI/Login?
-        realm=gatein&amp;goto=http://localhost:8080/portal/initiatessologin</param-value>
-    </init-param>
-  </filter>
-  <filter>  
-    <filter-name>OpenSSOLogoutFilter</filter-name>
-    <filter-class>org.gatein.sso.agent.filter.OpenSSOLogoutFilter</filter-class>
-    <init-param>
-      <!-- This should point to your OpenSSO authentication server -->
+<programlisting><![CDATA[<filter>
+   <filter-name>LoginRedirectFilter</filter-name>
+   <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
+   <init-param>
+      <!-- This should point to your SSO authentication server -->
+      <param-name>LOGIN_URL</param-name>
+      <param-value>http://localhost:8888/opensso/UI/Login?realm=gatein&amp;goto=http://localhost:8080/portal/initiatessologin</param-value>
+   </init-param>
+</filter>
+<filter>
+   <filter-name>OpenSSOLogoutFilter</filter-name>
+   <filter-class>org.gatein.sso.agent.filter.OpenSSOLogoutFilter</filter-class>
+   <init-param>
+      <!-- This should point to your SSO authentication server -->
       <param-name>LOGOUT_URL</param-name>
       <param-value>http://localhost:8888/opensso/UI/Logout</param-value>
-    </init-param>
-  </filter>
-  <filter>
-        <filter-name>InitiateLoginFilter</filter-name>
-        <filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
-        <init-param>
-          <param-name>ssoServerUrl</param-name>
-          <param-value>hhttp://localhost:8888/opensso</param-value>
-        </init-param>
-        <init-param>
-          <param-name>loginUrl</param-name>
-          <param-value>http://localhost:8080/portal/dologin</param-value>
-        </init-param>
-        <init-param>
+   </init-param>
+</filter>
+<filter>
+   <filter-name>InitiateLoginFilter</filter-name>
+   <filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
+   <init-param>
+      <param-name>ssoServerUrl</param-name>
+      <param-value>http://localhost:8888/opensso</param-value>
+   </init-param>
+   <init-param>
+      <param-name>loginUrl</param-name>
+      <param-value>http://localhost:8080/portal/dologin</param-value>
+   </init-param>
+   <init-param>
       <param-name>ssoCookieName</param-name>
       <param-value>iPlanetDirectoryPro</param-value>
-    </init-param>
-    </filter>
-  
-  <!-- place the filters at the top of the filter chain -->
-  <filter-mapping>
-      <filter-name>LoginRedirectFilter</filter-name>
-      <url-pattern>/*</url-pattern>          
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>OpenSSOLogoutFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
-  <filter-mapping>
-    <filter-name>InitiateLoginFilter</filter-name>
-    <url-pattern>/initiatessologin</url-pattern>
-  </filter-mapping>
-]]> 
-</programlisting>
+   </init-param>
+</filter>
+
+<!-- Mapping the filters at the very top of the filter chain -->
+<filter-mapping>
+   <filter-name>LoginRedirectFilter</filter-name>
+   <url-pattern>/*</url-pattern>
+</filter-mapping>
+<filter-mapping>
+   <filter-name>OpenSSOLogoutFilter</filter-name>
+   <url-pattern>/*</url-pattern>
+</filter-mapping>
+<filter-mapping>
+   <filter-name>InitiateLoginFilter</filter-name>
+   <url-pattern>/initiatessologin</url-pattern>
+</filter-mapping>]]></programlisting>
                         </para>
                     </listitem>
                 </itemizedlist>
@@ -1219,11 +1192,10 @@ kdestroy
                         <programlisting><![CDATA[<!-- SPNEGO domain -->
 <application-policy name="host">
   <authentication>
-      <login-module code="com.sun.security.auth.module.Krb5LoginModule"
-         flag="required">
-         <module-option name="storeKey">true</module-option>
-         <module-option name="useKeyTab">true</module-option>
-         <module-option name="principal">HTTP/server.local.network@LOCAL.NETWORK</module-option>
+    <login-module code="com.sun.security.auth.module.Krb5LoginModule" flag="required">
+      <module-option name="storeKey">true</module-option>
+      <module-option name="useKeyTab">true</module-option>
+      <module-option name="principal">HTTP/server.local.network@LOCAL.NETWORK</module-option>
       <module-option name="keyTab">/etc/krb5.keytab</module-option>
       <module-option name="doNotPrompt">true</module-option>
       <module-option name="debug">true</module-option>
@@ -1245,9 +1217,9 @@ kdestroy
           </para>
 
 <programlisting language="xml">
-<![CDATA[
+<![CDATA[<deployment xmlns="urn:jboss:bean-deployer:2.0">
 <property name="authenticators">
-         <map keyClass="java.lang.String" valueClass="java.lang.String">
+  <map class="java.util.Properties" keyClass="java.lang.String" valueClass="java.lang.String">
             <entry>
                <key>BASIC</key>
                <value>org.apache.catalina.authenticator.BasicAuthenticator</value>
