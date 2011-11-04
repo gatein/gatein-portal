@@ -587,13 +587,14 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       PortalConfig pConfig;
       if (obj == null)
       {
-         if (dataStorage_.getPortalConfig(type, owner) != null)
+         String fixedName = fixOwnerName(type, owner);
+         if (dataStorage_.getPortalConfig(type, fixedName) != null)
          {
             return true;
          }
          else
          {
-            pConfig = new PortalConfig(type, owner);
+            pConfig = new PortalConfig(type, fixedName);
          }
       }
       else

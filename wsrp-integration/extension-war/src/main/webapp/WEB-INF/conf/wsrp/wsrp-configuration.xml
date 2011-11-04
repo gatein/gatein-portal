@@ -172,7 +172,7 @@
                   <field name="predefinedOwner">
                      <collection type="java.util.HashSet">
                         <value>
-                           <string>platform/administrators</string>
+                           <string>/platform/administrators</string>
                         </value>
                      </collection>
                   </field>

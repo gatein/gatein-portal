@@ -64,7 +64,7 @@
 						<field name="predefinedOwner">
 							<collection type="java.util.HashSet">
 								<value>
-									<string>platform/users</string>
+									<string>/platform/users</string>
 								</value>
 							</collection>
 						</field>
