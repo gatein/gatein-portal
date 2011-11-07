@@ -469,8 +469,7 @@ public class UIPortalComponentActionListener
    {
       public void execute(Event<UIPortal> event) throws Exception
       {
-         UIPortal uiPortal = event.getSource();
-         UIPortalApplication application = uiPortal.getAncestorOfType(UIPortalApplication.class);
+         UIPortalApplication application = Util.getUIPortalApplication();
          UIPortalComposer composer = application.findFirstComponentOfType(UIPortalComposer.class);
          UITabPane uiTabPane = composer.getChild(UITabPane.class);
          String appListId = uiTabPane.getChild(UIApplicationList.class).getId();
