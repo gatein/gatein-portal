@@ -70,7 +70,7 @@
 						if(node.pageRef != null) {
 								print """<a class="ItemIcon $icon" href="$href" $title>$label</a>""";
 						} else {
-								print """<a class="ItemIcon $icon" href="#" $title>$label</a>""";
+								print """<a class="ItemIcon $icon" onclick='eXo.portal.UIPortalNavigation.cancelHideMenuContainer(event)' $title>$label</a>""";
 						}
 		if(hasChild) {
 			print """

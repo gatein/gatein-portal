@@ -291,7 +291,13 @@ UIPortalNavigation.prototype.toggleSubMenu = function(e, tab, menuItemContainer)
   }
 };
 
-UIPortalNavigation.prototype.cancelHideMenuContainer = function() {
+UIPortalNavigation.prototype.cancelHideMenuContainer = function(evt) {
+  if (evt && evt.stopPropagation) {
+	  evt.stopPropagation();
+  } else if (window.event) {
+	  window.event.cancelBubble = true;
+  }
+	
   if (this.hideMenuTimeoutId) {
     window.clearTimeout(this.hideMenuTimeoutId) ;
   }

@@ -460,31 +460,31 @@ public class UINavigationNodeSelector extends UIContainer
       }
    }
 
-   static public class EditPageNodeActionListener extends EventListener<UIRightClickPopupMenu>
+   static public class EditPageNodeActionListener extends BaseActionListener<UIRightClickPopupMenu>
    {
       public void execute(Event<UIRightClickPopupMenu> event) throws Exception
       {
-         // get nodeID
-         String nodeID = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
-
-         // get UINavigationNodeSelector
-         UIRightClickPopupMenu uiPopupMenu = event.getSource();
-         UINavigationNodeSelector uiNodeSelector = uiPopupMenu.getAncestorOfType(UINavigationNodeSelector.class);
-
-         // get Selected Node
-         TreeNode selectedPageNode = uiNodeSelector.findNode(nodeID);
-
          UIPortalApplication uiApp = Util.getUIPortalApplication();
-         if (selectedPageNode == null || selectedPageNode.getPageRef() == null)
+         UIRightClickPopupMenu popupMenu = event.getSource();
+         UINavigationNodeSelector uiNodeSelector = popupMenu.getAncestorOfType(UINavigationNodeSelector.class);
+
+         String nodeID = event.getRequestContext().getRequestParameter(UIComponent.OBJECTID);
+         TreeNode node = uiNodeSelector.findNode(nodeID);
+         try
          {
-            uiApp.addMessage(new ApplicationMessage("UIPageNodeSelector.msg.notAvailable", null));
-            return;
+            node = rebaseNode(node, uiNodeSelector);
+            if (node == null) return;
          }
+         catch (NavigationServiceException ex)
+         {
+            handleError(ex.getError(), uiNodeSelector);
+            return;
+         }         
 
          UserPortalConfigService userService = uiNodeSelector.getApplicationComponent(UserPortalConfigService.class);
 
          // get selected page
-         String pageId = selectedPageNode.getPageRef();
+         String pageId = node.getPageRef();
          Page selectPage = (pageId != null) ? userService.getPage(pageId) : null;
          if (selectPage != null)
          {
@@ -518,7 +518,7 @@ public class UINavigationNodeSelector extends UIContainer
             UIPage uiPage = (UIPage)uiToolPanel.getUIComponent();
 
             if (selectPage.getTitle() == null)
-               selectPage.setTitle(selectedPageNode.getLabel());
+               selectPage.setTitle(node.getLabel());
 
             // convert Page to UIPage
             PortalDataMapper.toUIPage(uiPage, selectPage);

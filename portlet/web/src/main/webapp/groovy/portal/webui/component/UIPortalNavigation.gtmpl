@@ -58,16 +58,21 @@
 			label = label.substring(0,37) + "...";
 		}
 					
-		def actionLink = "#";
+		print """
+		<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
+		""";
 		if(node.getPageRef() != null) {
 		    nodeURL.setNode(node);
 			nodeURL.setAjax(uicomponent.isUseAjax());
-			actionLink = nodeURL.toString();
-		} 
-		print """
-			<li class="MenuItem $tabStyleNavigation $arrowIcon" title="$title" $getNodeURL>
-				<a  class="ItemIcon $icon" href="$actionLink">$label</a>
-		""";
+			def actionLink = nodeURL.toString();
+			print """
+					<a  class="ItemIcon $icon" href="$actionLink">$label</a>
+			""";
+		} else {
+		   print """
+				<a  class="ItemIcon $icon" onclick='eXo.portal.UIPortalNavigation.cancelHideMenuContainer(event)'>$label</a>
+			""";
+		}
 		
 		if (node.getChildren().size() > 0) {
 			renderChildrenContainer(node, nodeURL);
