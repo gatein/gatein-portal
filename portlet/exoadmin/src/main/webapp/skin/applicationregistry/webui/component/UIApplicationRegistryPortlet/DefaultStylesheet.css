@@ -184,8 +184,6 @@
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
 	margin: 3px;
-	filter: alpha(opacity=30);
-	-moz-opacity: 0.3;
 }
 
 .UIApplicationRegistryPortlet .ListItem .SelectedItem a.TabLabel {
