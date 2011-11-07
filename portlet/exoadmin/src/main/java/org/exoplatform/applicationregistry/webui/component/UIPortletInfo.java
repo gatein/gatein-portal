@@ -106,7 +106,7 @@ public class UIPortletInfo extends UIContainer
          {
             if (application.getContentId().equals(portlet_.getId()))
             {
-               nameList.add(category.getDisplayName());
+               nameList.add(category.getDisplayName(true));
             }
          }
       }

@@ -95,7 +95,7 @@ public class UIGadgetInfo extends UIContainer
       {
          if (appRegService.getApplication(category.getName(), gadget_.getName()) != null)
          {
-            nameList.add(category.getDisplayName());
+            nameList.add(category.getDisplayName(true));
          }
       }
       StringBuffer names = new StringBuffer("");

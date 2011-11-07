@@ -58,6 +58,20 @@ public class ApplicationCategory implements Serializable
 
    public String getDisplayName()
    {
+      return getDisplayName(false);
+   }
+   
+   /**
+    * Return display name <br/>
+    * If it's null or empty and checkEmpty is true, return name instead 
+    * @param checkEmpty
+    */
+   public String getDisplayName(boolean checkEmpty)
+   {
+      if (checkEmpty && (displayName == null || displayName.trim().length() == 0))
+      {
+         return getName();
+      }
       return displayName;
    }
 

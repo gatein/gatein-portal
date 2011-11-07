@@ -28,8 +28,7 @@ def selectedApp = uicomponent.getSelectedApplication();
 			 				boolean isSelected = false;
 							for(category in categories) { 					 
 								cName	= category.getName();
-								displayName =category.getDisplayName();
-								if(displayName == null || displayName.length() < 1 ) displayName = cName;
+								displayName =category.getDisplayName(true);
 								EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 								displayName = encoder.encode(displayName);
 								if(selectedCategory != null && cName == selectedCategory.getName()) {

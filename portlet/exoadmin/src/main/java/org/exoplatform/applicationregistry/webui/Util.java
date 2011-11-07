@@ -47,7 +47,7 @@ public class Util
 
       public int compare(ApplicationCategory cate1, ApplicationCategory cate2)
       {
-         return cate1.getDisplayName().compareToIgnoreCase(cate2.getDisplayName());
+         return cate1.getDisplayName(true).compareToIgnoreCase(cate2.getDisplayName(true));
       }
 
    }

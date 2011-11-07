@@ -150,7 +150,7 @@ public class UIApplicationList extends UIContainer
       {
          public int compare(ApplicationCategory p_1, ApplicationCategory p_2)
          {
-            return p_1.getDisplayName().compareToIgnoreCase(p_2.getDisplayName());
+            return p_1.getDisplayName(true).compareToIgnoreCase(p_2.getDisplayName(true));
          }
       };
 

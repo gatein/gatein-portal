@@ -9,7 +9,7 @@ String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.pn
 
 EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 
-String categoryDisplayName = encoder.encode(category.getDisplayName());
+String categoryDisplayName = encoder.encode(category.getDisplayName(true));
 String applicationDisplayName = encoder.encode(application.getDisplayName());
 String applicationDescription = encoder.encode(application.getDescription());
 %>
@@ -17,7 +17,7 @@ String applicationDescription = encoder.encode(application.getDescription());
 	<div class="UIBreadcumb">
 		<div class="ControlIcon EditIcon" title="<%=_ctx.appRes("UIApplicationInfo.title.editApplication")%>" onclick="<%= uicomponent.event("EditApplication") %>"><span></span></div>
 		<div class="BreadcumbInfo">
-			<div class="LeftBlock" title="<%= category.getDisplayName() %>"><%= categoryDisplayName %></div> 																
+			<div class="LeftBlock" title="<%= category.getDisplayName(true) %>"><%= categoryDisplayName %></div> 																
 			<div class="RightBlackGridArrow16x16Icon"><span></span></div>									
 			<div class="Selected" title="<%= application.getDisplayName() %> "><%= applicationDisplayName %></div> 
 		</div>

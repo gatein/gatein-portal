@@ -136,15 +136,9 @@ public class UICategoryForm extends UIFormTabPane
          UIFormInputSet uiSetting = uiForm.getChildById(FIELD_SETTING);
          UIFormInputSet uiPermission = uiForm.getChildById(FIELD_PERMISSION);
          category.setName(uiSetting.getUIStringInput(FIELD_NAME).getValue());
-         String displayName = uiSetting.getUIStringInput(FIELD_DISPLAY_NAME).getValue();
-         if (displayName == null || displayName.length() < 1)
-         {
-            category.setDisplayName(category.getName());
-         }
-         else
-         {
-            category.setDisplayName(displayName);
-         }
+         String displayName = uiSetting.getUIStringInput(FIELD_DISPLAY_NAME).getValue();         
+         category.setDisplayName(displayName);
+         
          category.setDescription(uiSetting.getUIFormTextAreaInput(FIELD_DESCRIPTION).getValue());
 
          UIListPermissionSelector uiListPermissionSelector = uiPermission.getChild(UIListPermissionSelector.class);

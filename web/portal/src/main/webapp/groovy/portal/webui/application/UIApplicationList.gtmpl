@@ -19,8 +19,7 @@ EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 			 				boolean isSelected = false;
 							for(category in categories) {
 								cName = category.getName();
-								displayName = encoder.encode(category.getDisplayName());
-								if (displayName == null || displayName.length() < 1 ) displayName = cName;
+								displayName = encoder.encode(category.getDisplayName(true));
 								if (selectedCategory != null && cName == selectedCategory.getName()) {
 									isSelected = true;
 									cTab = "SelectedTab";

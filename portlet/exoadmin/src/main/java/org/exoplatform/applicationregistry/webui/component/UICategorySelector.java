@@ -94,7 +94,7 @@ public class UICategorySelector extends UIForm
             defaultValue = appRegService.getApplication(category.getName(), definitionName) != null;
          }
          checkBoxInput = new UIFormCheckBoxInput<Boolean>("category_" + category.getName(), null, defaultValue);
-         uiInfo = new UIFormInputInfo("categoryName", null, encoder.encode(category.getDisplayName()));
+         uiInfo = new UIFormInputInfo("categoryName", null, encoder.encode(category.getDisplayName(true)));
          uiInputSet.addChild(checkBoxInput);
          uiInputSet.addChild(uiInfo);
          uiTableInputSet.addChild(uiInputSet);
