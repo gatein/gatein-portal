@@ -32,9 +32,11 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NaturalLanguageValidator;
 import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
 import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.exoplatform.webui.form.validator.UsernameValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -59,18 +61,21 @@ public class UIAccountInputSet extends UIFormInputWithActions
    public UIAccountInputSet(String name) throws Exception
    {
       super(name);
-      //setComponentConfig(getClass(), null) ;
       addUIFormInput(new UIFormStringInput(USERNAME, "userName", null).addValidator(MandatoryValidator.class)
-         .addValidator(StringLengthValidator.class, 3, 30).addValidator(ResourceValidator.class).addValidator(
-            ExpressionValidator.class, Utils.USER_NAME_VALIDATOR_REGEX, "ResourceValidator.msg.Invalid-char"));
+         .addValidator(UsernameValidator.class, 3, 30));
+      
       addUIFormInput(new UIFormStringInput(PASSWORD1X, "password", null).setType(UIFormStringInput.PASSWORD_TYPE)
          .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
+      
       addUIFormInput(new UIFormStringInput(PASSWORD2X, "password", null).setType(UIFormStringInput.PASSWORD_TYPE)
          .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
+      
       addUIFormInput(new UIFormStringInput("firstName", "firstName", null).addValidator(StringLengthValidator.class, 1,
-         45).addValidator(MandatoryValidator.class));
+         45).addValidator(MandatoryValidator.class).addValidator(NaturalLanguageValidator.class));
+      
       addUIFormInput(new UIFormStringInput("lastName", "lastName", null).addValidator(StringLengthValidator.class, 1,
-         45).addValidator(MandatoryValidator.class));
+         45).addValidator(MandatoryValidator.class).addValidator(NaturalLanguageValidator.class));
+      
       addUIFormInput(new UIFormStringInput("email", "email", null).addValidator(MandatoryValidator.class).addValidator(
          EmailAddressValidator.class));
    }
