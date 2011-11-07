@@ -20,6 +20,7 @@
 package org.exoplatform.organization.webui.component;
 
 import org.exoplatform.commons.utils.EmptySerializablePageList;
+import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.Group;
@@ -133,7 +134,9 @@ public class UIUserInGroup extends UIContainer
       {
          OrganizationService service = getApplicationComponent(OrganizationService.class);
          MembershipHandler handler = service.getMembershipHandler();
-         pageList = new FindMembershipByGroupPageList(group.getId(), handler.findAllMembershipsByGroup(group).getSize());
+         ListAccess<?> list = handler.findAllMembershipsByGroup(group);
+         pageList = new FindMembershipByGroupPageList(group.getId(), 
+            list.getSize() > 10 ? list.getSize() : 10);
       }
       UIGridUser uiGrid = getChild(UIGridUser.class);
       pageList.setPageSize(5);
