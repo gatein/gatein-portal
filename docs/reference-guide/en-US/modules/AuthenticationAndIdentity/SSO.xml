@@ -19,13 +19,10 @@
                 In this tutorial, the SSO server is installed in a Tomcat installation. Tomcat can be obtained from <ulink type="http" url="http://tomcat.apache.org">http://tomcat.apache.org</ulink>.
             </para>
             <para>
-				All the packages required for setup can be found in a zip file located at <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.1.0-Beta02/sso-packaging-1.1.0-Beta02.zip">here</ulink>. In this document, $GATEIN_SSO_HOME is called as the directory where the file is extracted.
+				All the packages required for setup can be found in a zip file located at <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.1.0-GA/sso-packaging-1.1.0-GA.zip">here</ulink>. In this document, $GATEIN_SSO_HOME is called as the directory where the file is extracted.
             </para>
             <para>
                 Users are advised to not run any portal extensions that could override the data when manipulating the <filename>gatein.ear</filename> file directly.
-            </para>
-            <para>
-                Remove <literal>$JBOSS_HOME/server/default/deploy/gatein-sample-extension.ear</literal> and <literal>$JBOSS_HOME/server/default/deploy/gatein-sample-portal.ear</literal> which are packaged by default with &PRODUCT;.
             </para>
         </section>
 
@@ -34,7 +31,7 @@
     <section id="sect-Reference_Guide-Single_Sign_On-CAS_Central_Authentication_Service">
         <title>Central Authentication Service (CAS)</title>
         <para>
-            This Single Sign On plugin enables seamless integration between &PRODUCT; and the CAS Single Sign On Framework. Details about CAS can be found <ulink url="http://www.ja-sig.org/products/cas/">here</ulink>.
+            This Single Sign On plugin enables seamless integration between &PRODUCT; and the CAS Single Sign On Framework. Details about CAS can be found <ulink url="http://www.jasig.org/cas">here</ulink>.
         </para>
         <para>
             The integration consists of two parts; the first part consists of installing or configuring a CAS server, the second part consists of setting up the portal to use the CAS server.
@@ -48,9 +45,10 @@
                 <title>Obtaining CAS</title>
                 <para>
                     CAS can be downloaded from <ulink type="http" url="http://www.jasig.org/cas/download">http://www.jasig.org/cas/download</ulink>.
+                    Tested version, which should work with these instructions is <emphasis role="bold">CAS 3.3.5</emphasis>, however other versions can also work without problems.
                 </para>
                 <para>
-                    Extract the downloaded file into a suitable location. This location will be referred to as <literal>$CAS_HOME</literal> in the following example.
+                    Extract the downloaded file into a suitable location. This location will be referred to as <literal>$CAS_HOME</literal> in the following instructions.
                 </para>
             </section>
             
@@ -220,14 +218,19 @@
                             <para>
 							In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment on this section:
                             </para>
-<programlisting>&#60;authentication&#62;
-  &#60;login-module code=&#34;org.gatein.sso.agent.login.SSOLoginModule&#34; flag=&#34;required&#34;&#62;
-  &#60;/login-module&#62;      
-  &#60;login-module code=&#34;org.exoplatform.services.security.j2ee.JbossLoginModule&#34; flag=&#34;required&#34;&#62;
-    &#60;module-option name=&#34;portalContainerName&#34;&#62;portal&#60;/module-option&#62;
-    &#60;module-option name=&#34;realmName&#34;&#62;gatein-domain&#60;/module-option&#62;
-  &#60;/login-module&#62;
-&#60;/authentication&#62;
+<programlisting>
+<![CDATA[
+<authentication>
+  <login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required">
+    <module-option name="portalContainerName">portal</module-option>
+    <module-option name="realmName">gatein-domain</module-option>
+  </login-module>
+  <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
+    <module-option name="portalContainerName">portal</module-option>
+    <module-option name="realmName">gatein-domain</module-option>
+  </login-module>
+</authentication>
+]]>
 </programlisting>
 
                         </listitem>
@@ -326,7 +329,7 @@ realmName=gatein-domain;
       <!-- If casRenewTicket param value of InitiateLoginServlet is: not specified or false -->
       <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/initiatessologin</param-value>
       <!-- If casRenewTicket param value of InitiateLoginServlet is : true -->
-      <!-- <param-value>http://localhost:8888/cas/login? service=http://localhost:8080/portal/initiatessologin&amp;renew=true</param-value> -->
+      <!-- <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/initiatessologin&amp;renew=true</param-value> -->
    </init-param>
 </filter>
 <filter>
@@ -492,14 +495,19 @@ realmName=gatein-domain;
                             <para>
                                 In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment this section:
                             </para>
-<programlisting>&#60;authentication&#62;
-  &#60;login-module code=&#34;org.gatein.sso.agent.login.SSOLoginModule&#34; flag=&#34;required&#34;&#62;
-  &#60;/login-module&#62;      
-  &#60;login-module code=&#34;org.exoplatform.services.security.j2ee.JbossLoginModule&#34; flag=&#34;required&#34;&#62;
-    &#60;module-option name=&#34;portalContainerName&#34;&#62;portal&#60;/module-option&#62;
-    &#60;module-option name=&#34;realmName&#34;&#62;gatein-domain&#60;/module-option&#62;
-  &#60;/login-module&#62;
-&#60;/authentication&#62;
+<programlisting>
+<![CDATA[
+<authentication>
+  <login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required">
+    <module-option name="portalContainerName">portal</module-option>
+    <module-option name="realmName">gatein-domain</module-option>
+  </login-module>
+  <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
+    <module-option name="portalContainerName">portal</module-option>
+    <module-option name="realmName">gatein-domain</module-option>
+  </login-module>
+</authentication>
+]]>
 </programlisting>
                         </listitem>
                         <listitem>
@@ -667,6 +675,12 @@ realmName=gatein-domain;
                 <para>
                     Once downloaded, extract the package into a suitable location. This location will be referred to as <filename>OPENSSO_HOME</filename> in this example.
                 </para>
+                <note>
+                   <para>
+                       There is also possibility to use OpenAM instead of OpenSSO server. OpenAM is free and integration steps with &PRODUCT; and OpenAM are very similar as with OpenSSO. More info is
+                       <ulink type="http" url="http://community.jboss.org/wiki/GateInAndOpenAMIntegration">here</ulink> .
+                   </para>
+                </note>
             </section>
             
             <section id="sect-Reference_Guide-OpenSSO_server-Modifying_OpenSSO_server">
@@ -759,22 +773,22 @@ realmName=gatein-domain;
                      <para>Create default configuration</para>
                </step>
                <step>
-                     <para>Login as <literal>amadmin</literal> and then go to tab "Configuration" -> tab "Authentication" -> link "Core" ->
-                        add new value and fill in the class name "org.gatein.sso.opensso.plugin.AuthenticationPlugin".
+                     <para>Login as <literal>amadmin</literal> and then go to tab <emphasis role="bold">Configuration</emphasis> -> tab <emphasis role="bold">Authentication</emphasis> -> link <emphasis role="bold">Core</emphasis> ->
+                        add new value and fill in the class name <emphasis role="bold">org.gatein.sso.opensso.plugin.AuthenticationPlugin</emphasis>.
                         This step is really important. Without it AuthenticationPlugin is not available among other OpenSSO authentication modules.
                      </para>
                </step>
                <step>
-                  <para>Go to tab "Access control" and create new realm called "gatein".</para>
+                  <para>Go to tab <emphasis role="bold">Access control</emphasis> and create new realm called <emphasis role="bold">gatein</emphasis>.</para>
                </step>
                <step>
-                  <para>Go to "gatein" realm and click on "Authentication" tab. At the bottom in the section "Authentication chaining" click on "ldapService".
-                     Here change the selection from "Datastore", which is the default module in the authentication chain, to "AuthenticationPlugin".
+                  <para>Go to "gatein" realm and click on <emphasis role="bold">Authentication</emphasis> tab. At the bottom in the section <emphasis role="bold">Authentication chaining</emphasis> click on <emphasis role="bold">ldapService</emphasis>.
+                     Here change the selection from "Datastore", which is the default module in the authentication chain, to <emphasis role="bold">AuthenticationPlugin</emphasis>.
                      This enables authentication of "gatein" realm by using GateIn REST service instead of the OpenSSO LDAP server.</para>
                </step>
                <step>
                   <para>
-                     Go to "Advanced properties" and change UserProfile from "Required" to "Dynamic". This step is needed
+                     Go to <emphasis role="bold">Advanced properties</emphasis> and change UserProfile from "Required" to <emphasis role="bold">Dynamic</emphasis>. This step is needed
                      because &PRODUCT; users are not in OpenSSO Datastore (LDAP server), so their profiles can't be obtained
                      if "Required" is active. By using "Dynamic" all new users are automatically
                      created in OpenSSO datastore after successful authentication.
@@ -782,8 +796,8 @@ realmName=gatein-domain;
                </step>
                <step>
                   <para>
-                     Increase the user privileges to allow REST access. Go to "Access control" ->
-                     Top level realm -> "Privileges" tab -> All authenticated users, and check the last two checkboxes:
+                     Increase the user privileges to allow REST access. Go to <emphasis role="bold">Access control</emphasis> ->
+                     <emphasis role="bold">Top level realm</emphasis> -> <emphasis role="bold">Privileges</emphasis> tab -> <emphasis role="bold">All authenticated users</emphasis>, and check the last two checkboxes:
                      <itemizedlist>
                         <listitem><para>Read and write access only for policy properties</para></listitem>
                         <listitem><para>Read and write access to all realm and policy properties</para></listitem>
@@ -791,7 +805,7 @@ realmName=gatein-domain;
                   </para>
                </step>
                <step>
-                  <para>Do the same for "gatein" realm.</para>
+                  <para>Repeat previous step with increasing privileges for <emphasis role="bold">gatein</emphasis> realm as well.</para>
                </step>
             </procedure>
          </section>
@@ -811,14 +825,19 @@ realmName=gatein-domain;
                             <para>
                                 In JBoss AS, edit gatein.ear/META-INF/gatein-jboss-beans.xml and uncomment this section
                             </para>
-<programlisting>&#60;authentication&#62;
-  &#60;login-module code=&#34;org.gatein.sso.agent.login.SSOLoginModule&#34; flag=&#34;required&#34;&#62;
-  &#60;/login-module&#62;      
-  &#60;login-module code=&#34;org.exoplatform.services.security.j2ee.JbossLoginModule&#34; flag=&#34;required&#34;&#62;
-    &#60;module-option name=&#34;portalContainerName&#34;&#62;portal&#60;/module-option&#62;
-    &#60;module-option name=&#34;realmName&#34;&#62;gatein-domain&#60;/module-option&#62;
-  &#60;/login-module&#62;
-&#60;/authentication&#62;
+<programlisting>
+<![CDATA[
+<authentication>
+  <login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required">
+    <module-option name="portalContainerName">portal</module-option>
+    <module-option name="realmName">gatein-domain</module-option>
+  </login-module>
+  <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
+    <module-option name="portalContainerName">portal</module-option>
+    <module-option name="realmName">gatein-domain</module-option>
+  </login-module>
+</authentication>
+]]>
 </programlisting>
 
                         </listitem>
