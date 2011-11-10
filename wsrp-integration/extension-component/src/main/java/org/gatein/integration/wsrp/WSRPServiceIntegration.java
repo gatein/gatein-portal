@@ -30,7 +30,6 @@ import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.pc.ExoKernelIntegration;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
@@ -41,7 +40,6 @@ import org.gatein.integration.wsrp.structure.MOPPortalStructureAccess;
 import org.gatein.integration.wsrp.structure.PortalStructureAccess;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.federation.FederatingPortletInvoker;
-import org.gatein.pc.federation.PortletInvokerResolver;
 import org.gatein.pc.portlet.PortletInvokerInterceptor;
 import org.gatein.pc.portlet.aspects.EventPayloadInterceptor;
 import org.gatein.pc.portlet.container.ContainerPortletInvoker;
@@ -90,18 +88,20 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
 {
    private static final Logger log = LoggerFactory.getLogger(WSRPServiceIntegration.class);
 
-   private static final String CLASSPATH = "classpath:/";
+   private static final String DEFAULT_PRODUCER_CONFIG_LOCATION = "classpath:/conf/wsrp-producer-config.xml";
+   private static final String DEFAULT_CONSUMERS_CONFIG_LOCATION = "classpath:/conf/wsrp-consumers-config.xml";
    private static final String PRODUCER_CONFIG_LOCATION = "producerConfigLocation";
    private static final String CONSUMERS_CONFIG_LOCATION = "consumersConfigLocation";
    public static final String CONSUMERS_INIT_DELAY = "consumersInitDelay";
    public static final int DEFAULT_DELAY = 2;
+   public static final String FILE = "file://";
 
-   private final InputStream producerConfigurationIS;
-   private final String producerConfigLocation;
+   private InputStream producerConfigurationIS;
+   private String producerConfigLocation;
    private WSRPProducer producer;
 
-   private final InputStream consumersConfigurationIS;
-   private final String consumersConfigLocation;
+   private InputStream consumersConfigurationIS;
+   private String consumersConfigLocation;
    private JCRConsumerRegistry consumerRegistry;
    private ExoContainer container;
    private final ExoKernelIntegration exoKernelIntegration;
@@ -115,14 +115,12 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       // IMPORTANT: even though NodeHierarchyCreator is not used anywhere in the code, it's still needed for pico
       // to properly make sure that this service is started after the PC one. Yes, Pico is crap. :/
 
-      // todo: we currently only allow the service to go through initialization if we are running in the default portal
-      // as this service is not meant to work with extensions yet...
       if ("portal".equals(context.getName()))
       {
          if (params != null)
          {
-            producerConfigLocation = params.getValueParam(PRODUCER_CONFIG_LOCATION).getValue();
-            consumersConfigLocation = params.getValueParam(CONSUMERS_CONFIG_LOCATION).getValue();
+            producerConfigLocation = computePath(params.getValueParam(PRODUCER_CONFIG_LOCATION).getValue());
+            consumersConfigLocation = computePath(params.getValueParam(CONSUMERS_CONFIG_LOCATION).getValue());
             String delayString = params.getValueParam(CONSUMERS_INIT_DELAY).getValue();
             try
             {
@@ -139,8 +137,25 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
                + PRODUCER_CONFIG_LOCATION + "and " + CONSUMERS_CONFIG_LOCATION);
          }
 
-         producerConfigurationIS = configurationManager.getInputStream(CLASSPATH + producerConfigLocation);
-         consumersConfigurationIS = configurationManager.getInputStream(CLASSPATH + consumersConfigLocation);
+         try
+         {
+            producerConfigurationIS = configurationManager.getInputStream(producerConfigLocation);
+         }
+         catch (Exception e)
+         {
+            producerConfigLocation = DEFAULT_PRODUCER_CONFIG_LOCATION;
+            producerConfigurationIS = configurationManager.getInputStream(DEFAULT_PRODUCER_CONFIG_LOCATION);
+         }
+
+         try
+         {
+            consumersConfigurationIS = configurationManager.getInputStream(consumersConfigLocation);
+         }
+         catch (Exception e)
+         {
+            consumersConfigLocation = DEFAULT_CONSUMERS_CONFIG_LOCATION;
+            consumersConfigurationIS = configurationManager.getInputStream(DEFAULT_CONSUMERS_CONFIG_LOCATION);
+         }
 
          container = context.getContainer();
 
@@ -160,6 +175,12 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          exoKernelIntegration = null;
          bypass = true;
       }
+   }
+
+   private String computePath(String pathFromConfig)
+   {
+      // if specified path starts with / then it's a file and we need to add file:// to it so that ConfigurationManager can properly resolve it
+      return pathFromConfig.startsWith("/") ? FILE + pathFromConfig : pathFromConfig;
    }
 
    public void start()
