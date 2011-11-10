@@ -68,8 +68,8 @@
          Committee and Community at large).
       </para>
 
-      <para>New for &PRODUCT_VERSION; of &PRODUCT_NAME; is support of WSRP 2.0 with a complete implementation of
-         the non-optional features. The only thing that we have not implemented is support for lifetimes and leasing
+      <para>&PRODUCT_NAME; supports WSRP 2.0 with a complete implementation of the non-optional features. The only
+         features that we have not implemented is support for lifetimes and leasing
          support.
       </para>
 
@@ -83,77 +83,79 @@
    <sect1>
       <title>Deploying &PRODUCT_NAME;'s WSRP services</title>
       <para>
-         &PRODUCT_NAME; provides a complete support of WSRP 1.0 standard interfaces and offers both consumer and
-         producer services. WSRP support is provided by the following files, assuming
+         &PRODUCT_NAME; provides a complete support of WSRP 1.0 and 2.0 standard interfaces and offers both consumer and
+         producer services. Starting with version 2.1.0-GA of the component, WSRP is packaged as a &PRODUCT_NAME;
+         extension and is now self-contained in an easy to install package named
+         <filename>gatein-wsrp-integration.ear</filename>, deployed directly in the
+         <filename>deploy</filename>
+         directory of your JBoss Application Server configuration directory.
+      </para>
+      <para>
+         The extension itself is composed of the following components, , assuming
          <code>$GATEIN_HOME</code>
-         is
-         where &PRODUCT_NAME; has been installed,
+         is where &PRODUCT_NAME; has been installed,
          <code>$WSRP_VERSION</code>
-         (at the time of the writing, it was &WSRP_VERSION;)
-         is the version of the WSRP component and
+         (at the time of the writing, it was &WSRP_VERSION;) is the version of the WSRP component and
          <code>$PORTAL_VERSION</code>
-         (at the time of the writing, it was &PORTAL_VERSION;)
-         is the current &PRODUCT_NAME; version:
+         (at the time of the writing, it was &PORTAL_VERSION;) is the current &PRODUCT_NAME; version:
          <itemizedlist>
             <listitem>
                <para>
-                  <filename>$GATEIN_HOME/wsrp-admin-gui.war</filename>, which contains the WSRP Configuration portlet
+                  <filename>META-INF</filename>
+                  contains files necessary for EAR packaging. The only file that is of interest from a user perspective
+                  is
+                  <filename>gatein-wsse-consumer.xml</filename>
+                  which allows you to configure WS-Security support for the consumer. !!!TODO mwringe please detail !!!!
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                  <filename>extension-component-$PORTAL_VERSION.jar</filename>, which contains the components needed to
+                  integrate the WSRP component into &PRODUCT_NAME;. It also includes the default configuration files for
+                  the WSRP producer and the default WSRP consumers.
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                  <filename>extension-config-$PORTAL_VERSION.jar</filename>, which contains the configuration file
+                  needed by the GateIn extension mechanism to properly register this EAR as an extension.
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                  <filename>extension-war-$PORTAL_VERSION.war</filename>, which contains the configuration files
+                  needed by the GateIn extension mechanism to properly setup the WSRP service. It includes
+                  <filename>wsrp-configuration.xml</filename>
+                  which, in particular, configures several options for the
+                  <code>WSRPServiceIntegration</code>
+                  component at the heart of the WSRP integration in &PRODUCT_NAME;.
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                  <filename>lib</filename>, which contains the different libraries needed by the WSRP service.
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                  <filename>wsrp-admin-gui-$WSRP_VERSION.war</filename>, which contains the WSRP Configuration portlet
                   with which you can configure consumers to access remote servers and how the WSRP producer is
                   configured.
                </para>
             </listitem>
             <listitem>
-               <para><filename>$GATEIN_HOME/wsrp-producer.war</filename>, which contains the WSRP producer web
-                  application.
-               </para>
-            </listitem>
-            <listitem>
-               <para><filename>$GATEIN_HOME/lib/wsrp-common-$WSRP_VERSION.jar</filename>, which contains common classes
-                  needed by the different WSRP libraries.
-               </para>
-            </listitem>
-            <listitem>
-               <para>
-                  <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar</filename>, which contains the WSRP
-                  consumer.
-               </para>
-            </listitem>
-            <listitem>
-               <para>
-                  <filename>$GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar</filename>, which contains the
-                  API classes needed to integrate the WSRP component into portals.
-               </para>
-
-            </listitem>
-            <listitem>
-               <para>
-                  <filename>$GATEIN_HOME/lib/wsrp-producer-lib-$WSRP_VERSION.jar</filename>, which contains the classes
-                  needed by the WSRP producer.
-               </para>
-            </listitem>
-            <listitem>
-               <para>
-                  <filename>$GATEIN_HOME/lib/wsrp-wsrp1-ws-$WSRP_VERSION.jar</filename>, which contains the generated
-                  JAX-WS classes for WSRP version 1.
-               </para>
-            </listitem>
-            <listitem>
-               <para>
-                  <filename>$GATEIN_HOME/lib/wsrp-wsrp2-ws-$WSRP_VERSION.jar</filename>, which contains the generated
-                  JAX-WS classes for WSRP version 2.
-               </para>
-            </listitem>
-            <listitem>
-               <para>
-                  <filename>$GATEIN_HOME/lib/gatein.portal.component.wsrp-$PORTAL_VERSION.jar</filename>, which
-                  contains the code to integrate the WSRP service into &PRODUCT_NAME;.
+               <para><filename>wsrp-producer-jb5wsss-$WSRP_VERSION.war</filename>, which contains the producer-side
+                  support for WS-Security. !!!!TODO mwringe: please detail if there are any user-modifiable
+                  configuration file there and how this files is different in AS 6 !!!!
                </para>
             </listitem>
          </itemizedlist>
+      </para>
+      <para>
          If you're not going to use WSRP in &PRODUCT_NAME;, it won't adversely affect your installation to leave it
-         as-is. Please see the
-         <ulink url="http://community.jboss.org/wiki/WSRPserviceremovalprocedure">WSRP service removal procedure</ulink>
-         for a complete guide on how to remove the WSRP service.
+         as-is. Otherwise, you can just remove the
+         <filename>gatein-wsrp-integration.ear</filename>
+         file from your AS deploy directory.
       </para>
 
       <sect2 id="wsrp-ports">
@@ -303,10 +305,9 @@
 
    <sect1>
       <title>Consuming &PRODUCT_NAME;'s WSRP portlets from a remote Consumer</title>
-      <para>WSRP Consumers vary a lot as far as how they are configured. Most of them require that you specify
-         the URL for the Producer's WSDL definition. Please refer to your Consumer's documentation for specific
-         instructions. For instructions on how to do so in &PRODUCT_NAME;, please
-         refer to
+      <para>WSRP Producers vary a lot as far as how they are configured. Most of them require that you specify
+         the URL for the Producer's WSDL definition. Please refer to the remote producer's documentation for specific
+         instructions. For instructions on how to do so in &PRODUCT_NAME;, please refer to
          <xref linkend="consumer_configuration"/>.
       </para>
       <para>
@@ -353,7 +354,8 @@
                <code>Caused by: org.jboss.ws.WSException: Invalid HTTP server response [503] - Service
                   Unavailable</code>.
                Please see this GateIn's
-               <ulink url="http://community.jboss.org/wiki/Workaroundwhenchunkedencodingisnotsupported">wiki page</ulink>
+               <ulink url="http://community.jboss.org/wiki/Workaroundwhenchunkedencodingisnotsupported">wiki page
+               </ulink>
                for more details.
             </para>
          </note>
@@ -413,7 +415,7 @@
             </note>
 
             <para>
-               Next, we create a new Consumer which we will call <literal>oracle</literal>. Type
+               Next, we create a new Consumer which we will call<literal>oracle</literal>. Type
                "<literal>oracle</literal>" in
                the "Create a consumer named:" field then click on "Create consumer":
                <mediaobject>
@@ -482,7 +484,12 @@
 
             <para>While we recommend you use the WSRP Configuration portlet to configure Consumers, we provide an
                alternative way to configure consumers by editing the XML file located at
-               <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>.
+
+               !!! TODO claprun: finish updating from here.
+
+               <filename>extension-component-$PORTAL_VERSION.jar/conf/wsrp-consumers-config.xml</filename>
+               in your
+               JBoss AS deploy directory.
             </para>
             <programlisting role="XML"><![CDATA[
 <?xml version='1.0' encoding='UTF-8' ?>
@@ -685,7 +692,9 @@
 
          <para>
             Here is the configuration of the
-            <literal>selfv1</literal> and <literal>selfv2</literal>
+            <literal>selfv1</literal>
+            and
+            <literal>selfv2</literal>
             consumers as found in
             <filename>$GATEIN_HOME/lib/wsrp-consumer-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>
             with a cache expiring every 500 seconds and with a 50 second timeout for web service operations.
@@ -961,7 +970,8 @@
          <para>You can re-import the portlets directly by pressing the "Use for import" button or, on the Consumers list
             page, using the "Import" action for a given consumer. Let's assume that you used that second option and that
             you currently have several available sets of previously exported portlets to import from. After clicking the
-            action link, you should see a screen similar to the one below:</para>
+            action link, you should see a screen similar to the one below:
+         </para>
          <mediaobject>
             <imageobject>
                <imagedata fileref="images/WSRP/export_list.png" format="PNG" align="center" valign="middle"/>
@@ -995,7 +1005,8 @@
             <literal>NetUnity WSRP 2 Interop - Cache Markup (remote)</literal>
             and
             <literal>/samples-remotecontroller-portlet.RemoteControl (remote)</literal>
-            as shown below:</para>
+            as shown below:
+         </para>
          <mediaobject>
             <imageobject>
                <imagedata fileref="images/WSRP/import_original_page.png" format="PNG" align="center" valign="middle"/>
@@ -1122,7 +1133,8 @@
             register.
          </para>
          <para>New in &PRODUCT;, we now display the WSDL URLs to access &PRODUCT_NAME;'s WSRP producer either in WSRP 1
-            or WSRP 2 mode.</para>
+            or WSRP 2 mode.
+         </para>
       </sect2>
 
       <sect2 id="registration-configuration">
