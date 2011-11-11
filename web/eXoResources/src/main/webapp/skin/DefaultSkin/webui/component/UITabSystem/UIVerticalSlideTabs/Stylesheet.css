@@ -269,6 +269,7 @@
 	float: right; /* orientation=rt */
 	margin: 0px 4px 0px 0px; /* orientation=lt */
 	margin: 0px 0px 0px 4px; /* orientation=rt */
+	width: 80px;
 }
 
 .UIVerticalSlideTabs .VTabStyle4 .VTabContentBG .ContentInfo {
