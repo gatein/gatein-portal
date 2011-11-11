@@ -39,6 +39,7 @@ import org.exoplatform.portal.resource.compressor.ResourceType;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
+import org.gatein.wci.WebAppListener;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.picocontainer.Startable;
 
@@ -66,7 +67,7 @@ import javax.servlet.ServletContext;
    @Property(key = "type", value = "skin")})
 @ManagedDescription("Skin service")
 @RESTEndpoint(path = "skinservice")
-public class SkinService implements Startable
+public class SkinService extends AbstractResourceService implements Startable
 {
 
    protected static Log log = ExoLogger.getLogger("portal.SkinService");
@@ -108,10 +109,10 @@ public class SkinService implements Startable
    public static final String DEFAULT_SKIN = "Default";
 
    /** The deployer. */
-   private final AbstractResourceHandler deployer;
+   private final WebAppListener deployer;
 
    /** The removal. */
-   private final AbstractResourceHandler removal;
+   private final WebAppListener removal;
 
    private final Map<SkinKey, SkinConfig> portalSkins_;
 
@@ -124,8 +125,6 @@ public class SkinService implements Startable
    private final FutureMap<String, CachedStylesheet, Orientation> rtCache;
 
    private final Map<String, Set<String>> portletThemes_;
-
-   private final MainResourceResolver mainResolver;
 
    /**
     * The name of the portal container
@@ -140,10 +139,9 @@ public class SkinService implements Startable
     */
    final String id = Long.toString(System.currentTimeMillis());
 
-   private ResourceCompressor compressor;
-
    public SkinService(ExoContainerContext context, ResourceCompressor compressor)
    {
+      super(compressor);
       Loader<String, CachedStylesheet, Orientation> loader = new Loader<String, CachedStylesheet, Orientation>()
       {
          public CachedStylesheet retrieve(Orientation context, String key) throws Exception
@@ -174,7 +172,6 @@ public class SkinService implements Startable
       };
 
       //
-      this.compressor = compressor;
       portalSkins_ = new LinkedHashMap<SkinKey, SkinConfig>();
       skinConfigs_ = new LinkedHashMap<SkinKey, SkinConfig>(20);
       availableSkins_ = new HashSet<String>(5);
@@ -182,9 +179,10 @@ public class SkinService implements Startable
       rtCache = new FutureMap<String, CachedStylesheet, Orientation>(loader);
       portletThemes_ = new HashMap<String, Set<String>>();
       portalContainerName = context.getPortalContainerName();
-      mainResolver = new MainResourceResolver(portalContainerName, skinConfigs_);
       deployer = new GateInSkinConfigDeployer(portalContainerName, this);
       removal = new GateInSkinConfigRemoval(this);
+
+      addResourceResolver(new CompositeResourceResolver(portalContainerName, skinConfigs_));
    }
 
    /**
@@ -422,17 +420,6 @@ public class SkinService implements Startable
    public Skin merge(Collection<SkinConfig> skins)
    {
       return new CompositeSkin(this, skins);
-   }
-
-   /**
-    * Add a resource resolver to plug external resolvers.
-    * 
-    * @param resolver
-    *           a resolver to add
-    */
-   public void addResourceResolver(ResourceResolver resolver)
-   {
-      mainResolver.resolvers.addIfAbsent(resolver);
    }
 
    /**
@@ -996,26 +983,6 @@ public class SkinService implements Startable
       Collections.sort(availableSkin);
 
       return availableSkin.toArray(new String[availableSkin.size()]);
-   }
-
-   /**
-    * Registry ServletContext into MainResourceResolver of SkinService
-    * @param sContext
-    *          ServletContext will be registried
-    */
-   public void registerContext(ServletContext sContext)
-   {
-      mainResolver.registerContext(sContext);
-   }
-   
-   /**
-    * unregister a {@link ServletContext} into {@link MainResourceResolver} of {@link SkinService} 
-    * 
-    * @param servletContext ServletContext will unregistered
-    */
-   public void unregisterServletContext(ServletContext servletContext)
-   {
-      mainResolver.removeServletContext(servletContext);
    }
 
    /**

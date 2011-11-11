@@ -79,7 +79,7 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
       assertEquals(1, skinService.getAvailableSkinNames().size());
       assertTrue(skinService.getAvailableSkinNames().contains("TestSkin"));
 
-      String css = skinService.getCSS("/path/to/MockResourceResolver.css");
+      String css = skinService.getCSS("/path/to/MockResourceResolver");
       assertEquals(MockResourceResolver.class.getName(), css);
    }
 

@@ -19,58 +19,97 @@
 
 package org.exoplatform.web.application.javascript;
 
-import javax.servlet.ServletContext;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public class Javascript
 {
+   /** . */
+   private final String module;
 
    /** . */
-   private final JavascriptKey key;
-
-   /** . */
-   private final ServletContext context;
+   private final String contextPath;
 
    /** . */
    private final int priority;
 
-   public Javascript(JavascriptKey key, ServletContext context, Integer priority)
+   private final String path;
+   
+   public Javascript(String module, String path, String contextPath, int priority)
    {
-      this.key = key;
-      this.context = context;
-      this.priority = priority != null ? priority : -1;
+      this.module = module;
+      if (path.startsWith("http://") || path.startsWith("https://"))
+      {
+         this.path = path;
+      }
+      else
+      {
+         this.path = contextPath + path;
+      }
+      this.contextPath = contextPath;
+      this.priority = priority < 0 ? Integer.MAX_VALUE : priority;
    }
 
    public String getPath() {
-      if(key.isExternalScript()) 
-      {
-         return key.getScriptPath();
-      }
-      return key.getContextPath() + key.getScriptPath();
+      return this.path;
    }
 
-   public JavascriptKey getKey()
+   public String getModule()
    {
-      return key;
+      return module;
    }
 
-   public ServletContext getContext()
+   public String getContextPath()
    {
-      return context;
+      return this.contextPath;
    }
 
    public int getPriority()
    {
       return priority;
    }
-
-   public BufferedReader getReader()
+   
+   public boolean isExternalScript()
    {
-      return new BufferedReader(new InputStreamReader(context.getResourceAsStream(key.getScriptPath())));
+      return (path.startsWith("http://") || path.startsWith("https://")) ? true : false;
+   }
+   
+   @Override
+   public String toString()
+   {
+      return "Javascript[module=" + module + ", path=" + path +"]";
+   }
+   
+   public static class PortalJScript extends Javascript
+   {
+      private final String portalName;
+
+      public PortalJScript(String module, String path, String contextPath, int priority, String portalName)
+      {
+         super(module, path, contextPath, priority);
+         this.portalName = portalName;
+      }
+      
+      public String getPortalName()
+      {
+         return portalName;
+      }
+   }
+   
+   public static class ExtendedJScript extends Javascript
+   {
+      private final String script;
+      
+      public ExtendedJScript(String module, String path, String contextPath, String script)
+      {
+         super(module, path, contextPath, Integer.MAX_VALUE);
+         this.script = script;
+      }
+      
+      public String getScript()
+      {
+         return this.script;
+      }
    }
 }

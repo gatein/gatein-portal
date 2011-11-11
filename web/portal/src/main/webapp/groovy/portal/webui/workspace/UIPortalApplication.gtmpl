@@ -13,6 +13,7 @@
 	String skin = uicomponent.getSkin();
 	def portalSkins = uicomponent.getPortalSkins() ;
 	def portletSkins = uicomponent.getPortletSkins() ;
+	def portalJScripts = uicomponent.getPortalJScripts();
 	def scriptsPaths = uicomponent.getJavascriptURLs();
 	def lang = uicomponent.getLocale().getLanguage();
 	def title = rcontext.getTitle();
@@ -93,8 +94,15 @@
 		</script>
 		<script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/I18NMessage.js"></script>
 		<script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/MessageResource_<%=lang%>.js"></script>
-
-		<% 
+      <%
+        if (portalJScripts != null)
+        {
+          for (jScript in portalJScripts) {
+      %>
+            <script type="text/javascript" src="<%=jScript.getPath()%>"></script>
+      <%
+          }
+        }
 		 def headerElements = rcontext.getExtraMarkupHeadersAsStrings();
 		 if (headerElements != null) 
 		 {

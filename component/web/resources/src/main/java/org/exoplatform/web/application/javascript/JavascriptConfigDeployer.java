@@ -1,16 +1,16 @@
-/**
- * Copyright (C) 2009 eXo Platform SAS.
- * 
+/*
+ * Copyright (C) 2011 eXo Platform SAS.
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -27,19 +27,19 @@ import org.exoplatform.services.log.Log;
 import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
 import org.gatein.wci.WebAppListener;
-import org.gatein.wci.impl.DefaultServletContainerFactory;
-import org.picocontainer.Startable;
 
 import java.io.InputStream;
 
 import javax.servlet.ServletContext;
 
 /**
- * Created by The eXo Platform SAS
- * Jan 19, 2007
+ * An listener for listening the ADDED and REMOVED events of the webapp
+ * to deploy/undeploy Javascript configured in <code>/WEB-INF/gatein-resources.xml</code> file.
+ * 
+ * @author <a href="trongtt@gmail.com">Trong Tran</a>
+ * @version $Revision$
  */
-
-public class JavascriptDeployer implements WebAppListener, Startable
+public class JavascriptConfigDeployer implements WebAppListener
 {
 
    private static final String GATEIN_CONFIG_RESOURCE = "/WEB-INF/gatein-resources.xml";
@@ -47,7 +47,7 @@ public class JavascriptDeployer implements WebAppListener, Startable
    /**
     * Logger
     */
-   private static final Log LOG = ExoLogger.getLogger(JavascriptDeployer.class);
+   private static final Log LOG = ExoLogger.getLogger(JavascriptConfigDeployer.class);
 
    /** . */
    private final JavascriptConfigService javascriptService;
@@ -57,59 +57,63 @@ public class JavascriptDeployer implements WebAppListener, Startable
     */
    private final String portalContainerName;
 
-   public JavascriptDeployer(String portalContainerName, JavascriptConfigService javascriptService)
+   public JavascriptConfigDeployer(String portalContainerName, JavascriptConfigService javascriptService)
    {
       this.javascriptService = javascriptService;
       this.portalContainerName = portalContainerName;
-   }
-
-   public void start()
-   {
-      DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(this);
-   }
-
-   public void stop()
-   {
-      DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(this);
    }
 
    public void onEvent(WebAppEvent event)
    {
       if (event instanceof WebAppLifeCycleEvent)
       {
-         WebAppLifeCycleEvent waEvent = (WebAppLifeCycleEvent)event;
-         if (waEvent.getType() == WebAppLifeCycleEvent.ADDED)
+         WebAppLifeCycleEvent lifeCycleEvent = (WebAppLifeCycleEvent)event;
+         ServletContext servletContext = lifeCycleEvent.getWebApp().getServletContext();
+         switch (lifeCycleEvent.getType())
          {
-            InputStream is = null;
-            ServletContext scontext = null;
-            try
-            {
-               scontext = event.getWebApp().getServletContext();
-               is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
-               if (is != null)
-               {
-                  final PortalContainerPostInitTask task = new PortalContainerPostInitTask()
-                  {
-
-                     public void execute(ServletContext scontext, PortalContainer portalContainer)
-                     {
-                        register(scontext, portalContainer);
-                     }
-                  };
-                  PortalContainer.addInitTask(scontext, task, portalContainerName);
-               }
-            }
-            catch (Exception ex)
-            {
-               LOG.error("An error occurs while registering 'Javascript in gatein-resources.xml' from the context '"
-                  + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
-            }
-            finally
-            {
-               Safe.close(is);
-            }
+            case WebAppLifeCycleEvent.ADDED:
+               add(servletContext);
+               break;
+            case WebAppLifeCycleEvent.REMOVED:
+               remove(servletContext);
+               break;
          }
       }
+   }
+   
+   private void add(ServletContext scontext)
+   {
+      try
+      {
+         InputStream is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
+         if (is == null)
+         {
+            return;
+         }
+         
+         Safe.close(is);
+
+         final PortalContainerPostInitTask task = new PortalContainerPostInitTask()
+         {
+
+            public void execute(ServletContext scontext, PortalContainer portalContainer)
+            {
+               register(scontext, portalContainer);
+               javascriptService.registerContext(scontext);
+            }
+         };
+         PortalContainer.addInitTask(scontext, task, portalContainerName);
+      }
+      catch (Exception ex)
+      {
+         LOG.error("An error occurs while registering 'Javascript in gatein-resources.xml' from the context '"
+            + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
+      }
+   }
+   
+   private void remove(ServletContext scontext)
+   {
+      javascriptService.unregisterServletContext(scontext);
    }
 
    private void register(ServletContext scontext, PortalContainer container)

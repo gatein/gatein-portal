@@ -20,6 +20,7 @@
 package org.exoplatform.portal.resource;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.MalformedURLException;
@@ -49,25 +50,18 @@ class SimpleResourceContext
       int i2 = path.lastIndexOf("/") + 1;
       String targetedParentPath = path.substring(0, i2);
       String targetedFileName = path.substring(i2);
-      try
-      {
-         final URL url = context.getResource(path);
-         if (url != null)
+         final InputStream inputStream = context.getResourceAsStream(path);
+         if (inputStream != null)
          {
             return new Resource(contextPath, targetedParentPath, targetedFileName)
             {
                @Override
                public Reader read() throws IOException
                {
-                  return new InputStreamReader(url.openStream());
+                  return new InputStreamReader(inputStream);
                }
             };
          }
-      }
-      catch (MalformedURLException e)
-      {
-         e.printStackTrace();
-      }
       return null;
    }
 

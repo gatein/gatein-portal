@@ -19,201 +19,270 @@
 
 package org.exoplatform.web.application.javascript;
 
+import org.exoplatform.commons.cache.future.FutureMap;
+import org.exoplatform.commons.cache.future.Loader;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.resource.AbstractResourceService;
+import org.exoplatform.portal.resource.MainResourceResolver;
+import org.exoplatform.portal.resource.Resource;
+import org.exoplatform.portal.resource.ResourceResolver;
+import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.portal.resource.compressor.ResourceType;
+import org.exoplatform.web.application.javascript.Javascript.ExtendedJScript;
+import org.exoplatform.web.application.javascript.Javascript.PortalJScript;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.wci.WebAppListener;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.picocontainer.Startable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.Reader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.ServletContext;
 
-public class JavascriptConfigService implements Startable
+public class JavascriptConfigService extends AbstractResourceService implements Startable
 {
-
    /** Our logger. */
    private final Logger log = LoggerFactory.getLogger(JavascriptConfigService.class);
 
-   private Collection<String> availableScripts_;
-
-   private Collection<String> availableScriptsPaths_;
-
-   private List<Javascript> availableScriptsKey_;
-
-   private String mergedJavascript = "";
-
-   private HashMap<String, String> extendedJavascripts;
-
-   private byte[] jsBytes = null;
+   private List<Javascript> commonJScripts;
    
+   private HashMap<String, List<PortalJScript>> portalJScripts;
+
    private long lastModified = Long.MAX_VALUE;
 
    /** . */
-   private JavascriptDeployer deployer;
+   private WebAppListener deployer;
 
-   private JavascriptRemoval removal;
+   private CachedJavascript mergedCommonJScripts;
    
-   private ResourceCompressor compressor;
-
-   /** Used to clear merged Javascript on undeploying an webapp */
-   private Map<String, List<String>> object_view_of_merged_JS;
-
+   private final FutureMap<String, CachedJavascript, ResourceResolver> cache;
+   
    public JavascriptConfigService(ExoContainerContext context, ResourceCompressor compressor)
    {
-      this.compressor = compressor;
-      availableScripts_ = new ArrayList<String>();
-      availableScriptsPaths_ = new ArrayList<String>();
-      availableScriptsKey_ = new ArrayList<Javascript>();
-      extendedJavascripts = new HashMap<String, String>();
-      deployer = new JavascriptDeployer(context.getPortalContainerName(), this);
-      removal = new JavascriptRemoval(this);
-      object_view_of_merged_JS = new HashMap<String, List<String>>();
+      super(compressor);
+
+      Loader<String, CachedJavascript, ResourceResolver> loader = new Loader<String, CachedJavascript, ResourceResolver>()
+      {
+         @Override
+         public CachedJavascript retrieve(ResourceResolver context, String key) throws Exception
+         {
+            Resource resource = context.resolve(key);
+            if (resource == null)
+            {
+               return null;
+            }
+            
+            StringBuilder sB = new StringBuilder();
+            try
+            {
+               BufferedReader reader = new BufferedReader(resource.read());
+               String line = reader.readLine();
+               try
+               {
+                  while (line != null)
+                  {
+                     sB.append(line);
+                     if ((line = reader.readLine()) != null)
+                     {
+                        sB.append("\n");
+                     }
+                  }
+               }
+               catch (Exception ex)
+               {
+                  ex.printStackTrace();
+               }
+               finally
+               {
+                  Safe.close(reader);
+               }
+            }
+            catch (Exception e)
+            {
+               e.printStackTrace();
+            }
+            
+            return new CachedJavascript(sB.toString());
+         }
+      };
+      cache = new FutureMap<String, CachedJavascript, ResourceResolver>(loader);
+
+      commonJScripts = new ArrayList<Javascript>();
+      deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
+      portalJScripts = new HashMap<String, List<PortalJScript>>();
+      
+      addResourceResolver(new ExtendedJScriptResourceResolver());
    }
 
    /**
-    * Return a collection list This method should return the availables scripts in the service 
+    * Return a collection list This method should return the availables scripts in the service
+    * 
+    * @deprecated Somehow, it should use {@link #getCommonJScripts()} instead.
     * @return
     */
+   @Deprecated
    public Collection<String> getAvailableScripts()
    {
-      return availableScripts_;
+      ArrayList<String> list = new ArrayList<String>();
+      for (Javascript js : commonJScripts)
+      {
+         list.add(js.getModule());
+      }
+      return list;
+   }
+   
+   /**
+    * Return a collection of all common JScripts
+    * 
+    * @return
+    */
+   public Collection<Javascript> getCommonJScripts()
+   {
+      return commonJScripts;
    }
 
    /**
-    * Get a available script paths
-    * @return a collection list. This method should return the available script paths
+    * Return a collection of all available JS paths
+    * 
+    * @deprecated Somehow, it should use {@link #getCommonJScripts()} instead.
+    * 
+    * @return A collection of all available JS paths
     */
+   @Deprecated
    public Collection<String> getAvailableScriptsPaths()
    {
-      return availableScriptsPaths_;
+      ArrayList<String> list = new ArrayList<String>();
+      for (Javascript js : commonJScripts)
+      {
+         list.add(js.getPath());
+      }
+
+      return list;
    }
-
+   
    /**
-    * Add extended JavaScript into available JavaScript
-    * @param module
-    *           module name
-    * @param scriptPath
-    *           URI path of JavaScript 
-    * @param scontext
-    *           the webapp's {@link javax.servlet.ServletContext}
-    * @param scriptData
-    *            Content of JavaScript that will be added into available JavaScript
+    * Add a JScript to {@link #commonJScripts} list and re-sort the list.
+    * Then invalidate cache of all merged common JScripts to
+    * ensure they will be newly merged next time.
+    * 
+    * @param js
     */
-   public synchronized void addExtendedJavascript(String module, String scriptPath, ServletContext scontext, String scriptData)
+   public void addCommonJScript(Javascript js)
    {
-      String servletContextName = scontext.getServletContextName();
-      String path = "/" + servletContextName + scriptPath;
-      availableScripts_.add(module);
-      availableScriptsPaths_.add(path);
-      extendedJavascripts.put(path, scriptData);
-   }
-
-   /**
-    * Clear available JavaScript and add new JavaScripts
-    * @param jsKeys
-    *          new list of JavaScript will replace current available JavaScript
-    */
-   public synchronized void addJavascripts(List<Javascript> jsKeys)
-   {
-      availableScriptsKey_.addAll(jsKeys);
-
-
-      Collections.sort(availableScriptsKey_, new Comparator<Javascript>()
+      commonJScripts.add(js);
+      
+      Collections.sort(commonJScripts, new Comparator<Javascript>()
       {
          public int compare(Javascript o1, Javascript o2)
          {
-            if (o1.getPriority() == o2.getPriority())
-               return o1.getKey().getModule().compareTo(o2.getKey().getModule());
-            else if (o1.getPriority() < 0)
-               return 1;
-            else if (o2.getPriority() < 0)
-               return -1;
-            else
-               return o1.getPriority() - o2.getPriority();
+            return o1.getPriority() - o2.getPriority();
          }
       });
+      
+      invalidateMergedCommonJScripts();
+   }
 
-      mergedJavascript = "";
-      availableScripts_.clear();
-      availableScriptsPaths_.clear();
-      object_view_of_merged_JS.clear();
-      jsBytes = null;
-
-      //
-      for (Javascript script : availableScriptsKey_) {
-         addJavascript(script);
+   /**
+    * Remove a JScript for this module from {@link #commonJScripts}
+    * and invalidates its cache correspondingly
+    * 
+    * @param module
+    */
+   public void removeCommonJScript(String module)
+   {
+      Iterator<Javascript> iterator = commonJScripts.iterator();
+      while (iterator.hasNext())
+      {
+         Javascript js = iterator.next();
+         if (js.getModule().equals(module))
+         {
+            iterator.remove();
+            invalidateCachedJScript(js.getPath());
+            invalidateMergedCommonJScripts();
+         }
       }
    }
 
    /**
-    * Add an JavaScript into available JavaScripts
-    * @param javascript
-    *          JavaScript will be added into available JavaScript
+    * Return a collection of all PortalJScripts which belong to the specified portalName.
+    * 
+    * @param portalName
+    * @return list of JavaScript path which will be loaded by particular portal
     */
-   private void addJavascript(Javascript javascript)
+   public Collection<PortalJScript> getPortalJScripts(String portalName)
    {
-      availableScripts_.add(javascript.getKey().getModule());
-      availableScriptsPaths_.add(javascript.getPath());
-
-      List<String> mergedJS_list = object_view_of_merged_JS.get(javascript.getKey().getContextPath());
-      if (mergedJS_list == null)
-      {
-         mergedJS_list = new ArrayList<String>();
-         object_view_of_merged_JS.put(javascript.getKey().getContextPath(), mergedJS_list);
-      }
-
-      //Merge internal javascripts
-      if(!javascript.getKey().isExternalScript()) {
-         StringBuffer sB = new StringBuffer();
-         String line = "";
-         try
-         {
-            BufferedReader reader = javascript.getReader();
-            try
-            {
-               while ((line = reader.readLine()) != null)
-               {
-                  line = line + "\n";
-                  sB.append(line);
-                  mergedJS_list.add(line);
-               }
-            }
-            catch (Exception ex)
-            {
-               ex.printStackTrace();
-            }
-            finally
-            {
-               Safe.close(reader);
-            }
-         }
-         catch (Exception e)
-         {
-            e.printStackTrace();
-         }
-         sB.append("\n");
-         mergedJS_list.add("\n");
+      return portalJScripts.get(portalName);
+   }
    
-         mergedJavascript = mergedJavascript.concat(sB.toString());
+   /**
+    * Add a PortalJScript which will be loaded with a specific portal.
+    * <p>
+    * For now, we don't persist it inside the Portal site storage but just in memory.
+    * Therefore we could somehow remove all PortalJScript for a Portal by using {@link #removePortalJScripts(String)}
+    * when the portal is being removed.
+    * 
+    * @param js
+    */
+   public void addPortalJScript(PortalJScript js)
+   {
+      List<PortalJScript> list = portalJScripts.get(js.getPortalName());
+      if (list == null)
+      {
+         list = new ArrayList<PortalJScript>();
+      }
+      
+      list.add(js);
+
+      Collections.sort(list, new Comparator<Javascript>()
+      {
+         public int compare(Javascript o1, Javascript o2)
+         {
+            return o1.getPriority() - o2.getPriority();
+         }
+      });
+      
+      portalJScripts.put(js.getPortalName(), list);
+   }
+
+   /**
+    * Remove portal name from a JavaScript module or remove JavaScript module if it contains only one portal name
+    * 
+    * @param portalName portal's name which you want to remove
+    */
+   public void removePortalJScripts(String portalName)
+   {
+      List<PortalJScript> list = portalJScripts.remove(portalName);
+      for (PortalJScript js : list)
+      {
+         invalidateCachedJScript(js.getPath());
       }
    }
 
+   /**
+    * unregister a {@link ServletContext} into {@link MainResourceResolver} of {@link SkinService} 
+    * 
+    * @param servletContext ServletContext will unregistered
+    */
+   public void unregisterServletContext(ServletContext servletContext)
+   {
+      super.unregisterServletContext(servletContext);
+      remove(servletContext);
+   }
+   
    /**
     * Remove JavaScripts from availabe JavaScipts by ServletContext
     * @param scontext
@@ -222,53 +291,26 @@ public class JavascriptConfigService implements Startable
     */
    public synchronized void remove(ServletContext context)
    {
-      // We clone to avoid concurrent modification exception
-      for (Javascript script : new ArrayList<Javascript>(availableScriptsKey_))
+      Iterator<Javascript> iterator = commonJScripts.iterator();
+      while (iterator.hasNext())
       {
-         if (script.getContext().getContextPath().equals(context.getContextPath())) {
-            removeJavascript(script);
-         }
-      }
-   }
-
-   /**
-    * Remove JavaScript from available JavaScripts
-    * @param script
-    *          JavaScript will be removed
-    */
-   public synchronized void removeJavascript(Javascript script)
-   {
-      availableScripts_.remove(script.getKey().getModule());
-      availableScriptsPaths_.remove(script.getPath());
-      object_view_of_merged_JS.remove(script.getKey().getContextPath());
-
-      // Enlist entries to be removed
-      for (Iterator<Javascript> i = availableScriptsKey_.iterator();i.hasNext();)
-      {
-         Javascript _script = i.next();
-         if (script.getKey().equals(_script.getKey()))
+         Javascript js = iterator.next();
+         if (js.getContextPath().equals(context.getContextPath()))
          {
-            i.remove();
+            iterator.remove();
+            invalidateCachedJScript(js.getPath());
+            invalidateMergedCommonJScripts();
          }
       }
    }
 
    /**
-    *  Refresh the mergedJavascript
+    *  @deprecated Use {@link #invalidateMergedCommonJScripts()} instead
     */
+   @Deprecated
    public void refreshMergedJavascript()
    {
-      mergedJavascript = "";
-      jsBytes = null;
-      StringBuffer buffer = new StringBuffer();
-      for (String webApp : object_view_of_merged_JS.keySet())
-      {
-         for (String jsPath : object_view_of_merged_JS.get(webApp))
-         {
-            buffer.append(jsPath);
-         }
-      }
-      mergedJavascript = buffer.toString();
+      invalidateMergedCommonJScripts();
    }
 
    /**
@@ -277,59 +319,98 @@ public class JavascriptConfigService implements Startable
     * @param out the output stream
     * @throws IOException any io exception
     */
+   @Deprecated
    public void writeMergedJavascript(OutputStream out) throws IOException
    {
-      jsBytes = getMergedJavascript();
+      byte[] jsBytes = getMergedJavascript();
 
       //
       out.write(jsBytes);
    }
-   
-   /**
-    * Return merged javascript in byte array
-    * @return byte[]
-    */
-   public byte[] getMergedJavascript()
+
+   public String getJScript(String path)
    {
-      if (jsBytes == null)
+      CachedJavascript cachedJScript = getCachedJScript(path);
+      if (cachedJScript != null)
       {
-         // Generate javascript in a buffer
-         StringBuffer allJavascript = new StringBuffer();
-         allJavascript.append(mergedJavascript);
-         for (String script : extendedJavascripts.values())
-         {
-            allJavascript.append(script);
-         }
-         String s = allJavascript.toString();
+         return cachedJScript.getText();
+      }
+      else
+      {
+         return null;
+      }
+   }
 
-         // Get bytes
-         byte[] bytes;
+   /**
+    * Return a CachedJavascript which is lazy loaded from a {@link FutureMap} cache
+    * 
+    * @param path
+    * @return
+    */
+   public CachedJavascript getCachedJScript(String path)
+   {
+      return cache.get(mainResolver, path);
+   }
+
+   /**
+    * Returns a string which is merging of all common JScripts
+    * 
+    * @return
+    */
+   public CachedJavascript getMergedCommonJScripts()
+   {
+      if (mergedCommonJScripts == null)
+      {
+         StringBuilder sB = new StringBuilder();
+         for (Javascript js : commonJScripts)
+         {
+            if (!js.isExternalScript())
+            {
+               String jScript = getJScript(js.getPath());
+               if (jScript != null)
+               {
+                  sB.append(jScript).append("\n");
+               }
+               
+            }
+         }
+
+         String jScript = sB.toString();
+
          try
          {
-            bytes = s.getBytes("UTF-8");
-         }
-         catch (UnsupportedEncodingException e)
-         {
-            throw new AssertionError("No access to UTF-8, e");
-         }
-
-         // Minify
-         try
-         {
-            String output = compressor.compress(s, ResourceType.JAVASCRIPT);
-            jsBytes = output.getBytes();
+            jScript = compressor.compress(jScript, ResourceType.JAVASCRIPT);
          }
          catch (Exception e)
          {
-            log.warn("Error when generating minified javascript, will use normal javascript instead", e);
-            jsBytes = bytes;
          }
-//         Remove miliseconds because string of date retrieve from Http header doesn't have miliseconds
-         lastModified = (new Date().getTime() / 1000) * 1000;
+         
+         mergedCommonJScripts = new CachedJavascript(jScript);
+         lastModified = mergedCommonJScripts.getLastModified();
       }
-      return jsBytes;
+      
+      return mergedCommonJScripts;
    }
 
+   /**
+    * @deprecated Use {@link #getMergedCommonJScripts()} instead.
+    * It is more clearly to see what exactly are included in the returned merging
+    * 
+    * @return byte[]
+    */
+   @Deprecated
+   public byte[] getMergedJavascript()
+   {
+      String mergedCommonJS = getMergedCommonJScripts().getText();
+      
+      return mergedCommonJS.getBytes();
+   }
+
+   /**
+    * @deprecated the last modification should belong to CachedJavascript object
+    * @return
+    */
+   @Deprecated
    public long getLastModified() 
    {
       return lastModified;
@@ -342,11 +423,48 @@ public class JavascriptConfigService implements Startable
     */
    public boolean isModuleLoaded(CharSequence module)
    {
-      return getAvailableScripts().contains(module);
+      for (Javascript js : commonJScripts)
+      {
+         if (js.getModule().equals(module))
+         {
+            return true;
+         }
+      }
+
+      return false;
    }
 
    /**
-    * Remove JavaScript from available JavaScripts and extended JavaScripts
+    * Add an extended JavaScript to the list of common JScripts which are loaded by default
+    * 
+    * @deprecated This method support was not good in design so it will be unsupported soon.
+    * Absolutely this usage can be replaced by using combination of {@link #addCommonJScript(Javascript)} and {@link ResourceResolver}
+    * 
+    * @param module
+    *           module name
+    * @param scriptPath
+    *           URI path of JavaScript 
+    * @param scontext
+    *           the webapp's {@link javax.servlet.ServletContext}
+    * @param scriptData
+    *            Content of JavaScript that will be added into available JavaScript
+    */
+   @Deprecated
+   public synchronized void addExtendedJavascript(String module, String scriptPath, ServletContext scontext, String scriptData)
+   {
+      ExtendedJScript js = new ExtendedJScript(module, scriptPath, scontext.getContextPath(), scriptData);
+      commonJScripts.add(js);
+      if (log.isDebugEnabled())
+      {
+         log.debug("Added an extended javascript " + js);
+      }
+   }
+
+   /**
+    * Remove an extended Javascript from the list of common JScripts
+    * 
+    * @deprecated This method is deprecated according to {@link #addExtendedJavascript(String, String, ServletContext, String)}.
+    * Use {@link #removeCommonJScript(String)} instead.
     * @param module
     *          module will be removed
     * @param scriptPath
@@ -355,17 +473,29 @@ public class JavascriptConfigService implements Startable
     *          the webapp's {@link javax.servlet.ServletContext}
     *          
     */
+   @Deprecated
    public void removeExtendedJavascript(String module, String scriptPath, ServletContext scontext)
    {
-      String servletContextName = scontext.getServletContextName();
-      availableScripts_.remove(module);
-      String path = "/" + servletContextName + scriptPath;
-      availableScriptsPaths_.remove(path);
-      extendedJavascripts.remove(path);
-      jsBytes = null;
+      removeCommonJScript(module);
    }
-   
-   
+
+   /**
+    * Invalidate cache of merged common JScripts
+    */
+   public void invalidateMergedCommonJScripts()
+   {
+      mergedCommonJScripts = null;
+   }
+
+   /**
+    * Invalidate cache for this <tt>path</tt>
+    * 
+    * @param path
+    */
+   public void invalidateCachedJScript(String path)
+   {
+      cache.remove(path);
+   }
 
    /**
     * Start service.
@@ -376,7 +506,6 @@ public class JavascriptConfigService implements Startable
    public void start()
    {
       DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(deployer);
-      DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(removal);
    }
 
    /**
@@ -388,7 +517,29 @@ public class JavascriptConfigService implements Startable
    public void stop()
    {
       DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(deployer);
-      DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(removal);
    }
-
+   
+   private class ExtendedJScriptResourceResolver implements ResourceResolver
+   {
+      @Override
+      public Resource resolve(String path) throws NullPointerException
+      {
+         for (final Javascript js : commonJScripts)
+         {
+            if (js instanceof ExtendedJScript && js.getPath().equals(path))
+            {
+               final String jScript = ((ExtendedJScript)js).getScript();
+               return new Resource(path)
+               {
+                  @Override
+                  public Reader read() throws IOException
+                  {
+                     return new StringReader(jScript);
+                  }
+               };
+            }
+         }
+         return null;
+      }
+   }
 }

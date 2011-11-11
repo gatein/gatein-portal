@@ -19,10 +19,8 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
 -->
-<gatein-resources
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2 http://www.gatein.org/xml/ns/gatein_resources_1_2"
-    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2">
+<gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2 http://www.gatein.org/xml/ns/gatein_resources_1_2"
+   xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2">
 
    <portal-skin>
       <skin-name>TestSkin</skin-name>
@@ -108,6 +106,32 @@
          <js-module>js.test4</js-module>
          <js-path>/js/test4.js</js-path>
          <js-priority>2</js-priority>
+      </param>
+   </javascript>
+   <javascript>
+      <param>
+         <portal-name>site1</portal-name>
+         <js-module>js.test5</js-module>
+         <js-path>/js/test5.js</js-path>
+      </param>
+      <param>
+         <portal-name>site2</portal-name>
+         <js-module>js.test5</js-module>
+         <js-path>/js/test5.js</js-path>
+      </param>
+   </javascript>
+   <javascript>
+      <param>
+         <portal-name>site2</portal-name>
+         <js-module>js.test6</js-module>
+         <js-path>/js/test6.js</js-path>
+         <js-priority>1</js-priority>
+      </param>
+   </javascript>
+   <javascript>
+      <param>
+         <js-module>js.test7</js-module>
+         <js-path>http://example.com/test7.js</js-path>
       </param>
    </javascript>
 </gatein-resources>

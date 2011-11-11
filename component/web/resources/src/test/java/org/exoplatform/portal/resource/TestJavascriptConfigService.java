@@ -20,12 +20,14 @@ package org.exoplatform.portal.resource;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.test.mocks.servlet.MockServletContext;
+import org.exoplatform.web.application.javascript.Javascript.PortalJScript;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -35,44 +37,64 @@ import javax.servlet.ServletContext;
 /**
  * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
  * @version $Id$
- *
  */
 public class TestJavascriptConfigService extends AbstractWebResourceTest
 {
    private JavascriptConfigService jsService;
 
-   private ServletContext mockServletContext;
-   
-   private static final String exModule = "extended.js.test";
-   
-   private static final String exPath = "/extended/js/test.js";
-   
-   private static final ServletContext exContext = new MockJSServletContext("extendedWebApp", null);
+   private static MockResourceResolver resResolver;
 
+   private static ServletContext mockServletContext;
+   
+   private static boolean isFirstStartup = true;
+   
    @Override
    protected void setUp() throws Exception
    {
       final PortalContainer portalContainer = getContainer();
       jsService = (JavascriptConfigService)portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
-            
-      Map<String, String> resources = new HashMap<String, String>(4);
-      resources.put("/js/test1.js", "aaa;");
-      resources.put("/js/test2.js", "bbb;");
-      resources.put("/js/test3.js", "ccc;");
-      resources.put("/js/test4.js", "ddd;");      
-      mockServletContext = new MockJSServletContext("mockwebapp", resources);
       
-      URL url = portalContainer.getPortalClassLoader().getResource("mockwebapp/gatein-resources.xml");
-      JavascriptConfigParser.processConfigResource(url.openStream(), jsService, mockServletContext);
+      if (isFirstStartup)
+      {
+         Map<String, String> resources = new HashMap<String, String>(4);
+         resources.put("/js/test1.js", "aaa; // inline comment");
+         resources.put("/js/test2.js", "bbb;");
+         resources.put("/js/test3.js", "ccc;");
+         resources.put("/js/test4.js", "ddd;");
+         mockServletContext = new MockJSServletContext("mockwebapp", resources);
+         jsService.registerContext(mockServletContext);
+
+         resResolver = new MockResourceResolver();
+         jsService.addResourceResolver(resResolver);
+         URL url = portalContainer.getPortalClassLoader().getResource("mockwebapp/gatein-resources.xml");
+         JavascriptConfigParser.processConfigResource(url.openStream(), jsService, mockServletContext);
+
+         isFirstStartup = false;
+      }
    }
 
-   public void testAvailableScripts()
+   public void testResourceResolver()
    {
-      assertEquals(4, jsService.getAvailableScripts().size());
+      String jScript = jsService.getJScript("/path/to/MockResourceResolver");
+      assertEquals(MockResourceResolver.class.getName(), jScript);
+      
+      jScript = jsService.getJScript("/path/to/non-existing.js");
+      assertNull(jScript);
+      
+      resResolver.addResource("/path/to/non-existing.js", "foo");
+      jScript = jsService.getJScript("/path/to/non-existing.js");
+      assertNotNull("foo", jScript);
+   }
+
+   public void testCommonJScripts()
+   {
+      assertEquals(5, jsService.getCommonJScripts().size());
       assertTrue(jsService.isModuleLoaded("js.test1"));
       assertTrue(jsService.isModuleLoaded("js.test2"));
       assertTrue(jsService.isModuleLoaded("js.test3"));
       assertTrue(jsService.isModuleLoaded("js.test4"));
+      assertTrue(jsService.isModuleLoaded("js.test7"));
+      
       assertFalse(jsService.isModuleLoaded("js.test5"));            
    }
 
@@ -83,11 +105,16 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertEquals(mockServletContext.getContextPath() + "/js/test4.js", availPaths.next());
       assertEquals(mockServletContext.getContextPath() + "/js/test1.js", availPaths.next());
       assertEquals(mockServletContext.getContextPath() + "/js/test3.js", availPaths.next());
+      assertEquals("http://example.com/test7.js", availPaths.next());
       assertFalse(availPaths.hasNext());
    }
    
-   public void testExtendedJS() throws Exception
+   public void testAddingExtendedJScript() throws Exception
    {
+      ServletContext exContext = new MockJSServletContext("extendedWebApp", null);
+      String exModule = "extended.js.test";
+      String exPath = "/extended/js/test.js";
+      
       jsService.addExtendedJavascript(exModule, exPath, exContext, "extendedJS;");
       assertTrue(jsService.isModuleLoaded(exModule));
       assertTrue(jsService.getAvailableScriptsPaths().contains(exContext.getContextPath() + exPath));
@@ -107,32 +134,57 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertTrue(first < second);
       assertTrue(second < System.currentTimeMillis());
    }
-   
-   public void testMergedJS()
-   {      
-      String mergedJS = new String(jsService.getMergedJavascript());
-      assertEquals("\nbbb;ddd;aaa;ccc;", mergedJS);            
-      assertTrue(jsService.getLastModified() < System.currentTimeMillis());
-   }   
-   
-   public void testRemoveJS()
+
+   public void testMergingCommonJScripts()
    {
-      assertEquals(4, jsService.getAvailableScripts().size());
-      assertEquals(4, jsService.getAvailableScriptsPaths().size());            
-      jsService.remove(mockServletContext);
-      assertEquals(0, jsService.getAvailableScripts().size());
-      assertEquals(0, jsService.getAvailableScriptsPaths().size());      
-      
-      assertTrue(jsService.getMergedJavascript().length > 0);
-      jsService.refreshMergedJavascript();
-      assertTrue(jsService.getMergedJavascript().length == 0);
+      String mergedJS = new String(jsService.getMergedJavascript());
+      assertEquals("\nbbb;ddd;aaa;ccc;", mergedJS);
+      assertEquals("\nbbb;ddd;aaa;ccc;", jsService.getMergedCommonJScripts().getText());
+      assertTrue(jsService.getLastModified() < System.currentTimeMillis());
    }
 
-   @Override
-   protected void tearDown() throws Exception
+   public void testCaching()
    {
-      jsService.remove(mockServletContext);
-      jsService.removeExtendedJavascript(exModule, exPath, exContext);
+      String path = "/path/to/caching";
+      resResolver.addResource(path, "foo");
+      String jScript = jsService.getJScript(path);
+      assertEquals("foo", jScript);
+      
+      resResolver.addResource(path, "bar");
+      jScript = jsService.getJScript(path);
+      assertEquals("foo", jScript);
+
+      // invalidate cache
+      jsService.invalidateCachedJScript(path);
+      jScript = jsService.getJScript(path);
+      assertEquals("bar", jScript);
+   }
+
+   public void testPortalJScript()
+   {
+      Collection<PortalJScript> site = jsService.getPortalJScripts("site1");
+      assertEquals(1, site.size());
+      Iterator<PortalJScript> iterator = site.iterator();
+      assertEquals(mockServletContext.getContextPath() + "/js/test5.js", iterator.next().getPath());
+      
+      site = jsService.getPortalJScripts("site2");
+      assertEquals(2, site.size());
+      iterator = site.iterator();
+      assertEquals(mockServletContext.getContextPath() + "/js/test6.js", iterator.next().getPath());
+      assertEquals(mockServletContext.getContextPath() + "/js/test5.js", iterator.next().getPath());
+
+      assertNull(jsService.getPortalJScripts("classic"));
+
+      jsService.removePortalJScripts("site1");
+      assertNull(jsService.getPortalJScripts("site1"));
+      
+      PortalJScript portalJScript = new PortalJScript("portal_module1", "/path/to/portal/jscript1", "/portal", Integer.MAX_VALUE, "portal1");
+      jsService.addPortalJScript(portalJScript);
+      String jScript = jsService.getJScript(portalJScript.getPath());
+      assertNull(jScript);
+      resResolver.addResource(portalJScript.getPath(), "bar1");
+      jScript = jsService.getJScript(portalJScript.getPath());
+      assertEquals("bar1", jScript);
    }
    
    private static class MockJSServletContext extends MockServletContext
@@ -154,7 +206,15 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       @Override
       public InputStream getResourceAsStream(String s)
       {
-         return new ByteArrayInputStream(resources.get(s).getBytes());
+         String input = resources.get(s);
+         if (input != null)
+         {
+            return new ByteArrayInputStream(input.getBytes());
+         }
+         else
+         {
+            return null;
+         }
       }
    }
 }

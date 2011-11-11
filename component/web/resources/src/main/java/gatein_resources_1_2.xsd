@@ -102,6 +102,9 @@
 	
 	<xs:complexType name="param">
 		<xs:sequence>
+      <!-- The portal name loading particular JavaScript module -->
+      <xs:element name="portal-name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
       <!-- The javascript module -->
 			<xs:element name="js-module" type="xs:string" minOccurs="1" maxOccurs="1"/>
 

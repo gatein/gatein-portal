@@ -40,7 +40,7 @@ class MockResourceResolver implements ResourceResolver
 
    public MockResourceResolver()
    {
-      addResource("/path/to/MockResourceResolver.css", this.getClass().getName());
+      addResource("/path/to/MockResourceResolver", this.getClass().getName());
    }
 
    public void addResource(String path, String value)

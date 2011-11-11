@@ -47,6 +47,8 @@ public class JavascriptConfigParser
    final public static String JAVA_SCRIPT_PATH = "js-path";
 
    final public static String JAVA_SCRIPT_PRIORITY = "js-priority";
+   
+   final public static String JAVA_SCRIPT_PORTAL_NAME = "portal-name";
 
    /** . */
    private ServletContext context;
@@ -118,19 +120,37 @@ public class JavascriptConfigParser
                param_ele.getElementsByTagName(JAVA_SCRIPT_MODULE).item(0).getFirstChild().getNodeValue();
             String js_path =
                param_ele.getElementsByTagName(JAVA_SCRIPT_PATH).item(0).getFirstChild().getNodeValue();
-            Integer js_priority = null;
+            int priority;
             try
             {
-               js_priority =
+               priority =
                   Integer.valueOf(param_ele.getElementsByTagName(JAVA_SCRIPT_PRIORITY).item(0)
-                     .getFirstChild().getNodeValue());
+                     .getFirstChild().getNodeValue()).intValue();
             }
             catch (Exception e)
             {
-               //Js_priority still is null;
+               priority = Integer.MAX_VALUE;
             }
-            JavascriptKey key = new JavascriptKey(js_module, js_path, context.getContextPath());
-            Javascript js = new Javascript(key, context, js_priority);
+            String portalName = null;
+            try
+            {
+               portalName = param_ele.getElementsByTagName(JAVA_SCRIPT_PORTAL_NAME).item(0)
+               .getFirstChild().getNodeValue();
+            }
+            catch (Exception e)
+            {
+               // portal-name is null
+            }
+            
+            Javascript js;
+            if (portalName == null)
+            {
+               js = new Javascript(js_module, js_path, context.getContextPath(), priority);
+            }
+            else
+            {
+               js = new Javascript.PortalJScript(js_module, js_path, context.getContextPath(), priority, portalName);
+            }
             task.addScript(js);
          }
          return task;

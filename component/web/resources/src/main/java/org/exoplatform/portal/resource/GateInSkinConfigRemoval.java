@@ -25,13 +25,14 @@ import javax.servlet.ServletContext;
 
 import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
+import org.gatein.wci.WebAppListener;
 
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
  * @version $Id$
  * 
  */
-public class GateInSkinConfigRemoval extends AbstractResourceHandler
+public class GateInSkinConfigRemoval implements WebAppListener
 {
 
    private SkinService service;
@@ -41,9 +42,6 @@ public class GateInSkinConfigRemoval extends AbstractResourceHandler
       this.service = _service;
    }
 
-   /**
-    * @see org.exoplatform.portal.resource.AbstractResourceHandler#onEvent(org.gatein.wci.WebAppEvent)
-    */
    @Override
    public void onEvent(WebAppEvent event)
    {

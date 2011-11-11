@@ -22,10 +22,12 @@ package org.exoplatform.portal.webui.javascript;
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.ResourceRequestFilter;
+import org.exoplatform.web.application.javascript.CachedJavascript;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URLDecoder;
 import java.util.Date;
 
 import javax.servlet.ServletConfig;
@@ -62,7 +64,15 @@ public class JavascriptServlet extends HttpServlet
       final JavascriptConfigService service =
          (JavascriptConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
             JavascriptConfigService.class);
-      long lastModified = service.getLastModified();
+      final String uri = URLDecoder.decode(request.getRequestURI(), "UTF-8");
+      
+      CachedJavascript jScript = service.getCachedJScript(uri);
+      if (jScript == null)
+      {
+         jScript = service.getMergedCommonJScripts();
+      }
+      
+      long lastModified = jScript.getLastModified();
       long ifModifiedSince = request.getDateHeader(ResourceRequestFilter.IF_MODIFIED_SINCE);
       
       // Julien: should we also set charset along with the content type ?
@@ -74,8 +84,8 @@ public class JavascriptServlet extends HttpServlet
          }
       }
       
-      byte[] jsBytes = service.getMergedJavascript();
+      String js = jScript.getText();
       response.setDateHeader(ResourceRequestFilter.LAST_MODIFIED, lastModified);
-      response.getOutputStream().write(jsBytes);      
+      response.getWriter().write(js);
    }
 }

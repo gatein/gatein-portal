@@ -18,6 +18,8 @@
  */
 package org.exoplatform.web.application.javascript;
 
+import org.exoplatform.web.application.javascript.Javascript.PortalJScript;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +42,17 @@ public class JavascriptTask
 
    public void execute(JavascriptConfigService service, ServletContext scontext)
    {
-      service.addJavascripts(scripts);
+      for (Javascript js : scripts)
+      {
+         if (js instanceof PortalJScript)
+         {
+            service.addPortalJScript((PortalJScript)js);
+         }
+         else
+         {
+            service.addCommonJScript(js);
+         }
+      }
    }
 
    public void addScript(Javascript script)

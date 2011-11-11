@@ -30,8 +30,6 @@ import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
-import org.exoplatform.web.url.MimeType;
-import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPageActionListener.ChangeNodeActionListener;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -46,7 +44,10 @@ import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.application.javascript.Javascript.PortalJScript;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
+import org.exoplatform.web.url.MimeType;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -318,6 +319,16 @@ public class UIPortalApplication extends UIApplication
    {
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
       return service.getAvailableScriptsPaths();
+   }
+
+   /**
+    * Get all JavaScript path which available on selected portal site
+    * @return
+    */
+   public Collection<PortalJScript> getPortalJScripts()
+   {
+      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
+      return service.getPortalJScripts(Util.getUIPortal().getName());
    }
 
    public Collection<Skin> getPortalSkins()

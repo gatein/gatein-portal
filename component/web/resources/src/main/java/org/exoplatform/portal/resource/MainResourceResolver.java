@@ -32,7 +32,7 @@ import javax.servlet.ServletContext;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class MainResourceResolver implements ResourceResolver
+public class MainResourceResolver implements ResourceResolver
 {
 
    /** . */
@@ -42,19 +42,12 @@ class MainResourceResolver implements ResourceResolver
    final CopyOnWriteArrayList<ResourceResolver> resolvers;
 
    /** . */
-   final Map<SkinKey, SkinConfig> skins;
-
-   /** . */
    private final Logger log = LoggerFactory.getLogger(MainResourceResolver.class);
 
-   public MainResourceResolver(String portalContainerName, Map<SkinKey, SkinConfig> skins)
+   public MainResourceResolver()
    {
-      this.skins = skins;
       this.contexts = new HashMap<String, SimpleResourceContext>();
       this.resolvers = new CopyOnWriteArrayList<ResourceResolver>();
-
-      //
-      resolvers.add(new CompositeResourceResolver(portalContainerName, skins));
    }
 
    /**
