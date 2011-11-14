@@ -328,7 +328,8 @@ public class UIPortalApplication extends UIApplication
    public Collection<PortalJScript> getPortalJScripts()
    {
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
-      return service.getPortalJScripts(Util.getUIPortal().getName());
+      String portalOwner = Util.getPortalRequestContext().getPortalOwner();
+      return service.getPortalJScripts(portalOwner);
    }
 
    public Collection<Skin> getPortalSkins()
