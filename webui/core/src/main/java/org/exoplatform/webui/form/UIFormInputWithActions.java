@@ -78,70 +78,73 @@ public class UIFormInputWithActions extends UIFormInputSet
 
       for (UIComponent inputEntry : getChildren())
       {
-         String label;
-         try
+         if (inputEntry.isRendered())
          {
-            label = uiForm.getLabel(res, inputEntry.getId());
-            if (inputEntry instanceof UIFormInputBase)
-               ((UIFormInputBase)inputEntry).setLabel(label);
-         }
-         catch (MissingResourceException ex)
-         {
-            label = inputEntry.getId();
-            log.error("\n " + uiForm.getId() + ".label." + inputEntry.getId() + " not found value");
-         }
-         w.write("<tr>");
-         w.write("<td class=\"FieldLabel\">");
-         w.write(label);
-         w.write("</td>");
-         w.write("<td class=\"FieldComponent\">");
-         renderUIComponent(inputEntry);
-         List<ActionData> actions = actionField.get(inputEntry.getName());
-         if (actions != null)
-         {
-            for (ActionData action : actions)
+            String label;
+            try
             {
-               String actionLabel;
-               try
-               {
-                  actionLabel = uiForm.getLabel(res, "action." + action.getActionName());
-               }
-               catch (MissingResourceException ex)
-               {
-                  actionLabel = action.getActionName();
-                  log.debug("Key: '" + uiForm.getId() + ".label.action." + action.getActionName()
-                     + "' not found");
-               }
-               String actionLink;
-               if (action.getActionParameter() != null)
-               {
-                  actionLink =
-                     getParent().event(action.getActionListener(), action.getActionParameter());
-               }
-               else
-               {
-                  actionLink = getParent().event(action.getActionListener());
-               }
-
-               if (action.getActionType() == ActionData.TYPE_ICON)
-               {
-                  w.write("<img title=\"" + actionLabel + "\" onclick=\"" + actionLink + "\" "
-                     + "src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" class=\""
-                     + action.getCssIconClass() + "\" alt=\"\"/>");
-                  if (action.isShowLabel)
-                     w.write(actionLabel);
-               }
-               else if (action.getActionType() == ActionData.TYPE_LINK)
-               {
-                  w.write("<a title=\"" + actionLabel + "\" href=\"" + actionLink + "\">" + actionLabel + "</a>");
-               }
-               w.write("&nbsp;");
-               if (action.isBreakLine())
-                  w.write("<br/>");
+               label = uiForm.getLabel(res, inputEntry.getId());
+               if (inputEntry instanceof UIFormInputBase)
+                  ((UIFormInputBase)inputEntry).setLabel(label);
             }
+            catch (MissingResourceException ex)
+            {
+               label = inputEntry.getId();
+               log.error("\n " + uiForm.getId() + ".label." + inputEntry.getId() + " not found value");
+            }
+            w.write("<tr>");
+            w.write("<td class=\"FieldLabel\">");
+            w.write(label);
+            w.write("</td>");
+            w.write("<td class=\"FieldComponent\">");
+            renderUIComponent(inputEntry);
+            List<ActionData> actions = actionField.get(inputEntry.getName());
+            if (actions != null)
+            {
+               for (ActionData action : actions)
+               {
+                  String actionLabel;
+                  try
+                  {
+                     actionLabel = uiForm.getLabel(res, "action." + action.getActionName());
+                  }
+                  catch (MissingResourceException ex)
+                  {
+                     actionLabel = action.getActionName();
+                     log.debug("Key: '" + uiForm.getId() + ".label.action." + action.getActionName()
+                           + "' not found");
+                  }
+                  String actionLink;
+                  if (action.getActionParameter() != null)
+                  {
+                     actionLink =
+                           getParent().event(action.getActionListener(), action.getActionParameter());
+                  }
+                  else
+                  {
+                     actionLink = getParent().event(action.getActionListener());
+                  }
+                  
+                  if (action.getActionType() == ActionData.TYPE_ICON)
+                  {
+                     w.write("<img title=\"" + actionLabel + "\" onclick=\"" + actionLink + "\" "
+                           + "src=\"/eXoResources/skin/DefaultSkin/background/Blank.gif\" class=\""
+                           + action.getCssIconClass() + "\" alt=\"\"/>");
+                     if (action.isShowLabel)
+                        w.write(actionLabel);
+                  }
+                  else if (action.getActionType() == ActionData.TYPE_LINK)
+                  {
+                     w.write("<a title=\"" + actionLabel + "\" href=\"" + actionLink + "\">" + actionLabel + "</a>");
+                  }
+                  w.write("&nbsp;");
+                  if (action.isBreakLine())
+                     w.write("<br/>");
+               }
+            }
+            w.write("</td>");
+            w.write("</tr>");
          }
-         w.write("</td>");
-         w.write("</tr>");
       }
       w.write("</table>");
       w.write("</div>");
