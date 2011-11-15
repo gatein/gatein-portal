@@ -3,20 +3,25 @@
 	import org.exoplatform.portal.webui.application.UIGadget;
 	import org.exoplatform.portal.webui.application.GadgetUtil;
 	import org.exoplatform.webui.application.portlet.PortletRequestContext;
+	import org.exoplatform.portal.webui.application.UIPortlet;
 	
 	def hostName = GadgetUtil.getGadgetServerUrl();
 	def rcontext = _ctx.getRequestContext() ;
 	def windowId = rcontext.getWindowId();
 	def id = uicomponent.getId() + "-" + windowId ;
 	def url = uicomponent.getParent().getUrl();
-	
+		
 	if(url != null) {
-  	def metadata = uicomponent.getParent().getMetadata(url);
-  	def userPref = uicomponent.getParent().getUserPref();
-  	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-  	jsmanager.importJavascript("eXo.gadget.UIGadget") ;
-  	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.createGadget('$url','$id', $metadata, $userPref, 'canvas', '$hostName');") ;
-  }
+	  	def metadata = uicomponent.getParent().getMetadata(url);
+	  	def userPref = uicomponent.getParent().getUserPref();
+	  	JavascriptManager jsmanager = rcontext.getJavascriptManager();
+	  	jsmanager.importJavascript("eXo.gadget.UIGadget") ;
+	  	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.createGadget('$url','$id', $metadata, $userPref, 'canvas', '$hostName');") ;
+	  	
+	  	if(UIPortlet.getCurrentUIPortlet().getHeight() == null && uicomponent.getParent().isFillUpFreeSpace()) {
+	  		jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.resizeFullHeight('$id')");
+	  	}
+  	}
 %>
 
 <div class="UIGadgetViewMode" id="$id" style="height: auto;"></div>

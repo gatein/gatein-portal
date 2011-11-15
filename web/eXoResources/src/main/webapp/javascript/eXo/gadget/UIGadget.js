@@ -340,5 +340,15 @@ eXo.gadget.UIGadget = {
         ] ;
 
         ajaxAsyncGetRequest(eXo.env.server.createPortalURL(containerBlockId, "SaveGadgetProperties", true, params), false);
+    },
+    
+    /**
+     * Resize height of parent portlet to full height of browser
+     * @param componentId a component is child of portlet
+     */
+    resizeFullHeight : function(componentId) {
+        var gadget = document.getElementById(componentId);
+        var portlet = eXo.core.DOMUtil.findAncestorByClass(gadget, "PORTLET-FRAGMENT");
+        eXo.core.Browser.fillUpFreeSpace(portlet);
     }
 }

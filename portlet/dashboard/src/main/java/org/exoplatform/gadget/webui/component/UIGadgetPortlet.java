@@ -64,8 +64,14 @@ public class UIGadgetPortlet extends UIPortletApplication
    /** User pref. */
    private String userPref;
    
+   /** Indicate height should be filled full in browser height */
+   private boolean fillUpFreeSpace;
+   
    public UIGadgetPortlet() throws Exception
    {
+      setId(Integer.toString(hashCode()));
+      PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
+      fillUpFreeSpace = Boolean.parseBoolean(context.getRequest().getPreferences().getValue("fillUpFreeSpace", "false"));
       addChild(UIGadgetViewMode.class, null, null);
    }
    
@@ -77,6 +83,16 @@ public class UIGadgetPortlet extends UIPortletApplication
    public void setUserPref(String pref)
    {
       this.userPref = pref;
+   }
+   
+   public boolean isFillUpFreeSpace()
+   {
+      return fillUpFreeSpace;
+   }
+   
+   public void setFillUpFreeSpace(boolean isFillUpFreeSpace)
+   {
+      this.fillUpFreeSpace = isFillUpFreeSpace;
    }
 
    @Override
