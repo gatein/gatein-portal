@@ -26,6 +26,7 @@ package org.exoplatform.web.login;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
 
+import org.exoplatform.web.security.PortalLoginModule;
 import org.gatein.wci.security.Credentials;
 import org.jboss.web.tomcat.security.login.WebAuthentication;
 
@@ -48,7 +49,7 @@ public class ClusteredSSOFilter extends AbstractFilter
       {
          HttpServletRequest httpRequest = (HttpServletRequest)request;
 
-         Credentials credentials  = (Credentials)httpRequest.getSession().getAttribute(Credentials.CREDENTIALS);
+         Credentials credentials  = (Credentials)httpRequest.getSession().getAttribute(PortalLoginModule.AUTHENTICATED_CREDENTIALS);
          
          // Make programatic login if authenticated credentials are present in session - they were set in another cluster node
          if (credentials != null && httpRequest.getRemoteUser() == null)
@@ -64,7 +65,7 @@ public class ClusteredSSOFilter extends AbstractFilter
          // This is a workaround... without this code this attr will vanish from session after first request - don't ask...
          if (credentials != null && httpRequest.getSession(false) != null)
          {
-            httpRequest.getSession(false).setAttribute(Credentials.CREDENTIALS, credentials);
+            httpRequest.getSession(false).setAttribute(PortalLoginModule.AUTHENTICATED_CREDENTIALS, credentials);
          }
       }
       else
