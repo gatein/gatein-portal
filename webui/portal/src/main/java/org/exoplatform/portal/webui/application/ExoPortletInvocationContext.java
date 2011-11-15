@@ -116,12 +116,8 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
          .append(PortalRequestContext.UI_COMPONENT_ID).append("=").append(this.portletId);
 */
       
-      //Clear URL parameters
-      Map<String, String[]> queryParameters = url.getQueryParameters();
-      if (queryParameters != null)
-      {
-         queryParameters.clear();
-      }
+      //Reset query parameters
+      url.reset();
 
       String type;
       if (containerURL instanceof RenderURL)

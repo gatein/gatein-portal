@@ -22,7 +22,6 @@ package org.exoplatform.web.controller.router;
 import org.exoplatform.web.controller.QualifiedName;
 import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,7 +44,6 @@ public class TestPortalConfiguration extends AbstractTestController
                with(
                   routeParam("gtn:handler").withValue("site"),
                   routeParam("gtn:handler").withValue("site"),
-                  requestParam("gtn:componentid").named("portal:componentId"),
                   pathParam("gtn:path").matchedBy(".*").preservePath()),
             route("/private/{gtn:sitetype}/{gtn:sitename}{gtn:path}").
                with(
@@ -69,11 +67,10 @@ public class TestPortalConfiguration extends AbstractTestController
       expectedParameters.put(Names.GTN_SITENAME, "classic");
       expectedParameters.put(Names.GTN_SITETYPE, "portal");
       expectedParameters.put(Names.GTN_PATH, "/");
-      expectedParameters.put(Names.GTN_COMPONENTID, "foo");
 
       //
-      assertEquals(expectedParameters, router.route("/private/portal/classic/", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
-      assertEquals("/private/portal/classic/?portal:componentId=foo", router.render(expectedParameters));
+      assertEquals(expectedParameters, router.route("/private/portal/classic/"));
+      assertEquals("/private/portal/classic/", router.render(expectedParameters));
    }
 
    public void testPrivateClassic() throws Exception

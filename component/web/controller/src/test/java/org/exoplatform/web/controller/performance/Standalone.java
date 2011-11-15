@@ -21,9 +21,6 @@ public class Standalone extends TestCase
    private static final QualifiedName HANDLER = QualifiedName.parse("gtn:handler");
 
    /** . */
-   private static final QualifiedName LANG = QualifiedName.parse("gtn:lang");
-
-   /** . */
    private static final QualifiedName SITETYPE = QualifiedName.parse("gtn:sitetype");
 
    /** . */
@@ -31,15 +28,6 @@ public class Standalone extends TestCase
 
    /** . */
    private static final QualifiedName PATH = QualifiedName.parse("gtn:path");
-
-   /** . */
-   private static final QualifiedName COMPONENT_ID = QualifiedName.parse("gtn:componentid");
-
-   /** . */
-   private static final QualifiedName ACTION = QualifiedName.parse("gtn:action");
-
-   /** . */
-   private static final QualifiedName OBJECT_ID = QualifiedName.parse("gtn:objectid");
 
    public void testFoo() throws Exception
    {

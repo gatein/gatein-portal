@@ -42,6 +42,4 @@ public interface Names
    QualifiedName GTN_SITETYPE = QualifiedName.parse("gtn:sitetype");
    QualifiedName GTN_ACCESS = QualifiedName.parse("gtn:access");
    QualifiedName GTN_PATH = QualifiedName.parse("gtn:path");
-   QualifiedName GTN_COMPONENTID = QualifiedName.parse("gtn:componentid");
-
 }

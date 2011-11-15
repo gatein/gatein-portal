@@ -35,33 +35,24 @@ import java.util.Set;
  */
 public class ComponentURL extends PortalURL<UIComponent, ComponentURL>
 {
+   public static final String PORTAL_COMPONENT_ID = "portal:componentId";
+
+   public static final String PORTAL_COMPONENT_ACTION = "portal:action";
 
    /** . */
    public static final ResourceType<UIComponent, ComponentURL> TYPE = new ResourceType<UIComponent, ComponentURL>() {};
 
    /** . */
-   public static final QualifiedName COMPONENT = QualifiedName.create("gtn", "componentid");
-
-   /** . */
-   public static final QualifiedName ACTION = QualifiedName.create("gtn", "action");
-
-   /** . */
-   public static final QualifiedName TARGET = QualifiedName.create("gtn", "objectid");
-
-   /** . */
    public static final QualifiedName PATH = QualifiedName.create("gtn", "path");
 
    /** . */
-   private static final Set<QualifiedName> NAMES = Collections.unmodifiableSet(Tools.toSet(COMPONENT, ACTION, TARGET, PATH));
+   private static final Set<QualifiedName> NAMES = Collections.unmodifiableSet(Tools.toSet(PATH));
 
    /** . */
    private UIComponent resource;
 
    /** . */
    private String action;
-
-   /** . */
-   private String targetBeanId;
 
    /** . */
    private String path;
@@ -79,9 +70,27 @@ public class ComponentURL extends PortalURL<UIComponent, ComponentURL>
    public ComponentURL setResource(UIComponent resource)
    {
       this.resource = resource;
+
+      if (resource != null)
+      {
+         setQueryParameterValue(PORTAL_COMPONENT_ID, resource.getId());
+      }
+
       return this;
    }
 
+   public void reset()
+   {
+      super.reset();
+      
+      //
+      if (resource != null)
+      {
+         setQueryParameterValue(PORTAL_COMPONENT_ID, resource.getId());
+      }
+      setQueryParameterValue(PORTAL_COMPONENT_ACTION, action);
+   }
+   
    public Set<QualifiedName> getParameterNames()
    {
       return NAMES;
@@ -89,19 +98,7 @@ public class ComponentURL extends PortalURL<UIComponent, ComponentURL>
 
    public String getParameterValue(QualifiedName parameterName)
    {
-      if (COMPONENT.equals(parameterName))
-      {
-         return resource != null ? resource.getId() : null;
-      }
-      else if (ACTION.equals(parameterName))
-      {
-         return action;
-      }
-      else if (TARGET.equals(parameterName))
-      {
-         return targetBeanId;
-      }
-      else if (PATH.equals(parameterName))
+      if (PATH.equals(parameterName))
       {
          return path;
       }
@@ -111,24 +108,10 @@ public class ComponentURL extends PortalURL<UIComponent, ComponentURL>
       }
    }
 
-   public String getAction()
-   {
-      return action;
-   }
-
    public void setAction(String action)
    {
       this.action = action;
-   }
-
-   public String getTargetBeanId()
-   {
-      return targetBeanId;
-   }
-
-   public void setTargetBeanId(String targetBeanId)
-   {
-      this.targetBeanId = targetBeanId;
+      setQueryParameterValue(PORTAL_COMPONENT_ACTION, action);
    }
 
    public String getPath()

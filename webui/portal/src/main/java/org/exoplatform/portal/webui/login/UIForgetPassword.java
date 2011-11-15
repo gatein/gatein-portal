@@ -39,6 +39,7 @@ import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.url.ComponentURL;
 import org.gatein.wci.security.Credentials;
 
 import java.net.URLEncoder;
@@ -145,7 +146,7 @@ public class UIForgetPassword extends UIForm
          HttpServletRequest request = portalContext.getRequest();
          String host = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();
          String activeLink = host + requestContext.getRequestContextPath() + "/public/" + portalName
-        	 		+ "?portal:componentId=UIPortal&portal:action=RecoveryPasswordAndUsername&tokenId=" 
+        	 		+ "?" + ComponentURL.PORTAL_COMPONENT_ID + "=UIPortal&portal:action=RecoveryPasswordAndUsername&tokenId=" 
         	 		+ tokenId;
          String mailText = headerMail + "\n" + activeLink + footerMail;
          try

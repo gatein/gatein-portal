@@ -23,7 +23,6 @@ import junit.framework.TestCase;
 import org.exoplatform.web.controller.QualifiedName;
 import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,10 +42,7 @@ public class TestLegacyPortal extends TestCase
       this.router = router().
          add(route("/").
             with(
-               routeParam("gtn:handler").withValue("portal"),
-               requestParam("gtn:componentid").named("portal:componentId"),
-               requestParam("gtn:action").named("portal:action"),
-               requestParam("gtn:objectid").named("portal:objectId")).
+               routeParam("gtn:handler").withValue("portal")).
             sub(route("/public/{gtn:sitename}{gtn:path}").
                with(
                   routeParam("gtn:access").withValue("public"),
@@ -65,11 +61,10 @@ public class TestLegacyPortal extends TestCase
       expectedParameters.put(Names.GTN_SITENAME, "classic");
       expectedParameters.put(Names.GTN_ACCESS, "private");
       expectedParameters.put(Names.GTN_PATH, "");
-      expectedParameters.put(Names.GTN_COMPONENTID, "foo");
 
       //
-      assertEquals(expectedParameters, router.route("/private/classic", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
-      assertEquals("/private/classic?portal:componentId=foo", router.render(expectedParameters));
+      assertEquals(expectedParameters, router.route("/private/classic"));
+      assertEquals("/private/classic", router.render(expectedParameters));
    }
 
    public void testPrivateClassic() throws Exception
@@ -105,11 +100,10 @@ public class TestLegacyPortal extends TestCase
       expectedParameters.put(Names.GTN_SITENAME, "classic");
       expectedParameters.put(Names.GTN_ACCESS, "private");
       expectedParameters.put(Names.GTN_PATH, "/");
-      expectedParameters.put(Names.GTN_COMPONENTID, "foo");
 
       //
-      assertEquals(expectedParameters, router.route("/private/classic/", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
-      assertEquals("/private/classic/?portal:componentId=foo", router.render(expectedParameters));
+      assertEquals(expectedParameters, router.route("/private/classic/"));
+      assertEquals("/private/classic/", router.render(expectedParameters));
    }
 
    public void testPrivateClassicHome() throws Exception
@@ -132,10 +126,9 @@ public class TestLegacyPortal extends TestCase
       expectedParameters.put(Names.GTN_SITENAME, "classic");
       expectedParameters.put(Names.GTN_ACCESS, "private");
       expectedParameters.put(Names.GTN_PATH, "/home");
-      expectedParameters.put(Names.GTN_COMPONENTID, "foo");
 
       //
-      assertEquals(expectedParameters, router.route("/private/classic/home", Collections.singletonMap("portal:componentId", new String[]{"foo"})));
-      assertEquals("/private/classic/home?portal:componentId=foo", router.render(expectedParameters));
+      assertEquals(expectedParameters, router.route("/private/classic/home"));
+      assertEquals("/private/classic/home", router.render(expectedParameters));
    }
 }

@@ -59,11 +59,7 @@ public class PortalURLBuilder extends URLBuilder<UIComponent>
 
    private String createURL(boolean ajax, UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
    {
-      Map<String,String[]> queryParameters = url.getQueryParameters();
-      if (queryParameters != null)
-      {
-         queryParameters.clear();
-      }
+      url.reset();
 
       //
       url.setAjax(ajax);
@@ -72,7 +68,7 @@ public class PortalURLBuilder extends URLBuilder<UIComponent>
 
       //
       url.setAction(action);
-      url.setTargetBeanId(targetBeanId);
+      url.setQueryParameterValue(UIComponent.OBJECTID, targetBeanId);
 
       //
       if (params != null)

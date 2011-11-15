@@ -243,6 +243,18 @@ public abstract class PortalURL<R, U extends PortalURL<R, U>>
    }
 
    /**
+    * Reset the Portal URL state
+    */
+   public void reset()
+   {
+      Map<String, String[]> params = getQueryParameters();
+      if (params != null)
+      {
+         params.clear();
+      }
+   }
+
+   /**
     * Returns the query parameters. Null can be returned.
     *
     * @return the query parameters

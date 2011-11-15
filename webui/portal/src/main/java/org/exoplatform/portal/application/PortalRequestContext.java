@@ -89,9 +89,9 @@ public class PortalRequestContext extends WebuiRequestContext
 
    final static public int PRIVATE_ACCESS = 1;
 
-   final static public String UI_COMPONENT_ACTION = "portal:action";
+   final static public String UI_COMPONENT_ACTION = ComponentURL.PORTAL_COMPONENT_ACTION;
 
-   final static public String UI_COMPONENT_ID = "portal:componentId";
+   final static public String UI_COMPONENT_ID = ComponentURL.PORTAL_COMPONENT_ID;
 
    final static public String TARGET_NODE = "portal:targetNode";
 
@@ -475,7 +475,7 @@ public class PortalRequestContext extends WebuiRequestContext
 
    public String getUIComponentIdParameterName()
    {
-      return PortalRequestContext.UI_COMPONENT_ID;
+      return ComponentURL.PORTAL_COMPONENT_ID;
    }
 
    public SiteType getSiteType()

@@ -83,11 +83,6 @@
       <value>portal</value>
     </route-param>
 
-    <!-- Webui parameters -->
-    <request-param qname="gtn:componentid" name="portal:componentId"/>
-    <request-param qname="gtn:action" name="portal:action"/>
-    <request-param qname="gtn:objectid" name="objectId"/>
-
     <!-- The group access -->
     <route path="/groups/{gtn:sitename}/{gtn:path}">
       <request-param qname="gtn:lang" name="lang" value-mapping="never-empty">
