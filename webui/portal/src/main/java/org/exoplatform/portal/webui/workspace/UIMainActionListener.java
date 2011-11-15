@@ -60,7 +60,7 @@ public class UIMainActionListener
    static public class PageCreationWizardActionListener extends EventListener<UIWorkingWorkspace>
    {
       public void execute(Event<UIWorkingWorkspace> event) throws Exception
-      {         
+      {
          UIPortalApplication uiApp = Util.getUIPortalApplication();
          UIPortal uiPortal = Util.getUIPortal();
          UIWorkingWorkspace uiWorkingWS = uiApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
@@ -69,7 +69,6 @@ public class UIMainActionListener
          if (currNav == null)
          {
             uiApp.addMessage(new ApplicationMessage("UIPortalManagement.msg.navigation.deleted", null));
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
             return;
          }                 
          
@@ -107,10 +106,10 @@ public class UIMainActionListener
          uiToolPanel.setWorkingComponent(UIPageCreationWizard.class, null);
          UIPageCreationWizard uiWizard = (UIPageCreationWizard)uiToolPanel.getUIComponent();
          uiWizard.configure(resolvedNode);
-         
+
          UIWizardPageSetInfo uiPageSetInfo = uiWizard.getChild(UIWizardPageSetInfo.class);
          uiPageSetInfo.setShowPublicationDate(false);
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);                                             
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);                          
       }
 
       private UserNode resolveNode(UserNode selectedNode, UserNodeFilterConfig filterConfig) throws Exception
