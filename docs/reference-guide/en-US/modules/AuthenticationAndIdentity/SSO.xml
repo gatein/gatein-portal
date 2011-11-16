@@ -103,7 +103,8 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
                which is by default bound only to host where the request is coming. When used cookieDomain parameter, cookie is bound to domain (like <emphasis>yourdomain.com</emphasis>),
                which will ensure that it is shared among both hosts <emphasis>node1.yourdomain.com</emphasis> and <emphasis>node2.yourdomain.com</emphasis>. So in this case, valve configuration can look like this:
             </para>
-<programlisting language="XML" role="XML">&lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn" cookieDomain="yourdomain.com" /&gt;
+<programlisting language="XML" role="XML">&lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn"
+   cookieDomain="yourdomain.com" /&gt;
 </programlisting>
          </step>
 
@@ -153,7 +154,8 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
             <para>
                And edit it to match the following:
             </para>
-<programlisting language="XML" role="XML">&lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn" cookieDomain="yourdomain.com" /&gt;
+<programlisting language="XML" role="XML">&lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn"
+   cookieDomain="yourdomain.com" /&gt;
 </programlisting>
             <para>
                This will ensure the <literal>JSESSIONIDSSO</literal> cookie is used in the correct domain, allowing the SSO authentication to occur.
@@ -297,12 +299,14 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
             <para>
                Open the <filename><replaceable>&lt;JBOSS_HOME&gt;</replaceable>/server/<replaceable>&lt;PROFILE&gt;</replaceable>/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file and edit the line:
             </para>
-<programlisting language="Java" role="java">&lt;a class="Login" onclick="$signInAction"&gt;&lt;%=_ctx.appRes("UILoginForm.label.Signin")%&gt;&lt;/a&gt;
+<programlisting language="Java" role="java">&lt;a class="Login"
+   onclick="$signInAction"&gt;&lt;%=_ctx.appRes("UILoginForm.label.Signin")%&gt;&lt;/a&gt;
 </programlisting>
             <para>
                To read:
             </para>
-<programlisting language="Java" role="java">&lt;a class="Login" href="/portal/private/classic"&gt;&lt;%=_ctx.appRes("UILoginForm.label.Signin")%&gt;&lt;/a&gt;
+<programlisting language="Java" role="java">&lt;a class="Login"
+   href="/portal/private/classic"&gt;&lt;%=_ctx.appRes("UILoginForm.label.Signin")%&gt;&lt;/a&gt;
 </programlisting>
          </step>
 
