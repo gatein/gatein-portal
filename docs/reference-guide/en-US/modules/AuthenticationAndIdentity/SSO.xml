@@ -27,6 +27,363 @@
         </section>
 
     </section>
+
+
+
+   <section id="sect-Reference_Guide_eXo_JCR_1.14-SSO_Single_Sign_On-Enabling_SSO_using_JBoss_SSO_Valve">
+      <title>Enabling SSO using JBoss SSO Valve</title>
+<!--   Source Metadata
+URL: https://issues.jboss.org/browse/JBQA-4530
+Author [w/email]:  Marek Posolda  (mposolda@redhat.com)
+
+URL: http://community.jboss.org/wiki/JBossWebSingleSignOn
+Author [w/email]: Brian Stansberry (bstansberry@jboss.com)
+
+URL: https://issues.jboss.org/browse/JBEPP-615
+Author [w/email]: Marek Posolda  (mposolda@redhat.com)
+  -->
+      <para>
+         The JBoss SSO valve is useful to authenticate a user on one JBoss Enterprise Portal Platform node in a cluster and have that authentication automatically carry across to other nodes in the cluster.
+      </para>
+
+      <para>
+         This authentication can also be used in any other web applications which may require authentication, <emphasis role="bold">provided that these applications use same roles as the main portal instance</emphasis>. Attempting to use an SSO authentication in an application that uses different roles may create authorization errors (<emphasis role="bold">403</emphasis> errors, for example).
+      </para>
+
+      <para>
+         More info about the JBoss SSO valve can be found at <ulink type="http" url="http://docs.redhat.com/docs/en-US/JBoss_Enterprise_Web_Platform/5/html/Administration_And_Configuration_Guide/clustering-http-sso.html" />.
+      </para>
+
+      <para>
+         To successfully implement SSO integration, do the following:
+      </para>
+
+      <procedure id="proc-Reference_Guide_eXo_JCR_1.14-Enabling_SSO_using_JBoss_SSO_Valve-SSO_Integration">
+         <title>SSO Integration</title>
+
+         <step>
+            <para>
+               Open the <filename>/<replaceable>&lt;JBOSS_HOME&gt;</replaceable>/server/<replaceable>&lt;PROFILE&gt;</replaceable>/deploy/jbossweb.sar/server.xml</filename> file and uncomment one of the two <parameter>Valve</parameter> entries:
+            </para>
+
+            <itemizedlist>
+               <listitem>
+                  <para>
+                     For a <emphasis>non-clustered</emphasis> implementation, uncomment:
+                  </para>
+<programlisting language="XML" role="XML">&lt;Valve className="org.apache.catalina.authenticator.SingleSignOn" /&gt;
+</programlisting>
+               </listitem>
+
+               <listitem>
+                  <para>
+                     For a <emphasis>clustered</emphasis> implementation, uncomment:
+                  </para>
+<programlisting language="XML" role="XML">&lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn" /&gt;
+</programlisting>
+               </listitem>
+            </itemizedlist>
+         </step>
+
+         <step>
+            <para>
+               To integrate with the JBoss SSO valve, follow <emphasis role="bold">one</emphasis> of the procedures below to make the necessary configuration changes in the Java Authentication and Authorization Service (<emphasis role="bold">JAAS</emphasis>):
+            </para>
+
+            <itemizedlist>
+               <listitem>
+                  <procedure id="proc-Reference_Guide_eXo_JCR_1.14-SSO_Integration-Call_the_JAAS_authentication_directly">
+                     <title>Call the JAAS authentication directly</title>
+
+                     <step>
+                        <para>
+                           Open the <filename>/<replaceable>&lt;JBOSS_HOME&gt;</replaceable>/server/<replaceable>&lt;PROFILE&gt;</replaceable>/deploy/gatein.ear/02portal.war/login/jsp/login.jsp</filename> file.
+                        </para>
+                     </step>
+
+                     <step>
+                        <para>
+                           Change the line that reads:
+                        </para>
+<programlisting language="XML" role="XML">&lt;form name="loginForm" action="&lt;%= contextPath + "/login"%&gt;" method="post" style="margin: 0px;"&gt;
+</programlisting>
+                        <para>
+                           to read:
+                        </para>
+<programlisting language="XML" role="XML">&lt;form name="loginForm" action="&lt;%= contextPath + "/private/j_security_check"%&gt;" method="post" style="margin: 0px;"&gt;
+</programlisting>
+                     </step>
+
+                     <step>
+                        <para>
+                           Change the line that reads:
+                        </para>
+<programlisting language="XML" role="XML">&lt;td&gt;&lt;input class="UserName" name="username" value="&lt;%=username%&gt;"/&gt;&lt;/td&gt;
+</programlisting>
+                        <para>
+                           to read:
+                        </para>
+<programlisting language="XML" role="XML">&lt;td&gt;&lt;input class="UserName" name="j_username" value="&lt;%=username%&gt;"/&gt;&lt;/td&gt;
+</programlisting>
+                     </step>
+
+                     <step>
+                        <para>
+                           Change the line that reads:
+                        </para>
+<programlisting language="XML" role="XML">&lt;td&gt;&lt;input class="Password" type="password" name="password" value=""/&gt;&lt;/td&gt;
+</programlisting>
+                        <para>
+                           to read:
+                        </para>
+<programlisting language="XML" role="XML">&lt;td&gt;&lt;input class="Password" type="password" name="j_password" value=""/&gt;&lt;/td&gt;
+</programlisting>
+                     </step>
+                  </procedure>
+               </listitem>
+
+               <listitem>
+                  <procedure id="proc-Reference_Guide_eXo_JCR_1.14-SSO_Integration-Switch_to_BASIC_authentication">
+                     <title>Switch to <emphasis role="bold">BASIC</emphasis> authentication</title>
+
+                     <step>
+                        <para>
+                           Change the <parameter>auth-method</parameter> element in <filename><replaceable>&lt;JBOSS_HOME&gt;</replaceable>/server/<replaceable>&lt;PROFILE&gt;</replaceable>/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</filename> from <parameter>FORM</parameter> to <parameter>BASIC</parameter>:
+                        </para>
+<programlisting language="XML" role="XML">&lt;login-config&gt;
+&lt;auth-method&gt;BASIC&lt;/auth-method&gt;
+&lt;realm-name&gt;gatein-domain&lt;/realm-name&gt;
+&lt;form-login-config&gt;
+  &lt;form-login-page&gt;/initiatelogin&lt;/form-login-page&gt;
+ &lt;form-error-page&gt;/errorlogin&lt;/form-error-page&gt;
+&lt;/form-login-config&gt;
+</programlisting>
+                     </step>
+                  </procedure>
+               </listitem>
+            </itemizedlist>
+         </step>
+      </procedure>
+
+      <formalpara id="form-Reference_Guide_eXo_JCR_1.14-Enabling_SSO_using_JBoss_SSO_Valve-Testing_the_SSO_Valve">
+         <title>Testing the SSO Valve</title>
+
+         <para>
+            Once the JBoss SSO Valve has been enabled, it can be tested with the following steps:
+         </para>
+      </formalpara>
+
+      <procedure id="proc-Reference_Guide_eXo_JCR_1.14-Enabling_SSO_using_JBoss_SSO_Valve-Testing_the_SSO_Valve">
+         <title>Testing the SSO Valve</title>
+
+         <step>
+            <para>
+               Copy the <replaceable>&lt;PROFILE&gt;</replaceable> you enabled the valve in (<literal>all</literal>, for example) into two new profiles called <literal>node1</literal> and <literal>node2</literal>.
+            </para>
+         </step>
+
+         <step>
+            <para>
+               Run an instance of JBoss Enterprise Portal Platform using the <literal>node1</literal> profile on a local machine:
+            </para>
+<programlisting>./run.sh -c node1 -Djboss.service.binding.set=ports-default -Dexo.profiles=cluster -Djboss.messaging.ServerPeerID=0 &amp;
+</programlisting>
+         </step>
+
+         <step>
+            <para>
+               Start another instance using the <literal>node2</literal> profile:
+            </para>
+<programlisting>./run.sh -c node2 -Djboss.service.binding.set=ports-01 -Dexo.profiles=cluster -Djboss.messaging.ServerPeerID=1 &amp;
+</programlisting>
+         </step>
+
+         <step>
+            <para>
+               Navigate to <ulink type="http" url="http://localhost:8080/portal/private/classic" /> and authenticate with the pre-configured user account " <systemitem> root </systemitem> " (password " <systemitem> gtn </systemitem> ").
+            </para>
+         </step>
+
+         <step>
+            <para>
+               Navigate to <ulink type="http" url="http://localhost:8180/portal/private/classic" /> . You should be automatically authenticated as user <systemitem> root </systemitem> on this node as well.
+            </para>
+         </step>
+      </procedure>
+
+      <formalpara id="form-Reference_Guide_eXo_JCR_1.14-Enabling_SSO_using_JBoss_SSO_Valve-Enabling_SSO_in_a_physical_cluster">
+         <title>Enabling SSO in a physical cluster</title>
+
+         <para>
+            If you require SSO to work across a physical cluster of separate machines you will need to use the <parameter>cookieDomain</parameter> attribute of the SSO valve.
+         </para>
+      </formalpara>
+
+      <procedure>
+         <step>
+            <para>
+               Open the <filename><replaceable>&lt;JBOSS_HOME&gt;</replaceable>/server/<replaceable>&lt;PROFILE&gt;</replaceable>/deploy/jbossweb.sar/server.xml</filename> file.
+            </para>
+         </step>
+
+         <step>
+            <para>
+               Uncomment the line:
+            </para>
+<programlisting language="XML" role="XML">&lt;!--
+&lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn" /&gt;
+--&gt;
+</programlisting>
+         </step>
+
+         <step>
+            <para>
+               And edit it to match the following:
+            </para>
+<programlisting language="XML" role="XML">&lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn" cookieDomain="yourdomain.com" /&gt;
+</programlisting>
+            <para>
+               (Where <literal>yourdomain.com</literal> is the domain used in your cluster. For example; <ulink type="http" url="http://machine1.yourdomain.com:8080/portal/private/classic" /> and <ulink type="http" url="http://machine2.yourdomain.com:8080/portal/private/classic" /> )
+            </para>
+         </step>
+
+         <step>
+            <para>
+               Repeat the process in the other nodes in the cluster.
+            </para>
+         </step>
+      </procedure>
+
+      <para>
+         This will ensure the <literal>JSESSIONIDSSO</literal> cookie is used in the correct domain, allowing the SSO authentication to occur.
+      </para>
+
+      <formalpara id="form-Reference_Guide_eXo_JCR_1.14-Enabling_SSO_using_JBoss_SSO_Valve-Enabling_SSO_with_Other_Web_Applications">
+         <title>Enabling SSO with Other Web Applications</title>
+
+         <para>
+            As mentioned earlier, in order to use SSO authentication between JBoss Enterprise Portal Platform instances and other web applications, the roles defined in the web application must match those used in the portal instance.
+         </para>
+      </formalpara>
+
+      <para>
+         As an example, to use the SSO Valve to authenticate a user in both a portal instance and the JMX Console, the following actions would be required:
+      </para>
+
+      <procedure>
+         <title></title>
+
+         <step>
+            <para>
+               Open the <filename><replaceable>&lt;JBOSS_HOME&gt;</replaceable>/server/<replaceable>&lt;PROFILE&gt;</replaceable>/deploy/jmx-console.war/WEB-INF/web.xml</filename> file and edit it as follows:
+            </para>
+
+            <substeps>
+               <step>
+                  <para>
+                     Change the <parameter>&lt;role-name&gt;</parameter> entry in the <parameter>&lt;auth-constraint&gt;</parameter> element (line <literal>110</literal>) from <literal>JBossAdmin</literal> to <literal>users</literal>:
+                  </para>
+<programlisting language="XML" role="XML">&lt;auth-constraint&gt;
+  &lt;!--&lt;role-name&gt;JBossAdmin&lt;/role-name&gt;--&gt;
+  &lt;role-name&gt;users&lt;/role-name&gt;
+&lt;/auth-constraint&gt;</programlisting>
+               </step>
+
+               <step>
+                  <para>
+                     Change the <parameter>&lt;role-name&gt;</parameter> entry in the <parameter>&lt;security-role&gt;</parameter> element (line <literal>120</literal>) from <literal>JBossAdmin</literal> to <literal>users</literal>
+                  </para>
+<programlisting language="XML" role="XML">&lt;security-role&gt;
+  &lt;!--&lt;role-name&gt;JBossAdmin&lt;/role-name&gt;--&gt;
+  &lt;role-name&gt;users&lt;/role-name&gt;
+&lt;/security-role&gt;</programlisting>
+               </step>
+            </substeps>
+         </step>
+      </procedure>
+
+      <formalpara id="form-Reference_Guide_eXo_JCR_1.14-Enabling_SSO_using_JBoss_SSO_Valve-Testing_SSO_With_Other_Web_Applications">
+         <title>Testing SSO With Other Web Applications</title>
+
+         <para>
+            To test that SSO authentication is enabled from portal instances to other web applications (in this case, the JMX Console), do the following:
+         </para>
+      </formalpara>
+
+      <procedure id="proc-Reference_Guide_eXo_JCR_1.14-Enabling_SSO_using_JBoss_SSO_Valve-Test_SSO_Between_Portal_and_JMX_Console">
+         <title>Test SSO Between Portal and JMX Console</title>
+
+         <step>
+            <para>
+               Start a portal instance on one node:
+            </para>
+<programlisting>./run.sh -c node1 -Djboss.service.binding.set=ports-default -Dexo.profiles=cluster -Djboss.messaging.ServerPeerID=0 &amp;
+</programlisting>
+         </step>
+
+         <step>
+            <para>
+               Navigate to <ulink type="http" url="http://localhost:8080/portal/private/classic" /> and authenticate with the pre-configured user account "<systemitem> root </systemitem>" (password "<systemitem> gtn </systemitem>").
+            </para>
+         </step>
+
+         <step>
+            <para>
+               Navigate to <ulink type="http" url="http://localhost:8080/jmx-console" />. You should be automatically authenticated into the JMX Console.
+            </para>
+         </step>
+      </procedure>
+
+      <formalpara id="form-Reference_Guide_eXo_JCR_1.14-Enabling_SSO_using_JBoss_SSO_Valve-Using_SSO_to_Authenticate_From_the_Public_Page">
+         <title>Using SSO to Authenticate From the Public Page</title>
+
+         <para>
+            The previous configuration changes in this section are useful if a user is using a private URL ( <ulink type="http" url="http://localhost:8080/portal/private/classic" />, for example) to log in to the portal instance.
+         </para>
+      </formalpara>
+
+      <para>
+         Further changes are needed however, if SSO authentication is required to work with the <guilabel>Sign In</guilabel> button on the front page of the portal ( <ulink type="http" url="http://localhost:8080/portal/public/classic" /> ).
+      </para>
+
+      <para>
+         To enable this functionality, the <guilabel>Sign In</guilabel> link must redirect to the <filename>login.jsp</filename> file edited earlier to call the JAAS authentication directly.
+      </para>
+
+      <procedure id="proc-Reference_Guide_eXo_JCR_1.14-Enabling_SSO_using_JBoss_SSO_Valve-Redirect_to_Use_SSO_Valve_Authentication">
+         <title>Redirect to Use SSO Valve Authentication</title>
+
+         <step>
+            <para>
+               Open the <filename><replaceable>&lt;JBOSS_HOME&gt;</replaceable>/server/<replaceable>&lt;PROFILE&gt;</replaceable>/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file and edit the line:
+            </para>
+<programlisting language="Java" role="java">&lt;a class="Login" onclick="$signInAction"&gt;&lt;%=_ctx.appRes("UILoginForm.label.Signin")%&gt;&lt;/a&gt;
+</programlisting>
+            <para>
+               To read:
+            </para>
+<programlisting language="Java" role="java">&lt;a class="Login" href="/portal/private/classic"&gt;&lt;%=_ctx.appRes("UILoginForm.label.Signin")%&gt;&lt;/a&gt;
+</programlisting>
+         </step>
+
+         <step>
+            <para>
+               Open the <filename><replaceable>&lt;JBOSS_HOME&gt;</replaceable>/server/<replaceable>&lt;PROFILE&gt;</replaceable>/deploy/gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file and change the line:
+            </para>
+<programlisting language="Java" role="java">&lt;a onclick="$signInAction"&gt;&lt;%=_ctx.appRes("UILogoPortlet.action.signin")%&gt;&lt;/a&gt;
+</programlisting>
+            <para>
+               To read:
+            </para>
+<programlisting language="Java" role="java">&lt;a href="/portal/private/classic"&gt;&lt;%=_ctx.appRes("UILogoPortlet.action.signin")%&gt;&lt;/a&gt;
+</programlisting>
+         </step>
+      </procedure>
+   </section>
+
+
+
+
     
     <section id="sect-Reference_Guide-Single_Sign_On-CAS_Central_Authentication_Service">
         <title>Central Authentication Service (CAS)</title>
