@@ -22,7 +22,7 @@
 
 <project name="module-repository" basedir="." default="modules">
 
-    <property name="output.dir" value="target/jboss-as-${version.jboss.as.release}"/>
+    <property name="output.dir" value="target/${exo.projects.app.jboss7.version}"/>
 
     <import file="lib.xml"/>
 
