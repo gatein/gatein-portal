@@ -103,7 +103,8 @@
                   contains files necessary for EAR packaging. The only file that is of interest from a user perspective
                   is
                   <filename>gatein-wsse-consumer.xml</filename>
-                  which allows you to configure WS-Security support for the consumer. !!!TODO mwringe please detail !!!!
+                  which allows you to configure WS-Security support for the consumer. Please see the 
+                  <link linkend="wss_configuration">WSRP and WS-Security</link> section for more details.
                </para>
             </listitem>
             <listitem>
@@ -143,8 +144,10 @@
             </listitem>
             <listitem>
                <para><filename>wsrp-producer-jb5wsss-$WSRP_VERSION.war</filename>, which contains the producer-side
-                  support for WS-Security. !!!!TODO mwringe: please detail if there are any user-modifiable
-                  configuration file there and how this files is different in AS 6 !!!!
+                  support for WS-Security. The only file of interest from a user perspective is 
+                  <filename>gatein-wsse-producer.xml</filename> which allows you to configure WS-Security support for 
+                  the producer. Please see the <link linkend="wss_configuration">WSRP and WS-Security</link> section 
+                  for more details.
                </para>
             </listitem>
          </itemizedlist>
@@ -175,7 +178,10 @@
             to learn how to do so.
          </para>
       </sect2>
+   </sect1>
 
+   <sect1>
+      <title>Securing WSRP</title>
       <sect2>
          <title>Considerations to use WSRP with SSL</title>
          <para>It is possible to use WSRP over SSL for secure exchange of data. Please refer to the
@@ -183,6 +189,121 @@
             on how to do so from
             <ulink url="http://community.jboss.org/wiki/GateIn">GateIn's wiki</ulink>.
          </para>
+      </sect2>
+      <sect2>
+        <title>WSRP and WS-Security</title>
+        <para>Portlets may present different data or options depending on the currently authenticated user. For remote 
+              portlets, this means having to propagate the user credentials from the consumer back to the producer in 
+              a safe and secure manner. The WSRP specification does not directly specify how this should be 
+              accomplished, but delegates this work to the existing WS-Security standards.
+        </para>
+        <note>
+          <title>Web Container Compatibility</title>
+          <para>WSRP and WS-Security is currently only supported on &PRODUCT_NAME; when running on top of JBoss 
+                AS 5.
+          </para>
+        </note>
+        <warning>
+          <title>Encryption</title>
+          <para>You will want to encrypt the credentials being sent between the consumer and producer, otherwise they 
+                will be sent in plain text and could be easily intercepted. You can either configure WS-Security to 
+                encrypt and sign the SOAP messages being sent, or secure the transport layer by using an https endpoint. 
+                Failure to encrypt the soap message or transport layer will result in the username and password being 
+                sent in plain text. <emphasis role="bold">Use of encryption is strongly recommended.</emphasis>
+          </para>
+        </warning>
+        <important>
+          <title>Credentials</title>
+          <para>When the consumer sends the user credentials to the producer, it is sending the credentials for the 
+                currently authenticated user in the consumer. This makes signing in to remote portlets transparent 
+                to end users, but also requires that the producer and consumer use the same credentials. This means 
+                that the username and password must be the same and valid on both servers.
+         </para>
+         <para>The recommended approach for this situation would be to use a common ldap configuration. Please
+               see the user guide on how to configure ldap for use with &PRODUCT_NAME;
+         </para>
+        </important>
+        <para>The GateIn Wiki article, <ulink url="http://community.jboss.org/wiki/GateInWSRPAndWebServiceSecurity">
+              GateIn WSRP and Web Service Security</ulink>, also provides a step-by-step example on how to configure 
+              WSRP with WS-Security.
+        </para>
+        <sect3 id="wss_configuration">
+          <title>WS-Security Configuration</title>
+          <para>&PRODUCT_NAME; uses JBossWS Native to handle ws-security. Please see the WS-Security section of the 
+                <ulink url="http://www.jboss.org/jbossas/docs/5-x">JBoss AS 5 Administration and Configuration Guide
+                </ulink> for indepth configuration options. Please note that since the consumer passes its credentials
+                to the producer, the consumer will act at the wss client and the producer will act as the wss server.
+          </para>
+          <para> The following are the JBossWS Native configuration files which need to be configure for WSRP:
+          </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+                <filename>gatein-wsrp-integration.ear/META-INF/gatein-wsse-consumer.xml</filename>: JBossWS 
+                configuration file for the consumer.
+              </para>
+            </listitem>
+            <listitem>
+              <para>
+                <filename>gatein-wsrp-integration.ear/wsrp-producer-jb5wss.war/WEB-INF/conf/gatein-wsse-producer.xml
+                </filename>: JBossWS configuration file for the producer.
+              </para>
+            </listitem>
+          </itemizedlist>
+        </sect3>
+        <sect3>
+          <title>WS-Security Producer Configuration</title>
+          <para>
+            Other than the JBossWS configuration file mention above, no other configuration changes should be necessary 
+            for the producer.
+          </para>
+        </sect3>
+        <sect3>
+          <title>WS-Security Consumer Configuration</title>
+          <para>The consumer requires a few changes before it will function properly with WS-Security. The consumer 
+                needs access to the current servlet request since this is used to retrieve the currently authenticated 
+                user. In order for the consumer to access this information, it needs a special servlet-filter added to 
+                the portal.
+          </para>
+          <para>In <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename> add the following information:
+          </para>
+<programlisting role="XML"><![CDATA[<!-- Filter to put request and response in ServletAccess -->
+   <filter>
+      <filter-name>ServletAccessFilter</filter-name>
+      <filter-class>org.gatein.wsrp.servlet.ServletAccessFilter</filter-class>
+   </filter>
+   <filter-mapping>
+      <filter-name>ServletAccessFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+   </filter-mapping>]]>
+</programlisting>
+          <para>
+            Finally, in the WSRP Configuration portlet, in the consumer configuration options, you will need to check the 'Enable WS Security' checkbox:
+          </para>
+          <mediaobject>
+            <imageobject>
+              <imagedata fileref="images/WSRP/config_wss_selected.png" format="PNG" align="center" valign="middle" scalefit="1"/>
+            </imageobject>
+          </mediaobject>
+        </sect3>
+        <note>
+          <title>WS-Security Consumer Checklist</title>
+          <para>
+            In order for the consumer to handle ws-security, the following steps must be completed properly
+          </para>
+          <itemizedlist>
+            <listitem>
+              <para>The JBossWS configuration files must be configured</para>
+            </listitem>
+            <listitem>
+              <para>The filter must be added to the portal's web.xml</para>
+            </listitem>
+            <listitem>
+              <para>the enable wss feature must be check in the wsrp admin</para>
+            </listitem>
+          </itemizedlist>
+          <para>The consumer will not properly handle ws-security unless all 3 are properly configured</para>
+        </note>
       </sect2>
    </sect1>
 
