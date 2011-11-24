@@ -86,9 +86,10 @@
          &PRODUCT_NAME; provides a complete support of WSRP 1.0 and 2.0 standard interfaces and offers both consumer and
          producer services. Starting with version 2.1.0-GA of the component, WSRP is packaged as a &PRODUCT_NAME;
          extension and is now self-contained in an easy to install package named
-         <filename>gatein-wsrp-integration.ear</filename>, deployed directly in the
-         <filename>deploy</filename>
-         directory of your JBoss Application Server configuration directory.
+         <filename>$JBOSS_PROFILE_HOME/deploy/gatein-wsrp-integration.ear</filename>
+         where
+         <filename>$JBOSS_PROFILE_HOME</filename>
+         refers to your JBoss AS profile directory (<filename>default</filename>, for instance).
       </para>
       <para>
          The extension itself is composed of the following components, assuming
@@ -607,18 +608,24 @@
          <para>While we recommend you use the WSRP Configuration portlet to configure Consumers, we provide an
                alternative way to configure consumers by adding an XML file called
                <filename>wsrp-consumers-config.xml</filename> in the
-               <filename>$JBOSS_PROFILE_HOME/conf/gatein/</filename> directory
-               where <code>$JBOSS_PROFILE_HOME</code> refers to your JBoss AS profile directory (<code>default</code>, for instance).
+               <filename>$JBOSS_PROFILE_HOME/conf/gatein/</filename> directory.
             <note>
                <para>An XML Schema defining which elements are available to configure Consumers via XML can be found
                   in
                   <filename>
-                     gatein-wsrp-integration.ear/lib/wsrp-integration-api-$WSRP_VERSION.jar/xsd/gatein_wsrp_consumer_1_0.xsd
+                     $JBOSS_PROFILE_HOME/deploy/gatein-wsrp-integration.ear/lib/wsrp-integration-api-$WSRP_VERSION.jar/xsd/gatein_wsrp_consumer_1_0.xsd
                   </filename>
                </para>
             </note>
             <note>
-               <para>It is important to note how the XML consumers configuration file is processed. It is read the first
+               <para>
+                  It is important to note that once the XML configuration file for consumers has been read upon
+                  the WSRP service first start, the associated information is put under control of JCR (Java Content
+                  Repository). Subsequent launches of the WSRP service will use the JCR-stored information and ignore
+                  the content of the XML configuration file.
+               </para>
+
+               <!--<para>It is important to note how the XML consumers configuration file is processed. It is read the first
                   time the WSRP service starts and the associated information is then put under control of JCR (Java
                   Content Repository). Subsequent launches of the WSRP service will use the JCR-stored information for
                   all producers already known to &PRODUCT_NAME;. More specifically, the
@@ -635,7 +642,7 @@
                   <filename>wsrp-consumers-config.xml</filename>
                   (if such information exists) as the producer will be re-created the next time the WSRP is launched if
                   that information is not removed.
-               </para>
+               </para>-->
             </note>
          </para>
 
@@ -735,7 +742,7 @@
                and
                <literal>selfv2</literal>
                consumers as found in
-               <filename>gatein-wsrp-integration.ear/lib/extension-component-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>
+               <filename>$JBOSS_PROFILE_HOME/deploy/gatein-wsrp-integration.ear/lib/extension-component-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>
                with a cache expiring every 500 seconds and with a 50 second timeout for web service operations.
                <note>
                   <para>
@@ -1162,16 +1169,36 @@
       <sect2>
          <title>Overview</title>
          <para>
-            !!! TODO claprun update from here !!!
-
-            You can configure the behavior of Portal's WSRP Producer by using the WSRP administration interface, which
-            is the preferred way, or by editing the
-            <filename>$GATEIN_HOME/wsrp-producer.war/WEB-INF/conf/producer/config.xml</filename>
-            file. Several aspects can be modified with respects to whether registration is required for consumers to
-            access the Producer's services. An XML Schema for the configuration format is available at
-            <filename>
-               $GATEIN_HOME/lib/wsrp-integration-api-$WSRP_VERSION.jar/xsd/gatein_wsrp_producer_1_0.xsd
-            </filename>.
+            The preferred way to configure the behavior of Portal's WSRP Producer is via the WSRP configuration portlet.
+            Alternatively, it is possible to add an XML file called
+            <filename>wsrp-producer-config.xml</filename>
+            in the
+            <filename>$JBOSS_PROFILE_HOME/conf/gatein/</filename>
+            directory.
+            Several aspects can be modified with respects to whether registration is required for consumers to access
+            the Producer's services.
+            <note>
+               <para>An XML Schema defining which elements are available to configure Consumers via XML can be found
+                  in
+                  <filename>
+                     $JBOSS_PROFILE_HOME/deploy/gatein-wsrp-integration.ear/lib/wsrp-integration-api-$WSRP_VERSION.jar/xsd/gatein_wsrp_producer_1_0.xsd
+                  </filename>
+               </para>
+            </note>
+            <note>
+               <para>
+                  It is important to note that once the XML configuration file for the producer has been read upon
+                  the WSRP service first start, the associated information is put under control of JCR (Java Content
+                  Repository). Subsequent launches of the WSRP service will use the JCR-stored information and ignore
+                  the content of the XML configuration file.
+               </para>
+            </note>
+            <note>
+               <para>
+                  The default configuration file for the producer can be found at
+                  <filename>$JBOSS_PROFILE_HOME/deploy/gatein-wsrp-integration.ear/lib/extension-component-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>
+               </para>
+            </note>
          </para>
       </sect2>
       <sect2>
