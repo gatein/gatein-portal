@@ -103,7 +103,7 @@
                   contains files necessary for EAR packaging. The only file that is of interest from a user perspective
                   is
                   <filename>gatein-wsse-consumer.xml</filename>
-                  which allows you to configure WS-Security support for the consumer. Please see the 
+                  which allows you to configure WS-Security support for the consumer. Please see the
                   <link linkend="wss_configuration">WSRP and WS-Security</link> section for more details.
                </para>
             </listitem>
@@ -144,9 +144,9 @@
             </listitem>
             <listitem>
                <para><filename>wsrp-producer-jb5wsss-$WSRP_VERSION.war</filename>, which contains the producer-side
-                  support for WS-Security. The only file of interest from a user perspective is 
-                  <filename>gatein-wsse-producer.xml</filename> which allows you to configure WS-Security support for 
-                  the producer. Please see the <link linkend="wss_configuration">WSRP and WS-Security</link> section 
+                  support for WS-Security. The only file of interest from a user perspective is
+                  <filename>gatein-wsse-producer.xml</filename> which allows you to configure WS-Security support for
+                  the producer. Please see the <link linkend="wss_configuration">WSRP and WS-Security</link> section
                   for more details.
                </para>
             </listitem>
@@ -192,31 +192,31 @@
       </sect2>
       <sect2>
         <title>WSRP and WS-Security</title>
-        <para>Portlets may present different data or options depending on the currently authenticated user. For remote 
-              portlets, this means having to propagate the user credentials from the consumer back to the producer in 
-              a safe and secure manner. The WSRP specification does not directly specify how this should be 
+        <para>Portlets may present different data or options depending on the currently authenticated user. For remote
+              portlets, this means having to propagate the user credentials from the consumer back to the producer in
+              a safe and secure manner. The WSRP specification does not directly specify how this should be
               accomplished, but delegates this work to the existing WS-Security standards.
         </para>
         <note>
           <title>Web Container Compatibility</title>
-          <para>WSRP and WS-Security is currently only supported on &PRODUCT_NAME; when running on top of JBoss 
+          <para>WSRP and WS-Security is currently only supported on &PRODUCT_NAME; when running on top of JBoss
                 AS 5.
           </para>
         </note>
         <warning>
           <title>Encryption</title>
-          <para>You will want to encrypt the credentials being sent between the consumer and producer, otherwise they 
-                will be sent in plain text and could be easily intercepted. You can either configure WS-Security to 
-                encrypt and sign the SOAP messages being sent, or secure the transport layer by using an https endpoint. 
-                Failure to encrypt the soap message or transport layer will result in the username and password being 
+          <para>You will want to encrypt the credentials being sent between the consumer and producer, otherwise they
+                will be sent in plain text and could be easily intercepted. You can either configure WS-Security to
+                encrypt and sign the SOAP messages being sent, or secure the transport layer by using an https endpoint.
+                Failure to encrypt the soap message or transport layer will result in the username and password being
                 sent in plain text. <emphasis role="bold">Use of encryption is strongly recommended.</emphasis>
           </para>
         </warning>
         <important>
           <title>Credentials</title>
-          <para>When the consumer sends the user credentials to the producer, it is sending the credentials for the 
-                currently authenticated user in the consumer. This makes signing in to remote portlets transparent 
-                to end users, but also requires that the producer and consumer use the same credentials. This means 
+          <para>When the consumer sends the user credentials to the producer, it is sending the credentials for the
+                currently authenticated user in the consumer. This makes signing in to remote portlets transparent
+                to end users, but also requires that the producer and consumer use the same credentials. This means
                 that the username and password must be the same and valid on both servers.
          </para>
          <para>The recommended approach for this situation would be to use a common ldap configuration. Please
@@ -224,12 +224,12 @@
          </para>
         </important>
         <para>The GateIn Wiki article, <ulink url="http://community.jboss.org/wiki/GateInWSRPAndWebServiceSecurity">
-              GateIn WSRP and Web Service Security</ulink>, also provides a step-by-step example on how to configure 
+              GateIn WSRP and Web Service Security</ulink>, also provides a step-by-step example on how to configure
               WSRP with WS-Security.
         </para>
         <sect3 id="wss_configuration">
           <title>WS-Security Configuration</title>
-          <para>&PRODUCT_NAME; uses JBossWS Native to handle ws-security. Please see the WS-Security section of the 
+          <para>&PRODUCT_NAME; uses JBossWS Native to handle ws-security. Please see the WS-Security section of the
                 <ulink url="http://www.jboss.org/jbossas/docs/5-x">JBoss AS 5 Administration and Configuration Guide
                 </ulink> for indepth configuration options. Please note that since the consumer passes its credentials
                 to the producer, the consumer will act at the wss client and the producer will act as the wss server.
@@ -239,7 +239,7 @@
           <itemizedlist>
             <listitem>
               <para>
-                <filename>gatein-wsrp-integration.ear/META-INF/gatein-wsse-consumer.xml</filename>: JBossWS 
+                <filename>gatein-wsrp-integration.ear/META-INF/gatein-wsse-consumer.xml</filename>: JBossWS
                 configuration file for the consumer.
               </para>
             </listitem>
@@ -254,15 +254,15 @@
         <sect3>
           <title>WS-Security Producer Configuration</title>
           <para>
-            Other than the JBossWS configuration file mention above, no other configuration changes should be necessary 
+            Other than the JBossWS configuration file mention above, no other configuration changes should be necessary
             for the producer.
           </para>
         </sect3>
         <sect3>
           <title>WS-Security Consumer Configuration</title>
-          <para>The consumer requires a few changes before it will function properly with WS-Security. The consumer 
-                needs access to the current servlet request since this is used to retrieve the currently authenticated 
-                user. In order for the consumer to access this information, it needs a special servlet-filter added to 
+          <para>The consumer requires a few changes before it will function properly with WS-Security. The consumer
+                needs access to the current servlet request since this is used to retrieve the currently authenticated
+                user. In order for the consumer to access this information, it needs a special servlet-filter added to
                 the portal.
           </para>
           <para>In <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename> add the following information:
@@ -845,8 +845,6 @@
          <sect3>
             <title>Registration modification for service upgrade</title>
             <para>
-               !!! TODO claprun continue update from here !!!
-
                Producers often offer several levels of service depending on consumers' subscription levels (for
                example). This is implemented at the WSRP level with the registration concept: producers can assert which
                level of service to provide to consumers based on the values of given registration properties.
@@ -858,25 +856,19 @@
             </para>
             <para>
                It is therefore sometimes necessary to modify the registration that concretizes the service agreement
-               between a consumer and a producer. Let's take the example of the producer requiring an email we
-               configured in
-               <xref linkend="consumer_gui"/>.
-               If you recall, the producer was requiring registration and required a value to be provided for the
+               between a consumer and a producer. Let's take the example of a producer requiring a valid email (via an
                <literal>email</literal>
-               property.
+               registration property) as part of its required information that consumers need to provide to be properly
+               registered.
             </para>
             <para>
-               Suppose now that we would like to update the email address that we provided to the remote producer. We
-               will need to tell the producer that our registration data has been modified. Let's see how to do this.
-               Assuming you
-               have configured access to the producer as previously described, please go to the configuration screen for
-               the
-               <literal>self</literal>
-               producer and modify the value of
+               Suppose now that we would like to update the email address that we provided to the remote producer when
+               we first registered. We will need to tell the producer that our registration data has been modified.
+               Let's see how to do this. Select the consumer for the remote producer in the available consumers list to
+               display its configuration. Assuming you want to change the email you registered with to
+               <literal>foo@example.com</literal>, change its value in the field for the
                <literal>email</literal>
-               to
-               <literal>foo@example.com</literal>
-               instead of<literal>example@example.com</literal>:
+               registration property:
                <mediaobject>
                   <imageobject>
                      <imagedata fileref="images/WSRP/modify_reg_start.png" format="PNG" align="center" valign="middle"
@@ -908,15 +900,10 @@
 
             <para>
                It can also happen that a producer administrator decided to change its requirement for registered
-               consumers. In this case, invoking operations on the producer will fail with an
-               <exceptionname>OperationFailedFault</exceptionname>. &PRODUCT_NAME; will attempt to help you in this
-               situation. Let's walk through an example using the
-               <literal>self</literal>
-               producer. Let's assume that
-               registration is requiring a valid value for an
+               consumers. &PRODUCT_NAME; will attempt to help you in this situation. Let's walk through an example using
+               the <literal>selfv2</literal> consumer. Let's assume that registration is requiring a valid value for an
                <literal>email</literal>
-               registration property (as we have seen so far). If you go to the configuration screen for this producer,
-               you should see:
+               registration property. If you go to the configuration screen for this consumer, you should see:
                <mediaobject>
                   <imageobject>
                      <imagedata fileref="images/WSRP/config_self.png" format="PNG" align="center" valign="middle"
@@ -961,7 +948,7 @@
                      can be caused by several different reasons, one
                      of them being a request to modify the registration data. Please take a look at the log files to see
                      if you can gather more information as to what happened. WSRP 2 introduces an exception that is
-                     specific to a request to modify registrations thus reducing the ambiguity that currently exists.
+                     specific to a request to modify registrations thus reducing the ambiguity that exists when using WSRP 1.
                   </para>
 
                </note>
@@ -1016,8 +1003,9 @@
             </itemizedlist>
          </para>
          <note>
-            <para>Import/Export functionalities are only available to WSRP 2 consumers. Import functionality is only
-               available if portlets had previously been exported.
+            <para>
+               Import/Export functionality is only available to WSRP 2 consumers of producers that support this optional
+               functionality. Import functionality is only available if portlets had previously been exported.
             </para>
          </note>
       </sect2>
@@ -1030,8 +1018,9 @@
             does not currently support automated migration of portal data, the functionality that we provide as part of
             WSRP 2 is necessarily less complete than it could be with full portal support.
          </para>
-         <para>The import/export implementation in &PRODUCT; allows users to export portlets from a given consumer.
-            These portlets can then be used to replace existing content on pages. This is accomplished by assiging
+         <para>The import/export implementation in &PRODUCT_NAME; (available since 3.1) allows users to export portlets
+            from a given consumer.
+            These portlets can then be used to replace existing content on pages. This is accomplished by assigning
             previously exported portlets to replace the content displayed by windows on the portal's pages. Let us walk
             through an example to make things clearer.
          </para>
@@ -1173,6 +1162,8 @@
       <sect2>
          <title>Overview</title>
          <para>
+            !!! TODO claprun update from here !!!
+
             You can configure the behavior of Portal's WSRP Producer by using the WSRP administration interface, which
             is the preferred way, or by editing the
             <filename>$GATEIN_HOME/wsrp-producer.war/WEB-INF/conf/producer/config.xml</filename>
