@@ -92,7 +92,15 @@ public class PortalLoginModule extends AbstractLoginModule
 
          try
          {
-            HttpServletRequest request = (HttpServletRequest)getContextMethod.invoke(null, "javax.servlet.http.HttpServletRequest");
+            HttpServletRequest request = getCurrentHttpServletRequest();
+
+            // This can be the case with CLI login
+            if (request == null)
+            {
+               log.debug("Unable to find HTTPServletRequest.");
+               return false;
+            }
+
             authCredentials = (Credentials)request.getSession().getAttribute(AUTHENTICATED_CREDENTIALS);
 
             // If authenticated credentials were presented in HTTP session, it means that we were already logged on different cluster node
@@ -139,6 +147,7 @@ public class PortalLoginModule extends AbstractLoginModule
    {
       // Add authenticated credentials to session only if we were logged on this host with "real" credentials
       if (getContextMethod != null &&
+         isClusteredSSO() &&
          sharedState.containsKey("javax.security.auth.login.name") &&
          sharedState.containsKey("javax.security.auth.login.password") &&
          sharedState.get(LOGIN_ON_DIFFERENT_NODE) == null)
@@ -150,9 +159,18 @@ public class PortalLoginModule extends AbstractLoginModule
          HttpServletRequest request = null;
          try
          {
-            request = (HttpServletRequest)getContextMethod.invoke(null, "javax.servlet.http.HttpServletRequest");
-            request.getSession().setAttribute(AUTHENTICATED_CREDENTIALS, wc);
-            handleCredentialsRemoving(request);
+            request = getCurrentHttpServletRequest();
+
+            // This can be the case with CLI login
+            if (request == null)
+            {
+               log.debug("Unable to find HTTPServletRequest.");
+            }
+            else
+            {
+               request.getSession().setAttribute(AUTHENTICATED_CREDENTIALS, wc);
+               handleCredentialsRemoving(request);
+            }
          }
          catch(Exception e)
          {
@@ -200,5 +218,23 @@ public class PortalLoginModule extends AbstractLoginModule
    {
       // TODO: We can't remove credentials from HTTP session right now because WSRP-Security relies on it. See method WSSecurityCredentialHelper.handleRequest
       // request.getSession().removeAttribute(Credentials.CREDENTIALS);
+   }
+
+   private HttpServletRequest getCurrentHttpServletRequest()
+   {
+      HttpServletRequest request = null;
+      try
+      {
+         if (getContextMethod != null)
+         {
+            request = (HttpServletRequest)getContextMethod.invoke(null, "javax.servlet.http.HttpServletRequest");
+         }
+      }
+      catch (Exception e)
+      {
+         log.debug("Exception when trying to obtain HTTPServletRequest.", e);
+      }
+
+      return request;
    }
 }
