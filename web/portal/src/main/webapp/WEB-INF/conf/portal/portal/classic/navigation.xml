@@ -35,8 +35,8 @@
       <label xml:lang="it">Home</label>
       <label xml:lang="nl">Home</label>
       <label xml:lang="pt-BR">Principal</label>
-      <label xml:lang="ja">&#x30db;&#x30fc;&#x30e0;</label>
-      <label xml:lang="ne">&#x0917;&#x0943;&#x0939; &#x092a;&#x0943;&#x0937;&#x094d;&#x200d;&#x0920;</label>
+      <label xml:lang="ja">ホーム</label>
+      <label xml:lang="ne">गृह पृष्‍ठ</label>
       <label xml:lang="ru">Главная</label>
       <label xml:lang="uk">Додому</label>
       <label xml:lang="ar">ترحيب</label>
@@ -51,12 +51,12 @@
       <label xml:lang="en">SiteMap</label>
       <label xml:lang="fr">SiteMap</label>
       <label xml:lang="es">Mapa del Sitio</label>
-      <label xml:lang="de">Seiten&#x00fc;bersicht</label>
+      <label xml:lang="de">Seitenübersicht</label>
       <label xml:lang="it">Mappa del Sito</label>
       <label xml:lang="nl">Sitemap</label>
       <label xml:lang="pt-BR">Mapa do Site</label>
-      <label xml:lang="ja">&#x30b5;&#x30a4;&#x30c8;&#x30de;&#x30c3;&#x30d7;</label>
-      <label xml:lang="ne">&#x0938;&#x093e;&#x0908;&#x091f;&#x092e;&#x094d;&#x092f;&#x093e;&#x092a;</label>
+      <label xml:lang="ja">サイトマップ</label>
+      <label xml:lang="ne">साईटम्याप</label>
       <label xml:lang="ru">SiteMap</label>
       <label xml:lang="ar">خريطة الموقع</label>
       <label xml:lang="ko">사이트맵</label>
@@ -70,13 +70,13 @@
 	    <name>groupnavigation</name>
       <label xml:lang="en">Group Navigation</label>
       <label xml:lang="fr">Group Navigation</label>
-      <label xml:lang="es">Navegaci&#x00f3;n por Grupos</label>
+      <label xml:lang="es">Navegación por Grupos</label>
       <label xml:lang="de">Gruppennavigation</label>
       <label xml:lang="it">Navigazione dei Gruppi</label>
       <label xml:lang="nl">Groep navigatie</label>
       <label xml:lang="pt-BR">Navegação do Grupo</label>
-      <label xml:lang="ja">&#x30b0;&#x30eb;&#x30fc;&#x30d7;&#x30ca;&#x30d3;&#x30b2;&#x30fc;&#x30b7;&#x30e7;&#x30f3;</label>
-      <label xml:lang="ne">&#x0938;&#x092e;&#x0941;&#x0939; &#x0928;&#x094d;&#x092f;&#x093e;&#x092d;&#x093f;&#x0917;&#x0947;&#x0938;&#x0928;</label>
+      <label xml:lang="ja">グループナビゲーション</label>
+      <label xml:lang="ne">समुह न्याभिगेसन</label>
       <label xml:lang="ru">Навигация по группам</label>
       <label xml:lang="uk">Навігація груп</label>
       <label xml:lang="ar">مجموعة الملاحة</label>
@@ -91,13 +91,13 @@
 	    <name>portalnavigation</name>
       <label xml:lang="en">Portal Navigation</label>
       <label xml:lang="fr">Portal Navigation</label>
-      <label xml:lang="es">Navegaci&#x00f3;n por Portales</label>
+      <label xml:lang="es">Navegación por Portales</label>
       <label xml:lang="de">Portalnavigation</label>
       <label xml:lang="it">Navigazione del Portale</label>
       <label xml:lang="nl">Portaal navigatie</label>
       <label xml:lang="pt-BR">Navegação do Portal</label>
-      <label xml:lang="ja">&#x30dd;&#x30fc;&#x30bf;&#x30eb;&#x30ca;&#x30d3;&#x30b2;&#x30fc;&#x30b7;&#x30e7;&#x30f3;</label>
-      <label xml:lang="ne">&#x092a;&#x094b;&#x0930;&#x094d;&#x091f;&#x0932; &#x0928;&#x094d;&#x092f;&#x093e;&#x092d;&#x093f;&#x0917;&#x0947;&#x0938;&#x0928;</label>
+      <label xml:lang="ja">ポータルナビゲーション</label>
+      <label xml:lang="ne">पोर्टल न्याभिगेसन</label>
       <label xml:lang="ru">Навигация по порталу</label>
       <label xml:lang="uk">Навігація порталу</label>
       <label xml:lang="ar">بوابة الملاحة</label>
@@ -116,8 +116,8 @@
       <label xml:lang="it">Registrazione</label>
       <label xml:lang="nl">Registreren</label>
       <label xml:lang="pt-BR">Cadastrar-se</label>
-      <label xml:lang="ja">&#x767b;&#x9332;</label>
-      <label xml:lang="ne">&#x0926;&#x0930;&#x094d;&#x0924;&#x093e;</label>
+      <label xml:lang="ja">登録</label>
+      <label xml:lang="ne">दर्ता</label>
       <label xml:lang="ko">등록</label>
       <label xml:lang="vi">Đăng ký</label>
       <label xml:lang="zh">注册</label>
