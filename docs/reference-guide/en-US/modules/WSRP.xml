@@ -778,8 +778,7 @@
 
             </example>
 
-            <para>Here is an example of a WSRP descriptor with registration data and cache expiring every minute:
-            </para>
+            <para>Here is an example of a WSRP descriptor with registration data and cache expiring every minute:</para>
 
             <example>
                <para>
@@ -840,6 +839,109 @@
                </imageobject>
             </mediaobject>
          </para>
+      </sect2>
+
+      <sect2>
+         <title>Adding remote portlets to pages</title>
+         <para>
+            Since remote portlets can be manipulated just like regular portlets, you can add them to pages just like you
+            would do for a regular portlet. Please refer to the appropriate section of the documentation for how to do
+            so.
+         </para>
+         <para>
+            Of note, though, is that, starting with version 3.2 of GateIn (5.2 of EPP), it is now possible to also add a
+            remote portlet to a
+            <filename>pages.xml</filename>
+            configuration file.
+            This is accomplished using the
+            <literal>&lt;wsrp&gt;</literal>
+            element instead of the
+            <literal>&lt;portlet&gt;</literal>
+            element in your
+            <filename>pages.xml</filename>
+            document. While
+            <literal>&lt;portlet&gt;</literal>
+            references a local portlet using the name of the application in which the portlet is contained and the
+            portlet name itself to identify which portlet to use,
+            <literal>&lt;wsrp&gt;</literal>
+            references a remote portlet using a combination of the consumer identifier for the producer publishing the
+            portlet and the portlet handle identifying the portlet within the context of the producer.
+         </para>
+         <para>
+            The format for such a reference to a remote portlet is a follows: first, the identifier of the
+            consumer that accesses the remote producer publishing the remote portlet, then a separator (currently a
+            period (<literal>.</literal>)) and finally the portlet handle for that
+            portlet, which is a string provided by the producer to identify the portlet.
+         </para>
+         <para>
+            Since there currently is no easy way to determine the correct portlet handle, we recommend that you use the
+            graphical user interface to add remote portlets to pages instead of using
+            <filename>pages.xml</filename>.
+         </para>
+         <note>
+            <para>
+               For remote portlets published by &PRODUCT_NAME;'s WSRP producer, the portlet handles are, at
+               the time of this writing, following the
+               <literal>/&lt;portlet application name&gt;.&lt;portlet name&gt;</literal>
+               format.
+            </para>
+         </note>
+         <sect3>
+            <title>Example</title>
+            <para>
+               In the following example, we define 2 portlets for a page named
+               <literal>Test</literal>
+               in our
+               <filename>pages.xml</filename>
+               configuration. They are actually references to the same portlet, albeit one accessed locally and the
+               other
+               one accessing it via the
+               <literal>selfv2</literal>
+               consumer which consumes &PRODUCT_NAME;'s WSRP producer. You can see that the first one is local (the
+               <code>&lt;portlet-application&gt;</code>
+               with the
+               '<literal>Added locally</literal>'
+               title) and follows the usual declaration. The second portlet (the one with the
+               '<literal>Added from selfv2 consumer</literal>'
+               title) comes from the
+               <literal>selfv2</literal>
+               consumer and uses the
+               <code>&lt;wsrp&gt;</code>
+               element instead of
+               <code>&lt;portlet&gt;</code>
+               element and follows the format for portlets coming from the &PRODUCT_NAME;'s WSRP producer.
+            </para>
+            <example>
+               <para>
+                  <programlisting><![CDATA[
+<page>
+   <name>Test</name>
+
+   ...
+
+   <portlet-application>
+      <portlet>
+         <application-ref>richFacesPortlet</application-ref>
+         <portlet-ref>richFacesPortlet</portlet-ref>
+      </portlet>
+      <title>Added locally</title>
+
+      ...
+
+   </portlet-application>
+
+   <portlet-application>
+      <wsrp>selfv2./richFacesPortlet.richFacesPortlet</wsrp>
+      <title>Added from selfv2 consumer</title>
+
+      ...
+
+   </portlet-application>
+</page>]]></programlisting>
+               </para>
+            </example>
+         </sect3>
+
       </sect2>
    </sect1>
 
