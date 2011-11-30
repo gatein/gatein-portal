@@ -35,9 +35,6 @@ import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.mop.user.UserPortalContext;
-import org.exoplatform.web.url.navigation.NodeURL;
-import org.exoplatform.web.url.navigation.NavigationResource;
-import org.exoplatform.web.url.URLFactoryService;
 import org.exoplatform.portal.url.PortalURLContext;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -50,15 +47,17 @@ import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.web.url.PortalURL;
-import org.exoplatform.web.url.URLFactory;
 import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.web.url.URLFactory;
+import org.exoplatform.web.url.URLFactoryService;
+import org.exoplatform.web.url.navigation.NavigationResource;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.url.ComponentURL;
 import org.gatein.common.http.QueryStringParser;
 import org.w3c.dom.Element;
-
 import java.io.IOException;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -71,7 +70,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -697,4 +695,11 @@ public class PortalRequestContext extends WebuiRequestContext
          return Util.getPortalRequestContext().getLocale();
       }
    };
+
+   public RequestNavigationData getNavigationData()
+   {
+      return new RequestNavigationData(controllerContext.getParameter(RequestNavigationData.REQUEST_SITE_TYPE),
+         controllerContext.getParameter(RequestNavigationData.REQUEST_SITE_NAME),
+         controllerContext.getParameter(RequestNavigationData.REQUEST_PATH));
+   }
 }

@@ -86,7 +86,7 @@ public class UIPageActionListener
                      targetNode = userPortal.resolvePath(navigation, null, nodePath); 
                      if (targetNode != null)
                      {
-                        uiPortalApp.setLastRequestURI(null);
+                        uiPortalApp.setLastRequestNavData(null);
                         pcontext.requestAuthenticationLogin();
                         return;
                      }
