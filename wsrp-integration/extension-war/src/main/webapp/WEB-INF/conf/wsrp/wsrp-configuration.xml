@@ -44,7 +44,8 @@
          <value-param>
             <name>consumersInitDelay</name>
             <description>Time (in seconds) after the start of the WSRP extension, waited before the consumers are
-               started
+               started. This is used to prevent deadlocking with self consumers trying to activate and blocking before
+               the WSDL is made available by JBoss WS.
             </description>
             <value>2</value>
          </value-param>
