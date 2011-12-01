@@ -84,7 +84,6 @@
           <field  name="userURL"><string>ou=users,ou=portal,dc=exoplatform,dc=org</string></field>
           <field  name="profileURL"><string>ou=profiles,ou=portal,dc=exoplatform,dc=org</string></field>
           
-          <field  name="userAuthenticationAttr"><string>mail</string></field>
           <field  name="userUsernameAttr"><string>sAMAccountName</string></field>
           <field  name="userPassword"><string>unicodePwd</string></field> 
           <!--unicodePwd-->
