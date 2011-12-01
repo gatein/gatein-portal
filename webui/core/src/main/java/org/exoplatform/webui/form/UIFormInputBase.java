@@ -269,7 +269,7 @@ abstract public class UIFormInputBase<T> extends UIContainer implements UIFormIn
 
    public boolean isValid()
    {
-      return (isRendered() && !isReadOnly() && !isDisabled());
+      return (isRendered() && !isDisabled());
    }
 
    public <E extends Validator> UIFormInputBase<T> addValidator(Class<E> clazz, Object... params) throws Exception

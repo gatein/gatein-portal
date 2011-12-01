@@ -42,13 +42,8 @@ public class UIFormLifecycle extends Lifecycle<UIForm>
 
    public void processDecode(UIForm uicomponent, WebuiRequestContext context) throws Exception
    {
-      //    HttpServletRequest httpRequest = (HttpServletRequest)context.getRequest() ;
       uicomponent.setSubmitAction(null);
-      //    if(ServletFileUpload.isMultipartContent(new ServletRequestContext(httpRequest))) {
-      //      processMultipartRequest(uiForm, context) ;
-      //    } else {
       processNormalRequest(uicomponent, context);
-      //    }
       List<UIComponent> children = uicomponent.getChildren();
       for (UIComponent uiChild : children)
       {
@@ -101,20 +96,6 @@ public class UIFormLifecycle extends Lifecycle<UIForm>
       List<UIComponent> children = uicomponent.getChildren();
       validateChildren(children, uiApp, context);
 
-      /*List<Validator> validators = uiForm.getValidators() ;
-      if(validators != null) {
-        try {
-          for(Validator validator : validators) validator.validate(uiForm) ;
-        } catch (MessageException ex) {
-          uiApp.addMessage(ex.getDetailMessage()) ;
-          context.setProcessRender(true) ;
-        } catch(Exception ex) {
-          //TODO:  This is a  critical exception and should be handle  in the UIApplication
-          uiApp.addMessage(new ApplicationMessage(ex.toString(), null)) ;        
-          context.setProcessRender(true) ;
-        }
-      }*/
-
       if (context.getProcessRender())
       {
          return;
@@ -141,33 +122,6 @@ public class UIFormLifecycle extends Lifecycle<UIForm>
          input.decode(inputValue, context);
       }
    }
-
-   /*private void processMultipartRequest(UIForm uiForm, RequestContext context) throws Exception {
-     HttpServletRequest httpRequest = (HttpServletRequest)context.getRequest() ;
-     ServletFileUpload upload = new ServletFileUpload(new DiskFileItemFactory());
-     List items = upload.parseRequest(httpRequest);
-     Iterator iter = items.iterator();
-     while (iter.hasNext()) {
-       FileItem item = (FileItem) iter.next();
-       String fieldName = item.getFieldName();      
-       if (item.isFormField()) {  //Normal  inputs
-         String inputValue = item.getString() ;
-         if (UIForm.ACTION.equals(fieldName)) {
-           uiForm.setSubmitAction(inputValue) ;
-           continue;
-         } else if(UIFormTabPane.RENDER_TAB.equals(fieldName)){
-           ((UIFormTabPane)uiForm).setRenderTabId(inputValue);
-           continue;
-         }
-         UIFormInputBase input =  uiForm.findComponentById(fieldName) ;
-         if(input != null) input.decode(inputValue, context) ;
-         continue;
-       }
-       UIFormInputBase input =  uiForm.findComponentById(fieldName) ;  // File input
-       if(input != null) input.decode(item, context) ;
-     }
-     
-   }*/
 
    @SuppressWarnings("unchecked")
    private void validateChildren(List<UIComponent> children, UIApplication uiApp, WebuiRequestContext context)
