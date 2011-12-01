@@ -210,11 +210,18 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
          if (configuration.isUseJTA())
          {
             UserTransaction tx = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
-            tx.commit();
+            if(tx.getStatus() == Status.STATUS_ACTIVE)
+            {
+               tx.commit();
+            }
+            
          }            
          else
          {
-            idmService_.getIdentitySession().getTransaction().commit();
+            if(idmService_.getIdentitySession().getTransaction().isActive())
+            {
+               idmService_.getIdentitySession().getTransaction().commit();
+            }
          }
       }
       catch (Exception e)
