@@ -275,7 +275,12 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
          // add suffix in case we have several windows with the same name in the page
          if (childrenWindows.containsKey(windowName))
          {
-            if (windowName.endsWith("|"))
+            //Add this if check ad portlet window 's title could be null
+            if(windowName == null)
+            {
+               windowName = "null" + uuid;
+            }
+            else if (windowName.endsWith("|"))
             {
                windowName += "|";
             }
