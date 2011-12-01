@@ -272,8 +272,9 @@ public class UIGadget extends UIComponent
                for(int i = 0; i < count; i++)
                {
                   JSONObject o = (JSONObject) userPrefs.get(names.get(i).toString());
-                  if(!(o.get(METADATA_USERPREFS_TYPE).equals(METADATA_USERPREFS_TYPE_HIDDEN) || 
-                        o.get(METADATA_USERPREFS_TYPE).equals(METADATA_USERPREFS_TYPE_LIST)))
+                  String prefType = o.optString(METADATA_USERPREFS_TYPE);
+                  if(!(METADATA_USERPREFS_TYPE_HIDDEN.equalsIgnoreCase(prefType) || 
+                           METADATA_USERPREFS_TYPE_LIST.equalsIgnoreCase(prefType)))
                      return true;
                }
                return false;
