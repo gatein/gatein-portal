@@ -47,13 +47,7 @@
 		%>
 			<link id="${portletSkin.id}" rel="stylesheet" type="text/css" href= "$url" />
 		<%}%>
-		 <script type="text/javascript">
-		 // This variable must be used only to initialize other variables otherwise
-		 // please use eXo.env.portal.context or eXo.env.portal.context instead
-		 // Those 2 last variables cannot be used to initialize variables because 
-		 // we cannot be sure that they will be initialized before initializing your script
-			var currentContext = '<%=docBase%>' ;
-		</script>	 
+
 		<%if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) {
 				for(path in scriptsPaths) { %>
 					<script type="text/javascript" src="<%=path%>"></script>
