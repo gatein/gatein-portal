@@ -358,7 +358,7 @@ public class UIPortalForm extends UIFormTabPane
          UIMaskWorkspace uiMaskWorkspace = uiForm.getParent();
          uiMaskWorkspace.setUIComponent(null);
          WebuiRequestContext rContext = event.getRequestContext();
-         if (!uiForm.getId().equals("CreatePortal")) 
+         if (!uiForm.getId().equals("CreatePortal") && uiPortalApp.getModeState() != UIPortalApplication.NORMAL_MODE) 
          {
             rContext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
          }         

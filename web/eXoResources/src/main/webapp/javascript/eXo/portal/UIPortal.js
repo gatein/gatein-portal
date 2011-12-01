@@ -373,8 +373,12 @@ UIPortal.prototype.changeComposerSaveButton = function() {
 	if(eXo.portal.hasEditted == false) {
 		var uiWorkingWS = document.getElementById("UIWorkingWorkspace");
 		var portalComposer = eXo.core.DOMUtil.findFirstDescendantByClass(uiWorkingWS, "div", "UIPortalComposer");
+		if (!portalComposer) return;
+		
 		var saveButton = eXo.core.DOMUtil.findFirstDescendantByClass(portalComposer, "a", "SaveButton");
-		if(saveButton) eXo.core.DOMUtil.replaceClass(saveButton, "SaveButton", "EdittedSaveButton");
+		if (saveButton) {
+			eXo.core.DOMUtil.replaceClass(saveButton, "SaveButton", "EdittedSaveButton");			
+		}
 		ajaxAsyncGetRequest(eXo.env.server.createPortalURL(portalComposer.id, "ChangeEdittedState", true));
   }
 };
