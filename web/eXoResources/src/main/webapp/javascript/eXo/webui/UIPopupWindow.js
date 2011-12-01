@@ -179,23 +179,30 @@ UIPopupWindow.prototype.closePopupEvt = function(evt) {
  * sets the onmousemove and onmouseup events on the portal application (not the popup)
  * associates these events with UIPopupWindow.resize and UIPopupWindow.endResizeEvt respectively
  */
-UIPopupWindow.prototype.startResizeEvt = function(evt) {
-//	var portalApp = document.getElementById("UIPortalApplication") ;
-	eXo.webui.UIPopupWindow.popupId = eXo.core.DOMUtil.findAncestorByClass(this, "UIPopupWindow").id ;
+UIPopupWindow.prototype.startResizeEvt = function(evt) {		
+	//disable select text
+	eXo.webui.UIPopupWindow.backupEvent = null;
+	if (navigator.userAgent.indexOf("MSIE") >= 0) {
+		//Need to check if we have remove resizedPopup after last mouseUp
+		//IE bug: not call endResizeEvt when mouse moved out of page
+		if (!eXo.webui.UIPopupWindow.resizedPopup && document.onselectstart) {
+			eXo.webui.UIPopupWindow.backupEvent = document.onselectstart;
+		}
+		document.onselectstart = function() {return false};		
+	} else {		
+		if (document.onmousedown) {
+			eXo.webui.UIPopupWindow.backupEvent = document.onmousedown;
+		}
+		document.onmousedown = function() {return false};		
+	}
+	
+	var targetPopup = eXo.core.DOMUtil.findAncestorByClass(this, "UIPopupWindow");
+	eXo.webui.UIPopupWindow.resizedPopup = targetPopup;
+	eXo.webui.UIPopupWindow.backupPointerY = eXo.core.Browser.findMouseRelativeY(targetPopup, evt) ;			
+	
 	document.onmousemove = eXo.webui.UIPopupWindow.resize;
 	document.onmouseup = eXo.webui.UIPopupWindow.endResizeEvt ;
 }
-
-/**
- * 1. Popup window 's bottom 's height is required to set correctly 'Resize' button during resize process
- * 
- * 2. For unknow reasons, property 'offsetHeight' of the bottom div is not accessible during resize process
- * It's likely that the bottom 'div' is locked during that period of time.
- * 
- * 3. As bottom height is unchanged across popup window (as long as it has bottom), we store its height in a
- * global variable
- */
-var POPUP_WINDOW_BOTTOM_HEIGHT=50;
 
 /**
  * Function called when the window is being resized
@@ -204,23 +211,23 @@ var POPUP_WINDOW_BOTTOM_HEIGHT=50;
  *  . sets these values to the window
  */
 UIPopupWindow.prototype.resize = function(evt) {
-	var targetPopup = document.getElementById(eXo.webui.UIPopupWindow.popupId) ;
+	var targetPopup = eXo.webui.UIPopupWindow.resizedPopup ;
 	var content = eXo.core.DOMUtil.findFirstDescendantByClass(targetPopup, "div", "PopupContent") ;
 	var isRTL = eXo.core.I18n.isRT();
 	var pointerX = eXo.core.Browser.findMouseRelativeX(targetPopup, evt, isRTL) ;
 	var pointerY = eXo.core.Browser.findMouseRelativeY(targetPopup, evt) ;
-	var delta = eXo.core.Browser.findPosYInContainer(content,targetPopup) +
-							content.style.borderWidth + content.style.padding + content.style.margin;
-	//var bottomLevel=eXo.core.DOMUtil.findDescendantsByClass(targetPopup,"div","BCPortalComposer");
-	//TODO: Check if the bottom is not null before assign new value to 'content.style.height'
-	if((pointerY-delta) > 0) content.style.height = (pointerY-delta-POPUP_WINDOW_BOTTOM_HEIGHT)+"px" ;
+	
+	var delta = pointerY - eXo.webui.UIPopupWindow.backupPointerY;	
+	if ((content.offsetHeight + delta) > 0) {
+		eXo.webui.UIPopupWindow.backupPointerY = pointerY;		
+		content.style.height = content.offsetHeight + delta +"px" ;	
+	}
 	targetPopup.style.height = "auto";
 	
 	if(isRTL){
-	 pointerX = (-1) * pointerX
-	}
-	
-	if(pointerX > 200) targetPopup.style.width = (pointerX+5) + "px" ;
+	 pointerX = (-1) * pointerX;
+	}	
+	if(pointerX > 200) targetPopup.style.width = (pointerX+10) + "px" ;
 } ;
 
 /**
@@ -229,9 +236,18 @@ UIPopupWindow.prototype.resize = function(evt) {
  * inits the scroll managers active on this page (in case there is one in the popup)
  */
 UIPopupWindow.prototype.endResizeEvt = function(evt) {
-	delete eXo.webui.UIPopupWindow.popupId ;
+	eXo.webui.UIPopupWindow.resizedPopup = null;
 	this.onmousemove = null;
 	this.onmouseup = null;
+	
+	//enable select text
+	if (navigator.userAgent.indexOf("MSIE") >= 0) {
+		document.onselectstart = eXo.webui.UIPopupWindow.backupEvent;
+	} else {		
+		document.onmousedown = eXo.webui.UIPopupWindow.backupEvent;
+	}
+	eXo.webui.UIPopupWindow.backupEvent = null;	
+	
 	// Added by Philippe
 	// inits all the scroll managers, in case there is one in the popup that needs to be recalculated
 	eXo.portal.UIPortalControl.initAllManagers();
