@@ -47,6 +47,7 @@ import org.exoplatform.webui.organization.account.UIUserSelector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -191,7 +192,7 @@ public class UIGroupMembershipForm extends UIForm
          OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class);
          MembershipHandler memberShipHandler = service.getMembershipHandler();
          UIApplication uiApp = event.getRequestContext().getUIApplication();
-         List<String> userNames = Arrays.asList(uiForm.getUserName().trim().split("\\s*,\\s*"));
+         
          Group group = userInGroup.getSelectedGroup();
          MembershipType membershipType = service.getMembershipTypeHandler().findMembershipType(uiForm.getMembership());
          if (group == null)
@@ -201,19 +202,13 @@ public class UIGroupMembershipForm extends UIForm
          }
 
          // add new
-         for (int i0 = 0; i0 < userNames.size() - 1; i0++)
+         List<String> userNames = Arrays.asList(uiForm.getUserName().trim().split("\\s*,\\s*"));
+         if (new HashSet<String>(userNames).size() != userNames.size())
          {
-            String user0 = userNames.get(i0);
-            if (user0 == null || user0.trim().length() == 0)
-               continue;
-            for (int i1 = i0 + 1; i1 < userNames.size(); i1++)
-               if (user0.equals(userNames.get(i1)))
-               {
-                  uiApp.addMessage(new ApplicationMessage("UIGroupMembershipForm.msg.duplicate-user",
-                     new String[]{user0}));
-                  return;
-               }
+            uiApp.addMessage(new ApplicationMessage("UIGroupMembershipForm.msg.duplicate-user", null));
+            return;
          }
+         
          // check user
          boolean check = false;
          String listNotExist = null;
