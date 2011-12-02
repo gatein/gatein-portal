@@ -19,64 +19,161 @@
 
 package org.exoplatform.application.gadget;
 
-import org.exoplatform.component.test.AbstractGateInTest;
+import org.chromattic.ext.ntdef.NTFolder;
+import org.chromattic.ext.ntdef.Resource;
+import org.exoplatform.application.AbstractApplicationRegistryTest;
+import org.exoplatform.application.gadget.impl.GadgetDefinition;
+import org.exoplatform.application.gadget.impl.GadgetRegistryServiceImpl;
+import org.exoplatform.application.gadget.impl.LocalGadgetData;
+import org.exoplatform.application.gadget.impl.RemoteGadgetData;
+import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.configuration.ConfigurationManager;
+import org.gatein.common.io.IOTools;
+import org.gatein.common.net.URLTools;
 
-import java.util.List;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 
 /**
- * todo julien : to fix
- * 
  * Created by The eXo Platform SAS Author : Pham Thanh Tung
  * thanhtungty@gmail.com Jul 11, 2008
  */
-public abstract class TestGadgetRegistryService extends AbstractGateInTest
+public class TestGadgetRegistryService extends AbstractApplicationRegistryTest
 {
 
-   private GadgetRegistryService service_;
+   private GadgetRegistryServiceImpl service_;
+
+   private ChromatticManager chromatticManager;
+
+   private ConfigurationManager configurationManager;
 
    public void setUp() throws Exception
    {
       PortalContainer container = PortalContainer.getInstance();
-      service_ = (GadgetRegistryService)container.getComponentInstanceOfType(GadgetRegistryService.class);
+      service_ = (GadgetRegistryServiceImpl) container.getComponentInstanceOfType(GadgetRegistryService.class);
+      chromatticManager = (ChromatticManager) container.getComponentInstanceOfType(ChromatticManager.class);
+      configurationManager = (ConfigurationManager) container.getComponentInstanceOfType(ConfigurationManager.class);
+      begin();
    }
 
-   public void testAddGadget() throws Exception
+   @Override
+   protected void tearDown() throws Exception
    {
-      Gadget g1 = new Gadget();
-      g1.setName("weather");
-      g1.setUrl("http://www.labpixies.com/campaigns/weather/weather.xml");
-      Gadget g2 = new Gadget();
-      g2.setName("map");
-      g2.setUrl("http://www.labpixies.com/campaigns/maps/maps.xml");
-      service_.saveGadget(g1);
-      service_.saveGadget(g2);
+      chromatticManager.getSynchronization().setSaveOnClose(false);
+      end();
    }
 
-   public void testGetAllGadgets() throws Exception
+   public void testLocalGadget() throws Exception
    {
-      assertEquals(2, service_.getAllGadgets().size());
+      String gadgetName = "local_test";
+      TestGadgetImporter importer = new TestGadgetImporter(configurationManager, gadgetName, "org/exoplatform/application/gadgets/weather.xml", true);
+      importer.doImport();
+      assertEquals(1, service_.getAllGadgets().size());
+      assertEquals(gadgetName, service_.getGadget(gadgetName).getName());
+      service_.removeGadget(gadgetName);
+      assertNull(service_.getGadget(gadgetName));
    }
    
-   public void testGetGadget() throws Exception
+   public void testRemoteGadget() throws Exception
    {
-      Gadget g3 = service_.getGadget("weather");
-      assertNotNull(g3);
-      assertEquals("weather", g3.getName());
-      assertEquals("http://www.labpixies.com/campaigns/weather/weather.xml", g3.getUrl());
-
-      Gadget g4 = service_.getGadget("map");
-      assertNotNull(g4);
-      assertEquals("map", g4.getName());
-      assertEquals("http://www.labpixies.com/campaigns/maps/maps.xml", g4.getUrl());
+      String gadgetName = "remote_test";
+      TestGadgetImporter importer = new TestGadgetImporter(configurationManager, gadgetName, "http://www.labpixies.com/campaigns/weather/weather.xml", false);
+      importer.doImport();
+      assertEquals(1, service_.getAllGadgets().size());
+      assertEquals(gadgetName, service_.getGadget(gadgetName).getName());
+      service_.removeGadget(gadgetName);
+      assertNull(service_.getGadget(gadgetName));
    }
 
-   public void testRemoveGadget() throws Exception
+   class TestGadgetImporter extends GadgetImporter
    {
-      List<Gadget> gadgets = service_.getAllGadgets();
-      for (Gadget ele : gadgets)
+      private boolean local_;
+
+      private ConfigurationManager configurationManager;
+
+      protected TestGadgetImporter(ConfigurationManager configurationManager, String gadgetName, String gadgetURI,
+            boolean local)
       {
-         service_.removeGadget(ele.getName());
+         super(gadgetName, gadgetURI);
+         this.local_ = local;
+         this.configurationManager = configurationManager;
+      }
+
+      @Override
+      protected byte[] getGadgetBytes(String gadgetURI) throws IOException
+      {
+         if (local_)
+         {
+            String filePath = "classpath:/" + gadgetURI;
+            InputStream in;
+            try
+            {
+               in = configurationManager.getInputStream(filePath);
+               if (in != null)
+               {
+                  return IOTools.getBytes(in);
+               }
+            }
+            catch (Exception e)
+            {
+               e.printStackTrace();
+            }
+         }
+         else if (!local_)
+         {
+            URL url;
+            url = new URL(gadgetURI);
+            return URLTools.getContent(url, 5000, 5000);
+         }
+
+         throw new IllegalArgumentException("Gadget URI is not correct");
+      }
+
+      @Override
+      protected String getGadgetURL() throws Exception
+      {
+         return getGadgetURI();
+      }
+
+      @Override
+      protected void process(String gadgetURI, GadgetDefinition def) throws Exception
+      {
+         def.setLocal(local_);
+         if (local_)
+         {
+            byte[] content = getGadgetBytes(gadgetURI);
+            if (content != null)
+            {
+               LocalGadgetData data = (LocalGadgetData) def.getData();
+               data.setFileName(gadgetURI);
+               NTFolder folder = data.getResources();
+               String encoding = EncodingDetector.detect(new ByteArrayInputStream(content));
+               folder.createFile(getName(gadgetURI), new Resource(LocalGadgetData.GADGET_MIME_TYPE, encoding, content));
+            }
+         }
+         else
+         {
+            RemoteGadgetData data = (RemoteGadgetData) def.getData();
+            data.setURL(gadgetURI);
+         }
+      }
+
+      private String getName(String resourcePath) throws IOException
+      {
+         // Get index of last '/'
+         int index = resourcePath.lastIndexOf('/');
+
+         // Return name
+         return resourcePath.substring(index + 1);
+      }
+
+      public void doImport() throws Exception
+      {
+         GadgetDefinition def = service_.getRegistry().addGadget(getGadgetName());
+         doImport(def);
       }
    }
 }

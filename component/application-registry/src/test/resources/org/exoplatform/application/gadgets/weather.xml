@@ -1,0 +1,5767 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <!--
+    Weather Gadget Design & Code: LabPixies All subsequent code and resources
+    used are proprietary of LabPixies unless directly stated otherwise.
+    Copyright (C) 2006 LabPixies. www.labpixies.com This work is licensed under
+    the Creative Commons Attribution-NonCommercial-NoDerivs 2.5 License. To view
+    a copy of this license, visit
+    http://creativecommons.org/licenses/by-nc-nd/2.5/ or send a letter to
+    Creative Commons, 543 Howard Street, 5th Floor, San Francisco, California,
+    94105, USA.
+  -->
+
+  <ModulePrefs height="230" author="LabPixies" author_email="labpixie.gadgets+weather+201101101@gmail.com" description="__MSG_description__" thumbnail="http://www.labpixies.com/campaigns/weather/images/thumbnail.jpg" screenshot="http://www.labpixies.com/campaigns/weather/images/screenshot.png" title="__MSG_gTitle__" title_url="http://www.labpixies.com">
+
+    <Locale messages="http://www.labpixies.com/campaigns/weather/i20/all_all.xml"/>
+
+    <Locale lang="en" country="UK" messages="http://www.labpixies.com/campaigns/weather/i20/en_gb_all.xml"/>
+    <Locale lang="en" country="AU" messages="http://www.labpixies.com/campaigns/weather/i20/en_au_all.xml"/>
+
+    <Locale lang="de" messages="http://www.labpixies.com/campaigns/weather/i20/de_all.xml"/>
+    <Locale lang="it" messages="http://www.labpixies.com/campaigns/weather/i20/it_all.xml"/>
+    <Locale lang="fr" messages="http://www.labpixies.com/campaigns/weather/i20/fr_all.xml"/>
+    <Locale lang="es" messages="http://www.labpixies.com/campaigns/weather/i20/es_all.xml"/>
+    <Locale lang="pl" messages="http://www.labpixies.com/campaigns/weather/i20/pl_all.xml"/>
+    <Locale lang="pt-PT" messages="http://www.labpixies.com/campaigns/weather/i20/pt_pt_all.xml"/>
+    <Locale lang="pt-BR" messages="http://www.labpixies.com/campaigns/weather/i20/pt_br_all.xml"/>
+    <Locale lang="nl" messages="http://www.labpixies.com/campaigns/weather/i20/nl_all.xml"/>
+    <Locale lang="ja" messages="http://www.labpixies.com/campaigns/weather/i20/ja_all.xml"/>
+    <Locale lang="zh-CN" messages="http://www.labpixies.com/campaigns/weather/i20/zh_cn_all.xml"/>
+    <Locale lang="ru" messages="http://www.labpixies.com/campaigns/weather/i20/ru_all.xml"/>
+    <Locale lang="bg" messages="http://www.labpixies.com/campaigns/weather/i20/bg_all.xml"/>
+    <Locale lang="ca" messages="http://www.labpixies.com/campaigns/weather/i20/ca_all.xml"/>
+    <Locale lang="zh-TW" messages="http://www.labpixies.com/campaigns/weather/i20/zh_tw_all.xml"/>
+    <Locale lang="hr" messages="http://www.labpixies.com/campaigns/weather/i20/hr_all.xml"/>
+    <Locale lang="cs" messages="http://www.labpixies.com/campaigns/weather/i20/cs_all.xml"/>
+    <Locale lang="da" messages="http://www.labpixies.com/campaigns/weather/i20/da_all.xml"/>
+    <Locale lang="fi" messages="http://www.labpixies.com/campaigns/weather/i20/fi_all.xml"/>
+    <Locale lang="el" messages="http://www.labpixies.com/campaigns/weather/i20/el_all.xml"/>
+    <Locale lang="iw" messages="http://www.labpixies.com/campaigns/weather/i20/iw_all.xml" language_direction="rtl"/>
+    <Locale lang="hi" messages="http://www.labpixies.com/campaigns/weather/i20/hi_all.xml"/>
+    <Locale lang="hu" messages="http://www.labpixies.com/campaigns/weather/i20/hu_all.xml"/>
+    <Locale lang="ko" messages="http://www.labpixies.com/campaigns/weather/i20/ko_all.xml"/>
+    <Locale lang="lv" messages="http://www.labpixies.com/campaigns/weather/i20/lv_all.xml"/>
+    <Locale lang="lt" messages="http://www.labpixies.com/campaigns/weather/i20/lt_all.xml"/>
+    <Locale lang="ms" messages="http://www.labpixies.com/campaigns/weather/i20/ms_all.xml"/>
+    <Locale lang="no" messages="http://www.labpixies.com/campaigns/weather/i20/no_all.xml"/>
+    <Locale lang="ro" messages="http://www.labpixies.com/campaigns/weather/i20/ro_all.xml"/>
+    <Locale lang="sr" messages="http://www.labpixies.com/campaigns/weather/i20/sr_all.xml"/>
+    <Locale lang="sk" messages="http://www.labpixies.com/campaigns/weather/i20/sk_all.xml"/>
+    <Locale lang="sl" messages="http://www.labpixies.com/campaigns/weather/i20/sl_all.xml"/>
+    <Locale lang="sv" messages="http://www.labpixies.com/campaigns/weather/i20/sv_all.xml"/>
+    <Locale lang="tl" messages="http://www.labpixies.com/campaigns/weather/i20/tl_all.xml"/>
+    <Locale lang="th" messages="http://www.labpixies.com/campaigns/weather/i20/th_all.xml"/>
+    <Locale lang="tr" messages="http://www.labpixies.com/campaigns/weather/i20/tr_all.xml"/>
+    <Locale lang="uk" messages="http://www.labpixies.com/campaigns/weather/i20/uk_all.xml"/>
+    <Locale lang="vi" messages="http://www.labpixies.com/campaigns/weather/i20/vi_all.xml"/>
+    <Require feature="dynamic-height"/>
+    <Require feature="setprefs"/>
+    <Require feature="views"/>
+  </ModulePrefs>
+
+  <UserPref name="degree_unit_type" datatype="hidden" default_value="0"/>
+  <UserPref name="first_load" datatype="hidden" default_value="1"/>
+  <UserPref name="locations" datatype="hidden" default_value="__MSG_dflt_location__"/>
+  <UserPref name="zip_code" datatype="hidden" default_value="0"/>
+  <UserPref name="city_code" datatype="hidden" default_value="0"/>
+  <UserPref name="disable_os" datatype="hidden" default_value="0"/>
+  <UserPref name="tabs" datatype="hidden" default_value="{&quot;news&quot;:1,&quot;l0&quot;:1}"/>
+
+  <Content type="html" view="home">
+<![CDATA[
+<title>Weather</title>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+
+<style type="text/css">
+body, div, td, span, table, a
+{
+  font-family: Arial;
+  direction:ltr;
+}
+
+#lp_wr_pr_main
+{
+  width:300px;
+}
+
+#lp_wr_pr_logo
+{
+  height:28px;
+  width:100%;
+  background-position: 0px 0px;
+  margin-bottom:1px;
+}
+
+#lp_wr_pr_logo_link
+{
+  float:left;
+  height:28px;
+  width:100px;
+  cursor:pointer;
+}
+
+#lp_wr_pr_logo_icon
+{
+  float:right;
+  background-position:0px -45px;
+  overflow:hidden;
+  margin-top:7px;
+  margin-right:5px;
+  cursor:pointer;
+  font-size:11px;
+  color:#D3DBF3;
+}
+
+.lp_wr_pr_loaction_title_top
+{
+  width:100%;
+  height:5px;
+  overflow:hidden;
+  background-position:0px -35px;
+  margin-top:10px;
+}
+
+.lp_wr_pr_loaction_logo_top
+{
+  width:100%;
+  height:5px;
+  overflow:hidden;
+  background-position:0px -35px;
+}
+
+.lp_wr_pr_location_shortmp_old
+{
+  font-size:12px;
+  color:#CAE0F4;
+  float:left;
+  margin-left:5px;
+}
+
+.lp_wr_pr_location_shortmp
+{
+  font-size:12px;
+  color:#CAE0F4;
+  float:left;
+  margin-left:5px;
+}
+
+.lp_wr_pr_loaction_gadget_bottom
+{
+  width:100%;
+  height:5px;
+  overflow:hidden;
+  background-position:0px -30px;
+}
+
+.lp_wr_pr_temp_main
+{
+  float:left;
+  margin-left:4px;
+  margin-top:10px;
+  height: 35px;
+}
+
+.lp_wr_pr_temp_hold
+{
+  float:left;
+  cursor:pointer;
+}
+
+.lp_wr_pr_temp
+{
+  height:24px;
+  line-height:24px;
+  font-size:24px;
+  font-weight:bold;
+  color:#FF6C00;
+}
+
+.lp_wr_pr_tempmore
+{
+  font-size:10px;
+  font-weight:bold;
+  color:#3354A6;
+  height:11px;
+  padding-left:3px;
+}
+
+.lp_wr_pr_term
+{
+  float:left;
+  width:15px;
+  height:35px;
+  overflow:hidden;
+  background-position: 0px -74px;
+}
+
+.lp_wr_pr_forecast
+{
+  text-align:center;
+}
+
+.lp_wr_pr_forecast_title
+{
+  font-size:10px;
+  font-weight:bold;
+  color:#163B99;
+  text-align:center;
+  height:10px;
+  line-height:10px;
+  margin-bottom:1px;
+}
+
+.lp_wr_pr_forecast_icon
+{
+  width: 53px;
+  height: 45px;
+  margin:auto;
+  background-position: 0px -135px;
+  cursor:pointer;
+}
+
+.lp_wr_pr_forecast_icon_img
+{
+  width: 50px;
+  height: 42px;
+}
+
+.lp_wr_pr_forecast_temp
+{
+  text-align:center;
+  line-height:12px;
+  height:12px;
+}
+
+.lp_wr_pr_forecast_high
+{
+  font-size:10px;
+  color:#BC5A02;
+  line-height:12px;
+  height:12px;
+  margin:0;
+  padding:0;
+}
+
+.lp_wr_pr_forecast_low
+{
+  font-size:10px;
+  color:#163B99;
+  line-height:12px;
+  height:12px;
+  margin:0;
+  padding:0;
+}
+
+.lp_wr_pr_forecast_sep
+{
+
+  font-size:10px;
+  color:#163B99;
+  line-height:12px;
+  height:12px;
+  margin:0;
+  padding:0;
+  /*
+  width:1px;
+  height:11px;
+  background-position: -57px -40px;
+  */
+}
+
+.lp_wr_pr_location_title
+{
+  width:100%;
+  height:23px;
+  line-height:23px;
+}
+
+.lp_wr_pr_location_expand
+{
+  float:left;
+  margin: 5px 3px 0px 5px;
+  cursor:pointer;
+  width:13px;
+  height:13px;
+  overflow:hidden;
+}
+
+.lp_wr_pr_location_expand_location
+{
+
+  background-position: 0px -61px;
+}
+
+.lp_wr_pr_location_expand_news
+{
+  background-position: -57px -61px;
+}
+
+
+#lp_wr_pr_location_data_news_holder
+{
+  margin-bottom:3px;
+}
+
+.lp_wr_pr_location_name
+{
+  float:left;
+  font-size:12px;
+  font-weight:bold;
+    color:#FFFFFF;
+  cursor:pointer;
+}
+
+.lp_wr_pr_location_name_text
+{
+  height:23px;
+  overflow:hidden;
+  width:180px;
+  text-align:left;
+}
+
+.lp_wr_pr_location_link
+{
+  float:right;
+  font-size:11px;
+    color:#FFF200 ;
+  margin-right:7px;
+  cursor:pointer;
+}
+
+.lp_wr_pr_location_data
+{
+  clear:both;
+  margin-top:8px;
+}
+
+.lp_wr_pr_term_val
+{
+  width:5px;
+  height:22px;
+  background-position: -52px -62px;
+  margin-left:5px;
+  margin-top:3px;
+}
+
+.lp_wr_pr_temp_btns
+{
+  height:13px;
+  margin-top:10px;
+  oveflow:hidden;
+  float:left;
+  margin-left:6px;
+}
+
+.lp_wr_pr_temp_btn
+{
+  float:left;
+  width:16px;
+  height:13px;
+  overflow:hidden;
+  cursor:pointer;
+}
+
+#lp_wr_pr_details_hover
+{
+  display:none;
+  position:absolute;
+  width:130px;
+  z-index:1000;
+}
+
+#lp_wr_pr_details_hover_text
+{
+  border-left:1px solid #1E3FB5;
+  border-right:1px solid #1E3FB5;
+  border-top:1px solid #1E3FB5;
+  background-color:#CAE0F4;
+  font-size:12px;
+  color:#000000;
+  text-align:left;
+  padding:3px;
+}
+
+.lp_wr_pr_details_hover_bottom
+{
+  float:left;
+  border-top:1px solid #1E3FB5;
+}
+
+#lp_wr_pr_details_hover_middle
+{
+  float:left;
+  width:13px;
+  height:8px;
+  background-position:0px -180px;
+  overflow:hidden;
+}
+
+.lp_wr_pr_news_bullet
+{
+  float:left;
+  width:4px;
+  height:4px;
+  overflow:hidden;
+  background-position:-16px -189px;
+  margin:5px 5px 0px 7px;
+}
+
+.lp_wr_pr_news_linkdiv
+{
+  float:left;
+  margin-bottom:3px;
+  margin-right:10px;
+}
+
+.lp_wr_pr_news_link
+{
+  font-size:11px;
+  line-height:14px;
+  color:#163B99;
+  text-decoration:none;
+}
+
+.lp_wr_pr_news_link:hover
+{
+  text-decoration:underline;
+}
+
+.lp_wr_pr_news_link:visited
+{
+  color:#163B99;
+}
+
+.lp_wr_pr_loaction_gadget_bottom_left
+{
+  width:3px;
+  height:5px;
+  background-position: 0px -40px;
+}
+
+.lp_wr_pr_loaction_gadget_bottom_right
+{
+  width:5px;
+  height:5px;
+  background-position: -3px -40px;
+}
+
+.lp_wr_pr_space
+{
+  margin-bottom:1px;
+}
+
+.lp_wr_pr_location_data_waiting
+{
+  width:100%;
+  height:90px;
+  text-align:center;
+}
+
+.lp_wr_pr_location_data_unvailable
+{
+  color:#898989;
+  font-size:12px;
+  width:100%;
+  padding-top:37px;
+  text-align:center;
+}
+
+.lp_wr_pr_location_data_waiting_img
+{
+  margin-top:33px;
+  width:24px;
+  height:24px;
+}
+
+.lp_wr_pr_location_data_waiting_holder
+{
+  width:24px;
+  height:24px;
+  margin: 0px auto 0px auto;
+}
+
+#lp_wr_pr_alerts
+{
+  width:100%;
+  text-align:center;
+}
+
+.lp_wr_pr_alert
+{
+  font-size:11px;
+  color:#C11919;
+  direction: __BIDI_DIR__;
+}
+
+.lp_wr_pr_alert a
+{
+  font-size:11px;
+  color:#C11919;
+  text-decoration:underline;
+}
+
+.lp_wr_pr_alert a:visited
+{
+  font-size:11px;
+  color:#C11919;
+  text-decoration:underline;
+}
+</style>
+
+<script type="text/javascript">
+var _gadgetID = 49;
+var $lp = jQuery.noConflict();
+var IMAGES_BASE="http://cdn.labpixies.com/campaigns/weather/images/";
+
+var g_partner_id = "BFB7BE81-EF74-4b7b-A9EF-A82D059992EF";
+var g_zcode  = "z6070";
+var g_link_str = "http://www.weatherbug.com/?zcode="+g_zcode;
+var degree = 0;
+
+//var prefs = new _IG_Prefs();
+var prefs = null;
+var locations = {};
+var tabs = {};
+var load_state = [];
+
+var SECT_LIVE = 0;
+var SECT_FORECAST = 1;
+var SECT_RADAR = 2;
+var SECT_CAMERA = 3;
+var SECT_NEWS = 4;
+var SECT_VIDEO = 5;
+var SECT_ALERT = 6;
+var SECT_ALL = 7;
+
+var NO_TEMP = '(!)';
+var NO_TEMP_VAL = '---';
+
+var is_loading = true;
+
+/*----------------------------------------------------------------------------------------------------*/
+function lp_trackEvent(eventName, eventLable, eventVar) {}
+/*----------------------------------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------------------------------*/
+function switchToCanvas( param, day )
+{
+  var params = {};
+
+  if( !param ) params.day="1";
+  //else if( typeof(param) != 'string' ) params.day = param.toString();
+  else if( typeof(param) != 'string' ) params.location = param.toString();
+  else if( param == 'edit' ) params.edit = '1';
+  else if( param == 'add' ) params.add = '1';
+
+  if (day)
+  {
+    params.location = param.toString();
+    params.day = day;
+  }
+
+  map = gadgets.views.getSupportedViews();
+  gadgets.views.requestNavigateTo( map['canvas'], params );
+}
+/*----------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+function init()
+{
+  prefs = new gadgets.Prefs();
+
+  set_profile_width();
+  $lp(window).resize(function(){set_profile_width()});
+
+  load_profile_images();
+  set_profile_ui();
+  load_data();
+  fetch_news();
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+// PROFILE - set the width of profile view, on window resize. between 246 and 300
+var NAME_OFFSET = 130;
+var ALERT_OFFSET = 170;
+function set_profile_width()
+{
+  var container_width = parseInt(document.getElementById('td_size_cont').offsetWidth);
+  var target_width;
+  var name_target_width;
+  var alert_target_width;
+  var MAX_WIDTH = 300;
+  var MIN_WIDTH = 246;
+
+  if (container_width > MAX_WIDTH)
+    target_width = MAX_WIDTH;
+  else if (container_width < MIN_WIDTH)
+    target_width = MIN_WIDTH;
+  else
+    target_width = container_width;
+
+  name_target_width = target_width - NAME_OFFSET;
+  alert_target_width = target_width - ALERT_OFFSET;
+
+  $lp('.lp_wr_pr_location_name_text').css('width', name_target_width+'px');
+  $lp('.weather_alert').css('width', alert_target_width+'px');
+
+
+  $lp('#lp_wr_pr_main').css('width', target_width+'px');
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+// returns cached url
+function get_image_url(src)
+{
+  return gadgets.io.getProxyUrl(IMAGES_BASE+src,{refreshInterval:21600});
+  //return IMAGES_BASE+src;
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+function adjust_height()
+{
+  gadgets.window.adjustHeight();
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+function load_data()
+{
+  locations = gadgets.json.parse(lpgadgets.lp.utils.unescapeString(prefs.getString('locations')));
+  tabs = gadgets.json.parse(lpgadgets.lp.utils.unescapeString(prefs.getString('tabs')));
+
+  degree = parseInt(lpgadgets.lp.utils.unescapeString(prefs.getString('degree_unit_type')),10);
+
+  locations.today_temp = [];
+  locations.alerts = [];
+  //locations.live = [];
+
+  // show live weather of each
+  var len = locations.name.length;
+  for(var i=0;i<len;i++)
+  {
+    locations.zip_code[i] = locations.zip_code[i];
+    locations.city_code[i] = locations.city_code[i];
+    locations.alerts[i] = false;
+    locations.today_temp[i] = NO_TEMP;
+    createCityTab(i);
+    getLiveWeather(i);
+  }
+  setTimeout("set_height()",1000);
+}
+/*------------------------------------------------------------------------------------------------*/
+
+function set_height()
+{
+  is_loading = false;
+  adjust_height();
+}
+
+/*------------------------------------------------------------------------------------------------*/
+function set_tabs(tab_code)
+{
+  if (!tabs[tab_code])
+    return;
+
+  if (tabs[tab_code] != 1)
+    return;
+
+  //if location tab
+  if (tab_code.substr(0,1) == 'l')
+  {
+    var item_id = tab_code.replace('l','');
+    $lp('#lp_wr_pr_location_name_'+item_id).click();
+  }
+  // if news tab
+  else
+  {
+    $lp('#lp_wr_pr_location_name_news').click();
+  }
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+function save_tabs_state(item_id, tab_val)
+{
+  tabs[item_id] = tab_val;
+  prefs.set('tabs',gadgets.json.stringify(tabs));
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+function get_short_name(str,len,is_dots)
+{
+  return str;
+  if (str.length>len)
+  {
+    if (is_dots)
+      ret = str.substr(0,len)+'...';
+    else
+      ret = str.substr(0,len);
+  }
+  else
+    ret = str;
+
+  return ret;
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+function createCityTab(item_id)
+{
+  var locations_holder = $lp('#lp_wr_pr_loactions');
+  var new_location_html = $lp('#lp_wr_pr_loaction_template').html();
+  new_location_html = new_location_html.replace(/LOCID/g,item_id);
+  var new_location = $lp(new_location_html);
+
+  locations_holder.append(new_location);
+
+  load_state[item_id] = [];
+  load_state[item_id][SECT_LIVE] = false; // live weather
+  load_state[item_id][SECT_FORECAST] = false; // forecast
+  load_state[item_id][SECT_RADAR] = false; // radar btn
+  load_state[item_id][SECT_CAMERA] = false; // camera btn
+  load_state[item_id][SECT_NEWS] = false; // news btn
+  load_state[item_id][SECT_VIDEO] = false; // video btn
+  load_state[item_id][SECT_ALERT] = false; // weather alerts
+  load_state[item_id][SECT_ALL] = false; // 'all complete'
+
+  // open / close
+  $lp('#lp_wr_pr_location_data_'+item_id).css('display','none');
+  $lp('.lp_wr_pr_location_data_waiting_img', new_location).attr('src',get_image_url('loading_animation.gif'));
+
+   /*
+  $lp('#lp_wr_pr_location_name_'+item_id).text(get_short_name(locations.name[item_id],20,true));
+  if (locations.country[item_id])
+    $lp('#lp_wr_pr_location_name_'+item_id).text(get_short_name(locations.name[item_id]+', '+locations.country[item_id],20,true));
+  */
+  $lp('#lp_wr_pr_location_nametext_'+item_id).text(get_short_name(locations.name[item_id],20,true));
+  if (locations.country[item_id])
+    $lp('#lp_wr_pr_location_nametext_'+item_id).text(get_short_name(locations.name[item_id]+', '+locations.country[item_id],20,true));
+
+
+  set_location_title_gui(item_id);
+  set_tabs('l'+item_id);
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+// after each section is loaded, it's reporting complete. after all sections are complete - remove the 'loading'
+// image and display data
+function report_load(item_id, section_id)
+{
+  var is_complete = true;
+  var is_all_complete = true;
+  load_state[item_id][section_id] = true;
+
+  // check completion
+  for (var i=0;i<6;i++)
+  {
+    if (!load_state[item_id][i])
+      is_complete = false;
+  }
+
+  if (is_complete)
+  {
+    $lp('#lp_wr_pr_location_data_waiting_'+item_id).remove();
+    $lp('#lp_wr_pr_location_data_table_'+item_id).show();
+    load_state[item_id][SECT_ALL] = true;
+  }
+}
+
+/*------------------------------------------------------------------------------------------------*/
+function set_unavailable(item_id, is_err)
+{
+  var html = '';
+  var msg = prefs.getMsg('location_unavailable');
+  msg = msg.replace('%STR%', locations.name[item_id]);
+
+  $lp('#lp_wr_pr_location_shortmp_'+item_id).html(NO_TEMP);
+  html = '<div class="lp_wr_pr_location_data_unvailable">'+msg+'</div>';
+
+  if (is_err)
+  {
+    $lp('#lp_wr_pr_location_data_table_'+item_id).css('height','80px');
+    $lp('#lp_wr_pr_location_data_table_'+item_id).html(html);
+  }
+  else
+    $lp('#lp_wr_pr_location_data_waiting_'+item_id).html(html);
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+// if zip code contains a space, return false and use he city code
+function is_zipcode_ok(zip_code)
+{
+  if (zip_code.indexOf(' ') >= 0)
+    return false;
+  else
+    return true;
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+// this block handles the load of live weather
+function getLiveCBFunction(item_id)
+{
+  return function(data) {
+        processLiveWeather(data,item_id);
+       };
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+// get current weather
+function getLiveWeather(item_id)
+{
+  var cur_live_url = "";
+
+  //set url with the correct city code or zip code
+  if ( (locations.zip_code[item_id] != 0) && (is_zipcode_ok(locations.zip_code[item_id])) ){
+    cur_live_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=103&PartnerId="+g_partner_id+"&zipcode=" + locations.zip_code[item_id] + "&unittype=" + degree+'&zcode='+g_zcode;
+  }
+  else if(locations.city_code[item_id] != 0){
+    cur_live_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=103&PartnerId="+g_partner_id+"&citycode=" + locations.city_code[item_id] + "&unittype=" + degree+'&zcode='+g_zcode;
+  }
+
+  //console.log('getLiveWeather for ' + locations.name[item_id]);
+  //console.log(cur_live_url);
+
+  //fetch data
+  var params = {};
+  params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+  gadgets.io.makeRequest(cur_live_url, getLiveCBFunction(item_id), params);
+}
+
+
+function processLiveWeather(response, item_id)
+{
+  //console.log('processLiveWeather for ' + locations.name[item_id]);
+  //console.log(response);
+
+  var curr_deg = '';
+  var curr_temp_num = 0;
+  var is_live_ready = true;
+  var temp_val;
+  var curr_temp;
+
+  try
+  {
+    if (response == null || typeof(response) != "object" || response.data == null)
+    {
+      //set_unavailable(item_id);
+      is_live_ready = false;
+      //return;
+    }
+    if (response.data.firstChild == null)
+    {
+      //set_unavailable(item_id);
+      is_live_ready = false;
+      //return;
+    }
+
+    if (is_live_ready)
+    {
+      var itemList = response.data.getElementsByTagName("condition");
+
+      if(itemList.item(0))
+      {
+        curr_temp = itemList.item(0).getAttribute("temp");
+        if (curr_temp)
+        {
+          curr_deg = itemList.item(0).getAttribute("temp") + "&deg;";
+          locations.today_temp[item_id] = curr_deg;
+          curr_temp_num = itemList.item(0).getAttribute("temp");
+          temp_val = curr_deg;
+        }
+        else
+        {
+          is_live_ready = false;
+          set_unavailable(item_id, true);
+          locations.today_temp[item_id] = NO_TEMP;
+          temp_val = NO_TEMP_VAL;
+
+          if (degree == 1)
+            curr_temp_num = 1;
+          else
+            curr_temp_num = 33;
+        }
+      }
+      else
+      {
+        locations.today_temp[item_id] = NO_TEMP;
+        curr_temp_num = 0;
+        temp_val = NO_TEMP_VAL;
+      }
+    }
+    else
+    {
+      locations.today_temp[item_id] = NO_TEMP;
+      temp_val = NO_TEMP_VAL;
+
+      if (degree == 1)
+        curr_temp_num = 1;
+      else
+        curr_temp_num = 33;
+    }
+  }
+  catch(e)
+  {
+    //set_unavailable(item_id);
+    is_live_ready = false;
+    //return;
+  }
+
+  // set termometr
+  //var curr_temp = -1*curr_temp_num;
+  var curr_temp = curr_temp_num;
+  var off_height;
+
+  // if above 0 (cel) or above 32 (far)
+  if ( ((degree == 1) && (curr_temp > 0)) || ((degree == 0) && (curr_temp > 32)) )
+  {
+    if (degree == 1)
+      off_height = 0.37;
+    else
+      off_height = 0.2;
+
+    var new_height = (curr_temp * off_height) + 40;
+    if (new_height>62)
+      new_height = 62;
+
+    $lp('#lp_wr_pr_term_val_'+item_id).css('background-position','-52px -'+new_height+'px');
+  }
+  else
+  {
+    $lp('#lp_wr_pr_term_'+item_id).css('background-position','-15px -74px');
+    $lp('#lp_wr_pr_term_val_'+item_id).hide();
+    $lp('#lp_wr_pr_temp_'+item_id).css({'color':'#02c1f1','font-size':'20px'});
+  }
+
+  // fill data
+  $lp('#lp_wr_pr_temp_'+item_id).html(temp_val);
+  $lp('#lp_wr_pr_location_shortmp_'+item_id).html(locations.today_temp[item_id]);
+
+  // set 'more...' link
+  $lp('.lp_wr_pr_temp_hold', $lp('#lp_wr_pr_location_data_'+item_id)).click(function()
+                                       {
+                                        switchToCanvas(item_id,1);
+                                       });
+
+  $lp('#lp_wr_pr_location_link_'+item_id).click(function()
+                             {
+                              switchToCanvas(item_id,1);
+                             });
+
+  set_location_gui(item_id);
+
+  report_load(item_id, SECT_LIVE);
+
+  getAwsWeatherAlerts(item_id);
+}
+
+
+function get_rest_data(item_id)
+{
+  show_forecast(item_id);
+  getAwsLinks_Cameras(item_id);
+  getAwsLinks_News(item_id);
+  getAwsLinks_Radar(item_id);
+  getAwsLinks_Video(item_id);
+}
+
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+function setErrorMsg()
+{
+  //alert('ERR!');
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+// this block fetches the news and creates the news section of the gadget
+function fetch_news()
+{
+  var news_url = 'http://feeds.weatherbug.com/rss.aspx?zipCode=12405&zCode='+g_zcode+'&units=0&feed=news';
+  var params = {};
+  params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+  gadgets.io.makeRequest(news_url, process_news, params);
+}
+
+function process_news(response)
+{
+  if(response == null || typeof(response) != "object" || response.data == null){
+    setErrorMsg();
+    return;
+  }
+  var news = response.data.getElementsByTagName("item");
+  var MAX_NEWS = 3;
+
+  for (var i=0; (i < news.length) && (i < MAX_NEWS); i++)
+  {
+    var nodeList = news.item(i).childNodes;
+    var tmp_title = '';
+    var tmp_url = '';
+
+    for (var j=0; j < nodeList.length; j++)
+    {
+      var node = nodeList.item(j);
+
+      if (node.firstChild)
+      {
+        // day title
+        if (node.nodeName == "title")
+        {
+          tmp_title = node.firstChild.nodeValue;
+          tmp_title = tmp_title.replace('US Weather News - ','');
+        }
+
+        //day image
+        if(node.nodeName == "link") {tmp_url = node.firstChild.nodeValue;}
+      }
+    }
+
+    create_news_item(tmp_title, tmp_url);
+  }
+
+  set_tabs('news');
+}
+
+function create_news_item(title, url)
+{
+  var news_holder = $lp('#lp_wr_pr_location_data_news_holder');
+
+  var news_item = $lp('<table cellpadding="0" cellspacing="0" border="0">'+
+         '<tr>'+
+          '<td valign="top"><div class="lp_wr_pr_sprite lp_wr_pr_news_bullet"></div></td>'+
+          '<td valign="top"><div class="lp_wr_pr_news_linkdiv"><a class="lp_wr_pr_news_link" href="'+url+'" target="blank">'+title+'</a></div></td>'+
+        '</tr>'+
+        '</table>');
+    news_holder.append(news_item);
+
+  $lp('.lp_wr_pr_news_bullet').css('background-image','url('+get_image_url('n_profile_sprite.png')+')');
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+// this block fetches and updates the forecast section (today, tomorrow, day after tomorow)
+function getForecastCBFunction(item_id)
+{
+  return function(data) {
+        parseRSS_Forecast(data,item_id);
+       };
+}
+
+// fill forcast for today, tomorrow or day after tumorrow
+function fill_forecast(item_id, day_type, hi, lo, img, desc, weekday)
+{
+  var main_div = $lp('#lp_wr_pr_forecast_'+day_type+'_'+item_id);
+  // day title
+  $lp('.lp_wr_pr_forecast_title',main_div).text(weekday);
+
+  // forecast icon
+  $lp('.lp_wr_pr_forecast_icon_img',main_div).css('background-image','url('+img+')');
+
+  // hi temp.
+  $lp('.lp_wr_pr_forecast_high',main_div).html(hi+'&deg;');
+
+  // low temp
+  $lp('.lp_wr_pr_forecast_low',main_div).html(lo+'&deg;');
+
+  //  text for hover bubble
+  $lp('#lp_wr_pr_forecast_icon_'+day_type+'_'+item_id).attr('desc',desc);
+}
+
+var forecast_timeout;
+function show_forecast(item_id){
+
+  //prepare the url
+  var url ="";
+  if ( (locations.zip_code[item_id] != 0) && (is_zipcode_ok(locations.zip_code[item_id])) )
+  {
+    url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&ZipCode="+locations.zip_code[item_id]+"&UnitType="+degree+"&ForecastType=1&zcode="+g_zcode;
+
+    //fix bug of 4 digits
+    var temp_code = locations.zip_code[item_id].toString();
+    if(temp_code.length==4)
+    {
+      url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&ZipCode=0"+locations.zip_code[item_id]+"&UnitType="+degree+"&ForecastType=1&zcode="+g_zcode;
+    }
+  }
+  else
+  {
+    url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&CityCode="+locations.city_code[item_id]+"&UnitType="+degree+"&ForecastType=1&zcode="+g_zcode;
+  }
+
+  //forecast_timeout = setTimeout("setErrorMsg()",10000);
+  var params = {};
+  params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+  gadgets.io.makeRequest(url, getForecastCBFunction(item_id), params);
+}
+
+// parse RSS Forecast
+function parseRSS_Forecast(response, item_id)
+{
+  //clearTimeout(forecast_timeout);
+  if (response == null || typeof(response) != "object" || response.data == null) {
+    set_unavailable(item_id)
+    return;
+  }
+
+  if(response.data.firstChild == null){
+    set_unavailable(item_id)
+    return;
+  }
+
+  //--------------------------------------------
+  // Get Location name - city and state
+  //--------------------------------------------
+
+  var itemList_2 = response.data.getElementsByTagName("aws:location");
+  if(itemList_2.length==0){itemList_2 = response.data.getElementsByTagName("location");}
+
+  var state_name_str   = "";
+  var city_name_str   = "";
+  for (var k=0; k < itemList_2.length; k++)
+  {
+    var nodeList_2 = itemList_2.item(k).childNodes;
+
+    for (var l=0; l < nodeList_2.length; l++)
+    {
+
+      var node_2 = nodeList_2.item(l);
+
+      var inner;
+
+      //city name
+      if(node_2.nodeName=="aws:city" || node_2.nodeName=="city")
+      {
+        inner = node_2.firstChild.nodeValue;
+        city_name_str = node_2.firstChild.nodeValue + ", ";
+          //$lp('#lp_wr_pr_location_name_'+item_id).text(city_name_str);
+        //$lp('#lp_wr_pr_location_nametext_'+item_id).text(city_name_str);
+      }
+
+      // state name or country name
+      if(node_2.nodeName=="aws:state" || node_2.nodeName=="state" ||node_2.nodeName=="aws:country" ||node_2.nodeName=="country")
+      {
+        state_name_str = node_2.firstChild.nodeValue;
+          //$lp('#lp_wr_pr_location_name_'+item_id).text($lp('#lp_wr_pr_location_name_'+item_id).text() + state_name_str);
+        //$lp('#lp_wr_pr_location_name_text_'+item_id).text($lp('#lp_wr_pr_location_name_'+item_id).text() + state_name_str);
+      }
+
+    }
+  }
+
+  //--------------------------------------------
+  // Get Forecast
+  //--------------------------------------------
+
+  //temp values
+  var tmp_name    =  "";
+  var tmp_image   =  "";
+  var tmp_hi     =  "";
+  var tmp_low   =  "";
+  var tmp_desc  =   "";
+  var cursor     = 0;
+
+  var extractNodeData = function(node) {
+    if (!node) return false;
+    var nodeList = node.childNodes;
+    for (var j=0; j < nodeList.length; j++) {
+
+      var node = nodeList.item(j);
+
+      if (node.firstChild) {
+        // day title
+        if(node.nodeName=="aws:title" || node.nodeName=="title"){tmp_title = node.firstChild.nodeValue;}
+
+        //day image
+        if(node.nodeName=="aws:image" || node.nodeName=="image"){tmp_image = node.firstChild.nodeValue;}
+
+        //day hi temp
+        if(node.nodeName=="aws:high" || node.nodeName=="high")  {tmp_hi = node.firstChild.nodeValue;}
+
+        //day low temp
+        if(node.nodeName=="aws:low" || node.nodeName=="low")  {tmp_low = node.firstChild.nodeValue;}
+
+        //day forecast text
+        if(node.nodeName=="aws:prediction" || node.nodeName=="prediction"){
+        tmp_desc = node.firstChild.nodeValue;
+        if(tmp_desc.length>56)
+          tmp_desc = tmp_desc.substring(0,56) + "... ";
+        }
+       }
+    }
+    return { hi:tmp_hi, lo:tmp_low, img:tmp_image, desc:tmp_desc, title:tmp_title };
+  }
+
+  var itemList = response.data.getElementsByTagName("aws:forecast");
+  if(itemList.length == 0){itemList = response.data.getElementsByTagName("forecast");}
+
+  var dayA_node = 1; // tomorrow
+
+  var today = extractNodeData( itemList.item(0) );
+  if (!today)
+  {
+    report_load(item_id, SECT_FORECAST);
+    return false;
+  }
+
+  // TODAY
+  if( today.lo == '--' )
+  {
+    dayA_node ++;
+    var tonight = extractNodeData( itemList.item(1) );
+    fill_forecast(item_id, '1', today.hi, tonight.lo, today.img, today.desc, "__MSG_today__");
+  }
+  else
+  {
+    fill_forecast(item_id, '1', today.hi, today.lo, today.img, today.desc, "__MSG_today__");
+  }
+
+  // TOMORROW
+  var dayA_data = extractNodeData( itemList.item(dayA_node) );
+
+  if( dayA_data.lo == '--' )
+  {
+    dayA_node++;
+    var dayA_night_data = extractNodeData( itemList.item(dayA_node) );
+    fill_forecast(item_id, '2', dayA_data.hi, dayA_night_data.lo, dayA_data.img, dayA_data.desc, dayA_data.title);
+  }
+  else
+  {
+    fill_forecast(item_id, '2', dayA_data.hi, dayA_data.lo, dayA_data.img, dayA_data.desc, dayA_data.title);
+  }
+
+  // DAY AFTER TOMORROW
+  var dayB_node = dayA_node+1; // day after tomorrow
+  var dayB_data = extractNodeData( itemList.item(dayB_node) );
+
+  if( dayB_data.lo == '--' )
+  {
+    dayB_node++;
+    var dayB_night_data = extractNodeData( itemList.item(dayB_node) );
+    fill_forecast(item_id, '3', dayB_data.hi, dayB_night_data.lo, dayB_data.img, dayB_data.desc, dayB_data.title);
+  }
+  else
+  {
+    fill_forecast(item_id, '3', dayB_data.hi, dayB_data.lo, dayB_data.img, dayB_data.desc, dayB_data.title);
+  }
+
+  report_load(item_id, SECT_FORECAST);
+
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+// set global images on the gui
+function load_profile_images()
+{
+  $lp('.lp_wr_pr_sprite').css('background-image','url('+get_image_url('n_profile_sprite.png')+')');
+  $lp('.lp_wr_pr_forecast_icon_img').css('background-image','url('+get_image_url('n_weather_temp_icon.png')+')');
+  $lp('#lp_wr_pr_main_left').css('background-image','url('+get_image_url('n_left_shadow.png')+')');
+  $lp('#lp_wr_pr_main_right').css('background-image','url('+get_image_url('n_right_shadow.png')+')');
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+// set the ui elements for location title
+function set_location_title_gui(item_id)
+{
+  $lp('.lp_wr_pr_sprite').css('background-image','url('+get_image_url('n_profile_sprite.png')+')');
+
+  var curr_location = $lp('#lp_wr_pr_loaction_'+item_id);
+
+  // show / hide location
+  $lp('.lp_wr_pr_loaction_action', curr_location).click(
+    function()
+    {
+      var is_show = $lp('#lp_wr_pr_location_data_'+item_id).css('display');
+      var new_pos;
+
+      // SHOW
+      if (is_show == 'none')
+      {
+        $lp('#lp_wr_pr_location_data_'+item_id).show('fast',
+                        function()
+                        {
+                          if (!is_loading)
+                            adjust_height();
+                          $lp('#lp_wr_pr_location_shortmp_'+item_id).hide();
+                        });
+
+        if (locations.alerts[item_id])
+          new_pos = '-39px -61px';
+        else
+          new_pos = '-13px -61px';
+
+        $lp('#lp_wr_pr_location_expand_'+item_id).css('background-position',new_pos);
+
+        save_tabs_state('l'+item_id, 1);
+
+        // if data not loaded alredy - load it
+        if (!load_state[item_id][SECT_ALL])
+          get_rest_data(item_id);
+      }
+      // HIDE
+      else
+      {
+        $lp('#lp_wr_pr_location_data_'+item_id).hide('fast',
+                        function()
+                        {
+                          adjust_height();
+                          $lp('#lp_wr_pr_location_shortmp_'+item_id).show();
+                        });
+
+        if (locations.alerts[item_id])
+          new_pos = '-26px -61px';
+        else
+          new_pos = '0px -61px';
+
+        $lp('#lp_wr_pr_location_expand_'+item_id).css('background-position',new_pos);
+
+        save_tabs_state('l'+item_id, 0);
+      }
+    }
+  );
+
+  // title rollovers
+  $lp('.lp_wr_pr_location_name_text,.lp_wr_pr_location_link', curr_location).hover(
+    function()
+    {
+      $lp(this).css('text-decoration','underline');
+    },
+    function()
+    {
+      $lp(this).css('text-decoration','none');
+    }
+  );
+
+
+  $lp('.lp_wr_pr_location_expand', curr_location).hover(
+    function()
+    {
+      $lp('#lp_wr_pr_location_name_text_'+item_id).css('text-decoration','underline');
+    },
+    function()
+    {
+      $lp('#lp_wr_pr_location_name_text_'+item_id).css('text-decoration','none');
+    }
+  );
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+// set ui elements for location data section
+function set_location_gui(item_id)
+{
+  $lp('.lp_wr_pr_sprite').css('background-image','url('+get_image_url('n_profile_sprite.png')+')');
+
+  var curr_location = $lp('#lp_wr_pr_loaction_'+item_id);
+
+  if ($lp.browser.msie)
+    $lp('.lp_wr_pr_forecast_sep',curr_location).html('&nbsp;|');
+
+  // buttons rollovers
+  $lp('.lp_wr_pr_temp_btn', curr_location).hover(
+    function()
+    {
+      var tmp = $lp(this).attr('id').split('_');
+      var btn_id = tmp[5];
+      var btn_type = tmp[4];
+      var new_pos;
+
+      switch (btn_type)
+      {
+        case 'a':
+          new_pos = '0px -122px';
+        break;
+
+        case 'b':
+          new_pos = '-16px -122px';
+        break;
+
+        case 'c':
+          new_pos = '-32px -122px';
+        break;
+
+        case 'd':
+          new_pos = '-48px -122px';
+        break;
+      }
+
+      $lp(this).css('background-position',new_pos);
+    },
+    function()
+    {
+      var tmp = $lp(this).attr('id').split('_');
+      var btn_id = tmp[5];
+      var btn_type = tmp[4];
+      var new_pos;
+
+      switch (btn_type)
+      {
+        case 'a':
+          new_pos = '0px -109px';
+        break;
+
+        case 'b':
+          new_pos = '-16px -109px';
+        break;
+
+        case 'c':
+          new_pos = '-32px -109px';
+        break;
+
+        case 'd':
+          new_pos = '-48px -109px';
+        break;
+      }
+
+      $lp(this).css('background-position',new_pos);
+    }
+  );
+
+  // info bubble rollover
+  $lp('.lp_wr_pr_forecast_icon', curr_location).hover(
+    function()
+    {
+      var hover_div = $lp('#lp_wr_pr_details_hover');
+      var hover_top;
+      var hover_left;
+      var top_offset = 10;
+
+      if ($lp.browser.msie)
+        top_offset = 20;
+
+
+      $lp('#lp_wr_pr_details_hover_text').html($lp(this).attr('desc'));
+
+      hover_top = $lp(this).offset().top-hover_div.height()+top_offset;
+      hover_left = $lp(this).offset().left-76;
+
+
+      hover_div.css({'top':hover_top,'left':hover_left});
+      hover_div.show();
+    },
+    function()
+    {
+      var hover_div = $lp('#lp_wr_pr_details_hover');
+      //hover_div.hide();
+    }
+  );
+
+  // hide hover bubbles
+  $lp('.lp_wr_pr_location_data, .lp_wr_pr_temp_data', curr_location).hover(
+    function()
+    {
+      var hover_div = $lp('#lp_wr_pr_details_hover');
+      hover_div.hide();
+    },
+    function()
+    {
+      var hover_div = $lp('#lp_wr_pr_details_hover');
+      hover_div.hide();
+    }
+  );
+
+  // click on weather icons - takes to vanvas: location+day
+  $lp('.lp_wr_pr_forecast_icon',curr_location).click(function()
+                             {
+                              var day = $lp(this).attr('id').split('_')[5];
+                              switchToCanvas(item_id, day);
+                            });
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+// set global ui elements
+function set_profile_ui()
+{
+  // settings rollover
+  $lp('#lp_wr_pr_logo_icon').hover(
+    function()
+    {
+      $lp(this).css('text-decoration','underline');
+    },
+    function()
+    {
+      $lp(this).css('text-decoration','none');
+    }
+  );
+
+  // settings click
+  $lp('#lp_wr_pr_logo_icon').click(function(){
+    switchToCanvas("edit");
+  });
+
+  // title rollovers
+
+  $lp('#lp_wr_pr_location_name_news').hover(
+    function()
+    {
+      $lp(this).css('text-decoration','underline');
+    },
+    function()
+    {
+      $lp(this).css('text-decoration','none');
+    }
+  );
+
+  $lp('#lp_wr_pr_location_link_news').hover(
+    function()
+    {
+      $lp(this).css('text-decoration','underline');
+    },
+    function()
+    {
+      $lp(this).css('text-decoration','none');
+    }
+  );
+
+  $lp('#lp_wr_pr_location_expand_news').hover(
+    function()
+    {
+      $lp('#lp_wr_pr_location_name_news').css('text-decoration','underline');
+    },
+    function()
+    {
+      $lp('#lp_wr_pr_location_name_news').css('text-decoration','none');
+    }
+  );
+
+  // show / hide news
+  var news_title = $lp('#lp_wr_pr_location_title_news');
+  $lp('.lp_wr_pr_loaction_action', news_title).click(
+    function()
+    {
+      var tmp = $lp(this).attr('id').split('_');
+      var location_id = tmp[5];
+      var is_show = $lp('#lp_wr_pr_location_data_'+location_id).css('display');
+      var new_pos;
+
+      if (is_show == 'none')
+      {
+        $lp('#lp_wr_pr_location_data_'+location_id).show('fast',function()
+                                    {
+                                      if (!is_loading)
+                                        adjust_height();
+                                    });
+        switch (location_id)
+        {
+          case 'news':
+            new_pos = '-70px -61px';
+          break;
+
+          default:
+            new_pos = '-13px -61px';
+        }
+
+        $lp('#lp_wr_pr_location_expand_'+location_id).css('background-position',new_pos);
+
+        save_tabs_state('news', 1);
+      }
+      else
+      {
+        $lp('#lp_wr_pr_location_data_'+location_id).hide('fast',function() {adjust_height();});
+
+        switch (location_id)
+        {
+          case 'news':
+            new_pos = '-57px -61px';
+          break;
+
+          default:
+            new_pos = '0px -61px';
+        }
+
+        $lp('#lp_wr_pr_location_expand_'+location_id).css('background-position',new_pos);
+
+        save_tabs_state('news', 0);
+      }
+    }
+  );
+
+  // news link
+  $lp('#lp_wr_pr_location_link_news').click(function()
+                        {
+                        window.open('http://weather.weatherbug.com/weather-news/weather-reports.html?zcode='+g_zcode);
+                        });
+
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+//---------------------------------------------
+//aws new links - cameras
+//---------------------------------------------
+
+function getAwsLinks_Cameras(item_id){
+
+  var cur_url = "";
+
+  //set url with the correct city code or zip code
+  if ( (locations.zip_code[item_id] != 0) && (is_zipcode_ok(locations.zip_code[item_id])) )
+  {
+    cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&ZipCode="+locations.zip_code[item_id]+"&LinkName=cameras_local&Zcode="+g_zcode;
+  }
+  else if (locations.city_code[item_id] != 0)
+  {
+    cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&CityCode="+locations.city_code[item_id]+"&LinkName=cameras_local&Zcode="+g_zcode;
+  }
+
+  var params = {};
+  params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+  gadgets.io.makeRequest(cur_url, get_parseRSS_AWS_CAMERAS(item_id), params);
+}
+
+function get_parseRSS_AWS_CAMERAS(item_id)
+{
+  return function(data) {
+        parseRSS_AWS_CAMERAS(data,item_id);
+       };
+}
+
+var g_link_cameras="http://www.weatherbug.com/?zcode="+g_zcode;
+function parseRSS_AWS_CAMERAS(response, item_id) {
+
+  $lp('#lp_wr_pr_link_b_'+item_id).attr('href',g_link_cameras);
+  report_load(item_id, SECT_CAMERA);
+
+  try{
+    if (response == null || typeof(response) != "object" || response.data == null) {return;}
+    if(response.data.firstChild == null){return;}
+
+    var itemList = response.data.getElementsByTagName("aws:Link");
+    if(itemList.length==0){itemList = response.data.getElementsByTagName("Link");}
+
+    //check if we have any items
+    if(itemList.length!=0){
+      if ( (itemList[0].getAttribute("linkname")=="cameras_local") &&
+         (itemList[0].getAttribute("url").length > 14) )
+      {
+        //_gel("aws_link_cameras").innerHTML = '<span id="aws_link_cameras_dot"><b>&bull;</b></span>&nbsp;<a onmouseout="_gel(\'aws_link_cameras_dot\').style.color=\'#5ea3e3\';" onmouseover="_gel(\'aws_link_cameras_dot\').style.color=\'#fbe317\';" class="style_aws_link" href="' + itemList[0].getAttribute("url") + '" target="_blank">Cameras</a><br />';
+        //g_link_cameras = itemList[0].getAttribute("url");
+        $lp('#lp_wr_pr_link_b_'+item_id).attr('href',itemList[0].getAttribute("url"));
+      }
+    }
+  }
+  catch(e){}
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+//---------------------------------------------
+//aws new links - video
+//---------------------------------------------
+
+function getAwsLinks_Video(item_id){
+
+  var cur_url = "";
+
+  //set url with the correct city code or zip code
+  if ( (locations.zip_code[item_id] != 0) && (is_zipcode_ok(locations.zip_code[item_id])) )
+  {
+    cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&ZipCode="+locations.zip_code[item_id]+"&LinkName=video_local&Zcode="+g_zcode;
+  }
+  else if (locations.city_code[item_id] != 0)
+  {
+    cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&CityCode="+locations.city_code[item_id]+"&LinkName=video_local&Zcode="+g_zcode;
+  }
+
+  var params = {};
+  params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+  gadgets.io.makeRequest(cur_url, get_parseRSS_AWS_VIDEO(item_id), params);
+
+
+}
+
+function get_parseRSS_AWS_VIDEO(item_id)
+{
+  return function(data) {
+        parseRSS_AWS_VIDEO(data,item_id);
+       };
+}
+
+var g_link_video="http://www.weatherbug.com/?zcode="+g_zcode;
+function parseRSS_AWS_VIDEO(response, item_id) {
+
+  $lp('#lp_wr_pr_link_d_'+item_id).attr('href',g_link_video);
+  report_load(item_id, SECT_VIDEO);
+  try{
+    if (response == null || typeof(response) != "object" || response.data == null) {return;}
+    if(response.data.firstChild == null){return;}
+
+    var itemList = response.data.getElementsByTagName("aws:Link");
+    if(itemList.length==0){itemList = response.data.getElementsByTagName("Link");}
+
+    //check if we have any items
+    if(itemList.length!=0){
+      if ( (itemList[0].getAttribute("linkname")=="video_local") &&
+         (itemList[0].getAttribute("url").length > 14) )
+      {
+        //_gel("aws_link_cameras").innerHTML = '<span id="aws_link_cameras_dot"><b>&bull;</b></span>&nbsp;<a onmouseout="_gel(\'aws_link_cameras_dot\').style.color=\'#5ea3e3\';" onmouseover="_gel(\'aws_link_cameras_dot\').style.color=\'#fbe317\';" class="style_aws_link" href="' + itemList[0].getAttribute("url") + '" target="_blank">Cameras</a><br />';
+        //g_link_cameras = itemList[0].getAttribute("url");
+        $lp('#lp_wr_pr_link_d_'+item_id).attr('href',itemList[0].getAttribute("url"));
+      }
+    }
+  }
+  catch(e){}
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+//---------------------------------------------
+//aws new links - Radar
+//---------------------------------------------
+function getAwsLinks_Radar(item_id){
+
+  var cur_url = "";
+
+  //set url with the correct city code or zip code
+  if ( (locations.zip_code[item_id] != 0) && (is_zipcode_ok(locations.zip_code[item_id])) )
+  {
+    cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&ZipCode="+locations.zip_code[item_id]+"&LinkName=maps_doppler&Zcode="+g_zcode;
+  }
+  else if (locations.city_code[item_id] != 0)
+  {
+    cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&CityCode="+locations.city_code[item_id]+"&LinkName=maps_doppler&Zcode="+g_zcode;
+  }
+
+  //fetch data
+  var params = {};
+  params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+  gadgets.io.makeRequest(cur_url,get_parseRSS_AWS_RADAR(item_id), params);
+}
+
+function get_parseRSS_AWS_RADAR(item_id)
+{
+  return function(data) {
+        parseRSS_AWS_RADAR(data,item_id);
+       };
+}
+
+var g_link_radar="http://www.weatherbug.com/?zcode="+g_zcode;
+function parseRSS_AWS_RADAR(response,item_id) {
+
+  $lp('#lp_wr_pr_link_a_'+item_id).attr('href',g_link_radar);
+  report_load(item_id, SECT_RADAR);
+  try{
+    if (response == null || typeof(response) != "object" || response.data == null) {return;}
+    if(response.data.firstChild == null){return;}
+
+    var itemList = response.data.getElementsByTagName("aws:Link");
+    if(itemList.length==0){itemList = response.data.getElementsByTagName("Link");}
+
+    //check if we have any items
+    if(itemList.length!=0){
+      if ( (itemList[0].getAttribute("linkname")=="maps_doppler") &&
+         (itemList[0].getAttribute("url").length > 14) )
+      {
+        //_gel("aws_link_radar").innerHTML = '<span id="aws_link_radar_dot"><b>&bull;</b></span>&nbsp;<a onmouseout="_gel(\'aws_link_radar_dot\').style.color=\'#5ea3e3\';" onmouseover="_gel(\'aws_link_radar_dot\').style.color=\'#fbe317\';" class="style_aws_link" href="' + itemList[0].getAttribute("url") + '" target="_blank">'+g_radar_title+'</a><br />';
+        //g_link_radar=itemList[0].getAttribute("url");
+        $lp('#lp_wr_pr_link_a_'+item_id).attr('href',itemList[0].getAttribute("url"));
+      }
+    }
+  }
+  catch(e){}
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+//---------------------------------------------
+//aws new links - News
+//---------------------------------------------
+
+function getAwsLinks_News(item_id){
+
+  var cur_url = "";
+
+  //set url with the correct city code or zip code
+  if ( (locations.zip_code[item_id] != 0) && (is_zipcode_ok(locations.zip_code[item_id])) )
+  {
+    cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&ZipCode="+locations.zip_code[item_id]+"&LinkName=news_topstories&Zcode="+g_zcode;
+  }
+  else if (locations.city_code[item_id] != 0)
+  {
+    cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&CityCode="+locations.city_code[item_id]+"&LinkName=news_topstories&Zcode="+g_zcode;
+  }
+
+  //fetch data
+  var params = {};
+  params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+  gadgets.io.makeRequest(cur_url,get_parseRSS_AWS_NEWS(item_id), params);
+}
+
+function get_parseRSS_AWS_NEWS(item_id)
+{
+  return function(data) {
+        parseRSS_AWS_NEWS(data,item_id);
+       };
+}
+
+var g_link_news="http://www.weatherbug.com/?zcode="+g_zcode;
+function parseRSS_AWS_NEWS(response, item_id) {
+  $lp('#lp_wr_pr_link_c_'+item_id).attr('href',g_link_news);
+  report_load(item_id, SECT_NEWS);
+  try{
+    if (response == null || typeof(response) != "object" || response.data == null) {return;}
+    if(response.data.firstChild == null){return;}
+
+    var itemList = response.data.getElementsByTagName("aws:Link");
+    if(itemList.length==0){itemList = response.data.getElementsByTagName("Link");}
+
+    //check if we have any items
+    if(itemList.length!=0){
+      if ( (itemList[0].getAttribute("linkname")=="news_topstories") &&
+           (itemList[0].getAttribute("url").length > 14) )
+      {
+        //_gel("aws_link_news").innerHTML = '<span id="aws_link_news_dot"><b>&bull;</b></span>&nbsp;<a onmouseout="_gel(\'aws_link_news_dot\').style.color=\'#5ea3e3\';" onmouseover="_gel(\'aws_link_news_dot\').style.color=\'#fbe317\';"  class="style_aws_link" href="' + itemList[0].getAttribute("url") + '" target="_blank">News</a><br />';
+        //g_link_news = itemList[0].getAttribute("url");
+        $lp('#lp_wr_pr_link_c_'+item_id).attr('href',itemList[0].getAttribute("url"));
+      }
+    }
+  }
+  catch(e){}
+}
+/*------------------------------------------------------------------------------------------------*/
+
+/*------------------------------------------------------------------------------------------------*/
+//---------------------------------------------
+//aws new links - WEATHER ALERTS
+//---------------------------------------------
+function getAwsWeatherAlerts(item_id){
+
+  var cur_url = "";
+
+  //set url with the correct  zip code - US ONLY
+  if (locations.zip_code[item_id] != 0)
+  {
+    cur_url = "http://datafeed.weatherbug.com/getxml.aspx?RequestType=6&PartnerId="+g_partner_id+"&ZipCode="+locations.zip_code[item_id]+"&Zcode="+g_zcode;
+    var params = {};
+    params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+    gadgets.io.makeRequest(cur_url,get_parseRSS_AWS_ALERTS(item_id), params);
+  }
+  else
+  {
+    report_load(item_id, SECT_ALERT);
+  }
+}
+
+function get_parseRSS_AWS_ALERTS(item_id)
+{
+  return function(data) {
+        parseRSS_AWS_ALERTS(data,item_id);
+       };
+}
+
+function parseRSS_AWS_ALERTS(response, item_id) {
+
+  if (response == null || typeof(response) != "object" || response.data == null) {return;}
+  if (response.data.firstChild == null){return;}
+
+  var itemList = response.data.getElementsByTagName("aws:alert");
+  if(itemList.length==0){itemList = response.data.getElementsByTagName("alert");}
+
+  //check if we have any items
+  if(itemList.length!=0)
+  {
+    //we have alerts for this place - fetch link
+    var cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&ZipCode="+locations.zip_code[item_id]+"&LinkName=severeweather_localalerts&Zcode="+g_zcode;
+
+    //fetch data
+    var params = {};
+  params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+  gadgets.io.makeRequest(cur_url,get_parseRSS_AWS_ALERTS_LINK(item_id), params);
+  }
+  else
+  {
+    report_load(item_id, SECT_ALERT);
+  }
+}
+
+function get_parseRSS_AWS_ALERTS_LINK(item_id)
+{
+  return function(data) {
+        parseRSS_AWS_ALERTS_LINK(data,item_id);
+       };
+}
+
+function parseRSS_AWS_ALERTS_LINK(response, item_id) {
+
+  if (response == null || typeof(response) != "object" || response.data == null) {return;}
+  if (response.data.firstChild == null){return;}
+
+  var itemList = response.data.getElementsByTagName("aws:Link");
+  if(itemList.length==0){itemList = response.data.getElementsByTagName("Link");}
+
+  //check if we have any items
+  if(itemList.length!=0)
+  {
+    if(itemList[0].getAttribute("linkname")=="severeweather_localalerts"){
+      set_alert_data(item_id, itemList[0].getAttribute("url"));
+    }
+  }
+  report_load(item_id, SECT_ALERT);
+}
+
+function set_alert_data(item_id, alert_url)
+{
+  locations.alerts[item_id] = true;
+
+  // set red background
+  $lp('#lp_wr_pr_location_title_'+item_id).css('background-color','#C11919');
+  $lp('#lp_wr_pr_location_nametext_'+item_id).addClass('weather_alert');
+
+  // set open/close icons
+  if (tabs['l'+item_id] == 1)
+  {
+    $lp('#lp_wr_pr_location_expand_'+item_id).css('background-position','-39px -61px');
+  }
+  else
+  {
+    $lp('#lp_wr_pr_location_expand_'+item_id).css('background-position','-26px -61px');
+  }
+
+  // set link
+  $lp('#lp_wr_pr_location_link_'+item_id).text("__MSG_alert_link__");
+  $lp('#lp_wr_pr_location_link_'+item_id).unbind('click');
+  $lp('#lp_wr_pr_location_link_'+item_id).click(function()
+                          {
+                          window.open(alert_url);
+                          });
+
+  // set width
+  var main_width = parseInt($lp('#lp_wr_pr_main').css('width'),10);
+  $lp('#lp_wr_pr_location_nametext_'+item_id).css('width',main_width-ALERT_OFFSET);
+
+    // create top link
+  var html = '<div class="lp_wr_pr_alert">'+prefs.getMsg('alert_top').replace('%STR%',locations.name[item_id])+'&nbsp;<a href="'+alert_url+'" target="_blank">'+prefs.getMsg('alert_top_more')+'&nbsp;&raquo;</a></div>'
+
+  $lp('#lp_wr_pr_alerts').append(html);
+}
+/*------------------------------------------------------------------------------------------------*/
+
+$lp(document).ready(function(){init();});
+</script>
+
+<body>
+<center>
+
+<div id="lp_wr_pr_details_hover">
+  <div id="lp_wr_pr_details_hover_text"></div>
+  <div id="lp_wr_pr_details_hover_bottom">
+    <div class="lp_wr_pr_details_hover_bottom" style="width:94px;"></div>
+    <div class="lp_wr_pr_sprite" id="lp_wr_pr_details_hover_middle"></div>
+    <div class="lp_wr_pr_details_hover_bottom" style="width:23px;"></div>
+  </div>
+</div>
+
+<div id="lp_wr_pr_container">
+
+  <div id="lp_wr_pr_alerts">
+  </div>
+
+  <table cellpadding="0" cellspacing="0" border="0">
+  <tr>
+    <td width="3" id="lp_wr_pr_main_left"></td>
+    <td valign="top">
+      <div id="lp_wr_pr_main">
+        <div id="lp_wr_pr_logo" class="lp_wr_pr_sprite">
+          <a href="http://www.weatherbug.com/?zcode=z6070" target="_blank" style="outline:none;"><div id="lp_wr_pr_logo_link"></div></a>
+          <div id="lp_wr_pr_logo_icon">__MSG_settings__</div>
+          <!--<div id="lp_wr_pr_logo_icon" class="lp_wr_pr_sprite">__MSG_settings__</div>-->
+        </div>
+        <style>
+        .lp_wr_pr_location_wrap
+        {
+          float:left;
+
+          height:23px;
+          overflow:hidden;
+        }
+        </style>
+
+        <!-- LOCATIONS -->
+        <div id="lp_wr_pr_loactions">
+
+          <!-- LOCATION TEMPLATE -->
+          <div id="lp_wr_pr_loaction_template" style="display:none;">
+            <div class="lp_wr_pr_loaction" id="lp_wr_pr_loaction_LOCID">
+              <div id="lp_wr_pr_location_title_LOCID" class="lp_wr_pr_location_title lp_wr_pr_space" style="background-color:#163b99;">
+                <div id="lp_wr_pr_location_expand_LOCID" class="lp_wr_pr_sprite lp_wr_pr_location_expand lp_wr_pr_loaction_action lp_wr_pr_location_expand_location"></div>
+                <div class="lp_wr_pr_location_wrap">
+                  <div id="lp_wr_pr_location_name_LOCID" class="lp_wr_pr_location_name lp_wr_pr_loaction_action">
+                    <div id="lp_wr_pr_location_nametext_LOCID" class="lp_wr_pr_location_name_text" style="float:left;"></div>
+                    <div id="lp_wr_pr_location_shortmp_LOCID" class="lp_wr_pr_location_shortmp"></div>
+                  </div>
+                  <!--<div id="lp_wr_pr_location_shortmp_LOCID" class="lp_wr_pr_location_shortmp"></div>-->
+                </div>
+                <div id="lp_wr_pr_location_link_LOCID" class="lp_wr_pr_location_link">__MSG_seven_days__ &raquo;</div>
+              </div>
+              <div class="lp_wr_pr_location_data" id="lp_wr_pr_location_data_LOCID">
+                <div id="lp_wr_pr_location_data_waiting_LOCID" class="lp_wr_pr_location_data_waiting">
+                  <div class="lp_wr_pr_location_data_waiting_holder">
+                    <img class="lp_wr_pr_location_data_waiting_img"/>
+                  </div>
+                </div>
+                <div id="lp_wr_pr_location_data_table_LOCID" style="display:none;">
+                  <table cellpadding="0" cellspacing="0" border="0" width="100%">
+                    <tr>
+                      <td width="31%" valign="top" class="lp_wr_pr_temp_data">
+                        <div class="lp_wr_pr_temp_main">
+                          <div id="lp_wr_pr_term_LOCID" class="lp_wr_pr_sprite lp_wr_pr_term">
+                            <div id="lp_wr_pr_term_val_LOCID" class="lp_wr_pr_sprite lp_wr_pr_term_val"></div>
+                          </div>
+                          <div class="lp_wr_pr_temp_hold">
+                            <div id="lp_wr_pr_temp_LOCID" class="lp_wr_pr_temp"></div>
+                            <div class="lp_wr_pr_tempmore">__MSG_more__</div>
+                          </div>
+                        </div>
+                        <div class="lp_wr_pr_temp_btns">
+                          <a id="lp_wr_pr_link_a_LOCID" href="" target="blank"><div id="lp_wr_pr_btn_a_LOCID" title="__MSG_radar__" class="lp_wr_pr_sprite lp_wr_pr_temp_btn" style="background-position:0px -109px;"></div></a>
+                          <a id="lp_wr_pr_link_b_LOCID" href="" target="blank"><div id="lp_wr_pr_btn_b_LOCID" title="__MSG_cameras__" class="lp_wr_pr_sprite lp_wr_pr_temp_btn" style="background-position:-16px -109px;"></div></a>
+                          <a id="lp_wr_pr_link_c_LOCID" href="" target="blank"><div id="lp_wr_pr_btn_c_LOCID" title="__MSG_news__" class="lp_wr_pr_sprite lp_wr_pr_temp_btn" style="background-position:-32px -109px;"></div></a>
+                          <a id="lp_wr_pr_link_d_LOCID" href="" target="blank"><div id="lp_wr_pr_btn_d_LOCID" title="__MSG_video__" class="lp_wr_pr_sprite lp_wr_pr_temp_btn" style="background-position:-48px -109px;"></div></a>
+                        </div>
+
+                      </td>
+                      <td width="23%" valign="top">
+                        <div id="lp_wr_pr_forecast_1_LOCID" class="lp_wr_pr_forecast">
+                          <div class="lp_wr_pr_forecast_title"></div>
+                          <div id="lp_wr_pr_forecast_icon_1_LOCID" class="lp_wr_pr_sprite lp_wr_pr_forecast_icon">
+                            <div class="lp_wr_pr_forecast_icon_img"></div>
+                          </div>
+                          <div class="lp_wr_pr_forecast_temp">
+                            <span class="lp_wr_pr_forecast_high"></span>
+                            <span class="lp_wr_pr_forecast_sep">|</span>
+                            <span class="lp_wr_pr_forecast_low"></span>
+                          </div>
+                        </div>
+                      </td>
+                      <td width="23%" valign="top">
+                        <div id="lp_wr_pr_forecast_2_LOCID" class="lp_wr_pr_forecast">
+                          <div class="lp_wr_pr_forecast_title"></div>
+                          <div id="lp_wr_pr_forecast_icon_2_LOCID" class="lp_wr_pr_sprite lp_wr_pr_forecast_icon">
+                            <div class="lp_wr_pr_forecast_icon_img"></div>
+                          </div>
+                          <div class="lp_wr_pr_forecast_temp">
+                            <span class="lp_wr_pr_forecast_high"></span>
+                            <span class="lp_wr_pr_forecast_sep">|</span>
+                            <span class="lp_wr_pr_forecast_low"></span>
+                          </div>
+                        </div>
+                      </td>
+                      <td width="23%" valign="top">
+                        <div id="lp_wr_pr_forecast_3_LOCID" class="lp_wr_pr_forecast">
+                          <div class="lp_wr_pr_forecast_title"></div>
+                          <div id="lp_wr_pr_forecast_icon_3_LOCID" class="lp_wr_pr_sprite lp_wr_pr_forecast_icon">
+                            <div class="lp_wr_pr_forecast_icon_img"></div>
+                          </div>
+                          <div class="lp_wr_pr_forecast_temp">
+                            <span class="lp_wr_pr_forecast_high"></span>
+                            <span class="lp_wr_pr_forecast_sep">|</span>
+                            <span class="lp_wr_pr_forecast_low"></span>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="lp_wr_pr_loaction_title_top lp_wr_pr_sprite"></div>
+              </div>
+            </div>
+          </div>
+          <!-- //LOCATION TEMPLATE -->
+        </div>
+        <!-- /LOCATIONS -->
+
+        <!-- NEWS -->
+        <div class="lp_wr_pr_loaction" id="lp_wr_pr_loaction_news">
+          <div id="lp_wr_pr_location_title_news" class="lp_wr_pr_location_title" style="background-color:#2047B0;">
+            <div id="lp_wr_pr_location_expand_news" class="lp_wr_pr_sprite lp_wr_pr_location_expand lp_wr_pr_loaction_action lp_wr_pr_location_expand_news"></div>
+            <div id="lp_wr_pr_location_name_news" class="lp_wr_pr_location_name lp_wr_pr_loaction_action">__MSG_news_title__</div>
+            <div id="lp_wr_pr_location_link_news" class="lp_wr_pr_location_link">__MSG_news_title_link__ &raquo;</div>
+          </div>
+          <div class="lp_wr_pr_location_data" id="lp_wr_pr_location_data_news" style="display:none;">
+            <div id="lp_wr_pr_location_data_news_holder">
+
+            </div>
+
+          </div>
+        </div>
+        <!-- /NEWS -->
+
+      </div>
+    </td>
+    <td width="5" id="lp_wr_pr_main_right"></td>
+  </tr>
+  <tr>
+    <td width="3" class="lp_wr_pr_loaction_gadget_bottom_left lp_wr_pr_sprite"></td>
+    <td>
+      <div class="lp_wr_pr_loaction_gadget_bottom lp_wr_pr_sprite"></div>
+    </td>
+    <td width="5" class="lp_wr_pr_loaction_gadget_bottom_right lp_wr_pr_sprite"></td>
+  </tr>
+
+  </table>
+</div>
+
+<div id="lp_wr_pr_photo_tmp" style="display:none"></div>
+
+<div>
+  <script type="text/javascript">
+        var mMENU = gadgets.io.getProxyUrl("http://cdn.labpixies.com/infra/js/lp_footer.js");
+      document.write('<scr'+'ipt type="text/javascript" src="'+mMENU+'"></scr'+'ipt>');
+     </script>
+</div>
+
+</center>
+
+<div id="td_size_cont" style="width:100%;height:1px;line-height:1px;font-size:1px;"></div>
+]]>
+  </Content>
+
+  <Content type="html" view="canvas">
+<![CDATA[
+<title>Weather</title>
+<!--[if IE 6]>
+<style type="text/css">
+.gainlayout {
+    zoom:1;
+}
+</style>
+<![endif]-->
+<style type="text/css">
+
+body, form {
+    margin:0;
+    padding:0;
+  direction:ltr;
+}
+
+#loading_block {
+    width:100%;
+    height:100%;
+    position:absolute;
+    left:0px;
+    top:0px;
+    z-index:500;
+    background:white;
+}
+
+#side_panel {
+    width:200px;
+    float:right;
+}
+
+#container {
+    width:510px;
+    overflow:hidden;
+    text-align:left;
+    position:relative;
+}
+
+#weatherbug {
+    border:0;
+    float:right;
+    margin-right:14px;
+}
+
+#titlebar {
+    height:42px;
+}
+
+#forecast {
+
+}
+
+#forecast table {
+    /*width:100%;*/
+
+/*    margin-left:3px;
+    margin-right:3px;*/
+}
+
+#forecast td {
+    width:14.3%;
+    text-align:center;
+}
+
+#day1 {
+    margin-left:17px;
+}
+
+#day7 {
+    margin-right:17px;
+}
+
+.day_title {
+    font-family:arial;
+    font-weight:bold;
+    font-size:11px;
+    color:#fff;
+    margin-top:9px;
+}
+
+.day_hi {
+    font-family:arial;
+    font-size:10px;
+    font-weight:bold;
+    color:#f49e1c;
+}
+
+.day_lo {
+    font-family:arial;
+    font-size:10px;
+    font-weight:bold;
+    color:#5ea3e3;
+    margin-bottom:2px;
+}
+
+.icon_background {
+    padding-top:6px;
+    padding-bottom:6px;
+    width:62px;
+    hiehgt:54px;
+    margin:0 auto;
+    cursor:pointer;
+}
+
+#bottom_outer, #bottom_left, #bottom_right, #bottom_left_white_corner, #bottom_right_white_corner {
+    height:28px;
+}
+
+#bottom_left {
+    padding-left:16px;
+}
+
+#bottom_right {
+    padding-right:16px;
+}
+
+#whitearea {
+    padding-left:24px;
+    padding-right:24px;
+}
+
+table.details td {
+    padding:0;
+    vertical-align:top;
+}
+
+table.details td.dayimg{
+    padding-bottom:10px
+}
+
+#whitearea img {
+    width:50px;
+    height:42px;
+}
+
+#whitearea .temp1 {
+    margin-left:10px;
+    font-family:arial;
+    font-size:11px;
+    font-weight:bold;
+    /*width:40px;*/
+  width:25px;
+    padding-left:5px;
+}
+#whitearea .temp2 {
+    /*margin-left:10px;*/
+    font-family:arial;
+    font-size:11px;
+    font-weight:bold;
+    /*width:40px;*/
+  width:15px;
+    padding-right:5px;
+}
+
+#whitearea .daytemp {
+    color:#e4771d;
+}
+
+#whitearea .nighttemp {
+    color:#2345c3;
+}
+
+#whitearea .textual {
+    font-family:arial;
+    font-size:11px;
+    color:#000;
+    line-height:13px;
+}
+
+#whitearea_top, #whitearea_top_left, #whitearea_top_right {
+    height:7px;
+  line-height:7px;
+  overflow:hidden;
+}
+
+#whitearea_top {
+    margin-left:16px;
+    margin-right:16px;
+}
+
+#city_name {
+    margin-left:20px;
+    font-family:arial;
+    font-size:14px;
+    font-weight:bold;
+    color:#fbe41c;
+    cursor:default;
+}
+
+#edit_location {
+    font-family:arial;
+    font-size:12px;
+    color:#12365d;
+
+    margin-left:5px;
+    display:none;
+}
+
+#titlebar_text {
+    margin-top:14px;
+    float:left;
+}
+
+.clear {
+    clear:left;
+    height:0;
+    line-height:0;
+    font-size:0;
+}
+
+.degree_radio {
+    font-family:arial;
+    font-size:11px;
+    color:#000;
+    vertical-align:2px;
+}
+
+#locations {
+    float:left;
+    margin-bottom:6px;
+}
+
+#edit_locations {
+    line-height:18px;
+    color:#12365d;
+    font-size:11px;
+    margin-left:10px;
+    display:none;
+}
+
+.location_button_outer {
+    padding-left:8px;
+    float:left;
+    cursor:pointer;
+    margin-left:4px;
+}
+
+.location_button {
+    font-family:arial;
+    font-size:12px;
+    color:#13265d;
+    height:18px;
+    line-height:18px;
+    padding-right:8px;
+    float:left;
+}
+
+#friends_title_left {
+    margin-top:10px;
+    padding-left:4px;
+    margin-left:7px;
+}
+
+#friends_title_right {
+    padding-right:4px;
+    margin-right:7px;
+}
+
+#friends_title {
+    font-family:arial;
+    font-size:11px;
+    font-weight:bold;
+    color:#fff;
+    height:23px;
+    line-height:23px;
+}
+
+#friends_map {
+    height:350px;
+    margin-left:7px;
+    margin-right:7px;
+    margin-top:13px;
+    border:1px solid #a8a6a9;
+}
+
+#locations_editor_outer {
+    width:100%;
+    margin-right:10px;
+}
+
+#locations_editor {
+    display:none;
+    border:1px solid #213fb7;
+    margin-left:4px;
+    margin-right:4px;
+    margin-bottom:4px;
+}
+
+#locations_editor table {
+    width:100%;
+}
+
+#locations_editor table td {
+    border-bottom:1px solid #e1e4ef;
+}
+
+#locations_editor table td, #locations_editor table th {
+    text-align:left;
+    padding:5px;
+    font-family:arial;
+    font-size:12px;
+    font-weight:bold;
+    color:#12365d;
+}
+
+#locations_editor table th {
+    font-size:10px;
+    /*text-align:center;*/
+}
+
+#locations_editor .header {
+    background:#e1e4ef;
+    height:23px;
+}
+
+#locations_editor .last {
+    width:40%;
+    text-align:right;
+}
+
+#locations_editor td.radio {
+    padding-left:10px;
+    width:8%;
+}
+
+#locations_editor td.location {
+    width:30%;
+    padding-left:10px;
+}
+
+#locations_editor td.edit {
+    width:8%;
+    text-align:center;
+}
+
+#locations_editor td.edit img {
+    cursor:pointer;
+}
+
+#locations_editor td.delete {
+    width:8%;
+    text-align:center;
+}
+
+#locations_editor td.delete img {
+    cursor:pointer;
+}
+
+#locations_editor_close_left {
+    float:right;
+    cursor:pointer;
+    padding-left:17px;
+}
+
+#locations_editor_close {
+    float:left;
+    color:#fff;
+    font-size:11px;
+    height:15px;
+    line-height:15px;
+    padding-right:7px;
+
+}
+
+#add_location_left {
+    float:left;
+    padding-left:14px;
+    clear:left;
+    margin-left:10px;
+    margin-top:10px;
+    margin-bottom:10px;
+    cursor:pointer;
+}
+
+#add_location {
+    float:left;
+    color:#fff;
+    font-family:arial;
+    font-size:12px;
+    font-weight:bold;
+    padding-right:8px;
+    height:18px;
+    line-height:18px;
+}
+
+#locations_search {
+    display:none;
+    border:1px solid #213fb7;
+    margin-left:4px;
+    margin-right:4px;
+}
+
+#locations_search .header {
+    background:#e1e4ef;
+    padding:5px;
+}
+
+#locations_search_back_left {
+    float:left;
+    padding-left:18px;
+    cursor:pointer;
+}
+
+#locations_search_back {
+    float:left;
+    padding-right:7px;
+    height:15px;
+    line-height:15px;
+    font-family:arial;
+    font-size:11px;
+    font-weight:bold;
+    color:#fff;
+}
+
+#locations_search_close_left {
+    float:right;
+    padding-left:17px;
+    cursor:pointer;
+}
+
+#locations_search_close {
+    float:left;
+    height:15px;
+    line-height:15px;
+    padding-right:7px;
+    font-family:arial;
+    font-size:11px;
+    font-weight:bold;
+    color:#fff;
+}
+
+#search_area {
+    padding-top:5px;
+    padding-bottom:10px;
+    padding-left:10px;
+    clear:left;
+}
+
+#search_link {
+    font-family:arial;
+    font-size:11px;
+    color:#dc4a20;
+    text-decoration:none;
+    margin-left:10px;
+}
+
+#search_link:hover {
+    text-decoration:underline;
+}
+
+#search_title {
+    font-family:arial;
+    font-size:11px;
+}
+
+#locations_results {
+    font-family:arial;
+    font-size:11px;
+    line-height:18px;
+    border-top:1px solid #e1e4ef;
+    /*overflow:auto;*/
+  overflow-y:scroll;
+  overflow-x:hidden;
+}
+
+#locations_results ul {
+    padding:0;
+    margin:0;
+    margin-left:10px;
+    list-style:none;
+}
+
+#locations_results ul li a, #locations_results ul li a:visited {
+    color:#13265d;
+    text-decoration:none;
+}
+
+#locations_results ul li a:hover {
+    color:#dc4a20;
+    text-decoration:underline;
+}
+
+img.map_profile_pic {
+    float:left;
+    margin-right:5px;
+    width:64px;
+    height:64px;
+}
+
+img.map_weather_pic {
+    float:left;
+    margin-right:5px;
+}
+
+a.map_profile_name, a.map_profle_name:visited {
+    font-family:arial;
+    font-size:12px;
+    color:#2242b8;
+    font-weight:bold;
+    text-decoration:none;
+}
+
+.map_profile_place {
+    font-family:arial;
+    font-size:10px;
+    color:#4c4c4c;
+}
+
+.map_profile_weather {
+    font-family:arial;
+    font-size:12px;
+}
+
+#feed_error {
+    font-size:12px;
+    text-align:center;
+    display:none;
+}
+
+#err_dialog {
+    background:#fff;
+    position:absolute;
+    width:400px;
+    height:140px;
+    border:2px solid #213FB7;
+    text-align:center;
+    top:68px;
+    display:none;
+}
+
+#err_dialog_close_left {
+    float:right;
+    cursor:pointer;
+    padding-left:17px;
+    margin-right:20px;
+}
+
+#err_dialog_close {
+    float:left;
+    color:#fff;
+    font-size:11px;
+    height:15px;
+    line-height:15px;
+    padding-right:7px;
+
+}
+
+.location_name
+{
+  padding-left:12px;
+}
+
+.table_tmp
+{
+  direction: __BIDI_DIR__;
+  /*width:30px;*/
+}
+
+.table_tmp
+{
+  direction: __BIDI_DIR__;
+  /*width:30px;*/
+}
+</style>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+
+<script type="text/javascript">
+
+  var _gadgetID = 49;
+    var $lp = jQuery.noConflict();
+
+var g_prefs = new gadgets.Prefs();
+
+
+function lp_trackEvent(eventName,eventLable,eventVar) {}
+
+    var platform;
+
+  try{
+      var domain = opensocial.getEnvironment().getDomain();
+      if( domain.indexOf('google.com/ig') >= 0 ) {
+    platform = 'igoogle';
+      }
+      else if ( domain.indexOf('orkut.com') >= 0 ) {
+    platform = 'orkut';
+      }
+      else if ( domain.indexOf('myspace.com') >= 0 ) {
+    platform = 'myspace';
+      }
+      else if ( domain.indexOf('hi5.com') >= 0 ) {
+    platform = 'hi5';
+      }
+      else if ( domain.indexOf('shindig') >= 0 ) {
+    platform = 'shindig';
+      }
+      else {
+      platform = 'igoogle';
+      }
+  }
+  catch (ee) {
+      if( document.location.hostname == 'os.labpixies.com' )
+    platform = 'shindig';
+      else
+    platform = 'igoogle';//the value should have been "not-os". changing it to "igoogle" will allow to try loading the igoogle key for the map.
+
+  }
+
+  var apikeys = {
+      igoogle: "ABQIAAAAZnZdzRcDBizyBEPH4MDuLxTZqGWfQErE9pT-IucjscazSdFnjBR0pJPAuGajKG2-0RpnSxJBm6BilQ",
+      orkut: "ABQIAAAAZnZdzRcDBizyBEPH4MDuLxTZqGWfQErE9pT-IucjscazSdFnjBR0pJPAuGajKG2-0RpnSxJBm6BilQ",
+      myspace: "ABQIAAAATcial5GD1zI7Wkyd02u5CBTnoafGCtz1NECmAcUYLJSslAPmLhSo5sk-K5hma2tX2B1HNna6rqM3xA",
+      hi5: "ABQIAAAATcial5GD1zI7Wkyd02u5CBRJwUzEb5stqZCdhItqARrWzouR2RTN54WcGHjzoG4dPOWD7703iR9Gfg",
+      shindig: "ABQIAAAATcial5GD1zI7Wkyd02u5CBTuURy28e5inG-turiJlevqF6eTlRQT1FEgGJBV1OM19HrFOlUKEIboGw"
+  };
+
+
+  var lang = g_prefs.getLang();
+  var mMAPS = 'http://maps.google.com/maps?file=api&amp;v=2&amp;hl='+lang+'&amp;key=' + apikeys[platform];
+  document.write('<scr'+'ipt type="text/javascript" src="'+mMAPS+'"></scr'+'ipt>');
+
+</script>
+
+<script type="text/javascript">
+
+  var IMAGES_BASE = "http://cdn.labpixies.com/campaigns/weather/images/canvas/";
+  var g_partner_id = "BFB7BE81-EF74-4b7b-A9EF-A82D059992EF";
+  var g_zip_code = '10001';
+  var g_city_code = '';
+  var g_degree = 0;
+  var g_zcode     = "z6070";
+
+  var g_locations = []; //an array that holds objects of type { zip_code, city_code }
+  var g_location_buttons = []; //an array that holds the location buttons dom elements
+  var g_active_location = 0;
+  var g_default_index = 0;
+
+  var g_delete_lock = 0; // "semahore" to help synchronize data requests with the rest of the code
+
+  var weekday = new Array(7);
+  weekday[0]="__MSG_sunday__";
+  weekday[1]="__MSG_monday__";
+  weekday[2]="__MSG_tuesday__";
+  weekday[3]="__MSG_wednesday__";
+  weekday[4]="__MSG_thursday__";
+  weekday[5]="__MSG_friday__";
+  weekday[6]="__MSG_saturday__";
+
+  var forecastData = [];
+  var arrDate = new Array();
+
+  var g_is_os;
+  var is_gadget_ready = false;
+  var g_params = gadgets.views.getParams();
+
+  gadgets.util.registerOnLoadHandler(init_module);
+  function gadget_ready() {
+      if(is_gadget_ready) return;
+      is_gadget_ready = true;
+      $lp('#loading_block').remove();
+
+    if ($lp.browser.msie)
+      $lp('#deg_settings').css('width','500px');
+  }
+
+
+
+  function init_module() {
+      loadImages();
+      g_is_os = !g_prefs.getInt('disable_os') && lpgadgets.lp.utils.isOpenSocialSupported();
+
+    /*
+      var addSidebarParams = {}; // contains the texts for notification areas
+      var addMenuParams = {}; // contains menu parameters
+
+      // set notification area titles
+      addSidebarParams.notifications = '__MSG_notifications__';
+      addSidebarParams.friendslist = '__MSG_friends_list__';
+
+      // set menu area params
+      addMenuParams.textDirection = '__MSG_tdDir__'; // optional, 'ltr' is the default value
+      addMenuParams.lang = '__MSG_lang__';       // optional, 'en' is the default value
+      addMenuParams.title = 'More Options';
+
+      // deploy sidebar
+      lpgadgets.lp.sidebar.deploy('container', addSidebarParams, addMenuParams);
+       */
+
+      date = new Date();
+      today = date.getDay();
+      for(var i=1;i<=7;i++) {
+      day_img = document.getElementById('day'+i+'_img');
+      day_img.index = i;
+      day_img.onclick = function() { selectDay(this.index);};
+
+
+      if( i == 1 ) {
+          document.getElementById('day'+i+'_title').innerHTML = "__MSG_today__";
+          day_img.parentNode.style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'icon_background_selected.png')+') no-repeat';
+      }
+      else {
+          document.getElementById('day'+i+'_title').innerHTML = weekday[ (today-1 + i) % 7 ];
+          day_img.parentNode.style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'icon_background.png')+') no-repeat';
+      }
+
+      day_img.src = gadgets.io.getProxyUrl(IMAGES_BASE + 'temp_icon_new.gif');
+      //document.getElementById('day'+i+'_hi').innerHTML = '__MSG_hi__: --&deg;';
+      //document.getElementById('day'+i+'_lo').innerHTML = '__MSG_lo__: --&deg;';
+
+      document.getElementById('day'+i+'_hi').innerHTML = '<center><table cellpadding="0" cellspacing="0" border="0" class="table_tmp day_hi"><tr><td style="width:15px;padding-left:5px;">__MSG_hi__:</td><td style="direction:ltr;width:15px;">--&deg;</td></tr></table></center>';
+      document.getElementById('day'+i+'_lo').innerHTML = '<center><table cellpadding="0" cellspacing="0" border="0" class="table_tmp day_lo"><tr><td style="width:15px;padding-left:5px;">__MSG_lo__:</td><td style="direction:ltr;width:15px;">--&deg;</td></tr></table></center>';
+      }
+
+
+      g_degree = g_prefs.getInt('degree_unit_type');
+      if(g_degree)
+    document.getElementById('degree_c').checked = true;
+      else
+    document.getElementById('degree_f').checked = true;
+
+      loadLocations();
+
+
+
+      initMap();
+      getAwsLinks();
+      gadget_ready();
+  }
+
+  var g_bounds;
+  var g_mapIcon;
+  var g_myIcon;
+
+  function initMap() {
+      map = new GMap2( document.getElementById('friends_map') );
+      map.setCenter( new GLatLng(37.4419, -122.1419), 6);
+
+      g_geocoder = new GClientGeocoder();
+      g_bounds = new GLatLngBounds();
+      g_mapIcon = new GIcon();
+      g_mapIcon.image = gadgets.io.getProxyUrl( IMAGES_BASE + 'marker.png' );// + '&bla=.png';
+      g_mapIcon.shadow = gadgets.io.getProxyUrl( IMAGES_BASE + 'marker_shadow.png' );// + '&bla=.png';
+      g_mapIcon.iconSize = new GSize(20, 22);
+      g_mapIcon.shadowSize = new GSize(20, 22);
+      g_mapIcon.iconAnchor = new GPoint(10, 22);
+      g_mapIcon.infoWindowAnchor = new GPoint(10, 2);
+      g_mapIcon.infoShadowAnchor = new GPoint(10, 18);
+
+      g_myIcon = new GIcon( g_mapIcon );
+      g_myIcon.image = gadgets.io.getProxyUrl( IMAGES_BASE + 'my_marker.png' );
+
+      map.addControl( new GMapTypeControl() );
+      map.addControl( new GLargeMapControl() );
+
+      if( g_is_os ) {
+    var params = {};
+    params[opensocial.DataRequest.PeopleRequestFields.PROFILE_DETAILS] = [opensocial.Person.Field.PROFILE_URL];
+
+    var req = opensocial.newDataRequest();
+    req.add( req.newFetchPersonRequest( opensocial.DataRequest.PersonId.OWNER ), "owner");
+    req.add( req.newFetchPeopleRequest( opensocial.DataRequest.Group.OWNER_FRIENDS, params ), 'ownerFriends' );
+    req.add( req.newFetchPersonAppDataRequest(opensocial.DataRequest.Group.OWNER_FRIENDS, 'locations'), 'locations' );
+
+    req.send(
+        function (data) {
+      try {
+          var ownerFriends = data.get('ownerFriends');
+          var ownerFriendsData = data.get('locations');
+
+          if( typeof(ownerFriends) != 'object' || typeof(ownerFriendsData) != 'object' ) return;
+
+          ownerFriends = ownerFriends.getData();
+          ownerFriendsData = ownerFriendsData.getData();
+
+          ownerFriends.each( function(person)
+                 {
+               if( !ownerFriendsData) return;
+               var locations = ownerFriendsData[ person.getId() ];
+
+               if(locations) {
+                   if( typeof(locations['locations']) == 'undefined' ) return;
+                   var obj = gadgets.util.unescapeString( locations['locations'] );
+                   obj = gadgets.json.parse(obj);
+
+                   try {
+                 var loc = {};
+                 loc.name = obj.name[obj['default']];
+                 loc.zip_code = obj.zip_code[obj['default']];
+                 loc.city_code = obj.city_code[obj['default']];
+                 loc.country = obj.country[obj['default']];
+
+                 findAndAddToMap( loc, person, 0 );
+                   }
+                   catch(ee) {}
+               }
+                 });
+      }
+      catch(ee) {
+          showErrorDialog(g_prefs.getMsg('data_load_error'));
+      }
+        });
+      }
+      else {
+    for( i in g_locations ) {
+        findAndAddToMap( g_locations[i], 0, 0 );
+    }
+      }
+
+  }
+
+  function findAndAddToMap( location, person, me ) {
+      var location_name = location.name;
+      if(location.country) location_name+=', '+location.country;
+
+      g_geocoder.getLocations( location_name,
+           function (response ) {
+               if( typeof( response.Placemark ) != 'object' ) return; //location not found
+
+               var place = response.Placemark[0];
+
+               var point = new GLatLng( place.Point.coordinates[1]+ Math.random()/5.0, place.Point.coordinates[0]+ Math.random()/5.0 );
+               var marker = new GMarker( point, {icon: me?g_myIcon:g_mapIcon} );
+               g_bounds.extend( point );
+
+               infoDiv = document.createElement('div');
+
+               if( person && g_is_os ) {
+             profileLink = document.createElement('a');
+             var name = person.getDisplayName();
+             if(!name && me) name = '__MSG_me__';
+
+             var profile_url = person.getField(opensocial.Person.Field.PROFILE_URL);
+             profileLink.innerHTML = name;
+             if( profile_url ) profileLink.href = profile_url;
+             profileLink.target = '_top';
+             profileLink.className = 'map_profile_name';
+
+             profilePic = document.createElement('img');
+             profilePic.src = person.getField(opensocial.Person.Field.THUMBNAIL_URL);
+             profilePic.className = 'map_profile_pic';
+
+             infoDiv.appendChild( profilePic );
+             infoDiv.appendChild( profileLink );
+               }
+               else {
+             var weatherImg = document.createElement('img');
+
+             weatherImg.className = 'map_weather_pic';
+             infoDiv.appendChild( weatherImg );
+               }
+
+               locationName = document.createElement('div');
+               locationName.innerHTML = location_name;
+               locationName.className = 'map_profile_place';
+
+               locationWeather = document.createElement('div');
+               locationWeather.className = 'map_profile_weather';
+
+               infoDiv.appendChild( locationName );
+               infoDiv.appendChild( locationWeather );
+
+               marker.bindInfoWindow( infoDiv );
+               marker.infoDiv = infoDiv;
+               marker.loc = location;
+
+               GEvent.addListener( marker, "infowindowopen",
+                 function () {
+                     var marker = this;
+                     var infoDiv = marker.infoDiv;
+
+                     getLiveWeatherForMap( location, $lp('.map_profile_weather', infoDiv ) );
+                     var img =  $lp('img',infoDiv);
+                     if( marker.loc == g_locations[g_active_location] && img.attr('class')=='map_weather_pic' ) {
+                   var src = document.getElementById('day1_img').src;
+                   img.attr('src',src).show();
+                     }
+                     else {
+                   img.hide();
+                     }
+                 });
+
+               map.addOverlay( marker );
+               if(location == g_locations[g_default_index]) marker.openInfoWindow( infoDiv );
+
+               var zoomlevel = map.getBoundsZoomLevel(g_bounds);
+               if( zoomlevel > 3 ) zoomlevel=3;
+
+               map.setCenter(g_bounds.getCenter(), zoomlevel);
+           });
+  }
+
+  /*------------------------------------------------------------------------------------------------*/
+  // if zip code contains a space, return false and use he city code
+  function is_zipcode_ok(zip_code)
+  {
+    if (zip_code.indexOf(' ') >= 0)
+      return false;
+    else
+      return true;
+  }
+  /*------------------------------------------------------------------------------------------------*/
+
+
+  function getLiveWeatherForMap( location, target_jquery ){
+      var cur_live_url = "";
+
+      //set url with the correct city code or zip code
+      if ( (location.zip_code!=0) && (is_zipcode_ok(location.zip_code)) ){
+    cur_live_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=103&PartnerId="+g_partner_id+"&zipcode=" + location.zip_code + "&unittype=" + g_degree + "&zcode="+g_zcode;
+      }
+      else if(location.city_code!=0) {
+    cur_live_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=103&PartnerId="+g_partner_id+"&citycode=" + location.city_code + "&unittype=" + g_degree + "&zcode="+g_zcode;
+      }
+
+      //fetch data
+      var params = {};
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+      gadgets.io.makeRequest(cur_live_url, function(response) {
+            try{
+          if (response == null || typeof(response) != "object" || response.data == null) {return;}
+          if(response.data.firstChild == null){return;}
+
+          var itemList = response.data.getElementsByTagName("condition");
+
+          if(itemList.item(0)){
+              var out_text = itemList.item(0).getAttribute('text')+', '+itemList.item(0).getAttribute("temp") + "&deg;";
+
+              target_jquery.html(out_text);
+          }
+            }
+            catch(e){}
+        }, params);
+  }
+
+  function loadLocations() {
+      if( !g_is_os ) { loadLocationsPref(); return; }
+
+      var json;
+
+      var req = opensocial.newDataRequest();
+      req.add( req.newFetchPersonRequest( opensocial.DataRequest.PersonId.VIEWER ), "viewer");
+      req.add( req.newFetchPersonRequest( opensocial.DataRequest.PersonId.OWNER), "owner");
+      req.add( req.newFetchPersonAppDataRequest(opensocial.DataRequest.PersonId.OWNER, "locations"), "locations" );
+      req.send(
+    function(data) {
+        var viewer;
+        var me;
+        try {
+      viewer = data.get("viewer");
+      me = data.get("owner");
+
+      if( typeof(viewer) != 'object' || typeof(me) != 'object' )
+          throw 2; //can't determine owner
+
+      viewer = viewer.getData();
+      me = me.getData();
+
+      if( me.getId() == viewer.getId() ) { //display edit location links
+          document.getElementById('edit_locations').style.display = 'inline';
+          //lpgadgets.lp.menu.addMenuItem('__MSG_add_location__', function(){ onAddLocation();});
+      }
+
+      var mydata = data.get("locations");
+
+      mydata = mydata.getData();
+
+      mydata = mydata[me.getId()];
+
+      if( typeof(mydata) == 'object' ) {
+          json = mydata['locations'];
+
+          json = gadgets.util.unescapeString(json);
+
+          if(json) {
+        obj = gadgets.json.parse(json);
+
+        g_default_index = obj['default'];
+
+        var len = obj.zip_code.length;
+        if( obj.city_code.length > len ) len = obj.city_code.length;
+
+        for( var i=0; i< len; i++ ) {
+            addLocation( obj.name[i], obj.zip_code[i] || '0', obj.city_code[i] || '0', obj.country[i], 0 );
+        }
+          }
+          else {
+        throw 1;
+          }
+      }
+      else {
+          throw 1;
+      }
+
+        }
+        catch(e) {
+      addLocation('New York', '10001', '');
+
+      if( e != 2 && me.isOwner() ) {
+          if( g_prefs.getInt('first_load') ) {
+        saveLocations();
+          }
+          else {
+        showErrorDialog(g_prefs.getMsg('data_load_error'));
+          }
+      }
+
+      g_default_index = 0;
+        }
+
+        g_active_location = g_default_index;
+        setActiveButton( g_default_index );
+        show_forecast(g_locations[g_default_index].zip_code, g_locations[g_default_index].city_code);
+
+        if( typeof(me)=='object' ) findAndAddToMap( g_locations[g_default_index] , me ,1);
+
+      });
+
+
+  }
+
+  function loadLocationsPref() {
+      var json;
+
+      document.getElementById('edit_locations').style.display = 'inline';
+      //lpgadgets.lp.menu.addMenuItem('__MSG_add_location__', function(){ onAddLocation();});
+
+      json = g_prefs.getString('locations');
+      json = lpgadgets.lp.utils.unescapeString(json);
+
+      if(json && json != '0') {
+      obj = lpgadgets.lp.utils.jsonParse(json);
+
+      g_default_index = obj['default'];
+
+      var len = obj.zip_code.length;
+      if( obj.city_code.length > len ) len = obj.city_code.length;
+
+      for( var i=0; i< len; i++ ) {
+          if(!obj.zip_code[i]) obj.zip_code[i]='0';
+          if(!obj.city_code[i]) obj.city_code[i]='0';
+
+          addLocation( obj.name[i], obj.zip_code[i], obj.city_code[i], obj.country[i], 0 );
+      }
+      }
+
+      else {
+      addLocation('New York', '10001', '');
+      g_default_index = 0;
+      }
+
+    g_active_location = g_default_index;
+    if (g_params.location)
+      g_active_location = g_params.location;
+
+    /*
+      setActiveButton( g_default_index );
+      show_forecast(g_locations[g_default_index].zip_code, g_locations[g_default_index].city_code);
+    */
+    setActiveButton( g_active_location );
+      show_forecast(g_locations[g_active_location].zip_code, g_locations[g_active_location].city_code);
+
+      //if( typeof(me)=='object' ) findAndAddToMap( g_locations[g_default_index] , me ,1);
+  }
+
+  function saveLocations() {
+      if( !g_is_os ) { saveLocationsPrefs(); return; }
+      obj = {};
+
+      locations_zip = [];
+      locations_city = [];
+      locations_name = [];
+      locations_country = [];
+
+      for( var i=0; i< g_locations.length; i++ ) {
+    locations_zip.push( g_locations[i].zip_code );
+    locations_city.push( g_locations[i].city_code );
+    locations_name.push( g_locations[i].name );
+    locations_country.push( g_locations[i].country );
+      }
+
+      obj.name = locations_name;
+      obj.zip_code = locations_zip;
+      obj.city_code = locations_city;
+      obj.country = locations_country;
+      obj['default'] = g_default_index;
+
+      json = gadgets.json.stringify(obj);
+
+
+
+      var req = opensocial.newDataRequest();
+      req.add( req.newUpdatePersonAppDataRequest("VIEWER", "locations", json));
+      req.send( function(response) {
+    if( !response.hadError() ) {
+        g_prefs.set('first_load','0');
+    }
+    else {
+        showErrorDialog(g_prefs.getMsg('data_error'));
+    }
+    if( g_delete_lock > 0 ) g_delete_lock--;
+      } );
+  }
+
+  function saveLocationsPrefs() {
+      obj = {};
+
+      locations_zip = [];
+      locations_city = [];
+      locations_name = [];
+      locations_country = [];
+
+      for( var i=0; i< g_locations.length; i++ ) {
+      locations_zip.push( g_locations[i].zip_code );
+      locations_city.push( g_locations[i].city_code );
+      locations_name.push( g_locations[i].name );
+      locations_country.push( g_locations[i].country );
+      }
+
+      obj.name = locations_name;
+      obj.zip_code = locations_zip;
+      obj.city_code = locations_city;
+      obj.country = locations_country;
+      obj['default'] = g_default_index;
+
+      json = lpgadgets.lp.utils.jsonStringify(obj);
+
+      g_prefs.set('locations', json);
+
+    // set profile open tab for default location
+    /*
+    var tabs = gadgets.json.parse(g_prefs.getString('tabs'));
+    if (tabs['l'+g_default_index] == 0)
+    {
+      tabs['l'+g_default_index] = 1;
+      g_prefs.set('tabs',gadgets.json.stringify(tabs));
+    }
+    */
+
+      if( g_delete_lock > 0 ) g_delete_lock--;
+  }
+
+  var g_img_edit;
+  var g_img_edit_over;
+  var g_img_delete;
+  var g_img_delete_over;
+
+  function loadImages() {
+      document.getElementById('weatherbug').src = gadgets.io.getProxyUrl(IMAGES_BASE + 'weatherbug_logo.jpg');
+
+      document.getElementById('titlebar').style.background = 'url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'blue_top.png') +')';
+
+      document.getElementById('forecast_left').style.background = 'url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'blue_forecast_left.jpg')+') top left no-repeat';
+      document.getElementById('forecast_right').style.background = 'url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'blue_forecast_right.jpg')+') top right no-repeat';
+      document.getElementById('forecast_outer').style.background = 'url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'blue_forecast_middle.jpg')+') repeat-x';
+
+      document.getElementById('bottom_outer').style.background = 'url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'blue_bottom.jpg')+') repeat-x';
+      document.getElementById('bottom_left').style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'blue_bottom_left.jpg')+') top left no-repeat';
+      document.getElementById('bottom_right').style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'blue_bottom_right.jpg')+') top right no-repeat';
+      //document.getElementById('bottom_left_white_corner').style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'blue_bottom_white_left.jpg')+') top left no-repeat';
+      //document.getElementById('bottom_right_white_corner').style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'blue_bottom_white_right.jpg')+') top right no-repeat';
+
+      document.getElementById('whitearea_outer_left').style.background = 'url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'blue_white_left.jpg')+') left repeat-y';
+      document.getElementById('whitearea_outer_right').style.background = 'url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'blue_white_right.jpg')+') right repeat-y';
+      document.getElementById('whitearea_top_right').style.background = 'url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'white_top_left.jpg')+') left no-repeat';
+      document.getElementById('whitearea_top_left').style.background = 'url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'white_top_right.jpg')+') right no-repeat';
+      document.getElementById('whitearea_top').style.background = 'url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'white_top.jpg')+') repeat-x';
+
+      document.getElementById('friends_title_left').style.background = 'url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'map_title_left.jpg')+') left no-repeat';
+      document.getElementById('friends_title_right').style.background = 'url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'map_title_right.jpg')+') right no-repeat';
+      document.getElementById('friends_title').style.background = 'url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'map_title_middle.jpg')+') repeat-x';
+
+      document.getElementById('locations_editor_close_left').style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'close_button_left.png')+') left no-repeat';
+      document.getElementById('locations_editor_close').style.background = '#103671 url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'close_button_right.png')+') right no-repeat';
+
+      g_img_edit = gadgets.io.getProxyUrl(IMAGES_BASE + 'edit_location.png');
+      g_img_edit_over = gadgets.io.getProxyUrl(IMAGES_BASE + 'edit_location_roll.png');
+      g_img_delete = gadgets.io.getProxyUrl(IMAGES_BASE + 'delete_location.png');
+      g_img_delete_over = gadgets.io.getProxyUrl(IMAGES_BASE + 'delete_location_roll.png');
+
+      document.getElementById('add_location_left').style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'add_location_left.png')+') left no-repeat';
+      document.getElementById('add_location').style.background = '#103671 url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'add_location_right.png')+') right no-repeat';
+
+      document.getElementById('locations_search_close_left').style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'close_button_left.png')+') left no-repeat';
+      document.getElementById('locations_search_close').style.background = '#103671 url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'close_button_right.png')+') right no-repeat';
+      document.getElementById('locations_search_back_left').style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'back_button_left.png')+') left no-repeat';
+      document.getElementById('locations_search_back').style.background = '#103671 url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'back_button_right.png')+') right no-repeat';
+
+      document.getElementById('err_dialog_close_left').style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'close_button_left.png')+') left no-repeat';
+      document.getElementById('err_dialog_close').style.background = '#103671 url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'close_button_right.png')+') right no-repeat';
+
+  }
+
+  function getFeedUrl( zip_code, city_code ) {
+    var url ="";
+    if(zip_code != '0' && zip_code != '' && is_zipcode_ok(zip_code)){
+      url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&ZipCode="+zip_code+"&UnitType="+g_degree+"&ForecastType=1&zcode="+g_zcode;
+
+      //fix bug of 4 digits
+      var temp_code = zip_code.toString();
+      if(temp_code.length==4){
+        url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&ZipCode=0"+zip_code+"&UnitType="+g_degree+"&ForecastType=1&zcode="+g_zcode;
+      }
+    }
+    else if(city_code != '0' && city_code != ''){
+      url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&CityCode="+city_code+"&UnitType="+g_degree+"&ForecastType=1&zcode="+g_zcode;
+    }
+    else{
+      if((zip_code != 0) && (is_zipcode_ok(zip_code))){
+        url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&ZipCode="+zip_code+"&UnitType="+g_degree+"&ForecastType=1&zcode="+g_zcode;
+        //fix bug of 4 digits
+        if(zip_code.length==4){
+          url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&ZipCode=0"+zip_code+"&UnitType="+g_degree+"&ForecastType=1&zcode="+g_zcode;
+        }
+      }
+      else{
+        url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&CityCode="+city_code+"&UnitType="+g_degree+"&ForecastType=1&zcode="+g_zcode;
+      }
+    }
+
+    //fix bug of 4 digits
+    if(zip_code.length==4 || zip_code.toString().length==4){
+      zip_code = "0" + zip_code;
+    }
+
+      return url;
+  }
+
+  var forecast_timeout;
+  function show_forecast( zip_code, city_code) {
+      url = getFeedUrl( zip_code, city_code );
+      //update gui with degree type
+      forecast_timeout = setTimeout("setErrorMsg()",10000);
+
+      var params = {};
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+      gadgets.io.makeRequest(url,parseRSS_Forecast, params);
+  }
+
+  function setErrorMsg() {
+      document.getElementById('forecast').style.display = 'none';
+      document.getElementById('whitearea').style.display = 'none';
+      document.getElementById('feed_error').style.display = 'block';
+      document.getElementById('city_name').innerHTML = '';
+      gadgets.window.adjustHeight();
+  }
+
+  function unsetErrorMsg() {
+      document.getElementById('forecast').style.display = 'block';
+      document.getElementById('whitearea').style.display = 'block';
+      document.getElementById('feed_error').style.display = 'none';
+  }
+
+  function parseRSS_Forecast(response) {
+      clearTimeout(forecast_timeout);
+      forecastData = [];
+
+      unsetErrorMsg();
+      if (response == null || typeof(response) != "object" || response.data == null) {
+    setErrorMsg();
+    return;
+      }
+
+      if(response.data.firstChild == null){
+    setErrorMsg();
+    return;
+      }
+
+      //--------------------------------------------
+      // Get Location name - city and state
+      //--------------------------------------------
+
+      var itemList_2 = response.data.getElementsByTagName("aws:location");
+      if(itemList_2.length==0){itemList_2 = response.data.getElementsByTagName("location");}
+
+      var state_name_str   = "";
+      var city_name_str   = "";
+      for (var k=0; k < itemList_2.length; k++) {
+
+    var nodeList_2 = itemList_2.item(k).childNodes;
+
+    for (var l=0; l < nodeList_2.length; l++) {
+
+        var node_2 = nodeList_2.item(l);
+
+        //city name
+        if(node_2.nodeName=="aws:city" || node_2.nodeName=="city"){
+/*      if(node_2.firstChild.nodeValue.length>16){
+          document.getElementById("city_name").innerHTML = node_2.firstChild.nodeValue.substring(0,15);
+      }
+      else{
+          document.getElementById("city_name").innerHTML = node_2.firstChild.nodeValue;
+      }
+*/
+      city_name_str = node_2.firstChild.nodeValue + ", ";
+        }
+
+        //state name or country name
+        if(node_2.nodeName=="aws:state" || node_2.nodeName=="state" ||node_2.nodeName=="aws:country" ||node_2.nodeName=="country"){
+      state_name_str = node_2.firstChild.nodeValue;
+        }
+    }
+      }
+
+      //update city title
+      document.getElementById("city_name").innerHTML = city_name_str + state_name_str;
+
+      //--------------------------------------------
+      // Get Forecast
+      //--------------------------------------------
+
+      //temp values
+      var tmp_name    =  "";
+      var tmp_image   =  "";
+      var tmp_hi     =  "";
+      var tmp_low   =  "";
+      var tmp_desc  =   "";
+      var cursor     = 0;
+
+      var itemList = response.data.getElementsByTagName("aws:forecast");
+      if(itemList.length == 0){itemList = response.data.getElementsByTagName("forecast");}
+      for (var i=0; i < itemList.length; i++) {
+
+    //for each node
+    var nodeList = itemList.item(i).childNodes;
+
+    for (var j=0; j < nodeList.length; j++) {
+
+        var node = nodeList.item(j);
+        if (node.firstChild) {
+            //day name
+            if(node.nodeName=="aws:title" || node.nodeName=="title"){tmp_name = node.firstChild.nodeValue;}
+
+            //day image
+            if(node.nodeName=="aws:image" || node.nodeName=="image"){tmp_image = node.firstChild.nodeValue;}
+
+            //day hi temp
+            if(node.nodeName=="aws:high" || node.nodeName=="high")  {tmp_hi = node.firstChild.nodeValue;}
+
+            //day low temp
+            if(node.nodeName=="aws:low" || node.nodeName=="low")  {tmp_low = node.firstChild.nodeValue;}
+
+            //day forecast text
+             if(node.nodeName=="aws:prediction" || node.nodeName=="prediction"){
+           tmp_desc = node.firstChild.nodeValue;
+             }
+         }
+
+    }
+
+
+    var k;
+    if(tmp_low == '--' ) { //day node
+        k = Math.floor( i / 2);
+        forecastData[k] = forecastData[k] || {};
+        forecastData[k].day = {};
+        forecastData[k].day.temp = tmp_hi;
+        forecastData[k].day.image = tmp_image;
+        forecastData[k].day.desc = tmp_desc;
+    }
+    else if(tmp_hi == '--' ) { //night node
+        k = Math.floor( (i-1) / 2 );
+        forecastData[k] = forecastData[k] || {};
+        forecastData[k].night = {};
+        forecastData[k].night.temp = tmp_low;
+        forecastData[k].night.image = tmp_image;
+        forecastData[k].night.desc = tmp_desc;
+    }
+    else { //not in the us - single node per day
+        k = i;
+        forecastData[k] = forecastData[k] || {};
+        forecastData[k].single = {};
+        forecastData[k].single.temp = {};
+        forecastData[k].single.temp.hi = tmp_hi;
+        forecastData[k].single.temp.lo = tmp_low;
+        forecastData[k].single.image = tmp_image;
+        forecastData[k].single.desc = tmp_desc;
+    }
+
+
+      }
+
+      for (var i=1; i<=7; i++ ) {
+    if( typeof(forecastData[i-1]) == 'undefined'  ) {
+        for(var j=i-1; j<=7; j++ ) {
+      document.getElementById('day'+i+'_img').src = gadgets.io.getProxyUrl(IMAGES_BASE + 'temp_icon_new.gif');
+      //document.getElementById('day'+i+'_hi').innerHTML = '__MSG_hi__: --&deg;';
+      //document.getElementById('day'+i+'_lo').innerHTML = '__MSG_lo__: --&deg;';
+      document.getElementById('day'+i+'_hi').innerHTML = '<center><table cellpadding="0" cellspacing="0" border="0" class="table_tmp day_hi"><tr><td style="width:15px;padding-left:5px;">__MSG_hi__:</td><td style="direction:ltr;width:15px;">--&deg;</td></tr></table></center>';
+        document.getElementById('day'+i+'_lo').innerHTML = '<center><table cellpadding="0" cellspacing="0" border="0" class="table_tmp day_lo"><tr><td style="width:15px;padding-left:5px;">__MSG_lo__:</td><td style="direction:ltr;width:15px;">--&deg;</td></tr></table></center>';
+
+        }
+        break;
+    }
+
+    if( typeof(forecastData[i-1].day ) == 'object' ) {
+        document.getElementById('day'+i+'_img').src = forecastData[i-1].day.image;
+        //document.getElementById('day'+i+'_hi').innerHTML = '__MSG_hi__: '+forecastData[i-1].day.temp + '&deg;';
+      document.getElementById('day'+i+'_hi').innerHTML = '<center><table cellpadding="0" cellspacing="0" border="0" class="table_tmp day_hi"><tr><td style="width:15px;padding-left:5px;">__MSG_hi__:</td><td style="direction:ltr;width:21px;">'+forecastData[i-1].day.temp + '&deg;</td></tr></table></center>';
+    }
+    if( typeof(forecastData[i-1].night ) == 'object' ) {
+        //document.getElementById('day'+i+'_lo').innerHTML = '__MSG_lo__: '+forecastData[i-1].night.temp + '&deg;';
+      document.getElementById('day'+i+'_lo').innerHTML = '<center><table cellpadding="0" cellspacing="0" border="0" class="table_tmp day_lo"><tr><td style="width:15px;padding-left:5px;">__MSG_lo__:</td><td style="direction:ltr;width:21px;">'+forecastData[i-1].night.temp + '&deg;</td></tr></table></center>';
+    }
+    if( typeof(forecastData[i-1].single ) == 'object' ) {
+        document.getElementById('day'+i+'_img').src = forecastData[i-1].single.image;
+        //document.getElementById('day'+i+'_hi').innerHTML = '__MSG_hi__: '+forecastData[i-1].single.temp.hi + '&deg;';
+        //document.getElementById('day'+i+'_lo').innerHTML = '__MSG_lo__: '+forecastData[i-1].single.temp.lo + '&deg;';
+      document.getElementById('day'+i+'_hi').innerHTML = '<center><table cellpadding="0" cellspacing="0" border="0" class="table_tmp day_hi"><tr><td style="width:15px;padding-left:5px;">__MSG_hi__:</td><td style="direction:ltr;width:21px;">'+forecastData[i-1].single.temp.hi + '&deg;</td></tr></table></center>';
+        document.getElementById('day'+i+'_lo').innerHTML = '<center><table cellpadding="0" cellspacing="0" border="0" class="table_tmp day_lo"><tr><td style="width:15px;padding-left:5px;">__MSG_lo__:</td><td style="direction:ltr;width:21px;">'+forecastData[i-1].single.temp.lo + '&deg;</td></tr></table></center>';
+    }
+
+      }
+
+      if( g_params && g_params.day ) selectDay( parseInt(g_params.day) );
+      else selectDay(1);
+
+      if( g_params && g_params.edit ) {
+    onEditLocations();
+    g_params = {};
+      }
+      else if( g_params && g_params.add ) {
+    onAddLocation();
+    g_params = {};
+      }
+
+      gadgets.window.adjustHeight();
+
+  }
+
+  function selectDay( index ) {
+      if( typeof(forecastData[index-1]) !='object') return;
+      for(var i=1; i<=7; i++ ) {
+    if(i != index ) document.getElementById('day'+i+'_img').parentNode.style.background =  'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'icon_background.png')+') no-repeat';
+      }
+
+      document.getElementById('day'+index+'_img').parentNode.style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'icon_background_selected.png')+') no-repeat';
+
+      var whiteArea = document.getElementById('whitearea');
+      whiteArea.innerHTML = '';
+
+      var table = $lp('<table class="details">').appendTo(whiteArea);
+
+      if( typeof(forecastData[index-1].day ) == 'object' ) {
+    var tr = $lp('<tr>').appendTo(table);
+
+    $lp('<td class="dayimg"><img src="'+forecastData[ index-1 ].day.image+'" /></td>').appendTo(tr);
+    //$lp('<td class="temp daytemp">'+'__MSG_hi__: '+forecastData[ index-1 ].day.temp + '&deg;</td>').appendTo(tr);
+    $lp('<td class="temp1 daytemp">__MSG_hi__:</td>').appendTo(tr);
+    $lp('<td class="temp2 daytemp">'+forecastData[ index-1 ].day.temp + '&deg;</td>').appendTo(tr);
+    $lp('<td class="textual">'+forecastData[ index-1 ].day.desc+'</td>').appendTo(tr);
+    if( typeof(forecastData[index-1].night) != 'object' ) {
+        $lp('td.dayimg',tr).attr('class','');
+    }
+      }
+
+      if( typeof(forecastData[index-1].night ) == 'object' ) {
+    var tr = $lp('<tr>').appendTo(table);
+
+    $lp('<td><img src="'+forecastData[ index-1 ].night.image+'" /></td>').appendTo(tr);
+    //$lp('<td class="temp nighttemp">'+'__MSG_lo__: '+forecastData[ index-1 ].night.temp + '&deg;</td>').appendTo(tr);
+    $lp('<td class="temp1 nighttemp">__MSG_lo__:</td>').appendTo(tr);
+    $lp('<td class="temp2 nighttemp">'+forecastData[ index-1 ].night.temp + '&deg;</td>').appendTo(tr);
+    $lp('<td class="textual">'+forecastData[ index-1 ].night.desc+'</td>').appendTo(tr);
+      }
+
+      if( typeof(forecastData[index-1].single ) == 'object' ) {
+    var tr = $lp('<tr>').appendTo(table);
+
+    $lp('<td><img src="'+forecastData[ index-1 ].single.image+'" /></td>').appendTo(tr);
+    //$lp('<td class="temp daytemp">'+'__MSG_hi__: '+forecastData[ index-1 ].single.temp.hi + '&deg;</td>').appendTo(tr);
+    $lp('<td class="temp1 daytemp">__MSG_hi__:</td>').appendTo(tr);
+    $lp('<td class="temp2 daytemp">'+forecastData[ index-1 ].single.temp.hi + '&deg;</td>').appendTo(tr);
+    $lp('<td class="textual">'+forecastData[ index-1 ].single.desc+'</td>').appendTo(tr);
+      }
+
+
+      gadgets.window.adjustHeight();
+  }
+
+  function degreeChanged(value) {
+  //onclick handler for the degree type radio buttons
+      var degs = "Celsius";
+      if (value==0){
+        degs = "Fahrenheit";
+      }
+      g_degree = value;
+      g_prefs.set('degree_unit_type', g_degree);
+
+      show_forecast(g_locations[ g_active_location ].zip_code , g_locations[ g_active_location ].city_code);
+  }
+
+  function addLocation( name, zip, city, country, save ) {
+      index = g_locations.push( {name: name, zip_code: zip, city_code: city, country: country} ) - 1;
+      if(save) saveLocations();
+
+      addLocationButton( index, name );
+
+      //create an entry for the new location in the Edit Locations dialog
+      tr = document.createElement('tr');
+      tdRadio = document.createElement('td');
+      tdRadio.className = 'radio';
+      //inputRadio = document.createElement('input');
+      inputRadio = $lp('<input type="radio" name="default_location" value="'+index+'" />');
+      inputRadio.click( function (ee) { //save new default location
+    g_default_index = this.value;
+    //lpgadgets.lp.notifications.setAlert('__MSG_note_changed_location__ ' + g_locations[g_default_index].name );
+    //lpgadgets.lp.notifications.addTagLine(g_locations[g_default_index].name);
+    saveLocations();
+    return true;
+      }) ;
+      //tdRadio.appendChild(inputRadio);
+      $lp(tdRadio).append(inputRadio);
+
+    //tdSpacer = document.createElement('td');
+    //tdSpacer.width = 12;
+    //tdSpacer.innerHTML = '&nbsp;';
+
+      tdLocation = document.createElement('td');
+      //tdLocation.innerHTML = name;
+    tdLocation.innerHTML = '<div style="margin-left:7px;">'+name+'</div>';
+
+      tdEdit = document.createElement('td');
+      tdEdit.className = 'edit';
+      imgEdit = document.createElement('img');
+      imgEdit.src = g_img_edit;
+      imgEdit.onmouseover = function () { this.src = g_img_edit_over; };
+      imgEdit.onmouseout = function () { this.src = g_img_edit; };
+      imgEdit.index = index;
+      imgEdit.onclick = editButtonHandler;
+      tdEdit.appendChild(imgEdit);
+
+      tdDelete = document.createElement('td');
+      tdDelete.className = 'delete';
+      imgDelete = document.createElement('img');
+      imgDelete.src = g_img_delete;
+      imgDelete.onmouseover = function () { this.src = g_img_delete_over; };
+      imgDelete.onmouseout = function () { this.src = g_img_delete; };
+      imgDelete.index = index;
+      imgDelete.onclick = deleteButtonHandler;
+      tdDelete.appendChild(imgDelete);
+
+      tdLast = document.createElement('td');
+      tdLast.innerHTML = '&nbsp;';
+
+      //tr.appendChild(tdRadio);
+    //tr.appendChild(tdSpacer);
+      tr.appendChild(tdLocation);
+      tr.appendChild(tdEdit);
+      tr.appendChild(tdDelete);
+      tr.appendChild(tdLast);
+
+      document.getElementById('locations_editor_tbody').appendChild(tr);
+
+      if( g_default_index == index ) inputRadio.attr('checked',true); //this has to be done here for IE
+
+      if( g_locations.length > 1 ) showDelete();
+      else {
+    hideDelete();
+      }
+  }
+
+  function addLocationButton( index, name ) {
+  //this function is used to create the location buttons
+
+      leftDiv = document.createElement('div'); //this is the outer div - it creates the left part of the button
+      leftDiv.style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'location_left.png')+') left no-repeat';
+      leftDiv.className = 'location_button_outer';
+      leftDiv.location_index = index;
+      leftDiv.onclick = locationHandler;
+
+      rightDiv = document.createElement('div');
+      rightDiv.className = 'location_button';
+      rightDiv.style.background = '#97d5fc url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'location_right.png')+') right no-repeat';
+
+      if( name.length > 10 ) name = name.substring(0, 8) + '...';
+      rightDiv.appendChild( document.createTextNode( name ) );
+      leftDiv.appendChild(rightDiv);
+
+      document.getElementById('locations').appendChild(leftDiv);
+      g_location_buttons.push( leftDiv );
+  }
+
+  function setActiveButton( index ) {
+
+      for( var j=0; j<g_location_buttons.length; j++ ) {
+    g_location_buttons[j].style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'location_left.png')+') left no-repeat';
+    g_location_buttons[j].firstChild.style.background = '#97d5fc url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'location_right.png')+') right no-repeat';
+      }
+      g_location_buttons[index].style.background = 'transparent url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'location_current_left.png')+') left no-repeat';
+      g_location_buttons[index].firstChild.style.background = '#ef8a14 url'+'('+gadgets.io.getProxyUrl(IMAGES_BASE + 'location_current_right.png')+') right no-repeat';
+  }
+
+  function locationHandler() {
+  //this is the onclick handler for the location buttons
+      i = this.location_index;
+      setActiveButton( i );
+
+      g_active_location = i;
+      show_forecast( g_locations[i].zip_code, g_locations[i].city_code );
+      getAwsLinks();
+  }
+
+  function searchLocationByString(str){
+      //search for locations
+      str        = escape(str);
+      cur_url       = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=103&PartnerId="+g_partner_id+"&SearchString=" + str + "&zcode="+g_zcode;;
+
+      var params = {};
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+      gadgets.io.makeRequest(cur_url,parseRSS_Locations, params);
+  }
+
+  function parseRSS_Locations( response ) {
+      resultsDiv = document.getElementById('locations_results');
+      resultsDiv.innerHTML = '';
+
+      if( response == null || typeof(response) != 'object' || response.data == null) {
+    resultsDiv.innerHTML = '<i style="padding-left:10px">'+g_prefs.getMsg("invalid_result")+'</i>';
+    return;
+      }
+
+      locationTags = response.data.getElementsByTagName('location');
+      if( locationTags.length == 0 ) {
+    resultsDiv.innerHTML = '<i style="padding-left:10px">'+g_prefs.getMsg("invalid_result")+'</i>';
+    return;
+      }
+
+      ul = document.createElement('ul');
+
+      for(var i=0; i< locationTags.length; i++ ) {
+    li = document.createElement('li');
+    a = document.createElement('a');
+
+    city = locationTags[i].getAttribute('city');
+    state = locationTags[i].getAttribute('state');
+    country = locationTags[i].getAttribute('country');
+    state = locationTags[i].getAttribute('state');
+    if( state ) country = state+', '+country;
+
+    a.innerHTML = '&bull; '+city+' ('+country+')';
+    a.href="#";
+    if(state) a.innerHTML += ', '+state;
+
+    a.location = { name: city, zipcode: locationTags[i].getAttribute('zipcode'), citycode: locationTags[i].getAttribute('citycode'), country:country };
+    a.onclick = locationLinkHandler;
+
+    li.appendChild(a);
+    ul.appendChild(li);
+      }
+
+      resultsDiv.appendChild(ul);
+
+      resultsDiv.style.height = '';
+      if( resultsDiv.offsetHeight > 145 ) resultsDiv.style.height = '145px';
+
+  }
+
+  var g_replacing_location = -1; /* if this var is set to anything other than -1, the following function
+          will use it as the index of the location that it should replace */
+
+  function locationLinkHandler() {
+
+    //alert('locationLinkHandler. g_replacing_location: ' + g_replacing_location);
+      if( g_replacing_location < 0 ) {
+    var index = g_locations.length;
+
+    g_default_index = index;
+    addLocation( this.location.name, this.location.zipcode, this.location.citycode, this.location.country, 1 );
+
+    setActiveButton( index );
+
+    g_active_location = index;
+    show_forecast( g_locations[index].zip_code, g_locations[index].city_code );
+      }
+      else {
+    g_locations[g_replacing_location].name = this.location.name;
+    g_locations[g_replacing_location].zip_code = this.location.zipcode;
+    g_locations[g_replacing_location].city_code = this.location.citycode;
+    g_locations[g_replacing_location].country = this.location.country;
+
+    //replace the entry in the locations editor table
+    $lp('tr:eq('+ (g_replacing_location+1) + ') >td:eq(0)', document.getElementById('locations_editor_tbody')).html( '<div style="margin-left:7px;">'+this.location.name+'</div>' );
+
+    //rewrite the locatin button
+    var name = this.location.name;
+    if( name.length > 10 ) name = name.substring(0, 8) + '...';
+    g_location_buttons[g_replacing_location].firstChild.innerHTML = name;
+    g_location_buttons[g_replacing_location].onclick();
+
+    setActiveButton( g_replacing_location );
+
+    g_active_location = g_replacing_location;
+    show_forecast( g_locations[g_replacing_location].zip_code, g_locations[g_replacing_location].city_code );
+
+    g_replacing_location = -1;
+
+    saveLocations();
+      }
+
+      onLocationSearchClose();
+      return false;
+  }
+
+  function onLocationSearch() {
+      str  = document.getElementById('search_box').value;
+
+      searchLocationByString(str);
+  }
+
+  function onEditLocations() {
+      document.getElementById('locations_editor').style.display = 'block';
+      document.getElementById('locations_search').style.display = 'none';
+
+      gadgets.window.adjustHeight();
+  }
+
+  function onEditLocation() {
+      var location = g_locations[ g_active_location ];
+      g_replacing_location = g_active_location;
+
+      document.getElementById('search_box').value = location.name;
+      showLocationSearch();
+      onLocationSearch();
+  }
+
+  function onLocationsEditorClose() {
+      document.getElementById('locations_editor').style.display = 'none';
+
+      gadgets.window.adjustHeight();
+  }
+
+  function editButtonHandler() {
+      var location = g_locations[ this.index ];
+      g_replacing_location = this.index;
+
+      document.getElementById('search_box').value = location.name;
+      showLocationSearch();
+      onLocationSearch();
+  }
+
+
+  function deleteButtonHandler() {
+      if( g_delete_lock > 0 ) return;
+      else g_delete_lock++;
+
+      try {
+
+    // remove the location from the global array
+    g_locations.splice( this.index, 1 );
+
+    // remove the location button
+    g_location_buttons[ this.index ].parentNode.removeChild( g_location_buttons[ this.index ] );
+    g_location_buttons.splice( this.index, 1 );
+
+    // update button indices
+    for( var i=this.index; i<g_location_buttons.length; i++ ) {
+        g_location_buttons[i].location_index--;
+    }
+
+    // remove the table entry
+    this.parentNode.parentNode.parentNode.removeChild( this.parentNode.parentNode );
+
+    // update radio button values
+    $lp('#locations_editor_tbody input:radio').each( function( n, el) {
+        el.value = n;
+    });
+
+    // update delete button indices
+    $lp('#locations_editor_tbody td.delete img').each( function( n, el) {
+        el.index = n;
+    });
+
+    // update edit button indices
+    $lp('#locations_editor_tbody td.edit img').each( function( n, el) {
+        el.index = n;
+    });
+
+    // if the default location was removed
+    if( g_default_index == this.index ) {
+      $lp('#locations_editor_tbody input[@value=0]').attr('checked',true);
+        g_default_index = 0;
+    }
+    else if ( g_default_index > this.index ) {
+        g_default_index--;
+
+    }
+
+    setActiveButton( g_default_index );
+    g_active_location = g_default_index;
+    show_forecast( g_locations[g_default_index].zip_code, g_locations[g_default_index].city_code );
+
+    if( g_locations.length == 1 ) hideDelete();
+    // save changes
+    saveLocations();
+
+      }
+      catch (ee) { g_delete_lock--; }
+
+  }
+
+  function hideDelete() {
+      $lp('td.delete>img').css('visibility','hidden');
+      $lp('th.delete').html('');
+  }
+
+  function showDelete() {
+      $lp('td.delete>img').css('visibility','visible');
+      $lp('th.delete').html('__MSG_delete__');
+  }
+
+  function showLocationSearch() {
+      document.getElementById('locations_editor').style.display = 'none';
+      document.getElementById('locations_search').style.display = 'block';
+
+      gadgets.window.adjustHeight();
+  }
+
+  function onAddLocation() {
+      if( g_locations.length >= 5 ) {
+    showErrorDialog(g_prefs.getMsg( 'too_many_locations'));
+
+    return;
+      }
+
+      showLocationSearch();
+  }
+
+  function onLocationSearchBack() {
+      document.getElementById('locations_editor').style.display = 'block';
+      document.getElementById('locations_search').style.display = 'none';
+
+      gadgets.window.adjustHeight();
+  }
+
+  function onLocationSearchClose() {
+      document.getElementById('locations_search').style.display = 'none';
+
+      gadgets.window.adjustHeight();
+  }
+
+  function getAwsLinks() {
+      var cur_url = "";
+
+      //set url with the correct city code or zip code
+
+      var zip_code = g_locations[ g_active_location ].zip_code;
+      var city_code = g_locations[ g_active_location ].city_code;
+
+      if ((zip_code!=0) && (is_zipcode_ok(zip_code))){
+    cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&ZipCode="+zip_code+"&LinkName=forecast_hourly,maps_infrared,severeweather_localalerts,hurricanes_commandcenter,cameras_local,traffic_local,video_local,health_airquality,travel_forecast&Zcode="+g_zcode;
+      }
+      else if(city_code!=0){
+    cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&CityCode="+city_code+"&LinkName=forecast_hourly,maps_infrared,severeweather_localalerts,hurricanes_commandcenter,cameras_local,traffic_local,video_local,health_airquality,travel_forecast&Zcode="+g_zcode;
+      }
+
+      //fetch data
+      var params = {};
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+      gadgets.io.makeRequest(cur_url,parseRSS_AWS_LINKS, params);
+  }
+
+  var g_links_set = false;
+  var g_link_titles = {'forecast_hourly':'Hourly Forecast', 'maps_infrared':'Radar & Maps', 'severeweather_localalerts':'Severe Weather', 'hurricanes_commandcenter':'Hurricanes', 'cameras_local':'Weather Cameras', 'traffic_local':'Traffic Cameras', 'video_local':'Video Forecast','health_airquality':'Health & Fitness', 'travel_forecast':'Travel'};
+  var g_link_urls = {};
+
+  function sidebarLink(t) {
+      window.open(g_link_urls[t],'_blank');
+  }
+
+  function parseRSS_AWS_LINKS(response) {
+
+      if(!g_links_set) {
+    for(t in g_link_titles ) {
+        g_link_urls[t] = "http://www.weatherbug.com/?zcode="+g_zcode;
+        //eval("var func = function() {sidebarLink('"+t+"');}");
+        //lpgadgets.lp.menu.addLongMenuItem( g_link_titles[t], g_link_titles[t],IMAGES_BASE + 'weatherbug_icon', func);
+    }
+    g_links_set = true;
+
+      }
+
+      try{
+    if (response == null || typeof(response) != "object" || response.data == null) {return;}
+    if(response.data.firstChild == null){return;}
+
+    var itemList = response.data.getElementsByTagName("aws:Link");
+    if(itemList.length==0){itemList = response.data.getElementsByTagName("Link");}
+
+
+    //check if we have any items
+    for( i=0;i<itemList.length;i++ ) {
+        var t = itemList[i].getAttribute('linkname');
+        var title = g_link_titles[t];
+        if(typeof(title)!='undefined') {
+      g_link_urls[t] = itemList[i].getAttribute('url');
+        }
+    }
+
+      }
+      catch(e){}
+  }
+
+  function showErrorDialog(errmsg) {
+      dialog = document.getElementById('err_dialog');
+      document.getElementById('err_dialog_inner').innerHTML = errmsg;
+
+      parent_left = dialog.parentNode.offsetLeft;
+      dialog.style.left = (parent_left+70) + 'px';
+      dialog.style.display = 'block';
+  }
+
+</script>
+
+<center>
+<table cellpadding="0" cellspacing="0" border="0"  width="540">
+    <tr>
+        <td style="width:520px;padding-left:15px;">
+      <div id="container">
+<div>
+  <div id="locations"></div>
+  <div style="float:left"><a id="edit_locations" href="#" onclick="onEditLocations(); return false;">__MSG_edit_locations__</a></div>
+</div>
+<div class="clear"></div>
+
+<div id="locations_editor_outer">
+<div id="err_dialog">
+  <table>
+    <tr><td id="err_dialog_inner" style="width:400px;height:100px;text-align:center;vertical-align:middle;"></td></tr>
+    <tr><td><div onclick="document.getElementById('err_dialog').style.display='none';" id="err_dialog_close_left">
+      <div id="err_dialog_close">__MSG_close__</div></div></td></tr>
+  </table>
+</div>
+
+<div id="locations_editor">
+
+<table id="locations_editor_table" border="0" cellpadding="0" cellspacing="0">
+<form id="default_form">
+  <tbody id="locations_editor_tbody">
+  <tr class="header">
+    <!--<th>__MSG_default__</th>-->
+    <th class="location"><div style="margin-left:7px;">__MSG_location_title__</div></th>
+    <th class="edit">__MSG_Edit__</th>
+    <th class="delete">__MSG_delete__</th>
+    <th class="last">
+      <div onclick="onLocationsEditorClose();" id="locations_editor_close_left">
+        <div id="locations_editor_close">__MSG_close__</div>
+      </div>
+    </th>
+  </tr>
+  </tbody>
+</form>
+</table>
+
+
+
+
+
+  <div onclick="onAddLocation();" id="add_location_left"><div id="add_location">__MSG_add_location__</div></div>
+  <div class="clear"></div>
+
+  <div id="deg_settings" style="width:488px;height:24px;padding-left:12px;border-top:1px solid #213FB7;background-color:#E1E4EF;">
+    <div style="float:left;font-size:11px;font-weight:bold;margin-right:5px;line-height:24px;">__MSG_units__:</div>
+    <div style="float:left;line-height:24px;direction:__BIDI_DIR__;">
+      <input type="radio" name="degree" id="degree_f" onclick="degreeChanged(0);" />
+      <label class="degree_radio" for="degree_f">__MSG_fahrenheit__</label>
+      <input type="radio" name="degree" id="degree_c" onclick="degreeChanged(1);"/>
+      <label class="degree_radio" for="degree_c">__MSG_celsius__</label>
+    </div>
+  </div>
+
+</div> <!-- locations_editor -->
+
+
+
+
+</div> <!-- locations_editor_outer -->
+
+
+
+
+<div id="locations_search">
+  <div class="header">
+    <div onclick="onLocationSearchBack();return false;" id="locations_search_back_left"><div id="locations_search_back">__MSG_back__</div></div>
+    <div onclick="onLocationSearchClose();return false;" id="locations_search_close_left"><div id="locations_search_close">__MSG_close__</div></div>
+    <div></div>
+    <div class="clear"></div>
+  </div>
+  <div></div>
+  <div id="search_area">
+  <form onsubmit="onLocationSearch();return false;">
+    <div id="search_title">__MSG_search_title__</div>
+    <div><input id="search_box" /><a id="search_link" href="#" onclick="onLocationSearch();return false;" >&raquo; __MSG_search__</a></div>
+  </form>
+  </div>
+  <div id="locations_results">
+
+  </div>
+</div>
+<div class="clear"></div>
+<div id="titlebar">
+  <span id="titlebar_text">
+    <span id="city_name">__MSG_loading__</span>
+
+  </span>
+  <a href="http://www.weatherbug.com/?zcode=z6070" target="_new"><img id="weatherbug" /></a>
+</div>
+<div id="forecast_outer" class="gainlayout">
+  <div id="forecast_left" class="gainlayout">
+  <div id="forecast_right" class="gainlayout">
+  <div id="forecast">
+    <table>
+      <tr>
+        <td>
+          <div id="day1">
+            <div class="icon_background"><img id="day1_img"/></div>
+            <div class="day_title" id="day1_title"></div>
+            <div class="day_hi" id="day1_hi"></div>
+            <div class="day_lo" id="day1_lo"></div>
+          </div>
+        </td>
+        <td>
+          <div id="day2">
+            <div class="icon_background"><img id="day2_img"/></div>
+            <div class="day_title" id="day2_title"></div>
+            <div class="day_hi" id="day2_hi"></div>
+            <div class="day_lo" id="day2_lo"></div>
+          </div>
+        </td>
+        <td>
+          <div id="day3">
+            <div class="icon_background"><img id="day3_img"/></div>
+            <div class="day_title" id="day3_title"></div>
+            <div class="day_hi" id="day3_hi"></div>
+            <div class="day_lo" id="day3_lo"></div>
+          </div>
+        </td>
+        <td>
+          <div id="day4">
+            <div class="icon_background"><img id="day4_img"/></div>
+            <div class="day_title" id="day4_title"></div>
+            <div class="day_hi" id="day4_hi"></div>
+            <div class="day_lo" id="day4_lo"></div>
+          </div>
+        </td>
+        <td>
+          <div id="day5">
+            <div class="icon_background"><img id="day5_img"/></div>
+            <div class="day_title" id="day5_title"></div>
+            <div class="day_hi" id="day5_hi"></div>
+            <div class="day_lo" id="day5_lo"></div>
+          </div>
+        </td>
+        <td>
+          <div id="day6">
+            <div class="icon_background"><img id="day6_img"/></div>
+            <div class="day_title" id="day6_title"></div>
+            <div class="day_hi" id="day6_hi"></div>
+            <div class="day_lo" id="day6_lo"></div>
+          </div>
+        </td>
+        <td>
+          <div id="day7">
+            <div class="icon_background"><img id="day7_img"/></div>
+            <div class="day_title" id="day7_title"></div>
+            <div class="day_hi" id="day7_hi"></div>
+            <div class="day_lo" id="day7_lo"></div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  </div>
+  </div>
+</div>
+
+<div id="whitearea_outer" class="gainlayout">
+<div id="whitearea_outer_left" class="gainlayout">
+<div id="whitearea_outer_right" class="gainlayout">
+<div id="whitearea_left">
+<div id="whitearea_right">
+  <div id="whitearea_top">
+  <div id="whitearea_top_left">
+  <div id="whitearea_top_right">
+  <div></div> <!-- IE fix empty div -->
+  </div>
+  </div>
+  </div>
+  <div id="feed_error">__MSG_unavailable__</div>
+  <div id="whitearea">
+
+  </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<div id="bottom_outer">
+  <div id="bottom_left">
+  <div id="bottom_left_white_corner">
+  <div id="bottom_right">
+  <div id="bottom_right_white_corner">
+  </div>
+  </div>
+  </div>
+  </div>
+</div>
+
+<!--
+<div>
+<input type="radio" name="degree" id="degree_f" onclick="degreeChanged(0);" />
+<label class="degree_radio" for="degree">__MSG_fahrenheit__</label>
+<input type="radio" name="degree" id="degree_c" onclick="degreeChanged(1);"/>
+<label class="degree_radio" for="degree">__MSG_celsius__</label>
+</div>
+-->
+
+<!--<table>
+  <tr>
+    <td style="vertical-align:middle;">
+      <input type="radio" name="degree" id="degree_f" onclick="degreeChanged(0);" />
+    </td>
+    <td class="degree_radio">
+      __MSG_fahrenheit__
+    </td>
+
+    <td style="vertical-align:middle;">
+      <input type="radio" name="degree" id="degree_c" onclick="degreeChanged(1);"/>
+    </td>
+    <td class="degree_radio">
+      __MSG_celsius__
+    </td>
+  </tr>
+</table> -->
+
+<div id="friends_title_left">
+<div id="friends_title_right">
+<div id="friends_title">
+__MSG_friends_title__
+</div>
+</div>
+</div>
+
+<div id="friends_map">
+</div>
+</div> <!-- container -->
+</td>
+  </tr>
+ </table>
+
+
+
+<div style="height:10px;font-size:1px;clear:both;">&nbsp;</div>
+<div style="text-align:center;width:728px;">
+</div>
+
+<div>
+  <script type="text/javascript">
+        var mMENU = gadgets.io.getProxyUrl("http://cdn.labpixies.com/infra/js/lp_footer.js");
+      document.write('<scr'+'ipt type="text/javascript" src="'+mMENU+'"></scr'+'ipt>');
+     </script>
+</div>
+
+</center>
+]]>
+  </Content>
+
+  <Content type="html">
+  <![CDATA[
+<title>Weather</title>
+
+<style type="text/css">
+body {direction:ltr;}
+
+.style1 {font-size: 1px}
+.style3 {
+  font-size: 14px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fbe317;
+  font-weight: bold;
+}
+.style4 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  color: #13265d;
+  font-weight: bold;
+}
+.style5 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  color: #bac1dd;
+  font-weight: bold;
+}
+.style6 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+.style7 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  color: #FFFFFF;
+}
+.style7_gray {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  color: #999999;
+}
+
+.style_aws_alert {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: bold;
+  color: #DF4E00;
+}
+a.style_aws_alert:link{text-decoration:none;color:#DF4E00;}
+a.style_aws_alert:visited{text-decoration:none;color:#DF4E00;}
+a.style_aws_alert:active{text-decoration:underline;color:#DF4E00;}
+a.style_aws_alert:hover{text-decoration:underline;color:#DF4E00;}
+
+.style_aws_link {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  color: #5ea3e3;
+  line-height:11px;
+  font-weight:bold;
+}
+a.style_aws_link:link{text-decoration:none;color:#5ea3e3;}
+a.style_aws_link:visited{text-decoration:none;color:#5ea3e3;}
+a.style_aws_link:active{text-decoration:underline;color:#fbe317;}
+a.style_aws_link:hover{text-decoration:underline;color:#fbe317;}
+
+.style7_a {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  color: #FFFFFF;
+  cursor: pointer;
+}
+
+.style8 {
+  color: #fbe317;
+  font-weight: bold;
+  font-size: 10px;
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration:none;
+}
+
+a.style8:visited{text-decoration:none;color:#fbe317;}
+a.style8:active{text-decoration:underline;color:#fbe317;}
+a.style8:hover{text-decoration:underline;color:#fbe317;}
+
+.style9 {
+  color: #5ea3e3;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.style10 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: bold;
+  color: #f49e19;
+}
+
+.style11 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: bold;
+  color: #5ea3e3;
+}
+
+.whitebordertable {
+  border: 1px solid #FFFFFF;
+  background-color: #0b1641;
+}
+
+.style12 {font-family: Arial, Helvetica, sans-serif; font-size: 12px; color: #13265d; font-weight: bold; }
+
+.style13 {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 10px;
+  font-weight: bold;
+  color: #fbe317;
+}
+
+.table_div {
+  height: 75px;
+}
+
+.style17 {font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #f49e19; }
+
+.style19 {font-family: Arial, Helvetica, sans-serif; font-size: 12px; font-weight: bold; color: #5ea3e3; }
+
+#no_line a:link    {text-decoration:none;}
+#no_line a:visited {text-decoration:none;}
+#no_line a:hover   {text-decoration:none;}
+#no_line a:active  {text-decoration:none;}
+
+#tdad_title {
+  font-size:11px;
+  font-family: Verdana, Arial, sans-serif;
+  color:#1c47b8;
+}
+
+</style>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+<script type="text/javascript">
+  var $lp=jQuery.noConflict();
+  var images_url = "http://cdn.labpixies.com/campaigns/weather/images/";
+
+  var _gadgetID = 49;
+
+  function lp_trackEvent(eventName,eventLable,eventVar) {}
+
+    //var mMENU = gadgets.io.getProxyUrl("http://cdn.labpixies.com/infra/js/lp_menu.js");
+  //document.write('<scr'+'ipt type="text/javascript" src="'+mMENU+'"></scr'+'ipt>');
+
+  var mAll = gadgets.io.getProxyUrl("http://www.labpixies.com/lib/lp_utils_all_cookie.js");
+  document.write('<scr'+'ipt type="text/javascript" src="'+mAll+'"></scr'+'ipt>');
+
+</script>
+
+<script type="text/javascript">
+  //current loaction
+  var city_name      = "";
+  var state_name      = "";
+  var country_name    = "";
+  var zip_code      = "";
+  var city_code      = "";
+  var cur_url        = "none";
+
+  //actions
+  var cur_action      = "FORECAST"; //FORECAST , SEARCH_CITY
+
+  //loading cities message
+  var stop_loading    =  0;
+  var is_loading      =  0;
+  var h_timeout;
+  var cur_loading_str    =  "";
+  var live_stop_loading  =  0;
+  var live_is_loading    =  0;
+
+  //degree values
+  var degree     = 0;
+
+  //forecast array
+  var forecastText = new Array();
+  var arrDate     = new Array();
+  arrDate[0]     = "Today";
+
+  //timeout handle
+  var hTime = 0;
+
+  //globals
+  var g_partner_id = "BFB7BE81-EF74-4b7b-A9EF-A82D059992EF";
+  var g_zcode     = "z6070";
+  var g_link_str = "http://www.weatherbug.com/?zcode="+g_zcode;
+
+  //---------------------------------------------
+  //init module
+  //---------------------------------------------
+
+  function init_module__MODULE_ID__(){
+
+    // Get user preferences
+    prefs__MODULE_ID__ = new gadgets.Prefs(__MODULE_ID__);
+
+    //get prefs
+    degree     = prefs__MODULE_ID__.getString("degree_unit_type");
+    city_code   = prefs__MODULE_ID__.getString("city_code");
+    zip_code   = prefs__MODULE_ID__.getString("zip_code");
+
+    if(degree=='1') document.getElementById('radio_c').checked = true;
+    else document.getElementById('radio_f').checked = true;
+
+    if(zip_code == 'none') prefs__MODULE_ID__.set('zip_code','0');
+        if(city_code == 'none') prefs__MODULE_ID__.set('city_code','0');
+
+    //look for zip code
+    if(zip_code != "0"){
+      show_forecast(1,zip_code,'0',0);
+    }
+    //if not - look for city code
+    else{
+      if(city_code != "0"){
+        show_forecast(1,'0',city_code,0);
+      }
+      //no settings - use NYC as a default city
+      else{
+        if(city_code=="0" && zip_code=="0"){
+          zip_code="10001";
+          show_forecast(1,zip_code,'0',1);
+        }
+      }
+    }
+  }
+
+  function is_zipcode_ok(zip_code)
+  {
+    if (zip_code.indexOf(' ') >= 0)
+      return false;
+    else
+      return true;
+  }
+
+
+  //---------------------------------------------
+  //show forecast
+  //---------------------------------------------
+  var close_setting_flag = 1; //tells us if the settings win should be closed now - 1 means close it , 0 means keep  it open , this parametes is checked while parsing the rss
+  function show_forecast(close_setttings_flag_arg,
+              zip_code_arg,
+              city_code_arg,
+              save_location_flag){
+
+
+
+
+    //prepare the url
+    var url ="";
+    if( (zip_code_arg != '0') && (is_zipcode_ok(zip_code_arg))){
+
+      url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&ZipCode="+zip_code_arg+"&UnitType="+degree+"&ForecastType=1&zcode="+g_zcode;
+
+      //fix bug of 4 digits
+      var temp_code = zip_code_arg.toString();
+      if(temp_code.length==4){
+        url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&ZipCode=0"+zip_code_arg+"&UnitType="+degree+"&ForecastType=1&zcode="+g_zcode;
+      }
+    }
+    else if(city_code_arg != '0'){
+      url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&CityCode="+city_code_arg+"&UnitType="+degree+"&ForecastType=1&zcode="+g_zcode;
+    }
+    else{
+      if( (zip_code != "0") && (is_zipcode_ok(zip_code)) ){
+        url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&ZipCode="+zip_code+"&UnitType="+degree+"&ForecastType=1&zcode="+g_zcode;
+        //fix bug of 4 digits
+        if(zip_code.length==4){
+          url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&ZipCode=0"+zip_code+"&UnitType="+degree+"&ForecastType=1&zcode="+g_zcode;
+        }
+      }
+      else{
+        url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=4&PartnerId="+g_partner_id+"&CityCode="+city_code+"&UnitType="+degree+"&ForecastType=1&zcode="+g_zcode;
+      }
+    }
+
+    //save location codes
+    if(save_location_flag){
+      if( (zip_code_arg != '0') && (is_zipcode_ok(zip_code_arg)) ){
+        zip_code = zip_code_arg;
+        city_code = "0";
+        prefs__MODULE_ID__.set("zip_code", zip_code);
+        prefs__MODULE_ID__.set("city_code", "0");
+
+      }
+      else if (city_code_arg != '0'){
+        city_code = city_code_arg;
+        zip_code = "0";
+        prefs__MODULE_ID__.set("city_code", city_code);
+        prefs__MODULE_ID__.set("zip_code", "0");
+      }
+    }
+
+    //setting window close flag
+    close_setting_flag = close_setttings_flag_arg;
+
+    //show loading forecast message
+    cur_loading_str   =   "weather details";
+    stop_loading    =  0;
+    showLoadingMessage();
+
+    //fetch forecast
+    cur_action       = "FORECAST";
+    cur_url       = url;
+
+    //fix bug of 4 digits
+    if(zip_code_arg.length==4 || zip_code_arg.toString().length==4){
+      zip_code = "0" + zip_code_arg;
+    }
+
+    //update gui with degree type
+      var params = {};
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+      gadgets.io.makeRequest(url,parseRSS_Forecast, params);
+  }
+
+  //---------------------------------------------
+  //search for location - user enters his city name or zip code
+  //---------------------------------------------
+
+  function search_city_click(){
+
+    //check if input box is empty
+    if(_gel("city_name").value==""){
+        _gel("city_search_result").innerHTML = "Please enter a city name or zip code";
+      return false;
+    }
+
+    //disable search button
+    _gel("search_button").innerHTML = '<a style="cursor:default; color: #999999;"  title="Please wait for search to end...">Search&raquo;</a>';
+
+    //show loading message
+    stop_loading    =  0;
+    cur_loading_str   =   "locations";
+    showLoadingMessage();
+
+    //clear paging arrows
+    _gel("city_search_result_paging").innerHTML = "&nbsp;";
+
+    //get cities
+    searchLocationByString(_gel("city_name").value);
+
+    return false;
+  }
+
+  //handle enter key press - users pressed enter key while typing his location name
+  function onKeyHandle(e,origin){
+
+    var keynum;
+
+    if(window.event){keynum = e.keyCode;}
+    else if(e.which){keynum = e.which;}
+
+    //enter key = 13
+    if(keynum == 13){
+
+      if(_gel("city_name").value==""){return false;}
+
+      //check if already loading - if yes quit
+      if(stop_loading==0){return false;}
+
+      //disable search
+      //before starting a new search we disable the search option
+      //so the user will not be able to start a new search before the current one ends
+      _gel("search_button").innerHTML = '<a style="cursor:default; color: #999999;"  title="Please wait for search to end...">Search&raquo;</a>';
+
+      //clear paging arrows
+      _gel("city_search_result_paging").innerHTML = "&nbsp;";
+
+      //show loading message
+      stop_loading    =  0;
+      cur_loading_str   =   "locations";
+      showLoadingMessage();
+
+      //get cities
+      searchLocationByString(_gel("city_name").value);
+
+      return false;
+    }
+
+    return true;
+  }
+
+  //---------------------------------------------
+  // Loading text animation
+  //---------------------------------------------
+
+  //loading cities message - this is just a simple text  animation
+  function liveWeatherLoadingMessage(){
+    var temp_str = "";
+    if(live_stop_loading==0){
+      if(live_is_loading==0) temp_str = "&nbsp;" + ".";
+      if(live_is_loading==1) temp_str = "&nbsp;" + "..";
+      if(live_is_loading==2) temp_str = "&nbsp;" + "...";
+      if(live_is_loading==3) temp_str = "&nbsp;" + "";
+      live_is_loading++;
+      live_is_loading = live_is_loading%4;
+      _gel("day_1_temperature_live").innerHTML = temp_str;
+      setTimeout(liveWeatherLoadingMessage,300);
+    }
+    else
+      live_is_loading=0;
+  }
+
+  //loading cities message - this is just a simple text  animation
+  function showLoadingMessage(){
+
+    if(stop_loading==0){
+      if(is_loading==0) my_str = "&nbsp;" + cur_loading_str + ".";
+      if(is_loading==1) my_str = "&nbsp;" + cur_loading_str + "..";
+      if(is_loading==2) my_str = "&nbsp;" + cur_loading_str + "...";
+      if(is_loading==3) my_str = "&nbsp;" + cur_loading_str + "";
+      is_loading++;
+      is_loading = is_loading%4;
+      _gel("city_search_result").innerHTML = "Loading" + my_str;
+      h_timeout = setTimeout(showLoadingMessage,500);
+    }
+    else
+      is_loading=0;
+  }
+
+  //---------------------------------------------
+  // settings screen (edit)
+  //---------------------------------------------
+
+  //opens the settings screen
+  function edit_button_click(){
+    _gel("city_search_result").innerHTML     = "";
+    _gel("settings_window").style.display     = "";
+    _gel("search_button").innerHTML       = '<a style="cursor:pointer; color: #fbe317;"  onclick="search_city_click()">Search&raquo;</a>';
+  }
+
+  //closes the settings screen
+  function settings_close_button_click(){
+    _gel("settings_window").style.display = "none";
+
+    //clear paging arrows
+    _gel("city_search_result_paging").innerHTML = "&nbsp;";
+
+    //clear input box
+    _gel("city_name").value="";
+  }
+
+  //more info show
+  function more_info(num){
+
+    //show fade in
+    fadeImage();
+
+    //show  info
+    _gel("more_info_text").innerHTML     =  forecastText[num-1] + '<br /><br />' +
+    '<a onmouseout="this.style.color=\'#5ea3e3\';" onmouseover="this.style.color=\'#fbe317\';"  class="style_aws_link" href="'+g_link_str+'" target="_blank">Forecast</a>&nbsp;&nbsp;' +
+    '<a onmouseout="this.style.color=\'#5ea3e3\';" onmouseover="this.style.color=\'#fbe317\';"  class="style_aws_link" href="'+g_link_radar+'" target="_blank">'+g_radar_title+'</a>&nbsp;&nbsp;' +
+    '<a onmouseout="this.style.color=\'#5ea3e3\';" onmouseover="this.style.color=\'#fbe317\';"  class="style_aws_link" href="'+g_link_news+'" target="_blank">News</a>&nbsp;&nbsp;' +
+    '<a onmouseout="this.style.color=\'#5ea3e3\';" onmouseover="this.style.color=\'#fbe317\';"  class="style_aws_link" href="'+g_link_cameras+'" target="_blank">Cameras</a>';
+    _gel("more_info_img").src         = _gel("day_"+(num)+"_img").src;
+    _gel("more_info_hi").innerHTML       = "&nbsp;" + _gel("day_"+ num +"_temperature_hi").innerHTML + "&deg;&nbsp;/&nbsp;";
+    _gel("more_info_lo").innerHTML       = _gel("day_"+ num +"_temperature_lo").innerHTML + "&deg;";
+    _gel("more_info_date").innerHTML     = arrDate[num-1];
+
+    _gel("more_info_window").style.left = lp_getAbsoluteLeft("mainBackground")+15+"px";
+    _gel("more_info_window").style.top   = lp_getAbsoluteTop("mainBackground")+15+"px";
+    _gel("more_info_window").style.display   = "";
+
+  }
+
+  function more_info_close_button_click(){
+    _gel("more_info_window").style.display = "none";
+  }
+
+  //---------------------------------------------
+  //fade images in & out
+  //---------------------------------------------
+
+  var fade_steps = 0;
+  var is_inside  = 0;
+
+  function enableFadeAgain(){
+    fade_steps=0;
+  }
+
+  function fadeImage(){
+
+    if(fade_steps<0){
+      setTimeout(enableFadeAgain,1000);
+      return;
+    }
+
+    //semaphore
+    if(is_inside==1)
+      setTimeout(fadeImage,50);
+    else
+      is_inside=1;
+
+    //fade out
+    if(fade_steps<=10){
+
+      //main table
+      var cur_image = _gel("main_table");
+      var object = cur_image.style;
+
+      object.opacity      = 0;
+      object.MozOpacity    = 0;
+      object.KhtmlOpacity    = 0;
+      object.filter = "alpha(opacity=0)";
+
+      //more info window
+      cur_image = _gel("more_info_window");
+      object = cur_image.style;
+
+      object.opacity      = 0;
+      object.MozOpacity    = 0;
+      object.KhtmlOpacity    = 0;
+      object.filter = "alpha(opacity=0)";
+
+      fade_steps=11;
+      setTimeout(fadeImage,70);
+    }
+
+    //fade in
+    if(fade_steps>10 && fade_steps!=20){
+
+      var cur_image = _gel("more_info_window");
+      var object = cur_image.style;
+      var temp_opacity    = (fade_steps-10)*10;
+
+      object.opacity      = temp_opacity/100;
+      object.MozOpacity    = temp_opacity/100;
+      object.KhtmlOpacity    = temp_opacity/100;
+      object.filter = "alpha(opacity=" + temp_opacity + ")";
+
+      fade_steps=fade_steps+1;
+      setTimeout(fadeImage,90);
+    }
+
+    //exit fade
+    if(fade_steps==20){
+      //more info
+      var cur_image = _gel("more_info_window");
+      var object = cur_image.style;
+      object.opacity      = 100;
+      object.MozOpacity    = 100;
+      object.KhtmlOpacity    = 100;
+      object.filter = "alpha(opacity=100)";
+
+      //main table
+      cur_image = _gel("main_table");
+      object = cur_image.style;
+      object.opacity      = 100;
+      object.MozOpacity    = 100;
+      object.KhtmlOpacity    = 100;
+      object.filter = "alpha(opacity=100)";
+
+      //reset
+      fade_steps=-1;
+    }
+
+    //semaphore
+    is_inside=0;
+  }
+
+  //---------------------------------------------
+  // degree type Fer or Cel
+  //---------------------------------------------
+
+  function degree_change(type){
+
+    var old_deg = degree;
+    if(type=='c') degree = 1;
+    if(type=='f') degree = 0;
+
+    //save current value
+    prefs__MODULE_ID__.set("degree_unit_type", degree);
+
+    if(cur_action=="SEARCH_CITY" && _gel("city_name").value!=""){
+
+      //show loading message
+      stop_loading    = 0;
+      cur_loading_str   = "locations";
+      showLoadingMessage();
+
+      //clear paging arrows
+      _gel("city_search_result_paging").innerHTML = "&nbsp;";
+
+      //get cities
+      searchLocationByString(_gel("city_name").value);
+    }
+    else{
+      show_forecast(0,"0","0",0);
+    }
+
+    //update gui with degree type
+    if(degree==0){
+      _gel("set_deg_type_1").innerHTML = "&deg;&nbsp;F";
+      _gel("set_deg_type_2").innerHTML = "&deg;&nbsp;F";
+    }
+    if(degree==1){
+      _gel("set_deg_type_1").innerHTML = "&deg;&nbsp;C";
+      _gel("set_deg_type_2").innerHTML = "&deg;&nbsp;C";
+    }
+  }
+
+  //---------------------------------------------
+  // search for locations
+  //---------------------------------------------
+
+  var temp_str = "";
+  function searchLocationByString(str){
+
+    //clear pagin cursor on new search
+    if(temp_str!=str){list_cursor = 0;}
+    temp_str = str;
+
+    //search for locations
+    str         = escape(str);
+    cur_url       = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=103&PartnerId="+g_partner_id+"&SearchString=" + str + "&zcode="+g_zcode;
+    cur_action       = "SEARCH_CITY";
+
+    var params = {};
+    params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+    gadgets.io.makeRequest(cur_url,parseRSS_Locations, params);
+  }
+
+
+
+  //---------------------------------------------
+  // Live weather - get current temperature
+  //---------------------------------------------
+
+  function getLiveWeather(){
+
+    var cur_live_url = "";
+
+    //set url with the correct city code or zip code
+    if(city_code!="0"){
+      cur_live_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=103&PartnerId="+g_partner_id+"&citycode=" + city_code + "&unittype=" + degree + "&zcode="+g_zcode;
+    }
+    else if (zip_code!="0"){
+      cur_live_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=103&PartnerId="+g_partner_id+"&zipcode=" + zip_code + "&unittype=" + degree + "&zcode="+g_zcode;
+    }
+
+    //start the loading text animation
+    live_stop_loading = 0;
+    liveWeatherLoadingMessage();
+
+    //fetch data
+      var params = {};
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+      gadgets.io.makeRequest(cur_live_url,parseRSS_LiveWeather, params);
+  }
+
+  function parseRSS_LiveWeather(response) {
+
+    try{
+      //clear loading message
+      live_stop_loading=1;
+
+      if (response == null || typeof(response) != "object" || response.data == null) {return;}
+      if(response.data.firstChild == null){return;}
+
+      var itemList = response.data.getElementsByTagName("condition");
+
+      if(itemList.item(0)){
+        _gel("day_1_temperature_live").innerHTML = itemList.item(0).getAttribute("temp") + "&deg;";
+      }
+    }
+    catch(e){}
+  }
+
+  //---------------------------------------------
+  //aws new links - prepare
+  //---------------------------------------------
+
+  var links_fetching_flag = 0; //this var is a semafore that make sure we do no override the fetch operations
+  var g_radar_title = "Radar";
+
+  function getAwsLinks(){
+
+    if(city_code!="0"){g_radar_title = "Satellite";}
+    else{g_radar_title = "Radar";}
+
+      _gel("aws_link_forecast").innerHTML = '<span id="aws_link_forecast_dot"><b>&bull;</b></span>&nbsp;<a onmouseout="_gel(\'aws_link_forecast_dot\').style.color=\'#5ea3e3\';" onmouseover="_gel(\'aws_link_forecast_dot\').style.color=\'#fbe317\';" class="style_aws_link" href="http://www.weatherbug.com/?zcode='+g_zcode+'" target="_blank">Forecast</a><br />';
+      _gel("aws_link_radar").innerHTML   = '<span id="aws_link_radar_dot"><b>&bull;</b></span>&nbsp;<a onmouseout="_gel(\'aws_link_radar_dot\').style.color=\'#5ea3e3\';" onmouseover="_gel(\'aws_link_radar_dot\').style.color=\'#fbe317\';" class="style_aws_link" href="http://www.weatherbug.com/?zcode='+g_zcode+'" target="_blank">'+g_radar_title+'</a><br />';
+      _gel("aws_link_news").innerHTML   = '<span id="aws_link_news_dot"><b>&bull;</b></span>&nbsp;<a onmouseout="_gel(\'aws_link_news_dot\').style.color=\'#5ea3e3\';" onmouseover="_gel(\'aws_link_news_dot\').style.color=\'#fbe317\';"  class="style_aws_link" href="http://www.weatherbug.com/?zcode='+g_zcode+'" target="_blank">News</a><br/>';
+      _gel("aws_link_cameras").innerHTML   = '<span id="aws_link_cameras_dot"><b>&bull;</b></span>&nbsp;<a onmouseout="_gel(\'aws_link_cameras_dot\').style.color=\'#5ea3e3\';" onmouseover="_gel(\'aws_link_cameras_dot\').style.color=\'#fbe317\';" class="style_aws_link" href="http://www.weatherbug.com/?zcode='+g_zcode+'" target="_blank">Cameras</a>';
+    _gel("alert_td").innerHTML       = '&nbsp;';
+
+    getAwsLinks_Forecast();
+    getAwsLinks_Cameras();
+    getAwsLinks_Radar();
+    getAwsLinks_News();
+    getAwsWeatherAlerts();
+  }
+
+  //---------------------------------------------
+  //aws new links - forecast
+  //---------------------------------------------
+
+  function getAwsLinks_Forecast(){
+
+    var cur_url = "";
+
+    //set url with the correct city code or zip code
+    if(city_code!="0"){
+      cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&CityCode="+city_code+"&LinkName=forecast_sevenday&Zcode="+g_zcode;
+    }
+    else if (zip_code!="0"){
+      cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&ZipCode="+zip_code+"&LinkName=forecast_sevenday&Zcode="+g_zcode;
+    }
+
+    //fetch data
+      var params = {};
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+      gadgets.io.makeRequest(cur_url,parseRSS_AWS_FORECASTS, params);
+  }
+
+  function parseRSS_AWS_FORECASTS(response) {
+
+    try{
+      if (response == null || typeof(response) != "object" || response.data == null) {return;}
+      if(response.data.firstChild == null){return;}
+
+      var itemList = response.data.getElementsByTagName("aws:Link");
+      if(itemList.length==0){itemList = response.data.getElementsByTagName("Link");}
+
+      //check if we have any items
+      if(itemList.length!=0){
+        if(itemList[0].getAttribute("linkname")=="forecast_sevenday"){
+          //update the link on the main screen
+          _gel("aws_link_forecast").innerHTML = '<span id="aws_link_forecast_dot"><b>&bull;</b></span>&nbsp;<a onmouseout="_gel(\'aws_link_forecast_dot\').style.color=\'#5ea3e3\';" onmouseover="_gel(\'aws_link_forecast_dot\').style.color=\'#fbe317\';" class="style_aws_link" href="' + itemList[0].getAttribute("url") + '" target="_blank">Forecast</a><br />';
+
+          //update the more link on the main screen
+          _gel("more_info_1").innerHTML = '<a class="style8" target="_blank" href="' + itemList[0].getAttribute("url") + '" style="cursor:pointer; color:#fbe317;">more...</a>';
+          g_link_str = itemList[0].getAttribute("url");
+        }
+      }
+    }
+    catch(e){}
+  }
+
+  //---------------------------------------------
+  //aws new links - cameras
+  //---------------------------------------------
+
+  function getAwsLinks_Cameras(){
+
+    var cur_url = "";
+
+    //set url with the correct city code or zip code
+    if(city_code!="0"){
+      cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&CityCode="+city_code+"&LinkName=cameras_local&Zcode="+g_zcode;
+    }
+    else if (zip_code!="0"){
+      cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&ZipCode="+zip_code+"&LinkName=cameras_local&Zcode="+g_zcode;
+    }
+
+      var params = {};
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+      gadgets.io.makeRequest(cur_url,parseRSS_AWS_CAMERAS, params);
+  }
+
+  var g_link_cameras="http://www.weatherbug.com/?zcode="+g_zcode;
+  function parseRSS_AWS_CAMERAS(response) {
+
+    try{
+      if (response == null || typeof(response) != "object" || response.data == null) {return;}
+      if(response.data.firstChild == null){return;}
+
+      var itemList = response.data.getElementsByTagName("aws:Link");
+      if(itemList.length==0){itemList = response.data.getElementsByTagName("Link");}
+
+      //check if we have any items
+      if(itemList.length!=0){
+        if(itemList[0].getAttribute("linkname")=="cameras_local"){
+          _gel("aws_link_cameras").innerHTML = '<span id="aws_link_cameras_dot"><b>&bull;</b></span>&nbsp;<a onmouseout="_gel(\'aws_link_cameras_dot\').style.color=\'#5ea3e3\';" onmouseover="_gel(\'aws_link_cameras_dot\').style.color=\'#fbe317\';" class="style_aws_link" href="' + itemList[0].getAttribute("url") + '" target="_blank">Cameras</a><br />';
+          g_link_cameras = itemList[0].getAttribute("url");
+        }
+      }
+    }
+    catch(e){}
+  }
+
+  //---------------------------------------------
+  //aws new links - Radar
+  //---------------------------------------------
+
+  function getAwsLinks_Radar(){
+
+    var cur_url = "";
+
+    //set url with the correct city code or zip code
+    if(city_code!="0"){
+      cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&CityCode="+city_code+"&LinkName=maps_doppler&Zcode="+g_zcode;
+    }
+    else if (zip_code!="0"){
+      cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&ZipCode="+zip_code+"&LinkName=maps_doppler&Zcode="+g_zcode;
+    }
+
+    //fetch data
+      var params = {};
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+      gadgets.io.makeRequest(cur_url,parseRSS_AWS_RADAR, params);
+  }
+
+  var g_link_radar="http://www.weatherbug.com/?zcode="+g_zcode;
+  function parseRSS_AWS_RADAR(response) {
+
+    try{
+      if (response == null || typeof(response) != "object" || respone.data == null) {return;}
+      if(response.data.firstChild == null){return;}
+
+      var itemList = response.data.getElementsByTagName("aws:Link");
+      if(itemList.length==0){itemList = response.data.getElementsByTagName("Link");}
+
+      //check if we have any items
+      if(itemList.length!=0){
+        if(itemList[0].getAttribute("linkname")=="maps_doppler"){
+          _gel("aws_link_radar").innerHTML = '<span id="aws_link_radar_dot"><b>&bull;</b></span>&nbsp;<a onmouseout="_gel(\'aws_link_radar_dot\').style.color=\'#5ea3e3\';" onmouseover="_gel(\'aws_link_radar_dot\').style.color=\'#fbe317\';" class="style_aws_link" href="' + itemList[0].getAttribute("url") + '" target="_blank">'+g_radar_title+'</a><br />';
+          g_link_radar=itemList[0].getAttribute("url");
+        }
+      }
+    }
+    catch(e){}
+  }
+
+  //---------------------------------------------
+  //aws new links - News
+  //---------------------------------------------
+
+  function getAwsLinks_News(){
+
+    var cur_url = "";
+
+    //set url with the correct city code or zip code
+    if(city_code!="0"){
+      cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&CityCode="+city_code+"&LinkName=news_topstories&Zcode="+g_zcode;
+    }
+    else if (zip_code!="0"){
+      cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&ZipCode="+zip_code+"&LinkName=news_topstories&Zcode="+g_zcode;
+    }
+
+    //fetch data
+      var params = {};
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+      gadgets.io.makeRequest(cur_url,parseRSS_AWS_NEWS, params);
+  }
+
+  var g_link_news="http://www.weatherbug.com/?zcode="+g_zcode;
+  function parseRSS_AWS_NEWS(response) {
+
+    try{
+      if (response == null || typeof(response) != "object" || response.data == null) {return;}
+      if(response.data.firstChild == null){return;}
+
+      var itemList = response.data.getElementsByTagName("aws:Link");
+      if(itemList.length==0){itemList = response.data.getElementsByTagName("Link");}
+
+      //check if we have any items
+      if(itemList.length!=0){
+        if(itemList[0].getAttribute("linkname")=="news_topstories"){
+          _gel("aws_link_news").innerHTML = '<span id="aws_link_news_dot"><b>&bull;</b></span>&nbsp;<a onmouseout="_gel(\'aws_link_news_dot\').style.color=\'#5ea3e3\';" onmouseover="_gel(\'aws_link_news_dot\').style.color=\'#fbe317\';"  class="style_aws_link" href="' + itemList[0].getAttribute("url") + '" target="_blank">News</a><br />';
+          g_link_news = itemList[0].getAttribute("url");
+        }
+      }
+    }
+    catch(e){}
+  }
+
+  //---------------------------------------------
+  //aws new links - WEATHER ALERTS
+  //---------------------------------------------
+  function getAwsWeatherAlerts(){
+
+    var cur_url = "";
+
+    //set url with the correct  zip code - US ONLY
+    if (zip_code!="0"){
+      cur_url = "http://datafeed.weatherbug.com/getxml.aspx?RequestType=6&PartnerId="+g_partner_id+"&ZipCode="+ zip_code + "&zcode="+g_zcode;;
+      var params = {};
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+      gadgets.io.makeRequest(cur_url,parseRSS_AWS_ALERTS, params);
+    }
+  }
+
+  function parseRSS_AWS_ALERTS(response) {
+
+    if (response == null || typeof(response) != "object" || response.data == null) {return;}
+    if(response.data.firstChild == null){return;}
+
+    var itemList = response.data.getElementsByTagName("aws:alert");
+    if(itemList.length==0){itemList = response.data.getElementsByTagName("alert");}
+
+    //check if we have any items
+    if(itemList.length!=0){
+      //we have alerts for this place - fetch link
+      var cur_url = "http://datafeed.weatherbug.com/GetXml.aspx?RequestType=23&PartnerId="+g_partner_id+"&ZipCode="+zip_code+"&LinkName=severeweather_localalerts&Zcode="+g_zcode;
+      //fetch data
+      var params = {};
+      params[gadgets.io.RequestParameters.CONTENT_TYPE] = gadgets.io.ContentType.DOM;
+      gadgets.io.makeRequest(cur_url,parseRSS_AWS_ALERTS_LINK, params);
+    }
+  }
+
+  function parseRSS_AWS_ALERTS_LINK(response) {
+
+    if (response == null || typeof(response) != "object" || response.data == null) {return;}
+    if(response.data.firstChild == null){return;}
+
+    var itemList = response.data.getElementsByTagName("aws:Link");
+    if(itemList.length==0){itemList = response.data.getElementsByTagName("Link");}
+
+    //check if we have any items
+    if(itemList.length!=0){
+      if(itemList[0].getAttribute("linkname")=="severeweather_localalerts"){
+        //_gel("alert_td").innerHTML = '<a class="style_aws_alert" href="' + itemList[0].getAttribute("url") + '" title="Weather alert - click for more details" target="_top">WEATHER ALERT!</a>';
+        _gel("alert_td").innerHTML = '<div style="background-color:#FF0000; text-align:center;"><a class="style_aws_alert" style="color:#FFFFFF;" href="' + itemList[0].getAttribute("url") + '" title="Weather alert - click for more details" target="_top">WEATHER ALERT! - CLICK HERE</a></div>';
+      }
+    }
+  }
+
+  //Error handling
+  function setErrorMsg(){
+
+    if(cur_action=="SEARCH_CITY"){
+      stop_loading=1;
+        _gel("city_search_result").innerHTML = "Search ended with no results, or an error has occurred, please check your input and try again.";
+      _gel("search_button").innerHTML = '<a style="cursor:pointer; color: #fbe317;"  onclick="search_city_click()">Search&raquo;</a>';
+      return;
+    }
+
+    stop_loading=1;
+    settings_close_button_click();
+
+    forecastText[0] = "&nbsp;";
+    forecastText[1] = "&nbsp;";
+    forecastText[2] = "&nbsp;";
+    forecastText[3] = "&nbsp;";
+    forecastText[4] = "&nbsp;";
+    forecastText[5] = "&nbsp;";
+
+    _gel("city_name_text").innerHTML   = "Unavailable";
+      _gel("city_name_text").title     = "Error Fetching Data";
+      _gel("day_1_forecast").innerHTML   = "Please Try again later";
+
+    _gel("day_1_img").src = gadgets.io.getProxyUrl(images_url+"temp_icon_new.gif");
+    _gel("day_2_img").src = gadgets.io.getProxyUrl(images_url+"temp_icon_new.gif");
+      _gel("day_3_img").src = gadgets.io.getProxyUrl(images_url+"temp_icon_new.gif");
+      _gel("day_4_img").src = gadgets.io.getProxyUrl(images_url+"temp_icon_new.gif");
+    _gel("more_info_img").src = gadgets.io.getProxyUrl(images_url+"temp_icon_new.gif");
+
+    _gel("day_1_temperature_live").innerHTML   = "&nbsp;";
+    _gel("day_1_temperature_hi").innerHTML     = "&nbsp;";
+    _gel("day_1_temperature_lo").innerHTML     = "&nbsp;";
+
+    _gel("day_2_temperature_hi").innerHTML = "&nbsp;";
+    _gel("day_2_temperature_lo").innerHTML = "&nbsp;";
+    _gel("day_3_temperature_hi").innerHTML = "&nbsp;";
+    _gel("day_3_temperature_lo").innerHTML = "&nbsp;";
+    _gel("day_4_temperature_hi").innerHTML = "&nbsp;";
+    _gel("day_4_temperature_lo").innerHTML = "&nbsp;";
+
+    _gel("day_2_name").innerHTML = "--";
+    _gel("day_3_name").innerHTML = "--";
+    _gel("day_4_name").innerHTML = "--";
+
+        _gel("more_info_text").innerHTML   =  "Data unavailable, plesae Try again later";
+    _gel("more_info_img").src       = gadgets.io.getProxyUrl(images_url+"temp_icon_new.gif");
+    _gel("more_info_hi").innerHTML     = "&nbsp;";
+    _gel("more_info_lo").innerHTML     = "&nbsp;";
+    _gel("more_info_date").innerHTML   = "&nbsp;";
+
+    _gel("more_info_1").innerHTML = "<a class='style8' target='_blank' href='http://www.weatherbug.com/?zcode="+g_zcode+"' style='cursor:pointer; color:#fbe317;'>more...</a>";
+  }
+
+  //---------------------------------------------
+  // parse RSS Locations
+  //---------------------------------------------
+  var list_cursor=0;
+  var current_m=0;
+  function parseRSS_Locations (response){
+
+    if (response == null || typeof(response) != "object" || response.data == null) {
+      setErrorMsg();
+      return;
+    }
+
+    if(response.data.firstChild == null){
+      setErrorMsg();
+      return;
+    }
+
+    //clear loading message
+    stop_loading=1;
+
+    // Get Location
+    var itemList = response.data.getElementsByTagName("aws:location");
+    if(itemList.length==0){itemList = response.data.getElementsByTagName("location");}
+
+    var html_str = "";
+
+    for (var m=0; m < itemList.length; m++) {
+      //up to 5 cities in results page
+      if(m<5+(5*list_cursor) && m>=(5*list_cursor)){
+        var node_4 = itemList.item(m);
+
+        var cur_city_str   = "&bull;&nbsp;";
+        var cur_city_code   = "";
+        var cur_zip_code   = "";
+
+        //city name
+        if(node_4.getAttribute("city")!=""){
+          if(node_4.getAttribute("city").length>34){
+            cur_city_str = cur_city_str + node_4.getAttribute("city").substring(0,33) + ".";
+            cur_city_name = cur_city_str + node_4.getAttribute("city").substring(0,33);
+          }
+          else{
+            cur_city_str = cur_city_str + node_4.getAttribute("city");
+            cur_city_name = cur_city_str + node_4.getAttribute("city");
+          }
+        }
+
+        //country name
+        if(node_4.getAttribute("country")!=""){
+          cur_city_str = cur_city_str + "&nbsp;&nbsp;("+node_4.getAttribute("country")+ ")";
+        }
+
+        //state name
+        if(node_4.getAttribute("state")!=""){
+          cur_city_str = cur_city_str + "&nbsp;," + node_4.getAttribute("state");
+        }
+
+        //zip code
+        if(node_4.getAttribute("zipcode")!=""){
+          cur_zip_code = node_4.getAttribute("zipcode");
+        }
+
+        //city code
+        if(node_4.getAttribute("citycode")!=""){
+          cur_city_code = node_4.getAttribute("citycode");
+        }
+
+        var my_link = "";
+        if( (cur_zip_code!="") && (is_zipcode_ok(cur_zip_code)) ) {
+          cur_city_str = "<a id='city_link_" + m + "' onMouseOut=city_mouse_out(" + m + "); onMouseOver=city_mouse_over(" + m + "); onclick=show_forecast(1,'"+cur_zip_code+"','0',1); class='style7_a' >" + cur_city_str + "</a>";
+        }
+        else if(cur_city_code!=""){
+          cur_city_str = "<a id='city_link_" + m + "' onMouseOut=city_mouse_out(" + m + "); onMouseOver=city_mouse_over(" + m + "); onclick=show_forecast(1,'0','"+cur_city_code+"',1); class='style7_a'>" + cur_city_str + "</a>";
+        }
+
+        //update the inner html code
+        html_str = html_str + cur_city_str + "<br />";
+
+        //update cursor for paging
+        current_m = m;
+      }
+    }
+
+    //paging
+    var str_paging = "";
+    if(current_m>=5 && current_m+1<itemList.length){
+      str_paging = "<span style='cursor:pointer;' class='style7_a' onmouseover='this.style.color=\"#fbe317\";' onmouseout='this.style.color=\"#ffffff\";'  onclick='locationPage(0);'>&laquo;back</span>&nbsp;|&nbsp;<span style='cursor:pointer;' onmouseover='this.style.color=\"#fbe317\";' onmouseout='this.style.color=\"#ffffff\";' class='style7_a' onclick='locationPage(1);'>next&raquo;</span>";
+    }
+    else if(current_m>=5){
+      str_paging = "<span style='cursor:pointer;' class='style7_a' onmouseover='this.style.color=\"#fbe317\";' onmouseout='this.style.color=\"#ffffff\";' style='cursor:pointer;' onclick='locationPage(0);'>&laquo;back</span>&nbsp;|&nbsp;<span style='cursor:pointer;' class='style7_gray'>next&raquo;</span>";
+    }
+    else if(current_m+1<itemList.length){
+      str_paging = "<span style='cursor:pointer;' class='style7_gray'>&laquo;back</span>&nbsp;|&nbsp;<span class='style7_a' onmouseover='this.style.color=\"#fbe317\";' onmouseout='this.style.color=\"#ffffff\";' style='cursor:pointer;' onclick='locationPage(1);'>next&raquo;</span>";
+    }
+
+    //update html
+    _gel("city_search_result").innerHTML     = html_str;
+    _gel("city_search_result_paging").innerHTML = str_paging;
+
+    //enable search button again
+    _gel("search_button").innerHTML = '<a style="cursor:pointer; color: #fbe317;"  onclick="search_city_click()">Search&raquo;</a>';
+
+    //test - load the single location found -  AUTOMATICALLY
+    if(itemList.length==1){
+      _gel("city_link_0").onclick();
+    }
+
+  }
+
+  //paging
+  function locationPage(num){
+
+    if(num){
+      list_cursor++;
+    }
+    else{
+      list_cursor--;
+    }
+
+    //clear paging arrows
+    _gel("city_search_result_paging").innerHTML = "&nbsp;";
+
+    search_city_click();
+  }
+
+  //---------------------------------------------
+  // parse RSS Forecast
+  //---------------------------------------------
+
+  function parseRSS_Forecast(response) {
+
+    if (response == null || typeof(response) != "object" || response.data == null) {
+      setErrorMsg();
+      return;
+    }
+
+    if(response.data.firstChild == null){
+      setErrorMsg();
+      return;
+    }
+
+    //clear loading message
+    stop_loading=1;
+
+    //close edit screen
+    if(close_setting_flag==1)
+      settings_close_button_click();
+    else
+        _gel("city_search_result").innerHTML = "Data Loaded Successfully";
+
+    //--------------------------------------------
+    // Get Location name - city and state
+    //--------------------------------------------
+
+    var itemList_2 = response.data.getElementsByTagName("aws:location");
+    if(itemList_2.length==0){itemList_2 = response.data.getElementsByTagName("location");}
+
+    var state_name_str   = "";
+    var city_name_str   = "";
+    for (var k=0; k < itemList_2.length; k++) {
+
+      var nodeList_2 = itemList_2.item(k).childNodes;
+
+      for (var l=0; l < nodeList_2.length; l++) {
+
+        var node_2 = nodeList_2.item(l);
+
+        //city name
+        if(node_2.nodeName=="aws:city" || node_2.nodeName=="city"){
+          if(node_2.firstChild.nodeValue.length>16){
+            _gel("city_name_text").innerHTML = node_2.firstChild.nodeValue.substring(0,15);
+          }
+          else{
+            _gel("city_name_text").innerHTML = node_2.firstChild.nodeValue;
+          }
+          city_name_str = node_2.firstChild.nodeValue + ", ";
+        }
+
+        //state name or country name
+        if(node_2.nodeName=="aws:state" || node_2.nodeName=="state" ||node_2.nodeName=="aws:country" ||node_2.nodeName=="country"){
+          state_name_str = node_2.firstChild.nodeValue;
+        }
+      }
+    }
+
+    //update city title
+    _gel("city_name_text").title =   city_name_str + state_name_str;
+
+    //--------------------------------------------
+    // Get Forecast
+    //--------------------------------------------
+
+    //temp values
+    var tmp_name    =  "";
+    var tmp_image   =  "";
+    var tmp_hi     =  "";
+    var tmp_low   =  "";
+    var tmp_desc  =   ""
+    var cursor     = 0;
+
+    var itemList = response.data.getElementsByTagName("aws:forecast");
+    if(itemList.length == 0){itemList = response.data.getElementsByTagName("forecast");}
+    for (var i=0; i < itemList.length; i++) {
+
+      //for each node
+      var nodeList = itemList.item(i).childNodes;
+      for (var j=0; j < nodeList.length; j++) {
+
+        var node = nodeList.item(j);
+        if (node.firstChild) {
+            //day name
+            if(node.nodeName=="aws:title" || node.nodeName=="title"){tmp_name = node.firstChild.nodeValue;}
+
+            //day image
+            if(node.nodeName=="aws:image" || node.nodeName=="image"){tmp_image = node.firstChild.nodeValue;}
+
+            //day hi temp
+            if(node.nodeName=="aws:high" || node.nodeName=="high")  {tmp_hi = node.firstChild.nodeValue;}
+
+            //day low temp
+            if(node.nodeName=="aws:low" || node.nodeName=="low")  {tmp_low = node.firstChild.nodeValue;}
+
+            //day forecast text
+            if(node.nodeName=="aws:prediction" || node.nodeName=="prediction"){
+              tmp_desc = node.firstChild.nodeValue;
+              if(i==0){
+                if(tmp_desc.length>56)
+                  _gel("day_1_forecast").innerHTML = tmp_desc.substring(0,56) + ".";
+                else
+                  _gel("day_1_forecast").innerHTML = tmp_desc;
+              }
+            }
+          }
+
+      }
+
+      //update gui - there are differences between us location and rest of the world
+      if(tmp_hi != "--" && tmp_low!="--"){
+        if(_gel("day_"+(i+1-cursor)+"_name"))        _gel("day_"+(i+1-cursor)+"_name").innerHTML       = tmp_name.substring(0,3);
+        if(_gel("day_"+(i+1-cursor)+"_img"))         _gel("day_"+(i+1-cursor)+"_img").src           = tmp_image;
+        if(_gel("day_"+(i+1-cursor)+"_temperature_hi"))   _gel("day_"+(i+1-cursor)+"_temperature_hi").innerHTML  = tmp_hi;
+        if(_gel("day_"+(i+1-cursor)+"_temperature_lo"))   _gel("day_"+(i+1-cursor)+"_temperature_lo").innerHTML   = tmp_low;
+        forecastText[i-cursor]   = tmp_desc;
+        arrDate[i-cursor]     = tmp_name;
+      }
+      else if(tmp_hi == "--" && tmp_low!="--"){
+        if(i==0){
+          _gel("day_1_img").src           = tmp_image;
+          _gel("day_1_temperature_hi").innerHTML  = tmp_hi;
+          _gel("day_1_temperature_lo").innerHTML   = tmp_low;
+          forecastText[0] = tmp_desc;
+          arrDate[0]     = tmp_name;
+        }
+        else{
+          cursor++;
+          if(_gel("day_"+(i+1-cursor)+"_temperature_lo")) _gel("day_"+(i+1-cursor)+"_temperature_lo").innerHTML   = tmp_low;
+        }
+      }
+      else if(tmp_hi != "--" && tmp_low=="--"){
+        if(_gel("day_"+(i+1-cursor)+"_name"))        _gel("day_"+(i+1-cursor)+"_name").innerHTML       = tmp_name.substring(0,3);
+        if(_gel("day_"+(i+1-cursor)+"_img"))         _gel("day_"+(i+1-cursor)+"_img").src           = tmp_image;
+        if(_gel("day_"+(i+1-cursor)+"_temperature_hi"))   _gel("day_"+(i+1-cursor)+"_temperature_hi").innerHTML  = tmp_hi;
+        if(_gel("day_"+(i+1-cursor)+"_temperature_lo"))   _gel("day_"+(i+1-cursor)+"_temperature_lo").innerHTML   = tmp_low;
+        forecastText[i-cursor]  = tmp_desc;
+        arrDate[i-cursor]     = tmp_name;
+      }
+    }
+
+    //update gui with degree type
+    if(degree==0){
+      _gel("set_deg_type_1").innerHTML = "&deg;&nbsp;F";
+      _gel("set_deg_type_2").innerHTML = "&deg;&nbsp;F";
+    }
+    if(degree==1){
+      _gel("set_deg_type_1").innerHTML = "&deg;&nbsp;C";
+      _gel("set_deg_type_2").innerHTML = "&deg;&nbsp;C";
+    }
+
+    //enable search button again (on the settings screen)
+    _gel("search_button").innerHTML = '<a style="cursor:pointer; color: #fbe317;"  onclick="search_city_click()">Search&raquo;</a>';
+
+    //call live weather - > try catch
+    try{getLiveWeather();}
+    catch(e){}
+
+    //get links
+    getAwsLinks();
+  }
+
+  //link mouse over - makes the hover link yellowed
+  function city_mouse_over(num){
+    _gel("city_link_"+num).style.color = "#fbe317";
+  }
+
+  //link mouse out
+  function city_mouse_out(num){
+    _gel("city_link_"+num).style.color = "#FFFFFF";
+  }
+
+</script>
+<div id="menu_div">
+</div>
+<center>
+<div id="all_other_elements">
+<table id="mainBackground" width="270" height="207" border="0" cellpadding="0" cellspacing="0">
+  <tr>
+    <td width="19">&nbsp;</td>
+    <td width="230">
+      <table id="main_table" width="230" border="0" cellspacing="0" cellpadding="0">
+        <tr>
+          <td height="13"><span class="style1">&nbsp;</span></td>
+        </tr>
+        <tr>
+          <td height="17">
+            <table width="230" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+<td width="165" align="left"><span class="style3" style="cursor:default" id="city_name_text">&nbsp;Loading...</span><span align="left" class="style3" id="state_name_text">&nbsp;</span><span align="left" class="style3">&nbsp;</span><span align="left" class="style4" id="edit_button" onclick="javascript:edit_button_click();" style="cursor:pointer;">edit</span></td>
+                <td width="65" style="font-size:12px" id="no_line"><a href="http://www.weatherbug.com/?zcode=z6070" target="_blank">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td height="17" class="style_aws_alert" id="alert_td" valign="top">&nbsp;</td>
+        </tr>
+        <tr>
+          <td height="57">
+            <table  width="230" height="57" border="0" cellpadding="0" cellspacing="0">
+              <tr>
+                <td width="50" valign="top" onclick="more_info(1);" style="cursor:pointer;"><img id="day_1_img" width="50" height="42" /></td>
+                <td width="10">&nbsp;</td>
+<td width="70" valign="top"><span class="style5">Hi:&nbsp;</span><span class="style5" id="day_1_temperature_hi">&nbsp;</span><span class="style5" id="set_deg_type_1">&deg; F</span><br /><span class="style6" id="day_1_temperature_live">&nbsp;</span><br /><span class="style5">Lo:&nbsp;<span class="style5" id="day_1_temperature_lo">&nbsp;</span><span class="style5" id="set_deg_type_2">&deg;&nbsp;F</span></td>
+                <td width="100" valign="top"><div style="width:100px; height:57px; overflow:hidden;"><span class="style7" id="day_1_forecast">Loading...</span><span class="style8">&nbsp;</span><span class="style8" id="more_info_1"><a class='style8' target='_blank' href='http://www.weatherbug.com/?zcode=z6070' style='cursor:pointer; color:#fbe317;'>more...</a></span></div></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr><td height="12"><span class="style1">&nbsp;</span></td></tr>
+        <tr>
+          <td height="78">
+            <table width="230" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="50" height="18"><span class="style9" id="day_2_name">--</span></td>
+                <td width="10" height="18" class="style1">&nbsp;</td>
+                <td width="50" height="18"><span class="style9" id="day_3_name">--</span></td>
+                <td width="10" height="18" class="style1">&nbsp;</td>
+                <td width="50" height="18"><span class="style9" id="day_4_name">--</span></td>
+                <td width="9" height="18" class="style1">&nbsp;</td>
+                <td width="51" height="18" class="style1">&nbsp;</td>
+              </tr>
+              <tr>
+                <td width="50" height="42" onclick="more_info(2);" style="cursor:pointer;"><img id="day_2_img" width="50" height="42" /></td>
+                <td width="10" height="42" class="style1">&nbsp;</td>
+                <td width="50" height="42" onclick="more_info(3);" style="cursor:pointer;"><img id="day_3_img" width="50" height="42" /></td>
+                <td width="10" height="42" class="style1">&nbsp;</td>
+                <td width="50" height="42" onclick="more_info(4);" style="cursor:pointer;"><img id="day_4_img" width="50" height="42" /></td>
+                <td width="9" height="42" class="style1">&nbsp;</td>
+                <td width="51" rowspan="2" valign="top" xbgcolor=pink class="style_aws_link"><span class="style_aws_link" id="aws_link_forecast"></span><span class="style_aws_link" id="aws_link_radar"></span><span class="style_aws_link" id="aws_link_news"></span><span class="style_aws_link" id="aws_link_cameras"></span></td>
+              </tr>
+              <tr>
+                <td width="50" height="18"><div align="center"><span class="style10" id="day_2_temperature_hi">&nbsp;</span><span class="style10">&deg;&nbsp;/&nbsp;</span><span class="style11" id="day_2_temperature_lo">&nbsp;</span><span class="style11">&deg;</span></div></td>
+                <td width="10" height="18" class="style1">&nbsp;</td>
+                <td width="50" height="18"><div align="center"><span class="style10" id="day_3_temperature_hi">&nbsp;</span><span class="style10">&deg;&nbsp;/&nbsp;</span><span class="style11" id="day_3_temperature_lo">&nbsp;</span><span class="style11">&deg;</span></div></td>
+                <td width="10" height="18" class="style1">&nbsp;</td>
+                <td width="50" height="18"><div align="center"><span class="style10" id="day_4_temperature_hi">&nbsp;</span><span class="style10">&deg;&nbsp;/&nbsp;</span><span class="style11" id="day_4_temperature_lo">&nbsp;</span><span class="style11">&deg;</span></div></td>
+                <td width="9" height="18" class="style1">&nbsp;</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr><td height="13"><span class="style1">&nbsp;</span></td></tr>
+      </table>
+    </td>
+    <td width="21">&nbsp;</td>
+  </tr>
+</table>
+
+<!-- settings window -->
+<table id="settings_window" style="display:none; position:relative; top:-194px; left:0px;" width="240" height="180" border="0" cellpadding="0" cellspacing="0" class="whitebordertable">
+  <tr>
+    <td class="style1" width="5">&nbsp;</td>
+    <td valign="middle">
+      <table width="230" height="170" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+          <td height="15" class="style3">Settings</td>
+          <td class="style3"><div align="right"><a style="cursor:pointer;" onclick="javascript:settings_close_button_click();"><img id="btnCloseSettings" border="0" width="31" height="9" /></a></div></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <table width="230" border="0" cellspacing="0" cellpadding="0">
+              <tr>
+                <td width="180" height="18" class="style7">Zip code (US only) or City (worldwide)</td>
+              </tr>
+              <tr>
+<td width="180"><input  id="city_name" type="text" class="style12" size="16" onkeypress="onKeyHandle(event,'city_name');" /><span class="style13">&nbsp;&nbsp;</span><span class="style13" id="search_button"><a style="cursor:pointer; color: #fbe317;"  onclick="search_city_click()">Search&raquo;</a></span></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+        <tr>
+          <td height="12" colspan="2"><img id="imgVDiv" width="230" height="12" /></td>
+        </tr>
+        <tr>
+          <td height="64" colspan="2" class="style7" id="city_search_result" valign="top" style="line-height:12px;">&nbsp;</td>
+        </tr>
+        <tr>
+          <td height="14" colspan="2" class="style7" id="city_search_result_paging" align="center" valign="bottom" style="line-height:12px;">&nbsp;</td>
+        </tr>
+        <tr>
+          <td height="12" colspan="2"><img id="imgVDiv2" width="230" height="12" /></td>
+        </tr>
+        <tr>
+<td height="15" colspan="2" valign="top"><span class="style13">Units: </span><span class="style7"><input onclick="degree_change('f');" id="radio_f" name="radiobutton" type="radio" checked=true class="style7"/>Fahrenheit&nbsp;&nbsp;<input onclick="degree_change('c');"  name="radiobutton" id="radio_c" type="radio" class="style7" />Celsius</span></td>
+
+        </tr>
+      </table>
+    </td>
+    <td class="style1" width="5">&nbsp;</td>
+  </tr>
+</table>
+<!-- more info window -->
+<table id="more_info_window" style="display:none; position:absolute;" width="240" height="180" border="0" cellpadding="0" cellspacing="0" class="whitebordertable">
+  <tr>
+    <td class="style1" width="5">&nbsp;</td>
+    <td valign="middle">
+      <table width="230" height="170" border="0" align="center" cellpadding="0" cellspacing="0">
+        <tr>
+          <td width="230" height="1" colspan="2" class="style1">&nbsp;</td>
+        </tr>
+        <tr>
+          <td width="199" height="26" valign="top" class="style3" id="more_info_date">&nbsp;</td>
+          <td width="31" height="26" valign="top" class="style3"><div align="right"><a style="cursor:pointer;" onclick="more_info_close_button_click();"><img id="btnCloseInfo" width="31" height="9" /></a></div></td>
+        </tr>
+        <tr>
+          <td width="230" height="140" colspan="2" valign="top">
+            <table width="230" border="0" height="140" cellpadding="0" cellspacing="0" xbgcolor=red>
+              <tr>
+                <td width="50" valign="top"><div align="center"><img id="more_info_img" onclick="more_info_close_button_click();" style="cursor:pointer;" border=1 width="50" height="42" /><br /><span class="style17" id="more_info_hi">--&deg;</span><span id="more_info_lo" class="style19">--&deg;</span></div></td>
+                <td width="10">&nbsp;</td>
+                <td width="170" valign="top" class="style7" id="more_info_text">&nbsp;</td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td class="style1" width="5">&nbsp;</td>
+  </tr>
+</table>
+</div>
+
+
+
+
+</center>
+
+<div>
+  <script type="text/javascript">
+        var mMENU = gadgets.io.getProxyUrl("http://cdn.labpixies.com/infra/js/lp_footer.js");
+      document.write('<scr'+'ipt type="text/javascript" src="'+mMENU+'"></scr'+'ipt>');
+     </script>
+</div>
+
+<script type="text/javascript">
+  function setImages() {
+
+    _gel("mainBackground").style.background = 'transparent url'+'('+gadgets.io.getProxyUrl("http://cdn.labpixies.com/campaigns/weather/images/background_nir.jpg")+') 0px 0px no-repeat';
+    _gel("day_1_img").src       = gadgets.io.getProxyUrl(images_url+"temp_icon_new.gif");
+    _gel("day_2_img").src       = gadgets.io.getProxyUrl(images_url+"temp_icon_new.gif");
+    _gel("day_3_img").src       = gadgets.io.getProxyUrl(images_url+"temp_icon_new.gif");
+    _gel("day_4_img").src       = gadgets.io.getProxyUrl(images_url+"temp_icon_new.gif");
+    _gel("btnCloseSettings").src   = gadgets.io.getProxyUrl(images_url+"close.gif");
+    _gel("imgVDiv").src       = gadgets.io.getProxyUrl(images_url+"vertical_div.gif");
+    _gel("imgVDiv2").src       = gadgets.io.getProxyUrl(images_url+"vertical_div.gif");
+    _gel("btnCloseInfo").src     = gadgets.io.getProxyUrl(images_url+"close.gif");
+    _gel("more_info_img").src     = gadgets.io.getProxyUrl(images_url+"temp_icon_new.gif");
+  }
+
+  setImages();
+  gadgets.util.registerOnLoadHandler(function () {
+    init_module__MODULE_ID__();
+    //lpgadgets.lp.menu.deploy("menu_div",{"textDirection":"ltr","lang":"en"});
+
+    gadgets.window.adjustHeight();
+  });
+</script>
+]]>
+  </Content>
+</Module>
