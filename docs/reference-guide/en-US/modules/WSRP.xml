@@ -171,7 +171,7 @@
             for more details.
          </para>
          <para>
-            Of course, if you have modified you have modified the host name and port on which your server runs, you will
+            Of course, if you have modified the host name and port on which your server runs, you will
             need to
             update the configuration for the consumer used to consume &PRODUCT_NAME;'s 'self' producer. Please refer to
             the
@@ -233,7 +233,7 @@
           <para>&PRODUCT_NAME; uses JBossWS Native to handle ws-security. Please see the WS-Security section of the
                 <ulink url="http://www.jboss.org/jbossas/docs/5-x">JBoss AS 5 Administration and Configuration Guide
                 </ulink> for indepth configuration options. Please note that since the consumer passes its credentials
-                to the producer, the consumer will act at the wss client and the producer will act as the wss server.
+                to the producer, the consumer will act as the wss client and the producer will act as the wss server.
           </para>
           <para> The following are the JBossWS Native configuration files which need to be configure for WSRP:
           </para>
@@ -294,16 +294,16 @@
           </para>
           <itemizedlist>
             <listitem>
-              <para>The JBossWS configuration files must be configured</para>
+              <para>The JBossWS configuration files must be configured.</para>
             </listitem>
             <listitem>
-              <para>The filter must be added to the portal's web.xml</para>
+              <para>The filter must be added to the portal's web.xml.</para>
             </listitem>
             <listitem>
-              <para>the enable wss feature must be check in the wsrp admin</para>
+              <para>The enable wss feature must be check in the wsrp admin.</para>
             </listitem>
           </itemizedlist>
-          <para>The consumer will not properly handle ws-security unless all 3 are properly configured</para>
+          <para>The consumer will not properly handle ws-security unless all 3 are properly configured.</para>
         </note>
       </sect2>
    </sect1>
@@ -356,9 +356,7 @@
       <para>
          It is also possible to specify that all the portlets declared within a given portlet application to be
          remotable by default. This is done by specifying the
-         <code>
-            container-runtime-option
-         </code>
+         <code>container-runtime-option</code>
          at the
          <code>portlet-app</code>
          element level. Individual portlets can override that value to not be remotely exposed. Let's look at an
@@ -415,11 +413,11 @@
          <varname>RemotelyExposedPortlet</varname>
          inherits the remotable status defined at the
          <code>portlet-app</code>
-         level since it does not specify a value for the<code>org.gatein.pc.remotable container-runtime-option</code>.
+         level since it does not specify a value for the <code>org.gatein.pc.remotable container-runtime-option</code>.
          The<varname>NotRemotelyExposedPortlet</varname>, however, overrides the default behavior and is not remotely
          exposed. Note that in the absence of a top-level
          <code>org.gatein.pc.remotable container-runtime-option</code>
-         value set to<code>true</code>, portlets are NOT remotely exposed.
+         value set to <code>true</code>, portlets are NOT remotely exposed.
       </para>
    </sect1>
 
@@ -481,7 +479,7 @@
 
          <para>
             &PRODUCT_NAME; provides a portlet to configure access (among other functions) to remote WSRP Producers
-            grahically. Starting with &PRODUCT_VERSION;, the WSRP configuration portlet is installed by default. You
+            graphically. Starting with &PRODUCT_VERSION;, the WSRP configuration portlet is installed by default. You
             can find it at
             <ulink
                url="http://localhost:8080/portal/login?initialURI=%2Fportal%2Fprivate%2Fclassic%2FwsrpConfiguration&amp;username=root&amp;password=gtn">
@@ -592,7 +590,7 @@
             properties, as is the case for the
             <literal>selfv2</literal>
             consumer (the consumer that accesses the portlets made remotely available by &PRODUCT_NAME;'s producer via
-            WSRP 2), we'd have seen something similar to, after pressing the "Refresh &amp; Save" button:
+            WSRP 2), we'd have seen something similar to the screenshot below, after pressing the "Refresh &amp; Save" button:
             <mediaobject>
                <imageobject>
                   <imagedata fileref="images/WSRP/config_refresh.png" format="PNG" align="center" valign="middle"

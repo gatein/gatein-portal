@@ -336,7 +336,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
         <section id="sect-Reference_Guide-CAS_Central_Authentication_Service-CAS_server">
             <title>CAS server</title>
             <para>
-				First, set up the server to authenticate against the portal login module. In this example, the CAS server is installed on Tomcat.
+                First, set up the server to authenticate against the portal login module. In this example, the CAS server is installed on Tomcat.
             </para>
             <section id="sect-Reference_Guide-CAS_server-Obtaining_CAS">
                 <title>Obtaining CAS</title>
@@ -352,7 +352,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
             <section id="sect-Reference_Guide-CAS_server-Modifying_CAS_server">
                 <title>Modifying the CAS server</title>
                 <para>
-					To configure the web archive as desired, the simplest way is to make the necessary changes directly in the CAS codebase.
+                    To configure the web archive as desired, the simplest way is to make the necessary changes directly in the CAS codebase.
                 </para>
             <note>
                <para>
@@ -361,10 +361,10 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
                </para>
             </note>
                 <para>
-					First, change the default authentication handler with the one provided by &PRODUCT;.
+                    First, change the default authentication handler with the one provided by &PRODUCT;.
                 </para>
                 <para>
-					The CAS Server Plugin makes secure authentication callbacks to a RESTful service installed on the remote &PRODUCT; server to authenticate a user.
+                    The CAS Server Plugin makes secure authentication callbacks to a RESTful service installed on the remote &PRODUCT; server to authenticate a user.
                 </para>
                 <para>
                     In order for the plugin to function correctly, it needs to be properly configured to connect to this service. This configuration is done via the <filename>cas.war/WEB-INF/deployerConfigContext.xml </filename> file.
@@ -457,7 +457,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
                             Change the default port to avoid a conflict with the default &PRODUCT; (for testing purposes). Edit <filename>TOMCAT_HOME/conf/server.xml</filename> and replace the 8080 port to 8888.
                             <note>
                                 <para>
-									If &PRODUCT; is running on the same machine as Tomcat, other ports need to be changed in addition to 8080 to avoid port conflicts.
+                                    If &PRODUCT; is running on the same machine as Tomcat, other ports need to be changed in addition to 8080 to avoid port conflicts.
                            They can be changed to any free port. For example, you can change admin port from 8005 to 8805, and AJP port from 8009 to 8809.
                                 </para>
                             </note>
@@ -513,7 +513,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
                     <itemizedlist>
                         <listitem>
                             <para>
-							In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment on this section:
+                            In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment on this section:
                             </para>
 <programlisting>
 <![CDATA[
@@ -533,7 +533,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
                         </listitem>
                         <listitem>
                             <para>
-							In Tomcat, edit <filename>GATEIN_HOME/conf/jaas.conf</filename>, uncomment on this section and comment other parts:
+                            In Tomcat, edit <filename>GATEIN_HOME/conf/jaas.conf</filename>, uncomment on this section and comment other parts:
                             </para>         
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required;
 org.exoplatform.services.security.j2ee.TomcatLoginModule required
@@ -687,18 +687,18 @@ realmName=gatein-domain;
     <section id="sect-Reference_Guide-Single_Sign_On-JOSSO">
         <title>JOSSO</title>
         <para>
-			This Single-Sign-On plugin enables the seamless integration between &PRODUCT; and the JOSSO Single-Sign-On Framework. Details about JOSSO can be found <ulink url="http://www.josso.org">here</ulink>.
+            This Single-Sign-On plugin enables the seamless integration between &PRODUCT; and the JOSSO Single-Sign-On Framework. Details about JOSSO can be found <ulink url="http://www.josso.org">here</ulink>.
         </para>
         <para>
-			Setting up this integration consists of two steps: installing/configuring a JOSSO server, and setting up the portal to use the JOSSO server.
+            Setting up this integration consists of two steps: installing/configuring a JOSSO server, and setting up the portal to use the JOSSO server.
         </para>
         <section id="sect-Reference_Guide-JOSSO-JOSSO_server">
             <title>JOSSO server</title>
             <para>
-				This section describes how to set up the JOSSO server to authenticate against the &PRODUCT; login module.
+                This section describes how to set up the JOSSO server to authenticate against the &PRODUCT; login module.
             </para>
             <para>
-				In this example, the JOSSO server will be installed on Tomcat.
+                In this example, the JOSSO server will be installed on Tomcat.
             </para>
             <section id="sect-Reference_Guide-JOSSO_server-Obtaining_JOSSO">
                 <title>Obtaining JOSSO</title>
@@ -981,7 +981,7 @@ realmName=gatein-domain;
             </section>
             
             <section id="sect-Reference_Guide-OpenSSO_server-Modifying_OpenSSO_server">
-				<title>Modifying the OpenSSO server</title>
+                <title>Modifying the OpenSSO server</title>
                 <para>
                      To configure the web server as desired, it is simpler to directly modify the sources. 
                 </para>
@@ -989,7 +989,7 @@ realmName=gatein-domain;
                     The first step is to add the &PRODUCT; Authentication Plugin:
                 </para>
                 <para>
-					The plugin makes secure authentication callbacks to a RESTful service installed on the remote &PRODUCT; server to authenticate a user.
+                    The plugin makes secure authentication callbacks to a RESTful service installed on the remote &PRODUCT; server to authenticate a user.
                 </para>
                 <para>
                     In order for the plugin to function correctly, it needs to be properly configured to connect to this service. This configuration is done via the <filename>opensso.war/config/auth/default/AuthenticationPlugin.xml</filename> file.
@@ -1002,7 +1002,7 @@ realmName=gatein-domain;
                     </step>
                     <step>
                         <para>
-							Change the default port to avoid a conflict with the default &PRODUCT; port (for testing purposes) by editing <filename>TOMCAT_HOME/conf/server.xml</filename> and replacing the 8080 port with 8888.
+                            Change the default port to avoid a conflict with the default &PRODUCT; port (for testing purposes) by editing <filename>TOMCAT_HOME/conf/server.xml</filename> and replacing the 8080 port with 8888.
                             <note>
                                 <para>
                            If &PRODUCT; is running on the same machine as Tomcat, other ports need to be changed in addition to 8080 to avoid port conflicts.
@@ -1140,7 +1140,7 @@ realmName=gatein-domain;
                         </listitem>
                         <listitem>
                             <para>
-								If you are running &PRODUCT; in Tomcat, edit $GATEIN_HOME/conf/jaas.conf, uncomment on this section and comment other parts:
+                                If you are running &PRODUCT; in Tomcat, edit $GATEIN_HOME/conf/jaas.conf, uncomment on this section and comment other parts:
                             </para>
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required;
 org.exoplatform.services.security.j2ee.TomcatLoginModule required
@@ -1572,7 +1572,7 @@ network.negotiate-auth.using-native-gsslib = true
                         adding the 'SPNEGO' authenticators property.
           </para>
 
-<programlisting language="xml">
+<programlisting language="XML">
 <![CDATA[<deployment xmlns="urn:jboss:bean-deployer:2.0">
 <property name="authenticators">
   <map class="java.util.Properties" keyClass="java.lang.String" valueClass="java.lang.String">
@@ -1625,7 +1625,7 @@ network.negotiate-auth.using-native-gsslib = true
                         Modify the <emphasis role="bold">JBOSS_HOME/server/defaut/deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</emphasis> file as below:
                     </para>
 
-                        <programlisting language="xml"><![CDATA[
+                        <programlisting language="XML"><![CDATA[
 <deployment xmlns="urn:jboss:bean-deployer:2.0">
 
   <application-policy xmlns="urn:jboss:security-beans:1.0" name="gatein-form-auth-domain">
@@ -1691,7 +1691,7 @@ network.negotiate-auth.using-native-gsslib = true
                     <para>
                         Modify <emphasis role="bold">JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> as below.</para>
 
-                        <programlisting language="xml"><![CDATA[
+                        <programlisting language="XML"><![CDATA[
 <!--	<login-config>
 	  <auth-method>FORM</auth-method>
 	  <realm-name>gatein-domain</realm-name>
