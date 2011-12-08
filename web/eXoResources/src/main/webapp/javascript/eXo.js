@@ -60,6 +60,8 @@ var eXo  = {
 } ;
 
 /**
+* This function is deprecated, please use eXo.loadJS instead
+* 
 * This method will : 
 *   1) dynamically load a javascript module from the server (if no root location is set 
 *      then use '/eXoResources/javascript/', aka files
@@ -70,30 +72,17 @@ var eXo  = {
 *
 */
 eXo.require = function(module, jsLocation, callback, context, params) {
-  try {
-    if(eval(module + ' != null'))  {
-    	if (callback) {
-    		var ctx = context ? context : {};
-    	  	if(params && typeof(params) != "string" && params.length) callback.apply(ctx, params);
-    	  	else callback.call(ctx, params) ;
-    	}
-    	return ;
-    }
-  } catch(err) {
-    //alert(err + " : " + module);
-  }
   window.status = "Loading Javascript Module " + module ;
   if(jsLocation == null) jsLocation = '/eXoResources/javascript/' ;
   var path = jsLocation  + module.replace(/\./g, '/')  + '.js' ;
-  eXo.loadJS(path, module, callback, context, params);
-  window.status = "";
+  eXo.loadJS(path, callback, context, params);
 } ;
 
-eXo.loadJS = function(path, module, callback, context, params) {
-  if (!module) module = path;
-  
-  eXo.core.Loader.register(module, path);
-  eXo.core.Loader.init(module, callback, context, params);
+eXo.loadJS = function(path, callback, context, params) {
+  if (!eXo.core.Loader.loadedScripts[path]) {
+	  eXo.core.Loader.register(path, path);	  
+  }
+  eXo.core.Loader.init(path, callback, context, params);
   
   eXo.session.itvDestroy() ;
   if(eXo.session.canKeepState && eXo.session.isOpen && eXo.env.portal.accessMode == 'private') {

@@ -20,6 +20,8 @@
 function Loader() {
   this.wait = 1;
   this.defaultAsyncWait = 250;
+  this.loadedScripts = {};  
+  this.registered = {}
 };
 
 Loader.prototype.init = function(scriptName, callback, context, params) {
@@ -178,7 +180,6 @@ Loader.prototype.register = function(name, version, remote, asyncWait, urls) {
   } else {
     reg = new this.Registration(name, version, remote, asyncWait, urls);
   }
-  if (!this.registered) this.registered = {};
   if (this.registered[name] && window.console) {
     window.console.log("Warning: Resource named \"" + name + "\" was already registered with this.register(); overwritten.");
   }
@@ -199,13 +200,11 @@ Loader.prototype.getCallbackQueue = function(scriptUrl) {
 
 Loader.prototype.load = function(scriptName, scriptUrl, remote, asyncWait, cb) {
   if (asyncWait == undefined) asyncWait = this.wait;
-  if (remote && asyncWait == 0) asyncWait = this.defaultAsyncWait;
-
-  if (!this.loadedScripts) this.loadedScripts = new Array();
+  if (remote && asyncWait == 0) asyncWait = this.defaultAsyncWait;  
 
   var callbackQueue = this.getCallbackQueue(scriptUrl);
   callbackQueue.push(new this.CallbackItem(function() {
-      eXo.core.Loader.loadedScripts.push(eXo.core.Loader.registered[scriptName]);
+      eXo.core.Loader.loadedScripts[scriptName] = eXo.core.Loader.registered[scriptName];
       eXo.core.Loader.registered[scriptName] = false;
     },  null));
   if (cb) {
@@ -280,6 +279,15 @@ function durl(sc) {
   //console.log("this.registered", this.registered);
   var r = eXo.core.Loader.registered[su];
   return (!r && (!this.__durls || !this.__durls[su]) && sc && sc.length > 4 && sc.substring(0, 4) == "url(");
+};
+
+Loader.prototype.addLoadedScripts = function(scriptPaths, registration) {
+	if (!scriptPaths || !scriptPaths.length) return;
+	
+	scriptPaths = typeof scriptPaths === 'string' ? [scriptPaths] : scriptPaths;
+	for (var i = 0; i < scriptPaths.length; i++) {
+		eXo.core.Loader.loadedScripts[scriptPaths[i]] = registration || true;
+	}
 };
 
 eXo.core.Loader = new Loader();

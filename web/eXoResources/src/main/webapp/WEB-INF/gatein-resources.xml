@@ -123,6 +123,11 @@
    <!-- CORE Javascripts -->
    <javascript>
       <param>
+         <js-module>eXo.core.Loader</js-module>
+         <js-path>/javascript/eXo/core/Loader.js</js-path>
+         <js-priority>0</js-priority>
+      </param>
+      <param>
          <js-module>eXo.core.Utils</js-module>
          <js-path>/javascript/eXo/core/Util.js</js-path>
          <js-priority>1</js-priority>
@@ -146,12 +151,7 @@
          <js-module>eXo.core.Browser</js-module>
          <js-path>/javascript/eXo/core/Browser.js</js-path>
          <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Loader</js-module>
-         <js-path>/javascript/eXo/core/Loader.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
+      </param>      
       <param>
          <js-module>eXo.core.MouseEventManager</js-module>
          <js-path>/javascript/eXo/core/MouseEventManager.js</js-path>

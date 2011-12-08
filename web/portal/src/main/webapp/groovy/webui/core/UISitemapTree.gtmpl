@@ -12,7 +12,7 @@
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext();		
 	JavascriptManager jsmanager = pcontext.getJavascriptManager();
-	jsmanager.importJavascript('eXo.webui.UISiteMap') ;
+	jsmanager.importJavascript('eXo.webui.UISiteMap', '/web/javascript') ;
 
 	UIPortletApplication siteMapPortlet = uicomponent.getParent();
 	def useAJAX = siteMapPortlet.isUseAjax();
