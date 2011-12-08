@@ -1,5 +1,4 @@
 <%
-	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.webui.core.UIPortletApplication;
 	import org.exoplatform.portal.mop.user.UserNode;
 	import javax.portlet.MimeResponse;
@@ -11,8 +10,6 @@
 	import javax.portlet.ResourceURL;
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext();		
-	JavascriptManager jsmanager = pcontext.getJavascriptManager();
-	jsmanager.importJavascript('eXo.webui.UISiteMap', '/web/javascript') ;
 
 	UIPortletApplication siteMapPortlet = uicomponent.getParent();
 	def useAJAX = siteMapPortlet.isUseAjax();
