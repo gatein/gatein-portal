@@ -249,7 +249,6 @@ You can also use -Pdownload to automatically provide JBoss AS instance.
          </activation>
 
          <properties>
-            <exo.projects.app.jboss7.version>jboss-as-7.0.2.Final</exo.projects.app.jboss7.version>
             <servers.dir>${exo.projects.directory.dependencies}</servers.dir>
             <jbossas.name>${exo.projects.app.jboss7.version}</jbossas.name>
          </properties>
