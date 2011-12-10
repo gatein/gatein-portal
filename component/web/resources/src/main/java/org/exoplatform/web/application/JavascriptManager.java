@@ -26,6 +26,9 @@ import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by The eXo Platform SAS
@@ -59,6 +62,9 @@ public class JavascriptManager
       }
    }
 
+   /**
+    * This method is deprecated, please use {@link #lazyLoadJavascript(String)} instead
+    */
    public void importJavascript(CharSequence s)
    {
       if (s != null)
@@ -70,8 +76,11 @@ public class JavascriptManager
             data.add("'); \n");
          }
       }
-   }
-
+   }   
+   
+   /**
+    * This method is deprecated, please use {@link #lazyLoadJavascript(String)} instead
+    */
    public void importJavascript(String s, String location)
    {
       if (s != null && location != null)
@@ -90,7 +99,52 @@ public class JavascriptManager
          }
       }
    }
-
+   
+   /**
+    * Create js code that help to load javascript file
+    * @param path - path to js file, should contain context path
+    */
+   public void loadJavascript(String path) 
+   {
+      loadJavascript(Arrays.asList(path), null, null);
+   }
+   
+   /**
+    * Create js code that help to load javascript file
+    * @param paths - list of path to js files, should contain context path
+    * @param callback - method will be called after js file's been loaded
+    * @param params - variable arguments pass to js callback method
+    * @param context
+    */
+   public void loadJavascript(List<String> paths, String callback, String context, String ...params) 
+   {
+      if (paths != null && paths.size() > 0)
+      {
+         Iterator<String> pathItr = paths.iterator();         
+         while (pathItr.hasNext()) 
+         {
+            String path = pathItr.next();
+            if (jsSrevice_.isJavascriptLoaded(path) && !PropertyManager.isDevelopping()) 
+            {
+               pathItr.remove();
+            }
+         }
+         String[] pathArray = new String[paths.size()];
+         String jsPaths = buildJSArray(paths.toArray(pathArray));
+                  
+         if (jsPaths.length() > 2)
+         {
+            StringBuilder builder = new StringBuilder("eXo.loadJS(");
+            builder.append(jsPaths).append(",");
+            builder.append(callback).append(",");
+            builder.append(context).append(",");
+            builder.append(buildJSArray(params));
+            builder.append("); \n");
+            data.add(builder.toString());
+         }
+      }
+   }   
+   
    public void addOnLoadJavascript(CharSequence s)
    {
       if (s != null)
@@ -162,5 +216,16 @@ public class JavascriptManager
             writer.write(s);
          }
       }
+   }
+   
+   private String buildJSArray(String ...params)
+   {
+      StringBuilder pathBuilder = new StringBuilder("[");
+      for (String str : params) 
+      {
+         pathBuilder.append("'").append(str).append("',");
+      }
+      pathBuilder.append("]");
+      return pathBuilder.toString();
    }
 }

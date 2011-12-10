@@ -608,6 +608,26 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    {
       return getAvailableScripts().contains(module.toString());
    }
+   
+   /**
+    * Check the existence of javascript in Available Scripts
+    * @param path - should contain context path
+    * @return true if Available Scripts contain js with specified path
+    */
+   public boolean isJavascriptLoaded(String path)
+   {
+      for (ScriptResource shared : scripts.getResources(ResourceScope.SHARED))
+      {
+         for (Module module : shared.getModules())
+         {
+            if (module.getURI().equals(path))
+            {
+               return true;
+            }
+         }
+      }      
+      return false;
+   }
 
    /**
     * Invalidate cache of merged common JScripts

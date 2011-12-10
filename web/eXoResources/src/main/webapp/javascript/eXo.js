@@ -78,11 +78,20 @@ eXo.require = function(module, jsLocation, callback, context, params) {
   eXo.loadJS(path, callback, context, params);
 } ;
 
-eXo.loadJS = function(path, callback, context, params) {
-  if (!eXo.core.Loader.loadedScripts[path]) {
-	  eXo.core.Loader.register(path, path);	  
+eXo.loadJS = function(paths, callback, context, params) {
+  if (!paths || !paths.length) return;
+  
+  var tmp = [];
+  paths = typeof paths === 'string' ? [paths] : paths;  
+  for (var i = 0; i < paths.length; i++) {
+	  if (!eXo.core.Loader.loadedScripts[paths[i]]) {
+		  eXo.core.Loader.register(paths[i], paths[i]);
+		  tmp.push(paths[i]);
+	  }	  
   }
-  eXo.core.Loader.init(path, callback, context, params);
+  if (tmp.length > 0) {
+	  eXo.core.Loader.init(tmp, callback, context, params);	  
+  }
   
   eXo.session.itvDestroy() ;
   if(eXo.session.canKeepState && eXo.session.isOpen && eXo.env.portal.accessMode == 'private') {
