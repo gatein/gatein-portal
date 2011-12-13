@@ -30,7 +30,6 @@ import org.exoplatform.portal.resource.ResourceResolver;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.portal.resource.compressor.ResourceType;
-import org.exoplatform.web.application.javascript.Javascript.ExtendedJScript;
 import org.exoplatform.web.application.javascript.Javascript.PortalJScript;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -41,8 +40,6 @@ import org.picocontainer.Startable;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.io.Reader;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -124,8 +121,6 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       commonJScripts = new ArrayList<Javascript>();
       deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
       portalJScripts = new HashMap<String, List<PortalJScript>>();
-      
-      addResourceResolver(new ExtendedJScriptResourceResolver());
    }
 
    /**
@@ -436,51 +431,6 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    }
 
    /**
-    * Add an extended JavaScript to the list of common JScripts which are loaded by default
-    * 
-    * @deprecated This method support was not good in design so it will be unsupported soon.
-    * Absolutely this usage can be replaced by using combination of {@link #addCommonJScript(Javascript)} and {@link ResourceResolver}
-    * 
-    * @param module
-    *           module name
-    * @param scriptPath
-    *           URI path of JavaScript 
-    * @param scontext
-    *           the webapp's {@link javax.servlet.ServletContext}
-    * @param scriptData
-    *            Content of JavaScript that will be added into available JavaScript
-    */
-   @Deprecated
-   public synchronized void addExtendedJavascript(String module, String scriptPath, ServletContext scontext, String scriptData)
-   {
-      ExtendedJScript js = new ExtendedJScript(module, scriptPath, scontext.getContextPath(), scriptData);
-      commonJScripts.add(js);
-      if (log.isDebugEnabled())
-      {
-         log.debug("Added an extended javascript " + js);
-      }
-   }
-
-   /**
-    * Remove an extended Javascript from the list of common JScripts
-    * 
-    * @deprecated This method is deprecated according to {@link #addExtendedJavascript(String, String, ServletContext, String)}.
-    * Use {@link #removeCommonJScript(String)} instead.
-    * @param module
-    *          module will be removed
-    * @param scriptPath
-    *          URI of script that will be removed
-    * @param scontext
-    *          the webapp's {@link javax.servlet.ServletContext}
-    *          
-    */
-   @Deprecated
-   public void removeExtendedJavascript(String module, String scriptPath, ServletContext scontext)
-   {
-      removeCommonJScript(module);
-   }
-
-   /**
     * Invalidate cache of merged common JScripts
     */
    public void invalidateMergedCommonJScripts()
@@ -518,29 +468,5 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    public void stop()
    {
       DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(deployer);
-   }
-   
-   private class ExtendedJScriptResourceResolver implements ResourceResolver
-   {
-      @Override
-      public Resource resolve(String path) throws NullPointerException
-      {
-         for (final Javascript js : commonJScripts)
-         {
-            if (js instanceof ExtendedJScript && js.getPath().equals(path))
-            {
-               final String jScript = ((ExtendedJScript)js).getScript();
-               return new Resource(path)
-               {
-                  @Override
-                  public Reader read() throws IOException
-                  {
-                     return new StringReader(jScript);
-                  }
-               };
-            }
-         }
-         return null;
-      }
    }
 }

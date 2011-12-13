@@ -103,24 +103,4 @@ public class Javascript
          return portalName;
       }
    }
-   
-   public static class ExtendedJScript extends Javascript
-   {
-
-      /** . */
-      private final String script;
-      
-      public ExtendedJScript(String module, String path, String contextPath, String script)
-      {
-         super(module, path, contextPath, Integer.MAX_VALUE);
-
-         //
-         this.script = script;
-      }
-
-      public String getScript()
-      {
-         return this.script;
-      }
-   }
 }

@@ -109,32 +109,6 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertFalse(availPaths.hasNext());
    }
    
-   public void testAddingExtendedJScript() throws Exception
-   {
-      ServletContext exContext = new MockJSServletContext("extendedWebApp", null);
-      String exModule = "extended.js.test";
-      String exPath = "/extended/js/test.js";
-      
-      jsService.addExtendedJavascript(exModule, exPath, exContext, "extendedJS;");
-      assertTrue(jsService.isModuleLoaded(exModule));
-      assertTrue(jsService.getAvailableScriptsPaths().contains(exContext.getContextPath() + exPath));
-      assertEquals("\nbbb;ddd;aaa;ccc;extendedJS;", new String(jsService.getMergedJavascript()));
-  
-      long first = jsService.getLastModified();
-      assertTrue(first < System.currentTimeMillis());            
-            
-      jsService.removeExtendedJavascript(exModule, exPath, exContext);
-      
-      assertFalse(jsService.isModuleLoaded(exModule));
-      assertFalse(jsService.getAvailableScriptsPaths().contains(exContext.getContextPath() + exPath));
-      Thread.sleep(1000); //Wait to make sure we can compare lastModified properly
-      assertEquals("\nbbb;ddd;aaa;ccc;", new String(jsService.getMergedJavascript()));
-      
-      long second = jsService.getLastModified();
-      assertTrue(first < second);
-      assertTrue(second < System.currentTimeMillis());
-   }
-
    public void testMergingCommonJScripts()
    {
       String mergedJS = new String(jsService.getMergedJavascript());
