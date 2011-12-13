@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form.ext;
 
 import org.exoplatform.commons.utils.HTMLEntityEncoder;
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
@@ -197,6 +198,8 @@ public class UIFormColorPicker extends UIFormInputBase<String>
 
    public void processRender(WebuiRequestContext context) throws Exception
    {
+      JavascriptManager jsManager = context.getJavascriptManager();
+      jsManager.importJavascript("eXo.webui.UIColorPicker");
       String value = getValue();
       if (value != null)
       {

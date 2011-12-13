@@ -30,4 +30,8 @@
   <artifactId>exo.portal.web.portal</artifactId>
   <packaging>war</packaging> 
   <name>GateIn Portal Web Module</name>
+  
+  <build>
+    <finalName>portal</finalName>
+  </build>
 </project>

@@ -8,9 +8,6 @@
 	boolean hasPermission = uicomponent.hasPermission();
 	if(!uiPortalApp.isEditing() && !hasPermission) return;
 	
-	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.importJavascript('eXo.portal.PortalDragDrop');
-	
 %>
 <div class="UIContainer UIToolbarContainer <%=uiPortalApp.isEditing()?"EdittingContainer":""%> <%=hasPermission?"": "ProtectedContainer"%>" 
 				id="${uicomponent.id}" 
