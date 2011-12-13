@@ -23,6 +23,8 @@ import org.exoplatform.commons.cache.future.FutureMap;
 import org.exoplatform.commons.cache.future.Loader;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.controller.resource.Scope;
+import org.exoplatform.portal.controller.resource.ScopeType;
 import org.exoplatform.portal.resource.AbstractResourceService;
 import org.exoplatform.portal.resource.MainResourceResolver;
 import org.exoplatform.portal.resource.Resource;
@@ -54,7 +56,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    /** Our logger. */
    private final Logger log = LoggerFactory.getLogger(JavascriptConfigService.class);
 
-   private List<Javascript> commonJScripts;
+   private Javascript.Composite commonJScripts;
    
    private HashMap<String, List<Javascript>> portalJScripts;
 
@@ -117,7 +119,8 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       };
       cache = new FutureMap<String, CachedJavascript, ResourceResolver>(loader);
 
-      commonJScripts = new ArrayList<Javascript>();
+      // todo : remove /portal ???
+      commonJScripts = new Javascript.Composite(new Scope(ScopeType.GLOBAL, "merged"), "/portal", 0);
       deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
       portalJScripts = new HashMap<String, List<Javascript>>();
    }
@@ -132,7 +135,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    public Collection<String> getAvailableScripts()
    {
       ArrayList<String> list = new ArrayList<String>();
-      for (Javascript js : commonJScripts)
+      for (Javascript js : commonJScripts.compounds)
       {
          list.add(js.getModule());
       }
@@ -146,7 +149,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public Collection<Javascript> getCommonJScripts()
    {
-      return commonJScripts;
+      return commonJScripts.compounds;
    }
 
    /**
@@ -160,7 +163,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    public Collection<String> getAvailableScriptsPaths()
    {
       ArrayList<String> list = new ArrayList<String>();
-      for (Javascript js : commonJScripts)
+      for (Javascript js : commonJScripts.compounds)
       {
          list.add(js.getPath());
       }
@@ -177,9 +180,9 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public void addCommonJScript(Javascript js)
    {
-      commonJScripts.add(js);
+      commonJScripts.compounds.add(js);
       
-      Collections.sort(commonJScripts, new Comparator<Javascript>()
+      Collections.sort(commonJScripts.compounds, new Comparator<Javascript>()
       {
          public int compare(Javascript o1, Javascript o2)
          {
@@ -198,7 +201,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public void removeCommonJScript(String module)
    {
-      Iterator<Javascript> iterator = commonJScripts.iterator();
+      Iterator<Javascript> iterator = commonJScripts.compounds.iterator();
       while (iterator.hasNext())
       {
          Javascript js = iterator.next();
@@ -222,6 +225,11 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       return portalJScripts.get(portalName);
    }
    
+   public Collection<Javascript> getGlobalScripts()
+   {
+      return Collections.<Javascript>singleton(commonJScripts);
+   }
+
    /**
     * Add a PortalJScript which will be loaded with a specific portal.
     * <p>
@@ -285,7 +293,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public synchronized void remove(ServletContext context)
    {
-      Iterator<Javascript> iterator = commonJScripts.iterator();
+      Iterator<Javascript> iterator = commonJScripts.compounds.iterator();
       while (iterator.hasNext())
       {
          Javascript js = iterator.next();
@@ -357,7 +365,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       if (mergedCommonJScripts == null)
       {
          StringBuilder sB = new StringBuilder();
-         for (Javascript js : commonJScripts)
+         for (Javascript js : commonJScripts.compounds)
          {
             if (!js.isExternalScript())
             {
@@ -418,7 +426,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public boolean isModuleLoaded(CharSequence module)
    {
-      for (Javascript js : commonJScripts)
+      for (Javascript js : commonJScripts.compounds)
       {
          if (js.getModule().equals(module))
          {

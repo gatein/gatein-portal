@@ -147,11 +147,11 @@ public class JavascriptConfigParser
             Javascript js;
             if (portalName == null)
             {
-               js = new Javascript(new Scope(ScopeType.MODULE, js_module), js_path, context.getContextPath(), priority);
+               js = Javascript.create(new Scope(ScopeType.MODULE, js_module), js_path, context.getContextPath(), priority);
             }
             else
             {
-               js = new Javascript(new Scope(ScopeType.PORTAL, portalName), js_path, context.getContextPath(), priority);
+               js = Javascript.create(new Scope(ScopeType.PORTAL, portalName), js_path, context.getContextPath(), priority);
             }
             task.addScript(js);
          }

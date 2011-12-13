@@ -22,12 +22,27 @@ package org.exoplatform.web.application.javascript;
 import org.exoplatform.portal.controller.resource.Scope;
 import org.exoplatform.portal.controller.resource.ScopeType;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Javascript
+public abstract class Javascript
 {
+
+   public static Javascript create(Scope scope, String path, String contextPath, int priority)
+   {
+      if (path.startsWith("http://") || path.startsWith("https://"))
+      {
+         return new External(scope, path, contextPath, priority);
+      }
+      else
+      {
+         return new Simple(scope, path, contextPath, priority);
+      }
+   }
 
    /** . */
    private final Scope scope;
@@ -37,29 +52,15 @@ public class Javascript
 
    /** . */
    private final int priority;
-
-   /** . */
-   private final String path;
    
-   public Javascript(Scope scope, String path, String contextPath, int priority)
+   private Javascript(Scope scope, String contextPath, int priority)
    {
       this.scope = scope;
-      if (path.startsWith("http://") || path.startsWith("https://"))
-      {
-         this.path = path;
-      }
-      else
-      {
-         this.path = contextPath + path;
-      }
       this.contextPath = contextPath;
       this.priority = priority < 0 ? Integer.MAX_VALUE : priority;
    }
 
-   public String getPath()
-   {
-      return this.path;
-   }
+   public abstract String getPath();
 
    public Scope getScope()
    {
@@ -73,7 +74,7 @@ public class Javascript
 
    public String getContextPath()
    {
-      return this.contextPath;
+      return contextPath;
    }
 
    public int getPriority()
@@ -81,14 +82,105 @@ public class Javascript
       return priority;
    }
    
-   public boolean isExternalScript()
-   {
-      return path.startsWith("http://") || path.startsWith("https://");
-   }
+   public abstract boolean isExternalScript();
    
    @Override
    public String toString()
    {
-      return "Javascript[scope=" + scope + ", path=" + path +"]";
+      return "Javascript[scope=" + scope + ", path=" + getPath() +"]";
+   }
+
+   public static class External extends Javascript
+   {
+
+      /** . */
+      private final String uri;
+
+      public External(Scope scope, String uri, String contextPath, int priority)
+      {
+         super(scope, contextPath, priority);
+
+         //
+         this.uri = uri;
+      }
+
+      @Override
+      public String getPath()
+      {
+         return uri;
+      }
+
+      @Override
+      public boolean isExternalScript()
+      {
+         return true;
+      }
+   }
+
+   public abstract static class Internal extends Javascript
+   {
+
+      protected Internal(Scope scope, String contextPath, int priority)
+      {
+         super(scope, contextPath, priority);
+      }
+   }
+
+   public static class Simple extends Internal
+   {
+
+      /** . */
+      private final String path;
+
+      /** . */
+      private final String uri;
+
+      public Simple(Scope scope, String path, String contextPath, int priority)
+      {
+         super(scope, contextPath, priority);
+
+         //
+         this.path = path;
+         this.uri = contextPath + path;
+      }
+
+      @Override
+      public String getPath()
+      {
+         return uri;
+      }
+
+      @Override
+      public boolean isExternalScript()
+      {
+         return false;
+      }
+
+   }
+
+   public static class Composite extends Internal
+   {
+
+      final ArrayList<Javascript> compounds;
+
+      public Composite(Scope scope, String contextPath, int priority)
+      {
+         super(scope, contextPath, priority);
+         
+         //
+         this.compounds = new ArrayList<Javascript>();
+      }
+
+      @Override
+      public String getPath()
+      {
+         return "/merged.js";
+      }
+
+      @Override
+      public boolean isExternalScript()
+      {
+         return false;
+      }
    }
 }

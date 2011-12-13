@@ -154,7 +154,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       jsService.removePortalJScripts("site1");
       assertNull(jsService.getPortalJScripts("site1"));
 
-      Javascript portalJScript = new Javascript(new Scope(ScopeType.PORTAL, "portal1"), "/path/to/portal/jscript1", "/portal", Integer.MAX_VALUE);
+      Javascript portalJScript = Javascript.create(new Scope(ScopeType.PORTAL, "portal1"), "/path/to/portal/jscript1", "/portal", Integer.MAX_VALUE);
       jsService.addPortalJScript(portalJScript);
       String jScript = jsService.getJScript(portalJScript.getPath());
       assertNull(jScript);

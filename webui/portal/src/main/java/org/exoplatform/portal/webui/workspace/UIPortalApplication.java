@@ -26,6 +26,8 @@ import org.exoplatform.portal.application.RequestNavigationData;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.PortalProperties;
+import org.exoplatform.portal.controller.resource.ScriptURL;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
@@ -331,6 +333,48 @@ public class UIPortalApplication extends UIApplication
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
       String portalOwner = Util.getPortalRequestContext().getPortalOwner();
       return service.getPortalJScripts(portalOwner);
+   }
+
+   public Collection<String> getScriptsURLs()
+   {
+      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
+      String portalOwner = Util.getPortalRequestContext().getPortalOwner();
+      ArrayList<String> locations = new ArrayList<String>();
+
+      //
+      Collection<Javascript> scripts = service.getPortalJScripts(portalOwner);
+      if (scripts != null)
+      {
+         for (Javascript script : scripts)
+         {
+            if (script.isExternalScript())
+            {
+               locations.add(script.getPath());
+            }
+            else
+            {
+               ScriptURL url = PortalRequestContext.getCurrentInstance().createURL(ScriptURL.TYPE, (Javascript.Internal)script);
+               locations.add(url.toString());
+            }
+         }
+      }
+
+      //
+      for (Javascript script : service.getGlobalScripts())
+      {
+         if (script.isExternalScript())
+         {
+            locations.add(script.getPath());
+         }
+         else
+         {
+            ScriptURL url = PortalRequestContext.getCurrentInstance().createURL(ScriptURL.TYPE, (Javascript.Internal)script);
+            locations.add(url.toString());
+         }
+      }
+
+      //
+      return locations;
    }
 
    public Collection<Skin> getPortalSkins()
