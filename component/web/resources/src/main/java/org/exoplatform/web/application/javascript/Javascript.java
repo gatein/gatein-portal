@@ -25,6 +25,7 @@ package org.exoplatform.web.application.javascript;
  */
 public class Javascript
 {
+
    /** . */
    private final String module;
 
@@ -34,6 +35,7 @@ public class Javascript
    /** . */
    private final int priority;
 
+   /** . */
    private final String path;
    
    public Javascript(String module, String path, String contextPath, int priority)
@@ -51,7 +53,8 @@ public class Javascript
       this.priority = priority < 0 ? Integer.MAX_VALUE : priority;
    }
 
-   public String getPath() {
+   public String getPath()
+   {
       return this.path;
    }
 
@@ -72,7 +75,7 @@ public class Javascript
    
    public boolean isExternalScript()
    {
-      return (path.startsWith("http://") || path.startsWith("https://")) ? true : false;
+      return path.startsWith("http://") || path.startsWith("https://");
    }
    
    @Override
@@ -80,17 +83,21 @@ public class Javascript
    {
       return "Javascript[module=" + module + ", path=" + path +"]";
    }
-   
+
    public static class PortalJScript extends Javascript
    {
+
+      /** . */
       private final String portalName;
 
       public PortalJScript(String module, String path, String contextPath, int priority, String portalName)
       {
          super(module, path, contextPath, priority);
+
+         //
          this.portalName = portalName;
       }
-      
+
       public String getPortalName()
       {
          return portalName;
@@ -99,14 +106,18 @@ public class Javascript
    
    public static class ExtendedJScript extends Javascript
    {
+
+      /** . */
       private final String script;
       
       public ExtendedJScript(String module, String path, String contextPath, String script)
       {
          super(module, path, contextPath, Integer.MAX_VALUE);
+
+         //
          this.script = script;
       }
-      
+
       public String getScript()
       {
          return this.script;

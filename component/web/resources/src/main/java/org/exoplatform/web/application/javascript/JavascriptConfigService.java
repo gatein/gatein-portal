@@ -359,6 +359,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public CachedJavascript getMergedCommonJScripts()
    {
+      new Exception().printStackTrace();
       if (mergedCommonJScripts == null)
       {
          StringBuilder sB = new StringBuilder();
