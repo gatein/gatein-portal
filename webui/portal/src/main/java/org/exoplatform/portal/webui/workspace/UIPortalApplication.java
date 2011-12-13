@@ -45,7 +45,7 @@ import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.web.application.javascript.Javascript.PortalJScript;
+import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.web.url.MimeType;
 import org.exoplatform.web.url.navigation.NodeURL;
@@ -326,7 +326,7 @@ public class UIPortalApplication extends UIApplication
     * Get all JavaScript path which available on selected portal site
     * @return
     */
-   public Collection<PortalJScript> getPortalJScripts()
+   public Collection<Javascript> getPortalJScripts()
    {
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
       String portalOwner = Util.getPortalRequestContext().getPortalOwner();

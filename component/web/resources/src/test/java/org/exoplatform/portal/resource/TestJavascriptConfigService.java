@@ -19,8 +19,10 @@
 package org.exoplatform.portal.resource;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.controller.resource.Scope;
+import org.exoplatform.portal.controller.resource.ScopeType;
 import org.exoplatform.test.mocks.servlet.MockServletContext;
-import org.exoplatform.web.application.javascript.Javascript.PortalJScript;
+import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
@@ -136,9 +138,9 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
 
    public void testPortalJScript()
    {
-      Collection<PortalJScript> site = jsService.getPortalJScripts("site1");
+      Collection<Javascript> site = jsService.getPortalJScripts("site1");
       assertEquals(1, site.size());
-      Iterator<PortalJScript> iterator = site.iterator();
+      Iterator<Javascript> iterator = site.iterator();
       assertEquals(mockServletContext.getContextPath() + "/js/test5.js", iterator.next().getPath());
       
       site = jsService.getPortalJScripts("site2");
@@ -151,8 +153,8 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
 
       jsService.removePortalJScripts("site1");
       assertNull(jsService.getPortalJScripts("site1"));
-      
-      PortalJScript portalJScript = new PortalJScript("portal_module1", "/path/to/portal/jscript1", "/portal", Integer.MAX_VALUE, "portal1");
+
+      Javascript portalJScript = new Javascript(new Scope(ScopeType.PORTAL, "portal1"), "/path/to/portal/jscript1", "/portal", Integer.MAX_VALUE);
       jsService.addPortalJScript(portalJScript);
       String jScript = jsService.getJScript(portalJScript.getPath());
       assertNull(jScript);

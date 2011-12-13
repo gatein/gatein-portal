@@ -19,6 +19,9 @@
 
 package org.exoplatform.web.application.javascript;
 
+import org.exoplatform.portal.controller.resource.Scope;
+import org.exoplatform.portal.controller.resource.ScopeType;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -27,7 +30,7 @@ public class Javascript
 {
 
    /** . */
-   private final String module;
+   private final Scope scope;
 
    /** . */
    private final String contextPath;
@@ -38,9 +41,9 @@ public class Javascript
    /** . */
    private final String path;
    
-   public Javascript(String module, String path, String contextPath, int priority)
+   public Javascript(Scope scope, String path, String contextPath, int priority)
    {
-      this.module = module;
+      this.scope = scope;
       if (path.startsWith("http://") || path.startsWith("https://"))
       {
          this.path = path;
@@ -58,9 +61,14 @@ public class Javascript
       return this.path;
    }
 
+   public Scope getScope()
+   {
+      return scope;
+   }
+
    public String getModule()
    {
-      return module;
+      return scope.getType() == ScopeType.MODULE ? scope.getId() : null;
    }
 
    public String getContextPath()
@@ -81,26 +89,6 @@ public class Javascript
    @Override
    public String toString()
    {
-      return "Javascript[module=" + module + ", path=" + path +"]";
-   }
-
-   public static class PortalJScript extends Javascript
-   {
-
-      /** . */
-      private final String portalName;
-
-      public PortalJScript(String module, String path, String contextPath, int priority, String portalName)
-      {
-         super(module, path, contextPath, priority);
-
-         //
-         this.portalName = portalName;
-      }
-
-      public String getPortalName()
-      {
-         return portalName;
-      }
+      return "Javascript[scope=" + scope + ", path=" + path +"]";
    }
 }

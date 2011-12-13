@@ -30,7 +30,6 @@ import org.exoplatform.portal.resource.ResourceResolver;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.portal.resource.compressor.ResourceType;
-import org.exoplatform.web.application.javascript.Javascript.PortalJScript;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.WebAppListener;
@@ -57,7 +56,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
    private List<Javascript> commonJScripts;
    
-   private HashMap<String, List<PortalJScript>> portalJScripts;
+   private HashMap<String, List<Javascript>> portalJScripts;
 
    private long lastModified = Long.MAX_VALUE;
 
@@ -120,7 +119,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
       commonJScripts = new ArrayList<Javascript>();
       deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
-      portalJScripts = new HashMap<String, List<PortalJScript>>();
+      portalJScripts = new HashMap<String, List<Javascript>>();
    }
 
    /**
@@ -218,7 +217,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     * @param portalName
     * @return list of JavaScript path which will be loaded by particular portal
     */
-   public Collection<PortalJScript> getPortalJScripts(String portalName)
+   public Collection<Javascript> getPortalJScripts(String portalName)
    {
       return portalJScripts.get(portalName);
    }
@@ -232,12 +231,12 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     * 
     * @param js
     */
-   public void addPortalJScript(PortalJScript js)
+   public void addPortalJScript(Javascript js)
    {
-      List<PortalJScript> list = portalJScripts.get(js.getPortalName());
+      List<Javascript> list = portalJScripts.get(js.getScope().getId());
       if (list == null)
       {
-         list = new ArrayList<PortalJScript>();
+         list = new ArrayList<Javascript>();
       }
       
       list.add(js);
@@ -250,7 +249,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          }
       });
       
-      portalJScripts.put(js.getPortalName(), list);
+      portalJScripts.put(js.getScope().getId(), list);
    }
 
    /**
@@ -260,8 +259,8 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public void removePortalJScripts(String portalName)
    {
-      List<PortalJScript> list = portalJScripts.remove(portalName);
-      for (PortalJScript js : list)
+      List<Javascript> list = portalJScripts.remove(portalName);
+      for (Javascript js : list)
       {
          invalidateCachedJScript(js.getPath());
       }

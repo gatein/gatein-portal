@@ -18,7 +18,7 @@
  */
 package org.exoplatform.web.application.javascript;
 
-import org.exoplatform.web.application.javascript.Javascript.PortalJScript;
+import org.exoplatform.portal.controller.resource.ScopeType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,9 +44,9 @@ public class JavascriptTask
    {
       for (Javascript js : scripts)
       {
-         if (js instanceof PortalJScript)
+         if (js.getScope().getType() == ScopeType.PORTAL)
          {
-            service.addPortalJScript((PortalJScript)js);
+            service.addPortalJScript(js);
          }
          else
          {
