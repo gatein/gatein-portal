@@ -18,6 +18,30 @@
  */
 
 function UIRightClickPopupMenu() {};
+
+/**
+ * Add mouse down event handler
+ * @param method handler method
+ */
+UIRightClickPopupMenu.prototype.addMouseDownHandler = function(method) {
+  document.onmousedown = this.docMouseDownEvt ;
+  this.onMouseDownHandlers = method ;
+} ;
+
+/**
+ * Document mouse down event, it will cancel default behavior of browser and process behavior in handler chain
+ * @param {Event} evt
+ */
+UIRightClickPopupMenu.prototype.docMouseDownEvt = function(evt) {
+  if(!evt) evt = window.event ;
+  evt.cancelBubble = true ;
+
+  if(eXo.webui.UIRightClickPopupMenu.onMouseDownHandlers == null) return;
+  if(typeof(eXo.webui.UIRightClickPopupMenu.onMouseDownHandlers) == "string") eval(eXo.webui.UIRightClickPopupMenu.onMouseDownHandlers) ;
+  else eXo.webui.UIRightClickPopupMenu.onMouseDownHandlers(evt) ;
+  document.onmousedown = null ;
+} ;
+
 /**
  * Initialize a UIRightClickPopupMenu object
  * @param contextMenuId identifier of a document object
@@ -42,7 +66,7 @@ UIRightClickPopupMenu.prototype.init = function(contextMenuId) {
 UIRightClickPopupMenu.prototype.hideContextMenu = function(contextId) {
 	if (document.getElementById(contextId)) {
 		document.getElementById(contextId).style.display = 'none' ;
-		eXo.core.MouseEventManager.onMouseDownHandlers = null ;
+		eXo.webui.UIRightClickPopupMenu.onMouseDownHandlers = null ;
 	}
 }
 /**
@@ -66,7 +90,7 @@ UIRightClickPopupMenu.prototype.disableContextMenu = function(comp) {
 * @param {Object} elemt document object that contains context menu
 */
 UIRightClickPopupMenu.prototype.prepareObjectId = function(evt, elemt) {
-	eXo.core.MouseEventManager.docMouseDownEvt(evt) ;
+	eXo.webui.UIRightClickPopupMenu.docMouseDownEvt(evt) ;
 	var contextMenu = eXo.core.DOMUtil.findAncestorByClass(elemt, "UIRightClickPopupMenu") ;
 	contextMenu.style.display = "none" ;
 	var href = elemt.getAttribute('href') ;	
@@ -112,7 +136,7 @@ UIRightClickPopupMenu.prototype.prepareObjectId = function(evt, elemt) {
  */
 UIRightClickPopupMenu.prototype.clickRightMouse = function(event, elemt, menuId, objId, params, opt) {
 	if (!event) event = window.event;
-	eXo.core.MouseEventManager.docMouseDownEvt(event) ;
+	eXo.webui.UIRightClickPopupMenu.docMouseDownEvt(event) ;
 	var contextMenu = document.getElementById(menuId) ;
 	contextMenu.objId = objId ;
 	if(!(((event.which) && (event.which == 2 || event.which == 3)) || ((event.button) && (event.button == 2))))	{
@@ -120,7 +144,7 @@ UIRightClickPopupMenu.prototype.clickRightMouse = function(event, elemt, menuId,
 		return;
 	}
 	
-	eXo.core.MouseEventManager.addMouseDownHandler("eXo.webui.UIRightClickPopupMenu.hideContextMenu('" + menuId + "');")
+	eXo.webui.UIRightClickPopupMenu.addMouseDownHandler("eXo.webui.UIRightClickPopupMenu.hideContextMenu('" + menuId + "');")
 
 	if(params) {
 		params = "," + params + "," ;

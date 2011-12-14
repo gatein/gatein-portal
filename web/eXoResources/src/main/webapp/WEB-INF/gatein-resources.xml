@@ -151,11 +151,6 @@
          <js-priority>1</js-priority>
       </param>
       <param>
-         <js-module>eXo.core.MouseEventManager</js-module>
-         <js-path>/javascript/eXo/core/MouseEventManager.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
          <js-module>eXo.core.UIMaskLayer</js-module>
          <js-path>/javascript/eXo/core/UIMaskLayer.js</js-path>
          <js-priority>1</js-priority>
@@ -351,11 +346,6 @@
       <param>
          <js-module>eXo.core.Topic</js-module>
          <js-path>/javascript/eXo/core/Topic.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Notification</js-module>
-         <js-path>/javascript/eXo/core/Notification.js</js-path>
          <js-priority>1</js-priority>
       </param>
       <param>
