@@ -18,6 +18,7 @@
  */
 
 eXo.gadget.UIGadget = {
+
     /**
      * Create a new Gadget
      * @param {String} url local or remote path that contain gadget .xml file

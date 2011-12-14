@@ -313,11 +313,6 @@
          <js-priority>4</js-priority>
       </param>
       <param>
-         <js-module>eXo.webui.UIPermissionSelectorTab</js-module>
-         <js-path>/javascript/eXo/webui/UIPermissionSelectorTab.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
          <js-module>eXo.webui.UICombobox</js-module>
          <js-path>/javascript/eXo/webui/UICombobox.js</js-path>
          <js-priority>4</js-priority>
@@ -357,6 +352,11 @@
          <js-module>eXo.portal.UIBrowseContent</js-module>
          <js-path>/javascript/eXo/portal/UIBrowseContent.js</js-path>
          <js-priority>3</js-priority>
+      </param>
+      <param>
+         <js-module>eXo.webui.UIPermissionSelectorTab</js-module>
+         <js-path>/javascript/eXo/webui/UIPermissionSelectorTab.js</js-path>
+         <js-priority>4</js-priority>
       </param>
    </javascript>
     -->

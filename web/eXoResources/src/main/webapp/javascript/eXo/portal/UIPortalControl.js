@@ -17,62 +17,128 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-function UIPortalControl() {
-  this.scrollManagers = new Array();
-};
-/**
- * Change state of window
- * @param {String} id object identifier
- * @param {String} state state will be displayed (maximized, minimized, normal)
- */
-UIPortalControl.prototype.changeWindowState = function(id, state) {
-  var params = [
-    {name: "portletId", value: id},
-    {name: "objectId", value: state}
-  ] ;
-	ajaxGet(eXo.env.server.createPortalURL("UIPortal", "ChangeWindowState", true, params));
-};
-/**
- * Collapse tree, use for Navigation Tree
- * @param {Object} selectedElement first object of tree
- */
-UIPortalControl.prototype.collapseTree = function(selectedElement ) {
-  var DOMUtil = eXo.core.DOMUtil ;
-  
-  var parentNode = DOMUtil.findAncestorByClass(selectedElement, "Node");  
-  var childrenContainer = DOMUtil.findFirstDescendantByClass(parentNode, "div", "ChildrenContainer");
-  var newHTML = "<div onclick=\"" + childrenContainer.getAttribute("actionLink") + "\" class=\"ExpandIcon\">" + selectedElement.innerHTML +  "</div>";  	
-  parentNode.innerHTML = newHTML;
-};
+eXo.portal.UIPortalControl = {
+  scrollManagers : [],
 
-/**
- * Process enter key press
- * @param {Event} e this event
- * @param {String} executeScript javascript command to execute if enter key was pressed
- */
-UIPortalControl.prototype.onEnterPress = function(e, executeScript) {
- var e = window.event || e;
- var code;
- if(!e) e = window.event;
- if(e.keyCode) code = e.keyCode;
- else if (e.which) code = e.which;
- if(code ==13) {
-	 if (window.event) {
-		 e.returnValue = false;
-	 } else {
-		 e.preventDefault();
-	 }
-	 var uiPortalLoginFormAction = document.getElementById("UIPortalLoginFormAction");
-   if(uiPortalLoginFormAction) {
-     uiPortalLoginFormAction.onclick() ;
-   }
-   else
-   {
-     if(executeScript)
-       eval(executeScript);
-   }
- }
-};
+  /**
+   * Change state of window
+   * 
+   * @param {String}
+   *          id object identifier
+   * @param {String}
+   *          state state will be displayed (maximized, minimized, normal)
+   */
+  changeWindowState : function(id, state) {
+    var params = [ {
+      name : "portletId",
+      value : id
+    }, {
+      name : "objectId",
+      value : state
+    } ];
+    ajaxGet(eXo.env.server.createPortalURL("UIPortal", "ChangeWindowState",
+        true, params));
+  },
+  /**
+   * Collapse tree, use for Navigation Tree
+   * 
+   * @param {Object}
+   *          selectedElement first object of tree
+   */
+  collapseTree : function(selectedElement) {
+    var DOMUtil = eXo.core.DOMUtil;
+
+    var parentNode = DOMUtil.findAncestorByClass(selectedElement, "Node");
+    var childrenContainer = DOMUtil.findFirstDescendantByClass(parentNode,
+        "div", "ChildrenContainer");
+    var newHTML = "<div onclick=\""
+        + childrenContainer.getAttribute("actionLink")
+        + "\" class=\"ExpandIcon\">" + selectedElement.innerHTML + "</div>";
+    parentNode.innerHTML = newHTML;
+  },
+
+  /**
+   * Process enter key press
+   * 
+   * @param {Event}
+   *          e this event
+   * @param {String}
+   *          executeScript javascript command to execute if enter key was
+   *          pressed
+   */
+  onEnterPress : function(e, executeScript) {
+    var e = window.event || e;
+    var code;
+    if (!e)
+      e = window.event;
+    if (e.keyCode)
+      code = e.keyCode;
+    else if (e.which)
+      code = e.which;
+    if (code == 13) {
+      if (window.event) {
+        e.returnValue = false;
+      } else {
+        e.preventDefault();
+      }
+      var uiPortalLoginFormAction = document
+          .getElementById("UIPortalLoginFormAction");
+      if (uiPortalLoginFormAction) {
+        uiPortalLoginFormAction.onclick();
+      } else {
+        if (executeScript)
+          eval(executeScript);
+      }
+    }
+  },
+  /**
+   * Called whenever the scroll managers present on the current page need to be
+   * re-calculated e.g. when the workspace control is opened/closed, when a
+   * popup window is resized, etc Inits only the scroll managers that manage
+   * tabs that appears on the current page
+   */
+  initAllManagers : function() {
+    var managers = eXo.portal.UIPortalControl.scrollManagers;
+    for ( var i = 0; i < managers.length; i++) {
+      var mgrContainer = document.getElementById(managers[i].id);
+      var mgrParent = eXo.core.DOMUtil.findAncestorByClass(mgrContainer,
+          "UIWindow");
+      var toInit = (mgrContainer !== null) // if the tabs exist on the page
+          // in desktop mode, checks that the UIWindow containing the tabs is
+          // visible (display block)
+          && (mgrParent === null || (mgrParent !== null && mgrParent.style.display == "block"))
+          && (typeof (managers[i].initFunction) == "function"); // if the
+                                                                // initFunction
+                                                                // is defined
+      if (toInit) {
+        managers[i].initFunction();
+      }
+    }
+  },
+
+  /**
+   * Creates a new scroll manager with the given id (id is mandatory) At the
+   * creation of the first scroll manager, sets the initAllManagers to be called
+   * onResize The id must be the one of the portlet, because it is used by
+   * initAllManagers to find the scroll managers that exists on the page
+   */
+  newScrollManager : function(id_) {
+    if (eXo.portal.UIPortalControl.scrollManagers.length == 0) {
+      eXo.core.Browser.addOnResizeCallback("initAllManagers",
+          eXo.portal.UIPortalControl.initAllManagers);
+    }
+    if (id_) {
+      var tmpMgr = new ScrollManager();
+      tmpMgr.id = id_;
+      eXo.portal.UIPortalControl.scrollManagers.push(tmpMgr);
+      return tmpMgr;
+    } else {
+      alert('You must set an id to the new scroll manager !!');
+      return null;
+    }
+  }
+}
+
 
 /*********** Scroll Manager *************/
 /**
@@ -458,81 +524,44 @@ ScrollManager.prototype.renderArrows = function() {
 	if (this.lastVisibleIndex == this.elements.length-1) this.enableArrow(this.rightArrow, false);
 	else this.enableArrow(this.rightArrow, true);
 };
-/**
- * Called whenever the scroll managers present on the current page need to be re-calculated
- * e.g. when the workspace control is opened/closed, when a popup window is resized, etc
- * Inits only the scroll managers that manage tabs that appears on the current page
- */
-UIPortalControl.prototype.initAllManagers = function() {
-	var managers = eXo.portal.UIPortalControl.scrollManagers;
-	for (var i = 0; i < managers.length; i++) {
-		var mgrContainer = document.getElementById(managers[i].id);
-		var mgrParent = eXo.core.DOMUtil.findAncestorByClass(mgrContainer, "UIWindow");
-		var toInit = (mgrContainer !== null) 														// if the tabs exist on the page
-							// in desktop mode, checks that the UIWindow containing the tabs is visible (display block)
-							&& (mgrParent === null || (mgrParent !== null && mgrParent.style.display == "block"))
-							&& (typeof(managers[i].initFunction) == "function");  // if the initFunction is defined
-		if (toInit) { managers[i].initFunction(); }
-	}
-};
-/**
- * Creates a new scroll manager with the given id (id is mandatory)
- * At the creation of the first scroll manager, sets the initAllManagers to be called onResize
- * The id must be the one of the portlet, because it is used by initAllManagers to find the scroll
- * managers that exists on the page
- */
-UIPortalControl.prototype.newScrollManager = function(id_) {
-	if (eXo.portal.UIPortalControl.scrollManagers.length == 0) {
-		eXo.core.Browser.addOnResizeCallback("initAllManagers", eXo.portal.UIPortalControl.initAllManagers);
-	}
-	if (id_) {
-		var tmpMgr = new ScrollManager();
-		tmpMgr.id = id_;
-		eXo.portal.UIPortalControl.scrollManagers.push(tmpMgr);
-		return tmpMgr;
-	} else {
-		alert('You must set an id to the new scroll manager !!');
-		return null;
-	}
-};
 /*********** Scroll Manager *************/
 
-/*********** Vertical Scroll Manager ************/
-function VerticalScrollManager() {
-	repeat = null;
+/** ********* Vertical Scroll Manager *********** */
+eXo.portal.VerticalScrollManager = {
+  repeat : null,
+
+  initScroll : function(clickedEle, isUp, step) {
+    var DOMUtil = eXo.core.DOMUtil;
+    var verticalScroll = eXo.portal.VerticalScrollManager;
+    var container = DOMUtil.findAncestorByClass(clickedEle, "ItemContainer");
+    var middleCont = DOMUtil.findFirstDescendantByClass(container, "div",
+        "MiddleItemContainer");
+    if (!middleCont.id)
+      middleCont.id = "IC" + new Date().getTime()
+          + Math.random().toString().substring(2);
+    verticalScroll.scrollComponent(middleCont.id, isUp, step);
+    document.onmouseup = verticalScroll.cancelScroll;
+  },
+
+  scrollComponent : function(id, isUp, step) {
+    var verticalScroll = eXo.portal.VerticalScrollManager;
+    var scrollComp = document.getElementById(id);
+    if (isUp) {
+      scrollComp.scrollTop -= step;
+    } else {
+      scrollComp.scrollTop += step;
+    }
+    if (verticalScroll.repeat) {
+      verticalScroll.cancelScroll();
+    }
+    verticalScroll.repeat = setTimeout(
+        "eXo.portal.VerticalScrollManager.scrollComponent('" + id + "'," + isUp
+            + "," + step + ")", 100);
+  },
+
+  cancelScroll : function() {
+    clearTimeout(eXo.portal.VerticalScrollManager.repeat);
+    eXo.portal.VerticalScrollManager.repeat = null;
+  }
 }
-
-VerticalScrollManager.prototype.initScroll = function (clickedEle, isUp, step) {
-	var DOMUtil = eXo.core.DOMUtil;
-	var verticalScroll = eXo.portal.VerticalScrollManager;
-	var container = DOMUtil.findAncestorByClass(clickedEle, "ItemContainer");
-	var middleCont = DOMUtil.findFirstDescendantByClass(container, "div", "MiddleItemContainer");
-	if(!middleCont.id) middleCont.id = "IC" + new Date().getTime() + Math.random().toString().substring(2);
-	verticalScroll.scrollComponent(middleCont.id, isUp, step);
-	document.onmouseup = verticalScroll.cancelScroll;
-};
-	
-VerticalScrollManager.prototype.scrollComponent = function (id, isUp, step) {
-	var verticalScroll = eXo.portal.VerticalScrollManager;
-	var scrollComp = document.getElementById(id);
-	if(isUp) {
-		scrollComp.scrollTop -= step;
-	} else {
-		scrollComp.scrollTop += step;
-	}
-	if(verticalScroll.repeat) {
-		verticalScroll.cancelScroll();
-	}
-	verticalScroll.repeat = setTimeout("eXo.portal.VerticalScrollManager.scrollComponent('" + id + "'," + isUp + "," + step + ")", 100);
-};
-
-VerticalScrollManager.prototype.cancelScroll = function () {
-	clearTimeout(eXo.portal.VerticalScrollManager.repeat);
-	eXo.portal.VerticalScrollManager.repeat = null;
-};
-
-eXo.portal.VerticalScrollManager = new VerticalScrollManager();
-
 /*********** End Of Vertical Scroll Manager ************/
-
-eXo.portal.UIPortalControl = new UIPortalControl();

@@ -17,26 +17,28 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-function I18NMessage() {}
-/**
- * Get message from resource bundle files, this function often is called from .js files
- * @param {String} str know as key in Message Resource bundle file
- * @param {Array} params parameter that can used to set value in message
- * @return {String} message string
- */
-I18NMessage.prototype.getMessage = function(str, params) {
-	var msg;
-	try {
-		msg = eval("this." + str);
-	} catch(e) {}
-	if (msg == null || msg == "undefined") msg = str;
-	
-	if (params != null && params.constructor.toString().indexOf("Array") > 0) {
-		for (var i=0; i < params.length; i++) {
-			msg = msg.replace("{" + i + "}" ,params[i]);
-		}
-	}	
-	return msg;
-}
+eXo.i18n.I18NMessage = {
 
-eXo.i18n.I18NMessage = new I18NMessage();
+  /**
+   * Get message from resource bundle files, this function often is called from .js files
+   * @param {String} str know as key in Message Resource bundle file
+   * @param {Array} params parameter that can used to set value in message
+   * @return {String} message string
+   */
+  getMessage : function(str, params) {
+    var msg;
+    try {
+      msg = eval("this." + str);
+    } catch (e) {
+    }
+    if (msg == null || msg == "undefined")
+      msg = str;
+
+    if (params != null && params.constructor.toString().indexOf("Array") > 0) {
+      for ( var i = 0; i < params.length; i++) {
+        msg = msg.replace("{" + i + "}", params[i]);
+      }
+    }
+    return msg;
+  }
+}
