@@ -22,24 +22,24 @@ package org.exoplatform.portal.controller.resource;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class Scope
+public class Resource
 {
 
    /** . */
-   private final ScopeType type;
+   private final ResourceScope scope;
 
    /** . */
    private final String id;
 
-   public Scope(ScopeType type, String id)
+   public Resource(ResourceScope scope, String id)
    {
-      this.type = type;
+      this.scope = scope;
       this.id = id;
    }
 
-   public ScopeType getType()
+   public ResourceScope getScope()
    {
-      return type;
+      return scope;
    }
 
    public String getId()
@@ -48,8 +48,29 @@ public class Scope
    }
 
    @Override
+   public boolean equals(Object obj)
+   {
+      if (obj == this)
+      {
+         return true;
+      }
+      if (obj instanceof Resource)
+      {
+         Resource that = (Resource)obj;
+         return scope == that.scope && id.equals(that.id);
+      }
+      return false;
+   }
+
+   @Override
+   public int hashCode()
+   {
+      return scope.hashCode() ^ id.hashCode();
+   }
+
+   @Override
    public String toString()
    {
-      return "Scope[type=" + type.name() + ",id=" + id + "]";
+      return "Scope[type=" + scope.name() + ",id=" + id + "]";
    }
 }

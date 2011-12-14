@@ -23,11 +23,10 @@ import org.exoplatform.commons.cache.future.FutureMap;
 import org.exoplatform.commons.cache.future.Loader;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.controller.resource.Scope;
-import org.exoplatform.portal.controller.resource.ScopeType;
+import org.exoplatform.portal.controller.resource.Resource;
+import org.exoplatform.portal.controller.resource.ResourceScope;
 import org.exoplatform.portal.resource.AbstractResourceService;
 import org.exoplatform.portal.resource.MainResourceResolver;
-import org.exoplatform.portal.resource.Resource;
 import org.exoplatform.portal.resource.ResourceResolver;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
@@ -40,6 +39,7 @@ import org.picocontainer.Startable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -47,7 +47,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 
 import javax.servlet.ServletContext;
 
@@ -57,8 +56,8 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    private final Logger log = LoggerFactory.getLogger(JavascriptConfigService.class);
 
    private Javascript.Composite commonJScripts;
-   
-   private HashMap<String, List<Javascript>> portalJScripts;
+
+   private HashMap<String, Javascript.Composite> portalJScripts;
 
    private long lastModified = Long.MAX_VALUE;
 
@@ -66,24 +65,23 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    private WebAppListener deployer;
 
    private CachedJavascript mergedCommonJScripts;
-   
+
    private final FutureMap<String, CachedJavascript, ResourceResolver> cache;
-   
+
    public JavascriptConfigService(ExoContainerContext context, ResourceCompressor compressor)
    {
       super(compressor);
 
       Loader<String, CachedJavascript, ResourceResolver> loader = new Loader<String, CachedJavascript, ResourceResolver>()
       {
-         @Override
          public CachedJavascript retrieve(ResourceResolver context, String key) throws Exception
          {
-            Resource resource = context.resolve(key);
+            org.exoplatform.portal.resource.Resource resource = context.resolve(key);
             if (resource == null)
             {
                return null;
             }
-            
+
             StringBuilder sB = new StringBuilder();
             try
             {
@@ -113,21 +111,21 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             {
                e.printStackTrace();
             }
-            
+
             return new CachedJavascript(sB.toString());
          }
       };
       cache = new FutureMap<String, CachedJavascript, ResourceResolver>(loader);
 
       // todo : remove /portal ???
-      commonJScripts = new Javascript.Composite(new Scope(ScopeType.GLOBAL, "merged"), "/portal", 0);
+      commonJScripts = new Javascript.Composite(new Resource(ResourceScope.GLOBAL, "merged"), "/portal", 0);
       deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
-      portalJScripts = new HashMap<String, List<Javascript>>();
+      portalJScripts = new HashMap<String, Javascript.Composite>();
    }
 
    /**
     * Return a collection list This method should return the availables scripts in the service
-    * 
+    *
     * @deprecated Somehow, it should use {@link #getCommonJScripts()} instead.
     * @return
     */
@@ -141,10 +139,10 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       }
       return list;
    }
-   
+
    /**
     * Return a collection of all common JScripts
-    * 
+    *
     * @return
     */
    public Collection<Javascript> getCommonJScripts()
@@ -154,9 +152,9 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
    /**
     * Return a collection of all available JS paths
-    * 
+    *
     * @deprecated Somehow, it should use {@link #getCommonJScripts()} instead.
-    * 
+    *
     * @return A collection of all available JS paths
     */
    @Deprecated
@@ -170,18 +168,18 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
       return list;
    }
-   
+
    /**
     * Add a JScript to {@link #commonJScripts} list and re-sort the list.
     * Then invalidate cache of all merged common JScripts to
     * ensure they will be newly merged next time.
-    * 
+    *
     * @param js
     */
    public void addCommonJScript(Javascript js)
    {
       commonJScripts.compounds.add(js);
-      
+
       Collections.sort(commonJScripts.compounds, new Comparator<Javascript>()
       {
          public int compare(Javascript o1, Javascript o2)
@@ -189,14 +187,14 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             return o1.getPriority() - o2.getPriority();
          }
       });
-      
+
       invalidateMergedCommonJScripts();
    }
 
    /**
     * Remove a JScript for this module from {@link #commonJScripts}
     * and invalidates its cache correspondingly
-    * 
+    *
     * @param module
     */
    public void removeCommonJScript(String module)
@@ -216,18 +214,79 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
    /**
     * Return a collection of all PortalJScripts which belong to the specified portalName.
-    * 
+    *
     * @param portalName
     * @return list of JavaScript path which will be loaded by particular portal
     */
    public Collection<Javascript> getPortalJScripts(String portalName)
    {
-      return portalJScripts.get(portalName);
+      Javascript.Composite composite = portalJScripts.get(portalName);
+      return composite != null ? Collections.unmodifiableCollection(composite.compounds) : null;
+   }
+
+   public InputStream open(Javascript.Internal script) throws IOException
+   {
+      // We don't implement caching or concurrent serving for now
+      // we will do it later
+      return script.open(this);
    }
    
-   public Collection<Javascript> getGlobalScripts()
+   public Javascript getScript(Resource resource)
    {
-      return Collections.<Javascript>singleton(commonJScripts);
+      switch (resource.getScope())
+      {
+         case GLOBAL:
+            if (resource.getId().equals(commonJScripts.getResource().getId()))
+            {
+               return commonJScripts;
+            }
+            break;
+         case MODULE:
+            for (Javascript script : commonJScripts.compounds)
+            {
+               if (script.getResource().equals(resource))
+               {
+                  return script;
+               }
+            }
+            break;
+         case PORTAL:
+            return portalJScripts.get(resource.getId());
+      }
+      
+      //
+      return null;
+   }
+   
+   ServletContext getContext(String contextPath)
+   {
+      return contexts.get(contextPath);
+   }
+   
+   public Collection<Javascript> getScripts(boolean merge)
+   {
+      ArrayList<Javascript> scripts = new ArrayList<Javascript>();
+      
+      // First global scripts
+      if (merge)
+      {
+         scripts.add(commonJScripts);
+         for (Javascript script : commonJScripts.compounds)
+         {
+            // For now we do it this way
+            if (script instanceof Javascript.External)
+            {
+               scripts.add(script);
+            }
+         }
+      }
+      else
+      {
+         scripts.addAll(commonJScripts.compounds);
+      }
+      
+      //
+      return scripts;
    }
 
    /**
@@ -236,47 +295,45 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     * For now, we don't persist it inside the Portal site storage but just in memory.
     * Therefore we could somehow remove all PortalJScript for a Portal by using {@link #removePortalJScripts(String)}
     * when the portal is being removed.
-    * 
+    *
     * @param js
     */
    public void addPortalJScript(Javascript js)
    {
-      List<Javascript> list = portalJScripts.get(js.getScope().getId());
+      Javascript.Composite list = portalJScripts.get(js.getResource().getId());
       if (list == null)
       {
-         list = new ArrayList<Javascript>();
+         portalJScripts.put(js.getResource().getId(), list = new Javascript.Composite(js.getResource(), null, 0));
       }
-      
-      list.add(js);
 
-      Collections.sort(list, new Comparator<Javascript>()
+      //
+      list.compounds.add(js);
+      Collections.sort(list.compounds, new Comparator<Javascript>()
       {
          public int compare(Javascript o1, Javascript o2)
          {
             return o1.getPriority() - o2.getPriority();
          }
       });
-      
-      portalJScripts.put(js.getScope().getId(), list);
    }
 
    /**
     * Remove portal name from a JavaScript module or remove JavaScript module if it contains only one portal name
-    * 
+    *
     * @param portalName portal's name which you want to remove
     */
    public void removePortalJScripts(String portalName)
    {
-      List<Javascript> list = portalJScripts.remove(portalName);
-      for (Javascript js : list)
+      Javascript.Composite list = portalJScripts.remove(portalName);
+      for (Javascript js : list.compounds)
       {
          invalidateCachedJScript(js.getPath());
       }
    }
 
    /**
-    * unregister a {@link ServletContext} into {@link MainResourceResolver} of {@link SkinService} 
-    * 
+    * unregister a {@link ServletContext} into {@link MainResourceResolver} of {@link SkinService}
+    *
     * @param servletContext ServletContext will unregistered
     */
    public void unregisterServletContext(ServletContext servletContext)
@@ -284,12 +341,11 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       super.unregisterServletContext(servletContext);
       remove(servletContext);
    }
-   
+
    /**
     * Remove JavaScripts from availabe JavaScipts by ServletContext
-    * @param scontext
-    *           the webapp's {@link javax.servlet.ServletContext}
-    *          
+    * @param context the webapp's {@link javax.servlet.ServletContext}
+    *
     */
    public synchronized void remove(ServletContext context)
    {
@@ -345,7 +401,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
    /**
     * Return a CachedJavascript which is lazy loaded from a {@link FutureMap} cache
-    * 
+    *
     * @param path
     * @return
     */
@@ -356,7 +412,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
    /**
     * Returns a string which is merging of all common JScripts
-    * 
+    *
     * @return
     */
    public CachedJavascript getMergedCommonJScripts()
@@ -374,7 +430,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                {
                   sB.append(jScript).append("\n");
                }
-               
+
             }
          }
 
@@ -387,25 +443,25 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          catch (Exception e)
          {
          }
-         
+
          mergedCommonJScripts = new CachedJavascript(jScript);
          lastModified = mergedCommonJScripts.getLastModified();
       }
-      
+
       return mergedCommonJScripts;
    }
 
    /**
     * @deprecated Use {@link #getMergedCommonJScripts()} instead.
     * It is more clearly to see what exactly are included in the returned merging
-    * 
+    *
     * @return byte[]
     */
    @Deprecated
    public byte[] getMergedJavascript()
    {
       String mergedCommonJS = getMergedCommonJScripts().getText();
-      
+
       return mergedCommonJS.getBytes();
    }
 
@@ -414,7 +470,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     * @return
     */
    @Deprecated
-   public long getLastModified() 
+   public long getLastModified()
    {
       return lastModified;
    }
@@ -447,7 +503,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
    /**
     * Invalidate cache for this <tt>path</tt>
-    * 
+    *
     * @param path
     */
    public void invalidateCachedJScript(String path)

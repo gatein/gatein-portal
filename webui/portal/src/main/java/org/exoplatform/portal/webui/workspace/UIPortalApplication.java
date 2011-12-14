@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.workspace;
 
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -26,13 +27,17 @@ import org.exoplatform.portal.application.RequestNavigationData;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.config.model.PortalProperties;
-import org.exoplatform.portal.controller.resource.ScriptURL;
+import org.exoplatform.portal.controller.resource.ResourceRequestHandler;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
+import org.exoplatform.web.WebAppController;
+import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.router.URIWriter;
+import org.exoplatform.web.url.MimeType;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPageActionListener.ChangeNodeActionListener;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -49,8 +54,6 @@ import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
-import org.exoplatform.web.url.MimeType;
-import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -61,6 +64,7 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.url.ComponentURL;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
@@ -318,12 +322,6 @@ public class UIPortalApplication extends UIApplication
       return (modeState != NORMAL_MODE);
    }
 
-   public Collection<String> getJavascriptURLs()
-   {
-      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
-      return service.getAvailableScriptsPaths();
-   }
-
    /**
     * Get all JavaScript path which available on selected portal site
     * @return
@@ -334,6 +332,7 @@ public class UIPortalApplication extends UIApplication
       String portalOwner = Util.getPortalRequestContext().getPortalOwner();
       return service.getPortalJScripts(portalOwner);
    }
+   
 
    public Collection<String> getScriptsURLs()
    {
@@ -342,25 +341,7 @@ public class UIPortalApplication extends UIApplication
       ArrayList<String> locations = new ArrayList<String>();
 
       //
-      Collection<Javascript> scripts = service.getPortalJScripts(portalOwner);
-      if (scripts != null)
-      {
-         for (Javascript script : scripts)
-         {
-            if (script.isExternalScript())
-            {
-               locations.add(script.getPath());
-            }
-            else
-            {
-               ScriptURL url = PortalRequestContext.getCurrentInstance().createURL(ScriptURL.TYPE, (Javascript.Internal)script);
-               locations.add(url.toString());
-            }
-         }
-      }
-
-      //
-      for (Javascript script : service.getGlobalScripts())
+      for (Javascript script : service.getScripts(!PropertyManager.isDevelopping()))
       {
          if (script.isExternalScript())
          {
@@ -368,8 +349,21 @@ public class UIPortalApplication extends UIApplication
          }
          else
          {
-            ScriptURL url = PortalRequestContext.getCurrentInstance().createURL(ScriptURL.TYPE, (Javascript.Internal)script);
-            locations.add(url.toString());
+            try
+            {
+               Map<QualifiedName, String> params = new HashMap<QualifiedName, String>();
+               params.put(WebAppController.HANDLER_PARAM, "script");
+               params.put(ResourceRequestHandler.RESOURCE_ID, script.getResource().getId());
+               params.put(ResourceRequestHandler.RESOURCE_SCOPE, script.getResource().getScope().name());
+               StringBuilder sb = new StringBuilder();
+               URIWriter writer = new URIWriter(sb);
+               PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
+               prc.getControllerContext().renderURL(params, writer);
+               locations.add(sb.toString());
+            } catch (IOException e)
+            {
+               e.printStackTrace();
+            }
          }
       }
 

@@ -19,20 +19,26 @@
 package org.exoplatform.portal.resource;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.controller.resource.Scope;
-import org.exoplatform.portal.controller.resource.ScopeType;
+import org.exoplatform.portal.controller.resource.Resource;
+import org.exoplatform.portal.controller.resource.ResourceScope;
 import org.exoplatform.test.mocks.servlet.MockServletContext;
 import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
+import org.gatein.common.io.IOTools;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.servlet.ServletContext;
 
@@ -97,7 +103,12 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertTrue(jsService.isModuleLoaded("js.test4"));
       assertTrue(jsService.isModuleLoaded("js.test7"));
       
-      assertFalse(jsService.isModuleLoaded("js.test5"));            
+      assertFalse(jsService.isModuleLoaded("js.test5"));
+      
+      //
+      Javascript script = jsService.getScript(new Resource(ResourceScope.MODULE, "js.test1"));
+      assertNotNull(script);
+      assertTrue(script instanceof Javascript.Internal);
    }
 
    public void testPriority()
@@ -111,12 +122,28 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertFalse(availPaths.hasNext());
    }
    
-   public void testMergingCommonJScripts()
+   public void testMergingCommonJScripts() throws IOException
    {
       String mergedJS = new String(jsService.getMergedJavascript());
       assertEquals("\nbbb;ddd;aaa;ccc;", mergedJS);
       assertEquals("\nbbb;ddd;aaa;ccc;", jsService.getMergedCommonJScripts().getText());
       assertTrue(jsService.getLastModified() < System.currentTimeMillis());
+
+      //
+      Map<Resource, Javascript> map = new HashMap<Resource, Javascript>();
+      for (Javascript script :jsService.getScripts(true))
+      {
+         map.put(script.getResource(), script);
+      }
+      Set<Resource> expectedSet = new HashSet<Resource>();
+      expectedSet.add(new Resource(ResourceScope.GLOBAL, "merged"));
+      expectedSet.add(new Resource(ResourceScope.MODULE, "js.test7"));
+      assertEquals(expectedSet, map.keySet());
+
+      //
+      Javascript.Internal merged = (Javascript.Internal)map.get(new Resource(ResourceScope.GLOBAL, "merged"));
+      mergedJS = read(jsService.open(merged));
+      assertEquals("bbb;ddd;aaa; // inline commentccc;", mergedJS);
    }
 
    public void testCaching()
@@ -136,28 +163,46 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertEquals("bar", jScript);
    }
 
-   public void testPortalJScript()
+   public void testPortalJScript() throws IOException
    {
       Collection<Javascript> site = jsService.getPortalJScripts("site1");
       assertEquals(1, site.size());
       Iterator<Javascript> iterator = site.iterator();
       assertEquals(mockServletContext.getContextPath() + "/js/test5.js", iterator.next().getPath());
-      
+
+      //
+      Javascript script = jsService.getScript(new Resource(ResourceScope.PORTAL, "site1"));
+      assertNotNull(script);
+      assertTrue(script instanceof Javascript.Internal);
+      assertEquals("", read(jsService.open((Javascript.Internal)script)));
+
       site = jsService.getPortalJScripts("site2");
       assertEquals(2, site.size());
       iterator = site.iterator();
       assertEquals(mockServletContext.getContextPath() + "/js/test6.js", iterator.next().getPath());
       assertEquals(mockServletContext.getContextPath() + "/js/test5.js", iterator.next().getPath());
 
-      assertNull(jsService.getPortalJScripts("classic"));
+      //
+      script = jsService.getScript(new Resource(ResourceScope.PORTAL, "site2"));
+      assertNotNull(script);
+      assertTrue(script instanceof Javascript.Internal);
+      assertEquals("", read(jsService.open((Javascript.Internal)script)));
 
+      //
+      assertNull(jsService.getPortalJScripts("classic"));
+      assertNull(jsService.getScript(new Resource(ResourceScope.PORTAL, "classic")));
+
+      //
       jsService.removePortalJScripts("site1");
       assertNull(jsService.getPortalJScripts("site1"));
+      assertNull(jsService.getScript(new Resource(ResourceScope.PORTAL, "site1")));
 
-      Javascript portalJScript = Javascript.create(new Scope(ScopeType.PORTAL, "portal1"), "/path/to/portal/jscript1", "/portal", Integer.MAX_VALUE);
+      //
+      Javascript portalJScript = Javascript.create(new Resource(ResourceScope.PORTAL, "portal1"), "/portal", "/mockwebapp", Integer.MAX_VALUE);
       jsService.addPortalJScript(portalJScript);
       String jScript = jsService.getJScript(portalJScript.getPath());
       assertNull(jScript);
+      assertEquals("", read(jsService.open((Javascript.Internal) script)));
       resResolver.addResource(portalJScript.getPath(), "bar1");
       jScript = jsService.getJScript(portalJScript.getPath());
       assertEquals("bar1", jScript);
@@ -173,7 +218,6 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
          this.resources = resources;
       }
       
-      @Override
       public String getContextPath()
       {
          return "/" + getServletContextName();
@@ -192,5 +236,12 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
             return null;
          }
       }
+   }
+   
+   private static String read(InputStream in) throws IOException
+   {
+      ByteArrayOutputStream baos = new ByteArrayOutputStream();
+      IOTools.copy(in, baos);
+      return baos.toString();
    }
 }

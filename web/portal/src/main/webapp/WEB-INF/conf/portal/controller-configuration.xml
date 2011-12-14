@@ -108,7 +108,12 @@
       <name>DefaultRequestHandler</name>
       <set-method>register</set-method>
       <type>org.exoplatform.portal.application.DefaultRequestHandler</type>
-   </component-plugin>    
+   </component-plugin>
+    <component-plugin>
+      <name>ScriptRequestHandler</name>
+      <set-method>register</set-method>
+      <type>org.exoplatform.portal.controller.resource.ResourceRequestHandler</type>
+    </component-plugin>
    <component-plugin>
       <name>StaticResourceRequestHandler</name>
       <set-method>register</set-method>

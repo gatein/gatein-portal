@@ -19,11 +19,17 @@
 
 package org.exoplatform.web.application.javascript;
 
-import org.exoplatform.portal.controller.resource.Scope;
-import org.exoplatform.portal.controller.resource.ScopeType;
+import org.exoplatform.commons.utils.Safe;
+import org.exoplatform.portal.controller.resource.Resource;
+import org.exoplatform.portal.controller.resource.ResourceScope;
 
+import javax.servlet.ServletContext;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -32,7 +38,7 @@ import java.util.List;
 public abstract class Javascript
 {
 
-   public static Javascript create(Scope scope, String path, String contextPath, int priority)
+   public static Javascript create(Resource scope, String path, String contextPath, int priority)
    {
       if (path.startsWith("http://") || path.startsWith("https://"))
       {
@@ -45,31 +51,31 @@ public abstract class Javascript
    }
 
    /** . */
-   private final Scope scope;
+   protected final Resource resource;
 
    /** . */
-   private final String contextPath;
+   protected final String contextPath;
 
    /** . */
    private final int priority;
    
-   private Javascript(Scope scope, String contextPath, int priority)
+   private Javascript(Resource resource, String contextPath, int priority)
    {
-      this.scope = scope;
+      this.resource = resource;
       this.contextPath = contextPath;
       this.priority = priority < 0 ? Integer.MAX_VALUE : priority;
    }
 
    public abstract String getPath();
 
-   public Scope getScope()
+   public Resource getResource()
    {
-      return scope;
+      return resource;
    }
 
    public String getModule()
    {
-      return scope.getType() == ScopeType.MODULE ? scope.getId() : null;
+      return resource.getScope() == ResourceScope.MODULE ? resource.getId() : null;
    }
 
    public String getContextPath()
@@ -87,7 +93,7 @@ public abstract class Javascript
    @Override
    public String toString()
    {
-      return "Javascript[scope=" + scope + ", path=" + getPath() +"]";
+      return "Javascript[scope=" + resource + ", path=" + getPath() +"]";
    }
 
    public static class External extends Javascript
@@ -96,7 +102,7 @@ public abstract class Javascript
       /** . */
       private final String uri;
 
-      public External(Scope scope, String uri, String contextPath, int priority)
+      public External(Resource scope, String uri, String contextPath, int priority)
       {
          super(scope, contextPath, priority);
 
@@ -120,10 +126,12 @@ public abstract class Javascript
    public abstract static class Internal extends Javascript
    {
 
-      protected Internal(Scope scope, String contextPath, int priority)
+      protected Internal(Resource scope, String contextPath, int priority)
       {
          super(scope, contextPath, priority);
       }
+      
+      protected abstract InputStream open(JavascriptConfigService context) throws IOException;
    }
 
    public static class Simple extends Internal
@@ -135,7 +143,7 @@ public abstract class Javascript
       /** . */
       private final String uri;
 
-      public Simple(Scope scope, String path, String contextPath, int priority)
+      public Simple(Resource scope, String path, String contextPath, int priority)
       {
          super(scope, contextPath, priority);
 
@@ -156,6 +164,12 @@ public abstract class Javascript
          return false;
       }
 
+      @Override
+      protected InputStream open(JavascriptConfigService context) throws IOException
+      {
+         ServletContext servletContext = context.getContext(contextPath);
+         return servletContext != null ? servletContext.getResourceAsStream(path) : null;
+      }
    }
 
    public static class Composite extends Internal
@@ -163,7 +177,7 @@ public abstract class Javascript
 
       final ArrayList<Javascript> compounds;
 
-      public Composite(Scope scope, String contextPath, int priority)
+      public Composite(Resource scope, String contextPath, int priority)
       {
          super(scope, contextPath, priority);
          
@@ -181,6 +195,54 @@ public abstract class Javascript
       public boolean isExternalScript()
       {
          return false;
+      }
+
+      @Override
+      protected InputStream open(JavascriptConfigService context) throws IOException
+      {
+         StringBuilder buffer = new StringBuilder();
+         for (Javascript compound : compounds)
+         {
+            if (compound instanceof Internal)
+            {
+               InputStream in = ((Internal)compound).open(context);
+               if (in != null)
+               {
+                  try
+                  {
+                     BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                     String line = reader.readLine();
+                     try
+                     {
+                        while (line != null)
+                        {
+                           buffer.append(line);
+                           if ((line = reader.readLine()) != null)
+                           {
+                              buffer.append("\n");
+                           }
+                        }
+                     }
+                     catch (Exception ignore)
+                     {
+                     }
+                     finally
+                     {
+                        Safe.close(reader);
+                     }
+                  }
+                  catch (Exception e)
+                  {
+                     e.printStackTrace();
+                  }
+               }
+            }
+            else
+            {
+               // We skip it for now
+            }
+         }
+         return new ByteArrayInputStream(buffer.toString().getBytes());
       }
    }
 }

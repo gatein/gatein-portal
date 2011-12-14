@@ -14,9 +14,7 @@
 	def portalSkins = uicomponent.getPortalSkins() ;
 	def portletSkins = uicomponent.getPortletSkins() ;
 	def portalJScripts = uicomponent.getPortalJScripts();
-	def scriptsPaths = uicomponent.getJavascriptURLs();
 	def scriptsURLs = uicomponent.getScriptsURLs();
-	System.out.println("script urls " + scriptsURLs);
 	def lang = uicomponent.getLocale().getLanguage();
 	def title = rcontext.getTitle();
 	def metaInformation = rcontext.getMetaInformation();
@@ -50,23 +48,15 @@
 			<link id="${portletSkin.id}" rel="stylesheet" type="text/css" href= "$url" />
 		<%}%>
 
-		<%if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) {
-				for(path in scriptsPaths) { %>
-					<script type="text/javascript" src="<%=path%>"></script>
-			<%}%>
+		<% for (url in scriptsURLs) { %>
+            <script type="text/javascript" src="<%= url %>"></script>
+		<% } %>
+
+		<% if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) { %>
 					<script type="text/javascript">
 						eXo.developing = true ;
 					</script>
-			
-		<%} else {%>
-				<script type="text/javascript" src="<%=docBase%>/javascript/merged.js"></script>
-		<%
-			 for(path in scriptsPaths) {
-					if(path.startsWith("http") || path.startsWith("https")) {%>
-					<script type="text/javascript" src="<%=path%>"></script>
-			 <%}
-			 }
-		}%>
+		<% } %>
 		<script type="text/javascript">
 			eXo.env.portal.context = "<%=docBase%>" ;
 			<%if(rcontext.getAccessPath() == 0) {%>eXo.env.portal.accessMode = "public" ;<%}

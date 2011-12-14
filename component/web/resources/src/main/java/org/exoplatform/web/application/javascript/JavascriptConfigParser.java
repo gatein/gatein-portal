@@ -18,8 +18,8 @@
  */
 package org.exoplatform.web.application.javascript;
 
-import org.exoplatform.portal.controller.resource.Scope;
-import org.exoplatform.portal.controller.resource.ScopeType;
+import org.exoplatform.portal.controller.resource.Resource;
+import org.exoplatform.portal.controller.resource.ResourceScope;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -147,11 +147,11 @@ public class JavascriptConfigParser
             Javascript js;
             if (portalName == null)
             {
-               js = Javascript.create(new Scope(ScopeType.MODULE, js_module), js_path, context.getContextPath(), priority);
+               js = Javascript.create(new Resource(ResourceScope.MODULE, js_module), js_path, context.getContextPath(), priority);
             }
             else
             {
-               js = Javascript.create(new Scope(ScopeType.PORTAL, portalName), js_path, context.getContextPath(), priority);
+               js = Javascript.create(new Resource(ResourceScope.PORTAL, portalName), js_path, context.getContextPath(), priority);
             }
             task.addScript(js);
          }

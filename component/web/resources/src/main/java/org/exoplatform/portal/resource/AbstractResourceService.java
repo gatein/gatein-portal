@@ -23,6 +23,8 @@ import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
 import javax.servlet.ServletContext;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * An abstract class for resource services in Portal like {@link SkinService}
@@ -37,10 +39,13 @@ public abstract class AbstractResourceService
 
    protected final ResourceCompressor compressor;
    
+   protected final Map<String, ServletContext> contexts;
+   
    public AbstractResourceService(ResourceCompressor compressor)
    {
       this.compressor = compressor;
       this.mainResolver = new MainResourceResolver();
+      this.contexts = new HashMap<String, ServletContext>();
    }
 
    /**
@@ -62,6 +67,7 @@ public abstract class AbstractResourceService
    public void registerContext(ServletContext sContext)
    {
       mainResolver.registerContext(sContext);
+      contexts.put(sContext.getContextPath(), sContext);
    }
    
    /**
@@ -72,5 +78,6 @@ public abstract class AbstractResourceService
    public void unregisterServletContext(ServletContext servletContext)
    {
       mainResolver.removeServletContext(servletContext);
+      contexts.remove(servletContext.getContextPath());
    }
 }
