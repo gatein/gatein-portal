@@ -262,8 +262,13 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    {
       return contexts.get(contextPath);
    }
-   
+
    public Collection<Javascript> getScripts(boolean merge)
+   {
+      return getScripts(null, merge);
+   }
+
+   public Collection<Javascript> getScripts(String portalName, boolean merge)
    {
       ArrayList<Javascript> scripts = new ArrayList<Javascript>();
       
@@ -283,6 +288,16 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       else
       {
          scripts.addAll(commonJScripts.compounds);
+      }
+      
+      // Then portal scripts
+      if (portalName != null)
+      {
+         Javascript.Composite portalScript = portalJScripts.get(portalName);
+         if (portalScript != null)
+         {
+            scripts.addAll(portalScript.compounds);
+         }
       }
       
       //

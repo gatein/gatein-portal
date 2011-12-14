@@ -322,18 +322,6 @@ public class UIPortalApplication extends UIApplication
       return (modeState != NORMAL_MODE);
    }
 
-   /**
-    * Get all JavaScript path which available on selected portal site
-    * @return
-    */
-   public Collection<Javascript> getPortalJScripts()
-   {
-      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
-      String portalOwner = Util.getPortalRequestContext().getPortalOwner();
-      return service.getPortalJScripts(portalOwner);
-   }
-   
-
    public Collection<String> getScriptsURLs()
    {
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
@@ -341,7 +329,7 @@ public class UIPortalApplication extends UIApplication
       ArrayList<String> locations = new ArrayList<String>();
 
       //
-      for (Javascript script : service.getScripts(!PropertyManager.isDevelopping()))
+      for (Javascript script : service.getScripts(portalOwner, !PropertyManager.isDevelopping()))
       {
          if (script.isExternalScript())
          {
