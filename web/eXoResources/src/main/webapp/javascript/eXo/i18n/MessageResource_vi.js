@@ -16,13 +16,16 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+(function(res) {
 
-eXo.i18n.I18NMessage.SessionTimeout = "Phiên làm việc hết hạn! Tải lại trang này.";
-eXo.i18n.I18NMessage.TargetBlockNotFound = "Không tìm thấy vùng đích với ID là : {0}";
-eXo.i18n.I18NMessage.BlockUpdateNotFound = "Không tìm thấy vùng cần cập nhật : {0}";
-eXo.i18n.I18NMessage.DefaultTheme = "Mặc định";
-eXo.i18n.I18NMessage.PreviousMonth="Tháng trước";
-eXo.i18n.I18NMessage.NextMonth="Tháng sau";
-eXo.i18n.I18NMessage.PreviousYear="Năm trước";
-eXo.i18n.I18NMessage.NextYear="Năm sau";
-eXo.i18n.I18NMessage.weekdays=["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+  res.SessionTimeout = "Phiên làm việc hết hạn! Tải lại trang này.";
+  res.TargetBlockNotFound = "Không tìm thấy vùng đích với ID là : {0}";
+  res.BlockUpdateNotFound = "Không tìm thấy vùng cần cập nhật : {0}";
+  res.DefaultTheme = "Mặc định";
+  res.PreviousMonth="Tháng trước";
+  res.NextMonth="Tháng sau";
+  res.PreviousYear="Năm trước";
+  res.NextYear="Năm sau";
+  res.weekdays=["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+  
+}(eXo.i18n.I18NMessage));

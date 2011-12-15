@@ -180,6 +180,13 @@
          <js-path>/javascript/eXo/core/I18n.js</js-path>
          <js-priority>1</js-priority>
       </param>
+      <!-- 
+      <param>
+         <js-module>eXo.core.Spliter</js-module>
+         <js-path>/javascript/eXo/core/Spliter.js</js-path>
+         <js-priority>1</js-priority>
+      </param>
+       -->
    </javascript>
 
    <!-- Gadget Javascripts -->
@@ -223,6 +230,18 @@
          <js-path>/javascript/eXo/portal/UIMaskWorkspace.js</js-path>
          <js-priority>3</js-priority>
       </param>
+      <!-- 
+      <param>
+         <js-module>eXo.core.Cometd</js-module>
+         <js-path>/javascript/eXo/core/Cometd.js</js-path>
+         <js-priority>3</js-priority>
+      </param>
+      <param>
+         <js-module>eXo.core.Topic</js-module>
+         <js-path>/javascript/eXo/core/Topic.js</js-path>
+         <js-priority>3</js-priority>
+      </param>
+       -->
    </javascript>
 
    <!-- WebUI Javascripts -->
@@ -272,11 +291,6 @@
    <!-- Should be lazy loaded -->
    <!-- 
    <javascript>
-      <param>
-         <js-module>eXo.portal.UIPortalNavigation</js-module>
-         <js-path>/javascript/eXo/portal/UIPortalNavigation.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
       <param>
          <js-module>eXo.webui.UIDashboard</js-module>
          <js-path>/javascript/eXo/webui/UIDashboard.js</js-path>
@@ -330,33 +344,18 @@
    </javascript>
     -->
 
-   <!-- Need to check if these are still in use -->
+   <!-- Portlet Application JScripts -->
    <!-- 
    <javascript>
       <param>
-         <js-module>eXo.core.Cometd</js-module>
-         <js-path>/javascript/eXo/core/Cometd.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Topic</js-module>
-         <js-path>/javascript/eXo/core/Topic.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Spliter</js-module>
-         <js-path>/javascript/eXo/core/Spliter.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.UIBrowseContent</js-module>
-         <js-path>/javascript/eXo/portal/UIBrowseContent.js</js-path>
+         <js-module>eXo.portal.UIPortalNavigation</js-module>
+         <js-path>/javascript/eXo/portal/UIPortalNavigation.js</js-path>
          <js-priority>3</js-priority>
       </param>
       <param>
-         <js-module>eXo.webui.UIPermissionSelectorTab</js-module>
-         <js-path>/javascript/eXo/webui/UIPermissionSelectorTab.js</js-path>
-         <js-priority>4</js-priority>
+         <js-module>eXo.portal.UIAdminToolbar</js-module>
+         <js-path>/javascript/eXo/portal/UIAdminToolbar.js</js-path>
+         <js-priority>3</js-priority>
       </param>
    </javascript>
     -->

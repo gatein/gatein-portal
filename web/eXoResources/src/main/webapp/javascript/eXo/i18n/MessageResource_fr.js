@@ -16,13 +16,16 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+(function(res) {
 
-eXo.i18n.I18NMessage.SessionTimeout = "La session a expir\u00e9 ! Veuillez recharger la page.";
-eXo.i18n.I18NMessage.TargetBlockNotFound = "Cannot complete request as the component to update cannot be found (blockId: {0}). If the page's contents have changed, a page refresh may be needed." 
-eXo.i18n.I18NMessage.BlockUpdateNotFound = "The blockId to update is not found : {0}";
-eXo.i18n.I18NMessage.DefaultTheme = "Style par Défaut";
-eXo.i18n.I18NMessage.PreviousMonth="Mois précédent";
-eXo.i18n.I18NMessage.NextMonth="Mois prochain";
-eXo.i18n.I18NMessage.PreviousYear="Année précédente";
-eXo.i18n.I18NMessage.NextYear="Année suivante";
-eXo.i18n.I18NMessage.weekdays=["D", "L", "M", "M", "J", "V", "S"];
+  res.SessionTimeout = "La session a expir\u00e9 ! Veuillez recharger la page.";
+  res.TargetBlockNotFound = "The target blockId to update is not found : {0}";
+  res.BlockUpdateNotFound = "The blockId to update is not found : {0}";
+  res.DefaultTheme = "Style par Défaut";
+  res.PreviousMonth="Mois précédent";
+  res.NextMonth="Mois prochain";
+  res.PreviousYear="Année précédente";
+  res.NextYear="Année suivante";
+  res.weekdays=["D", "L", "M", "M", "J", "V", "S"];
+  
+}(eXo.i18n.I18NMessage));
