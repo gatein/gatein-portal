@@ -53,10 +53,6 @@ public class InitiateLoginServlet extends AbstractHttpServlet
    public static final String COOKIE_NAME = "rememberme";
 
    /** . */
-   public static final long LOGIN_VALIDITY =
-           1000 * TicketConfiguration.getInstance(TicketConfiguration.class).getValidityTime();
-
-   /** . */
    private WCIController wciController;
 
    /** . */
@@ -112,7 +108,7 @@ public class InitiateLoginServlet extends AbstractHttpServlet
       else
       {
          // WCI authentication
-         servletContainer.login(req, resp, credentials, LOGIN_VALIDITY, wciController.getInitialURI(req));
+         servletContainer.login(req, resp, credentials, getLoginValidity(), wciController.getInitialURI(req));
       }
    }
 
@@ -157,5 +153,10 @@ public class InitiateLoginServlet extends AbstractHttpServlet
          wciController = new GateinWCIController(getServletContext());
       }
       return wciController;
+   }
+
+   private long getLoginValidity()
+   {
+      return 1000 * TicketConfiguration.getInstance(TicketConfiguration.class).getValidityTime();
    }
 }
