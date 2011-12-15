@@ -293,6 +293,7 @@ DOMUtil.prototype.findPreviousElementByTagName = function(element, tagName) {
 	}
 	return null ;
 } ;
+
 /**
  * Move an element
  * @param {String} srcElemt element to move
@@ -361,12 +362,13 @@ DOMUtil.prototype.hideElements = function() {
 };
 
 DOMUtil.prototype.cleanUpHiddenElements = function() {
-	var ln = eXo.core.DOMUtil.hideElementList.length ;
+    var DOMUtil = eXo.core.DOMUtil;
+	var ln = DOMUtil.hideElementList.length ;
 	if (ln > 0) {
 		for (var i = 0; i < ln; i++) {
-			eXo.core.DOMUtil.hideElementList[i].style.display = "none" ;
+			DOMUtil.hideElementList[i].style.display = "none" ;
 		}
-		eXo.core.DOMUtil.hideElementList.clear() ;
+		DOMUtil.hideElementList.clear() ;
 	}
 };
 
@@ -375,8 +377,9 @@ DOMUtil.prototype.cleanUpHiddenElements = function() {
  * Should only contain elements from a popup menu
  */
 DOMUtil.prototype.listHideElements = function(object) {
-	if (!eXo.core.DOMUtil.hideElementList.contains(object)) {
-		eXo.core.DOMUtil.hideElementList.push(object) ;
+	var DOMUtil = eXo.core.DOMUtil;
+	if (!DOMUtil.hideElementList.contains(object)) {
+		DOMUtil.hideElementList.push(object) ;
 	}
 } ;
 /**

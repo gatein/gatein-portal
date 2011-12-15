@@ -40,74 +40,10 @@ function UIDashboardUtil() {
 	  return curleft ;
 	};
 	
-	UIDashboardUtil.prototype.findPosY = function(obj) {
-	  var curtop = 0 ;
-	  while (obj) {
-	    curtop += obj.offsetTop ;
-	    obj = obj.offsetParent ;
-	  }
-	  return curtop ;
-	};
-	
-	UIDashboardUtil.prototype.findMouseRelativeX = function (object, e){
-		var posx = -1 ;
-		var posXObject = eXo.webui.UIDashboardUtil.findPosX(object) ;
-		if (!e) e = window.event ;
-		if (e.pageX || e.pageY) {
-		  posx = e.pageX - posXObject ;
-		} else if (e.clientX || e.clientY) {
-		  posx = e.clientX + document.body.scrollLeft - posXObject ;
-		}
-		return posx ;
-	};
-	
-	UIDashboardUtil.prototype.findMouseRelativeY = function(object, e) {
-	  var posy = -1 ;
-	  var posYObject = eXo.webui.UIDashboardUtil.findPosY(object) ;
-	  if (!e) e = window.event ;
-	  if (e.pageY) {
-	    posy = e.pageY - posYObject ;
-	  } else if (e.clientX || e.clientY) {
-	    //IE 6
-	    if (document.documentElement && document.documentElement.scrollTop) {
-	      posy = e.clientY + document.documentElement.scrollTop - posYObject ;
-	    } else {
-	      posy = e.clientY + document.body.scrollTop - posYObject ;
-	    }
-	  }
-	  return  posy ;
-	};
-	
-	UIDashboardUtil.prototype.findPosXInContainer = function(obj, container) {
-  	var objX =  eXo.webui.UIDashboardUtil.findPosX(obj) ;
-  	var containerX =  eXo.webui.UIDashboardUtil.findPosX(container) ;  
-	  return (objX - containerX) ;
-	};
-
-	UIDashboardUtil.prototype.findPosYInContainer = function(obj, container) {
-	  var objY = eXo.webui.UIDashboardUtil.findPosY(obj) ;
-	  var containerY =  eXo.webui.UIDashboardUtil.findPosY(container) ;
-	  return (objY - containerY) ;
-	}; 
-	
-	UIDashboardUtil.prototype.setPositionInContainer = function(container, component, posX, posY) {
-		var offsetX = component.offsetLeft ;
-		var offsetY = component.offsetTop ;
-	
-		var posXInContainer = eXo.webui.UIDashboardUtil.findPosXInContainer(component, container) ;
-		var posYInContainer = eXo.webui.UIDashboardUtil.findPosYInContainer(component, container) ;
-	
-		var deltaX = posX - (posXInContainer - offsetX) ;
-		var deltaY = posY - (posYInContainer - offsetY) ;
-	
-		component.style.left = deltaX + "px" ;
-		component.style.top = deltaY + "px" ;
-	}; 
-	
 	UIDashboardUtil.prototype.isIn = function(x, y, component) {
 	  var componentLeft = eXo.webui.UIDashboardUtil.findPosX(component);
 	  var componentRight = componentLeft + component.offsetWidth ;
-	  var componentTop = eXo.webui.UIDashboardUtil.findPosY(component) ;
+	  var componentTop = eXo.core.Browser.findPosY(component) ;
 	  var componentBottom = componentTop + component.offsetHeight ;
 	  var isOver = false ;
 

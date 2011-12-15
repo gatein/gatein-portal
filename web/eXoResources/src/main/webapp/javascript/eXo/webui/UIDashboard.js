@@ -25,6 +25,7 @@ function UIDashboard() {
 	UIDashboard.prototype.init = function (dragItem, dragObj) {
 		
 		var DOMUtil = eXo.core.DOMUtil;
+		var Browser = eXo.core.Browser;
 		eXo.core.DragDrop2.init(dragItem, dragObj);
 
 		dragObj.onDragStart = function(x, y, lastMouseX, lastMouseY, e) {
@@ -39,12 +40,12 @@ function UIDashboard() {
 			var ggheight = dragObj.offsetHeight;
 			
 			//find position to put drag object in
-			var mx = eXo.webui.UIDashboardUtil.findMouseRelativeX(uiWorkingWS, e);
-			var ox = eXo.webui.UIDashboardUtil.findMouseRelativeX(dragObj, e);
+			var mx = Browser.findMouseRelativeX(uiWorkingWS, e);
+			var ox = Browser.findMouseRelativeX(dragObj, e);
 			var x = mx-ox;
 				
-			var my = eXo.webui.UIDashboardUtil.findMouseRelativeY(uiWorkingWS, e);
-			var oy = eXo.webui.UIDashboardUtil.findMouseRelativeY(dragObj, e);
+			var my = Browser.findMouseRelativeY(uiWorkingWS, e);
+			var oy = Browser.findMouseRelativeY(dragObj, e);
 			var y = my-oy;
 
 			var temp = dragObj;
@@ -89,7 +90,7 @@ function UIDashboard() {
 				
 			//set position of drag object
 			dragObj.style.position = "absolute";
-			eXo.webui.UIDashboardUtil.setPositionInContainer(uiWorkingWS, dragObj, x, y);
+			Browser.setPositionInContainer(uiWorkingWS, dragObj, x, y);
 			if(uiTarget!=null) {
 				uiTarget.style.height = ggheight +"px";
 				targetObj = uiTarget;
@@ -148,7 +149,7 @@ function UIDashboard() {
 
 					//find position and add uiTarget into column				
 					for(var i=0; i<gadgets.length; i++) {
-						var oy = eXo.webui.UIDashboardUtil.findPosY(gadgets[i]) + (gadgets[i].offsetHeight/3) - dashboardCont.scrollTop;
+						var oy = Browser.findPosY(gadgets[i]) + (gadgets[i].offsetHeight/3) - dashboardCont.scrollTop;
 						
 						if(ey<=oy) {
 							uiCol.insertBefore(uiTarget, gadgets[i]);
@@ -451,9 +452,10 @@ function UIDashboard() {
 		var trueWidth = colCont.offsetWidth;
 		var trueHeight = colCont.offsetHeight;
 		
-		var objLeft = dashboardUtil.findPosXInContainer(dragObj, gadgetContainer);
+		var Browser = eXo.core.Browser;
+		var objLeft = Browser.findPosXInContainer(dragObj, gadgetContainer);
 		var objRight = objLeft + dragObj.offsetWidth;
-		var objTop = dashboardUtil.findPosYInContainer(dragObj, gadgetContainer);
+		var objTop = Browser.findPosYInContainer(dragObj, gadgetContainer);
 		var objBottom = objTop + dragObj.offsetHeight;
 		
 		//controls horizontal scroll
