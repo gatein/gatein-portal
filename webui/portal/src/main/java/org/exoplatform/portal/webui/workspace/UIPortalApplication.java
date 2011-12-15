@@ -341,8 +341,17 @@ public class UIPortalApplication extends UIApplication
             {
                Map<QualifiedName, String> params = new HashMap<QualifiedName, String>();
                params.put(WebAppController.HANDLER_PARAM, "script");
-               params.put(ResourceRequestHandler.RESOURCE_ID, script.getResource().getId());
-               params.put(ResourceRequestHandler.RESOURCE_SCOPE, script.getResource().getScope().name());
+               params.put(ResourceRequestHandler.RESOURCE, script.getResource().getId());
+               params.put(ResourceRequestHandler.SCOPE, script.getResource().getScope().name());
+
+               // Do something better than that
+               String module = script.getModule();
+               if (module != null)
+               {
+                  params.put(ResourceRequestHandler.MODULE, module);
+               }
+
+               //
                StringBuilder sb = new StringBuilder();
                URIWriter writer = new URIWriter(sb);
                PortalRequestContext prc = PortalRequestContext.getCurrentInstance();

@@ -33,7 +33,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -106,7 +105,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertFalse(jsService.isModuleLoaded("js.test5"));
       
       //
-      Javascript script = jsService.getScript(new Resource(ResourceScope.MODULE, "js.test1"));
+      Javascript script = jsService.getScript(new Resource(ResourceScope.SHARED, "common"), "js.test1");
       assertNotNull(script);
       assertTrue(script instanceof Javascript.Internal);
    }
@@ -130,20 +129,27 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertTrue(jsService.getLastModified() < System.currentTimeMillis());
 
       //
-      Map<Resource, Javascript> map = new HashMap<Resource, Javascript>();
+      Map<String, Javascript> map = new HashMap<String, Javascript>();
       for (Javascript script :jsService.getScripts(true))
       {
-         map.put(script.getResource(), script);
+         assertEquals(new Resource(ResourceScope.SHARED, "common"), script.getResource());
+         String module = script.getModule();
+         if (module == null)
+         {
+            module = "merged";
+         }
+         map.put(module, script);
       }
-      Set<Resource> expectedSet = new HashSet<Resource>();
-      expectedSet.add(new Resource(ResourceScope.GLOBAL, "merged"));
-      expectedSet.add(new Resource(ResourceScope.MODULE, "js.test7"));
-      assertEquals(expectedSet, map.keySet());
 
       //
-      Javascript.Internal merged = (Javascript.Internal)map.get(new Resource(ResourceScope.GLOBAL, "merged"));
+      Javascript.Internal merged = (Javascript.Internal)map.get("merged");
       mergedJS = read(jsService.open(merged));
-      assertEquals("bbb;ddd;aaa; // inline commentccc;", mergedJS);
+      System.out.println("merged = " + mergedJS);
+      System.out.println("merged = " + mergedJS);
+      System.out.println("merged = " + mergedJS);
+      System.out.println("merged = " + mergedJS);
+      System.out.println("merged = " + mergedJS);
+      assertEquals("bbb;\nddd;\naaa; // inline comment\nccc;\n", mergedJS);
    }
 
    public void testCaching()
@@ -198,7 +204,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertNull(jsService.getScript(new Resource(ResourceScope.PORTAL, "site1")));
 
       //
-      Javascript portalJScript = Javascript.create(new Resource(ResourceScope.PORTAL, "portal1"), "/portal", "/mockwebapp", Integer.MAX_VALUE);
+      Javascript portalJScript = Javascript.create(new Resource(ResourceScope.PORTAL, "/portal"), "portal1", "/mockwebapp", "/portal", Integer.MAX_VALUE);
       jsService.addPortalJScript(portalJScript);
       String jScript = jsService.getJScript(portalJScript.getPath());
       assertNull(jScript);

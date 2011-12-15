@@ -38,10 +38,13 @@ public class ResourceRequestHandler extends WebRequestHandler
 {
 
    /** . */
-   public static final QualifiedName RESOURCE_ID = QualifiedName.create("gtn", "resourceid");
+   public static final QualifiedName RESOURCE = QualifiedName.create("gtn", "resource");
 
    /** . */
-   public static final QualifiedName RESOURCE_SCOPE = QualifiedName.create("gtn", "resourcescope");
+   public static final QualifiedName SCOPE = QualifiedName.create("gtn", "scope");
+
+   /** . */
+   public static final QualifiedName MODULE = QualifiedName.create("gtn", "module");
 
    @Override
    public String getHandlerName()
@@ -55,19 +58,30 @@ public class ResourceRequestHandler extends WebRequestHandler
 
       JavascriptConfigService service = (JavascriptConfigService)PortalContainer.getComponent(JavascriptConfigService.class);
 
-      String idParam = context.getParameter(RESOURCE_ID);
-      String scopeParam = context.getParameter(RESOURCE_SCOPE);
+      String resourceParam = context.getParameter(RESOURCE);
+      String scopeParam = context.getParameter(SCOPE);
+      String moduleParam = context.getParameter(MODULE);
 
       //
-      if (scopeParam != null && idParam != null)
+      if (scopeParam != null && resourceParam != null)
       {
          try
          {
             ResourceScope scope = ResourceScope.valueOf(ResourceScope.class, scopeParam);
-            Resource resource = new Resource(scope, idParam);
+            Resource resource = new Resource(scope, resourceParam);
             
             //
-            Javascript script = service.getScript(resource);
+            Javascript script;
+            if (moduleParam != null)
+            {
+               script = service.getScript(resource, moduleParam);
+            }
+            else
+            {
+               script = service.getScript(resource);
+            }
+
+            //
             if (script != null && script instanceof Javascript.Internal)
             {
                Javascript.Internal internal = (Javascript.Internal)script;

@@ -147,11 +147,11 @@ public class JavascriptConfigParser
             Javascript js;
             if (portalName == null)
             {
-               js = Javascript.create(new Resource(ResourceScope.MODULE, js_module), js_path, context.getContextPath(), priority);
+               js = Javascript.create(new Resource(ResourceScope.SHARED, "common"), js_module, js_path, context.getContextPath(), priority);
             }
             else
             {
-               js = Javascript.create(new Resource(ResourceScope.PORTAL, portalName), js_path, context.getContextPath(), priority);
+               js = Javascript.create(new Resource(ResourceScope.PORTAL, portalName), js_module, js_path, context.getContextPath(), priority);
             }
             task.addScript(js);
          }

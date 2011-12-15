@@ -55,17 +55,22 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    /** Our logger. */
    private final Logger log = LoggerFactory.getLogger(JavascriptConfigService.class);
 
-   private Javascript.Composite commonJScripts;
+   /** The shared scripts. */
+   private HashMap<String, Javascript.Composite> sharedJScripts;
 
+   /** The portal scripts. */
    private HashMap<String, Javascript.Composite> portalJScripts;
 
+   /** . */
    private long lastModified = Long.MAX_VALUE;
 
    /** . */
    private WebAppListener deployer;
 
+   /** . */
    private CachedJavascript mergedCommonJScripts;
 
+   /** . */
    private final FutureMap<String, CachedJavascript, ResourceResolver> cache;
 
    public JavascriptConfigService(ExoContainerContext context, ResourceCompressor compressor)
@@ -118,7 +123,11 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       cache = new FutureMap<String, CachedJavascript, ResourceResolver>(loader);
 
       // todo : remove /portal ???
-      commonJScripts = new Javascript.Composite(new Resource(ResourceScope.GLOBAL, "merged"), "/portal", 0);
+      HashMap<String, Javascript.Composite> tmp = new HashMap<String, Javascript.Composite>();
+      tmp.put("common", new Javascript.Composite(new Resource(ResourceScope.SHARED, "common"), "/portal", 0));
+
+      //
+      sharedJScripts = tmp;
       deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
       portalJScripts = new HashMap<String, Javascript.Composite>();
    }
@@ -133,9 +142,12 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    public Collection<String> getAvailableScripts()
    {
       ArrayList<String> list = new ArrayList<String>();
-      for (Javascript js : commonJScripts.compounds)
+      for (Javascript.Composite shared : sharedJScripts.values())
       {
-         list.add(js.getModule());
+         for (Javascript js : shared.compounds)
+         {
+            list.add(js.getModule());
+         }
       }
       return list;
    }
@@ -147,7 +159,12 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public Collection<Javascript> getCommonJScripts()
    {
-      return commonJScripts.compounds;
+      ArrayList<Javascript> list = new ArrayList<Javascript>();
+      for (Javascript.Composite shared : sharedJScripts.values())
+      {
+         list.addAll(shared.compounds);
+      }
+      return list;
    }
 
    /**
@@ -161,11 +178,13 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    public Collection<String> getAvailableScriptsPaths()
    {
       ArrayList<String> list = new ArrayList<String>();
-      for (Javascript js : commonJScripts.compounds)
+      for (Javascript.Composite shared : sharedJScripts.values())
       {
-         list.add(js.getPath());
+         for (Javascript js : shared.compounds)
+         {
+            list.add(js.getPath());
+         }
       }
-
       return list;
    }
 
@@ -178,16 +197,15 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public void addCommonJScript(Javascript js)
    {
-      commonJScripts.compounds.add(js);
-
-      Collections.sort(commonJScripts.compounds, new Comparator<Javascript>()
+      Javascript.Composite common = sharedJScripts.get("common");
+      common.compounds.add(js);
+      Collections.sort(common.compounds, new Comparator<Javascript>()
       {
          public int compare(Javascript o1, Javascript o2)
          {
             return o1.getPriority() - o2.getPriority();
          }
       });
-
       invalidateMergedCommonJScripts();
    }
 
@@ -199,7 +217,8 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public void removeCommonJScript(String module)
    {
-      Iterator<Javascript> iterator = commonJScripts.compounds.iterator();
+      Javascript.Composite common = sharedJScripts.get("common");
+      Iterator<Javascript> iterator = common.compounds.iterator();
       while (iterator.hasNext())
       {
          Javascript js = iterator.next();
@@ -230,26 +249,26 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       // we will do it later
       return script.open(this);
    }
-   
-   public Javascript getScript(Resource resource)
+
+   public Javascript getScript(Resource resource, String module)
+   {
+      Javascript.Composite script = getScript(resource);
+      if (script != null && !"merged".equals(module))
+      {
+         return script.getCompound(module);
+      }
+      else
+      {
+         return script;
+      }
+   }
+
+   public Javascript.Composite getScript(Resource resource)
    {
       switch (resource.getScope())
       {
-         case GLOBAL:
-            if (resource.getId().equals(commonJScripts.getResource().getId()))
-            {
-               return commonJScripts;
-            }
-            break;
-         case MODULE:
-            for (Javascript script : commonJScripts.compounds)
-            {
-               if (script.getResource().equals(resource))
-               {
-                  return script;
-               }
-            }
-            break;
+         case SHARED:
+            return sharedJScripts.get(resource.getId());
          case PORTAL:
             return portalJScripts.get(resource.getId());
       }
@@ -272,11 +291,12 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    {
       ArrayList<Javascript> scripts = new ArrayList<Javascript>();
       
-      // First global scripts
+      // First shared scripts
+      Javascript.Composite common = sharedJScripts.get("common");
       if (merge)
       {
-         scripts.add(commonJScripts);
-         for (Javascript script : commonJScripts.compounds)
+         scripts.add(common);
+         for (Javascript script : common.compounds)
          {
             // For now we do it this way
             if (script instanceof Javascript.External)
@@ -287,7 +307,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       }
       else
       {
-         scripts.addAll(commonJScripts.compounds);
+         scripts.addAll(common.compounds);
       }
       
       // Then portal scripts
@@ -364,15 +384,18 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public synchronized void remove(ServletContext context)
    {
-      Iterator<Javascript> iterator = commonJScripts.compounds.iterator();
-      while (iterator.hasNext())
+      for (Javascript.Composite shared : sharedJScripts.values())
       {
-         Javascript js = iterator.next();
-         if (js.getContextPath().equals(context.getContextPath()))
+         Iterator<Javascript> iterator = shared.compounds.iterator();
+         while (iterator.hasNext())
          {
-            iterator.remove();
-            invalidateCachedJScript(js.getPath());
-            invalidateMergedCommonJScripts();
+            Javascript js = iterator.next();
+            if (js.getContextPath().equals(context.getContextPath()))
+            {
+               iterator.remove();
+               invalidateCachedJScript(js.getPath());
+               invalidateMergedCommonJScripts();
+            }
          }
       }
    }
@@ -436,7 +459,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       if (mergedCommonJScripts == null)
       {
          StringBuilder sB = new StringBuilder();
-         for (Javascript js : commonJScripts.compounds)
+         for (Javascript js : sharedJScripts.get("common").compounds)
          {
             if (!js.isExternalScript())
             {
@@ -497,14 +520,16 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public boolean isModuleLoaded(CharSequence module)
    {
-      for (Javascript js : commonJScripts.compounds)
+      for (Javascript.Composite shared : sharedJScripts.values())
       {
-         if (js.getModule().equals(module))
+         for (Javascript js : shared.compounds)
          {
-            return true;
+            if (js.getModule().equals(module))
+            {
+               return true;
+            }
          }
       }
-
       return false;
    }
 
