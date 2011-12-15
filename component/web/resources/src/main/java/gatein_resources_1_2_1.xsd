@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (C) 2009 eXo Platform SAS.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+
+<xs:schema
+    targetNamespace="http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.0">
+
+  <!-- The root element type that contains the various resource declarations -->
+  <xs:element name="gatein-resources">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="portal-skin" type="portal-skin" />
+        <xs:element name="portlet-skin" type="portlet-skin" />
+        <xs:element name="window-style" type="window-style" />
+        <xs:element name="javascript" type="javascript" />
+        <xs:element name="resource-bundle" type="resource-bundle" />
+        <xs:element name="script" type="script" />
+      </xs:choice>
+    </xs:complexType>
+  </xs:element>
+
+  <!-- Declares a portal skin resource -->
+  <xs:complexType name="portal-skin">
+    <xs:sequence>
+      <xs:element name="skin-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="skin-module" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="css-path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="css-priority" type="xs:integer" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="overwrite" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Declares a portlet skin resource -->
+  <xs:complexType name="portlet-skin">
+    <xs:sequence>
+      <!-- The portlet application name -->
+      <xs:element name="application-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- The portlet name -->
+      <xs:element name="portlet-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- The name of the skin to load -->
+      <xs:element name="skin-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- The css path of the skin relative to the application context -->
+      <xs:element name="css-path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- Overwrite -->
+      <xs:element name="overwrite" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+      <!-- The css priority of the skin to indicate condition for sorting -->
+      <xs:element name="css-priority" type="xs:integer" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Declares a window style -->
+  <xs:complexType name="window-style" mixed="true">
+    <xs:sequence>
+
+      <!-- The window style name -->
+      <xs:element name="style-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- The window style theme -->
+      <xs:element name="style-theme" type="style-theme" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- The window style theme -->
+  <xs:complexType name="style-theme">
+    <xs:sequence>
+      <!-- The theme name -->
+      <xs:element name="theme-name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Declares a javascript resource  -->
+  <xs:complexType name="javascript">
+    <xs:sequence>
+      <xs:element name="param" type="param" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="param">
+    <xs:sequence>
+      <!-- The portal name loading particular JavaScript module -->
+      <xs:element name="portal-name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+      <!-- The javascript module -->
+      <xs:element name="js-module" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- The javascript path -->
+      <xs:element name="js-path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+
+      <!-- The javascript priority -->
+      <xs:element name="js-priority" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- Declares a resource bundle -->
+  <xs:complexType name="resource-bundle">
+  </xs:complexType>
+
+  <!-- A script declaration -->
+  <xs:complexType name="script">
+    <xs:complexContent>
+      <xs:extension base="resource">
+        <xs:sequence>
+          <xs:element name="module" type="xs:string" minOccurs="1" maxOccurs="1"/>
+          <xs:element name="path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+          <xs:element name="priority" type="xs:string" minOccurs="0" maxOccurs="1"/>
+          <xs:element name="depends" type="resource" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <!-- The identifier of a resource for the portal -->
+  <xs:complexType name="resource">
+    <xs:sequence>
+      <xs:element name="scope" type="scope" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <!-- A scope for portal resources -->
+  <xs:simpleType name="scope">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="shared"/>
+      <xs:enumeration value="portal"/>
+      <xs:enumeration value="portlet"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>
