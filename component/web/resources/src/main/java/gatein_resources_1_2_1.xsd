@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  ~ Copyright (C) 2009 eXo Platform SAS.
+  ~ Copyright (C) 2011 eXo Platform SAS.
   ~
   ~ This is free software; you can redistribute it and/or modify it
   ~ under the terms of the GNU Lesser General Public License as
@@ -35,7 +35,7 @@
         <xs:element name="window-style" type="window-style" />
         <xs:element name="javascript" type="javascript" />
         <xs:element name="resource-bundle" type="resource-bundle" />
-        <xs:element name="script" type="script" />
+        <xs:element name="scripts" type="scripts" />
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -122,14 +122,14 @@
   </xs:complexType>
 
   <!-- A script declaration -->
-  <xs:complexType name="script">
+  <xs:complexType name="scripts">
     <xs:complexContent>
       <xs:extension base="resource">
         <xs:sequence>
           <xs:element name="module" type="xs:string" minOccurs="1" maxOccurs="1"/>
-          <xs:element name="path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+          <xs:element name="path" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
           <xs:element name="priority" type="xs:string" minOccurs="0" maxOccurs="1"/>
-          <xs:element name="depends" type="resource" minOccurs="0" maxOccurs="1"/>
+          <xs:element name="depends" type="resource" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
