@@ -143,8 +143,9 @@ DragDrop.prototype.destroy = function() {
   
 DragDrop.prototype.findDropableTarget = function(dndEvent, dropableTargets, mouseEvent) {
   if(dropableTargets == null) return null ;
-  var mousexInPage = eXo.core.Browser.findMouseXInPage(mouseEvent) ;
-  var mouseyInPage = eXo.core.Browser.findMouseYInPage(mouseEvent) ;
+  var browser = eXo.core.Browser;
+  var mousexInPage = browser.findMouseXInPage(mouseEvent) ;
+  var mouseyInPage = browser.findMouseYInPage(mouseEvent) ;
   
 	var clickObject = dndEvent.clickObject ;
 	var dragObject = dndEvent.dragObject ;
@@ -168,9 +169,10 @@ DragDrop.prototype.findDropableTarget = function(dndEvent, dropableTargets, mous
 } ;
   
 DragDrop.prototype.isIn = function(x, y, component) {
-  var componentLeft = eXo.core.Browser.findPosX(component);
+  var browser = eXo.core.Browser;
+  var componentLeft = browser.findPosX(component);
   var componentRight = componentLeft + component.offsetWidth ;
-  var componentTop = eXo.core.Browser.findPosY(component) ;
+  var componentTop = browser.findPosY(component) ;
   var componentBottom = componentTop + component.offsetHeight ;
   var isOver = false ;
 

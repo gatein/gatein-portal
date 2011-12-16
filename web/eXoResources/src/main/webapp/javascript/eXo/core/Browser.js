@@ -40,9 +40,9 @@ MouseObject.prototype.init = function(mouseEvent) {
 } ;
 
 MouseObject.prototype.update = function(mouseEvent) {
-  var Browser = eXo.core.Browser;
-  var  x = Browser.findMouseXInPage(mouseEvent) ;
-  var  y = Browser.findMouseYInPage(mouseEvent) ;
+  browser = eXo.core.Browser;
+  var  x = browser.findMouseXInPage(mouseEvent) ;
+  var  y = browser.findMouseYInPage(mouseEvent) ;
 
   this.lastMousexInPage =  this.mousexInPage != null ? this.mousexInPage : x ;
   this.lastMouseyInPage =  this.mouseyInPage != null ? this.mouseyInPage : y ;
@@ -50,8 +50,8 @@ MouseObject.prototype.update = function(mouseEvent) {
   this.mousexInPage = x ;
   this.mouseyInPage = y ;
 
-  x  =  Browser.findMouseXInClient(mouseEvent) ;
-  y  =  Browser.findMouseYInClient(mouseEvent) ;
+  x  =  browser.findMouseXInClient(mouseEvent) ;
+  y  =  browser.findMouseYInClient(mouseEvent) ;
 
   this.lastMousexInClient =  this.mousexInClient != null ? this.mousexInClient : x ;
   this.lastMouseyInClient =  this.mouseyInClient != null ? this.mouseyInClient : y ;
@@ -75,10 +75,9 @@ MouseObject.prototype.update = function(mouseEvent) {
 * calls
 */
 function Browser() {
-  var HashMap = eXo.core.HashMap;
-  this.onLoadCallback = new HashMap() ;
-  this.onResizeCallback = new HashMap() ;
-  this.onScrollCallback = new HashMap() ;
+  this.onLoadCallback = new eXo.core.HashMap() ;
+  this.onResizeCallback = new eXo.core.HashMap() ;
+  this.onScrollCallback = new eXo.core.HashMap() ;
   
   this.breakStream;
   window.onresize =  this.managerResize ;
@@ -235,12 +234,12 @@ Browser.prototype.detectBrowser = function() {
 }
 
 Browser.prototype.managerResize = function() {
-  var Browser = eXo.core.Browser;
-  if(Browser.currheight != document.documentElement.clientHeight) {
-    clearTimeout(Browser.breakStream) ;
-    Browser.breakStream = setTimeout(Browser.onResize, 100) ;
+  var browser = eXo.core.Browser;
+  if(browser.currheight != document.documentElement.clientHeight) {
+    clearTimeout(browser.breakStream) ;
+    browser.breakStream = setTimeout(browser.onResize, 100) ;
   }
-  Browser.currheight = document.documentElement.clientHeight;
+  browser.currheight = document.documentElement.clientHeight;
 }
 
 Browser.prototype.initCommon = function() {
@@ -418,9 +417,9 @@ Browser.prototype.findPosY = function(obj) {
  * Returns the horizontal position of an object relative to its container
  */
 Browser.prototype.findPosXInContainer = function(obj, container, isRTL) {
-  var Browser = eXo.core.Browser;
-  var objX = Browser.findPosX(obj, isRTL) ;
-  var containerX = Browser.findPosX(container, isRTL) ;
+  var browser = eXo.core.Browser;
+  var objX = browser.findPosX(obj, isRTL) ;
+  var containerX = browser.findPosX(container, isRTL) ;
   if(isRTL) return -(objX - containerX) ;
   return (objX - containerX) ;
 } ;
@@ -428,9 +427,9 @@ Browser.prototype.findPosXInContainer = function(obj, container, isRTL) {
  * Returns the vertical position of an object relative to its container
  */
 Browser.prototype.findPosYInContainer = function(obj, container) {
-  var Browser = eXo.core.Browser;
-  var objY = Browser.findPosY(obj) ;
-  var containerY = Browser.findPosY(container) ;
+  var browser = eXo.core.Browser;
+  var objY = browser.findPosY(obj) ;
+  var containerY = browser.findPosY(container) ;
   return (objY - containerY) ;
 } ;
 
@@ -469,8 +468,8 @@ Browser.prototype.findMouseYInPage = function(e) {
  * find the x position of the mouse relative to object
  */
 Browser.prototype.findMouseRelativeX = function(object, e, isRTL) {
-  var Browser = eXo.core.Browser;
-  var posXObject = eXo.core.Browser.findPosX(object,isRTL) ;
+  var browser = eXo.core.Browser;
+  var posXObject = browser.findPosX(object,isRTL) ;
   
   /*
    * posXObject is added more 3px on IE6
@@ -481,16 +480,16 @@ Browser.prototype.findMouseRelativeX = function(object, e, isRTL) {
 //  	posXObject = posXObject / 2 ;
 //  }
   
-  var mouseX = Browser.findMouseXInPage(e);  
+  var mouseX = browser.findMouseXInPage(e);  
   return mouseX == -1 ? -1 : mouseX - posXObject ;
 } ;
 /**
  * find the y position of the mouse relative to object
  */
 Browser.prototype.findMouseRelativeY = function(object, e) {
-  var Browser = eXo.core.Browser;
-  var posYObject = Browser.findPosY(object) ;
-  var mouseY = Browser.findMouseYInPage(e);  
+  var browser = eXo.core.Browser;
+  var posYObject = browser.findPosY(object) ;
+  var mouseY = browser.findMouseYInPage(e);  
   return  mouseY == -1 ? -1 : mouseY - posYObject ;
 } ;
 
@@ -501,9 +500,9 @@ Browser.prototype.setPositionInContainer = function(container, component, posX, 
 	var offsetX = component.offsetLeft ;
 	var offsetY = component.offsetTop ;
 
-	var Browser = eXo.core.Browser;
-	var posXInContainer = Browser.findPosXInContainer(component, container) ;
-	var posYInContainer = Browser.findPosYInContainer(component, container) ;
+	var browser = eXo.core.Browser;
+	var posXInContainer = browser.findPosXInContainer(component, container) ;
+	var posYInContainer = browser.findPosYInContainer(component, container) ;
 
 	var deltaX = posX - (posXInContainer - offsetX) ;
 	var deltaY = posY - (posYInContainer - offsetY) ;

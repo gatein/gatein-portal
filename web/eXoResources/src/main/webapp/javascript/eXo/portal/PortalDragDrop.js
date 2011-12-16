@@ -40,7 +40,7 @@ PortalDragDrop.prototype.init = function(e) {
 	if(((e.which) && (e.which == 2 || e.which == 3)) || ((e.button) && (e.button == 2)))	return;
 	
 	var DOMUtil = eXo.core.DOMUtil ;
-	var Browser = eXo.core.Browser ;
+	var browser = eXo.core.Browser ;
   var DragDrop = eXo.core.DragDrop ;
   var Mouse = eXo.core.Mouse;
   
@@ -62,10 +62,10 @@ PortalDragDrop.prototype.init = function(e) {
 		PortalDragDrop.positionRootObj = !isAddingNewly ? uiWorkingWS : 
 					DOMUtil.findFirstDescendantByClass(uiWorkingWS, "div", "UIPortalComposer");
 		
-		var originalDragObjectTop = Browser.findPosYInContainer(dragObject, PortalDragDrop.positionRootObj);
-		var originalDragObjectLeft = Browser.findPosXInContainer(dragObject, PortalDragDrop.positionRootObj);
-		PortalDragDrop.deltaYDragObjectAndMouse = Browser.findMouseRelativeY(dragObject, e);
-		PortalDragDrop.deltaXDragObjectAndMouse = Browser.findMouseRelativeX(dragObject, e);
+		var originalDragObjectTop = browser.findPosYInContainer(dragObject, PortalDragDrop.positionRootObj);
+		var originalDragObjectLeft = browser.findPosXInContainer(dragObject, PortalDragDrop.positionRootObj);
+		PortalDragDrop.deltaYDragObjectAndMouse = browser.findMouseRelativeY(dragObject, e);
+		PortalDragDrop.deltaXDragObjectAndMouse = browser.findMouseRelativeX(dragObject, e);
     if(isAddingNewly) {
       var contentContainer = DOMUtil.findAncestorByClass(dragObject, "PopupContent");
       originalDragObjectTop -= contentContainer.scrollTop;
@@ -414,11 +414,11 @@ PortalDragDrop.prototype.scrollOnDrag = function(dndEvent) {
  * @param layout {string} the layout type which is "row" or "column"
  */
 PortalDragDrop.prototype.findInsertPosition = function(components, layout, mouseEvent) {
-	   var Browser = eXo.core.Browser;
+	   var browser = eXo.core.Browser;
 	   if (layout == "row") {
 	      for (var i = 0; i < components.length; i++) {
-	         var componentTop = Browser.findPosY(components[i]);
-	         var mouseYInPage = Browser.findMouseYInPage(mouseEvent);
+	         var componentTop = browser.findPosY(components[i]);
+	         var mouseYInPage = browser.findMouseYInPage(mouseEvent);
 	         var componentMIddle = componentTop + Math.round(components[i].offsetHeight / 2);
 	         if (mouseYInPage > componentMIddle) continue;
 	         else return i;
@@ -427,8 +427,8 @@ PortalDragDrop.prototype.findInsertPosition = function(components, layout, mouse
 	      return -1;
 	   } else {
 	      for (var i = 0; i < components.length; i++) {
-	         var mouseXInPage = Browser.findMouseXInPage(mouseEvent);
-	         var componentX = Browser.findPosX(components[i], eXo.core.I18n.isRT());
+	         var mouseXInPage = browser.findMouseXInPage(mouseEvent);
+	         var componentX = browser.findPosX(components[i], eXo.core.I18n.isRT());
 	         if (eXo.core.I18n.isRT()) {
 	        	 if (mouseXInPage < componentX) continue;        	 
 	         } else if (mouseXInPage > componentX ) continue;

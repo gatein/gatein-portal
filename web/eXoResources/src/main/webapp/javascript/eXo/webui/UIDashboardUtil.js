@@ -20,14 +20,14 @@
 function UIDashboardUtil() {
 
 	UIDashboardUtil.prototype.findPosX = function(obj) {
-	  var curleft = 0;
+	  var curleft = 0, browser = eXo.core.Browser;
 	  var uiWorkspaceContainer = document.getElementById("UIWorkspaceContainer");
-	  var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
+	  var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");	  
 	  while (obj) {
 	  	if(uiWorkspaceContainer!=null && uiWorkspaceContainer.style.display!="none"
-	  					 && eXo.core.Browser.getBrowserType()=="ie"){
+	  					 && browser.getBrowserType()=="ie"){
 	  		var uiPageDesktop = document.getElementById("UIPageDesktop");
-	  		if( (uiPageDesktop!=null && eXo.core.DOMUtil.hasClass(obj,"UIPageDesktop") && eXo.core.Browser.isIE7()) 
+	  		if( (uiPageDesktop!=null && eXo.core.DOMUtil.hasClass(obj,"UIPageDesktop") && browser.isIE7()) 
 	  					|| (uiPageDesktop==null && eXo.core.DOMUtil.hasClass(obj,"PORTLET-FRAGMENT")) ){
 	  			curleft += (obj.offsetLeft - uiWorkingWorkspace.offsetLeft);
 	  			obj = obj.offsetParent ;

@@ -44,9 +44,9 @@ function Cometd() {
 	this.exoId = null;
 	this.exoToken = null;
 
-  var Browser = eXo.core.Browser;
+  var browser = eXo.core.Browser;
 
-  this.clientId = Browser.getCookie('cometdClientID') || false;
+  this.clientId = browser.getCookie('cometdClientID') || false;
 	this.messageId = 0;
 	this.batch=0;
 
