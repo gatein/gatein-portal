@@ -17,51 +17,56 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-function I18n() {
-  this.init();
-}
-/**
- * initialize some information as language, orientation, etc of I18n object
- */
-I18n.prototype.init = function() {
-  var html = document.getElementsByTagName('html')[0];
-  var lang = html.getAttribute('xml:lang') || html.getAttribute('lang') || "en";
-  var dir = html.getAttribute('dir') || "lt";
-  this.lang = lang;
-  this.dir = dir;
-  this.orientation = "rtl" == dir ? "rt" : "lt";
-  this.lt = this.orientation == "lt";
-}
-/**
- * return language
- */
-I18n.prototype.getLanguage = function() {
-  return this.lang;
-}
-/**
- * return orientation (right to left, left to right), 
- * some languages (such as Arabic) used "right to left" view
- */
-I18n.prototype.getOrientation = function() {
-  return this.orientation;
-}
-/**
- * return directory
- */
-I18n.prototype.getDir = function() {
-  return !this.lt;
-}
-/**
- * return "left to"(lt) state
- */
-I18n.prototype.isLT = function() {
-  return this.lt;
-}
-/**
- * return "right to" state
- */
-I18n.prototype.isRT = function() {
-  return !this.lt;
-}
+eXo.core.I18n = {
+  
+  /**
+   * initialize some information as language, orientation, etc of I18n object
+   */
+  init : function() {
+    var html = document.getElementsByTagName('html')[0];
+    var lang = html.getAttribute('xml:lang') || html.getAttribute('lang') || "en";
+    var dir = html.getAttribute('dir') || "lt";
+    this.lang = lang;
+    this.dir = dir;
+    this.orientation = "rtl" == dir ? "rt" : "lt";
+    this.lt = this.orientation == "lt";
+  },
+  
+  /**
+   * return language
+   */
+  getLanguage : function() {
+    return this.lang;
+  },
+  
+  /**
+   * return orientation (right to left, left to right), 
+   * some languages (such as Arabic) used "right to left" view
+   */
+  getOrientation : function() {
+    return this.orientation;
+  },
+  
+  /**
+   * return directory
+   */
+  getDir : function() {
+    return !this.lt;
+  },
+  
+  /**
+   * return "left to"(lt) state
+   */
+  isLT : function() {
+    return this.lt;
+  },
+  
+  /**
+   * return "right to" state
+   */
+  isRT : function() {
+    return !this.lt;
+  }
+};
 
-eXo.core.I18n = new I18n();
+eXo.core.I18n.init();
