@@ -17,11 +17,10 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-function UIAdminToolbar() {} ;
-UIAdminToolbar.prototype.onLoad = function(baseId) {
-  var uiNavPortlet = document.getElementById(baseId).parentNode ;
-  var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiNavPortlet, "ul", "UIHorizontalTabs");
-  if(mainContainer) eXo.portal.UIPortalNavigation.init(uiNavPortlet, mainContainer, 0, 0);
+eXo.portal.UIAdminToolbar = {
+	onLoad : function(baseId) {
+	  var uiNavPortlet = document.getElementById(baseId).parentNode ;
+	  var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiNavPortlet, "ul", "UIHorizontalTabs");
+	  if(mainContainer) eXo.portal.UIPortalNavigation.init(uiNavPortlet, mainContainer, 0, 0);
+	}
 } ;
-
-eXo.portal.UIAdminToolbar = new UIAdminToolbar() ;
