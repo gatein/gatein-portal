@@ -5,6 +5,7 @@
 ]>
 <chapter id="chap-Reference_Guide-Authentication_And_Identity">
    <title>Authentication and Identity</title>
+   <xi:include href="AuthenticationAndIdentity/PasswordEncryption.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="AuthenticationAndIdentity/PredefinedUserConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="AuthenticationAndIdentity/AuthenticationTokenConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="AuthenticationAndIdentity/BackendConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
