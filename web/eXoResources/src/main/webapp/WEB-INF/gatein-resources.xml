@@ -345,7 +345,7 @@
          <js-priority>4</js-priority>
       </param>
       <param>
-         <js-module>eXo.webui.UICombobox</js-module>
+         <js-module>eXo.webui.UIVirtualList</js-module>
          <js-path>/javascript/eXo/webui/UIVirtualList.js</js-path>
          <js-priority>4</js-priority>
       </param>
