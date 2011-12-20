@@ -8,7 +8,7 @@
    <parent>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.packaging.jboss7</artifactId>
-      <version>3.2.0-M02-SNAPSHOT</version>
+      <version>3.2.0-CR01-SNAPSHOT</version>
    </parent>
 
    <artifactId>exo.portal.packaging.jboss7.pkg</artifactId>
@@ -17,7 +17,6 @@
    <name>GateIn for JBoss AS 7.x.x packaging</name>
 
    <properties>
-      <version.jboss.as>7.0.2.Final</version.jboss.as>
       <jbossas.dist.version>${version.jboss.as}</jbossas.dist.version>
       <servers.dir>${project.basedir}/servers</servers.dir>
       <jbossas.path>${servers.dir}</jbossas.path>
@@ -249,6 +248,7 @@ You can also use -Pdownload to automatically provide JBoss AS instance.
          </activation>
 
          <properties>
+            <exo.projects.app.jboss7.version>jboss-as-${jbossas.dist.version}</exo.projects.app.jboss7.version>
             <servers.dir>${exo.projects.directory.dependencies}</servers.dir>
             <jbossas.name>${exo.projects.app.jboss7.version}</jbossas.name>
          </properties>
@@ -390,7 +390,7 @@ Either rename it, delete it, or deactivate -Pdownload profile.
                               <ant antfile="${project.basedir}/download-jboss.xml">
                                  <target name="download-jboss"/>
                                  <property name="url"
-                                           value="http://download.jboss.org/jbossas/7.0/jboss-as-${jbossas.dist.version}/jboss-as-${jbossas.dist.version}.zip"/>
+                                           value="http://download.jboss.org/jbossas/7.1/jboss-as-${jbossas.dist.version}/jboss-as-${jbossas.dist.version}.zip"/>
                                  <property name="dest" value="${jbossas.zip}"/>
                               </ant>
 

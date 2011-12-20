@@ -63,10 +63,10 @@
       <copy todir="${jbossas.target.dir}/standalone/deployments/gatein-sample-portal.ear/lib" >
          <fileset refid="org.exoplatform.portal:exo.portal.sample.portal.jar:jar"/>
       </copy>
-      <copy todir="${jbossas.target.dir}/standalone/deployments/gatein-sample-portal.ear" >
+      <copy tofile="${jbossas.target.dir}/standalone/deployments/gatein-sample-portal.ear/sample-portal.war" >
          <fileset refid="org.exoplatform.portal:exo.portal.sample.portal.war:war"/>
       </copy>
-      <copy todir="${jbossas.target.dir}/standalone/deployments/gatein-sample-portal.ear" >
+      <copy tofile="${jbossas.target.dir}/standalone/deployments/gatein-sample-portal.ear/rest-sample-portal.war" >
          <fileset refid="org.exoplatform.portal:exo.portal.sample.portal.rest-war:war"/>
       </copy>
 
@@ -80,7 +80,7 @@
       <copy todir="${jbossas.target.dir}/standalone/deployments/gatein-sample-extension.ear/lib" >
          <fileset refid="org.exoplatform.portal:exo.portal.sample.extension.jar:jar"/>
       </copy>
-      <copy todir="${jbossas.target.dir}/standalone/deployments/gatein-sample-extension.ear" >
+      <copy tofile="${jbossas.target.dir}/standalone/deployments/gatein-sample-extension.ear/sample-ext.war" >
          <fileset refid="org.exoplatform.portal:exo.portal.sample.extension.war:war"/>
       </copy>
 

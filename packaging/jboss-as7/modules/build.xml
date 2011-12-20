@@ -267,9 +267,6 @@
            <maven-resource group="org.jboss.slf4j" artifact="slf4j-jboss-logmanager" />
        </module-def>
 
-       <module-def name="sun.jdk.xml">
-       </module-def>
-
        <module-def name="org.hsqldb">
            <maven-resource group="hsqldb" artifact="hsqldb" />
        </module-def>

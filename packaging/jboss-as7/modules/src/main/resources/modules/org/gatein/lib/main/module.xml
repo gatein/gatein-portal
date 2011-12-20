@@ -22,65 +22,55 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<module xmlns="urn:jboss:module:1.0" name="org.gatein.lib">
+<module xmlns="urn:jboss:module:1.1" name="org.gatein.lib">
     <resources>
         <!-- Insert resources here -->
     </resources>
     <dependencies>
 
-        <module name="system" export="true">
-          <imports>
-              <exclude-set>
-                  <path name="javax/xml/bind"/>
-                  <path name="javax/xml/bind/annotation"/>
-              </exclude-set>
-          </imports>
-        </module>
+        <module name="javax.api"/>
 
-       <!-- picketlink idm dependencies -->
-       <module name="com.sun.xml.bind" services="export" export="true" />
-       <module name="javax.xml.bind.api" />
-       <module name="org.dom4j" />
+        <system export="true">
+            <paths>
+                <path name="sun/misc"/>
+            </paths>
+        </system>
 
-       <!--module name="sun.jdk" /-->
-       <!-- TODO try maybe: module name="javax.xml.jaxp-provider" /-->
-       <module name="sun.jdk.xml" />
-       <module name="javax.api"/>
-       <module name="javax.jcr.api" />
-       <module name="javax.portlet.api" export="true"/>
-       <module name="javax.servlet.api" />
-       <module name="javax.servlet.jsp.api" />
-       <module name="javax.ws.rs.api" />
-       <module name="org.gatein.common" />
-       <module name="org.apache.commons.logging" />
-       <module name="org.apache.commons.collections" />
-       <module name="org.apache.httpcomponents" />
-       <module name="org.apache.xerces" />
-       <module name="org.gatein.naming" export="true"/>
-       <module name="org.gatein.pc" />
-       <module name="org.gatein.wci" export="true"/>
-       <module name="org.hibernate" slot="gatein" />
-       <module name="org.javassist"/>
-       <module name="org.slf4j" slot="gatein" />
-       <module name="org.staxnav" />
+        <module name="org.apache.xerces" services="export" export="true"/>
+        <module name="com.sun.xml.bind" services="export" export="true" />
+        <module name="javax.xml.bind.api" />
+        <module name="org.dom4j" />
 
-       <!-- gatein-naming.jar dependencies -->
-       <module name="org.jboss.threads"/>
-       <module name="org.jboss.logging"/>
+        <module name="javax.jcr.api" />
+        <module name="javax.portlet.api" export="true"/>
+        <module name="javax.servlet.api" />
+        <module name="javax.servlet.jsp.api" />
+        <module name="javax.ws.rs.api" />
+        <module name="org.gatein.common" />
+        <module name="org.apache.commons.logging" />
+        <module name="org.apache.commons.collections" />
+        <module name="org.apache.httpcomponents" />
+        <module name="org.gatein.naming" export="true"/>
+        <module name="org.gatein.pc" />
+        <module name="org.gatein.wci" export="true"/>
+        <module name="org.hibernate" slot="gatein" />
+        <module name="org.javassist"/>
+        <module name="org.slf4j" slot="gatein" />
+        <module name="org.staxnav" />
 
-       <!-- oeg.exoplatform.services dependencies -->
-       <module name="org.hsqldb" />
-       <module name="org.jboss.common-core" />
+        <module name="org.jboss.threads"/>
+        <module name="org.jboss.logging"/>
 
-       <!-- oeg.exoplatform.services.rest dependencies -->
-       <module name="javax.inject.api" />
+        <module name="org.hsqldb" />
+        <module name="org.jboss.common-core" />
 
-       <!-- jbosscache dependencies -->
-       <module name="javax.resource.api" />
-       <module name="javax.transaction.api" />
-       <module name="org.jboss.jts" />
+        <module name="javax.inject.api" />
 
-       <module name="javax.annotation.api" />
+        <module name="javax.resource.api" />
+        <module name="javax.transaction.api" />
+        <module name="org.jboss.jts" />
 
+        <module name="javax.annotation.api"/>
+        <module name="org.jboss.msc"/>
     </dependencies>
 </module>

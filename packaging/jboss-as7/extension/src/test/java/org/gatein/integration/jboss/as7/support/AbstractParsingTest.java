@@ -139,7 +139,7 @@ public class AbstractParsingTest
    /**
     * Parse the subsystem xml and create the operations that will be passed into the controller
     *
-    * @param allows       Additional steps that should be done to the controller before initializing our extension
+    * @param additionalParsers Additional steps that should be done to the controller before initializing our extension
     * @param subsystemXml the subsystem xml to be parsed
     * @return the created operations
     */
@@ -395,7 +395,7 @@ public class AbstractParsingTest
 
       ModelControllerService(final AdditionalInitialization additionalPreStep, final ControlledProcessState processState, final StringConfigurationPersister persister)
       {
-         super(OperationContext.Type.SERVER, persister, processState, DESC_PROVIDER, null);
+         super(OperationContext.Type.SERVER, persister, processState, DESC_PROVIDER, null, null);
          this.persister = persister;
          this.additionalInit = additionalPreStep;
       }
@@ -414,7 +414,7 @@ public class AbstractParsingTest
          rootRegistration.registerOperationHandler(READ_OPERATION_DESCRIPTION_OPERATION, GlobalOperationHandlers.READ_OPERATION_DESCRIPTION, CommonProviders.READ_OPERATION_PROVIDER, true);
          rootRegistration.registerOperationHandler(WRITE_ATTRIBUTE_OPERATION, GlobalOperationHandlers.WRITE_ATTRIBUTE, CommonProviders.WRITE_ATTRIBUTE_PROVIDER, true);
 
-         ExtensionContext context = new ExtensionContextImpl(rootRegistration, null, persister);
+         ExtensionContext context = new ExtensionContextImpl(rootRegistration, null, persister, ExtensionContext.ProcessType.STANDALONE_SERVER);
          if (additionalInit != null)
          {
             additionalInit.initializeExtraSubystemsAndModel(context, rootResource, rootRegistration);

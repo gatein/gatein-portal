@@ -7,7 +7,7 @@
   <description>GateIn Sample Extension Ear</description>
   <module>
     <web>
-      <web-uri>exo.portal.sample.extension.war-3.2.0-M02-SNAPSHOT.war</web-uri>
+      <web-uri>sample-ext.war</web-uri>
       <context-root>sample-ext</context-root>
     </web>
   </module>
