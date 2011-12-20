@@ -19,61 +19,66 @@
 
 package org.exoplatform.web.application.javascript;
 
-import org.exoplatform.commons.utils.Safe;
-import org.exoplatform.portal.controller.resource.Resource;
-import org.gatein.common.io.IOTools;
-
-import javax.servlet.ServletContext;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
+import org.exoplatform.portal.controller.resource.ResourceId;
+import org.exoplatform.portal.controller.resource.script.Module;
+import org.exoplatform.portal.controller.resource.script.ScriptResource;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class Javascript
+public class Javascript
 {
 
-   public static Javascript create(Resource scope, String module, String path, String contextPath, int priority)
+   public static Javascript create(ResourceId resource, String module, String path, String contextPath, int priority)
    {
-      if (path.startsWith("http://") || path.startsWith("https://"))
+      return new Javascript(resource, module, contextPath, path, priority);
+   }
+
+   public static Javascript create(Module module)
+   {
+      if (module instanceof Module.Remote)
       {
-         return new External(scope, module, contextPath, path, priority);
+         Module.Remote remote = (Module.Remote)module;
+         return new Javascript(module.getResource().getId(), remote.getName(), remote.getContextPath(), remote.getURI(), remote.getPriority());
       }
       else
       {
-         return new Simple(scope, module, contextPath, path, priority);
+         Module.Local local = (Module.Local)module;
+         return new Javascript(local.getResource().getId(), local.getName(), local.getContextPath(), local.getPath(), local.getPriority());
       }
    }
 
    /** . */
-   protected final Resource resource;
-   
+   protected final ResourceId resource;
+
    /** . */
    protected final String contextPath;
+
+   /** . */
+   protected final String path;
 
    /** . */
    protected final String module;
 
    /** . */
-   private final int priority;
+   protected final int priority;
    
-   private Javascript(Resource resource, String module, String contextPath, int priority)
+   private Javascript(ResourceId resource, String module, String contextPath, String path, int priority)
    {
       this.resource = resource;
       this.contextPath = contextPath;
+      this.path = path;
       this.module = module;
       this.priority = priority < 0 ? Integer.MAX_VALUE : priority;
    }
 
-   public abstract String getPath();
+   public String getPath()
+   {
+      return isExternalScript() ? path : contextPath + path;
+   }
 
-   public Resource getResource()
+   public ResourceId getResource()
    {
       return resource;
    }
@@ -93,148 +98,26 @@ public abstract class Javascript
       return priority;
    }
    
-   public abstract boolean isExternalScript();
+   Module addModuleTo(ScriptResource resource)
+   {
+      if (isExternalScript())
+      {
+         return resource.addRemoteModule(contextPath, module, path, priority);
+      }
+      else
+      {
+         return resource.addLocalModule(contextPath, module, path, priority);
+      }
+   }
+   
+   public boolean isExternalScript()
+   {
+      return path.startsWith("http://") || path.startsWith("https://");
+   }
    
    @Override
    public String toString()
    {
       return "Javascript[scope=" + resource + ", path=" + getPath() +"]";
-   }
-
-   public static class External extends Javascript
-   {
-
-      /** . */
-      private final String uri;
-
-      public External(Resource scope, String module, String contextPath, String uri, int priority)
-      {
-         super(scope, module, contextPath, priority);
-
-         //
-         this.uri = uri;
-      }
-
-      @Override
-      public String getPath()
-      {
-         return uri;
-      }
-
-      @Override
-      public boolean isExternalScript()
-      {
-         return true;
-      }
-   }
-
-   public abstract static class Internal extends Javascript
-   {
-
-      protected Internal(Resource scope, String module, String contextPath, int priority)
-      {
-         super(scope, module, contextPath, priority);
-      }
-      
-      protected abstract InputStream open(JavascriptConfigService context) throws IOException;
-   }
-
-   public static class Simple extends Internal
-   {
-
-      /** . */
-      private final String path;
-
-      /** . */
-      private final String uri;
-
-      public Simple(Resource scope, String module, String contextPath, String path, int priority)
-      {
-         super(scope, module, contextPath, priority);
-
-         //
-         this.path = path;
-         this.uri = contextPath + path;
-      }
-
-      @Override
-      public String getPath()
-      {
-         return uri;
-      }
-
-      @Override
-      public boolean isExternalScript()
-      {
-         return false;
-      }
-
-      @Override
-      protected InputStream open(JavascriptConfigService context) throws IOException
-      {
-         ServletContext servletContext = context.getContext(contextPath);
-         return servletContext != null ? servletContext.getResourceAsStream(path) : null;
-      }
-   }
-
-   public static class Composite extends Internal
-   {
-
-      final ArrayList<Javascript> compounds;
-
-      public Composite(Resource scope, String contextPath, int priority)
-      {
-         super(scope, null, contextPath, priority);
-         
-         //
-         this.compounds = new ArrayList<Javascript>();
-      }
-
-      @Override
-      public String getPath()
-      {
-         return resource.getScope().name() + "/" + resource.getId() + "/merged.js";
-      }
-
-      @Override
-      public boolean isExternalScript()
-      {
-         return false;
-      }
-      
-      public Javascript getCompound(String module)
-      {
-         for (Javascript compound : compounds)
-         {
-            if (compound.getModule().equals(module))
-            {
-               return compound;
-            }
-         }
-         return null;
-      }
-
-      @Override
-      protected InputStream open(JavascriptConfigService context) throws IOException
-      {
-         ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-         for (Javascript compound : compounds)
-         {
-            if (compound instanceof Internal)
-            {
-               InputStream in = ((Internal)compound).open(context);
-               if (in != null)
-               {
-                  IOTools.copy(in, buffer);
-                  buffer.write('\n');
-               }
-            }
-            else
-            {
-               // We skip it for now
-            }
-         }
-         return new ByteArrayInputStream(buffer.toByteArray());
-      }
    }
 }

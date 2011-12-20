@@ -22,7 +22,6 @@ package org.exoplatform.portal.controller.resource;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebRequestHandler;
-import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.web.controller.QualifiedName;
 import org.gatein.common.io.IOTools;
@@ -68,10 +67,10 @@ public class ResourceRequestHandler extends WebRequestHandler
          try
          {
             ResourceScope scope = ResourceScope.valueOf(ResourceScope.class, scopeParam);
-            Resource resource = new Resource(scope, resourceParam);
+            ResourceId resource = new ResourceId(scope, resourceParam);
             
             //
-            Javascript script;
+            InputStream script;
             if (moduleParam != null)
             {
                script = service.getScript(resource, moduleParam);
@@ -82,14 +81,12 @@ public class ResourceRequestHandler extends WebRequestHandler
             }
 
             //
-            if (script != null && script instanceof Javascript.Internal)
+            if (script != null)
             {
-               Javascript.Internal internal = (Javascript.Internal)script;
                HttpServletResponse response = context.getResponse();
                response.setContentType("application/x-javascript");
                OutputStream out = response.getOutputStream();
-               InputStream in = service.open(internal);
-               IOTools.copy(in, out);
+               IOTools.copy(script, out);
                return true;
             }
             else

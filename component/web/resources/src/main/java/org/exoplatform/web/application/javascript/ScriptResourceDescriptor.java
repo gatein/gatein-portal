@@ -17,23 +17,33 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.controller.resource;
+package org.exoplatform.web.application.javascript;
 
-import java.util.Collections;
-import java.util.Set;
+import org.exoplatform.portal.controller.resource.ResourceId;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class Resource<R extends Resource<R>>
+public class ScriptResourceDescriptor
 {
 
    /** . */
-   protected final ResourceId id;
+   final ResourceId id;
+   
+   /** . */
+   final List<Javascript> modules;
 
-   public Resource(ResourceId id)
+   /** . */
+   final List<ResourceId> dependencies;
+
+   public ScriptResourceDescriptor(ResourceId id)
    {
       this.id = id;
+      this.modules = new ArrayList<Javascript>();
+      this.dependencies = new ArrayList<ResourceId>();
    }
 
    public ResourceId getId()
@@ -41,8 +51,13 @@ public class Resource<R extends Resource<R>>
       return id;
    }
 
-   public Set<ResourceId> getDependencies()
+   public List<Javascript> getModules()
    {
-      return Collections.emptySet();
+      return modules;
+   }
+
+   public List<ResourceId> getDependencies()
+   {
+      return dependencies;
    }
 }

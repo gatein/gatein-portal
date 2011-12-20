@@ -27,15 +27,15 @@ import org.exoplatform.portal.application.RequestNavigationData;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.controller.resource.ResourceRequestHandler;
+import org.exoplatform.portal.config.model.PortalProperties;
+import org.exoplatform.portal.controller.resource.ResourceId;
+import org.exoplatform.portal.controller.resource.ResourceScope;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
-import org.exoplatform.web.WebAppController;
-import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.router.URIWriter;
+import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.web.url.MimeType;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -52,7 +52,6 @@ import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -63,6 +62,7 @@ import org.exoplatform.webui.core.UIComponentDecorator;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.url.ComponentURL;
+import org.gatein.pc.api.info.PortletInfo;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -74,6 +74,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -324,48 +325,53 @@ public class UIPortalApplication extends UIApplication
 
    public Collection<String> getScriptsURLs()
    {
-      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
+      PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
+      
+      // Determine the resource ids involved
+      LinkedHashSet<ResourceId> resourceIds = new LinkedHashSet<ResourceId>();
+      
+      // Add current portal
       String portalOwner = Util.getPortalRequestContext().getPortalOwner();
-      ArrayList<String> locations = new ArrayList<String>();
-
-      //
-      for (Javascript script : service.getScripts(portalOwner, !PropertyManager.isDevelopping()))
+      resourceIds.add(new ResourceId(ResourceScope.PORTAL, portalOwner));
+      
+      // If we are logged in we hardcode dependency onto common js for now
+      // as it is required for some stuff
+      // we'll figure out maybe something later
+      // specially with the split into the three shared js
+      if (prc.getRemoteUser() != null)
       {
-         if (script.isExternalScript())
-         {
-            locations.add(script.getPath());
-         }
-         else
-         {
-            try
-            {
-               Map<QualifiedName, String> params = new HashMap<QualifiedName, String>();
-               params.put(WebAppController.HANDLER_PARAM, "script");
-               params.put(ResourceRequestHandler.RESOURCE, script.getResource().getId());
-               params.put(ResourceRequestHandler.SCOPE, script.getResource().getScope().name());
-
-               // Do something better than that
-               String module = script.getModule();
-               if (module != null)
-               {
-                  params.put(ResourceRequestHandler.MODULE, module);
-               }
-
-               //
-               StringBuilder sb = new StringBuilder();
-               URIWriter writer = new URIWriter(sb);
-               PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
-               prc.getControllerContext().renderURL(params, writer);
-               locations.add(sb.toString());
-            } catch (IOException e)
-            {
-               e.printStackTrace();
-            }
-         }
+         resourceIds.add(new ResourceId(ResourceScope.SHARED, "common"));
       }
 
       //
-      return locations;
+      UIPortal site = getCurrentSite();
+      ArrayList<UIPortlet> windows = new ArrayList<UIPortlet>();
+      site.findComponentOfType(windows, UIPortlet.class);
+      for (UIPortlet<?, ?> window : windows)
+      {
+         PortletInfo info = window.getProducedOfferedPortlet().getInfo();
+         String name = info.getApplicationName() + "/" + info.getName();
+         resourceIds.add(new ResourceId(ResourceScope.PORTLET, name));
+      }
+
+      // todo : switch to debug later
+      log.info("Resource ids to resolve: " + resourceIds);
+
+      //
+      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
+
+      try
+      {
+         Collection<String> urls = service.resolveURLs(prc.getControllerContext(), resourceIds, !PropertyManager.isDevelopping());
+         // todo : switch to debug later
+         log.info("Resolved URLS for page: " + urls);
+         return urls;
+      }
+      catch (IOException e)
+      {
+         log.error("Could not resolve URLs", e);
+         return Collections.emptyList();
+      }
    }
 
    public Collection<Skin> getPortalSkins()

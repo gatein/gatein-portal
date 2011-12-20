@@ -18,7 +18,9 @@
  */
 package org.exoplatform.web.application.javascript;
 
+import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.ScriptResource;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,30 +35,31 @@ import javax.servlet.ServletContext;
 public class JavascriptTask
 {
 
-   private List<Javascript> scripts;
+   private List<ScriptResourceDescriptor> descriptors;
 
    public JavascriptTask()
    {
-      scripts = new ArrayList<Javascript>();
+      descriptors = new ArrayList<ScriptResourceDescriptor>();
    }
 
    public void execute(JavascriptConfigService service, ServletContext scontext)
    {
-      for (Javascript js : scripts)
+      for (ScriptResourceDescriptor desc : descriptors)
       {
-         if (js.getResource().getScope() == ResourceScope.PORTAL)
+         ScriptResource resource = service.scripts.addResource(desc.id);
+         for (Javascript module : desc.modules)
          {
-            service.addPortalJScript(js);
+            module.addModuleTo(resource);
          }
-         else
+         for (ResourceId dependency : desc.dependencies)
          {
-            service.addCommonJScript(js);
+            resource.addDependency(dependency);
          }
       }
    }
 
-   public void addScript(Javascript script)
+   public void addDescriptor(ScriptResourceDescriptor desc)
    {
-      scripts.add(script);
+      descriptors.add(desc);
    }
 }

@@ -23,14 +23,19 @@ import org.exoplatform.commons.cache.future.FutureMap;
 import org.exoplatform.commons.cache.future.Loader;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.controller.resource.Resource;
+import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.Module;
+import org.exoplatform.portal.controller.resource.script.ScriptGraph;
+import org.exoplatform.portal.controller.resource.script.ScriptResource;
 import org.exoplatform.portal.resource.AbstractResourceService;
 import org.exoplatform.portal.resource.MainResourceResolver;
 import org.exoplatform.portal.resource.ResourceResolver;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.portal.resource.compressor.ResourceType;
+import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.controller.router.URIWriter;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.WebAppListener;
@@ -38,6 +43,7 @@ import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.picocontainer.Startable;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -45,21 +51,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 
 public class JavascriptConfigService extends AbstractResourceService implements Startable
 {
+
+   /** . */
+   public static final ResourceId COMMON_SHARED_RESOURCE = new ResourceId(ResourceScope.SHARED, "common");
+
    /** Our logger. */
    private final Logger log = LoggerFactory.getLogger(JavascriptConfigService.class);
 
-   /** The shared scripts. */
-   private HashMap<String, Javascript.Composite> sharedJScripts;
-
-   /** The portal scripts. */
-   private HashMap<String, Javascript.Composite> portalJScripts;
+   /** The scripts. */
+   ScriptGraph scripts;
 
    /** . */
    private long lastModified = Long.MAX_VALUE;
@@ -72,6 +78,15 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
    /** . */
    private final FutureMap<String, CachedJavascript, ResourceResolver> cache;
+
+   /** . */
+   public static final Comparator<Module> MODULE_COMPARATOR = new Comparator<Module>()
+   {
+      public int compare(Module o1, Module o2)
+      {
+         return o1.getPriority() - o2.getPriority();
+      }
+   };
 
    public JavascriptConfigService(ExoContainerContext context, ResourceCompressor compressor)
    {
@@ -123,13 +138,12 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       cache = new FutureMap<String, CachedJavascript, ResourceResolver>(loader);
 
       // todo : remove /portal ???
-      HashMap<String, Javascript.Composite> tmp = new HashMap<String, Javascript.Composite>();
-      tmp.put("common", new Javascript.Composite(new Resource(ResourceScope.SHARED, "common"), "/portal", 0));
+      ScriptGraph scripts = new ScriptGraph();
+      scripts.addResource(COMMON_SHARED_RESOURCE);
 
       //
-      sharedJScripts = tmp;
-      deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
-      portalJScripts = new HashMap<String, Javascript.Composite>();
+      this.scripts = scripts;
+      this.deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
    }
 
    /**
@@ -142,12 +156,9 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    public Collection<String> getAvailableScripts()
    {
       ArrayList<String> list = new ArrayList<String>();
-      for (Javascript.Composite shared : sharedJScripts.values())
+      for (ScriptResource shared : scripts.getResources(ResourceScope.SHARED))
       {
-         for (Javascript js : shared.compounds)
-         {
-            list.add(js.getModule());
-         }
+         list.addAll(shared.getModulesNames());
       }
       return list;
    }
@@ -160,9 +171,9 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    public Collection<Javascript> getCommonJScripts()
    {
       ArrayList<Javascript> list = new ArrayList<Javascript>();
-      for (Javascript.Composite shared : sharedJScripts.values())
+      for (ScriptResource shared : scripts.getResources(ResourceScope.SHARED))
       {
-         list.addAll(shared.compounds);
+         list.addAll(getJavascripts(shared));
       }
       return list;
    }
@@ -177,19 +188,22 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    @Deprecated
    public Collection<String> getAvailableScriptsPaths()
    {
-      ArrayList<String> list = new ArrayList<String>();
-      for (Javascript.Composite shared : sharedJScripts.values())
+      ArrayList<Module> sharedModules = new ArrayList<Module>();
+      for (ScriptResource shared : scripts.getResources(ResourceScope.SHARED))
       {
-         for (Javascript js : shared.compounds)
-         {
-            list.add(js.getPath());
-         }
+         sharedModules.addAll(shared.getModules());
       }
-      return list;
+      Collections.sort(sharedModules, MODULE_COMPARATOR);
+      List<String> paths = new ArrayList<String>();
+      for (Module module : sharedModules)
+      {
+         paths.add(module.getURI());
+      }
+      return paths;
    }
 
    /**
-    * Add a JScript to {@link #commonJScripts} list and re-sort the list.
+    * Add a JScript to common javascript list and re-sort the list.
     * Then invalidate cache of all merged common JScripts to
     * ensure they will be newly merged next time.
     *
@@ -197,35 +211,26 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public void addCommonJScript(Javascript js)
    {
-      Javascript.Composite common = sharedJScripts.get("common");
-      common.compounds.add(js);
-      Collections.sort(common.compounds, new Comparator<Javascript>()
-      {
-         public int compare(Javascript o1, Javascript o2)
-         {
-            return o1.getPriority() - o2.getPriority();
-         }
-      });
+      ScriptResource common = scripts.getResource(COMMON_SHARED_RESOURCE);
+      js.addModuleTo(common);
       invalidateMergedCommonJScripts();
    }
 
    /**
-    * Remove a JScript for this module from {@link #commonJScripts}
+    * Remove a JScript for this module from common javascript
     * and invalidates its cache correspondingly
     *
-    * @param module
+    * @param moduleName the module name
     */
-   public void removeCommonJScript(String module)
+   public void removeCommonJScript(String moduleName)
    {
-      Javascript.Composite common = sharedJScripts.get("common");
-      Iterator<Javascript> iterator = common.compounds.iterator();
-      while (iterator.hasNext())
+      ScriptResource common = scripts.getResource(COMMON_SHARED_RESOURCE);
+      for (Module module : common.removeModuleByName(moduleName))
       {
-         Javascript js = iterator.next();
-         if (js.getModule().equals(module))
+         if (module instanceof Module.Local)
          {
-            iterator.remove();
-            invalidateCachedJScript(js.getPath());
+            Module.Local local = (Module.Local)module;
+            invalidateCachedJScript(local.getPath());
             invalidateMergedCommonJScripts();
          }
       }
@@ -239,41 +244,80 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public Collection<Javascript> getPortalJScripts(String portalName)
    {
-      Javascript.Composite composite = portalJScripts.get(portalName);
-      return composite != null ? Collections.unmodifiableCollection(composite.compounds) : null;
-   }
-
-   public InputStream open(Javascript.Internal script) throws IOException
-   {
-      // We don't implement caching or concurrent serving for now
-      // we will do it later
-      return script.open(this);
-   }
-
-   public Javascript getScript(Resource resource, String module)
-   {
-      Javascript.Composite script = getScript(resource);
-      if (script != null && !"merged".equals(module))
+      ScriptResource composite = scripts.getResource(ResourceScope.PORTAL, portalName);
+      if (composite != null)
       {
-         return script.getCompound(module);
+         ArrayList<Module> modules = new ArrayList<Module>(composite.getModules());
+         Collections.sort(modules, MODULE_COMPARATOR);
+         ArrayList<Javascript> scripts = new ArrayList<Javascript>();
+         for (Module module : modules)
+         {
+            scripts.add(Javascript.create(module));
+         }
+         return scripts;
       }
       else
       {
-         return script;
+         return null;
+      }
+   }
+   
+   private String merge(ResourceId id)
+   {
+      ScriptResource res = getResource(id);
+      List<Module> modules = new ArrayList<Module>(res.getModules());
+      Collections.sort(modules, MODULE_COMPARATOR);
+      StringBuilder buffer = new StringBuilder();
+      for (Module js :modules)
+      {
+         if (!js.isRemote())
+         {
+            String jScript = getJScript(js.getURI());
+            if (jScript != null)
+            {
+               buffer.append(jScript).append("\n");
+            }
+
+         }
+      }
+      return buffer.toString();
+   }
+
+   public InputStream getScript(ResourceId id, String name)
+   {
+      ScriptResource script = getResource(id);
+      if (script != null && !"merged".equals(name))
+      {
+         return getJavascript(script, name);
+      }
+      else
+      {
+         return getScript(id);
       }
    }
 
-   public Javascript.Composite getScript(Resource resource)
+   public InputStream getScript(ResourceId resourceId)
    {
-      switch (resource.getScope())
+      ScriptResource resource = getResource(resourceId);
+      if (resource != null)
       {
-         case SHARED:
-            return sharedJScripts.get(resource.getId());
-         case PORTAL:
-            return portalJScripts.get(resource.getId());
+         List<Module> modules = new ArrayList<Module>(resource.getModules());
+         Collections.sort(modules, MODULE_COMPARATOR);
+         StringBuilder buffer = new StringBuilder();
+         for (Module js :modules)
+         {
+            if (!js.isRemote())
+            {
+               String jScript = getJScript(js.getURI());
+               if (jScript != null)
+               {
+                  buffer.append(jScript).append("\n");
+               }
+
+            }
+         }
+         return new ByteArrayInputStream(buffer.toString().getBytes());
       }
-      
-      //
       return null;
    }
    
@@ -281,47 +325,107 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    {
       return contexts.get(contextPath);
    }
-
-   public Collection<Javascript> getScripts(boolean merge)
+   
+   public List<String> resolveURLs(ControllerContext controllerContext, Collection<ResourceId> ids, boolean merge) throws IOException
    {
-      return getScripts(null, merge);
+      ArrayList<String> urls = new ArrayList<String>();
+      StringBuilder buffer = new StringBuilder();
+      URIWriter writer = new URIWriter(buffer);
+
+      //
+      Collection<ScriptResource> resources = scripts.resolve(ids);
+
+      //
+      for (ScriptResource resource : resources)
+      {
+         if (!resource.isEmpty())
+         {
+            controllerContext.renderURL(resource.getParameters(), writer);
+            urls.add(buffer.toString());
+            buffer.setLength(0);
+            writer.reset(buffer);
+         }
+      }
+
+      //
+      return urls;
    }
 
-   public Collection<Javascript> getScripts(String portalName, boolean merge)
+   public List<String> resolve(ControllerContext controllerContext, boolean merge) throws IOException
    {
-      ArrayList<Javascript> scripts = new ArrayList<Javascript>();
+      return resolve(controllerContext, null, merge);
+   }
+
+   public List<String> resolve(ControllerContext controllerContext, String portalName, boolean merge) throws IOException
+   {
+      ArrayList<String> scripts = new ArrayList<String>();
+      StringBuilder buffer = new StringBuilder();
+      URIWriter writer = new URIWriter(buffer);
       
       // First shared scripts
-      Javascript.Composite common = sharedJScripts.get("common");
+      ScriptResource common = this.scripts.getResource(COMMON_SHARED_RESOURCE);
       if (merge)
       {
-         scripts.add(common);
-         for (Javascript script : common.compounds)
+         controllerContext.renderURL(common.getParameters(), writer);
+         scripts.add(buffer.toString());
+         buffer.setLength(0);
+         writer.reset(buffer);
+
+         //
+         for (Module module : common.getModules())
          {
-            // For now we do it this way
-            if (script instanceof Javascript.External)
+            if (module.isRemote())
             {
-               scripts.add(script);
+               scripts.add(module.getURI());
             }
          }
       }
       else
       {
-         scripts.addAll(common.compounds);
+         for (Module module : common.getModules())
+         {
+            if (module instanceof Module.Local)
+            {
+               Module.Local local = (Module.Local)module;
+               controllerContext.renderURL(local.getParameters(), writer);
+               scripts.add(buffer.toString());
+               buffer.setLength(0);
+               writer.reset(buffer);
+            }
+            else
+            {
+               // ????
+            }
+         }
       }
       
       // Then portal scripts
       if (portalName != null)
       {
-         Javascript.Composite portalScript = portalJScripts.get(portalName);
+         ScriptResource portalScript = this.scripts.getResource(ResourceScope.PORTAL, portalName);
          if (portalScript != null)
          {
-            scripts.addAll(portalScript.compounds);
+            for (Module module : portalScript.getModules())
+            {
+               if (module instanceof Module.Local)
+               {
+                  Module.Local local = (Module.Local)module;
+                  controllerContext.renderURL(local.getParameters(), writer);
+                  scripts.add(buffer.toString());
+                  buffer.setLength(0);
+                  writer.reset(buffer);
+               }
+            }
          }
       }
       
       //
       return scripts;
+   }
+
+   public ScriptResource getResource(ResourceId resource)
+   {
+      return scripts.getResource(resource);
    }
 
    /**
@@ -335,21 +439,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public void addPortalJScript(Javascript js)
    {
-      Javascript.Composite list = portalJScripts.get(js.getResource().getId());
-      if (list == null)
-      {
-         portalJScripts.put(js.getResource().getId(), list = new Javascript.Composite(js.getResource(), null, 0));
-      }
-
-      //
-      list.compounds.add(js);
-      Collections.sort(list.compounds, new Comparator<Javascript>()
-      {
-         public int compare(Javascript o1, Javascript o2)
-         {
-            return o1.getPriority() - o2.getPriority();
-         }
-      });
+      js.addModuleTo(scripts.addResource(js.getResource()));
    }
 
    /**
@@ -359,10 +449,17 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public void removePortalJScripts(String portalName)
    {
-      Javascript.Composite list = portalJScripts.remove(portalName);
-      for (Javascript js : list.compounds)
+      ScriptResource list = scripts.removeResource(new ResourceId(ResourceScope.PORTAL, portalName));
+      if (list != null)
       {
-         invalidateCachedJScript(js.getPath());
+         for (Module module : list.getModules())
+         {
+            if (module instanceof Module.Local)
+            {
+               Module.Local local = (Module.Local)module;
+               invalidateCachedJScript(local.getPath());
+            }
+         }
       }
    }
 
@@ -384,16 +481,14 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public synchronized void remove(ServletContext context)
    {
-      for (Javascript.Composite shared : sharedJScripts.values())
+      for (ScriptResource shared : scripts.getResources(ResourceScope.SHARED))
       {
-         Iterator<Javascript> iterator = shared.compounds.iterator();
-         while (iterator.hasNext())
+         for (Module module : shared.removeModuleByContextPath(context.getContextPath()))
          {
-            Javascript js = iterator.next();
-            if (js.getContextPath().equals(context.getContextPath()))
+            if (module instanceof Module.Local)
             {
-               iterator.remove();
-               invalidateCachedJScript(js.getPath());
+               Module.Local local = (Module.Local)module;
+               invalidateCachedJScript(local.getPath());
                invalidateMergedCommonJScripts();
             }
          }
@@ -455,24 +550,10 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public CachedJavascript getMergedCommonJScripts()
    {
-      new Exception().printStackTrace();
       if (mergedCommonJScripts == null)
       {
-         StringBuilder sB = new StringBuilder();
-         for (Javascript js : sharedJScripts.get("common").compounds)
-         {
-            if (!js.isExternalScript())
-            {
-               String jScript = getJScript(js.getPath());
-               if (jScript != null)
-               {
-                  sB.append(jScript).append("\n");
-               }
-
-            }
-         }
-
-         String jScript = sB.toString();
+         ScriptResource common = scripts.getResource(COMMON_SHARED_RESOURCE);
+         String jScript = merge(common.getId());
 
          try
          {
@@ -520,17 +601,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public boolean isModuleLoaded(CharSequence module)
    {
-      for (Javascript.Composite shared : sharedJScripts.values())
-      {
-         for (Javascript js : shared.compounds)
-         {
-            if (js.getModule().equals(module))
-            {
-               return true;
-            }
-         }
-      }
-      return false;
+      return getAvailableScripts().contains(module.toString());
    }
 
    /**
@@ -571,5 +642,30 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    public void stop()
    {
       DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(deployer);
+   }
+
+   private InputStream getJavascript(ScriptResource resource, String moduleName)
+   {
+      Module module = resource.getModule(moduleName);
+      if (module instanceof Module.Local)
+      {
+         Module.Local local = (Module.Local)module;
+         ServletContext servletContext = contexts.get(local.getContextPath());
+         if (servletContext != null)
+         {
+            return servletContext.getResourceAsStream(local.getPath());
+         }
+      }
+      return null;
+   }
+
+   private List<Javascript> getJavascripts(ScriptResource resource)
+   {
+      ArrayList<Javascript> javascripts = new ArrayList<Javascript>();
+      for (Module module : resource.getModules())
+      {
+         javascripts.add(Javascript.create(module));
+      }
+      return javascripts;
    }
 }

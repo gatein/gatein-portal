@@ -107,6 +107,10 @@ public class MainResourceResolver implements ResourceResolver
 
       //
       int i1 = path.indexOf("/", 2);
+      if (i1 == -1)
+      {
+         throw new AssertionError();
+      }
       String targetedContextPath = path.substring(0, i1);
       SimpleResourceContext context = contexts.get(targetedContextPath);
 

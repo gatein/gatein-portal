@@ -25,6 +25,6 @@ package org.exoplatform.portal.controller.resource;
 public enum ResourceScope
 {
 
-   SHARED, PORTAL
+   SHARED, PORTAL, PORTLET
 
 }

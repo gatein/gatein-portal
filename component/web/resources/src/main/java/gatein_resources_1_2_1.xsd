@@ -126,9 +126,7 @@
     <xs:complexContent>
       <xs:extension base="resource">
         <xs:sequence>
-          <xs:element name="module" type="xs:string" minOccurs="1" maxOccurs="1"/>
-          <xs:element name="path" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-          <xs:element name="priority" type="xs:string" minOccurs="0" maxOccurs="1"/>
+          <xs:element name="module" type="module" minOccurs="0" maxOccurs="unbounded"/>
           <xs:element name="depends" type="resource" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
       </xs:extension>
@@ -140,6 +138,16 @@
     <xs:sequence>
       <xs:element name="scope" type="scope" minOccurs="1" maxOccurs="1"/>
       <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="module">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:choice minOccurs="1" maxOccurs="1">
+        <xs:element name="path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="uri" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
     </xs:sequence>
   </xs:complexType>
 

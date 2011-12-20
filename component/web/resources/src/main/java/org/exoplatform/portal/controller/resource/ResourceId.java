@@ -19,30 +19,60 @@
 
 package org.exoplatform.portal.controller.resource;
 
-import java.util.Collections;
-import java.util.Set;
-
 /**
+ * Identify a resource.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class Resource<R extends Resource<R>>
+public class ResourceId
 {
 
    /** . */
-   protected final ResourceId id;
+   private final ResourceScope scope;
 
-   public Resource(ResourceId id)
+   /** . */
+   private final String name;
+
+   public ResourceId(ResourceScope scope, String name)
    {
-      this.id = id;
+      this.scope = scope;
+      this.name = name;
    }
 
-   public ResourceId getId()
+   public ResourceScope getScope()
    {
-      return id;
+      return scope;
    }
 
-   public Set<ResourceId> getDependencies()
+   public String getName()
    {
-      return Collections.emptySet();
+      return name;
+   }
+
+   @Override
+   public boolean equals(Object obj)
+   {
+      if (obj == this)
+      {
+         return true;
+      }
+      if (obj instanceof ResourceId)
+      {
+         ResourceId that = (ResourceId)obj;
+         return scope == that.scope && name.equals(that.name);
+      }
+      return false;
+   }
+
+   @Override
+   public int hashCode()
+   {
+      return scope.hashCode() ^ name.hashCode();
+   }
+
+   @Override
+   public String toString()
+   {
+      return "Scope[type=" + scope.name() + ",id=" + name + "]";
    }
 }

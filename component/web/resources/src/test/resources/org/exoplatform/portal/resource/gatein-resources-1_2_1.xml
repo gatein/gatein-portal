@@ -26,10 +26,10 @@
   <scripts>
     <scope>portal</scope>
     <name>abc</name>
-    <module>foo</module>
-    <path>/foo.js</path>
-    <path>http://www.somehost.com/bar.js</path>
-    <priority>0</priority>
+    <module>
+      <name>foo</name>
+      <path>/foo.js</path>
+    </module>
     <depends>
       <scope>shared</scope>
       <name>webui</name>
