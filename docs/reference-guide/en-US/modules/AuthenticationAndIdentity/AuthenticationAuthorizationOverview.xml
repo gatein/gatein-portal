@@ -14,12 +14,32 @@
         </para>
         <para>
             In &PRODUCT; we support these kinds of authentication:
-            <step>J2EE FORM based authentication</step>
-            <step><emphasis>RememberMe</emphasis> authentication (user checks <emphasis>Remember my login</emphasis> checkbox in login form)</step>
-            <step>SSO servers integration (CAS, JOSSO, OpenSSO) - more informations in <xref linkend="chap-Reference_Guide-SSO_Single_Sign_On" /></step>
-            <step>SPNEGO authentication with Kerberos ticket - more informations in <xref linkend="Single_Sign_On-SPNEGO" /></step>
-            <step>Cluster authentication with loadbalancer or with JBoss SSO valve. See <xref linkend="sect-Reference_Guide_eXo_JCR_1.14-SSO_Single_Sign_On-Enabling_SSO_using_JBoss_SSO_Valve" /></step>
         </para>
+        <itemizedlist>
+            <listitem>
+               <para>J2EE FORM based authentication</para>
+            </listitem>
+            <listitem>
+                <para>
+                   <emphasis>RememberMe</emphasis> authentication (user checks <emphasis>Remember my login</emphasis> checkbox in login form)
+                </para>
+            </listitem>
+            <listitem>
+               <para>
+                  SSO servers integration (CAS, JOSSO, OpenSSO) - more informations in <xref linkend="chap-Reference_Guide-SSO_Single_Sign_On" />
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                  SPNEGO authentication with Kerberos ticket - more informations in <xref linkend="Single_Sign_On-SPNEGO" />
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                  Cluster authentication with loadbalancer or with JBoss SSO valve. See <xref linkend="sect-Reference_Guide_eXo_JCR_1.14-SSO_Single_Sign_On-Enabling_SSO_using_JBoss_SSO_Valve" />
+               </para>
+            </listitem>
+        </itemizedlist>
         <para>
             Authentication workflow consists of more HTTP requests and redirects with couple of handshakes in it. Source code related to
             authentication is partially in WCI module, because authentication process is little different on <ulink type="http" url="http://www.jcp.org/en/jsr/detail?id=154">Servlet 2.5</ulink>
@@ -90,22 +110,26 @@
             performs WCI login. WCI layer can recognize current servlet container and so that it can decide if it's old container with Servlet API 2.5 (JBoss 5, Tomcat 6)
             or newer with Servlet API 3.0 (JBoss 6, JBoss 7, Tomcat 7).
         </para>
-        <para>
-            <step>
-                <emphasis role="bold">Servlet 3.0 case</emphasis> - New servlet API supports programmatic authentication by calling method
-                <emphasis>HttpServletRequest.login(String username, String password)</emphasis>. This will directly call JAAS authentication without
-                need to perform any more redirects.
-            </step>
-            <step>
-                <emphasis role="bold">Servlet 2.5 case</emphasis> - There is not standard support for programmatic authentication and so we need
-                another redirection to special URL like
-                <ulink type="http" url="http://localhost:8080/portal/j_security_check?j_username=root&amp;j_password=wci-ticket-1385113882&amp;initialURI=/portal/private/classic/">http://localhost:8080/portal/j_security_check?j_username=root&amp;j_password=wci-ticket-1385113882&amp;initialURI=/portal/private/classic/</ulink>
-                which will trigger JAAS authentication.
-                You can notice that in this case, JAAS authentication is not triggered with real password of user but with WCI ticket. WCI ticket is
-                created by InitiateLoginServlet during WCI login and it's saved into WCI <emphasis>TicketService</emphasis>.
-                The purpose of WCI ticket is to avoid using of real password in URL during redirection.
-            </step>
-        </para>
+        <itemizedlist>
+           <listitem>
+              <para>
+                 <emphasis role="bold">Servlet 3.0 case</emphasis> - New servlet API supports programmatic authentication by calling method
+                 <emphasis>HttpServletRequest.login(String username, String password)</emphasis>. This will directly call JAAS authentication without
+                 need to perform any more redirects.
+              </para>
+           </listitem>
+           <listitem>
+              <para>
+                 <emphasis role="bold">Servlet 2.5 case</emphasis> - There is not standard support for programmatic authentication and so we need
+                 another redirection to special URL like
+                 <ulink type="http" url="http://localhost:8080/portal/j_security_check?j_username=root&amp;j_password=wci-ticket-1385113882&amp;initialURI=/portal/private/classic/">http://localhost:8080/portal/j_security_check?j_username=root&amp;j_password=wci-ticket-1385113882&amp;initialURI=/portal/private/classic/</ulink>
+                 which will trigger JAAS authentication.
+                 You can notice that in this case, JAAS authentication is not triggered with real password of user but with WCI ticket. WCI ticket is
+                 created by InitiateLoginServlet during WCI login and it's saved into WCI <emphasis>TicketService</emphasis>.
+                 The purpose of WCI ticket is to avoid using of real password in URL during redirection.
+              </para>
+           </listitem>
+        </itemizedlist>
     </section>
     <section id="sect-Reference_Guide-Authentication_Authorization_Intro-LoginModules">
         <title>Login modules</title>
@@ -148,17 +172,24 @@
         </programlisting>
         <para>
             You are free to add some new login modules or completely replace existing login modules with some of your own. Few points to mention:
-            <step>
+        </para>
+        <itemizedlist>
+           <listitem>
+              <para>
                 It's possible to login user through existing login modules with his real password (credentials like username: <emphasis>root</emphasis>/ password: <emphasis>gtn</emphasis>),
                 but also with WCI ticket (credentials like username: <emphasis>root</emphasis>/password: <emphasis>wci-ticket-458791</emphasis>).
                 Login modules stack supports both of these kinds of authentication.
-            </step>
-            <step>
+              </para>
+           </listitem>
+           <listitem>
+              <para>
                 Authentication through WCI ticket is used for FORM based authentication in Servlet 2.5 containers (JBoss 5 or Tomcat 6).
                 Majority of other cases (Servlet 3.0 login, JBoss SSO valve login, login through <ulink type="http" url="http://code.google.com/p/crsh/">Crash</ulink>,
                 BASIC authentication etc) are using the case with real password.
-            </step>
-            <step>
+              </para>
+           </listitem>
+           <listitem>
+              <para>
                 Authentication starts with invoke of method <emphasis>login</emphasis> on each login module. After all <emphasis>login</emphasis>
                 methods are invoked, then authentication continue by invoke of method <emphasis>commit</emphasis> on each login module. 
                 Both methods <emphasis>login</emphasis> or <emphasis>commit</emphasis> can throw LoginException. 
@@ -166,33 +197,41 @@
                 login module. By returning "false" from method login, you can ensure that login module is ignored. This is not specific to EPP 
                 but it's generic to JAAS and more info about login modules in general can be found
                 <ulink type="http" url="http://docs.oracle.com/javase/6/docs/technotes/guides/security/jaas/JAASRefGuide.html">here</ulink>.
-            </step>
-        </para>
+              </para>
+           </listitem>
+        </itemizedlist>
         <section id="sect-Authentication_Authorization_Intro-existingLM">
             <title>Existing login modules</title>
             <para>
-                Here is some brief description of existing login modules:
-                <step>
-                    <emphasis role="bold">WCILoginModule</emphasis> - This login module is useful when authentication is performed with JAAS password like
-                    WCI ticket. It simply validates if WCI ticket is valid and then it finds real username and password of user from WCI <emphasis>TicketService</emphasis> and save
-                    it into sharedState map. Username is saved under key <emphasis>javax.security.auth.login.name</emphasis> and
-                    Password (real password like "gtn") is saved under key <emphasis>javax.security.auth.login.password</emphasis>.
-                </step>
+               Here is some brief description of existing login modules:
             </para>
+            <itemizedlist>
+               <listitem>
+                  <para>
+                     <emphasis role="bold">WCILoginModule</emphasis> - This login module is useful when authentication is performed with JAAS password like
+                     WCI ticket. It simply validates if WCI ticket is valid and then it finds real username and password of user from WCI <emphasis>TicketService</emphasis> and save
+                     it into sharedState map. Username is saved under key <emphasis>javax.security.auth.login.name</emphasis> and
+                     Password (real password like "gtn") is saved under key <emphasis>javax.security.auth.login.password</emphasis>.
+                  </para>
+               </listitem>
+            </itemizedlist>
             <note>
                 If you trigger JAAS authentication with username/password like "root"/"gtn" and not with password like WCI ticket, then WCILoginModule is useless
                 and it throws LoginException. But you can notice that WCILoginModule is declared as "optional" which means that login failure in WCILoginModule
                 is not a problem for whole login process.
             </note>
-            <para>
-                <step>
+            <itemizedlist>
+               <listitem>
+                <para>
                     <emphasis role="bold">PortalLoginModule</emphasis> - This login module is actually used mainly for login in cluster environment.
                     Assumption is working session replication between two cluster nodes. After successful authentication on cluster node1 will
                     method <emphasis>commit</emphasis> add flag (attribute <emphasis>AUTHENTICATED_CREDENTIALS</emphasis>) to HTTP session and this
                     flag can then be used to reauthentication on node2 when it executes method <emphasis>login</emphasis>.
                     More info in section <xref linkend="sect-Authentication_Authorization_Intro-ClusterLogin" />.
-                </step>
-                <step>
+                </para>
+               </listitem>
+               <listitem>
+                <para>
                     <emphasis role="bold">SharedStateLoginModule</emphasis> - This login module is actually the one, which triggers real
                     authentication of user with usage of <emphasis>Authenticator</emphasis> interface. It takes the username and password from
                     sharedState map from attributes <emphasis>javax.security.auth.login.name</emphasis> and <emphasis>javax.security.auth.login.password</emphasis>.
@@ -200,29 +239,32 @@
                     username and password against OrganizationService and portal identity database. Result of successful authentication is object
                     <emphasis>Identity</emphasis>, which is saved to sharedState map under key <emphasis>exo.security.identity</emphasis>.
                     More info in <xref linkend="sect-Authentication_Authorization_Intro-authenticatorAndRolesExtractor" />.
-                </step>
-            </para>
+                </para>
+               </listitem>
+            </itemizedlist>
             <para>
                 SharedStateLoginModule assumes that mentioned attributes for username and password are already placed in sharedState map,
                 which was actually done by WCILoginModule. If attributes are not in sharedState map, SharedStateLoginModule is simply ignored
                 (method "login" returns false).
             </para>
-            <para>
-                <step>
+            <itemizedlist>
+              <listitem>
+                 <para>
                     <emphasis role="bold">JbossLoginModule</emphasis> - previous login modules (like WCILoginModule and SharedStateLoginModule)
                     are useful for authentication flow with WCI ticket. <emphasis role="bold">DefaultLoginModule</emphasis> (superclass of JbossLoginModule)
                     is used for second case (authentication with real password instead of WCI ticket).
                     First it checks if Identity object has been already created and saved into sharedState map by SharedStateLoginModule.
                     If not, then it means that WCI ticket authentication was not successful and so it tries to login with real password of user.
                     It also uses <emphasis>Authentication.validateUser(Credential[] credentials)</emphasis> for authentication check.
-                </step>
-            </para>
-            <para>
-                In method <emphasis>JbossLoginModule.commit</emphasis>, we need to assign our Identity object to IdentityRegistry, which will be
-                used later for authorization. We also need to create JAAS principals (UserPrincipal and RolesPrincipal) and assign them to our
-                authenticated Subject. This is needed for JBoss AS server, so that it can properly recognize name of logged user and his roles
-                on JBoss AS level.
-            </para>
+                 </para>
+                 <para>
+                    In method <emphasis>JbossLoginModule.commit</emphasis>, we need to assign our Identity object to IdentityRegistry, which will be
+                    used later for authorization. We also need to create JAAS principals (UserPrincipal and RolesPrincipal) and assign them to our
+                    authenticated Subject. This is needed for JBoss AS server, so that it can properly recognize name of logged user and his roles
+                    on JBoss AS level.
+                 </para>
+              </listitem>
+            </itemizedlist>
         </section><!-- Ending section with existing login modules -->
         <section id="sect-Authentication_Authorization_Intro-createNewLM">
             <title>Creating your own login module</title>
@@ -233,9 +275,15 @@
             </para>
            <para>
               We have actually two levels of authentication and overall result of JAAS authentication should properly handle both these cases:
-              <step>Authentication on application server level</step>
-              <step>Authentication on GateIn level</step>
            </para>
+           <itemizedlist>
+               <listitem>
+                  <para>Authentication on application server level</para>
+               </listitem>
+               <listitem>
+                  <para>Authentication on GateIn level</para>
+               </listitem>
+           </itemizedlist>
            <section id="sect-Authentication_Authorization_Intro-authenticationAppServerLevel">
               <title>Authentication on application server level</title>
               <para>
@@ -298,17 +346,28 @@ public interface Authenticator
            <para>
               Method <emphasis>createIdentity</emphasis> is used to create instance of object <emphasis>org.exoplatform.services.security.Identity</emphasis>,
               which encapsulates all important informations about single user like:
-              <step>username</step>
-              <step>set of Memberships (MembershipEntry objects) which user belongs to. <emphasis>Membership</emphasis> is object,
+           </para>
+           <itemizedlist>
+              <listitem>
+               <para>
+                     username
+               </para>
+              </listitem>
+              <listitem>
+               <para>
+                 set of Memberships (MembershipEntry objects) which user belongs to. <emphasis>Membership</emphasis> is object,
                  which contains informations about <emphasis>membershipType</emphasis> (manager, member, validator, ... ) and about <emphasis>group</emphasis> (/platform/users,
                  /platform/administrators, /partners, /organization/management/executiveBoard, ... ).
-              </step>
-              <step>
+               </para>
+              </listitem>
+              <listitem>
+               <para>
                  set of Strings with JAAS roles of given user. JAAS roles are simple Strings, which are mapped from MembershipEntry objects.
                  There is another special component <emphasis>org.exoplatform.services.security.RolesExtractor</emphasis>,
                  which is used to map JAAS roles from MembershipEntry objects. RolesExtractor interface looks like this:
-              </step>
-           </para>
+               </para>
+              </listitem>
+           </itemizedlist>
            <programlisting language="Java" role="Java">
               <![CDATA[
 public interface RolesExtractor
@@ -359,35 +418,48 @@ public interface RolesExtractor
          </para>
          <section id="sect-Authentication_Authorization_Intro-RememberMeAuthentication-howDoesItWork">
             <title>How does it work</title>
-            <para>
-               <step>
-                  User checks the checkbox "Remember my login" on login screen of &PRODUCT; . Then he submit the form.
-               </step>
-               <step>
-                  HTTP request like <emphasis>http://localhost:8080/portal/login?initialURI=/portal/classic&amp;username=root&amp;password=gtn&amp;rememberme=true</emphasis> is send to server
-               </step>
-               <step>
+            <itemizedlist>
+               <listitem>
+                  <para>
+                     User checks the checkbox "Remember my login" on login screen of &PRODUCT; . Then he submit the form.
+                  </para>
+               </listitem>
+               <listitem>
+                  <para>
+                     HTTP request like <emphasis>http://localhost:8080/portal/login?initialURI=/portal/classic&amp;username=root&amp;password=gtn&amp;rememberme=true</emphasis> is send to server
+                  </para>
+               </listitem>
+               <listitem>
+                  <para>
                   Request is processed by PortalLoginController servlet.
                   Servlet obtains instance of <emphasis>RemindPasswordTokenService</emphasis> and save user credentials into JCR. It generates and returns special token (key) for later use.
                   Then it creates cookie called <emphasis>rememberme</emphasis> and use returned token as value of cookie.
-               </step>
-            </para>
+                  </para>
+               </listitem>
+            </itemizedlist>
          </section>
          <section id="sect-Authentication_Authorization_Intro-RememberMeAuthentication-reauthentication">
             <title>Reauthentication</title>
-            <para>
-               <step>After some time, user wants to reauthenticate. Let's assume that his HTTP Session is already expired but his RememberMe
-                  cookie is still active.
-               </step>
-               <step>
+            <itemizedlist>
+               <listitem>
+                  <para>
+                     After some time, user wants to reauthenticate. Let's assume that his HTTP Session is already expired but his RememberMe
+                     cookie is still active.
+                  </para>
+               </listitem>
+               <listitem>
+                  <para>
                   User send HTTP request to some portal page (ie. <emphasis>http://localhost:8080/portal/classic</emphasis> ).
-               </step>
-               <step>
+                  </para>
+               </listitem>
+               <listitem>
+                  <para>
                   There is special HTTP Filter <emphasis role="bold">RememberMeFilter</emphasis> configured in web.xml, which checks
                   rememberme cookie and then it retrieves credentials of user from RemindPasswordTokenService. Now filter redirects request to
                   PortalLoginController and authentication process goes in same way as for normal FORM based authentication.
-               </step>
-            </para>
+                  </para>
+               </listitem>
+            </itemizedlist>
          </section>
          <section id="sect-Authentication_Authorization_Intro-RememberMeAuthentication-RemindPasswordTokenService">
             <title>RemindPasswordTokenService</title>
@@ -505,13 +577,19 @@ public interface RolesExtractor
       <title>Authorization overview</title>
       <para>
          In previous section, we learned about JAAS authentication and about login modules. So we know that result of authentication are:
-         <step>
-            JAAS Subject with principals for username (UserPrincipal) and for JAAS roles (RolesPrincipal).
-         </step>
-         <step>
-            Identity object, which encapsulates username, all memberships and all JAAS roles. This Identity object is bound to IdentityRegistry component.
-         </step>
       </para>
+      <itemizedlist>
+         <listitem>
+            <para>
+               JAAS Subject with principals for username (UserPrincipal) and for JAAS roles (RolesPrincipal).
+            </para>
+         </listitem>
+         <listitem>
+            <para>
+            Identity object, which encapsulates username, all memberships and all JAAS roles. This Identity object is bound to IdentityRegistry component.
+            </para>
+         </listitem>
+      </itemizedlist>
       <para>
          Authorization in &PRODUCT; actually happens on two levels:
       </para>
@@ -547,22 +625,34 @@ public interface RolesExtractor
          </para>
          <para>
             Authorization on portal level looks like this:
-            <step>user send HTTP request to some URL in portal</step>
-            <step>
-               HTTP request is processed through <emphasis role="bold">SetCurrentIdentityFilter</emphasis>, which is declared in
-               <emphasis>deploy/gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>.
-            </step>
-            <step>
-               SetCurrentIdentityFilter reads username of current user from <emphasis>HttpServletRequest.getRemoteUser()</emphasis>.
-               Then it looks for Identity of this user in IdentityRegistry, where Identity has been saved during authentication.
-               Found Identity is then encapsulated into <emphasis role="bold">ConversationState</emphasis> object and bound into ThreadLocal variable.
-            </step>
-            <step>
-               UserACL is able to obtain Identity of current user from method <emphasis>UserACL.getIdentity()</emphasis>, which simply calls
-               <emphasis>ConversationState.getCurrent().getIdentity()</emphasis> for find current Identity bound to ThreadLocal.
-               Now UserACL has identity of user and so that it can performs any security checks.
-            </step>
          </para>
+         <itemizedlist>
+            <listitem>
+               <para>
+                  user send HTTP request to some URL in portal
+               </para>
+            </listitem>
+            <listitem>
+               <para>            
+                  HTTP request is processed through <emphasis role="bold">SetCurrentIdentityFilter</emphasis>, which is declared in
+                  <emphasis>deploy/gatein.ear/02portal.war/WEB-INF/web.xml</emphasis>.
+               </para>
+            </listitem>
+            <listitem>
+               <para>
+                  SetCurrentIdentityFilter reads username of current user from <emphasis>HttpServletRequest.getRemoteUser()</emphasis>.
+                  Then it looks for Identity of this user in IdentityRegistry, where Identity has been saved during authentication.
+                  Found Identity is then encapsulated into <emphasis role="bold">ConversationState</emphasis> object and bound into ThreadLocal variable.
+               </para>
+            </listitem>
+            <listitem>
+              <para>            
+                  UserACL is able to obtain Identity of current user from method <emphasis>UserACL.getIdentity()</emphasis>, which simply calls
+                  <emphasis>ConversationState.getCurrent().getIdentity()</emphasis> for find current Identity bound to ThreadLocal.
+                  Now UserACL has identity of user and so that it can performs any security checks.
+              </para>
+            </listitem>
+         </itemizedlist>
       </section>
    </section><!-- Ending section Authorization overview -->
 </section>
