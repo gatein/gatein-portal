@@ -341,6 +341,8 @@ public class UIPortalApplication extends UIApplication
       if (prc.getRemoteUser() != null)
       {
          resourceIds.add(new ResourceId(ResourceScope.SHARED, "common"));
+         resourceIds.add(new ResourceId(ResourceScope.SHARED, "portal"));
+         resourceIds.add(new ResourceId(ResourceScope.SHARED, "webui"));
       }
 
       //
