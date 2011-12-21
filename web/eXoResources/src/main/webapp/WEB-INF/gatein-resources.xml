@@ -230,19 +230,6 @@
          <js-path>/javascript/eXo/portal/UIMaskWorkspace.js</js-path>
          <js-priority>3</js-priority>
       </param> -->
-      <!-- 
-      <param>
-         <js-module>eXo.core.Cometd</js-module>
-         <js-path>/javascript/eXo/core/Cometd.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Topic</js-module>
-         <js-path>/javascript/eXo/core/Topic.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-       -->
-       
       <scripts>
          <scope>shared</scope>
          <name>portal</name>
@@ -275,11 +262,64 @@
             <name>common</name>
          </depends>
       </scripts>
+
+      <!-- 
+      <param>
+         <js-module>eXo.core.Cometd</js-module>
+         <js-path>/javascript/eXo/core/Cometd.js</js-path>
+         <js-priority>3</js-priority>
+      </param>
+      <param>
+         <js-module>eXo.core.Topic</js-module>
+         <js-path>/javascript/eXo/core/Topic.js</js-path>
+         <js-priority>3</js-priority>
+      </param>
+       -->       
    </javascript>
 
    <!-- WebUI Javascripts -->
    <javascript>
-      <param>
+      <scripts>
+         <scope>shared</scope>
+         <name>webui</name>
+         <module>
+            <name>eXo.webui.UIItemSelector</name>
+            <path>/javascript/eXo/webui/UIItemSelector.js</path>
+         </module>
+         <module>
+            <name>eXo.webui.UIForm</name>
+            <path>/javascript/eXo/webui/UIForm.js</path>
+         </module>
+         <module>
+            <name>eXo.webui.UIPopup</name>
+            <path>/javascript/eXo/webui/UIPopup.js</path>
+         </module>
+         <module>
+            <name>eXo.webui.UIPopupSelectCategory</name>
+            <path>/javascript/eXo/webui/UIPopupSelectCategory.js</path>
+         </module>
+         <module>
+            <name>eXo.webui.UIPopupWindow</name>
+            <path>/javascript/eXo/webui/UIPopupWindow.js</path>
+         </module>
+         <module>
+            <name>eXo.webui.UIHorizontalTabs</name>
+            <path>/javascript/eXo/webui/UIHorizontalTabs.js</path>
+         </module>
+         <module>
+            <name>eXo.webui.UIPopupMenu</name>
+            <path>/javascript/eXo/webui/UIPopupMenu.js</path>
+         </module>
+         <module>
+            <name>eXo.webui.UIPortlet</name>
+            <path>/javascript/eXo/webui/UIPortlet.js</path>
+         </module>
+         <depends>
+            <scope>shared</scope>
+            <name>common</name>
+         </depends>
+      </scripts>
+<!--       <param>
          <js-module>eXo.webui.UIItemSelector</js-module>
          <js-path>/javascript/eXo/webui/UIItemSelector.js</js-path>
          <js-priority>4</js-priority>
@@ -318,7 +358,7 @@
          <js-module>eXo.webui.UIPortlet</js-module>
          <js-path>/javascript/eXo/webui/UIPortlet.js</js-path>
          <js-priority>4</js-priority>
-      </param>
+      </param> -->
    </javascript>
 
    <!-- Should be lazy loaded -->

@@ -89,6 +89,14 @@
       <scope>shared</scope>
       <name>common</name>
     </depends>
+    <depends>
+      <scope>shared</scope>
+      <name>portal</name>
+    </depends>
+    <depends>
+      <scope>shared</scope>
+      <name>webui</name>
+    </depends>
   </scripts>
 
 </gatein-resources>
