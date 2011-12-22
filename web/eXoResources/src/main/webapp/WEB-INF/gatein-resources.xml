@@ -403,4 +403,16 @@
       </param>
    </javascript>
     -->
+
+  <javascript>
+    <scripts>
+      <scope>shared</scope>
+      <name>common</name>
+      <module>
+        <name>jquery</name>
+        <path>/javascript/jquery.js</path>
+      </module>
+    </scripts>
+  </javascript>
+
 </gatein-resources>
