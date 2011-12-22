@@ -34,12 +34,8 @@ eXo.webui.UIPopupMenu = {
    *          String} popupMenu popup object
    * @param {Object}
    *          container
-   * @param {Number}
-   *          x
-   * @param {Number}
-   *          y
    */
-  init : function(popupMenu, container, x, y) {
+  init : function(popupMenu, container) {
     this.superClass = eXo.webui.UIPopup;
     this.superClass.init(popupMenu, container.id);
   },
