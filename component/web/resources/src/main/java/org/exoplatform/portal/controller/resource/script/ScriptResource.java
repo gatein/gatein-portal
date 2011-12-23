@@ -100,6 +100,11 @@ public class ScriptResource extends Resource<ScriptResource>
          }
       }
 
+      //That is important to make closure independent from building order of graph nodes.
+      if(dependency != null)
+      {
+         closure.addAll(dependency.getClosure());
+      }
       //Update the source's closure
       closure.add(dependencyId);
    }
