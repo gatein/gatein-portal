@@ -29,8 +29,10 @@ import org.jboss.as.controller.ControlledProcessState;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.ExtensionContextImpl;
 import org.jboss.as.controller.ModelController;
-import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.PathAddress;
+import org.jboss.as.controller.ProcessType;
+import org.jboss.as.controller.RunningMode;
+import org.jboss.as.controller.RunningModeControl;
 import org.jboss.as.controller.descriptions.DescriptionProvider;
 import org.jboss.as.controller.descriptions.common.CommonProviders;
 import org.jboss.as.controller.operations.common.Util;
@@ -395,7 +397,7 @@ public class AbstractParsingTest
 
       ModelControllerService(final AdditionalInitialization additionalPreStep, final ControlledProcessState processState, final StringConfigurationPersister persister)
       {
-         super(OperationContext.Type.SERVER, persister, processState, DESC_PROVIDER, null, null);
+         super(ProcessType.STANDALONE_SERVER, new RunningModeControl(RunningMode.NORMAL), persister, processState, DESC_PROVIDER, null, null);
          this.persister = persister;
          this.additionalInit = additionalPreStep;
       }
@@ -414,7 +416,7 @@ public class AbstractParsingTest
          rootRegistration.registerOperationHandler(READ_OPERATION_DESCRIPTION_OPERATION, GlobalOperationHandlers.READ_OPERATION_DESCRIPTION, CommonProviders.READ_OPERATION_PROVIDER, true);
          rootRegistration.registerOperationHandler(WRITE_ATTRIBUTE_OPERATION, GlobalOperationHandlers.WRITE_ATTRIBUTE, CommonProviders.WRITE_ATTRIBUTE_PROVIDER, true);
 
-         ExtensionContext context = new ExtensionContextImpl(rootRegistration, null, persister, ExtensionContext.ProcessType.STANDALONE_SERVER);
+         ExtensionContext context = new ExtensionContextImpl(rootRegistration, null, persister, ProcessType.STANDALONE_SERVER);
          if (additionalInit != null)
          {
             additionalInit.initializeExtraSubystemsAndModel(context, rootResource, rootRegistration);

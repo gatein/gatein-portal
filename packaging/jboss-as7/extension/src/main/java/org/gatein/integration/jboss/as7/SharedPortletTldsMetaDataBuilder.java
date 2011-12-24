@@ -22,7 +22,7 @@
 package org.gatein.integration.jboss.as7;
 
 import org.jboss.metadata.parser.jsp.TldMetaDataParser;
-import org.jboss.metadata.parser.util.NoopXmlResolver;
+import org.jboss.metadata.parser.util.NoopXMLResolver;
 import org.jboss.metadata.web.spec.TldMetaData;
 import org.jboss.modules.Module;
 import org.jboss.modules.ModuleClassLoader;
@@ -87,7 +87,7 @@ class SharedPortletTldsMetaDataBuilder
       try
       {
          final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-         inputFactory.setXMLResolver(NoopXmlResolver.create());
+         inputFactory.setXMLResolver(NoopXMLResolver.create());
          XMLStreamReader xmlReader = inputFactory.createXMLStreamReader(is);
          return TldMetaDataParser.parse(xmlReader);
       }
