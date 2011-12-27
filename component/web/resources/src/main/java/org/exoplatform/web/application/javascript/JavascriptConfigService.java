@@ -51,7 +51,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
@@ -326,22 +328,25 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       return contexts.get(contextPath);
    }
    
-   public List<String> resolveURLs(ControllerContext controllerContext, Collection<ResourceId> ids, boolean merge) throws IOException
+   public Map<String, Boolean> resolveURLs(ControllerContext controllerContext, Collection<ResourceId> ids, boolean merge) throws IOException
    {
-      ArrayList<String> urls = new ArrayList<String>();
+      Map<String, Boolean> urls = new LinkedHashMap<String, Boolean>();
       StringBuilder buffer = new StringBuilder();
       URIWriter writer = new URIWriter(buffer);
 
       //
-      Collection<ScriptResource> resources = scripts.resolve(ids);
+      Map<ScriptResource, Boolean> resources = scripts.resolve(ids);
 
       //
-      for (ScriptResource resource : resources)
+      for (Map.Entry<ScriptResource, Boolean> entry : resources.entrySet())
       {
+         ScriptResource resource = entry.getKey();
+
+         //
          if (!resource.isEmpty())
          {
             controllerContext.renderURL(resource.getParameters(), writer);
-            urls.add(buffer.toString());
+            urls.put(buffer.toString(), entry.getValue());
             buffer.setLength(0);
             writer.reset(buffer);
          }

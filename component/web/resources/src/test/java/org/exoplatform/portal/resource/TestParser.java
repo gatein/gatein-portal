@@ -22,6 +22,7 @@ package org.exoplatform.portal.resource;
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.web.application.javascript.DependencyDescriptor;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.ScriptResourceDescriptor;
 
@@ -50,6 +51,11 @@ public class TestParser extends AbstractGateInTest
          "<scope>shared</scope>" +
          "<name>bar</name>" +
          "</depends>" +
+         "<depends>" +
+         "<scope>portal</scope>" +
+         "<name>juu</name>" +
+         "<on-load>true</on-load>" +
+         "</depends>" +
          "</scripts>" +
          "</gatein-resources>";
 
@@ -59,6 +65,6 @@ public class TestParser extends AbstractGateInTest
       assertEquals(1, scripts.size());
       ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.PORTAL, "foo"), desc.getId());
-      assertEquals(Arrays.asList(new ResourceId(ResourceScope.SHARED, "bar")), desc.getDependencies());
+      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), false), new DependencyDescriptor(new ResourceId(ResourceScope.PORTAL, "juu"), true)), desc.getDependencies());
    }
 }

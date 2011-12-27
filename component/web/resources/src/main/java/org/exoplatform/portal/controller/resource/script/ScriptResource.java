@@ -34,9 +34,13 @@ import java.util.Map;
 import java.util.Set;
 
 /**
+ * This class implements the {@link Comparable} interface, however the natural ordering provided here
+ * is not consistent with equals, therefore this class should not be used as a key in a {@link java.util.TreeMap}
+ * for instance.
+ * 
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ScriptResource extends Resource<ScriptResource>
+public class ScriptResource extends Resource<ScriptResource> implements Comparable<ScriptResource>
 {
 
    /** . */
@@ -47,6 +51,9 @@ public class ScriptResource extends Resource<ScriptResource>
 
    /** . */
    private final Map<QualifiedName, String> parameters;
+
+   /** . */
+   final HashMap<ResourceId, Boolean> dependencies;
 
    /** . */
    final HashSet<ResourceId> closure;
@@ -66,6 +73,7 @@ public class ScriptResource extends Resource<ScriptResource>
       this.graph = graph;
       this.modules = new ArrayList<Module>();
       this.closure = new HashSet<ResourceId>();
+      this.dependencies = new HashMap<ResourceId, Boolean>();
    }
 
    public boolean isEmpty()
@@ -79,6 +87,11 @@ public class ScriptResource extends Resource<ScriptResource>
    }
 
    public void addDependency(ResourceId dependencyId)
+   {
+      addDependency(dependencyId, false);
+   }
+
+   public void addDependency(ResourceId dependencyId, boolean onLoad)
    {
       ScriptResource dependency = graph.getResource(dependencyId);
 
@@ -100,13 +113,17 @@ public class ScriptResource extends Resource<ScriptResource>
          }
       }
 
-      //That is important to make closure independent from building order of graph nodes.
+      // That is important to make closure independent from building order of graph nodes.
       if(dependency != null)
       {
          closure.addAll(dependency.getClosure());
       }
+      
       //Update the source's closure
       closure.add(dependencyId);
+      
+      //
+      dependencies.put(dependencyId, onLoad);
    }
 
    public Set<ResourceId> getClosure()
@@ -126,6 +143,11 @@ public class ScriptResource extends Resource<ScriptResource>
       Module module = new Module.Remote(this, contextPath, name, path, priority);
       modules.add(module);
       return module;
+   }
+   
+   public Boolean isOnLoad(ResourceId dependencyId)
+   {
+      return dependencies.get(dependencyId);
    }
 
    public List<Module> removeModuleByName(String name)
@@ -183,5 +205,27 @@ public class ScriptResource extends Resource<ScriptResource>
          names.add(script.getName());
       }
       return names;
+   }
+
+   public int compareTo(ScriptResource o)
+   {
+      if (closure.contains(o.id))
+      {
+         return 1;
+      }
+      else if (closure.contains(o.id))
+      {
+         return -1;
+      }
+      else
+      {
+         return 0;
+      }
+   }
+
+   @Override
+   public String toString()
+   {
+      return "ScriptResource[id=" + id + "]";
    }
 }

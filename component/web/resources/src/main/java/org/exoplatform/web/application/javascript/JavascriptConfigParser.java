@@ -218,7 +218,10 @@ public class JavascriptConfigParser
          {
             String dependencyName = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "name", true));
             ResourceScope dependencyScope = ResourceScope.valueOf(XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "scope", true)).toUpperCase());
-            ResourceId dependency = new ResourceId(dependencyScope, dependencyName);
+            ResourceId resourceId = new ResourceId(dependencyScope, dependencyName);
+            Element onLoadElt = XMLTools.getUniqueChild(moduleElt, "on-load", false);
+            boolean onLoad = onLoadElt != null && "true".equals(XMLTools.asString(onLoadElt));
+            DependencyDescriptor dependency = new DependencyDescriptor(resourceId, onLoad);
             desc.dependencies.add(dependency);
          }
       }

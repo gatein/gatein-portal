@@ -27,6 +27,7 @@ import org.exoplatform.portal.controller.resource.script.ScriptResource;
 import org.gatein.common.util.Tools;
 
 import java.util.Collections;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -42,7 +43,10 @@ public class TestScriptGraph extends AbstractGateInTest
 
    /** . */
    private static final ResourceId C = new ResourceId(ResourceScope.SHARED, "C");
-   
+
+   /** . */
+   private static final ResourceId D = new ResourceId(ResourceScope.PORTAL, "D");
+
    public void testDetectCycle1()
    {
       ScriptGraph graph = new ScriptGraph();
@@ -115,7 +119,6 @@ public class TestScriptGraph extends AbstractGateInTest
     */
    public void testClosurePropagate()
    {
-      ResourceId D = new ResourceId(ResourceScope.PORTAL, "D");
       ScriptGraph graph = new ScriptGraph();
       ScriptResource a = graph.addResource(A);
       ScriptResource b = graph.addResource(B);
@@ -127,5 +130,66 @@ public class TestScriptGraph extends AbstractGateInTest
       c.addDependency(D);
 
       assertEquals(Tools.toSet(B, C, D), a.getClosure());
+   }
+
+   public void testOnLoad()
+   {
+      ScriptGraph graph = new ScriptGraph();
+
+      ScriptResource a = graph.addResource(A);
+      ScriptResource b = graph.addResource(B);
+      ScriptResource c = graph.addResource(C);
+      a.addDependency(C, true);
+      b.addDependency(C, false);
+
+      //
+      Map<ScriptResource, Boolean> resolution = graph.resolve(Collections.singleton(A));
+      assertEquals(2, resolution.size());
+      assertEquals(Tools.toSet(a, c), resolution.keySet());
+      assertEquals((Boolean)false, resolution.get(a));
+      assertEquals((Boolean)true, resolution.get(c));
+
+      //
+      resolution = graph.resolve(Collections.singleton(B));
+      assertEquals(2, resolution.size());
+      assertEquals(Tools.toSet(b, c), resolution.keySet());
+      assertEquals((Boolean)false, resolution.get(b));
+      assertEquals((Boolean)false, resolution.get(c));
+
+      //
+      resolution = graph.resolve(Collections.singleton(C));
+      assertEquals(1, resolution.size());
+      assertEquals(Tools.toSet(c), resolution.keySet());
+      assertEquals((Boolean)false, resolution.get(c));
+
+      //
+      resolution = graph.resolve(Tools.toSet(A, B));
+      assertEquals(3, resolution.size());
+      assertEquals(Tools.toSet(a, b, c), resolution.keySet());
+      assertEquals((Boolean)false, resolution.get(a));
+      assertEquals((Boolean)false, resolution.get(b));
+      assertEquals((Boolean)false, resolution.get(c));
+
+      //
+      resolution = graph.resolve(Tools.toSet(A, C));
+      assertEquals(2, resolution.size());
+      assertEquals(Tools.toSet(a, c), resolution.keySet());
+      assertEquals((Boolean)false, resolution.get(a));
+      assertEquals((Boolean)false, resolution.get(c));
+
+      //
+      resolution = graph.resolve(Tools.toSet(B, C));
+      assertEquals(2, resolution.size());
+      assertEquals(Tools.toSet(b, c), resolution.keySet());
+      assertEquals((Boolean)false, resolution.get(b));
+      assertEquals((Boolean)false, resolution.get(c));
+
+      //
+      resolution = graph.resolve(Tools.toSet(A, B, C));
+      assertEquals(3, resolution.size());
+      assertEquals(Tools.toSet(a, b, c), resolution.keySet());
+      assertEquals((Boolean)false, resolution.get(a));
+      assertEquals((Boolean)false, resolution.get(b));
+      assertEquals((Boolean)false, resolution.get(c));
    }
 }

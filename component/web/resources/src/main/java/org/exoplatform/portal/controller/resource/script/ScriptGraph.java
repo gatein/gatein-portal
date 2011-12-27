@@ -25,12 +25,12 @@ import org.exoplatform.portal.controller.resource.ResourceScope;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -53,50 +53,72 @@ public class ScriptGraph
       this.resources = resources;
    }
 
-   public Collection<ScriptResource> resolve(Collection<ResourceId> ids)
+   public Map<ScriptResource, Boolean> resolve(Collection<ResourceId> ids)
    {
       // First build the closure
-      HashSet<ResourceId> closure = new HashSet<ResourceId>();
+      Map<ScriptResource, Boolean> closure = new HashMap<ScriptResource, Boolean>();
+
+      //
       for (ResourceId id : ids)
       {
          ScriptResource resource = getResource(id);
          if (resource != null)
          {
-            closure.add(id);
-            closure.addAll(resource.closure);
-         }
-      }
-      
-      // Now we create the set
-      List<ScriptResource> resources = new ArrayList<ScriptResource>();
-      for (ResourceId id : closure)
-      {
-         ScriptResource resource = getResource(id);
-         resources.add(resource);
-      }
-      
-      // And we sort it
-      Collections.sort(resources, new Comparator<ScriptResource>()
-      {
-         public int compare(ScriptResource o1, ScriptResource o2)
-         {
-            if (o1.closure.contains(o2.getId()))
+            // Add the resource 
+            closure.put(resource, false);
+            
+            // Add the resource closure
+            for (ResourceId dependencyId : resource.closure)
             {
-               return 1;
-            }
-            else if (o2.closure.contains(o1.getId()))
-            {
-               return -1;
-            }
-            else
-            {
-               return 0;
-            }
-         }
-      });
+               ScriptResource dependency = getResource(dependencyId);
 
+               //
+               if (dependency != null)
+               {
+                  Boolean onLoad = closure.get(dependency);
+
+                  //
+                  if (onLoad != null && !onLoad)
+                  {
+                     // It's already for immediate loading
+                  }
+                  else
+                  {
+                     onLoad = resource.dependencies.get(dependencyId);
+
+                     // We don't know if we will need this resource immediatly so
+                     // we assume it is onload, another dependency will set it to
+                     // false later in this loop
+                     if (onLoad == null)
+                     {
+                        onLoad = true;
+                     }
+
+                     //
+                     closure.put(dependency, onLoad);
+                  }
+               }
+               else
+               {
+                  // Warn somehow since we cannot resolve the resource
+               }
+            }
+         }
+      }
+      
       //
-      return resources;
+      ArrayList<ScriptResource> keys = new ArrayList<ScriptResource>(closure.keySet());
+      Collections.sort(keys);
+      
+      // There is a valid reason to not use a TreeMap directly: it does not work :-)
+      // more seriously, we have a natural ordering but with inconsistent equals, please
+      // see Comparable#compareTo javadoc
+      LinkedHashMap<ScriptResource, Boolean> ret = new LinkedHashMap<ScriptResource, Boolean>();
+      for (ScriptResource key : keys)
+      {
+         ret.put(key, closure.get(key));
+      }
+      return ret;
    }
 
    public ScriptResource getResource(ResourceId id)

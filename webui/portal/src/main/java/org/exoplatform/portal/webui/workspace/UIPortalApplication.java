@@ -362,10 +362,14 @@ public class UIPortalApplication extends UIApplication
 
       try
       {
-         Collection<String> urls = service.resolveURLs(prc.getControllerContext(), resourceIds, !PropertyManager.isDevelopping());
+         Map<String, Boolean> urls = service.resolveURLs(prc.getControllerContext(), resourceIds, !PropertyManager.isDevelopping());
+
+         // Here we get the list of stuff to load on demand or not
+         // according to the boolean value in the map
+
          // todo : switch to debug later
          log.info("Resolved URLS for page: " + urls);
-         return urls;
+         return urls.keySet();
       }
       catch (IOException e)
       {

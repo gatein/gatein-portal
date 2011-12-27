@@ -21,43 +21,52 @@ package org.exoplatform.web.application.javascript;
 
 import org.exoplatform.portal.controller.resource.ResourceId;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ScriptResourceDescriptor
+public class DependencyDescriptor
 {
 
    /** . */
-   final ResourceId id;
-   
-   /** . */
-   final List<Javascript> modules;
+   private final ResourceId resourceId;
 
    /** . */
-   final List<DependencyDescriptor> dependencies;
+   private final boolean onLoad;
 
-   public ScriptResourceDescriptor(ResourceId id)
+   public DependencyDescriptor(ResourceId resourceId, boolean onLoad) throws NullPointerException
    {
-      this.id = id;
-      this.modules = new ArrayList<Javascript>();
-      this.dependencies = new ArrayList<DependencyDescriptor>();
+      if (resourceId == null)
+      {
+         throw new NullPointerException("No null resource id accepted");
+      }
+
+      //
+      this.resourceId = resourceId;
+      this.onLoad = onLoad;
    }
 
-   public ResourceId getId()
+   public ResourceId getResourceId()
    {
-      return id;
+      return resourceId;
    }
 
-   public List<Javascript> getModules()
+   public boolean isOnLoad()
    {
-      return modules;
+      return onLoad;
    }
 
-   public List<DependencyDescriptor> getDependencies()
+   @Override
+   public boolean equals(Object obj)
    {
-      return dependencies;
+      if (obj == this)
+      {
+         return true;
+      }
+      if (obj instanceof DependencyDescriptor)
+      {
+         DependencyDescriptor that = (DependencyDescriptor)obj;
+         return resourceId.equals(that.resourceId) && onLoad == that.onLoad;
+      }
+      return false;
    }
 }

@@ -51,9 +51,9 @@ public class JavascriptTask
          {
             module.addModuleTo(resource);
          }
-         for (ResourceId dependency : desc.dependencies)
+         for (DependencyDescriptor dependency : desc.dependencies)
          {
-            resource.addDependency(dependency);
+            resource.addDependency(dependency.getResourceId(), dependency.isOnLoad());
          }
       }
    }
