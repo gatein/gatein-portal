@@ -22,8 +22,8 @@
 
 <gatein-resources
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2 http://www.gatein.org/xml/ns/gatein_resources_1_2"
-   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2">
+   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2_1 http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
+   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
 
 
 	<!-- OrganizationPortlet skins -->
@@ -83,5 +83,66 @@
 		<skin-name>Default</skin-name>
 		<css-path>/skin/register/webui/component/DefaultStylesheet.css</css-path>
 	</portlet-skin>
+	
+	<scripts>
+	  <scope>portlet</scope>
+	  <name>StarToolbarPortlet</name>
+	  <module>
+	     <name>eXo.portal.UIPortalNavigation</name>
+	     <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
+	  </module>
+	  <depends>
+	    <scope>shared</scope>
+	    <name>webui</name>
+	  </depends>
+	</scripts>
+	<scripts>
+	  <scope>portlet</scope>
+	  <name>UserToolbarSitePortlet</name>
+	  <module>
+	     <name>eXo.portal.UIPortalNavigation</name>
+	     <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
+	  </module>
+	  <depends>
+	    <scope>shared</scope>
+	    <name>webui</name>
+	  </depends>
+	</scripts>
+	<scripts>
+	  <scope>portlet</scope>
+	  <name>UserToolbarGroupPortlet</name>
+	  <module>
+	     <name>eXo.portal.UIPortalNavigation</name>
+	     <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
+	  </module>
+	  <depends>
+	    <scope>shared</scope>
+	    <name>webui</name>
+	  </depends>
+	</scripts>
+	<scripts>
+	  <scope>portlet</scope>
+	  <name>UserToolbarDashboardPortlet</name>
+	  <module>
+	     <name>eXo.portal.UIPortalNavigation</name>
+	     <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
+	  </module>
+	  <depends>
+	    <scope>shared</scope>
+	    <name>webui</name>
+	  </depends>
+	</scripts>
+	<scripts>
+	  <scope>portlet</scope>
+	  <name>AdminToolbarPortlet</name>
+	  <module>
+	     <name>eXo.portal.UIPortalNavigation</name>
+	     <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
+	  </module>
+	  <depends>
+	    <scope>shared</scope>
+	    <name>webui</name>
+	  </depends>
+	</scripts>
 </gatein-resources>
 

@@ -72,6 +72,18 @@ var eXo  = {
 *
 */
 eXo.require = function(module, jsLocation, callback, context, params) {
+  try {
+    if(eval(module + ' != null')) {
+      if (callback) {
+        var ctx = context ? context : {};
+        if(params && typeof(params) != "string" && params.length) callback.apply(ctx, params);
+     	else callback.call(ctx, params) ;
+      }
+      return ;
+    }
+  } catch(err) {
+    //alert(err + " : " + module);
+  }
   window.status = "Loading Javascript Module " + module ;
   if(jsLocation == null) jsLocation = '/eXoResources/javascript/' ;
   var path = jsLocation  + module.replace(/\./g, '/')  + '.js' ;

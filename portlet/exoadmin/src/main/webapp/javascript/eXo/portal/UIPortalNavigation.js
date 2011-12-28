@@ -47,16 +47,20 @@ eXo.portal.UIPortalNavigation = {
   /**
    * Calls the init function when the page loads
    */
-  onLoad : function() {
-    var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
-    var uiNavPortlets = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "UINavigationPortlet");
-    if (uiNavPortlets.length) {
-  		var mainContainer = eXo.core.DOMUtil.findFirstDescendantByClass(uiNavPortlets[0], "ul", "UIHorizontalTabs");
-   		eXo.portal.UIPortalNavigation.init(uiNavPortlets[0], mainContainer, 0, 0);
-  		for (var i = 1; i < uiNavPortlets.length; ++i) {
-  				uiNavPortlets[i].style.display = "none";
-  		}		
-    }
+  onLoad : function(baseId) {
+	var domUtil = eXo.core.DOMUtil;
+	var uiNavPortlet = document.getElementById(baseId);
+	if(domUtil.hasClass(uiNavPortlet, "UIHorizontalTabs")) eXo.portal.UIPortalNavigation.init(uiNavPortlet, uiNavPortlet, 0, 0);
+	  
+	if (baseId === "UIHorizontalNavigation") {
+		var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
+		var uiNavPortlets = domUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "UIHorizontalNavigation");
+		if (uiNavPortlets.length) {
+			for (var i = 1; i < uiNavPortlets.length; ++i) {
+				uiNavPortlets[i].style.display = "none";
+			}		
+		}		
+	}
   },
   
   /**
@@ -73,7 +77,7 @@ eXo.portal.UIPortalNavigation = {
    */
   buildMenu : function(popupMenu) {
     var DOMUtil = eXo.core.DOMUtil;
-    var topContainer = DOMUtil.findFirstDescendantByClass(popupMenu, "ul", "UIHorizontalTabs");
+    var topContainer = popupMenu;
     topContainer.id = "PortalNavigationTopContainer";
     // Top menu items
     var topItems = DOMUtil.findDescendantsByClass(topContainer, "li", "UITab");
@@ -193,8 +197,7 @@ eXo.portal.UIPortalNavigation = {
   		    	for(var i = 0; i < uicomponents.length; i ++) {
   		      	var navPortlet = DOMUtil.findFirstDescendantByClass(uicomponents[i], "div", "UINavigationPortlet") ;
   		      	if(navPortlet && (navAncestor != navPortlet)) {
-  		      		var tabsContainer = DOMUtil.findFirstDescendantByClass(navPortlet, "ul", "UIHorizontalTabs");
-  		      		tabsContainer.style.position = "static" ;
+  		      		navPortlet.style.position = "static" ;
   		      	}
   		    	}	
   		    } 
@@ -293,13 +296,7 @@ eXo.portal.UIPortalNavigation = {
     }
   },
 
-  cancelHideMenuContainer : function(evt) {
-    if (evt && evt.stopPropagation) {
-	  evt.stopPropagation();
-    } else if (window.event) {
-	  window.event.cancelBubble = true;
-    }
-	  
+  cancelHideMenuContainer : function() {
     if (this.hideMenuTimeoutId) {
       window.clearTimeout(this.hideMenuTimeoutId) ;
     }
@@ -355,8 +352,7 @@ eXo.portal.UIPortalNavigation = {
       for(var i = 0; i < uicomponents.length; i ++) {
         var navPortlet = DOMUtil.findFirstDescendantByClass(uicomponents[i], "div", "UINavigationPortlet") ;
         if(navPortlet) {
-        	var tabsContainer = DOMUtil.findFirstDescendantByClass(navPortlet, "ul", "UIHorizontalTabs");
-        	tabsContainer.style.position = "relative" ;
+        	navPortlet.style.position = "relative" ;
         }
       }
     }  
@@ -439,12 +435,12 @@ eXo.portal.UIPortalNavigation = {
    *  . Configures the arrows
    *  . Calls the initScroll function
    */
-  loadScroll : function(e) {
+  loadScroll : function(portalNavId) {
     var uiNav = eXo.portal.UIPortalNavigation;
-    var portalNav = document.getElementById("PortalNavigationTopContainer");
+    var portalNav = document.getElementById(portalNavId);
     if (portalNav) {
       // Creates new ScrollManager and initializes it
-      uiNav.scrollMgr = eXo.portal.UIPortalControl.newScrollManager("PortalNavigationTopContainer");
+      uiNav.scrollMgr = eXo.portal.UIPortalControl.newScrollManager(portalNavId);
       uiNav.scrollMgr.initFunction = uiNav.initScroll;
       // Adds the tab elements to the manager
       uiNav.scrollMgr.mainContainer = portalNav;

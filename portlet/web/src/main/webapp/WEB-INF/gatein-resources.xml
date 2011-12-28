@@ -85,19 +85,17 @@
   <scripts>
     <scope>portlet</scope>
     <name>NavigationPortlet</name>
+    <module>
+       <name>eXo.portal.UIPortalNavigation</name>
+       <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
+    </module>
     <depends>
       <scope>shared</scope>
-      <name>common</name>
+      <name>webui</name>
     </depends>
     <depends>
       <scope>shared</scope>
       <name>portal</name>
     </depends>
-    <depends>
-      <scope>shared</scope>
-      <name>webui</name>
-    </depends>
   </scripts>
-
 </gatein-resources>
-

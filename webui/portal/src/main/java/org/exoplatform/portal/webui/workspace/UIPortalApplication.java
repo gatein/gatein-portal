@@ -334,6 +334,7 @@ public class UIPortalApplication extends UIApplication
       String portalOwner = Util.getPortalRequestContext().getPortalOwner();
       resourceIds.add(new ResourceId(ResourceScope.PORTAL, portalOwner));
       
+      UIContainer tmp = getCurrentSite();
       // If we are logged in we hardcode dependency onto common js for now
       // as it is required for some stuff
       // we'll figure out maybe something later
@@ -343,12 +344,12 @@ public class UIPortalApplication extends UIApplication
          resourceIds.add(new ResourceId(ResourceScope.SHARED, "common"));
          resourceIds.add(new ResourceId(ResourceScope.SHARED, "portal"));
          resourceIds.add(new ResourceId(ResourceScope.SHARED, "webui"));
+         tmp = getChildById(UI_WORKING_WS_ID);
       }
 
-      //
-      UIPortal site = getCurrentSite();
+      //      
       ArrayList<UIPortlet> windows = new ArrayList<UIPortlet>();
-      site.findComponentOfType(windows, UIPortlet.class);
+      tmp.findComponentOfType(windows, UIPortlet.class);
       for (UIPortlet<?, ?> window : windows)
       {
          PortletInfo info = window.getProducedOfferedPortlet().getInfo();
