@@ -110,21 +110,22 @@
       </style-theme>
    </window-style>
 
-   <javascript>
-      <param>
-         <js-module>eXo</js-module>
-         <js-path>/javascript/eXo.js</js-path>
-         <js-priority>0</js-priority>
-      </param>
-   </javascript>
+   <!-- Bootstrap Javascripts -->
+   <scripts>
+      <scope>shared</scope>
+      <name>bootstrap</name>
+      <module>
+         <name>eXo</name>
+         <path>/javascript/eXo.js</path>
+      </module>
+      <module>
+         <name>eXo.core.Loader</name>
+         <path>/javascript/eXo/core/Loader.js</path>
+      </module>
+   </scripts>
 
    <!-- CORE Javascripts -->
    <javascript>
-      <param>
-         <js-module>eXo.core.Loader</js-module>
-         <js-path>/javascript/eXo/core/Loader.js</js-path>
-         <js-priority>0</js-priority>
-      </param>
       <param>
          <js-module>eXo.core.Utils</js-module>
          <js-path>/javascript/eXo/core/Util.js</js-path>
@@ -199,8 +200,42 @@
    </javascript>
 
    <!-- Portal Javascripts -->
+   <scripts>
+      <scope>shared</scope>
+      <name>portal</name>
+      <module>
+         <name>eXo.portal.PortalHttpRequest</name>
+         <path>/javascript/eXo/portal/PortalHttpRequest.js</path>
+      </module>
+      <module>
+         <name>eXo.portal.UIPortal</name>
+         <path>/javascript/eXo/portal/UIPortal.js</path>
+      </module>
+      <module>
+         <name>eXo.portal.UIWorkspace</name>
+         <path>/javascript/eXo/portal/UIWorkspace.js</path>
+      </module>
+      <module>
+         <name>eXo.portal.UIPortalControl</name>
+         <path>/javascript/eXo/portal/UIPortalControl.js</path>
+      </module>
+      <module>
+         <name>eXo.portal.PortalDragDrop</name>
+         <path>/javascript/eXo/portal/PortalDragDrop.js</path>
+      </module>
+      <module>
+         <name>eXo.portal.UIMaskWorkspace</name>
+         <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
+      </module>
+      <depends>
+         <scope>shared</scope>
+         <name>common</name>
+      </depends>
+   </scripts>
+   
+<!--
    <javascript>
-<!--       <param>
+       <param>
          <js-module>eXo.portal.PortalHttpRequest</js-module>
          <js-path>/javascript/eXo/portal/PortalHttpRequest.js</js-path>
          <js-priority>3</js-priority>
@@ -230,38 +265,6 @@
          <js-path>/javascript/eXo/portal/UIMaskWorkspace.js</js-path>
          <js-priority>3</js-priority>
       </param> -->
-      <scripts>
-         <scope>shared</scope>
-         <name>portal</name>
-         <module>
-            <name>eXo.portal.PortalHttpRequest</name>
-            <path>/javascript/eXo/portal/PortalHttpRequest.js</path>
-         </module>
-         <module>
-            <name>eXo.portal.UIPortal</name>
-            <path>/javascript/eXo/portal/UIPortal.js</path>
-         </module>
-         <module>
-            <name>eXo.portal.UIWorkspace</name>
-            <path>/javascript/eXo/portal/UIWorkspace.js</path>
-         </module>
-         <module>
-            <name>eXo.portal.UIPortalControl</name>
-            <path>/javascript/eXo/portal/UIPortalControl.js</path>
-         </module>
-         <module>
-            <name>eXo.portal.PortalDragDrop</name>
-            <path>/javascript/eXo/portal/PortalDragDrop.js</path>
-         </module>
-         <module>
-            <name>eXo.portal.UIMaskWorkspace</name>
-            <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
-         </module>
-         <depends>
-            <scope>shared</scope>
-            <name>common</name>
-         </depends>
-      </scripts>
 
       <!-- 
       <param>
@@ -274,52 +277,53 @@
          <js-path>/javascript/eXo/core/Topic.js</js-path>
          <js-priority>3</js-priority>
       </param>
-       -->       
    </javascript>
+       -->       
 
    <!-- WebUI Javascripts -->
-   <javascript>
-      <scripts>
+   <scripts>
+      <scope>shared</scope>
+      <name>webui</name>
+      <module>
+         <name>eXo.webui.UIItemSelector</name>
+         <path>/javascript/eXo/webui/UIItemSelector.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIForm</name>
+         <path>/javascript/eXo/webui/UIForm.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIPopup</name>
+         <path>/javascript/eXo/webui/UIPopup.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIPopupSelectCategory</name>
+         <path>/javascript/eXo/webui/UIPopupSelectCategory.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIPopupWindow</name>
+         <path>/javascript/eXo/webui/UIPopupWindow.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIHorizontalTabs</name>
+         <path>/javascript/eXo/webui/UIHorizontalTabs.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIPopupMenu</name>
+         <path>/javascript/eXo/webui/UIPopupMenu.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIPortlet</name>
+         <path>/javascript/eXo/webui/UIPortlet.js</path>
+      </module>
+      <depends>
          <scope>shared</scope>
-         <name>webui</name>
-         <module>
-            <name>eXo.webui.UIItemSelector</name>
-            <path>/javascript/eXo/webui/UIItemSelector.js</path>
-         </module>
-         <module>
-            <name>eXo.webui.UIForm</name>
-            <path>/javascript/eXo/webui/UIForm.js</path>
-         </module>
-         <module>
-            <name>eXo.webui.UIPopup</name>
-            <path>/javascript/eXo/webui/UIPopup.js</path>
-         </module>
-         <module>
-            <name>eXo.webui.UIPopupSelectCategory</name>
-            <path>/javascript/eXo/webui/UIPopupSelectCategory.js</path>
-         </module>
-         <module>
-            <name>eXo.webui.UIPopupWindow</name>
-            <path>/javascript/eXo/webui/UIPopupWindow.js</path>
-         </module>
-         <module>
-            <name>eXo.webui.UIHorizontalTabs</name>
-            <path>/javascript/eXo/webui/UIHorizontalTabs.js</path>
-         </module>
-         <module>
-            <name>eXo.webui.UIPopupMenu</name>
-            <path>/javascript/eXo/webui/UIPopupMenu.js</path>
-         </module>
-         <module>
-            <name>eXo.webui.UIPortlet</name>
-            <path>/javascript/eXo/webui/UIPortlet.js</path>
-         </module>
-         <depends>
-            <scope>shared</scope>
-            <name>common</name>
-         </depends>
-      </scripts>
-<!--       <param>
+         <name>common</name>
+      </depends>
+   </scripts>
+<!--
+   <javascript>
+       <param>
          <js-module>eXo.webui.UIItemSelector</js-module>
          <js-path>/javascript/eXo/webui/UIItemSelector.js</js-path>
          <js-priority>4</js-priority>
@@ -358,8 +362,10 @@
          <js-module>eXo.webui.UIPortlet</js-module>
          <js-path>/javascript/eXo/webui/UIPortlet.js</js-path>
          <js-priority>4</js-priority>
-      </param> -->
+      </param>
    </javascript>
+    -->
+
 
    <!-- Should be lazy loaded -->
    <!-- 

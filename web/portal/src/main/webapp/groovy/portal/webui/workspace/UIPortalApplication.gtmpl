@@ -51,7 +51,7 @@
 		%>
 			<link id="${portletSkin.id}" rel="stylesheet" type="text/css" href= "$url" />
 		<%}%>
-
+		<script type="text/javascript" src="/portal/scripts/SHARED/bootstrap.js"></script>
 		<% for (url in scriptsURLs) { %>
             <script type="text/javascript" src="<%= url %>"></script>
 		<% } %>
