@@ -28,6 +28,7 @@ import org.gatein.wci.security.Credentials;
 import org.gatein.wci.security.WCILoginController;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
@@ -91,7 +92,7 @@ public class PortalLoginController extends WCILoginController {
       }
 
       //
-      String redirectURI = req.getContextPath() + "/dologin?initialURI=" + uri;
+      String redirectURI = req.getContextPath() + "/dologin?initialURI=" + URLEncoder.encode(uri, "UTF-8");
       resp.sendRedirect(resp.encodeRedirectURL(redirectURI));
    }
 }
