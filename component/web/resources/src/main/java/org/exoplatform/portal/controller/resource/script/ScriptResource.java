@@ -213,7 +213,7 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       {
          return 1;
       }
-      else if (closure.contains(o.id))
+      else if (o.closure.contains(id))
       {
          return -1;
       }
