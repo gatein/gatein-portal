@@ -231,58 +231,22 @@
          <name>eXo.portal.UIMaskWorkspace</name>
          <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
       </module>
+      <!--
+      <module>
+         <name>eXo.core.Cometd</name>
+         <path>/javascript/eXo/core/Cometd.js</path>
+      </module>
+      <module>
+         <name>eXo.core.Topic</name>
+         <path>/javascript/eXo/core/Topic.js</path>
+      </module>
+      -->       
       <depends>
          <scope>shared</scope>
          <name>common</name>
       </depends>
    </scripts>
    
-<!--
-   <javascript>
-       <param>
-         <js-module>eXo.portal.PortalHttpRequest</js-module>
-         <js-path>/javascript/eXo/portal/PortalHttpRequest.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.UIPortal</js-module>
-         <js-path>/javascript/eXo/portal/UIPortal.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.UIWorkspace</js-module>
-         <js-path>/javascript/eXo/portal/UIWorkspace.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.UIPortalControl</js-module>
-         <js-path>/javascript/eXo/portal/UIPortalControl.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.PortalDragDrop</js-module>
-         <js-path>/javascript/eXo/portal/PortalDragDrop.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.UIMaskWorkspace</js-module>
-         <js-path>/javascript/eXo/portal/UIMaskWorkspace.js</js-path>
-         <js-priority>3</js-priority>
-      </param> -->
-
-      <!-- 
-      <param>
-         <js-module>eXo.core.Cometd</js-module>
-         <js-path>/javascript/eXo/core/Cometd.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Topic</js-module>
-         <js-path>/javascript/eXo/core/Topic.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-   </javascript>
-       -->       
 
    <!-- WebUI Javascripts -->
    <scripts>
@@ -325,51 +289,43 @@
          <name>common</name>
       </depends>
    </scripts>
-<!--
-   <javascript>
-       <param>
-         <js-module>eXo.webui.UIItemSelector</js-module>
-         <js-path>/javascript/eXo/webui/UIItemSelector.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIForm</js-module>
-         <js-path>/javascript/eXo/webui/UIForm.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIPopup</js-module>
-         <js-path>/javascript/eXo/webui/UIPopup.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIPopupSelectCategory</js-module>
-         <js-path>/javascript/eXo/webui/UIPopupSelectCategory.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIPopupWindow</js-module>
-         <js-path>/javascript/eXo/webui/UIPopupWindow.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIHorizontalTabs</js-module>
-         <js-path>/javascript/eXo/webui/UIHorizontalTabs.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIPopupMenu</js-module>
-         <js-path>/javascript/eXo/webui/UIPopupMenu.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIPortlet</js-module>
-         <js-path>/javascript/eXo/webui/UIPortlet.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-   </javascript>
-    -->
-
+   
+   <scripts>
+      <scope>shared</scope>
+      <name>webui-ext</name>
+      <module>
+         <name>eXo.webui.UICalendar</name>
+         <path>/javascript/eXo/webui/UICalendar.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIUpload</name>
+         <path>/javascript/eXo/webui/UIUpload.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIRightClickPopupMenu</name>
+         <path>/javascript/eXo/webui/UIRightClickPopupMenu.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIDropDownControl</name>
+         <path>/javascript/eXo/webui/UIDropDownControl.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIVirtualList</name>
+         <path>/javascript/eXo/webui/UIVirtualList.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIColorPicker</name>
+         <path>/javascript/eXo/webui/UIColorPicker.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UICombobox</name>
+         <path>/javascript/eXo/webui/UICombobox.js</path>
+      </module>
+      <depends>
+         <scope>shared</scope>
+         <name>common</name>
+      </depends>
+   </scripts>
 
    <!-- Should be lazy loaded -->
    <!-- 
@@ -390,16 +346,6 @@
          <js-priority>4</js-priority>
       </param>
       <param>
-         <js-module>eXo.webui.UIRightClickPopupMenu</js-module>
-         <js-path>/javascript/eXo/webui/UIRightClickPopupMenu.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIDropDownControl</js-module>
-         <js-path>/javascript/eXo/webui/UIDropDownControl.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
          <js-module>eXo.webui.UIVerticalSlideTabs</js-module>
          <js-path>/javascript/eXo/webui/UIVerticalSlideTabs.js</js-path>
          <js-priority>4</js-priority>
@@ -407,21 +353,6 @@
       <param>
          <js-module>eXo.webui.UINotification</js-module>
          <js-path>/javascript/eXo/webui/UINotification.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UICombobox</js-module>
-         <js-path>/javascript/eXo/webui/UICombobox.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIVirtualList</js-module>
-         <js-path>/javascript/eXo/webui/UIVirtualList.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIColorPicker</js-module>
-         <js-path>/javascript/eXo/webui/UIColorPicker.js</js-path>
          <js-priority>4</js-priority>
       </param>
    </javascript>

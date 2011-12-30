@@ -20,40 +20,16 @@
  * This class contains common js object that used in whole portal
  */
 var eXo  = {
-  animation : { },
-  
-  browser : { },
-    
-  desktop : { },
-  
   core : { },
 
   env : { portal: {}, client: {}, server: {} },
 
   portal : { },
     
-  util : { },
-  
   webui : { },
 
   gadget : { },
-  
-  application : { 
-  	browser : { }
-  },
-  
-  ecm : { },  
-  
-  calendar : { },
-  
-  contact : { },
-  
-  forum : { }, 
-   
-  mail : { },
-  
-  faq : { },
-  
+
   session : { },
   
   i18n : { }
