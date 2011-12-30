@@ -216,10 +216,6 @@
          <path>/javascript/eXo/portal/UIPortal.js</path>
       </module>
       <module>
-         <name>eXo.portal.UIWorkspace</name>
-         <path>/javascript/eXo/portal/UIWorkspace.js</path>
-      </module>
-      <module>
          <name>eXo.portal.UIPortalControl</name>
          <path>/javascript/eXo/portal/UIPortalControl.js</path>
       </module>
