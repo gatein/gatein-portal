@@ -327,6 +327,22 @@
       </depends>
    </scripts>
 
+   <scripts>
+      <scope>shared</scope>
+      <name>navigation</name>
+      <module>
+         <name>eXo.portal.UIPortalNavigation</name>
+         <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
+      </module>
+      <depends>
+         <scope>shared</scope>
+         <name>portal</name>
+      </depends>
+      <depends>
+         <scope>shared</scope>
+         <name>webui</name>
+      </depends>
+   </scripts>
    <!-- Should be lazy loaded -->
    <!-- 
    <javascript>
