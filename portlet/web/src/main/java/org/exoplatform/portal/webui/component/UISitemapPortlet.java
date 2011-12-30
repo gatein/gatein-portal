@@ -19,13 +19,11 @@
 
 package org.exoplatform.portal.webui.component;
 
-import java.util.Date;
 import java.util.List;
 
 import javax.portlet.MimeResponse;
 import javax.portlet.PortletPreferences;
 import javax.portlet.PortletRequest;
-import javax.portlet.PortletResponse;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceURL;
 
@@ -37,7 +35,6 @@ import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.portal.webui.navigation.TreeNode;
 import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -47,7 +44,6 @@ import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Element;
 
 /**
  * Created by The eXo Platform SARL
@@ -95,19 +91,6 @@ public class UISitemapPortlet extends UIPortletApplication
       {
          uiPortalNavigation.setScope(GenericScope.treeShape(level));
       }
-   }
-
-   @Override
-   public void processRender(WebuiApplication app, WebuiRequestContext context) throws Exception
-   {
-      PortletResponse response = context.getResponse();
-      
-      Element script = response.createElement("script");
-      script.setAttribute("type", "text/javascript");
-      script.setAttribute("src", "/web/javascript/eXo/webui/UISiteMap.js");
-      response.addProperty(MimeResponse.MARKUP_HEAD_ELEMENT, script);
-      
-      super.processRender(app, context);
    }
 
    @Override

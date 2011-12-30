@@ -81,6 +81,19 @@
 		<css-path>/skin/portal/webui/component/UIIFramePortlet/DefaultStylesheet.css</css-path>
 	</portlet-skin>
 
+	<scripts>
+	  <scope>portlet</scope>
+	  <name>SiteMapPortlet</name>
+	  <module>
+	     <name>eXo.webui.UISiteMap</name>
+	     <path>/javascript/eXo/webui/UISiteMap.js</path>
+	  </module>
+	  <depends>
+	    <scope>shared</scope>
+	    <name>common</name>
+	  </depends>
+	</scripts>
+
   <!-- The navigation portlet declaration -->
   <scripts>
     <scope>portlet</scope>
