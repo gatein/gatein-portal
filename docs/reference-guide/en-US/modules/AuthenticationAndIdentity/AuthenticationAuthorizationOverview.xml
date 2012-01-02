@@ -264,41 +264,7 @@
                     on JBoss AS level.
                  </para>
               </listitem>
-              <listitem>
-                 <para>
-                    <emphasis role="bold">CustomMembershipLoginModule</emphasis> - special login module, which is disabled (commented) by default.
-                    It can be used to add user to some existing group during successful login of this user. Name of group is configurable and by default it's <emphasis>/platform/users</emphasis>
-                    group. Login module is commented because in normal environment, users are already in /platform/users group.
-                    It's useful only for some special setups like read-only LDAP, where groups of ldap user are taken from ldap tree and so that users may not be in /platform/users
-                    group, which is needed for successful authorization.
-                 </para>
-              </listitem>
             </itemizedlist>
-            <section id="sect-Authentication_Authorization_Intro-LoginModuleLocations">
-               <title>SVN location of login modules</title>
-               <para>
-                   Some modules are specific for portal, but some are used also by eXo JCR and so they are part of eXo core module.
-               </para>
-               <itemizedlist>
-                  <listitem>
-                     <para>
-                        <emphasis>PortalLoginModule</emphasis> - is located in &PRODUCT; sources in <ulink type="http" url="http://anonsvn.jboss.org/repos/gatein/portal/trunk/component/web/security/">http://anonsvn.jboss.org/repos/gatein/portal/trunk/component/web/security/</ulink>
-                     </para>
-                  </listitem>
-                  <listitem>
-                     <para>
-                        <emphasis>SharedStateLoginModule, JbossLoginModule</emphasis> - these are located in eXo core sources in
-                        <ulink type="http" url="http://anonsvn.jboss.org/repos/exo-jcr/core/trunk/exo.core.component.security.core/">http://anonsvn.jboss.org/repos/exo-jcr/core/trunk/exo.core.component.security.core/</ulink>
-                     </para>
-                  </listitem>
-                  <listitem>
-                     <para>
-                        <emphasis>CustomMembershipLoginModule</emphasis> - located in &PRODUCT; sources in module for identity integration -
-                        <ulink type="http" url="http://anonsvn.jboss.org/repos/gatein/portal/trunk/component/identity/">http://anonsvn.jboss.org/repos/gatein/portal/trunk/component/identity/</ulink>
-                     </para>
-                  </listitem>
-               </itemizedlist>
-            </section>
         </section><!-- Ending section with existing login modules -->
         <section id="sect-Authentication_Authorization_Intro-createNewLM">
             <title>Creating your own login module</title>
