@@ -13,12 +13,13 @@
 	String skin = uicomponent.getSkin();
 	def portalSkins = uicomponent.getPortalSkins() ;
 	def portletSkins = uicomponent.getPortletSkins() ;
-	def scriptsURLs = uicomponent.getScriptsURLs();
-	def loadedScripts = new StringBuilder("[");
-	for (path in scriptsURLs) {
-	   loadedScripts.append("'").append(path).append("',");
+	def scriptsURLs = rcontext.getAttribute("eXo.portal.scriptsURLs");
+	def headerScripts = new LinkedList();	
+	for (path in scriptsURLs.keySet()) {
+	   if (!scriptsURLs.get(path)) {
+	      headerScripts.add(path);
+	   }
 	}
-	loadedScripts.append("]");
 	def lang = uicomponent.getLocale().getLanguage();
 	def title = rcontext.getTitle();
 	def metaInformation = rcontext.getMetaInformation();
@@ -52,7 +53,7 @@
 			<link id="${portletSkin.id}" rel="stylesheet" type="text/css" href= "$url" />
 		<%}%>
 		<script type="text/javascript" src="/portal/scripts/SHARED/bootstrap.js"></script>
-		<% for (url in scriptsURLs) { %>
+		<% for (url in headerScripts) { %>
             <script type="text/javascript" src="<%= url %>"></script>
 		<% } %>
 
@@ -61,8 +62,7 @@
 						eXo.developing = true ;
 					</script>
 		<% } %>
-		<script type="text/javascript">
-			eXo.core.Loader.addLoadedScripts(<%=loadedScripts%>);
+		<script type="text/javascript">			
 			eXo.env.portal.context = "<%=docBase%>" ;
 			<%if(rcontext.getAccessPath() == 0) {%>eXo.env.portal.accessMode = "public" ;<%}
 			else

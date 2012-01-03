@@ -213,7 +213,7 @@ eXo.core.Loader = {
 	  if (remote) {
 	    this.srcScript(scriptUrl, asyncWait, callbackQueue);
 	  } else {
-	    var request = eXo.core.Browser.createHttpRequest();
+		var request = window.ActiveXObject ? new window.ActiveXObject( "Microsoft.XMLHTTP" ) : new window.XMLHttpRequest();
 	    request.open('GET', scriptUrl, false);
 	    request.send(null);
 

@@ -98,9 +98,10 @@
   <scripts>
     <scope>portlet</scope>
     <name>NavigationPortlet</name>
-    <depends>
+    <depends>      
       <scope>shared</scope>
       <name>navigation</name>
+      <on-load>true</on-load>
     </depends>
   </scripts>
 </gatein-resources>

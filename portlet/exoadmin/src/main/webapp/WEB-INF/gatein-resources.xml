@@ -90,6 +90,7 @@
 	  <depends>
 	    <scope>shared</scope>
 	    <name>navigation</name>
+	    <on-load>true</on-load>
 	  </depends>
 	</scripts>
 
@@ -99,6 +100,7 @@
 	  <depends>
 	    <scope>shared</scope>
 	    <name>navigation</name>
+	    <on-load>true</on-load>
 	  </depends>
 	</scripts>
 
@@ -108,6 +110,7 @@
 	  <depends>
 	    <scope>shared</scope>
 	    <name>navigation</name>
+	    <on-load>true</on-load>
 	  </depends>
 	</scripts>
 
@@ -117,6 +120,7 @@
 	  <depends>
 	    <scope>shared</scope>
 	    <name>navigation</name>
+	    <on-load>true</on-load>
 	  </depends>
 	</scripts>
 
@@ -126,6 +130,7 @@
 	  <depends>
 	    <scope>shared</scope>
 	    <name>navigation</name>
+	    <on-load>true</on-load>
 	  </depends>
 	</scripts>
 </gatein-resources>

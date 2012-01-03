@@ -323,7 +323,7 @@ public class UIPortalApplication extends UIApplication
       return (modeState != NORMAL_MODE);
    }
 
-   public Collection<String> getScriptsURLs()
+   public Map<String, Boolean> getScriptsURLs()
    {
       PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
       
@@ -371,13 +371,13 @@ public class UIPortalApplication extends UIApplication
          // according to the boolean value in the map
 
          // todo : switch to debug later
-         log.info("Resolved URLS for page: " + urls);
-         return urls.keySet();
+         log.info("Resolved URLS for page: " + urls);         
+         return urls;
       }
       catch (IOException e)
       {
          log.error("Could not resolve URLs", e);
-         return Collections.emptyList();
+         return Collections.emptyMap();
       }
    }
 
