@@ -27,6 +27,7 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.UserProfileHandler;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -35,6 +36,7 @@ import org.exoplatform.webui.core.model.SelectItemCategory;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,17 +96,18 @@ public class UISkinSelector extends UIContainer
    {
       public void execute(Event<UISkinSelector> event) throws Exception
       {
-         String skin = event.getRequestContext().getRequestParameter("skin");
+         WebuiRequestContext rContext = event.getRequestContext();
+         String skin = rContext.getRequestParameter("skin");
          UIPortal uiPortal = Util.getUIPortal();
          UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-         uiMaskWS.setUIComponent(null);
+         uiMaskWS.createEvent("Close", Phase.DECODE, rContext).broadcast();
          //event.getRequestContext().addUIComponentToUpdateByAjax(uiApp) ;
          Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(false);
          if (skin == null || skin.trim().length() < 1)
             return;
          uiApp.setSkin(skin);
-         String remoteUser = event.getRequestContext().getRemoteUser();
+         String remoteUser = rContext.getRemoteUser();
          
          //Save the skin selection to the User Profile
          OrganizationService orgService = event.getSource().getApplicationComponent(OrganizationService.class);

@@ -6,23 +6,25 @@
 	 * March 13, 2006
 	 * version: $Id$
 	 */
-%>
-<%
-  component = uicomponent.getUIComponent();
-  String maskId = uicomponent.getId() ;
-  def rcontext = _ctx.getRequestContext() ;
-	rcontext.getJavascriptManager().importJavascript('eXo.portal.UIMaskWorkspace');	
-	
-	int width = uicomponent.getWindowWidth();
-	int height = uicomponent.getWindowHeight();
-	boolean isShow = uicomponent.isShow();
-	String id = uicomponent.getId();
-	
-	String init = "eXo.portal.UIMaskWorkspace.init('"+id+"', "+isShow+", "+width+", "+height+");";
-	String resize = "eXo.portal.UIMaskWorkspace.resetPosition('"+id+"');";
-	rcontext.getJavascriptManager().addCustomizedOnLoadScript(init) ;
-	rcontext.getJavascriptManager().addOnResizeJavascript("eXo.portal.UIMaskWorkspace.resetPosition") ;
-%>
+
+	String maskId = uicomponent.getId() ;
+  boolean isShow = uicomponent.isShow();
+%>	
 <div class="UIMaskWorkspace" id="$maskId" style="display: none;">
-	<div class="MaskContainer"><%uicomponent.renderChildren();%></div>
+<%
+  if (isShow)
+  {
+    def rcontext = _ctx.getRequestContext() ;
+    int width = uicomponent.getWindowWidth();
+    int height = uicomponent.getWindowHeight();
+
+    String script = "eXo.portal.UIMaskWorkspace.show('"+maskId+"', "+width+", "+height+");";
+    rcontext.getJavascriptManager().addCustomizedOnLoadScript(script) ;
+%>
+    <div class="MaskContainer">
+      <%uicomponent.renderChildren();%>
+    </div>
+<%
+  }
+%>
 </div>

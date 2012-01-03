@@ -22,44 +22,41 @@
  */
 eXo.portal.UIMaskWorkspace = {
 
-  /**
-   * Inits the mask workspace identified by maskId if show is true . creates the
-   * mask with eXo.core.UIMaskLayer.createMask . set margin: auto and display:
-   * block if show is false . removes the mask with
-   * eXo.core.UIMaskLayer.removeMask . set display: none sets the size (width
-   * and height) of the mask
-   */
-  init : function(maskId, show, width, height) {
-    var maskWorkpace = document.getElementById(maskId);
-    this.maskWorkpace = maskWorkpace;
+  show : function(maskId, width, height) {
+    this.maskWorkpace = document.getElementById(maskId);
     if (this.maskWorkpace) {
-      if (width > -1)
+      if (width > -1) {
         this.maskWorkpace.style.width = width + "px";
-      if (show) {
-        if (eXo.portal.UIMaskWorkspace.maskLayer == null) {
-          var maskLayer = eXo.core.UIMaskLayer.createMask(
-              "UIPortalApplication", this.maskWorkpace, 30);
-          eXo.portal.UIMaskWorkspace.maskLayer = maskLayer;
-        }
-        this.maskWorkpace.style.margin = "auto";
-        this.maskWorkpace.style.display = "block";
-      } else {
-        if (eXo.portal.UIMaskWorkspace.maskLayer == undefined)
-          return;
-        eXo.core.UIMaskLayer.removeMask(eXo.portal.UIMaskWorkspace.maskLayer);
-        eXo.portal.UIMaskWorkspace.maskLayer = null;
-        this.maskWorkpace.style.display = "none";
       }
-      if (height < 0)
-        return;
+
+      if (eXo.portal.UIMaskWorkspace.maskLayer == null) {
+        var maskLayer = eXo.core.UIMaskLayer.createMask("UIPortalApplication",
+            this.maskWorkpace, 30);
+        eXo.portal.UIMaskWorkspace.maskLayer = maskLayer;
+      }
+      this.maskWorkpace.style.margin = "auto";
+      this.maskWorkpace.style.display = "block";
+
+      eXo.core.Browser.addOnResizeCallback('mid_maskWorkspace',
+          eXo.portal.UIMaskWorkspace.resetPositionEvt);
     }
+  },
+
+  hide : function(maskId) {
+    this.maskWorkpace = document.getElementById(maskId);
+    if (eXo.portal.UIMaskWorkspace.maskLayer == undefined || !this.maskWorkpace) {
+      return;
+    }
+    eXo.core.UIMaskLayer.removeMask(eXo.portal.UIMaskWorkspace.maskLayer);
+    eXo.portal.UIMaskWorkspace.maskLayer = null;
+    this.maskWorkpace.style.display = "none";
   },
 
   /**
    * Resets the position of the mask calls eXo.core.UIMaskLayer.setPosition to
    * perform this operation
    */
-  resetPosition : function() {
+  resetPositionEvt : function() {
     var maskWorkpace = eXo.portal.UIMaskWorkspace.maskWorkpace;
     if (maskWorkpace && (maskWorkpace.style.display == "block")) {
       try {

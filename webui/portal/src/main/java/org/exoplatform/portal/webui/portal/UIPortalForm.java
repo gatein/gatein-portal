@@ -356,13 +356,12 @@ public class UIPortalForm extends UIFormTabPane
          }
 
          UIMaskWorkspace uiMaskWorkspace = uiForm.getParent();
-         uiMaskWorkspace.setUIComponent(null);
          WebuiRequestContext rContext = event.getRequestContext();
+         uiMaskWorkspace.createEvent("Close", Phase.DECODE, rContext).broadcast();
          if (!uiForm.getId().equals("CreatePortal") && uiPortalApp.getModeState() != UIPortalApplication.NORMAL_MODE) 
          {
             rContext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
          }         
-         rContext.addUIComponentToUpdateByAjax(uiMaskWorkspace);
       }
    }
 
@@ -391,8 +390,7 @@ public class UIPortalForm extends UIFormTabPane
          dataService.save(pconfig);
          UIPortalApplication uiPortalApp = event.getSource().getAncestorOfType(UIPortalApplication.class);
          UIMaskWorkspace uiMaskWS = uiPortalApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-         uiMaskWS.setUIComponent(null);
-         pcontext.addUIComponentToUpdateByAjax(uiMaskWS);
+         uiMaskWS.createEvent("Close", Phase.DECODE, pcontext).broadcast();
 
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChild(UIWorkingWorkspace.class);
          uiWorkingWS.updatePortletsByName("PortalNavigationPortlet");

@@ -99,7 +99,6 @@ public class UIChangePassword extends UIForm
          String confirmnewpassword = uiForm.getUIStringInput(CONFIRM_NEW_PASSWORD).getValue();
          WebuiRequestContext request = event.getRequestContext();
          UIApplication uiApp = request.getUIApplication();
-         UIMaskWorkspace uiMaskWorkspace = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          OrganizationService orgService = uiForm.getApplicationComponent(OrganizationService.class);
          uiForm.reset();
          boolean isNew = true;
@@ -113,15 +112,16 @@ public class UIChangePassword extends UIForm
             uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.password-is-not-match", null));
             isNew = false;
          }
+
+         UIMaskWorkspace uiMaskWorkspace = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
          if (isNew)
          {
             user_.setPassword(newpassword);
             orgService.getUserHandler().saveUser(user_, true);
-            uiMaskWorkspace.setUIComponent(null);
-            uiMaskWorkspace.setWindowSize(-1, -1);
+            uiMaskWorkspace.createEvent("Close", Phase.DECODE, request).broadcast();
             uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.change-password-successfully", null));
          }
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWorkspace);
+         request.addUIComponentToUpdateByAjax(uiMaskWorkspace);
       }
    }
 }

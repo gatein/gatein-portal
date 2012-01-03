@@ -129,11 +129,10 @@ public class UIResetPassword extends UIForm
          {
             user_.setPassword(newpassword);
             orgService.getUserHandler().saveUser(user_, true);
-            uiMaskWorkspace.setUIComponent(null);
-            uiMaskWorkspace.setWindowSize(-1, -1);
+            uiMaskWorkspace.createEvent("Close", Phase.DECODE, request).broadcast();
             uiApp.addMessage(new ApplicationMessage("UIResetPassword.msg.change-password-successfully", null));
          }
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWorkspace);
+         request.addUIComponentToUpdateByAjax(uiMaskWorkspace);
       }
    }
 

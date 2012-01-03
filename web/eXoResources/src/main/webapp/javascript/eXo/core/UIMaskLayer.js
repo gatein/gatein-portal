@@ -259,7 +259,7 @@ eXo.core.UIMaskLayer = {
       if (offsetParent
           && (browser.findPosX(offsetParent) != 0 || browser
               .findPosY(offsetParent) != 0)) {
-        eXo.portal.UIMaskWorkspace.resetPosition();
+        eXo.portal.UIMaskWorkspace.resetPositionEvt();
       }
     }
     var blockContainer = UIMaskLayer.blockContainer;
