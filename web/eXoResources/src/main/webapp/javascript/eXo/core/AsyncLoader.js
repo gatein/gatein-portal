@@ -24,7 +24,6 @@ eXo.core.AsyncLoader = {
 	  ie : /MSIE/.test(navigator.userAgent)
   },
   head : document.head || document.getElementsByTagName('head')[0],
-  jsPending : -1,
   registered : [],
   loaded : [],
   
@@ -32,15 +31,14 @@ eXo.core.AsyncLoader = {
 	if (!urls || !urls.length) return;
 	urls = typeof urls === 'string' ? [urls] : urls;	
 		
-	var reg = new this.Registration(urls, new this.CallbackItem(callback, params, context), this.registered.length);
+	var reg = new this.JSReg(urls, new this.CallbackItem(callback, params, context));
 	this.registered.push(reg);
 	reg.load();		
   },    
  
-  Registration : function(urls, callback, index) {
+  JSReg : function(urls, callback) {
     this.urls = urls;		  
 	this.callback = callback;
-	this.index = index;
 	this.pending = [];
 	for (var i = 0; i < urls.length; i++) {
 		if (!eXo.core.AsyncLoader.isRegistered(urls[i])) {
@@ -48,54 +46,42 @@ eXo.core.AsyncLoader = {
 		}
 	}
 	this.load = function() {
-		var loader = eXo.core.AsyncLoader, nodes = [];				
-
+		var nodes = [], loader = eXo.core.AsyncLoader;				
 		
-		if (!loader.env.async) {
-			if (loader.jsPending != -1) return;
-			loader.jsPending = this.index;
-			if (!this.pending.length) {
-				this.finish(this);
-			} else {
-				nodes.push(this.createNode(this.pending[0], loader.env));				
-			}			
-		} else {
-			if (!this.pending.length) {
-				this.finish(this);
-			} else {
-				for (var i = 0; i < this.pending.length; i++) {
-					var node = this.createNode(this.pending[i], loader.env);
-					nodes.push(node);
-				}
+		if (!this.pending.length) {
+			this.finish();
+			return;
+		}
+		if (loader.env.async) {
+			for (var i = 0; i < this.pending.length; i++) {
+				var node = this.createNode(this.pending[i], loader.env);
+				nodes.push(node);
 			}
+		} else {						
+			nodes.push(this.createNode(this.pending[0], loader.env));				
 		}        
 
         for (i = 0; i < nodes.length; ++i) {
           loader.head.appendChild(nodes[i]);
         }
 	};
-	this.finish = function(reg) {		
+	this.finish = function(url) {		
 		var loader = eXo.core.AsyncLoader;
 		
-		if (reg.pending.length) {
-			loader.loaded.push(reg.pending.shift());					
-		}
-		if (reg.pending.length == 0) {
-			for (var i = 0; i < reg.urls.length; i++) {
-				if (!loader.isLoaded(reg.urls[i])) {
-					setTimeout(function() {reg.finish(reg);}, 250);
+		if (this.pending.length && url) {			
+			loader.loaded.push(reg.pending.splice(loader.indexOf(reg.pending, url), 1));					
+		}		
+		if (this.pending.length == 0) {
+			for (var i = 0; i < this.urls.length; i++) {
+				if (!loader.isLoaded(this.urls[i])) {
+					setTimeout(function() {this.finish();}, 250);
 					return;
 				}
 			}
-			reg.callback.invoke();
+			this.callback.invoke();
 		}
-		if (!loader.env.async) {
-			loader.jsPending = -1;
-			if (reg.pending.length > 0) {
-				loader.head.appendChild(reg.createNode(reg.pending[0], loader.env));							
-			} else if (reg.index < loader.registered.length - 1) {
-				loader.registered[reg.index + 1].load();
-			}
+		if (!loader.env.async && this.pending.length > 0) {
+			this.load();							
 		} 
 	};
 	this.createNode = function(url, env) {
@@ -106,11 +92,11 @@ eXo.core.AsyncLoader = {
     		node.onreadystatechange = function () {
     			if (/loaded|complete/.test(node.readyState)) {
     				node.onreadystatechange = null;
-    				me.finish(me);
+    				me.finish(url);
     			}
     		};          
     	} else {
-    		node.onload = node.onerror = function() {me.finish(me);};
+    		node.onload = node.onerror = function() {me.finish(url);};
     	}		
 		return node;
 	};
@@ -131,6 +117,13 @@ eXo.core.AsyncLoader = {
 	}
 	return false;
   },
+  
+  indexOf : function(array, obj) {
+    for (var i = 0; i < this.array.length; i++) {
+    	if (obj === this.array[i]) return i;
+	}
+	return -1;
+  }
   
   CallbackItem : function(_callback, _params, _context) {
     this.callback = _callback;
