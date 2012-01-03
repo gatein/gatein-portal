@@ -101,18 +101,6 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
          throw new IllegalStateException("Going to create a cycle");
       }
 
-      // Update any entry that points to the source
-      for (Map<String, ScriptResource> resources : graph.resources.values())
-      {
-         for (ScriptResource resource : resources.values())
-         {
-            if (resource.closure.contains(id))
-            {
-               resource.closure.add(dependencyId);
-            }
-         }
-      }
-
       // That is important to make closure independent from building order of graph nodes.
       if(dependency != null)
       {
@@ -121,6 +109,18 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       
       //Update the source's closure
       closure.add(dependencyId);
+      
+      // Update any entry that points to the source
+      for (Map<String, ScriptResource> resources : graph.resources.values())
+      {
+         for (ScriptResource resource : resources.values())
+         {
+            if (resource.closure.contains(id))
+            {
+               resource.closure.addAll(closure);
+            }
+         }
+      }                
       
       //
       dependencies.put(dependencyId, onLoad);

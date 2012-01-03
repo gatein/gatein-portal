@@ -100,35 +100,26 @@ public class TestScriptGraph extends AbstractGateInTest
     */
    public void testBuildingOrder()
    {
-      //We expect that closure won't depend on building order of nodes (ScriptResource) in graph
       ScriptGraph graph = new ScriptGraph();
-      ScriptResource b = graph.addResource(B);
-      b.addDependency(C);
+      
+      // A -> B
       ScriptResource a = graph.addResource(A);
       a.addDependency(B);
+
+      // C -> D
       ScriptResource c = graph.addResource(C);
-
-      assertEquals(Tools.toSet(C), b.getClosure());
-
-      //Although C is added as dependency of b before a is created, C must appear in a 's closure
-      assertEquals(Tools.toSet(B, C), a.getClosure());
-   }
-
-   /**
-    * Update on closure of a node is propagated to its ancestor 's closure
-    */
-   public void testClosurePropagate()
-   {
-      ScriptGraph graph = new ScriptGraph();
-      ScriptResource a = graph.addResource(A);
+      c.addDependency(D);
+      
+      // B -> C
       ScriptResource b = graph.addResource(B);
-      ScriptResource c = graph.addResource(C);
+      b.addDependency(C);
+
       ScriptResource d = graph.addResource(D);
 
-      a.addDependency(B);
-      b.addDependency(C);
-      c.addDependency(D);
-
+      assertEquals(Tools.toSet(D), c.getClosure());
+      
+      assertEquals(Tools.toSet(C, D), b.getClosure());
+      
       assertEquals(Tools.toSet(B, C, D), a.getClosure());
    }
 
