@@ -44,12 +44,13 @@ eXo.portal.UIPortalNavigation = {
   /**
    * Calls the init function when the page loads
    */
-  onLoad : function() {
-    var uiNavPortlets = $("#UIWorkingWorkspace").find(".UINavigationPortlet");
-    var mainContainer = uiNavPortlets.find(".UIHorizontalTabs");
+  onLoad : function(baseId) {    
+	var uiNavPortlet = $("#" + baseId);
+	if(uiNavPortlet.hasClass("UIHorizontalTabs")) eXo.portal.UIPortalNavigation.init(uiNavPortlet[0], uiNavPortlet[0]);
 	  
-    if (mainContainer.length) eXo.portal.UIPortalNavigation.init(uiNavPortlets[0], mainContainer[0]);
-    uiNavPortlets.slice(1).each(function() {$(this).css("display", "none"); });
+	if (baseId === "UIHorizontalNavigation") {
+		$(".UIHorizontalNavigation").slice(1).each(function() {$(this).hide();});
+	}
   },
   
   /**
@@ -67,7 +68,7 @@ eXo.portal.UIPortalNavigation = {
   buildMenu : function(popupMenu) {
     var DOMUtil = eXo.core.DOMUtil;
     var portalNav = eXo.portal.UIPortalNavigation;
-    var topContainer = $(popupMenu).find(".UIHorizontalTabs");
+    var topContainer = $(popupMenu);
     topContainer.attr("id", "PortalNavigationTopContainer");
 
     // Top menu items
@@ -262,17 +263,17 @@ var timeout = eXo.portal.UIPortalNavigation.hideMenuTimeoutIds.remove(containerI
   /***** Scroll Management *****/
   /**
    * Function called to load the scroll manager that will manage the tabs in the main nav menu
-   *  . Creates the scroll manager with id PortalNavigationTopContainer
+   *  . Creates the scroll manager
    *  . Adds the tabs to the scroll manager
    *  . Configures the arrows
    *  . Calls the initScroll function
    */
-  loadScroll : function() {
+  loadScroll : function(portalNavId) {
     var uiNav = eXo.portal.UIPortalNavigation;
-    var portalNav = $("#PortalNavigationTopContainer");
+    var portalNav = $("#" + portalNavId);
     if (portalNav.length) {
       // Creates new ScrollManager and initializes it
-      uiNav.scrollMgr = eXo.portal.UIPortalControl.newScrollManager("PortalNavigationTopContainer");
+      uiNav.scrollMgr = eXo.portal.UIPortalControl.newScrollManager(portalNavId);
       uiNav.scrollMgr.initFunction = uiNav.initScroll;
       // Adds the tab elements to the manager
       uiNav.scrollMgr.mainContainer = portalNav[0];
