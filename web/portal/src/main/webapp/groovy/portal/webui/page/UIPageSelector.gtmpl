@@ -20,11 +20,7 @@
 	}
 	
 	 
-	UIPopupWindow uipopup = uicomponent.getChild(UIPopupWindow.class); 
-	
-	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPopupWindow');
-	
+	UIPopupWindow uipopup = uicomponent.getChild(UIPopupWindow.class); 		
 	UIFormInputSet uiform = uicomponent.getChild(UIFormInputSet.class); 
 %>
 <div class="UIPageSelector" id="<%=uicomponent.getId();%>">

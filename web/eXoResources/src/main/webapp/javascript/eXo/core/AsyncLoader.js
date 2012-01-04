@@ -28,7 +28,7 @@ eXo.core.AsyncLoader = {
   loaded : [],
   
   loadJS : function(urls, callback, params, context) {		  
-	if (!urls || !urls.length) return;
+	if (!urls) return;
 	urls = typeof urls === 'string' ? [urls] : urls;	
 		
 	var reg = new this.JSReg(urls, new this.CallbackItem(callback, params, context));

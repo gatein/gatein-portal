@@ -105,13 +105,6 @@ eXo.webui.UIHorizontalTabs = {
       uiTabContents[i].style.display = "none";
     }
     uiTabContents[index].style.display = "block";
-    if (eXo.ecm.UIJCRExplorer) {
-      try {
-        eXo.ecm.UIJCRExplorer.initViewNodeScroll();
-      } catch (e) {
-        void (0);
-      }
-    }
     // if(tabId !=null){
     // //TODO: modify: dang.tung
     // url = url+"&objectId="+tabId ;
