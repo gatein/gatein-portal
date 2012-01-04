@@ -68,16 +68,18 @@ eXo.core.AsyncLoader = {
 	this.finish = function(url) {		
 		var loader = eXo.core.AsyncLoader;
 		
-		if (this.pending.length && url) {			
-			loader.loaded.push(reg.pending.splice(loader.indexOf(reg.pending, url), 1));					
+		if (this.pending.length && url) {		
+			this.pending.splice(loader.indexOf(this.pending, url), 1);
+			loader.loaded.push(url);					
 		}		
 		if (this.pending.length == 0) {
 			for (var i = 0; i < this.urls.length; i++) {
-				if (!loader.isLoaded(this.urls[i])) {
-					setTimeout(function() {this.finish();}, 250);
+				if (!loader.isLoaded(this.urls[i])) {					
+					var me = this;
+					setTimeout(function() {me.finish();}, 250);
 					return;
 				}
-			}
+			}			
 			this.callback.invoke();
 		}
 		if (!loader.env.async && this.pending.length > 0) {
@@ -119,11 +121,11 @@ eXo.core.AsyncLoader = {
   },
   
   indexOf : function(array, obj) {
-    for (var i = 0; i < this.array.length; i++) {
-    	if (obj === this.array[i]) return i;
+    for (var i = 0; i < array.length; i++) {
+    	if (obj === array[i]) return i;
 	}
 	return -1;
-  }
+  },
   
   CallbackItem : function(_callback, _params, _context) {
     this.callback = _callback;
