@@ -344,6 +344,7 @@ public class UIPortalApplication extends UIApplication
          resourceIds.add(new ResourceId(ResourceScope.SHARED, "common"));
          resourceIds.add(new ResourceId(ResourceScope.SHARED, "portal"));
          resourceIds.add(new ResourceId(ResourceScope.SHARED, "webui"));
+         resourceIds.add(new ResourceId(ResourceScope.SHARED, "webui-ext"));
          tmp = getChildById(UI_WORKING_WS_ID);
       }
 

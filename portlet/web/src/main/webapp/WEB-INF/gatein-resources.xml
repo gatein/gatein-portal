@@ -74,12 +74,22 @@
 	
 	<!-- IFramePortlet skins -->
 	
-	<portlet-skin>
-		<application-name>web</application-name>
-		<portlet-name>IFramePortlet</portlet-name>
-		<skin-name>Default</skin-name>
-		<css-path>/skin/portal/webui/component/UIIFramePortlet/DefaultStylesheet.css</css-path>
-	</portlet-skin>
+   <portlet-skin>
+   	<application-name>web</application-name>
+   	<portlet-name>IFramePortlet</portlet-name>
+   	<skin-name>Default</skin-name>
+   	<css-path>/skin/portal/webui/component/UIIFramePortlet/DefaultStylesheet.css</css-path>
+   </portlet-skin>
+   
+   <scripts>
+     <scope>portlet</scope>
+     <name>BannerPortlet</name>
+     <depends>
+       <scope>shared</scope>
+       <name>webui</name>
+       <on-load>true</on-load>
+     </depends>
+   </scripts>
 
 	<scripts>
 	  <scope>portlet</scope>

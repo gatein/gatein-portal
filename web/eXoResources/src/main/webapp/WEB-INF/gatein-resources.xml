@@ -129,88 +129,84 @@
    </scripts>
 
    <!-- CORE Javascripts -->
-   <javascript>
-      <param>
-         <js-module>eXo.core.Utils</js-module>
-         <js-path>/javascript/eXo/core/Util.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.DOMUtil</js-module>
-         <js-path>/javascript/eXo/core/DOMUtil.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.html.HTMLEntities</js-module>
-         <js-path>/javascript/eXo/core/html/HTMLEntities.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.HTMLUtil</js-module>
-         <js-path>/javascript/eXo/core/HTMLUtil.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Browser</js-module>
-         <js-path>/javascript/eXo/core/Browser.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.UIMaskLayer</js-module>
-         <js-path>/javascript/eXo/core/UIMaskLayer.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Skin</js-module>
-         <js-path>/javascript/eXo/core/Skin.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.DragDrop</js-module>
-         <js-path>/javascript/eXo/core/DragDrop.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.DragDrop2</js-module>
-         <js-path>/javascript/eXo/core/DragDrop2.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.JSON</js-module>
-         <js-path>/javascript/eXo/core/JSON.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.I18n</js-module>
-         <js-path>/javascript/eXo/core/I18n.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <!-- 
-      <param>
-         <js-module>eXo.core.Spliter</js-module>
-         <js-path>/javascript/eXo/core/Spliter.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-       -->
-   </javascript>
+   <scripts>
+      <scope>shared</scope>
+      <name>common</name>
+      <module>
+         <name>eXo.core.Utils</name>
+         <path>/javascript/eXo/core/Util.js</path>
+      </module>
+      <module>
+         <name>eXo.core.DOMUtil</name>
+         <path>/javascript/eXo/core/DOMUtil.js</path>
+      </module>
+      <module>
+         <name>eXo.core.html.HTMLEntities</name>
+         <path>/javascript/eXo/core/html/HTMLEntities.js</path>
+      </module>
+      <module>
+         <name>eXo.core.HTMLUtil</name>
+         <path>/javascript/eXo/core/HTMLUtil.js</path>
+      </module>
+      <module>
+         <name>eXo.core.Browser</name>
+         <path>/javascript/eXo/core/Browser.js</path>
+      </module>
+      <module>
+         <name>eXo.core.UIMaskLayer</name>
+         <path>/javascript/eXo/core/UIMaskLayer.js</path>
+      </module>
+      <module>
+         <name>eXo.core.Skin</name>
+         <path>/javascript/eXo/core/Skin.js</path>
+      </module>
+      <module>
+         <name>eXo.core.DragDrop</name>
+         <path>/javascript/eXo/core/DragDrop.js</path>
+      </module>
+      <module>
+         <name>eXo.core.DragDrop2</name>
+         <path>/javascript/eXo/core/DragDrop2.js</path>
+      </module>
+      <module>
+         <name>eXo.core.JSON</name>
+         <path>/javascript/eXo/core/JSON.js</path>
+      </module>
+      <module>
+         <name>eXo.core.I18n</name>
+         <path>/javascript/eXo/core/I18n.js</path>
+      </module>
+      <module>
+         <name>eXo.portal.UIMaskWorkspace</name>
+         <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
+      </module>
+      <module>
+         <name>eXo.portal.PortalHttpRequest</name>
+         <path>/javascript/eXo/portal/PortalHttpRequest.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIPopup</name>
+         <path>/javascript/eXo/webui/UIPopup.js</path>
+      </module>
 
-   <!-- Gadget Javascripts -->
-   <javascript>
-      <param>
-         <js-module>eXo.gadget.UIGadget</js-module>
-         <js-path>/javascript/eXo/gadget/UIGadget.js</js-path>
-         <js-priority>2</js-priority>
-      </param>
-   </javascript>
+      <!-- Gadget Javascripts -->
+      <module>
+         <name>eXo.gadget.UIGadget</name>
+         <path>/javascript/eXo/gadget/UIGadget.js</path>
+      </module>
+
+      <!-- 
+      <module>
+         <name>eXo.core.Spliter</name>
+         <path>/javascript/eXo/core/Spliter.js</path>
+      </module>
+       -->
+   </scripts>      
 
    <!-- Portal Javascripts -->
    <scripts>
       <scope>shared</scope>
       <name>portal</name>
-      <module>
-         <name>eXo.portal.PortalHttpRequest</name>
-         <path>/javascript/eXo/portal/PortalHttpRequest.js</path>
-      </module>
       <module>
          <name>eXo.portal.UIPortal</name>
          <path>/javascript/eXo/portal/UIPortal.js</path>
@@ -222,10 +218,6 @@
       <module>
          <name>eXo.portal.PortalDragDrop</name>
          <path>/javascript/eXo/portal/PortalDragDrop.js</path>
-      </module>
-      <module>
-         <name>eXo.portal.UIMaskWorkspace</name>
-         <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
       </module>
       <!--
       <module>
@@ -255,10 +247,6 @@
       <module>
          <name>eXo.webui.UIForm</name>
          <path>/javascript/eXo/webui/UIForm.js</path>
-      </module>
-      <module>
-         <name>eXo.webui.UIPopup</name>
-         <path>/javascript/eXo/webui/UIPopup.js</path>
       </module>
       <module>
          <name>eXo.webui.UIPopupSelectCategory</name>
