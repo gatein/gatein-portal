@@ -14,9 +14,7 @@
        </div>
     <script type="text/javascript">      
 	  eXo.core.AsyncLoader.loadJS($onloadScripts, function() {
-	      <%rcontext.getJavascriptManager().writeJavascript(out.writer)%>
-	      eXo.core.Browser.onLoad();
-	      <% rcontext.getJavascriptManager().writeCustomizedOnLoadScript(out.writer); %>		  
+	      <%rcontext.getJavascriptManager().writeJavascript(out.writer)%>	  
 	  	}			  
 	  );
     </script>

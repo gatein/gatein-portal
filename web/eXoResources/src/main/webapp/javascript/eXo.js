@@ -64,22 +64,14 @@ eXo.require = function(module, jsLocation, callback, context, params) {
   if(jsLocation == null) jsLocation = '/eXoResources/javascript/' ;
   var path = jsLocation  + module.replace(/\./g, '/')  + '.js' ;
   eXo.loadJS(path, callback, context, params);
-} ;
+};
 
 eXo.loadJS = function(paths, callback, context, params) {
   if (!paths || !paths.length) return;  
-  var tmp = [], loader = eXo.core.Loader;
+  var tmp = [], loader = eXo.core.AsyncLoader;
   
   paths = typeof paths === 'string' ? [paths] : paths;  
-  for (var i = 0; i < paths.length; i++) {
-	  if (!loader.loadedScripts[paths[i]]) {
-		  loader.register(paths[i], paths[i]);
-		  tmp.push(paths[i]);
-	  }	  
-  }
-  if (tmp.length > 0) {
-	  loader.init(tmp, callback, context, params);	  
-  }
+  loader.loadJS(paths, callback, params, context);
   
   eXo.session.startItv();
 } ;

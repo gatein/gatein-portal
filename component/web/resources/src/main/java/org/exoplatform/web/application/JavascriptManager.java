@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * Created by The eXo Platform SAS
@@ -38,10 +39,13 @@ public class JavascriptManager
 {
 
    /** . */
-   private ArrayList<String> data = new ArrayList<String>(100);
+   private TreeSet<String> onloadScripts = new TreeSet<String>();
+   
+   /** . */
+   private StringBuilder data = new StringBuilder();
 
    /** . */
-   private ArrayList<String> customizedOnloadJavascript = null;
+   private StringBuilder customizedOnloadJavascript = new StringBuilder();
 
    /** . */
    private JavascriptConfigService jsSrevice_;
@@ -57,8 +61,8 @@ public class JavascriptManager
    {
       if (s != null)
       {
-         data.add(s instanceof String ? (String)s : s.toString());
-         data.add(" \n");
+         data.append(s instanceof String ? (String)s : s.toString());
+         data.append(" \n");
       }
    }
 
@@ -67,15 +71,7 @@ public class JavascriptManager
     */
    public void importJavascript(CharSequence s)
    {
-      if (s != null)
-      {
-         if (!jsSrevice_.isModuleLoaded(s) || PropertyManager.isDevelopping())
-         {
-            data.add("eXo.require('");
-            data.add(s instanceof String ? (String)s : s.toString());
-            data.add("'); \n");
-         }
-      }
+      importJavascript(s instanceof String ? (String)s : s.toString(), null);
    }   
    
    /**
@@ -83,19 +79,12 @@ public class JavascriptManager
     */
    public void importJavascript(String s, String location)
    {
-      if (s != null && location != null)
+      if (s != null)
       {
          if (!jsSrevice_.isModuleLoaded(s) || PropertyManager.isDevelopping())
          {
-            data.add("eXo.require('");
-            data.add(s);
-            data.add("', '");
-            data.add(location);
-            if (!location.endsWith("/"))
-            {
-               data.add("/");
-            }
-            data.add("'); \n");
+            if(location == null) location = "/eXoResources/javascript/";
+            onloadScripts.add(location  + s.replaceAll("\\.", "/")  + ".js" );
          }
       }
    }
@@ -140,7 +129,7 @@ public class JavascriptManager
             builder.append(context).append(",");
             builder.append(buildJSArray(params));
             builder.append("); \n");
-            data.add(builder.toString());
+            data.append(builder.toString());
          }
       }
    }   
@@ -150,11 +139,11 @@ public class JavascriptManager
       if (s != null)
       {
          String id = Integer.toString(Math.abs(s.hashCode()));
-         data.add("eXo.core.Browser.addOnLoadCallback('mid");
-         data.add(id);
-         data.add("',");
-         data.add(s instanceof String ? (String)s : s.toString());
-         data.add("); \n");
+         data.append("eXo.core.Browser.addOnLoadCallback('mid");
+         data.append(id);
+         data.append("',");
+         data.append(s instanceof String ? (String)s : s.toString());
+         data.append("); \n");
       }
    }
 
@@ -163,11 +152,11 @@ public class JavascriptManager
       if (s != null)
       {
          String id = Integer.toString(Math.abs(s.hashCode()));
-         data.add("eXo.core.Browser.addOnResizeCallback('mid");
-         data.add(id);
-         data.add("',");
-         data.add(s instanceof String ? (String)s : s.toString());
-         data.add("); \n");
+         data.append("eXo.core.Browser.addOnResizeCallback('mid");
+         data.append(id);
+         data.append("',");
+         data.append(s instanceof String ? (String)s : s.toString());
+         data.append("); \n");
       }
    }
 
@@ -176,20 +165,41 @@ public class JavascriptManager
       if (s != null)
       {
          String id = Integer.toString(Math.abs(s.hashCode()));
-         data.add("eXo.core.Browser.addOnScrollCallback('mid");
-         data.add(id);
-         data.add("',");
-         data.add(s instanceof String ? (String)s : s.toString());
-         data.add("); \n");
+         data.append("eXo.core.Browser.addOnScrollCallback('mid");
+         data.append(id);
+         data.append("',");
+         data.append(s instanceof String ? (String)s : s.toString());
+         data.append("); \n");
       }
    }
 
    public void writeJavascript(Writer writer) throws IOException
    {
-      for (int i = 0;i < data.size();i++)
+
+      if (onloadScripts.size() > 0)
       {
-         String s = data.get(i);
-         writer.write(s);
+         Iterator<String> pathItr = onloadScripts.iterator();         
+         while (pathItr.hasNext()) 
+         {
+            String path = pathItr.next();
+            if (jsSrevice_.isJavascriptLoaded(path) && !PropertyManager.isDevelopping()) 
+            {
+               pathItr.remove();
+            }
+         }
+         String[] pathArray = new String[onloadScripts.size()];
+         String jsPaths = buildJSArray(onloadScripts.toArray(pathArray));
+                  
+         StringBuilder builder = new StringBuilder("eXo.loadJS(");
+         builder.append(jsPaths).append(",");
+         builder.append("function() {" + data.toString() + "eXo.core.Browser.onLoad(); " + customizedOnloadJavascript.toString() + " }");
+         builder.append(");");
+         writer.write(builder.toString());
+      } 
+      else 
+      {
+         writer.write(data.toString());         
+         writer.write(customizedOnloadJavascript.toString());
       }
    }
 
@@ -197,12 +207,8 @@ public class JavascriptManager
    {
       if (s != null)
       {
-         if (customizedOnloadJavascript == null)
-         {
-            customizedOnloadJavascript = new ArrayList<String>(30);
-         }
-         customizedOnloadJavascript.add(s instanceof String ? (String)s : s.toString());
-         customizedOnloadJavascript.add("\n");
+         customizedOnloadJavascript.append(s instanceof String ? (String)s : s.toString());
+         customizedOnloadJavascript.append("\n");
       }
    }
 
@@ -210,11 +216,7 @@ public class JavascriptManager
    {
       if (customizedOnloadJavascript != null)
       {
-         for (int i = 0;i < customizedOnloadJavascript.size();i++)
-         {
-            String s = customizedOnloadJavascript.get(i);
-            writer.write(s);
-         }
+         writer.write(customizedOnloadJavascript.toString());
       }
    }
    
