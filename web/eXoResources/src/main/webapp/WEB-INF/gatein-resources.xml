@@ -112,7 +112,6 @@
 
    <!-- Bootstrap Javascripts -->
    <scripts>
-      <scope>shared</scope>
       <name>bootstrap</name>
       <module>
          <name>eXo</name>
@@ -126,7 +125,6 @@
 
    <!-- CORE Javascripts -->
    <scripts>
-      <scope>shared</scope>
       <name>common</name>
       <module>
          <name>eXo.core.Utils</name>
@@ -207,7 +205,6 @@
 
    <!-- Portal Javascripts -->
    <scripts>
-      <scope>shared</scope>
       <name>portal</name>
       <module>
          <name>eXo.portal.UIPortal</name>
@@ -232,15 +229,13 @@
       </module>
       -->       
       <depends>
-         <scope>shared</scope>
-         <name>common</name>
+        <scripts>common</scripts>
       </depends>
    </scripts>
    
 
    <!-- WebUI Javascripts -->
    <scripts>
-      <scope>shared</scope>
       <name>webui</name>
       <module>
          <name>eXo.webui.UIItemSelector</name>
@@ -267,13 +262,11 @@
          <path>/javascript/eXo/webui/UIPopupMenu.js</path>
       </module>
       <depends>
-         <scope>shared</scope>
-         <name>common</name>
+        <scripts>common</scripts>
       </depends>
    </scripts>
    
    <scripts>
-      <scope>shared</scope>
       <name>webui-ext</name>
       <module>
          <name>eXo.webui.UICalendar</name>
@@ -304,26 +297,25 @@
          <path>/javascript/eXo/webui/UICombobox.js</path>
       </module>
       <depends>
-         <scope>shared</scope>
-         <name>common</name>
+        <scripts>common</scripts>
       </depends>
+     <depends>
+       <scripts>shared</scripts>
+     </depends>
    </scripts>
 
    <scripts>
-      <scope>shared</scope>
       <name>navigation</name>
       <module>
          <name>eXo.portal.UIPortalNavigation</name>
          <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
       </module>
       <depends>
-         <scope>shared</scope>
-         <name>portal</name>
+        <scripts>portal</scripts>
       </depends>
-      <depends>
-         <scope>shared</scope>
-         <name>webui</name>
-      </depends>
+     <depends>
+       <scripts>webui</scripts>
+     </depends>
    </scripts>
    <!-- Should be lazy loaded -->
    <!-- 

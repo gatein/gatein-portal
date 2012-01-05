@@ -84,75 +84,75 @@
 		<css-path>/skin/register/webui/component/DefaultStylesheet.css</css-path>
 	</portlet-skin>
 
-   <scripts>
-      <scope>portlet</scope>
-      <name>RegisterPortlet</name>
-      <depends>
-         <scope>shared</scope>
-         <name>webui</name>
-         <on-load>true</on-load>
-      </depends>
-   </scripts>
+   <portlet>
+     <name>RegisterPortlet</name>
+     <scripts>
+       <depends>
+         <mode>on-load</mode>
+         <scripts>webui</scripts>
+       </depends>
+     </scripts>
+   </portlet>
 
-   <scripts>
-      <scope>portlet</scope>
-      <name>StarToolbarPortlet</name>
-      <depends>
-         <scope>shared</scope>
-         <name>navigation</name>
-         <on-load>true</on-load>
-      </depends>
-   </scripts>
+   <portlet>
+     <name>StarToolbarPortlet</name>
+     <scripts>
+       <depends>
+         <mode>on-load</mode>
+         <scripts>navigation</scripts>
+       </depends>
+     </scripts>
+   </portlet>
 
-   <scripts>
-      <scope>portlet</scope>
-      <name>UserToolbarSitePortlet</name>
-      <depends>
-         <scope>shared</scope>
-         <name>navigation</name>
-         <on-load>true</on-load>
-      </depends>
-   </scripts>
+   <portlet>
+     <name>UserToolbarSitePortlet</name>
+     <scripts>
+       <depends>
+         <mode>on-load</mode>
+         <scripts>navigation</scripts>
+       </depends>
+     </scripts>
+   </portlet>
 
-   <scripts>
-      <scope>portlet</scope>
-      <name>UserToolbarGroupPortlet</name>
-      <depends>
-         <scope>shared</scope>
-         <name>navigation</name>
-         <on-load>true</on-load>
-      </depends>
+   <portlet>
+     <name>UserToolbarGroupPortlet</name>
+     <scripts>
+       <depends>
+         <mode>on-load</mode>
+         <scripts>navigation</scripts>
+       </depends>
    </scripts>
+   </portlet>
 
-   <scripts>
-      <scope>portlet</scope>
-      <name>UserToolbarDashboardPortlet</name>
-      <depends>
-         <scope>shared</scope>
-         <name>navigation</name>
-         <on-load>true</on-load>
-      </depends>
-   </scripts>
+   <portlet>
+     <name>UserToolbarDashboardPortlet</name>
+     <scripts>
+       <depends>
+         <mode>on-load</mode>
+         <scripts>navigation</scripts>
+       </depends>
+     </scripts>
+   </portlet>
 
-   <scripts>
-      <scope>portlet</scope>
-      <name>AdminToolbarPortlet</name>
-      <depends>
-         <scope>shared</scope>
-         <name>navigation</name>
-         <on-load>true</on-load>
-      </depends>
-   </scripts>
+   <portlet>
+     <name>AdminToolbarPortlet</name>
+     <scripts>
+       <depends>
+         <mode>on-load</mode>
+         <scripts>navigation</scripts>
+       </depends>
+     </scripts>
+   </portlet>
 
-   <scripts>
-      <scope>portlet</scope>
-      <name>ApplicationRegistryPortlet</name>
-      <depends>
-         <scope>shared</scope>
-         <name>webui</name>
-         <on-load>true</on-load>
-      </depends>
-   </scripts>
+   <portlet>
+     <name>ApplicationRegistryPortlet</name>
+     <scripts>
+       <depends>
+         <mode>on-load</mode>
+         <scripts>webui</scripts>
+       </depends>
+     </scripts>
+   </portlet>
 
 </gatein-resources>
 

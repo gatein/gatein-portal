@@ -24,16 +24,32 @@
     xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
 
   <scripts>
-    <scope>portal</scope>
-    <name>abc</name>
+    <name>zefzef</name>
     <module>
       <name>foo</name>
       <path>/foo.js</path>
     </module>
     <depends>
-      <scope>shared</scope>
-      <name>webui</name>
+      <scripts>bar</scripts>
+    </depends>
+    <depends>
+      <mode>on-load</mode>
+      <scripts>juu</scripts>
     </depends>
   </scripts>
+
+  <portlet>
+    <name>zfze</name>
+    <scripts>
+      <module>
+        <name>zezef</name>
+        <uri>zefzf</uri>
+      </module>
+      <depends>
+        <scripts>zefze</scripts>
+      </depends>
+    </scripts>
+  </portlet>
+
 
 </gatein-resources>

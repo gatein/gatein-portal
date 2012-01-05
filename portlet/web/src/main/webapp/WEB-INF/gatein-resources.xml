@@ -81,37 +81,37 @@
    	<css-path>/skin/portal/webui/component/UIIFramePortlet/DefaultStylesheet.css</css-path>
    </portlet-skin>
    
-   <scripts>
-     <scope>portlet</scope>
+   <portlet>
      <name>BannerPortlet</name>
-     <depends>
-       <scope>shared</scope>
-       <name>webui</name>
-       <on-load>true</on-load>
-     </depends>
+     <scripts>
+       <depends>
+         <mode>on-load</mode>
+         <scripts>webui</scripts>
+       </depends>
    </scripts>
+   </portlet>
 
-	<scripts>
-	  <scope>portlet</scope>
-	  <name>SiteMapPortlet</name>
-	  <module>
-	     <name>eXo.webui.UISiteMap</name>
-	     <path>/javascript/eXo/webui/UISiteMap.js</path>
-	  </module>
-	  <depends>
-	    <scope>shared</scope>
-	    <name>common</name>
-	  </depends>
-	</scripts>
+  <portlet>
+    <name>SiteMapPortlet</name>
+  	<scripts>
+  	  <module>
+	       <name>eXo.webui.UISiteMap</name>
+	       <path>/javascript/eXo/webui/UISiteMap.js</path>
+  	  </module>
+	    <depends>
+  	    <scripts>common</scripts>
+	    </depends>
+	  </scripts>
+  </portlet>
 
   <!-- The navigation portlet declaration -->
-  <scripts>
-    <scope>portlet</scope>
+  <portlet>
     <name>NavigationPortlet</name>
-    <depends>      
-      <scope>shared</scope>
-      <name>navigation</name>
-      <on-load>true</on-load>
-    </depends>
-  </scripts>
+    <scripts>
+      <depends>
+        <mode>on-load</mode>
+        <scripts>navigation</scripts>
+      </depends>
+    </scripts>
+  </portlet>
 </gatein-resources>

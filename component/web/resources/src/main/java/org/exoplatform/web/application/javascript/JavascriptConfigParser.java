@@ -60,6 +60,12 @@ public class JavascriptConfigParser
    final public static String SCRIPTS_TAG = "scripts";
 
    /** . */
+   final public static String PORTLET_TAG = "portlet";
+
+   /** . */
+   final public static String PORTAL_TAG = "portal";
+
+   /** . */
    final public static String RESOURCE_TAG = "resource";
 
    /** . */
@@ -115,13 +121,11 @@ public class JavascriptConfigParser
    {
       List<ScriptResourceDescriptor> tasks = new ArrayList<ScriptResourceDescriptor>();
       Element element = document.getDocumentElement();
-      for (String tagName : Arrays.asList(JAVA_SCRIPT_TAG, SCRIPTS_TAG))
+      for (String tagName : Arrays.asList(JAVA_SCRIPT_TAG, SCRIPTS_TAG, PORTLET_TAG, PORTAL_TAG))
       {
-         NodeList nodes = element.getElementsByTagName(tagName);
-         int length = nodes.getLength();
-         for (int i = 0; i < length; i++)
+         for (Element childElt : XMLTools.getChildren(element, tagName))
          {
-            Collection<ScriptResourceDescriptor> task = parseScripts((Element) nodes.item(i));
+            Collection<ScriptResourceDescriptor> task = parseScripts(childElt);
             if (task != null)
             {
                tasks.addAll(task);
@@ -193,13 +197,18 @@ public class JavascriptConfigParser
             ex.printStackTrace();
          }
       }
-      else if (SCRIPTS_TAG.equals(element.getTagName()))
+      else if (PORTAL_TAG.equals(element.getTagName()) || PORTLET_TAG.equals(element.getTagName()))
       {
          String resourceName = XMLTools.asString(XMLTools.getUniqueChild(element, "name", true));
-         ResourceScope resourceScope = ResourceScope.valueOf(XMLTools.asString(XMLTools.getUniqueChild(element, "scope", true)).toUpperCase());
-         if (resourceScope == ResourceScope.PORTLET)
+         ResourceScope resourceScope;
+         if (PORTLET_TAG.equals(element.getTagName()))
          {
             resourceName = contextPath.substring(1) + "/" + resourceName;
+            resourceScope = ResourceScope.PORTLET;
+         }
+         else
+         {
+            resourceScope = ResourceScope.PORTAL;
          }
          ResourceId id = new ResourceId(resourceScope, resourceName);
          ScriptResourceDescriptor desc = scripts.get(id);
@@ -207,30 +216,49 @@ public class JavascriptConfigParser
          {
             scripts.put(id, desc = new ScriptResourceDescriptor(id));
          }
-         for (Element moduleElt : XMLTools.getChildren(element, "module"))
+         Element scriptsElt = XMLTools.getUniqueChild(element, SCRIPTS_TAG, false);
+         if (scriptsElt != null)
          {
-            String moduleName = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "name", true));
-            String modulePath = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "path", true));
-            Javascript script = Javascript.create(id, moduleName, modulePath, contextPath, 0);
-            desc.modules.add(script);
+            parseDesc(scriptsElt, desc);
          }
-         for (Element moduleElt : XMLTools.getChildren(element, "depends"))
+      }
+      else if (SCRIPTS_TAG.equals(element.getTagName()))
+      {
+         String resourceName = XMLTools.asString(XMLTools.getUniqueChild(element, "name", true));
+         ResourceId id = new ResourceId(ResourceScope.SHARED, resourceName);
+         ScriptResourceDescriptor desc = scripts.get(id);
+         if (desc == null)
          {
-            String dependencyName = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "name", true));
-            ResourceScope dependencyScope = ResourceScope.valueOf(XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "scope", true)).toUpperCase());
-            ResourceId resourceId = new ResourceId(dependencyScope, dependencyName);
-            Element onLoadElt = XMLTools.getUniqueChild(moduleElt, "on-load", false);
-            boolean onLoad = onLoadElt != null && "true".equals(XMLTools.asString(onLoadElt));
-            DependencyDescriptor dependency = new DependencyDescriptor(resourceId, onLoad);
-            desc.dependencies.add(dependency);
+            scripts.put(id, desc = new ScriptResourceDescriptor(id));
          }
+         parseDesc(element, desc);
       }
       else
       {
-         return null;
+         // ???
       }
 
       //
       return scripts.values();
+   }
+   
+   private void parseDesc(Element element, ScriptResourceDescriptor desc)
+   {
+      for (Element moduleElt : XMLTools.getChildren(element, "module"))
+      {
+         String moduleName = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "name", true));
+         String modulePath = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "path", true));
+         Javascript script = Javascript.create(desc.id, moduleName, modulePath, contextPath, 0);
+         desc.modules.add(script);
+      }
+      for (Element moduleElt : XMLTools.getChildren(element, "depends"))
+      {
+         String dependencyName = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "scripts", true));
+         ResourceId resourceId = new ResourceId(ResourceScope.SHARED, dependencyName);
+         Element modeElt = XMLTools.getUniqueChild(moduleElt, "mode", false);
+         boolean onLoad = modeElt != null && "on-load".equals(XMLTools.asString(modeElt));
+         DependencyDescriptor dependency = new DependencyDescriptor(resourceId, onLoad);
+         desc.dependencies.add(dependency);
+      }
    }
 }

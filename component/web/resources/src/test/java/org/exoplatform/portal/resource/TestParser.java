@@ -36,25 +36,22 @@ import java.util.List;
 public class TestParser extends AbstractGateInTest
 {
    
-   public void testFoo() throws Exception
+   public void testShared() throws Exception
    {
       String config = "" +
          "<gatein-resources>" +
          "<scripts>" +
-         "<scope>portal</scope>" +
          "<name>foo</name>" +
          "<module>" +
          "<name>foo_module</name>" +
          "<path>/foo_module.js</path>" +
          "</module>" +
          "<depends>" +
-         "<scope>shared</scope>" +
-         "<name>bar</name>" +
+         "<scripts>bar</scripts>" +
          "</depends>" +
          "<depends>" +
-         "<scope>portal</scope>" +
-         "<name>juu</name>" +
-         "<on-load>true</on-load>" +
+         "<scripts>juu</scripts>" +
+         "<mode>on-load</mode>" +
          "</depends>" +
          "</scripts>" +
          "</gatein-resources>";
@@ -64,7 +61,69 @@ public class TestParser extends AbstractGateInTest
       List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
       assertEquals(1, scripts.size());
       ScriptResourceDescriptor desc = scripts.get(0);
+      assertEquals(new ResourceId(ResourceScope.SHARED, "foo"), desc.getId());
+      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), false), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"), true)), desc.getDependencies());
+   }
+
+   public void testPortlet() throws Exception
+   {
+      String config = "" +
+         "<gatein-resources>" +
+         "<portlet>" +
+         "<name>foo</name>" +
+         "<scripts>" +
+         "<module>" +
+         "<name>foo_module</name>" +
+         "<path>/foo_module.js</path>" +
+         "</module>" +
+         "<depends>" +
+         "<scripts>bar</scripts>" +
+         "</depends>" +
+         "<depends>" +
+         "<scripts>juu</scripts>" +
+         "<mode>on-load</mode>" +
+         "</depends>" +
+         "</scripts>" +
+         "</portlet>" +
+         "</gatein-resources>";
+
+      //
+      JavascriptConfigParser parser = new JavascriptConfigParser("/mypath");
+      List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
+      assertEquals(1, scripts.size());
+      ScriptResourceDescriptor desc = scripts.get(0);
+      assertEquals(new ResourceId(ResourceScope.PORTLET, "mypath/foo"), desc.getId());
+      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), false), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"), true)), desc.getDependencies());
+   }
+
+   public void testPortal() throws Exception
+   {
+      String config = "" +
+         "<gatein-resources>" +
+         "<portal>" +
+         "<name>foo</name>" +
+         "<scripts>" +
+         "<module>" +
+         "<name>foo_module</name>" +
+         "<path>/foo_module.js</path>" +
+         "</module>" +
+         "<depends>" +
+         "<scripts>bar</scripts>" +
+         "</depends>" +
+         "<depends>" +
+         "<scripts>juu</scripts>" +
+         "<mode>on-load</mode>" +
+         "</depends>" +
+         "</scripts>" +
+         "</portal>" +
+         "</gatein-resources>";
+
+      //
+      JavascriptConfigParser parser = new JavascriptConfigParser("/mypath");
+      List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
+      assertEquals(1, scripts.size());
+      ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.PORTAL, "foo"), desc.getId());
-      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), false), new DependencyDescriptor(new ResourceId(ResourceScope.PORTAL, "juu"), true)), desc.getDependencies());
+      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), false), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"), true)), desc.getDependencies());
    }
 }
