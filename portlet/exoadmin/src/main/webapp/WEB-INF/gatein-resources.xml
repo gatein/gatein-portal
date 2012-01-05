@@ -143,5 +143,16 @@
          <on-load>true</on-load>
       </depends>
    </scripts>
+
+   <scripts>
+      <scope>portlet</scope>
+      <name>ApplicationRegistryPortlet</name>
+      <depends>
+         <scope>shared</scope>
+         <name>webui</name>
+         <on-load>true</on-load>
+      </depends>
+   </scripts>
+
 </gatein-resources>
 
