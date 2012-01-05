@@ -25,6 +25,7 @@ import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.FetchMode;
 import org.exoplatform.portal.controller.resource.script.Module;
 import org.exoplatform.portal.controller.resource.script.ScriptGraph;
 import org.exoplatform.portal.controller.resource.script.ScriptResource;
@@ -141,7 +142,10 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
       // todo : remove /portal ???
       ScriptGraph scripts = new ScriptGraph();
-      scripts.addResource(COMMON_SHARED_RESOURCE);
+
+      // Not sure it's still used but that should be removed at some point
+      // since we do everyting by XML now
+      scripts.addResource(COMMON_SHARED_RESOURCE, FetchMode.ON_LOAD);
 
       //
       this.scripts = scripts;
@@ -328,17 +332,17 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       return contexts.get(contextPath);
    }
    
-   public Map<String, Boolean> resolveURLs(ControllerContext controllerContext, Collection<ResourceId> ids, boolean merge) throws IOException
+   public Map<String, FetchMode> resolveURLs(ControllerContext controllerContext, Collection<ResourceId> ids, boolean merge) throws IOException
    {
-      Map<String, Boolean> urls = new LinkedHashMap<String, Boolean>();
+      Map<String, FetchMode> urls = new LinkedHashMap<String, FetchMode>();
       StringBuilder buffer = new StringBuilder();
       URIWriter writer = new URIWriter(buffer);
 
       //
-      Map<ScriptResource, Boolean> resources = scripts.resolve(ids);
+      Map<ScriptResource, FetchMode> resources = scripts.resolve(ids);
 
       //
-      for (Map.Entry<ScriptResource, Boolean> entry : resources.entrySet())
+      for (Map.Entry<ScriptResource, FetchMode> entry : resources.entrySet())
       {
          ScriptResource resource = entry.getKey();
 
@@ -444,7 +448,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public void addPortalJScript(Javascript js)
    {
-      js.addModuleTo(scripts.addResource(js.getResource()));
+      js.addModuleTo(scripts.addResource(js.getResource(), null));
    }
 
    /**

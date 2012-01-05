@@ -22,6 +22,7 @@ package org.exoplatform.portal.resource;
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.FetchMode;
 import org.exoplatform.portal.controller.resource.script.ScriptGraph;
 import org.exoplatform.portal.controller.resource.script.ScriptResource;
 import org.gatein.common.util.Tools;
@@ -123,64 +124,95 @@ public class TestScriptGraph extends AbstractGateInTest
       assertEquals(Tools.toSet(B, C, D), a.getClosure());
    }
 
-   public void testOnLoad()
+   public void testDependencyFetchMode()
    {
       ScriptGraph graph = new ScriptGraph();
 
       ScriptResource a = graph.addResource(A);
       ScriptResource b = graph.addResource(B);
       ScriptResource c = graph.addResource(C);
-      a.addDependency(C, true);
-      b.addDependency(C, false);
+      a.addDependency(C, FetchMode.ON_LOAD);
+      b.addDependency(C, FetchMode.IMMEDIATE);
 
       //
-      Map<ScriptResource, Boolean> resolution = graph.resolve(Collections.singleton(A));
+      Map<ScriptResource, FetchMode> resolution = graph.resolve(Collections.singleton(A));
       assertEquals(2, resolution.size());
       assertEquals(Tools.toSet(a, c), resolution.keySet());
-      assertEquals((Boolean)false, resolution.get(a));
-      assertEquals((Boolean)true, resolution.get(c));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(a));
+      assertEquals(FetchMode.ON_LOAD, resolution.get(c));
 
       //
       resolution = graph.resolve(Collections.singleton(B));
       assertEquals(2, resolution.size());
       assertEquals(Tools.toSet(b, c), resolution.keySet());
-      assertEquals((Boolean)false, resolution.get(b));
-      assertEquals((Boolean)false, resolution.get(c));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(b));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(c));
 
       //
       resolution = graph.resolve(Collections.singleton(C));
       assertEquals(1, resolution.size());
       assertEquals(Tools.toSet(c), resolution.keySet());
-      assertEquals((Boolean)false, resolution.get(c));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(c));
 
       //
       resolution = graph.resolve(Tools.toSet(A, B));
       assertEquals(3, resolution.size());
       assertEquals(Tools.toSet(a, b, c), resolution.keySet());
-      assertEquals((Boolean)false, resolution.get(a));
-      assertEquals((Boolean)false, resolution.get(b));
-      assertEquals((Boolean)false, resolution.get(c));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(a));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(b));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(c));
 
       //
       resolution = graph.resolve(Tools.toSet(A, C));
       assertEquals(2, resolution.size());
       assertEquals(Tools.toSet(a, c), resolution.keySet());
-      assertEquals((Boolean)false, resolution.get(a));
-      assertEquals((Boolean)false, resolution.get(c));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(a));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(c));
 
       //
       resolution = graph.resolve(Tools.toSet(B, C));
       assertEquals(2, resolution.size());
       assertEquals(Tools.toSet(b, c), resolution.keySet());
-      assertEquals((Boolean)false, resolution.get(b));
-      assertEquals((Boolean)false, resolution.get(c));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(b));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(c));
 
       //
       resolution = graph.resolve(Tools.toSet(A, B, C));
       assertEquals(3, resolution.size());
       assertEquals(Tools.toSet(a, b, c), resolution.keySet());
-      assertEquals((Boolean)false, resolution.get(a));
-      assertEquals((Boolean)false, resolution.get(b));
-      assertEquals((Boolean)false, resolution.get(c));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(a));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(b));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(c));
+   }
+
+   public void testResourceFetchMode()
+   {
+      // Resource fetch mode should affect the resource
+      ScriptGraph graph = new ScriptGraph();
+      ScriptResource a = graph.addResource(A, FetchMode.ON_LOAD);
+      Map<ScriptResource, FetchMode> resolution = graph.resolve(Collections.singleton(A));
+      assertEquals(1, resolution.size());
+      assertEquals(Tools.toSet(a), resolution.keySet());
+      assertEquals(FetchMode.ON_LOAD, resolution.get(a));
+
+      //
+      graph = new ScriptGraph();
+      a = graph.addResource(A, FetchMode.ON_LOAD);
+      ScriptResource b = graph.addResource(B, FetchMode.IMMEDIATE);
+      a.addDependency(B, FetchMode.ON_LOAD);
+
+      // Resource fetch mode of B should not affect dependency A->B
+      resolution = graph.resolve(Collections.singleton(A));
+      assertEquals(2, resolution.size());
+      assertEquals(Tools.toSet(a, b), resolution.keySet());
+      assertEquals(FetchMode.ON_LOAD, resolution.get(a));
+      assertEquals(FetchMode.ON_LOAD, resolution.get(b));
+
+      // Immediate loading of B should preclude over A->B when specified
+      resolution = graph.resolve(Tools.toSet(A, B));
+      assertEquals(2, resolution.size());
+      assertEquals(Tools.toSet(a, b), resolution.keySet());
+      assertEquals(FetchMode.ON_LOAD, resolution.get(a));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(b));
    }
 }

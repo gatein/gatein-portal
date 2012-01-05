@@ -20,6 +20,7 @@ package org.exoplatform.web.application.javascript;
 
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.FetchMode;
 import org.gatein.common.xml.XMLTools;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -187,7 +188,7 @@ public class JavascriptConfigParser
                ScriptResourceDescriptor desc = scripts.get(js.getResource());
                if (desc == null)
                {
-                  scripts.put(js.getResource(), desc = new ScriptResourceDescriptor(js.getResource()));
+                  scripts.put(js.getResource(), desc = new ScriptResourceDescriptor(js.getResource(), FetchMode.IMMEDIATE));
                }
                desc.modules.add(js);
             }
@@ -211,14 +212,20 @@ public class JavascriptConfigParser
             resourceScope = ResourceScope.PORTAL;
          }
          ResourceId id = new ResourceId(resourceScope, resourceName);
-         ScriptResourceDescriptor desc = scripts.get(id);
-         if (desc == null)
-         {
-            scripts.put(id, desc = new ScriptResourceDescriptor(id));
-         }
          Element scriptsElt = XMLTools.getUniqueChild(element, SCRIPTS_TAG, false);
          if (scriptsElt != null)
          {
+            Element modeElt = XMLTools.getUniqueChild(scriptsElt, "mode", false);
+            FetchMode fetchMode = modeElt == null ? FetchMode.IMMEDIATE : FetchMode.decode(XMLTools.asString(modeElt));
+            ScriptResourceDescriptor desc = scripts.get(id);
+            if (desc == null)
+            {
+               scripts.put(id, desc = new ScriptResourceDescriptor(id, fetchMode));
+            }
+            else if (fetchMode == FetchMode.IMMEDIATE)
+            {
+               desc.fetchMode = fetchMode;
+            }
             parseDesc(scriptsElt, desc);
          }
       }
@@ -229,7 +236,7 @@ public class JavascriptConfigParser
          ScriptResourceDescriptor desc = scripts.get(id);
          if (desc == null)
          {
-            scripts.put(id, desc = new ScriptResourceDescriptor(id));
+            scripts.put(id, desc = new ScriptResourceDescriptor(id, FetchMode.ON_LOAD));
          }
          parseDesc(element, desc);
       }
@@ -256,8 +263,8 @@ public class JavascriptConfigParser
          String dependencyName = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "scripts", true));
          ResourceId resourceId = new ResourceId(ResourceScope.SHARED, dependencyName);
          Element modeElt = XMLTools.getUniqueChild(moduleElt, "mode", false);
-         boolean onLoad = modeElt != null && "on-load".equals(XMLTools.asString(modeElt));
-         DependencyDescriptor dependency = new DependencyDescriptor(resourceId, onLoad);
+         FetchMode fetchMode = modeElt == null ? FetchMode.IMMEDIATE : FetchMode.decode(XMLTools.asString(modeElt));
+         DependencyDescriptor dependency = new DependencyDescriptor(resourceId, fetchMode);
          desc.dependencies.add(dependency);
       }
    }

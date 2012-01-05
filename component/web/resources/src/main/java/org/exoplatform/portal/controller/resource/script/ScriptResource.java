@@ -32,11 +32,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * This class implements the {@link Comparable} interface, however the natural ordering provided here
+ * <p></p>
+ * 
+ * <p></p>This class implements the {@link Comparable} interface, however the natural ordering provided here
  * is not consistent with equals, therefore this class should not be used as a key in a {@link java.util.TreeMap}
- * for instance.
+ * for instance.</p>
  * 
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
@@ -53,12 +56,15 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    private final Map<QualifiedName, String> parameters;
 
    /** . */
-   final HashMap<ResourceId, Boolean> dependencies;
+   final HashMap<ResourceId, FetchMode> dependencies;
 
    /** . */
    final HashSet<ResourceId> closure;
 
-   ScriptResource(ScriptGraph graph, ResourceId id)
+   /** . */
+   FetchMode fetchMode;
+
+   ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode)
    {
       super(id);
 
@@ -73,12 +79,18 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       this.graph = graph;
       this.modules = new ArrayList<Module>();
       this.closure = new HashSet<ResourceId>();
-      this.dependencies = new HashMap<ResourceId, Boolean>();
+      this.dependencies = new HashMap<ResourceId, FetchMode>();
+      this.fetchMode = fetchMode;
    }
 
    public boolean isEmpty()
    {
       return modules.isEmpty();
+   }
+
+   public FetchMode getFetchMode()
+   {
+      return fetchMode;
    }
 
    public Map<QualifiedName, String> getParameters()
@@ -88,10 +100,10 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
 
    public void addDependency(ResourceId dependencyId)
    {
-      addDependency(dependencyId, false);
+      addDependency(dependencyId, FetchMode.IMMEDIATE);
    }
 
-   public void addDependency(ResourceId dependencyId, boolean onLoad)
+   public void addDependency(ResourceId dependencyId, FetchMode fetchMode)
    {
       ScriptResource dependency = graph.getResource(dependencyId);
 
@@ -123,7 +135,7 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       }                
       
       //
-      dependencies.put(dependencyId, onLoad);
+      dependencies.put(dependencyId, fetchMode);
    }
 
    public Set<ResourceId> getClosure()
@@ -145,7 +157,7 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       return module;
    }
    
-   public Boolean isOnLoad(ResourceId dependencyId)
+   public FetchMode isOnLoad(ResourceId dependencyId)
    {
       return dependencies.get(dependencyId);
    }

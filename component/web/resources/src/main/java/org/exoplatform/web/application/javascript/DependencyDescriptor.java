@@ -20,6 +20,7 @@
 package org.exoplatform.web.application.javascript;
 
 import org.exoplatform.portal.controller.resource.ResourceId;
+import org.exoplatform.portal.controller.resource.script.FetchMode;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -31,9 +32,9 @@ public class DependencyDescriptor
    private final ResourceId resourceId;
 
    /** . */
-   private final boolean onLoad;
+   private final FetchMode fetchMode;
 
-   public DependencyDescriptor(ResourceId resourceId, boolean onLoad) throws NullPointerException
+   public DependencyDescriptor(ResourceId resourceId, FetchMode fetchMode) throws NullPointerException
    {
       if (resourceId == null)
       {
@@ -42,7 +43,7 @@ public class DependencyDescriptor
 
       //
       this.resourceId = resourceId;
-      this.onLoad = onLoad;
+      this.fetchMode = fetchMode;
    }
 
    public ResourceId getResourceId()
@@ -50,9 +51,9 @@ public class DependencyDescriptor
       return resourceId;
    }
 
-   public boolean isOnLoad()
+   public FetchMode getFetchMode()
    {
-      return onLoad;
+      return fetchMode;
    }
 
    @Override
@@ -65,7 +66,7 @@ public class DependencyDescriptor
       if (obj instanceof DependencyDescriptor)
       {
          DependencyDescriptor that = (DependencyDescriptor)obj;
-         return resourceId.equals(that.resourceId) && onLoad == that.onLoad;
+         return resourceId.equals(that.resourceId) && fetchMode == that.fetchMode;
       }
       return false;
    }

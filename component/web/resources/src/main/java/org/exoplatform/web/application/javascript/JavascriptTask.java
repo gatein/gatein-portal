@@ -18,8 +18,6 @@
  */
 package org.exoplatform.web.application.javascript;
 
-import org.exoplatform.portal.controller.resource.ResourceId;
-import org.exoplatform.portal.controller.resource.ResourceScope;
 import org.exoplatform.portal.controller.resource.script.ScriptResource;
 
 import java.util.ArrayList;
@@ -46,14 +44,14 @@ public class JavascriptTask
    {
       for (ScriptResourceDescriptor desc : descriptors)
       {
-         ScriptResource resource = service.scripts.addResource(desc.id);
+         ScriptResource resource = service.scripts.addResource(desc.id, desc.fetchMode);
          for (Javascript module : desc.modules)
          {
             module.addModuleTo(resource);
          }
          for (DependencyDescriptor dependency : desc.dependencies)
          {
-            resource.addDependency(dependency.getResourceId(), dependency.isOnLoad());
+            resource.addDependency(dependency.getResourceId(), dependency.getFetchMode());
          }
       }
    }

@@ -137,6 +137,7 @@
       <xs:element name="scripts" minOccurs="0" maxOccurs="1">
         <xs:complexType>
           <xs:sequence>
+            <xs:element name="mode" type="fetchMode" minOccurs="0" maxOccurs="1" default="document"/>
             <xs:element name="module" type="module" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="depends" type="dependency" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
@@ -159,7 +160,7 @@
 
   <xs:complexType name="dependency">
     <xs:sequence>
-      <xs:element name="mode" type="loadingMode" minOccurs="0" maxOccurs="1" default="document"/>
+      <xs:element name="mode" type="fetchMode" minOccurs="0" maxOccurs="1" default="document"/>
       <xs:element name="scripts" type="xs:string" minOccurs="1" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
@@ -174,9 +175,9 @@
     </xs:sequence>
   </xs:complexType>
 
-  <xs:simpleType name="loadingMode">
+  <xs:simpleType name="fetchMode">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="document"/>
+      <xs:enumeration value="immediate"/>
       <xs:enumeration value="on-load"/>
     </xs:restriction>
   </xs:simpleType>

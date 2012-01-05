@@ -28,9 +28,7 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -53,10 +51,10 @@ public class ScriptGraph
       this.resources = resources;
    }
 
-   public Map<ScriptResource, Boolean> resolve(Collection<ResourceId> ids)
+   public Map<ScriptResource, FetchMode> resolve(Collection<ResourceId> ids)
    {
       // First build the closure
-      Map<ScriptResource, Boolean> closure = new HashMap<ScriptResource, Boolean>();
+      Map<ScriptResource, FetchMode> closure = new HashMap<ScriptResource, FetchMode>();
 
       //
       for (ResourceId id : ids)
@@ -65,7 +63,7 @@ public class ScriptGraph
          if (resource != null)
          {
             // Add the resource 
-            closure.put(resource, false);
+            closure.put(resource, resource.fetchMode);
             
             // Add the resource closure
             for (ResourceId dependencyId : resource.closure)
@@ -75,10 +73,10 @@ public class ScriptGraph
                //
                if (dependency != null)
                {
-                  Boolean onLoad = closure.get(dependency);
+                  FetchMode onLoad = closure.get(dependency);
 
                   //
-                  if (onLoad != null && !onLoad)
+                  if (onLoad == FetchMode.IMMEDIATE)
                   {
                      // It's already for immediate loading
                   }
@@ -91,7 +89,7 @@ public class ScriptGraph
                      // false later in this loop
                      if (onLoad == null)
                      {
-                        onLoad = true;
+                        onLoad = FetchMode.ON_LOAD;
                      }
 
                      //
@@ -113,7 +111,7 @@ public class ScriptGraph
       // There is a valid reason to not use a TreeMap directly: it does not work :-)
       // more seriously, we have a natural ordering but with inconsistent equals, please
       // see Comparable#compareTo javadoc
-      LinkedHashMap<ScriptResource, Boolean> ret = new LinkedHashMap<ScriptResource, Boolean>();
+      LinkedHashMap<ScriptResource, FetchMode> ret = new LinkedHashMap<ScriptResource, FetchMode>();
       for (ScriptResource key : keys)
       {
          ret.put(key, closure.get(key));
@@ -138,12 +136,24 @@ public class ScriptGraph
 
    public ScriptResource addResource(ResourceId id)
    {
+      return addResource(id, FetchMode.IMMEDIATE);
+   }
+
+   public ScriptResource addResource(ResourceId id, FetchMode fetchMode)
+   {
       Map<String, ScriptResource> map = resources.get(id.getScope());
       String name = id.getName();
       ScriptResource resource = map.get(name);
       if (resource == null)
       {
-         map.put(name, resource = new ScriptResource(this, id));
+         map.put(name, resource = new ScriptResource(this, id, fetchMode));
+      }
+      else if (fetchMode == FetchMode.IMMEDIATE && resource.fetchMode != FetchMode.IMMEDIATE)
+      {
+         // We should somehow have a method on FetchMode called "implies" that would provide
+         // relationship between fetch modes, but for now it's ok, but later it may be useful
+         // if we have additional fetch mode like "on-click".
+         resource.fetchMode = FetchMode.IMMEDIATE;
       }
       return resource;
    }

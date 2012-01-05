@@ -30,6 +30,7 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.FetchMode;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
@@ -74,6 +75,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
@@ -366,14 +368,21 @@ public class UIPortalApplication extends UIApplication
 
       try
       {
-         Map<String, Boolean> urls = service.resolveURLs(prc.getControllerContext(), resourceIds, !PropertyManager.isDevelopping());
+         Map<String, FetchMode> urls = service.resolveURLs(prc.getControllerContext(), resourceIds, !PropertyManager.isDevelopping());
+         log.info("Resolved URLS for page: " + urls);
 
          // Here we get the list of stuff to load on demand or not
          // according to the boolean value in the map
 
+         // Convert the map to what the js expects to have
+         LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
+         for (Map.Entry<String, FetchMode> entry : urls.entrySet())
+         {
+            ret.put(entry.getKey(), entry.getValue() == FetchMode.ON_LOAD);
+         }
+
          // todo : switch to debug later
-         log.info("Resolved URLS for page: " + urls);         
-         return urls;
+         return ret;
       }
       catch (IOException e)
       {

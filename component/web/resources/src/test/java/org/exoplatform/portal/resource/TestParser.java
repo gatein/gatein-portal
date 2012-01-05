@@ -22,6 +22,7 @@ package org.exoplatform.portal.resource;
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.FetchMode;
 import org.exoplatform.web.application.javascript.DependencyDescriptor;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.ScriptResourceDescriptor;
@@ -62,7 +63,7 @@ public class TestParser extends AbstractGateInTest
       assertEquals(1, scripts.size());
       ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.SHARED, "foo"), desc.getId());
-      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), false), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"), true)), desc.getDependencies());
+      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), FetchMode.IMMEDIATE), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"), FetchMode.ON_LOAD)), desc.getDependencies());
    }
 
    public void testPortlet() throws Exception
@@ -93,7 +94,7 @@ public class TestParser extends AbstractGateInTest
       assertEquals(1, scripts.size());
       ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.PORTLET, "mypath/foo"), desc.getId());
-      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), false), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"), true)), desc.getDependencies());
+      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), FetchMode.IMMEDIATE), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"), FetchMode.ON_LOAD)), desc.getDependencies());
    }
 
    public void testPortal() throws Exception
@@ -124,6 +125,6 @@ public class TestParser extends AbstractGateInTest
       assertEquals(1, scripts.size());
       ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.PORTAL, "foo"), desc.getId());
-      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), false), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"), true)), desc.getDependencies());
+      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), FetchMode.IMMEDIATE), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"), FetchMode.ON_LOAD)), desc.getDependencies());
    }
 }

@@ -17,47 +17,31 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.application.javascript;
-
-import org.exoplatform.portal.controller.resource.ResourceId;
-import org.exoplatform.portal.controller.resource.script.FetchMode;
-
-import java.util.ArrayList;
-import java.util.List;
+package org.exoplatform.portal.controller.resource.script;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ScriptResourceDescriptor
+public enum FetchMode
 {
 
-   /** . */
-   final ResourceId id;
+   IMMEDIATE,
+
+   ON_LOAD;
    
-   /** . */
-   final List<Javascript> modules;
-
-   /** . */
-   final List<DependencyDescriptor> dependencies;
-
-   /** . */
-   FetchMode fetchMode;
-
-   public ScriptResourceDescriptor(ResourceId id, FetchMode fetchMode)
+   public static FetchMode decode(String value)
    {
-      this.id = id;
-      this.modules = new ArrayList<Javascript>();
-      this.dependencies = new ArrayList<DependencyDescriptor>();
-      this.fetchMode = fetchMode;
-   }
-
-   public ResourceId getId()
-   {
-      return id;
-   }
-
-   public List<DependencyDescriptor> getDependencies()
-   {
-      return dependencies;
+      if (value.equals("immediate"))
+      {
+         return FetchMode.IMMEDIATE;
+      }
+      else if (value.equals("on-load"))
+      {
+         return FetchMode.ON_LOAD;
+      }
+      else
+      {
+         return null;
+      }
    }
 }
