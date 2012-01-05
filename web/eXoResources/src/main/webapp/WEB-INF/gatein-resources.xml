@@ -195,6 +195,12 @@
          <path>/javascript/eXo/gadget/UIGadget.js</path>
       </module>
 
+      <module>
+         <name>eXo.webui.UIPortlet</name>
+         <path>/javascript/eXo/webui/UIPortlet.js</path>
+      </module>
+
+
       <!-- 
       <module>
          <name>eXo.core.Spliter</name>
@@ -263,10 +269,6 @@
       <module>
          <name>eXo.webui.UIPopupMenu</name>
          <path>/javascript/eXo/webui/UIPopupMenu.js</path>
-      </module>
-      <module>
-         <name>eXo.webui.UIPortlet</name>
-         <path>/javascript/eXo/webui/UIPortlet.js</path>
       </module>
       <depends>
          <scope>shared</scope>
