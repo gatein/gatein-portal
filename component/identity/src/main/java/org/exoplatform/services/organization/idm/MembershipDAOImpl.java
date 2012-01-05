@@ -715,7 +715,17 @@ public class MembershipDAOImpl implements MembershipHandler
             Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(role.getGroup());
             m.setGroupId(g.getId());
             m.setUserName(role.getUser().getId());
-            m.setMembershipType(role.getRoleType().getName());
+
+            // LDAP store may return raw membership type as role type
+            if(role.getRoleType().getName().equals("JBOSS_IDENTITY_MEMBERSHIP"))
+            {
+               m.setMembershipType(orgService.getConfiguration().getAssociationMembershipType());
+            }
+            else
+            {
+               m.setMembershipType(role.getRoleType().getName());
+            }
+
             memberships.add(m);
          }
       }
