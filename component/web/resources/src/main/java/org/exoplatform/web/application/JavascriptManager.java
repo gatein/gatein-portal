@@ -21,11 +21,18 @@ package org.exoplatform.web.application;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.controller.resource.ResourceId;
+import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.FetchMode;
+import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
 /**
@@ -46,12 +53,15 @@ public class JavascriptManager
 
    /** . */
    private JavascriptConfigService jsSrevice_;
+   
+   private ControllerContext context;
 
-   public JavascriptManager()
+   public JavascriptManager(ControllerContext context)
    {
       jsSrevice_ =
          (JavascriptConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
             JavascriptConfigService.class);
+      this.context = context;
    }
 
    public void addJavascript(CharSequence s)
@@ -86,15 +96,35 @@ public class JavascriptManager
       }
    }
    
-   public void loadJavascript(String path) 
+   public void loadJavascript(ResourceScope scope, String name) throws Exception 
    {
-      if (path != null)
+      loadJavascript(Arrays.asList(new ResourceId(scope, name)));
+   }   
+
+   public void loadJavascript(Collection<ResourceId> ids) throws Exception
+   {
+      if (ids == null) 
+      {
+         throw new IllegalArgumentException("ids can't be null");
+      }
+      Map<String, FetchMode> urlMap = jsSrevice_.resolveURLs(context, ids, !PropertyManager.isDevelopping());
+      Set<String> urls = urlMap.keySet();
+      loadJavascript(urls.toArray(new String[urls.size()]));
+   }
+      
+   public void loadJavascript(String ...paths) 
+   {
+      if (paths == null)
+      {
+         throw new IllegalArgumentException("paths can't be null");
+      }      
+      for (String path : paths) 
       {
          if (!jsSrevice_.isJavascriptLoaded(path) || PropertyManager.isDevelopping())
          {
             onloadScripts.add(path);
-         }
-      }      
+         }            
+      }
    }
    
    public void addOnLoadJavascript(CharSequence s)

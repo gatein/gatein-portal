@@ -9,12 +9,13 @@
 %>
 <%
   import org.gatein.common.text.EntityEncoder;
-  import org.exoplatform.commons.utils.HTMLEntityEncoder;	
+  import org.exoplatform.commons.utils.HTMLEntityEncoder;
+  import org.exoplatform.portal.controller.resource.ResourceScope;
+  
 	String popupId = uicomponent.getId();
 	
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPopupWindow');
+	rcontext.getJavascriptManager().loadJavascript(ResourceScope.SHARED, "webui");
 	
 	def errors = uicomponent.getErrors();
 	def warnings = uicomponent.getWarnings();

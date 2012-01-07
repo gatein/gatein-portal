@@ -132,7 +132,7 @@ public class PortalRequestContext extends WebuiRequestContext
 
    private Writer writer_;
 
-   protected JavascriptManager jsmanager_ = new JavascriptManager();
+   protected JavascriptManager jsmanager_;
 
    private List<Element> extraMarkupHeaders;
 
@@ -176,7 +176,8 @@ public class PortalRequestContext extends WebuiRequestContext
       //
       this.urlFactory = (URLFactoryService)PortalContainer.getComponent(URLFactoryService.class);
       this.controllerContext = controllerContext;
-
+      this.jsmanager_ = new JavascriptManager(controllerContext);
+      
       //
       request_ = controllerContext.getRequest();
       response_ = controllerContext.getResponse();
