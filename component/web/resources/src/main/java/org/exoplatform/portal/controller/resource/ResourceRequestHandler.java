@@ -20,6 +20,8 @@
 package org.exoplatform.portal.controller.resource;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.resource.compressor.*;
+import org.exoplatform.portal.resource.compressor.ResourceType;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebRequestHandler;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
@@ -27,8 +29,8 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.gatein.common.io.IOTools;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -45,6 +47,17 @@ public class ResourceRequestHandler extends WebRequestHandler
    /** . */
    public static final QualifiedName MODULE = QualifiedName.create("gtn", "module");
 
+   /** . */
+   public static final QualifiedName MINIFIED = QualifiedName.create("gtn", "minified");
+
+   /** . */
+   private final ResourceCompressor compressor;
+
+   public ResourceRequestHandler(ResourceCompressor compressor)
+   {
+      this.compressor = compressor; 
+   }
+
    @Override
    public String getHandlerName()
    {
@@ -60,6 +73,7 @@ public class ResourceRequestHandler extends WebRequestHandler
       String resourceParam = context.getParameter(RESOURCE);
       String scopeParam = context.getParameter(SCOPE);
       String moduleParam = context.getParameter(MODULE);
+      String minifiedParam = context.getParameter(MINIFIED);
 
       //
       if (scopeParam != null && resourceParam != null)
@@ -70,7 +84,7 @@ public class ResourceRequestHandler extends WebRequestHandler
             ResourceId resource = new ResourceId(scope, resourceParam);
             
             //
-            InputStream script;
+            Reader script;
             if (moduleParam != null)
             {
                script = service.getScript(resource, moduleParam);
@@ -85,8 +99,19 @@ public class ResourceRequestHandler extends WebRequestHandler
             {
                HttpServletResponse response = context.getResponse();
                response.setContentType("application/x-javascript");
-               OutputStream out = response.getOutputStream();
-               IOTools.copy(script, out);
+               Writer out = response.getWriter();
+               
+               //
+               if ("true".equals(minifiedParam))
+               {
+                  compressor.compress(script,  out, ResourceType.JAVASCRIPT);
+               }
+               else
+               {
+                  IOTools.copy(script, out);
+               }
+
+               //
                return true;
             }
             else

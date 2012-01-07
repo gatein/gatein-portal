@@ -368,7 +368,11 @@ public class UIPortalApplication extends UIApplication
 
       try
       {
-         Map<String, FetchMode> urls = service.resolveURLs(prc.getControllerContext(), resourceIds, !PropertyManager.isDevelopping());
+         Map<String, FetchMode> urls = service.resolveURLs(
+            prc.getControllerContext(),
+            resourceIds,
+            !PropertyManager.isDevelopping(),
+            !PropertyManager.isDevelopping());
          log.info("Resolved URLS for page: " + urls);
 
          // Here we get the list of stuff to load on demand or not

@@ -107,7 +107,7 @@ public class JavascriptManager
       {
          throw new IllegalArgumentException("ids can't be null");
       }
-      Map<String, FetchMode> urlMap = jsSrevice_.resolveURLs(context, ids, !PropertyManager.isDevelopping());
+      Map<String, FetchMode> urlMap = jsSrevice_.resolveURLs(context, ids, !PropertyManager.isDevelopping(), !PropertyManager.isDevelopping());
       Set<String> urls = urlMap.keySet();
       loadJavascript(urls.toArray(new String[urls.size()]));
    }

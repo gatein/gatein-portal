@@ -56,6 +56,9 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    private final Map<QualifiedName, String> parameters;
 
    /** . */
+   private final Map<QualifiedName, String> minifiedParameters;
+
+   /** . */
    final HashMap<ResourceId, FetchMode> dependencies;
 
    /** . */
@@ -73,9 +76,15 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       parameters.put(WebAppController.HANDLER_PARAM, "script");
       parameters.put(ResourceRequestHandler.RESOURCE, id.getName());
       parameters.put(ResourceRequestHandler.SCOPE, id.getScope().name());
+      parameters.put(ResourceRequestHandler.MINIFIED, "false");
+
+      //
+      Map<QualifiedName, String> minifiedParameters = new HashMap<QualifiedName, String>(parameters);
+      minifiedParameters.put(ResourceRequestHandler.MINIFIED, "true");
 
       //
       this.parameters = parameters;
+      this.minifiedParameters = minifiedParameters;
       this.graph = graph;
       this.modules = new ArrayList<Module>();
       this.closure = new HashSet<ResourceId>();
@@ -93,9 +102,9 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       return fetchMode;
    }
 
-   public Map<QualifiedName, String> getParameters()
+   public Map<QualifiedName, String> getParameters(boolean minified)
    {
-      return parameters;
+      return minified ? minifiedParameters : parameters;
    }
 
    public void addDependency(ResourceId dependencyId)
