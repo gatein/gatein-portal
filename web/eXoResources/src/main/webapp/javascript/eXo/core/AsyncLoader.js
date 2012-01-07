@@ -24,59 +24,82 @@ eXo.core.AsyncLoader = {
 	  ie : /MSIE/.test(navigator.userAgent)
   },
   head : document.head || document.getElementsByTagName('head')[0],
-  registered : [],
-  loaded : [],
+  PENDING : "pending",
+  LOADED : "loaded",
+  JS : [],  
   
-  loadJS : function(urls, callback, params, context) {		  
-	if (!urls) return;
-	urls = typeof urls === 'string' ? [urls] : urls;	
+  loadJS : function(scripts, callback, params, context) {		  
+	if (!scripts) return;	
+	scripts = typeof scripts === "string" || scripts.length == undefined ? [scripts] : scripts;
 		
-	var reg = new this.JSReg(urls, new this.CallbackItem(callback, params, context));
-	this.registered.push(reg);
+	var tmp = [];
+	for (var i = 0; i < scripts.length; i++) {
+		if (scripts[i]) {
+			//filter undefined
+			tmp.push(scripts[i]);
+			//filter duplicated
+			if (!this.getScript(scripts[i]))
+				this.JS.push({script: scripts[i], status: ""});
+		}
+	}	
+	var reg = new this.JSReg(tmp, new this.CallbackItem(callback, params, context));
 	reg.load();		
   },    
  
-  JSReg : function(urls, callback) {
-    this.urls = urls;		  
-	this.callback = callback;
-	this.pending = [];
-	for (var i = 0; i < urls.length; i++) {
-		if (!eXo.core.AsyncLoader.isRegistered(urls[i])) {
-			this.pending.push(urls[i]);
-		}
-	}
+  JSReg : function(scripts, callback) {
+	var loader = eXo.core.AsyncLoader;
+	this.scripts = scripts;
+    this.pending = [];
+    for (var i = 0; i < this.scripts.length; i++) {
+    	if (!loader.env.async || loader.getScript(this.scripts[i]).status === "") {
+    		this.pending.push(this.scripts[i]);
+    	}
+    }
+	this.callback = callback;	
 	this.load = function() {
-		var nodes = [], loader = eXo.core.AsyncLoader;				
+		var nodes = [];				
 		
-		if (!this.pending.length) {
-			this.finish();
-			return;
-		}
-		if (loader.env.async) {
-			for (var i = 0; i < this.pending.length; i++) {
-				var node = this.createNode(this.pending[i], loader.env);
-				nodes.push(node);
+		if (this.pending.length) {
+			var len = loader.env.async ? this.pending.length : 1;
+			for (var i = 0; i < len; i++) {
+				var registered = loader.getScript(this.pending[i]); 
+				if (registered.status === "") {
+					registered.status = loader.PENDING;
+					nodes.push(this.createNode(this.pending[i]));
+				} else if (registered.status === loader.PENDING && !loader.env.async) {
+					//Sync mode: wait to make sure the order of scripts
+					setTimeout(function(reg) { return function() {reg.load();};}(this), 250);
+					return;						
+				}						
 			}
-		} else {						
-			nodes.push(this.createNode(this.pending[0], loader.env));				
-		}        
 
-        for (i = 0; i < nodes.length; ++i) {
-          loader.head.appendChild(nodes[i]);
-        }
+	        for (i = 0; i < nodes.length; ++i) {
+	          var node = nodes[i];
+	          loader.head.appendChild(node);
+	          if (!node.src) {
+	        	  this.finish(node);
+	          }
+	        }
+		}
+		if (!nodes.length) this.finish();
 	};
-	this.finish = function(url) {		
-		var loader = eXo.core.AsyncLoader;
+	this.finish = function(script) {		
+		if (script) {
+			loader.getScript(script).status = loader.LOADED;								
+		}
 		
-		if (this.pending.length && url) {		
-			this.pending.splice(loader.indexOf(this.pending, url), 1);
-			loader.loaded.push(url);					
-		}		
+		if (this.pending.length) {
+			var tmp = this.pending.slice(0);
+			for (var i = 0; i < tmp.length; i++) {
+				if (loader.getScript(tmp[i]).status === loader.LOADED) {
+					this.pending.splice(loader.indexOf(this.pending, tmp[i]), 1);						
+				}
+			}					
+		}
 		if (this.pending.length == 0) {
-			for (var i = 0; i < this.urls.length; i++) {
-				if (!loader.isLoaded(this.urls[i])) {					
-					var me = this;
-					setTimeout(function() {me.finish();}, 250);
+			for (var i = 0; i < this.scripts.length; i++) {
+				if (loader.getScript(this.scripts[i]).status === loader.PENDING) {					
+					setTimeout(function(reg) { return function() {reg.finish();};}(this), 250);
 					return;
 				}
 			}			
@@ -86,38 +109,35 @@ eXo.core.AsyncLoader = {
 			this.load();							
 		} 
 	};
-	this.createNode = function(url, env) {
-		var  me = this, node = document.createElement("script");
-		node.src = url;
+	this.createNode = function(script) {		
+		var node = script, me = this;
+		if (typeof script === "string") {
+			node = document.createElement("script");
+			node.src = script;			
+		}
+		node.type = "text/javascript";
 		node.async = false;
-		if (env.ie) {
-    		node.onreadystatechange = function () {
-    			if (/loaded|complete/.test(node.readyState)) {
-    				node.onreadystatechange = null;
-    				me.finish(url);
-    			}
-    		};          
-    	} else {
-    		node.onload = node.onerror = function() {me.finish(url);};
-    	}		
+		if (node.src) {
+			if (loader.env.ie) {
+				node.onreadystatechange = function () {
+					if (/loaded|complete/.test(node.readyState)) {
+						node.onreadystatechange = null;
+						me.finish(script);
+					}
+				};          
+			} else {
+				node.onload = node.onerror = function() {me.finish(script);};
+			}								
+		}
 		return node;
 	};
-  },
-	
-  isRegistered : function(url) {
-	for (var i = 0; i < this.registered.length; i++) {
-		for (j = 0; j < this.registered[i].urls.length; j++) {
-			if (url === this.registered[i].urls[j]) return true;
-		}
-	}
-	return false;
-  },
+  },	  
   
-  isLoaded : function(url) {
-	for (var i = 0; i < this.loaded.length; i++) {
-		if (url === this.loaded[i]) return true;
-	}
-	return false;
+  getScript : function(script) {
+	  for (var i = 0; i < this.JS.length; i++) {
+		if (script === this.JS[i].script) return this.JS[i];
+	  }
+	  return null;   
   },
   
   indexOf : function(array, obj) {

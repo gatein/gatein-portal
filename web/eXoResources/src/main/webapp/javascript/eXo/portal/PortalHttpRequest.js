@@ -149,7 +149,11 @@ function MarkupHeadElements(fragment) {
 	this.bases = DOMUtil.findDescendantsByTagName(fragment, "base") ;
 	this.links = DOMUtil.findDescendantsByTagName(fragment, "link") ;
 	this.metas = DOMUtil.findDescendantsByTagName(fragment, "meta") ;
-	this.scripts = DOMUtil.findDescendantsByTagName(fragment, "script") ;		
+	this.scripts = DOMUtil.findDescendantsByTagName(fragment, "script") ;           
+	//Recreate tag to make sure browser will execute it	
+	for (var i = 0; i < this.scripts.length; i++) {
+		this.scripts[i] = createScriptNode(this.scripts[i]);
+	}
 	this.styles = DOMUtil.findDescendantsByTagName(fragment, "style") ;
 }
 
@@ -165,20 +169,24 @@ function appendScriptToHead(scriptId, scriptElement) {
     head.removeChild(descendant) ;
   }
 
-  script = document.createElement('script');
+  var script = createScriptNode(scriptElement);
   script.id = scriptId;
-  script.type = 'text/javascript';
-  
-  //check if contains source attribute
-  if(scriptElement.src) {
-    script.src = scriptElement.src;
-  } else {
-  	script.text = scriptElement.innerHTML;
-  }
   head.appendChild(script);
 };
 
-
+function createScriptNode(elem) {
+	var script = document.createElement('script');	
+	script.type = 'text/javascript';
+	script.className = elem.className;
+	//check if contains source attribute
+	if(elem.src) {
+	  script.src = elem.src;
+	} else {
+	  script.text = elem.innerHTML;
+	}
+	
+	return script;
+};
 
 /*****************************************************************************************/
 /*
@@ -448,7 +456,11 @@ function HttpResponseHandler(){
       appendElementsToHead(markupHeadElements.bases);
 		appendElementsToHead(markupHeadElements.links);				
 		appendElementsToHead(markupHeadElements.styles);
-		appendElementsToHead(markupHeadElements.scripts);
+		if (markupHeadElements.scripts.length) {
+			eXo.core.AsyncLoader.loadJS(markupHeadElements.scripts, function() {
+				this.executeScript(response.script) ;
+			}, null, this);
+		}
 	};
 	
 	function cleanHtmlHead(response) {
@@ -624,10 +636,13 @@ function HttpResponseHandler(){
 	  	if(confirm(eXo.i18n.I18NMessage.getMessage("SessionTimeout"))) instance.ajaxTimeout(request) ;
 	  }
 	  //Handle the portal responses
-	  try {
-	    instance.updateBlocks(response.blocksToUpdate);
-	    instance.updateHtmlHead(response);
-	    instance.executeScript(response.script) ;
+	  try {	    
+	    instance.updateBlocks(response.blocksToUpdate) ;
+		instance.updateHtmlHead(response);
+		var extraMarkup = response.markupHeadElements;
+		if (!extraMarkup || !extraMarkup.scripts.length) {
+			instance.executeScript(response.script) ;		  
+		}
       }
       catch (error) {
              alert(error.message) ;
