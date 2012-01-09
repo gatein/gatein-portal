@@ -15,7 +15,6 @@
 	
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.importJavascript('eXo.webui.UIPopupSelectCategory');
-	jsmanager.importJavascript('eXo.portal.UIPortalControl');
 
 	WindowState windowState = uicomponent.getCurrentWindowState();
 	String portletId = uicomponent.getId();
@@ -78,30 +77,14 @@
 						<div class="WindowBarRight">
 							<div class="WindowBarCenter ClearFix">
 								<%
-									
-									String restoreDown = _ctx.appRes("UIPortlet.tooltip.MaximizeRestore");
-									String restore = _ctx.appRes("UIPortlet.tooltip.MinimizeRestore");
-									String miniTooltip = _ctx.appRes("UIPortlet.tooltip.Minimize");
-									String maxiTooltip = _ctx.appRes("UIPortlet.tooltip.Maximize");
-									String renderMaxi = maxiTooltip;
-									String renderMini = miniTooltip;
-									if(windowState == WindowState.MAXIMIZED) {
-										renderMaxi = restoreDown;
-									} else if(windowState == WindowState.MINIMIZED) {
-										renderMini = restore;
-									}
-									if(uicomponent.getShowWindowState()) {
-										String maximizedAction = "eXo.portal.UIPortalControl.changeWindowState('"+portletId+"', 'maximized');";
-										String minimizedAction = "eXo.portal.UIPortalControl.changeWindowState('"+portletId+"', 'minimized');";
-										String maximizedMode = "Maximized";
-										String minimizedMode = "Minimized";
-										if(windowState == WindowState.MAXIMIZED) {
-											maximizedAction = "eXo.portal.UIPortalControl.changeWindowState('"+portletId+"', 'normal');";
-											maximizedMode = "Normal";
-										} else if(windowState == WindowState.MINIMIZED) {
-											minimizedAction = "eXo.portal.UIPortalControl.changeWindowState('"+portletId+"', 'normal');";
-											minimizedMode = "Normal";
-										}
+									if(uicomponent.getShowWindowState())
+									{
+										String maximizedAction = uicomponent.event("ChangeWindowState", (windowState != WindowState.MAXIMIZED)? "maximized" : "normal");
+										String minimizedAction = uicomponent.event("ChangeWindowState", (windowState != WindowState.MINIMIZED)? "minimized" : "normal");
+										String maximizedMode = (windowState != WindowState.MAXIMIZED)? "Maximized" : "Normal";
+										String minimizedMode = (windowState != WindowState.MINIMIZED)? "Minimized" : "Normal";
+										String renderMaxi = (windowState != WindowState.MAXIMIZED)? _ctx.appRes("UIPortlet.tooltip.Maximize") : _ctx.appRes("UIPortlet.tooltip.MaximizeRestore");
+										String renderMini = (windowState != WindowState.MINIMIZED)? _ctx.appRes("UIPortlet.tooltip.Minimize") : _ctx.appRes("UIPortlet.tooltip.MinimizeRestore");
 								%>
 										<div class="ControlIcon ${maximizedMode}Icon" title="$renderMaxi"	onclick="$maximizedAction" ></div>
 										<div class="ControlIcon ${minimizedMode}Icon" title="$renderMini"	onclick="$minimizedAction" ></div>
