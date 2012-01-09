@@ -194,7 +194,7 @@
 	background-position: center 18px;
 }
 
-.MacTheme .OverArrowDownIcon {
+.MacTheme .ArrowDownIcon:hover {
 	background-position: center 98px;
 }
 
@@ -202,7 +202,7 @@
 	background-position: center 37px;
 }
 
-.MacTheme .OverMinimizedIcon {
+.MacTheme .MinimizedIcon:hover {
 	background-position: center 118px;
 }
 
@@ -210,7 +210,7 @@
 	background-position: center 57px;
 }
 
-.MacTheme .OverMaximizedIcon {
+.MacTheme .MaximizedIcon:hover {
 	background-position: center 138px;
 }
 
@@ -218,7 +218,7 @@
 	background-position: center 78px;
 }
 
-.MacTheme .OverNormalIcon {
+.MacTheme .NormalIcon:hover {
 	background-position: center 158px;
 }
 
@@ -226,7 +226,7 @@
 	background-position: center 78px;
 }
 
-.MacTheme .OverRestoreIcon {
+.MacTheme .RestoreIcon:hover {
 	background-position: center 158px;
 }
 
@@ -344,7 +344,7 @@
 	background-position: center 20px;
 }
 
-.MacGray .OverArrowDownIcon {
+.MacGray .ArrowDownIcon:hover {
 	background-position: center 100px;
 }
 
@@ -352,7 +352,7 @@
 	background-position: center 37px;
 }
 
-.MacGray .OverMinimizedIcon {
+.MacGray .MinimizedIcon:hover {
 	background-position: center 120px;
 }
 
@@ -360,7 +360,7 @@
 	background-position: center 57px;
 }
 
-.MacGray .OverMaximizedIcon {
+.MacGray .MaximizedIcon:hover {
 	background-position: center 140px;
 }
 
@@ -368,7 +368,7 @@
 	background-position: center 78px;
 }
 
-.MacGray .OverNormalIcon {
+.MacGray .NormalIcon:hover {
 	background-position: center 160px;
 }
 
@@ -376,7 +376,7 @@
 	background-position: center 78px;
 }
 
-.MacGray .OverRestoreIcon {
+.MacGray .RestoreIcon:hover {
 	background-position: center 160px;
 }
 
@@ -495,7 +495,7 @@
 	background-position: center 20px;
 }
 
-.MacBlack .OverArrowDownIcon {
+.MacBlack .ArrowDownIcon:hover {
 	background-position: center 100px;
 }
 
@@ -503,7 +503,7 @@
 	background-position: center 37px;
 }
 
-.MacBlack .OverMinimizedIcon {
+.MacBlack .MinimizedIcon:hover {
 	background-position: center 120px;
 }
 
@@ -511,7 +511,7 @@
 	background-position: center 57px;
 }
 
-.MacBlack .OverMaximizedIcon {
+.MacBlack .MaximizedIcon:hover {
 	background-position: center 140px;
 }
 
@@ -519,7 +519,7 @@
 	background-position: center 78px;
 }
 
-.MacBlack .OverNormalIcon {
+.MacBlack .NormalIcon:hover {
 	background-position: center 160px;
 }
 
@@ -527,7 +527,7 @@
 	background-position: center 78px;
 }
 
-.MacBlack .OverRestoreIcon {
+.MacBlack .RestoreIcon:hover {
 	background-position: center 160px;
 }
 
@@ -646,7 +646,7 @@
 	background-position: center 20px;
 }
 
-.MacGreenSteel .OverArrowDownIcon {
+.MacGreenSteel .ArrowDownIcon:hover {
 	background-position: center 100px;
 }
 
@@ -654,7 +654,7 @@
 	background-position: center 37px;
 }
 
-.MacGreenSteel .OverMinimizedIcon {
+.MacGreenSteel .MinimizedIcon:hover {
 	background-position: center 120px;
 }
 
@@ -662,7 +662,7 @@
 	background-position: center 57px;
 }
 
-.MacGreenSteel .OverMaximizedIcon {
+.MacGreenSteel .MaximizedIcon:hover {
 	background-position: center 140px;
 }
 
@@ -670,7 +670,7 @@
 	background-position: center 78px;
 }
 
-.MacGreenSteel .OverNormalIcon {
+.MacGreenSteel .NormalIcon:hover {
 	background-position: center 160px;
 }
 
@@ -678,7 +678,7 @@
 	background-position: center 78px;
 }
 
-.MacGreenSteel .OverRestoreIcon {
+.MacGreenSteel .RestoreIcon:hover {
 	background-position: center 160px;
 }
 
@@ -793,7 +793,7 @@
 	background-position: center 20px;
 }
 
-.VistaTheme .OverArrowDownIcon {
+.VistaTheme .ArrowDownIcon:hover {
 	background-position: center 100px;
 }
 
@@ -801,7 +801,7 @@
 	background-position: center 40px;
 }
 
-.VistaTheme .OverMinimizedIcon {
+.VistaTheme .MinimizedIcon:hover {
 	background-position: center 120px;
 }
 
@@ -809,7 +809,7 @@
 	background-position: center 60px;
 }
 
-.VistaTheme .OverMaximizedIcon {
+.VistaTheme .MaximizedIcon:hover {
 	background-position: center 140px;
 }
 
@@ -817,7 +817,7 @@
 	background-position: center 80px;
 }
 
-.VistaTheme .OverNormalIcon {
+.VistaTheme .NormalIcon:hover {
 	background-position: center 160px;
 }
 
@@ -825,7 +825,7 @@
 	background-position: center 80px;
 }
 
-.VistaTheme .OverRestoreIcon {
+.VistaTheme .RestoreIcon:hover {
 	background-position: center 160px;
 }
 
@@ -947,7 +947,7 @@
 	background-position: center 19px;
 }
 
-.VistaBlue .OverArrowDownIcon {
+.VistaBlue .ArrowDownIcon:hover {
 	background-position: center 99px;
 }
 
@@ -955,7 +955,7 @@
 	background-position: center 39px;
 }
 
-.VistaBlue .OverMinimizedIcon {
+.VistaBlue .MinimizedIcon:hover {
 	background-position: center 119px;
 }
 
@@ -963,7 +963,7 @@
 	background-position: center 59px;
 }
 
-.VistaBlue .OverMaximizedIcon {
+.VistaBlue .MaximizedIcon:hover {
 	background-position: center 139px;
 }
 
@@ -971,7 +971,7 @@
 	background-position: center 79px;
 }
 
-.VistaBlue .OverNormalIcon {
+.VistaBlue .NormalIcon:hover {
 	background-position: center 159px;
 }
 
@@ -979,7 +979,7 @@
 	background-position: center 79px;
 }
 
-.VistaBlue .OverRestoreIcon {
+.VistaBlue .RestoreIcon:hover {
 	background-position: center 159px;
 }
 
@@ -1104,7 +1104,7 @@
 	background-position: center 21px;
 }
 
-.RoundConerBlue .OverArrowDownIcon {
+.RoundConerBlue .ArrowDownIcon:hover {
 	background-position: center 117px;
 }
 
@@ -1112,7 +1112,7 @@
 	background-position: center 45px;
 }
 
-.RoundConerBlue .OverMinimizedIcon {
+.RoundConerBlue .MinimizedIcon:hover {
 	background-position: center 141px;
 }
 
@@ -1120,7 +1120,7 @@
 	background-position: center 69px;
 }
 
-.RoundConerBlue .OverMaximizedIcon {
+.RoundConerBlue .MaximizedIcon:hover {
 	background-position: center 165px;
 }
 
@@ -1128,7 +1128,7 @@
 	background-position: center 93px;
 }
 
-.RoundConerBlue .OverRestoreIcon {
+.RoundConerBlue .RestoreIcon:hover {
 	background-position: center 189px;
 }
 
@@ -1136,7 +1136,7 @@
 	background-position: center 93px;
 }
 
-.RoundConerBlue .OverNormalIcon {
+.RoundConerBlue .NormalIcon:hover {
 	background-position: center 189px;
 }
 
@@ -1244,7 +1244,7 @@
 	background-position: center 21px;
 }
 
-.RoundConerViolet .OverArrowDownIcon {
+.RoundConerViolet .ArrowDownIcon:hover {
 	background-position: center 117px;
 }
 
@@ -1252,7 +1252,7 @@
 	background-position: center 45px;
 }
 
-.RoundConerViolet .OverMinimizedIcon {
+.RoundConerViolet .MinimizedIcon:hover {
 	background-position: center 141px;
 }
 
@@ -1260,7 +1260,7 @@
 	background-position: center 69px;
 }
 
-.RoundConerViolet .OverMaximizedIcon {
+.RoundConerViolet .MaximizedIcon:hover {
 	background-position: center 165px;
 }
 
@@ -1268,7 +1268,7 @@
 	background-position: center 93px;
 }
 
-.RoundConerViolet .OverRestoreIcon {
+.RoundConerViolet .RestoreIcon:hover {
 	background-position: center 189px;
 }
 
@@ -1276,7 +1276,7 @@
 	background-position: center 93px;
 }
 
-.RoundConerViolet .OverNormalIcon {
+.RoundConerViolet .NormalIcon:hover {
 	background-position: center 189px;
 }
 
@@ -1389,7 +1389,7 @@
 	background-position: center 21px;
 }
 
-.RoundConerOrange .OverArrowDownIcon {
+.RoundConerOrange .ArrowDownIcon:hover {
 	background-position: center 117px;
 }
 
@@ -1397,7 +1397,7 @@
 	background-position: center 45px;
 }
 
-.RoundConerOrange .OverMinimizedIcon {
+.RoundConerOrange .MinimizedIcon:hover {
 	background-position: center 141px;
 }
 
@@ -1405,7 +1405,7 @@
 	background-position: center 69px;
 }
 
-.RoundConerOrange .OverMaximizedIcon {
+.RoundConerOrange .MaximizedIcon:hover {
 	background-position: center 165px;
 }
 
@@ -1413,7 +1413,7 @@
 	background-position: center 93px;
 }
 
-.RoundConerOrange .OverRestoreIcon {
+.RoundConerOrange .RestoreIcon:hover {
 	background-position: center 189px;
 }
 
@@ -1421,7 +1421,7 @@
 	background-position: center 93px;
 }
 
-.RoundConerOrange .OverNormalIcon {
+.RoundConerOrange .NormalIcon:hover {
 	background-position: center 189px;
 }
 
@@ -1534,7 +1534,7 @@
 	background-position: center 21px;
 }
 
-.RoundConerPink .OverArrowDownIcon {
+.RoundConerPink .ArrowDownIcon:hover {
 	background-position: center 117px;
 }
 
@@ -1542,7 +1542,7 @@
 	background-position: center 45px;
 }
 
-.RoundConerPink .OverMinimizedIcon {
+.RoundConerPink .MinimizedIcon:hover {
 	background-position: center 141px;
 }
 
@@ -1550,7 +1550,7 @@
 	background-position: center 69px;
 }
 
-.RoundConerPink .OverMaximizedIcon {
+.RoundConerPink .MaximizedIcon:hover {
 	background-position: center 165px;
 }
 
@@ -1558,7 +1558,7 @@
 	background-position: center 93px;
 }
 
-.RoundConerPink .OverRestoreIcon {
+.RoundConerPink .RestoreIcon:hover {
 	background-position: center 189px;
 }
 
@@ -1566,7 +1566,7 @@
 	background-position: center 93px;
 }
 
-.RoundConerPink .OverNormalIcon {
+.RoundConerPink .NormalIcon:hover {
 	background-position: center 189px;
 }
 
@@ -1679,7 +1679,7 @@
 	background-position: center 21px;
 }
 
-.RoundConerGreen .OverArrowDownIcon {
+.RoundConerGreen .ArrowDownIcon:hover {
 	background-position: center 117px;
 }
 
@@ -1687,7 +1687,7 @@
 	background-position: center 45px;
 }
 
-.RoundConerGreen .OverMinimizedIcon {
+.RoundConerGreen .MinimizedIcon:hover {
 	background-position: center 141px;
 }
 
@@ -1695,7 +1695,7 @@
 	background-position: center 69px;
 }
 
-.RoundConerGreen .OverMaximizedIcon {
+.RoundConerGreen .MaximizedIcon:hover {
 	background-position: center 165px;
 }
 
@@ -1703,7 +1703,7 @@
 	background-position: center 93px;
 }
 
-.RoundConerGreen .OverRestoreIcon {
+.RoundConerGreen .RestoreIcon:hover {
 	background-position: center 189px;
 }
 
@@ -1711,7 +1711,7 @@
 	background-position: center 93px;
 }
 
-.RoundConerGreen .OverNormalIcon {
+.RoundConerGreen .NormalIcon:hover {
 	background-position: center 189px;
 }
 
@@ -1824,7 +1824,7 @@
 	background-position: center 20px;
 }
 
-.ShadowBlue .OverArrowDownIcon {
+.ShadowBlue .ArrowDownIcon:hover {
 	background-position: center 116px;
 }
 
@@ -1832,7 +1832,7 @@
 	background-position: center 44px;
 }
 
-.ShadowBlue .OverMinimizedIcon {
+.ShadowBlue .MinimizedIcon:hover {
 	background-position: center 140px;
 }
 
@@ -1840,7 +1840,7 @@
 	background-position: center 68px;
 }
 
-.ShadowBlue .OverMaximizedIcon {
+.ShadowBlue .MaximizedIcon:hover {
 	background-position: center 164px;
 }
 
@@ -1848,7 +1848,7 @@
 	background-position: center 92px;
 }
 
-.ShadowBlue .OverRestoreIcon {
+.ShadowBlue .RestoreIcon:hover {
 	background-position: center 188px;
 }
 
@@ -1856,7 +1856,7 @@
 	background-position: center 92px;
 }
 
-.ShadowBlue .OverNormalIcon {
+.ShadowBlue .NormalIcon:hover {
 	background-position: center 188px;
 }
 
@@ -1967,7 +1967,7 @@
 	background-position: center 20px;
 }
 
-.ShadowViolet .OverArrowDownIcon {
+.ShadowViolet .ArrowDownIcon:hover {
 	background-position: center 116px;
 }
 
@@ -1975,7 +1975,7 @@
 	background-position: center 44px;
 }
 
-.ShadowViolet .OverMinimizedIcon {
+.ShadowViolet .MinimizedIcon:hover {
 	background-position: center 140px;
 }
 
@@ -1983,7 +1983,7 @@
 	background-position: center 68px;
 }
 
-.ShadowViolet .OverMaximizedIcon {
+.ShadowViolet .MaximizedIcon:hover {
 	background-position: center 164px;
 }
 
@@ -1991,7 +1991,7 @@
 	background-position: center 92px;
 }
 
-.ShadowViolet .OverRestoreIcon {
+.ShadowViolet .RestoreIcon:hover {
 	background-position: center 188px;
 }
 
@@ -1999,7 +1999,7 @@
 	background-position: center 92px;
 }
 
-.ShadowViolet .OverNormalIcon {
+.ShadowViolet .NormalIcon:hover {
 	background-position: center 188px;
 }
 
@@ -2110,7 +2110,7 @@
 	background-position: center 20px;
 }
 
-.ShadowOrange .OverArrowDownIcon {
+.ShadowOrange .ArrowDownIcon:hover {
 	background-position: center 116px;
 }
 
@@ -2118,7 +2118,7 @@
 	background-position: center 44px;
 }
 
-.ShadowOrange .OverMinimizedIcon {
+.ShadowOrange .MinimizedIcon:hover {
 	background-position: center 140px;
 }
 
@@ -2126,7 +2126,7 @@
 	background-position: center 68px;
 }
 
-.ShadowOrange .OverMaximizedIcon {
+.ShadowOrange .MaximizedIcon:hover {
 	background-position: center 164px;
 }
 
@@ -2134,7 +2134,7 @@
 	background-position: center 92px;
 }
 
-.ShadowOrange .OverRestoreIcon {
+.ShadowOrange .RestoreIcon:hover {
 	background-position: center 188px;
 }
 
@@ -2142,7 +2142,7 @@
 	background-position: center 92px;
 }
 
-.ShadowOrange .OverNormalIcon {
+.ShadowOrange .NormalIcon:hover {
 	background-position: center 188px;
 }
 
@@ -2254,7 +2254,7 @@
 	background-position: center 20px;
 }
 
-.ShadowPink .OverArrowDownIcon {
+.ShadowPink .ArrowDownIcon:hover {
 	background-position: center 116px;
 }
 
@@ -2262,7 +2262,7 @@
 	background-position: center 44px;
 }
 
-.ShadowPink .OverMinimizedIcon {
+.ShadowPink .MinimizedIcon:hover {
 	background-position: center 140px;
 }
 
@@ -2270,7 +2270,7 @@
 	background-position: center 68px;
 }
 
-.ShadowPink .OverMaximizedIcon {
+.ShadowPink .MaximizedIcon:hover {
 	background-position: center 164px;
 }
 
@@ -2278,7 +2278,7 @@
 	background-position: center 92px;
 }
 
-.ShadowPink .OverRestoreIcon {
+.ShadowPink .RestoreIcon:hover {
 	background-position: center 188px;
 }
 
@@ -2286,7 +2286,7 @@
 	background-position: center 92px;
 }
 
-.ShadowPink .OverNormalIcon {
+.ShadowPink .NormalIcon:hover {
 	background-position: center 188px;
 }
 
@@ -2398,7 +2398,7 @@
 	background-position: center 20px;
 }
 
-.ShadowGreen .OverArrowDownIcon {
+.ShadowGreen .ArrowDownIcon:hover {
 	background-position: center 116px;
 }
 
@@ -2406,7 +2406,7 @@
 	background-position: center 44px;
 }
 
-.ShadowGreen .OverMinimizedIcon {
+.ShadowGreen .MinimizedIcon:hover {
 	background-position: center 140px;
 }
 
@@ -2414,7 +2414,7 @@
 	background-position: center 68px;
 }
 
-.ShadowGreen .OverMaximizedIcon {
+.ShadowGreen .MaximizedIcon:hover {
 	background-position: center 164px;
 }
 
@@ -2422,7 +2422,7 @@
 	background-position: center 92px;
 }
 
-.ShadowGreen .OverRestoreIcon {
+.ShadowGreen .RestoreIcon:hover {
 	background-position: center 188px;
 }
 
@@ -2430,7 +2430,7 @@
 	background-position: center 92px;
 }
 
-.ShadowGreen .OverNormalIcon {
+.ShadowGreen .NormalIcon:hover {
 	background-position: center 188px;
 }
 
@@ -2539,7 +2539,7 @@
 	background: url('background/SimpleStyle.gif') left 16px;
 }
 
-.SimpleBlue .OverArrowDownIcon {
+.SimpleBlue .ArrowDownIcon:hover {
 	background: url('background/SimpleStyle.gif') right 16px;
 }
 
@@ -2547,7 +2547,7 @@
 	background: url('background/SimpleStyle.gif') left 32px;
 }
 
-.SimpleBlue .OverMinimizedIcon {
+.SimpleBlue .MinimizedIcon:hover {
 	background: url('background/SimpleStyle.gif') right 32px;
 }
 
@@ -2555,7 +2555,7 @@
 	background: url('background/SimpleStyle.gif') left 48px;
 }
 
-.SimpleBlue .OverMaximizedIcon {
+.SimpleBlue .MaximizedIcon:hover {
 	background: url('background/SimpleStyle.gif') right 48px;
 }
 
@@ -2563,7 +2563,7 @@
 	background: url('background/SimpleStyle.gif') left 64px;
 }
 
-.SimpleBlue .OverRestoreIcon {
+.SimpleBlue .RestoreIcon:hover {
 	background: url('background/SimpleStyle.gif') right 64px;
 }
 
@@ -2571,7 +2571,7 @@
 	background: url('background/SimpleStyle.gif') left 64px;
 }
 
-.SimpleBlue .OverNormalIcon {
+.SimpleBlue .NormalIcon:hover {
 	background: url('background/SimpleStyle.gif') right 64px;
 }
 
@@ -2671,7 +2671,7 @@
 	background: url('background/SimpleStyle.gif') left 80px;
 }
 
-.SimpleViolet .OverArrowDownIcon {
+.SimpleViolet .ArrowDownIcon:hover {
 	background: url('background/SimpleStyle.gif') right 80px;
 }
 
@@ -2679,7 +2679,7 @@
 	background: url('background/SimpleStyle.gif') left 96px;
 }
 
-.SimpleViolet .OverMinimizedIcon {
+.SimpleViolet .MinimizedIcon:hover {
 	background: url('background/SimpleStyle.gif') right 96px;
 }
 
@@ -2687,7 +2687,7 @@
 	background: url('background/SimpleStyle.gif') left 112px;
 }
 
-.SimpleViolet .OverMaximizedIcon {
+.SimpleViolet .MaximizedIcon:hover {
 	background: url('background/SimpleStyle.gif') right 112px;
 }
 
@@ -2695,7 +2695,7 @@
 	background: url('background/SimpleStyle.gif') left 128px;
 }
 
-.SimpleViolet .OverRestoreIcon {
+.SimpleViolet .RestoreIcon:hover {
 	background: url('background/SimpleStyle.gif') right 128px;
 }
 
@@ -2703,7 +2703,7 @@
 	background: url('background/SimpleStyle.gif') left 128px;
 }
 
-.SimpleViolet .OverNormalIcon {
+.SimpleViolet .NormalIcon:hover {
 	background: url('background/SimpleStyle.gif') right 128px;
 }
 
@@ -2802,7 +2802,7 @@
 	background: url('background/SimpleStyle.gif') left 144px;
 }
 
-.SimpleOrange .OverArrowDownIcon {
+.SimpleOrange .ArrowDownIcon:hover {
 	background: url('background/SimpleStyle.gif') right 144px;
 }
 
@@ -2810,7 +2810,7 @@
 	background: url('background/SimpleStyle.gif') left 160px;
 }
 
-.SimpleOrange .OverMinimizedIcon {
+.SimpleOrange .MinimizedIcon:hover {
 	background: url('background/SimpleStyle.gif') right 160px;
 }
 
@@ -2818,7 +2818,7 @@
 	background: url('background/SimpleStyle.gif') left 192px;
 }
 
-.SimpleOrange .OverMaximizedIcon {
+.SimpleOrange .MaximizedIcon:hover {
 	background: url('background/SimpleStyle.gif') right 192px;
 }
 
@@ -2826,7 +2826,7 @@
 	background: url('background/SimpleStyle.gif') left 176px;
 }
 
-.SimpleOrange .OverRestoreIcon {
+.SimpleOrange .RestoreIcon:hover {
 	background: url('background/SimpleStyle.gif') right 176px;
 }
 
@@ -2834,7 +2834,7 @@
 	background: url('background/SimpleStyle.gif') left 176px;
 }
 
-.SimpleOrange .OverNormalIcon {
+.SimpleOrange .NormalIcon:hover {
 	background: url('background/SimpleStyle.gif') right 176px;
 }
 
@@ -2932,7 +2932,7 @@
 	background: url('background/SimpleStyle.gif') left 208px;
 }
 
-.SimplePink .OverArrowDownIcon {
+.SimplePink .ArrowDownIcon:hover {
 	background: url('background/SimpleStyle.gif') right 208px;
 }
 
@@ -2940,7 +2940,7 @@
 	background: url('background/SimpleStyle.gif') left 224px;
 }
 
-.SimplePink .OverMinimizedIcon {
+.SimplePink .MinimizedIcon:hover {
 	background: url('background/SimpleStyle.gif') right 224px;
 }
 
@@ -2948,7 +2948,7 @@
 	background: url('background/SimpleStyle.gif') left 240px;
 }
 
-.SimplePink .OverMaximizedIcon {
+.SimplePink .MaximizedIcon:hover {
 	background: url('background/SimpleStyle.gif') right 240px;
 }
 
@@ -2956,7 +2956,7 @@
 	background: url('background/SimpleStyle.gif') left 256px;
 }
 
-.SimplePink .OverRestoreIcon {
+.SimplePink .RestoreIcon:hover {
 	background: url('background/SimpleStyle.gif') right 256px;
 }
 
@@ -2964,7 +2964,7 @@
 	background: url('background/SimpleStyle.gif') left 256px;
 }
 
-.SimplePink .OverNormalIcon {
+.SimplePink .NormalIcon:hover {
 	background: url('background/SimpleStyle.gif') right 256px;
 }
 
@@ -3063,7 +3063,7 @@
 	background: url('background/SimpleStyle.gif') left 272px;
 }
 
-.SimpleGreen .OverArrowDownIcon {
+.SimpleGreen .ArrowDownIcon:hover {
 	background: url('background/SimpleStyle.gif') right 272px;
 }
 
@@ -3071,7 +3071,7 @@
 	background: url('background/SimpleStyle.gif') left 288px;
 }
 
-.SimpleGreen .OverMinimizedIcon {
+.SimpleGreen .MinimizedIcon:hover {
 	background: url('background/SimpleStyle.gif') right 288px;
 }
 
@@ -3079,7 +3079,7 @@
 	background: url('background/SimpleStyle.gif') left 304px;
 }
 
-.SimpleGreen .OverMaximizedIcon {
+.SimpleGreen .MaximizedIcon:hover {
 	background: url('background/SimpleStyle.gif') right 304px;
 }
 
@@ -3087,7 +3087,7 @@
 	background: url('background/SimpleStyle.gif') left 320px;
 }
 
-.SimpleGreen .OverRestoreIcon {
+.SimpleGreen .RestoreIcon:hover {
 	background: url('background/SimpleStyle.gif') right 320px;
 }
 
@@ -3095,7 +3095,7 @@
 	background: url('background/SimpleStyle.gif') left 320px;
 }
 
-.SimpleGreen .OverNormalIcon {
+.SimpleGreen .NormalIcon:hover {
 	background: url('background/SimpleStyle.gif') right 320px;
 }
 
