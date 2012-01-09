@@ -37,7 +37,7 @@
 	background-position: center 20px;
 }
 
-.DefaultTheme .OverArrowDownIcon {
+.DefaultTheme .ArrowDownIcon:hover {
 	background-position: center 116px;
 }
 
@@ -45,7 +45,7 @@
 	background-position: center 44px;
 }
 
-.DefaultTheme .OverMinimizedIcon {
+.DefaultTheme .MinimizedIcon:hover {
 	background-position: center 140px;
 }
 
@@ -53,7 +53,7 @@
 	background-position: center 68px;
 }
 
-.DefaultTheme .OverMaximizedIcon {
+.DefaultTheme .MaximizedIcon:hover {
 	background-position: center 164px;
 }
 
@@ -61,7 +61,7 @@
 	background-position: center 92px;
 }
 
-.DefaultTheme .OverRestoreIcon {
+.DefaultTheme .RestoreIcon:hover {
 	background-position: center 188px;
 }
 
@@ -69,7 +69,7 @@
 	background-position: center 92px;
 }
 
-.DefaultTheme .OverNormalIcon {
+.DefaultTheme .NormalIcon:hover {
 	background-position: center 188px;
 }
 
