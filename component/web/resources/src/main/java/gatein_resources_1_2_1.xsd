@@ -160,7 +160,6 @@
 
   <xs:complexType name="dependency">
     <xs:sequence>
-      <xs:element name="mode" type="fetchMode" minOccurs="0" maxOccurs="1" default="document"/>
       <xs:element name="scripts" type="xs:string" minOccurs="1" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>

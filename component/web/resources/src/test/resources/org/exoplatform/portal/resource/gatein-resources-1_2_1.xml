@@ -33,7 +33,6 @@
       <scripts>bar</scripts>
     </depends>
     <depends>
-      <mode>on-load</mode>
       <scripts>juu</scripts>
     </depends>
   </scripts>

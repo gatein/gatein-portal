@@ -84,8 +84,8 @@
    <portlet>
      <name>BannerPortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>webui</scripts>
        </depends>
    </scripts>
@@ -108,8 +108,8 @@
   <portlet>
     <name>NavigationPortlet</name>
     <scripts>
+      <mode>on-load</mode>
       <depends>
-        <mode>on-load</mode>
         <scripts>navigation</scripts>
       </depends>
     </scripts>

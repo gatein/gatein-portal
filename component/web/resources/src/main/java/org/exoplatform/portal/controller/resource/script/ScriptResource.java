@@ -32,7 +32,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * <p></p>
@@ -59,7 +58,7 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    private final Map<QualifiedName, String> minifiedParameters;
 
    /** . */
-   final HashMap<ResourceId, FetchMode> dependencies;
+   final HashSet<ResourceId> dependencies;
 
    /** . */
    final HashSet<ResourceId> closure;
@@ -88,7 +87,7 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       this.graph = graph;
       this.modules = new ArrayList<Module>();
       this.closure = new HashSet<ResourceId>();
-      this.dependencies = new HashMap<ResourceId, FetchMode>();
+      this.dependencies = new HashSet<ResourceId>();
       this.fetchMode = fetchMode;
    }
 
@@ -108,11 +107,6 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    }
 
    public void addDependency(ResourceId dependencyId)
-   {
-      addDependency(dependencyId, FetchMode.IMMEDIATE);
-   }
-
-   public void addDependency(ResourceId dependencyId, FetchMode fetchMode)
    {
       ScriptResource dependency = graph.getResource(dependencyId);
 
@@ -144,7 +138,7 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       }                
       
       //
-      dependencies.put(dependencyId, fetchMode);
+      dependencies.add(dependencyId);
    }
 
    public Set<ResourceId> getClosure()
@@ -166,11 +160,6 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       return module;
    }
    
-   public FetchMode isOnLoad(ResourceId dependencyId)
-   {
-      return dependencies.get(dependencyId);
-   }
-
    public List<Module> removeModuleByName(String name)
    {
       ArrayList<Module> removed = new ArrayList<Module>();

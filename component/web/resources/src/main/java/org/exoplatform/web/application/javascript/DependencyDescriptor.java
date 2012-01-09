@@ -31,10 +31,7 @@ public class DependencyDescriptor
    /** . */
    private final ResourceId resourceId;
 
-   /** . */
-   private final FetchMode fetchMode;
-
-   public DependencyDescriptor(ResourceId resourceId, FetchMode fetchMode) throws NullPointerException
+   public DependencyDescriptor(ResourceId resourceId) throws NullPointerException
    {
       if (resourceId == null)
       {
@@ -43,17 +40,11 @@ public class DependencyDescriptor
 
       //
       this.resourceId = resourceId;
-      this.fetchMode = fetchMode;
    }
 
    public ResourceId getResourceId()
    {
       return resourceId;
-   }
-
-   public FetchMode getFetchMode()
-   {
-      return fetchMode;
    }
 
    @Override
@@ -66,7 +57,7 @@ public class DependencyDescriptor
       if (obj instanceof DependencyDescriptor)
       {
          DependencyDescriptor that = (DependencyDescriptor)obj;
-         return resourceId.equals(that.resourceId) && fetchMode == that.fetchMode;
+         return resourceId.equals(that.resourceId);
       }
       return false;
    }

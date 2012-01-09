@@ -52,7 +52,6 @@ public class TestParser extends AbstractGateInTest
          "</depends>" +
          "<depends>" +
          "<scripts>juu</scripts>" +
-         "<mode>on-load</mode>" +
          "</depends>" +
          "</scripts>" +
          "</gatein-resources>";
@@ -63,7 +62,7 @@ public class TestParser extends AbstractGateInTest
       assertEquals(1, scripts.size());
       ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.SHARED, "foo"), desc.getId());
-      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), FetchMode.IMMEDIATE), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"), FetchMode.ON_LOAD)), desc.getDependencies());
+      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar")), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"))), desc.getDependencies());
    }
 
    public void testPortlet() throws Exception
@@ -82,7 +81,6 @@ public class TestParser extends AbstractGateInTest
          "</depends>" +
          "<depends>" +
          "<scripts>juu</scripts>" +
-         "<mode>on-load</mode>" +
          "</depends>" +
          "</scripts>" +
          "</portlet>" +
@@ -94,7 +92,7 @@ public class TestParser extends AbstractGateInTest
       assertEquals(1, scripts.size());
       ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.PORTLET, "mypath/foo"), desc.getId());
-      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), FetchMode.IMMEDIATE), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"), FetchMode.ON_LOAD)), desc.getDependencies());
+      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar")), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"))), desc.getDependencies());
    }
 
    public void testPortal() throws Exception
@@ -113,7 +111,6 @@ public class TestParser extends AbstractGateInTest
          "</depends>" +
          "<depends>" +
          "<scripts>juu</scripts>" +
-         "<mode>on-load</mode>" +
          "</depends>" +
          "</scripts>" +
          "</portal>" +
@@ -125,6 +122,6 @@ public class TestParser extends AbstractGateInTest
       assertEquals(1, scripts.size());
       ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.PORTAL, "foo"), desc.getId());
-      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar"), FetchMode.IMMEDIATE), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"), FetchMode.ON_LOAD)), desc.getDependencies());
+      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar")), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"))), desc.getDependencies());
    }
 }

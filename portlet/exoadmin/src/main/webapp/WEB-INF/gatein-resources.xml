@@ -87,8 +87,8 @@
    <portlet>
      <name>RegisterPortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>webui</scripts>
        </depends>
      </scripts>
@@ -97,8 +97,8 @@
    <portlet>
      <name>StarToolbarPortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>navigation</scripts>
        </depends>
      </scripts>
@@ -107,8 +107,8 @@
    <portlet>
      <name>UserToolbarSitePortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>navigation</scripts>
        </depends>
      </scripts>
@@ -117,8 +117,8 @@
    <portlet>
      <name>UserToolbarGroupPortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>navigation</scripts>
        </depends>
    </scripts>
@@ -137,8 +137,8 @@
    <portlet>
      <name>AdminToolbarPortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>navigation</scripts>
        </depends>
      </scripts>
@@ -147,8 +147,8 @@
    <portlet>
      <name>ApplicationRegistryPortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>webui</scripts>
        </depends>
      </scripts>

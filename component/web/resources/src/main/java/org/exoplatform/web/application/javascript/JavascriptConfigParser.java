@@ -262,9 +262,7 @@ public class JavascriptConfigParser
       {
          String dependencyName = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "scripts", true));
          ResourceId resourceId = new ResourceId(ResourceScope.SHARED, dependencyName);
-         Element modeElt = XMLTools.getUniqueChild(moduleElt, "mode", false);
-         FetchMode fetchMode = modeElt == null ? FetchMode.IMMEDIATE : FetchMode.decode(XMLTools.asString(modeElt));
-         DependencyDescriptor dependency = new DependencyDescriptor(resourceId, fetchMode);
+         DependencyDescriptor dependency = new DependencyDescriptor(resourceId);
          desc.dependencies.add(dependency);
       }
    }

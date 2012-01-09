@@ -51,7 +51,7 @@ public class JavascriptTask
          }
          for (DependencyDescriptor dependency : desc.dependencies)
          {
-            resource.addDependency(dependency.getResourceId(), dependency.getFetchMode());
+            resource.addDependency(dependency.getResourceId());
          }
       }
    }

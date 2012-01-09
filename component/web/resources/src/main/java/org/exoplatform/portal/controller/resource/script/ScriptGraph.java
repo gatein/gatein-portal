@@ -27,8 +27,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -50,75 +54,56 @@ public class ScriptGraph
       //
       this.resources = resources;
    }
-
-   public Map<ScriptResource, FetchMode> resolve(Collection<ResourceId> ids)
+   
+   public Collection<ScriptResource> resolve(Collection<ResourceId> ids, FetchMode fetchMode)
    {
-      // First build the closure
-      Map<ScriptResource, FetchMode> closure = new HashMap<ScriptResource, FetchMode>();
-
+      Set<ScriptResource> determined = new HashSet<ScriptResource>();
+      
       //
       for (ResourceId id : ids)
       {
          ScriptResource resource = getResource(id);
-         if (resource != null)
+         if (resource != null && resource.fetchMode == fetchMode)
          {
-            // Add the resource 
-            closure.put(resource, resource.fetchMode);
-            
-            // Add the resource closure
+            determined.add(resource);
             for (ResourceId dependencyId : resource.closure)
             {
                ScriptResource dependency = getResource(dependencyId);
-
-               //
                if (dependency != null)
                {
-                  FetchMode onLoad = closure.get(dependency);
-
-                  //
-                  if (onLoad == FetchMode.IMMEDIATE)
-                  {
-                     // It's already for immediate loading
-                  }
-                  else
-                  {
-                     onLoad = resource.dependencies.get(dependencyId);
-
-                     // We don't know if we will need this resource immediatly so
-                     // we assume it is onload, another dependency will set it to
-                     // false later in this loop
-                     if (onLoad == null)
-                     {
-                        onLoad = FetchMode.ON_LOAD;
-                     }
-
-                     //
-                     closure.put(dependency, onLoad);
-                  }
-               }
-               else
-               {
-                  // Warn somehow since we cannot resolve the resource
+                  determined.add(dependency);
                }
             }
          }
       }
       
       //
-      ArrayList<ScriptResource> keys = new ArrayList<ScriptResource>(closure.keySet());
-      Collections.sort(keys);
+      List<ScriptResource> sorted = new ArrayList<ScriptResource>(determined);
+      Collections.sort(sorted);
       
-      // There is a valid reason to not use a TreeMap directly: it does not work :-)
-      // more seriously, we have a natural ordering but with inconsistent equals, please
-      // see Comparable#compareTo javadoc
-      LinkedHashMap<ScriptResource, FetchMode> ret = new LinkedHashMap<ScriptResource, FetchMode>();
-      for (ScriptResource key : keys)
-      {
-         ret.put(key, closure.get(key));
-      }
-      return ret;
+      //
+      return sorted;
    }
 
+   public Map<ScriptResource, FetchMode> resolve(Collection<ResourceId> ids)
+   {
+      LinkedHashMap<ScriptResource, FetchMode> map = new LinkedHashMap<ScriptResource, FetchMode>();
+      
+      //
+      for (ScriptResource onLoad : resolve(ids, FetchMode.ON_LOAD))
+      {
+         map.put(onLoad, FetchMode.ON_LOAD);
+      }
+
+      //
+      for (ScriptResource onLoad : resolve(ids, FetchMode.IMMEDIATE))
+      {
+         map.put(onLoad, FetchMode.IMMEDIATE);
+      }
+
+      //
+      return map;
+   }
    public ScriptResource getResource(ResourceId id)
    {
       return getResource(id.getScope(), id.getName());
