@@ -220,5 +220,15 @@
      </scripts>
    </portlet>
 
+   <portlet>
+     <name>UserInfoPortlet</name>
+     <scripts>
+       <depends>
+         <mode>on-load</mode>
+         <scripts>webui</scripts>
+       </depends>
+     </scripts>
+   </portlet>
+
 </gatein-resources>
 
