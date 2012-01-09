@@ -13,13 +13,6 @@
   import org.exoplatform.portal.controller.resource.ResourceScope;
   
 	String popupId = uicomponent.getId();
-	
-	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().loadJavascript(ResourceScope.SHARED, "webui");
-	
-	def errors = uicomponent.getErrors();
-	def warnings = uicomponent.getWarnings();
-	def infos = uicomponent.getInfos();
 
 	boolean printTab(List messages, String title, boolean isSelected) {
 		String cssClass = "NormalTab";
@@ -44,6 +37,7 @@
 		""";
 		return isSelected;
 	}
+
 	boolean printMessages(List messages, String messType, boolean isSelected) {
 		String style = "style=\"display: none;\"";
 		if(messages.size() > 0 && !isSelected) {
@@ -64,46 +58,54 @@
 		println "		</ul>";
 		return isSelected;
 	}
-
 %>
-	<div class="UIPopupWindow UIDragObject ExoMessageDecorator" id="$popupId" style="width: 550px; display: none;">
-			<div class="OverflowContainer ClearFix">
-				<span class="PopupTitleIcon"></span>
-				<a class="CloseButton" title="<%=_ctx.appRes("UIPopupMessages.Close")%>" onclick="<%=uicomponent.event("Close")%>"></a>
-				<span class="PopupTitle"><%=_ctx.appRes("UIPopupMessages.title.exoMessages")%></span>
+<div class="UIPopupWindow UIDragObject ExoMessageDecorator" id="$popupId" style="width: 550px; display: none;">
+  <%
+  
+    def rcontext = _ctx.getRequestContext();
+
+    if(uicomponent.hasMessage()){
+      rcontext.getJavascriptManager().loadJavascript(ResourceScope.SHARED, "webui");
+
+      rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
+
+      def errors = uicomponent.getErrors();
+      def warnings = uicomponent.getWarnings();
+      def infos = uicomponent.getInfos();  
+  %>
+	<div class="OverflowContainer ClearFix">
+	    <span class="PopupTitleIcon"></span>
+		<a class="CloseButton" title="<%=_ctx.appRes("UIPopupMessages.Close")%>" onclick="<%=uicomponent.event("Close")%>"></a>
+		<span class="PopupTitle"><%=_ctx.appRes("UIPopupMessages.title.exoMessages")%></span>
+	</div>
+	<div class="UIWindowContent">
+		<div class="PopupContent UIPopupMessages">
+			<div class="UIHorizontalTabs">
+				<div class="TabsContainer">
+				<%	
+					boolean flag = false;
+					flag = printTab(errors, "Error", flag);
+					flag = printTab(warnings, "Warning", flag);
+					flag = printTab(infos, "Info", flag);
+				%>
+				</div>
 			</div>
-			
-			<div class="UIWindowContent">
-				<div class="PopupContent UIPopupMessages">
-					<div class="UIHorizontalTabs">
-						<div class="TabsContainer">
-						<%	
-							boolean flag = false;
-							flag = printTab(errors, "Error", flag);
-							flag = printTab(warnings, "Warning", flag);
-							flag = printTab(infos, "Info", flag);
-						%>
-						</div>
-					</div>
-					
-					<div class="UITabContentContainer">
-						<%
-							flag = false;
-							flag = printMessages(errors, "ErrorMessage", flag);
-							flag = printMessages(warnings, "WarningMessage", flag);
-							flag = printMessages(infos, "InfoMessage", flag);
-						%>
-					</div>
-					<div class="UIAction MessageActionBar">
-						<a href="javascript:void(0);" onclick="<%=uicomponent.event("Close")%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIPopupMessages.button.ok")%></a>
-					</div>
-				</div>						
+			<div class="UITabContentContainer">
+				<%
+					flag = false;
+					flag = printMessages(errors, "ErrorMessage", flag);
+					flag = printMessages(warnings, "WarningMessage", flag);
+					flag = printMessages(infos, "InfoMessage", flag);
+				%>
 			</div>
+			<div class="UIAction MessageActionBar">
+				<a href="javascript:void(0);" onclick="<%=uicomponent.event("Close")%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIPopupMessages.button.ok")%></a>
+			</div>
+		</div>
 	</div>
 	<%
-		if(uicomponent.hasMessage()){
-			rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
-		} else if (rcontext.useAjax()) {
-		   	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.hide('$popupId', $uicomponent.showMask);");
-		}
+    } else if (rcontext.useAjax()) {
+        rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.hide('$popupId', $uicomponent.showMask);");
+    }
 	%>
+</div>
