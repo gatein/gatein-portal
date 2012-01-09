@@ -202,5 +202,23 @@
      </scripts>
    </portlet>
 
+   <portlet>
+     <name>PageManagementPortlet</name>
+     <scripts>
+       <depends>
+         <mode>on-load</mode>
+         <scripts>portal</scripts>
+       </depends>
+       <depends>
+         <mode>on-load</mode>
+         <scripts>webui</scripts>
+       </depends>
+       <depends>
+         <mode>on-load</mode>
+         <scripts>webui-ext</scripts>
+       </depends>
+     </scripts>
+   </portlet>
+
 </gatein-resources>
 
