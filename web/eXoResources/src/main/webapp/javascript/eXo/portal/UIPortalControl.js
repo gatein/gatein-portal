@@ -62,6 +62,7 @@ eXo.portal.UIPortalControl = {
       } else {
         e.preventDefault();
       }
+      //TODO: Move the code serving for login form to executeScript param in caller side
       var uiPortalLoginFormAction = document
           .getElementById("UIPortalLoginFormAction");
       if (uiPortalLoginFormAction) {
@@ -72,6 +73,32 @@ eXo.portal.UIPortalControl = {
       }
     }
   },
+
+  onKeyPress : function(e, executeScript, expectedCode)
+  {
+    if(!e)
+    {
+      e = window.event;
+    }
+
+    if(e.keyCode && e.keyCode == expectedCode)
+    {
+      if(window.event)
+      {
+        e.cancelBubble = true;
+      }
+      else
+      {
+        e.preventDefault();
+      }
+
+      if(executeScript)
+      {
+        eval(executeScript);
+      }
+    }
+  },
+
   /**
    * Called whenever the scroll managers present on the current page need to be
    * re-calculated e.g. when the workspace control is opened/closed, when a
