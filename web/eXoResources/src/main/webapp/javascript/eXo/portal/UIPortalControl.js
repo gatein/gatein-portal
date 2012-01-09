@@ -21,25 +21,6 @@ eXo.portal.UIPortalControl = {
   scrollManagers : [],
 
   /**
-   * Change state of window
-   * 
-   * @param {String}
-   *          id object identifier
-   * @param {String}
-   *          state state will be displayed (maximized, minimized, normal)
-   */
-  changeWindowState : function(id, state) {
-    var params = [ {
-      name : "portletId",
-      value : id
-    }, {
-      name : "objectId",
-      value : state
-    } ];
-    ajaxGet(eXo.env.server.createPortalURL("UIPortal", "ChangeWindowState",
-        true, params));
-  },
-  /**
    * Collapse tree, use for Navigation Tree
    * 
    * @param {Object}
