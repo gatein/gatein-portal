@@ -86,7 +86,7 @@
      <scripts>
        <mode>on-load</mode>
        <depends>
-         <scripts>webui</scripts>
+         <scripts>base</scripts>
        </depends>
    </scripts>
    </portlet>

@@ -123,9 +123,9 @@
       </module>
    </scripts>
 
-   <!-- CORE Javascripts -->
+   <!-- Base Javascripts for anonymous mode-->
    <scripts>
-      <name>common</name>
+      <name>base</name>
       <module>
          <name>eXo.core.Utils</name>
          <path>/javascript/eXo/core/Util.js</path>
@@ -135,20 +135,60 @@
          <path>/javascript/eXo/core/DOMUtil.js</path>
       </module>
       <module>
+         <name>eXo.core.Browser</name>
+         <path>/javascript/eXo/core/Browser.js</path>
+      </module>
+      <module>
+         <name>eXo.core.JSON</name>
+         <path>/javascript/eXo/core/JSON.js</path>
+      </module>
+      <module>
+         <name>eXo.core.I18n</name>
+         <path>/javascript/eXo/core/I18n.js</path>
+      </module>
+      <module>
+         <name>eXo.portal.PortalHttpRequest</name>
+         <path>/javascript/eXo/portal/PortalHttpRequest.js</path>
+      </module>
+
+      <module>
+         <name>eXo.portal.UIPortalControl</name>
+         <path>/javascript/eXo/portal/UIPortalControl.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIPopup</name>
+         <path>/javascript/eXo/webui/UIPopup.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIPopupMenu</name>
+         <path>/javascript/eXo/webui/UIPopupMenu.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIHorizontalTabs</name>
+         <path>/javascript/eXo/webui/UIHorizontalTabs.js</path>
+      </module>
+
+      <module>
+         <name>eXo.core.UIMaskLayer</name>
+         <path>/javascript/eXo/core/UIMaskLayer.js</path>
+      </module>
+      <module>
+         <name>eXo.portal.UIMaskWorkspace</name>
+         <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
+      </module>
+   </scripts>
+
+
+   <!-- CORE Javascripts -->
+   <scripts>
+      <name>common</name>
+      <module>
          <name>eXo.core.html.HTMLEntities</name>
          <path>/javascript/eXo/core/html/HTMLEntities.js</path>
       </module>
       <module>
          <name>eXo.core.HTMLUtil</name>
          <path>/javascript/eXo/core/HTMLUtil.js</path>
-      </module>
-      <module>
-         <name>eXo.core.Browser</name>
-         <path>/javascript/eXo/core/Browser.js</path>
-      </module>
-      <module>
-         <name>eXo.core.UIMaskLayer</name>
-         <path>/javascript/eXo/core/UIMaskLayer.js</path>
       </module>
       <module>
          <name>eXo.core.Skin</name>
@@ -161,26 +201,6 @@
       <module>
          <name>eXo.core.DragDrop2</name>
          <path>/javascript/eXo/core/DragDrop2.js</path>
-      </module>
-      <module>
-         <name>eXo.core.JSON</name>
-         <path>/javascript/eXo/core/JSON.js</path>
-      </module>
-      <module>
-         <name>eXo.core.I18n</name>
-         <path>/javascript/eXo/core/I18n.js</path>
-      </module>
-      <module>
-         <name>eXo.portal.UIMaskWorkspace</name>
-         <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
-      </module>
-      <module>
-         <name>eXo.portal.PortalHttpRequest</name>
-         <path>/javascript/eXo/portal/PortalHttpRequest.js</path>
-      </module>
-      <module>
-         <name>eXo.webui.UIPopup</name>
-         <path>/javascript/eXo/webui/UIPopup.js</path>
       </module>
 
       <!-- Gadget Javascripts -->
@@ -195,6 +215,9 @@
          <path>/javascript/eXo/core/Spliter.js</path>
       </module>
        -->
+      <depends>
+        <scripts>base</scripts>
+      </depends>
    </scripts>      
 
    <!-- Portal Javascripts -->
@@ -203,10 +226,6 @@
       <module>
          <name>eXo.portal.UIPortal</name>
          <path>/javascript/eXo/portal/UIPortal.js</path>
-      </module>
-      <module>
-         <name>eXo.portal.UIPortalControl</name>
-         <path>/javascript/eXo/portal/UIPortalControl.js</path>
       </module>
       <module>
          <name>eXo.portal.PortalDragDrop</name>
@@ -247,14 +266,6 @@
          <name>eXo.webui.UIPopupWindow</name>
          <path>/javascript/eXo/webui/UIPopupWindow.js</path>
       </module>
-      <module>
-         <name>eXo.webui.UIHorizontalTabs</name>
-         <path>/javascript/eXo/webui/UIHorizontalTabs.js</path>
-      </module>
-      <module>
-         <name>eXo.webui.UIPopupMenu</name>
-         <path>/javascript/eXo/webui/UIPopupMenu.js</path>
-      </module>
       <depends>
         <scripts>common</scripts>
       </depends>
@@ -293,9 +304,6 @@
       <depends>
         <scripts>common</scripts>
       </depends>
-     <depends>
-       <scripts>shared</scripts>
-     </depends>
    </scripts>
 
    <scripts>
@@ -305,11 +313,8 @@
          <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
       </module>
       <depends>
-        <scripts>portal</scripts>
+        <scripts>base</scripts>
       </depends>
-     <depends>
-       <scripts>webui</scripts>
-     </depends>
    </scripts>
 
    <scripts>
