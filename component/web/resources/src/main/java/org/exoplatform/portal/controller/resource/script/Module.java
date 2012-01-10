@@ -95,9 +95,9 @@ public abstract class Module
          //
          Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
          parameters.put(WebAppController.HANDLER_PARAM, "script");
-         parameters.put(ResourceRequestHandler.RESOURCE, resource.getId().getName());
-         parameters.put(ResourceRequestHandler.SCOPE, resource.getId().getScope().name());
-         parameters.put(ResourceRequestHandler.MODULE, name);
+         parameters.put(ResourceRequestHandler.RESOURCE_QN, resource.getId().getName());
+         parameters.put(ResourceRequestHandler.SCOPE_QN, resource.getId().getScope().name());
+         parameters.put(ResourceRequestHandler.MODULE_QN, name);
          
          //
          this.path = path;

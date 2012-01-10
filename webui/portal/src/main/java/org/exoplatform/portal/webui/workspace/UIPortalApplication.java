@@ -368,18 +368,36 @@ public class UIPortalApplication extends UIApplication
 
       try
       {
+         LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
+
+         // Get boostrap
+         Map<String, FetchMode> bootstrap = service.resolveURLs(
+            prc.getControllerContext(), 
+            Collections.singleton(new ResourceId(ResourceScope.SHARED, "bootstrap")), 
+            !PropertyManager.isDevelopping(), 
+            !PropertyManager.isDevelopping());
+         for (Map.Entry<String, FetchMode> entry : bootstrap.entrySet())
+         {
+            // False : means load now without loader
+            ret.put(entry.getKey(), false);
+         }
+         
+         //
          Map<String, FetchMode> urls = service.resolveURLs(
             prc.getControllerContext(),
             resourceIds,
             !PropertyManager.isDevelopping(),
             !PropertyManager.isDevelopping());
+
+         // Remove bootstrap if any since it's already there
+         urls.keySet().removeAll(bootstrap.keySet());
+
+         //
          log.info("Resolved URLS for page: " + urls);
 
          // Here we get the list of stuff to load on demand or not
          // according to the boolean value in the map
-
          // Convert the map to what the js expects to have
-         LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
          for (Map.Entry<String, FetchMode> entry : urls.entrySet())
          {
             ret.put(entry.getKey(), entry.getValue() == FetchMode.ON_LOAD);
