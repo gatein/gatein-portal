@@ -73,6 +73,6 @@ public class ResourceId
    @Override
    public String toString()
    {
-      return "Scope[type=" + scope.name() + ",id=" + name + "]";
+      return "ResourceId[type=" + scope.name() + ",id=" + name + "]";
    }
 }

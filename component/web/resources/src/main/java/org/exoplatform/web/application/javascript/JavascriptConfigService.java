@@ -227,8 +227,9 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                Reader jScript = getJavascript(resource, js.getName());
                if (jScript != null)
                {
+                  readers.add(new StringReader("// Begin " + js.getName() + "\n"));
                   readers.add(jScript);
-                  readers.add(new StringReader("\n"));
+                  readers.add(new StringReader("// End " + js.getName() + "\n"));
                }
             }
          }
