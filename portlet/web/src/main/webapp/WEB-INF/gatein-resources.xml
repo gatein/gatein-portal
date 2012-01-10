@@ -114,4 +114,54 @@
       </depends>
     </scripts>
   </portlet>
+
+  <portlet>
+    <name>LogoPortlet</name>
+    <scripts>
+      <mode>on-load</mode>
+      <depends>
+        <scripts>webui</scripts>
+      </depends>
+    </scripts>
+  </portlet>
+
+  <portlet>
+    <name>FooterPortlet</name>
+    <scripts>
+      <mode>on-load</mode>
+      <depends>
+        <scripts>webui</scripts>
+      </depends>
+    </scripts>
+  </portlet>
+
+  <portlet>
+    <name>BreadcumbsPortlet</name>
+    <scripts>
+      <mode>on-load</mode>
+      <depends>
+        <scripts>webui</scripts>
+      </depends>
+    </scripts>
+  </portlet>
+
+  <portlet>
+    <name>IFramePortlet</name>
+    <scripts>
+      <mode>on-load</mode>
+      <depends>
+        <scripts>webui</scripts>
+      </depends>
+    </scripts>
+  </portlet>
+
+  <portlet>
+    <name>HomePagePortlet</name>
+    <scripts>
+      <mode>on-load</mode>
+      <depends>
+        <scripts>webui</scripts>
+      </depends>
+    </scripts>
+  </portlet>
 </gatein-resources>
