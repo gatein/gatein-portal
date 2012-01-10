@@ -52,7 +52,7 @@
     <scripts>
       <mode>on-load</mode>
       <depends>
-        <scripts>webui</scripts>
+        <scripts>common</scripts>
       </depends>
     </scripts>
   </portlet>
@@ -65,7 +65,7 @@
         <scripts>tabbeddashboard</scripts>
       </depends>
       <depends>
-        <scripts>webui</scripts>
+        <scripts>common</scripts>
       </depends>
     </scripts>
   </portlet>

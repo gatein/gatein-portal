@@ -216,15 +216,5 @@
      </scripts>
    </portlet>
 
-   <portlet>
-     <name>UserInfoPortlet</name>
-     <scripts>
-       <mode>on-load</mode>
-       <depends>
-         <scripts>webui</scripts>
-       </depends>
-     </scripts>
-   </portlet>
-
 </gatein-resources>
 
