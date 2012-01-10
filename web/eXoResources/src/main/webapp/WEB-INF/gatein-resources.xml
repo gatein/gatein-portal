@@ -311,6 +311,33 @@
        <scripts>webui</scripts>
      </depends>
    </scripts>
+
+   <scripts>
+     <name>dashboard</name>
+     <module>
+       <name>eXo.webui.UIDashboard</name>
+       <path>/javascript/eXo/webui/UIDashboard.js</path>
+     </module>
+     <module>
+       <name>eXo.webui.UIDashboardUtil</name>
+       <path>/javascript/eXo/webui/UIDashboardUtil.js</path>
+     </module>
+     <depends>
+       <scripts>common</scripts>
+     </depends>
+   </scripts>
+
+   <scripts>
+     <name>tabbeddasboard</name>
+     <module>
+       <name>eXo.webui.UITabbedDashboard</name>
+       <path>/javascript/eXo/webui/UITabbedDashboard.js</path>
+     </module>
+     <depends>
+       <scripts>common</scripts>
+     </depends>
+   </scripts>
+
    <!-- Should be lazy loaded -->
    <!-- 
    <javascript>

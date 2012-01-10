@@ -33,6 +33,42 @@
 		<skin-name>Default</skin-name>
 		<css-path>/skin/gadget/webui/component/UIGadgetPortlet/DefaultStylesheet.css</css-path>
 	</portlet-skin>
+
+  <portlet>
+    <name>DashboardPortlet</name>
+    <scripts>
+      <mode>on-load</mode>
+      <depends>
+        <scripts>dashboard</scripts>
+      </depends>
+      <depends>
+        <scripts>webui</scripts>
+      </depends>
+    </scripts>
+  </portlet>
+
+  <portlet>
+    <name>GadgetPortlet</name>
+    <scripts>
+      <mode>on-load</mode>
+      <depends>
+        <scripts>webui</scripts>
+      </depends>
+    </scripts>
+  </portlet>
+
+  <portlet>
+    <name>TabbedDashboardPortlet</name>
+    <scripts>
+      <mode>on-load</mode>
+      <depends>
+        <scripts>tabbeddashboard</scripts>
+      </depends>
+      <depends>
+        <scripts>webui</scripts>
+      </depends>
+    </scripts>
+  </portlet>
 			
 </gatein-resources>
 
