@@ -19,6 +19,12 @@
 
 package org.exoplatform.portal.controller.resource;
 
+import com.google.javascript.jscomp.CompilationLevel;
+import com.google.javascript.jscomp.CompilerOptions;
+import com.google.javascript.jscomp.ErrorManager;
+import com.google.javascript.jscomp.JSSourceFile;
+import com.google.javascript.jscomp.LoggerErrorManager;
+import com.google.javascript.jscomp.Result;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.resource.compressor.*;
 import org.exoplatform.portal.resource.compressor.ResourceType;
@@ -28,9 +34,14 @@ import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.web.controller.QualifiedName;
 import org.gatein.common.io.IOTools;
 
+import com.google.javascript.jscomp.Compiler;
+
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.io.Writer;
+import java.util.logging.Logger;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -50,12 +61,8 @@ public class ResourceRequestHandler extends WebRequestHandler
    /** . */
    public static final QualifiedName MINIFIED = QualifiedName.create("gtn", "minified");
 
-   /** . */
-   private final ResourceCompressor compressor;
-
-   public ResourceRequestHandler(ResourceCompressor compressor)
+   public ResourceRequestHandler()
    {
-      this.compressor = compressor; 
    }
 
    @Override
@@ -85,13 +92,16 @@ public class ResourceRequestHandler extends WebRequestHandler
             
             //
             Reader script;
+            String sourceName;
             if (moduleParam != null)
             {
                script = service.getScript(resource, moduleParam);
+               sourceName = resource.getScope() + "/" + resource.getName() + "/" + moduleParam  + ".js";
             }
             else
             {
                script = service.getScript(resource);
+               sourceName = resource.getScope() + "/" + resource.getName() + ".js";
             }
 
             //
@@ -104,7 +114,25 @@ public class ResourceRequestHandler extends WebRequestHandler
                //
                if ("true".equals(minifiedParam))
                {
-                  compressor.compress(script,  out, ResourceType.JAVASCRIPT);
+                  CompilationLevel level = CompilationLevel.SIMPLE_OPTIMIZATIONS;
+                  CompilerOptions options = new CompilerOptions();
+                  level.setDebugOptionsForCompilationLevel(options);
+                  Compiler compiler = new Compiler();
+                  compiler.setErrorManager(new LoggerErrorManager(Logger.getLogger(ResourceRequestHandler.class.getName())));
+                  StringWriter code = new StringWriter();
+                  IOTools.copy(script, code);
+                  JSSourceFile[] inputs = new JSSourceFile[]{
+                     JSSourceFile.fromCode(sourceName, code.toString())
+                  };
+                  Result res = compiler.compile(new JSSourceFile[0], inputs, options);
+                  if (res.success)
+                  {
+                     out.write(compiler.toSource());
+                  }
+                  else
+                  {
+                     throw new UnsupportedOperationException("handle me gracefuylly");
+                  }
                }
                else
                {

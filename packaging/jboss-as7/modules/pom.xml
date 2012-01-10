@@ -1339,7 +1339,6 @@
       <dependency>
         <groupId>com.google.javascript</groupId>
         <artifactId>closure-compiler</artifactId>
-        <version>r706</version>
          <exclusions>
             <exclusion>
                <groupId>args4j</groupId>
