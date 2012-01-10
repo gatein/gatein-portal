@@ -127,8 +127,8 @@
    <portlet>
      <name>UserToolbarDashboardPortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>navigation</scripts>
        </depends>
      </scripts>
@@ -157,8 +157,8 @@
    <portlet>
      <name>OrganizationPortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>webui</scripts>
        </depends>
      </scripts>
@@ -167,8 +167,8 @@
    <portlet>
      <name>AccountPortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>webui</scripts>
        </depends>
      </scripts>
@@ -177,12 +177,11 @@
    <portlet>
      <name>GroupNavigationPortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>webui</scripts>
        </depends>
        <depends>
-         <mode>on-load</mode>
          <scripts>webui-ext</scripts>
        </depends>
      </scripts>
@@ -191,12 +190,11 @@
    <portlet>
      <name>PortalNavigationPortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>webui</scripts>
        </depends>
        <depends>
-         <mode>on-load</mode>
          <scripts>webui-ext</scripts>
        </depends>
      </scripts>
@@ -205,16 +203,14 @@
    <portlet>
      <name>PageManagementPortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>portal</scripts>
        </depends>
        <depends>
-         <mode>on-load</mode>
          <scripts>webui</scripts>
        </depends>
        <depends>
-         <mode>on-load</mode>
          <scripts>webui-ext</scripts>
        </depends>
      </scripts>
@@ -223,8 +219,8 @@
    <portlet>
      <name>UserInfoPortlet</name>
      <scripts>
+       <mode>on-load</mode>
        <depends>
-         <mode>on-load</mode>
          <scripts>webui</scripts>
        </depends>
      </scripts>
