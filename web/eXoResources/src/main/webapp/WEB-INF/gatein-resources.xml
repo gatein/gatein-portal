@@ -135,6 +135,10 @@
          <path>/javascript/eXo/core/DOMUtil.js</path>
       </module>
       <module>
+         <name>eXo.webui.UIPopupSelectCategory</name>
+         <path>/javascript/eXo/webui/UIPopupSelectCategory.js</path>
+      </module>
+      <module>
          <name>eXo.core.Browser</name>
          <path>/javascript/eXo/core/Browser.js</path>
       </module>
@@ -145,6 +149,10 @@
       <module>
          <name>eXo.core.I18n</name>
          <path>/javascript/eXo/core/I18n.js</path>
+      </module>
+      <module>
+         <name>eXo.core.Skin</name>
+         <path>/javascript/eXo/core/Skin.js</path>
       </module>
       <module>
          <name>eXo.portal.PortalHttpRequest</name>
@@ -189,10 +197,6 @@
       <module>
          <name>eXo.core.HTMLUtil</name>
          <path>/javascript/eXo/core/HTMLUtil.js</path>
-      </module>
-      <module>
-         <name>eXo.core.Skin</name>
-         <path>/javascript/eXo/core/Skin.js</path>
       </module>
       <module>
          <name>eXo.core.DragDrop</name>
@@ -257,10 +261,6 @@
       <module>
          <name>eXo.webui.UIForm</name>
          <path>/javascript/eXo/webui/UIForm.js</path>
-      </module>
-      <module>
-         <name>eXo.webui.UIPopupSelectCategory</name>
-         <path>/javascript/eXo/webui/UIPopupSelectCategory.js</path>
       </module>
       <module>
          <name>eXo.webui.UIPopupWindow</name>
