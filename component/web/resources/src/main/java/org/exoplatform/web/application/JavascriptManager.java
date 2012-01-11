@@ -19,6 +19,14 @@
 
 package org.exoplatform.web.application;
 
+import org.exoplatform.commons.utils.PropertyManager;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.controller.resource.ResourceId;
+import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.FetchMode;
+import org.exoplatform.portal.controller.resource.script.ScriptResource;
+import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
@@ -26,14 +34,6 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import org.exoplatform.commons.utils.PropertyManager;
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.controller.resource.ResourceId;
-import org.exoplatform.portal.controller.resource.ResourceScope;
-import org.exoplatform.portal.controller.resource.script.FetchMode;
-import org.exoplatform.web.ControllerContext;
-import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
 /**
  * Created by The eXo Platform SAS
@@ -74,12 +74,29 @@ public class JavascriptManager
    }
 
    /**
-    * This method is deprecated, please use {@link #lazyLoadJavascript(String)} instead
+    * This method is deprecated, please use {@link #loadJavascript(ResourceScope, String)} instead
     */
    public void importJavascript(CharSequence s)
    {
-      importJavascript(s instanceof String ? (String)s : s.toString(), null);
-   }   
+      String moduleName = s.toString();
+      ScriptResource res = jsSrevice_.getResourceIncludingModule(moduleName);
+      if(res != null)
+      {
+         try
+         {
+            loadJavascript(Arrays.asList(res.getId()));
+         }
+         catch (Exception ex)
+         {
+            //Spare me, Sonar! This importJavascript is to be deleted soon
+            ex.printStackTrace();
+         }
+      }
+      else
+      {
+         importJavascript(moduleName, null);
+      }
+   }
    
    /**
     * This method is deprecated, please use {@link #lazyLoadJavascript(String)} instead

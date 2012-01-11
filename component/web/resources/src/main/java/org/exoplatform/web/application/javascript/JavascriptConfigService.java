@@ -275,6 +275,37 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       return scripts.getResource(resource);
    }
 
+   //TODO: This method should be removed once there is no call to importJavascript from Groovy template
+   public ScriptResource getResourceIncludingModule(String moduleName)
+   {
+      //We accept repeated graph traversing for the moment
+      for(ScriptResource sharedRes : scripts.getResources(ResourceScope.SHARED))
+      {
+         if(sharedRes.getModule(moduleName) != null)
+         {
+            return sharedRes;
+         }
+      }
+
+      for(ScriptResource portletRes : scripts.getResources(ResourceScope.PORTLET))
+      {
+         if(portletRes.getModule(moduleName) != null)
+         {
+            return portletRes;
+         }
+      }
+
+      for(ScriptResource portalRes : scripts.getResources(ResourceScope.PORTAL))
+      {
+         if(portalRes.getModule(moduleName) != null)
+         {
+            return portalRes;
+         }
+      }
+
+      return null;
+   }
+
    /**
     * Add a PortalJScript which will be loaded with a specific portal.
     * <p>

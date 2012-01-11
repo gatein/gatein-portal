@@ -21,7 +21,6 @@ package org.exoplatform.portal.controller.resource.script;
 
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -29,7 +28,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -152,4 +150,5 @@ public class ScriptGraph
       }
       return removed;
    }
+
 }
