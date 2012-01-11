@@ -2,7 +2,7 @@
 <bundle>
    <javax>
       <portlet>
-         <title>Breadcumbs 포틀릿</title>
+         <title>Breadcrumbs 포틀릿</title>
       </portlet>
    </javax>
 </bundle>
