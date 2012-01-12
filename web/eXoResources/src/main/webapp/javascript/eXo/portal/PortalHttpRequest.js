@@ -622,12 +622,13 @@ function HttpResponseHandler(){
 	instance.ajaxResponse = function(request, response) {
 	  if (!response) {
 		  var temp =  document.createElement("div") ;
-		  temp.innerHTML =  this.responseText ;
+		  temp.innerHTML =  this.responseText;
 		  var responseDiv = eXo.core.DOMUtil.findFirstDescendantByClass(temp, "div", "PortalResponse") ;
 		  var response = new PortalResponse(responseDiv) ;		  
 		  instance.updateHtmlHead(response);
 	  }
-	  var immediateScripts = response.loadingScripts.immediateScripts; 
+	  var loadingScripts = response.loadingScripts;
+	  var immediateScripts = loadingScripts ? loadingScripts.immediateScripts : []; 
 	  if (immediateScripts.length) {
 		  eXo.core.AsyncLoader.loadJS(immediateScripts, function() {
 			  immediateScripts.clear();
@@ -674,7 +675,7 @@ function HttpResponseHandler(){
 	  try {	    
 		  //Handle the portal responses
 		  instance.updateBlocks(response.blocksToUpdate) ;
-		  var onloadScripts = response.loadingScripts.onloadScripts;
+		  var onloadScripts = loadingScripts ? loadingScripts.onloadScripts : [];
 		  eXo.core.AsyncLoader.loadJS(onloadScripts, function() {		  
 			  instance.executeScript(response.script);		  
 			  /**
