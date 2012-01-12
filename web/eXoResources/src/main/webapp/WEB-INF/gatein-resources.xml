@@ -413,6 +413,10 @@
       <name>jquery</name>
       <path>/javascript/jquery-1.7.1.js</path>
     </module>
+    <module>
+      <name>eXoJQuery</name>
+      <path>/javascript/eXoJQuery.js</path>
+    </module>
   </scripts>
 
 </gatein-resources>
