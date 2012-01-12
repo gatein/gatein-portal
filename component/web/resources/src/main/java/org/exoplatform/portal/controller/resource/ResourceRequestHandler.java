@@ -104,7 +104,7 @@ public class ResourceRequestHandler extends WebRequestHandler
    public static final QualifiedName MODULE_QN = QualifiedName.create("gtn", "module");
 
    /** . */
-   public static final QualifiedName MINIFIED_QN = QualifiedName.create("gtn", "minified");
+   public static final QualifiedName COMPRESS_QN = QualifiedName.create("gtn", "compress");
 
    @Override
    public String getHandlerName()
@@ -121,7 +121,7 @@ public class ResourceRequestHandler extends WebRequestHandler
       String resourceParam = context.getParameter(RESOURCE_QN);
       String scopeParam = context.getParameter(SCOPE_QN);
       String moduleParam = context.getParameter(MODULE_QN);
-      String minifiedParam = context.getParameter(MINIFIED_QN);
+      String compressParam = context.getParameter(COMPRESS_QN);
 
       //
       if (scopeParam != null && resourceParam != null)
@@ -153,7 +153,7 @@ public class ResourceRequestHandler extends WebRequestHandler
                Writer out = response.getWriter();
                
                //
-               if ("true".equals(minifiedParam))
+               if ("min".equals(compressParam))
                {
                   CompilationLevel level = CompilationLevel.SIMPLE_OPTIMIZATIONS;
                   CompilerOptions options = new CompilerOptions();

@@ -24,9 +24,11 @@ import org.exoplatform.web.controller.metadata.PathParamDescriptor;
 import org.exoplatform.web.controller.regexp.RENode;
 import org.exoplatform.web.controller.regexp.REParser;
 import org.exoplatform.web.controller.regexp.RERenderer;
+import org.exoplatform.web.controller.regexp.REVisitor;
 import org.exoplatform.web.controller.regexp.SyntaxException;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -70,27 +72,45 @@ class PathParam extends Param
       }
 
       // Now work on the regex
-      StringBuilder renderingRegex = new StringBuilder();
       StringBuilder routingRegex = new StringBuilder();
+      Regex[] renderingRegexes;
+      String[] templatePrefixes;
+      String[] templateSuffixes;
       try
       {
+         REVisitor<RuntimeException> transformer = descriptor.getCaptureGroup() ?
+            new CaptureGroupTransformation() : new NonCaptureGroupTransformation();
          REParser parser = new REParser(regex);
 
          //
          RENode.Disjunction routingDisjunction = parser.parseDisjunction();
          if (encodingMode == EncodingMode.FORM)
          {
-            RouteEscaper escaper = new RouteEscaper('/', '_');
-            escaper.visit(routingDisjunction);
+            CharEscapeTransformation escaper = new CharEscapeTransformation('/', '_');
+            routingDisjunction.accept(escaper);
          }
-         new RERenderer().render(routingDisjunction, routingRegex);
+         routingDisjunction.accept(transformer);
+         RERenderer.render(routingDisjunction, routingRegex);
 
          //
          parser.reset();
          RENode.Disjunction renderingDisjunction = parser.parseDisjunction();
-         renderingRegex.append("^");
-         new RERenderer().render(renderingDisjunction, renderingRegex);
-         renderingRegex.append("$");
+         ValueResolverFactory factory = new ValueResolverFactory();
+         renderingDisjunction.accept(transformer);
+         List<ValueResolverFactory.Alternative> alt =  factory.foo(renderingDisjunction);
+         renderingRegexes = new Regex[alt.size()];
+         templatePrefixes = new String[alt.size()];
+         templateSuffixes = new String[alt.size()];
+         for (int i = 0;i < alt.size();i++)
+         {
+            ValueResolverFactory.Alternative v = alt.get(i);
+            StringBuilder valueMatcher = v.getValueMatcher();
+            valueMatcher.insert(0, '^');
+            valueMatcher.append("$");
+            renderingRegexes[i] = router.compile(valueMatcher.toString());
+            templatePrefixes[i] = v.getPrefix();
+            templateSuffixes[i] = v.getSuffix();
+         }
       }
       catch (IOException e)
       {
@@ -110,7 +130,9 @@ class PathParam extends Param
          descriptor.getQualifiedName(),
          encodingMode,
          routingRegex.toString(),
-         router.compile(renderingRegex.toString()));
+         renderingRegexes,
+         templatePrefixes,
+         templateSuffixes);
    }
 
    /** . */
@@ -120,31 +142,41 @@ class PathParam extends Param
    final String routingRegex;
 
    /** . */
-   final Regex renderingPattern;
+   final Regex[] matchingRegex;
 
-   PathParam(
+   /** . */
+   final String[] templatePrefixes;
+
+   /** . */
+   final String[] templateSuffixes;
+
+   private PathParam(
       QualifiedName name,
       EncodingMode encodingMode,
       String routingRegex,
-      Regex renderingRegex)
+      Regex[] matchingRegex,
+      String[] templatePrefixes,
+      String[] templateSuffixes)
    {
       super(name);
 
       //
-      if (renderingRegex == null)
+      if (matchingRegex == null || matchingRegex.length == 0)
       {
-         throw new NullPointerException("No null pattern accepted");
+         throw new NullPointerException("No null or empty pattern accepted");
       }
 
       //
       this.encodingMode = encodingMode;
       this.routingRegex = routingRegex;
-      this.renderingPattern = renderingRegex;
+      this.matchingRegex = matchingRegex;
+      this.templatePrefixes = templatePrefixes;
+      this.templateSuffixes = templateSuffixes;
    }
 
    @Override
    public String toString()
    {
-      return "PathParam[name=" + name + ",encodingMode=" + encodingMode + ",pattern=" + renderingPattern + "]";
+      return "PathParam[name=" + name + ",encodingMode=" + encodingMode + ",pattern=" + matchingRegex + "]";
    }
 }

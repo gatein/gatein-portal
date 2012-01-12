@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -19,7 +19,6 @@
 
 package org.exoplatform.web.controller.router;
 
-import org.exoplatform.web.controller.regexp.GroupType;
 import org.exoplatform.web.controller.regexp.RENode;
 import org.exoplatform.web.controller.regexp.REVisitor;
 
@@ -43,7 +42,7 @@ import org.exoplatform.web.controller.regexp.REVisitor;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RouteEscaper extends REVisitor<MalformedRouteException>
+class CharEscapeTransformation extends REVisitor<MalformedRouteException>
 {
 
    /** . */
@@ -52,7 +51,7 @@ public class RouteEscaper extends REVisitor<MalformedRouteException>
    /** . */
    private final char dst;
 
-   public RouteEscaper(char src, char dst)
+   public CharEscapeTransformation(char src, char dst)
    {
       this.src = src;
       this.dst = dst;
@@ -65,16 +64,6 @@ public class RouteEscaper extends REVisitor<MalformedRouteException>
       {
          expr.setValue(dst);
       }
-   }
-
-   @Override
-   protected void visit(RENode.Group expr) throws MalformedRouteException
-   {
-      if (expr.getType() == GroupType.CAPTURING_GROUP)
-      {
-         expr.setType(GroupType.NON_CAPTURING_GROUP);
-      }
-      super.visit(expr);
    }
 
    @Override

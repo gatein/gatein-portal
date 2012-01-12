@@ -75,12 +75,12 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       parameters.put(WebAppController.HANDLER_PARAM, "script");
       parameters.put(ResourceRequestHandler.RESOURCE_QN, id.getName());
       parameters.put(ResourceRequestHandler.SCOPE_QN, id.getScope().name());
-      parameters.put(ResourceRequestHandler.MINIFIED_QN, "false");
+      parameters.put(ResourceRequestHandler.COMPRESS_QN, "");
       parameters.put(ResourceRequestHandler.VERSION_QN, ResourceRequestHandler.VERSION);
 
       //
       Map<QualifiedName, String> minifiedParameters = new HashMap<QualifiedName, String>(parameters);
-      minifiedParameters.put(ResourceRequestHandler.MINIFIED_QN, "true");
+      minifiedParameters.put(ResourceRequestHandler.COMPRESS_QN, "min");
 
       //
       this.parameters = parameters;

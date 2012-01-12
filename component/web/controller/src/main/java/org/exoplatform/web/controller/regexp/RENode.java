@@ -31,9 +31,21 @@ public abstract class RENode
 
    public abstract String toString();
 
+   public abstract <E extends Exception> void accept(REVisitor<E> visitor) throws E;
+
    public final RENode getParent()
    {
       return owner != null ? owner.parent : null;
+   }
+   
+   public final RENode getRoot()
+   {
+      RENode root = this;
+      for (RENode parent = root.getParent();parent != null;parent = root.getParent())
+      {
+         root = parent;
+      }
+      return root;
    }
 
    public final RENode replaceBy(RENode that) throws IllegalStateException
@@ -49,14 +61,21 @@ public abstract class RENode
    {
 
       /** . */
-      private final NullableRef<Alternative> alternative;
+      private NullableRef<Alternative> alternative;
 
       /** . */
-      private final NullableRef<Disjunction> next;
+      private NullableRef<Disjunction> next;
+
+      public Disjunction()
+      {
+         this.alternative = null;
+         this.next = null;
+      }
 
       public Disjunction(Alternative alternative)
       {
-         this(alternative, null);
+         this.alternative = new NullableRef<Alternative>(this, Alternative.class, alternative);
+         this.next = null;
       }
 
       public Disjunction(Alternative alternative, Disjunction next)
@@ -65,51 +84,103 @@ public abstract class RENode
          this.next = new NullableRef<Disjunction>(this, Disjunction.class, next);
       }
 
+      public Disjunction(Disjunction next)
+      {
+         this.alternative = null;
+         this.next = new NullableRef<Disjunction>(this, Disjunction.class, next);
+      }
+
       public Alternative getAlternative()
       {
-         return alternative.get();
+         return alternative != null ? alternative.get() : null;
       }
 
       public void setAlternative(Alternative alternative)
       {
-         this.alternative.set(alternative);
+         if (this.alternative == null)
+         {
+            this.alternative = new NullableRef<Alternative>(this, Alternative.class, alternative);
+         }
+         else
+         {
+            this.alternative.set(alternative);
+         }
+      }
+      
+      public boolean hasAlternative()
+      {
+         return alternative != null;
+      }
+      
+      public void clearAlternative()
+      {
+         if (this.alternative != null)
+         {
+            this.alternative.set(null);
+            this.alternative = null;
+         }
       }
 
       public Disjunction getNext()
       {
-         return next.get();
+         return next != null ? next.get() : null;
       }
 
       public void setNext(Disjunction next)
       {
-         this.next.set(next);
+         if (this.next == null)
+         {
+            this.next = new NullableRef<Disjunction>(this, Disjunction.class, next);
+         }
+         else
+         {
+            this.next.set(next);
+         }
+      }
+
+      public boolean hasNext()
+      {
+         return next != null;
+      }
+
+      public void clearNext()
+      {
+         if (this.next != null)
+         {
+            this.next.set(null);
+            this.next = null;
+         }
       }
 
       @Override
       public String toString()
       {
-         if (next.isNotNull())
+         StringBuilder sb = new StringBuilder();
+         if (alternative != null)
          {
             if (alternative.isNotNull())
             {
-               return alternative.get() + "|" + next.get();
-            }
-            else
-            {
-               return next.get().toString();
+               sb.append(alternative.get());
             }
          }
-         else
+         if (alternative != null && next != null)
          {
-            if (alternative.isNotNull())
+            sb.append('|');
+         }
+         if (next != null)
+         {
+            if (next.isNotNull())
             {
-               return alternative.get().toString();
-            }
-            else
-            {
-               return "";
+               sb.append(next.get());
             }
          }
+         return sb.toString();
+      }
+
+      @Override
+      public <E extends Exception> void accept(REVisitor<E> visitor) throws E
+      {
+         visitor.visit(this);
       }
    }
 
@@ -117,30 +188,30 @@ public abstract class RENode
    {
 
       /** . */
-      private final Ref<Expr> exp;
+      private final Ref<Expr> expr;
 
       /** . */
       private final Ref<Alternative> next;
 
-      public Alternative(Expr exp)
+      public Alternative(Expr expr)
       {
-         this(exp, null);
+         this(expr, null);
       }
 
-      public Alternative(Expr exp, Alternative next)
+      public Alternative(Expr expr, Alternative next)
       {
-         this.exp = new NonNullableRef<Expr>(this, Expr.class, exp);
+         this.expr = new NonNullableRef<Expr>(this, Expr.class, expr);
          this.next = new NullableRef<Alternative>(this, Alternative.class, next);
       }
 
-      public Expr getExp()
+      public Expr getExpr()
       {
-         return exp.get();
+         return expr.get();
       }
 
-      public void setExp(Expr exp)
+      public void setExpr(Expr expr)
       {
-         this.exp.set(exp);
+         this.expr.set(expr);
       }
 
       public Alternative getNext()
@@ -158,12 +229,18 @@ public abstract class RENode
       {
          if (next.isNotNull())
          {
-            return exp.get().toString() + next.get();
+            return expr.get().toString() + next.get();
          }
          else
          {
-            return exp.get().toString();
+            return expr.get().toString();
          }
+      }
+
+      @Override
+      public <E extends Exception> void accept(REVisitor<E> visitor) throws E
+      {
+         visitor.visit(this);
       }
    }
 
@@ -175,6 +252,11 @@ public abstract class RENode
 
       private Expr()
       {
+      }
+      
+      public final int getMin()
+      {
+         return quantifier == null ? 1 : quantifier.getMin();
       }
 
       public final Quantifier getQuantifier()
@@ -222,6 +304,12 @@ public abstract class RENode
          {
             sb.append("<^/>");
          }
+
+         @Override
+         public <E extends Exception> void accept(REVisitor<E> visitor) throws E
+         {
+            visitor.visit(this);
+         }
       }
 
       public static final class End extends Assertion
@@ -230,6 +318,12 @@ public abstract class RENode
          protected void writeTo(StringBuilder sb)
          {
             sb.append("<$/>");
+         }
+
+         @Override
+         public <E extends Exception> void accept(REVisitor<E> visitor) throws E
+         {
+            visitor.visit(this);
          }
       }
    }
@@ -243,8 +337,12 @@ public abstract class RENode
       /** . */
       private final Ref<Disjunction> disjunction;
 
-      public Group(Disjunction disjunction, GroupType type)
+      public Group(Disjunction disjunction, GroupType type) throws NullPointerException
       {
+         if (type == null)
+         {
+            throw new NullPointerException("No null type accepted");
+         }
          this.disjunction = new NullableRef<Disjunction>(this, Disjunction.class, disjunction);
          this.type = type;
       }
@@ -274,6 +372,12 @@ public abstract class RENode
       {
          sb.append("<").append(type.getOpen()).append('>').append(disjunction.get()).append("</").append(type.getOpen()).append(">");
       }
+
+      @Override
+      public <E extends Exception> void accept(REVisitor<E> visitor) throws E
+      {
+         visitor.visit(this);
+      }
    }
 
    public static abstract class Atom extends Expr
@@ -289,6 +393,12 @@ public abstract class RENode
       protected void writeTo(StringBuilder sb)
       {
          sb.append("<./>");
+      }
+
+      @Override
+      public <E extends Exception> void accept(REVisitor<E> visitor) throws E
+      {
+         visitor.visit(this);
       }
    }
 
@@ -318,6 +428,12 @@ public abstract class RENode
       {
          sb.append("<c>").append(value).append("</c>");
       }
+
+      @Override
+      public <E extends Exception> void accept(REVisitor<E> visitor) throws E
+      {
+         visitor.visit(this);
+      }
    }
 
    public static class CharacterClass extends Atom
@@ -345,6 +461,12 @@ public abstract class RENode
       protected void writeTo(StringBuilder sb)
       {
          sb.append(expr.get());
+      }
+
+      @Override
+      public <E extends Exception> void accept(REVisitor<E> visitor) throws E
+      {
+         visitor.visit(this);
       }
    }
 
@@ -418,6 +540,12 @@ public abstract class RENode
          {
             return "[^" + negated.get() + "]";
          }
+
+         @Override
+         public <E extends Exception> void accept(REVisitor<E> visitor) throws E
+         {
+            visitor.visit(this);
+         }
       }
 
       public static class Or extends CharacterClassExpr
@@ -489,6 +617,12 @@ public abstract class RENode
             String l = left.isNotNull() ? left.get().toString() : "";
             String r = right.isNotNull() ? right.get().toString() : "";
             return "[" + l + "||" + r + "]";
+         }
+
+         @Override
+         public <E extends Exception> void accept(REVisitor<E> visitor) throws E
+         {
+            visitor.visit(this);
          }
       }
 
@@ -562,6 +696,12 @@ public abstract class RENode
             String r = right.isNotNull() ? right.get().toString() : "";
             return "[" + l + "&&" + r + "]";
          }
+
+         @Override
+         public <E extends Exception> void accept(REVisitor<E> visitor) throws E
+         {
+            visitor.visit(this);
+         }
       }
 
       public static class Char extends CharacterClassExpr
@@ -613,6 +753,12 @@ public abstract class RENode
          public String toString()
          {
             return "[" + value + "]";
+         }
+
+         @Override
+         public <E extends Exception> void accept(REVisitor<E> visitor) throws E
+         {
+            visitor.visit(this);
          }
       }
 
@@ -727,6 +873,12 @@ public abstract class RENode
          public String toString()
          {
             return "[" + from.value + "-" + to.value + "]";
+         }
+
+         @Override
+         public <E extends Exception> void accept(REVisitor<E> visitor) throws E
+         {
+            visitor.visit(this);
          }
       }
    }
@@ -854,7 +1006,7 @@ public abstract class RENode
          //
          if (node == null)
          {
-            throw new NullPointerException();
+            throw new NullPointerException("No null node accepted");
          }
          if (node.owner != null)
          {

@@ -1,0 +1,114 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright (C) 2011 eXo Platform SAS.
+  ~
+  ~ This is free software; you can redistribute it and/or modify it
+  ~ under the terms of the GNU Lesser General Public License as
+  ~ published by the Free Software Foundation; either version 2.1 of
+  ~ the License, or (at your option) any later version.
+  ~
+  ~ This software is distributed in the hope that it will be useful,
+  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  ~ Lesser General Public License for more details.
+  ~
+  ~ You should have received a copy of the GNU Lesser General Public
+  ~ License along with this software; if not, write to the Free
+  ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+  ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+  -->
+
+<xs:schema
+   targetNamespace="http://www.gatein.org/xml/ns/gatein_controller_1_1"
+   xmlns="http://www.gatein.org/xml/ns/gatein_controller_1_1"
+   xmlns:xs="http://www.w3.org/2001/XMLSchema"
+   elementFormDefault="qualified"
+   attributeFormDefault="unqualified"
+   version="1.0">
+
+  <xs:element name="controller" type="controllerType" />
+
+  <xs:complexType name="controllerType">
+    <xs:sequence>
+      <xs:element name="route" type="routeType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="separator-escape" use="optional">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="_"/>
+          <xs:enumeration value="."/>
+          <xs:enumeration value="-"/>
+          <xs:enumeration value="~"/>
+          <xs:enumeration value="!"/>
+          <xs:enumeration value="$"/>
+          <xs:enumeration value="&amp;"/>
+          <xs:enumeration value="+"/>
+          <xs:enumeration value=":"/>
+          <xs:enumeration value="@"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="routeType">
+    <xs:sequence>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="route-param" type="routeParamType" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="path-param" type="pathParamType" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="request-param" type="requestParamType" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
+      <xs:element name="route" type="routeType" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="path" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="routeParamType">
+    <xs:choice minOccurs="1" maxOccurs="1">
+      <xs:element name="value" type="xs:string"/>
+    </xs:choice>
+    <xs:attribute name="qname" type="xs:string" use="required"/>
+  </xs:complexType>
+
+  <xs:complexType name="pathParamType">
+    <xs:choice minOccurs="0" maxOccurs="1">
+      <xs:element name="pattern" type="xs:string"/>
+    </xs:choice>
+    <xs:attribute name="qname" type="xs:string" use="required"/>
+    <xs:attribute name="encoding" use="optional">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="default-form"/>
+          <xs:enumeration value="preserve-path"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="capture-group" type="xs:boolean" use="optional" default="false"/>
+  </xs:complexType>
+
+  <xs:complexType name="requestParamType">
+    <xs:choice minOccurs="0" maxOccurs="1">
+      <xs:element name="value" type="xs:string"/>
+      <xs:element name="pattern" type="xs:string"/>
+    </xs:choice>
+    <xs:attribute name="qname" type="xs:string" use="required"/>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="control-mode" type="controlModeType" use="optional"/>
+    <xs:attribute name="value-mapping" type="valueMappingType" use="optional"/>
+  </xs:complexType>
+
+  <xs:simpleType name="valueMappingType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="canonical" />
+      <xs:enumeration value="never-empty" />
+      <xs:enumeration value="never-null" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="controlModeType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="optional" />
+      <xs:enumeration value="required" />
+    </xs:restriction>
+  </xs:simpleType>
+
+</xs:schema>

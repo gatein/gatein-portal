@@ -145,6 +145,13 @@ public class TestParser extends BaseGateInTest
       }
    }
 
+   public void testDisjunction()
+   {
+      new ParserTester("a|").assertParseDisjunction("<c>a</c>|");
+      new ParserTester("|a").assertParseDisjunction("|<c>a</c>");
+      new ParserTester("a|b").assertParseDisjunction("<c>a</c>|<c>b</c>");
+   }
+
    public void testExtendedRegexp()
    {
       new ParserTester("").assertParseDisjunction("");

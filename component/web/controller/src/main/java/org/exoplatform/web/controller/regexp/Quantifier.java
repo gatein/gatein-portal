@@ -136,6 +136,11 @@ public class Quantifier
       this.mode = mode;
       this.range = range;
    }
+   
+   public int getMin()
+   {
+      return range.min;
+   }
 
    public static Quantifier onceOrNotAtAll(Mode mode)
    {

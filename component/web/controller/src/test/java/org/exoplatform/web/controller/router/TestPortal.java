@@ -118,4 +118,21 @@ public class TestPortal extends AbstractTestController
       assertEquals("/", rc.getPath());
       assertEquals(null, rc.getQueryParams());
    }
+   
+   public void testJSMin() throws Exception
+   {
+      Router router = router().add(
+         route("/foo{gtn:min}.js").with(pathParam("gtn:min").matchedBy("-(min)|").captureGroup(true))
+      ).build();
+      
+      //
+      assertEquals(Collections.singletonMap(Names.GTN_MIN, "min"), router.route("/foo-min.js"));
+      assertEquals(Collections.singletonMap(Names.GTN_MIN, ""), router.route("/foo.js"));
+      assertNull(router.route("/foo-max.js"));
+
+      //
+      assertEquals("/foo-min.js", router.render(Collections.singletonMap(Names.GTN_MIN, "min")));
+      assertEquals("/foo.js", router.render(Collections.singletonMap(Names.GTN_MIN, "")));
+      assertEquals("", router.render(Collections.singletonMap(Names.GTN_MIN, "max")));
+   }
 }

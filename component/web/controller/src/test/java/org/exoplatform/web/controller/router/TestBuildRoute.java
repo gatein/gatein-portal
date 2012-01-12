@@ -38,10 +38,10 @@ public class TestBuildRoute extends TestCase
       assertEquals(0, router.root.getSegmentNames().size());
       assertEquals(1, router.root.getPatternSize());
       PatternRoute patternRoute = router.root.getPattern(0);
-      assertEquals("^/([^/]+)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.getPattern());
+      assertEquals("^/(?:([^/]+))(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.getPattern());
       assertEquals(1, patternRoute.params.length);
       assertEquals(Names.A, patternRoute.params[0].name);
-      assertEquals("^.+$", patternRoute.params[0].renderingPattern.getPattern());
+      assertEquals("^(.+)$", patternRoute.params[0].matchingRegex[0].getPattern());
       assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
       assertEquals(2, patternRoute.chunks.length);
       assertEquals("", patternRoute.chunks[0]);
@@ -56,10 +56,10 @@ public class TestBuildRoute extends TestCase
       assertEquals(0, router.root.getSegmentNames().size());
       assertEquals(1, router.root.getPatternSize());
       PatternRoute patternRoute = router.root.getPattern(0);
-      assertEquals("^/([^/]+)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.getPattern());
+      assertEquals("^/(?:([^/]+))(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.getPattern());
       assertEquals(1, patternRoute.params.length);
       assertEquals(Names.Q_A, patternRoute.params[0].name);
-      assertEquals("^.+$", patternRoute.params[0].renderingPattern.getPattern());
+      assertEquals("^(.+)$", patternRoute.params[0].matchingRegex[0].getPattern());
       assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
       assertEquals(2, patternRoute.chunks.length);
       assertEquals("", patternRoute.chunks[0]);
@@ -74,10 +74,10 @@ public class TestBuildRoute extends TestCase
       assertEquals(0, router.root.getSegmentNames().size());
       assertEquals(1, router.root.getPatternSize());
       PatternRoute patternRoute = router.root.getPattern(0);
-      assertEquals("^/([^/]*)(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.getPattern());
+      assertEquals("^/(?:([^/]*))(?:(?<=^/)|(?=/)|$)", patternRoute.pattern.getPattern());
       assertEquals(1, patternRoute.params.length);
       assertEquals(Names.A, patternRoute.params[0].name);
-      assertEquals("^.*$", patternRoute.params[0].renderingPattern.getPattern());
+      assertEquals("^(.*)$", patternRoute.params[0].matchingRegex[0].getPattern());
       assertEquals(EncodingMode.FORM, patternRoute.params[0].encodingMode);
       assertEquals(2, patternRoute.chunks.length);
       assertEquals("", patternRoute.chunks[0]);
@@ -122,7 +122,11 @@ public class TestBuildRoute extends TestCase
             PathParam expectedParam = ((PatternRoute)expectedRoute).params[i];
             PathParam param = ((PatternRoute)route).params[i];
             assertEquals(expectedParam.name, param.name);
-            assertEquals(expectedParam.renderingPattern.toString(), param.renderingPattern.toString());
+            assertEquals(expectedParam.matchingRegex.length, param.matchingRegex.length);
+            for (int j = 0;j < expectedParam.matchingRegex.length;j++)
+            {
+               assertEquals(expectedParam.matchingRegex[j].toString(), param.matchingRegex[j].toString());
+            }
             assertEquals(expectedParam.encodingMode, param.encodingMode);
          }
       }

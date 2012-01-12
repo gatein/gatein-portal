@@ -23,6 +23,8 @@ import org.exoplatform.web.controller.QualifiedName;
 import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -98,5 +100,25 @@ public class TestRender extends AbstractTestController
       //
       assertEquals("/fr/b", router.render(Collections.singletonMap(Names.A, "fr/")));
       assertEquals("/b", router.render(Collections.singletonMap(Names.A, "")));
+   }
+
+   public void testDisjunction() throws Exception
+   {
+      Router router = router().
+         add(route("/{a}").with(pathParam("a").matchedBy("a|b"))).
+         build();
+
+      //
+      assertEquals("/b", router.render(Collections.singletonMap(Names.A, "b")));
+   }
+
+   public void testCaptureGroup() throws Exception
+   {
+      Router router = router().
+         add(route("/{a}").with(pathParam("a").matchedBy("a(.)c").captureGroup(true))).
+         build();
+
+      //
+      assertEquals("/abc", router.render(Collections.singletonMap(Names.A, "b")));
    }
 }
