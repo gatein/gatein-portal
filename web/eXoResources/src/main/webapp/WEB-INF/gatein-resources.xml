@@ -333,7 +333,7 @@
    </scripts>
 
    <scripts>
-     <name>tabbeddasboard</name>
+     <name>tabbeddashboard</name>
      <module>
        <name>eXo.webui.UITabbedDashboard</name>
        <path>/javascript/eXo/webui/UITabbedDashboard.js</path>
