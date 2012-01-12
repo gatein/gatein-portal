@@ -69,9 +69,9 @@ public abstract class Imported
    }
    
    @Property(name = "gtn:status")
-   public abstract int getStatus();
+   public abstract Integer getStatus();
 
-   public abstract void setStatus(int status);
+   public abstract void setStatus(Integer status);
    
    @Property(name = "gtn:creationdate")
    public abstract Date getCreationDate();

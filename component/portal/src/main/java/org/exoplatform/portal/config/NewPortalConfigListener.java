@@ -222,23 +222,28 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          {
             Imported imported = workspace.adapt(Imported.class);
             imported.setCreationDate(new Date());
-            session.save();
             
             // for legacy checking
             if (dataStorage_.getPortalConfig(defaultPortal) != null)
             {
                perform = false;
+               imported.setStatus(Status.DONE.status());
             }
             else
             {
                isFirstStartup = true;
             }
+            session.save();
          }
          else
          {
             Imported imported = workspace.adapt(Imported.class);
-            Status status = Status.getStatus(imported.getStatus());
-            perform = (Status.WANT_REIMPORT == status);
+            Integer st = imported.getStatus();
+            if (st != null)
+            {
+               Status status = Status.getStatus(st);
+               perform = (Status.WANT_REIMPORT == status);
+            }
          }
          
          if (overrideExistingData)
