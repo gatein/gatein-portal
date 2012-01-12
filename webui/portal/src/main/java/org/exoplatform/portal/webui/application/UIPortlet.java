@@ -27,6 +27,7 @@ import org.exoplatform.portal.application.state.ContextualPropertyManager;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.controller.resource.ResourceScope;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.webui.application.UIPortletActionListener.ChangePortletModeActionListener;
@@ -1088,4 +1089,19 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       return getDisplayName();
 
    }
+
+   @Override
+   public void processRender(WebuiRequestContext context) throws Exception
+   {
+      UIPortalApplication uiApp = (UIPortalApplication)context.getUIApplication();
+      int portalMode = uiApp.getModeState();
+      if(portalMode != UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE && 
+               portalMode != UIPortalApplication.APP_BLOCK_EDIT_MODE && hasPermission()) 
+      {
+         PortletInfo info = getProducedOfferedPortlet().getInfo();
+         String name = info.getApplicationName() + "/" + info.getName();
+         context.getJavascriptManager().registerJS(ResourceScope.PORTLET, name);
+      }
+      super.processRender(context);
+   }   
 }

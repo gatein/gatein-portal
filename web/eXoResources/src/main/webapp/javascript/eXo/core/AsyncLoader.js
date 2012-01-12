@@ -147,6 +147,10 @@ eXo.core.AsyncLoader = {
 	return -1;
   },
   
+  addLoadedJS : function(url) {
+	  this.JS.push({script: url, status: this.LOADED});
+  },
+  
   CallbackItem : function(_callback, _params, _context) {
     this.callback = _callback;
     this.context = _context;

@@ -62,6 +62,9 @@
 					</script>
 		<% } %>
 		<script type="text/javascript">			
+		<% for (url in headerScripts) { %>
+	        eXo.core.AsyncLoader.addLoadedJS('$url');
+		<% } %>	
 			eXo.env.portal.context = "<%=docBase%>" ;
 			<%if(rcontext.getAccessPath() == 0) {%>eXo.env.portal.accessMode = "public" ;<%}
 			else

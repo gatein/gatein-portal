@@ -63,7 +63,6 @@ import org.exoplatform.webui.core.UIComponentDecorator;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.url.ComponentURL;
-import org.gatein.pc.api.info.PortletInfo;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -76,7 +75,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -330,36 +329,18 @@ public class UIPortalApplication extends UIApplication
       PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
       
       // Determine the resource ids involved
-      LinkedHashSet<ResourceId> resourceIds = new LinkedHashSet<ResourceId>();
+      Set<ResourceId> resourceIds = prc.getJavascriptManager().getRegisteredJS();
       
       // Add current portal
       String portalOwner = Util.getPortalRequestContext().getPortalOwner();
-      resourceIds.add(new ResourceId(ResourceScope.PORTAL, portalOwner));
-      
-      UIContainer tmp = getCurrentSite();
-      // If we are logged in we hardcode dependency onto common js for now
-      // as it is required for some stuff
-      // we'll figure out maybe something later
-      // specially with the split into the three shared js
+      resourceIds.add(new ResourceId(ResourceScope.PORTAL, portalOwner));      
+
+      //still need this util SHARED/portal.js is optimized
       if (prc.getRemoteUser() != null)
       {
-         resourceIds.add(new ResourceId(ResourceScope.SHARED, "common"));
          resourceIds.add(new ResourceId(ResourceScope.SHARED, "portal"));
-         resourceIds.add(new ResourceId(ResourceScope.SHARED, "webui"));
-         resourceIds.add(new ResourceId(ResourceScope.SHARED, "webui-ext"));
-         tmp = getChildById(UI_WORKING_WS_ID);
       }
-
-      //      
-      ArrayList<UIPortlet> windows = new ArrayList<UIPortlet>();
-      tmp.findComponentOfType(windows, UIPortlet.class);
-      for (UIPortlet<?, ?> window : windows)
-      {
-         PortletInfo info = window.getProducedOfferedPortlet().getInfo();
-         String name = info.getApplicationName() + "/" + info.getName();
-         resourceIds.add(new ResourceId(ResourceScope.PORTLET, name));
-      }
-
+      
       // todo : switch to debug later
       log.info("Resource ids to resolve: " + resourceIds);
 
@@ -772,6 +753,9 @@ public class UIPortalApplication extends UIApplication
             w.write(elem);
          }
          w.write("</div>");
+         w.write("<div class=\"LoadingScripts\">");
+         writeLoadingScripts(w);
+         w.write("</div>");
          w.write("<div class=\"PortalResponseScript\">");
          JavascriptManager scriptMan = pcontext.getJavascriptManager();
          String skin = getAddSkinScript(list);
@@ -785,6 +769,34 @@ public class UIPortalApplication extends UIApplication
       }
    }
 
+   private void writeLoadingScripts(Writer w) throws Exception
+   {
+      Map<String, Boolean> scriptURLs = getScriptsURLs();
+      List<String> onloadJS = new LinkedList<String>();
+      for (String url : scriptURLs.keySet()) 
+      {
+         if (scriptURLs.get(url))
+         {
+            onloadJS.add(url);
+         }
+      }
+      w.write("<div class=\"OnloadScripts\">");
+      for (String url : onloadJS)
+      {
+         w.write(url);
+         w.write(",");
+      }
+      w.write("</div>");
+      w.write("<div class=\"ImmediateScripts\">");
+      scriptURLs.keySet().removeAll(onloadJS);
+      for (String url : scriptURLs.keySet())
+      {
+         w.write(url);
+         w.write(",");
+      }
+      w.write("</div>");      
+   }
+   
    private String getAddSkinScript(Set<UIComponent> updateComponents)
    {
       if (updateComponents == null)

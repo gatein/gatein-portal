@@ -19,21 +19,20 @@
 
 package org.exoplatform.web.application;
 
-import org.exoplatform.commons.utils.PropertyManager;
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.controller.resource.ResourceId;
-import org.exoplatform.portal.controller.resource.ResourceScope;
-import org.exoplatform.portal.controller.resource.script.FetchMode;
-import org.exoplatform.portal.controller.resource.script.ScriptResource;
-import org.exoplatform.web.ControllerContext;
-import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
+
+import org.exoplatform.commons.utils.PropertyManager;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.controller.resource.ResourceId;
+import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.ScriptResource;
+import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
 /**
  * Created by The eXo Platform SAS
@@ -43,7 +42,10 @@ public class JavascriptManager
 {
 
    /** . */
-   private TreeSet<String> onloadScripts = new TreeSet<String>();
+   private Set<String> onloadScripts = new HashSet<String>();
+   
+   /** . */
+   private Set<ResourceId> resourceIds = new HashSet<ResourceId>();
    
    /** . */
    private StringBuilder data = new StringBuilder();
@@ -53,15 +55,12 @@ public class JavascriptManager
 
    /** . */
    private JavascriptConfigService jsSrevice_;
-   
-   private ControllerContext context;
 
    public JavascriptManager(ControllerContext context)
    {
       jsSrevice_ =
          (JavascriptConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
             JavascriptConfigService.class);
-      this.context = context;
    }
 
    public void addJavascript(CharSequence s)
@@ -72,10 +71,37 @@ public class JavascriptManager
          data.append(" \n");
       }
    }
+   
+   /**
+    * Register a Javascript Module that will be loaded in Rendering phase
+    */
+   public void registerJS(ResourceScope scope, String module) 
+   {
+      if (scope == null) 
+      {
+         throw new IllegalArgumentException("scope can't be null");
+      }
+      registerJS(Arrays.asList(new ResourceId(scope, module)));
+   }   
 
    /**
-    * This method is deprecated, please use {@link #loadJavascript(ResourceScope, String)} instead
+    * Register collection of JS resources that will be loaded in Rendering phase
     */
+   public void registerJS(Collection<ResourceId> ids)
+   {
+      if (ids == null) 
+      {
+         throw new IllegalArgumentException("ids can't be null");
+      }
+      resourceIds.addAll(ids);
+   }
+   
+   public Set<ResourceId> getRegisteredJS()
+   {
+      return resourceIds;
+   }
+
+   @Deprecated
    public void importJavascript(CharSequence s)
    {
       String moduleName = s.toString();
@@ -84,7 +110,7 @@ public class JavascriptManager
       {
          try
          {
-            loadJavascript(Arrays.asList(res.getId()));
+            registerJS(Arrays.asList(res.getId()));
          }
          catch (Exception ex)
          {
@@ -98,9 +124,7 @@ public class JavascriptManager
       }
    }
    
-   /**
-    * This method is deprecated, please use {@link #lazyLoadJavascript(String)} instead
-    */
+   @Deprecated
    public void importJavascript(String s, String location)
    {
       if (s != null)
@@ -111,25 +135,12 @@ public class JavascriptManager
             loadJavascript(location  + s.replaceAll("\\.", "/")  + ".js");
          }
       }
-   }
-   
-   public void loadJavascript(ResourceScope scope, String name) throws Exception 
-   {
-      loadJavascript(Arrays.asList(new ResourceId(scope, name)));
-   }   
-
-   public void loadJavascript(Collection<ResourceId> ids) throws Exception
-   {
-      if (ids == null) 
-      {
-         throw new IllegalArgumentException("ids can't be null");
-      }
-      Map<String, FetchMode> urlMap = jsSrevice_.resolveURLs(context, ids, !PropertyManager.isDevelopping(), !PropertyManager.isDevelopping());
-      Set<String> urls = urlMap.keySet();
-      loadJavascript(urls.toArray(new String[urls.size()]));
-   }
+   }     
       
-   public void loadJavascript(String ...paths) 
+   /**
+    * This method will be removed after importJavascript method is removed
+    */
+   private void loadJavascript(String ...paths) 
    {
       if (paths == null)
       {

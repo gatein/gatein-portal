@@ -134,8 +134,10 @@ function PortalResponse(responseDiv) {
         this.blocksToUpdate[j].scripts = eXo.core.DOMUtil.findDescendantsByTagName(dataBlocks[1], "script") ;
         
       }
-    } else if(div[i].className == "MarkupHeadElements") {
-      this.markupHeadElements = new MarkupHeadElements(div[i]);    
+	} else if(div[i].className == "MarkupHeadElements") {
+		this.markupHeadElements = new MarkupHeadElements(div[i]);
+	} else if(div[i].className == "LoadingScripts") {
+		this.loadingScripts = new LoadingScripts(div[i]);
     } else if(div[i].className == "PortalResponseScript") {
       this.script = div[i].innerHTML ;
 			div[i].style.display = "none" ;
@@ -155,6 +157,26 @@ function MarkupHeadElements(fragment) {
 		this.scripts[i] = createScriptNode(this.scripts[i]);
 	}
 	this.styles = DOMUtil.findDescendantsByTagName(fragment, "style") ;
+}
+
+function LoadingScripts(fragment) {
+	var  DOMUtil = eXo.core.DOMUtil;	
+	this.immediateScripts = [];
+	this.onloadScripts = [];
+	var headers = DOMUtil.findFirstChildByClass(fragment, "div", "ImmediateScripts").innerHTML;
+	headers = headers.replace(/^\s*/, '').split(",");
+	for (var i = 0; i < headers.length; i++) {
+		if (headers[i] !== "") {
+			this.immediateScripts.push(headers[i]);
+		}
+	}
+	var onloads = DOMUtil.findFirstChildByClass(fragment, "div", "OnloadScripts").innerHTML;
+	onloads = onloads.replace(/^\s*/, '').split(",");
+	for (var i = 0; i < onloads.length; i++) {
+		if (headers[i] !== "") {
+			this.onloadScripts.push(onloads[i]);
+		}
+	}
 }
 
 /*
@@ -456,10 +478,13 @@ function HttpResponseHandler(){
       appendElementsToHead(markupHeadElements.bases);
 		appendElementsToHead(markupHeadElements.links);				
 		appendElementsToHead(markupHeadElements.styles);
-		if (markupHeadElements.scripts.length) {
-			eXo.core.AsyncLoader.loadJS(markupHeadElements.scripts, function() {
-				this.executeScript(response.script) ;
-			}, null, this);
+		for (var i = 0; i < markupHeadElements.scripts.length; i++) {
+			var sc = markupHeadElements.scripts[i];
+			if (sc.defer) {
+				response.loadingScripts.onloadScripts.push(sc);
+			} else {
+				response.loadingScripts.immediateScripts.push(sc);
+			}
 		}
 	};
 	
@@ -594,13 +619,24 @@ function HttpResponseHandler(){
 	*    and then the script are loaded
 	* 5) Then it is each portal block which is updated and the assocaited scripts are evaluated
 	*/
-	instance.ajaxResponse = function(request){
-	  var temp =  document.createElement("div") ;
-	  temp.innerHTML =  this.request.responseText ;
-	  var responseDiv = eXo.core.DOMUtil.findFirstDescendantByClass(temp, "div", "PortalResponse") ;
-	  var response = new PortalResponse(responseDiv) ;
+	instance.ajaxResponse = function(request, response) {
+	  if (!response) {
+		  var temp =  document.createElement("div") ;
+		  temp.innerHTML =  this.responseText ;
+		  var responseDiv = eXo.core.DOMUtil.findFirstDescendantByClass(temp, "div", "PortalResponse") ;
+		  var response = new PortalResponse(responseDiv) ;		  
+		  instance.updateHtmlHead(response);
+	  }
+	  var immediateScripts = response.loadingScripts.immediateScripts; 
+	  if (immediateScripts.length) {
+		  eXo.core.AsyncLoader.loadJS(immediateScripts, function() {
+			  immediateScripts.clear();
+			  instance.ajaxResponse.apply(this, [request, response]);
+		  }, null, this);
+		  return;
+	  }
 	  //Handle the portlet responses
-	  var portletResponses =  response.portletResponses ;
+	  var portletResponses =  response.portletResponses;
 	  if(portletResponses != null) {
 	    for(var i = 0; i < portletResponses.length; i++) {
 	      var portletResponse = portletResponses[i] ;
@@ -635,30 +671,29 @@ function HttpResponseHandler(){
 	  if(response.blocksToUpdate == undefined && temp.innerHTML !== "") {
 	  	if(confirm(eXo.i18n.I18NMessage.getMessage("SessionTimeout"))) instance.ajaxTimeout(request) ;
 	  }
-	  //Handle the portal responses
 	  try {	    
-	    instance.updateBlocks(response.blocksToUpdate) ;
-		instance.updateHtmlHead(response);
-		var extraMarkup = response.markupHeadElements;
-		if (!extraMarkup || !extraMarkup.scripts.length) {
-			instance.executeScript(response.script) ;		  
-		}
+		  //Handle the portal responses
+		  instance.updateBlocks(response.blocksToUpdate) ;
+		  var onloadScripts = response.loadingScripts.onloadScripts;
+		  eXo.core.AsyncLoader.loadJS(onloadScripts, function() {		  
+			  instance.executeScript(response.script);		  
+			  /**
+			   * Clears the instance.to timeout if the request takes less time than expected to get response
+			   * Removes the transparent mask so the UI is available again, with cursor "auto"
+			   */
+			  clearTimeout(instance.to);
+//		  eXo.core.UIMaskLayer.removeTransparentMask();
+//		  eXo.core.UIMaskLayer.removeMask(eXo.portal.AjaxRequest.maskLayer) ;
+			  eXo.core.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
+			  
+			  eXo.portal.AjaxRequest.maskLayer = null ;
+			  eXo.portal.CurrentRequest = null ;		 
+		  }, null, this);		  
       }
       catch (error) {
              alert(error.message) ;
-      }
-	  /**
-       * Clears the instance.to timeout if the request takes less time than expected to get response
-       * Removes the transparent mask so the UI is available again, with cursor "auto"
-       */
-	  clearTimeout(instance.to);
-//	  eXo.core.UIMaskLayer.removeTransparentMask();
-//	  eXo.core.UIMaskLayer.removeMask(eXo.portal.AjaxRequest.maskLayer) ;
-	  eXo.core.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
-
-	  eXo.portal.AjaxRequest.maskLayer = null ;
-	  eXo.portal.CurrentRequest = null ;
-	} ;
+      }	  
+	};
 	
 	/*
 	  * This method is called when doing an AJAX call, it will put the "Loading" image in the

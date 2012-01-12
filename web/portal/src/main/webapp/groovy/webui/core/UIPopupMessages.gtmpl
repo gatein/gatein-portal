@@ -65,7 +65,7 @@
     def rcontext = _ctx.getRequestContext();
 
     if(uicomponent.hasMessage()){
-      rcontext.getJavascriptManager().loadJavascript(ResourceScope.SHARED, "webui");
+      rcontext.getJavascriptManager().registerJS(ResourceScope.SHARED, "webui");
 
       rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
 
