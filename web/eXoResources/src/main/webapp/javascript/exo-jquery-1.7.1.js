@@ -9264,3 +9264,8 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 
 
 })( window );
+
+/**
+ * Define eXo's alias to jQuery object
+ */
+var xj = jQuery;
