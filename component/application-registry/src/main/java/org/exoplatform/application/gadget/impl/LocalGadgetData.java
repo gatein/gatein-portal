@@ -85,7 +85,7 @@ public abstract class LocalGadgetData extends GadgetData
       // Update def
       def.setDescription(prefs.getDescription());
       def.setThumbnail(prefs.getThumbnail().toString()); // Do something better than that
-      def.setTitle(prefs.getTitle());
+      def.setTitle(getGadgetTitle(prefs, def.getName()));
       def.setReferenceURL(prefs.getTitleUrl().toString());
 
       // Update content
@@ -106,5 +106,19 @@ public abstract class LocalGadgetData extends GadgetData
    {
       NTFile content = getGadgetContent();
       return content.getLastModified();
+   }
+
+   private String getGadgetTitle(ModulePrefs prefs, String defaultValue)
+   {
+      String title = prefs.getDirectoryTitle();
+      if (title == null || title.trim().length() < 1)
+      {
+         title = prefs.getTitle();
+      }
+      if (title == null || title.trim().length() < 1)
+      {
+         return defaultValue;
+      }
+      return title;
    }
 }
