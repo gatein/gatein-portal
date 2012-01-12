@@ -198,6 +198,9 @@
       <depends>
         <scripts>bootstrap</scripts>
       </depends>
+      <depends>
+        <scripts>jquery</scripts>
+      </depends>
    </scripts>
 
 
@@ -404,15 +407,12 @@
    </javascript>
     -->
 
-  <javascript>
-    <scripts>
-      <scope>shared</scope>
-      <name>common</name>
-      <module>
-        <name>jquery</name>
-        <path>/javascript/jquery.js</path>
-      </module>
-    </scripts>
-  </javascript>
+  <scripts>
+    <name>jquery</name>
+    <module>
+      <name>jquery</name>
+      <path>/javascript/jquery-1.7.1.js</path>
+    </module>
+  </scripts>
 
 </gatein-resources>
