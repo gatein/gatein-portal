@@ -29,8 +29,8 @@ gadgets.ExoBasedUserPrefStore.prototype.getPrefs = function(gadget) {
 
 gadgets.ExoBasedUserPrefStore.prototype.savePrefs = function(gadget, newPrefs) {
   	//TODO: dang.tung - sent event to portal
-  var prefs = eXo.core.JSON.stringify(newPrefs || gadget.userPrefs_);
-  prefs = encodeURIComponent(prefs);
+  var prefs = gadgets.json.stringify(newPrefs || gadget.userPrefs_);
+  prefs = encodeURIComponent(prefs);  
   var DOMUtil = eXo.core.DOMUtil;
 	var gadget = document.getElementById("gadget_" + gadget.id) ;
 	if(gadget != null ) {

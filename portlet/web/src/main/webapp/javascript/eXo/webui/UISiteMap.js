@@ -27,7 +27,7 @@ UISiteMap.prototype.updateTreeNode = function (nodeToUpdate, getNodeURL) {
 		
 	var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);	
 	try {
-		var data = eXo.core.JSON.parse(jsChilds);				
+		var data = xj.parseJSON(jsChilds);
 	} catch (e) {		
 	}	
 	if (data && data.length) {
