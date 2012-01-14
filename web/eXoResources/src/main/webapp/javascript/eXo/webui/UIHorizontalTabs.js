@@ -25,24 +25,7 @@ eXo.webui.UIHorizontalTabs = {
 
   init : function() {
   },
-  /**
-   * Changes the style of a tab, depending on the over value (true or false)
-   * Gives the defaut css style class names . UITab when tab is NOT highlighted .
-   * HighlightNavigationTab when tab is highlighted
-   */
-  changeTabNavigationStyle : function(clickedEle, over) {
-    if (clickedEle == null)
-      return;
-    if (!eXo.core.DOMUtil.hasClass(clickedEle, "UITab"))
-      clickedEle = eXo.core.DOMUtil.findAncestorByClass(clickedEle, "UITab");
 
-    if (over) {
-      this.backupNavigationTabStyle = clickedEle.className;
-      clickedEle.className = "UITab HighlightNavigationTab";
-    } else if (this.backupNavigationTabStyle) {
-      clickedEle.className = this.backupNavigationTabStyle;
-    }
-  },
   /**
    * Changes the css style of an item on mouse over / out with the values : .
    * MenuItem when item is NOT highlighted . MenuItemSelected when item is
