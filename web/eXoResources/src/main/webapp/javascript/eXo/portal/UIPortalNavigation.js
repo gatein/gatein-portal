@@ -72,50 +72,103 @@ eXo.portal.UIPortalNavigation = {
     topContainer.attr("id", "PortalNavigationTopContainer");
 
     // Top menu items
-    topContainer.children(".UITab").each(function() {
-     var tab = $(this);
-     tab.hover(portalNav.setTabStyleOnMouseOver, portalNav.setTabStyleOnMouseOut).css("width", tab.width());
-     tab.find("." + portalNav.containerStyleClass).first().css("minWidth", tab.width());
-    });
-    
-    var itemConts = topContainer.find("." + this.containerStyleClass);
-    itemConts.each(function() {
-     if (!this.id) this.id = DOMUtil.generateId("PortalNavigationContainer");
-     this.resized = false;
+    topContainer.children(".UITab").each(function()
+    {
+      var tab = $(this);
 
-     var jObj = $(this);
-     var items = jObj.find("." + portalNav.tabStyleClass);
-     if(items.length == 0) {
-     jObj.remove();
-  	  } else {
-     jObj.on({"mouseenter" : portalNav.onMenuItemOver, "mouseleave" : portalNav.onMenuItemOut,
-"click" : function() {portalNav.hideMenu(jObj.attr("id"));}}, "." + portalNav.tabStyleClass);
-  	  }
+      var highlightClass = "UITab HighlightNavigationTab";
+      tab.mouseenter(function()
+      {
+        portalNav.mouseEnterTab($(this), highlightClass);
+      });
+
+      var actualClass = tab.attr("class");
+      tab.mouseleave(function()
+      {
+        portalNav.mouseLeaveTab($(this), actualClass);
+      });
+
+      tab.find("." + portalNav.containerStyleClass).first().css("minWidth", tab.width());
+    });
+
+    var itemConts = topContainer.find("." + this.containerStyleClass);
+    itemConts.each(function()
+    {
+      if (!this.id)
+      {
+        this.id = DOMUtil.generateId("PortalNavigationContainer");
+      }
+      this.resized = false;
+
+      var jObj = $(this);
+      var items = jObj.find("." + portalNav.tabStyleClass);
+      if (items.length == 0)
+      {
+        jObj.remove();
+      }
+      else
+      {
+        jObj.on({"mouseenter" : portalNav.onMenuItemOver, "mouseleave" : portalNav.onMenuItemOut,
+          "click" : function() {portalNav.hideMenu(jObj.attr("id"));}}, "." + portalNav.tabStyleClass);
+      }
     });
   },
-  
-  setTabStyleOnMouseOver : function() {
-    var tab = $(this) ;
+
+  /**
+   * Method triggered as mouse cursor enter a navigation node showed on navigation tab.
+   *
+   * @param tab
+   * @param newClass
+   */
+  mouseEnterTab : function(tab, newClass)
+  {
     var portalNav = eXo.portal.UIPortalNavigation;
 
     var getNodeURL = tab.attr("exo:getNodeURL");
     var menuItemContainer = tab.find("." + portalNav.containerStyleClass).first();
-    if (getNodeURL && !menuItemContainer.length) {
-  	  var jsChilds = ajaxAsyncGetRequest(getNodeURL,false)
-  	  try {
-   var data = jQuery.parseJSON(jsChilds);
-  	  } catch (e) {
-  	  }				  
-   if (!data || !data.length) return;
-   tab.append(portalNav.generateContainer(data));
-  	  }
-    eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab[0], true);
-    
+    if (getNodeURL && !menuItemContainer.length)
+    {
+      var jsChilds = ajaxAsyncGetRequest(getNodeURL, false)
+      try
+      {
+        var data = xj.parseJSON(jsChilds);
+      }
+      catch (e)
+      {
+      }
+      if (!data || !data.length)
+      {
+        return;
+      }
+      tab.append(portalNav.generateContainer(data));
+    }
+    tab.attr("class", newClass);
+
     menuItemContainer = tab.find("." + portalNav.containerStyleClass).first();
-    if (menuItemContainer.length) {
+    if (menuItemContainer.length)
+    {
       portalNav.cancelHideMenuContainer(menuItemContainer.attr("id"));
       portalNav.showMenu(tab, menuItemContainer);
-  		      	}
+    }
+    return false;
+  },
+
+  /**
+   * Method triggered as mouse cursor leaves a navigation node showed on navigation tab
+   *
+   * @param tab
+   * @param oldClass
+   */
+  mouseLeaveTab : function(tab, oldClass)
+  {
+    var portalNav = eXo.portal.UIPortalNavigation;
+
+    tab.attr("class", oldClass);
+    var conts = tab.find("." + portalNav.containerStyleClass);
+    if (conts.length)
+    {
+      portalNav.hideMenuTimeoutIds.put(conts[0].id, window.setTimeout(function() {portalNav.hideMenu(conts[0].id); }, 300));
+    }
     return false;
   },
 
@@ -153,18 +206,6 @@ x += (tab.width() - menuItemContainer.width()) ;
 menuItemContainer.css("right", x + "px");
   				}
   			}
-  },
-
-  setTabStyleOnMouseOut : function() {
-    var tab = $(this);
-    var portalNav = eXo.portal.UIPortalNavigation;
-
-    eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab[0], false);
-    var conts = tab.find("." + portalNav.containerStyleClass);
-    if (conts.length) {
-        portalNav.hideMenuTimeoutIds.put(conts[0].id, window.setTimeout(function() {portalNav.hideMenu(conts[0].id); }, 300));
-    }
-    return false;
   },
 
   cancelHideMenuContainer : function(containerId) {
