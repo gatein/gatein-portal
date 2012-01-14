@@ -22,11 +22,8 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.test.mocks.servlet.MockServletContext;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
-import org.gatein.common.io.IOTools;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
@@ -247,12 +244,5 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
             return null;
          }
       }
-   }
-   
-   private static String read(InputStream in) throws IOException
-   {
-      ByteArrayOutputStream baos = new ByteArrayOutputStream();
-      IOTools.copy(in, baos);
-      return baos.toString();
    }
 }

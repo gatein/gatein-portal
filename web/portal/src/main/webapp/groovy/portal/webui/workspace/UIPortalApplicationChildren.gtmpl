@@ -2,19 +2,27 @@
    def rcontext = _ctx.getRequestContext() ;
    uicomponent.renderChildren();
    def scriptsURLs = uicomponent.getScriptsURLs();
-   rcontext.setAttribute("eXo.portal.scriptsURLs", scriptsURLs);
+
    def onloadScripts = new StringBuilder("[");
    for (path in scriptsURLs.keySet()) {
 	   if (scriptsURLs.get(path)) {
 	      onloadScripts.append("'").append(path).append("',");
 	   }
    }
+
+   // This handles legacy usage of importJavascript
+   def jsManager = rcontext.getJavascriptManager();
+   for (path in jsManager.getImportedJavaScripts()) {
+	   onloadScripts.append("'").append(path).append("',");
+   }
    onloadScripts.append("]");
+
+   rcontext.setAttribute("eXo.portal.scriptsURLs", scriptsURLs);
 %>
        </div>
     <script type="text/javascript">      
-	  eXo.core.AsyncLoader.loadJS($onloadScripts, function() {
-	      <%rcontext.getJavascriptManager().writeJavascript(out.writer)%>	  
+    eXo.loadJS($onloadScripts, function() {
+	      <%=jsManager.getJavaScripts()%>	  
 	  	}			  
 	  );
     </script>

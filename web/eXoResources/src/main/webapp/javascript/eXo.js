@@ -47,7 +47,7 @@ var eXo  = {
 *   3) Cache the script on the client
 *
 */
-eXo.require = function(module, jsLocation, callback, context, params) {
+eXo.require = function(module, jsLocation, callback, params, context) {
   try {
     if(eval(module + ' != null')) {
       if (callback) {
@@ -63,10 +63,10 @@ eXo.require = function(module, jsLocation, callback, context, params) {
   window.status = "Loading Javascript Module " + module ;
   if(jsLocation == null) jsLocation = '/eXoResources/javascript/' ;
   var path = jsLocation  + module.replace(/\./g, '/')  + '.js' ;
-  eXo.loadJS(path, callback, context, params);
+  eXo.loadJS(path, callback, params, context);
 };
 
-eXo.loadJS = function(paths, callback, context, params) {
+eXo.loadJS = function(paths, callback, params, context) {
   if (!paths || !paths.length) return;  
   var tmp = [], loader = eXo.core.AsyncLoader;
   

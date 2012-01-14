@@ -26,7 +26,6 @@ import java.util.Arrays;
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-
 public class TestSkinService extends AbstractSkinServiceTest
 {
    private static boolean isFirstStartup = true;

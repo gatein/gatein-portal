@@ -56,12 +56,10 @@
             <script type="text/javascript" src="<%= url %>"></script>
 		<% } %>
 
-		<% if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) { %>
-					<script type="text/javascript">
-						eXo.developing = true ;
-					</script>
-		<% } %>
 		<script type="text/javascript">			
+		<% if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) { %>
+						eXo.developing = true ;
+		<% } %>
 		<% for (url in headerScripts) { %>
 	        eXo.core.AsyncLoader.addLoadedJS('$url');
 		<% } %>	

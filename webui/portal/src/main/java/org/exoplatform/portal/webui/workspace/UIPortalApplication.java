@@ -329,7 +329,7 @@ public class UIPortalApplication extends UIApplication
       PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
       
       // Determine the resource ids involved
-      Set<ResourceId> resourceIds = prc.getJavascriptManager().getRegisteredJS();
+      Set<ResourceId> resourceIds = prc.getJavascriptManager().getScriptResources();
       
       // Add current portal
       String portalOwner = Util.getPortalRequestContext().getPortalOwner();
@@ -754,23 +754,24 @@ public class UIPortalApplication extends UIApplication
          }
          w.write("</div>");
          w.write("<div class=\"LoadingScripts\">");
-         writeLoadingScripts(w);
+         writeLoadingScripts(pcontext);
          w.write("</div>");
          w.write("<div class=\"PortalResponseScript\">");
-         JavascriptManager scriptMan = pcontext.getJavascriptManager();
+         JavascriptManager jsManager = pcontext.getJavascriptManager();
          String skin = getAddSkinScript(list);
          if (skin != null)
          {
-            scriptMan.addCustomizedOnLoadScript(skin);
+            jsManager.addCustomizedOnLoadScript(skin);
          }
-         scriptMan.writeJavascript(w);
+         w.write(jsManager.getJavaScripts());
          w.write("</div>");
          w.write("</div>");
       }
    }
 
-   private void writeLoadingScripts(Writer w) throws Exception
+   private void writeLoadingScripts(PortalRequestContext context) throws Exception
    {
+      Writer w = context.getWriter();
       Map<String, Boolean> scriptURLs = getScriptsURLs();
       List<String> onloadJS = new LinkedList<String>();
       for (String url : scriptURLs.keySet()) 
@@ -790,6 +791,13 @@ public class UIPortalApplication extends UIApplication
       w.write("<div class=\"ImmediateScripts\">");
       scriptURLs.keySet().removeAll(onloadJS);
       for (String url : scriptURLs.keySet())
+      {
+         w.write(url);
+         w.write(",");
+      }
+      
+      JavascriptManager jsManager = context.getJavascriptManager();
+      for (String url : jsManager.getImportedJavaScripts())
       {
          w.write(url);
          w.write(",");

@@ -19,6 +19,15 @@
 
 package org.exoplatform.web.application;
 
+import org.exoplatform.commons.utils.PropertyManager;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.controller.resource.ResourceId;
+import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.ScriptResource;
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.web.application.javascript.JavascriptConfigService;
+
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Arrays;
@@ -26,77 +35,65 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.exoplatform.commons.utils.PropertyManager;
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.controller.resource.ResourceId;
-import org.exoplatform.portal.controller.resource.ResourceScope;
-import org.exoplatform.portal.controller.resource.script.ScriptResource;
-import org.exoplatform.web.ControllerContext;
-import org.exoplatform.web.application.javascript.JavascriptConfigService;
-
 /**
  * Created by The eXo Platform SAS
  * Mar 27, 2007  
  */
 public class JavascriptManager
 {
+   Log log = ExoLogger.getLogger("portal:JavascriptManager");
+   
+   /** . */
+   private Set<String> importedScripts = new HashSet<String>();
 
    /** . */
-   private Set<String> onloadScripts = new HashSet<String>();
-   
-   /** . */
    private Set<ResourceId> resourceIds = new HashSet<ResourceId>();
-   
+
    /** . */
-   private StringBuilder data = new StringBuilder();
+   private StringBuilder scripts = new StringBuilder();
 
    /** . */
    private StringBuilder customizedOnloadJavascript = new StringBuilder();
 
-   /** . */
-   private JavascriptConfigService jsSrevice_;
-
-   public JavascriptManager(ControllerContext context)
-   {
-      jsSrevice_ =
-         (JavascriptConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
-            JavascriptConfigService.class);
-   }
-
+   /**
+    * Add a valid javascript code
+    * 
+    * @param s a valid javascript code
+    */
    public void addJavascript(CharSequence s)
    {
       if (s != null)
       {
-         data.append(s instanceof String ? (String)s : s.toString());
-         data.append(" \n");
+         scripts.append(s.toString().trim());
+         scripts.append(";\n");
       }
    }
-   
+
    /**
     * Register a Javascript Module that will be loaded in Rendering phase
     */
-   public void registerJS(ResourceScope scope, String module) 
+   public void loadScriptResource(ResourceScope scope, String name)
    {
-      if (scope == null) 
+      if (scope == null)
       {
          throw new IllegalArgumentException("scope can't be null");
       }
-      registerJS(Arrays.asList(new ResourceId(scope, module)));
-   }   
+      loadScriptResources(new ResourceId(scope, name));
+   }
 
    /**
     * Register collection of JS resources that will be loaded in Rendering phase
     */
-   public void registerJS(Collection<ResourceId> ids)
+   public void loadScriptResources(ResourceId... ids)
    {
-      if (ids == null) 
+      if (ids == null)
       {
          throw new IllegalArgumentException("ids can't be null");
       }
-      resourceIds.addAll(ids);
+      resourceIds.addAll(Arrays.asList(ids));
    }
-   
-   public Set<ResourceId> getRegisteredJS()
+
+   public Set<ResourceId> getScriptResources()
    {
       return resourceIds;
    }
@@ -105,12 +102,19 @@ public class JavascriptManager
    public void importJavascript(CharSequence s)
    {
       String moduleName = s.toString();
+      JavascriptConfigService jsSrevice_ =
+         (JavascriptConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
+            JavascriptConfigService.class);
       ScriptResource res = jsSrevice_.getResourceIncludingModule(moduleName);
-      if(res != null)
+      if (res != null)
       {
          try
          {
-            registerJS(Arrays.asList(res.getId()));
+            loadScriptResources(res.getId());
+            if (log.isWarnEnabled())
+            {
+               log.warn("This method is deprecated. You could loadScriptResources " + res.getId() + " instead of importJavascript " + moduleName);
+            }
          }
          catch (Exception ex)
          {
@@ -123,48 +127,41 @@ public class JavascriptManager
          importJavascript(moduleName, null);
       }
    }
-   
+
    @Deprecated
    public void importJavascript(String s, String location)
    {
       if (s != null)
       {
+         JavascriptConfigService jsSrevice_ =
+            (JavascriptConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
+               JavascriptConfigService.class);
          if (!jsSrevice_.isModuleLoaded(s) || PropertyManager.isDevelopping())
          {
-            if(location == null) location = "/eXoResources/javascript/";
-            loadJavascript(location  + s.replaceAll("\\.", "/")  + ".js");
+            if (location == null)
+            {
+               location = "/eXoResources/javascript/";
+            }
+
+            String path = location + s.replaceAll("\\.", "/") + ".js";
+            if (!jsSrevice_.isJavascriptLoaded(path) || PropertyManager.isDevelopping())
+            {
+               importedScripts.add(path);
+            }
          }
       }
-   }     
-      
-   /**
-    * This method will be removed after importJavascript method is removed
-    */
-   private void loadJavascript(String ...paths) 
-   {
-      if (paths == null)
-      {
-         throw new IllegalArgumentException("paths can't be null");
-      }      
-      for (String path : paths) 
-      {
-         if (!jsSrevice_.isJavascriptLoaded(path) || PropertyManager.isDevelopping())
-         {
-            onloadScripts.add(path);
-         }            
-      }
    }
-   
+
    public void addOnLoadJavascript(CharSequence s)
    {
       if (s != null)
       {
          String id = Integer.toString(Math.abs(s.hashCode()));
-         data.append("eXo.core.Browser.addOnLoadCallback('mid");
-         data.append(id);
-         data.append("',");
-         data.append(s instanceof String ? (String)s : s.toString());
-         data.append("); \n");
+         scripts.append("eXo.core.Browser.addOnLoadCallback('mid");
+         scripts.append(id);
+         scripts.append("',");
+         scripts.append(s instanceof String ? (String)s : s.toString());
+         scripts.append(");\n");
       }
    }
 
@@ -173,11 +170,11 @@ public class JavascriptManager
       if (s != null)
       {
          String id = Integer.toString(Math.abs(s.hashCode()));
-         data.append("eXo.core.Browser.addOnResizeCallback('mid");
-         data.append(id);
-         data.append("',");
-         data.append(s instanceof String ? (String)s : s.toString());
-         data.append("); \n");
+         scripts.append("eXo.core.Browser.addOnResizeCallback('mid");
+         scripts.append(id);
+         scripts.append("',");
+         scripts.append(s instanceof String ? (String)s : s.toString());
+         scripts.append(");\n");
       }
    }
 
@@ -186,23 +183,23 @@ public class JavascriptManager
       if (s != null)
       {
          String id = Integer.toString(Math.abs(s.hashCode()));
-         data.append("eXo.core.Browser.addOnScrollCallback('mid");
-         data.append(id);
-         data.append("',");
-         data.append(s instanceof String ? (String)s : s.toString());
-         data.append("); \n");
+         scripts.append("eXo.core.Browser.addOnScrollCallback('mid");
+         scripts.append(id);
+         scripts.append("',");
+         scripts.append(s instanceof String ? (String)s : s.toString());
+         scripts.append(");\n");
       }
-   }   
+   }
 
    public void addCustomizedOnLoadScript(CharSequence s)
    {
       if (s != null)
       {
-         customizedOnloadJavascript.append(s instanceof String ? (String)s : s.toString());
-         customizedOnloadJavascript.append("\n");
+         customizedOnloadJavascript.append(s.toString().trim());
+         customizedOnloadJavascript.append(";\n");
       }
    }
-   
+
    @Deprecated
    public void writeCustomizedOnLoadScript(Writer writer) throws IOException
    {
@@ -211,41 +208,71 @@ public class JavascriptManager
          writer.write(customizedOnloadJavascript.toString());
       }
    }
-   
+
+   /**
+    * Returns javascripts which were added by {@link #addJavascript(CharSequence)},
+    * {@link #addOnLoadJavascript(CharSequence)}, {@link #addOnResizeJavascript(CharSequence)},
+    * {@link #addOnScrollJavascript(CharSequence)}, {@link #addCustomizedOnLoadScript(CharSequence)}
+    * 
+    * @return
+    */
+   public String getJavaScripts()
+   {
+      StringBuilder callback = new StringBuilder();
+      callback.append(scripts);
+      callback.append("eXo.core.Browser.onLoad();\n");
+      callback.append(customizedOnloadJavascript);
+      return callback.toString();
+   }
+
+   public Set<String> getImportedJavaScripts()
+   {
+      return importedScripts;
+   }
+
+   /**
+    * @deprecated You would handle the returned javascripts from {@link #getJavaScripts()} and 
+    * {@link #getImportedJavaScripts()} by yourself instead of delegating JavascriptManager to
+    * write the output
+    * 
+    * @param writer
+    * @throws IOException
+    */
+   @Deprecated
    public void writeJavascript(Writer writer) throws IOException
    {
       StringBuilder callback = new StringBuilder();
-      callback.append(data);
-      callback.append("eXo.core.Browser.onLoad();");
+      callback.append(scripts);
+      callback.append("eXo.core.Browser.onLoad();\n");
       callback.append(customizedOnloadJavascript);
-      
-      if (onloadScripts.size() > 0)
+
+      if (importedScripts.size() > 0)
       {
-         String jsPaths = buildJSArray(onloadScripts);
-                  
+         String jsPaths = buildJSArray(importedScripts);
+
          StringBuilder builder = new StringBuilder("eXo.loadJS(");
          builder.append(jsPaths).append(",");
          builder.append("function() {").append(callback.toString()).append("});");
          writer.write(builder.toString());
-      } 
-      else 
+      }
+      else
       {
          writer.write(callback.toString());
       }
    }
-   
+
    private String buildJSArray(Collection<String> params)
    {
       StringBuilder pathBuilder = new StringBuilder("[");
-      for (String str : params) 
+      for (String str : params)
       {
          pathBuilder.append("'").append(str).append("',");
       }
-      if (!params.isEmpty()) 
+      if (!params.isEmpty())
       {
          pathBuilder.deleteCharAt(pathBuilder.length() - 1);
       }
       pathBuilder.append("]");
       return pathBuilder.toString();
-   }  
+   }
 }

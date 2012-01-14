@@ -176,7 +176,7 @@ public class PortalRequestContext extends WebuiRequestContext
       //
       this.urlFactory = (URLFactoryService)PortalContainer.getComponent(URLFactoryService.class);
       this.controllerContext = controllerContext;
-      this.jsmanager_ = new JavascriptManager(controllerContext);
+      this.jsmanager_ = new JavascriptManager();
       
       //
       request_ = controllerContext.getRequest();
