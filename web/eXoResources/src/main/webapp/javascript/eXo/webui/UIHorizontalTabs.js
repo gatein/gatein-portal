@@ -27,23 +27,6 @@ eXo.webui.UIHorizontalTabs = {
   },
 
   /**
-   * Changes the css style of an item on mouse over / out with the values : .
-   * MenuItem when item is NOT highlighted . MenuItemSelected when item is
-   * highlighted
-   */
-  itemOver : function(selectedElement, over) {
-    if (over) {
-      this.backupItemStyle = selectedElement.className;
-      if (selectedElement.className == "MenuItem") {
-        selectedElement.className = "MenuItemSelected";
-      } else {
-        selectedElement.className = "MenuItemSelected MenuItemExpand";
-      }
-    } else {
-      selectedElement.className = this.backupItemStyle;
-    }
-  },
-  /**
    * Calls changeTabForUITabPane to display tab content
    */
   displayTabContent : function(clickedEle) {
