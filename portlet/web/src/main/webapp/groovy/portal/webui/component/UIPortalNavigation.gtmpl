@@ -12,7 +12,7 @@
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.addCustomizedOnLoadScript("eXo.portal.UIPortalNavigation.onLoad('" + uicomponent.id + "');");	
-	jsmanager.addCustomizedOnLoadScript("eXo.portal.UIPortalNavigation.loadScroll('" + uicomponent.id + "');");
+	jsmanager.addCustomizedOnLoadScript("eXo.portal.UIPortalNavigation.loadScroll('" + uicomponent.getParent().id + "');");
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext();     
 	PortalURL nodeURL = nodeurl();

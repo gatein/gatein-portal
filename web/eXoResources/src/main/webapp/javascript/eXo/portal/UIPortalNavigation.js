@@ -314,7 +314,7 @@ var timeout = eXo.portal.UIPortalNavigation.hideMenuTimeoutIds.remove(containerI
     var portalNav = $("#" + portalNavId);
     if (portalNav.length) {
       // Creates new ScrollManager and initializes it
-      uiNav.scrollMgr = eXo.portal.UIPortalControl.newScrollManager(portalNavId);
+      uiNav.scrollMgr = new ScrollManager(portalNavId);
       uiNav.scrollMgr.initFunction = uiNav.initScroll;
       // Adds the tab elements to the manager
       uiNav.scrollMgr.mainContainer = portalNav[0];
@@ -341,7 +341,7 @@ var timeout = eXo.portal.UIPortalNavigation.hideMenuTimeoutIds.remove(containerI
    *  . Renders the tabs
    */
   initScroll : function() {
-var portalNav = eXo.portal.UIPortalNavigation;
+    var portalNav = eXo.portal.UIPortalNavigation;
     if (!portalNav.scrollManagerLoaded) portalNav.loadScroll();
     var scrollMgr = portalNav.scrollMgr;
     scrollMgr.init();

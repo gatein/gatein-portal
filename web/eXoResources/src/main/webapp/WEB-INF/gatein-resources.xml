@@ -326,6 +326,10 @@
    <scripts>
       <name>navigation</name>
       <module>
+         <name>eXo.portal.ScrollManager</name>
+         <path>/javascript/eXo/portal/ScrollManager.js</path>
+      </module>
+      <module>
          <name>eXo.portal.UIPortalNavigation</name>
          <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
       </module>

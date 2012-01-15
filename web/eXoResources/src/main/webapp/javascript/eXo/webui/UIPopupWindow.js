@@ -288,18 +288,6 @@ eXo.webui.UIPopupWindow = {
 		document.onmousedown = eXo.webui.UIPopupWindow.backupEvent;
 	}
 	eXo.webui.UIPopupWindow.backupEvent = null;
-    
-    // Added by Philippe
-    // inits all the scroll managers, in case there is one in the popup that
-    // needs
-    // to be recalculated
-    eXo.portal.UIPortalControl.initAllManagers();
-    // other solutions :
-    // - add a callback property that points to the init function of the
-    // concerned
-    // scroll manager. call it here
-    // - add a boolean to each scroll manager that specifies if it's in a popup.
-    // re init only those that have this property true
   },
   /**
    * Inits the drag and drop configures the DragDrop callback functions .
