@@ -441,8 +441,7 @@ function HttpResponseHandler() {
 	instance.executeScript = function(script) {
 	  if(script == null || script == "") return ;
 	  try {
-		var HTMLUtil = eXo.core.HTMLUtil;
-		eval(HTMLUtil.entitiesDecode(script));
+		eval(xj("<div />").html(script).text());
 	    return;
 	  } catch(err) {
 	  }

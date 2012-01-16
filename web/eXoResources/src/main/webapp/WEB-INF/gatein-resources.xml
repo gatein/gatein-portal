@@ -208,14 +208,6 @@
    <scripts>
       <name>common</name>
       <module>
-         <name>eXo.core.html.HTMLEntities</name>
-         <path>/javascript/eXo/core/html/HTMLEntities.js</path>
-      </module>
-      <module>
-         <name>eXo.core.HTMLUtil</name>
-         <path>/javascript/eXo/core/HTMLUtil.js</path>
-      </module>
-      <module>
          <name>eXo.core.DragDrop</name>
          <path>/javascript/eXo/core/DragDrop.js</path>
       </module>
