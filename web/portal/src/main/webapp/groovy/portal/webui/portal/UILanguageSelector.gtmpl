@@ -2,9 +2,6 @@
 	def rcontext = _ctx.getRequestContext(); 
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector'); 
 	rcontext.getJavascriptManager().importJavascript('eXo.portal.UIPortal'); 
-	
-	String onMouseOver = "eXo.webui.UIItemSelector.onOver(this, true)";
-	String onMouseOut = "eXo.webui.UIItemSelector.onOver(this, false)";
 %>
 <div class="UIChangeLanguageForm">
 	<div class="UIFormTabPane">
@@ -56,9 +53,8 @@
 															rcontext.getJavascriptManager().addCustomizedOnLoadScript(setSelected);
 															itemSelected = "SelectedItem";
 														} 
-														String onclickOption = "eXo.webui.UIItemSelector.onClickOption(this, '$uicomponent.name', '$selector.name', '$opt.value')";
 												%>
-													<div class="$itemSelected" onclick="$onclickOption">
+													<div class="$itemSelected ClearFix" onclick="eXo.webui.UIItemSelector.onClickOption(this, '$uicomponent.name', '$selector.name', '$opt.value')">
 														<div class="Icon"><span></span></div>
 														<a class="NodeLabel"><%=opt.getLabel()%></a>
 														<div class="PercentLabel"><%=opt.getDescription()%></div>

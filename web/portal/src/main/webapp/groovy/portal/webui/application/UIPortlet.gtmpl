@@ -92,9 +92,8 @@
 								
 								List supportModes = uicomponent.getSupportModes();
 									if(uicomponent.getShowPortletMode() && supportModes.size() > 0) {
-										String showCategory = "eXo.webui.UIPopupSelectCategory.show(this, event);"
 								%>
-										<div class="ControlIcon ArrowDownIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.PortletMode");%>" onclick="$showCategory" style="position: relative;">
+										<div class="ControlIcon ArrowDownIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.PortletMode");%>" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="position: relative;">
 											<% /*Begin Popup Menu*/ %>
 												<div class="UIPopupCategory" style="display: none;">
 													<div class="PopupCategoryDecorator">

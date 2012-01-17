@@ -66,13 +66,12 @@
 									 				<%
 														if(modeState > 0){
 															String actionLink = uicomponent.event("EditContainer", "$uiChild.id") - "javascript:";
-															String showCategory = "eXo.webui.UIPopupSelectCategory.show(this, event);"
 															String moveLeftAction = uicomponent.event("MoveLeft", tabId);
 															String moveRightAction = uicomponent.event("MoveRight", tabId);
 													%>
 														<div class="MiddleTab ClearFix"> 
 											 				<div class="TabLabel FloatLeft" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this,'$id', '$tabId' );<%= selectTab %>"><%=title%></div>
-															<div class="EditIcon" onclick="$showCategory">
+															<div class="EditIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);">
 															   <div style="position: relative; width: 100%">
 															      <div class="UIPopupCategory" style="display: none;">
 															         <div class="PopupCategoryDecorator">

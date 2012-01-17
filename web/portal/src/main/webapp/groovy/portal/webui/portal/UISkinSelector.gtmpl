@@ -2,8 +2,8 @@
 	import org.exoplatform.webui.core.UIItemSelector; 
 	
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector'); 
-	rcontext.getJavascriptManager().importJavascript('eXo.portal.UIPortal'); 
+	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector');
+	rcontext.getJavascriptManager().importJavascript('eXo.portal.UIPortal');
 %>
 <div class="UIChangeSkinForm">
 	<div class="UIFormTabPane">
@@ -30,12 +30,10 @@
 					</div>
 				</div>
 			</div>	
-			
 			<div class="UIAction">
 				<a href="javascript:void(0);" onclick="javascript:eXo.portal.UIPortal.changeSkin('<%=uicomponent.url("Save");%>');" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeSkin.action.save");%></a>
 				<a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeSkin.action.close");%></a>
-			</div>
-						
+			</div>						
 		</div>	
 	</div>
 </div>

@@ -123,7 +123,15 @@
       </module>
    </scripts>
 
-   <!-- Base Javascripts for anonymous mode-->
+   <scripts>
+      <name>jquery</name>
+      <module>
+         <name>jquery</name>
+         <path>/javascript/exo-jquery-1.7.1.js</path>
+      </module>
+   </scripts>
+
+   <!-- Base Javascripts for anonymous mode -->
    <scripts>
       <name>base</name>
       <supported-locale>de</supported-locale>
@@ -173,10 +181,6 @@
          <path>/javascript/eXo/webui/UIPopup.js</path>
       </module>
       <module>
-         <name>eXo.webui.UIPopupMenu</name>
-         <path>/javascript/eXo/webui/UIPopupMenu.js</path>
-      </module>
-      <module>
          <name>eXo.webui.UIHorizontalTabs</name>
          <path>/javascript/eXo/webui/UIHorizontalTabs.js</path>
       </module>
@@ -222,16 +226,10 @@
          <path>/javascript/eXo/gadget/UIGadget.js</path>
       </module>
 
-      <!--
-      <module>
-         <name>eXo.core.Spliter</name>
-         <path>/javascript/eXo/core/Spliter.js</path>
-      </module>
-       -->
       <depends>
-        <scripts>base</scripts>
+         <scripts>base</scripts>
       </depends>
-   </scripts>      
+   </scripts>
 
    <!-- Portal Javascripts -->
    <scripts>
@@ -244,21 +242,11 @@
          <name>eXo.portal.PortalDragDrop</name>
          <path>/javascript/eXo/portal/PortalDragDrop.js</path>
       </module>
-      <!--
-      <module>
-         <name>eXo.core.Cometd</name>
-         <path>/javascript/eXo/core/Cometd.js</path>
-      </module>
-      <module>
-         <name>eXo.core.Topic</name>
-         <path>/javascript/eXo/core/Topic.js</path>
-      </module>
-      -->       
       <depends>
-        <scripts>common</scripts>
+         <scripts>common</scripts>
       </depends>
    </scripts>
-   
+
 
    <!-- WebUI Javascripts -->
    <scripts>
@@ -276,10 +264,10 @@
          <path>/javascript/eXo/webui/UIPopupWindow.js</path>
       </module>
       <depends>
-        <scripts>common</scripts>
+         <scripts>common</scripts>
       </depends>
    </scripts>
-   
+
    <scripts>
       <name>webui-ext</name>
       <module>
@@ -311,7 +299,7 @@
          <path>/javascript/eXo/webui/UICombobox.js</path>
       </module>
       <depends>
-        <scripts>common</scripts>
+         <scripts>common</scripts>
       </depends>
    </scripts>
 
@@ -322,93 +310,41 @@
          <path>/javascript/eXo/portal/ScrollManager.js</path>
       </module>
       <module>
+         <name>eXo.webui.UIPopupMenu</name>
+         <path>/javascript/eXo/webui/UIPopupMenu.js</path>
+      </module>
+      <module>
          <name>eXo.portal.UIPortalNavigation</name>
          <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
       </module>
       <depends>
-        <scripts>base</scripts>
+         <scripts>base</scripts>
       </depends>
    </scripts>
 
    <scripts>
-     <name>dashboard</name>
-     <module>
-       <name>eXo.webui.UIDashboard</name>
-       <path>/javascript/eXo/webui/UIDashboard.js</path>
-     </module>
-     <module>
-       <name>eXo.webui.UIDashboardUtil</name>
-       <path>/javascript/eXo/webui/UIDashboardUtil.js</path>
-     </module>
-     <depends>
-       <scripts>common</scripts>
-     </depends>
+      <name>dashboard</name>
+      <module>
+         <name>eXo.webui.UIDashboard</name>
+         <path>/javascript/eXo/webui/UIDashboard.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIDashboardUtil</name>
+         <path>/javascript/eXo/webui/UIDashboardUtil.js</path>
+      </module>
+      <depends>
+         <scripts>common</scripts>
+      </depends>
    </scripts>
 
    <scripts>
-     <name>tabbeddashboard</name>
-     <module>
-       <name>eXo.webui.UITabbedDashboard</name>
-       <path>/javascript/eXo/webui/UITabbedDashboard.js</path>
-     </module>
-     <depends>
-       <scripts>common</scripts>
-     </depends>
+      <name>tabbeddashboard</name>
+      <module>
+         <name>eXo.webui.UITabbedDashboard</name>
+         <path>/javascript/eXo/webui/UITabbedDashboard.js</path>
+      </module>
+      <depends>
+         <scripts>common</scripts>
+      </depends>
    </scripts>
-
-   <!-- Should be lazy loaded -->
-   <!-- 
-   <javascript>
-      <param>
-         <js-module>eXo.webui.UIDashboard</js-module>
-         <js-path>/javascript/eXo/webui/UIDashboard.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIDashboardUtil</js-module>
-         <js-path>/javascript/eXo/webui/UIDashboardUtil.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIUserSelector</js-module>
-         <js-path>/javascript/eXo/webui/UIUserSelector.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIVerticalSlideTabs</js-module>
-         <js-path>/javascript/eXo/webui/UIVerticalSlideTabs.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UINotification</js-module>
-         <js-path>/javascript/eXo/webui/UINotification.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-   </javascript>
-    -->
-
-   <!-- Portlet Application JScripts -->
-   <!-- 
-   <javascript>
-      <param>
-         <js-module>eXo.portal.UIPortalNavigation</js-module>
-         <js-path>/javascript/eXo/portal/UIPortalNavigation.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.UIAdminToolbar</js-module>
-         <js-path>/javascript/eXo/portal/UIAdminToolbar.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-   </javascript>
-    -->
-
-  <scripts>
-    <name>jquery</name>
-    <module>
-      <name>jquery</name>
-      <path>/javascript/exo-jquery-1.7.1.js</path>
-    </module>
-  </scripts>
-
 </gatein-resources>

@@ -71,14 +71,13 @@
 
 										<span class="DragControlArea" title="<%=_ctx.appRes("UIColumnContainer.title.DragControlArea")%>" onmousedown="eXo.portal.PortalDragDrop.init.call(this,event);"></span>
 										<% 
-											String showCategory = "eXo.webui.UIPopupSelectCategory.show(this, event)";
 											String strTitle = uicomponent.getTitle() != null ?
 														ExpressionUtil.getExpressionValue(res, uicomponent.getTitle()) :
 														_ctx.appRes("UIColumnContainer.title.Container");
 										%>
 										<div class="ContainerIcon"><%=hasPermission ? strTitle : _ctx.appRes("UIPortlet.label.protectedContent")%></div>
 										<%if(hasPermission) {%>
-											<div class="ControlIcon ArrowDownIcon" onclick="$showCategory" title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertColumn") %>">
+											<div class="ControlIcon ArrowDownIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertColumn") %>">
 												<% /*Begin Popup Menu*/ %>
 												<div style="position: relative; width: 100%">
 													<div class="UIPopupCategory" style="display: none;">

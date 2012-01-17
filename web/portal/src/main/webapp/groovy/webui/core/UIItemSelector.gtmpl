@@ -1,11 +1,6 @@
-<%import  org.exoplatform.webui.core.UIContainer;%>	
 <%
-  def rcontext = _ctx.getRequestContext(); 
-  rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector');
+  import  org.exoplatform.webui.core.UIContainer;
 
-	String onMouseOver = "eXo.webui.UIItemSelector.onOver(this, true)";
-	String onMouseOut = "eXo.webui.UIItemSelector.onOver(this, false)";
-		
 	categories = uicomponent.getItemCategories();
 	UIContainer uicontainer = uicomponent.getAncestorOfType(UIContainer.class);	
 %>
@@ -22,11 +17,10 @@
 				<%						
 					for(category in categories) {							
 						String itemSelected = "Item";
-						String onClick = "eXo.webui.UIItemSelector.onClickCategory(this, '$uicontainer.name', '$uicomponent.name', '$category.name')";
-																				
+
 						if (category.isSelected()) itemSelected = "SelectedItem Item";							
 				 %>
-						<div class="$itemSelected" onmouseover="$onMouseOver" onmouseout="$onMouseOut" onclick="$onClick">
+						<div class="$itemSelected" onmouseover="eXo.webui.UIItemSelector.onOver(this, true)" onmouseout="eXo.webui.UIItemSelector.onOver(this, false)" onclick="eXo.webui.UIItemSelector.onClickCategory(this, '$uicontainer.name', '$uicomponent.name', '$category.name')">
 							<div class="LeftItem">
 								<div class="RightItem">	
 								<%

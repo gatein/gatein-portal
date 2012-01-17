@@ -1,12 +1,6 @@
-<%  import  org.exoplatform.webui.form.UIForm; %>	
 <%
-  def rcontext = _ctx.getRequestContext(); 
-  rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector');
+  import  org.exoplatform.webui.form.UIForm;
 
-	String onMouseOver = "eXo.webui.UIItemSelector.onOver(this, true)";
-	String onMouseOut = "eXo.webui.UIItemSelector.onOver(this, false)";
-	String onClick = "eXo.webui.UIItemSelector.onClick(this)";
-	
 	options = uicomponent.getItemCategories();
 	UIForm form = uicomponent.getAncestorOfType(UIForm.class);	
 %>
@@ -28,7 +22,7 @@
 						String submitEvent = "eXo.webui.UIForm.submitEvent('$form.id','SelectItemOption', '')";
 						if (opt.isSelected()) itemSelected = "SelectedItem Item" ;
 				 %>
-						<div class="$itemSelected" onmouseover="$onMouseOver" onmouseout="$onMouseOut" onclick="$onClick;$setHiddenValue;$submitEvent">
+						<div class="$itemSelected" onmouseover="eXo.webui.UIItemSelector.onOver(this, true)" onmouseout="eXo.webui.UIItemSelector.onOver(this, false)" onclick="eXo.webui.UIItemSelector.onClick(this);$setHiddenValue;$submitEvent">
 							<div class="LeftItem">
 								<div class="RightItem">	
 									<div class="ItemTitle"><%=_ctx.appRes(opt.getName() + ".label")%></div>

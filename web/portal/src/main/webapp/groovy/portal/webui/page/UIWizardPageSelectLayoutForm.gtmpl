@@ -1,10 +1,8 @@
 <%	
 	import	org.exoplatform.webui.form.UIForm; 
 	import org.exoplatform.webui.core.UIDropDownControl;
-%>
-<% 
+
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPopupSelectCategory');
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector');
 
 	def categories = uicomponent.getItemCategories();
@@ -41,13 +39,10 @@
 							for(template in templates){
 								String itemSelected = "Item"; 
 								String setHiddenValue = "eXo.webui.UIForm.setHiddenValue('"+form.getName()+"', '"+uicomponent.getName()+"','"+template.getLabel()+"' )";
-								String onMouseOver = "eXo.webui.UIItemSelector.onOver(this, true, '"+template.getIcon()+"')";
-								String onMouseOut = "eXo.webui.UIItemSelector.onOver(this, false, '"+template.getIcon()+"')";
-								String onClick = "eXo.webui.UIItemSelector.onClick(this, '"+template.getIcon()+"')";
 								if(template.isSelected()) itemSelected = "SelectedItem Item"; 
 						%>
-								<div class="$itemSelected" onmouseover="$onMouseOver"
-										 onmouseout="$onMouseOut" onclick="$onClick;$setHiddenValue;">
+								<div class="$itemSelected" onmouseover="eXo.webui.UIItemSelector.onOver(this, true, '$template.icon')"
+										 onmouseout="eXo.webui.UIItemSelector.onOver(this, false, '$template.icon')" onclick="eXo.webui.UIItemSelector.onClick(this, '$template.icon');$setHiddenValue;">
 									<div class="LeftItem">
 										<div class="RightItem">	
 											<div class="ItemTitle"><%=_ctx.appRes("UIWizardPageSelectLayoutForm.label."+template.getLabel())%></div>

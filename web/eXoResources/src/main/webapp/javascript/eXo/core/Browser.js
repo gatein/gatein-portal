@@ -22,9 +22,6 @@ eXo.core.Mouse = {
 	  this.mousexInPage = null ;
 	  this.mouseyInPage = null ;
 
-	  this.lastMousexInPage = null ;
-	  this.lastMouseyInPage = null ;
-
 	  this.mousexInClient = null ;
 	  this.mouseyInClient = null ;
 
@@ -35,19 +32,15 @@ eXo.core.Mouse = {
 	  this.deltay = null ;
 	  if(mouseEvent != null) this.update(mouseEvent) ;
   },
+
   update : function(mouseEvent) {
 	  browser = eXo.core.Browser;
-	  var  x = browser.findMouseXInPage(mouseEvent) ;
-	  var  y = browser.findMouseYInPage(mouseEvent) ;
 
-	  this.lastMousexInPage =  this.mousexInPage != null ? this.mousexInPage : x ;
-	  this.lastMouseyInPage =  this.mouseyInPage != null ? this.mouseyInPage : y ;
+	  this.mousexInPage = browser.findMouseXInPage(mouseEvent);
+	  this.mouseyInPage = browser.findMouseYInPage(mouseEvent);
 
-	  this.mousexInPage = x ;
-	  this.mouseyInPage = y ;
-
-	  x  =  browser.findMouseXInClient(mouseEvent) ;
-	  y  =  browser.findMouseYInClient(mouseEvent) ;
+	  var x  =  browser.findMouseXInClient(mouseEvent) ;
+	  var y  =  browser.findMouseYInClient(mouseEvent) ;
 
 	  this.lastMousexInClient =  this.mousexInClient != null ? this.mousexInClient : x ;
 	  this.lastMouseyInClient =  this.mouseyInClient != null ? this.mouseyInClient : y ;
@@ -59,8 +52,6 @@ eXo.core.Mouse = {
 	  this.deltay = this.mouseyInClient - this.lastMouseyInClient ;
   }
 } ;
-
-eXo.core.Mouse.init(null);
 
 /************************************************************************************/
 /**
