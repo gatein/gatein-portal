@@ -19,11 +19,6 @@
 
 eXo.webui.UIDropDownControl = {
 
-  init : function(id) {
-    // var popup = document.getElementById(id) ;
-    // return popup;
-  },
-
   selectItem : function(method, id, selectedIndex) {
     if (method)
       method(id, selectedIndex);

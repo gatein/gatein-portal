@@ -69,8 +69,7 @@ public class UIFormInputIconSelector extends UIFormInputBase<String>
    {
       super(name, bindingField, String.class);
       setComponentConfig(UIFormInputIconSelector.class, null);
-      UIDropDownControl dropIconSet = addChild(UIDropDownControl.class, null, null);
-      dropIconSet.setAction("eXo.webui.UIDropDownControl.init");
+      addChild(UIDropDownControl.class, null, null);
       this.setValues(paramDefault);
       selectType = "page";
    }
