@@ -19,6 +19,8 @@
 
 eXo.webui.UIUpload = {
   listUpload : [],
+  
+  //This attribute should be persisted belong to particular upload component
   isAutoUpload : false,
   // this.listLimitMB = new Array();
   /**
@@ -40,7 +42,7 @@ eXo.webui.UIUpload = {
     } catch (err) {
       return;
     }
-    UIUpload.isAutoUpload = isAutoUpload;
+    this.isAutoUpload = isAutoUpload;
     if (response.upload[uploadId] == undefined
         || response.upload[uploadId].percent == undefined) {
       // eXo.webui.UIUpload.listLimitMB.push();
@@ -259,7 +261,7 @@ eXo.webui.UIUpload = {
     var uploadIframe = DOMUtil.findDescendantById(container, id
         + "UploadIframe");
     uploadIframe.style.display = "block";
-    eXo.webui.UIUpload.createUploadEntry(id, UIUpload.isAutoUpload);
+    eXo.webui.UIUpload.createUploadEntry(id, this.isAutoUpload);
     var progressIframe = DOMUtil.findDescendantById(container, id
         + "ProgressIframe");
     progressIframe.style.display = "none";
