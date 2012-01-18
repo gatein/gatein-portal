@@ -368,20 +368,6 @@ eXo.core.DOMUtil = {
 		return result ;
 	},
 
-	/* TODO: review this function: document.onclick */
-	/*
-	 * user for method eXo.webui.UIPopupSelectCategory.show();
-	 * reference file : UIPopupSelectCategory.js
-	 */
-	 /**
-	  * Hides the elements in the hideElementList array
-	  * This function is called when a click appear on the page,
-	  * and that all opened popup menu should be hidden
-	  */
-	hideElements : function() {
-		document.onclick = eXo.core.DOMUtil.cleanUpHiddenElements;
-	},
-
 	cleanUpHiddenElements : function() {
 	    var DOMUtil = eXo.core.DOMUtil;
 		var ln = DOMUtil.hideElementList.length ;
@@ -490,3 +476,5 @@ eXo.core.DOMUtil = {
 		el.onclick = new Function("return false;");
 	}
 };
+
+document.onclick = eXo.core.DOMUtil.cleanUpHiddenElements;

@@ -20,18 +20,6 @@
 eXo.webui.UIPopupSelectCategory = {
 
   /**
-   * Hide all hidden elements, it is used while showing UIPopupCategory
-   */
-  hide : function() {
-    var ln = eXo.core.DOMUtil.hideElementList.length;
-    if (ln > 0) {
-      for ( var i = 0; i < ln; i++) {
-        eXo.core.DOMUtil.hideElementList[i].style.display = "none";
-      }
-    }
-  },
-
-  /**
    * Show UIPopupCategory object
    * 
    * @param {Object}
@@ -49,7 +37,7 @@ eXo.webui.UIPopupSelectCategory = {
     if (!uiPopupCategory)
       return;
     if (uiPopupCategory.style.display == "none") {
-      eXo.webui.UIPopupSelectCategory.hide();
+      eXo.core.DOMUtil.cleanUpHiddenElements();
       uiPopupCategory.style.display = "block";
       eXo.core.DOMUtil.listHideElements(uiPopupCategory);
     } else
