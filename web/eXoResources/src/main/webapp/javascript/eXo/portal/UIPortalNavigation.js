@@ -23,7 +23,6 @@
 eXo.portal.UIPortalNavigation = {
   hideMenuTimeoutIds : new HashMap(),
   scrollMgr : null,
-  scrollManagerLoaded : false,
   
   /**
    * Sets some parameters :
@@ -34,6 +33,8 @@ eXo.portal.UIPortalNavigation = {
   init : function(popupMenu, container) {
     this.superClass = eXo.webui.UIPopupMenu;
     this.superClass.init(popupMenu, container);
+    //UIPopup.js will add onclick event that increase z-index
+    popupMenu.onmousedown = null;
     
     this.containerStyleClass = "MenuItemContainer";
     this.tabStyleClass = "MenuItem";
@@ -69,7 +70,6 @@ eXo.portal.UIPortalNavigation = {
     var DOMUtil = eXo.core.DOMUtil;
     var portalNav = eXo.portal.UIPortalNavigation;
     var topContainer = $(popupMenu);
-    topContainer.attr("id", "PortalNavigationTopContainer");
 
     // Top menu items
     topContainer.children(".UITab").each(function()
@@ -186,33 +186,33 @@ eXo.portal.UIPortalNavigation = {
     var offParent = menuItemContainer.offsetParent();
     var y = tab.height() + browser.findPosYInContainer(tab[0], offParent[0]);
     var x = browser.findPosXInContainer(tab[0], offParent[0]) + 2;
-        if(eXo.core.I18n.isRT()) {
-     x = browser.findPosXInContainer(tab[0], offParent[0], true);
-        }
+    if(eXo.core.I18n.isRT()) {
+    	x = browser.findPosXInContainer(tab[0], offParent[0], true);
+    }
     portalNav.superClass.setPosition(menuItemContainer[0], x, y, eXo.core.I18n.isRT());
     portalNav.superClass.show(menuItemContainer[0]);
         
     menuItemContainer.css("width", menuItemContainer.width() + "px");
 
-var posXinBrowser = menuItemContainer.offset().left;
-  			if(eXo.core.I18n.isLT()) {
-if(posXinBrowser + menuItemContainer.width() >= $(window).width()) {
-x += (tab.width() - menuItemContainer.width()) ;
-menuItemContainer.css("left", x + "px");
-  				}
-  			} else {
-if(posXinBrowser + tab.width() < menuItemContainer.width()) {
-x += (tab.width() - menuItemContainer.width()) ;
-menuItemContainer.css("right", x + "px");
-  				}
-  			}
+    var posXinBrowser = menuItemContainer.offset().left;
+  	if(eXo.core.I18n.isLT()) {
+		if(posXinBrowser + menuItemContainer.width() >= $(window).width()) {
+			x += (tab.width() - menuItemContainer.width()) ;
+			menuItemContainer.css("left", x + "px");
+		}
+  	} else {
+		if(posXinBrowser + tab.width() < menuItemContainer.width()) {
+			x += (tab.width() - menuItemContainer.width()) ;
+			menuItemContainer.css("right", x + "px");
+		}
+	}
   },
 
   cancelHideMenuContainer : function(containerId) {
-var timeout = eXo.portal.UIPortalNavigation.hideMenuTimeoutIds.remove(containerId);
-    if (timeout) {
-      window.clearTimeout(timeout) ;
-    }
+	  var timeout = eXo.portal.UIPortalNavigation.hideMenuTimeoutIds.remove(containerId);
+      if (timeout) {
+    	  window.clearTimeout(timeout) ;
+      }
   },
   
   /**
@@ -243,18 +243,18 @@ var timeout = eXo.portal.UIPortalNavigation.hideMenuTimeoutIds.remove(containerI
     
     var getNodeURL = menuItem.attr("exo:getNodeURL");
     var subContainer = menuItem.find("." + portalNav.containerStyleClass).first();
-    if (getNodeURL && !subContainer.length) {
-   var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);
-  	  try {
-   var data = jQuery.parseJSON(jsChilds);
-  	  } catch (e) {
-  	  }	
-  	  if (!data || !data.length) {
-   menuItem.removeClass("ArrowIcon");
-   menuItem.removeAttr("exo:getNodeURL");
-  		  return;
-  	  }
-   menuItem.append(portalNav.generateContainer(data));
+	    if (getNodeURL && !subContainer.length) {
+		    var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);
+		  	try {
+		  		var data = jQuery.parseJSON(jsChilds);
+		  	} catch (e) {
+	  	}	
+	  	if (!data || !data.length) {
+		   menuItem.removeClass("ArrowIcon");
+		   menuItem.removeAttr("exo:getNodeURL");
+	  	   return;
+	    }
+	  	menuItem.append(portalNav.generateContainer(data));
     }
       
     subContainer = menuItem.find("." + portalNav.containerStyleClass).first();
@@ -277,8 +277,8 @@ var timeout = eXo.portal.UIPortalNavigation.hideMenuTimeoutIds.remove(containerI
     this.superClass.show(menuItemContainer[0]);
     var posRight = $(window).width() - eXo.core.Browser.findPosX(menuItem[0], true) ;
     var rootX = (eXo.core.I18n.isLT() ? eXo.core.Browser.findPosX(menuItem[0]) : posRight) ;
-   if (x + menuItemContainer.width() + rootX > $(window).width()) {
-     x -= (menuItemContainer.width() + menuItem.width()) ;
+    if (x + menuItemContainer.width() + rootX > $(window).width()) {
+    	x -= (menuItemContainer.width() + menuItem.width()) ;
     }
     this.superClass.setPosition(menuItemContainer[0], x, y, eXo.core.I18n.isRT());
   },
@@ -300,61 +300,24 @@ var timeout = eXo.portal.UIPortalNavigation.hideMenuTimeoutIds.remove(containerI
     }
   },
   
-
   /***** Scroll Management *****/
   /**
    * Function called to load the scroll manager that will manage the tabs in the main nav menu
    *  . Creates the scroll manager
    *  . Adds the tabs to the scroll manager
-   *  . Configures the arrows
-   *  . Calls the initScroll function
    */
   loadScroll : function(portalNavId) {
     var uiNav = eXo.portal.UIPortalNavigation;
     var portalNav = $("#" + portalNavId);
-    if (portalNav.length) {
-      // Creates new ScrollManager and initializes it
-      uiNav.scrollMgr = new ScrollManager(portalNavId);
-      uiNav.scrollMgr.initFunction = uiNav.initScroll;
-      // Adds the tab elements to the manager
-      uiNav.scrollMgr.mainContainer = portalNav[0];
-      var arrowsContainer = portalNav.find(".ScrollButtons").first();
-      uiNav.scrollMgr.arrowsContainer = arrowsContainer[0];
-      uiNav.scrollMgr.loadElements("UITab");
-      // Configures the arrow buttons
-      var arrowButtons = arrowsContainer.find("a");
-      if (arrowButtons.length == 2) {
-        uiNav.scrollMgr.initArrowButton(arrowButtons[0], "left", "ScrollLeftButton", "HighlightScrollLeftButton", "DisableScrollLeftButton");
-        uiNav.scrollMgr.initArrowButton(arrowButtons[1], "right", "ScrollRightButton", "HighlightScrollRightButton", "DisableScrollRightButton");
-      }
-      // Finish initialization
-      uiNav.scrollMgr.callback = uiNav.scrollCallback;
-      uiNav.scrollManagerLoaded = true;
-      uiNav.initScroll();
-    }
-  },
-  
-  /**
-   * Init function for the scroll manager
-   *  . Calls the init function of the scroll manager
-   *  . Calculates the available space to render the tabs
-   *  . Renders the tabs
-   */
-  initScroll : function() {
-    var portalNav = eXo.portal.UIPortalNavigation;
-    if (!portalNav.scrollManagerLoaded) portalNav.loadScroll();
-    var scrollMgr = portalNav.scrollMgr;
-    scrollMgr.init();
-    // Gets the maximum width available for the tabs
-    scrollMgr.checkAvailableSpace();
-    scrollMgr.renderElements();
-  },
-
-  /**
-   * A callback function to call after a scroll event occurs (and the elements are rendered)
-   * Is empty so far.
-   */
-  scrollCallback : function() {
+    if (!portalNav.length) return;
+    
+    // Creates new ScrollManager and initializes it
+    uiNav.scrollMgr = new ScrollManager(portalNav[0]);       
+    uiNav.scrollMgr.loadElements("UITab");
+    
+    // Finish initialization
+    uiNav.scrollMgr.init();
+    uiNav.scrollMgr.renderElements();
   },
 
   generateContainer : function(data) {
@@ -362,18 +325,18 @@ var timeout = eXo.portal.UIPortalNavigation.hideMenuTimeoutIds.remove(containerI
    htmlFrags += eXo.core.DOMUtil.generateId("PortalNavigationContainer") + "' resized='false'>";
 
    for (var i = 0; i < data.length; i++) {
-   var node = data[i];
-   var actionLink = node.actionLink ? node.actionLink : "javascript:void(0);";
-
-   htmlFrags += ("<li class='MenuItem " + (node.hasChild ? "ArrowIcon " : "") + (node.isSelected ? "SelectedItem'" : "NormalItem'"));
-   htmlFrags += (node.hasChild ? (" exo:getNodeURL='" + node.getNodeURL + "' ") : "" );
-   htmlFrags += ("' title='" + node.label + "'>");
-   htmlFrags += ("<a class='ItemIcon " + (node.icon ? node.icon : "DefaultPageIcon") + "'" +
-   "href='" + actionLink + "'>" + (node.label.length > 40 ? node.label.substring(0,37) + "..." : node.label) + "</a>");
-   if (node.childs.length) {
-   htmlFrags += eXo.portal.UIPortalNavigation.generateContainer(node.childs);
-  }
-   htmlFrags += "</li>";
+	   var node = data[i];
+	   var actionLink = node.actionLink ? node.actionLink : "javascript:void(0);";
+	
+	   htmlFrags += ("<li class='MenuItem " + (node.hasChild ? "ArrowIcon " : "") + (node.isSelected ? "SelectedItem'" : "NormalItem'"));
+	   htmlFrags += (node.hasChild ? (" exo:getNodeURL='" + node.getNodeURL + "' ") : "" );
+	   htmlFrags += ("' title='" + node.label + "'>");
+	   htmlFrags += ("<a class='ItemIcon " + (node.icon ? node.icon : "DefaultPageIcon") + "'" +
+	   "href='" + actionLink + "'>" + (node.label.length > 40 ? node.label.substring(0,37) + "..." : node.label) + "</a>");
+	   if (node.childs.length) {
+		   htmlFrags += eXo.portal.UIPortalNavigation.generateContainer(node.childs);
+	   }
+	   htmlFrags += "</li>";
    }
    htmlFrags += "</ul>";
    return htmlFrags;
