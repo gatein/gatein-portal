@@ -23,13 +23,14 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.Param;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
+import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.config.annotation.ParamConfig;
 import org.exoplatform.webui.core.UIDropDownControl;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,10 +43,12 @@ import java.util.List;
  * 
  * Represents an icon selector
  */
-@ComponentConfig(template = "system:/groovy/webui/form/UIFormInputIconSelector.gtmpl", events = {
-   @EventConfig(listeners = UIFormInputIconSelector.ChangeOptionSetActionListener.class, phase = Phase.DECODE),
-   @EventConfig(listeners = UIFormInputIconSelector.ChangeIconCategoryActionListener.class, phase = Phase.DECODE),
-   @EventConfig(listeners = UIFormInputIconSelector.SelectIconActionListener.class, phase = Phase.DECODE)}, initParams = {@ParamConfig(name = "IconSet16x16", value = "app:/WEB-INF/conf/uiconf/webui/component/IconSet16x16.groovy")})
+@ComponentConfigs({
+   @ComponentConfig(template = "system:/groovy/webui/form/UIFormInputIconSelector.gtmpl", events = {
+      @EventConfig(listeners = UIFormInputIconSelector.ChangeOptionSetActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIFormInputIconSelector.ChangeIconCategoryActionListener.class, phase = Phase.DECODE),
+      @EventConfig(listeners = UIFormInputIconSelector.SelectIconActionListener.class, phase = Phase.DECODE)}, initParams = {@ParamConfig(name = "IconSet16x16", value = "app:/WEB-INF/conf/uiconf/webui/component/IconSet16x16.groovy")}),
+   @ComponentConfig(type = UIDropDownControl.class, id = "IconDropDown", template = "system:/groovy/webui/core/UIDropDownControl.gtmpl", events = {@EventConfig(listeners = UIFormInputIconSelector.SelectItemActionListener.class)})})
 public class UIFormInputIconSelector extends UIFormInputBase<String>
 {
 
@@ -69,7 +72,7 @@ public class UIFormInputIconSelector extends UIFormInputBase<String>
    {
       super(name, bindingField, String.class);
       setComponentConfig(UIFormInputIconSelector.class, null);
-      addChild(UIDropDownControl.class, null, null);
+      addChild(UIDropDownControl.class, "IconDropDown", null);
       this.setValues(paramDefault);
       selectType = "page";
    }
@@ -350,4 +353,13 @@ public class UIFormInputIconSelector extends UIFormInputBase<String>
 
    }
 
+   // Just for using UIDropDownControl correctly.
+   public static class SelectItemActionListener extends EventListener<UIDropDownControl>
+   {
+      public void execute(Event<UIDropDownControl> event) throws Exception
+      {
+         UIDropDownControl uiDropDown = event.getSource();
+         event.getRequestContext().addUIComponentToUpdateByAjax(uiDropDown);
+      }
+   }
 }
