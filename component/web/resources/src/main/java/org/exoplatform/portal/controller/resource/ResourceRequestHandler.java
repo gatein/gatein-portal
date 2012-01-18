@@ -21,9 +21,11 @@ package org.exoplatform.portal.controller.resource;
 
 import com.google.javascript.jscomp.CompilationLevel;
 import com.google.javascript.jscomp.CompilerOptions;
+import com.google.javascript.jscomp.JSError;
 import com.google.javascript.jscomp.JSSourceFile;
 import com.google.javascript.jscomp.LoggerErrorManager;
 import com.google.javascript.jscomp.Result;
+import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebRequestHandler;
@@ -42,6 +44,7 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.net.URL;
+import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -106,6 +109,9 @@ public class ResourceRequestHandler extends WebRequestHandler
    /** . */
    public static final QualifiedName COMPRESS_QN = QualifiedName.create("gtn", "compress");
 
+   /** . */
+   public static final QualifiedName LANG_QN = QualifiedName.create("gtn", "lang");
+
    @Override
    public String getHandlerName()
    {
@@ -122,6 +128,14 @@ public class ResourceRequestHandler extends WebRequestHandler
       String scopeParam = context.getParameter(SCOPE_QN);
       String moduleParam = context.getParameter(MODULE_QN);
       String compressParam = context.getParameter(COMPRESS_QN);
+      String lang = context.getParameter(LANG_QN);
+      
+      //
+      Locale locale = null;
+      if (lang != null && lang.length() > 0)
+      {
+         locale = I18N.parseTagIdentifier(lang);
+      }
 
       //
       if (scopeParam != null && resourceParam != null)
@@ -136,12 +150,12 @@ public class ResourceRequestHandler extends WebRequestHandler
             String sourceName;
             if (moduleParam != null)
             {
-               script = service.getScript(resource, moduleParam);
+               script = service.getScript(resource, moduleParam, locale);
                sourceName = resource.getScope() + "/" + resource.getName() + "/" + moduleParam  + ".js";
             }
             else
             {
-               script = service.getScript(resource);
+               script = service.getScript(resource, locale);
                sourceName = resource.getScope() + "/" + resource.getName() + ".js";
             }
 
@@ -172,7 +186,12 @@ public class ResourceRequestHandler extends WebRequestHandler
                   }
                   else
                   {
-                     throw new UnsupportedOperationException("handle me gracefuylly");
+                     StringBuilder msg = new StringBuilder("Handle me gracefuylly JS errors\n");
+                     for (JSError error : res.errors)
+                     {
+                        msg.append(error.sourceName).append(":").append(error.lineNumber).append(" ").append(error.description).append("\n");
+                     }
+                     throw new UnsupportedOperationException(msg.toString());
                   }
                }
                else

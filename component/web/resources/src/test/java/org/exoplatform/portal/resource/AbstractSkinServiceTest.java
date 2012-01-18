@@ -24,9 +24,12 @@ import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.component.test.web.ServletContextImpl;
+import org.exoplatform.component.test.web.WebAppImpl;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Collection;
 import java.util.Map;
@@ -61,8 +64,12 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
 
       if (setUpTestEnvironment())
       {
-         mockServletContext = new MockServletContext("mockwebapp", portalContainer.getPortalClassLoader());
-         skinService.registerContext(mockServletContext);
+         URL base = AbstractSkinServiceTest.class.getClassLoader().getResource("mockwebapp");
+         File f = new File(base.toURI());
+         assertTrue(f.exists());
+         assertTrue(f.isDirectory());
+         mockServletContext = new ServletContextImpl(f, "/mockwebapp", "mockwebapp");
+         skinService.registerContext(new WebAppImpl(mockServletContext, Thread.currentThread().getContextClassLoader()));
 
          resResolver = new MockResourceResolver();
          skinService.addResourceResolver(resResolver);

@@ -200,4 +200,36 @@ public class I18N
          throw new IllegalArgumentException("Locale " + s + " cannot be parsed");
       }
    }
+
+   /**
+    * Returns the parent locale of a locale or null when it does not have one.
+    *
+    * @param locale the locale
+    * @return the parent locale
+    * @throws NullPointerException if the specified locale is null
+    */
+   public static Locale getParent(Locale locale) throws NullPointerException
+   {
+      if (locale == null)
+      {
+         throw new NullPointerException("No null locale accepted");
+      }
+      
+      //
+      if (locale.getVariant() != null && locale.getVariant().length() > 0)
+      {
+         return new Locale(locale.getLanguage(), locale.getCountry());
+      }
+      else
+      {
+         if (locale.getCountry() != null && locale.getCountry().length() > 0)
+         {
+            return new Locale(locale.getLanguage());
+         }
+         else
+         {
+            return null;
+         }
+      }
+   }
 }

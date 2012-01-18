@@ -33,13 +33,13 @@ import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.controller.router.URIWriter;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.wci.WebApp;
 import org.gatein.wci.WebAppListener;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.picocontainer.Startable;
 
+import javax.servlet.ServletContext;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -48,9 +48,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
-
-import javax.servlet.ServletContext;
 
 public class JavascriptConfigService extends AbstractResourceService implements Startable
 {
@@ -199,20 +198,20 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       }
    }
    
-   public Reader getScript(ResourceId id, String name)
+   public Reader getScript(ResourceId id, String name, Locale locale)
    {
       ScriptResource script = getResource(id);
       if (script != null && !"merged".equals(name))
       {
-         return getJavascript(script, name);
+         return getJavascript(script, name, locale);
       }
       else
       {
-         return getScript(id);
+         return getScript(id, locale);
       }
    }
 
-   public Reader getScript(ResourceId resourceId)
+   public Reader getScript(ResourceId resourceId, Locale locale)
    {
       ScriptResource resource = getResource(resourceId);
       if (resource != null)
@@ -224,7 +223,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          {
             if (!js.isRemote())
             {
-               Reader jScript = getJavascript(resource, js.getName());
+               Reader jScript = getJavascript(resource, js.getName(), locale);
                if (jScript != null)
                {
                   readers.add(new StringReader("// Begin " + js.getName() + "\n"));
@@ -242,7 +241,8 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       ControllerContext controllerContext,
       Collection<ResourceId> ids,
       boolean merge,
-      boolean minified) throws IOException
+      boolean minified,
+      Locale locale) throws IOException
    {
       Map<String, FetchMode> urls = new LinkedHashMap<String, FetchMode>();
       StringBuilder buffer = new StringBuilder();
@@ -259,7 +259,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          //
          if (!resource.isEmpty())
          {
-            controllerContext.renderURL(resource.getParameters(minified), writer);
+            controllerContext.renderURL(resource.getParameters(minified, locale), writer);
             urls.put(buffer.toString(), entry.getValue());
             buffer.setLength(0);
             writer.reset(buffer);
@@ -391,21 +391,18 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    {
       DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(deployer);
    }
-
-   private Reader getJavascript(ScriptResource resource, String moduleName)
+   
+   private Reader getJavascript(ScriptResource resource, String moduleName, Locale locale)
    {
       Module module = resource.getModule(moduleName);
       if (module instanceof Module.Local)
       {
-         Module.Local local = (Module.Local)module;
-         ServletContext servletContext = contexts.get(local.getContextPath());
-         if (servletContext != null)
+         Module.Local localModule = (Module.Local)module;
+         final WebApp webApp = contexts.get(localModule.getContextPath());
+         if (webApp != null)
          {
-            InputStream in = servletContext.getResourceAsStream(local.getPath());
-            if (in != null)
-            {
-               return new InputStreamReader(in);
-            }
+            ServletContext sc = webApp.getServletContext();
+            return localModule.read(locale, sc, webApp.getClassLoader());
          }
       }
       return null;

@@ -40,5 +40,23 @@ eXo.i18n.I18NMessage = {
       }
     }
     return msg;
-  }
+  },
+
+  SessionTimeout : "${SessionTimeout}",
+  TargetBlockNotFound : "${TargetBlockNotFound}",
+  BlockUpdateNotFound : "${BlockUpdateNotFound}",
+  DefaultTheme : "${DefaultTheme}",
+  PreviousMonth : "${PreviousMonth}",
+  NextMonth : "${NextMonth}",
+  PreviousYear : "${PreviousYear}",
+  NextYear : "${NextYear}",
+  weekdays : [
+      "${weekdays.sun}",
+      "${weekdays.mon}",
+      "${weekdays.tue}",
+      "${weekdays.wed}",
+      "${weekdays.thu}",
+      "${weekdays.fri}",
+      "${weekdays.sat}"
+  ]
 }

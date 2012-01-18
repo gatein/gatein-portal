@@ -18,6 +18,7 @@
  */
 package org.exoplatform.portal.resource;
 
+import org.exoplatform.component.test.web.WebAppImpl;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.test.mocks.servlet.MockServletContext;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
@@ -60,7 +61,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
          resources.put("/js/test3.js", "ccc;");
          resources.put("/js/test4.js", "ddd;");
          mockServletContext = new MockJSServletContext("mockwebapp", resources);
-         jsService.registerContext(mockServletContext);
+         jsService.registerContext(new WebAppImpl(mockServletContext, Thread.currentThread().getContextClassLoader()));
 
          resResolver = new MockResourceResolver();
          jsService.addResourceResolver(resResolver);

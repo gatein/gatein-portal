@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.controller.resource.script;
 
+import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.portal.controller.resource.Resource;
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceRequestHandler;
@@ -30,6 +31,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -55,7 +57,13 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    private final Map<QualifiedName, String> parameters;
 
    /** . */
-   private final Map<QualifiedName, String> minifiedParameters;
+   private final Map<Locale, Map<QualifiedName, String>> parametersMap;
+
+   /** . */
+   private final Map<QualifiedName, String> minParameters;
+
+   /** . */
+   private final  Map<Locale, Map<QualifiedName, String>> minParametersMap;
 
    /** . */
    final HashSet<ResourceId> dependencies;
@@ -77,6 +85,7 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       parameters.put(ResourceRequestHandler.SCOPE_QN, id.getScope().name());
       parameters.put(ResourceRequestHandler.COMPRESS_QN, "");
       parameters.put(ResourceRequestHandler.VERSION_QN, ResourceRequestHandler.VERSION);
+      parameters.put(ResourceRequestHandler.LANG_QN, "");
 
       //
       Map<QualifiedName, String> minifiedParameters = new HashMap<QualifiedName, String>(parameters);
@@ -84,12 +93,14 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
 
       //
       this.parameters = parameters;
-      this.minifiedParameters = minifiedParameters;
+      this.minParameters = minifiedParameters;
       this.graph = graph;
       this.modules = new ArrayList<Module>();
       this.closure = new HashSet<ResourceId>();
       this.dependencies = new HashSet<ResourceId>();
       this.fetchMode = fetchMode;
+      this.parametersMap = new HashMap<Locale, Map<QualifiedName, String>>();
+      this.minParametersMap = new HashMap<Locale, Map<QualifiedName, String>>();
    }
 
    public boolean isEmpty()
@@ -102,9 +113,18 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       return fetchMode;
    }
 
-   public Map<QualifiedName, String> getParameters(boolean minified)
+   public Map<QualifiedName, String> getParameters(boolean minified, Locale locale)
    {
-      return minified ? minifiedParameters : parameters;
+      Map<Locale, Map<QualifiedName, String>> map = minified ? minParametersMap : parametersMap;
+      for (Locale current = locale;current != null;current = I18N.getParent(current))
+      {
+         Map<QualifiedName, String> ret = map.get(locale);
+         if (ret != null)
+         {
+            return ret;
+         }
+      }
+      return minified ? minParameters : parameters;
    }
 
    public void addDependency(ResourceId dependencyId)
@@ -147,16 +167,16 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       return closure;
    }
 
-   public Module addLocalModule(String contextPath, String name, String path, int priority)
+   public Module.Local addLocalModule(String contextPath, String name, String path, String resourceBundle, int priority)
    {
-      Module module = new Module.Local(this, contextPath, name, path, priority);
+      Module.Local module = new Module.Local(this, contextPath, name, path, resourceBundle, priority);
       modules.add(module);
       return module;
    }
 
-   public Module addRemoteModule(String contextPath, String name, String path, int priority)
+   public Module.Remote addRemoteModule(String contextPath, String name, String path, int priority)
    {
-      Module module = new Module.Remote(this, contextPath, name, path, priority);
+      Module.Remote module = new Module.Remote(this, contextPath, name, path, priority);
       modules.add(module);
       return module;
    }
@@ -231,6 +251,19 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       else
       {
          return 0;
+      }
+   }
+   
+   public void addSupportedLocale(Locale locale)
+   {
+      if (!parametersMap.containsKey(locale))
+      {
+         Map<QualifiedName, String> localizedParameters = new HashMap<QualifiedName, String>(parameters);
+         localizedParameters.put(ResourceRequestHandler.LANG_QN, I18N.toTagIdentifier(locale));
+         parametersMap.put(locale, localizedParameters);
+         Map<QualifiedName, String> localizedMinParameters = new HashMap<QualifiedName, String>(minParameters);
+         localizedMinParameters.put(ResourceRequestHandler.LANG_QN, I18N.toTagIdentifier(locale));
+         minParametersMap.put(locale, localizedMinParameters);
       }
    }
 

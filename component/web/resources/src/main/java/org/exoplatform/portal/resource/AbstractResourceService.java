@@ -21,8 +21,8 @@ package org.exoplatform.portal.resource;
 
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
+import org.gatein.wci.WebApp;
 
-import javax.servlet.ServletContext;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,49 +35,42 @@ import java.util.Map;
  */
 public abstract class AbstractResourceService
 {
+
+   /** . */
    protected final MainResourceResolver mainResolver;
 
+   /** . */
    protected final ResourceCompressor compressor;
-   
-   protected final Map<String, ServletContext> contexts;
+
+   /** . */
+   protected final Map<String, WebApp> contexts;
    
    public AbstractResourceService(ResourceCompressor compressor)
    {
       this.compressor = compressor;
       this.mainResolver = new MainResourceResolver();
-      this.contexts = new HashMap<String, ServletContext>();
+      this.contexts = new HashMap<String, WebApp>();
    }
 
    /**
     * Add a resource resolver to plug external resolvers.
     * 
-    * @param resolver
-    *           a resolver to add
+    * @param resolver a resolver to add
     */
    public void addResourceResolver(ResourceResolver resolver)
    {
       mainResolver.resolvers.addIfAbsent(resolver);
    }
 
-   /**
-    * Registry ServletContext into MainResourceResolver of SkinService
-    * @param sContext
-    *          ServletContext will be registried
-    */
-   public void registerContext(ServletContext sContext)
+   public void registerContext(WebApp app)
    {
-      mainResolver.registerContext(sContext);
-      contexts.put(sContext.getContextPath(), sContext);
+      mainResolver.registerContext(app.getServletContext());
+      contexts.put(app.getContextPath(), app);
    }
    
-   /**
-    * unregister a {@link ServletContext} into {@link MainResourceResolver} of {@link SkinService} 
-    * 
-    * @param servletContext ServletContext will unregistered
-    */
-   public void unregisterServletContext(ServletContext servletContext)
+   public void unregisterServletContext(WebApp app)
    {
-      mainResolver.removeServletContext(servletContext);
-      contexts.remove(servletContext.getContextPath());
+      mainResolver.removeServletContext(app.getServletContext());
+      contexts.remove(app.getContextPath());
    }
 }

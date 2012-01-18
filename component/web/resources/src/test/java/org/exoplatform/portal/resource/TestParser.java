@@ -24,12 +24,14 @@ import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
 import org.exoplatform.portal.controller.resource.script.FetchMode;
 import org.exoplatform.web.application.javascript.DependencyDescriptor;
+import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.ScriptResourceDescriptor;
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -123,5 +125,54 @@ public class TestParser extends AbstractGateInTest
       ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.PORTAL, "foo"), desc.getId());
       assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar")), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"))), desc.getDependencies());
+   }
+   
+   public void testResourceBundle() throws Exception
+   {
+      String config = "" +
+         "<gatein-resources>" +
+         "<portal>" +
+         "<name>foo</name>" +
+         "<scripts>" +
+         "<module>" +
+         "<name>foo_module</name>" +
+         "<path>/foo_module.js</path>" +
+         "<resource-bundle>my_bundle</resource-bundle>" +
+         "</module>" +
+         "</scripts>" +
+         "</portal>" +
+         "</gatein-resources>";
+
+      //
+      JavascriptConfigParser parser = new JavascriptConfigParser("/mypath");
+      List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
+      assertEquals(1, scripts.size());
+      ScriptResourceDescriptor desc = scripts.get(0);
+      assertEquals(new ResourceId(ResourceScope.PORTAL, "foo"), desc.getId());
+      assertEquals(1, desc.getModules().size());
+      Javascript.Local js = (Javascript.Local) desc.getModules().get(0);
+      assertEquals("my_bundle", js.getResourceBundle());
+   }
+   
+   public void testSupportedLocales() throws Exception
+   {
+      String config = "" +
+         "<gatein-resources>" +
+         "<portal>" +
+         "<name>foo</name>" +
+         "<scripts>" +
+         "<supported-locale>EN</supported-locale>" +
+         "<supported-locale>FR-fr</supported-locale>" +
+         "</scripts>" +
+         "</portal>" +
+         "</gatein-resources>";
+
+      //
+      JavascriptConfigParser parser = new JavascriptConfigParser("/mypath");
+      List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
+      assertEquals(1, scripts.size());
+      ScriptResourceDescriptor desc = scripts.get(0);
+      List<Locale> locales = desc.getSupportedLocales();
+      assertEquals(Arrays.asList(Locale.ENGLISH, Locale.FRANCE), locales);
    }
 }

@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.resource;
+package org.exoplatform.portal.controller.resource.script;
 
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.controller.resource.ResourceId;

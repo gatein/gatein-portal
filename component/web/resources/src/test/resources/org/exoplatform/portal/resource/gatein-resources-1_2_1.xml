@@ -25,9 +25,12 @@
 
   <scripts>
     <name>zefzef</name>
+    <supported-locale>EN</supported-locale>
+    <supported-locale>FR</supported-locale>
     <module>
       <name>foo</name>
       <path>/foo.js</path>
+      <resource-bundle>zefzfeze</resource-bundle>
     </module>
     <depends>
       <scripts>bar</scripts>
@@ -40,6 +43,7 @@
   <portlet>
     <name>zfze</name>
     <scripts>
+      <supported-locale>EN</supported-locale>
       <module>
         <name>zezef</name>
         <uri>zefzf</uri>

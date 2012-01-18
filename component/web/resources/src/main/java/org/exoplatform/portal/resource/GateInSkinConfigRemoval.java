@@ -23,6 +23,7 @@ import java.util.Set;
 
 import javax.servlet.ServletContext;
 
+import org.gatein.wci.WebApp;
 import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
 import org.gatein.wci.WebAppListener;
@@ -42,7 +43,6 @@ public class GateInSkinConfigRemoval implements WebAppListener
       this.service = _service;
    }
 
-   @Override
    public void onEvent(WebAppEvent event)
    {
       // TODO Auto-generated method stub
@@ -53,7 +53,7 @@ public class GateInSkinConfigRemoval implements WebAppListener
          {
             String webApp = event.getWebApp().getServletContext().getContextPath();
             removeWebAppSkin(webApp);
-            removeContextAppSkin(event.getWebApp().getServletContext());
+            removeContextAppSkin(event.getWebApp());
          }
       }
    }
@@ -75,9 +75,9 @@ public class GateInSkinConfigRemoval implements WebAppListener
       }
    }
 
-   private void removeContextAppSkin(ServletContext servletContext)
+   private void removeContextAppSkin(WebApp webApp)
    {
-      service.unregisterServletContext(servletContext);
+      service.unregisterServletContext(webApp);
    }
 
    private void removePortalSkins(String webApp) throws Exception

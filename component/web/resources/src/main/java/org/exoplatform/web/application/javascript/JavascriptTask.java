@@ -22,6 +22,7 @@ import org.exoplatform.portal.controller.resource.script.ScriptResource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.ServletContext;
 
@@ -48,6 +49,10 @@ public class JavascriptTask
          for (Javascript module : desc.modules)
          {
             module.addModuleTo(resource);
+         }
+         for (Locale locale : desc.getSupportedLocales())
+         {
+            resource.addSupportedLocale(locale);
          }
          for (DependencyDescriptor dependency : desc.dependencies)
          {

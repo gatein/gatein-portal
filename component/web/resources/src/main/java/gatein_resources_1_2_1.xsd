@@ -126,6 +126,7 @@
   <xs:complexType name="scripts">
     <xs:sequence>
       <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="module" type="module" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="depends" type="dependency" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
@@ -138,6 +139,7 @@
         <xs:complexType>
           <xs:sequence>
             <xs:element name="mode" type="fetchMode" minOccurs="0" maxOccurs="1" default="document"/>
+            <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="module" type="module" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="depends" type="dependency" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
@@ -168,8 +170,13 @@
     <xs:sequence>
       <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:choice minOccurs="1" maxOccurs="1">
-        <xs:element name="path" type="xs:string" minOccurs="1" maxOccurs="1"/>
-        <xs:element name="uri" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <xs:sequence>
+          <xs:element name="path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+          <xs:element name="resource-bundle" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:sequence>
+          <xs:element name="uri" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        </xs:sequence>
       </xs:choice>
     </xs:sequence>
   </xs:complexType>

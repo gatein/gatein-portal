@@ -126,6 +126,8 @@
    <!-- Base Javascripts for anonymous mode-->
    <scripts>
       <name>base</name>
+      <supported-locale>en</supported-locale>
+      <supported-locale>fr</supported-locale>
       <module>
          <name>eXo.core.Utils</name>
          <path>/javascript/eXo/core/Util.js</path>
@@ -183,6 +185,12 @@
       <module>
          <name>eXo.portal.UIMaskWorkspace</name>
          <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
+      </module>
+
+      <module>
+        <name>eXo.i18n.I18NMessage</name>
+        <path>/javascript/eXo/i18n/I18NMessage.js</path>
+        <resource-bundle>eXo.portal</resource-bundle>
       </module>
    </scripts>
 

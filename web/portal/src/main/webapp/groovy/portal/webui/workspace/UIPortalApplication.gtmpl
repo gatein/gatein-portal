@@ -83,8 +83,6 @@
 			eXo.session.isOpen = <%=uicomponent.isSessionOpen()%> ;
 			eXo.session.itvTime = ${((PortalRequestContext)rcontext).getRequest().getSession().getMaxInactiveInterval()} ;
 		</script>
-		<script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/I18NMessage.js"></script>
-		<script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/MessageResource_<%=lang%>.js"></script>
       <%
 		 def headerElements = rcontext.getExtraMarkupHeadersAsStrings();
 		 if (headerElements != null) 

@@ -24,6 +24,7 @@ import org.exoplatform.portal.controller.resource.script.FetchMode;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -33,6 +34,9 @@ public class ScriptResourceDescriptor
 
    /** . */
    final ResourceId id;
+
+   /** . */
+   final List<Locale> supportedLocales;
    
    /** . */
    final List<Javascript> modules;
@@ -48,12 +52,23 @@ public class ScriptResourceDescriptor
       this.id = id;
       this.modules = new ArrayList<Javascript>();
       this.dependencies = new ArrayList<DependencyDescriptor>();
+      this.supportedLocales = new ArrayList<Locale>();
       this.fetchMode = fetchMode;
    }
 
    public ResourceId getId()
    {
       return id;
+   }
+
+   public List<Locale> getSupportedLocales()
+   {
+      return supportedLocales;
+   }
+
+   public List<Javascript> getModules()
+   {
+      return modules;
    }
 
    public List<DependencyDescriptor> getDependencies()

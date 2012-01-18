@@ -18,6 +18,7 @@
  */
 package org.exoplatform.web.application.javascript;
 
+import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
 import org.exoplatform.portal.controller.resource.script.FetchMode;
@@ -32,6 +33,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
@@ -251,11 +253,32 @@ public class JavascriptConfigParser
    
    private void parseDesc(Element element, ScriptResourceDescriptor desc)
    {
+      for (Element localeElt : XMLTools.getChildren(element, "supported-locale"))
+      {
+         String localeValue = XMLTools.asString(localeElt);
+         Locale locale = I18N.parseTagIdentifier(localeValue);
+         desc.supportedLocales.add(locale);
+      }
       for (Element moduleElt : XMLTools.getChildren(element, "module"))
       {
          String moduleName = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "name", true));
-         String modulePath = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "path", true));
-         Javascript script = Javascript.create(desc.id, moduleName, modulePath, contextPath, 0);
+         Javascript script;
+         String modulePath = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "path", false));
+         if (modulePath != null)
+         {
+            String resourceBundle = null;
+            Element bundleElt = XMLTools.getUniqueChild(moduleElt, "resource-bundle", false);
+            if (bundleElt != null)
+            {
+               resourceBundle = XMLTools.asString(bundleElt);
+            }
+            script = new Javascript.Local(desc.id, moduleName, contextPath, modulePath, resourceBundle, 0);
+         }
+         else
+         {
+            String moduleURI = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "uri", true));
+            script = new Javascript.Remote(desc.id, moduleName, contextPath, moduleURI, 0);
+         }
          desc.modules.add(script);
       }
       for (Element moduleElt : XMLTools.getChildren(element, "depends"))

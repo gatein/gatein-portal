@@ -25,6 +25,16 @@ package org.exoplatform.portal.controller.resource;
 public enum ResourceScope
 {
 
-   SHARED, PORTAL, PORTLET
+   SHARED, PORTAL, PORTLET ;
 
+   /**
+    * Returns a new <code>ResourceId</code> scoped with this enum instance.
+    *
+    * @param name the name to wrap
+    * @return a new resource id
+    */
+   public ResourceId create(String name)
+   {
+      return new ResourceId(this, name);
+   }
 }

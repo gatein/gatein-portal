@@ -19,18 +19,42 @@
 
 package org.exoplatform.portal.controller.resource.script;
 
+import org.exoplatform.commons.utils.PropertyResolverReader;
 import org.exoplatform.portal.controller.resource.ResourceRequestHandler;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
+import javax.servlet.ServletContext;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public abstract class Module
 {
+
+   /** Our logger. */
+   private static final Logger log = LoggerFactory.getLogger(Module.class);
+
+   /** . */
+   public static final ResourceBundle.Control CONTROL =  new ResourceBundle.Control()
+   {
+      @Override
+      public Locale getFallbackLocale(String baseName, Locale locale)
+      {
+         return locale.equals(Locale.ENGLISH) ? null : Locale.ENGLISH;
+      }
+   };
 
    /** . */
    protected ScriptResource resource;
@@ -86,9 +110,12 @@ public abstract class Module
       private final String path;
 
       /** . */
+      private final String resourceBundle;
+
+      /** . */
       private final Map<QualifiedName, String> parameters;
 
-      Local(ScriptResource resource, String contextPath, String name, String path, int priority)
+      Local(ScriptResource resource, String contextPath, String name, String path, String resourceBundle, int priority)
       {
          super(resource, contextPath, name, priority);
 
@@ -102,11 +129,17 @@ public abstract class Module
          //
          this.path = path;
          this.parameters = parameters;
+         this.resourceBundle = resourceBundle;
       }
 
       public String getPath()
       {
          return path;
+      }
+
+      public String getResourceBundle()
+      {
+         return resourceBundle;
       }
 
       public Map<QualifiedName, String> getParameters()
@@ -124,6 +157,57 @@ public abstract class Module
       public String getURI()
       {
          return contextPath + path;
+      }
+
+      /**
+       *
+       * @param locale the desired locale, if null, <code>Locale.ENGLISH</code> will be used
+       * @param scriptLoader the script loader
+       * @param bundleLoader the bundle loader
+       * @return a reader for the resource or null if the resource cannot be resolved
+       */
+      public Reader read(Locale locale, ServletContext scriptLoader, ClassLoader bundleLoader)
+      {
+         InputStream in = scriptLoader.getResourceAsStream(path);
+         if (in != null)
+         {
+            Reader reader = new InputStreamReader(in);
+            if (resourceBundle != null)
+            {
+               if (locale == null)
+               {
+                  locale = Locale.ENGLISH;
+               }
+
+               //
+               log.debug("About to load a bundle for locale " + locale + " and bundle " + resourceBundle);
+               final ResourceBundle bundle = ResourceBundle.getBundle(resourceBundle, locale, bundleLoader, CONTROL);
+               if (bundle != null)
+               {
+                  log.debug("Found bundle " + bundle + " for locale " + locale + " and bundle " + resourceBundle);
+                  reader = new PropertyResolverReader(reader)
+                  {
+                     @Override
+                     protected String resolve(String name) throws IOException
+                     {
+                        try
+                        {
+                           String val = bundle.getString(name);
+                           return escapeJavascriptStringLiteral(val);
+                        }
+                        catch (MissingResourceException e)
+                        {
+                           // Need to use logging
+                           log.debug("Could not resolve property " + name + " when filtering JS");
+                           return "";
+                        }
+                     }
+                  };
+               }
+            }
+            return reader;
+         }
+         return null;
       }
    }
 
@@ -149,5 +233,34 @@ public abstract class Module
    public int getPriority()
    {
       return priority;
+   }
+
+   /**
+    * Escape simple and double quotes chars.
+    *
+    * @param s the string to escape
+    * @return the escaped string
+    */
+   private static String escapeJavascriptStringLiteral(String s)
+   {
+      StringBuilder sb = new StringBuilder(s.length());
+      for (int i = 0;i < s.length();i++)
+      {
+         char c = s.charAt(i);
+         if (c == '"')
+         {
+            sb.append("\\\"");
+         }
+         else if (c == '\'')
+         {
+            sb.append("\\\'");
+         }
+         else
+         {
+            sb.append(c);
+         }
+      }
+      return sb.toString();
+
    }
 }

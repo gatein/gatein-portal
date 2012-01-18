@@ -24,6 +24,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer.PortalContainerPostInitTask;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.gatein.wci.WebApp;
 import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
 import org.gatein.wci.WebAppListener;
@@ -72,20 +73,20 @@ public class JavascriptConfigDeployer implements WebAppListener
          switch (lifeCycleEvent.getType())
          {
             case WebAppLifeCycleEvent.ADDED:
-               add(servletContext);
+               add(event.getWebApp());
                break;
             case WebAppLifeCycleEvent.REMOVED:
-               remove(servletContext);
+               remove(event.getWebApp());
                break;
          }
       }
    }
    
-   private void add(ServletContext scontext)
+   private void add(final WebApp webApp)
    {
       try
       {
-         InputStream is = scontext.getResourceAsStream(GATEIN_CONFIG_RESOURCE);
+         InputStream is = webApp.getServletContext().getResourceAsStream(GATEIN_CONFIG_RESOURCE);
          if (is == null)
          {
             return;
@@ -99,21 +100,21 @@ public class JavascriptConfigDeployer implements WebAppListener
             public void execute(ServletContext scontext, PortalContainer portalContainer)
             {
                register(scontext, portalContainer);
-               javascriptService.registerContext(scontext);
+               javascriptService.registerContext(webApp);
             }
          };
-         PortalContainer.addInitTask(scontext, task, portalContainerName);
+         PortalContainer.addInitTask(webApp.getServletContext(), task, portalContainerName);
       }
       catch (Exception ex)
       {
          LOG.error("An error occurs while registering 'Javascript in gatein-resources.xml' from the context '"
-            + (scontext == null ? "unknown" : scontext.getServletContextName()) + "'", ex);
+            + (webApp.getServletContext() == null ? "unknown" : webApp.getServletContext().getServletContextName()) + "'", ex);
       }
    }
    
-   private void remove(ServletContext scontext)
+   private void remove(WebApp webApp)
    {
-      javascriptService.unregisterServletContext(scontext);
+      javascriptService.unregisterServletContext(webApp);
    }
 
    private void register(ServletContext scontext, PortalContainer container)
