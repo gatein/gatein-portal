@@ -32,41 +32,5 @@ eXo.core.Skin = {
 	  link.setAttribute('href', url) ;
 	  var head = document.getElementsByTagName("head")[0] ;
 	  head.appendChild(link) ;
-	},
-	
-	/**
-	 * Add skin css file to the page and assign them to core skin document objects
-	 * @param {String} componentId
-	 * @param {String} url Url to css skin file in respository
-	 */
-	addCoreSkin : function(componentId, url) {
-	  if(document.getElementById(componentId) == null) {
-	    var coreSkin = document.getElementById("CoreSkin") ;
-	    var  head = coreSkin.parentNode ;
-	    var  link = document.createElement('link') ;
-	    link.setAttribute('id', componentId) ;
-	    link.setAttribute('rel', 'stylesheet') ;
-	    link.setAttribute('type', 'text/css') ;
-	    link.setAttribute('href', url) ;
-	    head.insertBefore(link, coreSkin) ;
-	  }
-	},
-	
-	/**
-	 * Add skin css file to the page and assign them to portal skin document objects
-	 * @param {String} componentId
-	 * @param {String} url Url to css skin file in respository
-	 */
-	addApplicationSkin : function(componentId, url) {
-	  if(document.getElementById(componentId) == null) { 
-	    var coreSkin = document.getElementById("PortalSkin") ;
-	    var  head = coreSkin.parentNode ;
-	    var  link = document.createElement('link') ;
-	    link.setAttribute('id', componentId) ;
-	    link.setAttribute('rel', 'stylesheet') ;
-	    link.setAttribute('type', 'text/css') ;
-	    link.setAttribute('href', url) ;
-	    head.insertBefore(link,  coreSkin) ;
-	  }
 	}
-} ;
+};
