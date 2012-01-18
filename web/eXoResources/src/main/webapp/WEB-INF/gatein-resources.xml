@@ -173,16 +173,8 @@
       </module>
 
       <module>
-         <name>eXo.portal.UIPortalControl</name>
-         <path>/javascript/eXo/portal/UIPortalControl.js</path>
-      </module>
-      <module>
          <name>eXo.webui.UIPopup</name>
          <path>/javascript/eXo/webui/UIPopup.js</path>
-      </module>
-      <module>
-         <name>eXo.webui.UIHorizontalTabs</name>
-         <path>/javascript/eXo/webui/UIHorizontalTabs.js</path>
       </module>
 
       <module>
@@ -256,12 +248,24 @@
          <path>/javascript/eXo/webui/UIItemSelector.js</path>
       </module>
       <module>
+         <name>eXo.portal.UIPortalControl</name>
+         <path>/javascript/eXo/portal/UIPortalControl.js</path>
+      </module>
+      <module>
+         <name>eXo.portal.VerticalScrollManager</name>
+         <path>/javascript/eXo/portal/VerticalScrollManager.js</path>
+      </module>
+      <module>
          <name>eXo.webui.UIForm</name>
          <path>/javascript/eXo/webui/UIForm.js</path>
       </module>
       <module>
          <name>eXo.webui.UIPopupWindow</name>
          <path>/javascript/eXo/webui/UIPopupWindow.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIHorizontalTabs</name>
+         <path>/javascript/eXo/webui/UIHorizontalTabs.js</path>
       </module>
       <depends>
          <scripts>common</scripts>
