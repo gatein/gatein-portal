@@ -37,8 +37,10 @@ eXo.portal.UIMaskWorkspace = {
       this.maskWorkpace.style.margin = "auto";
       this.maskWorkpace.style.display = "block";
 
-      eXo.core.Browser.addOnResizeCallback('mid_maskWorkspace',
+      var browser = eXo.core.Browser; 
+      browser.addOnResizeCallback('mid_maskWorkspace',
           eXo.portal.UIMaskWorkspace.resetPositionEvt);
+      browser.addOnScrollCallback("setPosition_maskWorkspace", eXo.portal.UIMaskWorkspace.resetPositionEvt);
     }
   },
 

@@ -254,14 +254,6 @@ eXo.core.UIMaskLayer = {
     var UIMaskLayer = eXo.core.UIMaskLayer;
     var browser = eXo.core.Browser;
     var object = UIMaskLayer.object;
-    if (object && object.previousSibling) {
-      var offsetParent = object.previousSibling.offsetParent;
-      if (offsetParent
-          && (browser.findPosX(offsetParent) != 0 || browser
-              .findPosY(offsetParent) != 0)) {
-        eXo.portal.UIMaskWorkspace.resetPositionEvt();
-      }
-    }
     var blockContainer = UIMaskLayer.blockContainer;
     var position = UIMaskLayer.position;
     object.style.position = "absolute";
