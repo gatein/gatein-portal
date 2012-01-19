@@ -118,7 +118,7 @@ eXo.webui.UIPopupWindow = {
     // Firefox
     // this.superClass.init(popup) ;    
     var popupBar = DOMUtil.findFirstDescendantByClass(popup, 'span', 'PopupTitle');
-    popupBar.onmousedown = this.initDND;    
+    this.initDND(popupBar, popup);
     
     var resizeBtn = DOMUtil.findFirstDescendantByClass(popup, "span", "ResizeButton");
     if (resizeBtn) {
@@ -289,57 +289,61 @@ eXo.webui.UIPopupWindow = {
 	}
 	eXo.webui.UIPopupWindow.backupEvent = null;
   },
+
   /**
-   * Inits the drag and drop configures the DragDrop callback functions .
-   * initCallback : sets overflow: hidden to elements in the popup if browser is
-   * mozilla . dragCallback : empty . dropCallback : sets overflow: auto to
-   * elements in the popup if browser is mozilla
+   * Init the Drag&Drop infrastructure using DragDrop2
+   *
+   * @param popupBar
+   * @param popup
    */
-  initDND : function(evt) {
-    var DragDrop = eXo.core.DragDrop;
-    var DOMUtil = eXo.core.DOMUtil;
+  initDND : function(popupBar, popup)
+  {
+    eXo.core.DragDrop2.init(popupBar, popup);
 
-    DragDrop.initCallback = function(dndEvent) {
-      var dragObject = dndEvent.dragObject;
-      dragObject.uiWindowContent = DOMUtil.findFirstDescendantByClass(
-          dragObject, "div", "PopupContent");
-      if (!dragObject.uiWindowContent)
-        return;
-      if (eXo.core.Browser.browserType == "mozilla") {
-        dragObject.uiWindowContent.style.overflow = "hidden";
-        var elements = eXo.core.DOMUtil.findDescendantsByClass(
-            dragObject.uiWindowContent, "ul", "PopupMessageBox");
-        for ( var i = 0; i < elements.length; i++) {
-          elements[i].style.overflow = "hidden";
-        }
-      }
-    }
-
-    DragDrop.dragCallback = function(dndEvent) {
-    }
-
-    DragDrop.dropCallback = function(dndEvent) {
-      var dragObject = dndEvent.dragObject;
-      if (eXo.core.Browser.browserType == "mozilla"
-          && dragObject.uiWindowContent) {
-        dragObject.uiWindowContent.style.overflow = "auto";
-        var elements = eXo.core.DOMUtil.findDescendantsByClass(
-            dragObject.uiWindowContent, "ul", "PopupMessageBox");
-        for ( var i = 0; i < elements.length; i++) {
+    popup.onDragStart = function(x, y, last_x, last_y, e)
+    {
+      if (eXo.core.Browser.browserType == "mozilla" && popup.uiWindowContent)
+      {
+        popup.uiWindowContent.style.overflow = "auto";
+        var elements = eXo.core.DOMUtil.findDescendantsByClass(popup.uiWindowContent, "ul", "PopupMessageBox");
+        for (var i = 0; i < elements.length; i++)
+        {
           elements[i].style.overflow = "auto";
         }
       }
+    };
 
-      var offsetParent = dragObject.offsetParent;
-      if (offsetParent) {
-        if (eXo.core.Browser.findPosY(dragObject) < 0)
-          dragObject.style.top = (0 - offsetParent.offsetTop) + "px";
-      } else {
-        dragObject.style.top = "0px";
+    popup.onDrag = function(nx, ny, ex, ey, e)
+    {
+    };
+
+    popup.onDragEnd = function(x, y, clientX, clientY)
+    {
+      if (eXo.core.Browser.browserType == "mozilla" && popup.uiWindowContent)
+      {
+        popup.uiWindowContent.style.overflow = "auto";
+        var elements = eXo.core.DOMUtil.findDescendantsByClass(popup.uiWindowContent, "ul", "PopupMessageBox");
+        for (var i = 0; i < elements.length; i++)
+        {
+          elements[i].style.overflow = "auto";
+        }
       }
-    }
-    var clickBlock = this;
-    var dragBlock = eXo.core.DOMUtil.findAncestorByClass(this, "UIDragObject");
-    DragDrop.init(null, clickBlock, dragBlock, evt);
+      var offsetParent = popup.offsetParent;
+      if (offsetParent)
+      {
+        if (clientY < 0)
+        {
+          popup.style.top = (0 - offsetParent.offsetTop) + "px";
+        }
+      }
+      else
+      {
+        popup.style.top = "0px";
+      }
+    };
+
+    popup.onCancel = function(e)
+    {
+    };
   }
 };
