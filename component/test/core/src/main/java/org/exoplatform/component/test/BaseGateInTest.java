@@ -60,17 +60,29 @@ public class BaseGateInTest extends TestCase
       }
    }
 
-   public static <T> T fail(String msg, Throwable t)
+   public static void fail(String msg, Throwable t)
    {
-      AssertionFailedError afe = new AssertionFailedError(msg);
-      afe.initCause(t);
-      throw afe;
+      throw failure(msg, t);
    }
 
-   public static <T> T fail(Throwable t)
+   public static void fail(Throwable t)
    {
       AssertionFailedError afe = new AssertionFailedError();
       afe.initCause(t);
       throw afe;
+   }
+
+   public static Error failure(Throwable t)
+   {
+      AssertionFailedError afe = new AssertionFailedError();
+      afe.initCause(t);
+      return afe;
+   }
+
+   public static Error failure(String msg, Throwable t)
+   {
+      AssertionFailedError afe = new AssertionFailedError(msg);
+      afe.initCause(t);
+      return afe;
    }
 }
