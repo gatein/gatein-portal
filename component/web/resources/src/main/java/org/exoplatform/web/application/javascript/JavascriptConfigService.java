@@ -54,17 +54,14 @@ import java.util.Map;
 public class JavascriptConfigService extends AbstractResourceService implements Startable
 {
 
-   /** . */
-   public static final ResourceId COMMON_SHARED_RESOURCE = new ResourceId(ResourceScope.SHARED, "common");
-
    /** Our logger. */
    private final Logger log = LoggerFactory.getLogger(JavascriptConfigService.class);
 
    /** The scripts. */
-   ScriptGraph scripts;
+   final ScriptGraph scripts;
 
    /** . */
-   private WebAppListener deployer;
+   private final WebAppListener deployer;
 
    /** . */
    public static final Comparator<Module> MODULE_COMPARATOR = new Comparator<Module>()
@@ -79,25 +76,11 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    {
       super(compressor);
 
-      // todo : remove /portal ???
-      ScriptGraph scripts = new ScriptGraph();
-
-      // Not sure it's still used but that should be removed at some point
-      // since we do everyting by XML now
-      scripts.addResource(COMMON_SHARED_RESOURCE, FetchMode.ON_LOAD);
-
       //
-      this.scripts = scripts;
+      this.scripts = new ScriptGraph();
       this.deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
    }
 
-   /**
-    * Return a collection list This method should return the availables scripts in the service
-    *
-    * @deprecated Somehow, it should use {@link #getCommonJScripts()} instead.
-    * @return
-    */
-   @Deprecated
    public Collection<String> getAvailableScripts()
    {
       ArrayList<String> list = new ArrayList<String>();
@@ -108,29 +91,6 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       return list;
    }
 
-   /**
-    * Return a collection of all common JScripts
-    *
-    * @return
-    */
-   public Collection<Javascript> getCommonJScripts()
-   {
-      ArrayList<Javascript> list = new ArrayList<Javascript>();
-      for (ScriptResource shared : scripts.getResources(ResourceScope.SHARED))
-      {
-         list.addAll(getJavascripts(shared));
-      }
-      return list;
-   }
-
-   /**
-    * Return a collection of all available JS paths
-    *
-    * @deprecated Somehow, it should use {@link #getCommonJScripts()} instead.
-    *
-    * @return A collection of all available JS paths
-    */
-   @Deprecated
    public Collection<String> getAvailableScriptsPaths()
    {
       ArrayList<Module> sharedModules = new ArrayList<Module>();
@@ -147,57 +107,6 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       return paths;
    }
 
-   /**
-    * Add a JScript to common javascript list and re-sort the list.
-    * Then invalidate cache of all merged common JScripts to
-    * ensure they will be newly merged next time.
-    *
-    * @param js
-    */
-   public void addCommonJScript(Javascript js)
-   {
-      ScriptResource common = scripts.getResource(COMMON_SHARED_RESOURCE);
-      js.addModuleTo(common);
-   }
-
-   /**
-    * Remove a JScript for this module from common javascript
-    * and invalidates its cache correspondingly
-    *
-    * @param moduleName the module name
-    */
-   public void removeCommonJScript(String moduleName)
-   {
-      ScriptResource common = scripts.getResource(COMMON_SHARED_RESOURCE);
-      common.removeModuleByName(moduleName);
-   }
-
-   /**
-    * Return a collection of all PortalJScripts which belong to the specified portalName.
-    *
-    * @param portalName
-    * @return list of JavaScript path which will be loaded by particular portal
-    */
-   public Collection<Javascript> getPortalJScripts(String portalName)
-   {
-      ScriptResource composite = scripts.getResource(ResourceScope.PORTAL, portalName);
-      if (composite != null)
-      {
-         ArrayList<Module> modules = new ArrayList<Module>(composite.getModules());
-         Collections.sort(modules, MODULE_COMPARATOR);
-         ArrayList<Javascript> scripts = new ArrayList<Javascript>();
-         for (Module module : modules)
-         {
-            scripts.add(Javascript.create(module));
-         }
-         return scripts;
-      }
-      else
-      {
-         return null;
-      }
-   }
-   
    public Reader getScript(ResourceId id, String name, Locale locale)
    {
       ScriptResource script = getResource(id);
@@ -306,55 +215,11 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       return null;
    }
 
-   /**
-    * Add a PortalJScript which will be loaded with a specific portal.
-    * <p>
-    * For now, we don't persist it inside the Portal site storage but just in memory.
-    * Therefore we could somehow remove all PortalJScript for a Portal by using {@link #removePortalJScripts(String)}
-    * when the portal is being removed.
-    *
-    * @param js
-    */
-   public void addPortalJScript(Javascript js)
-   {
-      js.addModuleTo(scripts.addResource(js.getResource(), null));
-   }
-
-   /**
-    * Remove portal name from a JavaScript module or remove JavaScript module if it contains only one portal name
-    *
-    * @param portalName portal's name which you want to remove
-    */
-   public void removePortalJScripts(String portalName)
-   {
-      ScriptResource list = scripts.removeResource(new ResourceId(ResourceScope.PORTAL, portalName));
-      if (list != null)
-      {
-         for (Module module : list.getModules())
-         {
-            if (module instanceof Module.Local)
-            {
-               Module.Local local = (Module.Local)module;
-            }
-         }
-      }
-   }
-
-   /**
-    * Check the existence of module in Available Scripts
-    * @param module
-    * @return true if Available Scripts contain module, else return false
-    */
    public boolean isModuleLoaded(CharSequence module)
    {
       return getAvailableScripts().contains(module.toString());
    }
    
-   /**
-    * Check the existence of javascript in Available Scripts
-    * @param path - should contain context path
-    * @return true if Available Scripts contain js with specified path
-    */
    public boolean isJavascriptLoaded(String path)
    {
       for (ScriptResource shared : scripts.getResources(ResourceScope.SHARED))
@@ -378,6 +243,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public void start()
    {
+      log.debug("Registering JavascriptConfigService for servlet container events");
       DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(deployer);
    }
 
@@ -389,6 +255,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public void stop()
    {
+      log.debug("Unregistering JavascriptConfigService for servlet container events");
       DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(deployer);
    }
    
@@ -406,15 +273,5 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          }
       }
       return null;
-   }
-
-   private List<Javascript> getJavascripts(ScriptResource resource)
-   {
-      ArrayList<Javascript> javascripts = new ArrayList<Javascript>();
-      for (Module module : resource.getModules())
-      {
-         javascripts.add(Javascript.create(module));
-      }
-      return javascripts;
    }
 }
