@@ -25,7 +25,10 @@ import com.google.javascript.jscomp.JSError;
 import com.google.javascript.jscomp.JSSourceFile;
 import com.google.javascript.jscomp.LoggerErrorManager;
 import com.google.javascript.jscomp.Result;
+import org.exoplatform.commons.utils.CharsetTextEncoder;
 import org.exoplatform.commons.utils.I18N;
+import org.exoplatform.commons.utils.Safe;
+import org.exoplatform.commons.utils.TextEncoder;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebRequestHandler;
@@ -40,10 +43,12 @@ import org.gatein.common.logging.LoggerFactory;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Reader;
+import java.io.StringReader;
 import java.io.StringWriter;
-import java.io.Writer;
 import java.net.URL;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -163,9 +168,16 @@ public class ResourceRequestHandler extends WebRequestHandler
             if (script != null)
             {
                HttpServletResponse response = context.getResponse();
-               response.setContentType("application/x-javascript");
-               Writer out = response.getWriter();
-               
+
+               // Content type + charset
+               response.setContentType("text/javascript");
+               response.setCharacterEncoding("UTF-8");
+
+               // One hour caching
+               // make this configurable later
+               response.setHeader("Cache-Control", "max-age:3600");
+               response.setDateHeader("Expires", System.currentTimeMillis() + 3600 * 1000);
+
                //
                if ("min".equals(compressParam))
                {
@@ -182,7 +194,7 @@ public class ResourceRequestHandler extends WebRequestHandler
                   Result res = compiler.compile(new JSSourceFile[0], inputs, options);
                   if (res.success)
                   {
-                     out.write(compiler.toSource());
+                     script = new StringReader(compiler.toSource());
                   }
                   else
                   {
@@ -194,9 +206,21 @@ public class ResourceRequestHandler extends WebRequestHandler
                      throw new UnsupportedOperationException(msg.toString());
                   }
                }
-               else
+
+               // Encode data
+               OutputStream out = response.getOutputStream();
+               try
                {
-                  IOTools.copy(script, out);
+                  TextEncoder encoder = CharsetTextEncoder.getUTF8();
+                  char[] buffer = new char[256];
+                  for (int l = script.read(buffer);l != -1;l = script.read(buffer))
+                  {
+                     encoder.encode(buffer, 0, l, out);
+                  }
+               }
+               finally
+               {
+                  Safe.close(out);
                }
 
                //
