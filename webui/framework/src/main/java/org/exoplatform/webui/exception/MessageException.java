@@ -40,11 +40,6 @@ public class MessageException extends Exception
       this.message = message;
    }
 
-   /*public MessageException(ApplicationMessage message)
-   {
-      this.message = message;
-   }*/
-
    public AbstractApplicationMessage getDetailMessage()
    {
       return message;
