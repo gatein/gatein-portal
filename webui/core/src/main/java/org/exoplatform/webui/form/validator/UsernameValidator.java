@@ -18,6 +18,7 @@ package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
@@ -43,46 +44,39 @@ public class UsernameValidator implements Validator
       this.min = min;
       this.max = max;
    }
-   
-   @Override
+
    public void validate(UIFormInput uiInput) throws Exception
    {
-      if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0) 
+      String value = (String)uiInput.getValue();
+      if (value == null || value.trim().length() == 0)
       {
          return;
       }
+
       UIComponent uiComponent = (UIComponent)uiInput;
       UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
-      String label;
-      try
+      String label = uiInput.getName();
+      if(uiForm != null)
       {
-        label = uiForm.getId() + ".label." + uiInput.getName();
+         label = uiForm.getLabel(label);
       }
-      catch (Exception e)
-      {
-         label = uiInput.getName();
-      }
-      
-      char[] buff = ((String)uiInput.getValue()).toCharArray();
+
+      CompoundApplicationMessage messages = new CompoundApplicationMessage();
+
+      char[] buff = value.toCharArray();
       if(buff.length < min || buff.length > max) 
       {
-         Object[] args = {label, min.toString(), max.toString()};
-         throw new MessageException(new ApplicationMessage("StringLengthValidator.msg.length-invalid", args,
-            ApplicationMessage.WARNING));
+         messages.addMessage("StringLengthValidator.msg.length-invalid", new Object[]{label, min.toString(), max.toString()}, ApplicationMessage.WARNING);
       }
       
       if(!isAlphabet(buff[0])) 
       {
-         Object[] args = {label};
-         throw new MessageException(new ApplicationMessage("FirstCharacterNameValidator.msg", args,
-            ApplicationMessage.WARNING));
+         messages.addMessage("FirstCharacterNameValidator.msg", new Object[]{label}, ApplicationMessage.WARNING);
       }
       
       if(!isAlphabetOrDigit(buff[buff.length - 1]))
       {
-         Object[] args = {label, buff[buff.length - 1]};
-         throw new MessageException(new ApplicationMessage("LastCharacterUsernameValidator.msg", args,
-            ApplicationMessage.WARNING));
+         messages.addMessage("LastCharacterUsernameValidator.msg", new Object[]{label, buff[buff.length - 1]}, ApplicationMessage.WARNING);
       }
       
       for(int i = 1; i < buff.length -1; i++)
@@ -99,21 +93,22 @@ public class UsernameValidator implements Validator
             char next = buff[i + 1];
             if (isSymbol(next))
             {
-               Object[] args = {label, buff[i], buff[i + 1]};
-               throw new MessageException(new ApplicationMessage("ConsecutiveSymbolValidator.msg", args,
-                  ApplicationMessage.WARNING));
+               messages.addMessage("ConsecutiveSymbolValidator.msg", new Object[]{label, buff[i], buff[i + 1]}, ApplicationMessage.WARNING);
             }
             else if (!isAlphabetOrDigit(next))
             {
-               Object[] args = {label};
-               throw new MessageException(new ApplicationMessage("UsernameValidator.msg.Invalid-char", args, ApplicationMessage.WARNING));
+               messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label}, ApplicationMessage.WARNING);
             }
          }
          else
          {
-            Object[] args = {label};
-            throw new MessageException(new ApplicationMessage("UsernameValidator.msg.Invalid-char", args, ApplicationMessage.WARNING));
+            messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label}, ApplicationMessage.WARNING);
          }
+      }
+
+      if(!messages.isEmpty())
+      {
+         throw new MessageException(messages);
       }
    }
    

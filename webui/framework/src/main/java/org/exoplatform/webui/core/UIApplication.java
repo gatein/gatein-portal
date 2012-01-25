@@ -21,6 +21,7 @@ package org.exoplatform.webui.core;
 
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.web.application.AbstractApplicationMessage;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
@@ -82,7 +83,7 @@ abstract public class UIApplication extends UIContainer
       return uiPopupMessages_;
    }
 
-   public void addMessage(ApplicationMessage message)
+   public void addMessage(AbstractApplicationMessage message)
    {
       getUIPopupMessages().addMessage(message);
    }

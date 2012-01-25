@@ -23,42 +23,46 @@
 package org.exoplatform.web.application;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /** @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a> */
-public class ApplicationMessage extends AbstractApplicationMessage implements Serializable
+public class CompoundApplicationMessage extends AbstractApplicationMessage implements Serializable
 {
-   private final String messageKey_;
-   private final Object[] messageArgs_;
+   private List<AbstractApplicationMessage> messages = new ArrayList<AbstractApplicationMessage>(5);
 
-   public ApplicationMessage(String key, Object[] args)
+   public CompoundApplicationMessage()
    {
-      this.messageKey_ = key;
-      this.messageArgs_ = args;
+      this(null);
    }
 
-   public ApplicationMessage(String key, Object[] args, int type)
+   public CompoundApplicationMessage(AbstractApplicationMessage initialMessage)
    {
-      this.messageKey_ = key;
-      this.messageArgs_ = args;
-      setType(type);
+      if(initialMessage != null)
+      {
+         messages.add(initialMessage);
+      }
    }
 
+   @Override
    public String getMessage()
    {
-      String msg = resolveMessage(messageKey_);
-      if (msg != null && messageArgs_ != null)
+      StringBuilder sb = new StringBuilder(255);
+      for (AbstractApplicationMessage message : messages)
       {
-         for (int i = 0; i < messageArgs_.length; i++)
-         {
-            String arg = messageArgs_[i].toString();
-            if (isArgsLocalized())
-            {
-               arg = resolveMessage(arg);
-            }
-            msg = msg.replace("{" + i + "}", arg);
-         }
+         sb.append(message.getMessage()).append('\n');
       }
 
-      return msg;
+      return sb.toString();
+   }
+
+   public void addMessage(String messageKey, Object[] args, int type)
+   {
+      messages.add(new ApplicationMessage(messageKey, args, type));
+   }
+
+   public boolean isEmpty()
+   {
+      return messages.isEmpty();
    }
 }

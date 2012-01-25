@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.core;
 
+import org.exoplatform.web.application.AbstractApplicationMessage;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -48,53 +49,53 @@ public class UIPopupMessages extends UIPopupWindow
    /**
     * The error messages
     */
-   private List<ApplicationMessage> errors_;
+   private List<AbstractApplicationMessage> errors_;
 
    /**
     * The warning messages
     */
-   private List<ApplicationMessage> warnings_;
+   private List<AbstractApplicationMessage> warnings_;
 
    /**
     * The info messages
     */
-   private List<ApplicationMessage> infos_;
+   private List<AbstractApplicationMessage> infos_;
 
    public UIPopupMessages()
    {
-      errors_ = new ArrayList<ApplicationMessage>();
-      warnings_ = new ArrayList<ApplicationMessage>();
-      infos_ = new ArrayList<ApplicationMessage>();
+      errors_ = new ArrayList<AbstractApplicationMessage>();
+      warnings_ = new ArrayList<AbstractApplicationMessage>();
+      infos_ = new ArrayList<AbstractApplicationMessage>();
       setShowMask(true);
       setShow(true);
    }
 
-   public List<ApplicationMessage> getErrors()
+   public List<AbstractApplicationMessage> getErrors()
    {
       return errors_;
    }
 
-   public void setErrors(List<ApplicationMessage> errors_)
+   public void setErrors(List<AbstractApplicationMessage> errors_)
    {
       this.errors_ = errors_;
    }
 
-   public List<ApplicationMessage> getInfos()
+   public List<AbstractApplicationMessage> getInfos()
    {
       return infos_;
    }
 
-   public void setInfos(List<ApplicationMessage> infos_)
+   public void setInfos(List<AbstractApplicationMessage> infos_)
    {
       this.infos_ = infos_;
    }
 
-   public List<ApplicationMessage> getWarnings()
+   public List<AbstractApplicationMessage> getWarnings()
    {
       return warnings_;
    }
 
-   public void setWarnings(List<ApplicationMessage> warnings_)
+   public void setWarnings(List<AbstractApplicationMessage> warnings_)
    {
       this.warnings_ = warnings_;
    }
@@ -104,7 +105,7 @@ public class UIPopupMessages extends UIPopupWindow
       super.processRender(context);
    }
 
-   public void addMessage(ApplicationMessage msg)
+   public void addMessage(AbstractApplicationMessage msg)
    {
       msg.setResourceBundle(getResourceBundle());
       switch (msg.getType())

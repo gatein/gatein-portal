@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.exception;
 
+import org.exoplatform.web.application.AbstractApplicationMessage;
 import org.exoplatform.web.application.ApplicationMessage;
 
 /**
@@ -32,14 +33,19 @@ import org.exoplatform.web.application.ApplicationMessage;
 public class MessageException extends Exception
 {
 
-   private ApplicationMessage message;
+   private AbstractApplicationMessage message;
 
-   public MessageException(ApplicationMessage message)
+   public MessageException(AbstractApplicationMessage message)
    {
       this.message = message;
    }
 
-   public ApplicationMessage getDetailMessage()
+   /*public MessageException(ApplicationMessage message)
+   {
+      this.message = message;
+   }*/
+
+   public AbstractApplicationMessage getDetailMessage()
    {
       return message;
    }
