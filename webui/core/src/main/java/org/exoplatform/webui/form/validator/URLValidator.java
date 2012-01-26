@@ -19,13 +19,7 @@
 
 package org.exoplatform.webui.form.validator;
 
-import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormInput;
-
-import java.io.Serializable;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 
 /**
  * Created by The eXo Platform SAS
@@ -33,7 +27,8 @@ import java.io.Serializable;
  *          pdtanit@gmail.com
  * Oct 30, 2008  
  */
-public class URLValidator implements Validator, Serializable
+@Serialized
+public class URLValidator extends ExpressionValidator
 {
    
    static private final String IP_REGEX =
@@ -46,39 +41,15 @@ public class URLValidator implements Validator, Serializable
       + "|([a-zA-Z][-a-zA-Z0-9]+))" // domain like localhost
       + "(:[0-9]{1,5})?" // port number :8080
       + "((/?)|(/[0-9a-zA-Z_!~*'().;?:@&=+$,%#-]+)+/?)$"; //uri
-
-   private String key_;
+   private static final String DEFAULT_KEY = "URLValidator.msg.invalid-url";
 
    public URLValidator()
    {
-      key_ = "URLValidator.msg.invalid-url";
+      this(DEFAULT_KEY);
    }
 
    public URLValidator(String key)
    {
-      if (key != null)
-         key_ = key;
-   }
-
-   public void validate(UIFormInput uiInput) throws Exception
-   {
-      if ((uiInput.getValue() == null) || (uiInput.getValue().toString().trim().length() == 0))
-         return;
-      String s = uiInput.getValue().toString().trim();
-      if (s.matches(URL_REGEX))
-         return;
-
-      UIForm uiForm = ((UIComponent)uiInput).getAncestorOfType(UIForm.class);
-      String label;
-      try
-      {
-    	  label = uiForm.getId() + ".label." + uiInput.getName();
-      }
-      catch (Exception e)
-      {
-         label = uiInput.getName();
-      }
-      Object[] args = {label};
-      throw new MessageException(new ApplicationMessage(key_, args, ApplicationMessage.WARNING));
+      super(URL_REGEX, key != null ? key : DEFAULT_KEY);
    }
 }

@@ -19,11 +19,9 @@
 
 package org.exoplatform.webui.form.validator;
 
-import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
+
+import java.io.Serializable;
 
 /**
  * Created by The eXo Platform SARL
@@ -33,26 +31,26 @@ import org.exoplatform.webui.form.UIFormInput;
  * 
  * Validates whether this value is null
  */
-public class NullFieldValidator implements Validator
+public class NullFieldValidator extends AbstractValidator implements Serializable
 {
 
    public void validate(UIFormInput uiInput) throws Exception
    {
-      if ((uiInput.getValue() != null))
-         return;
-      //  modified by Pham Dinh Tan
-      UIComponent uiComponent = (UIComponent)uiInput;
-      UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
-      String label;
-      try
+      if ((uiInput.getValue() == null))
       {
-    	  label = uiForm.getId() + ".label." + uiInput.getName();
+         throw createMessageException(null, uiInput);
       }
-      catch (Exception e)
-      {
-         label = uiInput.getName();
-      }
-      Object[] args = {label};
-      throw new MessageException(new ApplicationMessage("EmptyFieldValidator.msg.empty-input", args));
+   }
+
+   @Override
+   protected String getMessageLocalizationKey()
+   {
+      return "EmptyFieldValidator.msg.empty-input";
+   }
+
+   @Override
+   protected boolean isValid(String value, UIFormInput uiInput)
+   {
+      throw new UnsupportedOperationException("Unneeded by this implementation");
    }
 }

@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -19,33 +19,29 @@
 
 package org.exoplatform.webui.form.validator;
 
-import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.form.UIFormInput;
-
-import java.io.Serializable;
 
 /**
  * Created by The eXo Platform SARL
  * Author : Dang Van Minh
- *          minhdv81@yahoo.com
+ * minhdv81@yahoo.com
  * Jun 7, 2006
- * 
+ * <p/>
  * Validates whether this value has a length between min and max
  */
-public class StringLengthValidator implements Validator, Serializable
+@Serialized
+public class StringLengthValidator extends AbstractValidator
 {
-   /**
-    * The minimum number of characters in this String
-    */
+   /** The minimum number of characters in this String */
    private Integer min_ = 0;
 
-   /**
-    * The maximum number of characters in this String
-    */
+   /** The maximum number of characters in this String */
    private Integer max_ = 0;
+
+   public StringLengthValidator()
+   {
+   }
 
    public StringLengthValidator(Integer max)
    {
@@ -58,31 +54,27 @@ public class StringLengthValidator implements Validator, Serializable
       max_ = max;
    }
 
-   public void validate(UIFormInput uiInput) throws Exception
+   @Override
+   protected String getMessageLocalizationKey()
    {
-      if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0)
-         return;
-      if ((uiInput.getValue() != null))
-      {
-         int length = ((String)uiInput.getValue()).trim().length();
-         if (min_ <= length && max_ >= length)
-            return;
-      }
+      return "StringLengthValidator.msg.length-invalid";
+   }
 
-      //modified by Pham Dinh Tan
-      UIComponent uiComponent = (UIComponent)uiInput;
-      UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
-      String label;
-      try
-      {
-         label = uiForm.getId() + ".label." + uiInput.getName();
-      }
-      catch (Exception e)
-      {
-         label = uiInput.getName();
-      }
-      Object[] args = {label, min_.toString(), max_.toString()};
-      throw new MessageException(new ApplicationMessage("StringLengthValidator.msg.length-invalid", args,
-         ApplicationMessage.WARNING));
+   @Override
+   protected boolean isValid(String value, UIFormInput uiInput)
+   {
+      int length = getValue(value).length();
+      return min_ <= length && max_ >= length;
+   }
+
+   protected String getValue(String value)
+   {
+      return value.trim();
+   }
+
+   @Override
+   protected Object[] getMessageArgs(String value, UIFormInput uiInput) throws Exception
+   {
+      return new Object[]{getLabelFor(uiInput), min_.toString(), max_.toString()};
    }
 }

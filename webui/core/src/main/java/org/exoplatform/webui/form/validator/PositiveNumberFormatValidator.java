@@ -20,10 +20,9 @@
 package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormInput;
+import org.exoplatform.web.application.CompoundApplicationMessage;
+
+import java.io.Serializable;
 
 /**
  * Created by The eXo Platform SARL
@@ -34,54 +33,26 @@ import org.exoplatform.webui.form.UIFormInput;
  * Validates whether this number is positive or 0
  */
 
-public class PositiveNumberFormatValidator implements Validator
+public class PositiveNumberFormatValidator extends NumberFormatValidator implements Serializable
 {
 
-   public void validate(UIFormInput uiInput) throws Exception
+   @Override
+   protected Integer validateInteger(String value, String label, CompoundApplicationMessage messages)
    {
-      if (uiInput.getValue() == null || ((String)uiInput.getValue()).length() == 0)
+      Integer integer = super.validateInteger(value, label, messages);
+
+      if(integer == null)
       {
-         return;
+         return null;
       }
-      //  modified by Pham Dinh Tan
-      UIComponent uiComponent = (UIComponent)uiInput;
-      UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
-      String label;
-      try
+      else if(integer < 0)
       {
-        label = uiForm.getId() + ".label." + uiInput.getName();
+         messages.addMessage("PositiveNumberFormatValidator.msg.Invalid-number", new Object[]{label}, ApplicationMessage.WARNING);
+         return null;
       }
-      catch (Exception e)
+      else
       {
-         label = uiInput.getName();
+         return integer;
       }
-      Object[] args = {label, uiInput.getBindingField()};
-      
-      String s = (String)uiInput.getValue();
-      
-      if(s.charAt(0) == '0' && s.length() > 1)
-      {
-         throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
-      }
-      else if(s.charAt(0) == '-' && s.length() > 1 && s.charAt(1) == '0')
-      {
-         throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
-      }
-      
-      int value;
-      try 
-      {
-         value = Integer.parseInt(s);
-      } 
-      catch(NumberFormatException e) 
-      {
-         throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
-      }
-      
-      if(value >= 0) 
-      {
-         return;
-      }
-      throw new MessageException(new ApplicationMessage("PositiveNumberFormatValidator.msg.Invalid-number", args));
    }
 }

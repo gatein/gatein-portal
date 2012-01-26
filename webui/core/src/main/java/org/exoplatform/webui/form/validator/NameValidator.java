@@ -19,10 +19,6 @@
 
 package org.exoplatform.webui.form.validator;
 
-import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 
 import java.io.Serializable;
@@ -35,36 +31,29 @@ import java.io.Serializable;
  * 
  * Validates whether this value is composed of letters, numbers, '_', '-', '.' or '*'
  */
-public class NameValidator implements Validator, Serializable
+public class NameValidator extends AbstractValidator implements Serializable
 {
 
-   public void validate(UIFormInput uiInput) throws Exception
+   @Override
+   protected String getMessageLocalizationKey()
    {
-      if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0)
-         return;
-      //  modified by Pham Dinh Tan
-      UIComponent uiComponent = (UIComponent)uiInput;
-      UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
-      String label;
-      try
+      return "NameValidator.msg.Invalid-char";
+   }
+
+   @Override
+   protected boolean isValid(String value, UIFormInput uiInput)
+   {
+      for (int i = 0; i < value.length(); i++)
       {
-    	  label = uiForm.getId() + ".label." + uiInput.getName();
-      }
-      catch (Exception e)
-      {
-         label = uiInput.getName();
-      }
-      String s = (String)uiInput.getValue();
-      for (int i = 0; i < s.length(); i++)
-      {
-         char c = s.charAt(i);
+         char c = value.charAt(i);
          if (Character.isLetter(c) || Character.isDigit(c) || c == '_' || c == '-' || c == '.' || c == '*')
          {
             continue;
          }
-         Object[] args = {label};
-         throw new MessageException(new ApplicationMessage("NameValidator.msg.Invalid-char", args));
+         return false;
       }
+
+      return true;
    }
 
 }

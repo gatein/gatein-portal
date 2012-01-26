@@ -19,12 +19,7 @@
 
 package org.exoplatform.webui.form.validator;
 
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormInput;
 
 /**
  * Created by The eXo Platform SARL
@@ -35,18 +30,8 @@ import org.exoplatform.webui.form.UIFormInput;
  * Validates whether this value has a length between min and max
  */
 @Serialized
-public class PasswordStringLengthValidator implements Validator
+public class PasswordStringLengthValidator extends StringLengthValidator
 {
-   /**
-    * The minimum number of characters in this String
-    */
-   private Integer min_ = 0;
-
-   /**
-    * The maximum number of characters in this String
-    */
-   private Integer max_ = 0;
-
    // For @Serialized needs
    public PasswordStringLengthValidator()
    {
@@ -54,40 +39,17 @@ public class PasswordStringLengthValidator implements Validator
 
    public PasswordStringLengthValidator(Integer max)
    {
-      max_ = max;
+      super(max);
    }
 
    public PasswordStringLengthValidator(Integer min, Integer max)
    {
-      min_ = min;
-      max_ = max;
+      super(min, max);
    }
 
-   public void validate(UIFormInput uiInput) throws Exception
+   @Override
+   protected String getValue(String value)
    {
-      if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0)
-         return;
-      if ((uiInput.getValue() != null))
-      {
-         int length = ((String)uiInput.getValue()).length();
-         if (min_ <= length && max_ >= length)
-            return;
-      }
-
-      //modified by Pham Dinh Tan
-      UIComponent uiComponent = (UIComponent)uiInput;
-      UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
-      String label;
-      try
-      {
-    	  label = uiForm.getId() + ".label." + uiInput.getName();
-      }
-      catch (Exception e)
-      {
-         label = uiInput.getName();
-      }
-      Object[] args = {label, min_.toString(), max_.toString()};
-      throw new MessageException(new ApplicationMessage("StringLengthValidator.msg.length-invalid", args,
-         ApplicationMessage.WARNING));
+      return value;
    }
 }

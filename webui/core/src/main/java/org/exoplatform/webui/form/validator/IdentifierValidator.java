@@ -20,9 +20,7 @@
 package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIForm;
+import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.form.UIFormInput;
 
 import java.io.Serializable;
@@ -36,42 +34,24 @@ import java.io.Serializable;
  * Validates whether the value is composed of letters, digit , '_' or '-'h
  * First character could not be digit or '-'
  */
-public class IdentifierValidator implements Validator, Serializable
+public class IdentifierValidator extends MultipleConditionsValidator implements Serializable
 {
 
-   public void validate(UIFormInput uiInput) throws Exception
+   @Override
+   protected void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput)
    {
-      if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0)
-         return;
-      //  modified by Pham Dinh Tan
-      UIComponent uiComponent = (UIComponent)uiInput;
-      UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
-      String label;
-      try
+      if (Character.isDigit(value.charAt(0)) || value.charAt(0) == '-')
       {
-    	  label = uiForm.getId() + ".label." + uiInput.getName();
+         messages.addMessage("FirstAndSpecialCharacterNameValidator.msg", new Object[]{label, uiInput.getBindingField()}, ApplicationMessage.WARNING);
       }
-      catch (Exception e)
+      for (int i = 0; i < value.length(); i++)
       {
-         label = uiInput.getName();
-      }
-      String s = (String)uiInput.getValue();
-      if (Character.isDigit(s.charAt(0)) || s.charAt(0) == '-')
-      {
-         Object[] args = {label, uiInput.getBindingField()};
-         throw new MessageException(new ApplicationMessage("FirstAndSpecialCharacterNameValidator.msg", args,
-            ApplicationMessage.WARNING));
-      }
-      for (int i = 0; i < s.length(); i++)
-      {
-         char c = s.charAt(i);
+         char c = value.charAt(i);
          if (Character.isLetter(c) || Character.isDigit(c) || c == '_' || c == '-')
          {
             continue;
          }
-         Object[] args = {label};
-         throw new MessageException(new ApplicationMessage("IdentifierValidator.msg.Invalid-char", args,
-            ApplicationMessage.WARNING));
+         messages.addMessage("IdentifierValidator.msg.Invalid-char", new Object[]{label}, ApplicationMessage.WARNING);
       }
    }
 }

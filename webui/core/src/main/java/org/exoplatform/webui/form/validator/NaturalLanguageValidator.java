@@ -17,52 +17,36 @@
 package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 
 /**
  * @author <a href="mailto:haint@exoplatform.com">Nguyen Thanh Hai</a>
- *
  * @datOct 11, 2011
- * 
+ *
  * Validates whether this value is composed of letters or spaces
  */
 @Serialized
-public class NaturalLanguageValidator implements Validator
+public class NaturalLanguageValidator extends AbstractValidator
 {
 
-   public void validate(UIFormInput uiInput) throws Exception
+   @Override
+   protected String getMessageLocalizationKey()
    {
-      UIComponent uiComponent = (UIComponent)uiInput;
-      UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
-      String label;
-      try
+      return "NaturalLanguageValidator.msg.Invalid-char";
+   }
+
+   @Override
+   protected boolean isValid(String value, UIFormInput uiInput)
+   {
+      for (int i = 0; i < value.length(); i++)
       {
-        label = uiForm.getId() + ".label." + uiInput.getName();
-      }
-      catch (Exception e)
-      {
-         label = uiInput.getName();
-      }
-      Object[] args = {label};
-      
-      if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0) 
-      {
-         return;
-      }
-      
-      String s = (String)uiInput.getValue();
-      for (int i = 0; i < s.length(); i++)
-      {
-         char c = s.charAt(i);
+         char c = value.charAt(i);
          if (Character.isLetter(c) || Character.isSpaceChar(c))
          {
             continue;
          }
-         throw new MessageException(new ApplicationMessage("NaturalLanguageValidator.msg.Invalid-char", args));
+         return false;
       }
+      return true;
    }
 }

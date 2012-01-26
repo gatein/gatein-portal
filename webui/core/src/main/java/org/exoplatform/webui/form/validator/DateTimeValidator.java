@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -19,58 +19,64 @@
 
 package org.exoplatform.webui.form.validator;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-
-import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.webui.core.UIComponent;
-import org.exoplatform.webui.exception.MessageException;
-import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInput;
+
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by The eXo Platform SARL
  * Author : Tran The Trong
  *          trongtt@gmail.com
  * May 15, 2007
- * 
+ *
  * Validates whether a date is in a correct format
  */
 
-public class DateTimeValidator implements Validator
+public class DateTimeValidator extends AbstractValidator implements Serializable
 {
-   public void validate(UIFormInput uiInput) throws Exception
+   @Override
+   protected String getMessageLocalizationKey()
    {
-      if (uiInput.getValue() == null || ((String)uiInput.getValue()).trim().length() == 0)
-      {
-         return;
-      }
-      String s = (String)uiInput.getValue();
+      return "DateTimeValidator.msg.Invalid-input";
+   }
+
+   @Override
+   protected boolean isValid(String value, UIFormInput uiInput)
+   {
       UIFormDateTimeInput uiDateInput = (UIFormDateTimeInput)uiInput;
       SimpleDateFormat sdf = new SimpleDateFormat(uiDateInput.getDatePattern_().trim());
-
-      UIForm uiForm = ((UIComponent)uiInput).getAncestorOfType(UIForm.class);
-      String label;
+      // Specify whether or not date/time parsing is to be lenient.
+      sdf.setLenient(false);
       try
       {
-    	  label = uiForm.getId() + ".label." + uiInput.getName();
+         sdf.parse(value);
+         return true;
       }
-      catch (Exception e)
+      catch (ParseException e)
       {
-         label = uiInput.getName();
+         return false;
       }
-      Object[] args = {label, s};
+   }
 
-      try
+   @Override
+   protected String trimmedValueOrNullIfBypassed(String value, UIFormInput uiInput)
+   {
+      if(!(uiInput instanceof UIFormDateTimeInput))
       {
-         // Specify whether or not date/time parsing is to be lenient. 
-         sdf.setLenient(false);
-         sdf.parse(s);
+         return null;
       }
-      catch (Exception e)
+      else
       {
-         throw new MessageException(new ApplicationMessage("DateTimeValidator.msg.Invalid-input", args, ApplicationMessage.WARNING));
+         return super.trimmedValueOrNullIfBypassed(value, uiInput);
       }
+   }
+
+   @Override
+   protected Object[] getMessageArgs(String value, UIFormInput uiInput) throws Exception
+   {
+      return new Object[]{getLabelFor(uiInput), value};
    }
 }
