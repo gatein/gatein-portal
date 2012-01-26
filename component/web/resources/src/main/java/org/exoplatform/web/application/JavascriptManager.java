@@ -23,6 +23,7 @@ import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.FetchMap;
 import org.exoplatform.portal.controller.resource.script.ScriptResource;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -47,7 +48,7 @@ public class JavascriptManager
    private Set<String> importedScripts = new HashSet<String>();
 
    /** . */
-   private Set<ResourceId> resourceIds = new HashSet<ResourceId>();
+   private FetchMap<ResourceId> resourceIds = new FetchMap<ResourceId>();
 
    /** . */
    private StringBuilder scripts = new StringBuilder();
@@ -90,10 +91,13 @@ public class JavascriptManager
       {
          throw new IllegalArgumentException("ids can't be null");
       }
-      resourceIds.addAll(Arrays.asList(ids));
+      for (ResourceId id : ids)
+      {
+         resourceIds.add(id, null);
+      }
    }
 
-   public Set<ResourceId> getScriptResources()
+   public FetchMap<ResourceId> getScriptResources()
    {
       return resourceIds;
    }

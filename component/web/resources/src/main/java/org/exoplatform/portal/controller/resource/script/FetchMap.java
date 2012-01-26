@@ -19,42 +19,55 @@
 
 package org.exoplatform.portal.controller.resource.script;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
+ * <p></p>Extends an {@link HashMap} to add convenient method for safely adding a fetch mode to a map.
+ * The method {@link #add(Object, FetchMode)} will add the mode only if the new mode implies the previous
+ * mode in the map.</p>
+ * 
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public enum FetchMode
+public class FetchMap<E> extends HashMap<E, FetchMode>
 {
 
-   IMMEDIATE(1),
-
-   ON_LOAD(0);
-
-   /** . */
-   private final int order;
-
-   private FetchMode(int order)
+   public FetchMap()
    {
-      this.order = order;
-   }
-   
-   public boolean implies(FetchMode implied)
-   {
-      return order - implied.order >= 0;
    }
 
-   public static FetchMode decode(String value)
+   public FetchMap(Map<? extends E, ? extends FetchMode> m)
    {
-      if (value.equals("immediate"))
+      super(m);
+   }
+
+   public boolean add(E element, FetchMode mode) throws NullPointerException
+   {
+      if (element == null)
       {
-         return FetchMode.IMMEDIATE;
+         throw new NullPointerException("No null element accepted");
       }
-      else if (value.equals("on-load"))
+      
+      //
+      FetchMode prev = get(element);
+      if (prev == null)
       {
-         return FetchMode.ON_LOAD;
+         put(element, mode);
+         return true;
+      }
+      else if (mode != null && mode.implies(prev))
+      {
+         put(element, mode);
+         return true;
       }
       else
       {
-         return null;
+         return false;
       }
+   }
+
+   public boolean add(E element) throws NullPointerException
+   {
+      return add(element, null);
    }
 }

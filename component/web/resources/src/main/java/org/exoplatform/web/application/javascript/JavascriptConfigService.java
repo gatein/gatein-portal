@@ -148,7 +148,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    
    public Map<String, FetchMode> resolveURLs(
       ControllerContext controllerContext,
-      Collection<ResourceId> ids,
+      Map<ResourceId, FetchMode> ids,
       boolean merge,
       boolean minified,
       Locale locale) throws IOException

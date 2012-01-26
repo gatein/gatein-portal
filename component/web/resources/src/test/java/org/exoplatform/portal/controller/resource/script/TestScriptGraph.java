@@ -29,6 +29,7 @@ import org.gatein.common.util.Tools;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -136,25 +137,154 @@ public class TestScriptGraph extends AbstractGateInTest
       b.addDependency(C);
 
       //
-      Map<ScriptResource, FetchMode> resolution = graph.resolve(Collections.singleton(A));
+      Map<ScriptResource, FetchMode> resolution = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, null));
       assertEquals(2, resolution.size());
       assertEquals(Tools.toSet(a, c), resolution.keySet());
       assertEquals(FetchMode.ON_LOAD, resolution.get(a));
       assertEquals(FetchMode.ON_LOAD, resolution.get(c));
 
       //
-      resolution = graph.resolve(Collections.singleton(B));
+      resolution = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(B, null));
       assertEquals(2, resolution.size());
       assertEquals(Tools.toSet(b, c), resolution.keySet());
       assertEquals(FetchMode.IMMEDIATE, resolution.get(b));
       assertEquals(FetchMode.IMMEDIATE, resolution.get(c));
 
       //
-      resolution = graph.resolve(Arrays.asList(A, B));
+      LinkedHashMap<ResourceId, FetchMode> pairs = new LinkedHashMap<ResourceId, FetchMode>();
+      pairs.put(A, null);
+      pairs.put(B, null);
+      resolution = graph.resolve(pairs);
       assertEquals(3, resolution.size());
       assertEquals(Tools.toSet(a, b, c), resolution.keySet());
       assertEquals(FetchMode.ON_LOAD, resolution.get(a));
       assertEquals(FetchMode.IMMEDIATE, resolution.get(b));
       assertEquals(FetchMode.IMMEDIATE, resolution.get(c));
+   }
+
+   // ********
+
+   public void testResolveDefaultOnLoadFetchMode()
+   {
+      ScriptGraph graph = new ScriptGraph();
+      ScriptResource a = graph.addResource(A, FetchMode.ON_LOAD);
+
+      // Use default fetch mode
+      Map<ScriptResource, FetchMode> test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, null));
+      assertEquals(Tools.toSet(a), test.keySet());
+      assertEquals(FetchMode.ON_LOAD, test.get(a));
+
+      // Override default fetch mode with same value
+      test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, FetchMode.ON_LOAD));
+      assertEquals(Tools.toSet(a), test.keySet());
+      assertEquals(FetchMode.ON_LOAD, test.get(a));
+
+      // Override default fetch mode with higher
+      test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, FetchMode.IMMEDIATE));
+      assertEquals(Tools.toSet(a), test.keySet());
+      assertEquals(FetchMode.IMMEDIATE, test.get(a));
+   }
+
+   public void testResolveDefaultImmediateFetchMode()
+   {
+      ScriptGraph graph = new ScriptGraph();
+      ScriptResource a = graph.addResource(A, FetchMode.IMMEDIATE);
+
+      // Use default fetch mode
+      Map<ScriptResource, FetchMode> test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, null));
+      assertEquals(Tools.toSet(a), test.keySet());
+      assertEquals(FetchMode.IMMEDIATE, test.get(a));
+
+      // Override default fetch mode with same value
+      test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, FetchMode.ON_LOAD));
+      assertEquals(Tools.toSet(a), test.keySet());
+      assertEquals(FetchMode.IMMEDIATE, test.get(a));
+
+      // Override default fetch mode with higher
+      test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, FetchMode.IMMEDIATE));
+      assertEquals(Tools.toSet(a), test.keySet());
+      assertEquals(FetchMode.IMMEDIATE, test.get(a));
+   }
+
+   public void testResolveDependency1()
+   {
+      ScriptGraph graph = new ScriptGraph();
+      ScriptResource a = graph.addResource(A, FetchMode.IMMEDIATE);
+      ScriptResource b = graph.addResource(B, FetchMode.ON_LOAD);
+      a.addDependency(B);
+
+      //
+      LinkedHashMap<ResourceId, FetchMode> pairs = new LinkedHashMap<ResourceId, FetchMode>();
+      pairs.put(A, null);
+      Map<ScriptResource, FetchMode> test = graph.resolve(pairs);
+      assertEquals(Tools.toSet(a,b), test.keySet());
+      assertEquals(FetchMode.IMMEDIATE, test.get(a));
+      assertEquals(FetchMode.IMMEDIATE, test.get(b));
+
+      //
+      pairs = new LinkedHashMap<ResourceId, FetchMode>();
+      pairs.put(A, null);
+      pairs.put(B, null);
+      test = graph.resolve(pairs);
+      assertEquals(Tools.toSet(a, b), test.keySet());
+      assertEquals(FetchMode.IMMEDIATE, test.get(a));
+      assertEquals(FetchMode.IMMEDIATE, test.get(b));
+
+      //
+      pairs = new LinkedHashMap<ResourceId, FetchMode>();
+      pairs.put(B, null);
+      pairs.put(A, null);
+      test = graph.resolve(pairs);
+      assertEquals(Tools.toSet(a, b), test.keySet());
+      assertEquals(FetchMode.IMMEDIATE, test.get(a));
+      assertEquals(FetchMode.IMMEDIATE, test.get(b));
+
+      //
+      pairs = new LinkedHashMap<ResourceId, FetchMode>();
+      pairs.put(B, null);
+      test = graph.resolve(pairs);
+      assertEquals(Tools.toSet(b), test.keySet());
+      assertEquals(FetchMode.ON_LOAD, test.get(b));
+   }
+
+   public void testResolveDependency2()
+   {
+      ScriptGraph graph = new ScriptGraph();
+      ScriptResource a = graph.addResource(A, FetchMode.ON_LOAD);
+      ScriptResource b = graph.addResource(B, FetchMode.IMMEDIATE);
+      a.addDependency(B);
+
+      //
+      LinkedHashMap<ResourceId, FetchMode> pairs = new LinkedHashMap<ResourceId, FetchMode>();
+      pairs.put(A, null);
+      Map<ScriptResource, FetchMode> test = graph.resolve(pairs);
+      assertEquals(Tools.toSet(a, b), test.keySet());
+      assertEquals(FetchMode.ON_LOAD, test.get(a));
+      assertEquals(FetchMode.ON_LOAD, test.get(b));
+
+      //
+      pairs = new LinkedHashMap<ResourceId, FetchMode>();
+      pairs.put(A, null);
+      pairs.put(B, null);
+      test = graph.resolve(pairs);
+      assertEquals(Tools.toSet(a, b), test.keySet());
+      assertEquals(FetchMode.ON_LOAD, test.get(a));
+      assertEquals(FetchMode.IMMEDIATE, test.get(b));
+
+      //
+      pairs = new LinkedHashMap<ResourceId, FetchMode>();
+      pairs.put(B, null);
+      pairs.put(A, null);
+      test = graph.resolve(pairs);
+      assertEquals(Tools.toSet(a, b), test.keySet());
+      assertEquals(FetchMode.ON_LOAD, test.get(a));
+      assertEquals(FetchMode.IMMEDIATE, test.get(b));
+
+      //
+      pairs = new LinkedHashMap<ResourceId, FetchMode>();
+      pairs.put(B, null);
+      test = graph.resolve(pairs);
+      assertEquals(Tools.toSet(b), test.keySet());
+      assertEquals(FetchMode.IMMEDIATE, test.get(b));
    }
 }

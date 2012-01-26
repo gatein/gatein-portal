@@ -22,15 +22,11 @@ package org.exoplatform.portal.controller.resource.script;
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -52,56 +48,73 @@ public class ScriptGraph
       //
       this.resources = resources;
    }
-   
-   public Collection<ScriptResource> resolve(Collection<ResourceId> ids, FetchMode fetchMode)
+
+   /**
+    * <p></p>Resolve a collection of pair of resource id and fetch mode, each entry of the map will be processed
+    * in the order specified by the iteration of the {@link java.util.Map#entrySet()}. For a given pair
+    * the fetch mode may be null or not. When the fetch mode is null, the default fetch mode of the resource
+    * is used. When the fetch mode is not null, this fetch mode may override the resource fetch mode if it implies
+    * this particular fetch mode. This algorithm tolerates the absence of resources, for instance if a resource
+    * is specified (among the pairs or by a transitive dependency) and does not exist, the resource will be skipped.</p>
+    *
+    * @param pairs the pairs to resolve
+    * @return the resources sorted
+    */
+   public Map<ScriptResource, FetchMode> resolve(Map<ResourceId, FetchMode> pairs)
    {
-      Set<ScriptResource> determined = new HashSet<ScriptResource>();
-      
+      FetchMap<ResourceId> determined = new FetchMap<ResourceId>();
+
       //
-      for (ResourceId id : ids)
+      for (Map.Entry<ResourceId, FetchMode> pair : pairs.entrySet())
       {
+         ResourceId id = pair.getKey();
+         FetchMode fetchMode = pair.getValue();
          ScriptResource resource = getResource(id);
-         if (resource != null && resource.fetchMode == fetchMode)
+         
+         //
+         if (resource != null)
          {
-            determined.add(resource);
-            for (ResourceId dependencyId : resource.closure)
+            // Which fetch mode should we use ?
+            if (fetchMode == null || resource.fetchMode.implies(fetchMode))
             {
-               ScriptResource dependency = getResource(dependencyId);
-               if (dependency != null)
+               fetchMode = resource.fetchMode;
+            }
+            
+            //
+            if (determined.add(id, fetchMode))
+            {
+               for (ResourceId dependencyId : resource.closure)
                {
-                  determined.add(dependency);
+                  ScriptResource dependency = getResource(dependencyId);
+                  if (dependency != null)
+                  {
+                     determined.add(dependencyId, fetchMode);
+                  }
                }
             }
          }
       }
       
-      //
-      List<ScriptResource> sorted = new ArrayList<ScriptResource>(determined);
-      Collections.sort(sorted);
+      // Sort results
+      ArrayList<ScriptResource> resources = new ArrayList<ScriptResource>(determined.size());
+      for (ResourceId id : determined.keySet())
+      {
+         resources.add(getResource(id));
+      }
+      Collections.sort(resources);
       
       //
-      return sorted;
-   }
-
-   public Map<ScriptResource, FetchMode> resolve(Collection<ResourceId> ids)
-   {
-      LinkedHashMap<ScriptResource, FetchMode> map = new LinkedHashMap<ScriptResource, FetchMode>();
+      LinkedHashMap<ScriptResource, FetchMode> result = new LinkedHashMap<ScriptResource, FetchMode>(determined.size());
+      for (ScriptResource resource : resources)
+      {
+         result.put(resource, determined.get(resource.getId()));
+      }
       
-      //
-      for (ScriptResource onLoad : resolve(ids, FetchMode.ON_LOAD))
-      {
-         map.put(onLoad, FetchMode.ON_LOAD);
-      }
 
       //
-      for (ScriptResource onLoad : resolve(ids, FetchMode.IMMEDIATE))
-      {
-         map.put(onLoad, FetchMode.IMMEDIATE);
-      }
-
-      //
-      return map;
+      return result;
    }
+   
    public ScriptResource getResource(ResourceId id)
    {
       return getResource(id.getScope(), id.getName());

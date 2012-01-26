@@ -30,6 +30,7 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.FetchMap;
 import org.exoplatform.portal.controller.resource.script.FetchMode;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.resource.Skin;
@@ -328,21 +329,25 @@ public class UIPortalApplication extends UIApplication
    {
       PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
       
-      // Determine the resource ids involved
-      Set<ResourceId> resourceIds = prc.getJavascriptManager().getScriptResources();
-      
+      // Obtain the resource ids involved
+      // we clone the fetch map by safety
+      FetchMap<ResourceId> requiredResources = new FetchMap<ResourceId>(prc.getJavascriptManager().getScriptResources());
+
       // Add current portal
       String portalOwner = Util.getPortalRequestContext().getPortalOwner();
-      resourceIds.add(new ResourceId(ResourceScope.PORTAL, portalOwner));      
+      requiredResources.add(new ResourceId(ResourceScope.PORTAL, portalOwner), null);
 
-      //still need this util SHARED/portal.js is optimized
+      // Still need this util SHARED/portal.js is optimized
       if (prc.getRemoteUser() != null)
       {
-         resourceIds.add(new ResourceId(ResourceScope.SHARED, "portal"));
+         requiredResources.add(new ResourceId(ResourceScope.SHARED, "portal"), null);
       }
-      
+
+      // Need to add bootstrap as immediate since it contains the loader
+      requiredResources.add(new ResourceId(ResourceScope.SHARED, "bootstrap"), FetchMode.IMMEDIATE);
+
       // todo : switch to debug later
-      log.info("Resource ids to resolve: " + resourceIds);
+      log.info("Resource ids to resolve: " + requiredResources);
 
       //
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
@@ -354,29 +359,13 @@ public class UIPortalApplication extends UIApplication
       {
          LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
 
-         // Get boostrap
-         Map<String, FetchMode> bootstrap = service.resolveURLs(
-            prc.getControllerContext(), 
-            Collections.singleton(new ResourceId(ResourceScope.SHARED, "bootstrap")), 
-            !PropertyManager.isDevelopping(), 
-            !PropertyManager.isDevelopping(),
-            locale);
-         for (Map.Entry<String, FetchMode> entry : bootstrap.entrySet())
-         {
-            // False : means load now without loader
-            ret.put(entry.getKey(), false);
-         }
-         
          //
          Map<String, FetchMode> urls = service.resolveURLs(
             prc.getControllerContext(),
-            resourceIds,
+            requiredResources,
             !PropertyManager.isDevelopping(),
             !PropertyManager.isDevelopping(),
             locale);
-
-         // Remove bootstrap if any since it's already there
-         urls.keySet().removeAll(bootstrap.keySet());
 
          //
          log.info("Resolved URLS for page: " + urls);
