@@ -89,18 +89,6 @@ public class UsernameValidator extends MultipleConditionsValidator implements Se
       }
    }
 
-   @Override
-   protected String getMessageLocalizationKey()
-   {
-      throw new UnsupportedOperationException("Unneeded by this implementation");
-   }
-
-   @Override
-   protected boolean isValid(String value, UIFormInput uiInput)
-   {
-      throw new UnsupportedOperationException("Unneeded by this implementation");
-   }
-
    private boolean isSymbol(char c)
    {
       return c == '_' || c == '.';
