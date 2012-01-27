@@ -83,7 +83,7 @@ public class UIGadgetEditor extends UIForm
       addUIFormInput(new UIFormStringInput(FIELD_NAME, FIELD_NAME, null).addValidator(MandatoryValidator.class)
     		  	.addValidator(StringLengthValidator.class, 2, 50)
     		  	.addValidator(ResourceValidator.class)
-    		  	.addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\-\\d]+$","UIGadgetEditor.msg.Invalid-firstChar"));
+    		  	.addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\-\\d]+$","UIGadgetEditor.msg.Invalid"));
       addUIFormInput(new UIFormTextAreaInput(FIELD_SOURCE, FIELD_SOURCE, sample).addValidator(MandatoryValidator.class)
          .addValidator(GadgetSpecValidator.class));
    }
