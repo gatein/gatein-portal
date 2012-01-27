@@ -21,8 +21,6 @@ import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.form.UIFormInput;
 
-import java.io.Serializable;
-
 /**
  * Validate username whether the value is only alpha lower, digit, dot and underscore with first, last character is
  * alpha lower or digit and cannot contain consecutive underscore, dot or both.
@@ -32,10 +30,15 @@ import java.io.Serializable;
  */
 
 @Serialized
-public class UsernameValidator extends MultipleConditionsValidator implements Serializable
+public class UsernameValidator extends MultipleConditionsValidator
 {
    private Integer min = 3;
    private Integer max = 30;
+
+   // required by @Serialized
+   public UsernameValidator()
+   {
+   }
 
    public UsernameValidator(Integer min, Integer max)
    {
