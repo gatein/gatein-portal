@@ -20,6 +20,7 @@ package org.exoplatform.portal.resource;
 
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.FetchMap;
 import org.exoplatform.web.application.JavascriptManager;
 
 import java.io.IOException;
@@ -43,7 +44,7 @@ public class TestJavascriptManager extends AbstractWebResourceTest
    
    public void testAddingScriptResources() throws IOException
    {
-      Set<ResourceId> scriptResources = jsManager.getScriptResources();
+      FetchMap<ResourceId> scriptResources = jsManager.getScriptResources();
       assertEquals(0, scriptResources.size());
       
       jsManager.loadScriptResource(ResourceScope.PORTAL, "foo");
@@ -54,7 +55,7 @@ public class TestJavascriptManager extends AbstractWebResourceTest
       jsManager.loadScriptResource(ResourceScope.PORTAL, "foo");
       scriptResources = jsManager.getScriptResources();
       assertEquals(1, scriptResources.size());
-      assertTrue(scriptResources.contains(new ResourceId(ResourceScope.PORTAL, "foo")));
+      assertTrue(scriptResources.containsKey(new ResourceId(ResourceScope.PORTAL, "foo")));
    }
    
    public void testAddingJavascripts()
