@@ -74,7 +74,7 @@ public class I18N
       }
       else if (!isLetter(c0) || s.length() < 2 || !isLetter(s.charAt(1)))
       {
-         throw new IllegalArgumentException();
+         throw new IllegalArgumentException("Invalid Java Locale identifier: '" + s + "'");
       }
       else
       {
@@ -133,7 +133,7 @@ public class I18N
          {
             if (!isLetter(s.charAt(i)))
             {
-               throw new IllegalArgumentException();
+               throw new IllegalArgumentException("Invalid Java Locale identifier: '" + s + "'");
             }
          }
          String variant = s.substring(index + 1);
