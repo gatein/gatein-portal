@@ -193,7 +193,8 @@
          </programlisting>
 
          <para>The default <literal>LocalePolicy</literal> implementation is installed as GateIn Kernel portal service via
-            <filename>gatein.ear/lib/exo.portal.webui.portal-VERSION.jar/conf/portal/configuration.xml</filename>.
+            <filename>gatein.ear/02portal.war/WEB-INF/conf/portal/web-configuration.xml</filename>. So here you can change it to different
+            value according to your needs.
          </para>
          <para>The following fragment is responsible for installing the service:
          </para>
@@ -204,9 +205,6 @@
          </programlisting>
          <para>Besides implementing <literal>LocalePolicy</literal>, the service class also needs to implement
             <literal>org.picocontainer.Startable</literal> interface in order to get installed.
-         </para>
-         <para>This configuration file should not be changed. The configuration in it can be overriden by placing it into portal's .war file:
-            <filename>gatein.ear/02portal.war/WEB-INF/conf/configuration.xml</filename> (usually as another file included into this one).
          </para>
       </section>
 
