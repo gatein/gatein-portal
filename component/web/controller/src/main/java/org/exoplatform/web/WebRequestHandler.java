@@ -64,4 +64,12 @@ abstract public class WebRequestHandler extends BaseComponentPlugin
    public void onDestroy(WebAppController controller) throws Exception
    {
   }
+
+   /**
+    * Flag if particular handler requires lifecycle.
+    *
+    * @return true if processing of particular handler requires to be wrapped
+    * within {@link org.exoplatform.container.component.RequestLifeCycle} block.
+    */
+   protected abstract boolean getRequiresLifeCycle();
 }

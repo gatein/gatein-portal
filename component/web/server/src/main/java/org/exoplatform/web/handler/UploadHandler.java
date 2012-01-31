@@ -127,6 +127,12 @@ public class UploadHandler extends WebRequestHandler
       }
    }
 
+   @Override
+   protected boolean getRequiresLifeCycle()
+   {
+      return false;
+   }
+
    public String encodeName(String name) throws Exception
    {
       String[] arr = name.split(" ");

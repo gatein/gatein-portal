@@ -98,6 +98,12 @@ public class DownloadHandler extends WebRequestHandler
       }
    }
 
+   @Override
+   protected boolean getRequiresLifeCycle()
+   {
+      return false;
+   }
+
    private static void optimalRead(InputStream is, OutputStream os) throws Exception
    {
       int bufferLength = 1024; //TODO: Better to compute bufferLength in term of -Xms, -Xmx properties

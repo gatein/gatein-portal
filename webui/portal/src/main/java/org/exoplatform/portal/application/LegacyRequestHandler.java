@@ -110,7 +110,7 @@ public class LegacyRequestHandler extends WebRequestHandler
          }
       }
 
-     //
+      //
       PortalURLContext urlContext = new PortalURLContext(context, siteKey);
       NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
 
@@ -129,6 +129,12 @@ public class LegacyRequestHandler extends WebRequestHandler
 
       HttpServletResponse resp = context.getResponse();
       resp.sendRedirect(resp.encodeRedirectURL(s));
+      return true;
+   }
+
+   @Override
+   protected boolean getRequiresLifeCycle()
+   {
       return true;
    }
 }

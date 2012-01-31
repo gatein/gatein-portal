@@ -49,4 +49,10 @@ public class StaticResourceRequestHandler extends WebRequestHandler
       mergedContext.getNamedDispatcher("default").forward(req, res);
       return true;
    }
+
+   @Override
+   protected boolean getRequiresLifeCycle()
+   {
+      return false;
+   }
 }

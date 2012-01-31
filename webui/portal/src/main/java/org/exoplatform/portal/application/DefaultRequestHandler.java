@@ -66,4 +66,10 @@ public class DefaultRequestHandler extends WebRequestHandler
       resp.sendRedirect(resp.encodeRedirectURL(s));
       return true;
    }
+
+   @Override
+   protected boolean getRequiresLifeCycle()
+   {
+      return false;
+   }
 }
