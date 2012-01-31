@@ -19,7 +19,6 @@
 
 package org.exoplatform.webui.form.validator;
 
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.CompoundApplicationMessage;
 
 import java.io.Serializable;
@@ -47,7 +46,7 @@ public class PositiveNumberFormatValidator extends NumberFormatValidator impleme
       }
       else if(integer < 0)
       {
-         messages.addMessage("PositiveNumberFormatValidator.msg.Invalid-number", new Object[]{label}, ApplicationMessage.WARNING);
+         messages.addMessage("PositiveNumberFormatValidator.msg.Invalid-number", new Object[]{label});
          return null;
       }
       else

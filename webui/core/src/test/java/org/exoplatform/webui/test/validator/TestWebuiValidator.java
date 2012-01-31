@@ -16,11 +16,7 @@
  */
 package org.exoplatform.webui.test.validator;
 
-import java.util.List;
-import java.util.Locale;
-
 import junit.framework.TestCase;
-
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.exception.MessageException;
@@ -37,6 +33,9 @@ import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
 import org.exoplatform.webui.form.validator.URLValidator;
 import org.exoplatform.webui.form.validator.UsernameValidator;
 import org.exoplatform.webui.form.validator.Validator;
+
+import java.util.List;
+import java.util.Locale;
 
 /**
  * @author <a href="mailto:haint@exoplatform.com">Nguyen Thanh Hai</a>
@@ -109,6 +108,7 @@ public class TestWebuiValidator extends TestCase
    public void testEmailValidator()
    {
       Validator validator = new EmailAddressValidator();
+      assertFalse(expected(validator, "root"));
       assertTrue(expected(validator, "root.gtn@exoplatform.com"));
       assertTrue(expected(validator, "root.exo.gtn.portal@explatform.biz.edu.vn"));
       assertTrue(expected(validator, "root_exo_gtn_portal@explatform-edu.biz.vn"));

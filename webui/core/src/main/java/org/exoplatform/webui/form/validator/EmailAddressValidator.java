@@ -20,7 +20,6 @@
 package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.form.UIFormInput;
 
@@ -53,16 +52,19 @@ public class EmailAddressValidator extends MultipleConditionsValidator
       int atIndex = value.indexOf('@');
       if (atIndex == -1)
       {
-         messages.addMessage("EmailAddressValidator.msg.Invalid-input", args, ApplicationMessage.WARNING);
+         messages.addMessage("EmailAddressValidator.msg.Invalid-input", args);
       }
-
-      String localPart = value.substring(0, atIndex);
-      String domainName = value.substring(atIndex + 1);
-
-      if (!validateLocalPart(localPart.toCharArray()) || !validateDomainName(domainName.toCharArray()))
+      else
       {
-         messages.addMessage("EmailAddressValidator.msg.Invalid-input", args, ApplicationMessage.WARNING);
+         String localPart = value.substring(0, atIndex);
+         String domainName = value.substring(atIndex + 1);
+
+         if (!validateLocalPart(localPart.toCharArray()) || !validateDomainName(domainName.toCharArray()))
+         {
+            messages.addMessage("EmailAddressValidator.msg.Invalid-input", args);
+         }
       }
+
    }
 
    private boolean validateLocalPart(char[] localPart)

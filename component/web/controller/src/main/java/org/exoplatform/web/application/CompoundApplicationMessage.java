@@ -25,6 +25,7 @@ package org.exoplatform.web.application;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /** @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a> */
 public class CompoundApplicationMessage extends AbstractApplicationMessage implements Serializable
@@ -42,6 +43,17 @@ public class CompoundApplicationMessage extends AbstractApplicationMessage imple
       {
          messages.add(initialMessage);
       }
+      setType(AbstractApplicationMessage.WARNING);
+   }
+
+   @Override
+   public void setResourceBundle(ResourceBundle resourceBundle)
+   {
+      super.setResourceBundle(resourceBundle);
+      for (AbstractApplicationMessage message : messages)
+      {
+         message.setResourceBundle(resourceBundle);
+      }
    }
 
    @Override
@@ -56,9 +68,9 @@ public class CompoundApplicationMessage extends AbstractApplicationMessage imple
       return sb.toString();
    }
 
-   public void addMessage(String messageKey, Object[] args, int type)
+   public void addMessage(String messageKey, Object[] args)
    {
-      messages.add(new ApplicationMessage(messageKey, args, type));
+      messages.add(new ApplicationMessage(messageKey, args, AbstractApplicationMessage.WARNING));
    }
 
    public boolean isEmpty()

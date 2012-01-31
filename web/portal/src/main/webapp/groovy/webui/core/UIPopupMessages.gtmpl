@@ -51,7 +51,7 @@
 		}
 			println "      <ul class=\"UITabContent PopupMessageBox $messType\" $style>";
 		for(mess in messages) {
-			if(mess.messageKey == null) continue;
+			// if(mess.messageKey == null) continue;
 			println "						<li class=\"MessageContainer\">";
 			println "							<span class=\"PopupIcon ${messType}Icon\">";
 			String msgValue = mess.getMessage();

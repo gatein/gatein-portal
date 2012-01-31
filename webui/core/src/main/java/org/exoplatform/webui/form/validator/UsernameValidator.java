@@ -17,7 +17,6 @@
 package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.form.UIFormInput;
 
@@ -51,17 +50,17 @@ public class UsernameValidator extends MultipleConditionsValidator
       char[] buff = value.toCharArray();
       if (buff.length < min || buff.length > max)
       {
-         messages.addMessage("StringLengthValidator.msg.length-invalid", new Object[]{label, min.toString(), max.toString()}, ApplicationMessage.WARNING);
+         messages.addMessage("StringLengthValidator.msg.length-invalid", new Object[]{label, min.toString(), max.toString()});
       }
 
       if (!Character.isLowerCase(buff[0]))
       {
-         messages.addMessage("FirstCharacterNameValidator.msg", new Object[]{label}, ApplicationMessage.WARNING);
+         messages.addMessage("FirstCharacterNameValidator.msg", new Object[]{label});
       }
 
       if (!Character.isLetterOrDigit(buff[buff.length - 1]))
       {
-         messages.addMessage("LastCharacterUsernameValidator.msg", new Object[]{label, buff[buff.length - 1]}, ApplicationMessage.WARNING);
+         messages.addMessage("LastCharacterUsernameValidator.msg", new Object[]{label, buff[buff.length - 1]});
       }
 
       for (int i = 1; i < buff.length - 1; i++)
@@ -78,16 +77,16 @@ public class UsernameValidator extends MultipleConditionsValidator
             char next = buff[i + 1];
             if (isSymbol(next))
             {
-               messages.addMessage("ConsecutiveSymbolValidator.msg", new Object[]{label, buff[i], buff[i + 1]}, ApplicationMessage.WARNING);
+               messages.addMessage("ConsecutiveSymbolValidator.msg", new Object[]{label, buff[i], buff[i + 1]});
             }
             else if (!Character.isLetterOrDigit(next))
             {
-               messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label}, ApplicationMessage.WARNING);
+               messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label});
             }
          }
          else
          {
-            messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label}, ApplicationMessage.WARNING);
+            messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label});
          }
       }
    }

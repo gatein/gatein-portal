@@ -34,7 +34,7 @@ public abstract class MultipleConditionsValidator extends AbstractValidator impl
 {
    public void validate(UIFormInput uiInput) throws Exception
    {
-      String value = trimmedValueOrNullIfBypassed((String)uiInput.getValue(), uiInput);
+      String value = trimmedValueOrNullIfBypassed((String)uiInput.getValue(), uiInput, exceptionOnMissingMandatory, trimValue);
       if (value == null)
       {
          return;

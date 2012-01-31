@@ -34,6 +34,9 @@ import java.io.Serializable;
 /** @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a> */
 public abstract class AbstractValidator implements Validator, Serializable
 {
+   protected boolean exceptionOnMissingMandatory = false;
+   protected boolean trimValue = false;
+
    protected String getLabelFor(UIFormInput uiInput) throws Exception
    {
       UIComponent uiComponent = (UIComponent)uiInput;
@@ -44,12 +47,20 @@ public abstract class AbstractValidator implements Validator, Serializable
          label = uiForm.getLabel(label);
       }
 
+      label = label.trim();
+      
+      // remove trailing ':' if there is one
+      int index = label.indexOf(':');
+      if(index != -1)
+      {
+         label = label.substring(0, index);
+      }
       return label.trim();
    }
 
    public void validate(UIFormInput uiInput) throws Exception
    {
-      String value = trimmedValueOrNullIfBypassed((String)uiInput.getValue(), uiInput);
+      String value = trimmedValueOrNullIfBypassed((String)uiInput.getValue(), uiInput, exceptionOnMissingMandatory, trimValue);
       if (value == null)
       {
          return;
@@ -75,17 +86,24 @@ public abstract class AbstractValidator implements Validator, Serializable
 
    protected abstract boolean isValid(String value, UIFormInput uiInput);
 
-   protected String trimmedValueOrNullIfBypassed(String value, UIFormInput uiInput)
+   protected String trimmedValueOrNullIfBypassed(String value, UIFormInput uiInput, boolean exceptionOnMissingMandatory, boolean trimValue) throws Exception
    {
-      if (value == null)
+      if (value != null)
       {
-         return null;
-      }
-      else
-      {
-//         value = value.trim(); // should values be trimmed before being validated and saved?
+         String tmp = value.trim();
+         if(trimValue)
+         {
+            value = tmp;
+         }
 
-         return value.trim().isEmpty() ? null : value;
+         value = tmp.isEmpty() ? null : value;
       }
+
+      if(exceptionOnMissingMandatory && value == null)
+      {
+         throw createMessageException("EmptyFieldValidator.msg.empty-input", uiInput);
+      }
+
+      return value;
    }
 }

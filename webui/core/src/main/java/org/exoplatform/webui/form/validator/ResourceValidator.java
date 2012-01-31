@@ -20,7 +20,6 @@
 package org.exoplatform.webui.form.validator;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.form.UIFormInput;
 
@@ -42,7 +41,7 @@ public class ResourceValidator extends MultipleConditionsValidator
       if (Character.isDigit(firstChar) || firstChar == '-' || firstChar == '.' || firstChar == '_')
       {
          Object[] args = {label, uiInput.getBindingField()};
-         messages.addMessage("FirstCharacterNameValidator.msg", args, ApplicationMessage.WARNING);
+         messages.addMessage("FirstCharacterNameValidator.msg", args);
       }
       for (int i = 0; i < value.length(); i++)
       {
@@ -52,7 +51,7 @@ public class ResourceValidator extends MultipleConditionsValidator
             continue;
          }
          Object[] args = {label};
-         messages.addMessage("ResourceValidator.msg.Invalid-char", args, ApplicationMessage.WARNING);
+         messages.addMessage("ResourceValidator.msg.Invalid-char", args);
       }
    }
 }

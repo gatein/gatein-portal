@@ -43,6 +43,11 @@ public class ApplicationMessage extends AbstractApplicationMessage implements Se
       setType(type);
    }
 
+   public String getMessageKey()
+   {
+      return messageKey_;
+   }
+
    public String getMessage()
    {
       String msg = resolveMessage(messageKey_);

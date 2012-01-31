@@ -19,7 +19,6 @@
 
 package org.exoplatform.webui.form.validator;
 
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.form.UIFormInput;
 
@@ -46,11 +45,11 @@ public class NumberFormatValidator extends MultipleConditionsValidator implement
       Object[] args = {label};
       if (value.charAt(0) == '0' && value.length() > 1)
       {
-         messages.addMessage("NumberFormatValidator.msg.Invalid-number", args, ApplicationMessage.WARNING);
+         messages.addMessage("NumberFormatValidator.msg.Invalid-number", args);
       }
       else if (value.charAt(0) == '-' && value.length() > 1 && value.charAt(1) == '0')
       {
-         messages.addMessage("NumberFormatValidator.msg.Invalid-number", args, ApplicationMessage.WARNING);
+         messages.addMessage("NumberFormatValidator.msg.Invalid-number", args);
       }
       try
       {
@@ -58,7 +57,7 @@ public class NumberFormatValidator extends MultipleConditionsValidator implement
       }
       catch (NumberFormatException e)
       {
-         messages.addMessage("NumberFormatValidator.msg.Invalid-number", args, ApplicationMessage.WARNING);
+         messages.addMessage("NumberFormatValidator.msg.Invalid-number", args);
          return null;
       }
    }

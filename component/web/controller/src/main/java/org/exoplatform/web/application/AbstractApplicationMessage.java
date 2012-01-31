@@ -45,12 +45,16 @@ public abstract class AbstractApplicationMessage implements Serializable
 
    private boolean argsLocalized = true;
 
-
    public abstract String getMessage();
    
    public void setResourceBundle(ResourceBundle resourceBundle)
    {
       this.resourceBundle = resourceBundle;
+   }
+
+   protected ResourceBundle getResourceBundle()
+   {
+      return resourceBundle;
    }
 
    public int getType()

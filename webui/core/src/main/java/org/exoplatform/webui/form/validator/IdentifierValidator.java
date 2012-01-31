@@ -19,7 +19,6 @@
 
 package org.exoplatform.webui.form.validator;
 
-import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.form.UIFormInput;
 
@@ -42,7 +41,7 @@ public class IdentifierValidator extends MultipleConditionsValidator implements 
    {
       if (Character.isDigit(value.charAt(0)) || value.charAt(0) == '-')
       {
-         messages.addMessage("FirstAndSpecialCharacterNameValidator.msg", new Object[]{label, uiInput.getBindingField()}, ApplicationMessage.WARNING);
+         messages.addMessage("FirstAndSpecialCharacterNameValidator.msg", new Object[]{label, uiInput.getBindingField()});
       }
       for (int i = 0; i < value.length(); i++)
       {
@@ -51,7 +50,7 @@ public class IdentifierValidator extends MultipleConditionsValidator implements 
          {
             continue;
          }
-         messages.addMessage("IdentifierValidator.msg.Invalid-char", new Object[]{label}, ApplicationMessage.WARNING);
+         messages.addMessage("IdentifierValidator.msg.Invalid-char", new Object[]{label});
       }
    }
 }

@@ -62,7 +62,7 @@ public class DateTimeValidator extends AbstractValidator implements Serializable
    }
 
    @Override
-   protected String trimmedValueOrNullIfBypassed(String value, UIFormInput uiInput)
+   protected String trimmedValueOrNullIfBypassed(String value, UIFormInput uiInput, boolean exceptionOnMissingMandatory, boolean trimValue) throws Exception
    {
       if(!(uiInput instanceof UIFormDateTimeInput))
       {
@@ -70,7 +70,7 @@ public class DateTimeValidator extends AbstractValidator implements Serializable
       }
       else
       {
-         return super.trimmedValueOrNullIfBypassed(value, uiInput);
+         return super.trimmedValueOrNullIfBypassed(value, uiInput, exceptionOnMissingMandatory, trimValue);
       }
    }
 
