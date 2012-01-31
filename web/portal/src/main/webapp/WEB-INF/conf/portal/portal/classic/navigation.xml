@@ -29,6 +29,7 @@
 	  <node>
 	    <name>home</name>
       <label xml:lang="en">Home</label>
+      <label xml:lang="cs">Domů</label>
       <label xml:lang="fr">Accueil</label>
       <label xml:lang="es">Inicio</label>
       <label xml:lang="de">Startseite</label>
@@ -49,6 +50,7 @@
     <node>
       <name>sitemap</name>
       <label xml:lang="en">SiteMap</label>
+      <label xml:lang="cs">Mapa stránek</label>
       <label xml:lang="fr">SiteMap</label>
       <label xml:lang="es">Mapa del Sitio</label>
       <label xml:lang="de">Seitenübersicht</label>
@@ -69,6 +71,7 @@
 	  <node>
 	    <name>groupnavigation</name>
       <label xml:lang="en">Group Navigation</label>
+      <label xml:lang="cs">Navigace skupin</label>
       <label xml:lang="fr">Group Navigation</label>
       <label xml:lang="es">Navegación por Grupos</label>
       <label xml:lang="de">Gruppennavigation</label>
@@ -90,6 +93,7 @@
 	  <node>
 	    <name>portalnavigation</name>
       <label xml:lang="en">Portal Navigation</label>
+      <label xml:lang="cs">Navigace portálu</label>
       <label xml:lang="fr">Portal Navigation</label>
       <label xml:lang="es">Navegación por Portales</label>
       <label xml:lang="de">Portalnavigation</label>
@@ -111,6 +115,7 @@
 	  <node>
 	    <name>register</name>
       <label xml:lang="en">Register</label>
+      <label xml:lang="cs">Registrace</label>
       <label xml:lang="es">Registrarse</label>
       <label xml:lang="de">Registrieren</label>
       <label xml:lang="it">Registrazione</label>
