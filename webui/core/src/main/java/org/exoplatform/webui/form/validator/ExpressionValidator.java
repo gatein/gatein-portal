@@ -69,4 +69,10 @@ public class ExpressionValidator extends AbstractValidator
       matcher.reset(value);
       return matcher.matches();
    }
+
+   @Override
+   protected Object[] getMessageArgs(String value, UIFormInput uiInput) throws Exception
+   {
+      return new Object[]{getLabelFor(uiInput), matcher.pattern().toString()};
+   }
 }
