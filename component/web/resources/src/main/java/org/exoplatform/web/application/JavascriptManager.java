@@ -24,6 +24,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
 import org.exoplatform.portal.controller.resource.script.FetchMap;
+import org.exoplatform.portal.controller.resource.script.FetchMode;
 import org.exoplatform.portal.controller.resource.script.ScriptResource;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -31,7 +32,6 @@ import org.exoplatform.web.application.javascript.JavascriptConfigService;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -71,30 +71,29 @@ public class JavascriptManager
    }
 
    /**
-    * Register a Javascript Module that will be loaded in Rendering phase
+    * Register a SHARE Javascript resource that will be loaded in Rendering phase
+    * Script FetchMode is ON_LOAD by default
     */
-   public void loadScriptResource(ResourceScope scope, String name)
+   public void loadScriptResource(String name)
+   {      
+      loadScriptResource(ResourceScope.SHARED, name, null);
+   }
+
+   /**
+    * Register a Javascript resource that will be loaded in Rendering phase
+    * If mode is null, script will be loaded with mode defined in gatein-resources.xml
+    */
+   public void loadScriptResource(ResourceScope scope, String name, FetchMode mode)
    {
       if (scope == null)
       {
          throw new IllegalArgumentException("scope can't be null");
       }
-      loadScriptResources(new ResourceId(scope, name));
-   }
-
-   /**
-    * Register collection of JS resources that will be loaded in Rendering phase
-    */
-   public void loadScriptResources(ResourceId... ids)
-   {
-      if (ids == null)
+      if (name == null)
       {
-         throw new IllegalArgumentException("ids can't be null");
+         throw new IllegalArgumentException("name can't be null");
       }
-      for (ResourceId id : ids)
-      {
-         resourceIds.add(id, null);
-      }
+      resourceIds.add(new ResourceId(scope, name), mode);
    }
 
    public FetchMap<ResourceId> getScriptResources()
@@ -114,7 +113,8 @@ public class JavascriptManager
       {
          try
          {
-            loadScriptResources(res.getId());
+            ResourceId id = res.getId();
+            loadScriptResource(id.getScope(), id.getName(), null);
             if (log.isWarnEnabled())
             {
                log.warn("This method is deprecated. You could loadScriptResources " + res.getId() + " instead of importJavascript " + moduleName);

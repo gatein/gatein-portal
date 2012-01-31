@@ -47,12 +47,12 @@ public class TestJavascriptManager extends AbstractWebResourceTest
       FetchMap<ResourceId> scriptResources = jsManager.getScriptResources();
       assertEquals(0, scriptResources.size());
       
-      jsManager.loadScriptResource(ResourceScope.PORTAL, "foo");
+      jsManager.loadScriptResource(ResourceScope.PORTAL, "foo", null);
       scriptResources = jsManager.getScriptResources();
       assertEquals(1, scriptResources.size());
 
       // Re-adding the same resource
-      jsManager.loadScriptResource(ResourceScope.PORTAL, "foo");
+      jsManager.loadScriptResource(ResourceScope.PORTAL, "foo", null);
       scriptResources = jsManager.getScriptResources();
       assertEquals(1, scriptResources.size());
       assertTrue(scriptResources.containsKey(new ResourceId(ResourceScope.PORTAL, "foo")));

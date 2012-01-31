@@ -44,11 +44,11 @@ public enum FetchMode
 
    public static FetchMode decode(String value)
    {
-      if (value.equals("immediate"))
+      if ("immediate".equals(value))
       {
          return FetchMode.IMMEDIATE;
       }
-      else if (value.equals("on-load"))
+      else if ("on-load".equals(value))
       {
          return FetchMode.ON_LOAD;
       }

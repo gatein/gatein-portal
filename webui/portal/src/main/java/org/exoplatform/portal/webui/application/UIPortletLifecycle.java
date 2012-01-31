@@ -23,6 +23,8 @@ import org.exoplatform.Constants;
 import org.exoplatform.commons.utils.Text;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.portal.controller.resource.ResourceScope;
+import org.exoplatform.portal.controller.resource.script.FetchMode;
 import org.exoplatform.portal.portlet.PortletExceptionHandleService;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
@@ -32,6 +34,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.portletcontainer.PortletContainerException;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
@@ -63,6 +66,10 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
 {
 
    protected static Log log = ExoLogger.getLogger("portal:UIPortletLifecycle");
+   
+   public static final String SCRIPT_NAME = "org.gatein.script.name";
+   
+   public static final String FETCH_MODE = "org.gatein.script.fetch-mode";
 
    /**
     * This processAction method associated with the portlet UI component does the
@@ -251,12 +258,24 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                      if (fragmentResponse.getProperties().getTransportHeaders() != null)
                      {
                         MultiValuedPropertyMap<String> transportHeaders = fragmentResponse.getProperties()
-                              .getTransportHeaders();
+                              .getTransportHeaders();                                               
                         for (String key : transportHeaders.keySet())
-                        {
-                           for (String value : transportHeaders.getValues(key))
+                        {                           
+                           if (SCRIPT_NAME.equals(key)) 
+                           {                                                              
+                              JavascriptManager jsMan = context.getJavascriptManager();                                                                                           
+                              String mode = transportHeaders.getValue(FETCH_MODE);
+                              for (String value : transportHeaders.getValues(key))
+                              {
+                                 jsMan.loadScriptResource(ResourceScope.SHARED, value, FetchMode.decode(mode));                                                                  
+                              }
+                           }
+                           else
                            {
-                              prcontext.getResponse().setHeader(key, value);
+                              for (String value : transportHeaders.getValues(key))
+                              {
+                                 prcontext.getResponse().setHeader(key, value);                                                                                                   
+                              }
                            }
                         }
                      }

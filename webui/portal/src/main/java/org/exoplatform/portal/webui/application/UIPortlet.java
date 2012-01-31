@@ -1100,7 +1100,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       {
          PortletInfo info = getProducedOfferedPortlet().getInfo();
          String name = info.getApplicationName() + "/" + info.getName();
-         context.getJavascriptManager().loadScriptResource(ResourceScope.PORTLET, name);
+         context.getJavascriptManager().loadScriptResource(ResourceScope.PORTLET, name, null);
       }
       super.processRender(context);
    }   
