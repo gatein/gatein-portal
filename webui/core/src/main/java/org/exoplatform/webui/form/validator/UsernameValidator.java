@@ -31,8 +31,10 @@ import org.exoplatform.webui.form.UIFormInput;
 @Serialized
 public class UsernameValidator extends MultipleConditionsValidator
 {
-   private Integer min = 3;
-   private Integer max = 30;
+   protected static final int DEFAULT_MIN_LENGTH = 3;
+   protected static final int DEFAULT_MAX_LENGTH = 30;
+   protected Integer min = DEFAULT_MIN_LENGTH;
+   protected Integer max = DEFAULT_MAX_LENGTH;
 
    // required by @Serialized
    public UsernameValidator()
