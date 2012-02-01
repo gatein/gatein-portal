@@ -38,7 +38,27 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.regex.Pattern;
 
-/** @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a> */
+/**
+ * A user-configurable validator. Several aspects of this validator can be configured via properties in the
+ * configuration.properties file found in the GateIn configuration directory (${gatein.conf.dir}. The validator
+ * supports several configurations that can be activated when a validator instance is created by passing it the name of
+ * the configuration to be activated. A configuration is created by adding an entry in configuration.properties using
+ * the {@link #KEY_PREFIX} prefix followed by the name of the configuration, a period '.' and the name of the
+ * validation aspect to modify.
+ * <p/>
+ * Currently supported validation aspects, where {configuration} is a configuration's name:
+ * <ul>
+ * <li>{@link #KEY_PREFIX}{configuration}.length.min: the minimal length of the validated field</li>
+ * <li>{@link #KEY_PREFIX}{configuration}.length.max: the maximal length of the validated field</li>
+ * <li>{@link #KEY_PREFIX}{configuration}.regexp: the regular expression to which the validated field must conform</li>
+ * <li>{@link #KEY_PREFIX}{configuration}.format.message: a message to display providing details about the format of
+ * values the regular expression allows in case the validated field doesn't conform to it</li>
+ * </ul>
+ *
+ * Currently used configurations in the code are defined by the {@link #USERNAME} and {@link #GROUPMEMBERSHIP} names.
+ *
+ * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
+ */
 @Serialized
 public class UserConfigurableValidator extends MultipleConditionsValidator
 {
@@ -72,7 +92,7 @@ public class UserConfigurableValidator extends MultipleConditionsValidator
                {
                   // extract property key
                   String propertyKey = key.substring(length, key.indexOf('.', length));
-                  if(!configurations.containsKey(propertyKey))
+                  if (!configurations.containsKey(propertyKey))
                   {
                      configurations.put(propertyKey, new ValidatorConfiguration(propertyKey, properties));
                   }
@@ -96,17 +116,17 @@ public class UserConfigurableValidator extends MultipleConditionsValidator
       this(USERNAME, DEFAULT_LOCALIZATION_KEY);
    }
 
-   public UserConfigurableValidator(String validatorName, String messageLocalizationKey)
+   public UserConfigurableValidator(String configurationName, String messageLocalizationKey)
    {
       this.exceptionOnMissingMandatory = true;
       this.trimValue = true;
       localizationKey = messageLocalizationKey != null ? messageLocalizationKey : DEFAULT_LOCALIZATION_KEY;
-      this.validatorName = validatorName != null ? validatorName : USERNAME;
+      this.validatorName = configurationName != null ? configurationName : USERNAME;
    }
 
-   public UserConfigurableValidator(String validatorName)
+   public UserConfigurableValidator(String configurationName)
    {
-      this(validatorName, DEFAULT_LOCALIZATION_KEY);
+      this(configurationName, DEFAULT_LOCALIZATION_KEY);
    }
 
    @Override
@@ -161,10 +181,10 @@ public class UserConfigurableValidator extends MultipleConditionsValidator
          boolean isUser = USERNAME.equals(propertyKey);
          String prefixedKey = KEY_PREFIX + propertyKey;
 
-         String property = properties.getProperty(prefixedKey + ".min.length");
+         String property = properties.getProperty(prefixedKey + ".length.min");
          minLength = property != null ? Integer.valueOf(property) : (isUser ? UsernameValidator.DEFAULT_MIN_LENGTH : 0);
 
-         property = properties.getProperty(prefixedKey + ".max.length");
+         property = properties.getProperty(prefixedKey + ".length.max");
          maxLength = property != null ? Integer.valueOf(property) : (isUser ? UsernameValidator.DEFAULT_MAX_LENGTH : Integer.MAX_VALUE);
 
          pattern = properties.getProperty(prefixedKey + ".regexp", Utils.USER_NAME_VALIDATOR_REGEX);
