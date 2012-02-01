@@ -40,9 +40,9 @@ import java.util.regex.Pattern;
 
 /** @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a> */
 @Serialized
-public class UserConfigurableUsernameValidator extends MultipleConditionsValidator
+public class UserConfigurableValidator extends MultipleConditionsValidator
 {
-   protected static Log log = ExoLogger.getLogger(UserConfigurableUsernameValidator.class);
+   protected static Log log = ExoLogger.getLogger(UserConfigurableValidator.class);
 
    public static final String USERNAME = "username";
    public static final String GROUPMEMBERSHIP = "groupmembership";
@@ -91,12 +91,12 @@ public class UserConfigurableUsernameValidator extends MultipleConditionsValidat
    private final String localizationKey;
 
    // needed by @Serialized
-   public UserConfigurableUsernameValidator()
+   public UserConfigurableValidator()
    {
       this(USERNAME, DEFAULT_LOCALIZATION_KEY);
    }
 
-   public UserConfigurableUsernameValidator(String validatorName, String messageLocalizationKey)
+   public UserConfigurableValidator(String validatorName, String messageLocalizationKey)
    {
       this.exceptionOnMissingMandatory = true;
       this.trimValue = true;
@@ -104,7 +104,7 @@ public class UserConfigurableUsernameValidator extends MultipleConditionsValidat
       this.validatorName = validatorName != null ? validatorName : USERNAME;
    }
 
-   public UserConfigurableUsernameValidator(String validatorName)
+   public UserConfigurableValidator(String validatorName)
    {
       this(validatorName, DEFAULT_LOCALIZATION_KEY);
    }
