@@ -49,6 +49,11 @@ public class UsernameValidator extends MultipleConditionsValidator
 
    protected void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput)
    {
+      validate(value, label, messages, min, max);
+   }
+
+   static void validate(String value, String label, CompoundApplicationMessage messages, Integer min, Integer max)
+   {
       char[] buff = value.toCharArray();
       if (buff.length < min || buff.length > max)
       {
@@ -93,7 +98,7 @@ public class UsernameValidator extends MultipleConditionsValidator
       }
    }
 
-   private boolean isSymbol(char c)
+   private static boolean isSymbol(char c)
    {
       return c == '_' || c == '.';
    }

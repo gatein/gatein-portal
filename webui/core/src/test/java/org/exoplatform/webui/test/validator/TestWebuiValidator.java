@@ -31,6 +31,7 @@ import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
 import org.exoplatform.webui.form.validator.URLValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableUsernameValidator;
 import org.exoplatform.webui.form.validator.UsernameValidator;
 import org.exoplatform.webui.form.validator.Validator;
 
@@ -93,6 +94,14 @@ public class TestWebuiValidator extends TestCase
    public void testUsernameValidator()
    {
       Validator validator = new UsernameValidator(3, 30);
+      validateUsernames(validator);
+
+      validator = new UserConfigurableUsernameValidator(UserConfigurableUsernameValidator.USERNAME);
+      validateUsernames(validator);
+   }
+
+   private void validateUsernames(Validator validator)
+   {
       assertTrue(expected(validator, "root.gtn"));
       assertTrue(expected(validator, "root_gtn"));
       assertTrue(expected(validator, "root_gtn.01"));
