@@ -23,6 +23,7 @@
 package org.gatein.integration.wsrp.wss;
 
 import org.gatein.wsrp.wss.WebServiceSecurityFactory;
+import org.gatein.wsrp.wss.credentials.CredentialsAccessor;
 import org.picocontainer.Startable;
 import org.wsrp.wss.jboss5.handlers.consumer.JBWSSecurityHandlerWrapper;
 import org.wsrp.wss.jboss5.handlers.consumer.WSSecurityCredentialHandler;
@@ -35,12 +36,13 @@ public class JBoss5WSSServiceIntegration implements Startable
 {
    private final WebServiceSecurityFactory wssFactory;
    
-   private final WSSecurityCredentialHandler WS_CREDENTIAL_HANDLER = new WSSecurityCredentialHandler();
+   private final WSSecurityCredentialHandler WS_CREDENTIAL_HANDLER;
    private final JBWSSecurityHandlerWrapper JBWS_SECURITY_WRAPPER = new JBWSSecurityHandlerWrapper();
    
-   public JBoss5WSSServiceIntegration()
+   public JBoss5WSSServiceIntegration(CredentialsAccessor credentialsAccessor)
    {
       wssFactory = WebServiceSecurityFactory.getInstance();
+      WS_CREDENTIAL_HANDLER = new WSSecurityCredentialHandler(credentialsAccessor);
    }
    
    public void start()
