@@ -709,7 +709,7 @@ realmName=gatein-domain;
                     Once downloaded, extract the package into what will be called <filename>JOSSO_HOME</filename> in this example.
                 </para>
         <warning>
-          <para>The steps described later are only correct in case of JOSSO v.1.8.1.</para>
+          <para>The steps described later are only correct in case of JOSSO v.1.8</para>
         </warning>
             </section>
             
@@ -718,7 +718,10 @@ realmName=gatein-domain;
                 <procedure>
                     <step>
                         <para>
-                            Copy the files from <filename>GATEIN_SSO_HOME/josso/plugin</filename> into the Tomcat directory (<filename>JOSSO_HOME</filename>).
+                            If you have JOSSO 1.8.1, then copy the files from <filename>GATEIN_SSO_HOME/josso/josso-181/plugin</filename> into the Tomcat directory (<filename>JOSSO_HOME</filename>).
+                        </para>
+                        <para>
+                          If you have JOSSO 1.8.2 or newer, then copy the files from <filename>GATEIN_SSO_HOME/josso/josso-182/plugin</filename> into the Tomcat directory (<filename>JOSSO_HOME</filename>).
                         </para>
                         <para>
                             This action should replace or add the following files to the <filename>JOSSO_HOME/webapps/josso/WEB-INF/lib</filename> directory:
@@ -775,15 +778,20 @@ realmName=gatein-domain;
         
         <section id="sect-Reference_Guide-JOSSO-Setup_the_JOSSO_client">
             <title>Setup the JOSSO client</title>
+            <note>
+               There are some changes in JOSSO agent api among versions 1.8.1 and 1.8.2, which means that we need to use different modules for different JOSSO versions.
+               In next section, we will use directory with key <emphasis role="bold">josso-18X</emphasis>, which will be directory <emphasis>josso-181</emphasis> if you
+               have JOSSO 1.8.1 and <emphasis>josso-182</emphasis> if you have JOSSO 1.8.2 or newer.
+            </note>
             <procedure>
                 <step>
                     <para>
-                        Copy the library files from <filename>GATEIN_SSO_HOME/josso/gatein.ear/lib</filename> into <filename>gatein.ear/lib</filename> (or into <filename>GATEIN_HOME/lib</filename> if &PRODUCT; is  running in Tomcat)
+                        Copy the library files from <filename>GATEIN_SSO_HOME/josso/josso-18X/gatein.ear/lib</filename> into <filename>gatein.ear/lib</filename> (or into <filename>GATEIN_HOME/lib</filename> if &PRODUCT; is  running in Tomcat)
                     </para>
                 </step>
             <step>
                <para>
-                  Copy the file <filename>GATEIN_SSO_HOME/josso/gatein.ear/portal.war/WEB-INF/classes/josso-agent-config.xml</filename> into <filename>gatein.ear/02portal.war/WEB-INF/classes</filename> (or into <filename>GATEIN_HOME/webapps/portal.war/WEB-INF/classes</filename>, or <filename>GATEIN_HOME/conf</filename> if &PRODUCT; is  running in Tomcat)
+                  Copy the file <filename>GATEIN_SSO_HOME/josso/josso-18X/gatein.ear/portal.war/WEB-INF/classes/josso-agent-config.xml</filename> into <filename>gatein.ear/02portal.war/WEB-INF/classes</filename> (or into <filename>GATEIN_HOME/webapps/portal.war/WEB-INF/classes</filename>, or <filename>GATEIN_HOME/conf</filename> if &PRODUCT; is  running in Tomcat)
                </para>
             </step>
                 <step>
