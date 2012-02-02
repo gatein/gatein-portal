@@ -32,10 +32,12 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.URLValidator;
 
 import javax.portlet.PortletMode;
 import javax.portlet.PortletPreferences;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /** Created by The eXo Platform SAS Author : eXoPlatform October 2, 2009 */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {@EventConfig(listeners = UILogoEditMode.SaveActionListener.class)})
@@ -57,13 +59,46 @@ public class UILogoEditMode extends UIForm
       {
          UILogoEditMode uiForm = event.getSource();
          String url = uiForm.getUIStringInput(FIELD_URL).getValue();
-         if ((url == null || url.trim().length() == 0) || (!url.trim().matches(URLValidator.URL_REGEX)))
+         if(url == null)
          {
-            UILogoPortlet uiPortlet = uiForm.getParent();
-            uiForm.getUIStringInput(FIELD_URL).setValue(uiPortlet.getURL());
-            Object[] args = {FIELD_URL, "URL"};
-            throw new MessageException(new ApplicationMessage("ExpressionValidator.msg.value-invalid", args));
+            throwMessageException(uiForm);
          }
+         else
+         {
+            url = url.trim();
+            
+            if(url.length() == 0)
+            {
+               throwMessageException(uiForm);
+            }
+            else
+            {
+
+               String tmp = url;
+
+               // check if we have an absolute URL
+               if(url.startsWith("/"))
+               {
+                  // build a fake file: URI for validation purposes
+                  tmp = "file://" + url;
+               }
+
+               try
+               {
+                  URI uri = new URI(tmp);
+                  uri.toURL();
+               }
+               catch (URISyntaxException e)
+               {
+                  throwMessageException(uiForm);
+               }
+               catch (MalformedURLException e)
+               {
+                  throwMessageException(uiForm);
+               }
+            }
+         }
+
          PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
          PortletPreferences pref = pcontext.getRequest().getPreferences();
          pref.setValue("url", uiForm.getUIStringInput(FIELD_URL).getValue());
@@ -74,6 +109,14 @@ public class UILogoEditMode extends UIForm
          {
             pcontext.setApplicationMode(PortletMode.VIEW);
          }
+      }
+
+      private void throwMessageException(UILogoEditMode uiForm) throws MessageException
+      {
+         UILogoPortlet uiPortlet = uiForm.getParent();
+         uiForm.getUIStringInput(FIELD_URL).setValue(uiPortlet.getURL());
+         Object[] args = {FIELD_URL, "URL"};
+         throw new MessageException(new ApplicationMessage("ExpressionValidator.msg.value-invalid", args));
       }
    }
 }
