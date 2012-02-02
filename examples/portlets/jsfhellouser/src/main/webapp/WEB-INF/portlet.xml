@@ -1,22 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
-version="2.0"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd
+             version="2.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd
    http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
    <portlet>
       <portlet-name>JSFHelloUserPortlet</portlet-name>
       <portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
-      <supports>
-         <mime-type>text/html</mime-type>
-         <portlet-mode>view</portlet-mode>
-         <portlet-mode>edit</portlet-mode>
-         <portlet-mode>help</portlet-mode>
-      </supports>
-      <portlet-info>
-         <title>JSF Hello User Portlet</title>
-      </portlet-info>
-      
       <init-param>
          <name>javax.portlet.faces.defaultViewId.view</name>
          <value>/jsf/welcome.jsp</value>
@@ -31,6 +21,14 @@ version="2.0"
          <name>javax.portlet.faces.defaultViewId.help</name>
          <value>/jsf/help.jsp</value>
       </init-param>
-
+      <supports>
+         <mime-type>text/html</mime-type>
+         <portlet-mode>view</portlet-mode>
+         <portlet-mode>edit</portlet-mode>
+         <portlet-mode>help</portlet-mode>
+      </supports>
+      <portlet-info>
+         <title>JSF Hello User Portlet</title>
+      </portlet-info>
    </portlet>
 </portlet-app>
