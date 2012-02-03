@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Module>
+  <ModulePrefs title="EndToEndTest">
+    <Locale messages="messages.xml"/>
+    <Locale lang="ar" messages="messages_ar.xml" language_direction="rtl"/>
+  </ModulePrefs>
+  <Content type="html">
+    <![CDATA[
+      /** For test message bundle */
+      <span id="substituteHere">__MSG_TEST__</span>
+      <span id="bidi">__BIDI_DIR__</span>
+      
+      /** Script test framework */
+      <script type="text/javascript" src="/testframework.js"></script>
+      
+      /** Test cases */
+      <script type="text/javascript">
+      
+        var tests = {
+          /** Test json feature */
+          jsonTest: function() {
+            var val = {foo: 1, bar: [0, 1, 2], baz: {key: 'value'}};
+            var str = gadgets.json.stringify(val);
+            assertTrue("Serialization missing scalar value", /"foo":1/.test(str));
+            assertTrue("Serialization missing array value", /"bar":\[0,1,2\]/.test(str));
+            assertTrue("Serialization missing literal value", /"baz":\{"key":"value"\}/.test(str));
+            finished();
+          },
+          
+          /** Test fetching a makeRequest proxied call */
+          makeRequestTest: function() {
+            function receivedData(response) {
+              assertEquals('Text property not set', '{"key": "value"}', response.text);
+              assertEquals('Data property not set', '{"key": "value"}', response.data);
+              assertEquals('Response code not set', 200, response.rc);
+              assertEquals('Errors not an empty array', 0, response.errors.length);
+              finished();
+            }
+
+            gadgets.io.makeRequest('http://localhost:9003/test.json', receivedData);
+          },
+
+          /** Test fetching a makeRequest proxied for JSON */
+          makeRequestJsonTest: function() {
+            function receivedData(response) {
+              assertEquals('Text property not set', '{"key": "value"}', response.text);
+              assertEquals('Data property not set', 'value', response.data.key);
+              assertEquals('Response code not set', 200, response.rc);
+              assertEquals('Errors not an empty array', 0, response.errors.length);
+              finished();
+            }
+
+            gadgets.io.makeRequest('http://localhost:9003/test.json', receivedData,
+              {CONTENT_TYPE: 'JSON'});
+          },
+
+          /** Test fetching a makeRequest proxied call that fails */
+          makeRequestJsonDoesntExistTest: function() {
+            function receivedData(response) {
+              assertEquals('Response code not set', 404, response.rc);
+              assertEquals('Errors not an empty array', 1, response.errors.length);
+              finished();
+            }
+
+            gadgets.io.makeRequest('http://localhost:9003/doesntexist.txt', receivedData);
+          },
+          
+          /** Message bundle */
+          messageBundleTest: function() {
+            var msg = document.getElementById('substituteHere');
+            var bidi = document.getElementById('bidi');
+            var prefs = new gadgets.Prefs();
+            var expectedText = 'test FTW';
+            var expectedLtr = 'ltr';
+            
+            if('ar' == prefs.getLang()) {
+               expectedText = 'WTF tset';
+               expectedLtr = 'rtl';
+            }
+            
+            assertEquals('Text not substituted', expectedText, msg.firstChild.data);
+            assertEquals('getMsg not successful', expectedText, prefs.getMsg('TEST'));
+            assertEquals('BIDI not substituted', expectedLtr, bidi.firstChild.data);
+            finished();
+          }
+        }
+      </script>
+      
+      <div>Core Features Test Cases!</div>
+    ]]>
+  </Content>
+</Module>
