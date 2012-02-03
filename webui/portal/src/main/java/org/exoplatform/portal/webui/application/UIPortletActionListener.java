@@ -23,6 +23,21 @@
 
 package org.exoplatform.portal.webui.application;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.portlet.PortletMode;
+import javax.portlet.WindowState;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.xml.namespace.QName;
+
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -56,20 +71,6 @@ import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.pc.api.invocation.response.SecurityErrorResponse;
 import org.gatein.pc.api.invocation.response.SecurityResponse;
 import org.gatein.pc.api.invocation.response.UpdateNavigationalStateResponse;
-
-import javax.portlet.PortletMode;
-import javax.portlet.WindowState;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.xml.namespace.QName;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 /** May 29, 2006 */
 public class UIPortletActionListener
@@ -440,14 +441,14 @@ public class UIPortletActionListener
 
             log.trace("Try to get a resource of type: " + contentType + " for the portlet: "
                + uiPortlet.getPortletContext());
-            if (piResponse.getChars() != null || contentType.startsWith("text"))
+            response.setContentType(contentType);
+            if (piResponse.getChars() != null)
             {
-               context.getResponse().setContentType(contentType);
-               context.getWriter().write(piResponse.getContent());
+               OutputStream stream = response.getOutputStream();
+               stream.write(piResponse.getChars().getBytes(response.getCharacterEncoding()));
             }
             else
             {
-               response.setContentType(contentType);
                if (piResponse.getBytes() != null)
                {
                   OutputStream stream = response.getOutputStream();
