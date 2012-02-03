@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-var count = 1 ;
+//var count = 1 ;
 function DragDrop2() {
 	var obj = null;
 	
@@ -25,9 +25,6 @@ function DragDrop2() {
 		o.onmousedown = eXo.core.DragDrop2.start;
 
 		o.root = oRoot && oRoot != null ? oRoot : o ;
-		o.root.onmousedown = function() {
-			this.style.zIndex = ++count ;
-		}
 		
 		o.root.onDragStart = new Function();
 		o.root.onDragEnd = new Function();

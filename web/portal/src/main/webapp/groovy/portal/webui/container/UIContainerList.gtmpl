@@ -1,6 +1,13 @@
 <%
-def categories = uicomponent.getCategories();
-def selectedCategory = uicomponent.getSelectedCategory();
+	import org.exoplatform.web.application.JavascriptManager;
+
+	def categories = uicomponent.getCategories();
+	def selectedCategory = uicomponent.getSelectedCategory();
+	
+	def rcontext = _ctx.getRequestContext();
+	JavascriptManager jsManager = rcontext.getJavascriptManager();
+	jsManager.loadScriptResource("portal");
+	jsManager.addJavascript("eXo.portal.PortalDragDrop.init(['DragObjectPortlet'])");
 %>	
 <div class="UIContainerList" id="$uicomponent.id">
 	<div class="UIVerticalSlideTabs">
@@ -33,7 +40,7 @@ def selectedCategory = uicomponent.getSelectedCategory();
 					String setLabel = container.getLabel();
 					String title = _ctx.appRes("ContainerOptions.Item." + setLabel);
 			%>
-				<div class="DragObjectPortlet VTabContentBG" id="$setLabel" onmousedown="eXo.portal.PortalDragDrop.init.call(this,event)">
+				<div class="DragObjectPortlet VTabContentBG" id="$setLabel">
 					<div class="$setIcon ContainerIcon">
 						<div class="TabLabel" title="$title">$title</div>
 					</div>

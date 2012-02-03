@@ -63,7 +63,7 @@
 						<div class="CONTROL-CONTAINER CONTROL-BLOCK UIInfoBar">
 							<%/*Begin InfoBar*/%>
 							<div class="BlueRoundedStyle">
-								<div class="DragControlArea" title="<%=_ctx.appRes("UIContainer.tooltip.drag")%>" onmousedown="eXo.portal.PortalDragDrop.init.call(this,event);"><span></span></div>
+								<div class="DragControlArea" title="<%=_ctx.appRes("UIContainer.tooltip.drag")%>"><span></span></div>
 								<% 
 									String strTitle = uicomponent.getTitle() != null ?
 												ExpressionUtil.getExpressionValue(res, uicomponent.getTitle()) :

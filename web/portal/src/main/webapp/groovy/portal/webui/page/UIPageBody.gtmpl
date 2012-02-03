@@ -6,7 +6,7 @@
 <div class="UIPageBody" id="${uicomponent.id}">		
 	<div class="UIComponent UIComponentBlock">
 	<%if(portalMode == UIPortalApplication.APP_BLOCK_EDIT_MODE || portalMode == UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE) {%>
-		<div class="LAYOUT-BLOCK LAYOUT-PAGEBODY DragControlArea PageLayoutDecorator" onmouseover="if(eXo.portal.portalMode == <%=UIPortalApplication.APP_BLOCK_EDIT_MODE%>){this.style.cursor ='move';} else this.style.cursor ='default';" onmousedown="if(eXo.portal.portalMode == <%=UIPortalApplication.APP_BLOCK_EDIT_MODE%>){eXo.portal.PortalDragDrop.init.call(this, event);} return false">
+		<div class="LAYOUT-BLOCK LAYOUT-PAGEBODY DragControlArea PageLayoutDecorator" onmouseover="if(eXo.portal.portalMode == <%=UIPortalApplication.APP_BLOCK_EDIT_MODE%>){this.style.cursor ='move';} else this.style.cursor ='default';">
 				<%/*Begin Top Decorator*/%>
 				<div class="LeftPage">
 					<div class="RightPage">
@@ -35,7 +35,7 @@
 			
 			<%if(portalMode != UIPortalApplication.NORMAL_MODE) {%>
 			<div class="MaskParent" style="height: 0px;position:relative;">
-				<div class="UIPageBodyMask" style="position:absolute;" onmousedown="eXo.portal.PortalDragDrop.init.call(this, event);"><span></span></div>
+				<div class="UIPageBodyMask" style="position:absolute;"><span></span></div>
 			</div>
 			<%}%>
 		</div>

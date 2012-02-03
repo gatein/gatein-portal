@@ -2,6 +2,7 @@
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.commons.utils.ExpressionUtil;	
 	import org.exoplatform.portal.webui.util.Util;
+	import org.exoplatform.web.application.JavascriptManager;
 	
 	def rcontext = _ctx.getRequestContext(); 
 	ResourceBundle res = rcontext.getApplicationResourceBundle(); 
@@ -65,6 +66,10 @@
 											<div class="RightTab">
 									 				<%
 														if(modeState > 0){
+														    JavascriptManager jsManager = rcontext.getJavascriptManager();
+														  	jsManager.loadScriptResource("portal");
+														  	jsManager.addJavascript("eXo.portal.PortalDragDrop.init(['UIContainer'])");
+														  	
 															String actionLink = uicomponent.event("EditContainer", "$uiChild.id") - "javascript:";
 															String moveLeftAction = uicomponent.event("MoveLeft", tabId);
 															String moveRightAction = uicomponent.event("MoveRight", tabId);

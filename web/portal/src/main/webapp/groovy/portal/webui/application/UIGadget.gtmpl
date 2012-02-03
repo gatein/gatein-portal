@@ -10,6 +10,7 @@
     def posX = uicomponent.getProperties().getIntValue("locationX") + "px";
     def posY = uicomponent.getProperties().getIntValue("locationY") + "px";
     def zIndex = uicomponent.getProperties().getIntValue("zIndex");
+    zIndex = zIndex >=0 ? zIndex : 0;
     def id = uicomponent.getId() != null ? uicomponent.getId() : "UIGadget";
     def view = uicomponent.getView();
     def userPref = null;

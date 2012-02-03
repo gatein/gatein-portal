@@ -204,10 +204,6 @@
    <scripts>
       <name>common</name>
       <module>
-         <name>eXo.core.DragDrop</name>
-         <path>/javascript/eXo/core/DragDrop.js</path>
-      </module>
-      <module>
          <name>eXo.core.DragDrop2</name>
          <path>/javascript/eXo/core/DragDrop2.js</path>
       </module>
