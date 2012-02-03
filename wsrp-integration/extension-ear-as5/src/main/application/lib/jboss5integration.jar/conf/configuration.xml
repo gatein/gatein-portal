@@ -28,6 +28,16 @@
    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
    <component>
+      <key>org.gatein.wsrp.wss.credentials.CredentialsAccessor</key>
+
+      <!-- Reading credentials from HTTP session -->
+      <type>org.gatein.wsrp.wss.credentials.HTTPSessionCredentialsAccessor</type>
+
+      <!-- Reading credentials from ConversationState -->
+      <!--<type>org.gatein.integration.wsrp.wss.ConversationStateCredentialsAccessor</type>-->
+   </component>
+
+   <component>
       <type>org.gatein.integration.wsrp.wss.JBoss5WSSServiceIntegration</type>
    </component>
 
