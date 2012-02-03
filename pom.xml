@@ -44,18 +44,18 @@
       <org.shindig.version>2.0.2-CP01</org.shindig.version>
       <nl.captcha.simplecaptcha.version>1.1.1-GA-Patch01</nl.captcha.simplecaptcha.version>
       <org.gatein.common.version>2.0.4-GA</org.gatein.common.version>
-      <org.gatein.wci.version>2.1.0-GA</org.gatein.wci.version>
-      <org.gatein.pc.version>2.3.0-GA</org.gatein.pc.version>
+      <org.gatein.wci.version>2.1.1-Beta02</org.gatein.wci.version>
+      <org.gatein.pc.version>2.3.1-Beta02</org.gatein.pc.version>
       <org.picketlink.idm>1.3.0.GA</org.picketlink.idm>
-      <org.gatein.wsrp.version>2.1.0-GA</org.gatein.wsrp.version>
-      <org.gatein.mop.version>1.1.0-GA</org.gatein.mop.version>
+      <org.gatein.wsrp.version>2.1.1-CR01</org.gatein.wsrp.version>
+      <org.gatein.mop.version>1.1.1-GA</org.gatein.mop.version>
       <org.gatein.mgmt.version>1.0.1-GA</org.gatein.mgmt.version>
       <org.slf4j.version>1.5.8</org.slf4j.version>
       <commons-pool.version>1.5.5</commons-pool.version>
       <rhino.version>1.6R5</rhino.version>
       <org.codehaus.groovy.version>1.7.6</org.codehaus.groovy.version>
       <javax.servlet.version>2.5</javax.servlet.version>
-      <version.chromattic>1.1.1</version.chromattic>
+      <version.chromattic>1.1.2</version.chromattic>
       <version.reflext>1.1.0</version.reflext>
       <org.staxnav.version>0.9.6</org.staxnav.version>
       <jcip.version>1.0</jcip.version>
