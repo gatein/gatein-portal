@@ -748,6 +748,10 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          {
             resourceInvocation.setResourceId(resourceId);
          }
+         else if (!ParameterValidation.isNullOrEmpty(prc.getRequestParameter(Constants.RESOURCE_ID_PARAMETER)))
+         {
+            resourceInvocation.setResourceId(prc.getRequestParameter(Constants.RESOURCE_ID_PARAMETER));
+         }
 
          String cachability = servletRequest.getParameter(Constants.CACHELEVEL_PARAMETER);
          if (!ParameterValidation.isNullOrEmpty(cachability))
