@@ -12,10 +12,10 @@
    <name>GateIn JBoss AS 7.x.x packaging</name>
 
    <properties>
-      <version.jboss.as.release>7.1.0.CR1</version.jboss.as.release>
-      <version.jboss.as>7.1.0.CR1</version.jboss.as>
+      <version.jboss.as.release>7.1.0.CR1b</version.jboss.as.release>
+      <version.jboss.as>7.1.0.CR1b</version.jboss.as>
       <version.org.jboss.vfs>3.0.0.GA</version.org.jboss.vfs>
-      <version.org.gatein.wci.as7>2.1.0-Beta07-AS7-Beta01</version.org.gatein.wci.as7>
+      <version.org.gatein.wci.as7>2.1.0-Beta07-AS7-Beta02</version.org.gatein.wci.as7>
       <version.exo.kernel.as7>2.3.2-GA-AS7-Beta02</version.exo.kernel.as7>
       <version.org.gatein.naming>1.0.0-Beta01</version.org.gatein.naming>
       <exo.projects.app.jboss7.version>jboss-as-${version.jboss.as.release}</exo.projects.app.jboss7.version>

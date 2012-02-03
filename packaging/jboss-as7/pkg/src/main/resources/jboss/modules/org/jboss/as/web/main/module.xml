@@ -25,7 +25,7 @@
 <module xmlns="urn:jboss:module:1.1" name="org.jboss.as.web">
 
     <resources>
-        <resource-root path="jboss-as-web-7.1.0.CR1.jar"/>
+        <resource-root path="jboss-as-web-7.1.0.CR1b.jar"/>
         <resource-root path="jasper-jdt-7.0.3.Final.jar"/>
         <resource-root path="jbossweb-7.0.7.Final.jar"/>
         <!-- Insert resources here -->

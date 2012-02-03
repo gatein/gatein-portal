@@ -2,30 +2,20 @@
 
 <project name="download-jboss" xmlns:mvn="http://maven.apache.org/POM/4.0.0">
 
-   <target name="download-jboss">
-
-      <!-- Fetch jbossas .zip -->
-      <get dest="${dest}" skipexisting="true">
-         <url url="${url}"/>
-      </get>
-
-      <!-- Fetch .sha1 file -->
-      <!--
-      <get dest="${dest}.sha1" skipexisting="true">
-         <url url="${url}.sha1"/>
-      </get>
-      -->
-
-      <!-- Validate checksum -->
-      <!--
-      <local name="checksum.matches"/>
-      <local name="checksum.matches.fail"/>
-      <checksum file="${dest}" algorithm="sha" fileext=".sha1"
-                verifyproperty="checksum.matches"/>
-      <condition property="checksum.matches.fail">
-         <equals arg1="${checksum.matches}" arg2="false"/>
+   <target name="jbossas-download-check">
+      <condition property="jbossas.missing">
+         <not>
+            <available file="${dest}"/>
+         </not>
       </condition>
-      <fail if="checksum.matches.fail">Checksum validation failed! (for: ${dest})</fail>
-      -->
+   </target>
+
+   <target name="download-jboss" depends="jbossas-download-check" if="jbossas.missing">
+
+      <dependencyfilesets/>
+      <copy tofile="${dest}" >
+         <fileset refid="${maven.artifact}"/>
+      </copy>
+
    </target>
 </project>

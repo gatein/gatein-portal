@@ -337,6 +337,14 @@ You can also use -Pdownload to automatically provide JBoss AS instance.
 
       <profile>
          <id>download</id>
+         <dependencies>
+            <dependency>
+               <groupId>org.jboss.as</groupId>
+               <artifactId>jboss-as-dist</artifactId>
+               <version>${version.jboss.as}</version>
+               <type>zip</type>
+            </dependency>
+         </dependencies>
          <build>
             <plugins>
                <plugin>
@@ -389,8 +397,8 @@ Either rename it, delete it, or deactivate -Pdownload profile.
                               <!-- Download JBossAS unless already downloaded -->
                               <ant antfile="${project.basedir}/download-jboss.xml">
                                  <target name="download-jboss"/>
-                                 <property name="url"
-                                           value="http://download.jboss.org/jbossas/7.1/jboss-as-${jbossas.dist.version}/jboss-as-${jbossas.dist.version}.zip"/>
+                                 <property name="maven.artifact"
+                                           value="org.jboss.as:jboss-as-dist:zip"/>
                                  <property name="dest" value="${jbossas.zip}"/>
                               </ant>
 
