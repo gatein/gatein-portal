@@ -100,7 +100,7 @@ public class LocaleConfigServiceImpl implements LocaleConfigService
       return configs_.values();
    }
 
-   private void parseConfiguration(InputStream is) throws Exception
+   protected void parseConfiguration(InputStream is) throws Exception
    {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       factory.setIgnoringComments(true);

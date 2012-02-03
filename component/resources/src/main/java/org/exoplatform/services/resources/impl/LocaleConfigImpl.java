@@ -68,49 +68,49 @@ public class LocaleConfigImpl implements LocaleConfig
    {
    }
 
-   public final String getDescription()
+   public String getDescription()
    {
       return description_;
    }
 
-   public final void setDescription(String desc)
+   public void setDescription(String desc)
    {
       description_ = desc;
    }
 
-   public final String getOutputEncoding()
+   public String getOutputEncoding()
    {
       return outputEncoding_;
    }
 
-   public final void setOutputEncoding(String enc)
+   public void setOutputEncoding(String enc)
    {
       outputEncoding_ = enc;
    }
 
-   public final String getInputEncoding()
+   public String getInputEncoding()
    {
       return inputEncoding_;
    }
 
-   public final void setInputEncoding(String enc)
+   public void setInputEncoding(String enc)
    {
       inputEncoding_ = enc;
    }
 
-   public final Locale getLocale()
+   public Locale getLocale()
    {
       return locale_;
    }
 
-   public final void setLocale(Locale locale)
+   public void setLocale(Locale locale)
    {
       locale_ = locale;
       if (localeName_ == null)
          localeName_ = locale.getLanguage();
    }
 
-   public final void setLocale(String localeName)
+   public void setLocale(String localeName)
    {
       localeName_ = localeName;
       locale_ = predefinedLocaleMap_.get(localeName);
@@ -134,17 +134,17 @@ public class LocaleConfigImpl implements LocaleConfig
       return tagIdentifier_;
    }
 
-   public final String getLanguage()
+   public String getLanguage()
    {
       return locale_.getLanguage();
    }
 
-   public final String getLocaleName()
+   public String getLocaleName()
    {
       return localeName_;
    }
 
-   public final void setLocaleName(String localeName)
+   public void setLocaleName(String localeName)
    {
       localeName_ = localeName;
    }
