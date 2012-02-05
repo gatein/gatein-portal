@@ -318,6 +318,12 @@
             <groupId>org.gatein.mop</groupId>
             <artifactId>mop-core</artifactId>
             <version>${org.gatein.mop.version}</version>
+            <exclusions>
+              <exclusion>
+                <groupId>org.chromattic</groupId>
+                <artifactId>chromattic.testgenerator</artifactId>
+              </exclusion>
+            </exclusions>
          </dependency>
          <!-- Gatein Mgmt -->
          <dependency>
@@ -630,6 +636,12 @@
             <artifactId>chromattic.apt</artifactId>
             <version>${version.chromattic}</version>
             <scope>compile</scope>
+            <exclusions>
+              <exclusion>
+                <groupId>org.chromattic</groupId>
+                <artifactId>chromattic.testgenerator</artifactId>
+              </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.chromattic</groupId>
@@ -667,6 +679,12 @@
             <groupId>org.chromattic</groupId>
             <artifactId>chromattic.metamodel</artifactId>
             <version>${version.chromattic}</version>
+             <exclusions>
+              <exclusion>
+                <groupId>org.chromattic</groupId>
+                <artifactId>chromattic.testgenerator</artifactId>
+              </exclusion>
+            </exclusions>
          </dependency>
 
          <!-- Picketlink -->
