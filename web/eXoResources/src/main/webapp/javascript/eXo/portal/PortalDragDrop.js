@@ -101,9 +101,8 @@ eXo.portal.PortalDragDrop = {
 	  
 	   var dragCallback = function(nx, ny, ex, ey, e) {
 	     var dragObject = this;
-	     PortalDragDrop.backupMouseEvent = e;
 	     /* Control Scroll */
-	     eXo.portal.PortalDragDrop.scrollOnDrag(dragObject);
+	     eXo.portal.PortalDragDrop.scrollOnDrag(dragObject, e);
 	    
 	     var foundTarget = PortalDragDrop.findTarget(dragObject, PortalDragDrop.dropableTarget, ex, ey);	  
 	     PortalDragDrop.lastFoundTargetObject = PortalDragDrop.foundTargetObject;
@@ -192,11 +191,11 @@ eXo.portal.PortalDragDrop = {
 	    }
 	  } ;
 
-	  var dropCallback = function(x, y, clientX, clientY) {
+	  var dropCallback = function(x, y, clientX, clientY, e) {
 	    var hasChanged = true;
 	    var dragObject = this;
 		//When press esc key, we want to cancel the dragdrop
-	  	if (PortalDragDrop.backupMouseEvent && PortalDragDrop.backupMouseEvent.keyCode == 27) {
+	  	if (e.keyCode === 27) {
 	  		hasChanged = false;
 	  	}
 	  	//When dragObject is outside 
@@ -232,7 +231,7 @@ eXo.portal.PortalDragDrop = {
 	      }
 	  	}
 
-	    if(PortalDragDrop.backupMouseEvent && PortalDragDrop.backupMouseEvent.keyCode != 27) {
+	    if(e.keyCode !== 27) {
 	    	eXo.portal.PortalDragDrop.doDropCallback(dragObject);
 	    } else {
 	      //When click ESC, restore dragObject's last position
@@ -367,11 +366,11 @@ eXo.portal.PortalDragDrop = {
 	  return dropableTargets ;
 	},
 
-	scrollOnDrag : function(dragObject) {
+	scrollOnDrag : function(dragObject, e) {
 	  var workspaceHeight = document.getElementById("UIWorkingWorkspace").offsetHeight;
 	  var browserHeight = eXo.core.Browser.getBrowserHeight() ;
 	  if(workspaceHeight <= browserHeight) return;
-	  var mouseY = eXo.core.Browser.findMouseYInClient(eXo.portal.PortalDragDrop.backupMouseEvent) ;
+	  var mouseY = eXo.core.Browser.findMouseYInClient(e) ;
 	  var deltaTop = mouseY - (Math.round(browserHeight * 5/6)) ;
 	  var deltaBottom = mouseY - (Math.round(browserHeight/6)) ;
 	  var currentDragObjPos = parseInt(dragObject.style.top);

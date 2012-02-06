@@ -46,6 +46,7 @@ function DragDrop2() {
 		o.root.onDragStart(x, y, o.lastMouseX, o.lastMouseY, e);
 		document.onmousemove = eXo.core.DragDrop2.drag;
 		document.onmouseup = eXo.core.DragDrop2.end;
+		document.onkeypress = eXo.core.DragDrop2.onKeyPressEvt;
 		document.onmouseout = eXo.core.DragDrop2.cancel;
 		return false;
 	};
@@ -75,8 +76,9 @@ function DragDrop2() {
 		document.onmousemove = null;
 		document.onmouseup = null;
 		document.onmouseout = null;
+		document.onkeypress = null;
 		obj.root.onDragEnd( parseInt(obj.root.style["left"]), 
-		parseInt(obj.root.style["top"]), e.clientX, e.clientY);
+		parseInt(obj.root.style["top"]), e.clientX, e.clientY, e);
 		obj = null;
 	};
 	
@@ -84,12 +86,17 @@ function DragDrop2() {
 		if(obj.root.onCancel) obj.root.onCancel(e);
 	};
 	
+	DragDrop2.prototype.onKeyPressEvt = function(e) {
+		if(!e) e = window.event ;
+		if(e.keyCode === 27) eXo.core.DragDrop2.end(e) ;
+	},
+	
 	DragDrop2.prototype.fixE = function(e) {
 		if (typeof e == 'undefined') e = window.event;
 		if (typeof e.layerX == 'undefined') e.layerX = e.offsetX;
 		if (typeof e.layerY == 'undefined') e.layerY = e.offsetY;
 		return e;
-	};
+	};		
 };
 
 eXo.core.DragDrop2 = new DragDrop2();
