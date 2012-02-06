@@ -31,16 +31,15 @@ eXo.webui.UIPopupSelectCategory = {
     if (!evt)
       evt = window.event;
     evt.cancelBubble = true;
-    var DOMUtil = eXo.core.DOMUtil;
-    var uiPopupCategory = DOMUtil.findFirstDescendantByClass(obj, 'div',
-        'UIPopupCategory');
-    if (!uiPopupCategory)
-      return;
-    if (uiPopupCategory.style.display == "none") {
-      eXo.core.DOMUtil.cleanUpHiddenElements();
-      uiPopupCategory.style.display = "block";
-      eXo.core.DOMUtil.listHideElements(uiPopupCategory);
-    } else
-      uiPopupCategory.style.display = "none";
+    var popup = xj(obj).find("div.UIPopupCategory");
+    if (popup && popup.css("display") == "none")
+    {
+      popup.css("display", "block");
+      xj(document).bind("click.closepopupcategory", function()
+      {
+        xj(document).unbind("click.closepopupcategory");
+        popup.css("display", "none");
+      });
+    }
   }
 }
