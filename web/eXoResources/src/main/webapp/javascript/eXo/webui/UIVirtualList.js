@@ -28,8 +28,7 @@ eXo.webui.UIVirtualList = {
       uiVirtualList.isFinished = true;
     }
 
-    var virtualHeight = eXo.core.DOMUtil
-        .getStyle(uiVirtualList, 'height', true);
+    var virtualHeight = xj(uiVirtualList).height();
 
     if (virtualHeight == 0) {
       virtualHeight = 300;
@@ -60,21 +59,18 @@ eXo.webui.UIVirtualList = {
   },
 
   getFeedBox : function(componentId) {
-    var DOMUtil = eXo.core.DOMUtil;
-    var uiVirtualList = document.getElementById(componentId);
-    var feedBox = DOMUtil.findFirstDescendantByClass(uiVirtualList, "div",
-        "FeedBox");
-    if (feedBox == null) {
-      feedBox = DOMUtil.findFirstDescendantByClass(uiVirtualList, "tbody",
-          "FeedBox");
+    var uiVirtualList = xj("#" + componentId);
+    var feedBox = uiVirtualList.find("div.FeedBox");
+    if(!feedBox || feedBox.length < 1)
+    {
+      feedBox = uiVirtualList.find("tbody.FeedBox");
     }
-    return feedBox;
+    return feedBox[0];
   },
 
   onScroll : function(uiVirtualList, url) {
     if (uiVirtualList.isFinished || uiVirtualList.inProgress)
       return;
-    var DOMUtil = eXo.core.DOMUtil;
     var componentHeight = uiVirtualList.offsetHeight;
     var scrollPosition = uiVirtualList.scrollTop;
     var scrollerHeight = uiVirtualList.scrollHeight;
@@ -90,7 +86,6 @@ eXo.webui.UIVirtualList = {
   },
 
   updateList : function(componentId, hasNext) {
-    var DOMUtil = eXo.core.DOMUtil;
     var uiVirtualList = document.getElementById(componentId);
     if (uiVirtualList == null)
       return;
