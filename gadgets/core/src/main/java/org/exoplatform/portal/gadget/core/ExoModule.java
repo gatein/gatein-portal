@@ -23,7 +23,6 @@ import com.google.inject.AbstractModule;
 import com.google.inject.name.Names;
 
 import org.apache.shindig.config.ContainerConfig;
-import org.apache.shindig.gadgets.DefaultGuiceModule;
 import org.apache.shindig.gadgets.http.HttpFetcher;
 import org.apache.shindig.protocol.conversion.BeanAtomConverter;
 import org.apache.shindig.protocol.conversion.BeanConverter;

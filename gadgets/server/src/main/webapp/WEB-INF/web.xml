@@ -34,7 +34,7 @@
   <context-param>
     <param-name>guice-modules</param-name>
     <param-value>
-      org.apache.shindig.common.PropertiesModule:
+      org.exoplatform.portal.gadget.core.ExoPropertiesModule:
       org.apache.shindig.gadgets.DefaultGuiceModule:
       org.apache.shindig.gadgets.servlet.AuthenticationModule:
       org.exoplatform.portal.gadget.core.ExoOAuthModule:

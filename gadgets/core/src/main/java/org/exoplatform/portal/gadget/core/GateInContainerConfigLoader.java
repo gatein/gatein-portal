@@ -1,7 +1,7 @@
 package org.exoplatform.portal.gadget.core;
 
-import javax.servlet.ServletContext;
 import java.io.IOException;
+import java.io.InputStream;
 
 /**
  *   A generic loader, used to load gadget server configuration files. We abuse the ThreadLocal here, as there is no way
@@ -14,5 +14,7 @@ import java.io.IOException;
 public abstract class GateInContainerConfigLoader {
 
   public abstract String loadContentAsString(String path, String encoding) throws IOException;
+  
+  public abstract InputStream loadResourceAsStream(String path);
 
 }

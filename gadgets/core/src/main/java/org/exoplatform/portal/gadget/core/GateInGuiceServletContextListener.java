@@ -43,6 +43,20 @@ public class GateInGuiceServletContextListener extends GuiceServletContextListen
         InputStream is = scontext.getResourceAsStream(path);
         return (is != null) ? IOUtils.toString(is, encoding) : null;
       }
+      
+      @Override
+      public InputStream loadResourceAsStream(String path) {
+
+        //To make sure that the path begins with a slash, as required in the javadoc of method
+        // getResourceAsStream in ServletContext
+        //The leading slash is required on certain application servers such as JBoss, WebSphere
+        if('/' != path.charAt(0))
+        {
+           path = '/' + path;
+        }
+
+        return scontext.getResourceAsStream(path);
+      }
     };
 
     //Setup the threadlocal loader
