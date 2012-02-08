@@ -110,17 +110,16 @@ eXo.webui.UIPopupWindow = {
    * popup on the page (top and left properties)
    */
   show : function(popupId, isShowMask, middleBrowser) {
-    var DOMUtil = eXo.core.DOMUtil;
     var popup = document.getElementById(popupId);
     if (popup == null) return;        
 
     // TODO Lambkin: this statement create a bug in select box component in
     // Firefox
     // this.superClass.init(popup) ;    
-    var popupBar = DOMUtil.findFirstDescendantByClass(popup, 'span', 'PopupTitle');
+    var popupBar = xj(popup).find("span.PopupTitle")[0];
     this.initDND(popupBar, popup);
     
-    var resizeBtn = DOMUtil.findFirstDescendantByClass(popup, "span", "ResizeButton");
+    var resizeBtn = xj(popup).find("span.ResizeButton")[0];
     if (resizeBtn) {
     	resizeBtn.style.display = 'block';
     	resizeBtn.onmousedown = this.startResizeEvt;
@@ -131,8 +130,7 @@ eXo.webui.UIPopupWindow = {
     popup.style.visibility = "hidden";
     this.superClass.show(popup);
     
-    var iframes = DOMUtil.findDescendantsByTagName(popup, "iframe");
-    if (iframes.length > 0) {
+    if (xj(popup).find("iframe").length > 0) {
     	setTimeout(function() {eXo.webui.UIPopupWindow.setupWindow(popup, middleBrowser);}, 500);
     } else {
     	this.setupWindow(popup, middleBrowser);
@@ -140,8 +138,7 @@ eXo.webui.UIPopupWindow = {
   },
   
   setupWindow : function(popup, middleBrowser) {	    	
-	var DOMUtil = eXo.core.DOMUtil;
-    var contentBlock = DOMUtil.findFirstDescendantByClass(popup, 'div', 'PopupContent');
+    var contentBlock = xj(popup).find("div.PopupContent")[0];
     if (contentBlock && (eXo.core.Browser.getBrowserHeight() - 100 < contentBlock.offsetHeight)) {
       contentBlock.style.height = (eXo.core.Browser.getBrowserHeight() - 100) + "px";
     }
@@ -155,7 +152,7 @@ eXo.webui.UIPopupWindow = {
       scrollY = document.body.scrollTop;
     // reference
     if (offsetParent) {
-      var middleWindow = (DOMUtil.hasClass(offsetParent, "UIPopupWindow") || DOMUtil.hasClass(offsetParent, "UIWindow"));
+      var middleWindow = xj(offsetParent).is(".UIPopupWindow,.UIWindow");
       if (middleWindow) {
         popup.style.top = Math.ceil((offsetParent.offsetHeight - popup.offsetHeight) / 2) + "px";
       }
@@ -163,7 +160,7 @@ eXo.webui.UIPopupWindow = {
         popup.style.top = Math.ceil((eXo.core.Browser.getBrowserHeight() - popup.offsetHeight) / 2) + scrollY + "px";
       }
       // Todo: set popup of UIPopup always display in the center browsers in case UIMaskWorkspace
-      if (eXo.core.DOMUtil.hasClass(offsetParent, "UIMaskWorkspace")) {
+      if (xj(offsetParent).hasClass("UIMaskWorkspace")) {
         popup.style.top = Math.ceil((offsetParent.offsetHeight - popup.offsetHeight) / 2) + "px";
       }
       
@@ -199,7 +196,7 @@ eXo.webui.UIPopupWindow = {
     }
     if (isShowPopup) {
       // Modal if popup is portal component
-      if (eXo.core.DOMUtil.findAncestorByClass(popup, "PORTLET-FRAGMENT") == null) {
+      if (xj(popup).parents(".PORTLET-FRAGMENT").length < 1){
         if (!mask)
           eXo.core.UIMaskLayer.createMask(popup.parentNode, popup, 1);
       } else {
@@ -236,10 +233,10 @@ eXo.webui.UIPopupWindow = {
 		document.onmousedown = function() {return false};		
 	}
 	
-	var targetPopup = eXo.core.DOMUtil.findAncestorByClass(this, "UIPopupWindow");
+	var targetPopup = xj(this).parents(".UIPopupWindow")[0];
 	eXo.webui.UIPopupWindow.resizedPopup = targetPopup;
 	eXo.webui.UIPopupWindow.backupPointerY = eXo.core.Browser.findMouseRelativeY(targetPopup, evt) ;	
-	  
+
     document.onmousemove = eXo.webui.UIPopupWindow.resize;
     document.onmouseup = eXo.webui.UIPopupWindow.endResizeEvt;
   },
@@ -251,8 +248,7 @@ eXo.webui.UIPopupWindow = {
    */
   resize : function(evt) {
 	var targetPopup = eXo.webui.UIPopupWindow.resizedPopup ;
-    var content = eXo.core.DOMUtil.findFirstDescendantByClass(targetPopup,
-        "div", "PopupContent");
+    var content = xj(targetPopup).find("div.PopupContent")[0];
     var isRTL = eXo.core.I18n.isRT();
     var pointerX = eXo.core.Browser.findMouseRelativeX(targetPopup, evt, isRTL);
     var pointerY = eXo.core.Browser.findMouseRelativeY(targetPopup, evt);
@@ -305,11 +301,7 @@ eXo.webui.UIPopupWindow = {
       if (eXo.core.Browser.browserType == "mozilla" && popup.uiWindowContent)
       {
         popup.uiWindowContent.style.overflow = "auto";
-        var elements = eXo.core.DOMUtil.findDescendantsByClass(popup.uiWindowContent, "ul", "PopupMessageBox");
-        for (var i = 0; i < elements.length; i++)
-        {
-          elements[i].style.overflow = "auto";
-        }
+        xj(popup.uiWindowContent).find("ul.PopupMessageBox").css("overflow", "auto");
       }
     };
 
@@ -322,11 +314,7 @@ eXo.webui.UIPopupWindow = {
       if (eXo.core.Browser.browserType == "mozilla" && popup.uiWindowContent)
       {
         popup.uiWindowContent.style.overflow = "auto";
-        var elements = eXo.core.DOMUtil.findDescendantsByClass(popup.uiWindowContent, "ul", "PopupMessageBox");
-        for (var i = 0; i < elements.length; i++)
-        {
-          elements[i].style.overflow = "auto";
-        }
+        xj(popup.uiWindowContent).find("ul.PopupMessageBox").css("overflow", "auto");
       }
       var offsetParent = popup.offsetParent;
       if (offsetParent)
