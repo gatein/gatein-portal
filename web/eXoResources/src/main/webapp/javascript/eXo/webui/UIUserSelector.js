@@ -27,15 +27,18 @@ eXo.webui.UIUserSelector = {
   init : function(cont) {
     if (typeof (cont) == "string")
       cont = document.getElementById(cont);
-    var checkboxes = eXo.core.DOMUtil.findDescendantsByClass(cont, "input",
-        "checkbox");
-    if (checkboxes.length <= 0)
-      return;
-    checkboxes[0].onclick = this.checkAll;
-    var len = checkboxes.length;
-    for ( var i = 1; i < len; i++) {
-      checkboxes[i].onclick = this.check;
-    }
+    var checkboxes = xj(cont).find("input.checkbox");
+    checkboxes.each(function(index)
+    {
+      if(index == 0)
+      {
+        checkboxes[index].onclick = eXo.webui.UIUserSelector.checkAll;
+      }
+      else
+      {
+        checkboxes[index].onclick = eXo.webui.UIUserSelector.check;
+      }
+    });
   },
   /**
    * Check or uncheck all items in table
@@ -50,10 +53,7 @@ eXo.webui.UIUserSelector = {
    *          obj first object of table
    */
   getItems : function(obj) {
-    var table = eXo.core.DOMUtil.findAncestorByTagName(obj, "table");
-    var checkboxes = eXo.core.DOMUtil.findDescendantsByClass(table, "input",
-        "checkbox");
-    return checkboxes;
+    return xj(obj).parent().closest("table").find("input.checkbox").get();
   },
   /**
    * Check and uncheck first item
