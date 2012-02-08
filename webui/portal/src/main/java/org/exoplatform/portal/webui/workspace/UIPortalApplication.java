@@ -331,7 +331,8 @@ public class UIPortalApplication extends UIApplication
       
       // Obtain the resource ids involved
       // we clone the fetch map by safety
-      FetchMap<ResourceId> requiredResources = new FetchMap<ResourceId>(prc.getJavascriptManager().getScriptResources());
+      JavascriptManager jsMan = prc.getJavascriptManager();
+      FetchMap<ResourceId> requiredResources = new FetchMap<ResourceId>(jsMan.getScriptResources());
 
       // Add current portal
       String portalOwner = Util.getPortalRequestContext().getPortalOwner();
@@ -360,16 +361,17 @@ public class UIPortalApplication extends UIApplication
          LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
 
          //
-         Map<String, FetchMode> urls = service.resolveURLs(
+         FetchMap<String> urls = jsMan.getExtendedScriptURLs();          
+         urls.addAll(service.resolveURLs(
             prc.getControllerContext(),
             requiredResources,
             !PropertyManager.isDevelopping(),
             !PropertyManager.isDevelopping(),
-            locale);
+            locale));
 
          //
          log.info("Resolved URLS for page: " + urls);
-
+         
          // Here we get the list of stuff to load on demand or not
          // according to the boolean value in the map
          // Convert the map to what the js expects to have

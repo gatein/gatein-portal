@@ -49,6 +49,9 @@ public class JavascriptManager
 
    /** . */
    private FetchMap<ResourceId> resourceIds = new FetchMap<ResourceId>();
+   
+   /** . */
+   private FetchMap<String> extendedScriptURLs = new FetchMap<String>();
 
    /** . */
    private StringBuilder scripts = new StringBuilder();
@@ -99,6 +102,20 @@ public class JavascriptManager
    public FetchMap<ResourceId> getScriptResources()
    {
       return resourceIds;
+   }
+   
+   public FetchMap<String> getExtendedScriptURLs()
+   {
+      return new FetchMap<String>(extendedScriptURLs);
+   }
+
+   public void addExtendedScriptURLs(String url, FetchMode mode)
+   {
+      if (mode == null) 
+      {
+         mode = FetchMode.IMMEDIATE;
+      }
+      this.extendedScriptURLs.add(url, mode);
    }
 
    @Deprecated

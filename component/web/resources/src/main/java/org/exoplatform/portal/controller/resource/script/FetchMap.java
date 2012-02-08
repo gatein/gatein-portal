@@ -70,4 +70,12 @@ public class FetchMap<E> extends HashMap<E, FetchMode>
    {
       return add(element, null);
    }
+      
+   public void addAll(Map<E, FetchMode> m) 
+   {
+      for (E elem : m.keySet())
+      {
+         add(elem, m.get(elem));
+      }
+   }
 }
