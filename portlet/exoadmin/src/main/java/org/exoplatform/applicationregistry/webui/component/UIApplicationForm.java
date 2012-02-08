@@ -38,6 +38,7 @@ import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.validator.NotHTMLTagValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
+import org.exoplatform.webui.form.validator.NullFieldValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 
 import java.util.Calendar;
@@ -64,7 +65,7 @@ public class UIApplicationForm extends UIForm
       addUIFormInput(new UIFormStringInput("displayName", "displayName", null).addValidator(
          StringLengthValidator.class, 3, 30).addValidator(NotHTMLTagValidator.class));
       addUIFormInput(new UIFormTextAreaInput("description", "description", null)
-         .addValidator(StringLengthValidator.class, 0, 255)
+         .addValidator(NullFieldValidator.class)
          .addValidator(NotHTMLTagValidator.class));
    }
 

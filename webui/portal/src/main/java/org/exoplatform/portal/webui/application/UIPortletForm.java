@@ -49,6 +49,7 @@ import org.exoplatform.webui.form.*;
 import org.exoplatform.webui.form.validator.NotHTMLTagValidator;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NullFieldValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
@@ -108,8 +109,8 @@ public class UIPortletForm extends UIFormTabPane
          new UIFormCheckBoxInput("showInfoBar", "showInfoBar", false)).addUIFormInput(
          new UIFormCheckBoxInput("showPortletMode", "showPortletMode", false)).addUIFormInput(
          new UIFormCheckBoxInput("showWindowState", "showWindowState", false)).addUIFormInput(
-                  new UIFormTextAreaInput("description", "description", null).addValidator(StringLengthValidator.class,
-                        0, 255).addValidator(NotHTMLTagValidator.class, "UIPortletForm.msg.InvalidPortletDescription"));
+                  new UIFormTextAreaInput("description", "description", null).addValidator(
+                        NullFieldValidator.class).addValidator(NotHTMLTagValidator.class, "UIPortletForm.msg.InvalidPortletDescription"));
       addUIFormInput(uiSettingSet);
       UIFormInputIconSelector uiIconSelector = new UIFormInputIconSelector("Icon", "icon");
       addUIFormInput(uiIconSelector);
