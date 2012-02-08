@@ -62,6 +62,7 @@ function DragDrop2() {
 		var nx, ny;
 		nx = x + (ex - o.lastMouseX);
 		ny = y + (ey - o.lastMouseY);
+		obj.root.style["right"] = "";
 		obj.root.style["left"] = nx + "px";
 		obj.root.style["top"] = ny + "px";
 		obj.lastMouseX = ex;

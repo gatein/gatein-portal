@@ -55,6 +55,9 @@ eXo.portal.PortalDragDrop = {
 		var position = jDragObj.position();
 		var originalDragObjectTop = position.top;
 		var originalDragObjectLeft = position.left;
+		if (!isAddingNewly && browser.isIE7()) {
+			originalDragObjectLeft = browser.findPosXInContainer(dragObject, xj("#UIWorkingWorkspace")[0]);			
+		}
 			
 	    //use this when press ESC with firefox (cancel dragdrop in column container)
 	    jDragObj.data("backupParentSibling", jDragObj.parent().next("td"));	  

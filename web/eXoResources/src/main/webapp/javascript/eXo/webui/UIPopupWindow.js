@@ -170,10 +170,7 @@ eXo.webui.UIPopupWindow = {
       if (document.getElementById("UIDockBar") && checkHeight) {
         popup.style.top = "6px";
       }
-      if (eXo.core.I18n.lt)
-        popup.style.left = Math.ceil((offsetParent.offsetWidth - popup.offsetWidth) / 2) + "px";
-      else
-        popup.style.right = Math.ceil((offsetParent.offsetWidth - popup.offsetWidth) / 2) + "px";
+      popup.style.left = Math.ceil((offsetParent.offsetWidth - popup.offsetWidth) / 2) + "px";
     }
     if (eXo.core.Browser.findPosY(popup) < 0)
       popup.style.top = scrollY + "px";
