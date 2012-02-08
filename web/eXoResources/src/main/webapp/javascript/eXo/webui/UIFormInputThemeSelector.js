@@ -25,41 +25,21 @@
 eXo.webui.UIFormInputThemeSelector = {
 
   showThemeSelected : function(obj, param) {
-    var DOMUtil = eXo.core.DOMUtil;
-    var itemListContainer = DOMUtil.findAncestorByClass(obj,
-        "ItemListContainer");
-    var itemDetailList = DOMUtil.findNextElementByTagName(itemListContainer,
-        'div');
-    var detailList = DOMUtil.findFirstDescendantByClass(itemDetailList, 'div',
-        'UIThemeSelector');
-    var nameTheme = DOMUtil.findNextElementByTagName(detailList, 'div');
-    var nameStyle = DOMUtil.findFirstDescendantByClass(obj, 'div', 'NameStyle');
-    nameTheme.innerHTML = nameStyle.innerHTML;
-    detailList.className = "UIThemeSelector " + param;
-
-    // get hide input
-    var itemList = obj.parentNode;
-    var hidenInput = DOMUtil.findPreviousElementByTagName(itemList, 'input');
-    hidenInput.value = param;
+    var jqObj = xj(obj);
+    var itemListContainer = jqObj.parent().closest(".ItemListContainer");
+    var detailList = itemListContainer.next("div").find("div.UIThemeSelector").eq(0);
+    detailList.next("div").html(jqObj.find("div.NameStyle").eq(0).html());
+    detailList.attr("class", "UIThemeSelector " + param);
+    jqObj.parent().prev("input")[0].value = param;
   },
 
   setDefaultTheme : function(obj, param) {
     var DOMUtil = eXo.core.DOMUtil;
-    var itemDetailList = DOMUtil.findAncestorByClass(obj, "ItemDetailList");
-    var detailList = DOMUtil.findFirstDescendantByClass(itemDetailList, 'div',
-        'UIThemeSelector');
-    detailList.className = "UIThemeSelector " + param;
+    var itemDetailList = xj(obj).parent().closest(".ItemDetailList");
+    var detailList = itemDetailList.find("div.UIThemeSelector").eq(0);
+    detailList.attr("class", "UIThemeSelector " + param);
 
-    var nameTheme = DOMUtil.findNextElementByTagName(detailList, 'div');
-    nameTheme.innerHTML = eXo.i18n.I18NMessage.getMessage("DefaultTheme");
-
-    // get hide input
-    var itemListContainer = DOMUtil.findPreviousElementByTagName(
-        itemDetailList, 'div');
-    var itemThemeSelector = DOMUtil.findFirstDescendantByClass(
-        itemListContainer, 'div', 'ItemList');
-    var hidenInput = DOMUtil.findPreviousElementByTagName(itemThemeSelector,
-        'input');
-    hidenInput.value = param;
+    detailList.next("div").html(eXo.i18n.I18NMessage.getMessage("DefaultTheme"));
+    itemDetailList.prev("div").find("div.ItemList").eq(0).prev("input")[0].value = param;
   }
 }
