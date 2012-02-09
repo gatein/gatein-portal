@@ -52,9 +52,8 @@ eXo.portal.PortalDragDrop = {
 	    jDragObj.data("origDragObjectStyle", origDragObjectStyle);
 	    
 	    var isAddingNewly = jDragObj.children(".UIComponentBlock").length == 0;
-		var position = jDragObj.position();
-		var originalDragObjectTop = position.top;
-		var originalDragObjectLeft = position.left;
+		var originalDragObjectTop = y;
+		var originalDragObjectLeft = x;
 		if (!isAddingNewly && browser.isIE7()) {
 			originalDragObjectLeft = browser.findPosXInContainer(dragObject, xj("#UIWorkingWorkspace")[0]);			
 		}
@@ -65,12 +64,12 @@ eXo.portal.PortalDragDrop = {
 	        
 	    var componentBlockWidth = 300;
 	    if(isAddingNewly) {
-	      var cloneObject = dragObject.cloneNode(true);
-	      dragObject.parentNode.insertBefore(cloneObject, dragObject);
-	      DragDrop.init(cloneObject, cloneObject);
-	      cloneObject.onDragStart = initCallback;
-	      cloneObject.onDrag = dragCallback;
-	      cloneObject.onDragEnd = dropCallback;
+	      var cloneObject = jDragObj.clone(true, true);
+	      jDragObj.before(cloneObject);
+	      DragDrop.init(cloneObject[0], cloneObject[0]);
+	      cloneObject[0].onDragStart = initCallback;
+	      cloneObject[0].onDrag = dragCallback;
+	      cloneObject[0].onDragEnd = dropCallback;
 	      
 	      jDragObj.width(backupDragObjectWidth);
 	      jDragObj.fadeTo(0, 0.5);
@@ -180,7 +179,7 @@ eXo.portal.PortalDragDrop = {
 	    var hasChanged = true;
 	    var dragObject = this, jDragObj = xj(this);
 		//When press esc key, we want to cancel the dragdrop
-	  	if (e.keyCode === 27) {
+	  	if (e.which === 27) {
 	  		hasChanged = false;
 	  	}
 	  	//When dragObject is outside 
@@ -214,7 +213,7 @@ eXo.portal.PortalDragDrop = {
 	      }
 	  	}
 
-	    if(e.keyCode !== 27) {
+	    if(e.which !== 27) {
 	    	eXo.portal.PortalDragDrop.doDropCallback(dragObject);
 	    } else {
 	      //When click ESC, restore dragObject's last position

@@ -17,12 +17,13 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-//var count = 1 ;
 function DragDrop2() {
 	var obj = null;
 	
 	DragDrop2.prototype.init = function(o, oRoot) {
-		o.onmousedown = eXo.core.DragDrop2.start;
+		var jObj = xj(o);
+		jObj.off("mousedown");
+		jObj.on("mousedown", eXo.core.DragDrop2.start);
 
 		o.root = oRoot && oRoot != null ? oRoot : o ;
 		
@@ -32,33 +33,34 @@ function DragDrop2() {
 	};
 	
 	DragDrop2.prototype.start = function(e)	{
-		if (!e) e = window.event;
-		if(((e.which) && (e.which == 2 || e.which == 3)) || ((e.button) && (e.button == 2)))	{
-			return;
-		}
 		var o = obj = this;
-		e = eXo.core.DragDrop2.fixE(e);
-		var y = parseInt(eXo.core.DOMUtil.getStyle(o.root,"top"));
-		var x = parseInt(eXo.core.DOMUtil.getStyle(o.root,"left"));
-		if(isNaN(x)) x=0;		if(isNaN(y)) y=0;
-		o.lastMouseX = 		eXo.core.Browser.findMouseXInPage(e);
-		o.lastMouseY = 		eXo.core.Browser.findMouseYInPage(e);
-		o.root.onDragStart(x, y, o.lastMouseX, o.lastMouseY, e);
-		document.onmousemove = eXo.core.DragDrop2.drag;
-		document.onmouseup = eXo.core.DragDrop2.end;
-		document.onkeypress = eXo.core.DragDrop2.onKeyPressEvt;
-		document.onmouseout = eXo.core.DragDrop2.cancel;
+		var jRoot = xj(o.root);
+		
+		if((e.which && e.which != 1) || jRoot.data("dragging"))	{
+			return false;
+		}
+		var position = jRoot.position();
+		o.lastMouseX = e.pageX;
+		o.lastMouseY = e.pageY;
+		o.root.onDragStart(position.left, position.top, o.lastMouseX, o.lastMouseY, e);
+		xj(document).on({"mousemove" : eXo.core.DragDrop2.drag, 
+			"mouseup" : eXo.core.DragDrop2.end, 
+			"keydown" : eXo.core.DragDrop2.onKeyDownEvt, 
+			"mouseout" : eXo.core.DragDrop2.cancel});		
+		jRoot.data("dragging", true);
 		return false;
 	};
 	
 	DragDrop2.prototype.drag = function(e) {
-		e = eXo.core.DragDrop2.fixE(e);
-		var o = obj, browser = eXo.core.Browser;
-		var ey = browser.findMouseYInPage(e);
-		var ex = browser.findMouseXInPage(e);
-		var y = parseInt(eXo.core.DOMUtil.getStyle(o.root, "top"));
-		var x = parseInt(eXo.core.DOMUtil.getStyle(o.root, "left"));
-		if(isNaN(x)) x=0;		if(isNaN(y)) y=0;
+		var o = obj;
+		var ey = e.pageY;
+		var ex = e.pageX;
+		
+		var jRoot = xj(o.root);
+		var position = jRoot.position();
+		var y = position.top;
+		var x = position.left;
+
 		var nx, ny;
 		nx = x + (ex - o.lastMouseX);
 		ny = y + (ey - o.lastMouseY);
@@ -73,31 +75,28 @@ function DragDrop2() {
 	};
 	
 	DragDrop2.prototype.end = function(e) {
-		e = eXo.core.DragDrop2.fixE(e);
-		document.onmousemove = null;
-		document.onmouseup = null;
-		document.onmouseout = null;
-		document.onkeypress = null;
-		obj.root.onDragEnd( parseInt(obj.root.style["left"]), 
-		parseInt(obj.root.style["top"]), e.clientX, e.clientY, e);
+		xj(document).off("mousemove mouseup mouseout keydown");
+		
+		var jRoot = xj(obj.root);
+		var position = jRoot.position();
+		var y = position.top;
+		var x = position.left;
+		
+		obj.root.onDragEnd( position.left, position.top, e.clientX, e.clientY, e);
 		obj = null;
+		jRoot.removeData("dragging");
+		return false;
 	};
 	
 	DragDrop2.prototype.cancel = function(e) {
 		if(obj.root.onCancel) obj.root.onCancel(e);
+		return false;
 	};
 	
-	DragDrop2.prototype.onKeyPressEvt = function(e) {
-		if(!e) e = window.event ;
-		if(e.keyCode === 27) eXo.core.DragDrop2.end(e) ;
-	},
-	
-	DragDrop2.prototype.fixE = function(e) {
-		if (typeof e == 'undefined') e = window.event;
-		if (typeof e.layerX == 'undefined') e.layerX = e.offsetX;
-		if (typeof e.layerY == 'undefined') e.layerY = e.offsetY;
-		return e;
-	};		
+	DragDrop2.prototype.onKeyDownEvt = function(e) {
+		if(e.which === 27) eXo.core.DragDrop2.end(e) ;
+		return false;
+	}
 };
 
 eXo.core.DragDrop2 = new DragDrop2();
