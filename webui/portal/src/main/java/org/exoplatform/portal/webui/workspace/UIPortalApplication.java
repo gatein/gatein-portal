@@ -347,8 +347,8 @@ public class UIPortalApplication extends UIApplication
       // Need to add bootstrap as immediate since it contains the loader
       requiredResources.add(new ResourceId(ResourceScope.SHARED, "bootstrap"), FetchMode.IMMEDIATE);
 
-      // todo : switch to debug later
-      log.info("Resource ids to resolve: " + requiredResources);
+      //
+      log.debug("Resource ids to resolve: " + requiredResources);
 
       //
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
