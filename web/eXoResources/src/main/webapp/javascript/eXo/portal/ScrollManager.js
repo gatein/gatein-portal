@@ -52,7 +52,7 @@ ScrollManager.prototype.init = function() {
 	
 	if(!this.arrowsContainer)  {
 		// Adds the tab elements to the manager
-		var arrowsContainer = $(this.mainContainer).find(".ScrollButtons");
+		var arrowsContainer = xj(this.mainContainer).find(".ScrollButtons");
 		if (arrowsContainer.length) {
 			this.arrowsContainer = arrowsContainer[0];			
 			// Configures the arrow buttons
@@ -77,7 +77,7 @@ ScrollManager.prototype.init = function() {
  */
 ScrollManager.prototype.loadElements = function(elementClass, clean) {
 	if (clean) this.cleanElements();
-	this.elements = $(this.mainContainer).find("." + elementClass);	
+	this.elements = xj(this.mainContainer).find("." + elementClass);
 };
 
 /**
@@ -87,7 +87,7 @@ ScrollManager.prototype.loadElements = function(elementClass, clean) {
  */
 ScrollManager.prototype.initArrowButton = function(arrow, dir, normalClass, overClass, disabledClass) {
 	if (arrow) {
-		arrow = $(arrow);
+		arrow = xj(arrow);
 		arrow[0].direction = dir; // "left" or "right" (up or down)
 		arrow[0].overClass = overClass; // the css class for mouse over event
 		arrow[0].disabledClass = disabledClass; // the css class for a disabled arrow
@@ -143,7 +143,7 @@ ScrollManager.prototype.mouseOutArrow = function(e) {
  */
 ScrollManager.prototype.checkAvailableSpace = function() { // in pixels
 	if (!this.maxSpace) {
-		this.maxSpace = $(this.mainContainer).width() - this.getElementSpace(this.arrowsContainer);
+		this.maxSpace = xj(this.mainContainer).width() - this.getElementSpace(this.arrowsContainer);
 	}
 	var elementsSpace = 0, margin = 0;
 	var length =  this.elements.length;
@@ -186,11 +186,11 @@ ScrollManager.prototype.getElementSpace = function(element) {
 	var elementSpace = 0;
 	if (element) {
 		if (this.axis == 0) { // horizontal tabs
-			elementSpace += $(element).outerWidth(true);
+			elementSpace += xj(element).outerWidth(true);
 			// decorator is another element that is linked to the current element (e.g. a separator bar)
 			if (element.decorator) elementSpace += this.getElementSpace(element.decorator);
 		} else if (this.axis == 1) { // vertical tabs
-			elementSpace += $(element).outerHeigth(true);
+			elementSpace += xj(element).outerHeigth(true);
 			if (element.decorator) elementSpace += this.getElementSpace(element.decorator);
 		}
 		// Store the calculated value for faster return on next calls. To recalculate, set element.space to null.
@@ -308,7 +308,7 @@ ScrollManager.prototype.getElementsSpace = function(indexStart, indexEnd) {
 
 ScrollManager.prototype.checkResize = function() {
 	if (this.mainContainer) {
-		var tmp = $("#" + this.mainContainer.id);
+		var tmp = xj("#" + this.mainContainer.id);
 		if (!tmp.length) {
 			clearTimeout(this.refresh);
 			return;
@@ -316,7 +316,7 @@ ScrollManager.prototype.checkResize = function() {
 		this.mainContainer = tmp[0];
 		this.mainContainer.space = null; 
 		this.arrowsContainer.space = null;
-		var curr = $(this.mainContainer).width() - this.getElementSpace(this.arrowsContainer);		
+		var curr = xj(this.mainContainer).width() - this.getElementSpace(this.arrowsContainer);
 		if (this.maxSpace && this.maxSpace !== curr) {
 			var mgrParent = tmp.closest(".UIWindow");
 			// if the tabs exist on the page

@@ -20,7 +20,7 @@
 eXo.core.I18n = {
   
   /**
-   * initialize some information as language, orientation, etc of I18n object
+   * initialize some information as language, orientation, etc of I18n object                       $
    */
   init : function() {
     var html = document.getElementsByTagName('html')[0];

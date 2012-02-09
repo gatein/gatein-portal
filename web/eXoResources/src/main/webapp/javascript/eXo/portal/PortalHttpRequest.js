@@ -63,20 +63,20 @@
 */
 
 function PortletResponse(responseDiv) {
-  var div = $(responseDiv).children("div");
+  var div = xj(responseDiv).children("div");
   this.portletId =  div[0].innerHTML;
   this.portletData =  div[1].innerHTML;
   
   this.blocksToUpdate = null;
-  var blocks = $(div[1]).children(".BlockToUpdate");  
+  var blocks = xj(div[1]).children(".BlockToUpdate");
   
   if(blocks.length > 0 ) {
     var updates = this.blocksToUpdate = new Array() ;
     
     blocks.each(function() {
-    	var div = $(this).children("div");
+    	var div = xj(this).children("div");
     	updates[updates.length] = {blockId : div[0].innerHTML, data : div[1]};
-        updates[updates.length - 1].scripts = $(div[1]).find("script");
+        updates[updates.length - 1].scripts = xj(div[1]).find("script");
     });
   } else {
     /*
@@ -92,7 +92,7 @@ function PortletResponse(responseDiv) {
     * script in the head tag
     */
     
-    this.scripts = $(div[1]).find("script");
+    this.scripts = xj(div[1]).find("script");
   }
 };
 
@@ -110,7 +110,7 @@ function PortalResponse(responseDiv) {
   //jquery always remove script tag from the source
   var temp =  document.createElement("div") ;
   temp.innerHTML = responseDiv;
-  var div = $(temp).children().first(), portalResp = this;
+  var div = xj(temp).children().first(), portalResp = this;
   
   portalResp.portletResponses = new Array() ;
   //Portlet Response
@@ -121,8 +121,8 @@ function PortalResponse(responseDiv) {
   div.children("div.PortalResponseData").each(function() {
 	  portalResp.data = this;
 	  portalResp.blocksToUpdate = new Array();
-	  $(this).children(".BlockToUpdate").each(function() {
-		var dataBlocks = $(this).children("div");
+	  xj(this).children(".BlockToUpdate").each(function() {
+		var dataBlocks = xj(this).children("div");
 		var i = portalResp.blocksToUpdate.length;
 		portalResp.blocksToUpdate[i] = {blockId : dataBlocks[0].innerHTML, data : dataBlocks[1]}; 
 		
@@ -132,7 +132,7 @@ function PortalResponse(responseDiv) {
          * This is needed when we refresh an entire portal page that contains some 
          * standard JSR 168 / 286 portlets with embeded <script> tag
          */
-		portalResp.blocksToUpdate[i].scripts = $(dataBlocks[1]).find("script");
+		portalResp.blocksToUpdate[i].scripts = xj(dataBlocks[1]).find("script");
 	  });
   });
   //Extra Markup Header
@@ -146,12 +146,12 @@ function PortalResponse(responseDiv) {
   //Portal Response Script
   div.children("div.PortalResponseScript").each(function() {
 	  portalResp.script = this.innerHTML;
-	  $(this).css("display", "none");
+	  xj(this).css("display", "none");
   });  
 };
 
 function MarkupHeadElements(fragment) {
-	var jObj = $(fragment);
+	var jObj = xj(fragment);
 	this.titles = jObj.find("title");
 	this.bases = jObj.find("base") ;
 	this.links = jObj.find("link") ;
@@ -189,9 +189,9 @@ function LoadingScripts(fragment) {
 * of the page
 */
 function appendScriptToHead(scriptId, scriptElement) {
-  var head = $("head");
+  var head = xj("head");
   head.find("#" + scriptId).remove();
-  var script = $(scriptElement);
+  var script = xj(scriptElement);
   script.attr("id", scriptId);
   head[0].appendChild(script[0]);
 };
@@ -460,7 +460,7 @@ function HttpResponseHandler() {
 	instance.updateHtmlHead = function(response) {
 		if (!response) return;      
 		cleanHtmlHead(response);
-		var head = $("head"); 								
+		var head = xj("head");
 		var markupHeadElements = response.markupHeadElements;
 		if (!markupHeadElements) return;
 		
@@ -490,7 +490,7 @@ function HttpResponseHandler() {
 
   function cleanHtmlHead(response)
   {
-    var head = $("head");
+    var head = xj("head");
     if (response)
     {
       var portletResponses = response.portletResponses;
@@ -504,7 +504,7 @@ function HttpResponseHandler() {
 
       if (response.data)
       {
-        $(response.data).find(".PORTLET-FRAGMENT").each(function()
+        xj(response.data).find(".PORTLET-FRAGMENT").each(function()
         {
           head.find(".ExHead-" + this.parentNode.id + ":not(title)").remove();
         });
@@ -513,14 +513,14 @@ function HttpResponseHandler() {
     else 
     {
     	//This code will be run after we've finished update html
-    	var workspace = $("#UIWorkingWorkspace");
-    	var exHeads = $("head").find("[class^='ExHead-']:not(title)");
+    	var workspace = xj("#UIWorkingWorkspace");
+    	var exHeads = head.find("[class^='ExHead-']:not(title)");
     	exHeads.each(function()
 		{
     		var portletId = this.className.substring(7);
     		if (workspace.find("#" + portletId).length == 0)
     		{
-    			$(this).remove();
+    			xj(this).remove();
     		}
 		});    	
     }
@@ -550,13 +550,13 @@ function HttpResponseHandler() {
 	instance.updateBlocks = function(blocksToUpdate, parentId) {
 	  if(!blocksToUpdate) return;
 	  var parentBlock = null;
-	  if(parentId && parentId != "") parentBlock =  $("#" + parentId);
-	  parentBlock = !parentBlock ? $(document) : parentBlock;
+	  if(parentId && parentId != "") parentBlock =  xj("#" + parentId);
+	  parentBlock = !parentBlock ? xj(document) : parentBlock;
 	  
 	  blocksToUpdate.each(function(blockToUpdate) {
 		  var target = parentBlock.find("#" + blockToUpdate.blockId);
 		  if(target.length == 0) alert(eXo.i18n.I18NMessage.getMessage("TargetBlockNotFound", new Array (blockToUpdate.blockId))) ;		  
-		  var newData = $(blockToUpdate.data).find("#" + blockToUpdate.blockId);
+		  var newData = xj(blockToUpdate.data).find("#" + blockToUpdate.blockId);
 		  if(newData.length == 0) alert(eXo.i18n.I18NMessage.getMessage("BlockUpdateNotFound", new Array (blockToUpdate.blockId))) ;
 //		    target.parentNode.replaceChild(newData, target);
 		  target.html(newData.html());
@@ -620,8 +620,8 @@ function HttpResponseHandler() {
 		        * and that it does not contain any finer block to update. Hence replace the innerHTML inside the
 		        * id="PORTLET-FRAGMENT" block
 		        */
-		        var parentBlock =  $("#" + portletResponse.portletId) ;
-		        var target = $("#" + portletResponse.portletId + " .PORTLET-FRAGMENT").first();
+		        var parentBlock =  xj("#" + portletResponse.portletId) ;
+		        var target = xj("#" + portletResponse.portletId + " .PORTLET-FRAGMENT").first();
 		        target.html(portletResponse.portletData);
 		        
 		        //update embedded scripts 
@@ -770,7 +770,7 @@ function ajaxAsyncGetRequest(url, async) {
 function ajaxRequest(method, url, async, queryString) {
   if(async == undefined) async = true ;
   var resp;
-  $.ajax(url, {
+  xj.ajax(url, {
 	  type: method,
 	  async : async,
 	  data : queryString,
