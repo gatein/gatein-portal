@@ -19,36 +19,22 @@
 
 package org.exoplatform.portal.controller.resource;
 
-import com.google.javascript.jscomp.CompilationLevel;
-import com.google.javascript.jscomp.CompilerOptions;
-import com.google.javascript.jscomp.JSError;
-import com.google.javascript.jscomp.JSSourceFile;
-import com.google.javascript.jscomp.LoggerErrorManager;
-import com.google.javascript.jscomp.Result;
-import org.exoplatform.commons.utils.CharsetTextEncoder;
+import org.exoplatform.commons.cache.future.FutureMap;
 import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.commons.utils.Safe;
-import org.exoplatform.commons.utils.TextEncoder;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebRequestHandler;
-import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.web.controller.QualifiedName;
 import org.gatein.common.io.IOTools;
 
-import com.google.javascript.jscomp.Compiler;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.StringWriter;
 import java.net.URL;
-import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -117,6 +103,14 @@ public class ResourceRequestHandler extends WebRequestHandler
    /** . */
    public static final QualifiedName LANG_QN = QualifiedName.create("gtn", "lang");
 
+   /** . */
+   private final FutureMap<ScriptKey, ScriptResult, ControllerContext> cache;
+
+   public ResourceRequestHandler()
+   {
+      this.cache = new FutureMap<ScriptKey, ScriptResult, ControllerContext>(new ScriptLoader());
+   }
+
    @Override
    public String getHandlerName()
    {
@@ -126,119 +120,103 @@ public class ResourceRequestHandler extends WebRequestHandler
    @Override
    public boolean execute(ControllerContext context) throws Exception
    {
-
-      JavascriptConfigService service = (JavascriptConfigService)PortalContainer.getComponent(JavascriptConfigService.class);
-
       String resourceParam = context.getParameter(RESOURCE_QN);
       String scopeParam = context.getParameter(SCOPE_QN);
-      String moduleParam = context.getParameter(MODULE_QN);
-      String compressParam = context.getParameter(COMPRESS_QN);
-      String lang = context.getParameter(LANG_QN);
-      
-      //
-      Locale locale = null;
-      if (lang != null && lang.length() > 0)
-      {
-         locale = I18N.parseTagIdentifier(lang);
-      }
 
       //
       if (scopeParam != null && resourceParam != null)
       {
+         String compressParam = context.getParameter(COMPRESS_QN);
+         String lang = context.getParameter(LANG_QN);
+         String moduleParam = context.getParameter(MODULE_QN);
+
+         //
+         Locale locale = null;
+         if (lang != null && lang.length() > 0)
+         {
+            locale = I18N.parseTagIdentifier(lang);
+         }
+
+         //
+         ResourceScope scope;
          try
          {
-            ResourceScope scope = ResourceScope.valueOf(ResourceScope.class, scopeParam);
-            ResourceId resource = new ResourceId(scope, resourceParam);
-            
-            //
-            Reader script;
-            String sourceName;
-            if (moduleParam != null)
-            {
-               script = service.getScript(resource, moduleParam, locale);
-               sourceName = resource.getScope() + "/" + resource.getName() + "/" + moduleParam  + ".js";
-            }
-            else
-            {
-               script = service.getScript(resource, locale);
-               sourceName = resource.getScope() + "/" + resource.getName() + ".js";
-            }
-
-            //
-            if (script != null)
-            {
-               HttpServletResponse response = context.getResponse();
-
-               // Content type + charset
-               response.setContentType("text/javascript");
-               response.setCharacterEncoding("UTF-8");
-
-               // One hour caching
-               // make this configurable later
-               response.setHeader("Cache-Control", "max-age:3600");
-               response.setDateHeader("Expires", System.currentTimeMillis() + 3600 * 1000);
-
-               //
-               if ("min".equals(compressParam))
-               {
-                  CompilationLevel level = CompilationLevel.SIMPLE_OPTIMIZATIONS;
-                  CompilerOptions options = new CompilerOptions();
-                  level.setDebugOptionsForCompilationLevel(options);
-                  Compiler compiler = new Compiler();
-                  compiler.setErrorManager(new LoggerErrorManager(java.util.logging.Logger.getLogger(ResourceRequestHandler.class.getName())));
-                  StringWriter code = new StringWriter();
-                  IOTools.copy(script, code);
-                  JSSourceFile[] inputs = new JSSourceFile[]{
-                     JSSourceFile.fromCode(sourceName, code.toString())
-                  };
-                  Result res = compiler.compile(new JSSourceFile[0], inputs, options);
-                  if (res.success)
-                  {
-                     script = new StringReader(compiler.toSource());
-                  }
-                  else
-                  {
-                     StringBuilder msg = new StringBuilder("Handle me gracefuylly JS errors\n");
-                     for (JSError error : res.errors)
-                     {
-                        msg.append(error.sourceName).append(":").append(error.lineNumber).append(" ").append(error.description).append("\n");
-                     }
-                     throw new UnsupportedOperationException(msg.toString());
-                  }
-               }
-
-               // Encode data
-               OutputStream out = response.getOutputStream();
-               try
-               {
-                  TextEncoder encoder = CharsetTextEncoder.getUTF8();
-                  char[] buffer = new char[256];
-                  for (int l = script.read(buffer);l != -1;l = script.read(buffer))
-                  {
-                     encoder.encode(buffer, 0, l, out);
-                  }
-               }
-               finally
-               {
-                  Safe.close(out);
-               }
-
-               //
-               return true;
-            }
-            else
-            {
-               // What should we do ?
-            }
+            scope = ResourceScope.valueOf(ResourceScope.class, scopeParam);
          }
          catch (IllegalArgumentException e)
          {
-            // Not found
+            HttpServletResponse response = context.getResponse();
+            String msg = "Unrecognized scope " + scopeParam;
+            log.error(msg);
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, msg);
+            return true;
          }
+         
+         //
+         ResourceId resource = new ResourceId(scope, resourceParam);
+         
+         ScriptKey key = new ScriptKey(
+            resource,
+            moduleParam,
+            "min".equals(compressParam),
+            locale
+         );
+
+         //
+         ScriptResult result = cache.get(context, key);
+         HttpServletResponse response = context.getResponse();
+
+         //
+         if (result instanceof ScriptResult.Resolved)
+         {
+            ScriptResult.Resolved resolved = (ScriptResult.Resolved)result;
+
+            // Content type + charset
+            response.setContentType("text/javascript");
+            response.setCharacterEncoding("UTF-8");
+
+            // One hour caching
+            // make this configurable later
+            response.setHeader("Cache-Control", "max-age:3600");
+            response.setDateHeader("Expires", System.currentTimeMillis() + 3600 * 1000);
+            
+            // Set content length
+            response.setContentLength(resolved.bytes.length);
+            
+            // Send bytes
+            ServletOutputStream out = response.getOutputStream();
+            try
+            {
+               out.write(resolved.bytes);
+            }
+            finally
+            {
+               Safe.close(out);
+            }
+         }
+         else if (result instanceof ScriptResult.Error)
+         {
+            ScriptResult.Error error = (ScriptResult.Error)result;
+            log.error("Could not render script " + key + "\n:" + error.message);
+            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+         }
+         else
+         {
+            String msg = "Resource " + key + " cannot be found";
+            log.error(msg);
+            response.sendError(HttpServletResponse.SC_NOT_FOUND, msg);
+         }
+      }
+      else
+      {
+         HttpServletResponse response = context.getResponse();
+         String msg = "Missing scope or resource param";
+         log.error(msg);
+         response.sendError(HttpServletResponse.SC_BAD_REQUEST, msg);
       }
       
       //
-      return false;
+      return true;
    }
    
    @Override

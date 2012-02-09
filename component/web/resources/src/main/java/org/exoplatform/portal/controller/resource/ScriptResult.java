@@ -19,62 +19,39 @@
 
 package org.exoplatform.portal.controller.resource;
 
-import java.io.Serializable;
-
 /**
- * Identify a resource.
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ResourceId implements Serializable
+class ScriptResult
 {
 
-   /** . */
-   private final ResourceScope scope;
-
-   /** . */
-   private final String name;
-
-   public ResourceId(ResourceScope scope, String name)
-   {
-      this.scope = scope;
-      this.name = name;
+   private ScriptResult() {
    }
 
-   public ResourceScope getScope()
+   static class Resolved extends ScriptResult
    {
-      return scope;
-   }
 
-   public String getName()
-   {
-      return name;
-   }
+      /** . */
+      final byte[] bytes;
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (obj == this)
+      Resolved(byte[] bytes)
       {
-         return true;
+         this.bytes = bytes;
       }
-      if (obj instanceof ResourceId)
+   }
+   
+   static class Error extends ScriptResult
+   {
+
+      /** . */
+      final String message;
+
+      Error(String message)
       {
-         ResourceId that = (ResourceId)obj;
-         return scope == that.scope && name.equals(that.name);
+         this.message = message;
       }
-      return false;
    }
 
-   @Override
-   public int hashCode()
-   {
-      return scope.hashCode() ^ name.hashCode();
-   }
+   static ScriptResult NOT_FOUND = new ScriptResult();
 
-   @Override
-   public String toString()
-   {
-      return "ResourceId[type=" + scope.name() + ",id=" + name + "]";
-   }
 }

@@ -19,36 +19,45 @@
 
 package org.exoplatform.portal.controller.resource;
 
+import org.exoplatform.commons.utils.Safe;
+
 import java.io.Serializable;
+import java.util.Locale;
 
 /**
- * Identify a resource.
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ResourceId implements Serializable
+class ScriptKey implements Serializable
 {
 
    /** . */
-   private final ResourceScope scope;
+   final ResourceId id;
 
    /** . */
-   private final String name;
+   final boolean minified;
 
-   public ResourceId(ResourceScope scope, String name)
+   /** . */
+   final Locale locale;
+
+   /** . */
+   final String module;
+
+   /** . */
+   final int hashCode;
+
+   ScriptKey(ResourceId id, String module, boolean minified, Locale locale)
    {
-      this.scope = scope;
-      this.name = name;
+      this.id = id;
+      this.minified = minified;
+      this.locale = locale;
+      this.module = module;
+      this.hashCode = id.hashCode() ^ (module != null ? module.hashCode() : 0) ^ (locale != null ? locale.hashCode() : 0) ^ (minified ? ~1 : 0);
    }
 
-   public ResourceScope getScope()
+   @Override
+   public int hashCode()
    {
-      return scope;
-   }
-
-   public String getName()
-   {
-      return name;
+      return hashCode;
    }
 
    @Override
@@ -58,23 +67,22 @@ public class ResourceId implements Serializable
       {
          return true;
       }
-      if (obj instanceof ResourceId)
+      if (obj instanceof ScriptKey)
       {
-         ResourceId that = (ResourceId)obj;
-         return scope == that.scope && name.equals(that.name);
+         ScriptKey that = (ScriptKey)obj;
+         return
+            id.equals(that.id) &&
+            minified &&
+            Safe.equals(module, that.module) &&
+            that.minified &&
+            Safe.equals(locale, that.locale);
       }
       return false;
    }
 
    @Override
-   public int hashCode()
-   {
-      return scope.hashCode() ^ name.hashCode();
-   }
-
-   @Override
    public String toString()
    {
-      return "ResourceId[type=" + scope.name() + ",id=" + name + "]";
+      return "ScriptKey[id=" + id + ",module=" + module + ",minified=" + minified + ",locale=" + locale + "]";
    }
 }
