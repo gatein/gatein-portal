@@ -20,7 +20,6 @@
 package org.exoplatform.webui.organization;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
@@ -30,13 +29,11 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
-import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NaturalLanguageValidator;
 import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
-import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
-import org.exoplatform.webui.form.validator.UsernameValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 
 /**
  * Created by The eXo Platform SARL
@@ -62,7 +59,7 @@ public class UIAccountInputSet extends UIFormInputWithActions
    {
       super(name);
       addUIFormInput(new UIFormStringInput(USERNAME, "userName", null).addValidator(MandatoryValidator.class)
-         .addValidator(UsernameValidator.class, 3, 30));
+         .addValidator(UserConfigurableValidator.class, UserConfigurableValidator.USERNAME));
       
       addUIFormInput(new UIFormStringInput(PASSWORD1X, "password", null).setType(UIFormStringInput.PASSWORD_TYPE)
          .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));

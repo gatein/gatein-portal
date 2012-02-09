@@ -19,6 +19,7 @@
 
 package org.exoplatform.organization.webui.component;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.MembershipHandler;
@@ -26,7 +27,6 @@ import org.exoplatform.services.organization.MembershipType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -36,13 +36,12 @@ import org.exoplatform.webui.core.UIPopupWindow;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.ExpressionValidator;
-import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 import org.exoplatform.webui.organization.account.UIUserSelector;
 
 import java.util.ArrayList;
@@ -77,9 +76,10 @@ public class UIGroupMembershipForm extends UIForm
 
    public UIGroupMembershipForm() throws Exception
    {
-      addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).addValidator(MandatoryValidator.class)
+      /*addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).addValidator(MandatoryValidator.class)
          .addValidator(ExpressionValidator.class, "^\\p{L}[\\p{L}\\d._\\-\\s*,\\s*]+$",
-            "UIGroupMembershipForm.msg.Invalid-char"));
+            "UIGroupMembershipForm.msg.Invalid-char"));*/
+      addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).addValidator(UserConfigurableValidator.class, UserConfigurableValidator.GROUPMEMBERSHIP, UserConfigurableValidator.GROUP_MEMBERSHIP_LOCALIZATION_KEY));
       addUIFormInput(new UIFormSelectBox("membership", "membership", listOption).setSize(1));
       UIPopupWindow searchUserPopup = addChild(UIPopupWindow.class, "SearchUser", "SearchUser");
       searchUserPopup.setWindowSize(640, 0);

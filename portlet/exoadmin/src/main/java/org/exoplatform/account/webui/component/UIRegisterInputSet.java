@@ -18,9 +18,6 @@
  */
 package org.exoplatform.account.webui.component;
 
-import javax.portlet.PortletPreferences;
-
-import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.webui.CaptchaValidator;
 import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
@@ -32,13 +29,13 @@ import org.exoplatform.webui.core.UIApplication;
 import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
-import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NaturalLanguageValidator;
 import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
-import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
-import org.exoplatform.webui.form.validator.UsernameValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
+
+import javax.portlet.PortletPreferences;
 
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
@@ -66,8 +63,10 @@ public class UIRegisterInputSet extends UIFormInputWithActions
    public UIRegisterInputSet(String name) throws Exception{
       super(name);
       
+      /*addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).addValidator(MandatoryValidator.class)
+         .addValidator(UsernameValidator.class, 3, 30));*/
       addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).addValidator(MandatoryValidator.class)
-         .addValidator(UsernameValidator.class, 3, 30));
+         .addValidator(UserConfigurableValidator.class, UserConfigurableValidator.USERNAME));
       
       addUIFormInput(new UIFormStringInput(PASSWORD, PASSWORD, null).setType(UIFormStringInput.PASSWORD_TYPE)
          .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
