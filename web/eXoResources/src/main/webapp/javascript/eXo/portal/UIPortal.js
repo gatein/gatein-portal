@@ -199,13 +199,11 @@ eXo.portal.UIPortal = {
    * @return {Array} Array of UIComponents
    */
   getUIPortlets : function() {
-    var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
-    var founds = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace,
-        "div", "UIPortlet");
     var components = new Array();
-    for (j = 0; j < founds.length; j++) {
-      components[components.length] = new UIComponent(founds[j]);
-    }
+    xj("#UIWorkingWorkspace").find("div.UIPortlet").each(function()
+    {
+      components.push(new UIComponent(this));
+    });
     return components;
   },
   /**
@@ -214,15 +212,14 @@ eXo.portal.UIPortal = {
    * @return {Array} Array of UIComponents
    */
   getUIPortletsInUIPortal : function() {
-    var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
-    var founds = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace,
-        "div", "UIPortlet");
     var components = new Array();
-    for ( var j = 0; j < founds.length; j++) {
-      if (eXo.core.DOMUtil.findAncestorByClass(founds[j], 'UIPage') == null) {
-        components[components.length] = new UIComponent(founds[j]);
-      }
-    }
+    xj("#UIWorkingWorkspace").find("div.UIPortlet").each(function()
+    {
+       if(xj(this).parents(".UIPage").length == 0)
+       {
+         components.push(new UIComponent(this));
+       }
+    });
     return components;
   },
   /**
@@ -231,13 +228,11 @@ eXo.portal.UIPortal = {
    * @return {Array} components array of UIComponent objects
    */
   getUIPortletsInUIPage : function() {
-    var uiPage = document.getElementById("UIPage");
-    var founds = eXo.core.DOMUtil.findDescendantsByClass(uiPage, "div",
-        "UIPortlet");
     var components = new Array();
-    for ( var j = 0; j < founds.length; j++) {
-      components[components.length] = new UIComponent(founds[j]);
-    }
+    xj("#UIPage").find("div.UIPortlet").each(function()
+    {
+       components.push(new UIComponent(this));
+    });
     return components;
   },
   /**
@@ -246,13 +241,11 @@ eXo.portal.UIPortal = {
    * @return {Array} components array of UIComponent objects
    */
   getUIContainers : function() {
-    var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
-    var founds = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace,
-        "div", "UIContainer");
     var components = new Array();
-    for ( var j = 0; j < founds.length; j++) {
-      components[j] = new UIComponent(founds[j]);
-    }
+    xj("#UIWorkingWorkspace").find("div.UIContainer").each(function()
+    {
+       components.push(new UIComponent(this));
+    });
     return components;
   },
   /**
@@ -261,10 +254,6 @@ eXo.portal.UIPortal = {
    * @return {Object} UIPageBody object of this document
    */
   getUIPageBody : function() {
-    // var uiPortal = document.getElementById("UIPortal") ;
-    // return new
-    // UIComponent(eXo.core.DOMUtil.findFirstDescendantByClass(uiPortal, "div",
-    // "UIPage")) ;
     return new UIComponent(document.getElementById("UIPageBody"));
   },
   /**
@@ -281,32 +270,22 @@ eXo.portal.UIPortal = {
 
   /** Repaired: by Vu Duy Tu 25/04/07* */
   showLayoutModeForPage : function() {
-    var uiPage = eXo.core.DOMUtil.findFirstDescendantByClass(document.body,
-        "div", "UIPage");
-    if (uiPage == null)
+    var uiPage = xj(document.body).find("div.UIPage");
+    if (uiPage.length == 0)
       return;
-    var viewPage = eXo.core.DOMUtil.findFirstDescendantByClass(uiPage, "div",
-        "VIEW-PAGE");
-    var uiPortalApplication = document.getElementById("UIPortalApplication");
-    if (uiPortalApplication.className != "Vista") {
-      viewPage.style.border = "solid 3px #dadada";
+    var viewPage = uiPage.find("div.VIEW-PAGE").eq(0);
+    if(xj("#UIPortalApplication").attr("class") != "Vista")
+    {
+      viewPage.css("border", "solid 3px #dadada");
     }
 
-    viewPage.style.paddingTop = "50px";
-    viewPage.style.paddingRight = "0px";
-    viewPage.style.paddingBottom = "50px";
-    viewPage.style.paddingLeft = "0px";
-
-    var uiContainer = eXo.core.DOMUtil.findFirstDescendantByClass(viewPage,
-        "div", "UIContainer");
-    var uiPortlet = eXo.core.DOMUtil.findFirstDescendantByClass(viewPage,
-        "div", "UIPortlet");
-    if (uiContainer != null || uiPortlet != null) {
-      viewPage.style.border = "none";
-      viewPage.style.paddingTop = "5px";
-      viewPage.style.paddingRight = "5px";
-      viewPage.style.paddingBottom = "5px";
-      viewPage.style.paddingLeft = "5px";
+    if(viewPage.find("div.UIContainer,div.UIPortlet").length > 0)
+    {
+      viewPage.css({"border" : "none", "paddingTop" : "5px", "paddingRight" : "5px", "paddingBottom" : "5px", "paddingLeft" : "5px"});
+    }
+    else
+    {
+      viewPage.css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
   },
 
@@ -316,21 +295,13 @@ eXo.portal.UIPortal = {
     var portlet = this.getUIPortlets();
 
     if (container.length == 0 && portlet.length == 0) {
-      var pageIdElemt = document.getElementById("UIPage");
-      var viewPage = eXo.core.DOMUtil.findAncestorByClass(pageIdElemt,
-          "VIEW-PAGE");
-      viewPage.style.paddingTop = "50px";
-      viewPage.style.paddingRight = "0px";
-      viewPage.style.paddingBottom = "50px";
-      viewPage.style.paddingLeft = "0px";
+      xj("#UIPage").parents(".VIEW-PAGE").css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
     var pageBodyBlock = pageBody.getUIComponentBlock();
-    var mask = eXo.core.DOMUtil.findFirstDescendantByClass(pageBodyBlock,
-        "div", "UIPageBodyMask");
-    if (mask) {
-      mask.style.top = -pageBodyBlock.offsetHeight + "px";
-      mask.style.height = pageBodyBlock.offsetHeight + "px";
-      mask.style.width = pageBodyBlock.offsetWidth + "px";
+    var mask = xj(pageBodyBlock).find("div.UIPageBodyMask");
+    if(mask.length > 0)
+    {
+      mask.css("top", -pageBodyBlock.offsetHeight + "px").css("height", pageBodyBlock.offsetHeight + "px").css(pageBodyBlock.offsetWidth + "px");
     }
   },
 
@@ -339,19 +310,7 @@ eXo.portal.UIPortal = {
    * UIPortlet, UIContainer, UIPageBody, UIPortal
    */
   findUIComponentOf : function(element) {
-    var DOMUtil = eXo.core.DOMUtil;
-    var parent;
-    if (parent = DOMUtil.findAncestorByClass(element, "UIPortlet")) {
-      return parent;
-    } else if (parent = DOMUtil.findAncestorByClass(element, "UIPageBody")) {
-      return parent;
-    } else if (parent = DOMUtil.findAncestorByClass(element, "UIContainer")) {
-      return parent;
-    } else if (parent = DOMUtil.findAncestorByClass(element, "UIPortal")) {
-      return parent;
-    }
-
-    return null;
+    return xj(element).parent().closest(".UIPortlet,.UIPageBody,.UIContainer,.UIPortal")[0];
   },
 
   /**
