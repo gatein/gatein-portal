@@ -20,6 +20,7 @@
 package org.exoplatform.portal.controller.resource.script;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -29,7 +30,7 @@ import java.util.Map;
  * 
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class FetchMap<E> extends HashMap<E, FetchMode>
+public class FetchMap<E> extends LinkedHashMap<E, FetchMode>
 {
 
    public FetchMap()

@@ -361,14 +361,14 @@ public class UIPortalApplication extends UIApplication
          LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
 
          //
-         FetchMap<String> urls = jsMan.getExtendedScriptURLs();          
-         urls.addAll(service.resolveURLs(
+         FetchMap<String> urls = new FetchMap<String>(service.resolveURLs(
             prc.getControllerContext(),
             requiredResources,
             !PropertyManager.isDevelopping(),
             !PropertyManager.isDevelopping(),
             locale));
-
+         urls.addAll(jsMan.getExtendedScriptURLs());
+         
          //
          log.info("Resolved URLS for page: " + urls);
          
