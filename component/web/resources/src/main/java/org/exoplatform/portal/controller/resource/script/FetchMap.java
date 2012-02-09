@@ -56,7 +56,7 @@ public class FetchMap<E> extends LinkedHashMap<E, FetchMode>
          put(element, mode);
          return true;
       }
-      else if (mode != null && mode.implies(prev))
+      else if (mode != null && mode.compareTo(prev) >= 0)
       {
          put(element, mode);
          return true;

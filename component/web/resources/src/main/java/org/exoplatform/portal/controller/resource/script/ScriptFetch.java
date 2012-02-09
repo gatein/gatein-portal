@@ -19,29 +19,42 @@
 
 package org.exoplatform.portal.controller.resource.script;
 
+import java.util.LinkedHashSet;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public enum FetchMode
+class ScriptFetch
 {
 
-   ON_LOAD,
+   /** . */
+   final ScriptResource resource;
 
-   IMMEDIATE;
+   /** . */
+   FetchMode mode;
 
-   public static FetchMode decode(String value)
+   /** . */
+   final LinkedHashSet<ScriptFetch> dependencies;
+
+   /** . */
+   final LinkedHashSet<ScriptFetch> dependsOnMe;
+
+   ScriptFetch(ScriptResource resource, FetchMode mode)
    {
-      if ("immediate".equals(value))
+      this.resource = resource;
+      this.mode = mode;
+      this.dependencies = new LinkedHashSet<ScriptFetch>();
+      this.dependsOnMe = new LinkedHashSet<ScriptFetch>();
+   }
+   
+   void upgrade(FetchMode mode)
+   {
+      this.mode = mode;
+
+      //
+      for (ScriptFetch dependency : dependencies)
       {
-         return FetchMode.IMMEDIATE;
-      }
-      else if ("on-load".equals(value))
-      {
-         return FetchMode.ON_LOAD;
-      }
-      else
-      {
-         return null;
+         dependency.upgrade(mode);
       }
    }
 }

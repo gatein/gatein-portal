@@ -27,7 +27,9 @@ import org.exoplatform.portal.controller.resource.script.ScriptGraph;
 import org.exoplatform.portal.controller.resource.script.ScriptResource;
 import org.gatein.common.util.Tools;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -138,13 +140,15 @@ public class TestScriptGraph extends AbstractGateInTest
 
       //
       Map<ScriptResource, FetchMode> resolution = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, null));
+      assertResultOrder(resolution.keySet());
       assertEquals(2, resolution.size());
       assertEquals(Tools.toSet(a, c), resolution.keySet());
       assertEquals(FetchMode.ON_LOAD, resolution.get(a));
-      assertEquals(FetchMode.ON_LOAD, resolution.get(c));
+      assertEquals(FetchMode.IMMEDIATE, resolution.get(c));
 
       //
       resolution = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(B, null));
+      assertResultOrder(resolution.keySet());
       assertEquals(2, resolution.size());
       assertEquals(Tools.toSet(b, c), resolution.keySet());
       assertEquals(FetchMode.IMMEDIATE, resolution.get(b));
@@ -155,6 +159,7 @@ public class TestScriptGraph extends AbstractGateInTest
       pairs.put(A, null);
       pairs.put(B, null);
       resolution = graph.resolve(pairs);
+      assertResultOrder(resolution.keySet());
       assertEquals(3, resolution.size());
       assertEquals(Tools.toSet(a, b, c), resolution.keySet());
       assertEquals(FetchMode.ON_LOAD, resolution.get(a));
@@ -171,16 +176,19 @@ public class TestScriptGraph extends AbstractGateInTest
 
       // Use default fetch mode
       Map<ScriptResource, FetchMode> test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, null));
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a), test.keySet());
       assertEquals(FetchMode.ON_LOAD, test.get(a));
 
       // Override default fetch mode with same value
       test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, FetchMode.ON_LOAD));
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a), test.keySet());
       assertEquals(FetchMode.ON_LOAD, test.get(a));
 
       // Override default fetch mode with higher
       test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, FetchMode.IMMEDIATE));
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a), test.keySet());
       assertEquals(FetchMode.IMMEDIATE, test.get(a));
    }
@@ -192,16 +200,19 @@ public class TestScriptGraph extends AbstractGateInTest
 
       // Use default fetch mode
       Map<ScriptResource, FetchMode> test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, null));
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a), test.keySet());
       assertEquals(FetchMode.IMMEDIATE, test.get(a));
 
       // Override default fetch mode with same value
       test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, FetchMode.ON_LOAD));
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a), test.keySet());
       assertEquals(FetchMode.IMMEDIATE, test.get(a));
 
       // Override default fetch mode with higher
       test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, FetchMode.IMMEDIATE));
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a), test.keySet());
       assertEquals(FetchMode.IMMEDIATE, test.get(a));
    }
@@ -217,6 +228,7 @@ public class TestScriptGraph extends AbstractGateInTest
       LinkedHashMap<ResourceId, FetchMode> pairs = new LinkedHashMap<ResourceId, FetchMode>();
       pairs.put(A, null);
       Map<ScriptResource, FetchMode> test = graph.resolve(pairs);
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a,b), test.keySet());
       assertEquals(FetchMode.IMMEDIATE, test.get(a));
       assertEquals(FetchMode.IMMEDIATE, test.get(b));
@@ -226,6 +238,7 @@ public class TestScriptGraph extends AbstractGateInTest
       pairs.put(A, null);
       pairs.put(B, null);
       test = graph.resolve(pairs);
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a, b), test.keySet());
       assertEquals(FetchMode.IMMEDIATE, test.get(a));
       assertEquals(FetchMode.IMMEDIATE, test.get(b));
@@ -235,6 +248,7 @@ public class TestScriptGraph extends AbstractGateInTest
       pairs.put(B, null);
       pairs.put(A, null);
       test = graph.resolve(pairs);
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a, b), test.keySet());
       assertEquals(FetchMode.IMMEDIATE, test.get(a));
       assertEquals(FetchMode.IMMEDIATE, test.get(b));
@@ -243,6 +257,7 @@ public class TestScriptGraph extends AbstractGateInTest
       pairs = new LinkedHashMap<ResourceId, FetchMode>();
       pairs.put(B, null);
       test = graph.resolve(pairs);
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(b), test.keySet());
       assertEquals(FetchMode.ON_LOAD, test.get(b));
    }
@@ -258,15 +273,17 @@ public class TestScriptGraph extends AbstractGateInTest
       LinkedHashMap<ResourceId, FetchMode> pairs = new LinkedHashMap<ResourceId, FetchMode>();
       pairs.put(A, null);
       Map<ScriptResource, FetchMode> test = graph.resolve(pairs);
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a, b), test.keySet());
       assertEquals(FetchMode.ON_LOAD, test.get(a));
-      assertEquals(FetchMode.ON_LOAD, test.get(b));
+      assertEquals(FetchMode.IMMEDIATE, test.get(b));
 
       //
       pairs = new LinkedHashMap<ResourceId, FetchMode>();
       pairs.put(A, null);
       pairs.put(B, null);
       test = graph.resolve(pairs);
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a, b), test.keySet());
       assertEquals(FetchMode.ON_LOAD, test.get(a));
       assertEquals(FetchMode.IMMEDIATE, test.get(b));
@@ -276,6 +293,7 @@ public class TestScriptGraph extends AbstractGateInTest
       pairs.put(B, null);
       pairs.put(A, null);
       test = graph.resolve(pairs);
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a, b), test.keySet());
       assertEquals(FetchMode.ON_LOAD, test.get(a));
       assertEquals(FetchMode.IMMEDIATE, test.get(b));
@@ -284,7 +302,65 @@ public class TestScriptGraph extends AbstractGateInTest
       pairs = new LinkedHashMap<ResourceId, FetchMode>();
       pairs.put(B, null);
       test = graph.resolve(pairs);
+      assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(b), test.keySet());
       assertEquals(FetchMode.IMMEDIATE, test.get(b));
+   }
+
+   public void testResolveDisjointDependencies()
+   {
+      ScriptGraph graph = new ScriptGraph();
+      ScriptResource a = graph.addResource(A, FetchMode.IMMEDIATE);
+      ScriptResource b = graph.addResource(B, FetchMode.IMMEDIATE);
+      ScriptResource c = graph.addResource(C, FetchMode.IMMEDIATE);
+      a.addDependency(C);
+      
+      // Yes all permutations
+      ResourceId[][] samples = {
+         {A},
+         {A,B},
+         {B,A},
+         {A,B,C},
+         {A,C,B},
+         {B,A,C},
+         {B,C,A},
+         {C,A,B},
+         {C,B,A},
+      };
+      
+      //
+      LinkedHashMap<ResourceId, FetchMode> pairs = new LinkedHashMap<ResourceId, FetchMode>();
+      for (ResourceId[] sample : samples)
+      {
+         pairs.clear();
+         for (ResourceId id : sample)
+         {
+            pairs.put(id, null);
+         }
+         Map<ScriptResource, FetchMode> test = graph.resolve(pairs);
+         assertResultOrder(test.keySet());
+      }
+   }
+
+   /**
+    * Test that each script of the test collection has no following script that belongs
+    * to its closure.
+    *
+    * @param test the test
+    */
+   private void assertResultOrder(Collection<ScriptResource> test)
+   {
+      ScriptResource[] array = test.toArray(new ScriptResource[test.size()]);
+      for (int i = 0;i < array.length;i++)
+      {
+         ScriptResource resource = array[i];
+         for (int j = i + 1;j < array.length;j++)
+         {
+            if (resource.closure.contains(array[j].getId()))
+            {
+               throw failure("Was not expecting result order " + test, new Exception());
+            }
+         }
+      }
    }
 }

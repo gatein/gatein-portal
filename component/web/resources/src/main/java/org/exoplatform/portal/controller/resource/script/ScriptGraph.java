@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 /**
@@ -62,59 +64,90 @@ public class ScriptGraph
     */
    public Map<ScriptResource, FetchMode> resolve(Map<ResourceId, FetchMode> pairs)
    {
-      FetchMap<ResourceId> determined = new FetchMap<ResourceId>();
-
-      //
+      // Build a fetch graph
+      Map<ResourceId, ScriptFetch> determined = new HashMap<ResourceId, ScriptFetch>();
       for (Map.Entry<ResourceId, FetchMode> pair : pairs.entrySet())
       {
-         ResourceId id = pair.getKey();
-         FetchMode fetchMode = pair.getValue();
-         ScriptResource resource = getResource(id);
-         
-         //
-         if (resource != null)
+         traverse(determined, pair.getKey(), pair.getValue());
+      }
+
+      // We remove one by one the nodes of the fetch graph having no dependencies
+      // each node will build the dependency list
+      LinkedHashMap<ScriptResource, FetchMode> result = new LinkedHashMap<ScriptResource, FetchMode>();
+      LinkedList<ScriptFetch> all = new LinkedList<ScriptFetch>(determined.values());
+      while (all.size() > 0)
+      {
+         ScriptFetch next = null;
+         for (Iterator<ScriptFetch> i = all.iterator();i.hasNext();)
          {
-            // Which fetch mode should we use ?
-            if (fetchMode == null || resource.fetchMode.implies(fetchMode))
+            ScriptFetch fetch = i.next();
+            if (fetch.dependencies.size() == 0)
             {
-               fetchMode = resource.fetchMode;
-            }
-            
-            //
-            if (determined.add(id, fetchMode))
-            {
-               for (ResourceId dependencyId : resource.closure)
+               i.remove();
+               next = fetch;
+               for (ScriptFetch dependent : fetch.dependsOnMe)
                {
-                  ScriptResource dependency = getResource(dependencyId);
-                  if (dependency != null)
-                  {
-                     determined.add(dependencyId, fetchMode);
-                  }
+                  dependent.dependencies.remove(fetch);
                }
+               break;
             }
          }
+         if (next == null)
+         {
+            // This should not happen:
+            // we have an DAG, on each iteration we must have at least one node that has no dependencies
+            // we remove it from the graph and update its dependencies
+            // (unless the graph is not correctly constructed above)
+            throw new AssertionError("This is a bug");
+         }
+         else
+         {
+            result.put(next.resource, next.mode);
+         }
       }
-      
-      // Sort results
-      ArrayList<ScriptResource> resources = new ArrayList<ScriptResource>(determined.size());
-      for (ResourceId id : determined.keySet())
-      {
-         resources.add(getResource(id));
-      }
-      Collections.sort(resources);
-      
-      //
-      LinkedHashMap<ScriptResource, FetchMode> result = new LinkedHashMap<ScriptResource, FetchMode>(determined.size());
-      for (ScriptResource resource : resources)
-      {
-         result.put(resource, determined.get(resource.getId()));
-      }
-      
 
       //
       return result;
    }
-   
+
+   private ScriptFetch traverse(Map<ResourceId, ScriptFetch> map, ResourceId id, FetchMode mode)
+   {
+      ScriptResource resource = getResource(id);
+      if (resource != null)
+      {
+         if (mode == null || resource.fetchMode.compareTo(mode) > 0)
+         {
+            mode = resource.fetchMode;
+         }
+         ScriptFetch fetch = map.get(id);
+         if (fetch == null)
+         {
+            map.put(id, fetch = new ScriptFetch(resource, mode));
+
+            // Recursively add the dependencies
+            for (ResourceId dependencyId : resource.dependencies)
+            {
+               ScriptFetch dependencyFetch = traverse(map, dependencyId, mode);
+               if (dependencyFetch != null)
+               {
+                  dependencyFetch.dependsOnMe.add(fetch);
+                  fetch.dependencies.add(dependencyFetch);
+               }
+            }
+         }
+         else if (mode.compareTo(fetch.mode) > 0)
+         {
+            // Propagate the fetch mode upgrade along the graph already built
+            fetch.upgrade(mode);
+         }
+         return fetch;
+      }
+      else
+      {
+         return null;
+      }
+   }
+
    public ScriptResource getResource(ResourceId id)
    {
       return getResource(id.getScope(), id.getName());
@@ -135,8 +168,26 @@ public class ScriptGraph
       return addResource(id, FetchMode.IMMEDIATE);
    }
 
-   public ScriptResource addResource(ResourceId id, FetchMode fetchMode)
+   /**
+    * Add a resource to the graph.
+    *
+    * @param id the resource id
+    * @param fetchMode the resource fetch mode
+    * @return the resource
+    * @throws NullPointerException if any argument is null
+    */
+   public ScriptResource addResource(ResourceId id, FetchMode fetchMode) throws NullPointerException
    {
+      if (id == null)
+      {
+         throw new NullPointerException("No null resource accepted");
+      }
+      if (fetchMode == null)
+      {
+         throw new NullPointerException("No null fetch mode accepted");
+      }
+
+      //
       Map<String, ScriptResource> map = resources.get(id.getScope());
       String name = id.getName();
       ScriptResource resource = map.get(name);
@@ -144,12 +195,9 @@ public class ScriptGraph
       {
          map.put(name, resource = new ScriptResource(this, id, fetchMode));
       }
-      else if (fetchMode == FetchMode.IMMEDIATE && resource.fetchMode != FetchMode.IMMEDIATE)
+      else if (fetchMode.compareTo(resource.fetchMode) > 0)
       {
-         // We should somehow have a method on FetchMode called "implies" that would provide
-         // relationship between fetch modes, but for now it's ok, but later it may be useful
-         // if we have additional fetch mode like "on-click".
-         resource.fetchMode = FetchMode.IMMEDIATE;
+         resource.fetchMode = fetchMode;
       }
       return resource;
    }
