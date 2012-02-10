@@ -8,4 +8,5 @@
    <xi:include href="Configuration/DatabaseConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="Configuration/EMailServiceConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
    <xi:include href="Configuration/HTTPSConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+   <xi:include href="Configuration/ValidatorConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>

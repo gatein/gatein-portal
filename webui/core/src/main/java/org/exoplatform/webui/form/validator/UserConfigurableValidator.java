@@ -40,7 +40,7 @@ import java.util.regex.Pattern;
 
 /**
  * A user-configurable validator. Several aspects of this validator can be configured via properties in the
- * configuration.properties file found in the GateIn configuration directory (${gatein.conf.dir}. The validator
+ * configuration.properties file found in the GateIn configuration directory (${gatein.conf.dir}). The validator
  * supports several configurations that can be activated when a validator instance is created by passing it the name of
  * the configuration to be activated. A configuration is created by adding an entry in configuration.properties using
  * the {@link #KEY_PREFIX} prefix followed by the name of the configuration, a period '.' and the name of the
