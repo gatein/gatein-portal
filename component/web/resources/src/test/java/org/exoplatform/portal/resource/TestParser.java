@@ -22,7 +22,6 @@ package org.exoplatform.portal.resource;
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.controller.resource.ResourceId;
 import org.exoplatform.portal.controller.resource.ResourceScope;
-import org.exoplatform.portal.controller.resource.script.FetchMode;
 import org.exoplatform.web.application.javascript.DependencyDescriptor;
 import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
@@ -125,6 +124,43 @@ public class TestParser extends AbstractGateInTest
       ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.PORTAL, "foo"), desc.getId());
       assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar")), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"))), desc.getDependencies());
+   }
+   
+   public void testModules() throws Exception
+   {
+      String config = "" +
+         "<gatein-resources>" +
+         "<portal>" +
+         "<name>foo</name>" +
+         "<scripts>" +
+         "<module>" +
+         "<name>local_module</name>" +
+         "<path>/local_module.js</path>" +
+         "</module>" +
+         "<module>" +
+         "<name>remote_module</name>" +
+         "<uri>/remote_module.js</uri>" +
+         "</module>" +
+         "</scripts>" +
+         "</portal>" +
+         "</gatein-resources>";
+
+      //
+      JavascriptConfigParser parser = new JavascriptConfigParser("/mypath");
+      List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
+      assertEquals(1, scripts.size());
+      ScriptResourceDescriptor desc = scripts.get(0);
+      
+      List<Javascript> modules = desc.getModules();
+      assertEquals(2, modules.size());
+      
+      Javascript local = modules.get(0); 
+      assertTrue(local instanceof Javascript.Local);
+      assertEquals("local_module", local.getModule());
+      
+      Javascript remote = modules.get(1);
+      assertTrue(remote instanceof Javascript.Remote);
+      assertEquals("remote_module", remote.getModule());
    }
    
    public void testResourceBundle() throws Exception

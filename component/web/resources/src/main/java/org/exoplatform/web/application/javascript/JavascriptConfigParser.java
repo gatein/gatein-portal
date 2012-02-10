@@ -263,8 +263,8 @@ public class JavascriptConfigParser
       {
          String moduleName = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "name", true));
          Javascript script;
-         String modulePath = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "path", false));
-         if (modulePath != null)
+         Element path = XMLTools.getUniqueChild(moduleElt, "path", false);
+         if (path != null)
          {
             String resourceBundle = null;
             Element bundleElt = XMLTools.getUniqueChild(moduleElt, "resource-bundle", false);
@@ -272,6 +272,7 @@ public class JavascriptConfigParser
             {
                resourceBundle = XMLTools.asString(bundleElt);
             }
+            String modulePath = XMLTools.asString(path);
             script = new Javascript.Local(desc.id, moduleName, contextPath, modulePath, resourceBundle, 0);
          }
          else

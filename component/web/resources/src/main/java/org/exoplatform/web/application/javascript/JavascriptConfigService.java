@@ -168,8 +168,16 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          //
          if (!resource.isEmpty())
          {
+            FetchMode mode = entry.getValue();
+            for (Module module : resource.getModules())
+            {
+               if (module instanceof Module.Remote)
+               {
+                  urls.put(((Module.Remote)module).getURI(), mode);
+               }
+            }
             controllerContext.renderURL(resource.getParameters(minified, locale), writer);
-            urls.put(buffer.toString(), entry.getValue());
+            urls.put(buffer.toString(), mode);
             buffer.setLength(0);
             writer.reset(buffer);
          }
