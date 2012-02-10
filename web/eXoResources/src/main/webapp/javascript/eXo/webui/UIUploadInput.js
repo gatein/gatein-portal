@@ -41,9 +41,8 @@ eXo.webui.UIUploadInput = {
     for ( var i = 0; i < uploadId.length; i++) {
       var url = this.progressURL + uploadId[i];
       var responseText = ajaxAsyncGetRequest(url, false);
-      var response;
-      try {
-        eval("response = " + responseText);
+      try {        
+    	  var response = eval("response = " + responseText);
       } catch (err) {
         return;
       }
@@ -55,7 +54,7 @@ eXo.webui.UIUploadInput = {
         this.showUploaded(uploadId[i], response.upload[uploadId[i]].fileName);
       }
     }
-  },
+  }, 
 
   createEntryUpload : function(id, isDynamicMode) {
     var div = document.getElementById('UploadInput' + id);
@@ -96,26 +95,22 @@ eXo.webui.UIUploadInput = {
     var element = document.getElementById('ProgressIframe' + id);
     element.innerHTML = "<span></span>";
 
-    var UploadInput = eXo.core.DOMUtil.findDescendantById(container,
-        'UploadInput' + id);
-    UploadInput.style.display = "none";
+    jCont = xj(container);
+    var UploadInput = jCont.find('#UploadInput' + id);
+    UploadInput.hide();
 
-    var progressIframe = eXo.core.DOMUtil.findDescendantById(container,
-        'ProgressIframe' + id);
-    progressIframe.style.display = "none";
+    var progressIframe = jCont.find('#ProgressIframe' + id);
+    progressIframe.hide();
 
-    var selectFileFrame = eXo.core.DOMUtil.findFirstDescendantByClass(
-        container, "div", "SelectFileFrame");
-    selectFileFrame.style.display = "block";
+    var selectFileFrame = jCont.find(".SelectFileFrame").first();
+    selectFileFrame.show();
 
-    var fileNameLabel = eXo.core.DOMUtil.findFirstDescendantByClass(
-        selectFileFrame, "div", "FileNameLabel");
-    if (fileName != null)
-      fileNameLabel.innerHTML = decodeURIComponent(fileName);
+    var fileNameLabel = selectFileFrame.find(".FileNameLabel").first();
+    if (fileName.length)
+      fileNameLabel.html(decodeURIComponent(fileName));
 
-    var progressBarFrame = eXo.core.DOMUtil.findFirstDescendantByClass(
-        container, "div", "ProgressBarFrame");
-    progressBarFrame.style.display = "none";
+    var progressBarFrame = jCont.find(".ProgressBarFrame").first();
+    progressBarFrame.hide();
   },
 
   refreshProgress : function(uploadId) {
@@ -134,9 +129,8 @@ eXo.webui.UIUploadInput = {
           this.refreshTime);
     }
 
-    var response;
     try {
-      eval("response = " + responseText);
+    	var response = eval("response = " + responseText);
     } catch (err) {
       return;
     }
@@ -144,10 +138,10 @@ eXo.webui.UIUploadInput = {
     for (id in response.upload) {
       var container = parent.document.getElementById('UploadInputContainer'
           + id);
+      var jCont = xj(container);
       if (response.upload[id].status == "failed") {
         this.abortUpload(id);
-        var message = eXo.core.DOMUtil.findFirstChildByClass(container, "div",
-            "LimitMessage").innerHTML;
+        var message = jCont.children(".LimitMessage").first().html();
         message = message.replace("{0}", response.upload[id].size);
         message = message.replace("{1}", response.upload[id].unit);
         alert(message);
@@ -155,14 +149,11 @@ eXo.webui.UIUploadInput = {
       }
       var element = document.getElementById('ProgressIframe' + id);
       var percent = response.upload[id].percent;
-      var progressBarMiddle = eXo.core.DOMUtil.findFirstDescendantByClass(
-          container, "div", "ProgressBarMiddle");
-      var blueProgressBar = eXo.core.DOMUtil.findFirstChildByClass(
-          progressBarMiddle, "div", "BlueProgressBar");
-      var progressBarLabel = eXo.core.DOMUtil.findFirstChildByClass(
-          blueProgressBar, "div", "ProgressBarLabel");
-      blueProgressBar.style.width = percent + "%";
-      progressBarLabel.innerHTML = percent + "%";
+      var progressBarMiddle = jCont.find(".ProgressBarMiddle").first();
+      var blueProgressBar = progressBarMiddle.children(".BlueProgressBar").first();
+      var progressBarLabel = blueProgressBar.children(".ProgressBarLabel").first();
+      blueProgressBar.css("width", percent + "%");
+      progressBarLabel.html(percent + "%");
 
       if (percent == 100) {
         this.showUploaded(id, response.upload[id].fileName);
@@ -187,9 +178,8 @@ eXo.webui.UIUploadInput = {
     request.send(null);
 
     var container = parent.document.getElementById('UploadInputContainer' + id);
-    var selectFileFrame = eXo.core.DOMUtil.findFirstDescendantByClass(
-        container, "div", "SelectFileFrame");
-    selectFileFrame.style.display = "none";
+    var selectFileFrame = xj(container).find(".SelectFileFrame").first();
+    selectFileFrame.hide();
 
     this.createEntryUpload(id, isDynamicMode);
   },
@@ -203,13 +193,12 @@ eXo.webui.UIUploadInput = {
     request.send(null);
 
     var container = parent.document.getElementById('UploadInputContainer' + id);
-    var progressIframe = eXo.core.DOMUtil.findDescendantById(container,
-        'ProgressIframe' + id);
-    progressIframe.style.display = "none";
+    var jCont = xj(container); 
+    var progressIframe = jCont.find('#ProgressIframe' + id);
+    progressIframe.hide();
 
-    var progressBarFrame = eXo.core.DOMUtil.findFirstDescendantByClass(
-        container, "div", "ProgressBarFrame");
-    progressBarFrame.style.display = "none";
+    var progressBarFrame = jCont.find(".ProgressBarFrame").first();
+    progressBarFrame.hide();
 
     this.createEntryUpload(id, isDynamicMode);
   },
@@ -225,6 +214,7 @@ eXo.webui.UIUploadInput = {
   doUpload : function(id) {
     var DOMUtil = eXo.core.DOMUtil;
     var container = parent.document.getElementById('UploadInputContainer' + id);
+    var jCont = xj(container);
     this.displayUploadButton(id);
     if (id instanceof Array) {
       for ( var i = 0; i < id.length; i++) {
@@ -238,18 +228,14 @@ eXo.webui.UIUploadInput = {
         return;
       var temp = file.value;
 
-      var progressBarFrame = DOMUtil.findFirstDescendantByClass(container,
-          "div", "ProgressBarFrame");
-      progressBarFrame.style.display = "block";
+      var progressBarFrame = jCont.find(".ProgressBarFrame").first();
+      progressBarFrame.show();
 
-      var progressBarMiddle = DOMUtil.findFirstDescendantByClass(container,
-          "div", "ProgressBarMiddle");
-      var blueProgressBar = DOMUtil.findFirstChildByClass(progressBarMiddle,
-          "div", "BlueProgressBar");
-      var progressBarLabel = DOMUtil.findFirstChildByClass(blueProgressBar,
-          "div", "ProgressBarLabel");
-      blueProgressBar.style.width = "0%";
-      progressBarLabel.innerHTML = "0%";
+      var progressBarMiddle = jCont.find(".ProgressBarMiddle").first();
+      var blueProgressBar = progressBarMiddle.children(".BlueProgressBar").first();
+      var progressBarLabel = blueProgressBar.children(".ProgressBarLabel").first();
+      blueProgressBar.css("width", "0%");
+      progressBarLabel.html("0%");
 
       var uploadAction = this.uploadURL + id;
       var formHTML = "<form id='form" + id
@@ -274,11 +260,8 @@ eXo.webui.UIUploadInput = {
         this.listUpload.push(id);
       }
 
-      var container = parent.document.getElementById('UploadInputContainer'
-          + id);
-      var UploadInput = eXo.core.DOMUtil.findDescendantById(container,
-          'UploadInput' + id);
-      UploadInput.style.display = "none";
+      var UploadInput = jCont.find('#UploadInput' + id);
+      UploadInput.hide();
     }
   },
 
