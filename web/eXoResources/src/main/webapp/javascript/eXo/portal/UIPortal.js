@@ -56,141 +56,131 @@ eXo.portal.UIPortalComponent = UIComponent.prototype.constructor ;
 eXo.portal.UIPortal = {
   portalUIComponentDragDrop : false,
 
-  blockOnMouseOver : function(event, portlet, isOver) {
-    var DOMUtil = eXo.core.DOMUtil;
+  blockOnMouseOver : function(event, block, isOver) {
+    var jqBlock = xj(block);
     if (!eXo.portal.portalMode || eXo.portal.isInDragging)
       return;
-    if (eXo.portal.portalMode <= 2 && DOMUtil.hasClass(portlet, "UIContainer"))
+    if (eXo.portal.portalMode <= 2 && jqBlock.hasClass("UIContainer"))
       return;
     if (eXo.portal.portalMode > 2 && eXo.portal.portalMode != 4
-        && DOMUtil.hasClass(portlet, "UIPortlet"))
+        && jqBlock.hasClass("UIPortlet"))
       return;
 
     if (!event)
       event = window.event;
     event.cancelBubble = true;
 
-    var component = DOMUtil.findFirstDescendantByClass(portlet, "div",
-        "UIComponentBlock");
-    var children = DOMUtil.getChildrenByTagName(component, "div");
-    var layoutBlock;
-    var viewBlock;
-    var editBlock;
+    var viewBlock, layoutBlock, editBlock;
+    jqBlock.find("div.UIComponentBlock").eq(0).children("div").each(function()
+    {
+      var child = xj(this);
+      if (child.hasClass("VIEW-BLOCK"))
+      {
+        viewBlock = child;
+      }
+      else if (child.hasClass("LAYOUT-BLOCK"))
+      {
+        layoutBlock = child;
+      }
+      else if (child.hasClass("EDITION-BLOCK"))
+      {
+        editBlock = child;
+      }
+    });
 
-    for ( var i = 0; i < children.length; i++) {
-      if (DOMUtil.hasClass(children[i], "LAYOUT-BLOCK"))
-        layoutBlock = children[i];
-      else if (DOMUtil.hasClass(children[i], "VIEW-BLOCK"))
-        viewBlock = children[i];
-      else if (DOMUtil.hasClass(children[i], "EDITION-BLOCK"))
-        editBlock = children[i];
+    if (editBlock.length == 0)
+    {
+      return;
     }
 
-    if (!editBlock)
-      return;
-    if (isOver) {
-      var newLayer = DOMUtil.findFirstDescendantByClass(editBlock, "div",
-          "NewLayer");
+    if (isOver)
+    {
+      var newLayer = editBlock.find("div.NewLayer").eq(0);
       var height = 0;
       var width = 0;
-      if (layoutBlock && layoutBlock.style.display != "none") {
-        height = layoutBlock.offsetHeight;
-        width = layoutBlock.offsetWidth;
-      } else if (viewBlock && viewBlock.style.display != "none") {
-        height = viewBlock.offsetHeight;
-        width = viewBlock.offsetWidth;
+
+      if (layoutBlock.length > 0 && layoutBlock.css("display") != "none")
+      {
+        height = layoutBlock[0].offsetHeight;
+        width = layoutBlock[0].offsetWidth;
+      }
+      else if (viewBlock.length > 0 && viewBlock.css("display") != "none")
+      {
+        height = viewBlock[0].offsetHeight;
+        width = viewBlock[0].offsetWidth;
       }
 
-      if (DOMUtil.hasClass(portlet, "UIPortlet")) {
-        newLayer.style.width = width + "px";
-        newLayer.style.height = height + "px";
-      } else {
-        newLayer.parentNode.style.width = width + "px";
-        var normalBlock = DOMUtil.findFirstChildByClass(portlet, "div",
-            "NormalContainerBlock");
-        if (normalBlock)
-          DOMUtil.replaceClass(normalBlock, "NormalContainerBlock",
-              "OverContainerBlock");
+      if (jqBlock.hasClass("UIPortlet"))
+      {
+        newLayer.css("width", width + "px");
+        newLayer.css("height", height + "px");
       }
-      newLayer.parentNode.style.top = -height + "px";
-      editBlock.style.display = "block";
-
-      // resize width of portlet/container control if IE + LTR align BEGIN
-
-      var uiInfoBar = DOMUtil.findFirstDescendantByClass(editBlock, "div",
-          "UIInfoBar");
-
-      if (uiInfoBar
-          && (eXo.core.Browser.isIE6() || (eXo.core.Browser.isIE7() && eXo.core.I18n
-              .isRT()))) {
-        // resize width of portlet/container only one time
-        if (uiInfoBar.style.width == "") {
-          var dragControlArea = DOMUtil.findFirstDescendantByClass(uiInfoBar,
-              "div", "DragControlArea");
-
-          var portletIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar,
-              "div", "PortletIcon");
-          var editPortletPropertiesIcon = DOMUtil.findFirstDescendantByClass(
-              uiInfoBar, "a", "EditPortletPropertiesIcon");
-          var deletePortletIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar,
-              "a", "DeletePortletIcon");
-
-          var contarnerIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar,
-              "div", "ContainerIcon");
-          var editContainerIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar,
-              "a", "EditContainerIcon");
-          var deleteContainerIcon = DOMUtil.findFirstDescendantByClass(
-              uiInfoBar, "a", "DeleteContainerIcon");
-
-          var uiInfoBarWidth = dragControlArea.offsetWidth;
-
-          if (DOMUtil.hasClass(portlet, "UIPortlet")) {
-            uiInfoBarWidth += portletIcon.offsetWidth;
-
-            if (editPortletPropertiesIcon) {
-              uiInfoBarWidth += editPortletPropertiesIcon.offsetWidth;
-            }
-
-            if (deletePortletIcon) {
-              uiInfoBarWidth += deletePortletIcon.offsetWidth;
-            }
-          }
-
-          if (DOMUtil.hasClass(portlet, "UIContainer")) {
-            uiInfoBarWidth += contarnerIcon.offsetWidth
-
-            if (editContainerIcon) {
-              uiInfoBarWidth += editContainerIcon.offsetWidth;
-            }
-
-            if (deleteContainerIcon) {
-              uiInfoBarWidth += deleteContainerIcon.offsetWidth;
-            }
-          }
-
-          uiInfoBar.style.width = uiInfoBarWidth + 35 + "px";
+      else
+      {
+        newLayer.parent().css("width", width + "px");
+        var normalBlock = jqBlock.children("div.NormalContainerBlock");
+        if (normalBlock.length > 0)
+        {
+          normalBlock.eq(0).removeClass("NormalContainerBlock").addClass("OverContainerBlock");
         }
-
       }
-      // resize width of portlet/container control if IE + LTR align END
 
-    } else {
-      editBlock.style.display = "none";
-      if (!DOMUtil.hasClass(portlet, "UIPortlet")) {
-        var normalBlock = DOMUtil.findFirstChildByClass(portlet, "div",
-            "OverContainerBlock");
-        if (normalBlock)
-          DOMUtil.replaceClass(normalBlock, "OverContainerBlock",
-              "NormalContainerBlock");
+      newLayer.parent().css("top", -height + "px");
+      editBlock.css("display", "block");
+
+      var infBar = editBlock.find("div.UIInfoBar").eq(0);
+      if (infBar && (eXo.core.Browser.isIE6() || (eXo.core.Browser.isIE7() && eXo.core.I18n.isRT())))
+      {
+        // Avoid resizing width of portlet/container block multiple times
+        if (infBar.css("width") == "")
+        {
+          var blockIcon, editIcon, delIcon;
+          if (jqBlock.hasClass("UIPortlet"))
+          {
+            blockIcon = infBar.find("div.PortletIcon");
+            editIcon = infBar.find("a.EditPortletPropertiesIcon");
+            delIcon = infBar.find("a.DeletePortletIcon");
+          }
+          else
+          {
+            blockIcon = infBar.find("div.ContainerIcon");
+            editIcon = infBar.find("a.EditContainerIcon");
+            delIcon = infBar.find("a.DeleteContainerIcon");
+          }
+
+          var infBarWidth = infBar.find("div.DragControlArea")[0].offsetWidth;
+          infBarWidth += blockIcon[0].offsetWidth;
+          if (editIcon.length > 0)
+          {
+            infBarWidth += editIcon[0].offsetWidth;
+          }
+          if (delIcon.length > 0)
+          {
+            infBarWidth += delIcon[0].offsetWidth;
+          }
+
+          infBar.css("width", infBarWidth + 35 + "px");
+        }
+      }
+    }
+    else
+    {
+      editBlock.css("display", "none");
+      if (jqBlock.hasClass("UIContainer"))
+      {
+        var normalBlock = jqBlock.find("div.OverContainerBlock");
+        if (normalBlock.length > 0)
+        {
+          normalBlock.eq(0).removeClass("OverContainerBlock").addClass("NormalContainerBlock");
+        }
       }
     }
 
     // Don't display portlet control when View Container
-    var controlPortlet = DOMUtil.findFirstDescendantByClass(editBlock, "div",
-        "CONTROL-PORTLET");
-    if (controlPortlet) {
-      controlPortlet.style.display = eXo.portal.portalMode == 4 ? "none"
-          : "block";
+    var controlPortlet = editBlock.find("div.CONTROL-PORTLET");
+    if(controlPortlet.length > 0)
+    {
+      controlPortlet.eq(0).css("display", eXo.portal.portalMode == 4 ? "none" : "block");
     }
   },
 
