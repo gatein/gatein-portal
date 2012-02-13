@@ -193,80 +193,6 @@ eXo.portal.UIPortal = {
           : "block";
     }
   },
-  /**
-   * Get all UIPortlets of current UIWorkingWorkspace
-   * 
-   * @return {Array} Array of UIComponents
-   */
-  getUIPortlets : function() {
-    var components = new Array();
-    xj("#UIWorkingWorkspace").find("div.UIPortlet").each(function()
-    {
-      components.push(new UIComponent(this));
-    });
-    return components;
-  },
-  /**
-   * Get all UIPortlets is children of UIWorkingWorkspace
-   * 
-   * @return {Array} Array of UIComponents
-   */
-  getUIPortletsInUIPortal : function() {
-    var components = new Array();
-    xj("#UIWorkingWorkspace").find("div.UIPortlet").each(function()
-    {
-       if(xj(this).parents(".UIPage").length == 0)
-       {
-         components.push(new UIComponent(this));
-       }
-    });
-    return components;
-  },
-  /**
-   * Get all UIPortlets in UIPage
-   * 
-   * @return {Array} components array of UIComponent objects
-   */
-  getUIPortletsInUIPage : function() {
-    var components = new Array();
-    xj("#UIPage").find("div.UIPortlet").each(function()
-    {
-       components.push(new UIComponent(this));
-    });
-    return components;
-  },
-  /**
-   * Get All UIContainers in current UIWorkingWorkspace
-   * 
-   * @return {Array} components array of UIComponent objects
-   */
-  getUIContainers : function() {
-    var components = new Array();
-    xj("#UIWorkingWorkspace").find("div.UIContainer").each(function()
-    {
-       components.push(new UIComponent(this));
-    });
-    return components;
-  },
-  /**
-   * Get current UIPageBody
-   * 
-   * @return {Object} UIPageBody object of this document
-   */
-  getUIPageBody : function() {
-    return new UIComponent(document.getElementById("UIPageBody"));
-  },
-  /**
-   * Get current UIPortal
-   * 
-   * @return {Object} UIComponent object that contains UIPortal object of this
-   *         component
-   */
-  getUIPortal : function() {
-    var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
-    return new UIComponent(eXo.core.DOMUtil.findFirstDescendantByClass(
-        uiWorkingWorkspace, "div", "UIPortal"));
-  },
 
   /** Repaired: by Vu Duy Tu 25/04/07* */
   showLayoutModeForPage : function() {
@@ -290,27 +216,17 @@ eXo.portal.UIPortal = {
   },
 
   showViewMode : function() {
-    var pageBody = this.getUIPageBody();
-    var container = this.getUIContainers();
-    var portlet = this.getUIPortlets();
-
-    if (container.length == 0 && portlet.length == 0) {
+    var wkWs = xj("#UIWorkingWorkspace");
+    if (wkWs.find("div.UIPortlet").length == 0 && wkWs.find("div.UIContainer") == 0)
+    {
       xj("#UIPage").parents(".VIEW-PAGE").css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
-    var pageBodyBlock = pageBody.getUIComponentBlock();
+    var pageBodyBlock = new UIComponent(document.getElementById("UIPageBody")).getUIComponentBlock();
     var mask = xj(pageBodyBlock).find("div.UIPageBodyMask");
     if(mask.length > 0)
     {
       mask.css("top", -pageBodyBlock.offsetHeight + "px").css("height", pageBodyBlock.offsetHeight + "px").css(pageBodyBlock.offsetWidth + "px");
     }
-  },
-
-  /**
-   * Return the closest container of the element. It might be one of these :
-   * UIPortlet, UIContainer, UIPageBody, UIPortal
-   */
-  findUIComponentOf : function(element) {
-    return xj(element).parent().closest(".UIPortlet,.UIPageBody,.UIContainer,.UIPortal")[0];
   },
 
   /**
@@ -363,22 +279,25 @@ eXo.portal.UIPortal = {
    * @param {String}
    *          componentId identifier of component
    */
-  removeComponent : function(componentId) {
-    var comp = document.getElementById(componentId);
-    var viewPage = eXo.core.DOMUtil.findAncestorByClass(comp, "VIEW-PAGE");
+  removeComponent : function(id) {
+    var comp = xj("#" + id);
+    var parent = comp.parent();
+    var viewPage = parent.closest(".VIEW-PAGE");
 
     // Check if the removing component is a column
-    if (comp.parentNode.nodeName.toUpperCase() == "TD")
-      eXo.core.DOMUtil.removeElement(comp.parentNode);
+    if (parent[0].nodeName.toUpperCase() == "TD")
+    {
+      parent.remove();
+    }
     else
-      eXo.core.DOMUtil.removeElement(comp);
+    {
+      comp.remove();
+    }
 
-    if (viewPage && eXo.portal.UIPortal.getUIContainers().length == 0
-        && eXo.portal.UIPortal.getUIPortlets().length == 0) {
-      viewPage.style.paddingTop = "50px";
-      viewPage.style.paddingRight = "0px";
-      viewPage.style.paddingBottom = "50px";
-      viewPage.style.paddingLeft = "0px";
+    var wkWs = xj("#UIWorkingWorkspace");
+    if (viewPage.length > 0 && wkWs.find("div.UIContainer").length == 0 && wkWs.find("div.UIPortlet").length == 0)
+    {
+      viewPage.css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
   },
 
