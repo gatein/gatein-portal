@@ -15,9 +15,11 @@
 	    def url = uicomponent.getParent().getUrl();
 	  	def metadata = uicomponent.getParent().getMetadata();
 	  	def userPref = uicomponent.getParent().getUserPref();
+	  	def noCache = uicomponent.getParent().isNoCache();
+	  	def isDebug = uicomponent.getParent().isDebug();
 	  	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	  	jsmanager.importJavascript("eXo.gadget.UIGadget") ;
-	  	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.createGadget('$url','$id', $metadata, $userPref, 'canvas', '$hostName');") ;
+	  	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.createGadget('$url','$id', $metadata, $userPref, 'canvas', '$hostName', " + (isDebug ? 1 : 0) + ", " + (noCache ? 1 : 0) + ");");
 	  	
 	  	if(UIPortlet.getCurrentUIPortlet().getHeight() == null && uicomponent.getParent().isFillUpFreeSpace()) {
 	  		jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.resizeFullHeight('$id')");

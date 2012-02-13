@@ -23,8 +23,7 @@
     	  def isDebug = uicomponent.isDebug();
       	jsmanager.importJavascript("eXo.gadget.UIGadget");
       	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.confirmDeleteGadget = '" + _ctx.appRes("UIGadgetContainerManagement.confirm.DeleteGadget") + "';");
-      	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.createGadget('$url','content-$id', $metadata, $userPref, '$view', '$hostName', " + (isDev ? 1 : 0)
-      																																						+ ", " + (isDebug ? 1 : 0) + ", " + (noCache ? 1 : 0) + ");");      									
+      	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.createGadget('$url','content-$id', $metadata, $userPref, '$view', '$hostName', " + (isDebug ? 1 : 0) + ", " + (noCache ? 1 : 0) + ");");      									
     }
                                                                                                             																													
 	boolean isMini = Boolean.parseBoolean(uicomponent.getProperties().get("minimized"));

@@ -25,11 +25,10 @@ eXo.gadget.UIGadget = {
      * @param {String} metadata contain information of gadget
      * @param {Object} userPref
      * @param {String} view type of view (home, canvas, ...)
-     * @param {boolean} isdev normal or development mode (0, 1)
      * @param {boolean} debug normal or debug mode (0, 1)
      * @param {String} nocache value indicate cache or nocache at shindig level (0, 1)
      */
-	createGadget : function(url, id, metadata, userPref, view, hostName, isdev, debug, nocache) {
+	createGadget : function(url, id, metadata, userPref, view, hostName, debug, nocache) {
 		//eXo = eXo || {};
 		window.gadgets = window.gadgets || {};
 		eXo.gadgets = window.gadgets;
@@ -43,7 +42,7 @@ eXo.gadget.UIGadget = {
 		eXo.gadget.UIGadget.createCallback, null, arguments);
 	},
     
-    createCallback : function(url, id, metadata, userPref, view, hostName, isdev, debug, nocache) {
+    createCallback : function(url, id, metadata, userPref, view, hostName, debug, nocache) {
         //TODO: dang.tung - set language for gadget
         //-----------------------------------------
         var language = eXo.core.I18n.getLanguage();
@@ -63,7 +62,6 @@ eXo.gadget.UIGadget = {
         gadget.parentId = id;
         gadget.debug = debug;
         gadget.nocache = nocache;
-        gadget.isdev = isdev;
         gadget.serverBase_ = hostName;
         
         gadgets.container.addGadget(gadget);

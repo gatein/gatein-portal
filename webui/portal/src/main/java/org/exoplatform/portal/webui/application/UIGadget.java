@@ -22,7 +22,6 @@ package org.exoplatform.portal.webui.application;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.commons.utils.PropertyManager;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -75,8 +74,6 @@ public class UIGadget extends UIComponent
    private JSONObject metadata_;
 
    private String url_;
-
-   private GadgetRegistryService gadgetRegistryService = null;
 
    public static final String PREF_KEY = "_pref_gadget_";
 
@@ -371,40 +368,14 @@ public class UIGadget extends UIComponent
       return url_;
    }
 
-   private GadgetRegistryService getGadgetRegistryService()
-   {
-      if (gadgetRegistryService == null)
-         gadgetRegistryService =
-            (GadgetRegistryService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
-               GadgetRegistryService.class);
-      return gadgetRegistryService;
-   }
-
    public boolean isNoCache()
    {
-      if(PropertyManager.isDevelopping())
-         return true;
-      return false;
-   }
-
-   public void setNoCache(boolean value)
-   {
+      return PropertyManager.isDevelopping();
    }
 
    public boolean isDebug()
    {
-      if(PropertyManager.isDevelopping())
-         return true;
-      return false;
-   }
-
-   public void setDebug(boolean value)
-   {
-   }
-
-   public boolean isGadgetDeveloper()
-   {
-      return getGadgetRegistryService().isGadgetDeveloper(Util.getPortalRequestContext().getRemoteUser());
+      return PropertyManager.isDevelopping();
    }
 
    public String getView()

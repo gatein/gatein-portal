@@ -20,8 +20,9 @@
 package org.exoplatform.gadget.webui.component;
 
 import org.exoplatform.application.gadget.Gadget;
-import org.exoplatform.application.gadget.GadgetImporter;
 import org.exoplatform.application.gadget.GadgetRegistryService;
+import org.exoplatform.application.gadget.GadgetImporter;
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.application.GadgetUtil;
@@ -212,6 +213,16 @@ public class UIGadgetPortlet extends UIPortletApplication
          log.warn("Unable to retrieve metadata of url: " + url, e);
       }
       return metadata_;
+   }
+   
+   public boolean isNoCache()
+   {
+      return PropertyManager.isDevelopping();
+   }
+   
+   public boolean isDebug()
+   {
+      return PropertyManager.isDevelopping();
    }
    
    static public class SaveUserPrefActionListener extends EventListener<UIGadgetPortlet>

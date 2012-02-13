@@ -712,26 +712,6 @@ gadgets.IfrGadget.prototype.generateForm = function(gadget) {
       this.id +').handleSaveUserPrefs()"> <input type="button" value="'+eXo.gadget.UIGadget.CancelTitle+'" onclick="gadgets.container.getGadget(' +
       this.id +').handleCancelUserPrefs()">';
     parentEl.appendChild(saveEl);
-    
-    /** Minh Hoang TO: Instantly remove the noCache and Debug boxes
-    if(gadget.isdev) {
-      //Are we in a portlet ? if not, we don't had  this code because we can't save the value
-      var gadgetEl = document.getElementById("gadget_" + gadget.id) ;
-      var portletFragment = eXo.core.DOMUtil.findAncestorByClass(gadgetEl, "PORTLET-FRAGMENT");
-
-      if (portletFragment) {
-        var devEl = document.createElement("div");
-        devEl.className = "devToolbar";
-        devEl.innerHTML = '<table>' +
-                          '<tr><td>'+eXo.gadget.UIGadget.Cache+'</td><td><input type="checkbox"' + (gadget.nocache ? ' checked=""' : "") + ' onclick="gadgets.container.getGadget(' + this.id + ').setNoCache(checked)"/></td></tr>' +
-                          '<tr><td>'+eXo.gadget.UIGadget.Debug+'</td><td><input type="checkbox"' + (gadget.debug ? ' checked=""' : "") + ' onclick="gadgets.container.getGadget(' + this.id + ').setDebug(checked)"/></td></tr>' +
-                          '</table>';
-        parentEl.appendChild(devEl);
-      }
-    }
-    */
-
-
 };
 
 gadgets.IfrGadget.prototype.buildUserPrefsDialog = function(content) {

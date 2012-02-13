@@ -304,9 +304,7 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
 
    public boolean isGadgetDeveloper(String username)
    {
-      if(PropertyManager.isDevelopping())
-         return true;
-      return false;
+      return PropertyManager.isDevelopping();
    }
 
    public String getCountry()
