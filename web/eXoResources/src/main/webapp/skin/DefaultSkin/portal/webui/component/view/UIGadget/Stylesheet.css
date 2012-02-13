@@ -99,6 +99,7 @@
 	border: 1px solid #c3c3c3;
 	border-top: none;
 	padding: 3px;
+	word-wrap: break-word;
 }
 
 .UIGadget iframe {

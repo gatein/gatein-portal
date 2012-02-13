@@ -9,10 +9,11 @@
 	def rcontext = _ctx.getRequestContext() ;
 	def windowId = rcontext.getWindowId();
 	def id = uicomponent.getId() + "-" + windowId ;
-	def url = uicomponent.getParent().getUrl();
-		
-	if(url != null) {
-	  	def metadata = uicomponent.getParent().getMetadata(url);
+	def isLossData = uicomponent.getParent().isLossData();
+	
+	if(!isLossData) {
+	    def url = uicomponent.getParent().getUrl();
+	  	def metadata = uicomponent.getParent().getMetadata();
 	  	def userPref = uicomponent.getParent().getUserPref();
 	  	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	  	jsmanager.importJavascript("eXo.gadget.UIGadget") ;
@@ -24,4 +25,8 @@
   	}
 %>
 
-<div class="UIGadgetViewMode" id="$id" style="height: auto;"></div>
+<div class="UIGadgetViewMode" id="$id" style="height: auto;">
+	<% if(isLossData) { %>
+			<span><%=_ctx.appRes("UIGadget.error.NotAvailable");%></span>
+	<% } %>
+</div>
