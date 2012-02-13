@@ -158,7 +158,7 @@ eXo.webui.UICalendar = {
     clndr.firstChild.lastChild.innerHTML = this.renderCalendar();
     // var x = 0 ;
     var y = this.dateField.offsetHeight;
-    var beforeShow = eXo.core.Browser.getBrowserHeight();
+    var beforeShow = xj(window).height();
     with (clndr.firstChild.style) {
       display = 'block';
       // left = x + "px" ;
@@ -168,7 +168,7 @@ eXo.webui.UICalendar = {
       else
         right = "0px";
     }
-    var posCal = eXo.core.Browser.findPosY(this.dateField) - y;
+    var posCal = xj(this.dateField).offset().top - y;
     var heightCal = document.getElementById('BlockCaledar');
     var afterShow = posCal + heightCal.offsetHeight;
     if (afterShow > beforeShow) {
@@ -177,13 +177,9 @@ eXo.webui.UICalendar = {
 
     eXo.webui.UICalendar.initDragDrop();
 
-    var drag = document.getElementById("BlockCaledar");
-    var calendar = eXo.core.DOMUtil.findFirstChildByClass(drag, "div",
-        "UICalendar");
-    var primary = eXo.core.DOMUtil.findAncestorById(this.dateField,
-        "UIECMSearch");
-    if (primary && eXo.core.Browser.isFF()) {
-      calendar = clndr.firstChild;
+    var primary = xj(this.dateField).closest("#UIECMSearch");
+    if (primary.length && eXo.core.Browser.isFF()) {
+      var calendar = clndr.firstChild;
       calendar.style.top = "0px";
       calendar.style.left = this.dateField.offsetLeft
           - this.dateField.offsetWidth - 32 + "px";
@@ -323,18 +319,16 @@ eXo.webui.UICalendar = {
   },
 
   initDragDrop : function() {
-    var drag = document.getElementById("BlockCaledar");
-    var component = eXo.core.DOMUtil.findAncestorByClass(drag,
-        "UICalendarComponent");
-    var calendar = eXo.core.DOMUtil.findFirstChildByClass(drag, "div",
-        "UICalendar");
-    var innerWidth = drag.offsetWidth;
+    var drag = xj("#BlockCaledar");
+    var component = drag.closest(".UICalendarComponent");    
+    var calendar = drag.children(".UICalendar").first();
+    var innerWidth = drag[0].offsetWidth;
 
-    eXo.core.DragDrop2.init(drag, component);
-    component.onDragStart = function() {
+    eXo.core.DragDrop2.init(drag[0], component[0]);
+    component[0].onDragStart = function() {
       if (eXo.core.Browser.isIE7())
-        drag.style.height = calendar.offsetHeight + "px";
-      drag.style.width = innerWidth + "px";
+        drag.height(calendar[0].offsetHeight);
+      drag.width(innerWidth);
     }
 
     // var calendar = eXo.core.DOMUtil.findFirstChildByClass(drag, "div",

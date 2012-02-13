@@ -21,11 +21,9 @@ eXo.portal.VerticalScrollManager = {
   repeat : null,
 
   initScroll : function(clickedEle, isUp, step) {
-    var DOMUtil = eXo.core.DOMUtil;
     var verticalScroll = eXo.portal.VerticalScrollManager;
-    var container = DOMUtil.findAncestorByClass(clickedEle, "ItemContainer");
-    var middleCont = DOMUtil.findFirstDescendantByClass(container, "div",
-        "MiddleItemContainer");
+    var container = xj(clickedEle).closest(".ItemContainer");
+    var middleCont = container.find(".MiddleItemContainer").first()[0];
     if (!middleCont.id)
       middleCont.id = "IC" + new Date().getTime()
           + Math.random().toString().substring(2);

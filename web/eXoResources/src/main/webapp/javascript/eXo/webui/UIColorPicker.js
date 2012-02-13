@@ -21,16 +21,16 @@ eXo.webui.UIColorPicker = {
 
   show : function(obj) {
     document.onmousedown = new Function("eXo.webui.UIColorPicker.hide()");
-    this.tableColor = eXo.core.DOMUtil.findNextElementByTagName(obj, "div");
-    this.title = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "span",
-        "DisplayValue");
-    this.input = eXo.core.DOMUtil.findFirstDescendantByClass(obj.parentNode,
-        "input", "UIColorPickerValue");
+    var jObj = xj(obj);
+    this.tableColor = jObj.next("div")[0];
+    this.title = jObj.find(".DisplayValue").first()[0];
+    this.input = jObj.parent().find(".UIColorPickerValue").first()[0];
     this.showHide();
     this.getSelectedValue();
   },
+  
   setColor : function(color) {
-    if (eXo.core.DOMUtil.hasClass(this.title, color)) {
+    if (xj(this.title).hasClass(color)) {
       this.hide();
       return;
     }
@@ -41,31 +41,28 @@ eXo.webui.UIColorPicker = {
   },
 
   clearSelectedValue : function() {
-    var selectedValue = this.input.value;
-    var colorCell = eXo.core.DOMUtil.findDescendantsByTagName(this.tableColor,
-        "a");
-    var len = colorCell.length;
-    for ( var i = 0; i < len; i++) {
-      if (eXo.core.DOMUtil.hasClass(colorCell[i], "SelectedColorCell")) {
-        colorCell[i].className = colorCell[i].className.replace(
-            "SelectedColorCell", "");
-        break;
-      }
-    }
+    var colorCell = xj(this.tableColor).find("a");        
+    colorCell.each(function() {
+    	var jObj = xj(this);
+    	if (jObj.hasClass("SelectedColorCell")) {
+    		jObj.removeClass("SelectedColorCell");    		
+    		return false;
+    	}
+    });
   },
 
   getSelectedValue : function() {
     var selectedValue = this.input.value;
-    var colorCell = eXo.core.DOMUtil.findDescendantsByTagName(this.tableColor,
-        "a");
-    var len = colorCell.length;
+    
     this.clearSelectedValue();
-    for ( var i = 0; i < len; i++) {
-      if (eXo.core.DOMUtil.hasClass(colorCell[i], selectedValue)) {
-        eXo.core.DOMUtil.addClass(colorCell[i], "SelectedColorCell");
-        break;
-      }
-    }
+    var colorCell = xj(this.tableColor).find("a");
+    colorCell.each(function() {
+    	var jObj = xj(this);
+    	if (jObj.hasClass(selectedValue)) {
+    		jObj.addClass("SelectedColorCell");
+    		return false;
+    	}
+    });
   },
 
   hide : function() {
