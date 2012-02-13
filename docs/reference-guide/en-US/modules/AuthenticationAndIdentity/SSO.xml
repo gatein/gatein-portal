@@ -545,6 +545,22 @@ realmName=gatein-domain;
                     </itemizedlist>
                 </step>
                 <step>
+                   <para>
+                      In Tomcat, edit <filename>GATEIN_HOME/webapps/portal.war/META-INF/context.xml</filename> and add
+                      <literal>ServletAccessValve</literal> into configuration as first sub-element of <literal>Context</literal>:
+                   </para>
+                   <programlisting>
+<![CDATA[
+<Context path='/portal' docBase='portal' ... >
+
+   ]]><emphasis role="bold"><![CDATA[<Valve className='org.gatein.sso.agent.tomcat.ServletAccessValve' />]]></emphasis><![CDATA[
+
+   ...
+</Context>
+]]>
+                   </programlisting>
+                </step>
+                <step>
                     <para>
                         The installation can be tested at this point:
                     </para>
@@ -821,12 +837,28 @@ realmName=gatein-domain;
                                 In Tomcat, edit <filename>GATEIN_HOME/conf/jaas.conf</filename> and uncomment this section:
                             </para>
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required;
-org.exoplatform.services.security.j2ee.TomcatLoginModule requiredtm 
+org.exoplatform.services.security.j2ee.TomcatLoginModule required
 portalContainerName=portal
 realmName=gatein-domain;
 </programlisting>
                         </listitem>
                     </itemizedlist>
+                </step>
+                <step>
+                  <para>
+                     In Tomcat, edit <filename>GATEIN_HOME/webapps/portal.war/META-INF/context.xml</filename> and add
+                     <literal>ServletAccessValve</literal> into configuration as first sub-element of <literal>Context</literal>:
+                  </para>
+                  <programlisting>
+                     <![CDATA[
+<Context path='/portal' docBase='portal' ... >
+
+   ]]><emphasis role="bold"><![CDATA[<Valve className='org.gatein.sso.agent.tomcat.ServletAccessValve' />]]></emphasis><![CDATA[
+
+   ...
+</Context>
+]]>
+                  </programlisting>
                 </step>
                 <step>
                     <para>
@@ -1129,7 +1161,7 @@ realmName=gatein-domain;
                     <itemizedlist>
                         <listitem>
                             <para>
-                                In JBoss AS, edit gatein.ear/META-INF/gatein-jboss-beans.xml and uncomment this section
+                                In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment this section
                             </para>
 <programlisting>
 <![CDATA[
@@ -1149,7 +1181,7 @@ realmName=gatein-domain;
                         </listitem>
                         <listitem>
                             <para>
-                                If you are running &PRODUCT; in Tomcat, edit $GATEIN_HOME/conf/jaas.conf, uncomment on this section and comment other parts:
+                                If you are running &PRODUCT; in Tomcat, edit <filename>GATEIN_HOME/conf/jaas.conf</filename>, uncomment on this section and comment other parts:
                             </para>
 <programlisting>org.gatein.sso.agent.login.SSOLoginModule required;
 org.exoplatform.services.security.j2ee.TomcatLoginModule required
@@ -1159,6 +1191,24 @@ realmName=gatein-domain;
 
                         </listitem>
                     </itemizedlist>
+                </step>
+                <step>
+                  <para>
+                     In Tomcat, edit <filename>GATEIN_HOME/webapps/portal.war/META-INF/context.xml</filename> and add
+                     <literal>ServletAccessValve</literal> into configuration as first sub-element of <literal>Context</literal>:
+                  </para>
+                  <programlisting>
+                     <![CDATA[
+<Context path='/portal' docBase='portal' ... >
+
+   ]]><emphasis role="bold"><![CDATA[<Valve className='org.gatein.sso.agent.tomcat.ServletAccessValve' />]]></emphasis><![CDATA[
+
+   ...
+</Context>
+]]>
+                  </programlisting>
+                </step>
+                <step>
                     <para>
                         At this point the installation can be tested:
                     </para>
