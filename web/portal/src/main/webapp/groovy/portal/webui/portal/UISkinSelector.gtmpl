@@ -26,12 +26,27 @@
 							<div class="UITabContent" id="UITabContent">
 								<%uicomponent.renderChild(UIItemSelector.class); %>
 							</div>
-						</div>
+						</div>						
 					</div>
 				</div>
 			</div>	
+			<script type="text/javascript">
+				function changeSkin(url)
+				{
+					var skin = "";
+					if(eXo.webui.UIItemSelector.SelectedItem != undefined)
+					{
+						skin = eXo.webui.UIItemSelector.SelectedItem.option;
+					}
+					if(skin == undefined)
+					{
+						skin = "";
+					}
+					window.location = url + "&skin=" + skin;
+           		}
+			</script>
 			<div class="UIAction">
-				<a href="javascript:void(0);" onclick="javascript:eXo.portal.UIPortal.changeSkin('<%=uicomponent.url("Save");%>');" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeSkin.action.save");%></a>
+				<a href="javascript:void(0);" onclick="javascript:changeSkin('<%=uicomponent.url("Save");%>');" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeSkin.action.save");%></a>
 				<a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeSkin.action.close");%></a>
 			</div>						
 		</div>	

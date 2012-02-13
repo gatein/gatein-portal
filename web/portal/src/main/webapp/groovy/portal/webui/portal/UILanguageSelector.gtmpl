@@ -72,9 +72,23 @@
 							</div>
 							<%}%>
 						</div>
-						
+						<script type="text/javascript">
+							function changeLanguage(url)
+							{
+								var language = "";
+								if(eXo.webui.UIItemSelector.SelectedItem != undefined)
+								{
+									language = eXo.webui.UIItemSelector.SelectedItem.option;
+								}
+								if(language == undefined)
+								{
+									language = "";
+								}
+								window.location = url + "&language=" + language;
+              }
+						</script>
 		 				<div class="UIAction"> 
-							<a href="javascript:void(0);" onclick="javascript:eXo.portal.UIPortal.changeLanguage('<%=uicomponent.url("Save");%>');" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.save");%></a>
+							<a href="javascript:void(0);" onclick="javascript:changeLanguage('<%=uicomponent.url("Save");%>');" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.save");%></a>
 							<a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.close");%></a>
 						</div>
 	

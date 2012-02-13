@@ -220,36 +220,6 @@ eXo.portal.UIPortal = {
   },
 
   /**
-   * Change skin of Portal
-   * 
-   * @param url
-   */
-  changeSkin : function(url) {
-    var skin = '';
-    if (eXo.webui.UIItemSelector.SelectedItem != undefined) {
-      skin = eXo.webui.UIItemSelector.SelectedItem.option;
-    }
-    if (skin == undefined)
-      skin = '';
-    // ajaxAsyncGetRequest(url + '&skin='+skin, false);
-    window.location = url + '&skin=' + skin;
-  },
-  /**
-   * Change language of Portal
-   * 
-   * @param url
-   */
-  changeLanguage : function(url) {
-    var language = '';
-    if (eXo.webui.UIItemSelector.SelectedItem != undefined) {
-      language = eXo.webui.UIItemSelector.SelectedItem.option;
-    }
-    if (language == undefined)
-      language = '';
-    // ajaxAsyncGetRequest(url + '&language='+language, false);
-    window.location = url + '&language=' + language;
-  },
-  /**
    * Change current portal
    */
   changePortal : function(accessPath, portal) {
