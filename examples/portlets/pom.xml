@@ -20,6 +20,7 @@
       <module>jsphellouser</module>
       <module>simplesthelloworld</module>
       <module>struts-jpetstore</module>
+      <module>resourceserving</module>
    </modules>
 
 </project>

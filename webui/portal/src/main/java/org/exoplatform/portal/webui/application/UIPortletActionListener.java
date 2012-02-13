@@ -33,11 +33,13 @@ import java.util.List;
 import java.util.Map;
 
 import javax.portlet.PortletMode;
+import javax.portlet.ResourceResponse;
 import javax.portlet.WindowState;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.namespace.QName;
 
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -68,6 +70,7 @@ import org.gatein.pc.api.invocation.response.ContentResponse;
 import org.gatein.pc.api.invocation.response.ErrorResponse;
 import org.gatein.pc.api.invocation.response.HTTPRedirectionResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
+import org.gatein.pc.api.invocation.response.ResponseProperties;
 import org.gatein.pc.api.invocation.response.SecurityErrorResponse;
 import org.gatein.pc.api.invocation.response.SecurityResponse;
 import org.gatein.pc.api.invocation.response.UpdateNavigationalStateResponse;
@@ -365,11 +368,13 @@ public class UIPortletActionListener
          log.trace("Serve Resource for portlet: " + uiPortlet.getPortletContext());
          String resourceId = null;
 
+         //
+         PortalRequestContext context = (PortalRequestContext)event.getRequestContext();
+         HttpServletResponse response = context.getResponse();
+
+         //
          try
          {
-            PortalRequestContext context = (PortalRequestContext)event.getRequestContext();
-            HttpServletResponse response = context.getResponse();
-
             //Set the NavigationalState
             String navState = context.getRequestParameter(ExoPortletInvocationContext.NAVIGATIONAL_STATE_PARAM_NAME);
             if (navState != null)
@@ -386,90 +391,120 @@ public class UIPortletActionListener
             //
             PortletInvocationResponse portletResponse = uiPortlet.invoke(resourceInvocation);
 
-            // todo: handle the error response better than this.
+            //
+            int statusCode;
+            MultiValuedPropertyMap<String> transportHeaders;
+            String contentType;
+            Object content;
             if (!(portletResponse instanceof ContentResponse))
             {
                if (portletResponse instanceof ErrorResponse)
                {
                   ErrorResponse errorResponse = (ErrorResponse)portletResponse;
-                  if (errorResponse.getCause() != null)
+                  Throwable cause = errorResponse.getCause();
+                  if (cause != null)
                   {
-                     throw (Exception)errorResponse.getCause();
+                     log.trace("Got error response from portlet", cause);
                   }
                   else if (errorResponse.getMessage() != null)
                   {
-                     throw new Exception("Received an error response with message : " + errorResponse.getMessage());
+                     log.trace("Got error response from portlet:" + errorResponse.getMessage());
                   }
                   else
                   {
-                     throw new Exception("Received an error response.");
+                     log.trace("Got error response from portlet");
                   }
-                  
                }
                else
                {
-                  throw new Exception("Unexpected response type [" + portletResponse
-                     + "]. Expected a ContentResponse or an ErrorResponse.");
+                  log.trace("Unexpected response type [" + portletResponse + "]. Expected a ContentResponse or an ErrorResponse.");
                }
-            }
-
-            ContentResponse piResponse = (ContentResponse)portletResponse;
-
-            //
-            //Manage headers
-            if (piResponse.getProperties() != null && piResponse.getProperties().getTransportHeaders() != null)
-            {
-               MultiValuedPropertyMap<String> transportHeaders = piResponse.getProperties().getTransportHeaders();
-               Map<String, String> headers = new HashMap<String, String>();
-
-               for (String key : transportHeaders.keySet())
-               {
-                  for (String value : transportHeaders.getValues(key))
-                  {
-                     headers.put(key, value);
-                  }
-               }
-               context.setHeaders(headers);
-            }
-
-            String contentType = piResponse.getContentType();
-
-            if (contentType == null)
-            {
-               return;
-            }
-
-            log.trace("Try to get a resource of type: " + contentType + " for the portlet: "
-               + uiPortlet.getPortletContext());
-            response.setContentType(contentType);
-            if (piResponse.getChars() != null)
-            {
-               OutputStream stream = response.getOutputStream();
-               stream.write(piResponse.getChars().getBytes(response.getCharacterEncoding()));
+               statusCode = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+               contentType = null;
+               transportHeaders = null;
+               content = null;
             }
             else
             {
-               if (piResponse.getBytes() != null)
+               //
+               ContentResponse piResponse = (ContentResponse)portletResponse;
+               ResponseProperties properties = piResponse.getProperties();
+               transportHeaders = properties != null ? properties.getTransportHeaders() : null;
+
+               // Look at status code if there is one and honour it
+               String status = transportHeaders != null ? transportHeaders.getValue(ResourceResponse.HTTP_STATUS_CODE) : null;
+               if (status != null)
                {
-                  OutputStream stream = response.getOutputStream();
-                  stream.write(piResponse.getBytes());
+                  try
+                  {
+                     statusCode = Integer.parseInt(status);
+                  }
+                  catch (NumberFormatException e)
+                  {
+                     statusCode = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+                  }
                }
                else
                {
-                  if (piResponse.getChars() != null)
-                  {
-                     log.error("Received a content type of " + contentType + " but it contains no bytes of data. Chars were unexpectantly returned instead : " + piResponse.getChars());
-                  }
-                  else
-                  {
-                     log.error("Received a content type of " + contentType + " but it contains no bytes of data.");
-                  }
+                  statusCode = HttpServletResponse.SC_OK;
                }
 
+               //
+               contentType = piResponse.getContentType();
 
+               //
+               log.trace("Try to get a resource of type: " + contentType + " for the portlet: " + uiPortlet.getPortletContext());
+               if (piResponse.getChars() != null)
+               {
+                  content = piResponse.getChars();
+               }
+               else if (piResponse.getBytes() != null)
+               {
+                  content = piResponse.getBytes();
+               }
+               else
+               {
+                  content = null;
+               }
             }
-            context.getResponse().flushBuffer();
 
+            //
+            response.setStatus(statusCode);
+
+            // Set content type if any
+            if (contentType != null)
+            {
+               response.setContentType(contentType);
+            }
+
+            // Send headers if any
+            if (transportHeaders != null)
+            {
+               sendHeaders(transportHeaders, context);
+            }
+
+            // Send body if any
+            if (content instanceof String)
+            {
+               context.getWriter().write((String)content);
+            }
+            else if (content instanceof byte[])
+            {
+               byte[] bytes = (byte[]) content;
+               response.setContentLength(bytes.length);
+               OutputStream stream = response.getOutputStream();
+               try
+               {
+                  stream.write(bytes);
+               }
+               finally
+               {
+                  Safe.close(stream);
+               }
+            }
+
+            //
+            response.flushBuffer();
          }
          catch (Exception e)
          {
@@ -482,6 +517,29 @@ public class UIPortletActionListener
              */
             event.getRequestContext().setResponseComplete(true);
          }
+      }
+
+      /**
+       * Send any header to the client
+       *
+       * @param headers the headers
+       * @param context the context
+       * @throws IOException any io exception
+       */
+      private void sendHeaders(MultiValuedPropertyMap<String> headers, PortalRequestContext context) throws IOException
+      {
+         Map<String, String> map = new HashMap<String, String>();
+         for (String key : headers.keySet())
+         {
+            for (String value : headers.getValues(key))
+            {
+               map.put(key, value);
+            }
+         }
+
+         // We need to remove it if it there
+         map.remove(ResourceResponse.HTTP_STATUS_CODE);
+         context.setHeaders(map);
       }
    }
 
