@@ -287,7 +287,7 @@ public class UIPageForm extends UIFormTabPane
          uiPage.setShowMaxWindow(page.isShowMaxWindow());
 
          uiMaskWS.createEvent("Close", Phase.DECODE, pcontext).broadcast();
-         pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
+         pcontext.getJavascriptManager().addJavascript("eXo.portal.PortalComposer.toggleSaveButton();");
       }
 
       protected void findAllPortlet(List<UIPortlet> list, UIContainer uiContainer)

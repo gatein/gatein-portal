@@ -227,6 +227,10 @@
          <path>/javascript/eXo/portal/UIPortal.js</path>
       </module>
       <module>
+         <name>eXo.portal.PortalComposer</name>
+         <path>/javascript/eXo/portal/PortalComposer.js</path>
+      </module>
+      <module>
          <name>eXo.portal.PortalDragDrop</name>
          <path>/javascript/eXo/portal/PortalDragDrop.js</path>
       </module>

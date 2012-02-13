@@ -13,7 +13,7 @@
 			<%
 				String url = uicomponent.url("SelectTab"); 
 				String selTabId = uicomponent.getSelectedTabId(); 
-				jsManager.addCustomizedOnLoadScript("eXo.portal.UIPortal.composerTabChanged('" + selTabId + "');");
+				jsManager.addCustomizedOnLoadScript("eXo.portal.PortalComposer.showTab('" + selTabId + "');");
 				
 				UIApplicationList appList = uicomponent.getChild(UIApplicationList.class);
 				UIContainerList contList = uicomponent.getChild(UIContainerList.class);
@@ -24,7 +24,7 @@
 						<div class="RightTab">
 							<% String appLink = "ajaxAsyncGetRequest('" + uicomponent.url("SelectTab",appList.getId()) + "', true)" %>								
 							<div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this, '${appList.getId()}', '$url');
-																eXo.portal.UIPortal.composerTabChanged('${appList.getId()}');
+																eXo.portal.PortalComposer.showTab('${appList.getId()}');
 																$appLink;if(eXo.portal.portalMode) eXo.portal.portalMode -= 2;">
 								<%=_ctx.appRes("UITabPane.title." + appList.getId());%>
 							</div>
@@ -38,7 +38,7 @@
 						<div class="RightTab">
 							<% String contLink = "ajaxAsyncGetRequest('" + uicomponent.url("SelectTab",contList.getId()) + "', true)" %>								
 							<div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this, '${contList.getId()}', '$url');
-																eXo.portal.UIPortal.composerTabChanged('${contList.getId()}');
+																eXo.portal.PortalComposer.showTab('${contList.getId()}');
 																$contLink;if(eXo.portal.portalMode) eXo.portal.portalMode += 2;">
 								<%=_ctx.appRes("UITabPane.title." + contList.getId());%>
 							</div>

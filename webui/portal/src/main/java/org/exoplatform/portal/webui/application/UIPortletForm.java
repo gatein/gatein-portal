@@ -405,7 +405,7 @@ public class UIPortletForm extends UIFormTabPane
             uiPortlet.setHeight(height);
          }
 
-         pcontext.getJavascriptManager().addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
+         pcontext.getJavascriptManager().addJavascript("eXo.portal.PortalComposer.toggleSaveButton();");
          UIPortalApplication uiPortalApp = uiPortlet.getAncestorOfType(UIPortalApplication.class);
          UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);

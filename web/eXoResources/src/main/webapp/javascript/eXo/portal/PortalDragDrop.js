@@ -242,7 +242,7 @@ eXo.portal.PortalDragDrop = {
 	    
 	    eXo.portal.isInDragging = false;
 	    if (hasChanged) {
-	    	eXo.portal.UIPortal.changeComposerSaveButton();
+	    	eXo.portal.PortalComposer.toggleSaveButton();
 	    }
 	    
 	    jDragObj.removeData();

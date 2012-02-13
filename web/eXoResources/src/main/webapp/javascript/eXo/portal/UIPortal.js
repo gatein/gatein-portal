@@ -383,62 +383,6 @@ eXo.portal.UIPortal = {
   },
 
   /**
-   * Change Save button to editing state
-   */
-  changeComposerSaveButton : function() {
-    if (eXo.portal.hasEditted == false) {
-      var uiWorkingWS = document.getElementById("UIWorkingWorkspace");
-      var portalComposer = eXo.core.DOMUtil.findFirstDescendantByClass(
-          uiWorkingWS, "div", "UIPortalComposer");
-      if (!portalComposer)
-        return;
-
-      var saveButton = eXo.core.DOMUtil.findFirstDescendantByClass(
-          portalComposer, "a", "SaveButton");
-      if (saveButton) {
-        eXo.core.DOMUtil.replaceClass(saveButton, "SaveButton",
-            "EdittedSaveButton");
-      }
-      ajaxAsyncGetRequest(eXo.env.server.createPortalURL(portalComposer.id,
-          "ChangeEdittedState", true));
-    }
-  },
-
-  toggleComposer : function(clickedEle) {
-    var portalComposer = eXo.core.DOMUtil.findAncestorByClass(clickedEle,
-        "UIPortalComposer");
-    var content = eXo.core.DOMUtil.findFirstChildByClass(portalComposer, "div",
-        "UIWindowContent");
-    if (content && content.style.display != "none") {
-      content.style.display = "none";
-      eXo.core.DOMUtil.replaceClass(clickedEle, "ExpandIcon", "CollapseIcon");
-    } else {
-      content.style.display = "block";
-      eXo.core.DOMUtil.replaceClass(clickedEle, "CollapseIcon", "ExpandIcon");
-    }
-    var requestStr = eXo.env.server.createPortalURL(portalComposer.id,
-        "Toggle", true);
-    ajaxAsyncGetRequest(requestStr);
-  },
-
-  composerTabChanged : function(tabId) {
-    var toolPanel = document.getElementById("UIPortalToolPanel");
-    if (!tabId || !toolPanel)
-      return;
-
-    var removeCls, addCls;
-    if (tabId === "UIApplicationList") {
-      addCls = "ApplicationMode";
-      removeCls = "ContainerMode";
-    } else {
-      addCls = "ContainerMode";
-      removeCls = "ApplicationMode";
-    }
-    eXo.core.DOMUtil.removeClass(toolPanel, removeCls);
-    eXo.core.DOMUtil.addClass(toolPanel, addCls);
-  },
-
-  /**
    * Clollapse or expand an element (all its children) of tree
    * @param {Object} element object to collapse or expand
    */
