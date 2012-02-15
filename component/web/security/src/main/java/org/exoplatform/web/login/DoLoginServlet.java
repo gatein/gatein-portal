@@ -19,11 +19,14 @@
 
 package org.exoplatform.web.login;
 
+import org.exoplatform.container.web.AbstractHttpServlet;
+import org.exoplatform.services.security.ConversationState;
+import org.exoplatform.web.security.AuthenticationRegistry;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.wci.security.Credentials;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -33,7 +36,7 @@ import java.net.URISyntaxException;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class DoLoginServlet extends HttpServlet
+public class DoLoginServlet extends AbstractHttpServlet
 {
 
    /** . */
@@ -65,7 +68,39 @@ public class DoLoginServlet extends HttpServlet
          initialURI = req.getContextPath();
       }
 
+      // Now user is successfuly authenticated, so that we can remove credentials from temporary AuthenticationRegistry
+      // and add them to ConversationState
+      Credentials credentials = removeCredentialsFromRegistry(req);
+      setCredentialsToConversationState(credentials);
+
       //
       resp.sendRedirect(resp.encodeRedirectURL(initialURI));
+   }
+
+   /**
+    * Remove credentials from temporary AuthenticationRegistry because authentication of user is now finished.
+    *
+    * @param req
+    * @return credentials,which were removed from AuthenticationRegistry
+    */
+   protected Credentials removeCredentialsFromRegistry(HttpServletRequest req)
+   {
+      AuthenticationRegistry authenticationRegistry = (AuthenticationRegistry)getContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
+      return authenticationRegistry.removeCredentials(req);
+   }
+   
+   /**
+    * Add credentials to {@link ConversationState}.
+    *
+    * @param credentials
+    */
+   protected void setCredentialsToConversationState(Credentials credentials)
+   {
+      ConversationState currentConversationState = ConversationState.getCurrent();
+      if (currentConversationState != null && credentials != null)
+      {
+         log.debug("Adding credentials to conversationState for user " + credentials.getUsername());
+         currentConversationState.setAttribute(Credentials.CREDENTIALS, credentials);
+      }
    }
 }

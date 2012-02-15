@@ -19,6 +19,7 @@
 
 package org.exoplatform.web.security;
 
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.web.login.InitiateLoginServlet;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
@@ -64,7 +65,7 @@ public class PortalLoginController extends WCILoginController {
             {
                //Create token
                AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
-               Credentials credentials = (Credentials)req.getSession().getAttribute(Credentials.CREDENTIALS);
+               Credentials credentials = getCredentials(req);
                String cookieToken = tokenService.createToken(credentials);
 
                log.debug("Found a remember me request parameter, created a persistent token " + cookieToken + " for it and set it up " +
@@ -94,5 +95,35 @@ public class PortalLoginController extends WCILoginController {
       //
       String redirectURI = req.getContextPath() + "/dologin?initialURI=" + URLEncoder.encode(uri, "UTF-8");
       resp.sendRedirect(resp.encodeRedirectURL(redirectURI));
+   }
+
+   /**
+    * Read credentials from ConversationState instead of HTTP session.
+    *
+    * @param req
+    * @return credentials
+    */
+   @Override
+   protected Credentials getCredentials(HttpServletRequest req)
+   {
+      return getAuthenticationRegistry(req).getCredentials(req);
+   }
+
+   /**
+    * Set credentials to ConversationState instead of HTTP session
+    *
+    * @param req
+    * @param credentials
+    */
+   @Override
+   protected void setCredentials(HttpServletRequest req, Credentials credentials)
+   {
+      getAuthenticationRegistry(req).setCredentials(req, credentials);
+   }
+
+   private AuthenticationRegistry getAuthenticationRegistry(HttpServletRequest req)
+   {
+      return (AuthenticationRegistry) ExoContainerContext.getCurrentContainer().
+            getComponentInstanceOfType(AuthenticationRegistry.class);
    }
 }

@@ -169,7 +169,6 @@ public class PortalLoginModule extends AbstractLoginModule
             else
             {
                request.getSession().setAttribute(AUTHENTICATED_CREDENTIALS, wc);
-               handleCredentialsRemoving(request);
             }
          }
          catch(Exception e)
@@ -187,6 +186,13 @@ public class PortalLoginModule extends AbstractLoginModule
     */
    public boolean abort() throws LoginException
    {
+      HttpServletRequest request = getCurrentHttpServletRequest();
+
+      if (request != null)
+      {
+         handleCredentialsRemoving(request);
+      }
+
       return true;
    }
 
@@ -210,14 +216,24 @@ public class PortalLoginModule extends AbstractLoginModule
    }
 
    /**
-    * Remove credentials of authenticated user from HTTP session.
+    * Remove credentials of authenticated user from AuthenticationRegistry.
     *
     * @param request httpRequest
     */
    protected void handleCredentialsRemoving(HttpServletRequest request)
    {
-      // TODO: We can't remove credentials from HTTP session right now because WSRP-Security relies on it. See method WSSecurityCredentialHelper.handleRequest
-      // request.getSession().removeAttribute(Credentials.CREDENTIALS);
+      try
+      {
+         AuthenticationRegistry authenticationRegistry = (AuthenticationRegistry)getContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
+         if (request != null)
+         {
+            authenticationRegistry.removeCredentials(request);
+         }
+      }
+      catch (Exception e)
+      {
+         log.debug("Unable to remove credentials from credentialsRegistry.", e);
+      }
    }
 
    private HttpServletRequest getCurrentHttpServletRequest()

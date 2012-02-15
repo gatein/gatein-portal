@@ -31,10 +31,10 @@
       <key>org.gatein.wsrp.wss.credentials.CredentialsAccessor</key>
 
       <!-- Reading credentials from HTTP session -->
-      <type>org.gatein.wsrp.wss.credentials.HTTPSessionCredentialsAccessor</type>
+      <!--<type>org.gatein.wsrp.wss.credentials.HTTPSessionCredentialsAccessor</type>-->
 
       <!-- Reading credentials from ConversationState -->
-      <!--<type>org.gatein.integration.wsrp.wss.ConversationStateCredentialsAccessor</type>-->
+      <type>org.gatein.integration.wsrp.wss.ConversationStateCredentialsAccessor</type>
    </component>
 
    <component>

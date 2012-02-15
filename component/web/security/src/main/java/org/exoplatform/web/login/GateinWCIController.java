@@ -19,6 +19,9 @@
 
 package org.exoplatform.web.login;
 
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.web.security.AuthenticationRegistry;
+import org.exoplatform.web.security.PortalLoginModule;
 import org.gatein.wci.security.Credentials;
 import org.gatein.wci.security.WCIController;
 
@@ -94,7 +97,17 @@ public class GateinWCIController extends WCIController
    @Override
    public Credentials getCredentials(final HttpServletRequest req, final HttpServletResponse resp)
    {
-      return (Credentials)req.getSession().getAttribute(Credentials.CREDENTIALS);
+      AuthenticationRegistry credRegistry = (AuthenticationRegistry)PortalContainer.getCurrentInstance(servletContext).
+            getComponentInstanceOfType(AuthenticationRegistry.class);
+      Credentials credentials = credRegistry.getCredentials(req);
+      
+      // Try to find AuthenticatedCredentials in HTTP session
+      if (credentials == null)
+      {
+         credentials = (Credentials)req.getSession().getAttribute(PortalLoginModule.AUTHENTICATED_CREDENTIALS);
+      }
+
+      return credentials;
    }
 
    @Override

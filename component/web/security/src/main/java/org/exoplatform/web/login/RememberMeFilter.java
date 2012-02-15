@@ -21,6 +21,7 @@ package org.exoplatform.web.login;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
+import org.exoplatform.web.security.AuthenticationRegistry;
 import org.exoplatform.web.security.security.CookieTokenService;
 import org.exoplatform.web.controller.router.PercentEncoding;
 import org.gatein.common.logging.Logger;
@@ -68,7 +69,9 @@ public class RememberMeFilter extends AbstractFilter
                token, false);
             if (o instanceof Credentials)
             {
-               req.getSession().setAttribute(Credentials.CREDENTIALS, o);
+               AuthenticationRegistry authenticationRegistry = (AuthenticationRegistry)getContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
+               authenticationRegistry.setCredentials(req, (Credentials)o);
+
                resp.sendRedirect(resp.encodeRedirectURL(
                      loginUrl(
                            req.getContextPath(),

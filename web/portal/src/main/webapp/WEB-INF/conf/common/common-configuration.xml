@@ -185,6 +185,11 @@
     </init-params>
   </component>
 
+  <component>
+    <key>org.exoplatform.web.security.AuthenticationRegistry</key>
+    <type>org.exoplatform.web.security.AuthenticationRegistryImpl</type>
+  </component>
+
   <external-component-plugins>
     <target-component>org.exoplatform.services.cache.ExoCacheFactory</target-component>
     <component-plugin>
