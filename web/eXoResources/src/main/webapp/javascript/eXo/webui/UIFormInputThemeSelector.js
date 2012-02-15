@@ -30,16 +30,16 @@ eXo.webui.UIFormInputThemeSelector = {
     var detailList = itemListContainer.next("div").find("div.UIThemeSelector").eq(0);
     detailList.next("div").html(jqObj.find("div.NameStyle").eq(0).html());
     detailList.attr("class", "UIThemeSelector " + param);
-    jqObj.parent().prev("input")[0].value = param;
+    //jqObj.parent().prev("input")[0].value = param;//This does not work as 'prev' in jQuery does not return hidden input
+    jqObj.parent().parent().children("input").eq(0).val(param);
   },
 
   setDefaultTheme : function(obj, param) {
-    var DOMUtil = eXo.core.DOMUtil;
     var itemDetailList = xj(obj).parent().closest(".ItemDetailList");
     var detailList = itemDetailList.find("div.UIThemeSelector").eq(0);
     detailList.attr("class", "UIThemeSelector " + param);
 
     detailList.next("div").html(eXo.i18n.I18NMessage.getMessage("DefaultTheme"));
-    itemDetailList.prev("div").find("div.ItemList").eq(0).prev("input")[0].value = param;
+    itemDetailList.prev("div").find("div.ItemList").eq(0).parent().children("input").eq(0).val(param);
   }
 }
