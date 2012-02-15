@@ -21,11 +21,194 @@
  * Some utility functions to use the DOM
  */
 eXo.core.DOMUtil = {
-	hideElementList : new Array(),
+	hideElementList : new Array(),			
+	
+	/**
+	 * Generates an id based on the current time and random number
+	 */
+	generateId : function(objectId) {
+		return (objectId + "-" + new Date().getTime() + Math.random().toString().substring(2)) ;
+	},
+	
+	cleanUpHiddenElements : function() {
+	    var DOMUtil = eXo.core.DOMUtil;
+		var ln = DOMUtil.hideElementList.length ;
+		if (ln > 0) {
+			for (var i = 0; i < ln; i++) {
+				DOMUtil.hideElementList[i].style.display = "none" ;
+			}
+			DOMUtil.hideElementList.clear() ;
+		}
+	},
+
+	/**
+	 * Adds an element to the hideElementList array
+	 * Should only contain elements from a popup menu
+	 */
+	listHideElements : function(object) {
+		var DOMUtil = eXo.core.DOMUtil;
+		if (!DOMUtil.hideElementList.contains(object)) {
+			DOMUtil.hideElementList.push(object) ;
+		}
+	},
+	
+	/*
+	 * Deprecated methods - We should replace these function by jQuery
+	 */
+	
+	/**
+	 * Move an element
+	 * @param {String} srcElemt element to move
+	 * @param {String} destElemt destination element that will contains srcElemt
+	 * 
+	 * Deprecated
+	 */
+	moveElemt : function(srcElemt, destElemt) {
+		if(typeof(srcElemt) == "string") srcElemt = document.getElementById(srcElemt) ;
+		if(typeof(destElemt) == "string") destElemt = document.getElementById(destElemt) ;
+		if(srcElemt && destElemt) destElemt.appendChild(srcElemt) ;
+	},
+
+	/**
+	 * Creates an element tagName with innerHTML content
+	 * Returns the first node div in this element
+	 * 
+	 * Deprecated 
+	 */
+	createElementNode : function(innerHTML, tagName) {
+		var temporaryContainer = document.createElement(tagName) ;
+		temporaryContainer.innerHTML = innerHTML ;
+		var applicationNode = this.getChildrenByTagName(temporaryContainer, "div")[0] ;
+		return applicationNode ;
+	},
+	
+	/**
+	 * Gets the style of an element, in several steps
+	 *  . the style as defined in the css
+	 * or if it doesn't exist
+	 *  . the computed style
+	 * if intValue is true, a numeric value will be returned as a number, as a string otherwise
+	 * 
+	 * Deprecated - use $.css() instead
+	 */
+	getStyle : function(element, style, intValue) {
+		var result = null ;
+		if (element.style[style]) {
+			result = element.style[style] ;
+		}	else if (element.currentStyle) {
+			result = element.currentStyle[style] ;
+		}	else if (document.defaultView && document.defaultView.getComputedStyle) {
+			style = style.replace(/([A-Z])/g, "-$1") ;
+			style = style.toLowerCase() ;
+			var s = document.defaultView.getComputedStyle(element, "") ;
+			result = s && s.getPropertyValue(style) ;
+		}
+		if (intValue && result) {
+			var intRes = Number(result.match(/\d+/)) ;
+			if(!isNaN(intRes)) result = intRes ;
+		}
+		return result ;
+	},
+	
+	/**
+	 * Removes element node from the DOM tree
+	 * 
+	 * Deprecate - use $.remove() instead
+	 */
+	removeElement : function(elemt) {
+		if(typeof(elemt) == "string") elemt = document.getElementById(elemt) ;
+		if(!elemt) return ;
+		var parentElement = elemt.parentNode ;
+		parentElement.removeChild(elemt) ;
+	},
+
+	/**
+	 * Copyright (c) 2008, Yahoo! Inc. All rights reserved.
+	   Code licensed under the BSD License:
+	   http://developer.yahoo.net/yui/license.txt
+	   version: 2.5.2
+	 * Returns a array of HTMLElements that pass the test applied by supplied boolean method.
+	 * For optimized performance, include a tag and/or root node when possible.
+	 * @method getElementsBy
+	 * @param {Function} method - A boolean method for testing elements which receives the element as its only argument.
+	 * @param {String} tag (optional) The tag name of the elements being collected
+	 * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
+	 * @param {Function} apply (optional) A function to apply to each element when found 
+	 * @return {Array} Array of HTMLElements
+	 * 
+	 * Deprecate - use $.find() instead
+	 */
+	getElementsBy : function(method, tag, root, apply) {
+	  tag = tag || '*';
+	  root = (root) ? this.get(root) : null || document;
+
+	  if (!root) {
+	    return [];
+	  }
+
+	  var nodes = [],
+	    elements = root.getElementsByTagName(tag);
+
+	  for (var i = 0, len = elements.length; i < len; ++i) {
+	    if ( method(elements[i]) ) {
+	      nodes[nodes.length] = elements[i];
+	      if (apply) {
+	        apply(elements[i]);
+	      }
+	    }
+	  }
+
+	  return nodes;
+	},
+
+    /**
+	  * Copyright (c) 2008, Yahoo! Inc. All rights reserved.
+	   Code licensed under the BSD License:
+	   http://developer.yahoo.net/yui/license.txt
+	   version: 2.5.2
+	  * Returns an HTMLElement reference.
+	  * @method get
+	  * @param {String | HTMLElement |Array} el Accepts a string to use as an ID for getting a DOM reference, an actual DOM reference, or an Array of IDs and/or HTMLElements.
+	  * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
+	  * 
+	  * Deprecated - use $.find() instead
+	*/
+	get : function(el) {
+	  if (el && (el.nodeType || el.item)) { // Node, or NodeList
+	    return el;
+	  }
+
+	  if ((typeof el === 'string') || !el) { // id or null
+	    return document.getElementById(el);
+	  }
+	         
+	  if (el.length !== undefined) { // array-like
+	    var c = [];
+	    for (var i = 0, len = el.length; i < len; ++i) {
+	      c[c.length] = eXo.core.DOMUtil.get(el[i]);
+	    }
+	             
+	    return c;
+	  }
+
+	  return el; // some other object, just pass it back
+	 },
+	 
+	/**
+	 * Disable onclick event
+	 * @param {Event} el
+	 * 
+	 * Deprecated - register event using jQuery and return false instead
+	 */
+	disableOnClick : function(el) {
+		el.onclick = new Function("return false;");
+	}, 		
 	
 	/**
 	 * Returns true if elemt has the css class className
 	 * Uses a regular expression to search more quickly
+	 * 
+	 * Deprecated - use $.hasClass() instead
 	 */
 	hasClass : function(elemt, className) {
 		var reg = new RegExp('(^|\\s+)' + className + '(\\s+|$)') ;
@@ -34,12 +217,17 @@ eXo.core.DOMUtil = {
 	
 	/**
 	 * Adds the css class className to elemt, unless it already has it
+	 * 
+	 * Deprecated - use $.addClass() instead
 	 */
 	addClass : function(elemt, className) {
 		if (this.hasClass(elemt, className)) return ;
 		elemt['className'] = [elemt['className'], className].join(' ') ;
 	},
 
+	/**
+	 * Deprecated - use $.removeClass() instead
+	 */
 	removeClass : function(elemt, className) {
 	 var reg = new RegExp('(^|\\s+)' + className) ;
 	 elemt['className'] = elemt['className'].replace(reg, '') ;
@@ -47,6 +235,8 @@ eXo.core.DOMUtil = {
 	
 	/**
 	 * Replaces oldClazz by newClazz in elemt
+	 * 
+	 * Deprecated - Use $.addClass() and $.removeClass() instead
 	 */
 	replaceClass : function(elemt, oldClazz, newClazz) {
 		var reg = new RegExp('(^|\\s+)' + oldClazz) ;
@@ -312,169 +502,6 @@ eXo.core.DOMUtil = {
 		}
 		return null ;
 	},
-
-	/**
-	 * Move an element
-	 * @param {String} srcElemt element to move
-	 * @param {String} destElemt destination element that will contains srcElemt
-	 */
-	moveElemt : function(srcElemt, destElemt) {
-		if(typeof(srcElemt) == "string") srcElemt = document.getElementById(srcElemt) ;
-		if(typeof(destElemt) == "string") destElemt = document.getElementById(destElemt) ;
-		if(srcElemt && destElemt) destElemt.appendChild(srcElemt) ;
-	},
-
-	/**
-	 * Creates an element tagName with innerHTML content
-	 * Returns the first node div in this element
-	 */
-	createElementNode : function(innerHTML, tagName) {
-		var temporaryContainer = document.createElement(tagName) ;
-		temporaryContainer.innerHTML = innerHTML ;
-		var applicationNode = this.getChildrenByTagName(temporaryContainer, "div")[0] ;
-		return applicationNode ;
-	},
-	
-	/**
-	 * Generates an id based on the current time and random number
-	 */
-	generateId : function(objectId) {
-		return (objectId + "-" + new Date().getTime() + Math.random().toString().substring(2)) ;
-	},
-	
-	/**
-	 * Gets the style of an element, in several steps
-	 *  . the style as defined in the css
-	 * or if it doesn't exist
-	 *  . the computed style
-	 * if intValue is true, a numeric value will be returned as a number, as a string otherwise
-	 */
-	getStyle : function(element, style, intValue) {
-		var result = null ;
-		if (element.style[style]) {
-			result = element.style[style] ;
-		}	else if (element.currentStyle) {
-			result = element.currentStyle[style] ;
-		}	else if (document.defaultView && document.defaultView.getComputedStyle) {
-			style = style.replace(/([A-Z])/g, "-$1") ;
-			style = style.toLowerCase() ;
-			var s = document.defaultView.getComputedStyle(element, "") ;
-			result = s && s.getPropertyValue(style) ;
-		}
-		if (intValue && result) {
-			var intRes = Number(result.match(/\d+/)) ;
-			if(!isNaN(intRes)) result = intRes ;
-		}
-		return result ;
-	},
-
-	cleanUpHiddenElements : function() {
-	    var DOMUtil = eXo.core.DOMUtil;
-		var ln = DOMUtil.hideElementList.length ;
-		if (ln > 0) {
-			for (var i = 0; i < ln; i++) {
-				DOMUtil.hideElementList[i].style.display = "none" ;
-			}
-			DOMUtil.hideElementList.clear() ;
-		}
-	},
-
-	/**
-	 * Adds an element to the hideElementList array
-	 * Should only contain elements from a popup menu
-	 */
-	listHideElements : function(object) {
-		var DOMUtil = eXo.core.DOMUtil;
-		if (!DOMUtil.hideElementList.contains(object)) {
-			DOMUtil.hideElementList.push(object) ;
-		}
-	},
-	
-	/**
-	 * Removes element node from the DOM tree
-	 */
-	removeElement : function(elemt) {
-		if(typeof(elemt) == "string") elemt = document.getElementById(elemt) ;
-		if(!elemt) return ;
-		var parentElement = elemt.parentNode ;
-		parentElement.removeChild(elemt) ;
-	},
-
-	/**
-	 * Copyright (c) 2008, Yahoo! Inc. All rights reserved.
-	   Code licensed under the BSD License:
-	   http://developer.yahoo.net/yui/license.txt
-	   version: 2.5.2
-	 * Returns a array of HTMLElements that pass the test applied by supplied boolean method.
-	 * For optimized performance, include a tag and/or root node when possible.
-	 * @method getElementsBy
-	 * @param {Function} method - A boolean method for testing elements which receives the element as its only argument.
-	 * @param {String} tag (optional) The tag name of the elements being collected
-	 * @param {String | HTMLElement} root (optional) The HTMLElement or an ID to use as the starting point 
-	 * @param {Function} apply (optional) A function to apply to each element when found 
-	 * @return {Array} Array of HTMLElements
-	 */
-	getElementsBy : function(method, tag, root, apply) {
-	  tag = tag || '*';
-	  root = (root) ? this.get(root) : null || document;
-
-	  if (!root) {
-	    return [];
-	  }
-
-	  var nodes = [],
-	    elements = root.getElementsByTagName(tag);
-
-	  for (var i = 0, len = elements.length; i < len; ++i) {
-	    if ( method(elements[i]) ) {
-	      nodes[nodes.length] = elements[i];
-	      if (apply) {
-	        apply(elements[i]);
-	      }
-	    }
-	  }
-
-	  return nodes;
-	},
-
-    /**
-	  * Copyright (c) 2008, Yahoo! Inc. All rights reserved.
-	   Code licensed under the BSD License:
-	   http://developer.yahoo.net/yui/license.txt
-	   version: 2.5.2
-	  * Returns an HTMLElement reference.
-	  * @method get
-	  * @param {String | HTMLElement |Array} el Accepts a string to use as an ID for getting a DOM reference, an actual DOM reference, or an Array of IDs and/or HTMLElements.
-	  * @return {HTMLElement | Array} A DOM reference to an HTML element or an array of HTMLElements.
-	*/
-	get : function(el) {
-	  if (el && (el.nodeType || el.item)) { // Node, or NodeList
-	    return el;
-	  }
-
-	  if ((typeof el === 'string') || !el) { // id or null
-	    return document.getElementById(el);
-	  }
-	         
-	  if (el.length !== undefined) { // array-like
-	    var c = [];
-	    for (var i = 0, len = el.length; i < len; ++i) {
-	      c[c.length] = eXo.core.DOMUtil.get(el[i]);
-	    }
-	             
-	    return c;
-	  }
-
-	  return el; // some other object, just pass it back
-	 },
-	 
-	/**
-	 * Disable onclick event
-	 * @param {Event} el
-	 */
-	disableOnClick : function(el) {
-		el.onclick = new Function("return false;");
-	}
 };
 
 document.onclick = eXo.core.DOMUtil.cleanUpHiddenElements;

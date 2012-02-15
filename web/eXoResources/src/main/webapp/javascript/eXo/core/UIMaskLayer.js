@@ -182,8 +182,7 @@ eXo.core.UIMaskLayer = {
                   parentOfBlockContainer = temp;
                   temp = temp.parentNode;
                 } while (temp
-                    && eXo.core.DOMUtil.getStyle(parentOfBlockContainer,
-                        "position") === "static");
+                    && xj(parentOfBlockContainer).css("position") === "static");
 
                 maskLayer.css("top", browser.findPosYInContainer(
                     blockContainer[0], parentOfBlockContainer)

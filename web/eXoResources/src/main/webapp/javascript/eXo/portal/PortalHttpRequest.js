@@ -165,17 +165,17 @@ function MarkupHeadElements(fragment) {
 }
 
 function LoadingScripts(fragment) {
-	var  DOMUtil = eXo.core.DOMUtil;	
 	this.immediateScripts = [];
 	this.onloadScripts = [];
-	var headers = DOMUtil.findFirstChildByClass(fragment, "div", "ImmediateScripts").innerHTML;
+	var jFragment = xj(fragment);
+	var headers = jFragment.children(".ImmediateScripts").first().html();
 	headers = headers.replace(/^\s*/, '').split(",");
 	for (var i = 0; i < headers.length; i++) {
 		if (headers[i] !== "") {
 			this.immediateScripts.push(headers[i]);
 		}
 	}
-	var onloads = DOMUtil.findFirstChildByClass(fragment, "div", "OnloadScripts").innerHTML;
+	var onloads = jFragment.children(".OnloadScripts").first().html();
 	onloads = onloads.replace(/^\s*/, '').split(",");
 	for (var i = 0; i < onloads.length; i++) {
 		if (onloads[i] !== "") {

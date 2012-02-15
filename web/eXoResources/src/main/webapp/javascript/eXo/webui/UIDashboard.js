@@ -58,7 +58,7 @@ function UIDashboard() {
 			}
 			
 			var uiTarget = null;
-			if(!DOMUtil.hasClass(dragObj, "SelectItem")) {
+			if(!xj(dragObj).hasClass("SelectItem")) {
 				uiTarget = uiDashboard.createTarget(ggwidth, 0);
 				dragObj.parentNode.insertBefore(uiTarget, dragObj.nextSibling);
 				currCol = eXo.webui.UIDashboardUtil.findColIndexInDashboard(dragObj);
@@ -241,7 +241,7 @@ function UIDashboard() {
 
 			uiTarget = DOMUtil.findFirstDescendantByClass(portletFragment, "div", "UITarget");
 			while (uiTarget) {
-				DOMUtil.removeElement(uiTarget);
+				xj(uiTarget).remove();
 				uiTarget = eXo.core.DOMUtil.findFirstDescendantByClass(portletFragment, "div", "UITarget");
 			}
 			targetObj = currCol = null;

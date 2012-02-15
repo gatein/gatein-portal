@@ -234,8 +234,7 @@ eXo.webui.UIRightClickPopupMenu = {
       var clickCenter = eXo.core.DOMUtil.findFirstDescendantByClass(
           contextMenu, "div", "ClickCenterBottom");
       if (clickCenter) {
-        var clickCenterWidth = clickCenter ? parseInt(eXo.core.DOMUtil
-            .getStyle(clickCenter, "marginRight")) : 0;
+        var clickCenterWidth = clickCenter ? parseInt(xj(clickCenter).css("marginRight")) : 0;
         intLeft += (ctxMenuContainer.offsetWidth - 2 * clickCenterWidth);
       }
     }

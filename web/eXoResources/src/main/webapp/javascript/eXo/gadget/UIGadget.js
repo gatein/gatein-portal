@@ -298,7 +298,7 @@ eXo.gadget.UIGadget = {
                 var uiDashboardCont = DOMUtil.findAncestorByClass(uiGadget, "UIDashboardContainer"); 
                 if(uiDashboardCont) {
                 	ajaxGet(href);
-	                DOMUtil.removeElement(uiGadget);
+	                xj(uiGadget).remove();
 	                if(!DOMUtil.findFirstDescendantByClass(uiDashboardCont, "div", "UIGadget")) {
 	                	DOMUtil.findFirstDescendantByClass(uiDashboardCont, "div", "NoGadget").style.display = "block";
 	                }
@@ -317,7 +317,7 @@ eXo.gadget.UIGadget = {
                 ] ;
                 var result = ajaxAsyncGetRequest(eXo.env.server.createPortalURL(containerBlockId, "DeleteGadget", true, params), false) ;
                 if (result == "OK") {
-                    DOMUtil.removeElement(uiGadget);
+                    xj(uiGadget).remove();
                 }
             }
         }

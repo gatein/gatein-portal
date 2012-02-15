@@ -63,18 +63,15 @@ eXo.webui.UICombobox = {
 
   setSelectedItem : function(textbox) {
     if (this.lastSelectedItem)
-      eXo.core.DOMUtil.replaceClass(this.lastSelectedItem,
-          "UIComboboxSelectedItem", "");
+      xj(this.lastSelectedItem).removeClass("UIComboboxSelectedItem");
     var selectedIndex = parseInt(this.getSelectedItem(textbox));
     if (selectedIndex >= 0) {
-      eXo.core.DOMUtil.addClass(this.items[selectedIndex],
-          "UIComboboxSelectedItem");
+      xj(this.items[selectedIndex]).addClass("UIComboboxSelectedItem");
       this.lastSelectedItem = this.items[selectedIndex];
       var y = eXo.core.Browser.findPosYInContainer(this.lastSelectedItem,
           this.list);
       this.list.firstChild.scrollTop = y;
-      var hidden = eXo.core.DOMUtil.findPreviousElementByTagName(textbox,
-          "input");
+      var hidden = xj(textbox).prev("input")[0];
       hidden.value = this.items[selectedIndex].getAttribute("value");
 
     }
