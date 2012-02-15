@@ -17,42 +17,6 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.core.Mouse = {
-  init : function (mouseEvent) {
-	  this.mousexInPage = null ;
-	  this.mouseyInPage = null ;
-
-	  this.mousexInClient = null ;
-	  this.mouseyInClient = null ;
-
-	  this.lastMousexInClient = null ;
-	  this.lastMouseyInClient = null ;
-
-	  this.deltax = null ;
-	  this.deltay = null ;
-	  if(mouseEvent != null) this.update(mouseEvent) ;
-  },
-
-  update : function(mouseEvent) {
-	  browser = eXo.core.Browser;
-
-	  this.mousexInPage = browser.findMouseXInPage(mouseEvent);
-	  this.mouseyInPage = browser.findMouseYInPage(mouseEvent);
-
-	  var x  =  browser.findMouseXInClient(mouseEvent) ;
-	  var y  =  browser.findMouseYInClient(mouseEvent) ;
-
-	  this.lastMousexInClient =  this.mousexInClient != null ? this.mousexInClient : x ;
-	  this.lastMouseyInClient =  this.mouseyInClient != null ? this.mouseyInClient : y ;
-
-	  this.mousexInClient = x ;
-	  this.mouseyInClient = y ;
-
-	  this.deltax = this.mousexInClient - this.lastMousexInClient ;
-	  this.deltay = this.mouseyInClient - this.lastMouseyInClient ;
-  }
-} ;
-
 /************************************************************************************/
 /**
 * This function aims is to configure the javascript environment according to the browser in use
