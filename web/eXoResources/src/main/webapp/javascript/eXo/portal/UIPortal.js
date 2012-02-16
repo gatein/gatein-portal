@@ -21,23 +21,48 @@ function UIComponent(node) {
 	if(!node) return null;
   this.node = node ;
   this.type = node.className ;
-  var DOMUtil = eXo.core.DOMUtil;
-  var componentBlock = DOMUtil.findFirstDescendantByClass(node, "div", "UIComponentBlock");
-  var children =  DOMUtil.getChildrenByTagName(componentBlock, "div") ;
-  
-  for(var i=0; i<children.length; i++) {
-  	if(DOMUtil.hasClass(children[i], "LAYOUT-BLOCK")) this.layout = children[i];
-  	else if(DOMUtil.hasClass(children[i], "VIEW-BLOCK")) this.view = children[i];
-  	else if(DOMUtil.hasClass(children[i], "EDITION-BLOCK")) this.control = children[i];
-  }
-	
+
+
+  var jqNode = xj(node);
+  var compBlock = jqNode.find("div.UIComponentBlock").eq(0);
+
+  var comp = this; //Store to avoid 'this' conflict in jQuery 'each'
+  compBlock.children("div").each(function()
+  {
+    var child = xj(this);
+    if(child.hasClass("LAYOUT-BLOCK"))
+    {
+      comp.layout = child[0];
+    }
+    else if(child.hasClass("VIEW-BLOCK"))
+    {
+      comp.view = child[0];
+    }
+    else if(child.hasClass("EDITION-BLOCK"))
+    {
+      comp.control = child[0];
+    }
+  });
+
   this.component = "";
-  
-  if(DOMUtil.hasClass(node, "UIPortal")) this.id = node.id.replace("UIPortal-", "");
-  else if(DOMUtil.hasClass(node, "UIPortlet")) this.id = node.id.replace("UIPortlet-", "");
-  else if(DOMUtil.hasClass(node, "UIContainer")) this.id = node.id.replace("UIContainer-", "");
-  else this.id = node.id;
-  
+
+  if (jqNode.hasClass("UIPortal"))
+  {
+    this.id = node.id.replace("UIPortal-", "");
+  }
+  else if (jqNode.hasClass("UIPortlet"))
+  {
+    this.id = node.id.replace("UIPortlet-", "");
+  }
+  else if (jqNode.hasClass("UIContainer"))
+  {
+    this.id = node.id.replace("UIContainer-", "");
+  }
+  else
+  {
+    this.id = node.id;
+  }
+
 };
 
 UIComponent.prototype.getId = function() { return this.id ; };
@@ -266,8 +291,7 @@ eXo.portal.UIPortal = {
    * @param {Object} element object to collapse or expand
    */
   collapseExpand : function(element) {
-    var subGroup = eXo.core.DOMUtil.findFirstChildByClass(element.parentNode,
-        "div", "ChildrenContainer");
+    var subGroup = xj(element.parentNode).children("div.ChildrenContainer")[0];
     var className = element.className;
     if (!subGroup)
       return;

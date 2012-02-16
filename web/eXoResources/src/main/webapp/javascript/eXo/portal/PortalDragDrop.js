@@ -33,7 +33,6 @@ eXo.portal.PortalDragDrop = {
 		return;
 	  }
 		
-	  var DOMUtil = eXo.core.DOMUtil;
 	  var browser = eXo.core.Browser;
 	  var DragDrop = eXo.core.DragDrop2;
 	  var PortalDragDrop = eXo.portal.PortalDragDrop;
@@ -420,7 +419,7 @@ eXo.portal.PortalDragDrop = {
 	      if(foundTarget == null) {
 	        foundTarget = ele;
 	      } else {
-	        if(eXo.core.DOMUtil.hasAncestor(ele, foundTarget)) {
+	        if(ele != foundTarget && xj(ele).closest(xj(foundTarget)).length > 0) {
 	          foundTarget = ele;
 	        }
 	      } 

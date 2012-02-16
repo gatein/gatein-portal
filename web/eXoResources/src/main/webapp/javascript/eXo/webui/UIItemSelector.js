@@ -50,8 +50,7 @@ eXo.webui.UIItemSelector = {
    */
   onClick : function(clickedElement) {
     var itemListContainer = clickedElement.parentNode;
-    var allItems = eXo.core.DOMUtil.findDescendantsByClass(itemListContainer,
-        "div", "Item");
+    var allItems = xj(itemListContainer).find("div.Item").get();
     eXo.webui.UIItemSelector.beforeActionHappen(clickedElement);
     if (this.allItems.length <= 0)
       return;
@@ -109,10 +108,7 @@ eXo.webui.UIItemSelector = {
 
   /* Pham Thanh Tung added */
   onClickOption : function(clickedElement, form, component, option) {
-    var itemDetailList = eXo.core.DOMUtil.findAncestorByClass(clickedElement,
-        "ItemDetailList");
-    var selectedItems = eXo.core.DOMUtil.findDescendantsByClass(itemDetailList,
-        "div", "SelectedItem");
+    var selectedItems = xj(clickedElement).closest(".ItemDetailList").find("div.SelectedItem").get();
     for ( var i = 0; i < selectedItems.length; i++) {
       selectedItems[i].className = "NormalItem";
     }
@@ -126,18 +122,15 @@ eXo.webui.UIItemSelector = {
 
   /* TODO: Review This Function (Ha's comment) */
   beforeActionHappen : function(selectedItem) {
-    DOMUtil = eXo.core.DOMUtil;
-    this.uiItemSelector = DOMUtil.findAncestorByClass(selectedItem,
-        "UIItemSelector");
-    this.itemList = DOMUtil.findAncestorByClass(selectedItem, "ItemList");
-    this.itemListContainer = DOMUtil.findAncestorByClass(selectedItem,
-        "ItemListContainer");
-    this.itemListAray = DOMUtil.findDescendantsByClass(
-        this.itemListContainer.parentNode, "div", "ItemList");
+    var jqObj = xj(selectedItem);
+    this.uiItemSelector = jqObj.closest(".UIItemSelector")[0];
+    this.itemList = jqObj.closest(".ItemList")[0];
+    var listCont = jqObj.closest(".ItemListContainer");
+    this.itemListContainer = listCont[0];
+    this.itemListAray = listCont.parent().find("div.ItemList").get();
 
     if (this.itemListAray.length > 1) {
-      this.itemDetailLists = DOMUtil.findDescendantsByClass(
-          this.itemListContainer.parentNode, "div", "ItemDetailList");
+      this.itemDetailLists = listCont.parent().find("div.ItemDetailList").get();
       this.itemDetailList = null;
       for ( var i = 0; i < this.itemListAray.length; i++) {
         if (this.itemListAray[i].style.display == "none") {
@@ -148,71 +141,58 @@ eXo.webui.UIItemSelector = {
         }
       }
     } else {
-      this.itemDetailList = DOMUtil.findFirstDescendantByClass(
-          this.itemListContainer.parentNode, "div", "ItemDetailList");
+      this.itemDetailList = listCont.parent().find("div.ItemDetailList")[0];
     }
-    // this.itemDetails =
-    // eXo.core.DOMUtil.findChildrenByClass(this.itemDetailList, "div",
-    // "ItemDetail");
-    this.itemDetails = DOMUtil.findDescendantsByClass(this.itemDetailList,
-        "div", "ItemDetail");
-    var firstItemDescendant = DOMUtil.findFirstDescendantByClass(this.itemList,
-        "div", "Item");
-    var firstItemParent = firstItemDescendant.parentNode;
-    this.allItems = DOMUtil.findChildrenByClass(firstItemParent, "div", "Item");
+
+    this.itemDetails = xj(this.itemDetailList).find("div.ItemDetail").get();
+    this.allItems = xj(this.itemList).find("div.Item").eq(0).parent().children("div.Item").get();
   },
 
   showPopupCategory : function(selectedNode) {
-    var DOMUtil = eXo.core.DOMUtil;
-    var itemListContainer = DOMUtil.findAncestorByClass(selectedNode,
-        "ItemListContainer");
-    var uiPopupCategory = DOMUtil.findFirstDescendantByClass(itemListContainer,
-        "div", "UIPopupCategory");
+    var itemListCont = xj(selectedNode).closest(".ItemListContainer");
+    var popupCategory = itemListCont.find("div.UIPopupCategory").eq(0);
 
-    itemListContainer.style.position = "relative";
+    itemListCont.css("position", "relative");
 
-    if (uiPopupCategory.style.display == "none") {
-      uiPopupCategory.style.position = "absolute";
-      uiPopupCategory.style.top = "23px";
-      uiPopupCategory.style.left = "0px";
-      uiPopupCategory.style.display = "block";
-      uiPopupCategory.style.width = "100%";
-    } else {
-      uiPopupCategory.style.display = "none";
+    if(popupCategory.css("display") == "none")
+    {
+      popupCategory.css({"position" : "absolute", "top" : "23px", "left" : "0px", "display" : "block", "width" : "100%"});
+    }
+    else
+    {
+      popupCategory.css("display", "none");
     }
   },
 
   selectCategory : function(selectedNode) {
-    var DOMUtil = eXo.core.DOMUtil;
-    var uiPopupCategory = DOMUtil.findAncestorByClass(selectedNode,
-        "UIPopupCategory");
-    var itemListContainer = DOMUtil.findAncestorByClass(selectedNode,
-        "OverflowContainer");
+    var jqObj = xj(selectedNode);
+    var itemListCont = jqObj.closest(".OverflowContainer");
     var selectedNodeIndex = eXo.webui.UIItemSelector.findIndex(selectedNode);
 
-    var itemLists = DOMUtil.findDescendantsByClass(itemListContainer, "div",
-        "ItemList");
-    var itemDetailLists = DOMUtil.findDescendantsByClass(itemListContainer,
-        "div", "ItemDetailList");
+    var itemList = itemListCont.find("div.ItemList");
+    var itemDetailList = itemListCont.find("div.ItemDetailList");
 
-    for ( var i = 0; i < itemLists.length; i++) {
-      if (i != selectedNodeIndex) {
-        itemLists[i].style.display = "none";
-        itemDetailLists[i].style.display = "none";
-      } else {
-        itemDetailLists[i].style.display = "block";
-        itemLists[i].style.display = "block";
+    itemList.each(function(index)
+    {
+      if (index == selectedNodeIndex)
+      {
+        xj(this).css("display", "block");
+        itemDetailList.get(index).style.display = "block";
       }
-    }
-    uiPopupCategory.style.display = "none";
+      else
+      {
+        xj(this).css("display", "none");
+        itemDetailList.get(index).style.display = "none";
+      }
+    });
+
+    jqObj.closest(".UIPopupCategory").css("display", "none");
   },
 
   findIndex : function(object) {
-    var parentNode = object.parentNode;
-    var objectElements = eXo.core.DOMUtil.findChildrenByClass(parentNode,
-        "div", object.className);
-    for ( var i = 0; i < objectElements.length; i++) {
-      if (objectElements[i] == object)
+    var siblings = xj(object).parent().children("div." + object.className).get();
+    for ( var i = 0; i < siblings.length; i++) {
+      if (siblings[i] == object)
         return i;
     }
   },
@@ -225,19 +205,13 @@ eXo.webui.UIItemSelector = {
    * action UIDropDownControl.js : set this method to do
    */
   selectPageLayout : function(id, selectedIndex) {
-    var DOMUtil = eXo.core.DOMUtil;
-    var uiDropDownControl = document.getElementById(id);
-    var itemSelectorAncestor = DOMUtil.findAncestorByClass(uiDropDownControl,
-        "ItemSelectorAncestor");
-    var itemList = DOMUtil.findDescendantsByClass(itemSelectorAncestor, "div",
-        "ItemList");
-    var itemSelectorLabel = DOMUtil.findDescendantsByClass(
-        itemSelectorAncestor, "a", "OptionItem");
-    var uiItemSelector = DOMUtil.findAncestorByClass(uiDropDownControl,
-        "UIItemSelector");
-    var itemDetailList = DOMUtil.findDescendantsByClass(uiItemSelector, "div",
-        "ItemDetailList");
-    if (itemList == null)
+    var dropDownControl = xj("#" + id);
+    var itemSelectorAncest = dropDownControl.closest(".ItemSelectorAncestor");
+    var itemList = itemSelectorAncest.find("div.ItemList");
+    var itemSelectorLabel = itemSelectorAncest.find("a.OptionItem");
+    var itemSelector = dropDownControl.find("div.UIItemSelector");
+    var itemDetailList = itemSelector.find("div.ItemDetailList");
+    if (itemList.length == 0)
       return;
     for (i = 0; i < itemSelectorLabel.length; ++i) {
       if (i >= itemList.length)
@@ -247,11 +221,10 @@ eXo.webui.UIItemSelector = {
         if (itemDetailList.length < 1)
           continue;
         itemDetailList[i].style.display = "block";
-        var selectedItem = DOMUtil.findFirstDescendantByClass(itemList[i],
-            "div", "SelectedItem");
-        if (selectedItem == null)
+        var selectedItem = xj(itemList[i]).find("div.SelectedItem").eq(0);
+        if (!selectedItem || selectedItem == null)
           continue;
-        var setValue = DOMUtil.findDescendantById(selectedItem, "SetValue");
+        var setValue = selectedItem.find("#SetValue")[0];
         if (setValue == null)
           continue;
         eval(setValue.innerHTML);

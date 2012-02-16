@@ -26,15 +26,13 @@ eXo.portal.UIPortalControl = {
    *          selectedElement first object of tree
    */
   collapseTree : function(selectedElement) {
-    var DOMUtil = eXo.core.DOMUtil;
 
-    var parentNode = DOMUtil.findAncestorByClass(selectedElement, "Node");
-    var childrenContainer = DOMUtil.findFirstDescendantByClass(parentNode,
-        "div", "ChildrenContainer");
+    var ancest = xj(selectedElement).parent().closest(".Node");
+    var childrenCont = ancest.find("div.ChildrenContainer").eq(0);
     var newHTML = "<div onclick=\""
-        + childrenContainer.getAttribute("actionLink")
+        + childrenCont.attr("actionLink")
         + "\" class=\"ExpandIcon\">" + selectedElement.innerHTML + "</div>";
-    parentNode.innerHTML = newHTML;
+    ancest.html(newHTML);
   },
 
   /**

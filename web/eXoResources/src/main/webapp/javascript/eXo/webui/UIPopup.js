@@ -162,7 +162,7 @@ eXo.webui.UIPopup = {
     var DragDrop = eXo.core.DragDrop2;
 
     var clickBlock = this;
-    var dragBlock = eXo.core.DOMUtil.findAncestorByClass(this, "UIDragObject");
+    var dragBlock = xj(clickBlock).parent().closest(".UIDragObject")[0];
     DragDrop.init(clickBlock, dragBlock);
   }
 }

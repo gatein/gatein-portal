@@ -330,19 +330,6 @@ eXo.webui.UICalendar = {
         drag.height(calendar[0].offsetHeight);
       drag.width(innerWidth);
     }
-
-    // var calendar = eXo.core.DOMUtil.findFirstChildByClass(drag, "div",
-    // "UICalendar");
-    // var innerWidth = drag.offsetWidth;
-    // drag.onmousedown = function(evt) {
-    // var event = evt || window.event;
-    // event.cancelBubble = true;
-    // drag.style.position = "absolute";
-    // if(eXo.core.Browser.isIE7()) drag.style.height = calendar.offsetHeight +
-    // "px";
-    // drag.style.width = innerWidth + "px";
-    // eXo.core.DragDrop2.init(drag, component);
-    // }
   },
 
   changeYear : function(change) {

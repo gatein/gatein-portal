@@ -22,8 +22,9 @@ function UISiteMap() {};
 UISiteMap.prototype.updateTreeNode = function (nodeToUpdate, getNodeURL) {
 	if (!nodeToUpdate || ! getNodeURL) return;
 	
-	var subGroup = eXo.core.DOMUtil.findFirstChildByClass(nodeToUpdate.parentNode, "div", "ChildrenContainer") ;
-	if (!subGroup || subGroup.innerHTML.trim() !== "") return;	
+  var jqNode = xj(nodeToUpdate);
+  var subGroup = jqNode.parent().children("div.ChildrenContainer");
+	if (subGroup.length == 0 || subGroup.html().trim() !== "") return;
 		
 	var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);	
 	try {
@@ -34,8 +35,7 @@ UISiteMap.prototype.updateTreeNode = function (nodeToUpdate, getNodeURL) {
 		eXo.webui.UISiteMap.generateHtml(data, nodeToUpdate, subGroup);			
 		return;
 	}
-	eXo.core.DOMUtil.removeClass(nodeToUpdate, "CollapseIcon");
-	eXo.core.DOMUtil.addClass(nodeToUpdate, "NullItem");
+  jqNode.removeClass("CollapseIcon").addClass("NullItem");
 };
 
 UISiteMap.prototype.generateHtml = function(data, nodeToUpdate, subGroup) {						

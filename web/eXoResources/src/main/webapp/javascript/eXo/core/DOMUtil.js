@@ -501,7 +501,7 @@ eXo.core.DOMUtil = {
 			previousElement = previousElement.previousSibling ;
 		}
 		return null ;
-	},
+	}
 };
 
 document.onclick = eXo.core.DOMUtil.cleanUpHiddenElements;
