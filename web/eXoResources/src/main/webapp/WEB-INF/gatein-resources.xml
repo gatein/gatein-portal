@@ -341,14 +341,4 @@
       </depends>
    </scripts>
 
-   <scripts>
-      <name>tabbeddashboard</name>
-      <module>
-         <name>eXo.webui.UITabbedDashboard</name>
-         <path>/javascript/eXo/webui/UITabbedDashboard.js</path>
-      </module>
-      <depends>
-         <scripts>common</scripts>
-      </depends>
-   </scripts>
 </gatein-resources>
