@@ -47,4 +47,7 @@ public interface AuthenticationRegistry
 
    public Credentials removeCredentials(HttpServletRequest request);
 
+
+   public void removeClient(String sessionId);
+
 }

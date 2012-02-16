@@ -24,6 +24,8 @@
 
 package org.exoplatform.web.security;
 
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.security.Credentials;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,7 +41,8 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class AuthenticationRegistryImpl implements AuthenticationRegistry
 {
-
+   private static final Logger log = LoggerFactory.getLogger(AuthenticationRegistryImpl.class);
+   
    // Key is ID of HTTP Session. Value is map with various attributes of single client (session),
    // which will be used during authentication process.
    private final ConcurrentMap<String, Map<String, Object>> registry = new ConcurrentHashMap<String, Map<String, Object>>();
@@ -79,10 +82,21 @@ public class AuthenticationRegistryImpl implements AuthenticationRegistry
       // Clear map if no more attributes are here.
       if (attributesOfClient.size() == 0)
       {
-         registry.remove(sessionId);
+         removeClient(sessionId);
       }
 
       return credentials;
+   }
+
+
+   public void removeClient(String sessionId)
+   {
+      registry.remove(sessionId);
+
+      if (log.isTraceEnabled())
+      {
+         log.trace("Entry cleared for session " + sessionId);
+      }
    }
 
 
@@ -94,6 +108,11 @@ public class AuthenticationRegistryImpl implements AuthenticationRegistry
       {
          attributes = new ConcurrentHashMap<String, Object>();
          registry.putIfAbsent(sessionId, attributes);
+         
+         if (log.isTraceEnabled())
+         {
+            log.trace("New entry created in AuthenticationRegistry for session " + sessionId);
+         }
       }
 
       return registry.get(sessionId);

@@ -180,7 +180,10 @@
 	</listener>
 	<listener>
     <listener-class>org.exoplatform.services.security.web.JAASConversationStateListener</listener-class>
-  </listener>
+   </listener>
+   <listener>
+    <listener-class>org.exoplatform.web.security.AuthenticationRegistryListener</listener-class>
+   </listener>
   <!-- ================================================================== -->
   <!--           SERVLET                                                  -->
   <!-- ================================================================== -->
