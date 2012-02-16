@@ -46,5 +46,5 @@
 			</div>
 				<%} %>	
 	<% } %>
-	<a class="AddDashboard" onclick="eXo.webui.UITabbedDashboard.createTabDashboard(this)"></a>										
+	<a class="AddDashboard" onclick="eXo.webui.UITabbedDashboard.showAddTabInput(this)"></a>
 </div>
