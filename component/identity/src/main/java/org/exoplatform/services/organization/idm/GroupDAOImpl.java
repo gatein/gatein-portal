@@ -284,6 +284,23 @@ public class GroupDAOImpl implements GroupHandler
             //TODO: impl force in IDM
             getIdentitySession().getPersistenceManager().removeGroup(child, true);
          }
+
+
+         // Obtain parents
+
+         Collection<org.picketlink.idm.api.Group> parents = 
+            getIdentitySession().getRelationshipManager().findAssociatedGroups(jbidGroup, null, false, false);
+
+         // not possible to disassociate only one child...
+         Set dummySet = new HashSet();
+         dummySet.add(jbidGroup);
+         
+         for (org.picketlink.idm.api.Group parent : parents)
+         {
+            getIdentitySession().getRelationshipManager().disassociateGroups(parent, dummySet);
+         }
+         
+        
       }
       catch (Exception e)
       {
