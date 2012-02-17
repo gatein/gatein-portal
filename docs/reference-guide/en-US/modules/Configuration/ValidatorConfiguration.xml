@@ -116,6 +116,13 @@
             </itemizedlist>
          </para>
       </note>
+
+      <important>
+         <para>
+            Some components that leverage &PRODUCT_NAME; depend on user names being all lowercase. We therefore strongly
+            recommend that you also only accept lowercase user names.
+         </para>
+      </important>
    </section>
 
    <section id="sect-Reference_Guide-Validator_Developer-Configuration">
