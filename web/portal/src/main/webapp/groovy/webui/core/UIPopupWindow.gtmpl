@@ -7,14 +7,14 @@
 	 * version: $Id$
 	 */
 %>
-<%		
+<%
 	boolean showCloseButton =	uicomponent.isShowCloseButton();
 	String popupId = uicomponent.getId();
 	String rsId = popupId;
 	if(popupId.indexOf('-')>0){
 		rsId = popupId.substring(0,popupId.lastIndexOf('-'));
 	} 	
-		
+
 	String title = rsId;
 	def component = uicomponent.getUIComponent();
 	if(component != null) title = component.getId();
@@ -28,6 +28,7 @@
 	String show = "none";
 	def rcontext = _ctx.getRequestContext();
 	if(uicomponent.isShow()) {
+	   rcontext.getJavascriptManager().loadScriptResource("webui");
 	   rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
 	   show = "block";
 	} else if (rcontext.useAjax()) {

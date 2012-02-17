@@ -1,4 +1,7 @@
 <%
+  def rcontext = _ctx.getRequestContext(); 
+  rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector');
+
 	String onClickRightColumnBigItemStyle = "eXo.webui.UIItemSelector.onClick(this)";
 %>
 <div class="UIPersonalInfo">
