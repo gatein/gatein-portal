@@ -1,0 +1,10 @@
+<feature>
+  <name>gatein-container</name>
+  <dependency>globals</dependency>
+  <dependency>rpc</dependency>
+  <dependency>pubsub</dependency>
+  <container>
+    <script src="Gadgets.js"/>
+    <script src="ExoBasedUserPrefStore.js"/>
+  </container>
+</feature>

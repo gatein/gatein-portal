@@ -34,8 +34,7 @@ eXo.gadget.UIGadget = {
     window.gadgets = window.gadgets || {};
     eXo.gadgets = window.gadgets;
     var loader = eXo.core.AsyncLoader;
-    loader.loadJS([hostName + '/js/pubsub.js?c=1', '/eXoResources/javascript/eXo/gadget/Gadgets.js',
-      '/eXoResources/javascript/eXo/gadget/ExoBasedUserPrefStore.js'], eXo.gadget.UIGadget.createCallback, arguments, null);
+    loader.loadJS([hostName + '/js/gatein-container.js?c=1' + (debug ? "&debug=1": "") + (nocache ? "&nocache=1" : "&nocache=0")], eXo.gadget.UIGadget.createCallback, arguments, null);
   },
 
   createCallback : function(url, id, metadata, userPref, view, hostName, debug, nocache)
@@ -61,7 +60,7 @@ eXo.gadget.UIGadget = {
     gadget.debug = debug;
     gadget.nocache = nocache;
     gadget.serverBase_ = hostName;
-
+    
     gadgets.container.addGadget(gadget);
     // i use the internal var "gadget.userPrefs_" to not call the save on the server side
     if (userPref != null)

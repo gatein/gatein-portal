@@ -48,7 +48,29 @@
                </execution>
             </executions>
          </plugin>
-
+         <plugin>
+            <!-- Use to compress javascript gadget features -->
+            <groupId>net.sf.alchim</groupId>
+            <artifactId>yuicompressor-maven-plugin</artifactId>
+            <version>0.7.1</version>
+            <executions>
+               <execution>
+                  <goals>
+                     <goal>compress</goal>
+                  </goals>
+               </execution>
+            </executions>
+            <configuration>
+               <suffix>.opt</suffix>
+               <excludes>
+                  <exclude>**/*.xml</exclude>
+                  <exclude>**/*.txt</exclude>
+                  <exclude>**/*.json</exclude>
+               </excludes>
+               <jswarn>false</jswarn>
+               <statistics>false</statistics>
+            </configuration>
+         </plugin>
       </plugins>
       <resources>
          <resource>
@@ -56,6 +78,12 @@
             <includes>
                <include>**/oauth.json</include>
                <include>**/*.xml</include>
+            </includes>
+         </resource>
+         <resource>
+            <directory>src/main/javascript</directory>
+            <includes>
+                <include>**/*</include>
             </includes>
          </resource>
       </resources>

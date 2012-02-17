@@ -39,7 +39,8 @@
       org.apache.shindig.gadgets.servlet.AuthenticationModule:
       org.exoplatform.portal.gadget.core.ExoOAuthModule:
       org.apache.shindig.common.cache.ehcache.EhCacheModule:
-      org.exoplatform.portal.gadget.core.ExoModule
+      org.exoplatform.portal.gadget.core.ExoModule:
+      org.exoplatform.portal.gadget.core.ExtraFeatureModule
     </param-value>
   </context-param>
 
