@@ -55,12 +55,16 @@ public class ApplicationMessage extends AbstractApplicationMessage implements Se
       {
          for (int i = 0; i < messageArgs_.length; i++)
          {
-            String arg = messageArgs_[i].toString();
-            if (isArgsLocalized())
+            final Object messageArg = messageArgs_[i];
+            if (messageArg != null)
             {
-               arg = resolveMessage(arg);
+               String arg = messageArg.toString();
+               if (isArgsLocalized())
+               {
+                  arg = resolveMessage(arg);
+               }
+               msg = msg.replace("{" + i + "}", arg);
             }
-            msg = msg.replace("{" + i + "}", arg);
          }
       }
 
