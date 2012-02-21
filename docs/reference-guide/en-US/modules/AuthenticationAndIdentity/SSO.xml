@@ -19,7 +19,7 @@
                 In this tutorial, the SSO server is installed in a Tomcat installation. Tomcat can be obtained from <ulink type="http" url="http://tomcat.apache.org">http://tomcat.apache.org</ulink>.
             </para>
             <para>
-				   All the packages required for setup can be found in a latest zip file located under <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/">this directory</ulink>. At this moment, latest version is <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.1.1-CR01/sso-packaging-1.1.1-CR01.zip">here</ulink>.
+				   All the packages required for setup can be found in a latest zip file located under <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/">this directory</ulink>. At this moment, latest version is <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.1.1-CR02/sso-packaging-1.1.1-CR02.zip">here</ulink>.
                In this document, $GATEIN_SSO_HOME is called as the directory where the file is extracted.
             </para>
             <para>
