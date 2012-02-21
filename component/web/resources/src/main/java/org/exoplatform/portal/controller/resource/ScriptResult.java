@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.controller.resource;
 
+import java.util.Date;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
@@ -33,10 +35,15 @@ class ScriptResult
 
       /** . */
       final byte[] bytes;
+      
+      final long lastModified;
 
       Resolved(byte[] bytes)
       {
          this.bytes = bytes;
+         //  string of date retrieve from Http header doesn't have miliseconds
+         //  we need to remove miliseconds
+         lastModified = (new Date().getTime() / 1000) * 1000;         
       }
    }
    

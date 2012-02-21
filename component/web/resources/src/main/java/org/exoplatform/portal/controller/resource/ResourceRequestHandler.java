@@ -21,7 +21,9 @@ package org.exoplatform.portal.controller.resource;
 
 import org.exoplatform.commons.cache.future.FutureMap;
 import org.exoplatform.commons.utils.I18N;
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.utils.Safe;
+import org.exoplatform.portal.application.ResourceRequestFilter;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebRequestHandler;
 import org.exoplatform.web.controller.QualifiedName;
@@ -31,6 +33,7 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
 import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,6 +47,10 @@ import java.util.Properties;
 public class ResourceRequestHandler extends WebRequestHandler
 {
 
+   public static final String IF_MODIFIED_SINCE     = "If-Modified-Since";
+   
+   public static final String LAST_MODIFIED     = "Last-Modified";
+   
    /** . */
    private static String PATH = "META-INF/maven/org.exoplatform.portal/exo.portal.component.web.resources/pom.properties";
 
@@ -165,7 +172,8 @@ public class ResourceRequestHandler extends WebRequestHandler
          //
          ScriptResult result = cache.get(context, key);
          HttpServletResponse response = context.getResponse();
-
+         HttpServletRequest request = context.getRequest();                  
+                  
          //
          if (result instanceof ScriptResult.Resolved)
          {
@@ -183,10 +191,20 @@ public class ResourceRequestHandler extends WebRequestHandler
             // Set content length
             response.setContentLength(resolved.bytes.length);
             
+            long ifModifiedSince = request.getDateHeader(IF_MODIFIED_SINCE);
+            if (isNotModified(ifModifiedSince, resolved.lastModified)) {
+               response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+               return true;
+            } 
+            else
+            {
+               response.setDateHeader(ResourceRequestFilter.LAST_MODIFIED, resolved.lastModified);
+            }
+            
             // Send bytes
             ServletOutputStream out = response.getOutputStream();
             try
-            {
+            {               
                out.write(resolved.bytes);
             }
             finally
@@ -221,7 +239,17 @@ public class ResourceRequestHandler extends WebRequestHandler
    
    @Override
    protected boolean getRequiresLifeCycle()
+   {   
+      return false;
+   }
+   
+   private boolean isNotModified(long ifModifiedSince, long lastModified)
    {
+      if (!PropertyManager.isDevelopping()) {
+         if (ifModifiedSince >= lastModified) {
+            return true;
+         }
+      }
       return false;
    }
 }
