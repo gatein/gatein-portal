@@ -2,7 +2,7 @@
 	import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util;
-  import org.gatein.common.text.EntityEncoder;
+	import org.gatein.common.text.EntityEncoder;
 	import org.exoplatform.commons.utils.HTMLEntityEncoder;
 	import javax.portlet.MimeResponse;
 	import org.exoplatform.portal.application.PortalRequestContext;
@@ -53,9 +53,9 @@
 
 		String label = node.getEncodedResolvedLabel();
 		String title = "";
-		if(label.length() > 40) {
+		if(node.getResolvedLabel().length() > 40) {
 			title = label;
-			label = label.substring(0,37) + "...";
+			label = EntityEncoder.encode(node.getResolvedLabel(0,37) + "...");
 		}
 					
 		print """
@@ -113,7 +113,7 @@
 							<span class="$arrowIcon">																
 							<%
 					 			String label = node.getEncodedResolvedLabel();
-					 			if(label.length() > 30) label = label.substring(0,29) + "...";
+					 			if(node.getResolvedLabel().length() > 30) label = EntityEncoder.encode(node.getResolvedLavel().substring(0,27) + "...");
 					 			if(node.getPageRef() != null) {
 					 			    nodeURL.setNode(node);
 					 			    nodeURL.setAjax(uicomponent.isUseAjax());

@@ -2,6 +2,7 @@
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.util.Util ;
 	import org.exoplatform.portal.mop.user.UserNode;
+	import org.gatein.common.text.EntityEncoder;
 	import java.util.Collection;
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
@@ -50,8 +51,8 @@
 				resolvedLabel = _ctx.appRes("UIUserToolBarDashboard.page." + resolvedLabel);
 		}
 	
-		boolean toolong = (resolvedLabel.length() > 60);
-		String label = ( toolong ? resolvedLabel.substring(0, 57) + "..." : resolvedLabel);
+		boolean toolong = (node.getResolvedLabel().length() > 60);
+		String label = ( toolong ? EntityEncoder.encode(node.getResolvedLabel().substring(0, 57) + "...") : resolvedLabel);
 		String title = "";
 		if(toolong) title = "title='$resolvedLabel'";
 		else title = "";

@@ -4,6 +4,7 @@
 	import org.exoplatform.webui.organization.OrganizationUtils;
 	import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.portal.mop.user.UserNavigation;
+	import org.gatein.common.text.EntityEncoder;
 	import javax.portlet.MimeResponse;
 	import javax.portlet.ResourceURL;
 	import org.exoplatform.portal.application.PortalRequestContext;
@@ -50,8 +51,8 @@
 		String actionLink = nodeURL.setNode(node).toString();
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
-		boolean toolong = (node.getEncodedResolvedLabel().length() > 60);
-		String label = ( toolong ? node.getEncodedResolvedLabel().substring(0, 57) + "..." : node.getEncodedResolvedLabel());
+		boolean toolong = (node.getResolvedLabel().length() > 60);
+		String label = ( toolong ? EntityEncoder.encode(node.getResolvedLabel().substring(0, 57) + "...") : node.getEncodedResolvedLabel());
 		String title = "";
 		if(toolong) title = "title='" + node.getEncodedResolvedLabel()  + "'";
 		else title = "";
