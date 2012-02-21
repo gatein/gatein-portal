@@ -27,6 +27,7 @@ import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
 import org.exoplatform.webui.form.validator.NumberFormatValidator;
+import org.exoplatform.webui.form.validator.NumberRangeValidator;
 import org.exoplatform.webui.form.validator.PositiveNumberFormatValidator;
 import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.SpecialCharacterValidator;
@@ -156,6 +157,21 @@ public class TestWebuiValidator extends TestCase
       assertFalse(expected(validator, "-1"));
       assertFalse(expected(validator, "01"));
       assertFalse(expected(validator, "-01"));
+   }
+   
+   public void testNumberRangeValidator()
+   {
+      Validator validator = new NumberRangeValidator(-5, 5);
+      assertTrue(expected(validator, "-5"));
+      assertTrue(expected(validator, "-1"));
+      assertTrue(expected(validator, "0"));
+      assertTrue(expected(validator, "1"));
+      assertTrue(expected(validator, "5"));
+      
+      assertFalse(expected(validator, "-10"));
+      assertFalse(expected(validator, "-6"));
+      assertFalse(expected(validator, "6"));
+      assertFalse(expected(validator, "10"));
    }
    
    public void testSpecialCharacterValidator()

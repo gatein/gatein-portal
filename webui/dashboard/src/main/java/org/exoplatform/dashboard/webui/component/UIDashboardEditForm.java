@@ -91,7 +91,7 @@ public class UIDashboardEditForm extends UIForm
          catch (Exception e)
          {
             uiInput.setValue(lastValue);
-            throw new MessageException(new ApplicationMessage("NumberFormatValidator.msg.Invalid-number", args));
+            throw new MessageException(new ApplicationMessage("NumberRangeValidator.msg.Invalid-number", args));
          }
 
          UIDashboardContainer uiDashboardContainer =
