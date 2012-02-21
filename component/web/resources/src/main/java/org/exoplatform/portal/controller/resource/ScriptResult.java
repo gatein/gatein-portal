@@ -21,6 +21,8 @@ package org.exoplatform.portal.controller.resource;
 
 import java.util.Date;
 
+import org.exoplatform.commons.utils.PropertyManager;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
@@ -44,6 +46,18 @@ class ScriptResult
          //  string of date retrieve from Http header doesn't have miliseconds
          //  we need to remove miliseconds
          lastModified = (new Date().getTime() / 1000) * 1000;         
+      }
+      
+      boolean isModified(long ifModifiedSince) 
+      {
+         if (PropertyManager.isDevelopping()) 
+         {
+            return true;            
+         }
+         else
+         {
+            return lastModified > ifModifiedSince;
+         }
       }
    }
    

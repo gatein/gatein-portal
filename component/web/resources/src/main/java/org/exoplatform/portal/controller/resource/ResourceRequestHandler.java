@@ -192,25 +192,24 @@ public class ResourceRequestHandler extends WebRequestHandler
             response.setContentLength(resolved.bytes.length);
             
             long ifModifiedSince = request.getDateHeader(IF_MODIFIED_SINCE);
-            if (isNotModified(ifModifiedSince, resolved.lastModified)) {
-               response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-               return true;
+            if (resolved.isModified(ifModifiedSince)) 
+            {
+               response.setDateHeader(ResourceRequestFilter.LAST_MODIFIED, resolved.lastModified);
+               // Send bytes
+               ServletOutputStream out = response.getOutputStream();
+               try
+               {               
+                  out.write(resolved.bytes);
+               }
+               finally
+               {
+                  Safe.close(out);
+               }
             } 
             else
             {
-               response.setDateHeader(ResourceRequestFilter.LAST_MODIFIED, resolved.lastModified);
-            }
-            
-            // Send bytes
-            ServletOutputStream out = response.getOutputStream();
-            try
-            {               
-               out.write(resolved.bytes);
-            }
-            finally
-            {
-               Safe.close(out);
-            }
+               response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+            }            
          }
          else if (result instanceof ScriptResult.Error)
          {
@@ -236,20 +235,10 @@ public class ResourceRequestHandler extends WebRequestHandler
       //
       return true;
    }
-   
+
    @Override
    protected boolean getRequiresLifeCycle()
    {   
-      return false;
-   }
-   
-   private boolean isNotModified(long ifModifiedSince, long lastModified)
-   {
-      if (!PropertyManager.isDevelopping()) {
-         if (ifModifiedSince >= lastModified) {
-            return true;
-         }
-      }
       return false;
    }
 }
