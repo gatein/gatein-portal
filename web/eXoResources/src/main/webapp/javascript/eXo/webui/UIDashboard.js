@@ -309,12 +309,12 @@ eXo.webui.UIDashboard = {
 	initPopup : function(popup) {
 		if(typeof(popup) == "string") popup = document.getElementById(popup);
 		if(!popup || popup.style.display == "none") return;
-		var uiDashboard = eXo.core.DOMUtil.findAncestorByClass(popup, "UIDashboard");
-		var deltaY = Math.ceil((uiDashboard.offsetHeight - popup.offsetHeight) / 2);
+    var dashboard = xj(popup).closest(".UIDashboard")[0];
+		var deltaY = Math.ceil((dashboard.offsetHeight - popup.offsetHeight) / 2);
 		if (deltaY < 0) {
 			deltaY = 0;
 		}
-		popup.style.top = eXo.core.Browser.findPosY(uiDashboard) + deltaY + "px";
+		popup.style.top = eXo.core.Browser.findPosY(dashboard) + deltaY + "px";
 	},
 
 	/**
@@ -378,95 +378,98 @@ eXo.webui.UIDashboard = {
    * @param {String} normalStyle a css style
    * @param {String} selectedType a css style
    */
-	onTabClick : function(clickElement, normalStyle, selectedType) {
-		var DOMUtil = eXo.core.DOMUtil;
-		var category = DOMUtil.findAncestorByClass(clickElement, "GadgetCategory");
-		var categoryContent = DOMUtil.findFirstChildByClass(category, "div", "ItemsContainer");
-		var categoriesContainer = DOMUtil.findAncestorByClass(category, "GadgetItemsContainer");
-		var categories = DOMUtil.findChildrenByClass(categoriesContainer, "div", "GadgetCategory");
-		var gadgetTab = DOMUtil.findFirstChildByClass(category, "div", "GadgetTab");
-		
-		if(DOMUtil.hasClass(gadgetTab, normalStyle)) {
-			for(var i=0; i<categories.length; i++) {
-				DOMUtil.findFirstChildByClass(categories[i], "div", "GadgetTab").className = "GadgetTab " + normalStyle;
-				DOMUtil.findFirstChildByClass(categories[i], "div", "ItemsContainer").style.display = "none";
-			}
-			DOMUtil.findFirstChildByClass(category, "div", "GadgetTab").className = "GadgetTab " + selectedType;
-			categoryContent.style.display = "block";
-		} else {
-			DOMUtil.findFirstChildByClass(category, "div", "GadgetTab").className = "GadgetTab " + normalStyle;
-			categoryContent.style.display = "none";
-		}
-		
-		var popupContent = DOMUtil.findAncestorByClass(clickElement, "PopupContent");
-		var browser = eXo.core.Browser;
-		if(browser.getBrowserHeight() - 100 < categoriesContainer.offsetHeight) {
-			popupContent.style.height = (browser.getBrowserHeight() - 100) + "px";
-		}	else {
-			popupContent.style.height = "auto";
-		}	
-	},
-	/**
+  onTabClick : function(clickElement, normalStyle, selectedType)
+  {
+    var jqObj = xj(clickElement);
+    var category = jqObj.closest(".GadgetCategory");
+    var itemCont = category.closest(".GadgetItemsContainer");
+
+    var tab = category.children("div.GadgetTab").eq(0);
+    if (tab.hasClass(normalStyle))
+    {
+      itemCont.children("div.GadgetCategory").each(function()
+      {
+        var c = xj(this);
+        c.children("div.GadgetTab").attr("class", "GadgetTab " + normalStyle);
+        c.children("div.ItemsContainer").css("display", "none");
+      });
+
+      tab.attr("class", "GadgetTab " + selectedType);
+      category.children("div.ItemsContainer").css("display", "block");
+    }
+    else
+    {
+      tab.attr("class", "GadgetTab " + normalStyle);
+      category.children("div.ItemsContainer").css("display", "none");
+    }
+
+    var h = eXo.core.Browser.getBrowserHeight();
+    jqObj.closest(".PopupContent").css("height", (h - 100 < itemCont[0].offsetHeight) ? (h - 100 + "px") : "auto");
+  },
+  /**
 	 * Change disabled object to enable state
 	 * @param {Object} elemt object to enable
 	 */
-	enableContainer : function(elemt) {
-		var DOMUtil = eXo.core.DOMUtil;
-		if(DOMUtil.hasClass(elemt, "DisableContainer")) {
-			DOMUtil.replaceClass(elemt, " DisableContainer", "");
-		}
-		var arrow = DOMUtil.findFirstChildByClass(elemt, "div", "Arrow");
-		if(DOMUtil.hasClass(arrow, "DisableArrowIcon")) DOMUtil.replaceClass(arrow," DisableArrowIcon", "");
-	},
-	 /**
+  enableContainer : function(elemt)
+  {
+    var jqObj = xj(elemt);
+    jqObj.removeClass("DisableContainer");
+    jqObj.children("div.Arrow").eq(0).removeClass("DisableArrowIcon");
+  },
+  /**
    * Change object to disable state
    * @param {Object} elemt object to enable
    */
-	disableContainer : function(elemt) {
-		var DOMUtil = eXo.core.DOMUtil;
-		if(!DOMUtil.hasClass(elemt, "DisableContainer")) {
-			DOMUtil.addClass(elemt, "DisableContainer");
-		}
-		var arrow = DOMUtil.findFirstChildByClass(elemt, "div", "Arrow");
-		if(!DOMUtil.hasClass(arrow, "DisableArrowIcon")) DOMUtil.addClass(arrow," DisableArrowIcon");
-	},
-	
-	scrollOnDrag : function(dragObj) {
-		var DOMUtil = eXo.core.DOMUtil;
-		var uiDashboard = DOMUtil.findAncestorByClass(dragObj, "UIDashboard");
-		var gadgetContainer = DOMUtil.findFirstDescendantByClass(uiDashboard, "div", "GadgetContainer");
-		var colCont = DOMUtil.findFirstChildByClass(gadgetContainer, "div", "UIColumns");
-		
-		if(!DOMUtil.findFirstDescendantByClass(colCont, "div", "UITarget")) return;
-		
-		var visibleWidth = gadgetContainer.offsetWidth;
-		var visibleHeight = gadgetContainer.offsetHeight;
+  disableContainer : function(elemt)
+  {
+    var jqObj = xj(elemt);
+    jqObj.addClass("DisableContainer");
+    jqObj.children("div.Arrow").eq(0).addClass("DisableArrowIcon");
+  },
+
+  scrollOnDrag : function(dragObj) {
+    var gadgetContainer = xj(dragObj).closest(".UIDashboard").find("div.GadgetContainer").eq(0);
+
+    var colCont = gadgetContainer.children("div.UIColumns")[0];
+
+		var visibleWidth = gadgetContainer[0].offsetWidth;
+		var visibleHeight = gadgetContainer[0].offsetHeight;
 		var trueWidth = colCont.offsetWidth;
 		var trueHeight = colCont.offsetHeight;
 		
 		var browser = eXo.core.Browser;
-		var objLeft = browser.findPosXInContainer(dragObj, gadgetContainer);
+		var objLeft = browser.findPosXInContainer(dragObj, gadgetContainer[0]);
 		var objRight = objLeft + dragObj.offsetWidth;
-		var objTop = browser.findPosYInContainer(dragObj, gadgetContainer);
+		var objTop = browser.findPosYInContainer(dragObj, gadgetContainer[0]);
 		var objBottom = objTop + dragObj.offsetHeight;
 		
 		//controls horizontal scroll
-		var deltaX = gadgetContainer.scrollLeft;
-		if((trueWidth - (visibleWidth + deltaX) > 0) && objRight > visibleWidth) {
-			gadgetContainer.scrollLeft += 5;
-		} else {
-			if(objLeft < 0 && deltaX > 0) gadgetContainer.scrollLeft -= 5;
-		}
-		
-		//controls vertical scroll
-		var controlBar = DOMUtil.findFirstChildByClass(gadgetContainer, "div", "ContainerControlBarL");
-		var buttonHeight = 0 ;
-		if(controlBar) buttonHeight = controlBar.offsetHeight;
-		var deltaY = gadgetContainer.scrollTop;
-		if((trueHeight - (visibleHeight -10 - buttonHeight + deltaY) > 0) && objBottom > visibleHeight) {
-			gadgetContainer.scrollTop += 5;
-		}	else {
-			if(objTop < 0 && deltaY > 0) gadgetContainer.scrollTop -= 5;
-		}
-	}
+    var deltaX = gadgetContainer.scrollLeft();
+    if ((trueWidth - (visibleWidth + deltaX) > 0) && objRight > visibleWidth)
+    {
+      gadgetContainer.scrollLeft(deltaX + 5);
+    } else if (objLeft < 0 && deltaX > 0)
+    {
+      gadgetContainer.scrollLeft(deltaX - 5);
+    }
+
+
+    //controls vertical scroll
+    var controlBar = gadgetContainer.children("div.ContainerControlBarL")[0];
+    var buttonHeight = 0;
+    if (controlBar)
+    {
+      buttonHeight = controlBar.offsetHeight;
+    }
+    var deltaY = gadgetContainer.scrollTop();
+    if ((trueHeight - (visibleHeight - 10 - buttonHeight + deltaY) > 0) && objBottom > visibleHeight)
+    {
+      gadgetContainer.scrollTop(deltaY + 5);
+    } else
+    if (objTop < 0 && deltaY > 0)
+    {
+      gadgetContainer.scrollTop(deltaY - 5);
+    }
+
+  }
 };

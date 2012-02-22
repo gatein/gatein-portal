@@ -27,8 +27,9 @@ eXo.webui.UIDashboardUtil = {
 	  	if(uiWorkspaceContainer!=null && uiWorkspaceContainer.style.display!="none"
 	  					 && browser.getBrowserType()=="ie"){
 	  		var uiPageDesktop = document.getElementById("UIPageDesktop");
-	  		if( (uiPageDesktop!=null && eXo.core.DOMUtil.hasClass(obj,"UIPageDesktop") && browser.isIE7()) 
-	  					|| (uiPageDesktop==null && eXo.core.DOMUtil.hasClass(obj,"PORTLET-FRAGMENT")) ){
+        var jqObj = xj(obj);
+	  		if( (uiPageDesktop!=null && jqObj.hasClass("UIPageDesktop") && browser.isIE7())
+	  					|| (uiPageDesktop==null && jqObj.hasClass("PORTLET-FRAGMENT")) ){
 	  			curleft += (obj.offsetLeft - uiWorkingWorkspace.offsetLeft);
 	  			obj = obj.offsetParent ;
 	  			continue;
