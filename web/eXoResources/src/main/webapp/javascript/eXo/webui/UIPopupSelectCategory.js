@@ -35,9 +35,8 @@ eXo.webui.UIPopupSelectCategory = {
     if (popup && popup.css("display") == "none")
     {
       popup.css("display", "block");
-      xj(document).bind("click.closepopupcategory", function()
+      xj(document).one("click", function()
       {
-        xj(document).unbind("click.closepopupcategory");
         popup.css("display", "none");
       });
     }

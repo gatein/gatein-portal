@@ -74,9 +74,8 @@ eXo.webui.UIDropDownControl = {
         middleCont.css("height", "auto");
       }
 
-      xj(document).bind("mouseclick.closedropdowncontrol", function()
+      xj(document).one("click", function()
       {
-        xj(document).unbind("mouseclick.closedropdowncontrol");
         dropDownAnchor.css("display", "none");
       });
     }
