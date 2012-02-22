@@ -27,6 +27,8 @@ eXo.webui.UIDashboard = {
 		
 		var BROWSER = eXo.core.Browser;
 
+    var UTIL = eXo.webui.UIDashboardUtil;
+
     var jqDragObj = xj(dragObj);//JQuery wrapper of dragObj, that facilitates JQuery integration
 
     var portletFrag = jqDragObj.closest(".PORTLET-FRAGMENT");
@@ -105,7 +107,7 @@ eXo.webui.UIDashboard = {
       eXo.webui.UIDashboard.scrollOnDrag(dragObj);
 
       var targetArea = eXo.webui.UIDashboard.targetObj;
-      if (eXo.webui.UIDashboardUtil.isIn(ex, ey, gadgetContainer[0]))
+      if (UTIL.isIn(ex, ey, gadgetContainer[0]))
       {
         if (!targetArea)
         {
@@ -113,18 +115,14 @@ eXo.webui.UIDashboard = {
           eXo.webui.UIDashboard.targetObj = targetArea;
         }
 
+        if (!eXo.webui.UIDashboard.currentCol)
+        {
+          //We are sure that currentCol is not null as mouse cursor is already inside the gadget container
+          eXo.webui.UIDashboard.currentCol = UTIL.findContainingColumn(gadgetContainer, ex);
+        }
+
         var column = eXo.webui.UIDashboard.currentCol;
-        if (!column)
-        {
-          column = eXo.webui.UIDashboardUtil.findContainingColumn(gadgetContainer, ex);
-        }
-
-        if (!column)
-        {
-          return; //That happens as user drags mouse out of the gadget container
-        }
-
-        if (eXo.webui.UIDashboardUtil.isInColumn(column, ex, gadgetContainer.scrollLeft()))
+        if (UTIL.isInColumn(column, ex, gadgetContainer.scrollLeft()))
         {
           var addToLast = true;
           column.find("div.UIGadget").not("#" + dragObj.id).each(function()
@@ -146,7 +144,8 @@ eXo.webui.UIDashboard = {
         }
         else
         {
-          eXo.webui.UIDashboard.currentCol = eXo.webui.UIDashboardUtil.findContainingColumn(gadgetContainer, ex);
+          //There is no column containing mouse cursor as mouse is moved out of gadget container. So we reset the cached column to null
+          eXo.webui.UIDashboard.currentCol = null;
         }
       }
       else if (targetArea != null && jqDragObj.hasClass("SelectItem"))
@@ -160,19 +159,11 @@ eXo.webui.UIDashboard = {
 
     dragObj.onDragEnd = function(x, y, clientX, clientY)
     {
-      var uiDashboardUtil = eXo.webui.UIDashboardUtil;
-
       gadgetContainer.find("div.UIMask").each(function()
       {
-        eXo.core.Browser.setOpacity(this, 100);
+        BROWSER.setOpacity(this, 100);
         xj(this).css("display", "none");
       });
-
-      var targetArea = eXo.webui.UIDashboard.targetObj;
-      if (targetArea && !targetArea[0].parentNode)
-      {
-        targetArea = null;
-      }
 
       jqDragObj.removeClass("Dragging").css("position", "static");
 
@@ -183,11 +174,12 @@ eXo.webui.UIDashboard = {
         jqDragObj.css("width", "auto");
       }
 
-      if (targetArea)
+      var targetArea = eXo.webui.UIDashboard.targetObj;
+      if (targetArea && targetArea.parent())
       {
         //if drag object is not gadget module, create an module
-        var col = uiDashboardUtil.findColIndexInDashboard(targetArea[0]);
-        var row = uiDashboardUtil.findRowIndexInDashboard(targetArea[0]);
+        var col = UTIL.findColIndexInDashboard(targetArea[0]);
+        var row = UTIL.findRowIndexInDashboard(targetArea[0]);
         var compId = portletFrag.parent().attr("id");
 
         if (jqDragObj.hasClass("SelectItem"))
@@ -197,27 +189,27 @@ eXo.webui.UIDashboard = {
             {name: "rowIndex", value: row},
             {name: "objectId", value: jqDragObj.attr("id")}
           ];
-          var url = uiDashboardUtil.createRequest(compId, 'AddNewGadget', params);
+          var url = UTIL.createRequest(compId, 'AddNewGadget', params);
           ajaxGet(url);
         }
         else
         {
           //in case: drop to old position
-          if (uiDashboardUtil.findColIndexInDashboard(dragObj) == col
-            && uiDashboardUtil.findRowIndexInDashboard(dragObj) == (row - 1))
+          if (UTIL.findColIndexInDashboard(dragObj) == col
+            && UTIL.findRowIndexInDashboard(dragObj) == (row - 1))
           {
             targetArea.remove();
           }
           else
           {
             targetArea.replaceWith(jqDragObj);
-            row = uiDashboardUtil.findRowIndexInDashboard(dragObj);
+            row = UTIL.findRowIndexInDashboard(dragObj);
             var params = [
               {name: "colIndex", value: col},
               {name: "rowIndex", value: row},
               {name: "objectId", value: dragObj.id}
             ];
-            var url = uiDashboardUtil.createRequest(compId, 'MoveGadget', params);
+            var url = UTIL.createRequest(compId, 'MoveGadget', params);
             ajaxGet(url);
           }
         }
@@ -315,31 +307,6 @@ eXo.webui.UIDashboard = {
 			deltaY = 0;
 		}
 		popup.style.top = eXo.core.Browser.findPosY(dashboard) + deltaY + "px";
-	},
-
-	/**
-	 * Build a UITarget element (div element) with properties in parameters
-	 * @param {Number} width
-	 * @param {Number} height
-	 */
-	createTarget : function(width, height) {
-		var uiTarget = document.createElement("div");
-		uiTarget.id = "UITarget";
-		uiTarget.className = "UITarget";
-		uiTarget.style.width = width + "px";
-		uiTarget.style.height = height + "px";
-		return uiTarget;
-	},
-	 /**
-   * Build a UITarget element (div element) with properties equal to object's properties in parameter
-   * @param {Object} obj object
-   */
-	createTargetOfAnObject : function(obj) {
-		var uiTarget = document.createElement("div");
-		uiTarget.id = "UITarget";
-		uiTarget.className = "UITarget";
-		uiTarget.style.height = obj.offsetHeight + "px";
-		return uiTarget;
 	},
 
 	 /**

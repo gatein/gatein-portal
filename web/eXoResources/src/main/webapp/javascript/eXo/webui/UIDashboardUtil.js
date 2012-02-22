@@ -79,7 +79,7 @@ eXo.webui.UIDashboardUtil = {
     gadgetCont.find("div.UIColumn").each(function()
     {
       var left = eXo.webui.UIDashboardUtil.findPosX(this) - scrollLeft;
-      if(left < x && x < left + this.offsetWidth)
+      if(left <= x && x < left + this.offsetWidth)
       {
         column = xj(this);
         return false;
