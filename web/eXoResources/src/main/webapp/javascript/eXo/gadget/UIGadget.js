@@ -69,7 +69,7 @@ eXo.gadget.UIGadget = {
         if (userPref != null) gadget.userPrefs_ = userPref;
         var gadgetBlock = document.getElementById(id);
         gadgetBlock.innerHTML = "<div id='gadget_" + gadget.id + "' class='UIGadgetContent'> </div>";
-        gadgets.container.renderGadgets();
+        gadgets.container.renderGadget(gadget);
         var uiGadget = eXo.core.DOMUtil.findAncestorByClass(gadgetBlock, "UIGadget");
         //TODO: dang.tung - isn't portlet
         if (uiGadget != null) {
