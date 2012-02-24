@@ -212,7 +212,6 @@ eXo.webui.UIUploadInput = {
    *          id
    */
   doUpload : function(id) {
-    var DOMUtil = eXo.core.DOMUtil;
     var container = parent.document.getElementById('UploadInputContainer' + id);
     var jCont = xj(container);
     this.displayUploadButton(id);
