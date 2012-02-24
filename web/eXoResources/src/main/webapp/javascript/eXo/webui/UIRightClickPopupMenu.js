@@ -18,37 +18,6 @@
  */
 
 eXo.webui.UIRightClickPopupMenu = {
-  /**
-   * Add mouse down event handler
-   * 
-   * @param method
-   *          handler method
-   */
-  addMouseDownHandler : function(method) {
-    document.onmousedown = this.docMouseDownEvt;
-    this.onMouseDownHandlers = method;
-  },
-
-  /**
-   * Document mouse down event, it will cancel default behavior of browser and
-   * process behavior in handler chain
-   * 
-   * @param {Event}
-   *          evt
-   */
-  docMouseDownEvt : function(evt) {
-    if (!evt)
-      evt = window.event;
-    evt.cancelBubble = true;
-
-    if (eXo.webui.UIRightClickPopupMenu.onMouseDownHandlers == null)
-      return;
-    if (typeof (eXo.webui.UIRightClickPopupMenu.onMouseDownHandlers) == "string")
-      eval(eXo.webui.UIRightClickPopupMenu.onMouseDownHandlers);
-    else
-      eXo.webui.UIRightClickPopupMenu.onMouseDownHandlers(evt);
-    document.onmousedown = null;
-  },
 
   /**
    * Initialize a UIRightClickPopupMenu object
@@ -57,19 +26,16 @@ eXo.webui.UIRightClickPopupMenu = {
    *          identifier of a document object
    */
   init : function(contextMenuId) {
-    var contextMenu = document.getElementById(contextMenuId);
-    // TODO: Fix temporary for the problem Minimize window in Page Mode
-    if (!contextMenu)
-      return;
+    var menu = xj("#" + contextMenuId);
+    menu.mousedown(function()
+    {
+      return false;
+    });
 
-    contextMenu.onmousedown = function(e) {
-      if (!e)
-        e = window.event;
-      e.cancelBubble = true;
-    }
-
-    var parentNode = contextMenu.parentNode;
-    this.disableContextMenu(parentNode);
+    /**
+     * Disable/enable browser's default right click handler
+     */
+    this.disableContextMenu(menu.parent());
   },
   /**
    * Hide and disable mouse down event of context menu object
@@ -78,11 +44,9 @@ eXo.webui.UIRightClickPopupMenu = {
    *          identifier of context menu
    */
   hideContextMenu : function(contextId) {
-    if (document.getElementById(contextId)) {
-      document.getElementById(contextId).style.display = 'none';
-      eXo.webui.UIRightClickPopupMenu.onMouseDownHandlers = null;
-    }
+    xj("#" + contextId).css("display", "none");
   },
+
   /**
    * Disable default context menu of browser
    * 
@@ -91,17 +55,23 @@ eXo.webui.UIRightClickPopupMenu = {
    */
   disableContextMenu : function(comp) {
     if (typeof (comp) == "string")
-      comp = document.getElementById(comp);
-    comp.onmouseover = function() {
-      document.oncontextmenu = function() {
-        return false
-      };
-    }
-    comp.onmouseout = function() {
-      document.oncontextmenu = function() {
-        return true
-      };
-    }
+      comp = xj("#" + comp);
+
+    comp.mouseover(function()
+    {
+      document.oncontextmenu = function()
+      {
+        return false;
+      }
+    });
+
+    comp.mouseout(function()
+    {
+      document.oncontextmenu = function()
+      {
+        return true;
+      }
+    });
   },
 
   /**
@@ -113,9 +83,13 @@ eXo.webui.UIRightClickPopupMenu = {
    *          elemt document object that contains context menu
    */
   prepareObjectId : function(evt, elemt) {
-    eXo.webui.UIRightClickPopupMenu.docMouseDownEvt(evt);
-    var contextMenu = eXo.core.DOMUtil.findAncestorByClass(elemt,
-        "UIRightClickPopupMenu");
+    if(!evt)
+    {
+      evt = window.event;
+    }
+    evt.cancelBubble = true;
+
+    var contextMenu = xj(elemt).closest(".UIRightClickPopupMenu")[0];
     contextMenu.style.display = "none";
     var href = elemt.getAttribute('href');
     if (!href) {
@@ -166,43 +140,54 @@ eXo.webui.UIRightClickPopupMenu = {
    * @param {Number}
    *          opt option
    */
-  clickRightMouse : function(event, elemt, menuId, objId, params, opt) {
+  clickRightMouse : function(event, elemt, menuId, objId, whiteList, opt) {
     if (!event)
       event = window.event;
-    eXo.webui.UIRightClickPopupMenu.docMouseDownEvt(event);
+
     var contextMenu = document.getElementById(menuId);
     contextMenu.objId = objId;
-    if (!(((event.which) && (event.which == 2 || event.which == 3)) || ((event.button) && (event.button == 2)))) {
-      contextMenu.style.display = 'none';
+
+    if(event.which != 2 && event.which !=3 && event.button !=2)
+    {
+      contextMenu.style.display = "none";
       return;
     }
 
-    eXo.webui.UIRightClickPopupMenu
-        .addMouseDownHandler("eXo.webui.UIRightClickPopupMenu.hideContextMenu('"
-            + menuId + "');")
+    //Register closing contextual menu callback on document
+    xj(document).mousedown(function(e)
+    {
+      eXo.webui.UIRightClickPopupMenu.hideContextMenu(menuId);
+      xj(document).unbind(e);
+    });
 
-    if (params) {
-      params = "," + params + ",";
-      var items = contextMenu.getElementsByTagName("a");
-      for ( var i = 0; i < items.length; i++) {
-        if (params.indexOf(items[i].getAttribute("exo:attr")) > -1) {
-          items[i].style.display = 'block';
-        } else {
-          items[i].style.display = 'none';
+    //The callback registered on document won't be triggered by current 'mousedown' event
+    event.cancelBubble = true;
+
+    if (whiteList) {
+      xj(contextMenu).find("a").each(function()
+      {
+        var item = xj(this);
+        if(whiteList.indexOf(item.attr("exo:attr")) > -1)
+        {
+          item.css("display", "block");
         }
-      }
+        else
+        {
+          item.css("display", "none");
+        }
+      });
     }
-    var customItem = eXo.core.DOMUtil.findFirstDescendantByClass(elemt, "div",
-        "RightClickCustomItem");
-    var tmpCustomItem = eXo.core.DOMUtil.findFirstDescendantByClass(
-        contextMenu, "div", "RightClickCustomItem");
-    if (tmpCustomItem) {
-      if (customItem) {
-        tmpCustomItem.innerHTML = customItem.innerHTML;
-        tmpCustomItem.style.display = "inline";
-      } else {
-        tmpCustomItem.style.display = "none";
-      }
+
+    var customItem = xj(elemt).find("div.RightClickCustomItem").eq(0);
+    var tmpCustomItem = xj(contextMenu).find("div.RightClickCustomItem").eq(0);
+    if(customItem && tmpCustomItem)
+    {
+      tmpCustomItem.html(customItem.html());
+      tmpCustomItem.css("display", "inline");
+    }
+    else if(tmpCustomItem)
+    {
+      tmpCustomItem.css("display", "none");
     }
     /*
      * fix bug right click in IE7.
@@ -217,8 +202,7 @@ eXo.webui.UIRightClickPopupMenu = {
     eXo.core.Mouse.update(event);
     eXo.webui.UIPopup.show(contextMenu);
 
-    var ctxMenuContainer = eXo.core.DOMUtil.findFirstChildByClass(contextMenu,
-        "div", "UIContextMenuContainer");
+    var ctxMenuContainer = xj(contextMenu).children("div.UIContextMenuContainer")[0];
     var intTop = eXo.core.Mouse.mouseyInPage
         - (eXo.core.Browser.findPosY(contextMenu) - contextMenu.offsetTop);
     var intLeft = eXo.core.Mouse.mousexInPage
@@ -231,8 +215,7 @@ eXo.webui.UIRightClickPopupMenu = {
         scrollWidth = 0;
       intLeft = contextMenu.offsetParent.offsetWidth - intLeft + fixWidthForIE7
           + scrollWidth;
-      var clickCenter = eXo.core.DOMUtil.findFirstDescendantByClass(
-          contextMenu, "div", "ClickCenterBottom");
+      var clickCenter = xj(contextMenu).find("div.ClickCenterBottom")[0];
       if (clickCenter) {
         var clickCenterWidth = clickCenter ? parseInt(xj(clickCenter).css("marginRight")) : 0;
         intLeft += (ctxMenuContainer.offsetWidth - 2 * clickCenterWidth);
