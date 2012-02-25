@@ -106,7 +106,7 @@
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
               <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/portal-system${container.name.suffix}"/>
-            </properties>                                                      ∂
+            </properties>
             <value-storages>
               <value-storage id="portal-system" class="org.exoplatform.services.jcr.impl.storage.value.fs.TreeFileValueStorage">
                 <properties>
