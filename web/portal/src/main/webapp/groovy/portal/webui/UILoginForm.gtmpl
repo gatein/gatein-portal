@@ -59,7 +59,6 @@
 </div>
 <script>
 	function login(ele) {
-		var formEle = eXo.core.DOMUtil.findAncestorByTagName(ele,'form');
-		formEle.submit();
+		xj(ele).closest("form")[0].submit();
 	}
 </script>

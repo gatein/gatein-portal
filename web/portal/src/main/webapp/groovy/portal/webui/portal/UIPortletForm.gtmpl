@@ -67,10 +67,6 @@
 							<div id="<%=uicomponent.getUIPortlet().getId()%>">
 								<div class="PORTLET-FRAGMENT">
 									<%= uicomponent.getEditModeContent() %>
-									<%
-										//String strExec = "eXo.core.DOMUtil.removeElement('" + uicomponent.getUIPortlet().getId() + "');"; 
-										//rcontext.getJavascriptManager().addCustomizedOnLoadScript(strExec); 
-									%>
 								</div>
 							</div>
 						</div>
@@ -126,35 +122,33 @@
 <script language="javascript">
 		eXo.UIPortletForm = {
 				hideSaveButton : function(comp) {
-						var DOMUtil = eXo.core.DOMUtil;
-						var workingArea = DOMUtil.findAncestorByClass(comp, "WorkingArea");
-						var horLayout = DOMUtil.findFirstChildByClass(workingArea, "div", "HorizontalLayout");
-						var uiAction = DOMUtil.findFirstChildByClass(horLayout, "div", "UIAction");
-						var buttons = DOMUtil.findChildrenByClass(uiAction, "a", "ActionButton");
-						for (var i = 0; i < buttons.length; i++) {
-								if (buttons[i].id.indexOf("Save") >= 0) {
-										buttons[i].style.display = "none";
-								}
-								if (buttons[i].id.indexOf("Close") >= 0) {
-										buttons[i].innerHTML = buttons[i].getAttribute("closeLabel");
-								}
-						}
+						xj(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
+						{
+							var button = xj(this);
+							if(button.attr("id").indexOf("Save") >= 0)
+							{
+								button.css("display", "none");
+							}
+							else if(button.attr("id").indexOf("Close") >= 0)
+							{
+								button.html(button.attr("closeLabel"));
+							}
+						});
 				},
 		
 				showSaveButton : function(comp) {
-						var DOMUtil = eXo.core.DOMUtil;
-						var workingArea = DOMUtil.findAncestorByClass(comp, "WorkingArea");
-						var horLayout = DOMUtil.findFirstChildByClass(workingArea, "div", "HorizontalLayout");
-						var uiAction = DOMUtil.findFirstChildByClass(horLayout, "div", "UIAction");
-						var buttons = DOMUtil.findChildrenByClass(uiAction, "a", "ActionButton");
-						for (var i = 0; i < buttons.length; i++) {
-								if (buttons[i].id.indexOf("Save") >= 0) {
-										buttons[i].style.display = "inline-block";
-								}
-								if (buttons[i].id.indexOf("Close") >= 0) {
-										buttons[i].innerHTML = buttons[i].getAttribute("cancelLabel");
-								}
-						}
+						xj(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
+						{
+							var button = xj(this);
+							if(button.attr("id").indexOf("Save") >= 0)
+							{
+								button.css("display", "inline-block");
+							}
+							else if(button.attr("id").indexOf("Close") >= 0)
+							{
+								button.html(button.attr("cancelLabel"));
+							}
+						});
 				}
 		}
 </script>

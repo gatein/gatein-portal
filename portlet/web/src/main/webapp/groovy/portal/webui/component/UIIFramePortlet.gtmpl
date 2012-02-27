@@ -11,26 +11,22 @@
 	%>
 </div>
 <script type="text/javascript">
-	var uiWorkingWS = document.getElementById("UIWorkingWorkspace");
-	if (uiWorkingWS) {
-		var iFrames = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWS, "div", "UIIFramePortlet");
-		if (iFrames.length) {
-			for (var i = 0; i < iFrames.length; i ++) {
-				var portletFrag = eXo.core.DOMUtil.findAncestorByClass(iFrames[i], "PORTLET-FRAGMENT");
-				portletFrag.style.overflow = "hidden" ;
-				iFrames[i].style.height = "98%";
-				if(!portletFrag.style.height) {
-					portletFrag.style.height = "400px" ;
-					var iframe = eXo.core.DOMUtil.getChildrenByTagName(iFrames[i], "iframe")[0] ;
-					if(iframe.offsetHeight < iFrames[i].offsetHeight) iframe.style.height = iFrames[i].offsetHeight + "px" ;
-				} /*else {
-					var uiWindow = eXo.core.DOMUtil.findAncestorByClass(portletFrag, "UIWindow");
-					if(!uiWindow) {
-						var windowHeight = parseInt(portletFrag.style.height) - 15 + "px";
-						iFrames[i].style.height = windowHeight;
-					}
-				}*/
-			}
-		}
-	}
+  xj("#UIWorkingWorkspace").find("div.UIIFramePortlet").each(function()
+  {
+  	var frameDiv = xj(this);
+  	var portletFrag = frameDiv.closest(".PORTLET-FRAGMENT");
+
+  	frameDiv.css("height", "98%");
+  	portletFrag.css("overflow", "hidden");
+
+  	if(!portletFrag[0].style.height)
+  	{
+  		portletFrag[0].style.height = "400px";
+  		var iframe = frameDiv.children("iframe").eq(0);
+  		if(iframe[0].offsetHeight < frameDiv[0].offsetHeight)
+  		{
+  			iframe.css("height", frameDiv[0].offsetHeight + "px");
+  		}
+  	}
+  });
 </script>
