@@ -21,7 +21,6 @@
  */
 package org.gatein.integration.jboss.as7.deployment;
 
-import org.gatein.integration.jboss.as7.GateInExtension;
 import org.gatein.integration.jboss.as7.GateInExtensionConfiguration;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -32,19 +31,15 @@ import org.jboss.as.web.deployment.WarMetaData;
 import org.jboss.metadata.web.jboss.JBossWebMetaData;
 import org.jboss.msc.service.ServiceName;
 
-import java.lang.Override;import java.lang.String;
+import java.lang.Override;
+import java.lang.String;
 
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
 public class WarDependenciesDeploymentProcessor implements DeploymentUnitProcessor
 {
-   private GateInExtensionConfiguration config;
-
-   public WarDependenciesDeploymentProcessor(GateInExtension extension)
-   {
-      this.config = extension.getConfiguration();
-   }
+   private GateInExtensionConfiguration config = GateInExtensionConfiguration.INSTANCE;
 
    private void processWarDeployment(DeploymentUnit du)
    {
@@ -54,19 +49,25 @@ public class WarDependenciesDeploymentProcessor implements DeploymentUnitProcess
       final JBossWebMetaData metaData = warMetaData.getMergedJBossWebMetaData();
 
       String pathName;
-      if (metaData.getContextRoot() == null) {
+      if (metaData.getContextRoot() == null)
+      {
          pathName = "/" + du.getName().substring(0, du.getName().length() - 4);
-      } else {
+      }
+      else
+      {
          pathName = metaData.getContextRoot();
-         if ("/".equals(pathName)) {
-             pathName = "";
-         } else if (pathName.length() > 0 && pathName.charAt(0) != '/') {
-             pathName = "/" + pathName;
+         if ("/".equals(pathName))
+         {
+            pathName = "";
+         }
+         else if (pathName.length() > 0 && pathName.charAt(0) != '/')
+         {
+            pathName = "/" + pathName;
          }
       }
 
       final ServiceName deploymentServiceName = WebSubsystemServices.deploymentServiceName("default-host", pathName);
-      config.getChildWars().add(deploymentServiceName);
+      config.addChildWar(deploymentServiceName);
    }
 
    @Override
@@ -75,15 +76,14 @@ public class WarDependenciesDeploymentProcessor implements DeploymentUnitProcess
       DeploymentUnit du = phaseContext.getDeploymentUnit();
       DeploymentUnit parent = du.getParent();
 
-      if (du.getParent() != null) {
-         if (parent.getAttachment(GateInEarKey.KEY) != null
-               || parent.getAttachment(GateInExtKey.KEY) != null)
+      if (parent != null)
+      {
+         if (config.isGateInArchive(parent))
          {
             processWarDeployment(du);
          }
       }
-      else if (du.getAttachment(GateInEarKey.KEY) != null
-               || du.getAttachment(GateInExtKey.KEY) != null)
+      else if (config.isGateInArchive(du))
       {
          processWarDeployment(du);
       }

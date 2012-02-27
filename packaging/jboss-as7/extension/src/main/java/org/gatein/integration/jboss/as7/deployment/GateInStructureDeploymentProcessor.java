@@ -23,25 +23,18 @@ package org.gatein.integration.jboss.as7.deployment;
 
 import org.gatein.integration.jboss.as7.GateInExtension;
 import org.gatein.integration.jboss.as7.GateInExtensionConfiguration;
-import org.jboss.as.ee.structure.DeploymentType;
-import org.jboss.as.ee.structure.DeploymentTypeMarker;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.as.server.deployment.Services;
-import org.jboss.as.web.WebSubsystemServices;
 import org.jboss.logging.Logger;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.msc.service.AbstractServiceListener;
 import org.jboss.msc.service.ServiceController;
 import org.jboss.msc.service.ServiceListener;
 import org.jboss.msc.service.ServiceName;
-
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
@@ -75,13 +68,10 @@ public class GateInStructureDeploymentProcessor implements DeploymentUnitProcess
    };
 
 
-   private GateInExtension extension;
-   private GateInExtensionConfiguration config;
+   private GateInExtensionConfiguration config = GateInExtensionConfiguration.INSTANCE;
 
-   public GateInStructureDeploymentProcessor(GateInExtension extension)
+   public GateInStructureDeploymentProcessor()
    {
-      this.extension = extension;
-      this.config = extension.getConfiguration();
    }
 
    @Override
@@ -121,14 +111,13 @@ public class GateInStructureDeploymentProcessor implements DeploymentUnitProcess
    {
       DeploymentUnit du = phaseContext.getDeploymentUnit();
       DeploymentUnit parent = du.getParent();
-      if (parent.getAttachment(GateInEarKey.KEY) != null
-            || parent.getAttachment(GateInExtKey.KEY) != null)
+      if (config.isGateInArchive(parent))
       {
          //if (DeploymentTypeMarker.isType(DeploymentType.WAR, du))
          //{
          //   config.getChildWars().add(WebSubsystemServices.JBOSS_WEB.append(du.getName()));
          //}
-         config.getChildSubUnits().add(Services.deploymentUnitName(parent.getName(), du.getName()));
+         config.addChildSubUnit(Services.deploymentUnitName(parent.getName(), du.getName()));
       }
    }
 
@@ -140,7 +129,7 @@ public class GateInStructureDeploymentProcessor implements DeploymentUnitProcess
    void installListener(DeploymentPhaseContext phaseContext, ModuleIdentifier moduleId)
    {
       ServiceName serviceName = Services.deploymentUnitName(
-            GateInExtension.skipModuleLoaderPrefix(moduleId.getName()));
+         GateInExtension.skipModuleLoaderPrefix(moduleId.getName()));
 
       ServiceController<?> svcc = phaseContext.getServiceRegistry().getService(serviceName);
       svcc.addListener(ServiceListener.Inheritance.ALL, listener);

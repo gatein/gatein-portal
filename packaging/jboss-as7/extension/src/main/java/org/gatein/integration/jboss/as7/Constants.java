@@ -26,12 +26,17 @@ package org.gatein.integration.jboss.as7;
  */
 interface Constants
 {
-
+   // xml parser constants
    String DEPLOYMENT_ARCHIVES = "deployment-archives";
    String PORTLET_WAR_DEPENDENCIES = "portlet-war-dependencies";
    String ARCHIVE = "archive";
    String DEPENDENCY = "dependency";
    String MAIN = "main";
    String IMPORT_SERVICES = "import-services";
-   String TRUE = "true";
+
+   String PORTAL = "portal";
+    
+   // MDR operations constants 
+   String DEPLOYMENT_ARCHIVE = "deployment-archive";
+   String PORTLET_WAR_DEPENDENCY = "portlet-war-dependency";
 }

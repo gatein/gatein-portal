@@ -21,24 +21,21 @@
  */
 package org.gatein.integration.jboss.as7;
 
-import org.jboss.as.controller.descriptions.DescriptionProvider;
+import org.jboss.as.controller.AbstractAddStepHandler;
+import org.jboss.as.controller.OperationFailedException;
 import org.jboss.dmr.ModelNode;
 
-import java.util.Locale;
-
 /**
- * Common web description providers.
- *
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class GateInSubsystemDescriptionProviders
-{
-   public static final DescriptionProvider SUBSYSTEM = new DescriptionProvider()
-   {
-      @Override
-      public ModelNode getModelDescription(Locale locale)
-      {
-         return GateInSubsystemDescriptions.getSubsystemDescription(locale);
-      }
-   };
+public class PortletWarDependancyAdd extends AbstractAddStepHandler {
+    public static final PortletWarDependancyAdd INSTANCE = new PortletWarDependancyAdd();
+
+    private PortletWarDependancyAdd() {
+    }
+
+    @Override
+    protected void populateModel(ModelNode operation, ModelNode model) throws OperationFailedException {
+        PortletWarDependancyDefinition.IMPORT_SERVICES.validateAndSet(operation,model);
+    }
 }

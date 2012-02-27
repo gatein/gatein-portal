@@ -30,12 +30,12 @@ Provides packaging for the build, with automated JBoss AS7 download support.
 Known Issues
 ============
 
-- Only one JBoss AS 7 version is supported at one time. At the moment it's JBoss AS 7.1.0.CR1b.
+- Only one JBoss AS 7 version is supported at one time. At the moment it's JBoss AS 7.1.0.Final.
 - WSRP is not yet supported
 - <distributable/> is not yet supported
 - Sample ears have been repackaged as their current default packaging is not supported
 - Exception occurs, and is ignored when logging out (EXOJCR-1619)
-
+- 'gatein' subsystem configuration in standalone.xml is ignored
 
 
 
@@ -46,8 +46,8 @@ Currently some patched up gatein dependencies are required to build JBoss AS7 su
 
 Checkout the dependencies sources from sandbox:
 
-svn co http://anonsvn.jboss.org/repos/gatein/sandbox/as7_support/tags/AS7-Beta02
-cd AS7-Beta02
+svn co http://anonsvn.jboss.org/repos/gatein/sandbox/as7_support/tags/AS7-Beta03
+cd AS7-Beta03
 
 This will checkout specific versions of wci and exo.kernel.container, and a new gatein-naming component.
 
@@ -74,7 +74,7 @@ If you have built gatein portal before, you can skip the tests by adding '-Dmave
 mvn clean install
 
 
-Set CONTAINERS_DIR env variable to point to a directory containing your application servers (i.e. export CONTAINERS_DIR=$HOME/devel/containers). If you already have ‘jboss-as-7.1.0.CR1b’ in your CONTAINERS_DIR, then remove ‘,download’ from the next command:
+Set CONTAINERS_DIR env variable to point to a directory containing your application servers (i.e. export CONTAINERS_DIR=$HOME/devel/containers). If you already have ‘jboss-as-7.1.0.Final’ in your CONTAINERS_DIR, then remove ‘,download’ from the next command:
 
 cd packaging/jboss-as7
 mvn clean install -Ppkg-jbossas7,download -Dexo.projects.directory.dependencies=$CONTAINERS_DIR
@@ -83,7 +83,7 @@ mvn clean install -Ppkg-jbossas7,download -Dexo.projects.directory.dependencies=
 
 Now that we successfully built GateIn including JBoss AS7 support, let’s run it:
 
-cd pkg/target/jboss-as-7.1.0.CR1b/bin
+cd pkg/target/jboss-as-7.1.0.Final/bin
 ./standalone.sh
 
 

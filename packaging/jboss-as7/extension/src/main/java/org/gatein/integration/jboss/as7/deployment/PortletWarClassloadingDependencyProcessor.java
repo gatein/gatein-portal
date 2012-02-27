@@ -21,6 +21,7 @@
  */
 package org.gatein.integration.jboss.as7.deployment;
 
+import org.gatein.integration.jboss.as7.GateInExtensionConfiguration;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -30,9 +31,6 @@ import org.jboss.as.server.deployment.module.ModuleDependency;
 import org.jboss.as.server.deployment.module.ModuleSpecification;
 import org.jboss.as.web.deployment.TldsMetaData;
 import org.jboss.metadata.web.spec.TldMetaData;
-import org.jboss.modules.Module;
-import org.jboss.modules.ModuleIdentifier;
-import org.jboss.modules.ModuleLoader;
 
 import java.util.List;
 import java.util.Map;
@@ -43,11 +41,9 @@ import java.util.Map;
 public class PortletWarClassloadingDependencyProcessor implements DeploymentUnitProcessor
 {
 
-   private static final ModuleIdentifier GATEIN_WCI = ModuleIdentifier.create("org.gatein.wci");
-   private static final ModuleIdentifier GATEIN_PC = ModuleIdentifier.create("org.gatein.pc");
-   private static final ModuleIdentifier JAVAX_PORTLET = ModuleIdentifier.create("javax.portlet.api");
-
    private List<TldMetaData> tldMetas;
+
+   private GateInExtensionConfiguration conf = GateInExtensionConfiguration.INSTANCE;
 
    public PortletWarClassloadingDependencyProcessor(List<TldMetaData> tldMetaData)
    {
@@ -57,22 +53,22 @@ public class PortletWarClassloadingDependencyProcessor implements DeploymentUnit
    @Override
    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
    {
-      final DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
-      if (deploymentUnit.getAttachment(PortletWarKey.INSTANCE) == null)
+      final DeploymentUnit du = phaseContext.getDeploymentUnit();
+      if (!conf.isPortletArchive(du))
       {
          return; // Skip non portlet deployments
       }
 
-      final ModuleLoader moduleLoader = Module.getBootModuleLoader();
-      final ModuleSpecification moduleSpecification = deploymentUnit.getAttachment(Attachments.MODULE_SPECIFICATION);
+      final ModuleSpecification moduleSpecification = du.getAttachment(Attachments.MODULE_SPECIFICATION);
 
       // Add module dependencies
-      moduleSpecification.addSystemDependency(new ModuleDependency(moduleLoader, GATEIN_WCI, false, false, false));
-      moduleSpecification.addSystemDependency(new ModuleDependency(moduleLoader, GATEIN_PC, false, false, false));
-      moduleSpecification.addSystemDependency(new ModuleDependency(moduleLoader, JAVAX_PORTLET, false, false, false));
+      for (ModuleDependency dep: conf.getPortletWarDependencies())
+      {
+         moduleSpecification.addSystemDependency(dep);
+      }
 
       // Provide tlds for portlet taglibs
-      provideTlds(deploymentUnit);
+      provideTlds(du);
    }
 
    private void provideTlds(DeploymentUnit deploymentUnit)

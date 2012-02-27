@@ -23,6 +23,7 @@ package org.gatein.integration.jboss.as7.web;
 
 import org.exoplatform.container.RootContainer;
 import org.gatein.integration.jboss.as7.GateInExtension;
+import org.gatein.integration.jboss.as7.GateInExtensionConfiguration;
 import org.jboss.as.server.moduleservice.ModuleLoadService;
 import org.jboss.as.server.moduleservice.ServiceModuleLoader;
 import org.jboss.modules.Module;
@@ -38,19 +39,14 @@ import org.jboss.msc.service.StopContext;
 public class InitService implements Service<InitService>
 {
 
-   private GateInExtension extension;
-
-   public InitService(GateInExtension extension)
-   {
-      this.extension = extension;
-   }
+   private GateInExtensionConfiguration config = GateInExtensionConfiguration.INSTANCE;
 
    @Override
    public void start(StartContext context) throws StartException
    {
       System.out.println("InitService START");
       ServiceController<?> svc = context.getController().getServiceContainer()
-            .getRequiredService(ServiceModuleLoader.moduleServiceName(extension.getConfiguration().getGateInEarModule()));
+         .getRequiredService(ServiceModuleLoader.moduleServiceName(config.getGateInEarModule()));
 
       ModuleLoadService modService = (ModuleLoadService) svc.getService();
       Module module = modService.getValue();

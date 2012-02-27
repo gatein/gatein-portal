@@ -21,7 +21,6 @@
  */
 package org.gatein.integration.jboss.as7.deployment;
 
-import org.gatein.integration.jboss.as7.GateInExtension;
 import org.jboss.as.ee.structure.DeploymentType;
 import org.jboss.as.ee.structure.DeploymentTypeMarker;
 import org.jboss.as.server.deployment.Attachments;
@@ -39,12 +38,6 @@ public class PortletWarDeploymentInitializingProcessor implements DeploymentUnit
 {
    private static final String PORTLET_XML = "WEB-INF/portlet.xml";
 
-   private GateInExtension extension;
-
-   public PortletWarDeploymentInitializingProcessor(GateInExtension extension)
-   {
-      this.extension = extension;
-   }
 
    @Override
    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException

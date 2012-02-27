@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
    <parent>
       <groupId>org.exoplatform.portal</groupId>
@@ -12,40 +13,40 @@
    <name>GateIn JBoss AS 7.x.x packaging</name>
 
    <properties>
-      <version.jboss.as.release>7.1.0.CR1b</version.jboss.as.release>
-      <version.jboss.as>7.1.0.CR1b</version.jboss.as>
-      <version.org.jboss.vfs>3.0.0.GA</version.org.jboss.vfs>
-      <version.org.gatein.wci.as7>2.1.0-Beta07-AS7-Beta02</version.org.gatein.wci.as7>
-      <version.exo.kernel.as7>2.3.2-GA-AS7-Beta02</version.exo.kernel.as7>
+      <version.jboss.as.release>7.1.0.Final</version.jboss.as.release>
+      <version.jboss.as>7.1.0.Final</version.jboss.as>
+      <version.org.jboss.vfs>3.1.0.Final</version.org.jboss.vfs>
+      <version.org.gatein.wci.as7>2.1.1-Beta03-AS7-Beta03</version.org.gatein.wci.as7>
+      <version.exo.kernel.as7>2.3.6-GA-AS7-Beta03</version.exo.kernel.as7>
       <version.org.gatein.naming>1.0.0-Beta01</version.org.gatein.naming>
       <exo.projects.app.jboss7.version>jboss-as-${version.jboss.as.release}</exo.projects.app.jboss7.version>
    </properties>
    <build>
       <defaultGoal>package</defaultGoal>
       <plugins>
-	<plugin>
-	    <artifactId>maven-antrun-plugin</artifactId>
-	    <executions>
-		<execution>
-		    <phase>generate-resources</phase>
-		    <goals>
-		        <goal>run</goal>
-		    </goals>
-		    <configuration>
-		        <tasks>
-		            <echo>"
+         <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+               <execution>
+                  <phase>generate-resources</phase>
+                  <goals>
+                     <goal>run</goal>
+                  </goals>
+                  <configuration>
+                     <tasks>
+                        <echo>"
 
 
-DON'T FORGET TO FIRST READ packaging/jboss-as7/README.txt
+                           DON'T FORGET TO FIRST READ packaging/jboss-as7/README.txt
 
 
-"
-</echo>
-		        </tasks>
-		    </configuration>
-		</execution>
-	    </executions>
-	</plugin>
+                           "
+                        </echo>
+                     </tasks>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
       </plugins>
    </build>
 
@@ -84,6 +85,12 @@ DON'T FORGET TO FIRST READ packaging/jboss-as7/README.txt
          <dependency>
             <groupId>org.jboss.as</groupId>
             <artifactId>jboss-as-web</artifactId>
+            <version>${version.jboss.as}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.jboss.as</groupId>
+            <artifactId>jboss-as-subsystem-test</artifactId>
+            <scope>test</scope>
             <version>${version.jboss.as}</version>
          </dependency>
          <dependency>

@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source.
- * Copyright 2011, Red Hat, Inc., and individual contributors
+ * Copyright 2012, Red Hat, Inc., and individual contributors
  * as indicated by the @author tags. See the copyright.txt file in the
  * distribution for a full listing of individual contributors.
  *
@@ -19,21 +19,23 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.integration.jboss.as7.support;
+package org.gatein.integration.jboss.as7;
 
-import org.jboss.as.controller.parsing.ExtensionParsingContext;
+import org.jboss.as.controller.PathElement;
+import org.jboss.as.controller.ReloadRequiredRemoveStepHandler;
+import org.jboss.as.controller.SimpleResourceDefinition;
 
 /**
- * Allows you to additionally initialize the parsers
- *
- * @author <a href="kabir.khan@jboss.com">Kabir Khan</a>
+ * @author Tomaz Cerar                                                                                        r
  */
-public interface AdditionalParsers
+public class GateInPortalDefinition extends SimpleResourceDefinition
 {
-   /**
-    * Allows you to add subsystems parsers
-    *
-    * @param context the extension parsing context to add your subsystem parser to
-    */
-   void addParsers(ExtensionParsingContext context);
+
+   protected GateInPortalDefinition(String portalName)
+   {
+      super(PathElement.pathElement(Constants.PORTAL, portalName),
+         GateInExtension.getResourceDescriptionResolver(Constants.PORTAL),
+         GateInPortalAdd.INSTANCE, new ReloadRequiredRemoveStepHandler()
+      );
+   }
 }

@@ -21,21 +21,30 @@
  */
 package org.gatein.integration.jboss.as7;
 
+import org.gatein.integration.jboss.as7.deployment.GateInEarKey;
+import org.gatein.integration.jboss.as7.deployment.GateInExtKey;
+import org.gatein.integration.jboss.as7.deployment.PortletWarKey;
+import org.jboss.as.server.deployment.DeploymentUnit;
+import org.jboss.as.server.deployment.module.ModuleDependency;
+import org.jboss.dmr.ModelNode;
+import org.jboss.dmr.Property;
+import org.jboss.modules.Module;
 import org.jboss.modules.ModuleIdentifier;
+import org.jboss.modules.ModuleLoader;
 import org.jboss.msc.service.ServiceName;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
 public class GateInExtensionConfiguration
 {
+   public static final GateInExtensionConfiguration INSTANCE = new GateInExtensionConfiguration();
+
    private Set<ModuleIdentifier> extModules;
+
+   private Set<ModuleDependency> portletWarDependencies;
 
    private ModuleIdentifier earModule = ModuleIdentifier.create("deployment.gatein.ear");
 
@@ -43,14 +52,22 @@ public class GateInExtensionConfiguration
 
    private final List<ServiceName> childSubUnits = new LinkedList<ServiceName>();
 
-   public GateInExtensionConfiguration()
+   final ModuleLoader moduleLoader = Module.getBootModuleLoader();
+
+   private GateInExtensionConfiguration()
    {
       Set<ModuleIdentifier> set = new LinkedHashSet<ModuleIdentifier>();
       set.add(ModuleIdentifier.create("deployment.gatein-sample-extension.ear"));
       set.add(ModuleIdentifier.create("deployment.gatein-sample-portal.ear"));
       set.add(ModuleIdentifier.create("deployment.gatein-sample-skin.war"));
       //set.add(ModuleIdentifier.create("deployment.gatein-wsrp-integration.ear"));
-      setGateInExtModules(Collections.unmodifiableSet(set));
+      extModules = Collections.unmodifiableSet(set);
+
+      Set<ModuleDependency> dset = new LinkedHashSet<ModuleDependency>();
+      dset.add(new ModuleDependency(moduleLoader, ModuleIdentifier.create("org.gatein.wci"), false, false, false, false));
+      dset.add(new ModuleDependency(moduleLoader, ModuleIdentifier.create("org.gatein.pc"), false, false, false, false));
+      dset.add(new ModuleDependency(moduleLoader, ModuleIdentifier.create("javax.portlet.api"), false, false, false, false));
+      portletWarDependencies = Collections.unmodifiableSet(dset);
    }
 
    public Set<ModuleIdentifier> getGateInExtModules()
@@ -58,9 +75,9 @@ public class GateInExtensionConfiguration
       return extModules;
    }
 
-   public void setGateInExtModules(Set<ModuleIdentifier> modules)
+   public Set<ModuleDependency> getPortletWarDependencies()
    {
-      this.extModules = modules;
+      return portletWarDependencies;
    }
 
    public ModuleIdentifier getGateInEarModule()
@@ -73,17 +90,21 @@ public class GateInExtensionConfiguration
       this.earModule = modules;
    }
 
-   public List<ServiceName> getChildWars()
+   public synchronized List<ServiceName> getChildWars()
    {
-      return childWars;
+      return Collections.unmodifiableList(childWars);
    }
 
-   public List<ServiceName> getChildSubUnits()
+   public synchronized void addChildWar(ServiceName deploymentServiceName) {
+      childWars.add(deploymentServiceName);
+   }
+    
+   public synchronized List<ServiceName> getChildSubUnits()
    {
-      return childSubUnits;
+      return Collections.unmodifiableList(childSubUnits);
    }
 
-   public List<String> getChildSubUnitComponentPrefixes()
+   public synchronized List<String> getChildSubUnitComponentPrefixes()
    {
       LinkedList<String> ret = new LinkedList<String>();
       for (ServiceName name : childSubUnits)
@@ -91,5 +112,88 @@ public class GateInExtensionConfiguration
          ret.add(name.getCanonicalName() + ".component.");
       }
       return ret;
+   }
+
+   public synchronized void addChildSubUnit(ServiceName serviceName) {
+      childSubUnits.add(serviceName);
+   }
+
+   public void setConfigurationFromModel(ModelNode model)
+   {
+      ModelNode archives = model.get(Constants.DEPLOYMENT_ARCHIVES);
+      if (archives.isDefined())
+      {
+         Set<ModuleIdentifier> set = new LinkedHashSet<ModuleIdentifier>();
+
+         for (Property p: archives.asPropertyList())
+         {
+            boolean isMain = false;
+            if (p.getValue().isDefined())
+            {
+               for (Property attr: p.getValue().asPropertyList())
+               {
+                  if (Constants.MAIN.equals(attr.getName()))
+                     isMain = true;
+               }
+            }
+            if (isMain)
+               earModule = ModuleIdentifier.create("deployment." + p.getName());
+            else
+               set.add(ModuleIdentifier.create("deployment." + p.getName()));
+         }
+         extModules = Collections.unmodifiableSet(set);
+      }
+
+      ModelNode deps = model.get(Constants.PORTLET_WAR_DEPENDENCIES);
+      if (deps.isDefined())
+      {
+         Set<ModuleDependency> dset = new LinkedHashSet<ModuleDependency>();
+
+         for (Property p: deps.asPropertyList())
+         {
+            boolean importSvcs = false;
+            if (p.getValue().isDefined())
+            {
+               for (Property attr: p.getValue().asPropertyList())
+               {
+                  if (Constants.IMPORT_SERVICES.equals(attr.getName()))
+                     importSvcs = true;
+               }
+            }
+            String [] parts = parseNameSlotPair(p.getName());
+            dset.add(new ModuleDependency(moduleLoader, ModuleIdentifier.create(parts[0], parts[1]), false, false, importSvcs, true));
+            // TODO: add optional, and exports
+         }
+         portletWarDependencies = Collections.unmodifiableSet(dset);
+      }
+   }
+
+   private String[] parseNameSlotPair(String name)
+   {
+      String [] parts = name.split(":");
+      if (parts.length == 2)
+         return parts;
+      return new String[] {parts[0], null};
+   }
+
+   public boolean isGateInArchive(DeploymentUnit du)
+   {
+      return du.getAttachment(GateInEarKey.KEY) != null
+            || du.getAttachment(GateInExtKey.KEY) != null;
+   }
+
+   public boolean isPortletArchive(DeploymentUnit du)
+   {
+      return du.getAttachment(PortletWarKey.INSTANCE) != null;
+   }
+
+   public boolean isNonGateInPortletArchive(DeploymentUnit du)
+   {
+      return !isGateInArchive(du) && isPortletArchive(du);
+   }
+
+   public boolean isGateInOrPortletArchive(DeploymentUnit du)
+   {
+      return isGateInArchive(du) || isPortletArchive(du);
    }
 }

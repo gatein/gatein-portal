@@ -21,7 +21,6 @@
  */
 package org.gatein.integration.jboss.as7.deployment;
 
-import org.gatein.integration.jboss.as7.GateInExtension;
 import org.gatein.integration.jboss.as7.GateInExtensionConfiguration;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -43,22 +42,13 @@ public class GateInDependenciesDeploymentProcessor implements DeploymentUnitProc
 
    final ModuleIdentifier gateInLibId = ModuleIdentifier.fromString("org.gatein.lib");
 
-   private GateInExtension extension;
-   private GateInExtensionConfiguration config;
-
-   public GateInDependenciesDeploymentProcessor(GateInExtension extension)
-   {
-      this.extension = extension;
-      this.config = extension.getConfiguration();
-   }
+   private GateInExtensionConfiguration config =GateInExtensionConfiguration.INSTANCE;
 
    public void deploy(final DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
    {
       final DeploymentUnit du = phaseContext.getDeploymentUnit();
 
-      if (du.getAttachment(GateInEarKey.KEY) != null
-            || du.getAttachment(GateInExtKey.KEY) != null
-            || du.getAttachment(PortletWarKey.INSTANCE) != null)
+      if (config.isGateInOrPortletArchive(du))
       {
          // add dependency on org.gatein.lib
          List<ModuleDependency> dependencies = du.getAttachmentList(Attachments.MANIFEST_DEPENDENCIES);
@@ -66,14 +56,13 @@ public class GateInDependenciesDeploymentProcessor implements DeploymentUnitProc
          if (!containsDependency(dependencies, gateInLibId))
          {
             du.addToAttachmentList(Attachments.MANIFEST_DEPENDENCIES,
-                  new ModuleDependency(Module.getBootModuleLoader(), gateInLibId, false, false, true));
+                  new ModuleDependency(Module.getBootModuleLoader(), gateInLibId, false, false, true, false));
          }
 
          // add gatein deployment modules cross-dependencies
          ModuleIdentifier moduleId = du.getAttachment(Attachments.MODULE_IDENTIFIER);
 
-         if (du.getAttachment(GateInEarKey.KEY) != null
-               || du.getAttachment(GateInExtKey.KEY) != null)
+         if (config.isGateInArchive(du))
          {
             final ServiceModuleLoader deploymentModuleLoader = du.getAttachment(Attachments.SERVICE_MODULE_LOADER);
 
@@ -82,7 +71,7 @@ public class GateInDependenciesDeploymentProcessor implements DeploymentUnitProc
                if (!containsDependency(dependencies, config.getGateInEarModule()))
                {
                   du.addToAttachmentList(Attachments.MANIFEST_DEPENDENCIES,
-                        new ModuleDependency(deploymentModuleLoader, config.getGateInEarModule(), false, false, false));
+                        new ModuleDependency(deploymentModuleLoader, config.getGateInEarModule(), false, false, false, false));
                }
             }
 
@@ -93,7 +82,7 @@ public class GateInDependenciesDeploymentProcessor implements DeploymentUnitProc
                   if (!containsDependency(dependencies, id))
                   {
                      du.addToAttachmentList(Attachments.MANIFEST_DEPENDENCIES,
-                           new ModuleDependency(deploymentModuleLoader, id, false, false, false));
+                           new ModuleDependency(deploymentModuleLoader, id, false, false, false, false));
                   }
                }
             }

@@ -23,11 +23,14 @@
   -->
 
 <module xmlns="urn:jboss:module:1.1" name="org.jboss.as.web">
+    <properties>
+        <property name="jboss.api" value="private"/>
+    </properties>
 
     <resources>
-        <resource-root path="jboss-as-web-7.1.0.CR1b.jar"/>
+        <resource-root path="jboss-as-web-7.1.0.Final.jar"/>
         <resource-root path="jasper-jdt-7.0.3.Final.jar"/>
-        <resource-root path="jbossweb-7.0.7.Final.jar"/>
+        <resource-root path="jbossweb-7.0.10.Final.jar"/>
         <!-- Insert resources here -->
     </resources>
 
@@ -42,6 +45,7 @@
         <module name="javax.servlet.jsp.api"/>
         <module name="org.jboss.jandex"/>
         <module name="org.jboss.staxmapper"/>
+        <module name="org.jboss.as.clustering.api" optional="true"/>
         <module name="org.jboss.as.clustering.web.spi" optional="true"/>
         <module name="org.jboss.as.controller"/>
         <module name="org.jboss.as.ee"/>
@@ -51,6 +55,7 @@
         <module name="org.jboss.as.server"/>
         <module name="org.jboss.as.threads"/>
         <module name="org.jboss.invocation"/>
+        <module name="org.jboss.marshalling"/>
         <module name="org.jboss.metadata"/>
         <module name="org.jboss.modules"/>
         <module name="org.jboss.msc"/>

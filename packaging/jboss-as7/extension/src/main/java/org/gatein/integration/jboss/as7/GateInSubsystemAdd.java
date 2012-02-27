@@ -25,13 +25,13 @@ import org.gatein.integration.jboss.as7.deployment.GateInDependenciesDeploymentP
 import org.gatein.integration.jboss.as7.deployment.GateInInitDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.GateInStarterDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.GateInStructureDeploymentProcessor;
+import org.gatein.integration.jboss.as7.deployment.PortletWarClassloadingDependencyProcessor;
 import org.gatein.integration.jboss.as7.deployment.PortletWarDeploymentInitializingProcessor;
 import org.gatein.integration.jboss.as7.deployment.WarDependenciesDeploymentProcessor;
 import org.jboss.as.controller.AbstractBoottimeAddStepHandler;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
 import org.jboss.as.controller.ServiceVerificationHandler;
-import org.jboss.as.controller.descriptions.DescriptionProvider;
 import org.jboss.as.server.AbstractDeploymentChainStep;
 import org.jboss.as.server.DeploymentProcessorTarget;
 import org.jboss.as.server.deployment.Phase;
@@ -39,21 +39,12 @@ import org.jboss.dmr.ModelNode;
 import org.jboss.msc.service.ServiceController;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
 public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
 {
-   static final DescriptionProvider DESCRIPTION = new DescriptionProvider()
-   {
-      public ModelNode getModelDescription(Locale locale)
-      {
-         return GateInSubsystemDescriptions.getSubsystemAddDescription(locale);
-      }
-   };
-
 
    static final int STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT = 0x0B80;
    static final int DEPENDENCIES_PORTLET_MODULE = 0x1100;
@@ -63,25 +54,13 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
    static final int INSTALL_GATEIN_START = 0x4000;
    static final int MANIFEST_DEPENDENCIES_GATEIN = 0x4000;
 
-   private GateInExtension extension;
-
-   public GateInSubsystemAdd(GateInExtension extension)
+   protected GateInSubsystemAdd()
    {
-      this.extension = extension;
    }
 
    protected void populateModel(ModelNode operation, ModelNode model)
    {
-      //Initialize the 'type' child node
-      if (operation.hasDefined(Constants.DEPLOYMENT_ARCHIVES))
-      {
-         model.get(Constants.DEPLOYMENT_ARCHIVES).set(operation.get(Constants.DEPLOYMENT_ARCHIVES));
-      }
-      if (operation.hasDefined(Constants.PORTLET_WAR_DEPENDENCIES))
-      {
-         model.get(Constants.PORTLET_WAR_DEPENDENCIES).set(operation.get(Constants.PORTLET_WAR_DEPENDENCIES));
-      }
-      // Can we read extension configuration here?
+      /* noop */
    }
 
    protected void performBoottime(OperationContext context, ModelNode operation, ModelNode model,
@@ -94,15 +73,14 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
          {
             final SharedPortletTldsMetaDataBuilder tldsBuilder = new SharedPortletTldsMetaDataBuilder();
 
-            processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_GATEIN, new GateInStructureDeploymentProcessor(extension));
-            processorTarget.addDeploymentProcessor(Phase.PARSE, STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT, new PortletWarDeploymentInitializingProcessor(extension));
-            processorTarget.addDeploymentProcessor(Phase.PARSE, MANIFEST_DEPENDENCIES_GATEIN, new GateInDependenciesDeploymentProcessor(extension));
-            processorTarget.addDeploymentProcessor(Phase.PARSE, INSTALL_GATEIN_CHILD_WARS, new WarDependenciesDeploymentProcessor(extension));
+            processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_GATEIN, new GateInStructureDeploymentProcessor());
+            processorTarget.addDeploymentProcessor(Phase.PARSE, STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT, new PortletWarDeploymentInitializingProcessor());
+            processorTarget.addDeploymentProcessor(Phase.PARSE, MANIFEST_DEPENDENCIES_GATEIN, new GateInDependenciesDeploymentProcessor());
+            processorTarget.addDeploymentProcessor(Phase.PARSE, INSTALL_GATEIN_CHILD_WARS, new WarDependenciesDeploymentProcessor());
 
-            //processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_PORTLET_MODULE,
-            //      new PortletWarClassloadingDependencyProcessor(tldsBuilder.create()));
-            processorTarget.addDeploymentProcessor(Phase.POST_MODULE, POST_MODULE_GATEIN_INIT, new GateInInitDeploymentProcessor(extension));
-            processorTarget.addDeploymentProcessor(Phase.INSTALL, INSTALL_GATEIN_START, new GateInStarterDeploymentProcessor(extension));
+            processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_PORTLET_MODULE, new PortletWarClassloadingDependencyProcessor(tldsBuilder.create()));
+            processorTarget.addDeploymentProcessor(Phase.POST_MODULE, POST_MODULE_GATEIN_INIT, new GateInInitDeploymentProcessor());
+            processorTarget.addDeploymentProcessor(Phase.INSTALL, INSTALL_GATEIN_START, new GateInStarterDeploymentProcessor());
          }
       }, OperationContext.Stage.RUNTIME);
    }

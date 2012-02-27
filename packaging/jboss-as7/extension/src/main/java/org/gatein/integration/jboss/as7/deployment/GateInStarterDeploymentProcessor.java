@@ -44,14 +44,7 @@ public class GateInStarterDeploymentProcessor implements DeploymentUnitProcessor
 {
    private ConcurrentHashMap<ModuleIdentifier, ModuleIdentifier> deploymentModules;
 
-   private GateInExtension extension;
-   private GateInExtensionConfiguration config;
-
-   public GateInStarterDeploymentProcessor(GateInExtension extension)
-   {
-      this.extension = extension;
-      this.config = extension.getConfiguration();
-   }
+   private GateInExtensionConfiguration config = GateInExtensionConfiguration.INSTANCE;
 
    private synchronized ConcurrentHashMap<ModuleIdentifier, ModuleIdentifier> getDeploymentModules()
    {
@@ -76,7 +69,7 @@ public class GateInStarterDeploymentProcessor implements DeploymentUnitProcessor
       // Then enumerate all the child components which should all be scheduled for startup at that point
       // to get the dependencies for StartupService
 
-      if (du.getAttachment(GateInEarKey.KEY) != null || du.getAttachment(GateInExtKey.KEY) != null)
+      if (config.isGateInArchive(du))
       {
          ModuleIdentifier moduleId = du.getAttachment(Attachments.MODULE_IDENTIFIER);
          getDeploymentModules().remove(moduleId);

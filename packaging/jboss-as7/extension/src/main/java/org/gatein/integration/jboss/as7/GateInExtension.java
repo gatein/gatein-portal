@@ -24,6 +24,9 @@ package org.gatein.integration.jboss.as7;
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.SubsystemRegistration;
+import org.jboss.as.controller.descriptions.ResourceDescriptionResolver;
+import org.jboss.as.controller.descriptions.StandardResourceDescriptionResolver;
+import org.jboss.as.controller.operations.common.GenericSubsystemDescribeHandler;
 import org.jboss.as.controller.parsing.ExtensionParsingContext;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
 import org.jboss.as.controller.registry.OperationEntry;
@@ -34,7 +37,6 @@ import org.jboss.logging.Logger;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.msc.service.ServiceName;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADD;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.DESCRIBE;
 
 /**
@@ -51,11 +53,13 @@ public class GateInExtension implements Extension
 
    public static final String SUBSYSTEM_NAME = "gatein";
 
-   private GateInExtensionConfiguration config = new GateInExtensionConfiguration();
+   protected static final String DEFAULT_PORTAL_NAME = "default";
 
-   public GateInExtensionConfiguration getConfiguration()
+   private static final String RESOURCE_NAME = GateInExtension.class.getPackage().getName() + ".LocalDescriptions";
+
+   static ResourceDescriptionResolver getResourceDescriptionResolver(final String keyPrefix)
    {
-      return config;
+      return new StandardResourceDescriptionResolver(keyPrefix, RESOURCE_NAME, GateInExtension.class.getClassLoader(), true, false);
    }
 
    /**
@@ -66,9 +70,12 @@ public class GateInExtension implements Extension
    {
       log.debug("Activating GateIn Extension");
       final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME);
-      final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(GateInSubsystemDescriptionProviders.SUBSYSTEM);
-      registration.registerOperationHandler(ADD, new GateInSubsystemAdd(this), GateInSubsystemAdd.DESCRIPTION, false);
-      registration.registerOperationHandler(DESCRIBE, GateInSubsystemDescribe.INSTANCE, GateInSubsystemDescribe.INSTANCE, false, OperationEntry.EntryType.PRIVATE);
+      final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(GateInSubsystemDefinition.INSTANCE);
+      registration.registerOperationHandler(DESCRIBE, GenericSubsystemDescribeHandler.INSTANCE, GenericSubsystemDescribeHandler.INSTANCE, false, OperationEntry.EntryType.PRIVATE);
+      registration.registerSubModel(DeploymentArchiveDefinition.INSTANCE);
+      registration.registerSubModel(PortletWarDependancyDefinition.INSTANCE);
+      registration.registerSubModel(new GateInPortalDefinition(DEFAULT_PORTAL_NAME));
+
       subsystem.registerXMLElementWriter(GateInSubsystemParser.getInstance());
    }
 
@@ -94,12 +101,12 @@ public class GateInExtension implements Extension
    public static ServiceName deploymentUnitName(ModuleIdentifier moduleId, Phase phase)
    {
       return ServiceName.of(Services.deploymentUnitName(
-            GateInExtension.skipModuleLoaderPrefix(moduleId.getName())), phase.name());
+         GateInExtension.skipModuleLoaderPrefix(moduleId.getName())), phase.name());
    }
 
    public static ServiceName deploymentUnitName(ModuleIdentifier moduleId, String... postfix)
    {
       return ServiceName.of(Services.deploymentUnitName(
-            GateInExtension.skipModuleLoaderPrefix(moduleId.getName())), postfix);
+         GateInExtension.skipModuleLoaderPrefix(moduleId.getName())), postfix);
    }
 }

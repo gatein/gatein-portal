@@ -44,34 +44,28 @@ public class GateInInitDeploymentProcessor implements DeploymentUnitProcessor
 {
    private final Logger log = Logger.getLogger(GateInInitDeploymentProcessor.class);
 
-   private GateInExtension extension;
-
-   public GateInInitDeploymentProcessor(GateInExtension extension)
-   {
-      this.extension = extension;
-   }
+   private GateInExtensionConfiguration config = GateInExtensionConfiguration.INSTANCE;
 
    @Override
    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
    {
       final DeploymentUnit du = phaseContext.getDeploymentUnit();
 
-      if (du.getAttachment(GateInEarKey.KEY) != null
-            || du.getAttachment(GateInExtKey.KEY) != null)
+      if (config.isGateInArchive(du))
       {
          log.info("Module is on GateIn Extension modules list");
-         GateInExtensionConfiguration conf = extension.getConfiguration();
-         ServiceName initSvcName = GateInExtension.deploymentUnitName(conf.getGateInEarModule(), "gatein", "init");
+
+         ServiceName initSvcName = GateInExtension.deploymentUnitName(config.getGateInEarModule(), "gatein", "init");
          ServiceTarget target = phaseContext.getServiceTarget();
 
          if (du.getAttachment(GateInEarKey.KEY) != null)
          {
             // install InitService with dependency on all the deployment modules reaching POST_MODULE
             // TODO: we are starting up InitService before child modules (jboss.deployment.subunit.*) have gone through POST_MODULE
-            ServiceBuilder<InitService> builder = target.addService(initSvcName, new InitService(extension))
-                  .addDependency(GateInExtension.deploymentUnitName(conf.getGateInEarModule(), Phase.POST_MODULE));
+            ServiceBuilder<InitService> builder = target.addService(initSvcName, new InitService())
+                  .addDependency(GateInExtension.deploymentUnitName(config.getGateInEarModule(), Phase.POST_MODULE));
 
-            for (ModuleIdentifier module : conf.getGateInExtModules())
+            for (ModuleIdentifier module : config.getGateInExtModules())
             {
                builder.addDependency(GateInExtension.deploymentUnitName(module, Phase.POST_MODULE));
             }

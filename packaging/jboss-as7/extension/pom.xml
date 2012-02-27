@@ -71,20 +71,25 @@
          <scope>test</scope>
          <version>${version.junit}</version>
       </dependency>
+      <dependency>
+         <groupId>org.jboss.as</groupId>
+         <artifactId>jboss-as-subsystem-test</artifactId>
+         <scope>test</scope>
+      </dependency>
 
    </dependencies>
 
    <build>
       <plugins>
-        <plugin>
+         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-compiler-plugin</artifactId>
             <configuration>
-              <source>1.6</source>
-              <target>1.6</target>
-              <compilerArgument>-proc:none</compilerArgument>
+               <source>1.6</source>
+               <target>1.6</target>
+               <compilerArgument>-proc:none</compilerArgument>
             </configuration>
-          </plugin>
+         </plugin>
       </plugins>
    </build>
 </project>

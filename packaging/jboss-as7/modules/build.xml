@@ -205,9 +205,6 @@
            <maven-resource group="org.gatein.captcha" artifact="simplecaptcha" />
            <maven-resource group="org.apache.tika" artifact="tika-core" />
            <maven-resource group="org.apache.tika" artifact="tika-parsers" />
-           <!--maven-resource group="org.gatein.wci" artifact="wci-exo" />
-           <maven-resource group="org.gatein.wci" artifact="wci-jboss7" />
-           <maven-resource group="org.gatein.wci" artifact="wci-wci" /-->
            <maven-resource group="org.apache.ws.commons" artifact="ws-commons-util" />
            <maven-resource group="com.experlog" artifact="xapool" />
            <maven-resource group="org.apache.xmlbeans" artifact="xmlbeans" />
@@ -218,7 +215,7 @@
        <module-def name="org.gatein.wci">
            <maven-resource group="org.gatein.wci" artifact="wci-jboss7" />
            <maven-resource group="org.gatein.wci" artifact="wci-wci" />
-           <maven-resource group="org.gatein.wci" artifact="wci-exo" />
+           <!--maven-resource group="org.gatein.wci" artifact="wci-exo" /-->
        </module-def>
 
        <module-def name="org.gatein.common">

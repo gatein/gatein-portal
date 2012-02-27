@@ -32,7 +32,7 @@ public enum Attribute
    UNKNOWN(null),
    NAME("name"),
    MAIN("main"),
-   IMPORT_SERVICES("import-services");
+   IMPORT_SERVICES(Constants.IMPORT_SERVICES);
 
    private final String name;
 

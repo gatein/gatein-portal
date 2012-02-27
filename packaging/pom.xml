@@ -45,6 +45,7 @@
                 <module>jetty</module>
                 <module>jboss-as5</module>
                 <module>jboss-as6</module>
+                <module>jboss-as7</module>
           </modules>
         </profile>
         <profile>
@@ -54,6 +55,7 @@
                 <module>jetty</module>
                 <module>jboss-as5</module>
                 <module>jboss-as6</module>
+                <module>jboss-as7</module>
           </modules>
         </profile>
         <profile>
