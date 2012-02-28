@@ -555,7 +555,7 @@ public class UserDAOImpl implements UserHandler
          q.getFirstName() == null &&
          q.getLastName() == null)
       {
-         list = new IDMUserListAccess(qb, 20, true);
+         list = new IDMUserListAccess(qb, 20, !countPaginatedUsers());
       }
       else
       {
@@ -923,5 +923,10 @@ public class UserDAOImpl implements UserHandler
       // TODO: refactor to remove cast. For now to avoid adding new config option and share existing cache instannce
       // TODO: it should be there.
       return ((PicketLinkIDMServiceImpl)service_).getRealmName();
+   }
+
+   private boolean countPaginatedUsers()
+   {
+      return orgService.getConfiguration().isCountPaginatedUsers();
    }
 }

@@ -58,6 +58,8 @@ public class Config
 
    private boolean sortMemberships = true;
 
+   private boolean countPaginatedUsers = true;
+
    public Config()
    {
    }
@@ -327,5 +329,15 @@ public class Config
    public void setSortMemberships(boolean sortMemberships)
    {
       this.sortMemberships = sortMemberships;
+   }
+
+   public boolean isCountPaginatedUsers()
+   {
+      return countPaginatedUsers;
+   }
+
+   public void setCountPaginatedUsers(boolean countPaginatedUsers)
+   {
+      this.countPaginatedUsers = countPaginatedUsers;
    }
 }
