@@ -74,7 +74,12 @@ public abstract class AbstractValidator implements Validator, Serializable
 
    protected MessageException createMessageException(String value, UIFormInput uiInput) throws Exception
    {
-      return new MessageException(new ApplicationMessage(getMessageLocalizationKey(), getMessageArgs(value, uiInput), ApplicationMessage.WARNING));
+      return createMessageException(value, uiInput, getMessageLocalizationKey());
+   }
+   
+   protected MessageException createMessageException(String value, UIFormInput uiInput, String localizationKey) throws Exception
+   {
+      return new MessageException(new ApplicationMessage(localizationKey, getMessageArgs(value, uiInput), ApplicationMessage.WARNING));
    }
 
    protected Object[] getMessageArgs(String value, UIFormInput uiInput) throws Exception
@@ -101,7 +106,7 @@ public abstract class AbstractValidator implements Validator, Serializable
 
       if(exceptionOnMissingMandatory && value == null)
       {
-         throw createMessageException("EmptyFieldValidator.msg.empty-input", uiInput);
+         throw createMessageException(value, uiInput, "EmptyFieldValidator.msg.empty-input");
       }
 
       return value;
