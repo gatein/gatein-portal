@@ -21,6 +21,7 @@
  */
 package org.gatein.integration.jboss.as7.deployment;
 
+import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.jboss.as.ee.structure.DeploymentType;
 import org.jboss.as.ee.structure.DeploymentTypeMarker;
 import org.jboss.as.server.deployment.Attachments;
@@ -38,21 +39,27 @@ public class PortletWarDeploymentInitializingProcessor implements DeploymentUnit
 {
    private static final String PORTLET_XML = "WEB-INF/portlet.xml";
 
+   private GateInConfiguration config;
+
+   public PortletWarDeploymentInitializingProcessor(GateInConfiguration config) {
+      this.config = config;
+   }
 
    @Override
    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
    {
-      final DeploymentUnit deploymentUnit = phaseContext.getDeploymentUnit();
-      if (!DeploymentTypeMarker.isType(DeploymentType.WAR, deploymentUnit))
+      final DeploymentUnit du = phaseContext.getDeploymentUnit();
+      if (!DeploymentTypeMarker.isType(DeploymentType.WAR, du))
       {
          return; // Skip non web deployments
       }
-      final ResourceRoot deploymentRoot = deploymentUnit.getAttachment(Attachments.DEPLOYMENT_ROOT);
+      final ResourceRoot deploymentRoot = du.getAttachment(Attachments.DEPLOYMENT_ROOT);
       final VirtualFile portletXml = deploymentRoot.getRoot().getChild(PORTLET_XML);
       if (portletXml.exists())
       {
          // we don't care about the contents, its existence is enough to mark it as a portlet app
-         deploymentUnit.putAttachment(PortletWarKey.INSTANCE, Boolean.TRUE);
+         du.putAttachment(PortletWarKey.INSTANCE, Boolean.TRUE);
+         du.putAttachment(GateInConfigurationKey.KEY, config);
       }
    }
 

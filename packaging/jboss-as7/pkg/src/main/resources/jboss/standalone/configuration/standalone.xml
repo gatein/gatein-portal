@@ -320,8 +320,9 @@
                 <archive name="gatein-sample-skin.war"/>
             </deployment-archives>
             <portlet-war-dependencies>
-                <dependency name="org.gatein.lib" import-services="true"/>
+                <!--dependency name="org.gatein.lib" import-services="true"/-->
                 <dependency name="org.gatein.wci"/>
+                <dependency name="org.gatein.pc"/>
                 <dependency name="javax.portlet.api"/>
             </portlet-war-dependencies>
         </subsystem>

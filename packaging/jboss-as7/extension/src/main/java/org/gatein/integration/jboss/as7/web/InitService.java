@@ -22,8 +22,7 @@
 package org.gatein.integration.jboss.as7.web;
 
 import org.exoplatform.container.RootContainer;
-import org.gatein.integration.jboss.as7.GateInExtension;
-import org.gatein.integration.jboss.as7.GateInExtensionConfiguration;
+import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.jboss.as.server.moduleservice.ModuleLoadService;
 import org.jboss.as.server.moduleservice.ServiceModuleLoader;
 import org.jboss.modules.Module;
@@ -39,7 +38,12 @@ import org.jboss.msc.service.StopContext;
 public class InitService implements Service<InitService>
 {
 
-   private GateInExtensionConfiguration config = GateInExtensionConfiguration.INSTANCE;
+   private GateInConfiguration config;
+      
+   public InitService(GateInConfiguration config)
+   {
+      this.config = config;
+   }
 
    @Override
    public void start(StartContext context) throws StartException

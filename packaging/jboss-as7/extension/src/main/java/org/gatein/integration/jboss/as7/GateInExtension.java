@@ -70,11 +70,13 @@ public class GateInExtension implements Extension
    {
       log.debug("Activating GateIn Extension");
       final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME);
-      final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(GateInSubsystemDefinition.INSTANCE);
+      final GateInConfiguration config = new GateInConfiguration();
+      final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(new GateInSubsystemDefinition(config));
       registration.registerOperationHandler(DESCRIBE, GenericSubsystemDescribeHandler.INSTANCE, GenericSubsystemDescribeHandler.INSTANCE, false, OperationEntry.EntryType.PRIVATE);
-      registration.registerSubModel(DeploymentArchiveDefinition.INSTANCE);
-      registration.registerSubModel(PortletWarDependancyDefinition.INSTANCE);
-      registration.registerSubModel(new GateInPortalDefinition(DEFAULT_PORTAL_NAME));
+
+      registration.registerSubModel(new DeploymentArchiveDefinition(config));
+      registration.registerSubModel(new PortletWarDependencyDefinition(config));
+      registration.registerSubModel(new GateInPortalDefinition(config, DEFAULT_PORTAL_NAME));
 
       subsystem.registerXMLElementWriter(GateInSubsystemParser.getInstance());
    }

@@ -21,7 +21,7 @@
  */
 package org.gatein.integration.jboss.as7.deployment;
 
-import org.gatein.integration.jboss.as7.GateInExtensionConfiguration;
+import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -43,8 +43,6 @@ public class PortletWarClassloadingDependencyProcessor implements DeploymentUnit
 
    private List<TldMetaData> tldMetas;
 
-   private GateInExtensionConfiguration conf = GateInExtensionConfiguration.INSTANCE;
-
    public PortletWarClassloadingDependencyProcessor(List<TldMetaData> tldMetaData)
    {
       this.tldMetas = tldMetaData;
@@ -54,15 +52,19 @@ public class PortletWarClassloadingDependencyProcessor implements DeploymentUnit
    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
    {
       final DeploymentUnit du = phaseContext.getDeploymentUnit();
-      if (!conf.isPortletArchive(du))
+
+      if (!GateInConfiguration.isPortletArchive(du))
       {
          return; // Skip non portlet deployments
       }
 
       final ModuleSpecification moduleSpecification = du.getAttachment(Attachments.MODULE_SPECIFICATION);
 
+
+      GateInConfiguration config = du.getAttachment(GateInConfigurationKey.KEY);
+
       // Add module dependencies
-      for (ModuleDependency dep: conf.getPortletWarDependencies())
+      for (ModuleDependency dep: config.getPortletWarDependencies())
       {
          moduleSpecification.addSystemDependency(dep);
       }

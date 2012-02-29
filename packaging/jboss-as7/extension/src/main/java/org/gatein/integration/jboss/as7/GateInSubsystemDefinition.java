@@ -42,19 +42,20 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.REM
  */
 public class GateInSubsystemDefinition extends SimpleResourceDefinition
 {
-   protected static GateInSubsystemDefinition INSTANCE = new GateInSubsystemDefinition();
+   private GateInConfiguration config;
 
-   private GateInSubsystemDefinition()
+   GateInSubsystemDefinition(GateInConfiguration config)
    {
       super(PathElement.pathElement(ModelDescriptionConstants.SUBSYSTEM, GateInExtension.SUBSYSTEM_NAME),
          GateInExtension.getResourceDescriptionResolver(GateInExtension.SUBSYSTEM_NAME));
+      this.config = config;
    }
 
    @Override
    public void registerOperations(final ManagementResourceRegistration registration)
    {
-      final GateInSubsystemAdd subsystemAdd = new GateInSubsystemAdd();
-      final ResourceDescriptionResolver rootResolver = GateInSubsystemDefinition.INSTANCE.getResourceDescriptionResolver();
+      final GateInSubsystemAdd subsystemAdd = new GateInSubsystemAdd(config);
+      final ResourceDescriptionResolver rootResolver = getResourceDescriptionResolver();
       final DescriptionProvider subsystemAddDescription = new DefaultResourceAddDescriptionProvider(registration, rootResolver);
       registration.registerOperationHandler(ADD, subsystemAdd, subsystemAddDescription, EnumSet.of(OperationEntry.Flag.RESTART_ALL_SERVICES));
       registration.registerOperationHandler(REMOVE, ReloadRequiredRemoveStepHandler.INSTANCE, new DefaultResourceRemoveDescriptionProvider(rootResolver), EnumSet.of(OperationEntry.Flag.RESTART_ALL_SERVICES));

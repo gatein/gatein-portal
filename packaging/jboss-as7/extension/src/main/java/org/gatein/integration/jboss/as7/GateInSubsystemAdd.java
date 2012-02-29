@@ -53,14 +53,18 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
    static final int INSTALL_GATEIN_CHILD_WARS = 0x4000;
    static final int INSTALL_GATEIN_START = 0x4000;
    static final int MANIFEST_DEPENDENCIES_GATEIN = 0x4000;
+   static final int CLEANUP_ATTACHMENTS = 0x4000;
 
-   protected GateInSubsystemAdd()
+   private GateInConfiguration config;
+
+   protected GateInSubsystemAdd(GateInConfiguration config)
    {
+      this.config = config;
    }
 
    protected void populateModel(ModelNode operation, ModelNode model)
    {
-      /* noop */
+      // DO NOTHING
    }
 
    protected void performBoottime(OperationContext context, ModelNode operation, ModelNode model,
@@ -73,14 +77,15 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
          {
             final SharedPortletTldsMetaDataBuilder tldsBuilder = new SharedPortletTldsMetaDataBuilder();
 
-            processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_GATEIN, new GateInStructureDeploymentProcessor());
-            processorTarget.addDeploymentProcessor(Phase.PARSE, STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT, new PortletWarDeploymentInitializingProcessor());
+            processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_GATEIN, new GateInStructureDeploymentProcessor(config));
+            processorTarget.addDeploymentProcessor(Phase.PARSE, STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT, new PortletWarDeploymentInitializingProcessor(config));
             processorTarget.addDeploymentProcessor(Phase.PARSE, MANIFEST_DEPENDENCIES_GATEIN, new GateInDependenciesDeploymentProcessor());
             processorTarget.addDeploymentProcessor(Phase.PARSE, INSTALL_GATEIN_CHILD_WARS, new WarDependenciesDeploymentProcessor());
 
             processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_PORTLET_MODULE, new PortletWarClassloadingDependencyProcessor(tldsBuilder.create()));
             processorTarget.addDeploymentProcessor(Phase.POST_MODULE, POST_MODULE_GATEIN_INIT, new GateInInitDeploymentProcessor());
             processorTarget.addDeploymentProcessor(Phase.INSTALL, INSTALL_GATEIN_START, new GateInStarterDeploymentProcessor());
+            processorTarget.addDeploymentProcessor(Phase.CLEANUP, CLEANUP_ATTACHMENTS, new GateInCleanupDeploymentProcessor());
          }
       }, OperationContext.Stage.RUNTIME);
    }

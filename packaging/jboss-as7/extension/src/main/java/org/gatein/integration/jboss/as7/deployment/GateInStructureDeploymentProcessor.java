@@ -21,8 +21,8 @@
  */
 package org.gatein.integration.jboss.as7.deployment;
 
+import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.gatein.integration.jboss.as7.GateInExtension;
-import org.gatein.integration.jboss.as7.GateInExtensionConfiguration;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -67,17 +67,17 @@ public class GateInStructureDeploymentProcessor implements DeploymentUnitProcess
       }
    };
 
+   private GateInConfiguration config;
 
-   private GateInExtensionConfiguration config = GateInExtensionConfiguration.INSTANCE;
-
-   public GateInStructureDeploymentProcessor()
+   public GateInStructureDeploymentProcessor(GateInConfiguration config)
    {
+      this.config = config;
    }
 
    @Override
    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
    {
-      DeploymentUnit du = phaseContext.getDeploymentUnit();
+      final DeploymentUnit du = phaseContext.getDeploymentUnit();
       log.debug("Deploy: " + du.getName() + " [" + phaseContext.getPhase() + "]");
       if (du.getParent() != null)
       {
@@ -85,11 +85,12 @@ public class GateInStructureDeploymentProcessor implements DeploymentUnitProcess
       }
       else
       {
-         ModuleIdentifier moduleId = du.getAttachment(Attachments.MODULE_IDENTIFIER);
+         final ModuleIdentifier moduleId = du.getAttachment(Attachments.MODULE_IDENTIFIER);
          if (config.getGateInEarModule().equals(moduleId))
          {
             log.debugf("Recognized %s as main GateIn deployment archive", moduleId);
             du.putAttachment(GateInEarKey.KEY, GateInEarKey.INSTANCE);
+            du.putAttachment(GateInConfigurationKey.KEY, config);
             if (log.isTraceEnabled())
             {
                installListener(phaseContext, moduleId);
@@ -99,6 +100,7 @@ public class GateInStructureDeploymentProcessor implements DeploymentUnitProcess
          {
             log.debugf("Recognized %s as part of GateIn deployment", moduleId);
             du.putAttachment(GateInExtKey.KEY, GateInExtKey.INSTANCE);
+            du.putAttachment(GateInConfigurationKey.KEY, config);
             if (log.isTraceEnabled())
             {
                installListener(phaseContext, moduleId);
@@ -111,12 +113,13 @@ public class GateInStructureDeploymentProcessor implements DeploymentUnitProcess
    {
       DeploymentUnit du = phaseContext.getDeploymentUnit();
       DeploymentUnit parent = du.getParent();
-      if (config.isGateInArchive(parent))
+      if (GateInConfiguration.isGateInArchive(parent))
       {
          //if (DeploymentTypeMarker.isType(DeploymentType.WAR, du))
          //{
          //   config.getChildWars().add(WebSubsystemServices.JBOSS_WEB.append(du.getName()));
          //}
+         du.putAttachment(GateInConfigurationKey.KEY, config);
          config.addChildSubUnit(Services.deploymentUnitName(parent.getName(), du.getName()));
       }
    }

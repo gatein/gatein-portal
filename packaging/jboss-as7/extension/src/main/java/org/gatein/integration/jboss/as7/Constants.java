@@ -39,4 +39,5 @@ interface Constants
    // MDR operations constants 
    String DEPLOYMENT_ARCHIVE = "deployment-archive";
    String PORTLET_WAR_DEPENDENCY = "portlet-war-dependency";
+   String TRUE = "true";
 }

@@ -25,6 +25,7 @@ import org.jboss.as.controller.AbstractAddStepHandler;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
 import org.jboss.as.controller.ServiceVerificationHandler;
+import org.jboss.as.controller.registry.Resource;
 import org.jboss.dmr.ModelNode;
 import org.jboss.msc.service.ServiceController;
 
@@ -35,22 +36,17 @@ import java.util.List;
  */
 public class GateInPortalAdd extends AbstractAddStepHandler
 {
-   protected static final GateInPortalAdd INSTANCE = new GateInPortalAdd();
+   private GateInConfiguration config;
 
-   private GateInPortalAdd()
+   GateInPortalAdd(GateInConfiguration config)
    {
+      this.config = config;
    }
 
    @Override
    protected void populateModel(ModelNode operation, ModelNode model) throws OperationFailedException
    {
-      /* noop */
-   }
-
-   @Override
-   protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model, ServiceVerificationHandler verificationHandler, List<ServiceController<?>> newControllers) throws OperationFailedException
-   {
-      super.performRuntime(context, operation, model, verificationHandler, newControllers);
+      // DO NOTHING
    }
 }
 

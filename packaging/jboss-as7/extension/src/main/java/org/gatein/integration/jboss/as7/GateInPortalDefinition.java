@@ -31,11 +31,11 @@ import org.jboss.as.controller.SimpleResourceDefinition;
 public class GateInPortalDefinition extends SimpleResourceDefinition
 {
 
-   protected GateInPortalDefinition(String portalName)
+   GateInPortalDefinition(GateInConfiguration config, String portalName)
    {
       super(PathElement.pathElement(Constants.PORTAL, portalName),
          GateInExtension.getResourceDescriptionResolver(Constants.PORTAL),
-         GateInPortalAdd.INSTANCE, new ReloadRequiredRemoveStepHandler()
+         new GateInPortalAdd(config), new ReloadRequiredRemoveStepHandler()
       );
    }
 }

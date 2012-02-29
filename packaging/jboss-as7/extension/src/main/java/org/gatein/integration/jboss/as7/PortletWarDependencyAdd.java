@@ -36,11 +36,11 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class DeploymentArchiveAdd extends AbstractAddStepHandler
+public class PortletWarDependencyAdd extends AbstractAddStepHandler
 {
    private GateInConfiguration config;
 
-   DeploymentArchiveAdd(GateInConfiguration config)
+   PortletWarDependencyAdd(GateInConfiguration config)
    {
       this.config = config;
    }
@@ -48,7 +48,7 @@ public class DeploymentArchiveAdd extends AbstractAddStepHandler
    @Override
    protected void populateModel(ModelNode operation, ModelNode model) throws OperationFailedException
    {
-      DeploymentArchiveDefinition.MAIN.validateAndSet(operation,model);
+      PortletWarDependencyDefinition.IMPORT_SERVICES.validateAndSet(operation, model);
    }
 
    @Override
@@ -59,10 +59,10 @@ public class DeploymentArchiveAdd extends AbstractAddStepHandler
          throw new IllegalArgumentException("Invalid submodel address: " + addr);
 
       Property prop = addr.get(1).asProperty();
-      if (!Constants.DEPLOYMENT_ARCHIVE.equals(prop.getName()))
+      if (!Constants.PORTLET_WAR_DEPENDENCY.equals(prop.getName()))
          throw new IllegalArgumentException("Invalid submodel address: " + addr);
 
-      ModelNode main = operation.get(Constants.MAIN);
-      config.addDeploymentArchive(prop.getValue().asString(), main.isDefined() && main.asBoolean());
+      ModelNode importSvcs = operation.get(Constants.IMPORT_SERVICES);
+      config.addPortletWarDependency(prop.getValue().asString(), importSvcs.isDefined() && importSvcs.asBoolean());
    }
 }

@@ -36,8 +36,6 @@ import org.jboss.dmr.ModelType;
  */
 public class DeploymentArchiveDefinition extends SimpleResourceDefinition
 {
-   protected static final DeploymentArchiveDefinition INSTANCE = new DeploymentArchiveDefinition();
-
    protected static final SimpleAttributeDefinition MAIN =
       new SimpleAttributeDefinitionBuilder(Constants.MAIN, ModelType.BOOLEAN, true)
          .setAllowExpression(false)
@@ -46,11 +44,11 @@ public class DeploymentArchiveDefinition extends SimpleResourceDefinition
          .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES)
          .build();
 
-   private DeploymentArchiveDefinition()
+   DeploymentArchiveDefinition(GateInConfiguration config)
    {
       super(PathElement.pathElement(Constants.DEPLOYMENT_ARCHIVE),
          GateInExtension.getResourceDescriptionResolver(Constants.DEPLOYMENT_ARCHIVE),
-         DeploymentArchiveAdd.INSTANCE, new ReloadRequiredRemoveStepHandler());
+         new DeploymentArchiveAdd(config), new ReloadRequiredRemoveStepHandler());
    }
 
    @Override

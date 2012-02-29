@@ -22,7 +22,7 @@
 package org.gatein.integration.jboss.as7.deployment;
 
 import org.gatein.integration.jboss.as7.GateInExtension;
-import org.gatein.integration.jboss.as7.GateInExtensionConfiguration;
+import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.gatein.integration.jboss.as7.web.InitService;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -44,25 +44,24 @@ public class GateInInitDeploymentProcessor implements DeploymentUnitProcessor
 {
    private final Logger log = Logger.getLogger(GateInInitDeploymentProcessor.class);
 
-   private GateInExtensionConfiguration config = GateInExtensionConfiguration.INSTANCE;
-
    @Override
    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
    {
       final DeploymentUnit du = phaseContext.getDeploymentUnit();
 
-      if (config.isGateInArchive(du))
+      if (GateInConfiguration.isGateInArchive(du))
       {
          log.info("Module is on GateIn Extension modules list");
+         final GateInConfiguration config = du.getAttachment(GateInConfigurationKey.KEY);
 
-         ServiceName initSvcName = GateInExtension.deploymentUnitName(config.getGateInEarModule(), "gatein", "init");
-         ServiceTarget target = phaseContext.getServiceTarget();
+         final ServiceName initSvcName = GateInExtension.deploymentUnitName(config.getGateInEarModule(), "gatein", "init");
+         final ServiceTarget target = phaseContext.getServiceTarget();
 
          if (du.getAttachment(GateInEarKey.KEY) != null)
          {
-            // install InitService with dependency on all the deployment modules reaching POST_MODULE
+            // Install InitService with dependency on all the deployment modules reaching POST_MODULE
             // TODO: we are starting up InitService before child modules (jboss.deployment.subunit.*) have gone through POST_MODULE
-            ServiceBuilder<InitService> builder = target.addService(initSvcName, new InitService())
+            final ServiceBuilder<InitService> builder = target.addService(initSvcName, new InitService(config))
                   .addDependency(GateInExtension.deploymentUnitName(config.getGateInEarModule(), Phase.POST_MODULE));
 
             for (ModuleIdentifier module : config.getGateInExtModules())

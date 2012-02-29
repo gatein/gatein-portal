@@ -21,7 +21,7 @@
  */
 package org.gatein.integration.jboss.as7.deployment;
 
-import org.gatein.integration.jboss.as7.GateInExtensionConfiguration;
+import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -42,13 +42,11 @@ public class GateInDependenciesDeploymentProcessor implements DeploymentUnitProc
 
    final ModuleIdentifier gateInLibId = ModuleIdentifier.fromString("org.gatein.lib");
 
-   private GateInExtensionConfiguration config =GateInExtensionConfiguration.INSTANCE;
-
    public void deploy(final DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
    {
       final DeploymentUnit du = phaseContext.getDeploymentUnit();
 
-      if (config.isGateInOrPortletArchive(du))
+      if (GateInConfiguration.isGateInOrPortletArchive(du))
       {
          // add dependency on org.gatein.lib
          List<ModuleDependency> dependencies = du.getAttachmentList(Attachments.MANIFEST_DEPENDENCIES);
@@ -62,8 +60,9 @@ public class GateInDependenciesDeploymentProcessor implements DeploymentUnitProc
          // add gatein deployment modules cross-dependencies
          ModuleIdentifier moduleId = du.getAttachment(Attachments.MODULE_IDENTIFIER);
 
-         if (config.isGateInArchive(du))
+         if (GateInConfiguration.isGateInArchive(du))
          {
+            final GateInConfiguration config = du.getAttachment(GateInConfigurationKey.KEY);
             final ServiceModuleLoader deploymentModuleLoader = du.getAttachment(Attachments.SERVICE_MODULE_LOADER);
 
             if (!moduleId.equals(config.getGateInEarModule()))

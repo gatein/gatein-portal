@@ -34,10 +34,8 @@ import org.jboss.dmr.ModelType;
 /**
  * @author Tomaz Cerar
  */
-public class PortletWarDependancyDefinition extends SimpleResourceDefinition
+public class PortletWarDependencyDefinition extends SimpleResourceDefinition
 {
-   protected static final PortletWarDependancyDefinition INSTANCE = new PortletWarDependancyDefinition();
-
    protected static final SimpleAttributeDefinition IMPORT_SERVICES =
       new SimpleAttributeDefinitionBuilder(Constants.IMPORT_SERVICES, ModelType.BOOLEAN, true)
          .setAllowExpression(false)
@@ -46,10 +44,10 @@ public class PortletWarDependancyDefinition extends SimpleResourceDefinition
          .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES)
          .build();
 
-   private PortletWarDependancyDefinition()
+   PortletWarDependencyDefinition(GateInConfiguration config)
    {
       super(PathElement.pathElement(Constants.PORTLET_WAR_DEPENDENCY), GateInExtension.getResourceDescriptionResolver(Constants.PORTLET_WAR_DEPENDENCY),
-         PortletWarDependancyAdd.INSTANCE, new ReloadRequiredRemoveStepHandler()
+         new PortletWarDependencyAdd(config), new ReloadRequiredRemoveStepHandler()
       );
    }
 

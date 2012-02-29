@@ -21,7 +21,7 @@
  */
 package org.gatein.integration.jboss.as7.deployment;
 
-import org.gatein.integration.jboss.as7.GateInExtensionConfiguration;
+import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
@@ -39,7 +39,6 @@ import java.lang.String;
  */
 public class WarDependenciesDeploymentProcessor implements DeploymentUnitProcessor
 {
-   private GateInExtensionConfiguration config = GateInExtensionConfiguration.INSTANCE;
 
    private void processWarDeployment(DeploymentUnit du)
    {
@@ -66,7 +65,9 @@ public class WarDependenciesDeploymentProcessor implements DeploymentUnitProcess
          }
       }
 
-      final ServiceName deploymentServiceName = WebSubsystemServices.deploymentServiceName("default-host", pathName);
+      GateInConfiguration config = du.getAttachment(GateInConfigurationKey.KEY);
+      ServiceName deploymentServiceName = WebSubsystemServices.deploymentServiceName("default-host", pathName);
+
       config.addChildWar(deploymentServiceName);
    }
 
@@ -78,12 +79,12 @@ public class WarDependenciesDeploymentProcessor implements DeploymentUnitProcess
 
       if (parent != null)
       {
-         if (config.isGateInArchive(parent))
+         if (GateInConfiguration.isGateInArchive(parent))
          {
             processWarDeployment(du);
          }
       }
-      else if (config.isGateInArchive(du))
+      else if (GateInConfiguration.isGateInArchive(du))
       {
          processWarDeployment(du);
       }

@@ -22,7 +22,7 @@
 package org.gatein.integration.jboss.as7.deployment;
 
 import org.gatein.integration.jboss.as7.GateInExtension;
-import org.gatein.integration.jboss.as7.GateInExtensionConfiguration;
+import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.gatein.integration.jboss.as7.web.StartupService;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -42,19 +42,24 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class GateInStarterDeploymentProcessor implements DeploymentUnitProcessor
 {
-   private ConcurrentHashMap<ModuleIdentifier, ModuleIdentifier> deploymentModules;
+   private volatile ConcurrentHashMap<ModuleIdentifier, ModuleIdentifier> deploymentModules;
 
-   private GateInExtensionConfiguration config = GateInExtensionConfiguration.INSTANCE;
-
-   private synchronized ConcurrentHashMap<ModuleIdentifier, ModuleIdentifier> getDeploymentModules()
+   private ConcurrentHashMap<ModuleIdentifier, ModuleIdentifier> getDeploymentModules(GateInConfiguration config)
    {
       if (deploymentModules == null)
       {
-         deploymentModules = new ConcurrentHashMap<ModuleIdentifier, ModuleIdentifier>();
-         deploymentModules.put(config.getGateInEarModule(), config.getGateInEarModule());
-         for (ModuleIdentifier id : config.getGateInExtModules())
+         synchronized (this)
          {
-            deploymentModules.put(id, id);
+            if (deploymentModules == null)
+            {
+               final ConcurrentHashMap<ModuleIdentifier, ModuleIdentifier> dms = new ConcurrentHashMap<ModuleIdentifier, ModuleIdentifier>();
+               dms.put(config.getGateInEarModule(), config.getGateInEarModule());
+               for (ModuleIdentifier id : config.getGateInExtModules())
+               {
+                  dms.put(id, id);
+               }
+               this.deploymentModules = dms;
+            }
          }
       }
       return deploymentModules;
@@ -63,23 +68,25 @@ public class GateInStarterDeploymentProcessor implements DeploymentUnitProcessor
    @Override
    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
    {
-      DeploymentUnit du = phaseContext.getDeploymentUnit();
+      final DeploymentUnit du = phaseContext.getDeploymentUnit();
 
       // Wait to the last GateIn archive deployment unit install
       // Then enumerate all the child components which should all be scheduled for startup at that point
       // to get the dependencies for StartupService
 
-      if (config.isGateInArchive(du))
+      if (GateInConfiguration.isGateInArchive(du))
       {
-         ModuleIdentifier moduleId = du.getAttachment(Attachments.MODULE_IDENTIFIER);
-         getDeploymentModules().remove(moduleId);
+         final GateInConfiguration config = du.getAttachment(GateInConfigurationKey.KEY);
+
+         final ModuleIdentifier moduleId = du.getAttachment(Attachments.MODULE_IDENTIFIER);
+         getDeploymentModules(config).remove(moduleId);
 
          if (deploymentModules.size() == 0)
          {
-            StartupService startup = new StartupService();
+            final StartupService startup = new StartupService();
             startup.setGateInModule(du.getAttachment(Attachments.MODULE));
 
-            ServiceBuilder<StartupService> builder = phaseContext.getServiceTarget()
+            final ServiceBuilder<StartupService> builder = phaseContext.getServiceTarget()
                   .addService(StartupService.SERVICE_NAME, startup);
 
             builder.addDependency(GateInExtension.deploymentUnitName(config.getGateInEarModule(), Phase.CLEANUP));
