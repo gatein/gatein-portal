@@ -42,11 +42,15 @@ eXo.webui.UIForm = {
    *          pattern The pattern can be Id#Id, example: Account#UIAccountForm
    */
   getFormElemt : function(pattern) {
-    if (pattern.indexOf("#") == -1)
-      return document.getElementById(pattern);
-    var strArr = pattern.split("#");
-    var portlet = document.getElementById(strArr[0]);
-    return eXo.core.DOMUtil.findDescendantById(portlet, strArr[1]);
+    var ids = pattern.split("#");
+    if(ids.length == 1)
+    {
+      return xj("#" + ids[0])[0];
+    }
+    else
+    {
+      return xj("#" + ids[0]).find("#" + ids[1])[0];
+    }
   },
 
   /**
@@ -109,16 +113,17 @@ eXo.webui.UIForm = {
   },
 
   selectBoxOnChange : function(formId, elemt) {
-    var selectBox = eXo.core.DOMUtil.findAncestorByClass(elemt,
-        "UISelectBoxOnChange");
-    var contentContainer = eXo.core.DOMUtil.findFirstDescendantByClass(
-        selectBox, "div", "SelectBoxContentContainer");
-    var tabs = eXo.core.DOMUtil.findChildrenByClass(contentContainer, "div",
-        "SelectBoxContent");
-    for ( var i = 0; i < tabs.length; i++) {
-      tabs[i].style.display = "none";
-    }
-    tabs[elemt.selectedIndex].style.display = "block";
+    var tabs = xj(elemt).closest(".UISelectBoxOnChange").find("div.SelectBoxContentContainer").eq(0).children("div.SelectBoxContent").each(function(index)
+    {
+      if(index == elemt.selectedIndex)
+      {
+        xj(this).css("display", "block");
+      }
+      else
+      {
+        xj(this).css("display", "none");
+      }
+    });
   },
   /**
    * Sets the value (hiddenValue) of a hidden field (typeId) in the form
@@ -126,9 +131,9 @@ eXo.webui.UIForm = {
    */
   setHiddenValue : function(formId, typeId, hiddenValue) {
     var form = document.getElementById(formId);
-    if (form == null) {
-      maskWorkspace = document.getElementById("UIMaskWorkspace");
-      form = eXo.core.DOMUtil.findDescendantById(maskWorkspace, formId);
+    if (form == null)
+    {
+      form = xj("#UIMaskWorkspace").find("#" + formId)[0];
     }
     form.elements[typeId].value = hiddenValue;
   },
