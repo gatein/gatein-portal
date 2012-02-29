@@ -27,34 +27,38 @@ gadgets.ExoBasedUserPrefStore.prototype.getPrefs = function(gadget) {
   return gadget.userPrefs_;
 };
 
-gadgets.ExoBasedUserPrefStore.prototype.savePrefs = function(gadget, newPrefs) {
-  	//TODO: dang.tung - sent event to portal
+gadgets.ExoBasedUserPrefStore.prototype.savePrefs = function(gadget, newPrefs)
+{
   var prefs = gadgets.json.stringify(newPrefs || gadget.userPrefs_);
-  prefs = encodeURIComponent(prefs);  
-  var DOMUtil = eXo.core.DOMUtil;
-	var gadget = document.getElementById("gadget_" + gadget.id) ;
-	if(gadget != null ) {
-		var uicomponent = gadget.parentNode.id.replace(/^content-/,"");
-		var portletFragment = DOMUtil.findAncestorByClass(gadget, "PORTLET-FRAGMENT");
-		var gadgetPortlet = DOMUtil.findAncestorByClass(gadget, "UIGadgetPortlet");
-		if(gadgetPortlet != null) {
-			uicomponent = gadgetPortlet.id;
-		}
-		if (portletFragment != null) {
-			var compId = portletFragment.parentNode.id;
-			var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + compId;
-			href += "&portal:type=action&uicomponent=" + uicomponent;
-			href += "&op=SaveUserPref";
-			href += "&ajaxRequest=true";
-			href += "&userPref=" + prefs;
-			ajaxGet(href,true);
-		} else {
-			var params = [
-			 {name : "userPref", value : prefs}
-			] ;
-			ajaxGet(eXo.env.server.createPortalURL(uicomponent, "SaveUserPref", true, params),true) ;
-		}
-	}
+  prefs = encodeURIComponent(prefs);
+  var ggWindow = xj("#gadget_" + gadget.id);
+  if (ggWindow.length > 0)
+  {
+    var compID = ggWindow.parent().attr("id").replace(/^content-/, "");
+    var gadgetPortlet = ggWindow.closest(".UIGadgetPortlet");
+    if (gadgetPortlet.length > 0)
+    {
+      compID = gadgetPortlet.attr("id");
+    }
+    var portletFrag = ggWindow.closest(".PORTLET-FRAGMENT");
+    if (portletFrag.length > 0)
+    {
+      var portletID = portletFrag.parent().attr("id");
+      var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
+      href += "&portal:type=action&uicomponent=" + compID;
+      href += "&op=SaveUserPref";
+      href += "&ajaxRequest=true";
+      href += "&userPref=" + prefs;
+      ajaxGet(href, true);
+    }
+    else
+    {
+      var params = [
+        {name : "userPref", value : prefs}
+      ];
+      ajaxGet(eXo.env.server.createPortalURL(compID, "SaveUserPref", true, params), true);
+    }
+  }
 };
 
 gadgets.Container.prototype.userPrefStore = new gadgets.ExoBasedUserPrefStore();
