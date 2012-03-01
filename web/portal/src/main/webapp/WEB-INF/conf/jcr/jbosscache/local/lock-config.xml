@@ -24,7 +24,7 @@
     <preload>
       <node fqn="/" />
     </preload>
-    <loader class="org.jboss.cache.loader.JDBCCacheLoader" async="false" fetchPersistentState="false"
+    <loader class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.JDBCCacheLoader" async="false" fetchPersistentState="false"
       ignoreModifications="false" purgeOnStartup="false">
       <properties>
         cache.jdbc.table.name=${jbosscache-cl-cache.jdbc.table.name}
@@ -37,7 +37,7 @@
         cache.jdbc.node.type=${jbosscache-cl-cache.jdbc.node.type}
         cache.jdbc.parent.column=${jbosscache-cl-cache.jdbc.parent.column}
         cache.jdbc.datasource=${jbosscache-cl-cache.jdbc.datasource}
-			</properties>
+      </properties>
     </loader>
   </loaders>
 </jbosscache>
