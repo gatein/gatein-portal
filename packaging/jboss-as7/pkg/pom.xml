@@ -418,5 +418,35 @@ Either rename it, delete it, or deactivate -Pdownload profile.
             </plugins>
          </build>
       </profile>
+      <profile>
+         <id>bundle</id>
+         <properties>
+            <release.version>3.3.0.Alpha01</release.version>
+         </properties>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-antrun-plugin</artifactId>
+                  <version>1.6</version>
+                  <executions>
+                     <execution>
+                        <id>package</id>
+                        <phase>package</phase>
+                        <goals>
+                           <goal>run</goal>
+                        </goals>
+                        <configuration>
+                           <target>
+                              <zip destfile="${project.build.directory}/GateIn-${release.version}-jbossas7-preview.zip" basedir="${jbossas.target.dir}" />
+                              <attachartifact file="${project.build.directory}/GateIn-${release.version}-jbossas7-preview.zip" classifier="bundle" type="zip" />
+                           </target>
+                        </configuration>
+                     </execution>
+                  </executions>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
    </profiles>
 </project>

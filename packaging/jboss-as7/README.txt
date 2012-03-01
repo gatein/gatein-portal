@@ -45,8 +45,8 @@ Currently some patched up gatein dependencies are required to build JBoss AS7 su
 
 Checkout the dependencies sources from sandbox:
 
-svn co http://anonsvn.jboss.org/repos/gatein/sandbox/as7_support/tags/AS7-Beta03
-cd AS7-Beta03
+svn co http://anonsvn.jboss.org/repos/gatein/sandbox/as7_support/tags/AS7-Beta03 gatein-sandbox-AS7-Beta03
+cd gatein-sandbox-AS7-Beta03
 
 This will checkout specific versions of wci and exo.kernel.container, and a new gatein-naming component.
 
@@ -73,7 +73,8 @@ If you have built gatein portal before, you can skip the tests by adding '-Dmave
 mvn clean install
 
 
-Set CONTAINERS_DIR env variable to point to a directory containing your application servers (i.e. export CONTAINERS_DIR=$HOME/devel/containers). If you already have ‘jboss-as-7.1.0.Final’ in your CONTAINERS_DIR, then remove ‘,download’ from the next command:
+Set CONTAINERS_DIR env variable to point to a directory containing your application servers (i.e. export CONTAINERS_DIR=$HOME/devel/containers).
+If you already have ‘jboss-as-7.1.0.Final’ in your CONTAINERS_DIR, then remove ‘,download’ from the next command:
 
 cd packaging/jboss-as7
 mvn clean install -Ppkg-jbossas7,download -Dexo.projects.directory.dependencies=$CONTAINERS_DIR
@@ -84,6 +85,11 @@ Now that we successfully built GateIn including JBoss AS7 support, let’s run i
 
 cd pkg/target/jboss-as-7.1.0.Final/bin
 ./standalone.sh
+
+
+Access default portal at: http://localhost:8080/portal
+
+Access sample portal at: http://localhost:8080/sample-portal
 
 
 
