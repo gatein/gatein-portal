@@ -86,6 +86,7 @@ eXo.require = function(module, jsLocation, callback, context, params) {
   if(jsLocation == null) jsLocation = '/eXoResources/javascript/' ;
   var path = jsLocation  + module.replace(/\./g, '/')  + '.js' ;
   eXo.loadJS(path, module, callback, context, params);
+  window.status = "";
 } ;
 
 eXo.loadJS = function(path, module, callback, context, params) {
