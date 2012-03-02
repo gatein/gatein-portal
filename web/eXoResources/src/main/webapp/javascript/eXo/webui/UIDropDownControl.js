@@ -36,10 +36,6 @@ eXo.webui.UIDropDownControl = {
    *          evet event object
    */
   show : function(obj, evt) {
-    if (!evt)
-      evt = window.event;
-    evt.cancelBubble = true;
-
     var dropDownAnchor = xj(obj).next("div");
     if(!dropDownAnchor)
     {
@@ -76,7 +72,10 @@ eXo.webui.UIDropDownControl = {
 
       xj(document).one("click", function()
       {
-        dropDownAnchor.css("display", "none");
+    	  xj(document).one("click", function()
+    	  {
+	        dropDownAnchor.css("display", "none");
+    	  });
       });
     }
     else

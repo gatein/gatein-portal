@@ -28,17 +28,16 @@ eXo.webui.UIPopupSelectCategory = {
    *          evt
    */
   show : function(obj, evt) {
-    if (!evt)
-      evt = window.event;
-    evt.cancelBubble = true;
     var popup = xj(obj).find("div.UIPopupCategory");
-    if (popup && popup.css("display") == "none")
+    if (popup.length && popup.css("display") == "none")
     {
-      popup.css("display", "block");
+      popup.show();
       xj(document).one("click", function()
-      {
-        popup.css("display", "none");
-      });
-    }
+	  {
+    	  xj(document).one("click", function() {
+    		  popup.hide();    		  
+    	  });
+	  });
+    } 
   }
-}
+};
