@@ -96,7 +96,7 @@ eXo.portal.UIPortalNavigation = {
     {
       if (!this.id)
       {
-        this.id = DOMUtil.generateId("PortalNavigationContainer");
+        this.id = eXo.generateId("PortalNavigationContainer");
       }
       this.resized = false;
 
@@ -322,7 +322,7 @@ eXo.portal.UIPortalNavigation = {
 
   generateContainer : function(data) {
    var htmlFrags = "<ul class='" + this.containerStyleClass + "' style='display: none;' id='";
-   htmlFrags += eXo.core.DOMUtil.generateId("PortalNavigationContainer") + "' resized='false'>";
+   htmlFrags += eXo.generateId("PortalNavigationContainer") + "' resized='false'>";
 
    for (var i = 0; i < data.length; i++) {
 	   var node = data[i];

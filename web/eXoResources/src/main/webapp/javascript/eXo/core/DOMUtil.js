@@ -19,12 +19,14 @@
 
 /**
  * Some utility functions to use the DOM
+ * Deprecated - we should not use DOMUtil any more
  */
 eXo.core.DOMUtil = {
 	hideElementList : new Array(),			
 	
 	/**
 	 * Generates an id based on the current time and random number
+	 * Deprecated - use eXo.generateId instead
 	 */
 	generateId : function(objectId) {
 		return (objectId + "-" + new Date().getTime() + Math.random().toString().substring(2)) ;
@@ -44,17 +46,15 @@ eXo.core.DOMUtil = {
 	/**
 	 * Adds an element to the hideElementList array
 	 * Should only contain elements from a popup menu
+	 * 
+	 * Deprecated - use jQuery to register document click event instead
 	 */
 	listHideElements : function(object) {
 		var DOMUtil = eXo.core.DOMUtil;
 		if (!DOMUtil.hideElementList.contains(object)) {
 			DOMUtil.hideElementList.push(object) ;
 		}
-	},
-	
-	/*
-	 * Deprecated methods - We should replace these function by jQuery
-	 */
+	},	
 	
 	/**
 	 * Move an element
