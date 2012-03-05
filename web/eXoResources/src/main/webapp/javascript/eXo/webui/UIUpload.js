@@ -213,16 +213,13 @@ eXo.webui.UIUpload = {
     url += "uploadId=" + id + "&action=abort";
     // var url = eXo.env.server.context + "/upload?uploadId="
     // +id+"&action=abort" ;
-    var request = eXo.core.Browser.createHttpRequest();
-    request.open('GET', url, false);
-    request.setRequestHeader("Cache-Control", "max-age=86400");
-    request.send(null);
+    ajaxRequest('GET', url, false);
 
     var container = parent.document.getElementById(id);
     var uploadIframe = eXo.core.DOMUtil.findDescendantById(container, id
         + "UploadIframe");
     uploadIframe.style.display = "block";
-    eXo.webui.UIUpload.createUploadEntry(id, UIUpload.isAutoUpload);
+    eXo.webui.UIUpload.createUploadEntry(id, eXo.webui.UIUpload.isAutoUpload);
     var progressIframe = eXo.core.DOMUtil.findDescendantById(container, id
         + "ProgressIframe");
     progressIframe.style.display = "none";
@@ -252,10 +249,8 @@ eXo.webui.UIUpload = {
     url += "uploadId=" + id + "&action=delete";
     // var url = eXo.env.server.context + "/upload?uploadId="
     // +id+"&action=delete" ;
-    var request = eXo.core.Browser.createHttpRequest();
-    request.open('GET', url, false);
-    request.setRequestHeader("Cache-Control", "max-age=86400");
-    request.send(null);
+    ajaxRequest('GET', url, false);
+    
     var DOMUtil = eXo.core.DOMUtil;
     var container = parent.document.getElementById(id);
     var uploadIframe = DOMUtil.findDescendantById(container, id
@@ -332,4 +327,4 @@ eXo.webui.UIUpload = {
       eXo.webui.UIUpload.listUpload.push(form.id);
     }
   }
-}
+};

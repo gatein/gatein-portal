@@ -224,14 +224,14 @@ function createScriptNode(elem) {
 function AjaxRequest(method, url, queryString) {	
 	var instance = new Object() ;
 	
+	instance.request = null;
+	
 	instance.timeout = 80000 ;
 	instance.aborted = false ;
 	
 	if(method != null) instance.method = method; else	instance.method = "GET" ;
 	if(url != null) instance.url = url; else instance.url = window.location.href ;
 	if(queryString != null) instance.queryString = queryString; else instance.queryString = null ;
-
-	instance.request = null ;
 	
 	instance.responseReceived = false ;
 
@@ -243,8 +243,6 @@ function AjaxRequest(method, url, queryString) {
 	
 	instance.onTimeout = null ;
 	instance.onLoading = null ;
-	instance.onLoaded = null ;
-	instance.onInteractive = null ;
 	instance.onComplete = null ;
 	instance.onSuccess = null ;
 	instance.callBack = null ;
@@ -265,24 +263,7 @@ function AjaxRequest(method, url, queryString) {
 	};	
 	
 	instance.onLoadingInternalHandled = false ;
-	instance.onLoadedInternalHandled = false ;
-	instance.onInteractiveInternalHandled = false ;
-	instance.onCompleteInternalHandled = false ;
-	
-	instance.request = eXo.core.Browser.createHttpRequest() ;
-	
-	/*
-	* This method is called several times during the AJAX request call, in
-	* fact each time the request state changes. In each case the call is 
-	* delegated to one of the method of the AjaxRequest instance
-	*/
-	instance.request.onreadystatechange = function() {
-		if (instance == null || instance.request == null) { return; }
-		if (instance.request.readyState == 1) { instance.onLoadingInternal(instance) ; }
-		if (instance.request.readyState == 2) { instance.onLoadedInternal(instance) ; }
-		if (instance.request.readyState == 3) { instance.onInteractiveInternal(instance) ; }
-		if (instance.request.readyState == 4) { instance.onCompleteInternal(instance) ; }
-    } ;
+	instance.onCompleteInternalHandled = false ;		
 	
     /*
     * This method is executed only if the boolean "onLoadingInternalHandled" is set to false
@@ -293,27 +274,7 @@ function AjaxRequest(method, url, queryString) {
 
 		if (typeof(instance.onLoading) == "function") instance.onLoading(instance) ;
 		instance.onLoadingInternalHandled = true ;
-	} ;
-	
-    /*
-    * This method is executed only if the boolean "onLoadedInternalHandled" is set to false
-    * The method delegate the call to the instance.onLoaded() which is null for now
-    */	
-	instance.onLoadedInternal = function() {
-		if (instance.onLoadedInternalHandled) return ;
-		if (typeof(instance.onLoaded) == "function") instance.onLoaded(instance) ;
-		instance.onLoadedInternalHandled = true ;
-	} ;
-	
-    /*
-    * This method is executed only if the boolean "onInteractiveInternalHandled" is set to false
-    * The method delegate the call to the instance.onInteractive() which is null for now
-    */		
-	instance.onInteractiveInternal = function() {
-		if (instance.onInteractiveInternalHandled) return ;
-		if (typeof(instance.onInteractive) == "function") instance.onInteractive(instance) ;
-		instance.onInteractiveInternalHandled = true ;
-	} ;
+	};
 
 	/**
 	 * evaluate the response and return an object
@@ -336,58 +297,53 @@ function AjaxRequest(method, url, queryString) {
     * back from the AJAX call. Once the ajaxResponse() is called then the callback object is called
     * if not null
     */	
-	instance.onCompleteInternal = function() {
-		if (instance.onCompleteInternalHandled || instance.aborted) return ; 
+	instance.onCompleteInternal = function(xhr, statusText) {
+		if (instance.onCompleteInternalHandled || instance.aborted) return;
 		
-		try{
-			instance.responseReceived = true ;
-			instance.status = instance.request.status ;
-			instance.statusText = instance.request.statusText ;
-			instance.responseText = instance.request.responseText ;
-			instance.responseXML = instance.request.responseXML ;
-		}catch(err){
-			instance.status = 0;
-		}
-		
-		if(typeof(instance.onComplete) == "function") instance.onComplete(instance) ;
-		
-		if (instance.status == 200 && typeof(instance.onSuccess) == "function") {
-			instance.onSuccess(instance) ;
-			instance.onCompleteInternalHandled = true ;
-			if (typeof(instance.callBack) == "function") {
-			  instance.callBack(instance) ;
-			} else if (instance.callBack) { // Modified by Uoc Nguyen: allow user use custom javascript code for callback
-			  try {
-			    eval(instance.callBack) ;
-			  }
-			  catch (e) {
-          throw (new Error('Can not execute callback...')) ;
-        }
+		if (statusText == "timeout") {
+			instance.onTimeoutInternal();
+		} else {
+			try {
+				instance.responseReceived = true;
+				instance.status = xhr.status;
+				instance.statusText = statusText;
+				instance.responseText = xhr.responseText;
+				instance.responseXML = xhr.responseXML;
+			} catch(err) {
+				instance.status = 0;
 			}
-		} else if (typeof(instance.onError) == "function") {
-			instance.onError(instance) ;
-			instance.onCompleteInternalHandled = false ;
+			
+			if(typeof(instance.onComplete) == "function") instance.onComplete(instance);
+			
+			if (statusText == "success" && typeof(instance.onSuccess) == "function") {
+				instance.onSuccess(instance) ;
+				instance.onCompleteInternalHandled = true ;
+				if (typeof(instance.callBack) == "function") {
+					instance.callBack(instance) ;
+				} else if (instance.callBack) { // Modified by Uoc Nguyen: allow user use custom javascript code for callback
+					try {
+						eval(instance.callBack) ;
+					}
+					catch (e) {
+						throw (new Error('Can not execute callback...')) ;
+					}
+				}
+			} else if (typeof(instance.onError) == "function") {
+				instance.onError(instance) ;
+				instance.onCompleteInternalHandled = false ;
+			}				
 		}
-		
-		// Remove IE doesn't leak memory
-		delete instance.request['onreadystatechange'] ;
-		instance.request = null ;
-
-	} ;
+	};
 		
     /*
     * This method is executed only if the boolean "onLoadingInternalHandled" is set to false
     * The method delegate the call to the ajaxTimeout() method of the HttpResponseHandler
     */
 	instance.onTimeoutInternal = function() {
-		if (instance == null || instance.request == null || instance.onCompleteInternalHandled) return ;
-		instance.aborted = true ;
-		instance.request.abort() ;
+		if (instance == null || instance.request == null || instance.onCompleteInternalHandled) return;
+		instance.aborted = true;
 		
-		if (typeof(instance.onTimeout) == "function") instance.onTimeout(instance) ;
-		
-		delete instance.request['onreadystatechange'] ;
-		instance.request = null ;
+		if (typeof(instance.onTimeout) == "function") instance.onTimeout(instance);
 	} ;
 	
 	/*
@@ -397,21 +353,24 @@ function AjaxRequest(method, url, queryString) {
 	*
 	* It also sets up the time out and its call back to the method of the current instance onTimeoutInternal()
 	*/
-	instance.process = function() {
-		if (instance.request == null) return;
-		instance.request.open(instance.method, instance.url, true);		
-		//instance.request.open(instance.method, instance.url, instance.isAsynchronize());		
-		
+	instance.process = function() {		
+		var contentType;
 		if (instance.method == "POST") {
-			instance.request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8") ;
+			contentType = "application/x-www-form-urlencoded; charset=UTF-8";
 		} else {
-			instance.request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8") ;
+			contentType =  "text/plain;charset=UTF-8";
 		}
 		
-		if (instance.timeout > 0) setTimeout(instance.onTimeoutInternal, instance.timeout) ;
-		
-		instance.request.send(instance.queryString);
-	} ;
+		instance.request = xj.ajax(instance.url, {
+			type : instance.method,
+			beforeSend : instance.onLoadingInternal,
+			complete : instance.onCompleteInternal,
+			contentType : contentType,
+			data : instance.queryString,
+			timeout : instance.timeout,
+			cache : false
+		});
+	};
 	
 	return instance ;
 } ;

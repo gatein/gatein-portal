@@ -172,11 +172,8 @@ eXo.webui.UIUploadInput = {
 
   deleteUpload : function(id, isDynamicMode) {
     var url = this.deleteURL + id;
-    var request = eXo.core.Browser.createHttpRequest();
-    request.open('GET', url, false);
-    request.setRequestHeader("Cache-Control", "max-age=86400");
-    request.send(null);
-
+    ajaxRequest('GET', url, false);
+    
     var container = parent.document.getElementById('UploadInputContainer' + id);
     var selectFileFrame = xj(container).find(".SelectFileFrame").first();
     selectFileFrame.hide();
@@ -187,11 +184,8 @@ eXo.webui.UIUploadInput = {
   abortUpload : function(id, isDynamicMode) {
     this.listUpload.remove(id);
     var url = this.abortURL + id;
-    var request = eXo.core.Browser.createHttpRequest();
-    request.open('GET', url, false);
-    request.setRequestHeader("Cache-Control", "max-age=86400");
-    request.send(null);
-
+    ajaxRequest('GET', url, false);
+    
     var container = parent.document.getElementById('UploadInputContainer' + id);
     var jCont = xj(container); 
     var progressIframe = jCont.find('#ProgressIframe' + id);
