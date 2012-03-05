@@ -119,7 +119,7 @@ eXo.webui.UIPopup = {
   setAlign : function(popup, pos, hozMargin, verMargin) {
     if (typeof (popup) == 'string')
       popup = document.getElementById(popup);
-    var stdLeft = eXo.core.Browser.getBrowserWidth()
+    var stdLeft = xj(window).width()
         - eXo.core.Browser.findPosX(document
             .getElementById("UIWorkingWorkspace"));
     var intTop = 0;
@@ -127,7 +127,9 @@ eXo.webui.UIPopup = {
     if (!hozMargin)
       hozMargin = 0;
     if (!verMargin)
-      verMargin = 0;
+      verMargin = 0;           
+
+    var browserHeight = xj(window).height();
     switch (pos) {
     case 1: // Top Left
       intTop = verMargin;
@@ -138,17 +140,17 @@ eXo.webui.UIPopup = {
       intLeft = (stdLeft - popup.offsetWidth) - hozMargin;
       break;
     case 3: // Bottom Left
-      intTop = (eXo.core.Browser.getBrowserHeight() - popup.offsetHeight)
+      intTop = (browserHeight - popup.offsetHeight)
           - verMargin;
       intLeft = hozMargin;
       break;
     case 4: // Bottom Right
-      intTop = (eXo.core.Browser.getBrowserHeight() - popup.offsetHeight)
+      intTop = (browserHeight - popup.offsetHeight)
           - verMargin;
       intLeft = (stdLeft - popup.offsetWidth) - hozMargin;
       break;
     default:
-      intTop = (eXo.core.Browser.getBrowserHeight() - popup.offsetHeight) / 2;
+      intTop = (browserHeight - popup.offsetHeight) / 2;
       intLeft = (uiWorkingWS.offsetWidth - popup.offsetWidth) / 2;
       break;
     }

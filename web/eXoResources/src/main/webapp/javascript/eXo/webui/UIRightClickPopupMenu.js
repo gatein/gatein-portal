@@ -203,15 +203,16 @@ eXo.webui.UIRightClickPopupMenu = {
     eXo.webui.UIPopup.show(contextMenu);
 
     var ctxMenuContainer = xj(contextMenu).children("div.UIContextMenuContainer")[0];
+    var offset = xj(contextMenu).offset();
     var intTop = eXo.core.Mouse.mouseyInPage
-        - (eXo.core.Browser.findPosY(contextMenu) - contextMenu.offsetTop);
+        - (offset.top - contextMenu.offsetTop);
     var intLeft = eXo.core.Mouse.mousexInPage
-        - (eXo.core.Browser.findPosX(contextMenu) - contextMenu.offsetLeft)
+        - (offset.left - contextMenu.offsetLeft)
         + fixWidthForIE7;
     if (eXo.core.I18n.isRT()) {
       // scrollWidth is width of browser scrollbar
       var scrollWidth = 16;
-      if (eXo.core.Browser.getBrowserType() == "mozilla")
+      if (eXo.core.Browser.isFF())
         scrollWidth = 0;
       intLeft = contextMenu.offsetParent.offsetWidth - intLeft + fixWidthForIE7
           + scrollWidth;
@@ -222,6 +223,9 @@ eXo.webui.UIRightClickPopupMenu = {
       }
     }
 
+    var jWin = xj(window);
+    var browserHeight = jWin.height();
+    var browserWidth = jWin.width();
     switch (opt) {
     case 1:
       intTop -= ctxMenuContainer.offsetHeight;
@@ -234,8 +238,7 @@ eXo.webui.UIRightClickPopupMenu = {
       break;
     default:
       // if it isn't fit to be showed down BUT is fit to to be showed up
-      if ((eXo.core.Mouse.mouseyInClient + ctxMenuContainer.offsetHeight) > eXo.core.Browser
-          .getBrowserHeight()
+      if ((eXo.core.Mouse.mouseyInClient + ctxMenuContainer.offsetHeight) > browserHeight
           && (intTop > ctxMenuContainer.offsetHeight)) {
         intTop -= ctxMenuContainer.offsetHeight;
       }
@@ -244,7 +247,7 @@ eXo.webui.UIRightClickPopupMenu = {
 
     if (eXo.core.I18n.isLT()) {
       // move context menu to center of screen to fix width
-      contextMenu.style.left = eXo.core.Browser.getBrowserWidth() * 0.5 + "px";
+      contextMenu.style.left = browserWidth * 0.5 + "px";
       ctxMenuContainer.style.width = "auto";
       ctxMenuContainer.style.width = ctxMenuContainer.offsetWidth + 2 + "px";
       // end fix width
@@ -253,7 +256,7 @@ eXo.webui.UIRightClickPopupMenu = {
       contextMenu.style.left = (intLeft + 1) + "px";
     } else {
       // move context menu to center of screen to fix width
-      contextMenu.style.right = eXo.core.Browser.getBrowserWidth() * 0.5 + "px";
+      contextMenu.style.right = browserWidth * 0.5 + "px";
       ctxMenuContainer.style.width = "auto";
       ctxMenuContainer.style.width = ctxMenuContainer.offsetWidth + 2 + "px";
       // end fix width
@@ -262,8 +265,7 @@ eXo.webui.UIRightClickPopupMenu = {
     ctxMenuContainer.style.width = ctxMenuContainer.offsetWidth + "px";
     // need to add 1 more pixel because IE8 will dispatch onmouseout event to
     // contextMenu.parent
-    if ((eXo.core.Mouse.mouseyInClient + ctxMenuContainer.offsetHeight) <= eXo.core.Browser
-        .getBrowserHeight()) {
+    if ((eXo.core.Mouse.mouseyInClient + ctxMenuContainer.offsetHeight) <= browserHeight) {
       intTop += 1
     }
     contextMenu.style.top = intTop + "px";
@@ -288,12 +290,13 @@ eXo.core.Mouse = {
 
   update : function(mouseEvent) {
     browser = eXo.core.Browser;
+    
+    mouseEvent = xj.event.fix(mouseEvent);
+    this.mousexInPage = mouseEvent.pageX;
+    this.mouseyInPage = mouseEvent.pageY;
 
-    this.mousexInPage = browser.findMouseXInPage(mouseEvent);
-    this.mouseyInPage = browser.findMouseYInPage(mouseEvent);
-
-    var x  =  browser.findMouseXInClient(mouseEvent) ;
-    var y  =  browser.findMouseYInClient(mouseEvent) ;
+    var x  =  mouseEvent.clientX;
+    var y  =  mouseEvent.clientY;
 
     this.lastMousexInClient =  this.mousexInClient != null ? this.mousexInClient : x ;
     this.lastMouseyInClient =  this.mouseyInClient != null ? this.mouseyInClient : y ;

@@ -139,8 +139,9 @@ eXo.webui.UIPopupWindow = {
   
   setupWindow : function(popup, middleBrowser) {	    	
     var contentBlock = xj(popup).find("div.PopupContent")[0];
-    if (contentBlock && (eXo.core.Browser.getBrowserHeight() - 100 < contentBlock.offsetHeight)) {
-      contentBlock.style.height = (eXo.core.Browser.getBrowserHeight() - 100) + "px";
+    var browserHeight = xj(window).height();
+    if (contentBlock && (browserHeight - 100 < contentBlock.offsetHeight)) {
+      contentBlock.style.height = (browserHeight - 100) + "px";
     }
     
     var scrollY = 0, offsetParent = popup.offsetParent;
@@ -157,7 +158,7 @@ eXo.webui.UIPopupWindow = {
         popup.style.top = Math.ceil((offsetParent.offsetHeight - popup.offsetHeight) / 2) + "px";
       }
       if (middleBrowser || !middleWindow) {
-        popup.style.top = Math.ceil((eXo.core.Browser.getBrowserHeight() - popup.offsetHeight) / 2) + scrollY + "px";
+        popup.style.top = Math.ceil((browserHeight - popup.offsetHeight) / 2) + scrollY + "px";
       }
       // Todo: set popup of UIPopup always display in the center browsers in case UIMaskWorkspace
       if (xj(offsetParent).hasClass("UIMaskWorkspace")) {
@@ -172,7 +173,7 @@ eXo.webui.UIPopupWindow = {
       }
       popup.style.left = Math.ceil((offsetParent.offsetWidth - popup.offsetWidth) / 2) + "px";
     }
-    if (eXo.core.Browser.findPosY(popup) < 0)
+    if (xj(popup).offset().top < 0)
       popup.style.top = scrollY + "px";
         
     popup.style.visibility = "visible";	  

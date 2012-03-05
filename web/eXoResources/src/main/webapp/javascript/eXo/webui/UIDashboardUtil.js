@@ -25,7 +25,7 @@ eXo.webui.UIDashboardUtil = {
 	  var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");	  
 	  while (obj) {
 	  	if(uiWorkspaceContainer!=null && uiWorkspaceContainer.style.display!="none"
-	  					 && browser.getBrowserType()=="ie"){
+	  					 && browser.isIE()){
 	  		var uiPageDesktop = document.getElementById("UIPageDesktop");
         var jqObj = xj(obj);
 	  		if( (uiPageDesktop!=null && jqObj.hasClass("UIPageDesktop") && browser.isIE7())
@@ -44,7 +44,7 @@ eXo.webui.UIDashboardUtil = {
 	isIn : function(x, y, component) {
 	  var componentLeft = eXo.webui.UIDashboardUtil.findPosX(component);
 	  var componentRight = componentLeft + component.offsetWidth ;
-	  var componentTop = eXo.core.Browser.findPosY(component) ;
+	  var componentTop = xj(component).offset().top;
 	  var componentBottom = componentTop + component.offsetHeight ;
 	  var isOver = false ;
 

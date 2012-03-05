@@ -224,9 +224,9 @@ eXo.core.UIMaskLayer = {
   doScroll : function() {
     var maskLayer = document.getElementById("MaskLayer");
     if (maskLayer) {
-      var offsetParent = maskLayer.offsetParent, browser = eXo.core.Browser;
-      if (offsetParent && browser.findPosX(offsetParent) != 0
-          || browser.findPosY(offsetParent) != 0) {
+      var offsetParent = maskLayer.offsetParent;
+      var offset = xj(offsetParent).offset();
+      if (offsetParent && offset.left != 0 || offset.top != 0) {
         maskLayer = document.getElementById("subMaskLayer");
         if (!maskLayer)
           return;
@@ -251,7 +251,6 @@ eXo.core.UIMaskLayer = {
    */
   setPosition : function() {
     var UIMaskLayer = eXo.core.UIMaskLayer;
-    var browser = eXo.core.Browser;
     var object = UIMaskLayer.object;
     var blockContainer = UIMaskLayer.blockContainer;
     var position = UIMaskLayer.position;
@@ -298,7 +297,7 @@ eXo.core.UIMaskLayer = {
       top = (browserHeight - object.offsetHeight) / 2 + topPos;
     }
 
-    if ((top + object.offsetHeight) > topPos + browser.getBrowserHeight()) {
+    if ((top + object.offsetHeight) > topPos + xj(window).height()) {
       top = topPos + browserHeight - object.offsetHeight;
     }
 

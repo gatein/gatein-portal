@@ -431,9 +431,10 @@ eXo.portal.PortalDragDrop = {
 	  
 	isIn : function(x, y, component) {
 	  var browser = eXo.core.Browser;
-	  var componentLeft = browser.findPosX(component);
+	  var offset = xj(component).offset();
+	  var componentLeft = offset.left;
 	  var componentRight = componentLeft + component.offsetWidth ;
-	  var componentTop = browser.findPosY(component) ;
+	  var componentTop = offset.top;
 	  var componentBottom = componentTop + component.offsetHeight ;
 	  var isOver = false ;
 

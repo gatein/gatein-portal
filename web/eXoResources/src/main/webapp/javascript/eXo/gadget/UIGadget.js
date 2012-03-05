@@ -168,7 +168,7 @@ eXo.gadget.UIGadget = {
           {
             var c = xj(this).find("div.gadgets-gadget-content")[0];
             mask.css({"marginTop" : -c.offsetHeight + "px", "height" : c.offsetHeight + "px", "width" : c.offsetWidth + "px", "backgroundColor" : "white", "display" : "block"});
-            eXo.core.Browser.setOpacity(mask[0], 3);
+            mask.fadeTo(0, 0.03);
           }
         });
 

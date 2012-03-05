@@ -86,7 +86,7 @@ eXo.webui.UIDashboard = {
         {
           var app = gadgetWindow.find("div.GadgetApplication")[0];
           mask.css({"marginTop" : - app.offsetHeight + "px", "height" : app.offsetHeight + "px", "width" : app.offsetWidth + "px", "display" : "block", "backgroundColor" : "white"});
-          BROWSER.setOpacity(mask[0], 3);
+          mask.fadeTo(0, 0.03);
         }
       });
 
@@ -127,7 +127,7 @@ eXo.webui.UIDashboard = {
           var addToLast = true;
           column.find("div.UIGadget").not("#" + dragObj.id).each(function()
           {
-            if (ey <= BROWSER.findPosY(this) + (this.offsetHeight / 3) - gadgetContainer.scrollTop())
+            if (ey <= xj(this).offset().top + (this.offsetHeight / 3) - gadgetContainer.scrollTop())
             {
               xj(this).before(targetArea);
               addToLast = false;
@@ -161,8 +161,9 @@ eXo.webui.UIDashboard = {
     {
       gadgetContainer.find("div.UIMask").each(function()
       {
-        BROWSER.setOpacity(this, 100);
-        xj(this).css("display", "none");
+    	var jObj = xj(this);
+        jObj.fadeTo(0, 1);
+        jObj.css("display", "none");
       });
 
       jqDragObj.removeClass("Dragging").css("position", "static");
@@ -306,7 +307,7 @@ eXo.webui.UIDashboard = {
 		if (deltaY < 0) {
 			deltaY = 0;
 		}
-		popup.style.top = eXo.core.Browser.findPosY(dashboard) + deltaY + "px";
+		popup.style.top = xj(dashboard).offset().top + deltaY + "px";
 	},
 
 	 /**
@@ -370,7 +371,7 @@ eXo.webui.UIDashboard = {
       category.children("div.ItemsContainer").css("display", "none");
     }
 
-    var h = eXo.core.Browser.getBrowserHeight();
+    var h = xj(window).height();
     jqObj.closest(".PopupContent").css("height", (h - 100 < itemCont[0].offsetHeight) ? (h - 100 + "px") : "auto");
   },
   /**
