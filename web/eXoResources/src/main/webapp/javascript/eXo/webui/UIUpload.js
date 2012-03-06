@@ -130,10 +130,10 @@ eXo.webui.UIUpload = {
 
     for (id in response.upload) {
       var container = parent.document.getElementById(elementId);
+      var jCont = xj(container);
       if (response.upload[id].status == "failed") {
         this.abortUpload(id);
-        var message = eXo.core.DOMUtil.findFirstChildByClass(container, "div",
-            "LimitMessage").innerHTML;
+        var message = jCont.children(".LimitMessage").first().html();
         message = message.replace("{0}", response.upload[id].size);
         message = message.replace("{1}", response.upload[id].unit);
         alert(message);
@@ -141,15 +141,11 @@ eXo.webui.UIUpload = {
       }
       var element = document.getElementById(id + "ProgressIframe");
       var percent = response.upload[id].percent;
-      var progressBarMiddle = eXo.core.DOMUtil.findFirstDescendantByClass(
-          container, "div", "ProgressBarMiddle");
-      var blueProgressBar = eXo.core.DOMUtil.findFirstChildByClass(
-          progressBarMiddle, "div", "BlueProgressBar");
-      var progressBarLabel = eXo.core.DOMUtil.findFirstChildByClass(
-          blueProgressBar, "div", "ProgressBarLabel");
-      blueProgressBar.style.width = percent + "%";
+      var blueProgressBar = jCont.find(".ProgressBarMiddle .BlueProgressBar").first();
+      var progressBarLabel = blueProgressBar.children(".ProgressBarLabel").first();
+      blueProgressBar.css("width", percent + "%");
 
-      progressBarLabel.innerHTML = percent + "%";
+      progressBarLabel.html(percent + "%");
       if (percent == 100) {
         this.showUploaded(id, response.upload[id].fileName);
       }
@@ -175,26 +171,22 @@ eXo.webui.UIUpload = {
   showUploaded : function(id, fileName) {
     eXo.webui.UIUpload.listUpload.remove(id);
     var container = parent.document.getElementById(id);
+    var jCont = xj(container);
     var element = document.getElementById(id + "ProgressIframe");
     element.innerHTML = "<span></span>";
 
-    var uploadIframe = eXo.core.DOMUtil.findDescendantById(container, id
-        + "UploadIframe");
-    uploadIframe.style.display = "none";
-    var progressIframe = eXo.core.DOMUtil.findDescendantById(container, id
-        + "ProgressIframe");
-    progressIframe.style.display = "none";
+    var uploadIframe = jCont.find("#" + id + "UploadIframe");
+    uploadIframe.hide();
+    var progressIframe = jCont.find("#" + id + "ProgressIframe");
+    progressIframe.hide();
 
-    var selectFileFrame = eXo.core.DOMUtil.findFirstDescendantByClass(
-        container, "div", "SelectFileFrame");
-    selectFileFrame.style.display = "block";
-    var fileNameLabel = eXo.core.DOMUtil.findFirstDescendantByClass(
-        selectFileFrame, "div", "FileNameLabel");
+    var selectFileFrame = jCont.find(".SelectFileFrame").first();
+    selectFileFrame.show();
+    var fileNameLabel = selectFileFrame.find(".FileNameLabel").first();
     if (fileName != null)
-      fileNameLabel.innerHTML = decodeURIComponent(fileName);
-    var progressBarFrame = eXo.core.DOMUtil.findFirstDescendantByClass(
-        container, "div", "ProgressBarFrame");
-    progressBarFrame.style.display = "none";
+      fileNameLabel.html(decodeURIComponent(fileName));
+    var progressBarFrame = jCont.find(".ProgressBarFrame").first();
+    progressBarFrame.hide();
     var tmp = element.parentNode;
     var temp = tmp.parentNode;
     // TODO: dang.tung - always return true even we reload browser
@@ -216,24 +208,17 @@ eXo.webui.UIUpload = {
     ajaxRequest('GET', url, false);
 
     var container = parent.document.getElementById(id);
-    var uploadIframe = eXo.core.DOMUtil.findDescendantById(container, id
-        + "UploadIframe");
-    uploadIframe.style.display = "block";
+    var jCont = xj(container);
+    var uploadIframe = jCont.find("#" + id + "UploadIframe");
+    uploadIframe.show();
     eXo.webui.UIUpload.createUploadEntry(id, eXo.webui.UIUpload.isAutoUpload);
-    var progressIframe = eXo.core.DOMUtil.findDescendantById(container, id
-        + "ProgressIframe");
-    progressIframe.style.display = "none";
+    var progressIframe =jCont.find("#" + id + "ProgressIframe");
+    progressIframe.hide();
 
-    var tmp = progressIframe.parentNode;
-    var temp = tmp.parentNode;
-    // var child = eXo.core.DOMUtil.getChildrenByTagName(temp,"label");
-    // child[0].style.visibility = "visible" ;
-    var progressBarFrame = eXo.core.DOMUtil.findFirstDescendantByClass(
-        container, "div", "ProgressBarFrame");
-    progressBarFrame.style.display = "none";
-    var selectFileFrame = eXo.core.DOMUtil.findFirstDescendantByClass(
-        container, "div", "SelectFileFrame");
-    selectFileFrame.style.display = "none";
+    var progressBarFrame = jCont.find(".ProgressBarFrame").first();
+    progressBarFrame.hide();
+    var selectFileFrame = jCont.find(".SelectFileFrame").first();
+    selectFileFrame.hide();
 
     var input = parent.document.getElementById('input' + id);
     input.value = "false";
@@ -251,24 +236,18 @@ eXo.webui.UIUpload = {
     // +id+"&action=delete" ;
     ajaxRequest('GET', url, false);
     
-    var DOMUtil = eXo.core.DOMUtil;
     var container = parent.document.getElementById(id);
-    var uploadIframe = DOMUtil.findDescendantById(container, id
-        + "UploadIframe");
-    uploadIframe.style.display = "block";
+    var jCont = xj(container);
+    var uploadIframe = jCont.find("#" + id + "UploadIframe");
+    uploadIframe.show();
     eXo.webui.UIUpload.createUploadEntry(id, this.isAutoUpload);
-    var progressIframe = DOMUtil.findDescendantById(container, id
-        + "ProgressIframe");
-    progressIframe.style.display = "none";
+    var progressIframe = jCont.find("#" + id + "ProgressIframe");
+    progressIframe.hide();
 
-    var tmp = progressIframe.parentNode;
-    var temp = tmp.parentNode;
-    var progressBarFrame = DOMUtil.findFirstDescendantByClass(container, "div",
-        "ProgressBarFrame");
-    progressBarFrame.style.display = "none";
-    var selectFileFrame = DOMUtil.findFirstDescendantByClass(container, "div",
-        "SelectFileFrame");
-    selectFileFrame.style.display = "none";
+    var progressBarFrame = jCont.find(".ProgressBarFrame").first();
+    progressBarFrame.hide();
+    var selectFileFrame = jCont.find(".SelectFileFrame").first();
+    selectFileFrame.hide();
 
     var input = parent.document.getElementById('input' + id);
     input.value = "false";
@@ -283,39 +262,29 @@ eXo.webui.UIUpload = {
    *          id
    */
   upload : function(clickEle, id) {
-    var DOMUtil = eXo.core.DOMUtil;
     var container = parent.document.getElementById(id);
     var uploadFrame = parent.document.getElementById(id + "uploadFrame");
     var form = uploadFrame.contentWindow.document.getElementById(id);
 
-    var file = DOMUtil.findDescendantById(form, "file");
-    if (file.value == null || file.value == '')
+    var file = xj(form).find("#file");
+    if (file.attr("value") == null || file.attr("value") == '')
       return;
 
-    var progressBarFrame = DOMUtil.findFirstDescendantByClass(container, "div",
-        "ProgressBarFrame");
-    progressBarFrame.style.display = "block";
-    var progressBarMiddle = DOMUtil.findFirstDescendantByClass(container,
-        "div", "ProgressBarMiddle");
-    var blueProgressBar = DOMUtil.findFirstChildByClass(progressBarMiddle,
-        "div", "BlueProgressBar");
-    var progressBarLabel = DOMUtil.findFirstChildByClass(blueProgressBar,
-        "div", "ProgressBarLabel");
-    blueProgressBar.style.width = "0%";
-    progressBarLabel.innerHTML = "0%";
+    var jCont = xj(container);
+    var progressBarFrame = jCont.find(".ProgressBarFrame").first();
+    progressBarFrame.show();
+    var blueProgressBar = jCont.find(".ProgressBarMiddle .BlueProgressBar").first();
+    var progressBarLabel = blueProgressBar.children(".ProgressBarLabel").first();
+    blueProgressBar.css("width", "0%");
+    progressBarLabel.html("0%");
 
     var input = parent.document.getElementById('input' + id);
     input.value = "true";
 
-    var uploadIframe = DOMUtil.findDescendantById(container, id
-        + "UploadIframe");
-    uploadIframe.style.display = "none";
-    var progressIframe = DOMUtil.findDescendantById(container, id
-        + "ProgressIframe");
-    progressIframe.style.display = "none";
-
-    var tmp = progressIframe.parentNode;
-    var temp = tmp.parentNode;
+    var uploadIframe = jCont.find("#" + id + "UploadIframe");
+    uploadIframe.hide();
+    var progressIframe = jCont.find("#" + id + "ProgressIframe");
+    progressIframe.hide();
 
     form.submit();
 

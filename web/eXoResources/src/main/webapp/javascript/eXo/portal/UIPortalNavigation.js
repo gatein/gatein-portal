@@ -67,7 +67,6 @@ eXo.portal.UIPortalNavigation = {
    *  . adds onclick event if the item contains a link, so a click on this item will call the link
    */
   buildMenu : function(popupMenu) {
-    var DOMUtil = eXo.core.DOMUtil;
     var portalNav = eXo.portal.UIPortalNavigation;
     var topContainer = xj(popupMenu);
 

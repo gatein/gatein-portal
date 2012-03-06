@@ -22,32 +22,30 @@ eXo.webui.UICombobox = {
   init : function(textbox) {
     if (typeof (textbox) == "string")
       textbox = document.getElementById(textbox);
-    textbox = eXo.core.DOMUtil.findNextElementByTagName(textbox, "input");
+    textbox = xj(textbox).next("input");
     var UICombobox = eXo.webui.UICombobox;
-    var onfocus = textbox.getAttribute("onfocus");
-    var onclick = textbox.getAttribute("onclick");
+    var onfocus = textbox.attr("onfocus");
+    var onclick = textbox.attr("onclick");
     if (!onfocus)
-      textbox.onfocus = UICombobox.show;
+      textbox.on("focus", UICombobox.show);
     if (!onclick)
-      textbox.onclick = UICombobox.show;
+      textbox.on("click", UICombobox.show);
   },
 
   show : function(evt) {
     var uiCombo = eXo.webui.UICombobox;
-    uiCombo.items = eXo.core.DOMUtil.findDescendantsByTagName(this.parentNode,
-        "a");
+    uiCombo.items = xj(this.parentNode).find("a");
     if (uiCombo.list)
       uiCombo.list.style.display = "none";
-    uiCombo.list = eXo.core.DOMUtil.findFirstDescendantByClass(this.parentNode,
-        "div", "UIComboboxContainer");
+    uiCombo.list = xj(this.parentNode).find(".UIComboboxContainer").first()[0];
     uiCombo.list.parentNode.style.position = "absolute";
     uiCombo.fixForIE6(this);
     uiCombo.list.style.display = "block";
     uiCombo.list.style.top = this.offsetHeight + "px";
     uiCombo.list.style.width = this.offsetWidth + "px";
     uiCombo.setSelectedItem(this);
-    uiCombo.list.onmousedown = eXo.core.EventManager.cancelEvent;
-    document.onmousedown = uiCombo.hide;
+    xj(uiCombo.list).one("mousedown", false);
+    xj(document).one("mousedown", uiCombo.hide);
   },
 
   getSelectedItem : function(textbox) {
@@ -80,7 +78,7 @@ eXo.webui.UICombobox = {
   fixForIE6 : function(obj) {
     if (!eXo.core.Browser.isIE6())
       return;
-    if (eXo.core.DOMUtil.getChildrenByTagName(this.list, "iframe").length > 0)
+    if (xj(this.list).children("iframe").length > 0)
       return;
     var iframe = document.createElement("iframe");
     iframe.frameBorder = 0;
@@ -131,22 +129,22 @@ eXo.webui.UICombobox = {
 
   hide : function() {
     eXo.webui.UICombobox.list.style.display = "none";
-    document.onmousedown = null;
   },
 
   getValue : function(obj) {
     var UICombobox = eXo.webui.UICombobox;
     var val = obj.getAttribute("value");
-    var hiddenField = eXo.core.DOMUtil.findNextElementByTagName(
-        UICombobox.list.parentNode, "input");
-    hiddenField.value = val;
-    var text = eXo.core.DOMUtil.findNextElementByTagName(hiddenField, "input");
-    text.value = eXo.core.DOMUtil.findFirstDescendantByClass(obj, "div",
-        "UIComboboxLabel").innerHTML;
+    var hiddenField = xj(UICombobox.list.parentNode).next("input");
+    hiddenField.attr("value", val);
+    var text = hiddenField.next("input");
+    text.attr("value", xj(obj).find(".UIComboboxLabel").first().html());
     UICombobox.list.style.display = "none";
   }
 }
 
+/**
+ * Deprecated - use jQuery to register event, then return false instead
+ */
 eXo.core.EventManager = {
   cancelBubble : function(evt) {
     if (eXo.core.Browser.browserType == 'ie')
