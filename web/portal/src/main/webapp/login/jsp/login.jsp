@@ -93,14 +93,14 @@
 		              <td><%=res.getString("UILoginForm.label.RememberOnComputer")%></td>
 		            </tr>
 		          </table>
-		          <div id="UIPortalLoginFormAction" class="LoginButton" onclick="login();">
+		          <div id="UIPortalLoginFormAction" class="LoginButton">
 		            <table class="LoginButtonContainer">
 		            	<tr>
 			              <td class="Button">
 			                <div class="LeftButton">
 			                  <div class="RightButton">
 			                    <div class="MiddleButton">
-			                    	<a href="#"><%=res.getString("UILoginForm.label.Signin")%></a>
+			                    	<a href="#" onclick="login();"><%=res.getString("UILoginForm.label.Signin")%></a>
 			                    </div>
 			                  </div>
 			                </div>
