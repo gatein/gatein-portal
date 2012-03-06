@@ -49,7 +49,7 @@
 				    def actionCollapse = "ajaxAsyncGetRequest('" + uicomponent.url("CollapseNode", treePath) + "', true)";
 					println """
 						<div class="$lastNode Node">
-							<div class="CollapseIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this); $actionCollapse">
+							<div class="CollapseIcon ClearFix" onclick="eXo.webui.UISiteMap.collapseExpand(this); $actionCollapse">
 					""";
 					   println "<a class='NodeIcon DefaultPageIcon' href=\"$actionLink\">$label</a>";
 					println """
@@ -68,7 +68,7 @@
 					
 					println """
 						<div class="$lastNode Node">
-							<div class="ExpandIcon ClearFix" onclick="eXo.portal.UIPortal.collapseExpand(this); $actionExpand">
+							<div class="ExpandIcon ClearFix" onclick="eXo.webui.UISiteMap.collapseExpand(this); $actionExpand">
 					""";
 					      println "<a class='NodeIcon DefaultPageIcon' href=\"$actionLink\">$label</a>";
 					println """

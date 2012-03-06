@@ -284,25 +284,5 @@ eXo.portal.UIPortal = {
     {
       viewPage.css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
-  },
-
-  /**
-   * Clollapse or expand an element (all its children) of tree
-   * @param {Object} element object to collapse or expand
-   */
-  collapseExpand : function(element) {
-    var subGroup = xj(element.parentNode).children("div.ChildrenContainer")[0];
-    var className = element.className;
-    if (!subGroup)
-      return;
-    if (subGroup.style.display == "none") {
-      if (className.indexOf("ExpandIcon") == 0)
-        element.className = "CollapseIcon ClearFix";
-      subGroup.style.display = "block";
-    } else {
-      if (className.indexOf("CollapseIcon") == 0)
-        element.className = "ExpandIcon ClearFix";
-      subGroup.style.display = "none";
-    }
-  }
+  }  
 };

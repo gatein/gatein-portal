@@ -51,14 +51,14 @@ UISiteMap.prototype.generateHtml = function(data, nodeToUpdate, subGroup) {
 		if (node.hasChild) {
 			str += "<div class='" + lastNode + " Node'>";			
 			if (node.isExpanded) {
-				str += "<div class='CollapseIcon ClearFix' onclick='eXo.portal.UIPortal.collapseExpand(this); " + actionCollapse + "'>";
+				str += "<div class='CollapseIcon ClearFix' onclick='eXo.webui.UISiteMap.collapseExpand(this); " + actionCollapse + "'>";
 				str += "<a class='NodeIcon DefaultPageIcon' href='" + actionLink + "'>" + node.label + "</a>";
 				str += "</div><div class='ChildrenContainer' style='display: block'>";
 				for (var idx = 0; idx < node.childs.length; idx++) {
 					str += toHtml(node.childs[idx], idx == node.childs.length - 1);
 				}				
 			} else {
-				str += "<div class='ExpandIcon ClearFix' onclick='eXo.portal.UIPortal.collapseExpand(this); " + actionExpand + "'>";
+				str += "<div class='ExpandIcon ClearFix' onclick='eXo.webui.UISiteMap.collapseExpand(this); " + actionExpand + "'>";
 				str += "<a class='NodeIcon DefaultPageIcon' href='" + actionLink + "'>" + node.label + "</a>";
 				str += "</div><div class='ChildrenContainer' style='display: none'>";
 				for (var idx = 0; idx < node.childs.length; idx++) {
@@ -78,8 +78,28 @@ UISiteMap.prototype.generateHtml = function(data, nodeToUpdate, subGroup) {
 		htmlFrags += toHtml(data[i], i == data.length - 1);
 	}
 	
-	subGroup.innerHTML = htmlFrags;
-	subGroup.style.display = "block";
+	subGroup.html(htmlFrags);
+	subGroup.show();
+};
+
+/**
+ * Clollapse or expand an element (all its children) of tree
+ * @param {Object} element object to collapse or expand
+ */
+UISiteMap.prototype.collapseExpand = function(element) {
+  var subGroup = xj(element.parentNode).children("div.ChildrenContainer")[0];
+  var className = element.className;
+  if (!subGroup)
+    return;
+  if (subGroup.style.display == "none") {
+    if (className.indexOf("ExpandIcon") == 0)
+      element.className = "CollapseIcon ClearFix";
+    subGroup.style.display = "block";
+  } else {
+    if (className.indexOf("CollapseIcon") == 0)
+      element.className = "ExpandIcon ClearFix";
+    subGroup.style.display = "none";
+  }
 };
 
 eXo.webui.UISiteMap = new UISiteMap();

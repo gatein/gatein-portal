@@ -227,7 +227,8 @@ eXo.webui.UIDashboard = {
 
     dragObj.onCancel = function(e)
     {
-      if (BROWSER.browserType == "ie" && BROWSER.findMouseYInClient() < 0)
+      e = e || window.event;
+      if (BROWSER.isIE() && e.clientY < 0)
       {
         eXo.core.DragDrop2.end(e);
       }
