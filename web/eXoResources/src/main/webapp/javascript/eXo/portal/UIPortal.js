@@ -113,7 +113,7 @@ eXo.portal.UIPortal = {
       }
     });
 
-    if (editBlock.length == 0)
+    if (!editBlock)
     {
       return;
     }
@@ -124,12 +124,12 @@ eXo.portal.UIPortal = {
       var height = 0;
       var width = 0;
 
-      if (layoutBlock.length > 0 && layoutBlock.css("display") != "none")
+      if (layoutBlock && layoutBlock.css("display") != "none")
       {
         height = layoutBlock[0].offsetHeight;
         width = layoutBlock[0].offsetWidth;
       }
-      else if (viewBlock.length > 0 && viewBlock.css("display") != "none")
+      else if (viewBlock && viewBlock.css("display") != "none")
       {
         height = viewBlock[0].offsetHeight;
         width = viewBlock[0].offsetWidth;
