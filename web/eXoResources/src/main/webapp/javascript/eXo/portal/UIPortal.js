@@ -232,7 +232,7 @@ eXo.portal.UIPortal = {
 
   showViewMode : function() {
     var wkWs = xj("#UIWorkingWorkspace");
-    if (wkWs.find("div.UIPortlet").length == 0 && wkWs.find("div.UIContainer") == 0)
+    if (wkWs.find("div.UIPortlet").length == 0 && wkWs.find("div.UIContainer").length == 0)
     {
       xj("#UIPage").parents(".VIEW-PAGE").css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
@@ -240,7 +240,7 @@ eXo.portal.UIPortal = {
     var mask = xj(pageBodyBlock).find("div.UIPageBodyMask");
     if(mask.length > 0)
     {
-      mask.css("top", -pageBodyBlock.offsetHeight + "px").css("height", pageBodyBlock.offsetHeight + "px").css(pageBodyBlock.offsetWidth + "px");
+      mask.css("top", -pageBodyBlock.offsetHeight + "px").css("height", pageBodyBlock.offsetHeight + "px").css("width", pageBodyBlock.offsetWidth + "px");
     }
   },
 

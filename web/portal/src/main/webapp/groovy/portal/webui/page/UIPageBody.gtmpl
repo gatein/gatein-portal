@@ -35,7 +35,7 @@
 			
 			<%if(portalMode != UIPortalApplication.NORMAL_MODE) {%>
 			<div class="MaskParent" style="height: 0px;position:relative;">
-				<div class="UIPageBodyMask" style="position:absolute;"><span></span></div>
+				<div class="UIPageBodyMask DragControlArea" style="position:absolute;"><span></span></div>
 			</div>
 			<%}%>
 		</div>
