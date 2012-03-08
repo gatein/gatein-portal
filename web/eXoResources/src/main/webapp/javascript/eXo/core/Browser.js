@@ -39,14 +39,7 @@ eXo.core.Browser = {
 	  window.onresize =  this.managerResize;
 	  window.onscroll =  this.onScroll ;
 
-	  //All things defined in init methods has been deprecated
-	  this.initCommon() ;
 	  this.detectBrowser();
-
-	  if(this.opera)  this.initOpera() ;
-	  else if(this.ie) this.initIE() ;
-	  else if(this.webkit) this.initSafari() ;
-	  else this.initMozilla() ;
   },
 
   /**
@@ -203,6 +196,11 @@ eXo.core.Browser = {
 	  var agent = navigator.userAgent ;
 	  return (agent.indexOf("MSIE") >=0);
 	},		
+	
+	isIE6 : function() {
+	  var agent = navigator.userAgent ;
+	  return (agent.indexOf("MSIE 6") >=0);
+	},
 	
 	isIE7 : function() {
 	  var agent = navigator.userAgent ;
@@ -401,143 +399,7 @@ eXo.core.Browser = {
 	    height += elemt.offsetHeight;
 	    elemt.style.height = height + "px";
 	  }
-	},
-	
-	/**
-	 * All of these methods have been deprecated, we should move to use jQuery
-	 */
-	initCommon : function() {
-	  //Deprecated - should use $(window).height() instead
-	  this.getBrowserHeight = function() { return xj(window).height(); }
-	  //Deprecated - should use $(window).width() instead
-      this.getBrowserWidth = function() { return xj(window).width(); }
-      //Deprecated - should use $.ajax() instead
-      this.createHttpRequest = function() { return new XMLHttpRequest() ; }
-	},	
-		
-	initIE : function() {
-	  this.browserType = "ie" ;
-	  //Deprecated - should use $.ajax() instead
-	  this.createHttpRequest = function() {
-	     return new ActiveXObject("Msxml2.XMLHTTP") ; 
-	  }
-	  //Deprecated - should use $.on() instead
-	  this.eventListener = function(object, event, operation) {
-	    event = "on" + event ;
-	    object.attachEvent(event, operation) ;
-	  }
-	  //Deprecated - should use $.fadeIn() $.fadeTo() instead
-	  this.setOpacity = function(component, value) {component.style.filter = "alpha(opacity=" + value + ")" ;}
-	  //Deprecated - register event using jQuery and use event.target instead
-	  this.getEventSource = function(e) { return window.event.srcElement ; }
-	},
-	
-	initMozilla : function() {
-	  this.browserType = "mozilla" ;
-	  this.eventListener = function(object, event, operation) { object.addEventListener(event, operation, false) ; }
-	  this.setOpacity = function(component, value) { component.style.opacity = value/100 ; }
-	  this.getEventSource = function(e) { return e.target ; }
-	},
-	
-	initSafari : function() {
-	  this.browserType = "safari" ;
-	  this.getBrowserHeight = function() { return self.innerHeight ; } ;
-	  this.getBrowserWidth = function() { return self.innerWidth ; } ;
-	  this.eventListener = function(object, event, operation) { object.addEventListener(event, operation, false) ; }
-	  this.setOpacity = function(component, value) { component.style.opacity = value/100 ; }
-	  this.getEventSource = function(e) {
-	    var targ = e.target ;
-	    if (targ.nodeType == 3) targ = targ.parentNode ;
-	    return targ ;
-	  }
-	},
-	
-	initOpera : function() {
-	  this.browserType = "opera" ;
-	  this.getBrowserHeight = function() {
-	    return document.body.clientHeight ;
-	  }
-	  this.getBrowserWidth = function() {
-	    return document.body.clientWidth ;
-	  }	
-	},
-	
-	findMouseXInClient : function(e) {
-		  if (!e) e = window.event ;
-		  return e.clientX ;
-	},
-		
-	findMouseYInClient : function(e) {
-	  if (!e) e = window.event ;
-	  return e.clientY ;
-	},
-	
-	getBrowserType : function() {  
-	  return this.browserType ;
-	},
-	
-	/**
-	 * Returns the vertical position of an object relative to the window
-	 * Deprecated - use $.offset().top instead
-	 */
-	findPosY : function(obj) {
-	  var curtop = 0;
-	  while (obj) {
-	    curtop += obj.offsetTop ;
-	    obj = obj.offsetParent ;
-	  }
-	  return curtop ;
-	}, 
-	
-	/**
-	 * find the x position of the mouse in the page
-	 * Deprecated - register event using jQuery, and use event.pageX; 
-	 */
-	findMouseXInPage : function(e) {
-	  var posx = -1 ;
-	  if (!e) e = window.event ;
-	  if (e.pageX || e.pageY) {
-	    posx = e.pageX ;
-	  } else if (e.clientX || e.clientY) {
-	    posx = e.clientX + document.body.scrollLeft ;
-	  }
-	  return posx ;
-	},
-	
-	/**
-	 * find the y position of the mouse in the page
-	 * Deprecated - register event using jQuery, and use event.pageY;
-	 */
-	findMouseYInPage : function(e) {
-	  var posy = -1 ;
-	  if (!e) e = window.event ;
-	  if (e.pageY) {
-	    posy = e.pageY ;
-	  } else if (e.clientX || e.clientY) {
-	    //IE 6
-	    if (document.documentElement && document.documentElement.scrollTop) {
-	      posy = e.clientY + document.documentElement.scrollTop ;
-	    } else {
-	      posy = e.clientY + document.body.scrollTop ;
-	    }
-	  }
-	  return  posy ;
-	},
-	
-	/**
-	 * Deprecated - We don't support FF2 anymore
-	 */
-	isFF2 : function() {
-	  return (navigator.userAgent.indexOf("Firefox/2") >= 0);
-	},
-	
-	/**
-	 * Deprecated - We don't support IE6 anymore
-	 */
-	isIE6 : function() {
-	  var agent = navigator.userAgent ;
-	  return (agent.indexOf("MSIE 6") >=0);
-	}
+	}		
 };
 
 eXo.core.Browser.init();

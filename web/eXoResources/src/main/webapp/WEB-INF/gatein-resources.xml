@@ -144,10 +144,6 @@
          <path>/javascript/eXo/core/Util.js</path>
       </module>
       <module>
-         <name>eXo.core.DOMUtil</name>
-         <path>/javascript/eXo/core/DOMUtil.js</path>
-      </module>
-      <module>
          <name>eXo.webui.UIPopupSelectCategory</name>
          <path>/javascript/eXo/webui/UIPopupSelectCategory.js</path>
       </module>

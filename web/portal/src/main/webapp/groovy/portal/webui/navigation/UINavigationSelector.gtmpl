@@ -4,7 +4,6 @@
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
 	jsmanager.importJavascript("eXo.webui.UIDropDownControl");
-	jsmanager.addOnResizeJavascript("eXo.core.DOMUtil.cleanUpHiddenElements");
 	def options = uicomponent.getOptions();
 %>
 	<div class="UIDropDownControl" id="$uicomponent.id">
