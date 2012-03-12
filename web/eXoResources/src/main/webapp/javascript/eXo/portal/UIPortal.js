@@ -17,67 +17,6 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-function UIComponent(node) {
-	if(!node) return null;
-  this.node = node ;
-  this.type = node.className ;
-
-
-  var jqNode = xj(node);
-  var compBlock = jqNode.find("div.UIComponentBlock").eq(0);
-
-  var comp = this; //Store to avoid 'this' conflict in jQuery 'each'
-  compBlock.children("div").each(function()
-  {
-    var child = xj(this);
-    if(child.hasClass("LAYOUT-BLOCK"))
-    {
-      comp.layout = child[0];
-    }
-    else if(child.hasClass("VIEW-BLOCK"))
-    {
-      comp.view = child[0];
-    }
-    else if(child.hasClass("EDITION-BLOCK"))
-    {
-      comp.control = child[0];
-    }
-  });
-
-  this.component = "";
-
-  if (jqNode.hasClass("UIPortal"))
-  {
-    this.id = node.id.replace("UIPortal-", "");
-  }
-  else if (jqNode.hasClass("UIPortlet"))
-  {
-    this.id = node.id.replace("UIPortlet-", "");
-  }
-  else if (jqNode.hasClass("UIContainer"))
-  {
-    this.id = node.id.replace("UIContainer-", "");
-  }
-  else
-  {
-    this.id = node.id;
-  }
-
-};
-
-UIComponent.prototype.getId = function() { return this.id ; };
-UIComponent.prototype.getElement = function() { return this.node ; };
-UIComponent.prototype.getUIComponentType = function() { return this.type ; };
-
-UIComponent.prototype.getUIComponentBlock = function() { return this.node ; };
-UIComponent.prototype.getControlBlock = function() { return this.control ; };
-UIComponent.prototype.getLayoutBlock = function() { return this.layout ; };
-UIComponent.prototype.getViewBlock = function() { return this.view ; };
-
-eXo.portal.UIPortalComponent = UIComponent.prototype.constructor ;
-
-/*******************************************************************************/
-
 eXo.portal.UIPortal = {
   portalUIComponentDragDrop : false,
 
@@ -236,11 +175,11 @@ eXo.portal.UIPortal = {
     {
       xj("#UIPage").parents(".VIEW-PAGE").css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
-    var pageBodyBlock = new UIComponent(document.getElementById("UIPageBody")).getUIComponentBlock();
-    var mask = xj(pageBodyBlock).find("div.UIPageBodyMask");
+    var pageBodyBlock = xj("UIPageBody");        
+    var mask = pageBodyBlock.find("div.UIPageBodyMask");
     if(mask.length > 0)
     {
-      mask.css("top", -pageBodyBlock.offsetHeight + "px").css("height", pageBodyBlock.offsetHeight + "px").css("width", pageBodyBlock.offsetWidth + "px");
+      mask.css("top", -pageBodyBlock[0].offsetHeight + "px").css("height", pageBodyBlock[0].offsetHeight + "px").css("width", pageBodyBlock[0].offsetWidth + "px");
     }
   },
 

@@ -120,19 +120,18 @@ eXo.portal.PortalDragDrop = {
 	       if(eXo.portal.portalMode % 2) uiComponentLayout = jTarget.find(".LAYOUT-PORTAL").first();
 	       else uiComponentLayout = jTarget.find(".VIEW-PORTAL").first();
 	     } else {
-	       var foundUIComponent = new eXo.portal.UIPortalComponent(foundTarget);
-	       if(eXo.portal.portalMode % 2) uiComponentLayout = foundUIComponent.getLayoutBlock();
-	       else uiComponentLayout = foundUIComponent.getViewBlock();
-	       uiComponentLayout.style.height = "auto";
+	       var foundUIComponent = xj(foundTarget);
+	       if(eXo.portal.portalMode % 2) uiComponentLayout = foundUIComponent.find(".LAYOUT-BLOCK").first();
+	       else uiComponentLayout = foundUIComponent.find(".VIEW-BLOCK").first();
+	       uiComponentLayout.css("height", "auto");
 	     }
 	    
-	     var componentIdElement = xj(uiComponentLayout).children("div").first();
+	     var componentIdElement = uiComponentLayout.children("div").first();
 	     var layoutTypeElement = componentIdElement.children("div");
 	     layoutTypeElement = layoutTypeElement.length == 0 ? null : layoutTypeElement[0];
 	     PortalDragDrop.layoutTypeElementNode = layoutTypeElement;
 	    
-	     if(previewBlock == null) previewBlock = PortalDragDrop.createPreview();
-	    	     
+	     if(previewBlock == null) previewBlock = PortalDragDrop.createPreview();	    	     
 	     if(layoutTypeElement != null && !xj(layoutTypeElement).hasClass("UITableColumnContainer")) {
 	      /* ===============================CASE ROW LAYOUT================================ */
 	      var rowContainer = jTarget.find(".UIRowContainer").first();
@@ -142,6 +141,8 @@ eXo.portal.PortalDragDrop = {
 	      
 	      jDragObj.data("listComponentInTarget", listComponent);
 	      var insertPosition = eXo.portal.PortalDragDrop.findInsertPosition(listComponent, "row", ey);
+	      if (jDragObj.data("foundTargetObject") === jDragObj.data("lastFoundTargetObject") && 
+	    		  insertPosition === jDragObj.data("foundIndex")) return;	      
 	      jDragObj.data("foundIndex", insertPosition);
 	      
 	      /* Insert preview block */
@@ -158,6 +159,8 @@ eXo.portal.PortalDragDrop = {
 	      });
 	      
 	      var insertPosition = eXo.portal.PortalDragDrop.findInsertPosition(listComponent, "column", ex);
+	      if (jDragObj.data("foundTargetObject") === jDragObj.data("lastFoundTargetObject") && 
+	    		  insertPosition === jDragObj.data("foundIndex")) return;
 	      jDragObj.data("foundIndex", insertPosition);
 	      
 	      /* Insert preview block */
@@ -407,7 +410,7 @@ eXo.portal.PortalDragDrop = {
 	},
 
 	findTarget : function(dragObject, mousexInPage, mouseyInPage) {
-	  var dropableTargets = xj(dragObject).data("dropableTargets") 
+	  var dropableTargets = xj(dragObject).data("dropableTargets");
 	  if(!dropableTargets) return null;
 	  
 	  var foundTarget = null;
@@ -419,7 +422,7 @@ eXo.portal.PortalDragDrop = {
 	      if(foundTarget == null) {
 	        foundTarget = ele;
 	      } else {
-	        if(ele != foundTarget && xj(ele).closest(xj(foundTarget)).length > 0) {
+	        if(xj(ele).closest(foundTarget).length > 0) {
 	          foundTarget = ele;
 	        }
 	      } 
