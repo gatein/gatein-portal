@@ -35,6 +35,7 @@ public class UsernameValidator extends MultipleConditionsValidator
    protected static final int DEFAULT_MAX_LENGTH = 30;
    protected Integer min = DEFAULT_MIN_LENGTH;
    protected Integer max = DEFAULT_MAX_LENGTH;
+   public static final String ALLOWED_SYMBOLS = "'_', '.'";
 
    // required by @Serialized
    public UsernameValidator()
@@ -62,19 +63,22 @@ public class UsernameValidator extends MultipleConditionsValidator
 
       if (!Character.isLowerCase(buff[0]))
       {
-         messages.addMessage("FirstCharacterNameValidator.msg", new Object[]{label});
+         messages.addMessage("FirstCharacterUsernameValidator.msg", new Object[]{label});
       }
 
-      if (!Character.isLetterOrDigit(buff[buff.length - 1]))
+      char c = buff[buff.length - 1];
+      if (!isLowerCaseLetterOrDigit(c))
       {
-         messages.addMessage("LastCharacterUsernameValidator.msg", new Object[]{label, buff[buff.length - 1]});
+         messages.addMessage("LastCharacterUsernameValidator.msg", new Object[]{label, c});
       }
 
+      boolean hasConsecutive = false;
+      boolean hasInvalid = false;
       for (int i = 1; i < buff.length - 1; i++)
       {
-         char c = buff[i];
+         c = buff[i];
 
-         if (Character.isLetterOrDigit(c))
+         if (isLowerCaseLetterOrDigit(c))
          {
             continue;
          }
@@ -84,18 +88,41 @@ public class UsernameValidator extends MultipleConditionsValidator
             char next = buff[i + 1];
             if (isSymbol(next))
             {
-               messages.addMessage("ConsecutiveSymbolValidator.msg", new Object[]{label, buff[i], buff[i + 1]});
+               if (!hasConsecutive)
+               {
+                  messages.addMessage("ConsecutiveSymbolValidator.msg", new Object[]{label, ALLOWED_SYMBOLS});
+                  hasConsecutive = true;
+               }
             }
             else if (!Character.isLetterOrDigit(next))
             {
-               messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label});
+               if (!hasInvalid)
+               {
+                  messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label});
+                  hasInvalid = true;
+               }
             }
          }
          else
          {
-            messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label});
+            if (!hasInvalid)
+            {
+               messages.addMessage("UsernameValidator.msg.Invalid-char", new Object[]{label});
+               hasInvalid = true;
+            }
+         }
+
+         // if we have both error conditions, fail "fast" instead of going on
+         if (hasConsecutive && hasInvalid)
+         {
+            break;
          }
       }
+   }
+
+   private static boolean isLowerCaseLetterOrDigit(char character)
+   {
+      return Character.isDigit(character) || (character >= 'a' && character <= 'z');
    }
 
    private static boolean isSymbol(char c)

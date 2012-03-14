@@ -38,7 +38,7 @@ public class ResourceValidator extends MultipleConditionsValidator
    protected void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput)
    {
       char firstChar = value.charAt(0);
-      if (Character.isDigit(firstChar) || firstChar == '-' || firstChar == '.' || firstChar == '_')
+      if (!Character.isLetter(firstChar))
       {
          Object[] args = {label, uiInput.getBindingField()};
          messages.addMessage("FirstCharacterNameValidator.msg", args);
@@ -46,12 +46,12 @@ public class ResourceValidator extends MultipleConditionsValidator
       for (int i = 0; i < value.length(); i++)
       {
          char c = value.charAt(i);
-         if (Character.isLetter(c) || Character.isDigit(c) || c == '_' || c == '-' || c == '.')
+         if (!Character.isLetter(c) && !Character.isDigit(c) && c != '_' && c != '-' && c != '.')
          {
-            continue;
+            Object[] args = {label};
+            messages.addMessage("ResourceValidator.msg.Invalid-char", args);
+            break;
          }
-         Object[] args = {label};
-         messages.addMessage("ResourceValidator.msg.Invalid-char", args);
       }
    }
 }

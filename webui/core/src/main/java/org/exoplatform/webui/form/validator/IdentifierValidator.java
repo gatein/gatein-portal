@@ -46,11 +46,11 @@ public class IdentifierValidator extends MultipleConditionsValidator implements 
       for (int i = 0; i < value.length(); i++)
       {
          char c = value.charAt(i);
-         if (Character.isLetter(c) || Character.isDigit(c) || c == '_' || c == '-')
+         if (!Character.isLetter(c) && !Character.isDigit(c) && c != '_' && c != '-')
          {
-            continue;
+            messages.addMessage("IdentifierValidator.msg.Invalid-char", new Object[]{label});
+            break;
          }
-         messages.addMessage("IdentifierValidator.msg.Invalid-char", new Object[]{label});
       }
    }
 }
