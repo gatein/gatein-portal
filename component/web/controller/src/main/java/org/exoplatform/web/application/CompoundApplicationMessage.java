@@ -24,13 +24,15 @@ package org.exoplatform.web.application;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 /** @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a> */
 public class CompoundApplicationMessage extends AbstractApplicationMessage implements Serializable
 {
-   private List<AbstractApplicationMessage> messages = new ArrayList<AbstractApplicationMessage>(5);
+   private Set<AbstractApplicationMessage> messages = new HashSet<AbstractApplicationMessage>(5);
 
    public CompoundApplicationMessage()
    {
@@ -70,7 +72,9 @@ public class CompoundApplicationMessage extends AbstractApplicationMessage imple
 
    public void addMessage(String messageKey, Object[] args)
    {
-      messages.add(new ApplicationMessage(messageKey, args, AbstractApplicationMessage.WARNING));
+      final ApplicationMessage message = new ApplicationMessage(messageKey, args, AbstractApplicationMessage.WARNING);
+      message.setArgsLocalized(false);
+      messages.add(message);
    }
 
    public boolean isEmpty()

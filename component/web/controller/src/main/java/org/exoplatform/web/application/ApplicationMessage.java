@@ -23,6 +23,7 @@
 package org.exoplatform.web.application;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /** @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a> */
 public class ApplicationMessage extends AbstractApplicationMessage implements Serializable
@@ -34,6 +35,40 @@ public class ApplicationMessage extends AbstractApplicationMessage implements Se
    {
       this.messageKey_ = key;
       this.messageArgs_ = args;
+   }
+
+   @Override
+   public boolean equals(Object o)
+   {
+      if (this == o)
+      {
+         return true;
+      }
+      if (o == null || getClass() != o.getClass())
+      {
+         return false;
+      }
+
+      ApplicationMessage that = (ApplicationMessage)o;
+
+      if (!Arrays.equals(messageArgs_, that.messageArgs_))
+      {
+         return false;
+      }
+      if (!messageKey_.equals(that.messageKey_))
+      {
+         return false;
+      }
+
+      return true;
+   }
+
+   @Override
+   public int hashCode()
+   {
+      int result = messageKey_.hashCode();
+      result = 31 * result + (messageArgs_ != null ? Arrays.hashCode(messageArgs_) : 0);
+      return result;
    }
 
    public ApplicationMessage(String key, Object[] args, int type)
