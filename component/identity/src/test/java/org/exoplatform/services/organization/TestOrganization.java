@@ -162,6 +162,45 @@ public class TestOrganization extends AbstractKernelTest
       uHandler.saveUser(user, false);
 
    }
+   
+   public void testDisplayName() throws Exception
+   {
+      UserHandler uHandler = organizationService.getUserHandler();
+      User john = uHandler.findUserByName("john");
+
+      Assert.assertNotNull(john);
+
+      // Test that fullName is working correctly for "john"
+      Assert.assertEquals("John Anthony", john.getFullName());
+      john.setFullName("Johnny Something");
+      uHandler.saveUser(john, false);
+      john = uHandler.findUserByName("john");
+      Assert.assertEquals("Johnny Something", john.getFullName());
+
+      // Now delete fullName and assert that it's "firstName lastName"
+      john.setFullName(null);
+      uHandler.saveUser(john, false);
+      john = uHandler.findUserByName("john");
+      Assert.assertEquals("John Anthony", john.getFullName());
+      
+//    TODO: GTNPORTAL-2358 uncomment once displayName will be available      
+//      // Test that "root" and "john" have displayName but demo not.
+//      Assert.assertEquals("Root Root", root.getDisplayName());
+//      Assert.assertEquals("john@localhost", john.getDisplayName());
+//      Assert.assertNull(demo.getDisplayName());
+//
+//      // Change displayName of john and test that it's changed
+//      john.setDisplayName("John Anthony");
+//      uHandler.saveUser(john, false);
+//      john = uHandler.findUserByName("john");
+//      Assert.assertEquals("John Anthony", john.getDisplayName());
+//
+//      // Assign displayName to demo and test that it's changed
+//      demo.setDisplayName("Demo Demo");
+//      uHandler.saveUser(demo, false);
+//      demo = uHandler.findUserByName("demo");
+//      Assert.assertEquals("Demo Demo", demo.getDisplayName());
+   }
 
    private void createGroup(String parent, String name)
    {

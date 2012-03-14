@@ -73,6 +73,10 @@ public class UIAccountProfiles extends UIForm
          StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
       addUIFormInput(new UIFormStringInput("lastName", "lastName", useraccount.getLastName()).addValidator(
          StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
+
+      // TODO: GTNPORTAL-2358 switch to getDisplayName once it will be available in Organization API
+      addUIFormInput(new UIFormStringInput("displayName", "displayName", useraccount.getFullName()).addValidator(
+            StringLengthValidator.class, 0, 90));
       addUIFormInput(new UIFormStringInput("email", "email", useraccount.getEmail()).addValidator(
          MandatoryValidator.class).addValidator(EmailAddressValidator.class));
    }
@@ -87,6 +91,8 @@ public class UIAccountProfiles extends UIForm
          User user = service.getUserHandler().findUserByName(userName);
          uiForm.getUIStringInput("firstName").setValue(user.getFirstName());
          uiForm.getUIStringInput("lastName").setValue(user.getLastName());
+         // TODO: GTNPORTAL-2358 switch to getDisplayName once it will be available in Organization API
+         uiForm.getUIStringInput("displayName").setValue(user.getFullName());
          uiForm.getUIStringInput("email").setValue(user.getEmail());
          event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
       }
@@ -119,6 +125,9 @@ public class UIAccountProfiles extends UIForm
          }
          user.setFirstName(uiForm.getUIStringInput("firstName").getValue());
          user.setLastName(uiForm.getUIStringInput("lastName").getValue());
+
+         // TODO: GTNPORTAL-2358 switch to setDisplayName once it will be available in Organization API
+         user.setFullName(uiForm.getUIStringInput("displayName").getValue());
          user.setEmail(newEmail);
          uiApp.addMessage(new ApplicationMessage("UIAccountProfiles.msg.update.success", null));
          service.getUserHandler().saveUser(user, true);

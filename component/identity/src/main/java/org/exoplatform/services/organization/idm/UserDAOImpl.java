@@ -25,7 +25,6 @@ import org.exoplatform.services.organization.Query;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserEventListener;
 import org.exoplatform.services.organization.UserHandler;
-import org.exoplatform.services.organization.impl.UserImpl;
 import org.gatein.common.logging.LogLevel;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -65,6 +64,8 @@ public class UserDAOImpl implements UserHandler
 
    public static final String USER_LAST_NAME = "lastName";
 
+   public static final String USER_DISPLAY_NAME = "displayName";
+
    public static final String USER_EMAIL = "email";
 
    public static final String USER_CREATED_DATE = "createdDate";
@@ -85,6 +86,7 @@ public class UserDAOImpl implements UserHandler
       keys.add(USER_PASSWORD);
       keys.add(USER_FIRST_NAME);
       keys.add(USER_LAST_NAME);
+      keys.add(USER_DISPLAY_NAME);
       keys.add(USER_EMAIL);
       keys.add(USER_CREATED_DATE);
       keys.add(USER_LAST_LOGIN_TIME);
@@ -735,6 +737,25 @@ public class UserDAOImpl implements UserHandler
       {
          attributes.add(new SimpleAttribute(USER_LAST_NAME, user.getLastName()));
       }
+
+      // TODO: GTNPORTAL-2358 Change once displayName will be available as part of Organization API
+      if (user instanceof UserImpl)
+      {
+         UserImpl userImpl = (UserImpl)user;
+         if (userImpl.getDisplayName() != null)
+         {
+            attributes.add(new SimpleAttribute(USER_DISPLAY_NAME, ((UserImpl)user).getDisplayName()));
+         }
+         else
+         {
+            removeDisplayNameIfNeeded(am, user);
+         }
+      }
+      else
+      {
+         log.warn("User is of class " + user.getClass() + " which is not instanceof " + UserImpl.class);
+      }
+
       if (user.getOrganizationId() != null)
       {
          attributes.add(new SimpleAttribute(USER_ORGANIZATION_ID, user.getOrganizationId()));
@@ -891,6 +912,11 @@ public class UserDAOImpl implements UserHandler
          {
             user.setLastName(attrs.get(USER_LAST_NAME).getValue().toString());
          }
+         if (attrs.containsKey(USER_DISPLAY_NAME))
+         {
+            // TODO: GTNPORTAL-2358 Change once displayName will be available as part of Organization API
+            user.setFullName(attrs.get(USER_DISPLAY_NAME).getValue().toString());
+         }
          if (attrs.containsKey(USER_ORGANIZATION_ID))
          {
             user.setOrganizationId(attrs.get(USER_ORGANIZATION_ID).getValue().toString());
@@ -923,6 +949,24 @@ public class UserDAOImpl implements UserHandler
       // TODO: refactor to remove cast. For now to avoid adding new config option and share existing cache instannce
       // TODO: it should be there.
       return ((PicketLinkIDMServiceImpl)service_).getRealmName();
+   }
+
+   // Field displayName is not mandatory. We need to handle situation when user deleted displayName, which had been set previously.
+   // We need to ask if current User has displayName set previously and if yes, it needs to be removed.
+   private void removeDisplayNameIfNeeded(AttributesManager am, User user)
+   {
+      try
+      {
+         Attribute attr = am.getAttribute(user.getUserName(), USER_DISPLAY_NAME);
+         if (attr != null)
+         {
+            am.removeAttributes(user.getUserName(), new String[] { USER_DISPLAY_NAME });
+         }
+      }
+      catch (IdentityException e)
+      {
+         log.error("Cannot remove displayName attribute of user: " + user.getUserName() + "; ", e);
+      }
    }
 
    private boolean countPaginatedUsers()

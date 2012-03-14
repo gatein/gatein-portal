@@ -53,6 +53,8 @@ public class UIRegisterInputSet extends UIFormInputWithActions
    protected static String FIRST_NAME = "firstName";
    
    protected static String LAST_NAME = "lastName";
+
+   protected static String DISPLAY_NAME = "displayName";
    
    protected static String EMAIL_ADDRESS = "emailAddress";
 
@@ -79,6 +81,9 @@ public class UIRegisterInputSet extends UIFormInputWithActions
       
       addUIFormInput(new UIFormStringInput(LAST_NAME, LAST_NAME, null).addValidator(StringLengthValidator.class, 1,
          45).addValidator(MandatoryValidator.class).addValidator(NaturalLanguageValidator.class));
+
+      addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(StringLengthValidator.class, 0,
+            90));
       
       addUIFormInput(new UIFormStringInput(EMAIL_ADDRESS, EMAIL_ADDRESS, null).addValidator(MandatoryValidator.class).addValidator(
          EmailAddressValidator.class));
@@ -123,6 +128,11 @@ public class UIRegisterInputSet extends UIFormInputWithActions
    private String getLastName(){
       return getUIStringInput(LAST_NAME).getValue();
    }
+
+   private String getDisplayName()
+   {
+      return getUIStringInput(DISPLAY_NAME).getValue();
+   }
    
    /**
     * Use this method instead of invokeSetBinding, to avoid abusing reflection
@@ -132,6 +142,8 @@ public class UIRegisterInputSet extends UIFormInputWithActions
       user.setPassword(getPassword());
       user.setFirstName(getFirstName());
       user.setLastName(getLastName());
+      // TODO: GTNPORTAL-2358 switch to setDisplayName once it will be available in Organization API
+      user.setFullName(getDisplayName());
       user.setEmail(getEmail());
    }
    

@@ -69,6 +69,10 @@ public class UIAccountEditInputSet extends UIFormInputSet
          StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
       addUIFormInput(new UIFormStringInput("lastName", "lastName", null).addValidator(
          StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
+
+      // TODO: GTNPORTAL-2358 switch bindingField fullName to displayName once displayName will be available in Organization API
+      addUIFormInput(new UIFormStringInput("displayName", "fullName", null).addValidator(
+            StringLengthValidator.class, 0, 90));
       addUIFormInput(new UIFormStringInput("email", "email", null).addValidator(MandatoryValidator.class).addValidator(
          EmailAddressValidator.class));
       UIFormCheckBoxInput<Boolean> uiCheckbox = new UIFormCheckBoxInput<Boolean>(CHANGEPASS, null, false);

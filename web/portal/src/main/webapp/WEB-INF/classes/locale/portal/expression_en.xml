@@ -59,6 +59,7 @@
     <decorator>Decorator</decorator>
     <department>Department</department>
     <description>Description</description>
+    <displayName>Display Name</displayName>
   <!--
   ###################################################################
   #                  EXPRESSION START  WITH 'e'                     #
