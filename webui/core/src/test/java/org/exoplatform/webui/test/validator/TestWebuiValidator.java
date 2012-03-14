@@ -41,7 +41,6 @@ import java.util.Locale;
 
 /**
  * @author <a href="mailto:haint@exoplatform.com">Nguyen Thanh Hai</a>
- * 
  * @datSep 26, 2011
  */
 public class TestWebuiValidator extends TestCase
@@ -115,6 +114,26 @@ public class TestWebuiValidator extends TestCase
       assertFalse(expected(validator, "Root"));
    }
 
+   public void validateUsernamesInGroupMembership()
+   {
+      final UserConfigurableValidator validator = new UserConfigurableValidator(UserConfigurableValidator.GROUPMEMBERSHIP);
+      assertTrue(expected(validator, "root.gtn"));
+      assertTrue(expected(validator, "root_gtn"));
+      assertTrue(expected(validator, "root_gtn.01"));
+      assertTrue(expected(validator, "a1,foo,bar"));
+      assertTrue(expected(validator, "a1 ,\tfoo,\nbar     \r"));
+      assertFalse(expected(validator, "a1 ,\tfoo,\nbar     \ra"));
+      assertFalse(expected(validator, "a1 ,\tfoo,\nbar     \r,a"));
+      assertFalse(expected(validator, "root_gtn_"));
+      assertFalse(expected(validator, "_root_gtn"));
+//      assertFalse(expected(validator, "root__gtn")); // not taken into account yet
+//      assertFalse(expected(validator, "root._gtn")); // not taken into account yet
+      assertFalse(expected(validator, "root--gtn"));
+      assertFalse(expected(validator, "root*gtn"));
+      assertFalse(expected(validator, "Root"));
+      assertFalse(expected(validator, "a"));
+   }
+
    public void testEmailValidator()
    {
       Validator validator = new EmailAddressValidator();
@@ -158,7 +177,7 @@ public class TestWebuiValidator extends TestCase
       assertFalse(expected(validator, "01"));
       assertFalse(expected(validator, "-01"));
    }
-   
+
    public void testNumberRangeValidator()
    {
       Validator validator = new NumberRangeValidator(-5, 5);
@@ -167,28 +186,28 @@ public class TestWebuiValidator extends TestCase
       assertTrue(expected(validator, "0"));
       assertTrue(expected(validator, "1"));
       assertTrue(expected(validator, "5"));
-      
+
       assertFalse(expected(validator, "-10"));
       assertFalse(expected(validator, "-6"));
       assertFalse(expected(validator, "6"));
       assertFalse(expected(validator, "10"));
    }
-   
+
    public void testSpecialCharacterValidator()
    {
-      Validator validator= new SpecialCharacterValidator();
-      assertTrue(expected(validator,"aAzZ  caffé"));
-      assertFalse(expected(validator,"aAzZ\tcaffé"));
-      assertFalse(expected(validator,"aAzZ\ncaffé"));
-      assertFalse(expected(validator,"aAzZ \rcaffé"));
-      assertFalse(expected(validator,"\tcaffé"));
-      assertFalse(expected(validator,"\ncaffé"));
-      assertFalse(expected(validator,"\rcaffé"));
-      assertTrue(expected(validator,"\n"));
+      Validator validator = new SpecialCharacterValidator();
+      assertTrue(expected(validator, "aAzZ  caffé"));
+      assertFalse(expected(validator, "aAzZ\tcaffé"));
+      assertFalse(expected(validator, "aAzZ\ncaffé"));
+      assertFalse(expected(validator, "aAzZ \rcaffé"));
+      assertFalse(expected(validator, "\tcaffé"));
+      assertFalse(expected(validator, "\ncaffé"));
+      assertFalse(expected(validator, "\rcaffé"));
+      assertTrue(expected(validator, "\n"));
       assertTrue(expected(validator, "\t"));
       assertTrue(expected(validator, "\n"));
    }
-   
+
    public void testResourceValidator()
    {
       Validator validator = new ResourceValidator();
@@ -196,7 +215,7 @@ public class TestWebuiValidator extends TestCase
       assertFalse(expected(validator, "_caffé"));
       assertFalse(expected(validator, "0caffé"));
    }
-   
+
    public void testNameValidator()
    {
       Validator validator = new NameValidator();
@@ -204,7 +223,7 @@ public class TestWebuiValidator extends TestCase
       assertTrue(expected(validator, "*caffé"));
       assertTrue(expected(validator, "0caffé"));
    }
-   
+
    public void testIdentifierValidator()
    {
       Validator validator = new IdentifierValidator();

@@ -67,7 +67,8 @@ public class UserConfigurableValidator extends MultipleConditionsValidator
    public static final String USERNAME = "username";
    public static final String GROUPMEMBERSHIP = "groupmembership";
    public static final String DEFAULT_LOCALIZATION_KEY = "ExpressionValidator.msg.value-invalid";
-   public static final String GROUP_MEMBERSHIP_VALIDATION_REGEX = "^\\p{L}[\\p{L}\\d._\\-\\s*,\\s*]+$";
+   /** Note that this regular expression should actually validate comma-separated usernames. This is not the case as some constraints (consecutive symbols for examples) are not taken into account. */
+   public static final String GROUP_MEMBERSHIP_VALIDATION_REGEX = "^(\\p{Lower}[\\p{Lower}\\d\\._]+)(\\s*,\\s*(\\p{Lower}[\\p{Lower}\\d\\._]+))*$";
    public static final String GROUP_MEMBERSHIP_LOCALIZATION_KEY = "UIGroupMembershipForm.msg.Invalid-char";
 
    private static Map<String, ValidatorConfiguration> configurations = new HashMap<String, ValidatorConfiguration>(3);
