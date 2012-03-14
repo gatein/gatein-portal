@@ -138,8 +138,19 @@ eXo.session.startItv = function() {
 
 eXo.session.openItv = function() {
 	var session = eXo.session;
-	var result = ajaxAsyncGetRequest(session.openUrl, false) ;
-	if(!isNaN(result)) session.itvTime = parseInt(result) ;
+	var request = window.ActiveXObject ? new ActiveXObject( "Msxml2.XMLHTTP" ) : new XMLHttpRequest();
+	request.open("GET", session.openUrl, true);
+	request.setRequestHeader("Cache-Control", "max-age=86400");
+	request.onreadystatechange = function() {
+		if (request.readyState == 4) { 
+			if (request.status == 200) {
+				var result = request.responseText;
+				if(!isNaN(result)) session.itvTime = parseInt(result); 				
+			}
+			delete request['onreadystatechange'];
+		}
+	}
+	request.send(null);
 } ;
 
 eXo.session.destroyItv = function () {
