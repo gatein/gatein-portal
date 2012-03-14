@@ -46,11 +46,13 @@ eXo.portal.PortalComposer = {
     if(id == "UIApplicationList")
     {
       toolPanel.attr("class", "ApplicationMode");
+      eXo.portal.PortalDragDrop.init(['UIPageBody']);
     }
     else if(id == "UIContainerList")
     {
       toolPanel.attr("class", "ContainerMode");
-    }
+      xj("#UIPageBody .DragControlArea").off("mousedown");
+    }    
   },
 
   /**

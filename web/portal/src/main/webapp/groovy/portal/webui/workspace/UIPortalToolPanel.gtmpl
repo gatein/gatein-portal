@@ -4,7 +4,7 @@
   def rcontext = _ctx.getRequestContext();
   JavascriptManager jsManager = rcontext.getJavascriptManager();
   jsManager.loadScriptResource("portal");
-  jsManager.addJavascript("eXo.portal.PortalDragDrop.init(['UIPortlet','UIPageBody','UIContainer','UIPortal'])");
+  jsManager.addJavascript("eXo.portal.PortalDragDrop.init(['UIPortlet','UIContainer'])");
 %>
 <div id="UIPortalToolPanel" style="position: relative;">
   <div class="UIPortalToolPanel" style="position: relative; z-index: 0;">	

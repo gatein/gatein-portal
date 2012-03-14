@@ -1,7 +1,17 @@
 <%	
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-	UIPortalApplication uiPortalApp = _ctx.getRequestContext().getUIApplication();
+  	import org.exoplatform.web.application.JavascriptManager;
+	
+  	def rcontext = _ctx.getRequestContext();
+  	UIPortalApplication uiPortalApp = rcontext.getUIApplication();
 	int portalMode = uiPortalApp.getModeState();
+	
+	JavascriptManager jsManager = rcontext.getJavascriptManager();
+	if (portalMode == UIPortalApplication.APP_BLOCK_EDIT_MODE || 
+	         portalMode == UIPortalApplication.APP_VIEW_EDIT_MODE) {
+		jsManager.loadScriptResource("portal");
+		jsManager.addJavascript("eXo.portal.PortalDragDrop.init(['UIPageBody'])");		   
+	}
 %>
 <div class="UIPageBody" id="${uicomponent.id}">		
 	<div class="UIComponent UIComponentBlock">
