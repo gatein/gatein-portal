@@ -280,7 +280,7 @@ eXo.webui.UIDashboard = {
     {
       var gadgetControl = xj(this);
       var gadget = gadgetControl.closest(".UIGadget");
-      var minimizeButton = gadget.find("span.MinimizedAction").eq(0);//That might be undefined if actual gadget is the item in Select Gadget popup
+      var minimizeButton = gadget.find("span.MinimizeAction").eq(0);//That might be undefined if actual gadget is the item in Select Gadget popup
       if(canEdit)
       {
         eXo.webui.UIDashboard.init(gadgetControl[0], gadget[0]);
