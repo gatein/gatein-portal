@@ -28,6 +28,8 @@ import org.exoplatform.container.xml.ObjectParameter;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.organization.BaseOrganizationService;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.picocontainer.Startable;
 
 import javax.naming.InitialContext;
@@ -50,6 +52,11 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
    public static final String CONFIGURATION_OPTION = "configuration";
 
    private Config configuration = new Config();
+
+   private UserTransaction userTransaction;
+
+   private static final Logger log = LoggerFactory.getLogger(PicketLinkIDMOrganizationServiceImpl.class);
+   private static final boolean traceLoggingEnabled = log.isTraceEnabled();
 
    public PicketLinkIDMOrganizationServiceImpl(InitParams params, PicketLinkIDMService idmService)
       throws Exception
@@ -144,11 +151,11 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
       {
          if (configuration.isUseJTA())
          {
-            UserTransaction tx = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
-            if (tx.getStatus() == Status.STATUS_NO_TRANSACTION)
+            if (traceLoggingEnabled)
             {
-               tx.begin();
+               log.trace("Starting UserTransaction in method startRequest");
             }
+            beginJTATransaction();
          }
          else
          {
@@ -174,16 +181,16 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
 
          if (configuration.isUseJTA())
          {
-            UserTransaction tx = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
-
-            if (tx.getStatus() != Status.STATUS_NO_TRANSACTION)
+            if (traceLoggingEnabled)
             {
-               tx.commit();
+               log.trace("Flushing UserTransaction in method flush");
             }
-
-            if (tx.getStatus() == Status.STATUS_NO_TRANSACTION)
+            // Complete restart of JTA transaction don't have good performance. So we will only sync identitySession (same as for non-jta environment)
+            // finishJTATransaction();
+            // beginJTATransaction();
+            if (getUserTransaction().getStatus() == Status.STATUS_ACTIVE)
             {
-               tx.begin();
+               idmService_.getIdentitySession().save();
             }
          }
          else
@@ -209,19 +216,15 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
       {
          if (configuration.isUseJTA())
          {
-            UserTransaction tx = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
-            if(tx.getStatus() == Status.STATUS_ACTIVE)
+            if (traceLoggingEnabled)
             {
-               tx.commit();
+               log.trace("Finishing UserTransaction in method endRequest");
             }
-            
+            finishJTATransaction();
          }            
          else
          {
-            if(idmService_.getIdentitySession().getTransaction().isActive())
-            {
-               idmService_.getIdentitySession().getTransaction().commit();
-            }
+            idmService_.getIdentitySession().getTransaction().commit();
          }
       }
       catch (Exception e)
@@ -239,5 +242,58 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
    public void setConfiguration(Config configuration)
    {
       this.configuration = configuration;
+   }
+   
+   
+   private void beginJTATransaction() throws Exception
+   {
+      UserTransaction tx = getUserTransaction();
+      
+      if (tx.getStatus() == Status.STATUS_NO_TRANSACTION)
+      {
+         tx.begin();
+      }
+      else
+      {
+         log.warn("UserTransaction not started as it's in state " + tx.getStatus());
+      }
+   }
+   
+   
+   private void finishJTATransaction() throws Exception
+   {
+      UserTransaction tx = getUserTransaction();
+      
+      int txStatus = tx.getStatus();
+      if (txStatus == Status.STATUS_NO_TRANSACTION)
+      {
+         log.warn("UserTransaction can't be finished as it wasn't started");
+      }
+      else if (txStatus == Status.STATUS_MARKED_ROLLBACK || txStatus == Status.STATUS_ROLLEDBACK || txStatus == Status.STATUS_ROLLING_BACK)
+      {
+         log.warn("Going to rollback UserTransaction as it's status is " + txStatus);
+         tx.rollback();
+      }
+      else
+      {
+         tx.commit();
+      }
+   }
+
+   // It's fine to reuse same instance of UserTransaction as UserTransaction is singleton in JBoss and most other AS.
+   // And new InitialContext().lookup("java:comp/UserTransaction") is quite expensive operation
+   private UserTransaction getUserTransaction() throws Exception
+   {
+      if (userTransaction == null)
+      {
+         synchronized (this)
+         {
+            if (userTransaction == null)
+            {
+               userTransaction = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
+            }
+         }
+      }
+      return userTransaction;
    }
 }
