@@ -19,11 +19,11 @@
 
 package org.exoplatform.webui.core;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.web.application.AbstractApplicationMessage;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
@@ -119,6 +119,11 @@ public class UIPopupMessages extends UIPopupWindow
          default :
             infos_.add(msg);
       }
+   }
+
+   public void addMessage(ApplicationMessage msg)
+   {
+      addMessage((AbstractApplicationMessage)msg);
    }
    
    private ResourceBundle getResourceBundle()

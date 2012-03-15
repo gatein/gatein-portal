@@ -99,4 +99,9 @@ public abstract class AbstractApplicationMessage implements Serializable
       }
       return value;
    }
+
+   public String getMessageKey()
+   {
+      throw new UnsupportedOperationException("Only non-compound ApplicationMessages have a message key.");
+   }
 }
