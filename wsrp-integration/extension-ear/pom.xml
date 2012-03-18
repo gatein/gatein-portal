@@ -28,7 +28,7 @@
    <parent>
       <artifactId>gatein-wsrp-integration-parent</artifactId>
       <groupId>org.gatein.integration</groupId>
-      <version>3.2.0-Beta01-SNAPSHOT</version>
+      <version>3.3.0.Alpha01-SNAPSHOT</version>
    </parent>
 
    <artifactId>extension-ear</artifactId>

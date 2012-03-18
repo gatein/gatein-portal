@@ -28,9 +28,10 @@
     <parent>
         <groupId>org.gatein.doc</groupId>
         <artifactId>docs-aggregator</artifactId>
-        <version>3.3.0.Alpha01</version>
+        <version>3.3.0-CR01-SNAPSHOT</version>
     </parent> 
     
+    <groupId>org.gatein.doc</groupId>
     <artifactId>gatein-user-guide-en</artifactId>
     <packaging>jdocbook</packaging>
     <name>GateIn User Guide en</name>
