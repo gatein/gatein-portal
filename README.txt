@@ -128,6 +128,15 @@ Alternatively you can use 'bin/gatein.sh run' ('bin\gatein.bat run' on Windows).
 Access the portal at: http://localhost:8080/portal
 
 
+Release instructions
+==================
+
+
+You should execute this magic command line:
+
+mvn release:prepare -Prelease,docs,hsqldb
+mvn release:perform -Prelease,docs,hsqldb
+
 Troubleshooting
 ===============
 

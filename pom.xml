@@ -67,12 +67,22 @@
 
       <!-- maven-enforcer-plugin -->
       <jdk.min.version>1.6</jdk.min.version>
+      
+      <!-- maven-release-plugin -->
+      <useReleaseProfile>false</useReleaseProfile>
+      <arguments>-Prelease,docs,hslqdb</arguments>
+      <version.release.plugin>2.2.1</version.release.plugin>
+      <pushChanges>false</pushChanges>
+      
+      <!-- buildnumber-maven-plugin : needs 1.0 for git -->
+      <version.buildnumber.plugin>1.0</version.buildnumber.plugin>
+      
    </properties>
 
    <scm>
-      <connection>scm:svn:http://anonsvn.jboss.org/repos/gatein/portal/trunk</connection>
-      <developerConnection>scm:svn:https://svn.jboss.org/repos/gatein/portal/trunk</developerConnection>
-      <url>http://fisheye.jboss.org/browse/gatein/portal/trunk</url>
+      <connection>scm:git:git://github.com/gatein/gatein-portal.git</connection>
+      <developerConnection>scm:git:ssh://git@github.com/gatein/gatein-portal.git</developerConnection>
+      <url>https://github.com/gatein/gatein-portal</url>
    </scm>
 
    <modules>
@@ -994,7 +1004,7 @@
          </build>
       </profile>
       <profile>
-         <id>doc</id>
+         <id>docs</id>
          <modules>
             <module>docs</module>
          </modules>
