@@ -20,7 +20,7 @@ Build instructions
 1) Check out GateIn Portal
 --------------------------
 
-svn co http://anonsvn.jboss.org/repos/gatein/portal/trunk gatein-portal
+git clone git://github.com/gatein/gatein-portal.git
 cd gatein-portal
 
 
