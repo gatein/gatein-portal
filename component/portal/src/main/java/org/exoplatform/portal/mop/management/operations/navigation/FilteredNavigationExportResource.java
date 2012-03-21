@@ -32,6 +32,7 @@ import org.gatein.management.api.PathTemplateFilter;
 import org.gatein.management.api.binding.BindingProvider;
 import org.gatein.management.api.binding.Marshaller;
 import org.gatein.management.api.exceptions.OperationException;
+import org.gatein.management.api.exceptions.ResourceNotFoundException;
 import org.gatein.management.api.operation.OperationContext;
 import org.gatein.management.api.operation.OperationContextDelegate;
 import org.gatein.management.api.operation.OperationHandler;
@@ -103,6 +104,10 @@ public class FilteredNavigationExportResource
             NavigationExportTask task = new NavigationExportTask(stepResultHandler.getResults().get(0), marshaller);
             resultHandler.completed(new ExportResourceModel(task));
          }
+      }
+      catch (ResourceNotFoundException e)
+      {
+         throw e;
       }
       catch (OperationException e)
       {

@@ -27,6 +27,7 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.management.exportimport.NavigationExportTask;
 import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.gatein.management.api.ContentType;
 import org.gatein.management.api.PathTemplateFilter;
 import org.gatein.management.api.binding.BindingProvider;
@@ -76,10 +77,16 @@ public class NavigationExportResource extends AbstractNavigationOperationHandler
 
          DescriptionService descriptionService = operationContext.getRuntimeContext().getRuntimeComponent(DescriptionService.class);
          NavigationService navigationService = operationContext.getRuntimeContext().getRuntimeComponent(NavigationService.class);
+         NavigationKey navigationKey = new NavigationKey(siteKey, navUri);
+
+         // Find navigation first
+         NodeContext<?> context = NavigationUtils.loadNode(navigationService, navigationService.loadNavigation(siteKey), navigationKey.getNavUri());
+         if (context == null) throw new ResourceNotFoundException("Navigation node not found for navigation uri '" + navUri +"'");
+
          BindingProvider bindingProvider = operationContext.getBindingProvider();
          Marshaller<PageNavigation> marshaller = bindingProvider.getMarshaller(PageNavigation.class, ContentType.XML);
 
-         NavigationExportTask exportTask = new NavigationExportTask(new NavigationKey(siteKey, navUri), navigationService, descriptionService, marshaller);
+         NavigationExportTask exportTask = new NavigationExportTask(navigationKey, navigationService, descriptionService, marshaller);
 
          resultHandler.completed(new ExportResourceModel(exportTask));
       }
