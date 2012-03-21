@@ -36,7 +36,8 @@ import java.util.regex.Pattern;
 @Serialized
 public class ExpressionValidator extends AbstractValidator
 {
-   private Matcher matcher;
+   private String regexp;
+   private transient Matcher matcher;
 
    private String key_;
 
@@ -47,14 +48,27 @@ public class ExpressionValidator extends AbstractValidator
 
    public ExpressionValidator(final String regex)
    {
-      matcher = Pattern.compile(regex).matcher("");
-      key_ = "ExpressionValidator.msg.value-invalid";
+      this(regex, "ExpressionValidator.msg.value-invalid");
    }
 
    public ExpressionValidator(final String regex, final String key)
    {
-      matcher = Pattern.compile(regex).matcher("");
+      this.regexp = regex;
       key_ = key;
+   }
+
+   private Matcher getMatcherFor(String input)
+   {
+      if(matcher == null)
+      {
+         matcher = Pattern.compile(regexp).matcher(input);
+      }
+      else
+      {
+         matcher.reset(input);
+      }
+
+      return matcher;
    }
 
    @Override
@@ -66,8 +80,7 @@ public class ExpressionValidator extends AbstractValidator
    @Override
    protected boolean isValid(String value, UIFormInput uiInput)
    {
-      matcher.reset(value);
-      return matcher.matches();
+      return getMatcherFor(value).matches();
    }
 
    @Override
