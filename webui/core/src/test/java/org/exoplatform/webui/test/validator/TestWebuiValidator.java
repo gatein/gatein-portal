@@ -138,6 +138,9 @@ public class TestWebuiValidator extends TestCase
    {
       Validator validator = new EmailAddressValidator();
       assertFalse(expected(validator, "root"));
+      assertFalse(expected(validator, "@"));
+      assertFalse(expected(validator, "foo@"));
+      assertFalse(expected(validator, "@foo"));
       assertTrue(expected(validator, "root.gtn@exoplatform.com"));
       assertTrue(expected(validator, "root.exo.gtn.portal@explatform.biz.edu.vn"));
       assertTrue(expected(validator, "root_exo_gtn_portal@explatform-edu.biz.vn"));

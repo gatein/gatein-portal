@@ -69,7 +69,7 @@ public class EmailAddressValidator extends MultipleConditionsValidator
 
    private boolean validateLocalPart(char[] localPart)
    {
-      if(!Character.isLetter(localPart[0]) || !Character.isLetterOrDigit(localPart[localPart.length - 1]))
+      if(localPart.length == 0 || !Character.isLetter(localPart[0]) || !Character.isLetterOrDigit(localPart[localPart.length - 1]))
       {
          return false;
       }
@@ -93,7 +93,7 @@ public class EmailAddressValidator extends MultipleConditionsValidator
 
    private boolean validateDomainName(char[] domainName)
    {
-      if(!Character.isLetter(domainName[0]) || !Character.isLetterOrDigit(domainName[domainName.length - 1]))
+      if(domainName.length == 0 || !Character.isLetter(domainName[0]) || !Character.isLetterOrDigit(domainName[domainName.length - 1]))
       {
          return false;
       }
