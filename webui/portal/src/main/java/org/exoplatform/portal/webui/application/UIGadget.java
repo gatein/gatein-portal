@@ -22,7 +22,6 @@ package org.exoplatform.portal.webui.application;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.commons.utils.PropertyManager;
-import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -50,9 +49,7 @@ import java.util.UUID;
  * 2008
  */
 @ComponentConfig(template = "system:/groovy/portal/webui/application/UIGadget.gtmpl", events = {
-   @EventConfig(listeners = UIGadget.SaveUserPrefActionListener.class),
-   @EventConfig(listeners = UIGadget.SetNoCacheActionListener.class),
-   @EventConfig(listeners = UIGadget.SetDebugActionListener.class)})
+   @EventConfig(listeners = UIGadget.SaveUserPrefActionListener.class)})
 /**
  * This class represents user interface gadgets, it using UIGadget.gtmpl for
  * rendering UI in eXo. It mapped to Application model in page or container.
@@ -78,8 +75,6 @@ public class UIGadget extends UIComponent
 
    private String url_;
 
-   private GadgetRegistryService gadgetRegistryService = null;
-
    public static final String PREF_KEY = "_pref_gadget_";
 
    public static final String PREF_NO_CACHE = "_pref_no_cache_";
@@ -95,6 +90,8 @@ public class UIGadget extends UIComponent
    public static final String METADATA_USERPREFS = "userPrefs";
    
    public static final String METADATA_MODULEPREFS = "modulePrefs";
+   
+   public static final String METADATA_ERROR = "error";
    
    public static final String RPC_RESULT = "result";
    
@@ -234,19 +231,39 @@ public class UIGadget extends UIComponent
       }
    }
    
+   /**
+    * Get metadata of this gadget application
+    * This metadata contains both metadata of gadget specification (.xml file) and a token from container
+    * @return String represent metadata of gadget
+    */
    public String getRpcMetadata()
    {
       try
       {
          if (metadata_ == null)
          {
-        	String gadgetUrl = getUrl();
-            String strMetadata = GadgetUtil.fetchGagdetRpcMetadata(gadgetUrl);
-            metadata_ = new JSONArray(strMetadata).getJSONObject(0).getJSONObject(UIGadget.RPC_RESULT).getJSONObject(gadgetUrl);
+            metadata_ = fetchRpcMetadata();
          }
          String token = GadgetUtil.createToken(this.getUrl(), new Random().nextLong());
          metadata_.put("secureToken", token);
          return metadata_.toString();
+      }
+      catch (JSONException e)
+      {
+         return null;
+      }
+   }
+   
+   private JSONObject fetchRpcMetadata()
+   {
+      try
+      {
+         String gadgetUrl = getUrl();
+         String strMetadata = GadgetUtil.fetchGagdetRpcMetadata(gadgetUrl);
+         JSONObject metadata =
+            new JSONArray(strMetadata).getJSONObject(0).getJSONObject(UIGadget.RPC_RESULT).getJSONObject(gadgetUrl);
+
+         return metadata;
       }
       catch (JSONException e)
       {
@@ -298,6 +315,16 @@ public class UIGadget extends UIComponent
          {
             throw new Exception();
          }
+         
+         if (metadata_ == null)
+         {
+            metadata_ = fetchRpcMetadata();
+         }
+
+         if (metadata_ == null || metadata_.has(METADATA_ERROR))
+         {
+            throw new Exception();
+         }
       }
       catch (Exception e)
       {
@@ -341,40 +368,14 @@ public class UIGadget extends UIComponent
       return url_;
    }
 
-   private GadgetRegistryService getGadgetRegistryService()
-   {
-      if (gadgetRegistryService == null)
-         gadgetRegistryService =
-            (GadgetRegistryService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
-               GadgetRegistryService.class);
-      return gadgetRegistryService;
-   }
-
    public boolean isNoCache()
    {
-      if(PropertyManager.isDevelopping())
-         return true;
-      return false;
-   }
-
-   public void setNoCache(boolean value)
-   {
+      return PropertyManager.isDevelopping();
    }
 
    public boolean isDebug()
    {
-      if(PropertyManager.isDevelopping())
-         return true;
-      return false;
-   }
-
-   public void setDebug(boolean value)
-   {
-   }
-
-   public boolean isGadgetDeveloper()
-   {
-      return getGadgetRegistryService().isGadgetDeveloper(Util.getPortalRequestContext().getRemoteUser());
+      return PropertyManager.isDevelopping();
    }
 
    public String getView()
@@ -458,33 +459,6 @@ public class UIGadget extends UIComponent
          }
 
          //event.getRequestContext().setResponseComplete(true);
-      }
-   }
-
-   static public class SetNoCacheActionListener extends EventListener<UIGadget>
-   {
-      public void execute(Event<UIGadget> event) throws Exception
-      {
-         /*
-          * String noCache =
-          * event.getRequestContext().getRequestParameter("nocache") ; UIGadget
-          * uiGadget = event.getSource() ;
-          * uiGadget.setNoCache(noCache.equals("1"));
-          */
-         event.getRequestContext().setResponseComplete(true);
-      }
-   }
-
-   static public class SetDebugActionListener extends EventListener<UIGadget>
-   {
-      public void execute(Event<UIGadget> event) throws Exception
-      {
-         /*
-          * String debug = event.getRequestContext().getRequestParameter("debug") ;
-          * UIGadget uiGadget = event.getSource() ;
-          * uiGadget.setDebug(debug.equals("1"));
-          */
-         event.getRequestContext().setResponseComplete(true);
       }
    }
 }

@@ -567,8 +567,11 @@ Browser.prototype.getHeightOfFreeSpace = function() {
  * Adjust height of the element to fill up free space if any
  */
 Browser.prototype.fillUpFreeSpace = function(elemt) {
+  if(typeof(elemt) == "string")
+    elemt = document.getElementById(elemt);
+	
   var height = eXo.core.Browser.getHeightOfFreeSpace();
-  if (height > 0)
+  if (height > 0 && elemt != undefined)
   {
     height += elemt.offsetHeight;
     elemt.style.height = height + "px";

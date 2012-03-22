@@ -85,7 +85,7 @@
 
   <filter-mapping>
     <filter-name>authFilter</filter-name>
-    <url-pattern>/gadgets/api/rpc/*</url-pattern>
+    <url-pattern>/gadgets/api/rest/*</url-pattern>
   </filter-mapping>
 
   <filter-mapping>

@@ -20,8 +20,9 @@
 package org.exoplatform.gadget.webui.component;
 
 import org.exoplatform.application.gadget.Gadget;
-import org.exoplatform.application.gadget.GadgetImporter;
 import org.exoplatform.application.gadget.GadgetRegistryService;
+import org.exoplatform.application.gadget.GadgetImporter;
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.webui.application.GadgetUtil;
@@ -64,8 +65,18 @@ public class UIGadgetPortlet extends UIPortletApplication
    /** User pref. */
    private String userPref;
    
+   /** Indicate height should be filled full in browser height */
+   private boolean fillUpFreeSpace;
+   
+   private JSONObject metadata;
+
+   private String url;
+   
    public UIGadgetPortlet() throws Exception
    {
+      setId(Integer.toString(hashCode()));
+      PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
+      fillUpFreeSpace = Boolean.parseBoolean(context.getRequest().getPreferences().getValue("fillUpFreeSpace", "false"));
       addChild(UIGadgetViewMode.class, null, null);
    }
    
@@ -77,6 +88,16 @@ public class UIGadgetPortlet extends UIPortletApplication
    public void setUserPref(String pref)
    {
       this.userPref = pref;
+   }
+   
+   public boolean isFillUpFreeSpace()
+   {
+      return fillUpFreeSpace;
+   }
+   
+   public void setFillUpFreeSpace(boolean isFillUpFreeSpace)
+   {
+      this.fillUpFreeSpace = isFillUpFreeSpace;
    }
 
    @Override
@@ -102,14 +123,26 @@ public class UIGadgetPortlet extends UIPortletApplication
       PortletPreferences prefs = req.getPreferences();
       userPref = prefs.getValue("userPref", null);
       
+      url = getUrl(prefs);
+      metadata = fetchMetadata(url);
+      
       super.processRender(app, context);
    }
 
    public String getUrl()
    {
-      PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
-      PortletPreferences pref = pcontext.getRequest().getPreferences();
-      String urlPref = pref.getValue("url", "http://www.google.com/ig/modules/horoscope.xml");
+      return url;
+   }
+   
+   public boolean isLossData()
+   {
+      return (url == null || metadata.has("error"));
+   }
+   
+   private String getUrl(PortletPreferences pref)
+   {
+      String url = null;
+      String urlPref = pref.getValue("url", "local://Calendar");
       if (urlPref.startsWith(LOCAL_STRING))
       {
          try
@@ -121,7 +154,7 @@ public class UIGadgetPortlet extends UIPortletApplication
             Gadget gadget = gadgetService.getGadget(gadgetName);
             if (gadget != null)
             {
-               return GadgetUtil.reproduceUrl(gadget.getUrl(), gadget.isLocal());
+               url = GadgetUtil.reproduceUrl(gadget.getUrl(), gadget.isLocal());
             }
             else 
             {
@@ -129,7 +162,6 @@ public class UIGadgetPortlet extends UIPortletApplication
             	{
             	   log.warn("The local gadget '" + gadgetName + "' was not found, nothing rendered");
             	}
-            	return null;
             }
          }
          catch (Exception e)
@@ -137,37 +169,60 @@ public class UIGadgetPortlet extends UIPortletApplication
             log.warn("Failure retrieving gadget from url!");
          }
       }
-      return urlPref;
-   }
-
-   public String getMetadata()
-   {
-      String url = getUrl();
+      else
+      {
+         url = urlPref;
+      }
+      
       if (url == null)
       {
          WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
          UIApplication uiApplication = context.getUIApplication();
          uiApplication.addMessage(new ApplicationMessage("UIGadgetPortlet.msg.url-invalid", null));
       }
+      
+      return url;
+      
+   }
 
-      return getMetadata(url);
+   public String getMetadata()
+   {
+      if (metadata == null)
+      {
+         PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
+         PortletPreferences pref = pcontext.getRequest().getPreferences();
+         url = getUrl(pref);
+         metadata = fetchMetadata(url);
+      }
+      
+      return metadata.toString();
    }
    
-   public String getMetadata(String url)
+   private JSONObject fetchMetadata(String url)
    {
       JSONObject metadata_ = null;
       try
       {
          String strMetadata = GadgetUtil.fetchGagdetRpcMetadata(url);
-         metadata_ = new JSONArray(strMetadata).getJSONObject(0).getJSONObject(UIGadget.RPC_RESULT).getJSONObject(url);
+         metadata_ = new JSONArray(strMetadata).getJSONObject(0).getJSONObject(UIGadget.RPC_RESULT).getJSONObject(url); 
          String token = GadgetUtil.createToken(url, new Long(hashCode()));
          metadata_.put("secureToken", token);
       }
       catch (JSONException e)
       {
-         e.printStackTrace(); //To change body of catch statement use File | Settings | File Templates.
+         log.warn("Unable to retrieve metadata of url: " + url, e);
       }
-      return metadata_.toString();
+      return metadata_;
+   }
+   
+   public boolean isNoCache()
+   {
+      return PropertyManager.isDevelopping();
+   }
+   
+   public boolean isDebug()
+   {
+      return PropertyManager.isDevelopping();
    }
    
    static public class SaveUserPrefActionListener extends EventListener<UIGadgetPortlet>
