@@ -37,6 +37,7 @@ import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -292,31 +293,56 @@ public class PageMarshallerTest extends AbstractMarshallerTest
       assertEquals("Everyone", Utils.join(";", container3.getAccessPermissions()));
       assertNull(container3.getFactoryId());
       {
-         // Verify site map application
+         // Verify site map  & wsrp application
          assertNotNull(container3.getChildren());
-         assertEquals(1, container3.getChildren().size());
-         ModelObject sitemapcomponent = container3.getChildren().get(0);
-         assertTrue(sitemapcomponent instanceof Application);
-         @SuppressWarnings("unchecked")
-         Application<Portlet> application = (Application<Portlet>) sitemapcomponent;
-         assertTrue(application.getType() == ApplicationType.PORTLET);
-         ApplicationState<Portlet> state = application.getState();
-         assertNotNull(state);
-         assertTrue(state instanceof TransientApplicationState);
-         TransientApplicationState<Portlet> tas = (TransientApplicationState<Portlet>) state;
-         assertEquals("web/SiteMapPortlet", tas.getContentId());
-         assertNull(tas.getContentState());
+         assertEquals(2, container3.getChildren().size());
+         {
+            ModelObject sitemapcomponent = container3.getChildren().get(0);
+            assertTrue(sitemapcomponent instanceof Application);
+            @SuppressWarnings("unchecked")
+            Application<Portlet> application = (Application<Portlet>) sitemapcomponent;
+            assertTrue(application.getType() == ApplicationType.PORTLET);
+            ApplicationState<Portlet> state = application.getState();
+            assertNotNull(state);
+            assertTrue(state instanceof TransientApplicationState);
+            TransientApplicationState<Portlet> tas = (TransientApplicationState<Portlet>) state;
+            assertEquals("web/SiteMapPortlet", tas.getContentId());
+            assertNull(tas.getContentState());
 
-         assertEquals("Default:DefaultTheme::Vista:VistaTheme::Mac:MacTheme", application.getTheme());
-         assertEquals("SiteMap", application.getTitle());
-         assertEquals("*:/platform/users", Utils.join(";", application.getAccessPermissions()));
-         assertTrue(application.getShowInfoBar());
-         assertTrue(application.getShowApplicationState());
-         assertFalse(application.getShowApplicationMode());
-         assertEquals("SiteMap", application.getDescription());
-         assertNull(application.getIcon());
-         assertNull(application.getWidth());
-         assertNull(application.getHeight());
+            assertEquals("Default:DefaultTheme::Vista:VistaTheme::Mac:MacTheme", application.getTheme());
+            assertEquals("SiteMap", application.getTitle());
+            assertEquals("*:/platform/users", Utils.join(";", application.getAccessPermissions()));
+            assertTrue(application.getShowInfoBar());
+            assertTrue(application.getShowApplicationState());
+            assertFalse(application.getShowApplicationMode());
+            assertEquals("SiteMap", application.getDescription());
+            assertNull(application.getIcon());
+            assertNull(application.getWidth());
+            assertNull(application.getHeight());
+         }
+         {
+            ModelObject wsrpcomponent = container3.getChildren().get(1);
+            assertTrue(wsrpcomponent instanceof Application);
+            @SuppressWarnings("unchecked")
+            Application<WSRP> application = (Application<WSRP>) wsrpcomponent;
+            assertTrue(application.getType() == ApplicationType.WSRP_PORTLET);
+            ApplicationState<WSRP> state = application.getState();
+            assertNotNull(state);
+            assertTrue(state instanceof TransientApplicationState);
+            TransientApplicationState<WSRP> tas = (TransientApplicationState<WSRP>) state;
+            assertEquals("selfv2./portletApplicationName.portletName", tas.getContentId());
+            assertNull(tas.getContentState());
+
+            assertEquals("WSRP", application.getTitle());
+            assertEquals("Someone", Utils.join(";", application.getAccessPermissions()));
+            assertFalse(application.getShowInfoBar());
+            assertTrue(application.getShowApplicationState());
+            assertTrue(application.getShowApplicationMode());
+            assertNull(application.getDescription());
+            assertNull(application.getIcon());
+            assertNull(application.getWidth());
+            assertNull(application.getHeight());
+         }
       }
    }
 

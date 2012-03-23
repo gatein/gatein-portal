@@ -76,6 +76,7 @@ public enum Element implements EnumElement<Element>
    PORTLET("portlet"),
    GADGET_REF("gadget-ref"),
    GADGET("gadget"),
+   WSRP("wsrp"),
    THEME("theme"),
    SHOW_INFO_BAR("show-info-bar"),
    SHOW_APPLICATION_STATE("show-application-state"),

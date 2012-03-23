@@ -34,6 +34,7 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.gatein.common.xml.stax.writer.StaxWriter;
 import org.gatein.common.xml.stax.writer.WritableValueTypes;
 import org.exoplatform.portal.pom.data.ModelDataStorage;
@@ -76,7 +77,7 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T>
          }
          else if (ApplicationType.WSRP_PORTLET == type)
          {
-            throw new XMLStreamException("WSRP portlet marshalling not supported.");
+            marshalWsrpApplication(writer, safeCast(application, WSRP.class));
          }
       }
       else if (modelObject instanceof Page)
@@ -282,74 +283,30 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T>
       writer.writeEndElement(); // End of portlet-application
    }
 
-   protected Application<Portlet> unmarshalPortletApplication(StaxNavigator<Element> navigator) throws XMLStreamException
+   protected Application<?> unmarshalPortletApplication(StaxNavigator<Element> navigator) throws XMLStreamException
    {
-      requiresChild(navigator, Element.PORTLET);
-      ApplicationState<Portlet> state = unmarshalPortletApplicationState(navigator.fork());
-
-      Application<Portlet> portlet = new Application<Portlet>(ApplicationType.PORTLET);
-      portlet.setState(state);
-
-      boolean showInfoBarParsed = false;
-
-      Element current = navigator.sibling();
-      while (current != null)
+      Application<?> application;
+      switch (navigator.child())
       {
-         switch (current)
-         {
-            case THEME:
-               portlet.setTheme(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case TITLE:
-               portlet.setTitle(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case ACCESS_PERMISSIONS:
-               portlet.setAccessPermissions(unmarshalAccessPermissions(navigator, true));
-               current = navigator.sibling();
-               break;
-            case SHOW_INFO_BAR:
-               portlet.setShowInfoBar(parseRequiredContent(navigator, ValueType.BOOLEAN));
-               showInfoBarParsed = true;
-               current = navigator.sibling();
-               break;
-            case SHOW_APPLICATION_STATE:
-               portlet.setShowApplicationState(navigator.parseContent(ValueType.BOOLEAN));
-               current = navigator.sibling();
-               break;
-            case SHOW_APPLICATION_MODE:
-               portlet.setShowApplicationMode(navigator.parseContent(ValueType.BOOLEAN));
-               current = navigator.sibling();
-               break;
-            case DESCRIPTION:
-               portlet.setDescription(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case ICON:
-               portlet.setIcon(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case WIDTH:
-               portlet.setWidth(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case HEIGHT:
-               portlet.setHeight(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case UNKNOWN:
-               throw unknownElement(navigator);
-            default:
-               throw unexpectedElement(navigator);
-         }
+         case PORTLET:
+            ApplicationState<Portlet> state = unmarshalPortletApplicationState(navigator.fork());
+            Application<Portlet> portlet = new Application<Portlet>(ApplicationType.PORTLET);
+            portlet.setState(state);
+            application = portlet;
+            break;
+         case WSRP:
+            ApplicationState<WSRP> wsrpState = unmarshalWsrpApplicationState(navigator.fork());
+            Application<WSRP> wsrp = new Application<WSRP>(ApplicationType.WSRP_PORTLET);
+            wsrp.setState(wsrpState);
+            application = wsrp;
+            break;
+         case UNKNOWN:
+            throw unexpectedElement(navigator);
+         default:
+            throw unexpectedElement(navigator);
       }
 
-      //TODO: We should raise this exception as soon as we know so location is accurate
-      if (portlet.getAccessPermissions() == null) throw expectedElement(navigator, Element.ACCESS_PERMISSIONS);
-      if (!showInfoBarParsed) throw expectedElement(navigator, Element.SHOW_INFO_BAR);
-
-      return portlet;
+      return unmarshalApplication(navigator, application);
    }
 
    private ApplicationState<Portlet> unmarshalPortletApplicationState(StaxNavigator<Element> navigator) throws XMLStreamException
@@ -493,66 +450,7 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T>
       Application<Gadget> gadget = new Application<Gadget>(ApplicationType.GADGET);
       gadget.setState(state);
 
-      boolean showInfoBarParsed = false;
-
-      Element current = navigator.sibling();
-      while (current != null)
-      {
-         switch (current)
-         {
-            case THEME:
-               gadget.setTheme(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case TITLE:
-               gadget.setTitle(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case ACCESS_PERMISSIONS:
-               gadget.setAccessPermissions(unmarshalAccessPermissions(navigator, true));
-               current = navigator.sibling();
-               break;
-            case SHOW_INFO_BAR:
-               gadget.setShowInfoBar(parseRequiredContent(navigator, ValueType.BOOLEAN));
-               showInfoBarParsed = true;
-               current = navigator.sibling();
-               break;
-            case SHOW_APPLICATION_STATE:
-               gadget.setShowApplicationState(navigator.parseContent(ValueType.BOOLEAN));
-               current = navigator.sibling();
-               break;
-            case SHOW_APPLICATION_MODE:
-               gadget.setShowApplicationMode(navigator.parseContent(ValueType.BOOLEAN));
-               current = navigator.sibling();
-               break;
-            case DESCRIPTION:
-               gadget.setDescription(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case ICON:
-               gadget.setIcon(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case WIDTH:
-               gadget.setWidth(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case HEIGHT:
-               gadget.setHeight(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case UNKNOWN:
-               throw unknownElement(navigator);
-            default:
-               throw unexpectedElement(navigator);
-         }
-      }
-
-      //TODO: We should raise this exception as soon as we know so location is accurate
-      if (gadget.getAccessPermissions() == null) throw expectedElement(navigator, Element.ACCESS_PERMISSIONS);
-      if (!showInfoBarParsed) throw expectedElement(navigator, Element.SHOW_INFO_BAR);
-
-      return gadget;
+      return unmarshalApplication(navigator, gadget);
    }
 
    private ApplicationState<Gadget> unmarshalGadgetApplicationState(StaxNavigator<Element> navigator) throws XMLStreamException
@@ -569,6 +467,58 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T>
       }
 
       return new TransientApplicationState<Gadget>(gadgetRef, gadget);
+   }
+
+   protected void marshalWsrpApplication(StaxWriter<Element> writer, Application<WSRP> wsrpApplication) throws XMLStreamException
+   {
+      writer.writeStartElement(Element.PORTLET_APPLICATION);
+      
+      // Marshal application state
+      String contentId;
+      ApplicationState<WSRP> state = wsrpApplication.getState();
+      if (state instanceof TransientApplicationState)
+      {
+         TransientApplicationState<WSRP> tas = (TransientApplicationState<WSRP>) state;
+         contentId = tas.getContentId();
+      }
+      else
+      {
+         // The only way to retrieve the information if the state is not transient is if we're within the portal context
+         ExoContainer container = ExoContainerContext.getCurrentContainer();
+         if (container instanceof PortalContainer)
+         {
+            DataStorage dataStorage = (DataStorage) container.getComponentInstanceOfType(DataStorage.class);
+            try
+            {
+               contentId = dataStorage.getId(state);
+            }
+            catch (Exception e)
+            {
+               throw new XMLStreamException("Could not obtain contentId.", e);
+            }
+         }
+         else
+         {
+            throw new XMLStreamException("Cannot marshal application state " + state + " outside the context of the portal.");
+         }
+      }
+
+      writer.writeElement(Element.WSRP, contentId);
+
+      marshalApplication(writer, wsrpApplication);
+
+      writer.writeEndElement(); // end portlet-application
+   }
+
+   private ApplicationState<WSRP> unmarshalWsrpApplicationState(StaxNavigator<Element> navigator) throws XMLStreamException
+   {
+      String portletId = getRequiredContent(navigator, true);
+      if (navigator.next() != null)
+      {
+         throw unexpectedElement(navigator);
+      }
+
+      return new TransientApplicationState<WSRP>(portletId, null);
    }
 
    protected void marshalApplication(StaxWriter<Element> writer, Application<?> application) throws XMLStreamException
@@ -592,6 +542,70 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T>
       // Width & Height
       writeOptionalElement(writer, Element.WIDTH, application.getWidth());
       writeOptionalElement(writer, Element.HEIGHT, application.getHeight());
+   }
+   
+   protected <S> Application<S> unmarshalApplication(StaxNavigator<Element> navigator, Application<S> application) throws XMLStreamException
+   {
+      boolean showInfoBarParsed = false;
+
+      Element current = navigator.sibling();
+      while (current != null)
+      {
+         switch (current)
+         {
+            case THEME:
+               application.setTheme(navigator.getContent());
+               current = navigator.sibling();
+               break;
+            case TITLE:
+               application.setTitle(navigator.getContent());
+               current = navigator.sibling();
+               break;
+            case ACCESS_PERMISSIONS:
+               application.setAccessPermissions(unmarshalAccessPermissions(navigator, true));
+               current = navigator.sibling();
+               break;
+            case SHOW_INFO_BAR:
+               application.setShowInfoBar(parseRequiredContent(navigator, ValueType.BOOLEAN));
+               showInfoBarParsed = true;
+               current = navigator.sibling();
+               break;
+            case SHOW_APPLICATION_STATE:
+               application.setShowApplicationState(navigator.parseContent(ValueType.BOOLEAN));
+               current = navigator.sibling();
+               break;
+            case SHOW_APPLICATION_MODE:
+               application.setShowApplicationMode(navigator.parseContent(ValueType.BOOLEAN));
+               current = navigator.sibling();
+               break;
+            case DESCRIPTION:
+               application.setDescription(navigator.getContent());
+               current = navigator.sibling();
+               break;
+            case ICON:
+               application.setIcon(navigator.getContent());
+               current = navigator.sibling();
+               break;
+            case WIDTH:
+               application.setWidth(navigator.getContent());
+               current = navigator.sibling();
+               break;
+            case HEIGHT:
+               application.setHeight(navigator.getContent());
+               current = navigator.sibling();
+               break;
+            case UNKNOWN:
+               throw unknownElement(navigator);
+            default:
+               throw unexpectedElement(navigator);
+         }
+      }
+
+      //TODO: We should raise this exception as soon as we know so location is accurate
+      if (application.getAccessPermissions() == null) throw expectedElement(navigator, Element.ACCESS_PERMISSIONS);
+      if (!showInfoBarParsed) throw expectedElement(navigator, Element.SHOW_INFO_BAR);
+
+      return application;
    }
 
    protected void marshalAccessPermissions(StaxWriter<Element> writer, String[] accessPermissions) throws XMLStreamException

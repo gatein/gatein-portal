@@ -117,6 +117,12 @@
                <show-application-mode>false</show-application-mode>
                <description>SiteMap</description>
             </portlet-application>
+            <portlet-application>
+               <wsrp>selfv2./portletApplicationName.portletName</wsrp>
+               <title>WSRP</title>
+               <access-permissions>Someone</access-permissions>
+               <show-info-bar>false</show-info-bar>
+            </portlet-application>
          </container>
       </container>
    </page>
