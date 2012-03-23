@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2011, Red Hat Middleware, LLC, and individual
+ * Copyright 2012, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -179,8 +179,15 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
 
    private String computePath(String pathFromConfig)
    {
-      // if specified path starts with / then it's a file and we need to add file:// to it so that ConfigurationManager can properly resolve it
-      return pathFromConfig.startsWith("/") ? FILE + pathFromConfig : pathFromConfig;
+      // if the specified path doesn't start with one of the recognized protocol, then it should be a file URL
+      if (!pathFromConfig.startsWith("jar:") && !pathFromConfig.startsWith("classpath:") && !pathFromConfig.startsWith("war:") && !pathFromConfig.startsWith("file:"))
+      {
+         return FILE + pathFromConfig;
+      }
+      else
+      {
+         return pathFromConfig;
+      }
    }
 
    public void start()
