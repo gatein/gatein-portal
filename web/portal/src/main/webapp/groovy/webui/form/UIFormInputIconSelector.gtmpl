@@ -50,13 +50,12 @@
 		
 		<%/*Begin Item Detail List*/%>
 		<div class="ItemDetailList">
-			<div class="ItemDetailTitle">
+			<div class="ItemDetailTitle ClearFix">
 				<div class="TitleIcon ViewListIcon"><span></span></div>
 				<div class="Title"><%=_ctx.appRes("UIFormInputIconSelector.label.iconPreview")%></div>
-				<div class="SetDefault FloatRight">
+				<div class="SetDefault FR">
 					<a href="<%=form.event('SelectIcon', "Default");%>"><%= _ctx.appRes(uicomponent.getParent().getId() + "." + uicomponent.getId() + ".title.SetDefault") %></a>
 				</div>
-				<div class="ClearBoth"><span></span></div>
 		</div>
 			<%/*Template 1*/%>
 			

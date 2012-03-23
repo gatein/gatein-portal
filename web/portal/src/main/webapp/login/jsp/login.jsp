@@ -73,7 +73,7 @@
 
           %>
           <font color="red"><%=res.getString("UILoginForm.label.SigninFail")%></font><%}%>
-          <form name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">
+          <form class="ClearFix" name="loginForm" action="<%= contextPath + "/login"%>" method="post" style="margin: 0px;">
                 <% if (uri != null) { 
                    uri = EntityEncoder.FULL.encode(uri);
                 %>
@@ -102,7 +102,6 @@
 			             </tr>
 		            </table>
 		          </div>
-		          <div class="ClearLeft"><span></span></div>
 		        </form>
 		        <%/*End form*/%>
         </div>

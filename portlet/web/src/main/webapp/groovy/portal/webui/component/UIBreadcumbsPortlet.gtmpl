@@ -19,10 +19,10 @@
   <div class="UIBreadcumbs">
   	<div class="LeftBreadcumbsBar">
   		<div class="RightBreadcumbsBar">
-  			<div class="BreadcumbsInfoBar">
-  				<div class="HomeIcon LeftBlock BCHome16x16Icon"><span></span></div>
+  			<div class="BreadcumbsInfoBar ClearFix">
+  				<div class="HomeIcon FL BCHome16x16Icon"><span></span></div>
   				<%if(size > 0) {
-  						String note = "LeftBlock";
+  						String note = "FL";
   						int counter = 0;
   						for(UserNode node : list) {
   						  counter++;
@@ -33,13 +33,12 @@
   				<%			
   							if(counter < size) {
   				%>
-  				<div class="RightBlackGridArrowIcon LeftBlock RightBlackGridArrow16x16Icon"><span></span></div>									
+  				<div class="RightBlackGridArrowIcon FL RightBlackGridArrow16x16Icon"><span></span></div>									
   				<%	 		 
   							}					 
   						}
   					}
   				%>
-  				<div class="ClearLeft"><span></span></div>
   			</div>
   		</div>
   	</div>

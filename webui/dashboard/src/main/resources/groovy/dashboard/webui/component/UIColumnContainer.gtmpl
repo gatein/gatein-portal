@@ -1,4 +1,4 @@
-<div class="UIColumns" id="$uicomponent.id">
+<div class="UIColumns ClearFix" id="$uicomponent.id">
 
 <%
   int childrenNbs = uicomponent.getChildren().size() == 0 ? 1 : uicomponent.getChildren().size();
@@ -11,5 +11,4 @@
 		%>
 	</div>	
 <% } %>
-	<div class="ClearLeft"><span></span></div>
 </div>

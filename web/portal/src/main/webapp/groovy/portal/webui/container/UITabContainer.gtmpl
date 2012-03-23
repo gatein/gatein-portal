@@ -71,7 +71,7 @@
 															String moveRightAction = uicomponent.event("MoveRight", tabId);
 													%>
 														<div class="MiddleTab ClearFix"> 
-											 				<div class="TabLabel FloatLeft" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this,'$id', '$tabId' );<%= selectTab %>"><%=title%></div>
+											 				<div class="TabLabel FL" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this,'$id', '$tabId' );<%= selectTab %>"><%=title%></div>
 															<div class="EditIcon" onclick="$showCategory">
 															   <div style="position: relative; width: 100%">
 															      <div class="UIPopupCategory" style="display: none;">

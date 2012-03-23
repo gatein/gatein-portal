@@ -7,7 +7,7 @@ def selectedCategory = uicomponent.getSelectedCategory();
 EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 %>
 <div class="UIOrganizerManagement" id="$uicomponent.id">
-	<div class="AppRegistryContainer">
+	<div class="AppRegistryContainer ClearFix">
 		<div class="AppRegistryControl">
 			<div class="ControlArea">
 				<div class="CategoryContent">
@@ -45,13 +45,12 @@ EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 								%>
 									<div class="UIVTab VTabStyle3" id="<%=application.getId();%>" onmousedown="eXo.portal.PortalDragDrop.init.call(this, event);">
 										<div class="VTabContentBG">
-											<div class="OverflowContainer">
+											<div class="OverflowContainer ClearFix">
 												<img src="<%=(srcBG!=null && srcBG.length()>0)?srcBG:srcBGError%>" onError="src='$srcBGError'"  alt=""/>
 												<div class="ContentInfo" title="$applicationName" style="cursor:move;">
 													<div class="LabelTab">$applicationName</div>
 													<div class="LableText">$applicationDescription</div>
 												</div>
-												<div class="ClearLeft"><span></span></div>
 											</div>
 										</div>
 									</div>
@@ -67,7 +66,6 @@ EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 				</div>
 			</div>
 		</div>
-		<div class="ClearLeft"><span></span></div>
 	</div>	
 	
 </div>

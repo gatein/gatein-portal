@@ -4,7 +4,7 @@
 	List<String> groups = uicomponent.getListGroup(); 
 %>
 <div class="UIGroupMembershipSelector" id="$uicomponent.id">
-	<div class="Container"> 
+	<div class="Container ClearFix"> 
 		<div class="SelectedGroupPath"><% uicomponent.renderChild(UIBreadcumbs.class); %></div>
 		<div class="GroupSelector">
 			<div class="ContentContainer">
@@ -36,6 +36,5 @@
 				</div>
 			</div>
 		</div>
-		<div class="ClearLeft"><span></span></div>
 	</div>
 </div> 		

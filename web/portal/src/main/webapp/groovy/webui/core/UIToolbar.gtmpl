@@ -7,7 +7,7 @@
 		<div class="<%=uicomponent.getToolbarStyle();%>">
 			<div class="LeftBar">
 				<div class="RightBar">
-					<div class="MiddleBar">
+					<div class="MiddleBar ClearFix">
 						<%
 							def events = uicomponent.getEvents();
 							for(event in events) {
@@ -24,7 +24,6 @@
 									<a class="Icon <%=event.getName();%>Icon" href="<%=uicomponent.event(event.getName())%>" title="<%=_ctx.appRes(uicomponent.id + ".tooltip." + event.getName())%>"><span></span></a>
 						<%	} %>
 						<%}%>
-						<div style="clear: both"><span></span></div>
 					</div>
 				</div>
 			</div>

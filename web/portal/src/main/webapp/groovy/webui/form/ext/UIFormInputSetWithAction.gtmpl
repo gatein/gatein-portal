@@ -62,7 +62,8 @@
 										if(infor != null && actionInfo != null) {
 											def arrInfor = infor.split(",");
 											if(arrInfor.length > 0) {
-											println "<div style=\"overflow:hidden; float:left;\">";
+											println "<div class=\"ClearFix\">";
+												println "<div class=\"FL\" style=\"overflow:hidden;\">";
 												for(i in 0..arrInfor.length -1) {
 													if(arrInfor[i].length() > 0) { 
 														if(!isView) { 
@@ -72,13 +73,14 @@
 																</div>									
 																<img onclick="if(confirm('<%=confirm%>')) eXo.webui.UIForm.submitEvent('<%=formName%>', '<%=actionInfo[0]%>', '&objectId=<%=arrInfor[i]%>');" alt="" class="DeleteIconInfo" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/>										 
 														<%} else { %>
-																<div class="ActionField" style="float:left;">
+															<div class="ClearFix">
+																<div class="ActionField FL">
 																	[ <a href="javascript:eXo.webui.UIForm.submitEvent('<%=formName%>', '<%=actionInfo[0]%>', '&objectId=<%=arrInfor[i]%>');">
 																			<%=arrInfor[i]%>
 																	</a> ]
 																</div>
 																	<img onclick="if(confirm('<%=confirm%>')) eXo.webui.UIForm.submitEvent('<%=formName%>', '<%=actionInfo[1]%>', '&objectId=<%=arrInfor[i]%>');" alt="" class="DeleteIconInfo" src="/eXoResources/skin/DefaultSkin/background/Blank.gif"/>								
-																<div class="ClearLeft"><span></span></div>
+																</div>
 														<%
 															}
 														} else {
@@ -95,21 +97,23 @@
 													}
 												}
 											 println "</div>";
-											 println "<div class=\"ClearLeft\"><span></span></div>";
+											 println "</div>";
 											}
 										} else if(infor != null && uicomponent.isShowOnly()) {
 											def arrInfor = infor.split(",");
 											if(arrInfor.length > 0) {
-												println "<div style=\"float:left;overflow:hidden;\">";
+												println "<div class=\"ClearFix\">";
+												println "<div class=\"FL\" style=\"overflow:hidden;\">";
 													for(i in 0..arrInfor.length -1) { 
 														if(arrInfor[i].length() > 0) { %>
-															<div class="ActionField">[ <%=arrInfor[i]%> ]</div>	
-															<div class="ClearLeft"><span></span></div>
+															<div class="ClearFix">
+																<div class="ActionField">[ <%=arrInfor[i]%> ]</div>	
+															</div>
 														<%
 														}								
 													}
 											 	println "</div>";
-											 	println "<div class=\"ClearLeft\"><span></span></div>";
+											 	println "</div>";
 											}
 										} 
 										if(infor == null && listInfor == null) {

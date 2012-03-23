@@ -8,7 +8,7 @@
 <div id="UIPortalControlPanel" class="UIPortalControlPanel">
 	<div class="OverflowContainer">
 		<%/*Begin Control Panel */%>
-		<div id="controlPanelContainer" class="InlineLeft ControlPanelContainer" style="height:100%">
+		<div id="controlPanelContainer" class="FL ControlPanelContainer" style="height:100%">
 			<%/*Begin Top Control Panel*/%>
       <div id="TopControlPanel">
 			  <div class="TopBotBar">
@@ -36,7 +36,7 @@
 		<%/*End Control Panel */%>
  
 		<%/*SplitBar */%>
-		<div id="splitBar" class="SplitBar InlineRight">
+		<div id="splitBar" class="SplitBar FR">
 			<div id="swapImage" class="SplitBarButtonHide" onclick="eXo.portal.UIControlPanel.showHide();"><span></span></div>
 		</div>
 		<%/*End SplitBar */%>

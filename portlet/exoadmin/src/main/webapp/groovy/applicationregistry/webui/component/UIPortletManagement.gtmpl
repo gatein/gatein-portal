@@ -5,7 +5,7 @@
 	def selectedPortlet = uicomponent.getSelectedPortlet();
 %>
 <div class="UIPortletManagement" id="$uicomponent.id">
-	<div class="AppRegistryContainer">
+	<div class="AppRegistryContainer ClearFix">
 		<div class="AppRegistryControl">
 			<div class="ControlArea">
 			
@@ -55,7 +55,6 @@
 		<div class="AppWorkingArea">
 		<% uicomponent.renderChildren() %>
 		</div>
-		<div class="ClearBoth"><span></span></div>
 	</div>	
 	
 </div>

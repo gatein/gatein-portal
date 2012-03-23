@@ -44,11 +44,10 @@
 					<div>
 						<%if(hasPermission) {%>
 						<div class="UITableColumnContainer" style="margin: 0px auto; $style">
-							<div class="TRContainer" style="zoom: 100%;">
+							<div class="TRContainer ClearFix" style="zoom: 100%;">
 								<% for(uiChild in uicomponent.getChildren()) {%>
-									<div class="${uiChild.id}TDContainer FloatLeft"><% uicomponent.renderUIComponent(uiChild) %></div>
+									<div class="${uiChild.id}TDContainer FL"><% uicomponent.renderUIComponent(uiChild) %></div>
 								<% } %>
-								<div class="ClearLeft" style="width: 0px; height: 0px;"><span></span></div>
 						 </div>
 						</div>
 						<%}%>

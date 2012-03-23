@@ -45,20 +45,6 @@
 	color: #4e4e4e;
 }
 
-.UISitemap .ClearFix:after {
-  content: ".";
-  display: block;
-  height: 0;
-  clear: both;
-  visibility: hidden;
-}
-
-.UISitemap .ClearFix {
-	!display: inline-block;
-  !zoom: 1;
-  !display: block; 
-}
-
 .UISitemap .CollapseAll {
 	background: url('DefaultSkin/background/CollapseAllIcon.gif') no-repeat left center; /* orientation=lt */
 	background: url('DefaultSkin/background/CollapseAllIcon-rt.gif') no-repeat right center; /* orientation=rt */

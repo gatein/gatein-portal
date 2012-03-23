@@ -17,10 +17,10 @@
 <div class="UIBreadcumbs">
 	<div class="LeftBreadcumbsBar">
 		<div class="RightBreadcumbsBar">
-			<div class="BreadcumbsInfoBar">
-				<div class="HomeIcon LeftBlock BCHome16x16Icon"><span></span></div>
+			<div class="BreadcumbsInfoBar ClearFix">
+				<div class="HomeIcon FL BCHome16x16Icon"><span></span></div>
 				<%if(list.size() > 0) {
-						String note = "LeftBlock";
+						String note = "FL";
 						for(i in 0 .. list.size()-1) { 
 							localPath = list.get(i);							
 							String actionLink 
@@ -36,13 +36,12 @@
 				<%			
 							if(i != list.size()-1) {
 				%>
-				<div class="RightBlackGridArrowIcon LeftBlock RightBlackGridArrow16x16Icon"><span></span></div>									
+				<div class="RightBlackGridArrowIcon FL RightBlackGridArrow16x16Icon"><span></span></div>									
 				<%	 		 
 							}					 
 						}
 					}
 				%>
-				<div class="ClearLeft"><span></span></div>
 			</div>
 		</div>
 	</div>

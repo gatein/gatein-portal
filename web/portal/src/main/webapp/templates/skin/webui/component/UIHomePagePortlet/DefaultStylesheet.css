@@ -245,7 +245,3 @@ _html .UIHomePagePortlet .HomePortletContent .RightAccountsContainer {
 	line-height: 40px;
 	font-weight: bold;
 }
-
-.UIHomePagePortlet .ClearBoth {
-	clear: both; 
-}

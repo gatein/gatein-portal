@@ -25,11 +25,11 @@
 						NavigationResource resource = new NavigationResource(SiteType.PORTAL, pcontext.getPortalOwner(), "register");
 						String registerURI = nodeURL.setResource(resource).toString();
 					%>
-					<div class="MiddleBanner MiddleBannerSignin">
+					<div class="MiddleBanner MiddleBannerSignin ClearFix">
 						<div class="BannerTitle"><span></span></div>
 						<div class="LeftLoginContainer">
 							<div class="RightLoginContainer">
-								<div class="MiddleLoginContainer Signin">
+								<div class="MiddleLoginContainer Signin ClearFix">
 									<a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
 									<a class="Register" href="$registerURI">
 										<%=_ctx.appRes("UIBannerPortlet.action.register")%>
@@ -37,13 +37,10 @@
 									<a class="Language" onclick="$changeLanguageAction">
 										<%=_ctx.appRes("UIBannerPortlet.action.changeLanguage")%>
 									</a>		
-									<div class="ClearBoth"><span></span></div>
 								</div>
 							</div>
-							<div class="ClearBoth"><span></span></div>
 						</div>
 					<%}%>	 
-						<div class="ClearBoth"><span></span></div>
 					</div>									
 				</div>	 
 			</div>

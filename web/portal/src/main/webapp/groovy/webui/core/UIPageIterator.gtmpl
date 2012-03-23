@@ -50,6 +50,5 @@
 	
 	<a class="PagesTotalNumber"><%=totalPage%></a>
 	<a class="TotalPages"><%=_ctx.appRes("UIPageIterator.label.totalPage")%>:</a>
-	<div class="ClearRight"><span></span></div>
 <%}%>	
 </div>

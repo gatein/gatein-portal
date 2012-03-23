@@ -15,10 +15,9 @@
 		<input type="hidden" name="$uicomponent.name" value ="">
 		<%/*Begin ItemList*/%>
 		<div class="ItemListContainer">
-			<div class="ItemListTitle">
+			<div class="ItemListTitle ClearFix">
 				<div class="TitleIcon ItemListIcon"><span></span></div>
 				<div class="Title"><%=_ctx.appRes(uicomponent.getName() + ".title")%></div>
-				<div class="ClearLeft"><span></span></div>
 			</div>
 			<div class="ItemList">
 				<%
@@ -42,10 +41,9 @@
 					
 		<%/*Begin ItemDetailList*/%>
 		<div class="ItemDetailList">
-			<div class="ItemDetailTitle">
+			<div class="ItemDetailTitle ClearFix">
 				<div class="TitleIcon ViewListIcon"><span></span></div>
 				<div class="Title"><%=_ctx.appRes(uicomponent.getName() + ".left.title")%></div>
-				<div class="ClearLeft"><span></span></div>
 			</div>
 			<%		 
 				for(opt in options) {

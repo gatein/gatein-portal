@@ -7,15 +7,14 @@ def apps = uicomponent.getApplications();
 def selectedApp = uicomponent.getSelectedApplication();
 %>
 <div class="UIOrganizerManagement" id="$uicomponent.id">
-	<div class="UIControlbar">
+	<div class="UIControlbar ClearFix">
 		<div class="IconControl AddCategoryIcon" onclick="<%= uicomponent.event("AddCategory") %>"><%=_ctx.appRes("UIOrganizer.label.addCategory")%></div>
 		<% if(uicomponent.isShowImport()) { %>
 			<div class="IconControl ImportIcon" onclick="<%= uicomponent.event("ImportAllApplications") %>"><%=_ctx.appRes("UIOrganizer.label.autoImport")%></div> 
 		<% } %>	
-		<div class="ClearBoth"><span></span></div>
 	</div>
 	
-	<div class="AppRegistryContainer">
+	<div class="AppRegistryContainer ClearFix">
 		<div class="AppRegistryControl">
 			<div class="ControlArea">
 				<div class="CategoryContent">
@@ -43,7 +42,7 @@ def selectedApp = uicomponent.getSelectedApplication();
 								<div class="$cTab">
 									<div class="TabLeft">
 										<div class="TabRight">
-											<div class="TabRepeat">
+											<div class="TabRepeat ClearFix">
 												<a class="TabLabel" onclick="<%= uicomponent.event("ShowCategory", cName) %>" title="<%= displayName %>">
 													<%= displayName %>
 												</a>
@@ -52,7 +51,6 @@ def selectedApp = uicomponent.getSelectedApplication();
 												<a class="ControlIcon CreateNewIcon" title="<%=_ctx.appRes("UIOrganizer.title.addApplication")%>" onclick="<%= uicomponent.event("AddApplication") %>"><span></span></a>
 												<a class="ControlIcon EditIcon" title="<%=_ctx.appRes("UIOrganizer.title.editCategory")%>" onclick="<%= uicomponent.event("EditCategory", "$cName") %>"><span></span></a>
 												<% } %>
-												<div class="ClearBoth"><span></span></div>
 											 </div>
 										</div>
 									</div>
@@ -66,14 +64,13 @@ def selectedApp = uicomponent.getSelectedApplication();
 									else cssClass = "NormalItem";
 									String appName= application.getApplicationName();
 								%>
-									<div class="ItemContent $cssClass">
+									<div class="ItemContent $cssClass ClearFix">
 									<% def applicationLabel = application.getDisplayName() 
 									String displayApplicationName = (applicationLabel.length() <= 30) ? applicationLabel : applicationLabel.substring(0, 27)+"...";
                                                                         displayApplicationName = encoder.encode(displayApplicationName);
 									%>
 										<a onclick="<%= uicomponent.event("SelectApplication", "$appName") %>" class="ItemLabel" title="<%= application.getDisplayName() %>"><%= displayApplicationName %><span></span></a>
 										<a class="ControlIcon DeletePortalIcon" title="<%=_ctx.appRes("UIOrganizer.title.deleteApplication")%>" onclick="<%= uicomponent.event("RemoveApplication", appName) %>"><span></span></a>
-										<div class="ClearBoth"><span></span></div>
 									</div>
 								<% } %>	
 								</div>
@@ -89,7 +86,6 @@ def selectedApp = uicomponent.getSelectedApplication();
 		<div class="AppWorkingArea">
 		<% uicomponent.renderChildren() %>
 		</div>
-		<div class="ClearLeft"><span></span></div>
 	</div>	
 	
 </div>

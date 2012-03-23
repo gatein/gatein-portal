@@ -15,13 +15,12 @@
 %>
 <div class="UIPortletInfo" id="$uicomponent.id">	
 		
-		<div class="UIBreadcumb">
-			<div class="LeftBlock"><%=_ctx.appRes("UIPortletManagement.title." + portlet.getType())%></div>		
+		<div class="UIBreadcumb ClearFix">
+			<div class="FL"><%=_ctx.appRes("UIPortletManagement.title." + portlet.getType())%></div>		
 			<div class="RightBlackGridArrow16x16Icon"><span></span></div>
 			<div class="Selected"><%=portlet.getPortletGroup()%></div>
 			<div class="RightBlackGridArrow16x16Icon"><span></span></div>									
-			<div class="Selected"><%=portlet.getDisplayName() %></div> 																
-			<div class="ClearLeft"><span></span></div>
+			<div class="Selected"><%=portlet.getDisplayName() %></div> 		
 		</div>
 		
 

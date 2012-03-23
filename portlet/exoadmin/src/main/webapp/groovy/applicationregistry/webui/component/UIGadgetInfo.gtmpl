@@ -17,13 +17,12 @@
         def refURL = gadget.getReferenceUrl();
 %>
 <div class="UIGadgetInfo" id="$uicomponent.id">
-	<div class="UIBreadcumb">
-		<div class="LeftBlock"><%=_ctx.appRes("UIGadgetInfo.label.gadgetDetails")%></div>
+	<div class="UIBreadcumb ClearFix">
+		<div class="FL"><%=_ctx.appRes("UIGadgetInfo.label.gadgetDetails")%></div>
 		<% if(gadget.isLocal()) {%>
 		<div class="EditIcon ControlIcon" title="<%=_ctx.appRes("UIGadgetInfo.title.editGadget")%>" onclick="<%= uicomponent.event("Edit") %>"><span></span></div>
 		<% } %>
 		<div class="Refresh16x16Icon ControlIcon" title="<%=_ctx.appRes("UIGadgetInfo.title.refresh")%>" onclick="<%= uicomponent.event("Refresh") %>"><span></span></div>
-		<div class="ClearBoth"><span></span></div>
 	</div>
  	<div class="Application ClearFix">
  		<div class="PortletIcons">

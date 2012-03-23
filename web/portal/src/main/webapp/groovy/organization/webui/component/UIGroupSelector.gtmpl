@@ -5,7 +5,7 @@
 %>
 
 <div class="UIGroupSelector" id="$uicomponent.id">
-	<div class="GroupSelector">
+	<div class="GroupSelector ClearFix">
 		<div class="SelectedGroupPath"><% uicomponent.renderChild(UIBreadcumbs.class); %></div>
 		<div class="LeftGroupSelector">
 			<div class="TitleGroupSelector"><%=_ctx.appRes("UIGroupSelector.title.selectGroup")%></div>
@@ -30,7 +30,6 @@
 				<div><span><%=_ctx.appRes("UIGroupSelector.lable.description")%></span> $des </div>
 			</div>
 		</div>
-		<div class="ClearLeft"><span></span></div>
 	</div>
 	
 	<div class="UIAction"> 

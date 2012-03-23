@@ -6,7 +6,7 @@
 	String initialURI = pcontext.getInitialURI();
 %>
 
-<div class="UIHomePagePortlet" id="$uicomponent.id">
+<div class="UIHomePagePortlet ClearFix" id="$uicomponent.id">
 	<div class="TRContainer">
 		<div class="PortletDecoration">					
 			<div class="GuideText"><%=_ctx.appRes("UIHomePagePortlet.Label.IntroText")%></div>
@@ -33,17 +33,15 @@
 					<div class="RightAccountsContainer">
 						<div class="MiddleAccountsContainer">
 							<div class="InstructionTitle"><%=_ctx.appRes("UIHomePagePortlet.Label.Title")%></div>
-							<div class="AccountsContainerDeco">
+							<div class="AccountsContainerDeco ClearFix">
 								<div class="AccountBlock AdministratorUser">
 									<div class="AccountInfos">
 										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=root&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.Administrator")%></a></div>
-										<div class="Username">
+										<div class="Username ClearFix">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>root</span>
-											<div class="ClearBoth"><span></span></div>
 										</div>
-										<div class="Passwords">
+										<div class="Passwords ClearFix">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Password")%></div><span>gtn</span>
-											<div class="ClearBoth"><span></span></div>
 										</div>
 									</div>
 								</div>	
@@ -51,13 +49,11 @@
 								<div class="AccountBlock ManagerUser">
 									<div class="AccountInfos">
 										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=john&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.Manager")%></a></div>
-										<div class="Username">
+										<div class="Username ClearFix">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>john</span>
-											<div class="ClearBoth"><span></span></div>
 										</div>
-										<div class="Passwords">
+										<div class="Passwords ClearFix">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Password")%></div><span>gtn</span>
-											<div class="ClearBoth"><span></span></div>
 										</div>
 									</div>
 								</div>
@@ -65,13 +61,11 @@
 								<div class="AccountBlock NormalUser">
 									<div class="AccountInfos">
 										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=mary&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.User")%></a></div>
-										<div class="Username">
+										<div class="Username ClearFix">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>mary</span>
-											<div class="ClearBoth"><span></span></div>
 										</div>
-										<div class="Passwords">
+										<div class="Passwords ClearFix">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Password")%></div><span>gtn</span>
-											<div class="ClearBoth"><span></span></div>
 										</div>
 									</div>
 								</div>
@@ -79,17 +73,14 @@
 								<div class="AccountBlock DemoUser" style="margin-right: 0px;">
 									<div class="AccountInfos">
 										<div class="AccountTitle"><a href="${_ctx.getPortalContextPath()}/login?username=demo&amp;password=gtn&amp;initialURI=<%=initialURI%>"><%=_ctx.appRes("UIHomePagePortlet.Label.Demo")%></a></div>
-										<div class="Username">
+										<div class="Username ClearFix">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Username")%></div><span>demo</span>
-											<div class="ClearBoth"><span></span></div>
 										</div>
-										<div class="Passwords">
+										<div class="Passwords ClearFix">
 											<div class="Lable"><%=_ctx.appRes("UIHomePagePortlet.Label.Password")%></div><span>gtn</span>
-											<div class="ClearBoth"><span></span></div>
 										</div>
 									</div>
 								</div>
-								<div class="ClearBoth"><span></span></div>
 							</div>
 						</div>
 					</div>
@@ -98,6 +89,5 @@
 			
 		</div>	
 	</div>	
-	<div class="ClearBoth"><span></span></div>
 </div>
 
