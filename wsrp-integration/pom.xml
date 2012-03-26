@@ -42,9 +42,11 @@
 
    <profiles>
       <profile>
-         <id>default</id>
+         <id>pkg-all</id>
          <activation>
-            <activeByDefault>true</activeByDefault>
+            <property>
+               <name>!gatein.dev</name>
+            </property>
          </activation>
          <modules>
             <module>extension-config</module>
@@ -55,19 +57,13 @@
          </modules>
       </profile>
       <profile>
-         <id>pkg-tomcat</id>
-         <modules />
-      </profile>
-      <profile>
-         <id>pkg-tomcat7</id>
-         <modules />
-      </profile>
-      <profile>
-         <id>pkg-jetty</id>
-         <modules />
-      </profile>
-      <profile>
          <id>pkg-jbossas</id>
+         <activation>
+            <property>
+               <name>gatein.dev</name>
+               <value>jbossas</value>
+            </property>
+         </activation>
          <modules>
             <module>extension-config</module>
             <module>extension-component</module>
@@ -77,6 +73,12 @@
       </profile>
       <profile>
          <id>pkg-jbossas6</id>
+         <activation>
+            <property>
+               <name>gatein.dev</name>
+               <value>jbossas6</value>
+            </property>
+         </activation>
          <modules>
             <module>extension-config</module>
             <module>extension-component</module>
@@ -86,6 +88,12 @@
       </profile>
       <profile>
          <id>pkg-jbossas5</id>
+         <activation>
+            <property>
+               <name>gatein.dev</name>
+               <value>jbossas5</value>
+            </property>
+         </activation>
          <modules>
             <module>extension-config</module>
             <module>extension-component</module>
