@@ -325,7 +325,7 @@
 
 .UIHorizontalTabs .GrayTabStyle .NormalTab .MiddleTab {
 	background: url(background/TabEditInline.gif) repeat-x left -25px;
-	line-height: 25px;
+	line-height: 24px;
 	color: #000; 
 	padding: 0px 8px;
 	font-weight: normal;
@@ -344,7 +344,7 @@
 
 .UIHorizontalTabs .GrayTabStyle .SelectedTab .MiddleTab {
 	background: url(background/TabEditInline.gif) repeat-x left -75px;
-	line-height: 25px;
+	line-height: 24px;
 	color: #000; 
 	padding: 0px 8px;
 	font-weight: normal;

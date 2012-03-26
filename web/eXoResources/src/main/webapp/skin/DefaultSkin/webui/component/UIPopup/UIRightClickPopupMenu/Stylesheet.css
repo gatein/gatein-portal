@@ -45,8 +45,6 @@
 	cursor: pointer;
 	white-space: nowrap;
 	display: block;
-	background-position: 6px center; /* orientation=lt */
-	background-position: 95% center; /* orientation=rt */
 }
 
 .UIRightClickPopupMenu .UIRightPopupMenuContainer a:hover {
