@@ -17,14 +17,14 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.controller.resource.script;
+package org.gatein.portal.controller.resource.script;
 
 import org.exoplatform.commons.utils.PropertyResolverReader;
-import org.exoplatform.portal.controller.resource.ResourceRequestHandler;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.portal.controller.resource.ResourceRequestHandler;
 
 import javax.servlet.ServletContext;
 import java.io.IOException;

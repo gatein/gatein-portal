@@ -17,31 +17,24 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.controller.resource.script;
+package org.gatein.portal.controller.resource;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public enum FetchMode
+public enum ResourceScope
 {
 
-   ON_LOAD,
+   SHARED, PORTAL, PORTLET ;
 
-   IMMEDIATE;
-
-   public static FetchMode decode(String value)
+   /**
+    * Returns a new <code>ResourceId</code> scoped with this enum instance.
+    *
+    * @param name the name to wrap
+    * @return a new resource id
+    */
+   public ResourceId create(String name)
    {
-      if ("immediate".equals(value))
-      {
-         return FetchMode.IMMEDIATE;
-      }
-      else if ("on-load".equals(value))
-      {
-         return FetchMode.ON_LOAD;
-      }
-      else
-      {
-         return null;
-      }
+      return new ResourceId(this, name);
    }
 }

@@ -17,32 +17,31 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.controller.resource;
-
-import java.util.Collections;
-import java.util.Set;
+package org.gatein.portal.controller.resource.script;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class Resource<R extends Resource<R>>
+public enum FetchMode
 {
 
-   /** . */
-   protected final ResourceId id;
+   ON_LOAD,
 
-   public Resource(ResourceId id)
-   {
-      this.id = id;
-   }
+   IMMEDIATE;
 
-   public ResourceId getId()
+   public static FetchMode decode(String value)
    {
-      return id;
-   }
-
-   public Set<ResourceId> getDependencies()
-   {
-      return Collections.emptySet();
+      if ("immediate".equals(value))
+      {
+         return FetchMode.IMMEDIATE;
+      }
+      else if ("on-load".equals(value))
+      {
+         return FetchMode.ON_LOAD;
+      }
+      else
+      {
+         return null;
+      }
    }
 }

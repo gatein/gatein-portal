@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.controller.resource.script;
+package org.gatein.portal.controller.resource.script;
 
 import java.util.LinkedHashSet;
 

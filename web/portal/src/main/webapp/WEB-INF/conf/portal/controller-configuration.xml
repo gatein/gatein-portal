@@ -112,7 +112,7 @@
     <component-plugin>
       <name>ScriptRequestHandler</name>
       <set-method>register</set-method>
-      <type>org.exoplatform.portal.controller.resource.ResourceRequestHandler</type>
+      <type>org.gatein.portal.controller.resource.ResourceRequestHandler</type>
     </component-plugin>
    <component-plugin>
       <name>StaticResourceRequestHandler</name>

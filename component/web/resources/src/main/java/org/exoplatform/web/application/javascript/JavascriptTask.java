@@ -18,7 +18,7 @@
  */
 package org.exoplatform.web.application.javascript;
 
-import org.exoplatform.portal.controller.resource.script.ScriptResource;
+import org.gatein.portal.controller.resource.script.ScriptResource;
 
 import java.util.ArrayList;
 import java.util.List;

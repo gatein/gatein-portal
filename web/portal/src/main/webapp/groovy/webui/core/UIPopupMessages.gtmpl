@@ -10,7 +10,7 @@
 <%
   import org.gatein.common.text.EntityEncoder;
   import org.exoplatform.commons.utils.HTMLEntityEncoder;
-  import org.exoplatform.portal.controller.resource.ResourceScope;
+  import org.gatein.portal.controller.resource.ResourceScope;
   
 	String popupId = uicomponent.getId();
 

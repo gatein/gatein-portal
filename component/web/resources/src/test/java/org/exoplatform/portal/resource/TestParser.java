@@ -20,12 +20,12 @@
 package org.exoplatform.portal.resource;
 
 import org.exoplatform.component.test.AbstractGateInTest;
-import org.exoplatform.portal.controller.resource.ResourceId;
-import org.exoplatform.portal.controller.resource.ResourceScope;
 import org.exoplatform.web.application.javascript.DependencyDescriptor;
 import org.exoplatform.web.application.javascript.Javascript;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.ScriptResourceDescriptor;
+import org.gatein.portal.controller.resource.ResourceId;
+import org.gatein.portal.controller.resource.ResourceScope;
 
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;

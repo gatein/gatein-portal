@@ -17,24 +17,32 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.controller.resource;
+package org.gatein.portal.controller.resource;
+
+import java.util.Collections;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public enum ResourceScope
+public class Resource<R extends Resource<R>>
 {
 
-   SHARED, PORTAL, PORTLET ;
+   /** . */
+   protected final ResourceId id;
 
-   /**
-    * Returns a new <code>ResourceId</code> scoped with this enum instance.
-    *
-    * @param name the name to wrap
-    * @return a new resource id
-    */
-   public ResourceId create(String name)
+   public Resource(ResourceId id)
    {
-      return new ResourceId(this, name);
+      this.id = id;
+   }
+
+   public ResourceId getId()
+   {
+      return id;
+   }
+
+   public Set<ResourceId> getDependencies()
+   {
+      return Collections.emptySet();
    }
 }

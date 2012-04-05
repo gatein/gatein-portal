@@ -19,8 +19,8 @@
 
 package org.exoplatform.web.application.javascript;
 
-import org.exoplatform.portal.controller.resource.ResourceId;
-import org.exoplatform.portal.controller.resource.script.FetchMode;
+import org.gatein.portal.controller.resource.ResourceId;
+import org.gatein.portal.controller.resource.script.FetchMode;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

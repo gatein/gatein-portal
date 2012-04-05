@@ -19,8 +19,8 @@
 
 package org.exoplatform.web.application.javascript;
 
-import org.exoplatform.portal.controller.resource.ResourceId;
-import org.exoplatform.portal.controller.resource.script.FetchMode;
+import org.gatein.portal.controller.resource.ResourceId;
+import org.gatein.portal.controller.resource.script.FetchMode;
 
 import java.util.ArrayList;
 import java.util.List;

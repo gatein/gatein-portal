@@ -18,10 +18,10 @@
  */
 package org.exoplatform.portal.resource;
 
-import org.exoplatform.portal.controller.resource.ResourceId;
-import org.exoplatform.portal.controller.resource.ResourceScope;
-import org.exoplatform.portal.controller.resource.script.FetchMap;
 import org.exoplatform.web.application.JavascriptManager;
+import org.gatein.portal.controller.resource.ResourceId;
+import org.gatein.portal.controller.resource.ResourceScope;
+import org.gatein.portal.controller.resource.script.FetchMap;
 
 import java.io.IOException;
 import java.util.Set;

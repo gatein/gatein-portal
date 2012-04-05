@@ -27,7 +27,6 @@ import org.exoplatform.portal.application.state.ContextualPropertyManager;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.model.ApplicationType;
-import org.exoplatform.portal.controller.resource.ResourceScope;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.portal.webui.application.UIPortletActionListener.ChangePortletModeActionListener;
@@ -79,6 +78,7 @@ import org.gatein.pc.portlet.impl.spi.AbstractRequestContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractServerContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
+import org.gatein.portal.controller.resource.ResourceScope;
 
 import javax.portlet.PortletMode;
 import javax.portlet.WindowState;

@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.controller.resource;
+package org.gatein.portal.controller.resource;
 
 import org.exoplatform.commons.cache.future.FutureMap;
 import org.exoplatform.commons.utils.I18N;
