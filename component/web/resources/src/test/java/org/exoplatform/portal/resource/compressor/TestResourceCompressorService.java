@@ -142,7 +142,7 @@ public class TestResourceCompressorService extends AbstractWebResourceTest
       Compiler compiler = new Compiler();
       CompilerOptions options = new CompilerOptions();
       CompilationLevel.SIMPLE_OPTIMIZATIONS.setOptionsForCompilationLevel(options);
-      JSSourceFile extern = JSSourceFile.fromCode("", "");
+      JSSourceFile extern = JSSourceFile.fromCode("extern", "");
 
       JSSourceFile jsInput;
       try
