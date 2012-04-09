@@ -66,7 +66,7 @@ class ScriptLoader implements Loader<ScriptKey, ScriptResult, ControllerContext>
          {
             CompilationLevel level = CompilationLevel.SIMPLE_OPTIMIZATIONS;
             CompilerOptions options = new CompilerOptions();
-            level.setDebugOptionsForCompilationLevel(options);
+            level.setOptionsForCompilationLevel(options);
             com.google.javascript.jscomp.Compiler compiler = new Compiler();
             compiler.setErrorManager(new LoggerErrorManager(java.util.logging.Logger.getLogger(ResourceRequestHandler.class.getName())));
             StringWriter code = new StringWriter();
