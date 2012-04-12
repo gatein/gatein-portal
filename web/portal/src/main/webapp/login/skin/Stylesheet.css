@@ -175,3 +175,19 @@
   line-height: 21px; 
   background: url('../skin/images/LoginBackground.gif') center -311px;
 }
+
+.UILogin .LoginContent .LoginButton input[type="submit"] {
+	background: url("../skin/images/LoginBackground.gif")
+		no-repeat scroll center -312px transparent;
+	filter:chroma(color=#000000);
+	border: 1px solid #858585;
+	border-radius: 5px 5px 5px 5px;
+	color: #3F3F3F;
+	font-size: 11px;
+	padding: 2px 11px 3px;
+	cursor:pointer;
+}
+
+.UILogin .LoginContent .LoginButton input[type="submit"]:hover {
+ color: #058ee6;
+}

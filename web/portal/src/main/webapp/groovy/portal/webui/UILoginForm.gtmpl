@@ -30,19 +30,19 @@
 										<td class="FieldLabel"><%=_ctx.appRes("UILoginForm.label.UserName")%></td>
 										<td><input class="UserName" name="username"/></td>
 									</tr>
-									<tr class="PasswordField" id="UIPortalLoginFormControl" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event)">
+									<tr class="PasswordField" id="UIPortalLoginFormControl"">
 										<td class="FieldLabel"><%=_ctx.appRes("UILoginForm.label.password")%></td>
 										<td><input class="Password" type="password" name="password"/></td>
 									</tr> 								
-									<tr class="RememberField" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event)">
+									<tr class="RememberField">
 										<td class="FieldLabel"><input type="checkbox" class="checkbox" value="true" name="rememberme"/></td>
 										<td><%=_ctx.appRes("UILoginForm.label.RememberOnComputer")%></td>
 									</tr>
 								</table>
 							<div class="ForgetPass"><a href="<%= uicomponent.event("ForgetPassword") %>"><%=_ctx.appRes("UILoginForm.label.forgot")%></a></div>
 							<div class="UIAction"> 
-								<a href="javascript:void(0);" onclick="login(this);" id="UIPortalLoginFormAction" class="ActionButton SimpleStyle"><%=_ctx.appRes("UILoginForm.label.Signin");%></a>
-								<a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton SimpleStyle"><%=_ctx.appRes("UILoginForm.label.Discard")%></a>
+							   <input type="submit" name="signIn" class="ActionButton SimpleStyle" value="<%=_ctx.appRes("UILoginForm.label.Signin")%>"></input>
+							   <input type="button" name="discard" class="ActionButton SimpleStyle" value="<%=_ctx.appRes("UILoginForm.label.Discard")%>" onclick="<%=uicomponent.event("Close");%>"></input>
 							</div> 
 						</div>
 						</form>					
@@ -57,9 +57,3 @@
 		</div>
 	</div>
 </div>
-<script>
-	function login(ele) {
-		var formEle = eXo.core.DOMUtil.findAncestorByTagName(ele,'form');
-		formEle.submit();
-	}
-</script>

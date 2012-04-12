@@ -59,8 +59,6 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>   
     <link rel="shortcut icon" type="image/x-icon"  href="<%=contextPath%>/favicon.ico" />
     <link rel='stylesheet' type='text/css' href='<%=contextPath%>/login/skin/Stylesheet.css'/>
-    <script type="text/javascript" src="/eXoResources/javascript/eXo.js"></script>
-    <script type="text/javascript" src="/eXoResources/javascript/eXo/portal/UIPortalControl.js"></script>
   </head>
   <body style="text-align: center; background: #b5b6b6; font-family: arial, tahoma, verdana">
     <div class="UILogin">
@@ -84,36 +82,25 @@
 		              <td class="FieldLabel"><%=res.getString("UILoginForm.label.UserName")%></td>
 		              <td><input class="UserName" name="username" value="<%=username%>"/></td>
 			          </tr>
-		            <tr class="FieldContainer" id="UIPortalLoginFormControl" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event);">
+		            <tr class="FieldContainer" id="UIPortalLoginFormControl">
 		              <td class="FieldLabel"><%=res.getString("UILoginForm.label.password")%></td>
 		              <td><input class="Password" type="password" name="password" value=""/></td>
 		            </tr>
-		            <tr class="FieldContainer" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event);">
+		            <tr class="FieldContainer">
 		              <td class="FieldLabel"><input type="checkbox" name="rememberme" value="true"/></td>
 		              <td><%=res.getString("UILoginForm.label.RememberOnComputer")%></td>
 		            </tr>
 		          </table>
 		          <div class="LoginButton">
-		            <table id="UIPortalLoginFormAction" class="LoginButtonContainer" onclick="login();">
+		            <table class="LoginButtonContainer">
 		            	<tr>
 			              <td class="Button">
-			                <div class="LeftButton">
-			                  <div class="RightButton">
-			                    <div class="MiddleButton">
-			                    	<a href="#"><%=res.getString("UILoginForm.label.Signin")%></a>
-			                    </div>
-			                  </div>
-			                </div>
+			              	<input type="submit" name="signIn" value="<%=res.getString("UILoginForm.label.Signin")%>"></input>
 			              </td>
 			             </tr>
 		            </table>
 		          </div>
 		          <div class="ClearLeft"><span></span></div>
-		          <script type='text/javascript'>			            
-              function login() {
-                document.loginForm.submit();                   
-              }
-            </script>
 		        </form>
 		        <%/*End form*/%>
         </div>

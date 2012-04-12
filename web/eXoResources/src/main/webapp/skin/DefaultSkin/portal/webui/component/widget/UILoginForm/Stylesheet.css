@@ -173,15 +173,15 @@
 }
 
 .UILoginForm .UIAction .SimpleStyle {
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-}
-
-.UILoginForm .UIAction .SimpleStyle a {
+	border-radius: 5px 5px 5px 5px;
+	filter:chroma(color=#000000);
 	color: #3f3f3f;
+	padding: 2px 12px;
+	width: auto;
+	border: 1px solid #C9C9C9;
+	background-position: bottom center;	
 }
 
-.UILoginForm .UIAction .SimpleStyle a:hover {
+.UILoginForm .UIAction .SimpleStyle:hover {
 	color: #058EE6;
 }
