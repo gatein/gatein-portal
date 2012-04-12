@@ -134,8 +134,10 @@ function PortalResponse(responseDiv) {
         this.blocksToUpdate[j].scripts = eXo.core.DOMUtil.findDescendantsByTagName(dataBlocks[1], "script") ;
         
       }
-    } else if(div[i].className == "MarkupHeadElements") {
-      this.markupHeadElements = new MarkupHeadElements(div[i]);    
+	} else if(div[i].className == "MarkupHeadElements") {
+		this.markupHeadElements = new MarkupHeadElements(div[i]);
+	} else if(div[i].className == "LoadingScripts") {
+		this.loadingScripts = new LoadingScripts(div[i]);
     } else if(div[i].className == "PortalResponseScript") {
       this.script = div[i].innerHTML ;
 			div[i].style.display = "none" ;
@@ -149,8 +151,32 @@ function MarkupHeadElements(fragment) {
 	this.bases = DOMUtil.findDescendantsByTagName(fragment, "base") ;
 	this.links = DOMUtil.findDescendantsByTagName(fragment, "link") ;
 	this.metas = DOMUtil.findDescendantsByTagName(fragment, "meta") ;
-	this.scripts = DOMUtil.findDescendantsByTagName(fragment, "script") ;		
+	this.scripts = DOMUtil.findDescendantsByTagName(fragment, "script") ;           
+	//Recreate tag to make sure browser will execute it	
+	for (var i = 0; i < this.scripts.length; i++) {
+		this.scripts[i] = createScriptNode(this.scripts[i]);
+	}
 	this.styles = DOMUtil.findDescendantsByTagName(fragment, "style") ;
+}
+
+function LoadingScripts(fragment) {
+	var  DOMUtil = eXo.core.DOMUtil;	
+	this.immediateScripts = [];
+	this.onloadScripts = [];
+	var headers = DOMUtil.findFirstChildByClass(fragment, "div", "ImmediateScripts").innerHTML;
+	headers = headers.replace(/^\s*/, '').split(",");
+	for (var i = 0; i < headers.length; i++) {
+		if (headers[i] !== "") {
+			this.immediateScripts.push(headers[i]);
+		}
+	}
+	var onloads = DOMUtil.findFirstChildByClass(fragment, "div", "OnloadScripts").innerHTML;
+	onloads = onloads.replace(/^\s*/, '').split(",");
+	for (var i = 0; i < onloads.length; i++) {
+		if (onloads[i] !== "") {
+			this.onloadScripts.push(onloads[i]);
+		}
+	}
 }
 
 /*
@@ -165,20 +191,28 @@ function appendScriptToHead(scriptId, scriptElement) {
     head.removeChild(descendant) ;
   }
 
-  script = document.createElement('script');
+  var script = createScriptNode(scriptElement);
   script.id = scriptId;
-  script.type = 'text/javascript';
-  
-  //check if contains source attribute
-  if(scriptElement.src) {
-    script.src = scriptElement.src;
-  } else {
-  	script.text = scriptElement.innerHTML;
-  }
   head.appendChild(script);
 };
 
-
+function createScriptNode(elem) {
+	var script = document.createElement('script');	
+	script.type = 'text/javascript';
+	script.className = elem.className;
+	if (elem.defer) {
+		script.defer = elem.defer;
+	}
+	
+	//check if contains source attribute
+	if(elem.src) {
+	  script.src = elem.src;
+	} else {
+	  script.text = elem.innerHTML;
+	}
+	
+	return script;
+};
 
 /*****************************************************************************************/
 /*
@@ -423,7 +457,7 @@ function HttpResponseHandler(){
 		    }
 		  }
 	  } 
-	} ;
+	};	        
 
 	instance.updateHtmlHead = function(response) {
       if (!response) return;      
@@ -448,46 +482,55 @@ function HttpResponseHandler(){
       appendElementsToHead(markupHeadElements.bases);
 		appendElementsToHead(markupHeadElements.links);				
 		appendElementsToHead(markupHeadElements.styles);
-		appendElementsToHead(markupHeadElements.scripts);
+		for (var i = 0; i < markupHeadElements.scripts.length; i++) {
+			var sc = markupHeadElements.scripts[i];
+			if (sc.defer) {
+				response.loadingScripts.onloadScripts.push(sc);
+			} else {
+				response.loadingScripts.immediateScripts.push(sc);
+			}
+		}
 	};
 	
 	function cleanHtmlHead(response) {
 		var DOMUtil = eXo.core.DOMUtil;
-		var head = document.getElementsByTagName("head")[0];		
-		
-		var portletResponses = response.portletResponses;
-		if (portletResponses) {
-			for (var i = 0; i < portletResponses.length; i++) {
-				removeExtraHead(portletResponses[i].portletId);
-			}
-		}
-
-      if (response.data) {
-         var portletFragments = DOMUtil.findDescendantsByClass(response.data, "div", "PORTLET-FRAGMENT");
-         for (var i = 0; i < portletFragments.length; i++) {
-            removeExtraHead(portletFragments[i].parentNode.id);
-         }
-      }
-		
-		var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace") ;
-		var portletFragsInWS = DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "PORTLET-FRAGMENT");		
-		var exHeads = DOMUtil.getElementsBy(function(elem) {
-			return elem.tagName != "TITLE" && elem.className.indexOf("ExHead-") == 0;
-		}, "*", head);
-		
-		for (var i = 0; i < exHeads.length; i++) {
-			var portletId = exHeads[i].className.substring(7);
-			var del = true;
-			for (var j = 0; j < portletFragsInWS.length; j++) {
-				if (portletId == portletFragsInWS[j].parentNode.id) {
-					del = false;
-					break;
+		var head = document.getElementsByTagName("head")[0];            
+		if (response) {
+			var portletResponses = response.portletResponses;
+			if (portletResponses) {
+				for (var i = 0; i < portletResponses.length; i++) {
+					removeExtraHead(portletResponses[i].portletId);
 				}
 			}
-			if (del) {
-				head.removeChild(exHeads[i]);
+			
+			if (response.data) {
+				var portletFragments = DOMUtil.findDescendantsByClass(response.data, "div", "PORTLET-FRAGMENT");
+				for (var i = 0; i < portletFragments.length; i++) {
+					removeExtraHead(portletFragments[i].parentNode.id);
+				}
 			}
-		}
+		} else {
+			//This code will be run after we've finished update html
+			var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace") ;
+			var portletFragsInWS = DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "PORTLET-FRAGMENT");		
+			var exHeads = DOMUtil.getElementsBy(function(elem) {
+				return elem.tagName != "TITLE" && elem.className.indexOf("ExHead-") == 0;
+			}, "*", head);
+			
+			for (var i = 0; i < exHeads.length; i++) {
+				var portletId = exHeads[i].className.substring(7);
+				var del = true;
+				for (var j = 0; j < portletFragsInWS.length; j++) {
+					if (portletId == portletFragsInWS[j].parentNode.id) {
+						del = false;
+						break;
+					}
+				}
+				if (del) {
+					head.removeChild(exHeads[i]);
+				}
+			}			
+		}		
 	}
 	
 	function removeExtraHead(portletId) {
@@ -582,13 +625,25 @@ function HttpResponseHandler(){
 	*    and then the script are loaded
 	* 5) Then it is each portal block which is updated and the assocaited scripts are evaluated
 	*/
-	instance.ajaxResponse = function(request){
-	  var temp =  document.createElement("div") ;
-	  temp.innerHTML =  this.request.responseText ;
-	  var responseDiv = eXo.core.DOMUtil.findFirstDescendantByClass(temp, "div", "PortalResponse") ;
-	  var response = new PortalResponse(responseDiv) ;
+	instance.ajaxResponse = function(request, response) {
+	  if (!response) {
+		  var temp =  document.createElement("div") ;
+		  temp.innerHTML =  this.responseText;
+		  var responseDiv = eXo.core.DOMUtil.findFirstDescendantByClass(temp, "div", "PortalResponse") ;
+		  var response = new PortalResponse(responseDiv) ;		  
+		  instance.updateHtmlHead(response);
+	  }
+	  var loadingScripts = response.loadingScripts;
+	  var immediateScripts = loadingScripts ? loadingScripts.immediateScripts : []; 
+	  if (immediateScripts.length) {
+		  eXo.core.AsyncLoader.loadJS(immediateScripts, function() {
+			  immediateScripts.clear();
+			  instance.ajaxResponse.apply(this, [request, response]);
+		  }, null, this);
+		  return;
+	  }
 	  //Handle the portlet responses
-	  var portletResponses =  response.portletResponses ;
+	  var portletResponses =  response.portletResponses;
 	  if(portletResponses != null) {
 	    for(var i = 0; i < portletResponses.length; i++) {
 	      var portletResponse = portletResponses[i] ;
@@ -623,27 +678,30 @@ function HttpResponseHandler(){
 	  if(response.blocksToUpdate == undefined && temp.innerHTML !== "") {
 	  	if(confirm(eXo.i18n.I18NMessage.getMessage("SessionTimeout"))) instance.ajaxTimeout(request) ;
 	  }
-	  //Handle the portal responses
-	  try {
-	    instance.updateBlocks(response.blocksToUpdate);
-	    instance.updateHtmlHead(response);
-	    instance.executeScript(response.script) ;
-      }
-      catch (error) {
+	  try {	    
+		  //Handle the portal responses
+		  instance.updateBlocks(response.blocksToUpdate) ;
+		  //After handle html response. We need to remove extra markup header of removed portlets
+		  cleanHtmlHead();
+		  var onloadScripts = loadingScripts ? loadingScripts.onloadScripts : [];
+		  eXo.core.AsyncLoader.loadJS(onloadScripts, function() {		  
+			  instance.executeScript(response.script);		  
+			  /**
+			   * Clears the instance.to timeout if the request takes less time than expected to get response
+			   * Removes the transparent mask so the UI is available again, with cursor "auto"
+			   */
+			  clearTimeout(instance.to);
+//		  eXo.core.UIMaskLayer.removeTransparentMask();
+//		  eXo.core.UIMaskLayer.removeMask(eXo.portal.AjaxRequest.maskLayer) ;
+			  eXo.core.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
+			  
+			  eXo.portal.AjaxRequest.maskLayer = null ;
+			  eXo.portal.CurrentRequest = null ;		 
+		  }, null, this);		  
+      } catch (error) {
              alert(error.message) ;
-      }
-	  /**
-       * Clears the instance.to timeout if the request takes less time than expected to get response
-       * Removes the transparent mask so the UI is available again, with cursor "auto"
-       */
-	  clearTimeout(instance.to);
-//	  eXo.core.UIMaskLayer.removeTransparentMask();
-//	  eXo.core.UIMaskLayer.removeMask(eXo.portal.AjaxRequest.maskLayer) ;
-	  eXo.core.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
-
-	  eXo.portal.AjaxRequest.maskLayer = null ;
-	  eXo.portal.CurrentRequest = null ;
-	} ;
+      }	  
+	};
 	
 	/*
 	  * This method is called when doing an AJAX call, it will put the "Loading" image in the
@@ -714,11 +772,8 @@ function doRequest(method, url, queryString, callback) {
   request.callBack = callback ;
   eXo.portal.CurrentRequest = request ;
   request.process() ;
-  eXo.session.itvDestroy() ;
-  if(eXo.session.canKeepState && eXo.session.isOpen  && eXo.env.portal.accessMode == 'private') {
-	  eXo.session.itvInit() ;
-  }
-}	;
+  eXo.session.startItv();
+};
 
 /**
  * Abort an ajax request
@@ -763,11 +818,8 @@ function ajaxRequest(method, url, async, queryString) {
   {
     request.send(null);
   }
-  eXo.session.itvDestroy() ;
-  if(eXo.session.canKeepState && eXo.session.isOpen && eXo.env.portal.accessMode == 'private') {
-    eXo.session.itvInit() ;
-  }
-	if(!async) return request.responseText ;
+  eXo.session.startItv();
+  if(!async) return request.responseText ;
 }
 
 /**

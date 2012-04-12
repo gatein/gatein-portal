@@ -1,5 +1,8 @@
 <%  import  org.exoplatform.webui.form.UIForm; %>	
 <%
+  def rcontext = _ctx.getRequestContext(); 
+  rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector');
+
 	String onMouseOver = "eXo.webui.UIItemSelector.onOver(this, true)";
 	String onMouseOut = "eXo.webui.UIItemSelector.onOver(this, false)";
 	String onClick = "eXo.webui.UIItemSelector.onClick(this)";

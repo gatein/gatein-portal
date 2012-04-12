@@ -825,7 +825,6 @@
       <dependency>
         <groupId>com.google.javascript</groupId>
         <artifactId>closure-compiler</artifactId>
-        <version>r706</version>
       </dependency>
       <dependency>
          <groupId>eu.medsea.mimeutil</groupId>

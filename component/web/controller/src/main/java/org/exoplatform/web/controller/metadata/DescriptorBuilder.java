@@ -122,13 +122,14 @@ public class DescriptorBuilder
             {
                String qualifiedName = fork.getAttribute("qname");
                String encoded = fork.getAttribute("encoding");
+               boolean captureGroup = "true".equals(fork.getAttribute("capture-group"));
                String pattern = null;
                if (fork.child(Element.PATTERN))
                {
                   pattern = fork.getContent();
                }
                EncodingMode encodingMode = "preserve-path".equals(encoded) ? EncodingMode.PRESERVE_PATH : EncodingMode.FORM;
-               route.with(new PathParamDescriptor(qualifiedName).encodedBy(encodingMode).matchedBy(pattern));
+               route.with(new PathParamDescriptor(qualifiedName).captureGroup(captureGroup).encodedBy(encodingMode).matchedBy(pattern));
                break;
             }
             case ROUTE_PARAM:

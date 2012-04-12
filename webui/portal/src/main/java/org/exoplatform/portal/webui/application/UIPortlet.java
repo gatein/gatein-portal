@@ -78,6 +78,7 @@ import org.gatein.pc.portlet.impl.spi.AbstractRequestContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractServerContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
+import org.gatein.portal.controller.resource.ResourceScope;
 
 import javax.portlet.PortletMode;
 import javax.portlet.WindowState;
@@ -1088,4 +1089,19 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       return getDisplayName();
 
    }
+
+   @Override
+   public void processRender(WebuiRequestContext context) throws Exception
+   {
+      UIPortalApplication uiApp = (UIPortalApplication)context.getUIApplication();
+      int portalMode = uiApp.getModeState();
+      if(portalMode != UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE && 
+               portalMode != UIPortalApplication.APP_BLOCK_EDIT_MODE && hasPermission()) 
+      {
+         PortletInfo info = getProducedOfferedPortlet().getInfo();
+         String name = info.getApplicationName() + "/" + info.getName();
+         context.getJavascriptManager().loadScriptResource(ResourceScope.PORTLET, name, null);
+      }
+      super.processRender(context);
+   }   
 }

@@ -5,9 +5,6 @@
 	import	org.exoplatform.webui.core.UIBreadcumbs;
 	import	org.exoplatform.organization.webui.component.GroupManagement;
 	import	org.exoplatform.services.organization.Group;
-	def rcontext = _ctx.getRequestContext();
-	
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPermissionSelectorTab');
 	
 %>
 <div class="UIGroupManagement">

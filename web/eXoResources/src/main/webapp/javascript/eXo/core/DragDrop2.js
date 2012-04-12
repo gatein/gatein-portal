@@ -55,9 +55,9 @@ function DragDrop2() {
 	
 	DragDrop2.prototype.drag = function(e) {
 		e = eXo.core.DragDrop2.fixE(e);
-		var o = obj;
-		var ey = eXo.core.Browser.findMouseYInPage(e);
-		var ex = eXo.core.Browser.findMouseXInPage(e);
+		var o = obj, browser = eXo.core.Browser;
+		var ey = browser.findMouseYInPage(e);
+		var ex = browser.findMouseXInPage(e);
 		var y = parseInt(eXo.core.DOMUtil.getStyle(o.root, "top"));
 		var x = parseInt(eXo.core.DOMUtil.getStyle(o.root, "left"));
 		if(isNaN(x)) x=0;		if(isNaN(y)) y=0;

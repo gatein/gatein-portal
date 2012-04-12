@@ -1,6 +1,6 @@
 <%
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs'); 
+	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector'); 
 	rcontext.getJavascriptManager().importJavascript('eXo.portal.UIPortal'); 
 	
 	String onMouseOver = "eXo.webui.UIItemSelector.onOver(this, true)";

@@ -421,7 +421,7 @@ Either rename it, delete it, or deactivate -Pdownload profile.
       <profile>
          <id>bundle</id>
          <properties>
-            <release.version>3.3.0.Alpha01</release.version>
+            <release.version>3.3.0-CR01-SNAPSHOT</release.version>
          </properties>
          <build>
             <plugins>

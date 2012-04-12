@@ -57,7 +57,7 @@ public class TestParser extends BaseGateInTest
          }
          catch (SyntaxException e)
          {
-            return fail(e);
+            throw failure(e);
          }
       }
       ParserTester assertParseDisjunction(String expectedValue)
@@ -79,7 +79,7 @@ public class TestParser extends BaseGateInTest
          }
          catch (SyntaxException e)
          {
-            return fail(e);
+            throw failure(e);
          }
       }
       ParserTester assertNotParseDisjunction()
@@ -107,7 +107,7 @@ public class TestParser extends BaseGateInTest
          }
          catch (SyntaxException e)
          {
-            return fail(e);
+            throw failure(e);
          }
       }
       ParserTester assertNotParseExpression()
@@ -131,7 +131,7 @@ public class TestParser extends BaseGateInTest
          }
          catch (SyntaxException e)
          {
-            return fail(e);
+            throw failure(e);
          }
          if (expectedQuantifier != null)
          {
@@ -143,6 +143,13 @@ public class TestParser extends BaseGateInTest
          }
          return this;
       }
+   }
+
+   public void testDisjunction()
+   {
+      new ParserTester("a|").assertParseDisjunction("<c>a</c>|");
+      new ParserTester("|a").assertParseDisjunction("|<c>a</c>");
+      new ParserTester("a|b").assertParseDisjunction("<c>a</c>|<c>b</c>");
    }
 
    public void testExtendedRegexp()

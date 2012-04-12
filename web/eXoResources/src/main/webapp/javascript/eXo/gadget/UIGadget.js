@@ -18,6 +18,7 @@
  */
 
 eXo.gadget.UIGadget = {
+
     /**
      * Create a new Gadget
      * @param {String} url local or remote path that contain gadget .xml file
@@ -33,13 +34,16 @@ eXo.gadget.UIGadget = {
 		window.gadgets = window.gadgets || {};
 		eXo.gadgets = window.gadgets;
 		//window.gadgets = eXo.gadget.Gadgets;
+		var loader = eXo.core.AsyncLoader;
 		if (!eXo.gadgets || !eXo.gadgets.rpc) {
-			eXo.core.Loader.register('rpc', '1.0.0',true, 0, hostName + '/js/pubsub.js?c=1');
-			eXo.core.Loader.register('eXo.gadgets.Gadgets', '/eXoResources/javascript/eXo/gadget/Gadgets.js');
-			eXo.core.Loader.register('eXo.gadgets.ExoBasedUserPrefStore', '/eXoResources/javascript/eXo/gadget/ExoBasedUserPrefStore.js');
+			//eXo.core.Loader.register('rpc', '1.0.0',true, 0, hostName + '/js/pubsub.js?c=1');
+			//eXo.core.Loader.register('eXo.gadgets.Gadgets', '/eXoResources/javascript/eXo/gadget/Gadgets.js');
+			//eXo.core.Loader.register('eXo.gadgets.ExoBasedUserPrefStore', '/eXoResources/javascript/eXo/gadget/ExoBasedUserPrefStore.js');
 		}
-		eXo.core.Loader.init("rpc","eXo.gadgets.Gadgets","eXo.gadgets.ExoBasedUserPrefStore", 
-		eXo.gadget.UIGadget.createCallback, null, arguments);
+		loader.loadJS([hostName + '/js/pubsub.js?c=1', '/eXoResources/javascript/eXo/gadget/Gadgets.js', 
+		               '/eXoResources/javascript/eXo/gadget/ExoBasedUserPrefStore.js'], eXo.gadget.UIGadget.createCallback, arguments, null);
+		//eXo.core.Loader.init("rpc","eXo.gadgets.Gadgets","eXo.gadgets.ExoBasedUserPrefStore", 
+		//eXo.gadget.UIGadget.createCallback, null, arguments);
 	},
     
     createCallback : function(url, id, metadata, userPref, view, hostName, debug, nocache) {

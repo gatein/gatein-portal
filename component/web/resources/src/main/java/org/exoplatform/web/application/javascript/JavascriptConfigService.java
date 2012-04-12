@@ -19,482 +19,228 @@
 
 package org.exoplatform.web.application.javascript;
 
-import org.exoplatform.commons.cache.future.FutureMap;
-import org.exoplatform.commons.cache.future.Loader;
-import org.exoplatform.commons.utils.Safe;
+import org.exoplatform.commons.utils.CompositeReader;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.resource.AbstractResourceService;
-import org.exoplatform.portal.resource.MainResourceResolver;
-import org.exoplatform.portal.resource.Resource;
-import org.exoplatform.portal.resource.ResourceResolver;
-import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.compressor.ResourceCompressor;
-import org.exoplatform.portal.resource.compressor.ResourceType;
-import org.exoplatform.web.application.javascript.Javascript.ExtendedJScript;
-import org.exoplatform.web.application.javascript.Javascript.PortalJScript;
+import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.controller.router.URIWriter;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.portal.controller.resource.ResourceId;
+import org.gatein.portal.controller.resource.ResourceScope;
+import org.gatein.portal.controller.resource.script.FetchMode;
+import org.gatein.portal.controller.resource.script.Module;
+import org.gatein.portal.controller.resource.script.ScriptGraph;
+import org.gatein.portal.controller.resource.script.ScriptResource;
+import org.gatein.wci.WebApp;
 import org.gatein.wci.WebAppListener;
 import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.picocontainer.Startable;
 
-import java.io.BufferedReader;
+import javax.servlet.ServletContext;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
-
-import javax.servlet.ServletContext;
+import java.util.Locale;
+import java.util.Map;
 
 public class JavascriptConfigService extends AbstractResourceService implements Startable
 {
+
    /** Our logger. */
    private final Logger log = LoggerFactory.getLogger(JavascriptConfigService.class);
 
-   private List<Javascript> commonJScripts;
-   
-   private HashMap<String, List<PortalJScript>> portalJScripts;
-
-   private long lastModified = Long.MAX_VALUE;
+   /** The scripts. */
+   final ScriptGraph scripts;
 
    /** . */
-   private WebAppListener deployer;
+   private final WebAppListener deployer;
 
-   private CachedJavascript mergedCommonJScripts;
-   
-   private final FutureMap<String, CachedJavascript, ResourceResolver> cache;
-   
+   /** . */
+   public static final Comparator<Module> MODULE_COMPARATOR = new Comparator<Module>()
+   {
+      public int compare(Module o1, Module o2)
+      {
+         return o1.getPriority() - o2.getPriority();
+      }
+   };
+
    public JavascriptConfigService(ExoContainerContext context, ResourceCompressor compressor)
    {
       super(compressor);
 
-      Loader<String, CachedJavascript, ResourceResolver> loader = new Loader<String, CachedJavascript, ResourceResolver>()
-      {
-         @Override
-         public CachedJavascript retrieve(ResourceResolver context, String key) throws Exception
-         {
-            Resource resource = context.resolve(key);
-            if (resource == null)
-            {
-               return null;
-            }
-            
-            StringBuilder sB = new StringBuilder();
-            try
-            {
-               BufferedReader reader = new BufferedReader(resource.read());
-               String line = reader.readLine();
-               try
-               {
-                  while (line != null)
-                  {
-                     sB.append(line);
-                     if ((line = reader.readLine()) != null)
-                     {
-                        sB.append("\n");
-                     }
-                  }
-               }
-               catch (Exception ex)
-               {
-                  ex.printStackTrace();
-               }
-               finally
-               {
-                  Safe.close(reader);
-               }
-            }
-            catch (Exception e)
-            {
-               e.printStackTrace();
-            }
-            
-            return new CachedJavascript(sB.toString());
-         }
-      };
-      cache = new FutureMap<String, CachedJavascript, ResourceResolver>(loader);
-
-      commonJScripts = new ArrayList<Javascript>();
-      deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
-      portalJScripts = new HashMap<String, List<PortalJScript>>();
-      
-      addResourceResolver(new ExtendedJScriptResourceResolver());
+      //
+      this.scripts = new ScriptGraph();
+      this.deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
    }
 
-   /**
-    * Return a collection list This method should return the availables scripts in the service
-    * 
-    * @deprecated Somehow, it should use {@link #getCommonJScripts()} instead.
-    * @return
-    */
-   @Deprecated
    public Collection<String> getAvailableScripts()
    {
       ArrayList<String> list = new ArrayList<String>();
-      for (Javascript js : commonJScripts)
+      for (ScriptResource shared : scripts.getResources(ResourceScope.SHARED))
       {
-         list.add(js.getModule());
+         list.addAll(shared.getModulesNames());
       }
       return list;
    }
-   
-   /**
-    * Return a collection of all common JScripts
-    * 
-    * @return
-    */
-   public Collection<Javascript> getCommonJScripts()
-   {
-      return commonJScripts;
-   }
 
-   /**
-    * Return a collection of all available JS paths
-    * 
-    * @deprecated Somehow, it should use {@link #getCommonJScripts()} instead.
-    * 
-    * @return A collection of all available JS paths
-    */
-   @Deprecated
    public Collection<String> getAvailableScriptsPaths()
    {
-      ArrayList<String> list = new ArrayList<String>();
-      for (Javascript js : commonJScripts)
+      ArrayList<Module> sharedModules = new ArrayList<Module>();
+      for (ScriptResource shared : scripts.getResources(ResourceScope.SHARED))
       {
-         list.add(js.getPath());
+         sharedModules.addAll(shared.getModules());
       }
-
-      return list;
-   }
-   
-   /**
-    * Add a JScript to {@link #commonJScripts} list and re-sort the list.
-    * Then invalidate cache of all merged common JScripts to
-    * ensure they will be newly merged next time.
-    * 
-    * @param js
-    */
-   public void addCommonJScript(Javascript js)
-   {
-      commonJScripts.add(js);
-      
-      Collections.sort(commonJScripts, new Comparator<Javascript>()
+      Collections.sort(sharedModules, MODULE_COMPARATOR);
+      List<String> paths = new ArrayList<String>();
+      for (Module module : sharedModules)
       {
-         public int compare(Javascript o1, Javascript o2)
-         {
-            return o1.getPriority() - o2.getPriority();
-         }
-      });
-      
-      invalidateMergedCommonJScripts();
-   }
-
-   /**
-    * Remove a JScript for this module from {@link #commonJScripts}
-    * and invalidates its cache correspondingly
-    * 
-    * @param module
-    */
-   public void removeCommonJScript(String module)
-   {
-      Iterator<Javascript> iterator = commonJScripts.iterator();
-      while (iterator.hasNext())
-      {
-         Javascript js = iterator.next();
-         if (js.getModule().equals(module))
-         {
-            iterator.remove();
-            invalidateCachedJScript(js.getPath());
-            invalidateMergedCommonJScripts();
-         }
+         paths.add(module.getURI());
       }
+      return paths;
    }
 
-   /**
-    * Return a collection of all PortalJScripts which belong to the specified portalName.
-    * 
-    * @param portalName
-    * @return list of JavaScript path which will be loaded by particular portal
-    */
-   public Collection<PortalJScript> getPortalJScripts(String portalName)
+   public Reader getScript(ResourceId id, String name, Locale locale)
    {
-      return portalJScripts.get(portalName);
-   }
-   
-   /**
-    * Add a PortalJScript which will be loaded with a specific portal.
-    * <p>
-    * For now, we don't persist it inside the Portal site storage but just in memory.
-    * Therefore we could somehow remove all PortalJScript for a Portal by using {@link #removePortalJScripts(String)}
-    * when the portal is being removed.
-    * 
-    * @param js
-    */
-   public void addPortalJScript(PortalJScript js)
-   {
-      List<PortalJScript> list = portalJScripts.get(js.getPortalName());
-      if (list == null)
+      ScriptResource script = getResource(id);
+      if (script != null && !"merged".equals(name))
       {
-         list = new ArrayList<PortalJScript>();
-      }
-      
-      list.add(js);
-
-      Collections.sort(list, new Comparator<Javascript>()
-      {
-         public int compare(Javascript o1, Javascript o2)
-         {
-            return o1.getPriority() - o2.getPriority();
-         }
-      });
-      
-      portalJScripts.put(js.getPortalName(), list);
-   }
-
-   /**
-    * Remove portal name from a JavaScript module or remove JavaScript module if it contains only one portal name
-    * 
-    * @param portalName portal's name which you want to remove
-    */
-   public void removePortalJScripts(String portalName)
-   {
-      List<PortalJScript> list = portalJScripts.remove(portalName);
-      for (PortalJScript js : list)
-      {
-         invalidateCachedJScript(js.getPath());
-      }
-   }
-
-   /**
-    * unregister a {@link ServletContext} into {@link MainResourceResolver} of {@link SkinService} 
-    * 
-    * @param servletContext ServletContext will unregistered
-    */
-   public void unregisterServletContext(ServletContext servletContext)
-   {
-      super.unregisterServletContext(servletContext);
-      remove(servletContext);
-   }
-   
-   /**
-    * Remove JavaScripts from availabe JavaScipts by ServletContext
-    * @param scontext
-    *           the webapp's {@link javax.servlet.ServletContext}
-    *          
-    */
-   public synchronized void remove(ServletContext context)
-   {
-      Iterator<Javascript> iterator = commonJScripts.iterator();
-      while (iterator.hasNext())
-      {
-         Javascript js = iterator.next();
-         if (js.getContextPath().equals(context.getContextPath()))
-         {
-            iterator.remove();
-            invalidateCachedJScript(js.getPath());
-            invalidateMergedCommonJScripts();
-         }
-      }
-   }
-
-   /**
-    *  @deprecated Use {@link #invalidateMergedCommonJScripts()} instead
-    */
-   @Deprecated
-   public void refreshMergedJavascript()
-   {
-      invalidateMergedCommonJScripts();
-   }
-
-   /**
-    * Write the merged javascript in a provided output stream.
-    *
-    * @param out the output stream
-    * @throws IOException any io exception
-    */
-   @Deprecated
-   public void writeMergedJavascript(OutputStream out) throws IOException
-   {
-      byte[] jsBytes = getMergedJavascript();
-
-      //
-      out.write(jsBytes);
-   }
-
-   public String getJScript(String path)
-   {
-      CachedJavascript cachedJScript = getCachedJScript(path);
-      if (cachedJScript != null)
-      {
-         return cachedJScript.getText();
+         return getJavascript(script, name, locale);
       }
       else
       {
-         return null;
+         return getScript(id, locale);
       }
    }
 
-   /**
-    * Return a CachedJavascript which is lazy loaded from a {@link FutureMap} cache
-    * 
-    * @param path
-    * @return
-    */
-   public CachedJavascript getCachedJScript(String path)
+   public Reader getScript(ResourceId resourceId, Locale locale)
    {
-      return cache.get(mainResolver, path);
-   }
-
-   /**
-    * Returns a string which is merging of all common JScripts
-    * 
-    * @return
-    */
-   public CachedJavascript getMergedCommonJScripts()
-   {
-      if (mergedCommonJScripts == null)
+      ScriptResource resource = getResource(resourceId);
+      if (resource != null)
       {
-         StringBuilder sB = new StringBuilder();
-         for (Javascript js : commonJScripts)
+         List<Module> modules = new ArrayList<Module>(resource.getModules());
+         Collections.sort(modules, MODULE_COMPARATOR);
+         ArrayList<Reader> readers = new ArrayList<Reader>(modules.size() * 2);
+         for (Module js :modules)
          {
-            if (!js.isExternalScript())
+            if (!js.isRemote())
             {
-               String jScript = getJScript(js.getPath());
+               Reader jScript = getJavascript(resource, js.getName(), locale);
                if (jScript != null)
                {
-                  sB.append(jScript).append("\n");
+                  readers.add(new StringReader("// Begin " + js.getName() + "\n"));
+                  readers.add(jScript);
+                  readers.add(new StringReader("// End " + js.getName() + "\n"));
                }
-               
             }
          }
-
-         String jScript = sB.toString();
-
-         try
-         {
-            jScript = compressor.compress(jScript, ResourceType.JAVASCRIPT);
-         }
-         catch (Exception e)
-         {
-         }
-         
-         mergedCommonJScripts = new CachedJavascript(jScript);
-         lastModified = mergedCommonJScripts.getLastModified();
+         return new CompositeReader(readers);
       }
-      
-      return mergedCommonJScripts;
+      return null;
    }
-
-   /**
-    * @deprecated Use {@link #getMergedCommonJScripts()} instead.
-    * It is more clearly to see what exactly are included in the returned merging
-    * 
-    * @return byte[]
-    */
-   @Deprecated
-   public byte[] getMergedJavascript()
+   
+   public Map<String, FetchMode> resolveURLs(
+      ControllerContext controllerContext,
+      Map<ResourceId, FetchMode> ids,
+      boolean merge,
+      boolean minified,
+      Locale locale) throws IOException
    {
-      String mergedCommonJS = getMergedCommonJScripts().getText();
-      
-      return mergedCommonJS.getBytes();
+      Map<String, FetchMode> urls = new LinkedHashMap<String, FetchMode>();
+      StringBuilder buffer = new StringBuilder();
+      URIWriter writer = new URIWriter(buffer);
+
+      //
+      Map<ScriptResource, FetchMode> resources = scripts.resolve(ids);
+
+      //
+      for (Map.Entry<ScriptResource, FetchMode> entry : resources.entrySet())
+      {
+         ScriptResource resource = entry.getKey();
+
+         //
+         if (!resource.isEmpty())
+         {
+            FetchMode mode = entry.getValue();
+            for (Module module : resource.getModules())
+            {
+               if (module instanceof Module.Remote)
+               {
+                  urls.put(((Module.Remote)module).getURI(), mode);
+               }
+            }
+            controllerContext.renderURL(resource.getParameters(minified, locale), writer);
+            urls.put(buffer.toString(), mode);
+            buffer.setLength(0);
+            writer.reset(buffer);
+         }
+      }
+
+      //
+      return urls;
    }
 
-   /**
-    * @deprecated the last modification should belong to CachedJavascript object
-    * @return
-    */
-   @Deprecated
-   public long getLastModified() 
+   public ScriptResource getResource(ResourceId resource)
    {
-      return lastModified;
+      return scripts.getResource(resource);
    }
 
-   /**
-    * Check the existence of module in Available Scripts
-    * @param module
-    * @return true if Available Scripts contain module, else return false
-    */
+   //TODO: This method should be removed once there is no call to importJavascript from Groovy template
+   public ScriptResource getResourceIncludingModule(String moduleName)
+   {
+      //We accept repeated graph traversing for the moment
+      for(ScriptResource sharedRes : scripts.getResources(ResourceScope.SHARED))
+      {
+         if(sharedRes.getModule(moduleName) != null)
+         {
+            return sharedRes;
+         }
+      }
+
+      for(ScriptResource portletRes : scripts.getResources(ResourceScope.PORTLET))
+      {
+         if(portletRes.getModule(moduleName) != null)
+         {
+            return portletRes;
+         }
+      }
+
+      for(ScriptResource portalRes : scripts.getResources(ResourceScope.PORTAL))
+      {
+         if(portalRes.getModule(moduleName) != null)
+         {
+            return portalRes;
+         }
+      }
+
+      return null;
+   }
+
    public boolean isModuleLoaded(CharSequence module)
    {
-      for (Javascript js : commonJScripts)
+      return getAvailableScripts().contains(module.toString());
+   }
+   
+   public boolean isJavascriptLoaded(String path)
+   {
+      for (ScriptResource shared : scripts.getResources(ResourceScope.SHARED))
       {
-         if (js.getModule().equals(module))
+         for (Module module : shared.getModules())
          {
-            return true;
+            if (module.getURI().equals(path))
+            {
+               return true;
+            }
          }
-      }
-
+      }      
       return false;
-   }
-
-   /**
-    * Add an extended JavaScript to the list of common JScripts which are loaded by default
-    * 
-    * @deprecated This method support was not good in design so it will be unsupported soon.
-    * Absolutely this usage can be replaced by using combination of {@link #addCommonJScript(Javascript)} and {@link ResourceResolver}
-    * 
-    * @param module
-    *           module name
-    * @param scriptPath
-    *           URI path of JavaScript 
-    * @param scontext
-    *           the webapp's {@link javax.servlet.ServletContext}
-    * @param scriptData
-    *            Content of JavaScript that will be added into available JavaScript
-    */
-   @Deprecated
-   public synchronized void addExtendedJavascript(String module, String scriptPath, ServletContext scontext, String scriptData)
-   {
-      ExtendedJScript js = new ExtendedJScript(module, scriptPath, scontext.getContextPath(), scriptData);
-      commonJScripts.add(js);
-      if (log.isDebugEnabled())
-      {
-         log.debug("Added an extended javascript " + js);
-      }
-   }
-
-   /**
-    * Remove an extended Javascript from the list of common JScripts
-    * 
-    * @deprecated This method is deprecated according to {@link #addExtendedJavascript(String, String, ServletContext, String)}.
-    * Use {@link #removeCommonJScript(String)} instead.
-    * @param module
-    *          module will be removed
-    * @param scriptPath
-    *          URI of script that will be removed
-    * @param scontext
-    *          the webapp's {@link javax.servlet.ServletContext}
-    *          
-    */
-   @Deprecated
-   public void removeExtendedJavascript(String module, String scriptPath, ServletContext scontext)
-   {
-      removeCommonJScript(module);
-   }
-
-   /**
-    * Invalidate cache of merged common JScripts
-    */
-   public void invalidateMergedCommonJScripts()
-   {
-      mergedCommonJScripts = null;
-   }
-
-   /**
-    * Invalidate cache for this <tt>path</tt>
-    * 
-    * @param path
-    */
-   public void invalidateCachedJScript(String path)
-   {
-      cache.remove(path);
    }
 
    /**
@@ -505,6 +251,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public void start()
    {
+      log.debug("Registering JavascriptConfigService for servlet container events");
       DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(deployer);
    }
 
@@ -516,30 +263,23 @@ public class JavascriptConfigService extends AbstractResourceService implements 
     */
    public void stop()
    {
+      log.debug("Unregistering JavascriptConfigService for servlet container events");
       DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(deployer);
    }
    
-   private class ExtendedJScriptResourceResolver implements ResourceResolver
+   private Reader getJavascript(ScriptResource resource, String moduleName, Locale locale)
    {
-      @Override
-      public Resource resolve(String path) throws NullPointerException
+      Module module = resource.getModule(moduleName);
+      if (module instanceof Module.Local)
       {
-         for (final Javascript js : commonJScripts)
+         Module.Local localModule = (Module.Local)module;
+         final WebApp webApp = contexts.get(localModule.getContextPath());
+         if (webApp != null)
          {
-            if (js instanceof ExtendedJScript && js.getPath().equals(path))
-            {
-               final String jScript = ((ExtendedJScript)js).getScript();
-               return new Resource(path)
-               {
-                  @Override
-                  public Reader read() throws IOException
-                  {
-                     return new StringReader(jScript);
-                  }
-               };
-            }
+            ServletContext sc = webApp.getServletContext();
+            return localModule.read(locale, sc, webApp.getClassLoader());
          }
-         return null;
       }
+      return null;
    }
 }

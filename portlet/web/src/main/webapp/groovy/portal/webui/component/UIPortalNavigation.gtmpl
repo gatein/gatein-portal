@@ -11,12 +11,9 @@
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.importJavascript('eXo.webui.UIHorizontalTabs');
-	jsmanager.importJavascript('eXo.portal.UIPortalNavigation');
-	jsmanager.addOnLoadJavascript('eXo.portal.UIPortalNavigation.onLoad');	
-	jsmanager.addOnLoadJavascript('eXo.portal.UIPortalNavigation.loadScroll');
-	//jsmanager.addOnResizeJavascript('eXo.portal.UIPortalNavigation.initScroll');	
-	
+	jsmanager.addCustomizedOnLoadScript("eXo.portal.UIPortalNavigation.onLoad('" + uicomponent.id + "');");	
+	jsmanager.addCustomizedOnLoadScript("eXo.portal.UIPortalNavigation.loadScroll('" + uicomponent.id + "');");
+
 	PortalRequestContext pcontext = Util.getPortalRequestContext();     
 	PortalURL nodeURL = nodeurl();
 
@@ -80,7 +77,7 @@
 		print "</li>";					
 	}
 %>
-<ul class="UINavigationBar UIHorizontalTabs <%=uicomponent.getCssClassName()%>" >
+<ul id="$uicomponent.id" class="UINavigationBar UIHorizontalTabs <%=uicomponent.getCssClassName()%>" >	
 	<%
 		MimeResponse res = _ctx.getRequestContext().getResponse();
 		

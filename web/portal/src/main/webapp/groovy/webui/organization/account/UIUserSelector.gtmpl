@@ -4,6 +4,7 @@
  uiform.begin()
  def rcontext = _ctx.getRequestContext(); 
  boolean isMulti = uicomponent.getMulti();
+ rcontext.getJavascriptManager().importJavascript('eXo.webui.UIUserSelector');
  rcontext.getJavascriptManager().addJavascript('eXo.webui.UIUserSelector.init("'+uiform.id+'"); '); 
 
   String js = "if (eXo.webui.UIUserSelector.isEnterPress(event)) {" + uicomponent.event('Search') + "; return false;}";

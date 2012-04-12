@@ -10,7 +10,7 @@
 							    <script type="text/javascript">
 									var executeScript = "<%=quickSearchlink%>";
 								</script>
-						      	<div class="QuickSet" onkeypress="eXo.portal.UIPortalControl.onEnterPress(event, executeScript)">
+						      	<div class="QuickSet" onkeypress="eXo.portal.UIPortalControl.onKeyPress(event, executeScript, 13)">
 								
 								<% 
 									QuickSearchInputSet = uiform.getQuickSearchInputSet();

@@ -1,28 +1,30 @@
 <%
-  import org.exoplatform.portal.application.PortalRequestContext ;
-        import org.exoplatform.webui.core.UIComponent;
-        import java.util.Iterator;
-        import org.exoplatform.portal.webui.portal.UIPortal ;
-        import org.exoplatform.portal.config.model.PortalProperties ;
+   def rcontext = _ctx.getRequestContext() ;
+   uicomponent.renderChildren();
+   def scriptsURLs = uicomponent.getScriptsURLs();
 
-  def rcontext = _ctx.getRequestContext() ;
+   def onloadScripts = new StringBuilder("[");
+   for (path in scriptsURLs.keySet()) {
+	   if (scriptsURLs.get(path)) {
+	      onloadScripts.append("'").append(path).append("',");
+	   }
+   }
+
+   // This handles legacy usage of importJavascript
+   def jsManager = rcontext.getJavascriptManager();
+   for (path in jsManager.getImportedJavaScripts()) {
+	   onloadScripts.append("'").append(path).append("',");
+   }
+   onloadScripts.append("]");
+
+   rcontext.setAttribute("eXo.portal.scriptsURLs", scriptsURLs);
 %>
-
-      <% 
-        UIPortal portal = uicomponent.findFirstComponentOfType(UIPortal.class);
-        String sessionAliveLevel = (portal == null ? null : portal.sessionAlive) ;
-        boolean canKeepState = sessionAliveLevel == null ? false : !sessionAliveLevel.equals(PortalProperties.SESSION_NEVER) ;
-      %>
-
-          <%uicomponent.renderChildren();%>
-        </div>
-        <script type="text/javascript">
-
-      <%rcontext.getJavascriptManager().writeJavascript(out.writer)%>
-      
-        eXo.core.Browser.onLoad();
-      <% rcontext.getJavascriptManager().writeCustomizedOnLoadScript(out.writer); %>
-      <%if(canKeepState && uicomponent.isSessionOpen) {%> eXo.session.itvInit() ;<%}%>
+       </div>
+    <script type="text/javascript">      
+    eXo.loadJS($onloadScripts, function() {
+	      <%=jsManager.getJavaScripts()%>	  
+	  	}			  
+	  );
     </script>
   </body>
 </html>

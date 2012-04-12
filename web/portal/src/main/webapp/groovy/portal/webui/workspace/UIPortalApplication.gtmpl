@@ -13,8 +13,13 @@
 	String skin = uicomponent.getSkin();
 	def portalSkins = uicomponent.getPortalSkins() ;
 	def portletSkins = uicomponent.getPortletSkins() ;
-	def portalJScripts = uicomponent.getPortalJScripts();
-	def scriptsPaths = uicomponent.getJavascriptURLs();
+	def scriptsURLs = rcontext.getAttribute("eXo.portal.scriptsURLs");
+	def headerScripts = new LinkedList();	
+	for (path in scriptsURLs.keySet()) {
+	   if (!scriptsURLs.get(path)) {
+	      headerScripts.add(path);
+	   }
+	}
 	def lang = uicomponent.getLocale().getLanguage();
 	def title = rcontext.getTitle();
 	def metaInformation = rcontext.getMetaInformation();
@@ -47,25 +52,17 @@
 		%>
 			<link id="${portletSkin.id}" rel="stylesheet" type="text/css" href= "$url" />
 		<%}%>
+		<% for (url in headerScripts) { %>
+            <script type="text/javascript" src="<%= url %>"></script>
+		<% } %>
 
-		<%if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) {
-				for(path in scriptsPaths) { %>
-					<script type="text/javascript" src="<%=path%>"></script>
-			<%}%>
-					<script type="text/javascript">
+		<script type="text/javascript">			
+		<% if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) { %>
 						eXo.developing = true ;
-					</script>
-			
-		<%} else {%>
-				<script type="text/javascript" src="<%=docBase%>/javascript/merged.js"></script>
-		<%
-			 for(path in scriptsPaths) {
-					if(path.startsWith("http") || path.startsWith("https")) {%>
-					<script type="text/javascript" src="<%=path%>"></script>
-			 <%}
-			 }
-		}%>
-		<script type="text/javascript">
+		<% } %>
+		<% for (url in headerScripts) { %>
+	        eXo.core.AsyncLoader.addLoadedJS('$url');
+		<% } %>	
 			eXo.env.portal.context = "<%=docBase%>" ;
 			<%if(rcontext.getAccessPath() == 0) {%>eXo.env.portal.accessMode = "public" ;<%}
 			else
@@ -86,17 +83,7 @@
 			eXo.session.isOpen = <%=uicomponent.isSessionOpen()%> ;
 			eXo.session.itvTime = ${((PortalRequestContext)rcontext).getRequest().getSession().getMaxInactiveInterval()} ;
 		</script>
-		<script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/I18NMessage.js"></script>
-		<script type="text/javascript" src="/eXoResources/javascript/eXo/i18n/MessageResource_<%=lang%>.js"></script>
       <%
-        if (portalJScripts != null)
-        {
-          for (jScript in portalJScripts) {
-      %>
-            <script type="text/javascript" src="<%=jScript.getPath()%>"></script>
-      <%
-          }
-        }
 		 def headerElements = rcontext.getExtraMarkupHeadersAsStrings();
 		 if (headerElements != null) 
 		 {

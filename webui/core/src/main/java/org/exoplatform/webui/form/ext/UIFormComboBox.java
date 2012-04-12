@@ -20,6 +20,7 @@
 package org.exoplatform.webui.form.ext;
 
 import org.exoplatform.commons.utils.HTMLEntityEncoder;
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.form.UIForm;
@@ -176,7 +177,9 @@ public class UIFormComboBox extends UIFormInputBase<String>
 
    public void processRender(WebuiRequestContext context) throws Exception
    {
-      context.getJavascriptManager().addJavascript("eXo.webui.UICombobox.init('" + getId() + "');");
+      JavascriptManager jsManager = context.getJavascriptManager();
+      jsManager.importJavascript("eXo.webui.UICombobox");
+      jsManager.addJavascript("eXo.webui.UICombobox.init('" + getId() + "');");
       Writer w = context.getWriter();
       String options = "[";
       String text =

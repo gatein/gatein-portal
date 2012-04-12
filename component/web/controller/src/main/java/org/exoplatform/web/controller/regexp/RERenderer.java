@@ -27,10 +27,10 @@ import java.io.IOException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RERenderer
+public class RERenderer extends REVisitor<IOException>
 {
 
-   public final <A extends Appendable> A render(RENode re, A appendable) throws IOException, NullPointerException
+   public static <A extends Appendable> A render(RENode re, A appendable) throws IOException, NullPointerException
    {
       if (re == null)
       {
@@ -42,209 +42,110 @@ public class RERenderer
       }
 
       //
-      doRender(re, appendable);
+      RERenderer renderer = new RERenderer(appendable);
+
+      //
+      re.accept(renderer);
 
       //
       return appendable;
    }
 
-   protected void doRender(RENode re, Appendable appendable) throws IOException
+   /** . */
+   private final Appendable appendable;
+
+   public RERenderer(Appendable appendable)
    {
-      if (re instanceof RENode.Disjunction)
-      {
-         doRender((RENode.Disjunction) re, appendable);
-      }
-      else if (re instanceof RENode.Alternative)
-      {
-         doRender((RENode.Alternative) re, appendable);
-      }
-      else if (re instanceof RENode.Expr)
-      {
-         doRender((RENode.Expr) re, appendable);
-      }
-      else
-      {
-         throw new AssertionError("Was not expecting node " + re);
-      }
+      this.appendable = appendable;
    }
 
-   protected void doRender(RENode.Disjunction disjunction, Appendable appendable) throws IOException, NullPointerException
+   protected void visit(RENode.Disjunction disjunction) throws IOException, NullPointerException
    {
       RENode.Alternative alternative = disjunction.getAlternative();
-      RENode.Disjunction next = disjunction.getNext();
       if (alternative != null)
       {
-         doRender(alternative, appendable);
-         if (next != null)
-         {
-            appendable.append('|');
-            doRender(next, appendable);
-         }
+         alternative.accept(this);
       }
-      else if (next != null)
+      if (disjunction.hasAlternative() && disjunction.hasNext())
       {
-         doRender(next, appendable);
+         appendable.append('|');
+      }
+      RENode.Disjunction next = disjunction.getNext();
+      if (next != null)
+      {
+         next.accept(this);
       }
    }
 
-   protected void doRender(RENode.Alternative alternative, Appendable appendable) throws IOException, NullPointerException
+   protected void visit(RENode.Alternative alternative) throws IOException, NullPointerException
    {
-      doRender(alternative.getExp(), appendable);
+      alternative.getExpr().accept(this);
       RENode.Alternative next = alternative.getNext();
       if (next != null)
       {
-         doRender(next, appendable);
+         visit(next);
       }
    }
 
-   protected void doRender(RENode.Expr expr, Appendable appendable) throws IOException, NullPointerException
-   {
-      if (expr instanceof RENode.Atom)
-      {
-         doRender((RENode.Atom) expr, appendable);
-      }
-      else if (expr instanceof RENode.Group)
-      {
-         doRender((RENode.Group)expr, appendable);
-      }
-      else if (expr instanceof RENode.Assertion)
-      {
-         doRender((RENode.Assertion)expr, appendable);
-      }
-      else
-      {
-         throw new AssertionError("Was not expecting node " + expr);
-      }
-   }
-
-   protected void doRender(Quantifier quantifier, Appendable appendable) throws IOException
-   {
-      quantifier.toString(appendable);
-   }
-
-   protected void doRender(RENode.Assertion assertion, Appendable appendable) throws IOException
-   {
-      if (assertion instanceof RENode.Assertion.Begin)
-      {
-         doRender((RENode.Assertion.Begin)assertion, appendable);
-      }
-      else if (assertion instanceof RENode.Assertion.End)
-      {
-         doRender((RENode.Assertion.End)assertion, appendable);
-      }
-      else
-      {
-         throw new AssertionError("Was not expecting node " + assertion);
-      }
-   }
-
-   protected void doRender(RENode.Assertion.Begin expr, Appendable appendable) throws IOException
+   protected void visit(RENode.Assertion.Begin expr) throws IOException
    {
       appendable.append('^');
       if (expr.getQuantifier() != null)
       {
-         doRender(expr.getQuantifier(), appendable);
+         expr.getQuantifier().toString(appendable);
       }
    }
 
-   protected void doRender(RENode.Assertion.End expr, Appendable appendable) throws IOException
+   protected void visit(RENode.Assertion.End expr) throws IOException
    {
       appendable.append('$');
       if (expr.getQuantifier() != null)
       {
-         doRender(expr.getQuantifier(), appendable);
+         expr.getQuantifier().toString(appendable);
       }
    }
 
-   protected void doRender(RENode.Group expr, Appendable appendable) throws IOException
+   protected void visit(RENode.Group expr) throws IOException
    {
       appendable.append(expr.getType().getOpen());
-      this.doRender(expr.getDisjunction(), appendable);
+      this.visit(expr.getDisjunction());
       appendable.append(expr.getType().getClose());
       if (expr.getQuantifier() != null)
       {
-         doRender(expr.getQuantifier(), appendable);
+         expr.getQuantifier().toString(appendable);
       }
    }
 
-   protected void doRender(RENode.Atom atom, Appendable appendable) throws IOException
-   {
-      if (atom instanceof RENode.Any)
-      {
-         doRender((RENode.Any) atom, appendable);
-      }
-      else if (atom instanceof RENode.Char)
-      {
-         doRender((RENode.Char)atom, appendable);
-      }
-      else if (atom instanceof RENode.CharacterClass)
-      {
-         doRender((RENode.CharacterClass)atom, appendable);
-      }
-      else
-      {
-         throw new AssertionError("Was not expecting node " + atom);
-      }
-   }
-
-   protected void doRender(RENode.Char expr, Appendable appendable) throws IOException
+   protected void visit(RENode.Char expr) throws IOException
    {
       Literal.escapeTo(expr.getValue(), appendable);
       if (expr.getQuantifier() != null)
       {
-         doRender(expr.getQuantifier(), appendable);
+         expr.getQuantifier().toString(appendable);
       }
    }
 
-   protected void doRender(RENode.Any expr, Appendable appendable) throws IOException
+   protected void visit(RENode.Any expr) throws IOException
    {
       appendable.append('.');
       if (expr.getQuantifier() != null)
       {
-         doRender(expr.getQuantifier(), appendable);
+         expr.getQuantifier().toString(appendable);
       }
    }
 
-   protected void doRender(RENode.CharacterClass expr, Appendable appendable) throws IOException
+   protected void visit(RENode.CharacterClass expr) throws IOException
    {
       appendable.append("[");
-      doRender(expr.getExpr(), appendable);
+      expr.getExpr().accept(this);
       appendable.append("]");
       if (expr.getQuantifier() != null)
       {
-         doRender(expr.getQuantifier(), appendable);
+         expr.getQuantifier().toString(appendable);
       }
    }
 
-   protected void doRender(RENode.CharacterClassExpr expr, Appendable appendable) throws IOException, NullPointerException
-   {
-      if (expr instanceof RENode.CharacterClassExpr.Char)
-      {
-         doRender((RENode.CharacterClassExpr.Char) expr, appendable);
-      }
-      else if (expr instanceof RENode.CharacterClass.CharacterClassExpr.Range)
-      {
-         doRender((RENode.CharacterClassExpr.Range) expr, appendable);
-      }
-      else if (expr instanceof RENode.CharacterClass.CharacterClassExpr.And)
-      {
-         doRender((RENode.CharacterClassExpr.And) expr, appendable);
-      }
-      else if (expr instanceof RENode.CharacterClass.CharacterClassExpr.Or)
-      {
-         doRender((RENode.CharacterClassExpr.Or) expr, appendable);
-      }
-      else if (expr instanceof RENode.CharacterClass.CharacterClassExpr.Not)
-      {
-         doRender((RENode.CharacterClassExpr.Not) expr, appendable);
-      }
-      else
-      {
-         throw new AssertionError();
-      }
-   }
-
-   protected void doRender(RENode.CharacterClassExpr.Not expr, Appendable appendable) throws IOException
+   protected void visit(RENode.CharacterClassExpr.Not expr) throws IOException
    {
       boolean needBrace = false;
       for (RENode current = expr.getParent();current != null;current = current.getParent())
@@ -270,34 +171,34 @@ public class RERenderer
          appendable.append("[");
       }
       appendable.append("^");
-      doRender(expr.getNegated(), appendable);
+      expr.getNegated().accept(this);
       if (needBrace)
       {
          appendable.append(']');
       }
    }
 
-   protected void doRender(RENode.CharacterClassExpr.Or expr, Appendable appendable) throws IOException
+   protected void visit(RENode.CharacterClassExpr.Or expr) throws IOException
    {
-      doRender(expr.getLeft(), appendable);
-      doRender(expr.getRight(), appendable);
+      expr.getLeft().accept(this);
+      expr.getRight().accept(this);
    }
 
-   protected void doRender(RENode.CharacterClassExpr.And expr, Appendable appendable) throws IOException
+   protected void visit(RENode.CharacterClassExpr.And expr) throws IOException
    {
-      doRender(expr.getLeft(), appendable);
+      expr.getLeft().accept(this);
       appendable.append("&&");
-      doRender(expr.getRight(), appendable);
+      expr.getRight().accept(this);
    }
 
-   protected void doRender(RENode.CharacterClassExpr.Range expr, Appendable appendable) throws IOException
+   protected void visit(RENode.CharacterClassExpr.Range expr) throws IOException
    {
-      doRender(expr.getFrom(), appendable);
+      visit(expr.getFrom());
       appendable.append('-');
-      doRender(expr.getTo(), appendable);
+      visit(expr.getTo());
    }
 
-   protected void doRender(RENode.CharacterClassExpr.Char expr, Appendable appendable) throws IOException
+   protected void visit(RENode.CharacterClassExpr.Char expr) throws IOException
    {
       Literal.escapeTo(expr.getValue(), appendable);
    }

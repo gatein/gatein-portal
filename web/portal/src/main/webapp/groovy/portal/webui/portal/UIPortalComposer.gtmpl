@@ -4,7 +4,7 @@
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPopupWindow');
 	
 	boolean isEditted = uicomponent.isEditted; 
-	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.init('$popupId', true, true, true, false);");
+	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId');");
 	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopup.setAlign('$popupId', 2, 5, 5);");
 %>
 <div class="UIPopupWindow UIDragObject UIPortalComposer" exo:minWidth="200" exo:minHeight="200" id="$uicomponent.id" style="width: 320px; display: block;">

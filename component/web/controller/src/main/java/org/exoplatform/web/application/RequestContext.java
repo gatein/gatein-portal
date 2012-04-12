@@ -125,11 +125,6 @@ abstract public class RequestContext
 
    abstract public String[] getRequestParameterValues(String name);
 
-   public JavascriptManager getJavascriptManager()
-   {
-      return getParentAppRequestContext().getJavascriptManager();
-   }
-
    abstract public URLBuilder<?> getURLBuilder();
 
    public String getRemoteUser()

@@ -18,10 +18,11 @@
  */
 package org.exoplatform.web.application.javascript;
 
-import org.exoplatform.web.application.javascript.Javascript.PortalJScript;
+import org.gatein.portal.controller.resource.script.ScriptResource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.ServletContext;
 
@@ -33,30 +34,35 @@ import javax.servlet.ServletContext;
 public class JavascriptTask
 {
 
-   private List<Javascript> scripts;
+   private List<ScriptResourceDescriptor> descriptors;
 
    public JavascriptTask()
    {
-      scripts = new ArrayList<Javascript>();
+      descriptors = new ArrayList<ScriptResourceDescriptor>();
    }
 
    public void execute(JavascriptConfigService service, ServletContext scontext)
    {
-      for (Javascript js : scripts)
+      for (ScriptResourceDescriptor desc : descriptors)
       {
-         if (js instanceof PortalJScript)
+         ScriptResource resource = service.scripts.addResource(desc.id, desc.fetchMode);
+         for (Javascript module : desc.modules)
          {
-            service.addPortalJScript((PortalJScript)js);
+            module.addModuleTo(resource);
          }
-         else
+         for (Locale locale : desc.getSupportedLocales())
          {
-            service.addCommonJScript(js);
+            resource.addSupportedLocale(locale);
+         }
+         for (DependencyDescriptor dependency : desc.dependencies)
+         {
+            resource.addDependency(dependency.getResourceId());
          }
       }
    }
 
-   public void addScript(Javascript script)
+   public void addDescriptor(ScriptResourceDescriptor desc)
    {
-      scripts.add(script);
+      descriptors.add(desc);
    }
 }

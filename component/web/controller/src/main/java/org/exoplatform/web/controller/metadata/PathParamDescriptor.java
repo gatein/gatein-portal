@@ -35,12 +35,16 @@ public class PathParamDescriptor extends ParamDescriptor
    /** . */
    private EncodingMode encodingMode;
 
+   /** . */
+   private boolean captureGroup;
+
    public PathParamDescriptor(QualifiedName qualifiedName)
    {
       super(qualifiedName);
 
       //
       this.encodingMode = EncodingMode.FORM;
+      this.captureGroup = false;
    }
 
    public PathParamDescriptor(String qualifiedName)
@@ -60,6 +64,12 @@ public class PathParamDescriptor extends ParamDescriptor
    public PathParamDescriptor encodedBy(EncodingMode encodingMode)
    {
       this.encodingMode = encodingMode;
+      return this;
+   }
+
+   public PathParamDescriptor captureGroup(boolean capture)
+   {
+      this.captureGroup = capture;
       return this;
    }
 
@@ -91,5 +101,15 @@ public class PathParamDescriptor extends ParamDescriptor
    public void setEncodingMode(EncodingMode encodingMode)
    {
       this.encodingMode = encodingMode;
+   }
+
+   public boolean getCaptureGroup()
+   {
+      return captureGroup;
+   }
+
+   public void setCaptureGroup(boolean captureGroup)
+   {
+      this.captureGroup = captureGroup;
    }
 }

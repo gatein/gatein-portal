@@ -66,8 +66,7 @@ public class GateInSkinConfigDeployer implements WebAppListener
       this.portalContainerName = portalContainerName;
    }
 
-   @Override
-   public void onEvent(WebAppEvent event)
+   public void onEvent(final WebAppEvent event)
    {
       if (event instanceof WebAppLifeCycleEvent)
       {
@@ -84,11 +83,10 @@ public class GateInSkinConfigDeployer implements WebAppListener
                {
                   final PortalContainerPostInitTask task = new PortalContainerPostInitTask()
                   {
-
                      public void execute(ServletContext scontext, PortalContainer portalContainer)
                      {
                         register(scontext, portalContainer);
-                        skinService.registerContext(scontext);
+                        skinService.registerContext(event.getWebApp());
                      }
                   };
                   PortalContainer.addInitTask(scontext, task, portalContainerName);

@@ -1,7 +1,5 @@
 <%	
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().importJavascript('eXo.portal.PortalDragDrop'); 
 	int portalMode = _ctx.getRequestContext().getUIApplication().getModeState();
 %>
 

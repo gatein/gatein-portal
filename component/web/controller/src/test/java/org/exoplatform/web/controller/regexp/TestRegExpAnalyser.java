@@ -28,15 +28,12 @@ import org.exoplatform.component.test.BaseGateInTest;
 public class TestRegExpAnalyser extends BaseGateInTest
 {
 
-   /** . */
-   private RERenderer renderer = new RERenderer();
-
    private void assertAnalyse(String expectedPattern, String pattern)
    {
       try
       {
          RENode.Disjunction disjunction = new REParser(pattern).parseDisjunction();
-         assertEquals(expectedPattern, renderer.render(disjunction, new StringBuilder()).toString());
+         assertEquals(expectedPattern, RERenderer.render(disjunction, new StringBuilder()).toString());
       }
       catch (Exception e)
       {

@@ -65,7 +65,6 @@ import javax.servlet.http.HttpServletRequest;
 @ComponentConfig(lifecycle = UIPortalLifecycle.class, template = "system:/groovy/portal/webui/portal/UIPortal.gtmpl", events = {
    @EventConfig(listeners = ChangeApplicationListActionListener.class),
    @EventConfig(listeners = MoveChildActionListener.class),
-   @EventConfig(listeners = UIPortal.ChangeWindowStateActionListener.class),
    @EventConfig(listeners = UIPortal.LogoutActionListener.class),
    @EventConfig(listeners = ShowLoginFormActionListener.class),
    @EventConfig(listeners = ChangeLanguageActionListener.class),
@@ -394,18 +393,6 @@ public class UIPortal extends UIContainer
          return null;
       }
 
-   }
-
-   static public class ChangeWindowStateActionListener extends EventListener<UIPortal>
-   {
-      public void execute(Event<UIPortal> event) throws Exception
-      {
-         UIPortal uiPortal = event.getSource();
-         String portletId = event.getRequestContext().getRequestParameter("portletId");
-         UIPortlet uiPortlet = uiPortal.findComponentById(portletId);
-         WebuiRequestContext context = event.getRequestContext();
-         uiPortlet.createEvent("ChangeWindowState", event.getExecutionPhase(), context).broadcast();
-      }
    }
 
    public static class AccountSettingsActionListener extends EventListener<UIPortal>

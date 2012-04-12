@@ -20,46 +20,24 @@
  * This class contains common js object that used in whole portal
  */
 var eXo  = {
-  animation : { },
-  
-  browser : { },
-    
-  desktop : { },
-  
   core : { },
 
   env : { portal: {}, client: {}, server: {} },
 
   portal : { },
     
-  util : { },
-  
   webui : { },
 
   gadget : { },
-  
-  application : { 
-  	browser : { }
-  },
-  
-  ecm : { },  
-  
-  calendar : { },
-  
-  contact : { },
-  
-  forum : { }, 
-   
-  mail : { },
-  
-  faq : { },
-  
+
   session : { },
   
   i18n : { }
 } ;
 
 /**
+* This function is deprecated, please use eXo.loadJS instead
+* 
 * This method will : 
 *   1) dynamically load a javascript module from the server (if no root location is set 
 *      then use '/eXoResources/javascript/', aka files
@@ -69,15 +47,15 @@ var eXo  = {
 *   3) Cache the script on the client
 *
 */
-eXo.require = function(module, jsLocation, callback, context, params) {
+eXo.require = function(module, jsLocation, callback, params, context) {
   try {
-    if(eval(module + ' != null'))  {
-    	if (callback) {
-    		var ctx = context ? context : {};
-    	  	if(params && typeof(params) != "string" && params.length) callback.apply(ctx, params);
-    	  	else callback.call(ctx, params) ;
-    	}
-    	return ;
+    if(eval(module + ' != null')) {
+      if (callback) {
+        var ctx = context ? context : {};
+        if(params && typeof(params) != "string" && params.length) callback.apply(ctx, params);
+     	else callback.call(ctx, params) ;
+      }
+      return ;
     }
   } catch(err) {
     //alert(err + " : " + module);
@@ -85,20 +63,17 @@ eXo.require = function(module, jsLocation, callback, context, params) {
   window.status = "Loading Javascript Module " + module ;
   if(jsLocation == null) jsLocation = '/eXoResources/javascript/' ;
   var path = jsLocation  + module.replace(/\./g, '/')  + '.js' ;
-  eXo.loadJS(path, module, callback, context, params);
-  window.status = "";
-} ;
+  eXo.loadJS(path, callback, params, context);
+};
 
-eXo.loadJS = function(path, module, callback, context, params) {
-  if (!module) module = path;
+eXo.loadJS = function(paths, callback, params, context) {
+  if (!paths || !paths.length) return;  
+  var tmp = [], loader = eXo.core.AsyncLoader;
   
-  eXo.core.Loader.register(module, path);
-  eXo.core.Loader.init(module, callback, context, params);
+  paths = typeof paths === 'string' ? [paths] : paths;  
+  loader.loadJS(paths, callback, params, context);
   
-  eXo.session.itvDestroy() ;
-  if(eXo.session.canKeepState && eXo.session.isOpen && eXo.env.portal.accessMode == 'private') {
-    eXo.session.itvInit() ;
-  }
+  eXo.session.startItv();
 } ;
 
 /**
@@ -137,27 +112,59 @@ eXo.portal.logout = function() {
 eXo.session.openUrl = null ;
 eXo.session.itvTime = null ;
 eXo.session.itvObj = null;
+eXo.session.initialized = false;
 
 eXo.session.itvInit = function() {
-	if(!eXo.session.openUrl) eXo.session.openUrl = eXo.env.server.createPortalURL("UIPortal", "Ping", false) ;
-	if(!eXo.session.itvTime) eXo.session.itvTime = 1800;
-	if(eXo.session.itvTime > 0) eXo.session.itvObj = window.setTimeout("eXo.session.itvOpen()", (eXo.session.itvTime - 10)*1000) ;
+   var session = eXo.session, env = eXo.env;
+   if (!session.initialized && session.canKeepState && env.portal.accessMode == 'private') {
+      if (!session.openUrl) session.openUrl = env.server.createPortalURL("UIPortal", "Ping", false) ;
+      if (!session.itvTime) session.itvTime = 1800;
+      session.initialized = true;
+      session.openItv();
+   }
 } ;
 
-eXo.session.itvOpen = function() {
-	var result = ajaxAsyncGetRequest(eXo.session.openUrl, false) ;
-	if(!isNaN(result)) eXo.session.itvTime = parseInt(result) ;
+eXo.session.startItv = function() {
+   var session = eXo.session;
+   if (session.initialized) {
+      session.destroyItv();
+      if (session.canKeepState && eXo.env.portal.accessMode == 'private') {
+         if (session.itvTime > 0) session.itvObj = window.setTimeout("eXo.session.openItv()", (session.itvTime - 10) * 1000) ;
+      }
+   } else if (session.isOpen) {
+      session.itvInit();
+   }
 } ;
 
-eXo.session.itvDestroy = function() {
-	window.clearTimeout(eXo.session.itvObj) ;
-	eXo.session.itvObj = null ;
+eXo.session.openItv = function() {
+	var session = eXo.session;
+	var request = window.ActiveXObject ? new ActiveXObject( "Msxml2.XMLHTTP" ) : new XMLHttpRequest();
+	request.open("GET", session.openUrl, true);
+	request.setRequestHeader("Cache-Control", "max-age=86400");
+	request.onreadystatechange = function() {
+		if (request.readyState == 4) { 
+			if (request.status == 200) {
+				var result = request.responseText;
+				if(!isNaN(result)) session.itvTime = parseInt(result); 				
+			}
+			delete request['onreadystatechange'];
+		}
+	}
+	request.send(null);
+} ;
+
+eXo.session.destroyItv = function () {
+   var session = eXo.session;
+   window.clearTimeout(session.itvObj) ;
+   session.itvObj = null ;
 } ;
 
 eXo.debug = function(message) {
 	if(!eXo.developing) return;
-	if(eXo.webui.UINotification) {
+	
+	var webui = eXo.webui;
+	if(webui.UINotification) {
 		message = "DEBUG: " + message;
-		eXo.webui.UINotification.addMessage(message);
+		webui.UINotification.addMessage(message);
 	}
 }

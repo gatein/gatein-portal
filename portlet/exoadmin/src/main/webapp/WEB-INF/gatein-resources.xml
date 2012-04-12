@@ -22,8 +22,8 @@
 
 <gatein-resources
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2 http://www.gatein.org/xml/ns/gatein_resources_1_2"
-   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2">
+   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2_1 http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
+   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
 
 
 	<!-- OrganizationPortlet skins -->
@@ -83,5 +83,138 @@
 		<skin-name>Default</skin-name>
 		<css-path>/skin/register/webui/component/DefaultStylesheet.css</css-path>
 	</portlet-skin>
+
+   <portlet>
+     <name>RegisterPortlet</name>
+     <scripts>
+       <mode>on-load</mode>
+       <depends>
+         <scripts>webui</scripts>
+       </depends>
+     </scripts>
+   </portlet>
+
+   <portlet>
+     <name>StarToolbarPortlet</name>
+     <scripts>
+       <mode>on-load</mode>
+       <depends>
+         <scripts>navigation</scripts>
+       </depends>
+     </scripts>
+   </portlet>
+
+   <portlet>
+     <name>UserToolbarSitePortlet</name>
+     <scripts>
+       <mode>on-load</mode>
+       <depends>
+         <scripts>navigation</scripts>
+       </depends>
+     </scripts>
+   </portlet>
+
+   <portlet>
+     <name>UserToolbarGroupPortlet</name>
+     <scripts>
+       <mode>on-load</mode>
+       <depends>
+         <scripts>navigation</scripts>
+       </depends>
+   </scripts>
+   </portlet>
+
+   <portlet>
+     <name>UserToolbarDashboardPortlet</name>
+     <scripts>
+       <mode>on-load</mode>
+       <depends>
+         <scripts>navigation</scripts>
+       </depends>
+     </scripts>
+   </portlet>
+
+   <portlet>
+     <name>AdminToolbarPortlet</name>
+     <scripts>
+       <mode>on-load</mode>
+       <depends>
+         <scripts>navigation</scripts>
+       </depends>
+     </scripts>
+   </portlet>
+
+   <portlet>
+     <name>ApplicationRegistryPortlet</name>
+     <scripts>
+       <mode>on-load</mode>
+       <depends>
+         <scripts>webui</scripts>
+       </depends>
+     </scripts>
+   </portlet>
+
+   <portlet>
+     <name>OrganizationPortlet</name>
+     <scripts>
+       <mode>on-load</mode>
+       <depends>
+         <scripts>webui</scripts>
+       </depends>
+     </scripts>
+   </portlet>
+
+   <portlet>
+     <name>AccountPortlet</name>
+     <scripts>
+       <mode>on-load</mode>
+       <depends>
+         <scripts>webui</scripts>
+       </depends>
+     </scripts>
+   </portlet>
+
+   <portlet>
+     <name>GroupNavigationPortlet</name>
+     <scripts>
+       <mode>on-load</mode>
+       <depends>
+         <scripts>webui</scripts>
+       </depends>
+       <depends>
+         <scripts>webui-ext</scripts>
+       </depends>
+     </scripts>
+   </portlet>
+
+   <portlet>
+     <name>PortalNavigationPortlet</name>
+     <scripts>
+       <mode>on-load</mode>
+       <depends>
+         <scripts>webui</scripts>
+       </depends>
+       <depends>
+         <scripts>webui-ext</scripts>
+       </depends>
+     </scripts>
+   </portlet>
+
+   <portlet>
+     <name>PageManagementPortlet</name>
+     <scripts>
+       <mode>on-load</mode>
+       <depends>
+         <scripts>portal</scripts>
+       </depends>
+       <depends>
+         <scripts>webui</scripts>
+       </depends>
+       <depends>
+         <scripts>webui-ext</scripts>
+       </depends>
+     </scripts>
+   </portlet>
+
 </gatein-resources>
 

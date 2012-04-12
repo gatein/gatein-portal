@@ -120,4 +120,22 @@ public class TestI18N extends TestCase
    {
       assertEquals(expected, I18N.parseJavaIdentifier(s));
    }
+   
+   public void testGetParentLocale()
+   {
+      Locale l3 = new Locale("a", "b", "c");
+      Locale l2 = new Locale("a", "b");
+      Locale l1 = new Locale("a");
+      assertEquals(l2, I18N.getParent(l3));
+      assertEquals(l1, I18N.getParent(l2));
+      assertEquals(null, I18N.getParent(l1));
+      try
+      {
+         I18N.getParent(null);
+         fail("Was expecting an NPE");
+      }
+      catch (NullPointerException ignore)
+      {
+      }
+   }
 }

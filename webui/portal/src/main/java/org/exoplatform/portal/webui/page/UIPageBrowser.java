@@ -492,9 +492,7 @@ public class UIPageBrowser extends UIContainer
       private void postSave(UIPortalApplication uiPortalApp, WebuiRequestContext context) throws Exception
       {
          UIMaskWorkspace uiMaskWS = uiPortalApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-         uiMaskWS.setUIComponent(null);
-         uiMaskWS.setShow(false);
-         context.addUIComponentToUpdateByAjax(uiMaskWS);
+         uiMaskWS.createEvent("Close", Phase.DECODE, context).broadcast();
 
          UIWorkingWorkspace uiWorkWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
          uiWorkWS.updatePortletsByName("PageManagementPortlet");

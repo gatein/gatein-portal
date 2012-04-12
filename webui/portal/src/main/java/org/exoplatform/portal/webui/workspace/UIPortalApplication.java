@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.workspace;
 
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -26,11 +27,14 @@ import org.exoplatform.portal.application.RequestNavigationData;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
+import org.exoplatform.web.url.MimeType;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPageActionListener.ChangeNodeActionListener;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -45,10 +49,8 @@ import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.web.application.javascript.Javascript.PortalJScript;
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
-import org.exoplatform.web.url.MimeType;
-import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -58,7 +60,12 @@ import org.exoplatform.webui.core.UIComponentDecorator;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.url.ComponentURL;
+import org.gatein.portal.controller.resource.ResourceId;
+import org.gatein.portal.controller.resource.ResourceScope;
+import org.gatein.portal.controller.resource.script.FetchMap;
+import org.gatein.portal.controller.resource.script.FetchMode;
 
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
@@ -68,6 +75,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -316,21 +325,69 @@ public class UIPortalApplication extends UIApplication
       return (modeState != NORMAL_MODE);
    }
 
-   public Collection<String> getJavascriptURLs()
+   public Map<String, Boolean> getScriptsURLs()
    {
-      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
-      return service.getAvailableScriptsPaths();
-   }
+      PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
+      
+      // Obtain the resource ids involved
+      // we clone the fetch map by safety
+      JavascriptManager jsMan = prc.getJavascriptManager();
+      FetchMap<ResourceId> requiredResources = new FetchMap<ResourceId>(jsMan.getScriptResources());
 
-   /**
-    * Get all JavaScript path which available on selected portal site
-    * @return
-    */
-   public Collection<PortalJScript> getPortalJScripts()
-   {
-      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
+      // Add current portal
       String portalOwner = Util.getPortalRequestContext().getPortalOwner();
-      return service.getPortalJScripts(portalOwner);
+      requiredResources.add(new ResourceId(ResourceScope.PORTAL, portalOwner), null);
+
+      // Still need this util SHARED/portal.js is optimized
+      if (prc.getRemoteUser() != null)
+      {
+         requiredResources.add(new ResourceId(ResourceScope.SHARED, "portal"), null);
+      }
+
+      // Need to add bootstrap as immediate since it contains the loader
+      requiredResources.add(new ResourceId(ResourceScope.SHARED, "bootstrap"), FetchMode.IMMEDIATE);
+
+      //
+      log.debug("Resource ids to resolve: " + requiredResources);
+
+      //
+      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
+      
+      // We need the locale
+      Locale locale = prc.getLocale();
+
+      try
+      {
+         LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
+
+         //
+         FetchMap<String> urls = new FetchMap<String>(service.resolveURLs(
+            prc.getControllerContext(),
+            requiredResources,
+            !PropertyManager.isDevelopping(),
+            !PropertyManager.isDevelopping(),
+            locale));
+         urls.addAll(jsMan.getExtendedScriptURLs());
+         
+         //
+         log.info("Resolved URLS for page: " + urls);
+         
+         // Here we get the list of stuff to load on demand or not
+         // according to the boolean value in the map
+         // Convert the map to what the js expects to have
+         for (Map.Entry<String, FetchMode> entry : urls.entrySet())
+         {
+            ret.put(entry.getKey(), entry.getValue() == FetchMode.ON_LOAD);
+         }
+
+         // todo : switch to debug later
+         return ret;
+      }
+      catch (IOException e)
+      {
+         log.error("Could not resolve URLs", e);
+         return Collections.emptyMap();
+      }
    }
 
    public Collection<Skin> getPortalSkins()
@@ -692,20 +749,58 @@ public class UIPortalApplication extends UIApplication
             w.write(elem);
          }
          w.write("</div>");
+         w.write("<div class=\"LoadingScripts\">");
+         writeLoadingScripts(pcontext);
+         w.write("</div>");
          w.write("<div class=\"PortalResponseScript\">");
-         pcontext.getJavascriptManager().writeJavascript(w);
-         w.write("eXo.core.Browser.onLoad();\n");
-         pcontext.getJavascriptManager().writeCustomizedOnLoadScript(w);
+         JavascriptManager jsManager = pcontext.getJavascriptManager();
          String skin = getAddSkinScript(list);
          if (skin != null)
          {
-            w.write(skin);
+            jsManager.addCustomizedOnLoadScript(skin);
          }
+         w.write(jsManager.getJavaScripts());
          w.write("</div>");
          w.write("</div>");
       }
    }
 
+   private void writeLoadingScripts(PortalRequestContext context) throws Exception
+   {
+      Writer w = context.getWriter();
+      Map<String, Boolean> scriptURLs = getScriptsURLs();
+      List<String> onloadJS = new LinkedList<String>();
+      for (String url : scriptURLs.keySet()) 
+      {
+         if (scriptURLs.get(url))
+         {
+            onloadJS.add(url);
+         }
+      }
+      w.write("<div class=\"OnloadScripts\">");
+      for (String url : onloadJS)
+      {
+         w.write(url);
+         w.write(",");
+      }
+      w.write("</div>");
+      w.write("<div class=\"ImmediateScripts\">");
+      scriptURLs.keySet().removeAll(onloadJS);
+      for (String url : scriptURLs.keySet())
+      {
+         w.write(url);
+         w.write(",");
+      }
+      
+      JavascriptManager jsManager = context.getJavascriptManager();
+      for (String url : jsManager.getImportedJavaScripts())
+      {
+         w.write(url);
+         w.write(",");
+      }
+      w.write("</div>");      
+   }
+   
    private String getAddSkinScript(Set<UIComponent> updateComponents)
    {
       if (updateComponents == null)

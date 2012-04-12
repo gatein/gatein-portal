@@ -25,6 +25,7 @@ function UIDashboard() {
 	UIDashboard.prototype.init = function (dragItem, dragObj) {
 		
 		var DOMUtil = eXo.core.DOMUtil;
+		var browser = eXo.core.Browser;
 		eXo.core.DragDrop2.init(dragItem, dragObj);
 
 		dragObj.onDragStart = function(x, y, lastMouseX, lastMouseY, e) {
@@ -39,12 +40,12 @@ function UIDashboard() {
 			var ggheight = dragObj.offsetHeight;
 			
 			//find position to put drag object in
-			var mx = eXo.webui.UIDashboardUtil.findMouseRelativeX(uiWorkingWS, e);
-			var ox = eXo.webui.UIDashboardUtil.findMouseRelativeX(dragObj, e);
+			var mx = browser.findMouseRelativeX(uiWorkingWS, e);
+			var ox = browser.findMouseRelativeX(dragObj, e);
 			var x = mx-ox;
 				
-			var my = eXo.webui.UIDashboardUtil.findMouseRelativeY(uiWorkingWS, e);
-			var oy = eXo.webui.UIDashboardUtil.findMouseRelativeY(dragObj, e);
+			var my = browser.findMouseRelativeY(uiWorkingWS, e);
+			var oy = browser.findMouseRelativeY(dragObj, e);
 			var y = my-oy;
 
 			var temp = dragObj;
@@ -89,7 +90,7 @@ function UIDashboard() {
 				
 			//set position of drag object
 			dragObj.style.position = "absolute";
-			eXo.webui.UIDashboardUtil.setPositionInContainer(uiWorkingWS, dragObj, x, y);
+			browser.setPositionInContainer(uiWorkingWS, dragObj, x, y);
 			if(uiTarget!=null) {
 				uiTarget.style.height = ggheight +"px";
 				targetObj = uiTarget;
@@ -148,7 +149,7 @@ function UIDashboard() {
 
 					//find position and add uiTarget into column				
 					for(var i=0; i<gadgets.length; i++) {
-						var oy = eXo.webui.UIDashboardUtil.findPosY(gadgets[i]) + (gadgets[i].offsetHeight/3) - dashboardCont.scrollTop;
+						var oy = browser.findPosY(gadgets[i]) + (gadgets[i].offsetHeight/3) - dashboardCont.scrollTop;
 						
 						if(ey<=oy) {
 							uiCol.insertBefore(uiTarget, gadgets[i]);
@@ -188,7 +189,7 @@ function UIDashboard() {
 			
 			var masks = DOMUtil.findDescendantsByClass(portletFragment, "div", "UIMask");
 			for(var i=0; i<masks.length; i++) {
-				eXo.core.Browser.setOpacity(masks[i], 100);
+				browser.setOpacity(masks[i], 100);
 				masks[i].style.display = "none";
 			}
 			
@@ -248,7 +249,7 @@ function UIDashboard() {
 		
 		
 		dragObj.onCancel = function(e){
-			if(eXo.core.Browser.browserType == "ie" && eXo.core.Browser.findMouseYInClient() < 0) {
+			if(browser.browserType == "ie" && browser.findMouseYInClient() < 0) {
 				eXo.core.DragDrop2.end(e);
 			}
 		}
@@ -406,8 +407,9 @@ function UIDashboard() {
 		}
 		
 		var popupContent = DOMUtil.findAncestorByClass(clickElement, "PopupContent");
-		if(eXo.core.Browser.getBrowserHeight() - 100 < categoriesContainer.offsetHeight) {
-			popupContent.style.height = (eXo.core.Browser.getBrowserHeight() - 100) + "px";
+		var browser = eXo.core.Browser;
+		if(browser.getBrowserHeight() - 100 < categoriesContainer.offsetHeight) {
+			popupContent.style.height = (browser.getBrowserHeight() - 100) + "px";
 		}	else {
 			popupContent.style.height = "auto";
 		}	
@@ -451,9 +453,10 @@ function UIDashboard() {
 		var trueWidth = colCont.offsetWidth;
 		var trueHeight = colCont.offsetHeight;
 		
-		var objLeft = dashboardUtil.findPosXInContainer(dragObj, gadgetContainer);
+		var browser = eXo.core.Browser;
+		var objLeft = browser.findPosXInContainer(dragObj, gadgetContainer);
 		var objRight = objLeft + dragObj.offsetWidth;
-		var objTop = dashboardUtil.findPosYInContainer(dragObj, gadgetContainer);
+		var objTop = browser.findPosYInContainer(dragObj, gadgetContainer);
 		var objBottom = objTop + dragObj.offsetHeight;
 		
 		//controls horizontal scroll

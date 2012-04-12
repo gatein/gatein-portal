@@ -274,4 +274,41 @@ public class TestMatch extends AbstractTestController
       assertEquals(Collections.singletonMap(Names.B, "b_value"), s2);
       assertFalse(i.hasNext());
    }
+
+   public void testDisjunction() throws Exception
+   {
+      Router router = router().
+         add(route("/{a}{b}").with(pathParam("a").matchedBy("a|b"))).
+         build();
+
+      //
+      Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
+      expectedParameters.put(Names.A, "a");
+      expectedParameters.put(Names.B, "c");
+
+      //
+      Iterator<Map<QualifiedName, String>> i = router.root.route("/ac", Collections.<String, String[]>emptyMap());
+      Map<QualifiedName, String> s1 = i.next();
+      assertEquals(expectedParameters, s1);
+      assertFalse(i.hasNext());
+
+      i = router.root.route("/bc", Collections.<String, String[]>emptyMap());
+      s1 = i.next();
+      expectedParameters.put(Names.A, "b");
+      assertEquals(expectedParameters, s1);
+      assertFalse(i.hasNext());
+   }
+
+   public void testCaptureGroup() throws Exception
+   {
+      Router router = router().
+         add(route("/{a}").with(pathParam("a").matchedBy("a(.)c").captureGroup(true))).
+         build();
+
+      //
+      Iterator<Map<QualifiedName, String>> i = router.root.route("/abc", Collections.<String, String[]>emptyMap());
+      Map<QualifiedName, String> s1 = i.next();
+      assertEquals(Collections.singletonMap(Names.A, "b"), s1);
+      assertFalse(i.hasNext());
+   }
 }

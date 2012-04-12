@@ -37,8 +37,7 @@ public class TestRegExpRenderer extends TestCase
          String rendered;
          if (re != null)
          {
-            RERenderer renderer = new RERenderer();
-            rendered = renderer.render(re, new StringBuilder()).toString();
+            rendered = RERenderer.render(re, new StringBuilder()).toString();
          }
          else
          {
@@ -132,9 +131,10 @@ public class TestRegExpRenderer extends TestCase
    public void testDisjunction()
    {
       assertRender(disjunction(""), "");
-      assertRender(disjunction("|"), "");
-      assertRender(disjunction("a|"), "a");
-      assertRender(disjunction("|a"), "a");
+      assertRender(disjunction("|"), "|");
+      assertRender(disjunction("a|"), "a|");
+      assertRender(disjunction("|a"), "|a");
+      assertRender(disjunction("a|b"), "a|b");
    }
 
    public void testAlternative()

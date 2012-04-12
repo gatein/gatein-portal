@@ -8,7 +8,6 @@
 	def permission =	uicomponent.getPermission();
 	def rcontext = _ctx.getRequestContext();
 	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPopupWindow');
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPermissionSelectorTab');
 %>
 <div class="UIPermissionSelector" id="UIPermissionSelector">
 	<div class="PermissionInfoContainer">

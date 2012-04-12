@@ -61,17 +61,23 @@ public class JavascriptServlet extends HttpServlet
    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException,
       IOException
    {
+      response.sendError(HttpServletResponse.SC_NO_CONTENT, "Should not be called anymore (" + request.getRequestURL() + ")");
+/*
       final JavascriptConfigService service =
          (JavascriptConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
             JavascriptConfigService.class);
       final String uri = URLDecoder.decode(request.getRequestURI(), "UTF-8");
-      
+*/
+
+/*
       CachedJavascript jScript = service.getCachedJScript(uri);
       if (jScript == null)
       {
          jScript = service.getMergedCommonJScripts();
       }
-      
+*/
+
+/*
       long lastModified = jScript.getLastModified();
       long ifModifiedSince = request.getDateHeader(ResourceRequestFilter.IF_MODIFIED_SINCE);
       
@@ -87,5 +93,6 @@ public class JavascriptServlet extends HttpServlet
       String js = jScript.getText();
       response.setDateHeader(ResourceRequestFilter.LAST_MODIFIED, lastModified);
       response.getWriter().write(js);
+*/
    }
 }

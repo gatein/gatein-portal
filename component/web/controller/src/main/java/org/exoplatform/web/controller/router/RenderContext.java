@@ -41,6 +41,9 @@ public class RenderContext
       /** . */
       private final int index;
 
+      /** This value is valid only if the parameter is matched. */
+      private String match;
+
       private Parameter(String value, int index)
       {
          this.value = value;
@@ -51,14 +54,29 @@ public class RenderContext
       {
          return value;
       }
+      
+      public String getMatch()
+      {
+         return isMatched() ? match : null;
+      }
 
-      public void remove()
+      public boolean isMatched()
+      {
+         return stack.getDepth() > 0 && stack.get(index);
+      }
+
+      public void remove(String match)
       {
          if (stack.getDepth() < 1)
          {
             throw new IllegalStateException();
          }
+         if (stack.get(index))
+         {
+            throw new AssertionError("We should not do that twice, shouldn't we ?");
+         }
          stack.set(index);
+         this.match = match;
       }
    }
 
@@ -141,21 +159,12 @@ public class RenderContext
 
    Parameter getParameter(QualifiedName name)
    {
-      Parameter entry = parameters.get(name);
-      if (stack.getDepth() == 0 || (entry != null && !stack.get(entry.index)))
-      {
-         return entry;
-      }
-      else
-      {
-         return null;
-      }
+      return parameters.get(name);
    }
-
-   String getParameterValue(QualifiedName name)
+   
+   Iterable<QualifiedName> getNames()
    {
-      Parameter entry = getParameter(name);
-      return entry != null ? entry.value : null;
+      return parameters.keySet();
    }
 
    boolean isEmpty()

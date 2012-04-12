@@ -21,6 +21,7 @@ package org.exoplatform.web.controller.router;
 
 import org.exoplatform.web.controller.regexp.GroupType;
 import org.exoplatform.web.controller.regexp.RENode;
+import org.exoplatform.web.controller.regexp.REVisitor;
 
 /**
  * The route escaper transformer a regular expression with the following rules:
@@ -42,7 +43,7 @@ import org.exoplatform.web.controller.regexp.RENode;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RouteEscaper
+public class RouteEscaper extends REVisitor<MalformedRouteException>
 {
 
    /** . */
@@ -57,59 +58,40 @@ public class RouteEscaper
       this.dst = dst;
    }
 
-   public void visit(RENode.Disjunction disjunction) throws MalformedRouteException
+   @Override
+   protected void visit(RENode.Char expr) throws MalformedRouteException
    {
-      visit(disjunction.getAlternative());
-      RENode.Disjunction next = disjunction.getNext();
-      if (next != null)
+      if (expr.getValue() == src)
       {
-         visit(next);
+         expr.setValue(dst);
       }
    }
 
-   public void visit(RENode.Alternative alternative) throws MalformedRouteException
+   @Override
+   protected void visit(RENode.Group expr) throws MalformedRouteException
    {
-      visit(alternative.getExp());
-      RENode.Alternative next = alternative.getNext();
-      if (next != null)
+      if (expr.getType() == GroupType.CAPTURING_GROUP)
       {
-         visit(next);
+         expr.setType(GroupType.NON_CAPTURING_GROUP);
       }
+      super.visit(expr);
    }
 
-   public void visit(RENode.Expr expr) throws MalformedRouteException
+   @Override
+   protected void visit(RENode.Any expr) throws MalformedRouteException
    {
-      if (expr instanceof RENode.Char)
-      {
-         RENode.Char c = (RENode.Char)expr;
-         if (c.getValue() == src)
-         {
-            c.setValue(dst);
-         }
-      }
-      else if (expr instanceof RENode.Group)
-      {
-         RENode.Group group = (RENode.Group)expr;
-         if (group.getType() == GroupType.CAPTURING_GROUP)
-         {
-            group.setType(GroupType.NON_CAPTURING_GROUP);
-         }
-         visit(group.getDisjunction());
-      }
-      else if (expr instanceof RENode.Any)
-      {
-         RENode.CharacterClass repl = new RENode.CharacterClass(new RENode.CharacterClassExpr.Not(new RENode.CharacterClassExpr.Char('/')));
-         repl.setQuantifier(expr.getQuantifier());
-         expr.replaceBy(repl);
-      }
-      else if (expr instanceof RENode.CharacterClass)
-      {
-         RENode.CharacterClass characterClass = (RENode.CharacterClass)expr;
-         RENode.CharacterClassExpr ccExpr = characterClass.getExpr();
-         ccExpr = ccExpr.replace(src, dst);
+      RENode.CharacterClass repl = new RENode.CharacterClass(new RENode.CharacterClassExpr.Not(new RENode.CharacterClassExpr.Char('/')));
+      repl.setQuantifier(expr.getQuantifier());
+      expr.replaceBy(repl);
+   }
+
+   @Override
+   protected void visit(RENode.CharacterClass expr) throws MalformedRouteException
+   {
+      RENode.CharacterClassExpr ccExpr = expr.getExpr();
+      ccExpr = ccExpr.replace(src, dst);
 //         RENode.CharacterClassExpr.And ccRepl = new RENode.CharacterClassExpr.And(null, new RENode.CharacterClassExpr.Not(new RENode.CharacterClassExpr.Char('/')));
 //         ccExpr.replaceBy(ccRepl);
 //         ccRepl.setLeft(ccExpr);
-      }
    }
 }

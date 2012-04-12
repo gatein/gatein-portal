@@ -19,40 +19,66 @@
 
 package org.exoplatform.web.application.javascript;
 
+import org.gatein.portal.controller.resource.ResourceId;
+import org.gatein.portal.controller.resource.script.Module;
+import org.gatein.portal.controller.resource.script.ScriptResource;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Javascript
+public abstract class Javascript
 {
-   /** . */
-   private final String module;
 
-   /** . */
-   private final String contextPath;
-
-   /** . */
-   private final int priority;
-
-   private final String path;
-   
-   public Javascript(String module, String path, String contextPath, int priority)
+   public static Javascript create(ResourceId resource, String module, String path, String contextPath, int priority)
    {
-      this.module = module;
       if (path.startsWith("http://") || path.startsWith("https://"))
       {
-         this.path = path;
+         return new Remote(resource, module, contextPath, path, priority);
       }
       else
       {
-         this.path = contextPath + path;
+         return new Local(resource, module, contextPath, path, null, priority);
       }
+   }
+
+   public static Javascript create(Module module)
+   {
+      if (module instanceof Module.Remote)
+      {
+         Module.Remote remote = (Module.Remote)module;
+         return new Remote(module.getResource().getId(), remote.getName(), remote.getContextPath(), remote.getURI(), remote.getPriority());
+      }
+      else
+      {
+         Module.Local local = (Module.Local)module;
+         return new Local(local.getResource().getId(), local.getName(), local.getContextPath(), local.getPath(), local.getResourceBundle(), local.getPriority());
+      }
+   }
+
+   /** . */
+   protected final ResourceId resource;
+
+   /** . */
+   protected final String contextPath;
+
+   /** . */
+   protected final String module;
+
+   /** . */
+   protected final int priority;
+   
+   private Javascript(ResourceId resource, String module, String contextPath, int priority)
+   {
+      this.resource = resource;
       this.contextPath = contextPath;
+      this.module = module;
       this.priority = priority < 0 ? Integer.MAX_VALUE : priority;
    }
 
-   public String getPath() {
-      return this.path;
+   public ResourceId getResource()
+   {
+      return resource;
    }
 
    public String getModule()
@@ -62,7 +88,7 @@ public class Javascript
 
    public String getContextPath()
    {
-      return this.contextPath;
+      return contextPath;
    }
 
    public int getPriority()
@@ -70,46 +96,76 @@ public class Javascript
       return priority;
    }
    
-   public boolean isExternalScript()
-   {
-      return (path.startsWith("http://") || path.startsWith("https://")) ? true : false;
-   }
-   
+   abstract Module addModuleTo(ScriptResource resource);
+
+   public abstract boolean isExternalScript();
+
    @Override
    public String toString()
    {
-      return "Javascript[module=" + module + ", path=" + path +"]";
+      return "Javascript[scope=" + resource + ", module=" + module +"]";
    }
    
-   public static class PortalJScript extends Javascript
+   public static class Local extends Javascript
    {
-      private final String portalName;
 
-      public PortalJScript(String module, String path, String contextPath, int priority, String portalName)
+      /** . */
+      protected final String path;
+
+      /** . */
+      protected final String resourceBundle;
+
+      public Local(ResourceId resource, String module, String contextPath, String path, String resourceBundle, int priority)
       {
-         super(module, path, contextPath, priority);
-         this.portalName = portalName;
+         super(resource, module, contextPath, priority);
+
+         //
+         this.path = path;
+         this.resourceBundle = resourceBundle;
       }
-      
-      public String getPortalName()
+
+      @Override
+      Module addModuleTo(ScriptResource resource)
       {
-         return portalName;
+         return resource.addLocalModule(contextPath, module, path, resourceBundle, priority);
+      }
+
+      public String getResourceBundle()
+      {
+         return resourceBundle;
+      }
+
+      @Override
+      public boolean isExternalScript()
+      {
+         return false;
       }
    }
-   
-   public static class ExtendedJScript extends Javascript
+
+   public static class Remote extends Javascript
    {
-      private final String script;
-      
-      public ExtendedJScript(String module, String path, String contextPath, String script)
+
+      /** . */
+      protected final String uri;
+
+      public Remote(ResourceId resource, String module, String contextPath, String uri, int priority)
       {
-         super(module, path, contextPath, Integer.MAX_VALUE);
-         this.script = script;
+         super(resource, module, contextPath, priority);
+
+         //
+         this.uri = uri;
       }
-      
-      public String getScript()
+
+      @Override
+      Module addModuleTo(ScriptResource resource)
       {
-         return this.script;
+         return resource.addRemoteModule(contextPath, module, uri, priority);
+      }
+
+      @Override
+      public boolean isExternalScript()
+      {
+         return true;
       }
    }
 }

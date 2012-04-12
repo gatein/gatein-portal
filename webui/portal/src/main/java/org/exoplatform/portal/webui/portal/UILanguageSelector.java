@@ -34,6 +34,7 @@ import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.ResourceBundleService;
 import org.exoplatform.web.url.ResourceType;
 import org.exoplatform.web.url.navigation.NodeURL;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
@@ -42,6 +43,7 @@ import org.exoplatform.webui.core.model.SelectItemCategory;
 import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.exoplatform.webui.event.Event.Phase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -168,14 +170,13 @@ public class UILanguageSelector extends UIContainer
    {
       public void execute(Event<UILanguageSelector> event) throws Exception
       {
+         WebuiRequestContext rContext = event.getRequestContext();
          String language = event.getRequestContext().getRequestParameter("language");
          PortalRequestContext prqCtx = PortalRequestContext.getCurrentInstance();
 
          UIPortalApplication uiApp = Util.getUIPortalApplication();
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-         uiMaskWS.setUIComponent(null);
-         // event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS) ;
-         prqCtx.ignoreAJAXUpdateOnPortlets(false);
+         uiMaskWS.createEvent("Close", Phase.DECODE, rContext).broadcast();
 
          if (language == null || language.trim().equals(prqCtx.getLocale().getLanguage()))
          {

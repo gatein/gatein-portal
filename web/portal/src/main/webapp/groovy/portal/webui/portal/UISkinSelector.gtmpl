@@ -2,7 +2,7 @@
 	import org.exoplatform.webui.core.UIItemSelector; 
 	
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs'); 
+	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector'); 
 	rcontext.getJavascriptManager().importJavascript('eXo.portal.UIPortal'); 
 %>
 <div class="UIChangeSkinForm">

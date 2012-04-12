@@ -39,8 +39,8 @@ public class TestRouteEscaper extends BaseGateInTest
       REParser parser = new REParser(pattern);
       RouteEscaper escaper = new RouteEscaper('/', '_');
       RENode.Disjunction re = parser.parseDisjunction();
-      escaper.visit(re);
-      Pattern p = Pattern.compile(new RERenderer().render(re, new StringBuilder()).toString());
+      re.accept(escaper);
+      Pattern p = Pattern.compile(RERenderer.render(re, new StringBuilder()).toString());
       Matcher matcher = p.matcher(test);
       assertTrue(matcher.find());
       assertEquals(expectedValue, matcher.group());

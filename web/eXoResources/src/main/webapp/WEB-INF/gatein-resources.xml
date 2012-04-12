@@ -19,306 +19,347 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
 -->
-<gatein-resources
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2 http://www.gatein.org/xml/ns/gatein_resources_1_2"
-    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2">
+<gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2_1 http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
+   xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
 
-	<portal-skin>
-		<skin-name>Default</skin-name>
-		<css-path>/skin/Stylesheet.css</css-path>
-    <css-priority>0</css-priority>
-	</portal-skin>	
-	
-	<!-- Simple window style -->
-	<window-style>
-		<style-name>Simple</style-name>
-		<style-theme>
-			<theme-name>SimpleBlue</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>SimpleViolet</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>SimpleOrange</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>SimplePink</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>SimpleGreen</theme-name>
-		</style-theme>
-	</window-style>
-	
-	<!-- RoundConer window style -->
-	<window-style>
-		<style-name>RoundConer</style-name>
-		<style-theme>
-			<theme-name>RoundConerBlue</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>RoundConerViolet</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>RoundConerOrange</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>RoundConerPink</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>RoundConerGreen</theme-name>
-		</style-theme>
-	</window-style>
-	
-	<!-- Shadow window style -->
-	<window-style>
-		<style-name>Shadow</style-name>
-		<style-theme>
-			<theme-name>ShadowBlue</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>ShadowViolet</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>ShadowOrange</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>ShadowPink</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>ShadowGreen</theme-name>
-		</style-theme>
-	</window-style>
-	
-	<!-- MacStyle window style -->
-	<window-style>
-		<style-name>MacStyle</style-name>
-		<style-theme>
-			<theme-name>MacTheme</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>MacGray</theme-name>
-		</style-theme>
-		<style-theme>
-			<theme-name>MacGreenSteel</theme-name>
-		</style-theme>
-	</window-style>
-	
-	<!-- VistaStyle window style -->
-	<window-style>
-		<style-name>VistaStyle</style-name>
-		<style-theme>
-			<theme-name>VistaTheme</theme-name>
-		</style-theme>
-	</window-style>
+   <portal-skin>
+      <skin-name>Default</skin-name>
+      <css-path>/skin/Stylesheet.css</css-path>
+      <css-priority>0</css-priority>
+   </portal-skin>
 
-   <javascript>
-      <param>
-         <js-module>eXo</js-module>
-         <js-path>/javascript/eXo.js</js-path>
-         <js-priority>0</js-priority>
-      </param>
-   </javascript>
+   <!-- Simple window style -->
+   <window-style>
+      <style-name>Simple</style-name>
+      <style-theme>
+         <theme-name>SimpleBlue</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>SimpleViolet</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>SimpleOrange</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>SimplePink</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>SimpleGreen</theme-name>
+      </style-theme>
+   </window-style>
+
+   <!-- RoundConer window style -->
+   <window-style>
+      <style-name>RoundConer</style-name>
+      <style-theme>
+         <theme-name>RoundConerBlue</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>RoundConerViolet</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>RoundConerOrange</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>RoundConerPink</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>RoundConerGreen</theme-name>
+      </style-theme>
+   </window-style>
+
+   <!-- Shadow window style -->
+   <window-style>
+      <style-name>Shadow</style-name>
+      <style-theme>
+         <theme-name>ShadowBlue</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>ShadowViolet</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>ShadowOrange</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>ShadowPink</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>ShadowGreen</theme-name>
+      </style-theme>
+   </window-style>
+
+   <!-- MacStyle window style -->
+   <window-style>
+      <style-name>MacStyle</style-name>
+      <style-theme>
+         <theme-name>MacTheme</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>MacGray</theme-name>
+      </style-theme>
+      <style-theme>
+         <theme-name>MacGreenSteel</theme-name>
+      </style-theme>
+   </window-style>
+
+   <!-- VistaStyle window style -->
+   <window-style>
+      <style-name>VistaStyle</style-name>
+      <style-theme>
+         <theme-name>VistaTheme</theme-name>
+      </style-theme>
+   </window-style>
+
+   <!-- Bootstrap Javascripts -->
+   <scripts>
+      <name>bootstrap</name>
+      <module>
+         <name>eXo</name>
+         <path>/javascript/eXo.js</path>
+      </module>
+      <module>
+         <name>eXo.core.Loader</name>
+         <path>/javascript/eXo/core/AsyncLoader.js</path>
+      </module>
+   </scripts>
+
+   <!-- Base Javascripts for anonymous mode-->
+   <scripts>
+      <name>base</name>
+      <supported-locale>de</supported-locale>
+      <supported-locale>en</supported-locale>
+      <supported-locale>fr</supported-locale>
+      <supported-locale>ru</supported-locale>
+      <supported-locale>vi</supported-locale>
+      <module>
+         <name>eXo.core.Utils</name>
+         <path>/javascript/eXo/core/Util.js</path>
+      </module>
+      <module>
+         <name>eXo.core.DOMUtil</name>
+         <path>/javascript/eXo/core/DOMUtil.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIPopupSelectCategory</name>
+         <path>/javascript/eXo/webui/UIPopupSelectCategory.js</path>
+      </module>
+      <module>
+         <name>eXo.core.Browser</name>
+         <path>/javascript/eXo/core/Browser.js</path>
+      </module>
+      <module>
+         <name>eXo.core.JSON</name>
+         <path>/javascript/eXo/core/JSON.js</path>
+      </module>
+      <module>
+         <name>eXo.core.I18n</name>
+         <path>/javascript/eXo/core/I18n.js</path>
+      </module>
+      <module>
+         <name>eXo.core.Skin</name>
+         <path>/javascript/eXo/core/Skin.js</path>
+      </module>
+      <module>
+         <name>eXo.portal.PortalHttpRequest</name>
+         <path>/javascript/eXo/portal/PortalHttpRequest.js</path>
+      </module>
+
+      <module>
+         <name>eXo.portal.UIPortalControl</name>
+         <path>/javascript/eXo/portal/UIPortalControl.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIPopup</name>
+         <path>/javascript/eXo/webui/UIPopup.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIPopupMenu</name>
+         <path>/javascript/eXo/webui/UIPopupMenu.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIHorizontalTabs</name>
+         <path>/javascript/eXo/webui/UIHorizontalTabs.js</path>
+      </module>
+
+      <module>
+         <name>eXo.core.UIMaskLayer</name>
+         <path>/javascript/eXo/core/UIMaskLayer.js</path>
+      </module>
+      <module>
+         <name>eXo.portal.UIMaskWorkspace</name>
+         <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
+      </module>
+
+      <module>
+        <name>eXo.i18n.I18NMessage</name>
+        <path>/javascript/eXo/i18n/I18NMessage.js</path>
+        <resource-bundle>eXo.portal</resource-bundle>
+      </module>
+      <depends>
+        <scripts>bootstrap</scripts>
+      </depends>
+   </scripts>
+
 
    <!-- CORE Javascripts -->
-   <javascript>
-      <param>
-         <js-module>eXo.core.Utils</js-module>
-         <js-path>/javascript/eXo/core/Util.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.DOMUtil</js-module>
-         <js-path>/javascript/eXo/core/DOMUtil.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.html.HTMLEntities</js-module>
-         <js-path>/javascript/eXo/core/html/HTMLEntities.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.HTMLUtil</js-module>
-         <js-path>/javascript/eXo/core/HTMLUtil.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Browser</js-module>
-         <js-path>/javascript/eXo/core/Browser.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Loader</js-module>
-         <js-path>/javascript/eXo/core/Loader.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.MouseEventManager</js-module>
-         <js-path>/javascript/eXo/core/MouseEventManager.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.UIMaskLayer</js-module>
-         <js-path>/javascript/eXo/core/UIMaskLayer.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Skin</js-module>
-         <js-path>/javascript/eXo/core/Skin.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.DragDrop</js-module>
-         <js-path>/javascript/eXo/core/DragDrop.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.DragDrop2</js-module>
-         <js-path>/javascript/eXo/core/DragDrop2.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Topic</js-module>
-         <js-path>/javascript/eXo/core/Topic.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.JSON</js-module>
-         <js-path>/javascript/eXo/core/JSON.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Cometd</js-module>
-         <js-path>/javascript/eXo/core/Cometd.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Spliter</js-module>
-         <js-path>/javascript/eXo/core/Spliter.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.Notification</js-module>
-         <js-path>/javascript/eXo/core/Notification.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.core.I18n</js-module>
-         <js-path>/javascript/eXo/core/I18n.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-   </javascript>
+   <scripts>
+      <name>common</name>
+      <module>
+         <name>eXo.core.html.HTMLEntities</name>
+         <path>/javascript/eXo/core/html/HTMLEntities.js</path>
+      </module>
+      <module>
+         <name>eXo.core.HTMLUtil</name>
+         <path>/javascript/eXo/core/HTMLUtil.js</path>
+      </module>
+      <module>
+         <name>eXo.core.DragDrop</name>
+         <path>/javascript/eXo/core/DragDrop.js</path>
+      </module>
+      <module>
+         <name>eXo.core.DragDrop2</name>
+         <path>/javascript/eXo/core/DragDrop2.js</path>
+      </module>
 
-   <!-- Gadget Javascripts -->
-   <javascript>
-      <param>
-         <js-module>eXo.gadget.UIGadget</js-module>
-         <js-path>/javascript/eXo/gadget/UIGadget.js</js-path>
-         <js-priority>2</js-priority>
-      </param>
-   </javascript>
+      <!-- Gadget Javascripts -->
+      <module>
+         <name>eXo.gadget.UIGadget</name>
+         <path>/javascript/eXo/gadget/UIGadget.js</path>
+      </module>
+
+      <!--
+      <module>
+         <name>eXo.core.Spliter</name>
+         <path>/javascript/eXo/core/Spliter.js</path>
+      </module>
+       -->
+      <depends>
+        <scripts>base</scripts>
+      </depends>
+   </scripts>      
 
    <!-- Portal Javascripts -->
-   <javascript>
-      <param>
-         <js-module>eXo.portal.PortalHttpRequest</js-module>
-         <js-path>/javascript/eXo/portal/PortalHttpRequest.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.UIPortal</js-module>
-         <js-path>/javascript/eXo/portal/UIPortal.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.UIWorkspace</js-module>
-         <js-path>/javascript/eXo/portal/UIWorkspace.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.UIPortalControl</js-module>
-         <js-path>/javascript/eXo/portal/UIPortalControl.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.PortalDragDrop</js-module>
-         <js-path>/javascript/eXo/portal/PortalDragDrop.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.UIPortalNavigation</js-module>
-         <js-path>/javascript/eXo/portal/UIPortalNavigation.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.UIMaskWorkspace</js-module>
-         <js-path>/javascript/eXo/portal/UIMaskWorkspace.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.portal.UIBrowseContent</js-module>
-         <js-path>/javascript/eXo/portal/UIBrowseContent.js</js-path>
-         <js-priority>3</js-priority>
-      </param>
-   </javascript>
+   <scripts>
+      <name>portal</name>
+      <module>
+         <name>eXo.portal.UIPortal</name>
+         <path>/javascript/eXo/portal/UIPortal.js</path>
+      </module>
+      <module>
+         <name>eXo.portal.PortalDragDrop</name>
+         <path>/javascript/eXo/portal/PortalDragDrop.js</path>
+      </module>
+      <!--
+      <module>
+         <name>eXo.core.Cometd</name>
+         <path>/javascript/eXo/core/Cometd.js</path>
+      </module>
+      <module>
+         <name>eXo.core.Topic</name>
+         <path>/javascript/eXo/core/Topic.js</path>
+      </module>
+      -->       
+      <depends>
+        <scripts>common</scripts>
+      </depends>
+   </scripts>
+   
 
    <!-- WebUI Javascripts -->
+   <scripts>
+      <name>webui</name>
+      <module>
+         <name>eXo.webui.UIItemSelector</name>
+         <path>/javascript/eXo/webui/UIItemSelector.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIForm</name>
+         <path>/javascript/eXo/webui/UIForm.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIPopupWindow</name>
+         <path>/javascript/eXo/webui/UIPopupWindow.js</path>
+      </module>
+      <depends>
+        <scripts>common</scripts>
+      </depends>
+   </scripts>
+   
+   <scripts>
+      <name>webui-ext</name>
+      <module>
+         <name>eXo.webui.UICalendar</name>
+         <path>/javascript/eXo/webui/UICalendar.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIUpload</name>
+         <path>/javascript/eXo/webui/UIUpload.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIRightClickPopupMenu</name>
+         <path>/javascript/eXo/webui/UIRightClickPopupMenu.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIDropDownControl</name>
+         <path>/javascript/eXo/webui/UIDropDownControl.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIVirtualList</name>
+         <path>/javascript/eXo/webui/UIVirtualList.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIColorPicker</name>
+         <path>/javascript/eXo/webui/UIColorPicker.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UICombobox</name>
+         <path>/javascript/eXo/webui/UICombobox.js</path>
+      </module>
+      <depends>
+        <scripts>common</scripts>
+      </depends>
+   </scripts>
+
+   <scripts>
+      <name>navigation</name>
+      <module>
+         <name>eXo.portal.UIPortalNavigation</name>
+         <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
+      </module>
+      <depends>
+        <scripts>base</scripts>
+      </depends>
+   </scripts>
+
+   <scripts>
+     <name>dashboard</name>
+     <module>
+       <name>eXo.webui.UIDashboard</name>
+       <path>/javascript/eXo/webui/UIDashboard.js</path>
+     </module>
+     <module>
+       <name>eXo.webui.UIDashboardUtil</name>
+       <path>/javascript/eXo/webui/UIDashboardUtil.js</path>
+     </module>
+     <depends>
+       <scripts>common</scripts>
+     </depends>
+   </scripts>
+
+   <scripts>
+     <name>tabbeddashboard</name>
+     <module>
+       <name>eXo.webui.UITabbedDashboard</name>
+       <path>/javascript/eXo/webui/UITabbedDashboard.js</path>
+     </module>
+     <depends>
+       <scripts>common</scripts>
+     </depends>
+   </scripts>
+
+   <!-- Should be lazy loaded -->
+   <!-- 
    <javascript>
-      <param>
-         <js-module>eXo.webui.UIItemSelector</js-module>
-         <js-path>/javascript/eXo/webui/UIItemSelector.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIForm</js-module>
-         <js-path>/javascript/eXo/webui/UIForm.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIPopup</js-module>
-         <js-path>/javascript/eXo/webui/UIPopup.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIPopupSelectCategory</js-module>
-         <js-path>/javascript/eXo/webui/UIPopupSelectCategory.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIPopupWindow</js-module>
-         <js-path>/javascript/eXo/webui/UIPopupWindow.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIHorizontalTabs</js-module>
-         <js-path>/javascript/eXo/webui/UIHorizontalTabs.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIPopupMenu</js-module>
-         <js-path>/javascript/eXo/webui/UIPopupMenu.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIDropDownControl</js-module>
-         <js-path>/javascript/eXo/webui/UIDropDownControl.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIRightClickPopupMenu</js-module>
-         <js-path>/javascript/eXo/webui/UIRightClickPopupMenu.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIVerticalSlideTabs</js-module>
-         <js-path>/javascript/eXo/webui/UIVerticalSlideTabs.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIPermissionSelectorTab</js-module>
-         <js-path>/javascript/eXo/webui/UIPermissionSelectorTab.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
       <param>
          <js-module>eXo.webui.UIDashboard</js-module>
          <js-path>/javascript/eXo/webui/UIDashboard.js</js-path>
@@ -330,34 +371,36 @@
          <js-priority>4</js-priority>
       </param>
       <param>
-         <js-module>eXo.webui.UINotification</js-module>
-         <js-path>/javascript/eXo/webui/UINotification.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
          <js-module>eXo.webui.UIUserSelector</js-module>
          <js-path>/javascript/eXo/webui/UIUserSelector.js</js-path>
          <js-priority>4</js-priority>
       </param>
       <param>
-         <js-module>eXo.webui.UICombobox</js-module>
-         <js-path>/javascript/eXo/webui/UICombobox.js</js-path>
+         <js-module>eXo.webui.UIVerticalSlideTabs</js-module>
+         <js-path>/javascript/eXo/webui/UIVerticalSlideTabs.js</js-path>
          <js-priority>4</js-priority>
       </param>
       <param>
-         <js-module>eXo.webui.UICombobox</js-module>
-         <js-path>/javascript/eXo/webui/UIVirtualList.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIColorPicker</js-module>
-         <js-path>/javascript/eXo/webui/UIColorPicker.js</js-path>
-         <js-priority>4</js-priority>
-      </param>
-      <param>
-         <js-module>eXo.webui.UIPortlet</js-module>
-         <js-path>/javascript/eXo/webui/UIPortlet.js</js-path>
+         <js-module>eXo.webui.UINotification</js-module>
+         <js-path>/javascript/eXo/webui/UINotification.js</js-path>
          <js-priority>4</js-priority>
       </param>
    </javascript>
+    -->
+
+   <!-- Portlet Application JScripts -->
+   <!-- 
+   <javascript>
+      <param>
+         <js-module>eXo.portal.UIPortalNavigation</js-module>
+         <js-path>/javascript/eXo/portal/UIPortalNavigation.js</js-path>
+         <js-priority>3</js-priority>
+      </param>
+      <param>
+         <js-module>eXo.portal.UIAdminToolbar</js-module>
+         <js-path>/javascript/eXo/portal/UIAdminToolbar.js</js-path>
+         <js-priority>3</js-priority>
+      </param>
+   </javascript>
+    -->
 </gatein-resources>

@@ -20,166 +20,178 @@
 /**
  * Manages a form component
  */
-function UIForm() {
-};
+eXo.webui.UIForm = {
 
-/**
- * This method is called when a HTTP POST should be done but in an AJAX
- * case some maniputalions are needed
- * Once the content of the form is placed into a string object, the call
- * is delegated to the doRequest() method 
- */
-UIForm.prototype.ajaxPost = function(formElement, callback) {
-  if (!callback) callback = null ;
-  var queryString = eXo.webui.UIForm.serializeForm(formElement) ;
-  var url = formElement.action + "&ajaxRequest=true" ;
-  doRequest("POST", url, queryString, callback) ;
-} ;
+  /**
+   * This method is called when a HTTP POST should be done but in an AJAX case
+   * some maniputalions are needed Once the content of the form is placed into a
+   * string object, the call is delegated to the doRequest() method
+   */
+  ajaxPost : function(formElement, callback) {
+    if (!callback)
+      callback = null;
+    var queryString = eXo.webui.UIForm.serializeForm(formElement);
+    var url = formElement.action + "&ajaxRequest=true";
+    doRequest("POST", url, queryString, callback);
+  },
 
-/**
- * Get form element with pattern condition
- * @param {String} pattern
- * The pattern can  be Id#Id, example: Account#UIAccountForm
- */
-UIForm.prototype.getFormElemt = function(pattern) {
-	if(pattern.indexOf("#") == -1) return document.getElementById(pattern) ;
-	var strArr = pattern.split("#") ;
-	var portlet = document.getElementById(strArr[0]) ;
-	return eXo.core.DOMUtil.findDescendantById(portlet, strArr[1]) ;
-}
+  /**
+   * Get form element with pattern condition
+   * 
+   * @param {String}
+   *          pattern The pattern can be Id#Id, example: Account#UIAccountForm
+   */
+  getFormElemt : function(pattern) {
+    if (pattern.indexOf("#") == -1)
+      return document.getElementById(pattern);
+    var strArr = pattern.split("#");
+    var portlet = document.getElementById(strArr[0]);
+    return eXo.core.DOMUtil.findDescendantById(portlet, strArr[1]);
+  },
 
-/**
- * A function that submits the form identified by formId, with the specified action
- * If useAjax is true, calls the ajaxPost function, with the given callback function
- * Note: ie bug  you cannot have more than one button tag
- */
-UIForm.prototype.submitForm = function(formId, action, useAjax, callback) {
- if (!callback) callback = null;
- var form = this.getFormElemt(formId) ;
- //TODO need review try-cactch block for form doesn't use FCK
- try {
-  if (FCKeditorAPI && typeof FCKeditorAPI == "object") {
- 	  for ( var name in FCKeditorAPI.__Instances ) {
- 	  	var oEditor ;
- 	  	try {
- 	  	  oEditor = FCKeditorAPI.__Instances[name] ;
-	 	  	if (oEditor && oEditor.GetParentForm && oEditor.GetParentForm() == form ) {
-	 	  		oEditor.UpdateLinkedField() ;
-	 	  	}
- 	  	} catch(e) {
- 	  	  continue ;
- 	  	}
-  	}
-  }
- } catch(e) {}
+  /**
+   * A function that submits the form identified by formId, with the specified
+   * action If useAjax is true, calls the ajaxPost function, with the given
+   * callback function Note: ie bug you cannot have more than one button tag
+   */
+  submitForm : function(formId, action, useAjax, callback) {
+    if (!callback)
+      callback = null;
+    var form = this.getFormElemt(formId);
+    // TODO need review try-cactch block for form doesn't use FCK
+    try {
+      if (FCKeditorAPI && typeof FCKeditorAPI == "object") {
+        for ( var name in FCKeditorAPI.__Instances) {
+          var oEditor;
+          try {
+            oEditor = FCKeditorAPI.__Instances[name];
+            if (oEditor && oEditor.GetParentForm
+                && oEditor.GetParentForm() == form) {
+              oEditor.UpdateLinkedField();
+            }
+          } catch (e) {
+            continue;
+          }
+        }
+      }
+    } catch (e) {
+    }
 
-  form.elements['formOp'].value = action ;
-  if(useAjax) this.ajaxPost(form, callback) ;
-  else  form.submit();
-} ;
+    form.elements['formOp'].value = action;
+    if (useAjax)
+      this.ajaxPost(form, callback);
+    else
+      form.submit();
+  },
 
-/**
- * Submits a form by Ajax, with the given action and the given parameters
- * Calls ajaxPost
- * Note: ie bug  you cannot have more than one button tag
- */
-UIForm.prototype.submitEvent = function(formId, action, params) {
-  var form = this.getFormElemt(formId) ;
-	 try {
-	  if (FCKeditorAPI && typeof FCKeditorAPI == "object") {
-	 	  for ( var name in FCKeditorAPI.__Instances ) {
-	 	  	var oEditor = FCKeditorAPI.__Instances[name] ;
-	 	  	if ( oEditor.GetParentForm && oEditor.GetParentForm() == form ) {
-	 	  		oEditor.UpdateLinkedField() ;
-	 	  	}
-	  	}
-	  }
-	 } catch(e) {}
-  form.elements['formOp'].value = action ; 
-  if(!form.originalAction) form.originalAction = form.action ; 
-	form.action =  form.originalAction +  encodeURI(params) ;
-  this.ajaxPost(form) ;
-} ;
+  /**
+   * Submits a form by Ajax, with the given action and the given parameters
+   * Calls ajaxPost Note: ie bug you cannot have more than one button tag
+   */
+  submitEvent : function(formId, action, params) {
+    var form = this.getFormElemt(formId);
+    try {
+      if (FCKeditorAPI && typeof FCKeditorAPI == "object") {
+        for ( var name in FCKeditorAPI.__Instances) {
+          var oEditor = FCKeditorAPI.__Instances[name];
+          if (oEditor.GetParentForm && oEditor.GetParentForm() == form) {
+            oEditor.UpdateLinkedField();
+          }
+        }
+      }
+    } catch (e) {
+    }
+    form.elements['formOp'].value = action;
+    if (!form.originalAction)
+      form.originalAction = form.action;
+    form.action = form.originalAction + encodeURI(params);
+    this.ajaxPost(form);
+  },
 
-UIForm.prototype.selectBoxOnChange = function(formId, elemt) {
-	var selectBox = eXo.core.DOMUtil.findAncestorByClass(elemt, "UISelectBoxOnChange");
-	var contentContainer = eXo.core.DOMUtil.findFirstDescendantByClass(selectBox, "div", "SelectBoxContentContainer") ;
-	var tabs = eXo.core.DOMUtil.findChildrenByClass(contentContainer, "div", "SelectBoxContent");
-	for(var i=0; i < tabs.length; i++) {
-		tabs[i].style.display = "none";
-	}
-	tabs[elemt.selectedIndex].style.display = "block";
-} ;
-/**
- * Sets the value (hiddenValue) of a hidden field (typeId) in the form (formId)
- */
-UIForm.prototype.setHiddenValue = function(formId, typeId, hiddenValue) {
-  var form = document.getElementById(formId) ;
-  if(form == null){
-	  maskWorkspace =	document.getElementById("UIMaskWorkspace");
-	  form = eXo.core.DOMUtil.findDescendantById(maskWorkspace, formId);
-  }
-  form.elements[typeId].value = hiddenValue;  
-} ;
-/**
- * Returns a string that contains all the values of the elements of a form (formElement) in this format
- *  . fieldName=value
- * The result is a string like this : abc=def&ghi=jkl...
- * The values are encoded to be used in an URL
- * Only serializes the elements of type :
- *  . text, hidden, password, textarea
- *  . checkbox and radio if they are checked
- *  . select-one if one option is selected
- */
-/*
-* This method goes through the form element passed as an argument and 
-* generates a string output in a GET request way.
-* It also encodes the the form parameter values
-*/
-UIForm.prototype.serializeForm = function (formElement) {
-  var queryString = "";
-  var element ;
-  var elements = formElement.elements;
-  
-  this.addField = function(name, value) {
-    if (queryString.length > 0) queryString += "&";
-    queryString += name + "=" + encodeURIComponent(value);
-  };
-  
-  for(var i = 0; i < elements.length; i++) {
-    element = elements[i];
-    //if(element.disabled) continue;
-    switch(element.type) {
+  selectBoxOnChange : function(formId, elemt) {
+    var selectBox = eXo.core.DOMUtil.findAncestorByClass(elemt,
+        "UISelectBoxOnChange");
+    var contentContainer = eXo.core.DOMUtil.findFirstDescendantByClass(
+        selectBox, "div", "SelectBoxContentContainer");
+    var tabs = eXo.core.DOMUtil.findChildrenByClass(contentContainer, "div",
+        "SelectBoxContent");
+    for ( var i = 0; i < tabs.length; i++) {
+      tabs[i].style.display = "none";
+    }
+    tabs[elemt.selectedIndex].style.display = "block";
+  },
+  /**
+   * Sets the value (hiddenValue) of a hidden field (typeId) in the form
+   * (formId)
+   */
+  setHiddenValue : function(formId, typeId, hiddenValue) {
+    var form = document.getElementById(formId);
+    if (form == null) {
+      maskWorkspace = document.getElementById("UIMaskWorkspace");
+      form = eXo.core.DOMUtil.findDescendantById(maskWorkspace, formId);
+    }
+    form.elements[typeId].value = hiddenValue;
+  },
+  /**
+   * Returns a string that contains all the values of the elements of a form
+   * (formElement) in this format . fieldName=value The result is a string like
+   * this : abc=def&ghi=jkl... The values are encoded to be used in an URL Only
+   * serializes the elements of type : . text, hidden, password, textarea .
+   * checkbox and radio if they are checked . select-one if one option is
+   * selected
+   */
+  /*
+   * This method goes through the form element passed as an argument and
+   * generates a string output in a GET request way. It also encodes the the
+   * form parameter values
+   */
+  serializeForm : function(formElement) {
+    var queryString = "";
+    var element;
+    var elements = formElement.elements;
+
+    this.addField = function(name, value) {
+      if (queryString.length > 0)
+        queryString += "&";
+      queryString += name + "=" + encodeURIComponent(value);
+    };
+
+    for ( var i = 0; i < elements.length; i++) {
+      element = elements[i];
+      // if(element.disabled) continue;
+      switch (element.type) {
       case "text":
       case "hidden":
       case "password":
-      case "textarea" :  
-        this.addField(element.name, element.value.replace(/\r/gi, ""));  
-        break; 
-          
+      case "textarea":
+        this.addField(element.name, element.value.replace(/\r/gi, ""));
+        break;
+
       case "checkbox":
-        if(element.checked) 
-            this.addField(element.name, "true");
+        if (element.checked)
+          this.addField(element.name, "true");
         else
-            this.addField(element.name, "false");
+          this.addField(element.name, "false");
         break;
       case "radio":
-        if(element.checked) this.addField(element.name, element.value);  
-        break;  
-  
+        if (element.checked)
+          this.addField(element.name, element.value);
+        break;
+
       case "select-one":
-        if(element.selectedIndex > -1){
-        	this.addField(element.name, element.options[element.selectedIndex].value);  
+        if (element.selectedIndex > -1) {
+          this.addField(element.name,
+              element.options[element.selectedIndex].value);
         }
         break;
       case "select-multiple":
-        for(var j = 0; j < element.options.length; j++) {
-        	if(element.options[j].selected) this.addField(element.name, element.options[j].value);
+        for ( var j = 0; j < element.options.length; j++) {
+          if (element.options[j].selected)
+            this.addField(element.name, element.options[j].value);
         }
         break;
-    } // switch
-   } // for 
-   return queryString;
-};
-
-eXo.webui.UIForm = new UIForm();
+      } // switch
+    } // for
+    return queryString;
+  }
+}

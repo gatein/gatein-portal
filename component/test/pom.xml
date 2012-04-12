@@ -33,6 +33,7 @@
    <modules>
       <module>core</module>
       <module>jcr</module>
+      <module>web</module>
    </modules>
 
 </project>

@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.workspace;
 
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -39,6 +40,7 @@ public class UIMaskWorkspace extends UIComponentDecorator
 
    private boolean isShow = false;
 
+   //TODO: Seems the isUpdated is never true
    private boolean isUpdated = false;
 
    public int getWindowWidth()
@@ -120,7 +122,9 @@ public class UIMaskWorkspace extends UIComponentDecorator
          }
          uiMaskWorkspace.setUIComponent(null);
          uiMaskWorkspace.setWindowSize(-1, -1);
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWorkspace);
+         WebuiRequestContext rContext = event.getRequestContext();
+         rContext.getJavascriptManager().addCustomizedOnLoadScript("eXo.portal.UIMaskWorkspace.hide('" + uiMaskWorkspace.getId() + "');");
+         rContext.addUIComponentToUpdateByAjax(uiMaskWorkspace);
       }
    }
 }

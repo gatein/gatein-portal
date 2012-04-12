@@ -22,6 +22,7 @@ package org.exoplatform.webui.application;
 import org.exoplatform.resolver.ApplicationResourceResolver;
 import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.web.application.Application;
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.web.application.URLBuilder;
 import org.exoplatform.webui.core.UIApplication;
@@ -202,5 +203,11 @@ abstract public class WebuiRequestContext extends RequestContext
    public void setStateManager(StateManager manager)
    {
       stateManager_ = manager;
+   }
+
+   public JavascriptManager getJavascriptManager()
+   {
+      // Yes nasty cast
+      return ((WebuiRequestContext)getParentAppRequestContext()).getJavascriptManager();
    }
 }
