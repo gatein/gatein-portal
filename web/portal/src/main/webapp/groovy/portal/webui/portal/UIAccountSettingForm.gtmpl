@@ -1,6 +1,6 @@
 <%
   import org.exoplatform.web.application.JavascriptManager;
-  import org.exoplatform.portal.controller.resource.ResourceScope;
+  import org.gatein.portal.controller.resource.ResourceScope;
 
   def rcontext = _ctx.getRequestContext();
   JavascriptManager jsManager = rcontext.getJavascriptManager();
