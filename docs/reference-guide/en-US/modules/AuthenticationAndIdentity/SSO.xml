@@ -1339,6 +1339,150 @@ realmName=gatein-domain;
             </para>
         </section>
 
+       <section id="sect-Reference_Guide-OpenSSO_The_Open_Web_SSO_project-Setup_cross_context_login">
+          <title>Cross-domain authentication with OpenSSO</title>
+          <para>Authentication scenario described in previous parts assumes that &PRODUCT; and OpenSSO are deployed on same
+             server or in same DNS domain (like OpenSSO on <emphasis role="bold">opensso.shareddomain.com</emphasis> and
+             &PRODUCT; on <emphasis role="bold">portal.shareddomain.com</emphasis>).
+          </para>
+          <para>After successful authentication in OpenSSO console, OpenSSO will add special cookie <emphasis role="bold">iPlanetDirectoryPro</emphasis>
+             for DNS domain shareddomain.com and then it redirects to portal agent. Portal OpenSSO agent can read SSO token
+             from this cookie because cookie is in same DNS domain, so it can perform validation of token. In other words,
+             exchange of secret token between OpenSSO and &PRODUCT; is done through this shared cookie.
+          </para>
+          <para>This approach can't work in situations, when &PRODUCT; server and OpenSSO server are in different domains
+             and can't share cookie. For this scenario, OpenSSO provides special servlet <emphasis role="bold">CDCServlet</emphasis>.
+             Authenticated user can send request to this servlet and servlet will send him encoded SAML message with SSO token and
+             other informations. Portal agent is then able to parse and validate this message, obtain SSO token and establish
+             iPlanetDirectoryPro cookie for server where portal is deployed. Once OpenSSO agent on portal side has token,
+             it can perform other validations of this token and successfuly finish authentication of user.
+          </para>
+          <para>
+             You can follow <ulink url="http://docs.oracle.com/cd/E19575-01/820-3746/gipjl/index.html">this link</ulink>
+             for more technical informations about CDCServlet or <ulink url="http://developers.sun.com/identity/reference/techart/troubleshooting3.html">this link</ulink>
+             for more info about whole OpenSSO Cross-Domain workflow with possible troubleshooting tips.
+          </para>
+          <section id="sect-Reference_Guide-OpenSSO_The_Open_Web_SSO_project-Setup_cross_context_login_configuration">
+             <title>Cross-domain authentication configuration</title>
+             <procedure>
+                <step>
+                   <para>
+                      Let's assume that your OpenSSO server is deployed on opensso.mydomain.com and &PRODUCT; on portal.yourdomain.com.
+                      If you are on single machine, you can simply simulate this scenario by using virtual hosts. On linux
+                      you can simply edit <emphasis role="bold">/etc/hosts</emphasis> file and add those records:
+                      <programlisting>
+                         opensso.mydomain.com 127.0.0.1
+                         portal.yourdomain.com 127.0.1.1
+                      </programlisting>
+                   </para>
+                </step>
+                <step>
+                   <para>
+                      Now you can follow steps in previous sections about &PRODUCT; and OpenSSO integration. Assumption
+                      is that OpenSSO will be deployed on Tomcat server on <emphasis role="bold">opensso.mydomain.com:8888</emphasis>
+                      and &PRODUCT; will be deployed on <emphasis role="bold">portal.yourdomain.com:8080</emphasis>. Configuration of
+                      <emphasis role="bold">LoginRedirectFilter</emphasis> on &PRODUCT; side in file
+                      <emphasis role="bold">gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> will be different. We will
+                      use different class for filter and different parameters, because now we don't redirect user directly
+                      to OpenSSO console but we need to redirect him to CDCServlet. Configuration will look as follows:
+                   </para>
+                   <programlisting>
+                      <![CDATA[
+<filter>
+  <filter-name>LoginRedirectFilter</filter-name>
+  <filter-class>org.gatein.sso.agent.filter.OpenSSOCDLoginRedirectFilter</filter-class>
+  <init-param>
+    <!-- This should point to URL of CDCServlet on your OpenSSO authentication server -->
+    <param-name>LOGIN_URL</param-name>
+    <param-value>http://opensso.mydomain.com:8888/opensso/cdcservlet</param-value>
+  </init-param>
+  <init-param>
+    <!-- This is name of GateIn authentication realm in your OpenSSO server -->
+    <param-name>OpenSSORealm</param-name>
+    <param-value>gatein</param-value>
+  </init-param>
+  <init-param>
+    <!-- This is URL of agent on GateIn server side. Normally it should point to location,
+         which is mapped to InitiateLoginFilter
+    -->
+    <param-name>AgentUrl</param-name>
+    <param-value>http://portal.yourdomain.com:8080/portal/initiatessologin</param-value>
+  </init-param>
+</filter>
+]]>
+                   </programlisting>
+                   <para>Configuration of OpenSSOLogoutFilter and InitiateLoginFilter will be quite similar like in previous scenario.
+                      Only difference are different host names:
+                   </para>
+                   <programlisting>
+                      <![CDATA[
+<filter>
+  <filter-name>OpenSSOLogoutFilter</filter-name>
+  <filter-class>org.gatein.sso.agent.filter.OpenSSOLogoutFilter</filter-class>
+  <init-param>
+    <!-- This should point to your OpenSSO authentication server -->
+    <param-name>LOGOUT_URL</param-name>
+    <param-value>http://opensso.mydomain.com:8888/opensso/UI/Logout</param-value>
+  </init-param>
+</filter>
+<filter>
+  <filter-name>InitiateLoginFilter</filter-name>
+  <filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
+  <init-param>
+    <param-name>ssoServerUrl</param-name>
+    <param-value>http://opensso.mydomain.com:8888/opensso</param-value>
+  </init-param>
+  <init-param>
+    <param-name>loginUrl</param-name>
+    <param-value>http://portal.yourdomain.com:8080/portal/dologin</param-value>
+  </init-param>
+  <init-param>
+    <param-name>ssoCookieName</param-name>
+    <param-value>iPlanetDirectoryPro</param-value>
+  </init-param>
+</filter>
+]]>
+                   </programlisting>
+                </step>
+                <step>
+                   <para>
+                      In case that you are on OpenAM instead of OpenSSO, it's mandatory to create agent for &PRODUCT; server.
+                      This agent is required by CDCServlet to work properly. You can create agent in OpenAM UI by performing these steps:
+                   </para>
+                   <itemizedlist>
+                      <listitem><para>Go to <ulink url="http://opensso.mydomain.com:8888/opensso">http://opensso.mydomain.com:8888/opensso</ulink>
+                         and login as <emphasis>amadmin</emphasis></para>
+                      </listitem>
+                      <listitem>
+                         <para>Go to <emphasis role="bold">Access Control</emphasis> --> <emphasis role="bold">Realm "gatein"</emphasis> -->
+                            <emphasis role="bold">Agents</emphasis> --> <emphasis role="bold">Web</emphasis></para>
+                      </listitem>
+                      <listitem>
+                         <para>Create new web agent through the wizard. You can use these properties:</para>
+                         <itemizedlist>
+                            <listitem><para>Name: GateInAgent</para></listitem>
+                            <listitem><para>Password: Whatever you want...</para></listitem>
+                            <listitem><para>Configuration: Centralized</para></listitem>
+                            <listitem><para>Server URL: http://opensso.mydomain.com:8888/opensso</para></listitem>
+                            <listitem><para>Agent URL: http://portal.yourdomain.com:8080</para></listitem>
+                         </itemizedlist>
+                         <para>If you have more portal servers on different hosts, you may want to create agent for each of them.
+                            Please look at <ulink url="http://openam.forgerock.org/doc/admin-guide/index.html">OpenAM administration guide</ulink> for more details.
+                         </para>
+                      </listitem>
+                   </itemizedlist>
+                   <mediaobject>
+                      <imageobject>
+                         <imagedata fileref="images/AuthenticationAndIdentity/SSO/openam-agent.png" format="PNG" width="444" />
+                      </imageobject>
+                   </mediaobject>
+                </step>
+             </procedure>
+             <note>
+                Support for Cross-Domain scenario has been tested with &PRODUCT; and with OpenSSO of version 8.0-Update1 and OpenAM of version 9.5.2 as SSO servers.
+             </note>
+          </section>
+       </section>
     </section>
 
     <section id="Single_Sign_On-SPNEGO">
