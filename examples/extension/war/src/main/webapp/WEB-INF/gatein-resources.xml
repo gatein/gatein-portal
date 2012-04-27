@@ -22,15 +22,14 @@
 <gatein-resources
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2 http://www.gatein.org/xml/ns/gatein_resources_1_2"
-   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2">  
-    
+   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2">
+
 	<portlet-skin>
 		<application-name>web</application-name>
 		<portlet-name>HomePagePortlet</portlet-name>
 		<skin-name>Default</skin-name>
 		<css-path>/templates/skin/webui/component/UIHomePagePortlet/DefaultStylesheet.css</css-path>
-    <overwrite>false</overwrite>
-  </portlet-skin>
+	</portlet-skin>
 	
 </gatein-resources>
 

@@ -73,6 +73,7 @@
 	width: 80px;
 	margin: 20px auto;
 	cursor: pointer;
+	display: block;
 }
 
 .UIHomePagePortlet  .TLContainer {
@@ -109,7 +110,19 @@
 }
 
 .UIHomePagePortlet .AdImageLeft .EmptyBlock {
-	height: 170px;
+	height: 120px;
+	font-size: 21px;
+	color: #616161;
+	text-align: center;
+	font-family: arial;
+	font-weight: bold;
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+	padding: 50px 0 0;
+}
+
+.UIHomePagePortlet .AdImageLeft .EmptyBlock div {
+	font-size: 19px;
 }
 
 .UIHomePagePortlet .AdImageLeft .ProductSlogan {

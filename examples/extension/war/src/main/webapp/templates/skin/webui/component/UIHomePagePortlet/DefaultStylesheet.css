@@ -63,16 +63,18 @@
 	background: url("DefaultSkin/background/HomePagePortlet.gif") no-repeat left -978px;
 	height: 65px;
 	width: 80px;
-	margin: 20px auto;
+	margin: 10px auto;
 	cursor: pointer;
+	display: block;
 }
 
 .UIHomePagePortlet .TRContainer .ContactIcon {
 	background: url("DefaultSkin/background/HomePagePortlet.gif") no-repeat left -1209px;
 	height: 70px;
 	width: 80px;
-	margin: 20px auto;
+	margin: 10px auto;
 	cursor: pointer;
+	display: block;
 }
 
 .UIHomePagePortlet  .TLContainer {
