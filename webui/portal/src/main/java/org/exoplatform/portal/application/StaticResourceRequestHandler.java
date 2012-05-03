@@ -41,6 +41,7 @@ public class StaticResourceRequestHandler extends WebRequestHandler
    @Override
    public boolean execute(ControllerContext context) throws Exception
    {
+      context.getResponse().setHeader("Cache-Control", "max-age=2592000,s-maxage=2592000");
       PortalContainer portalContainer = PortalContainer.getInstance();
       ServletContext mergedContext = portalContainer.getPortalContext();
       

@@ -225,6 +225,7 @@ public class ResourceRequestFilter extends AbstractFilter
                         }
                         httpResponse.setContentType(img.type.getMimeType());
                         httpResponse.setContentLength(img.bytes.length);
+                        httpResponse.setHeader("Cache-Control", "max-age=2592000,s-maxage=2592000");
                         processIfModified(imgLastModified, httpResponse);
                         
                         OutputStream out = httpResponse.getOutputStream();
