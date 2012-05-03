@@ -94,7 +94,7 @@ public class InitiateLoginServlet extends AbstractHttpServlet
                // Send authentication request
                log.debug("Login initiated with no credentials in session but found token " + token + " with existing credentials, " +
                   "performing authentication");
-               getWCIController().sendAuth(req, resp, credentials.getUsername(), token);
+               servletContainer.login(req, resp, credentials, getLoginValidity(), wciController.getInitialURI(req));
             }
          }
          else
