@@ -245,7 +245,7 @@ eXo.portal.UIPortalNavigation = {
 	    if (getNodeURL && !subContainer.length) {
 		    var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);
 		  	try {
-		  		var data = jQuery.parseJSON(jsChilds);
+		  		var data = xj.parseJSON(jsChilds);
 		  	} catch (e) {
 	  	}	
 	  	if (!data || !data.length) {

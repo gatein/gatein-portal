@@ -129,6 +129,10 @@
          <name>jquery</name>
          <path>/javascript/exo-jquery-1.7.1.js</path>
       </module>
+      <module>
+         <name>exo-jquery-alias</name>
+         <path>/javascript/exo-jquery-alias.js</path>
+      </module>
    </scripts>
 
    <!-- Base Javascripts for anonymous mode -->
