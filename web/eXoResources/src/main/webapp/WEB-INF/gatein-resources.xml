@@ -152,10 +152,6 @@
          <path>/javascript/eXo/core/Browser.js</path>
       </module>
       <module>
-         <name>eXo.core.JSON</name>
-         <path>/javascript/eXo/core/JSON.js</path>
-      </module>
-      <module>
          <name>eXo.core.I18n</name>
          <path>/javascript/eXo/core/I18n.js</path>
       </module>
