@@ -1,4 +1,3 @@
-
 Welcome to GateIn
 ==================
 
@@ -141,7 +140,7 @@ mvn clean install -Dgatein.dev=tomcat7 -DskipTests -Pdownload -Dexo.projects.dir
 If you have an existing Tomcat 7.x.x distribution from tomcat.apache.org, unpack it into CONTAINERS_DIR directory so that you get CONTAINERS_DIR/apache-tomcat-7.x.x directory.
 Issue the following command:
 
-mvn clean install -Dgatein.dev=tomcat5 -DskipTests -Dexo.projects.directory.dependencies=$CONTAINERS_DIR -Dexo.projects.app.tomcat7.version=apache-tomcat-7.x.x
+mvn clean install -Dgatein.dev=tomcat7 -DskipTests -Dexo.projects.directory.dependencies=$CONTAINERS_DIR -Dexo.projects.app.tomcat7.version=apache-tomcat-7.x.x
 
 (where apache-tomcat-7.x.x refers to a directory under $CONTAINERS_DIR directory - adjust appropriately to match your version)
 
