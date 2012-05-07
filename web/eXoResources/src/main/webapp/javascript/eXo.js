@@ -69,10 +69,21 @@ eXo.require = function(module, jsLocation, callback, params, context) {
 eXo.loadJS = function(paths, callback, params, context) {
   if (!paths || paths.length === undefined) return;
   
+  var copyArr = function(source, des, removeNull) {
+	  if (source && source.length) {
+		  for (var i = 0; i < source.length; i++) {
+			  if (!removeNull || source[i]) {
+				  des[des.length] = source[i];				  
+			  }
+		  }			  
+	  }
+  }
+  
   var invokeCallback = function(args) {
 	  var ctx = context || {};
-	  var tmp = args || [];
-	  if (params) tmp = tmp.concat(params);
+	  var tmp = [];
+	  copyArr(params, tmp, false);
+	  copyArr(args, tmp, true);
 	  callback.apply(ctx, tmp);
   }
   

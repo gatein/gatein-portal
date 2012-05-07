@@ -65,9 +65,6 @@
 		<% if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) { %>
 						eXo.developing = true ;
 		<% } %>		
-		<% for (url in headerScripts) { %>
-	        eXo.core.AsyncLoader.addLoadedJS('$url');
-		<% } %>	
 			eXo.env.portal.context = "<%=docBase%>" ;
 			<%if(rcontext.getAccessPath() == 0) {%>eXo.env.portal.accessMode = "public" ;<%}
 			else
