@@ -46,13 +46,13 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormInputItemSelector;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormPopupWindow;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTabPane;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
@@ -136,7 +136,7 @@ public class UIPageForm extends UIFormTabPane
 
       if (!page.isShowMaxWindow())
       {
-         page.setShowMaxWindow((Boolean)getUIFormCheckBoxInput("showMaxWindow").getValue());
+         page.setShowMaxWindow(getUICheckBoxInput("showMaxWindow").getValue());
       }
       if (!SiteType.USER.getName().equals(page.getOwnerType()))
       {
@@ -221,7 +221,7 @@ public class UIPageForm extends UIFormTabPane
                .addValidator(IdentifierValidator.class).addValidator(MandatoryValidator.class))
          .addUIFormInput(
             new UIFormStringInput("title", "title", null).addValidator(StringLengthValidator.class, 3, 120))
-         .addUIFormInput(new UIFormCheckBoxInput("showMaxWindow", "showMaxWindow", false));
+         .addUIFormInput(new UICheckBoxInput("showMaxWindow", "showMaxWindow", false));
       
       addUIFormInput(uiSettingSet);
       setSelectedTab(uiSettingSet.getId());
@@ -261,7 +261,7 @@ public class UIPageForm extends UIFormTabPane
          getUIStringInput("name").setReadOnly(true);
          getUIStringInput("pageId").setValue(uiPage.getPageId());
          getUIStringInput("title").setValue(uiPage.getTitle());
-         getUIFormCheckBoxInput("showMaxWindow").setValue(uiPage.isShowMaxWindow());
+         getUICheckBoxInput("showMaxWindow").setValue(uiPage.isShowMaxWindow());
          getUIFormSelectBox(OWNER_TYPE).setDisabled(true).setValue(uiPage.getSiteKey().getTypeName());
       }
 

@@ -30,7 +30,7 @@ eXo.webui.UIForm = {
   ajaxPost : function(formElement, callback) {
     if (!callback)
       callback = null;
-    var queryString = eXo.webui.UIForm.serializeForm(formElement);
+    var queryString = xj(formElement).serialize();
     var url = formElement.action + "&ajaxRequest=true";
     doRequest("POST", url, queryString, callback);
   },
@@ -136,67 +136,5 @@ eXo.webui.UIForm = {
       form = xj("#UIMaskWorkspace").find("#" + formId)[0];
     }
     form.elements[typeId].value = hiddenValue;
-  },
-  /**
-   * Returns a string that contains all the values of the elements of a form
-   * (formElement) in this format . fieldName=value The result is a string like
-   * this : abc=def&ghi=jkl... The values are encoded to be used in an URL Only
-   * serializes the elements of type : . text, hidden, password, textarea .
-   * checkbox and radio if they are checked . select-one if one option is
-   * selected
-   */
-  /*
-   * This method goes through the form element passed as an argument and
-   * generates a string output in a GET request way. It also encodes the the
-   * form parameter values
-   */
-  serializeForm : function(formElement) {
-    var queryString = "";
-    var element;
-    var elements = formElement.elements;
-
-    this.addField = function(name, value) {
-      if (queryString.length > 0)
-        queryString += "&";
-      queryString += name + "=" + encodeURIComponent(value);
-    };
-
-    for ( var i = 0; i < elements.length; i++) {
-      element = elements[i];
-      // if(element.disabled) continue;
-      switch (element.type) {
-      case "text":
-      case "hidden":
-      case "password":
-      case "textarea":
-        this.addField(element.name, element.value.replace(/\r/gi, ""));
-        break;
-
-      case "checkbox":
-        if (element.checked)
-          this.addField(element.name, "true");
-        else
-          this.addField(element.name, "false");
-        break;
-      case "radio":
-        if (element.checked)
-          this.addField(element.name, element.value);
-        break;
-
-      case "select-one":
-        if (element.selectedIndex > -1) {
-          this.addField(element.name,
-              element.options[element.selectedIndex].value);
-        }
-        break;
-      case "select-multiple":
-        for ( var j = 0; j < element.options.length; j++) {
-          if (element.options[j].selected)
-            this.addField(element.name, element.options[j].value);
-        }
-        break;
-      } // switch
-    } // for
-    return queryString;
   }
 }
