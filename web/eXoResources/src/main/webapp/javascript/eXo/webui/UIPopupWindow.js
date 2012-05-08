@@ -285,14 +285,14 @@ eXo.webui.UIPopupWindow = {
   },
 
   /**
-   * Init the Drag&Drop infrastructure using DragDrop2
+   * Init the Drag&Drop infrastructure using DragDrop
    *
    * @param popupBar
    * @param popup
    */
   initDND : function(popupBar, popup)
   {
-    eXo.core.DragDrop2.init(popupBar, popup);
+    eXo.core.DragDrop.init(popupBar, popup);
 
     popup.onDragStart = function(x, y, last_x, last_y, e)
     {

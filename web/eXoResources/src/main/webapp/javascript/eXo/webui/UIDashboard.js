@@ -35,7 +35,7 @@ eXo.webui.UIDashboard = {
 
     var gadgetContainer = portletFrag.find("div.GadgetContainer").eq(0);
 
-		eXo.core.DragDrop2.init(dragItem, dragObj);
+		eXo.core.DragDrop.init(dragItem, dragObj);
 
     dragObj.onDragStart = function(x, y, lastMouseX, lastMouseY, e)
     {
@@ -230,7 +230,7 @@ eXo.webui.UIDashboard = {
       e = e || window.event;
       if (BROWSER.isIE() && e.clientY < 0)
       {
-        eXo.core.DragDrop2.end(e);
+        eXo.core.DragDrop.end(e);
       }
     };
   },

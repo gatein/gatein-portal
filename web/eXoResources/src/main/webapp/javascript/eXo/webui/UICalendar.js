@@ -324,7 +324,7 @@ eXo.webui.UICalendar = {
     var calendar = drag.children(".UICalendar").first();
     var innerWidth = drag[0].offsetWidth;
 
-    eXo.core.DragDrop2.init(drag[0], component[0]);
+    eXo.core.DragDrop.init(drag[0], component[0]);
     component[0].onDragStart = function() {
       if (eXo.core.Browser.isIE7())
         drag.height(calendar[0].offsetHeight);

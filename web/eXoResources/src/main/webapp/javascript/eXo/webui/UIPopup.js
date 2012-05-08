@@ -161,7 +161,7 @@ eXo.webui.UIPopup = {
    * Inits the DragDrop class with empty values
    */
   initDND : function(evt) {
-    var DragDrop = eXo.core.DragDrop2;
+    var DragDrop = eXo.core.DragDrop;
 
     var clickBlock = this;
     var dragBlock = xj(clickBlock).parent().closest(".UIDragObject")[0];

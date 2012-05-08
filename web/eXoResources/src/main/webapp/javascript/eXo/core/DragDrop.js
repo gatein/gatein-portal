@@ -17,13 +17,13 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-function DragDrop2() {
+function DragDrop() {
 	var obj = null;
 	
-	DragDrop2.prototype.init = function(o, oRoot) {
+	DragDrop.prototype.init = function(o, oRoot) {
 		var jObj = xj(o);
 		jObj.off("mousedown");
-		jObj.on("mousedown", eXo.core.DragDrop2.start);
+		jObj.on("mousedown", eXo.core.DragDrop.start);
 
 		o.root = oRoot && oRoot != null ? oRoot : o ;
 		
@@ -32,7 +32,7 @@ function DragDrop2() {
 		o.root.onDrag = new Function();
 	};
 	
-	DragDrop2.prototype.start = function(e)	{
+	DragDrop.prototype.start = function(e)	{
 		var o = obj = this;
 		var jRoot = xj(o.root);
 		
@@ -43,15 +43,15 @@ function DragDrop2() {
 		o.lastMouseX = e.pageX;
 		o.lastMouseY = e.pageY;
 		o.root.onDragStart(position.left, position.top, o.lastMouseX, o.lastMouseY, e);
-		xj(document).on({"mousemove" : eXo.core.DragDrop2.drag, 
-			"mouseup" : eXo.core.DragDrop2.end, 
-			"keydown" : eXo.core.DragDrop2.onKeyDownEvt, 
-			"mouseout" : eXo.core.DragDrop2.cancel});		
+		xj(document).on({"mousemove" : eXo.core.DragDrop.drag,
+			"mouseup" : eXo.core.DragDrop.end,
+			"keydown" : eXo.core.DragDrop.onKeyDownEvt,
+			"mouseout" : eXo.core.DragDrop.cancel});
 		jRoot.data("dragging", true);
 		return false;
 	};
 	
-	DragDrop2.prototype.drag = function(e) {
+	DragDrop.prototype.drag = function(e) {
 		var o = obj;
 		var ey = e.pageY;
 		var ex = e.pageX;
@@ -74,7 +74,7 @@ function DragDrop2() {
 		return false;
 	};
 	
-	DragDrop2.prototype.end = function(e) {
+	DragDrop.prototype.end = function(e) {
 		xj(document).off("mousemove mouseup mouseout keydown");
 		
 		var jRoot = xj(obj.root);
@@ -88,15 +88,15 @@ function DragDrop2() {
 		return false;
 	};
 	
-	DragDrop2.prototype.cancel = function(e) {
+	DragDrop.prototype.cancel = function(e) {
 		if(obj.root.onCancel) obj.root.onCancel(e);
 		return false;
 	};
 	
-	DragDrop2.prototype.onKeyDownEvt = function(e) {
-		if(e.which === 27) eXo.core.DragDrop2.end(e) ;
+	DragDrop.prototype.onKeyDownEvt = function(e) {
+		if(e.which === 27) eXo.core.DragDrop.end(e) ;
 		return false;
 	}
 };
 
-eXo.core.DragDrop2 = new DragDrop2();
+eXo.core.DragDrop = new DragDrop();

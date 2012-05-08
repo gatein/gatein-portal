@@ -133,7 +133,7 @@ eXo.gadget.UIGadget = {
       {
         gadget.css("z-index", "0");
       }
-      eXo.core.DragDrop2.init(dragArea, uiGadget);
+      eXo.core.DragDrop.init(dragArea, uiGadget);
 
       var desktopPage = xj("#UIPageDesktop");
       var offsetHeight = desktopPage.offsetHeight - uiGadget.offsetHeight;

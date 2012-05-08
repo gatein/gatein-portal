@@ -34,7 +34,7 @@ eXo.portal.PortalDragDrop = {
 	  }
 		
 	  var browser = eXo.core.Browser;
-	  var DragDrop = eXo.core.DragDrop2;
+	  var DragDrop = eXo.core.DragDrop;
 	  var PortalDragDrop = eXo.portal.PortalDragDrop;
 	  
 	  var previewBlock = null;
