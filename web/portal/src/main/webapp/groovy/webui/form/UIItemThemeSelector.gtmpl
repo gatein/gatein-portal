@@ -2,11 +2,7 @@
 	import org.exoplatform.webui.core.UIDropDownControl; 
 	import org.exoplatform.web.application.JavascriptManager;
 	
-	def rcontext = _ctx.getRequestContext(); 
-	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.importJavascript("eXo.webui.UIFormInputThemeSelector"); 
-	
-	def selectedCategory = uicomponent.getSelectedCategory(); 
+	def selectedCategory = uicomponent.getSelectedCategory();
 	String selectedThemeName = uicomponent.getSelectedTheme(); 
 %>
 

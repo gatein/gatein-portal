@@ -230,6 +230,10 @@
          <name>eXo.portal.PortalDragDrop</name>
          <path>/javascript/eXo/portal/PortalDragDrop.js</path>
       </module>
+      <module>
+         <name>eXo.webui.UIFormInputThemeSelector</name>
+         <path>/javascript/eXo/webui/UIFormInputThemeSelector.js</path>
+      </module>
       <depends>
          <scripts>common</scripts>
       </depends>
