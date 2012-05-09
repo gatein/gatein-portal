@@ -147,6 +147,9 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                strBuild.append("'");
                strBuild.append(dependId.getScope()).append("/").append(dependId.getName());
                strBuild.append("',");
+            }            
+            if (resource.getDependencies().size() > 0) {
+               strBuild.deleteCharAt(strBuild.length() - 1);
             }
             strBuild.append("], function() {");
             readers.add(new StringReader(strBuild.toString()));                        
