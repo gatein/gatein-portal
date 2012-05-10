@@ -204,14 +204,20 @@
          <path>/javascript/eXo/core/DragDrop.js</path>
       </module>
 
-      <!-- Gadget Javascripts -->
+      <depends>
+         <scripts>base</scripts>
+      </depends>
+   </scripts>
+
+   <!-- GADGET Javascripts -->
+   <scripts>
+      <name>gadget</name>
       <module>
          <name>eXo.gadget.UIGadget</name>
          <path>/javascript/eXo/gadget/UIGadget.js</path>
       </module>
-
       <depends>
-         <scripts>base</scripts>
+         <scripts>common</scripts>
       </depends>
    </scripts>
 
