@@ -21,8 +21,22 @@
  * Manages the main navigation menu on the portal
  */
 eXo.portal.UIPortalNavigation = {
+
   hideMenuTimeoutIds : new HashMap(),
-  scrollMgr : null,
+
+  maxSpace : null,
+
+  leftArrow : null,
+
+  rightArrow : null,
+
+  beginIndex : 0,
+
+  endIndex : -1,
+
+  navItems : null,
+
+  isHorizontal : true,
   
   /**
    * Sets some parameters :
@@ -299,24 +313,129 @@ eXo.portal.UIPortalNavigation = {
     }
   },
   
-  /***** Scroll Management *****/
-  /**
-   * Function called to load the scroll manager that will manage the tabs in the main nav menu
-   *  . Creates the scroll manager
-   *  . Adds the tabs to the scroll manager
-   */
-  loadScroll : function(portalNavId) {
-    var uiNav = eXo.portal.UIPortalNavigation;
-    var portalNav = xj("#" + portalNavId);
-    if (!portalNav.length) return;
-    
-    // Creates new ScrollManager and initializes it
-    uiNav.scrollMgr = new ScrollManager(portalNav[0]);       
-    uiNav.scrollMgr.loadElements("UITab");
-    
-    // Finish initialization
-    uiNav.scrollMgr.init();
-    uiNav.scrollMgr.renderElements();
+  initScroll : function(navId)
+  {
+    var navContainer = xj("#" + navId);
+    var scrollButtons = navContainer.find(".ScrollButtons");
+    this.leftArrow = scrollButtons.children("a.ScrollLeftButton");
+    this.rightArrow = scrollButtons.children("a.ScrollRightButton");
+
+    this.navItems = navContainer.find(".UITab");
+    this.maxSpace = (this.isHorizontal)? (navContainer.width() - scrollButtons.width()) : (navContainer.height() - scrollButtons.height());
+
+    var end = this.beginIndex + 1;
+    var tmpSpace = 0;
+    var showArrows = false;
+    this.navItems.each(function()
+    {
+      var navItem = xj(this);
+      tmpSpace += eXo.portal.UIPortalNavigation.computeSpace(navItem);
+      if(tmpSpace <= eXo.portal.UIPortalNavigation.maxSpace)
+      {
+        end++;
+        navItem.css("display", "block");
+      }
+      else
+      {
+        showArrows = true;
+        navItem.css("display", "none");
+      }
+    });
+    this.endIndex = end;
+
+    if(showArrows)
+    {
+      scrollButtons.css("display", "block");
+
+      var left = eXo.core.I18n.isLT()? this.leftArrow : this.rightArrow;
+      var right = eXo.core.I18n.isLT()? this.rightArrow : this.leftArrow;
+      left.on("click", function() { eXo.portal.UIPortalNavigation.scrollLeft(eXo.portal.UIPortalNavigation.navItems);});
+      right.on("click", function() { eXo.portal.UIPortalNavigation.scrollRight(eXo.portal.UIPortalNavigation.navItems);});
+
+      this.updateArrows(this.beginIndex, this.endIndex, this.navItems.length);
+    }
+  },
+
+  scrollLeft : function(navItems)
+  {
+    var beginIndex = eXo.portal.UIPortalNavigation.beginIndex;
+    var endIndex = eXo.portal.UIPortalNavigation.endIndex;
+
+    if(beginIndex <= 0)
+    {
+      return;
+    }
+    var newEndIndex = beginIndex--;
+    var tmpSpace = 0;
+    navItems.slice(beginIndex, endIndex).each(function()
+    {
+      var navItem = xj(this);
+      tmpSpace += eXo.portal.UIPortalNavigation.computeSpace(navItem);
+      if(tmpSpace <= eXo.portal.UIPortalNavigation.maxSpace)
+      {
+        newEndIndex++;
+        navItem.css("display", "block");
+      }
+      else
+      {
+        navItem.css("display", "none");
+      }
+    });
+    eXo.portal.UIPortalNavigation.beginIndex = beginIndex;
+    eXo.portal.UIPortalNavigation.endIndex = newEndIndex;
+    eXo.portal.UIPortalNavigation.updateArrows(beginIndex, newEndIndex, navItems.length);
+  },
+
+  scrollRight : function(navItems)
+  {
+    var beginIndex = eXo.portal.UIPortalNavigation.beginIndex;
+    var endIndex = eXo.portal.UIPortalNavigation.endIndex;
+    var size = navItems.length;
+    if(endIndex >= size)
+    {
+      return;
+    }
+    var newBeginIndex = endIndex++;
+    var tmpSpace = 0;
+    xj.each(navItems.slice(beginIndex, endIndex).get().reverse(), function()
+    {
+      var navItem = xj(this);
+      tmpSpace += eXo.portal.UIPortalNavigation.computeSpace(navItem);
+      if(tmpSpace <= eXo.portal.UIPortalNavigation.maxSpace)
+      {
+        newBeginIndex--;
+        navItem.css("display", "block");
+      }
+      else
+      {
+        navItem.css("display", "none");
+      }
+    });
+    eXo.portal.UIPortalNavigation.beginIndex = newBeginIndex;
+    eXo.portal.UIPortalNavigation.endIndex = endIndex;
+    eXo.portal.UIPortalNavigation.updateArrows(newBeginIndex, endIndex, size);
+  },
+
+  computeSpace : function(navItem)
+  {
+    //We cache the computational result in the DOM object
+    if(navItem[0].space)
+    {
+      return navItem[0].space;
+    }
+    else
+    {
+      var space = (this.isHorizontal)? navItem.outerWidth(true) : navItem.outerHeight(true);
+      navItem[0].space = space;
+
+      return space;
+    }
+  },
+
+  updateArrows : function(beginIndex, endIndex, size)
+  {
+    this.leftArrow.attr("class", beginIndex == 0 ? "DisableScrollLeftButton" : "ScrollLeftButton");
+    this.rightArrow.attr("class", endIndex == size ? "DisableScrollRightButton" : "ScrollRightButton");
   },
 
   generateContainer : function(data) {

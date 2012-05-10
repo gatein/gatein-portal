@@ -310,10 +310,6 @@
    <scripts>
       <name>navigation</name>
       <module>
-         <name>eXo.portal.ScrollManager</name>
-         <path>/javascript/eXo/portal/ScrollManager.js</path>
-      </module>
-      <module>
          <name>eXo.webui.UIPopupMenu</name>
          <path>/javascript/eXo/webui/UIPopupMenu.js</path>
       </module>
