@@ -20,7 +20,9 @@
 /**
  * @fileoverview Open Gadget Container
  */
-var gadgets = gadgets || {};
+
+define("eXo.gadget.Gadgets", ["SHARED/jquery"], function(gj) {
+var gadgets = window.gadgets || {};
 gadgets.error = {};
 gadgets.error.SUBCLASS_RESPONSIBILITY = 'subclass responsibility';
 gadgets.error.TO_BE_DONE = 'to be done';
@@ -945,3 +947,4 @@ gadgets.IfrContainer.prototype.renderGadget = function(gadget) {
  * Default container.
  */
 gadgets.container = new gadgets.IfrContainer();
+});

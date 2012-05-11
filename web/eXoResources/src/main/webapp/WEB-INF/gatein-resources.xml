@@ -355,4 +355,19 @@
       </depends>
    </module>
 
+   <scripts>
+     <name>shindig-patch</name>
+     <module>
+       <name>eXo.gadget.Gadgets</name>
+       <path>/javascript/eXo/gadget/Gadgets.js</path>
+     </module>
+     <module>
+       <name>eXo.gadget.ExoBasedUserPrefStore</name>
+       <path>/javascript/eXo/gadget/ExoBasedUserPrefStore.js</path>
+     </module>
+     <depends>
+       <scripts>common</scripts>
+     </depends>
+   </scripts>
+   
 </gatein-resources>
