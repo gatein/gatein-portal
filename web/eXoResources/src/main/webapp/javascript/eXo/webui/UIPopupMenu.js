@@ -172,4 +172,5 @@ eXo.webui.UIPopupMenu = {
 	this.superClass.show(object);
     object.style.visibility = "";
   }
-}
+};
+return {UIPopupMenu: eXo.webui.UIPopupMenu};

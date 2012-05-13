@@ -93,3 +93,4 @@ eXo.webui.UIHorizontalTabs = {
     eXo.webui.UIForm.setHiddenValue(formId, 'currentSelectedTab', hiddenValue);
   }
 }
+return {UIHorizontalTabs: eXo.webui.UIHorizontalTabs};

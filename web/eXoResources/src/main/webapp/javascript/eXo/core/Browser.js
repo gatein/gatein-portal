@@ -403,3 +403,7 @@ eXo.core.Browser = {
 };
 
 eXo.core.Browser.init();
+return {
+	Browser: eXo.core.Browser,
+	Mouse: eXo.core.Mouse
+};
