@@ -19,6 +19,22 @@
 
 package org.exoplatform.web.application.javascript;
 
+import javax.servlet.ServletContext;
+
+import java.io.IOException;
+import java.io.Reader;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import org.exoplatform.commons.utils.CompositeReader;
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
@@ -40,21 +56,6 @@ import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.picocontainer.Startable;
-
-import javax.servlet.ServletContext;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
 
 public class JavascriptConfigService extends AbstractResourceService implements Startable
 {
@@ -124,10 +125,15 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          return getScript(id, locale);
       }
    }
-
+   
    public Reader getScript(ResourceId resourceId, Locale locale)
    {
       ScriptResource resource = getResource(resourceId);
+      
+      //
+      String resName = resourceId.getName();
+      resName = resName.substring(resName.lastIndexOf("/") + 1);
+      
       if (resource != null)
       {
          List<Module> modules = new ArrayList<Module>(resource.getModules());
@@ -135,46 +141,71 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          ArrayList<Reader> readers = new ArrayList<Reader>(modules.size() * 2);
          
          //
+         StringBuilder buffer = new StringBuilder();
          boolean isModule = FetchMode.ON_LOAD.equals(resource.getFetchMode());
          if (isModule)
          {
-            StringBuilder strBuild = new StringBuilder();
-            strBuild.append("define('");
-            strBuild.append(resourceId.getScope()).append("/").append(resourceId.getName());
-            strBuild.append("', [");
+            buffer.append("define('");
+            buffer.append(resourceId.getScope()).append("/").append(resourceId.getName());
+            buffer.append("', [");
             for (ResourceId dependId : resource.getDependencies())
             {
-               strBuild.append("'");
-               strBuild.append(dependId.getScope()).append("/").append(dependId.getName());
-               strBuild.append("',");
+               buffer.append("'");
+               buffer.append(dependId.getScope()).append("/").append(dependId.getName());
+               buffer.append("',");
             }            
             if (resource.getDependencies().size() > 0) {
-               strBuild.deleteCharAt(strBuild.length() - 1);
+               buffer.deleteCharAt(buffer.length() - 1);
             }
-            strBuild.append("], function() {");
-            readers.add(new StringReader(strBuild.toString()));                        
+            
+            buffer.append("], function(");
+            for (ResourceId resId : resource.getDependencies()) 
+            {               
+               String depName = resId.getName();
+               buffer.append(depName.substring(depName.lastIndexOf("/") + 1)).append(",");
+            }
+            if (resource.getDependencies().size() > 0) 
+            {
+               buffer.deleteCharAt(buffer.length() - 1);
+            }                        
+            
+            //                        
+            buffer.append(") { var ").append(resName).append(" = {};");
          }
          
          //
-         for (Module js :modules)
+         for (Module js : modules)
          {
-            if (!js.isRemote())
-            {
-               Reader jScript = getJavascript(resource, js.getName(), locale);
-               if (jScript != null)
-               {                                   
-                  readers.add(new StringReader("// Begin " + js.getName() + "\n"));                  
-                  readers.add(jScript);
-                  readers.add(new StringReader("// End " + js.getName() + "\n"));
+            Reader jScript = getJavascript(resource, js.getName(), locale);
+            if (jScript != null)
+            {                                                     
+               if (isModule) 
+               {                   
+                  buffer.append("var tmp = function() {");
+               }
+               buffer.append("// Begin ").append(js.getName()).append("\n");
+               
+               //
+               readers.add(new StringReader(buffer.toString()));                  
+               buffer.setLength(0);                  
+               readers.add(jScript);
+               
+               //
+               buffer.append("// End ").append(js.getName()).append("\n");
+               if (isModule) 
+               {
+                  buffer.append("}();for(var prop in tmp){");
+                  buffer.append(resName).append("[prop]=tmp[prop];").append("}");
                }
             }
          }
          
          if (isModule)
          {
-            readers.add(new StringReader("});"));                     
+            buffer.append("return ").append(resName).append(";});");     
          }
-
+         readers.add(new StringReader(buffer.toString()));
+         
          return new CompositeReader(readers);
       }
       return null;

@@ -280,7 +280,7 @@
    </module>
 
    <module>
-      <name>webui-ext</name>
+      <name>webuiExt</name>
       <script>
          <name>eXo.webui.UICalendar</name>
          <path>/javascript/eXo/webui/UICalendar.js</path>
@@ -355,19 +355,19 @@
       </depends>
    </module>
 
-   <scripts>
-     <name>shindig-patch</name>
-     <module>
+   <module>
+     <name>shindigPatch</name>
+     <script>
        <name>eXo.gadget.Gadgets</name>
        <path>/javascript/eXo/gadget/Gadgets.js</path>
-     </module>
-     <module>
+     </script>
+     <script>
        <name>eXo.gadget.ExoBasedUserPrefStore</name>
        <path>/javascript/eXo/gadget/ExoBasedUserPrefStore.js</path>
-     </module>
+     </script>
      <depends>
-       <scripts>common</scripts>
+       <module>common</module>
      </depends>
-   </scripts>
+   </module>
    
 </gatein-resources>
