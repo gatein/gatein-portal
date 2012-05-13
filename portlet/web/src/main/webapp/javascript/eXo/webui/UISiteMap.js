@@ -32,9 +32,10 @@ UISiteMap.prototype.updateTreeNode = function (nodeToUpdate, getNodeURL) {
 	} catch (e) {		
 	}	
 	if (data && data.length) {
-		eXo.webui.UISiteMap.generateHtml(data, nodeToUpdate, subGroup);			
+		SiteMapPortlet.generateHtml(data, nodeToUpdate, subGroup);			
 		return;
 	}
+
   jqNode.removeClass("CollapseIcon").addClass("NullItem");
 };
 
@@ -103,3 +104,4 @@ UISiteMap.prototype.collapseExpand = function(element) {
 };
 
 eXo.webui.UISiteMap = new UISiteMap();
+return eXo.webui.UISiteMap; 
