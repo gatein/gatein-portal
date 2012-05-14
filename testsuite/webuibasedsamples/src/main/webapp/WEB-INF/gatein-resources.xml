@@ -22,8 +22,8 @@
 
 <gatein-resources
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2 http://www.gatein.org/xml/ns/gatein_resources_1_2"
-   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2">
+   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2_1 http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
+   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
 	
 	<!-- Skin sample -->
 	<portlet-skin>
@@ -32,4 +32,20 @@
 		<skin-name>Default</skin-name>
 		<css-path>/skin/webui/component/UISamplePortlet/DefaultStylesheet.css</css-path>
 	</portlet-skin>
+	
+	<portlet>
+   	<name>UISamplePortlet</name>
+		<scripts>
+			<module>
+		     <name>eXo.webui.UISampleTOC</name>
+		     <path>/javascript/eXo/webui/UISampleTOC.js</path>
+		 	</module>
+			<depends>
+			  	<scripts>webui</scripts>
+			</depends>
+			<depends>
+			   <scripts>webui-ext</scripts>
+			</depends>
+		 </scripts>
+    </portlet>
 </gatein-resources>

@@ -2,10 +2,6 @@
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.portal.webui.application.UIItemThemeSelector;
   
-  def rcontext = _ctx.getRequestContext() ;
-  JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.importJavascript("eXo.webui.UIFormInputThemeSelector") ;
-	
 	def selectedCategory = uicomponent.getChild(UIItemThemeSelector.class).getSelectedCategory() ;
 	String selectedThemeName = uicomponent.getChild(UIItemThemeSelector.class).getSelectedTheme() ;
 	def uiParentComponent = uicomponent.getParent() ;

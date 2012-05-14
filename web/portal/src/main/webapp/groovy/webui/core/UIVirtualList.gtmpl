@@ -6,7 +6,6 @@
     boolean isAutoAdjustHeight = uicomponent.isAutoAdjustHeight();
     def rcontext = _ctx.getRequestContext();
     
-    rcontext.getJavascriptManager().importJavascript('eXo.core.DOMUtil');
     rcontext.getJavascriptManager().importJavascript('eXo.core.Browser');
     rcontext.getJavascriptManager().importJavascript('eXo.webui.UIVirtualList');
     

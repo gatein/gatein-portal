@@ -114,12 +114,12 @@ public class UICheckBoxInput extends UIFormInputBase<Boolean>
    {
       if (isDisabled())
          return;
-      
+
       if (input == null || "false".equals(input.toString()))
       {
          setValue(false);
       }
-      else 
+      else
       {
          setValue(true);
       }

@@ -17,373 +17,172 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-function UIComponent(node) {
-	if(!node) return null;
-  this.node = node ;
-  this.type = node.className ;
-  var DOMUtil = eXo.core.DOMUtil;
-  var componentBlock = DOMUtil.findFirstDescendantByClass(node, "div", "UIComponentBlock");
-  var children =  DOMUtil.getChildrenByTagName(componentBlock, "div") ;
-  
-  for(var i=0; i<children.length; i++) {
-  	if(DOMUtil.hasClass(children[i], "LAYOUT-BLOCK")) this.layout = children[i];
-  	else if(DOMUtil.hasClass(children[i], "VIEW-BLOCK")) this.view = children[i];
-  	else if(DOMUtil.hasClass(children[i], "EDITION-BLOCK")) this.control = children[i];
-  }
-	
-  this.component = "";
-  
-  if(DOMUtil.hasClass(node, "UIPortal")) this.id = node.id.replace("UIPortal-", "");
-  else if(DOMUtil.hasClass(node, "UIPortlet")) this.id = node.id.replace("UIPortlet-", "");
-  else if(DOMUtil.hasClass(node, "UIContainer")) this.id = node.id.replace("UIContainer-", "");
-  else this.id = node.id;
-  
-};
-
-UIComponent.prototype.getId = function() { return this.id ; };
-UIComponent.prototype.getElement = function() { return this.node ; };
-UIComponent.prototype.getUIComponentType = function() { return this.type ; };
-
-UIComponent.prototype.getUIComponentBlock = function() { return this.node ; };
-UIComponent.prototype.getControlBlock = function() { return this.control ; };
-UIComponent.prototype.getLayoutBlock = function() { return this.layout ; };
-UIComponent.prototype.getViewBlock = function() { return this.view ; };
-
-eXo.portal.UIPortalComponent = UIComponent.prototype.constructor ;
-
-/*******************************************************************************/
-
 eXo.portal.UIPortal = {
   portalUIComponentDragDrop : false,
 
-  blockOnMouseOver : function(event, portlet, isOver) {
-    var DOMUtil = eXo.core.DOMUtil;
+  blockOnMouseOver : function(event, block, isOver) {
+    var jqBlock = gj(block);
     if (!eXo.portal.portalMode || eXo.portal.isInDragging)
       return;
-    if (eXo.portal.portalMode <= 2 && DOMUtil.hasClass(portlet, "UIContainer"))
+    if (eXo.portal.portalMode <= 2 && jqBlock.hasClass("UIContainer"))
       return;
     if (eXo.portal.portalMode > 2 && eXo.portal.portalMode != 4
-        && DOMUtil.hasClass(portlet, "UIPortlet"))
+        && jqBlock.hasClass("UIPortlet"))
       return;
 
     if (!event)
       event = window.event;
     event.cancelBubble = true;
 
-    var component = DOMUtil.findFirstDescendantByClass(portlet, "div",
-        "UIComponentBlock");
-    var children = DOMUtil.getChildrenByTagName(component, "div");
-    var layoutBlock;
-    var viewBlock;
-    var editBlock;
-
-    for ( var i = 0; i < children.length; i++) {
-      if (DOMUtil.hasClass(children[i], "LAYOUT-BLOCK"))
-        layoutBlock = children[i];
-      else if (DOMUtil.hasClass(children[i], "VIEW-BLOCK"))
-        viewBlock = children[i];
-      else if (DOMUtil.hasClass(children[i], "EDITION-BLOCK"))
-        editBlock = children[i];
-    }
+    var viewBlock, layoutBlock, editBlock;
+    jqBlock.find("div.UIComponentBlock").eq(0).children("div").each(function()
+    {
+      var child = gj(this);
+      if (child.hasClass("VIEW-BLOCK"))
+      {
+        viewBlock = child;
+      }
+      else if (child.hasClass("LAYOUT-BLOCK"))
+      {
+        layoutBlock = child;
+      }
+      else if (child.hasClass("EDITION-BLOCK"))
+      {
+        editBlock = child;
+      }
+    });
 
     if (!editBlock)
+    {
       return;
-    if (isOver) {
-      var newLayer = DOMUtil.findFirstDescendantByClass(editBlock, "div",
-          "NewLayer");
+    }
+
+    if (isOver)
+    {
+      var newLayer = editBlock.find("div.NewLayer").eq(0);
       var height = 0;
       var width = 0;
-      if (layoutBlock && layoutBlock.style.display != "none") {
-        height = layoutBlock.offsetHeight;
-        width = layoutBlock.offsetWidth;
-      } else if (viewBlock && viewBlock.style.display != "none") {
-        height = viewBlock.offsetHeight;
-        width = viewBlock.offsetWidth;
+
+      if (layoutBlock && layoutBlock.css("display") != "none")
+      {
+        height = layoutBlock[0].offsetHeight;
+        width = layoutBlock[0].offsetWidth;
+      }
+      else if (viewBlock && viewBlock.css("display") != "none")
+      {
+        height = viewBlock[0].offsetHeight;
+        width = viewBlock[0].offsetWidth;
       }
 
-      if (DOMUtil.hasClass(portlet, "UIPortlet")) {
-        newLayer.style.width = width + "px";
-        newLayer.style.height = height + "px";
-      } else {
-        newLayer.parentNode.style.width = width + "px";
-        var normalBlock = DOMUtil.findFirstChildByClass(portlet, "div",
-            "NormalContainerBlock");
-        if (normalBlock)
-          DOMUtil.replaceClass(normalBlock, "NormalContainerBlock",
-              "OverContainerBlock");
+      if (jqBlock.hasClass("UIPortlet"))
+      {
+        newLayer.css("width", width + "px");
+        newLayer.css("height", height + "px");
       }
-      newLayer.parentNode.style.top = -height + "px";
-      editBlock.style.display = "block";
-
-      // resize width of portlet/container control if IE + LTR align BEGIN
-
-      var uiInfoBar = DOMUtil.findFirstDescendantByClass(editBlock, "div",
-          "UIInfoBar");
-
-      if (uiInfoBar
-          && (eXo.core.Browser.isIE6() || (eXo.core.Browser.isIE7() && eXo.core.I18n
-              .isRT()))) {
-        // resize width of portlet/container only one time
-        if (uiInfoBar.style.width == "") {
-          var dragControlArea = DOMUtil.findFirstDescendantByClass(uiInfoBar,
-              "div", "DragControlArea");
-
-          var portletIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar,
-              "div", "PortletIcon");
-          var editPortletPropertiesIcon = DOMUtil.findFirstDescendantByClass(
-              uiInfoBar, "a", "EditPortletPropertiesIcon");
-          var deletePortletIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar,
-              "a", "DeletePortletIcon");
-
-          var contarnerIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar,
-              "div", "ContainerIcon");
-          var editContainerIcon = DOMUtil.findFirstDescendantByClass(uiInfoBar,
-              "a", "EditContainerIcon");
-          var deleteContainerIcon = DOMUtil.findFirstDescendantByClass(
-              uiInfoBar, "a", "DeleteContainerIcon");
-
-          var uiInfoBarWidth = dragControlArea.offsetWidth;
-
-          if (DOMUtil.hasClass(portlet, "UIPortlet")) {
-            uiInfoBarWidth += portletIcon.offsetWidth;
-
-            if (editPortletPropertiesIcon) {
-              uiInfoBarWidth += editPortletPropertiesIcon.offsetWidth;
-            }
-
-            if (deletePortletIcon) {
-              uiInfoBarWidth += deletePortletIcon.offsetWidth;
-            }
-          }
-
-          if (DOMUtil.hasClass(portlet, "UIContainer")) {
-            uiInfoBarWidth += contarnerIcon.offsetWidth
-
-            if (editContainerIcon) {
-              uiInfoBarWidth += editContainerIcon.offsetWidth;
-            }
-
-            if (deleteContainerIcon) {
-              uiInfoBarWidth += deleteContainerIcon.offsetWidth;
-            }
-          }
-
-          uiInfoBar.style.width = uiInfoBarWidth + 35 + "px";
+      else
+      {
+        newLayer.parent().css("width", width + "px");
+        var normalBlock = jqBlock.children("div.NormalContainerBlock");
+        if (normalBlock.length > 0)
+        {
+          normalBlock.eq(0).removeClass("NormalContainerBlock").addClass("OverContainerBlock");
         }
-
       }
-      // resize width of portlet/container control if IE + LTR align END
 
-    } else {
-      editBlock.style.display = "none";
-      if (!DOMUtil.hasClass(portlet, "UIPortlet")) {
-        var normalBlock = DOMUtil.findFirstChildByClass(portlet, "div",
-            "OverContainerBlock");
-        if (normalBlock)
-          DOMUtil.replaceClass(normalBlock, "OverContainerBlock",
-              "NormalContainerBlock");
+      newLayer.parent().css("top", -height + "px");
+      editBlock.css("display", "block");
+
+      var infBar = editBlock.find("div.UIInfoBar").eq(0);
+      if (infBar && (eXo.core.Browser.isIE6() || (eXo.core.Browser.isIE7() && eXo.core.I18n.isRT())))
+      {
+        // Avoid resizing width of portlet/container block multiple times
+        if (infBar.css("width") == "")
+        {
+          var blockIcon, editIcon, delIcon;
+          if (jqBlock.hasClass("UIPortlet"))
+          {
+            blockIcon = infBar.find("div.PortletIcon");
+            editIcon = infBar.find("a.EditPortletPropertiesIcon");
+            delIcon = infBar.find("a.DeletePortletIcon");
+          }
+          else
+          {
+            blockIcon = infBar.find("div.ContainerIcon");
+            editIcon = infBar.find("a.EditContainerIcon");
+            delIcon = infBar.find("a.DeleteContainerIcon");
+          }
+
+          var infBarWidth = infBar.find("div.DragControlArea")[0].offsetWidth;
+          infBarWidth += blockIcon[0].offsetWidth;
+          if (editIcon.length > 0)
+          {
+            infBarWidth += editIcon[0].offsetWidth;
+          }
+          if (delIcon.length > 0)
+          {
+            infBarWidth += delIcon[0].offsetWidth;
+          }
+
+          infBar.css("width", infBarWidth + 35 + "px");
+        }
+      }
+    }
+    else
+    {
+      editBlock.css("display", "none");
+      if (jqBlock.hasClass("UIContainer"))
+      {
+        var normalBlock = jqBlock.find("div.OverContainerBlock");
+        if (normalBlock.length > 0)
+        {
+          normalBlock.eq(0).removeClass("OverContainerBlock").addClass("NormalContainerBlock");
+        }
       }
     }
 
     // Don't display portlet control when View Container
-    var controlPortlet = DOMUtil.findFirstDescendantByClass(editBlock, "div",
-        "CONTROL-PORTLET");
-    if (controlPortlet) {
-      controlPortlet.style.display = eXo.portal.portalMode == 4 ? "none"
-          : "block";
+    var controlPortlet = editBlock.find("div.CONTROL-PORTLET");
+    if(controlPortlet.length > 0)
+    {
+      controlPortlet.eq(0).css("display", eXo.portal.portalMode == 4 ? "none" : "block");
     }
-  },
-  /**
-   * Get all UIPortlets of current UIWorkingWorkspace
-   * 
-   * @return {Array} Array of UIComponents
-   */
-  getUIPortlets : function() {
-    var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
-    var founds = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace,
-        "div", "UIPortlet");
-    var components = new Array();
-    for (j = 0; j < founds.length; j++) {
-      components[components.length] = new UIComponent(founds[j]);
-    }
-    return components;
-  },
-  /**
-   * Get all UIPortlets is children of UIWorkingWorkspace
-   * 
-   * @return {Array} Array of UIComponents
-   */
-  getUIPortletsInUIPortal : function() {
-    var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
-    var founds = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace,
-        "div", "UIPortlet");
-    var components = new Array();
-    for ( var j = 0; j < founds.length; j++) {
-      if (eXo.core.DOMUtil.findAncestorByClass(founds[j], 'UIPage') == null) {
-        components[components.length] = new UIComponent(founds[j]);
-      }
-    }
-    return components;
-  },
-  /**
-   * Get all UIPortlets in UIPage
-   * 
-   * @return {Array} components array of UIComponent objects
-   */
-  getUIPortletsInUIPage : function() {
-    var uiPage = document.getElementById("UIPage");
-    var founds = eXo.core.DOMUtil.findDescendantsByClass(uiPage, "div",
-        "UIPortlet");
-    var components = new Array();
-    for ( var j = 0; j < founds.length; j++) {
-      components[components.length] = new UIComponent(founds[j]);
-    }
-    return components;
-  },
-  /**
-   * Get All UIContainers in current UIWorkingWorkspace
-   * 
-   * @return {Array} components array of UIComponent objects
-   */
-  getUIContainers : function() {
-    var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
-    var founds = eXo.core.DOMUtil.findDescendantsByClass(uiWorkingWorkspace,
-        "div", "UIContainer");
-    var components = new Array();
-    for ( var j = 0; j < founds.length; j++) {
-      components[j] = new UIComponent(founds[j]);
-    }
-    return components;
-  },
-  /**
-   * Get current UIPageBody
-   * 
-   * @return {Object} UIPageBody object of this document
-   */
-  getUIPageBody : function() {
-    // var uiPortal = document.getElementById("UIPortal") ;
-    // return new
-    // UIComponent(eXo.core.DOMUtil.findFirstDescendantByClass(uiPortal, "div",
-    // "UIPage")) ;
-    return new UIComponent(document.getElementById("UIPageBody"));
-  },
-  /**
-   * Get current UIPortal
-   * 
-   * @return {Object} UIComponent object that contains UIPortal object of this
-   *         component
-   */
-  getUIPortal : function() {
-    var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
-    return new UIComponent(eXo.core.DOMUtil.findFirstDescendantByClass(
-        uiWorkingWorkspace, "div", "UIPortal"));
   },
 
   /** Repaired: by Vu Duy Tu 25/04/07* */
   showLayoutModeForPage : function() {
-    var uiPage = eXo.core.DOMUtil.findFirstDescendantByClass(document.body,
-        "div", "UIPage");
-    if (uiPage == null)
+    var uiPage = gj(document.body).find("div.UIPage");
+    if (uiPage.length == 0)
       return;
-    var viewPage = eXo.core.DOMUtil.findFirstDescendantByClass(uiPage, "div",
-        "VIEW-PAGE");
-    var uiPortalApplication = document.getElementById("UIPortalApplication");
-    if (uiPortalApplication.className != "Vista") {
-      viewPage.style.border = "solid 3px #dadada";
+    var viewPage = uiPage.find("div.VIEW-PAGE").eq(0);
+    if(gj("#UIPortalApplication").attr("class") != "Vista")
+    {
+      viewPage.css("border", "solid 3px #dadada");
     }
 
-    viewPage.style.paddingTop = "50px";
-    viewPage.style.paddingRight = "0px";
-    viewPage.style.paddingBottom = "50px";
-    viewPage.style.paddingLeft = "0px";
-
-    var uiContainer = eXo.core.DOMUtil.findFirstDescendantByClass(viewPage,
-        "div", "UIContainer");
-    var uiPortlet = eXo.core.DOMUtil.findFirstDescendantByClass(viewPage,
-        "div", "UIPortlet");
-    if (uiContainer != null || uiPortlet != null) {
-      viewPage.style.border = "none";
-      viewPage.style.paddingTop = "5px";
-      viewPage.style.paddingRight = "5px";
-      viewPage.style.paddingBottom = "5px";
-      viewPage.style.paddingLeft = "5px";
+    if(viewPage.find("div.UIContainer,div.UIPortlet").length > 0)
+    {
+      viewPage.css({"border" : "none", "paddingTop" : "5px", "paddingRight" : "5px", "paddingBottom" : "5px", "paddingLeft" : "5px"});
+    }
+    else
+    {
+      viewPage.css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
   },
 
   showViewMode : function() {
-    var pageBody = this.getUIPageBody();
-    var container = this.getUIContainers();
-    var portlet = this.getUIPortlets();
-
-    if (container.length == 0 && portlet.length == 0) {
-      var pageIdElemt = document.getElementById("UIPage");
-      var viewPage = eXo.core.DOMUtil.findAncestorByClass(pageIdElemt,
-          "VIEW-PAGE");
-      viewPage.style.paddingTop = "50px";
-      viewPage.style.paddingRight = "0px";
-      viewPage.style.paddingBottom = "50px";
-      viewPage.style.paddingLeft = "0px";
+    var wkWs = gj("#UIWorkingWorkspace");
+    if (wkWs.find("div.UIPortlet").length == 0 && wkWs.find("div.UIContainer").length == 0)
+    {
+      gj("#UIPage").parents(".VIEW-PAGE").css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
-    var pageBodyBlock = pageBody.getUIComponentBlock();
-    var mask = eXo.core.DOMUtil.findFirstDescendantByClass(pageBodyBlock,
-        "div", "UIPageBodyMask");
-    if (mask) {
-      mask.style.top = -pageBodyBlock.offsetHeight + "px";
-      mask.style.height = pageBodyBlock.offsetHeight + "px";
-      mask.style.width = pageBodyBlock.offsetWidth + "px";
+    var pageBodyBlock = gj("UIPageBody");
+    var mask = pageBodyBlock.find("div.UIPageBodyMask");
+    if(mask.length > 0)
+    {
+      mask.css("top", -pageBodyBlock[0].offsetHeight + "px").css("height", pageBodyBlock[0].offsetHeight + "px").css("width", pageBodyBlock[0].offsetWidth + "px");
     }
   },
 
-  /**
-   * Return the closest container of the element. It might be one of these :
-   * UIPortlet, UIContainer, UIPageBody, UIPortal
-   */
-  findUIComponentOf : function(element) {
-    var DOMUtil = eXo.core.DOMUtil;
-    var parent;
-    if (parent = DOMUtil.findAncestorByClass(element, "UIPortlet")) {
-      return parent;
-    } else if (parent = DOMUtil.findAncestorByClass(element, "UIPageBody")) {
-      return parent;
-    } else if (parent = DOMUtil.findAncestorByClass(element, "UIContainer")) {
-      return parent;
-    } else if (parent = DOMUtil.findAncestorByClass(element, "UIPortal")) {
-      return parent;
-    }
-
-    return null;
-  },
-
-  /**
-   * Change skin of Portal
-   * 
-   * @param url
-   */
-  changeSkin : function(url) {
-    var skin = '';
-    if (eXo.webui.UIItemSelector.SelectedItem != undefined) {
-      skin = eXo.webui.UIItemSelector.SelectedItem.option;
-    }
-    if (skin == undefined)
-      skin = '';
-    // ajaxAsyncGetRequest(url + '&skin='+skin, false);
-    window.location = url + '&skin=' + skin;
-  },
-  /**
-   * Change language of Portal
-   * 
-   * @param url
-   */
-  changeLanguage : function(url) {
-    var language = '';
-    if (eXo.webui.UIItemSelector.SelectedItem != undefined) {
-      language = eXo.webui.UIItemSelector.SelectedItem.option;
-    }
-    if (language == undefined)
-      language = '';
-    // ajaxAsyncGetRequest(url + '&language='+language, false);
-    window.location = url + '&language=' + language;
-  },
   /**
    * Change current portal
    */
@@ -404,99 +203,25 @@ eXo.portal.UIPortal = {
    * @param {String}
    *          componentId identifier of component
    */
-  removeComponent : function(componentId) {
-    var comp = document.getElementById(componentId);
-    var viewPage = eXo.core.DOMUtil.findAncestorByClass(comp, "VIEW-PAGE");
+  removeComponent : function(id) {
+    var comp = gj("#" + id);
+    var parent = comp.parent();
+    var viewPage = parent.closest(".VIEW-PAGE");
 
     // Check if the removing component is a column
-    if (comp.parentNode.nodeName.toUpperCase() == "TD")
-      eXo.core.DOMUtil.removeElement(comp.parentNode);
+    if (parent[0].nodeName.toUpperCase() == "TD")
+    {
+      parent.remove();
+    }
     else
-      eXo.core.DOMUtil.removeElement(comp);
-
-    if (viewPage && eXo.portal.UIPortal.getUIContainers().length == 0
-        && eXo.portal.UIPortal.getUIPortlets().length == 0) {
-      viewPage.style.paddingTop = "50px";
-      viewPage.style.paddingRight = "0px";
-      viewPage.style.paddingBottom = "50px";
-      viewPage.style.paddingLeft = "0px";
+    {
+      comp.remove();
     }
-  },
 
-  /**
-   * Change Save button to editing state
-   */
-  changeComposerSaveButton : function() {
-    if (eXo.portal.hasEditted == false) {
-      var uiWorkingWS = document.getElementById("UIWorkingWorkspace");
-      var portalComposer = eXo.core.DOMUtil.findFirstDescendantByClass(
-          uiWorkingWS, "div", "UIPortalComposer");
-      if (!portalComposer)
-        return;
-
-      var saveButton = eXo.core.DOMUtil.findFirstDescendantByClass(
-          portalComposer, "a", "SaveButton");
-      if (saveButton) {
-        eXo.core.DOMUtil.replaceClass(saveButton, "SaveButton",
-            "EdittedSaveButton");
-      }
-      ajaxAsyncGetRequest(eXo.env.server.createPortalURL(portalComposer.id,
-          "ChangeEdittedState", true));
+    var wkWs = gj("#UIWorkingWorkspace");
+    if (viewPage.length > 0 && wkWs.find("div.UIContainer").length == 0 && wkWs.find("div.UIPortlet").length == 0)
+    {
+      viewPage.css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
-  },
-
-  toggleComposer : function(clickedEle) {
-    var portalComposer = eXo.core.DOMUtil.findAncestorByClass(clickedEle,
-        "UIPortalComposer");
-    var content = eXo.core.DOMUtil.findFirstChildByClass(portalComposer, "div",
-        "UIWindowContent");
-    if (content && content.style.display != "none") {
-      content.style.display = "none";
-      eXo.core.DOMUtil.replaceClass(clickedEle, "ExpandIcon", "CollapseIcon");
-    } else {
-      content.style.display = "block";
-      eXo.core.DOMUtil.replaceClass(clickedEle, "CollapseIcon", "ExpandIcon");
-    }
-    var requestStr = eXo.env.server.createPortalURL(portalComposer.id,
-        "Toggle", true);
-    ajaxAsyncGetRequest(requestStr);
-  },
-
-  composerTabChanged : function(tabId) {
-    var toolPanel = document.getElementById("UIPortalToolPanel");
-    if (!tabId || !toolPanel)
-      return;
-
-    var removeCls, addCls;
-    if (tabId === "UIApplicationList") {
-      addCls = "ApplicationMode";
-      removeCls = "ContainerMode";
-    } else {
-      addCls = "ContainerMode";
-      removeCls = "ApplicationMode";
-    }
-    eXo.core.DOMUtil.removeClass(toolPanel, removeCls);
-    eXo.core.DOMUtil.addClass(toolPanel, addCls);
-  },
-
-  /**
-   * Clollapse or expand an element (all its children) of tree
-   * @param {Object} element object to collapse or expand
-   */
-  collapseExpand : function(element) {
-    var subGroup = eXo.core.DOMUtil.findFirstChildByClass(element.parentNode,
-        "div", "ChildrenContainer");
-    var className = element.className;
-    if (!subGroup)
-      return;
-    if (subGroup.style.display == "none") {
-      if (className.indexOf("ExpandIcon") == 0)
-        element.className = "CollapseIcon ClearFix";
-      subGroup.style.display = "block";
-    } else {
-      if (className.indexOf("CollapseIcon") == 0)
-        element.className = "ExpandIcon ClearFix";
-      subGroup.style.display = "none";
-    }
-  }
+  }  
 };

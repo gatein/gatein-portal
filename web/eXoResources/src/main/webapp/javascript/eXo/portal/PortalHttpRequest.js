@@ -63,22 +63,21 @@
 */
 
 function PortletResponse(responseDiv) {
-  var  DOMUtil = eXo.core.DOMUtil ;
-  var div = eXo.core.DOMUtil.getChildrenByTagName(responseDiv, "div") ;
-  this.portletId =  div[0].innerHTML ;
-  this.portletData =  div[1].innerHTML ;
-  this.blocksToUpdate = null ;
-  var blocks = DOMUtil.findChildrenByClass(div[1], "div", "BlockToUpdate") ;
+  var div = gj(responseDiv).children("div");
+  this.portletId =  div[0].innerHTML;
+  this.portletData =  div[1].innerHTML;
+  
+  this.blocksToUpdate = null;
+  var blocks = gj(div[1]).children(".BlockToUpdate");
+  
   if(blocks.length > 0 ) {
-    this.blocksToUpdate = new Array() ;
-    for(var i = 0 ; i < blocks.length; i++) {
-      var obj = new Object() ; 
-      var div = eXo.core.DOMUtil.getChildrenByTagName(blocks[i], "div") ;
-      obj.blockId = div[0].innerHTML ;
-      obj.data = div[1] ;
-      this.blocksToUpdate[i] = obj ;
-      this.blocksToUpdate[i].scripts = eXo.core.DOMUtil.findDescendantsByTagName(div[1], "script") ;
-    }
+    var updates = this.blocksToUpdate = new Array() ;
+    
+    blocks.each(function() {
+    	var div = gj(this).children("div");
+    	updates[updates.length] = {blockId : div[0].innerHTML, data : div[1]};
+        updates[updates.length - 1].scripts = gj(div[1]).find("script");
+    });
   } else {
     /*
     * If there is no block to update it means we are in a JSR 286 / 168 portlet
@@ -93,7 +92,7 @@ function PortletResponse(responseDiv) {
     * script in the head tag
     */
     
-    this.scripts = eXo.core.DOMUtil.findDescendantsByTagName(div[1], "script") ;
+    this.scripts = gj(div[1]).find("script");
   }
 };
 
@@ -108,69 +107,75 @@ function PortletResponse(responseDiv) {
 * It also extract from the HTML the javascripts script to then be dynamically evaluated
 */
 function PortalResponse(responseDiv) {
-  var  DOMUtil = eXo.core.DOMUtil ;
-  this.portletResponses = new Array() ;
-  var div = DOMUtil.getChildrenByTagName(responseDiv, "div") ;
-  for(var i = 0 ; i < div.length; i++) {
-    if(div[i].className == "PortletResponse") {
-      this.portletResponses[this.portletResponses.length] =  new PortletResponse(div[i]) ;
-    } else if(div[i].className == "PortalResponseData") {
-      this.data = div[i] ;
-      var blocks = DOMUtil.findChildrenByClass(div[i], "div", "BlockToUpdate") ;
-      this.blocksToUpdate = new Array() ;
-      for(var j = 0 ; j < blocks.length; j++) {
-        var obj = new Object() ; 
-        var dataBlocks = DOMUtil.getChildrenByTagName(blocks[j], "div") ;
-        obj.blockId = dataBlocks[0].innerHTML ;
-        obj.data = dataBlocks[1] ;
-        this.blocksToUpdate[j] = obj ;
-        
-        /*
-        * handle embedded javascripts to dynamically add them to the page head
-        *
-        * This is needed when we refresh an entire portal page that contains some 
-        * standard JSR 168 / 286 portlets with embeded <script> tag
-        */
-        this.blocksToUpdate[j].scripts = eXo.core.DOMUtil.findDescendantsByTagName(dataBlocks[1], "script") ;
-        
-      }
-	} else if(div[i].className == "MarkupHeadElements") {
-		this.markupHeadElements = new MarkupHeadElements(div[i]);
-	} else if(div[i].className == "LoadingScripts") {
-		this.loadingScripts = new LoadingScripts(div[i]);
-    } else if(div[i].className == "PortalResponseScript") {
-      this.script = div[i].innerHTML ;
-			div[i].style.display = "none" ;
-    }
-  }
+  //jquery always remove script tag from the source
+  var temp =  document.createElement("div") ;
+  temp.innerHTML = responseDiv;
+  var div = gj(temp).children().first(), portalResp = this;
+  
+  portalResp.portletResponses = new Array() ;
+  //Portlet Response
+  div.children("div.PortletResponse").each(function() {
+	  portalResp.portletResponses[portalResp.portletResponses.length] = new PortletResponse(this);
+  });
+  //Portal Response
+  div.children("div.PortalResponseData").each(function() {
+	  portalResp.data = this;
+	  portalResp.blocksToUpdate = new Array();
+	  gj(this).children(".BlockToUpdate").each(function() {
+		var dataBlocks = gj(this).children("div");
+		var i = portalResp.blocksToUpdate.length;
+		portalResp.blocksToUpdate[i] = {blockId : dataBlocks[0].innerHTML, data : dataBlocks[1]}; 
+		
+		/*
+         * handle embedded javascripts to dynamically add them to the page head
+         *
+         * This is needed when we refresh an entire portal page that contains some 
+         * standard JSR 168 / 286 portlets with embeded <script> tag
+         */
+		portalResp.blocksToUpdate[i].scripts = gj(dataBlocks[1]).find("script");
+	  });
+  });
+  //Extra Markup Header
+  div.children("div.MarkupHeadElements").each(function() {
+	  portalResp.markupHeadElements = new MarkupHeadElements(this);
+  });
+  //Loading Scripts
+  div.children("div.LoadingScripts").each(function() {
+	  portalResp.loadingScripts = new LoadingScripts(this);
+  });
+  //Portal Response Script
+  div.children("div.PortalResponseScript").each(function() {
+	  portalResp.script = this.innerHTML;
+	  gj(this).css("display", "none");
+  });  
 };
 
 function MarkupHeadElements(fragment) {
-	var  DOMUtil = eXo.core.DOMUtil ;
-	this.titles = DOMUtil.findDescendantsByTagName(fragment, "title");
-	this.bases = DOMUtil.findDescendantsByTagName(fragment, "base") ;
-	this.links = DOMUtil.findDescendantsByTagName(fragment, "link") ;
-	this.metas = DOMUtil.findDescendantsByTagName(fragment, "meta") ;
-	this.scripts = DOMUtil.findDescendantsByTagName(fragment, "script") ;           
-	//Recreate tag to make sure browser will execute it	
+	var jObj = gj(fragment);
+	this.titles = jObj.find("title");
+	this.bases = jObj.find("base") ;
+	this.links = jObj.find("link") ;
+	this.metas = jObj.find("meta") ;
+	this.scripts = jObj.find("script") ;           
+	this.styles = jObj.find("style") ;
+  //Recreate tag to make sure browser will execute it
 	for (var i = 0; i < this.scripts.length; i++) {
 		this.scripts[i] = createScriptNode(this.scripts[i]);
 	}
-	this.styles = DOMUtil.findDescendantsByTagName(fragment, "style") ;
 }
 
 function LoadingScripts(fragment) {
-	var  DOMUtil = eXo.core.DOMUtil;	
 	this.immediateScripts = [];
 	this.onloadScripts = [];
-	var headers = DOMUtil.findFirstChildByClass(fragment, "div", "ImmediateScripts").innerHTML;
+	var jFragment = gj(fragment);
+	var headers = jFragment.children(".ImmediateScripts").first().html();
 	headers = headers.replace(/^\s*/, '').split(",");
 	for (var i = 0; i < headers.length; i++) {
 		if (headers[i] !== "") {
 			this.immediateScripts.push(headers[i]);
 		}
 	}
-	var onloads = DOMUtil.findFirstChildByClass(fragment, "div", "OnloadScripts").innerHTML;
+	var onloads = jFragment.children(".OnloadScripts").first().html();
 	onloads = onloads.replace(/^\s*/, '').split(",");
 	for (var i = 0; i < onloads.length; i++) {
 		if (onloads[i] !== "") {
@@ -184,16 +189,11 @@ function LoadingScripts(fragment) {
 * of the page
 */
 function appendScriptToHead(scriptId, scriptElement) {
-  var head = document.getElementsByTagName("head")[0]; 
-  var descendant = eXo.core.DOMUtil.findDescendantById(head, scriptId);
-  var script;
-  if(descendant) {
-    head.removeChild(descendant) ;
-  }
-
-  var script = createScriptNode(scriptElement);
-  script.id = scriptId;
-  head.appendChild(script);
+  var head = gj("head");
+  head.find("#" + scriptId).remove();
+  var script = gj(scriptElement);
+  script.attr("id", scriptId);
+  head[0].appendChild(script[0]);
 };
 
 function createScriptNode(elem) {
@@ -224,14 +224,14 @@ function createScriptNode(elem) {
 function AjaxRequest(method, url, queryString) {	
 	var instance = new Object() ;
 	
+	instance.request = null;
+	
 	instance.timeout = 80000 ;
 	instance.aborted = false ;
 	
 	if(method != null) instance.method = method; else	instance.method = "GET" ;
 	if(url != null) instance.url = url; else instance.url = window.location.href ;
 	if(queryString != null) instance.queryString = queryString; else instance.queryString = null ;
-
-	instance.request = null ;
 	
 	instance.responseReceived = false ;
 
@@ -243,8 +243,6 @@ function AjaxRequest(method, url, queryString) {
 	
 	instance.onTimeout = null ;
 	instance.onLoading = null ;
-	instance.onLoaded = null ;
-	instance.onInteractive = null ;
 	instance.onComplete = null ;
 	instance.onSuccess = null ;
 	instance.callBack = null ;
@@ -265,24 +263,7 @@ function AjaxRequest(method, url, queryString) {
 	};	
 	
 	instance.onLoadingInternalHandled = false ;
-	instance.onLoadedInternalHandled = false ;
-	instance.onInteractiveInternalHandled = false ;
-	instance.onCompleteInternalHandled = false ;
-	
-	instance.request = eXo.core.Browser.createHttpRequest() ;
-	
-	/*
-	* This method is called several times during the AJAX request call, in
-	* fact each time the request state changes. In each case the call is 
-	* delegated to one of the method of the AjaxRequest instance
-	*/
-	instance.request.onreadystatechange = function() {
-		if (instance == null || instance.request == null) { return; }
-		if (instance.request.readyState == 1) { instance.onLoadingInternal(instance) ; }
-		if (instance.request.readyState == 2) { instance.onLoadedInternal(instance) ; }
-		if (instance.request.readyState == 3) { instance.onInteractiveInternal(instance) ; }
-		if (instance.request.readyState == 4) { instance.onCompleteInternal(instance) ; }
-    } ;
+	instance.onCompleteInternalHandled = false ;		
 	
     /*
     * This method is executed only if the boolean "onLoadingInternalHandled" is set to false
@@ -293,27 +274,7 @@ function AjaxRequest(method, url, queryString) {
 
 		if (typeof(instance.onLoading) == "function") instance.onLoading(instance) ;
 		instance.onLoadingInternalHandled = true ;
-	} ;
-	
-    /*
-    * This method is executed only if the boolean "onLoadedInternalHandled" is set to false
-    * The method delegate the call to the instance.onLoaded() which is null for now
-    */	
-	instance.onLoadedInternal = function() {
-		if (instance.onLoadedInternalHandled) return ;
-		if (typeof(instance.onLoaded) == "function") instance.onLoaded(instance) ;
-		instance.onLoadedInternalHandled = true ;
-	} ;
-	
-    /*
-    * This method is executed only if the boolean "onInteractiveInternalHandled" is set to false
-    * The method delegate the call to the instance.onInteractive() which is null for now
-    */		
-	instance.onInteractiveInternal = function() {
-		if (instance.onInteractiveInternalHandled) return ;
-		if (typeof(instance.onInteractive) == "function") instance.onInteractive(instance) ;
-		instance.onInteractiveInternalHandled = true ;
-	} ;
+	};
 
 	/**
 	 * evaluate the response and return an object
@@ -336,58 +297,53 @@ function AjaxRequest(method, url, queryString) {
     * back from the AJAX call. Once the ajaxResponse() is called then the callback object is called
     * if not null
     */	
-	instance.onCompleteInternal = function() {
-		if (instance.onCompleteInternalHandled || instance.aborted) return ; 
+	instance.onCompleteInternal = function(xhr, statusText) {
+		if (instance.onCompleteInternalHandled || instance.aborted) return;
 		
-		try{
-			instance.responseReceived = true ;
-			instance.status = instance.request.status ;
-			instance.statusText = instance.request.statusText ;
-			instance.responseText = instance.request.responseText ;
-			instance.responseXML = instance.request.responseXML ;
-		}catch(err){
-			instance.status = 0;
-		}
-		
-		if(typeof(instance.onComplete) == "function") instance.onComplete(instance) ;
-		
-		if (instance.status == 200 && typeof(instance.onSuccess) == "function") {
-			instance.onSuccess(instance) ;
-			instance.onCompleteInternalHandled = true ;
-			if (typeof(instance.callBack) == "function") {
-			  instance.callBack(instance) ;
-			} else if (instance.callBack) { // Modified by Uoc Nguyen: allow user use custom javascript code for callback
-			  try {
-			    eval(instance.callBack) ;
-			  }
-			  catch (e) {
-          throw (new Error('Can not execute callback...')) ;
-        }
+		if (statusText == "timeout") {
+			instance.onTimeoutInternal();
+		} else {
+			try {
+				instance.responseReceived = true;
+				instance.status = xhr.status;
+				instance.statusText = statusText;
+				instance.responseText = xhr.responseText;
+				instance.responseXML = xhr.responseXML;
+			} catch(err) {
+				instance.status = 0;
 			}
-		} else if (typeof(instance.onError) == "function") {
-			instance.onError(instance) ;
-			instance.onCompleteInternalHandled = false ;
+			
+			if(typeof(instance.onComplete) == "function") instance.onComplete(instance);
+			
+			if (statusText == "success" && typeof(instance.onSuccess) == "function") {
+				instance.onSuccess(instance) ;
+				instance.onCompleteInternalHandled = true ;
+				if (typeof(instance.callBack) == "function") {
+					instance.callBack(instance) ;
+				} else if (instance.callBack) { // Modified by Uoc Nguyen: allow user use custom javascript code for callback
+					try {
+						eval(instance.callBack) ;
+					}
+					catch (e) {
+						throw (new Error('Can not execute callback...')) ;
+					}
+				}
+			} else if (typeof(instance.onError) == "function") {
+				instance.onError(instance) ;
+				instance.onCompleteInternalHandled = false ;
+			}				
 		}
-		
-		// Remove IE doesn't leak memory
-		delete instance.request['onreadystatechange'] ;
-		instance.request = null ;
-
-	} ;
+	};
 		
     /*
     * This method is executed only if the boolean "onLoadingInternalHandled" is set to false
     * The method delegate the call to the ajaxTimeout() method of the HttpResponseHandler
     */
 	instance.onTimeoutInternal = function() {
-		if (instance == null || instance.request == null || instance.onCompleteInternalHandled) return ;
-		instance.aborted = true ;
-		instance.request.abort() ;
+		if (instance == null || instance.request == null || instance.onCompleteInternalHandled) return;
+		instance.aborted = true;
 		
-		if (typeof(instance.onTimeout) == "function") instance.onTimeout(instance) ;
-		
-		delete instance.request['onreadystatechange'] ;
-		instance.request = null ;
+		if (typeof(instance.onTimeout) == "function") instance.onTimeout(instance);
 	} ;
 	
 	/*
@@ -397,21 +353,24 @@ function AjaxRequest(method, url, queryString) {
 	*
 	* It also sets up the time out and its call back to the method of the current instance onTimeoutInternal()
 	*/
-	instance.process = function() {
-		if (instance.request == null) return;
-		instance.request.open(instance.method, instance.url, true);		
-		//instance.request.open(instance.method, instance.url, instance.isAsynchronize());		
-		
+	instance.process = function() {		
+		var contentType;
 		if (instance.method == "POST") {
-			instance.request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8") ;
+			contentType = "application/x-www-form-urlencoded; charset=UTF-8";
 		} else {
-			instance.request.setRequestHeader("Content-Type", "text/plain;charset=UTF-8") ;
+			contentType =  "text/plain;charset=UTF-8";
 		}
 		
-		if (instance.timeout > 0) setTimeout(instance.onTimeoutInternal, instance.timeout) ;
-		
-		instance.request.send(instance.queryString);
-	} ;
+		instance.request = gj.ajax(instance.url, {
+			type : instance.method,
+			beforeSend : instance.onLoadingInternal,
+			complete : instance.onCompleteInternal,
+			contentType : contentType,
+			data : instance.queryString,
+			timeout : instance.timeout,
+			cache : false
+		});
+	};
 	
 	return instance ;
 } ;
@@ -427,7 +386,7 @@ function AjaxRequest(method, url, queryString) {
 * 
 * Those methods are executed during the process of the AJAX call
 */
-function HttpResponseHandler(){
+function HttpResponseHandler() {
 	var instance = new Object() ;
 	/*
 	 * instance.to stores a timeout object used to postpone the display of the loading popup
@@ -441,11 +400,9 @@ function HttpResponseHandler(){
 	instance.executeScript = function(script) {
 	  if(script == null || script == "") return ;
 	  try {
-		var HTMLUtil = eXo.core.HTMLUtil;
-		script = HTMLUtil.entitiesDecode(script);
-	    eval(script) ;       
+		eval(gj("<div />").html(script).text());
 	    return;
-	  } catch(err) {                  
+	  } catch(err) {
 	  }
 	  var elements = script.split(';') ;
 	  if(elements != null && elements.length > 0) {
@@ -453,35 +410,33 @@ function HttpResponseHandler(){
 		    try {
 		      eval(elements[i]) ;
 		    } catch(err) {
-		      alert(err +" : "+elements[i] + "  -- " + i) ;      
+		      alert(err +" : "+elements[i] + "  -- " + i) ;
 		    }
 		  }
-	  } 
-	};	        
+	  }
+	} ;
 
 	instance.updateHtmlHead = function(response) {
-      if (!response) return;      
+		if (!response) return;      
 		cleanHtmlHead(response);
-		
-		var DOMUtil = eXo.core.DOMUtil;
-		var head = document.getElementsByTagName("head")[0]; 								
+		var head = gj("head");
 		var markupHeadElements = response.markupHeadElements;
-      if (!markupHeadElements) return;
+		if (!markupHeadElements) return;
 		
 		if (markupHeadElements.titles && markupHeadElements.titles.length != 0) {
-			var oldTitle = DOMUtil.getChildrenByTagName(head, "title")[0];
+			var oldTitle = head.children("title");
 			var newTitle = markupHeadElements.titles[markupHeadElements.titles.length - 1];
-			if (oldTitle) {
-				head.replaceChild(newTitle, oldTitle);
+			if (oldTitle.length) {
+				oldTitle.replaceWith(newTitle);
 			} else {
-				head.appendChild(newTitle);
+				head[0].appendChild(newTitle);
 			}
-		}			
-		
-		appendElementsToHead(markupHeadElements.metas);
-      appendElementsToHead(markupHeadElements.bases);
-		appendElementsToHead(markupHeadElements.links);				
-		appendElementsToHead(markupHeadElements.styles);
+		}                       
+
+		appendElementsToHead(head, markupHeadElements.metas);
+		appendElementsToHead(head, markupHeadElements.bases);
+		appendElementsToHead(head, markupHeadElements.links);                         
+		appendElementsToHead(head, markupHeadElements.styles);
 		for (var i = 0; i < markupHeadElements.scripts.length; i++) {
 			var sc = markupHeadElements.scripts[i];
 			if (sc.defer) {
@@ -491,68 +446,53 @@ function HttpResponseHandler(){
 			}
 		}
 	};
-	
-	function cleanHtmlHead(response) {
-		var DOMUtil = eXo.core.DOMUtil;
-		var head = document.getElementsByTagName("head")[0];            
-		if (response) {
-			var portletResponses = response.portletResponses;
-			if (portletResponses) {
-				for (var i = 0; i < portletResponses.length; i++) {
-					removeExtraHead(portletResponses[i].portletId);
-				}
-			}
-			
-			if (response.data) {
-				var portletFragments = DOMUtil.findDescendantsByClass(response.data, "div", "PORTLET-FRAGMENT");
-				for (var i = 0; i < portletFragments.length; i++) {
-					removeExtraHead(portletFragments[i].parentNode.id);
-				}
-			}
-		} else {
-			//This code will be run after we've finished update html
-			var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace") ;
-			var portletFragsInWS = DOMUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "PORTLET-FRAGMENT");		
-			var exHeads = DOMUtil.getElementsBy(function(elem) {
-				return elem.tagName != "TITLE" && elem.className.indexOf("ExHead-") == 0;
-			}, "*", head);
-			
-			for (var i = 0; i < exHeads.length; i++) {
-				var portletId = exHeads[i].className.substring(7);
-				var del = true;
-				for (var j = 0; j < portletFragsInWS.length; j++) {
-					if (portletId == portletFragsInWS[j].parentNode.id) {
-						del = false;
-						break;
-					}
-				}
-				if (del) {
-					head.removeChild(exHeads[i]);
-				}
-			}			
-		}		
-	}
-	
-	function removeExtraHead(portletId) {
-		var DOMUtil = eXo.core.DOMUtil;
-		var head = document.getElementsByTagName("head")[0];
-		
-		var elemsToRemove = DOMUtil.getElementsBy(function(elem) {
-			return elem.tagName != "TITLE" && elem.className == "ExHead-" + portletId;
-		}, "*", head);
-		
-		for (var i = 0; i < elemsToRemove.length; i++) {
-			head.removeChild(elemsToRemove[i]);
-		}
-	}
-	
-	function appendElementsToHead(elements) {
-      if (!elements) return;
-		var head = document.getElementsByTagName("head")[0]; 
-		
-		for (var i = 0; i < elements.length; i++) {
-			head.appendChild(elements[i]);
-		}
+
+  function cleanHtmlHead(response)
+  {
+    var head = gj("head");
+    if (response)
+    {
+      var portletResponses = response.portletResponses;
+      if (portletResponses)
+      {
+        for (var i = 0; i < portletResponses.length; i++)
+        {
+          head.find(".ExHead-" + portletResponses[i].portletId + ":not(title)").remove();
+        }
+      }
+
+      if (response.data)
+      {
+        gj(response.data).find(".PORTLET-FRAGMENT").each(function()
+        {
+          head.find(".ExHead-" + this.parentNode.id + ":not(title)").remove();
+        });
+      }
+    }
+    else 
+    {
+    	//This code will be run after we've finished update html
+    	var workspace = gj("#UIWorkingWorkspace");
+    	var exHeads = head.find("[class^='ExHead-']:not(title)");
+    	exHeads.each(function()
+		{
+    		var portletId = this.className.substring(7);
+    		if (workspace.find("#" + portletId).length == 0)
+    		{
+    			gj(this).remove();
+    		}
+		});    	
+    }
+  }
+
+  function appendElementsToHead(head, elements) {
+		if (!elements) return;
+		elements.each(function() {
+			//script tags that has been wrapped in jquery are not executed
+			//when inserted to head
+			head.append(this);
+			head[0].appendChild(this);
+		});		
 	}
 	
 	/*
@@ -566,44 +506,33 @@ function HttpResponseHandler(){
 	* Each block in the array contains the exact id to update, hence a loop is executed 
 	* for each block and the HTML is then dynamically replaced by the new one
 	*/
-	instance.updateBlocks = function(blocksToUpdate, parentId) {	  
-	  if(blocksToUpdate == null) return ;
-	  var parentBlock = null ;
-	  if(parentId != null && parentId != "") parentBlock =  document.getElementById(parentId) ;
-	  for(var i = 0; i < blocksToUpdate.length; i++) {
-	    var blockToUpdate =  blocksToUpdate[i] ;
-	 //   alert("block update" + blockToUpdate.blockId) ;	
-	    var target = null ;   	
-	    if(parentBlock != null) {
-	    	target = eXo.core.DOMUtil.findDescendantById(parentBlock, blockToUpdate.blockId) ;
-	    } else {
-	    	target = document.getElementById(blockToUpdate.blockId) ;
-	    }
-	    if(target == null) {
-             throw new Error(eXo.i18n.I18NMessage.getMessage("TargetBlockNotFound", new Array (blockToUpdate.blockId)));
-        }
-	    var newData =  eXo.core.DOMUtil.findDescendantById(blockToUpdate.data, blockToUpdate.blockId) ;
-	   	//var newData =  blockToUpdate.data.getElementById(blockToUpdate.blockId) ;
-	    if(newData == null) alert(eXo.i18n.I18NMessage.getMessage("BlockUpdateNotFound", new Array (blockToUpdate.blockId))) ;
-//	    target.parentNode.replaceChild(newData, target);
-	    target.innerHTML = newData.innerHTML ;
-	    //update embedded scripts
-	    if(blockToUpdate.scripts) {
-	      if(blockToUpdate.scripts.length > 0) {
-          for(var k = 0 ; k < blockToUpdate.scripts.length; k++) {
-            var encodedName = 'script_' + k + '_' +  blockToUpdate.blockId;
-            appendScriptToHead(encodedName, blockToUpdate.scripts[k]);
-          }
-        }
-	    }
-	  }
-	} ;
+	instance.updateBlocks = function(blocksToUpdate, parentId) {
+	  if(!blocksToUpdate) return;
+	  var parentBlock = null;
+	  if(parentId && parentId != "") parentBlock =  gj("#" + parentId);
+	  parentBlock = !parentBlock ? gj(document) : parentBlock;
+	  
+	  blocksToUpdate.each(function(blockToUpdate) {
+		  var target = parentBlock.find("#" + blockToUpdate.blockId);
+		  if(target.length == 0) alert(eXo.i18n.I18NMessage.getMessage("TargetBlockNotFound", new Array (blockToUpdate.blockId))) ;		  
+		  var newData = gj(blockToUpdate.data).find("#" + blockToUpdate.blockId);
+		  if(newData.length == 0) alert(eXo.i18n.I18NMessage.getMessage("BlockUpdateNotFound", new Array (blockToUpdate.blockId))) ;
+//		    target.parentNode.replaceChild(newData, target);
+		  target.html(newData.html());
+		  //update embedded scripts
+		  if(blockToUpdate.scripts) {
+			  for(var k = 0 ; k < blockToUpdate.scripts.length; k++) {
+				  var encodedName = 'script_' + k + '_' +  blockToUpdate.blockId;
+				  appendScriptToHead(encodedName, blockToUpdate.scripts[k]);
+			  }
+		  }
+	  });	  
+	};
 	
 	/*
 	* This method is called when the AJAX call was too long to be executed
 	*/
-	instance.ajaxTimeout = function(request){
-//	  eXo.core.UIMaskLayer.removeMask(eXo.portal.AjaxRequest.maskLayer) ;
+	instance.ajaxTimeout = function(request) {
 	  eXo.core.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
 	  eXo.portal.AjaxRequest.maskLayer = null ;
 	  eXo.portal.CurrentRequest = null ;
@@ -627,11 +556,8 @@ function HttpResponseHandler(){
 	*/
 	instance.ajaxResponse = function(request, response) {
 	  if (!response) {
-		  var temp =  document.createElement("div") ;
-		  temp.innerHTML =  this.responseText;
-		  var responseDiv = eXo.core.DOMUtil.findFirstDescendantByClass(temp, "div", "PortalResponse") ;
-		  var response = new PortalResponse(responseDiv) ;		  
-		  instance.updateHtmlHead(response);
+		var response = new PortalResponse(this.responseText) ;		  
+        instance.updateHtmlHead(response);
 	  }
 	  var loadingScripts = response.loadingScripts;
 	  var immediateScripts = loadingScripts ? loadingScripts.immediateScripts : []; 
@@ -642,40 +568,37 @@ function HttpResponseHandler(){
 		  }, null, this);
 		  return;
 	  }
+
 	  //Handle the portlet responses
-	  var portletResponses =  response.portletResponses;
-	  if(portletResponses != null) {
-	    for(var i = 0; i < portletResponses.length; i++) {
-	      var portletResponse = portletResponses[i] ;
-	      if(portletResponse.blocksToUpdate == null) {
-	        /*
-	        * This means that the entire portlet fragment is included in the portletResponse.portletData
-	        * and that it does not contain any finer block to update. Hence replace the innerHTML inside the
-	        * id="PORTLET-FRAGMENT" block
-	        */
-	        var parentBlock =  document.getElementById(portletResponse.portletId) ;
-	        var target = eXo.core.DOMUtil.findFirstDescendantByClass(parentBlock, "div", "PORTLET-FRAGMENT") ;
-	        target.innerHTML = portletResponse.portletData;
-	        
-	        //update embedded scripts 
-	        if(portletResponse.scripts) {
-	          if(portletResponse.scripts.length > 0) {
-		          for(var k = 0 ; k < portletResponse.scripts.length; k++) {
-		            var encodedName = 'script_' + k + '_' +  portletResponse.portletId;
-		            appendScriptToHead(encodedName, portletResponse.scripts[k]);
-		          }
-			      }              
+	  var portletResponses =  response.portletResponses ;
+	  if(portletResponses) {
+		portletResponses.each(function(portletResponse) {
+			if(!portletResponse.blocksToUpdate) {
+		        /*
+		        * This means that the entire portlet fragment is included in the portletResponse.portletData
+		        * and that it does not contain any finer block to update. Hence replace the innerHTML inside the
+		        * id="PORTLET-FRAGMENT" block
+		        */
+		        var parentBlock =  gj("#" + portletResponse.portletId) ;
+		        var target = gj("#" + portletResponse.portletId + " .PORTLET-FRAGMENT").first();
+		        target.html(portletResponse.portletData);
+		        
+		        //update embedded scripts 
+		        if(portletResponse.scripts) {
+		        	portletResponse.scripts.each(function(index) {
+		        		var encodedName = 'script_' + index + '_' +  portletResponse.portletId;
+			            appendScriptToHead(encodedName, this);
+		        	});        
+		        }	            
+	        } else {
+	          /*
+	          * Else updates each block with the portlet
+	          */
+	          instance.updateBlocks(portletResponse.blocksToUpdate, portletResponse.portletId) ;
 	        }
-            
-        } else {
-	        /*
-	        * Else updates each block with the portlet
-	        */
-	        instance.updateBlocks(portletResponse.blocksToUpdate, portletResponse.portletId) ;
-	      }
-	    }
-	  }
-	  if(response.blocksToUpdate == undefined && temp.innerHTML !== "") {
+		});
+	  }	
+	  if(!response.blocksToUpdate && request.responseText !== "") {
 	  	if(confirm(eXo.i18n.I18NMessage.getMessage("SessionTimeout"))) instance.ajaxTimeout(request) ;
 	  }
 	  try {	    
@@ -691,8 +614,6 @@ function HttpResponseHandler(){
 			   * Removes the transparent mask so the UI is available again, with cursor "auto"
 			   */
 			  clearTimeout(instance.to);
-//		  eXo.core.UIMaskLayer.removeTransparentMask();
-//		  eXo.core.UIMaskLayer.removeMask(eXo.portal.AjaxRequest.maskLayer) ;
 			  eXo.core.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
 			  
 			  eXo.portal.AjaxRequest.maskLayer = null ;
@@ -728,7 +649,7 @@ function HttpResponseHandler(){
 	};
 	
 	return instance ;
-} ;
+}
 
 /*****************************************************************************************/
 /*
@@ -739,8 +660,8 @@ function HttpResponseHandler(){
 */
 function ajaxGet(url, callback) {
   if (!callback) callback = null ;
-  doRequest("Get", url, null, callback) ;
-} ;
+  doRequest("Get", url, null, callback);
+}
 
 /**
  * Do a POST request in AJAX with given <code>url</code> and <code>queryString</code>.
@@ -749,7 +670,7 @@ function ajaxGet(url, callback) {
 function ajaxPost(url, queryString, callback) {
   if (!callback) callback = null ;
   doRequest("POST", url, queryString, callback) ;
-} ;
+}
 
 /*
 * The doRequest() method takes incoming request from GET and POST calls
@@ -773,7 +694,7 @@ function doRequest(method, url, queryString, callback) {
   eXo.portal.CurrentRequest = request ;
   request.process() ;
   eXo.session.startItv();
-};
+}
 
 /**
  * Abort an ajax request
@@ -786,7 +707,7 @@ function ajaxAbort() {
   eXo.portal.CurrentRequest.request.abort() ;  
   eXo.portal.CurrentRequest.aborted = true ;
   eXo.portal.CurrentRequest = null ;
-} ;
+}
 
 /**
  * Create an ajax GET request
@@ -806,20 +727,19 @@ function ajaxAsyncGetRequest(url, async) {
  * @return {String} response text if request is not async
  */
 function ajaxRequest(method, url, async, queryString) {
-	if(async == undefined) async = true ;
-	var request =  eXo.core.Browser.createHttpRequest() ;
-  request.open(method, url, async) ;
-  request.setRequestHeader("Cache-Control", "max-age=86400") ;
-  if(queryString)
-  {
-    request.send(queryString) ;    
-  }
-  else
-  {
-    request.send(null);
-  }
+  if(async == undefined) async = true ;
+  var resp;
+  gj.ajax(url, {
+	  type: method,
+	  async : async,
+	  data : queryString,
+	  headers : {"Cache-Control" : "max-age=86400"},
+	  complete : function(jqXHR) {
+		  resp = jqXHR.responseText;
+	  }
+  });
   eXo.session.startItv();
-  if(!async) return request.responseText ;
+  if(!async) return resp ;
 }
 
 /**

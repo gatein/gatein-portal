@@ -201,7 +201,7 @@ public class UIPortalComponentActionListener
          buffer.append("');");
          jsManager.addJavascript(buffer.toString());
       }
-      jsManager.addJavascript("eXo.portal.UIPortal.changeComposerSaveButton();");
+      jsManager.addJavascript("eXo.portal.PortalComposer.toggleSaveButton();");
    }
 
    static public class MoveChildActionListener extends EventListener<UIContainer>

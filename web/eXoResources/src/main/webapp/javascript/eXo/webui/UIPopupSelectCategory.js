@@ -20,18 +20,6 @@
 eXo.webui.UIPopupSelectCategory = {
 
   /**
-   * Hide all hidden elements, it is used while showing UIPopupCategory
-   */
-  hide : function() {
-    var ln = eXo.core.DOMUtil.hideElementList.length;
-    if (ln > 0) {
-      for ( var i = 0; i < ln; i++) {
-        eXo.core.DOMUtil.hideElementList[i].style.display = "none";
-      }
-    }
-  },
-
-  /**
    * Show UIPopupCategory object
    * 
    * @param {Object}
@@ -40,19 +28,16 @@ eXo.webui.UIPopupSelectCategory = {
    *          evt
    */
   show : function(obj, evt) {
-    if (!evt)
-      evt = window.event;
-    evt.cancelBubble = true;
-    var DOMUtil = eXo.core.DOMUtil;
-    var uiPopupCategory = DOMUtil.findFirstDescendantByClass(obj, 'div',
-        'UIPopupCategory');
-    if (!uiPopupCategory)
-      return;
-    if (uiPopupCategory.style.display == "none") {
-      eXo.webui.UIPopupSelectCategory.hide();
-      uiPopupCategory.style.display = "block";
-      eXo.core.DOMUtil.listHideElements(uiPopupCategory);
-    } else
-      uiPopupCategory.style.display = "none";
+    var popup = gj(obj).find("div.UIPopupCategory");
+    if (popup.length && popup.css("display") == "none")
+    {
+      popup.show();
+      gj(document).one("click", function()
+	  {
+    	  gj(document).one("click", function() {
+    		  popup.hide();    		  
+    	  });
+	  });
+    } 
   }
-}
+};

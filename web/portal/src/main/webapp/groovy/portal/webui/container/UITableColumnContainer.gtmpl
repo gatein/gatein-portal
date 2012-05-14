@@ -1,6 +1,7 @@
 <%	
 	import org.exoplatform.commons.utils.ExpressionUtil;
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
+	import org.exoplatform.web.application.JavascriptManager;
 	
 	def rcontext = _ctx.getRequestContext(); 
 	ResourceBundle res = rcontext.getApplicationResourceBundle(); 
@@ -17,6 +18,9 @@
 
 	if (uiPortalApp.isEditing())
 	{
+	   	JavascriptManager jsManager = rcontext.getJavascriptManager();
+	  	jsManager.loadScriptResource("portal");
+	  	jsManager.addJavascript("eXo.portal.PortalDragDrop.init(['UIContainer'])");
 %>  
 <div class="UIContainer UITableColumnContainer EdittingContainer <%=hasPermission?"":"ProtectedContainer"%>" 
 				id="${uicomponent.id}" 
@@ -66,7 +70,7 @@
 				<div class="CONTROL-CONTAINER CONTROL-BLOCK UIInfoBar">
 					<%/*Begin InfoBar*/%>
 					<div class="BlueRoundedStyle ClearFix">
-						<div class="DragControlArea" title="<%=_ctx.appRes("UITableColumnContainer.title.DragControlArea")%>" onmousedown="eXo.portal.PortalDragDrop.init.call(this,event);"><span></span></div>
+						<div class="DragControlArea" title="<%=_ctx.appRes("UITableColumnContainer.title.DragControlArea")%>"><span></span></div>
 						<% 
 							String strTitle = uicomponent.getTitle() != null ?
 										ExpressionUtil.getExpressionValue(res, uicomponent.getTitle()) :

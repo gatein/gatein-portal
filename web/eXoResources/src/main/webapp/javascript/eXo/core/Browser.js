@@ -17,51 +17,6 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.core.Mouse = {
-  init : function (mouseEvent) {
-	  this.mousexInPage = null ;
-	  this.mouseyInPage = null ;
-
-	  this.lastMousexInPage = null ;
-	  this.lastMouseyInPage = null ;
-
-	  this.mousexInClient = null ;
-	  this.mouseyInClient = null ;
-
-	  this.lastMousexInClient = null ;
-	  this.lastMouseyInClient = null ;
-
-	  this.deltax = null ;
-	  this.deltay = null ;
-	  if(mouseEvent != null) this.update(mouseEvent) ;
-  },
-  update : function(mouseEvent) {
-	  browser = eXo.core.Browser;
-	  var  x = browser.findMouseXInPage(mouseEvent) ;
-	  var  y = browser.findMouseYInPage(mouseEvent) ;
-
-	  this.lastMousexInPage =  this.mousexInPage != null ? this.mousexInPage : x ;
-	  this.lastMouseyInPage =  this.mouseyInPage != null ? this.mouseyInPage : y ;
-
-	  this.mousexInPage = x ;
-	  this.mouseyInPage = y ;
-
-	  x  =  browser.findMouseXInClient(mouseEvent) ;
-	  y  =  browser.findMouseYInClient(mouseEvent) ;
-
-	  this.lastMousexInClient =  this.mousexInClient != null ? this.mousexInClient : x ;
-	  this.lastMouseyInClient =  this.mouseyInClient != null ? this.mouseyInClient : y ;
-
-	  this.mousexInClient = x ;
-	  this.mouseyInClient = y ;
-
-	  this.deltax = this.mousexInClient - this.lastMousexInClient ;
-	  this.deltay = this.mouseyInClient - this.lastMouseyInClient ;
-  }
-} ;
-
-eXo.core.Mouse.init(null);
-
 /************************************************************************************/
 /**
 * This function aims is to configure the javascript environment according to the browser in use
@@ -81,16 +36,10 @@ eXo.core.Browser = {
   breakStream : null,
   
   init : function() {
-	  window.onresize =  this.managerResize ;
+	  window.onresize =  this.managerResize;
 	  window.onscroll =  this.onScroll ;
 
-	  this.initCommon() ;
 	  this.detectBrowser();
-
-	  if(this.opera)  this.initOpera() ;
-	  else if(this.ie) this.initIE() ;
-	  else if(this.webkit) this.initSafari() ;
-	  else this.initMozilla() ;
   },
 
   /**
@@ -235,61 +184,18 @@ eXo.core.Browser = {
 	
 	managerResize : function() {
 	  var browser = eXo.core.Browser;
-	  if(browser.currheight != document.documentElement.clientHeight) {
+	  var jWin = gj(window);
+	  if(browser.currheight != jWin.height()) {
 	    clearTimeout(browser.breakStream) ;
 	    browser.breakStream = setTimeout(browser.onResize, 100) ;
 	  }
-	  browser.currheight = document.documentElement.clientHeight;
-	}, 
+	  browser.currheight = jWin.height();
+	}, 	
 	
-	initCommon : function() {
-	  this.getBrowserHeight = function() { return document.documentElement.clientHeight ; }
-      this.getBrowserWidth = function() { return document.documentElement.clientWidth ; }
-      this.createHttpRequest = function() { return new XMLHttpRequest() ; }
-	},
-	
-	initIE : function() {
-	  this.browserType = "ie" ;
-	  this.createHttpRequest = function() {
-	     return new ActiveXObject("Msxml2.XMLHTTP") ; 
-	  }
-	  this.eventListener = function(object, event, operation) {
-	    event = "on" + event ;
-	    object.attachEvent(event, operation) ;
-	  }
-	  this.setOpacity = function(component, value) {component.style.filter = "alpha(opacity=" + value + ")" ;}
-	  this.getEventSource = function(e) { return window.event.srcElement ; }
-	},
-	
-	initMozilla : function() {
-	  this.browserType = "mozilla" ;
-	  this.eventListener = function(object, event, operation) { object.addEventListener(event, operation, false) ; }
-	  this.setOpacity = function(component, value) { component.style.opacity = value/100 ; }
-	  this.getEventSource = function(e) { return e.target ; }
-	},
-	
-	initSafari : function() {
-	  this.browserType = "safari" ;
-	  this.getBrowserHeight = function() { return self.innerHeight ; } ;
-	  this.getBrowserWidth = function() { return self.innerWidth ; } ;
-	  this.eventListener = function(object, event, operation) { object.addEventListener(event, operation, false) ; }
-	  this.setOpacity = function(component, value) { component.style.opacity = value/100 ; }
-	  this.getEventSource = function(e) {
-	    var targ = e.target ;
-	    if (targ.nodeType == 3) targ = targ.parentNode ;
-	    return targ ;
-	  }
-	},
-	
-	initOpera : function() {
-	  this.browserType = "opera" ;
-	  this.getBrowserHeight = function() {
-	    return document.body.clientHeight ;
-	  }
-	  this.getBrowserWidth = function() {
-	    return document.body.clientWidth ;
-	  }	
-	},
+	isIE : function() {
+	  var agent = navigator.userAgent ;
+	  return (agent.indexOf("MSIE") >=0);
+	},		
 	
 	isIE6 : function() {
 	  var agent = navigator.userAgent ;
@@ -303,25 +209,11 @@ eXo.core.Browser = {
 	
 	isFF : function() {
 	  return this.gecko;
-	},
-	
-	isFF2 : function() {
-	  return (navigator.userAgent.indexOf("Firefox/2") >= 0);
-	},
+	},		
 	
 	isFF3 : function() {
 	  return (navigator.userAgent.indexOf("Firefox/3") >= 0);
-	},
-	
-	findMouseXInClient : function(e) {
-	  if (!e) e = window.event ;
-	  return e.clientX ;
-	},
-	
-	findMouseYInClient : function(e) {
-	  if (!e) e = window.event ;
-	  return e.clientY ;
-	},
+	},		
 	
 	/**
 	 * Adds a function to the list of functions to call on load
@@ -379,38 +271,17 @@ eXo.core.Browser = {
 	      if (typeof(method) == "function") method(event) ;
 	    }catch(err){}
 	  }
-	},
-	
-	getBrowserType : function() {  
-	  return this.browserType ;
-	},
+	},		
 	
 	/**
 	 * Returns the horizontal position of an object relative to the window
 	 */
 	findPosX : function(obj, isRTL) {
-	  var curleft = 0;
-	  var tmpObj = obj ;
-	  while (tmpObj) {
-	    curleft += tmpObj.offsetLeft ;
-	    tmpObj = tmpObj.offsetParent ;
-	  }
+	  var curleft = gj(obj).offset().left;
 	  // if RTL return right position of obj
-	  if(isRTL) return curleft + obj.offsetWidth ;
-	  return curleft ;
-	},
-	
-	/**
-	 * Returns the vertical position of an object relative to the window
-	 */
-	findPosY : function(obj) {
-	  var curtop = 0 ;
-	  while (obj) {
-	    curtop += obj.offsetTop ;
-	    obj = obj.offsetParent ;
-	  }
-	  return curtop ;
-	},
+	  if(isRTL) return curleft + obj.offsetWidth;
+	  return curleft;
+	},		
 	
 	/**
 	 * Returns the horizontal position of an object relative to its container
@@ -428,61 +299,18 @@ eXo.core.Browser = {
 	 */
 	findPosYInContainer : function(obj, container) {
 	  var browser = eXo.core.Browser;
-	  var objY = browser.findPosY(obj) ;
-	  var containerY = browser.findPosY(container) ;
-	  return (objY - containerY) ;
-	},
-	
-	/**
-	 * find the x position of the mouse in the page
-	 */
-	findMouseXInPage : function(e) {
-	  var posx = -1 ;
-	  if (!e) e = window.event ;
-	  if (e.pageX || e.pageY) {
-	    posx = e.pageX ;
-	  } else if (e.clientX || e.clientY) {
-	    posx = e.clientX + document.body.scrollLeft ;
-	  }
-	  return posx ;
-	},
-	
-	/**
-	 * find the y position of the mouse in the page
-	 */
-	findMouseYInPage : function(e) {
-	  var posy = -1 ;
-	  if (!e) e = window.event ;
-	  if (e.pageY) {
-	    posy = e.pageY ;
-	  } else if (e.clientX || e.clientY) {
-	    //IE 6
-	    if (document.documentElement && document.documentElement.scrollTop) {
-	      posy = e.clientY + document.documentElement.scrollTop ;
-	    } else {
-	      posy = e.clientY + document.body.scrollTop ;
-	    }
-	  }
-	  return  posy ;
-	},
+	  var objY = gj(obj).offset().top;
+	  var containerY = gj(container).offset().top;
+	  return (objY - containerY);
+	},		
 	
 	/**
 	 * find the x position of the mouse relative to object
 	 */
 	findMouseRelativeX : function(object, e, isRTL) {
 	  var browser = eXo.core.Browser;
-	  var posXObject = browser.findPosX(object,isRTL) ;
-	  
-	  /*
-	   * posXObject is added more 3px on IE6
-	   * posXObject is double on IE7
-	   * */
-	//TODO: TanPD: Remove it to fix PORTAL-3603. Temporary remove it for testing.  
-	//  if(eXo.core.Browser.isIE7()) {
-//		    posXObject = posXObject / 2 ;
-	//  }
-	  
-	  var mouseX = browser.findMouseXInPage(e);  
+	  var posXObject = browser.findPosX(object,isRTL) ;	  
+	  var mouseX = e.pageX;  
 	  return mouseX == -1 ? -1 : mouseX - posXObject ;
 	},
 	
@@ -491,8 +319,8 @@ eXo.core.Browser = {
 	 */
 	findMouseRelativeY : function(object, e) {
 	  var browser = eXo.core.Browser;
-	  var posYObject = browser.findPosY(object) ;
-	  var mouseY = browser.findMouseYInPage(e);  
+	  var posYObject = gj(object).offset().top;
+	  var mouseY = e.pageY;  
 	  return  mouseY == -1 ? -1 : mouseY - posYObject ;
 	},
 	
@@ -500,18 +328,18 @@ eXo.core.Browser = {
 	 * Set Position for a Component in a container
 	 */
 	setPositionInContainer : function(container, component, posX, posY) {
-	  var offsetX = component.offsetLeft ;
-	  var offsetY = component.offsetTop ;
+	  var offsetX = component.offsetLeft;
+	  var offsetY = component.offsetTop;
 
 	  var browser = eXo.core.Browser;
-	  var posXInContainer = browser.findPosXInContainer(component, container) ;
-	  var posYInContainer = browser.findPosYInContainer(component, container) ;
+	  var posXInContainer = browser.findPosXInContainer(component, container);
+	  var posYInContainer = browser.findPosYInContainer(component, container);
 
-	  var deltaX = posX - (posXInContainer - offsetX) ;
-	  var deltaY = posY - (posYInContainer - offsetY) ;
+	  var deltaX = posX - (posXInContainer - offsetX);
+	  var deltaY = posY - (posYInContainer - offsetY);
 
-	  component.style.left = deltaX + "px" ;
-	  component.style.top = deltaY + "px" ;
+	  component.style.left = deltaX + "px";
+	  component.style.top = deltaY + "px";
 	},
 	
 	/* 
@@ -555,7 +383,7 @@ eXo.core.Browser = {
 	  for(var k = 0; k < ln; k++) {
 	    height += elements[k].offsetHeight ;
 	  }
-	  return (this.getBrowserHeight() - height);
+	  return (gj(window).height() - height);
 	},
 	
 	/**
@@ -571,7 +399,7 @@ eXo.core.Browser = {
 	    height += elemt.offsetHeight;
 	    elemt.style.height = height + "px";
 	  }
-	}
+	}		
 };
 
 eXo.core.Browser.init();

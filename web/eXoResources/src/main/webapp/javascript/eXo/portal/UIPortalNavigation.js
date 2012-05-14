@@ -21,9 +21,22 @@
  * Manages the main navigation menu on the portal
  */
 eXo.portal.UIPortalNavigation = {
-  currentOpenedMenu : null,
-  scrollMgr : null,
-  scrollManagerLoaded : false,
+
+  hideMenuTimeoutIds : new HashMap(),
+
+  maxSpace : null,
+
+  leftArrow : null,
+
+  rightArrow : null,
+
+  beginIndex : 0,
+
+  endIndex : -1,
+
+  navItems : null,
+
+  isHorizontal : true,
   
   /**
    * Sets some parameters :
@@ -31,35 +44,27 @@ eXo.portal.UIPortalNavigation = {
    *  . the css style classes
    * and calls the buildMenu function
    */
-  init : function(popupMenu, container, x, y) {
+  init : function(popupMenu, container) {
     this.superClass = eXo.webui.UIPopupMenu;
-    this.superClass.init(popupMenu, container, x, y) ;
+    this.superClass.init(popupMenu, container);
+    //UIPopup.js will add onclick event that increase z-index
+    popupMenu.onmousedown = null;
     
-    this.tabStyleClass = "MenuItem";
-    this.itemStyleClass = "NormalItem";
-    this.selectedItemStyleClass = "SelectedItem";
-    this.itemOverStyleClass = "OverItem";
     this.containerStyleClass = "MenuItemContainer";
-    
+    this.tabStyleClass = "MenuItem";
+
     this.buildMenu(popupMenu);
   },
   
   /**
    * Calls the init function when the page loads
    */
-  onLoad : function(baseId) {
-	var domUtil = eXo.core.DOMUtil;
-	var uiNavPortlet = document.getElementById(baseId);
-	if(domUtil.hasClass(uiNavPortlet, "UIHorizontalTabs")) eXo.portal.UIPortalNavigation.init(uiNavPortlet, uiNavPortlet, 0, 0);
+  onLoad : function(baseId) {    
+	var uiNavPortlet = gj("#" + baseId);
+	if(uiNavPortlet.hasClass("UIHorizontalTabs")) eXo.portal.UIPortalNavigation.init(uiNavPortlet[0], uiNavPortlet[0]);
 	  
 	if (baseId === "UIHorizontalNavigation") {
-		var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
-		var uiNavPortlets = domUtil.findDescendantsByClass(uiWorkingWorkspace, "div", "UIHorizontalNavigation");
-		if (uiNavPortlets.length) {
-			for (var i = 1; i < uiNavPortlets.length; ++i) {
-				uiNavPortlets[i].style.display = "none";
-			}		
-		}		
+		gj(".UIHorizontalNavigation").slice(1).each(function() {gj(this).hide();});
 	}
   },
   
@@ -76,286 +81,168 @@ eXo.portal.UIPortalNavigation = {
    *  . adds onclick event if the item contains a link, so a click on this item will call the link
    */
   buildMenu : function(popupMenu) {
-    var DOMUtil = eXo.core.DOMUtil;
-    var topContainer = popupMenu;
-    topContainer.id = "PortalNavigationTopContainer";
+    var portalNav = eXo.portal.UIPortalNavigation;
+    var topContainer = gj(popupMenu);
+
     // Top menu items
-    var topItems = DOMUtil.findDescendantsByClass(topContainer, "li", "UITab");
-    for (var i = 0; i < topItems.length; i++) {
-      var item = topItems[i];
-      item.onmouseover = eXo.portal.UIPortalNavigation.setTabStyleOnMouseOver ;
-      item.onmouseout = eXo.portal.UIPortalNavigation.setTabStyleOnMouseOut ;
-      if (!item.getAttribute('hidesubmenu')) {
-        item.onmousemove = eXo.portal.UIPortalNavigation.tabOnMouseMove ;
+    topContainer.children(".UITab").each(function()
+    {
+      var tab = gj(this);
+
+      var highlightClass = "UITab HighlightNavigationTab";
+      tab.mouseenter(function()
+      {
+        portalNav.mouseEnterTab(gj(this), highlightClass);
+      });
+
+      var actualClass = tab.attr("class");
+      tab.mouseleave(function()
+      {
+        portalNav.mouseLeaveTab(gj(this), actualClass);
+      });
+
+      tab.find("." + portalNav.containerStyleClass).first().css("minWidth", tab.width());
+    });
+
+    var itemConts = topContainer.find("." + this.containerStyleClass);
+    itemConts.each(function()
+    {
+      if (!this.id)
+      {
+        this.id = eXo.generateId("PortalNavigationContainer");
       }
-      item.style.width = item.offsetWidth + "px";
-    }
-    
-    /**
-     * TODO: fix IE7;
-     */
-    var container = DOMUtil.findFirstDescendantByClass(item, "ul", this.containerStyleClass);
-    if (container) {
-  	  if (eXo.core.Browser.isIE6()) {
-  		  container.style.width = item.offsetWidth + "px";
-  	  } else {
-  		  container.style.minWidth = item.offsetWidth + "px";
-  	  }
-    }
+      this.resized = false;
 
-    var itemConts = DOMUtil.findDescendantsByClass(topContainer, "ul", this.containerStyleClass);
-    for (var i = 0; i < itemConts.length; i++) {
-  	  var cont = itemConts[i];
-  	  if(!cont.id) cont.id = DOMUtil.generateId("PortalNavigationContainer");
-  	  cont.resized = false;
-
-  	  var items = DOMUtil.findDescendantsByClass(cont, "li", this.tabStyleClass);
-  	  if(items.length == 0) cont.parentNode.removeChild(cont);
-  	  for(var j = 0; j < items.length; j ++) {
-  		  items[j].onmouseover = eXo.portal.UIPortalNavigation.onMenuItemOver;
-  		  items[j].onmouseout = eXo.portal.UIPortalNavigation.onMenuItemOut;
-  	  }
-    }
+      var jObj = gj(this);
+      var items = jObj.find("." + portalNav.tabStyleClass);
+      if (items.length == 0)
+      {
+        jObj.remove();
+      }
+      else
+      {
+        jObj.on({"mouseenter" : portalNav.onMenuItemOver, "mouseleave" : portalNav.onMenuItemOut,
+          "click" : function() {portalNav.hideMenu(jObj.attr("id"));}}, "." + portalNav.tabStyleClass);
+      }
+    });
   },
-  
+
   /**
-   * Sets the tab style on mouse over and mouse out
-   * If the mouse goes out of the item but stays on its sub menu, the item remains highlighted
+   * Method triggered as mouse cursor enter a navigation node showed on navigation tab.
+   *
+   * @param tab
+   * @param newClass
    */
-  // TODO: there's no caller for this method, prepare to remove it
-  //UIPortalNavigation.prototype.setTabStyle = function() {
-  //  var tab = this;
-  //  var tabChildren = eXo.core.DOMUtil.getChildrenByTagName(tab, "div") ;
-  //  if (tabChildren[0].className != "HighlightNavigationTab") {
-//      // highlights the tab
-//      eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab, true);
-  //  } else {
-//      if(tabChildren.length <= 1 || tabChildren[1].id != eXo.portal.UIPortalNavigation.currentOpenedMenu) {
-//        // de-highlights the tab if it doesn't have a submenu (cond 1) or its submenu isn't visible (cond 2)
-//        eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab, false);
-//      }
-  //  }
-  //}
+  mouseEnterTab : function(tab, newClass)
+  {
+    var portalNav = eXo.portal.UIPortalNavigation;
 
-  generateContainer : function(data) {		
-  	var htmlFrags = "<ul class='" + this.containerStyleClass + "' style='display: none;' id='"; 
-  	htmlFrags += eXo.core.DOMUtil.generateId("PortalNavigationContainer") + "' resized='false'>";	
-
-  	for (var i = 0; i < data.length; i++) {
-  		var node = data[i];
-  		var actionLink = node.actionLink ? node.actionLink : "javascript:void(0);";
-  				
-  		htmlFrags += ("<li class='MenuItem " + (node.hasChild ? "ArrowIcon " : "") + (node.isSelected ? "SelectedItem'" : "NormalItem'")); 
-  		htmlFrags += (node.hasChild ? (" exo:getNodeURL='" + node.getNodeURL + "' ") : "" ); 
-  		htmlFrags += ("onmouseover='eXo.portal.UIPortalNavigation.onMenuItemOver(this)' onmouseout='eXo.portal.UIPortalNavigation.onMenuItemOut(this)'");
-  		htmlFrags += ("' title='" + node.label + "'>");
-  		htmlFrags += ("<a class='ItemIcon " + (node.icon ? node.icon : "DefaultPageIcon") + "'" +
-  				"href='" + actionLink + "'>" + (node.label.length > 40 ? node.label.substring(0,37) + "..." : node.label) + "</a>");
-  		if (node.childs.length) {
-  			htmlFrags += eXo.portal.UIPortalNavigation.generateContainer(node.childs);			
-  		}
-  		htmlFrags += "</li>";
-  	}
-  	htmlFrags += "</ul>";
-  	return htmlFrags;
-  },
-
-  setTabStyleOnMouseOver : function(e) {
-    var tab = this ;
-    if (eXo.portal.UIPortalNavigation.previousMenuItem != tab) {
-      eXo.portal.UIPortalNavigation.hideMenu() ;
-    }
-    eXo.portal.UIPortalNavigation.setTabStyleOnMouseOut(e, tab) ;
-    eXo.portal.UIPortalNavigation.previousMenuItem = tab ;    
-    
-    var getNodeURL = tab.getAttribute("exo:getNodeURL");
-    var menuItemContainer = eXo.core.DOMUtil.findFirstDescendantByClass(tab, "ul", eXo.portal.UIPortalNavigation.containerStyleClass);
-    if (getNodeURL && !menuItemContainer) {
-  	  var jsChilds = ajaxAsyncGetRequest(getNodeURL,false)
-  	  try {
-  		  var data = eXo.core.JSON.parse(jsChilds);		  
-  	  } catch (e) {
-  	  }				  
-  	  if (!data || !data.length) {
-  		  return;
-  	  }
-  	  var temp = document.createElement("div");
-  	  temp.innerHTML = eXo.portal.UIPortalNavigation.generateContainer(data); 		  
-  	  tab.appendChild(eXo.core.DOMUtil.findFirstChildByClass(temp, "ul", eXo.portal.UIPortalNavigation.containerStyleClass));
-    }
-    
-    if (!eXo.portal.UIPortalNavigation.menuVisible) {    
-      var hideSubmenu = tab.getAttribute('hideSubmenu') ;
-      menuItemContainer = eXo.core.DOMUtil.findFirstDescendantByClass(tab, "ul", eXo.portal.UIPortalNavigation.containerStyleClass);
-      if (menuItemContainer && !hideSubmenu) {
-        var DOMUtil = eXo.core.DOMUtil ;
-  		  if(eXo.core.Browser.browserType == "ie") {
-  		    var navAncestor = DOMUtil.findAncestorByClass(tab, "UINavigationPortlet") ;
-  		    var pageBody = document.getElementById("UIPageBody");
-  		    if(pageBody){
-  		    	var uicomponents = DOMUtil.getChildrenByTagName(pageBody.parentNode, "div") ;
-  		    	for(var i = 0; i < uicomponents.length; i ++) {
-  		      	var navPortlet = DOMUtil.findFirstDescendantByClass(uicomponents[i], "div", "UINavigationPortlet") ;
-  		      	if(navPortlet && (navAncestor != navPortlet)) {
-  		      		navPortlet.style.position = "static" ;
-  		      	}
-  		    	}	
-  		    } 
-  		  }
-        eXo.portal.UIPortalNavigation.toggleSubMenu(e, tab, menuItemContainer) ;
+    var getNodeURL = tab.attr("exo:getNodeURL");
+    var menuItemContainer = tab.find("." + portalNav.containerStyleClass).first();
+    if (getNodeURL && !menuItemContainer.length)
+    {
+      var jsChilds = ajaxAsyncGetRequest(getNodeURL, false)
+      try
+      {
+        var data = gj.parseJSON(jsChilds);
       }
-    }  
-    
-    eXo.portal.UIPortalNavigation.cancelHideMenuContainer() ;
-    eXo.portal.UIPortalNavigation.menuVisible = true ;
-  },
-
-  setTabStyleOnMouseOut : function(e, src) {
-    var tab = src || this;
-    if (!eXo.core.DOMUtil.hasClass(tab, "HighlightNavigationTab")) {
-      // highlights the tab
-      eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab, true);
-    } else {
-      if(tab.id != eXo.portal.UIPortalNavigation.currentOpenedMenu) {
-        // de-highlights the tab if it doesn't have a submenu (cond 1) or its submenu isn't visible (cond 2)
-        eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab, false);
+      catch (e)
+      {
       }
+      if (!data || !data.length)
+      {
+        return;
+      }
+      tab.append(portalNav.generateContainer(data));
     }
-    eXo.portal.UIPortalNavigation.hideMenuTimeout(300) ;
-  },
+    tab.attr("class", newClass);
 
-  tabOnMouseMove : function() {
-    eXo.portal.UIPortalNavigation.cancelHideMenuContainer() ;
+    menuItemContainer = tab.find("." + portalNav.containerStyleClass).first();
+    if (menuItemContainer.length)
+    {
+      portalNav.cancelHideMenuContainer(menuItemContainer.attr("id"));
+      portalNav.showMenu(tab, menuItemContainer);
+    }
+    return false;
   },
 
   /**
-   * Shows or hides a submenu
-   * Calls hideMenuContainer to hide a submenu.
-   * Hides any other visible sub menu before showing the new one
+   * Method triggered as mouse cursor leaves a navigation node showed on navigation tab
+   *
+   * @param tab
+   * @param oldClass
+   */
+  mouseLeaveTab : function(tab, oldClass)
+  {
+    var portalNav = eXo.portal.UIPortalNavigation;
+
+    tab.attr("class", oldClass);
+    var conts = tab.find("." + portalNav.containerStyleClass);
+    if (conts.length)
+    {
+      portalNav.hideMenuTimeoutIds.put(conts[0].id, window.setTimeout(function() {portalNav.hideMenu(conts[0].id); }, 300));
+    }
+    return false;
+  },
+
+  /**
+* Shows a submenu
    * Sets the width of the submenu (the first time it is shown) to fix a bug in IE
    * Sets the currentOpenedMenu to the menu being opened
    */
-  toggleSubMenu : function(e, tab, menuItemContainer) {
-    if (!e) e = window.event;
-    e.cancelBubble = true;
-    var src = eXo.core.Browser.getEventSource(e);
-    if (src.tagName.toLowerCase() == "a" && !menuItemContainer) {
-      if (src.href.substr(0, 7) == "http://") {
-        if (!src.target) {
-          window.location.href = src.href
-        } else {
-          return true ;
-        }
-      } else eval(src.href);
-      return false;
+  showMenu : function(tab, menuItemContainer) {
+    var portalNav = eXo.portal.UIPortalNavigation;
+    var browser = eXo.core.Browser;
+    portalNav.superClass.pushVisibleContainer(menuItemContainer.attr("id"));
+        
+    menuItemContainer.css({"display" : "block", "position" : "absolute"});
+    var offParent = menuItemContainer.offsetParent();
+    var y = tab.height() + browser.findPosYInContainer(tab[0], offParent[0]);
+    var x = browser.findPosXInContainer(tab[0], offParent[0]) + 2;
+    if(eXo.core.I18n.isRT()) {
+    	x = browser.findPosXInContainer(tab[0], offParent[0], true);
     }
-    var item = tab;
-    var DOMUtil = eXo.core.DOMUtil;
-    if (menuItemContainer) {
-      if (menuItemContainer.style.display == "none") {
-        // shows the sub menu
-        // hides a previously opened sub menu
-        if (eXo.portal.UIPortalNavigation.currentOpenedMenu) eXo.portal.UIPortalNavigation.hideMenu();
+    portalNav.superClass.setPosition(menuItemContainer[0], x, y, eXo.core.I18n.isRT());
+    portalNav.superClass.show(menuItemContainer[0]);
         
-        eXo.portal.UIPortalNavigation.superClass.pushVisibleContainer(menuItemContainer.id);
-        menuItemContainer.style.display = "block";
-        menuItemContainer.style.position = "absolute";
-        var offParent = menuItemContainer.offsetParent;
-        var y = item.offsetHeight + eXo.core.Browser.findPosYInContainer(item, offParent);
-        var x = eXo.core.Browser.findPosXInContainer(item, offParent) + 2;
-        if(eXo.core.I18n.isRT()) {
-        	x = eXo.core.Browser.findPosX(offParent) + offParent.offsetWidth - eXo.core.Browser.findPosX(item) - item.offsetWidth;
-//        	if(eXo.core.Browser.isIE6()) x += parseInt(document.getElementById("UIWorkingWorkspace").style.marginRight) ;
-        }
-        eXo.portal.UIPortalNavigation.superClass.setPosition(menuItemContainer, x, y, eXo.core.I18n.isRT());
-        eXo.portal.UIPortalNavigation.superClass.show(menuItemContainer);
-        
-        menuItemContainer.style.width = menuItemContainer.offsetWidth - parseInt(DOMUtil.getStyle(menuItemContainer, "borderLeftWidth",true)) 
-            - parseInt(DOMUtil.getStyle(menuItemContainer, "borderRightWidth",true)) + "px";
-  			var posXinBrowser = eXo.core.Browser.findPosX(menuItemContainer);
-  			if(eXo.core.I18n.isLT()) {
-  				if(posXinBrowser + menuItemContainer.offsetWidth >= eXo.core.Browser.getBrowserWidth()) {
-  					x += (item.offsetWidth - menuItemContainer.offsetWidth) ;
-  					menuItemContainer.style.left = x + "px";
-  				}
-  			} else {
-  				if(posXinBrowser + item.offsetWidth <menuItemContainer.offsetWidth) {
-  					x += (item.offsetWidth - menuItemContainer.offsetWidth) ;
-  					menuItemContainer.style.right = x + "px";
-  				}
-  			}
-        eXo.portal.UIPortalNavigation.currentOpenedMenu = menuItemContainer.id;
-        
-        /*Hide eXoStartMenu whenever click on the UIApplication*/
-        var uiPortalApplication = document.getElementById("UIPortalApplication") ;
-        uiPortalApplication.onclick = eXo.portal.UIPortalNavigation.hideMenu ;
-      } else {
-        // hides the sub menu
-        eXo.portal.UIPortalNavigation.hideMenuContainer();
+    menuItemContainer.css("width", menuItemContainer.width() + "px");
+
+    var posXinBrowser = menuItemContainer.offset().left;
+  	if(eXo.core.I18n.isLT()) {
+		if(posXinBrowser + menuItemContainer.width() >= gj(window).width()) {
+			x += (tab.width() - menuItemContainer.width()) ;
+			menuItemContainer.css("left", x + "px");
+		}
+  	} else {
+		if(posXinBrowser + tab.width() < menuItemContainer.width()) {
+			x += (tab.width() - menuItemContainer.width()) ;
+			menuItemContainer.css("right", x + "px");
+		}
+	}
+  },
+
+  cancelHideMenuContainer : function(containerId) {
+	  var timeout = eXo.portal.UIPortalNavigation.hideMenuTimeoutIds.remove(containerId);
+      if (timeout) {
+    	  window.clearTimeout(timeout) ;
       }
-    }
-  },
-
-  cancelHideMenuContainer : function() {
-    if (this.hideMenuTimeoutId) {
-      window.clearTimeout(this.hideMenuTimeoutId) ;
-    }
-  },
-
-  closeMenuTimeout : function() {
-    eXo.portal.UIPortalNavigation.hideMenuTimeout(200) ;
-  },
-
-  hideMenuTimeout : function(time) {
-    this.cancelHideMenuContainer() ;
-    if (!time || time <= 0) {
-      time = 200 ;
-    }
-    //this.hideMenuTimeoutId = window.setTimeout(this.hideMenu, time) ;
-    this.hideMenuTimeoutId = window.setTimeout('eXo.portal.UIPortalNavigation.hideMenu() ;', time) ;
-  },
-
-  /**
-   * Adds the currentOpenedMenu to the list of containers to hide
-   * and sets a time out to close them effectively
-   * Sets currentOpenedMenu to null (no menu is opened)
-   * Uses the methods from the superClass (eXo.webui.UIPopupMenu) to perform these operations
-   */
-  hideMenuContainer : function() {
-    var menuItemContainer = document.getElementById(eXo.portal.UIPortalNavigation.currentOpenedMenu);
-    if (menuItemContainer) {
-      eXo.portal.UIPortalNavigation.superClass.pushHiddenContainer(menuItemContainer.id);
-      eXo.portal.UIPortalNavigation.superClass.popVisibleContainer();
-      eXo.portal.UIPortalNavigation.superClass.setCloseTimeout();
-      eXo.portal.UIPortalNavigation.superClass.hide(menuItemContainer);
-      eXo.portal.UIPortalNavigation.currentOpenedMenu = null;    
-    }
-    this.previousMenuItem = false ;
-    eXo.portal.UIPortalNavigation.menuVisible = false ;
   },
   
   /**
    * Changes the style of the parent button when a submenu has to be hidden
    */
-  hideMenu : function() {
-    if (eXo.portal.UIPortalNavigation.currentOpenedMenu) {
-      var currentItemContainer = document.getElementById(eXo.portal.UIPortalNavigation.currentOpenedMenu);
-      var tab = eXo.core.DOMUtil.findAncestorByClass(currentItemContainer, "UITab");
-      eXo.webui.UIHorizontalTabs.changeTabNavigationStyle(tab, false);
+  hideMenu : function(containerId) {
+    var portalNav = eXo.portal.UIPortalNavigation;
+    portalNav.hideMenuTimeoutIds.remove(containerId);
+
+    var menuItemContainer = gj("#" + containerId);
+    if (menuItemContainer.length) {
+      var id = menuItemContainer.attr("id");
+      portalNav.superClass.pushHiddenContainer(id);
+      portalNav.superClass.popVisibleContainer(id);
+      portalNav.superClass.setCloseTimeout();
+      portalNav.superClass.hide(menuItemContainer[0]);
     }
-    eXo.portal.UIPortalNavigation.hideMenuContainer();
-    var DOMUtil = eXo.core.DOMUtil ;
-    if(eXo.core.Browser.browserType == "ie") {
-      var pageBody = document.getElementById("UIPageBody") ;
-      if(!pageBody) return;
-      var uicomponents = DOMUtil.getChildrenByTagName(pageBody.parentNode, "div") ;
-      for(var i = 0; i < uicomponents.length; i ++) {
-        var navPortlet = DOMUtil.findFirstDescendantByClass(uicomponents[i], "div", "UINavigationPortlet") ;
-        if(navPortlet) {
-        	navPortlet.style.position = "relative" ;
-        }
-      }
-    }  
   },
   
   /**
@@ -363,35 +250,33 @@ eXo.portal.UIPortalNavigation = {
    * Check if this menu item has a sub menu, if yes, opens it
    * Changes the style of the button
    */
-  onMenuItemOver : function(menuItem) {  
-    if (!menuItem || !menuItem.nodeName) menuItem = this;
-    var DOMUtil = eXo.core.DOMUtil;
+  onMenuItemOver : function() {
+    var menuItem = gj(this);
+    var portalNav = eXo.portal.UIPortalNavigation;
     
-    var getNodeURL = menuItem.getAttribute("exo:getNodeURL");
-    var subContainer = DOMUtil.findFirstDescendantByClass(menuItem, "ul", eXo.portal.UIPortalNavigation.containerStyleClass);
-    if (getNodeURL && !subContainer) {
-  	  var jsChilds = ajaxAsyncGetRequest(getNodeURL,false)
-  	  try {
-  		  var data = eXo.core.JSON.parse(jsChilds);		  		  
-  	  } catch (e) {
-  	  }	
-  	  if (!data || !data.length) {
-  		  DOMUtil.removeClass(menuItem, "ArrowIcon");
-  		  menuItem.removeAttribute("exo:getNodeURL");
-  		  return;
-  	  }
-  	  var temp = document.createElement("div");
-  	  temp.innerHTML = eXo.portal.UIPortalNavigation.generateContainer(data); 		  
-  	  menuItem.appendChild(eXo.core.DOMUtil.findFirstChildByClass(temp, "ul", eXo.portal.UIPortalNavigation.containerStyleClass));
+    var getNodeURL = menuItem.attr("exo:getNodeURL");
+    var subContainer = menuItem.find("." + portalNav.containerStyleClass).first();
+	    if (getNodeURL && !subContainer.length) {
+		    var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);
+		  	try {
+		  		var data = gj.parseJSON(jsChilds);
+		  	} catch (e) {
+	  	}	
+	  	if (!data || !data.length) {
+		   menuItem.removeClass("ArrowIcon");
+		   menuItem.removeAttr("exo:getNodeURL");
+	  	   return;
+	    }
+	  	menuItem.append(portalNav.generateContainer(data));
     }
       
-    subContainer = DOMUtil.findFirstDescendantByClass(menuItem, "ul", eXo.portal.UIPortalNavigation.containerStyleClass);
-    if (subContainer) {
-      eXo.portal.UIPortalNavigation.superClass.pushVisibleContainer(subContainer.id);
-      eXo.portal.UIPortalNavigation.showMenuItemContainer(menuItem, subContainer) ;
-      if (!subContainer.firstTime) {
-          subContainer.style.width = subContainer.offsetWidth + 2 + "px";
-          subContainer.firstTime = true;
+    subContainer = menuItem.find("." + portalNav.containerStyleClass).first();
+    if (subContainer.length) {
+      portalNav.superClass.pushVisibleContainer(subContainer.attr("id"));
+      portalNav.showMenuItemContainer(menuItem, subContainer) ;
+      if (!subContainer.data("firstTime")) {
+          subContainer.css("width", subContainer.width() + 2 + "px");
+          subContainer.data("firstTime", true);
       }
     }
   },
@@ -400,83 +285,178 @@ eXo.portal.UIPortalNavigation = {
    * Shows a sub menu, uses the methods from superClass (eXo.webui.UIPopupMenu)
    */
   showMenuItemContainer : function(menuItem, menuItemContainer) {
-    var x = menuItem.offsetWidth;
-    var y = menuItem.offsetTop;
-    this.superClass.show(menuItemContainer);
-    var posRight = eXo.core.Browser.getBrowserWidth() - eXo.core.Browser.findPosX(menuItem) - menuItem.offsetWidth ; 
-    var rootX = (eXo.core.I18n.isLT() ? eXo.core.Browser.findPosX(menuItem) : posRight) ;
-  	if (x + menuItemContainer.offsetWidth + rootX > eXo.core.Browser.getBrowserWidth()) {
-    	x -= (menuItemContainer.offsetWidth + menuItem.offsetWidth) ;
+    var x = menuItem.width();
+    var y = menuItem.position().top;
+    this.superClass.show(menuItemContainer[0]);
+    var posRight = gj(window).width() - eXo.core.Browser.findPosX(menuItem[0], true) ;
+    var rootX = (eXo.core.I18n.isLT() ? eXo.core.Browser.findPosX(menuItem[0]) : posRight) ;
+    if (x + menuItemContainer.width() + rootX > gj(window).width()) {
+    	x -= (menuItemContainer.width() + menuItem.width()) ;
     }
-    this.superClass.setPosition(menuItemContainer, x, y, eXo.core.I18n.isRT());
+    this.superClass.setPosition(menuItemContainer[0], x, y, eXo.core.I18n.isRT());
   },
   
   /**
    * When the mouse goes out a menu item from the main nav menu
    * Checks if this item has a sub menu, if yes calls methods from superClass to hide it
    */
-  onMenuItemOut : function(menuItem) {
-    if (!menuItem || !menuItem.nodeName) menuItem = this;
-    
-    var subContainer = eXo.core.DOMUtil.findFirstDescendantByClass(menuItem, "ul", eXo.portal.UIPortalNavigation.containerStyleClass);
-    if (subContainer) {
-      eXo.portal.UIPortalNavigation.superClass.pushHiddenContainer(subContainer.id);
-      eXo.portal.UIPortalNavigation.superClass.popVisibleContainer();
-      eXo.portal.UIPortalNavigation.superClass.setCloseTimeout(300);
-    }
-  },
-  
+  onMenuItemOut : function() {
+    var menuItem = gj(this);
+    var portalNav = eXo.portal.UIPortalNavigation;
 
-  /***** Scroll Management *****/
-  /**
-   * Function called to load the scroll manager that will manage the tabs in the main nav menu
-   *  . Creates the scroll manager with id PortalNavigationTopContainer
-   *  . Adds the tabs to the scroll manager
-   *  . Configures the arrows
-   *  . Calls the initScroll function
-   */
-  loadScroll : function(portalNavId) {
-    var uiNav = eXo.portal.UIPortalNavigation;
-    var portalNav = document.getElementById(portalNavId);
-    if (portalNav) {
-      // Creates new ScrollManager and initializes it
-      uiNav.scrollMgr = eXo.portal.UIPortalControl.newScrollManager(portalNavId);
-      uiNav.scrollMgr.initFunction = uiNav.initScroll;
-      // Adds the tab elements to the manager
-      uiNav.scrollMgr.mainContainer = portalNav;
-      uiNav.scrollMgr.arrowsContainer = eXo.core.DOMUtil.findFirstDescendantByClass(portalNav, "li", "ScrollButtons");
-      uiNav.scrollMgr.loadElements("UITab");
-      // Configures the arrow buttons
-      var arrowButtons = eXo.core.DOMUtil.findDescendantsByTagName(uiNav.scrollMgr.arrowsContainer, "a");
-      if (arrowButtons.length == 2) {
-        uiNav.scrollMgr.initArrowButton(arrowButtons[0], "left", "ScrollLeftButton", "HighlightScrollLeftButton", "DisableScrollLeftButton");
-        uiNav.scrollMgr.initArrowButton(arrowButtons[1], "right", "ScrollRightButton", "HighlightScrollRightButton", "DisableScrollRightButton");
-      }
-      // Finish initialization
-      uiNav.scrollMgr.callback = uiNav.scrollCallback;
-      uiNav.scrollManagerLoaded = true;
-      uiNav.initScroll();
+    var subContainer = menuItem.find("." + portalNav.containerStyleClass).first();
+    if (subContainer.length) {
+      var id = subContainer.attr("id");
+      portalNav.superClass.pushHiddenContainer(id);
+      portalNav.superClass.currentVisibleContainers.remove(id);
+      portalNav.superClass.setCloseTimeout(200);
     }
   },
   
-  /**
-   * Init function for the scroll manager
-   *  . Calls the init function of the scroll manager
-   *  . Calculates the available space to render the tabs
-   *  . Renders the tabs
-   */
-  initScroll : function(e) {
-    if (!eXo.portal.UIPortalNavigation.scrollManagerLoaded) eXo.portal.UIPortalNavigation.loadScroll();
-    var scrollMgr = eXo.portal.UIPortalNavigation.scrollMgr;
-    scrollMgr.init();
-    // Gets the maximum width available for the tabs
-    scrollMgr.checkAvailableSpace();
-    scrollMgr.renderElements();
+  initScroll : function(navId)
+  {
+    var navContainer = gj("#" + navId);
+    var scrollButtons = navContainer.find(".ScrollButtons");
+    this.leftArrow = scrollButtons.children("a.ScrollLeftButton");
+    this.rightArrow = scrollButtons.children("a.ScrollRightButton");
+
+    this.navItems = navContainer.find(".UITab");
+    this.maxSpace = (this.isHorizontal)? (navContainer.width() - scrollButtons.width()) : (navContainer.height() - scrollButtons.height());
+
+    var end = this.beginIndex + 1;
+    var tmpSpace = 0;
+    var showArrows = false;
+    this.navItems.each(function()
+    {
+      var navItem = gj(this);
+      tmpSpace += eXo.portal.UIPortalNavigation.computeSpace(navItem);
+      if(tmpSpace <= eXo.portal.UIPortalNavigation.maxSpace)
+      {
+        end++;
+        navItem.css("display", "block");
+      }
+      else
+      {
+        showArrows = true;
+        navItem.css("display", "none");
+      }
+    });
+    this.endIndex = end;
+
+    if(showArrows)
+    {
+      scrollButtons.css("display", "block");
+
+      var left = eXo.core.I18n.isLT()? this.leftArrow : this.rightArrow;
+      var right = eXo.core.I18n.isLT()? this.rightArrow : this.leftArrow;
+      left.on("click", function() { eXo.portal.UIPortalNavigation.scrollLeft(eXo.portal.UIPortalNavigation.navItems);});
+      right.on("click", function() { eXo.portal.UIPortalNavigation.scrollRight(eXo.portal.UIPortalNavigation.navItems);});
+
+      this.updateArrows(this.beginIndex, this.endIndex, this.navItems.length);
+    }
   },
-  /**
-   * A callback function to call after a scroll event occurs (and the elements are rendered)
-   * Is empty so far.
-   */
-  scrollCallback : function() {
+
+  scrollLeft : function(navItems)
+  {
+    var beginIndex = eXo.portal.UIPortalNavigation.beginIndex;
+    var endIndex = eXo.portal.UIPortalNavigation.endIndex;
+
+    if(beginIndex <= 0)
+    {
+      return;
+    }
+    var newEndIndex = beginIndex--;
+    var tmpSpace = 0;
+    navItems.slice(beginIndex, endIndex).each(function()
+    {
+      var navItem = gj(this);
+      tmpSpace += eXo.portal.UIPortalNavigation.computeSpace(navItem);
+      if(tmpSpace <= eXo.portal.UIPortalNavigation.maxSpace)
+      {
+        newEndIndex++;
+        navItem.css("display", "block");
+      }
+      else
+      {
+        navItem.css("display", "none");
+      }
+    });
+    eXo.portal.UIPortalNavigation.beginIndex = beginIndex;
+    eXo.portal.UIPortalNavigation.endIndex = newEndIndex;
+    eXo.portal.UIPortalNavigation.updateArrows(beginIndex, newEndIndex, navItems.length);
+  },
+
+  scrollRight : function(navItems)
+  {
+    var beginIndex = eXo.portal.UIPortalNavigation.beginIndex;
+    var endIndex = eXo.portal.UIPortalNavigation.endIndex;
+    var size = navItems.length;
+    if(endIndex >= size)
+    {
+      return;
+    }
+    var newBeginIndex = endIndex++;
+    var tmpSpace = 0;
+    gj.each(navItems.slice(beginIndex, endIndex).get().reverse(), function()
+    {
+      var navItem = gj(this);
+      tmpSpace += eXo.portal.UIPortalNavigation.computeSpace(navItem);
+      if(tmpSpace <= eXo.portal.UIPortalNavigation.maxSpace)
+      {
+        newBeginIndex--;
+        navItem.css("display", "block");
+      }
+      else
+      {
+        navItem.css("display", "none");
+      }
+    });
+    eXo.portal.UIPortalNavigation.beginIndex = newBeginIndex;
+    eXo.portal.UIPortalNavigation.endIndex = endIndex;
+    eXo.portal.UIPortalNavigation.updateArrows(newBeginIndex, endIndex, size);
+  },
+
+  computeSpace : function(navItem)
+  {
+    //We cache the computational result in the DOM object
+    if(navItem[0].space)
+    {
+      return navItem[0].space;
+    }
+    else
+    {
+      var space = (this.isHorizontal)? navItem.outerWidth(true) : navItem.outerHeight(true);
+      navItem[0].space = space;
+
+      return space;
+    }
+  },
+
+  updateArrows : function(beginIndex, endIndex, size)
+  {
+    this.leftArrow.attr("class", beginIndex == 0 ? "DisableScrollLeftButton" : "ScrollLeftButton");
+    this.rightArrow.attr("class", endIndex == size ? "DisableScrollRightButton" : "ScrollRightButton");
+  },
+
+  generateContainer : function(data) {
+   var htmlFrags = "<ul class='" + this.containerStyleClass + "' style='display: none;' id='";
+   htmlFrags += eXo.generateId("PortalNavigationContainer") + "' resized='false'>";
+
+   for (var i = 0; i < data.length; i++) {
+	   var node = data[i];
+	   var actionLink = node.actionLink ? node.actionLink : "javascript:void(0);";
+	
+	   htmlFrags += ("<li class='MenuItem " + (node.hasChild ? "ArrowIcon " : "") + (node.isSelected ? "SelectedItem'" : "NormalItem'"));
+	   htmlFrags += (node.hasChild ? (" exo:getNodeURL='" + node.getNodeURL + "' ") : "" );
+	   htmlFrags += ("' title='" + node.label + "'>");
+	   htmlFrags += ("<a class='ItemIcon " + (node.icon ? node.icon : "DefaultPageIcon") + "'" +
+	   "href='" + actionLink + "'>" + (node.label.length > 40 ? node.label.substring(0,37) + "..." : node.label) + "</a>");
+	   if (node.childs.length) {
+		   htmlFrags += eXo.portal.UIPortalNavigation.generateContainer(node.childs);
+	   }
+	   htmlFrags += "</li>";
+   }
+   htmlFrags += "</ul>";
+   return htmlFrags;
   }
 };

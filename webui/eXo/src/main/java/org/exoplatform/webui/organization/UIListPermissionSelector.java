@@ -19,15 +19,12 @@
 
 package org.exoplatform.webui.organization;
 
-import java.io.Serializable;
-import java.util.*;
-
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.commons.utils.SerializablePageList;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserACL.Permission;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIBreadcumbs;
@@ -40,12 +37,18 @@ import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.UIFormCheckBoxInput;
 import org.exoplatform.webui.form.UIFormGrid;
 import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormPageIterator;
 import org.exoplatform.webui.form.UIFormPopupWindow;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.validator.Validator;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 /** Created by The eXo Platform SARL Author : Pham Dung Ha ha.pham@exoplatform.com May 7, 2007o */
 @ComponentConfig(template = "system:/groovy/organization/webui/component/UIListPermissionSelector.gtmpl", events = {
@@ -59,7 +62,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
 
    public UIListPermissionSelector() throws Exception
    {
-      UIFormCheckBoxInput<Boolean> uiPublicMode = new UIFormCheckBoxInput<Boolean>("publicMode", null, false);
+      UICheckBoxInput uiPublicMode = new UICheckBoxInput("publicMode", null, false);
       addChild(uiPublicMode);
       UIFormGrid uiGrid = addChild(UIFormGrid.class, null, "PermissionGrid");
       uiGrid.setLabel("UIListPermissionSelector");
@@ -84,7 +87,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
       setName(iname);
       setId(iname);
       setBindingField(bfield);
-      UIFormCheckBoxInput uiPublicMode = getChild(UIFormCheckBoxInput.class);
+      UICheckBoxInput uiPublicMode = getChild(UICheckBoxInput.class);
       uiPublicMode.setOnChange("ChangePublicMode", iname);
       UIFormPopupWindow uiPopup = getChild(UIFormPopupWindow.class);
       uiPopup.setId(iname + "Popup");
@@ -228,7 +231,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
    public void setPublicMode(boolean mode) throws Exception
    {
       publicMode_ = mode;
-      UIFormCheckBoxInput<Boolean> uiPublicMode = getChildById("publicMode");
+      UICheckBoxInput uiPublicMode = getChildById("publicMode");
       uiPublicMode.setChecked(publicMode_);
       UIFormGrid uiGrid = getChild(UIFormGrid.class);
       uiGrid.setRendered(!publicMode_);
@@ -272,7 +275,7 @@ public class UIListPermissionSelector extends UISelector<String[]>
       public void execute(Event<UIListPermissionSelector> event) throws Exception
       {
          UIListPermissionSelector uicom = event.getSource();
-         UIFormCheckBoxInput<Boolean> uiPublicModeInput = uicom.getChildById("publicMode");
+         UICheckBoxInput uiPublicModeInput = uicom.getChildById("publicMode");
          uicom.setPublicMode(uiPublicModeInput.isChecked());
          uicom.setRendered(true);
          UIForm uiForm = uicom.getAncestorOfType(UIForm.class);

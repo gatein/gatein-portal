@@ -19,11 +19,6 @@
 
 eXo.webui.UIDropDownControl = {
 
-  init : function(id) {
-    // var popup = document.getElementById(id) ;
-    // return popup;
-  },
-
   selectItem : function(method, id, selectedIndex) {
     if (method)
       method(id, selectedIndex);
@@ -41,52 +36,52 @@ eXo.webui.UIDropDownControl = {
    *          evet event object
    */
   show : function(obj, evt) {
-    if (!evt)
-      evt = window.event;
-    evt.cancelBubble = true;
-
-    var DOMUtil = eXo.core.DOMUtil;
-    var Browser = eXo.core.Browser;
-    var dropDownAnchor = DOMUtil.findNextElementByTagName(obj, 'div');
-    if (dropDownAnchor) {
-      if (dropDownAnchor.style.display == "none") {
-        dropDownAnchor.style.display = "block";
-        dropDownAnchor.style.visibility = "visible";
-        var middleCont = DOMUtil.findFirstDescendantByClass(dropDownAnchor,
-            "div", "MiddleItemContainer");
-        var topCont = DOMUtil.findPreviousElementByTagName(middleCont, "div");
-        var bottomCont = DOMUtil.findNextElementByTagName(middleCont, "div");
-        topCont.style.display = "block";
-        bottomCont.style.display = "block";
-        var visibleHeight = Browser.getBrowserHeight()
-            - Browser.findPosY(middleCont) - 40;
-        var scrollHeight = middleCont.scrollHeight;
-        if (scrollHeight > visibleHeight) {
-          topCont.style.display = "block";
-          bottomCont.style.display = "block";
-          middleCont.style.height = visibleHeight - topCont.offsetHeight
-              - bottomCont.offsetHeight + "px";
-          topCont.onclick = function(event) {
-            event = event || window.event;
-            event.cancelBubble = true;
-          };
-          bottomCont.onclick = function(event) {
-            event = event || window.event;
-            event.cancelBubble = true;
-          }
-        } else {
-          topCont.style.display = "none";
-          bottomCont.style.display = "none";
-          middleCont.scrollTop = 0;
-          middleCont.style.height = "auto";
-        }
-        DOMUtil.listHideElements(dropDownAnchor);
-      } else {
-        dropDownAnchor.style.display = "none";
-        dropDownAnchor.style.visibility = "hidden";
-      }
+    var dropDownAnchor = gj(obj).next("div");
+    if(!dropDownAnchor)
+    {
+      return;
     }
 
+    if(dropDownAnchor.css("display") == "none")
+    {
+      dropDownAnchor.css({"display" : "block" , "visibility" : "visible"});
+
+      var middleCont = dropDownAnchor.find("div.MiddleItemContainer");
+      var topCont = middleCont.prev("div");
+      var bottomCont = middleCont.next("div");
+
+      topCont.css("display", "block");
+      bottomCont.css("display", "block");
+
+      //TODO: Use JQuery Core instead of eXo.core.Browser
+      var Browser = eXo.core.Browser;
+      var visibleHeight = gj(window).height() - gj(middleCont[0]).offset().top - 40;
+      if(middleCont[0].scrollHeight > visibleHeight)
+      {
+        middleCont.css("height", visibleHeight - topCont[0].offsetHeight - bottomCont[0].offsetHeight + "px");
+        topCont.click(function() { return false;});
+        bottomCont.click(function() { return false;});
+      }
+      else
+      {
+        topCont.css("display", "none");
+        bottomCont.css("display", "none");
+        middleCont.scrollTop(0);
+        middleCont.css("height", "auto");
+      }
+
+      gj(document).one("click", function()
+      {
+    	  gj(document).one("click", function()
+    	  {
+	        dropDownAnchor.css("display", "none");
+    	  });
+      });
+    }
+    else
+    {
+      dropDownAnchor.css({"display" : "none" , "visibility" : "hidden"});
+    }
   },
   /**
    * Hide an object
@@ -109,13 +104,10 @@ eXo.webui.UIDropDownControl = {
    *          evt event
    */
   onclickEvt : function(obj, evt) {
-    var DOMUtil = eXo.core.DOMUtil;
-    var uiDropDownAnchor = DOMUtil.findAncestorByClass(obj, 'UIDropDownAnchor');
-    var uiDropDownTitle = DOMUtil.findPreviousElementByTagName(
-        uiDropDownAnchor, 'div');
-    var uiDropDownMiddleTitle = DOMUtil.findFirstDescendantByClass(
-        uiDropDownTitle, 'div', 'DropDownSelectLabel');
-    uiDropDownMiddleTitle.innerHTML = obj.innerHTML;
-    uiDropDownAnchor.style.display = 'none';
+    var dropDownAnchor = gj(obj).parents("div.UIDropDownAnchor");
+    var dropDownMiddleTitle = dropDownAnchor.prev("div.UIDropDownTitle").find("div.DropDownSelectLabel");
+    dropDownMiddleTitle.html(gj(obj).html());
+
+    dropDownAnchor.css("display", "none");
   }
 }

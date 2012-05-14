@@ -6,14 +6,15 @@
 	boolean isEditted = uicomponent.isEditted; 
 	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId');");
 	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopup.setAlign('$popupId', 2, 5, 5);");
+	rcontext.getJavascriptManager().addJavascript("eXo.portal.PortalComposer.contentModified = " + uicomponent.isEditted + ";");
 %>
 <div class="UIPopupWindow UIDragObject UIPortalComposer" exo:minWidth="200" exo:minHeight="200" id="$uicomponent.id" style="width: 320px; display: block;">
 	<div class="OverflowContainer ClearFix">
-		<span class="<%=uicomponent.isCollapsed ? "CollapseIcon" : "ExpandIcon"%>" onclick="eXo.portal.UIPortal.toggleComposer(this)"></span>
+		<span class="<%=uicomponent.isCollapsed ? "CollapseIcon" : "ExpandIcon"%>" onclick="eXo.portal.PortalComposer.toggle(this)"></span>
 			<% if(uicomponent.isShowControl) { %>
 			<a class="CloseButton" title="<%=_ctx.appRes("word.abort")%>" href="<%=uicomponent.event("CloseComposer")%>"><span></span></a>
 				<% if (uicomponent.isUsedInWizard()) { %>
-					<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="<%=uicomponent.url("Finish")%>" onclick="eXo.core.DOMUtil.disableOnClick(this);" ></a>
+					<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="<%=uicomponent.url("Finish")%>"></a>
 					<a class="BackButton" title="<%=_ctx.appRes("word.back")%>" href="<%=uicomponent.event("Back")%>"></a>
 				<% } else {%>
 					<a class="<%= isEditted ? "EdittedSaveButton" : "SaveButton" %>" title="<%=_ctx.appRes("word.finish")%>" href="<%=uicomponent.event("Finish")%>"></a>
@@ -41,5 +42,5 @@
 </div>
 <script language="javascript">
 	eXo.portal.portalMode = <%=uicomponent.getPortalMode();%>;
-	eXo.portal.hasEditted = <%=uicomponent.isEditted;%>;
+	eXo.portal.hasEditted = <%=uicomponent.isEditted;%>;	
 </script>

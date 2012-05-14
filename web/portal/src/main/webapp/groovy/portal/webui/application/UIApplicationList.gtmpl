@@ -1,10 +1,16 @@
 <%
-import org.gatein.common.text.EntityEncoder;
-import org.exoplatform.commons.utils.HTMLEntityEncoder;
-
-def categories = uicomponent.getCategories();
-def selectedCategory = uicomponent.getSelectedCategory();
-EntityEncoder encoder = HTMLEntityEncoder.getInstance();
+	import org.gatein.common.text.EntityEncoder;
+	import org.exoplatform.commons.utils.HTMLEntityEncoder;
+	import org.exoplatform.web.application.JavascriptManager;
+	
+	def categories = uicomponent.getCategories();
+	def selectedCategory = uicomponent.getSelectedCategory();
+	EntityEncoder encoder = HTMLEntityEncoder.getInstance();
+	
+	def rcontext = _ctx.getRequestContext();
+	JavascriptManager jsManager = rcontext.getJavascriptManager();
+	jsManager.loadScriptResource("portal");
+	jsManager.addJavascript("eXo.portal.PortalDragDrop.init(['DragObjectPortlet'])");
 %>
 <div class="UIOrganizerManagement" id="$uicomponent.id">
 	<div class="AppRegistryContainer ClearFix">
@@ -43,7 +49,7 @@ EntityEncoder encoder = HTMLEntityEncoder.getInstance();
 									String srcBG = application.getIconURL();
 									String srcBGError = "/eXoResources/skin/sharedImages/Icon80x80/DefaultPortlet.png";
 								%>
-									<div class="UIVTab VTabStyle3" id="<%=application.getId();%>" onmousedown="eXo.portal.PortalDragDrop.init.call(this, event);">
+									<div class="UIVTab VTabStyle3 DragObjectPortlet" id="<%=application.getId();%>">
 										<div class="VTabContentBG">
 											<div class="OverflowContainer ClearFix">
 												<img src="<%=(srcBG!=null && srcBG.length()>0)?srcBG:srcBGError%>" onError="src='$srcBGError'"  alt=""/>

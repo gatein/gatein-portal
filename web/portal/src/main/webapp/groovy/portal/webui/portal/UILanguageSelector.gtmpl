@@ -1,89 +1,99 @@
 <%
-	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector'); 
-	rcontext.getJavascriptManager().importJavascript('eXo.portal.UIPortal'); 
-	
-	String onMouseOver = "eXo.webui.UIItemSelector.onOver(this, true)";
-	String onMouseOut = "eXo.webui.UIItemSelector.onOver(this, false)";
+  def rcontext = _ctx.getRequestContext(); 
+  rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector'); 
+  rcontext.getJavascriptManager().importJavascript('eXo.portal.UIPortal'); 
 %>
 <div class="UIChangeLanguageForm">
-	<div class="UIFormTabPane">
-		<div class="UITabPane">
-		
-			<div class="UIBarStyle">
-				<div class="TitleBar">
-					<div class="LeftBar">
-						<div class="RightBar">
-							<div class="MiddleBar">
-								<span><%=_ctx.appRes("UIChangeLanguage.title.LanguageSetting")%></span>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		
-			<div class="TabPaneContent">
-				<div class="WorkingArea">	
-					<div class="HorizontalLayout">
-						<div class="UITabContentContainer">
-							<%
-								for(selector in uicomponent.getChildren()) { 
-									String selectorDisplay = "none"; 
-									if(selector.isRendered()) selectorDisplay="block"; 
-									categories = selector.getItemCategories();
-							%>
-							<div class="UITabContent" id="UITabContent" style="display: $selectorDisplay;">									
-								<div class="UIItemSelector">	
-									<div class="RightColumnStyle">														
-										<%/*Begin ItemDetailList:*/%>
-										<div class="ItemDetailList" style="margin:0px 0px 0px 0px">																																			
-											<div class="ItemDetailContainer" style="border:none">
-											<% 
-												for(category in categories) {
-													String itemDetailDisplay = "none";
-													if(category.isSelected()) itemDetailDisplay = "block";
-													options = category.getSelectItemOptions();
-											%>
-												<div class="ItemDetail" style="display: $itemDetailDisplay">
-												<% 
-													for(opt in options) {
-														String itemSelected = "NormalItem";
-														if (opt.isSelected()) {
-															def setSelected = "eXo.webui.UIItemSelector.SelectedItem = new Object();";
-															setSelected += "eXo.webui.UIItemSelector.SelectedItem.component = '$selector.name';";
-															setSelected += "eXo.webui.UIItemSelector.SelectedItem.option = '$opt.value';";
+  <div class="UIFormTabPane">
+    <div class="UITabPane">
+    
+      <div class="UIBarStyle">
+        <div class="TitleBar">
+          <div class="LeftBar">
+            <div class="RightBar">
+              <div class="MiddleBar">
+                <span><%=_ctx.appRes("UIChangeLanguage.title.LanguageSetting")%></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    
+      <div class="TabPaneContent">
+        <div class="WorkingArea"> 
+          <div class="HorizontalLayout">
+            <div class="UITabContentContainer">
+              <%
+                for(selector in uicomponent.getChildren()) { 
+                  String selectorDisplay = "none"; 
+                  if(selector.isRendered()) selectorDisplay="block"; 
+                  categories = selector.getItemCategories();
+              %>
+              <div class="UITabContent" id="UITabContent" style="display: $selectorDisplay;">                 
+                <div class="UIItemSelector">  
+                  <div class="RightColumnStyle">                            
+                    <%/*Begin ItemDetailList:*/%>
+                    <div class="ItemDetailList" style="margin:0px 0px 0px 0px">                                                                     
+                      <div class="ItemDetailContainer" style="border:none">
+                      <% 
+                        for(category in categories) {
+                          String itemDetailDisplay = "none";
+                          if(category.isSelected()) itemDetailDisplay = "block";
+                          options = category.getSelectItemOptions();
+                      %>
+                        <div class="ItemDetail" style="display: $itemDetailDisplay">
+                        <% 
+                          for(opt in options) {
+                            String itemSelected = "NormalItem";
+                            if (opt.isSelected()) {
+                              def setSelected = "eXo.webui.UIItemSelector.SelectedItem = new Object();";
+                              setSelected += "eXo.webui.UIItemSelector.SelectedItem.component = '$selector.name';";
+                              setSelected += "eXo.webui.UIItemSelector.SelectedItem.option = '$opt.value';";
 
-															rcontext.getJavascriptManager().addCustomizedOnLoadScript(setSelected);
-															itemSelected = "SelectedItem";
-														} 
-														String onclickOption = "eXo.webui.UIItemSelector.onClickOption(this, '$uicomponent.name', '$selector.name', '$opt.value')";
-												%>
-													<div class="$itemSelected ClearFix" onclick="$onclickOption">
-														<div class="Icon"><span></span></div>
-														<a class="NodeLabel"><%=opt.getLabel()%></a>
-														<div class="PercentLabel"><%=opt.getDescription()%></div>
-													</div>
-												<%}%>	
-												</div>
-										 <%}%>
-											</div>								
-										</div>	
-										<%/*End ItemDetailList*/%>			
-									</div>
-								</div>
-										
-							</div>
-							<%}%>
-						</div>
-						
-		 				<div class="UIAction"> 
-							<a href="javascript:void(0);" onclick="javascript:eXo.portal.UIPortal.changeLanguage('<%=uicomponent.url("Save");%>');" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.save");%></a>
-							<a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.close");%></a>
-						</div>
-	
-					</div>
-				</div>
-			</div>	
-		</div>	
-	</div>
+                              rcontext.getJavascriptManager().addCustomizedOnLoadScript(setSelected);
+                              itemSelected = "SelectedItem";
+                            } 
+                        %>
+                          <div class="$itemSelected ClearFix" onclick="eXo.webui.UIItemSelector.onClickOption(this, '$uicomponent.name', '$selector.name', '$opt.value')">
+                            <div class="Icon"><span></span></div>
+                            <a class="NodeLabel"><%=opt.getLabel()%></a>
+                            <div class="PercentLabel"><%=opt.getDescription()%></div>
+                          </div>
+                        <%}%> 
+                        </div>
+                     <%}%>
+                      </div>                
+                    </div>  
+                    <%/*End ItemDetailList*/%>      
+                  </div>
+                </div>
+                    
+              </div>
+              <%}%>
+            </div>
+            <script type="text/javascript">
+              function changeLanguage(url)
+              {
+                var language = "";
+                if(eXo.webui.UIItemSelector.SelectedItem != undefined)
+                {
+                  language = eXo.webui.UIItemSelector.SelectedItem.option;
+                }
+                if(language == undefined)
+                {
+                  language = "";
+                }
+                window.location = url + "&language=" + language;
+              }
+            </script>
+            <div class="UIAction"> 
+              <a href="javascript:void(0);" onclick="javascript:changeLanguage('<%=uicomponent.url("Save");%>');" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.save");%></a>
+              <a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.close");%></a>
+            </div>
+  
+          </div>
+        </div>
+      </div>  
+    </div>  
+  </div>
 </div>

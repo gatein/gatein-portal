@@ -10,6 +10,7 @@
     def posX = uicomponent.getProperties().getIntValue("locationX") + "px";
     def posY = uicomponent.getProperties().getIntValue("locationY") + "px";
     def zIndex = uicomponent.getProperties().getIntValue("zIndex");
+    zIndex = zIndex >=0 ? zIndex : 0;
     def id = uicomponent.getId() != null ? uicomponent.getId() : "UIGadget";
     def view = uicomponent.getView();
     def userPref = null;
@@ -21,7 +22,7 @@
       	userPref = uicomponent.getUserPref();
       	def noCache = uicomponent.isNoCache();
     	  def isDebug = uicomponent.isDebug();
-      	jsmanager.importJavascript("eXo.gadget.UIGadget");
+      	jsmanager.loadScriptResource("gadget");
       	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.confirmDeleteGadget = '" + _ctx.appRes("UIGadgetContainerManagement.confirm.DeleteGadget") + "';");
       	jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.createGadget('$url','content-$id', $metadata, $userPref, '$view', '$hostName', " + (isDebug ? 1 : 0) + ", " + (noCache ? 1 : 0) + ");");      									
     }

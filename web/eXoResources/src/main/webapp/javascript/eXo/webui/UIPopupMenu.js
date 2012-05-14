@@ -34,12 +34,8 @@ eXo.webui.UIPopupMenu = {
    *          String} popupMenu popup object
    * @param {Object}
    *          container
-   * @param {Number}
-   *          x
-   * @param {Number}
-   *          y
    */
-  init : function(popupMenu, container, x, y) {
+  init : function(popupMenu, container) {
     this.superClass = eXo.webui.UIPopup;
     this.superClass.init(popupMenu, container.id);
   },
@@ -173,9 +169,7 @@ eXo.webui.UIPopupMenu = {
    *          object to hide
    */
   show : function(object) {
-    if (typeof (object) == "string")
-      object = document.getElementById(object);
-    object.style.display = "block";
+	this.superClass.show(object);
     object.style.visibility = "";
   }
 }

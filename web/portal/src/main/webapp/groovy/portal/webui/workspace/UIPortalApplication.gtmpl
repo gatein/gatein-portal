@@ -96,11 +96,6 @@
 	</head>
 
 	<body style="height: 100%;">
-		<% 
-			/*Hide All Popup Menu when click on document*/
-			rcontext.getJavascriptManager().addOnLoadJavascript('eXo.core.DOMUtil.hideElements');
-			//rcontext.getJavascriptManager().addOnResizeJavascript('eXo.core.UIMaskLayer.resizeMaskLayer');
-		%>
  
 	<div class="$uicomponent.skin" id="UIPortalApplication" style="!height: 100%;">
 			

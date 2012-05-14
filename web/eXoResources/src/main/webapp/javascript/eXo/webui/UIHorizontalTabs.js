@@ -25,41 +25,7 @@ eXo.webui.UIHorizontalTabs = {
 
   init : function() {
   },
-  /**
-   * Changes the style of a tab, depending on the over value (true or false)
-   * Gives the defaut css style class names . UITab when tab is NOT highlighted .
-   * HighlightNavigationTab when tab is highlighted
-   */
-  changeTabNavigationStyle : function(clickedEle, over) {
-    if (clickedEle == null)
-      return;
-    if (!eXo.core.DOMUtil.hasClass(clickedEle, "UITab"))
-      clickedEle = eXo.core.DOMUtil.findAncestorByClass(clickedEle, "UITab");
 
-    if (over) {
-      this.backupNavigationTabStyle = clickedEle.className;
-      clickedEle.className = "UITab HighlightNavigationTab";
-    } else if (this.backupNavigationTabStyle) {
-      clickedEle.className = this.backupNavigationTabStyle;
-    }
-  },
-  /**
-   * Changes the css style of an item on mouse over / out with the values : .
-   * MenuItem when item is NOT highlighted . MenuItemSelected when item is
-   * highlighted
-   */
-  itemOver : function(selectedElement, over) {
-    if (over) {
-      this.backupItemStyle = selectedElement.className;
-      if (selectedElement.className == "MenuItem") {
-        selectedElement.className = "MenuItemSelected";
-      } else {
-        selectedElement.className = "MenuItemSelected MenuItemExpand";
-      }
-    } else {
-      selectedElement.className = this.backupItemStyle;
-    }
-  },
   /**
    * Calls changeTabForUITabPane to display tab content
    */
@@ -72,45 +38,39 @@ eXo.webui.UIHorizontalTabs = {
    * (display: block) if tabId are provided, can get the tab content by Ajax
    */
   changeTabForUITabPane : function(clickedEle, tabId, url) {
-    var DOMUtil = eXo.core.DOMUtil;
-    var uiSelectTab = DOMUtil.findAncestorByClass(clickedEle, "UITab");
+    var uiSelectTab = gj(clickedEle).parents(".UITab").eq(0);
+    var uiHorizontalTabs = gj(clickedEle).parents(".UIHorizontalTabs");
+    var uiTabs = uiHorizontalTabs.find("div.UITab");
+    var parentdHorizontabTab = uiHorizontalTabs.parent();
+    var contentTabContainer = parentdHorizontabTab.find("div.UITabContentContainer");
+    var uiTabContents = contentTabContainer.children("div.UITabContent");
 
-    var uiHorizontalTabs = DOMUtil.findAncestorByClass(clickedEle,
-        "UIHorizontalTabs");
-    var uiTabs = eXo.core.DOMUtil.findDescendantsByClass(uiHorizontalTabs,
-        "div", "UITab");
-    var parentdHorizontalTab = uiHorizontalTabs.parentNode;
-    var contentTabContainer = DOMUtil.findFirstDescendantByClass(
-        parentdHorizontalTab, "div", "UITabContentContainer");
-    var uiTabContents = DOMUtil.findChildrenByClass(contentTabContainer, "div",
-        "UITabContent");
-    var form = DOMUtil.getChildrenByTagName(contentTabContainer, "form");
-    if (form.length > 0) {
-      var tmp = DOMUtil.findChildrenByClass(form[0], "div", "UITabContent");
-      for ( var i = 0; i < tmp.length; i++) {
-        uiTabContents.push(tmp[i]);
-      }
+    //TODO: Remove this! A generic method should not contain code handling specially tabs in form
+    var form = contentTabContainer.children("form").eq(0);
+    if(form)
+    {
+      //Note that the method add() in jQuery creates a completely new set and does not modify original object
+      uiTabContents = uiTabContents.add("div.UITabContent", form);
     }
-    var index = 0;
-    for ( var i = 0; i < uiTabs.length; i++) {
-      var styleTabDiv = DOMUtil.getChildrenByTagName(uiTabs[i], "div")[0];
-      if (styleTabDiv.className == "DisabledTab")
-        continue;
-      if (uiSelectTab == uiTabs[i]) {
-        styleTabDiv.className = "SelectedTab";
-        index = i;
-        continue;
-      }
-      styleTabDiv.className = "NormalTab";
-      uiTabContents[i].style.display = "none";
-    }
-    uiTabContents[index].style.display = "block";
-    // if(tabId !=null){
-    // //TODO: modify: dang.tung
-    // url = url+"&objectId="+tabId ;
-    // ajaxAsyncGetRequest(url, false) ;
-    // }
 
+    uiTabs.each(function(index)
+    {
+      var styleTabDiv = gj(this).children("div").eq(0);
+      if(styleTabDiv.attr("class") == "DisabledTab")
+      {
+        return;
+      }
+      if (gj(this)[0] == uiSelectTab[0])
+      {
+        styleTabDiv.removeAttr("class").attr("class", "SelectedTab");
+        uiTabContents.eq(index).css("display", "block");
+      }
+      else
+      {
+        styleTabDiv.removeAttr("class").attr("class", "NormalTab");
+        uiTabContents.eq(index).css("display", "none");
+      }
+    });
   },
 
   checkContentAvailable : function(id) {
@@ -129,7 +89,7 @@ eXo.webui.UIHorizontalTabs = {
    * 
    */
   changeTabForUIFormTabpane : function(clickedElemt, formId, hiddenValue) {
-    this.displayTabContent(clickedElemt, formId, hiddenValue);
+    this.displayTabContent(clickedElemt);
     eXo.webui.UIForm.setHiddenValue(formId, 'currentSelectedTab', hiddenValue);
   }
 }

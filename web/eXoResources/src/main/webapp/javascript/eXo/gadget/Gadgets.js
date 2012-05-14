@@ -198,12 +198,10 @@ gadgets.IfrGadgetService.prototype.setHeight = function(height) {
 };
 
 gadgets.IfrGadgetService.prototype.setTitle = function(title) {
-  var element = document.getElementById(this.f);
-  element = eXo.core.DOMUtil.findAncestorByClass(element, "UIGadget");
-  element = eXo.core.DOMUtil.findFirstDescendantByClass(element, "span", "GadgetTitle");
-
-  if (element) {
-    element.innerHTML = title.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  var element = gj("#" + this.f).closest(".UIGadget").find("div.GadgetTitle").eq(0);
+  if(element)
+  {
+    element.html(title.replace(/&/g, '&amp;').replace(/</g, '&lt;'));
   }
 };
 
@@ -229,43 +227,47 @@ gadgets.IfrGadgetService.prototype.setUserPref = function(editToken, name,
  * Navigates the page to a new url based on a gadgets requested view and
  * parameters.
  */
-//TODO: tung.dang - support requestNavigate function
-gadgets.IfrGadgetService.prototype.requestNavigateTo = function(view,
-    opt_params) {
+gadgets.IfrGadgetService.prototype.requestNavigateTo = function(view, opt_params)
+{
   var id = gadgets.container.gadgetService.getGadgetIdFromModuleId(this.f);
   var gadget = gadgets.container.getGadget(id);
-  var iframe = document.getElementById(gadget.getIframeId()); 
-  var DOMUtil = eXo.core.DOMUtil;
-  var uiGadget = DOMUtil.findAncestorByClass(iframe,"UIGadget");
-  //set iframe url
+  var iframe = gj("#" + gadget.getIframeId());
+  var ggWindow = iframe.closest(".UIGadget");
   var url = gadget.getIframeUrl();
   var currentView = gadget.view || gadgets.container.view_;
-  if(currentView == view) return;
-  url = url.replace('view=' + currentView, 'view=' + view);
-  if (opt_params) {
-          if (url.indexOf('view-params=') == -1) {
-                  url += '&view-params=' + $.toJSON(opt_params);
-          } else {
-                  // Replace old view-params with opt_param and keep other params.
-                  url = url.replace(/([?&])view-params=.*?(&|$)/, '$1' + $.toJSON(opt_params) + '$2')
-          }
+  if (currentView == view)
+  {
+    return;
   }
-  iframe.src = url;
-  
-  // create portal action to maximize or unmaximize gadget
-  var portletFrag = DOMUtil.findAncestorByClass(uiGadget, "PORTLET-FRAGMENT") ;
-  if (!portletFrag) return;
-  var maximize = "maximize";
-  if(view == 'canvas') maximize = "maximize";
-  else if(view == 'home') maximize = "unmaximize";
-  var compId = portletFrag.parentNode.id;
-  var uicomp = DOMUtil.getChildrenByTagName(portletFrag, "div")[0];
-  var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + compId ;
-  href += "&portal:type=action&uicomponent=" + uicomp.id;
+  url = url.replace('view=' + currentView, 'view=' + view);
+  if (opt_params)
+  {
+    if (url.indexOf('view-params=') == -1)
+    {
+      url += '&view-params=' + $.toJSON(opt_params);
+    }
+    else
+    {
+      // Replace old view-params with opt_param and keep other params.
+      url = url.replace(/([?&])view-params=.*?(&|$)/, '$1' + $.toJSON(opt_params) + '$2')
+    }
+  }
+  iframe.attr("src", url);
+
+  var portletFrag = ggWindow.closest(".PORTLET-FRAGMENT");
+  if (portletFrag.length == 0)
+  {
+    return;
+  }
+  var maximize = view == 'home' ? "unmaximize" : "maximize";
+  var portletID = portletFrag.parent().attr("id");
+  var compID = portletFrag.children("div").attr("id");
+  var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
+  href += "&portal:type=action&uicomponent=" + compID;
   href += "&op=MaximizeGadget";
   href += "&maximize=" + maximize;
-  href += "&objectId=" + uiGadget.id + "&ajaxRequest=true";
-  ajaxGet(href,true);
+  href += "&objectId=" + ggWindow.attr("id") + "&ajaxRequest=true";
+  ajaxGet(href, true);
 };
 
 /**
@@ -575,7 +577,7 @@ gadgets.IfrGadget.prototype.getIframeUrl = function() {
       '&url=' + encodeURIComponent(this.specUrl) +
       '#rpctoken=' + this.rpcToken +
       (this.viewParams ?
-          '&view-params=' +  encodeURIComponent(JSON.stringify(this.viewParams)) : '') +
+          '&view-params=' +  encodeURIComponent(gadgets.json.stringify(this.viewParams)) : '') +
       (this.hashData ? '&' + this.hashData : '');
 };
 
@@ -765,24 +767,27 @@ gadgets.IfrGadget.prototype.refresh = function() {
 };
 
 
-gadgets.IfrGadget.prototype.sendServerRequest = function(op, key, value) {
-  var DOMUtil = eXo.core.DOMUtil;
-  var gadget = document.getElementById("gadget_" + this.id) ;
-  if(gadget != null ) {                    
-    var portletFragment = DOMUtil.findAncestorByClass(gadget, "PORTLET-FRAGMENT");
-    var uiGadget = gadget.parentNode;
-    if (portletFragment != null) {
-      var compId = portletFragment.parentNode.id;
-      var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + compId;
-      href += "&portal:type=action&uicomponent=" + uiGadget.id.replace(/^content-/,"");
+gadgets.IfrGadget.prototype.sendServerRequest = function(op, key, value)
+{
+  var gadget = gj("#gadget_" + this.id);
+  if (gadget.length > 0)
+  {
+    var portletFrag = gadget.closest(".PORTLET-FRAGMENT");
+    if (portletFrag.length > 0)
+    {
+      var portletID = portletFrag.parent().attr("id");
+      var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
+      href += "&portal:type=action&uicomponent=" + gadget.parent().attr("id").replace(/^content-/, "");
       href += "&op=" + op;
       href += "&" + key + "=" + value;
-      ajaxAsyncGetRequest(href,true);
-    } else {
+      ajaxAsyncGetRequest(href, true);
+    }
+    else
+    {
       alert("not managed yet");
     }
   }
-}
+};
 
 gadgets.IfrGadget.prototype.setDebug = function(value) {
   this.sendServerRequest("SetDebug", "debug", (value ? "1" : "0"));
