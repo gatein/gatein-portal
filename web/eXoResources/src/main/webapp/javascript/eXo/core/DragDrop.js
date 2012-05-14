@@ -21,7 +21,7 @@ function DragDrop() {
 	var obj = null;
 	
 	DragDrop.prototype.init = function(o, oRoot) {
-		var jObj = xj(o);
+		var jObj = gj(o);
 		jObj.off("mousedown");
 		jObj.on("mousedown", eXo.core.DragDrop.start);
 
@@ -34,7 +34,7 @@ function DragDrop() {
 	
 	DragDrop.prototype.start = function(e)	{
 		var o = obj = this;
-		var jRoot = xj(o.root);
+		var jRoot = gj(o.root);
 		
 		if((e.which && e.which != 1) || jRoot.data("dragging"))	{
 			return false;
@@ -43,7 +43,7 @@ function DragDrop() {
 		o.lastMouseX = e.pageX;
 		o.lastMouseY = e.pageY;
 		o.root.onDragStart(position.left, position.top, o.lastMouseX, o.lastMouseY, e);
-		xj(document).on({"mousemove" : eXo.core.DragDrop.drag,
+		gj(document).on({"mousemove" : eXo.core.DragDrop.drag,
 			"mouseup" : eXo.core.DragDrop.end,
 			"keydown" : eXo.core.DragDrop.onKeyDownEvt,
 			"mouseout" : eXo.core.DragDrop.cancel});
@@ -56,7 +56,7 @@ function DragDrop() {
 		var ey = e.pageY;
 		var ex = e.pageX;
 		
-		var jRoot = xj(o.root);
+		var jRoot = gj(o.root);
 		var position = jRoot.position();
 		var y = position.top;
 		var x = position.left;
@@ -75,9 +75,9 @@ function DragDrop() {
 	};
 	
 	DragDrop.prototype.end = function(e) {
-		xj(document).off("mousemove mouseup mouseout keydown");
+		gj(document).off("mousemove mouseup mouseout keydown");
 		
-		var jRoot = xj(obj.root);
+		var jRoot = gj(obj.root);
 		var position = jRoot.position();
 		var y = position.top;
 		var x = position.left;

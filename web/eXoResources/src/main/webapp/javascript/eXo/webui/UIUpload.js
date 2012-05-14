@@ -130,7 +130,7 @@ eXo.webui.UIUpload = {
 
     for (id in response.upload) {
       var container = parent.document.getElementById(elementId);
-      var jCont = xj(container);
+      var jCont = gj(container);
       if (response.upload[id].status == "failed") {
         this.abortUpload(id);
         var message = jCont.children(".LimitMessage").first().html();
@@ -171,7 +171,7 @@ eXo.webui.UIUpload = {
   showUploaded : function(id, fileName) {
     eXo.webui.UIUpload.listUpload.remove(id);
     var container = parent.document.getElementById(id);
-    var jCont = xj(container);
+    var jCont = gj(container);
     var element = document.getElementById(id + "ProgressIframe");
     element.innerHTML = "<span></span>";
 
@@ -208,7 +208,7 @@ eXo.webui.UIUpload = {
     ajaxRequest('GET', url, false);
 
     var container = parent.document.getElementById(id);
-    var jCont = xj(container);
+    var jCont = gj(container);
     var uploadIframe = jCont.find("#" + id + "UploadIframe");
     uploadIframe.show();
     eXo.webui.UIUpload.createUploadEntry(id, eXo.webui.UIUpload.isAutoUpload);
@@ -237,7 +237,7 @@ eXo.webui.UIUpload = {
     ajaxRequest('GET', url, false);
     
     var container = parent.document.getElementById(id);
-    var jCont = xj(container);
+    var jCont = gj(container);
     var uploadIframe = jCont.find("#" + id + "UploadIframe");
     uploadIframe.show();
     eXo.webui.UIUpload.createUploadEntry(id, this.isAutoUpload);
@@ -266,11 +266,11 @@ eXo.webui.UIUpload = {
     var uploadFrame = parent.document.getElementById(id + "uploadFrame");
     var form = uploadFrame.contentWindow.document.getElementById(id);
 
-    var file = xj(form).find("#file");
+    var file = gj(form).find("#file");
     if (file.attr("value") == null || file.attr("value") == '')
       return;
 
-    var jCont = xj(container);
+    var jCont = gj(container);
     var progressBarFrame = jCont.find(".ProgressBarFrame").first();
     progressBarFrame.show();
     var blueProgressBar = jCont.find(".ProgressBarMiddle .BlueProgressBar").first();

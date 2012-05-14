@@ -19,7 +19,7 @@
 
 eXo.webui.UISampleTOC = {
 	collapseExpand : function(element) {
-	  var subGroup = xj(element.parentNode).children("div.ChildrenContainer")[0];
+	  var subGroup = gj(element.parentNode).children("div.ChildrenContainer")[0];
 	  var className = element.className;
 	  if (!subGroup)
 	    return;

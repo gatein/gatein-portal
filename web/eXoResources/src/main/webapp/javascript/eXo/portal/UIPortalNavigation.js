@@ -60,11 +60,11 @@ eXo.portal.UIPortalNavigation = {
    * Calls the init function when the page loads
    */
   onLoad : function(baseId) {    
-	var uiNavPortlet = xj("#" + baseId);
+	var uiNavPortlet = gj("#" + baseId);
 	if(uiNavPortlet.hasClass("UIHorizontalTabs")) eXo.portal.UIPortalNavigation.init(uiNavPortlet[0], uiNavPortlet[0]);
 	  
 	if (baseId === "UIHorizontalNavigation") {
-		xj(".UIHorizontalNavigation").slice(1).each(function() {xj(this).hide();});
+		gj(".UIHorizontalNavigation").slice(1).each(function() {gj(this).hide();});
 	}
   },
   
@@ -82,23 +82,23 @@ eXo.portal.UIPortalNavigation = {
    */
   buildMenu : function(popupMenu) {
     var portalNav = eXo.portal.UIPortalNavigation;
-    var topContainer = xj(popupMenu);
+    var topContainer = gj(popupMenu);
 
     // Top menu items
     topContainer.children(".UITab").each(function()
     {
-      var tab = xj(this);
+      var tab = gj(this);
 
       var highlightClass = "UITab HighlightNavigationTab";
       tab.mouseenter(function()
       {
-        portalNav.mouseEnterTab(xj(this), highlightClass);
+        portalNav.mouseEnterTab(gj(this), highlightClass);
       });
 
       var actualClass = tab.attr("class");
       tab.mouseleave(function()
       {
-        portalNav.mouseLeaveTab(xj(this), actualClass);
+        portalNav.mouseLeaveTab(gj(this), actualClass);
       });
 
       tab.find("." + portalNav.containerStyleClass).first().css("minWidth", tab.width());
@@ -113,7 +113,7 @@ eXo.portal.UIPortalNavigation = {
       }
       this.resized = false;
 
-      var jObj = xj(this);
+      var jObj = gj(this);
       var items = jObj.find("." + portalNav.tabStyleClass);
       if (items.length == 0)
       {
@@ -144,7 +144,7 @@ eXo.portal.UIPortalNavigation = {
       var jsChilds = ajaxAsyncGetRequest(getNodeURL, false)
       try
       {
-        var data = xj.parseJSON(jsChilds);
+        var data = gj.parseJSON(jsChilds);
       }
       catch (e)
       {
@@ -209,7 +209,7 @@ eXo.portal.UIPortalNavigation = {
 
     var posXinBrowser = menuItemContainer.offset().left;
   	if(eXo.core.I18n.isLT()) {
-		if(posXinBrowser + menuItemContainer.width() >= xj(window).width()) {
+		if(posXinBrowser + menuItemContainer.width() >= gj(window).width()) {
 			x += (tab.width() - menuItemContainer.width()) ;
 			menuItemContainer.css("left", x + "px");
 		}
@@ -235,7 +235,7 @@ eXo.portal.UIPortalNavigation = {
     var portalNav = eXo.portal.UIPortalNavigation;
     portalNav.hideMenuTimeoutIds.remove(containerId);
 
-    var menuItemContainer = xj("#" + containerId);
+    var menuItemContainer = gj("#" + containerId);
     if (menuItemContainer.length) {
       var id = menuItemContainer.attr("id");
       portalNav.superClass.pushHiddenContainer(id);
@@ -251,7 +251,7 @@ eXo.portal.UIPortalNavigation = {
    * Changes the style of the button
    */
   onMenuItemOver : function() {
-    var menuItem = xj(this);
+    var menuItem = gj(this);
     var portalNav = eXo.portal.UIPortalNavigation;
     
     var getNodeURL = menuItem.attr("exo:getNodeURL");
@@ -259,7 +259,7 @@ eXo.portal.UIPortalNavigation = {
 	    if (getNodeURL && !subContainer.length) {
 		    var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);
 		  	try {
-		  		var data = xj.parseJSON(jsChilds);
+		  		var data = gj.parseJSON(jsChilds);
 		  	} catch (e) {
 	  	}	
 	  	if (!data || !data.length) {
@@ -288,9 +288,9 @@ eXo.portal.UIPortalNavigation = {
     var x = menuItem.width();
     var y = menuItem.position().top;
     this.superClass.show(menuItemContainer[0]);
-    var posRight = xj(window).width() - eXo.core.Browser.findPosX(menuItem[0], true) ;
+    var posRight = gj(window).width() - eXo.core.Browser.findPosX(menuItem[0], true) ;
     var rootX = (eXo.core.I18n.isLT() ? eXo.core.Browser.findPosX(menuItem[0]) : posRight) ;
-    if (x + menuItemContainer.width() + rootX > xj(window).width()) {
+    if (x + menuItemContainer.width() + rootX > gj(window).width()) {
     	x -= (menuItemContainer.width() + menuItem.width()) ;
     }
     this.superClass.setPosition(menuItemContainer[0], x, y, eXo.core.I18n.isRT());
@@ -301,7 +301,7 @@ eXo.portal.UIPortalNavigation = {
    * Checks if this item has a sub menu, if yes calls methods from superClass to hide it
    */
   onMenuItemOut : function() {
-    var menuItem = xj(this);
+    var menuItem = gj(this);
     var portalNav = eXo.portal.UIPortalNavigation;
 
     var subContainer = menuItem.find("." + portalNav.containerStyleClass).first();
@@ -315,7 +315,7 @@ eXo.portal.UIPortalNavigation = {
   
   initScroll : function(navId)
   {
-    var navContainer = xj("#" + navId);
+    var navContainer = gj("#" + navId);
     var scrollButtons = navContainer.find(".ScrollButtons");
     this.leftArrow = scrollButtons.children("a.ScrollLeftButton");
     this.rightArrow = scrollButtons.children("a.ScrollRightButton");
@@ -328,7 +328,7 @@ eXo.portal.UIPortalNavigation = {
     var showArrows = false;
     this.navItems.each(function()
     {
-      var navItem = xj(this);
+      var navItem = gj(this);
       tmpSpace += eXo.portal.UIPortalNavigation.computeSpace(navItem);
       if(tmpSpace <= eXo.portal.UIPortalNavigation.maxSpace)
       {
@@ -369,7 +369,7 @@ eXo.portal.UIPortalNavigation = {
     var tmpSpace = 0;
     navItems.slice(beginIndex, endIndex).each(function()
     {
-      var navItem = xj(this);
+      var navItem = gj(this);
       tmpSpace += eXo.portal.UIPortalNavigation.computeSpace(navItem);
       if(tmpSpace <= eXo.portal.UIPortalNavigation.maxSpace)
       {
@@ -397,9 +397,9 @@ eXo.portal.UIPortalNavigation = {
     }
     var newBeginIndex = endIndex++;
     var tmpSpace = 0;
-    xj.each(navItems.slice(beginIndex, endIndex).get().reverse(), function()
+    gj.each(navItems.slice(beginIndex, endIndex).get().reverse(), function()
     {
-      var navItem = xj(this);
+      var navItem = gj(this);
       tmpSpace += eXo.portal.UIPortalNavigation.computeSpace(navItem);
       if(tmpSpace <= eXo.portal.UIPortalNavigation.maxSpace)
       {

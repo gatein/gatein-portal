@@ -30,7 +30,7 @@ eXo.webui.UIForm = {
   ajaxPost : function(formElement, callback) {
     if (!callback)
       callback = null;
-    var queryString = xj(formElement).serialize();
+    var queryString = gj(formElement).serialize();
     var url = formElement.action + "&ajaxRequest=true";
     doRequest("POST", url, queryString, callback);
   },
@@ -45,11 +45,11 @@ eXo.webui.UIForm = {
     var ids = pattern.split("#");
     if(ids.length == 1)
     {
-      return xj("#" + ids[0])[0];
+      return gj("#" + ids[0])[0];
     }
     else
     {
-      return xj("#" + ids[0]).find("#" + ids[1])[0];
+      return gj("#" + ids[0]).find("#" + ids[1])[0];
     }
   },
 
@@ -113,15 +113,15 @@ eXo.webui.UIForm = {
   },
 
   selectBoxOnChange : function(formId, elemt) {
-    var tabs = xj(elemt).closest(".UISelectBoxOnChange").find("div.SelectBoxContentContainer").eq(0).children("div.SelectBoxContent").each(function(index)
+    var tabs = gj(elemt).closest(".UISelectBoxOnChange").find("div.SelectBoxContentContainer").eq(0).children("div.SelectBoxContent").each(function(index)
     {
       if(index == elemt.selectedIndex)
       {
-        xj(this).css("display", "block");
+        gj(this).css("display", "block");
       }
       else
       {
-        xj(this).css("display", "none");
+        gj(this).css("display", "none");
       }
     });
   },
@@ -133,7 +133,7 @@ eXo.webui.UIForm = {
     var form = document.getElementById(formId);
     if (form == null)
     {
-      form = xj("#UIMaskWorkspace").find("#" + formId)[0];
+      form = gj("#UIMaskWorkspace").find("#" + formId)[0];
     }
     form.elements[typeId].value = hiddenValue;
   }

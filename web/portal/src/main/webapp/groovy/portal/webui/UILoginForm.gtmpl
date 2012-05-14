@@ -59,6 +59,6 @@
 </div>
 <script>
 	function login(ele) {
-		xj(ele).closest("form")[0].submit();
+		gj(ele).closest("form")[0].submit();
 	}
 </script>

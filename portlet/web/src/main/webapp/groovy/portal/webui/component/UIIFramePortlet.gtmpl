@@ -11,9 +11,9 @@
 	%>
 </div>
 <script type="text/javascript">
-  xj("#UIWorkingWorkspace").find("div.UIIFramePortlet").each(function()
+  gj("#UIWorkingWorkspace").find("div.UIIFramePortlet").each(function()
   {
-  	var frameDiv = xj(this);
+  	var frameDiv = gj(this);
   	var portletFrag = frameDiv.closest(".PORTLET-FRAGMENT");
 
   	frameDiv.css("height", "98%");

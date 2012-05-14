@@ -63,20 +63,20 @@
 */
 
 function PortletResponse(responseDiv) {
-  var div = xj(responseDiv).children("div");
+  var div = gj(responseDiv).children("div");
   this.portletId =  div[0].innerHTML;
   this.portletData =  div[1].innerHTML;
   
   this.blocksToUpdate = null;
-  var blocks = xj(div[1]).children(".BlockToUpdate");
+  var blocks = gj(div[1]).children(".BlockToUpdate");
   
   if(blocks.length > 0 ) {
     var updates = this.blocksToUpdate = new Array() ;
     
     blocks.each(function() {
-    	var div = xj(this).children("div");
+    	var div = gj(this).children("div");
     	updates[updates.length] = {blockId : div[0].innerHTML, data : div[1]};
-        updates[updates.length - 1].scripts = xj(div[1]).find("script");
+        updates[updates.length - 1].scripts = gj(div[1]).find("script");
     });
   } else {
     /*
@@ -92,7 +92,7 @@ function PortletResponse(responseDiv) {
     * script in the head tag
     */
     
-    this.scripts = xj(div[1]).find("script");
+    this.scripts = gj(div[1]).find("script");
   }
 };
 
@@ -110,7 +110,7 @@ function PortalResponse(responseDiv) {
   //jquery always remove script tag from the source
   var temp =  document.createElement("div") ;
   temp.innerHTML = responseDiv;
-  var div = xj(temp).children().first(), portalResp = this;
+  var div = gj(temp).children().first(), portalResp = this;
   
   portalResp.portletResponses = new Array() ;
   //Portlet Response
@@ -121,8 +121,8 @@ function PortalResponse(responseDiv) {
   div.children("div.PortalResponseData").each(function() {
 	  portalResp.data = this;
 	  portalResp.blocksToUpdate = new Array();
-	  xj(this).children(".BlockToUpdate").each(function() {
-		var dataBlocks = xj(this).children("div");
+	  gj(this).children(".BlockToUpdate").each(function() {
+		var dataBlocks = gj(this).children("div");
 		var i = portalResp.blocksToUpdate.length;
 		portalResp.blocksToUpdate[i] = {blockId : dataBlocks[0].innerHTML, data : dataBlocks[1]}; 
 		
@@ -132,7 +132,7 @@ function PortalResponse(responseDiv) {
          * This is needed when we refresh an entire portal page that contains some 
          * standard JSR 168 / 286 portlets with embeded <script> tag
          */
-		portalResp.blocksToUpdate[i].scripts = xj(dataBlocks[1]).find("script");
+		portalResp.blocksToUpdate[i].scripts = gj(dataBlocks[1]).find("script");
 	  });
   });
   //Extra Markup Header
@@ -146,12 +146,12 @@ function PortalResponse(responseDiv) {
   //Portal Response Script
   div.children("div.PortalResponseScript").each(function() {
 	  portalResp.script = this.innerHTML;
-	  xj(this).css("display", "none");
+	  gj(this).css("display", "none");
   });  
 };
 
 function MarkupHeadElements(fragment) {
-	var jObj = xj(fragment);
+	var jObj = gj(fragment);
 	this.titles = jObj.find("title");
 	this.bases = jObj.find("base") ;
 	this.links = jObj.find("link") ;
@@ -167,7 +167,7 @@ function MarkupHeadElements(fragment) {
 function LoadingScripts(fragment) {
 	this.immediateScripts = [];
 	this.onloadScripts = [];
-	var jFragment = xj(fragment);
+	var jFragment = gj(fragment);
 	var headers = jFragment.children(".ImmediateScripts").first().html();
 	headers = headers.replace(/^\s*/, '').split(",");
 	for (var i = 0; i < headers.length; i++) {
@@ -189,9 +189,9 @@ function LoadingScripts(fragment) {
 * of the page
 */
 function appendScriptToHead(scriptId, scriptElement) {
-  var head = xj("head");
+  var head = gj("head");
   head.find("#" + scriptId).remove();
-  var script = xj(scriptElement);
+  var script = gj(scriptElement);
   script.attr("id", scriptId);
   head[0].appendChild(script[0]);
 };
@@ -361,7 +361,7 @@ function AjaxRequest(method, url, queryString) {
 			contentType =  "text/plain;charset=UTF-8";
 		}
 		
-		instance.request = xj.ajax(instance.url, {
+		instance.request = gj.ajax(instance.url, {
 			type : instance.method,
 			beforeSend : instance.onLoadingInternal,
 			complete : instance.onCompleteInternal,
@@ -400,7 +400,7 @@ function HttpResponseHandler() {
 	instance.executeScript = function(script) {
 	  if(script == null || script == "") return ;
 	  try {
-		eval(xj("<div />").html(script).text());
+		eval(gj("<div />").html(script).text());
 	    return;
 	  } catch(err) {
 	  }
@@ -419,7 +419,7 @@ function HttpResponseHandler() {
 	instance.updateHtmlHead = function(response) {
 		if (!response) return;      
 		cleanHtmlHead(response);
-		var head = xj("head");
+		var head = gj("head");
 		var markupHeadElements = response.markupHeadElements;
 		if (!markupHeadElements) return;
 		
@@ -449,7 +449,7 @@ function HttpResponseHandler() {
 
   function cleanHtmlHead(response)
   {
-    var head = xj("head");
+    var head = gj("head");
     if (response)
     {
       var portletResponses = response.portletResponses;
@@ -463,7 +463,7 @@ function HttpResponseHandler() {
 
       if (response.data)
       {
-        xj(response.data).find(".PORTLET-FRAGMENT").each(function()
+        gj(response.data).find(".PORTLET-FRAGMENT").each(function()
         {
           head.find(".ExHead-" + this.parentNode.id + ":not(title)").remove();
         });
@@ -472,14 +472,14 @@ function HttpResponseHandler() {
     else 
     {
     	//This code will be run after we've finished update html
-    	var workspace = xj("#UIWorkingWorkspace");
+    	var workspace = gj("#UIWorkingWorkspace");
     	var exHeads = head.find("[class^='ExHead-']:not(title)");
     	exHeads.each(function()
 		{
     		var portletId = this.className.substring(7);
     		if (workspace.find("#" + portletId).length == 0)
     		{
-    			xj(this).remove();
+    			gj(this).remove();
     		}
 		});    	
     }
@@ -509,13 +509,13 @@ function HttpResponseHandler() {
 	instance.updateBlocks = function(blocksToUpdate, parentId) {
 	  if(!blocksToUpdate) return;
 	  var parentBlock = null;
-	  if(parentId && parentId != "") parentBlock =  xj("#" + parentId);
-	  parentBlock = !parentBlock ? xj(document) : parentBlock;
+	  if(parentId && parentId != "") parentBlock =  gj("#" + parentId);
+	  parentBlock = !parentBlock ? gj(document) : parentBlock;
 	  
 	  blocksToUpdate.each(function(blockToUpdate) {
 		  var target = parentBlock.find("#" + blockToUpdate.blockId);
 		  if(target.length == 0) alert(eXo.i18n.I18NMessage.getMessage("TargetBlockNotFound", new Array (blockToUpdate.blockId))) ;		  
-		  var newData = xj(blockToUpdate.data).find("#" + blockToUpdate.blockId);
+		  var newData = gj(blockToUpdate.data).find("#" + blockToUpdate.blockId);
 		  if(newData.length == 0) alert(eXo.i18n.I18NMessage.getMessage("BlockUpdateNotFound", new Array (blockToUpdate.blockId))) ;
 //		    target.parentNode.replaceChild(newData, target);
 		  target.html(newData.html());
@@ -579,8 +579,8 @@ function HttpResponseHandler() {
 		        * and that it does not contain any finer block to update. Hence replace the innerHTML inside the
 		        * id="PORTLET-FRAGMENT" block
 		        */
-		        var parentBlock =  xj("#" + portletResponse.portletId) ;
-		        var target = xj("#" + portletResponse.portletId + " .PORTLET-FRAGMENT").first();
+		        var parentBlock =  gj("#" + portletResponse.portletId) ;
+		        var target = gj("#" + portletResponse.portletId + " .PORTLET-FRAGMENT").first();
 		        target.html(portletResponse.portletData);
 		        
 		        //update embedded scripts 
@@ -729,7 +729,7 @@ function ajaxAsyncGetRequest(url, async) {
 function ajaxRequest(method, url, async, queryString) {
   if(async == undefined) async = true ;
   var resp;
-  xj.ajax(url, {
+  gj.ajax(url, {
 	  type: method,
 	  async : async,
 	  data : queryString,

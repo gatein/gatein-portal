@@ -21,7 +21,7 @@ eXo.portal.UIPortal = {
   portalUIComponentDragDrop : false,
 
   blockOnMouseOver : function(event, block, isOver) {
-    var jqBlock = xj(block);
+    var jqBlock = gj(block);
     if (!eXo.portal.portalMode || eXo.portal.isInDragging)
       return;
     if (eXo.portal.portalMode <= 2 && jqBlock.hasClass("UIContainer"))
@@ -37,7 +37,7 @@ eXo.portal.UIPortal = {
     var viewBlock, layoutBlock, editBlock;
     jqBlock.find("div.UIComponentBlock").eq(0).children("div").each(function()
     {
-      var child = xj(this);
+      var child = gj(this);
       if (child.hasClass("VIEW-BLOCK"))
       {
         viewBlock = child;
@@ -150,11 +150,11 @@ eXo.portal.UIPortal = {
 
   /** Repaired: by Vu Duy Tu 25/04/07* */
   showLayoutModeForPage : function() {
-    var uiPage = xj(document.body).find("div.UIPage");
+    var uiPage = gj(document.body).find("div.UIPage");
     if (uiPage.length == 0)
       return;
     var viewPage = uiPage.find("div.VIEW-PAGE").eq(0);
-    if(xj("#UIPortalApplication").attr("class") != "Vista")
+    if(gj("#UIPortalApplication").attr("class") != "Vista")
     {
       viewPage.css("border", "solid 3px #dadada");
     }
@@ -170,12 +170,12 @@ eXo.portal.UIPortal = {
   },
 
   showViewMode : function() {
-    var wkWs = xj("#UIWorkingWorkspace");
+    var wkWs = gj("#UIWorkingWorkspace");
     if (wkWs.find("div.UIPortlet").length == 0 && wkWs.find("div.UIContainer").length == 0)
     {
-      xj("#UIPage").parents(".VIEW-PAGE").css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
+      gj("#UIPage").parents(".VIEW-PAGE").css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
-    var pageBodyBlock = xj("UIPageBody");        
+    var pageBodyBlock = gj("UIPageBody");
     var mask = pageBodyBlock.find("div.UIPageBodyMask");
     if(mask.length > 0)
     {
@@ -204,7 +204,7 @@ eXo.portal.UIPortal = {
    *          componentId identifier of component
    */
   removeComponent : function(id) {
-    var comp = xj("#" + id);
+    var comp = gj("#" + id);
     var parent = comp.parent();
     var viewPage = parent.closest(".VIEW-PAGE");
 
@@ -218,7 +218,7 @@ eXo.portal.UIPortal = {
       comp.remove();
     }
 
-    var wkWs = xj("#UIWorkingWorkspace");
+    var wkWs = gj("#UIWorkingWorkspace");
     if (viewPage.length > 0 && wkWs.find("div.UIContainer").length == 0 && wkWs.find("div.UIPortlet").length == 0)
     {
       viewPage.css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});

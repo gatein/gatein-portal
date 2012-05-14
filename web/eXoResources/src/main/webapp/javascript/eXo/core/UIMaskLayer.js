@@ -27,8 +27,8 @@ eXo.core.UIMaskLayer = {
    */
   createTransparentMask : function(position) {
     var browser = eXo.core.Browser;
-    var ajaxLoading = xj("#AjaxLoadingMask");
-    var maskLayer = xj(eXo.core.UIMaskLayer.createMask("UIPortalApplication",
+    var ajaxLoading = gj("#AjaxLoadingMask");
+    var maskLayer = gj(eXo.core.UIMaskLayer.createMask("UIPortalApplication",
         ajaxLoading[0], 0, position));
     browser.addOnScrollCallback("5439383", eXo.core.UIMaskLayer.setPosition);
     ajaxLoading.hide();
@@ -44,7 +44,7 @@ eXo.core.UIMaskLayer = {
   showAjaxLoading : function(mask) {
     var ajaxLoading = document.getElementById("AjaxLoadingMask");
     ajaxLoading.style.display = "block";
-    xj(mask).fadeTo(0, 0.3);
+    gj(mask).fadeTo(0, 0.3);
     mask.style.backgroundColor = "black";
   },
 
@@ -53,7 +53,7 @@ eXo.core.UIMaskLayer = {
    * only reduces its size to 0x0 px
    */
   removeTransparentMask : function() {
-    var mask = xj("#TransparentMaskLayer");
+    var mask = gj("#TransparentMaskLayer");
     if (mask.length) {
       mask.height(0);
       mask.width(0);
@@ -80,9 +80,9 @@ eXo.core.UIMaskLayer = {
     try {
       var browser = eXo.core.Browser;
       if (typeof (blockContainerId) == "string")
-        blockContainerId = xj("#" + blockContainerId);
-      var blockContainer = xj(blockContainerId);
-      var maskLayer = xj(document.createElement("div"));
+        blockContainerId = gj("#" + blockContainerId);
+      var blockContainer = gj(blockContainerId);
+      var maskLayer = gj(document.createElement("div"));
 
       this.object = object;
       this.blockContainer = blockContainer[0];
@@ -107,8 +107,8 @@ eXo.core.UIMaskLayer = {
         maskLayer.width(offsetParent[0].offsetWidth);
         maskLayer.height(offsetParent[0].offsetHeight);
       } else {
-        maskLayer.width(xj(window).width());
-        maskLayer.height(xj(window).height());
+        maskLayer.width(gj(window).width());
+        maskLayer.height(gj(window).height());
       }
 
       maskLayer.css("top", "0px");
@@ -163,9 +163,9 @@ eXo.core.UIMaskLayer = {
     try {
       var browser = eXo.core.Browser;
       if (typeof (blockContainerId) == "string")
-        blockContainerId = xj("#" + blockContainerId);
-      var blockContainer = xj(blockContainerId);
-      var maskLayer = xj(document.createElement("div"));
+        blockContainerId = gj("#" + blockContainerId);
+      var blockContainer = gj(blockContainerId);
+      var maskLayer = gj(document.createElement("div"));
       blockContainer.append(maskLayer);
       maskLayer.addClass("MaskLayer");
       maskLayer.attr("id", object.id + "MaskLayer");
@@ -182,7 +182,7 @@ eXo.core.UIMaskLayer = {
                   parentOfBlockContainer = temp;
                   temp = temp.parentNode;
                 } while (temp
-                    && xj(parentOfBlockContainer).css("position") === "static");
+                    && gj(parentOfBlockContainer).css("position") === "static");
 
                 maskLayer.css("top", browser.findPosYInContainer(
                     blockContainer[0], parentOfBlockContainer)
@@ -225,7 +225,7 @@ eXo.core.UIMaskLayer = {
     var maskLayer = document.getElementById("MaskLayer");
     if (maskLayer) {
       var offsetParent = maskLayer.offsetParent;
-      var offset = xj(offsetParent).offset();
+      var offset = gj(offsetParent).offset();
       if (offsetParent && offset.left != 0 || offset.top != 0) {
         maskLayer = document.getElementById("subMaskLayer");
         if (!maskLayer)
@@ -265,7 +265,7 @@ eXo.core.UIMaskLayer = {
       topPos = document.body.scrollTop;
     }
 
-    var browserHeight = xj(window).height();
+    var browserHeight = gj(window).height();
     switch (position) {
     case "TOP-LEFT":
       top = topPos;
@@ -297,7 +297,7 @@ eXo.core.UIMaskLayer = {
       top = (browserHeight - object.offsetHeight) / 2 + topPos;
     }
 
-    if ((top + object.offsetHeight) > topPos + xj(window).height()) {
+    if ((top + object.offsetHeight) > topPos + gj(window).height()) {
       top = topPos + browserHeight - object.offsetHeight;
     }
 
@@ -311,13 +311,13 @@ eXo.core.UIMaskLayer = {
     if (maskLayer) {
       maskLayer.nextSibling.style.display = "none";
 
-      var nextSiblingOfObject = xj(maskLayer).data("nextSiblingOfObject"); 
+      var nextSiblingOfObject = gj(maskLayer).data("nextSiblingOfObject");
       nextSiblingOfObject.parentNode.insertBefore(
           maskLayer.nextSibling, nextSiblingOfObject);
       nextSiblingOfObject.parentNode
           .removeChild(nextSiblingOfObject);
 
-      xj(maskLayer).remove();
+      gj(maskLayer).remove();
     }
   },
 
@@ -341,7 +341,7 @@ eXo.core.UIMaskLayer = {
     if (maskLayer) {
       var offsetParent = maskLayer.offsetParent;
       if (offsetParent) {
-    	var offset = xj(offsetParent).offset();
+    	var offset = gj(offsetParent).offset();
     	if (offset.top != 0 || offset.left != 0) {
     		maskLayer = document.getElementById("subMaskLayer");
     		if (!maskLayer)
@@ -351,9 +351,9 @@ eXo.core.UIMaskLayer = {
       }
     }
 
-    var jWin = xj(window);
+    var jWin = gj(window);
     if (maskLayer && offsetParent) {
-      var offset = xj(offsetParent).offset();
+      var offset = gj(offsetParent).offset();
       if (offset.left == 0 && offset.top == 0) {
     	  maskLayer.style.width = jWin.width() + "px";
     	  maskLayer.style.height = jWin.height() + "px";    	  

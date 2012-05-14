@@ -28,7 +28,7 @@ eXo.webui.UIVirtualList = {
       uiVirtualList.isFinished = true;
     }
 
-    var virtualHeight = xj(uiVirtualList).height();
+    var virtualHeight = gj(uiVirtualList).height();
 
     if (virtualHeight == 0) {
       virtualHeight = 300;
@@ -59,7 +59,7 @@ eXo.webui.UIVirtualList = {
   },
 
   getFeedBox : function(componentId) {
-    var uiVirtualList = xj("#" + componentId);
+    var uiVirtualList = gj("#" + componentId);
     var feedBox = uiVirtualList.find("div.FeedBox");
     if(!feedBox || feedBox.length < 1)
     {

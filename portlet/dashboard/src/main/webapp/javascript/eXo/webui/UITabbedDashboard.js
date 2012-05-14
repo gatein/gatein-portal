@@ -46,15 +46,15 @@ eXo.webui.UITabbedDashboard = {
 
   showEditLabelInput : function(target, nodeName, currentLabel)
   {
-    var jqObj = xj(target);
+    var jqObj = gj(target);
 
-    var input = xj("<input>").attr({type : "text", id : nodeName, name : currentLabel, value : currentLabel, maxLength : 50});
+    var input = gj("<input>").attr({type : "text", id : nodeName, name : currentLabel, value : currentLabel, maxLength : 50});
     input.css("border", "1px solid #b7b7b7").css("width", (target.offsetWidth - 2) + "px");
 
     jqObj = jqObj.replaceWith(input);
     input.blur(function()
     {
-      xj(this).replaceWith(jqObj);
+      gj(this).replaceWith(jqObj);
     });
 
     input.keypress(function(e)
@@ -62,11 +62,11 @@ eXo.webui.UITabbedDashboard = {
       var keyNum = e.keyCode ? e.keyCode : e.which;
       if (keyNum == 13)
       {
-        eXo.webui.UITabbedDashboard.renameTabLabel(xj(this));
+        eXo.webui.UITabbedDashboard.renameTabLabel(gj(this));
       }
       else if (keyNum == 27)
       {
-        xj(this).replaceWith(jqObj);
+        gj(this).replaceWith(jqObj);
       }
     });
 
@@ -99,7 +99,7 @@ eXo.webui.UITabbedDashboard = {
 
   showAddTabInput : function(addButton)
   {
-    var jqAddButton = xj(addButton);
+    var jqAddButton = gj(addButton);
     var tabs = jqAddButton.parent().children("div.UITab");
 
     var newTab = jqAddButton.prevAll("div.SelectedTab").eq(0).clone();
@@ -107,7 +107,7 @@ eXo.webui.UITabbedDashboard = {
 
     var portletID = jqAddButton.closest("div.PORTLET-FRAGMENT").parent().attr("id");
 
-    var input = xj("<input>").attr({type : "text", id : portletID , maxlength : 50, value : "Tab_" + tabs.length});
+    var input = gj("<input>").attr({type : "text", id : portletID , maxlength : 50, value : "Tab_" + tabs.length});
     input.css({"border" : "1px solid #b7b7b7", "width" : "80px"});
 
     newTab.find("span").eq(0).replaceWith(input);
@@ -115,7 +115,7 @@ eXo.webui.UITabbedDashboard = {
 
     input.blur(function()
     {
-      xj(this).closest(".UITab").remove();
+      gj(this).closest(".UITab").remove();
     });
 
     input.keypress(function(e)
@@ -123,11 +123,11 @@ eXo.webui.UITabbedDashboard = {
       var keyNum = e.keyCode ? e.keyCode : e.which;
       if (keyNum == 13)
       {
-        eXo.webui.UITabbedDashboard.createTab(xj(this));
+        eXo.webui.UITabbedDashboard.createTab(gj(this));
       }
       else if (keyNum == 27)
       {
-        xj(this).closest(".UITab").remove();
+        gj(this).closest(".UITab").remove();
       }
     });
 

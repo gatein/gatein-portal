@@ -50,7 +50,7 @@ eXo.webui.UIItemSelector = {
    */
   onClick : function(clickedElement) {
     var itemListContainer = clickedElement.parentNode;
-    var allItems = xj(itemListContainer).find("div.Item").get();
+    var allItems = gj(itemListContainer).find("div.Item").get();
     eXo.webui.UIItemSelector.beforeActionHappen(clickedElement);
     if (this.allItems.length <= 0)
       return;
@@ -108,7 +108,7 @@ eXo.webui.UIItemSelector = {
 
   /* Pham Thanh Tung added */
   onClickOption : function(clickedElement, form, component, option) {
-    var selectedItems = xj(clickedElement).closest(".ItemDetailList").find("div.SelectedItem").get();
+    var selectedItems = gj(clickedElement).closest(".ItemDetailList").find("div.SelectedItem").get();
     for ( var i = 0; i < selectedItems.length; i++) {
       selectedItems[i].className = "NormalItem";
     }
@@ -122,7 +122,7 @@ eXo.webui.UIItemSelector = {
 
   /* TODO: Review This Function (Ha's comment) */
   beforeActionHappen : function(selectedItem) {
-    var jqObj = xj(selectedItem);
+    var jqObj = gj(selectedItem);
     this.uiItemSelector = jqObj.closest(".UIItemSelector")[0];
     this.itemList = jqObj.closest(".ItemList")[0];
     var listCont = jqObj.closest(".ItemListContainer");
@@ -144,12 +144,12 @@ eXo.webui.UIItemSelector = {
       this.itemDetailList = listCont.parent().find("div.ItemDetailList")[0];
     }
 
-    this.itemDetails = xj(this.itemDetailList).find("div.ItemDetail").get();
-    this.allItems = xj(this.itemList).find("div.Item").eq(0).parent().children("div.Item").get();
+    this.itemDetails = gj(this.itemDetailList).find("div.ItemDetail").get();
+    this.allItems = gj(this.itemList).find("div.Item").eq(0).parent().children("div.Item").get();
   },
 
   showPopupCategory : function(selectedNode) {
-    var itemListCont = xj(selectedNode).closest(".ItemListContainer");
+    var itemListCont = gj(selectedNode).closest(".ItemListContainer");
     var popupCategory = itemListCont.find("div.UIPopupCategory").eq(0);
 
     itemListCont.css("position", "relative");
@@ -165,7 +165,7 @@ eXo.webui.UIItemSelector = {
   },
 
   selectCategory : function(selectedNode) {
-    var jqObj = xj(selectedNode);
+    var jqObj = gj(selectedNode);
     var itemListCont = jqObj.closest(".OverflowContainer");
     var selectedNodeIndex = eXo.webui.UIItemSelector.findIndex(selectedNode);
 
@@ -176,12 +176,12 @@ eXo.webui.UIItemSelector = {
     {
       if (index == selectedNodeIndex)
       {
-        xj(this).css("display", "block");
+        gj(this).css("display", "block");
         itemDetailList.get(index).style.display = "block";
       }
       else
       {
-        xj(this).css("display", "none");
+        gj(this).css("display", "none");
         itemDetailList.get(index).style.display = "none";
       }
     });
@@ -190,7 +190,7 @@ eXo.webui.UIItemSelector = {
   },
 
   findIndex : function(object) {
-    var siblings = xj(object).parent().children("div." + object.className).get();
+    var siblings = gj(object).parent().children("div." + object.className).get();
     for ( var i = 0; i < siblings.length; i++) {
       if (siblings[i] == object)
         return i;
@@ -205,7 +205,7 @@ eXo.webui.UIItemSelector = {
    * action UIDropDownControl.js : set this method to do
    */
   selectPageLayout : function(id, selectedIndex) {
-    var dropDownControl = xj("#" + id);
+    var dropDownControl = gj("#" + id);
     var itemSelectorAncest = dropDownControl.closest(".ItemSelectorAncestor");
     var itemList = itemSelectorAncest.find("div.ItemList");
     var itemSelectorLabel = itemSelectorAncest.find("a.OptionItem");
@@ -221,7 +221,7 @@ eXo.webui.UIItemSelector = {
         if (itemDetailList.length < 1)
           continue;
         itemDetailList[i].style.display = "block";
-        var selectedItem = xj(itemList[i]).find("div.SelectedItem").eq(0);
+        var selectedItem = gj(itemList[i]).find("div.SelectedItem").eq(0);
         if (!selectedItem || selectedItem == null)
           continue;
         var setValue = selectedItem.find("#SetValue")[0];

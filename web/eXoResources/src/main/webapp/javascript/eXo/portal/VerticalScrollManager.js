@@ -22,7 +22,7 @@ eXo.portal.VerticalScrollManager = {
 
   initScroll : function(clickedEle, isUp, step) {
     var verticalScroll = eXo.portal.VerticalScrollManager;
-    var container = xj(clickedEle).closest(".ItemContainer");
+    var container = gj(clickedEle).closest(".ItemContainer");
     var middleCont = container.find(".MiddleItemContainer").first()[0];
     if (!middleCont.id)
       middleCont.id = "IC" + new Date().getTime()

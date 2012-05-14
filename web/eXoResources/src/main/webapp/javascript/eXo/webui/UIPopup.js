@@ -73,7 +73,7 @@ eXo.webui.UIPopup = {
 
     var uiMaskWS = document.getElementById("UIMaskWorkspace");
     if (uiMaskWS) {
-      uiMaskWSzIndex = xj(uiMaskWS).css("zIndex");
+      uiMaskWSzIndex = gj(uiMaskWS).css("zIndex");
       if (uiMaskWSzIndex && (uiMaskWSzIndex > eXo.webui.UIPopup.zIndex)) {
         eXo.webui.UIPopup.zIndex = uiMaskWSzIndex;
       }
@@ -119,7 +119,7 @@ eXo.webui.UIPopup = {
   setAlign : function(popup, pos, hozMargin, verMargin) {
     if (typeof (popup) == 'string')
       popup = document.getElementById(popup);
-    var stdLeft = xj(window).width()
+    var stdLeft = gj(window).width()
         - eXo.core.Browser.findPosX(document
             .getElementById("UIWorkingWorkspace"));
     var intTop = 0;
@@ -129,7 +129,7 @@ eXo.webui.UIPopup = {
     if (!verMargin)
       verMargin = 0;           
 
-    var browserHeight = xj(window).height();
+    var browserHeight = gj(window).height();
     switch (pos) {
     case 1: // Top Left
       intTop = verMargin;
@@ -164,7 +164,7 @@ eXo.webui.UIPopup = {
     var DragDrop = eXo.core.DragDrop;
 
     var clickBlock = this;
-    var dragBlock = xj(clickBlock).parent().closest(".UIDragObject")[0];
+    var dragBlock = gj(clickBlock).parent().closest(".UIDragObject")[0];
     DragDrop.init(clickBlock, dragBlock);
   }
 }

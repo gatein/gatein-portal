@@ -43,7 +43,7 @@ eXo.portal.PortalDragDrop = {
 		 */
 	  var initCallback = function (x, y, mouseX, mouseY, e) {	  	
 		if (eXo.portal.isInDragging) return;		  
-		var dragObject = this, jDragObj = xj(this);
+		var dragObject = this, jDragObj = gj(this);
 		
 		var origDragObjectStyle = new eXo.core.HashMap();
 	    var properties = ["top", eXo.core.I18n.isLT() ? "left" : "right", "zIndex", "opacity", "filter", "position", "width"];
@@ -54,7 +54,7 @@ eXo.portal.PortalDragDrop = {
 		var originalDragObjectTop = y;
 		var originalDragObjectLeft = x;
 		if (!isAddingNewly && browser.isIE7()) {
-			originalDragObjectLeft = browser.findPosXInContainer(dragObject, xj("#UIWorkingWorkspace")[0]);			
+			originalDragObjectLeft = browser.findPosXInContainer(dragObject, gj("#UIWorkingWorkspace")[0]);
 		}
 			
 	    //use this when press ESC with firefox (cancel dragdrop in column container)
@@ -76,7 +76,7 @@ eXo.portal.PortalDragDrop = {
 	        previewBlock = PortalDragDrop.createPreview();
 	    	dragObject.parentNode.insertBefore(previewBlock, dragObject);
 	    	jDragObj.width(componentBlockWidth).find(".EDITION-BLOCK .NewLayer").each(function() {
-	    		xj(this).width(componentBlockWidth);
+	    		gj(this).width(componentBlockWidth);
 	    	});	    	
 	    }
 	    
@@ -103,7 +103,7 @@ eXo.portal.PortalDragDrop = {
 	  };
 	  
 	   var dragCallback = function(nx, ny, ex, ey, e) {
-	     var dragObject = this, jDragObj = xj(this);
+	     var dragObject = this, jDragObj = gj(this);
 	     /* Control Scroll */
 	     eXo.portal.PortalDragDrop.scrollOnDrag(dragObject, e);
 	    
@@ -112,7 +112,7 @@ eXo.portal.PortalDragDrop = {
 	     jDragObj.data("lastFoundTargetObject", jDragObj.data("foundTargetObject"));
 	     jDragObj.data("foundTargetObject", foundTarget);	     
 	    
-	     var jTarget = xj(foundTarget);
+	     var jTarget = gj(foundTarget);
 	     var uiComponentLayout;
 	     if(foundTarget.className == "UIPage") {
 		   uiComponentLayout = jTarget.find(".VIEW-PAGE").first();
@@ -120,7 +120,7 @@ eXo.portal.PortalDragDrop = {
 	       if(eXo.portal.portalMode % 2) uiComponentLayout = jTarget.find(".LAYOUT-PORTAL").first();
 	       else uiComponentLayout = jTarget.find(".VIEW-PORTAL").first();
 	     } else {
-	       var foundUIComponent = xj(foundTarget);
+	       var foundUIComponent = gj(foundTarget);
 	       if(eXo.portal.portalMode % 2) uiComponentLayout = foundUIComponent.find(".LAYOUT-BLOCK").first();
 	       else uiComponentLayout = foundUIComponent.find(".VIEW-BLOCK").first();
 	       uiComponentLayout.css("height", "auto");
@@ -132,7 +132,7 @@ eXo.portal.PortalDragDrop = {
 	     PortalDragDrop.layoutTypeElementNode = layoutTypeElement;
 	    
 	     if(previewBlock == null) previewBlock = PortalDragDrop.createPreview();	    	     
-	     if(layoutTypeElement != null && !xj(layoutTypeElement).hasClass("UITableColumnContainer")) {
+	     if(layoutTypeElement != null && !gj(layoutTypeElement).hasClass("UITableColumnContainer")) {
 	      /* ===============================CASE ROW LAYOUT================================ */
 	      var rowContainer = jTarget.find(".UIRowContainer").first();
 	      var listComponent = rowContainer.children("div").filter(function() {
@@ -171,7 +171,7 @@ eXo.portal.PortalDragDrop = {
 	       }
 	    }
 
-	    var dragParent = xj(dragObject).parent();
+	    var dragParent = gj(dragObject).parent();
 	    if (dragParent.children("div").length == 1 && !dragParent.hasClass("EmptyContainer")) {
 	    	dragParent.addClass("EmptyContainer");
 	    }
@@ -179,7 +179,7 @@ eXo.portal.PortalDragDrop = {
 
 	  var dropCallback = function(x, y, clientX, clientY, e) {
 	    var hasChanged = true;
-	    var dragObject = this, jDragObj = xj(this);
+	    var dragObject = this, jDragObj = gj(this);
 		//When press esc key, we want to cancel the dragdrop
 	  	if (e.which === 27) {
 	  		hasChanged = false;
@@ -251,9 +251,9 @@ eXo.portal.PortalDragDrop = {
 	  };
 	  
 	  dragClasses = dragClasses.join(",.");
-	  xj("." + dragClasses).each(function() {
+	  gj("." + dragClasses).each(function() {
 		  var dragBlock = this;	  
-		  var clickObject = xj(this).find(".DragControlArea").last();
+		  var clickObject = gj(this).find(".DragControlArea").last();
 
 		  if(clickObject.length != 0) {
 			  //object existing in the current layout
@@ -277,7 +277,7 @@ eXo.portal.PortalDragDrop = {
 	 * 2. Send an request to server side to update the changes
 	 */
 	doDropCallback : function(dragObject) {
-	  var srcElement = dragObject, jDragObj = xj(dragObject);
+	  var srcElement = dragObject, jDragObj = gj(dragObject);
 	  var PortalDragDrop = eXo.portal.PortalDragDrop;
 	  var targetElement = jDragObj.data("foundTargetObject");
 	  var foundIndex = jDragObj.data("foundIndex")
@@ -318,7 +318,7 @@ eXo.portal.PortalDragDrop = {
 	 */
 	findDropableTargets : function(dragBlock) {
 	  var dropableTargets = new Array();
-	  var jDragObj = xj(dragBlock);
+	  var jDragObj = gj(dragBlock);
 
       if (jDragObj.hasClass("UIColumnContainer")) {
 	    var uiTableContainer = jDragObj.closest(".UITableColumnContainer");
@@ -326,7 +326,7 @@ eXo.portal.PortalDragDrop = {
 	    return dropableTargets;
 	  }
 
-      var toolPanel = xj("#UIPortalToolPanel");
+      var toolPanel = gj("#UIPortalToolPanel");
 	  var uiPortal = toolPanel.find(".UIPortal");
 	  if(uiPortal.length) {
 	    dropableTargets.push(uiPortal[0]);
@@ -337,7 +337,7 @@ eXo.portal.PortalDragDrop = {
 	  
 	  var uiContainers = toolPanel.find(".UIContainer") ;
 	  uiContainers.each(function() {
-		 var jCont = xj(this);
+		 var jCont = gj(this);
 		 if (!jCont.closest(jDragObj).length && 
 				 !jCont.hasClass("ProtectedContainer") &&
 				 !jCont.hasClass("UITableColumnContainer")) {
@@ -348,8 +348,8 @@ eXo.portal.PortalDragDrop = {
 	},
 
 	scrollOnDrag : function(dragObject, e) {
-      var jWin = xj(window);
-	  var workspaceHeight = xj("#UIWorkingWorkspace").height();
+      var jWin = gj(window);
+	  var workspaceHeight = gj("#UIWorkingWorkspace").height();
 	  var browserHeight = jWin.height();
 	  if(workspaceHeight <= browserHeight) return;
 	  var mouseY = e.clientY;
@@ -376,7 +376,7 @@ eXo.portal.PortalDragDrop = {
 	   var browser = eXo.core.Browser;
 	   if (layout == "row") {
 	      for (var i = 0; i < components.length; i++) {
-	    	  var componentTop = xj(components[i]).offset().top;
+	    	  var componentTop = gj(components[i]).offset().top;
 	         var mouseYInPage = mousePos
 	         var componentMIddle = componentTop + Math.round(components[i].offsetHeight / 2);
 	         if (mouseYInPage > componentMIddle) continue;
@@ -410,7 +410,7 @@ eXo.portal.PortalDragDrop = {
 	},
 
 	findTarget : function(dragObject, mousexInPage, mouseyInPage) {
-	  var dropableTargets = xj(dragObject).data("dropableTargets");
+	  var dropableTargets = gj(dragObject).data("dropableTargets");
 	  if(!dropableTargets) return null;
 	  
 	  var foundTarget = null;
@@ -422,7 +422,7 @@ eXo.portal.PortalDragDrop = {
 	      if(foundTarget == null) {
 	        foundTarget = ele;
 	      } else {
-	        if(xj(ele).closest(foundTarget).length > 0) {
+	        if(gj(ele).closest(foundTarget).length > 0) {
 	          foundTarget = ele;
 	        }
 	      } 
@@ -434,7 +434,7 @@ eXo.portal.PortalDragDrop = {
 	  
 	isIn : function(x, y, component) {
 	  var browser = eXo.core.Browser;
-	  var offset = xj(component).offset();
+	  var offset = gj(component).offset();
 	  var componentLeft = offset.left;
 	  var componentRight = componentLeft + component.offsetWidth ;
 	  var componentTop = offset.top;
@@ -454,8 +454,8 @@ eXo.portal.PortalDragDrop = {
 	 * If the dragging object is a column then let remove it from the table column container
 	 */
 	divRowContainerAddChild : function(srcElement, targetElement, insertPosition) {	  
-	  var listComponent = xj(srcElement).data("listComponentInTarget");
-	  var uiRowContainer = xj(targetElement).find(".UIRowContainer").first();
+	  var listComponent = gj(srcElement).data("listComponentInTarget");
+	  var uiRowContainer = gj(targetElement).find(".UIRowContainer").first();
 	  srcElement.style.width = "auto" ;
 	  
 	  var parentNode = srcElement.parentNode;
@@ -468,7 +468,7 @@ eXo.portal.PortalDragDrop = {
 	  uiRowContainer.removeClass("EmptyContainer");
 	  
 	  if(parentNode.nodeName.toLowerCase() == "td") {
-	  	xj(parentNode).remove();
+	  	gj(parentNode).remove();
 	  }
 	}
 } ;

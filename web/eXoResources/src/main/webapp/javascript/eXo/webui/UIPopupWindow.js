@@ -116,10 +116,10 @@ eXo.webui.UIPopupWindow = {
     // TODO Lambkin: this statement create a bug in select box component in
     // Firefox
     // this.superClass.init(popup) ;    
-    var popupBar = xj(popup).find("span.PopupTitle")[0];
+    var popupBar = gj(popup).find("span.PopupTitle")[0];
     this.initDND(popupBar, popup);
     
-    var resizeBtn = xj(popup).find("span.ResizeButton")[0];
+    var resizeBtn = gj(popup).find("span.ResizeButton")[0];
     if (resizeBtn) {
     	resizeBtn.style.display = 'block';
     	resizeBtn.onmousedown = this.startResizeEvt;
@@ -130,7 +130,7 @@ eXo.webui.UIPopupWindow = {
     popup.style.visibility = "hidden";
     this.superClass.show(popup);
     
-    if (xj(popup).find("iframe").length > 0) {
+    if (gj(popup).find("iframe").length > 0) {
     	setTimeout(function() {eXo.webui.UIPopupWindow.setupWindow(popup, middleBrowser);}, 500);
     } else {
     	this.setupWindow(popup, middleBrowser);
@@ -138,8 +138,8 @@ eXo.webui.UIPopupWindow = {
   },
   
   setupWindow : function(popup, middleBrowser) {	    	
-    var contentBlock = xj(popup).find("div.PopupContent")[0];
-    var browserHeight = xj(window).height();
+    var contentBlock = gj(popup).find("div.PopupContent")[0];
+    var browserHeight = gj(window).height();
     if (contentBlock && (browserHeight - 100 < contentBlock.offsetHeight)) {
       contentBlock.style.height = (browserHeight - 100) + "px";
     }
@@ -153,7 +153,7 @@ eXo.webui.UIPopupWindow = {
       scrollY = document.body.scrollTop;
     // reference
     if (offsetParent) {
-      var middleWindow = xj(offsetParent).is(".UIPopupWindow,.UIWindow");
+      var middleWindow = gj(offsetParent).is(".UIPopupWindow,.UIWindow");
       if (middleWindow) {
         popup.style.top = Math.ceil((offsetParent.offsetHeight - popup.offsetHeight) / 2) + "px";
       }
@@ -161,7 +161,7 @@ eXo.webui.UIPopupWindow = {
         popup.style.top = Math.ceil((browserHeight - popup.offsetHeight) / 2) + scrollY + "px";
       }
       // Todo: set popup of UIPopup always display in the center browsers in case UIMaskWorkspace
-      if (xj(offsetParent).hasClass("UIMaskWorkspace")) {
+      if (gj(offsetParent).hasClass("UIMaskWorkspace")) {
         popup.style.top = Math.ceil((offsetParent.offsetHeight - popup.offsetHeight) / 2) + "px";
       }
       
@@ -173,7 +173,7 @@ eXo.webui.UIPopupWindow = {
       }
       popup.style.left = Math.ceil((offsetParent.offsetWidth - popup.offsetWidth) / 2) + "px";
     }
-    if (xj(popup).offset().top < 0)
+    if (gj(popup).offset().top < 0)
       popup.style.top = scrollY + "px";
         
     popup.style.visibility = "visible";	  
@@ -194,7 +194,7 @@ eXo.webui.UIPopupWindow = {
     }
     if (isShowPopup) {
       // Modal if popup is portal component
-      if (xj(popup).parents(".PORTLET-FRAGMENT").length < 1){
+      if (gj(popup).parents(".PORTLET-FRAGMENT").length < 1){
         if (!mask)
           eXo.core.UIMaskLayer.createMask(popup.parentNode, popup, 1);
       } else {
@@ -231,7 +231,7 @@ eXo.webui.UIPopupWindow = {
 		document.onmousedown = function() {return false};		
 	}
 	
-	var targetPopup = xj(this).parents(".UIPopupWindow")[0];
+	var targetPopup = gj(this).parents(".UIPopupWindow")[0];
 	eXo.webui.UIPopupWindow.resizedPopup = targetPopup;
 	eXo.webui.UIPopupWindow.backupPointerY = eXo.core.Browser.findMouseRelativeY(targetPopup, evt) ;	
 
@@ -246,7 +246,7 @@ eXo.webui.UIPopupWindow = {
    */
   resize : function(evt) {
 	var targetPopup = eXo.webui.UIPopupWindow.resizedPopup ;
-    var content = xj(targetPopup).find("div.PopupContent")[0];
+    var content = gj(targetPopup).find("div.PopupContent")[0];
     var isRTL = eXo.core.I18n.isRT();
     var pointerX = eXo.core.Browser.findMouseRelativeX(targetPopup, evt, isRTL);
     var pointerY = eXo.core.Browser.findMouseRelativeY(targetPopup, evt);
@@ -299,7 +299,7 @@ eXo.webui.UIPopupWindow = {
       if (eXo.core.Browser.browserType == "mozilla" && popup.uiWindowContent)
       {
         popup.uiWindowContent.style.overflow = "auto";
-        xj(popup.uiWindowContent).find("ul.PopupMessageBox").css("overflow", "auto");
+        gj(popup.uiWindowContent).find("ul.PopupMessageBox").css("overflow", "auto");
       }
     };
 
@@ -312,7 +312,7 @@ eXo.webui.UIPopupWindow = {
       if (eXo.core.Browser.browserType == "mozilla" && popup.uiWindowContent)
       {
         popup.uiWindowContent.style.overflow = "auto";
-        xj(popup.uiWindowContent).find("ul.PopupMessageBox").css("overflow", "auto");
+        gj(popup.uiWindowContent).find("ul.PopupMessageBox").css("overflow", "auto");
       }
       var offsetParent = popup.offsetParent;
       if (offsetParent)

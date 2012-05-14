@@ -22,7 +22,7 @@ eXo.webui.UICombobox = {
   init : function(textbox) {
     if (typeof (textbox) == "string")
       textbox = document.getElementById(textbox);
-    textbox = xj(textbox).next("input");
+    textbox = gj(textbox).next("input");
     var UICombobox = eXo.webui.UICombobox;
     var onfocus = textbox.attr("onfocus");
     var onclick = textbox.attr("onclick");
@@ -34,18 +34,18 @@ eXo.webui.UICombobox = {
 
   show : function(evt) {
     var uiCombo = eXo.webui.UICombobox;
-    uiCombo.items = xj(this.parentNode).find("a");
+    uiCombo.items = gj(this.parentNode).find("a");
     if (uiCombo.list)
       uiCombo.list.style.display = "none";
-    uiCombo.list = xj(this.parentNode).find(".UIComboboxContainer").first()[0];
+    uiCombo.list = gj(this.parentNode).find(".UIComboboxContainer").first()[0];
     uiCombo.list.parentNode.style.position = "absolute";
     uiCombo.fixForIE6(this);
     uiCombo.list.style.display = "block";
     uiCombo.list.style.top = this.offsetHeight + "px";
     uiCombo.list.style.width = this.offsetWidth + "px";
     uiCombo.setSelectedItem(this);
-    xj(uiCombo.list).one("mousedown", false);
-    xj(document).one("mousedown", uiCombo.hide);
+    gj(uiCombo.list).one("mousedown", false);
+    gj(document).one("mousedown", uiCombo.hide);
   },
 
   getSelectedItem : function(textbox) {
@@ -61,15 +61,15 @@ eXo.webui.UICombobox = {
 
   setSelectedItem : function(textbox) {
     if (this.lastSelectedItem)
-      xj(this.lastSelectedItem).removeClass("UIComboboxSelectedItem");
+      gj(this.lastSelectedItem).removeClass("UIComboboxSelectedItem");
     var selectedIndex = parseInt(this.getSelectedItem(textbox));
     if (selectedIndex >= 0) {
-      xj(this.items[selectedIndex]).addClass("UIComboboxSelectedItem");
+      gj(this.items[selectedIndex]).addClass("UIComboboxSelectedItem");
       this.lastSelectedItem = this.items[selectedIndex];
       var y = eXo.core.Browser.findPosYInContainer(this.lastSelectedItem,
           this.list);
       this.list.firstChild.scrollTop = y;
-      var hidden = xj(textbox).prev("input")[0];
+      var hidden = gj(textbox).prev("input")[0];
       hidden.value = this.items[selectedIndex].getAttribute("value");
 
     }
@@ -78,7 +78,7 @@ eXo.webui.UICombobox = {
   fixForIE6 : function(obj) {
     if (!eXo.core.Browser.isIE6())
       return;
-    if (xj(this.list).children("iframe").length > 0)
+    if (gj(this.list).children("iframe").length > 0)
       return;
     var iframe = document.createElement("iframe");
     iframe.frameBorder = 0;
@@ -134,10 +134,10 @@ eXo.webui.UICombobox = {
   getValue : function(obj) {
     var UICombobox = eXo.webui.UICombobox;
     var val = obj.getAttribute("value");
-    var hiddenField = xj(UICombobox.list.parentNode).next("input");
+    var hiddenField = gj(UICombobox.list.parentNode).next("input");
     hiddenField.attr("value", val);
     var text = hiddenField.next("input");
-    text.attr("value", xj(obj).find(".UIComboboxLabel").first().html());
+    text.attr("value", gj(obj).find(".UIComboboxLabel").first().html());
     UICombobox.list.style.display = "none";
   }
 }

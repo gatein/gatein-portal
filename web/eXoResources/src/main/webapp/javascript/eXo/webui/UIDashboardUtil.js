@@ -27,7 +27,7 @@ eXo.webui.UIDashboardUtil = {
 	  	if(uiWorkspaceContainer!=null && uiWorkspaceContainer.style.display!="none"
 	  					 && browser.isIE()){
 	  		var uiPageDesktop = document.getElementById("UIPageDesktop");
-        var jqObj = xj(obj);
+        var jqObj = gj(obj);
 	  		if( (uiPageDesktop!=null && jqObj.hasClass("UIPageDesktop") && browser.isIE7())
 	  					|| (uiPageDesktop==null && jqObj.hasClass("PORTLET-FRAGMENT")) ){
 	  			curleft += (obj.offsetLeft - uiWorkingWorkspace.offsetLeft);
@@ -44,7 +44,7 @@ eXo.webui.UIDashboardUtil = {
 	isIn : function(x, y, component) {
 	  var componentLeft = eXo.webui.UIDashboardUtil.findPosX(component);
 	  var componentRight = componentLeft + component.offsetWidth ;
-	  var componentTop = xj(component).offset().top;
+	  var componentTop = gj(component).offset().top;
 	  var componentBottom = componentTop + component.offsetHeight ;
 	  var isOver = false ;
 
@@ -65,7 +65,7 @@ eXo.webui.UIDashboardUtil = {
 	
 	findColIndexInDashboard : function(dragObj){
     var index = 0;
-    xj(dragObj).parent().prevAll("div.UIColumn").each(function()
+    gj(dragObj).parent().prevAll("div.UIColumn").each(function()
     {
       index++;
     });
@@ -81,7 +81,7 @@ eXo.webui.UIDashboardUtil = {
       var left = eXo.webui.UIDashboardUtil.findPosX(this) - scrollLeft;
       if(left <= x && x < left + this.offsetWidth)
       {
-        column = xj(this);
+        column = gj(this);
         return false;
       }
     });
@@ -91,7 +91,7 @@ eXo.webui.UIDashboardUtil = {
 	
 	findRowIndexInDashboard : function(dragObj){
     var row = 0;
-    xj(dragObj).prevAll("div").each(function()
+    gj(dragObj).prevAll("div").each(function()
     {
       if(this.id == dragObj.id)
       {

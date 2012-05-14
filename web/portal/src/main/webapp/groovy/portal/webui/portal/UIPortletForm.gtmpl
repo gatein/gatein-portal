@@ -122,9 +122,9 @@
 <script language="javascript">
 		eXo.UIPortletForm = {
 				hideSaveButton : function(comp) {
-						xj(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
+						gj(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
 						{
-							var button = xj(this);
+							var button = gj(this);
 							if(button.attr("id").indexOf("Save") >= 0)
 							{
 								button.css("display", "none");
@@ -137,9 +137,9 @@
 				},
 		
 				showSaveButton : function(comp) {
-						xj(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
+						gj(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
 						{
-							var button = xj(this);
+							var button = gj(this);
 							if(button.attr("id").indexOf("Save") >= 0)
 							{
 								button.css("display", "inline-block");

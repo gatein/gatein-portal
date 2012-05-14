@@ -184,7 +184,7 @@ eXo.core.Browser = {
 	
 	managerResize : function() {
 	  var browser = eXo.core.Browser;
-	  var jWin = xj(window);
+	  var jWin = gj(window);
 	  if(browser.currheight != jWin.height()) {
 	    clearTimeout(browser.breakStream) ;
 	    browser.breakStream = setTimeout(browser.onResize, 100) ;
@@ -277,7 +277,7 @@ eXo.core.Browser = {
 	 * Returns the horizontal position of an object relative to the window
 	 */
 	findPosX : function(obj, isRTL) {
-	  var curleft = xj(obj).offset().left;	  
+	  var curleft = gj(obj).offset().left;
 	  // if RTL return right position of obj
 	  if(isRTL) return curleft + obj.offsetWidth;
 	  return curleft;
@@ -299,8 +299,8 @@ eXo.core.Browser = {
 	 */
 	findPosYInContainer : function(obj, container) {
 	  var browser = eXo.core.Browser;
-	  var objY = xj(obj).offset().top;
-	  var containerY = xj(container).offset().top;
+	  var objY = gj(obj).offset().top;
+	  var containerY = gj(container).offset().top;
 	  return (objY - containerY);
 	},		
 	
@@ -319,7 +319,7 @@ eXo.core.Browser = {
 	 */
 	findMouseRelativeY : function(object, e) {
 	  var browser = eXo.core.Browser;
-	  var posYObject = xj(object).offset().top;
+	  var posYObject = gj(object).offset().top;
 	  var mouseY = e.pageY;  
 	  return  mouseY == -1 ? -1 : mouseY - posYObject ;
 	},
@@ -383,7 +383,7 @@ eXo.core.Browser = {
 	  for(var k = 0; k < ln; k++) {
 	    height += elements[k].offsetHeight ;
 	  }
-	  return (xj(window).height() - height);
+	  return (gj(window).height() - height);
 	},
 	
 	/**

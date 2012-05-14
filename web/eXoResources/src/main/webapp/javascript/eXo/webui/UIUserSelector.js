@@ -27,7 +27,7 @@ eXo.webui.UIUserSelector = {
   init : function(cont) {
     if (typeof (cont) == "string")
       cont = document.getElementById(cont);
-    var checkboxes = xj(cont).find("input.checkbox");
+    var checkboxes = gj(cont).find("input.checkbox");
     checkboxes.each(function(index)
     {
       if(index == 0)
@@ -53,7 +53,7 @@ eXo.webui.UIUserSelector = {
    *          obj first object of table
    */
   getItems : function(obj) {
-    return xj(obj).parent().closest("table").find("input.checkbox").get();
+    return gj(obj).parent().closest("table").find("input.checkbox").get();
   },
   /**
    * Check and uncheck first item

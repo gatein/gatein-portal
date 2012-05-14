@@ -95,7 +95,7 @@ eXo.webui.UIUploadInput = {
     var element = document.getElementById('ProgressIframe' + id);
     element.innerHTML = "<span></span>";
 
-    jCont = xj(container);
+    jCont = gj(container);
     var UploadInput = jCont.find('#UploadInput' + id);
     UploadInput.hide();
 
@@ -138,7 +138,7 @@ eXo.webui.UIUploadInput = {
     for (id in response.upload) {
       var container = parent.document.getElementById('UploadInputContainer'
           + id);
-      var jCont = xj(container);
+      var jCont = gj(container);
       if (response.upload[id].status == "failed") {
         this.abortUpload(id);
         var message = jCont.children(".LimitMessage").first().html();
@@ -175,7 +175,7 @@ eXo.webui.UIUploadInput = {
     ajaxRequest('GET', url, false);
     
     var container = parent.document.getElementById('UploadInputContainer' + id);
-    var selectFileFrame = xj(container).find(".SelectFileFrame").first();
+    var selectFileFrame = gj(container).find(".SelectFileFrame").first();
     selectFileFrame.hide();
 
     this.createEntryUpload(id, isDynamicMode);
@@ -187,7 +187,7 @@ eXo.webui.UIUploadInput = {
     ajaxRequest('GET', url, false);
     
     var container = parent.document.getElementById('UploadInputContainer' + id);
-    var jCont = xj(container); 
+    var jCont = gj(container);
     var progressIframe = jCont.find('#ProgressIframe' + id);
     progressIframe.hide();
 
@@ -207,7 +207,7 @@ eXo.webui.UIUploadInput = {
    */
   doUpload : function(id) {
     var container = parent.document.getElementById('UploadInputContainer' + id);
-    var jCont = xj(container);
+    var jCont = gj(container);
     this.displayUploadButton(id);
     if (id instanceof Array) {
       for ( var i = 0; i < id.length; i++) {

@@ -198,7 +198,7 @@ gadgets.IfrGadgetService.prototype.setHeight = function(height) {
 };
 
 gadgets.IfrGadgetService.prototype.setTitle = function(title) {
-  var element = xj("#" + this.f).closest(".UIGadget").find("div.GadgetTitle").eq(0);
+  var element = gj("#" + this.f).closest(".UIGadget").find("div.GadgetTitle").eq(0);
   if(element)
   {
     element.html(title.replace(/&/g, '&amp;').replace(/</g, '&lt;'));
@@ -231,7 +231,7 @@ gadgets.IfrGadgetService.prototype.requestNavigateTo = function(view, opt_params
 {
   var id = gadgets.container.gadgetService.getGadgetIdFromModuleId(this.f);
   var gadget = gadgets.container.getGadget(id);
-  var iframe = xj("#" + gadget.getIframeId());
+  var iframe = gj("#" + gadget.getIframeId());
   var ggWindow = iframe.closest(".UIGadget");
   var url = gadget.getIframeUrl();
   var currentView = gadget.view || gadgets.container.view_;
@@ -769,7 +769,7 @@ gadgets.IfrGadget.prototype.refresh = function() {
 
 gadgets.IfrGadget.prototype.sendServerRequest = function(op, key, value)
 {
-  var gadget = xj("#gadget_" + this.id);
+  var gadget = gj("#gadget_" + this.id);
   if (gadget.length > 0)
   {
     var portletFrag = gadget.closest(".PORTLET-FRAGMENT");

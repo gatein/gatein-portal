@@ -22,13 +22,13 @@ function UISiteMap() {};
 UISiteMap.prototype.updateTreeNode = function (nodeToUpdate, getNodeURL) {
 	if (!nodeToUpdate || ! getNodeURL) return;
 	
-  var jqNode = xj(nodeToUpdate);
+  var jqNode = gj(nodeToUpdate);
   var subGroup = jqNode.parent().children("div.ChildrenContainer");
 	if (subGroup.length == 0 || subGroup.html().trim() !== "") return;
 		
 	var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);	
 	try {
-		var data = xj.parseJSON(jsChilds);
+		var data = gj.parseJSON(jsChilds);
 	} catch (e) {		
 	}	
 	if (data && data.length) {
@@ -87,7 +87,7 @@ UISiteMap.prototype.generateHtml = function(data, nodeToUpdate, subGroup) {
  * @param {Object} element object to collapse or expand
  */
 UISiteMap.prototype.collapseExpand = function(element) {
-  var subGroup = xj(element.parentNode).children("div.ChildrenContainer")[0];
+  var subGroup = gj(element.parentNode).children("div.ChildrenContainer")[0];
   var className = element.className;
   if (!subGroup)
     return;

@@ -31,7 +31,7 @@ gadgets.ExoBasedUserPrefStore.prototype.savePrefs = function(gadget, newPrefs)
 {
   var prefs = gadgets.json.stringify(newPrefs || gadget.userPrefs_);
   prefs = encodeURIComponent(prefs);
-  var ggWindow = xj("#gadget_" + gadget.id);
+  var ggWindow = gj("#gadget_" + gadget.id);
   if (ggWindow.length > 0)
   {
     var compID = ggWindow.parent().attr("id").replace(/^content-/, "");

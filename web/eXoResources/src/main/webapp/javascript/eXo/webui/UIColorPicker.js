@@ -21,7 +21,7 @@ eXo.webui.UIColorPicker = {
 
   show : function(obj) {
     document.onmousedown = new Function("eXo.webui.UIColorPicker.hide()");
-    var jObj = xj(obj);
+    var jObj = gj(obj);
     this.tableColor = jObj.next("div")[0];
     this.title = jObj.find(".DisplayValue").first()[0];
     this.input = jObj.parent().find(".UIColorPickerValue").first()[0];
@@ -30,7 +30,7 @@ eXo.webui.UIColorPicker = {
   },
   
   setColor : function(color) {
-    if (xj(this.title).hasClass(color)) {
+    if (gj(this.title).hasClass(color)) {
       this.hide();
       return;
     }
@@ -41,9 +41,9 @@ eXo.webui.UIColorPicker = {
   },
 
   clearSelectedValue : function() {
-    var colorCell = xj(this.tableColor).find("a");        
+    var colorCell = gj(this.tableColor).find("a");
     colorCell.each(function() {
-    	var jObj = xj(this);
+    	var jObj = gj(this);
     	if (jObj.hasClass("SelectedColorCell")) {
     		jObj.removeClass("SelectedColorCell");    		
     		return false;
@@ -55,9 +55,9 @@ eXo.webui.UIColorPicker = {
     var selectedValue = this.input.value;
     
     this.clearSelectedValue();
-    var colorCell = xj(this.tableColor).find("a");
+    var colorCell = gj(this.tableColor).find("a");
     colorCell.each(function() {
-    	var jObj = xj(this);
+    	var jObj = gj(this);
     	if (jObj.hasClass(selectedValue)) {
     		jObj.addClass("SelectedColorCell");
     		return false;

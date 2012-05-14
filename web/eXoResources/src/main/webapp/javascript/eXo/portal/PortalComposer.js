@@ -23,7 +23,7 @@ eXo.portal.PortalComposer = {
 
   toggle : function(icon)
   {
-    var jqIcon = xj(icon);
+    var jqIcon = gj(icon);
     var compWindow = jqIcon.parent().closest(".UIPortalComposer");
     var contWindow = compWindow.children("div.UIWindowContent").eq(0);
     if(contWindow.css("display") == "block")
@@ -42,7 +42,7 @@ eXo.portal.PortalComposer = {
 
   showTab : function(id)
   {
-    var toolPanel = xj("#UIPortalToolPanel");
+    var toolPanel = gj("#UIPortalToolPanel");
     if(id == "UIApplicationList")
     {
       toolPanel.attr("class", "ApplicationMode");
@@ -51,7 +51,7 @@ eXo.portal.PortalComposer = {
     else if(id == "UIContainerList")
     {
       toolPanel.attr("class", "ContainerMode");
-      xj("#UIPageBody .DragControlArea").off("mousedown");
+      gj("#UIPageBody .DragControlArea").off("mousedown");
     }    
   },
 
@@ -66,7 +66,7 @@ eXo.portal.PortalComposer = {
     if(!this.contentModified)
     {
       this.contentModified = true;
-      var compWindow = xj("#UIWorkingWorkspace").find("div.UIPortalComposer").eq(0);
+      var compWindow = gj("#UIWorkingWorkspace").find("div.UIPortalComposer").eq(0);
       compWindow.find("a.SaveButton").attr("class", "EdittedSaveButton");
 
       ajaxAsyncGetRequest(eXo.env.server.createPortalURL(compWindow.attr("id"), "ChangeEdittedState", true));

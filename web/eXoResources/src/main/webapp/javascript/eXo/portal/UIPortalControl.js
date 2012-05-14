@@ -27,7 +27,7 @@ eXo.portal.UIPortalControl = {
    */
   collapseTree : function(selectedElement) {
 
-    var ancest = xj(selectedElement).parent().closest(".Node");
+    var ancest = gj(selectedElement).parent().closest(".Node");
     var childrenCont = ancest.find("div.ChildrenContainer").eq(0);
     var newHTML = "<div onclick=\""
         + childrenCont.attr("actionLink")

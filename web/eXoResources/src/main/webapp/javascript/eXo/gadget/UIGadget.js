@@ -71,7 +71,7 @@ eXo.gadget.UIGadget = {
     var gadgetBlock = document.getElementById(id);
     gadgetBlock.innerHTML = "<div id='gadget_" + gadget.id + "' class='UIGadgetContent'> </div>";
     gadgets.container.renderGadget(gadget);
-    var uiGadget = xj(gadgetBlock).closest(".UIGadget");
+    var uiGadget = gj(gadgetBlock).closest(".UIGadget");
     if (uiGadget.length > 0)
     {
       var isDesktop = uiGadget.parent().hasClass("UIPageDesktop");
@@ -97,20 +97,20 @@ eXo.gadget.UIGadget = {
    */
   init : function(uiGadget, inDesktop, metadata)
   {
-    var gadget = xj(uiGadget);
+    var gadget = gj(uiGadget);
     var portletFrag = gadget.closest(".PORTLET-FRAGMENT");
 
     if (portletFrag.length == 0)
     {
       gadget.mouseover(function()
       {
-        xj(this).find("div.GadgetControl").css("visibility", "visible");
+        gj(this).find("div.GadgetControl").css("visibility", "visible");
         return false;
       });
 
       gadget.mouseout(function()
       {
-        xj(this).find("div.GadgetControl").css("visibility", "hidden").css("border", "none");
+        gj(this).find("div.GadgetControl").css("visibility", "hidden").css("border", "none");
         return false;
       });
     }
@@ -135,7 +135,7 @@ eXo.gadget.UIGadget = {
       }
       eXo.core.DragDrop.init(dragArea, uiGadget);
 
-      var desktopPage = xj("#UIPageDesktop");
+      var desktopPage = gj("#UIPageDesktop");
       var offsetHeight = desktopPage.offsetHeight - uiGadget.offsetHeight;
       var offsetWidth = desktopPage.offsetWidth - uiGadget.offsetWidth;
       var dragPosX = uiGadget.offsetLeft;
@@ -163,10 +163,10 @@ eXo.gadget.UIGadget = {
       {
         desktopPage.children("div.UIGadget").each(function()
         {
-          var mask = xj(this).find("div.UIMask").eq(0);
+          var mask = gj(this).find("div.UIMask").eq(0);
           if (mask)
           {
-            var c = xj(this).find("div.gadgets-gadget-content")[0];
+            var c = gj(this).find("div.gadgets-gadget-content")[0];
             mask.css({"marginTop" : -c.offsetHeight + "px", "height" : c.offsetHeight + "px", "width" : c.offsetWidth + "px", "backgroundColor" : "white", "display" : "block"});
             mask.fadeTo(0, 0.03);
           }
@@ -192,7 +192,7 @@ eXo.gadget.UIGadget = {
       {
         desktopPage.children("div.UIGadget").each(function()
         {
-          var mask = xj(this).find("div.UIMask").eq(0);
+          var mask = gj(this).find("div.UIMask").eq(0);
           if (mask)
           {
             mask.css("display", "none");
@@ -231,7 +231,7 @@ eXo.gadget.UIGadget = {
    */
   editGadget : function(id)
   {
-    var tempId = xj("#" + id).find("iframe.gadgets-gadget").attr("id").split('_')[2];
+    var tempId = gj("#" + id).find("iframe.gadgets-gadget").attr("id").split('_')[2];
     gadgets.container.getGadget(tempId).handleOpenUserPrefsDialog();
   },
 
@@ -241,7 +241,7 @@ eXo.gadget.UIGadget = {
    */
   minimizeGadget: function(icon)
   {
-    var minIcon = xj(icon);
+    var minIcon = gj(icon);
     var gadget = minIcon.closest(".UIGadget");
     var portletFrag = gadget.closest(".PORTLET-FRAGMENT");
     if (portletFrag.length == 0)
@@ -286,7 +286,7 @@ eXo.gadget.UIGadget = {
    */
   maximizeGadget: function(icon)
   {
-    var maxIcon = xj(icon);
+    var maxIcon = gj(icon);
     var gadget = maxIcon.closest(".UIGadget");
     var portletFrag = gadget.closest(".PORTLET-FRAGMENT");
     if (portletFrag.length == 0)
@@ -310,7 +310,7 @@ eXo.gadget.UIGadget = {
    */
   deleteGadget : function(icon)
   {
-    var closeIcon = xj(icon);
+    var closeIcon = gj(icon);
     var gadget = closeIcon.closest(".UIGadget");
     var portletFrag = gadget.closest(".PORTLET-FRAGMENT");
 
@@ -366,7 +366,7 @@ eXo.gadget.UIGadget = {
    */
   saveWindowProperties : function(object)
   {
-    var gadget = xj(object);
+    var gadget = gj(object);
     var blockID = gadget.closest(".UIPage").find("div.id").html();
     var params = [
       {name: "objectId", value : object.id},
@@ -383,7 +383,7 @@ eXo.gadget.UIGadget = {
    */
   resizeFullHeight : function(componentId)
   {
-    var portletFrag = xj("#" + componentId).closest(".PORTLET-FRAGMENT");
+    var portletFrag = gj("#" + componentId).closest(".PORTLET-FRAGMENT");
     eXo.core.Browser.fillUpFreeSpace(portletFrag[0]);
   }
 }

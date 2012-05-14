@@ -28,13 +28,13 @@ eXo.webui.UIPopupSelectCategory = {
    *          evt
    */
   show : function(obj, evt) {
-    var popup = xj(obj).find("div.UIPopupCategory");
+    var popup = gj(obj).find("div.UIPopupCategory");
     if (popup.length && popup.css("display") == "none")
     {
       popup.show();
-      xj(document).one("click", function()
+      gj(document).one("click", function()
 	  {
-    	  xj(document).one("click", function() {
+    	  gj(document).one("click", function() {
     		  popup.hide();    		  
     	  });
 	  });

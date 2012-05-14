@@ -29,7 +29,7 @@ eXo.webui.UIDashboard = {
 
     var UTIL = eXo.webui.UIDashboardUtil;
 
-    var jqDragObj = xj(dragObj);//JQuery wrapper of dragObj, that facilitates JQuery integration
+    var jqDragObj = gj(dragObj);//JQuery wrapper of dragObj, that facilitates JQuery integration
 
     var portletFrag = jqDragObj.closest(".PORTLET-FRAGMENT");
 
@@ -67,7 +67,7 @@ eXo.webui.UIDashboard = {
 
       if (!jqDragObj.hasClass("SelectItem"))
       {
-        var targetArea = xj("<div>").attr("id", "UITarget").addClass("UITarget").css("height", dragObj.offsetHeight + "px");
+        var targetArea = gj("<div>").attr("id", "UITarget").addClass("UITarget").css("height", dragObj.offsetHeight + "px");
         eXo.webui.UIDashboard.targetObj = targetArea;
         jqDragObj.after(targetArea);
       }
@@ -80,7 +80,7 @@ eXo.webui.UIDashboard = {
       //increase speed of mouse when over iframe by create div layer above it
       gadgetContainer.find("div.UIGadget").each(function()
       {
-        var gadgetWindow = xj(this);
+        var gadgetWindow = gj(this);
         var mask = gadgetWindow.find("div.UIMask").eq(0);
         if (mask)
         {
@@ -111,7 +111,7 @@ eXo.webui.UIDashboard = {
       {
         if (!targetArea)
         {
-          targetArea = xj("<div>").attr("id", "UITarget").addClass("UITarget").css("height", dragObj.offsetHeight + "px");
+          targetArea = gj("<div>").attr("id", "UITarget").addClass("UITarget").css("height", dragObj.offsetHeight + "px");
           eXo.webui.UIDashboard.targetObj = targetArea;
         }
 
@@ -127,9 +127,9 @@ eXo.webui.UIDashboard = {
           var addToLast = true;
           column.find("div.UIGadget").not("#" + dragObj.id).each(function()
           {
-            if (ey <= xj(this).offset().top + (this.offsetHeight / 3) - gadgetContainer.scrollTop())
+            if (ey <= gj(this).offset().top + (this.offsetHeight / 3) - gadgetContainer.scrollTop())
             {
-              xj(this).before(targetArea);
+              gj(this).before(targetArea);
               addToLast = false;
 
               return false;
@@ -161,7 +161,7 @@ eXo.webui.UIDashboard = {
     {
       gadgetContainer.find("div.UIMask").each(function()
       {
-    	var jObj = xj(this);
+    	var jObj = gj(this);
         jObj.fadeTo(0, 1);
         jObj.css("display", "none");
       });
@@ -218,7 +218,7 @@ eXo.webui.UIDashboard = {
 
       gadgetContainer.find("div.UITarget").each(function()
       {
-        xj(this).remove();
+        gj(this).remove();
       });
 
       eXo.webui.UIDashboard.targetObj = eXo.webui.UIDashboard.currentCol = null;
@@ -236,7 +236,7 @@ eXo.webui.UIDashboard = {
   },
 	
 	onLoad : function(windowId, canEdit) {
-    var portletWindow = xj("#" + windowId).eq(0);
+    var portletWindow = gj("#" + windowId).eq(0);
     if(!portletWindow)
     {
       return;
@@ -273,12 +273,12 @@ eXo.webui.UIDashboard = {
 	},
 	
 	initDragDrop : function(windowId, canEdit) {
-    var portletWindow = xj("#" + windowId);
+    var portletWindow = gj("#" + windowId);
 
     //TODO: Improve this by seperate gadget control appearing in select popup and ones appearing in the dashboard
     portletWindow.find("div.GadgetControl").each(function()
     {
-      var gadgetControl = xj(this);
+      var gadgetControl = gj(this);
       var gadget = gadgetControl.closest(".UIGadget");
       var minimizeButton = gadget.find("span.MinimizeAction").eq(0);//That might be undefined if actual gadget is the item in Select Gadget popup
       if(canEdit)
@@ -303,12 +303,12 @@ eXo.webui.UIDashboard = {
 	initPopup : function(popup) {
 		if(typeof(popup) == "string") popup = document.getElementById(popup);
 		if(!popup || popup.style.display == "none") return;
-    var dashboard = xj(popup).closest(".UIDashboard")[0];
+    var dashboard = gj(popup).closest(".UIDashboard")[0];
 		var deltaY = Math.ceil((dashboard.offsetHeight - popup.offsetHeight) / 2);
 		if (deltaY < 0) {
 			deltaY = 0;
 		}
-		popup.style.top = xj(dashboard).offset().top + deltaY + "px";
+		popup.style.top = gj(dashboard).offset().top + deltaY + "px";
 	},
 
 	 /**
@@ -316,7 +316,7 @@ eXo.webui.UIDashboard = {
    */
   showSelectPopup : function(link)
   {
-    var jqLink = xj(link).parent();
+    var jqLink = gj(link).parent();
     jqLink.css("visibility", "hidden");
 
     var portletID = jqLink.closest(".PORTLET-FRAGMENT").parent().attr("id");
@@ -349,7 +349,7 @@ eXo.webui.UIDashboard = {
    */
   onTabClick : function(clickElement, normalStyle, selectedType)
   {
-    var jqObj = xj(clickElement);
+    var jqObj = gj(clickElement);
     var category = jqObj.closest(".GadgetCategory");
     var itemCont = category.closest(".GadgetItemsContainer");
 
@@ -358,7 +358,7 @@ eXo.webui.UIDashboard = {
     {
       itemCont.children("div.GadgetCategory").each(function()
       {
-        var c = xj(this);
+        var c = gj(this);
         c.children("div.GadgetTab").attr("class", "GadgetTab " + normalStyle);
         c.children("div.ItemsContainer").css("display", "none");
       });
@@ -372,7 +372,7 @@ eXo.webui.UIDashboard = {
       category.children("div.ItemsContainer").css("display", "none");
     }
 
-    var h = xj(window).height();
+    var h = gj(window).height();
     jqObj.closest(".PopupContent").css("height", (h - 100 < itemCont[0].offsetHeight) ? (h - 100 + "px") : "auto");
   },
   /**
@@ -381,7 +381,7 @@ eXo.webui.UIDashboard = {
 	 */
   enableContainer : function(elemt)
   {
-    var jqObj = xj(elemt);
+    var jqObj = gj(elemt);
     jqObj.removeClass("DisableContainer");
     jqObj.children("div.Arrow").eq(0).removeClass("DisableArrowIcon");
   },
@@ -391,13 +391,13 @@ eXo.webui.UIDashboard = {
    */
   disableContainer : function(elemt)
   {
-    var jqObj = xj(elemt);
+    var jqObj = gj(elemt);
     jqObj.addClass("DisableContainer");
     jqObj.children("div.Arrow").eq(0).addClass("DisableArrowIcon");
   },
 
   scrollOnDrag : function(dragObj) {
-    var gadgetContainer = xj(dragObj).closest(".UIDashboard").find("div.GadgetContainer").eq(0);
+    var gadgetContainer = gj(dragObj).closest(".UIDashboard").find("div.GadgetContainer").eq(0);
 
     var colCont = gadgetContainer.children("div.UIColumns")[0];
 

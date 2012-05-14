@@ -25,7 +25,7 @@
 eXo.webui.UIFormInputThemeSelector = {
 
   showThemeSelected : function(obj, param) {
-    var jqObj = xj(obj);
+    var jqObj = gj(obj);
     var itemListContainer = jqObj.parent().closest(".ItemListContainer");
     var detailList = itemListContainer.next("div").find("div.UIThemeSelector").eq(0);
     detailList.next("div").html(jqObj.find("div.NameStyle").eq(0).html());
@@ -35,7 +35,7 @@ eXo.webui.UIFormInputThemeSelector = {
   },
 
   setDefaultTheme : function(obj, param) {
-    var itemDetailList = xj(obj).parent().closest(".ItemDetailList");
+    var itemDetailList = gj(obj).parent().closest(".ItemDetailList");
     var detailList = itemDetailList.find("div.UIThemeSelector").eq(0);
     detailList.attr("class", "UIThemeSelector " + param);
 
