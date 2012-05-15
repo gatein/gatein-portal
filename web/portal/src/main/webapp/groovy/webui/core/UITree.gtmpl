@@ -10,7 +10,7 @@
 		def rcontext = _ctx.getRequestContext();
 		String id = uicomponent.getParent().getId();
 	
-		rcontext.getJavascriptManager().importJavascript('eXo.webui.UIRightClickPopupMenu');
+		rcontext.getJavascriptManager().loadScriptResource('webui-ext');
 		rcontext.getJavascriptManager().addJavascript("eXo.webui.UIRightClickPopupMenu.disableContextMenu('"+id+"');");
 		uicomponent.renderUIComponent(uiPopupMenu); 
 	}

@@ -3,7 +3,7 @@
 	boolean isAutoUpload = uicomponent.isAutoUpload();
 	int limitFile = uicomponent.getLimitFile();
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIUploadInput');
+	rcontext.getJavascriptManager().loadScriptResource('webui-ext');
 	StringBuilder b = new StringBuilder();
 	b.append("[") ;
 	for(int i = 0; i < uploadId.length; i++) {

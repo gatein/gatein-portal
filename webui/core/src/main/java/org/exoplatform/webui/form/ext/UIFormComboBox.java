@@ -178,7 +178,7 @@ public class UIFormComboBox extends UIFormInputBase<String>
    public void processRender(WebuiRequestContext context) throws Exception
    {
       JavascriptManager jsManager = context.getJavascriptManager();
-      jsManager.importJavascript("eXo.webui.UICombobox");
+      jsManager.loadScriptResource("webui-ext");
       jsManager.addJavascript("eXo.webui.UICombobox.init('" + getId() + "');");
       Writer w = context.getWriter();
       String options = "[";

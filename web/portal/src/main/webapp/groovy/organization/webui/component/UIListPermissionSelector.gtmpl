@@ -5,7 +5,7 @@
 	
 	def rcontext = _ctx.getRequestContext();
  	def uiPublicMode = uicomponent.getChildById("publicMode");
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPopupWindow');
+	rcontext.getJavascriptManager().loadScriptResource('webui');
 %>
 <div id="<%=uicomponent.getId();%>" class="UIAccessGroup">
 	<div class="PublicCheck">

@@ -14,9 +14,6 @@
 	PortalURL nodeURL = nodeurl();
 
 	def selectedNode = Util.getUIPortal().getSelectedUserNode();
-	
-	JavascriptManager jsManager = pcontext.getJavascriptManager();
-	jsManager.importJavascript("eXo.webui.UITabbedDashboard");
 %>
 <div id="$uicomponent.id" class="UITabPaneDashboard UIHorizontalTabs ClearFix">
 			<%

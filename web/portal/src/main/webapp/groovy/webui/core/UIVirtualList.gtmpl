@@ -6,8 +6,7 @@
     boolean isAutoAdjustHeight = uicomponent.isAutoAdjustHeight();
     def rcontext = _ctx.getRequestContext();
     
-    rcontext.getJavascriptManager().importJavascript('eXo.core.Browser');
-    rcontext.getJavascriptManager().importJavascript('eXo.webui.UIVirtualList');
+    rcontext.getJavascriptManager().loadScriptResource('webui-ext');
     
     String url = uicomponent.url("LoadNext") + "&ajaxRequest=true"; 
     String css = "";

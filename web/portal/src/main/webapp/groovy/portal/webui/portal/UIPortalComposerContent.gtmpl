@@ -4,7 +4,7 @@
 	
 	def rcontext = _ctx.getRequestContext(); 
 	def jsManager = rcontext.getJavascriptManager();
-	jsManager.importJavascript('eXo.webui.UIHorizontalTabs');
+	jsManager.loadScriptResource('webui');
 %>
 
 <div class="UITabPane" id="$uicomponent.id">

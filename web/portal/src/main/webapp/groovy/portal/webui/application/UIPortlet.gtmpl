@@ -14,7 +14,7 @@
 	int portalMode = uiPortalApp.getModeState(); 
 	
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.importJavascript('eXo.webui.UIPopupSelectCategory');
+	jsmanager.loadScriptResource('webui');
 
 	WindowState windowState = uicomponent.getCurrentWindowState();
 	String portletId = uicomponent.getId();

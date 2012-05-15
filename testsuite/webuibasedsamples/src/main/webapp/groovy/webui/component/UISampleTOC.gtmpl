@@ -4,7 +4,7 @@
 	
 	def rContext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rContext.getJavascriptManager();
-	jsmanager.importJavascript("eXo.portal.UIPortal");			
+	jsmanager.loadScriptResource("portal");			
  %>
 
 	

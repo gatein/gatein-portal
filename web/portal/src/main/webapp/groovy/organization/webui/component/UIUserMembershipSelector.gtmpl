@@ -5,7 +5,7 @@
 	def membership = uicomponent.getMembership();
 	
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPopupWindow');
+	rcontext.getJavascriptManager().loadScriptResource('webui');
 %>
 <div class="UIMembership" id="UIUserMembershipSelector" >
 	<%//Begin Membership List%>

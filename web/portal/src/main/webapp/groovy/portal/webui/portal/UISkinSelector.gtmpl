@@ -2,8 +2,8 @@
 	import org.exoplatform.webui.core.UIItemSelector; 
 	
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector');
-	rcontext.getJavascriptManager().importJavascript('eXo.portal.UIPortal');
+	rcontext.getJavascriptManager().loadScriptResource('webui');
+	rcontext.getJavascriptManager().loadScriptResource('portal');
 %>
 <div class="UIChangeSkinForm">
 	<div class="UIFormTabPane">

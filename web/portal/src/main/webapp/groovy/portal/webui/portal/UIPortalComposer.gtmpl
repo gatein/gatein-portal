@@ -1,7 +1,7 @@
 <%	
 	String popupId = uicomponent.getId(); 
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPopupWindow');
+	rcontext.getJavascriptManager().loadScriptResource('webui');
 	
 	boolean isEditted = uicomponent.isEditted; 
 	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId');");

@@ -83,6 +83,9 @@
             <logger category="jacorb.config">
                 <level name="ERROR"/>
             </logger>
+            <logger category="com.google.javascript.jscomp">
+                <level name="ERROR"/>
+            </logger>
             <root-logger>
                 <level name="INFO"/>
                 <handlers>

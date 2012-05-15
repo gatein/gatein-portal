@@ -58,7 +58,7 @@ public class UIPortalToolPanel extends UIComponentDecorator
       super.processRender(context);
       if (showMaskLayer)
       {
-         jsmanager.importJavascript("eXo.core.UIMaskLayer");
+         jsmanager.loadScriptResource("base");
          jsmanager.addCustomizedOnLoadScript("eXo.core.UIMaskLayer.createMask('UIPortalToolPanel', null, 10) ;");
       }
    }

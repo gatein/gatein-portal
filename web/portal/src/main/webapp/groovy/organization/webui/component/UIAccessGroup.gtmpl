@@ -3,7 +3,7 @@
 	import org.exoplatform.webui.core.UIGrid;
 	
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPopupWindow');
+	rcontext.getJavascriptManager().loadScriptResource('webui');
 %>
 <div class="UIAccessGroup">
 	<% 

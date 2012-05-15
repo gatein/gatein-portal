@@ -254,6 +254,10 @@
          <path>/javascript/eXo/webui/UIItemSelector.js</path>
       </module>
       <module>
+         <name>eXo.webui.UIUserSelector</name>
+         <path>/javascript/eXo/webui/UIUserSelector.js</path>
+      </module>
+      <module>
          <name>eXo.portal.UIPortalControl</name>
          <path>/javascript/eXo/portal/UIPortalControl.js</path>
       </module>
@@ -287,6 +291,10 @@
       <module>
          <name>eXo.webui.UIUpload</name>
          <path>/javascript/eXo/webui/UIUpload.js</path>
+      </module>
+      <module>
+         <name>eXo.webui.UIUploadInput</name>
+         <path>/javascript/eXo/webui/UIUploadInput.js</path>
       </module>
       <module>
          <name>eXo.webui.UIRightClickPopupMenu</name>
@@ -340,6 +348,9 @@
       </module>
       <depends>
          <scripts>common</scripts>
+      </depends>
+      <depends>
+         <scripts>gadget</scripts>
       </depends>
    </scripts>
 

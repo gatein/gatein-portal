@@ -13,7 +13,7 @@
     String id = uicomponent.getParent().getId();
   	
   	JavascriptManager jsmanager = _ctx.getRequestContext().getJavascriptManager();
-  	jsmanager.importJavascript('eXo.webui.UIRightClickPopupMenu') ;
+  	jsmanager.loadScriptResource('webui-ext') ;
   	def objId = uicomponent.getChild(UITree.class).getParentSelected().getId();
     if(uicomponent.getCopyNode()!= null) {
       popupMenu = uiPopupMenu.getJSOnclickShowPopup(objId, "AddNode,PasteNode,EditNavigation,SaveNavigation,DeleteNavigation");

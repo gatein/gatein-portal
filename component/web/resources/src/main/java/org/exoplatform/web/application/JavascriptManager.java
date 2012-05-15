@@ -134,7 +134,7 @@ public class JavascriptManager
             loadScriptResource(id.getScope(), id.getName(), null);
             if (log.isWarnEnabled())
             {
-               log.warn("This method is deprecated. You could loadScriptResources " + res.getId() + " instead of importJavascript " + moduleName);
+               log.warn("This method is deprecated. You could loadScriptResource " + res.getId() + " instead of importJavascript " + moduleName);
             }
          }
          catch (Exception ex)

@@ -348,7 +348,7 @@ public class UIPortalApplication extends UIApplication
       requiredResources.add(new ResourceId(ResourceScope.SHARED, "bootstrap"), FetchMode.IMMEDIATE);
 
       //
-      log.debug("Resource ids to resolve: " + requiredResources);
+      log.debug("Resource ids to resolve: {}", requiredResources);
 
       //
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
@@ -370,7 +370,7 @@ public class UIPortalApplication extends UIApplication
          urls.addAll(jsMan.getExtendedScriptURLs());
          
          //
-         log.info("Resolved URLS for page: " + urls);
+         log.debug("Resolved URLS for page: {}", urls);
          
          // Here we get the list of stuff to load on demand or not
          // according to the boolean value in the map

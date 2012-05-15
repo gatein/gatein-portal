@@ -11,8 +11,7 @@
 	
 	String popupId = uicomponent.getId();
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIHorizontalTabs');
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIPopupWindow');
+	rcontext.getJavascriptManager().loadScriptResource('webui');
 	
 	def message = uicomponent.getMessage();
 	def actions = uicomponent.getActions();

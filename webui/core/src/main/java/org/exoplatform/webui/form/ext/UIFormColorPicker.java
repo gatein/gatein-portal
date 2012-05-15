@@ -199,7 +199,7 @@ public class UIFormColorPicker extends UIFormInputBase<String>
    public void processRender(WebuiRequestContext context) throws Exception
    {
       JavascriptManager jsManager = context.getJavascriptManager();
-      jsManager.importJavascript("eXo.webui.UIColorPicker");
+      jsManager.loadScriptResource("webui-ext");
       String value = getValue();
       if (value != null)
       {

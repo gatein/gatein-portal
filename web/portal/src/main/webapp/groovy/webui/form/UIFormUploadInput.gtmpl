@@ -2,7 +2,7 @@
 	String uploadId = uicomponent.getUploadId();
 	boolean isAutoUpload = uicomponent.isAutoUpload();
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIUpload');
+	rcontext.getJavascriptManager().loadScriptResource('webui-ext');
 	rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.webui.UIUpload.initUploadEntry('"+uploadId+"',"+isAutoUpload+");");
 %>
 <div class="UIFormUploadInput" id="$uploadId">

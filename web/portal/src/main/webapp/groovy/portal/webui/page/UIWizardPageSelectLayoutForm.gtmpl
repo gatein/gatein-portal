@@ -3,7 +3,7 @@
 	import org.exoplatform.webui.core.UIDropDownControl;
 
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().importJavascript('eXo.webui.UIItemSelector');
+	rcontext.getJavascriptManager().loadScriptResource('webui');
 
 	def categories = uicomponent.getItemCategories();
 	UIForm form = uicomponent.getParent();
