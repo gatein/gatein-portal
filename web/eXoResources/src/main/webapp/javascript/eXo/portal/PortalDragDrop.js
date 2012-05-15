@@ -33,9 +33,9 @@ eXo.portal.PortalDragDrop = {
 		return;
 	  }
 		
-	  var browser = eXo.core.Browser;
-	  var DragDrop = eXo.core.DragDrop;
-	  var PortalDragDrop = eXo.portal.PortalDragDrop;
+	  var browser = base.Browser;
+	  var DragDrop = common.DragDrop;
+	  var PortalDragDrop = portal.PortalDragDrop;
 	  
 	  var previewBlock = null;
 		/**
@@ -45,7 +45,7 @@ eXo.portal.PortalDragDrop = {
 		if (eXo.portal.isInDragging) return;		  
 		var dragObject = this, jDragObj = gj(this);
 		
-		var origDragObjectStyle = new eXo.core.HashMap();
+		var origDragObjectStyle = new base.HashMap();
 	    var properties = ["top", eXo.core.I18n.isLT() ? "left" : "right", "zIndex", "opacity", "filter", "position", "width"];
 	    origDragObjectStyle.copyProperties(properties, dragObject.style);
 	    jDragObj.data("origDragObjectStyle", origDragObjectStyle);
@@ -105,7 +105,7 @@ eXo.portal.PortalDragDrop = {
 	   var dragCallback = function(nx, ny, ex, ey, e) {
 	     var dragObject = this, jDragObj = gj(this);
 	     /* Control Scroll */
-	     eXo.portal.PortalDragDrop.scrollOnDrag(dragObject, e);
+	     portal.PortalDragDrop.scrollOnDrag(dragObject, e);
 	    
 	     var foundTarget = PortalDragDrop.findTarget(dragObject, ex, ey) || jDragObj.data("lastFoundTargetObject");
 	     if (!foundTarget) return;	     
@@ -140,7 +140,7 @@ eXo.portal.PortalDragDrop = {
 	      });	      	      
 	      
 	      jDragObj.data("listComponentInTarget", listComponent);
-	      var insertPosition = eXo.portal.PortalDragDrop.findInsertPosition(listComponent, "row", ey);
+	      var insertPosition = portal.PortalDragDrop.findInsertPosition(listComponent, "row", ey);
 	      if (jDragObj.data("foundTargetObject") === jDragObj.data("lastFoundTargetObject") && 
 	    		  insertPosition === jDragObj.data("foundIndex")) return;	      
 	      jDragObj.data("foundIndex", insertPosition);
@@ -158,7 +158,7 @@ eXo.portal.PortalDragDrop = {
 	    	 return this != previewBlock.parentNode && this != dragObject.parentNode; 
 	      });
 	      
-	      var insertPosition = eXo.portal.PortalDragDrop.findInsertPosition(listComponent, "column", ex);
+	      var insertPosition = portal.PortalDragDrop.findInsertPosition(listComponent, "column", ex);
 	      if (jDragObj.data("foundTargetObject") === jDragObj.data("lastFoundTargetObject") && 
 	    		  insertPosition === jDragObj.data("foundIndex")) return;
 	      jDragObj.data("foundIndex", insertPosition);
@@ -216,7 +216,7 @@ eXo.portal.PortalDragDrop = {
 	  	}
 
 	    if(e.which !== 27) {
-	    	eXo.portal.PortalDragDrop.doDropCallback(dragObject);
+	    	portal.PortalDragDrop.doDropCallback(dragObject);
 	    } else {
 	      //When click ESC, restore dragObject's last position
 	      if (dragObject.parentNode && dragObject.parentNode.tagName.toLowerCase() == "td") {
@@ -244,7 +244,7 @@ eXo.portal.PortalDragDrop = {
 	    
 	    eXo.portal.isInDragging = false;
 	    if (hasChanged) {
-	    	eXo.portal.PortalComposer.toggleSaveButton();
+	    	portal.PortalComposer.toggleSaveButton();
 	    }
 	    
 	    jDragObj.removeData();
@@ -278,7 +278,7 @@ eXo.portal.PortalDragDrop = {
 	 */
 	doDropCallback : function(dragObject) {
 	  var srcElement = dragObject, jDragObj = gj(dragObject);
-	  var PortalDragDrop = eXo.portal.PortalDragDrop;
+	  var PortalDragDrop = portal.PortalDragDrop;
 	  var targetElement = jDragObj.data("foundTargetObject");
 	  var foundIndex = jDragObj.data("foundIndex")
 	  
@@ -292,7 +292,7 @@ eXo.portal.PortalDragDrop = {
 	  
 	  if(!srcElement.isAddingNewly && (foundIndex != undefined)) {
 	    if(PortalDragDrop.layoutTypeElementNode != null) {
-	      eXo.portal.PortalDragDrop.divRowContainerAddChild(srcElement, targetElement, foundIndex);
+	      portal.PortalDragDrop.divRowContainerAddChild(srcElement, targetElement, foundIndex);
 	    }
 	  }
 
@@ -373,7 +373,7 @@ eXo.portal.PortalDragDrop = {
 	 * @param layout {string} the layout type which is "row" or "column"
 	 */
 	findInsertPosition : function(components, layout, mousePos) {
-	   var browser = eXo.core.Browser;
+	   var browser = base.Browser;
 	   if (layout == "row") {
 	      for (var i = 0; i < components.length; i++) {
 	    	  var componentTop = gj(components[i]).offset().top;
@@ -433,7 +433,7 @@ eXo.portal.PortalDragDrop = {
 	},
 	  
 	isIn : function(x, y, component) {
-	  var browser = eXo.core.Browser;
+	  var browser = base.Browser;
 	  var offset = gj(component).offset();
 	  var componentLeft = offset.left;
 	  var componentRight = componentLeft + component.offsetWidth ;
@@ -472,3 +472,4 @@ eXo.portal.PortalDragDrop = {
 	  }
 	}
 } ;
+return {PortalDragDrop: eXo.portal.PortalDragDrop};

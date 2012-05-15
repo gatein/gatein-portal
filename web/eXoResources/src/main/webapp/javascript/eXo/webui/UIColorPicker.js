@@ -20,7 +20,7 @@
 eXo.webui.UIColorPicker = {
 
   show : function(obj) {
-    document.onmousedown = new Function("eXo.webui.UIColorPicker.hide()");
+    document.onmousedown = webuiExt.UIColorPicker.hide;
     var jObj = gj(obj);
     this.tableColor = jObj.next("div")[0];
     this.title = jObj.find(".DisplayValue").first()[0];
@@ -66,11 +66,11 @@ eXo.webui.UIColorPicker = {
   },
 
   hide : function() {
-    if (eXo.webui.UIColorPicker.tableColor) {
-      eXo.webui.UIColorPicker.tableColor.style.display = "none";
-      eXo.webui.UIColorPicker.tableColor = null;
-      eXo.webui.UIColorPicker.title = null;
-      eXo.webui.UIColorPicker.input = null;
+    if (webuiExt.UIColorPicker.tableColor) {
+      webuiExt.UIColorPicker.tableColor.style.display = "none";
+      webuiExt.UIColorPicker.tableColor = null;
+      webuiExt.UIColorPicker.title = null;
+      webuiExt.UIColorPicker.input = null;
       document.onmousedown = null;
     }
   },
@@ -83,4 +83,5 @@ eXo.webui.UIColorPicker = {
       obj.style.display = "none";
     }
   }
-}
+};
+return {UIColorPicker: eXo.webui.UIColorPicker};

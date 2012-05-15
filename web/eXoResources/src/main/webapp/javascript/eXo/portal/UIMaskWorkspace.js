@@ -29,28 +29,28 @@ eXo.portal.UIMaskWorkspace = {
         this.maskWorkpace.style.width = width + "px";
       }
 
-      if (eXo.portal.UIMaskWorkspace.maskLayer == null) {
-        var maskLayer = eXo.core.UIMaskLayer.createMask("UIPortalApplication",
+      if (base.UIMaskWorkspace.maskLayer == null) {
+        var maskLayer = base.UIMaskLayer.createMask("UIPortalApplication",
             this.maskWorkpace, 30);
-        eXo.portal.UIMaskWorkspace.maskLayer = maskLayer;
+        base.UIMaskWorkspace.maskLayer = maskLayer;
       }
       this.maskWorkpace.style.margin = "auto";
       this.maskWorkpace.style.display = "block";
 
-      var browser = eXo.core.Browser; 
+      var browser = base.Browser; 
       browser.addOnResizeCallback('mid_maskWorkspace',
-          eXo.portal.UIMaskWorkspace.resetPositionEvt);
-      browser.addOnScrollCallback("setPosition_maskWorkspace", eXo.portal.UIMaskWorkspace.resetPositionEvt);
+          base.UIMaskWorkspace.resetPositionEvt);
+      browser.addOnScrollCallback("setPosition_maskWorkspace", base.UIMaskWorkspace.resetPositionEvt);
     }
   },
 
   hide : function(maskId) {
     this.maskWorkpace = document.getElementById(maskId);
-    if (eXo.portal.UIMaskWorkspace.maskLayer == undefined || !this.maskWorkpace) {
+    if (base.UIMaskWorkspace.maskLayer == undefined || !this.maskWorkpace) {
       return;
     }
-    eXo.core.UIMaskLayer.removeMask(eXo.portal.UIMaskWorkspace.maskLayer);
-    eXo.portal.UIMaskWorkspace.maskLayer = null;
+    base.UIMaskLayer.removeMask(base.UIMaskWorkspace.maskLayer);
+    base.UIMaskWorkspace.maskLayer = null;
     this.maskWorkpace.style.display = "none";
   },
 
@@ -59,15 +59,16 @@ eXo.portal.UIMaskWorkspace = {
    * perform this operation
    */
   resetPositionEvt : function() {
-    var maskWorkpace = eXo.portal.UIMaskWorkspace.maskWorkpace;
+    var maskWorkpace = base.UIMaskWorkspace.maskWorkpace;
     if (maskWorkpace && (maskWorkpace.style.display == "block")) {
       try {
-        eXo.core.UIMaskLayer.blockContainer = document
+        base.UIMaskLayer.blockContainer = document
             .getElementById("UIPortalApplication");
-        eXo.core.UIMaskLayer.object = maskWorkpace;
-        eXo.core.UIMaskLayer.setPosition();
+        base.UIMaskLayer.object = maskWorkpace;
+        base.UIMaskLayer.setPosition();
       } catch (e) {
       }
     }
   }
-}
+};
+return {UIMaskWorkspace: eXo.portal.UIMaskWorkspace};

@@ -41,3 +41,4 @@ eXo.webui.UIPopupSelectCategory = {
     } 
   }
 };
+return {UIPopupSelectCategory: eXo.webui.UIPopupSelectCategory};

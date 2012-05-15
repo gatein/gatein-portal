@@ -36,7 +36,7 @@ eXo.webui.UIPopupMenu = {
    *          container
    */
   init : function(popupMenu, container) {
-    this.superClass = eXo.webui.UIPopup;
+    this.superClass = base.UIPopup;
     this.superClass.init(popupMenu, container.id);
   },
   /**
@@ -69,15 +69,15 @@ eXo.webui.UIPopupMenu = {
   },
 
   pushVisibleContainer : function(containerId) {
-    eXo.webui.UIPopupMenu.currentVisibleContainers.push(containerId);
+    navigation.UIPopupMenu.currentVisibleContainers.push(containerId);
   },
 
   popVisibleContainer : function() {
-    eXo.webui.UIPopupMenu.currentVisibleContainers.pop();
+    navigation.UIPopupMenu.currentVisibleContainers.pop();
   },
 
   pushHiddenContainer : function(containerId) {
-    eXo.webui.UIPopupMenu.elementsToHide.push(containerId);
+    navigation.UIPopupMenu.elementsToHide.push(containerId);
   },
   /**
    * Function called when an element (or more) must be hidden Sets a timeout to
@@ -87,7 +87,7 @@ eXo.webui.UIPopupMenu = {
   setCloseTimeout : function(time) {
     if (!time)
       time = 100;
-    setTimeout("eXo.webui.UIPopupMenu.doOnMenuItemOut()", time);
+    setTimeout(navigation.UIPopupMenu.doOnMenuItemOut, time);
   },
   /**
    * Adds an onCLick event to link elements If they are http links, changes the
@@ -115,9 +115,9 @@ eXo.webui.UIPopupMenu = {
    * that are no longer pointed at
    */
   doOnMenuItemOut : function() {
-    while (eXo.webui.UIPopupMenu.elementsToHide.length > 0) {
+    while (navigation.UIPopupMenu.elementsToHide.length > 0) {
       var container = document
-          .getElementById(eXo.webui.UIPopupMenu.elementsToHide.shift());
+          .getElementById(navigation.UIPopupMenu.elementsToHide.shift());
       if (container) {
         /*
          * It can happen that a submenu appears in both the "to-hide" list and
@@ -128,9 +128,9 @@ eXo.webui.UIPopupMenu = {
          * item submenu doesn't appear in the "keep-visible" list before we hide
          * it
          */
-        if (!eXo.webui.UIPopupMenu.currentVisibleContainers
+        if (!navigation.UIPopupMenu.currentVisibleContainers
             .contains(container.id)) {
-          eXo.webui.UIPopupMenu.hide(container);
+          navigation.UIPopupMenu.hide(container);
         }
       }
     }

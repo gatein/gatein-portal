@@ -54,7 +54,7 @@ eXo.webui.UIDropDownControl = {
       bottomCont.css("display", "block");
 
       //TODO: Use JQuery Core instead of eXo.core.Browser
-      var Browser = eXo.core.Browser;
+      var Browser = base.Browser;
       var visibleHeight = gj(window).height() - gj(middleCont[0]).offset().top - 40;
       if(middleCont[0].scrollHeight > visibleHeight)
       {
@@ -110,4 +110,5 @@ eXo.webui.UIDropDownControl = {
 
     dropDownAnchor.css("display", "none");
   }
-}
+};
+return {UIDropDownControl: eXo.webui.UIDropDownControl};

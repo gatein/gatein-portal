@@ -41,10 +41,10 @@
 		     <path>/javascript/eXo/webui/UISampleTOC.js</path>
 		 	</script>
 			<depends>
-			  	<module>webui</module>
+			  <module>webui</module>
 			</depends>
 			<depends>
-			   <module>webui-ext</module>
+			  <module>webuiExt</module>
 			</depends>
 		 </module>
     </portlet>

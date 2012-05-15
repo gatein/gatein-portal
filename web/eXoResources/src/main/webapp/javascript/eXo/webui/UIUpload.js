@@ -60,7 +60,7 @@ eXo.webui.UIUpload = {
     var uploadHTML = "";
     uploadHTML += "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>";
     uploadHTML += "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='"
-        + eXo.core.I18n.lang + "' dir='" + eXo.core.I18n.dir + "'>";
+        + base.I18n.lang + "' dir='" + base.I18n.dir + "'>";
     uploadHTML += "<head>";
     uploadHTML += "<style type='text/css'>";
     uploadHTML += ".UploadButton {width: 20px; height: 20px; cursor: pointer; vertical-align: bottom;";
@@ -105,7 +105,7 @@ eXo.webui.UIUpload = {
    *          elementId identifier of upload bar frame
    */
   refreshProgress : function(elementId) {
-    var list = eXo.webui.UIUpload.listUpload;
+    var list = webuiExt.UIUpload.listUpload;
     if (list.length < 1)
       return;
     var url = eXo.env.server.context + "/upload?";
@@ -116,8 +116,9 @@ eXo.webui.UIUpload = {
     }
     var responseText = ajaxAsyncGetRequest(url, false);
     if (list.length > 0) {
-      setTimeout("eXo.webui.UIUpload.refreshProgress('" + elementId + "');",
-          1000);
+      setTimeout(function() {
+    	  webuiExt.UIUpload.refreshProgress(elementId);
+      }, 1000);
     }
 
     try {
@@ -149,7 +150,7 @@ eXo.webui.UIUpload = {
       }
     }
 
-    if (eXo.webui.UIUpload.listUpload.length < 1)
+    if (webuiExt.UIUpload.listUpload.length < 1)
       return;
 
     if (element) {
@@ -167,7 +168,7 @@ eXo.webui.UIUpload = {
    *          fileName uploaded file name
    */
   showUploaded : function(id, fileName) {
-    eXo.webui.UIUpload.listUpload.remove(id);
+    webuiExt.UIUpload.listUpload.remove(id);
     var container = parent.document.getElementById(id);
     var jCont = gj(container);
     var element = document.getElementById(id + "ProgressIframe");
@@ -198,7 +199,7 @@ eXo.webui.UIUpload = {
    *          id upload identifier
    */
   abortUpload : function(id) {
-    eXo.webui.UIUpload.listUpload.remove(id);
+    webuiExt.UIUpload.listUpload.remove(id);
     var url = eXo.env.server.context + "/upload?";
     url += "uploadId=" + id + "&action=abort";
     // var url = eXo.env.server.context + "/upload?uploadId="
@@ -209,7 +210,7 @@ eXo.webui.UIUpload = {
     var jCont = gj(container);
     var uploadIframe = jCont.find("#" + id + "UploadIframe");
     uploadIframe.show();
-    eXo.webui.UIUpload.createUploadEntry(id, eXo.webui.UIUpload.isAutoUpload);
+    webuiExt.UIUpload.createUploadEntry(id, webuiExt.UIUpload.isAutoUpload);
     var progressIframe =jCont.find("#" + id + "ProgressIframe");
     progressIframe.hide();
 
@@ -238,7 +239,7 @@ eXo.webui.UIUpload = {
     var jCont = gj(container);
     var uploadIframe = jCont.find("#" + id + "UploadIframe");
     uploadIframe.show();
-    eXo.webui.UIUpload.createUploadEntry(id, this.isAutoUpload);
+    webuiExt.UIUpload.createUploadEntry(id, this.isAutoUpload);
     var progressIframe = jCont.find("#" + id + "ProgressIframe");
     progressIframe.hide();
 
@@ -286,12 +287,14 @@ eXo.webui.UIUpload = {
 
     form.submit();
 
-    var list = eXo.webui.UIUpload.listUpload;
+    var list = webuiExt.UIUpload.listUpload;
     if (list.length == 0) {
-      eXo.webui.UIUpload.listUpload.push(form.id);
-      setTimeout("eXo.webui.UIUpload.refreshProgress('" + id + "');", 1000);
+      webuiExt.UIUpload.listUpload.push(form.id);
+      setTimeout(function() {webuiExt.UIUpload.refreshProgress(id);}, 1000);
     } else {
-      eXo.webui.UIUpload.listUpload.push(form.id);
+      webuiExt.UIUpload.listUpload.push(form.id);
     }
   }
 };
+
+return {UIUpload: eXo.webui.UIUpload};

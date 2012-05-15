@@ -93,7 +93,7 @@ eXo.portal.UIPortal = {
       editBlock.css("display", "block");
 
       var infBar = editBlock.find("div.UIInfoBar").eq(0);
-      if (infBar && (eXo.core.Browser.isIE6() || (eXo.core.Browser.isIE7() && eXo.core.I18n.isRT())))
+      if (infBar && (base.Browser.isIE6() || (base.Browser.isIE7() && eXo.core.I18n.isRT())))
       {
         // Avoid resizing width of portlet/container block multiple times
         if (infBar.css("width") == "")
@@ -225,3 +225,4 @@ eXo.portal.UIPortal = {
     }
   }  
 };
+return {UIPortal: eXo.portal.UIPortal};

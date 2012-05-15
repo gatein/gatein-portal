@@ -137,4 +137,5 @@ eXo.webui.UIForm = {
     }
     form.elements[typeId].value = hiddenValue;
   }
-}
+};
+return {UIForm: eXo.webui.UIForm};

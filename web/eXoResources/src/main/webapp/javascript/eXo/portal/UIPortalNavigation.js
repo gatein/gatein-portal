@@ -21,7 +21,7 @@
  * Manages the main navigation menu on the portal
  */
 eXo.portal.UIPortalNavigation = {
-  hideMenuTimeoutIds : new eXo.core.HashMap(),
+  hideMenuTimeoutIds : new base.HashMap(),
   scrollMgr : null,
   
   /**

@@ -699,10 +699,11 @@ gadgets.IfrGadget.prototype.generateForm = function(gadget) {
 
     parentEl.appendChild(formEl);
 
+    var gadgetJS = require("SHARED/gadget");
     var saveEl = document.createElement("div");
     saveEl.className = this.cssClassGadgetUserPrefsDialogActionBar;
-    saveEl.innerHTML = '<input type="button" value="'+eXo.gadget.UIGadget.SaveTitle+'" onclick="gadgets.container.getGadget(' +
-      this.id +').handleSaveUserPrefs()"> <input type="button" value="'+eXo.gadget.UIGadget.CancelTitle+'" onclick="gadgets.container.getGadget(' +
+    saveEl.innerHTML = '<input type="button" value="'+gadgetJS.UIGadget.SaveTitle+'" onclick="gadgets.container.getGadget(' +
+      this.id +').handleSaveUserPrefs()"> <input type="button" value="'+gadgetJS.UIGadget.CancelTitle+'" onclick="gadgets.container.getGadget(' +
       this.id +').handleCancelUserPrefs()">';
     parentEl.appendChild(saveEl);
 };

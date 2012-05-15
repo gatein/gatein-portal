@@ -39,7 +39,8 @@ eXo.webui.UIFormInputThemeSelector = {
     var detailList = itemDetailList.find("div.UIThemeSelector").eq(0);
     detailList.attr("class", "UIThemeSelector " + param);
 
-    detailList.next("div").html(eXo.i18n.I18NMessage.getMessage("DefaultTheme"));
+    detailList.next("div").html(base.I18NMessage.getMessage("DefaultTheme"));
     itemDetailList.prev("div").find("div.ItemList").eq(0).parent().children("input").eq(0).val(param);
   }
-}
+};
+return {UIFormInputThemeSelector: eXo.webui.UIFormInputThemeSelector};

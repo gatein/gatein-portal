@@ -26,11 +26,11 @@ eXo.core.UIMaskLayer = {
    * Creates a transparent mask with "wait" cursor type
    */
   createTransparentMask : function(position) {
-    var browser = eXo.core.Browser;
+    var browser = base.Browser;
     var ajaxLoading = gj("#AjaxLoadingMask");
-    var maskLayer = gj(eXo.core.UIMaskLayer.createMask("UIPortalApplication",
+    var maskLayer = gj(base.UIMaskLayer.createMask("UIPortalApplication",
         ajaxLoading[0], 0, position));
-    browser.addOnScrollCallback("5439383", eXo.core.UIMaskLayer.setPosition);
+    browser.addOnScrollCallback("5439383", base.UIMaskLayer.setPosition);
     ajaxLoading.hide();
     maskLayer.fadeTo(0, 0);
     maskLayer.css("backgroundColor", "white");
@@ -63,8 +63,8 @@ eXo.core.UIMaskLayer = {
    * Removes both transparent and loading masks
    */
   removeMasks : function(maskLayer) {
-    eXo.core.UIMaskLayer.removeTransparentMask();
-    eXo.core.UIMaskLayer.removeMask(maskLayer);
+    base.UIMaskLayer.removeTransparentMask();
+    base.UIMaskLayer.removeMask(maskLayer);
   },
 
   /**
@@ -78,7 +78,7 @@ eXo.core.UIMaskLayer = {
    */
   createMask : function(blockContainerId, object, opacity, position) {
     try {
-      var browser = eXo.core.Browser;
+      var browser = base.Browser;
       if (typeof (blockContainerId) == "string")
         blockContainerId = gj("#" + blockContainerId);
       var blockContainer = gj(blockContainerId);
@@ -98,7 +98,7 @@ eXo.core.UIMaskLayer = {
       }
       blockContainer.append(maskLayer);
       maskLayer.addClass("MaskLayer").attr("id", "MaskLayer");
-      maskLayer.data("maxZIndex", eXo.webui.UIPopup.zIndex + 1); // 3 ;
+      maskLayer.data("maxZIndex", base.UIPopup.zIndex + 1); // 3 ;
 
       var offsetParent = maskLayer.offsetParent();
       var offset = offsetParent.offset();
@@ -133,7 +133,7 @@ eXo.core.UIMaskLayer = {
 
         blockContainer.append(object);
 
-        eXo.core.UIMaskLayer.setPosition();
+        base.UIMaskLayer.setPosition();
         if (eXo.core.I18n.isLT()) {
           if ((blockContainer[0].offsetWidth > object.offsetLeft
               + object.offsetWidth)
@@ -142,16 +142,16 @@ eXo.core.UIMaskLayer = {
                 + "px";
           }
         }
-        eXo.core.UIMaskLayer.doScroll();
+        base.UIMaskLayer.doScroll();
       }
       if (maskLayer[0].parentNode.id == "UIPage") {
-        eXo.core.UIMaskLayer.enablePageDesktop(false);
+        base.UIMaskLayer.enablePageDesktop(false);
       }
     } catch (err) {
       alert(err);
     }
     browser.addOnResizeCallback(maskLayer[0].id,
-        eXo.core.UIMaskLayer.resizeMaskLayer);
+        base.UIMaskLayer.resizeMaskLayer);
     return maskLayer[0];
   },
 
@@ -161,7 +161,7 @@ eXo.core.UIMaskLayer = {
   // TODO: Temporary use
   createMaskForFrame : function(blockContainerId, object, opacity) {
     try {
-      var browser = eXo.core.Browser;
+      var browser = base.Browser;
       if (typeof (blockContainerId) == "string")
         blockContainerId = gj("#" + blockContainerId);
       var blockContainer = gj(blockContainerId);
@@ -236,11 +236,11 @@ eXo.core.UIMaskLayer = {
       } else {
         maskLayer.style.top = document.body.scrollTop + "px";
       }
-      setTimeout("eXo.core.UIMaskLayer.doScroll()", 1);
+      setTimeout(function() {base.UIMaskLayer.doScroll();}, 1);
     } else if (document.getElementById("subMaskLayer")) {
       var subMaskLayer = document.getElementById("subMaskLayer");
       subMaskLayer.id = "MaskLayer";
-      eXo.core.UIMaskLayer.doScroll();
+      base.UIMaskLayer.doScroll();
     }
   },
 
@@ -250,7 +250,7 @@ eXo.core.UIMaskLayer = {
    * BOTTOM-RIGHT, other value will position to center
    */
   setPosition : function() {
-    var UIMaskLayer = eXo.core.UIMaskLayer;
+    var UIMaskLayer = base.UIMaskLayer;
     var object = UIMaskLayer.object;
     var blockContainer = UIMaskLayer.blockContainer;
     var position = UIMaskLayer.position;
@@ -361,3 +361,4 @@ eXo.core.UIMaskLayer = {
     }
   }
 };
+return {UIMaskLayer: eXo.core.UIMaskLayer};

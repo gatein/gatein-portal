@@ -216,6 +216,9 @@
       <depends>
          <module>common</module>
       </depends>
+      <depends>
+         <module>base</module>
+      </depends>
    </module>
 
    <!-- Portal Javascripts -->
@@ -239,6 +242,9 @@
       </script>
       <depends>
          <module>common</module>
+      </depends>
+      <depends>
+         <module>base</module>
       </depends>
    </module>
 
@@ -276,6 +282,9 @@
       </script>
       <depends>
          <module>common</module>
+      </depends>
+      <depends>
+         <module>base</module>
       </depends>
    </module>
 
@@ -316,6 +325,9 @@
       <depends>
          <module>common</module>
       </depends>
+      <depends>
+         <module>base</module>
+      </depends>
    </module>
 
    <module>
@@ -353,6 +365,9 @@
       <depends>
          <module>gadget</module>
       </depends>
+      <depends>
+         <module>base</module>
+      </depends>
    </module>
 
    <module>
@@ -367,6 +382,9 @@
      </script>
      <depends>
        <module>common</module>
+     </depends>
+     <depends>
+       <module>gadget</module>
      </depends>
    </module>
    

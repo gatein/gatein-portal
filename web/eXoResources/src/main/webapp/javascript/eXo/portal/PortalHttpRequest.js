@@ -514,9 +514,9 @@ function HttpResponseHandler() {
 	  
 	  blocksToUpdate.each(function(blockToUpdate) {
 		  var target = parentBlock.find("#" + blockToUpdate.blockId);
-		  if(target.length == 0) alert(eXo.i18n.I18NMessage.getMessage("TargetBlockNotFound", new Array (blockToUpdate.blockId))) ;		  
+		  if(target.length == 0) alert(base.I18NMessage.getMessage("TargetBlockNotFound", new Array (blockToUpdate.blockId))) ;		  
 		  var newData = gj(blockToUpdate.data).find("#" + blockToUpdate.blockId);
-		  if(newData.length == 0) alert(eXo.i18n.I18NMessage.getMessage("BlockUpdateNotFound", new Array (blockToUpdate.blockId))) ;
+		  if(newData.length == 0) alert(base.I18NMessage.getMessage("BlockUpdateNotFound", new Array (blockToUpdate.blockId))) ;
 //		    target.parentNode.replaceChild(newData, target);
 		  target.html(newData.html());
 		  //update embedded scripts
@@ -533,7 +533,7 @@ function HttpResponseHandler() {
 	* This method is called when the AJAX call was too long to be executed
 	*/
 	instance.ajaxTimeout = function(request) {
-	  eXo.core.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
+	  base.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
 	  eXo.portal.AjaxRequest.maskLayer = null ;
 	  eXo.portal.CurrentRequest = null ;
 	  window.location.reload() ;
@@ -599,7 +599,7 @@ function HttpResponseHandler() {
 		});
 	  }	
 	  if(!response.blocksToUpdate && request.responseText !== "") {
-	  	if(confirm(eXo.i18n.I18NMessage.getMessage("SessionTimeout"))) instance.ajaxTimeout(request) ;
+	  	if(confirm(base.I18NMessage.getMessage("SessionTimeout"))) instance.ajaxTimeout(request) ;
 	  }
 	  try {	    
 		  //Handle the portal responses
@@ -614,7 +614,7 @@ function HttpResponseHandler() {
 			   * Removes the transparent mask so the UI is available again, with cursor "auto"
 			   */
 			  clearTimeout(instance.to);
-			  eXo.core.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
+			  base.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
 			  
 			  eXo.portal.AjaxRequest.maskLayer = null ;
 			  eXo.portal.CurrentRequest = null ;		 
@@ -639,11 +639,11 @@ function HttpResponseHandler() {
 		 */		
 		 
 		if(eXo.portal.AjaxRequest.maskLayer == null ){
-			eXo.portal.AjaxRequest.maskLayer = eXo.core.UIMaskLayer.createTransparentMask();
+			eXo.portal.AjaxRequest.maskLayer = base.UIMaskLayer.createTransparentMask();
 		}
 		instance.to = setTimeout(function() {
 			if(eXo.portal.AjaxRequest.maskLayer != null) {
-				eXo.core.UIMaskLayer.showAjaxLoading(eXo.portal.AjaxRequest.maskLayer);			   
+				base.UIMaskLayer.showAjaxLoading(eXo.portal.AjaxRequest.maskLayer);			   
 			}
 		}, 2000);
 	};
@@ -701,7 +701,7 @@ window.doRequest = function(method, url, queryString, callback) {
  * @return
  */
 function ajaxAbort() {	
-  eXo.core.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
+  base.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
   eXo.portal.AjaxRequest.maskLayer = null ;	  
 
   eXo.portal.CurrentRequest.request.abort() ;  

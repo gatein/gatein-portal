@@ -59,4 +59,5 @@ eXo.i18n.I18NMessage = {
       "${weekdays.fri}",
       "${weekdays.sat}"
   ]
-}
+};
+return {I18NMessage: eXo.i18n.I18NMessage};

@@ -29,7 +29,7 @@ eXo.webui.UIItemSelector = {
 
   onOver : function(selectedElement, mouseOver) {
     if (selectedElement.className == "Item") {
-      eXo.webui.UIItemSelector.beforeActionHappen(selectedElement);
+      webui.UIItemSelector.beforeActionHappen(selectedElement);
     }
     if (mouseOver) {
       this.backupClass = selectedElement.className;
@@ -51,7 +51,7 @@ eXo.webui.UIItemSelector = {
   onClick : function(clickedElement) {
     var itemListContainer = clickedElement.parentNode;
     var allItems = gj(itemListContainer).find("div.Item").get();
-    eXo.webui.UIItemSelector.beforeActionHappen(clickedElement);
+    webui.UIItemSelector.beforeActionHappen(clickedElement);
     if (this.allItems.length <= 0)
       return;
     for ( var i = 0; i < allItems.length; i++) {
@@ -98,12 +98,12 @@ eXo.webui.UIItemSelector = {
 
   /* Pham Thanh Tung added */
   onClickCategory : function(clickedElement, form, component, option) {
-    eXo.webui.UIItemSelector.onClick(clickedElement);
-    if (eXo.webui.UIItemSelector.SelectedItem == null) {
-      eXo.webui.UIItemSelector.SelectedItem = new Object();
+    webui.UIItemSelector.onClick(clickedElement);
+    if (webui.UIItemSelector.SelectedItem == null) {
+      webui.UIItemSelector.SelectedItem = new Object();
     }
-    eXo.webui.UIItemSelector.SelectedItem.component = component;
-    eXo.webui.UIItemSelector.SelectedItem.option = option;
+    webui.UIItemSelector.SelectedItem.component = component;
+    webui.UIItemSelector.SelectedItem.option = option;
   },
 
   /* Pham Thanh Tung added */
@@ -113,11 +113,11 @@ eXo.webui.UIItemSelector = {
       selectedItems[i].className = "NormalItem";
     }
     clickedElement.className = "SelectedItem";
-    if (eXo.webui.UIItemSelector.SelectedItem == null) {
-      eXo.webui.UIItemSelector.SelectedItem = new Object();
+    if (webui.UIItemSelector.SelectedItem == null) {
+      webui.UIItemSelector.SelectedItem = new Object();
     }
-    eXo.webui.UIItemSelector.SelectedItem.component = component;
-    eXo.webui.UIItemSelector.SelectedItem.option = option;
+    webui.UIItemSelector.SelectedItem.component = component;
+    webui.UIItemSelector.SelectedItem.option = option;
   },
 
   /* TODO: Review This Function (Ha's comment) */
@@ -167,7 +167,7 @@ eXo.webui.UIItemSelector = {
   selectCategory : function(selectedNode) {
     var jqObj = gj(selectedNode);
     var itemListCont = jqObj.closest(".OverflowContainer");
-    var selectedNodeIndex = eXo.webui.UIItemSelector.findIndex(selectedNode);
+    var selectedNodeIndex = webui.UIItemSelector.findIndex(selectedNode);
 
     var itemList = itemListCont.find("div.ItemList");
     var itemDetailList = itemListCont.find("div.ItemDetailList");
@@ -235,4 +235,5 @@ eXo.webui.UIItemSelector = {
       }
     }
   }
-}
+};
+return {UIItemSelector: eXo.webui.UIItemSelector};

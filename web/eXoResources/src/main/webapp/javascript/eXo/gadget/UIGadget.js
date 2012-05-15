@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
+var gadgetJS = gadget; 
 eXo.gadget.UIGadget = {
 
   /**
@@ -36,7 +36,7 @@ eXo.gadget.UIGadget = {
     gadgets.pubsubURL = hostName + '/js/gatein-container.js?c=1' + (debug ? "&debug=1": "") + (nocache ? "&nocache=1" : "&nocache=0");  
 	eXo.loadJS([gadgets.pubsubURL, 'SHARED/shindig-patch'], function() {
 		//Make sure that 2 modules in shindig-patch has been loaded already
-		eXo.loadJS(["eXo.gadget.Gadgets", "eXo.gadget.ExoBasedUserPrefStore"], eXo.gadget.UIGadget.createCallback, arguments, null);
+		eXo.loadJS(["eXo.gadget.Gadgets", "eXo.gadget.ExoBasedUserPrefStore"], gadgetJS.UIGadget.createCallback, arguments, null);
 	}, arguments, null);
   },
 
@@ -85,7 +85,7 @@ eXo.gadget.UIGadget = {
       {
         uiGadget.css("width", "auto");
       }
-      eXo.gadget.UIGadget.init(uiGadget[0], isDesktop, gadget.metadata);
+      gadgetJS.UIGadget.init(uiGadget[0], isDesktop, gadget.metadata);
     }
     //setup for pubsub mechanism
     gadgets.pubsubrouter.init(function(id) {return url;}, {});
@@ -135,7 +135,7 @@ eXo.gadget.UIGadget = {
       {
         gadget.css("z-index", "0");
       }
-      eXo.core.DragDrop.init(dragArea, uiGadget);
+      common.DragDrop.init(dragArea, uiGadget);
 
       var desktopPage = gj("#UIPageDesktop");
       var offsetHeight = desktopPage.offsetHeight - uiGadget.offsetHeight;
@@ -222,7 +222,7 @@ eXo.gadget.UIGadget = {
         {
           uiGadget.style.left = offsetWidth + "px";
         }
-        eXo.gadget.UIGadget.saveWindowProperties(uiGadget);
+        gadgetJS.UIGadget.saveWindowProperties(uiGadget);
       };
     }
   },
@@ -320,7 +320,7 @@ eXo.gadget.UIGadget = {
     {
       var portletID = portletFrag.parent().attr("id");
       var dashboardID = gadget.closest(".UIDashboard").attr("id");
-      if (confirm(eXo.gadget.UIGadget.confirmDeleteGadget))
+      if (confirm(gadgetJS.UIGadget.confirmDeleteGadget))
       {
         var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
         href += "&portal:type=action&uicomponent=" + dashboardID;
@@ -348,7 +348,7 @@ eXo.gadget.UIGadget = {
     {
       //Code used for desktop page
       var blockID = closeIcon.closest(".UIPage").find("div.id").html();
-      if (confirm(eXo.gadget.UIGadget.confirmDeleteGadget))
+      if (confirm(gadgetJS.UIGadget.confirmDeleteGadget))
       {
         var params = [
           {name: "objectId", value : gadget.attr("id")}
@@ -386,6 +386,7 @@ eXo.gadget.UIGadget = {
   resizeFullHeight : function(componentId)
   {
     var portletFrag = gj("#" + componentId).closest(".PORTLET-FRAGMENT");
-    eXo.core.Browser.fillUpFreeSpace(portletFrag[0]);
+    base.Browser.fillUpFreeSpace(portletFrag[0]);
   }
-}
+};
+return {UIGadget: eXo.gadget.UIGadget};

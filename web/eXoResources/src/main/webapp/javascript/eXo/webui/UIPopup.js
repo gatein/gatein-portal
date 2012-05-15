@@ -42,7 +42,7 @@ eXo.webui.UIPopup = {
    * to this value
    */
   changezIndex : function() {
-    this.style.zIndex = ++eXo.webui.UIPopup.zIndex;
+    this.style.zIndex = ++base.UIPopup.zIndex;
   },
   /**
    * Creates and returns a div element with the following style properties .
@@ -74,12 +74,12 @@ eXo.webui.UIPopup = {
     var uiMaskWS = document.getElementById("UIMaskWorkspace");
     if (uiMaskWS) {
       uiMaskWSzIndex = gj(uiMaskWS).css("zIndex");
-      if (uiMaskWSzIndex && (uiMaskWSzIndex > eXo.webui.UIPopup.zIndex)) {
-        eXo.webui.UIPopup.zIndex = uiMaskWSzIndex;
+      if (uiMaskWSzIndex && (uiMaskWSzIndex > base.UIPopup.zIndex)) {
+        base.UIPopup.zIndex = uiMaskWSzIndex;
       }
     }
 
-    popup.style.zIndex = ++eXo.webui.UIPopup.zIndex;
+    popup.style.zIndex = ++base.UIPopup.zIndex;
     popup.style.display = "block";
   },
   /**
@@ -120,7 +120,7 @@ eXo.webui.UIPopup = {
     if (typeof (popup) == 'string')
       popup = document.getElementById(popup);
     var stdLeft = gj(window).width()
-        - eXo.core.Browser.findPosX(document
+        - base.Browser.findPosX(document
             .getElementById("UIWorkingWorkspace"));
     var intTop = 0;
     var intLeft = 0;
@@ -167,4 +167,5 @@ eXo.webui.UIPopup = {
     var dragBlock = gj(clickBlock).parent().closest(".UIDragObject")[0];
     DragDrop.init(clickBlock, dragBlock);
   }
-}
+};
+return {UIPopup: eXo.webui.UIPopup};

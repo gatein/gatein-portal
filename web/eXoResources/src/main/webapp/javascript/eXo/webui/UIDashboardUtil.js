@@ -20,7 +20,7 @@
 eXo.webui.UIDashboardUtil = {
 
 	findPosX : function(obj) {
-	  var curleft = 0, browser = eXo.core.Browser;
+	  var curleft = 0, browser = base.Browser;
 	  var uiWorkspaceContainer = document.getElementById("UIWorkspaceContainer");
 	  var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");	  
 	  while (obj) {
@@ -42,7 +42,7 @@ eXo.webui.UIDashboardUtil = {
 	},
 	
 	isIn : function(x, y, component) {
-	  var componentLeft = eXo.webui.UIDashboardUtil.findPosX(component);
+	  var componentLeft = dashboard.UIDashboardUtil.findPosX(component);
 	  var componentRight = componentLeft + component.offsetWidth ;
 	  var componentTop = gj(component).offset().top;
 	  var componentBottom = componentTop + component.offsetHeight ;
@@ -78,7 +78,7 @@ eXo.webui.UIDashboardUtil = {
     var scrollLeft = gadgetCont.scrollLeft();
     gadgetCont.find("div.UIColumn").each(function()
     {
-      var left = eXo.webui.UIDashboardUtil.findPosX(this) - scrollLeft;
+      var left = dashboard.UIDashboardUtil.findPosX(this) - scrollLeft;
       if(left <= x && x < left + this.offsetWidth)
       {
         column = gj(this);
@@ -120,3 +120,4 @@ eXo.webui.UIDashboardUtil = {
 		return url;
 	}
 };
+return {UIDashboardUtil: eXo.webui.UIDashboardUtil};

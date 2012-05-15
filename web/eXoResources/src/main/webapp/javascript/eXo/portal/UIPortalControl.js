@@ -95,4 +95,5 @@ eXo.portal.UIPortalControl = {
       }
     }
   }
-}
+};
+return {UIPortalControl: eXo.portal.UIPortalControl};

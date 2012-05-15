@@ -23,7 +23,7 @@ function DragDrop() {
 	DragDrop.prototype.init = function(o, oRoot) {
 		var jObj = gj(o);
 		jObj.off("mousedown");
-		jObj.on("mousedown", eXo.core.DragDrop.start);
+		jObj.on("mousedown", common.DragDrop.start);
 
 		o.root = oRoot && oRoot != null ? oRoot : o ;
 		
@@ -43,10 +43,10 @@ function DragDrop() {
 		o.lastMouseX = e.pageX;
 		o.lastMouseY = e.pageY;
 		o.root.onDragStart(position.left, position.top, o.lastMouseX, o.lastMouseY, e);
-		gj(document).on({"mousemove" : eXo.core.DragDrop.drag,
-			"mouseup" : eXo.core.DragDrop.end,
-			"keydown" : eXo.core.DragDrop.onKeyDownEvt,
-			"mouseout" : eXo.core.DragDrop.cancel});
+		gj(document).on({"mousemove" : common.DragDrop.drag,
+			"mouseup" : common.DragDrop.end,
+			"keydown" : common.DragDrop.onKeyDownEvt,
+			"mouseout" : common.DragDrop.cancel});
 		jRoot.data("dragging", true);
 		return false;
 	};
@@ -94,9 +94,10 @@ function DragDrop() {
 	};
 	
 	DragDrop.prototype.onKeyDownEvt = function(e) {
-		if(e.which === 27) eXo.core.DragDrop.end(e) ;
+		if(e.which === 27) common.DragDrop.end(e) ;
 		return false;
 	}
 };
 
 eXo.core.DragDrop = new DragDrop();
+return {DragDrop: eXo.core.DragDrop};

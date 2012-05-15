@@ -21,7 +21,7 @@
  * A class that manages a popup window
  */
 eXo.webui.UIPopupWindow = {
-  superClass : eXo.webui.UIPopup,
+  superClass : base.UIPopup,
   
   /**
    * Inits a popup window, with these parameters : . sets the superClass as
@@ -30,7 +30,7 @@ eXo.webui.UIPopupWindow = {
    */
   init : function(popupId, isShow, isResizable, showCloseButton, isShowMask) {
     var DOMUtil = eXo.core.DOMUtil;
-    this.superClass = eXo.webui.UIPopup;
+    this.superClass = base.UIPopup;
     var popup = document.getElementById(popupId);
     if (popup == null)
       return;
@@ -45,8 +45,8 @@ eXo.webui.UIPopupWindow = {
     var contentBlock = DOMUtil.findFirstDescendantByClass(popup, 'div',
         'PopupContent');
     if (contentBlock
-        && (eXo.core.Browser.getBrowserHeight() - 100 < contentBlock.offsetHeight)) {
-      contentBlock.style.height = (eXo.core.Browser.getBrowserHeight() - 100)
+        && (base.Browser.getBrowserHeight() - 100 < contentBlock.offsetHeight)) {
+      contentBlock.style.height = (base.Browser.getBrowserHeight() - 100)
           + "px";
     }
     var popupBar = DOMUtil.findFirstDescendantByClass(popup, 'span',
@@ -57,7 +57,7 @@ eXo.webui.UIPopupWindow = {
     if (isShow == false) {
       this.superClass.hide(popup);
       if (isShowMask)
-        eXo.webui.UIPopupWindow.showMask(popup, false);
+        webui.UIPopupWindow.showMask(popup, false);
     }
 
     if (isResizable) {
@@ -71,8 +71,9 @@ eXo.webui.UIPopupWindow = {
     if (isShow == true) {
       var iframes = DOMUtil.findDescendantsByTagName(popup, "iframe");
       if (iframes.length > 0) {
-        setTimeout("eXo.webui.UIPopupWindow.show('" + popupId + "',"
-            + isShowMask + ")", 500);
+        setTimeout(function() { 
+        	webui.UIPopupWindow.show(popupId, isShowMask); 
+        }, 500);
       } else {
         this.show(popup, isShowMask);
       }
@@ -89,15 +90,15 @@ eXo.webui.UIPopupWindow = {
       // Modal if popup is portal component
       if (eXo.core.DOMUtil.findAncestorByClass(popup, "PORTLET-FRAGMENT") == null) {
         if (!mask)
-          eXo.core.UIMaskLayer.createMask(popup.parentNode, popup, 1);
+          base.UIMaskLayer.createMask(popup.parentNode, popup, 1);
       } else {
         // If popup is portlet's component, modal with just its parent
         if (!mask)
-          eXo.core.UIMaskLayer.createMaskForFrame(popup.parentNode, popup, 1);
+          base.UIMaskLayer.createMaskForFrame(popup.parentNode, popup, 1);
       }
     } else {
       if (mask)
-        eXo.core.UIMaskLayer.removeMask(mask);
+        base.UIMaskLayer.removeMask(mask);
     }
   },
 
@@ -126,12 +127,12 @@ eXo.webui.UIPopupWindow = {
     }    	
 
     if (isShowMask)
-    	eXo.webui.UIPopupWindow.showMask(popup, true);
+    	webui.UIPopupWindow.showMask(popup, true);
     popup.style.visibility = "hidden";
     this.superClass.show(popup);
     
     if (gj(popup).find("iframe").length > 0) {
-    	setTimeout(function() {eXo.webui.UIPopupWindow.setupWindow(popup, middleBrowser);}, 500);
+    	setTimeout(function() {webui.UIPopupWindow.setupWindow(popup, middleBrowser);}, 500);
     } else {
     	this.setupWindow(popup, middleBrowser);
     }
@@ -183,7 +184,7 @@ eXo.webui.UIPopupWindow = {
 	var popup = document.getElementById(popupId);
 	if (popup == null) return;     
     this.superClass.hide(popup);
-    if (isShowMask) eXo.webui.UIPopupWindow.showMask(popup, false);
+    if (isShowMask) webui.UIPopupWindow.showMask(popup, false);
   },
   
   showMask : function(popup, isShowPopup) {
@@ -196,15 +197,15 @@ eXo.webui.UIPopupWindow = {
       // Modal if popup is portal component
       if (gj(popup).parents(".PORTLET-FRAGMENT").length < 1){
         if (!mask)
-          eXo.core.UIMaskLayer.createMask(popup.parentNode, popup, 1);
+          base.UIMaskLayer.createMask(popup.parentNode, popup, 1);
       } else {
         // If popup is portlet's component, modal with just its parent
         if (!mask)
-          eXo.core.UIMaskLayer.createMaskForFrame(popup.parentNode, popup, 1);
+          base.UIMaskLayer.createMaskForFrame(popup.parentNode, popup, 1);
       }
     } else {
       if (mask)
-        eXo.core.UIMaskLayer.removeMask(mask);
+        base.UIMaskLayer.removeMask(mask);
     }
   },  
   
@@ -216,27 +217,27 @@ eXo.webui.UIPopupWindow = {
    */
   startResizeEvt : function(evt) {
 	//disable select text
-	eXo.webui.UIPopupWindow.backupEvent = null;
+	webui.UIPopupWindow.backupEvent = null;
 	if (navigator.userAgent.indexOf("MSIE") >= 0) {
 		//Need to check if we have remove resizedPopup after last mouseUp
 		//IE bug: not call endResizeEvt when mouse moved out of page
-		if (!eXo.webui.UIPopupWindow.resizedPopup && document.onselectstart) {
-			eXo.webui.UIPopupWindow.backupEvent = document.onselectstart;
+		if (!webui.UIPopupWindow.resizedPopup && document.onselectstart) {
+			webui.UIPopupWindow.backupEvent = document.onselectstart;
 		}
 		document.onselectstart = function() {return false};		
 	} else {		
 		if (document.onmousedown) {
-			eXo.webui.UIPopupWindow.backupEvent = document.onmousedown;
+			webui.UIPopupWindow.backupEvent = document.onmousedown;
 		}
 		document.onmousedown = function() {return false};		
 	}
 	
 	var targetPopup = gj(this).parents(".UIPopupWindow")[0];
-	eXo.webui.UIPopupWindow.resizedPopup = targetPopup;
-	eXo.webui.UIPopupWindow.backupPointerY = eXo.core.Browser.findMouseRelativeY(targetPopup, evt) ;	
+	webui.UIPopupWindow.resizedPopup = targetPopup;
+	webui.UIPopupWindow.backupPointerY = base.Browser.findMouseRelativeY(targetPopup, evt) ;	
 
-    document.onmousemove = eXo.webui.UIPopupWindow.resize;
-    document.onmouseup = eXo.webui.UIPopupWindow.endResizeEvt;
+    document.onmousemove = webui.UIPopupWindow.resize;
+    document.onmouseup = webui.UIPopupWindow.endResizeEvt;
   },
 
   /**
@@ -245,14 +246,14 @@ eXo.webui.UIPopupWindow = {
    * position . sets these values to the window
    */
   resize : function(evt) {
-	var targetPopup = eXo.webui.UIPopupWindow.resizedPopup ;
+	var targetPopup = webui.UIPopupWindow.resizedPopup ;
     var content = gj(targetPopup).find("div.PopupContent")[0];
     var isRTL = eXo.core.I18n.isRT();
-    var pointerX = eXo.core.Browser.findMouseRelativeX(targetPopup, evt, isRTL);
-    var pointerY = eXo.core.Browser.findMouseRelativeY(targetPopup, evt);
-    var delta = pointerY - eXo.webui.UIPopupWindow.backupPointerY;  
+    var pointerX = base.Browser.findMouseRelativeX(targetPopup, evt, isRTL);
+    var pointerY = base.Browser.findMouseRelativeY(targetPopup, evt);
+    var delta = pointerY - webui.UIPopupWindow.backupPointerY;  
     if ((content.offsetHeight + delta) > 0) {
-    	eXo.webui.UIPopupWindow.backupPointerY = pointerY;              
+    	webui.UIPopupWindow.backupPointerY = pointerY;              
     	content.style.height = content.offsetHeight + delta +"px" ;     
     }
     targetPopup.style.height = "auto";
@@ -271,17 +272,17 @@ eXo.webui.UIPopupWindow = {
    * one in the popup)
    */
   endResizeEvt : function(evt) {
-	eXo.webui.UIPopupWindow.resizedPopup = null;
+	webui.UIPopupWindow.resizedPopup = null;
     this.onmousemove = null;
     this.onmouseup = null;
     
     //enable select text
 	if (navigator.userAgent.indexOf("MSIE") >= 0) {
-		document.onselectstart = eXo.webui.UIPopupWindow.backupEvent;
+		document.onselectstart = webui.UIPopupWindow.backupEvent;
 	} else {                
-		document.onmousedown = eXo.webui.UIPopupWindow.backupEvent;
+		document.onmousedown = webui.UIPopupWindow.backupEvent;
 	}
-	eXo.webui.UIPopupWindow.backupEvent = null;
+	webui.UIPopupWindow.backupEvent = null;
   },
 
   /**
@@ -292,11 +293,11 @@ eXo.webui.UIPopupWindow = {
    */
   initDND : function(popupBar, popup)
   {
-    eXo.core.DragDrop.init(popupBar, popup);
+    common.DragDrop.init(popupBar, popup);
 
     popup.onDragStart = function(x, y, last_x, last_y, e)
     {
-      if (eXo.core.Browser.browserType == "mozilla" && popup.uiWindowContent)
+      if (base.Browser.browserType == "mozilla" && popup.uiWindowContent)
       {
         popup.uiWindowContent.style.overflow = "auto";
         gj(popup.uiWindowContent).find("ul.PopupMessageBox").css("overflow", "auto");
@@ -309,7 +310,7 @@ eXo.webui.UIPopupWindow = {
 
     popup.onDragEnd = function(x, y, clientX, clientY)
     {
-      if (eXo.core.Browser.browserType == "mozilla" && popup.uiWindowContent)
+      if (base.Browser.browserType == "mozilla" && popup.uiWindowContent)
       {
         popup.uiWindowContent.style.overflow = "auto";
         gj(popup.uiWindowContent).find("ul.PopupMessageBox").css("overflow", "auto");
@@ -333,3 +334,4 @@ eXo.webui.UIPopupWindow = {
     };
   }
 };
+return {UIPopupWindow: eXo.webui.UIPopupWindow};

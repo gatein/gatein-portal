@@ -175,3 +175,4 @@ Function.prototype.inherits = function(parentCtor) {
   this.prototype = new tempCtor();
   this.prototype.constructor = this;
 };
+return {HashMap: eXo.core.HashMap};

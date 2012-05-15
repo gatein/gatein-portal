@@ -38,7 +38,7 @@ eXo.webui.UIVirtualList = {
 
     if (autoAdjustHeight) {
       uiVirtualList.autoAdjustHeight = autoAdjustHeight;
-      eXo.core.Browser.fillUpFreeSpace(uiVirtualList);
+      base.Browser.fillUpFreeSpace(uiVirtualList);
     }
 
     uiVirtualList.scrollTop = 0;
@@ -97,7 +97,7 @@ eXo.webui.UIVirtualList = {
     var feedBox = this.getFeedBox(uiVirtualList.id);
     var loadedContent = uiVirtualList.backupHTML;
 
-    if (eXo.core.Browser.browserType != "ie") {
+    if (base.Browser.browserType != "ie") {
       feedBox.innerHTML = loadedContent + feedBox.innerHTML;
     } else {
       var index = uiVirtualList.innerHTML.indexOf(feedBox.className);
@@ -111,3 +111,4 @@ eXo.webui.UIVirtualList = {
     this.loadIfNeeded(uiVirtualList);
   }
 };
+return {UIVirtualList: eXo.webui.UIVirtualList};

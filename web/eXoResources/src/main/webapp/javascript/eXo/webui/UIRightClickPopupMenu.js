@@ -158,7 +158,7 @@ eXo.webui.UIRightClickPopupMenu = {
     //Register closing contextual menu callback on document
     jDoc.one("mousedown.RightClickPopUpMenu", function(e)
     {
-      eXo.webui.UIRightClickPopupMenu.hideContextMenu(menuId);
+    	webuiExt.UIRightClickPopupMenu.hideContextMenu(menuId);
     });
 
     //The callback registered on document won't be triggered by current 'mousedown' event
@@ -195,13 +195,13 @@ eXo.webui.UIRightClickPopupMenu = {
      */
     var fixWidthForIE7 = 0;
     var UIWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
-    if (eXo.core.Browser.isIE7() && document.getElementById("UIDockBar")) {
+    if (base.Browser.isIE7() && document.getElementById("UIDockBar")) {
       if (event.clientX > UIWorkingWorkspace.offsetLeft)
         fixWidthForIE7 = UIWorkingWorkspace.offsetLeft;
     }
 
     eXo.core.Mouse.update(event);
-    eXo.webui.UIPopup.show(contextMenu);
+    base.UIPopup.show(contextMenu);
 
     var ctxMenuContainer = gj(contextMenu).children("div.UIContextMenuContainer")[0];
     var offset = gj(contextMenu).offset();
@@ -213,7 +213,7 @@ eXo.webui.UIRightClickPopupMenu = {
     if (eXo.core.I18n.isRT()) {
       // scrollWidth is width of browser scrollbar
       var scrollWidth = 16;
-      if (eXo.core.Browser.isFF())
+      if (base.Browser.isFF())
         scrollWidth = 0;
       intLeft = contextMenu.offsetParent.offsetWidth - intLeft + fixWidthForIE7
           + scrollWidth;
@@ -290,7 +290,7 @@ eXo.core.Mouse = {
   },
 
   update : function(mouseEvent) {
-    browser = eXo.core.Browser;
+    browser = base.Browser;
     
     mouseEvent = gj.event.fix(mouseEvent);
     this.mousexInPage = mouseEvent.pageX;
@@ -309,3 +309,4 @@ eXo.core.Mouse = {
     this.deltay = this.mouseyInClient - this.lastMouseyInClient ;
   }
 };
+return {UIRightClickPopupMenu: eXo.webui.UIRightClickPopupMenu};
