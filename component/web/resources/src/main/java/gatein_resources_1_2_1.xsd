@@ -138,7 +138,7 @@
       <xs:element name="scripts" minOccurs="0" maxOccurs="1">
         <xs:complexType>
           <xs:sequence>
-            <xs:element name="mode" type="fetchMode" minOccurs="0" maxOccurs="1" default="document"/>
+            <xs:element name="mode" type="fetchMode" minOccurs="0" maxOccurs="1" default="immediate"/>
             <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="module" type="module" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="depends" type="dependency" minOccurs="0" maxOccurs="unbounded"/>
