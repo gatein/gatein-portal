@@ -234,126 +234,14 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
                   && uicomponent.hasPermission())
             {
                PortletInvocationResponse response = uicomponent.invoke(renderInvocation);
-               if (response instanceof FragmentResponse)
-               {
-                  FragmentResponse fragmentResponse = (FragmentResponse) response;
-                  switch (fragmentResponse.getType())
-                  {
-                     case FragmentResponse.TYPE_CHARS :
-                        markup = Text.create(fragmentResponse.getContent());
-                        break;
-                     case FragmentResponse.TYPE_BYTES :
-                        markup = Text.create(fragmentResponse.getBytes(), Charset.forName("UTF-8"));
-                        break;
-                     case FragmentResponse.TYPE_EMPTY :
-                        markup = Text.create("");
-                        break;
-                  }
-                  uicomponent.setConfiguredTitle(fragmentResponse.getTitle());
-                  
-                  // setup portlet properties
-                  if (fragmentResponse.getProperties() != null)
-                  {
-                     //setup transport headers
-                     if (fragmentResponse.getProperties().getTransportHeaders() != null)
-                     {
-                        MultiValuedPropertyMap<String> transportHeaders = fragmentResponse.getProperties()
-                              .getTransportHeaders();                                               
-                        for (String key : transportHeaders.keySet())
-                        {                           
-                           if (SCRIPT_NAME.equals(key)) 
-                           {                                                              
-                              JavascriptManager jsMan = context.getJavascriptManager();                                                                                           
-                              String mode = transportHeaders.getValue(FETCH_MODE);
-                              for (String value : transportHeaders.getValues(key))
-                              {
-                                 jsMan.loadScriptResource(ResourceScope.SHARED, value, FetchMode.decode(mode));                                                                  
-                              }
-                           }
-                           else
-                           {
-                              for (String value : transportHeaders.getValues(key))
-                              {
-                                 prcontext.getResponse().setHeader(key, value);                                                                                                   
-                              }
-                           }
-                        }
-                     }
-
-                     //setup up portlet cookies
-                     if (fragmentResponse.getProperties().getCookies() != null)
-                     {
-                        List<Cookie> cookies = fragmentResponse.getProperties().getCookies();
-                        for (Cookie cookie : cookies)
-                        {
-                           prcontext.getResponse().addCookie(cookie);
-                        }
-                     }
-
-                     //setup markup headers
-                     if (fragmentResponse.getProperties().getMarkupHeaders() != null)
-                     {
-                        MultiValuedPropertyMap<Element> markupHeaders = fragmentResponse.getProperties()
-                              .getMarkupHeaders();
-
-                        List<Element> markupElements = markupHeaders.getValues(MimeResponse.MARKUP_HEAD_ELEMENT);
-                        if (markupElements != null)
-                        {
-                           for (Element element : markupElements)
-                           {
-                              if (!context.useAjax() && "title".equals(element.getNodeName().toLowerCase())
-                                    && element.getFirstChild() != null)
-                              {
-                                 String title = element.getFirstChild().getNodeValue();
-                                 prcontext.getRequest().setAttribute(PortalRequestContext.REQUEST_TITLE, title);
-                              }
-                              else
-                              {
-                                 prcontext.addExtraMarkupHeader(element, uicomponent.getId());
-                              }
-                           }
-                        }
-                     }
-                  }
-
-                  }
-                  else
-                  {
-
-                     PortletContainerException pcException;
-
-                     if (response instanceof ErrorResponse)
-                     {
-                        ErrorResponse errorResponse = (ErrorResponse)response;
-                        pcException =
-                           new PortletContainerException(errorResponse.getMessage(), errorResponse.getCause());
-                     }
-                     else
-                     {
-                        pcException =
-                           new PortletContainerException("Unknown invocation response type [" + response.getClass()
-                              + "]. Expected a FragmentResponse or an ErrorResponse");
-                     }
-
-                     //
-                     PortletExceptionHandleService portletExceptionService = uicomponent.getApplicationComponent(PortletExceptionHandleService.class);
-                     if (portletExceptionService != null)
-                     {
-                        portletExceptionService.handle(pcException);
-                     }
-
-                     // Log the error
-                     log.error("Portlet render threw an exception", pcException);
-
-                     markup = Text.create(context.getApplicationResourceBundle().getString("UIPortlet.message.RuntimeError"));
-                  }
-               }
-               else
-               {
-                  uicomponent.setConfiguredTitle(null);
-               }
+               markup = uicomponent.generateRenderMarkup(response, prcontext);
             }
-       }
+            else
+            {
+               uicomponent.setConfiguredTitle(null);
+            }
+         }
+      }
       catch (Exception e)
       {
          PortletContainerException pcException = new PortletContainerException(e);

@@ -20,6 +20,7 @@
 package org.exoplatform.portal.webui.application;
 
 import org.exoplatform.Constants;
+import org.exoplatform.commons.utils.Text;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.UserProfileLifecycle;
@@ -29,6 +30,7 @@ import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
+import org.exoplatform.portal.portlet.PortletExceptionHandleService;
 import org.exoplatform.portal.webui.application.UIPortletActionListener.ChangePortletModeActionListener;
 import org.exoplatform.portal.webui.application.UIPortletActionListener.ChangeWindowStateActionListener;
 import org.exoplatform.portal.webui.application.UIPortletActionListener.EditPortletActionListener;
@@ -43,6 +45,7 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.UserProfile;
+import org.exoplatform.services.portletcontainer.PortletContainerException;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -50,6 +53,7 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event.Phase;
 import org.gatein.common.i18n.LocalizedString;
 import org.gatein.common.net.media.MediaType;
+import org.gatein.common.util.MultiValuedPropertyMap;
 import org.gatein.common.util.ParameterValidation;
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.PortletContext;
@@ -69,6 +73,8 @@ import org.gatein.pc.api.invocation.EventInvocation;
 import org.gatein.pc.api.invocation.PortletInvocation;
 import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.ResourceInvocation;
+import org.gatein.pc.api.invocation.response.ErrorResponse;
+import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
 import org.gatein.pc.api.state.AccessMode;
 import org.gatein.pc.api.state.PropertyChange;
@@ -79,13 +85,16 @@ import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractServerContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
 import org.gatein.portal.controller.resource.ResourceScope;
+import org.w3c.dom.Element;
 
+import javax.portlet.MimeResponse;
 import javax.portlet.PortletMode;
 import javax.portlet.WindowState;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.namespace.QName;
 import java.io.Serializable;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -1103,5 +1112,115 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          context.getJavascriptManager().loadScriptResource(ResourceScope.PORTLET, name, null);
       }
       super.processRender(context);
+   }
+
+public Text generateRenderMarkup(PortletInvocationResponse pir, WebuiRequestContext context)
+   {
+      PortalRequestContext prcontext = (PortalRequestContext)context;
+      
+      Text markup = null;
+      if (pir instanceof FragmentResponse)
+      {
+         FragmentResponse fragmentResponse = (FragmentResponse) pir;
+         switch (fragmentResponse.getType())
+         {
+            case FragmentResponse.TYPE_CHARS :
+               markup = Text.create(fragmentResponse.getContent());
+               break;
+            case FragmentResponse.TYPE_BYTES :
+               markup = Text.create(fragmentResponse.getBytes(), Charset.forName("UTF-8"));
+               break;
+            case FragmentResponse.TYPE_EMPTY :
+               markup = Text.create("");
+               break;
+         }
+         setConfiguredTitle(fragmentResponse.getTitle());
+         
+         // setup portlet properties
+         if (fragmentResponse.getProperties() != null)
+         {
+            //setup transport headers
+            if (fragmentResponse.getProperties().getTransportHeaders() != null)
+            {
+               MultiValuedPropertyMap<String> transportHeaders = fragmentResponse.getProperties()
+                     .getTransportHeaders();
+               for (String key : transportHeaders.keySet())
+               {
+                  for (String value : transportHeaders.getValues(key))
+                  {
+                     prcontext.getResponse().setHeader(key, value);
+                  }
+               }
+            }
+
+            //setup up portlet cookies
+            if (fragmentResponse.getProperties().getCookies() != null)
+            {
+               List<Cookie> cookies = fragmentResponse.getProperties().getCookies();
+               for (Cookie cookie : cookies)
+               {
+                  prcontext.getResponse().addCookie(cookie);
+               }
+            }
+
+            //setup markup headers
+            if (fragmentResponse.getProperties().getMarkupHeaders() != null)
+            {
+               MultiValuedPropertyMap<Element> markupHeaders = fragmentResponse.getProperties()
+                     .getMarkupHeaders();
+
+               List<Element> markupElements = markupHeaders.getValues(MimeResponse.MARKUP_HEAD_ELEMENT);
+               if (markupElements != null)
+               {
+                  for (Element element : markupElements)
+                  {
+                     if (!context.useAjax() && "title".equals(element.getNodeName().toLowerCase())
+                           && element.getFirstChild() != null)
+                     {
+                        String title = element.getFirstChild().getNodeValue();
+                        prcontext.getRequest().setAttribute(PortalRequestContext.REQUEST_TITLE, title);
+                     }
+                     else
+                     {
+                        prcontext.addExtraMarkupHeader(element, getId());
+                     }
+                  }
+               }
+            }
+         }
+
+         }
+         else
+         {
+
+            PortletContainerException pcException;
+
+            if (pir instanceof ErrorResponse)
+            {
+               ErrorResponse errorResponse = (ErrorResponse)pir;
+               pcException =
+                  new PortletContainerException(errorResponse.getMessage(), errorResponse.getCause());
+            }
+            else
+            {
+               pcException =
+                  new PortletContainerException("Unknown invocation response type [" + pir.getClass()
+                     + "]. Expected a FragmentResponse or an ErrorResponse");
+            }
+
+            //
+            PortletExceptionHandleService portletExceptionService = getApplicationComponent(PortletExceptionHandleService.class);
+            if (portletExceptionService != null)
+            {
+               portletExceptionService.handle(pcException);
+            }
+
+            // Log the error
+            log.error("Portlet render threw an exception", pcException);
+
+            markup = Text.create(context.getApplicationResourceBundle().getString("UIPortlet.message.RuntimeError"));
+         }
+      
+      return markup;
    }   
 }

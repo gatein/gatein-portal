@@ -57,6 +57,7 @@ import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIterator
 import org.gatein.pc.api.Mode;
 import org.gatein.pc.api.StatefulPortletContext;
 import org.gatein.pc.api.info.PreferenceInfo;
+import org.gatein.pc.api.invocation.PortletInvocation;
 import org.gatein.pc.api.invocation.RenderInvocation;
 import org.gatein.pc.api.invocation.response.ErrorResponse;
 import org.gatein.pc.api.invocation.response.FragmentResponse;
@@ -159,93 +160,13 @@ public class UIPortletForm extends UIFormTabPane
 
          List<Cookie> requestCookies = new ArrayList<Cookie>(Arrays.asList(prcontext.getRequest().getCookies()));
 
-         RenderInvocation renderInvocation = new RenderInvocation(portletInvocationContext);
-         renderInvocation.setClientContext(new AbstractClientContext(prcontext.getRequest(), requestCookies));
-         renderInvocation.setServerContext(new AbstractServerContext(prcontext.getRequest(), prcontext.getResponse()));
-
-
-         // instance context
-         InstanceContext instanceContext;
-         if (portletContext.getType() instanceof WSRPPortletStateType)
-         {
-            WSRP wsrp = (WSRP)portletContext.getState();
-            AccessMode accessMode = AccessMode.CLONE_BEFORE_WRITE;
-            if (wsrp.isCloned())
-            {
-               accessMode = AccessMode.READ_WRITE;
-            }
-            instanceContext = new ExoPortletInstanceContext(wsrp.getPortletId(), accessMode);
-         }
-         else
-         {
-            ExoPortletState exo = (ExoPortletState)portletContext.getState();
-            instanceContext = new ExoPortletInstanceContext(exo.getPortletId());
-         }
-         renderInvocation.setInstanceContext(instanceContext);
-
-         renderInvocation.setUserContext(new AbstractUserContext(prcontext.getRequest()));
-         renderInvocation.setWindowContext(new AbstractWindowContext(uiPortlet_.getWindowId()));
-         renderInvocation.setPortalContext(new AbstractPortalContext(Collections.singletonMap(
-            "javax.portlet.markup.head.element.support", "true")));
-         renderInvocation.setSecurityContext(new AbstractSecurityContext(prcontext.getRequest()));
-         renderInvocation.setTarget(portletContext);
-
+         PortletInvocation portletInvocation = uiPortlet_.create(RenderInvocation.class, prcontext);
+         RenderInvocation renderInvocation = (RenderInvocation)portletInvocation;
+         //make sure we are in the EDIT mode, and not whatever the current portlet mode is for the Portlet
          renderInvocation.setMode(Mode.create(PortletMode.EDIT.toString()));
-         renderInvocation.setWindowState(org.gatein.pc.api.WindowState.create(uiPortlet_.getCurrentWindowState()
-            .toString()));
-
+         
          PortletInvocationResponse portletResponse = uiPortlet_.invoke(renderInvocation);
-
-         String content;
-         if (portletResponse instanceof FragmentResponse)
-         {
-            FragmentResponse fragmentResponse = (FragmentResponse)portletResponse;
-            if (fragmentResponse.getType() == FragmentResponse.TYPE_BYTES)
-            {
-               content = new String(fragmentResponse.getBytes(), "UTF-8");
-            }
-            else
-            {
-               content = fragmentResponse.getContent();
-            }
-
-         }
-         else
-         {
-            PortletContainerException pcException;
-
-            //
-            if (portletResponse instanceof ErrorResponse)
-            {
-               ErrorResponse errorResponse = (ErrorResponse)portletResponse;
-               pcException = new PortletContainerException(errorResponse.getMessage(), errorResponse.getCause());
-            }
-            else
-            {
-               pcException =
-                  new PortletContainerException("Unknown invocation response type [" + portletResponse.getClass()
-                     + "]. Expected a FragmentResponse or an ErrorResponse");
-            }
-
-            //
-            PortletExceptionHandleService portletExceptionService = uiPortlet_.getApplicationComponent(PortletExceptionHandleService.class);
-            if (portletExceptionService != null)
-            {
-                portletExceptionService.handle(pcException);
-            }
-            else
-            {
-               log.warn("Could not find the PortletExceptionHandleService in the exo container");
-            }
-
-            //
-            log.error("Portlet render in edit mode threw an exception", pcException);
-            content = "An error has occured. Please see the logs for details.";
-         }
-
-         portletContent.setLength(0);
-
-         portletContent.append(content);
+         portletContent.append(uiPortlet_.generateRenderMarkup(portletResponse, prcontext).toString());
       }
       catch (Throwable ex)
       {
