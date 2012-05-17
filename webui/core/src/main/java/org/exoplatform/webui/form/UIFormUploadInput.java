@@ -35,8 +35,10 @@ import java.nio.channels.FileChannel;
  * Jun 6, 2006
  * 
  * Represents an upload form
+ * @deprecated Use UIUploadInput instead
  */
 @ComponentConfig(template = "system:/groovy/webui/form/UIFormUploadInput.gtmpl")
+@Deprecated
 public class UIFormUploadInput extends UIFormInputBase<String>
 {
    /**

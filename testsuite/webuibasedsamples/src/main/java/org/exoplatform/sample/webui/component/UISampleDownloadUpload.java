@@ -38,11 +38,8 @@ public class UISampleDownloadUpload extends UIForm
       addUIFormInput(new UIFormUploadInput("name0", "value0"));
       addUIFormInput(new UIFormUploadInput("name1", "value1", 1));
       addUIFormInput(new UIFormUploadInput("name2", "value2", 200));
-      
-      addUIFormInput(new UIUploadInput("name3", "name3", 2, 300, UploadUnit.KB));
-      UIUploadInput input = new UIUploadInput("name4", "name4", 2, 300);
-      input.setAutoUpload(false);
-      addUIFormInput(input);
+      addUIFormInput(new UIUploadInput("name3", "name3", 0, 300, UploadUnit.KB));
+      addUIFormInput(new UIUploadInput("name4", "name4", 1, 300, UploadUnit.MB));
    }
 
    public void setDownloadLink(String[] downloadLink)

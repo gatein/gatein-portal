@@ -309,6 +309,11 @@ public class UploadService
          uploadLimits.put(uploadId, new UploadLimit(limit, unit));
       }
    }
+   
+   public void removeUploadLimit(String uploadId)
+   {
+      uploadLimits.remove(uploadId);
+   }
 
    /**
     * Get all upload limit sizes

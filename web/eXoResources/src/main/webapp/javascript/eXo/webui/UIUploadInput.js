@@ -20,11 +20,7 @@
 eXo.webui.UIUploadInput = {
   listUpload : [],
   refreshTime : 1000,
-  delayTime : 5000,
-  progressURL : eXo.env.server.context + "/upload?action=progress&uploadId=",
-  uploadURL : eXo.env.server.context + "/upload?action=upload&uploadId=",
-  abortURL : eXo.env.server.context + "/upload?action=abort&uploadId=",
-  deleteURL : eXo.env.server.context + "/upload?action=delete&uploadId=",
+  delayTime : 5000,  
 
   /**
    * Initialize upload and create a upload request to server
@@ -38,6 +34,15 @@ eXo.webui.UIUploadInput = {
     } else {
       isDynamicMode = false;
     }
+    
+    if (!this.progressURL) {
+    	var context = eXo.env.server.context;
+        this.progressURL = context + "/upload?action=progress&uploadId=";
+        this.uploadURL = context + "/upload?action=upload&uploadId=";
+        this.abortURL = context + "/upload?action=abort&uploadId=";
+        this.deleteURL = context + "/upload?action=delete&uploadId=";
+    }
+    
     for ( var i = 0; i < uploadId.length; i++) {
       var url = this.progressURL + uploadId[i];
       var responseText = ajaxAsyncGetRequest(url, false);

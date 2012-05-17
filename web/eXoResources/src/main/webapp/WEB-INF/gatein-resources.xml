@@ -133,6 +133,9 @@
          <name>exo-jquery-alias</name>
          <path>/javascript/exo-jquery-alias.js</path>
       </module>
+      <depends>
+        <scripts>bootstrap</scripts>
+      </depends>
    </scripts>
 
    <!-- Base Javascripts for anonymous mode -->
