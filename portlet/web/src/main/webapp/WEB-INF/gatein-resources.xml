@@ -83,56 +83,56 @@
    
    <portlet>
      <name>BannerPortlet</name>
-     <scripts>
+     <module>
        <mode>on-load</mode>
        <depends>
-         <scripts>base</scripts>
+         <module>base</module>
        </depends>
-   </scripts>
+   </module>
    </portlet>
 
   <portlet>
     <name>SiteMapPortlet</name>
-  	<scripts>
-  	  <module>
+  	<module>
+  	  <script>
 	       <name>eXo.webui.UISiteMap</name>
 	       <path>/javascript/eXo/webui/UISiteMap.js</path>
-  	  </module>
+  	  </script>
 	    <depends>
-  	    <scripts>common</scripts>
+  	    <module>common</module>
 	    </depends>
-	  </scripts>
+	  </module>
   </portlet>
 
   <!-- The navigation portlet declaration -->
   <portlet>
     <name>NavigationPortlet</name>
-    <scripts>
+    <module>
       <mode>on-load</mode>
       <depends>
-        <scripts>navigation</scripts>
+        <module>navigation</module>
       </depends>
-    </scripts>
+    </module>
   </portlet>
 
   <portlet>
     <name>LogoPortlet</name>
-    <scripts>
+    <module>
       <mode>on-load</mode>
       <depends>
-        <scripts>webui</scripts>
+        <module>webui</module>
       </depends>
-    </scripts>
+    </module>
   </portlet>
 
   <portlet>
     <name>IFramePortlet</name>
-    <scripts>
+    <module>
       <mode>on-load</mode>
       <depends>
-        <scripts>webui</scripts>
+        <module>webui</module>
       </depends>
-    </scripts>
+    </module>
   </portlet>
 
 </gatein-resources>

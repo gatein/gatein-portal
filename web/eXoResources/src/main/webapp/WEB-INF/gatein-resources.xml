@@ -111,250 +111,250 @@
    </window-style>
 
    <!-- Bootstrap Javascripts -->
-   <scripts>
+   <module>
       <name>bootstrap</name>
-      <module>
+      <script>
          <name>eXo</name>
          <path>/javascript/eXo.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.core.Loader</name>
          <path>/javascript/eXo/core/AsyncLoader.js</path>
-      </module>
-   </scripts>
+      </script>
+   </module>
 
-   <scripts>
+   <module>
       <name>jquery</name>
-      <module>
+      <script>
          <name>jquery</name>
          <path>/javascript/exo-jquery-1.7.1.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>exo-jquery-alias</name>
          <path>/javascript/exo-jquery-alias.js</path>
-      </module>
+      </script>
       <depends>
-        <scripts>bootstrap</scripts>
+        <module>bootstrap</module>
       </depends>
-   </scripts>
+   </module>
 
    <!-- Base Javascripts for anonymous mode -->
-   <scripts>
+   <module>
       <name>base</name>
       <supported-locale>de</supported-locale>
       <supported-locale>en</supported-locale>
       <supported-locale>fr</supported-locale>
       <supported-locale>ru</supported-locale>
       <supported-locale>vi</supported-locale>
-      <module>
+      <script>
          <name>eXo.core.Utils</name>
          <path>/javascript/eXo/core/Util.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UIPopupSelectCategory</name>
          <path>/javascript/eXo/webui/UIPopupSelectCategory.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.core.Browser</name>
          <path>/javascript/eXo/core/Browser.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.core.I18n</name>
          <path>/javascript/eXo/core/I18n.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.core.Skin</name>
          <path>/javascript/eXo/core/Skin.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.portal.PortalHttpRequest</name>
          <path>/javascript/eXo/portal/PortalHttpRequest.js</path>
-      </module>
+      </script>
 
-      <module>
+      <script>
          <name>eXo.webui.UIPopup</name>
          <path>/javascript/eXo/webui/UIPopup.js</path>
-      </module>
+      </script>
 
-      <module>
+      <script>
          <name>eXo.core.UIMaskLayer</name>
          <path>/javascript/eXo/core/UIMaskLayer.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.portal.UIMaskWorkspace</name>
          <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
-      </module>
+      </script>
 
-      <module>
+      <script>
         <name>eXo.i18n.I18NMessage</name>
         <path>/javascript/eXo/i18n/I18NMessage.js</path>
         <resource-bundle>eXo.portal</resource-bundle>
-      </module>
+      </script>
       <depends>
-        <scripts>bootstrap</scripts>
+        <module>bootstrap</module>
       </depends>
       <depends>
-        <scripts>jquery</scripts>
+        <module>jquery</module>
       </depends>
-   </scripts>
+   </module>
 
 
    <!-- CORE Javascripts -->
-   <scripts>
+   <module>
       <name>common</name>
-      <module>
+      <script>
          <name>eXo.core.DragDrop</name>
          <path>/javascript/eXo/core/DragDrop.js</path>
-      </module>
+      </script>
 
       <depends>
-         <scripts>base</scripts>
+         <module>base</module>
       </depends>
-   </scripts>
+   </module>
 
    <!-- GADGET Javascripts -->
-   <scripts>
+   <module>
       <name>gadget</name>
-      <module>
+      <script>
          <name>eXo.gadget.UIGadget</name>
          <path>/javascript/eXo/gadget/UIGadget.js</path>
-      </module>
+      </script>
       <depends>
-         <scripts>common</scripts>
+         <module>common</module>
       </depends>
-   </scripts>
+   </module>
 
    <!-- Portal Javascripts -->
-   <scripts>
+   <module>
       <name>portal</name>
-      <module>
+      <script>
          <name>eXo.portal.UIPortal</name>
          <path>/javascript/eXo/portal/UIPortal.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.portal.PortalComposer</name>
          <path>/javascript/eXo/portal/PortalComposer.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.portal.PortalDragDrop</name>
          <path>/javascript/eXo/portal/PortalDragDrop.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UIFormInputThemeSelector</name>
          <path>/javascript/eXo/webui/UIFormInputThemeSelector.js</path>
-      </module>
+      </script>
       <depends>
-         <scripts>common</scripts>
+         <module>common</module>
       </depends>
-   </scripts>
+   </module>
 
 
    <!-- WebUI Javascripts -->
-   <scripts>
+   <module>
       <name>webui</name>
-      <module>
+      <script>
          <name>eXo.webui.UIItemSelector</name>
          <path>/javascript/eXo/webui/UIItemSelector.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UIUserSelector</name>
          <path>/javascript/eXo/webui/UIUserSelector.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.portal.UIPortalControl</name>
          <path>/javascript/eXo/portal/UIPortalControl.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.portal.VerticalScrollManager</name>
          <path>/javascript/eXo/portal/VerticalScrollManager.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UIForm</name>
          <path>/javascript/eXo/webui/UIForm.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UIPopupWindow</name>
          <path>/javascript/eXo/webui/UIPopupWindow.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UIHorizontalTabs</name>
          <path>/javascript/eXo/webui/UIHorizontalTabs.js</path>
-      </module>
+      </script>
       <depends>
-         <scripts>common</scripts>
+         <module>common</module>
       </depends>
-   </scripts>
+   </module>
 
-   <scripts>
+   <module>
       <name>webui-ext</name>
-      <module>
+      <script>
          <name>eXo.webui.UICalendar</name>
          <path>/javascript/eXo/webui/UICalendar.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UIUpload</name>
          <path>/javascript/eXo/webui/UIUpload.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UIUploadInput</name>
          <path>/javascript/eXo/webui/UIUploadInput.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UIRightClickPopupMenu</name>
          <path>/javascript/eXo/webui/UIRightClickPopupMenu.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UIDropDownControl</name>
          <path>/javascript/eXo/webui/UIDropDownControl.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UIVirtualList</name>
          <path>/javascript/eXo/webui/UIVirtualList.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UIColorPicker</name>
          <path>/javascript/eXo/webui/UIColorPicker.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UICombobox</name>
          <path>/javascript/eXo/webui/UICombobox.js</path>
-      </module>
+      </script>
       <depends>
-         <scripts>common</scripts>
+         <module>common</module>
       </depends>
-   </scripts>
+   </module>
 
-   <scripts>
+   <module>
       <name>navigation</name>
-      <module>
+      <script>
          <name>eXo.webui.UIPopupMenu</name>
          <path>/javascript/eXo/webui/UIPopupMenu.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.portal.UIPortalNavigation</name>
          <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
-      </module>
+      </script>
       <depends>
-         <scripts>base</scripts>
+         <module>base</module>
       </depends>
-   </scripts>
+   </module>
 
-   <scripts>
+   <module>
       <name>dashboard</name>
-      <module>
+      <script>
          <name>eXo.webui.UIDashboard</name>
          <path>/javascript/eXo/webui/UIDashboard.js</path>
-      </module>
-      <module>
+      </script>
+      <script>
          <name>eXo.webui.UIDashboardUtil</name>
          <path>/javascript/eXo/webui/UIDashboardUtil.js</path>
-      </module>
+      </script>
       <depends>
-         <scripts>common</scripts>
+         <module>common</module>
       </depends>
       <depends>
-         <scripts>gadget</scripts>
+         <module>gadget</module>
       </depends>
-   </scripts>
+   </module>
 
 </gatein-resources>

@@ -42,19 +42,19 @@ public class TestParser extends AbstractGateInTest
    {
       String config = "" +
          "<gatein-resources>" +
-         "<scripts>" +
-         "<name>foo</name>" +
          "<module>" +
+         "<name>foo</name>" +
+         "<script>" +
          "<name>foo_module</name>" +
          "<path>/foo_module.js</path>" +
+         "</script>" +
+         "<depends>" +
+         "<module>bar</module>" +
+         "</depends>" +
+         "<depends>" +
+         "<module>juu</module>" +
+         "</depends>" +
          "</module>" +
-         "<depends>" +
-         "<scripts>bar</scripts>" +
-         "</depends>" +
-         "<depends>" +
-         "<scripts>juu</scripts>" +
-         "</depends>" +
-         "</scripts>" +
          "</gatein-resources>";
 
       //
@@ -72,18 +72,18 @@ public class TestParser extends AbstractGateInTest
          "<gatein-resources>" +
          "<portlet>" +
          "<name>foo</name>" +
-         "<scripts>" +
          "<module>" +
+         "<script>" +
          "<name>foo_module</name>" +
          "<path>/foo_module.js</path>" +
+         "</script>" +
+         "<depends>" +
+         "<module>bar</module>" +
+         "</depends>" +
+         "<depends>" +
+         "<module>juu</module>" +
+         "</depends>" +
          "</module>" +
-         "<depends>" +
-         "<scripts>bar</scripts>" +
-         "</depends>" +
-         "<depends>" +
-         "<scripts>juu</scripts>" +
-         "</depends>" +
-         "</scripts>" +
          "</portlet>" +
          "</gatein-resources>";
 
@@ -102,18 +102,18 @@ public class TestParser extends AbstractGateInTest
          "<gatein-resources>" +
          "<portal>" +
          "<name>foo</name>" +
-         "<scripts>" +
          "<module>" +
+         "<script>" +
          "<name>foo_module</name>" +
          "<path>/foo_module.js</path>" +
+         "</script>" +
+         "<depends>" +
+         "<module>bar</module>" +
+         "</depends>" +
+         "<depends>" +
+         "<module>juu</module>" +
+         "</depends>" +
          "</module>" +
-         "<depends>" +
-         "<scripts>bar</scripts>" +
-         "</depends>" +
-         "<depends>" +
-         "<scripts>juu</scripts>" +
-         "</depends>" +
-         "</scripts>" +
          "</portal>" +
          "</gatein-resources>";
 
@@ -132,16 +132,16 @@ public class TestParser extends AbstractGateInTest
          "<gatein-resources>" +
          "<portal>" +
          "<name>foo</name>" +
-         "<scripts>" +
          "<module>" +
+         "<script>" +
          "<name>local_module</name>" +
          "<path>/local_module.js</path>" +
-         "</module>" +
-         "<module>" +
+         "</script>" +
+         "<script>" +
          "<name>remote_module</name>" +
          "<uri>/remote_module.js</uri>" +
+         "</script>" +
          "</module>" +
-         "</scripts>" +
          "</portal>" +
          "</gatein-resources>";
 
@@ -169,13 +169,13 @@ public class TestParser extends AbstractGateInTest
          "<gatein-resources>" +
          "<portal>" +
          "<name>foo</name>" +
-         "<scripts>" +
          "<module>" +
+         "<script>" +
          "<name>foo_module</name>" +
          "<path>/foo_module.js</path>" +
          "<resource-bundle>my_bundle</resource-bundle>" +
+         "</script>" +
          "</module>" +
-         "</scripts>" +
          "</portal>" +
          "</gatein-resources>";
 
@@ -196,10 +196,10 @@ public class TestParser extends AbstractGateInTest
          "<gatein-resources>" +
          "<portal>" +
          "<name>foo</name>" +
-         "<scripts>" +
+         "<module>" +
          "<supported-locale>EN</supported-locale>" +
          "<supported-locale>FR-fr</supported-locale>" +
-         "</scripts>" +
+         "</module>" +
          "</portal>" +
          "</gatein-resources>";
 

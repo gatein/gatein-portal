@@ -35,17 +35,17 @@
 	
 	<portlet>
    	<name>UISamplePortlet</name>
-		<scripts>
-			<module>
+		<module>
+			<script>
 		     <name>eXo.webui.UISampleTOC</name>
 		     <path>/javascript/eXo/webui/UISampleTOC.js</path>
-		 	</module>
+		 	</script>
 			<depends>
-			  	<scripts>webui</scripts>
+			  	<module>webui</module>
 			</depends>
 			<depends>
-			   <scripts>webui-ext</scripts>
+			   <module>webui-ext</module>
 			</depends>
-		 </scripts>
+		 </module>
     </portlet>
 </gatein-resources>

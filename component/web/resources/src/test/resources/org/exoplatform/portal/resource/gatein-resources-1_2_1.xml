@@ -23,35 +23,35 @@
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2_1 http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
     xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
 
-  <scripts>
+  <module>
     <name>zefzef</name>
     <supported-locale>EN</supported-locale>
     <supported-locale>FR</supported-locale>
-    <module>
+    <script>
       <name>foo</name>
       <path>/foo.js</path>
       <resource-bundle>zefzfeze</resource-bundle>
-    </module>
+    </script>
     <depends>
-      <scripts>bar</scripts>
+      <module>bar</module>
     </depends>
     <depends>
-      <scripts>juu</scripts>
+      <module>juu</module>
     </depends>
-  </scripts>
+  </module>
 
   <portlet>
     <name>zfze</name>
-    <scripts>
+    <module>
       <supported-locale>EN</supported-locale>
-      <module>
+      <script>
         <name>zezef</name>
         <uri>zefzf</uri>
-      </module>
+      </script>
       <depends>
-        <scripts>zefze</scripts>
+        <module>zefze</module>
       </depends>
-    </scripts>
+    </module>
   </portlet>
 
 

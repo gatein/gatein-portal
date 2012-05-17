@@ -37,7 +37,7 @@
         <xs:element name="resource-bundle" type="resource-bundle" />
         <xs:element name="portlet" type="portlet" />
         <xs:element name="portal" type="portal" />
-        <xs:element name="scripts" type="scripts" />
+        <xs:element name="module" type="module" />
       </xs:choice>
     </xs:complexType>
   </xs:element>
@@ -123,11 +123,11 @@
   <xs:complexType name="resource-bundle">
   </xs:complexType>
 
-  <xs:complexType name="scripts">
+  <xs:complexType name="module">
     <xs:sequence>
       <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-      <xs:element name="module" type="module" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="script" type="script" minOccurs="0" maxOccurs="unbounded"/>
       <xs:element name="depends" type="dependency" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
@@ -135,12 +135,12 @@
   <xs:complexType name="resources-container" abstract="true">
     <xs:sequence>
       <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="scripts" minOccurs="0" maxOccurs="1">
+      <xs:element name="module" minOccurs="0" maxOccurs="1">
         <xs:complexType>
           <xs:sequence>
             <xs:element name="mode" type="fetchMode" minOccurs="0" maxOccurs="1" default="immediate"/>
             <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
-            <xs:element name="module" type="module" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="script" type="script" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="depends" type="dependency" minOccurs="0" maxOccurs="unbounded"/>
           </xs:sequence>
         </xs:complexType>
@@ -162,11 +162,11 @@
 
   <xs:complexType name="dependency">
     <xs:sequence>
-      <xs:element name="scripts" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="module" type="xs:string" minOccurs="1" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
 
-  <xs:complexType name="module">
+  <xs:complexType name="script">
     <xs:sequence>
       <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:choice minOccurs="1" maxOccurs="1">

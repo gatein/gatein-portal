@@ -60,7 +60,7 @@ public class JavascriptConfigParser
    final public static String JAVA_SCRIPT_PORTAL_NAME = "portal-name";
 
    /** . */
-   final public static String SCRIPTS_TAG = "scripts";
+   final public static String SCRIPTS_TAG = "script";
 
    /** . */
    final public static String PORTLET_TAG = "portlet";
@@ -124,7 +124,7 @@ public class JavascriptConfigParser
    {
       List<ScriptResourceDescriptor> tasks = new ArrayList<ScriptResourceDescriptor>();
       Element element = document.getDocumentElement();
-      for (String tagName : Arrays.asList(JAVA_SCRIPT_TAG, SCRIPTS_TAG, PORTLET_TAG, PORTAL_TAG))
+      for (String tagName : Arrays.asList(JAVA_SCRIPT_TAG, MODULE_TAG, PORTLET_TAG, PORTAL_TAG))
       {
          for (Element childElt : XMLTools.getChildren(element, tagName))
          {
@@ -214,10 +214,10 @@ public class JavascriptConfigParser
             resourceScope = ResourceScope.PORTAL;
          }
          ResourceId id = new ResourceId(resourceScope, resourceName);
-         Element scriptsElt = XMLTools.getUniqueChild(element, SCRIPTS_TAG, false);
-         if (scriptsElt != null)
+         Element moduleElt = XMLTools.getUniqueChild(element, MODULE_TAG, false);
+         if (moduleElt != null)
          {
-            Element modeElt = XMLTools.getUniqueChild(scriptsElt, "mode", false);
+            Element modeElt = XMLTools.getUniqueChild(moduleElt, "mode", false);
             FetchMode fetchMode = modeElt == null ? FetchMode.IMMEDIATE : FetchMode.decode(XMLTools.asString(modeElt));
             ScriptResourceDescriptor desc = scripts.get(id);
             if (desc == null)
@@ -228,10 +228,10 @@ public class JavascriptConfigParser
             {
                desc.fetchMode = fetchMode;
             }
-            parseDesc(scriptsElt, desc);
+            parseDesc(moduleElt, desc);
          }
       }
-      else if (SCRIPTS_TAG.equals(element.getTagName()))
+      else if (MODULE_TAG.equals(element.getTagName()))
       {
          String resourceName = XMLTools.asString(XMLTools.getUniqueChild(element, "name", true));
          ResourceId id = new ResourceId(ResourceScope.SHARED, resourceName);
@@ -259,32 +259,32 @@ public class JavascriptConfigParser
          Locale locale = I18N.parseTagIdentifier(localeValue);
          desc.supportedLocales.add(locale);
       }
-      for (Element moduleElt : XMLTools.getChildren(element, "module"))
+      for (Element scriptElt : XMLTools.getChildren(element, SCRIPTS_TAG))
       {
-         String moduleName = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "name", true));
+         String scriptName = XMLTools.asString(XMLTools.getUniqueChild(scriptElt, "name", true));
          Javascript script;
-         Element path = XMLTools.getUniqueChild(moduleElt, "path", false);
+         Element path = XMLTools.getUniqueChild(scriptElt, "path", false);
          if (path != null)
          {
             String resourceBundle = null;
-            Element bundleElt = XMLTools.getUniqueChild(moduleElt, "resource-bundle", false);
+            Element bundleElt = XMLTools.getUniqueChild(scriptElt, "resource-bundle", false);
             if (bundleElt != null)
             {
                resourceBundle = XMLTools.asString(bundleElt);
             }
-            String modulePath = XMLTools.asString(path);
-            script = new Javascript.Local(desc.id, moduleName, contextPath, modulePath, resourceBundle, 0);
+            String scriptPath = XMLTools.asString(path);
+            script = new Javascript.Local(desc.id, scriptName, contextPath, scriptPath, resourceBundle, 0);
          }
          else
          {
-            String moduleURI = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "uri", true));
-            script = new Javascript.Remote(desc.id, moduleName, contextPath, moduleURI, 0);
+            String scriptURI = XMLTools.asString(XMLTools.getUniqueChild(scriptElt, "uri", true));
+            script = new Javascript.Remote(desc.id, scriptName, contextPath, scriptURI, 0);
          }
          desc.modules.add(script);
       }
       for (Element moduleElt : XMLTools.getChildren(element, "depends"))
       {
-         String dependencyName = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, "scripts", true));
+         String dependencyName = XMLTools.asString(XMLTools.getUniqueChild(moduleElt, MODULE_TAG, true));
          ResourceId resourceId = new ResourceId(ResourceScope.SHARED, dependencyName);
          DependencyDescriptor dependency = new DependencyDescriptor(resourceId);
          desc.dependencies.add(dependency);

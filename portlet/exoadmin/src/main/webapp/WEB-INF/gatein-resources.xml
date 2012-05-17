@@ -86,134 +86,134 @@
 
    <portlet>
      <name>RegisterPortlet</name>
-     <scripts>
+     <module>
        <mode>on-load</mode>
        <depends>
-         <scripts>webui</scripts>
+         <module>webui</module>
        </depends>
-     </scripts>
+     </module>
    </portlet>
 
    <portlet>
      <name>StarToolbarPortlet</name>
-     <scripts>
+     <module>
        <mode>on-load</mode>
        <depends>
-         <scripts>navigation</scripts>
+         <module>navigation</module>
        </depends>
-     </scripts>
+     </module>
    </portlet>
 
    <portlet>
      <name>UserToolbarSitePortlet</name>
-     <scripts>
+     <module>
        <mode>on-load</mode>
        <depends>
-         <scripts>navigation</scripts>
+         <module>navigation</module>
        </depends>
-     </scripts>
+     </module>
    </portlet>
 
    <portlet>
      <name>UserToolbarGroupPortlet</name>
-     <scripts>
+     <module>
        <mode>on-load</mode>
        <depends>
-         <scripts>navigation</scripts>
+         <module>navigation</module>
        </depends>
-   </scripts>
+   </module>
    </portlet>
 
    <portlet>
      <name>UserToolbarDashboardPortlet</name>
-     <scripts>
+     <module>
        <mode>on-load</mode>
        <depends>
-         <scripts>navigation</scripts>
+         <module>navigation</module>
        </depends>
-     </scripts>
+     </module>
    </portlet>
 
    <portlet>
      <name>AdminToolbarPortlet</name>
-     <scripts>
+     <module>
        <mode>on-load</mode>
        <depends>
-         <scripts>navigation</scripts>
+         <module>navigation</module>
        </depends>
-     </scripts>
+     </module>
    </portlet>
 
    <portlet>
      <name>ApplicationRegistryPortlet</name>
-     <scripts>
+     <module>
        <mode>on-load</mode>
        <depends>
-         <scripts>webui</scripts>
+         <module>webui</module>
        </depends>
-     </scripts>
+     </module>
    </portlet>
 
    <portlet>
      <name>OrganizationPortlet</name>
-     <scripts>
+     <module>
        <mode>on-load</mode>
        <depends>
-         <scripts>webui</scripts>
+         <module>webui</module>
        </depends>
-     </scripts>
+     </module>
    </portlet>
 
    <portlet>
      <name>AccountPortlet</name>
-     <scripts>
+     <module>
        <mode>on-load</mode>
        <depends>
-         <scripts>webui</scripts>
+         <module>webui</module>
        </depends>
-     </scripts>
+     </module>
    </portlet>
 
    <portlet>
      <name>GroupNavigationPortlet</name>
-     <scripts>
+     <module>
        <mode>on-load</mode>
        <depends>
-         <scripts>webui</scripts>
+         <module>webui</module>
        </depends>
        <depends>
-         <scripts>webui-ext</scripts>
+         <module>webui-ext</module>
        </depends>
-     </scripts>
+     </module>
    </portlet>
 
    <portlet>
      <name>PortalNavigationPortlet</name>
-     <scripts>
+     <module>
        <mode>on-load</mode>
        <depends>
-         <scripts>webui</scripts>
+         <module>webui</module>
        </depends>
        <depends>
-         <scripts>webui-ext</scripts>
+         <module>webui-ext</module>
        </depends>
-     </scripts>
+     </module>
    </portlet>
 
    <portlet>
      <name>PageManagementPortlet</name>
-     <scripts>
+     <module>
        <mode>on-load</mode>
        <depends>
-         <scripts>portal</scripts>
+         <module>portal</module>
        </depends>
        <depends>
-         <scripts>webui</scripts>
+         <module>webui</module>
        </depends>
        <depends>
-         <scripts>webui-ext</scripts>
+         <module>webui-ext</module>
        </depends>
-     </scripts>
+     </module>
    </portlet>
 
 </gatein-resources>

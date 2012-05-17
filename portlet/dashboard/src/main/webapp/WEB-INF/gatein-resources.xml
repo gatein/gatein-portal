@@ -36,39 +36,39 @@
 
   <portlet>
     <name>DashboardPortlet</name>
-    <scripts>
+    <module>
       <mode>on-load</mode>
       <depends>
-        <scripts>dashboard</scripts>
+        <module>dashboard</module>
       </depends>
       <depends>
-        <scripts>webui</scripts>
+        <module>webui</module>
       </depends>
-    </scripts>
+    </module>
   </portlet>
 
   <portlet>
     <name>GadgetPortlet</name>
-    <scripts>
+    <module>
       <mode>on-load</mode>
       <depends>
-        <scripts>common</scripts>
+        <module>common</module>
       </depends>
-    </scripts>
+    </module>
   </portlet>
 
   <portlet>
     <name>TabbedDashboardPortlet</name>
-    <scripts>
+    <module>
       <mode>on-load</mode>
-      <module>
+      <script>
         <name>eXo.webui.UITabbedDashboard</name>
         <path>/javascript/eXo/webui/UITabbedDashboard.js</path>
-      </module>
+      </script>
       <depends>
-        <scripts>base</scripts>
+        <module>base</module>
       </depends>
-    </scripts>
+    </module>
   </portlet>
 			
 </gatein-resources>
