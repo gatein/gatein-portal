@@ -19,7 +19,8 @@
                 In this tutorial, the SSO server is installed in a Tomcat installation. Tomcat can be obtained from <ulink type="http" url="http://tomcat.apache.org">http://tomcat.apache.org</ulink>.
             </para>
             <para>
-				   All the packages required for setup can be found in a latest zip file located under <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/">this directory</ulink>. At this moment, latest version is <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.1.1-CR02/sso-packaging-1.1.1-CR02.zip">here</ulink>.
+				   All the packages required for setup can be found in a latest zip file located under <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/">this directory</ulink>.
+               At this moment, latest version is <ulink type="http" url="https://repository.jboss.org/nexus/content/groups/public/org/gatein/sso/sso-packaging/1.1.2-Beta02/sso-packaging-1.1.2-Beta02.zip">here</ulink>.
                In this document, $GATEIN_SSO_HOME is called as the directory where the file is extracted.
             </para>
             <para>
@@ -31,7 +32,7 @@
 
 
 
-   <section id="sect-Reference_Guide_eXo_JCR_1.14-SSO_Single_Sign_On-Enabling_SSO_using_JBoss_SSO_Valve">
+   <section id="sect-Reference_Guide-SSO_Single_Sign_On-Enabling_SSO_using_JBoss_SSO_Valve">
       <title>Enabling SSO using JBoss SSO Valve</title>
 <!--   Source Metadata
 URL: https://issues.jboss.org/browse/JBQA-4530
@@ -2006,5 +2007,597 @@ network.negotiate-auth.using-native-gsslib = true
                 </step>
             </procedure>
         </section>
+    </section>
+
+    <section id="sect-Reference_Guide-SSO_SAML">
+       <title>SAML2</title>
+       <para>
+          SAML (Security Assertion Markup Language) is Oasis standard for exchanging authentication and authorization
+          data between security domains. SAML 2.0 is an XML-based protocol that uses security tokens containing assertions
+          to pass information about a principal (usually an end user) between an identity provider and a web service.
+          SAML 2.0 enables web-based authentication and authorization scenarios including single sign-on (SSO).
+       </para>
+       <para>
+          SAML2 standard is described in set of specifications, which provides exact format of XML messages and context how these messages
+          are exchanged between Identity Provider  (IDP, Web application, which acts as SSO provider and users are
+          authenticated against it) and Service Provider (SP, Web application, which is used by client who wants to authenticate).
+          More info about specifications in document <ulink type="http" url="http://docs.oasis-open.org/security/saml/v2.0/">http://docs.oasis-open.org/security/saml/v2.0/</ulink> .
+       </para>
+       <para>
+          SAML2 based authentication is provided in &PRODUCT; SSO component. We support scenarios with &PRODUCT; acting
+          as Service Provider (SP) or Identity Provider (IDP).
+       </para>
+       <section id="sect-Reference_Guide-SSO_SAML-Overview">
+          <title>SAML2 Overview and authentication workflow</title>
+          <para>For &PRODUCT; and SAML2 integration, we are using JBoss project <ulink type="http" url="https://docs.jboss.org/author/display/PLINK/SAML+v2.0">Picketlink Federation</ulink>,
+             which provides solution for most important parts of SAML2 specification. Especially it supports SSO authentication
+             with SAML2 HTTP Redirect Binding and SAML2 HTTP Post Binding and it supports SAML2 Global Logout feature.
+          </para>
+          <para>SSO authentication is based on circle of trust between SP and IDP.</para>
+          <mediaobject>
+             <imageobject>
+                <imagedata fileref="images/AuthenticationAndIdentity/SSO/saml-sso.png" format="PNG" align="center" valign="middle" scalefit="1" />
+             </imageobject>
+          </mediaobject>
+          <para>Authentication works as follows (flow with &PRODUCT; as SAML2 SP):</para>
+          <procedure>
+            <step>User sends request to secured resource like <ulink type="http" url="http://localhost:8080/portal/dologin">http://localhost:8080/portal/dologin</ulink>
+            </step>
+            <step>&PRODUCT; will check if user is already authenticated and if yes, grant access to resource.
+               Otherwise continue with flow below.
+            </step>
+            <step>
+               There is special Tomcat valve, which needs to be configured for portal context. This Valve will create SAML Request, which is basically XML message. Example of message:
+<programlisting>
+<![CDATA[
+<samlp:AuthnRequest AssertionConsumerServiceURL="http://localhost:8080/portal/dologin" ID="ID_101dcb5e-f432-4f45-87cb-47daff92edef" IssueInstant="2012-04-12T17:53:27.294+01:00" ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Version="2.0">
+   <saml:Issuer>http://localhost:8080/portal/dologin</saml:Issuer>
+   <samlp:NameIDPolicy AllowCreate="true" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"/>
+</samlp:AuthnRequest>
+]]>
+</programlisting>
+               Valve will encapsulate SAML request into HttpResponse and it redirects it to IDP. Picketlink Federation
+               supports SAML Redirect Binding, which basically means that SAML XML Request message is Base64 encoded and
+               URL encoded and it is appended as URL parameter to GET request, which will be send to IDP.
+               PL Fed also supports SAML POST Binding where is message encoded into Base64 and sent in the body of POST request.
+            </step>
+            <step>
+               IDP parses XML with SAML request and it sends login screen back to client. Now client (user) needs to
+               authenticate himself. SAML specification does not mandate how exactly should be authentication of client
+               on IDP side performed.
+            </step>
+            <step>
+               User fills his credentials into IDP FORM and submits request for JAAS authentication. &PRODUCT; SSO component
+               provides login module <filename>SAML2IdpLoginModule</filename>, which will authenticate user by sending
+               callback request via REST API back to &PRODUCT;. This is similar approach like authentication with other
+               SSO providers like CAS, which are also leveraging this REST service.
+               <note>
+                  Portal administrators are free to use their own login module stack instead of our REST callback based login module.
+                  However they need to make sure that authenticated users also need to exist in &PRODUCT; database.
+                  Otherwise their users may have authorization errors with 403 response when they try to access portal.
+               </note>
+            </step>
+            <step>
+               So after successful authentication will IDP create SAML assertion ticket and it creates SAML Response message with this ticket. Message can looks like this:
+<programlisting>
+<![CDATA[
+<samlp:Response ID="ID_5291c49e-5450-4b3b-9f99-f76606db9929" Version="2.0" IssueInstant="2012-04-12T17:53:59.237+01:00" Destination="http://localhost:8080/portal/dologin" InResponseTo="ID_101dcb5e-f432-4f45-87cb-47daff92edef">
+   <saml:Issuer>http://localhost:8080/idp/</saml:Issuer>
+   <samlp:Status>
+      <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
+   </samlp:Status>
+
+   <saml:Assertion ID="ID_ebe89398-1e27-4257-9413-c3c17c40c9df" Version="2.0" IssueInstant="2012-04-12T17:53:59.236+01:00">
+      <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">root</saml:Issuer>
+      <saml:Subject>
+         <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">root</saml:NameID>
+         <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+            <saml:SubjectConfirmationData InResponseTo="ID_101dcb5e-f432-4f45-87cb-47daff92edef" NotBefore="2012-04-12T17:53:59.236+01:00" NotOnOrAfter="2012-04-12T17:54:06.236+01:00" Recipient="http://localhost:8080/portal/dologin"/>
+         </saml:SubjectConfirmation>
+      </saml:Subject>
+      <saml:Conditions NotBefore="2012-04-12T17:53:57.236+01:00" NotOnOrAfter="2012-04-12T17:54:06.236+01:00"/>
+      <saml:AuthnStatement AuthnInstant="2012-04-12T17:53:59.237+01:00">
+         <saml:AuthnContext>
+            <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:Password</saml:AuthnContextClassRef>
+         </saml:AuthnContext>
+      </saml:AuthnStatement>
+      <saml:AttributeStatement>
+         <saml:Attribute Name="Role">
+            <saml:AttributeValue xsi:type="xs:string">users</saml:AttributeValue>
+         </saml:Attribute>
+         <saml:Attribute Name="Role">
+            <saml:AttributeValue xsi:type="xs:string">administrators</saml:AttributeValue>
+         </saml:Attribute>
+      </saml:AttributeStatement>
+   </saml:Assertion>
+</samlp:Response>
+]]>
+</programlisting>
+            </step>
+            <step>
+               Message is then encapsulated into HttpResponse and redirected back to SP (&PRODUCT;).
+            </step>
+            <step>
+               On &PRODUCT; side is SAML response message decoded again by the Tomcat Valve and if assertion from response
+               is valid, then username and his roles are added into ThreadLocal context variable. Valve then triggers JAAS
+               authentication. &PRODUCT; SSO component will provide login module <filename>SAML2IntegrationLoginModule</filename>,
+               which will parse authenticated username and it will perform &PRODUCT; specific operations, like creating Identity object
+               and registering it into IdentityRegistry. Now user is successfully authenticated.
+            </step>
+            <step>
+               User is redirected back to secure resource
+               <ulink type="http" url="http://localhost:8080/portal/dologin">http://localhost:8080/portal/dologin</ulink>
+               , which in next turn will redirect him to &PRODUCT; as authenticated user.
+            </step>
+          </procedure>
+          <para>
+             If user wants to authenticate against different SP application within same browser session (&PRODUCT; on different host
+             or completely different web application), then he does not need to provide credentials again on IDP side
+             because he has been already authenticated against IDP. So he has automatic authentication thanks to SSO.
+          </para>
+          <para>
+             In next sections, we will go through various scenarios, which describes how you can leverage SAML2 in &PRODUCT;
+             and there is description of all needed configuration changes.
+          </para>
+       </section>
+
+       <section id="sect-Reference_Guide-SSO_SAML-SingleHostScenario">
+          <title>Single host scenario</title>
+          <para>This scenario is good starting point for other use cases. &PRODUCT; will act as SAML2 SP.
+             We will have &PRODUCT; and SAML2 IDP on same host
+             and we will use JBoss 5 as target server. So assumption is that you have &PRODUCT; bundle for JBoss 5.
+             Directory with &PRODUCT; will be referred to as <emphasis role="bold">JBOSS_HOME</emphasis>. Directory with unpacked SSO packaging zip will be referred to as
+             <emphasis role="bold">GATEIN_SSO_HOME</emphasis> similarly like in previous sections.
+          </para>
+          <procedure>
+             <step>Download <emphasis role="bold">idp-sig</emphasis> application.
+                It's sample quickstart application for Picketlink Federation and it's preconfigured to act as SAML2 IDP,
+                which uses signed SAML messages. It can be downloaded from <ulink type="html" url="https://repository.jboss.org/nexus/index.html#nexus-search;quick~picketlink-quickstarts">https://repository.jboss.org/nexus/index.html#nexus-search;quick~picketlink-quickstarts</ulink> .
+                You will need version for JBoss AS5.
+             </step>
+             <step>
+                Deploy downloaded <filename>idp-sig-VERSION.war</filename> into directory <filename>JBOSS_HOME/server/default/deploy/</filename> .
+             </step>
+             <step>
+                Copy all JAR files from <filename>GATEIN_SSO_HOME/saml/gatein.ear/lib/*</filename> into <filename>JBOSS_HOME/server/default/deploy/gatein.ear/lib/</filename>
+             </step>
+             <step>
+                Copy main configuration file for Picketlink Federation from location <filename>GATEIN_SSO_HOME/saml/gatein.ear/02portal.war/WEB-INF/picketlink.xml</filename>
+                to location <filename>JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/</filename>
+             </step>
+             <step>
+                Copy example keystore file for picketlink federation from <filename>GATEIN_SSO_HOME/saml/gatein.ear/02portal.war/WEB-INF/classes/jbid_test_keystore.jks</filename>
+                to <filename>JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/classes/</filename> .
+                This is example keystore file, which uses same keys on both &PRODUCT; and IDP side. Since it's prebundled
+                keystore, it should not be used for production environment (more details in <xref linkend="sect-Reference_Guide-SSO_SAML-KeystoreUpdate" />).
+             </step>
+             <step>
+                Copy file <filename>gatein-jboss-beans</filename> from <filename>GATEIN_SSO_HOME/saml/gatein.ear/META-INF/gatein-jboss-beans.xml</filename>
+                to <filename>JBOSS_HOME/server/default/deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</filename> .
+                This will replace original file with new configuration, which contains JAAS login modules needed for SAML integration.
+                There are 2 login modules by default: <emphasis role="bold">SAML2IntegrationLoginModule</emphasis> and <emphasis role="bold">JbossLoginModule</emphasis>.
+             </step>
+             <step>
+                Add and configure new Valve in <filename>JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/context.xml</filename> .
+                Configuration of new valve should be like this:
+<programlisting>
+<![CDATA[
+<Valve className="org.picketlink.identity.federation.bindings.tomcat.sp.ServiceProviderAuthenticator"
+    logOutPage="/" />
+]]>
+</programlisting>
+             </step>
+             <step>
+                Add new filter and filter-mapping for this filter into <filename>JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</filename> .
+                <para>Filter configuration should look like this:</para>
+<programlisting>
+<![CDATA[
+<filter>
+   <filter-name>SAML2LogoutFilter</filter-name>
+   <filter-class>org.gatein.sso.agent.filter.SAML2LogoutFilter</filter-class>
+</filter>
+]]>
+</programlisting>
+                <para>And filter-mapping for this filter as first filter in filter-mapping section:</para>
+<programlisting>
+<![CDATA[
+<filter-mapping>
+   <filter-name>SAML2LogoutFilter</filter-name>
+   <url-pattern>/*</url-pattern>
+</filter-mapping>
+]]>
+</programlisting>
+                <note>
+                   Filter is needed for "Single Logout" (Global logout) feature of SAML2 specification. Actually it means that when you are logged in more SP
+                   applications, you will be logged out automatically from all of them by initiating global logout. You can skip this filter if you don't want global logout and
+                   you want to be logged out only from &PRODUCT; when pressing <emphasis>Sign out</emphasis>.
+                </note>
+             </step>
+             <step>
+                In file <filename>JBOSS_HOME/server/default/conf/login-config.xml</filename> you need to add one new application-policy.
+                It is needed by IDP authentication, so that IDP won't use UsersPasswordLoginModule, but it will use login module for REST callback to &PRODUCT;.
+                It means that you will be able to login in SAML IDP screen with same username and passwords as to &PRODUCT; (root/gtn, john/gtn etc.).
+                New policy needs to look like this:
+<programlisting>
+<![CDATA[
+<application-policy xmlns="urn:jboss:security-beans:1.0" name="idp">
+   <authentication>
+      <login-module code="org.gatein.sso.saml.plugin.SAML2IdpLoginModule" flag="required">
+         <module-option name="rolesProcessing">STATIC</module-option>
+         <module-option name="staticRolesList">manager,employee,sales</module-option>
+         <module-option name="gateInURL">${portal.callback.url:http://localhost:8080/portal}</module-option>
+      </login-module>
+   </authentication>
+</application-policy>
+]]>
+</programlisting>
+             </step>
+             <step>
+                Copy file <filename>GATEIN_SSO_HOME/saml/idp-lib/sso-saml-plugin-VERSION.jar</filename> into file
+                <filename>JBOSS_HOME/server/default/lib/</filename> . This JAR file is needed by IDP for supporting REST callbacks described in previous step.
+             </step>
+             <step>
+                In the <filename>JBOSS_HOME/server/default/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
+<programlisting>
+<![CDATA[
+<!--
+<a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+-->
+<a class="Login" href="/portal/dologin"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+]]>
+</programlisting>
+             </step>
+             <step>
+                Test it. You can restart server and go to <ulink type="html" url="http://localhost:8080/portal">http://localhost:8080/portal</ulink> and click to "Sign in".
+                You will be redirected to IDP console where you can fill standard &PRODUCT; username/password for authentication (like john/gtn for instance).
+                After correct login, you will be redirected to &PRODUCT; as logged user.
+             </step>
+          </procedure>
+       </section>
+
+       <section id="sect-Reference_Guide-SSO_SAML-KeystoreUpdate">
+          <title>Using your own keystores</title>
+          <para>In this procedure, you will generate and use your own Keystores. This will add more safety into trusted
+             communication between &PRODUCT; and IDP because default packaging is using prepackaged keystore "jbid_test_keystore.jks".
+             For secure and trusted communication, you will need your own keystores with your own keys. Default keystore is
+             useful only for testing purpose, but should not be used in production. We will use separate keys for &PRODUCT;
+             and for IDP in this scenario.
+          </para>
+          <note>Scenario below can be simplified by using single keystore file for both &PRODUCT; and IDP.
+             It depends on your needs if you use same keystore for both or separate keystores for each.
+          </note>
+          <procedure>
+             <step>
+                Create new keystore for IDP and generate new pair of public/private keys. In directory
+                <filename>JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/classes</filename> (Assumption is exploded WAR archive idp-sig.war)
+                you can do it with command like:
+                <programlisting>keytool -genkey -alias idp-key -keyalg RSA -keystore idp-keystore.jks</programlisting>
+                You need to choose keystore password and private key password. Let's assume that your keystore password
+                is "keystorepass" a private key password is "keypass" .
+             </step>
+             <step>
+                Export IDP cerificate and public key into file <filename>idp.crt</filename>
+                <programlisting>keytool -export -alias idp-key -file idp.crt -keystore idp-keystore.jks</programlisting>
+             </step>
+             <step>
+                Create new keystore for &PRODUCT; (SP) and generate new pair of public/private keys. In directory
+                <filename>JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/classes</filename>, you can use command like:
+                <programlisting>keytool -genkey -alias sp-key -keyalg RSA -keystore sp-keystore.jks</programlisting>
+                You need to choose keystore password and private key password. Let's assume that your keystore password is
+                "spkeystorepass" a private key password is "spkeypass".
+             </step>
+             <step>
+                Export &PRODUCT; cerificate and public key into file sp.crt
+                <programlisting>keytool -export -alias sp-key -file sp.crt -keystore sp-keystore.jks</programlisting>
+             </step>
+             <step>
+                Import IDP certificate and public key to SP keystore. This will ensure that SP will trust public key from IDP.
+                You can use commands:
+<programlisting>
+<![CDATA[
+mv $JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/classes/idp.crt $JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/classes/idp.crt
+keytool -printcert -v -file idp.crt # Command only for debugging purposes. You can check certificate with it.
+keytool -import -trustcacerts -alias idp-cert -file idp.crt -keystore sp-keystore.jks
+rm idp.crt
+]]>
+</programlisting>
+             </step>
+             <step>
+                Import &PRODUCT; certificate and public key to IDP keystore. This will ensure that IDP will trust public
+                key from SP. In directory <filename>JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/classes/</filename> ,
+                you can use commands:
+<programlisting>
+<![CDATA[
+mv $JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/classes/sp.crt $JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/classes/sp.crt
+keytool -printcert -v -file sp.crt # Command only for debugging purposes. You can check certificate with it.
+keytool -import -trustcacerts -alias sp-cert -file sp.crt -keystore idp-keystore.jks
+rm sp.crt
+]]>
+</programlisting>
+             </step>
+             <step>
+                Configuration of KeyProvider in file <filename>JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/picketlink.xml</filename>
+                can look like this:
+<programlisting>
+<![CDATA[
+<KeyProvider ClassName="org.picketlink.identity.federation.core.impl.KeyStoreKeyManager">
+   <Auth Key="KeyStoreURL" Value="/idp-keystore.jks" />
+   <Auth Key="KeyStorePass" Value="keystorepass" />
+   <Auth Key="SigningKeyPass" Value="keypass" />
+   <Auth Key="SigningKeyAlias" Value="idp-key" />
+   <ValidatingAlias Key="${portal.sp.host::localhost}" Value="sp-cert"/>
+</KeyProvider>
+]]>
+</programlisting>
+             </step>
+             <step>
+                Configuration of KeyProvider in file <filename>JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/picketlink.xml</filename>
+                can look like this:
+<programlisting>
+<![CDATA[
+<KeyProvider ClassName="org.picketlink.identity.federation.core.impl.KeyStoreKeyManager">
+   <Auth Key="KeyStoreURL" Value="/sp-keystore.jks" />
+   <Auth Key="KeyStorePass" Value="spkeystorepass" />
+   <Auth Key="SigningKeyPass" Value="spkeypass" />
+   <Auth Key="SigningKeyAlias" Value="sp-key" />
+   <ValidatingAlias Key="${idp.host::localhost}" Value="idp-cert"/>
+</KeyProvider>
+]]>
+</programlisting>
+
+             </step>
+          </procedure>
+          <note>It may be slightly better to use certificates signed by certification authority. But for our purpose it's fine
+             to use self-signed certificates. For more info, you can check additional sources like
+             <ulink type="html" url="http://docs.oracle.com/javase/tutorial/security/sigcert/index.html">http://docs.oracle.com/javase/tutorial/security/sigcert/index.html</ulink> .
+          </note>
+       </section>
+
+       <section id="sect-Reference_Guide-SSO_SAML-MultipleHostsScenario">
+          <title>Multiple hosts scenario</title>
+          <para>
+             In this section, we will show the scenario closed to production environment. We will have 2 hosts with &PRODUCT;,
+             first on host <filename>www.node1.com</filename> and second on <filename>www.node2.com</filename>. Both will
+             use same Identity provider from host <filename>www.node3.com</filename>. So 3 hosts in total.
+          </para>
+          <procedure>
+             <step>
+                You will need to add virtual hosts to file <filename>/etc/hosts</filename> if you want to test this scenario on single
+                physical machine. On linux, it can be done by adding those entries:
+<programlisting>
+<![CDATA[
+127.0.1.1 www.node1.com
+127.0.1.2 www.node2.com
+127.0.1.3 www.node3.com
+]]>
+</programlisting>
+             </step>
+             <step>
+                Copy <filename>JBOSS_HOME/server/default</filename> into more separate configurations:
+<programlisting>
+<![CDATA[
+cd $JBOSS_HOME/server
+cp -r default node1
+cp -r default node2
+cp -r default node3
+]]>
+</programlisting>
+             </step>
+             <step>
+                In file <filename>JBOSS_HOME/server/node3/deploy/idp-sig.war/WEB-INF/picketlink.xml</filename> you will
+                need to change trusted domains list to ensure that IDP will trust your domains.
+<programlisting>
+<![CDATA[
+<Trust>
+   <Domains>node1.com,node2.com,node3.com</Domains>
+</Trust>
+]]>
+</programlisting>
+                IDP will also serves requests from both <filename>www.node1.com</filename> and <filename>www.node2.com</filename>.
+                So in KeyProvider configuration, you need to have two "ValidatingAlias" instead of default one. They should look like:
+<programlisting>
+<![CDATA[
+<ValidatingAlias Key="www.node1.com" Value="sp-cert"/>
+<ValidatingAlias Key="www.node2.com" Value="sp-cert"/>
+]]>
+</programlisting>
+             </step>
+             <step>
+                Start node1 with command:
+<programlisting>
+<![CDATA[
+./run.sh -c node1 -b www.node1.com
+-Didp-sig.url=http://www.node3.com:8080/idp-sig/
+-Didp.url=http://www.node3.com:8080/idp-sig/
+-Dportal.sp.url=http://www.node1.com:8080/portal/dologin
+-Didp.host=www.node3.com
+ -Dportal.sp.host=www.node1.com
+]]>
+</programlisting>
+                This will start the portal and set all the system properties, which are replaced in files <filename>picketlink.xml</filename>
+                and <filename>login-config.xml</filename>.
+             </step>
+             <step>
+                Start node3 (IDP host) with command:
+<programlisting>
+<![CDATA[
+./run.sh -c node3 -b www.node3.com
+-Didp-sig.url=http://www.node3.com:8080/idp-sig/
+-Dportal.callback.url=http://www.node1.com:8080/portal
+]]>
+</programlisting>
+             </step>
+             <step>
+                After start the server, you can test that you can access <ulink type="html" url="http://www.node1.com:8080/portal">http://www.node1.com:8080/portal</ulink>
+                and when trying to login, you will be redirected to IDP on
+                <ulink type="html" url="http://www.node3.com:8080/idp-sig">http://www.node3.com:8080/idp-sig</ulink>
+                where you can login with credentials like john/gtn .
+             </step>
+             <step>
+                Start second host node2. We will use again "www.node3.com" as IDP so startup commands can look like:
+<programlisting>
+<![CDATA[
+./run.sh -c node2 -b www.node2.com
+-Didp-sig.url=http://www.node3.com:8080/idp-sig/
+-Didp.url=http://www.node3.com:8080/idp-sig/
+-Dportal.sp.url=http://www.node2.com:8080/portal/dologin
+-Didp.host=www.node3.com -Dportal.sp.host=www.node2.com
+]]>
+</programlisting>
+             </step>
+             <step>
+                Now you can go to <ulink type="html" url="http://www.node2.com:8080/portal">http://www.node2.com:8080/portal</ulink>
+                and after click to "Sign in", you will be logged automatically thanks to SSO. When click to "Sign out", you will then be automatically logged out
+                from both &PRODUCT; hosts and also IDP host thanks to SAML2 Global logout. If you don't want global logout,
+                you can skip it by commenting of <emphasis>SAML2LogoutFilter</emphasis> in <filename>web.xml</filename>
+                (more info about this filter is in first scenario <xref linkend="sect-Reference_Guide-SSO_SAML-SingleHostScenario" /> ).
+             </step>
+          </procedure>
+       </section>
+
+
+       <section id="sect-Reference_Guide-SSO_SAML-PortalAsIDP">
+          <title>&PRODUCT; as Identity Provider</title>
+          <para>
+             In next scenario, we will use first &PRODUCT; host as SAML Identity Provider (IDP) and second host as SAML
+             Service Provider (SP).
+          </para>
+          <procedure>
+             <step>Copy configuration <emphasis>portal-idp</emphasis>, which will be used for &PRODUCT; as IDP
+                <programlisting>cp -r node1 portal-idp</programlisting>
+             </step>
+             <step>
+                In file <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</filename> we
+                need to add one special listener to cleaning expired SAML tokens:
+<programlisting>
+<![CDATA[
+<listener>
+   <listener-class>org.picketlink.identity.federation.web.listeners.IDPHttpSessionListener</listener-class>
+</listener>
+]]>
+</programlisting>
+                <note>
+                   Filter <filename>SAML2LogoutFilter</filename> should be commented in this file as it's used only for
+                   SP scenario.
+                </note>
+             </step>
+             <step>
+                In <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/02portal.war/WEB-INF/context.xml</filename> we
+                need to add valve <emphasis>org.gatein.sso.saml.plugin.valve.PortalIDPWebBrowserSSOValve</emphasis>:
+<programlisting>
+<![CDATA[
+<Valve
+   className="org.gatein.sso.saml.plugin.valve.PortalIDPWebBrowserSSOValve"
+   ignoreIncomingSignatures="false" signOutgoingMessages="true"
+   validatingAliasToTokenIssuer="true" />
+]]>
+</programlisting>
+                <note>Previous valve <filename>ServiceProviderAuthenticator</filename> should be commented as it's used
+                   only for SP scenario.
+                </note>
+             </step>
+             <step>
+                File <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/02portal.war/WEB-INF/picketlink.xml</filename>
+                needs to be configured as Identity provider. It can look like this:
+<programlisting>
+<![CDATA[
+<PicketLink xmlns="urn:picketlink:identity-federation:config:2.1">
+   <PicketLinkIDP xmlns="urn:picketlink:identity-federation:config:1.0">
+      <IdentityURL>${idp-sig.url::http://localhost:8080/portal/dologin}</IdentityURL>
+      <Trust>
+         <Domains>node1.com,node2.com</Domains>
+      </Trust>
+
+      <KeyProvider ClassName="org.picketlink.identity.federation.core.impl.KeyStoreKeyManager">
+         <Auth Key="KeyStoreURL" Value="/idp-keystore.jks" />
+         <Auth Key="KeyStorePass" Value="keystorepass" />
+         <Auth Key="SigningKeyPass" Value="keypass" />
+         <Auth Key="SigningKeyAlias" Value="idp-key" />
+         <ValidatingAlias Key="www.node2.com" Value="sp-cert"/>
+      </KeyProvider>
+   </PicketLinkIDP>
+
+   <Handlers xmlns="urn:picketlink:identity-federation:handler:config:2.1">
+      <Handler
+         class="org.picketlink.identity.federation.web.handlers.saml2.SAML2IssuerTrustHandler" />
+      <Handler
+         class="org.picketlink.identity.federation.web.handlers.saml2.SAML2LogOutHandler" />
+      <Handler
+         class="org.picketlink.identity.federation.web.handlers.saml2.SAML2AuthenticationHandler" />
+      <Handler
+         class="org.picketlink.identity.federation.web.handlers.saml2.RolesGenerationHandler" />
+      <Handler
+         class="org.picketlink.identity.federation.web.handlers.saml2.SAML2SignatureGenerationHandler" />
+      <Handler
+         class="org.picketlink.identity.federation.web.handlers.saml2.SAML2SignatureValidationHandler" />
+   </Handlers>
+</PicketLink>
+]]>
+</programlisting>
+             </step>
+             <step>
+                File <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</filename> needs
+                to have all login modules configured as normally, because we will use &PRODUCT; as SAML IDP now.
+<programlisting>
+<![CDATA[
+<application-policy xmlns="urn:jboss:security-beans:1.0" name="gatein-domain">
+  <authentication>
+    <login-module code="org.gatein.wci.security.WCILoginModule" flag="optional">
+      <module-option name="portalContainerName">portal</module-option>
+      <module-option name="realmName">gatein-domain</module-option>
+    </login-module>
+    <login-module code="org.exoplatform.web.security.PortalLoginModule" flag="required">
+      <module-option name="portalContainerName">portal</module-option>
+      <module-option name="realmName">gatein-domain</module-option>
+    </login-module>
+    <login-module code="org.exoplatform.services.security.jaas.SharedStateLoginModule" flag="required">
+      <module-option name="portalContainerName">portal</module-option>
+      <module-option name="realmName">gatein-domain</module-option>
+    </login-module>
+
+    <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
+      <module-option name="portalContainerName">portal</module-option>
+      <module-option name="realmName">gatein-domain</module-option>
+    </login-module>
+
+    </authentication>
+</application-policy>
+]]>
+</programlisting>
+             </step>
+             <step>
+                You need to copy keystore "idp-keystore.jks" created in previous tutorials into
+                <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/02portal.war/WEB-INF/classes/</filename>
+             </step>
+             <step>
+                Start &PRODUCT; as IDP with:
+                <programlisting>./run.sh -c portal-idp -b www.node1.com -Didp-sig.url=http://www.node1.com:8080/idp-sig/</programlisting>
+                Note that we use configuration <emphasis>portal-idp</emphasis> but we will bind it to <emphasis>www.node1.com</emphasis> .
+             </step>
+             <step>Start second node, which will act as SP
+<programlisting>
+<![CDATA[
+./run.sh -c node2 -b www.node2.com
+-Didp.url=http://www.node1.com:8080/portal/dologin
+-Dportal.sp.url=http://www.node2.com:8080/portal/dologin
+-Didp.host=www.node1.com -Dportal.sp.host=www.node2.com
+]]>
+</programlisting>
+             </step>
+             <step>
+                <para>
+                   You can test by going to <ulink type="http" url="http://www.node2.com:8080/portal">http://www.node2.com:8080/portal</ulink>
+                   and when click to "Sign in", you will be redirected to login screen on node1. After successful login,
+                   you will be redirected back to node2.
+                </para>
+                <para>
+                   You can also try other SP applications (like picketlink quickstarts examples from <ulink type="html" url="https://repository.jboss.org/nexus/index.html#nexus-search;quick~picketlink-quickstarts">https://repository.jboss.org/nexus/index.html#nexus-search;quick~picketlink-quickstarts</ulink> )
+                   and configure them for login against &PRODUCT; IDP, so you will be able to login into example application
+                   on behalf of &PRODUCT; SAML2 IDP.
+                </para>
+             </step>
+          </procedure>
+       </section>
+
     </section>
 </section>
