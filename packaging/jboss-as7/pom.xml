@@ -16,38 +16,13 @@
       <version.jboss.as.release>7.1.0.Final</version.jboss.as.release>
       <version.jboss.as>7.1.0.Final</version.jboss.as>
       <version.org.jboss.vfs>3.1.0.Final</version.org.jboss.vfs>
-      <version.org.gatein.wci.as7>2.1.1-Beta03-AS7-Beta03</version.org.gatein.wci.as7>
-      <version.exo.kernel.as7>2.3.6-GA-AS7-Beta03</version.exo.kernel.as7>
-      <version.org.gatein.naming>1.0.0-Beta01</version.org.gatein.naming>
-      <exo.projects.app.jboss7.version>jboss-as-${version.jboss.as.release}</exo.projects.app.jboss7.version>
+      <version.org.gatein.wci.as7>2.2.0-Beta01</version.org.gatein.wci.as7>
+      <org.exoplatform.kernel.version>2.3.6-GA-JBAS7</org.exoplatform.kernel.version>
+      <version.org.gatein.naming>1.0.0.Final</version.org.gatein.naming>
+      <server.name>jboss-as-${version.jboss.as}</server.name>
    </properties>
    <build>
       <defaultGoal>package</defaultGoal>
-      <plugins>
-         <plugin>
-            <artifactId>maven-antrun-plugin</artifactId>
-            <executions>
-               <execution>
-                  <phase>generate-resources</phase>
-                  <goals>
-                     <goal>run</goal>
-                  </goals>
-                  <configuration>
-                     <tasks>
-                        <echo>"
-
-
-                           DON'T FORGET TO FIRST READ packaging/jboss-as7/README.txt
-
-
-                           "
-                        </echo>
-                     </tasks>
-                  </configuration>
-               </execution>
-            </executions>
-         </plugin>
-      </plugins>
    </build>
 
    <dependencyManagement>
@@ -103,7 +78,7 @@
             <artifactId>wci-jboss7</artifactId>
             <version>${version.org.gatein.wci.as7}</version>
          </dependency>
-         <dependency>
+         <!--dependency>
             <groupId>org.gatein.wci</groupId>
             <artifactId>wci-wci</artifactId>
             <version>${version.org.gatein.wci.as7}</version>
@@ -112,7 +87,7 @@
             <groupId>org.exoplatform.kernel</groupId>
             <artifactId>exo.kernel.container</artifactId>
             <version>${version.exo.kernel.as7}</version>
-         </dependency>
+         </dependency-->
       </dependencies>
    </dependencyManagement>
    <modules>
@@ -120,5 +95,18 @@
       <module>modules</module>
       <module>pkg</module>
    </modules>
+   <profiles>
+      <profile>
+         <id>jboss7.name.spec</id>
+         <activation>
+            <property>
+               <name>jboss7.name</name>
+            </property>
+         </activation>
 
+         <properties>
+            <server.name>${jboss7.name}</server.name>
+         </properties>
+      </profile>
+   </profiles>
 </project>

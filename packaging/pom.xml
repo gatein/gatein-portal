@@ -44,7 +44,7 @@
                 <module>jetty</module>
                 <module>jboss-as5</module>
                 <module>jboss-as6</module>
-                <!--module>jboss-as7</module-->
+                <module>jboss-as7</module>
           </modules>
         </profile>
         <profile>
@@ -88,7 +88,7 @@
             <activation>
                 <property>
                     <name>gatein.dev</name>
-                    <value>tomcat</value>
+                    <value>jetty</value>
                 </property>
             </activation>
             <modules>
@@ -106,6 +106,7 @@
             <modules>
               <module>jboss-as5</module>
               <module>jboss-as6</module>
+              <module>jboss-as7</module>
             </modules>
         </profile>
         <profile>

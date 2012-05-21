@@ -18,11 +18,10 @@
 
    <properties>
       <jbossas.dist.version>${version.jboss.as}</jbossas.dist.version>
-      <servers.dir>${project.basedir}/servers</servers.dir>
-      <jbossas.path>${servers.dir}</jbossas.path>
-      <jbossas.name>jboss-${version.jboss.as}</jbossas.name>
-      <jbossas.dir>${jbossas.path}/${jbossas.name}</jbossas.dir>
-      <gatein.working.dir>${project.build.directory}/${jbossas.name}</gatein.working.dir>
+
+      <!--servers.dir>${project.basedir}/../../servers</servers.dir-->
+      <jbossas.dir>${servers.dir}/${server.name}</jbossas.dir>
+      <gatein.working.dir>${project.build.directory}/${server.name}</gatein.working.dir>
       <jbossas.target.dir>${gatein.working.dir}</jbossas.target.dir>
    </properties>
 
@@ -158,46 +157,48 @@
             <artifactId>maven-enforcer-plugin</artifactId>
             <executions>
                <execution>
-                  <id>check-jboss-environment-ready</id>
+                  <id>check-servers-dir-specified</id>
                   <goals>
                      <goal>enforce</goal>
                   </goals>
                   <configuration>
                      <rules>
                         <requireProperty>
-                           <property>jbossas.path</property>
+                           <property>servers.dir</property>
                            <message>"
-You must define the property 'jbossas.path'
-to give the path to the directory where you store your applications servers.
+You need to specify 'servers.dir' directory where you store your application servers (-Dservers.dir=PATH).
 "
                            </message>
                         </requireProperty>
-                        <requireProperty>
-                           <property>jbossas.name</property>
-                           <message>"
-You must define the property 'jbossas.name'
-to give the name of the directory where JBoss AS is stored.
-"
-                           </message>
-                        </requireProperty>
+                     </rules>
+                  </configuration>
+               </execution>
+
+               <execution>
+                  <id>check-server-dir-exists</id>
+                  <goals>
+                     <goal>enforce</goal>
+                  </goals>
+                  <configuration>
+                     <rules>
                         <requireFilesExist>
                            <files>
-                              <file>${jbossas.path}/${jbossas.name}/</file>
+                              <file>${servers.dir}/${server.name}/</file>
                            </files>
                            <message>"
-The following JBoss AS directory doesn't exist :
-                              ${jbossas.path}/${jbossas.name}
+The following JBoss AS directory doesn't exist {servers.dir}/{server.name}:
+${servers.dir}/${server.name}
 
 Make JBoss AS instance available at that location, or use -Dservers.dir=PATH to point to the correct location of servers directory
-and/or -Djbossas.name=NAME to point to the correct directory under the servers directory.
-You can also use -Pdownload to automatically provide JBoss AS instance.
+and/or -Dserver.name=NAME (alternatively use -Djboss7.name=NAME) to point to the correct directory under the servers directory.
+You can also use -Ddownload to automatically provide JBoss AS instance.
 "
                            </message>
                         </requireFilesExist>
                      </rules>
-                     <fail>true</fail>
                   </configuration>
                </execution>
+
             </executions>
          </plugin>
          <plugin>
@@ -241,110 +242,14 @@ You can also use -Pdownload to automatically provide JBoss AS instance.
 
 
    <profiles>
-      <profile>
-         <id>pkg-jbossas7</id>
-         <activation>
-            <activeByDefault>true</activeByDefault>
-         </activation>
-
-         <properties>
-            <exo.projects.app.jboss7.version>jboss-as-${jbossas.dist.version}</exo.projects.app.jboss7.version>
-            <servers.dir>${exo.projects.directory.dependencies}</servers.dir>
-            <jbossas.name>${exo.projects.app.jboss7.version}</jbossas.name>
-         </properties>
-
-         <build>
-            <plugins>
-               <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-enforcer-plugin</artifactId>
-                  <executions>
-                     <execution>
-                        <id>check-jboss-legacy-environment-dependencies-dir</id>
-                        <goals>
-                           <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                           <rules>
-                              <requireProperty>
-                                 <property>exo.projects.directory.dependencies</property>
-                                 <message>"
-You must define the property 'exo.projects.directory.dependencies'
-to specify the path to the directory where you store your application servers.
-"
-                                 </message>
-                              </requireProperty>
-                           </rules>
-                           <fail>true</fail>
-                        </configuration>
-                     </execution>
-                     <execution>
-                        <id>check-jboss-legacy-environment-jboss-name</id>
-                        <goals>
-                           <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                           <rules>
-                              <requireProperty>
-                                 <property>exo.projects.app.jboss7.version</property>
-                                 <message>"
-You must define the property 'exo.projects.app.jboss7.version'
-to specify the name of the directory where JBoss AS is stored.
-"
-                                 </message>
-                              </requireProperty>
-                           </rules>
-                           <fail>true</fail>
-                        </configuration>
-                     </execution>
-
-                     <execution>
-                        <id>check-jboss-dir-exists</id>
-                        <goals>
-                           <goal>enforce</goal>
-                        </goals>
-                        <configuration>
-                           <rules>
-                              <requireFilesExist>
-                                 <files>
-                                    <file>${exo.projects.directory.dependencies}/${exo.projects.app.jboss7.version}/
-                                    </file>
-                                 </files>
-                                 <message>"
-The following JBoss AS directory doesn't exist :
-                                    ${exo.projects.directory.dependencies}/${exo.projects.app.jboss7.version}
-
-Make JBoss AS instance available at that location, or use -Dexo.projects.directory.dependencies=PATH to point to the correct location
-of servers directory and/or -Dexo.projects.app.jboss7.version=NAME to point to the correct directory under the servers directory.
-You can also use -Pdownload to automatically provide JBoss AS instance.
-"
-                                 </message>
-                              </requireFilesExist>
-                           </rules>
-                           <fail>true</fail>
-                        </configuration>
-                     </execution>
-                     <execution>
-                        <id>check-jboss-environment-ready</id>
-                        <phase>none</phase>
-                     </execution>
-                  </executions>
-               </plugin>
-
-            </plugins>
-         </build>
-      </profile>
 
       <profile>
          <id>download</id>
-         <dependencies>
-            <dependency>
-               <groupId>org.jboss.as</groupId>
-               <artifactId>jboss-as-dist</artifactId>
-               <version>${version.jboss.as}</version>
-               <type>zip</type>
-            </dependency>
-         </dependencies>
+         <activation>
+            <property>
+               <name>download</name>
+            </property>
+         </activation>
          <build>
             <plugins>
                <plugin>
@@ -352,15 +257,7 @@ You can also use -Pdownload to automatically provide JBoss AS instance.
                   <artifactId>maven-enforcer-plugin</artifactId>
                   <executions>
                      <execution>
-                        <id>check-jboss-environment-ready</id>
-                        <phase>none</phase>
-                     </execution>
-                     <execution>
-                        <id>check-jboss-legacy-environment-jboss-name</id>
-                        <phase>none</phase>
-                     </execution>
-                     <execution>
-                        <id>check-jboss-dir-exists</id>
+                        <id>check-server-dir-exists</id>
                         <phase>none</phase>
                      </execution>
                   </executions>
@@ -378,35 +275,10 @@ You can also use -Pdownload to automatically provide JBoss AS instance.
                         </goals>
                         <configuration>
                            <target>
-                              <available property="jbossas.dir.exists" type="dir" file="${jbossas.dir}"/>
-
-                              <fail if="jbossas.dir.exists">"
-Destination JBossAS directory exists already:
-                                 ${jbossas.dir}
-
-Either rename it, delete it, or deactivate -Pdownload profile.
-"
-                              </fail>
-
-                              <property name="jbossas.zip"
-                                        value="${jbossas.path}/jboss-as-${jbossas.dist.version}.zip"/>
-
-                              <!-- Autocreate servers.dir if necessary -->
-                              <mkdir dir="${jbossas.path}"/>
-
-                              <!-- Download JBossAS unless already downloaded -->
-                              <ant antfile="${project.basedir}/download-jboss.xml">
-                                 <target name="download-jboss"/>
-                                 <property name="maven.artifact"
-                                           value="org.jboss.as:jboss-as-dist:zip"/>
-                                 <property name="dest" value="${jbossas.zip}"/>
-                              </ant>
-
-                              <!-- Extract downloaded JBossAS to servers dir -->
-                              <unzip src="${jbossas.zip}" dest="${jbossas.path}" overwrite="false"/>
-
                               <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
-                                 <target name="package"/>
+                                 <target name="prepare"/>
+                                 <!-- without the next line a wrong servers.dir value is passed to antrun -->
+                                 <property name="servers.dir" value="${servers.dir}"/>
                                  <property name="maven.project.basedir" value="${project.basedir}"/>
                                  <property name="maven.project.build.directory" value="${project.build.directory}"/>
                               </ant>

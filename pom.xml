@@ -44,7 +44,7 @@
       <org.shindig.version>2.0.2-CP01</org.shindig.version>
       <nl.captcha.simplecaptcha.version>1.1.1-GA-Patch01</nl.captcha.simplecaptcha.version>
       <org.gatein.common.version>2.0.4-GA</org.gatein.common.version>
-      <org.gatein.wci.version>2.1.1-GA</org.gatein.wci.version>
+      <org.gatein.wci.version>2.2.0-Beta01</org.gatein.wci.version>
       <org.gatein.pc.version>2.3.1-GA</org.gatein.pc.version>
       <org.picketlink.idm>1.3.1.GA</org.picketlink.idm>
       <org.gatein.wsrp.version>2.1.1-CR02</org.gatein.wsrp.version>
@@ -1019,6 +1019,36 @@
       <repository>
          <id>oauth</id>
          <url>http://oauth.googlecode.com/svn/code/maven</url>
+      </repository>
+
+      <!-- Redefine legacy jboss repository to go to JBoss Nexus instead to http://repository.jboss.org/maven2 -->
+      <repository>
+         <id>jboss</id>
+         <name>JBoss Public Maven Repository Group</name>
+         <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+         <layout>default</layout>
+         <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+         </releases>
+         <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+         </snapshots>
+      </repository>
+      <repository>
+         <id>repository.jboss.org</id>
+         <name>JBoss Public Maven Repository Group</name>
+         <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+         <layout>default</layout>
+         <releases>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+         </releases>
+         <snapshots>
+            <enabled>true</enabled>
+            <updatePolicy>never</updatePolicy>
+         </snapshots>
       </repository>
    </repositories>
    <pluginRepositories>
