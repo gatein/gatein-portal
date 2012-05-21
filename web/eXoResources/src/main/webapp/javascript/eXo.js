@@ -80,6 +80,7 @@ eXo.loadJS = function(paths, callback, params, context) {
   }
   
   var invokeCallback = function(args) {
+	  if (!callback || typeof callback != "function") return;
 	  var ctx = context || {};
 	  var tmp = [];
 	  copyArr(params, tmp, false);

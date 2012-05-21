@@ -437,14 +437,7 @@ function HttpResponseHandler() {
 		appendElementsToHead(head, markupHeadElements.bases);
 		appendElementsToHead(head, markupHeadElements.links);                         
 		appendElementsToHead(head, markupHeadElements.styles);
-		for (var i = 0; i < markupHeadElements.scripts.length; i++) {
-			var sc = markupHeadElements.scripts[i];
-			if (sc.defer) {
-				response.loadingScripts.onloadScripts.push(sc);
-			} else {
-				response.loadingScripts.immediateScripts.push(sc);
-			}
-		}
+		appendElementsToHead(head, markupHeadElements.scripts);		
 	};
 
   function cleanHtmlHead(response)
@@ -465,19 +458,25 @@ function HttpResponseHandler() {
       {
         gj(response.data).find(".PORTLET-FRAGMENT").each(function()
         {
-          head.find(".ExHead-" + this.parentNode.id + ":not(title)").remove();
+          head.find(".ExHead-" + this.parentNode.id.replace("EditMode-", "") + ":not(title)").remove();
         });
       }
     }
     else 
     {
     	//This code will be run after we've finished update html
-    	var workspace = gj("#UIWorkingWorkspace");
+    	var portlets = gj("#UIWorkingWorkspace .PORTLET-FRAGMENT");
     	var exHeads = head.find("[class^='ExHead-']:not(title)");
     	exHeads.each(function()
 		{
     		var portletId = this.className.substring(7);
-    		if (workspace.find("#" + portletId).length == 0)
+    		var del = true;
+    		portlets.each(function() {
+    			if (this.parentNode.id.replace("EditMode-", "") === portletId) {
+    				del = false;
+    			}
+    		});
+    		if (del)
     		{
     			gj(this).remove();
     		}
@@ -488,9 +487,6 @@ function HttpResponseHandler() {
   function appendElementsToHead(head, elements) {
 		if (!elements) return;
 		elements.each(function() {
-			//script tags that has been wrapped in jquery are not executed
-			//when inserted to head
-			head.append(this);
 			head[0].appendChild(this);
 		});		
 	}
