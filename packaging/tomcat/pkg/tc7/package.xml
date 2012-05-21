@@ -2,7 +2,35 @@
 
 <project name="package" xmlns:mvn="http://maven.apache.org/POM/4.0.0">
 
-  <target name="package">
+   <target name="prepare" depends="prepare-server-dir,package">
+   </target>
+
+   <target name="server-dir-check">
+      <available property="tomcat.dir.exists" type="dir" file="${tomcat.dir}" />
+   </target>
+
+   <target name="server-exist-msg" depends="server-dir-check" if="tomcat.dir.exists">
+      <echo message="Tomcat directory exists already. Using existing one ..."/>
+   </target>
+
+   <target name="prepare-server-dir" depends="server-dir-check,server-exist-msg" unless="tomcat.dir.exists">
+      <property name="tomcat.zip" value="${servers.dir}/${tomcat.archive.name}.zip" />
+
+      <!-- Autocreate servers.dir if necessary -->
+      <mkdir dir="${servers.dir}" />
+
+      <!-- Download Tomcat unless already downloaded -->
+      <ant antfile="${maven.project.basedir}/download-tomcat.xml">
+         <target name="download-tomcat" />
+         <property name="url" value="http://archive.apache.org/dist/tomcat/tomcat-7/v${version.apache.tomcat}/bin/${tomcat.archive.name}.zip" />
+         <property name="dest" value="${tomcat.zip}" />
+      </ant>
+
+      <!-- Extract downloaded Tomcat to servers dir -->
+      <unzip src="${tomcat.zip}" dest="${servers.dir}" overwrite="false" />
+   </target>
+
+   <target name="package">
 
     <echo>Using Tomcat at: ${tomcat.dir}</echo>
 

@@ -78,12 +78,12 @@
             <artifactId>wci-jboss7</artifactId>
             <version>${version.org.gatein.wci.as7}</version>
          </dependency>
-         <!--dependency>
+         <dependency>
             <groupId>org.gatein.wci</groupId>
             <artifactId>wci-wci</artifactId>
             <version>${version.org.gatein.wci.as7}</version>
          </dependency>
-         <dependency>
+         <!--dependency>
             <groupId>org.exoplatform.kernel</groupId>
             <artifactId>exo.kernel.container</artifactId>
             <version>${version.exo.kernel.as7}</version>

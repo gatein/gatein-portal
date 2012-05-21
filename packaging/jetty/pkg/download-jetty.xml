@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="download-jetty" xmlns:mvn="http://maven.apache.org/POM/4.0.0">
+
+   <target name="download-jetty">
+
+      <!-- Fetch jetty .zip -->
+      <get dest="${dest}" skipexisting="true">
+         <url url="${url}"/>
+      </get>
+
+   </target>
+</project>

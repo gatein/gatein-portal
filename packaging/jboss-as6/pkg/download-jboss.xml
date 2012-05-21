@@ -2,7 +2,15 @@
 
 <project name="download-jboss" xmlns:mvn="http://maven.apache.org/POM/4.0.0">
 
-   <target name="download-jboss">
+   <target name="jbossas-download-check">
+      <condition property="jbossas.missing">
+         <not>
+            <available file="${dest}"/>
+         </not>
+      </condition>
+   </target>
+
+   <target name="download-jboss" depends="jbossas-download-check" if="jbossas.missing">
 
       <!-- Fetch jbossas .zip -->
       <get dest="${dest}" skipexisting="true">

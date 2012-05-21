@@ -11,7 +11,7 @@
 
     <!-- Fetch .md5 file -->
     <get dest="${dest}.md5" skipexisting="true">
-      <url url="${md5.url}"/>
+      <url url="${url}.md5"/>
     </get>
 
     <!-- Fix md5 file -->

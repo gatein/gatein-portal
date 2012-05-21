@@ -838,29 +838,6 @@
   <build>
     <plugins>
 
-      <!-- Ensure your environment is correctly setup -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>tomcat-check-environment-ready</id>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-            <configuration>
-              <rules>
-                <requireProperty>
-                  <property>exo.projects.directory.dependencies</property>
-                  <message>"You must define the property exo.projects.directory.dependencies to give the path to the directory where you store your applications servers"</message>
-                  </requireProperty>
-              </rules>
-              <fail>true</fail>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
