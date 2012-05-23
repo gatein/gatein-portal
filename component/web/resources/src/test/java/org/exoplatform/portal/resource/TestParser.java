@@ -137,10 +137,6 @@ public class TestParser extends AbstractGateInTest
          "<name>local_module</name>" +
          "<path>/local_module.js</path>" +
          "</script>" +
-         "<script>" +
-         "<name>remote_module</name>" +
-         "<uri>/remote_module.js</uri>" +
-         "</script>" +
          "</module>" +
          "</portal>" +
          "</gatein-resources>";
@@ -152,15 +148,11 @@ public class TestParser extends AbstractGateInTest
       ScriptResourceDescriptor desc = scripts.get(0);
       
       List<Javascript> modules = desc.getModules();
-      assertEquals(2, modules.size());
+      assertEquals(1, modules.size());
       
       Javascript local = modules.get(0); 
       assertTrue(local instanceof Javascript.Local);
       assertEquals("local_module", local.getModule());
-      
-      Javascript remote = modules.get(1);
-      assertTrue(remote instanceof Javascript.Remote);
-      assertEquals("remote_module", remote.getModule());
    }
    
    public void testResourceBundle() throws Exception
@@ -210,5 +202,23 @@ public class TestParser extends AbstractGateInTest
       ScriptResourceDescriptor desc = scripts.get(0);
       List<Locale> locales = desc.getSupportedLocales();
       assertEquals(Arrays.asList(Locale.ENGLISH, Locale.FRANCE), locales);
+   }
+
+   public void testRemoteResource() throws Exception
+   {
+
+      String validConfig = "" +
+         "<gatein-resources xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.gatein.org/xml/ns/gatein_resources_1_2_1 http://www.gatein.org/xml/ns/gatein_resources_1_2_1\" xmlns=\"http://www.gatein.org/xml/ns/gatein_resources_1_2_1\">" +
+         "<module><name>foo</name><url>http://jquery.com/jquery.js</url></module>" +
+         "</gatein-resources>";
+
+      JavascriptConfigParser parser = new JavascriptConfigParser("mypath");
+      List<ScriptResourceDescriptor> descs = parser.parseConfig(new ByteArrayInputStream(validConfig.getBytes("UTF-8")));
+
+      assertEquals(1, descs.size());
+      ScriptResourceDescriptor desc = descs.get(0);
+      List<Javascript> scripts = desc.getModules();
+      assertEquals(1, scripts.size());
+      assertTrue(scripts.get(0) instanceof Javascript.Remote);
    }
 }

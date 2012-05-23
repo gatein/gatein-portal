@@ -26,7 +26,6 @@ import org.gatein.portal.controller.resource.script.FetchMode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +33,6 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
-
 import javax.servlet.ServletContext;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -85,6 +83,8 @@ public class JavascriptConfigParser
 
    /** . */
    final public static String DEPENDS_TAG = "depends";
+
+   final public static String URL_TAG = "url";
 
    /** . */
    private final String contextPath;
@@ -253,19 +253,25 @@ public class JavascriptConfigParser
    
    private void parseDesc(Element element, ScriptResourceDescriptor desc)
    {
-      for (Element localeElt : XMLTools.getChildren(element, "supported-locale"))
+      Element urlElement = XMLTools.getUniqueChild(element, URL_TAG, false);
+      if(urlElement != null)
       {
-         String localeValue = XMLTools.asString(localeElt);
-         Locale locale = I18N.parseTagIdentifier(localeValue);
-         desc.supportedLocales.add(locale);
+         String remoteURL = XMLTools.asString(urlElement);
+         desc.modules.add(new Javascript.Remote(desc.id, remoteURL, contextPath, remoteURL, 0));
       }
-      for (Element scriptElt : XMLTools.getChildren(element, SCRIPTS_TAG))
+      else
       {
-         String scriptName = XMLTools.asString(XMLTools.getUniqueChild(scriptElt, "name", true));
-         Javascript script;
-         Element path = XMLTools.getUniqueChild(scriptElt, "path", false);
-         if (path != null)
+         for (Element localeElt : XMLTools.getChildren(element, "supported-locale"))
          {
+            String localeValue = XMLTools.asString(localeElt);
+            Locale locale = I18N.parseTagIdentifier(localeValue);
+            desc.supportedLocales.add(locale);
+         }
+         for (Element scriptElt : XMLTools.getChildren(element, SCRIPTS_TAG))
+         {
+            String scriptName = XMLTools.asString(XMLTools.getUniqueChild(scriptElt, "name", true));
+            Javascript script;
+            Element path = XMLTools.getUniqueChild(scriptElt, "path", true);
             String resourceBundle = null;
             Element bundleElt = XMLTools.getUniqueChild(scriptElt, "resource-bundle", false);
             if (bundleElt != null)
@@ -274,13 +280,8 @@ public class JavascriptConfigParser
             }
             String scriptPath = XMLTools.asString(path);
             script = new Javascript.Local(desc.id, scriptName, contextPath, scriptPath, resourceBundle, 0);
+            desc.modules.add(script);
          }
-         else
-         {
-            String scriptURI = XMLTools.asString(XMLTools.getUniqueChild(scriptElt, "uri", true));
-            script = new Javascript.Remote(desc.id, scriptName, contextPath, scriptURI, 0);
-         }
-         desc.modules.add(script);
       }
       for (Element moduleElt : XMLTools.getChildren(element, "depends"))
       {
