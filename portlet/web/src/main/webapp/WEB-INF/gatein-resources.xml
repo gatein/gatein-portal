@@ -84,7 +84,6 @@
    <portlet>
      <name>BannerPortlet</name>
      <module>
-       <mode>on-load</mode>
        <depends>
          <module>base</module>
        </depends>
@@ -98,9 +97,9 @@
 	       <name>eXo.webui.UISiteMap</name>
 	       <path>/javascript/eXo/webui/UISiteMap.js</path>
   	  </script>
-	    <depends>
-  	    <module>common</module>
-	    </depends>
+	  <depends>
+  	    <module>base</module>
+	  </depends>
 	  </module>
   </portlet>
 
@@ -108,7 +107,6 @@
   <portlet>
     <name>NavigationPortlet</name>
     <module>
-      <mode>on-load</mode>
       <depends>
         <module>navigation</module>
       </depends>
@@ -118,7 +116,6 @@
   <portlet>
     <name>LogoPortlet</name>
     <module>
-      <mode>on-load</mode>
       <depends>
         <module>webui</module>
       </depends>
@@ -128,7 +125,6 @@
   <portlet>
     <name>IFramePortlet</name>
     <module>
-      <mode>on-load</mode>
       <depends>
         <module>webui</module>
       </depends>

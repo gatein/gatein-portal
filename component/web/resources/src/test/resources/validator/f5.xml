@@ -24,14 +24,17 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2_1 http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
    	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
-  <!-- Invalid with XSD 1.2.1 as there are more than one <url> elements under <module> -->
-  <portlet>
-    <name>P4</name>
-    <module>
-      <url>http://jquery.com/jquery.js</url>
-      <url>http://jquery.com/plugin.js</url>
-    </module>
-  </portlet>
+  <!-- Valid with XSD 1.2.1 -->
+  <scripts>
+    <name>foo</name>
+    <script>
+      <name>foo_script</name>
+      <path>foo_script.js</path>
+    </script>
+    <depends>
+      <scripts>bar</scripts>
+    </depends>
+  </scripts>
 
 </gatein-resources>
 

@@ -26,7 +26,6 @@ import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.ScriptResourceDescriptor;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
-
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -55,14 +54,33 @@ public class TestParser extends AbstractGateInTest
          "<module>juu</module>" +
          "</depends>" +
          "</module>" +
+
+         "<scripts>" +
+         "<name>foo_scripts</name>" +
+         "<script>" +
+         "<name>foo_module</name>" +
+         "<path>/foo_module.js</path>" +
+         "</script>" +
+         "<depends>" +
+         "<scripts>bar</scripts>" +
+         "</depends>" +
+         "<depends>" +
+         "<scripts>juu</scripts>" +
+         "</depends>" +
+         "</scripts>" +
+
          "</gatein-resources>";
 
       //
       JavascriptConfigParser parser = new JavascriptConfigParser("/mypath");
       List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
-      assertEquals(1, scripts.size());
+      assertEquals(2, scripts.size());
       ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.SHARED, "foo"), desc.getId());
+      assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar")), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"))), desc.getDependencies());
+
+      desc = scripts.get(1);
+      assertEquals(new ResourceId(ResourceScope.SHARED, "foo_scripts"), desc.getId());
       assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar")), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"))), desc.getDependencies());
    }
 

@@ -53,6 +53,11 @@ public class TestXSDValidator extends TestCase
       testScenarios.put("f2.xml", true);
       testScenarios.put("f3.xml", true);
       testScenarios.put("f4.xml", true);
+      testScenarios.put("f5.xml", false);
+      testScenarios.put("f6.xml", false);
+      testScenarios.put("f7.xml", true);
+      testScenarios.put("f8.xml", true);
+      testScenarios.put("f9.xml", false);
    }
 
    public static Validator createXSDValidator(URL xsdFile)

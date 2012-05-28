@@ -130,7 +130,6 @@ public class TestScriptGraph extends AbstractGateInTest
 
    public void testFetchMode()
    {
-      // Resource fetch mode should affect the resource
       ScriptGraph graph = new ScriptGraph();
       ScriptResource a = graph.addResource(A, FetchMode.ON_LOAD);
       ScriptResource b = graph.addResource(B, FetchMode.IMMEDIATE);
@@ -141,10 +140,8 @@ public class TestScriptGraph extends AbstractGateInTest
       //
       Map<ScriptResource, FetchMode> resolution = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, null));
       assertResultOrder(resolution.keySet());
-      assertEquals(2, resolution.size());
-      assertEquals(Tools.toSet(a, c), resolution.keySet());
-      assertEquals(FetchMode.ON_LOAD, resolution.get(a));
-      assertEquals(FetchMode.IMMEDIATE, resolution.get(c));
+      assertEquals(1, resolution.size());
+      assertEquals(Tools.toSet(a), resolution.keySet());
 
       //
       resolution = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(B, null));
@@ -180,17 +177,15 @@ public class TestScriptGraph extends AbstractGateInTest
       assertEquals(Tools.toSet(a), test.keySet());
       assertEquals(FetchMode.ON_LOAD, test.get(a));
 
-      // Override default fetch mode with same value
+      // Get resource with with same fetch-mode
       test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, FetchMode.ON_LOAD));
       assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a), test.keySet());
       assertEquals(FetchMode.ON_LOAD, test.get(a));
 
-      // Override default fetch mode with higher
-      test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, FetchMode.IMMEDIATE));
-      assertResultOrder(test.keySet());
-      assertEquals(Tools.toSet(a), test.keySet());
-      assertEquals(FetchMode.IMMEDIATE, test.get(a));
+      // Don't get resource with other fetch-mode
+      test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, FetchMode.IMMEDIATE));     
+      assertEquals(0, test.size());
    }
 
    public void testResolveDefaultImmediateFetchMode()
@@ -204,13 +199,11 @@ public class TestScriptGraph extends AbstractGateInTest
       assertEquals(Tools.toSet(a), test.keySet());
       assertEquals(FetchMode.IMMEDIATE, test.get(a));
 
-      // Override default fetch mode with same value
+      // Dont' get resource with other fetch-mode
       test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, FetchMode.ON_LOAD));
-      assertResultOrder(test.keySet());
-      assertEquals(Tools.toSet(a), test.keySet());
-      assertEquals(FetchMode.IMMEDIATE, test.get(a));
+      assertEquals(0, test.keySet().size());
 
-      // Override default fetch mode with higher
+      // Get resource with the same fetch-mode
       test = graph.resolve(Collections.<ResourceId, FetchMode>singletonMap(A, FetchMode.IMMEDIATE));
       assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a), test.keySet());
@@ -229,9 +222,8 @@ public class TestScriptGraph extends AbstractGateInTest
       pairs.put(A, null);
       Map<ScriptResource, FetchMode> test = graph.resolve(pairs);
       assertResultOrder(test.keySet());
-      assertEquals(Tools.toSet(a,b), test.keySet());
+      assertEquals(Tools.toSet(a), test.keySet());
       assertEquals(FetchMode.IMMEDIATE, test.get(a));
-      assertEquals(FetchMode.IMMEDIATE, test.get(b));
 
       //
       pairs = new LinkedHashMap<ResourceId, FetchMode>();
@@ -241,7 +233,7 @@ public class TestScriptGraph extends AbstractGateInTest
       assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a, b), test.keySet());
       assertEquals(FetchMode.IMMEDIATE, test.get(a));
-      assertEquals(FetchMode.IMMEDIATE, test.get(b));
+      assertEquals(FetchMode.ON_LOAD, test.get(b));
 
       //
       pairs = new LinkedHashMap<ResourceId, FetchMode>();
@@ -251,7 +243,7 @@ public class TestScriptGraph extends AbstractGateInTest
       assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a, b), test.keySet());
       assertEquals(FetchMode.IMMEDIATE, test.get(a));
-      assertEquals(FetchMode.IMMEDIATE, test.get(b));
+      assertEquals(FetchMode.ON_LOAD, test.get(b));
 
       //
       pairs = new LinkedHashMap<ResourceId, FetchMode>();
@@ -274,9 +266,8 @@ public class TestScriptGraph extends AbstractGateInTest
       pairs.put(A, null);
       Map<ScriptResource, FetchMode> test = graph.resolve(pairs);
       assertResultOrder(test.keySet());
-      assertEquals(Tools.toSet(a, b), test.keySet());
+      assertEquals(Tools.toSet(a), test.keySet());
       assertEquals(FetchMode.ON_LOAD, test.get(a));
-      assertEquals(FetchMode.IMMEDIATE, test.get(b));
 
       //
       pairs = new LinkedHashMap<ResourceId, FetchMode>();
@@ -356,7 +347,7 @@ public class TestScriptGraph extends AbstractGateInTest
          ScriptResource resource = array[i];
          for (int j = i + 1;j < array.length;j++)
          {
-            if (resource.closure.contains(array[j].getId()))
+            if (resource.closure.contains(array[j].getId()) && resource.fetchMode.equals(array[j].fetchMode))
             {
                throw failure("Was not expecting result order " + test, new Exception());
             }

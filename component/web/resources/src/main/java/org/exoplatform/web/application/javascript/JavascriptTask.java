@@ -46,17 +46,20 @@ public class JavascriptTask
       for (ScriptResourceDescriptor desc : descriptors)
       {
          ScriptResource resource = service.scripts.addResource(desc.id, desc.fetchMode);
-         for (Javascript module : desc.modules)
+         if (resource != null)
          {
-            module.addModuleTo(resource);
-         }
-         for (Locale locale : desc.getSupportedLocales())
-         {
-            resource.addSupportedLocale(locale);
-         }
-         for (DependencyDescriptor dependency : desc.dependencies)
-         {
-            resource.addDependency(dependency.getResourceId());
+            for (Javascript module : desc.modules)
+            {
+               module.addModuleTo(resource);
+            }
+            for (Locale locale : desc.getSupportedLocales())
+            {
+               resource.addSupportedLocale(locale);
+            }
+            for (DependencyDescriptor dependency : desc.dependencies)
+            {
+               resource.addDependency(dependency.getResourceId());
+            }            
          }
       }
    }

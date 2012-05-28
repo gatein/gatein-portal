@@ -111,7 +111,7 @@
    </window-style>
 
    <!-- Bootstrap Javascripts -->
-   <module>
+   <scripts>
       <name>bootstrap</name>
       <script>
          <name>eXo</name>
@@ -121,7 +121,7 @@
          <name>eXo.core.Loader</name>
          <path>/javascript/eXo/core/AsyncLoader.js</path>
       </script>
-   </module>
+   </scripts>
 
    <module>
       <name>jquery</name>
@@ -133,9 +133,6 @@
          <name>exo-jquery-alias</name>
          <path>/javascript/exo-jquery-alias.js</path>
       </script>
-      <depends>
-        <module>bootstrap</module>
-      </depends>
    </module>
 
    <!-- Base Javascripts for anonymous mode -->
@@ -190,9 +187,6 @@
         <path>/javascript/eXo/i18n/I18NMessage.js</path>
         <resource-bundle>eXo.portal</resource-bundle>
       </script>
-      <depends>
-        <module>bootstrap</module>
-      </depends>
       <depends>
         <module>jquery</module>
       </depends>

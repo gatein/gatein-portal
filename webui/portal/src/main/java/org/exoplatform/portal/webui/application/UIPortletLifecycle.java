@@ -65,11 +65,7 @@ import javax.servlet.http.Cookie;
 public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<UIPortlet<S, C>>
 {
 
-   protected static Log log = ExoLogger.getLogger("portal:UIPortletLifecycle");
-   
-   public static final String SCRIPT_NAME = "org.gatein.script.name";
-   
-   public static final String FETCH_MODE = "org.gatein.script.fetch-mode";
+   protected static Log log = ExoLogger.getLogger("portal:UIPortletLifecycle");      
 
    /**
     * This processAction method associated with the portlet UI component does the

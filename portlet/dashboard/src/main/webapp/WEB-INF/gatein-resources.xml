@@ -37,7 +37,6 @@
   <portlet>
     <name>DashboardPortlet</name>
     <module>
-      <mode>on-load</mode>
       <depends>
         <module>dashboard</module>
       </depends>
@@ -50,7 +49,6 @@
   <portlet>
     <name>GadgetPortlet</name>
     <module>
-      <mode>on-load</mode>
       <depends>
         <module>common</module>
       </depends>
@@ -60,7 +58,6 @@
   <portlet>
     <name>TabbedDashboardPortlet</name>
     <module>
-      <mode>on-load</mode>
       <script>
         <name>eXo.webui.UITabbedDashboard</name>
         <path>/javascript/eXo/webui/UITabbedDashboard.js</path>

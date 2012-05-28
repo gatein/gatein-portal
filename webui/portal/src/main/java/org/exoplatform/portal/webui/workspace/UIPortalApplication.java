@@ -27,7 +27,6 @@ import org.exoplatform.portal.application.RequestNavigationData;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
@@ -50,6 +49,7 @@ import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.Orientation;
 import org.exoplatform.web.application.JavascriptManager;
+import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -332,22 +332,25 @@ public class UIPortalApplication extends UIApplication
       // Obtain the resource ids involved
       // we clone the fetch map by safety
       JavascriptManager jsMan = prc.getJavascriptManager();
-      FetchMap<ResourceId> requiredResources = new FetchMap<ResourceId>(jsMan.getScriptResources());
 
       // Add current portal
       String portalOwner = Util.getPortalRequestContext().getPortalOwner();
-      requiredResources.add(new ResourceId(ResourceScope.PORTAL, portalOwner), null);
+      jsMan.loadScriptResource(ResourceScope.PORTAL, portalOwner);
 
       // Still need this util SHARED/portal.js is optimized
       if (prc.getRemoteUser() != null)
       {
-         requiredResources.add(new ResourceId(ResourceScope.SHARED, "portal"), null);
+         jsMan.loadScriptResource(ResourceScope.SHARED, "portal");
       }
 
+      //Support for legacy resource declaration 
+      jsMan.loadScriptResource(ResourceScope.SHARED, JavascriptConfigParser.LEGACY_JAVA_SCRIPT);
+      
       // Need to add bootstrap as immediate since it contains the loader
-      requiredResources.add(new ResourceId(ResourceScope.SHARED, "bootstrap"), FetchMode.IMMEDIATE);
+      jsMan.loadScriptResource(ResourceScope.SHARED, "bootstrap");
 
       //
+      FetchMap<ResourceId> requiredResources = new FetchMap<ResourceId>(jsMan.getScriptResources());
       log.debug("Resource ids to resolve: {}", requiredResources);
 
       //

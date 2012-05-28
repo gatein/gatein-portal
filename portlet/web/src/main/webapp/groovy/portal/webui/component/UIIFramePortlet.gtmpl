@@ -1,5 +1,10 @@
 <%
 	import javax.portlet.PortletMode ;
+	import org.exoplatform.web.application.JavascriptManager;
+	
+	def rcontext = _ctx.getRequestContext() ;
+	JavascriptManager jsmanager = rcontext.getJavascriptManager();
+	jsmanager.addOnLoadJavascript('eXo.webui.UIIFramePortlet.init');
 %>
 
 <div class="UIIFramePortlet" id="$uicomponent.id" name="test">
@@ -11,22 +16,25 @@
 	%>
 </div>
 <script type="text/javascript">
-  gj("#UIWorkingWorkspace").find("div.UIIFramePortlet").each(function()
-  {
-  	var frameDiv = gj(this);
-  	var portletFrag = frameDiv.closest(".PORTLET-FRAGMENT");
-
-  	frameDiv.css("height", "98%");
-  	portletFrag.css("overflow", "hidden");
-
-  	if(!portletFrag[0].style.height)
-  	{
-  		portletFrag[0].style.height = "400px";
-  		var iframe = frameDiv.children("iframe").eq(0);
-  		if(iframe[0].offsetHeight < frameDiv[0].offsetHeight)
-  		{
-  			iframe.css("height", frameDiv[0].offsetHeight + "px");
-  		}
-  	}
-  });
+  eXo.webui.UIIFramePortlet = {
+	  init : function() {
+		   gj("#UIWorkingWorkspace").find("div.UIIFramePortlet").each(function() {
+			  	var frameDiv = gj(this);
+			  	var portletFrag = frameDiv.closest(".PORTLET-FRAGMENT");
+			
+			  	frameDiv.css("height", "98%");
+			  	portletFrag.css("overflow", "hidden");
+			
+			  	if(!portletFrag[0].style.height)
+			  	{
+			  		portletFrag[0].style.height = "400px";
+			  		var iframe = frameDiv.children("iframe").eq(0);
+			  		if(iframe[0].offsetHeight < frameDiv[0].offsetHeight)
+			  		{
+			  			iframe.css("height", frameDiv[0].offsetHeight + "px");
+			  		}
+			  	}
+		  });	  
+	  }
+  }  
 </script>

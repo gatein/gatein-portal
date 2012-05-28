@@ -19,11 +19,12 @@
 
 package org.gatein.portal.controller.resource.script;
 
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,6 +38,8 @@ import java.util.Map;
 public class ScriptGraph
 {
 
+   private static final Log log = ExoLogger.getExoLogger(ScriptGraph.class);
+   
    /** . */
    final EnumMap<ResourceScope, Map<String, ScriptResource>> resources;
 
@@ -113,35 +116,34 @@ public class ScriptGraph
 
    private ScriptFetch traverse(Map<ResourceId, ScriptFetch> map, ResourceId id, FetchMode mode)
    {
-      ScriptResource resource = getResource(id);
+      ScriptResource resource = getResource(id);      
       if (resource != null)
       {
-         if (mode == null || resource.fetchMode.compareTo(mode) > 0)
+         if (mode != null && !resource.fetchMode.equals(mode))
+         {
+            return null;
+         }
+         else
          {
             mode = resource.fetchMode;
-         }
-         ScriptFetch fetch = map.get(id);
-         if (fetch == null)
-         {
-            map.put(id, fetch = new ScriptFetch(resource, mode));
-
-            // Recursively add the dependencies
-            for (ResourceId dependencyId : resource.dependencies)
+            ScriptFetch fetch = map.get(id);
+            if (fetch == null)
             {
-               ScriptFetch dependencyFetch = traverse(map, dependencyId, mode);
-               if (dependencyFetch != null)
+               map.put(id, fetch = new ScriptFetch(resource, mode));
+               
+               // Recursively add the dependencies
+               for (ResourceId dependencyId : resource.dependencies)
                {
-                  dependencyFetch.dependsOnMe.add(fetch);
-                  fetch.dependencies.add(dependencyFetch);
+                  ScriptFetch dependencyFetch = traverse(map, dependencyId, mode);
+                  if (dependencyFetch != null)
+                  {
+                     dependencyFetch.dependsOnMe.add(fetch);
+                     fetch.dependencies.add(dependencyFetch);
+                  }
                }
             }
+            return fetch;            
          }
-         else if (mode.compareTo(fetch.mode) > 0)
-         {
-            // Propagate the fetch mode upgrade along the graph already built
-            fetch.upgrade(mode);
-         }
-         return fetch;
       }
       else
       {
@@ -170,8 +172,9 @@ public class ScriptGraph
    }
 
    /**
-    * Add a resource to the graph.
-    *
+    * Add a resource to the graph if available.  
+    * return null if ResourceID is duplicated
+    * 
     * @param id the resource id
     * @param fetchMode the resource fetch mode
     * @return the resource
@@ -196,11 +199,13 @@ public class ScriptGraph
       {
          map.put(name, resource = new ScriptResource(this, id, fetchMode));
       }
-      else if (fetchMode.compareTo(resource.fetchMode) > 0)
+      else if (!(id.getScope().equals(ResourceScope.SHARED) && JavascriptConfigParser.LEGACY_JAVA_SCRIPT.equals(name)))
       {
-         resource.fetchMode = fetchMode;
-      }
-      return resource;
+         log.error("Duplicate ResourceId : {}, later resource definition will be ignored", id);
+         resource = null; 
+      }      
+         
+      return resource;            
    }
    
    public ScriptResource removeResource(ResourceId id)

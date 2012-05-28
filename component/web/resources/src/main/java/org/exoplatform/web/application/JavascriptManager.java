@@ -79,14 +79,14 @@ public class JavascriptManager
     */
    public void loadScriptResource(String name)
    {      
-      loadScriptResource(ResourceScope.SHARED, name, null);
+      loadScriptResource(ResourceScope.SHARED, name);
    }
 
    /**
     * Register a Javascript resource that will be loaded in Rendering phase
     * If mode is null, script will be loaded with mode defined in gatein-resources.xml
     */
-   public void loadScriptResource(ResourceScope scope, String name, FetchMode mode)
+   public void loadScriptResource(ResourceScope scope, String name)
    {
       if (scope == null)
       {
@@ -96,7 +96,7 @@ public class JavascriptManager
       {
          throw new IllegalArgumentException("name can't be null");
       }
-      resourceIds.add(new ResourceId(scope, name), mode);
+      resourceIds.add(new ResourceId(scope, name), null);
    }
 
    public FetchMap<ResourceId> getScriptResources()
@@ -109,13 +109,9 @@ public class JavascriptManager
       return new FetchMap<String>(extendedScriptURLs);
    }
 
-   public void addExtendedScriptURLs(String url, FetchMode mode)
+   public void addExtendedScriptURLs(String url)
    {
-      if (mode == null) 
-      {
-         mode = FetchMode.IMMEDIATE;
-      }
-      this.extendedScriptURLs.add(url, mode);
+      this.extendedScriptURLs.add(url, FetchMode.IMMEDIATE);
    }
 
    @Deprecated
@@ -131,7 +127,7 @@ public class JavascriptManager
          try
          {
             ResourceId id = res.getId();
-            loadScriptResource(id.getScope(), id.getName(), null);
+            loadScriptResource(id.getScope(), id.getName());
             if (log.isWarnEnabled())
             {
                log.warn("This method is deprecated. You could loadScriptResource " + res.getId() + " instead of importJavascript " + moduleName);

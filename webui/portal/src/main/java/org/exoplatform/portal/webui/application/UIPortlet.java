@@ -46,6 +46,7 @@ import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.portletcontainer.PortletContainerException;
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.RequestContext;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -124,6 +125,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
    protected static final Log log = ExoLogger.getLogger("portal:UIPortlet");
 
    static final public String DEFAULT_THEME = "Default:DefaultTheme::Vista:VistaTheme::Mac:MacTheme";
+   static public final String JAVASCRIPT_DEPENDENCY = "org.gatein.javascript.dependency";
    private static final String WSRP_URL = "wsrp-url";
    private static final String WSRP_PREFER_OPERATION = "wsrp-preferOperation";
    private static final String WSRP_REQUIRES_REWRITE = "wsrp-requiresRewrite";
@@ -1109,7 +1111,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       {
          PortletInfo info = getProducedOfferedPortlet().getInfo();
          String name = info.getApplicationName() + "/" + info.getName();
-         context.getJavascriptManager().loadScriptResource(ResourceScope.PORTLET, name, null);
+         context.getJavascriptManager().loadScriptResource(ResourceScope.PORTLET, name);
       }
       super.processRender(context);
    }
@@ -1143,12 +1145,23 @@ public Text generateRenderMarkup(PortletInvocationResponse pir, WebuiRequestCont
             if (fragmentResponse.getProperties().getTransportHeaders() != null)
             {
                MultiValuedPropertyMap<String> transportHeaders = fragmentResponse.getProperties()
-                     .getTransportHeaders();
+                        .getTransportHeaders();                                               
                for (String key : transportHeaders.keySet())
-               {
-                  for (String value : transportHeaders.getValues(key))
+               {                           
+                  JavascriptManager jsMan = context.getJavascriptManager();                                                                                
+                  if (JAVASCRIPT_DEPENDENCY.equals(key)) 
                   {
-                     prcontext.getResponse().setHeader(key, value);
+                     for (String value : transportHeaders.getValues(key))
+                     {
+                        jsMan.loadScriptResource(value);                          
+                     }
+                  }
+                  else
+                  {
+                     for (String value : transportHeaders.getValues(key))
+                     {
+                        prcontext.getResponse().setHeader(key, value);                                                                                        
+                     }
                   }
                }
             }
