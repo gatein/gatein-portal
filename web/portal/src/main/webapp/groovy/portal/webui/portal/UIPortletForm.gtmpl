@@ -68,17 +68,6 @@
 								<div class="PORTLET-FRAGMENT">
 									<%= uicomponent.getEditModeContent() %>
 								</div>
-                                                                <% //The portlet may have elements to add to the html head section, adding them now to a div which picks them up
-                                                                List<String> markupHeaders = rcontext.getExtraMarkupHeadersAsStrings(); %>
-                                                                <%   if (markupHeaders != null && !markupHeaders.isEmpty()) 
-                                                                   { %>
-                                                                     <div class="MarkupHeadElements">
-                                                                  <% for (int i=0; i< markupHeaders.size(); i++)
-                                                                     { %>
-                                                                       <%=markupHeaders.get(i);%>
-                                                                  <% }%>
-                                                                     </div>
-                                                                <% } %>
 							</div>
 						</div>
 						<%}%>
