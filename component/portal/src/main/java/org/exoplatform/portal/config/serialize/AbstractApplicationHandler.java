@@ -103,39 +103,8 @@ public class AbstractApplicationHandler implements IMarshaller, IUnmarshaller, I
       //
       Application<?> app;
       TransientApplicationState state;
-      if ("application".equals(m_name))
-      {
-         String instanceId = ctx.parseElementText(m_uri, "instance-id");
-         instanceId = NewPortalConfigListener.fixInstanceIdOwnerName(instanceId);
-         int i0 = instanceId.indexOf("#");
-         int i1 = instanceId.indexOf(":/", i0 + 1);
-         String ownerType = instanceId.substring(0, i0);
-         String ownerId = instanceId.substring(i0 + 1, i1);
-         String persistenceid = instanceId.substring(i1 + 2);
-         String[] persistenceChunks = split("/", persistenceid);
-         if (persistenceChunks.length == 2)
-         {
-            state = new TransientApplicationState<Portlet>(
-               persistenceChunks[0] + "/" +  persistenceChunks[1],
-               null,
-               ownerType,
-               ownerId,
-               null);
-         }
-         else
-         {
-            state = new TransientApplicationState<Portlet>(
-               persistenceChunks[0] + "/" +  persistenceChunks[1],
-               null,
-               ownerType,
-               ownerId,
-               persistenceChunks[2]);
-         }
-         app = Application.createPortletApplication();
-         app.setState(state);
-      }
       // Since we don't support dashboard's here, this only works for gadgets using the gadget wrapper portlet.
-      else if ("gadget-application".equals(m_name))
+      if ("gadget-application".equals(m_name))
       {
          ctx.parsePastStartTag(m_uri, "gadget");
          String gadgetName = ctx.parseElementText(m_uri, "gadget-ref");

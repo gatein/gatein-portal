@@ -85,7 +85,7 @@ public class PageUtils
       if (existing instanceof TransientApplicationState)
       {
          TransientApplicationState<S> state = (TransientApplicationState<S>) existing;
-         return new TransientApplicationState<S>(state.getContentId(), state.getContentState(), state.getOwnerType(), state.getOwnerId(), state.getUniqueId());
+         return new TransientApplicationState<S>(state.getContentId(), state.getContentState(), state.getOwnerType(), state.getOwnerId());
       }
       else
       {

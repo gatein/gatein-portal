@@ -46,7 +46,7 @@
       <supported-locale>EN</supported-locale>
       <script>
         <name>zezef</name>
-        <uri>zefzf</uri>
+        <path>zefzf</path>
       </script>
       <depends>
         <module>zefze</module>

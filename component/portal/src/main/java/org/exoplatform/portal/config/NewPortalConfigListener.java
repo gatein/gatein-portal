@@ -26,8 +26,6 @@ import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
-import org.exoplatform.portal.application.PortletPreferences;
-import org.exoplatform.portal.application.PortletPreferences.PortletPreferencesSet;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelUnmarshaller;
 import org.exoplatform.portal.config.model.NavigationFragment;
@@ -284,17 +282,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
                   log.error("NewPortalConfig error: " + e.getMessage(), e);
                }
             }
-            for (NewPortalConfig ele : configs)
-            {
-               try
-               {
-                  initPortletPreferencesDB(ele);
-               }
-               catch (Exception e)
-               {
-                  log.error("NewPortalConfig error: " + e.getMessage(), e);
-               }
-            }
          }
          finally
          {
@@ -350,10 +337,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             for (NewPortalConfig ele : configs)
             {
                initPortalConfigDB(ele);
-            }
-            for (NewPortalConfig ele : configs)
-            {
-               initPortletPreferencesDB(ele);
             }
          }
          finally
@@ -573,17 +556,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
    }
 
-   public void initPortletPreferencesDB(NewPortalConfig config) throws Exception
-   {
-      for (String owner : config.getPredefinedOwner())
-      {
-         if (!config.getOwnerType().equals(PortalConfig.USER_TYPE))
-         {
-            createPortletPreferences(config, owner);
-         }
-      }
-   }
-
    public boolean createPortalConfig(NewPortalConfig config, String owner) throws Exception
    {
       String type = config.getOwnerType();
@@ -678,21 +650,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
 
       //
       merge.perform();
-   }
-
-   public void createPortletPreferences(NewPortalConfig config, String owner) throws Exception
-   {
-      UnmarshalledObject<PortletPreferencesSet> obj = getConfig(config, owner, "portlet-preferences", PortletPreferencesSet.class);
-      if (obj == null)
-      {
-         return;
-      }
-      PortletPreferencesSet portletSet = obj.getObject();
-      ArrayList<PortletPreferences> list = portletSet.getPortlets();
-      for (PortletPreferences portlet : list)
-      {
-         dataStorage_.save(portlet);
-      }
    }
 
    private final Pattern OWNER_PATTERN = Pattern.compile("@owner@");
@@ -862,13 +819,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          portalConfig.setName(owner);
          fixOwnerName(portalConfig);
       }
-      else if (o instanceof PortletPreferencesSet)
-      {
-         for (PortletPreferences portlet : ((PortletPreferencesSet)o).getPortlets())
-         {
-            fixOwnerName(portlet);
-         }
-      }
       else if (o instanceof PageSet)
       {
          for (Page page : ((PageSet)o).getPages())
@@ -893,24 +843,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       {
          return owner;
       }
-   }
-
-   public static String fixInstanceIdOwnerName(String persistenceId)
-   {
-      int pos1 = persistenceId.indexOf("#");
-      if (pos1 != -1)
-      {
-         String type = persistenceId.substring(0, pos1);
-         int pos2 = persistenceId.indexOf(":", pos1 + 1);
-         if (pos2 != -1)
-         {
-            String owner = persistenceId.substring(pos1 + 1, pos2);
-            String windowId = persistenceId.substring(pos2 + 1);
-            owner = fixOwnerName(type, owner);
-            return type + "#" + owner + ":" + windowId;
-         }
-      }
-      return persistenceId;
    }
 
    private static void fixOwnerName(PortalConfig config)
@@ -976,11 +908,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin
             fixOwnerName(childPageNode);
          }
       }
-   }
-
-   private static void fixOwnerName(PortletPreferences prefs)
-   {
-      prefs.setWindowId(fixInstanceIdOwnerName(prefs.getWindowId()));
    }
 
    private static void fixOwnerName(Page page)

@@ -20,27 +20,24 @@
 
 -->
 
-<page-set>
+<page-set
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
 
    <page>
-      <owner-type>portal</owner-type>
-      <owner-id>limited</owner-id>
       <name>foo</name>
       <access-permissions>*:/platform/administrators</access-permissions>
       <edit-permission>*:/platform/administrators</edit-permission>
    </page>
 
    <page>
-      <owner-type>portal</owner-type>
-      <owner-id>limited</owner-id>
       <name>bar</name>
       <access-permissions>*:/platform/users</access-permissions>
       <edit-permission>*:/platform/administrators</edit-permission>
    </page>
 
    <page>
-      <owner-type>portal</owner-type>
-      <owner-id>limited</owner-id>
       <name>bit</name>
       <access-permissions>Everyone</access-permissions>
       <edit-permission>*:/platform/administrators</edit-permission>

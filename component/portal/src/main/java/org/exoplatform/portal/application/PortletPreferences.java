@@ -31,22 +31,10 @@ import java.util.ListIterator;
 public class PortletPreferences
 {
 
-   private String windowId;
-
    private ArrayList<Preference> preferences;
 
    public PortletPreferences()
    {
-   }
-
-   public String getWindowId()
-   {
-      return windowId;
-   }
-
-   public void setWindowId(String s)
-   {
-      windowId = s;
    }
 
    public ArrayList<Preference> getPreferences()
@@ -90,20 +78,5 @@ public class PortletPreferences
          }
       }
       preferences.add(pref);
-   }
-
-   static public class PortletPreferencesSet
-   {
-      private ArrayList<PortletPreferences> portlets;
-
-      public ArrayList<PortletPreferences> getPortlets()
-      {
-         return portlets;
-      }
-
-      public void setPortlets(ArrayList<PortletPreferences> list)
-      {
-         portlets = list;
-      }
    }
 }

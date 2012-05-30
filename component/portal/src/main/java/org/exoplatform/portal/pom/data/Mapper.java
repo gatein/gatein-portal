@@ -19,15 +19,12 @@
 
 package org.exoplatform.portal.pom.data;
 
-import javassist.runtime.Desc;
-
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.StaleModelException;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
-import org.exoplatform.portal.config.model.UserAgentConditions;
 import org.exoplatform.portal.mop.*;
 import org.exoplatform.portal.mop.redirects.Condition;
 import org.exoplatform.portal.mop.redirects.DeviceProperty;
@@ -64,8 +61,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.regex.Pattern;
-
-import static org.exoplatform.portal.pom.config.Utils.split;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -549,9 +544,7 @@ public class Mapper
                   "dashboard/DashboardPortlet",
                   null,
                   getOwnerType(owner.getObjectType()),
-                  owner.getName(),
-                  null
-               );
+                  owner.getName());
 
                //
                boolean showInfoBar = attrs.getValue(MappedAttributes.SHOW_INFO_BAR, false);
@@ -1136,62 +1129,6 @@ public class Mapper
          // The customization that we will inherit from if not null
          Customization<?> customization = null;
 
-         // Now inspect the unique id
-         String uniqueId = transientState.getUniqueId();
-         if (uniqueId != null)
-         {
-
-            // This is a customized window
-            if (uniqueId.startsWith("@"))
-            {
-               String id = uniqueId.substring(1);
-
-               // It's another window, we get its customization
-               if (!dst.getObjectId().equals(id))
-               {
-                  UIWindow window = session.findObjectById(ObjectType.WINDOW, id);
-                  Customization<?> windowCustomization = window.getCustomization();
-                  if (windowCustomization.getType().equals(contentType))
-                  {
-                     customization = windowCustomization;
-                  }
-               }
-            }
-            else
-            {
-               int pos = uniqueId.indexOf('#');
-               if (pos == -1)
-               {
-
-                  // If it's a different site than the page one (it has to be at this point)
-                  // then we get its customization
-                  if (site != null)
-                  {
-                     customization = site.getCustomizationContext().getCustomization(uniqueId);
-                  }
-                  else
-                  {
-                     customization = currentSite.getCustomizationContext().getCustomization(uniqueId);
-
-                     // If it does not exist we create it
-                     if (customization == null)
-                     {
-                        customization = currentSite.getCustomizationContext().customize(uniqueId, contentType, contentId, null);
-                     }
-                  }
-               }
-               else
-               {
-
-                  // Otherwise we get the page customization
-                  String a = uniqueId.substring(0, pos);
-                  String b = uniqueId.substring(pos + 1);
-                  org.gatein.mop.api.workspace.Page page = site.getRootPage().getChild("pages").getChild(b);
-                  customization = page.getCustomizationContext().getCustomization(a);
-               }
-            }
-         }
-
          // Destroy existing window previous customization
          if (dst.getCustomization() != null)
          {
@@ -1290,19 +1227,6 @@ public class Mapper
    {
       save(dashboard, dst);
       saveChildren(dashboard, dst);
-   }
-
-   public static String[] parseWindowId(String windowId)
-   {
-      int i0 = windowId.indexOf("#");
-      int i1 = windowId.indexOf(":/", i0 + 1);
-      String ownerType = windowId.substring(0, i0);
-      String ownerId = windowId.substring(i0 + 1, i1);
-      String persistenceid = windowId.substring(i1 + 2);
-      String[] chunks = split("/", 2, persistenceid);
-      chunks[0] = ownerType;
-      chunks[1] = ownerId;
-      return chunks;
    }
 
    private static void load(Attributes src, Map<String, String> dst, Set<String> blackList)

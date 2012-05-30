@@ -27,7 +27,7 @@
     version="1.0">
 
   <!-- The root element type that contains the various resource declarations -->
-  <xs:element name="gatein-resources">
+  <xs:element name="gatein-resources" xmlns:gt="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element name="portal-skin" type="portal-skin" />
@@ -41,6 +41,19 @@
         <xs:element name="scripts" type="scripts" />
       </xs:choice>
     </xs:complexType>
+    
+    <xs:unique name="shared-js-uniqueness">
+		<xs:selector xpath="gt:module|gt:scripts"/>
+		<xs:field xpath="gt:name"/>
+	 </xs:unique>
+    <xs:unique name="portlet-js-uniqueness">
+		<xs:selector xpath="gt:portlet"/>
+		<xs:field xpath="gt:name"/>
+	 </xs:unique>
+	 <xs:unique name="portal-js-uniqueness">
+		<xs:selector xpath="gt:portal"/>
+		<xs:field xpath="gt:name"/>
+	 </xs:unique>    	    
   </xs:element>
 
   <!-- Declares a portal skin resource -->

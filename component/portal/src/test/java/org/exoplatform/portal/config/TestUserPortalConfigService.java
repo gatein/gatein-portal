@@ -22,18 +22,14 @@ package org.exoplatform.portal.config;
 import junit.framework.AssertionFailedError;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
-import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.EventType;
-import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.pom.config.POMDataStorage;
@@ -55,7 +51,6 @@ import org.exoplatform.services.security.Authenticator;
 import org.exoplatform.services.security.ConversationState;
 import org.gatein.common.util.Tools;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -606,9 +601,9 @@ public class TestUserPortalConfigService extends AbstractConfigTest
                "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl").build(), prefs2);
 
             // Update prefs of original page
-            PortletPreferences prefs = new PortletPreferences();
-            prefs.setWindowId("portal#test:/web/BannerPortlet/banner");
-            storage_.save(prefs);
+            Page original = storage_.getPage("portal::test::test4");
+            app = (Application<Portlet>)original.getChildren().get(0);
+            storage_.save(app.getState(), new PortletBuilder().add("template", "foo").build());
 
             //
             prefs2 = storage_.load(app.getState(), ApplicationType.PORTLET);

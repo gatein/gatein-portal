@@ -20,53 +20,66 @@
 
 -->
 
-<page-set>
+<page-set
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
 		 		
   <page>
-  	<page-id>group::platform/guests::register</page-id>
-    <owner-type>group</owner-type>
-    <owner-id>platform/guests</owner-id>
-    <name>register</name>
+  	<name>register</name>
     <title>Register</title>
 	  <access-permissions>*:/platform/guests</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>    
-    <application>
-      <instance-id>group#platform/guests:/exoadmin/AccountPortlet/Account</instance-id>
+    <portlet-application>
+      <portlet>
+        <application-ref>exoadmin</application-ref>
+        <portlet-ref>AccountPortlet</portlet-ref>
+      </portlet>
       <title>New Account</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>      
-    </application>  
+    </portlet-application>
   </page>          
     
   <page>
-  	<page-id>group::platform/guests::sitemap</page-id>
-    <owner-type>group</owner-type>
-    <owner-id>platform/guests</owner-id>
-    <name>sitemap</name>
+  	<name>sitemap</name>
     <title>Site Map</title>
 	  <access-permissions>*:/platform/guests</access-permissions>
 	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <application>
-      <instance-id>group#platform/guests:/web/SiteMapPortlet/sitemapportlet</instance-id>
+	  <portlet-application>
+       <portlet>
+         <application-ref>web</application-ref>
+         <portlet-ref>SiteMapPortlet</portlet-ref>
+       </portlet>
       <title>SiteMap</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>      
-    </application>          
+    </portlet-application>
   </page>
   
   <page>
-  	<page-id>group::platform/guests::link</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/guests</owner-id>
-    <name>link</name>
+  	<name>link</name>
     <title>Link</title>
     <access-permissions>*:/platform/guests</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>group#platform/guests:/web/IFramePortlet/blog</instance-id>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>IFramePortlet</portlet-ref>
+        <preferences>
+          <preference>
+            <name>url</name>
+            <value>http://blog.exoplatform.org</value>
+            <read-only>false</read-only>
+          </preference>
+        </preferences>
+      </portlet>
       <title>Blog</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>true</show-application-state>
       <show-application-mode>true</show-application-mode>
-    </application>  
+    </portlet-application>
   </page>
       
 </page-set>

@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.config.model;
 
-import java.io.Serializable;
-
 /**
  * The transient state of an application when it has not yet been stored in the database.
  *
@@ -39,9 +37,6 @@ public class TransientApplicationState<S> extends ApplicationState<S>
    /** The owner id. */
    private String ownerId;
 
-   /** The unique id. */
-   private String uniqueId;
-
    /** The content state. */
    private S contentState;
 
@@ -56,19 +51,17 @@ public class TransientApplicationState<S> extends ApplicationState<S>
       this.contentState = contentState;
    }
 
-   public TransientApplicationState(String contentId, S contentState, String ownerType, String ownerId, String uniqueId)
+   public TransientApplicationState(String contentId, S contentState, String ownerType, String ownerId)
    {
       this.contentId = contentId;
       this.contentState = contentState;
       this.ownerType = ownerType;
       this.ownerId = ownerId;
-      this.uniqueId = uniqueId;
    }
 
    public TransientApplicationState()
    {
       this.contentState = null;
-      this.uniqueId = null;
    }
 
    public String getContentId()
@@ -104,10 +97,5 @@ public class TransientApplicationState<S> extends ApplicationState<S>
    public void setOwnerId(String ownerId)
    {
       this.ownerId = ownerId;
-   }
-
-   public String getUniqueId()
-   {
-      return uniqueId;
    }
 }

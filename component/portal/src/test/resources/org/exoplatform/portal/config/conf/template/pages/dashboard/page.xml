@@ -20,9 +20,9 @@
 
 -->
 
-<page>
-  <owner-type></owner-type>
-  <owner-id></owner-id>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
   <name></name>
   <portlet-application>
     <portlet>
@@ -30,6 +30,7 @@
       <portlet-ref>DashboardPortlet</portlet-ref>
     </portlet>
     <title>Dashboard</title>
+    <access-permissions>Everyone</access-permissions>
     <show-info-bar>false</show-info-bar>
     <show-application-state>true</show-application-state>
   </portlet-application>

@@ -45,7 +45,6 @@ import org.exoplatform.portal.pom.config.tasks.DashboardTask;
 import org.exoplatform.portal.pom.config.tasks.MOPAccess;
 import org.exoplatform.portal.pom.config.tasks.PageTask;
 import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
-import org.exoplatform.portal.pom.config.tasks.PortletPreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.SearchTask;
 import org.exoplatform.portal.pom.data.ApplicationData;
@@ -144,11 +143,6 @@ public class POMDataStorage implements ModelDataStorage
       return task.getChanges();
    }
 
-   public void save(PortletPreferences portletPreferences) throws Exception
-   {
-      pomMgr.execute(new PortletPreferencesTask.Save(portletPreferences));
-   }
-
    public <S> String getId(ApplicationState<S> state) throws Exception
    {
       String contentId;
@@ -219,11 +213,6 @@ public class POMDataStorage implements ModelDataStorage
          }
          return state;
       }
-   }
-
-   public PortletPreferences getPortletPreferences(String windowID) throws Exception
-   {
-      return pomMgr.execute(new PortletPreferencesTask.Load(windowID));
    }
 
    public <T> LazyPageList<T> find(Query<T> q) throws Exception

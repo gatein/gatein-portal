@@ -20,102 +20,132 @@
 
 -->
 
-<page-set>
+<page-set
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
   
   <page>
-  	<page-id>group::/platform/users::dashboard</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>/platform/users</owner-id>
     <name>dashboard</name>
     <title>Dashboard</title>
     <access-permissions>*:/platform/users</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>group#/platform/users:/dashboard/DashboardPortlet/Dashboard</instance-id>
+    <portlet-application>
+      <portlet>
+        <application-ref>dashboard</application-ref>
+        <portlet-ref>DashboardPortlet</portlet-ref>
+      </portlet>
       <title>Dashboard</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
-    </application>   
+    </portlet-application>
   </page>
   
   <page>
-  	<page-id>group::/platform/users::webexplorer</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>/platform/users</owner-id>
     <name>webexplorer</name>
     <title>Web Explorer</title>
     <access-permissions>*:/platform/users</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>group#/platform/users:/web/BrowserPortlet/WebExplorer</instance-id>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>BrowserPortlet</portlet-ref>
+      </portlet>
       <title>Web Explorer</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
-    </application>  
+    </portlet-application>
   </page>               
        
   <page>
-  	<page-id>group::/platform/users::mylink-blog</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>/platform/users</owner-id>
     <name>mylink-blog</name>
     <title>Blog</title>
     <access-permissions>*:/platform/users</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>group#/platform/users:/web/IFramePortlet/blog</instance-id>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>IFramePortlet</portlet-ref>
+        <preferences>
+          <preference>
+            <name>url</name>
+            <value>http://blog.exoplatform.org</value>
+            <read-only>false</read-only>
+          </preference>
+        </preferences>
+      </portlet>
       <title>Blog</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>true</show-info-bar>
       <show-application-state>true</show-application-state>
       <show-application-mode>true</show-application-mode>
-    </application>  
+    </portlet-application>
   </page>
   
   <page>
-  	<page-id>group::/platform/users::mylink-google</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>/platform/users</owner-id>
     <name>mylink-google</name>
     <title>Google</title>
     <access-permissions>*:/platform/users</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>group#/platform/users:/web/IFramePortlet/google</instance-id>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>IFramePortlet</portlet-ref>
+        <preferences>
+          <preference>
+            <name>url</name>
+            <value>http://www.google.com</value>
+            <read-only>false</read-only>
+          </preference>
+        </preferences>
+      </portlet>
       <title>Google</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>true</show-application-state>
       <show-application-mode>true</show-application-mode>
-    </application>  
+    </portlet-application>
   </page>
   
   <page>
-  	<page-id>group::/platform/users::mylink-facebook</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>/platform/users</owner-id>
     <name>mylink-facebook</name>
     <title>FaceBook</title>
     <access-permissions>*:/platform/users</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>group#/platform/users:/web/IFramePortlet/facebook</instance-id>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>IFramePortlet</portlet-ref>
+        <preferences>
+          <preference>
+            <name>url</name>
+            <value>http://www.facebook.com</value>
+            <read-only>false</read-only>
+          </preference>
+        </preferences>
+      </portlet>
       <title>FaceBook</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>true</show-application-state>
       <show-application-mode>true</show-application-mode>
-    </application>  
+    </portlet-application>
   </page>
   
   <page>
-  	<page-id>group::/platform/users::sitemap</page-id>
-    <owner-type>group</owner-type>
-    <owner-id>/platform/users</owner-id>
     <name>sitemap</name>
     <title>Site Map</title>
-	  <access-permissions>*:/platform/users</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <application>
-      <instance-id>group#/platform/users:/web/SiteMapPortlet/sitemapportlet</instance-id>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>SiteMapPortlet</portlet-ref>
+      </portlet>
       <title>SiteMap</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>      
-    </application>          
+    </portlet-application>
   </page>
 </page-set>
 

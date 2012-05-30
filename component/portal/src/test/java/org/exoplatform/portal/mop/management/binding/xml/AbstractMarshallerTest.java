@@ -29,8 +29,6 @@ import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.TransientApplicationState;
-import org.exoplatform.portal.pom.data.ApplicationData;
-import org.exoplatform.portal.pom.data.ContainerData;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
@@ -127,7 +125,6 @@ public abstract class AbstractMarshallerTest extends TestCase
          assertEquals(expectedTas.getContentId(), actualTas.getContentId());
          assertNull(actualTas.getOwnerType());
          assertNull(actualTas.getOwnerId());
-         assertNull(actualTas.getUniqueId());
          if (expectedTas.getContentState() == null)
          {
             assertNull(actualTas.getContentState());

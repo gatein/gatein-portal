@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.pom.config.tasks;
 
-import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.pom.config.cache.DataAccessMode;
 import org.exoplatform.portal.pom.config.cache.CacheableDataTask;
@@ -152,12 +151,6 @@ public abstract class PortalConfigTask
             Page root = site.getRootPage();
             root.addChild("pages");
             root.addChild("templates");
-
-            // Add pending preferences
-            for (PortletPreferences prefs : session.getPortletPreferences(site))
-            {
-               new PortletPreferencesTask.Save(prefs).run(session);
-            }
          }
          new Mapper(session).save(config, site);
 

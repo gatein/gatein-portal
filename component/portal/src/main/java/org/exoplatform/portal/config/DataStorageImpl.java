@@ -20,7 +20,6 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
-import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -111,11 +110,6 @@ public class DataStorageImpl implements DataStorage
    public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception
    {
       return delegate.load(state, type);
-   }
-
-   public PortletPreferences getPortletPreferences(String windowID) throws Exception
-   {
-      return delegate.getPortletPreferences(windowID);
    }
 
    public <S> ApplicationState<S> save(ApplicationState<S> state, S preferences) throws Exception
@@ -292,11 +286,6 @@ public class DataStorageImpl implements DataStorage
    public <S> String getId(ApplicationState<S> state) throws Exception
    {
       return delegate.getId(state);
-   }
-
-   public void save(PortletPreferences portletPreferences) throws Exception
-   {
-      delegate.save(portletPreferences);
    }
 
    public void save() throws Exception

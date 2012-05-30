@@ -18,13 +18,13 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<page-set>  
+<page-set
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">  
 
   <page>
-  	<page-id>portal::test::test1</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>test</owner-id>
-    <name>test1</name>
+  	<name>test1</name>
     <title>test_title</title>
     <factory-id>test_factory_id</factory-id>
 	  <access-permissions>test_access_permissions</access-permissions>
@@ -32,7 +32,6 @@
     <show-max-window>true</show-max-window>
     <container
         template="container_1_template"
-        decorator="container_1_decorator"
         width="container_1_width"
         height="container_1_height">
       <name>container_1</name>
@@ -42,9 +41,11 @@
       <factory-id>container_1_factory_id</factory-id>
       <description>container_1_description</description>
     </container>
-    <application>
-      <instance-id>portal#test:/web/BannerPortlet/banner</instance-id>
-      <application-type>application_1_type</application-type>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>BannerPortlet</portlet-ref>
+      </portlet>
       <theme>application_1_theme</theme>
       <title>application_1_title</title>
       <access-permissions>application_1_access_permissions</access-permissions>
@@ -55,41 +56,52 @@
       <icon>application_1_icon</icon>
       <width>application_1_width</width>
       <height>application_1_height</height>
-      <properties>
-        <entry key="prop_key">application_1_prop_value</entry>
-      </properties>
-    </application>
+    </portlet-application>
   </page>
     
   <page>
-    <owner-type>portal</owner-type>
-    <owner-id>test</owner-id>
     <name>test2</name>
   </page>
 
   <page>
-    <owner-type>portal</owner-type>
-    <owner-id>test</owner-id>
     <name>test3</name>
-    <application>
-      <instance-id>portal#notexisting:/web/BannerPortlet/banner2</instance-id>
-    </application>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>BannerPortlet</portlet-ref>
+      </portlet>
+      <access-permissions>Everyone</access-permissions>
+      <show-info-bar>true</show-info-bar>
+    </portlet-application>
   </page>
 
   <page>
-    <owner-type>portal</owner-type>
-    <owner-id>test</owner-id>
     <name>test4</name>
-    <application>
-      <instance-id>portal#test:/web/BannerPortlet/banner</instance-id>
-    </application>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>BannerPortlet</portlet-ref>
+      </portlet>
+      <access-permissions>Everyone</access-permissions>
+      <show-info-bar>true</show-info-bar>
+    </portlet-application>
     <container>
-      <application>
-        <instance-id>portal#test:/web/BannerPortlet/banner</instance-id>
-      </application>
-      <application>
-        <instance-id>portal#test:/web/FooterPortlet/footer</instance-id>
-      </application>
+      <portlet-application>
+        <portlet>
+          <application-ref>web</application-ref>
+          <portlet-ref>BannerPortlet</portlet-ref>
+        </portlet>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>true</show-info-bar>
+      </portlet-application>
+      <portlet-application>
+        <portlet>
+          <application-ref>web</application-ref>
+          <portlet-ref>FooterPortlet</portlet-ref>
+        </portlet>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>true</show-info-bar>
+      </portlet-application>
     </container>
   </page>
 

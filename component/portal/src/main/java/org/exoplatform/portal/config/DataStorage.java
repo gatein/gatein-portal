@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccess;
-import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -143,12 +142,6 @@ public interface DataStorage
    public List<ModelChange> save(Page page) throws Exception;
 
    /**
-    * Save PortletPreferences config node
-    * @param portletPreferences - PortletPreferences object
-    */
-   public void save(PortletPreferences portletPreferences) throws Exception;
-
-   /**
     * Return contentId according to each state (transient, persitent, clone)
     * @param state
     */
@@ -168,12 +161,6 @@ public interface DataStorage
     * @param preferences - object to be saved
     */
    public <S> ApplicationState<S> save(ApplicationState<S> state, S preferences) throws Exception;
-
-   /**
-    * Return PortletPreferences from database, if can't find it, return null
-    * @param windowID
-    */
-   public PortletPreferences getPortletPreferences(String windowID) throws Exception;
 
    /**
     * Return LazyPageList of object (unsorted) which type and other info determined in Query object

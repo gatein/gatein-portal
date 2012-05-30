@@ -18,7 +18,10 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<portal-config>
+<portal-config
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
   <portal-name>root</portal-name>
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
@@ -32,6 +35,8 @@
         <application-ref>overwrite_application_ref</application-ref>
         <portlet-ref>overwrite_portlet_ref</portlet-ref>
       </portlet>
+	  <access-permissions>Everyone</access-permissions>
+      <show-info-bar>true</show-info-bar>
 	  </portlet-application>
   </portal-layout>
 

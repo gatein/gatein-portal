@@ -23,14 +23,10 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.exoplatform.commons.utils.LazyPageList;
-import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
-import org.exoplatform.portal.pom.data.ModelChange;
-import org.exoplatform.portal.pom.data.PageData;
-import org.exoplatform.portal.pom.data.PortalData;
 
 /**
  * Created by The eXo Platform SAS
@@ -80,16 +76,11 @@ public interface ModelDataStorage
     */
    public List<ModelChange> save(PageData page) throws Exception;
 
-
-   public void save(PortletPreferences portletPreferences) throws Exception;
-
    public <S> String getId(ApplicationState<S> state) throws Exception;
 
    public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception;
 
    public <S> ApplicationState<S> save(ApplicationState<S> state, S preferences) throws Exception;
-
-   public PortletPreferences getPortletPreferences(String windowID) throws Exception;
 
    public <T> LazyPageList<T> find(Query<T> q) throws Exception;
 

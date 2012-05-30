@@ -18,34 +18,53 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<portal-config>
+<portal-config
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
   <portal-name>/platform/users</portal-name>
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
   <edit-permission>*:/platform/administrators</edit-permission>
 
  	<portal-layout>
-		<application>
-	    <instance-id>portal#classic:/web/BannerPortlet/banner</instance-id>
-	    <show-info-bar>false</show-info-bar>
-	  </application>
+		<portlet-application>
+        <portlet>
+          <application-ref>web</application-ref>
+          <portlet-ref>BannerPortlet</portlet-ref>
+        </portlet>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+	  </portlet-application>
 
-	  <application>
-	  	<instance-id>portal#classic:/web/NavigationPortlet/toolbar</instance-id>
-	    <show-info-bar>false</show-info-bar>
-	  </application>
+	  <portlet-application>
+       <portlet>
+         <application-ref>web</application-ref>
+         <portlet-ref>NavigationPortlet</portlet-ref>
+       </portlet>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+	  </portlet-application>
 
-	  <application>
-	    <instance-id>portal#classic:/web/BreadcumbsPortlet/breadcumbs</instance-id>
-	    <show-info-bar>false</show-info-bar>
-	  </application>
+	  <portlet-application>
+       <portlet>
+         <application-ref>web</application-ref>
+         <portlet-ref>BreadcumbsPortlet</portlet-ref>
+       </portlet>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+	  </portlet-application>
 
 	  <page-body> </page-body>
 
-	  <application>
-	    <instance-id>portal#classic:/web/FooterPortlet/footer</instance-id>
-	    <show-info-bar>false</show-info-bar>
-	  </application>
+	  <portlet-application>
+       <portlet>
+         <application-ref>web</application-ref>
+         <portlet-ref>FooterPortlet</portlet-ref>
+       </portlet>
+        <access-permissions>Everyone</access-permissions>
+        <show-info-bar>false</show-info-bar>
+	  </portlet-application>
   </portal-layout>
 
 </portal-config>

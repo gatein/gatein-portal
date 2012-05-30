@@ -20,42 +20,50 @@
 
 -->
 
-<page-set>  
+<page-set
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">  
 
   <page>
-  	<page-id>portal::classic::homepage</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>classic</owner-id>
     <name>homepage</name>
     <title>Home Page</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>portal#classic:/web/HomePagePortlet/homepageportlet</instance-id>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>HomePagePortlet</portlet-ref>
+        <preferences>
+          <preference>
+            <name>template</name>
+            <value>system:/templates/groovy/webui/component/UIHomePagePortlet.gtmpl</value>
+            <read-only>false</read-only>
+          </preference>
+        </preferences>
+      </portlet>
       <title>Home Page portlet</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
-      <properties>
-        <entry key="locationX">23432</entry>
-        <entry key="locationY">343534</entry>
-      </properties>
-    </application>
+    </portlet-application>
   </page>    
     
   <page>
-  	<page-id>portal::classic::webexplorer</page-id>
-    <owner-type>portal</owner-type>
-    <owner-id>classic</owner-id>
     <name>webexplorer</name>
     <title>Web Explorer</title>
-	  <access-permissions>*:/platform/users</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>    
-    <application>
-      <instance-id>group#platform/users:/web/BrowserPortlet/WebExplorer</instance-id>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>BrowserPortlet</portlet-ref>
+      </portlet>
       <title>Web Explorer</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
-    </application>  
+    </portlet-application>
   </page>  
 
 </page-set>

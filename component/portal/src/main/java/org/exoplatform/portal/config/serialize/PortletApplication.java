@@ -42,8 +42,8 @@ public class PortletApplication extends Application<Portlet>
       super(preferencesApplicationType, storageId);
    }
 
-   public PortletApplication(ApplicationType<Portlet> preferencesApplicationType)
+   public PortletApplication()
    {
-      super(preferencesApplicationType);
+      super(ApplicationType.PORTLET);
    }
 }

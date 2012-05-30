@@ -20,67 +20,73 @@
 
 -->
 
-<page-set>  
+<page-set
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">  
           
   <page>
-  	<page-id>group::platform/administrators::newAccount</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/administrators</owner-id>
-    <name>newAccount</name>
+  	<name>newAccount</name>
     <title>New Account</title>
     <access-permissions>MembershipType_1:/Group1</access-permissions>
     <edit-permission>manager:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>group#platform/administrators:/exoadmin/AccountPortlet/Account</instance-id>
+    <portlet-application>
+      <portlet>
+        <application-ref>exoadmin</application-ref>
+        <portlet-ref>AccountPortlet</portlet-ref>
+      </portlet>
       <title>New Account</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
-    </application>  
+    </portlet-application>
   </page>           
   
   <page>
-  	<page-id>group::platform/administrators::communityManagement</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/administrators</owner-id>
-    <name>communityManagement</name>
+  	<name>communityManagement</name>
     <title>Community Management</title>
     <access-permissions>manager:/platform/administrators</access-permissions>
     <edit-permission>manager:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>group#platform/administrators:/exoadmin/OrganizationPortlet/Organization</instance-id>
+    <portlet-application>
+      <portlet>
+        <application-ref>exoadmin</application-ref>
+        <portlet-ref>OrganizationPortlet</portlet-ref>
+      </portlet>
       <title>Community Management</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>      
-    </application>     
+    </portlet-application>
   </page>
   
   <page>
-  	<page-id>group::platform/administrators::registry</page-id>
-  	<owner-type>group</owner-type>
-    <owner-id>platform/administrators</owner-id>
-    <name>registry</name>
+  	<name>registry</name>
     <title>Registry</title>
     <access-permissions>manager:/platform/administrators</access-permissions>
     <edit-permission>manager:/platform/administrators</edit-permission>
-    <application>
-      <instance-id>group#platform/administrators:/exoadmin/ApplicationRegistryPortlet/ApplicationRegistry</instance-id>
+    <portlet-application>
+      <portlet>
+        <application-ref>exoadmin</application-ref>
+        <portlet-ref>ApplicationRegistryPortlet</portlet-ref>
+      </portlet>
       <title>Application Registry</title>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
-    </application>   
+    </portlet-application>
   </page>
   
   <page>
-  	<page-id>group::platform/administrators::pageManagement</page-id>
-    <owner-type>group</owner-type>
-    <owner-id>platform/administrators</owner-id>
-    <name>pageManagement</name>
+  	<name>pageManagement</name>
     <title>Page Management</title>
 	  <access-permissions>manager:/platform/administrators</access-permissions>
 	  <edit-permission>manager:/platform/administrators</edit-permission>    
-    <application>
-      <instance-id>group#platform/administrators:/exoadmin/PageManagementPortlet/PageManagement</instance-id>
+    <portlet-application>
+      <portlet>
+        <application-ref>exoadmin</application-ref>
+        <portlet-ref>PageManagementPortlet</portlet-ref>
+      </portlet>
       <title>Page Management</title>
       <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
-    </application>  
+    </portlet-application>
   </page>
   
 </page-set>

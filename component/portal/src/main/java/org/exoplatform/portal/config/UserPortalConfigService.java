@@ -355,11 +355,6 @@ public class UserPortalConfigService implements Startable
       NewPortalConfig portalConfig = new NewPortalConfig(templatePath);
       portalConfig.setTemplateName(template);
       portalConfig.setOwnerType(siteType);
-
-      if (!portalConfig.getOwnerType().equals(PortalConfig.USER_TYPE))
-      {
-         newPortalConfigListener_.createPortletPreferences(portalConfig, siteName);
-      }
       newPortalConfigListener_.createPortalConfig(portalConfig, siteName);
       newPortalConfigListener_.createPage(portalConfig, siteName);
       newPortalConfigListener_.createPageNavigation(portalConfig, siteName);

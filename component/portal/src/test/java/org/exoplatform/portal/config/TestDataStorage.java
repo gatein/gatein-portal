@@ -19,12 +19,8 @@
 
 package org.exoplatform.portal.config;
 
-import static org.exoplatform.portal.pom.config.Utils.split;
-
 import junit.framework.AssertionFailedError;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.application.PortletPreferences;
-import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -77,9 +73,6 @@ public class TestDataStorage extends AbstractConfigTest
 
    /** . */
    private final String testPage = "portal::classic::testPage";
-
-   /** . */
-   private final String testPortletPreferences = "portal#classic:/web/BannerPortlet/testPortletPreferences";
 
    /** . */
    private DataStorage storage_;
@@ -469,30 +462,6 @@ public class TestDataStorage extends AbstractConfigTest
       assertNull("Expected page reference should be null.", pageNavigationWithoutPageReference.get(0).getState().getPageRef());
    }
    
-   public void testCreatePortletPreferences() throws Exception
-   {
-      ArrayList<Preference> prefs = new ArrayList<Preference>();
-      for (int i = 0; i < 5; i++)
-      {
-         Preference pref = new Preference();
-         pref.setName("name" + i);
-         pref.addValue("value" + i);
-         prefs.add(pref);
-      }
-
-      //
-      PortletPreferences portletPreferences = new PortletPreferences();
-      portletPreferences.setWindowId(testPortletPreferences);
-      portletPreferences.setPreferences(prefs);
-
-      //
-      storage_.save(portletPreferences);
-
-      //
-      PortletPreferences portletPref = storage_.getPortletPreferences(testPortletPreferences);
-      assertEquals(portletPref.getWindowId(), testPortletPreferences);
-   }
-
    public void testWindowScopedPortletPreferences() throws Exception
    {
       Page page = new Page();
@@ -518,7 +487,9 @@ public class TestDataStorage extends AbstractConfigTest
       String app3Id = container.getChildren().get(1).getStorageId();
 
       // Add an application
-      Application<Portlet> groovyApp = create("portal#test:/web/GroovyPortlet/groovyportlet");
+      Application<Portlet> groovyApp = Application.createPortletApplication();
+      ApplicationState<Portlet> state = new TransientApplicationState<Portlet>("web/GroovyPortlet");
+      groovyApp.setState(state);
       ((Container)page.getChildren().get(1)).getChildren().add(1, groovyApp);
 
       // Save
@@ -602,14 +573,6 @@ public class TestDataStorage extends AbstractConfigTest
       // Check instance id format
       assertEquals("web/BannerPortlet", storage_.getId(banner1.getState()));
 
-      // Update site prefs
-      PortletPreferences sitePrefs = new PortletPreferences();
-      sitePrefs.setWindowId("portal#test:/web/BannerPortlet/banner");
-      sitePrefs.setPreferences(new ArrayList<Preference>(Collections.singleton(new Preference())));
-      sitePrefs.getPreferences().get(0).setName("template");
-      sitePrefs.getPreferences().get(0).getValues().add("bar");
-      storage_.save(sitePrefs);
-
       // Check that page prefs have not changed
       pagePrefs = storage_.load(instanceId, ApplicationType.PORTLET);
       assertEquals(new PortletBuilder().add("template", "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl")
@@ -622,10 +585,6 @@ public class TestDataStorage extends AbstractConfigTest
       // Check that page prefs have changed
       pagePrefs = storage_.load(instanceId, ApplicationType.PORTLET);
       assertEquals(new PortletBuilder().add("template", "foo").build(), pagePrefs);
-
-      // Check that site prefs have not changed
-      sitePrefs = storage_.getPortletPreferences("portal#test:/web/BannerPortlet/banner");
-      assertEquals("bar", sitePrefs.getPreferences().get(0).getValues().get(0));
 
       // Now check the container
       Container container = (Container)clone.getChildren().get(1);
@@ -1027,25 +986,6 @@ public class TestDataStorage extends AbstractConfigTest
       begin();
       afterNames = (List<String>)storage_.getClass().getMethod(methodName).invoke(storage_);
       assertEquals(new HashSet<String>(names), new HashSet<String>(afterNames));
-   }
-
-   private Application<Portlet> create(String instanceId)
-   {
-      int i0 = instanceId.indexOf("#");
-      int i1 = instanceId.indexOf(":/", i0 + 1);
-      String ownerType = instanceId.substring(0, i0);
-      String ownerId = instanceId.substring(i0 + 1, i1);
-      String persistenceid = instanceId.substring(i1 + 2);
-      String[] persistenceChunks = split("/", persistenceid);
-      TransientApplicationState<Portlet> state = new TransientApplicationState<Portlet>(
-         persistenceChunks[0] + "/" + persistenceChunks[1],
-         null,
-         ownerType,
-         ownerId,
-         persistenceChunks[2]);
-      Application<Portlet> portletApp = Application.createPortletApplication();
-      portletApp.setState(state);
-      return portletApp;
    }
 
    public void testSearchPage() throws Exception

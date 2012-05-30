@@ -26,9 +26,7 @@ import org.chromattic.api.query.QueryResult;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.commons.chromattic.SynchronizationListener;
 import org.exoplatform.commons.chromattic.SynchronizationStatus;
-import org.exoplatform.portal.application.PortletPreferences;
 import org.exoplatform.portal.config.NoSuchDataException;
-import org.exoplatform.portal.pom.data.Mapper;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Model;
@@ -45,12 +43,10 @@ import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -79,9 +75,6 @@ public final class POMSession
 
    /** . */
    private boolean isInTask;
-
-   /** Hack. */
-   private final Map<String, PortletPreferences> pendingPrefs = new HashMap<String, PortletPreferences>();
 
    /** . */
    private boolean markedForRollback;
@@ -214,32 +207,6 @@ public final class POMSession
          throw new NoSuchDataException("Can not find " + id);
       }
       return customization;
-   }
-
-   public void addPortletPreferences(PortletPreferences prefs)
-   {
-      pendingPrefs.put(prefs.getWindowId(), prefs);
-   }
-
-   public PortletPreferences getPortletPreferences(String id)
-   {
-      return pendingPrefs.get(id);
-   }
-
-   public Set<PortletPreferences> getPortletPreferences(Site site)
-   {
-      Set<PortletPreferences> prefs = new HashSet<PortletPreferences>();
-      for (Iterator<Map.Entry<String, PortletPreferences>> i = pendingPrefs.entrySet().iterator(); i.hasNext();)
-      {
-         Map.Entry<String, PortletPreferences> entry = i.next();
-         String prefix = Mapper.getOwnerType(site.getObjectType()) + "#" + site.getName() + ":/";
-         if (entry.getKey().startsWith(prefix))
-         {
-            prefs.add(entry.getValue());
-            i.remove();
-         }
-      }
-      return prefs;
    }
 
    public POMSessionManager getManager()

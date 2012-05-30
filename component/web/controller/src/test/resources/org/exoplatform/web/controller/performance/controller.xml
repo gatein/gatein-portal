@@ -19,8 +19,8 @@
 
 <controller
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_controller_1_0 http://www.gatein.org/xml/ns/gatein_controller_1_0"
-    xmlns="http://www.gatein.org/xml/ns/gatein_controller_1_0"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_controller_1_1 http://www.gatein.org/xml/ns/gatein_controller_1_1"
+    xmlns="http://www.gatein.org/xml/ns/gatein_controller_1_1"
     separator-escape=":">
 
   <route path="/upload">

@@ -104,12 +104,6 @@ public class TestLoadedPOM extends AbstractConfigTest
       assertNotNull(page);
       assertEquals("group::/test/legacy::register", page.getPageId());
       assertEquals("/test/legacy", page.getOwnerId());
-      Application app = (Application)page.getChildren().get(0);
-      //    assertEquals("group#/test/legacy:/web/IFramePortlet/blog", app.getInstanceState().getWeakReference());
-
-      PortletPreferences prefs = storage.getPortletPreferences("group#/test/legacy:/web/IFramePortlet/blog");
-      assertNotNull(prefs);
-      assertEquals("group#/test/legacy:/web/IFramePortlet/blog", prefs.getWindowId());
    }
 
    public void testGroupWithNormalizedName() throws Exception
@@ -125,13 +119,6 @@ public class TestLoadedPOM extends AbstractConfigTest
       assertNotNull(page);
       assertEquals("group::/test/normalized::register", page.getPageId());
       assertEquals("/test/normalized", page.getOwnerId());
-      Application app = (Application)page.getChildren().get(0);
-      //    assertEquals("group#/test/normalized:/exoadmin/AccountPortlet/Account", app.getInstanceState().getWeakReference());
-
-      PortletPreferences prefs =
-         storage.getPortletPreferences("group#/test/normalized:/exoadmin/AccountPortlet/Account");
-      assertNotNull(prefs);
-      assertEquals("group#/test/normalized:/exoadmin/AccountPortlet/Account", prefs.getWindowId());
    }
 
    public void testNavigation() throws Exception
@@ -225,7 +212,6 @@ public class TestLoadedPOM extends AbstractConfigTest
       assertEquals("application_1_icon", application1.getIcon());
       assertEquals("application_1_width", application1.getWidth());
       assertEquals("application_1_height", application1.getHeight());
-      assertEquals("application_1_prop_value", application1.getProperties().get("prop_key"));
       //    assertEquals("portal#test:/web/BannerPortlet/banner", application1.getInstanceState().getWeakReference());
    }
 

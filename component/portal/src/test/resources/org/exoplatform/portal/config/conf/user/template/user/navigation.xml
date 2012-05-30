@@ -18,10 +18,11 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<node-navigation>
-  <owner-type>user</owner-type>  
-	<owner-id>@owner@</owner-id>
-	<priority>3</priority>
+<node-navigation
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
+  <priority>3</priority>
 
   <page-nodes />
 </node-navigation>
