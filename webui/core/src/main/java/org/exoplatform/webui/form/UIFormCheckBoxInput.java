@@ -120,7 +120,8 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
    {
       if (isDisabled())
          return;
-      checked = "true".equals(input);
+      //This help our code compatible with old serialize style : input is alway "true" or "false" 
+      checked = input != null && !"false".equals(input.toString());
       if (typeValue_ == Boolean.class || typeValue_ == boolean.class)
       {
          value_ = typeValue_.cast(checked);
@@ -133,10 +134,6 @@ public class UIFormCheckBoxInput<T> extends UIFormInputBase<T>
       w.write("<input type='checkbox' name='");
       w.write(name);
       w.write("'");
-      w.write(" value='");
-      if (value_ != null)
-         w.write(String.valueOf(value_));
-      w.write("' ");
       if (onchange_ != null)
       {
          UIForm uiForm = getAncestorOfType(UIForm.class);
