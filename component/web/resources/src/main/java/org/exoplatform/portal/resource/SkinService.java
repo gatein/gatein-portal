@@ -100,12 +100,6 @@ public class SkinService extends AbstractResourceService implements Startable
    /** Immutable and therefore thread safe. */
    private static final Pattern RT = Pattern.compile("[^{;]*;\\s*/\\*\\s*orientation=rt\\s*\\*/");
 
-   /** One month caching. */
-   private static final int ONE_MONTH = 2592000;
-
-   /** One hour caching. */
-   private static final int ONE_HOUR = 3600;
-
    public static final String DEFAULT_SKIN = "Default";
 
    /** The deployer. */
@@ -138,6 +132,27 @@ public class SkinService extends AbstractResourceService implements Startable
     * false.
     */
    final String id = Long.toString(System.currentTimeMillis());
+   
+   private static final long MAX_AGE;
+   
+   static 
+   {
+      long seconds = 86400;
+      String propValue = PropertyManager.getProperty("gatein.assets.css.max-age");
+      if (propValue != null)
+      {
+         try
+         {
+            seconds = Long.valueOf(propValue);
+         }
+         catch (NumberFormatException e)
+         {
+            log.warn("The gatein.assets.css.max-age property is not set properly.");
+         }
+      }
+      
+      MAX_AGE = seconds;
+   }
 
    public SkinService(ExoContainerContext context, ResourceCompressor compressor)
    {
@@ -540,15 +555,8 @@ public class SkinService extends AbstractResourceService implements Startable
             return false;
          }
          
-         if (path.startsWith("/" + portalContainerName + "/resource"))
-         {
-            renderer.setExpiration(ONE_MONTH);
-         }
-         else
-         {
-            renderer.setExpiration(ONE_HOUR);
-         }
-         
+         renderer.setExpiration(MAX_AGE);
+
          cachedCss.writeTo(renderer.getOutput());
       }
       return true;

@@ -59,37 +59,64 @@ public class ResourceRequestHandler extends WebRequestHandler
 
    /** . */
    public static final String VERSION;
+   
+   private static final long MAX_AGE;
 
    static
    {
       // Detecting version from maven properties
       // empty value is ok
       String version = "";
-      URL url = ResourceRequestHandler.class.getClassLoader().getResource(PATH);
-      if (url != null)
+
+      String property = PropertyManager.getProperty("gatein.assets.version");
+      if (property != null && !property.isEmpty())
       {
-         log.debug("Loading resource serving version from " + url);
-         InputStream in = null;
-         try
+         version = property;
+      }
+      else
+      {
+         URL url = ResourceRequestHandler.class.getClassLoader().getResource(PATH);
+         if (url != null)
          {
-            in = url.openStream();
-            Properties props = new Properties();
-            props.load(in);
-            version = props.getProperty("version");
-         }
-         catch (IOException e)
-         {
-            log.error("Could not read properties from " + url, e);
-         }
-         finally
-         {
-            IOTools.safeClose(in);
+            log.debug("Loading resource serving version from " + url);
+            InputStream in = null;
+            try
+            {
+               in = url.openStream();
+               Properties props = new Properties();
+               props.load(in);
+               version = props.getProperty("version");
+            }
+            catch (IOException e)
+            {
+               log.error("Could not read properties from " + url, e);
+            }
+            finally
+            {
+               IOTools.safeClose(in);
+            }
          }
       }
 
       //
       log.info("Use version \"" + version + "\" for resource serving");
       VERSION = version;
+      
+      long seconds = 86400;
+      String propValue = PropertyManager.getProperty("gatein.assets.script.max-age");
+      if (propValue != null)
+      {
+         try
+         {
+            seconds = Long.valueOf(propValue);
+         }
+         catch (NumberFormatException e)
+         {
+            log.warn("The gatein.assets.script.max-age property is not set properly.");
+         }
+      }
+      
+      MAX_AGE = seconds;
    }
    
    /** . */
@@ -183,10 +210,7 @@ public class ResourceRequestHandler extends WebRequestHandler
             response.setContentType("text/javascript");
             response.setCharacterEncoding("UTF-8");
 
-            // One hour caching
-            // make this configurable later
-            response.setHeader("Cache-Control", "max-age:3600");
-            response.setDateHeader("Expires", System.currentTimeMillis() + 3600 * 1000);
+            response.setHeader("Cache-Control", "max-age=" + MAX_AGE + ",s-maxage=" + MAX_AGE);
             
             // Set content length
             response.setContentLength(resolved.bytes.length);
