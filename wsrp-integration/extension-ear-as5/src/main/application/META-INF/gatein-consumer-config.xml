@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jaxws-config xmlns="urn:jboss:jaxws-config:2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:javaee="http://java.sun.com/xml/ns/javaee"
+  xsi:schemaLocation="urn:jboss:jaxws-config:2.0 schema/jaxws-config_2_0.xsd">
+
+  <client-config>
+    <config-name>GateIn Consumer WSSecurity</config-name>
+    <post-handler-chains>
+      <javaee:handler-chain>
+        <javaee:protocol-bindings>##SOAP11_HTTP ##SOAP11_HTTP_MTOM</javaee:protocol-bindings>
+        <javaee:handler>
+          <javaee:handler-name>WS Security Credential Handler</javaee:handler-name>
+          <javaee:handler-class>org.wsrp.wss.jboss5.handlers.consumer.WSSecurityCredentialHandler</javaee:handler-class>
+        </javaee:handler>
+        <javaee:handler>
+          <javaee:handler-name>GateIn Consumer JBWS Security Wrapper</javaee:handler-name>
+          <javaee:handler-class>org.wsrp.wss.jboss5.handlers.consumer.JBWSSecurityHandlerWrapper</javaee:handler-class>
+        </javaee:handler>
+      </javaee:handler-chain>
+    </post-handler-chains>
+  </client-config>
+
+
+</jaxws-config>

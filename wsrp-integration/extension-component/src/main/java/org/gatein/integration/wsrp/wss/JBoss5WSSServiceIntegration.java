@@ -27,6 +27,7 @@ import org.gatein.wsrp.wss.credentials.CredentialsAccessor;
 import org.picocontainer.Startable;
 import org.wsrp.wss.jboss5.handlers.consumer.JBWSSecurityHandlerWrapper;
 import org.wsrp.wss.jboss5.handlers.consumer.WSSecurityCredentialHandler;
+import org.wsrp.wss.jboss5.handlers.consumer.JBWSCustomizePortListener;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
@@ -36,13 +37,12 @@ public class JBoss5WSSServiceIntegration implements Startable
 {
    private final WebServiceSecurityFactory wssFactory;
    
-   private final WSSecurityCredentialHandler WS_CREDENTIAL_HANDLER;
-   private final JBWSSecurityHandlerWrapper JBWS_SECURITY_WRAPPER = new JBWSSecurityHandlerWrapper();
+   private final JBWSCustomizePortListener JBWS_CUSTOMIZE_PORT_LISTENER = new JBWSCustomizePortListener(); 
    
    public JBoss5WSSServiceIntegration(CredentialsAccessor credentialsAccessor)
    {
       wssFactory = WebServiceSecurityFactory.getInstance();
-      WS_CREDENTIAL_HANDLER = new WSSecurityCredentialHandler(credentialsAccessor);
+      wssFactory.setCredentialsAccessor(credentialsAccessor);
    }
    
    public void start()
@@ -56,15 +56,13 @@ public class JBoss5WSSServiceIntegration implements Startable
    }
    
    protected void startConsumer()
-   {
-      wssFactory.registerWebServiceSecurityHandler(WS_CREDENTIAL_HANDLER);
-      wssFactory.registerWebServiceSecurityHandler(JBWS_SECURITY_WRAPPER);
+   {      
+      wssFactory.addCustomizePortListener(JBWS_CUSTOMIZE_PORT_LISTENER);
    }
 
    protected void stopConsumer()
    {
-      wssFactory.unregisterWebServiceSecurityHandler(WS_CREDENTIAL_HANDLER);
-      wssFactory.unregisterWebServiceSecurityHandler(JBWS_SECURITY_WRAPPER);
+      wssFactory.removeCustomizePortListener(JBWS_CUSTOMIZE_PORT_LISTENER);
    }
 }
 
