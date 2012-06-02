@@ -6,7 +6,7 @@
    <parent>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.packaging.jboss6</artifactId>
-      <version>3.3.0-CR01-SNAPSHOT</version>
+      <version>3.3.0-GA</version>
    </parent>
 
    <artifactId>exo.portal.packaging.jboss6.pkg</artifactId>
@@ -1073,7 +1073,7 @@ You can also use -Ddownload to automatically provide JBoss AS instance.
                               <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
                                  <target name="prepare" />
                                  <!-- without the next line a wrong servers.dir value is passed to antrun -->
-                                 <property name="servers.dir" value="${servers.dir}"/>
+                                 <property name="servers.dir" value="${servers.dir}" />
                                  <property name="maven.project.basedir" value="${project.basedir}" />
                                  <property name="maven.project.build.directory" value="${project.build.directory}" />
                               </ant>
