@@ -60,9 +60,9 @@
       </ant>
 
       <!-- Override the guava.jar of weld deployer -->
-      <copy file="${maven.dependency.com.google.guava.guava.jar.path}" tofile="${jbossas.target.dir}/server/default/deployers/weld.deployer/guava.jar"/>
-      <copy file="${maven.dependency.com.google.guava.guava.jar.path}" tofile="${jbossas.target.dir}/server/all/deployers/weld.deployer/guava.jar"/>
-      <copy file="${maven.dependency.com.google.guava.guava.jar.path}" tofile="${jbossas.target.dir}/server/standard/deployers/weld.deployer/guava.jar"/>
+      <copy file="${com.google.guava:guava:jar}" tofile="${jbossas.target.dir}/server/default/deployers/weld.deployer/guava.jar"/>
+      <copy file="${com.google.guava:guava:jar}" tofile="${jbossas.target.dir}/server/all/deployers/weld.deployer/guava.jar"/>
+      <copy file="${com.google.guava:guava:jar}" tofile="${jbossas.target.dir}/server/standard/deployers/weld.deployer/guava.jar"/>
 
       <!-- Copy configuration non-xml first -->
       <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">

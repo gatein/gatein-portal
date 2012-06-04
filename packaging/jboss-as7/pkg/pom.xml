@@ -19,7 +19,7 @@
 
       <!--servers.dir>${project.basedir}/../../servers</servers.dir-->
       <jbossas.dir>${servers.dir}/${server.name}</jbossas.dir>
-      <gatein.working.dir>${project.build.directory}/${server.name}</gatein.working.dir>
+      <gatein.working.dir>${project.build.directory}/jboss</gatein.working.dir>
       <jbossas.target.dir>${gatein.working.dir}</jbossas.target.dir>
    </properties>
 
