@@ -22,6 +22,10 @@ package org.exoplatform.portal.account;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
+import org.exoplatform.services.security.Authenticator;
+import org.exoplatform.services.security.Credential;
+import org.exoplatform.services.security.PasswordCredential;
+import org.exoplatform.services.security.UsernameCredential;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -84,7 +88,21 @@ public class UIAccountChangePass extends UIForm
          String newPass = uiForm.getUIStringInput("newpass").getValue();
          String confirmnewPass = uiForm.getUIStringInput("confirmnewpass").getValue();
 
-         if (!service.getUserHandler().authenticate(username, currentPass))
+         Authenticator authenticator = uiForm.getApplicationComponent(Authenticator.class);
+         boolean authenticated;
+         try
+         {
+            UsernameCredential usernameCred = new UsernameCredential(username);
+            PasswordCredential passwordCred = new PasswordCredential(currentPass);
+            authenticator.validateUser(new Credential[]{usernameCred, passwordCred});
+            authenticated = true;
+         }
+         catch (Exception ex)
+         {
+            authenticated = false;
+         }
+         
+         if (!authenticated)
          {
             uiApp.addMessage(new ApplicationMessage("UIAccountChangePass.msg.currentpassword-is-not-match", null, 1));
             uiForm.reset();
