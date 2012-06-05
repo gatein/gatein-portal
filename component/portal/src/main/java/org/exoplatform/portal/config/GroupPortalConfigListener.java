@@ -34,7 +34,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * Created by The eXo Platform SARL 
+ * This listener is used to initialize/destroy the Group Site Config
+ * of a group when it is created/deleted
+ * 
  * Author : Nhu Dinh Thuan
  *    nhudinhthuan@exoplatform.com May 29, 2007
  */
@@ -74,6 +76,11 @@ public class GroupPortalConfigListener extends GroupEventListener
    @Override
    public void preSave(Group group, boolean isNew) throws Exception
    {
+      if (!isNew)
+      {
+         return;
+      }
+      
       RequestLifeCycle.begin(PortalContainer.getInstance());
 
       try
