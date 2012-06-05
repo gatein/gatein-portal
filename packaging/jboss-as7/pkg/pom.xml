@@ -291,7 +291,7 @@ You can also use -Ddownload to automatically provide JBoss AS instance.
       <profile>
          <id>bundle</id>
          <properties>
-            <release.version>3.4.0-GA-SNAPSHOT</release.version>
+            <release.version>${project.version}</release.version>
          </properties>
          <build>
             <plugins>
