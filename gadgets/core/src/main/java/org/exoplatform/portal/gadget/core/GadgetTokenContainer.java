@@ -37,14 +37,15 @@ public abstract class GadgetTokenContainer
          BasicOAuthStoreTokenIndex key = tokenEntry.getKey();
          if (tokenKey.equals(key))
          {
+            GadgetToken token = tokenEntry.getToken();
             tokenEntry.remove();
-            return tokenEntry.getToken();
+            return token;
          }
       }
       return null;
    }
 
-   public GadgetToken saveToken(BasicOAuthStoreTokenIndex tokenKey, TokenInfo tokenInfo)
+   public GadgetToken saveToken(BasicOAuthStoreTokenIndex tokenKey, TokenInfo tokenInfo, long expirationTime)
    {
       Map<String, GadgetTokenEntry> tokens = getGadgetTokens();
       GadgetTokenEntry entry = null;
@@ -70,7 +71,7 @@ public abstract class GadgetTokenContainer
       entry.setAccessToken(tokenInfo.getAccessToken());
       entry.setTokenSecret(tokenInfo.getTokenSecret());
       entry.setSessionHandle(tokenInfo.getSessionHandle() == null ? "" : tokenInfo.getSessionHandle());
-      entry.setTokenExpireMillis(tokenInfo.getTokenExpireMillis());
+      entry.setTokenExpireMillis(expirationTime);
       return entry.getToken();
    }
 }

@@ -30,7 +30,9 @@ import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.gatein.wci.security.Credentials;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class GadgetTokenInfoService extends AbstractTokenService<GadgetToken, BasicOAuthStoreTokenIndex>
 {
@@ -51,7 +53,8 @@ public class GadgetTokenInfoService extends AbstractTokenService<GadgetToken, Ba
          protected GadgetToken execute()
          {
             GadgetTokenContainer container = getGadgetTokenContainer();
-            return container.saveToken(key, tokenInfo);
+            long expirationTimeMillis = System.currentTimeMillis() + validityMillis;
+            return container.saveToken(key, tokenInfo, expirationTimeMillis);
          }
       }.executeWith(chromatticLifeCycle);
    }
@@ -91,13 +94,13 @@ public class GadgetTokenInfoService extends AbstractTokenService<GadgetToken, Ba
          protected BasicOAuthStoreTokenIndex[] execute()
          {
             GadgetTokenContainer container = getGadgetTokenContainer();
-            Collection<GadgetTokenEntry> tokens = container.getGadgetTokens().values();
-            BasicOAuthStoreTokenIndex[] gadgetTokens = new BasicOAuthStoreTokenIndex[9];
-            int count = 0;
-            for(GadgetTokenEntry tokenEntry : tokens) {
-               gadgetTokens[count++] = tokenEntry.getKey();
+            Collection<GadgetTokenEntry> tokenEntries = container.getGadgetTokens().values();
+            List<BasicOAuthStoreTokenIndex> tokenHolder = new ArrayList<BasicOAuthStoreTokenIndex>();
+            for (GadgetTokenEntry tokenEntry : tokenEntries)
+            {
+               tokenHolder.add(tokenEntry.getKey());
             }
-            return gadgetTokens;
+            return tokenHolder.toArray(new BasicOAuthStoreTokenIndex[tokenHolder.size()]);
          }
       }.executeWith(chromatticLifeCycle);
    }

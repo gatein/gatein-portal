@@ -70,6 +70,6 @@ public abstract class GadgetTokenEntry
 
    public GadgetToken getToken()
    {
-      return new GadgetToken(getAccessToken(), getTokenSecret(), getServiceName(), getTokenExpireMillis());
+      return new GadgetToken(getAccessToken(), getTokenSecret(), getSessionHandle(), getTokenExpireMillis());
    }
 }

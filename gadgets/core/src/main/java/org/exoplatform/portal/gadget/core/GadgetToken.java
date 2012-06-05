@@ -15,7 +15,7 @@ public class GadgetToken extends TokenInfo implements Token
 
    public boolean isExpired()
    {
-      return false;
+      return System.currentTimeMillis() > getExpirationTimeMillis();
    }
 
    public long getExpirationTimeMillis()
