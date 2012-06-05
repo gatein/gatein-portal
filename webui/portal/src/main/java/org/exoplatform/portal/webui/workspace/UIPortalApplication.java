@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.webui.workspace;
 
-import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -64,8 +63,9 @@ import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMap;
 import org.gatein.portal.controller.resource.script.FetchMode;
+import org.gatein.portal.controller.resource.script.ScriptResource;
+import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
@@ -325,7 +325,7 @@ public class UIPortalApplication extends UIApplication
       return (modeState != NORMAL_MODE);
    }
 
-   public Map<String, Boolean> getScriptsURLs()
+   public Map<String, Boolean> getScripts()
    {
       PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
       
@@ -354,43 +354,39 @@ public class UIPortalApplication extends UIApplication
       log.debug("Resource ids to resolve: {}", requiredResources);
 
       //
-      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
+      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);      
+
+      LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
+
+      //
+      FetchMap<String> resources = new FetchMap<String>();
+      Map<ScriptResource, FetchMode> tmp = service.resolveIds(requiredResources);
+      for (ScriptResource rs : tmp.keySet())
+      {
+         ResourceId id = rs.getId();
+         resources.add(id.getScope() + "/" + id.getName(), tmp.get(rs));
+      }
+      resources.addAll(jsMan.getExtendedScriptURLs());
       
-      // We need the locale
-      Locale locale = prc.getLocale();
-
-      try
+      //
+      log.debug("Resolved resources for page: " + resources);
+      
+      // Here we get the list of stuff to load on demand or not
+      // according to the boolean value in the map
+      // Convert the map to what the js expects to have
+      for (Map.Entry<String, FetchMode> entry : resources.entrySet())
       {
-         LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
-
-         //
-         FetchMap<String> urls = new FetchMap<String>(service.resolveURLs(
-            prc.getControllerContext(),
-            requiredResources,
-            !PropertyManager.isDevelopping(),
-            !PropertyManager.isDevelopping(),
-            locale));
-         urls.addAll(jsMan.getExtendedScriptURLs());
-         
-         //
-         log.debug("Resolved URLS for page: {}", urls);
-         
-         // Here we get the list of stuff to load on demand or not
-         // according to the boolean value in the map
-         // Convert the map to what the js expects to have
-         for (Map.Entry<String, FetchMode> entry : urls.entrySet())
-         {
-            ret.put(entry.getKey(), entry.getValue() == FetchMode.ON_LOAD);
-         }
-
-         // todo : switch to debug later
-         return ret;
+         ret.put(entry.getKey(), entry.getValue() == FetchMode.ON_LOAD);
       }
-      catch (IOException e)
-      {
-         log.error("Could not resolve URLs", e);
-         return Collections.emptyMap();
-      }
+
+      return ret;
+   }
+   
+   public JSONObject getJSConfig() throws Exception 
+   {            
+      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
+      PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
+      return service.getJSConfig(prc.getControllerContext(), prc.getLocale());
    }
 
    public Collection<Skin> getPortalSkins()
@@ -771,7 +767,7 @@ public class UIPortalApplication extends UIApplication
    private void writeLoadingScripts(PortalRequestContext context) throws Exception
    {
       Writer w = context.getWriter();
-      Map<String, Boolean> scriptURLs = getScriptsURLs();
+      Map<String, Boolean> scriptURLs = getScripts();
       List<String> onloadJS = new LinkedList<String>();
       for (String url : scriptURLs.keySet()) 
       {

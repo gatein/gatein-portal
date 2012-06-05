@@ -67,11 +67,40 @@ eXo.require = function(module, jsLocation, callback, params, context) {
 };
 
 eXo.loadJS = function(paths, callback, params, context) {
-  if (!paths || !paths.length) return;  
-  var tmp = [], loader = eXo.core.AsyncLoader;
+  if (!paths || paths.length === undefined) return;
+  
+  var invokeCallback = function(args) {
+	  var ctx = context || {};
+	  var tmp = args || [];
+	  if (params) tmp = tmp.concat(params);
+	  callback.apply(ctx, tmp);
+  }
   
   paths = typeof paths === 'string' ? [paths] : paths;  
-  loader.loadJS(paths, callback, params, context);
+  var tmp = [], head = document.head || document.getElementsByTagName('head')[0];
+  var scripts = head.getElementsByTagName("script");
+  var reqContext = require.s.contexts._;
+  for (var i = 0; i < paths.length; i++) {
+	  //RequireJS can't check if an URL has been loaded by using module name before
+	  var loaded = false;
+	  for (var j = 0; j < scripts.length; j++) {		  
+		  var src = scripts[j].getAttribute("src");
+		  if (paths[i] === src || reqContext.config.paths[paths[i]] + ".js" === src) {
+			  loaded = true;
+			  break;
+		  }		  
+	  }
+	  if (!loaded && reqContext.urlFetched[paths[i]] === undefined) tmp.push(paths[i]);		  
+  }
+  if (tmp.length) {
+	  require(tmp, function() {
+		  if (typeof callback == "function") {
+			  invokeCallback(arguments);
+		  } 
+	  });		  
+  } else {
+	  invokeCallback();
+  }  
   
   eXo.session.startItv();
 } ;

@@ -268,6 +268,12 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    }
 
    @Override
+   public Set<ResourceId> getDependencies()
+   {
+      return dependencies;
+   }
+
+   @Override
    public String toString()
    {
       return "ScriptResource[id=" + id + "]";

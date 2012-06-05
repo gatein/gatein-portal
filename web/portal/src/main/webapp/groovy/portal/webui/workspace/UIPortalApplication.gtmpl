@@ -15,9 +15,11 @@
 	def portletSkins = uicomponent.getPortletSkins() ;
 	def scriptsURLs = rcontext.getAttribute("eXo.portal.scriptsURLs");
 	def headerScripts = new LinkedList();	
-	for (path in scriptsURLs.keySet()) {
-	   if (!scriptsURLs.get(path)) {
-	      headerScripts.add(path);
+	def jsConfig = uicomponent.getJSConfig();
+	for (module in scriptsURLs.keySet()) {
+	   if (!scriptsURLs.get(module)) {
+	      def url = jsConfig.get("paths").get(module);
+	      headerScripts.add(url != null ? url + ".js" : module);	      
 	   }
 	}
 	def lang = uicomponent.getLocale().getLanguage();
@@ -52,6 +54,9 @@
 		%>
 			<link id="${portletSkin.id}" rel="stylesheet" type="text/css" href= "$url" />
 		<%}%>
+		<script type="text/javascript">
+			var require = <%=jsConfig%>;
+		</script>
 		<% for (url in headerScripts) { %>
             <script type="text/javascript" src="<%= url %>"></script>
 		<% } %>
@@ -59,7 +64,7 @@
 		<script type="text/javascript">			
 		<% if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) { %>
 						eXo.developing = true ;
-		<% } %>
+		<% } %>		
 		<% for (url in headerScripts) { %>
 	        eXo.core.AsyncLoader.addLoadedJS('$url');
 		<% } %>	

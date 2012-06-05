@@ -25,6 +25,7 @@ import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -132,14 +133,17 @@ public class ScriptGraph
                map.put(id, fetch = new ScriptFetch(resource, mode));
                
                // Recursively add the dependencies
-               for (ResourceId dependencyId : resource.dependencies)
+               if (FetchMode.IMMEDIATE.equals(mode))
                {
-                  ScriptFetch dependencyFetch = traverse(map, dependencyId, mode);
-                  if (dependencyFetch != null)
+                  for (ResourceId dependencyId : resource.dependencies)
                   {
-                     dependencyFetch.dependsOnMe.add(fetch);
-                     fetch.dependencies.add(dependencyFetch);
-                  }
+                     ScriptFetch dependencyFetch = traverse(map, dependencyId, mode);
+                     if (dependencyFetch != null)
+                     {
+                        dependencyFetch.dependsOnMe.add(fetch);
+                        fetch.dependencies.add(dependencyFetch);
+                     }
+                  }                  
                }
             }
             return fetch;            
@@ -161,7 +165,7 @@ public class ScriptGraph
       return resources.get(scope).get(name);
    }
 
-   public Iterable<ScriptResource> getResources(ResourceScope scope)
+   public Collection<ScriptResource> getResources(ResourceScope scope)
    {
       return resources.get(scope).values();
    }

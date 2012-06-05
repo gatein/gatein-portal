@@ -562,7 +562,7 @@ function HttpResponseHandler() {
 	  var loadingScripts = response.loadingScripts;
 	  var immediateScripts = loadingScripts ? loadingScripts.immediateScripts : []; 
 	  if (immediateScripts.length) {
-		  eXo.core.AsyncLoader.loadJS(immediateScripts, function() {
+		  eXo.loadJS(immediateScripts, function() {
 			  immediateScripts.clear();
 			  instance.ajaxResponse.apply(this, [request, response]);
 		  }, null, this);
@@ -607,7 +607,7 @@ function HttpResponseHandler() {
 		  //After handle html response. We need to remove extra markup header of removed portlets
 		  cleanHtmlHead();
 		  var onloadScripts = loadingScripts ? loadingScripts.onloadScripts : [];
-		  eXo.core.AsyncLoader.loadJS(onloadScripts, function() {		  
+		  eXo.loadJS(onloadScripts, function() {		  
 			  instance.executeScript(response.script);		  
 			  /**
 			   * Clears the instance.to timeout if the request takes less time than expected to get response
@@ -658,7 +658,7 @@ function HttpResponseHandler() {
 * It is simply a dispatcher method that fills some init fields before 
 * calling the doRequest() method
 */
-function ajaxGet(url, callback) {
+window.ajaxGet = function(url, callback) {
   if (!callback) callback = null ;
   doRequest("Get", url, null, callback);
 }
@@ -667,7 +667,7 @@ function ajaxGet(url, callback) {
  * Do a POST request in AJAX with given <code>url</code> and <code>queryString</code>.
  * The call is delegated to the doRequest() method with a callback function
  */
-function ajaxPost(url, queryString, callback) {
+window.ajaxPost = function(url, queryString, callback) {
   if (!callback) callback = null ;
   doRequest("POST", url, queryString, callback) ;
 }
@@ -684,7 +684,7 @@ function ajaxPost(url, queryString, callback) {
 *    ajaxResponse, ajaxLoading, ajaxTimeout are associated with the one from
 *    the AjaxRequest and will be called by the XHR during the process method 
 */
-function doRequest(method, url, queryString, callback) {
+window.doRequest = function(method, url, queryString, callback) {
   request = new AjaxRequest(method, url, queryString) ;
   handler = new HttpResponseHandler() ;
   request.onSuccess = handler.ajaxResponse ;
@@ -715,7 +715,7 @@ function ajaxAbort() {
  * @param {boolean} async - asynchronous or none
  * @return {String} response text if request is not async
  */
-function ajaxAsyncGetRequest(url, async) {
+window.ajaxAsyncGetRequest = function(url, async) {
 	return ajaxRequest("GET", url, async);
 }
 

@@ -18,7 +18,7 @@
  */
 
 if (eXo.jQConflict) {
-  var gj = jQuery.noConflict(true);
+  window.gj = jQuery.noConflict(true);
 } else {
-  var gj = jQuery.sub();
+  window.gj = jQuery.sub();
 }

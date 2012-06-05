@@ -121,6 +121,10 @@
          <name>eXo.core.Loader</name>
          <path>/javascript/eXo/core/AsyncLoader.js</path>
       </script>
+      <script>
+      	<name>eXo.core.RequireJS</name>
+         <path>/javascript/eXo/core/require.js</path>
+      </script>
    </scripts>
 
    <module>
