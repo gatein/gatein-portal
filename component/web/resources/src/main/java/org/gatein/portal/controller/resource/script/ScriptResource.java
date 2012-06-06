@@ -151,10 +151,17 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    {
       ScriptResource dependency = graph.getResource(dependencyId);
 
-      // Detect cycle
-      if (dependency != null && dependency.closure.contains(id))
+      if (dependency != null)
       {
-         throw new IllegalStateException("Going to create a cycle");
+         if (!fetchMode.equals(dependency.getFetchMode()))
+         {
+            throw new IllegalStateException("ScriptResource " + id + " can't depend on " + dependency.getId() + ". They have difference fetchMode");
+         }
+         else if (dependency.closure.contains(id))
+         {
+            // Detect cycle
+            throw new IllegalStateException("Going to create a cycle");            
+         }
       }
 
       // That is important to make closure independent from building order of graph nodes.

@@ -122,7 +122,7 @@
    </javascript>
    <javascript>
       <param>
-         <portal-name>site2</portal-name>
+         <portal-name>site3</portal-name>
          <js-module>js.test6</js-module>
          <js-path>/js/test6.js</js-path>
          <js-priority>1</js-priority>

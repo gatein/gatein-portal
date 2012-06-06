@@ -27,8 +27,6 @@ import org.gatein.portal.controller.resource.script.FetchMode;
 import org.gatein.portal.controller.resource.script.ScriptGraph;
 import org.gatein.portal.controller.resource.script.ScriptResource;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -134,7 +132,14 @@ public class TestScriptGraph extends AbstractGateInTest
       ScriptResource a = graph.addResource(A, FetchMode.ON_LOAD);
       ScriptResource b = graph.addResource(B, FetchMode.IMMEDIATE);
       ScriptResource c = graph.addResource(C, FetchMode.IMMEDIATE);
-      a.addDependency(C);
+      try
+      {
+         a.addDependency(C);
+         fail();
+      }
+      catch (IllegalStateException e) 
+      {
+      }
       b.addDependency(C);
 
       //
@@ -215,21 +220,20 @@ public class TestScriptGraph extends AbstractGateInTest
       ScriptGraph graph = new ScriptGraph();
       ScriptResource a = graph.addResource(A, FetchMode.IMMEDIATE);
       ScriptResource b = graph.addResource(B, FetchMode.ON_LOAD);
-      a.addDependency(B);
+      try
+      {
+         a.addDependency(B);
+         fail();
+      }
+      catch(IllegalStateException ex)
+      {         
+      }
 
       //
       LinkedHashMap<ResourceId, FetchMode> pairs = new LinkedHashMap<ResourceId, FetchMode>();
       pairs.put(A, null);
-      Map<ScriptResource, FetchMode> test = graph.resolve(pairs);
-      assertResultOrder(test.keySet());
-      assertEquals(Tools.toSet(a), test.keySet());
-      assertEquals(FetchMode.IMMEDIATE, test.get(a));
-
-      //
-      pairs = new LinkedHashMap<ResourceId, FetchMode>();
-      pairs.put(A, null);
       pairs.put(B, null);
-      test = graph.resolve(pairs);
+      Map<ScriptResource, FetchMode> test = graph.resolve(pairs);
       assertResultOrder(test.keySet());
       assertEquals(Tools.toSet(a, b), test.keySet());
       assertEquals(FetchMode.IMMEDIATE, test.get(a));
@@ -259,7 +263,14 @@ public class TestScriptGraph extends AbstractGateInTest
       ScriptGraph graph = new ScriptGraph();
       ScriptResource a = graph.addResource(A, FetchMode.ON_LOAD);
       ScriptResource b = graph.addResource(B, FetchMode.IMMEDIATE);
-      a.addDependency(B);
+      try 
+      {
+         a.addDependency(B);
+         fail();
+      }
+      catch(IllegalStateException ex)
+      {         
+      }
 
       //
       LinkedHashMap<ResourceId, FetchMode> pairs = new LinkedHashMap<ResourceId, FetchMode>();
@@ -333,6 +344,72 @@ public class TestScriptGraph extends AbstractGateInTest
       }
    }
 
+   public void testCrossDependency()
+   {      
+      //Scripts and Module can't depend on each other
+      ScriptGraph graph = new ScriptGraph();
+      ScriptResource a = graph.addResource(A, FetchMode.IMMEDIATE);      
+      graph.addResource(B, FetchMode.ON_LOAD);
+      try
+      {
+         a.addDependency(B);
+         fail();
+      }
+      catch (IllegalStateException ignore)
+      {
+      }
+      
+      graph = new ScriptGraph();
+      a = graph.addResource(A, FetchMode.ON_LOAD);      
+      a.addDependency(B);
+      try
+      {
+         graph.addResource(B, FetchMode.IMMEDIATE);
+         fail();
+      }
+      catch (IllegalStateException ignore)
+      {
+      }      
+   }
+   
+   public void testDuplicateResource()
+   {      
+      ScriptGraph graph = new ScriptGraph();
+      ResourceId shared = new ResourceId(ResourceScope.SHARED, "foo");
+      
+      graph.addResource(shared);      
+      try
+      {
+         graph.addResource(shared);
+         fail();
+      }
+      catch (IllegalStateException ignore)
+      {
+      }
+      
+      ResourceId portlet = new ResourceId(ResourceScope.PORTLET, "foo");
+      graph.addResource(portlet);
+      try
+      {
+         graph.addResource(portlet);
+         fail();
+      }
+      catch (IllegalStateException ignore)
+      {
+      }
+      
+      ResourceId portal = new ResourceId(ResourceScope.PORTAL, "foo");
+      graph.addResource(portal);
+      try
+      {
+         graph.addResource(portal);
+         fail();
+      }
+      catch (IllegalStateException ignore)
+      {
+      }      
+   }
+   
    /**
     * Test that each script of the test collection has no following script that belongs
     * to its closure.

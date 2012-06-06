@@ -19,8 +19,6 @@
 
 package org.gatein.portal.controller.resource.script;
 
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
@@ -38,8 +36,6 @@ import java.util.Map;
  */
 public class ScriptGraph
 {
-
-   private static final Log log = ExoLogger.getExoLogger(ScriptGraph.class);
    
    /** . */
    final EnumMap<ResourceScope, Map<String, ScriptResource>> resources;
@@ -202,6 +198,21 @@ public class ScriptGraph
       }
 
       //
+      if (ResourceScope.SHARED.equals(id.getScope()))
+      {
+         for (Map<String, ScriptResource> mp : resources.values())
+         {
+            for (ScriptResource rs : mp.values())
+            {
+               if (rs.getDependencies().contains(id) && !rs.getFetchMode().equals(fetchMode))
+               {
+                  throw new IllegalStateException("ScriptResource " + rs.getId() + " can't depend on " + id + ". They have difference fetchMode");
+               }
+            }                     
+         }
+      }
+      
+      //
       Map<String, ScriptResource> map = resources.get(id.getScope());
       String name = id.getName();
       ScriptResource resource = map.get(name);
@@ -211,10 +222,9 @@ public class ScriptGraph
       }
       else if (!(id.getScope().equals(ResourceScope.SHARED) && JavascriptConfigParser.LEGACY_JAVA_SCRIPT.equals(name)))
       {
-         log.error("Duplicate ResourceId : {}, later resource definition will be ignored", id);
-         resource = null; 
-      }      
-         
+         throw new IllegalStateException("Duplicate ResourceId : " + id + ", later resource definition will be ignored");
+      }                     
+      
       return resource;            
    }
    
