@@ -289,7 +289,8 @@
    </module>
 
    <module>
-      <name>webuiExt</name>
+      <name>webui-ext</name>
+      <as>webuiExt</as>
       <script>
          <name>eXo.webui.UICalendar</name>
          <path>/javascript/eXo/webui/UICalendar.js</path>

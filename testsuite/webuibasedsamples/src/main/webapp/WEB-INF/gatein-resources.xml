@@ -44,7 +44,7 @@
 			  <module>webui</module>
 			</depends>
 			<depends>
-			  <module>webuiExt</module>
+			  <module>webui-ext</module>
 			</depends>
 		 </module>
     </portlet>

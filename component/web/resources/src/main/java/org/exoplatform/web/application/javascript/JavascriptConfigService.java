@@ -258,8 +258,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          String url = urlMap.keySet().iterator().next();
          
          //
-         ResourceId id = resource.getId();
-         String name = id.getScope() + "/" + id.getName(); 
+         String name = resource.getId().toString(); 
          paths.put(name, url.substring(0, url.length() - ".js".length()));
          
          //
@@ -267,11 +266,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          if (FetchMode.IMMEDIATE.equals(resource.getFetchMode()) || 
                   (modules.size() > 0 && modules.get(0) instanceof Module.Remote))
          {
-            JSONArray deps = new JSONArray();
-            for (ResourceId dep : resource.getDependencies())
-            {
-               deps.put(dep.getScope() + "/" + dep.getName());
-            }
+            JSONArray deps = new JSONArray(resource.getDependencies());
             
             if (deps.length() > 0)
             {
