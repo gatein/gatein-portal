@@ -36,7 +36,6 @@
 	        <name>cms.configuration</name>
 	        <description>configuration for the cms path</description>
 	        <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
-	        	<field  name="repository"><string>repository</string></field>
 	        	<field name="workspaces">
 	          	<collection type="java.util.ArrayList">
 	          		<value><string>portal-system</string></value>	          		               
