@@ -45,7 +45,7 @@ public class JavascriptTask
    {
       for (ScriptResourceDescriptor desc : descriptors)
       {
-         ScriptResource resource = service.scripts.addResource(desc.id, desc.fetchMode);
+         ScriptResource resource = service.scripts.addResource(desc.id, desc.fetchMode, desc.alias);
          if (resource != null)
          {
             for (Javascript module : desc.modules)
@@ -58,7 +58,7 @@ public class JavascriptTask
             }
             for (DependencyDescriptor dependency : desc.dependencies)
             {
-               resource.addDependency(dependency.getResourceId());
+               resource.addDependency(dependency.getResourceId(), dependency.getAlias());
             }            
          }
       }

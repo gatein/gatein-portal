@@ -130,10 +130,6 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    {
       ScriptResource resource = getResource(resourceId);
       
-      //
-      String resName = resourceId.getName();
-      resName = resName.substring(resName.lastIndexOf("/") + 1);
-      
       if (resource != null)
       {
          List<Module> modules = new ArrayList<Module>(resource.getModules());
@@ -145,32 +141,21 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          boolean isModule = FetchMode.ON_LOAD.equals(resource.getFetchMode());
          if (isModule)
          {
-            buffer.append("define('");
-            buffer.append(resourceId.getScope()).append("/").append(resourceId.getName());
-            buffer.append("', [");
-            for (ResourceId dependId : resource.getDependencies())
-            {
-               buffer.append("'");
-               buffer.append(dependId.getScope()).append("/").append(dependId.getName());
-               buffer.append("',");
-            }            
-            if (resource.getDependencies().size() > 0) {
-               buffer.deleteCharAt(buffer.length() - 1);
-            }
-            
-            buffer.append("], function(");
+            buffer.append("define('").append(resourceId).append("', ");
+            buffer.append(new JSONArray(resource.getDependencies()));            
+            buffer.append(", function(");
             for (ResourceId resId : resource.getDependencies()) 
             {               
-               String depName = resId.getName();
-               buffer.append(depName.substring(depName.lastIndexOf("/") + 1)).append(",");
+               String alias = resource.getDependencyAlias(resId);
+               buffer.append(alias == null ? getResource(resId).getAlias() : alias).append(",");
             }
             if (resource.getDependencies().size() > 0) 
             {
                buffer.deleteCharAt(buffer.length() - 1);
-            }                        
+            }
             
             //                        
-            buffer.append(") { var ").append(resName).append(" = {};");
+            buffer.append(") { var ").append(resource.getAlias()).append(" = {};");
          }
          
          //
@@ -183,32 +168,35 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                {                   
                   buffer.append("var tmp = function() {");
                }
-               buffer.append("// Begin ").append(js.getName()).append("\n");
-               
+               buffer.append("// Begin ").append(js.getName()).append("\n");                          
+
                //
                readers.add(new StringReader(buffer.toString()));                  
                buffer.setLength(0);                  
                readers.add(jScript);
-               
+
                //
                buffer.append("// End ").append(js.getName()).append("\n");
                if (isModule) 
                {
                   buffer.append("}();for(var prop in tmp){");
-                  buffer.append(resName).append("[prop]=tmp[prop];").append("}");
+                  buffer.append(resource.getAlias()).append("[prop]=tmp[prop];").append("}");
                }
-            }
-         }
-         
+            }                                             
+         }         
+            
          if (isModule)
          {
-            buffer.append("return ").append(resName).append(";});");     
+            buffer.append("return ").append(resource.getAlias()).append(";});");     
          }
          readers.add(new StringReader(buffer.toString()));
          
          return new CompositeReader(readers);
       }
-      return null;
+      else
+      {
+         return null;         
+      }
    }
    
    public Map<String, FetchMode> resolveURLs(

@@ -66,15 +66,23 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    private final  Map<Locale, Map<QualifiedName, String>> minParametersMap;
 
    /** . */
-   final HashSet<ResourceId> dependencies;
+   final HashMap<ResourceId, String> dependencies;
 
    /** . */
    final HashSet<ResourceId> closure;
 
    /** . */
    FetchMode fetchMode;
+   
+   /** . */
+   final String alias;
 
    ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode)
+   {
+      this(graph, id, fetchMode, null);
+   }
+
+   ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode, String alias)
    {
       super(id);
 
@@ -97,12 +105,19 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       this.graph = graph;
       this.modules = new ArrayList<Module>();
       this.closure = new HashSet<ResourceId>();
-      this.dependencies = new HashSet<ResourceId>();
+      this.dependencies = new HashMap<ResourceId, String>();
       this.fetchMode = fetchMode;
       this.parametersMap = new HashMap<Locale, Map<QualifiedName, String>>();
       this.minParametersMap = new HashMap<Locale, Map<QualifiedName, String>>();
+      
+      if (alias == null)
+      {
+         String resName = id.getName();
+         alias = resName.substring(resName.lastIndexOf("/") + 1);         
+      }
+      this.alias = alias;
    }
-
+   
    public boolean isEmpty()
    {
       return modules.isEmpty();
@@ -128,6 +143,11 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    }
 
    public void addDependency(ResourceId dependencyId)
+   {
+      addDependency(dependencyId, null);
+   }
+
+   public void addDependency(ResourceId dependencyId, String alias)
    {
       ScriptResource dependency = graph.getResource(dependencyId);
 
@@ -159,9 +179,9 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       }                
       
       //
-      dependencies.add(dependencyId);
+      dependencies.put(dependencyId, alias);
    }
-
+   
    public Set<ResourceId> getClosure()
    {
       return closure;
@@ -270,8 +290,22 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    @Override
    public Set<ResourceId> getDependencies()
    {
-      return dependencies;
+      return dependencies.keySet();
    }
+   
+   public String getDependencyAlias(ResourceId id)
+   {
+      return dependencies.get(id);
+   }
+
+   /**
+    * If no alias was set, return the last part of the resource name
+    * If resourceID is null, return null
+    */
+   public String getAlias()
+   {
+      return alias;
+   }   
 
    @Override
    public String toString()

@@ -135,7 +135,7 @@ public class ScriptGraph
                // Recursively add the dependencies
                if (FetchMode.IMMEDIATE.equals(mode))
                {
-                  for (ResourceId dependencyId : resource.dependencies)
+                  for (ResourceId dependencyId : resource.dependencies.keySet())
                   {
                      ScriptFetch dependencyFetch = traverse(map, dependencyId, mode);
                      if (dependencyFetch != null)
@@ -175,16 +175,22 @@ public class ScriptGraph
       return addResource(id, FetchMode.IMMEDIATE);
    }
 
+   public ScriptResource addResource(ResourceId id, FetchMode fetchMode) throws NullPointerException
+   {
+      return addResource(id, fetchMode, null);
+   }
+   
    /**
     * Add a resource to the graph if available.  
     * return null if ResourceID is duplicated
     * 
     * @param id the resource id
     * @param fetchMode the resource fetch mode
+    * @param alias default alias
     * @return the resource
-    * @throws NullPointerException if any argument is null
+    * @throws NullPointerException if id or fetchMode is null
     */
-   public ScriptResource addResource(ResourceId id, FetchMode fetchMode) throws NullPointerException
+   public ScriptResource addResource(ResourceId id, FetchMode fetchMode, String alias) throws NullPointerException
    {
       if (id == null)
       {
@@ -201,7 +207,7 @@ public class ScriptGraph
       ScriptResource resource = map.get(name);
       if (resource == null)
       {
-         map.put(name, resource = new ScriptResource(this, id, fetchMode));
+         map.put(name, resource = new ScriptResource(this, id, fetchMode, alias));
       }
       else if (!(id.getScope().equals(ResourceScope.SHARED) && JavascriptConfigParser.LEGACY_JAVA_SCRIPT.equals(name)))
       {
