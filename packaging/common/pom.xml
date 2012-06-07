@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     Copyright (C) 2009 eXo Platform SAS.
@@ -19,18 +18,17 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
 -->
-<portlet-app version="1.0" xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
-             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-             xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
 
-  <!-- This filter collects runtime request statistics -->
-  <filter>
-    <filter-name>org.exoplatform.portal.application.ApplicationMonitoringFilter</filter-name>
-    <filter-class>org.exoplatform.portal.application.ApplicationMonitoringFilter</filter-class>
-    <lifecycle>ACTION_PHASE</lifecycle>
-    <lifecycle>RENDER_PHASE</lifecycle>
-    <lifecycle>EVENT_PHASE</lifecycle>
-    <lifecycle>RESOURCE_PHASE</lifecycle>
-  </filter>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <parent>
+      <groupId>org.exoplatform.portal</groupId>
+      <artifactId>exo.portal.packaging</artifactId>
+      <version>3.4.0-GA-SNAPSHOT</version>
+   </parent>
 
-</portlet-app>
+   <modelVersion>4.0.0</modelVersion>
+   <artifactId>exo.portal.packaging.common</artifactId>
+   <packaging>jar</packaging>
+   <name>Common files used for packaging</name>
+
+</project>

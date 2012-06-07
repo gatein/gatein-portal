@@ -12,7 +12,7 @@
       <target name="copy-dependencies">
         <xsl:element name="copy">
           <xsl:attribute name="todir"><xsl:value-of select="$lib.dir"/></xsl:attribute>
-          <xsl:for-each select="//mvn:dependencies/mvn:dependency[count(mvn:type)=0 or mvn:type/text()='jar']">
+          <xsl:for-each select="//mvn:dependencies/mvn:dependency[(count(mvn:type)=0 or mvn:type/text()='jar') and mvn:artifactId/text()!='exo.portal.packaging.common']">
             <xsl:element name="fileset">
               <xsl:attribute name="refid"><xsl:value-of select="./mvn:groupId"/>:<xsl:value-of select="./mvn:artifactId"/>:jar</xsl:attribute>
             </xsl:element>

@@ -40,6 +40,7 @@
                 </property>
             </activation>
             <modules>
+                <module>common</module>
                 <module>tomcat</module>
                 <module>jetty</module>
                 <module>jboss-as5</module>
@@ -56,6 +57,7 @@
                 </property>
             </activation>
             <modules>
+                <module>common</module>
                 <module>tomcat</module>
             </modules>
         </profile>
@@ -68,6 +70,7 @@
                 </property>
             </activation>
             <modules>
+                <module>common</module>
                 <module>tomcat</module>
             </modules>
         </profile>
@@ -80,6 +83,7 @@
                 </property>
             </activation>
             <modules>
+                <module>common</module>
                 <module>tomcat</module>
             </modules>
         </profile>
@@ -92,6 +96,7 @@
                 </property>
             </activation>
             <modules>
+                <module>common</module>
                 <module>jetty</module>
             </modules>
         </profile>
@@ -104,6 +109,7 @@
                 </property>
             </activation>
             <modules>
+              <module>common</module>
               <module>jboss-as5</module>
               <module>jboss-as6</module>
               <module>jboss-as7</module>
@@ -118,6 +124,7 @@
                 </property>
             </activation>
             <modules>
+                <module>common</module>
                 <module>jboss-as6</module>
             </modules>
         </profile>
@@ -130,6 +137,7 @@
                 </property>
             </activation>
             <modules>
+                <module>common</module>
                 <module>jboss-as5</module>
             </modules>
         </profile>
@@ -142,6 +150,7 @@
                 </property>
             </activation>
             <modules>
+                <module>common</module>
                 <module>jboss-as7</module>
             </modules>
         </profile>

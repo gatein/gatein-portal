@@ -146,6 +146,12 @@
          <type>war</type>
       </dependency>
 
+      <!-- Need to declare this artifact to have access to its path from package.xml -->
+      <dependency>
+        <groupId>org.exoplatform.portal</groupId>
+        <artifactId>exo.portal.packaging.common</artifactId>
+      </dependency>
+
    </dependencies>
 
    <build>

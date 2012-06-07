@@ -13,7 +13,7 @@
       <xsl:comment>Generated file</xsl:comment>
       <project name="copy-dependencies">
          <target name="copy-dependencies">
-            <xsl:for-each select="//mvn:dependencies/mvn:dependency">
+            <xsl:for-each select="//mvn:dependencies/mvn:dependency[mvn:artifactId/text()!='exo.portal.packaging.common']">
                <xsl:variable name="dest.name">
                   <xsl:for-each select="processing-instruction()[name()='move']">
                      <xsl:value-of select="."/>

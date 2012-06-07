@@ -63,6 +63,13 @@
          <fileset dir="${maven.project.basedir}/../../../component/common/src/main/java/conf" includes="configuration-jetty.properties" />
       </copy>
 
+      <!-- Extract common config from packaging.common artifact to gatein/conf -->
+      <unzip src="${org.exoplatform.portal:exo.portal.packaging.common:jar}" dest="${maven.project.build.directory}/jetty/gatein/conf">
+        <patternset>
+          <exclude name="META-INF/"/>
+        </patternset>
+      </unzip>
+
       <!-- File permissions -->
       <!--chmod perm="0644" type="file" dir="${maven.project.build.directory}/jetty/bin" excludes="**/*.sh" /-->
       <chmod perm="0755" type="file" dir="${maven.project.build.directory}/jetty/bin" includes="**/*.sh" />

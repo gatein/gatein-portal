@@ -64,6 +64,13 @@
         file="${maven.project.basedir}/src/main/resources/conf/integration/web.xml"
         todir="${maven.project.build.directory}/tomcat6/webapps/integration/WEB-INF"/>
 
+    <!-- Extract common config from packaging.common artifact to gatein/conf -->
+    <unzip src="${org.exoplatform.portal:exo.portal.packaging.common:jar}" dest="${maven.project.build.directory}/tomcat6/gatein/conf">
+      <patternset>
+        <exclude name="META-INF/"/>
+      </patternset>
+    </unzip>
+
     <!-- File permissions -->
     <!-- Excluded due to ARG_MAX limitation on Mac OS X -->
     <!--chmod perm="0644" type="file" dir="${project.build.directory}/tomcat6" excludes="**/*.sh"/-->

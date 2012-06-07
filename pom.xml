@@ -573,6 +573,11 @@
           <version>3.4.0-GA-SNAPSHOT</version>
           <type>test-jar</type>
         </dependency>
+        <dependency>
+          <groupId>org.exoplatform.portal</groupId>
+          <artifactId>exo.portal.packaging.common</artifactId>
+          <version>${project.version}</version>
+        </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.web.portal</artifactId>
