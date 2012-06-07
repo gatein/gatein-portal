@@ -21,12 +21,8 @@ package org.exoplatform.portal.webui.application;
 
 import org.exoplatform.commons.utils.ExceptionUtil;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.pc.ExoPortletState;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
-import org.exoplatform.portal.pom.spi.wsrp.WSRP;
-import org.exoplatform.portal.pom.spi.wsrp.WSRPPortletStateType;
-import org.exoplatform.portal.portlet.PortletExceptionHandleService;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIMaskWorkspace;
@@ -34,7 +30,6 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
-import org.exoplatform.services.portletcontainer.PortletContainerException;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
@@ -50,25 +45,17 @@ import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.validator.NotHTMLTagValidator;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.exoplatform.webui.form.validator.NullFieldValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
 import org.gatein.pc.api.Mode;
-import org.gatein.pc.api.StatefulPortletContext;
 import org.gatein.pc.api.info.PreferenceInfo;
 import org.gatein.pc.api.invocation.PortletInvocation;
 import org.gatein.pc.api.invocation.RenderInvocation;
-import org.gatein.pc.api.invocation.response.ErrorResponse;
-import org.gatein.pc.api.invocation.response.FragmentResponse;
 import org.gatein.pc.api.invocation.response.PortletInvocationResponse;
-import org.gatein.pc.api.spi.InstanceContext;
-import org.gatein.pc.api.state.AccessMode;
 import org.gatein.pc.api.state.PropertyChange;
-import org.gatein.pc.portlet.impl.spi.*;
 
 import javax.portlet.PortletMode;
-import javax.servlet.http.Cookie;
 
 import java.io.StringWriter;
 import java.util.*;
@@ -176,9 +163,14 @@ public class UIPortletForm extends UIFormTabPane
       }
    }
 
-   public void setValues(final UIPortlet uiPortlet) throws Exception
+   public boolean setValues(final UIPortlet uiPortlet) throws Exception
    {
       uiPortlet_ = uiPortlet;
+      org.gatein.pc.api.Portlet portlet = uiPortlet.getProducedOfferedPortlet();
+      if (portlet == null)
+      {
+         return false;
+      }
       invokeGetBindingBean(uiPortlet_);
       String icon = uiPortlet.getIcon();
 
@@ -195,8 +187,7 @@ public class UIPortletForm extends UIFormTabPane
       }
       else
       {
-         Map<String, String> portletPreferenceMaps = new HashMap<String, String>();
-         org.gatein.pc.api.Portlet portlet = uiPortlet.getProducedOfferedPortlet();
+         Map<String, String> portletPreferenceMaps = new HashMap<String, String>();         
          Set<String> keySet = portlet.getInfo().getPreferences().getKeys();
 
          for (String key : keySet)
@@ -239,11 +230,13 @@ public class UIPortletForm extends UIFormTabPane
 
             uiPortletPrefSet.setRendered(true);
             setSelectedTab(FIELD_PORTLET_PREF);
-            return;
          }
-
-         setSelectedTab("PortletSetting");
+         else
+         {
+            setSelectedTab("PortletSetting");            
+         }
       }
+      return true;
    }
 
    private void savePreferences() throws Exception

@@ -51,6 +51,7 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
@@ -950,14 +951,23 @@ public class UIPortletActionListener
    {
       public void execute(Event<UIPortlet> event) throws Exception
       {
+         UIPortlet uiPortlet = event.getSource();
          UIPortalApplication uiApp = Util.getUIPortalApplication();
          UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
-         uiMaskWS.setUpdated(true);
-         UIPortlet uiPortlet = event.getSource();
          UIPortletForm uiPortletForm = uiMaskWS.createUIComponent(UIPortletForm.class, null, null);
-         uiPortletForm.setValues(uiPortlet);
-         uiMaskWS.setWindowSize(800, -1);
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);
+         
+         if (uiPortletForm.setValues(uiPortlet) == false)
+         {
+            uiMaskWS.setUIComponent(null);
+            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+            context.getUIApplication().addMessage((new ApplicationMessage("UIPortlet.message.portletDeleted", null, ApplicationMessage.ERROR)));            
+         }
+         else
+         {
+            uiMaskWS.setUpdated(true);
+            uiMaskWS.setWindowSize(800, -1);
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);            
+         }
       }
    }
 
