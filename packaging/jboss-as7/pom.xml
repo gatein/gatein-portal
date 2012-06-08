@@ -15,7 +15,6 @@
       <version.jboss.as.release>7.1.0.Final</version.jboss.as.release>
       <version.jboss.as>7.1.0.Final</version.jboss.as>
       <version.org.jboss.vfs>3.1.0.Final</version.org.jboss.vfs>
-      <version.org.gatein.wci.as7>2.2.0-Beta01</version.org.gatein.wci.as7>
       <org.exoplatform.kernel.version>2.3.6-GA-JBAS7</org.exoplatform.kernel.version>
       <version.org.gatein.naming>1.0.0.Final</version.org.gatein.naming>
       <server.name>jboss-as-${version.jboss.as}</server.name>
@@ -72,21 +71,6 @@
             <artifactId>jboss-vfs</artifactId>
             <version>${version.org.jboss.vfs}</version>
          </dependency>
-         <dependency>
-            <groupId>org.gatein.wci</groupId>
-            <artifactId>wci-jboss7</artifactId>
-            <version>${version.org.gatein.wci.as7}</version>
-         </dependency>
-         <dependency>
-            <groupId>org.gatein.wci</groupId>
-            <artifactId>wci-wci</artifactId>
-            <version>${version.org.gatein.wci.as7}</version>
-         </dependency>
-         <!--dependency>
-            <groupId>org.exoplatform.kernel</groupId>
-            <artifactId>exo.kernel.container</artifactId>
-            <version>${version.exo.kernel.as7}</version>
-         </dependency-->
       </dependencies>
    </dependencyManagement>
    <modules>

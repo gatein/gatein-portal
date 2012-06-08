@@ -28,6 +28,7 @@ import org.gatein.integration.jboss.as7.deployment.GateInStructureDeploymentProc
 import org.gatein.integration.jboss.as7.deployment.PortletWarClassloadingDependencyProcessor;
 import org.gatein.integration.jboss.as7.deployment.PortletWarDeploymentInitializingProcessor;
 import org.gatein.integration.jboss.as7.deployment.WarDependenciesDeploymentProcessor;
+import org.gatein.wci.jboss.GateInWCIService;
 import org.jboss.as.controller.AbstractBoottimeAddStepHandler;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
@@ -35,7 +36,10 @@ import org.jboss.as.controller.ServiceVerificationHandler;
 import org.jboss.as.server.AbstractDeploymentChainStep;
 import org.jboss.as.server.DeploymentProcessorTarget;
 import org.jboss.as.server.deployment.Phase;
+import org.jboss.as.web.WebServer;
+import org.jboss.as.web.WebSubsystemServices;
 import org.jboss.dmr.ModelNode;
+import org.jboss.msc.service.ServiceBuilder;
 import org.jboss.msc.service.ServiceController;
 
 import java.util.List;
@@ -67,9 +71,9 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
       // DO NOTHING
    }
 
-   protected void performBoottime(OperationContext context, ModelNode operation, ModelNode model,
-                                  ServiceVerificationHandler verificationHandler,
-                                  List<ServiceController<?>> newControllers) throws OperationFailedException
+   protected void performBoottime(final OperationContext context, final ModelNode operation, final ModelNode model,
+                                  final ServiceVerificationHandler verificationHandler,
+                                  final List<ServiceController<?>> newControllers) throws OperationFailedException
    {
       context.addStep(new AbstractDeploymentChainStep()
       {
@@ -88,6 +92,20 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
             processorTarget.addDeploymentProcessor(Phase.CLEANUP, CLEANUP_ATTACHMENTS, new GateInCleanupDeploymentProcessor());
          }
       }, OperationContext.Stage.RUNTIME);
+   }
+
+   @Override
+   protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model,
+                                 ServiceVerificationHandler verificationHandler, List<ServiceController<?>> newControllers) throws OperationFailedException
+   {
+      super.performRuntime(context, operation, model, verificationHandler, newControllers);
+
+      final GateInWCIService service = new GateInWCIService();
+      final ServiceBuilder<GateInWCIService> serviceBuilder = context.getServiceTarget().addService(GateInWCIService.NAME, service)
+         .addDependency(WebSubsystemServices.JBOSS_WEB, WebServer.class, service.getWebServer())
+         .addListener(verificationHandler)
+         .setInitialMode(ServiceController.Mode.ACTIVE);
+      newControllers.add(serviceBuilder.install());
    }
 
    protected boolean requiresRuntimeVerification()
