@@ -30,7 +30,8 @@ Provides packaging for the build, with automated JBoss AS7 download support.
 Known Issues
 ============
 
-- Only one JBoss AS 7 version is supported at one time. At the moment it's JBoss AS 7.1.0.Final.
+- JBoss AS 7 versions 7.1.0.Final, 7.1.1.Final, and 7.1.2.Final are supported at the moment
+- Special release of JCR Kernel is used (2.3.6-GA-JBAS7) that supports classloader isolated environment
 - WSRP is not yet supported
 - <distributable/> is not yet supported
 - Sample ears have been repackaged as their current default packaging is not supported
@@ -41,56 +42,23 @@ Known Issues
 Building
 ========
 
-Currently some patched up gatein dependencies are required to build JBoss AS7 support for GateIn. As soon as the patches are included and patched versions released this step will not be required any more. Until then, we have to build the patched versions ourselves.
+By default JBoss AS 7.1.0.Final is the version used. You can specify a different version by using -Dversion.jboss.as system property.
 
-Checkout the dependencies sources from sandbox:
-
-svn co http://anonsvn.jboss.org/repos/gatein/sandbox/as7_support/tags/AS7-Beta03 gatein-sandbox-AS7-Beta03
-cd gatein-sandbox-AS7-Beta03
-
-This will checkout specific versions of wci and exo.kernel.container, and a new gatein-naming component.
-
-Build them:
-
-cd wci
-mvn clean install -Dmaven.test.skip
-
-cd ../exo.kernel.container
-mvn clean install -Dmaven.test.skip
-
-cd ../gatein-naming
-mvn clean install -Dmaven.test.skip
+For general build instructions see ../../README.txt
 
 
-Now that we have built the new dependencies let’s checkout GateIn Portal trunk:
-cd ../..
+If you want to use JBoss AS 7.1.1.Final instead of default version, issue the following command:
 
-svn co http://anonsvn.jboss.org/repos/gatein/portal/trunk gatein-portal
-cd gatein-portal
+mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=jbossas7 -Ddownload -Dversion.jboss.as=7.1.1.Final
 
-If you have built gatein portal before, you can skip the tests by adding '-Dmaven.test.skip' to the next command:
-
-mvn clean install
+This will look for jboss-as-7.1.1.Final directory inside your $SERVERS_DIR, and download the JBoss AS distribution if necessary.
 
 
-Set CONTAINERS_DIR env variable to point to a directory containing your application servers (i.e. export CONTAINERS_DIR=$HOME/devel/containers).
-If you already have ‘jboss-as-7.1.0.Final’ in your CONTAINERS_DIR, then remove ‘,download’ from the next command:
+The packaged GateIn is available in packaging/jboss-as7/pkg/target/jboss-as-7.x.x.x.
 
-cd packaging/jboss-as7
-mvn clean install -Ppkg-jbossas7,download -Dexo.projects.directory.dependencies=$CONTAINERS_DIR
+To start it, go to jboss directory, and run 'bin/standalone.sh' ('bin\standalone.bat' on Windows).
 
-
-
-Now that we successfully built GateIn including JBoss AS7 support, let’s run it:
-
-cd pkg/target/jboss-as-7.1.0.Final/bin
-./standalone.sh
-
-
-Access default portal at: http://localhost:8080/portal
-
-Access sample portal at: http://localhost:8080/sample-portal
-
+Access the portal at: http://localhost:8080/portal
 
 
 Customizing

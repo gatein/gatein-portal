@@ -69,7 +69,7 @@ public class GateInExtension implements Extension
    public void initialize(ExtensionContext context)
    {
       log.debug("Activating GateIn Extension");
-      final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME);
+      final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, 1, 0);
       final GateInConfiguration config = new GateInConfiguration();
       final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(new GateInSubsystemDefinition(config));
       registration.registerOperationHandler(DESCRIBE, GenericSubsystemDescribeHandler.INSTANCE, GenericSubsystemDescribeHandler.INSTANCE, false, OperationEntry.EntryType.PRIVATE);

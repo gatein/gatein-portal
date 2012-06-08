@@ -107,14 +107,14 @@
 
 
       <!-- Deployment archives overrides -->
-      <!-- Copy configuration files -->
-      <copy todir="${jbossas.target.dir}/standalone" preservelastmodified="true" overwrite="true">
-         <fileset dir="${maven.project.basedir}/src/main/resources/jboss/standalone" />
+      <!-- Copy bin, modules, configuration files -->
+      <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
+         <fileset dir="${maven.project.basedir}/src/main/resources/jboss" />
       </copy>
 
-      <!-- Copy bin files -->
-      <copy todir="${jbossas.target.dir}/bin" preservelastmodified="true" overwrite="true">
-         <fileset dir="${maven.project.basedir}/src/main/resources/jboss/bin" />
+      <!-- Copy version specific bin, modules, configuration files -->
+      <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
+         <fileset dir="${maven.project.basedir}/src/main/resources/${version.jboss.as}" />
       </copy>
 
       <!-- Copy modules -->
