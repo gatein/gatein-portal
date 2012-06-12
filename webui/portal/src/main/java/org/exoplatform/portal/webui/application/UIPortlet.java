@@ -48,6 +48,7 @@ import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.portletcontainer.PortletContainerException;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.RequestContext;
+import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -85,7 +86,9 @@ import org.gatein.pc.portlet.impl.spi.AbstractRequestContext;
 import org.gatein.pc.portlet.impl.spi.AbstractSecurityContext;
 import org.gatein.pc.portlet.impl.spi.AbstractServerContext;
 import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
+import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
+import org.gatein.portal.controller.resource.script.ScriptResource;
 import org.w3c.dom.Element;
 
 import javax.portlet.MimeResponse;
@@ -1111,7 +1114,26 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       {
          PortletInfo info = getProducedOfferedPortlet().getInfo();
          String name = info.getApplicationName() + "/" + info.getName();
-         context.getJavascriptManager().loadScriptResource(ResourceScope.PORTLET, name);
+         ResourceId id = new ResourceId(ResourceScope.PORTLET, name);
+         
+         JavascriptConfigService jsService = getApplicationComponent(JavascriptConfigService.class);
+         ScriptResource portletJS = jsService.getResource(id);        
+         
+         if (portletJS != null)
+         {
+            JavascriptManager jsMan = context.getJavascriptManager();
+            if (portletJS.isEmpty())
+            {
+               for (ResourceId deps : portletJS.getDependencies())
+               {
+                  jsMan.loadScriptResource(deps.getScope(), deps.getName());
+               }
+            }
+            else
+            {
+               jsMan.loadScriptResource(ResourceScope.PORTLET, name);            
+            }            
+         }
       }
       super.processRender(context);
    }
