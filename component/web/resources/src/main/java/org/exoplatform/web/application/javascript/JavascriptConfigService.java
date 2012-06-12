@@ -147,9 +147,13 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             for (ResourceId resId : resource.getDependencies()) 
             {               
                String alias = resource.getDependencyAlias(resId);
-               buffer.append(alias == null ? getResource(resId).getAlias() : alias).append(",");
+               ScriptResource dep = getResource(resId);
+               if (dep != null) 
+               {
+                  buffer.append(alias == null ? dep.getAlias() : alias).append(",");                  
+               }
             }
-            if (resource.getDependencies().size() > 0) 
+            if (buffer.charAt(buffer.length() - 1) == ',') 
             {
                buffer.deleteCharAt(buffer.length() - 1);
             }
