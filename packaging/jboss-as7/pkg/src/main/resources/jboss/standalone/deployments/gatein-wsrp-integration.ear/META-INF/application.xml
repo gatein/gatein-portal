@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application PUBLIC
+	"-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN"
+	"http://java.sun.com/dtd/application_1_3.dtd">
+<application>
+  <display-name>gatein-wsrp-integration</display-name>
+  <description>GateIn WSRP Integration extension parent</description>
+  <module>
+    <web>
+      <web-uri>extension-war.war</web-uri>
+      <context-root>gatein-wsrp-integration</context-root>
+    </web>
+  </module>
+  <module>
+    <web>
+      <web-uri>wsrp-producer.war</web-uri>
+      <context-root>wsrp-producer</context-root>
+    </web>
+  </module>
+  <module>
+    <web>
+      <web-uri>wsrp-admin-gui.war</web-uri>
+      <context-root>wsrp-admin-gui</context-root>
+    </web>
+  </module>
+
+</application>

@@ -71,6 +71,16 @@
             <artifactId>jboss-vfs</artifactId>
             <version>${version.org.jboss.vfs}</version>
          </dependency>
+         <dependency>
+            <groupId>org.gatein.integration</groupId>
+            <artifactId>extension-config</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.integration</groupId>
+            <artifactId>extension-component</artifactId>
+            <version>${project.version}</version>
+         </dependency>
       </dependencies>
    </dependencyManagement>
    <modules>

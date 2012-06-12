@@ -26,9 +26,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
    <parent>
-      <artifactId>gatein-wsrp-integration-parent</artifactId>
       <groupId>org.gatein.integration</groupId>
       <version>3.4.0-GA-SNAPSHOT</version>
+      <artifactId>gatein-wsrp-integration-parent</artifactId>
    </parent>
 
    <artifactId>extension-ear</artifactId>

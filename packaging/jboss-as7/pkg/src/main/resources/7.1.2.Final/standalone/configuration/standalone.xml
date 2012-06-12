@@ -319,6 +319,7 @@
                 <archive name="gatein-sample-extension.ear"/>
                 <archive name="gatein-sample-portal.ear"/>
                 <archive name="gatein-sample-skin.war"/>
+                <archive name="gatein-wsrp-integration.ear"/>
             </deployment-archives>
             <portlet-war-dependencies>
                 <!--dependency name="org.gatein.lib" import-services="true"/-->

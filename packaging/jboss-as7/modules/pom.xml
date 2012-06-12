@@ -532,6 +532,10 @@
       </dependency>
       <dependency>
          <groupId>org.reflext</groupId>
+         <artifactId>reflext.apt</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.reflext</groupId>
          <artifactId>reflext.core</artifactId>
       </dependency>
       <dependency>
@@ -938,7 +942,49 @@
          <version>1.0.1</version>
       </dependency>
 
+      <!-- WSRP -->
 
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-common</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-consumer</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-integration-api</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-jcr-impl</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-producer-lib</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-wsrp1-ws</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-wsrp2-ws</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-wss</artifactId>
+      </dependency>
+
+      <dependency>
+         <groupId>org.gatein.integration</groupId>
+         <artifactId>extension-config</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.integration</groupId>
+         <artifactId>extension-component</artifactId>
+      </dependency>
 
       <!-- Various -->
       <dependency>
@@ -1333,6 +1379,7 @@
       <dependency>
         <groupId>com.google.javascript</groupId>
         <artifactId>closure-compiler</artifactId>
+        <version>r706</version>
          <exclusions>
             <exclusion>
                <groupId>args4j</groupId>

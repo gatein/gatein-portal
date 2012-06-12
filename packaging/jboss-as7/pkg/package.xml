@@ -106,6 +106,17 @@
       </copy>
 
 
+      <!-- WSRP integration -->
+      <unzip dest="${jbossas.target.dir}/standalone/deployments/gatein-wsrp-integration.ear/extension-war.war">
+         <fileset refid="org.gatein.integration:extension-war:war"/>
+      </unzip>
+      <unzip dest="${jbossas.target.dir}/standalone/deployments/gatein-wsrp-integration.ear/wsrp-producer.war">
+         <fileset refid="org.gatein.wsrp:wsrp-producer:war"/>
+      </unzip>
+      <unzip dest="${jbossas.target.dir}/standalone/deployments/gatein-wsrp-integration.ear/wsrp-admin-gui.war">
+         <fileset refid="org.gatein.wsrp:wsrp-admin-gui:war"/>
+      </unzip>
+
       <!-- Deployment archives overrides -->
       <!-- Copy bin, modules, configuration files -->
       <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">

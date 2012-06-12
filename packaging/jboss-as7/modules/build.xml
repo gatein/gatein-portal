@@ -73,13 +73,6 @@
            <maven-resource group="bouncycastle" artifact="bcmail-jdk14" />
            <maven-resource group="bouncycastle" artifact="bcprov-jdk14" />
            <maven-resource group="caja" artifact="caja" />
-           <maven-resource group="org.chromattic" artifact="chromattic.api" />
-           <maven-resource group="org.chromattic" artifact="chromattic.apt" />
-           <maven-resource group="org.chromattic" artifact="chromattic.common" />
-           <maven-resource group="org.chromattic" artifact="chromattic.core" />
-           <maven-resource group="org.chromattic" artifact="chromattic.ext" />
-           <maven-resource group="org.chromattic" artifact="chromattic.metamodel" />
-           <maven-resource group="org.chromattic" artifact="chromattic.spi" />
            <maven-resource group="com.google.javascript" artifact="closure-compiler" />
            <!--maven-resource group="org.gatein.common" artifact="common-common" /-->
            <!--maven-resource group="org.gatein.common" artifact="common-logging" /-->
@@ -88,7 +81,6 @@
            <maven-resource group="commons-codec" artifact="commons-codec" />
            <maven-resource group="commons-dbcp" artifact="commons-dbcp" />
            <maven-resource group="commons-digester" artifact="commons-digester" />
-           <maven-resource group="commons-fileupload" artifact="commons-fileupload" />
            <maven-resource group="commons-httpclient" artifact="commons-httpclient" />
            <maven-resource group="commons-io" artifact="commons-io" />
            <maven-resource group="commons-lang" artifact="commons-lang" />
@@ -174,11 +166,6 @@
            <maven-resource group="org.gatein.mop" artifact="mop-spi" />
            <maven-resource group="net.sourceforge.nekohtml" artifact="nekohtml" />
            <maven-resource group="net.oauth.core" artifact="oauth" />
-           <!--maven-resource group="org.gatein.pc" artifact="pc-api" /-->
-           <maven-resource group="org.gatein.pc" artifact="pc-bridge" />
-           <maven-resource group="org.gatein.pc" artifact="pc-controller" />
-           <maven-resource group="org.gatein.pc" artifact="pc-federation" />
-           <!--maven-resource group="org.gatein.pc" artifact="pc-portlet" /-->
            <maven-resource group="org.apache.pdfbox" artifact="pdfbox" />
            <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-api" />
            <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-cache" />
@@ -187,15 +174,9 @@
            <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-hibernate" />
            <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-ldap" />
            <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-spi" />
-           <maven-resource group="picocontainer" artifact="picocontainer" />
            <maven-resource group="org.apache.poi" artifact="poi" />
            <maven-resource group="org.apache.poi" artifact="poi-ooxml" />
            <maven-resource group="org.apache.poi" artifact="poi-scratchpad" />
-           <maven-resource group="org.apache.portals.bridges" artifact="portals-bridges-common" />
-           <maven-resource group="org.reflext" artifact="reflext.api" />
-           <maven-resource group="org.reflext" artifact="reflext.core" />
-           <maven-resource group="org.reflext" artifact="reflext.jlr" />
-           <maven-resource group="org.reflext" artifact="reflext.spi" />
            <maven-resource group="rome" artifact="rome" />
            <maven-resource group="org.apache.sanselan" artifact="sanselan" />
            <maven-resource group="org.gatein.shindig" artifact="shindig-common" />
@@ -226,11 +207,37 @@
        <module-def name="org.gatein.pc">
            <maven-resource group="org.gatein.pc" artifact="pc-api" />
            <maven-resource group="org.gatein.pc" artifact="pc-portlet" />
+           <maven-resource group="org.gatein.pc" artifact="pc-bridge" />
+           <maven-resource group="org.gatein.pc" artifact="pc-controller" />
+           <maven-resource group="org.gatein.pc" artifact="pc-federation" />
        </module-def>
 
        <module-def name="org.gatein.naming">
            <maven-resource group="org.gatein.naming" artifact="gatein-naming" />
        </module-def>
+
+       <module-def name="org.picocontainer">
+          <maven-resource group="picocontainer" artifact="picocontainer" />
+       </module-def>
+
+       <module-def name="org.chromattic">
+          <maven-resource group="org.chromattic" artifact="chromattic.api" />
+          <maven-resource group="org.chromattic" artifact="chromattic.apt" />
+          <maven-resource group="org.chromattic" artifact="chromattic.common" />
+          <maven-resource group="org.chromattic" artifact="chromattic.core" />
+          <maven-resource group="org.chromattic" artifact="chromattic.ext" />
+          <maven-resource group="org.chromattic" artifact="chromattic.metamodel" />
+          <maven-resource group="org.chromattic" artifact="chromattic.spi" />
+       </module-def>
+
+       <module-def name="org.reflext">
+          <maven-resource group="org.reflext" artifact="reflext.api" />
+          <maven-resource group="org.reflext" artifact="reflext.apt" />
+          <maven-resource group="org.reflext" artifact="reflext.core" />
+          <maven-resource group="org.reflext" artifact="reflext.jlr" />
+          <maven-resource group="org.reflext" artifact="reflext.spi" />
+       </module-def>
+
 
        <module-def name="org.hibernate" slot="gatein">
            <maven-resource group="org.hibernate" artifact="hibernate-commons-annotations" />
@@ -266,6 +273,30 @@
 
        <module-def name="org.hsqldb">
            <maven-resource group="hsqldb" artifact="hsqldb" />
+       </module-def>
+       
+       <module-def name="org.apache.commons-fileupload">
+          <maven-resource group="commons-fileupload" artifact="commons-fileupload" />
+       </module-def>
+
+       <module-def name="org.apache.portals-bridges-common">
+           <maven-resource group="org.apache.portals.bridges" artifact="portals-bridges-common" />
+       </module-def>
+
+       <module-def name="org.gatein.wsrp">
+          <maven-resource group="org.gatein.wsrp" artifact="wsrp-common" />
+          <maven-resource group="org.gatein.wsrp" artifact="wsrp-consumer" />
+          <maven-resource group="org.gatein.wsrp" artifact="wsrp-integration-api" />
+          <maven-resource group="org.gatein.wsrp" artifact="wsrp-jcr-impl" />
+          <maven-resource group="org.gatein.wsrp" artifact="wsrp-producer-lib" />
+          <maven-resource group="org.gatein.wsrp" artifact="wsrp-wsrp1-ws" />
+          <maven-resource group="org.gatein.wsrp" artifact="wsrp-wsrp2-ws" />
+          <maven-resource group="org.gatein.wsrp" artifact="wsrp-wss" />
+       </module-def>
+
+       <module-def name="org.gatein.wsrp.integration">
+          <maven-resource group="org.gatein.integration" artifact="extension-config" />
+          <maven-resource group="org.gatein.integration" artifact="extension-component" />
        </module-def>
     </target>
 

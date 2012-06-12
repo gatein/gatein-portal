@@ -652,6 +652,11 @@
          </dependency>
          <dependency>
             <groupId>org.reflext</groupId>
+            <artifactId>reflext.apt</artifactId>
+            <version>${version.reflext}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.reflext</groupId>
             <artifactId>reflext.core</artifactId>
             <version>${version.reflext}</version>
          </dependency>

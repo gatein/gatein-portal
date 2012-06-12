@@ -22,21 +22,28 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<module xmlns="urn:jboss:module:1.0" name="org.gatein.pc">
+<module xmlns="urn:jboss:module:1.0" name="org.gatein.wsrp">
     <resources>
-        <!-- Insert resources here -->
+       <!-- Insert resources here -->
     </resources>
 
     <dependencies>
        <module name="javax.api" />
-       <module name="javax.xml.bind.api" />
-       <module name="org.gatein.wci" />
-       <module name="org.gatein.common" />
-       <module name="org.staxnav" />
        <module name="javax.servlet.api" />
-       <module name="javax.servlet.jsp.api" />
        <module name="javax.portlet.api" />
-       <module name="javax.ccpp.api" />
-       <module name="org.apache.portals-bridges-common" />
+       <module name="javax.jws.api" />
+       <module name="javax.xml.ws.api" />
+       <module name="javax.jcr.api" />
+       <module name="javax.wsdl4j.api" />
+       <module name="org.slf4j" slot="gatein" />
+       <module name="org.gatein.pc" />
+       <module name="org.gatein.common" />
+       <module name="org.gatein.wsrp.integration" services="export" />
+       <module name="org.reflext" />
+       <module name="org.chromattic" />
+       <module name="org.jboss.xb" />
+       <module name="org.jboss.common-core" />
+       <module name="org.apache.commons-fileupload" />
+       <module name="com.google.guava" />
     </dependencies>
 </module>
