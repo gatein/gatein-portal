@@ -100,7 +100,10 @@
 	  <depends>
   	    <module>base</module>
 	  </depends>
-	  </module>
+	  <depends>
+  	    <module>jquery</module>
+	  </depends>
+	</module>
   </portlet>
 
   <!-- The navigation portlet declaration -->

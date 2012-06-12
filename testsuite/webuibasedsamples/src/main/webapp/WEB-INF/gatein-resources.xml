@@ -46,6 +46,9 @@
 			<depends>
 			  <module>webui-ext</module>
 			</depends>
+			<depends>
+			  <module>jquery</module>
+			</depends>
 		 </module>
     </portlet>
 </gatein-resources>

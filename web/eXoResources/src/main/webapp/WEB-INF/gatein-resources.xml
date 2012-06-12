@@ -124,7 +124,8 @@
    </scripts>
 
    <module>
-      <name>jquery</name>
+      <name>jquery</name>     
+      <as>gj</as> 
       <script>
          <name>jquery</name>
          <path>/javascript/exo-jquery-1.7.1.js</path>
@@ -204,6 +205,9 @@
       <depends>
          <module>base</module>
       </depends>
+      <depends>
+         <module>jquery</module>
+      </depends>
    </module>
 
    <!-- GADGET Javascripts -->
@@ -218,6 +222,9 @@
       </depends>
       <depends>
          <module>base</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
       </depends>
    </module>
 
@@ -245,6 +252,9 @@
       </depends>
       <depends>
          <module>base</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
       </depends>
    </module>
 
@@ -285,6 +295,9 @@
       </depends>
       <depends>
          <module>base</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
       </depends>
    </module>
 
@@ -329,6 +342,9 @@
       <depends>
          <module>base</module>
       </depends>
+      <depends>
+         <module>jquery</module>
+      </depends>
    </module>
 
    <module>
@@ -347,6 +363,9 @@
       </script>
       <depends>
          <module>base</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
       </depends>
    </module>
 
@@ -369,6 +388,9 @@
       <depends>
          <module>base</module>
       </depends>
+      <depends>
+         <module>jquery</module>
+      </depends>
    </module>
 
    <module>
@@ -386,6 +408,9 @@
      </depends>
      <depends>
        <module>gadget</module>
+     </depends>
+     <depends>
+       <module>jquery</module>
      </depends>
    </module>
    

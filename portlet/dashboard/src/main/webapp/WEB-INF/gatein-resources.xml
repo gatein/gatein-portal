@@ -65,6 +65,9 @@
       <depends>
         <module>base</module>
       </depends>
+      <depends>
+  	    <module>jquery</module>
+	   </depends>
     </module>
   </portlet>
 			
