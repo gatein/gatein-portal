@@ -80,58 +80,57 @@
          <theme-name>VistaTheme</theme-name>
       </style-theme>
    </window-style>
+	
+   <scripts>
+      <name>script1</name>
+      <script>
+         <name>eXo.script1</name>
+         <path>/js/script1.js</path>
+      </script>
+   </scripts>
+      
+   <scripts>
+      <name>script2</name>
+      <script>
+         <name>eXo.script2</name>
+         <path>/js/script2.js</path>
+      </script>      
+      <depends>
+          <scripts>script1</scripts>
+      </depends>
+   </scripts>
 
-   <javascript>
-      <param>
-         <js-module>js.test1</js-module>
-         <js-path>/js/test1.js</js-path>
-         <js-priority>-1</js-priority>
-      </param>
-   </javascript>
-   <javascript>
-      <param>
-         <js-module>js.test2</js-module>
-         <js-path>/js/test2.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-   </javascript>
-   <javascript>
-      <param>
-         <js-module>js.test3</js-module>
-         <js-path>/js/test3.js</js-path>
-      </param>
-   </javascript>
-   <javascript>
-      <param>
-         <js-module>js.test4</js-module>
-         <js-path>/js/test4.js</js-path>
-         <js-priority>2</js-priority>
-      </param>
-   </javascript>
-   <javascript>
-      <param>
-         <portal-name>site1</portal-name>
-         <js-module>js.test5</js-module>
-         <js-path>/js/test5.js</js-path>
-      </param>
-      <param>
-         <portal-name>site2</portal-name>
-         <js-module>js.test5</js-module>
-         <js-path>/js/test5.js</js-path>
-      </param>
-   </javascript>
-   <javascript>
-      <param>
-         <portal-name>site3</portal-name>
-         <js-module>js.test6</js-module>
-         <js-path>/js/test6.js</js-path>
-         <js-priority>1</js-priority>
-      </param>
-   </javascript>
-   <javascript>
-      <param>
-         <js-module>js.test7</js-module>
-         <js-path>http://example.com/test7.js</js-path>
-      </param>
-   </javascript>
+   <module>
+      <name>module1</name>     
+      <as>m1</as> 
+      <script>
+         <name>eXo.module1</name>
+         <path>/js/module1.js</path>
+      </script>
+   </module>
+   
+   <module>
+      <name>module2</name>     
+      <script>
+         <name>eXo.module2</name>
+         <path>/js/module2.js</path>
+      </script>
+      <depends>
+          <module>module1</module>
+          <as>mod1</as>
+      </depends>
+   </module>
+   
+   <module>
+      <name>remote1</name>
+      <url>/js/remote1.js</url>       
+   </module>
+   
+   <module>
+      <name>remote2</name>
+      <url>/js/remote2.js</url>
+      <depends>
+          <module>remote1</module>
+      </depends>       
+   </module>
 </gatein-resources>

@@ -18,20 +18,34 @@
  */
 package org.exoplatform.portal.resource;
 
+import javax.servlet.ServletContext;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.exoplatform.component.test.web.WebAppImpl;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.test.mocks.servlet.MockServletContext;
+import org.exoplatform.test.mocks.servlet.MockServletRequest;
+import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import javax.servlet.ServletContext;
+import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.router.URIWriter;
+import org.gatein.common.io.IOTools;
+import org.gatein.portal.controller.resource.ResourceId;
+import org.gatein.portal.controller.resource.ResourceScope;
+import org.gatein.portal.controller.resource.script.FetchMode;
+import org.gatein.portal.controller.resource.script.ScriptResource;
+import org.json.JSONObject;
 
 /**
  * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
@@ -39,13 +53,13 @@ import javax.servlet.ServletContext;
  */
 public class TestJavascriptConfigService extends AbstractWebResourceTest
 {
-   private JavascriptConfigService jsService;
+   private static final ControllerContext CONTROLLER_CONTEXT = new MockControllerContext();
 
-   private static MockResourceResolver resResolver;
+   private JavascriptConfigService jsService;
 
    private static ServletContext mockServletContext;
    
-   private static boolean isFirstStartup = true;
+   private static boolean isFirstStartup = true;   
    
    @Override
    protected void setUp() throws Exception
@@ -56,37 +70,112 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       if (isFirstStartup)
       {
          Map<String, String> resources = new HashMap<String, String>(4);
-         resources.put("/js/test1.js", "aaa; // inline comment");
-         resources.put("/js/test2.js", "bbb;");
-         resources.put("/js/test3.js", "ccc;");
-         resources.put("/js/test4.js", "ddd;");
+         resources.put("/js/script1.js", "aaa;");
+         resources.put("/js/script2.js", "bbb;");
+         resources.put("/js/module1.js", "ccc;");
+         resources.put("/js/module2.js", "ddd;");
          mockServletContext = new MockJSServletContext("mockwebapp", resources);
          jsService.registerContext(new WebAppImpl(mockServletContext, Thread.currentThread().getContextClassLoader()));
 
-         resResolver = new MockResourceResolver();
-         jsService.addResourceResolver(resResolver);
          URL url = portalContainer.getPortalClassLoader().getResource("mockwebapp/gatein-resources.xml");
          JavascriptConfigParser.processConfigResource(url.openStream(), jsService, mockServletContext);
 
          isFirstStartup = false;
-      }
+      }     
+   }
+   
+   public void testGetScript() throws Exception
+   {      
+      //no wrapper for SCRIPTS
+      assertReader("// Begin eXo.script1\naaa;// End eXo.script1\n", jsService.getScript(new ResourceId(ResourceScope.SHARED, "script1"), null));
+      assertReader("// Begin eXo.script2\nbbb;// End eXo.script2\n", jsService.getScript(new ResourceId(ResourceScope.SHARED, "script2"), null));          
+      
+      //wrapper for MODULE
+      //test for Alias : module1 is used with 'm1' alias
+      String module1 = "define('SHARED/module1', [], function() { var m1 = {};var tmp = function() {" +      
+                                 "// Begin eXo.module1\n" + 
+                                 "ccc;" +  
+                                 "// End eXo.module1\n" +
+                                 "}();for(var prop in tmp){m1[prop]=tmp[prop];}return m1;});";
+      assertReader(module1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module1"), null));
+      
+      //module2 depends on module1
+      //test for Alias : module1 is used with 'mod1' alias, module2 use default name for alias
+      String module2 = "define('SHARED/module2', [\"SHARED/module1\"], function(mod1) { var module2 = {};var tmp = function() {" +
+                                 "// Begin eXo.module2\n" + 
+                                 "ddd;" +
+                                 "// End eXo.module2\n" +
+                                  "}();for(var prop in tmp){module2[prop]=tmp[prop];}return module2;});";
+      assertReader(module2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module2"), null));
    }
 
-/*
-   public void testResourceResolver()
+   public void testGetJSConfig() throws Exception
+   {            
+      JSONObject config = jsService.getJSConfig(CONTROLLER_CONTEXT, null);
+      
+      //All SCRIPTS and remote resource have to had dependencies declared in shim configuration
+      JSONObject shim = config.getJSONObject("shim");
+      assertNotNull(shim);
+      
+      JSONObject remoteDep = shim.getJSONObject("SHARED/remote2");
+      assertNotNull(remoteDep);
+      assertEquals("{\"deps\":[\"SHARED/remote1\"]}", remoteDep.toString());
+      
+      JSONObject scriptDep = shim.getJSONObject("SHARED/script2");
+      assertNotNull(scriptDep);
+      assertEquals("{\"deps\":[\"SHARED/script1\"]}", scriptDep.toString());
+      
+      //requireJS need a map of all resourceIDs and urls
+      //requireJS add ".js" automatically so we truncate it from url
+      JSONObject paths = config.getJSONObject("paths");
+      assertNotNull(paths);
+      //Return remote module/script url as it's  declared in gatein-resources.xml
+      assertEquals("/js/remote1", paths.getString("SHARED/remote1"));
+      assertEquals("/js/remote2", paths.getString("SHARED/remote2"));
+      //navController url for modules and scripts
+      assertEquals("mock_url_of_module1", paths.getString("SHARED/module1"));
+      assertEquals("mock_url_of_module2", paths.getString("SHARED/module2"));
+      assertEquals("mock_url_of_script1", paths.getString("SHARED/script1"));
+      assertEquals("mock_url_of_script2", paths.getString("SHARED/script2"));
+   }
+   
+   public void testResolveURL() throws Exception
    {
-      String jScript = jsService.getJScript("/path/to/MockResourceResolver");
-      assertEquals(MockResourceResolver.class.getName(), jScript);
+      Map<ResourceId, FetchMode> tmp = new HashMap<ResourceId, FetchMode>();
+      tmp.put(new ResourceId(ResourceScope.SHARED, "remote1"), null);
       
-      jScript = jsService.getJScript("/path/to/non-existing.js");
-      assertNull(jScript);
+      Map<String, FetchMode> remoteURL = jsService.resolveURLs(CONTROLLER_CONTEXT, tmp, false, false, null);
+      assertTrue(remoteURL.size() > 0);
+      //Return remote module/script url as it's  declared in gatein-resources.xml
+      assertEquals("/js/remote1.js", remoteURL.keySet().iterator().next());
       
-      resResolver.addResource("/path/to/non-existing.js", "foo");
-      jScript = jsService.getJScript("/path/to/non-existing.js");
-      assertNotNull("foo", jScript);
+      tmp.clear();
+      tmp.put(new ResourceId(ResourceScope.SHARED, "module1"), null);      
+      remoteURL = jsService.resolveURLs(CONTROLLER_CONTEXT, tmp, false, false, null);
+      assertTrue(remoteURL.size() > 0);
+      assertEquals("mock_url_of_module1.js", remoteURL.keySet().iterator().next());
    }
-*/
-
+   
+   public void testResolveIDs()
+   {
+      Map<ResourceId, FetchMode> tmp = new HashMap<ResourceId, FetchMode>();
+      tmp.put(new ResourceId(ResourceScope.SHARED, "script2"), null);
+      
+      Map<ScriptResource, FetchMode> ids = jsService.resolveIds(tmp);
+      //Only resolve dependencies for SCRIPTS
+      assertEquals(2, ids.size());
+      List<ScriptResource> result = new ArrayList<ScriptResource>(ids.keySet());
+      assertEquals("script1", result.get(0).getId().getName());
+      assertEquals("script2", result.get(1).getId().getName());
+      
+      tmp.clear();      
+      //module2 depends on module1 but we don't resolve dependencies for it
+      tmp.put(new ResourceId(ResourceScope.SHARED, "module2"), null);
+      ids = jsService.resolveIds(tmp);
+      assertEquals(1, ids.size());
+      assertEquals("module2", ids.keySet().iterator().next().getId().getName());
+   }
+   
 /*
    public void testCommonJScripts()
    {
@@ -105,72 +194,12 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    }
 */
 
-   public void testPriority()
+   private void assertReader(String expected, Reader actual) throws Exception
    {
-      Iterator<String> availPaths = jsService.getAvailableScriptsPaths().iterator();      
-      assertEquals(mockServletContext.getContextPath() + "/js/test2.js", availPaths.next());
-      assertEquals(mockServletContext.getContextPath() + "/js/test4.js", availPaths.next());
-      assertEquals(mockServletContext.getContextPath() + "/js/test1.js", availPaths.next());
-      assertEquals(mockServletContext.getContextPath() + "/js/test3.js", availPaths.next());
-      assertEquals("http://example.com/test7.js", availPaths.next());
-      assertFalse(availPaths.hasNext());
+      StringWriter buffer = new StringWriter();
+      IOTools.copy(actual, buffer);
+      assertEquals(expected, buffer.toString());
    }
-   
-/*
-   public void testMergingCommonJScripts() throws IOException
-   {
-      String mergedJS = new String(jsService.getMergedJavascript());
-      assertEquals("\nbbb;ddd;aaa;ccc;", mergedJS);
-      assertEquals("\nbbb;ddd;aaa;ccc;", jsService.getMergedCommonJScripts().getText());
-      assertTrue(jsService.getLastModified() <= System.currentTimeMillis());
-
-      //
-*/
-/*
-      Map<String, Javascript> map = new HashMap<String, Javascript>();
-      for (Javascript script :jsService.getScripts(true))
-      {
-         assertEquals(new ResourceId(ResourceScope.SHARED, "common"), script.getResource());
-         String module = script.getModule();
-         if (module == null)
-         {
-            module = "merged";
-         }
-         map.put(module, script);
-      }
-
-      //
-      Javascript.Internal merged = (Javascript.Internal)map.get("merged");
-      mergedJS = read(jsService.open(merged));
-      System.out.println("merged = " + mergedJS);
-      System.out.println("merged = " + mergedJS);
-      System.out.println("merged = " + mergedJS);
-      System.out.println("merged = " + mergedJS);
-      System.out.println("merged = " + mergedJS);
-      assertEquals("bbb;\nddd;\naaa; // inline comment\nccc;\n", mergedJS);
-*//*
-
-   }
-*/
-
-/*
-   public void testCaching()
-   {
-      String path = "/path/to/caching";
-      resResolver.addResource(path, "foo");
-      String jScript = jsService.getJScript(path);
-      assertEquals("foo", jScript);
-      
-      resResolver.addResource(path, "bar");
-      jScript = jsService.getJScript(path);
-      assertEquals("foo", jScript);
-
-      // invalidate cache
-      jsService.invalidateCachedJScript(path);
-      jScript = jsService.getJScript(path);
-      assertEquals("bar", jScript);
-   }
-*/
 
 /*
    public void testPortalJScript() throws IOException
@@ -217,6 +246,20 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    }
 */
 
+   private static class MockControllerContext extends ControllerContext
+   {
+      public MockControllerContext()
+      {
+         super(null, null, new MockServletRequest(null, null), null, null);
+      }
+
+      @Override
+      public void renderURL(Map<QualifiedName, String> parameters, URIWriter uriWriter) throws IOException
+      {
+         uriWriter.appendSegment("mock_url_of_" + parameters.get(QualifiedName.create("gtn", "resource")) + ".js");
+      }      
+   }
+   
    private static class MockJSServletContext extends MockServletContext
    {
       private Map<String, String> resources;
