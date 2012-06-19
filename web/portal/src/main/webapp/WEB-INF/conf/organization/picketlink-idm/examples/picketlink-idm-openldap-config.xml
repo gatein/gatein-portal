@@ -132,6 +132,10 @@
             <value>true</value>
           </option>
           <option>
+            <name>allowNotCaseSensitiveSearch</name>
+            <value>true</value>
+          </option>
+          <option>
             <name>isRealmAware</name>
             <value>true</value>
           </option>
