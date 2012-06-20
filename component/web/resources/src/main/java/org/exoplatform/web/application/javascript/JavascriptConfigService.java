@@ -254,29 +254,29 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             
       for (ScriptResource resource : getAllResources())
       {
-         HashMap<ResourceId, FetchMode> ids = new HashMap<ResourceId, FetchMode>();
-         ids.put(resource.getId(), null);         
-         
-         Map<String, FetchMode> urlMap = resolveURLs(controllerContext, ids, !PropertyManager.isDevelopping(),
-            !PropertyManager.isDevelopping(), locale);         
-         String url = urlMap.keySet().iterator().next();
-         
-         //
-         String name = resource.getId().toString(); 
-         paths.put(name, url.substring(0, url.length() - ".js".length()));
-         
-         //
-         List<Module> modules = resource.getModules();         
-         if (FetchMode.IMMEDIATE.equals(resource.getFetchMode()) || 
-                  (modules.size() > 0 && modules.get(0) instanceof Module.Remote))
+         String name = resource.getId().toString();
+         if (!resource.isEmpty() || ResourceScope.SHARED.equals(resource.getId().getScope()))
          {
-            JSONArray deps = new JSONArray(resource.getDependencies());
+            HashMap<ResourceId, FetchMode> ids = new HashMap<ResourceId, FetchMode>();
+            ids.put(resource.getId(), null);                     
+            Map<String, FetchMode> urlMap = resolveURLs(controllerContext, ids, !PropertyManager.isDevelopping(),
+               !PropertyManager.isDevelopping(), locale);         
             
-            if (deps.length() > 0)
+            String url = urlMap.keySet().iterator().next();            
+            paths.put(name, url.substring(0, url.length() - ".js".length()));            
+
+            //
+            List<Module> modules = resource.getModules();         
+            if (FetchMode.IMMEDIATE.equals(resource.getFetchMode()) || 
+                     (modules.size() > 0 && modules.get(0) instanceof Module.Remote))
             {
-               shim.put(name, new JSONObject().put("deps", deps));               
+               JSONArray deps = new JSONArray(resource.getDependencies());               
+               if (deps.length() > 0)
+               {
+                  shim.put(name, new JSONObject().put("deps", deps));               
+               }
             }
-         }
+         }         
       }
                  
       JSONObject config = new JSONObject();      

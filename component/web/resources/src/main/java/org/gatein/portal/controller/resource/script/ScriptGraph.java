@@ -126,10 +126,14 @@ public class ScriptGraph
             ScriptFetch fetch = map.get(id);
             if (fetch == null)
             {
-               map.put(id, fetch = new ScriptFetch(resource, mode));
+               fetch = new ScriptFetch(resource, mode);
+               if (!resource.isEmpty() || ResourceScope.SHARED.equals(resource.getId().getScope()))
+               {
+                  map.put(id, fetch);                  
+               }
                
                // Recursively add the dependencies
-               if (FetchMode.IMMEDIATE.equals(mode))
+               if (FetchMode.IMMEDIATE.equals(mode) || resource.isEmpty())
                {
                   for (ResourceId dependencyId : resource.dependencies.keySet())
                   {

@@ -327,10 +327,7 @@ public class UIPortalApplication extends UIApplication
 
    public Map<String, Boolean> getScripts()
    {
-      PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
-      
-      // Obtain the resource ids involved
-      // we clone the fetch map by safety
+      PortalRequestContext prc = PortalRequestContext.getCurrentInstance();      
       JavascriptManager jsMan = prc.getJavascriptManager();
 
       // Add current portal
@@ -350,21 +347,17 @@ public class UIPortalApplication extends UIApplication
       jsMan.loadScriptResource(ResourceScope.SHARED, "bootstrap");
 
       //
-      FetchMap<ResourceId> requiredResources = new FetchMap<ResourceId>(jsMan.getScriptResources());
+      FetchMap<ResourceId> requiredResources = jsMan.getScriptResources();
       log.debug("Resource ids to resolve: {}", requiredResources);
 
       //
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);      
-
-      LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
-
-      //
       FetchMap<String> resources = new FetchMap<String>();
       Map<ScriptResource, FetchMode> tmp = service.resolveIds(requiredResources);
       for (ScriptResource rs : tmp.keySet())
       {
          ResourceId id = rs.getId();
-         resources.add(id.getScope() + "/" + id.getName(), tmp.get(rs));
+         resources.add(id.toString(), tmp.get(rs));
       }
       resources.addAll(jsMan.getExtendedScriptURLs());
       
@@ -374,6 +367,7 @@ public class UIPortalApplication extends UIApplication
       // Here we get the list of stuff to load on demand or not
       // according to the boolean value in the map
       // Convert the map to what the js expects to have
+      LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
       for (Map.Entry<String, FetchMode> entry : resources.entrySet())
       {
          ret.put(entry.getKey(), entry.getValue() == FetchMode.ON_LOAD);
