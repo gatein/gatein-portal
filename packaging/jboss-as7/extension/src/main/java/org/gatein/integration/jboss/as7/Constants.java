@@ -40,4 +40,7 @@ interface Constants
    String DEPLOYMENT_ARCHIVE = "deployment-archive";
    String PORTLET_WAR_DEPENDENCY = "portlet-war-dependency";
    String TRUE = "true";
+
+   String PATH = "path";
+   String RELATIVE_TO = "relative-to";
 }

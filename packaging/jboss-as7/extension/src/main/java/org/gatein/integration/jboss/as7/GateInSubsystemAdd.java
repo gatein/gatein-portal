@@ -81,6 +81,9 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
          {
             final SharedPortletTldsMetaDataBuilder tldsBuilder = new SharedPortletTldsMetaDataBuilder();
 
+            // if 'gatein' deployment scanner is set up, use it
+            DeploymentDirHandler.handleDeploymentDir(context, config);
+
             processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_GATEIN, new GateInStructureDeploymentProcessor(config));
             processorTarget.addDeploymentProcessor(Phase.PARSE, STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT, new PortletWarDeploymentInitializingProcessor(config));
             processorTarget.addDeploymentProcessor(Phase.PARSE, MANIFEST_DEPENDENCIES_GATEIN, new GateInDependenciesDeploymentProcessor());

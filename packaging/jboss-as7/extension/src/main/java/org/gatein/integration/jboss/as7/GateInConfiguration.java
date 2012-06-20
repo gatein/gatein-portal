@@ -26,8 +26,6 @@ import org.gatein.integration.jboss.as7.deployment.GateInExtKey;
 import org.gatein.integration.jboss.as7.deployment.PortletWarKey;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.module.ModuleDependency;
-import org.jboss.dmr.ModelNode;
-import org.jboss.dmr.Property;
 import org.jboss.modules.Module;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.modules.ModuleLoader;
@@ -40,6 +38,8 @@ import java.util.*;
  */
 public class GateInConfiguration
 {
+   private static final String DEPLOYMENT_SUFFIX = "deployment.";
+
    private Set<ModuleIdentifier> extModules = new HashSet<ModuleIdentifier>();
 
    private Set<ModuleDependency> portletWarDependencies = new LinkedHashSet<ModuleDependency>();
@@ -58,7 +58,7 @@ public class GateInConfiguration
    
    public synchronized void addDeploymentArchive(String archive, boolean main)
    {
-      String moduleId = "deployment." + archive;
+      String moduleId = DEPLOYMENT_SUFFIX + archive;
       extModules.add(ModuleIdentifier.create(moduleId));
       if (main)
          earModule = ModuleIdentifier.create(moduleId);
@@ -75,6 +75,21 @@ public class GateInConfiguration
       return Collections.unmodifiableSet(new HashSet<ModuleIdentifier>(extModules));
    }
 
+   /**
+    * Returns a list of portal extensions deployment archives' file names.
+    *
+    * @return list of file names
+    */
+   public synchronized Set<String> getGateInExtNames()
+   {
+      Set<String> ret = new HashSet<String>();
+      for (ModuleIdentifier module: extModules)
+      {
+         ret.add(module.getName().substring(DEPLOYMENT_SUFFIX.length()));
+      }
+      return Collections.unmodifiableSet(ret);
+   }
+
    public synchronized Set<ModuleDependency> getPortletWarDependencies()
    {
       return Collections.unmodifiableSet(new LinkedHashSet<ModuleDependency>(portletWarDependencies));
@@ -83,6 +98,25 @@ public class GateInConfiguration
    public ModuleIdentifier getGateInEarModule()
    {
       return earModule;
+   }
+
+   /**
+    * Returns a file name of the gatein.ear or equivalent main portal archive.
+    *
+    * @return deployment archive file name
+    */
+   public synchronized String getGateInEarName()
+   {
+      return earModule != null ? earModule.getName().substring(DEPLOYMENT_SUFFIX.length()) : null;
+   }
+
+   /**
+    * Clear all deployment archives info set via {@link #addDeploymentArchive(String,boolean)}
+    */
+   public synchronized void clearDeploymentArchives()
+   {
+      earModule = null;
+      extModules.clear();
    }
 
    public synchronized List<ServiceName> getChildWars()

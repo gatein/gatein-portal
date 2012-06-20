@@ -114,6 +114,7 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:deployment-scanner:1.1">
             <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" deployment-timeout="300"/>
+            <deployment-scanner name="gatein" path="gatein/deployments" relative-to="jboss.home.dir" scan-interval="5000" deployment-timeout="300"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:ee:1.0"/>
         <subsystem xmlns="urn:jboss:domain:ejb3:1.2">
@@ -316,13 +317,6 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:weld:1.0"/>
         <subsystem xmlns="urn:jboss:domain:gatein:1.0">
-            <deployment-archives>
-                <archive name="gatein.ear" main="true"/>
-                <archive name="gatein-sample-extension.ear"/>
-                <archive name="gatein-sample-portal.ear"/>
-                <archive name="gatein-sample-skin.war"/>
-                <archive name="gatein-wsrp-integration.ear"/>
-            </deployment-archives>
             <portlet-war-dependencies>
                 <!--dependency name="org.gatein.lib" import-services="true"/-->
                 <dependency name="org.gatein.wci"/>
