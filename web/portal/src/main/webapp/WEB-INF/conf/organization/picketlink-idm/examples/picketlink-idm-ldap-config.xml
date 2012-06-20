@@ -343,6 +343,10 @@
             <name>cache.providerRegistryName</name>
             <value>storeCacheProvider</value>
           </option>
+          <option>
+            <name>allowNotCaseSensitiveSearch</name>
+            <value>true</value>
+          </option>
         </options>
       </identity-store>
     </identity-stores>
