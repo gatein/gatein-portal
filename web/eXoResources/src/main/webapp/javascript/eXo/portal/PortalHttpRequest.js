@@ -722,7 +722,7 @@ window.ajaxAsyncGetRequest = function(url, async) {
  * @param {boolean} async - asynchronous or none
  * @return {String} response text if request is not async
  */
-function ajaxRequest(method, url, async, queryString) {
+window.ajaxRequest = function(method, url, async, queryString) {
   if(async == undefined) async = true ;
   var resp;
   gj.ajax(url, {

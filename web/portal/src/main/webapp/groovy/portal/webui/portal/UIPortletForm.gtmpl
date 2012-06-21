@@ -120,35 +120,37 @@
 	</div>
 </div>
 <script language="javascript">
+	require(["SHARED/jquery"], function(gj) {
 		eXo.UIPortletForm = {
-				hideSaveButton : function(comp) {
-						gj(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
-						{
-							var button = gj(this);
-							if(button.attr("id").indexOf("Save") >= 0)
-							{
-								button.css("display", "none");
-							}
-							else if(button.attr("id").indexOf("Close") >= 0)
-							{
-								button.html(button.attr("closeLabel"));
-							}
-						});
-				},
-		
-				showSaveButton : function(comp) {
-						gj(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
-						{
-							var button = gj(this);
-							if(button.attr("id").indexOf("Save") >= 0)
-							{
-								button.css("display", "inline-block");
-							}
-							else if(button.attr("id").indexOf("Close") >= 0)
-							{
-								button.html(button.attr("cancelLabel"));
-							}
-						});
-				}
-		}
+			hideSaveButton : function(comp) {
+				gj(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
+				{
+					var button = gj(this);
+					if(button.attr("id").indexOf("Save") >= 0)
+					{
+						button.css("display", "none");
+					}
+					else if(button.attr("id").indexOf("Close") >= 0)
+					{
+						button.html(button.attr("closeLabel"));
+					}
+				});
+			},
+	
+			showSaveButton : function(comp) {
+				gj(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
+				{
+					var button = gj(this);
+					if(button.attr("id").indexOf("Save") >= 0)
+					{
+						button.css("display", "inline-block");
+					}
+					else if(button.attr("id").indexOf("Close") >= 0)
+					{
+						button.html(button.attr("cancelLabel"));
+					}
+				});
+			}
+		}		
+	});		
 </script>

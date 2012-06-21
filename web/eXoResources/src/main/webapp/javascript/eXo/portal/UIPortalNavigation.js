@@ -20,7 +20,7 @@
 /**
  * Manages the main navigation menu on the portal
  */
-eXo.portal.UIPortalNavigation = {
+var portalNavigation = {
   hideMenuTimeoutIds : new base.HashMap(),
   scrollMgr : null,
   
@@ -108,7 +108,15 @@ eXo.portal.UIPortalNavigation = {
       else
       {
         jObj.on({"mouseenter" : portalNav.onMenuItemOver, "mouseleave" : portalNav.onMenuItemOut,
-          "click" : function() {portalNav.hideMenu(jObj.attr("id"));}}, "." + portalNav.tabStyleClass);
+            "click" : function(event) {
+              var a = gj(event.target);
+              var href = a.attr("href");
+          	  if (!href || (href.indexOf("#") !== -1 && !a.attr("onclick"))) {
+          		  event.stopPropagation();        		  
+          	  } else {
+          		  portalNav.hideMenu(jObj.attr("id"));        		  
+          	  }
+             }}, "." + portalNav.tabStyleClass);
       }
     });
   },
@@ -325,7 +333,7 @@ eXo.portal.UIPortalNavigation = {
 
    for (var i = 0; i < data.length; i++) {
 	   var node = data[i];
-	   var actionLink = node.actionLink ? node.actionLink : "javascript:void(0);";
+	   var actionLink = node.actionLink ? node.actionLink : "#" + node.label;
 	
 	   htmlFrags += ("<li class='MenuItem " + (node.hasChild ? "ArrowIcon " : "") + (node.isSelected ? "SelectedItem'" : "NormalItem'"));
 	   htmlFrags += (node.hasChild ? (" exo:getNodeURL='" + node.getNodeURL + "' ") : "" );
@@ -341,4 +349,4 @@ eXo.portal.UIPortalNavigation = {
    return htmlFrags;
   }
 };
-return  {UIPortalNavigation: eXo.portal.UIPortalNavigation};
+return  {UIPortalNavigation: portalNavigation};

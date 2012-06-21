@@ -11,8 +11,8 @@
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.addCustomizedOnLoadScript("eXo.portal.UIPortalNavigation.onLoad('" + uicomponent.id + "');");	
-	jsmanager.addCustomizedOnLoadScript("eXo.portal.UIPortalNavigation.loadScroll('" + uicomponent.id + "');");
+	jsmanager.addCustomizedOnLoadScript("require('SHARED/navigation').UIPortalNavigation.onLoad('" + uicomponent.id + "');");	
+	jsmanager.addCustomizedOnLoadScript("require('SHARED/navigation').UIPortalNavigation.loadScroll('" + uicomponent.id + "');");
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext();     
 	PortalURL nodeURL = nodeurl();
@@ -67,7 +67,7 @@
 			""";
 		} else {
 		   print """
-				<a  class="ItemIcon $icon" onclick='eXo.portal.UIPortalNavigation.cancelHideMenuContainer(event)'>$label</a>
+				<a  class="ItemIcon $icon" href="#$label">$label</a>
 			""";
 		}
 		
@@ -118,7 +118,7 @@
 										<a class="TabIcon ${iconType}" href="$nodeURL">$label</a>
 					 				""";
 								} else {%>
-									    <a class="TabIcon ${iconType}" href="javascript:void(0)">$label</a>
+									    <a class="TabIcon ${iconType}" href="#$label">$label</a>
 							<%}%>								
 							</span>
 						<%

@@ -3,7 +3,7 @@
   	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.addCustomizedOnLoadScript('eXo.portal.UIPortalNavigation.onLoad("' + uicomponent.id + '");');
+	jsmanager.addCustomizedOnLoadScript('require("SHARED/navigation").UIPortalNavigation.onLoad("' + uicomponent.id + '");');
 	String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));";
 	String accountSetting = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));";
 	String changeSkinAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeSkin', true));";
@@ -11,14 +11,14 @@
 <ul class="UIStarToolBarPortlet UIHorizontalTabs" id="$uicomponent.id" >
 	<li class="UITab portlet-menu-item" style="width: 62px">
 		<ul class="MenuItemContainer portlet-menu-cascade" style="display:none;">
-			<li class="MenuItem portlet-menu-cascade-item" onclick="$changeLanguageAction">
-				<a href="#" class="ChangeLanguageIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.ChangeLanguage")%></a>
+			<li class="MenuItem portlet-menu-cascade-item">
+				<a href="#" onclick="$changeLanguageAction" class="ChangeLanguageIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.ChangeLanguage")%></a>
 			</li>
-			<li class="MenuItem portlet-menu-cascade-item" onclick="$changeSkinAction">
-				<a href="#" class="ChangeSkinIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.ChangeSkin")%></a>
+			<li class="MenuItem portlet-menu-cascade-item">
+				<a href="#" onclick="$changeSkinAction" class="ChangeSkinIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.ChangeSkin")%></a>
 			</li>
-			<li class="MenuItem portlet-menu-cascade-item" onclick="eXo.portal.logout();">
-				<a href="#" class="SignOutIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.Logout")%></a>
+			<li class="MenuItem portlet-menu-cascade-item">
+				<a href="#" onclick="eXo.portal.logout();" class="SignOutIcon"><%=_ctx.appRes("UIStarToolbarPortlet.item.Logout")%></a>
 			</li>
 		</ul>
 	</li>
