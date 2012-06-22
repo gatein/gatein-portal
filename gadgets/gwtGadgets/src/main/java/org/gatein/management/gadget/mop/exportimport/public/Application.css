@@ -185,7 +185,7 @@ a:visited {
 }
 
 .gwt-DialogBox .Caption {
-   background-image: url(gray_gradient.gif);
+   /*background-image: url(gray_gradient.gif);*/
    background-repeat: repeat-x;
    padding: 4px;
    padding-bottom: 8px;
