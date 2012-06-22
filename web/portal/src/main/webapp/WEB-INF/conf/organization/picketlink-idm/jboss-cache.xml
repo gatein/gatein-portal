@@ -1,5 +1,8 @@
 <jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
+  <!-- Configure the TransactionManager -->
+  <transaction transactionManagerLookupClass="org.jboss.cache.transaction.JBossStandaloneJTAManagerLookup" />
+
   <!-- Eviction configuration -->
   <eviction wakeUpInterval="5000">
     <default algorithmClass="org.jboss.cache.eviction.ExpirationAlgorithm"

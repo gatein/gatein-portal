@@ -1,5 +1,8 @@
 <jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
+  <!-- Configure the TransactionManager -->
+  <transaction transactionManagerLookupClass="org.jboss.cache.transaction.JBossStandaloneJTAManagerLookup" />
+
   <!-- The cluster name will be changed programmatically. Portal container name will be added to the end of cluster name. -->
   <clustering mode="replication" clusterName="${jboss.partition.name:DefaultPartition}-idm-store-cluster">
     <stateRetrieval timeout="20000" fetchInMemoryState="false" />
