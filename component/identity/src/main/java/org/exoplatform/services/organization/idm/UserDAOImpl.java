@@ -50,11 +50,8 @@ import java.util.Set;
 /*
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
  */
-public class UserDAOImpl implements UserHandler
+public class UserDAOImpl extends AbstractDAOImpl implements UserHandler
 {
-   private static Logger log = LoggerFactory.getLogger(UserDAOImpl.class);
-
-   private final PicketLinkIDMService service_;
 
    private List<UserEventListener> listeners_ = new ArrayList<UserEventListener>(3);
 
@@ -77,8 +74,6 @@ public class UserDAOImpl implements UserHandler
    public static final Set<String> USER_NON_PROFILE_KEYS;
 
    public static final DateFormat dateFormat = DateFormat.getInstance();
-
-   private PicketLinkIDMOrganizationServiceImpl orgService;
    
    static
    {
@@ -98,8 +93,7 @@ public class UserDAOImpl implements UserHandler
    public UserDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService idmService)
       throws Exception
    {
-      service_ = idmService;
-      this.orgService = orgService;
+      super(orgService, idmService);
    }
 
    final public List getUserEventListeners()
@@ -165,7 +159,7 @@ public class UserDAOImpl implements UserHandler
       }
       catch (IdentityException e)
       {
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -241,7 +235,7 @@ public class UserDAOImpl implements UserHandler
       }
       catch (IdentityException e)
       {
-         log.info("Cannot obtain user: " + userName + "; ", e);
+         handleException("Cannot obtain user: " + userName + "; ", e);
 
       }
 
@@ -258,7 +252,7 @@ public class UserDAOImpl implements UserHandler
       }
       catch (Exception e)
       {
-         log.info("Cannot cleanup user relationships: " + userName + "; ", e);
+         handleException("Cannot cleanup user relationships: " + userName + "; ", e);
 
       }
 
@@ -275,7 +269,7 @@ public class UserDAOImpl implements UserHandler
       }
       catch (IdentityException e)
       {
-         log.info("Cannot remove user: " + userName + "; ", e);
+         handleException("Cannot remove user: " + userName + "; ", e);
 
       }
 
@@ -410,7 +404,7 @@ public class UserDAOImpl implements UserHandler
          }
          catch (Exception e)
          {
-            log.info("Cannot authenticate user: " + username + "; ",  e);
+            handleException("Cannot authenticate user: " + username + "; ",  e);
 
          }
       }
@@ -616,7 +610,7 @@ public class UserDAOImpl implements UserHandler
       }
       catch (IdentityException e)
       {
-         log.info("Cannot find user by email: " + email + "; ", e );
+         handleException("Cannot find user by email: " + email + "; ", e );
 
       }
 
@@ -666,7 +660,7 @@ public class UserDAOImpl implements UserHandler
       }
       catch (Exception e)
       {
-         log.info("Cannot obtain group: " + groupId + "; ", e);
+         handleException("Cannot obtain group: " + groupId + "; ", e);
 
       }
 
@@ -774,7 +768,7 @@ public class UserDAOImpl implements UserHandler
             }
             catch (IdentityException e)
             {
-               log.info("Cannot update password: " + user.getUserName() + "; ", e);
+               handleException("Cannot update password: " + user.getUserName() + "; ", e);
 
             }
          }
@@ -789,7 +783,7 @@ public class UserDAOImpl implements UserHandler
       }
       catch (IdentityException e)
       {
-         log.info("Cannot update attributes for user: " + user.getUserName() + "; ", e);
+         handleException("Cannot update attributes for user: " + user.getUserName() + "; ", e);
 
       }
 
@@ -807,7 +801,7 @@ public class UserDAOImpl implements UserHandler
       }
       catch (IdentityException e)
       {
-         log.info("Cannot obtain user: " + userName + "; ", e);
+         handleException("Cannot obtain user: " + userName + "; ", e);
 
       }
 
@@ -839,7 +833,7 @@ public class UserDAOImpl implements UserHandler
       catch (IdentityException e)
       {
 
-         log.info("Cannot obtain attributes for user: " + user.getUserName() + "; ", e);
+         handleException("Cannot obtain attributes for user: " + user.getUserName() + "; ", e);
 
       }
 
@@ -965,7 +959,7 @@ public class UserDAOImpl implements UserHandler
       }
       catch (IdentityException e)
       {
-         log.error("Cannot remove displayName attribute of user: " + user.getUserName() + "; ", e);
+         handleException("Cannot remove displayName attribute of user: " + user.getUserName() + "; ", e);
       }
    }
 

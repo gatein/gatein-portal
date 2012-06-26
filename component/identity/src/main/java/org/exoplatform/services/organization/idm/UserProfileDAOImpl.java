@@ -43,25 +43,18 @@ import java.util.Set;
 /*
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
  */
-public class UserProfileDAOImpl implements UserProfileHandler
+public class UserProfileDAOImpl extends AbstractDAOImpl implements UserProfileHandler
 {
-
-   private static Logger log = LoggerFactory.getLogger(UserProfileDAOImpl.class);
 
    static private UserProfile NOT_FOUND = new UserProfileImpl();
 
-   private PicketLinkIDMService service_;
-
    private List<UserProfileEventListener> listeners_;
-
-   private PicketLinkIDMOrganizationServiceImpl orgService;
 
    public UserProfileDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService service)
       throws Exception
    {
-      service_ = service;
+      super(orgService, service);
       listeners_ = new ArrayList<UserProfileEventListener>(3);
-      this.orgService = orgService;
    }
 
    public void addUserProfileEventListener(UserProfileEventListener listener)
@@ -159,7 +152,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
       }
 
       if (foundUser == null)
@@ -242,7 +235,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
       }
 
       if (u == null)
@@ -259,7 +252,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
       }
 
       if (attrs == null || attrs.isEmpty())
@@ -320,7 +313,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
       }
 
    }
@@ -340,7 +333,7 @@ public class UserProfileDAOImpl implements UserProfileHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
       }
    }
 

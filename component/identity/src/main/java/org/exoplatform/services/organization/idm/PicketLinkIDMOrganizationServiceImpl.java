@@ -282,7 +282,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
 
    // It's fine to reuse same instance of UserTransaction as UserTransaction is singleton in JBoss and most other AS.
    // And new InitialContext().lookup("java:comp/UserTransaction") is quite expensive operation
-   private UserTransaction getUserTransaction() throws Exception
+   protected UserTransaction getUserTransaction() throws Exception
    {
       if (userTransaction == null)
       {

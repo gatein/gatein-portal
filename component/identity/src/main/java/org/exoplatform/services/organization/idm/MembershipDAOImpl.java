@@ -48,21 +48,15 @@ import javax.naming.InvalidNameException;
 /*
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
  */
-public class MembershipDAOImpl implements MembershipHandler
+public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHandler
 {
-   private static Logger log = LoggerFactory.getLogger(MembershipDAOImpl.class);
-
-   private PicketLinkIDMService service_;
 
    private List listeners_;
 
-   private PicketLinkIDMOrganizationServiceImpl orgService;
-
    public MembershipDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService service)
    {
-      service_ = service;
+      super(orgService, service);
       listeners_ = new ListenerStack(5);
-      this.orgService = orgService;
    }
 
    public void addMembershipEventListener(MembershipEventListener listener)
@@ -233,7 +227,7 @@ public class MembershipDAOImpl implements MembershipHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -257,7 +251,7 @@ public class MembershipDAOImpl implements MembershipHandler
          catch (Exception e)
          {
             //TODO:
-            log.info("Identity operation error: ", e);
+            handleException("Identity operation error: ", e);
 
          }
       }
@@ -270,7 +264,7 @@ public class MembershipDAOImpl implements MembershipHandler
          catch (Exception e)
          {
             //TODO:
-            log.info("Identity operation error: ", e);
+            handleException("Identity operation error: ", e);
 
          }
       }
@@ -315,7 +309,7 @@ public class MembershipDAOImpl implements MembershipHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -328,7 +322,7 @@ public class MembershipDAOImpl implements MembershipHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
       }
 
       if (!hasRole &&
@@ -352,7 +346,7 @@ public class MembershipDAOImpl implements MembershipHandler
          catch (Exception e)
          {
             //TODO:
-            log.info("Identity operation error: ", e);
+            handleException("Identity operation error: ", e);
 
          }
       }
@@ -368,7 +362,7 @@ public class MembershipDAOImpl implements MembershipHandler
          catch (Exception e)
          {
             //TODO:
-            log.info("Identity operation error: ", e);
+            handleException("Identity operation error: ", e);
 
          }
       }
@@ -407,7 +401,7 @@ public class MembershipDAOImpl implements MembershipHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -448,7 +442,7 @@ public class MembershipDAOImpl implements MembershipHandler
          catch (Exception e)
          {
             //TODO:
-            log.info("Identity operation error: ", e);
+            handleException("Identity operation error: ", e);
 
          }
 
@@ -464,7 +458,7 @@ public class MembershipDAOImpl implements MembershipHandler
             catch (Exception e)
             {
                //TODO:
-               log.info("Identity operation error: ", e);
+               handleException("Identity operation error: ", e);
 
             }
          }
@@ -512,7 +506,7 @@ public class MembershipDAOImpl implements MembershipHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -531,7 +525,7 @@ public class MembershipDAOImpl implements MembershipHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -620,7 +614,7 @@ public class MembershipDAOImpl implements MembershipHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -647,7 +641,7 @@ public class MembershipDAOImpl implements MembershipHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -701,7 +695,7 @@ public class MembershipDAOImpl implements MembershipHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -742,7 +736,7 @@ public class MembershipDAOImpl implements MembershipHandler
          catch (Exception e)
          {
             //TODO:
-            log.info("Identity operation error: ", e);
+            handleException("Identity operation error: ", e);
 
          }
 
@@ -840,7 +834,7 @@ public class MembershipDAOImpl implements MembershipHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -872,7 +866,7 @@ public class MembershipDAOImpl implements MembershipHandler
          catch (Exception e)
          {
             //TODO:
-            log.info("Identity operation error: ", e);
+            handleException("Identity operation error: ", e);
 
          }
 
@@ -954,7 +948,7 @@ public class MembershipDAOImpl implements MembershipHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -979,7 +973,7 @@ public class MembershipDAOImpl implements MembershipHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 

@@ -45,27 +45,20 @@ import java.util.Set;
 /*
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
  */
-public class GroupDAOImpl implements GroupHandler
+public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler
 {
-
-   private static Logger log = LoggerFactory.getLogger(GroupDAOImpl.class);
 
    public static final String GROUP_LABEL = "label";
 
    public static final String GROUP_DESCRIPTION = "description";
 
-   private PicketLinkIDMService service_;
-
    private List<GroupEventListener> listeners_;
-
-   private PicketLinkIDMOrganizationServiceImpl orgService;
 
    private static final String CYCLIC_ID = "org.gatein.portal.identity.LOOPED_GROUP_ID";
 
    public GroupDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService service)
    {
-      service_ = service;
-      this.orgService = orgService;
+      super(orgService, service);
       listeners_ = new ArrayList<GroupEventListener>();
    }
 
@@ -149,7 +142,7 @@ public class GroupDAOImpl implements GroupHandler
          }
          catch (Exception e)
          {
-            log.info("Cannot obtain group: " + parentPLGroupName, e);
+            handleException("Cannot obtain group: " + parentPLGroupName, e);
 
          }
 
@@ -186,7 +179,7 @@ public class GroupDAOImpl implements GroupHandler
       }
       catch (Exception e)
       {
-         log.info("Cannot associate groups: ", e);
+         handleException("Cannot associate groups: ", e);
       }
 
       if (broadcast)
@@ -257,7 +250,7 @@ public class GroupDAOImpl implements GroupHandler
       }
       catch (Exception e)
       {
-         log.info("Cannot obtain group: " + plGroupName + "; ", e);
+         handleException("Cannot obtain group: " + plGroupName + "; ", e);
       }
 
       if (jbidGroup == null)
@@ -304,7 +297,7 @@ public class GroupDAOImpl implements GroupHandler
       }
       catch (Exception e)
       {
-         log.info("Cannot clear group relationships: " + plGroupName + "; ", e);
+         handleException("Cannot clear group relationships: " + plGroupName + "; ", e);
       }
 
       try
@@ -314,7 +307,7 @@ public class GroupDAOImpl implements GroupHandler
       }
       catch (Exception e)
       {
-         log.info("Cannot remove group: " + plGroupName + "; ", e);
+         handleException("Cannot remove group: " + plGroupName + "; ", e);
       }
 
       if (broadcast)
@@ -349,7 +342,7 @@ public class GroupDAOImpl implements GroupHandler
       }
       catch (Exception e)
       {
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
       }
 
       Set<Group> exoGroups = new HashSet<Group>();
@@ -376,7 +369,7 @@ public class GroupDAOImpl implements GroupHandler
          }
          catch (Exception e)
          {
-            log.info("Identity operation error: ", e);
+            handleException("Identity operation error: ", e);
          }
 
          for (org.picketlink.idm.api.Group group : groups)
@@ -484,7 +477,7 @@ public class GroupDAOImpl implements GroupHandler
          catch (Exception e)
          {
             //TODO:
-            log.info("Identity operation error: ", e);
+            handleException("Identity operation error: ", e);
 
          }
       }
@@ -509,7 +502,7 @@ public class GroupDAOImpl implements GroupHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -529,7 +522,7 @@ public class GroupDAOImpl implements GroupHandler
             catch (Exception e)
             {
                //TODO:
-               log.info("Identity operation error: ", e);
+               handleException("Identity operation error: ", e);
             }
          }
       }
@@ -639,7 +632,7 @@ public class GroupDAOImpl implements GroupHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -690,7 +683,7 @@ public class GroupDAOImpl implements GroupHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
 
       }
 
@@ -707,7 +700,7 @@ public class GroupDAOImpl implements GroupHandler
             catch (Exception e)
             {
                //TODO:
-               log.info("Identity operation error: ", e);
+               handleException("Identity operation error: ", e);
             }
          }
       }
@@ -799,7 +792,7 @@ public class GroupDAOImpl implements GroupHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
       }
 
       String gtnGroupName = getGtnGroupName(jbidGroup.getName());
@@ -924,7 +917,7 @@ public class GroupDAOImpl implements GroupHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
       }
 
       // Check if there is cross reference so we ended in a loop and break the process.
@@ -1044,7 +1037,7 @@ public class GroupDAOImpl implements GroupHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
       }
 
       if (jbidGroup == null)
@@ -1058,7 +1051,7 @@ public class GroupDAOImpl implements GroupHandler
          catch (Exception e)
          {
             //TODO:
-            log.info("Identity operation error: ", e);
+            handleException("Identity operation error: ", e);
          }
       }
 
@@ -1089,7 +1082,7 @@ public class GroupDAOImpl implements GroupHandler
          catch (Exception e)
          {
             //TODO:
-            log.info("Identity operation error: ", e);
+            handleException("Identity operation error: ", e);
          }
 
       }
@@ -1166,7 +1159,7 @@ public class GroupDAOImpl implements GroupHandler
       catch (Exception e)
       {
          //TODO:
-         log.info("Identity operation error: ", e);
+         handleException("Identity operation error: ", e);
       }
 
       if (rootGroup == null)
@@ -1182,7 +1175,7 @@ public class GroupDAOImpl implements GroupHandler
          catch (Exception e)
          {
             //TODO:
-            log.info("Identity operation error: ", e);
+            handleException("Identity operation error: ", e);
          }
       }
 

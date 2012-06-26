@@ -42,7 +42,7 @@ import java.util.Map;
 /*
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
  */
-public class MembershipTypeDAOImpl implements MembershipTypeHandler
+public class MembershipTypeDAOImpl extends AbstractDAOImpl implements MembershipTypeHandler
 {
 
    public static final String MEMBERSHIP_DESCRIPTION = "description";
@@ -55,19 +55,12 @@ public class MembershipTypeDAOImpl implements MembershipTypeHandler
 
    public static final DateFormat dateFormat = DateFormat.getInstance();
 
-   private PicketLinkIDMService service_;
-
-   private PicketLinkIDMOrganizationServiceImpl orgService;
-   
-   private static Logger log = LoggerFactory.getLogger(MembershipTypeDAOImpl.class);
-
    private List listeners_;
 
    public MembershipTypeDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService service)
    {
-      service_ = service;
+      super(orgService, service);
       listeners_ = new ListenerStack(5);
-      this.orgService = orgService;
    }
 
    public void addMembershipTypeEventListener(MembershipTypeEventListener listener)
