@@ -104,9 +104,9 @@ public class UIPortletForm extends UIFormTabPane
             .addValidator(StringLengthValidator.class, 3, 60)
             .addValidator(NotHTMLTagValidator.class, "UIPortletForm.msg.InvalidPortletTitle"))
          .addUIFormInput(new UIFormStringInput("width", "width", null)
-            .addValidator(ExpressionValidator.class, "(^([1-9]\\d*)px$)?", "UIPortletForm.msg.InvalidWidthHeight"))
+            .addValidator(ExpressionValidator.class, "(^([1-9]\\d*)(?:px)?$)?", "UIPortletForm.msg.InvalidWidthHeight"))
          .addUIFormInput(new UIFormStringInput("height", "height", null)
-            .addValidator(ExpressionValidator.class, "(^([1-9]\\d*)px$)?", "UIPortletForm.msg.InvalidWidthHeight"))
+            .addValidator(ExpressionValidator.class, "(^([1-9]\\d*)(?:px)?$)?", "UIPortletForm.msg.InvalidWidthHeight"))
          .addUIFormInput(new UICheckBoxInput("showInfoBar", "showInfoBar", false))
          .addUIFormInput(new UICheckBoxInput("showPortletMode", "showPortletMode", false))
          .addUIFormInput(new UICheckBoxInput("showWindowState", "showWindowState", false))
@@ -305,7 +305,7 @@ public class UIPortletForm extends UIFormTabPane
          {
             if (!width.endsWith("px"))
             {
-               width.concat("px");
+            	width = width.concat("px");
             }
             uiPortlet.setWidth(width);
          }
@@ -319,7 +319,7 @@ public class UIPortletForm extends UIFormTabPane
          {
             if (!height.endsWith("px"))
             {
-               height.concat("px");
+            	height = height.concat("px");
             }
             uiPortlet.setHeight(height);
          }
