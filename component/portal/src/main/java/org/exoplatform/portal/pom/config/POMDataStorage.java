@@ -54,9 +54,14 @@ import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+import org.gatein.common.transaction.JTAUserTransactionLifecycleService;
 import org.jibx.runtime.BindingDirectory;
 import org.jibx.runtime.IBindingFactory;
 import org.jibx.runtime.impl.UnmarshallingContext;
+
+import javax.transaction.Status;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -65,16 +70,21 @@ import org.jibx.runtime.impl.UnmarshallingContext;
 public class POMDataStorage implements ModelDataStorage
 {
 
+   private static final Logger log = LoggerFactory.getLogger(POMDataStorage.class);
+
    /** . */
    private final POMSessionManager pomMgr;
 
    /** . */
    private ConfigurationManager confManager_;
 
-   public POMDataStorage(POMSessionManager pomMgr, ConfigurationManager confManager)
+   private JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService;
+
+   public POMDataStorage(POMSessionManager pomMgr, ConfigurationManager confManager, JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService)
    {
       this.pomMgr = pomMgr;
       this.confManager_ = confManager;
+      this.jtaUserTransactionLifecycleService = jtaUserTransactionLifecycleService;
    }
 
    public PortalData getPortalConfig(PortalKey key) throws Exception
@@ -239,6 +249,10 @@ public class POMDataStorage implements ModelDataStorage
                
             };
          }
+
+         // Commit pending changes if JTA is enabled to ensure that query result contains latest stuff from persistent storage
+         syncUserTransactionIfJTAEnabled();
+
          return (LazyPageList<T>)new LazyPageList<PageData>(pageAccess, 10);
       }
       else if (PortletPreferences.class.equals(type))
@@ -348,6 +362,38 @@ public class POMDataStorage implements ModelDataStorage
       {
          ex.printStackTrace();
          return null;
+      }
+   }
+
+   /**
+    * If we are in JTA environment and there are pending changes in MOP, we will commit current JTA transaction and start new.
+    * This will enforce that query result will contain latest persistent stuff
+    */
+   private void syncUserTransactionIfJTAEnabled()
+   {
+      try
+      {
+         if (jtaUserTransactionLifecycleService.getUserTransaction().getStatus() == Status.STATUS_ACTIVE)
+         {
+            POMSession pomSession = pomMgr.getSession();
+            if (pomSession.isModified())
+            {
+               if (log.isTraceEnabled())
+               {
+                  log.trace("Active JTA transaction found. Going to sync MOP session and JTA transaction");
+               }
+
+               // Sync current MOP session first
+               pomSession.save();
+
+               jtaUserTransactionLifecycleService.finishJTATransaction();
+               jtaUserTransactionLifecycleService.beginJTATransaction();
+            }
+         }
+      }
+      catch (Exception e)
+      {
+         log.warn("Error during sync of JTA transaction", e);
       }
    }
 }

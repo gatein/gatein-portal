@@ -23,8 +23,10 @@
 
 package org.exoplatform.services.organization.idm;
 
+import org.exoplatform.container.ExoContainerContext;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.common.transaction.JTAUserTransactionLifecycleService;
 
 import javax.transaction.Status;
 import javax.transaction.UserTransaction;
@@ -57,7 +59,9 @@ public class AbstractDAOImpl
       {
          try
          {
-            UserTransaction tx = orgService.getUserTransaction();
+            JTAUserTransactionLifecycleService transactionLfService = (JTAUserTransactionLifecycleService)ExoContainerContext.getCurrentContainer().
+                  getComponentInstanceOfType(JTAUserTransactionLifecycleService.class);
+            UserTransaction tx = transactionLfService.getUserTransaction();
             if (tx.getStatus() == Status.STATUS_ACTIVE)
             {
                tx.setRollbackOnly();

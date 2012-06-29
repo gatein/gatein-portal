@@ -38,6 +38,22 @@
   </component>
 
   <component>
+     <key>org.jboss.cache.transaction.TransactionManagerLookup</key>
+     <type>org.jboss.cache.transaction.JBossStandaloneJTAManagerLookup</type>
+  </component>
+
+  <component>
+     <key>org.exoplatform.services.transaction.TransactionService</key>
+     <type>org.exoplatform.services.transaction.jbosscache.JBossTransactionsService</type>
+     <init-params>
+        <value-param>
+           <name>timeout</name>
+           <value>300</value>
+       </value-param>
+     </init-params>
+  </component>
+
+  <component>
      <key>org.exoplatform.services.document.DocumentReaderService</key>
      <type>org.exoplatform.services.document.impl.DocumentReaderServiceImpl</type>
      <component-plugins>

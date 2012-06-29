@@ -57,6 +57,7 @@ import org.exoplatform.services.organization.GroupHandler;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
+import org.gatein.common.transaction.JTAUserTransactionLifecycleService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,6 +99,8 @@ public class TestDataStorage extends AbstractConfigTest
    /** . */
    private OrganizationService org;
 
+   private JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService;
+
    public TestDataStorage(String name)
    {
       super(name);
@@ -123,6 +126,7 @@ public class TestDataStorage extends AbstractConfigTest
       events = new LinkedList<Event>();
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
       org = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
+      jtaUserTransactionLifecycleService = (JTAUserTransactionLifecycleService)container.getComponentInstanceOfType(JTAUserTransactionLifecycleService.class);
 
       //
       listenerService.addListener(DataStorage.PAGE_CREATED, listener);
@@ -702,10 +706,10 @@ public class TestDataStorage extends AbstractConfigTest
       String dashboardDesc = "dashboardDesc";
       String dashboardWidth = "dashboardWidth";
       String dashboardHeight = "dashboardHeight";
-      
+
       String normalTheme = "normalTheme";
-      
-      
+
+
       Page page = new Page();
       String pageId = "portal::test::bit";
       page.setPageId(pageId );
@@ -734,7 +738,7 @@ public class TestDataStorage extends AbstractConfigTest
       normalPortlet = (Application<Portlet>) page.getChildren().get(1);
       assertNotNull(dashboardPortlet);
       assertNotNull(normalPortlet);
-      
+
       assertEquals(normalTheme, normalPortlet.getTheme());
       assertEquals(dashboardTheme, dashboardPortlet.getTheme());
       assertEquals(dashboardIcon, dashboardPortlet.getIcon());
@@ -1301,5 +1305,23 @@ public class TestDataStorage extends AbstractConfigTest
       wsrp = storage_.load(wsrpApplication.getState(), ApplicationType.WSRP_PORTLET);
       assertNotNull(wsrp);
       assertEquals(id, wsrp.getPortletId());
+   }
+
+   public void testJTA() throws Exception
+   {
+      jtaUserTransactionLifecycleService.beginJTATransaction();
+
+      Page page = new Page();
+      page.setPageId("portal::test::searchedpage2");
+      page.setTitle("Juuu2 Ziii2");
+      storage_.create(page);
+
+      assertPageFound(new Query<Page>(null, null, null, "Juuu2 Ziii2", Page.class), "portal::test::searchedpage2");
+      jtaUserTransactionLifecycleService.finishJTATransaction();
+
+      jtaUserTransactionLifecycleService.beginJTATransaction();
+      storage_.remove(page);
+      assertPageNotFound(new Query<Page>(null, null, null, "Juuu2 Ziii2", Page.class));
+      jtaUserTransactionLifecycleService.finishJTATransaction();
    }
 }

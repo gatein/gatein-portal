@@ -31,6 +31,11 @@
   </component>
 
   <component>
+    <key>org.gatein.common.transaction.JTAUserTransactionLifecycleService</key>
+    <type>org.gatein.common.transaction.JTAUserTransactionLifecycleServiceImpl</type>
+  </component>
+
+  <component>
     <key>org.exoplatform.services.database.HibernateService</key>
     <jmx-name>database:type=HibernateService</jmx-name>
     <type>org.exoplatform.services.database.impl.HibernateServiceImpl</type>
