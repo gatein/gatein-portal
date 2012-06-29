@@ -57,9 +57,6 @@ public class NavigationServiceWrapper implements NavigationService, Startable
    private final POMSessionManager manager;
 
    /** . */
-   private Session session;
-
-   /** . */
    private final RepositoryService repositoryService;
 
    /** . */
@@ -171,6 +168,7 @@ public class NavigationServiceWrapper implements NavigationService, Startable
 
    public void start()
    {
+      Session session = null;
       try
       {
          String workspaceName = manager.getLifeCycle().getWorkspaceName();
@@ -182,16 +180,17 @@ public class NavigationServiceWrapper implements NavigationService, Startable
       {
          throw new UndeclaredRepositoryException(e);
       }
+      finally
+      {
+         if (session != null)
+         {
+            session.logout();
+         }
+      }
    }
 
    public void stop()
    {
       bridge.stop();
-
-      //
-      if (session != null)
-      {
-         session.logout();
-      }
    }
 }
