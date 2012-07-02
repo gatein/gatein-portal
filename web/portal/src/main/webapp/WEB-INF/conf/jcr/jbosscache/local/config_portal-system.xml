@@ -31,7 +31,7 @@
       <default algorithmClass="org.jboss.cache.eviction.LRUAlgorithm"
                actionPolicyClass="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.ParentNodeEvictionActionPolicy"
                eventQueueSize="1000000">
-         <property name="maxNodes" value="10000"/>
+         <property name="maxNodes" value="300000"/>
          <property name="timeToLive" value="60000"/>
       </default>
    </eviction>

@@ -126,7 +126,7 @@
           </initializer>
           <cache enabled="true" class="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.JBossCacheWorkspaceStorageCache">
             <properties>
-              <property name="jbosscache-configuration" value="${gatein.jcr.cache.config}" />
+              <property name="jbosscache-configuration" value="${gatein.jcr.cache.config.workspace.portal-system}" />
               <property name="jgroups-configuration" value="${gatein.jcr.jgroups.config}" />
               <property name="jgroups-multiplexer-stack" value="false" />
               <property name="jbosscache-cluster-name" value="jcr${container.name.suffix}" />
