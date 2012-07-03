@@ -79,6 +79,29 @@
 
   <route path="/">
 
+    <!-- The portal redirect handler -->
+    <route-param qname="gtn:handler">
+      <value>siteRedirect</value>
+    </route-param>
+
+    <!-- The portal access -->
+    <route path="/{gtn:lang}/{gtn:sitename}/{gtn:path}">
+      <route-param qname="gtn:sitetype">
+        <value>portal</value>
+      </route-param>
+      <path-param qname="gtn:lang" encoding="preserve-path">
+        <pattern>([A-Za-z]{2}(-[A-Za-z]{2})?)?</pattern>
+      </path-param>
+      <path-param qname="gtn:path" encoding="preserve-path">
+        <pattern>.*</pattern>
+      </path-param>
+    </route>
+
+  </route>
+
+
+  <route path="/">
+
     <!-- The portal handler -->
     <route-param qname="gtn:handler">
       <value>portal</value>

@@ -617,6 +617,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       }
       catch (Exception ex)
       {
+         log.error("An Exception occured when creating the Portal Configuration. Exception message: " + ex.getMessage(), ex);
          return false;
       }
    }

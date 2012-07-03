@@ -119,6 +119,18 @@
       <set-method>register</set-method>
       <type>org.exoplatform.portal.application.StaticResourceRequestHandler</type>
    </component-plugin>
+   <component-plugin>
+      <name>DeviceRedirectRequestHandler</name>
+      <set-method>register</set-method>
+      <type>org.gatein.web.redirect.DeviceRedirectRequestHandler</type>
+      <init-params> <!--browser.detection.path redirect.cookie.maxage redirect.cookie.comment redirect.cookie.path redirect.cookie.secure-->
+        <value-param>
+          <name>browser.detection.path</name>
+          <description>Where the device detection page is located with respect to the portal web application</description>
+          <value>/device/detection.jsp</value>
+        </value-param>
+      </init-params>
+   </component-plugin>
   </external-component-plugins>
 
 </configuration>

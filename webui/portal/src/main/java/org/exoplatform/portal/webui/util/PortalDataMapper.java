@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.webui.util;
 
-import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
@@ -205,7 +204,8 @@ public class PortalDataMapper
       model.setSkin(uiPortal.getSkin());
       model.setModifiable(uiPortal.isModifiable());
       model.setProperties(uiPortal.getProperties());
-
+      model.setPortalRedirects(uiPortal.getPortalRedirects());
+      
       model.setPortalLayout(new Container());
 
       List<UIComponent> children = uiPortal.getChildren();
@@ -353,6 +353,7 @@ public class PortalDataMapper
       uiPortal.setAccessPermissions(model.getAccessPermissions());
       uiPortal.setEditPermission(model.getEditPermission());
       uiPortal.setProperties(model.getProperties());
+      uiPortal.setRedirects(model.getPortalRedirects());
 
       List<ModelObject> children = model.getPortalLayout().getChildren();
       if (children != null)

@@ -162,7 +162,8 @@ public class TestSerialization extends AbstractGateInTest
          "foo06",
          Collections.singletonMap("foo07", "foo08"),
          "foo09",
-         container
+         container,
+         null
       );
       PortalData clone = IOTools.clone(obj);
       assertEquals(obj.getStorageId(), clone.getStorageId());

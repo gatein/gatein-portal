@@ -129,6 +129,49 @@
     <value name="skin" field="skin" usage="optional"/>
     <structure field="properties" usage="optional"/>
     <structure name="portal-layout" using="container" field="portalLayout" usage="optional"/>
+    <collection name="portal-redirects" usage="optional" get-method="getPortalRedirects" set-method="setPortalRedirects" item-type="org.exoplatform.portal.config.model.PortalRedirect"/>
+  </mapping>
+
+  <mapping name="portal-redirect" label="portal-redirect" class="org.exoplatform.portal.config.model.PortalRedirect">
+    <value name="redirect-site" field="redirectSite"/>
+    <value name="name" field="name"/>
+    <value name="enabled" field="enabled"/>
+    <collection name="conditions" usage="optional" get-method="getConditions" set-method="setConditions" item-type="org.exoplatform.portal.config.model.RedirectCondition"/>
+    <structure usage="optional" field="mappings"/>
+  </mapping>
+
+  <mapping name="condition" label="condition" class="org.exoplatform.portal.config.model.RedirectCondition">
+    <value name="name" field="name"/>
+    <structure usage="optional" field="userAgentConditions"/>
+    <collection name="device-properties" usage="optional" get-method="getDeviceProperties" set-method="setDeviceProperties" item-type="org.exoplatform.portal.config.model.DevicePropertyCondition"/>
+  </mapping>
+
+  <mapping name="user-agent" label="user-agent" class="org.exoplatform.portal.config.model.UserAgentConditions">
+    <collection field="contains" item-type="java.lang.String" factory="org.jibx.runtime.Utility.arrayListFactory">
+      <value name="contains"/>
+    </collection>
+    <collection field="doesNotContain" item-type="java.lang.String" factory="org.jibx.runtime.Utility.arrayListFactory">
+      <value name="does-not-contain"/>
+    </collection>
+  </mapping>
+
+  <mapping name="device-property" label="device-property" class="org.exoplatform.portal.config.model.DevicePropertyCondition">
+    <value name="property-name" field="propertyName"/>
+    <value name="greater-than" field="greaterThan" usage="optional"/>
+    <value name="less-than" field="lessThan" usage="optional"/>
+    <value name="equals" field="equals" usage="optional"/>
+    <value name="matches" field="matches" usage="optional"/>
+  </mapping>
+
+  <mapping name="node-mapping" label="node-mapping" class="org.exoplatform.portal.config.model.RedirectMappings">
+    <value name="use-node-name-matching" field="useNodeNameMatching" usage="optional"/>
+    <value name="unresolved-nodes" field="unresolvedNode" usage="optional"/>
+    <collection item-type="org.exoplatform.portal.config.model.NodeMap" get-method="getMappings" set-method="setMappings" usage="optional"/>
+  </mapping>
+
+  <mapping name="node-map" label="map" class="org.exoplatform.portal.config.model.NodeMap">
+    <value name="origin-node" field="originNode"/>
+    <value name="redirect-node" field="redirectNode"/>
   </mapping>
 
   <mapping name="page-set" class="org.exoplatform.portal.config.model.Page$PageSet">

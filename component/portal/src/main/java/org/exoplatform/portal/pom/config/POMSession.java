@@ -406,6 +406,10 @@ public final class POMSession
          needRollback = false;
          return v;
       }
+      catch (Exception e)
+      {
+         throw e;
+      }
       finally
       {
          isInTask = false;

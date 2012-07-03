@@ -27,13 +27,21 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
+import org.exoplatform.portal.config.model.UserAgentConditions;
 import org.exoplatform.portal.mop.*;
+import org.exoplatform.portal.mop.redirects.Condition;
+import org.exoplatform.portal.mop.redirects.DeviceProperty;
+import org.exoplatform.portal.mop.redirects.Mappings;
+import org.exoplatform.portal.mop.redirects.NodeMap;
+import org.exoplatform.portal.mop.redirects.Redirect;
+import org.exoplatform.portal.mop.redirects.Redirectable;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
+import org.exoplatform.services.jcr.util.Text;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
@@ -55,6 +63,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 import static org.exoplatform.portal.pom.config.Utils.split;
 
@@ -120,6 +129,15 @@ public class Mapper
          editPermission = pr.getEditPermission();
       }
       
+      //
+      List<RedirectData> redirects = null;
+      if (src.isAdapted(Redirectable.class))
+      {
+         Redirectable redirectAble = src.adapt(Redirectable.class);
+         redirects = loadRedirects(src, redirectAble.getRedirects());
+      }
+
+
       Described described = src.adapt(Described.class);
 
       //
@@ -134,11 +152,112 @@ public class Mapper
          editPermission,
          Collections.unmodifiableMap(properties),
          attrs.getValue(MappedAttributes.SKIN),
-         layout);
+         layout,
+         redirects);
+   }
+   
+   private List<RedirectData> loadRedirects(Site src, Map<String, Redirect> redirects)
+   {
+      if (redirects == null || redirects.isEmpty())
+      {
+         return null;
+      }
+      else
+      {
+         List<RedirectData> redirectsData = new ArrayList<RedirectData>();
+         for (Redirect redirect : redirects.values())
+         {
+            RedirectData redirectDate = new RedirectData(src.getObjectId(), redirect.getSite(), redirect.getName(), redirect.getEnabled(), buildConditionData(src, redirect.getConditions()), buildMappingsData(src.getObjectId(), redirect.getMapping()));
+            redirectsData.add(redirectDate);
+         }
+         return redirectsData;
+      }
+   }
+   
+   private List<RedirectConditionData> buildConditionData(Site src, Map<String, Condition> conditions)
+   {
+      List<RedirectConditionData> conditionDatas = new ArrayList<RedirectConditionData>();
+      
+      for (Condition condition: conditions.values())
+      {
+         RedirectConditionData conditionData = new RedirectConditionData(src.getObjectId(), null, condition.getName());
+        
+         RedirectUserAgentConditionData userAgentConditionData = new RedirectUserAgentConditionData(src.getObjectId(), null);
+         userAgentConditionData.getUserAgentContains().addAll(condition.getUserAgentContains());
+         userAgentConditionData.getUserAgentDoesNotContain().addAll(condition.getUserAgentDoesNotContain());
+
+         conditionData.setUserAgentConditionData(userAgentConditionData);
+
+         for (DeviceProperty deviceProperty: condition.getDeviceProperties().values())
+         {
+            RedirectDevicePropertyConditionData propertyConditionData = new RedirectDevicePropertyConditionData(src.getObjectId(), null, deviceProperty.getName());
+            if (deviceProperty.getEquals() != null)
+            {
+               propertyConditionData.setEquals(deviceProperty.getEquals());
+            }
+            
+            if (deviceProperty.getGreaterThan() != null)
+            {
+               propertyConditionData.setGreaterThan(deviceProperty.getGreaterThan());
+            }
+            
+            if (deviceProperty.getLessThan() != null)
+            {
+               propertyConditionData.setLessThan(deviceProperty.getLessThan());
+            }
+            
+            if (deviceProperty.getPattern() != null)
+            {
+               propertyConditionData.setMatches(Pattern.compile(deviceProperty.getPattern()));
+            }
+            
+            conditionData.getDevicePropertyConditionData().add(propertyConditionData);
+         }
+         
+         conditionDatas.add(conditionData);
+      }
+      
+      return conditionDatas;
+   }
+   
+   private RedirectMappingsData buildMappingsData(String storageId, Mappings mappings)
+   {
+      if (mappings != null)
+      {
+         RedirectMappingsData redirectMappingsData = new RedirectMappingsData(storageId);
+
+         if (mappings.getUnresolvedNodeMatching() != null)
+         {
+            redirectMappingsData.setUnresolvedNode(mappings.getUnresolvedNodeMatching());
+         }
+
+         if (mappings.getNodeNameMatching() != null)
+         {
+            redirectMappingsData.setUseNodeNameMatching(mappings.getNodeNameMatching());
+         }
+
+         if (mappings.getNodeMap() != null)
+         {
+            HashMap<String, String> map = new HashMap<String, String>();
+            for (NodeMap nodeMap :  mappings.getNodeMap().values())
+            {
+               map.put(nodeMap.getOriginNode(), nodeMap.getRedirectNode());
+            }
+            redirectMappingsData.getMappings().putAll(map);
+         }
+
+         return redirectMappingsData;
+      }
+      else 
+      {
+         return null;
+      }
    }
 
    public void save(PortalData src, Site dst)
    {
+      try
+      {
       if (src.getStorageId() != null && !src.getStorageId().equals(dst.getObjectId()))
       {
          String msg =
@@ -163,6 +282,58 @@ public class Mapper
       Described described = dst.adapt(Described.class);
       described.setName(src.getLabel());
       described.setDescription(src.getDescription());
+
+      Redirectable redirectable = dst.adapt(Redirectable.class);
+      Map<String, Redirect> redirects = redirectable.getRedirects();
+
+      List<RedirectData> redirectsData = src.getRedirects();
+      if (redirectsData != null)
+      {
+         for (RedirectData redirectData: redirectsData)
+         {
+            Redirect redirect;
+            if (!redirects.containsKey(redirectData.getRedirectName()))
+            {
+               redirect = redirectable.createRedirect();
+               redirectable.getRedirects().put(redirectData.getRedirectName(), redirect);
+            }
+            else
+            {
+               redirect = redirects.get(redirectData.getRedirectName());
+            }
+            
+            redirect.setName(redirectData.getRedirectName());
+            redirect.setSite(redirectData.getRedirectSiteName());
+            redirect.setEnabled(redirectData.isEnabled());
+            
+            if (redirectData.getConditions() != null)
+            {
+               for (RedirectConditionData conditionData: redirectData.getConditions())
+               {
+                  Condition condition = redirect.getConditions().get(conditionData.getRedirectName());
+                  if (condition == null)
+                  {
+                     condition = redirect.createCondition();
+                     redirect.getConditions().put(conditionData.getRedirectName(), condition);
+                  }
+               //condition.setName(conditionData.getRedirectName());
+               
+               buildCondition(conditionData, condition);
+               }
+            }
+            
+            if (redirectData.getMappings() != null)
+            {
+               Mappings mappings = redirect.getMapping();
+               if (redirect.getMapping() == null)
+               {
+                  mappings = redirect.createMapping();
+                  redirect.setMapping(mappings);
+               }
+               buildMappings(redirectData.getMappings(), mappings);
+            }
+         }
+      }
 
       //
       org.gatein.mop.api.workspace.Page templates = dst.getRootPage().getChild("templates");
@@ -205,6 +376,82 @@ public class Mapper
       else
       {
          template.templatize(dst.getRootNavigation());
+      }
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+      }
+   }
+
+   private void buildCondition(RedirectConditionData redirectConditionData, Condition condition)
+   {
+      condition.setName(redirectConditionData.getRedirectName());
+      
+      if (redirectConditionData.getUserAgentConditionData() != null)
+      {
+         condition.setUserAgentContains(redirectConditionData.getUserAgentConditionData().getUserAgentContains());
+      }
+      if (redirectConditionData.getUserAgentConditionData() != null)
+      {
+         condition.setUserAgentDoesNotContain(redirectConditionData.getUserAgentConditionData().getUserAgentDoesNotContain());
+      }
+      
+      if (redirectConditionData.getDevicePropertyConditionData() != null)
+      {
+         for (RedirectDevicePropertyConditionData propertyConditionData: redirectConditionData.getDevicePropertyConditionData())
+         {
+            DeviceProperty deviceProperty = condition.getDeviceProperties().get(propertyConditionData.getPropertyName());
+            if (deviceProperty == null)
+            {
+               deviceProperty = condition.createDeviceProperty();
+               condition.getDeviceProperties().put(propertyConditionData.getPropertyName(), deviceProperty);
+            }
+            
+            deviceProperty.setName(propertyConditionData.getPropertyName());
+            
+            if (propertyConditionData.getGreaterThan() != null)
+            {
+               deviceProperty.setGreaterThan(propertyConditionData.getGreaterThan());
+            }
+            
+            if (propertyConditionData.getLessThan() != null)
+            {
+               deviceProperty.setLessThan(propertyConditionData.getLessThan());
+            }
+            
+            if (propertyConditionData.getEquals() != null)
+            {
+               deviceProperty.setEquals(propertyConditionData.getEquals());
+            }
+            
+            if (propertyConditionData.getMatches() != null)
+            {
+               deviceProperty.setPattern(propertyConditionData.getMatches().toString());
+            }
+         }
+      }
+   }
+   
+   private void buildMappings(RedirectMappingsData mappingsData, Mappings mappings)
+   {
+      mappings.setNodeNameMatching(mappingsData.isUseNodeNameMatching());
+      mappings.setUnresolvedNodeMatching(mappingsData.getUnresolvedNode());
+      
+      if (!mappingsData.getMappings().isEmpty())
+      {
+         for (String key: mappingsData.getMappings().keySet())
+         {
+            NodeMap nodeMap = mappings.getNodeMap().get(Text.escapeIllegalJcrChars(key));
+            if (nodeMap == null)
+            {
+               nodeMap = mappings.createNode();
+               mappings.getNodeMap().put(Text.escapeIllegalJcrChars(key), nodeMap);
+            }
+            nodeMap.setOriginNode(key);
+            nodeMap.setRedirectNode(mappingsData.getMappings().get(key));
+         }
+         //mappings.setRedirectMap((HashMap)mappingsData.getMappings());
       }
    }
 

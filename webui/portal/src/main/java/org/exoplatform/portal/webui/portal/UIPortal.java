@@ -22,6 +22,7 @@ package org.exoplatform.portal.webui.portal;
 import org.exoplatform.portal.account.UIAccountSetting;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.model.PortalProperties;
+import org.exoplatform.portal.config.model.PortalRedirect;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
@@ -56,6 +57,8 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import javax.portlet.WindowState;
@@ -96,6 +99,8 @@ public class UIPortal extends UIContainer
    private Map<String, String[]> publicParameters_ = new HashMap<String, String[]>();
 
    private UIComponent maximizedUIComponent;
+
+   private ArrayList<PortalRedirect> portalRedirects;
 
    public SiteKey getSiteKey()
    {
@@ -426,5 +431,15 @@ public class UIPortal extends UIContainer
                "')) {eXo.portal.logout();}");
          }
       }
+   }
+
+   public void setRedirects(ArrayList<PortalRedirect> portalRedirects)
+   {
+      this.portalRedirects = portalRedirects;
+   }
+   
+   public ArrayList<PortalRedirect> getPortalRedirects()
+   {
+      return portalRedirects;
    }
 }

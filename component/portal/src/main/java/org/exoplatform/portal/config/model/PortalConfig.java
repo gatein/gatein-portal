@@ -22,8 +22,15 @@ package org.exoplatform.portal.config.model;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.data.PortalData;
+import org.exoplatform.portal.pom.data.RedirectConditionData;
+import org.exoplatform.portal.pom.data.RedirectData;
+import org.exoplatform.portal.pom.data.RedirectDevicePropertyConditionData;
+import org.exoplatform.portal.pom.data.RedirectMappingsData;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,6 +73,9 @@ public class PortalConfig extends ModelObject
    private Container portalLayout;
 
    private transient boolean modifiable;
+   
+   //TODO: storing this as a LinkedHashMap might make more sense (ordered + able to retrieve element based on redirect name
+   private ArrayList<PortalRedirect> portalRedirects;
 
    public PortalConfig()
    {
@@ -107,6 +117,7 @@ public class PortalConfig extends ModelObject
       this.properties = new Properties(data.getProperties());
       this.skin = data.getSkin();
       this.portalLayout = new Container(data.getPortalLayout());
+      this.portalRedirects = buildPortalRedirects(data.getRedirects());
    }
 
    public String getType()
@@ -191,6 +202,16 @@ public class PortalConfig extends ModelObject
       modifiable = b;
    }
 
+   public void setPortalRedirects(ArrayList<PortalRedirect> portalRedirects)
+   {
+      this.portalRedirects = portalRedirects;
+   }
+   
+   public ArrayList<PortalRedirect> getPortalRedirects()
+   {
+      return portalRedirects;
+   }
+   
    public Properties getProperties()
    {
       return properties;
@@ -336,6 +357,69 @@ public class PortalConfig extends ModelObject
          editPermission,
          properties,
          skin,
-         portalLayout.build());
+         portalLayout.build(),
+         buildRedirectData());
+   }
+   
+   private ArrayList<RedirectData> buildRedirectData()
+   {
+      if (portalRedirects != null)
+      {
+      ArrayList<RedirectData> redirects = new ArrayList<RedirectData>();
+      for (PortalRedirect portalRedirect : portalRedirects)
+      {
+         redirects.add(portalRedirect.build());
+      }
+      return redirects;
+      }
+      else
+      {
+         return null;
+      }
+   }
+   
+   private ArrayList<PortalRedirect> buildPortalRedirects(List<RedirectData> redirectsData)
+   {
+      if (redirectsData != null)
+      {
+         ArrayList<PortalRedirect> portalRedirects = new ArrayList<PortalRedirect>();
+         for (RedirectData redirectData : redirectsData)
+         {
+            PortalRedirect portalRedirect = new PortalRedirect();
+            portalRedirect.setName(redirectData.getRedirectName());
+            portalRedirect.setRedirectSite(redirectData.getRedirectSiteName());
+            portalRedirect.setEnabled(redirectData.isEnabled());
+            portalRedirect.setConditions(buildRedirectConditions(redirectData.getConditions()));
+            portalRedirect.setMappings(buildRedirectMappings(redirectData.getMappings()));
+            portalRedirects.add(portalRedirect);
+         }
+         return portalRedirects;
+      }
+      return null;
+   }
+   
+   private ArrayList<RedirectCondition> buildRedirectConditions(List<RedirectConditionData> conditionsData)
+   {
+      ArrayList<RedirectCondition> redirectConditions = new ArrayList<RedirectCondition>();
+      
+      for (RedirectConditionData conditionData: conditionsData)
+      {
+         RedirectCondition redirectCondition = conditionData.build();
+         redirectConditions.add(redirectCondition);
+      }
+      
+      return redirectConditions;
+   }
+   
+   private RedirectMappings buildRedirectMappings(RedirectMappingsData mappingsData)
+   {
+      if (mappingsData != null)
+      {
+         return mappingsData.build();
+      }
+      else
+      {
+         return null;
+      }
    }
 }

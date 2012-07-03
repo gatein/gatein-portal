@@ -175,7 +175,8 @@
 	          <object type="org.exoplatform.portal.config.NewPortalConfig">
 	            <field  name="predefinedOwner">
 	              <collection type="java.util.HashSet">                
-	                <value><string>classic</string></value>	               
+	                <value><string>classic</string></value>
+                    <value><string>mobile</string></value> 
 	              </collection>
 	            </field>
 	            <field name="ownerType"><string>portal</string></field>
@@ -306,6 +307,9 @@
           <value>org.exoplatform.portal.mop.i18n.LanguageSpace</value>
           <value>org.exoplatform.portal.mop.i18n.Language</value>
           <value>org.exoplatform.portal.mop.importer.Imported</value>
+          <value>org.exoplatform.portal.mop.redirects.Redirectable</value>
+          <value>org.exoplatform.portal.mop.redirects.Redirect</value>
+          <value>org.exoplatform.portal.mop.redirects.Mappings</value>
         </values-param>
         <properties-param>
           <name>options</name>

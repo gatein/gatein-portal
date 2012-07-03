@@ -53,6 +53,8 @@ public class PortalData extends ModelData
    
    private final String description;
    
+   private final List<RedirectData> redirects;
+   
    public PortalData(
       String storageId,
       String name,
@@ -64,7 +66,8 @@ public class PortalData extends ModelData
       String editPermission,
       Map<String, String> properties,
       String skin,
-      ContainerData portalLayout)
+      ContainerData portalLayout,
+      List<RedirectData> redirects)
    {
       super(storageId, null);
 
@@ -78,6 +81,7 @@ public class PortalData extends ModelData
       this.properties = properties;
       this.skin = skin;
       this.portalLayout = portalLayout;
+      this.redirects = redirects;
    }
 
    public PortalKey getKey()
@@ -125,6 +129,11 @@ public class PortalData extends ModelData
       return portalLayout;
    }
 
+   public List<RedirectData> getRedirects()
+   {
+      return redirects;
+   }
+   
    public String getDescription()
    {
       return description;

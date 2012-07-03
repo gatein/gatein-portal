@@ -887,7 +887,11 @@
          <artifactId>exo.portal.gadgets-core</artifactId>
       </dependency>
 
-
+      <!-- Device Detection and Redirection-->
+      <dependency>
+         <groupId>org.gatein.web</groupId>
+         <artifactId>redirect</artifactId>
+      </dependency>
 
       <!-- Provided -->
       <dependency>

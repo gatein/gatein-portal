@@ -194,7 +194,7 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest
       properties.put("key2", "value2");
 
       PortalData expectedData = new PortalData(null, "name", "type", "locale", "label", "description",
-         Collections.singletonList("access-permissions"), "edit-permissions", properties, "skin", layout);
+         Collections.singletonList("access-permissions"), "edit-permissions", properties, "skin", layout, null);
 
       PortalConfig expected = new PortalConfig(expectedData);
 

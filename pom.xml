@@ -644,6 +644,13 @@
             <type>war</type>
          </dependency>
 
+         <!-- GateIn Redirect -->
+         <dependency>
+            <groupId>org.gatein.web</groupId>
+            <artifactId>redirect</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
          <!-- Reflext -->
          <dependency>
             <groupId>org.reflext</groupId>

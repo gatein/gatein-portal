@@ -34,7 +34,31 @@
     <entry key="sessionAlive">onDemand</entry>
     <entry key="showPortletInfo">0</entry>
   </properties>
-    
+
+  <portal-redirects>
+    <portal-redirect>
+      <redirect-site>mobile</redirect-site>
+      <name>Mobile</name>
+      <enabled>true</enabled>
+      <conditions>
+        <condition>
+          <name>Default Mobile Condition</name>
+          <user-agent>
+            <!-- multiple contains means _any_ of the contains must be matched -->
+            <contains>(?i)i(phone|pad|pod)</contains>
+            <contains>(?i)mobile</contains>
+            <contains>(?i)android</contains>
+            <contains>(?)phone</contains>
+            <contains>(?i)tablet</contains>
+          </user-agent>
+       </condition>
+      </conditions>
+      <node-mapping>
+        <use-node-name-matching>true</use-node-name-matching>
+      </node-mapping>
+    </portal-redirect>
+  </portal-redirects>
+
  	<portal-layout>
 	  <portlet-application>
       <portlet>

@@ -38,6 +38,7 @@
       <module>eXoResources</module>
       <module>portal</module>
       <module>rest</module>
+      <module>redirect</module>
    </modules>
 
 </project>
