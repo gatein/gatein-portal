@@ -29,10 +29,10 @@ import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMap;
 import org.gatein.portal.controller.resource.script.FetchMode;
 import org.gatein.portal.controller.resource.script.ScriptResource;
+import org.json.JSONArray;
 
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -265,9 +265,9 @@ public class JavascriptManager
 
       if (importedScripts.size() > 0)
       {
-         String jsPaths = buildJSArray(importedScripts);
+         JSONArray jsPaths = new JSONArray(importedScripts);
 
-         StringBuilder builder = new StringBuilder("eXo.loadJS(");
+         StringBuilder builder = new StringBuilder("require(");
          builder.append(jsPaths).append(",");
          builder.append("function() {").append(callback.toString()).append("});");
          writer.write(builder.toString());
@@ -276,20 +276,5 @@ public class JavascriptManager
       {
          writer.write(callback.toString());
       }
-   }
-
-   private String buildJSArray(Collection<String> params)
-   {
-      StringBuilder pathBuilder = new StringBuilder("[");
-      for (String str : params)
-      {
-         pathBuilder.append("'").append(str).append("',");
-      }
-      if (!params.isEmpty())
-      {
-         pathBuilder.deleteCharAt(pathBuilder.length() - 1);
-      }
-      pathBuilder.append("]");
-      return pathBuilder.toString();
    }
 }

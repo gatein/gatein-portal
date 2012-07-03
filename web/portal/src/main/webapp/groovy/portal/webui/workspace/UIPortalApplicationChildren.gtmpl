@@ -22,7 +22,7 @@
 %>
        </div>
     <script type="text/javascript">      
-    eXo.loadJS($onloadScripts, function() {
+    require($onloadScripts, function() {
 	      <%=jsManager.getJavaScripts()%>	  
 	  	}			  
 	  );

@@ -20,7 +20,7 @@
 /**
  * Manages a popup menu
  */
-eXo.webui.UIPopupMenu = {
+var uiPopupMenu = {
 
   // Elements that must be hidden
   elementsToHide : [],
@@ -173,4 +173,4 @@ eXo.webui.UIPopupMenu = {
     object.style.visibility = "";
   }
 };
-return {UIPopupMenu: eXo.webui.UIPopupMenu};
+return {"UIPopupMenu": uiPopupMenu};

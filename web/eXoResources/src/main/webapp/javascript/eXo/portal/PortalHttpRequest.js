@@ -551,17 +551,26 @@ function HttpResponseHandler() {
 	* 5) Then it is each portal block which is updated and the assocaited scripts are evaluated
 	*/
 	instance.ajaxResponse = function(request, response) {
+	  var that = this;
 	  if (!response) {
-		var response = new PortalResponse(this.responseText) ;		  
+		var response = new PortalResponse(that.responseText) ;		  
         instance.updateHtmlHead(response);
 	  }
 	  var loadingScripts = response.loadingScripts;
-	  var immediateScripts = loadingScripts ? loadingScripts.immediateScripts : []; 
-	  if (immediateScripts.length) {
-		  eXo.loadJS(immediateScripts, function() {
+	  var immediateScripts = loadingScripts ? loadingScripts.immediateScripts : [];
+	  var scripts = gj("head script");
+	  for (var i = 0; i < immediateScripts.length; i++) {
+		  scripts.each(function() {
+			  if (gj(this).attr("src") === eXo.env.requireConfig.paths[immediateScripts[i]] + ".js") {
+				  immediateScripts.splice(i--, 1);
+			  }
+		  });
+	  }		  
+	  if (immediateScripts.length) {		  
+		  require(immediateScripts, function() {
 			  immediateScripts.clear();
-			  instance.ajaxResponse.apply(this, [request, response]);
-		  }, null, this);
+			  instance.ajaxResponse.apply(that, [request, response]);
+		  });
 		  return;
 	  }
 
@@ -603,7 +612,7 @@ function HttpResponseHandler() {
 		  //After handle html response. We need to remove extra markup header of removed portlets
 		  cleanHtmlHead();
 		  var onloadScripts = loadingScripts ? loadingScripts.onloadScripts : [];
-		  eXo.loadJS(onloadScripts, function() {		  
+		  require(onloadScripts, function() {		  
 			  instance.executeScript(response.script);		  
 			  /**
 			   * Clears the instance.to timeout if the request takes less time than expected to get response
@@ -614,7 +623,7 @@ function HttpResponseHandler() {
 			  
 			  eXo.portal.AjaxRequest.maskLayer = null ;
 			  eXo.portal.CurrentRequest = null ;		 
-		  }, null, this);		  
+		  });		  
       } catch (error) {
              alert(error.message) ;
       }	  
