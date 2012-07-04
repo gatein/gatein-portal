@@ -2182,8 +2182,7 @@ network.negotiate-auth.using-native-gsslib = true
                 Configuration of new valve should be like this:
 <programlisting>
 <![CDATA[
-<Valve className="org.picketlink.identity.federation.bindings.tomcat.sp.ServiceProviderAuthenticator"
-    logOutPage="/" />
+<Valve className="org.picketlink.identity.federation.bindings.tomcat.sp.ServiceProviderAuthenticator" />
 ]]>
 </programlisting>
              </step>
@@ -2487,9 +2486,7 @@ cp -r default node3
 <programlisting>
 <![CDATA[
 <Valve
-   className="org.gatein.sso.saml.plugin.valve.PortalIDPWebBrowserSSOValve"
-   ignoreIncomingSignatures="false" signOutgoingMessages="true"
-   validatingAliasToTokenIssuer="true" />
+   className="org.gatein.sso.saml.plugin.valve.PortalIDPWebBrowserSSOValve" />
 ]]>
 </programlisting>
                 <note>Previous valve <filename>ServiceProviderAuthenticator</filename> should be commented as it's used
@@ -2502,10 +2499,10 @@ cp -r default node3
 <programlisting>
 <![CDATA[
 <PicketLink xmlns="urn:picketlink:identity-federation:config:2.1">
-   <PicketLinkIDP xmlns="urn:picketlink:identity-federation:config:1.0">
+   <PicketLinkIDP xmlns="urn:picketlink:identity-federation:config:1.0" SupportsSignatures="true">
       <IdentityURL>${idp-sig.url::http://localhost:8080/portal/dologin}</IdentityURL>
       <Trust>
-         <Domains>node1.com,node2.com</Domains>
+         <Domains>localhost,node1.com,node2.com</Domains>
       </Trust>
 
       <KeyProvider ClassName="org.picketlink.identity.federation.core.impl.KeyStoreKeyManager">
@@ -2513,6 +2510,8 @@ cp -r default node3
          <Auth Key="KeyStorePass" Value="keystorepass" />
          <Auth Key="SigningKeyPass" Value="keypass" />
          <Auth Key="SigningKeyAlias" Value="idp-key" />
+         <ValidatingAlias Key="localhost" Value="sp-cert"/>
+         <ValidatingAlias Key="127.0.0.1" Value="sp-cert"/>
          <ValidatingAlias Key="www.node2.com" Value="sp-cert"/>
       </KeyProvider>
    </PicketLinkIDP>
@@ -2571,7 +2570,7 @@ cp -r default node3
              </step>
              <step>
                 Start &PRODUCT; as IDP with:
-                <programlisting>./run.sh -c portal-idp -b www.node1.com -Didp-sig.url=http://www.node1.com:8080/idp-sig/</programlisting>
+                <programlisting>./run.sh -c portal-idp -b www.node1.com -Didp-sig.url=http://www.node1.com:8080/portal/dologin</programlisting>
                 Note that we use configuration <emphasis>portal-idp</emphasis> but we will bind it to <emphasis>www.node1.com</emphasis> .
              </step>
              <step>Start second node, which will act as SP
