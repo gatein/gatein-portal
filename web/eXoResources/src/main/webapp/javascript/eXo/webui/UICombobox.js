@@ -23,7 +23,7 @@ eXo.webui.UICombobox = {
     if (typeof (textbox) == "string")
       textbox = document.getElementById(textbox);
     textbox = gj(textbox).next("input");
-    var UICombobox = webuiExt.UICombobox;
+    var UICombobox = _module.UICombobox;
     var onfocus = textbox.attr("onfocus");
     var onclick = textbox.attr("onclick");
     if (!onfocus)
@@ -33,7 +33,7 @@ eXo.webui.UICombobox = {
   },
 
   show : function(evt) {
-    var uiCombo = webuiExt.UICombobox;
+    var uiCombo = _module.UICombobox;
     uiCombo.items = gj(this.parentNode).find("a");
     if (uiCombo.list)
       uiCombo.list.style.display = "none";
@@ -128,11 +128,11 @@ eXo.webui.UICombobox = {
   },
 
   hide : function() {
-    webuiExt.UICombobox.list.style.display = "none";
+    _module.UICombobox.list.style.display = "none";
   },
 
   getValue : function(obj) {
-    var UICombobox = webuiExt.UICombobox;
+    var UICombobox = _module.UICombobox;
     var val = obj.getAttribute("value");
     var hiddenField = gj(UICombobox.list.parentNode).next("input");
     hiddenField.attr("value", val);
@@ -154,14 +154,11 @@ eXo.core.EventManager = {
   },
 
   cancelEvent : function(evt) {
-    webuiExt.EventManager.cancelBubble(evt);
+    _module.EventManager.cancelBubble(evt);
     if (base.Browser.browserType == 'ie')
       window.event.returnValue = true;
     else
       evt.preventDefault();
   }
 };
-return {
-	UICombobox: eXo.webui.UICombobox,
-	EventManager: eXo.core.EventManager
-}
+_module.UICombobox = eXo.webui.UICombobox;

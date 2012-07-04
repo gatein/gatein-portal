@@ -158,7 +158,7 @@ eXo.webui.UIRightClickPopupMenu = {
     //Register closing contextual menu callback on document
     jDoc.one("mousedown.RightClickPopUpMenu", function(e)
     {
-    	webuiExt.UIRightClickPopupMenu.hideContextMenu(menuId);
+    	_module.UIRightClickPopupMenu.hideContextMenu(menuId);
     });
 
     //The callback registered on document won't be triggered by current 'mousedown' event
@@ -309,4 +309,5 @@ eXo.core.Mouse = {
     this.deltay = this.mouseyInClient - this.lastMouseyInClient ;
   }
 };
-return {UIRightClickPopupMenu: eXo.webui.UIRightClickPopupMenu};
+
+_module.UIRightClickPopupMenu = eXo.webui.UIRightClickPopupMenu;

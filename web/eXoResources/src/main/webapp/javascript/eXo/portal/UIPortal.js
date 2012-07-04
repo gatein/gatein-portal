@@ -225,4 +225,5 @@ eXo.portal.UIPortal = {
     }
   }  
 };
-return {UIPortal: eXo.portal.UIPortal};
+
+_module.UIPortal = eXo.portal.UIPortal;

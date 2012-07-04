@@ -92,20 +92,20 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       
       //wrapper for MODULE
       //test for Alias : module1 is used with 'm1' alias
-      String module1 = "define('SHARED/module1', [], function() { var m1 = {};var tmp = function() {" +      
+      String module1 = "define('SHARED/module1', [], function() { var _module = {};(function() {" +      
                                  "// Begin eXo.module1\n" + 
                                  "ccc;" +  
                                  "// End eXo.module1\n" +
-                                 "}();for(var prop in tmp){m1[prop]=tmp[prop];}return m1;});";
+                                 "}).call(this);return _module;});";
       assertReader(module1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module1"), null));
       
       //module2 depends on module1
       //test for Alias : module1 is used with 'mod1' alias, module2 use default name for alias
-      String module2 = "define('SHARED/module2', [\"SHARED/module1\"], function(mod1) { var module2 = {};var tmp = function() {" +
+      String module2 = "define('SHARED/module2', [\"SHARED/module1\"], function(mod1) { var _module = {};(function() {" +
                                  "// Begin eXo.module2\n" + 
                                  "ddd;" +
                                  "// End eXo.module2\n" +
-                                  "}();for(var prop in tmp){module2[prop]=tmp[prop];}return module2;});";
+                                  "}).call(this);return _module;});";
       assertReader(module2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module2"), null));
    }
 

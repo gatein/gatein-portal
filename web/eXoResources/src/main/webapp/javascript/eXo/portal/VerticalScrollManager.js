@@ -21,7 +21,7 @@ eXo.portal.VerticalScrollManager = {
   repeat : null,
 
   initScroll : function(clickedEle, isUp, step) {
-    var verticalScroll = webui.VerticalScrollManager;
+    var verticalScroll = _module.VerticalScrollManager;
     var container = gj(clickedEle).closest(".ItemContainer");
     var middleCont = container.find(".MiddleItemContainer").first()[0];
     if (!middleCont.id)
@@ -32,7 +32,7 @@ eXo.portal.VerticalScrollManager = {
   },
 
   scrollComponent : function(id, isUp, step) {
-    var verticalScroll = webui.VerticalScrollManager;
+    var verticalScroll = _module.VerticalScrollManager;
     var scrollComp = document.getElementById(id);
     if (isUp) {
       scrollComp.scrollTop -= step;
@@ -43,13 +43,14 @@ eXo.portal.VerticalScrollManager = {
       verticalScroll.cancelScroll();
     }
     verticalScroll.repeat = setTimeout(function() {
-    	webui.VerticalScrollManager.scrollComponent(id, isUp, step);
+    	_module.VerticalScrollManager.scrollComponent(id, isUp, step);
     }, 100);
   },
 
   cancelScroll : function() {
-    clearTimeout(webui.VerticalScrollManager.repeat);
-    webui.VerticalScrollManager.repeat = null;
+    clearTimeout(_module.VerticalScrollManager.repeat);
+    _module.VerticalScrollManager.repeat = null;
   }
 };
-return {VerticalScrollManager: eXo.portal.VerticalScrollManager};
+
+_module.VerticalScrollManager = eXo.portal.VerticalScrollManager;

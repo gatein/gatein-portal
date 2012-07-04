@@ -27,7 +27,7 @@ eXo.webui.UIDashboard = {
 		
 		var BROWSER = base.Browser;
 
-    var UTIL = dashboard.UIDashboardUtil;
+    var UTIL = _module.UIDashboardUtil;
 
     var jqDragObj = gj(dragObj);//JQuery wrapper of dragObj, that facilitates JQuery integration
 
@@ -68,7 +68,7 @@ eXo.webui.UIDashboard = {
       if (!jqDragObj.hasClass("SelectItem"))
       {
         var targetArea = gj("<div>").attr("id", "UITarget").addClass("UITarget").css("height", dragObj.offsetHeight + "px");
-        dashboard.UIDashboard.targetObj = targetArea;
+        _module.UIDashboard.targetObj = targetArea;
         jqDragObj.after(targetArea);
       }
       else
@@ -104,24 +104,24 @@ eXo.webui.UIDashboard = {
     dragObj.onDrag = function(nx, ny, ex, ey, e)
     {
 
-      dashboard.UIDashboard.scrollOnDrag(dragObj);
+      _module.UIDashboard.scrollOnDrag(dragObj);
 
-      var targetArea = dashboard.UIDashboard.targetObj;
+      var targetArea = _module.UIDashboard.targetObj;
       if (UTIL.isIn(ex, ey, gadgetContainer[0]))
       {
         if (!targetArea)
         {
           targetArea = gj("<div>").attr("id", "UITarget").addClass("UITarget").css("height", dragObj.offsetHeight + "px");
-          dashboard.UIDashboard.targetObj = targetArea;
+          _module.UIDashboard.targetObj = targetArea;
         }
 
-        if (!dashboard.UIDashboard.currentCol)
+        if (!_module.UIDashboard.currentCol)
         {
           //We are sure that currentCol is not null as mouse cursor is already inside the gadget container
-          dashboard.UIDashboard.currentCol = UTIL.findContainingColumn(gadgetContainer, ex);
+          _module.UIDashboard.currentCol = UTIL.findContainingColumn(gadgetContainer, ex);
         }
 
-        var column = dashboard.UIDashboard.currentCol;
+        var column = _module.UIDashboard.currentCol;
         if (UTIL.isInColumn(column, ex, gadgetContainer.scrollLeft()))
         {
           var addToLast = true;
@@ -145,14 +145,14 @@ eXo.webui.UIDashboard = {
         else
         {
           //There is no column containing mouse cursor as mouse is moved out of gadget container. So we reset the cached column to null
-          dashboard.UIDashboard.currentCol = null;
+          _module.UIDashboard.currentCol = null;
         }
       }
       else if (targetArea != null && jqDragObj.hasClass("SelectItem"))
       {
         //prevent dragging item form selector popup out of gadget container
         targetArea.remove();
-        dashboard.UIDashboard.targetObj = targetArea = null;
+        _module.UIDashboard.targetObj = targetArea = null;
       }
     };
 
@@ -175,7 +175,7 @@ eXo.webui.UIDashboard = {
         jqDragObj.css("width", "auto");
       }
 
-      var targetArea = dashboard.UIDashboard.targetObj;
+      var targetArea = _module.UIDashboard.targetObj;
       if (targetArea && targetArea.parent())
       {
         //if drag object is not gadget module, create an module
@@ -221,7 +221,7 @@ eXo.webui.UIDashboard = {
         gj(this).remove();
       });
 
-      dashboard.UIDashboard.targetObj = dashboard.UIDashboard.currentCol = null;
+      _module.UIDashboard.targetObj = _module.UIDashboard.currentCol = null;
     };
 
 
@@ -256,7 +256,7 @@ eXo.webui.UIDashboard = {
     var selectPopup = container.prev("div");
     selectPopup.find("a.CloseButton").eq(0).click(function()
     {
-       dashboard.UIDashboard.hideSelectPopup(selectPopup);
+       _module.UIDashboard.hideSelectPopup(selectPopup);
     });
 
     var gadgetCont = container.children("div.GadgetContainer").eq(0);
@@ -269,7 +269,7 @@ eXo.webui.UIDashboard = {
 		//Todo: nguyenanhkien2a@gmail.com
 		//We set and increase waiting time for initDragDrop function to make sure all UI (tag, div, iframe, etc) 
 		//was loaded and to avoid some potential bugs (ex: GTNPORTAL-1068)
-		setTimeout(function() {dashboard.UIDashboard.initDragDrop(windowId,canEdit);}, 400) ;
+		setTimeout(function() {_module.UIDashboard.initDragDrop(windowId,canEdit);}, 400) ;
 	},
 	
 	initDragDrop : function(windowId, canEdit) {
@@ -283,7 +283,7 @@ eXo.webui.UIDashboard = {
       var minimizeButton = gadget.find("span.MinimizeAction").eq(0);//That might be undefined if actual gadget is the item in Select Gadget popup
       if(canEdit)
       {
-        dashboard.UIDashboard.init(gadgetControl[0], gadget[0]);
+        _module.UIDashboard.init(gadgetControl[0], gadget[0]);
         if(minimizeButton)
         {
           minimizeButton.css("display", "block");
@@ -320,7 +320,7 @@ eXo.webui.UIDashboard = {
     jqLink.css("visibility", "hidden");
 
     var portletID = jqLink.closest(".PORTLET-FRAGMENT").parent().attr("id");
-    var url = dashboard.UIDashboardUtil.createRequest(portletID, "SetShowSelectContainer", [
+    var url = _module.UIDashboardUtil.createRequest(portletID, "SetShowSelectContainer", [
       {name : "isShow", value : true}
     ]);
     ajaxGet(url);
@@ -335,7 +335,7 @@ eXo.webui.UIDashboard = {
 
     var portletID = dashboardCont.closest(".PORTLET-FRAGMENT").parent().attr("id");
 
-    var url = dashboard.UIDashboardUtil.createRequest(portletID, "SetShowSelectContainer", [
+    var url = _module.UIDashboardUtil.createRequest(portletID, "SetShowSelectContainer", [
       {name : "isShow", value : false}
     ]);
     ajaxAsyncGetRequest(url, false);
@@ -442,4 +442,5 @@ eXo.webui.UIDashboard = {
 
   }
 };
-return {UIDashboard: eXo.webui.UIDashboard};
+
+_module.UIDashboard = eXo.webui.UIDashboard;

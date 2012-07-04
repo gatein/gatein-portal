@@ -60,4 +60,5 @@ eXo.i18n.I18NMessage = {
       "${weekdays.sat}"
   ]
 };
-return {I18NMessage: eXo.i18n.I18NMessage};
+
+_module.I18NMessage = eXo.i18n.I18NMessage;

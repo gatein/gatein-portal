@@ -43,4 +43,5 @@ eXo.webui.UIFormInputThemeSelector = {
     itemDetailList.prev("div").find("div.ItemList").eq(0).parent().children("input").eq(0).val(param);
   }
 };
-return {UIFormInputThemeSelector: eXo.webui.UIFormInputThemeSelector};
+
+_module.UIFormInputThemeSelector = eXo.webui.UIFormInputThemeSelector;

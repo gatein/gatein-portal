@@ -57,7 +57,7 @@ eXo.webui.UIPopupWindow = {
     if (isShow == false) {
       this.superClass.hide(popup);
       if (isShowMask)
-        webui.UIPopupWindow.showMask(popup, false);
+        _module.UIPopupWindow.showMask(popup, false);
     }
 
     if (isResizable) {
@@ -72,7 +72,7 @@ eXo.webui.UIPopupWindow = {
       var iframes = DOMUtil.findDescendantsByTagName(popup, "iframe");
       if (iframes.length > 0) {
         setTimeout(function() { 
-        	webui.UIPopupWindow.show(popupId, isShowMask); 
+        	_module.UIPopupWindow.show(popupId, isShowMask); 
         }, 500);
       } else {
         this.show(popup, isShowMask);
@@ -127,12 +127,12 @@ eXo.webui.UIPopupWindow = {
     }    	
 
     if (isShowMask)
-    	webui.UIPopupWindow.showMask(popup, true);
+    	_module.UIPopupWindow.showMask(popup, true);
     popup.style.visibility = "hidden";
     this.superClass.show(popup);
     
     if (gj(popup).find("iframe").length > 0) {
-    	setTimeout(function() {webui.UIPopupWindow.setupWindow(popup, middleBrowser);}, 500);
+    	setTimeout(function() {_module.UIPopupWindow.setupWindow(popup, middleBrowser);}, 500);
     } else {
     	this.setupWindow(popup, middleBrowser);
     }
@@ -184,7 +184,7 @@ eXo.webui.UIPopupWindow = {
 	var popup = document.getElementById(popupId);
 	if (popup == null) return;     
     this.superClass.hide(popup);
-    if (isShowMask) webui.UIPopupWindow.showMask(popup, false);
+    if (isShowMask) _module.UIPopupWindow.showMask(popup, false);
   },
   
   showMask : function(popup, isShowPopup) {
@@ -217,27 +217,27 @@ eXo.webui.UIPopupWindow = {
    */
   startResizeEvt : function(evt) {
 	//disable select text
-	webui.UIPopupWindow.backupEvent = null;
+	_module.UIPopupWindow.backupEvent = null;
 	if (navigator.userAgent.indexOf("MSIE") >= 0) {
 		//Need to check if we have remove resizedPopup after last mouseUp
 		//IE bug: not call endResizeEvt when mouse moved out of page
-		if (!webui.UIPopupWindow.resizedPopup && document.onselectstart) {
-			webui.UIPopupWindow.backupEvent = document.onselectstart;
+		if (!_module.UIPopupWindow.resizedPopup && document.onselectstart) {
+			_module.UIPopupWindow.backupEvent = document.onselectstart;
 		}
 		document.onselectstart = function() {return false};		
 	} else {		
 		if (document.onmousedown) {
-			webui.UIPopupWindow.backupEvent = document.onmousedown;
+			_module.UIPopupWindow.backupEvent = document.onmousedown;
 		}
 		document.onmousedown = function() {return false};		
 	}
 	
 	var targetPopup = gj(this).parents(".UIPopupWindow")[0];
-	webui.UIPopupWindow.resizedPopup = targetPopup;
-	webui.UIPopupWindow.backupPointerY = base.Browser.findMouseRelativeY(targetPopup, evt) ;	
+	_module.UIPopupWindow.resizedPopup = targetPopup;
+	_module.UIPopupWindow.backupPointerY = base.Browser.findMouseRelativeY(targetPopup, evt) ;	
 
-    document.onmousemove = webui.UIPopupWindow.resize;
-    document.onmouseup = webui.UIPopupWindow.endResizeEvt;
+    document.onmousemove = _module.UIPopupWindow.resize;
+    document.onmouseup = _module.UIPopupWindow.endResizeEvt;
   },
 
   /**
@@ -246,14 +246,14 @@ eXo.webui.UIPopupWindow = {
    * position . sets these values to the window
    */
   resize : function(evt) {
-	var targetPopup = webui.UIPopupWindow.resizedPopup ;
+	var targetPopup = _module.UIPopupWindow.resizedPopup ;
     var content = gj(targetPopup).find("div.PopupContent")[0];
     var isRTL = eXo.core.I18n.isRT();
     var pointerX = base.Browser.findMouseRelativeX(targetPopup, evt, isRTL);
     var pointerY = base.Browser.findMouseRelativeY(targetPopup, evt);
-    var delta = pointerY - webui.UIPopupWindow.backupPointerY;  
+    var delta = pointerY - _module.UIPopupWindow.backupPointerY;  
     if ((content.offsetHeight + delta) > 0) {
-    	webui.UIPopupWindow.backupPointerY = pointerY;              
+    	_module.UIPopupWindow.backupPointerY = pointerY;              
     	content.style.height = content.offsetHeight + delta +"px" ;     
     }
     targetPopup.style.height = "auto";
@@ -272,17 +272,17 @@ eXo.webui.UIPopupWindow = {
    * one in the popup)
    */
   endResizeEvt : function(evt) {
-	webui.UIPopupWindow.resizedPopup = null;
+	_module.UIPopupWindow.resizedPopup = null;
     this.onmousemove = null;
     this.onmouseup = null;
     
     //enable select text
 	if (navigator.userAgent.indexOf("MSIE") >= 0) {
-		document.onselectstart = webui.UIPopupWindow.backupEvent;
+		document.onselectstart = _module.UIPopupWindow.backupEvent;
 	} else {                
-		document.onmousedown = webui.UIPopupWindow.backupEvent;
+		document.onmousedown = _module.UIPopupWindow.backupEvent;
 	}
-	webui.UIPopupWindow.backupEvent = null;
+	_module.UIPopupWindow.backupEvent = null;
   },
 
   /**
@@ -334,4 +334,5 @@ eXo.webui.UIPopupWindow = {
     };
   }
 };
-return {UIPopupWindow: eXo.webui.UIPopupWindow};
+
+_module.UIPopupWindow = eXo.webui.UIPopupWindow;

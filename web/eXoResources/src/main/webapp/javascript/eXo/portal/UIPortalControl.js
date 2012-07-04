@@ -96,4 +96,5 @@ eXo.portal.UIPortalControl = {
     }
   }
 };
-return {UIPortalControl: eXo.portal.UIPortalControl};
+
+_module.UIPortalControl = eXo.portal.UIPortalControl;

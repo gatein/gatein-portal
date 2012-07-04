@@ -105,7 +105,7 @@ eXo.webui.UIUpload = {
    *          elementId identifier of upload bar frame
    */
   refreshProgress : function(elementId) {
-    var list = webuiExt.UIUpload.listUpload;
+    var list = _module.UIUpload.listUpload;
     if (list.length < 1)
       return;
     var url = eXo.env.server.context + "/upload?";
@@ -117,7 +117,7 @@ eXo.webui.UIUpload = {
     var responseText = ajaxAsyncGetRequest(url, false);
     if (list.length > 0) {
       setTimeout(function() {
-    	  webuiExt.UIUpload.refreshProgress(elementId);
+    	  _module.UIUpload.refreshProgress(elementId);
       }, 1000);
     }
 
@@ -150,7 +150,7 @@ eXo.webui.UIUpload = {
       }
     }
 
-    if (webuiExt.UIUpload.listUpload.length < 1)
+    if (_module.UIUpload.listUpload.length < 1)
       return;
 
     if (element) {
@@ -168,7 +168,7 @@ eXo.webui.UIUpload = {
    *          fileName uploaded file name
    */
   showUploaded : function(id, fileName) {
-    webuiExt.UIUpload.listUpload.remove(id);
+    _module.UIUpload.listUpload.remove(id);
     var container = parent.document.getElementById(id);
     var jCont = gj(container);
     var element = document.getElementById(id + "ProgressIframe");
@@ -199,7 +199,7 @@ eXo.webui.UIUpload = {
    *          id upload identifier
    */
   abortUpload : function(id) {
-    webuiExt.UIUpload.listUpload.remove(id);
+    _module.UIUpload.listUpload.remove(id);
     var url = eXo.env.server.context + "/upload?";
     url += "uploadId=" + id + "&action=abort";
     // var url = eXo.env.server.context + "/upload?uploadId="
@@ -210,7 +210,7 @@ eXo.webui.UIUpload = {
     var jCont = gj(container);
     var uploadIframe = jCont.find("#" + id + "UploadIframe");
     uploadIframe.show();
-    webuiExt.UIUpload.createUploadEntry(id, webuiExt.UIUpload.isAutoUpload);
+    _module.UIUpload.createUploadEntry(id, _module.UIUpload.isAutoUpload);
     var progressIframe =jCont.find("#" + id + "ProgressIframe");
     progressIframe.hide();
 
@@ -239,7 +239,7 @@ eXo.webui.UIUpload = {
     var jCont = gj(container);
     var uploadIframe = jCont.find("#" + id + "UploadIframe");
     uploadIframe.show();
-    webuiExt.UIUpload.createUploadEntry(id, this.isAutoUpload);
+    _module.UIUpload.createUploadEntry(id, this.isAutoUpload);
     var progressIframe = jCont.find("#" + id + "ProgressIframe");
     progressIframe.hide();
 
@@ -287,14 +287,14 @@ eXo.webui.UIUpload = {
 
     form.submit();
 
-    var list = webuiExt.UIUpload.listUpload;
+    var list = _module.UIUpload.listUpload;
     if (list.length == 0) {
-      webuiExt.UIUpload.listUpload.push(form.id);
-      setTimeout(function() {webuiExt.UIUpload.refreshProgress(id);}, 1000);
+      _module.UIUpload.listUpload.push(form.id);
+      setTimeout(function() {_module.UIUpload.refreshProgress(id);}, 1000);
     } else {
-      webuiExt.UIUpload.listUpload.push(form.id);
+      _module.UIUpload.listUpload.push(form.id);
     }
   }
 };
 
-return {UIUpload: eXo.webui.UIUpload};
+_module.UIUpload = eXo.webui.UIUpload;

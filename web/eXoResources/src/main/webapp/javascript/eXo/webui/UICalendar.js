@@ -80,7 +80,7 @@ eXo.webui.UICalendar = {
   },
 
   show : function() {
-    document.onclick = function() {webuiExt.UICalendar.hide()};
+    document.onclick = function() {_module.UICalendar.hide()};
     var re = /^(\d{1,2}\/\d{1,2}\/\d{1,4})\s*(\s+\d{1,2}:\d{1,2}:\d{1,2})?$/i;
     this.selectedDate = new Date();
 
@@ -175,7 +175,7 @@ eXo.webui.UICalendar = {
       clndr.firstChild.style.top = -heightCal.offsetHeight + 'px';
     }
 
-    webuiExt.UICalendar.initDragDrop();
+    _module.UICalendar.initDragDrop();
 
     var primary = gj(this.dateField).closest("#UIECMSearch");
     if (primary.length && base.Browser.isFF()) {
@@ -191,7 +191,7 @@ eXo.webui.UICalendar = {
 
     // identify the tab key
     if (keyCode == 9) {
-      webuiExt.UICalendar.hide();
+      _module.UICalendar.hide();
     }
   },
 
@@ -315,7 +315,7 @@ eXo.webui.UICalendar = {
     var clndr = document.getElementById(this.calendarId);
     clndr.firstChild.lastChild.innerHTML = this.renderCalendar();
 
-    webuiExt.UICalendar.initDragDrop();
+    _module.UICalendar.initDragDrop();
   },
 
   initDragDrop : function() {
@@ -338,7 +338,7 @@ eXo.webui.UICalendar = {
     var clndr = document.getElementById(this.calendarId);
     clndr.firstChild.lastChild.innerHTML = this.renderCalendar();
 
-    webuiExt.UICalendar.initDragDrop();
+    _module.UICalendar.initDragDrop();
   },
 
   setDate : function(year, month, day) {
@@ -509,4 +509,5 @@ eXo.webui.UICalendar = {
     this.firstDayOfWeek = dayOfWeek;
   }
 };
-return {UICalendar: eXo.webui.UICalendar};
+
+_module.UICalendar = eXo.webui.UICalendar;

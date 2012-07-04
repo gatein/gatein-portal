@@ -267,3 +267,5 @@ eXo.webui.UIUploadInput = {
     setTimeout("eXo.webui.UIUploadInput.doUpload('" + id + "')", this.delayTime);
   }
 }
+
+_module.UIUploadInput = eXo.webui.UIUploadInput;

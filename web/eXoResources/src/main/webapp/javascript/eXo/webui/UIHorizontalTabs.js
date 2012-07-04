@@ -90,7 +90,8 @@ eXo.webui.UIHorizontalTabs = {
    */
   changeTabForUIFormTabpane : function(clickedElemt, formId, hiddenValue) {
     this.displayTabContent(clickedElemt);
-    webui.UIForm.setHiddenValue(formId, 'currentSelectedTab', hiddenValue);
+    _module.UIForm.setHiddenValue(formId, 'currentSelectedTab', hiddenValue);
   }
 }
-return {UIHorizontalTabs: eXo.webui.UIHorizontalTabs};
+
+_module.UIHorizontalTabs = eXo.webui.UIHorizontalTabs;

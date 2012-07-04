@@ -111,4 +111,5 @@ eXo.webui.UIDropDownControl = {
     dropDownAnchor.css("display", "none");
   }
 };
-return {UIDropDownControl: eXo.webui.UIDropDownControl};
+
+_module.UIDropDownControl = eXo.webui.UIDropDownControl;

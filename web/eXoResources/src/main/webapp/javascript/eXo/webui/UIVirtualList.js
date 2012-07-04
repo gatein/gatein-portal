@@ -111,4 +111,5 @@ eXo.webui.UIVirtualList = {
     this.loadIfNeeded(uiVirtualList);
   }
 };
-return {UIVirtualList: eXo.webui.UIVirtualList};
+
+_module.UIVirtualList = eXo.webui.UIVirtualList;

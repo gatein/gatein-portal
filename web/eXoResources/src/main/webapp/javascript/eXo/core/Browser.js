@@ -29,9 +29,9 @@
 * calls
 */
 eXo.core.Browser = {
-  onLoadCallback : new base.HashMap(),
-  onResizeCallback : new base.HashMap(),
-  onScrollCallback : new base.HashMap(),
+  onLoadCallback : new _module.HashMap(),
+  onResizeCallback : new _module.HashMap(),
+  onScrollCallback : new _module.HashMap(),
   
   breakStream : null,
   
@@ -183,7 +183,7 @@ eXo.core.Browser = {
 	},
 	
 	managerResize : function() {
-	  var browser = base.Browser;
+	  var browser = _module.Browser;
 	  var jWin = gj(window);
 	  if(browser.currheight != jWin.height()) {
 	    clearTimeout(browser.breakStream) ;
@@ -227,12 +227,12 @@ eXo.core.Browser = {
 	 * and clean the array
 	 */
 	onLoad : function() {
-	  var callback = base.Browser.onLoadCallback ;
+	  var callback = _module.Browser.onLoadCallback ;
 	  for(var name in callback.properties) {
 	    var method = callback.get(name) ;
 	    if (typeof(method) == "function") try{method()}catch(e){};
 	  }
-	  this.onLoadCallback = new base.HashMap();
+	  this.onLoadCallback = new _module.HashMap();
 	},
 	
 	/**
@@ -246,7 +246,7 @@ eXo.core.Browser = {
 	 * Calls the functions in the onResizeCallback array, if they exist
 	 */
 	onResize : function(event) {
-	  var callback = base.Browser.onResizeCallback ;
+	  var callback = _module.Browser.onResizeCallback ;
 	 for(var name in callback.properties) {
 	   var method = callback.get(name) ;
 	   if (typeof(method) == "function") method(event) ;
@@ -264,7 +264,7 @@ eXo.core.Browser = {
 	 * Calls the functions in the onScrollCallback array, if they exist
 	 */
 	onScroll : function(event) {
-	  var callback = base.Browser.onScrollCallback ;
+	  var callback = _module.Browser.onScrollCallback ;
 	  for(var name in callback.properties) {
 	    var method = callback.get(name) ;
 	    try {
@@ -287,7 +287,7 @@ eXo.core.Browser = {
 	 * Returns the horizontal position of an object relative to its container
 	 */
 	findPosXInContainer : function(obj, container, isRTL) {
-	  var browser = base.Browser;
+	  var browser = _module.Browser;
 	  var objX = browser.findPosX(obj, isRTL) ;
 	  var containerX = browser.findPosX(container, isRTL) ;
 	  if(isRTL) return -(objX - containerX) ;
@@ -298,7 +298,7 @@ eXo.core.Browser = {
 	 * Returns the vertical position of an object relative to its container
 	 */
 	findPosYInContainer : function(obj, container) {
-	  var browser = base.Browser;
+	  var browser = _module.Browser;
 	  var objY = gj(obj).offset().top;
 	  var containerY = gj(container).offset().top;
 	  return (objY - containerY);
@@ -308,7 +308,7 @@ eXo.core.Browser = {
 	 * find the x position of the mouse relative to object
 	 */
 	findMouseRelativeX : function(object, e, isRTL) {
-	  var browser = base.Browser;
+	  var browser = _module.Browser;
 	  var posXObject = browser.findPosX(object,isRTL) ;	  
 	  var mouseX = e.pageX;  
 	  return mouseX == -1 ? -1 : mouseX - posXObject ;
@@ -318,7 +318,7 @@ eXo.core.Browser = {
 	 * find the y position of the mouse relative to object
 	 */
 	findMouseRelativeY : function(object, e) {
-	  var browser = base.Browser;
+	  var browser = _module.Browser;
 	  var posYObject = gj(object).offset().top;
 	  var mouseY = e.pageY;  
 	  return  mouseY == -1 ? -1 : mouseY - posYObject ;
@@ -331,7 +331,7 @@ eXo.core.Browser = {
 	  var offsetX = component.offsetLeft;
 	  var offsetY = component.offsetTop;
 
-	  var browser = base.Browser;
+	  var browser = _module.Browser;
 	  var posXInContainer = browser.findPosXInContainer(component, container);
 	  var posYInContainer = browser.findPosYInContainer(component, container);
 
@@ -393,7 +393,7 @@ eXo.core.Browser = {
 	  if(typeof(elemt) == "string")
 	    elemt = document.getElementById(elemt);
 		
-	  var height = base.Browser.getHeightOfFreeSpace();
+	  var height = _module.Browser.getHeightOfFreeSpace();
 	  if (height > 0 && elemt != undefined)
 	  {
 	    height += elemt.offsetHeight;
@@ -403,7 +403,4 @@ eXo.core.Browser = {
 };
 
 eXo.core.Browser.init();
-return {
-	Browser: eXo.core.Browser,
-	Mouse: eXo.core.Mouse
-};
+_module.Browser = eXo.core.Browser;

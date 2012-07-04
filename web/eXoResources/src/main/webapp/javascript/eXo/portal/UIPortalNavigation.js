@@ -31,7 +31,7 @@ var portalNavigation = {
    * and calls the buildMenu function
    */
   init : function(popupMenu, container) {
-    this.superClass = navigation.UIPopupMenu;
+    this.superClass = _module.UIPopupMenu;
     this.superClass.init(popupMenu, container);
     //UIPopup.js will add onclick event that increase z-index
     popupMenu.onmousedown = null;
@@ -47,7 +47,7 @@ var portalNavigation = {
    */
   onLoad : function(baseId) {    
 	var uiNavPortlet = gj("#" + baseId);
-	if(uiNavPortlet.hasClass("UIHorizontalTabs")) navigation.UIPortalNavigation.init(uiNavPortlet[0], uiNavPortlet[0]);
+	if(uiNavPortlet.hasClass("UIHorizontalTabs")) _module.UIPortalNavigation.init(uiNavPortlet[0], uiNavPortlet[0]);
 	  
 	if (baseId === "UIHorizontalNavigation") {
 		gj(".UIHorizontalNavigation").slice(1).each(function() {gj(this).hide();});
@@ -67,7 +67,7 @@ var portalNavigation = {
    *  . adds onclick event if the item contains a link, so a click on this item will call the link
    */
   buildMenu : function(popupMenu) {
-    var portalNav = navigation.UIPortalNavigation;
+    var portalNav = _module.UIPortalNavigation;
     var topContainer = gj(popupMenu);
 
     // Top menu items
@@ -129,7 +129,7 @@ var portalNavigation = {
    */
   mouseEnterTab : function(tab, newClass)
   {
-    var portalNav = navigation.UIPortalNavigation;
+    var portalNav = _module.UIPortalNavigation;
 
     var getNodeURL = tab.attr("exo:getNodeURL");
     var menuItemContainer = tab.find("." + portalNav.containerStyleClass).first();
@@ -168,7 +168,7 @@ var portalNavigation = {
    */
   mouseLeaveTab : function(tab, oldClass)
   {
-    var portalNav = navigation.UIPortalNavigation;
+    var portalNav = _module.UIPortalNavigation;
 
     tab.attr("class", oldClass);
     var conts = tab.find("." + portalNav.containerStyleClass);
@@ -185,7 +185,7 @@ var portalNavigation = {
    * Sets the currentOpenedMenu to the menu being opened
    */
   showMenu : function(tab, menuItemContainer) {
-    var portalNav = navigation.UIPortalNavigation;
+    var portalNav = _module.UIPortalNavigation;
     var browser = base.Browser;
     portalNav.superClass.pushVisibleContainer(menuItemContainer.attr("id"));
         
@@ -216,7 +216,7 @@ var portalNavigation = {
   },
 
   cancelHideMenuContainer : function(containerId) {
-	  var timeout = navigation.UIPortalNavigation.hideMenuTimeoutIds.remove(containerId);
+	  var timeout = _module.UIPortalNavigation.hideMenuTimeoutIds.remove(containerId);
       if (timeout) {
     	  window.clearTimeout(timeout) ;
       }
@@ -226,7 +226,7 @@ var portalNavigation = {
    * Changes the style of the parent button when a submenu has to be hidden
    */
   hideMenu : function(containerId) {
-    var portalNav = navigation.UIPortalNavigation;
+    var portalNav = _module.UIPortalNavigation;
     portalNav.hideMenuTimeoutIds.remove(containerId);
 
     var menuItemContainer = gj("#" + containerId);
@@ -246,7 +246,7 @@ var portalNavigation = {
    */
   onMenuItemOver : function() {
     var menuItem = gj(this);
-    var portalNav = navigation.UIPortalNavigation;
+    var portalNav = _module.UIPortalNavigation;
     
     var getNodeURL = menuItem.attr("exo:getNodeURL");
     var subContainer = menuItem.find("." + portalNav.containerStyleClass).first();
@@ -296,7 +296,7 @@ var portalNavigation = {
    */
   onMenuItemOut : function() {
     var menuItem = gj(this);
-    var portalNav = navigation.UIPortalNavigation;
+    var portalNav = _module.UIPortalNavigation;
 
     var subContainer = menuItem.find("." + portalNav.containerStyleClass).first();
     if (subContainer.length) {
@@ -314,12 +314,12 @@ var portalNavigation = {
    *  . Adds the tabs to the scroll manager
    */
   loadScroll : function(portalNavId) {
-    var uiNav = navigation.UIPortalNavigation;
+    var uiNav = _module.UIPortalNavigation;
     var portalNav = gj("#" + portalNavId);
     if (!portalNav.length) return;
     
     // Creates new ScrollManager and initializes it
-    uiNav.scrollMgr = new navigation.ScrollManager(portalNav[0]);       
+    uiNav.scrollMgr = new _module.ScrollManager(portalNav[0]);       
     uiNav.scrollMgr.loadElements("UITab");
     
     // Finish initialization
@@ -341,7 +341,7 @@ var portalNavigation = {
 	   htmlFrags += ("<a class='ItemIcon " + (node.icon ? node.icon : "DefaultPageIcon") + "'" +
 	   "href='" + actionLink + "'>" + (node.label.length > 40 ? node.label.substring(0,37) + "..." : node.label) + "</a>");
 	   if (node.childs.length) {
-		   htmlFrags += navigation.UIPortalNavigation.generateContainer(node.childs);
+		   htmlFrags += _module.UIPortalNavigation.generateContainer(node.childs);
 	   }
 	   htmlFrags += "</li>";
    }
@@ -349,4 +349,4 @@ var portalNavigation = {
    return htmlFrags;
   }
 };
-return  {UIPortalNavigation: portalNavigation};
+_module.UIPortalNavigation = portalNavigation;

@@ -242,6 +242,7 @@ HashMap.prototype.clear = function() {
 
 /*************************************************************************/
 eXo.core.HashMap = HashMap.prototype.constructor ;
+_module.HashMap = eXo.core.HashMap; 
 /*************************************************************************/
 
 /**
@@ -275,4 +276,3 @@ Function.prototype.inherits = function(parentCtor) {
   this.prototype = new tempCtor();
   this.prototype.constructor = this;
 };
-return {HashMap: eXo.core.HashMap};

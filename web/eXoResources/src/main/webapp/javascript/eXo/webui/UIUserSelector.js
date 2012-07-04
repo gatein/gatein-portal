@@ -134,3 +134,4 @@ eXo.webui.UIUserSelector = {
     return false;
   }
 }
+_module.UIUserSelector = eXo.webui.UIUserSelector;

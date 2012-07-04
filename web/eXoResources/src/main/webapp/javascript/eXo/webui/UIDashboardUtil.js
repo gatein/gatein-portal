@@ -42,7 +42,7 @@ eXo.webui.UIDashboardUtil = {
 	},
 	
 	isIn : function(x, y, component) {
-	  var componentLeft = dashboard.UIDashboardUtil.findPosX(component);
+	  var componentLeft = _module.UIDashboardUtil.findPosX(component);
 	  var componentRight = componentLeft + component.offsetWidth ;
 	  var componentTop = gj(component).offset().top;
 	  var componentBottom = componentTop + component.offsetHeight ;
@@ -78,7 +78,7 @@ eXo.webui.UIDashboardUtil = {
     var scrollLeft = gadgetCont.scrollLeft();
     gadgetCont.find("div.UIColumn").each(function()
     {
-      var left = dashboard.UIDashboardUtil.findPosX(this) - scrollLeft;
+      var left = _module.UIDashboardUtil.findPosX(this) - scrollLeft;
       if(left <= x && x < left + this.offsetWidth)
       {
         column = gj(this);
@@ -120,4 +120,5 @@ eXo.webui.UIDashboardUtil = {
 		return url;
 	}
 };
-return {UIDashboardUtil: eXo.webui.UIDashboardUtil};
+
+_module.UIDashboardUtil = eXo.webui.UIDashboardUtil;

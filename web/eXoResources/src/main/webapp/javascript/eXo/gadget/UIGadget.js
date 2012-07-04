@@ -16,7 +16,6 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-var gadgetJS = gadget; 
 eXo.gadget.UIGadget = {
 
   /**
@@ -87,7 +86,7 @@ eXo.gadget.UIGadget = {
       {
         uiGadget.css("width", "auto");
       }
-      gadgetJS.UIGadget.init(uiGadget[0], isDesktop, gadget.metadata);
+      _module.UIGadget.init(uiGadget[0], isDesktop, gadget.metadata);
     }
     //setup for pubsub mechanism
     gadgets.pubsubrouter.init(function(id) {return url;}, {});
@@ -224,7 +223,7 @@ eXo.gadget.UIGadget = {
         {
           uiGadget.style.left = offsetWidth + "px";
         }
-        gadgetJS.UIGadget.saveWindowProperties(uiGadget);
+        _module.UIGadget.saveWindowProperties(uiGadget);
       };
     }
   },
@@ -322,7 +321,7 @@ eXo.gadget.UIGadget = {
     {
       var portletID = portletFrag.parent().attr("id");
       var dashboardID = gadget.closest(".UIDashboard").attr("id");
-      if (confirm(gadgetJS.UIGadget.confirmDeleteGadget))
+      if (confirm(_module.UIGadget.confirmDeleteGadget))
       {
         var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
         href += "&portal:type=action&uicomponent=" + dashboardID;
@@ -350,7 +349,7 @@ eXo.gadget.UIGadget = {
     {
       //Code used for desktop page
       var blockID = closeIcon.closest(".UIPage").find("div.id").html();
-      if (confirm(gadgetJS.UIGadget.confirmDeleteGadget))
+      if (confirm(_module.UIGadget.confirmDeleteGadget))
       {
         var params = [
           {name: "objectId", value : gadget.attr("id")}
@@ -391,4 +390,4 @@ eXo.gadget.UIGadget = {
     base.Browser.fillUpFreeSpace(portletFrag[0]);
   }
 };
-return {UIGadget: eXo.gadget.UIGadget};
+_module.UIGadget = eXo.gadget.UIGadget;

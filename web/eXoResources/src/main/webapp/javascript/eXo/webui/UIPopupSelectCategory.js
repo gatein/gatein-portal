@@ -41,4 +41,5 @@ eXo.webui.UIPopupSelectCategory = {
     } 
   }
 };
-return {UIPopupSelectCategory: eXo.webui.UIPopupSelectCategory};
+
+_module.UIPopupSelectCategory = eXo.webui.UIPopupSelectCategory;

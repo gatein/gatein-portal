@@ -159,7 +159,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             }
             
             //                        
-            buffer.append(") { var ").append(resource.getAlias()).append(" = {};");
+            buffer.append(") { var _module = {};(function() {");
          }
          
          //
@@ -168,10 +168,6 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             Reader jScript = getJavascript(resource, js.getName(), locale);
             if (jScript != null)
             {                                                     
-               if (isModule) 
-               {                   
-                  buffer.append("var tmp = function() {");
-               }
                buffer.append("// Begin ").append(js.getName()).append("\n");                          
 
                //
@@ -181,17 +177,13 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
                //
                buffer.append("// End ").append(js.getName()).append("\n");
-               if (isModule) 
-               {
-                  buffer.append("}();for(var prop in tmp){");
-                  buffer.append(resource.getAlias()).append("[prop]=tmp[prop];").append("}");
-               }
             }                                             
          }         
             
          if (isModule)
          {
-            buffer.append("return ").append(resource.getAlias()).append(";});");     
+            buffer.append("}).call(this);");
+            buffer.append("return _module;});");     
          }
          readers.add(new StringReader(buffer.toString()));
          

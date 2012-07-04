@@ -35,7 +35,7 @@ eXo.portal.PortalDragDrop = {
 		
 	  var browser = base.Browser;
 	  var DragDrop = common.DragDrop;
-	  var PortalDragDrop = portal.PortalDragDrop;
+	  var PortalDragDrop = _module.PortalDragDrop;
 	  
 	  var previewBlock = null;
 		/**
@@ -105,7 +105,7 @@ eXo.portal.PortalDragDrop = {
 	   var dragCallback = function(nx, ny, ex, ey, e) {
 	     var dragObject = this, jDragObj = gj(this);
 	     /* Control Scroll */
-	     portal.PortalDragDrop.scrollOnDrag(dragObject, e);
+	     _module.PortalDragDrop.scrollOnDrag(dragObject, e);
 	    
 	     var foundTarget = PortalDragDrop.findTarget(dragObject, ex, ey) || jDragObj.data("lastFoundTargetObject");
 	     if (!foundTarget) return;	     
@@ -140,7 +140,7 @@ eXo.portal.PortalDragDrop = {
 	      });	      	      
 	      
 	      jDragObj.data("listComponentInTarget", listComponent);
-	      var insertPosition = portal.PortalDragDrop.findInsertPosition(listComponent, "row", ey);
+	      var insertPosition = _module.PortalDragDrop.findInsertPosition(listComponent, "row", ey);
 	      if (jDragObj.data("foundTargetObject") === jDragObj.data("lastFoundTargetObject") && 
 	    		  insertPosition === jDragObj.data("foundIndex")) return;	      
 	      jDragObj.data("foundIndex", insertPosition);
@@ -158,7 +158,7 @@ eXo.portal.PortalDragDrop = {
 	    	 return this != previewBlock.parentNode && this != dragObject.parentNode; 
 	      });
 	      
-	      var insertPosition = portal.PortalDragDrop.findInsertPosition(listComponent, "column", ex);
+	      var insertPosition = _module.PortalDragDrop.findInsertPosition(listComponent, "column", ex);
 	      if (jDragObj.data("foundTargetObject") === jDragObj.data("lastFoundTargetObject") && 
 	    		  insertPosition === jDragObj.data("foundIndex")) return;
 	      jDragObj.data("foundIndex", insertPosition);
@@ -216,7 +216,7 @@ eXo.portal.PortalDragDrop = {
 	  	}
 
 	    if(e.which !== 27) {
-	    	portal.PortalDragDrop.doDropCallback(dragObject);
+	    	_module.PortalDragDrop.doDropCallback(dragObject);
 	    } else {
 	      //When click ESC, restore dragObject's last position
 	      if (dragObject.parentNode && dragObject.parentNode.tagName.toLowerCase() == "td") {
@@ -244,7 +244,7 @@ eXo.portal.PortalDragDrop = {
 	    
 	    eXo.portal.isInDragging = false;
 	    if (hasChanged) {
-	    	portal.PortalComposer.toggleSaveButton();
+	    	_module.PortalComposer.toggleSaveButton();
 	    }
 	    
 	    jDragObj.removeData();
@@ -278,7 +278,7 @@ eXo.portal.PortalDragDrop = {
 	 */
 	doDropCallback : function(dragObject) {
 	  var srcElement = dragObject, jDragObj = gj(dragObject);
-	  var PortalDragDrop = portal.PortalDragDrop;
+	  var PortalDragDrop = _module.PortalDragDrop;
 	  var targetElement = jDragObj.data("foundTargetObject");
 	  var foundIndex = jDragObj.data("foundIndex")
 	  
@@ -292,7 +292,7 @@ eXo.portal.PortalDragDrop = {
 	  
 	  if(!srcElement.isAddingNewly && (foundIndex != undefined)) {
 	    if(PortalDragDrop.layoutTypeElementNode != null) {
-	      portal.PortalDragDrop.divRowContainerAddChild(srcElement, targetElement, foundIndex);
+	      _module.PortalDragDrop.divRowContainerAddChild(srcElement, targetElement, foundIndex);
 	    }
 	  }
 
@@ -472,4 +472,5 @@ eXo.portal.PortalDragDrop = {
 	  }
 	}
 } ;
-return {PortalDragDrop: eXo.portal.PortalDragDrop};
+
+_module.PortalDragDrop = eXo.portal.PortalDragDrop;

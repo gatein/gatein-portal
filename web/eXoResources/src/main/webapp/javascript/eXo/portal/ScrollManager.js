@@ -331,4 +331,5 @@ ScrollManager.prototype.checkResize = function() {
 	var scroll = this;
 	this.refresh = setTimeout(function() {scroll.checkResize()}, 700);
 };
-return {"ScrollManager" : ScrollManager};
+
+_module.ScrollManager = ScrollManager;
