@@ -62,7 +62,7 @@ eXo.webui.UITabbedDashboard = {
       var keyNum = e.keyCode ? e.keyCode : e.which;
       if (keyNum == 13)
       {
-        eXo.webui.UITabbedDashboard.renameTabLabel(gj(this));
+        _module.renameTabLabel(gj(this));
       }
       else if (keyNum == 27)
       {
@@ -123,7 +123,7 @@ eXo.webui.UITabbedDashboard = {
       var keyNum = e.keyCode ? e.keyCode : e.which;
       if (keyNum == 13)
       {
-        eXo.webui.UITabbedDashboard.createTab(gj(this));
+        _module.createTab(gj(this));
       }
       else if (keyNum == 27)
       {
@@ -134,4 +134,5 @@ eXo.webui.UITabbedDashboard = {
     input.closest(".UITab").addClass("EditTab");
     input.focus();
   }
-}
+};
+_module = eXo.webui.UITabbedDashboard;

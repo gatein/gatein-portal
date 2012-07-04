@@ -34,3 +34,4 @@ eXo.webui.UISampleTOC = {
 	  }
 	}
 };
+module_ = eXo.webui.UISampleTOC;

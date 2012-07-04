@@ -32,7 +32,7 @@ UISiteMap.prototype.updateTreeNode = function (nodeToUpdate, getNodeURL) {
 	} catch (e) {		
 	}	
 	if (data && data.length) {
-		SiteMapPortlet.generateHtml(data, nodeToUpdate, subGroup);			
+		_module.generateHtml(data, nodeToUpdate, subGroup);			
 		return;
 	}
 
@@ -104,4 +104,4 @@ UISiteMap.prototype.collapseExpand = function(element) {
 };
 
 eXo.webui.UISiteMap = new UISiteMap();
-return eXo.webui.UISiteMap; 
+_module = eXo.webui.UISiteMap; 

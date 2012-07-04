@@ -96,7 +96,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
                                  "// Begin eXo.module1\n" + 
                                  "ccc;" +  
                                  "// End eXo.module1\n" +
-                                 "}).call(this);return _module;});";
+                                 "})();return _module;});";
       assertReader(module1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module1"), null));
       
       //module2 depends on module1
@@ -105,7 +105,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
                                  "// Begin eXo.module2\n" + 
                                  "ddd;" +
                                  "// End eXo.module2\n" +
-                                  "}).call(this);return _module;});";
+                                  "})();return _module;});";
       assertReader(module2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module2"), null));
    }
 

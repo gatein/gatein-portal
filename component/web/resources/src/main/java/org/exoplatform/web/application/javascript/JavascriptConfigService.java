@@ -182,7 +182,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             
          if (isModule)
          {
-            buffer.append("}).call(this);");
+            buffer.append("})();");
             buffer.append("return _module;});");     
          }
          readers.add(new StringReader(buffer.toString()));
