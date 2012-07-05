@@ -213,9 +213,15 @@
    <!-- GADGET Javascripts -->
    <module>
       <name>gadget</name>
+      <supported-locale>de</supported-locale>
+      <supported-locale>en</supported-locale>
+      <supported-locale>fr</supported-locale>
+      <supported-locale>ru</supported-locale>
+      <supported-locale>vi</supported-locale>
       <script>
          <name>eXo.gadget.UIGadget</name>
          <path>/javascript/eXo/gadget/UIGadget.js</path>
+         <resource-bundle>eXo.portal</resource-bundle>
       </script>
       <depends>
          <module>common</module>

@@ -58,7 +58,9 @@ eXo.i18n.I18NMessage = {
       "${weekdays.thu}",
       "${weekdays.fri}",
       "${weekdays.sat}"
-  ]
+  ],
+  Save : "${Save}",
+  Cancel : "${Cancel}"
 };
 
 _module.I18NMessage = eXo.i18n.I18NMessage;

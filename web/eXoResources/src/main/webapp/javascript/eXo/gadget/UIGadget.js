@@ -92,10 +92,8 @@ var eXoGadget = {
    * @param {boolean} inDesktop use to realize UIDesktopPage or no
    * @param {String} metadata metadata of gadget
    */
-  init : function(uiGadget, confirmDeleteMsg)
+  init : function(uiGadget)
   {
-    _module.UIGadget.confirmDeleteGadget = confirmDeleteMsg;
-
     if (typeof (uiGadget) == "string") uiGadget = document.getElementById(uiGadget);
     var gadget = gj(uiGadget);
     var portletFrag = gadget.closest(".PORTLET-FRAGMENT");
@@ -330,7 +328,8 @@ var eXoGadget = {
     {
       var portletID = portletFrag.parent().attr("id");
       var dashboardID = gadget.closest(".UIDashboard").attr("id");
-      if (confirm(_module.UIGadget.confirmDeleteGadget))
+
+      if (confirm("${GadgetDeletionConfirmation}"))
       {
         var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
         href += "&portal:type=action&uicomponent=" + dashboardID;
@@ -358,7 +357,7 @@ var eXoGadget = {
     {
       //Code used for desktop page
       var blockID = closeIcon.closest(".UIPage").find("div.id").html();
-      if (confirm(_module.UIGadget.confirmDeleteGadget))
+      if (confirm("${GadgetDeletionConfirmation}"))
       {
         var params = [
           {name: "objectId", value : gadget.attr("id")}

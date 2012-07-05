@@ -15,9 +15,8 @@
     def view = uicomponent.getView();
     def userPref = null;
 
-    def confirmDelete = _ctx.appRes("UIGadgetContainerManagement.confirm.DeleteGadget");
     def reqJS = jsmanager.require("SHARED/gadget", "gadget")
-             				 .addScripts("gadget.UIGadget.init('$id', '$confirmDelete');");    			 				 				     									
+             				 .addScripts("gadget.UIGadget.init('$id');");    			 				 				     									
     
     def isLossData = uicomponent.isLossData();
     if(!isLossData) {
