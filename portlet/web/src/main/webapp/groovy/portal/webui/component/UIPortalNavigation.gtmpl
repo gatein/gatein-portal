@@ -11,8 +11,9 @@
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.addCustomizedOnLoadScript("require('SHARED/navigation').UIPortalNavigation.onLoad('" + uicomponent.id + "');");	
-	jsmanager.addCustomizedOnLoadScript("require('SHARED/navigation').UIPortalNavigation.loadScroll('" + uicomponent.id + "');");
+	jsmanager.require("SHARED/navigation", "nav")
+				.addScripts("nav.UIPortalNavigation.onLoad('" + uicomponent.id + "');")
+				.addScripts("nav.UIPortalNavigation.loadScroll('" + uicomponent.id + "');");
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext();     
 	PortalURL nodeURL = nodeurl();

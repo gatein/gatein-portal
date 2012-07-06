@@ -753,6 +753,7 @@ public class UIPortalApplication extends UIApplication
             jsManager.addCustomizedOnLoadScript(skin);
          }
          w.write(jsManager.getJavaScripts());
+         if (jsManager.getRequireJS() != null) w.write(jsManager.getRequireJS().toString());
          w.write("</div>");
          w.write("</div>");
       }

@@ -26,6 +26,13 @@
 	      <%=jsManager.getJavaScripts()%>	  
 	  	}			  
 	  );
+    <%
+      if(jsManager.getRequireJS() != null) {
+    %>
+         <%=jsManager.getRequireJS().toString();%>
+    <%
+      }
+    %>
     </script>
   </body>
 </html>

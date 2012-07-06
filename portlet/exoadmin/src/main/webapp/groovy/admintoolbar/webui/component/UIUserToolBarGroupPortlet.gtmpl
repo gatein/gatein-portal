@@ -15,7 +15,7 @@
 
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.addCustomizedOnLoadScript('require("SHARED/navigation").UIPortalNavigation.onLoad("' + uicomponent.id + '");');
+	jsmanager.require("SHARED/navigation", "nav").addScripts("nav.UIPortalNavigation.onLoad('" + uicomponent.id + "');");
 		
 	def groupNavigations = uicomponent.getGroupNavigations();
 	

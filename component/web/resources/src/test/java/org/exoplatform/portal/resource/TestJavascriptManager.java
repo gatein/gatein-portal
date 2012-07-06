@@ -19,6 +19,7 @@
 package org.exoplatform.portal.resource;
 
 import org.exoplatform.web.application.JavascriptManager;
+import org.exoplatform.web.application.RequireJS;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMap;
@@ -74,5 +75,24 @@ public class TestJavascriptManager extends AbstractWebResourceTest
       assertEquals(2, importedJavaScripts.size());
       assertTrue(importedJavaScripts.contains("/eXoResources/javascript/eXo/webui/script.js"));
       assertTrue(importedJavaScripts.contains("/webapp/jscript/eXo/webui/script-ext.js"));
+   }
+
+   public void testRequireJS()
+   {
+      RequireJS require = jsManager.require("SHARED/jquery", "gj");
+      require.addScripts("gj('body').css('color : red')");
+
+      String expected = "require([\"SHARED/jquery\"],function(gj) {gj('body').css('color : red')});";
+      assertEquals(expected, require.toString());
+   }
+   
+   public void testNoAlias()
+   {
+      RequireJS require = jsManager.require("SHARED/webui", null);
+      require.require("SHARED/jquery", "gj");
+
+      //Any module without alias will be pushed to the end of dependency list
+      String expected = "require([\"SHARED/jquery\",\"SHARED/webui\"],function(gj) {});";
+      assertEquals(expected, require.toString());
    }
 }

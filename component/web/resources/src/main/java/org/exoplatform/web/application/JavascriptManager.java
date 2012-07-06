@@ -59,6 +59,8 @@ public class JavascriptManager
    /** . */
    private StringBuilder customizedOnloadJavascript = new StringBuilder();
 
+   private RequireJS requireJS;
+
    /**
     * Add a valid javascript code
     * 
@@ -276,5 +278,20 @@ public class JavascriptManager
       {
          writer.write(callback.toString());
       }
+   }
+   
+   public RequireJS require(String moduleId, String alias)
+   {
+      if (requireJS == null)
+      {
+         requireJS = new RequireJS();
+      }
+      requireJS.require(moduleId, alias);
+      return requireJS;
+   }
+   
+   public RequireJS getRequireJS()
+   {
+      return requireJS;
    }
 }
