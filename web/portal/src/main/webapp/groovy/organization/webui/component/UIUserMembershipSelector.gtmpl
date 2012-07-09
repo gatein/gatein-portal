@@ -5,7 +5,7 @@
 	def membership = uicomponent.getMembership();
 	
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().loadScriptResource('webui');
+	rcontext.getJavascriptManager().require("SHARED/webui");
 %>
 <div class="UIMembership" id="UIUserMembershipSelector" >
 	<%//Begin Membership List%>

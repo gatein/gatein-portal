@@ -3,11 +3,11 @@
   
   def rcontext = _ctx.getRequestContext() ;
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
-  jsmanager.loadScriptResource("dashboard");
-  jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.SaveTitle='" + _ctx.appRes("UIDashboardContainer.label.SaveTitle") + "';");
-  jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.CancelTitle='" + _ctx.appRes("UIDashboardContainer.label.CancelTitle") + "';");
-  jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.Cache='" + _ctx.appRes("UIDashboardContainer.label.Cache") + "';");
-  jsmanager.addCustomizedOnLoadScript("eXo.gadget.UIGadget.Debug='" + _ctx.appRes("UIDashboardContainer.label.Debug") + "';");
+  jsmanager.require("SHARED/gadget")
+  	.addScripts("eXo.gadget.UIGadget.SaveTitle='" + _ctx.appRes("UIDashboardContainer.label.SaveTitle") + "';")
+    .addScripts("eXo.gadget.UIGadget.CancelTitle='" + _ctx.appRes("UIDashboardContainer.label.CancelTitle") + "';")
+    .addScripts("eXo.gadget.UIGadget.Cache='" + _ctx.appRes("UIDashboardContainer.label.Cache") + "';")
+    .addScripts("eXo.gadget.UIGadget.Debug='" + _ctx.appRes("UIDashboardContainer.label.Debug") + "';");
    
   def maxiGadget = uicomponent.getMaximizedGadget(); 
 %>

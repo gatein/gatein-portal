@@ -145,8 +145,8 @@ public class UIDashboard extends UIContainer
          event.getRequestContext().addUIComponentToUpdateByAjax(uiDashboard.getChild(UIPopupWindow.class));
          if (isShow)
          {
-            event.getRequestContext().getJavascriptManager().addCustomizedOnLoadScript(
-               "eXo.webui.UIDashboard.onLoad('" + windowId + "'," + uiDashboard.canEdit() + ");");
+            event.getRequestContext().getJavascriptManager().require("SHARED/dashboard", "dashboard")
+               .addScripts("eXo.webui.UIDashboard.onLoad('" + windowId + "'," + uiDashboard.canEdit() + ");");
          }
       }
    }

@@ -1,12 +1,12 @@
 <%	
 	String popupId = uicomponent.getId(); 
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().loadScriptResource('webui');
 	
 	boolean isEditted = uicomponent.isEditted; 
-	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId');");
-	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopup.setAlign('$popupId', 2, 5, 5);");
-	rcontext.getJavascriptManager().addJavascript("eXo.portal.PortalComposer.contentModified = " + uicomponent.isEditted + ";");
+	rcontext.getJavascriptManager()
+    .require("SHARED/webui", "webui").addScripts("webui.UIPopupWindow.show('$popupId');")
+    .require("SHARED/base", "base").addScripts("base.UIPopup.setAlign('$popupId', 2, 5, 5);")
+    .require("SHARED/portal", "portal").addScripts("portal.PortalComposer.contentModified = " + uicomponent.isEditted + ";");
 %>
 <div class="UIPopupWindow UIDragObject UIPortalComposer" exo:minWidth="200" exo:minHeight="200" id="$uicomponent.id" style="width: 320px; display: block;">
 	<div class="OverflowContainer ClearFix">

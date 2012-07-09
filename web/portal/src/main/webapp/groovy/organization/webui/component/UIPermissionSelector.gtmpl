@@ -7,7 +7,7 @@
 	def uiForm = uicomponent.getAncestorOfType(UIForm.class);
 	def permission =	uicomponent.getPermission();
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().loadScriptResource('webui');
+	rcontext.getJavascriptManager().require("SHARED/webui");
 %>
 <div class="UIPermissionSelector" id="UIPermissionSelector">
 	<div class="PermissionInfoContainer">

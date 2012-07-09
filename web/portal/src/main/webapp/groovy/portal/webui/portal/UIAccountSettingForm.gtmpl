@@ -4,7 +4,7 @@
 
   def rcontext = _ctx.getRequestContext();
   JavascriptManager jsManager = rcontext.getJavascriptManager();
-  jsManager.loadScriptResource("webui");
+  jsManager.require("SHARED/webui");
 
 %>
 

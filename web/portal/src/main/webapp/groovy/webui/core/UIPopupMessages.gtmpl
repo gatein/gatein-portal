@@ -65,8 +65,8 @@
     def rcontext = _ctx.getRequestContext();
 
     if(uicomponent.hasMessage()){
-      rcontext.getJavascriptManager().loadScriptResource("webui");
-      rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
+      rcontext.getJavascriptManager().require("SHARED/webui", "webui")
+      	                             .addScripts("webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
 
       def errors = uicomponent.getErrors();
       def warnings = uicomponent.getWarnings();
@@ -104,7 +104,8 @@
 	</div>
 	<%
     } else if (rcontext.useAjax()) {
-        rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.hide('$popupId', $uicomponent.showMask);");
+        rcontext.getJavascriptManager().require("SHARED/webui", "webui")
+                                       .addScripts("webui.UIPopupWindow.hide('$popupId', $uicomponent.showMask);");
     }
 	%>
 </div>

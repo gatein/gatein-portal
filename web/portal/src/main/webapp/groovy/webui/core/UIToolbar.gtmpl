@@ -1,6 +1,6 @@
 <%
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.portal.UIPortal.previewTitle = '" + _ctx.appRes("UIPageEditBar.tooltip.TurnOffPreview") + "';");
+	rcontext.getJavascriptManager().require("SHARED/portal", "portal").addScripts("eXo.portal.UIPortal.previewTitle = '" + _ctx.appRes("UIPageEditBar.tooltip.TurnOffPreview") + "';");
 %>
 <div class="$uicomponent.id" id="$uicomponent.id">
 	<div class="UIToolbar">

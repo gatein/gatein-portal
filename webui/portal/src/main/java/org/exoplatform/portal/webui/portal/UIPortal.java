@@ -425,8 +425,7 @@ public class UIPortal extends UIContainer
          {
             //Show message detail to user and then logout if user press ok button
             JavascriptManager jsManager = Util.getPortalRequestContext().getJavascriptManager();
-            jsManager.loadScriptResource("bootstrap");
-            jsManager.addJavascript("if(confirm('" + 
+            jsManager.require("SHARED/base").addScripts("if(confirm('" + 
                Util.getPortalRequestContext().getApplicationResourceBundle().getString("UIAccountProfiles.msg.NotExistingAccount") + 
                "')) {eXo.portal.logout();}");
          }

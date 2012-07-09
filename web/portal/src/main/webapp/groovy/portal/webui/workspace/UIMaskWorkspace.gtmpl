@@ -18,8 +18,8 @@
     int width = uicomponent.getWindowWidth();
     int height = uicomponent.getWindowHeight();
 
-    String script = "eXo.portal.UIMaskWorkspace.show('"+maskId+"', "+width+", "+height+");";
-    rcontext.getJavascriptManager().addCustomizedOnLoadScript(script) ;
+    String script = "base.UIMaskWorkspace.show('"+maskId+"', "+width+", "+height+");";
+    rcontext.getJavascriptManager().require("SHARED/base", "base").addScripts(script) ;
 %>
     <div class="MaskContainer">
       <%uicomponent.renderChildren();%>

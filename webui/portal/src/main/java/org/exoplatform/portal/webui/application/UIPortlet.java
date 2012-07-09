@@ -1155,7 +1155,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
                   {
                      for (String value : transportHeaders.getValues(key))
                      {
-                        jsMan.loadScriptResource(value);                          
+                        jsMan.require(value);
                      }
                   }
                   else

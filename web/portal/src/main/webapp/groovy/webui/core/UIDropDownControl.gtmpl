@@ -3,7 +3,7 @@
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.loadScriptResource("webui-ext");
+	jsmanager.require("SHARED/webui-ext");
 	def options = uicomponent.getOptions();
 %>
 <div class="UIDropDownControl" id="$uicomponent.id">

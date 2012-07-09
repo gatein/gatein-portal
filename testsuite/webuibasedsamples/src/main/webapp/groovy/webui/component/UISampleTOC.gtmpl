@@ -4,7 +4,7 @@
 	
 	def rContext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rContext.getJavascriptManager();
-	jsmanager.loadScriptResource("portal");			
+	jsmanager.require("SHARED/portal");			
  %>
 
 	

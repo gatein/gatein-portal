@@ -51,8 +51,29 @@ public class RequireJS
       scripts = new StringBuilder();
    }
 
+   public RequireJS require(String moduleId)
+   {
+      return require(moduleId, null);
+   }
+
    public RequireJS require(String moduleId, String alias)
    {
+//      if (moduleId == null || moduleId.isEmpty())
+//      {
+//         log.warn("The moduleId can not be NULL");
+//      }
+//      else
+//      {
+//         if (alias == null || alias.isEmpty())
+//         {
+//            // Put the moduleId to the set of required modules
+//         }
+//         else
+//         {
+//            alias = alias.trim();
+//         }
+//      }
+      
       if (alias != null && !alias.trim().isEmpty())
       {
          alias = alias.trim();
@@ -91,8 +112,9 @@ public class RequireJS
          builder.append("require(");
          List<String> tmp = new LinkedList<String>(depends.values());
          tmp.addAll(noAlias);
-         builder.append(new JSONArray(tmp)).append(",");         
-         builder.append("function(").append(StringUtils.join(depends.keySet(), ",")).append(") {").append(this.scripts).append("});");
+         builder.append(new JSONArray(tmp)).append(",");
+         builder.append("function(").append(StringUtils.join(depends.keySet(), ",")).append(") {").append('\n')
+            .append(this.scripts).append('\n').append("});");
       }
       else
       {

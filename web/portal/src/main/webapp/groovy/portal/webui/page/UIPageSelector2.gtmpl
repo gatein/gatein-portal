@@ -23,7 +23,7 @@
 	UIPopupWindow uipopup = uicomponent.getChild(UIPopupWindow.class); 
 	
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().loadScriptResource('webui');
+	rcontext.getJavascriptManager().require("SHARED/webui");
 	
 	UIFormInputSet uiform = uicomponent.getChild(UIFormInputSet.class); 
 %>

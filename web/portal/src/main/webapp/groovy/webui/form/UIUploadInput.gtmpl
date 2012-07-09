@@ -2,7 +2,6 @@
 	String[] uploadId = uicomponent.getUploadIds();
 	boolean isDynamicMode = uicomponent.isDynamicMode();
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().loadScriptResource('webui-ext');
 	StringBuilder b = new StringBuilder();
 	b.append("[") ;
 	for(int i = 0; i < uploadId.length; i++) {
@@ -10,7 +9,8 @@
 		if(i < uploadId.length - 1) b.append(",");
 	}
 	b.append("]");
-	rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.webui.UIUploadInput.initUploadEntry(" +b.toString()+ ", " +isDynamicMode+ ");");
+	rcontext.getJavascriptManager().require("SHARED/webui-ext")
+    .addScripts("eXo.webui.UIUploadInput.initUploadEntry(" +b.toString()+ ", " +isDynamicMode+ ");");
 %>
 <div id="<%=uicomponent.getId()%>">
 <input type="hidden" id="RemoveInputLabel" value="<%= _ctx.appRes("UIFormUploadInput.label.RemoveInput"); %>"/>

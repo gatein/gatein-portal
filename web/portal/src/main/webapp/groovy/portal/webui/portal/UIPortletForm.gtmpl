@@ -1,6 +1,6 @@
 <%
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().loadScriptResource('webui'); 
+	rcontext.getJavascriptManager().require("SHARED/webui"); 
 %>
 
 <div class="UIFormTabPane">

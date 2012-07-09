@@ -6,7 +6,6 @@
     boolean isAutoAdjustHeight = uicomponent.isAutoAdjustHeight();
     def rcontext = _ctx.getRequestContext();
     
-    rcontext.getJavascriptManager().loadScriptResource('webui-ext');
     
     String url = uicomponent.url("LoadNext") + "&ajaxRequest=true"; 
     String css = "";
@@ -18,6 +17,7 @@
   onscroll="eXo.webui.UIVirtualList.onScroll(this,'$url');">    
   <% uicomponent.renderChildren();%>
   <% 
-    rcontext.getJavascriptManager().addJavascript("eXo.webui.UIVirtualList.init('$uicomponent.id', $hasNext, $isAutoAdjustHeight);");
+    rcontext.getJavascriptManager().require("SHARED/webui-ext", "webuiExt")
+      .addScripts("webuiExt.UIVirtualList.init('$uicomponent.id', $hasNext, $isAutoAdjustHeight);");
   %>
 </div>

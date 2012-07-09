@@ -10,8 +10,8 @@
 		def rcontext = _ctx.getRequestContext();
 		String id = uicomponent.getParent().getId();
 	
-		rcontext.getJavascriptManager().loadScriptResource('webui-ext');
-		rcontext.getJavascriptManager().addJavascript("eXo.webui.UIRightClickPopupMenu.disableContextMenu('"+id+"');");
+		rcontext.getJavascriptManager().require("SHARED/webui-ext", "webuiExt")
+                                   .addScripts("webuiExt.UIRightClickPopupMenu.disableContextMenu('"+id+"');");
 		uicomponent.renderUIComponent(uiPopupMenu); 
 	}
 %>

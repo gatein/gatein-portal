@@ -337,7 +337,7 @@ public class UIPortalApplication extends UIApplication
       // Still need this util SHARED/portal.js is optimized
       if (prc.getRemoteUser() != null)
       {
-         jsMan.loadScriptResource(ResourceScope.SHARED, "portal");
+         jsMan.require("SHARED/portal");
       }
 
       //Support for legacy resource declaration 
@@ -620,7 +620,7 @@ public class UIPortalApplication extends UIApplication
          js.append("eXo.env.server.portalURLTemplate=\"");
          js.append(url).append("\";");
          
-         pcontext.getJavascriptManager().addCustomizedOnLoadScript(js.toString());
+         pcontext.getJavascriptManager().require("SHARED/base").addScripts(js.toString());
          
          SiteKey siteKey = new SiteKey(pcontext.getSiteType(), pcontext.getSiteName());
          PageNodeEvent<UIPortalApplication> pnevent =
@@ -750,7 +750,7 @@ public class UIPortalApplication extends UIApplication
          String skin = getAddSkinScript(list);
          if (skin != null)
          {
-            jsManager.addCustomizedOnLoadScript(skin);
+            jsManager.require("SHARED/base").addScripts(skin);
          }
          w.write(jsManager.getJavaScripts());
          if (jsManager.getRequireJS() != null) w.write(jsManager.getRequireJS().toString());

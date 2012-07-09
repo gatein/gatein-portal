@@ -239,7 +239,6 @@ public class JavascriptManager
    {
       StringBuilder callback = new StringBuilder();
       callback.append(scripts);
-      callback.append("eXo.core.Browser.onLoad();\n");
       callback.append(customizedOnloadJavascript);
       return callback.toString();
    }
@@ -279,12 +278,18 @@ public class JavascriptManager
          writer.write(callback.toString());
       }
    }
-   
+
+   public RequireJS require(String moduleId)
+   {
+      return require(moduleId, null);
+   }
+
    public RequireJS require(String moduleId, String alias)
    {
       if (requireJS == null)
       {
          requireJS = new RequireJS();
+         requireJS.require("SHARED/base", "base").addScripts("base.Browser.onLoad();");
       }
       requireJS.require(moduleId, alias);
       return requireJS;

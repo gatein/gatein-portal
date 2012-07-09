@@ -5,7 +5,7 @@
 	
 	def rcontext = _ctx.getRequestContext();
  	def uiPublicMode = uicomponent.getChildById("publicMode");
-	rcontext.getJavascriptManager().loadScriptResource('webui');
+	rcontext.getJavascriptManager().require("SHARED/webui");
 %>
 <div id="<%=uicomponent.getId();%>" class="UIAccessGroup">
 	<div class="PublicCheck">

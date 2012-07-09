@@ -4,7 +4,7 @@
 	
 	def rcontext = _ctx.getRequestContext(); 
 	def jsManager = rcontext.getJavascriptManager();
-	jsManager.loadScriptResource('webui');
+	jsManager.require("SHARED/webui");
 %>
 
 <div class="UITabPane" id="$uicomponent.id">
@@ -13,7 +13,7 @@
 			<%
 				String url = uicomponent.url("SelectTab"); 
 				String selTabId = uicomponent.getSelectedTabId(); 
-				jsManager.addCustomizedOnLoadScript("eXo.portal.PortalComposer.showTab('" + selTabId + "');");
+				jsManager.require("SHARED/portal", "portal").addScripts("portal.PortalComposer.showTab('" + selTabId + "');");
 				
 				UIApplicationList appList = uicomponent.getChild(UIApplicationList.class);
 				UIContainerList contList = uicomponent.getChild(UIContainerList.class);

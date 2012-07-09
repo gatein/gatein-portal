@@ -8,7 +8,7 @@
   JavascriptManager jsmanager = rcontext.getJavascriptManager();  
   String windowId = uicomponent.getWindowId() ;
   DashboardParent parent = (DashboardParent)uicomponent.getParent().getParent();
-  jsmanager.addCustomizedOnLoadScript("eXo.webui.UIDashboard.onLoad('" + windowId + "'," + parent.canEdit() + ");") ;
+  jsmanager.require("SHARED/dashboard", "dashboard").addScripts("dashboard.UIDashboard.onLoad('" + windowId + "'," + parent.canEdit() + ");") ;
 %>
 <div id="$uicomponent.id" class="UIDashboardContainer">
 	<div class="GadgetContainer UIResizableBlock" id="GadgetContainer">

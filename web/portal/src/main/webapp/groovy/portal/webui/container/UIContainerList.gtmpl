@@ -6,8 +6,7 @@
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsManager = rcontext.getJavascriptManager();
-	jsManager.loadScriptResource("portal");
-	jsManager.addJavascript("eXo.portal.PortalDragDrop.init(['DragObjectPortlet'])");
+	jsManager.require("SHARED/portal", "portal").addScripts("portal.PortalDragDrop.init(['DragObjectPortlet']);");
 %>	
 <div class="UIContainerList" id="$uicomponent.id">
 	<div class="UIVerticalSlideTabs">

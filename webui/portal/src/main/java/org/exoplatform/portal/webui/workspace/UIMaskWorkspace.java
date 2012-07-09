@@ -123,7 +123,8 @@ public class UIMaskWorkspace extends UIComponentDecorator
          uiMaskWorkspace.setUIComponent(null);
          uiMaskWorkspace.setWindowSize(-1, -1);
          WebuiRequestContext rContext = event.getRequestContext();
-         rContext.getJavascriptManager().addCustomizedOnLoadScript("eXo.portal.UIMaskWorkspace.hide('" + uiMaskWorkspace.getId() + "');");
+         rContext.getJavascriptManager().require("SHARED/base", "base")
+            .addScripts("base.UIMaskWorkspace.hide('" + uiMaskWorkspace.getId() + "');");
          rContext.addUIComponentToUpdateByAjax(uiMaskWorkspace);
       }
    }

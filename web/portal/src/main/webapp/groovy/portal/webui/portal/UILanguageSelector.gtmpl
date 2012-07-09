@@ -1,7 +1,6 @@
 <%
   def rcontext = _ctx.getRequestContext(); 
-  rcontext.getJavascriptManager().loadScriptResource('webui'); 
-  rcontext.getJavascriptManager().loadScriptResource('portal'); 
+  rcontext.getJavascriptManager().require("SHARED/webui").require("SHARED/portal"); 
 %>
 <div class="UIChangeLanguageForm">
   <div class="UIFormTabPane">
@@ -46,11 +45,11 @@
                           for(opt in options) {
                             String itemSelected = "NormalItem";
                             if (opt.isSelected()) {
-                              def setSelected = "eXo.webui.UIItemSelector.SelectedItem = new Object();";
-                              setSelected += "eXo.webui.UIItemSelector.SelectedItem.component = '$selector.name';";
-                              setSelected += "eXo.webui.UIItemSelector.SelectedItem.option = '$opt.value';";
+                              def setSelected = "webui.UIItemSelector.SelectedItem = new Object();";
+                              setSelected += "webui.UIItemSelector.SelectedItem.component = '$selector.name';";
+                              setSelected += "webui.UIItemSelector.SelectedItem.option = '$opt.value';";
 
-                              rcontext.getJavascriptManager().addCustomizedOnLoadScript(setSelected);
+                              rcontext.getJavascriptManager().require("SHARED/webui", "webui").addScripts(setSelected);
                               itemSelected = "SelectedItem";
                             } 
                         %>
