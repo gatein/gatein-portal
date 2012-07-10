@@ -175,7 +175,7 @@ eXo.portal.UIPortal = {
     {
       gj("#UIPage").parents(".VIEW-PAGE").css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
-    var pageBodyBlock = gj("UIPageBody");
+    var pageBodyBlock = gj("#UIPageBody");
     var mask = pageBodyBlock.find("div.UIPageBodyMask");
     if(mask.length > 0)
     {

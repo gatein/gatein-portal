@@ -35,10 +35,9 @@ eXo.webui.UIUpload = {
     var url = eXo.env.server.context + "/upload?";
     url += "action=progress&uploadId=" + uploadId;
     var responseText = ajaxAsyncGetRequest(url, false);
-
-    var response;
+    
     try {
-      eval("response = " + responseText);
+      eval("var response = " + responseText);
     } catch (err) {
       return;
     }
