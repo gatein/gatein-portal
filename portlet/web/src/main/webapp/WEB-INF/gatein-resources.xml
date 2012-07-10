@@ -115,6 +115,9 @@
             <name>eXo.webui.UIIFramePortlet</name>
             <path>/javascript/eXo/webui/UIIFramePortlet.js</path>
          </script>
+         <depends>
+            <scripts>bootstrap</scripts>
+         </depends>
       </scripts>
    </portlet>
 </gatein-resources>

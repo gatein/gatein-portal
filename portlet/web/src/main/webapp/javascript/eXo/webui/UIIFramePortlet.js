@@ -16,10 +16,11 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-require([ "SHARED/jquery" ], function(gj) {
-  gj(document).ready(function() {
-    gj("#UIWorkingWorkspace").find("div.UIIFramePortlet").each(function() {
-      var frameDiv = gj(this);
+
+eXo.IFramePortlet = {
+  adjustHeight : function(id) {
+    require([ "SHARED/jquery" ], function(gj) {
+      var frameDiv = gj('#' + id);
       var portletFrag = frameDiv.closest(".PORTLET-FRAGMENT");
 
       frameDiv.css("height", "98%");
@@ -33,5 +34,5 @@ require([ "SHARED/jquery" ], function(gj) {
         }
       }
     });
-  });
-});
+  }
+}

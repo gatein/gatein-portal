@@ -18,13 +18,12 @@
 
 	if (uiPortalApp.isEditing())
 	{
-	   	JavascriptManager jsManager = rcontext.getJavascriptManager();
-	  	jsManager.require("SHARED/portal", "portal").addScripts("portal.PortalDragDrop.init(['UIContainer']);");
+	   JavascriptManager jsManager = rcontext.getJavascriptManager();
+	  	jsManager.require("SHARED/portal", "portal").addScripts("portal.PortalDragDrop.init(['UIContainer']);")
+	  				.addScripts("portal.UIPortal.initMouseHover('" + uicomponent.id + "');");
 %>  
 <div class="UIContainer UITableColumnContainer EdittingContainer <%=hasPermission?"":"ProtectedContainer"%>" 
-				id="${uicomponent.id}" 
-				onmouseover="eXo.portal.UIPortal.blockOnMouseOver(event, this, true);" 
-				onmouseout="eXo.portal.UIPortal.blockOnMouseOver(event, this, false);">
+				id="${uicomponent.id}">
 <%
   }
   else

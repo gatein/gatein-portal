@@ -91,7 +91,7 @@ public class RequireJS
       }
       else if (!depends.values().contains(moduleId))
       {
-         log.warn("Adding requirejs module {} without alias", moduleId);
+         log.debug("Adding requirejs module {} without alias", moduleId);
          noAlias.add(moduleId);         
       }
       return this;

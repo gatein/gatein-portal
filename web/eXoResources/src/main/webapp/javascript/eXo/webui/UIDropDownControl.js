@@ -19,6 +19,13 @@
 
 eXo.webui.UIDropDownControl = {
 
+  init : function(id)
+  {
+    var elmt = gj('#' + id);
+    elmt.find('.UIDropDownTitle').on('click', this.showEvt);
+    elmt.find('a.OptionItem').on('click', this.onclickEvt);
+  },
+
   selectItem : function(method, id, selectedIndex) {
     if (method)
       method(id, selectedIndex);
@@ -35,8 +42,8 @@ eXo.webui.UIDropDownControl = {
    * @param {Object}
    *          evet event object
    */
-  show : function(obj, evt) {
-    var dropDownAnchor = gj(obj).next("div");
+  showEvt : function() {
+    var dropDownAnchor = gj(this).next("div");
     if(!dropDownAnchor)
     {
       return;
@@ -100,13 +107,11 @@ eXo.webui.UIDropDownControl = {
    * 
    * @param {Object}
    *          obj selected object
-   * @param {Object}
-   *          evt event
    */
-  onclickEvt : function(obj, evt) {
-    var dropDownAnchor = gj(obj).parents("div.UIDropDownAnchor");
+  onclickEvt : function() {
+    var dropDownAnchor = gj(this).parents("div.UIDropDownAnchor");
     var dropDownMiddleTitle = dropDownAnchor.prev("div.UIDropDownTitle").find("div.DropDownSelectLabel");
-    dropDownMiddleTitle.html(gj(obj).html());
+    dropDownMiddleTitle.html(gj(this).html());
 
     dropDownAnchor.css("display", "none");
   }

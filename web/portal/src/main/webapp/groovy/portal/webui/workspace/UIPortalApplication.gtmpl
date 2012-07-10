@@ -13,7 +13,7 @@
 	String skin = uicomponent.getSkin();
 	def portalSkins = uicomponent.getPortalSkins() ;
 	def portletSkins = uicomponent.getPortletSkins() ;
-	def scriptsURLs = rcontext.getAttribute("eXo.portal.scriptsURLs");
+	def scriptsURLs = uicomponent.getScripts();
 	def headerScripts = new LinkedList();	
 	def jsConfig = uicomponent.getJSConfig();
 	for (module in scriptsURLs.keySet()) {

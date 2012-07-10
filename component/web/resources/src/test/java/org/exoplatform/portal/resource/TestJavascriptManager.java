@@ -25,7 +25,6 @@ import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMap;
 
 import java.io.IOException;
-import java.util.Set;
 
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
@@ -58,24 +57,6 @@ public class TestJavascriptManager extends AbstractWebResourceTest
       assertEquals(1, scriptResources.size());
       assertTrue(scriptResources.containsKey(new ResourceId(ResourceScope.PORTAL, "foo")));
    }
-   
-   public void testAddingJavascripts()
-   {
-      jsManager.addJavascript("foo  ");
-      jsManager.addCustomizedOnLoadScript("bar");
-      String expected = 
-               "foo;\n" +
-      		   "eXo.core.Browser.onLoad();\n" +
-      		   "bar;\n";
-      assertEquals(expected, jsManager.getJavaScripts());
-
-      jsManager.importJavascript("eXo.webui.script");
-      jsManager.importJavascript("eXo.webui.script-ext", "/webapp/jscript/");
-      Set<String> importedJavaScripts = jsManager.getImportedJavaScripts();
-      assertEquals(2, importedJavaScripts.size());
-      assertTrue(importedJavaScripts.contains("/eXoResources/javascript/eXo/webui/script.js"));
-      assertTrue(importedJavaScripts.contains("/webapp/jscript/eXo/webui/script-ext.js"));
-   }
 
    public void testRequireJS()
    {
@@ -88,7 +69,7 @@ public class TestJavascriptManager extends AbstractWebResourceTest
    
    public void testNoAlias()
    {
-      RequireJS require = jsManager.require("SHARED/webui", null);
+      RequireJS require = jsManager.require("SHARED/webui");
       require.require("SHARED/jquery", "gj");
 
       //Any module without alias will be pushed to the end of dependency list

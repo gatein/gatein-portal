@@ -24,13 +24,13 @@
 		uicomponent.setId(componentId.substring("UIContainer-".length()));
 	}
 
-	if (uiPortalApp.isEditing())
+  if (uiPortalApp.isEditing())
   {
+     def reqJS = rcontext.getJavascriptManager().require("SHARED/portal", "portal");
+     reqJS.addScripts("portal.UIPortal.initMouseHover('" + uicomponent.id + "');");
 %>  
 <div class="UIContainer UIColumnContainer EdittingContainer <%=hasPermission?"": "ProtectedContainer"%>" 
-				id="${uicomponent.id}" ${cssStyle} 
-				onmouseover="eXo.portal.UIPortal.blockOnMouseOver(event, this, true);" 
-				onmouseout="eXo.portal.UIPortal.blockOnMouseOver(event, this, false);">
+				id="${uicomponent.id}" ${cssStyle}>
 <%
   }
   else

@@ -20,6 +20,13 @@
 eXo.portal.UIPortal = {
   portalUIComponentDragDrop : false,
 
+  initMouseHover : function(id) {
+	  var comp = gj("#" + id);
+	  if (!comp.length) return;
+	  comp[0].onmouseover = function(event) {_module.UIPortal.blockOnMouseOver(event, this, true);};
+	  comp[0].onmouseout = function(event) {_module.UIPortal.blockOnMouseOver(event, this, false);};
+  },
+  
   blockOnMouseOver : function(event, block, isOver) {
     var jqBlock = gj(block);
     if (!eXo.portal.portalMode || eXo.portal.isInDragging)

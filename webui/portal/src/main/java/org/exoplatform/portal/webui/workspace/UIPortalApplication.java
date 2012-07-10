@@ -334,12 +334,6 @@ public class UIPortalApplication extends UIApplication
       String portalOwner = Util.getPortalRequestContext().getPortalOwner();
       jsMan.loadScriptResource(ResourceScope.PORTAL, portalOwner);
 
-      // Still need this util SHARED/portal.js is optimized
-      if (prc.getRemoteUser() != null)
-      {
-         jsMan.require("SHARED/portal");
-      }
-
       //Support for legacy resource declaration 
       jsMan.loadScriptResource(ResourceScope.SHARED, JavascriptConfigParser.LEGACY_JAVA_SCRIPT);
       
@@ -781,13 +775,6 @@ public class UIPortalApplication extends UIApplication
       w.write("<div class=\"ImmediateScripts\">");
       scriptURLs.keySet().removeAll(onloadJS);
       for (String url : scriptURLs.keySet())
-      {
-         w.write(url);
-         w.write(",");
-      }
-      
-      JavascriptManager jsManager = context.getJavascriptManager();
-      for (String url : jsManager.getImportedJavaScripts())
       {
          w.write(url);
          w.write(",");
