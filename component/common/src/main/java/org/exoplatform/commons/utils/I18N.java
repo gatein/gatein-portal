@@ -129,14 +129,26 @@ public class I18N
       }
       else
       {
-         for (int i = index + 1;i < s.length();i++)
+         final String variant;
+         if ("ja_JP_JP_#u-ca-japanese".equals(s))
          {
-            if (!isLetter(s.charAt(i)))
-            {
-               throw new IllegalArgumentException("Invalid Java Locale identifier: '" + s + "'");
-            }
+            variant = "JP";
          }
-         String variant = s.substring(index + 1);
+         else if ("th_TH_TH_#u-nu-thai".equals(s))
+         {
+            variant = "TH";
+         }
+         else
+         {
+            for (int i = index + 1;i < s.length();i++)
+            {
+               if (!isLetter(s.charAt(i)))
+               {
+                  throw new IllegalArgumentException("Invalid Java Locale identifier: '" + s + "'");
+               }
+            }
+            variant = s.substring(index + 1);
+         }
          return new Locale(lang, country, variant);
       }
    }

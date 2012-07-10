@@ -98,10 +98,80 @@ public class TestI18N extends TestCase
    {
       for (Locale expected : Locale.getAvailableLocales())
       {
-         String s = expected.toString();
-         Locale parsed = I18N.parseJavaIdentifier(s);
-         assertEquals(expected, parsed);
+         if (isJava6Compatible(expected))
+         {
+            String s = expected.toString();
+            Locale parsed = I18N.parseJavaIdentifier(s);
+            assertEquals(expected, parsed);
+         }
       }
+   }
+
+   /**
+    * Tests if it is possible to construct the given locale using means
+    * available in Java 6 only.
+    * 
+    * The given locale instance is considered Java 6 compatible if and only if
+    * no script, calendar, etc. fields are set that are there in the
+    * {@link Locale} class since Java 7 only. However, there are two hard-coded
+    * exceptions to this rule, for which this method returns {@code true}: (i)
+    * "ja_JP_JP_#u-ca-japanese" and (ii) "th_TH_TH_#u-nu-thai". These two
+    * exceptions are there due to the fact that new Locale("ja", "JP",
+    * "JP").toString() and new Locale("th", "TH", "TH").toString() return
+    * "ja_JP_JP_#u-ca-japanese" and "th_TH_TH_#u-nu-thai" respectively in Java
+    * 7; see <a
+    * href="http://docs.oracle.com/javase/7/docs/api/java/util/Locale.html">Java
+    * 7 Locale, Compatibility Section</a>.
+    * 
+    * The result is computed through comparing the expected Java 6 locale ID
+    * (e.g. "en_GB") with the result of {@link Locale#toString()}. If the output
+    * of of {@link Locale#toString()} matches the expected ID (i.e. something of
+    * the form {language}[_[{country}][_{variant}]]) or if
+    * {@link Locale#toString()} equals one of "ja_JP_JP_#u-ca-japanese" or
+    * "th_TH_TH_#u-nu-thai" then {@code true} is returned. Otherwise this method
+    * returns {@code false}.
+    * 
+    * @param locale
+    * @return {@code true} or {@code false}
+    */
+   private static boolean isJava6Compatible(Locale locale)
+   {
+      StringBuilder localeIdBuilder = new StringBuilder(16);
+      localeIdBuilder.append(locale.getLanguage());
+
+      String country = locale.getCountry();
+      boolean hasCountry = country != null && country.length() > 0;
+      String variant = locale.getVariant();
+      boolean hasVariant = variant != null && variant.length() > 0;
+      if (hasCountry || hasVariant)
+      {
+         localeIdBuilder.append('_');
+         if (hasCountry)
+         {
+            localeIdBuilder.append(country);
+         }
+         if (hasVariant)
+         {
+            localeIdBuilder.append('_').append(variant);
+         }
+      }
+      String expectedJava6LocaleId = localeIdBuilder.toString();
+      String foundLocaleId = locale.toString();
+      if ("ja_JP_JP".equals(expectedJava6LocaleId)
+            && "ja_JP_JP_#u-ca-japanese".equals(foundLocaleId))
+      {
+         return true;
+      }
+      else if ("th_TH_TH".equals(expectedJava6LocaleId)
+            && "th_TH_TH_#u-nu-thai".equals(foundLocaleId))
+      {
+         return true;
+      }
+      else
+      {
+         return expectedJava6LocaleId.equals(foundLocaleId);
+      }
+
    }
 
    private void assertNotJavaIdentifier(String s)
@@ -120,7 +190,7 @@ public class TestI18N extends TestCase
    {
       assertEquals(expected, I18N.parseJavaIdentifier(s));
    }
-   
+
    public void testGetParentLocale()
    {
       Locale l3 = new Locale("a", "b", "c");
