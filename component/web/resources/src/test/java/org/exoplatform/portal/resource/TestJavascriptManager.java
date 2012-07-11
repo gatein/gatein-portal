@@ -18,13 +18,18 @@
  */
 package org.exoplatform.portal.resource;
 
+import java.io.IOException;
+import java.net.URL;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.test.mocks.servlet.MockServletContext;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.RequireJS;
+import org.exoplatform.web.application.javascript.JavascriptConfigParser;
+import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMap;
-
-import java.io.IOException;
 
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
@@ -34,11 +39,29 @@ import java.io.IOException;
 public class TestJavascriptManager extends AbstractWebResourceTest
 {
    private JavascriptManager jsManager;
+   
+   private static boolean isFirstStartup = true;
 
    @Override
    protected void setUp() throws Exception
    {
       super.setUp();
+      final PortalContainer portalContainer = getContainer();
+      JavascriptConfigService jsService = (JavascriptConfigService)portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
+      
+      if (isFirstStartup)
+      {
+         URL url = portalContainer.getPortalClassLoader().getResource("mockwebapp/gatein-resources.xml");
+         JavascriptConfigParser.processConfigResource(url.openStream(), jsService, new MockServletContext() {
+            @Override
+            public String getContextPath()
+            {
+               return  "mockwebapp";
+            }            
+         });
+
+         isFirstStartup = false;
+      }
       jsManager = new JavascriptManager();
    }
    
@@ -47,23 +70,23 @@ public class TestJavascriptManager extends AbstractWebResourceTest
       FetchMap<ResourceId> scriptResources = jsManager.getScriptResources();
       assertEquals(0, scriptResources.size());
       
-      jsManager.loadScriptResource(ResourceScope.PORTAL, "foo");
+      jsManager.loadScriptResource(ResourceScope.SHARED, "script1");
       scriptResources = jsManager.getScriptResources();
       assertEquals(1, scriptResources.size());
 
       // Re-adding the same resource
-      jsManager.loadScriptResource(ResourceScope.PORTAL, "foo");
+      jsManager.loadScriptResource(ResourceScope.SHARED, "script1");
       scriptResources = jsManager.getScriptResources();
       assertEquals(1, scriptResources.size());
-      assertTrue(scriptResources.containsKey(new ResourceId(ResourceScope.PORTAL, "foo")));
+      assertTrue(scriptResources.containsKey(new ResourceId(ResourceScope.SHARED, "script1")));          
    }
-
+   
    public void testRequireJS()
    {
       RequireJS require = jsManager.require("SHARED/jquery", "gj");
-      require.addScripts("gj('body').css('color : red')");
+      require.addScripts("gj('body').css('color : red');");
 
-      String expected = "require([\"SHARED/jquery\"],function(gj) {gj('body').css('color : red')});";
+      String expected = "require([\"SHARED/base\",\"SHARED/jquery\"],function(base,gj) {\nbase.Browser.onLoad();gj('body').css('color : red');\n});";
       assertEquals(expected, require.toString());
    }
    
@@ -73,7 +96,7 @@ public class TestJavascriptManager extends AbstractWebResourceTest
       require.require("SHARED/jquery", "gj");
 
       //Any module without alias will be pushed to the end of dependency list
-      String expected = "require([\"SHARED/jquery\",\"SHARED/webui\"],function(gj) {});";
+      String expected = "require([\"SHARED/base\",\"SHARED/jquery\",\"SHARED/webui\"],function(base,gj) {\nbase.Browser.onLoad();\n});";
       assertEquals(expected, require.toString());
    }
 }

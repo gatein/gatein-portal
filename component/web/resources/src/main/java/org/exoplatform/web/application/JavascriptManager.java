@@ -19,14 +19,20 @@
 
 package org.exoplatform.web.application;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMap;
 import org.gatein.portal.controller.resource.script.FetchMode;
-
-import java.util.UUID;
+import org.gatein.portal.controller.resource.script.ScriptResource;
 
 /**
  * Created by The eXo Platform SAS
@@ -93,7 +99,26 @@ public class JavascriptManager
       {
          throw new IllegalArgumentException("name can't be null");
       }
-      resourceIds.add(new ResourceId(scope, name), null);
+      ResourceId id = new ResourceId(scope, name);
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      JavascriptConfigService service = (JavascriptConfigService)container.getComponentInstanceOfType(JavascriptConfigService.class);
+      ScriptResource resource = service.getResource(id);
+      if (resource != null)
+      {
+         if (FetchMode.IMMEDIATE.equals(resource.getFetchMode()))
+         {
+            resourceIds.add(id, null);         
+         }
+         else
+         {
+            Map<ResourceId, FetchMode> tmp = new HashMap<ResourceId, FetchMode>();
+            tmp.put(id, null);
+            for (ScriptResource res : service.resolveIds(tmp).keySet())
+            {
+               require(res.getId().toString());
+            }
+         }         
+      }
    }
 
    public FetchMap<ResourceId> getScriptResources()
@@ -147,7 +172,7 @@ public class JavascriptManager
       {
          String id = Integer.toString(Math.abs(s.hashCode()));
          StringBuilder script = new StringBuilder();
-         script.append("eXo.core.Browser.addOnScrollCallback('mid");
+         script.append("base.Browser.addOnScrollCallback('mid");
          script.append(id);
          script.append("',");
          script.append(s instanceof String ? (String)s : s.toString());

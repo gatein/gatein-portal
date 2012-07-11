@@ -18,8 +18,8 @@
  */
 package org.exoplatform.web.application;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -46,8 +46,8 @@ public class RequireJS
    
    public RequireJS()
    {
-      depends = new HashMap<String, String>();
-      noAlias = new HashSet<String>();
+      depends = new LinkedHashMap<String, String>();
+      noAlias = new LinkedHashSet<String>();
       scripts = new StringBuilder();
    }
 
@@ -58,42 +58,34 @@ public class RequireJS
 
    public RequireJS require(String moduleId, String alias)
    {
-//      if (moduleId == null || moduleId.isEmpty())
-//      {
-//         log.warn("The moduleId can not be NULL");
-//      }
-//      else
-//      {
-//         if (alias == null || alias.isEmpty())
-//         {
-//            // Put the moduleId to the set of required modules
-//         }
-//         else
-//         {
-//            alias = alias.trim();
-//         }
-//      }
-      
-      if (alias != null && !alias.trim().isEmpty())
+      if (moduleId == null || moduleId.isEmpty())
       {
-         alias = alias.trim();
-         if (depends.containsKey(alias))
+         log.warn("The moduleId can not be NULL");
+      }
+      else
+      {
+         if (alias != null && !alias.trim().isEmpty())
          {
-            if (!depends.get(alias).equals(moduleId))
+            alias = alias.trim();
+            if (depends.containsKey(alias))
             {
-               log.warn("There is already an alias named as {}", alias);
+               if (!depends.get(alias).equals(moduleId))
+               {
+                  log.warn("There is already an alias named as {}", alias);
+               }
             }
+            else
+            {
+               depends.put(alias, moduleId);
+            }         
          }
-         else
+         else if (!depends.values().contains(moduleId))
          {
-            depends.put(alias, moduleId);
-         }         
-      }
-      else if (!depends.values().contains(moduleId))
-      {
-         log.debug("Adding requirejs module {} without alias", moduleId);
-         noAlias.add(moduleId);         
-      }
+            log.debug("Adding requirejs module {} without alias", moduleId);
+            noAlias.add(moduleId);         
+         }
+      }      
+            
       return this;
    }
 
