@@ -21,20 +21,27 @@ eXo.portal.PortalComposer = {
 
   contentModified : false,
 
+  init : function(id, width, height)
+  {
+    gj("div#" + id).attr("exo:minWidth", width).attr("exo:minHeight", height).find("div.OverflowContainer > span").eq(0).on("click", function()
+    {
+      eXo.portal.PortalComposer.toggle(gj(this));
+    });
+  },
+
   toggle : function(icon)
   {
-    var jqIcon = gj(icon);
-    var compWindow = jqIcon.parent().closest(".UIPortalComposer");
+    var compWindow = icon.parent().closest(".UIPortalComposer");
     var contWindow = compWindow.children("div.UIWindowContent").eq(0);
     if(contWindow.css("display") == "block")
     {
       contWindow.css("display", "none");
-      jqIcon.attr("class", "CollapseIcon");
+      icon.attr("class", "CollapseIcon");
     }
     else
     {
       contWindow.css("display", "block");
-      jqIcon.attr("class", "ExpandIcon");
+      icon.attr("class", "ExpandIcon");
     }
 
     ajaxAsyncGetRequest(eXo.env.server.createPortalURL(compWindow.attr("id"), "Toggle", true));

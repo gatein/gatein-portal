@@ -6,11 +6,12 @@
 	rcontext.getJavascriptManager()
     .require("SHARED/webui", "webui").addScripts("webui.UIPopupWindow.show('$popupId');")
     .require("SHARED/base", "base").addScripts("base.UIPopup.setAlign('$popupId', 2, 5, 5);")
-    .require("SHARED/portal", "portal").addScripts("portal.PortalComposer.contentModified = " + uicomponent.isEditted + ";");
+    .require("SHARED/portal", "portal").addScripts("portal.PortalComposer.contentModified = " + uicomponent.isEditted + ";")
+    .addScripts("portal.PortalComposer.init('$uicomponent.id', 200, 200);");
 %>
-<div class="UIPopupWindow UIDragObject UIPortalComposer" exo:minWidth="200" exo:minHeight="200" id="$uicomponent.id" style="width: 320px; display: block;">
+<div class="UIPopupWindow UIDragObject UIPortalComposer" id="$uicomponent.id" style="width: 320px; display: block;">
 	<div class="OverflowContainer ClearFix">
-		<span class="<%=uicomponent.isCollapsed ? "CollapseIcon" : "ExpandIcon"%>" onclick="eXo.portal.PortalComposer.toggle(this)"></span>
+		<span class="<%=uicomponent.isCollapsed ? "CollapseIcon" : "ExpandIcon"%>"></span>
 			<% if(uicomponent.isShowControl) { %>
 			<a class="CloseButton" title="<%=_ctx.appRes("word.abort")%>" href="<%=uicomponent.event("CloseComposer")%>"><span></span></a>
 				<% if (uicomponent.isUsedInWizard()) { %>

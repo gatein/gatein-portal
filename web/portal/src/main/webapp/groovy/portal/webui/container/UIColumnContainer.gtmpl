@@ -76,17 +76,20 @@
 														_ctx.appRes("UIColumnContainer.title.Container");
 										%>
 										<div class="ContainerIcon"><%=hasPermission ? strTitle : _ctx.appRes("UIPortlet.label.protectedContent")%></div>
-										<%if(hasPermission) {%>
-											<div class="ControlIcon ArrowDownIcon" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertColumn") %>">
+										<%if(hasPermission) {
+										   rcontext.getJavascriptManager().require("SHARED/base", "base")
+										   		  .addScripts("base.UIPopupSelectCategory.init('" + uicomponent.id + "');");
+										%>
+											<div class="ControlIcon ArrowDownIcon" title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertColumn") %>">
 												<% /*Begin Popup Menu*/ %>
 												<div style="position: relative; width: 100%">
 													<div class="UIPopupCategory" style="display: none;">
 														<div class="PopupCategoryDecorator">
 		
-															<a class="CategoryItem" href="<%= uicomponent.event("InsertColumn", org.exoplatform.portal.webui.container.UIColumnContainer.INSERT_BEFORE) %>;eXo.portal.PortalComposer.toggleSaveButton()"  title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertLeft") %>">
+															<a class="CategoryItem" href="<%= uicomponent.event("InsertColumn", org.exoplatform.portal.webui.container.UIColumnContainer.INSERT_BEFORE) %>"  title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertLeft") %>">
 																<div class="CategoryItemLabel"><%= _ctx.appRes("UIColumnContainer.label.insertLeft") %></div>
 															</a>
-															<a class="CategoryItem" href="<%= uicomponent.event("InsertColumn", org.exoplatform.portal.webui.container.UIColumnContainer.INSERT_AFTER) %>;eXo.portal.PortalComposer.toggleSaveButton()"  title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertRight") %>">
+															<a class="CategoryItem" href="<%= uicomponent.event("InsertColumn", org.exoplatform.portal.webui.container.UIColumnContainer.INSERT_AFTER) %>"  title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertRight") %>">
 																<div class="CategoryItemLabel"><%= _ctx.appRes("UIColumnContainer.label.insertRight") %></div>
 															</a>
 

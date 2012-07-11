@@ -23,7 +23,14 @@
  */
 eXo.webui.UIHorizontalTabs = {
 
-  init : function() {
+  init : function(id) {
+    if(id)
+    {
+      gj("#" + id).find("div.TabsContainer").find("div.UITab").find("div.MiddleTab").on("click", function()
+      {
+        eXo.webui.UIHorizontalTabs.displayTabContent(this);
+      });
+    }
   },
 
   /**

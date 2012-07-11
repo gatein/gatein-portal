@@ -19,11 +19,17 @@
 
 eXo.webui.UIDropDownControl = {
 
-  init : function(id)
+  init : function(id, webui)
   {
     var elmt = gj('#' + id);
     elmt.find('.UIDropDownTitle').on('click', this.showEvt);
     elmt.find('a.OptionItem').on('click', this.onclickEvt);
+    elmt.find(".TopItemContainer").on('mousedown', function() {
+    	webui.VerticalScrollManager.initScroll(this, true, 10);
+    });   
+    elmt.find(".BottomItemContainer").on('mousedown', function() {
+    	webui.VerticalScrollManager.initScroll(this, false, 10);
+    });
   },
 
   selectItem : function(method, id, selectedIndex) {

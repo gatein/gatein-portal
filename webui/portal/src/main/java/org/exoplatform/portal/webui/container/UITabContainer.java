@@ -22,6 +22,7 @@ package org.exoplatform.portal.webui.container;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.container.UIContainerActionListener.EditContainerActionListener;
 import org.exoplatform.portal.webui.portal.UIPortalComponentActionListener.DeleteComponentActionListener;
+import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -115,10 +116,9 @@ public class UITabContainer extends UIContainer
       }
    }
    
-   public static class MoveLeftActionListener extends EventListener<UITabContainer>
+   public static abstract class MoveActionListener extends EventListener<UITabContainer>
    {
-      @Override
-      public void execute(Event<UITabContainer> event) throws Exception
+      public void doMove(Event<UITabContainer> event, boolean isToLeft) throws Exception
       {
          UITabContainer container = event.getSource();
          String objectId = event.getRequestContext().getRequestParameter(OBJECTID);
@@ -126,26 +126,29 @@ public class UITabContainer extends UIContainer
          {
             return;
          }
-         container.moveTab(container, objectId, true);
-         event.getRequestContext().addUIComponentToUpdateByAjax(container);
+         container.moveTab(container, objectId, isToLeft);
+         WebuiRequestContext context = event.getRequestContext(); 
+         context.addUIComponentToUpdateByAjax(container);
+         context.getJavascriptManager().require("SHARED/portal", "portal").addScripts("portal.PortalComposer.toggleSaveButton();");
       }
    }
    
-   public static class MoveRightActionListener extends EventListener<UITabContainer>
+   public static class MoveLeftActionListener extends MoveActionListener
    {
       @Override
       public void execute(Event<UITabContainer> event) throws Exception
       {
-         UITabContainer container = event.getSource();
-         String objectId = event.getRequestContext().getRequestParameter(OBJECTID);
-         if (container == null || objectId == null)
-         {
-            return;
-         }
-         container.moveTab(container, objectId, false);
-         event.getRequestContext().addUIComponentToUpdateByAjax(container);
+         doMove(event, true);
       }
-
+   }
+   
+   public static class MoveRightActionListener extends MoveActionListener
+   {
+      @Override
+      public void execute(Event<UITabContainer> event) throws Exception
+      {
+         doMove(event, false);
+      }
    }
    
    public static class AddTabActionListener extends EventListener<UITabContainer>
@@ -159,6 +162,7 @@ public class UITabContainer extends UIContainer
          {
             return;
          }
+         
          List<UIComponent> children = container.getChildren();
          for (UIComponent child : children)
          {
@@ -170,10 +174,10 @@ public class UITabContainer extends UIContainer
                newTabContainer.setRendered(true);
                newTabContainer.setId(String.valueOf(newTabContainer.hashCode()));
                pcontext.addUIComponentToUpdateByAjax(container);
+               pcontext.getJavascriptManager().require("SHARED/portal", "portal").addScripts("portal.PortalComposer.toggleSaveButton();");
                return;
             }
          }
-      }
-      
+      }      
    }
 }

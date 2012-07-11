@@ -3,7 +3,9 @@
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.require("SHARED/webui-ext", "webuiExt").addScripts("webuiExt.UIDropDownControl.init('$uicomponent.id');");
+	jsmanager.require("SHARED/webui-ext", "webuiExt")
+				.require("SHARED/webui", "webui")
+				.addScripts("webuiExt.UIDropDownControl.init('$uicomponent.id', webui);");
 	def options = uicomponent.getOptions();
 %>
 <div class="UIDropDownControl" id="$uicomponent.id">
@@ -42,7 +44,7 @@
 			<div class="RightMiddelItem">
 			
 				<div class="ItemListContent ItemContainer">
-					<div class="TopItemContainer" onmousedown="eXo.portal.VerticalScrollManager.initScroll(this, true, 10)">
+					<div class="TopItemContainer">
 						<div class="Arrow UpArrowIcon"><span></span></div>
 					</div>
 					<div class="MiddleItemContainer">
@@ -62,7 +64,7 @@
 						</div>
 					<% selectedIndex++;}%>
 					</div>
-					<div class="BottomItemContainer" onmousedown="eXo.portal.VerticalScrollManager.initScroll(this, false, 10)">
+					<div class="BottomItemContainer">
 						<div class="Arrow DownArrowIcon"><span></span></div>
 					</div>
 				</div>
