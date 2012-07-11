@@ -235,18 +235,19 @@
                 </ulink> for indepth configuration options. Please note that since the consumer passes its credentials
                 to the producer, the consumer will act as the wss client and the producer will act as the wss server.
           </para>
-          <para> The following are the JBossWS Native configuration files which need to be configure for WSRP:
+          <para> The JBossWS Native configuration files which need to be configure for WSRP are to be located in the
+                 /conf/gatein directory. These files may not exist by default and may need to be added.
           </para>
           <itemizedlist>
             <listitem>
               <para>
-                <filename>gatein-wsrp-integration.ear/META-INF/gatein-wsse-consumer.xml</filename>: JBossWS
+                <filename>conf/gatein/gatein-wsse-consumer.xml</filename>: JBossWS
                 configuration file for the consumer.
               </para>
             </listitem>
             <listitem>
               <para>
-                <filename>gatein-wsrp-integration.ear/wsrp-producer-jb5wss.war/WEB-INF/conf/gatein-wsse-producer.xml
+                <filename>conf/gatein/gatein-wsse-producer.xml
                 </filename>: JBossWS configuration file for the producer.
               </para>
             </listitem>
@@ -261,50 +262,22 @@
         </sect3>
         <sect3>
           <title>WS-Security Consumer Configuration</title>
-          <para>The consumer requires a few changes before it will function properly with WS-Security. The consumer
-                needs access to the current servlet request since this is used to retrieve the currently authenticated
-                user. In order for the consumer to access this information, it needs a special servlet-filter added to
-                the portal.
-          </para>
-          <para>In <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename> add the following information:
-          </para>
-<programlisting role="XML"><![CDATA[<!-- Filter to put request and response in ServletAccess -->
-   <filter>
-      <filter-name>ServletAccessFilter</filter-name>
-      <filter-class>org.gatein.wsrp.servlet.ServletAccessFilter</filter-class>
-   </filter>
-   <filter-mapping>
-      <filter-name>ServletAccessFilter</filter-name>
-      <url-pattern>/*</url-pattern>
-   </filter-mapping>]]>
-</programlisting>
           <para>
-            Finally, in the WSRP Configuration portlet, in the consumer configuration options, you will need to check the 'Enable WS Security' checkbox:
+            In the WSRP Configuration portlet, in the consumer configuration options, you will need to check the 'Enable 
+            WS Security' checkbox if you wish to send the user credentials to the producer.
           </para>
+          <note>
+            <para>
+              If you wish to use ws-security to just encrypt the communication between the producer and consumer, and not 
+              for use identity propagation,  then you will not need to enable this option.
+            </para>
+          </note>
           <mediaobject>
             <imageobject>
               <imagedata fileref="images/WSRP/config_wss_selected.png" format="PNG" align="center" valign="middle" scalefit="1"/>
             </imageobject>
           </mediaobject>
         </sect3>
-        <note>
-          <title>WS-Security Consumer Checklist</title>
-          <para>
-            In order for the consumer to handle ws-security, the following steps must be completed properly
-          </para>
-          <itemizedlist>
-            <listitem>
-              <para>The JBossWS configuration files must be configured.</para>
-            </listitem>
-            <listitem>
-              <para>The filter must be added to the portal's web.xml.</para>
-            </listitem>
-            <listitem>
-              <para>The enable wss feature must be check in the wsrp admin.</para>
-            </listitem>
-          </itemizedlist>
-          <para>The consumer will not properly handle ws-security unless all 3 are properly configured.</para>
-        </note>
       </sect2>
    </sect1>
 
