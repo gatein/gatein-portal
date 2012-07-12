@@ -25,8 +25,33 @@
  * @param {boolean}
  *          mouseOver
  */
-eXo.webui.UIItemSelector = {
+var uiItemSelector = {
 
+  init : function(selector, data, clickOnly) {
+	  var items = gj(selector);
+	  if (!clickOnly) {
+		  items.on("mouseover", function() {
+			  _module.UIItemSelector.onOver(this, true);
+		  });
+		  items.on("mouseout", function() {
+			  _module.UIItemSelector.onOver(this, false);
+		  });		  
+	  }
+	  items.each(function(index) {
+		  var itm = gj(this);
+		  itm.on("click", function() {
+			  _module.UIItemSelector.onClick(this);
+			  itm.find(".ExtraActions").each(function() {
+				  var act = gj(this).html();
+				  eval(act);
+			  });		  
+			  if (data) {
+				 _module.UIItemSelector.onClickCategory(this, null, data[index].componentName, data[index].categoryName);
+			  }
+		  });
+	  });
+  },
+  
   onOver : function(selectedElement, mouseOver) {
     if (selectedElement.className == "Item") {
       _module.UIItemSelector.beforeActionHappen(selectedElement);
@@ -237,4 +262,4 @@ eXo.webui.UIItemSelector = {
   }
 };
 
-_module.UIItemSelector = eXo.webui.UIItemSelector;
+_module.UIItemSelector = uiItemSelector;

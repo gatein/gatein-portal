@@ -3,13 +3,13 @@
 	import org.exoplatform.webui.core.UIDropDownControl;
 
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().require("SHARED/webui");
+	rcontext.getJavascriptManager().require("SHARED/webui", "webui").addScripts("webui.UIItemSelector.init('#$uicomponent.id .ItemList > div');");
 
 	def categories = uicomponent.getItemCategories();
 	UIForm form = uicomponent.getParent();
 	UIDropDownControl drop = form.getChild(UIDropDownControl.class);
 %>
-<div class="UIItemSelector">
+<div class="UIItemSelector" id="$uicomponent.id">
 	<div class="RightColumnStyle">
 		<input type="hidden" name="<%=uicomponent.getName();%>" value ="">
 		<%/*Begin ItemList*/%>
@@ -41,14 +41,13 @@
 								String setHiddenValue = "eXo.webui.UIForm.setHiddenValue('"+form.getName()+"', '"+uicomponent.getName()+"','"+template.getLabel()+"' )";
 								if(template.isSelected()) itemSelected = "SelectedItem Item"; 
 						%>
-								<div class="$itemSelected" onmouseover="eXo.webui.UIItemSelector.onOver(this, true, '$template.icon')"
-										 onmouseout="eXo.webui.UIItemSelector.onOver(this, false, '$template.icon')" onclick="eXo.webui.UIItemSelector.onClick(this, '$template.icon');$setHiddenValue;">
+								<div class="$itemSelected">
 									<div class="LeftItem">
 										<div class="RightItem">	
 											<div class="ItemTitle"><%=_ctx.appRes("UIWizardPageSelectLayoutForm.label."+template.getLabel())%></div>
 										</div>
 									</div>
-									<div id="SetValue" style="display: none">$setHiddenValue;</div>
+									<div id="SetValue" class="ExtraActions" style="display: none">$setHiddenValue;</div>
 								</div>
 						<%}%>
 					</div>

@@ -9,8 +9,8 @@
 		if(i < uploadId.length - 1) b.append(",");
 	}
 	b.append("]");
-	rcontext.getJavascriptManager().require("SHARED/webui-ext")
-    .addScripts("eXo.webui.UIUploadInput.initUploadEntry(" +b.toString()+ ", " +isDynamicMode+ ");");
+	rcontext.getJavascriptManager().require("SHARED/webui-ext", "webuiExt")
+    .addScripts("webuiExt.UIUploadInput.initUploadEntry(" +b.toString()+ ", " +isDynamicMode+ ");");
 %>
 <div id="<%=uicomponent.getId()%>">
 <input type="hidden" id="RemoveInputLabel" value="<%= _ctx.appRes("UIFormUploadInput.label.RemoveInput"); %>"/>
@@ -32,14 +32,14 @@
 			</div>
 		</div>
 		<div class="DeleteFileFrame">
-			<div class="DeleteFileLable" onclick="eXo.webui.UIUploadInput.abortUpload('<%=uploadId[i];%>', <%=isDynamicMode%>);"><%=_ctx.appRes("UIFormUploadInput.label.Cancel")%></div>
+			<div class="DeleteFileLable"><%=_ctx.appRes("UIFormUploadInput.label.Cancel")%></div>
 		</div>
 	</div>
 	<div class="SelectFileFrame" style="display: none;">
 		<div class="FileName">
 			<div class="FileNameLabel"><span></span></div>
 		</div>
-		<div class="RemoveFile" title="<%= _ctx.appRes("UIFormUploadInput.label.remove"); %>" onclick="eXo.webui.UIUploadInput.deleteUpload('<%=uploadId[i];%>', <%=isDynamicMode && uploadId.size() > 1%>);"></div>
+		<div class="RemoveFile" title="<%= _ctx.appRes("UIFormUploadInput.label.remove"); %>"></div>
 	</div>
 	<iframe height="0" width="0" name="UploadIFrame<%=uploadId[i];%>" id="UploadIFrame<%=uploadId[i];%>" style="display: none;">
 		<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>

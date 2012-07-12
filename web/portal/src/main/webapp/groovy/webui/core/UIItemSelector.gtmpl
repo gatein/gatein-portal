@@ -1,10 +1,13 @@
 <%
   import  org.exoplatform.webui.core.UIContainer;
+  import org.json.JSONArray;
+  import org.json.JSONObject;
 
 	categories = uicomponent.getItemCategories();
 	UIContainer uicontainer = uicomponent.getAncestorOfType(UIContainer.class);	
+	def data = new JSONArray();
 %>
-<div class="UIItemSelector">	
+<div class="UIItemSelector" id="$uicomponent.id">	
 	<div class="RightColumnStyle" style="width: 99.5%;">
 		<%/*Begin ItemList*/%>
 		<div class="ItemListContainer">
@@ -16,10 +19,14 @@
 				<%						
 					for(category in categories) {							
 						String itemSelected = "Item";
-
+						
+						def tmp = new JSONObject();
+						tmp.put("componentName", uicomponent.name);
+						tmp.put("categoryName", category.name);
+						data.put(tmp);
 						if (category.isSelected()) itemSelected = "SelectedItem Item";							
 				 %>
-						<div class="$itemSelected" onmouseover="eXo.webui.UIItemSelector.onOver(this, true)" onmouseout="eXo.webui.UIItemSelector.onOver(this, false)" onclick="eXo.webui.UIItemSelector.onClickCategory(this, '$uicontainer.name', '$uicomponent.name', '$category.name')">
+						<div class="$itemSelected">
 							<div class="LeftItem">
 								<div class="RightItem">	
 								<%
@@ -38,7 +45,12 @@
 								</div>
 							</div>
 						</div>
-				<%}%>
+				<%
+					}
+					def rcontext = _ctx.getRequestContext(); 
+					rcontext.getJavascriptManager().require("SHARED/webui", "webui")
+							  .addScripts("webui.UIItemSelector.init('#$uicomponent.id .ItemList > div', $data);");
+				%>
 			</div>
 		</div>
 		<%/*End ItemList*/%>

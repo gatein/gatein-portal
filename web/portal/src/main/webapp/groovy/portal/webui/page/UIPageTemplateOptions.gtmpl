@@ -4,7 +4,7 @@
 	import org.exoplatform.webui.core.model.SelectItemOption;
 
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().require("SHARED/webui"); 
+	rcontext.getJavascriptManager().require("SHARED/webui", "webui").addScripts("webui.UIItemSelector.init('#$uicomponent.id .ItemList > div');"); 
 
 	def categories = uicomponent.getItemCategories(); 
 	UIForm form = uicomponent.getParent(); 
@@ -13,7 +13,7 @@
 	String selectedValue = "";
 	if(selectedItem != null) selectedValue = selectedItem.getLabel();
 %>
-<div class="UIItemSelector">
+<div class="UIItemSelector" id="$uicomponent.id">
 	<div class="RightColumnStyle" style="width: 99.5%;">
 		<input type="hidden" name="<%=uicomponent.getName();%>" value="$selectedValue">
 		<%/*Begin ItemList*/ %>
@@ -38,18 +38,17 @@
 						<%
 							for(template in templates){
 								String itemSelected = "Item"; 
-								String setHiddenValue = "eXo.webui.UIForm.setHiddenValue('$form.name', '$uicomponent.name','$template.label' )";
-								String submitEvent = "eXo.webui.UIForm.submitEvent('$form.id','SelectItemOption', '')";
+								String setHiddenValue = "_module.UIForm.setHiddenValue('$form.name', '$uicomponent.name','$template.label' )";
+								String submitEvent = "_module.UIForm.submitEvent('$form.id','SelectItemOption', '')";
 								if (template.isSelected()) itemSelected = "SelectedItem Item"; 
 						%>
-								<div class="$itemSelected" onmouseover="eXo.webui.UIItemSelector.onOver(this, true, '$template.icon');" 
-										 onmouseout="eXo.webui.UIItemSelector.onOver(this, false, '$template.icon');" onclick="eXo.webui.UIItemSelector.onClick(this, '$template.icon');$setHiddenValue;" >
+								<div class="$itemSelected">
 									<div class="LeftItem">
 										<div class="RightItem">	
 											<div class="ItemTitle"><%=_ctx.appRes("UIWizardPageSelectLayoutForm.label."+template.label)%></div>
 										</div>
 									</div>
-									<div id="SetValue" style="display: none">$setHiddenValue;</div>
+									<div id="SetValue" class="ExtraActions" style="display: none">$setHiddenValue;</div>
 								</div>
 						<%}%>
 						

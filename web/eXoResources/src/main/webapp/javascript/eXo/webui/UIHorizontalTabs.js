@@ -26,7 +26,7 @@ eXo.webui.UIHorizontalTabs = {
   init : function(id) {
     if(id)
     {
-      gj("#" + id).find("div.TabsContainer").find("div.UITab").find("div.MiddleTab").on("click", function()
+      gj("#" + id).find("div.TabsContainer").find("div.UITab").find("div.MiddleTab").not(".LockedTab").on("click", function()
       {
         eXo.webui.UIHorizontalTabs.displayTabContent(this);
       });

@@ -17,7 +17,7 @@
  * site: http://www.fsf.org.
  */
 
-eXo.webui.UIUploadInput = {
+var uiUploadInput = {
   listUpload : [],
   refreshTime : 1000,
   delayTime : 5000,  
@@ -47,11 +47,28 @@ eXo.webui.UIUploadInput = {
       var url = this.progressURL + uploadId[i];
       var responseText = ajaxAsyncGetRequest(url, false);
       try {        
-    	  var response = eval("response = " + responseText);
+    	  eval("var response = " + responseText);
       } catch (err) {
         return;
       }
-
+      
+      var uploadCont = gj("#UploadInputContainer" + uploadId[i]);
+      uploadCont.on("click", ".DeleteFileLable, .Abort, .RemoveFile", (function(id) {
+    		  return function() {
+    			  if (gj(this).hasClass("RemoveFile")) {
+    				  _module.UIUploadInput.deleteUpload(id, isDynamicMode && uploadId.length > 1);    			      			      		 
+    			  } else {
+    				  _module.UIUploadInput.abortUpload(id, isDynamicMode);
+    			  }
+    		  };
+      })(uploadId[i]));
+      
+      uploadCont.on("change", ".file", (function(id) {
+    	  return function() {
+    		  _module.UIUploadInput.upload(id);    		  
+    	  };
+      })(uploadId[i]));
+      
       if (response.upload[uploadId[i]] == undefined
           || response.upload[uploadId[i]].percent == undefined) {
         this.createEntryUpload(uploadId[i], isDynamicMode);
@@ -61,14 +78,13 @@ eXo.webui.UIUploadInput = {
     }
   }, 
 
-  createEntryUpload : function(id, isDynamicMode) {
+  createEntryUpload : function(id, isDynamicMode) {	
     var div = document.getElementById('UploadInput' + id);
     var url = document.getElementById('RemoveInputUrl' + id).value;
     var label = document.getElementById('RemoveInputLabel').value;
     var inputHTML = "<input id='file" + id
         + "' class='file' name='file' type='file' onkeypress='return false;'";
-    inputHTML += " onchange='eXo.webui.UIUploadInput.upload(\"" + id
-        + "\");'/>";
+    inputHTML += "/>";
     if (isDynamicMode) {
       inputHTML += "<a class='ActionLabel' href='javascript:void(0)' onclick=\""
           + url + "\">" + label + "</a>";
@@ -130,12 +146,12 @@ eXo.webui.UIUploadInput = {
     var responseText = ajaxAsyncGetRequest(url, false);
     if (this.listUpload.length > 0) {
       setTimeout(
-          "eXo.webui.UIUploadInput.refreshProgress('" + uploadId + "');",
+          function() {_module.UIUploadInput.refreshProgress(uploadId);},
           this.refreshTime);
     }
 
     try {
-    	var response = eval("response = " + responseText);
+    	eval("var response = " + responseText);
     } catch (err) {
       return;
     }
@@ -170,8 +186,7 @@ eXo.webui.UIUploadInput = {
 
     if (element) {
       element.innerHTML = "Uploaded " + percent + "% "
-          + "<span onclick='parent.eXo.webui.UIUploadInput.abortUpload(\""
-          + uploadId + "\")'>Abort</span>";
+          + "<span class='Abort'>Abort</span>";
     }
   },
 
@@ -252,7 +267,7 @@ eXo.webui.UIUploadInput = {
 
       if (this.listUpload.length == 0) {
         this.listUpload.push(id);
-        setTimeout("eXo.webui.UIUploadInput.refreshProgress('" + id + "');",
+        setTimeout(function() {_module.UIUploadInput.refreshProgress(id);},
             this.refreshTime);
       } else {
         this.listUpload.push(id);
@@ -264,8 +279,8 @@ eXo.webui.UIUploadInput = {
   },
 
   upload : function(id) {
-    setTimeout("eXo.webui.UIUploadInput.doUpload('" + id + "')", this.delayTime);
+    setTimeout(function() {_module.UIUploadInput.doUpload(id)}, this.delayTime);
   }
-}
+};
 
-_module.UIUploadInput = eXo.webui.UIUploadInput;
+_module.UIUploadInput = uiUploadInput;

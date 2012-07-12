@@ -271,6 +271,14 @@
          <path>/javascript/eXo/webui/UIUserSelector.js</path>
       </script>
       <script>
+         <name>eXo.webui.UILanguageSelector</name>
+         <path>/javascript/eXo/webui/UILanguageSelector.js</path>
+      </script>
+      <script>
+         <name>eXo.webui.UISkinSelector</name>
+         <path>/javascript/eXo/webui/UISkinSelector.js</path>
+      </script>
+      <script>
          <name>eXo.portal.UIPortalControl</name>
          <path>/javascript/eXo/portal/UIPortalControl.js</path>
       </script>
