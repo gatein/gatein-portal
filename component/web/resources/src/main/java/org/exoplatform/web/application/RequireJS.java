@@ -106,7 +106,7 @@ public class RequireJS
          tmp.addAll(noAlias);
          builder.append(new JSONArray(tmp)).append(",");
          builder.append("function(").append(StringUtils.join(depends.keySet(), ",")).append(") {").append('\n')
-            .append(this.scripts).append('\n').append("});");
+            .append(this.scripts).append('\n').append("base.Browser.onLoad();").append("});");
       }
       else
       {
