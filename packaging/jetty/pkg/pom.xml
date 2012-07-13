@@ -840,6 +840,13 @@
       <type>war</type>
     </dependency>
 
+    <dependency>
+       <?rename redirect-portlet.war?>
+       <groupId>org.gatein.portal.portlet</groupId>
+       <artifactId>redirect</artifactId>
+       <type>war</type>
+    </dependency>
+
   </dependencies>
 
   <build>

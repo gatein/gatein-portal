@@ -24,6 +24,7 @@ package org.gatein.web.redirect.implementation;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,7 +36,7 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.web.redirect.Mapper;
 import org.gatein.web.redirect.Redirector;
-import org.gatein.web.redirect.api.DeviceRedirectService;
+import org.gatein.web.redirect.api.SiteRedirectService;
 import org.gatein.web.redirect.api.RedirectKey;
 import org.picocontainer.Startable;
 
@@ -43,9 +44,9 @@ import org.picocontainer.Startable;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class DeviceRedirectServiceImpl implements DeviceRedirectService, Startable
+public class SiteRedirectServiceImpl implements SiteRedirectService, Startable
 {
-   protected static Logger log = LoggerFactory.getLogger(DeviceRedirectServiceImpl.class);
+   protected static Logger log = LoggerFactory.getLogger(SiteRedirectServiceImpl.class);
 
    //Handles which site to redirect to
    Redirector redirector;
@@ -56,7 +57,7 @@ public class DeviceRedirectServiceImpl implements DeviceRedirectService, Startab
    //Used for retrieving the stored portal configuration
    DataStorage dataStorage;
 
-   public DeviceRedirectServiceImpl(DataStorage dataStorage, NavigationService navService) throws IOException
+   public SiteRedirectServiceImpl(DataStorage dataStorage, NavigationService navService) throws IOException
    {
       this.dataStorage = dataStorage;
       this.redirector = new Redirector();
@@ -162,17 +163,20 @@ public class DeviceRedirectServiceImpl implements DeviceRedirectService, Startab
    }
 
    @Override
-   public List<String> getAlternativeSites(String site)
+   public Map<String, String> getAlternativeSites(String site)
    {
-      List<String> siteKeys = new ArrayList<String>();
+      Map<String, String> siteKeys = new LinkedHashMap<String, String>();
       try
       {
          if (dataStorage != null)
          {
             PortalConfig portalConfig = dataStorage.getPortalConfig(site);
-            for (PortalRedirect portalRedirect : portalConfig.getPortalRedirects())
+            if (portalConfig != null && portalConfig.getPortalRedirects() != null)
             {
-               siteKeys.add(portalRedirect.getName());
+               for (PortalRedirect portalRedirect : portalConfig.getPortalRedirects())
+               {
+                  siteKeys.put(portalRedirect.getName(), portalRedirect.getRedirectSite());
+               }
             }
          }
          else

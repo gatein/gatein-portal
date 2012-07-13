@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<gatein-resources
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2_1 http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
+        xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
+
+  <portlet-skin>
+    <application-name>redirect-portlet</application-name>
+    <portlet-name>SiteRedirectPortlet</portlet-name>
+    <skin-name>Default</skin-name>
+    <css-path>/css/DefaultStylesheet.css</css-path>
+  </portlet-skin>
+
+  <portlet-skin>
+    <application-name>redirect-portlet</application-name>
+    <portlet-name>SiteRedirectPortlet</portlet-name>
+    <skin-name>SimpleSkin</skin-name>
+    <css-path>/css/SimpleSkinStylesheet.css</css-path>
+  </portlet-skin>
+
+</gatein-resources>

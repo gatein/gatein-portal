@@ -36,6 +36,17 @@
     <entry key="showPortletInfo">0</entry>
   </properties>
 
+  <portal-redirects>
+    <portal-redirect>
+      <redirect-site>classic</redirect-site>
+      <name>Desktop</name>
+      <enabled>true</enabled>
+      <node-mapping>
+        <use-node-name-matching>true</use-node-name-matching>
+      </node-mapping>
+    </portal-redirect>
+  </portal-redirects>
+
  	<portal-layout>
 	  <portlet-application>
       <portlet>
@@ -86,7 +97,17 @@
 	  </portlet-application>
 	  
 	  <page-body> </page-body>
-	  
+
+     <portlet-application>
+       <portlet>
+         <application-ref>redirect-portlet</application-ref>
+         <portlet-ref>SiteRedirectPortlet</portlet-ref>
+       </portlet>
+       <access-permissions>Everyone</access-permissions>
+       <show-info-bar>false</show-info-bar>
+     </portlet-application>
+	 
+ 
      <portlet-application>
        <portlet>
          <application-ref>web</application-ref>

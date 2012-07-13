@@ -38,6 +38,7 @@
       <module>dashboard</module>
       <module>exoadmin</module>
       <module>web</module>
+      <module>redirect</module>
    </modules>
 
 </project>

@@ -24,7 +24,7 @@ package org.gatein.web.redirect;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.RequestLifeCycle;
-import org.gatein.web.redirect.api.DeviceRedirectService;
+import org.gatein.web.redirect.api.SiteRedirectService;
 
 import junit.framework.TestCase;
 
@@ -63,7 +63,7 @@ public class TestMapper extends TestConfig
    {
       PortalContainer container = getContainer();
       RequestLifeCycle.begin(container);
-      DeviceRedirectService redirectService = (DeviceRedirectService)container.getComponentInstanceOfType(DeviceRedirectService.class);
+      SiteRedirectService redirectService = (SiteRedirectService)container.getComponentInstanceOfType(SiteRedirectService.class);
       assertNotNull(redirectService);
       
       //check that mappings are working
@@ -105,7 +105,7 @@ public class TestMapper extends TestConfig
    {
       PortalContainer container = getContainer();
       RequestLifeCycle.begin(container);
-      DeviceRedirectService redirectService = (DeviceRedirectService)container.getComponentInstanceOfType(DeviceRedirectService.class);
+      SiteRedirectService redirectService = (SiteRedirectService)container.getComponentInstanceOfType(SiteRedirectService.class);
       assertNotNull(redirectService);
       
       //check that mappings are working
@@ -147,7 +147,7 @@ public class TestMapper extends TestConfig
    {
       PortalContainer container = getContainer();
       RequestLifeCycle.begin(container);
-      DeviceRedirectService redirectService = (DeviceRedirectService)container.getComponentInstanceOfType(DeviceRedirectService.class);
+      SiteRedirectService redirectService = (SiteRedirectService)container.getComponentInstanceOfType(SiteRedirectService.class);
       assertNotNull(redirectService);
       
       //check that mappings are working
@@ -183,7 +183,7 @@ public class TestMapper extends TestConfig
    {
       PortalContainer container = getContainer();
       RequestLifeCycle.begin(container);
-      DeviceRedirectService redirectService = (DeviceRedirectService)container.getComponentInstanceOfType(DeviceRedirectService.class);
+      SiteRedirectService redirectService = (SiteRedirectService)container.getComponentInstanceOfType(SiteRedirectService.class);
       assertNotNull(redirectService);
       
       //check unresolved nodes
@@ -214,7 +214,7 @@ public class TestMapper extends TestConfig
       String redirectPath;
       PortalContainer container = getContainer();
       RequestLifeCycle.begin(container);
-      DeviceRedirectService redirectService = (DeviceRedirectService)container.getComponentInstanceOfType(DeviceRedirectService.class);
+      SiteRedirectService redirectService = (SiteRedirectService)container.getComponentInstanceOfType(SiteRedirectService.class);
       assertNotNull(redirectService);
       
       //check node name matching
@@ -246,7 +246,7 @@ public class TestMapper extends TestConfig
       String redirectPath;
       PortalContainer container = getContainer();
       RequestLifeCycle.begin(container);
-      DeviceRedirectService redirectService = (DeviceRedirectService)container.getComponentInstanceOfType(DeviceRedirectService.class);
+      SiteRedirectService redirectService = (SiteRedirectService)container.getComponentInstanceOfType(SiteRedirectService.class);
       assertNotNull(redirectService);
 
       //check unresolved nodes
@@ -276,7 +276,7 @@ public class TestMapper extends TestConfig
       String redirectPath;
       PortalContainer container = getContainer();
       RequestLifeCycle.begin(container);
-      DeviceRedirectService redirectService = (DeviceRedirectService)container.getComponentInstanceOfType(DeviceRedirectService.class);
+      SiteRedirectService redirectService = (SiteRedirectService)container.getComponentInstanceOfType(SiteRedirectService.class);
       assertNotNull(redirectService);
       
       //check node name matching
@@ -308,7 +308,7 @@ public class TestMapper extends TestConfig
       String redirectPath;
       PortalContainer container = getContainer();
       RequestLifeCycle.begin(container);
-      DeviceRedirectService redirectService = (DeviceRedirectService)container.getComponentInstanceOfType(DeviceRedirectService.class);
+      SiteRedirectService redirectService = (SiteRedirectService)container.getComponentInstanceOfType(SiteRedirectService.class);
       assertNotNull(redirectService);
 
       //check unresolved nodes
@@ -338,7 +338,7 @@ public class TestMapper extends TestConfig
       String redirectPath;
       PortalContainer container = getContainer();
       RequestLifeCycle.begin(container);
-      DeviceRedirectService redirectService = (DeviceRedirectService)container.getComponentInstanceOfType(DeviceRedirectService.class);
+      SiteRedirectService redirectService = (SiteRedirectService)container.getComponentInstanceOfType(SiteRedirectService.class);
       assertNotNull(redirectService);
       
       //check node name matching

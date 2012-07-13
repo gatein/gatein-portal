@@ -24,6 +24,7 @@ package org.gatein.web.redirect;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -45,8 +46,9 @@ import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.web.redirect.api.DeviceRedirectService;
+import org.gatein.web.redirect.api.SiteRedirectService;
 import org.gatein.web.redirect.api.RedirectKey;
+import org.gatein.web.redirect.api.RedirectHandler;
 import org.gatein.web.redirect.api.RedirectType;
 import org.picocontainer.Startable;
 
@@ -54,9 +56,9 @@ import org.picocontainer.Startable;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class DeviceRedirectRequestHandler extends WebRequestHandler implements Startable
+public class RedirectRequestHandler extends WebRequestHandler implements Startable
 {
-   protected static Logger log = LoggerFactory.getLogger(DeviceRedirectRequestHandler.class);
+   protected static Logger log = LoggerFactory.getLogger(RedirectRequestHandler.class);
 
    //The handler name to use
    public static final String HANDLER_NAME = "siteRedirect";
@@ -67,11 +69,11 @@ public class DeviceRedirectRequestHandler extends WebRequestHandler implements S
    // Redirection cookie settings
    protected Integer cookieMaxAge;
    protected String cookieComment;
-   protected String cookiePath;
+   protected String cookiePath = "/portal";
    protected Boolean cookieSecure;
    
    // The service to perform the redirection logic
-   protected DeviceRedirectService deviceRedirectionService;
+   protected SiteRedirectService deviceRedirectionService;
    
    protected URLFactoryService urlFactory;
 
@@ -84,7 +86,7 @@ public class DeviceRedirectRequestHandler extends WebRequestHandler implements S
    //TODO: the flag shouldn't exist here, it needs to exist somewhere else in the 'api' section
    public static final String REDIRECT_FLAG = "gtn_redirect";
 
-   public DeviceRedirectRequestHandler(InitParams params, DeviceRedirectService service, URLFactoryService urlFactory)
+   public RedirectRequestHandler(InitParams params, SiteRedirectService service, URLFactoryService urlFactory)
    {
       this.deviceRedirectionService = service;
       this.urlFactory = urlFactory;
@@ -136,13 +138,6 @@ public class DeviceRedirectRequestHandler extends WebRequestHandler implements S
       HttpServletRequest request = context.getRequest();
       HttpServletResponse response = context.getResponse();
       
-      String referer = request.getHeader("Referer");
-      String siteURL = request.getRequestURL().substring(0, request.getRequestURL().length() - request.getServletPath().length());
-      if (referer != null && referer.startsWith(siteURL) && (context.getRequest().getSession(true).getAttribute(DEVICE_DETECTION_ATTEMPTED) == null))
-      {
-         return false;
-      }
-      
       String originRequestPath = context.getParameter(PortalRequestHandler.REQUEST_PATH);
       SiteKey originSite = getOriginSiteKey(context);
       
@@ -153,12 +148,29 @@ public class DeviceRedirectRequestHandler extends WebRequestHandler implements S
 
       log.debug("Site Redirect being checked on [" + originSite.getName() + "], with type [" + originSite.getTypeName() 
             + "], and request path [" + originRequestPath + "]");
+      
+      String redirectFlagValue = request.getParameter(REDIRECT_FLAG);
+      if (redirectFlagValue != null && !redirectFlagValue.isEmpty())
+      {
+         SiteKey redirectSiteKey = new SiteKey(originSite.getType(),redirectFlagValue);
+         RedirectKey redirectKey =  RedirectKey.redirect(redirectSiteKey.getName());
+         return performRedirect(originSite, redirectKey, originRequestPath, context, true);
+      }
+      
+      String referer = request.getHeader("Referer");
+      String siteURL = request.getRequestURL().substring(0, request.getRequestURL().length() - request.getServletPath().length());
+      if (referer != null && referer.startsWith(siteURL) && (context.getRequest().getSession(true).getAttribute(DEVICE_DETECTION_ATTEMPTED) == null))
+      {
+         return false;
+      }
+      
+      
 
       RedirectKey redirectSite = getRedirect(originSite, request);
       if (redirectSite != null) // a redirect has already been set, use it
       {
          // do the redirect
-         return performRedirect(originSite, redirectSite, originRequestPath, context);
+         return performRedirect(originSite, redirectSite, originRequestPath, context, false);
       }
       else
       // no redirect set yet, we need to check if a redirect is requested or not
@@ -206,7 +218,7 @@ public class DeviceRedirectRequestHandler extends WebRequestHandler implements S
          // the service gave us a redirection site to use, use it.
          {
             log.debug("Redirect for origin site " + originSite.getName() + " is being set to : " + redirectSite);
-            return performRedirect(originSite, redirectSite, originRequestPath, context);
+            return performRedirect(originSite, redirectSite, originRequestPath, context, false);
          }
       }
       }
@@ -218,16 +230,7 @@ public class DeviceRedirectRequestHandler extends WebRequestHandler implements S
 
    protected RedirectKey getRedirect(SiteKey origin, HttpServletRequest request)
    {
-      String redirectFlagValue = request.getParameter(REDIRECT_FLAG);
-      if (redirectFlagValue != null && !redirectFlagValue.isEmpty())
-      {
-         SiteKey redirectSiteKey = new SiteKey(origin.getType(),redirectFlagValue);
-         return RedirectKey.redirect(redirectSiteKey.getName());
-      }
-      else
-      {
          return RedirectCookie.getRedirect(origin, request);
-      }
    }
    
    protected void setRedirect(SiteKey origin, RedirectKey redirect, HttpServletResponse response)
@@ -254,6 +257,22 @@ public class DeviceRedirectRequestHandler extends WebRequestHandler implements S
         if (redirect.getType() != RedirectType.NOREDIRECT && redirect.getRedirect() != null)
         {
            RedirectCookie removeRedirectCookie = new RedirectCookie(redirect.getRedirect(), RedirectKey.noRedirect());
+           
+           if (cookieMaxAge != null)
+           {
+              removeRedirectCookie.setMaxAge(cookieMaxAge);
+           }
+           
+           if (cookieComment != null)
+           {
+              removeRedirectCookie.setComment(cookieComment);
+           }
+           
+           if (cookiePath != null)
+           {
+              removeRedirectCookie.setPath(cookiePath);
+           }
+           
            response.addCookie(removeRedirectCookie.toCookie());
         }
    }
@@ -281,7 +300,7 @@ public class DeviceRedirectRequestHandler extends WebRequestHandler implements S
    }
 
    protected boolean performRedirect(SiteKey origin, RedirectKey redirect, String requestPath,
-         ControllerContext context) throws IOException
+         ControllerContext context, boolean forceRedirect) throws IOException
    {
       // If we have a no-redirect type, don't do anything and return null
       if (redirect.getType() == RedirectType.NOREDIRECT)
@@ -291,9 +310,14 @@ public class DeviceRedirectRequestHandler extends WebRequestHandler implements S
       }
       else
       {
-
          log.debug("Attempting redirect to site " + redirect + " with request path :" + requestPath);
          String redirectLocation = deviceRedirectionService.getRedirectPath(origin.getName(), redirect.getRedirect(), requestPath);
+         
+         if (forceRedirect && redirectLocation == null)
+         {
+            redirectLocation = requestPath;
+         }
+         
          if (redirectLocation != null)
          {
             log.debug("RedirectPath set to : " + redirectLocation);
@@ -310,13 +334,24 @@ public class DeviceRedirectRequestHandler extends WebRequestHandler implements S
             HttpServletRequest request = context.getRequest();
             
             //Add in the query string, if any.
+            String queryString = request.getQueryString();
             if (request.getQueryString() != null)
             {
+               //remove the redirect flag from the query string
+               if (queryString.contains(REDIRECT_FLAG + "="))
+               {
+                  queryString = queryString.substring(0, queryString.lastIndexOf(REDIRECT_FLAG));
+               }
+               
                if (s.endsWith("/"))
                {
                   s = s.substring(0, s.length() - 1);
                }
-               s += "?" + request.getQueryString();
+               
+               if (queryString != null && !queryString.isEmpty())
+               {
+                  s += "?" + queryString;
+               }
             }
             
             //set the redirect

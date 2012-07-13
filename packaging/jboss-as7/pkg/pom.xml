@@ -167,6 +167,15 @@
          <type>war</type>
       </dependency>
 
+      <!-- Site Redirection Portlet -->
+      <dependency>
+         <?expand?>
+         <?move gatein.ear/redirect-portlet.war?>
+         <groupId>org.gatein.portal.portlet</groupId>
+         <artifactId>redirect</artifactId>
+         <type>war</type>
+      </dependency>
+
       <!-- Need to declare this artifact to have access to its path from package.xml -->
       <dependency>
         <groupId>org.exoplatform.portal</groupId>

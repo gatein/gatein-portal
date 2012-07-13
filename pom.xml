@@ -650,6 +650,12 @@
             <artifactId>redirect</artifactId>
             <version>${project.version}</version>
          </dependency>
+         <dependency>
+            <groupId>org.gatein.portal.portlet</groupId>
+            <artifactId>redirect</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+         </dependency>
 
          <!-- Reflext -->
          <dependency>

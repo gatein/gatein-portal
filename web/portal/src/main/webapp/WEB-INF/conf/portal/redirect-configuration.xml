@@ -26,8 +26,12 @@
    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
-    <key>org.gatein.web.redirect.api.DeviceRedirectService</key>
-    <type>org.gatein.web.redirect.implementation.DeviceRedirectServiceImpl</type>
+    <key>org.gatein.web.redirect.api.SiteRedirectService</key>
+    <type>org.gatein.web.redirect.implementation.SiteRedirectServiceImpl</type>
   </component>
+  <component>
+    <key>org.gatein.web.redirect.api.RedirectHandler</key>
+    <type>org.gatein.web.redirect.implementation.RedirectHandlerImpl</type>
+  </component> 
 
 </configuration>

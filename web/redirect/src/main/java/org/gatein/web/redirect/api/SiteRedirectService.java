@@ -35,7 +35,7 @@ import org.exoplatform.portal.mop.SiteKey;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public interface DeviceRedirectService
+public interface SiteRedirectService
 {
    /**
     * Returns what action should be performed in terms of a redirect when a user access a portal site.
@@ -69,13 +69,11 @@ public interface DeviceRedirectService
    public String getRedirectPath (String origin, String redirect, String originRequestPath);
    
    /**
-    * Returns the list of alternative site names for a particular site.
+    * Returns the list of alternative sites for the specified URL
     * 
     * @param site The site
     * @return The list of alternative site names
     */
-   public List<String> getAlternativeSites(String site);
-   //TODO: returning just a list of alternative sites is not all the useful, it should perhaps return also the URL to use to perform the actual redirect?
-   //TODO: change this to -> public Map<String, URI> getAlternativeSites(URI originSite); ??? Have the service construct the uri to perform the redirect along with the redirect name
+   public Map<String, String> getAlternativeSites(String originSite);
 }
 
