@@ -51,6 +51,7 @@ import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.Validator;
 
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 
 /**
@@ -73,17 +74,15 @@ public class UIGadgetEditor extends UIForm
 
    private String dirPath;
    
-   private String gadgetName_;
-
    public UIGadgetEditor(InitParams initParams) throws Exception
    {
       Param param = initParams.getParam("SampleGadget");
       WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
       String sample = (String)param.getMapGroovyObject(context);
       addUIFormInput(new UIFormStringInput(FIELD_NAME, FIELD_NAME, null).addValidator(MandatoryValidator.class)
-    		  	.addValidator(StringLengthValidator.class, 2, 50)
-    		  	.addValidator(ResourceValidator.class)
-    		  	.addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\-\\d]+$","UIGadgetEditor.msg.Invalid"));
+               .addValidator(StringLengthValidator.class, 2, 50)
+               .addValidator(ResourceValidator.class)
+               .addValidator(ExpressionValidator.class, "^[\\p{L}][\\p{L}._\\-\\d]+$","UIGadgetEditor.msg.Invalid"));
       addUIFormInput(new UIFormTextAreaInput(FIELD_SOURCE, FIELD_SOURCE, sample).addValidator(MandatoryValidator.class)
          .addValidator(GadgetSpecValidator.class));
    }
@@ -102,8 +101,8 @@ public class UIGadgetEditor extends UIForm
    }
    
    public void setGadgetName(String name) {
-	   UIFormStringInput uiInputName = getUIStringInput(FIELD_NAME);
-	   uiInputName.setValue(name);
+      UIFormStringInput uiInputName = getUIStringInput(FIELD_NAME);
+      uiInputName.setValue(name);
    }
 
    public String getSourceFullName()
@@ -122,7 +121,7 @@ public class UIGadgetEditor extends UIForm
       UIFormStringInput uiInputName = getUIStringInput(FIELD_NAME);
       uiInputSource.setValue(uiInputSource.getValue());
       if(this.isEdit()) {
-    	  uiInputName.setReadOnly(true);
+         uiInputName.setReadOnly(true);
       }
       
       super.processRender(context);
@@ -158,18 +157,18 @@ public class UIGadgetEditor extends UIForm
          boolean isEdit = uiForm.isEdit();
          if (isEdit)
          {
-        	 gadgetName = uiForm.getSourceFullName();
+            gadgetName = uiForm.getSourceFullName();
          }
          else
          {
-        	 gadgetName = uiForm.getUIStringInput(UIGadgetEditor.FIELD_NAME).getValue();
+            gadgetName = uiForm.getUIStringInput(UIGadgetEditor.FIELD_NAME).getValue();
          }
 
          //
          Gadget gadget = service.getGadget(gadgetName);
          
          if(isEdit) {
-        	 if (gadget == null)
+            if (gadget == null)
              {
                 UIApplication uiApp = event.getRequestContext().getUIApplication();
                 uiApp.addMessage(new ApplicationMessage("gadget.msg.changeNotExist", null, ApplicationMessage.WARNING));
@@ -178,7 +177,7 @@ public class UIGadgetEditor extends UIForm
              }
          }
          else {
-        	// If gadget is null we need to create it first
+           // If gadget is null we need to create it first
              if (gadget == null)
              {
                 gadget = new Gadget();
@@ -195,37 +194,46 @@ public class UIGadgetEditor extends UIForm
                 service.saveGadget(gadget);
              }
              else {
-        		 UIApplication uiApp = event.getRequestContext().getUIApplication();
+               UIApplication uiApp = event.getRequestContext().getUIApplication();
                  uiApp.addMessage(new ApplicationMessage("UIGadgetEditor.gadget.msg.gadgetIsExist", null, ApplicationMessage.WARNING));
                  return;
-        	 }
+            }
          }
          //
          Source source = new Source(gadgetName, "application/xml");
          source.setTextContent(text);
          source.setLastModified(Calendar.getInstance());
 
-         sourceStorage.saveSource(gadget, source);
-         uiManagement.removeChild(UIGadgetEditor.class);
-         // This will update the source and also update the gadget related
-         // cached meta data
-         // from the source
-         uiManagement.initData();
-         uiManagement.setSelectedGadget(gadget.getName());
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
-         
-         //Send request to invalidate the cache to Shindig
-         String gadgetServerUrl = GadgetUtil.getGadgetServerUrl();
-         String gadgetUrl = GadgetUtil.reproduceUrl(gadget.getUrl(), gadget.isLocal());
-         String metadataUrl = gadgetServerUrl + (gadgetServerUrl.endsWith("/") ? "" : "/") + "metadata";
-         String queryString = "{\"context\":{\"ignoreCache\":\"true\"},\"gadgets\":[" + "{\"url\":\"" + gadgetUrl + "\"}]}";
-         event.getRequestContext().getJavascriptManager().addJavascript("ajaxRequest('POST', '" + metadataUrl + "', true, '" + queryString + "');");
+         try
+         {
+            sourceStorage.saveSource(gadget, source);
+            uiManagement.removeChild(UIGadgetEditor.class);
+            // This will update the source and also update the gadget related
+            // cached meta data
+            // from the source
+            uiManagement.initData();
+            uiManagement.setSelectedGadget(gadget.getName());
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiManagement);
+            
+            //Send request to invalidate the cache to Shindig
+            String gadgetServerUrl = GadgetUtil.getGadgetServerUrl();
+            String gadgetUrl = GadgetUtil.reproduceUrl(gadget.getUrl(), gadget.isLocal());
+            String metadataUrl = gadgetServerUrl + (gadgetServerUrl.endsWith("/") ? "" : "/") + "metadata";
+            String queryString = "{\"context\":{\"ignoreCache\":\"true\"},\"gadgets\":[" + "{\"url\":\"" + gadgetUrl + "\"}]}";
+            event.getRequestContext().getJavascriptManager().addJavascript("ajaxRequest('POST', '" + metadataUrl + "', true, '" + queryString + "');");
+         }
+         catch (UnsupportedEncodingException e)
+         {
+            UIApplication uiApp = event.getRequestContext().getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("UIGadgetEditor.msg.unsupportedEncoding", new Object[] {e.getMessage()}, ApplicationMessage.ERROR));
+            return;
+         }
       }
 
    }
    
    private boolean isEdit() {
-	   return (this.getSource() != null);
+      return (this.getSource() != null);
    }
 
    public static class CancelActionListener extends EventListener<UIGadgetEditor>

@@ -18,20 +18,27 @@
  */
 package org.exoplatform.application.gadget.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.util.Date;
+
 import org.apache.shindig.common.uri.Uri;
 import org.apache.shindig.gadgets.spec.GadgetSpec;
 import org.apache.shindig.gadgets.spec.ModulePrefs;
-import org.chromattic.api.annotations.*;
+import org.chromattic.api.annotations.FormattedBy;
+import org.chromattic.api.annotations.ManyToOne;
+import org.chromattic.api.annotations.MappedBy;
+import org.chromattic.api.annotations.NamingPrefix;
+import org.chromattic.api.annotations.OneToOne;
+import org.chromattic.api.annotations.Owner;
+import org.chromattic.api.annotations.Path;
 import org.chromattic.api.annotations.PrimaryType;
+import org.chromattic.api.annotations.Property;
 import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 import org.chromattic.ext.ntdef.NTFile;
-import org.chromattic.ext.ntdef.Resource;
 import org.chromattic.ext.ntdef.NTFolder;
-import org.exoplatform.application.gadget.EncodingDetector;
-
-
-import java.io.ByteArrayInputStream;
-import java.util.Date;
+import org.chromattic.ext.ntdef.Resource;
+import org.exoplatform.commons.xml.XMLDeclarationParser;
 
 
 /**
@@ -79,8 +86,16 @@ public abstract class LocalGadgetData extends GadgetData
       // Get the related content
       GadgetSpec spec = new GadgetSpec(Uri.parse("http://www.gatein.org"), gadgetXML);
       ModulePrefs prefs = spec.getModulePrefs();
-      byte[] bytes = gadgetXML.getBytes();
-      String encoding = EncodingDetector.detect(new ByteArrayInputStream(bytes));
+      
+      // detect the encoding declared in the XML source
+      // note that we do not need to detect the encoding of gadgetXML because 
+      // it is a String and not a stream 
+      String encoding = new XMLDeclarationParser(gadgetXML).parse().get(XMLDeclarationParser.ENCODING);
+      if (encoding == null || !Charset.isSupported(encoding)) {
+         throw new UnsupportedEncodingException(encoding);
+      }
+      // get the bytes in the declared encoding
+      byte[] bytes = gadgetXML.getBytes(encoding);
 
       // Update def
       def.setDescription(prefs.getDescription());

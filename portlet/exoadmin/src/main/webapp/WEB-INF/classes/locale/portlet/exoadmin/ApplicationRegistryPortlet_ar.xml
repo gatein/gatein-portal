@@ -263,7 +263,7 @@
     </msg>
   </UIGadgetEditor>
   <!--
-  ##package org.exoplatform.organization.webui.component.UIListPermissionSelector
+  ##	org.exoplatform.organization.webui.component.UIListPermissionSelector
   -->
   <UIListPermissionSelector>
     <header>
