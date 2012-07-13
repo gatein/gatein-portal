@@ -13,11 +13,10 @@
        css = "height: " + uicomponent.getHeight() + "px";
     }
 %>
-<div id="$uicomponent.id" class="UIVirtualList" style="overflow:auto; $css" 
-  onscroll="eXo.webui.UIVirtualList.onScroll(this,'$url');">    
+<div id="$uicomponent.id" class="UIVirtualList" style="overflow:auto; $css">    
   <% uicomponent.renderChildren();%>
   <% 
     rcontext.getJavascriptManager().require("SHARED/webui-ext", "webuiExt")
-      .addScripts("webuiExt.UIVirtualList.init('$uicomponent.id', $hasNext, $isAutoAdjustHeight);");
+      .addScripts("webuiExt.UIVirtualList.init('$uicomponent.id', $hasNext, $isAutoAdjustHeight, '$url');");
   %>
 </div>

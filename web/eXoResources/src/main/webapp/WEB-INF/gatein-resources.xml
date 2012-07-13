@@ -344,6 +344,10 @@
          <name>eXo.webui.UICombobox</name>
          <path>/javascript/eXo/webui/UICombobox.js</path>
       </script>
+      <script>
+         <name>eXo.webui.UIPortletForm</name>
+         <path>/javascript/eXo/webui/UIPortletForm.js</path>
+      </script>
       <depends>
          <module>common</module>
       </depends>

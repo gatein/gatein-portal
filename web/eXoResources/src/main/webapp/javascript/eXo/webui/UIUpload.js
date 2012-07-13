@@ -17,7 +17,7 @@
  * site: http://www.fsf.org.
  */
 
-eXo.webui.UIUpload = {
+var uiUpload = {
   listUpload : [],
   
   //This attribute should be persisted belong to particular upload component
@@ -41,6 +41,15 @@ eXo.webui.UIUpload = {
     } catch (err) {
       return;
     }
+    
+    var uploadInput = gj("#" + uploadId);
+    uploadInput.find(".DeleteFileLable, .Abort").on("click", function() {
+    	_module.UIUpload.abortUpload(uploadId);
+    });
+    uploadInput.find(".RemoveFile").on("click", function() {
+    	_module.UIUpload.deleteUpload(uploadId);
+    });
+    
     this.isAutoUpload = isAutoUpload;
     if (response.upload[uploadId] == undefined
         || response.upload[uploadId].percent == undefined) {
@@ -72,13 +81,12 @@ eXo.webui.UIUpload = {
         + "' class='UIUploadForm' style='margin: 0px; padding: 0px' action='"
         + uploadAction + "' enctype='multipart/form-data' method='post'>";
     if (isAutoUpload) {
-      uploadHTML += "    <input type='file' name='file' id='file' value='' onchange='parent.eXo.webui.UIUpload.upload(this, "
-          + uploadId + ")' onkeypress='return false;' />";
+      uploadHTML += "    <input type='file' name='file' id='file' value='' onchange='parent.require(\"SHARED/webui-ext\").UIUpload.upload(this, \""
+          + uploadId + "\")' onkeypress='return false;' />";
     } else {
       uploadHTML += "    <input type='file' name='file' id='file' value='' onkeypress='return false;' />";
-      uploadHTML += "    <img class='UploadButton' style='width: 20px; height: 20px; cursor: pointer; vertical-align: bottom; background: url(\"/eXoResources/skin/DefaultSkin/webui/component/UIUpload/background/UpArrow16x16.gif\") no-repeat left;' onclick='parent.eXo.webui.UIUpload.upload(this, "
-          + uploadId
-          + ")' alt='' src='/eXoResources/skin/sharedImages/Blank.gif'/>";
+      uploadHTML += "    <img class='UploadButton' style='width: 20px; height: 20px; cursor: pointer; vertical-align: bottom; background: url(\"/eXoResources/skin/DefaultSkin/webui/component/UIUpload/background/UpArrow16x16.gif\") no-repeat left;' " +
+      		"onclick='parent.require(\"SHARED/webui-ext\").UIUpload.upload(this, \"" + uploadId + "\")' alt='' src='/eXoResources/skin/sharedImages/Blank.gif'/>";
     }
     uploadHTML += "  </form>";
     uploadHTML += "</body>";
@@ -155,8 +163,7 @@ eXo.webui.UIUpload = {
 
     if (element) {
       element.innerHTML = "Uploaded " + percent + "% "
-          + "<span onclick='parent.eXo.webui.UIUpload.abortUpload(" + id
-          + ")'>Abort</span>";
+          + "<span class='Abort'>Abort</span>";
     }
   },
   /**
@@ -297,4 +304,4 @@ eXo.webui.UIUpload = {
   }
 };
 
-_module.UIUpload = eXo.webui.UIUpload;
+_module.UIUpload = uiUpload;

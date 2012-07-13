@@ -17,13 +17,17 @@
  * site: http://www.fsf.org.
  */
 
-eXo.webui.UIVirtualList = {
+var virtualList = {
 
-  init : function(componentId, hasNext, autoAdjustHeight) {
+  init : function(componentId, hasNext, autoAdjustHeight, loadNextUrl) {
     var uiVirtualList = document.getElementById(componentId);
     if (uiVirtualList == null)
       return;
 
+    gj(uiVirtualList).on("scroll", function() {
+    	_module.UIVirtualList.onScroll(this, loadNextUrl);
+    });
+    
     if (!hasNext) {
       uiVirtualList.isFinished = true;
     }
@@ -53,7 +57,7 @@ eXo.webui.UIVirtualList = {
           uiVirtualList.style.height = "auto";
         }
       } else {
-        uiVirtualList.onscroll();
+        gj(uiVirtualList).trigger("scroll");
       }
     }
   },
@@ -112,4 +116,4 @@ eXo.webui.UIVirtualList = {
   }
 };
 
-_module.UIVirtualList = eXo.webui.UIVirtualList;
+_module.UIVirtualList = virtualList;
