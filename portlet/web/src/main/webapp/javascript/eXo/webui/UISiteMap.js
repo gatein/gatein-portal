@@ -17,91 +17,118 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-function UISiteMap() {};
+eXo.webui.UISiteMap = {
 
-UISiteMap.prototype.updateTreeNode = function (nodeToUpdate, getNodeURL) {
-	if (!nodeToUpdate || ! getNodeURL) return;
-	
-  var jqNode = gj(nodeToUpdate);
-  var subGroup = jqNode.parent().children("div.ChildrenContainer");
-	if (subGroup.length == 0 || subGroup.html().trim() !== "") return;
-		
-	var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);	
-	try {
-		var data = gj.parseJSON(jsChilds);
-	} catch (e) {		
-	}	
-	if (data && data.length) {
-		_module.generateHtml(data, nodeToUpdate, subGroup);			
-		return;
-	}
+  collapseExpand : function(node)
+  {
+    var jqNode = gj(node);
+    var subGroup = jqNode.parent().children("div.ChildrenContainer");
+    if(subGroup.css("display") == "none")
+    {
+      if(jqNode.hasClass("ExpandIcon"))
+      {
+        jqNode.attr("class", "CollapseIcon ClearFix");
+      }
+      subGroup.css("display", "block");
+    }
+    else
+    {
+      if(jqNode.hasClass("CollapseIcon"))
+      {
+        jqNode.attr("class", "ExpandIcon ClearFix");
+      }
+      subGroup.css("display", "none");
+    }
 
-  jqNode.removeClass("CollapseIcon").addClass("NullItem");
-};
+  },
 
-UISiteMap.prototype.generateHtml = function(data, nodeToUpdate, subGroup) {						
-	function toHtml(node, isLast) {
-		if (!node) return;
-		var lastNode = isLast ? "LastNode" : "";
-		var actionLink = node.actionLink ? node.actionLink : "javascript:void(0);";
-		
-		var actionExpand = 'eXo.webui.UISiteMap.updateTreeNode(this, "' + node.getNodeURL + '")';
-		var actionCollapse = 'ajaxAsyncGetRequest("' + node.collapseURL + '", true)'; 		 
-			
-		var str = "";			
-		if (node.hasChild) {
-			str += "<div class='" + lastNode + " Node'>";			
-			if (node.isExpanded) {
-				str += "<div class='CollapseIcon ClearFix' onclick='eXo.webui.UISiteMap.collapseExpand(this); " + actionCollapse + "'>";
-				str += "<a class='NodeIcon DefaultPageIcon' href='" + actionLink + "'>" + node.label + "</a>";
-				str += "</div><div class='ChildrenContainer' style='display: block'>";
-				for (var idx = 0; idx < node.childs.length; idx++) {
-					str += toHtml(node.childs[idx], idx == node.childs.length - 1);
-				}				
-			} else {
-				str += "<div class='ExpandIcon ClearFix' onclick='eXo.webui.UISiteMap.collapseExpand(this); " + actionExpand + "'>";
-				str += "<a class='NodeIcon DefaultPageIcon' href='" + actionLink + "'>" + node.label + "</a>";
-				str += "</div><div class='ChildrenContainer' style='display: none'>";
-				for (var idx = 0; idx < node.childs.length; idx++) {
-					str += toHtml(node.childs[idx], idx == node.childs.length - 1);
-				}	
-			}
-			str += "</div></div>";
-		} else {
-			str += "<div class='" + lastNode + " Node ClearFix'><div class='NullItem'><div class='ClearFix'>";
-			str += "<a class='NodeIcon DefaultPageIcon' href='" + actionLink + "'>" + node.label + "</a></div></div></div>";			
-		}
-		return str;
-	}
-	
-	var htmlFrags = "";	
-	for (var i = 0; i < data.length; i++) {
-		htmlFrags += toHtml(data[i], i == data.length - 1);
-	}
-	
-	subGroup.html(htmlFrags);
-	subGroup.show();
-};
+  updateTreeNode : function (nodeToUpdate, getNodeURL)
+  {
+    if (!nodeToUpdate || !getNodeURL)
+    {
+      return;
+    }
+    var jqNode = gj(nodeToUpdate);
+    var subGroup = jqNode.parent().children("div.ChildrenContainer");
+    if (subGroup.length == 0 || subGroup.html().trim() !== "")
+    {
+      return;
+    }
+    var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);
+    try
+    {
+      var data = gj.parseJSON(jsChilds);
+    }
+    catch (e)
+    {
+    }
+    if (data && data.length)
+    {
+      var html = "";
+      for(var i = 0; i < data.length; i++)
+      {
+        html += this.toHtml(data[i], i == data.length - 1);
+      }
+      subGroup.html(html);
+      subGroup.show();
+    }
+    else
+    {
+      jqNode.removeClass("CollapseIcon").addClass("NullItem");
+    }
+  },
 
-/**
- * Clollapse or expand an element (all its children) of tree
- * @param {Object} element object to collapse or expand
- */
-UISiteMap.prototype.collapseExpand = function(element) {
-  var subGroup = gj(element.parentNode).children("div.ChildrenContainer")[0];
-  var className = element.className;
-  if (!subGroup)
-    return;
-  if (subGroup.style.display == "none") {
-    if (className.indexOf("ExpandIcon") == 0)
-      element.className = "CollapseIcon ClearFix";
-    subGroup.style.display = "block";
-  } else {
-    if (className.indexOf("CollapseIcon") == 0)
-      element.className = "ExpandIcon ClearFix";
-    subGroup.style.display = "none";
+  /**
+   * A recursive method which generates HTML fragment associated with node - an object created from JSON data.
+   *
+   * @param node
+   * @param isLast
+   * @return {*}
+   */
+  toHtml : function(node, isLast)
+  {
+    if(!node)
+    {
+      return;
+    }
+    var nodeLink = node.actionLink ? node.actionLink : "javascript:void(0);";
+    var expandLink = 'eXo.webui.UISiteMap.updateTreeNode(this, "' + node.getNodeURL + '")';
+    var collapseLink = 'ajaxAsyncGetRequest("' + node.collapseURL + '", true)';
+
+    var fragment = "";
+    var nodeCSS = isLast? "LastNode Node" : "Node";
+    if(node.hasChild)
+    {
+      fragment += "<div class='" + nodeCSS + "'>";
+      if(node.isExpanded)
+      {
+        fragment += "<div class='CollapseIcon ClearFix' onclick='eXo.webui.UISiteMap.collapseExpand(this); " + collapseLink + "'>";
+        fragment += "<a class='NodeIcon DefaultPageIcon' href='" + nodeLink + "'>" + node.label + "</a>";
+        fragment += "</div><div class='ChildrenContainer' style='display: block'>";
+        for (var i = 0; i < node.childs.length; i++)
+        {
+          fragment += toHtml(node.childs[i], i == node.childs.length - 1);
+        }
+      }
+      else
+      {
+        fragment += "<div class='ExpandIcon ClearFix' onclick='eXo.webui.UISiteMap.collapseExpand(this); " + expandLink + "'>";
+        fragment += "<a class='NodeIcon DefaultPageIcon' href='" + nodeLink + "'>" + node.label + "</a>";
+        fragment += "</div><div class='ChildrenContainer' style='display: none'>";
+        for (var i = 0; i < node.childs.length; i++)
+        {
+          fragment += toHtml(node.childs[i], i == node.childs.length - 1);
+        }
+      }
+      fragment += "</div></div>";
+    }
+    else
+    {
+      fragment += "<div class='" + nodeCSS + " ClearFix'><div class='NullItem'><div class='ClearFix'>";
+      fragment += "<a class='NodeIcon DefaultPageIcon' href='" + nodeLink + "'>" + node.label + "</a></div></div></div>";
+    }
+    return fragment;
   }
-};
+}
 
-eXo.webui.UISiteMap = new UISiteMap();
 _module = eXo.webui.UISiteMap; 
