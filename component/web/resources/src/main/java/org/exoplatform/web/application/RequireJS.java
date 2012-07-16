@@ -79,7 +79,7 @@ public class RequireJS
                depends.put(alias, moduleId);
             }         
          }
-         else if (!depends.values().contains(moduleId))
+         else
          {
             log.debug("Adding requirejs module {} without alias", moduleId);
             noAlias.add(moduleId);         
@@ -103,6 +103,7 @@ public class RequireJS
       {
          builder.append("require(");
          List<String> tmp = new LinkedList<String>(depends.values());
+         noAlias.removeAll(depends.values());
          tmp.addAll(noAlias);
          builder.append(new JSONArray(tmp)).append(",");
          builder.append("function(").append(StringUtils.join(depends.keySet(), ",")).append(") {").append('\n')

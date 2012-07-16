@@ -115,7 +115,7 @@ public class JavascriptManager
             tmp.put(id, null);
             for (ScriptResource res : service.resolveIds(tmp).keySet())
             {
-               require(res.getId().toString());
+               require(res.getId().toString(), res.getAlias());
             }
          }         
       }
