@@ -34,3 +34,28 @@ var eXo  = {
   
   i18n : { }
 };
+
+/*****************************************************************************************/
+/*
+* This is the main entry method for every Ajax calls to the eXo Portal
+*
+* It is simply a dispatcher method that fills some init fields before 
+* calling the doRequest() method
+*/
+window.ajaxGet = function(url, callback) {
+  if (!callback) callback = null ;
+  require(["SHARED/base"], function() {
+	  doRequest("Get", url, null, callback);	  
+  });
+};
+
+/**
+ * Do a POST request in AJAX with given <code>url</code> and <code>queryString</code>.
+ * The call is delegated to the doRequest() method with a callback function
+ */
+window.ajaxPost = function(url, queryString, callback) {
+  if (!callback) callback = null ;
+  require(["SHARED/base"], function() {
+	  doRequest("POST", url, queryString, callback) ;
+  });
+};
