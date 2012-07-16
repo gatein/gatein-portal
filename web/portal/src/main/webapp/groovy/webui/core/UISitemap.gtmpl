@@ -1,7 +1,12 @@
-<%	
-		import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
-					
-		def uiPortalNavigation = uicomponent.getChild(UIPortalNavigation.class); 
-		uiPortalNavigation.loadTreeNodes();
-		uicomponent.renderChildren();
+<%
+import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.web.application.JavascriptManager;
+
+def uiPortalNavigation = uicomponent.getChild(UIPortalNavigation.class);
+uiPortalNavigation.loadTreeNodes();
+uicomponent.renderChildren();
+
+JavascriptManager jsManager = Util.getPortalRequestContext().getJavascriptManager();
+jsManager.require("PORTLET/web/SiteMapPortlet", "sitemap").addScripts("sitemap.init('$uiPortalNavigation.id');");
 %>

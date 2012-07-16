@@ -1,15 +1,16 @@
 <%
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.portal.webui.portal.UIPortal;
-	import org.exoplatform.portal.application.PortalRequestContext;
 	import org.exoplatform.portal.mop.user.UserNode;
 	import org.exoplatform.web.url.PortalURL;
-	import org.exoplatform.web.url.navigation.NavigationResource;
+	
+	def rcontext = _ctx.getRequestContext();
+	rcontext.getJavascriptManager().getRequireJS()
+			  .addScripts("tabbedDashboard.init('$uicomponent.id');");
 	
 	def nodes = uicomponent.getSameSiblingsNode();
 	def tabNbs = nodes.size();
-
-	PortalRequestContext pcontext = Util.getPortalRequestContext();
+	
 	PortalURL nodeURL = nodeurl();
 
 	def selectedNode = Util.getUIPortal().getSelectedUserNode();
@@ -28,10 +29,7 @@
 			    if(node.getURI().equals(selectedNode.getURI())){ 
 			%>
 			<div class="UITab SelectedTab">
-				<% 
-					String ondblclick = "eXo.webui.UITabbedDashboard.showEditLabelInput(this,\"" + param + "\",this.innerHTML)"; 
-				%>
-				<span ondblclick='$ondblclick'>$tabLabel</span>		
+				<span id="$param">$tabLabel</span>		
 				<a href="<%= uicomponent.url("DeleteTab",param); %>" class="CloseIcon" title="DEL"></a>
 			</div>
 				<%}else{ %>
@@ -42,5 +40,5 @@
 			</div>
 				<%} %>	
 	<% } %>
-	<a class="AddDashboard" onclick="eXo.webui.UITabbedDashboard.showAddTabInput(this)"></a>
+	<a class="AddDashboard"></a>
 </div>

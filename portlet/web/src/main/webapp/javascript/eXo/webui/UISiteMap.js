@@ -19,6 +19,26 @@
 
 eXo.webui.UISiteMap = {
 
+  init : function(id)
+  {
+
+    gj("#" + id).on("click", "div.ExpandIcon,div.CollapseIcon", function (event)
+    {
+      eXo.webui.UISiteMap.collapseExpand(this);
+
+      var input = gj(this).children("input");
+      if(input.attr("name") == "collapseURL")
+      {
+        ajaxAsyncGetRequest(input.val(), true);
+      }
+      else if(input.attr("name") == "expandURL")
+      {
+        eXo.webui.UISiteMap.updateTreeNode(this, input.val());
+      }
+      event.stopPropagation();
+    });
+  },
+
   collapseExpand : function(node)
   {
     var jqNode = gj(node);
@@ -39,7 +59,6 @@ eXo.webui.UISiteMap = {
       }
       subGroup.css("display", "none");
     }
-
   },
 
   updateTreeNode : function (nodeToUpdate, getNodeURL)
@@ -92,8 +111,6 @@ eXo.webui.UISiteMap = {
       return;
     }
     var nodeLink = node.actionLink ? node.actionLink : "javascript:void(0);";
-    var expandLink = 'eXo.webui.UISiteMap.updateTreeNode(this, "' + node.getNodeURL + '")';
-    var collapseLink = 'ajaxAsyncGetRequest("' + node.collapseURL + '", true)';
 
     var fragment = "";
     var nodeCSS = isLast? "LastNode Node" : "Node";
@@ -102,22 +119,24 @@ eXo.webui.UISiteMap = {
       fragment += "<div class='" + nodeCSS + "'>";
       if(node.isExpanded)
       {
-        fragment += "<div class='CollapseIcon ClearFix' onclick='eXo.webui.UISiteMap.collapseExpand(this); " + collapseLink + "'>";
+        fragment += "<div class='CollapseIcon ClearFix'>";
+        fragment += "<input type='hidden' name='collapseURL' value='" + node.collapseURL + "'/>";
         fragment += "<a class='NodeIcon DefaultPageIcon' href='" + nodeLink + "'>" + node.label + "</a>";
         fragment += "</div><div class='ChildrenContainer' style='display: block'>";
         for (var i = 0; i < node.childs.length; i++)
         {
-          fragment += toHtml(node.childs[i], i == node.childs.length - 1);
+          fragment += eXo.webui.UISiteMap.toHtml(node.childs[i], i == node.childs.length - 1);
         }
       }
       else
       {
-        fragment += "<div class='ExpandIcon ClearFix' onclick='eXo.webui.UISiteMap.collapseExpand(this); " + expandLink + "'>";
+        fragment += "<div class='ExpandIcon ClearFix'>";
+        fragment += "<input type='hidden' name='expandURL' value='" + node.getNodeURL + "'/>"
         fragment += "<a class='NodeIcon DefaultPageIcon' href='" + nodeLink + "'>" + node.label + "</a>";
         fragment += "</div><div class='ChildrenContainer' style='display: none'>";
         for (var i = 0; i < node.childs.length; i++)
         {
-          fragment += toHtml(node.childs[i], i == node.childs.length - 1);
+          fragment += eXo.webui.UISiteMap.toHtml(node.childs[i], i == node.childs.length - 1);
         }
       }
       fragment += "</div></div>";

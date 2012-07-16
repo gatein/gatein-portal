@@ -46,10 +46,11 @@
 
 			if(treeNode.hasChild()) {
 				if (treeNode.isExpanded()) {
-				    def actionCollapse = "ajaxAsyncGetRequest('" + uicomponent.url("CollapseNode", treePath) + "', true)";
+				   def actionCollapse = uicomponent.url("CollapseNode", treePath);
 					println """
 						<div class="$lastNode Node">
-							<div class="CollapseIcon ClearFix" onclick="eXo.webui.UISiteMap.collapseExpand(this); $actionCollapse">
+							<div class="CollapseIcon ClearFix">
+                        <input type="hidden" name="collapseURL" value="$actionCollapse"/>
 					""";
 					   println "<a class='NodeIcon DefaultPageIcon' href=\"$actionLink\">$label</a>";
 					println """
@@ -63,12 +64,12 @@
 				    MimeResponse res = _ctx.getRequestContext().getResponse();
 					ResourceURL resourceURL = res.createResourceURL();
 					resourceURL.setResourceID(treePath);			
-					
-					def actionExpand = "eXo.webui.UISiteMap.updateTreeNode(this, '" + resourceURL.toString() + "')";	
+					def actionExpand = resourceURL.toString();
 					
 					println """
 						<div class="$lastNode Node">
-							<div class="ExpandIcon ClearFix" onclick="eXo.webui.UISiteMap.collapseExpand(this); $actionExpand">
+							<div class="ExpandIcon ClearFix">
+                        <input type="hidden" name="expandURL" value="$actionExpand"/>
 					""";
 					      println "<a class='NodeIcon DefaultPageIcon' href=\"$actionLink\">$label</a>";
 					println """
@@ -98,9 +99,8 @@
 				""";
 
 			}
-
-		}		
-	}  
+		}
+	}
 %>
 
 <div id="$uicomponent.id" class="UISitemap" >

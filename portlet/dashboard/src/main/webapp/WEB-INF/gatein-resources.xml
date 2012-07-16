@@ -57,6 +57,7 @@
 
   <portlet>
     <name>TabbedDashboardPortlet</name>
+    <as>tabbedDashboard</as>
     <module>
       <script>
         <name>eXo.webui.UITabbedDashboard</name>

@@ -17,8 +17,8 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.webui.UITabbedDashboard = {
-
+var uiTabbedDashboard = {
+  
   /**
    * A flag indicating that there is ongoing request to create new dashboard page. That helps
    * us to avoid concurrent dashboard creating requests coming from one user.
@@ -26,6 +26,18 @@ eXo.webui.UITabbedDashboard = {
    */
   inRequest : false,
 
+  init : function(id) 
+  {
+	  var tab = gj("#" + id);
+	  tab.find(".AddDashboard").on("click", function() {
+		  _module.showAddTabInput(this); 
+	  });
+	  tab.on("dblclick", ".SelectedTab > span", function() {
+		  var span = gj(this);
+		  _module.showEditLabelInput(this, span.attr("id"), span.text()); 
+	  });
+  },
+  
   renameTabLabel : function(input)
   {
     var newLabel = input.val();
@@ -135,4 +147,4 @@ eXo.webui.UITabbedDashboard = {
     input.focus();
   }
 };
-_module = eXo.webui.UITabbedDashboard;
+_module = uiTabbedDashboard;
