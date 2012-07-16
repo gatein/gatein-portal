@@ -333,8 +333,7 @@ public class UITree extends UIComponent
       }
       else if (nodeIcon.equals(colapseIcon))
       {
-         builder.append(" <div class=\"").append(nodeIcon).append(
-            "\" onclick=\"eXo.portal.UIPortalControl.collapseTree(this)").append("\">");
+         builder.append(" <div class=\"").append(nodeIcon).append("\">");
       }
       else {//Null item
          builder.append(" <div class=\"").append(nodeIcon).append("\" onclick=\"").append(actionLink).append("\">");

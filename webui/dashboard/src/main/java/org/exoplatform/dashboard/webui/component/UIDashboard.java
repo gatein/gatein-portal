@@ -146,7 +146,7 @@ public class UIDashboard extends UIContainer
          if (isShow)
          {
             event.getRequestContext().getJavascriptManager().require("SHARED/dashboard", "dashboard")
-               .addScripts("eXo.webui.UIDashboard.onLoad('" + windowId + "'," + uiDashboard.canEdit() + ");");
+               .addScripts("dashboard.UIDashboard.onLoad('" + windowId + "'," + uiDashboard.canEdit() + ");");
          }
       }
    }

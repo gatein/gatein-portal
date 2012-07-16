@@ -297,7 +297,7 @@
       <script>
          <name>eXo.webui.UIHorizontalTabs</name>
          <path>/javascript/eXo/webui/UIHorizontalTabs.js</path>
-      </script>
+      </script>      
       <depends>
          <module>common</module>
       </depends>
@@ -347,6 +347,10 @@
       <script>
          <name>eXo.webui.UIPortletForm</name>
          <path>/javascript/eXo/webui/UIPortletForm.js</path>
+      </script>
+      <script>
+         <name>eXo.webui.UITree</name>
+         <path>/javascript/eXo/webui/UITree.js</path>
       </script>
       <depends>
          <module>common</module>
@@ -399,6 +403,9 @@
       </depends>
       <depends>
          <module>base</module>
+      </depends>
+      <depends>
+         <module>webui</module>
       </depends>
       <depends>
          <module>jquery</module>

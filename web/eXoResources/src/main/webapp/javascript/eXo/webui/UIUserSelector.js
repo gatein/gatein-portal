@@ -16,7 +16,7 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-eXo.webui.UIUserSelector = {
+var uiUserSelector = {
   /**
    * Init information and event for items table
    * 
@@ -27,24 +27,38 @@ eXo.webui.UIUserSelector = {
   init : function(cont) {
     if (typeof (cont) == "string")
       cont = document.getElementById(cont);
-    var checkboxes = gj(cont).find("input.checkbox");
+    var jCont = gj(cont);
+    var checkboxes = jCont.find("input.checkbox");
     checkboxes.each(function(index)
     {
       if(index == 0)
       {
-        checkboxes[index].onclick = eXo.webui.UIUserSelector.checkAll;
+        checkboxes[index].onclick = _module.UIUserSelector.checkAll;
       }
       else
       {
-        checkboxes[index].onclick = eXo.webui.UIUserSelector.check;
+        checkboxes[index].onclick = _module.UIUserSelector.check;
       }
+    });
+            
+    jCont.find("input[name='Quick Search']").on("keypress", function(event) {    		
+    	if (_module.UIUserSelector.isEnterPress(event)) {
+    		gj.globalEval(gj(this).nextAll(".SearchIcon").attr("href"));
+    		return false;
+    	}
+    });
+    jCont.find("input[name='group']").on("keypress", function(event) {
+    	if (_module.UIUserSelector.isEnterPress(event)) {
+    		gj.globalEval(gj(this).nextAll(".SearchIcon").attr("href"));
+    		return false;
+    	}
     });
   },
   /**
    * Check or uncheck all items in table
    */
   checkAll : function() {
-    eXo.webui.UIUserSelector.checkAllItem(this);
+    _module.UIUserSelector.checkAllItem(this);
   },
   /**
    * Get all item in table list
@@ -59,7 +73,7 @@ eXo.webui.UIUserSelector = {
    * Check and uncheck first item
    */
   check : function() {
-    eXo.webui.UIUserSelector.checkItem(this);
+    _module.UIUserSelector.checkItem(this);
   },
   /**
    * check and uncheck all items in table
@@ -70,7 +84,7 @@ eXo.webui.UIUserSelector = {
    */
   checkAllItem : function(obj) {
     var checked = obj.checked;
-    var items = eXo.webui.UIUserSelector.getItems(obj);
+    var items = _module.UIUserSelector.getItems(obj);
     var len = items.length;
     for ( var i = 1; i < len; i++) {
       items[i].checked = checked;
@@ -83,7 +97,7 @@ eXo.webui.UIUserSelector = {
    *          obj selected object
    */
   checkItem : function(obj) {
-    var checkboxes = eXo.webui.UIUserSelector.getItems(obj);
+    var checkboxes = _module.UIUserSelector.getItems(obj);
     var len = checkboxes.length;
     var state = true;
     if (!obj.checked) {
@@ -120,7 +134,7 @@ eXo.webui.UIUserSelector = {
    */
   isEnterPress : function(evt) {
     var _e = evt || window.event;
-    var keynum = eXo.webui.UIUserSelector.getKeynum(_e);
+    var keynum = _module.UIUserSelector.getKeynum(_e);
     if (keynum == 13) {
       return true;
     }
@@ -134,4 +148,4 @@ eXo.webui.UIUserSelector = {
     return false;
   }
 }
-_module.UIUserSelector = eXo.webui.UIUserSelector;
+_module.UIUserSelector = uiUserSelector;

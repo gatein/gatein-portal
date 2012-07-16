@@ -59,3 +59,20 @@ window.ajaxPost = function(url, queryString, callback) {
 	  doRequest("POST", url, queryString, callback) ;
   });
 };
+
+eXo.env.server.createPortalURL = function(targetComponentId, actionName, useAjax, params) {
+  var url = eXo.env.server.portalURLTemplate.replace("{portal:componentId}", targetComponentId);
+  url = url.replace("{portal:action}", actionName);
+  
+  if(params != null) {
+  	var len = params.length ;
+    for(var i = 0 ; i < len ; i++) {
+      var paramName = encodeURIComponent(params[i].name);
+      var paramValue = encodeURIComponent(params[i].value);
+      url += "&" +  paramName + "=" + paramValue ;
+    }
+  }
+  if(useAjax) url += "&ajaxRequest=true" ;
+
+  return  url;
+};

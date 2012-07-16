@@ -361,7 +361,7 @@ public class UIPortalForm extends UIFormTabPane
          if (!uiForm.getId().equals("CreatePortal") && uiPortalApp.getModeState() != UIPortalApplication.NORMAL_MODE) 
          {
             rContext.getJavascriptManager().require("SHARED/portal", "portal")
-               .addScripts("eXo.portal.PortalComposer.toggleSaveButton();");
+               .addScripts("portal.PortalComposer.toggleSaveButton();");
          }
       }
    }

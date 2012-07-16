@@ -288,7 +288,7 @@ public class UIPageForm extends UIFormTabPane
 
          uiMaskWS.createEvent("Close", Phase.DECODE, pcontext).broadcast();
          pcontext.getJavascriptManager().require("SHARED/portal", "portal")
-            .addScripts("eXo.portal.PortalComposer.toggleSaveButton();");
+            .addScripts("portal.PortalComposer.toggleSaveButton();");
       }
 
       protected void findAllPortlet(List<UIPortlet> list, UIContainer uiContainer)

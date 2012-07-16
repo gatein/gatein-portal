@@ -17,14 +17,14 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.webui.UISiteMap = {
+var UISiteMap = {
 
   init : function(id)
   {
 
     gj("#" + id).on("click", "div.ExpandIcon,div.CollapseIcon", function (event)
     {
-      eXo.webui.UISiteMap.collapseExpand(this);
+      _module.collapseExpand(this);
 
       var input = gj(this).children("input");
       if(input.attr("name") == "collapseURL")
@@ -33,7 +33,7 @@ eXo.webui.UISiteMap = {
       }
       else if(input.attr("name") == "expandURL")
       {
-        eXo.webui.UISiteMap.updateTreeNode(this, input.val());
+        _module.updateTreeNode(this, input.val());
       }
       event.stopPropagation();
     });
@@ -125,7 +125,7 @@ eXo.webui.UISiteMap = {
         fragment += "</div><div class='ChildrenContainer' style='display: block'>";
         for (var i = 0; i < node.childs.length; i++)
         {
-          fragment += eXo.webui.UISiteMap.toHtml(node.childs[i], i == node.childs.length - 1);
+          fragment += _module.toHtml(node.childs[i], i == node.childs.length - 1);
         }
       }
       else
@@ -136,7 +136,7 @@ eXo.webui.UISiteMap = {
         fragment += "</div><div class='ChildrenContainer' style='display: none'>";
         for (var i = 0; i < node.childs.length; i++)
         {
-          fragment += eXo.webui.UISiteMap.toHtml(node.childs[i], i == node.childs.length - 1);
+          fragment += _module.toHtml(node.childs[i], i == node.childs.length - 1);
         }
       }
       fragment += "</div></div>";
@@ -150,4 +150,4 @@ eXo.webui.UISiteMap = {
   }
 }
 
-_module = eXo.webui.UISiteMap; 
+_module = UISiteMap;

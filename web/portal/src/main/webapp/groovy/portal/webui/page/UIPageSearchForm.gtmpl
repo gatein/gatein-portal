@@ -1,3 +1,14 @@
+<%
+	def rcontext = _ctx.getRequestContext();
+	def jsManager = rcontext.getJavascriptManager();	
+
+	String quickSearchlink = uicomponent.event("QuickSearch");							 	
+	def keyPressAct = "webui.UIPortalControl.onEnterPress(event, executeScript);";
+	
+	jsManager.require("SHARED/jquery", "gj").require("SHARED/webui", "webui")
+				.addScripts("var executeScript = gj('#$uiform.id a.SearchIcon').attr('href');")
+				.addScripts("gj('#$uiform.id .QuickSet').on('keypress', function(event) {$keyPressAct});");
+%>
 <div class="UIPageSearchForm">	
 	<div class="UIBarStyle">
 		<div class="BarStyle2">
@@ -5,13 +16,8 @@
 				<div class="RightBar">
 					<div class="MiddleBar">
 						<div class="UISearchContainer">
-							<%uiform.begin()%>
-							 <%String quickSearchlink = uicomponent.event("QuickSearch") ;%>
-							    <script type="text/javascript">
-									var executeScript = "<%=quickSearchlink%>";
-								</script>
-						      	<div class="QuickSet" onkeypress="eXo.portal.UIPortalControl.onKeyPress(event, executeScript, 13)">
-								
+							<%uiform.begin()%>							 
+						      	<div class="QuickSet">								
 								<% 
 									QuickSearchInputSet = uiform.getQuickSearchInputSet();
 									for(field in QuickSearchInputSet.getChildren()) {

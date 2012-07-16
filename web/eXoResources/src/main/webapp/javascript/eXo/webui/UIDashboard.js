@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.webui.UIDashboard = {
+var eXoDashBoard = {
 	
 	currentCol : null ,
 
@@ -253,10 +253,16 @@ eXo.webui.UIDashboard = {
     uiDashboard.css("overflow", "hidden");
     portletFrag.css("overflow", "hidden");
 
+    if (canEdit) {
+    	container.find(".AddIcon > a").off("click").on("click", function() {
+    		_module.UIDashboard.showSelectPopup(this);
+    		return false;
+    	});
+    }
     var selectPopup = container.prev("div");
-    selectPopup.find("a.CloseButton").eq(0).click(function()
-    {
-       _module.UIDashboard.hideSelectPopup(selectPopup);
+    selectPopup.find("a.CloseButton").eq(0).attr("onclick", null).click(function()
+    {    	
+      _module.UIDashboard.hideSelectPopup(selectPopup);
     });
 
     var gadgetCont = container.children("div.GadgetContainer").eq(0);
@@ -303,11 +309,27 @@ eXo.webui.UIDashboard = {
 	initPopup : function(popup) {
 		if(typeof(popup) == "string") popup = document.getElementById(popup);
 		if(!popup || popup.style.display == "none") return;
-    var dashboard = gj(popup).closest(".UIDashboard")[0];
+        var dashboard = gj(popup).closest(".UIDashboard")[0];
 		var deltaY = Math.ceil((dashboard.offsetHeight - popup.offsetHeight) / 2);
 		if (deltaY < 0) {
 			deltaY = 0;
 		}
+		var jpopup = gj(popup);
+		jpopup.find(".TopItemContainer, .BottomItemContainer").on({
+			"mouseover": function() {
+				_module.UIDashboard.enableContainer(this);
+			}, 
+			"mouseout": function() {
+				_module.UIDashboard.disableContainer(this);
+			},
+			"mousedown": function() {
+				webui.VerticalScrollManager.initScroll(this, gj(this).hasClass("TopItemContainer"), 10);
+			}
+		});
+		jpopup.find(".GadgetTab").on('click', function() {
+			_module.UIDashboard.onTabClick(this, 'NormalTab', 'SelectedTab');
+		});
+		
 		popup.style.top = gj(dashboard).offset().top + deltaY + "px";
 	},
 
@@ -331,7 +353,7 @@ eXo.webui.UIDashboard = {
     selectPopup.css({"visibility" : "hidden", "display" : "none"});
 
     var dashboardCont = selectPopup.next("div.UIDashboardContainer");
-    dashboardCont.find("a.AddIcon").eq(0).css("visibility", "visible");
+    dashboardCont.find(".AddIcon").eq(0).css("visibility", "visible");
 
     var portletID = dashboardCont.closest(".PORTLET-FRAGMENT").parent().attr("id");
 
@@ -443,4 +465,4 @@ eXo.webui.UIDashboard = {
   }
 };
 
-_module.UIDashboard = eXo.webui.UIDashboard;
+_module.UIDashboard = eXoDashBoard;

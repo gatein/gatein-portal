@@ -17,7 +17,7 @@
 			<div class="ContainerControlBarR">
 				<div class="ContainerControlBarM">
 					<div class="AddIcon" style="visibility: <%= uiDashboard.isShowSelectPopup()? "hidden" : "visible"; %>;">
-						<a href="#" onclick="eXo.webui.UIDashboard.showSelectPopup(this);return false;"><%=_ctx.appRes("UIDashboardContainer.label.openWorkspace");%></a>
+						<a href="#"><%=_ctx.appRes("UIDashboardContainer.label.openWorkspace");%></a>
 					</div>
 				</div>
 			</div>

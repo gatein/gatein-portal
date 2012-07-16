@@ -20,7 +20,7 @@
 /**
  * A class that manages a popup window
  */
-eXo.webui.UIPopupWindow = {
+var uiPopupWindow = {
   superClass : base.UIPopup,
   
   /**
@@ -335,4 +335,4 @@ eXo.webui.UIPopupWindow = {
   }
 };
 
-_module.UIPopupWindow = eXo.webui.UIPopupWindow;
+_module.UIPopupWindow = uiPopupWindow;

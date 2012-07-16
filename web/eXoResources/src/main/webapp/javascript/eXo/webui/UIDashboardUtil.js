@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.webui.UIDashboardUtil = {
+var uiDashboardUtil = {
 
 	findPosX : function(obj) {
 	  var curleft = 0, browser = base.Browser;
@@ -121,4 +121,4 @@ eXo.webui.UIDashboardUtil = {
 	}
 };
 
-_module.UIDashboardUtil = eXo.webui.UIDashboardUtil;
+_module.UIDashboardUtil = uiDashboardUtil;

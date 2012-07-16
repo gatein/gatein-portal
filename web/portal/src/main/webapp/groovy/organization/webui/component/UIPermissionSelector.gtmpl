@@ -7,7 +7,11 @@
 	def uiForm = uicomponent.getAncestorOfType(UIForm.class);
 	def permission =	uicomponent.getPermission();
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().require("SHARED/webui");
+
+	def popupId = uicomponent.getChild(UIPopupWindow.class).getId();
+	def btn = "#UIPermissionSelector .ActionButton";
+	rcontext.getJavascriptManager().require("SHARED/jquery", "gj").require("SHARED/webui", "webui")
+			  .addScripts("gj('$btn').eq(1).click(function() {webui.UIPopupWindow.show('$popupId', true)});");
 %>
 <div class="UIPermissionSelector" id="UIPermissionSelector">
 	<div class="PermissionInfoContainer">
@@ -55,7 +59,7 @@
 					<span onclick="<%=deletePermissionEvent%>" class="<%=css%>">
 						<a href="javascript:void(0);" class="DeletePermissionIcon"><%=_ctx.appRes(uicomponent.getId() + ".action.DeletePermission")%></a>
 					</span>
-					<span onclick="javascript: eXo.webui.UIPopupWindow.show('<%=uicomponent.getChild(UIPopupWindow.class).getId();%>', true);" class="ActionButton SimpleStyle">
+					<span class="ActionButton SimpleStyle">
 						<a href="javascript:void(0);" class="SelectPermissionIcon"><%=_ctx.appRes(uicomponent.getId() + ".action.SelectPermission")%></a>
 					</span>
 												

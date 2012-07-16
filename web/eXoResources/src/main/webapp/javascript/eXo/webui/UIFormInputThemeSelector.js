@@ -22,8 +22,21 @@
  * 
  * @author : dang.tung tungcnw@gmail.com
  */
-eXo.webui.UIFormInputThemeSelector = {
+var uiFormInputThemeSelector = {
 
+  initForm : function() {
+	  gj(".UIFormInputThemeSelector").find(".SetDefault").on("click", function() {
+		  _module.UIFormInputThemeSelector.setDefaultTheme(this,'DefaultTheme');
+	  });	  
+  },
+  
+  initSelector : function() {
+	  gj(".UIFormInputThemeSelector").find(".UIThemeSelector").parent().on("click", function() {
+		  var theme = gj(this).children("div").attr("class").replace("UIThemeSelector ", "");
+		  _module.UIFormInputThemeSelector.showThemeSelected(this, theme); 
+	  });
+  },
+  
   showThemeSelected : function(obj, param) {
     var jqObj = gj(obj);
     var itemListContainer = jqObj.parent().closest(".ItemListContainer");
@@ -44,4 +57,4 @@ eXo.webui.UIFormInputThemeSelector = {
   }
 };
 
-_module.UIFormInputThemeSelector = eXo.webui.UIFormInputThemeSelector;
+_module.UIFormInputThemeSelector = uiFormInputThemeSelector;

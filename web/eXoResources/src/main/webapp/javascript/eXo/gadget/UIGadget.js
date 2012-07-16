@@ -16,7 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-eXo.gadget.UIGadget = {
+var eXoGadget = {
 
   /**
    * Create a new Gadget
@@ -37,7 +37,7 @@ eXo.gadget.UIGadget = {
 	require([gadgets.pubsubURL, 'SHARED/shindigPatch'], 
 		function() {
 			//Make sure that 2 modules in shindig-patch has been loaded already
-			require(["eXo.gadget.Gadgets", "eXo.gadget.ExoBasedUserPrefStore"], function() {eXo.gadget.UIGadget.createCallback.apply(window, args)});
+			require(["eXo.gadget.Gadgets", "eXo.gadget.ExoBasedUserPrefStore"], function() {_module.UIGadget.createCallback.apply(window, args)});
 	});
   },
 
@@ -76,17 +76,11 @@ eXo.gadget.UIGadget = {
     gadgets.container.renderGadget(gadget);
     var uiGadget = gj(gadgetBlock).closest(".UIGadget");
     if (uiGadget.length > 0)
-    {
-      var isDesktop = uiGadget.parent().hasClass("UIPageDesktop");
-      if (isDesktop)
+    {      
+      if (metadata && metadata.modulePrefs.title != null && metadata.modulePrefs.title.length > 0)
       {
-        uiGadget.css("position", "absolute");
+    	  uiGadget.find(".GadgetTitle").html(metadata.modulePrefs.title);
       }
-      else
-      {
-        uiGadget.css("width", "auto");
-      }
-      _module.UIGadget.init(uiGadget[0], isDesktop, gadget.metadata);
     }
     //setup for pubsub mechanism
     gadgets.pubsubrouter.init(function(id) {return url;}, {});
@@ -98,8 +92,11 @@ eXo.gadget.UIGadget = {
    * @param {boolean} inDesktop use to realize UIDesktopPage or no
    * @param {String} metadata metadata of gadget
    */
-  init : function(uiGadget, inDesktop, metadata)
+  init : function(uiGadget, confirmDeleteMsg)
   {
+    _module.UIGadget.confirmDeleteGadget = confirmDeleteMsg;
+
+    if (typeof (uiGadget) == "string") uiGadget = document.getElementById(uiGadget);
     var gadget = gj(uiGadget);
     var portletFrag = gadget.closest(".PORTLET-FRAGMENT");
 
@@ -122,15 +119,27 @@ eXo.gadget.UIGadget = {
       var gadgetControl = gadget.find("div.GadgetControl").eq(0);
       var gadgetTitle = gadgetControl.find("span.GadgetTitle").eq(0);
       gadgetControl.css("display", "block");
-      gadgetTitle.css("display", "block");
-      if (metadata && metadata.modulePrefs.title != null && metadata.modulePrefs.title.length > 0)
-      {
-        gadgetTitle.html(metadata.modulePrefs.title);
-      }
+      gadgetTitle.css("display", "block");      
     }
 
-    if (inDesktop)
-    {
+    gadget.find(".CloseGadget").on("click", function() {
+    	_module.UIGadget.deleteGadget(this);
+    });
+    gadget.find(".MaximizeAction").on("click", function() {
+    	_module.UIGadget.maximizeGadget(this);
+    });
+    gadget.find(".MinimizeAction").on("click", function() {
+    	_module.UIGadget.minimizeGadget(this);
+    });
+    gadget.find(".EditGadget").on("click", function() {
+    	_module.UIGadget.editGadget(gadget.attr("id"));
+    });
+    gadget.find(".CloseGadget, .MaximizeAction, .MinimizeAction, .EditGadget").on("mousedown", false);
+    
+    if (!gadget.parent().hasClass("UIPageDesktop")) {
+      gadget.css("width", "auto");    	
+    } else {
+      gadget.css("position", "absolute");
       var dragArea = gadget.find("div.GadgetDragHandleArea")[0];
       if (gadget.css("z-index") < 0)
       {
@@ -390,4 +399,4 @@ eXo.gadget.UIGadget = {
     base.Browser.fillUpFreeSpace(portletFrag[0]);
   }
 };
-_module.UIGadget = eXo.gadget.UIGadget;
+_module.UIGadget = eXoGadget;

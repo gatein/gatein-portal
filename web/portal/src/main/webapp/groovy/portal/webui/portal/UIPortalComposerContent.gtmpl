@@ -1,20 +1,19 @@
 <%	
 	import org.exoplatform.portal.webui.portal.UIApplicationList;
 	import org.exoplatform.portal.webui.portal.UIContainerList;
-	
+		
 	def rcontext = _ctx.getRequestContext(); 
 	def jsManager = rcontext.getJavascriptManager();
-	jsManager.require("SHARED/webui");
+	
+	String selTabId = uicomponent.getSelectedTabId(); 
+	jsManager.require("SHARED/webui").require("SHARED/portal", "portal")
+				.addScripts("portal.PortalComposer.initComposerContent('$uicomponent.id', '$selTabId', webui);");
 %>
 
 <div class="UITabPane" id="$uicomponent.id">
 	<div class="UIHorizontalTabs">
 		<div class="TabsContainer">
-			<%
-				String url = uicomponent.url("SelectTab"); 
-				String selTabId = uicomponent.getSelectedTabId(); 
-				jsManager.require("SHARED/portal", "portal").addScripts("portal.PortalComposer.showTab('" + selTabId + "');");
-				
+			<%			
 				UIApplicationList appList = uicomponent.getChild(UIApplicationList.class);
 				UIContainerList contList = uicomponent.getChild(UIContainerList.class);
 			%>
@@ -23,10 +22,9 @@
 					<div class="LeftTab">
 						<div class="RightTab">
 							<% String appLink = "ajaxAsyncGetRequest('" + uicomponent.url("SelectTab",appList.getId()) + "', true)" %>								
-							<div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this, '${appList.getId()}', '$url');
-																eXo.portal.PortalComposer.showTab('${appList.getId()}');
-																$appLink;if(eXo.portal.portalMode) eXo.portal.portalMode -= 2;">
+							<div class="MiddleTab">
 								<%=_ctx.appRes("UITabPane.title." + appList.getId());%>
+								<input type="hidden" name="${appList.getId()}" value="$appLink"/>
 							</div>
 						</div>
 					</div>
@@ -37,10 +35,9 @@
 					<div class="LeftTab">
 						<div class="RightTab">
 							<% String contLink = "ajaxAsyncGetRequest('" + uicomponent.url("SelectTab",contList.getId()) + "', true)" %>								
-							<div class="MiddleTab" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this, '${contList.getId()}', '$url');
-																eXo.portal.PortalComposer.showTab('${contList.getId()}');
-																$contLink;if(eXo.portal.portalMode) eXo.portal.portalMode += 2;">
+							<div class="MiddleTab">
 								<%=_ctx.appRes("UITabPane.title." + contList.getId());%>
+								<input type="hidden" name="${contList.getId()}" value="$contLink"/>
 							</div>
 						</div>
 					</div>

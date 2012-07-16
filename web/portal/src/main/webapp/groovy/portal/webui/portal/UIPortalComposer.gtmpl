@@ -3,11 +3,11 @@
 	def rcontext = _ctx.getRequestContext(); 
 	
 	boolean isEditted = uicomponent.isEditted; 
+	def portalMode = uicomponent.getPortalMode();
 	rcontext.getJavascriptManager()
     .require("SHARED/webui", "webui").addScripts("webui.UIPopupWindow.show('$popupId');")
     .require("SHARED/base", "base").addScripts("base.UIPopup.setAlign('$popupId', 2, 5, 5);")
-    .require("SHARED/portal", "portal").addScripts("portal.PortalComposer.contentModified = " + uicomponent.isEditted + ";")
-    .addScripts("portal.PortalComposer.init('$uicomponent.id', 200, 200);");
+    .require("SHARED/portal", "portal").addScripts("portal.PortalComposer.init('$uicomponent.id', 200, 200, $isEditted, $portalMode);");
 %>
 <div class="UIPopupWindow UIDragObject UIPortalComposer" id="$uicomponent.id" style="width: 320px; display: block;">
 	<div class="OverflowContainer ClearFix">
@@ -41,7 +41,3 @@
 	</div>
 	<span class="ResizeButton"></span>
 </div>
-<script language="javascript">
-	eXo.portal.portalMode = <%=uicomponent.getPortalMode();%>;
-	eXo.portal.hasEditted = <%=uicomponent.isEditted;%>;	
-</script>

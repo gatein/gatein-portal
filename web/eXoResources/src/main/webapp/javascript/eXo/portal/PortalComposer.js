@@ -17,16 +17,36 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.portal.PortalComposer = {
+var portalComposer = {
 
-  contentModified : false,
+  isEditted : false,
 
-  init : function(id, width, height)
+  init : function(id, width, height, isEditted, portalMode)
   {
+	eXo.portal.portalMode = portalMode;
+	eXo.portal.hasEditted = isEditted;
+		
     gj("div#" + id).attr("exo:minWidth", width).attr("exo:minHeight", height).find("div.OverflowContainer > span").eq(0).on("click", function()
     {
-      eXo.portal.PortalComposer.toggle(gj(this));
+      _module.PortalComposer.toggle(gj(this));
     });
+  },
+  
+  initComposerContent : function(id, selTabId, webui) 
+  {
+	  _module.PortalComposer.showTab(selTabId);
+	  
+	  var tabs = gj("#" + id + " .MiddleTab");
+	  tabs.each(function(index) {
+		  gj(this).on("click", function() {
+			  webui.UIHorizontalTabs.changeTabForUITabPane(this);
+			  var hiddenInput = gj(this).children("input");		  
+			  _module.PortalComposer.showTab(hiddenInput.attr("name"));
+			  gj.globalEval(hiddenInput.attr("value"));
+			  
+			  if(eXo.portal.portalMode) eXo.portal.portalMode += (index==0 ? -1 : 1)*2;  		  
+		  });
+	  });
   },
 
   toggle : function(icon)
@@ -70,9 +90,9 @@ eXo.portal.PortalComposer = {
   toggleSaveButton : function()
   {
     //Avoid execute method body multiple times
-    if(!this.contentModified)
+    if(!this.isEditted)
     {
-      this.contentModified = true;
+      this.isEditted = true;
       var compWindow = gj("#UIWorkingWorkspace").find("div.UIPortalComposer").eq(0);
       compWindow.find("a.SaveButton").attr("class", "EdittedSaveButton");
 
@@ -81,4 +101,4 @@ eXo.portal.PortalComposer = {
   }
 };
 
-_module.PortalComposer = eXo.portal.PortalComposer;
+_module.PortalComposer = portalComposer;
