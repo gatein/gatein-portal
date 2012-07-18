@@ -8,11 +8,7 @@
       <description>Site Redirect Portlet</description>
       <portlet-name>SiteRedirectPortlet</portlet-name>
       <display-name>Site Redirect Portlet</display-name>
-      <portlet-class>javax.portlet.faces.GenericFacesPortlet</portlet-class>
-      <init-param>
-         <name>javax.portlet.faces.defaultViewId.view</name>
-         <value>/jsf/redirect.jsp</value>
-      </init-param>
+      <portlet-class>org.gatein.portlet.redirect.RedirectPortlet</portlet-class>
 
       <supports>
          <mime-type>text/html</mime-type>

@@ -57,31 +57,6 @@
         <artifactId>exo.kernel.component.common</artifactId>
         <scope>provided</scope>
       </dependency>
-
-      <!-- Portlet bridge -->
-      <dependency>
-         <groupId>org.jboss.portletbridge</groupId>
-         <artifactId>portletbridge-api</artifactId>
-         <version>2.3.1.Final</version>
-      </dependency>
-
-      <dependency>
-         <groupId>org.jboss.portletbridge</groupId>
-         <artifactId>portletbridge-impl</artifactId>
-         <version>2.3.1.Final</version>
-      </dependency>
-      <dependency>
-         <groupId>javax.faces</groupId>
-         <artifactId>jsf-api</artifactId>
-         <version>1.2_13</version>
-         <scope>provided</scope> 
-      </dependency>
-      <dependency>
-         <groupId>javax.faces</groupId>
-         <artifactId>jsf-impl</artifactId>
-         <version>1.2_13</version>
-         <scope>provided</scope>
-      </dependency>
    </dependencies>
 
    <repositories>

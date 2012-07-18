@@ -68,7 +68,9 @@
       <copy tofile="${jbossas.target.dir}/gatein/deployments/gatein.ear/web.war" >
          <fileset refid="org.exoplatform.portal:exo.portal.portlet.web:war"/>
       </copy>
-
+      <copy tofile="${jbossas.target.dir}/gatein/deployments/gatein.ear/redirect-portlet.war">
+         <fileset refid="org.gatein.portal.portlet:redirect:war"/>
+      </copy>
 
       <!--copy tofile="${jbossas.target.dir}/gatein/deployments/gatein-sample-portal.ear" >
          <fileset refid="org.exoplatform.portal:gatein-sample-portal:ear"/>
