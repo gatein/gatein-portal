@@ -25,111 +25,86 @@ package org.gatein.web.redirect;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
+import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.mop.SiteKey;
 import org.gatein.web.redirect.api.RedirectKey;
 import org.gatein.web.redirect.api.RedirectType;
 
 /**
- * Handles the creation and management of cookies which store the redirect preferences.
- * 
- * TODO:
- * - store the cookie values in a hash instead of a easily readable and modifiable format.
- * - include some sort of incremental identifier which can be used to invalidate older cookies.
- * - store multiple redirects within one cookie instead of a cookie per site redirect.
- * 
- * - Write tests for this class
- * 
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class RedirectCookie
-{  
-   private static final String COOKIE_PREFIX = "gtn.web";
-   private static final String COOKIE_ORIGIN_PREFIX = COOKIE_PREFIX + ".origin.";
-   private static final String COOKIE_REDIRECT_PREFIX = COOKIE_PREFIX + ".redirect.";
-   private static final String COOKIE_NOREDIRECT_PREFIX = COOKIE_PREFIX + ".noredirect";
+public class RedirectCookieService
+{
+   protected static final String DEFAULT_PREFIX = "gtn.site";
+   protected static final String NAME_PREFERENCE_FLAG = ".preference";
+   protected static final int DEFAULT_MAXAGE = 2600000; //Approx 1 month
+
    
-   protected String originSite;
-   protected RedirectKey redirect;
+   // Redirection cookie settings
+   protected Integer maxAge;
+   protected String comment;
+   protected String path;
+   protected Boolean secure;
    
-   //Default to Integer.MAX_VALUE
-   private int maxAge = Integer.MAX_VALUE;
-   
-   
-   //Default cookie comment
-   //TODO: i18n this ?
-   private String comment = "Cookie to store site preference.";
-   
-   private String path;
-   
-   private Boolean secure;
-   
-   public RedirectCookie(String originSite, RedirectKey redirect)
+   protected String cookiePrefix;
+
+   public RedirectCookieService(InitParams params)
    {
-      if (originSite != null && redirect != null)
+      ValueParam cookieMaxAgeValueParam = params.getValueParam("redirect.cookie.maxage");
+      if (cookieMaxAgeValueParam != null)
       {
-         
-         this.originSite = originSite;
-         this.redirect = redirect;
+         this.maxAge = Integer.parseInt(cookieMaxAgeValueParam.getValue());
       }
       else
       {
-         throw new IllegalArgumentException("RedirectCookie requires that both the origin site [" + originSite + "] and the redirect site [" + redirect + "] be not null.");
+         this.maxAge = DEFAULT_MAXAGE;
+      }
+      
+      ValueParam cookieCommentValueParam = params.getValueParam("redirect.cookie.comment");
+      if (cookieCommentValueParam != null)
+      {
+         this.comment = cookieCommentValueParam.getValue();
+      }
+      
+      ValueParam cookiePathValueParam = params.getValueParam("redirect.cookie.path");
+      if (cookiePathValueParam != null)
+      {
+         this.path = cookiePathValueParam.getValue();
+      }
+      
+      ValueParam cookieSecureValueParam = params.getValueParam("redirect.cookie.secure");
+      if (cookieSecureValueParam != null)
+      {
+         this.secure = Boolean.parseBoolean(cookieSecureValueParam.getValue());
+      }
+      
+      ValueParam cookiePrefixValueParam = params.getValueParam("redirect.cookie.prefix");
+      if (cookiePrefixValueParam != null)
+      {
+         cookiePrefix = cookiePrefixValueParam.getValue();
+      }
+      else
+      {
+         cookiePrefix = DEFAULT_PREFIX;
       }
    }
    
-   public void setMaxAge(int maxAge)
+   public Cookie createCookie(String originSite, RedirectKey redirect, String cookiePath)
    {
-      this.maxAge = maxAge;
-   }
-   
-   public int getMaxAge()
-   {
-      return maxAge;
-   }
-   
-   public void setComment(String comment)
-   {
-      this.comment = comment;
-   }
-   
-   public String getComment()
-   {
-      return comment;
-   }
-   
-   public void setPath(String path)
-   {
-      this.path = path;
-   }
-   
-   public String getCookiePath()
-   {
-      return path;
-   }
-   
-   public void setSecure(Boolean secure)
-   {
-      this.secure = secure;
-   }
-   
-   public Boolean getSecure()
-   {
-      return secure;
-   }
-   
-   public Cookie toCookie ()
-   {     
-         String originName = COOKIE_ORIGIN_PREFIX + originSite;
+      if (originSite != null && redirect != null)
+      {
+         String originName = cookiePrefix + NAME_PREFERENCE_FLAG;
          
          String redirectValue;
          if (redirect.getType() == RedirectType.REDIRECT)
          {
-            redirectValue = COOKIE_REDIRECT_PREFIX  + redirect.getRedirect();
+            redirectValue = redirect.getRedirect();
          }
          else
          {
-            redirectValue = COOKIE_NOREDIRECT_PREFIX;
+            redirectValue = originSite;
          }
          
          Cookie cookie = new Cookie(originName, redirectValue);
@@ -138,10 +113,14 @@ public class RedirectCookie
          {
             cookie.setComment(comment);
          }
-
+         
          if (path != null)
          {
             cookie.setPath(path);
+         }
+         else
+         {
+            cookie.setPath(cookiePath);
          }
          
          if (secure != null)
@@ -152,40 +131,40 @@ public class RedirectCookie
          cookie.setMaxAge(maxAge);
 
          return cookie;
+      }
+      else
+      {
+         throw new IllegalArgumentException("RedirectCookie requires that both the origin site [" + originSite + "] and the redirect site [" + redirect + "] be not null.");
+      }
+
    }
    
-   public static RedirectKey getRedirect(SiteKey origin, HttpServletRequest request)
+   public RedirectKey getRedirect(SiteKey origin, HttpServletRequest request)
    {
       if (request.getCookies() != null)
       {
-         String cookieName = COOKIE_ORIGIN_PREFIX + origin.getName();
-
          for (Cookie cookie : request.getCookies())
          {
-            if (cookie.getName().equals(cookieName))
+            if (cookie.getName().equals(cookiePrefix + NAME_PREFERENCE_FLAG))
             {
                String cookieValue = cookie.getValue();
-               if (cookieValue.startsWith(COOKIE_PREFIX))
+               
+               if (cookieValue.equals(origin.getName()))
                {
-                  if (cookieValue.startsWith(COOKIE_REDIRECT_PREFIX))
+                  return RedirectKey.noRedirect();
+               }
+               else
+               {
+                  if (cookieValue != null && !cookieValue.isEmpty())
                   {
-                     String redirectSiteName = cookieValue.substring((COOKIE_REDIRECT_PREFIX).length());
-                     if (redirectSiteName != null && !redirectSiteName.isEmpty())
-                     {
-                        return RedirectKey.redirect(redirectSiteName);
-                     }
-                  }
-                  else
-                  {
-                     return RedirectKey.noRedirect();
+                     return RedirectKey.redirect(cookieValue);
                   }
                }
-               break;
+              break;
             }
          }
       }
       return null;
    }
-
 }
 

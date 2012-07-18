@@ -28,9 +28,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.container.xml.InitParams;
@@ -66,12 +68,6 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
    // The path to the device detection page
    protected String browserDetectionPath;
    
-   // Redirection cookie settings
-   protected Integer cookieMaxAge;
-   protected String cookieComment;
-   protected String cookiePath = "/portal";
-   protected Boolean cookieSecure;
-   
    // The service to perform the redirection logic
    protected SiteRedirectService deviceRedirectionService;
    
@@ -96,30 +92,6 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
       if (browserDectionectUrl != null)
       {
          browserDetectionPath = browserDectionectUrl.getValue();
-      }
-      
-      ValueParam cookieMaxAgeValueParam = params.getValueParam("redirect.cookie.maxage");
-      if (cookieMaxAgeValueParam != null)
-      {
-         this.cookieMaxAge = Integer.parseInt(cookieMaxAgeValueParam.getValue());
-      }
-      
-      ValueParam cookieCommentValueParam = params.getValueParam("redirect.cookie.comment");
-      if (cookieCommentValueParam != null)
-      {
-         this.cookieComment = cookieCommentValueParam.getValue();
-      }
-      
-      ValueParam cookiePathValueParam = params.getValueParam("redirect.cookie.path");
-      if (cookiePathValueParam != null)
-      {
-         this.cookiePath = cookiePathValueParam.getValue();
-      }
-      
-      ValueParam cookieSecureValueParam = params.getValueParam("redirect.cookie.secure");
-      if (cookieSecureValueParam != null)
-      {
-         this.cookieSecure = Boolean.parseBoolean(cookieSecureValueParam.getValue());
       }
    }
 
@@ -166,7 +138,7 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
       
       
 
-      RedirectKey redirectSite = getRedirect(originSite, request);
+      RedirectKey redirectSite = getRedirect(originSite, request, context);
       if (redirectSite != null) // a redirect has already been set, use it
       {
          // do the redirect
@@ -194,7 +166,7 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
          if (redirectSite == null || redirectSite.getType() == RedirectType.NOREDIRECT)
          {
             log.debug("Redirect returned is null or NO_REDIRECT_DETECTED. Setting NO_REDIRECT for this user");
-            setRedirect(originSite, RedirectKey.noRedirect(), response);
+            setRedirect(originSite, RedirectKey.noRedirect(), request, response, context);
             return false;
          }
          else if (redirectSite.getType() == RedirectType.NEEDDEVICEINFO)
@@ -210,7 +182,7 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
             else
             {
                log.warn("DeviceDetectionService retruned NEED_BROWSER_DETECTION but the browser has already attempted dection. Setting no redirect.");
-               setRedirect(originSite, RedirectKey.noRedirect(), response);
+               setRedirect(originSite, RedirectKey.noRedirect(), request, response, context);
                return false;
             }
          }
@@ -228,53 +200,47 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
       }
    }
 
-   protected RedirectKey getRedirect(SiteKey origin, HttpServletRequest request)
+   protected RedirectKey getRedirect(SiteKey origin, HttpServletRequest request, ControllerContext context)
    {
-         return RedirectCookie.getRedirect(origin, request);
+         ExoContainer container = ExoContainerContext.getCurrentContainer();
+         RedirectCookieService redirectCookieService = (RedirectCookieService)container.getComponentInstanceOfType(RedirectCookieService.class);
+         return redirectCookieService.getRedirect(origin, request);
    }
    
-   protected void setRedirect(SiteKey origin, RedirectKey redirect, HttpServletResponse response)
+   protected void setRedirect(SiteKey origin, RedirectKey redirect, HttpServletRequest request, HttpServletResponse response, ControllerContext context)
    {    
-        RedirectCookie redirectCookie = new RedirectCookie(origin.getName(), redirect);
-        
-        if (cookieMaxAge != null)
-        {
-           redirectCookie.setMaxAge(cookieMaxAge);
-        }
-        
-        if (cookieComment != null)
-        {
-           redirectCookie.setComment(cookieComment);
-        }
-        
-        if (cookiePath != null)
-        {
-           redirectCookie.setPath(cookiePath);
-        }
-        
-        response.addCookie(redirectCookie.toCookie());
-        
-        if (redirect.getType() != RedirectType.NOREDIRECT && redirect.getRedirect() != null)
-        {
-           RedirectCookie removeRedirectCookie = new RedirectCookie(redirect.getRedirect(), RedirectKey.noRedirect());
-           
-           if (cookieMaxAge != null)
-           {
-              removeRedirectCookie.setMaxAge(cookieMaxAge);
-           }
-           
-           if (cookieComment != null)
-           {
-              removeRedirectCookie.setComment(cookieComment);
-           }
-           
-           if (cookiePath != null)
-           {
-              removeRedirectCookie.setPath(cookiePath);
-           }
-           
-           response.addCookie(removeRedirectCookie.toCookie());
-        }
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      RedirectCookieService redirectCookieService = (RedirectCookieService)container.getComponentInstanceOfType(RedirectCookieService.class);
+
+      //Determine the URL for the site so we can use this for the cookie path
+      PortalURLContext urlContext = new PortalURLContext(context, SiteKey.portal(origin.getName()));
+      NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
+      String path = url.setResource(new NavigationResource(SiteType.PORTAL, origin.getName(), "")).toString();
+      //We have to check for the '/' at the end of the path since the portal could be accessed under /portal/classic or /portal/classic/
+      //Removing the tailing slash means both urls will see the cookie.
+      if (path.endsWith("/"))
+      {
+         path = path.substring(0, path.length()-1);
+      }
+
+      Cookie redirectCookie = redirectCookieService.createCookie(origin.getName(), redirect, path);
+      response.addCookie(redirectCookie);
+
+      // In order to make sure we don't create an infinite redirect loop, we should update the cookie for the redirect site to specify that site is the prefered site and no redirect should be performed
+      if (redirect.getType() != RedirectType.NOREDIRECT && redirect.getRedirect() != null)
+      {
+         //Determine the URL for the redirect site so we can use this for the cookie path
+         String redirectPath = url.setResource(new NavigationResource(SiteType.PORTAL, redirect.getRedirect(), "")).toString();
+         //We have to check for the '/' at the end of the path since the portal could be accessed under /portal/classic or /portal/classic/
+         //Removing the tailing slash means both urls will see the cookie.
+         if (redirectPath.endsWith("/"))
+         {
+            redirectPath = redirectPath.substring(0, redirectPath.length()-1);
+         }
+
+         Cookie removeRedirectCookie = redirectCookieService.createCookie(redirect.getRedirect(), RedirectKey.noRedirect(),redirectPath);
+         response.addCookie(removeRedirectCookie);
+      }
    }
 
    protected Map<String, String> getDeviceProperties(HttpServletRequest request)
@@ -322,7 +288,7 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
          {
             log.debug("RedirectPath set to : " + redirectLocation);
 
-            setRedirect(origin, redirect, context.getResponse());
+            setRedirect(origin, redirect, context.getRequest(), context.getResponse(), context);
 
             //create the new redirect url
             SiteKey siteKey = new SiteKey(SiteType.PORTAL, redirect.getRedirect());
