@@ -30,8 +30,8 @@
       <version>3.4.0-GA-SNAPSHOT</version>
    </parent>
 
-   <groupId>org.jboss.gatein</groupId>
-   <artifactId>gatein.ui.tests.selenium</artifactId>
+   <groupId>org.gatein.portal</groupId>
+   <artifactId>portal-testsuite-selenium-ui-tests</artifactId>
    <version>3.4.0-GA-SNAPSHOT</version>
    <packaging>jar</packaging>
    <name>Selenium UI Tests for GateIn</name>
