@@ -2,16 +2,16 @@
 	import org.exoplatform.web.application.JavascriptManager;
 	import org.exoplatform.sample.webui.component.UISampleContent;
 	
+	uicomponent.renderChildren();
+  
 	def rContext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rContext.getJavascriptManager();
-	jsmanager.require("SHARED/portal");			
- %>
+  String uuid = jsmanager.generateUUID();
+  jsmanager.addJavascript("eXo.initWebUISamplePortlet('$uuid')");
+%>
 
-	
-	<%uicomponent.renderChildren(); %>
-
-<div class="SampleWebUI" style="width: 260px;">
-	<div class="CollapseIcon ClearFix" onclick="eXo.webui.UISampleTOC.collapseExpand(this);">
+<div id="$uuid" class="SampleWebUI" style="width: 260px;">
+	<div class="CollapseIcon ClearFix">
 		<a class='NodeIcon DefaultPageIcon' href='javascript:void(0);'>WebUI Demo</a>
 	</div>
 	<div class="ChildrenContainer">
@@ -36,7 +36,7 @@
 		<div class="Node ClearFix">
 			<div class="">
 				<div class="ClearFix">
-					<div class="CollapseIcon ClearFix" onclick="eXo.webui.UISampleTOC.collapseExpand(this);">
+					<div class="CollapseIcon ClearFix">
 						<a class="NodeIcon DefaultPageIcon" href=#>UIPopup</a><br>
 					</div>
 					<div class="ChildrenContainer" style="display:block;">
