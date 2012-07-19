@@ -86,7 +86,7 @@ public class TestJavascriptManager extends AbstractWebResourceTest
       RequireJS require = jsManager.require("SHARED/jquery", "gj");
       require.addScripts("gj('body').css('color : red');");
 
-      String expected = "require([\"SHARED/base\",\"SHARED/jquery\"],function(base,gj) {\nbase.Browser.onLoad();gj('body').css('color : red');\n});";
+      String expected = "require([\"SHARED/base\",\"SHARED/jquery\"],function(base,gj) {\ngj('body').css('color : red');\nbase.Browser.onLoad();});";
       assertEquals(expected, require.toString());
    }
    
@@ -96,7 +96,7 @@ public class TestJavascriptManager extends AbstractWebResourceTest
       require.require("SHARED/jquery", "gj");
 
       //Any module without alias will be pushed to the end of dependency list
-      String expected = "require([\"SHARED/base\",\"SHARED/jquery\",\"SHARED/webui\"],function(base,gj) {\nbase.Browser.onLoad();\n});";
+      String expected = "require([\"SHARED/base\",\"SHARED/jquery\",\"SHARED/webui\"],function(base,gj) {\n\nbase.Browser.onLoad();});";
       assertEquals(expected, require.toString());
    }
 }

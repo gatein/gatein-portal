@@ -5,14 +5,13 @@
 	import org.exoplatform.web.url.PortalURL;
 	
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().getRequireJS()
+	rcontext.getJavascriptManager().require("PORTLET/dashboard/TabbedDashboardPortlet", "tabbedDashboard")
 			  .addScripts("tabbedDashboard.init('$uicomponent.id');");
 	
 	def nodes = uicomponent.getSameSiblingsNode();
 	def tabNbs = nodes.size();
 	
 	PortalURL nodeURL = nodeurl();
-
 	def selectedNode = Util.getUIPortal().getSelectedUserNode();
 %>
 <div id="$uicomponent.id" class="UITabPaneDashboard UIHorizontalTabs ClearFix">
