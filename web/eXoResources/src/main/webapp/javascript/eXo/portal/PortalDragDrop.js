@@ -33,6 +33,14 @@ eXo.portal.PortalDragDrop = {
 		return;
 	  }
 		
+      gj(".UIPageBody .DragControlArea").off("mouseover").on("mouseover", function() {
+        if(eXo.portal.portalMode == 1 || eXo.portal.portalMode == 2) {
+          this.style.cursor ='move';
+        } else {
+          this.style.cursor ='default';    		  
+        }
+      });
+      
 	  var browser = base.Browser;
 	  var DragDrop = common.DragDrop;
 	  var PortalDragDrop = _module.PortalDragDrop;

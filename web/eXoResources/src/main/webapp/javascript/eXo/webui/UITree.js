@@ -21,7 +21,7 @@ var uiTree = {
 		var parent = gj('#' + id);
 		if (!parent.data("collapseRegistered")) {
 			parent.on('click', '.' + colapseClass, function() {
-				webui.UIPortalControl.collapseTree(this)
+				webui.UIPortalControl.collapseTree(this);
 			});
 			if (disableContextMenu) {
 				_module.UIRightClickPopupMenu.disableContextMenu(id);							

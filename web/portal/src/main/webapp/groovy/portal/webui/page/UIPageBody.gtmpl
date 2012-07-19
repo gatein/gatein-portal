@@ -15,7 +15,7 @@
 <div class="UIPageBody" id="${uicomponent.id}">		
 	<div class="UIComponent UIComponentBlock">
 	<%if(portalMode == UIPortalApplication.APP_BLOCK_EDIT_MODE || portalMode == UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE) {%>
-		<div class="LAYOUT-BLOCK LAYOUT-PAGEBODY DragControlArea PageLayoutDecorator" onmouseover="if(eXo.portal.portalMode == <%=UIPortalApplication.APP_BLOCK_EDIT_MODE%>){this.style.cursor ='move';} else this.style.cursor ='default';">
+		<div class="LAYOUT-BLOCK LAYOUT-PAGEBODY DragControlArea PageLayoutDecorator">
 				<%/*Begin Top Decorator*/%>
 				<div class="LeftPage">
 					<div class="RightPage">
