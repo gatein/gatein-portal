@@ -120,9 +120,8 @@ eXo.webui.UIUpload = {
           1000);
     }
 
-    var response;
     try {
-      eval("response = " + responseText);
+      eval("var response = " + responseText);
     } catch (err) {
       return;
     }
