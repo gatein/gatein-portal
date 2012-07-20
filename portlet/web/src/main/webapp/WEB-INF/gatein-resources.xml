@@ -75,18 +75,15 @@
 
    <portlet>
       <name>SiteMapPortlet</name>
-      <module>
+      <scripts>
          <script>
             <name>eXo.webui.UISiteMap</name>
             <path>/javascript/eXo/webui/UISiteMap.js</path>
          </script>
          <depends>
-            <module>base</module>
+            <scripts>bootstrap</scripts>
          </depends>
-         <depends>
-            <module>jquery</module>
-         </depends>
-      </module>
+      </scripts>
    </portlet>
 
    <!-- The navigation portlet declaration -->
