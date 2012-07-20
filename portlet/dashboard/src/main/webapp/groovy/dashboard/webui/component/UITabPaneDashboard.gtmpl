@@ -5,8 +5,7 @@
 	import org.exoplatform.web.url.PortalURL;
 	
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().require("PORTLET/dashboard/TabbedDashboardPortlet", "tabbedDashboard")
-			  .addScripts("tabbedDashboard.init('$uicomponent.id');");
+	rcontext.getJavascriptManager().addJavascript("eXo.initTabbedDashboardPortlet('$uicomponent.id');");
 	
 	def nodes = uicomponent.getSameSiblingsNode();
 	def tabNbs = nodes.size();

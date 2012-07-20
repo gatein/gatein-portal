@@ -16,135 +16,135 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
-var uiTabbedDashboard = {
+eXo.initTabbedDashboardPortlet = function(id)
+{
   
   /**
    * A flag indicating that there is ongoing request to create new dashboard page. That helps
    * us to avoid concurrent dashboard creating requests coming from one user.
    *
    */
-  inRequest : false,
+  var inRequest = false;
 
-  init : function(id) 
-  {
-	  var tab = gj("#" + id);
-	  tab.find(".AddDashboard").on("click", function() {
-		  _module.showAddTabInput(this); 
-	  });
-	  tab.on("dblclick", ".SelectedTab > span", function() {
-		  var span = gj(this);
-		  _module.showEditLabelInput(this, span.attr("id"), span.text()); 
-	  });
-  },
-  
-  renameTabLabel : function(input)
-  {
-    var newLabel = input.val();
-    if (newLabel && newLabel.length > 0)
-    {
-      var portletID = input.closest(".PORTLET-FRAGMENT").parent().attr("id");
-
-      var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
-      href += "&portal:type=action";
-      href += "&portal:isSecure=false";
-      href += "&uicomponent=UITabPaneDashboard";
-      href += "&op=RenameTabLabel";
-      href += "&objectId=" + input.attr("id");
-      href += "&newTabLabel=" + encodeURIComponent(newLabel);
-      window.location = href;
-    }
-  },
-
-  showEditLabelInput : function(target, nodeName, currentLabel)
-  {
-    var jqObj = gj(target);
-
-    var input = gj("<input>").attr({type : "text", id : nodeName, name : currentLabel, value : currentLabel, maxLength : 50});
-    input.css("border", "1px solid #b7b7b7").css("width", (target.offsetWidth - 2) + "px");
-
-    jqObj = jqObj.replaceWith(input);
-    input.blur(function()
-    {
-      gj(this).replaceWith(jqObj);
+  require(['SHARED/jquery'], function(gj){
+    
+    var tab = gj("#" + id);
+    tab.find(".AddDashboard").on("click", function() {
+      showAddTabInput(this); 
     });
 
-    input.keypress(function(e)
-    {
-      var keyNum = e.keyCode ? e.keyCode : e.which;
-      if (keyNum == 13)
-      {
-        _module.renameTabLabel(gj(this));
-      }
-      else if (keyNum == 27)
-      {
-        gj(this).replaceWith(jqObj);
-      }
+    tab.on("dblclick", ".SelectedTab > span", function() {
+      var span = gj(this);
+      showEditLabelInput(this, span.attr("id"), span.text()); 
     });
-
-    input.closest(".UITab").addClass("EditTab");
-    input.focus();
-  },
-
-  createTab : function(input)
-  {
-    if (this.inRequest)
+    
+    function renameTabLabel(input)
     {
-      return;
-    }
-    else
-    {
-      var label = input.val();
-      if (label && label.length > 0)
+      var newLabel = input.val();
+      if (newLabel && newLabel.length > 0)
       {
-        var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + input.attr("id");
+        var portletID = input.closest(".PORTLET-FRAGMENT").parent().attr("id");
+
+        var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
         href += "&portal:type=action";
         href += "&portal:isSecure=false";
         href += "&uicomponent=UITabPaneDashboard";
-        href += "&op=AddDashboard";
-        href += "&objectId=" + encodeURIComponent(label);
-        this.InRequest = true;
+        href += "&op=RenameTabLabel";
+        href += "&objectId=" + input.attr("id");
+        href += "&newTabLabel=" + encodeURIComponent(newLabel);
         window.location = href;
       }
-    }
-  },
+    };
 
-  showAddTabInput : function(addButton)
-  {
-    var jqAddButton = gj(addButton);
-    var tabs = jqAddButton.parent().children("div.UITab");
-
-    var newTab = jqAddButton.prevAll("div.SelectedTab").eq(0).clone();
-    newTab.insertBefore(jqAddButton);
-
-    var portletID = jqAddButton.closest("div.PORTLET-FRAGMENT").parent().attr("id");
-
-    var input = gj("<input>").attr({type : "text", id : portletID , maxlength : 50, value : "Tab_" + tabs.length});
-    input.css({"border" : "1px solid #b7b7b7", "width" : "80px"});
-
-    newTab.find("span").eq(0).replaceWith(input);
-    input.next("a").attr("href", "#");
-
-    input.blur(function()
+    function showEditLabelInput(target, nodeName, currentLabel)
     {
-      gj(this).closest(".UITab").remove();
-    });
+      var jqObj = gj(target);
 
-    input.keypress(function(e)
-    {
-      var keyNum = e.keyCode ? e.keyCode : e.which;
-      if (keyNum == 13)
+      var input = gj("<input>").attr({type : "text", id : nodeName, name : currentLabel, value : currentLabel, maxLength : 50});
+      input.css("border", "1px solid #b7b7b7").css("width", (target.offsetWidth - 2) + "px");
+
+      jqObj = jqObj.replaceWith(input);
+      input.blur(function()
       {
-        _module.createTab(gj(this));
+        gj(this).replaceWith(jqObj);
+      });
+
+      input.keypress(function(e)
+      {
+        var keyNum = e.keyCode ? e.keyCode : e.which;
+        if (keyNum == 13)
+        {
+          renameTabLabel(gj(this));
+        }
+        else if (keyNum == 27)
+        {
+          gj(this).replaceWith(jqObj);
+        }
+      });
+
+      input.closest(".UITab").addClass("EditTab");
+      input.focus();
+    };
+
+    function createTab(input)
+    {
+      if (this.inRequest)
+      {
+        return;
       }
-      else if (keyNum == 27)
+      else
+      {
+        var label = input.val();
+        if (label && label.length > 0)
+        {
+          var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + input.attr("id");
+          href += "&portal:type=action";
+          href += "&portal:isSecure=false";
+          href += "&uicomponent=UITabPaneDashboard";
+          href += "&op=AddDashboard";
+          href += "&objectId=" + encodeURIComponent(label);
+          this.inRequest = true;
+          window.location = href;
+        }
+      }
+    };
+
+    function showAddTabInput(addButton)
+    {
+      var jqAddButton = gj(addButton);
+      var tabs = jqAddButton.parent().children("div.UITab");
+
+      var newTab = jqAddButton.prevAll("div.SelectedTab").eq(0).clone();
+      newTab.insertBefore(jqAddButton);
+
+      var portletID = jqAddButton.closest("div.PORTLET-FRAGMENT").parent().attr("id");
+
+      var input = gj("<input>").attr({type : "text", id : portletID , maxlength : 50, value : "Tab_" + tabs.length});
+      input.css({"border" : "1px solid #b7b7b7", "width" : "80px"});
+
+      newTab.find("span").eq(0).replaceWith(input);
+      input.next("a").attr("href", "#");
+
+      input.blur(function()
       {
         gj(this).closest(".UITab").remove();
-      }
-    });
+      });
 
-    input.closest(".UITab").addClass("EditTab");
-    input.focus();
-  }
-};
-_module = uiTabbedDashboard;
+      input.keypress(function(e)
+      {
+        var keyNum = e.keyCode ? e.keyCode : e.which;
+        if (keyNum == 13)
+        {
+          createTab(gj(this));
+        }
+        else if (keyNum == 27)
+        {
+          gj(this).closest(".UITab").remove();
+        }
+      });
+
+      input.closest(".UITab").addClass("EditTab");
+      input.focus();
+    }
+  });
+}
