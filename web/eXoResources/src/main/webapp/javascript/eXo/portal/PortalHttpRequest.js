@@ -166,7 +166,6 @@ function MarkupHeadElements(fragment) {
 
 function LoadingScripts(fragment) {
 	this.immediateScripts = [];
-	this.onloadScripts = [];
 	var jFragment = gj(fragment);
 	var headers = jFragment.children(".ImmediateScripts").first().html();
 	headers = headers.replace(/^\s*/, '').split(",");
@@ -174,14 +173,7 @@ function LoadingScripts(fragment) {
 		if (headers[i] !== "") {
 			this.immediateScripts.push(headers[i]);
 		}
-	}
-	var onloads = jFragment.children(".OnloadScripts").first().html();
-	onloads = onloads.replace(/^\s*/, '').split(",");
-	for (var i = 0; i < onloads.length; i++) {
-		if (onloads[i] !== "") {
-			this.onloadScripts.push(onloads[i]);
-		}
-	}
+	}	
 }
 
 /*
@@ -557,15 +549,7 @@ function HttpResponseHandler() {
         instance.updateHtmlHead(response);
 	  }
 	  var loadingScripts = response.loadingScripts;
-	  var immediateScripts = loadingScripts ? loadingScripts.immediateScripts : [];
-	  var scripts = gj("head script");
-	  for (var i = 0; i < immediateScripts.length; i++) {
-		  scripts.each(function() {
-			  if (gj(this).attr("src") === eXo.env.requireConfig.paths[immediateScripts[i]] + ".js") {
-				  immediateScripts.splice(i--, 1);
-			  }
-		  });
-	  }		  
+	  var immediateScripts = loadingScripts ? loadingScripts.immediateScripts : [];	    
 	  if (immediateScripts.length) {		  
 		  require(immediateScripts, function() {
 			  immediateScripts.clear();
@@ -611,19 +595,16 @@ function HttpResponseHandler() {
 		  instance.updateBlocks(response.blocksToUpdate) ;
 		  //After handle html response. We need to remove extra markup header of removed portlets
 		  cleanHtmlHead();
-		  var onloadScripts = loadingScripts ? loadingScripts.onloadScripts : [];
-		  require(onloadScripts, function() {		  
-			  instance.executeScript(response.script);		  
-			  /**
-			   * Clears the instance.to timeout if the request takes less time than expected to get response
-			   * Removes the transparent mask so the UI is available again, with cursor "auto"
-			   */
-			  clearTimeout(instance.to);
-			  _module.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
-			  
-			  eXo.portal.AjaxRequest.maskLayer = null ;
-			  eXo.portal.CurrentRequest = null ;		 
-		  });		  
+		  instance.executeScript(response.script);		  
+		  /**
+		   * Clears the instance.to timeout if the request takes less time than expected to get response
+		   * Removes the transparent mask so the UI is available again, with cursor "auto"
+		   */
+		  clearTimeout(instance.to);
+		  _module.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
+		  
+		  eXo.portal.AjaxRequest.maskLayer = null ;
+		  eXo.portal.CurrentRequest = null ;		 
       } catch (error) {
              alert(error.message) ;
       }	  

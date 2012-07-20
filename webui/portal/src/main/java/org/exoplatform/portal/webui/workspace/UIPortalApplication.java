@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.workspace;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -76,7 +77,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -122,6 +122,8 @@ public class UIPortalApplication extends UIApplication
    final static public String UI_EDITTING_WS_ID = "UIEditInlineWS";
 
    final static public String UI_MASK_WS_ID = "UIMaskWorkspace";
+   
+   final static public String SCRIPTS = "eXo.portal.scripts";
 
    private String skin_ = SkinService.DEFAULT_SKIN;
 
@@ -347,7 +349,7 @@ public class UIPortalApplication extends UIApplication
       //
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);      
       FetchMap<String> resources = new FetchMap<String>();
-      Map<ScriptResource, FetchMode> tmp = service.resolveIds(requiredResources);
+      Map<ScriptResource, FetchMode> tmp = service.resolveIds(requiredResources);      
       for (ScriptResource rs : tmp.keySet())
       {
          ResourceId id = rs.getId();
@@ -662,11 +664,11 @@ public class UIPortalApplication extends UIApplication
     */
    public void processRender(WebuiRequestContext context) throws Exception
    {
-      Writer w = context.getWriter();
+      Writer w = context.getWriter();                  
 
       //
       if (!context.useAjax())
-      {
+      {                  
          super.processRender(context);
       }
       else
@@ -739,9 +741,9 @@ public class UIPortalApplication extends UIApplication
          w.write("<div class=\"LoadingScripts\">");
          writeLoadingScripts(pcontext);
          w.write("</div>");
-         w.write("<div class=\"PortalResponseScript\">");
-         JavascriptManager jsManager = pcontext.getJavascriptManager();
+         w.write("<div class=\"PortalResponseScript\">");         
          String skin = getAddSkinScript(list);
+         JavascriptManager jsManager = context.getJavascriptManager();
          if (skin != null)
          {
             jsManager.require("SHARED/base").addScripts(skin);
@@ -753,32 +755,34 @@ public class UIPortalApplication extends UIApplication
       }
    }
 
+   @Override
+   public void renderChildren() throws Exception
+   {
+      super.renderChildren();
+            
+      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+      if (!context.useAjax())
+      {
+         //Call this after all portlets processRender have been called
+         Map<String, Boolean> scriptURLs = getScripts();
+         context.setAttribute(SCRIPTS, scriptURLs.keySet());
+         
+         StringBuilder loadedScripts = new StringBuilder();
+         for (String id : scriptURLs.keySet()) 
+         {            
+            loadedScripts.append("define('").append(id).append("');");
+         }
+         //Need this to advoid duplicated loading in following ajax requests      
+         context.getJavascriptManager().addJavascript(loadedScripts);         
+      }
+   }
+
    private void writeLoadingScripts(PortalRequestContext context) throws Exception
    {
       Writer w = context.getWriter();
       Map<String, Boolean> scriptURLs = getScripts();
-      List<String> onloadJS = new LinkedList<String>();
-      for (String url : scriptURLs.keySet()) 
-      {
-         if (scriptURLs.get(url))
-         {
-            onloadJS.add(url);
-         }
-      }
-      w.write("<div class=\"OnloadScripts\">");
-      for (String url : onloadJS)
-      {
-         w.write(url);
-         w.write(",");
-      }
-      w.write("</div>");
       w.write("<div class=\"ImmediateScripts\">");
-      scriptURLs.keySet().removeAll(onloadJS);
-      for (String url : scriptURLs.keySet())
-      {
-         w.write(url);
-         w.write(",");
-      }
+      w.write(StringUtils.join(scriptURLs.keySet(), ","));
       w.write("</div>");      
    }
    
