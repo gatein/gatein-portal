@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.initWebUISamplePortlet = function(id) {
+function initWebUISamplePortlet(id) {
   require([ "SHARED/jquery" ], function(gj) {
     gj('#' + id).find('.CollapseIcon').on('click', function() {
       var subGroup = gj(this.parentNode).children("div.ChildrenContainer")[0];

@@ -7,7 +7,7 @@
 	def rContext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rContext.getJavascriptManager();
   String uuid = jsmanager.generateUUID();
-  jsmanager.addJavascript("eXo.initWebUISamplePortlet('$uuid')");
+  jsmanager.addJavascript("initWebUISamplePortlet('$uuid')");
 %>
 
 <div id="$uuid" class="SampleWebUI" style="width: 260px;">

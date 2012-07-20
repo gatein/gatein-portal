@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.initSitemapPortlet = function(id)
+function initSitemapPortlet(id)
 {
   require(['SHARED/jquery'], function(gj){
     gj("#" + id).on("click", "div.ExpandIcon,div.CollapseIcon", function(event) {

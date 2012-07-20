@@ -8,5 +8,5 @@ uiPortalNavigation.loadTreeNodes();
 uicomponent.renderChildren();
 
 JavascriptManager jsManager = Util.getPortalRequestContext().getJavascriptManager();
-jsManager.addJavascript("eXo.initSitemapPortlet('$uiPortalNavigation.id');");
+jsManager.addJavascript("initSitemapPortlet('$uiPortalNavigation.id');");
 %>
