@@ -36,6 +36,8 @@ eXo.webui.UIRightClickPopupMenu = {
      * Disable/enable browser's default right click handler
      */
     this.disableContextMenu(menu.parent());
+
+    menu.find('.UIRightPopupMenuContainer').on('click', 'div.MenuItem a', _module.UIRightClickPopupMenu.prepareObjectIdEvt)
   },
   /**
    * Hide and disable mouse down event of context menu object
@@ -75,29 +77,22 @@ eXo.webui.UIRightClickPopupMenu = {
   },
 
   /**
-   * Prepare objectId for context menu Make ajaxPost request if needed
+   * An event handler in JQuery
    * 
-   * @param {Object}
-   *          evt event
-   * @param {Object}
-   *          elemt document object that contains context menu
+   * Prepare objectId for context menu Make ajaxPost request if needed
    */
-  prepareObjectId : function(evt, elemt) {
-    if(!evt)
-    {
-      evt = window.event;
-    }
-    evt.cancelBubble = true;
+  prepareObjectIdEvt : function(event) {
+    event.stopPropagation();
 
-    var contextMenu = gj(elemt).closest(".UIRightClickPopupMenu")[0];
+    var contextMenu = gj(this).closest(".UIRightClickPopupMenu")[0];
     contextMenu.style.display = "none";
-    var href = elemt.getAttribute('href');
+    var href = this.getAttribute('href');
     if (!href) {
       return;
     }
     if (href.indexOf("ajaxGet") != -1) {
       href = href.replace("ajaxGet", "ajaxPost");
-      elemt.setAttribute('href', href);
+      this.setAttribute('href', href);
     }
     if (href.indexOf("objectId") != -1 || !contextMenu.objId) {
       return;
@@ -105,7 +100,7 @@ eXo.webui.UIRightClickPopupMenu = {
     var objId = encodeURIComponent(contextMenu.objId.replace(/'/g, "\\'"));
 
     if (href.indexOf("javascript") == -1) {
-      elemt.setAttribute('href', href + "&objectId=" + objId);
+      this.setAttribute('href', href + "&objectId=" + objId);
       return;
     } else if (href.indexOf("window.location") != -1) {
       href = href.substr(0, href.length - 1) + "&objectId=" + objId + "'";
@@ -116,8 +111,8 @@ eXo.webui.UIRightClickPopupMenu = {
     }
 
     eval(href);
-    if (evt && evt.preventDefault)
-      evt.preventDefault();
+    if (event && event.preventDefault)
+      event.preventDefault();
     else
       window.event.returnValue = false;
     return false;

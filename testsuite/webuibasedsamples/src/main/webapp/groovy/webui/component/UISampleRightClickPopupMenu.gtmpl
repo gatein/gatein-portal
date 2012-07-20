@@ -11,7 +11,6 @@
     String id = uicomponent.getParent().getId();
   	
   	JavascriptManager jsmanager = _ctx.getRequestContext().getJavascriptManager();
-  	popupMenu = uiPopupMenu.getJSOnclickShowPopup("", "SayHello,SayGoodBye");
   	jsmanager.require("SHARED/webui-ext", "webuiExt")
              .addScripts("webuiExt.UIRightClickPopupMenu.disableContextMenu('"+id+"') ;");
     uicomponent.renderUIComponent(uiPopupMenu) ;
@@ -19,7 +18,9 @@
 %>
 	<div class="UIForm $uicomponent.id">
 		<div class="HorizontalLayout">
-			<div class="FormContainer" style="text-align: center;font-size: 18px;" $popupMenu>Right Click On Me</div>
+			<div class="FormContainer" style="text-align: center;font-size: 18px;" <%=uiPopupMenu.getJSOnclickShowPopup("john", "SayHello") %>>Hello John</div>
+      <div class="FormContainer" style="text-align: center;font-size: 18px;" <%=uiPopupMenu.getJSOnclickShowPopup("mary", "SayGoodBye") %>>Goodbye Mary</div>
+      <div class="FormContainer" style="text-align: center;font-size: 18px;" <%=uiPopupMenu.getJSOnclickShowPopup("guys", "SayHello,SayGoodBye") %>>Hello / Goodbye guys</div>
 		</div>
 	</div>
 </div>
