@@ -29,7 +29,7 @@ var uiTree = {
 		}
 		parent.data("collapseRegistered", true);
 		parent.find(".LevelUpArrowIcon").on("mousedown", function(event) {
-			event.cancelBubble = true;
+			event.stopPropagation();
 		});
 	}
 };

@@ -157,6 +157,9 @@ eXo.webui.UIRightClickPopupMenu = {
     });
 
     //The callback registered on document won't be triggered by current 'mousedown' event
+    if ( event.stopPropagation ) {
+    	event.stopPropagation();
+    }
     event.cancelBubble = true;
 
     if (whiteList) {
