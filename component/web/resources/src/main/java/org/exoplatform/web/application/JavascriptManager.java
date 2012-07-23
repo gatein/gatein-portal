@@ -20,7 +20,11 @@
 package org.exoplatform.web.application;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import org.exoplatform.container.ExoContainer;
@@ -46,7 +50,7 @@ public class JavascriptManager
    private FetchMap<ResourceId> resourceIds = new FetchMap<ResourceId>();
    
    /** . */
-   private FetchMap<String> extendedScriptURLs = new FetchMap<String>();
+   private Set<String> extendedScriptURLs = new LinkedHashSet<String>();
 
    /** . */
    private StringBuilder scripts = new StringBuilder();
@@ -126,14 +130,14 @@ public class JavascriptManager
       return resourceIds;
    }
    
-   public FetchMap<String> getExtendedScriptURLs()
+   public List<String> getExtendedScriptURLs()
    {
-      return new FetchMap<String>(extendedScriptURLs);
+      return new LinkedList<String>(extendedScriptURLs);
    }
 
    public void addExtendedScriptURLs(String url)
    {
-      this.extendedScriptURLs.add(url, FetchMode.IMMEDIATE);
+      this.extendedScriptURLs.add(url);
    }
 
    public void addOnLoadJavascript(CharSequence s)

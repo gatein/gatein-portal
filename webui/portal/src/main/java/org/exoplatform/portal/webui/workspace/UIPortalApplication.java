@@ -64,6 +64,7 @@ import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMap;
 import org.gatein.portal.controller.resource.script.FetchMode;
+import org.gatein.portal.controller.resource.script.Module;
 import org.gatein.portal.controller.resource.script.ScriptResource;
 import org.json.JSONObject;
 
@@ -122,8 +123,6 @@ public class UIPortalApplication extends UIApplication
    final static public String UI_EDITTING_WS_ID = "UIEditInlineWS";
 
    final static public String UI_MASK_WS_ID = "UIMaskWorkspace";
-   
-   final static public String SCRIPTS = "eXo.portal.scripts";
 
    private String skin_ = SkinService.DEFAULT_SKIN;
 
@@ -348,26 +347,21 @@ public class UIPortalApplication extends UIApplication
 
       //
       JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);      
-      FetchMap<String> resources = new FetchMap<String>();
-      Map<ScriptResource, FetchMode> tmp = service.resolveIds(requiredResources);      
+      LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
+      Map<ScriptResource, FetchMode> tmp = service.resolveIds(requiredResources);
       for (ScriptResource rs : tmp.keySet())
       {
          ResourceId id = rs.getId();
-         resources.add(id.toString(), tmp.get(rs));
+         boolean isRemote = !rs.isEmpty() && rs.getModules().get(0) instanceof Module.Remote; 
+         ret.put(id.toString(), isRemote);
       }
-      resources.addAll(jsMan.getExtendedScriptURLs());
+      for (String url : jsMan.getExtendedScriptURLs())
+      {
+         ret.put(url, true);
+      }
       
       //
-      log.debug("Resolved resources for page: " + resources);
-      
-      // Here we get the list of stuff to load on demand or not
-      // according to the boolean value in the map
-      // Convert the map to what the js expects to have
-      LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
-      for (Map.Entry<String, FetchMode> entry : resources.entrySet())
-      {
-         ret.put(entry.getKey(), entry.getValue() == FetchMode.ON_LOAD);
-      }
+      log.debug("Resolved resources for page: " + ret);
 
       return ret;
    }
@@ -664,11 +658,11 @@ public class UIPortalApplication extends UIApplication
     */
    public void processRender(WebuiRequestContext context) throws Exception
    {
-      Writer w = context.getWriter();                  
+      Writer w = context.getWriter();
 
       //
       if (!context.useAjax())
-      {                  
+      {
          super.processRender(context);
       }
       else
@@ -741,9 +735,9 @@ public class UIPortalApplication extends UIApplication
          w.write("<div class=\"LoadingScripts\">");
          writeLoadingScripts(pcontext);
          w.write("</div>");
-         w.write("<div class=\"PortalResponseScript\">");         
+         w.write("<div class=\"PortalResponseScript\">");
+         JavascriptManager jsManager = pcontext.getJavascriptManager();
          String skin = getAddSkinScript(list);
-         JavascriptManager jsManager = context.getJavascriptManager();
          if (skin != null)
          {
             jsManager.require("SHARED/base").addScripts(skin);
@@ -751,28 +745,6 @@ public class UIPortalApplication extends UIApplication
          w.write(jsManager.getJavaScripts());
          w.write("</div>");
          w.write("</div>");
-      }
-   }
-
-   @Override
-   public void renderChildren() throws Exception
-   {
-      super.renderChildren();
-            
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      if (!context.useAjax())
-      {
-         //Call this after all portlets processRender have been called
-         Map<String, Boolean> scriptURLs = getScripts();
-         context.setAttribute(SCRIPTS, scriptURLs.keySet());
-         
-         StringBuilder loadedScripts = new StringBuilder();
-         for (String id : scriptURLs.keySet()) 
-         {            
-            loadedScripts.append("define('").append(id).append("');");
-         }
-         //Need this to advoid duplicated loading in following ajax requests      
-         context.getJavascriptManager().addJavascript(loadedScripts);         
       }
    }
 

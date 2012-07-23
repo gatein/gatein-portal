@@ -87,8 +87,12 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    public void testGetScript() throws Exception
    {      
       //no wrapper for SCRIPTS
-      assertReader("// Begin eXo.script1\naaa;// End eXo.script1\n", jsService.getScript(new ResourceId(ResourceScope.SHARED, "script1"), null));
-      assertReader("// Begin eXo.script2\nbbb;// End eXo.script2\n", jsService.getScript(new ResourceId(ResourceScope.SHARED, "script2"), null));          
+      String script1 = "// Begin eXo.script1\naaa;// End eXo.script1\n" +
+                               "if (typeof define === 'function' && define.amd) {define('SHARED/script1');}";
+      String script2 = "// Begin eXo.script2\nbbb;// End eXo.script2\n" +
+                               "if (typeof define === 'function' && define.amd) {define('SHARED/script2');}";
+      assertReader(script1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "script1"), null));
+      assertReader(script2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "script2"), null));          
       
       //wrapper for MODULE
       //test for Alias : module1 is used with 'm1' alias

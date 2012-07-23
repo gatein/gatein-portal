@@ -7,18 +7,23 @@
 	import java.util.Iterator;
 	import org.exoplatform.portal.webui.portal.UIPortal ;
 	import org.exoplatform.portal.config.model.PortalProperties ;
+	import org.json.JSONArray;
 		
 	def rcontext = _ctx.getRequestContext() ;
 	String docBase =	rcontext.getRequestContextPath() ;	
 	String skin = uicomponent.getSkin();
 	def portalSkins = uicomponent.getPortalSkins() ;
 	def portletSkins = uicomponent.getPortletSkins() ;
-	def scriptsURLs = rcontext.getAttribute(uicomponent.SCRIPTS);
+	def scriptsURLs = uicomponent.getScripts();
 	def headerScripts = new LinkedList();	
-	def jsConfig = uicomponent.getJSConfig();
-	for (module in scriptsURLs) {
+	def jsConfig = uicomponent.getJSConfig();	
+	def remoteScripts = new JSONArray();
+	for (module in scriptsURLs.keySet()) {
 	  def url = jsConfig.get("paths").get(module);
-	  headerScripts.add(url != null ? url + ".js" : module);	      
+	  headerScripts.add(url != null ? url + ".js" : module);	    
+	  if (scriptsURLs.get(module)) {
+	    remoteScripts.put(module);
+	  }
 	}
 	def lang = uicomponent.getLocale().getLanguage();
 	def title = rcontext.getTitle();
@@ -59,6 +64,7 @@
             <script type="text/javascript" src="<%= url %>"></script>
 		<% } %>
 		<script type="text/javascript">			
+		eXo.env.addLoadedRemoteScripts(<%=remoteScripts%>);
 		<% if(org.exoplatform.commons.utils.PropertyManager.isDevelopping()) { %>
 						eXo.developing = true ;
 		<% } %>		

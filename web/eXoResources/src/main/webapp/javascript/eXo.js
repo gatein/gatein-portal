@@ -76,3 +76,11 @@ eXo.env.server.createPortalURL = function(targetComponentId, actionName, useAjax
 
   return  url;
 };
+
+eXo.env.addLoadedRemoteScripts = function(scripts) {
+	if (typeof define === 'function' && define.amd) {
+		for (var i = 0; i < scripts.length; i++) {
+			define(scripts[i]);
+		}		
+	}
+};
