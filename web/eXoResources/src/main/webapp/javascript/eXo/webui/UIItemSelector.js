@@ -220,46 +220,7 @@ var uiItemSelector = {
       if (siblings[i] == object)
         return i;
     }
-  },
-
-  /**
-   * @author dang.tung
-   * 
-   * TODO To change the template layout in page config Called by
-   * UIPageTemplateOptions.java Review UIDropDownControl.java: set javascrip
-   * action UIDropDownControl.js : set this method to do
-   */
-  selectPageLayout : function(id, selectedIndex) {
-    var dropDownControl = gj("#" + id);
-    var itemSelectorAncest = dropDownControl.closest(".ItemSelectorAncestor");
-    var itemList = itemSelectorAncest.find("div.ItemList");
-    var itemSelectorLabel = itemSelectorAncest.find("a.OptionItem");
-    var itemSelector = dropDownControl.find("div.UIItemSelector");
-    var itemDetailList = itemSelector.find("div.ItemDetailList");
-    if (itemList.length == 0)
-      return;
-    for (i = 0; i < itemSelectorLabel.length; ++i) {
-      if (i >= itemList.length)
-        continue;
-      if (i == selectedIndex) {
-        itemList[i].style.display = "block";
-        if (itemDetailList.length < 1)
-          continue;
-        itemDetailList[i].style.display = "block";
-        var selectedItem = gj(itemList[i]).find("div.SelectedItem").eq(0);
-        if (!selectedItem || selectedItem == null)
-          continue;
-        var setValue = selectedItem.find("#SetValue")[0];
-        if (setValue == null)
-          continue;
-        eval(setValue.innerHTML);
-      } else {
-        itemList[i].style.display = "none";
-        if (itemDetailList.length > 0)
-          itemDetailList[i].style.display = "none";
-      }
-    }
-  }
+  }  
 };
 
 _module.UIItemSelector = uiItemSelector;

@@ -4,7 +4,8 @@
 	import org.exoplatform.webui.core.model.SelectItemOption;
 
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().require("SHARED/webui", "webui").addScripts("webui.UIItemSelector.init('#$uicomponent.id .ItemList > div');"); 
+	rcontext.getJavascriptManager().require("SHARED/portal")
+			  .require("SHARED/webui", "webui").addScripts("webui.UIItemSelector.init('#$uicomponent.id .ItemList > div');"); 
 
 	def categories = uicomponent.getItemCategories(); 
 	UIForm form = uicomponent.getParent(); 
