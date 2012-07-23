@@ -7,12 +7,7 @@
 %>
 </div>
   <script type="text/javascript">
-  <%
-    print jsManager.getJavaScripts();
-    if(jsManager.getRequireJS() != null) {
-      print jsManager.getRequireJS().toString();
-    }
-  %>
+  <%=jsManager.getJavaScripts()%>
   </script>
 </body>
 </html>

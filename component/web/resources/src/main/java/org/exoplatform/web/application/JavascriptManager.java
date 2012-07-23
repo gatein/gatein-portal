@@ -193,7 +193,8 @@ public class JavascriptManager
    /**
     * Returns javascripts which were added by {@link #addJavascript(CharSequence)},
     * {@link #addOnLoadJavascript(CharSequence)}, {@link #addOnResizeJavascript(CharSequence)},
-    * {@link #addOnScrollJavascript(CharSequence)}, {@link #addCustomizedOnLoadScript(CharSequence)}
+    * {@link #addOnScrollJavascript(CharSequence)}, {@link #addCustomizedOnLoadScript(CharSequence)},
+    * {@link #requireJS}
     * 
     * @return
     */
@@ -201,7 +202,7 @@ public class JavascriptManager
    {
       StringBuilder callback = new StringBuilder();
       callback.append(scripts);
-      callback.append(customizedOnloadJavascript);
+      callback.append(requireJS.addScripts("base.Browser.onLoad();").addScripts(customizedOnloadJavascript.toString()).toString());
       return callback.toString();
    }
 
