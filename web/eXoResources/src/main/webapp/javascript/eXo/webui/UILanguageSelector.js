@@ -22,7 +22,7 @@ var uiLanguageSelector = {
 		var langForm = gj(".UIChangeLanguageForm");
 		var saveButton = langForm.find(".UIAction a").first(); 
 		var href = saveButton.attr("href");
-		saveButton.on("click", function() {selector.changeLanguage(href);});		
+		saveButton.on("click", function() {selector.changeLanguage(href);return false;});		
 		
         selector.SelectedItem = {"component": selected.component, "option" : selected.option};
         langForm.find(".NodeLabel").parent().each(function(index) {

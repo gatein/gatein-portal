@@ -22,7 +22,7 @@ var uiSkinSelector = {
 		var langForm = gj(".UIChangeSkinForm");
 		var saveButton = langForm.find(".UIAction a").first(); 
 		var href = saveButton.attr("href");
-		saveButton.on("click", function() {selector.changeSkin(href);});		
+		saveButton.on("click", function() {selector.changeSkin(href);return false;});		
 	},
 	
 	changeSkin : function(url) {
