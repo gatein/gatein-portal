@@ -147,7 +147,7 @@ eXo.webui.UICombobox = {
  */
 eXo.core.EventManager = {
   cancelBubble : function(evt) {
-    if (base.Browser.browserType == 'ie')
+    if (base.Browser.isIE())
       window.event.cancelBubble = true;
     else
       evt.stopPropagation();
@@ -155,7 +155,7 @@ eXo.core.EventManager = {
 
   cancelEvent : function(evt) {
     _module.EventManager.cancelBubble(evt);
-    if (base.Browser.browserType == 'ie')
+    if (base.Browser.isIE())
       window.event.returnValue = true;
     else
       evt.preventDefault();

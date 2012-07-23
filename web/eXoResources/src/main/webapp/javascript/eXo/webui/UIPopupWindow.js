@@ -297,7 +297,7 @@ var uiPopupWindow = {
 
     popup.onDragStart = function(x, y, last_x, last_y, e)
     {
-      if (base.Browser.browserType == "mozilla" && popup.uiWindowContent)
+      if (base.Browser.isFF() && popup.uiWindowContent)
       {
         popup.uiWindowContent.style.overflow = "auto";
         gj(popup.uiWindowContent).find("ul.PopupMessageBox").css("overflow", "auto");
@@ -310,7 +310,7 @@ var uiPopupWindow = {
 
     popup.onDragEnd = function(x, y, clientX, clientY)
     {
-      if (base.Browser.browserType == "mozilla" && popup.uiWindowContent)
+      if (base.Browser.isFF() && popup.uiWindowContent)
       {
         popup.uiWindowContent.style.overflow = "auto";
         gj(popup.uiWindowContent).find("ul.PopupMessageBox").css("overflow", "auto");

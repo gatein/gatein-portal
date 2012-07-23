@@ -101,7 +101,7 @@ var virtualList = {
     var feedBox = this.getFeedBox(uiVirtualList.id);
     var loadedContent = uiVirtualList.backupHTML;
 
-    if (base.Browser.browserType != "ie") {
+    if (!base.Browser.isIE()) {
       feedBox.innerHTML = loadedContent + feedBox.innerHTML;
     } else {
       var index = uiVirtualList.innerHTML.indexOf(feedBox.className);
