@@ -310,6 +310,8 @@ eXo.core.Browser = {
 	findMouseRelativeX : function(object, e, isRTL) {
 	  var browser = _module.Browser;
 	  var posXObject = browser.findPosX(object,isRTL) ;	  
+	  if (!e) e = window.event;
+	  e = gj.event.fix(e);
 	  var mouseX = e.pageX;  
 	  return mouseX == -1 ? -1 : mouseX - posXObject ;
 	},
@@ -320,6 +322,8 @@ eXo.core.Browser = {
 	findMouseRelativeY : function(object, e) {
 	  var browser = _module.Browser;
 	  var posYObject = gj(object).offset().top;
+	  if (!e) e = window.event;
+	  e = gj.event.fix(e);
 	  var mouseY = e.pageY;  
 	  return  mouseY == -1 ? -1 : mouseY - posYObject ;
 	},
