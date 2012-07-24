@@ -14,7 +14,6 @@
 	int portalMode = uiPortalApp.getModeState(); 
 	
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	def reqJS = jsmanager.require("SHARED/webui");
 
 	WindowState windowState = uicomponent.getCurrentWindowState();
 	String portletId = uicomponent.getId();
@@ -23,7 +22,7 @@
 	String title = encoder.encode(uicomponent.getDisplayTitle());
 	if(uiPortalApp.isEditing()) {
 	   def id = "UIPortlet-" + portletId;
-	   reqJS.require("SHARED/portal", "portal").addScripts("portal.UIPortal.initMouseHover('" + id + "');");
+	   jsmanager.require("SHARED/portal", "portal").addScripts("portal.UIPortal.initMouseHover('" + id + "');");
 %>
 	<div class="UIPortlet <%=hasPermission?"":"ProtectedPortlet"%>" id="$id" style="top: 0px; left:0px;">
 		<div class="UIComponentBlock">
@@ -93,7 +92,7 @@
 								
 								List supportModes = uicomponent.getSupportModes();
 									if(uicomponent.getShowPortletMode() && supportModes.size() > 0) {
-									   reqJS.require("SHARED/base", "base").addScripts("base.UIPopupSelectCategory.init('UIWindow-" + portletId + "');");
+									   jsmanager.require("SHARED/base", "base").addScripts("base.UIPopupSelectCategory.init('UIWindow-" + portletId + "');");
 								%>
 										<div class="ControlIcon ArrowDownIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.PortletMode");%>" style="position: relative;">
 											<% /*Begin Popup Menu*/ %>
