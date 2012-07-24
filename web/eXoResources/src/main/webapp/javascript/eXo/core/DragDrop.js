@@ -57,9 +57,8 @@ function DragDrop() {
 		var ex = e.pageX;
 		
 		var jRoot = gj(o.root);
-		var position = jRoot.position();
-		var y = position.top;
-		var x = position.left;
+		var y = parseInt(jRoot.css("top"));
+		var x = parseInt(jRoot.css("left"));
 
 		var nx, ny;
 		nx = x + (ex - o.lastMouseX);
