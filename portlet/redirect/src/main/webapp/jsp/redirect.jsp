@@ -15,6 +15,7 @@ if (redirect.getAlternativeSites() != null && !redirect.getAlternativeSites().is
          </a> 
     <% } %>
   </ul>
+  </div>
 <%
 }
 %>  
