@@ -19,8 +19,6 @@
 
 var portalComposer = {
 
-  isEditted : false,
-
   init : function(id, width, height, isEditted, portalMode)
   {
 	eXo.portal.portalMode = portalMode;
@@ -90,9 +88,9 @@ var portalComposer = {
   toggleSaveButton : function()
   {
     //Avoid execute method body multiple times
-    if(!this.isEditted)
+    if(!eXo.portal.hasEditted)
     {
-      this.isEditted = true;
+      eXo.portal.hasEditted = true;
       var compWindow = gj("#UIWorkingWorkspace").find("div.UIPortalComposer").eq(0);
       compWindow.find("a.SaveButton").attr("class", "EdittedSaveButton");
 
