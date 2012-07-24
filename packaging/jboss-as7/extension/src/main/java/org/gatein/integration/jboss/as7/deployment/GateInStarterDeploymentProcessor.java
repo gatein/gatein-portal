@@ -35,35 +35,14 @@ import org.jboss.msc.service.ServiceBuilder;
 import org.jboss.msc.service.ServiceName;
 
 import java.util.List;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.HashMap;
 
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
 public class GateInStarterDeploymentProcessor implements DeploymentUnitProcessor
 {
-   private volatile ConcurrentHashMap<ModuleIdentifier, ModuleIdentifier> deploymentModules;
-
-   private ConcurrentHashMap<ModuleIdentifier, ModuleIdentifier> getDeploymentModules(GateInConfiguration config)
-   {
-      if (deploymentModules == null)
-      {
-         synchronized (this)
-         {
-            if (deploymentModules == null)
-            {
-               final ConcurrentHashMap<ModuleIdentifier, ModuleIdentifier> dms = new ConcurrentHashMap<ModuleIdentifier, ModuleIdentifier>();
-               dms.put(config.getGateInEarModule(), config.getGateInEarModule());
-               for (ModuleIdentifier id : config.getGateInExtModules())
-               {
-                  dms.put(id, id);
-               }
-               this.deploymentModules = dms;
-            }
-         }
-      }
-      return deploymentModules;
-   }
+   private HashMap<ModuleIdentifier, ModuleIdentifier> deploymentModules;
 
    @Override
    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
@@ -79,9 +58,8 @@ public class GateInStarterDeploymentProcessor implements DeploymentUnitProcessor
          final GateInConfiguration config = du.getAttachment(GateInConfigurationKey.KEY);
 
          final ModuleIdentifier moduleId = du.getAttachment(Attachments.MODULE_IDENTIFIER);
-         getDeploymentModules(config).remove(moduleId);
 
-         if (deploymentModules.size() == 0)
+         if (isLastModuleStarting(config, moduleId))
          {
             final StartupService startup = new StartupService();
             startup.setGateInModule(du.getAttachment(Attachments.MODULE));
@@ -125,7 +103,25 @@ public class GateInStarterDeploymentProcessor implements DeploymentUnitProcessor
       }
    }
 
-   @Override
+   private synchronized boolean isLastModuleStarting(GateInConfiguration config, ModuleIdentifier moduleId)
+   {
+      if (deploymentModules == null)
+      {
+
+         final HashMap<ModuleIdentifier, ModuleIdentifier> dms = new HashMap<ModuleIdentifier, ModuleIdentifier>();
+         dms.put(config.getGateInEarModule(), config.getGateInEarModule());
+         for (ModuleIdentifier id : config.getGateInExtModules())
+         {
+            dms.put(id, id);
+         }
+         this.deploymentModules = dms;
+      }
+      deploymentModules.remove(moduleId);
+
+      return deploymentModules.size() == 0;
+   }
+
+    @Override
    public void undeploy(DeploymentUnit context)
    {
    }
