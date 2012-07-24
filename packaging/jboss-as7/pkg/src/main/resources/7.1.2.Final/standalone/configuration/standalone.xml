@@ -113,7 +113,7 @@
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:deployment-scanner:1.1">
             <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" deployment-timeout="300"/>
-            <deployment-scanner name="gatein" path="gatein/deployments" relative-to="jboss.home.dir" scan-interval="5000" deployment-timeout="300"/>
+            <deployment-scanner name="gatein" auto-deploy-exploded="true" path="gatein/deployments" relative-to="jboss.home.dir" scan-interval="5000" deployment-timeout="300"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:ee:1.1">
             <spec-descriptor-property-replacement>false</spec-descriptor-property-replacement>
