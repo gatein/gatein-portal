@@ -32,7 +32,7 @@ eXo.webui.UIForm = {
       callback = null;
     var queryString = gj(formElement).serialize();
     var url = formElement.action + "&ajaxRequest=true";
-    doRequest("POST", url, queryString, callback);
+    ajaxPost(url, queryString, callback);
   },
 
   /**
@@ -137,4 +137,6 @@ eXo.webui.UIForm = {
     }
     form.elements[typeId].value = hiddenValue;
   }
-}
+};
+
+_module.UIForm = eXo.webui.UIForm;

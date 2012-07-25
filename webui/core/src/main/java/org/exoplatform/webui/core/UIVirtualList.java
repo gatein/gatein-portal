@@ -21,6 +21,7 @@ package org.exoplatform.webui.core;
 
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.portal.config.NoSuchDataException;
+import org.exoplatform.web.application.RequireJS;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.bean.UIDataFeed;
@@ -113,15 +114,14 @@ public class UIVirtualList extends UIComponentDecorator
             return;
          }
          
+         RequireJS require = rContext.getJavascriptManager().require("SHARED/webui-ext", "webuiExt");
          if (dataFeed.hasNext())
          {
-            rContext.getJavascriptManager().addJavascript(
-               "eXo.webui.UIVirtualList.updateList('" + virtualList.getId() + "', true);");
+            require.addScripts("webuiExt.UIVirtualList.updateList('" + virtualList.getId() + "', true);");
          }
          else
          {
-            rContext.getJavascriptManager().addJavascript(
-               "eXo.webui.UIVirtualList.updateList('" + virtualList.getId() + "', false);");
+            require.addScripts("webuiExt.UIVirtualList.updateList('" + virtualList.getId() + "', false);");
          }
          
          rContext.addUIComponentToUpdateByAjax((UIComponent)dataFeed);

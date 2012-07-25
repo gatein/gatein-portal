@@ -1,3 +1,8 @@
+<%		
+	def rcontext = _ctx.getRequestContext(); 
+	rcontext.getJavascriptManager().require("SHARED/webui", "webui")
+			  .addScripts("webui.UIItemSelector.init('.UIPersonalInfo .ItemList .ImageDecorator > div', null, true);"); 
+%>
 <div class="UIPersonalInfo">
 	<div class="UIItemSelector">
 		<div class="RightColumnBigItemStyle">
@@ -15,7 +20,7 @@
 								def String type = "Item"; 
 								if(child.isRendered()) type = "SelectedItem Item";
 							%>
-								<div class="$type" onclick="eXo.webui.UIItemSelector.onClick(this);">
+								<div class="$type">
 									<div class="User${child.id}Icon">
 										<div class="ItemName">
 											<div class="ItemTitle"><%= _ctx.appRes(uicomponent.getId() + ".label." + child.id)%></div>

@@ -46,7 +46,7 @@ eXo.webui.UICalendar = {
     this.months = monthNames.split(',');
     this.months.pop();
 
-    var weekdays = eXo.i18n.I18NMessage.getMessage("weekdays");
+    var weekdays = base.I18NMessage.getMessage("weekdays");
     if (weekdays != null && typeof (weekdays) == "object") {
       this.weekdays = weekdays;
     }
@@ -57,7 +57,7 @@ eXo.webui.UICalendar = {
 
     // fix bug for IE 6
     var cld = document.getElementById(this.calendarId);
-    if (eXo.core.Browser.isIE6()) {
+    if (base.Browser.isIE6()) {
       var blockClnd = document.getElementById('BlockCaledar');
       var iframe = document.getElementById(this.calendarId + 'IFrame');
       iframe.style.height = blockClnd.offsetHeight + "px";
@@ -69,7 +69,7 @@ eXo.webui.UICalendar = {
     var clndr = document.createElement("div");
     clndr.id = this.calendarId;
     clndr.style.position = "absolute";
-    if (eXo.core.Browser.isIE6()) {
+    if (base.Browser.isIE6()) {
       clndr.innerHTML = "<div class='UICalendarComponent'><iframe id='"
           + this.calendarId
           + "IFrame' frameBorder='0' style='position:absolute;height:100%;' scrolling='no'></iframe><div style='position:absolute;'></div></div>";
@@ -80,7 +80,7 @@ eXo.webui.UICalendar = {
   },
 
   show : function() {
-    document.onclick = new Function('eXo.webui.UICalendar.hide()');
+    document.onclick = function() {_module.UICalendar.hide()};
     var re = /^(\d{1,2}\/\d{1,2}\/\d{1,4})\s*(\s+\d{1,2}:\d{1,2}:\d{1,2})?$/i;
     this.selectedDate = new Date();
 
@@ -175,10 +175,10 @@ eXo.webui.UICalendar = {
       clndr.firstChild.style.top = -heightCal.offsetHeight + 'px';
     }
 
-    eXo.webui.UICalendar.initDragDrop();
+    _module.UICalendar.initDragDrop();
 
     var primary = gj(this.dateField).closest("#UIECMSearch");
-    if (primary.length && eXo.core.Browser.isFF()) {
+    if (primary.length && base.Browser.isFF()) {
       var calendar = clndr.firstChild;
       calendar.style.top = "0px";
       calendar.style.left = this.dateField.offsetLeft
@@ -191,7 +191,7 @@ eXo.webui.UICalendar = {
 
     // identify the tab key
     if (keyCode == 9) {
-      eXo.webui.UICalendar.hide();
+      _module.UICalendar.hide();
     }
   },
 
@@ -220,16 +220,16 @@ eXo.webui.UICalendar = {
     table += '	<table class="MonthYearBox">';
     table += '	  <tr>';
     table += '			<td class="MonthButton"><a class="PreviousMonth" href="javascript:eXo.webui.UICalendar.changeMonth(-1);" title="'
-        + eXo.i18n.I18NMessage.getMessage("PreviousMonth") + '"></a></td>';
+        + base.I18NMessage.getMessage("PreviousMonth") + '"></a></td>';
     table += '			<td class="YearButton"><a class="PreviousYear" href="javascript:eXo.webui.UICalendar.changeYear(-1);" title="'
-        + eXo.i18n.I18NMessage.getMessage("PreviousYear") + '"></a></td>';
+        + base.I18NMessage.getMessage("PreviousYear") + '"></a></td>';
     table += '			<td><font color="#f89302">'
         + this.months[this.currentDate.getMonth()] + '</font> - '
         + this.currentDate.getFullYear() + '</td>';
     table += '			<td class="YearButton"><a class="NextYear" href="javascript:eXo.webui.UICalendar.changeYear(1);" title="'
-        + eXo.i18n.I18NMessage.getMessage("NextYear") + '"></a></td>';
+        + base.I18NMessage.getMessage("NextYear") + '"></a></td>';
     table += '			<td class="MonthButton"><a class="NextMonth" href="javascript:eXo.webui.UICalendar.changeMonth(1);" title="'
-        + eXo.i18n.I18NMessage.getMessage("NextMonth") + '"></a></td>';
+        + base.I18NMessage.getMessage("NextMonth") + '"></a></td>';
     table += '		</tr>';
     table += '	</table>';
     table += '	<div style="margin-top: 6px;padding: 0px 5px;">';
@@ -315,7 +315,7 @@ eXo.webui.UICalendar = {
     var clndr = document.getElementById(this.calendarId);
     clndr.firstChild.lastChild.innerHTML = this.renderCalendar();
 
-    eXo.webui.UICalendar.initDragDrop();
+    _module.UICalendar.initDragDrop();
   },
 
   initDragDrop : function() {
@@ -324,9 +324,9 @@ eXo.webui.UICalendar = {
     var calendar = drag.children(".UICalendar").first();
     var innerWidth = drag[0].offsetWidth;
 
-    eXo.core.DragDrop.init(drag[0], component[0]);
+    common.DragDrop.init(drag[0], component[0]);
     component[0].onDragStart = function() {
-      if (eXo.core.Browser.isIE7())
+      if (base.Browser.isIE7())
         drag.height(calendar[0].offsetHeight);
       drag.width(innerWidth);
     }
@@ -338,7 +338,7 @@ eXo.webui.UICalendar = {
     var clndr = document.getElementById(this.calendarId);
     clndr.firstChild.lastChild.innerHTML = this.renderCalendar();
 
-    eXo.webui.UICalendar.initDragDrop();
+    _module.UICalendar.initDragDrop();
   },
 
   setDate : function(year, month, day) {
@@ -508,4 +508,6 @@ eXo.webui.UICalendar = {
   setFirstDayOfWeek : function(dayOfWeek) {
     this.firstDayOfWeek = dayOfWeek;
   }
-}
+};
+
+_module.UICalendar = eXo.webui.UICalendar;

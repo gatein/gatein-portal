@@ -17,10 +17,10 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.webui.UIDashboardUtil = {
+var uiDashboardUtil = {
 
 	findPosX : function(obj) {
-	  var curleft = 0, browser = eXo.core.Browser;
+	  var curleft = 0, browser = base.Browser;
 	  var uiWorkspaceContainer = document.getElementById("UIWorkspaceContainer");
 	  var uiWorkingWorkspace = document.getElementById("UIWorkingWorkspace");	  
 	  while (obj) {
@@ -42,7 +42,7 @@ eXo.webui.UIDashboardUtil = {
 	},
 	
 	isIn : function(x, y, component) {
-	  var componentLeft = eXo.webui.UIDashboardUtil.findPosX(component);
+	  var componentLeft = _module.UIDashboardUtil.findPosX(component);
 	  var componentRight = componentLeft + component.offsetWidth ;
 	  var componentTop = gj(component).offset().top;
 	  var componentBottom = componentTop + component.offsetHeight ;
@@ -78,7 +78,7 @@ eXo.webui.UIDashboardUtil = {
     var scrollLeft = gadgetCont.scrollLeft();
     gadgetCont.find("div.UIColumn").each(function()
     {
-      var left = eXo.webui.UIDashboardUtil.findPosX(this) - scrollLeft;
+      var left = _module.UIDashboardUtil.findPosX(this) - scrollLeft;
       if(left <= x && x < left + this.offsetWidth)
       {
         column = gj(this);
@@ -120,3 +120,5 @@ eXo.webui.UIDashboardUtil = {
 		return url;
 	}
 };
+
+_module.UIDashboardUtil = uiDashboardUtil;

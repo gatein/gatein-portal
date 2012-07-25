@@ -70,3 +70,4 @@ eXo.core.I18n = {
 };
 
 eXo.core.I18n.init();
+_module.I18n = eXo.core.I18n;

@@ -192,8 +192,8 @@ public class Util
       PortalRequestContext context = Util.getPortalRequestContext();
       if (uiParent instanceof UIPage)
       {
-         context.getJavascriptManager().addCustomizedOnLoadScript(
-            "eXo.portal.UIPortal.showLayoutModeForPage('" + layoutMode + "');");
+         context.getJavascriptManager().require("SHARED/portal", "portal")
+            .addScripts("eXo.portal.UIPortal.showLayoutModeForPage('" + layoutMode + "');");
       }
    }
 
@@ -214,8 +214,8 @@ public class Util
       String layoutMode = clazz.getSimpleName();
 
       PortalRequestContext context = Util.getPortalRequestContext();
-      context.getJavascriptManager().addCustomizedOnLoadScript(
-         "eXo.portal.UIPortal.showViewMode('" + layoutMode + "');");
+      context.getJavascriptManager().require("SHARED/portal", "portal")
+         .addScripts("portal.UIPortal.showViewMode('" + layoutMode + "');");
    }
 
    public static UIWorkingWorkspace updateUIApplication(Event<? extends UIComponent> event)

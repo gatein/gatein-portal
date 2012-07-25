@@ -27,8 +27,8 @@
 								<div class="LeftTab">
 									<div class="RightTab">
 		""";
-		if(messages.size() > 0) println "<div class=\"MiddleTab\" onclick=\"eXo.webui.UIHorizontalTabs.displayTabContent(this)\"><div class=\"TabIcon ${title}Icon\">"+_ctx.appRes("UIPopupMessages.label."+"${title}") +"</div></div>";
-		else println "<div class=\"MiddleTab\"><div class=\"TabIcon ${title}Icon\">" + _ctx.appRes("UIPopupMessages.label."+"${title}") + "</div></div>";
+		if(messages.size() > 0) println "<div class=\"MiddleTab\"><div class=\"TabIcon ${title}Icon\">"+_ctx.appRes("UIPopupMessages.label."+"${title}") +"</div></div>";
+		else println "<div class=\"MiddleTab LockedTab\"><div class=\"TabIcon ${title}Icon\">" + _ctx.appRes("UIPopupMessages.label."+"${title}") + "</div></div>";
 		println """
 									</div>
 								</div>
@@ -65,8 +65,9 @@
     def rcontext = _ctx.getRequestContext();
 
     if(uicomponent.hasMessage()){
-      rcontext.getJavascriptManager().loadScriptResource("webui");
-      rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
+      rcontext.getJavascriptManager().require("SHARED/webui", "webui")
+      	                             .addScripts("webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);")
+                                      .addScripts("webui.UIHorizontalTabs.init('$popupId');");
 
       def errors = uicomponent.getErrors();
       def warnings = uicomponent.getWarnings();
@@ -104,7 +105,8 @@
 	</div>
 	<%
     } else if (rcontext.useAjax()) {
-        rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.hide('$popupId', $uicomponent.showMask);");
+        rcontext.getJavascriptManager().require("SHARED/webui", "webui")
+                                       .addScripts("webui.UIPopupWindow.hide('$popupId', $uicomponent.showMask);");
     }
 	%>
 </div>

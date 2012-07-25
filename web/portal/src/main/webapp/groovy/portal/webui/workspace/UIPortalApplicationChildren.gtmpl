@@ -1,30 +1,13 @@
 <%
-   def rcontext = _ctx.getRequestContext() ;
-   uicomponent.renderChildren();
-   def scriptsURLs = uicomponent.getScriptsURLs();
+	import org.json.JSONArray;
 
-   def onloadScripts = new StringBuilder("[");
-   for (path in scriptsURLs.keySet()) {
-	   if (scriptsURLs.get(path)) {
-	      onloadScripts.append("'").append(path).append("',");
-	   }
-   }
-
-   // This handles legacy usage of importJavascript
-   def jsManager = rcontext.getJavascriptManager();
-   for (path in jsManager.getImportedJavaScripts()) {
-	   onloadScripts.append("'").append(path).append("',");
-   }
-   onloadScripts.append("]");
-
-   rcontext.setAttribute("eXo.portal.scriptsURLs", scriptsURLs);
+	def rcontext = _ctx.getRequestContext() ;
+	def jsManager = rcontext.getJavascriptManager();
+	uicomponent.renderChildren();
 %>
-       </div>
-    <script type="text/javascript">      
-    eXo.loadJS($onloadScripts, function() {
-	      <%=jsManager.getJavaScripts()%>	  
-	  	}			  
-	  );
-    </script>
-  </body>
+</div>
+  <script type="text/javascript">
+  <%=jsManager.getJavaScripts()%>
+  </script>
+</body>
 </html>

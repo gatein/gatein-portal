@@ -1,7 +1,18 @@
 <%
+  import org.json.JSONObject;
+  import org.json.JSONArray;
+  
   def rcontext = _ctx.getRequestContext(); 
-  rcontext.getJavascriptManager().loadScriptResource('webui'); 
-  rcontext.getJavascriptManager().loadScriptResource('portal'); 
+  rcontext.getJavascriptManager().require("SHARED/webui"); 
+  
+  def selected = null, selectOptions = new JSONArray();  
+  
+  JSONObject makeJSON(String name, String value) {
+     JSONObject tmp = new JSONObject();
+     tmp.put("component", "$name");
+     tmp.put("option", "$value");
+     return tmp;
+  }
 %>
 <div class="UIChangeLanguageForm">
   <div class="UIFormTabPane">
@@ -45,16 +56,13 @@
                         <% 
                           for(opt in options) {
                             String itemSelected = "NormalItem";
-                            if (opt.isSelected()) {
-                              def setSelected = "eXo.webui.UIItemSelector.SelectedItem = new Object();";
-                              setSelected += "eXo.webui.UIItemSelector.SelectedItem.component = '$selector.name';";
-                              setSelected += "eXo.webui.UIItemSelector.SelectedItem.option = '$opt.value';";
-
-                              rcontext.getJavascriptManager().addCustomizedOnLoadScript(setSelected);
+                            if (opt.isSelected()) {                  
+                              selected = makeJSON(selector.name, opt.value);                                                                                
                               itemSelected = "SelectedItem";
                             } 
+                            selectOptions.put(makeJSON(selector.name, opt.value));
                         %>
-                          <div class="$itemSelected ClearFix" onclick="eXo.webui.UIItemSelector.onClickOption(this, '$uicomponent.name', '$selector.name', '$opt.value')">
+                          <div class="$itemSelected ClearFix">
                             <div class="Icon"><span></span></div>
                             <a class="NodeLabel"><%=opt.getLabel()%></a>
                             <div class="PercentLabel"><%=opt.getDescription()%></div>
@@ -69,25 +77,14 @@
                 </div>
                     
               </div>
-              <%}%>
+              <%
+              	 }
+              	 rcontext.getJavascriptManager().require("SHARED/webui", "webui")
+              	 			.addScripts("webui.UILanguageSelector.init($selected, $selectOptions);");              
+              %>
             </div>
-            <script type="text/javascript">
-              function changeLanguage(url)
-              {
-                var language = "";
-                if(eXo.webui.UIItemSelector.SelectedItem != undefined)
-                {
-                  language = eXo.webui.UIItemSelector.SelectedItem.option;
-                }
-                if(language == undefined)
-                {
-                  language = "";
-                }
-                window.location = url + "&language=" + language;
-              }
-            </script>
             <div class="UIAction"> 
-              <a href="javascript:void(0);" onclick="javascript:changeLanguage('<%=uicomponent.url("Save");%>');" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.save");%></a>
+              <a href="<%=uicomponent.url("Save");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.save");%></a>
               <a href="javascript:void(0);" onclick="<%=uicomponent.event("Close");%>" class="ActionButton LightBlueStyle"><%=_ctx.appRes("UIChangeLanguage.action.close");%></a>
             </div>
   

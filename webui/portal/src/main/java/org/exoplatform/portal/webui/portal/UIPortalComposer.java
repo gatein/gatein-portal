@@ -323,7 +323,8 @@ public class UIPortalComposer extends UIContainer
          }
       }
       JavascriptManager jsManager = Util.getPortalRequestContext().getJavascriptManager();
-      jsManager.addJavascript("eXo.portal.portalMode=" + portalMode + ";");
+      jsManager.require("SHARED/portal", "portal")
+         .addScripts("eXo.portal.portalMode=" + portalMode + ";");
    }
 
    public void processRender(WebuiRequestContext context) throws Exception
@@ -430,7 +431,8 @@ public class UIPortalComposer extends UIContainer
          
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          JavascriptManager jsManager = prContext.getJavascriptManager();
-         jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+         jsManager.require("SHARED/portal", "portal")
+            .addScripts("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
       }
 
    }
@@ -501,7 +503,8 @@ public class UIPortalComposer extends UIContainer
             
             prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
             JavascriptManager jsManager = prContext.getJavascriptManager();
-            jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+            jsManager.require("SHARED/portal", "portal")
+               .addScripts("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
          }
          else
          {
@@ -677,7 +680,8 @@ public class UIPortalComposer extends UIContainer
          uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
          prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
          JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
-         jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+         jsManager.require("SHARED/portal", "portal")
+            .addScripts("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
       }
    }
 
@@ -723,7 +727,8 @@ public class UIPortalComposer extends UIContainer
             uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
             
             JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
-            jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+            jsManager.require("SHARED/portal", "portal")
+               .addScripts("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
             return;
          }
          UIPortalComposer composer = uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
@@ -783,7 +788,8 @@ public class UIPortalComposer extends UIContainer
          uiPortalApp.broadcast(pnevent, Event.Phase.PROCESS);
 
          JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
-         jsManager.addJavascript("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+         jsManager.require("SHARED/portal", "portal")
+            .addScripts("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
       }
    }
 

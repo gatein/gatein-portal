@@ -19,6 +19,17 @@
 
 eXo.webui.UIPopupSelectCategory = {
 
+  init : function(parentId) {
+	  var parent = parentId;
+	  if (typeof parent == "string") {
+		  parent = gj("#" + parentId);
+	  }
+	  gj(parent).find(".UIPopupCategory").closest(".ControlIcon, .EditIcon").off("click").on("click", function(event) {
+		  _module.UIPopupSelectCategory.show(this, event);
+	  });
+	  return false;
+  }, 
+  
   /**
    * Show UIPopupCategory object
    * 
@@ -41,3 +52,5 @@ eXo.webui.UIPopupSelectCategory = {
     } 
   }
 };
+
+_module.UIPopupSelectCategory = eXo.webui.UIPopupSelectCategory;

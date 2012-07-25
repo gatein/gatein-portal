@@ -17,7 +17,7 @@
  * site: http://www.fsf.org.
  */
 
-eXo.webui.UIUpload = {
+var uiUpload = {
   listUpload : [],
   
   //This attribute should be persisted belong to particular upload component
@@ -41,6 +41,15 @@ eXo.webui.UIUpload = {
     } catch (err) {
       return;
     }
+    
+    var uploadInput = gj("#" + uploadId);
+    uploadInput.find(".DeleteFileLable, .Abort").on("click", function() {
+    	_module.UIUpload.abortUpload(uploadId);
+    });
+    uploadInput.find(".RemoveFile").on("click", function() {
+    	_module.UIUpload.deleteUpload(uploadId);
+    });
+    
     this.isAutoUpload = isAutoUpload;
     if (response.upload[uploadId] == undefined
         || response.upload[uploadId].percent == undefined) {
@@ -60,7 +69,7 @@ eXo.webui.UIUpload = {
     var uploadHTML = "";
     uploadHTML += "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Strict//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd'>";
     uploadHTML += "<html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='"
-        + eXo.core.I18n.lang + "' dir='" + eXo.core.I18n.dir + "'>";
+        + base.I18n.lang + "' dir='" + base.I18n.dir + "'>";
     uploadHTML += "<head>";
     uploadHTML += "<style type='text/css'>";
     uploadHTML += ".UploadButton {width: 20px; height: 20px; cursor: pointer; vertical-align: bottom;";
@@ -72,13 +81,12 @@ eXo.webui.UIUpload = {
         + "' class='UIUploadForm' style='margin: 0px; padding: 0px' action='"
         + uploadAction + "' enctype='multipart/form-data' method='post'>";
     if (isAutoUpload) {
-      uploadHTML += "    <input type='file' name='file' id='file' value='' onchange='parent.eXo.webui.UIUpload.upload(this, "
-          + uploadId + ")' onkeypress='return false;' />";
+      uploadHTML += "    <input type='file' name='file' id='file' value='' onchange='parent.require(\"SHARED/webui-ext\").UIUpload.upload(this, \""
+          + uploadId + "\")' onkeypress='return false;' />";
     } else {
       uploadHTML += "    <input type='file' name='file' id='file' value='' onkeypress='return false;' />";
-      uploadHTML += "    <img class='UploadButton' style='width: 20px; height: 20px; cursor: pointer; vertical-align: bottom; background: url(\"/eXoResources/skin/DefaultSkin/webui/component/UIUpload/background/UpArrow16x16.gif\") no-repeat left;' onclick='parent.eXo.webui.UIUpload.upload(this, "
-          + uploadId
-          + ")' alt='' src='/eXoResources/skin/sharedImages/Blank.gif'/>";
+      uploadHTML += "    <img class='UploadButton' style='width: 20px; height: 20px; cursor: pointer; vertical-align: bottom; background: url(\"/eXoResources/skin/DefaultSkin/webui/component/UIUpload/background/UpArrow16x16.gif\") no-repeat left;' " +
+      		"onclick='parent.require(\"SHARED/webui-ext\").UIUpload.upload(this, \"" + uploadId + "\")' alt='' src='/eXoResources/skin/sharedImages/Blank.gif'/>";
     }
     uploadHTML += "  </form>";
     uploadHTML += "</body>";
@@ -105,7 +113,7 @@ eXo.webui.UIUpload = {
    *          elementId identifier of upload bar frame
    */
   refreshProgress : function(elementId) {
-    var list = eXo.webui.UIUpload.listUpload;
+    var list = _module.UIUpload.listUpload;
     if (list.length < 1)
       return;
     var url = eXo.env.server.context + "/upload?";
@@ -116,8 +124,9 @@ eXo.webui.UIUpload = {
     }
     var responseText = ajaxAsyncGetRequest(url, false);
     if (list.length > 0) {
-      setTimeout("eXo.webui.UIUpload.refreshProgress('" + elementId + "');",
-          1000);
+      setTimeout(function() {
+    	  _module.UIUpload.refreshProgress(elementId);
+      }, 1000);
     }
 
     try {
@@ -149,13 +158,12 @@ eXo.webui.UIUpload = {
       }
     }
 
-    if (eXo.webui.UIUpload.listUpload.length < 1)
+    if (_module.UIUpload.listUpload.length < 1)
       return;
 
     if (element) {
       element.innerHTML = "Uploaded " + percent + "% "
-          + "<span onclick='parent.eXo.webui.UIUpload.abortUpload(" + id
-          + ")'>Abort</span>";
+          + "<span class='Abort'>Abort</span>";
     }
   },
   /**
@@ -167,7 +175,7 @@ eXo.webui.UIUpload = {
    *          fileName uploaded file name
    */
   showUploaded : function(id, fileName) {
-    eXo.webui.UIUpload.listUpload.remove(id);
+    _module.UIUpload.listUpload.remove(id);
     var container = parent.document.getElementById(id);
     var jCont = gj(container);
     var element = document.getElementById(id + "ProgressIframe");
@@ -198,7 +206,7 @@ eXo.webui.UIUpload = {
    *          id upload identifier
    */
   abortUpload : function(id) {
-    eXo.webui.UIUpload.listUpload.remove(id);
+    _module.UIUpload.listUpload.remove(id);
     var url = eXo.env.server.context + "/upload?";
     url += "uploadId=" + id + "&action=abort";
     // var url = eXo.env.server.context + "/upload?uploadId="
@@ -209,7 +217,7 @@ eXo.webui.UIUpload = {
     var jCont = gj(container);
     var uploadIframe = jCont.find("#" + id + "UploadIframe");
     uploadIframe.show();
-    eXo.webui.UIUpload.createUploadEntry(id, eXo.webui.UIUpload.isAutoUpload);
+    _module.UIUpload.createUploadEntry(id, _module.UIUpload.isAutoUpload);
     var progressIframe =jCont.find("#" + id + "ProgressIframe");
     progressIframe.hide();
 
@@ -238,7 +246,7 @@ eXo.webui.UIUpload = {
     var jCont = gj(container);
     var uploadIframe = jCont.find("#" + id + "UploadIframe");
     uploadIframe.show();
-    eXo.webui.UIUpload.createUploadEntry(id, this.isAutoUpload);
+    _module.UIUpload.createUploadEntry(id, this.isAutoUpload);
     var progressIframe = jCont.find("#" + id + "ProgressIframe");
     progressIframe.hide();
 
@@ -286,12 +294,14 @@ eXo.webui.UIUpload = {
 
     form.submit();
 
-    var list = eXo.webui.UIUpload.listUpload;
+    var list = _module.UIUpload.listUpload;
     if (list.length == 0) {
-      eXo.webui.UIUpload.listUpload.push(form.id);
-      setTimeout("eXo.webui.UIUpload.refreshProgress('" + id + "');", 1000);
+      _module.UIUpload.listUpload.push(form.id);
+      setTimeout(function() {_module.UIUpload.refreshProgress(id);}, 1000);
     } else {
-      eXo.webui.UIUpload.listUpload.push(form.id);
+      _module.UIUpload.listUpload.push(form.id);
     }
   }
 };
+
+_module.UIUpload = uiUpload;

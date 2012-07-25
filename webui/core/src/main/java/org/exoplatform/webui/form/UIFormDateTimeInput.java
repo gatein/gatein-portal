@@ -220,8 +220,8 @@ public class UIFormDateTimeInput extends UIFormInputBase<String>
       
 
       JavascriptManager jsManager = context.getJavascriptManager();
-      jsManager.loadScriptResource("webui-ext");
-      jsManager.addJavascript("eXo.webui.UICalendar.setFirstDayOfWeek(" + Calendar.getInstance(context.getLocale()).getFirstDayOfWeek() + ");");
+      jsManager.require("SHARED/webui-ext", "webuiExt")
+               .addScripts("webuiExt.UICalendar.setFirstDayOfWeek(" + Calendar.getInstance(context.getLocale()).getFirstDayOfWeek() + ");");
       Writer w = context.getWriter();
 
       w.write("<input type=\"text\" onfocus='eXo.webui.UICalendar.init(this,");

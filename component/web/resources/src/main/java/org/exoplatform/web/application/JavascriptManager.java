@@ -19,7 +19,15 @@
 
 package org.exoplatform.web.application;
 
-import org.exoplatform.commons.utils.PropertyManager;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -30,12 +38,6 @@ import org.gatein.portal.controller.resource.script.FetchMap;
 import org.gatein.portal.controller.resource.script.FetchMode;
 import org.gatein.portal.controller.resource.script.ScriptResource;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * Created by The eXo Platform SAS
  * Mar 27, 2007  
@@ -45,19 +47,24 @@ public class JavascriptManager
    Log log = ExoLogger.getLogger("portal:JavascriptManager");
    
    /** . */
-   private Set<String> importedScripts = new HashSet<String>();
-
-   /** . */
    private FetchMap<ResourceId> resourceIds = new FetchMap<ResourceId>();
    
    /** . */
-   private FetchMap<String> extendedScriptURLs = new FetchMap<String>();
+   private Set<String> extendedScriptURLs = new LinkedHashSet<String>();
 
    /** . */
    private StringBuilder scripts = new StringBuilder();
 
    /** . */
    private StringBuilder customizedOnloadJavascript = new StringBuilder();
+
+   private RequireJS requireJS;
+
+   public JavascriptManager()
+   {
+      requireJS = new RequireJS();
+      requireJS.require("SHARED/base", "base");
+   }
 
    /**
     * Add a valid javascript code
@@ -96,7 +103,26 @@ public class JavascriptManager
       {
          throw new IllegalArgumentException("name can't be null");
       }
-      resourceIds.add(new ResourceId(scope, name), null);
+      ResourceId id = new ResourceId(scope, name);
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      JavascriptConfigService service = (JavascriptConfigService)container.getComponentInstanceOfType(JavascriptConfigService.class);
+      ScriptResource resource = service.getResource(id);
+      if (resource != null)
+      {
+         if (FetchMode.IMMEDIATE.equals(resource.getFetchMode()))
+         {
+            resourceIds.add(id, null);         
+         }
+         else
+         {
+            Map<ResourceId, FetchMode> tmp = new HashMap<ResourceId, FetchMode>();
+            tmp.put(id, null);
+            for (ScriptResource res : service.resolveIds(tmp).keySet())
+            {
+               require(res.getId().toString());
+            }
+         }         
+      }
    }
 
    public FetchMap<ResourceId> getScriptResources()
@@ -104,69 +130,14 @@ public class JavascriptManager
       return resourceIds;
    }
    
-   public FetchMap<String> getExtendedScriptURLs()
+   public List<String> getExtendedScriptURLs()
    {
-      return new FetchMap<String>(extendedScriptURLs);
+      return new LinkedList<String>(extendedScriptURLs);
    }
 
    public void addExtendedScriptURLs(String url)
    {
-      this.extendedScriptURLs.add(url, FetchMode.IMMEDIATE);
-   }
-
-   @Deprecated
-   public void importJavascript(CharSequence s)
-   {
-      String moduleName = s.toString();
-      JavascriptConfigService jsSrevice_ =
-         (JavascriptConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
-            JavascriptConfigService.class);
-      ScriptResource res = jsSrevice_.getResourceIncludingModule(moduleName);
-      if (res != null)
-      {
-         try
-         {
-            ResourceId id = res.getId();
-            loadScriptResource(id.getScope(), id.getName());
-            if (log.isWarnEnabled())
-            {
-               log.warn("This method is deprecated. You could loadScriptResource " + res.getId() + " instead of importJavascript " + moduleName);
-            }
-         }
-         catch (Exception ex)
-         {
-            //Spare me, Sonar! This importJavascript is to be deleted soon
-            ex.printStackTrace();
-         }
-      }
-      else
-      {
-         importJavascript(moduleName, null);
-      }
-   }
-
-   @Deprecated
-   public void importJavascript(String s, String location)
-   {
-      if (s != null)
-      {
-         JavascriptConfigService jsSrevice_ =
-            (JavascriptConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
-               JavascriptConfigService.class);
-         if (!jsSrevice_.isModuleLoaded(s) || PropertyManager.isDevelopping())
-         {
-            if (location == null)
-            {
-               location = "/eXoResources/javascript/";
-            }
-
-            String path = location + s.replaceAll("\\.", "/") + ".js";
-            if (!jsSrevice_.isJavascriptLoaded(path) || PropertyManager.isDevelopping())
-            {
-               importedScripts.add(path);
-            }
-         }
-      }
+      this.extendedScriptURLs.add(url);
    }
 
    public void addOnLoadJavascript(CharSequence s)
@@ -174,11 +145,13 @@ public class JavascriptManager
       if (s != null)
       {
          String id = Integer.toString(Math.abs(s.hashCode()));
-         scripts.append("eXo.core.Browser.addOnLoadCallback('mid");
-         scripts.append(id);
-         scripts.append("',");
-         scripts.append(s instanceof String ? (String)s : s.toString());
-         scripts.append(");\n");
+         StringBuilder script = new StringBuilder("base.Browser.addOnLoadCallback('mid");
+         script.append("base.Browser.addOnLoadCallback('mid");
+         script.append(id);
+         script.append("',");
+         script.append(s instanceof String ? (String)s : s.toString());
+         script.append(");");
+         requireJS.addScripts(script.toString());
       }
    }
 
@@ -187,11 +160,13 @@ public class JavascriptManager
       if (s != null)
       {
          String id = Integer.toString(Math.abs(s.hashCode()));
-         scripts.append("eXo.core.Browser.addOnResizeCallback('mid");
-         scripts.append(id);
-         scripts.append("',");
-         scripts.append(s instanceof String ? (String)s : s.toString());
-         scripts.append(");\n");
+         StringBuilder script = new StringBuilder();
+         script.append("base.Browser.addOnResizeCallback('mid");
+         script.append(id);
+         script.append("',");
+         script.append(s instanceof String ? (String)s : s.toString());
+         script.append(");");
+         requireJS.addScripts(script.toString());
       }
    }
 
@@ -200,11 +175,13 @@ public class JavascriptManager
       if (s != null)
       {
          String id = Integer.toString(Math.abs(s.hashCode()));
-         scripts.append("eXo.core.Browser.addOnScrollCallback('mid");
-         scripts.append(id);
-         scripts.append("',");
-         scripts.append(s instanceof String ? (String)s : s.toString());
-         scripts.append(");\n");
+         StringBuilder script = new StringBuilder();
+         script.append("base.Browser.addOnScrollCallback('mid");
+         script.append(id);
+         script.append("',");
+         script.append(s instanceof String ? (String)s : s.toString());
+         script.append(");");
+         requireJS.addScripts(script.toString());
       }
    }
 
@@ -217,19 +194,11 @@ public class JavascriptManager
       }
    }
 
-   @Deprecated
-   public void writeCustomizedOnLoadScript(Writer writer) throws IOException
-   {
-      if (customizedOnloadJavascript != null)
-      {
-         writer.write(customizedOnloadJavascript.toString());
-      }
-   }
-
    /**
     * Returns javascripts which were added by {@link #addJavascript(CharSequence)},
     * {@link #addOnLoadJavascript(CharSequence)}, {@link #addOnResizeJavascript(CharSequence)},
-    * {@link #addOnScrollJavascript(CharSequence)}, {@link #addCustomizedOnLoadScript(CharSequence)}
+    * {@link #addOnScrollJavascript(CharSequence)}, {@link #addCustomizedOnLoadScript(CharSequence)},
+    * {@link #requireJS}
     * 
     * @return
     */
@@ -237,59 +206,27 @@ public class JavascriptManager
    {
       StringBuilder callback = new StringBuilder();
       callback.append(scripts);
-      callback.append("eXo.core.Browser.onLoad();\n");
-      callback.append(customizedOnloadJavascript);
+      callback.append(requireJS.addScripts("base.Browser.onLoad();").addScripts(customizedOnloadJavascript.toString()).toString());
       return callback.toString();
    }
 
-   public Set<String> getImportedJavaScripts()
+   public RequireJS require(String moduleId)
    {
-      return importedScripts;
+      return require(moduleId, null);
    }
 
-   /**
-    * @deprecated You would handle the returned javascripts from {@link #getJavaScripts()} and 
-    * {@link #getImportedJavaScripts()} by yourself instead of delegating JavascriptManager to
-    * write the output
-    * 
-    * @param writer
-    * @throws IOException
-    */
-   @Deprecated
-   public void writeJavascript(Writer writer) throws IOException
+   public RequireJS require(String moduleId, String alias)
    {
-      StringBuilder callback = new StringBuilder();
-      callback.append(scripts);
-      callback.append("eXo.core.Browser.onLoad();\n");
-      callback.append(customizedOnloadJavascript);
-
-      if (importedScripts.size() > 0)
-      {
-         String jsPaths = buildJSArray(importedScripts);
-
-         StringBuilder builder = new StringBuilder("eXo.loadJS(");
-         builder.append(jsPaths).append(",");
-         builder.append("function() {").append(callback.toString()).append("});");
-         writer.write(builder.toString());
-      }
-      else
-      {
-         writer.write(callback.toString());
-      }
+      return requireJS.require(moduleId, alias);
+   }
+   
+   public RequireJS getRequireJS()
+   {
+      return requireJS;
    }
 
-   private String buildJSArray(Collection<String> params)
+   public String generateUUID()
    {
-      StringBuilder pathBuilder = new StringBuilder("[");
-      for (String str : params)
-      {
-         pathBuilder.append("'").append(str).append("',");
-      }
-      if (!params.isEmpty())
-      {
-         pathBuilder.deleteCharAt(pathBuilder.length() - 1);
-      }
-      pathBuilder.append("]");
-      return pathBuilder.toString();
+      return "uniq-" + UUID.randomUUID().toString();
    }
 }

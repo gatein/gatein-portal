@@ -166,7 +166,6 @@ function MarkupHeadElements(fragment) {
 
 function LoadingScripts(fragment) {
 	this.immediateScripts = [];
-	this.onloadScripts = [];
 	var jFragment = gj(fragment);
 	var headers = jFragment.children(".ImmediateScripts").first().html();
 	headers = headers.replace(/^\s*/, '').split(",");
@@ -174,14 +173,7 @@ function LoadingScripts(fragment) {
 		if (headers[i] !== "") {
 			this.immediateScripts.push(headers[i]);
 		}
-	}
-	var onloads = jFragment.children(".OnloadScripts").first().html();
-	onloads = onloads.replace(/^\s*/, '').split(",");
-	for (var i = 0; i < onloads.length; i++) {
-		if (onloads[i] !== "") {
-			this.onloadScripts.push(onloads[i]);
-		}
-	}
+	}	
 }
 
 /*
@@ -437,14 +429,7 @@ function HttpResponseHandler() {
 		appendElementsToHead(head, markupHeadElements.bases);
 		appendElementsToHead(head, markupHeadElements.links);                         
 		appendElementsToHead(head, markupHeadElements.styles);
-		for (var i = 0; i < markupHeadElements.scripts.length; i++) {
-			var sc = markupHeadElements.scripts[i];
-			if (sc.defer) {
-				response.loadingScripts.onloadScripts.push(sc);
-			} else {
-				response.loadingScripts.immediateScripts.push(sc);
-			}
-		}
+		appendElementsToHead(head, markupHeadElements.scripts);		
 	};
 
   function cleanHtmlHead(response)
@@ -465,19 +450,25 @@ function HttpResponseHandler() {
       {
         gj(response.data).find(".PORTLET-FRAGMENT").each(function()
         {
-          head.find(".ExHead-" + this.parentNode.id + ":not(title)").remove();
+          head.find(".ExHead-" + this.parentNode.id.replace("EditMode-", "") + ":not(title)").remove();
         });
       }
     }
     else 
     {
     	//This code will be run after we've finished update html
-    	var workspace = gj("#UIWorkingWorkspace");
+    	var portlets = gj("#UIWorkingWorkspace .PORTLET-FRAGMENT");
     	var exHeads = head.find("[class^='ExHead-']:not(title)");
     	exHeads.each(function()
 		{
     		var portletId = this.className.substring(7);
-    		if (workspace.find("#" + portletId).length == 0)
+    		var del = true;
+    		portlets.each(function() {
+    			if (this.parentNode.id.replace("EditMode-", "") === portletId) {
+    				del = false;
+    			}
+    		});
+    		if (del)
     		{
     			gj(this).remove();
     		}
@@ -488,9 +479,6 @@ function HttpResponseHandler() {
   function appendElementsToHead(head, elements) {
 		if (!elements) return;
 		elements.each(function() {
-			//script tags that has been wrapped in jquery are not executed
-			//when inserted to head
-			head.append(this);
 			head[0].appendChild(this);
 		});		
 	}
@@ -514,9 +502,9 @@ function HttpResponseHandler() {
 	  
 	  blocksToUpdate.each(function(blockToUpdate) {
 		  var target = parentBlock.find("#" + blockToUpdate.blockId);
-		  if(target.length == 0) alert(eXo.i18n.I18NMessage.getMessage("TargetBlockNotFound", new Array (blockToUpdate.blockId))) ;		  
+		  if(target.length == 0) alert(_module.I18NMessage.getMessage("TargetBlockNotFound", new Array (blockToUpdate.blockId))) ;		  
 		  var newData = gj(blockToUpdate.data).find("#" + blockToUpdate.blockId);
-		  if(newData.length == 0) alert(eXo.i18n.I18NMessage.getMessage("BlockUpdateNotFound", new Array (blockToUpdate.blockId))) ;
+		  if(newData.length == 0) alert(_module.I18NMessage.getMessage("BlockUpdateNotFound", new Array (blockToUpdate.blockId))) ;
 //		    target.parentNode.replaceChild(newData, target);
 		  target.html(newData.html());
 		  //update embedded scripts
@@ -533,7 +521,7 @@ function HttpResponseHandler() {
 	* This method is called when the AJAX call was too long to be executed
 	*/
 	instance.ajaxTimeout = function(request) {
-	  eXo.core.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
+	  _module.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
 	  eXo.portal.AjaxRequest.maskLayer = null ;
 	  eXo.portal.CurrentRequest = null ;
 	  window.location.reload() ;
@@ -555,17 +543,18 @@ function HttpResponseHandler() {
 	* 5) Then it is each portal block which is updated and the assocaited scripts are evaluated
 	*/
 	instance.ajaxResponse = function(request, response) {
+	  var that = this;
 	  if (!response) {
-		var response = new PortalResponse(this.responseText) ;		  
+		var response = new PortalResponse(that.responseText) ;		  
         instance.updateHtmlHead(response);
 	  }
 	  var loadingScripts = response.loadingScripts;
-	  var immediateScripts = loadingScripts ? loadingScripts.immediateScripts : []; 
-	  if (immediateScripts.length) {
-		  eXo.core.AsyncLoader.loadJS(immediateScripts, function() {
+	  var immediateScripts = loadingScripts ? loadingScripts.immediateScripts : [];	    
+	  if (immediateScripts.length) {		  
+		  require(immediateScripts, function() {
 			  immediateScripts.clear();
-			  instance.ajaxResponse.apply(this, [request, response]);
-		  }, null, this);
+			  instance.ajaxResponse.apply(that, [request, response]);
+		  });
 		  return;
 	  }
 
@@ -599,26 +588,23 @@ function HttpResponseHandler() {
 		});
 	  }	
 	  if(!response.blocksToUpdate && request.responseText !== "") {
-	  	if(confirm(eXo.i18n.I18NMessage.getMessage("SessionTimeout"))) instance.ajaxTimeout(request) ;
+	  	if(confirm(_module.I18NMessage.getMessage("SessionTimeout"))) instance.ajaxTimeout(request) ;
 	  }
 	  try {	    
 		  //Handle the portal responses
 		  instance.updateBlocks(response.blocksToUpdate) ;
 		  //After handle html response. We need to remove extra markup header of removed portlets
 		  cleanHtmlHead();
-		  var onloadScripts = loadingScripts ? loadingScripts.onloadScripts : [];
-		  eXo.core.AsyncLoader.loadJS(onloadScripts, function() {		  
-			  instance.executeScript(response.script);		  
-			  /**
-			   * Clears the instance.to timeout if the request takes less time than expected to get response
-			   * Removes the transparent mask so the UI is available again, with cursor "auto"
-			   */
-			  clearTimeout(instance.to);
-			  eXo.core.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
-			  
-			  eXo.portal.AjaxRequest.maskLayer = null ;
-			  eXo.portal.CurrentRequest = null ;		 
-		  }, null, this);		  
+		  instance.executeScript(response.script);		  
+		  /**
+		   * Clears the instance.to timeout if the request takes less time than expected to get response
+		   * Removes the transparent mask so the UI is available again, with cursor "auto"
+		   */
+		  clearTimeout(instance.to);
+		  _module.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
+		  
+		  eXo.portal.AjaxRequest.maskLayer = null ;
+		  eXo.portal.CurrentRequest = null ;		 
       } catch (error) {
              alert(error.message) ;
       }	  
@@ -639,37 +625,16 @@ function HttpResponseHandler() {
 		 */		
 		 
 		if(eXo.portal.AjaxRequest.maskLayer == null ){
-			eXo.portal.AjaxRequest.maskLayer = eXo.core.UIMaskLayer.createTransparentMask();
+			eXo.portal.AjaxRequest.maskLayer = _module.UIMaskLayer.createTransparentMask();
 		}
 		instance.to = setTimeout(function() {
 			if(eXo.portal.AjaxRequest.maskLayer != null) {
-				eXo.core.UIMaskLayer.showAjaxLoading(eXo.portal.AjaxRequest.maskLayer);			   
+				_module.UIMaskLayer.showAjaxLoading(eXo.portal.AjaxRequest.maskLayer);			   
 			}
 		}, 2000);
 	};
 	
 	return instance ;
-}
-
-/*****************************************************************************************/
-/*
-* This is the main entry method for every Ajax calls to the eXo Portal
-*
-* It is simply a dispatcher method that fills some init fields before 
-* calling the doRequest() method
-*/
-function ajaxGet(url, callback) {
-  if (!callback) callback = null ;
-  doRequest("Get", url, null, callback);
-}
-
-/**
- * Do a POST request in AJAX with given <code>url</code> and <code>queryString</code>.
- * The call is delegated to the doRequest() method with a callback function
- */
-function ajaxPost(url, queryString, callback) {
-  if (!callback) callback = null ;
-  doRequest("POST", url, queryString, callback) ;
 }
 
 /*
@@ -684,7 +649,7 @@ function ajaxPost(url, queryString, callback) {
 *    ajaxResponse, ajaxLoading, ajaxTimeout are associated with the one from
 *    the AjaxRequest and will be called by the XHR during the process method 
 */
-function doRequest(method, url, queryString, callback) {
+window.doRequest = function(method, url, queryString, callback) {
   request = new AjaxRequest(method, url, queryString) ;
   handler = new HttpResponseHandler() ;
   request.onSuccess = handler.ajaxResponse ;
@@ -701,7 +666,7 @@ function doRequest(method, url, queryString, callback) {
  * @return
  */
 function ajaxAbort() {	
-  eXo.core.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
+  _module.UIMaskLayer.removeMasks(eXo.portal.AjaxRequest.maskLayer) ;
   eXo.portal.AjaxRequest.maskLayer = null ;	  
 
   eXo.portal.CurrentRequest.request.abort() ;  
@@ -715,7 +680,7 @@ function ajaxAbort() {
  * @param {boolean} async - asynchronous or none
  * @return {String} response text if request is not async
  */
-function ajaxAsyncGetRequest(url, async) {
+window.ajaxAsyncGetRequest = function(url, async) {
 	return ajaxRequest("GET", url, async);
 }
 
@@ -726,7 +691,7 @@ function ajaxAsyncGetRequest(url, async) {
  * @param {boolean} async - asynchronous or none
  * @return {String} response text if request is not async
  */
-function ajaxRequest(method, url, async, queryString) {
+window.ajaxRequest = function(method, url, async, queryString) {
   if(async == undefined) async = true ;
   var resp;
   gj.ajax(url, {

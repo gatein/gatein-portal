@@ -17,24 +17,49 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.portal.PortalComposer = {
+var portalComposer = {
 
-  contentModified : false,
+  init : function(id, width, height, isEditted, portalMode)
+  {
+	eXo.portal.portalMode = portalMode;
+	eXo.portal.hasEditted = isEditted;
+		
+    gj("div#" + id).attr("exo:minWidth", width).attr("exo:minHeight", height).find("div.OverflowContainer > span").eq(0).on("click", function()
+    {
+      _module.PortalComposer.toggle(gj(this));
+    });
+  },
+  
+  initComposerContent : function(id, selTabId, webui) 
+  {
+	  _module.PortalComposer.showTab(selTabId);
+	  
+	  var tabs = gj("#" + id + " .MiddleTab");
+	  tabs.each(function(index) {
+		  gj(this).on("click", function() {
+			  webui.UIHorizontalTabs.changeTabForUITabPane(this);
+			  var hiddenInput = gj(this).children("input");		  
+			  _module.PortalComposer.showTab(hiddenInput.attr("name"));
+			  gj.globalEval(hiddenInput.attr("value"));
+			  
+			  if(eXo.portal.portalMode) eXo.portal.portalMode += (index==0 ? -1 : 1)*2;  		  
+		  });
+	  });
+  },
 
   toggle : function(icon)
   {
-    var jqIcon = gj(icon);
-    var compWindow = jqIcon.parent().closest(".UIPortalComposer");
+    var compWindow = icon.parent().closest(".UIPortalComposer");
     var contWindow = compWindow.children("div.UIWindowContent").eq(0);
     if(contWindow.css("display") == "block")
     {
       contWindow.css("display", "none");
-      jqIcon.attr("class", "CollapseIcon");
+      icon.attr("class", "CollapseIcon");
     }
     else
     {
       contWindow.css("display", "block");
-      jqIcon.attr("class", "ExpandIcon");
+      icon.attr("class", "ExpandIcon");
     }
 
     ajaxAsyncGetRequest(eXo.env.server.createPortalURL(compWindow.attr("id"), "Toggle", true));
@@ -46,7 +71,7 @@ eXo.portal.PortalComposer = {
     if(id == "UIApplicationList")
     {
       toolPanel.attr("class", "ApplicationMode");
-      eXo.portal.PortalDragDrop.init(['UIPageBody']);
+      _module.PortalDragDrop.init(['UIPageBody']);
     }
     else if(id == "UIContainerList")
     {
@@ -63,9 +88,9 @@ eXo.portal.PortalComposer = {
   toggleSaveButton : function()
   {
     //Avoid execute method body multiple times
-    if(!this.contentModified)
+    if(!eXo.portal.hasEditted)
     {
-      this.contentModified = true;
+      eXo.portal.hasEditted = true;
       var compWindow = gj("#UIWorkingWorkspace").find("div.UIPortalComposer").eq(0);
       compWindow.find("a.SaveButton").attr("class", "EdittedSaveButton");
 
@@ -73,3 +98,5 @@ eXo.portal.PortalComposer = {
     }
   }
 };
+
+_module.PortalComposer = portalComposer;

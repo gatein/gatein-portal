@@ -5,6 +5,9 @@
 	def selectedCategory = uicomponent.getChild(UIItemThemeSelector.class).getSelectedCategory() ;
 	String selectedThemeName = uicomponent.getChild(UIItemThemeSelector.class).getSelectedTheme() ;
 	def uiParentComponent = uicomponent.getParent() ;
+	
+	def rcontext = _ctx.getRequestContext(); 
+	rcontext.getJavascriptManager().require("SHARED/portal", "portal").addScripts("portal.UIFormInputThemeSelector.initForm();");
 %>
 <div class="UIItemSelector UIFormInputThemeSelector" id="$uicomponent.id">
 	<div class="LeftColumnStyle ClearFix">
@@ -13,7 +16,7 @@
 			<div class="ItemDetailTitle">
       	<div class="TitleIcon ViewListIcon"><span></span></div>
   	    <div class="Title"><%= _ctx.appRes(uiParentComponent.getId() + "." + uicomponent.getId() + ".title.Preview") %></div>
-  	    <div class="SetDefault" onclick="eXo.webui.UIFormInputThemeSelector.setDefaultTheme(this,'DefaultTheme')">
+  	    <div class="SetDefault">
   	    	<a href="#"><%= _ctx.appRes(uiParentComponent.getId() + "." + uicomponent.getId() + ".title.SetDefault") %></a>
   	    </div>
     	</div>

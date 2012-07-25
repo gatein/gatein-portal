@@ -76,7 +76,7 @@ public class UICheckBoxInput extends UIFormInputBase<Boolean>
     */
    public boolean isChecked()
    {
-      return getValue();
+      return getValue() == null ? false : getValue();
    }
 
    /**

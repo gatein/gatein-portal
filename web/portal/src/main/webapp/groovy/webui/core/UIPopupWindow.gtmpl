@@ -27,12 +27,12 @@
 	if(height > 0) heightStyle = "height:" + height + "px;";
 	String show = "none";
 	def rcontext = _ctx.getRequestContext();
+  def module = rcontext.getJavascriptManager().require("SHARED/webui", "webui");
 	if(uicomponent.isShow()) {
-	   rcontext.getJavascriptManager().loadScriptResource("webui");
-	   rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
+	   module.addScripts("webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
 	   show = "block";
 	} else if (rcontext.useAjax()) {
-	   rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.hide('$popupId', $uicomponent.showMask);");
+	   module.addScripts("webui.UIPopupWindow.hide('$popupId', $uicomponent.showMask);");
 	}
 %>
 

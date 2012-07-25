@@ -4,8 +4,7 @@
 
   def rcontext = _ctx.getRequestContext();
   JavascriptManager jsManager = rcontext.getJavascriptManager();
-  jsManager.loadScriptResource("webui");
-
+  jsManager.require("SHARED/webui", "webui").addScripts("webui.UIHorizontalTabs.init('$uicomponent.id');");
 %>
 
 <div class="UIAccountSettingForm" id="<%=uicomponent.getId();%>">
@@ -23,7 +22,7 @@
 										<div class="SelectedTab">
 											<div class="LeftTab">
 												<div class="RightTab">								
-													<div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">
+													<div class="MiddleTab">
 														<a class="Icon AccountProfiles"><%=_ctx.appRes("UIAccountSetting.tab.label.UIAccountProfiles")%></a>
 													</div>
 												</div>
@@ -37,7 +36,7 @@
 										<div class="NormalTab">
 											<div class="LeftTab">
 												<div class="RightTab">								
-													<div onclick="eXo.webui.UIHorizontalTabs.displayTabContent(this)" class="MiddleTab">
+													<div class="MiddleTab">
 														<a class="Icon ChangePass"><%=_ctx.appRes("UIAccountSetting.tab.label.UIAccountChangePass")%></a>
 													</div>
 												</div>

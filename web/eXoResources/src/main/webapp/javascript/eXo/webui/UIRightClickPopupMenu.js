@@ -36,6 +36,8 @@ eXo.webui.UIRightClickPopupMenu = {
      * Disable/enable browser's default right click handler
      */
     this.disableContextMenu(menu.parent());
+
+    menu.find('.UIRightPopupMenuContainer').on('click', 'div.MenuItem a', _module.UIRightClickPopupMenu.prepareObjectIdEvt)
   },
   /**
    * Hide and disable mouse down event of context menu object
@@ -75,29 +77,22 @@ eXo.webui.UIRightClickPopupMenu = {
   },
 
   /**
-   * Prepare objectId for context menu Make ajaxPost request if needed
+   * An event handler in JQuery
    * 
-   * @param {Object}
-   *          evt event
-   * @param {Object}
-   *          elemt document object that contains context menu
+   * Prepare objectId for context menu Make ajaxPost request if needed
    */
-  prepareObjectId : function(evt, elemt) {
-    if(!evt)
-    {
-      evt = window.event;
-    }
-    evt.cancelBubble = true;
+  prepareObjectIdEvt : function(event) {
+    event.stopPropagation();
 
-    var contextMenu = gj(elemt).closest(".UIRightClickPopupMenu")[0];
+    var contextMenu = gj(this).closest(".UIRightClickPopupMenu")[0];
     contextMenu.style.display = "none";
-    var href = elemt.getAttribute('href');
+    var href = this.getAttribute('href');
     if (!href) {
       return;
     }
     if (href.indexOf("ajaxGet") != -1) {
       href = href.replace("ajaxGet", "ajaxPost");
-      elemt.setAttribute('href', href);
+      this.setAttribute('href', href);
     }
     if (href.indexOf("objectId") != -1 || !contextMenu.objId) {
       return;
@@ -105,7 +100,7 @@ eXo.webui.UIRightClickPopupMenu = {
     var objId = encodeURIComponent(contextMenu.objId.replace(/'/g, "\\'"));
 
     if (href.indexOf("javascript") == -1) {
-      elemt.setAttribute('href', href + "&objectId=" + objId);
+      this.setAttribute('href', href + "&objectId=" + objId);
       return;
     } else if (href.indexOf("window.location") != -1) {
       href = href.substr(0, href.length - 1) + "&objectId=" + objId + "'";
@@ -116,8 +111,8 @@ eXo.webui.UIRightClickPopupMenu = {
     }
 
     eval(href);
-    if (evt && evt.preventDefault)
-      evt.preventDefault();
+    if (event && event.preventDefault)
+      event.preventDefault();
     else
       window.event.returnValue = false;
     return false;
@@ -158,10 +153,13 @@ eXo.webui.UIRightClickPopupMenu = {
     //Register closing contextual menu callback on document
     jDoc.one("mousedown.RightClickPopUpMenu", function(e)
     {
-      eXo.webui.UIRightClickPopupMenu.hideContextMenu(menuId);
+    	_module.UIRightClickPopupMenu.hideContextMenu(menuId);
     });
 
     //The callback registered on document won't be triggered by current 'mousedown' event
+    if ( event.stopPropagation ) {
+    	event.stopPropagation();
+    }
     event.cancelBubble = true;
 
     if (whiteList) {
@@ -195,13 +193,13 @@ eXo.webui.UIRightClickPopupMenu = {
      */
     var fixWidthForIE7 = 0;
     var UIWorkingWorkspace = document.getElementById("UIWorkingWorkspace");
-    if (eXo.core.Browser.isIE7() && document.getElementById("UIDockBar")) {
+    if (base.Browser.isIE7() && document.getElementById("UIDockBar")) {
       if (event.clientX > UIWorkingWorkspace.offsetLeft)
         fixWidthForIE7 = UIWorkingWorkspace.offsetLeft;
     }
 
     eXo.core.Mouse.update(event);
-    eXo.webui.UIPopup.show(contextMenu);
+    base.UIPopup.show(contextMenu);
 
     var ctxMenuContainer = gj(contextMenu).children("div.UIContextMenuContainer")[0];
     var offset = gj(contextMenu).offset();
@@ -213,7 +211,7 @@ eXo.webui.UIRightClickPopupMenu = {
     if (eXo.core.I18n.isRT()) {
       // scrollWidth is width of browser scrollbar
       var scrollWidth = 16;
-      if (eXo.core.Browser.isFF())
+      if (base.Browser.isFF())
         scrollWidth = 0;
       intLeft = contextMenu.offsetParent.offsetWidth - intLeft + fixWidthForIE7
           + scrollWidth;
@@ -290,7 +288,7 @@ eXo.core.Mouse = {
   },
 
   update : function(mouseEvent) {
-    browser = eXo.core.Browser;
+    browser = base.Browser;
     
     mouseEvent = gj.event.fix(mouseEvent);
     this.mousexInPage = mouseEvent.pageX;
@@ -309,3 +307,5 @@ eXo.core.Mouse = {
     this.deltay = this.mouseyInClient - this.lastMouseyInClient ;
   }
 };
+
+_module.UIRightClickPopupMenu = eXo.webui.UIRightClickPopupMenu;

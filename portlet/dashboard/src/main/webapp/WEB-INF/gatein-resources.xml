@@ -55,18 +55,18 @@
     </module>
   </portlet>
 
-  <portlet>
-    <name>TabbedDashboardPortlet</name>
-    <module>
-      <script>
-        <name>eXo.webui.UITabbedDashboard</name>
-        <path>/javascript/eXo/webui/UITabbedDashboard.js</path>
-      </script>
-      <depends>
-        <module>base</module>
-      </depends>
-    </module>
-  </portlet>
-			
+   <portlet>
+      <name>TabbedDashboardPortlet</name>
+      <scripts>
+         <script>
+            <name>eXo.webui.UITabbedDashboard</name>
+            <path>/javascript/eXo/webui/UITabbedDashboard.js</path>
+         </script>
+         <depends>
+            <scripts>bootstrap</scripts>
+         </depends>
+      </scripts>
+   </portlet>
+
 </gatein-resources>
 

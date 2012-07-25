@@ -25,11 +25,36 @@
  * @param {boolean}
  *          mouseOver
  */
-eXo.webui.UIItemSelector = {
+var uiItemSelector = {
 
+  init : function(selector, data, clickOnly) {
+	  var items = gj(selector);
+	  if (!clickOnly) {
+		  items.on("mouseover", function() {
+			  _module.UIItemSelector.onOver(this, true);
+		  });
+		  items.on("mouseout", function() {
+			  _module.UIItemSelector.onOver(this, false);
+		  });		  
+	  }
+	  items.each(function(index) {
+		  var itm = gj(this);
+		  itm.on("click", function() {
+			  _module.UIItemSelector.onClick(this);
+			  itm.find(".ExtraActions").each(function() {
+				  var act = gj(this).html();
+				  eval(act);
+			  });		  
+			  if (data) {
+				 _module.UIItemSelector.onClickCategory(this, null, data[index].componentName, data[index].categoryName);
+			  }
+		  });
+	  });
+  },
+  
   onOver : function(selectedElement, mouseOver) {
     if (selectedElement.className == "Item") {
-      eXo.webui.UIItemSelector.beforeActionHappen(selectedElement);
+      _module.UIItemSelector.beforeActionHappen(selectedElement);
     }
     if (mouseOver) {
       this.backupClass = selectedElement.className;
@@ -51,7 +76,7 @@ eXo.webui.UIItemSelector = {
   onClick : function(clickedElement) {
     var itemListContainer = clickedElement.parentNode;
     var allItems = gj(itemListContainer).find("div.Item").get();
-    eXo.webui.UIItemSelector.beforeActionHappen(clickedElement);
+    _module.UIItemSelector.beforeActionHappen(clickedElement);
     if (this.allItems.length <= 0)
       return;
     for ( var i = 0; i < allItems.length; i++) {
@@ -98,12 +123,12 @@ eXo.webui.UIItemSelector = {
 
   /* Pham Thanh Tung added */
   onClickCategory : function(clickedElement, form, component, option) {
-    eXo.webui.UIItemSelector.onClick(clickedElement);
-    if (eXo.webui.UIItemSelector.SelectedItem == null) {
-      eXo.webui.UIItemSelector.SelectedItem = new Object();
+    _module.UIItemSelector.onClick(clickedElement);
+    if (_module.UIItemSelector.SelectedItem == null) {
+      _module.UIItemSelector.SelectedItem = new Object();
     }
-    eXo.webui.UIItemSelector.SelectedItem.component = component;
-    eXo.webui.UIItemSelector.SelectedItem.option = option;
+    _module.UIItemSelector.SelectedItem.component = component;
+    _module.UIItemSelector.SelectedItem.option = option;
   },
 
   /* Pham Thanh Tung added */
@@ -113,11 +138,11 @@ eXo.webui.UIItemSelector = {
       selectedItems[i].className = "NormalItem";
     }
     clickedElement.className = "SelectedItem";
-    if (eXo.webui.UIItemSelector.SelectedItem == null) {
-      eXo.webui.UIItemSelector.SelectedItem = new Object();
+    if (_module.UIItemSelector.SelectedItem == null) {
+      _module.UIItemSelector.SelectedItem = new Object();
     }
-    eXo.webui.UIItemSelector.SelectedItem.component = component;
-    eXo.webui.UIItemSelector.SelectedItem.option = option;
+    _module.UIItemSelector.SelectedItem.component = component;
+    _module.UIItemSelector.SelectedItem.option = option;
   },
 
   /* TODO: Review This Function (Ha's comment) */
@@ -167,7 +192,7 @@ eXo.webui.UIItemSelector = {
   selectCategory : function(selectedNode) {
     var jqObj = gj(selectedNode);
     var itemListCont = jqObj.closest(".OverflowContainer");
-    var selectedNodeIndex = eXo.webui.UIItemSelector.findIndex(selectedNode);
+    var selectedNodeIndex = _module.UIItemSelector.findIndex(selectedNode);
 
     var itemList = itemListCont.find("div.ItemList");
     var itemDetailList = itemListCont.find("div.ItemDetailList");
@@ -195,44 +220,7 @@ eXo.webui.UIItemSelector = {
       if (siblings[i] == object)
         return i;
     }
-  },
+  }  
+};
 
-  /**
-   * @author dang.tung
-   * 
-   * TODO To change the template layout in page config Called by
-   * UIPageTemplateOptions.java Review UIDropDownControl.java: set javascrip
-   * action UIDropDownControl.js : set this method to do
-   */
-  selectPageLayout : function(id, selectedIndex) {
-    var dropDownControl = gj("#" + id);
-    var itemSelectorAncest = dropDownControl.closest(".ItemSelectorAncestor");
-    var itemList = itemSelectorAncest.find("div.ItemList");
-    var itemSelectorLabel = itemSelectorAncest.find("a.OptionItem");
-    var itemSelector = dropDownControl.find("div.UIItemSelector");
-    var itemDetailList = itemSelector.find("div.ItemDetailList");
-    if (itemList.length == 0)
-      return;
-    for (i = 0; i < itemSelectorLabel.length; ++i) {
-      if (i >= itemList.length)
-        continue;
-      if (i == selectedIndex) {
-        itemList[i].style.display = "block";
-        if (itemDetailList.length < 1)
-          continue;
-        itemDetailList[i].style.display = "block";
-        var selectedItem = gj(itemList[i]).find("div.SelectedItem").eq(0);
-        if (!selectedItem || selectedItem == null)
-          continue;
-        var setValue = selectedItem.find("#SetValue")[0];
-        if (setValue == null)
-          continue;
-        eval(setValue.innerHTML);
-      } else {
-        itemList[i].style.display = "none";
-        if (itemDetailList.length > 0)
-          itemDetailList[i].style.display = "none";
-      }
-    }
-  }
-}
+_module.UIItemSelector = uiItemSelector;

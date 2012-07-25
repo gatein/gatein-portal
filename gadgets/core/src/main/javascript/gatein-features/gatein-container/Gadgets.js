@@ -20,7 +20,9 @@
 /**
  * @fileoverview Open Gadget Container
  */
-var gadgets = gadgets || {};
+
+define("eXo.gadget.Gadgets", ["SHARED/jquery"], function(gj) {
+var gadgets = window.gadgets || {};
 gadgets.error = {};
 gadgets.error.SUBCLASS_RESPONSIBILITY = 'subclass responsibility';
 gadgets.error.TO_BE_DONE = 'to be done';
@@ -697,10 +699,11 @@ gadgets.IfrGadget.prototype.generateForm = function(gadget) {
 
     parentEl.appendChild(formEl);
 
+    var gadgetJS = require("SHARED/gadget");
     var saveEl = document.createElement("div");
     saveEl.className = this.cssClassGadgetUserPrefsDialogActionBar;
-    saveEl.innerHTML = '<input type="button" value="'+eXo.gadget.UIGadget.SaveTitle+'" onclick="gadgets.container.getGadget(' +
-      this.id +').handleSaveUserPrefs()"> <input type="button" value="'+eXo.gadget.UIGadget.CancelTitle+'" onclick="gadgets.container.getGadget(' +
+    saveEl.innerHTML = '<input type="button" value="'+gadgetJS.UIGadget.SaveTitle+'" onclick="gadgets.container.getGadget(' +
+      this.id +').handleSaveUserPrefs()"> <input type="button" value="'+gadgetJS.UIGadget.CancelTitle+'" onclick="gadgets.container.getGadget(' +
       this.id +').handleCancelUserPrefs()">';
     parentEl.appendChild(saveEl);
 };
@@ -945,3 +948,4 @@ gadgets.IfrContainer.prototype.renderGadget = function(gadget) {
  * Default container.
  */
 gadgets.container = new gadgets.IfrContainer();
+});

@@ -34,6 +34,9 @@ public class ScriptResourceDescriptor
 
    /** . */
    final ResourceId id;
+   
+   /** . */
+   final String alias;
 
    /** . */
    final List<Locale> supportedLocales;
@@ -49,11 +52,17 @@ public class ScriptResourceDescriptor
 
    public ScriptResourceDescriptor(ResourceId id, FetchMode fetchMode)
    {
+      this(id, fetchMode, null);
+   }
+   
+   public ScriptResourceDescriptor(ResourceId id, FetchMode fetchMode, String alias)
+   {
       this.id = id;
       this.modules = new ArrayList<Javascript>();
       this.dependencies = new ArrayList<DependencyDescriptor>();
       this.supportedLocales = new ArrayList<Locale>();
       this.fetchMode = fetchMode;
+      this.alias = alias;
    }
 
    public ResourceId getId()
@@ -74,5 +83,10 @@ public class ScriptResourceDescriptor
    public List<DependencyDescriptor> getDependencies()
    {
       return dependencies;
+   }
+
+   public String getAlias()
+   {
+      return alias;
    }
 }

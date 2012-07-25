@@ -17,20 +17,25 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.webui.UISampleTOC = {
-	collapseExpand : function(element) {
-	  var subGroup = gj(element.parentNode).children("div.ChildrenContainer")[0];
-	  var className = element.className;
-	  if (!subGroup)
-	    return;
-	  if (subGroup.style.display == "none") {
-	    if (className.indexOf("ExpandIcon") == 0)
-	      element.className = "CollapseIcon ClearFix";
-	    subGroup.style.display = "block";
-	  } else {
-	    if (className.indexOf("CollapseIcon") == 0)
-	      element.className = "ExpandIcon ClearFix";
-	    subGroup.style.display = "none";
-	  }
-	}
-};
+function initWebUISamplePortlet(id) {
+  require([ "SHARED/jquery" ], function(gj) {
+    gj('#' + id).find('.CollapseIcon').on('click', function() {
+      var subGroup = gj(this.parentNode).children("div.ChildrenContainer")[0];
+      var className = this.className;
+      if (!subGroup) {
+        return;
+      }
+      if (subGroup.style.display == "none") {
+        if (className.indexOf("ExpandIcon") == 0) {
+          this.className = "CollapseIcon ClearFix";
+        }
+        subGroup.style.display = "block";
+      } else {
+        if (className.indexOf("CollapseIcon") == 0) {
+          this.className = "ExpandIcon ClearFix";
+        }
+        subGroup.style.display = "none";
+      }
+    });
+  });
+}

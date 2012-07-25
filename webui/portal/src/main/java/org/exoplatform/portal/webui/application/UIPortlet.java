@@ -1111,12 +1111,14 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       {
          PortletInfo info = getProducedOfferedPortlet().getInfo();
          String name = info.getApplicationName() + "/" + info.getName();
-         context.getJavascriptManager().loadScriptResource(ResourceScope.PORTLET, name);
+         
+         JavascriptManager jsMan = context.getJavascriptManager();
+         jsMan.loadScriptResource(ResourceScope.PORTLET, name);                                   
       }
       super.processRender(context);
    }
 
-public Text generateRenderMarkup(PortletInvocationResponse pir, WebuiRequestContext context)
+   public Text generateRenderMarkup(PortletInvocationResponse pir, WebuiRequestContext context)
    {
       PortalRequestContext prcontext = (PortalRequestContext)context;
       
@@ -1153,7 +1155,7 @@ public Text generateRenderMarkup(PortletInvocationResponse pir, WebuiRequestCont
                   {
                      for (String value : transportHeaders.getValues(key))
                      {
-                        jsMan.loadScriptResource(value);                          
+                        jsMan.require(value);
                      }
                   }
                   else

@@ -127,6 +127,7 @@
   <xs:complexType name="module">  
     <xs:sequence>
       <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="as" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:choice>
         <xs:sequence>
           <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
@@ -165,6 +166,7 @@
             <xs:sequence>
               <xs:choice>
                 <xs:sequence>
+                  <xs:element name="as" type="xs:string" minOccurs="0" maxOccurs="1"/>
                   <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
                   <xs:element name="script" type="script" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
@@ -217,6 +219,7 @@
   <xs:complexType name="module-dependency">
     <xs:sequence>
       <xs:element name="module" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:element name="as" type="xs:string" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
 

@@ -1,16 +1,17 @@
 <%	
 	String popupId = uicomponent.getId(); 
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().loadScriptResource('webui');
 	
 	boolean isEditted = uicomponent.isEditted; 
-	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopupWindow.show('$popupId');");
-	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIPopup.setAlign('$popupId', 2, 5, 5);");
-	rcontext.getJavascriptManager().addJavascript("eXo.portal.PortalComposer.contentModified = " + uicomponent.isEditted + ";");
+	def portalMode = uicomponent.getPortalMode();
+	rcontext.getJavascriptManager()
+    .require("SHARED/webui", "webui").addScripts("webui.UIPopupWindow.show('$popupId');")
+    .require("SHARED/base", "base").addScripts("base.UIPopup.setAlign('$popupId', 2, 5, 5);")
+    .require("SHARED/portal", "portal").addScripts("portal.PortalComposer.init('$uicomponent.id', 200, 200, $isEditted, $portalMode);");
 %>
-<div class="UIPopupWindow UIDragObject UIPortalComposer" exo:minWidth="200" exo:minHeight="200" id="$uicomponent.id" style="width: 320px; display: block;">
+<div class="UIPopupWindow UIDragObject UIPortalComposer" id="$uicomponent.id" style="width: 320px; display: block;">
 	<div class="OverflowContainer ClearFix">
-		<span class="<%=uicomponent.isCollapsed ? "CollapseIcon" : "ExpandIcon"%>" onclick="eXo.portal.PortalComposer.toggle(this)"></span>
+		<span class="<%=uicomponent.isCollapsed ? "CollapseIcon" : "ExpandIcon"%>"></span>
 			<% if(uicomponent.isShowControl) { %>
 			<a class="CloseButton" title="<%=_ctx.appRes("word.abort")%>" href="<%=uicomponent.event("CloseComposer")%>"><span></span></a>
 				<% if (uicomponent.isUsedInWizard()) { %>
@@ -40,7 +41,3 @@
 	</div>
 	<span class="ResizeButton"></span>
 </div>
-<script language="javascript">
-	eXo.portal.portalMode = <%=uicomponent.getPortalMode();%>;
-	eXo.portal.hasEditted = <%=uicomponent.isEditted;%>;	
-</script>

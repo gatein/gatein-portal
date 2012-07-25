@@ -23,7 +23,14 @@
  */
 eXo.webui.UIHorizontalTabs = {
 
-  init : function() {
+  init : function(id) {
+    if(id)
+    {
+      gj("#" + id).find("div.TabsContainer").find("div.UITab").find("div.MiddleTab").not(".LockedTab").on("click", function()
+      {
+        eXo.webui.UIHorizontalTabs.displayTabContent(this);
+      });
+    }
   },
 
   /**
@@ -90,6 +97,8 @@ eXo.webui.UIHorizontalTabs = {
    */
   changeTabForUIFormTabpane : function(clickedElemt, formId, hiddenValue) {
     this.displayTabContent(clickedElemt);
-    eXo.webui.UIForm.setHiddenValue(formId, 'currentSelectedTab', hiddenValue);
+    _module.UIForm.setHiddenValue(formId, 'currentSelectedTab', hiddenValue);
   }
 }
+
+_module.UIHorizontalTabs = eXo.webui.UIHorizontalTabs;

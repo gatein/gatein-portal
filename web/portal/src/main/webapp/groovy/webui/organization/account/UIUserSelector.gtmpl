@@ -4,17 +4,8 @@
  uiform.begin()
  def rcontext = _ctx.getRequestContext(); 
  boolean isMulti = uicomponent.getMulti();
- rcontext.getJavascriptManager().loadScriptResource('webui');
- rcontext.getJavascriptManager().addJavascript('eXo.webui.UIUserSelector.init("'+uiform.id+'"); '); 
-
-  String js = "if (eXo.webui.UIUserSelector.isEnterPress(event)) {" + uicomponent.event('Search') + "; return false;}";
-  uiform.getUIStringInput(uiform.FIELD_KEYWORD).setHTMLAttribute("onkeypress", js);
- 
-  if(uicomponent.isShowSearchGroup())
-  {
-    js = "if (eXo.webui.UIUserSelector.isEnterPress(event)) {" + uicomponent.event('FindGroup',uicomponent.getSelectedGroup()) + "; return false;}";
-    uiform.getUIStringInput(uiform.FIELD_GROUP).setHTMLAttribute("onkeypress", js);
-  }
+ rcontext.getJavascriptManager().require("SHARED/webui", "webui")
+                                .addScripts("webui.UIUserSelector.init('$uiform.id');");
 
 %> 
 <div class="UIUserSelector">

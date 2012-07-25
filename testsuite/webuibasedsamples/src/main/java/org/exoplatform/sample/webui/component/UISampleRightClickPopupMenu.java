@@ -28,7 +28,7 @@ public class UISampleRightClickPopupMenu extends UIContainer
       @Override
       public void execute(Event<UISampleRightClickPopupMenu> event) throws Exception
       {
-         System.out.println("Hello");
+         System.out.println("Hello " + event.getRequestContext().getRequestParameter(OBJECTID));
       }
    }
 
@@ -38,7 +38,7 @@ public class UISampleRightClickPopupMenu extends UIContainer
       @Override
       public void execute(Event<UISampleRightClickPopupMenu> event) throws Exception
       {
-         System.out.println("GoodBye");
+         System.out.println("GoodBye " + event.getRequestContext().getRequestParameter(OBJECTID));
       }
    }
 }

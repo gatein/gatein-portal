@@ -1,11 +1,10 @@
 <%
 	import org.exoplatform.webui.organization.UIGroupMembershipSelector;
-	import org.exoplatform.webui.core.UIPopupWindow; 
+	import org.exoplatform.webui.form.UIFormPopupWindow;
 	import org.exoplatform.webui.core.UIGrid;
-	def membership = uicomponent.getMembership();
 	
-	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().loadScriptResource('webui');
+	def membership = uicomponent.getMembership();
+		
 %>
 <div class="UIMembership" id="UIUserMembershipSelector" >
 	<%//Begin Membership List%>
@@ -52,10 +51,16 @@
 -->			
 	</div>
 	<%//End Membership List%>
-	<% if(uicomponent.isAdminRole()) { %>
+	<% if(uicomponent.isAdminRole()) { 		
+		   def rcontext = _ctx.getRequestContext();
+			def popupId = uicomponent.getChild(UIFormPopupWindow.class).getId();
+		 	def btn = "#UIUserMembershipSelector .UIAction > a";
+			rcontext.getJavascriptManager().require("SHARED/jquery", "gj").require("SHARED/webui")
+					  .addScripts("gj('$btn').click(function() {webui.UIPopupWindow.show('$popupId')});");
+	%>
 	
 	<div class="UIAction"> 
-		<a href="javascript:void(0);" onclick="javascript: eXo.webui.UIPopupWindow.show('<%=uicomponent.getChild(UIPopupWindow.class).getId();%>');" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getId() + ".action.SelectPermission")%></a>
+		<a href="javascript:void(0);" class="ActionButton LightBlueStyle"><%=_ctx.appRes(uicomponent.getId() + ".action.SelectPermission")%></a>
 	</div>
 		
 	<% }%>	

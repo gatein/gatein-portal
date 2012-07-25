@@ -48,6 +48,7 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.application.JavascriptManager;
+import org.exoplatform.web.application.RequireJS;
 import org.exoplatform.web.security.GateInToken;
 import org.exoplatform.web.security.security.RemindPasswordTokenService;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -187,21 +188,21 @@ public class UIPortalComponentActionListener
       UIContainer uiParent = uiComponent.getParent();
       uiParent.getChildren().remove(uiComponent);
       
-      JavascriptManager jsManager = pcontext.getJavascriptManager();
+      RequireJS module = pcontext.getJavascriptManager().require("SHARED/portal", "portal");
       if(isUpdate) {
          pcontext.addUIComponentToUpdateByAjax(uiParent);
       } else {
          StringBuffer buffer = new StringBuffer();
-         buffer.append("eXo.portal.UIPortal.removeComponent('");
+         buffer.append("portal.UIPortal.removeComponent('");
          if (uiComponent instanceof UIPortlet)
          {
             buffer.append(UI_PORTLET_PREFIX);
          }
          buffer.append(uiComponent.getId());
          buffer.append("');");
-         jsManager.addJavascript(buffer.toString());
+         module.addScripts(buffer.toString());
       }
-      jsManager.addJavascript("eXo.portal.PortalComposer.toggleSaveButton();");
+      module.addScripts("portal.PortalComposer.toggleSaveButton();");
    }
 
    static public class MoveChildActionListener extends EventListener<UIContainer>

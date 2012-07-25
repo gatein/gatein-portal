@@ -34,3 +34,4 @@ eXo.core.Skin = {
 	  head.appendChild(link) ;
 	}
 };
+_module.Skin = eXo.core.Skin;

@@ -2,8 +2,8 @@
 	String uploadId = uicomponent.getUploadId();
 	boolean isAutoUpload = uicomponent.isAutoUpload();
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().loadScriptResource('webui-ext');
-	rcontext.getJavascriptManager().addCustomizedOnLoadScript("eXo.webui.UIUpload.initUploadEntry('"+uploadId+"',"+isAutoUpload+");");
+	rcontext.getJavascriptManager().require("SHARED/webui-ext", "webuiExt")
+    .addScripts("webuiExt.UIUpload.initUploadEntry('"+uploadId+"',"+isAutoUpload+");");
 %>
 <div class="UIFormUploadInput" id="$uploadId">
 	<div class="LimitMessage" style="display: none;"><%= _ctx.appRes("UIFormUploadInput.msg.limit"); %></div>
@@ -23,13 +23,13 @@
 			</div>
 		</div>
 		<div class="DeleteFileFrame">
-			<div class="DeleteFileLable" onclick="eXo.webui.UIUpload.abortUpload($uploadId);"><%=_ctx.appRes("UIFormUploadInput.label.Cancel")%></div>
+			<div class="DeleteFileLable"><%=_ctx.appRes("UIFormUploadInput.label.Cancel")%></div>
 		</div>
 	</div>
 	<div class="SelectFileFrame" style="display: none;">
 		<div class="FileName">
 			<div class="FileNameLabel portlet-form-label"><span></span></div>
 		</div>
-		<div class="RemoveFile" title="Remove Uploaded" onclick="eXo.webui.UIUpload.deleteUpload($uploadId);"></div>
+		<div class="RemoveFile" title="Remove Uploaded"></div>
 	</div>
 </div>

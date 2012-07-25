@@ -14,7 +14,7 @@
 	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.addCustomizedOnLoadScript('eXo.portal.UIPortalNavigation.onLoad("' + uicomponent.id + '");');
+	jsmanager.require("SHARED/navigation", "nav").addScripts("nav.UIPortalNavigation.onLoad('" + uicomponent.id + "');");
 
 	PortalRequestContext pcontext = Util.getPortalRequestContext(); 
 	PortalURL nodeURL = nodeurl();
@@ -69,7 +69,7 @@
 						if(node.pageRef != null) {
 								print """<a class="ItemIcon $icon" href="$href" $title>$label</a>""";
 						} else {
-								print """<a class="ItemIcon $icon" onclick='eXo.portal.UIPortalNavigation.cancelHideMenuContainer(event)' $title>$label</a>""";
+								print """<a class="ItemIcon $icon" href="#$label" $title>$label</a>""";
 						}
 		if(hasChild) {
 			print """

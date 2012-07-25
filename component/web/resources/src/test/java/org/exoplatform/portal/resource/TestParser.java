@@ -77,6 +77,7 @@ public class TestParser extends AbstractGateInTest
       assertEquals(2, scripts.size());
       ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.SHARED, "foo"), desc.getId());
+      assertNull(desc.getAlias());
       assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar")), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"))), desc.getDependencies());
 
       desc = scripts.get(1);
@@ -111,6 +112,7 @@ public class TestParser extends AbstractGateInTest
       assertEquals(1, scripts.size());
       ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.PORTLET, "mypath/foo"), desc.getId());
+      assertNull(desc.getAlias());
       assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar")), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"))), desc.getDependencies());
    }
 
@@ -141,6 +143,7 @@ public class TestParser extends AbstractGateInTest
       assertEquals(1, scripts.size());
       ScriptResourceDescriptor desc = scripts.get(0);
       assertEquals(new ResourceId(ResourceScope.PORTAL, "foo"), desc.getId());
+      assertNull(desc.getAlias());
       assertEquals(Arrays.asList(new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "bar")), new DependencyDescriptor(new ResourceId(ResourceScope.SHARED, "juu"))), desc.getDependencies());
    }
    
@@ -238,5 +241,46 @@ public class TestParser extends AbstractGateInTest
       List<Javascript> scripts = desc.getModules();
       assertEquals(1, scripts.size());
       assertTrue(scripts.get(0) instanceof Javascript.Remote);
+   }
+   
+   public void testAlias() throws Exception
+   {
+      String config = "" +
+         "<gatein-resources>" +
+         "<module>" +
+         "<name>foo</name>" +
+         "<as>f</as>" +
+         "<depends>" +
+         "<module>bar</module>" +
+         "<as>b</as>" +
+         "</depends>" +
+         "</module>" +
+         "</gatein-resources>";
+
+      //
+      JavascriptConfigParser parser = new JavascriptConfigParser("/mypath");
+      List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
+      ScriptResourceDescriptor desc = scripts.get(0);
+      assertEquals("f", desc.getAlias());
+      assertEquals("b", desc.getDependencies().get(0).getAlias());
+      
+      config = "" +
+         "<gatein-resources>" +
+         "<portal>" +
+         "<name>zoo</name>" +
+         "<as>z</as>" +
+         "<module>" +
+         "<depends>" +
+         "<module>zozo</module>" +
+         "<as>zz</as>" +
+         "</depends>" +
+         "</module>" +
+         "</portal>" +
+         "</gatein-resources>";
+      
+      List<ScriptResourceDescriptor> ptScripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
+      ScriptResourceDescriptor portalDesc = ptScripts.get(0);
+      assertEquals("z", portalDesc.getAlias());
+      assertEquals("zz", portalDesc.getDependencies().get(0).getAlias());
    }
 }

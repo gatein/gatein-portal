@@ -14,7 +14,6 @@
 	int portalMode = uiPortalApp.getModeState(); 
 	
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.loadScriptResource('webui');
 
 	WindowState windowState = uicomponent.getCurrentWindowState();
 	String portletId = uicomponent.getId();
@@ -22,9 +21,10 @@
 	
 	String title = encoder.encode(uicomponent.getDisplayTitle());
 	if(uiPortalApp.isEditing()) {
+	   def id = "UIPortlet-" + portletId;
+	   jsmanager.require("SHARED/portal", "portal").addScripts("portal.UIPortal.initMouseHover('" + id + "');");
 %>
-	<div class="UIPortlet <%=hasPermission?"":"ProtectedPortlet"%>" id="UIPortlet-$portletId" onmouseover="eXo.portal.UIPortal.blockOnMouseOver(event, this, true);" onmouseout="eXo.portal.UIPortal.blockOnMouseOver(event, this, false);"
-		style="top: 0px; left:0px;">
+	<div class="UIPortlet <%=hasPermission?"":"ProtectedPortlet"%>" id="$id" style="top: 0px; left:0px;">
 		<div class="UIComponentBlock">
 		
 		<%if(portalMode == uiPortalApp.CONTAINER_BLOCK_EDIT_MODE || portalMode == uiPortalApp.APP_BLOCK_EDIT_MODE) { %>	
@@ -92,8 +92,9 @@
 								
 								List supportModes = uicomponent.getSupportModes();
 									if(uicomponent.getShowPortletMode() && supportModes.size() > 0) {
+									   jsmanager.require("SHARED/base", "base").addScripts("base.UIPopupSelectCategory.init('UIWindow-" + portletId + "');");
 								%>
-										<div class="ControlIcon ArrowDownIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.PortletMode");%>" onclick="eXo.webui.UIPopupSelectCategory.show(this, event);" style="position: relative;">
+										<div class="ControlIcon ArrowDownIcon" title="<%=_ctx.appRes("UIPortlet.tooltip.PortletMode");%>" style="position: relative;">
 											<% /*Begin Popup Menu*/ %>
 												<div class="UIPopupCategory" style="display: none;">
 													<div class="PopupCategoryDecorator">

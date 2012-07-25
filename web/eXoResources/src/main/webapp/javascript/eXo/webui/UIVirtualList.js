@@ -17,13 +17,17 @@
  * site: http://www.fsf.org.
  */
 
-eXo.webui.UIVirtualList = {
+var virtualList = {
 
-  init : function(componentId, hasNext, autoAdjustHeight) {
+  init : function(componentId, hasNext, autoAdjustHeight, loadNextUrl) {
     var uiVirtualList = document.getElementById(componentId);
     if (uiVirtualList == null)
       return;
 
+    gj(uiVirtualList).on("scroll", function() {
+    	_module.UIVirtualList.onScroll(this, loadNextUrl);
+    });
+    
     if (!hasNext) {
       uiVirtualList.isFinished = true;
     }
@@ -38,7 +42,7 @@ eXo.webui.UIVirtualList = {
 
     if (autoAdjustHeight) {
       uiVirtualList.autoAdjustHeight = autoAdjustHeight;
-      eXo.core.Browser.fillUpFreeSpace(uiVirtualList);
+      base.Browser.fillUpFreeSpace(uiVirtualList);
     }
 
     uiVirtualList.scrollTop = 0;
@@ -53,7 +57,7 @@ eXo.webui.UIVirtualList = {
           uiVirtualList.style.height = "auto";
         }
       } else {
-        uiVirtualList.onscroll();
+        gj(uiVirtualList).trigger("scroll");
       }
     }
   },
@@ -97,7 +101,7 @@ eXo.webui.UIVirtualList = {
     var feedBox = this.getFeedBox(uiVirtualList.id);
     var loadedContent = uiVirtualList.backupHTML;
 
-    if (eXo.core.Browser.browserType != "ie") {
+    if (!base.Browser.isIE()) {
       feedBox.innerHTML = loadedContent + feedBox.innerHTML;
     } else {
       var index = uiVirtualList.innerHTML.indexOf(feedBox.className);
@@ -111,3 +115,5 @@ eXo.webui.UIVirtualList = {
     this.loadIfNeeded(uiVirtualList);
   }
 };
+
+_module.UIVirtualList = virtualList;

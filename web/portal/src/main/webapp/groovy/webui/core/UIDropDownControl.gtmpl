@@ -3,11 +3,13 @@
 	
 	def rcontext = _ctx.getRequestContext();
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-	jsmanager.loadScriptResource("webui-ext");
+	jsmanager.require("SHARED/webui-ext", "webuiExt")
+				.require("SHARED/webui", "webui")
+				.addScripts("webuiExt.UIDropDownControl.init('$uicomponent.id', webui);");
 	def options = uicomponent.getOptions();
 %>
 <div class="UIDropDownControl" id="$uicomponent.id">
-	<div class="UIDropDownTitle" onclick="eXo.webui.UIDropDownControl.show(this, event);">
+	<div class="UIDropDownTitle">
 		<div class="UIDropDownLeftTitle">
 			<div class="UIDropDownRightTitle">
 				<div class="UIDropDownMiddleTitle">
@@ -42,7 +44,7 @@
 			<div class="RightMiddelItem">
 			
 				<div class="ItemListContent ItemContainer">
-					<div class="TopItemContainer" onmousedown="eXo.portal.VerticalScrollManager.initScroll(this, true, 10)">
+					<div class="TopItemContainer">
 						<div class="Arrow UpArrowIcon"><span></span></div>
 					</div>
 					<div class="MiddleItemContainer">
@@ -55,14 +57,14 @@
 								String label = _ctx.appRes(uicomponent.getId() + ".item." + option.label);
 								if(label.length() > 30) {
 							%>
-							<a class="OptionItem" href="<%=uicomponent.event(selectedIndex)%>" onclick="eXo.webui.UIDropDownControl.onclickEvt(this)" title="<%=label%>"><%=label.substring(0,25)%>...</a>
+							<a class="OptionItem" href="<%=uicomponent.event(selectedIndex)%>" title="<%=label%>"><%=label.substring(0,25)%>...</a>
 							<% } else { %>
-							<a class="OptionItem" href="<%=uicomponent.event(selectedIndex)%>" onclick="eXo.webui.UIDropDownControl.onclickEvt(this)"><%=label%></a>
+							<a class="OptionItem" href="<%=uicomponent.event(selectedIndex)%>"><%=label%></a>
 							<% } %>
 						</div>
 					<% selectedIndex++;}%>
 					</div>
-					<div class="BottomItemContainer" onmousedown="eXo.portal.VerticalScrollManager.initScroll(this, false, 10)">
+					<div class="BottomItemContainer">
 						<div class="Arrow DownArrowIcon"><span></span></div>
 					</div>
 				</div>

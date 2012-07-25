@@ -19,6 +19,19 @@
 
 eXo.webui.UIDropDownControl = {
 
+  init : function(id, webui)
+  {
+    var elmt = gj('#' + id);
+    elmt.find('.UIDropDownTitle').on('click', this.showEvt);
+    elmt.find('a.OptionItem').on('click', this.onclickEvt);
+    elmt.find(".TopItemContainer").on('mousedown', function() {
+    	webui.VerticalScrollManager.initScroll(this, true, 10);
+    });   
+    elmt.find(".BottomItemContainer").on('mousedown', function() {
+    	webui.VerticalScrollManager.initScroll(this, false, 10);
+    });
+  },
+
   selectItem : function(method, id, selectedIndex) {
     if (method)
       method(id, selectedIndex);
@@ -35,8 +48,8 @@ eXo.webui.UIDropDownControl = {
    * @param {Object}
    *          evet event object
    */
-  show : function(obj, evt) {
-    var dropDownAnchor = gj(obj).next("div");
+  showEvt : function() {
+    var dropDownAnchor = gj(this).next("div");
     if(!dropDownAnchor)
     {
       return;
@@ -53,8 +66,6 @@ eXo.webui.UIDropDownControl = {
       topCont.css("display", "block");
       bottomCont.css("display", "block");
 
-      //TODO: Use JQuery Core instead of eXo.core.Browser
-      var Browser = eXo.core.Browser;
       var visibleHeight = gj(window).height() - gj(middleCont[0]).offset().top - 40;
       if(middleCont[0].scrollHeight > visibleHeight)
       {
@@ -100,14 +111,14 @@ eXo.webui.UIDropDownControl = {
    * 
    * @param {Object}
    *          obj selected object
-   * @param {Object}
-   *          evt event
    */
-  onclickEvt : function(obj, evt) {
-    var dropDownAnchor = gj(obj).parents("div.UIDropDownAnchor");
+  onclickEvt : function() {
+    var dropDownAnchor = gj(this).parents("div.UIDropDownAnchor");
     var dropDownMiddleTitle = dropDownAnchor.prev("div.UIDropDownTitle").find("div.DropDownSelectLabel");
-    dropDownMiddleTitle.html(gj(obj).html());
+    dropDownMiddleTitle.html(gj(this).html());
 
     dropDownAnchor.css("display", "none");
   }
-}
+};
+
+_module.UIDropDownControl = eXo.webui.UIDropDownControl;

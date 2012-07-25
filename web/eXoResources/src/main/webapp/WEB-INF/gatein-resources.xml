@@ -116,15 +116,16 @@
       <script>
          <name>eXo</name>
          <path>/javascript/eXo.js</path>
-      </script>
+      </script>      
       <script>
-         <name>eXo.core.Loader</name>
-         <path>/javascript/eXo/core/AsyncLoader.js</path>
+      	<name>eXo.core.RequireJS</name>
+         <path>/javascript/eXo/core/require.js</path>
       </script>
    </scripts>
 
    <module>
-      <name>jquery</name>
+      <name>jquery</name>     
+      <as>gj</as> 
       <script>
          <name>jquery</name>
          <path>/javascript/exo-jquery-1.7.1.js</path>
@@ -204,6 +205,9 @@
       <depends>
          <module>base</module>
       </depends>
+      <depends>
+         <module>jquery</module>
+      </depends>
    </module>
 
    <!-- GADGET Javascripts -->
@@ -215,6 +219,12 @@
       </script>
       <depends>
          <module>common</module>
+      </depends>
+      <depends>
+         <module>base</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
       </depends>
    </module>
 
@@ -240,6 +250,12 @@
       <depends>
          <module>common</module>
       </depends>
+      <depends>
+         <module>base</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
+      </depends>
    </module>
 
 
@@ -253,6 +269,14 @@
       <script>
          <name>eXo.webui.UIUserSelector</name>
          <path>/javascript/eXo/webui/UIUserSelector.js</path>
+      </script>
+      <script>
+         <name>eXo.webui.UILanguageSelector</name>
+         <path>/javascript/eXo/webui/UILanguageSelector.js</path>
+      </script>
+      <script>
+         <name>eXo.webui.UISkinSelector</name>
+         <path>/javascript/eXo/webui/UISkinSelector.js</path>
       </script>
       <script>
          <name>eXo.portal.UIPortalControl</name>
@@ -273,14 +297,21 @@
       <script>
          <name>eXo.webui.UIHorizontalTabs</name>
          <path>/javascript/eXo/webui/UIHorizontalTabs.js</path>
-      </script>
+      </script>      
       <depends>
          <module>common</module>
+      </depends>
+      <depends>
+         <module>base</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
       </depends>
    </module>
 
    <module>
       <name>webui-ext</name>
+      <as>webuiExt</as>
       <script>
          <name>eXo.webui.UICalendar</name>
          <path>/javascript/eXo/webui/UICalendar.js</path>
@@ -313,8 +344,22 @@
          <name>eXo.webui.UICombobox</name>
          <path>/javascript/eXo/webui/UICombobox.js</path>
       </script>
+      <script>
+         <name>eXo.webui.UIPortletForm</name>
+         <path>/javascript/eXo/webui/UIPortletForm.js</path>
+      </script>
+      <script>
+         <name>eXo.webui.UITree</name>
+         <path>/javascript/eXo/webui/UITree.js</path>
+      </script>
       <depends>
          <module>common</module>
+      </depends>
+      <depends>
+         <module>base</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
       </depends>
    </module>
 
@@ -335,6 +380,9 @@
       <depends>
          <module>base</module>
       </depends>
+      <depends>
+         <module>jquery</module>
+      </depends>
    </module>
 
    <module>
@@ -353,6 +401,36 @@
       <depends>
          <module>gadget</module>
       </depends>
+      <depends>
+         <module>base</module>
+      </depends>
+      <depends>
+         <module>webui</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
+      </depends>
    </module>
 
+   <module>
+     <name>shindigPatch</name>
+     <script>
+       <name>eXo.gadget.Gadgets</name>
+       <path>/javascript/eXo/gadget/Gadgets.js</path>
+     </script>
+     <script>
+       <name>eXo.gadget.ExoBasedUserPrefStore</name>
+       <path>/javascript/eXo/gadget/ExoBasedUserPrefStore.js</path>
+     </script>
+     <depends>
+       <module>common</module>
+     </depends>
+     <depends>
+       <module>gadget</module>
+     </depends>
+     <depends>
+       <module>jquery</module>
+     </depends>
+   </module>
+   
 </gatein-resources>

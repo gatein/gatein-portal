@@ -19,7 +19,7 @@
 
 package org.exoplatform.portal.webui.workspace;
 
-import org.exoplatform.commons.utils.PropertyManager;
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -64,8 +64,10 @@ import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMap;
 import org.gatein.portal.controller.resource.script.FetchMode;
+import org.gatein.portal.controller.resource.script.Module;
+import org.gatein.portal.controller.resource.script.ScriptResource;
+import org.json.JSONObject;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.net.URLDecoder;
@@ -76,7 +78,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -325,23 +326,14 @@ public class UIPortalApplication extends UIApplication
       return (modeState != NORMAL_MODE);
    }
 
-   public Map<String, Boolean> getScriptsURLs()
+   public Map<String, Boolean> getScripts()
    {
-      PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
-      
-      // Obtain the resource ids involved
-      // we clone the fetch map by safety
+      PortalRequestContext prc = PortalRequestContext.getCurrentInstance();      
       JavascriptManager jsMan = prc.getJavascriptManager();
 
       // Add current portal
       String portalOwner = Util.getPortalRequestContext().getPortalOwner();
       jsMan.loadScriptResource(ResourceScope.PORTAL, portalOwner);
-
-      // Still need this util SHARED/portal.js is optimized
-      if (prc.getRemoteUser() != null)
-      {
-         jsMan.loadScriptResource(ResourceScope.SHARED, "portal");
-      }
 
       //Support for legacy resource declaration 
       jsMan.loadScriptResource(ResourceScope.SHARED, JavascriptConfigParser.LEGACY_JAVA_SCRIPT);
@@ -350,47 +342,35 @@ public class UIPortalApplication extends UIApplication
       jsMan.loadScriptResource(ResourceScope.SHARED, "bootstrap");
 
       //
-      FetchMap<ResourceId> requiredResources = new FetchMap<ResourceId>(jsMan.getScriptResources());
+      FetchMap<ResourceId> requiredResources = jsMan.getScriptResources();
       log.debug("Resource ids to resolve: {}", requiredResources);
 
       //
-      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
+      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);      
+      LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
+      Map<ScriptResource, FetchMode> tmp = service.resolveIds(requiredResources);
+      for (ScriptResource rs : tmp.keySet())
+      {
+         ResourceId id = rs.getId();
+         boolean isRemote = !rs.isEmpty() && rs.getModules().get(0) instanceof Module.Remote; 
+         ret.put(id.toString(), isRemote);
+      }
+      for (String url : jsMan.getExtendedScriptURLs())
+      {
+         ret.put(url, true);
+      }
       
-      // We need the locale
-      Locale locale = prc.getLocale();
+      //
+      log.debug("Resolved resources for page: " + ret);
 
-      try
-      {
-         LinkedHashMap<String, Boolean> ret = new LinkedHashMap<String, Boolean>();
-
-         //
-         FetchMap<String> urls = new FetchMap<String>(service.resolveURLs(
-            prc.getControllerContext(),
-            requiredResources,
-            !PropertyManager.isDevelopping(),
-            !PropertyManager.isDevelopping(),
-            locale));
-         urls.addAll(jsMan.getExtendedScriptURLs());
-         
-         //
-         log.debug("Resolved URLS for page: {}", urls);
-         
-         // Here we get the list of stuff to load on demand or not
-         // according to the boolean value in the map
-         // Convert the map to what the js expects to have
-         for (Map.Entry<String, FetchMode> entry : urls.entrySet())
-         {
-            ret.put(entry.getKey(), entry.getValue() == FetchMode.ON_LOAD);
-         }
-
-         // todo : switch to debug later
-         return ret;
-      }
-      catch (IOException e)
-      {
-         log.error("Could not resolve URLs", e);
-         return Collections.emptyMap();
-      }
+      return ret;
+   }
+   
+   public JSONObject getJSConfig() throws Exception 
+   {            
+      JavascriptConfigService service = getApplicationComponent(JavascriptConfigService.class);
+      PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
+      return service.getJSConfig(prc.getControllerContext(), prc.getLocale());
    }
 
    public Collection<Skin> getPortalSkins()
@@ -630,7 +610,7 @@ public class UIPortalApplication extends UIApplication
          js.append("eXo.env.server.portalURLTemplate=\"");
          js.append(url).append("\";");
          
-         pcontext.getJavascriptManager().addCustomizedOnLoadScript(js.toString());
+         pcontext.getJavascriptManager().require("SHARED/base").addScripts(js.toString());
          
          SiteKey siteKey = new SiteKey(pcontext.getSiteType(), pcontext.getSiteName());
          PageNodeEvent<UIPortalApplication> pnevent =
@@ -760,7 +740,7 @@ public class UIPortalApplication extends UIApplication
          String skin = getAddSkinScript(list);
          if (skin != null)
          {
-            jsManager.addCustomizedOnLoadScript(skin);
+            jsManager.require("SHARED/base").addScripts(skin);
          }
          w.write(jsManager.getJavaScripts());
          w.write("</div>");
@@ -771,36 +751,9 @@ public class UIPortalApplication extends UIApplication
    private void writeLoadingScripts(PortalRequestContext context) throws Exception
    {
       Writer w = context.getWriter();
-      Map<String, Boolean> scriptURLs = getScriptsURLs();
-      List<String> onloadJS = new LinkedList<String>();
-      for (String url : scriptURLs.keySet()) 
-      {
-         if (scriptURLs.get(url))
-         {
-            onloadJS.add(url);
-         }
-      }
-      w.write("<div class=\"OnloadScripts\">");
-      for (String url : onloadJS)
-      {
-         w.write(url);
-         w.write(",");
-      }
-      w.write("</div>");
+      Map<String, Boolean> scriptURLs = getScripts();
       w.write("<div class=\"ImmediateScripts\">");
-      scriptURLs.keySet().removeAll(onloadJS);
-      for (String url : scriptURLs.keySet())
-      {
-         w.write(url);
-         w.write(",");
-      }
-      
-      JavascriptManager jsManager = context.getJavascriptManager();
-      for (String url : jsManager.getImportedJavaScripts())
-      {
-         w.write(url);
-         w.write(",");
-      }
+      w.write(StringUtils.join(scriptURLs.keySet(), ","));
       w.write("</div>");      
    }
    

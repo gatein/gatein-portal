@@ -211,5 +211,3 @@ UINotification.prototype.addMessage = function(messageContent, flag) {
 	msPanel.appendChild(UIMessageContent);	
 	eXo.webui.UINotification.slideDownUp(currMessageBoxId, this.deleteBox);
 }
-
-eXo.webui.UINotification = new UINotification();

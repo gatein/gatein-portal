@@ -7,7 +7,8 @@
 		
 	def uiPopup = uicomponent.getAncestorOfType(org.exoplatform.webui.core.UIPopupWindow.class);
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().addJavascript("eXo.webui.UIDashboard.initPopup('"+uiPopup.getId()+"');");
+	rcontext.getJavascriptManager().require("SHARED/dashboard", "dashboard")
+                                 .addScripts("dashboard.UIDashboard.initPopup('"+uiPopup.getId()+"');");
 
 	EntityEncoder encoder = HTMLEntityEncoder.getInstance();
  %>
@@ -17,8 +18,7 @@
 				<% uicomponent.renderChildren(); %>
 		</div>
 		<div class="GadgetItemsContainer " id="GadgetItemsContainer">
-			<div class="TopItemContainer DisableContainer" onmouseover="eXo.webui.UIDashboard.enableContainer(this)" 
-						onmouseout="eXo.webui.UIDashboard.disableContainer(this)" onmousedown="eXo.portal.VerticalScrollManager.initScroll(this, true, 10)">
+			<div class="TopItemContainer DisableContainer">
 				<div class="Arrow UpArrowIcon DisableArrowIcon"><span></span></div>
 			</div>
 			<div class="MiddleItemContainer UIResizableBlock">
@@ -29,7 +29,7 @@
 					   categoryName = encoder.encode(categoryName);
 			%>
 							<div class="GadgetCategory" id="${category.getName()}">
-								<div class="GadgetTab SelectedTab" onclick="eXo.webui.UIDashboard.onTabClick(this, 'NormalTab', 'SelectedTab')">
+								<div class="GadgetTab SelectedTab">
 									<div class="LeftCategoryTitleBar">
 										<div class="RightCategoryTitleBar">
 											<div class="MiddleCategoryTitleBar">
@@ -71,8 +71,7 @@
 				 				""";
 			%>
 			</div>
-			<div class="BottomItemContainer DisableContainer" onmouseover="eXo.webui.UIDashboard.enableContainer(this)" 
-						onmouseout="eXo.webui.UIDashboard.disableContainer(this)" onmousedown="eXo.portal.VerticalScrollManager.initScroll(this, false, 10)">
+			<div class="BottomItemContainer DisableContainer">
 				<div class="Arrow DownArrowIcon DisableArrowIcon"><span></span></div>
 			</div>
 		</div>

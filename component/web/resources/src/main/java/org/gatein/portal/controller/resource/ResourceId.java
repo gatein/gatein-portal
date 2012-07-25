@@ -75,6 +75,6 @@ public class ResourceId implements Serializable
    @Override
    public String toString()
    {
-      return "ResourceId[type=" + scope.name() + ",id=" + name + "]";
+      return scope + "/" + name;
    }
 }

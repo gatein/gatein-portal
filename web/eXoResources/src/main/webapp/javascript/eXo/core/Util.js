@@ -18,6 +18,90 @@
  */
 
 /**
+ * Make url portal request with parameters
+ * 
+ * @param targetComponentId identifier of component
+ * @param actionName name of action
+ * @param useAjax indicate Ajax request or none
+ * @param params array contains others parameters
+ * @return full url request
+ */
+
+/**
+ * log out of user session
+ */
+eXo.portal.logout = function() {
+	window.location = eXo.env.server.createPortalURL("UIPortal", "Logout", false) ;
+} ;
+
+eXo.session.openUrl = null ;
+eXo.session.itvTime = null ;
+eXo.session.itvObj = null;
+eXo.session.initialized = false;
+
+eXo.session.itvInit = function() {
+   var session = eXo.session, env = eXo.env;
+   if (!session.initialized && session.canKeepState && env.portal.accessMode == 'private') {
+      if (!session.openUrl) session.openUrl = env.server.createPortalURL("UIPortal", "Ping", false) ;
+      if (!session.itvTime) session.itvTime = 1800;
+      session.initialized = true;
+      session.openItv();
+   }
+} ;
+
+eXo.session.startItv = function() {
+   var session = eXo.session;
+   if (session.initialized) {
+      session.destroyItv();
+      if (session.canKeepState && eXo.env.portal.accessMode == 'private') {
+         if (session.itvTime > 0) session.itvObj = window.setTimeout("eXo.session.openItv()", (session.itvTime - 10) * 1000) ;
+      }
+   } else if (session.isOpen) {
+      session.itvInit();
+   }
+} ;
+
+eXo.session.openItv = function() {
+	var session = eXo.session;
+	var request = window.ActiveXObject ? new ActiveXObject( "Msxml2.XMLHTTP" ) : new XMLHttpRequest();
+	request.open("GET", session.openUrl, true);
+	request.setRequestHeader("Cache-Control", "max-age=86400");
+	request.onreadystatechange = function() {
+		if (request.readyState == 4) { 
+			if (request.status == 200) {
+				var result = request.responseText;
+				if(!isNaN(result)) session.itvTime = parseInt(result); 				
+			}
+			delete request['onreadystatechange'];
+		}
+	}
+	request.send(null);
+} ;
+
+eXo.session.destroyItv = function () {
+   var session = eXo.session;
+   window.clearTimeout(session.itvObj) ;
+   session.itvObj = null ;
+} ;
+
+/**
+ * Generates an id based on the current time and random number
+ */
+eXo.generateId = function(objectId) {
+	return (objectId + "-" + new Date().getTime() + Math.random().toString().substring(2)) ;
+};
+
+eXo.debug = function(message) {
+	if(!eXo.developing) return;
+	
+	var webui = eXo.webui;
+	if(webui.UINotification) {
+		message = "DEBUG: " + message;
+		webui.UINotification.addMessage(message);
+	}
+};
+
+/**
  *   Array convenience method to clear membership.
  *   @param object element
  *   @returns void
@@ -142,6 +226,7 @@ HashMap.prototype.clear = function() {
 
 /*************************************************************************/
 eXo.core.HashMap = HashMap.prototype.constructor ;
+_module.HashMap = eXo.core.HashMap; 
 /*************************************************************************/
 
 /**

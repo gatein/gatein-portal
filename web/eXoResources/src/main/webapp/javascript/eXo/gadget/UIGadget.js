@@ -16,8 +16,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
-eXo.gadget.UIGadget = {
+var eXoGadget = {
 
   /**
    * Create a new Gadget
@@ -33,8 +32,13 @@ eXo.gadget.UIGadget = {
   {
     window.gadgets = window.gadgets || {};
     eXo.gadgets = window.gadgets;
-    var loader = eXo.core.AsyncLoader;
-    loader.loadJS([hostName + '/js/gatein-container.js?c=1' + (debug ? "&debug=1": "") + (nocache ? "&nocache=1" : "&nocache=0")], eXo.gadget.UIGadget.createCallback, arguments, null);
+    gadgets.pubsubURL = hostName + '/js/gatein-container.js?c=1' + (debug ? "&debug=1": "") + (nocache ? "&nocache=1" : "&nocache=0");  
+    var args = arguments;
+	require([gadgets.pubsubURL, 'SHARED/shindigPatch'], 
+		function() {
+			//Make sure that 2 modules in shindig-patch has been loaded already
+			require(["eXo.gadget.Gadgets", "eXo.gadget.ExoBasedUserPrefStore"], function() {_module.UIGadget.createCallback.apply(window, args)});
+	});
   },
 
   createCallback : function(url, id, metadata, userPref, view, hostName, debug, nocache)
@@ -72,17 +76,11 @@ eXo.gadget.UIGadget = {
     gadgets.container.renderGadget(gadget);
     var uiGadget = gj(gadgetBlock).closest(".UIGadget");
     if (uiGadget.length > 0)
-    {
-      var isDesktop = uiGadget.parent().hasClass("UIPageDesktop");
-      if (isDesktop)
+    {      
+      if (metadata && metadata.modulePrefs.title != null && metadata.modulePrefs.title.length > 0)
       {
-        uiGadget.css("position", "absolute");
+    	  uiGadget.find(".GadgetTitle").html(metadata.modulePrefs.title);
       }
-      else
-      {
-        uiGadget.css("width", "auto");
-      }
-      eXo.gadget.UIGadget.init(uiGadget[0], isDesktop, gadget.metadata);
     }
     //setup for pubsub mechanism
     gadgets.pubsubrouter.init(function(id) {return url;}, {});
@@ -94,8 +92,11 @@ eXo.gadget.UIGadget = {
    * @param {boolean} inDesktop use to realize UIDesktopPage or no
    * @param {String} metadata metadata of gadget
    */
-  init : function(uiGadget, inDesktop, metadata)
+  init : function(uiGadget, confirmDeleteMsg)
   {
+    _module.UIGadget.confirmDeleteGadget = confirmDeleteMsg;
+
+    if (typeof (uiGadget) == "string") uiGadget = document.getElementById(uiGadget);
     var gadget = gj(uiGadget);
     var portletFrag = gadget.closest(".PORTLET-FRAGMENT");
 
@@ -118,21 +119,33 @@ eXo.gadget.UIGadget = {
       var gadgetControl = gadget.find("div.GadgetControl").eq(0);
       var gadgetTitle = gadgetControl.find("span.GadgetTitle").eq(0);
       gadgetControl.css("display", "block");
-      gadgetTitle.css("display", "block");
-      if (metadata && metadata.modulePrefs.title != null && metadata.modulePrefs.title.length > 0)
-      {
-        gadgetTitle.html(metadata.modulePrefs.title);
-      }
+      gadgetTitle.css("display", "block");      
     }
 
-    if (inDesktop)
-    {
+    gadget.find(".CloseGadget").on("click", function() {
+    	_module.UIGadget.deleteGadget(this);
+    });
+    gadget.find(".MaximizeAction").on("click", function() {
+    	_module.UIGadget.maximizeGadget(this);
+    });
+    gadget.find(".MinimizeAction").on("click", function() {
+    	_module.UIGadget.minimizeGadget(this);
+    });
+    gadget.find(".EditGadget").on("click", function() {
+    	_module.UIGadget.editGadget(gadget.attr("id"));
+    });
+    gadget.find(".CloseGadget, .MaximizeAction, .MinimizeAction, .EditGadget").on("mousedown", false);
+    
+    if (!gadget.parent().hasClass("UIPageDesktop")) {
+      gadget.css("width", "auto");    	
+    } else {
+      gadget.css("position", "absolute");
       var dragArea = gadget.find("div.GadgetDragHandleArea")[0];
       if (gadget.css("z-index") < 0)
       {
         gadget.css("z-index", "0");
       }
-      eXo.core.DragDrop.init(dragArea, uiGadget);
+      common.DragDrop.init(dragArea, uiGadget);
 
       var desktopPage = gj("#UIPageDesktop");
       var offsetHeight = desktopPage.offsetHeight - uiGadget.offsetHeight;
@@ -219,7 +232,7 @@ eXo.gadget.UIGadget = {
         {
           uiGadget.style.left = offsetWidth + "px";
         }
-        eXo.gadget.UIGadget.saveWindowProperties(uiGadget);
+        _module.UIGadget.saveWindowProperties(uiGadget);
       };
     }
   },
@@ -317,7 +330,7 @@ eXo.gadget.UIGadget = {
     {
       var portletID = portletFrag.parent().attr("id");
       var dashboardID = gadget.closest(".UIDashboard").attr("id");
-      if (confirm(eXo.gadget.UIGadget.confirmDeleteGadget))
+      if (confirm(_module.UIGadget.confirmDeleteGadget))
       {
         var href = eXo.env.server.portalBaseURL + "?portal:componentId=" + portletID;
         href += "&portal:type=action&uicomponent=" + dashboardID;
@@ -345,7 +358,7 @@ eXo.gadget.UIGadget = {
     {
       //Code used for desktop page
       var blockID = closeIcon.closest(".UIPage").find("div.id").html();
-      if (confirm(eXo.gadget.UIGadget.confirmDeleteGadget))
+      if (confirm(_module.UIGadget.confirmDeleteGadget))
       {
         var params = [
           {name: "objectId", value : gadget.attr("id")}
@@ -383,6 +396,7 @@ eXo.gadget.UIGadget = {
   resizeFullHeight : function(componentId)
   {
     var portletFrag = gj("#" + componentId).closest(".PORTLET-FRAGMENT");
-    eXo.core.Browser.fillUpFreeSpace(portletFrag[0]);
+    base.Browser.fillUpFreeSpace(portletFrag[0]);
   }
-}
+};
+_module.UIGadget = eXoGadget;

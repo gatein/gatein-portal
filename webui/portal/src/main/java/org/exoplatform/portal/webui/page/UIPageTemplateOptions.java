@@ -66,7 +66,7 @@ public class UIPageTemplateOptions extends UIFormInputItemSelector
       // modify: Dang.Tung
       UIDropDownControl uiItemSelector = addChild(UIDropDownControl.class, null, "UIDropDownPageTemp");
       uiItemSelector.setOptions(itemOptions);
-      uiItemSelector.setAction("eXo.webui.UIItemSelector.selectPageLayout");
+      uiItemSelector.setAction("eXo.webui.UIPageTemplateOptions.selectPageLayout");
       // end modify
    }
 

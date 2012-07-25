@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.portal.UIPortalControl = {
+var uiPortalControl = {
 
   /**
    * Collapse tree, use for Navigation Tree
@@ -95,4 +95,6 @@ eXo.portal.UIPortalControl = {
       }
     }
   }
-}
+};
+
+_module.UIPortalControl = uiPortalControl;

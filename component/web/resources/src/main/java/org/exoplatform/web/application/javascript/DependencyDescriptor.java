@@ -20,7 +20,6 @@
 package org.exoplatform.web.application.javascript;
 
 import org.gatein.portal.controller.resource.ResourceId;
-import org.gatein.portal.controller.resource.script.FetchMode;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -30,8 +29,16 @@ public class DependencyDescriptor
 
    /** . */
    private final ResourceId resourceId;
+   
+   /** . */
+   private final String alias;
 
    public DependencyDescriptor(ResourceId resourceId) throws NullPointerException
+   {
+      this(resourceId, null);
+   }
+   
+   public DependencyDescriptor(ResourceId resourceId, String alias) throws NullPointerException
    {
       if (resourceId == null)
       {
@@ -40,11 +47,17 @@ public class DependencyDescriptor
 
       //
       this.resourceId = resourceId;
+      this.alias = alias;
    }
 
    public ResourceId getResourceId()
    {
       return resourceId;
+   }
+
+   public String getAlias()
+   {
+      return alias;
    }
 
    @Override

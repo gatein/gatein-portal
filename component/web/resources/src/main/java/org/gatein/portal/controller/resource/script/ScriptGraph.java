@@ -19,12 +19,11 @@
 
 package org.gatein.portal.controller.resource.script;
 
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -37,8 +36,6 @@ import java.util.Map;
  */
 public class ScriptGraph
 {
-
-   private static final Log log = ExoLogger.getExoLogger(ScriptGraph.class);
    
    /** . */
    final EnumMap<ResourceScope, Map<String, ScriptResource>> resources;
@@ -129,17 +126,24 @@ public class ScriptGraph
             ScriptFetch fetch = map.get(id);
             if (fetch == null)
             {
-               map.put(id, fetch = new ScriptFetch(resource, mode));
+               fetch = new ScriptFetch(resource, mode);
+               if (!resource.isEmpty() || ResourceScope.SHARED.equals(resource.getId().getScope()))
+               {
+                  map.put(id, fetch);                  
+               }
                
                // Recursively add the dependencies
-               for (ResourceId dependencyId : resource.dependencies)
+               if (FetchMode.IMMEDIATE.equals(mode) || resource.isEmpty())
                {
-                  ScriptFetch dependencyFetch = traverse(map, dependencyId, mode);
-                  if (dependencyFetch != null)
+                  for (ResourceId dependencyId : resource.dependencies.keySet())
                   {
-                     dependencyFetch.dependsOnMe.add(fetch);
-                     fetch.dependencies.add(dependencyFetch);
-                  }
+                     ScriptFetch dependencyFetch = traverse(map, dependencyId, mode);
+                     if (dependencyFetch != null)
+                     {
+                        dependencyFetch.dependsOnMe.add(fetch);
+                        fetch.dependencies.add(dependencyFetch);
+                     }
+                  }                  
                }
             }
             return fetch;            
@@ -161,7 +165,7 @@ public class ScriptGraph
       return resources.get(scope).get(name);
    }
 
-   public Iterable<ScriptResource> getResources(ResourceScope scope)
+   public Collection<ScriptResource> getResources(ResourceScope scope)
    {
       return resources.get(scope).values();
    }
@@ -171,16 +175,22 @@ public class ScriptGraph
       return addResource(id, FetchMode.IMMEDIATE);
    }
 
+   public ScriptResource addResource(ResourceId id, FetchMode fetchMode) throws NullPointerException
+   {
+      return addResource(id, fetchMode, null);
+   }
+   
    /**
     * Add a resource to the graph if available.  
     * return null if ResourceID is duplicated
     * 
     * @param id the resource id
     * @param fetchMode the resource fetch mode
+    * @param alias default alias
     * @return the resource
-    * @throws NullPointerException if any argument is null
+    * @throws NullPointerException if id or fetchMode is null
     */
-   public ScriptResource addResource(ResourceId id, FetchMode fetchMode) throws NullPointerException
+   public ScriptResource addResource(ResourceId id, FetchMode fetchMode, String alias) throws NullPointerException
    {
       if (id == null)
       {
@@ -192,19 +202,33 @@ public class ScriptGraph
       }
 
       //
+      if (ResourceScope.SHARED.equals(id.getScope()))
+      {
+         for (Map<String, ScriptResource> mp : resources.values())
+         {
+            for (ScriptResource rs : mp.values())
+            {
+               if (rs.getDependencies().contains(id) && !rs.getFetchMode().equals(fetchMode))
+               {
+                  throw new IllegalStateException("ScriptResource " + rs.getId() + " can't depend on " + id + ". They have difference fetchMode");
+               }
+            }                     
+         }
+      }
+      
+      //
       Map<String, ScriptResource> map = resources.get(id.getScope());
       String name = id.getName();
       ScriptResource resource = map.get(name);
       if (resource == null)
       {
-         map.put(name, resource = new ScriptResource(this, id, fetchMode));
+         map.put(name, resource = new ScriptResource(this, id, fetchMode, alias));
       }
       else if (!(id.getScope().equals(ResourceScope.SHARED) && JavascriptConfigParser.LEGACY_JAVA_SCRIPT.equals(name)))
       {
-         log.error("Duplicate ResourceId : {}, later resource definition will be ignored", id);
-         resource = null; 
-      }      
-         
+         throw new IllegalStateException("Duplicate ResourceId : " + id + ", later resource definition will be ignored");
+      }                     
+      
       return resource;            
    }
    

@@ -26,7 +26,7 @@
  *     : create a callback function if necessary, to add specific behavior to your scroll
  *       (e.g. if an element must be always visible)
  */
-function ScrollManager(id) {
+var ScrollManager = function(id) {
 	if (typeof (id) == "string") id = document.getElementById(id);
 	this.mainContainer = id; // The HTML DOM element that contains the tabs, the arrows, etc	
 	this.elements = new Array(); // the array containing the elements
@@ -331,3 +331,5 @@ ScrollManager.prototype.checkResize = function() {
 	var scroll = this;
 	this.refresh = setTimeout(function() {scroll.checkResize()}, 700);
 };
+
+_module.ScrollManager = ScrollManager;

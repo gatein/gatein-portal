@@ -4,6 +4,9 @@
 	
 	def selectedCategory = uicomponent.getSelectedCategory();
 	String selectedThemeName = uicomponent.getSelectedTheme(); 
+	
+	def rcontext = _ctx.getRequestContext(); 
+	rcontext.getJavascriptManager().require("SHARED/portal", "portal").addScripts("portal.UIFormInputThemeSelector.initSelector();");
 %>
 
 <div class="UIItemThemeSelector" id="$uicomponent.id">
@@ -13,7 +16,7 @@
 	<%
 		for(theme in selectedCategory.getThemes()) {
 	%>
-		<div class="Item" onclick="eXo.webui.UIFormInputThemeSelector.showThemeSelected(this,'$theme')">
+		<div class="Item">
 			<div class="UIThemeSelector $theme">
 
 				<div class="WindowBarLeft">

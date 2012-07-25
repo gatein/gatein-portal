@@ -33,58 +33,33 @@ var eXo  = {
   session : { },
   
   i18n : { }
-} ;
-
-/**
-* This function is deprecated, please use eXo.loadJS instead
-* 
-* This method will : 
-*   1) dynamically load a javascript module from the server (if no root location is set 
-*      then use '/eXoResources/javascript/', aka files
-*      located in the eXoResources WAR in the application server). 
-*      The method used underneath is a XMLHttpRequest
-*   2) Evaluate the returned script
-*   3) Cache the script on the client
-*
-*/
-eXo.require = function(module, jsLocation, callback, params, context) {
-  try {
-    if(eval(module + ' != null')) {
-      if (callback) {
-        var ctx = context ? context : {};
-        if(params && typeof(params) != "string" && params.length) callback.apply(ctx, params);
-     	else callback.call(ctx, params) ;
-      }
-      return ;
-    }
-  } catch(err) {
-    //alert(err + " : " + module);
-  }
-  window.status = "Loading Javascript Module " + module ;
-  if(jsLocation == null) jsLocation = '/eXoResources/javascript/' ;
-  var path = jsLocation  + module.replace(/\./g, '/')  + '.js' ;
-  eXo.loadJS(path, callback, params, context);
 };
 
-eXo.loadJS = function(paths, callback, params, context) {
-  if (!paths || !paths.length) return;  
-  var tmp = [], loader = eXo.core.AsyncLoader;
-  
-  paths = typeof paths === 'string' ? [paths] : paths;  
-  loader.loadJS(paths, callback, params, context);
-  
-  eXo.session.startItv();
-} ;
+/*****************************************************************************************/
+/*
+* This is the main entry method for every Ajax calls to the eXo Portal
+*
+* It is simply a dispatcher method that fills some init fields before 
+* calling the doRequest() method
+*/
+window.ajaxGet = function(url, callback) {
+  if (!callback) callback = null ;
+  require(["SHARED/base"], function() {
+	  doRequest("Get", url, null, callback);	  
+  });
+};
 
 /**
- * Make url portal request with parameters
- * 
- * @param targetComponentId identifier of component
- * @param actionName name of action
- * @param useAjax indicate Ajax request or none
- * @param params array contains others parameters
- * @return full url request
+ * Do a POST request in AJAX with given <code>url</code> and <code>queryString</code>.
+ * The call is delegated to the doRequest() method with a callback function
  */
+window.ajaxPost = function(url, queryString, callback) {
+  if (!callback) callback = null ;
+  require(["SHARED/base"], function() {
+	  doRequest("POST", url, queryString, callback) ;
+  });
+};
+
 eXo.env.server.createPortalURL = function(targetComponentId, actionName, useAjax, params) {
   var url = eXo.env.server.portalURLTemplate.replace("{portal:componentId}", targetComponentId);
   url = url.replace("{portal:action}", actionName);
@@ -99,79 +74,13 @@ eXo.env.server.createPortalURL = function(targetComponentId, actionName, useAjax
   }
   if(useAjax) url += "&ajaxRequest=true" ;
 
-  return  url ;
-} ;
-
-/**
- * log out of user session
- */
-eXo.portal.logout = function() {
-	window.location = eXo.env.server.createPortalURL("UIPortal", "Logout", false) ;
-} ;
-
-eXo.session.openUrl = null ;
-eXo.session.itvTime = null ;
-eXo.session.itvObj = null;
-eXo.session.initialized = false;
-
-eXo.session.itvInit = function() {
-   var session = eXo.session, env = eXo.env;
-   if (!session.initialized && session.canKeepState && env.portal.accessMode == 'private') {
-      if (!session.openUrl) session.openUrl = env.server.createPortalURL("UIPortal", "Ping", false) ;
-      if (!session.itvTime) session.itvTime = 1800;
-      session.initialized = true;
-      session.openItv();
-   }
-} ;
-
-eXo.session.startItv = function() {
-   var session = eXo.session;
-   if (session.initialized) {
-      session.destroyItv();
-      if (session.canKeepState && eXo.env.portal.accessMode == 'private') {
-         if (session.itvTime > 0) session.itvObj = window.setTimeout("eXo.session.openItv()", (session.itvTime - 10) * 1000) ;
-      }
-   } else if (session.isOpen) {
-      session.itvInit();
-   }
-} ;
-
-eXo.session.openItv = function() {
-	var session = eXo.session;
-	var request = window.ActiveXObject ? new ActiveXObject( "Msxml2.XMLHTTP" ) : new XMLHttpRequest();
-	request.open("GET", session.openUrl, true);
-	request.setRequestHeader("Cache-Control", "max-age=86400");
-	request.onreadystatechange = function() {
-		if (request.readyState == 4) { 
-			if (request.status == 200) {
-				var result = request.responseText;
-				if(!isNaN(result)) session.itvTime = parseInt(result); 				
-			}
-			delete request['onreadystatechange'];
-		}
-	}
-	request.send(null);
-} ;
-
-eXo.session.destroyItv = function () {
-   var session = eXo.session;
-   window.clearTimeout(session.itvObj) ;
-   session.itvObj = null ;
-} ;
-
-/**
- * Generates an id based on the current time and random number
- */
-eXo.generateId = function(objectId) {
-	return (objectId + "-" + new Date().getTime() + Math.random().toString().substring(2)) ;
+  return  url;
 };
 
-eXo.debug = function(message) {
-	if(!eXo.developing) return;
-	
-	var webui = eXo.webui;
-	if(webui.UINotification) {
-		message = "DEBUG: " + message;
-		webui.UINotification.addMessage(message);
+eXo.env.addLoadedRemoteScripts = function(scripts) {
+	if (typeof define === 'function' && define.amd) {
+		for (var i = 0; i < scripts.length; i++) {
+			define(scripts[i]);
+		}		
 	}
-}
+};

@@ -20,7 +20,7 @@
 /**
  * Manages a popup menu
  */
-eXo.webui.UIPopupMenu = {
+var uiPopupMenu = {
 
   // Elements that must be hidden
   elementsToHide : [],
@@ -36,7 +36,7 @@ eXo.webui.UIPopupMenu = {
    *          container
    */
   init : function(popupMenu, container) {
-    this.superClass = eXo.webui.UIPopup;
+    this.superClass = base.UIPopup;
     this.superClass.init(popupMenu, container.id);
   },
   /**
@@ -69,15 +69,15 @@ eXo.webui.UIPopupMenu = {
   },
 
   pushVisibleContainer : function(containerId) {
-    eXo.webui.UIPopupMenu.currentVisibleContainers.push(containerId);
+    _module.UIPopupMenu.currentVisibleContainers.push(containerId);
   },
 
   popVisibleContainer : function() {
-    eXo.webui.UIPopupMenu.currentVisibleContainers.pop();
+    _module.UIPopupMenu.currentVisibleContainers.pop();
   },
 
   pushHiddenContainer : function(containerId) {
-    eXo.webui.UIPopupMenu.elementsToHide.push(containerId);
+    _module.UIPopupMenu.elementsToHide.push(containerId);
   },
   /**
    * Function called when an element (or more) must be hidden Sets a timeout to
@@ -87,7 +87,7 @@ eXo.webui.UIPopupMenu = {
   setCloseTimeout : function(time) {
     if (!time)
       time = 100;
-    setTimeout("eXo.webui.UIPopupMenu.doOnMenuItemOut()", time);
+    setTimeout(_module.UIPopupMenu.doOnMenuItemOut, time);
   },
   /**
    * Adds an onCLick event to link elements If they are http links, changes the
@@ -115,9 +115,9 @@ eXo.webui.UIPopupMenu = {
    * that are no longer pointed at
    */
   doOnMenuItemOut : function() {
-    while (eXo.webui.UIPopupMenu.elementsToHide.length > 0) {
+    while (_module.UIPopupMenu.elementsToHide.length > 0) {
       var container = document
-          .getElementById(eXo.webui.UIPopupMenu.elementsToHide.shift());
+          .getElementById(_module.UIPopupMenu.elementsToHide.shift());
       if (container) {
         /*
          * It can happen that a submenu appears in both the "to-hide" list and
@@ -128,9 +128,9 @@ eXo.webui.UIPopupMenu = {
          * item submenu doesn't appear in the "keep-visible" list before we hide
          * it
          */
-        if (!eXo.webui.UIPopupMenu.currentVisibleContainers
+        if (!_module.UIPopupMenu.currentVisibleContainers
             .contains(container.id)) {
-          eXo.webui.UIPopupMenu.hide(container);
+          _module.UIPopupMenu.hide(container);
         }
       }
     }
@@ -172,4 +172,6 @@ eXo.webui.UIPopupMenu = {
 	this.superClass.show(object);
     object.style.visibility = "";
   }
-}
+};
+
+_module.UIPopupMenu = uiPopupMenu;

@@ -18,13 +18,18 @@
  */
 package org.exoplatform.portal.resource;
 
+import java.io.IOException;
+import java.net.URL;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.test.mocks.servlet.MockServletContext;
 import org.exoplatform.web.application.JavascriptManager;
+import org.exoplatform.web.application.RequireJS;
+import org.exoplatform.web.application.javascript.JavascriptConfigParser;
+import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMap;
-
-import java.io.IOException;
-import java.util.Set;
 
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
@@ -34,11 +39,29 @@ import java.util.Set;
 public class TestJavascriptManager extends AbstractWebResourceTest
 {
    private JavascriptManager jsManager;
+   
+   private static boolean isFirstStartup = true;
 
    @Override
    protected void setUp() throws Exception
    {
       super.setUp();
+      final PortalContainer portalContainer = getContainer();
+      JavascriptConfigService jsService = (JavascriptConfigService)portalContainer.getComponentInstanceOfType(JavascriptConfigService.class);
+      
+      if (isFirstStartup)
+      {
+         URL url = portalContainer.getPortalClassLoader().getResource("mockwebapp/gatein-resources.xml");
+         JavascriptConfigParser.processConfigResource(url.openStream(), jsService, new MockServletContext() {
+            @Override
+            public String getContextPath()
+            {
+               return  "mockwebapp";
+            }            
+         });
+
+         isFirstStartup = false;
+      }
       jsManager = new JavascriptManager();
    }
    
@@ -47,32 +70,33 @@ public class TestJavascriptManager extends AbstractWebResourceTest
       FetchMap<ResourceId> scriptResources = jsManager.getScriptResources();
       assertEquals(0, scriptResources.size());
       
-      jsManager.loadScriptResource(ResourceScope.PORTAL, "foo");
+      jsManager.loadScriptResource(ResourceScope.SHARED, "script1");
       scriptResources = jsManager.getScriptResources();
       assertEquals(1, scriptResources.size());
 
       // Re-adding the same resource
-      jsManager.loadScriptResource(ResourceScope.PORTAL, "foo");
+      jsManager.loadScriptResource(ResourceScope.SHARED, "script1");
       scriptResources = jsManager.getScriptResources();
       assertEquals(1, scriptResources.size());
-      assertTrue(scriptResources.containsKey(new ResourceId(ResourceScope.PORTAL, "foo")));
+      assertTrue(scriptResources.containsKey(new ResourceId(ResourceScope.SHARED, "script1")));          
    }
    
-   public void testAddingJavascripts()
+   public void testRequireJS()
    {
-      jsManager.addJavascript("foo  ");
-      jsManager.addCustomizedOnLoadScript("bar");
-      String expected = 
-               "foo;\n" +
-      		   "eXo.core.Browser.onLoad();\n" +
-      		   "bar;\n";
-      assertEquals(expected, jsManager.getJavaScripts());
+      RequireJS require = jsManager.require("SHARED/jquery", "gj");
+      require.addScripts("gj('body').css('color : red');");
 
-      jsManager.importJavascript("eXo.webui.script");
-      jsManager.importJavascript("eXo.webui.script-ext", "/webapp/jscript/");
-      Set<String> importedJavaScripts = jsManager.getImportedJavaScripts();
-      assertEquals(2, importedJavaScripts.size());
-      assertTrue(importedJavaScripts.contains("/eXoResources/javascript/eXo/webui/script.js"));
-      assertTrue(importedJavaScripts.contains("/webapp/jscript/eXo/webui/script-ext.js"));
+      String expected = "require([\"SHARED/base\",\"SHARED/jquery\"],function(base,gj) {\ngj('body').css('color : red');});";
+      assertEquals(expected, require.toString());
+   }
+   
+   public void testNoAlias()
+   {
+      RequireJS require = jsManager.require("SHARED/webui");
+      require.require("SHARED/jquery", "gj");
+
+      //Any module without alias will be pushed to the end of dependency list
+      String expected = "require([\"SHARED/base\",\"SHARED/jquery\",\"SHARED/webui\"],function(base,gj) {\n});";
+      assertEquals(expected, require.toString());
    }
 }

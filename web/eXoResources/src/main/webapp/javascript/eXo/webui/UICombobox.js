@@ -23,7 +23,7 @@ eXo.webui.UICombobox = {
     if (typeof (textbox) == "string")
       textbox = document.getElementById(textbox);
     textbox = gj(textbox).next("input");
-    var UICombobox = eXo.webui.UICombobox;
+    var UICombobox = _module.UICombobox;
     var onfocus = textbox.attr("onfocus");
     var onclick = textbox.attr("onclick");
     if (!onfocus)
@@ -33,7 +33,7 @@ eXo.webui.UICombobox = {
   },
 
   show : function(evt) {
-    var uiCombo = eXo.webui.UICombobox;
+    var uiCombo = _module.UICombobox;
     uiCombo.items = gj(this.parentNode).find("a");
     if (uiCombo.list)
       uiCombo.list.style.display = "none";
@@ -66,7 +66,7 @@ eXo.webui.UICombobox = {
     if (selectedIndex >= 0) {
       gj(this.items[selectedIndex]).addClass("UIComboboxSelectedItem");
       this.lastSelectedItem = this.items[selectedIndex];
-      var y = eXo.core.Browser.findPosYInContainer(this.lastSelectedItem,
+      var y = base.Browser.findPosYInContainer(this.lastSelectedItem,
           this.list);
       this.list.firstChild.scrollTop = y;
       var hidden = gj(textbox).prev("input")[0];
@@ -76,7 +76,7 @@ eXo.webui.UICombobox = {
   },
 
   fixForIE6 : function(obj) {
-    if (!eXo.core.Browser.isIE6())
+    if (!base.Browser.isIE6())
       return;
     if (gj(this.list).children("iframe").length > 0)
       return;
@@ -128,11 +128,11 @@ eXo.webui.UICombobox = {
   },
 
   hide : function() {
-    eXo.webui.UICombobox.list.style.display = "none";
+    _module.UICombobox.list.style.display = "none";
   },
 
   getValue : function(obj) {
-    var UICombobox = eXo.webui.UICombobox;
+    var UICombobox = _module.UICombobox;
     var val = obj.getAttribute("value");
     var hiddenField = gj(UICombobox.list.parentNode).next("input");
     hiddenField.attr("value", val);
@@ -140,24 +140,25 @@ eXo.webui.UICombobox = {
     text.attr("value", gj(obj).find(".UIComboboxLabel").first().html());
     UICombobox.list.style.display = "none";
   }
-}
+};
 
 /**
  * Deprecated - use jQuery to register event, then return false instead
  */
 eXo.core.EventManager = {
   cancelBubble : function(evt) {
-    if (eXo.core.Browser.browserType == 'ie')
+    if (base.Browser.isIE())
       window.event.cancelBubble = true;
     else
       evt.stopPropagation();
   },
 
   cancelEvent : function(evt) {
-    eXo.core.EventManager.cancelBubble(evt);
-    if (eXo.core.Browser.browserType == 'ie')
+    _module.EventManager.cancelBubble(evt);
+    if (base.Browser.isIE())
       window.event.returnValue = true;
     else
       evt.preventDefault();
   }
-}
+};
+_module.UICombobox = eXo.webui.UICombobox;
