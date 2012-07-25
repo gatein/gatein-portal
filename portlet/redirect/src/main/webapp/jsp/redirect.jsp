@@ -10,9 +10,11 @@ if (redirect.getAlternativeSites() != null && !redirect.getAlternativeSites().is
   <ul>
     <% for (org.gatein.portlet.redirect.RedirectLink redirectLink: redirect.getAlternativeSites())
        { %>
-         <a href="<%= redirectLink.getRedirectURI() %>">
-           <li><%=redirectLink.getRedirectName() %></li>
-         </a> 
+         <li>
+           <a href="<%= redirectLink.getRedirectURI() %>">
+             <%=redirectLink.getRedirectName() %>
+           </a>
+         </li>
     <% } %>
   </ul>
   </div>
