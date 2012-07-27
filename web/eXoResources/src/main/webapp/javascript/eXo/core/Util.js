@@ -168,13 +168,6 @@ Array.prototype.pushAll = function (array) {
 	}
 } ;
 
-Array.prototype.each = function (iterator, context) {
-	iterator = iterator.bind(context);
-  	for (var i = 0; i < this.length; i++) {
-		iterator(this[i]) ;
-	}
-};
-
 /*************************************************************************/
 function  HashMap() { 
 	 this.properties = new Object() ;
