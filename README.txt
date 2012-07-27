@@ -26,14 +26,16 @@ When the gatein.dev property is set it will build and package one or several ser
 
 The various values for gatein.dev are:
 
-- tomcat   : Tomcat 6 and Tomcat 7
-- tomcat6  : Tomcat 6
-- tomcat7  : Tomcat 7
-- jbossas  : JBoss AS 5 and JBoss AS 6
-- jbossas5 : JBoss AS 5
-- jbosass6 : JBoss AS 6
-- jbossas7 : JBoss AS 7
-- jetty    : Jetty
+- tomcat     : Tomcat 6 and Tomcat 7
+- tomcat6    : Tomcat 6
+- tomcat7    : Tomcat 7
+- jbossas    : JBoss AS 5 and JBoss AS 6
+- jbossas5   : JBoss AS 5
+- jbosass6   : JBoss AS 6
+- jbossas710 : JBoss AS 7.1.0
+- jbossas711 : JBoss AS 7.1.1
+- jbossas712 : JBoss AS 7.1.2
+- jetty      : Jetty
 
 
 2) Database configuration
@@ -72,6 +74,17 @@ But that's only usable for development since in order to be able to run GateIn y
 
 GateIn can be packaged with different web / application servers. The specific server to use is selected by using an appropriate profile.
 
+Profile is selected by using -Dgatein.dev= with one of the supported values as described later.
+
+There is one parameter (-Dservers.dir=$SERVERS_DIR) that has to be specified every time in order to specify the location on the disk where you want to keep you application servers used for packaging.
+
+For each server packaging there is a default server version that will be used.
+
+You can override the name of the directory that contains your server (under $SERVERS_DIR) by using -Dserver.name=$NAME parameter.
+
+There are server specific equivalents that have to be used when packaging several servers in one build run. Those are described later.
+
+
 
   Packaging with JBoss-AS-5.1.0.GA
   --------------------------------
@@ -97,24 +110,32 @@ To start it, go to jboss directory, and run 'bin/run.sh' ('bin\run.bat' on Windo
 Access the portal at: http://localhost:8080/portal
 
 
-  Packaging with JBoss-AS-7.1.0.Final
+  Packaging with JBoss-AS-7.x.x
   -----------------------------------
 
 If you don’t have an existing JBoss AS distribution, the build can automatically download it for you.
 
 Issue the following command:
 
-mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=jbossas7 -Ddownload
+mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=$AS7_LABEL -Ddownload
+
+Where $AS7_LABEL is one of: jbossas710, jbossas711, or jbossas712.
 
 
-If you have an existing JBoss-AS-7.1.0.Final distribution, unpack it into SERVERS_DIR directory so that you get SERVERS_DIR/jboss-as-7.1.0.Final directory.
+If you have an existing JBoss-AS-7.x.x distribution, unpack it into SERVERS_DIR directory so that you get SERVERS_DIR/jboss-as-7.x.x directory.
 
 In this case you can issue the following command:
 
-mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=jbossas7
+mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=$AS7_LABEL
 
 
-The packaged GateIn is available in packaging/jboss-as7/pkg/target/jboss-as-7.1.0.Final.
+For more finegrained control you can specify the directory under $SERVERS_DIR that contains the jboss-as-7.x.x that you wish to use for packaging.
+You do that by using either -Dserver.name=$NAME or -Djboss7.name=$NAME.
+
+IMPORTANT: Make sure that your $AS7_LABEL matches the JBoss AS version in your specified directory.
+
+
+The packaged GateIn is available in packaging/jboss-as7/pkg/target/jboss-as-7.x.x.
 
 To start it, go to jboss directory, and run 'bin/standalone.sh' ('bin\standalone.bat' on Windows).
 
@@ -239,6 +260,9 @@ You can also specify server names for each container - for example:
 
 mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Djboss5.name=jboss-5.1.0 -Djboss7.name=jboss-7.1.0 -Djboss6.name=jboss-6.0.0 -Dtomcat6.name=tomcat-6.0.35 -Dtomcat7.name=tomcat-7.0.19 -Djetty.name=jetty-6.0.24
 
+
+For JBoss AS7 packaging the version used in this case would be 7.1.0.Final. If you want to use a different version you have to specify it with -Dversion.jboss.as=.
+Valid values are: 7.1.0.Final, 7.1.1.Final, and 7.1.2.Final
 
 
 Release instructions

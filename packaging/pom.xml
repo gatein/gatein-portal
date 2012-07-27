@@ -142,11 +142,37 @@
             </modules>
         </profile>
         <profile>
-            <id>pkg-jbossas7</id>
+            <id>pkg-jbossas710</id>
             <activation>
                 <property>
                     <name>gatein.dev</name>
-                    <value>jbossas7</value>
+                    <value>jbossas710</value>
+                </property>
+            </activation>
+            <modules>
+                <module>common</module>
+                <module>jboss-as7</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>pkg-jbossas711</id>
+            <activation>
+                <property>
+                    <name>gatein.dev</name>
+                    <value>jbossas711</value>
+                </property>
+            </activation>
+            <modules>
+                <module>common</module>
+                <module>jboss-as7</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>pkg-jbossas712</id>
+            <activation>
+                <property>
+                    <name>gatein.dev</name>
+                    <value>jbossas712</value>
                 </property>
             </activation>
             <modules>
