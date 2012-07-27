@@ -33,6 +33,7 @@
         <system export="true">
             <paths>
                 <path name="sun/misc"/>
+                <path name="com/sun/xml/internal/stream"/>
             </paths>
         </system>
 
