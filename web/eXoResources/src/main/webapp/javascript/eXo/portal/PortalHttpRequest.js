@@ -500,7 +500,8 @@ function HttpResponseHandler() {
 	  if(parentId && parentId != "") parentBlock =  gj("#" + parentId);
 	  parentBlock = !parentBlock ? gj(document) : parentBlock;
 	  
-	  blocksToUpdate.each(function(blockToUpdate) {
+	  gj.each(blocksToUpdate, function() {
+      var blockToUpdate = this;
 		  var target = parentBlock.find("#" + blockToUpdate.blockId);
 		  if(target.length == 0) alert(_module.I18NMessage.getMessage("TargetBlockNotFound", new Array (blockToUpdate.blockId))) ;		  
 		  var newData = gj(blockToUpdate.data).find("#" + blockToUpdate.blockId);
@@ -561,7 +562,8 @@ function HttpResponseHandler() {
 	  //Handle the portlet responses
 	  var portletResponses =  response.portletResponses ;
 	  if(portletResponses) {
-		portletResponses.each(function(portletResponse) {
+		gj.each(portletResponses, function() {
+      var portletResponse = this;
 			if(!portletResponse.blocksToUpdate) {
 		        /*
 		        * This means that the entire portlet fragment is included in the portletResponse.portletData
