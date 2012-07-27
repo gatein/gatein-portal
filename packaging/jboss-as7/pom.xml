@@ -16,7 +16,7 @@
       <version.jboss.as>7.1.0.Final</version.jboss.as>
       <version.org.jboss.vfs>3.1.0.Final</version.org.jboss.vfs>
       <org.exoplatform.kernel.version>2.3.6-GA-JBAS7</org.exoplatform.kernel.version>
-      <version.org.gatein.naming>1.0.0.Final</version.org.gatein.naming>
+      <version.org.gatein.naming>1.0.1.Final</version.org.gatein.naming>
       <server.name>jboss-as-${version.jboss.as}</server.name>
    </properties>
    <build>
