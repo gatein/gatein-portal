@@ -22,9 +22,9 @@ eXo.webui.UIPopupSelectCategory = {
   init : function(parentId) {
 	  var parent = parentId;
 	  if (typeof parent == "string") {
-		  parent = gj("#" + parentId);
+		  parent = $("#" + parentId);
 	  }
-	  gj(parent).find(".UIPopupCategory").closest(".ControlIcon, .EditIcon").off("click").on("click", function(event) {
+	  $(parent).find(".UIPopupCategory").closest(".ControlIcon, .EditIcon").off("click").on("click", function(event) {
 		  _module.UIPopupSelectCategory.show(this, event);
 	  });
 	  return false;
@@ -39,13 +39,13 @@ eXo.webui.UIPopupSelectCategory = {
    *          evt
    */
   show : function(obj, evt) {
-    var popup = gj(obj).find("div.UIPopupCategory");
+    var popup = $(obj).find("div.UIPopupCategory");
     if (popup.length && popup.css("display") == "none")
     {
       popup.show();
-      gj(document).one("click", function()
+      $(document).one("click", function()
 	  {
-    	  gj(document).one("click", function() {
+    	  $(document).one("click", function() {
     		  popup.hide();    		  
     	  });
 	  });

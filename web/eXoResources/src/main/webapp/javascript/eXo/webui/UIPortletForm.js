@@ -18,9 +18,9 @@
  */
 var uiPortletForm = {
 	init : function(id, webui) {
-		var tabs = gj("#" + id + " .UIHorizontalTabs .MiddleTab");
+		var tabs = $("#" + id + " .UIHorizontalTabs .MiddleTab");
 		tabs.each(function() {
-			var tab = gj(this);
+			var tab = $(this);
 			tab.on("click", function() {
 				if (tab.attr("id") === "EditMode") {
 					_module.UIPortletForm.hideSaveButton(this);
@@ -35,9 +35,9 @@ var uiPortletForm = {
 	},
 	
 	hideSaveButton : function(comp) {
-		gj(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
+		$(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
 		{
-			var button = gj(this);
+			var button = $(this);
 			if(button.attr("id").indexOf("Save") >= 0)
 			{
 				button.css("display", "none");
@@ -50,9 +50,9 @@ var uiPortletForm = {
 	},
 
 	showSaveButton : function(comp) {
-		gj(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
+		$(comp).closest(".WorkingArea").find("div.HorizontalLayout > div.UIAction > a.ActionButton").each(function()
 		{
-			var button = gj(this);
+			var button = $(this);
 			if(button.attr("id").indexOf("Save") >= 0)
 			{
 				button.css("display", "inline-block");

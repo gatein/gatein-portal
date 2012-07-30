@@ -26,7 +26,7 @@ eXo.webui.UIRightClickPopupMenu = {
    *          identifier of a document object
    */
   init : function(contextMenuId) {
-    var menu = gj("#" + contextMenuId);
+    var menu = $("#" + contextMenuId);
     menu.mousedown(function()
     {
       return false;
@@ -46,7 +46,7 @@ eXo.webui.UIRightClickPopupMenu = {
    *          identifier of context menu
    */
   hideContextMenu : function(contextId) {
-    gj("#" + contextId).css("display", "none");
+    $("#" + contextId).css("display", "none");
   },
 
   /**
@@ -57,7 +57,7 @@ eXo.webui.UIRightClickPopupMenu = {
    */
   disableContextMenu : function(comp) {
     if (typeof (comp) == "string")
-      comp = gj("#" + comp);
+      comp = $("#" + comp);
 
     comp.mouseover(function()
     {
@@ -84,7 +84,7 @@ eXo.webui.UIRightClickPopupMenu = {
   prepareObjectIdEvt : function(event) {
     event.stopPropagation();
 
-    var contextMenu = gj(this).closest(".UIRightClickPopupMenu")[0];
+    var contextMenu = $(this).closest(".UIRightClickPopupMenu")[0];
     contextMenu.style.display = "none";
     var href = this.getAttribute('href');
     if (!href) {
@@ -148,7 +148,7 @@ eXo.webui.UIRightClickPopupMenu = {
       return;
     }
 
-    var jDoc = gj(document);
+    var jDoc = $(document);
     jDoc.trigger("mousedown.RightClickPopUpMenu");    
     //Register closing contextual menu callback on document
     jDoc.one("mousedown.RightClickPopUpMenu", function(e)
@@ -163,9 +163,9 @@ eXo.webui.UIRightClickPopupMenu = {
     event.cancelBubble = true;
 
     if (whiteList) {
-      gj(contextMenu).find("a").each(function()
+      $(contextMenu).find("a").each(function()
       {
-        var item = gj(this);
+        var item = $(this);
         if(whiteList.indexOf(item.attr("exo:attr")) > -1)
         {
           item.css("display", "block");
@@ -177,8 +177,8 @@ eXo.webui.UIRightClickPopupMenu = {
       });
     }
 
-    var customItem = gj(elemt).find("div.RightClickCustomItem").eq(0);
-    var tmpCustomItem = gj(contextMenu).find("div.RightClickCustomItem").eq(0);
+    var customItem = $(elemt).find("div.RightClickCustomItem").eq(0);
+    var tmpCustomItem = $(contextMenu).find("div.RightClickCustomItem").eq(0);
     if(customItem && tmpCustomItem)
     {
       tmpCustomItem.html(customItem.html());
@@ -201,8 +201,8 @@ eXo.webui.UIRightClickPopupMenu = {
     eXo.core.Mouse.update(event);
     base.UIPopup.show(contextMenu);
 
-    var ctxMenuContainer = gj(contextMenu).children("div.UIContextMenuContainer")[0];
-    var offset = gj(contextMenu).offset();
+    var ctxMenuContainer = $(contextMenu).children("div.UIContextMenuContainer")[0];
+    var offset = $(contextMenu).offset();
     var intTop = eXo.core.Mouse.mouseyInPage
         - (offset.top - contextMenu.offsetTop);
     var intLeft = eXo.core.Mouse.mousexInPage
@@ -215,14 +215,14 @@ eXo.webui.UIRightClickPopupMenu = {
         scrollWidth = 0;
       intLeft = contextMenu.offsetParent.offsetWidth - intLeft + fixWidthForIE7
           + scrollWidth;
-      var clickCenter = gj(contextMenu).find("div.ClickCenterBottom")[0];
+      var clickCenter = $(contextMenu).find("div.ClickCenterBottom")[0];
       if (clickCenter) {
-        var clickCenterWidth = clickCenter ? parseInt(gj(clickCenter).css("marginRight")) : 0;
+        var clickCenterWidth = clickCenter ? parseInt($(clickCenter).css("marginRight")) : 0;
         intLeft += (ctxMenuContainer.offsetWidth - 2 * clickCenterWidth);
       }
     }
 
-    var jWin = gj(window);
+    var jWin = $(window);
     var browserHeight = jWin.height();
     var browserWidth = jWin.width();
     switch (opt) {
@@ -290,7 +290,7 @@ eXo.core.Mouse = {
   update : function(mouseEvent) {
     browser = base.Browser;
     
-    mouseEvent = gj.event.fix(mouseEvent);
+    mouseEvent = $.event.fix(mouseEvent);
     this.mousexInPage = mouseEvent.pageX;
     this.mouseyInPage = mouseEvent.pageY;
 

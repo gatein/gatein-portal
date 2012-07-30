@@ -27,7 +27,7 @@ var uiPortalControl = {
    */
   collapseTree : function(selectedElement) {
 
-    var ancest = gj(selectedElement).parent().closest(".Node");
+    var ancest = $(selectedElement).parent().closest(".Node");
     var childrenCont = ancest.find("div.ChildrenContainer").eq(0);
     var newHTML = "<div onclick=\""
         + childrenCont.attr("actionLink")

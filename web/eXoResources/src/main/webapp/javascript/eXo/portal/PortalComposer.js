@@ -24,9 +24,9 @@ var portalComposer = {
 	eXo.portal.portalMode = portalMode;
 	eXo.portal.hasEditted = isEditted;
 		
-    gj("div#" + id).attr("exo:minWidth", width).attr("exo:minHeight", height).find("div.OverflowContainer > span").eq(0).on("click", function()
+    $("div#" + id).attr("exo:minWidth", width).attr("exo:minHeight", height).find("div.OverflowContainer > span").eq(0).on("click", function()
     {
-      _module.PortalComposer.toggle(gj(this));
+      _module.PortalComposer.toggle($(this));
     });
   },
   
@@ -34,13 +34,13 @@ var portalComposer = {
   {
 	  _module.PortalComposer.showTab(selTabId);
 	  
-	  var tabs = gj("#" + id + " .MiddleTab");
+	  var tabs = $("#" + id + " .MiddleTab");
 	  tabs.each(function(index) {
-		  gj(this).on("click", function() {
+		  $(this).on("click", function() {
 			  webui.UIHorizontalTabs.changeTabForUITabPane(this);
-			  var hiddenInput = gj(this).children("input");		  
+			  var hiddenInput = $(this).children("input");		  
 			  _module.PortalComposer.showTab(hiddenInput.attr("name"));
-			  gj.globalEval(hiddenInput.attr("value"));
+			  $.globalEval(hiddenInput.attr("value"));
 			  
 			  if(eXo.portal.portalMode) eXo.portal.portalMode += (index==0 ? -1 : 1)*2;  		  
 		  });
@@ -67,7 +67,7 @@ var portalComposer = {
 
   showTab : function(id)
   {
-    var toolPanel = gj("#UIPortalToolPanel");
+    var toolPanel = $("#UIPortalToolPanel");
     if(id == "UIApplicationList")
     {
       toolPanel.attr("class", "ApplicationMode");
@@ -76,7 +76,7 @@ var portalComposer = {
     else if(id == "UIContainerList")
     {
       toolPanel.attr("class", "ContainerMode");
-      gj("#UIPageBody .DragControlArea").off("mousedown");
+      $("#UIPageBody .DragControlArea").off("mousedown");
     }    
   },
 
@@ -91,7 +91,7 @@ var portalComposer = {
     if(!eXo.portal.hasEditted)
     {
       eXo.portal.hasEditted = true;
-      var compWindow = gj("#UIWorkingWorkspace").find("div.UIPortalComposer").eq(0);
+      var compWindow = $("#UIWorkingWorkspace").find("div.UIPortalComposer").eq(0);
       compWindow.find("a.SaveButton").attr("class", "EdittedSaveButton");
 
       ajaxAsyncGetRequest(eXo.env.server.createPortalURL(compWindow.attr("id"), "ChangeEdittedState", true));

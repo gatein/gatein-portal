@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-define("eXo.gadget.ExoBasedUserPrefStore", ["SHARED/jquery"], function(gj) {	
+define("eXo.gadget.ExoBasedUserPrefStore", ["SHARED/jquery"], function($) {	
 gadgets.ExoBasedUserPrefStore = function() {
   gadgets.UserPrefStore.call(this);
 };
@@ -32,7 +32,7 @@ gadgets.ExoBasedUserPrefStore.prototype.savePrefs = function(gadget, newPrefs)
 {
   var prefs = gadgets.json.stringify(newPrefs || gadget.userPrefs_);
   var encodedPrefs = encodeURIComponent(prefs);
-  var ggWindow = gj("#gadget_" + gadget.id);
+  var ggWindow = $("#gadget_" + gadget.id);
   if (ggWindow.length > 0)
   {
     var compID = ggWindow.parent().attr("id").replace(/^content-/, "");

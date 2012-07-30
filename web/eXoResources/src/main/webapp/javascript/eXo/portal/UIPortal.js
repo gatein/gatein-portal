@@ -21,14 +21,14 @@ eXo.portal.UIPortal = {
   portalUIComponentDragDrop : false,
 
   initMouseHover : function(id) {
-	  var comp = gj("#" + id);
+	  var comp = $("#" + id);
 	  if (!comp.length) return;
 	  comp[0].onmouseover = function(event) {_module.UIPortal.blockOnMouseOver(event, this, true);};
 	  comp[0].onmouseout = function(event) {_module.UIPortal.blockOnMouseOver(event, this, false);};
   },
   
   blockOnMouseOver : function(event, block, isOver) {
-    var jqBlock = gj(block);
+    var jqBlock = $(block);
     if (!eXo.portal.portalMode || eXo.portal.isInDragging)
       return;
     if (eXo.portal.portalMode <= 2 && jqBlock.hasClass("UIContainer"))
@@ -44,7 +44,7 @@ eXo.portal.UIPortal = {
     var viewBlock, layoutBlock, editBlock;
     jqBlock.find("div.UIComponentBlock").eq(0).children("div").each(function()
     {
-      var child = gj(this);
+      var child = $(this);
       if (child.hasClass("VIEW-BLOCK"))
       {
         viewBlock = child;
@@ -157,11 +157,11 @@ eXo.portal.UIPortal = {
 
   /** Repaired: by Vu Duy Tu 25/04/07* */
   showLayoutModeForPage : function() {
-    var uiPage = gj(document.body).find("div.UIPage");
+    var uiPage = $(document.body).find("div.UIPage");
     if (uiPage.length == 0)
       return;
     var viewPage = uiPage.find("div.VIEW-PAGE").eq(0);
-    if(gj("#UIPortalApplication").attr("class") != "Vista")
+    if($("#UIPortalApplication").attr("class") != "Vista")
     {
       viewPage.css("border", "solid 3px #dadada");
     }
@@ -177,12 +177,12 @@ eXo.portal.UIPortal = {
   },
 
   showViewMode : function() {
-    var wkWs = gj("#UIWorkingWorkspace");
+    var wkWs = $("#UIWorkingWorkspace");
     if (wkWs.find("div.UIPortlet").length == 0 && wkWs.find("div.UIContainer").length == 0)
     {
-      gj("#UIPage").parents(".VIEW-PAGE").css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
+      $("#UIPage").parents(".VIEW-PAGE").css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});
     }
-    var pageBodyBlock = gj("#UIPageBody");
+    var pageBodyBlock = $("#UIPageBody");
     var mask = pageBodyBlock.find("div.UIPageBodyMask");
     if(mask.length > 0)
     {
@@ -211,7 +211,7 @@ eXo.portal.UIPortal = {
    *          componentId identifier of component
    */
   removeComponent : function(id) {
-    var comp = gj("#" + id);
+    var comp = $("#" + id);
     var parent = comp.parent();
     var viewPage = parent.closest(".VIEW-PAGE");
 
@@ -225,7 +225,7 @@ eXo.portal.UIPortal = {
       comp.remove();
     }
 
-    var wkWs = gj("#UIWorkingWorkspace");
+    var wkWs = $("#UIWorkingWorkspace");
     if (viewPage.length > 0 && wkWs.find("div.UIContainer").length == 0 && wkWs.find("div.UIPortlet").length == 0)
     {
       viewPage.css({"paddingTop" : "50px", "paddingRight" : "0px", "paddingBottom" : "50px", "paddingLeft" : "0px"});

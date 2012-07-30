@@ -18,9 +18,9 @@
  */
 
 function initWebUISamplePortlet(id) {
-  require([ "SHARED/jquery" ], function(gj) {
-    gj('#' + id).find('.CollapseIcon').on('click', function() {
-      var subGroup = gj(this.parentNode).children("div.ChildrenContainer")[0];
+  require([ "SHARED/jquery" ], function($) {
+    $('#' + id).find('.CollapseIcon').on('click', function() {
+      var subGroup = $(this.parentNode).children("div.ChildrenContainer")[0];
       var className = this.className;
       if (!subGroup) {
         return;

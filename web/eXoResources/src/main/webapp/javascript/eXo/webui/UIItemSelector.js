@@ -28,7 +28,7 @@
 var uiItemSelector = {
 
   init : function(selector, data, clickOnly) {
-	  var items = gj(selector);
+	  var items = $(selector);
 	  if (!clickOnly) {
 		  items.on("mouseover", function() {
 			  _module.UIItemSelector.onOver(this, true);
@@ -38,11 +38,11 @@ var uiItemSelector = {
 		  });		  
 	  }
 	  items.each(function(index) {
-		  var itm = gj(this);
+		  var itm = $(this);
 		  itm.on("click", function() {
 			  _module.UIItemSelector.onClick(this);
 			  itm.find(".ExtraActions").each(function() {
-				  var act = gj(this).html();
+				  var act = $(this).html();
 				  eval(act);
 			  });		  
 			  if (data) {
@@ -75,7 +75,7 @@ var uiItemSelector = {
    */
   onClick : function(clickedElement) {
     var itemListContainer = clickedElement.parentNode;
-    var allItems = gj(itemListContainer).find("div.Item").get();
+    var allItems = $(itemListContainer).find("div.Item").get();
     _module.UIItemSelector.beforeActionHappen(clickedElement);
     if (this.allItems.length <= 0)
       return;
@@ -133,7 +133,7 @@ var uiItemSelector = {
 
   /* Pham Thanh Tung added */
   onClickOption : function(clickedElement, form, component, option) {
-    var selectedItems = gj(clickedElement).closest(".ItemDetailList").find("div.SelectedItem").get();
+    var selectedItems = $(clickedElement).closest(".ItemDetailList").find("div.SelectedItem").get();
     for ( var i = 0; i < selectedItems.length; i++) {
       selectedItems[i].className = "NormalItem";
     }
@@ -147,7 +147,7 @@ var uiItemSelector = {
 
   /* TODO: Review This Function (Ha's comment) */
   beforeActionHappen : function(selectedItem) {
-    var jqObj = gj(selectedItem);
+    var jqObj = $(selectedItem);
     this.uiItemSelector = jqObj.closest(".UIItemSelector")[0];
     this.itemList = jqObj.closest(".ItemList")[0];
     var listCont = jqObj.closest(".ItemListContainer");
@@ -169,12 +169,12 @@ var uiItemSelector = {
       this.itemDetailList = listCont.parent().find("div.ItemDetailList")[0];
     }
 
-    this.itemDetails = gj(this.itemDetailList).find("div.ItemDetail").get();
-    this.allItems = gj(this.itemList).find("div.Item").eq(0).parent().children("div.Item").get();
+    this.itemDetails = $(this.itemDetailList).find("div.ItemDetail").get();
+    this.allItems = $(this.itemList).find("div.Item").eq(0).parent().children("div.Item").get();
   },
 
   showPopupCategory : function(selectedNode) {
-    var itemListCont = gj(selectedNode).closest(".ItemListContainer");
+    var itemListCont = $(selectedNode).closest(".ItemListContainer");
     var popupCategory = itemListCont.find("div.UIPopupCategory").eq(0);
 
     itemListCont.css("position", "relative");
@@ -190,7 +190,7 @@ var uiItemSelector = {
   },
 
   selectCategory : function(selectedNode) {
-    var jqObj = gj(selectedNode);
+    var jqObj = $(selectedNode);
     var itemListCont = jqObj.closest(".OverflowContainer");
     var selectedNodeIndex = _module.UIItemSelector.findIndex(selectedNode);
 
@@ -201,12 +201,12 @@ var uiItemSelector = {
     {
       if (index == selectedNodeIndex)
       {
-        gj(this).css("display", "block");
+        $(this).css("display", "block");
         itemDetailList.get(index).style.display = "block";
       }
       else
       {
-        gj(this).css("display", "none");
+        $(this).css("display", "none");
         itemDetailList.get(index).style.display = "none";
       }
     });
@@ -215,7 +215,7 @@ var uiItemSelector = {
   },
 
   findIndex : function(object) {
-    var siblings = gj(object).parent().children("div." + object.className).get();
+    var siblings = $(object).parent().children("div." + object.className).get();
     for ( var i = 0; i < siblings.length; i++) {
       if (siblings[i] == object)
         return i;

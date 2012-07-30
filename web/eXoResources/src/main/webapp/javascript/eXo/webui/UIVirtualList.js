@@ -24,7 +24,7 @@ var virtualList = {
     if (uiVirtualList == null)
       return;
 
-    gj(uiVirtualList).on("scroll", function() {
+    $(uiVirtualList).on("scroll", function() {
     	_module.UIVirtualList.onScroll(this, loadNextUrl);
     });
     
@@ -32,7 +32,7 @@ var virtualList = {
       uiVirtualList.isFinished = true;
     }
 
-    var virtualHeight = gj(uiVirtualList).height();
+    var virtualHeight = $(uiVirtualList).height();
 
     if (virtualHeight == 0) {
       virtualHeight = 300;
@@ -57,13 +57,13 @@ var virtualList = {
           uiVirtualList.style.height = "auto";
         }
       } else {
-        gj(uiVirtualList).trigger("scroll");
+        $(uiVirtualList).trigger("scroll");
       }
     }
   },
 
   getFeedBox : function(componentId) {
-    var uiVirtualList = gj("#" + componentId);
+    var uiVirtualList = $("#" + componentId);
     var feedBox = uiVirtualList.find("div.FeedBox");
     if(!feedBox || feedBox.length < 1)
     {

@@ -42,7 +42,7 @@ var uiUpload = {
       return;
     }
     
-    var uploadInput = gj("#" + uploadId);
+    var uploadInput = $("#" + uploadId);
     uploadInput.find(".DeleteFileLable, .Abort").on("click", function() {
     	_module.UIUpload.abortUpload(uploadId);
     });
@@ -137,7 +137,7 @@ var uiUpload = {
 
     for (id in response.upload) {
       var container = parent.document.getElementById(elementId);
-      var jCont = gj(container);
+      var jCont = $(container);
       if (response.upload[id].status == "failed") {
         this.abortUpload(id);
         var message = jCont.children(".LimitMessage").first().html();
@@ -177,7 +177,7 @@ var uiUpload = {
   showUploaded : function(id, fileName) {
     _module.UIUpload.listUpload.remove(id);
     var container = parent.document.getElementById(id);
-    var jCont = gj(container);
+    var jCont = $(container);
     var element = document.getElementById(id + "ProgressIframe");
     element.innerHTML = "<span></span>";
 
@@ -214,7 +214,7 @@ var uiUpload = {
     ajaxRequest('GET', url, false);
 
     var container = parent.document.getElementById(id);
-    var jCont = gj(container);
+    var jCont = $(container);
     var uploadIframe = jCont.find("#" + id + "UploadIframe");
     uploadIframe.show();
     _module.UIUpload.createUploadEntry(id, _module.UIUpload.isAutoUpload);
@@ -243,7 +243,7 @@ var uiUpload = {
     ajaxRequest('GET', url, false);
     
     var container = parent.document.getElementById(id);
-    var jCont = gj(container);
+    var jCont = $(container);
     var uploadIframe = jCont.find("#" + id + "UploadIframe");
     uploadIframe.show();
     _module.UIUpload.createUploadEntry(id, this.isAutoUpload);
@@ -272,11 +272,11 @@ var uiUpload = {
     var uploadFrame = parent.document.getElementById(id + "uploadFrame");
     var form = uploadFrame.contentWindow.document.getElementById(id);
 
-    var file = gj(form).find("#file");
+    var file = $(form).find("#file");
     if (file.attr("value") == null || file.attr("value") == '')
       return;
 
-    var jCont = gj(container);
+    var jCont = $(container);
     var progressBarFrame = jCont.find(".ProgressBarFrame").first();
     progressBarFrame.show();
     var blueProgressBar = jCont.find(".ProgressBarMiddle .BlueProgressBar").first();

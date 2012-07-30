@@ -19,11 +19,11 @@
 
 function initSitemapPortlet(id)
 {
-  require(['SHARED/jquery'], function(gj){
-    gj("#" + id).on("click", "div.ExpandIcon,div.CollapseIcon", function(event) {
+  require(['SHARED/jquery'], function($){
+    $("#" + id).on("click", "div.ExpandIcon,div.CollapseIcon", function(event) {
       collapseExpand(this);
 
-      var input = gj(this).children("input");
+      var input = $(this).children("input");
       if (input.attr("name") == "collapseURL") {
         ajaxAsyncGetRequest(input.val(), true);
       } else if (input.attr("name") == "expandURL") {
@@ -35,7 +35,7 @@ function initSitemapPortlet(id)
 
     function collapseExpand(node)
     {
-      var jqNode = gj(node);
+      var jqNode = $(node);
       var subGroup = jqNode.parent().children("div.ChildrenContainer");
       if(subGroup.css("display") == "none")
       {
@@ -61,7 +61,7 @@ function initSitemapPortlet(id)
       {
         return;
       }
-      var jqNode = gj(nodeToUpdate);
+      var jqNode = $(nodeToUpdate);
       var subGroup = jqNode.parent().children("div.ChildrenContainer");
       if (subGroup.length == 0 || subGroup.html().trim() !== "")
       {
@@ -70,7 +70,7 @@ function initSitemapPortlet(id)
       var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);
       try
       {
-        var data = gj.parseJSON(jsChilds);
+        var data = $.parseJSON(jsChilds);
       }
       catch (e)
       {

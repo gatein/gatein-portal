@@ -18,7 +18,7 @@
  */
 var uiTree = {
 	init : function(id, colapseClass, disableContextMenu, webui) {
-		var parent = gj('#' + id);
+		var parent = $('#' + id);
 		if (!parent.data("collapseRegistered")) {
 			parent.on('click', '.' + colapseClass, function() {
 				webui.UIPortalControl.collapseTree(this);

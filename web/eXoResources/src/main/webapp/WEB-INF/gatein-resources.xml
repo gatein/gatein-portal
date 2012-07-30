@@ -125,14 +125,14 @@
 
    <module>
       <name>jquery</name>     
-      <as>gj</as> 
+      <as>$</as> 
       <script>
          <name>jquery</name>
-         <path>/javascript/exo-jquery-1.7.1.js</path>
+         <path>/javascript/jquery-1.7.1.js</path>
       </script>
       <script>
-         <name>exo-jquery-alias</name>
-         <path>/javascript/exo-jquery-alias.js</path>
+         <name>jquery-patch</name>
+         <path>/javascript/jquery-patch.js</path>
       </script>
    </module>
 
