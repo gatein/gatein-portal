@@ -102,20 +102,9 @@ eXo.debug = function(message) {
 };
 
 /**
- *   Array convenience method to clear membership.
- *   @param object element
- *   @returns void
- */
-Array.prototype.clear = function () {
-  this.length = 0 ;
-} ;
-
-/**
- *   Array convenience method to remove element.
- *
- *   @param object element
- *   @returns boolean
- */
+ * Use this code instead
+ *   array.splice($.inArray(element, array), 1);
+ *   
 Array.prototype.remove = function (element) {
   var result = false ;
   var array = [] ;
@@ -133,12 +122,12 @@ Array.prototype.remove = function (element) {
   array = null ;
   return result ;
 } ;
+*/
 
 /**
- *   Array convenience method to check for membership.
- *
- *   @param object element
- *   @returns boolean
+ *   Use jquery instead
+ *   $.inArray(element, array) != -1;
+ *   
  */
 Array.prototype.contains = function (element) {
   for (var i = 0; i < this.length; i++) {
@@ -147,7 +136,7 @@ Array.prototype.contains = function (element) {
     }
   }
   return false ;
-} ;
+};
 
 Array.prototype.insertAt = function (what, iIndex) {
   if (iIndex < this.length) {
@@ -168,7 +157,9 @@ Array.prototype.pushAll = function (array) {
 	}
 } ;
 
-/*************************************************************************/
+/**********************************
+ * $.data
+ * ***************************************/
 function  HashMap() { 
 	 this.properties = new Object() ;
 	 this.length =  0 ;
@@ -223,11 +214,8 @@ _module.HashMap = eXo.core.HashMap;
 /*************************************************************************/
 
 /**
- * @author Nguyen Ba Uoc
- * 
- * String util
+ * jquery
  */
-
 String.prototype.trim = function () {
   var tmp = this.replace(/^\s*/, '');
   return tmp.replace(/\s*$/, '');
@@ -235,9 +223,7 @@ String.prototype.trim = function () {
 
 
 /**
- * @author jeremi joslin
- * 
- * Function util
+ * jQuery.proxy()
  */
 Function.prototype.bind = function(object) {
   var method = this;

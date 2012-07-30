@@ -111,7 +111,7 @@ var uiUploadInput = {
   },
 
   showUploaded : function(id, fileName) {
-    this.listUpload.remove(id);
+    this.remove(id);
     var container = parent.document.getElementById('UploadInputContainer' + id);
     var element = document.getElementById('ProgressIframe' + id);
     element.innerHTML = "<span></span>";
@@ -202,7 +202,7 @@ var uiUploadInput = {
   },
 
   abortUpload : function(id, isDynamicMode) {
-    this.listUpload.remove(id);
+    this.remove(id);
     var url = this.abortURL + id;
     ajaxRequest('GET', url, false);
     
@@ -280,6 +280,13 @@ var uiUploadInput = {
 
   upload : function(id) {
     setTimeout(function() {_module.UIUploadInput.doUpload(id)}, this.delayTime);
+  }, 
+  
+  remove : function(id) {
+  	var idx = $.inArray(id, _module.UIUploadInput.listUpload);
+  	if (idx !== -1) {
+  		_module.UIUploadInput.listUpload.splice(idx, 1);  		
+  	}
   }
 };
 

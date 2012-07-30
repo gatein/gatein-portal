@@ -553,7 +553,7 @@ function HttpResponseHandler() {
 	  var immediateScripts = loadingScripts ? loadingScripts.immediateScripts : [];	    
 	  if (immediateScripts.length) {		  
 		  require(immediateScripts, function() {
-			  immediateScripts.clear();
+			  immediateScripts.length = 0;
 			  instance.ajaxResponse.apply(that, [request, response]);
 		  });
 		  return;

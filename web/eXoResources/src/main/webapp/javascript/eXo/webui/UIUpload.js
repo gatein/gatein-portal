@@ -175,7 +175,7 @@ var uiUpload = {
    *          fileName uploaded file name
    */
   showUploaded : function(id, fileName) {
-    _module.UIUpload.listUpload.remove(id);
+    _module.UIUpload.remove(id);
     var container = parent.document.getElementById(id);
     var jCont = $(container);
     var element = document.getElementById(id + "ProgressIframe");
@@ -206,7 +206,7 @@ var uiUpload = {
    *          id upload identifier
    */
   abortUpload : function(id) {
-    _module.UIUpload.listUpload.remove(id);
+    _module.UIUpload.remove(id);
     var url = eXo.env.server.context + "/upload?";
     url += "uploadId=" + id + "&action=abort";
     // var url = eXo.env.server.context + "/upload?uploadId="
@@ -301,6 +301,13 @@ var uiUpload = {
     } else {
       _module.UIUpload.listUpload.push(form.id);
     }
+  },
+  
+  remove : function(id) {
+  	var idx = $.inArray(id, _module.UIUpload.listUpload);
+  	if (idx !== -1) {
+  		_module.UIUpload.listUpload.splice(idx, 1);  		
+  	}
   }
 };
 

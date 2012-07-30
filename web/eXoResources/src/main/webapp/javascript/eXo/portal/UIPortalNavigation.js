@@ -302,7 +302,10 @@ var portalNavigation = {
     if (subContainer.length) {
       var id = subContainer.attr("id");
       portalNav.superClass.pushHiddenContainer(id);
-      portalNav.superClass.currentVisibleContainers.remove(id);
+      var index = $.inArray(id, portalNav.superClass.currentVisibleContainers);
+      if(index !== -1) {
+      	portalNav.superClass.currentVisibleContainers.splice(index, 1);
+      }
       portalNav.superClass.setCloseTimeout(200);
     }
   },
