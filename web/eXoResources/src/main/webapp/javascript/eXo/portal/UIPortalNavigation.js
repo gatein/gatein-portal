@@ -21,7 +21,7 @@
  * Manages the main navigation menu on the portal
  */
 var portalNavigation = {
-  hideMenuTimeoutIds : new base.HashMap(),
+  hideMenuTimeoutIds : {},
   scrollMgr : null,
   
   /**
@@ -174,7 +174,7 @@ var portalNavigation = {
     var conts = tab.find("." + portalNav.containerStyleClass);
     if (conts.length)
     {
-      portalNav.hideMenuTimeoutIds.put(conts[0].id, window.setTimeout(function() {portalNav.hideMenu(conts[0].id); }, 300));
+      portalNav.hideMenuTimeoutIds[conts[0].id] = window.setTimeout(function() {portalNav.hideMenu(conts[0].id); }, 300);
     }
     return false;
   },
@@ -216,7 +216,8 @@ var portalNavigation = {
   },
 
   cancelHideMenuContainer : function(containerId) {
-	  var timeout = _module.UIPortalNavigation.hideMenuTimeoutIds.remove(containerId);
+	  var timeout = _module.UIPortalNavigation.hideMenuTimeoutIds[containerId];
+	  _module.UIPortalNavigation.hideMenuTimeoutIds[containerId] = null;
       if (timeout) {
     	  window.clearTimeout(timeout) ;
       }
@@ -227,7 +228,7 @@ var portalNavigation = {
    */
   hideMenu : function(containerId) {
     var portalNav = _module.UIPortalNavigation;
-    portalNav.hideMenuTimeoutIds.remove(containerId);
+    portalNav.hideMenuTimeoutIds[containerId] = null;
 
     var menuItemContainer = $("#" + containerId);
     if (menuItemContainer.length) {

@@ -53,9 +53,11 @@ eXo.portal.PortalDragDrop = {
 		if (eXo.portal.isInDragging) return;		  
 		var dragObject = this, jDragObj = $(this);
 		
-		var origDragObjectStyle = new base.HashMap();
+		var origDragObjectStyle = {};
 	    var properties = ["top", eXo.core.I18n.isLT() ? "left" : "right", "zIndex", "opacity", "filter", "position", "width"];
-	    origDragObjectStyle.copyProperties(properties, dragObject.style);
+	    $.each(properties, function(idx, elem) {
+	    	origDragObjectStyle[elem] = dragObject.style[elem];
+	    });
 	    jDragObj.data("origDragObjectStyle", origDragObjectStyle);
 	    
 	    var isAddingNewly = jDragObj.children(".UIComponentBlock").length == 0;
@@ -244,7 +246,7 @@ eXo.portal.PortalDragDrop = {
 	    
 	    if(!dragObject.isAddingNewly) {
 	    	jDragObj.find(".EDITION-BLOCK").last().hide();
-	    	jDragObj.data("origDragObjectStyle").setProperties(dragObject.style, false);
+	    	$.extend(dragObject.style, jDragObj.data("origDragObjectStyle"));
 	    }
 	    
 	    if(previewBlock) previewBlock.parentNode.removeChild(previewBlock);

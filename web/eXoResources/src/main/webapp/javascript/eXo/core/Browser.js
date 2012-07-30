@@ -29,9 +29,9 @@
 * calls
 */
 eXo.core.Browser = {
-  onLoadCallback : new _module.HashMap(),
-  onResizeCallback : new _module.HashMap(),
-  onScrollCallback : new _module.HashMap(),
+  onLoadCallback : {},
+  onResizeCallback : {},
+  onScrollCallback : {},
   
   breakStream : null,
   
@@ -219,7 +219,7 @@ eXo.core.Browser = {
 	 * Adds a function to the list of functions to call on load
 	 */
 	addOnLoadCallback : function(id, method) {
-	  this.onLoadCallback.put(id, method) ;
+	  this.onLoadCallback[id] = method;
 	},
 	
 	/**
@@ -227,19 +227,19 @@ eXo.core.Browser = {
 	 * and clean the array
 	 */
 	onLoad : function() {
-	  var callback = _module.Browser.onLoadCallback ;
-	  for(var name in callback.properties) {
-	    var method = callback.get(name) ;
+	  var callback = _module.Browser.onLoadCallback;
+	  for(var name in callback) {
+	    var method = callback[name];
 	    if (typeof(method) == "function") try{method()}catch(e){};
 	  }
-	  this.onLoadCallback = new _module.HashMap();
+	  this.onLoadCallback = {};
 	},
 	
 	/**
 	 * Adds a function to the list of functions to call when the window is resized
 	 */
 	addOnResizeCallback : function(id, method) {
-	  this.onResizeCallback.put(id, method) ;
+	  this.onResizeCallback[id] = method;
 	},
 	
 	/**
@@ -247,8 +247,8 @@ eXo.core.Browser = {
 	 */
 	onResize : function(event) {
 	  var callback = _module.Browser.onResizeCallback ;
-	 for(var name in callback.properties) {
-	   var method = callback.get(name) ;
+	 for(var name in callback) {
+	   var method = callback[name];
 	   if (typeof(method) == "function") method(event) ;
 	 }
 	},
@@ -257,7 +257,7 @@ eXo.core.Browser = {
 	 * Adds a function to the list of functions to call when the user scrolls
 	 */
 	addOnScrollCallback : function(id, method) {
-	  this.onScrollCallback.put(id, method) ;
+	  this.onScrollCallback[id] = method;
 	},
 	
 	/**
@@ -265,8 +265,8 @@ eXo.core.Browser = {
 	 */
 	onScroll : function(event) {
 	  var callback = _module.Browser.onScrollCallback ;
-	  for(var name in callback.properties) {
-	    var method = callback.get(name) ;
+	  for(var name in callback) {
+	    var method = callback[name];
 	    try {
 	      if (typeof(method) == "function") method(event) ;
 	    }catch(err){}

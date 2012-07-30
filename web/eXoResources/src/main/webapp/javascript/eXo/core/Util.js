@@ -101,62 +101,6 @@ eXo.debug = function(message) {
 	}
 };
 
-/**********************************
- * $.data
- * ***************************************/
-function  HashMap() { 
-	 this.properties = new Object() ;
-	 this.length =  0 ;
-} ;
-
-HashMap.prototype.copyProperties = function(names, object) {
-  for (var i = 0; i < names.length; i++) {
-    var name = names[i] ;
-    this.put(name, object[name]) ;
-  }
-} ;
-
-
-HashMap.prototype.setProperties = function(object, clear) {
-  for(var name in this.properties) {
-    object[name] = this.properties[name] ; 
-  }
-} ;
-
-HashMap.prototype.get = function (name) {
-  return  this.properties[name] ;
-} ;
-
-HashMap.prototype.remove = function (name) {
-  var value = this.properties[name] ;
-  if (value != null)  { 
-    this.properties[name] = null ;
-    this.length-- ;
-    return value ;
-  } else {
-    return null ;
-  }
-} ;
-
-HashMap.prototype.put = function (name, value) {
-  if (this.properties[name] == null) {
-    this.length++ ;
-  }
-  this.properties[name] =  value ;
-} ;
-
-HashMap.prototype.size = function () { return this.length ; } ;
-
-HashMap.prototype.clear = function() {
- this.properties = new Object() ;
- this.length =  0 ;
-} ;
-
-/*************************************************************************/
-eXo.core.HashMap = HashMap.prototype.constructor ;
-_module.HashMap = eXo.core.HashMap; 
-/*************************************************************************/
-
 /**
  * jquery
  */
