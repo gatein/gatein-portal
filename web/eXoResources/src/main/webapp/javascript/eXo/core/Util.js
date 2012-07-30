@@ -101,62 +101,6 @@ eXo.debug = function(message) {
 	}
 };
 
-/**
- * Use this code instead
- *   array.splice($.inArray(element, array), 1);
- *   
-Array.prototype.remove = function (element) {
-  var result = false ;
-  var array = [] ;
-  for (var i = 0; i < this.length; i++) {
-    if (this[i] == element) {
-      result = true ;
-    } else {
-      array.push(this[i]) ;
-    }
-  }
-  this.clear() ;
-  for (var i = 0; i < array.length; i++) {
-    this.push(array[i]) ;
-  }
-  array = null ;
-  return result ;
-} ;
-*/
-
-/**
- *   Use jquery instead
- *   $.inArray(element, array) != -1;
- *   
- */
-Array.prototype.contains = function (element) {
-  for (var i = 0; i < this.length; i++) {
-    if (this[i] == element) {
-      return true ;
-    }
-  }
-  return false ;
-};
-
-Array.prototype.insertAt = function (what, iIndex) {
-  if (iIndex < this.length) {
-    var aAfter = this.splice(iIndex, 100000, what) ;
-    for (var i = 0; i < aAfter.length; i++) {
-      this.push(aAfter[i]) ;
-    }
-  } else {
-    this.push(what) ;
-  }
-} ;
-
-Array.prototype.pushAll = function (array) {
-	if (array != null) {
-		for (var i = 0; i < array.length; i++) {
-			this.push(array[i]) ;
-		}
-	}
-} ;
-
 /**********************************
  * $.data
  * ***************************************/

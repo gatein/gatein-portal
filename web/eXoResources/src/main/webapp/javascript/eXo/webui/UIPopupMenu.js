@@ -128,8 +128,7 @@ var uiPopupMenu = {
          * item submenu doesn't appear in the "keep-visible" list before we hide
          * it
          */
-        if (!_module.UIPopupMenu.currentVisibleContainers
-            .contains(container.id)) {
+        if ($.inArray(container.id, _module.UIPopupMenu.currentVisibleContainers) === -1) {
           _module.UIPopupMenu.hide(container);
         }
       }
