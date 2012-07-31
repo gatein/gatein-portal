@@ -106,11 +106,11 @@ eXo.webui.UICombobox = {
       sVal = sVal.substring(0, sVal.length - 1)
     if (sVal.length < 1)
       return;
-    var data = eval(obj.getAttribute("options").trim());
+    var data = eval($.trim(obj.getAttribute("options")));
     var len = data.length;
     var tmp = null;
     for ( var i = 0; i < data.length; i++) {
-      tmp = data[i].trim();
+      tmp = $.trim(data[i]);
       var idx = tmp.toLowerCase().indexOf(sVal, 0);
       if (idx == 0 && tmp.length > sVal.length) {
         obj.value = data[i];

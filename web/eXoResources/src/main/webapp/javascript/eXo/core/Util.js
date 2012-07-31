@@ -101,25 +101,6 @@ eXo.debug = function(message) {
 	}
 };
 
-/**
- * jquery
- */
-String.prototype.trim = function () {
-  var tmp = this.replace(/^\s*/, '');
-  return tmp.replace(/\s*$/, '');
-}
-
-
-/**
- * jQuery.proxy()
- */
-Function.prototype.bind = function(object) {
-  var method = this;
-  return function() {
-    method.apply(object, arguments);
-  }
-}
-
 Function.prototype.inherits = function(parentCtor) {
   function tempCtor() {};
   tempCtor.prototype = parentCtor.prototype;

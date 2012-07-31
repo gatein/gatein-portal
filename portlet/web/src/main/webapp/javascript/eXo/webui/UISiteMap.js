@@ -63,7 +63,7 @@ function initSitemapPortlet(id)
       }
       var jqNode = $(nodeToUpdate);
       var subGroup = jqNode.parent().children("div.ChildrenContainer");
-      if (subGroup.length == 0 || subGroup.html().trim() !== "")
+      if (subGroup.length == 0 || $.trim(subGroup.html()) !== "")
       {
         return;
       }

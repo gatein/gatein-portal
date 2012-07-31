@@ -403,7 +403,7 @@ eXo.webui.UICalendar = {
     if (second.length < 2)
       second = "0" + second;
 
-    var dateString = this.datePattern.trim();
+    var dateString = $.trim(this.datePattern);
     if (!this.isDisplayTime) {
       var ptStrings = dateString.split(" ");
       for ( var i = 0; i < ptStrings.length; i++) {
