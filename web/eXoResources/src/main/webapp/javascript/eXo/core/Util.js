@@ -100,11 +100,3 @@ eXo.debug = function(message) {
 		webui.UINotification.addMessage(message);
 	}
 };
-
-Function.prototype.inherits = function(parentCtor) {
-  function tempCtor() {};
-  tempCtor.prototype = parentCtor.prototype;
-  this.superClass_ = parentCtor.prototype;
-  this.prototype = new tempCtor();
-  this.prototype.constructor = this;
-};

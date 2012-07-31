@@ -17,12 +17,12 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-define("eXo.gadget.ExoBasedUserPrefStore", ["SHARED/jquery"], function($) {	
+define("eXo.gadget.ExoBasedUserPrefStore", ["SHARED/jquery", "eXo.gadget.Gadgets"], function($, gadgets) {	
 gadgets.ExoBasedUserPrefStore = function() {
   gadgets.UserPrefStore.call(this);
 };
 
-gadgets.ExoBasedUserPrefStore.inherits(gadgets.UserPrefStore);
+gadgets.eXoUtil.inherits(gadgets.ExoBasedUserPrefStore, gadgets.UserPrefStore);
 
 gadgets.ExoBasedUserPrefStore.prototype.getPrefs = function(gadget) {
   return gadget.userPrefs_;

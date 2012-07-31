@@ -129,7 +129,7 @@ gadgets.UserPrefStore.prototype.savePrefs = function(gadget) {
 gadgets.DefaultUserPrefStore = function() {
   gadgets.UserPrefStore.call(this);
 };
-gadgets.DefaultUserPrefStore.inherits(gadgets.UserPrefStore);
+inherits(gadgets.DefaultUserPrefStore, gadgets.UserPrefStore);
 
 gadgets.DefaultUserPrefStore.prototype.getPrefs = function(gadget) { };
 
@@ -175,7 +175,7 @@ gadgets.IfrGadgetService = function() {
   gadgets.rpc.register('requestNavigateTo', this.requestNavigateTo);
 };
 
-gadgets.IfrGadgetService.inherits(gadgets.GadgetService);
+inherits(gadgets.IfrGadgetService, gadgets.GadgetService);
 
 gadgets.IfrGadgetService.prototype.setHeight = function(height) {
   if (height > gadgets.container.maxheight_) {
@@ -316,7 +316,7 @@ gadgets.StaticLayoutManager = function() {
   gadgets.LayoutManager.call(this);
 };
 
-gadgets.StaticLayoutManager.inherits(gadgets.LayoutManager);
+inherits(gadgets.StaticLayoutManager, gadgets.LayoutManager);
 
 /**
  * Sets chrome ids, whose indexes are gadget instance ids (starting from 0).
@@ -347,7 +347,7 @@ gadgets.FloatLeftLayoutManager = function(layoutRootId) {
   this.layoutRootId_ = layoutRootId;
 };
 
-gadgets.FloatLeftLayoutManager.inherits(gadgets.LayoutManager);
+inherits(gadgets.FloatLeftLayoutManager, gadgets.LayoutManager);
 
 gadgets.FloatLeftLayoutManager.prototype.getGadgetChrome =
     function(gadget) {
@@ -487,7 +487,7 @@ gadgets.IfrGadget = function(opt_params) {
   this.serverBase_ = '/eXoGadgetServer/gadgets/' // default gadget server
 };
 
-gadgets.IfrGadget.inherits(gadgets.Gadget);
+inherits(gadgets.IfrGadget, gadgets.Gadget);
 
 gadgets.IfrGadget.prototype.GADGET_IFRAME_PREFIX_ = 'remote_iframe_';
 
@@ -811,7 +811,7 @@ gadgets.Container = function() {
   this.maxheight_ = 0x7FFFFFFF;
 };
 
-gadgets.Container.inherits(gadgets.Extensible);
+inherits(gadgets.Container, gadgets.Extensible);
 
 /**
  * Known dependencies:
@@ -922,7 +922,7 @@ gadgets.IfrContainer = function() {
   gadgets.Container.call(this);
 };
 
-gadgets.IfrContainer.inherits(gadgets.Container);
+inherits(gadgets.IfrContainer, gadgets.Container);
 
 gadgets.IfrContainer.prototype.gadgetClass = gadgets.IfrGadget;
 
@@ -950,4 +950,14 @@ gadgets.IfrContainer.prototype.renderGadget = function(gadget) {
  * Default container.
  */
 gadgets.container = new gadgets.IfrContainer();
+
+function inherits(func, parentCtor) {
+  function tempCtor() {};
+  tempCtor.prototype = parentCtor.prototype;
+  func.superClass_ = parentCtor.prototype;
+  func.prototype = new tempCtor();
+  func.prototype.constructor = func;
+};
+gadgets.eXoUtil = {"inherits" : inherits};
+return gadgets;
 });
