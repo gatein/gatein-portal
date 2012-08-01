@@ -23,8 +23,8 @@
 
 <UIHomePagePortlet>
 <Label>
-<Title>讓你感受全新體驗的 JBoss GateIn 3.2：</Title>
-<Slogan>eXo和JBoss Portal最好的Portal平台<div>GateIn 3.2</div></Slogan>
+<Title>讓你感受全新體驗的 JBoss GateIn #{gatein.version}：</Title>
+<Slogan>eXo和JBoss Portal最好的Portal平台<div>GateIn #{gatein.version}</div></Slogan>
 <Username>用戶名：</Username>
 <Password>密碼：</Password>
 </Label>

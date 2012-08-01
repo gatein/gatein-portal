@@ -24,8 +24,8 @@
  
    <UIHomePagePortlet>
       <Label>
-         <Title>用一个用户帐户尝试GateIn 3.2：</Title>
-         <Slogan>eXo和JBoss Portal最好的门户平台<div>GateIn 3.2</div></Slogan>
+         <Title>用一个用户帐户尝试GateIn #{gatein.version}：</Title>
+         <Slogan>eXo和JBoss Portal最好的门户平台<div>GateIn #{gatein.version}</div></Slogan>
          <Username>用户名：</Username>
          <Password>密码：</Password>
       </Label>
