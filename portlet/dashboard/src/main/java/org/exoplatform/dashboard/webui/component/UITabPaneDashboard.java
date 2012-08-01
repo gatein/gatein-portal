@@ -31,15 +31,15 @@ import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
-import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.portal.webui.page.UIPageBody;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
-import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIApplication;
@@ -47,11 +47,11 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import javax.portlet.ActionResponse;
 
 /**
  * 
@@ -386,7 +386,7 @@ public class UITabPaneDashboard extends UIContainer
       public void execute(Event<UITabPaneDashboard> event) throws Exception
       {
          UITabPaneDashboard source = event.getSource();
-         WebuiRequestContext context = event.getRequestContext();
+         PortletRequestContext context = (PortletRequestContext)event.getRequestContext();
          String nodeName = context.getRequestParameter(UIComponent.OBJECTID);
          UserNode nextNode = source.getFirstAvailableNode();
          UserNode selectedNode = source.removePageNode(nodeName);
@@ -406,8 +406,7 @@ public class UITabPaneDashboard extends UIContainer
 
          PortalRequestContext prContext = Util.getPortalRequestContext();
          NodeURL nodeURL = prContext.createURL(NodeURL.TYPE).setNode(nextNode);
-
-         prContext.sendRedirect(nodeURL.toString());
+         context.sendRedirect(nodeURL.toString());
       }
    }
 
@@ -416,7 +415,7 @@ public class UITabPaneDashboard extends UIContainer
       public void execute(Event<UITabPaneDashboard> event) throws Exception
       {
          UITabPaneDashboard tabPane = event.getSource();
-         WebuiRequestContext context = event.getRequestContext();
+         PortletRequestContext context = (PortletRequestContext)event.getRequestContext();
          String newTabLabel = context.getRequestParameter(UIComponent.OBJECTID);
          UserNode node = tabPane.getFirstAvailableNode();
          if (!tabPane.validateName(newTabLabel))
@@ -435,8 +434,7 @@ public class UITabPaneDashboard extends UIContainer
 
          PortalRequestContext prContext = Util.getPortalRequestContext();
          NodeURL nodeURL = prContext.createURL(NodeURL.TYPE).setNode(node);
-
-         prContext.sendRedirect(nodeURL.toString());
+         context.sendRedirect(nodeURL.toString());
       }
    }
 
@@ -455,7 +453,7 @@ public class UITabPaneDashboard extends UIContainer
       public void execute(Event<UITabPaneDashboard> event) throws Exception
       {
          UITabPaneDashboard tabPane = event.getSource();         
-         WebuiRequestContext context = event.getRequestContext();
+         PortletRequestContext context = (PortletRequestContext)event.getRequestContext();
          UIApplication rootUI = context.getUIApplication();
                   
          String newTabLabel = context.getRequestParameter(RENAMED_TAB_LABEL_PARAMETER);
@@ -476,8 +474,7 @@ public class UITabPaneDashboard extends UIContainer
          }
          PortalRequestContext prContext = Util.getPortalRequestContext();
          NodeURL nodeURL = prContext.createURL(NodeURL.TYPE).setNode(node);
-
-         prContext.sendRedirect(nodeURL.toString());
+         context.sendRedirect(nodeURL.toString());
       }
    }
 

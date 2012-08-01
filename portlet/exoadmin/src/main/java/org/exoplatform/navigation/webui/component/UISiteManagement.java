@@ -45,6 +45,7 @@ import org.exoplatform.util.ReflectionUtil;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -63,6 +64,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import javax.portlet.ActionResponse;
 import javax.servlet.http.HttpServletRequest;
 
 @ComponentConfigs({
@@ -267,13 +269,10 @@ public class UISiteManagement extends UIContainer
          {
             HttpServletRequest request = prContext.getRequest();
             LogoutControl.wantLogout();
-            prContext.setResponseComplete(true);
-            prContext.getResponse().sendRedirect(request.getContextPath());
+            event.getRequestContext().sendRedirect(request.getContextPath());
             return;
          }
 
-         //event.getSource().loadPortalConfigs();
-         //UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);    
          event.getRequestContext().addUIComponentToUpdateByAjax(uicomp);
       }
    }

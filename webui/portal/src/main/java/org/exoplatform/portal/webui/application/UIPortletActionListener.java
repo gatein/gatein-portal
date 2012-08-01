@@ -149,6 +149,7 @@ public class UIPortletActionListener
          else if (portletResponse instanceof HTTPRedirectionResponse)
          {
             handleRedirectionResponse((HTTPRedirectionResponse)portletResponse, prcontext.getResponse());
+            prcontext.setResponseComplete(true);
          }
          else if (portletResponse instanceof ErrorResponse)
          {
