@@ -9,14 +9,14 @@
    <parent>
       <groupId>org.exoplatform.portal</groupId>
       <artifactId>exo.portal.portlet</artifactId>
-      <version>3.4.0-GA-SNAPSHOT</version>
+      <version>3.4.0.M01</version>
    </parent>
 
    <groupId>org.gatein.portal.portlet</groupId>
    <artifactId>redirect</artifactId>
    <packaging>war</packaging>
    <name>GateIn Portal Redirect Portlet</name>
-   <description/>
+   <description />
 
    <build>
       <plugins>
