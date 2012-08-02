@@ -50,7 +50,7 @@
 		String icon = node.getIcon();
 		if(icon == null) icon = "DefaultPageIcon";
 		boolean toolong = (node.getResolvedLabel().length() > 60);
-		String label = ( toolong ? EntityEncoder.encode(node.getResolvedLabel().substring(0, 57) + "...") : node.getEncodedResolvedLabel());
+		String label = ( toolong ? HTMLEntityEncoder.getInstance().encode(node.getResolvedLabel().substring(0, 57) + "...") : node.getEncodedResolvedLabel());
 		String title = "";
 		if(toolong) title = "title='" + node.getEncodedResolvedLabel()  + "'";
 		else title = "";
