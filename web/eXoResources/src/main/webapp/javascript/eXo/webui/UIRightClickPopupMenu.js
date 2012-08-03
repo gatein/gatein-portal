@@ -37,7 +37,7 @@ eXo.webui.UIRightClickPopupMenu = {
      */
     this.disableContextMenu(menu.parent());
 
-    menu.find('.UIRightPopupMenuContainer').on('click', 'div.MenuItem a', _module.UIRightClickPopupMenu.prepareObjectIdEvt)
+    menu.find('.UIRightPopupMenuContainer').on('click', 'div.MenuItem a', _module.UIRightClickPopupMenu.prepareObjectIdEvt);
   },
   /**
    * Hide and disable mouse down event of context menu object
@@ -142,6 +142,13 @@ eXo.webui.UIRightClickPopupMenu = {
     var contextMenu = document.getElementById(menuId);
     contextMenu.objId = objId;
 
+    //help to disable browser context menu
+    //when onmouseover is registered after the dom has already displayed, mouseover evt'll not be raised
+    var parent = $(contextMenu).parent();
+    if (!document.oncontextmenu) {
+    	parent.trigger("mouseover");
+    }
+    
     if(event.which != 2 && event.which !=3 && event.button !=2)
     {
       contextMenu.style.display = "none";
