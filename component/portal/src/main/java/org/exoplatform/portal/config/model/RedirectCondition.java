@@ -78,11 +78,13 @@ public class RedirectCondition extends ModelObject
    {
       RedirectConditionData redirectConditionData = new RedirectConditionData(this.storageId, this.storageName, name);
       
+      if (userAgentConditions != null)
+      {
       redirectConditionData.setUserAgentConditionData(userAgentConditions.build());
-      
+      }
       
       List<RedirectDevicePropertyConditionData> devicePropertyConditionsData = redirectConditionData.getDevicePropertyConditionData();
-      if (devicePropertyConditionsData != null && !devicePropertyConditionsData.isEmpty())
+      if (devicePropertyConditions != null && !devicePropertyConditions.isEmpty())
       {
          for (DevicePropertyCondition propertyCondition: devicePropertyConditions)
          {

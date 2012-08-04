@@ -59,7 +59,22 @@ public class TestMapper extends TestConfig
     * 
     */
 
-   public void testSiteA()
+   //Hack since there is a memory leak somewhere with bootstrap.dispose and we are using an old
+   //version of junit which doesn't support @beforeClass and @afterClass annotations
+   public void testAll()
+   {
+      atestSiteA();
+      atestSiteB();
+      atestSiteC();
+      atestSiteD();
+      atestSiteE();
+      atestSiteF();
+      atestSiteG();
+      atestSiteH();
+      atestSiteI();
+   }
+   
+   public void atestSiteA()
    {
       PortalContainer container = getContainer();
       RequestLifeCycle.begin(container);
@@ -101,7 +116,7 @@ public class TestMapper extends TestConfig
       RequestLifeCycle.end();
    }
    
-   public void testSiteB()
+   public void atestSiteB()
    {
       PortalContainer container = getContainer();
       RequestLifeCycle.begin(container);
@@ -143,7 +158,7 @@ public class TestMapper extends TestConfig
       RequestLifeCycle.end();
    }
    
-   public void testSiteC()
+   public void atestSiteC()
    {
       PortalContainer container = getContainer();
       RequestLifeCycle.begin(container);
@@ -179,7 +194,7 @@ public class TestMapper extends TestConfig
       RequestLifeCycle.end();
    }
    
-   public void testSiteD()
+   public void atestSiteD()
    {
       PortalContainer container = getContainer();
       RequestLifeCycle.begin(container);
@@ -208,7 +223,7 @@ public class TestMapper extends TestConfig
    }
    
    
-   public void testSiteE()
+   public void atestSiteE()
    {
       String redirectName = "redirectE";
       String redirectPath;
@@ -240,7 +255,7 @@ public class TestMapper extends TestConfig
       RequestLifeCycle.end();
    }
    
-   public void testSiteF()
+   public void atestSiteF()
    {
       String redirectName = "redirectF";
       String redirectPath;
@@ -270,7 +285,7 @@ public class TestMapper extends TestConfig
       RequestLifeCycle.end();
    }
    
-   public void testSiteG()
+   public void atestSiteG()
    {
       String redirectName = "redirectG";
       String redirectPath;
@@ -302,7 +317,7 @@ public class TestMapper extends TestConfig
       RequestLifeCycle.end();
    }
    
-   public void testSiteH()
+   public void atestSiteH()
    {
       String redirectName = "redirectH";
       String redirectPath;
@@ -332,7 +347,7 @@ public class TestMapper extends TestConfig
       RequestLifeCycle.end();
    }
    
-   public void testSiteI()
+   public void atestSiteI()
    {
       String redirectName = "redirectI";
       String redirectPath;
@@ -369,6 +384,13 @@ public class TestMapper extends TestConfig
       assertEquals("", redirectPath);
       
       RequestLifeCycle.end();
+   }
+   
+   public PortalContainer getContainer()
+   {
+      String configurationFile="org/exoplatform/portal/config/TestMappings-configuration.xml";
+      String origin = "testMappings";
+      return getContainer(configurationFile, origin);
    }
 }
 

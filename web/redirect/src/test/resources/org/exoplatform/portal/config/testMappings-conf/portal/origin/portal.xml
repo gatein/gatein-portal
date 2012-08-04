@@ -173,7 +173,7 @@
   <portal-layout>
     <portlet-application>
       <portlet>
-        <application-ref>siteOrigin</application-ref>
+        <application-ref>testMappings</application-ref>
         <portlet-ref>layout</portlet-ref>
       </portlet>
       <access-permissions>Everyone</access-permissions>

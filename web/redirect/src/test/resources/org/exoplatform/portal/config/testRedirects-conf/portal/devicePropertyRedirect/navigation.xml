@@ -20,22 +20,20 @@
 
 -->
 
-<page-set
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
-   xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
+<node-navigation
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
+  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2"> 
+  <priority>1</priority>
+<!--  <owner-type>portal</owner-type>
+  <owner-id>origin</owner-id> -->
+     <page-nodes>
+      <node>
+         <uri>originNode1</uri>
+         <name>origin_Node_1</name>
+         <label>Origin Node 1</label>
+         <page-reference>portal::origin::originPage1</page-reference>
+      </node>
+   </page-nodes>
 
-   <page>
-      <name>originPage1</name>
-      <title>origin site</title>
-<!--      <portlet-application>
-         <portlet>
-            <application-ref>siteOrigin</application-ref>
-            <portlet-ref>pageOrigin</portlet-ref>
-         </portlet>
-         <access-permissions>Everyone</access-permissions>
-         <show-info-bar>true</show-info-bar>
-      </portlet-application> -->
-   </page>
-  
-</page-set>
+</node-navigation>

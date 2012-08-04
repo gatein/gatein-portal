@@ -45,20 +45,23 @@ public abstract class TestConfig extends AbstractGateInTest
    
    protected KernelBootstrap bootstrap;
    
-   public PortalContainer getContainer()
+   public PortalContainer getContainer(String configurationFile, String origin)
    {
-      bootstrap = new KernelBootstrap();
-      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
-      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
-      bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
-      bootstrap.addConfiguration(ContainerScope.PORTAL, "org/exoplatform/portal/config/TestMappings-configuration.xml");
-      
-      setSystemProperty("override.origin", "false");
-      setSystemProperty("import.mode.origin", ImportMode.OVERWRITE.toString());
-      setSystemProperty("import.portal.origin", "siteOrigin");
-      
-      //
-      bootstrap.boot();
+      if (bootstrap == null)
+      {
+         bootstrap = new KernelBootstrap();
+         bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
+         bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
+         bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
+         bootstrap.addConfiguration(ContainerScope.PORTAL, configurationFile);
+
+         setSystemProperty("override.origin", "false");
+         setSystemProperty("import.mode.origin", ImportMode.OVERWRITE.toString());
+         setSystemProperty("import.portal.origin", origin);
+
+         //
+         bootstrap.boot();
+      }
       return bootstrap.getContainer();
    }
    
@@ -77,6 +80,7 @@ public abstract class TestConfig extends AbstractGateInTest
          System.clearProperty(key);
       }
       sysProperties.clear();
+      bootstrap.dispose();
    }
 }
 

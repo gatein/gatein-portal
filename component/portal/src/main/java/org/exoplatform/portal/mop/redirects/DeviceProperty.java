@@ -41,12 +41,12 @@ public abstract class DeviceProperty
    @Property (name="gtn:redirectDevicePropertyGreaterThan")
    public abstract Float getGreaterThan();
    
-   public abstract void setGreaterThan(float greaterThan);
+   public abstract void setGreaterThan(Float greaterThan);
    
    @Property (name="gtn:redirectDevicePropertyLessThan")
    public abstract Float getLessThan();
    
-   public abstract void setLessThan(float lessThan);
+   public abstract void setLessThan(Float lessThan);
    
    @Property (name="gtn:redirectDevicePropertyEquals")
    public abstract String getEquals();

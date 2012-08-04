@@ -200,10 +200,10 @@
       <propertyDefinition name="gtn:redirectDevicePropertyName" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
-      <propertyDefinition name="gtn:redirectDevicePropertyGreaterThan" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+      <propertyDefinition name="gtn:redirectDevicePropertyGreaterThan" requiredType="Float" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
-      <propertyDefinition name="gtn:redirectDevicePropertyLessThan" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+      <propertyDefinition name="gtn:redirectDevicePropertyLessThan" requiredType="Float" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
       <propertyDefinition name="gtn:redirectDevicePropertyEquals" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
