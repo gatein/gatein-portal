@@ -53,6 +53,9 @@
    <import>war:/conf/jcr/component-plugins-configuration.xml</import>
    <import>war:/conf/mail/portal-mail-configuration.xml</import>
 
+   <!-- Administration improvements -->
+   <import>war:/conf/admin/admin-configuration.xml</import>
+
    <!-- Portal related services -->
    <import>war:/conf/portal/portal-configuration.xml</import>
    <import>war:/conf/portal/application-registry-configuration.xml</import>
