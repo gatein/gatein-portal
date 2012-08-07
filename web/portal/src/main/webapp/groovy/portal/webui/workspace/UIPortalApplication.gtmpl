@@ -77,7 +77,6 @@
 			eXo.env.server.portalBaseURL = "<%=rcontext.getRequest().getRequestURI()%>" ;
 			eXo.env.server.portalURLTemplate = "<%=uicomponent.getPortalURLTemplate()%>" ;
 			eXo.env.client.skin = "$skin" ;
-			eXo.env.requireConfig = <%=jsConfig%>;
 			<% 
 				UIPortal portal = uicomponent.findFirstComponentOfType(UIPortal.class);
 				String sessionAliveLevel = (portal == null ? null : portal.sessionAlive) ;
