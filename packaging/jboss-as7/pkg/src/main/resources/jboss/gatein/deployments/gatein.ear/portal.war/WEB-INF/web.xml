@@ -93,6 +93,18 @@
 		<filter-class>org.exoplatform.web.login.ClusteredSSOFilter</filter-class>
 	</filter>
 
+   <!--  Uncomment ErrorLoginFilter and LoginDetectorFilter for sending mail after successive number of bad login attempts. -->
+   <!--
+   <filter>
+      <filter-name>ErrorLoginFilter</filter-name>
+      <filter-class>org.exoplatform.web.security.errorlogin.ErrorLoginFilter</filter-class>
+   </filter>
+   <filter>
+      <filter-name>LoginDetectorFilter</filter-name>
+      <filter-class>org.exoplatform.web.security.errorlogin.LoginDetectorFilter</filter-class>
+   </filter>
+   -->
+
   <filter>
 	     <filter-name>PortalContainerFilter</filter-name>
 	     <filter-class>org.exoplatform.container.web.PortalContainerFilter</filter-class>
@@ -112,6 +124,19 @@
 		<filter-name>ClusteredSSOFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
+
+   <!--  Uncomment ErrorLoginFilter and LoginDetectorFilter for sending mail after successive number of bad login attempts. -->
+   <!--
+   <filter-mapping>
+      <filter-name>ErrorLoginFilter</filter-name>
+      <url-pattern>/errorlogin</url-pattern>
+      <dispatcher>FORWARD</dispatcher>
+   </filter-mapping>
+   <filter-mapping>
+      <filter-name>LoginDetectorFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+   </filter-mapping>
+   -->
 
    <filter-mapping>
        <filter-name>LocalizationFilter</filter-name>

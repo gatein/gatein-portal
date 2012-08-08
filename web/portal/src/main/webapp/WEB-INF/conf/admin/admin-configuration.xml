@@ -53,77 +53,77 @@
                will be replaced with real attributes of registered user in final message.</description>
             <value>Hi admin,
 
-               User ${user.userName} just register himself into your portal. Full data about user:
+User ${user.userName} just register himself into your portal. Full data about user:
 
-               Username: ${user.userName}
-               First name: ${user.firstName}
-               Last name: ${user.lastName}
-               E-mail: ${user.email}
+Username: ${user.userName}
+First name: ${user.firstName}
+Last name: ${user.lastName}
+E-mail: ${user.email}
 
-               ----------------------
-               This message has been generated automatically as notification about registration of new user into portal.
+----------------------
+This message has been generated automatically as notification about registration of new user into portal.
             </value>
          </value-param>
       </init-params>
    </component>
 
-	<component>
-		<key>org.exoplatform.web.security.errorlogin.InvalidLoginAttemptsService</key>
-		<type>org.exoplatform.web.security.errorlogin.InvalidLoginAttemptsService</type>
-		<init-params>
-			<value-param>
-				<name>sendingMailsEnabled</name>
-				<description>Parameter can be used to enable/disable
-					feature of sending mails after some number of invalid login attempts.</description>
-				<value>false</value>
-			</value-param>
-			<value-param>
-				<name>numberOfFailedAttempts</name>
-				<description>Number of invalid login attempts of some user, after the mail will be send.</description>
-				<value>3</value>
-			</value-param>
-			<value-param>
-				<name>invalidLoginPolicy</name>
-				<description>Policy for indication that invalid login attempts
-					are coming from same source. Valid values are SESSION,
-					SESSION_AND_USER, SERVER. SESSION is default and it means that
-					login attempts are coming from same HTTP session. SESSION_AND_USER
-					is indicating login attempts of same user and from same HTTP
-					session. SERVER means login attempts from same remote server.</description>
-				<value>SESSION</value>
-				<!--<value>SESSION_AND_USER</value>-->
-				<!--<value>SERVER</value>-->
-			</value-param>
-			<value-param>
-				<name>mailFrom</name>
-				<description>This will be used as 'from' header in admin mail</description>
-				<value>gatein-portal@example.com</value>
-			</value-param>
-			<value-param>
-				<name>mailTo</name>
-				<description>This should be admin e-mail address, where e-mail
-					about invalid login attempts will be send.</description>
-				<value>gatein-admin@example.com</value>
-			</value-param>
-			<value-param>
-				<name>mailSubject</name>
-				<description>Subject of email about invalid login attempts.</description>
-				<value>Invalid login attempts to portal detected!</value>
-			</value-param>
-			<properties-param>
-				<name>mailMessage</name>
-				<description>Content of mail message, which will be send to
-					administrator. Real content will be based on value of parameter
-					"invalidLoginPolicy". Tokens like ${username}, ${sessionId},
-					${hostname} will be replaced with real values from attacker.</description>
-				<property name="SESSION"
-					value="Detected ${number} invalid login attempts from HTTP session ${sessionId}, host ${hostname}. Last tried username was ${username}." />
-				<property name="SESSION_AND_USER"
-					value="Detected ${number} invalid login attempts from user ${username}, host ${hostname}, HTTP session ${sessionId}." />
-				<property name="SERVER"
-					value="Detected ${number} invalid login attempts from host ${hostname}. Last tried session was ${sessionId}, last tried username was ${username}." />
-			</properties-param>
-		</init-params>
-	</component>
+   <component>
+      <key>org.exoplatform.web.security.errorlogin.InvalidLoginAttemptsService</key>
+      <type>org.exoplatform.web.security.errorlogin.InvalidLoginAttemptsService</type>
+      <init-params>
+         <value-param>
+            <name>sendingMailsEnabled</name>
+            <description>Parameter can be used to enable/disable
+               feature of sending mails after some number of invalid login attempts.</description>
+            <value>false</value>
+         </value-param>
+         <value-param>
+            <name>numberOfFailedAttempts</name>
+            <description>Number of invalid login attempts of some user, after the mail will be send.</description>
+            <value>3</value>
+         </value-param>
+         <value-param>
+            <name>invalidLoginPolicy</name>
+            <description>Policy for indication that invalid login attempts
+               are coming from same source. Valid values are SESSION,
+               SESSION_AND_USER, SERVER. SESSION is default and it means that
+               login attempts are coming from same HTTP session. SESSION_AND_USER
+               is indicating login attempts of same user and from same HTTP
+               session. SERVER means login attempts from same remote server.</description>
+            <value>SESSION</value>
+            <!--<value>SESSION_AND_USER</value>-->
+            <!--<value>SERVER</value>-->
+         </value-param>
+         <value-param>
+            <name>mailFrom</name>
+            <description>This will be used as 'from' header in admin mail</description>
+            <value>gatein-portal@example.com</value>
+         </value-param>
+         <value-param>
+            <name>mailTo</name>
+            <description>This should be admin e-mail address, where e-mail
+               about invalid login attempts will be send.</description>
+            <value>gatein-admin@example.com</value>
+         </value-param>
+         <value-param>
+            <name>mailSubject</name>
+            <description>Subject of email about invalid login attempts.</description>
+            <value>Invalid login attempts to portal detected!</value>
+         </value-param>
+         <properties-param>
+            <name>mailMessage</name>
+            <description>Content of mail message, which will be send to
+               administrator. Real content will be based on value of parameter
+               "invalidLoginPolicy". Tokens like ${username}, ${sessionId},
+               ${hostname} will be replaced with real values from attacker.</description>
+            <property name="SESSION"
+                      value="Detected ${number} invalid login attempts from HTTP session ${sessionId}, host ${hostname}. Last tried username was ${username}." />
+            <property name="SESSION_AND_USER"
+                      value="Detected ${number} invalid login attempts from user ${username}, host ${hostname}, HTTP session ${sessionId}." />
+            <property name="SERVER"
+                      value="Detected ${number} invalid login attempts from host ${hostname}. Last tried session was ${sessionId}, last tried username was ${username}." />
+         </properties-param>
+      </init-params>
+   </component>
 
 </configuration>
