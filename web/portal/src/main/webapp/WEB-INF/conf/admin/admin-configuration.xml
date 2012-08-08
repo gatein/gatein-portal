@@ -20,6 +20,53 @@
       xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
       xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
+   <component>
+      <key>org.exoplatform.portal.registration.PostRegistrationService</key>
+      <type>org.exoplatform.portal.registration.PostRegistrationService</type>
+      <init-params>
+         <value-param>
+            <name>sendMailAfterRegistration</name>
+            <description>Switch this parameter to value 'true' if you want
+               to be notified about registration of new user.</description>
+            <value>false</value>
+         </value-param>
+         <value-param>
+            <name>mailFrom</name>
+            <description>This will be used as from header in admin mail</description>
+            <value>gatein-portal@example.com</value>
+         </value-param>
+         <value-param>
+            <name>mailTo</name>
+            <description>This should be admin mail address, where email
+               about registration of new user will be send.</description>
+            <value>portal-admin@example.com</value>
+         </value-param>
+         <value-param>
+            <name>mailSubject</name>
+            <description>Subject of mail. Tokens like ${user.userName}
+               will be replaced with real attributes of registered user in final message.</description>
+            <value>Registration of user ${user.userName}</value>
+         </value-param>
+         <value-param>
+            <name>mailMessage</name>
+            <description>Content of mail. Tokens like ${user.userName}
+               will be replaced with real attributes of registered user in final message.</description>
+            <value>Hi admin,
+
+               User ${user.userName} just register himself into your portal. Full data about user:
+
+               Username: ${user.userName}
+               First name: ${user.firstName}
+               Last name: ${user.lastName}
+               E-mail: ${user.email}
+
+               ----------------------
+               This message has been generated automatically as notification about registration of new user into portal.
+            </value>
+         </value-param>
+      </init-params>
+   </component>
+
 	<component>
 		<key>org.exoplatform.web.security.errorlogin.InvalidLoginAttemptsService</key>
 		<type>org.exoplatform.web.security.errorlogin.InvalidLoginAttemptsService</type>

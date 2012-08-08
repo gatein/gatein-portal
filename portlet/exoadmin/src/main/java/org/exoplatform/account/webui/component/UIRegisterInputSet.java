@@ -184,6 +184,9 @@ public class UIRegisterInputSet extends UIFormInputWithActions
 
       userHandler.createUser(user, true);//Broadcast user creaton event
       reset();//Reset the input form
+
+      // save user as attribute to WebuiRequestContext for later use
+      context.setAttribute(UIRegisterForm.ATTR_USER, user);
       return true;
    }
 }

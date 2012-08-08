@@ -24,7 +24,9 @@ import java.util.List;
 
 import nl.captcha.Captcha;
 
+import org.exoplatform.portal.registration.PostRegistrationService;
 import org.exoplatform.services.organization.OrganizationService;
+import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -58,6 +60,8 @@ public class UIRegisterForm extends UIForm
 {
 
    private final static String[] ACTIONS = {"Subscribe", "Reset"};
+   
+   static final String ATTR_USER = "UIRegisterForm$User";
 
    public UIRegisterForm() throws Exception
    {
@@ -111,9 +115,14 @@ public class UIRegisterForm extends UIForm
 
          if (registerInput.save(userHandler, context))
          {
-            //TODO: Send email and add Account Activating feature
+            //TODO: Add Account Activating feature
             UIApplication uiApp = context.getUIApplication();
-            uiApp.addMessage(new ApplicationMessage("UIRegisterForm.registerWithSuccess.message", null));           
+            uiApp.addMessage(new ApplicationMessage("UIRegisterForm.registerWithSuccess.message", null));
+            
+            // Send mail to administrator after successful registration of user 
+            PostRegistrationService postRegistrationService = uiApp.getApplicationComponent(PostRegistrationService.class);
+            User user = (User)context.getAttribute(ATTR_USER);
+            postRegistrationService.sendMailAfterSuccessfulRegistration(user);
          }
 
          //Invalidate the capcha
