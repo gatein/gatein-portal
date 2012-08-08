@@ -19,6 +19,7 @@
 
 package org.exoplatform.web.controller.regexp;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -950,13 +951,13 @@ public abstract class RENode
          //
          if (node != null)
          {
-            if (node.owner != null)
+            if (((RENode)node).owner != null)
             {
                throw new IllegalArgumentException();
             }
             else
             {
-               node.owner = this;
+               ((RENode)node).owner = this;
             }
          }
          this.node = node;
@@ -965,18 +966,18 @@ public abstract class RENode
       @Override
       protected N set(N node)
       {
-         if (node != null && node.owner != null)
+         if (node != null && ((RENode)node).owner != null)
          {
             throw new IllegalArgumentException();
          }
          N previous = this.node;
          if (this.node != null)
          {
-            this.node.owner = null;
+            ((RENode)this.node).owner = null;
          }
          if (node != null)
          {
-            node.owner = this;
+            ((RENode)node).owner = this;
             this.node = node;
          }
          else
@@ -1008,11 +1009,11 @@ public abstract class RENode
          {
             throw new NullPointerException("No null node accepted");
          }
-         if (node.owner != null)
+         if (((RENode)node).owner != null)
          {
             throw new IllegalArgumentException();
          }
-         node.owner = this;
+         ((RENode)node).owner = this;
          this.node = node;
       }
 
@@ -1023,13 +1024,13 @@ public abstract class RENode
          {
             throw new NullPointerException("No null node accepted");
          }
-         if (node.owner != null)
+         if (((RENode)node).owner != null)
          {
             throw new IllegalArgumentException();
          }
          N previous = this.node;
-         this.node.owner = null;
-         node.owner = this;
+         ((RENode)this.node).owner = null;
+         ((RENode)node).owner = this;
          this.node = node;
          return previous;
       }

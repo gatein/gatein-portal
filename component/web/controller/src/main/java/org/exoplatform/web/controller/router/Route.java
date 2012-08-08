@@ -947,7 +947,7 @@ class Route
       {
          throw new NullPointerException("No null route accepted");
       }
-      if (route.parent != null)
+      if (((Route)route).parent != null)
       {
          throw new IllegalArgumentException("No route with an existing parent can be accepted");
       }
@@ -958,7 +958,7 @@ class Route
       LinkedList<Param> descendantParams = new LinkedList<Param>();
       for (Param param : ancestorParams)
       {
-         route.findDescendantOrSelfParams(param.name, descendantParams);
+         ((Route)route).findDescendantOrSelfParams(param.name, descendantParams);
          if (descendantParams.size() > 0)
          {
             throw new MalformedRouteException("Duplicate parameter " + param.name);
@@ -970,7 +970,7 @@ class Route
       {
          children = Tools.appendTo(children, route);
          terminal = false;
-         route.parent = this;
+         ((Route)route).parent = this;
       }
       else
       {
