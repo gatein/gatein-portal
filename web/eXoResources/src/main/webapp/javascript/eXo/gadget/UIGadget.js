@@ -34,11 +34,10 @@ var eXoGadget = {
     eXo.gadgets = window.gadgets;
     gadgets.pubsubURL = hostName + '/js/gatein-container.js?c=1' + (debug ? "&debug=1": "") + (nocache ? "&nocache=1" : "&nocache=0");  
     var args = arguments;
-	require([gadgets.pubsubURL, 'SHARED/shindigPatch'], 
-		function() {
+	  require([gadgets.pubsubURL], function() {
 			//Make sure that 2 modules in shindig-patch has been loaded already
 			require(["eXo.gadget.Gadgets", "eXo.gadget.ExoBasedUserPrefStore"], function() {_module.UIGadget.createCallback.apply(window, args)});
-	});
+	  });
   },
 
   createCallback : function(url, id, metadata, userPref, view, hostName, debug, nocache)

@@ -417,26 +417,5 @@
          <module>jquery</module>
       </depends>
    </module>
-
-   <module>
-     <name>shindigPatch</name>
-     <script>
-       <name>eXo.gadget.Gadgets</name>
-       <path>/javascript/eXo/gadget/Gadgets.js</path>
-     </script>
-     <script>
-       <name>eXo.gadget.ExoBasedUserPrefStore</name>
-       <path>/javascript/eXo/gadget/ExoBasedUserPrefStore.js</path>
-     </script>
-     <depends>
-       <module>common</module>
-     </depends>
-     <depends>
-       <module>gadget</module>
-     </depends>
-     <depends>
-       <module>jquery</module>
-     </depends>
-   </module>
    
 </gatein-resources>
