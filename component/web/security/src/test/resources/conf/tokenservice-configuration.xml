@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<configuration
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+
+  <component>
+    <key>org.exoplatform.commons.chromattic.ChromatticManager</key>
+    <type>org.exoplatform.commons.chromattic.ChromatticManager</type>
+  </component>
+
+  <component>
+    <key>org.exoplatform.web.security.security.CookieTokenService</key>
+    <type>org.exoplatform.web.security.security.CookieTokenService</type>
+    <init-params>
+      <values-param>
+        <name>service.configuration</name>
+        <value>jcr-token</value>
+        <value>2</value>
+        <value>SECOND</value>
+        <value>autologin</value>
+      </values-param>
+    </init-params>
+  </component>
+
+  <!-- TODO remove TransientTokenService service component -->
+  <component>
+    <key>org.exoplatform.web.security.security.TransientTokenService</key>
+    <type>org.exoplatform.web.security.security.TransientTokenService</type>
+    <init-params>
+      <values-param>
+        <name>service.configuration</name>
+        <value>memory-token</value>
+        <value>2</value>
+        <value>SECOND</value>
+      </values-param>
+    </init-params>
+  </component>
+
+  <external-component-plugins>
+    <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
+    <component-plugin>
+      <name>chromattic</name>
+      <set-method>addLifeCycle</set-method>
+      <type>org.exoplatform.commons.chromattic.ChromatticLifeCycle</type>
+      <init-params>
+        <value-param>
+          <name>domain-name</name>
+          <value>autologin</value>
+        </value-param>
+        <value-param>
+          <name>workspace-name</name>
+          <value>portal-test</value>
+        </value-param>
+        <values-param>
+          <name>entities</name>
+          <value>org.exoplatform.web.security.security.TokenContainer</value>
+          <value>org.exoplatform.web.security.security.TokenEntry</value>
+        </values-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
+    <component-plugin>
+      <name>chromattic</name>
+      <set-method>addLifeCycle</set-method>
+      <type>org.exoplatform.commons.chromattic.ChromatticLifeCycle</type>
+      <init-params>
+        <value-param>
+          <name>domain-name</name>
+          <value>remindpwd</value>
+        </value-param>
+        <value-param>
+          <name>workspace-name</name>
+          <value>portal-test</value>
+        </value-param>
+        <values-param>
+          <name>entities</name>
+          <value>org.exoplatform.web.security.security.TokenContainer</value>
+          <value>org.exoplatform.web.security.security.TokenEntry</value>
+        </values-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+		
+</configuration>
