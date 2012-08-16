@@ -182,16 +182,23 @@ public class UserPortalImpl implements UserPortal
       {
          throw new NullPointerException("No null key accepted");
       }
-      for (UserNavigation navigation : getNavigations())
-      {
-         if (navigation.getKey().equals(key))
-         {
-            return navigation;
-         }
-      }
 
-      //
-      return null;
+      if (service.getUserACL().getSuperUser().equals(userName))
+      {
+         NavigationContext navCtx = service.getNavigationService().loadNavigation(key);
+         return navCtx != null ? new UserNavigation(this, navCtx, true) : null;
+      }
+      else
+      {
+         for (UserNavigation navigation : getNavigations())
+         {
+            if (navigation.getKey().equals(key))
+            {
+               return navigation;
+            }
+         }
+         return null;
+      }
    }
 
    public void refresh()
