@@ -20,6 +20,8 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
+import java.util.List;
 
 /**
  * <p>The navigation service takes care of managing the various portal navigations and their nodes. In order to manage
@@ -46,6 +48,16 @@ public interface NavigationService
     * @throws NavigationServiceException anything that would prevent the operation to succeed
     */
    NavigationContext loadNavigation(SiteKey key) throws NullPointerException, NavigationServiceException;
+
+   /**
+    * Find and returns navigations of a given type. Method use discretion is advised
+    *
+    * @param type the navigation type
+    * @return all navigations matching type
+    * @throws NullPointerException if the key is null
+    * @throws NavigationServiceException
+    */
+   List<NavigationContext> loadNavigations(SiteType type) throws NullPointerException, NavigationServiceException;
 
    /**
     * Create, update a navigation. When the navigation state is not null, the navigation

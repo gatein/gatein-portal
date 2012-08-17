@@ -21,6 +21,7 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.workspace.Navigation;
@@ -31,6 +32,7 @@ import org.gatein.mop.core.api.MOPService;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -42,6 +44,12 @@ public class TestNavigationService extends AbstractTestNavigationService
    public void testNonExistingSite() throws Exception
    {
       assertNull(service.loadNavigation(SiteKey.portal("non_existing")));
+   }
+
+   public void testLoadNavigations() throws Exception
+   {
+      List<NavigationContext> navCtxs = service.loadNavigations(SiteType.PORTAL);
+      assertEquals(3, navCtxs.size());
    }
 
    public void testLoadSingleScope() throws Exception

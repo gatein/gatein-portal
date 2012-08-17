@@ -19,13 +19,6 @@
 
 package org.exoplatform.portal.mop.user;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
-
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
@@ -39,6 +32,12 @@ import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.navigation.VisitMode;
 import org.exoplatform.services.organization.Group;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -124,38 +123,45 @@ public class UserPortalImpl implements UserPortal
                navigations.add(new UserNavigation(this, userNavigation, true));
             }
 
-            //
-            Collection<?> groups;
-            try
+            // Add group navigations
+            if(service.getUserACL().getSuperUser().equals(userName))
             {
-               if (service.getUserACL().getSuperUser().equals(userName))
+               List<NavigationContext> navCtxs = service.getNavigationService().loadNavigations(SiteType.GROUP);
+               for(NavigationContext navCtx : navCtxs)
                {
-                  groups = service.getOrganizationService().getGroupHandler().getAllGroups();
+                  if(!navCtx.getKey().getName().equals(service.getUserACL().getGuestsGroup()))
+                  {
+                     navigations.add(new UserNavigation(this, navCtx, true));
+                  }
                }
-               else
+            }
+            else
+            {
+               Collection<?> groups;
+               try
                {
                   groups = service.getOrganizationService().getGroupHandler().findGroupsOfUser(userName);
                }
-            }
-            catch (Exception e)
-            {
-               throw new UserPortalException("Could not retrieve groups", e);
-            }
-
-            //
-            for (Object group : groups)
-            {
-               Group m = (Group)group;
-               String groupId = m.getId().trim();
-               if (!groupId.equals(service.getUserACL().getGuestsGroup()))
+               catch (Exception e)
                {
-                  NavigationContext groupNavigation = service.getNavigationService().loadNavigation(SiteKey.group(groupId));
-                  if (groupNavigation != null && groupNavigation.getState() != null)
+                  throw new UserPortalException("Could not retrieve groups", e);
+               }
+
+               //
+               for (Object group : groups)
+               {
+                  Group m = (Group)group;
+                  String groupId = m.getId().trim();
+                  if (!groupId.equals(service.getUserACL().getGuestsGroup()))
                   {
-                     navigations.add(new UserNavigation(
-                        this,
-                        groupNavigation,
-                        service.getUserACL().hasEditPermissionOnNavigation(groupNavigation.getKey())));
+                     NavigationContext groupNavigation = service.getNavigationService().loadNavigation(SiteKey.group(groupId));
+                     if (groupNavigation != null && groupNavigation.getState() != null)
+                     {
+                        navigations.add(new UserNavigation(
+                           this,
+                           groupNavigation,
+                           service.getUserACL().hasEditPermissionOnNavigation(groupNavigation.getKey())));
+                     }
                   }
                }
             }

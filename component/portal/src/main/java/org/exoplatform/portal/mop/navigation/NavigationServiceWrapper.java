@@ -23,6 +23,8 @@ import org.chromattic.api.UndeclaredRepositoryException;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteKey;
 import static org.exoplatform.portal.mop.navigation.Utils.*;
+
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -34,6 +36,7 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.picocontainer.Startable;
 
+import java.util.List;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
@@ -96,6 +99,12 @@ public class NavigationServiceWrapper implements NavigationService, Startable
    public NavigationContext loadNavigation(SiteKey key)
    {
       return service.loadNavigation(key);
+   }
+
+   @Override
+   public List<NavigationContext> loadNavigations(SiteType type) throws NullPointerException, NavigationServiceException
+   {
+      return service.loadNavigations(type);
    }
 
    public void saveNavigation(NavigationContext navigation) throws NullPointerException, NavigationServiceException

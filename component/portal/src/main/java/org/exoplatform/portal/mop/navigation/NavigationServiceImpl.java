@@ -21,13 +21,11 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visible;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.MappedAttributes;
-import static org.exoplatform.portal.mop.navigation.Utils.*;
-import static org.exoplatform.portal.pom.config.Utils.split;
-
 import org.exoplatform.portal.pom.data.Mapper;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -37,13 +35,18 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
 import org.gatein.mop.api.workspace.link.PageLink;
-
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static org.exoplatform.portal.mop.navigation.Utils.objectType;
+import static org.exoplatform.portal.pom.config.Utils.split;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -91,6 +94,31 @@ public class NavigationServiceImpl implements NavigationService
       POMSession session = manager.getSession();
       NavigationData data = dataCache.getNavigationData(session, key);
       return data != null && data != NavigationData.EMPTY ? new NavigationContext(data) : null;
+   }
+
+   @Override
+   public List<NavigationContext> loadNavigations(SiteType type) throws NullPointerException, NavigationServiceException
+   {
+      if(type == null)
+      {
+         throw new NullPointerException();
+      }
+
+      POMSession session = manager.getSession();
+      ObjectType<Site> objectType = objectType(type);
+      Collection<Site> sites = session.getWorkspace().getSites(objectType);
+
+      List<NavigationContext> navigations = new LinkedList<NavigationContext>();
+      for(Site site : sites)
+      {
+         Navigation defaultNavigation = site.getRootNavigation().getChild("default");
+         if(defaultNavigation != null)
+         {
+            SiteKey key = new SiteKey(type, site.getName());
+            navigations.add(new NavigationContext(new NavigationData(key, defaultNavigation)));
+         }
+      }
+      return navigations;
    }
 
    public void saveNavigation(NavigationContext navigation) throws NullPointerException, NavigationServiceException
