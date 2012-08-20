@@ -63,15 +63,4 @@ public abstract class AbstractPortalTest extends AbstractKernelTest
       end(save);
       begin();
    }
-
-   @Override
-   protected void setUp() throws Exception
-   {
-   }
-
-   @Override
-   protected void tearDown() throws Exception
-   {
-      //
-   }
 }

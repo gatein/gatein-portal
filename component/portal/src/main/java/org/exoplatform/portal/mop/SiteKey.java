@@ -20,6 +20,7 @@
 package org.exoplatform.portal.mop;
 
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.page.PageKey;
 
 import java.io.Serializable;
 
@@ -103,6 +104,11 @@ public final class SiteKey implements Serializable
    public String getName()
    {
       return name;
+   }
+
+   public PageKey page(String name)
+   {
+      return new PageKey(this, name);
    }
 
    @Override

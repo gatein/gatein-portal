@@ -29,7 +29,7 @@ public class NavigationContext
 {
 
    /** . */
-   SiteKey key;
+   final SiteKey key;
 
    /** . */
    NavigationState state;

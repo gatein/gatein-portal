@@ -22,9 +22,9 @@ package org.exoplatform.portal.mop.navigation;
 import org.chromattic.api.UndeclaredRepositoryException;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteKey;
-import static org.exoplatform.portal.mop.navigation.Utils.*;
 
 import org.exoplatform.portal.mop.SiteType;
+import static org.exoplatform.portal.mop.Utils.*;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -54,7 +54,7 @@ public class NavigationServiceWrapper implements NavigationService, Startable
    private final NavigationServiceImpl service;
 
    /** . */
-   private ListenerService listenerService;
+   private final ListenerService listenerService;
 
    /** . */
    private final POMSessionManager manager;

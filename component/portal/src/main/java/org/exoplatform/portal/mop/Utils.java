@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop;
 
 import org.exoplatform.portal.mop.SiteType;
 import org.gatein.mop.api.workspace.ObjectType;
@@ -32,11 +32,11 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class Utils
+public class Utils
 {
 
    /** . */
-   static final String[] EMPTY_STRING_ARRAY = new String[0];
+   public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
    /** . */
    private static final ComparableComparator INSTANCE = new ComparableComparator();
@@ -57,17 +57,17 @@ class Utils
       b.put(ObjectType.USER_SITE, SiteType.USER);
    }
 
-   static ObjectType<Site> objectType(SiteType siteType)
+   public static ObjectType<Site> objectType(SiteType siteType)
    {
       return a.get(siteType);
    }
 
-   static SiteType siteType(ObjectType objectType)
+   public static SiteType siteType(ObjectType objectType)
    {
       return b.get(objectType);
    }
 
-   static <T extends Comparable<T>> Comparator<T> comparator()
+   public static <T extends Comparable<T>> Comparator<T> comparator()
    {
       // Not totally good but well... should we pass the class to the caller ?
       @SuppressWarnings("unchecked")

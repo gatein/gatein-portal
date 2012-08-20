@@ -20,6 +20,7 @@
 package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.Utils;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.Visible;
 import org.exoplatform.portal.pom.data.MappedAttributes;

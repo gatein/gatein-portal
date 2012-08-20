@@ -19,13 +19,12 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import junit.framework.AssertionFailedError;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.AbstractPortalTest;
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.mop.AbstractMOPTest;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.description.DescriptionServiceImpl;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -39,7 +38,7 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml"),
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/portal/mop/navigation/configuration.xml")
 })
-public abstract class AbstractTestNavigationService extends AbstractPortalTest
+public abstract class AbstractTestNavigationService extends AbstractMOPTest
 {
 
    /** . */
@@ -71,54 +70,5 @@ public abstract class AbstractTestNavigationService extends AbstractPortalTest
 
       //
       begin();
-   }
-
-   @Override
-   protected void end(boolean save)
-   {
-      if (save)
-      {
-         try
-         {
-            startService();
-            super.end(save);
-         }
-         finally
-         {
-            stopService();
-         }
-      }
-      else
-      {
-         super.end(save);
-      }
-   }
-
-   @Override
-   protected void tearDown() throws Exception
-   {
-      end();
-      super.tearDown();
-   }
-
-   private void startService()
-   {
-      try
-      {
-         begin();
-         end();
-      }
-      catch (Exception e)
-      {
-         AssertionFailedError afe = new AssertionFailedError();
-         afe.initCause(e);
-         throw afe;
-      }
-   }
-
-   private void stopService()
-   {
-      begin();
-      end();
    }
 }

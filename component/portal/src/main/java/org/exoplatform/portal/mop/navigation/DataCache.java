@@ -28,7 +28,7 @@ import org.gatein.mop.api.workspace.Workspace;
 
 import java.util.Collection;
 
-import static org.exoplatform.portal.mop.navigation.Utils.objectType;
+import static org.exoplatform.portal.mop.Utils.objectType;
 
 /**
  * todo : see if it makes sense to use a bloom filter for not found site black list

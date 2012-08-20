@@ -17,37 +17,50 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop;
+package org.exoplatform.portal.mop.page;
 
 /**
- * Group various event types.
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class EventType
+public class PageServiceException extends RuntimeException
 {
 
-   private EventType()
+   /** . */
+   private final PageError error;
+
+   public PageServiceException(PageError error)
    {
+      super(error.toString());
+      this.error = error;
    }
 
-   /** . */
-   public final static String NAVIGATION_CREATED = "org.exoplatform.portal.mop.navigation.navigation_created";
+   public PageServiceException(PageError error, String message)
+   {
+      super(message);
 
-   /** . */
-   public final static String NAVIGATION_DESTROYED = "org.exoplatform.portal.mop.navigation.navigation_destroyed";
+      //
+      this.error = error;
+   }
 
-   /** . */
-   public final static String NAVIGATION_UPDATED = "org.exoplatform.portal.mop.navigation.navigation_updated";
+   public PageServiceException(PageError error, String message, Throwable cause)
+   {
+      super(message, cause);
 
-   /** . */
-   public final static String PAGE_CREATED = "org.exoplatform.portal.mop.page.page_created";
+      //
+      this.error = error;
+   }
 
-   /** . */
-   public final static String PAGE_DESTROYED = "org.exoplatform.portal.mop.page.page_destroyed";
+   public PageServiceException(PageError error, Throwable cause)
+   {
+      super(cause);
 
-   /** . */
-   public final static String PAGE_UPDATED = "org.exoplatform.portal.mop.page.page_updated";
+      //
+      this.error = error;
+   }
 
+   public PageError getError()
+   {
+      return error;
+   }
 }
