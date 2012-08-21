@@ -132,33 +132,38 @@
        <set-method>register</set-method>
        <type>org.exoplatform.portal.application.LegacyRequestHandler</type>
     </component-plugin>
-   <component-plugin>
-      <name>DefaultRequestHandler</name>
-      <set-method>register</set-method>
-      <type>org.exoplatform.portal.application.DefaultRequestHandler</type>
-   </component-plugin>
+    <component-plugin>
+       <name>DefaultRequestHandler</name>
+       <set-method>register</set-method>
+       <type>org.exoplatform.portal.application.DefaultRequestHandler</type>
+    </component-plugin>
     <component-plugin>
       <name>ScriptRequestHandler</name>
       <set-method>register</set-method>
       <type>org.gatein.portal.controller.resource.ResourceRequestHandler</type>
     </component-plugin>
-   <component-plugin>
-      <name>StaticResourceRequestHandler</name>
+    <component-plugin>
+      <name>SkinRequestHandler</name>
       <set-method>register</set-method>
-      <type>org.exoplatform.portal.application.StaticResourceRequestHandler</type>
-   </component-plugin>
-   <component-plugin>
-      <name>RedirectRequestHandler</name>
-      <set-method>register</set-method>
-      <type>org.gatein.web.redirect.RedirectRequestHandler</type>
-      <init-params> <!--browser.detection.path-->
-        <value-param>
-          <name>browser.detection.path</name>
-          <description>Where the device detection page is located with respect to the portal web application</description>
-          <value>/device/detection.jsp</value>
-        </value-param>
-      </init-params>
-   </component-plugin>
+      <type>org.exoplatform.portal.resource.SkinResourceRequestHandler</type>
+    </component-plugin>
+    <component-plugin>
+       <name>StaticResourceRequestHandler</name>
+       <set-method>register</set-method>
+       <type>org.exoplatform.portal.application.StaticResourceRequestHandler</type>
+    </component-plugin>
+    <component-plugin>
+       <name>RedirectRequestHandler</name>
+       <set-method>register</set-method>
+       <type>org.gatein.web.redirect.RedirectRequestHandler</type>
+       <init-params> <!--browser.detection.path-->
+         <value-param>
+           <name>browser.detection.path</name>
+           <description>Where the device detection page is located with respect to the portal web application</description>
+           <value>/device/detection.jsp</value>
+         </value-param>
+       </init-params>
+    </component-plugin>
    <component-plugin>
       <name>StandaloneAppRequestHandler</name>
       <set-method>register</set-method>

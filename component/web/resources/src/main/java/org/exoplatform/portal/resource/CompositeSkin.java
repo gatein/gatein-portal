@@ -21,9 +21,17 @@ package org.exoplatform.portal.resource;
 
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.WebAppController;
+import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.router.URIWriter;
+import org.exoplatform.web.url.MimeType;
+import org.gatein.portal.controller.resource.ResourceRequestHandler;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -54,7 +62,7 @@ class CompositeSkin implements Skin
 
       //
       final StringBuilder builder = new StringBuilder();
-      builder.append("/").append(service.portalContainerName).append("/resource");
+      builder.append(service.portalContainerName).append("/resource");
 
       //
       final StringBuilder id = new StringBuilder();
@@ -90,12 +98,17 @@ class CompositeSkin implements Skin
       return id;
    }
 
-   public SkinURL createURL()
+   public SkinURL createURL(final ControllerContext context)
    {
+      if (context == null)
+      {
+         throw new NullPointerException("No controller context provided");
+      }
       return new SkinURL()
       {
 
          Orientation orientation;
+         boolean compress = !PropertyManager.isDevelopping();
 
          public void setOrientation(Orientation orientation)
          {
@@ -105,8 +118,27 @@ class CompositeSkin implements Skin
          @Override
          public String toString()
          {
-            return urlPrefix + "/" + (PropertyManager.isDevelopping() ? "style" : service.id)
-               + service.getSuffix(orientation);
+            try
+            {
+               String resource = urlPrefix + "/" + (PropertyManager.isDevelopping() ? "style" : service.id);
+
+               //
+               Map<QualifiedName, String> params = new HashMap<QualifiedName, String>();
+               params.put(ResourceRequestHandler.VERSION_QN, ResourceRequestHandler.VERSION);
+               params.put(ResourceRequestHandler.COMPRESS_QN, compress ? "min" : "");
+               params.put(WebAppController.HANDLER_PARAM, "skin");
+               params.put(ResourceRequestHandler.RESOURCE_QN, resource);
+               StringBuilder url = new StringBuilder();
+               context.renderURL(params, new URIWriter(url, MimeType.PLAIN));
+
+               //
+               return url.toString();
+            }
+            catch (IOException e)
+            {
+               e.printStackTrace();
+               return null;
+            }
          }
       };
    }

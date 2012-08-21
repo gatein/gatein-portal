@@ -39,6 +39,12 @@ import org.exoplatform.portal.resource.compressor.ResourceType;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.WebAppController;
+import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.router.URIWriter;
+import org.exoplatform.web.url.MimeType;
+import org.gatein.portal.controller.resource.ResourceRequestHandler;
 import org.gatein.wci.ServletContainerFactory;
 import org.gatein.wci.WebAppListener;
 import org.picocontainer.Startable;
@@ -76,10 +82,10 @@ public class SkinService extends AbstractResourceService implements Startable
 
    static
    {
-      suffixMap.put(Orientation.LT, "-lt.css");
-      suffixMap.put(Orientation.RT, "-rt.css");
-      suffixMap.put(Orientation.TL, "-lt.css");
-      suffixMap.put(Orientation.TR, "-lt.css");
+      suffixMap.put(Orientation.LT, "-lt");
+      suffixMap.put(Orientation.RT, "-rt");
+      suffixMap.put(Orientation.TL, "-lt");
+      suffixMap.put(Orientation.TR, "-lt");
    }
 
    private static final String LEFT_P = "\\(";
@@ -114,9 +120,9 @@ public class SkinService extends AbstractResourceService implements Startable
 
    private final HashSet<String> availableSkins_;
 
-   private final FutureMap<String, CachedStylesheet, Orientation> ltCache;
+   private final FutureMap<String, CachedStylesheet, Foo> ltCache;
 
-   private final FutureMap<String, CachedStylesheet, Orientation> rtCache;
+   private final FutureMap<String, CachedStylesheet, Foo> rtCache;
 
    private final Map<String, Set<String>> portletThemes_;
 
@@ -154,12 +160,23 @@ public class SkinService extends AbstractResourceService implements Startable
       MAX_AGE = seconds;
    }
 
+   static class Foo
+   {
+      final ControllerContext controller;
+      final Orientation orientation;
+      Foo(ControllerContext controller, Orientation orientation)
+      {
+         this.controller = controller;
+         this.orientation = orientation;
+      }
+   }
+
    public SkinService(ExoContainerContext context, ResourceCompressor compressor)
    {
       super(compressor);
-      Loader<String, CachedStylesheet, Orientation> loader = new Loader<String, CachedStylesheet, Orientation>()
+      Loader<String, CachedStylesheet, Foo> loader = new Loader<String, CachedStylesheet, Foo>()
       {
-         public CachedStylesheet retrieve(Orientation context, String key) throws Exception
+         public CachedStylesheet retrieve(Foo context, String key) throws Exception
          {
             Resource skin = getCSSResource(key, key);
             if (skin == null)
@@ -168,8 +185,8 @@ public class SkinService extends AbstractResourceService implements Startable
             }
             
             StringBuffer sb = new StringBuffer();
-            processCSSRecursively(sb, true, skin, context);
-            String css = sb.toString();;
+            processCSSRecursively(context.controller, sb, true, skin, context.orientation);
+            String css = sb.toString();
             try
             {
                if (SkinService.this.compressor.isSupported(ResourceType.STYLESHEET))
@@ -190,8 +207,8 @@ public class SkinService extends AbstractResourceService implements Startable
       portalSkins_ = new LinkedHashMap<SkinKey, SkinConfig>();
       skinConfigs_ = new LinkedHashMap<SkinKey, SkinConfig>(20);
       availableSkins_ = new HashSet<String>(5);
-      ltCache = new FutureMap<String, CachedStylesheet, Orientation>(loader);
-      rtCache = new FutureMap<String, CachedStylesheet, Orientation>(loader);
+      ltCache = new FutureMap<String, CachedStylesheet, Foo>(loader);
+      rtCache = new FutureMap<String, CachedStylesheet, Foo>(loader);
       portletThemes_ = new HashMap<String, Set<String>>();
       portalContainerName = context.getPortalContainerName();
       deployer = new GateInSkinConfigDeployer(portalContainerName, this);
@@ -466,16 +483,20 @@ public class SkinService extends AbstractResourceService implements Startable
    /**
     * Return the CSS content of the file specified by the given URI.
     * 
+    *
+    *
+    * @param context
     * @param path
     *           path of the css to find
+    * @param compress
     * @return the css contet or null if not found.
     */
-   public String getCSS(String path)
+   public String getCSS(ControllerContext context, String path, boolean compress)
    {
       try
       {
          final ByteArrayOutput output = new ByteArrayOutput();
-         boolean success = renderCSS(new ResourceRenderer()
+         boolean success = renderCSS(context, new ResourceRenderer()
          {
             public BinaryOutput getOutput() throws IOException
             {
@@ -484,7 +505,7 @@ public class SkinService extends AbstractResourceService implements Startable
             public void setExpiration(long seconds)
             {
             }
-         }, path);
+         }, path, compress);
          
          if (success)
          {
@@ -509,16 +530,24 @@ public class SkinService extends AbstractResourceService implements Startable
 
    /**
     * Render css content of the file specified by the given URI
+    *
+    *
+    * @param context
     * @param renderer
     *          the webapp's {@link org.exoplatform.portal.resource.ResourceRenderer}
     * @param path
     *          path uri to the css file
+    * @param compress
     * @throws RenderingException
     * @throws IOException
     * @return <code>true</code> if the <code>CSS resource </code>is found and rendered;
     *         <code>false</code> otherwise.
     */
-   public boolean renderCSS(ResourceRenderer renderer, String path) throws RenderingException, IOException
+   public boolean renderCSS(
+      ControllerContext context,
+      ResourceRenderer renderer,
+      String path,
+      boolean compress) throws RenderingException, IOException
    {
       Orientation orientation = Orientation.LT;
       if (path.endsWith("-lt.css"))
@@ -532,47 +561,47 @@ public class SkinService extends AbstractResourceService implements Startable
       }
 
       // Check if it is running under developing mode
-      if (PropertyManager.isDevelopping())
+      if (!compress)
       {
          StringBuffer sb = new StringBuffer();
          Resource skin = getCSSResource(path, path);
-         if (skin == null)
+         if (skin != null)
          {
-            return false;
+            processCSSRecursively(context, sb, false, skin, orientation);
+            byte[] bytes = sb.toString().getBytes("UTF-8");
+            renderer.getOutput().write(bytes);
+            return true;
          }
-         processCSSRecursively(sb, false, skin, orientation);
-         byte[] bytes = sb.toString().getBytes("UTF-8");
-         renderer.getOutput().write(bytes);
       }
       else
       {
-         //
-         FutureMap<String, CachedStylesheet, Orientation> cache = orientation == Orientation.LT ? ltCache : rtCache;
-         CachedStylesheet cachedCss = cache.get(orientation, path);
-         
-         if (cachedCss == null)
+         FutureMap<String, CachedStylesheet, Foo> cache = orientation == Orientation.LT ? ltCache : rtCache;
+         CachedStylesheet cachedCss = cache.get(new Foo(context, orientation), path);
+         if (cachedCss != null)
          {
-            return false;
+            renderer.setExpiration(MAX_AGE);
+            cachedCss.writeTo(renderer.getOutput());
+            return true;
          }
-         
-         renderer.setExpiration(MAX_AGE);
-
-         cachedCss.writeTo(renderer.getOutput());
       }
-      return true;
+
+      //
+      return false;
    }
 
    /**
     * Return CSS data corresponding to the <code>path</code>
     * 
+    *
+    * @param context
     * @param path
     *          path uri to the css file
     * @return css content of URI file or null if not found
     */
    @Deprecated
-   public String getMergedCSS(String path)
+   public String getMergedCSS(ControllerContext context, String path)
    {
-      return getCSS(path);
+      return getCSS(context, path, true);
    }
 
    /**
@@ -657,9 +686,10 @@ public class SkinService extends AbstractResourceService implements Startable
    /**
     * Return last modifed date of cached css
     * Return null if cached css can not be found
+    * @param context
     * @param path - path must not be null
     */
-   public long getLastModified(String path)
+   public long getLastModified(ControllerContext context, String path)
    {
       if (path == null)
       {
@@ -671,7 +701,7 @@ public class SkinService extends AbstractResourceService implements Startable
          return Long.MAX_VALUE;
       }
 
-      FutureMap<String, CachedStylesheet, Orientation> cache = ltCache;
+      FutureMap<String, CachedStylesheet, Foo> cache = ltCache;
       Orientation orientation = Orientation.LT;
       if (path.endsWith("-lt.css"))
       {
@@ -683,7 +713,7 @@ public class SkinService extends AbstractResourceService implements Startable
          orientation = Orientation.RT;
       }
 
-      CachedStylesheet cachedCSS = cache.get(orientation, path);
+      CachedStylesheet cachedCSS = cache.get(new Foo(context, orientation), path);
       if (cachedCSS == null)
       {
          return Long.MAX_VALUE;
@@ -847,6 +877,8 @@ public class SkinService extends AbstractResourceService implements Startable
    /**
     * Apply CSS for Skin <br/>
     * If skin is null, do nothing
+    *
+    * @param context
     * @param appendable
     * @param merge
     * @param skin
@@ -854,7 +886,7 @@ public class SkinService extends AbstractResourceService implements Startable
     * @throws RenderingException
     * @throws IOException
     */
-   private void processCSSRecursively(Appendable appendable, boolean merge, Resource skin, Orientation orientation)
+   private void processCSSRecursively(ControllerContext context, Appendable appendable, boolean merge, Resource skin, Orientation orientation)
       throws RenderingException, IOException
    {
       if(skin == null)
@@ -888,19 +920,30 @@ public class SkinService extends AbstractResourceService implements Startable
                   includedPath = basePath + includedPath;
                }
                
-               String embeddedPath = includedPath.substring(0, includedPath.length() - ".css".length());
                StringBuffer strReplace = new StringBuffer();
                if (merge) 
                {                  
                   Resource ssskin = getCSSResource(includedPath, basePath + skin.getFileName());
-                  processCSSRecursively(strReplace, merge, ssskin, orientation);                                    
+                  processCSSRecursively(context, strReplace, merge, ssskin, orientation);
                } 
                else 
-               {                     
+               {
+                  // Remove leading '/' and trailing '.css'
+                  String resource = includedPath.substring(1, includedPath.length() - ".css".length()) + getSuffix(orientation);
+
+                  //
+                  Map<QualifiedName, String> params = new HashMap<QualifiedName, String>();
+                  params.put(ResourceRequestHandler.VERSION_QN, ResourceRequestHandler.VERSION);
+                  params.put(ResourceRequestHandler.COMPRESS_QN, merge ? "min" : "");
+                  params.put(WebAppController.HANDLER_PARAM, "skin");
+                  params.put(ResourceRequestHandler.RESOURCE_QN, resource);
+                  StringBuilder embeddedPath = new StringBuilder();
+                  context.renderURL(params, new URIWriter(embeddedPath, MimeType.PLAIN));
+
+                  //
                   strReplace.append(matcher.group(1));
                   strReplace.append(embeddedPath);
-                  strReplace.append(getSuffix(orientation));
-                  strReplace.append(matcher.group(3));                                    
+                  strReplace.append(matcher.group(3));
                }               
                String str = strReplace.toString().replaceAll("\\$", "\\\\\\$");
                matcher.appendReplacement((StringBuffer)appendable, str);

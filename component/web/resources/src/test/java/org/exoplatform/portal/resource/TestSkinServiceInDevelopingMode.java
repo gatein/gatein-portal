@@ -57,15 +57,15 @@ public class TestSkinServiceInDevelopingMode extends AbstractSkinServiceTest
       assertNotNull(sSkin);
 
       Skin merged = skinService.merge(Arrays.asList(fSkin, sSkin));
-      SkinURL url = merged.createURL();
+      SkinURL url = merged.createURL(bilto);
 
       url.setOrientation(Orientation.LT);
       assertEquals("@import url(/mockwebapp/skin/FirstPortlet-lt.css);\n"
-         + "@import url(/mockwebapp/skin/SecondPortlet-lt.css);", skinService.getCSS(url.toString()));
+         + "@import url(/mockwebapp/skin/SecondPortlet-lt.css);", skinService.getCSS(bilto, url.toString(), bilto));
 
       url.setOrientation(Orientation.RT);
       assertEquals("@import url(/mockwebapp/skin/FirstPortlet-rt.css);\n"
-         + "@import url(/mockwebapp/skin/SecondPortlet-rt.css);", skinService.getCSS(url.toString()));
+         + "@import url(/mockwebapp/skin/SecondPortlet-rt.css);", skinService.getCSS(bilto, url.toString(), bilto));
    }
 
    public void testCache()
@@ -73,10 +73,10 @@ public class TestSkinServiceInDevelopingMode extends AbstractSkinServiceTest
       String path = "/path/to/test/caching.css";
 
       resResolver.addResource(path, "foo");
-      assertEquals("foo", skinService.getCSS(path));
+      assertEquals("foo", skinService.getCSS(bilto, path, bilto));
 
       resResolver.addResource(path, "bar");
-      assertEquals("bar", skinService.getCSS(path));
+      assertEquals("bar", skinService.getCSS(bilto, path, bilto));
    }
    
    public void testProcessImportCSS()
@@ -84,10 +84,10 @@ public class TestSkinServiceInDevelopingMode extends AbstractSkinServiceTest
       String parent = "/process/import/css.css";
 
       resResolver.addResource(parent, "@import url(Portlet/Stylesheet.css); aaa;");
-      assertEquals("@import url(/process/import/Portlet/Stylesheet-lt.css); aaa;", skinService.getCSS(parent));
+      assertEquals("@import url(/process/import/Portlet/Stylesheet-lt.css); aaa;", skinService.getCSS(bilto, parent, bilto));
       
       resResolver.addResource(parent, "@import url('/Portlet/Stylesheet.css'); aaa;");
-      assertEquals("@import url('/Portlet/Stylesheet-lt.css'); aaa;", skinService.getCSS(parent));
+      assertEquals("@import url('/Portlet/Stylesheet-lt.css'); aaa;", skinService.getCSS(bilto, parent, bilto));
 
       //parent file import child css file
       resResolver.addResource(parent, "@import url(childCSS/child.css);  background:url(images/foo.gif);");
@@ -102,7 +102,7 @@ public class TestSkinServiceInDevelopingMode extends AbstractSkinServiceTest
        *                                                        /bar.gif
        */
       assertEquals("@import url(/process/import/childCSS/child-lt.css);  background:url(/process/import/images/foo.gif);",
-         skinService.getCSS(parent));
+         skinService.getCSS(bilto, parent, bilto));
    }
 
    public void testLastModifiedSince()
@@ -110,7 +110,7 @@ public class TestSkinServiceInDevelopingMode extends AbstractSkinServiceTest
       String path = "/last/modify/since.css";
       resResolver.addResource(path, "foo");
 
-      assertTrue(skinService.getCSS(path).length() > 0);
-      assertEquals(Long.MAX_VALUE, skinService.getLastModified(path));
+      assertTrue(skinService.getCSS(bilto, path, bilto).length() > 0);
+      assertEquals(Long.MAX_VALUE, skinService.getLastModified(bilto, path));
    }
 }

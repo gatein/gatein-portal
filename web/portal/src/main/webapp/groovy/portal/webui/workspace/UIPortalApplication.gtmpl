@@ -46,13 +46,13 @@
 		
 		<link rel="shortcut icon" type="image/x-icon" href="<%=docBase%>/favicon.ico" />
 		<%for(skinConfig in portalSkins) {
-		def url = skinConfig.createURL();
+		def url = skinConfig.createURL(rcontext.controllerContext);
 		url.setOrientation(orientation);
 		%>
 			<link id="${skinConfig.id}" rel="stylesheet" type="text/css" href="$url" />
 		<%}%>
 		<%for(portletSkin in portletSkins) {
-		def url = portletSkin.createURL();
+		def url = portletSkin.createURL(rcontext.controllerContext);
 		url.setOrientation(orientation);
 		%>
 			<link id="${portletSkin.id}" rel="stylesheet" type="text/css" href= "$url" />

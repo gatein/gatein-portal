@@ -20,10 +20,7 @@
 package org.exoplatform.portal.application;
 
 import org.exoplatform.commons.utils.*;
-import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
-import org.exoplatform.portal.resource.ResourceRenderer;
-import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 
@@ -34,10 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.SocketException;
 import java.net.URLDecoder;
-import java.nio.charset.Charset;
-import java.util.Date;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -58,7 +52,7 @@ public class ResourceRequestFilter extends AbstractFilter
 
    protected static Log log = ExoLogger.getLogger(ResourceRequestFilter.class);
 
-   private static final Charset UTF_8 = Charset.forName("UTF-8");
+//   private static final Charset UTF_8 = Charset.forName("UTF-8");
 
    private FilterConfig cfg;
 
@@ -82,11 +76,12 @@ public class ResourceRequestFilter extends AbstractFilter
       HttpServletRequest httpRequest = (HttpServletRequest)request;
       final String uri = URLDecoder.decode(httpRequest.getRequestURI(), "UTF-8");
       final HttpServletResponse httpResponse = (HttpServletResponse)response;
-      ExoContainer portalContainer = getContainer();
-      final SkinService skinService = (SkinService) portalContainer.getComponentInstanceOfType(SkinService.class);
+//      ExoContainer portalContainer = getContainer();
+//      final SkinService skinService = (SkinService) portalContainer.getComponentInstanceOfType(SkinService.class);
       long ifModifiedSince = httpRequest.getDateHeader(IF_MODIFIED_SINCE);
 
       //
+/*
       if (uri.endsWith(".css"))
       {
 //     Check if cached resource has not been modifed, return 304 code      
@@ -163,113 +158,116 @@ public class ResourceRequestFilter extends AbstractFilter
       }
       else
       {
+*/
 
-         // Fast matching
-         final int len = uri.length();
-         if (len >= 7 && uri.charAt(len - 7) == '-' && uri.charAt(len - 6) == 'r' && uri.charAt(len - 5) == 't')
+      // Fast matching
+      final int len = uri.length();
+      if (len >= 7 && uri.charAt(len - 7) == '-' && uri.charAt(len - 6) == 'r' && uri.charAt(len - 5) == 't')
+      {
+         for (final ImageType imageType : imageTypes)
          {
-            for (final ImageType imageType : imageTypes)
+            if (imageType.matches(uri))
             {
-               if (imageType.matches(uri))
+               final String resource =
+                  uri.substring(httpRequest.getContextPath().length(), len - 7) + uri.substring(len - 4);
+               FutureTask<Image> futureImg = mirroredImageCache.get(resource);
+               if (futureImg == null)
                {
-                  final String resource =
-                     uri.substring(httpRequest.getContextPath().length(), len - 7) + uri.substring(len - 4);
-                  FutureTask<Image> futureImg = mirroredImageCache.get(resource);
-                  if (futureImg == null)
+                  FutureTask<Image> tmp = new FutureTask<Image>(new Callable<Image>()
                   {
-                     FutureTask<Image> tmp = new FutureTask<Image>(new Callable<Image>()
+                     public Image call() throws Exception
                      {
-                        public Image call() throws Exception
+                        InputStream in = cfg.getServletContext().getResourceAsStream(resource);
+                        if (in == null)
                         {
-                           InputStream in = cfg.getServletContext().getResourceAsStream(resource);
-                           if (in == null)
-                           {
-                              return null;
-                           }
-
-                           //
-                           BufferedImage img = ImageIO.read(in);
-                           log.debug("Read image " + uri + " (" + img.getWidth() + "," + img.getHeight() + ")");
-                           AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-                           tx.translate(-img.getWidth(null), 0);
-                           AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
-                           img = op.filter(img, null);
-                           log.debug("Mirrored image " + uri + " (" + img.getWidth() + "," + img.getHeight() + ")");
-                           ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
-                           ImageIO.write(img, imageType.getFormat(), baos);
-                           baos.close();
-                           return new Image(imageType, baos.toByteArray());
+                           return null;
                         }
-                     });
 
-                     //
-                     futureImg = mirroredImageCache.putIfAbsent(resource, tmp);
-                     if (futureImg == null)
-                     {
-                        futureImg = tmp;
-                        futureImg.run();
+                        //
+                        BufferedImage img = ImageIO.read(in);
+                        log.debug("Read image " + uri + " (" + img.getWidth() + "," + img.getHeight() + ")");
+                        AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+                        tx.translate(-img.getWidth(null), 0);
+                        AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_NEAREST_NEIGHBOR);
+                        img = op.filter(img, null);
+                        log.debug("Mirrored image " + uri + " (" + img.getWidth() + "," + img.getHeight() + ")");
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream(1000);
+                        ImageIO.write(img, imageType.getFormat(), baos);
+                        baos.close();
+                        return new Image(imageType, baos.toByteArray());
                      }
-                  }
+                  });
 
                   //
-                  try
+                  futureImg = mirroredImageCache.putIfAbsent(resource, tmp);
+                  if (futureImg == null)
                   {
-                     Image img = futureImg.get();
-                     if (img != null)
-                     {
-                        //Check if cached resource has not been modifed, return 304 code      
-                        long imgLastModified = img.getLastModified();
-                        if (isNotModified(ifModifiedSince, imgLastModified)) {
-                           httpResponse.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
-                           return;
-                        }
-                        httpResponse.setContentType(img.type.getMimeType());
-                        httpResponse.setContentLength(img.bytes.length);
-                        httpResponse.setHeader("Cache-Control", "max-age=2592000,s-maxage=2592000");
-                        processIfModified(imgLastModified, httpResponse);
-                        
-                        OutputStream out = httpResponse.getOutputStream();
-                        out.write(img.bytes);
-                        out.close();
-                     }
-                     else
-                     {
-                        mirroredImageCache.remove(resource);
-                        httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
-                     }
-                     return;
+                     futureImg = tmp;
+                     futureImg.run();
                   }
-                  catch (InterruptedException e)
+               }
+
+               //
+               try
+               {
+                  Image img = futureImg.get();
+                  if (img != null)
                   {
-                     // Find out what is relevant to do
-                     e.printStackTrace();
+                     //Check if cached resource has not been modifed, return 304 code
+                     long imgLastModified = img.getLastModified();
+                     if (isNotModified(ifModifiedSince, imgLastModified)) {
+                        httpResponse.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
+                        return;
+                     }
+                     httpResponse.setContentType(img.type.getMimeType());
+                     httpResponse.setContentLength(img.bytes.length);
+                     httpResponse.setHeader("Cache-Control", "max-age=2592000,s-maxage=2592000");
+                     processIfModified(imgLastModified, httpResponse);
+
+                     OutputStream out = httpResponse.getOutputStream();
+                     out.write(img.bytes);
+                     out.close();
                   }
-                  catch (ExecutionException e)
+                  else
                   {
-                     // Cleanup
-                     e.printStackTrace();
                      mirroredImageCache.remove(resource);
+                     httpResponse.setStatus(HttpServletResponse.SC_NOT_FOUND);
                   }
+                  return;
+               }
+               catch (InterruptedException e)
+               {
+                  // Find out what is relevant to do
+                  e.printStackTrace();
+               }
+               catch (ExecutionException e)
+               {
+                  // Cleanup
+                  e.printStackTrace();
+                  mirroredImageCache.remove(resource);
                }
             }
          }
-
-         //
-         if (!PropertyManager.isDevelopping())
-         {
-            httpResponse.addHeader("Cache-Control", "max-age=2592000,s-maxage=2592000");
-         }
-         else
-         {
-            if (uri.endsWith(".jstmpl") || uri.endsWith(".js"))
-            {
-               httpResponse.setHeader("Cache-Control", "no-cache");
-            }
-            if (log.isDebugEnabled())
-               log.debug(" Load Resource: " + uri);
-         }
-         chain.doFilter(request, response);
       }
+
+      //
+      if (!PropertyManager.isDevelopping())
+      {
+         httpResponse.addHeader("Cache-Control", "max-age=2592000,s-maxage=2592000");
+      }
+      else
+      {
+         if (uri.endsWith(".jstmpl") || uri.endsWith(".js"))
+         {
+            httpResponse.setHeader("Cache-Control", "no-cache");
+         }
+         if (log.isDebugEnabled())
+            log.debug(" Load Resource: " + uri);
+      }
+      chain.doFilter(request, response);
+/*
+      }
+*/
    }
 
    /**
@@ -287,7 +285,7 @@ public class ResourceRequestFilter extends AbstractFilter
     * @param httpResponse
     * @return
     */
-   public boolean isNotModified(long ifModifedSince, long lastModified) {
+   private boolean isNotModified(long ifModifedSince, long lastModified) {
       if (!PropertyManager.isDevelopping()) {
          if (ifModifedSince >= lastModified) {
             return true;

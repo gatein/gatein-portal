@@ -91,7 +91,7 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
       assertEquals(1, skinService.getAvailableSkinNames().size());
       assertTrue(skinService.getAvailableSkinNames().contains("TestSkin"));
 
-      String css = skinService.getCSS("/path/to/MockResourceResolver");
+      String css = skinService.getCSS(bilto, "/path/to/MockResourceResolver", bilto);
       assertEquals(MockResourceResolver.class.getName(), css);
    }
 
@@ -151,19 +151,19 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
 
    public void testExistingCSS() throws Exception
    {
-      String css = skinService.getCSS("/mockwebapp/skin/Stylesheet-lt.css");
+      String css = skinService.getCSS(bilto, "/mockwebapp/skin/Stylesheet-lt.css", bilto);
       assertTrue(css.length() > 0);
 
-      css = skinService.getCSS("/mockwebapp/skin/Stylesheet-rt.css");
+      css = skinService.getCSS(bilto, "/mockwebapp/skin/Stylesheet-rt.css", bilto);
       assertTrue(css.length() > 0);
    }
 
    public void testNonExistingCSS()
    {
-      String css = skinService.getCSS("/non/existing/file.css");
+      String css = skinService.getCSS(bilto, "/non/existing/file.css", bilto);
       assertNull(css);
       
-      css = skinService.getCSS("/non/existing/file-lt.css");
+      css = skinService.getCSS(bilto, "/non/existing/file-lt.css", bilto);
       assertNull(css);
    }
 
@@ -185,7 +185,7 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
 //         "   background:url(bar.gif);\n" +
 //         "   End of block comment */",
 //         skinService.getCSS(path));
-      assertEquals("foo;", skinService.getCSS(path));
+      assertEquals("foo;", skinService.getCSS(bilto, path, bilto));
    }
 
    public void testOrientation()
@@ -204,14 +204,14 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
          "aaa;\n" +
          "{aaa;bbb;/*orientation=lt*/ccc;}\n" +
          "{aaa;/*orientation=lt*/bbb;}{ddd;}",
-         skinService.getCSS(path + "-lt.css"));
+         skinService.getCSS(bilto, path + "-lt.css", bilto));
       
       assertEquals(
          "bbb;/*orientation=rt*/\n" +
          " bbb; /* orientation=rt */\n" +
          "{aaa;ccc;ddd;/*orientation=rt*/}\n" +
          "{bbb;}{ccc;/*orientation=rt*/ddd;}",
-         skinService.getCSS(path + "-rt.css"));
+         skinService.getCSS(bilto, path + "-rt.css", bilto));
    }
 
    public void testBackgroundURL()
@@ -227,6 +227,6 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
          "background:url(/background/url/images/foo.gif);\n" + 
          "background:url('/images/foo.gif');\n" +
          "aaa; background: #fff url('/background/url/images/foo.gif') no-repeat center -614px; ccc;",
-         skinService.getCSS(path));
+         skinService.getCSS(bilto, path, bilto));
    }
 }

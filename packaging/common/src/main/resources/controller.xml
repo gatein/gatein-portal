@@ -76,6 +76,22 @@
   	</route>
   </route>
 
+  <!-- Skin handler -->
+  <route path="/skins/{gtn:version}/{gtn:resource}{gtn:compress}.css">
+    <route-param qname="gtn:handler">
+      <value>skin</value>
+    </route-param>
+    <path-param qname="gtn:version" encoding="preserve-path">
+      <pattern>[^/]*</pattern>
+    </path-param>
+    <path-param qname="gtn:compress" capture-group="true">
+      <pattern>-(min)|</pattern>
+    </path-param>
+	  <path-param qname="gtn:resource" encoding="preserve-path">
+      <pattern>.+?</pattern>
+	  </path-param>
+  </route>
+
   <!-- Static resource handler needs to be before the portal handler -->
   <route path="/{gtn:path}">
     <route-param qname="gtn:handler">
