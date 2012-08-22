@@ -59,6 +59,7 @@
         <module name="org.javassist"/>
         <module name="org.slf4j" slot="gatein" />
         <module name="org.staxnav" />
+        <module name="com.google.guava" slot="gatein" export="true"/>
 
         <module name="org.jboss.threads"/>
         <module name="org.jboss.logging"/>

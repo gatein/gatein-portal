@@ -139,7 +139,6 @@
            <maven-resource group="org.gatein.management" artifact="gatein-management-rest" />
            <maven-resource group="org.gatein.web" artifact="redirect" />
            <maven-resource group="org.codehaus.groovy" artifact="groovy-all" />
-           <maven-resource group="com.google.guava" artifact="guava" />
            <maven-resource group="com.google.inject" artifact="guice" />
            <maven-resource group="com.google.inject.extensions" artifact="guice-jmx" />
            <maven-resource group="com.google.inject.extensions" artifact="guice-multibindings" />
@@ -298,6 +297,10 @@
        <module-def name="org.gatein.wsrp.integration">
           <maven-resource group="org.gatein.integration" artifact="extension-config" />
           <maven-resource group="org.gatein.integration" artifact="extension-component" />
+       </module-def>
+
+       <module-def name="com.google.guava" slot="gatein">
+          <maven-resource group="com.google.guava" artifact="guava" />
        </module-def>
     </target>
 
