@@ -1109,15 +1109,8 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
       if(portalMode != UIPortalApplication.CONTAINER_BLOCK_EDIT_MODE && 
                portalMode != UIPortalApplication.APP_BLOCK_EDIT_MODE && hasPermission()) 
       {
-         org.gatein.pc.api.Portlet portlet = getProducedOfferedPortlet();
-         if (portlet != null)
-         {
-            PortletInfo info = portlet.getInfo();
-            String name = info.getApplicationName() + "/" + info.getName();
-            
-            JavascriptManager jsMan = context.getJavascriptManager();
-            jsMan.loadScriptResource(ResourceScope.PORTLET, name);                                   
-         }
+         JavascriptManager jsMan = context.getJavascriptManager();
+         jsMan.loadScriptResource(ResourceScope.PORTLET, getApplicationId());
       }
       super.processRender(context);
    }
