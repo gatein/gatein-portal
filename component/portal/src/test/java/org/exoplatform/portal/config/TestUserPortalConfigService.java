@@ -197,11 +197,13 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             UserPortal userPortal = userPortalCfg.getUserPortal();
             assertNotNull(userPortal.getNavigations());
             Map<String, UserNavigation> navigations = toMap(userPortal);
-            assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
+            assertEquals("expected to have 7 navigations instead of " + navigations, 7, navigations.size());
             assertTrue(navigations.containsKey("portal::classic"));
             assertTrue(navigations.containsKey("group::/platform/administrators"));
             assertTrue(navigations.containsKey("group::/platform/users"));
             assertTrue(navigations.containsKey("group::/organization/management/executive-board"));
+            assertTrue(navigations.containsKey("group::/test/normalized"));
+            assertTrue(navigations.containsKey("group::/test/legacy"));
             assertTrue(navigations.containsKey("user::root"));
          }
       }.execute("root");
@@ -284,12 +286,14 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", "root");
             UserPortal userPortal = userPortalCfg.getUserPortal();
             List<UserNavigation> navigations = userPortal.getNavigations();
-            assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
+            assertEquals("expected to have 7 navigations instead of " + navigations, 7, navigations.size());
             assertEquals("classic", navigations.get(0).getKey().getName()); // 1
             assertEquals("/platform/administrators", navigations.get(1).getKey().getName()); // 2
             assertEquals("root", navigations.get(2).getKey().getName()); // 3
             assertEquals("/organization/management/executive-board", navigations.get(3).getKey().getName()); // 5
             assertEquals("/platform/users", navigations.get(4).getKey().getName()); // 8
+            assertEquals("/test/legacy", navigations.get(5).getKey().getName());
+            assertEquals("/test/normalized", navigations.get(6).getKey().getName());
          }
       }.execute("root");
    }
@@ -310,12 +314,14 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             UserPortal userPortal = userPortalCfg.getUserPortal();
             assertNotNull(userPortal.getNavigations());
             Map<String, UserNavigation> navigations = toMap(userPortal);
-            assertEquals("expected to have 5 navigations instead of " + navigations, 5, navigations.size());
+            assertEquals("expected to have 7 navigations instead of " + navigations, 7, navigations.size());
             assertTrue(navigations.containsKey("portal::jazz"));
             assertTrue(navigations.containsKey("group::/platform/administrators"));
             assertTrue(navigations.containsKey("group::/organization/management/executive-board"));
             assertTrue(navigations.containsKey("group::/platform/users"));
             assertTrue(navigations.containsKey("user::root"));
+            assertTrue(navigations.containsKey("group::/test/legacy"));
+            assertTrue(navigations.containsKey("group::/test/normalized"));
 
             queryPage();
          }
