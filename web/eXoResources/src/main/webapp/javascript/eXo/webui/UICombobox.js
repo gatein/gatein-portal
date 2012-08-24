@@ -22,7 +22,7 @@ eXo.webui.UICombobox = {
   init : function(textbox) {
     if (typeof (textbox) == "string")
       textbox = document.getElementById(textbox);
-    textbox = gj(textbox).next("input");
+    textbox = $(textbox).next("input");
     var UICombobox = _module.UICombobox;
     var onfocus = textbox.attr("onfocus");
     var onclick = textbox.attr("onclick");
@@ -34,18 +34,18 @@ eXo.webui.UICombobox = {
 
   show : function(evt) {
     var uiCombo = _module.UICombobox;
-    uiCombo.items = gj(this.parentNode).find("a");
+    uiCombo.items = $(this.parentNode).find("a");
     if (uiCombo.list)
       uiCombo.list.style.display = "none";
-    uiCombo.list = gj(this.parentNode).find(".UIComboboxContainer").first()[0];
+    uiCombo.list = $(this.parentNode).find(".UIComboboxContainer").first()[0];
     uiCombo.list.parentNode.style.position = "absolute";
     uiCombo.fixForIE6(this);
     uiCombo.list.style.display = "block";
     uiCombo.list.style.top = this.offsetHeight + "px";
     uiCombo.list.style.width = this.offsetWidth + "px";
     uiCombo.setSelectedItem(this);
-    gj(uiCombo.list).one("mousedown", false);
-    gj(document).one("mousedown", uiCombo.hide);
+    $(uiCombo.list).one("mousedown", false);
+    $(document).one("mousedown", uiCombo.hide);
   },
 
   getSelectedItem : function(textbox) {
@@ -61,15 +61,15 @@ eXo.webui.UICombobox = {
 
   setSelectedItem : function(textbox) {
     if (this.lastSelectedItem)
-      gj(this.lastSelectedItem).removeClass("UIComboboxSelectedItem");
+      $(this.lastSelectedItem).removeClass("UIComboboxSelectedItem");
     var selectedIndex = parseInt(this.getSelectedItem(textbox));
     if (selectedIndex >= 0) {
-      gj(this.items[selectedIndex]).addClass("UIComboboxSelectedItem");
+      $(this.items[selectedIndex]).addClass("UIComboboxSelectedItem");
       this.lastSelectedItem = this.items[selectedIndex];
       var y = base.Browser.findPosYInContainer(this.lastSelectedItem,
           this.list);
       this.list.firstChild.scrollTop = y;
-      var hidden = gj(textbox).prev("input")[0];
+      var hidden = $(textbox).prev("input")[0];
       hidden.value = this.items[selectedIndex].getAttribute("value");
 
     }
@@ -78,7 +78,7 @@ eXo.webui.UICombobox = {
   fixForIE6 : function(obj) {
     if (!base.Browser.isIE6())
       return;
-    if (gj(this.list).children("iframe").length > 0)
+    if ($(this.list).children("iframe").length > 0)
       return;
     var iframe = document.createElement("iframe");
     iframe.frameBorder = 0;
@@ -106,11 +106,11 @@ eXo.webui.UICombobox = {
       sVal = sVal.substring(0, sVal.length - 1)
     if (sVal.length < 1)
       return;
-    var data = eval(obj.getAttribute("options").trim());
+    var data = eval($.trim(obj.getAttribute("options")));
     var len = data.length;
     var tmp = null;
     for ( var i = 0; i < data.length; i++) {
-      tmp = data[i].trim();
+      tmp = $.trim(data[i]);
       var idx = tmp.toLowerCase().indexOf(sVal, 0);
       if (idx == 0 && tmp.length > sVal.length) {
         obj.value = data[i];
@@ -134,10 +134,10 @@ eXo.webui.UICombobox = {
   getValue : function(obj) {
     var UICombobox = _module.UICombobox;
     var val = obj.getAttribute("value");
-    var hiddenField = gj(UICombobox.list.parentNode).next("input");
+    var hiddenField = $(UICombobox.list.parentNode).next("input");
     hiddenField.attr("value", val);
     var text = hiddenField.next("input");
-    text.attr("value", gj(obj).find(".UIComboboxLabel").first().html());
+    text.attr("value", $(obj).find(".UIComboboxLabel").first().html());
     UICombobox.list.style.display = "none";
   }
 };

@@ -26,25 +26,28 @@
    	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
 
 
-  <module>
+  <scripts>
     <name>jquery-1.6.4</name>
     <script>
       <name>jquery-1.6.4</name>
       <path>/javascript/jquery-1.6.4.js</path>
     </script>
-  </module>
+  </scripts>
 
   <portlet>
     <name>JQueryPortlet</name>
-    <module>
+    <scripts>
       <script>
         <name>version</name>
         <path>/javascript/version.js</path>
       </script>
       <depends>
-        <module>jquery-1.6.4</module>
+        <scripts>jquery-1.6.4</scripts>
       </depends>
-    </module>
+      <depends>
+        <scripts>bootstrap</scripts>
+      </depends>
+    </scripts>
   </portlet>
 
 </gatein-resources>

@@ -26,15 +26,15 @@ function initTabbedDashboardPortlet(id)
    */
   var inRequest = false;
 
-  require(['SHARED/jquery'], function(gj){
+  require(['SHARED/jquery'], function($){
     
-    var tab = gj("#" + id);
+    var tab = $("#" + id);
     tab.find(".AddDashboard").on("click", function() {
       showAddTabInput(this); 
     });
 
     tab.on("dblclick", ".SelectedTab > span", function() {
-      var span = gj(this);
+      var span = $(this);
       showEditLabelInput(this, span.attr("id"), span.text()); 
     });
     
@@ -58,15 +58,15 @@ function initTabbedDashboardPortlet(id)
 
     function showEditLabelInput(target, nodeName, currentLabel)
     {
-      var jqObj = gj(target);
+      var jqObj = $(target);
 
-      var input = gj("<input>").attr({type : "text", id : nodeName, name : currentLabel, value : currentLabel, maxLength : 50});
+      var input = $("<input>").attr({type : "text", id : nodeName, name : currentLabel, value : currentLabel, maxLength : 50});
       input.css("border", "1px solid #b7b7b7").css("width", (target.offsetWidth - 2) + "px");
 
       jqObj = jqObj.replaceWith(input);
       input.blur(function()
       {
-        gj(this).replaceWith(jqObj);
+        $(this).replaceWith(jqObj);
       });
 
       input.keypress(function(e)
@@ -74,11 +74,11 @@ function initTabbedDashboardPortlet(id)
         var keyNum = e.keyCode ? e.keyCode : e.which;
         if (keyNum == 13)
         {
-          renameTabLabel(gj(this));
+          renameTabLabel($(this));
         }
         else if (keyNum == 27)
         {
-          gj(this).replaceWith(jqObj);
+          $(this).replaceWith(jqObj);
         }
       });
 
@@ -111,7 +111,7 @@ function initTabbedDashboardPortlet(id)
 
     function showAddTabInput(addButton)
     {
-      var jqAddButton = gj(addButton);
+      var jqAddButton = $(addButton);
       var tabs = jqAddButton.parent().children("div.UITab");
 
       var newTab = jqAddButton.prevAll("div.SelectedTab").eq(0).clone();
@@ -119,7 +119,7 @@ function initTabbedDashboardPortlet(id)
 
       var portletID = jqAddButton.closest("div.PORTLET-FRAGMENT").parent().attr("id");
 
-      var input = gj("<input>").attr({type : "text", id : portletID , maxlength : 50, value : "Tab_" + tabs.length});
+      var input = $("<input>").attr({type : "text", id : portletID , maxlength : 50, value : "Tab_" + tabs.length});
       input.css({"border" : "1px solid #b7b7b7", "width" : "80px"});
 
       newTab.find("span").eq(0).replaceWith(input);
@@ -127,7 +127,7 @@ function initTabbedDashboardPortlet(id)
 
       input.blur(function()
       {
-        gj(this).closest(".UITab").remove();
+        $(this).closest(".UITab").remove();
       });
 
       input.keypress(function(e)
@@ -135,11 +135,11 @@ function initTabbedDashboardPortlet(id)
         var keyNum = e.keyCode ? e.keyCode : e.which;
         if (keyNum == 13)
         {
-          createTab(gj(this));
+          createTab($(this));
         }
         else if (keyNum == 27)
         {
-          gj(this).closest(".UITab").remove();
+          $(this).closest(".UITab").remove();
         }
       });
 

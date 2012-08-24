@@ -125,14 +125,14 @@
 
    <module>
       <name>jquery</name>     
-      <as>gj</as> 
+      <as>$</as> 
       <script>
          <name>jquery</name>
-         <path>/javascript/exo-jquery-1.7.1.js</path>
+         <path>/javascript/jquery-1.7.1.js</path>
       </script>
       <script>
-         <name>exo-jquery-alias</name>
-         <path>/javascript/exo-jquery-alias.js</path>
+         <name>jquery-patch</name>
+         <path>/javascript/jquery-patch.js</path>
       </script>
    </module>
 
@@ -416,27 +416,6 @@
       <depends>
          <module>jquery</module>
       </depends>
-   </module>
-
-   <module>
-     <name>shindigPatch</name>
-     <script>
-       <name>eXo.gadget.Gadgets</name>
-       <path>/javascript/eXo/gadget/Gadgets.js</path>
-     </script>
-     <script>
-       <name>eXo.gadget.ExoBasedUserPrefStore</name>
-       <path>/javascript/eXo/gadget/ExoBasedUserPrefStore.js</path>
-     </script>
-     <depends>
-       <module>common</module>
-     </depends>
-     <depends>
-       <module>gadget</module>
-     </depends>
-     <depends>
-       <module>jquery</module>
-     </depends>
    </module>
    
 </gatein-resources>

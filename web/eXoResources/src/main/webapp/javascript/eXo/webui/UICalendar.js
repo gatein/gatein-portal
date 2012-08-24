@@ -158,7 +158,7 @@ eXo.webui.UICalendar = {
     clndr.firstChild.lastChild.innerHTML = this.renderCalendar();
     // var x = 0 ;
     var y = this.dateField.offsetHeight;
-    var beforeShow = gj(window).height();
+    var beforeShow = $(window).height();
     with (clndr.firstChild.style) {
       display = 'block';
       // left = x + "px" ;
@@ -168,7 +168,7 @@ eXo.webui.UICalendar = {
       else
         right = "0px";
     }
-    var posCal = gj(this.dateField).offset().top - y;
+    var posCal = $(this.dateField).offset().top - y;
     var heightCal = document.getElementById('BlockCaledar');
     var afterShow = posCal + heightCal.offsetHeight;
     if (afterShow > beforeShow) {
@@ -177,7 +177,7 @@ eXo.webui.UICalendar = {
 
     _module.UICalendar.initDragDrop();
 
-    var primary = gj(this.dateField).closest("#UIECMSearch");
+    var primary = $(this.dateField).closest("#UIECMSearch");
     if (primary.length && base.Browser.isFF()) {
       var calendar = clndr.firstChild;
       calendar.style.top = "0px";
@@ -319,7 +319,7 @@ eXo.webui.UICalendar = {
   },
 
   initDragDrop : function() {
-    var drag = gj("#BlockCaledar");
+    var drag = $("#BlockCaledar");
     var component = drag.closest(".UICalendarComponent");    
     var calendar = drag.children(".UICalendar").first();
     var innerWidth = drag[0].offsetWidth;
@@ -403,7 +403,7 @@ eXo.webui.UICalendar = {
     if (second.length < 2)
       second = "0" + second;
 
-    var dateString = this.datePattern.trim();
+    var dateString = $.trim(this.datePattern);
     if (!this.isDisplayTime) {
       var ptStrings = dateString.split(" ");
       for ( var i = 0; i < ptStrings.length; i++) {

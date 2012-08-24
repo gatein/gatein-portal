@@ -34,11 +34,10 @@ var eXoGadget = {
     eXo.gadgets = window.gadgets;
     gadgets.pubsubURL = hostName + '/js/gatein-container.js?c=1' + (debug ? "&debug=1": "") + (nocache ? "&nocache=1" : "&nocache=0");  
     var args = arguments;
-	require([gadgets.pubsubURL, 'SHARED/shindigPatch'], 
-		function() {
+	  require([gadgets.pubsubURL], function() {
 			//Make sure that 2 modules in shindig-patch has been loaded already
 			require(["eXo.gadget.Gadgets", "eXo.gadget.ExoBasedUserPrefStore"], function() {_module.UIGadget.createCallback.apply(window, args)});
-	});
+	  });
   },
 
   createCallback : function(url, id, metadata, userPref, view, hostName, debug, nocache)
@@ -74,7 +73,7 @@ var eXoGadget = {
     var gadgetBlock = document.getElementById(id);
     gadgetBlock.innerHTML = "<div id='gadget_" + gadget.id + "' class='UIGadgetContent'> </div>";
     gadgets.container.renderGadget(gadget);
-    var uiGadget = gj(gadgetBlock).closest(".UIGadget");
+    var uiGadget = $(gadgetBlock).closest(".UIGadget");
     if (uiGadget.length > 0)
     {      
       if (metadata && metadata.modulePrefs.title != null && metadata.modulePrefs.title.length > 0)
@@ -95,20 +94,20 @@ var eXoGadget = {
   init : function(uiGadget)
   {
     if (typeof (uiGadget) == "string") uiGadget = document.getElementById(uiGadget);
-    var gadget = gj(uiGadget);
+    var gadget = $(uiGadget);
     var portletFrag = gadget.closest(".PORTLET-FRAGMENT");
 
     if (portletFrag.length == 0)
     {
       gadget.mouseover(function()
       {
-        gj(this).find("div.GadgetControl").css("visibility", "visible");
+        $(this).find("div.GadgetControl").css("visibility", "visible");
         return false;
       });
 
       gadget.mouseout(function()
       {
-        gj(this).find("div.GadgetControl").css("visibility", "hidden").css("border", "none");
+        $(this).find("div.GadgetControl").css("visibility", "hidden").css("border", "none");
         return false;
       });
     }
@@ -145,7 +144,7 @@ var eXoGadget = {
       }
       common.DragDrop.init(dragArea, uiGadget);
 
-      var desktopPage = gj("#UIPageDesktop");
+      var desktopPage = $("#UIPageDesktop");
       var offsetHeight = desktopPage.offsetHeight - uiGadget.offsetHeight;
       var offsetWidth = desktopPage.offsetWidth - uiGadget.offsetWidth;
       var dragPosX = uiGadget.offsetLeft;
@@ -173,10 +172,10 @@ var eXoGadget = {
       {
         desktopPage.children("div.UIGadget").each(function()
         {
-          var mask = gj(this).find("div.UIMask").eq(0);
+          var mask = $(this).find("div.UIMask").eq(0);
           if (mask)
           {
-            var c = gj(this).find("div.gadgets-gadget-content")[0];
+            var c = $(this).find("div.gadgets-gadget-content")[0];
             mask.css({"marginTop" : -c.offsetHeight + "px", "height" : c.offsetHeight + "px", "width" : c.offsetWidth + "px", "backgroundColor" : "white", "display" : "block"});
             mask.fadeTo(0, 0.03);
           }
@@ -202,7 +201,7 @@ var eXoGadget = {
       {
         desktopPage.children("div.UIGadget").each(function()
         {
-          var mask = gj(this).find("div.UIMask").eq(0);
+          var mask = $(this).find("div.UIMask").eq(0);
           if (mask)
           {
             mask.css("display", "none");
@@ -241,7 +240,7 @@ var eXoGadget = {
    */
   editGadget : function(id)
   {
-    var tempId = gj("#" + id).find("iframe.gadgets-gadget").attr("id").split('_')[2];
+    var tempId = $("#" + id).find("iframe.gadgets-gadget").attr("id").split('_')[2];
     gadgets.container.getGadget(tempId).handleOpenUserPrefsDialog();
   },
 
@@ -251,7 +250,7 @@ var eXoGadget = {
    */
   minimizeGadget: function(icon)
   {
-    var minIcon = gj(icon);
+    var minIcon = $(icon);
     var gadget = minIcon.closest(".UIGadget");
     var portletFrag = gadget.closest(".PORTLET-FRAGMENT");
     if (portletFrag.length == 0)
@@ -296,7 +295,7 @@ var eXoGadget = {
    */
   maximizeGadget: function(icon)
   {
-    var maxIcon = gj(icon);
+    var maxIcon = $(icon);
     var gadget = maxIcon.closest(".UIGadget");
     var portletFrag = gadget.closest(".PORTLET-FRAGMENT");
     if (portletFrag.length == 0)
@@ -320,7 +319,7 @@ var eXoGadget = {
    */
   deleteGadget : function(icon)
   {
-    var closeIcon = gj(icon);
+    var closeIcon = $(icon);
     var gadget = closeIcon.closest(".UIGadget");
     var portletFrag = gadget.closest(".PORTLET-FRAGMENT");
 
@@ -377,7 +376,7 @@ var eXoGadget = {
    */
   saveWindowProperties : function(object)
   {
-    var gadget = gj(object);
+    var gadget = $(object);
     var blockID = gadget.closest(".UIPage").find("div.id").html();
     var params = [
       {name: "objectId", value : object.id},
@@ -394,7 +393,7 @@ var eXoGadget = {
    */
   resizeFullHeight : function(componentId)
   {
-    var portletFrag = gj("#" + componentId).closest(".PORTLET-FRAGMENT");
+    var portletFrag = $("#" + componentId).closest(".PORTLET-FRAGMENT");
     base.Browser.fillUpFreeSpace(portletFrag[0]);
   }
 };

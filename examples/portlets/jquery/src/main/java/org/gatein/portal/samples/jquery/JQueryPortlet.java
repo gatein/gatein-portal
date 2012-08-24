@@ -34,10 +34,6 @@ public class JQueryPortlet extends GenericPortlet
    @Override
    public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException
    {
-      //Two lines of code below ensure that ON-LOAD resources jquery is available in the rendering phase
-      //We need this as the JQueryPortlet resource does not declare dependency on jquery resource
-      response.addProperty("org.gatein.javascript.dependency", "jquery");
-
       String view = request.getParameter("view");
       if(view == null || !view.endsWith(".jsp"))
       {

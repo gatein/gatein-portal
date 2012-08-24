@@ -19,7 +19,7 @@
 var uiLanguageSelector = {
 	init : function(selected, selectOptions) {
 		var selector = _module.UILanguageSelector;
-		var langForm = gj(".UIChangeLanguageForm");
+		var langForm = $(".UIChangeLanguageForm");
 		var saveButton = langForm.find(".UIAction a").first(); 
 		var href = saveButton.attr("href");
 		saveButton.on("click", function() {selector.changeLanguage(href);return false;});		
@@ -27,7 +27,7 @@ var uiLanguageSelector = {
         selector.SelectedItem = {"component": selected.component, "option" : selected.option};
         langForm.find(".NodeLabel").parent().each(function(index) {
         	var opt = selectOptions[index];
-        	gj(this).on("click", function() {
+        	$(this).on("click", function() {
             	_module.UIItemSelector.onClickOption(this, null, opt.component, opt.option);
             });
         });

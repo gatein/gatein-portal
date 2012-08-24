@@ -27,7 +27,7 @@ var uiUserSelector = {
   init : function(cont) {
     if (typeof (cont) == "string")
       cont = document.getElementById(cont);
-    var jCont = gj(cont);
+    var jCont = $(cont);
     var checkboxes = jCont.find("input.checkbox");
     checkboxes.each(function(index)
     {
@@ -43,13 +43,13 @@ var uiUserSelector = {
             
     jCont.find("input[name='Quick Search']").on("keypress", function(event) {    		
     	if (_module.UIUserSelector.isEnterPress(event)) {
-    		gj.globalEval(gj(this).nextAll(".SearchIcon").attr("href"));
+    		$.globalEval($(this).nextAll(".SearchIcon").attr("href"));
     		return false;
     	}
     });
     jCont.find("input[name='group']").on("keypress", function(event) {
     	if (_module.UIUserSelector.isEnterPress(event)) {
-    		gj.globalEval(gj(this).nextAll(".SearchIcon").attr("href"));
+    		$.globalEval($(this).nextAll(".SearchIcon").attr("href"));
     		return false;
     	}
     });
@@ -67,7 +67,7 @@ var uiUserSelector = {
    *          obj first object of table
    */
   getItems : function(obj) {
-    return gj(obj).parent().closest("table").find("input.checkbox").get();
+    return $(obj).parent().closest("table").find("input.checkbox").get();
   },
   /**
    * Check and uncheck first item

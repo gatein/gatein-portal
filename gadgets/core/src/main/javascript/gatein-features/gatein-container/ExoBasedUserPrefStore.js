@@ -17,12 +17,12 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-define("eXo.gadget.ExoBasedUserPrefStore", ["SHARED/jquery"], function(gj) {	
+define("eXo.gadget.ExoBasedUserPrefStore", ["SHARED/jquery", "eXo.gadget.Gadgets"], function($, gadgets) {	
 gadgets.ExoBasedUserPrefStore = function() {
   gadgets.UserPrefStore.call(this);
 };
 
-gadgets.ExoBasedUserPrefStore.inherits(gadgets.UserPrefStore);
+gadgets.eXoUtil.inherits(gadgets.ExoBasedUserPrefStore, gadgets.UserPrefStore);
 
 gadgets.ExoBasedUserPrefStore.prototype.getPrefs = function(gadget) {
   return gadget.userPrefs_;
@@ -32,7 +32,7 @@ gadgets.ExoBasedUserPrefStore.prototype.savePrefs = function(gadget, newPrefs)
 {
   var prefs = gadgets.json.stringify(newPrefs || gadget.userPrefs_);
   var encodedPrefs = encodeURIComponent(prefs);
-  var ggWindow = gj("#gadget_" + gadget.id);
+  var ggWindow = $("#gadget_" + gadget.id);
   if (ggWindow.length > 0)
   {
     var compID = ggWindow.parent().attr("id").replace(/^content-/, "");

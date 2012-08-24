@@ -25,20 +25,20 @@
 var uiFormInputThemeSelector = {
 
   initForm : function() {
-	  gj(".UIFormInputThemeSelector").find(".SetDefault").on("click", function() {
+	  $(".UIFormInputThemeSelector").find(".SetDefault").on("click", function() {
 		  _module.UIFormInputThemeSelector.setDefaultTheme(this,'DefaultTheme');
 	  });	  
   },
   
   initSelector : function() {
-	  gj(".UIFormInputThemeSelector").find(".UIThemeSelector").parent().on("click", function() {
-		  var theme = gj(this).children("div").attr("class").replace("UIThemeSelector ", "");
+	  $(".UIFormInputThemeSelector").find(".UIThemeSelector").parent().on("click", function() {
+		  var theme = $(this).children("div").attr("class").replace("UIThemeSelector ", "");
 		  _module.UIFormInputThemeSelector.showThemeSelected(this, theme); 
 	  });
   },
   
   showThemeSelected : function(obj, param) {
-    var jqObj = gj(obj);
+    var jqObj = $(obj);
     var itemListContainer = jqObj.parent().closest(".ItemListContainer");
     var detailList = itemListContainer.next("div").find("div.UIThemeSelector").eq(0);
     detailList.next("div").html(jqObj.find("div.NameStyle").eq(0).html());
@@ -48,7 +48,7 @@ var uiFormInputThemeSelector = {
   },
 
   setDefaultTheme : function(obj, param) {
-    var itemDetailList = gj(obj).parent().closest(".ItemDetailList");
+    var itemDetailList = $(obj).parent().closest(".ItemDetailList");
     var detailList = itemDetailList.find("div.UIThemeSelector").eq(0);
     detailList.attr("class", "UIThemeSelector " + param);
 
@@ -67,7 +67,7 @@ eXo.webui.UIPageTemplateOptions = {
    * action UIDropDownControl.js : set this method to do
    */
   selectPageLayout : function(id, selectedIndex) {
-    var dropDownControl = gj("#" + id);
+    var dropDownControl = $("#" + id);
     var itemSelectorAncest = dropDownControl.closest(".ItemSelectorAncestor");
     var itemList = itemSelectorAncest.find("div.ItemList");
     var itemSelectorLabel = itemSelectorAncest.find("a.OptionItem");
@@ -83,7 +83,7 @@ eXo.webui.UIPageTemplateOptions = {
         if (itemDetailList.length < 1)
           continue;
         itemDetailList[i].style.display = "block";
-        var selectedItem = gj(itemList[i]).find("div.SelectedItem").eq(0);
+        var selectedItem = $(itemList[i]).find("div.SelectedItem").eq(0);
         if (!selectedItem || selectedItem == null)
           continue;
         var setValue = selectedItem.find("#SetValue")[0];

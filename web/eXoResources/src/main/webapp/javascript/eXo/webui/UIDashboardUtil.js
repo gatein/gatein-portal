@@ -27,7 +27,7 @@ var uiDashboardUtil = {
 	  	if(uiWorkspaceContainer!=null && uiWorkspaceContainer.style.display!="none"
 	  					 && browser.isIE()){
 	  		var uiPageDesktop = document.getElementById("UIPageDesktop");
-        var jqObj = gj(obj);
+        var jqObj = $(obj);
 	  		if( (uiPageDesktop!=null && jqObj.hasClass("UIPageDesktop") && browser.isIE7())
 	  					|| (uiPageDesktop==null && jqObj.hasClass("PORTLET-FRAGMENT")) ){
 	  			curleft += (obj.offsetLeft - uiWorkingWorkspace.offsetLeft);
@@ -44,7 +44,7 @@ var uiDashboardUtil = {
 	isIn : function(x, y, component) {
 	  var componentLeft = _module.UIDashboardUtil.findPosX(component);
 	  var componentRight = componentLeft + component.offsetWidth ;
-	  var componentTop = gj(component).offset().top;
+	  var componentTop = $(component).offset().top;
 	  var componentBottom = componentTop + component.offsetHeight ;
 	  var isOver = false ;
 
@@ -65,7 +65,7 @@ var uiDashboardUtil = {
 	
 	findColIndexInDashboard : function(dragObj){
     var index = 0;
-    gj(dragObj).parent().prevAll("div.UIColumn").each(function()
+    $(dragObj).parent().prevAll("div.UIColumn").each(function()
     {
       index++;
     });
@@ -81,7 +81,7 @@ var uiDashboardUtil = {
       var left = _module.UIDashboardUtil.findPosX(this) - scrollLeft;
       if(left <= x && x < left + this.offsetWidth)
       {
-        column = gj(this);
+        column = $(this);
         return false;
       }
     });
@@ -91,7 +91,7 @@ var uiDashboardUtil = {
 	
 	findRowIndexInDashboard : function(dragObj){
     var row = 0;
-    gj(dragObj).prevAll("div").each(function()
+    $(dragObj).prevAll("div").each(function()
     {
       if(this.id == dragObj.id)
       {

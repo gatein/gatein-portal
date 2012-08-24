@@ -29,9 +29,9 @@
 * calls
 */
 eXo.core.Browser = {
-  onLoadCallback : new _module.HashMap(),
-  onResizeCallback : new _module.HashMap(),
-  onScrollCallback : new _module.HashMap(),
+  onLoadCallback : {},
+  onResizeCallback : {},
+  onScrollCallback : {},
   
   breakStream : null,
   
@@ -184,7 +184,7 @@ eXo.core.Browser = {
 	
 	managerResize : function() {
 	  var browser = _module.Browser;
-	  var jWin = gj(window);
+	  var jWin = $(window);
 	  if(browser.currheight != jWin.height()) {
 	    clearTimeout(browser.breakStream) ;
 	    browser.breakStream = setTimeout(browser.onResize, 100) ;
@@ -219,7 +219,7 @@ eXo.core.Browser = {
 	 * Adds a function to the list of functions to call on load
 	 */
 	addOnLoadCallback : function(id, method) {
-	  this.onLoadCallback.put(id, method) ;
+	  this.onLoadCallback[id] = method;
 	},
 	
 	/**
@@ -227,19 +227,19 @@ eXo.core.Browser = {
 	 * and clean the array
 	 */
 	onLoad : function() {
-	  var callback = _module.Browser.onLoadCallback ;
-	  for(var name in callback.properties) {
-	    var method = callback.get(name) ;
+	  var callback = _module.Browser.onLoadCallback;
+	  for(var name in callback) {
+	    var method = callback[name];
 	    if (typeof(method) == "function") try{method()}catch(e){};
 	  }
-	  this.onLoadCallback = new _module.HashMap();
+	  this.onLoadCallback = {};
 	},
 	
 	/**
 	 * Adds a function to the list of functions to call when the window is resized
 	 */
 	addOnResizeCallback : function(id, method) {
-	  this.onResizeCallback.put(id, method) ;
+	  this.onResizeCallback[id] = method;
 	},
 	
 	/**
@@ -247,8 +247,8 @@ eXo.core.Browser = {
 	 */
 	onResize : function(event) {
 	  var callback = _module.Browser.onResizeCallback ;
-	 for(var name in callback.properties) {
-	   var method = callback.get(name) ;
+	 for(var name in callback) {
+	   var method = callback[name];
 	   if (typeof(method) == "function") method(event) ;
 	 }
 	},
@@ -257,7 +257,7 @@ eXo.core.Browser = {
 	 * Adds a function to the list of functions to call when the user scrolls
 	 */
 	addOnScrollCallback : function(id, method) {
-	  this.onScrollCallback.put(id, method) ;
+	  this.onScrollCallback[id] = method;
 	},
 	
 	/**
@@ -265,8 +265,8 @@ eXo.core.Browser = {
 	 */
 	onScroll : function(event) {
 	  var callback = _module.Browser.onScrollCallback ;
-	  for(var name in callback.properties) {
-	    var method = callback.get(name) ;
+	  for(var name in callback) {
+	    var method = callback[name];
 	    try {
 	      if (typeof(method) == "function") method(event) ;
 	    }catch(err){}
@@ -277,7 +277,7 @@ eXo.core.Browser = {
 	 * Returns the horizontal position of an object relative to the window
 	 */
 	findPosX : function(obj, isRTL) {
-	  var curleft = gj(obj).offset().left;
+	  var curleft = $(obj).offset().left;
 	  // if RTL return right position of obj
 	  if(isRTL) return curleft + obj.offsetWidth;
 	  return curleft;
@@ -299,8 +299,8 @@ eXo.core.Browser = {
 	 */
 	findPosYInContainer : function(obj, container) {
 	  var browser = _module.Browser;
-	  var objY = gj(obj).offset().top;
-	  var containerY = gj(container).offset().top;
+	  var objY = $(obj).offset().top;
+	  var containerY = $(container).offset().top;
 	  return (objY - containerY);
 	},		
 	
@@ -311,7 +311,7 @@ eXo.core.Browser = {
 	  var browser = _module.Browser;
 	  var posXObject = browser.findPosX(object,isRTL) ;	  
 	  if (!e) e = window.event;
-	  e = gj.event.fix(e);
+	  e = $.event.fix(e);
 	  var mouseX = e.pageX;  
 	  return mouseX == -1 ? -1 : mouseX - posXObject ;
 	},
@@ -321,9 +321,9 @@ eXo.core.Browser = {
 	 */
 	findMouseRelativeY : function(object, e) {
 	  var browser = _module.Browser;
-	  var posYObject = gj(object).offset().top;
+	  var posYObject = $(object).offset().top;
 	  if (!e) e = window.event;
-	  e = gj.event.fix(e);
+	  e = $.event.fix(e);
 	  var mouseY = e.pageY;  
 	  return  mouseY == -1 ? -1 : mouseY - posYObject ;
 	},
@@ -387,7 +387,7 @@ eXo.core.Browser = {
 	  for(var k = 0; k < ln; k++) {
 	    height += elements[k].offsetHeight ;
 	  }
-	  return (gj(window).height() - height);
+	  return ($(window).height() - height);
 	},
 	
 	/**

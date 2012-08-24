@@ -21,7 +21,7 @@ eXo.webui.UIDropDownControl = {
 
   init : function(id, webui)
   {
-    var elmt = gj('#' + id);
+    var elmt = $('#' + id);
     elmt.find('.UIDropDownTitle').on('click', this.showEvt);
     elmt.find('a.OptionItem').on('click', this.onclickEvt);
     elmt.find(".TopItemContainer").on('mousedown', function() {
@@ -49,7 +49,7 @@ eXo.webui.UIDropDownControl = {
    *          evet event object
    */
   showEvt : function() {
-    var dropDownAnchor = gj(this).next("div");
+    var dropDownAnchor = $(this).next("div");
     if(!dropDownAnchor)
     {
       return;
@@ -66,7 +66,7 @@ eXo.webui.UIDropDownControl = {
       topCont.css("display", "block");
       bottomCont.css("display", "block");
 
-      var visibleHeight = gj(window).height() - gj(middleCont[0]).offset().top - 40;
+      var visibleHeight = $(window).height() - $(middleCont[0]).offset().top - 40;
       if(middleCont[0].scrollHeight > visibleHeight)
       {
         middleCont.css("height", visibleHeight - topCont[0].offsetHeight - bottomCont[0].offsetHeight + "px");
@@ -81,9 +81,9 @@ eXo.webui.UIDropDownControl = {
         middleCont.css("height", "auto");
       }
 
-      gj(document).one("click", function()
+      $(document).one("click", function()
       {
-    	  gj(document).one("click", function()
+    	  $(document).one("click", function()
     	  {
 	        dropDownAnchor.css("display", "none");
     	  });
@@ -113,9 +113,9 @@ eXo.webui.UIDropDownControl = {
    *          obj selected object
    */
   onclickEvt : function() {
-    var dropDownAnchor = gj(this).parents("div.UIDropDownAnchor");
+    var dropDownAnchor = $(this).parents("div.UIDropDownAnchor");
     var dropDownMiddleTitle = dropDownAnchor.prev("div.UIDropDownTitle").find("div.DropDownSelectLabel");
-    dropDownMiddleTitle.html(gj(this).html());
+    dropDownMiddleTitle.html($(this).html());
 
     dropDownAnchor.css("display", "none");
   }

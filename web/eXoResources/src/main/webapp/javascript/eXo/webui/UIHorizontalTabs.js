@@ -26,7 +26,7 @@ eXo.webui.UIHorizontalTabs = {
   init : function(id) {
     if(id)
     {
-      gj("#" + id).find("div.TabsContainer").find("div.UITab").find("div.MiddleTab").not(".LockedTab").on("click", function()
+      $("#" + id).find("div.TabsContainer").find("div.UITab").find("div.MiddleTab").not(".LockedTab").on("click", function()
       {
         eXo.webui.UIHorizontalTabs.displayTabContent(this);
       });
@@ -45,8 +45,8 @@ eXo.webui.UIHorizontalTabs = {
    * (display: block) if tabId are provided, can get the tab content by Ajax
    */
   changeTabForUITabPane : function(clickedEle, tabId, url) {
-    var uiSelectTab = gj(clickedEle).parents(".UITab").eq(0);
-    var uiHorizontalTabs = gj(clickedEle).parents(".UIHorizontalTabs");
+    var uiSelectTab = $(clickedEle).parents(".UITab").eq(0);
+    var uiHorizontalTabs = $(clickedEle).parents(".UIHorizontalTabs");
     var uiTabs = uiHorizontalTabs.find("div.UITab");
     var parentdHorizontabTab = uiHorizontalTabs.parent();
     var contentTabContainer = parentdHorizontabTab.find("div.UITabContentContainer");
@@ -62,12 +62,12 @@ eXo.webui.UIHorizontalTabs = {
 
     uiTabs.each(function(index)
     {
-      var styleTabDiv = gj(this).children("div").eq(0);
+      var styleTabDiv = $(this).children("div").eq(0);
       if(styleTabDiv.attr("class") == "DisabledTab")
       {
         return;
       }
-      if (gj(this)[0] == uiSelectTab[0])
+      if ($(this)[0] == uiSelectTab[0])
       {
         styleTabDiv.removeAttr("class").attr("class", "SelectedTab");
         uiTabContents.eq(index).css("display", "block");

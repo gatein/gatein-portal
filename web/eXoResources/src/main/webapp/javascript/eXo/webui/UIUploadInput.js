@@ -52,10 +52,10 @@ var uiUploadInput = {
         return;
       }
       
-      var uploadCont = gj("#UploadInputContainer" + uploadId[i]);
+      var uploadCont = $("#UploadInputContainer" + uploadId[i]);
       uploadCont.on("click", ".DeleteFileLable, .Abort, .RemoveFile", (function(id) {
     		  return function() {
-    			  if (gj(this).hasClass("RemoveFile")) {
+    			  if ($(this).hasClass("RemoveFile")) {
     				  _module.UIUploadInput.deleteUpload(id, isDynamicMode && uploadId.length > 1);    			      			      		 
     			  } else {
     				  _module.UIUploadInput.abortUpload(id, isDynamicMode);
@@ -111,12 +111,12 @@ var uiUploadInput = {
   },
 
   showUploaded : function(id, fileName) {
-    this.listUpload.remove(id);
+    this.remove(id);
     var container = parent.document.getElementById('UploadInputContainer' + id);
     var element = document.getElementById('ProgressIframe' + id);
     element.innerHTML = "<span></span>";
 
-    jCont = gj(container);
+    jCont = $(container);
     var UploadInput = jCont.find('#UploadInput' + id);
     UploadInput.hide();
 
@@ -159,7 +159,7 @@ var uiUploadInput = {
     for (id in response.upload) {
       var container = parent.document.getElementById('UploadInputContainer'
           + id);
-      var jCont = gj(container);
+      var jCont = $(container);
       if (response.upload[id].status == "failed") {
         this.abortUpload(id);
         var message = jCont.children(".LimitMessage").first().html();
@@ -195,19 +195,19 @@ var uiUploadInput = {
     ajaxRequest('GET', url, false);
     
     var container = parent.document.getElementById('UploadInputContainer' + id);
-    var selectFileFrame = gj(container).find(".SelectFileFrame").first();
+    var selectFileFrame = $(container).find(".SelectFileFrame").first();
     selectFileFrame.hide();
 
     this.createEntryUpload(id, isDynamicMode);
   },
 
   abortUpload : function(id, isDynamicMode) {
-    this.listUpload.remove(id);
+    this.remove(id);
     var url = this.abortURL + id;
     ajaxRequest('GET', url, false);
     
     var container = parent.document.getElementById('UploadInputContainer' + id);
-    var jCont = gj(container);
+    var jCont = $(container);
     var progressIframe = jCont.find('#ProgressIframe' + id);
     progressIframe.hide();
 
@@ -227,7 +227,7 @@ var uiUploadInput = {
    */
   doUpload : function(id) {
     var container = parent.document.getElementById('UploadInputContainer' + id);
-    var jCont = gj(container);
+    var jCont = $(container);
     this.displayUploadButton(id);
     if (id instanceof Array) {
       for ( var i = 0; i < id.length; i++) {
@@ -280,6 +280,13 @@ var uiUploadInput = {
 
   upload : function(id) {
     setTimeout(function() {_module.UIUploadInput.doUpload(id)}, this.delayTime);
+  }, 
+  
+  remove : function(id) {
+  	var idx = $.inArray(id, _module.UIUploadInput.listUpload);
+  	if (idx !== -1) {
+  		_module.UIUploadInput.listUpload.splice(idx, 1);  		
+  	}
   }
 };
 

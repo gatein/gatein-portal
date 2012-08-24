@@ -21,7 +21,7 @@
  * Manages the main navigation menu on the portal
  */
 var portalNavigation = {
-  hideMenuTimeoutIds : new base.HashMap(),
+  hideMenuTimeoutIds : {},
   scrollMgr : null,
   
   /**
@@ -46,11 +46,11 @@ var portalNavigation = {
    * Calls the init function when the page loads
    */
   onLoad : function(baseId) {    
-	var uiNavPortlet = gj("#" + baseId);
+	var uiNavPortlet = $("#" + baseId);
 	if(uiNavPortlet.hasClass("UIHorizontalTabs")) _module.UIPortalNavigation.init(uiNavPortlet[0], uiNavPortlet[0]);
 	  
 	if (baseId === "UIHorizontalNavigation") {
-		gj(".UIHorizontalNavigation").slice(1).each(function() {gj(this).hide();});
+		$(".UIHorizontalNavigation").slice(1).each(function() {$(this).hide();});
 	}
   },
   
@@ -68,23 +68,23 @@ var portalNavigation = {
    */
   buildMenu : function(popupMenu) {
     var portalNav = _module.UIPortalNavigation;
-    var topContainer = gj(popupMenu);
+    var topContainer = $(popupMenu);
 
     // Top menu items
     topContainer.children(".UITab").each(function()
     {
-      var tab = gj(this);
+      var tab = $(this);
 
       var highlightClass = "UITab HighlightNavigationTab";
       tab.mouseenter(function()
       {
-        portalNav.mouseEnterTab(gj(this), highlightClass);
+        portalNav.mouseEnterTab($(this), highlightClass);
       });
 
       var actualClass = tab.attr("class");
       tab.mouseleave(function()
       {
-        portalNav.mouseLeaveTab(gj(this), actualClass);
+        portalNav.mouseLeaveTab($(this), actualClass);
       });
 
       tab.find("." + portalNav.containerStyleClass).first().css("minWidth", tab.width());
@@ -99,7 +99,7 @@ var portalNavigation = {
       }
       this.resized = false;
 
-      var jObj = gj(this);
+      var jObj = $(this);
       var items = jObj.find("." + portalNav.tabStyleClass);
       if (items.length == 0)
       {
@@ -109,7 +109,7 @@ var portalNavigation = {
       {
         jObj.on({"mouseenter" : portalNav.onMenuItemOver, "mouseleave" : portalNav.onMenuItemOut,
             "click" : function(event) {
-              var a = gj(event.target);
+              var a = $(event.target);
               var href = a.attr("href");
           	  if (!href || (href.indexOf("#") !== -1 && !a.attr("onclick"))) {
           		  event.stopPropagation();        		  
@@ -138,7 +138,7 @@ var portalNavigation = {
       var jsChilds = ajaxAsyncGetRequest(getNodeURL, false)
       try
       {
-        var data = gj.parseJSON(jsChilds);
+        var data = $.parseJSON(jsChilds);
       }
       catch (e)
       {
@@ -174,7 +174,7 @@ var portalNavigation = {
     var conts = tab.find("." + portalNav.containerStyleClass);
     if (conts.length)
     {
-      portalNav.hideMenuTimeoutIds.put(conts[0].id, window.setTimeout(function() {portalNav.hideMenu(conts[0].id); }, 300));
+      portalNav.hideMenuTimeoutIds[conts[0].id] = window.setTimeout(function() {portalNav.hideMenu(conts[0].id); }, 300);
     }
     return false;
   },
@@ -203,7 +203,7 @@ var portalNavigation = {
 
     var posXinBrowser = menuItemContainer.offset().left;
   	if(base.I18n.isLT()) {
-		if(posXinBrowser + menuItemContainer.width() >= gj(window).width()) {
+		if(posXinBrowser + menuItemContainer.width() >= $(window).width()) {
 			x += (tab.width() - menuItemContainer.width()) ;
 			menuItemContainer.css("left", x + "px");
 		}
@@ -216,7 +216,8 @@ var portalNavigation = {
   },
 
   cancelHideMenuContainer : function(containerId) {
-	  var timeout = _module.UIPortalNavigation.hideMenuTimeoutIds.remove(containerId);
+	  var timeout = _module.UIPortalNavigation.hideMenuTimeoutIds[containerId];
+	  _module.UIPortalNavigation.hideMenuTimeoutIds[containerId] = null;
       if (timeout) {
     	  window.clearTimeout(timeout) ;
       }
@@ -227,9 +228,9 @@ var portalNavigation = {
    */
   hideMenu : function(containerId) {
     var portalNav = _module.UIPortalNavigation;
-    portalNav.hideMenuTimeoutIds.remove(containerId);
+    portalNav.hideMenuTimeoutIds[containerId] = null;
 
-    var menuItemContainer = gj("#" + containerId);
+    var menuItemContainer = $("#" + containerId);
     if (menuItemContainer.length) {
       var id = menuItemContainer.attr("id");
       portalNav.superClass.pushHiddenContainer(id);
@@ -245,7 +246,7 @@ var portalNavigation = {
    * Changes the style of the button
    */
   onMenuItemOver : function() {
-    var menuItem = gj(this);
+    var menuItem = $(this);
     var portalNav = _module.UIPortalNavigation;
     
     var getNodeURL = menuItem.attr("exo:getNodeURL");
@@ -253,7 +254,7 @@ var portalNavigation = {
 	    if (getNodeURL && !subContainer.length) {
 		    var jsChilds = ajaxAsyncGetRequest(getNodeURL, false);
 		  	try {
-		  		var data = gj.parseJSON(jsChilds);
+		  		var data = $.parseJSON(jsChilds);
 		  	} catch (e) {
 	  	}	
 	  	if (!data || !data.length) {
@@ -282,9 +283,9 @@ var portalNavigation = {
     var x = menuItem.width();
     var y = menuItem.position().top;
     this.superClass.show(menuItemContainer[0]);
-    var posRight = gj(window).width() - base.Browser.findPosX(menuItem[0], true) ;
+    var posRight = $(window).width() - base.Browser.findPosX(menuItem[0], true) ;
     var rootX = (base.I18n.isLT() ? base.Browser.findPosX(menuItem[0]) : posRight) ;
-    if (x + menuItemContainer.width() + rootX > gj(window).width()) {
+    if (x + menuItemContainer.width() + rootX > $(window).width()) {
     	x -= (menuItemContainer.width() + menuItem.width()) ;
     }
     this.superClass.setPosition(menuItemContainer[0], x, y, base.I18n.isRT());
@@ -295,14 +296,17 @@ var portalNavigation = {
    * Checks if this item has a sub menu, if yes calls methods from superClass to hide it
    */
   onMenuItemOut : function() {
-    var menuItem = gj(this);
+    var menuItem = $(this);
     var portalNav = _module.UIPortalNavigation;
 
     var subContainer = menuItem.find("." + portalNav.containerStyleClass).first();
     if (subContainer.length) {
       var id = subContainer.attr("id");
       portalNav.superClass.pushHiddenContainer(id);
-      portalNav.superClass.currentVisibleContainers.remove(id);
+      var index = $.inArray(id, portalNav.superClass.currentVisibleContainers);
+      if(index !== -1) {
+      	portalNav.superClass.currentVisibleContainers.splice(index, 1);
+      }
       portalNav.superClass.setCloseTimeout(200);
     }
   },
@@ -315,7 +319,7 @@ var portalNavigation = {
    */
   loadScroll : function(portalNavId) {
     var uiNav = _module.UIPortalNavigation;
-    var portalNav = gj("#" + portalNavId);
+    var portalNav = $("#" + portalNavId);
     if (!portalNav.length) return;
     
     // Creates new ScrollManager and initializes it

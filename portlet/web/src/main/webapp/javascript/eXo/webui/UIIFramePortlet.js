@@ -19,8 +19,8 @@
 
 eXo.IFramePortlet = {
   adjustHeight : function(id) {
-    require([ "SHARED/jquery" ], function(gj) {
-      var frameDiv = gj('#' + id);
+    require([ "SHARED/jquery" ], function($) {
+      var frameDiv = $('#' + id);
       var portletFrag = frameDiv.closest(".PORTLET-FRAGMENT");
 
       frameDiv.css("height", "98%");
