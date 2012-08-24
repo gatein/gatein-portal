@@ -17,7 +17,6 @@
    <modules>
       <module>api</module>
       <module>jquery</module>
-      <module>jsfhellouser</module>
       <module>jsphellouser</module>
       <module>simplesthelloworld</module>
       <module>struts-jpetstore</module>
