@@ -4,12 +4,13 @@
 	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();
-  String id = jsmanager.generateUUID();
-  jsmanager.addJavascript("eXo.IFramePortlet.adjustHeight('" + id + "');");
+   String id = jsmanager.generateUUID();   
 %>
 
 <div class="UIIFramePortlet" id="$id">
-	<%if( _ctx.getRequestContext().getApplicationMode() == PortletMode.VIEW ) {%>
+	<%if( _ctx.getRequestContext().getApplicationMode() == PortletMode.VIEW ) {
+	   jsmanager.addJavascript("eXo.IFramePortlet.adjustHeight('" + id + "');");
+	%>
 		<iframe src="<%=uicomponent.getURL()%>"></iframe>
 	<%} else {
 			uicomponent.renderChildren();
