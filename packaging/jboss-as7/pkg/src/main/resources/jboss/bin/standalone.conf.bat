@@ -73,7 +73,7 @@ rem set "JAVA_OPTS=%JAVA_OPTS% -Djboss.modules.lockless=true"
 :JAVA_OPTS_SET
 
 rem # GateIn configuration directory
-set "JAVA_OPTS=%JAVA_OPTS% -Dexo.conf.dir=%CD%\..\standalone\configuration\gatein -Dgatein.conf.dir=${jboss.server.config.dir}/gatein -Dexo.conf.dir.name=gatein"
+set "JAVA_OPTS=%JAVA_OPTS% -Dexo.conf.dir=%JBOSS_HOME%\standalone\configuration\gatein -Dgatein.conf.dir=${jboss.server.config.dir}/gatein -Dexo.conf.dir.name=gatein"
 
 rem # development mode
 set "JAVA_OPTS=%JAVA_OPTS% -Dexo.product.developing=true"
