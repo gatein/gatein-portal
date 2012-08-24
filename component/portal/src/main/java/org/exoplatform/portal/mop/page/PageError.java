@@ -1,6 +1,10 @@
 package org.exoplatform.portal.mop.page;
 
-/** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
+/**
+ * Error codes for page service.
+ *
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ */
 public enum PageError
 {
 

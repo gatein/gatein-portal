@@ -9,7 +9,19 @@ import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
-/** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
+/**
+ * <p>A wrapper for the {@link PageServiceImpl}, the wrappers takes care of integrating the implementation
+ * with the GateIn runtime.</p>
+ *
+ * <p>The wrapper emits events when page modifications are performed:</p>
+ * <ul>
+ *    <li>{@link EventType#PAGE_CREATED}: when a page is created</li>
+ *    <li>{@link EventType#PAGE_UPDATED}: when a page is updated</li>
+ *    <li>{@link EventType#PAGE_DESTROYED}: when a page is destroyed</li>
+ * </ul>
+ *
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ */
 public class PageServiceWrapper implements PageService
 {
 

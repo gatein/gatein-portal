@@ -23,7 +23,11 @@ import org.gatein.mop.api.workspace.ui.UIWindow;
 
 import java.util.Arrays;
 
-/** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
+/**
+ * This class implements the {@link PageService} business methods.
+ *
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ */
 public class PageServiceImpl implements PageService
 {
 
@@ -33,11 +37,24 @@ public class PageServiceImpl implements PageService
    /** . */
    private final DataCache dataCache;
 
+   /**
+    * Create an instance that uses a simple data cache, such instance should be used for testing purposes.
+    *
+    * @param manager the mop session manager
+    * @throws NullPointerException if the manager argument is null
+    */
    public PageServiceImpl(POMSessionManager manager) throws NullPointerException
    {
       this(manager, new SimpleDataCache());
    }
 
+   /**
+    * Create an instance that will use a specified data cache instance.
+    *
+    * @param manager the mop session manager
+    * @param dataCache the data cache
+    * @throws NullPointerException if any argument is null
+    */
    public PageServiceImpl(POMSessionManager manager, DataCache dataCache) throws NullPointerException
    {
       if (manager == null)

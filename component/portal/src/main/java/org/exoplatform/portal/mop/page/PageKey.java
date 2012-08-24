@@ -4,7 +4,11 @@ import org.exoplatform.portal.mop.SiteKey;
 
 import java.io.Serializable;
 
-/** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
+/**
+ * The immutable key for a page.
+ *
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ */
 public class PageKey implements Serializable
 {
 

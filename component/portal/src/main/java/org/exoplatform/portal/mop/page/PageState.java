@@ -14,7 +14,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * An immutable page state class.
+ * An immutable page state class, modifying an existing state should use the {@link Builder} builder class to
+ * rebuild a new immutable state object.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
