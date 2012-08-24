@@ -49,15 +49,15 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService
    @Override
    protected void setUp() throws Exception
    {
-      super.setUp();
-
-      //
       PortalContainer container = getContainer();
 
       //
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
       navigationService = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+
+      //
+      super.setUp();
    }
 
    public void testNotification() throws NavigationServiceException

@@ -43,9 +43,6 @@ public class AbstractTestPageService extends AbstractMOPTest
    @Override
    protected void setUp() throws Exception
    {
-      super.setUp();
-
-      //
       PortalContainer container = PortalContainer.getInstance();
       mgr = new POMSessionManager(
          (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class),
@@ -58,6 +55,6 @@ public class AbstractTestPageService extends AbstractMOPTest
       service = new PageServiceImpl(mgr);
 
       //
-      begin();
+      super.setUp();
    }
 }

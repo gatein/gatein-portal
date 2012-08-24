@@ -19,6 +19,7 @@
 package org.exoplatform.portal;
 
 import org.exoplatform.commons.chromattic.ChromatticManager;
+import org.exoplatform.commons.chromattic.Synchronization;
 import org.exoplatform.component.test.*;
 import org.exoplatform.container.PortalContainer;
 
@@ -48,7 +49,8 @@ public abstract class AbstractPortalTest extends AbstractKernelTest
    {
       PortalContainer container = getContainer();
       ChromatticManager manager = (ChromatticManager)container.getComponentInstanceOfType(ChromatticManager.class);
-      manager.getSynchronization().setSaveOnClose(save);
+      Synchronization synchronization = manager.getSynchronization();
+      synchronization.setSaveOnClose(save);
       super.end();
    }
 

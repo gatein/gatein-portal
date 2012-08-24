@@ -41,6 +41,7 @@ import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
 import org.exoplatform.portal.pom.config.tasks.MOPAccess;
 import org.exoplatform.portal.pom.config.tasks.PageTask;
@@ -58,6 +59,9 @@ import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
 
+import org.exoplatform.services.listener.Event;
+import org.exoplatform.services.listener.Listener;
+import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.transaction.JTAUserTransactionLifecycleService;
@@ -87,13 +91,42 @@ public class POMDataStorage implements ModelDataStorage
    /** . */
    private ConfigurationManager confManager_;
 
+   /** . */
    private JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService;
 
-   public POMDataStorage(POMSessionManager pomMgr, ConfigurationManager confManager, JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService)
+   /** . */
+   private final ListenerService listenerService;
+
+   public POMDataStorage(
+      final POMSessionManager pomMgr,
+      ConfigurationManager confManager,
+      JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService,
+      ListenerService listenerService)
    {
+
+      // Invalidation bridge : listen for PageService events and invalidate the DataStorage cache
+      Listener<?, org.exoplatform.portal.mop.page.PageKey> invalidator = new Listener<Object, org.exoplatform.portal.mop.page.PageKey>()
+      {
+         @Override
+         public void onEvent(Event<Object, org.exoplatform.portal.mop.page.PageKey> event) throws Exception
+         {
+            org.exoplatform.portal.mop.page.PageKey key = event.getData();
+            PageKey adaptedKey = new PageKey(
+               key.getSite().getTypeName(),
+               key.getSite().getName(),
+               key.getName()
+            );
+            pomMgr.getSession().scheduleForEviction(adaptedKey);
+         }
+      };
+      listenerService.addListener(EventType.PAGE_UPDATED, invalidator);
+      listenerService.addListener(EventType.PAGE_DESTROYED, invalidator);
+
+      //
       this.pomMgr = pomMgr;
       this.confManager_ = confManager;
       this.jtaUserTransactionLifecycleService = jtaUserTransactionLifecycleService;
+      this.listenerService = listenerService;
    }
 
    public PortalData getPortalConfig(PortalKey key) throws Exception

@@ -56,9 +56,6 @@ public abstract class AbstractTestNavigationService extends AbstractMOPTest
    @Override
    protected void setUp() throws Exception
    {
-      super.setUp();
-
-      //
       PortalContainer container = PortalContainer.getInstance();
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       service = new NavigationServiceImpl(mgr);
@@ -69,6 +66,6 @@ public abstract class AbstractTestNavigationService extends AbstractMOPTest
       service.clearCache();
 
       //
-      begin();
+      super.setUp();
    }
 }

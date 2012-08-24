@@ -72,7 +72,7 @@ public class PageServiceWrapper implements PageService
       //
       if (destroyed)
       {
-         notify(EventType.NAVIGATION_DESTROYED, key);
+         notify(EventType.PAGE_DESTROYED, key);
       }
 
       //

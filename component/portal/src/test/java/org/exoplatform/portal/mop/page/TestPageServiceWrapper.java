@@ -4,6 +4,8 @@ import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.AbstractMOPTest;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteKey;
@@ -38,15 +40,15 @@ public class TestPageServiceWrapper extends AbstractMOPTest
    @Override
    protected void setUp() throws Exception
    {
-      super.setUp();
-
-      //
       PortalContainer container = getContainer();
 
       //
       serviceWrapper = (PageService)container.getComponentInstanceOfType(PageService.class);
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+
+      //
+      super.setUp();
    }
 
    public void testNotification()
@@ -75,7 +77,6 @@ public class TestPageServiceWrapper extends AbstractMOPTest
       listenerService.addListener(EventType.PAGE_DESTROYED, destroyListener);
 
       //
-      begin();
       mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "notification").getRootPage().addChild("pages");
       sync(true);
 
@@ -108,6 +109,50 @@ public class TestPageServiceWrapper extends AbstractMOPTest
       assertTrue(serviceWrapper.destroyPage(key));
       assertEquals(1, createListener.events.size());
       assertEquals(1, updateListener.events.size());
-      assertEquals(0, destroyListener.events.size());
+      assertEquals(1, destroyListener.events.size());
+   }
+
+   public void testDataStorageSynchronization() throws Exception
+   {
+      mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "datastorage_sync").getRootPage().addChild("pages");
+      sync(true);
+
+      //
+      DataStorage storage = (DataStorage)getContainer().getComponentInstanceOfType(DataStorage.class);
+      Page fooPage = new Page("portal", "datastorage_sync", "foo");
+      fooPage.setTitle("foo_name");
+      storage.save(fooPage);
+      sync(true);
+
+      // Force cache loading
+      fooPage = storage.getPage("portal::datastorage_sync::foo");
+      assertEquals("foo_name", fooPage.getTitle());
+
+      // Save
+      PageKey fooKey = SiteKey.portal("datastorage_sync").page("foo");
+      PageContext foo = serviceWrapper.loadPage(fooKey);
+      PageState fooState = foo.getState();
+      assertEquals("foo_name", fooState.getName());
+      foo.setState(fooState.builder().name("foo_name_2").build());
+      assertFalse(serviceWrapper.savePage(foo));
+
+      // Check cache was invalidated
+      fooPage = storage.getPage("portal::datastorage_sync::foo");
+      assertEquals("foo_name_2", fooPage.getTitle());
+      sync(true);
+
+      // Check cache remains invalidated after synchronization
+      fooPage = storage.getPage("portal::datastorage_sync::foo");
+      assertEquals("foo_name_2", fooPage.getTitle());
+
+      // Delete
+      assertTrue(serviceWrapper.destroyPage(fooKey));
+      fooPage = storage.getPage("portal::datastorage_sync::foo");
+      assertNull(fooPage);
+      sync(true);
+
+      // Check cache remains invalidated after synchronization
+      fooPage = storage.getPage("portal::datastorage_sync::foo");
+      assertNull(fooPage);
    }
 }
