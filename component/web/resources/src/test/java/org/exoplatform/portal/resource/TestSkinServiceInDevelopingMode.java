@@ -18,9 +18,10 @@
  */
 package org.exoplatform.portal.resource;
 
+import java.util.Arrays;
+
 import org.exoplatform.services.resources.Orientation;
 
-import java.util.Arrays;
 
 
 /**
@@ -49,7 +50,7 @@ public class TestSkinServiceInDevelopingMode extends AbstractSkinServiceTest
       isFirstStartup = false;
    }
 
-   public void testCompositeSkin()
+   public void testCompositeSkin() throws Exception
    {
       SkinConfig fSkin = skinService.getSkin("mockwebapp/FirstPortlet", "TestSkin");
       SkinConfig sSkin = skinService.getSkin("mockwebapp/SecondPortlet", "TestSkin");
@@ -57,37 +58,45 @@ public class TestSkinServiceInDevelopingMode extends AbstractSkinServiceTest
       assertNotNull(sSkin);
 
       Skin merged = skinService.merge(Arrays.asList(fSkin, sSkin));
-      SkinURL url = merged.createURL(bilto);
-
+      SkinURL url = merged.createURL(new MockControllerContext());
+      
       url.setOrientation(Orientation.LT);
-      assertEquals("@import url(/mockwebapp/skin/FirstPortlet-lt.css);\n"
-         + "@import url(/mockwebapp/skin/SecondPortlet-lt.css);", skinService.getCSS(bilto, url.toString(), bilto));
+      assertEquals(
+         "@import url(/portal/skins/mockwebapp/skin/FirstPortlet-lt.css);\n" +
+         "@import url(/portal/skins/mockwebapp/skin/SecondPortlet-lt.css);", 
+         skinService.getCSS(new MockControllerContext(), url.toString().substring("/portal/skins".length()), false));
 
       url.setOrientation(Orientation.RT);
-      assertEquals("@import url(/mockwebapp/skin/FirstPortlet-rt.css);\n"
-         + "@import url(/mockwebapp/skin/SecondPortlet-rt.css);", skinService.getCSS(bilto, url.toString(), bilto));
+      assertEquals(
+         "@import url(/portal/skins/mockwebapp/skin/FirstPortlet-rt.css);\n" +
+         "@import url(/portal/skins/mockwebapp/skin/SecondPortlet-rt.css);", 
+         skinService.getCSS(new MockControllerContext(), url.toString().substring("/portal/skins".length()), false));
    }
 
-   public void testCache()
+   public void testCache() throws Exception
    {
       String path = "/path/to/test/caching.css";
 
       resResolver.addResource(path, "foo");
-      assertEquals("foo", skinService.getCSS(bilto, path, bilto));
+      assertEquals("foo", skinService.getCSS(new MockControllerContext(), path, false));
 
       resResolver.addResource(path, "bar");
-      assertEquals("bar", skinService.getCSS(bilto, path, bilto));
+      assertEquals("bar", skinService.getCSS(new MockControllerContext(), path, false));
    }
    
-   public void testProcessImportCSS()
+   public void testProcessImportCSS() throws Exception
    {
       String parent = "/process/import/css.css";
 
       resResolver.addResource(parent, "@import url(Portlet/Stylesheet.css); aaa;");
-      assertEquals("@import url(/process/import/Portlet/Stylesheet-lt.css); aaa;", skinService.getCSS(bilto, parent, bilto));
+      assertEquals(
+         "@import url(/portal/skins/process/import/Portlet/Stylesheet-lt.css); aaa;", 
+         skinService.getCSS(new MockControllerContext(), parent, false));
       
       resResolver.addResource(parent, "@import url('/Portlet/Stylesheet.css'); aaa;");
-      assertEquals("@import url('/Portlet/Stylesheet-lt.css'); aaa;", skinService.getCSS(bilto, parent, bilto));
+      assertEquals(
+         "@import url('/portal/skins/Portlet/Stylesheet-lt.css'); aaa;", 
+         skinService.getCSS(new MockControllerContext(), parent, false));
 
       //parent file import child css file
       resResolver.addResource(parent, "@import url(childCSS/child.css);  background:url(images/foo.gif);");
@@ -101,16 +110,16 @@ public class TestSkinServiceInDevelopingMode extends AbstractSkinServiceTest
        *                                        /childCSS/child.css
        *                                                        /bar.gif
        */
-      assertEquals("@import url(/process/import/childCSS/child-lt.css);  background:url(/process/import/images/foo.gif);",
-         skinService.getCSS(bilto, parent, bilto));
+      assertEquals("@import url(/portal/skins/process/import/childCSS/child-lt.css);  background:url(/process/import/images/foo.gif);",
+         skinService.getCSS(new MockControllerContext(), parent, false));
    }
 
-   public void testLastModifiedSince()
+   public void testLastModifiedSince() throws Exception
    {
       String path = "/last/modify/since.css";
       resResolver.addResource(path, "foo");
 
-      assertTrue(skinService.getCSS(bilto, path, bilto).length() > 0);
-      assertEquals(Long.MAX_VALUE, skinService.getLastModified(bilto, path));
+      assertTrue(skinService.getCSS(new MockControllerContext(), path, false).length() > 0);
+      assertEquals(Long.MAX_VALUE, skinService.getLastModified(new MockControllerContext(), path));
    }
 }

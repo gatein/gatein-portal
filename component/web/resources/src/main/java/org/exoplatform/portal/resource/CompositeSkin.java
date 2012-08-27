@@ -125,6 +125,7 @@ class CompositeSkin implements Skin
                //
                Map<QualifiedName, String> params = new HashMap<QualifiedName, String>();
                params.put(ResourceRequestHandler.VERSION_QN, ResourceRequestHandler.VERSION);
+               params.put(ResourceRequestHandler.ORIENTATION_QN, orientation == Orientation.RT ? "rt" : "lt");
                params.put(ResourceRequestHandler.COMPRESS_QN, compress ? "min" : "");
                params.put(WebAppController.HANDLER_PARAM, "skin");
                params.put(ResourceRequestHandler.RESOURCE_QN, resource);

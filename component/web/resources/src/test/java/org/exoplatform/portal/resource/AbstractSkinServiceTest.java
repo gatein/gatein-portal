@@ -18,6 +18,20 @@
  */
 package org.exoplatform.portal.resource;
 
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.pathParam;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.route;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.routeParam;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.router;
+
+import java.io.File;
+import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
+
+import javax.servlet.ServletContext;
+
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.component.test.AbstractKernelTest;
@@ -28,20 +42,18 @@ import org.exoplatform.component.test.web.ServletContextImpl;
 import org.exoplatform.component.test.web.WebAppImpl;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.resource.config.xml.SkinConfigParser;
-
-import java.io.File;
-import java.net.URL;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-
-import javax.servlet.ServletContext;
+import org.exoplatform.test.mocks.servlet.MockServletRequest;
+import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.router.Router;
+import org.exoplatform.web.controller.router.RouterConfigException;
+import org.gatein.portal.controller.resource.ResourceRequestHandler;
 
 @ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml")})
 public abstract class AbstractSkinServiceTest extends AbstractKernelTest
 {
    protected SkinService skinService;
-
+   
    private static ServletContext mockServletContext;
 
    protected static MockResourceResolver resResolver;
@@ -51,7 +63,7 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
    abstract boolean setUpTestEnvironment();
 
    abstract void touchSetUp();
-
+   
    @Override
    protected void setUp() throws Exception
    {
@@ -77,6 +89,7 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
          URL url = mockServletContext.getResource("/gatein-resources.xml");
          SkinConfigParser.processConfigResource(DocumentSource.create(url), skinService, mockServletContext);
 
+         //
          touchSetUp();
       }
    }
@@ -86,12 +99,43 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
       skinService.reloadSkins();
    }
 
-   public void testInitializing()
+   static class MockControllerContext extends ControllerContext 
+   {
+
+      private static Router router;
+      
+      static
+      {
+         try
+         {
+            router = router().add(
+               route("/skins/{gtn:version}/{gtn:resource}{gtn:compress}{gtn:orientation}.css")
+               .with(routeParam("gtn:handler").withValue("skin"))
+               .with(pathParam("gtn:version").matchedBy("[^/]*").preservePath())
+               .with(pathParam("gtn:orientation").matchedBy("-(lt)|-(rt)").captureGroup(true))
+               .with(pathParam("gtn:compress").matchedBy("-(min)|").captureGroup(true))
+               .with(pathParam("gtn:resource").matchedBy(".+?").preservePath())).build();
+         }
+         catch (RouterConfigException e)
+         {
+            e.printStackTrace();
+         }
+      }
+      
+      public MockControllerContext() throws Exception
+      {
+         super(null, router, new MockServletRequest(null, new URL("http://localhost"), "/portal", null, false), null,
+            Collections.<QualifiedName, String> singletonMap(ResourceRequestHandler.ORIENTATION_QN, "lt"));
+      }
+      
+   }
+   
+   public void testInitializing() throws Exception
    {
       assertEquals(1, skinService.getAvailableSkinNames().size());
       assertTrue(skinService.getAvailableSkinNames().contains("TestSkin"));
 
-      String css = skinService.getCSS(bilto, "/path/to/MockResourceResolver", bilto);
+      String css = skinService.getCSS(new MockControllerContext(), "/path/to/MockResourceResolver", false);
       assertEquals(MockResourceResolver.class.getName(), css);
    }
 
@@ -149,25 +193,25 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
       assertNotNull(themeStyles.get("VistaStyle"));
    }
 
-   public void testExistingCSS() throws Exception
+  public void testExistingCSS() throws Exception
    {
-      String css = skinService.getCSS(bilto, "/mockwebapp/skin/Stylesheet-lt.css", bilto);
+      String css = skinService.getCSS(new MockControllerContext(), "/mockwebapp/skin/Stylesheet-lt.css", false);
       assertTrue(css.length() > 0);
 
-      css = skinService.getCSS(bilto, "/mockwebapp/skin/Stylesheet-rt.css", bilto);
+      css = skinService.getCSS(new MockControllerContext(), "/mockwebapp/skin/Stylesheet-rt.css", false);
       assertTrue(css.length() > 0);
    }
 
-   public void testNonExistingCSS()
+   public void testNonExistingCSS() throws Exception
    {
-      String css = skinService.getCSS(bilto, "/non/existing/file.css", bilto);
+      String css = skinService.getCSS(new MockControllerContext(), "/non/existing/file.css", false);
       assertNull(css);
       
-      css = skinService.getCSS(bilto, "/non/existing/file-lt.css", bilto);
+      css = skinService.getCSS(new MockControllerContext(), "/non/existing/file-lt.css", false);
       assertNull(css);
    }
 
-   public void testProcessComment()
+   public void testProcessComment() throws Exception
    {
       String path = "/process/comment/file.css";
       String css =
@@ -179,16 +223,16 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
       resResolver.addResource(path, css);
       
       //TODO: It should only ignore the comment instead of removing it
-//      assertEquals(
-//         "foo; /*background:url(bar.gif); Inline comment*/" +
-//         "/* Block comment\n" +
-//         "   background:url(bar.gif);\n" +
-//         "   End of block comment */",
-//         skinService.getCSS(path));
-      assertEquals("foo;", skinService.getCSS(bilto, path, bilto));
+      //assertEquals(
+      //   "foo; /*background:url(bar.gif); Inline comment*/" +
+      //   "/* Block comment\n" +
+      //   "   background:url(bar.gif);\n" +
+      //   "   End of block comment */",
+      //   skinService.getCSS(new MockControllerContext(), path, false));
+      assertEquals("foo;", skinService.getCSS(new MockControllerContext(), path, false));
    }
 
-   public void testOrientation()
+   public void testOrientation() throws Exception
    {
       String path = "/orientation/file";
       String css =
@@ -204,17 +248,17 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
          "aaa;\n" +
          "{aaa;bbb;/*orientation=lt*/ccc;}\n" +
          "{aaa;/*orientation=lt*/bbb;}{ddd;}",
-         skinService.getCSS(bilto, path + "-lt.css", bilto));
+         skinService.getCSS(new MockControllerContext(), path + "-lt.css", false));
       
       assertEquals(
          "bbb;/*orientation=rt*/\n" +
          " bbb; /* orientation=rt */\n" +
          "{aaa;ccc;ddd;/*orientation=rt*/}\n" +
          "{bbb;}{ccc;/*orientation=rt*/ddd;}",
-         skinService.getCSS(bilto, path + "-rt.css", bilto));
+         skinService.getCSS(new MockControllerContext(), path + "-rt.css", false));
    }
 
-   public void testBackgroundURL()
+   public void testBackgroundURL() throws Exception
    {
       String path = "/background/url/file.css";
       String css =
@@ -227,6 +271,6 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
          "background:url(/background/url/images/foo.gif);\n" + 
          "background:url('/images/foo.gif');\n" +
          "aaa; background: #fff url('/background/url/images/foo.gif') no-repeat center -614px; ccc;",
-         skinService.getCSS(bilto, path, bilto));
+         skinService.getCSS(new MockControllerContext(), path, false));
    }
 }

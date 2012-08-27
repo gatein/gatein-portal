@@ -120,11 +120,12 @@ class SimpleSkin implements SkinConfig
          {
             try
             {
-               String resource = cssPath_.substring(1, cssPath_.length() - ".css".length()) + service_.getSuffix(orientation);
+               String resource = cssPath_.substring(1, cssPath_.length() - ".css".length());
 
                //
                Map<QualifiedName, String> params = new HashMap<QualifiedName, String>();
                params.put(ResourceRequestHandler.VERSION_QN, ResourceRequestHandler.VERSION);
+               params.put(ResourceRequestHandler.ORIENTATION_QN, orientation == Orientation.RT ? "rt" : "lt");
                params.put(ResourceRequestHandler.COMPRESS_QN, compress ? "min" : "");
                params.put(WebAppController.HANDLER_PARAM, "skin");
                params.put(ResourceRequestHandler.RESOURCE_QN, resource);

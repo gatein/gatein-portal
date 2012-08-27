@@ -549,6 +549,8 @@ public class SkinService extends AbstractResourceService implements Startable
       String path,
       boolean compress) throws RenderingException, IOException
    {
+      String str = context.getParameter(ResourceRequestHandler.ORIENTATION_QN);
+      
       Orientation orientation = Orientation.LT;
       if (path.endsWith("-lt.css"))
       {
@@ -557,6 +559,14 @@ public class SkinService extends AbstractResourceService implements Startable
       else if (path.endsWith("-rt.css"))
       {
          path = path.substring(0, path.length() - "-rt.css".length()) + ".css";
+         orientation = Orientation.RT;
+      }
+      else if ("lt".equals(str))
+      {
+         orientation = Orientation.LT;
+      }
+      else if ("rt".equals(str))
+      {
          orientation = Orientation.RT;
       }
 
@@ -929,11 +939,12 @@ public class SkinService extends AbstractResourceService implements Startable
                else 
                {
                   // Remove leading '/' and trailing '.css'
-                  String resource = includedPath.substring(1, includedPath.length() - ".css".length()) + getSuffix(orientation);
+                  String resource = includedPath.substring(1, includedPath.length() - ".css".length());
 
                   //
                   Map<QualifiedName, String> params = new HashMap<QualifiedName, String>();
                   params.put(ResourceRequestHandler.VERSION_QN, ResourceRequestHandler.VERSION);
+                  params.put(ResourceRequestHandler.ORIENTATION_QN, orientation == Orientation.RT ? "rt" : "lt");
                   params.put(ResourceRequestHandler.COMPRESS_QN, merge ? "min" : "");
                   params.put(WebAppController.HANDLER_PARAM, "skin");
                   params.put(ResourceRequestHandler.RESOURCE_QN, resource);
