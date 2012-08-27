@@ -27,8 +27,8 @@
 
    <portal-skin>
       <skin-name>Default</skin-name>
-      <skin-module>google-code-prettify</skin-module>
-      <css-path>/google-code-prettify/prettify.css</css-path>
+      <skin-module>Highlight</skin-module>
+      <css-path>/google-code-prettify/highlight.css</css-path>
    </portal-skin>
 
    <module>
@@ -40,11 +40,15 @@
    </module>
 
    <module>
-      <name>google-code-prettify</name>     
+      <name>highlight</name>     
       <script>
-         <name>prettify</name>
-         <path>/google-code-prettify/prettify.js</path>
+         <name>highlight</name>
+         <path>/google-code-prettify/highlight.js</path>
       </script>
+      <depends>
+        <module>jquery</module>
+        <as>jQuery</as>
+      </depends>
    </module>
 </gatein-resources>
 
