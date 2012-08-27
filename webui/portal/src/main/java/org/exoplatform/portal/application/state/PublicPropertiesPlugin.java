@@ -19,6 +19,7 @@
 package org.exoplatform.portal.application.state;
 
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -85,7 +86,8 @@ public class PublicPropertiesPlugin extends AbstractContextualPropertyProviderPl
          addProperty(properties, navigationURIQName, currentNode.getURI());
 
          // Page related properties
-         UIPage currentPage = currentSite.getUIPage(currentNode.getPageRef());
+         PageKey pageRef = currentNode.getPageRef();
+         UIPage currentPage = currentSite.getUIPage(pageRef != null ? pageRef.format() : null);
          if(currentPage != null)
          {
             addProperty(properties, pageNameQName, currentPage.getTitle());

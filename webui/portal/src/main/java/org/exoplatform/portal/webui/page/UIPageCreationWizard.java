@@ -35,6 +35,7 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
@@ -107,7 +108,7 @@ public class UIPageCreationWizard extends UIPageWizard
       Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
       UserNode createdNode = uiPageInfo.createUserNode(selectedNode);
       
-      createdNode.setPageRef(page.getPageId());
+      createdNode.setPageRef(PageKey.parse(page.getPageId()));
       DataStorage dataService = getApplicationComponent(DataStorage.class); 
       dataService.create(page);
 

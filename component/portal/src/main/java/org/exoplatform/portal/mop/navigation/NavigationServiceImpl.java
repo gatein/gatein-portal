@@ -24,13 +24,12 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Utils;
 import org.exoplatform.portal.mop.Visible;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import static org.exoplatform.portal.mop.Utils.*;
-import static org.exoplatform.portal.pom.config.Utils.split;
 
-import org.exoplatform.portal.pom.data.Mapper;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Attributes;
@@ -679,13 +678,12 @@ public class NavigationServiceImpl implements NavigationService
          //
          toEvict.add(sourceNav.getObjectId());
          Workspace workspace = sourceNav.getSite().getWorkspace();
-         String reference = state.getPageRef();
+         PageKey reference = state.getPageRef();
          if (reference != null)
          {
-            String[] pageChunks = split("::", reference);
-            ObjectType<? extends Site> siteType = Mapper.parseSiteType(pageChunks[0]);
-            Site site = workspace.getSite(siteType, pageChunks[1]);
-            org.gatein.mop.api.workspace.Page target = site.getRootPage().getChild("pages").getChild(pageChunks[2]);
+            ObjectType<? extends Site> siteType = Utils.objectType(reference.getSite().getType());
+            Site site = workspace.getSite(siteType, reference.getSite().getName());
+            org.gatein.mop.api.workspace.Page target = site.getRootPage().getChild("pages").getChild(reference.getName());
             PageLink link = sourceNav.linkTo(ObjectType.PAGE_LINK);
             link.setPage(target);
          }

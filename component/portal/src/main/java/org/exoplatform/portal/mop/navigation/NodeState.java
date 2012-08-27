@@ -21,6 +21,7 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.page.PageKey;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -59,7 +60,7 @@ public final class NodeState implements Serializable
       private Visibility visibility;
 
       /** . */
-      private String pageRef;
+      private PageKey pageRef;
 
       public Builder()
       {
@@ -121,7 +122,7 @@ public final class NodeState implements Serializable
          return this;
       }
 
-      public Builder pageRef(String pageRef)
+      public Builder pageRef(PageKey pageRef)
       {
          this.pageRef = pageRef;
          return this;
@@ -156,7 +157,7 @@ public final class NodeState implements Serializable
    private final Visibility visibility;
 
    /** . */
-   private final String pageRef;
+   private final PageKey pageRef;
 
    public NodeState(
       String label,
@@ -164,7 +165,7 @@ public final class NodeState implements Serializable
       long startPublicationTime,
       long endPublicationTime,
       Visibility visibility,
-      String pageRef)
+      PageKey pageRef)
    {
       this.label = label;
       this.icon = icon;
@@ -209,7 +210,7 @@ public final class NodeState implements Serializable
       return visibility;
    }
 
-   public String getPageRef()
+   public PageKey getPageRef()
    {
       return pageRef;
    }

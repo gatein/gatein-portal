@@ -118,7 +118,7 @@ public class UIPageBody extends UIComponentDecorator
       
       if (pageNode != null)
       {
-         pageReference = pageNode.getPageRef();
+         pageReference = pageNode.getPageRef().format();
          if (pageReference != null)
          {
             ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();

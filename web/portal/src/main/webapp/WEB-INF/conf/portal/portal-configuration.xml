@@ -94,17 +94,12 @@
   </component>
   
   <component>
-    <key>org.exoplatform.portal.mop.navigation.DataCache</key>
-    <type>org.exoplatform.portal.mop.navigation.ExoDataCache</type>
-  </component>
-  <component>
     <key>org.exoplatform.portal.mop.navigation.NavigationService</key>
     <type>org.exoplatform.portal.mop.navigation.NavigationServiceWrapper</type>
   </component>
-
   <component>
-    <key>org.exoplatform.portal.mop.description.DataCache</key>
-    <type>org.exoplatform.portal.mop.description.ExoDataCache</type>
+    <key>org.exoplatform.portal.mop.page.PageService</key>
+    <type>org.exoplatform.portal.mop.page.PageServiceWrapper</type>
   </component>
   <component>
     <key>org.exoplatform.portal.mop.description.DescriptionService</key>

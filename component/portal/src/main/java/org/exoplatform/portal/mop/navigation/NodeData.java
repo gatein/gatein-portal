@@ -23,11 +23,10 @@ import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.Utils;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.Visible;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.pom.data.MappedAttributes;
-import org.exoplatform.portal.pom.data.Mapper;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.workspace.Navigation;
-import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.link.Link;
 import org.gatein.mop.api.workspace.link.PageLink;
@@ -98,7 +97,7 @@ class NodeData implements Serializable
       }
 
       //
-      String pageRef = null;
+      PageKey pageRef = null;
       Link link = navigation.getLink();
       if (link instanceof PageLink)
       {
@@ -107,8 +106,7 @@ class NodeData implements Serializable
          if (target != null)
          {
             Site site = target.getSite();
-            ObjectType<? extends Site> siteType = site.getObjectType();
-            pageRef = Mapper.getOwnerType(siteType) + "::" + site.getName() + "::" + target.getName();
+            pageRef = Utils.siteType(site.getObjectType()).key(site.getName()).page(target.getName());
          }
       }
 

@@ -27,6 +27,7 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -216,15 +217,15 @@ public class UITabPaneDashboard extends UIContainer
                prevNode = child;
             }
 
-            String pageRef = tobeRemoved.getPageRef();
-            if (pageRef != null && pageRef.length() > 0)
+            PageKey pageRef = tobeRemoved.getPageRef();
+            if (pageRef != null)
             {
-               Page page = configService.getPage(pageRef);
+               Page page = configService.getPage(pageRef.format());
                if (page != null)
                   dataService.remove(page);
                UIPortal uiPortal = Util.getUIPortal();
                // Remove from cache
-               uiPortal.setUIPage(pageRef, null);
+               uiPortal.setUIPage(pageRef.format(), null);
             }
             getUserPortal().saveNode(parentNode, null);
          }
@@ -274,7 +275,7 @@ public class UITabPaneDashboard extends UIContainer
 
          UserNode tabNode = parentNode.addChild(uniqueNodeName);
          tabNode.setLabel(nodeLabel);
-         tabNode.setPageRef(page.getPageId());
+         tabNode.setPageRef(PageKey.parse(page.getPageId()));
 
          getUserPortal().saveNode(parentNode, null);
 
@@ -336,7 +337,7 @@ public class UITabPaneDashboard extends UIContainer
          }
          renamedNode.setName(newNodeName);
 
-         Page page = configService.getPage(renamedNode.getPageRef());
+         Page page = configService.getPage(renamedNode.getPageRef().format());
          if (page != null)
          {
             page.setTitle(newNodeLabel);

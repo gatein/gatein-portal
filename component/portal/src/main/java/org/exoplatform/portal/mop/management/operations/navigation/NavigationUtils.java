@@ -180,7 +180,7 @@ public class NavigationUtils
       }
 
       pageNode.setVisibility(node.getState().getVisibility());
-      pageNode.setPageReference(node.getState().getPageRef());
+      pageNode.setPageReference(node.getState().getPageRef() != null ? node.getState().getPageRef().format() : null);
 
       if (node.getNodes() != null)
       {

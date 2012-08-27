@@ -39,6 +39,7 @@ import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
@@ -446,7 +447,7 @@ public class TestDataStorage extends AbstractConfigTest
       navService.saveNavigation(nav);
       NodeContext<?> node = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.CHILDREN, null);
       NodeContext<?> test = node.add(null, "testPage");
-      test.setState(test.getState().builder().pageRef(page.getPageId()).build());
+      test.setState(test.getState().builder().pageRef(PageKey.parse(page.getPageId())).build());
       navService.saveNode(node, null);
 
       // get the page reference from the created page and check that it exists

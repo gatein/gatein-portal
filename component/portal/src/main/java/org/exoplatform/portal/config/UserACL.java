@@ -25,6 +25,9 @@ import org.exoplatform.container.xml.ValuesParam;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.security.ConversationState;
@@ -371,6 +374,39 @@ public class UserACL
       return false;
    }
 
+   public boolean hasPermission(PageContext page)
+   {
+      PageKey key = page.getKey();
+      Identity identity = getIdentity();
+      if (SiteType.USER == key.getSite().getType())
+      {
+         if (key.getSite().getName().equals(identity.getUserId()))
+         {
+            return true;
+         }
+      }
+      if (superUser_.equals(identity.getUserId()))
+      {
+         return true;
+      }
+      if (hasEditPermission(page))
+      {
+         return true;
+      }
+      List<String> accessPerms = page.getState().getAccessPermissions();
+      if (accessPerms != null)
+      {
+         for (String per : accessPerms)
+         {
+            if (hasPermission(identity, per))
+            {
+               return true;
+            }
+         }
+      }
+      return false;
+   }
+
    public boolean hasEditPermission(Page page)
    {
       Identity identity = getIdentity();
@@ -390,6 +426,20 @@ public class UserACL
       }
       page.setModifiable(false);
       return false;
+   }
+
+   public boolean hasEditPermission(PageContext page)
+   {
+      PageKey key = page.getKey();
+      Identity identity = getIdentity();
+      if (SiteType.USER == key.getSite().getType())
+      {
+         return key.getSite().getName().equals(identity.getUserId());
+      }
+      else
+      {
+         return hasPermission(identity, page.getState().getEditPermission());
+      }
    }
 
    /**

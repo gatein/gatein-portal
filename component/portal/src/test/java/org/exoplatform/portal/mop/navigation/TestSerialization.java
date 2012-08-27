@@ -33,14 +33,14 @@ public class TestSerialization extends AbstractGateInTest
 
    public void testNodeStateSerialization() throws Exception
    {
-      NodeState state = new NodeState.Builder().pageRef("foo").icon("bar").build();
+      NodeState state = new NodeState.Builder().pageRef(SiteKey.portal("classic").page("foo")).icon("bar").build();
       NodeState copy = IOTools.clone(state);
       assertEquals(state, copy);
    }
 
    public void testNodeDataSerialization() throws Exception
    {
-      NodeData data = new NodeData("parent", "this", "foo", new NodeState.Builder().pageRef("bar").icon("bar").build(), new String[]{"child"});
+      NodeData data = new NodeData("parent", "this", "foo", new NodeState.Builder().pageRef(SiteKey.portal("classic").page("bar")).icon("bar").build(), new String[]{"child"});
       NodeData copy = IOTools.clone(data);
       assertEquals(copy.parentId, data.parentId);
       assertEquals(copy.id, data.id);

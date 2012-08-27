@@ -28,6 +28,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -90,7 +91,7 @@ public class UserSiteLifeCycle implements ApplicationLifecycle<PortalRequestCont
 
                UserNode tabNode = rootNode.addChild(DEFAULT_TAB_NAME);
                tabNode.setLabel(DEFAULT_TAB_NAME);
-               tabNode.setPageRef(page.getPageId());
+               tabNode.setPageRef(PageKey.parse(page.getPageId()));
 
                userPortal.saveNode(tabNode, null);
             }

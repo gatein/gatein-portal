@@ -26,6 +26,7 @@ import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeState;
+import org.exoplatform.portal.mop.page.PageKey;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -177,12 +178,12 @@ public class UserNode
       context.setState(new NodeState.Builder(context.getState()).visibility(visibility).build());
    }
 
-   public String getPageRef()
+   public PageKey getPageRef()
    {
       return context.getState().getPageRef();
    }
 
-   public void setPageRef(String pageRef)
+   public void setPageRef(PageKey pageRef)
    {
       context.setState(new NodeState.Builder(context.getState()).pageRef(pageRef).build());
    }

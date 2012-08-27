@@ -40,4 +40,9 @@ public enum SiteType
    {
       return name;
    }
+
+   public SiteKey key(String name)
+   {
+      return new SiteKey(this, name);
+   }
 }

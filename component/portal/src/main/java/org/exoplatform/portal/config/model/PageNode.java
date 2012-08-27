@@ -21,6 +21,7 @@ package org.exoplatform.portal.config.model;
 
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NodeState;
+import org.exoplatform.portal.mop.page.PageKey;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -185,7 +186,7 @@ public class PageNode extends PageNodeContainer
          startPublicationDate == null ? -1 : startPublicationDate.getTime(),
          endPublicationDate == null ? -1 : endPublicationDate.getTime(),
          visibility,
-         pageReference
+         pageReference != null ? PageKey.parse(pageReference) : null
       );
    }
 

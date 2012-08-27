@@ -20,10 +20,11 @@
 package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NodeFilter;
 import org.exoplatform.portal.mop.navigation.NodeState;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -56,12 +57,13 @@ class UserNodeFilter implements NodeFilter
 
    private boolean canRead(NodeState state)
    {
-      String pageRef = state.getPageRef();
+      PageKey pageRef = state.getPageRef();
       if (pageRef != null)
       {
          try
          {
-            Page page = userPortal.service.getPage(pageRef);
+//            PageService pageService = userPortal.service.getPageService();
+            PageContext page = userPortal.service.getPageService().loadPage(pageRef);
             if (page != null)
             {
                return userPortal.service.getUserACL().hasPermission(page);
@@ -76,12 +78,12 @@ class UserNodeFilter implements NodeFilter
 
    private boolean canWrite(NodeState state)
    {
-      String pageRef = state.getPageRef();
+      PageKey pageRef = state.getPageRef();
       if (pageRef != null)
       {
          try
          {
-            Page page = userPortal.service.getPage(pageRef);
+            PageContext page = userPortal.service.getPageService().loadPage(pageRef);
             if (page != null)
             {
                return userPortal.service.getUserACL().hasEditPermission(page);

@@ -29,6 +29,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
@@ -98,7 +99,7 @@ public class TestLoadedPOM extends AbstractConfigTest
       assertNotNull(nav);
       NodeContext<?> root = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
       NodeContext<?> node = root.get(0);
-      assertEquals("group::/test/legacy::register", node.getState().getPageRef());
+      assertEquals(SiteKey.group("/test/legacy").page("register"), node.getState().getPageRef());
 
       Page page = storage.getPage("group::/test/legacy::register");
       assertNotNull(page);
@@ -113,7 +114,7 @@ public class TestLoadedPOM extends AbstractConfigTest
       assertNotNull(nav);
       NodeContext<?> root = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
       NodeContext<?> node = root.get(0);
-      assertEquals("group::/test/normalized::register", node.getState().getPageRef());
+      assertEquals(SiteKey.group("/test/normalized").page("register"), node.getState().getPageRef());
 
       Page page = storage.getPage("group::/test/normalized::register");
       assertNotNull(page);

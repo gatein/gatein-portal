@@ -36,6 +36,7 @@ import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationState;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.pom.data.ModelChange;
@@ -74,6 +75,9 @@ public class UserPortalConfigService implements Startable
    final DescriptionService descriptionService;
 
    /** . */
+   final PageService pageService;
+
+   /** . */
    boolean createUserPortal;
 
    /** . */
@@ -90,6 +94,7 @@ public class UserPortalConfigService implements Startable
       OrganizationService orgService,
       NavigationService navService,
       DescriptionService descriptionService,
+      PageService pageService,
       InitParams params) throws Exception
    {
 
@@ -110,10 +115,16 @@ public class UserPortalConfigService implements Startable
       this.orgService_ = orgService;
       this.userACL_ = userACL;
       this.navService = navService;
+      this.pageService = pageService;
       this.descriptionService = descriptionService;
       this.createUserPortal = createUserPortal;
       this.destroyUserPortal = destroyUserPortal;
       this.defaultImportMode = defaultImportMode;
+   }
+
+   public PageService getPageService()
+   {
+      return pageService;
    }
 
    public ImportMode getDefaultImportMode()

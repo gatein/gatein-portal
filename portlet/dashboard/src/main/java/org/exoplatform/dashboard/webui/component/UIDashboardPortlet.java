@@ -76,7 +76,7 @@ public class UIDashboardPortlet extends UIPortletApplication implements Dashboar
          UserNode node = portal.getSelectedUserNode();
          if (node != null)
          {
-            String pageRef = node.getPageRef();
+            String pageRef = node.getPageRef().format();
             DataStorage storage = portal.getApplicationComponent(DataStorage.class);
             Page page = storage.getPage(pageRef);
             if (page != null)

@@ -182,13 +182,13 @@ public class TestNavigationService extends AbstractTestNavigationService
       Node child2 = root.getChild("node_name4");
       assertEquals("node_name", child1.getName());
       assertEquals("node_label", child1.getContext().getState().getLabel());
-      assertEquals("portal::test::test1", child1.getContext().getState().getPageRef());
+      assertEquals(SiteKey.portal("test").page("test1"), child1.getContext().getState().getPageRef());
       assertEquals(Visibility.TEMPORAL, child1.getContext().getState().getVisibility());
       assertEquals(953602380000L, child1.getContext().getState().getStartPublicationTime());
       assertEquals(1237599180000L, child1.getContext().getState().getEndPublicationTime());
       assertEquals("node_name4", child2.getName());
       assertEquals("node_label4", child2.getContext().getState().getLabel());
-      assertEquals("portal::test::test1", child2.getContext().getState().getPageRef());
+      assertEquals(SiteKey.portal("test").page("test1"), child2.getContext().getState().getPageRef());
       assertEquals(Visibility.DISPLAYED, child2.getContext().getState().getVisibility());
    }
 
