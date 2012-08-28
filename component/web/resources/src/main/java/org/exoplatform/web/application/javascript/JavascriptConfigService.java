@@ -131,8 +131,14 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       ScriptResource resource = getResource(resourceId);
       
       if (resource != null)
-      {
+      {  
          List<Module> modules = new ArrayList<Module>(resource.getModules());
+         if (modules.size() > 0 && modules.get(0) instanceof Module.Native)
+         {
+            Reader jScript = getJavascript(resource, modules.get(0).getName(), locale);
+            return new CompositeReader(jScript);
+         }
+         
          Collections.sort(modules, MODULE_COMPARATOR);
          ArrayList<Reader> readers = new ArrayList<Reader>(modules.size() * 2);
          
@@ -375,7 +381,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    private Reader getJavascript(ScriptResource resource, String moduleName, Locale locale)
    {
       Module module = resource.getModule(moduleName);
-      if (module instanceof Module.Local)
+      if (module instanceof Module.Local || module instanceof Module.Native)
       {
          Module.Local localModule = (Module.Local)module;
          final WebApp webApp = contexts.get(localModule.getContextPath());

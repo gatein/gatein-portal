@@ -133,4 +133,14 @@
           <module>remote1</module>
       </depends>       
    </module>
+   
+   <module>
+      <name>native1</name> 
+      <native-script>/js/native1.js</native-script>
+   </module>
+   
+   <scripts>
+      <name>native2</name> 
+      <native-script>/js/native2.js</native-script>
+   </scripts>
 </gatein-resources>

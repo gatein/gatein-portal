@@ -168,4 +168,24 @@ public abstract class Javascript
          return true;
       }
    }
+   
+   public static class Native extends Local
+   {
+      public Native(ResourceId resource, String module, String contextPath, String path, String resourceBundle, int priority)
+      {
+         super(resource, module, contextPath, path, resourceBundle, priority);
+      }
+
+      @Override
+      Module addModuleTo(ScriptResource resource)
+      {
+         return resource.addNativeModule(contextPath, module, path, resourceBundle, priority);
+      }
+
+      @Override
+      public boolean isExternalScript()
+      {
+         return false;
+      }
+   }
 }

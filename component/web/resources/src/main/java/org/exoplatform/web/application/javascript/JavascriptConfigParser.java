@@ -95,6 +95,9 @@ public class JavascriptConfigParser
    
    /** . */
    final public static String AS_TAG = "as";
+   
+   /** . */
+   final public static String NATIVE_TAG = "native-script";
 
    /** . */
    private final String contextPath;
@@ -281,10 +284,22 @@ public class JavascriptConfigParser
    private void parseDesc(Element element, ScriptResourceDescriptor desc)
    {
       Element urlElement = XMLTools.getUniqueChild(element, URL_TAG, false);
+      Element nativeElement = XMLTools.getUniqueChild(element, NATIVE_TAG, false);
       if(urlElement != null)
       {
          String remoteURL = XMLTools.asString(urlElement);
          desc.modules.add(new Javascript.Remote(desc.id, remoteURL, contextPath, remoteURL, 0));
+      }
+      else if (nativeElement != null)
+      {
+         String resourceBundle = null;
+         Element bundleElt = XMLTools.getUniqueChild(nativeElement, "resource-bundle", false);
+         if (bundleElt != null)
+         {
+            resourceBundle = XMLTools.asString(bundleElt);
+         }
+         String path = XMLTools.asString(nativeElement);
+         desc.modules.add(new Javascript.Native(desc.id, path, contextPath, path, resourceBundle, 0));
       }
       else
       {

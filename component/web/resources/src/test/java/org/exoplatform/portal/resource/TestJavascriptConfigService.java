@@ -69,11 +69,17 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       
       if (isFirstStartup)
       {
-         Map<String, String> resources = new HashMap<String, String>(4);
+         Map<String, String> resources = new HashMap<String, String>(6);
          resources.put("/js/script1.js", "aaa;");
          resources.put("/js/script2.js", "bbb;");
          resources.put("/js/module1.js", "ccc;");
          resources.put("/js/module2.js", "ddd;");
+         resources.put("/js/native1.js", "eee;");
+         resources.put("/js/native2.js", "define('SHARED/native2', [], function() { var _module = {};(function() {" +      
+                                          "// Begin native2\n" + 
+                                          "fff;" +  
+                                          "// End native2\n" +
+                                          "})();return _module;});");
          mockServletContext = new MockJSServletContext("mockwebapp", resources);
          jsService.registerContext(new WebAppImpl(mockServletContext, Thread.currentThread().getContextClassLoader()));
 
@@ -111,6 +117,19 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
                                  "// End eXo.module2\n" +
                                   "})();return _module;});";
       assertReader(module2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module2"), null));
+   }
+   
+   public void testGetNativeScript() throws Exception
+   {
+      String native1 = "eee;";
+      assertReader(native1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "native1"), null));
+      
+      String native2 = "define('SHARED/native2', [], function() { var _module = {};(function() {" +      
+               "// Begin native2\n" + 
+               "fff;" +  
+               "// End native2\n" +
+               "})();return _module;});";
+      assertReader(native2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "native2"), null));
    }
 
    public void testGetJSConfig() throws Exception

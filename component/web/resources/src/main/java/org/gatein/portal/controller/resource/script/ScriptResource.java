@@ -208,6 +208,13 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       return module;
    }
    
+   public Module.Native addNativeModule(String contextPath, String name, String path, String resourceBundle, int priority)
+   {
+      Module.Native module = new Module.Native(this, contextPath, name, path, resourceBundle, priority);
+      modules.add(module);
+      return module;
+   }
+   
    public List<Module> removeModuleByName(String name)
    {
       ArrayList<Module> removed = new ArrayList<Module>();

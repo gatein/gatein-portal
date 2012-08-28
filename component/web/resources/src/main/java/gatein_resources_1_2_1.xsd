@@ -147,6 +147,9 @@
           <xs:element name="script" type="script" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
         <xs:sequence>
+          <xs:element name="native-script" type="xs:string" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+        <xs:sequence>
           <xs:element name="url" type="url" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
       </xs:choice>          
@@ -161,6 +164,9 @@
         <xs:sequence>
           <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
           <xs:element name="script" type="script" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:sequence>
+          <xs:element name="native-script" type="xs:string" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:sequence>
           <xs:element name="url" type="url" minOccurs="0" maxOccurs="1"/>
@@ -184,6 +190,9 @@
                   <xs:element name="script" type="script" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>
                 <xs:sequence>
+                  <xs:element name="native-script" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                </xs:sequence>
+                <xs:sequence>
                   <xs:element name="url" type="url" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
               </xs:choice>
@@ -198,6 +207,9 @@
                 <xs:sequence>
                   <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
                   <xs:element name="script" type="script" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+                <xs:sequence>
+                  <xs:element name="native-script" type="xs:string" minOccurs="0" maxOccurs="1"/>
                 </xs:sequence>
                 <xs:sequence>
                   <xs:element name="url" type="url" minOccurs="0" maxOccurs="1"/>
@@ -243,7 +255,7 @@
       <xs:element name="resource-bundle" type="xs:string" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
-
+  
   <xs:simpleType name="url">
     <xs:restriction base="xs:string">
       <xs:pattern value="http(s)?://([a-zA-Z0-9\-\.]+/)*([a-zA-Z0-9\-\.])+"/>

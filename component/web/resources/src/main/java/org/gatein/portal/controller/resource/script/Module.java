@@ -103,6 +103,14 @@ public abstract class Module
       }
    }
    
+   public static class Native extends Local
+   {
+      Native(ScriptResource resource, String contextPath, String name, String path, String resourceBundle, int priority)
+      {
+         super(resource, contextPath, name, path, resourceBundle, priority);
+      }
+   }
+   
    public static class Local extends Module
    {
 
