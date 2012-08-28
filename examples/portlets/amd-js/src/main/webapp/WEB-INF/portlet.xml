@@ -5,14 +5,14 @@ version="2.0"
    xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd
    http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd">
    <portlet>
-      <portlet-name>RequireJSPortlet</portlet-name>
-      <portlet-class>org.gatein.portlet.samples.RequireJSPortlet</portlet-class>
+      <portlet-name>Sample1Portlet</portlet-name>
+      <portlet-class>org.gatein.portlet.amd.Sample1Portlet</portlet-class>
       <supports>
          <mime-type>text/html</mime-type>
          <portlet-mode>view</portlet-mode>
       </supports>
       <portlet-info>
-         <title>RequireJS Portlet</title>
+         <title>The AMD module portlet</title>
       </portlet-info>
    </portlet>
 </portlet-app>

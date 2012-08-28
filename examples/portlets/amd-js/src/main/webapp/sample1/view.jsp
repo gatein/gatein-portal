@@ -1,4 +1,6 @@
 <div style="padding: 10px;">
+  <h1>Showing how to use AMD module in GateIn portal</h1>
+
   <h2>Define a shared immediately loaded module</h2>
   <div>Create a script file assets/js/foo.js at the webapp root folder</div>
   <pre class="code" lang="js">alert('hello world');</pre>
@@ -12,6 +14,8 @@
       &lt;/script&gt;
    &lt;/module&gt;
   </pre>
+
+
   <h2>How to use a shared module ?</h2>
   <div>Let's say we want to use shared JQuery module to increase the number in this button <button type="button" id="u_123" onclick="increase()">Increase Me! 1</button></div>
   <pre class="code" lang="js">
