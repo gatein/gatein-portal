@@ -187,7 +187,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          }
          else 
          {
-            buffer.append("if (typeof define === 'function' && define.amd) {");
+            buffer.append("if (typeof define === 'function' && define.amd && !require.specified('").append(resourceId).append("')) {");
             buffer.append("define('").append(resourceId).append("');}");            
          }
          readers.add(new StringReader(buffer.toString()));

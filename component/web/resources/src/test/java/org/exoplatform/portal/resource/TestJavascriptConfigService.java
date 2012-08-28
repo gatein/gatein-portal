@@ -88,9 +88,9 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    {      
       //no wrapper for SCRIPTS
       String script1 = "// Begin eXo.script1\naaa;// End eXo.script1\n" +
-                               "if (typeof define === 'function' && define.amd) {define('SHARED/script1');}";
+                               "if (typeof define === 'function' && define.amd && !require.specified('SHARED/script1')) {define('SHARED/script1');}";
       String script2 = "// Begin eXo.script2\nbbb;// End eXo.script2\n" +
-                               "if (typeof define === 'function' && define.amd) {define('SHARED/script2');}";
+                               "if (typeof define === 'function' && define.amd && !require.specified('SHARED/script2')) {define('SHARED/script2');}";
       assertReader(script1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "script1"), null));
       assertReader(script2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "script2"), null));          
       
