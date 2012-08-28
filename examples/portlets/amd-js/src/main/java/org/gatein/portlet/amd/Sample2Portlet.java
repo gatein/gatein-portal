@@ -19,7 +19,7 @@ public class Sample2Portlet extends GenericPortlet
 
    public void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException
    {
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/sample2/requirejs.jsp");
+      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/sample2/view.jsp");
       prd.include(request, response);
    }
 }

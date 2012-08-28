@@ -40,6 +40,18 @@
    </module>
 
    <module>
+      <name>jquery-plugin</name>     
+      <script>
+         <name>jquery-plugin</name>
+         <path>/sample2/jquery-plugin.js</path>
+      </script>
+      <depends>
+        <module>jquery</module>
+        <as>jQuery</as>
+      </depends>
+   </module>
+
+   <module>
       <name>highlight</name>     
       <script>
          <name>highlight</name>

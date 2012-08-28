@@ -47,6 +47,7 @@
 			
 			//hightlight
 			switch(code_lang) {
+			  case 'xml':
 				case 'html':
 					code = $.highlightCode.hightlight_html(code);	
 					break;

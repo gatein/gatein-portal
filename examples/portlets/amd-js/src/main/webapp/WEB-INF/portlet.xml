@@ -12,7 +12,19 @@ version="2.0"
          <portlet-mode>view</portlet-mode>
       </supports>
       <portlet-info>
-         <title>The AMD module portlet</title>
+         <title>Sample 1: The use of AMD module in GateIn</title>
+      </portlet-info>
+   </portlet>
+
+   <portlet>
+      <portlet-name>Sample2Portlet</portlet-name>
+      <portlet-class>org.gatein.portlet.amd.Sample2Portlet</portlet-class>
+      <supports>
+         <mime-type>text/html</mime-type>
+         <portlet-mode>view</portlet-mode>
+      </supports>
+      <portlet-info>
+         <title>Sample 2: Use jQuery plugin with the built-in jQuery</title>
       </portlet-info>
    </portlet>
 </portlet-app>
