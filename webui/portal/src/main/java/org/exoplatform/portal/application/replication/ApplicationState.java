@@ -72,6 +72,9 @@ public class ApplicationState implements Serializable
 
    private void writeObject(ObjectOutputStream oos) throws IOException
    {
+      oos.putFields();
+      oos.writeFields();
+
       if (userName != null)
       {
          oos.writeBoolean(true);
@@ -108,6 +111,8 @@ public class ApplicationState implements Serializable
 
    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException
    {
+      ois.readFields();
+
       if (ois.readBoolean())
       {
          userName = ois.readUTF();
