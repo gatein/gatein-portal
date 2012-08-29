@@ -64,6 +64,7 @@ public class TestXSDValidator extends TestCase
       testScenarios.put("duplicatePortlet.xml", true);
       testScenarios.put("f10.xml", false);
       testScenarios.put("f11.xml", false);
+      testScenarios.put("f12.xml", true);
    }
 
    public static Validator createXSDValidator(URL xsdFile)
