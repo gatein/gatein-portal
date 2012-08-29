@@ -31,6 +31,42 @@
       <css-path>/highlight/highlight.css</css-path>
    </portal-skin>
 
+   <portlet-skin>
+      <application-name>amd-js</application-name>
+      <portlet-name>RequireJSPluginPortlet</portlet-name>
+      <skin-name>Default</skin-name>
+      <css-path>/assets/skin/RequireJSPluginPortlet/DefaultStylesheet.css</css-path>
+   </portlet-skin>
+
+   <portlet>
+     <name>RequireJSPluginPortlet</name>
+     <module>
+       <script>
+         <name>twitterBootstrap</name>
+         <path>/assets/js/bootstrap/bootstrap.js</path>
+       </script>
+       <depends>
+         <module>jquery</module>
+       </depends>
+     </module>
+   </portlet>
+  
+   <scripts>
+      <name>textPlugin</name>     
+      <script>
+         <name>text</name>
+         <path>/assets/js/plugins/text.js</path>
+      </script>
+   </scripts>
+   
+   <scripts>
+      <name>mustacheTemplate</name>     
+      <script>
+         <name>mustache</name>
+         <path>/assets/js/plugins/mustache.js</path>
+      </script>
+   </scripts>
+   
    <module>
       <name>foo</name>     
       <script>

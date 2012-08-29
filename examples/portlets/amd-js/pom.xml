@@ -36,5 +36,10 @@
          <artifactId>portlet-api</artifactId>
          <scope>provided</scope>
       </dependency>
+      <dependency>
+         <groupId>org.json</groupId>
+         <artifactId>json</artifactId>
+         <scope>provided</scope>
+      </dependency>
    </dependencies>
 </project>

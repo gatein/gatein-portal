@@ -27,4 +27,20 @@ version="2.0"
          <title>Sample 2: Use jQuery plugin with the built-in jQuery</title>
       </portlet-info>
    </portlet>
+   
+   <portlet>
+      <description xml:lang="EN">RequireJS Plugins Sample Portlet</description>
+      <portlet-name>RequireJSPluginPortlet</portlet-name>
+      <display-name xml:lang="EN">RequireJS Plugins Portlet</display-name>
+      <portlet-class>org.gatein.portlet.samples.RequireJSPluginsPortlet</portlet-class>
+
+      <supports>
+         <mime-type>text/html</mime-type>
+      </supports>
+
+      <portlet-info>
+         <title>RequireJS Plugins Portlet</title>
+         <short-title>RequireJS Plugins</short-title>
+      </portlet-info>
+   </portlet>
 </portlet-app>
