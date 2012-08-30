@@ -104,7 +104,6 @@ public class TestOrganizationService extends AbstractKernelTest
       mtHandler_ = service_.getMembershipTypeHandler();
       membershipHandler_ = service_.getMembershipHandler();
 
-//      ((ComponentRequestLifecycle)service_).startRequest(manager);
       RequestLifeCycle.begin((ComponentRequestLifecycle)service_);
 
    }
@@ -123,7 +122,6 @@ public class TestOrganizationService extends AbstractKernelTest
          userHandler_.removeUser(userName, true);
       }
 
-//      ((ComponentRequestLifecycle)service_).endRequest(manager);
       RequestLifeCycle.end();
    }
 
@@ -295,6 +293,10 @@ public class TestOrganizationService extends AbstractKernelTest
          users = ud.findUsers(query).getAll();
          assertEquals(1, users.size());
          assertEquals("foobar", users.get(0).getUserName());
+
+         // Cleanup after test
+         ud.removeUser("foo", true);
+         ud.removeUser("foobar", true);
       }
    }
       //
@@ -517,6 +519,15 @@ public class TestOrganizationService extends AbstractKernelTest
                .equalsIgnoreCase("testmembership"));
          }
       }
+
+      // Cleanup after test
+      RequestLifeCycle.end();
+      RequestLifeCycle.begin((ComponentRequestLifecycle) service_);
+      membershipHandler_.removeMembershipByUser(Benj, true);
+      userHandler_.removeUser(Benj, true);
+      groupHandler_.removeGroup(group2, true);
+      mtHandler_.removeMembershipType("membershipType2", true);
+      mtHandler_.removeMembershipType("membershipType3", true);
    }
 
    public void testRemoveMembershipByUser() throws Exception
