@@ -35,7 +35,9 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
+import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
@@ -326,8 +328,10 @@ public class UIPageCreationWizard extends UIPageWizard
          Page page = uiPageTemplateOptions.createPageFromSelectedOption(ownerType, ownerId);
          page.setName("page" + page.hashCode());
          String pageId = ownerType + "::" + ownerId + "::" + page.getName();
-         DataStorage storage = uiWizard.getApplicationComponent(DataStorage.class);
-         if (storage.getPage(pageId) != null)
+         
+         // check page is exist
+         PageService pageService = uiWizard.getApplicationComponent(PageService.class);
+         if (pageService.loadPage(PageKey.parse(pageId)) != null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageCreationWizard.msg.NameNotSame", null));
             uiWizard.viewStep(FIRST_STEP);

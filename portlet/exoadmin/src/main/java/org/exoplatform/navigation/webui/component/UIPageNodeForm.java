@@ -44,6 +44,9 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.webui.page.UIPageSelector;
 import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
@@ -528,7 +531,8 @@ public class UIPageNodeForm extends UIFormTabPane
          {
             Page page = pageSelector.getPage();
             DataStorage storage = uiPageNodeForm.getApplicationComponent(DataStorage.class);
-            if (storage.getPage(page.getPageId()) == null)
+            PageService pageService = uiPageNodeForm.getApplicationComponent(PageService.class);
+            if (pageService.loadPage(PageKey.parse(page.getPageId())) == null)
             {
                storage.create(page);
                pageSelector.setValue(page.getPageId());
@@ -704,29 +708,29 @@ public class UIPageNodeForm extends UIFormTabPane
          UIFormStringInput uiPageName = uiInputSet.getChildById("pageName");
          UIFormStringInput uiPageTitle = uiInputSet.getChildById("pageTitle");
 
+         //
          Page page = new Page();
          page.setOwnerType(uiForm.getOwnerType().getName());
          page.setOwnerId(ownerId);
          page.setName(uiPageName.getValue());
          String title = uiPageTitle.getValue();
          if (title == null || title.trim().length() < 1)
+         {
             title = page.getName();
+         }
          page.setTitle(title);
-
          page.setShowMaxWindow(false);
-
          page.setAccessPermissions(accessPermission);
          page.setEditPermission(editPermission);
-
-         userACL.hasPermission(page);
-
          page.setModifiable(true);
          if (page.getChildren() == null)
+         {
             page.setChildren(new ArrayList<ModelObject>());
+         }
 
          // check page is exist
-         DataStorage dataService = uiForm.getApplicationComponent(DataStorage.class);
-         Page existPage = dataService.getPage(page.getPageId());
+         PageService pageService = uiForm.getApplicationComponent(PageService.class);
+         PageContext existPage = pageService.loadPage(PageKey.parse(page.getPageId()));
          if (existPage != null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.sameName", null));

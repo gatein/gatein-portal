@@ -22,6 +22,9 @@ package org.exoplatform.toolbar.webui.component;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.page.UIPage;
@@ -107,8 +110,8 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
          }
          else
          {
-            DataStorage dataStorage = portalApp.getApplicationComponent(DataStorage.class);
-            Page page = dataStorage.getPage(pageReference);
+            PageService pageService = portalApp.getApplicationComponent(PageService.class);
+            PageContext page = pageService.loadPage(PageKey.parse(pageReference));
             if(page == null)
             {
                return false;

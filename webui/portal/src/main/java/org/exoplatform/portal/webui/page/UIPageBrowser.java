@@ -42,6 +42,7 @@ import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
@@ -254,19 +255,19 @@ public class UIPageBrowser extends UIContainer
          UIPageBrowser uiPageBrowser = event.getSource();
          WebuiRequestContext context = event.getRequestContext();
          String id = context.getRequestParameter(OBJECTID);
-         UserPortalConfigService service = uiPageBrowser.getApplicationComponent(UserPortalConfigService.class);
-         DataStorage dataService = uiPageBrowser.getApplicationComponent(DataStorage.class);
 
+         UserPortalConfigService service = uiPageBrowser.getApplicationComponent(UserPortalConfigService.class);
+         PageContext page = service.getPageService().loadPage(PageKey.parse(id));
+         UserACL userACL = uiPageBrowser.getApplicationComponent(UserACL.class);
+         
          UIApplication uiApp = context.getUIApplication();
-         if (service.getPageService().loadPage(PageKey.parse(id)) == null)
+         if(page == null)
          {
             uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{id}, 1));
             return;
          }
-         PageContext page = service.getPageService().loadPage(PageKey.parse(id));
-         UserACL userACL = uiPageBrowser.getApplicationComponent(UserACL.class);
 
-         if (page == null || !userACL.hasEditPermission(page))
+         if (!userACL.hasEditPermission(page))
          {
             uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDelete", new String[]{id}, 1));
             return;
@@ -447,7 +448,8 @@ public class UIPageBrowser extends UIContainer
          // create new page
          if (uiPage == null)
          {
-            Page existPage = dataService.getPage(page.getPageId());
+            PageService pageService = uiPageForm.getApplicationComponent(PageService.class);
+            PageContext existPage = pageService.loadPage(PageKey.parse(page.getPageId()));
             if (existPage != null)
             {
                uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.sameName", null));
