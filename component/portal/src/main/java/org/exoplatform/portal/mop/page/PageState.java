@@ -154,43 +154,43 @@ public class PageState implements Serializable
          this.accessPermissions = accessPermissions;
       }
 
-      Builder editPermission(String editPermission)
+      public Builder editPermission(String editPermission)
       {
          this.editPermission = editPermission;
          return this;
       }
 
-      Builder accessPermissions(List<String> accessPermissions)
+      public Builder accessPermissions(List<String> accessPermissions)
       {
          this.accessPermissions = accessPermissions;
          return this;
       }
 
-      Builder accessPermissions(String... accessPermissions)
+      public Builder accessPermissions(String... accessPermissions)
       {
          this.accessPermissions = new ArrayList<String>(Arrays.asList(accessPermissions));
          return this;
       }
 
-      Builder showMaxWindow(boolean showMaxWindow)
+      public Builder showMaxWindow(boolean showMaxWindow)
       {
          this.showMaxWindow = showMaxWindow;
          return this;
       }
 
-      Builder name(String name)
+      public Builder name(String name)
       {
          this.name = name;
          return this;
       }
 
-      Builder description(String description)
+      public Builder description(String description)
       {
          this.description = description;
          return this;
       }
 
-      Builder factoryId(String factoryId)
+      public Builder factoryId(String factoryId)
       {
          this.factoryId = factoryId;
          return this;

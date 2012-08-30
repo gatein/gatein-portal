@@ -31,6 +31,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -713,7 +714,7 @@ public class UIPortalComposer extends UIContainer
           * if it is a edition of the current page and it is not available to current remote user anymore.
           */
          PortalRequestContext pContext = Util.getPortalRequestContext();
-         if (page.getStorageId() != null && portalConfigService.getPage(pageId) == null)
+         if (page.getStorageId() != null && portalConfigService.getPageService().loadPage(PageKey.parse(pageId)) == null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{pageId}, ApplicationMessage.WARNING));
             uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);

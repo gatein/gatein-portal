@@ -31,6 +31,7 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -370,12 +371,12 @@ public class PortalRequestContext extends WebuiRequestContext
             container.getComponentInstanceOfType(UserPortalConfigService.class);
             UserPortalConfigService configService = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
             PageKey pageRef = node.getPageRef();
-            Page page = configService.getPage(pageRef != null ? pageRef.format() : null, getRemoteUser());
+            PageContext page = configService.getPageService().loadPage(pageRef);
 
             //
             if (page != null)
             {
-               title = page.getTitle();
+               title = page.getState().getName();
                return ExpressionUtil.getExpressionValue(this.getApplicationResourceBundle(), title);
             }
             else

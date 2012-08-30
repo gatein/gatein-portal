@@ -32,6 +32,8 @@ import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationError;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -556,11 +558,12 @@ public class UINavigationNodeSelector extends UIContainer
          UIApplication uiApp = context.getUIApplication();
          UserPortalConfigService service = uiApp.getApplicationComponent(UserPortalConfigService.class);
          String pageId = node.getPageRef();
-         Page page = (pageId != null) ? service.getPage(pageId) : null;
+         //Page page = (pageId != null) ? service.getPage(pageId) : null;
+         PageContext page = (pageId != null) ? service.getPageService().loadPage(PageKey.parse(pageId)) : null;
          if (page != null)
          {
             UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
-            if (!userACL.hasPermission(page))
+            if(!userACL.hasPermission(page))
             {
                uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.UserNotPermission", new String[]{pageId}, 1));
                return;

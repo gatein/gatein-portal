@@ -200,7 +200,7 @@ public class PageServiceImpl implements PageService
       {
          throw new PageServiceException(PageError.CLONE_NO_SRC_SITE, "Could not clone page " +
             src.getName() + "from non existing site of type "
-            + src.site.getName() + " with id " + src.site.getName());
+            + src.site.getType() + " with id " + src.site.getName());
       }
       else
       {
@@ -213,7 +213,7 @@ public class PageServiceImpl implements PageService
       if (srcPage == null)
       {
          throw new PageServiceException(PageError.CLONE_NO_SRC_PAGE,"Could not clone non existing page "
-            + src.getName() + " from site of type " + src.site.getType() + " with id " + src.getName());
+            + src.getName() + " from site of type " + src.site.getType() + " with id " + src.site.getName());
       }
 
       //

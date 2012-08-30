@@ -40,6 +40,8 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
@@ -256,15 +258,15 @@ public class UIPageBrowser extends UIContainer
          DataStorage dataService = uiPageBrowser.getApplicationComponent(DataStorage.class);
 
          UIApplication uiApp = context.getUIApplication();
-         if (service.getPage(id) == null)
+         if (service.getPageService().loadPage(PageKey.parse(id)) == null)
          {
             uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{id}, 1));
             return;
          }
-         Page page = service.getPage(id, context.getRemoteUser());
+         PageContext page = service.getPageService().loadPage(PageKey.parse(id));
+         UserACL userACL = uiPageBrowser.getApplicationComponent(UserACL.class);
 
-         if (page == null || !page.isModifiable() ||
-            (page.getOwnerType().equals(SiteType.USER.getName()) && !page.getOwnerId().equals(context.getRemoteUser())))
+         if (page == null || !userACL.hasEditPermission(page))
          {
             uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDelete", new String[]{id}, 1));
             return;
@@ -272,8 +274,8 @@ public class UIPageBrowser extends UIContainer
          
          UIPortal uiPortal = Util.getUIPortal();
          UserNode userNode = uiPortal.getSelectedUserNode();
-         boolean isDeleteCurrentPage = userNode.getPageRef().equals(page.getPageId());
-         if (isDeleteCurrentPage && page.getOwnerType().equals(SiteType.USER.getName()))
+         boolean isDeleteCurrentPage = userNode.getPageRef().equals(page.getKey());
+         if (isDeleteCurrentPage && page.getKey().getSite().equals(SiteType.USER))
          {
             ApplicationMessage msg = new ApplicationMessage("UIPageBrowser.msg.delete.DeleteCurrentUserPage", null, ApplicationMessage.WARNING);
             event.getRequestContext().getUIApplication().addMessage(msg);
@@ -286,11 +288,11 @@ public class UIPageBrowser extends UIContainer
          int currentPage = datasource.getCurrentPage();
 
          //Update navigation and UserToolbarGroupPortlet if deleted page is dashboard page
-         if(page.getOwnerType().equals(SiteType.USER.getName())){
+         if(page.getKey().getSite().equals(SiteType.USER)){
             removePageNode(page, event);
          }
 
-         dataService.remove(page);
+         service.getPageService().destroyPage(page.getKey());
          //Minh Hoang TO: The cached UIPage objects corresponding to removed Page should be removed here.
          //As we have multiple UIPortal, which means multiple caches of UIPage. It 's unwise to garbage
          // all UIPage caches at once. Better solution is to clear UIPage on browsing to PageNode having Page
@@ -327,7 +329,7 @@ public class UIPageBrowser extends UIContainer
        * @param event
        * @throws Exception any exception
        */
-      private void removePageNode(Page page, Event<UIPageBrowser> event) throws Exception
+      private void removePageNode(PageContext page, Event<UIPageBrowser> event) throws Exception
       {
          PortalRequestContext prc = Util.getPortalRequestContext();
          UserPortal userPortal = prc.getUserPortalConfig().getUserPortal();
@@ -341,7 +343,7 @@ public class UIPageBrowser extends UIContainer
 
          for (UserNode userNode : rootNode.getChildren())
          {
-            if (page.getPageId().equals(userNode.getPageRef()))
+            if (page.getKey().equals(userNode.getPageRef()))
             {
                // Remove pageNode
                rootNode.removeChild(userNode.getName());
@@ -349,7 +351,7 @@ public class UIPageBrowser extends UIContainer
 
                // Update navigation and UserToolbarGroupPortlet
 
-               String pageRef = page.getPageId();
+               String pageRef = page.getKey().format();
                if (pageRef != null && pageRef.length() > 0)
                {
                   // Remove from cache

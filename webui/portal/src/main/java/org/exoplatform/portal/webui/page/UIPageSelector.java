@@ -22,6 +22,7 @@ package org.exoplatform.portal.webui.page;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
@@ -191,7 +192,7 @@ public class UIPageSelector extends UIFormInputContainer<String>
          UIPageSelector uiPageSelector = uiPageBrowser.getAncestorOfType(UIPageSelector.class);
          UserPortalConfigService service = uiPageBrowser.getApplicationComponent(UserPortalConfigService.class);
          UserACL userACL = uiPageBrowser.getApplicationComponent(UserACL.class);
-         if (!userACL.hasPermission(service.getPage(id)))
+         if (!userACL.hasPermission(service.getPageService().loadPage(PageKey.parse(id))))
          {
             uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.NoPermission", new String[]{id}));;
          }

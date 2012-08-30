@@ -22,7 +22,8 @@ public class ExoDataCache extends DataCache
    {
       public PageData retrieve(POMSession session, ScopedKey<PageKey> scopedKey) throws Exception
       {
-         return loadPage(session, scopedKey.getKey());
+         PageData data = loadPage(session, scopedKey.getKey());
+         return data == PageData.EMPTY ? null : data;
       }
    };
 
@@ -41,7 +42,7 @@ public class ExoDataCache extends DataCache
    @Override
    protected void removePage(POMSession session, PageKey key)
    {
-      cache.remove(key);
+      cache.remove(ScopedKey.create(key));
    }
 
    @Override

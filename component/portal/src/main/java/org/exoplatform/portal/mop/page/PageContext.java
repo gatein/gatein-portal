@@ -34,7 +34,7 @@ public class PageContext
     */
    public PageKey getKey()
    {
-      return data.key;
+      return key;
    }
 
    /**

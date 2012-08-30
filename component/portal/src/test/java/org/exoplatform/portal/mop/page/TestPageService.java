@@ -120,7 +120,7 @@ public class TestPageService extends AbstractTestPageService
       sync(true);
 
       //
-      SiteKey site = SiteKey.portal("create_page");
+      SiteKey site = SiteKey.portal("update_page");
 
       //
       PageContext page = new PageContext(site.page("foo"), new PageState(
@@ -136,7 +136,7 @@ public class TestPageService extends AbstractTestPageService
 
       //
       foo = mgr.getPOMService().getModel().getWorkspace().
-         getSite(ObjectType.PORTAL_SITE, "create_page").
+         getSite(ObjectType.PORTAL_SITE, "update_page").
          getRootPage().
          getChild("pages").
          getChild("foo");

@@ -36,6 +36,8 @@ import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationState;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortalContext;
@@ -443,6 +445,22 @@ public class UserPortalConfigService implements Startable
    {
       Page page = getPage(pageId);
       if (page == null || !userACL_.hasPermission(page))
+      {
+         return null;
+      }
+      return page;
+   }
+   
+   /**
+    * Use {@link PageService} to load metadata of specify page
+    * 
+    * @param pageRef the PageKey
+    * @return the PageContext
+    */
+   public PageContext getPage(PageKey pageRef)
+   {
+      PageContext page = pageService.loadPage(pageRef);
+      if(page == null || !userACL_.hasPermission(page))
       {
          return null;
       }

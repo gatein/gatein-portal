@@ -22,7 +22,9 @@ package org.exoplatform.dashboard.webui.component;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.portal.UIPortal;
@@ -76,13 +78,11 @@ public class UIDashboardPortlet extends UIPortletApplication implements Dashboar
          UserNode node = portal.getSelectedUserNode();
          if (node != null)
          {
-            String pageRef = node.getPageRef().format();
-            DataStorage storage = portal.getApplicationComponent(DataStorage.class);
-            Page page = storage.getPage(pageRef);
+            UserPortalConfigService configService = portal.getApplicationComponent(UserPortalConfigService.class);
+            PageContext page = configService.getPage(node.getPageRef());
             if (page != null)
             {
-               UserACL userACL = portal.getApplicationComponent(UserACL.class);
-               return userACL.hasPermission(page);
+               return true;
             }
          }
       }

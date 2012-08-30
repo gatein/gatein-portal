@@ -30,13 +30,13 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.config.cache.DataCache;
-import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.PortletBuilder;
 import org.exoplatform.services.listener.Event;
@@ -407,9 +407,9 @@ public class TestUserPortalConfigService extends AbstractConfigTest
          public void execute() throws Exception
          {
             assertEquals("group::/platform/administrators::newAccount", userPortalConfigSer_.getPage(
-               "group::/platform/administrators::newAccount", null).getPageId());
+               PageKey.parse("group::/platform/administrators::newAccount")).getKey().format());
             assertEquals("group::/organization/management/executive-board::newStaff", userPortalConfigSer_.getPage(
-               "group::/organization/management/executive-board::newStaff", null).getPageId());
+               PageKey.parse("group::/organization/management/executive-board::newStaff")).getKey().format());
          }
       }.execute("root");
    }
@@ -420,9 +420,9 @@ public class TestUserPortalConfigService extends AbstractConfigTest
       {
          public void execute() throws Exception
          {
-            assertEquals(null, userPortalConfigSer_.getPage("group::/platform/administrators::newAccount", null));
+            assertEquals(null, userPortalConfigSer_.getPage(PageKey.parse("group::/platform/administrators::newAccount")));
             assertEquals("group::/organization/management/executive-board::newStaff", userPortalConfigSer_.getPage(
-               "group::/organization/management/executive-board::newStaff", null).getPageId());
+               PageKey.parse("group::/organization/management/executive-board::newStaff")).getKey().format());
          }
       }.execute("john");
    }
@@ -433,9 +433,9 @@ public class TestUserPortalConfigService extends AbstractConfigTest
       {
          public void execute() throws Exception
          {
-            assertEquals(null, userPortalConfigSer_.getPage("group::/platform/administrators::newAccount", null));
+            assertEquals(null, userPortalConfigSer_.getPage(PageKey.parse("group::/platform/administrators::newAccount")));
             assertEquals(null, userPortalConfigSer_.getPage(
-               "group::/organization/management/executive-board::newStaff", null));
+               PageKey.parse("group::/organization/management/executive-board::newStaff")));
          }
       }.execute("mary");
    }
@@ -446,9 +446,8 @@ public class TestUserPortalConfigService extends AbstractConfigTest
       {
          public void execute() throws Exception
          {
-            assertEquals(null, userPortalConfigSer_.getPage("group::/platform/administrators::newAccount", null));
-            assertEquals(null, userPortalConfigSer_.getPage(
-               "group::/organization/management/executive-board::newStaff", null));
+            assertEquals(null, userPortalConfigSer_.getPage(PageKey.parse("group::/platform/administrators::newAccount")));
+            assertEquals(null, userPortalConfigSer_.getPage(PageKey.parse("group::/organization/management/executive-board::newStaff")));
          }
       }.execute(null);
    }
@@ -472,7 +471,7 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             assertEquals("group", p.getOwnerType());
             assertEquals("/platform/administrators", p.getOwnerId());
             assertEquals("newAccount", p.getName());
-            assertEquals(null, userPortalConfigSer_.getPage("group::/platform/administrators::newAccount"));
+            assertEquals(null, userPortalConfigSer_.getPage(PageKey.parse("group::/platform/administrators::newAccount")));
          }
       }.execute(null);
    }
@@ -782,7 +781,7 @@ public class TestUserPortalConfigService extends AbstractConfigTest
 
             // schedule for eviction, we shouldn't hit the cache anymore
             final POMSession session = mgr.getSession();
-            session.scheduleForEviction(new PageKey("portal", "test", "test1"));
+            session.scheduleForEviction(new org.exoplatform.portal.pom.data.PageKey("portal", "test", "test1"));
             session.save();
 
             userPortalConfigSer_.getPage("portal::test::test1");

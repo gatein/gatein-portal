@@ -27,7 +27,9 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -220,9 +222,11 @@ public class UITabPaneDashboard extends UIContainer
             PageKey pageRef = tobeRemoved.getPageRef();
             if (pageRef != null)
             {
-               Page page = configService.getPage(pageRef.format());
+               PageContext page = configService.getPage(pageRef);
                if (page != null)
-                  dataService.remove(page);
+               {
+                  configService.getPageService().destroyPage(pageRef);
+               }
                UIPortal uiPortal = Util.getUIPortal();
                // Remove from cache
                uiPortal.setUIPage(pageRef.format(), null);
@@ -337,11 +341,12 @@ public class UITabPaneDashboard extends UIContainer
          }
          renamedNode.setName(newNodeName);
 
-         Page page = configService.getPage(renamedNode.getPageRef().format());
+         PageContext page = configService.getPageService().loadPage(renamedNode.getPageRef());
          if (page != null)
          {
-            page.setTitle(newNodeLabel);
-            dataService.save(page);
+            PageState state = page.getState();
+            page.setState(state.builder().name(newNodeLabel).build());
+            configService.getPageService().savePage(page);
          }
 
          getUserPortal().saveNode(parentNode, null);
