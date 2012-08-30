@@ -44,6 +44,7 @@ import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.controller.router.URIWriter;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.portal.controller.resource.Resource;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMode;
@@ -148,7 +149,21 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          if (isModule)
          {
             buffer.append("define('").append(resourceId).append("', ");
-            buffer.append(new JSONArray(resource.getDependencies()));            
+            JSONArray deps = new JSONArray();
+            for (ResourceId id : resource.getDependencies())
+            {
+               ScriptResource rs = scripts.getResource(id);
+               if (rs.getModules().get(0) instanceof Module.Remote || 
+                   rs.getModules().get(0) instanceof Module.Native)
+               {
+                  deps.put(id.getName());
+               }
+               else
+               {
+                  deps.put(id.toString());
+               }
+            }
+            buffer.append(deps);            
             buffer.append(", function(");
             for (ResourceId resId : resource.getDependencies()) 
             {               
@@ -256,29 +271,48 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       JSONObject shim = new JSONObject();      
             
       for (ScriptResource resource : getAllResources())
-      {
-         String name = resource.getId().toString();
+      {         
          if (!resource.isEmpty() || ResourceScope.SHARED.equals(resource.getId().getScope()))
          {
+            String name = resource.getId().toString();
+            List<Module> modules = resource.getModules();
+            
+            if (modules.get(0) instanceof Module.Remote
+                     || modules.get(0) instanceof Module.Native)
+            {
+               name = resource.getId().getName();
+            }
+            
+            if (FetchMode.IMMEDIATE.equals(resource.getFetchMode()) || (modules.size() > 0 && (modules.get(0) instanceof Module.Remote
+                     || modules.get(0) instanceof Module.Native)))
+            {
+               JSONArray deps = new JSONArray();
+               for (ResourceId id : resource.getDependencies())
+               {
+                  ScriptResource rs = scripts.getResource(id);
+                  if (rs.getModules().get(0) instanceof Module.Remote || 
+                      rs.getModules().get(0) instanceof Module.Native)
+                  {
+                     deps.put(id.getName());
+                  }
+                  else
+                  {
+                     deps.put(id.toString());
+                  }
+               }
+               if (deps.length() > 0)
+               {
+                  shim.put(name, new JSONObject().put("deps", deps));                  
+               }
+            }
+            
             HashMap<ResourceId, FetchMode> ids = new HashMap<ResourceId, FetchMode>();
             ids.put(resource.getId(), null);                     
             Map<String, FetchMode> urlMap = resolveURLs(controllerContext, ids, !PropertyManager.isDevelopping(),
                !PropertyManager.isDevelopping(), locale);         
             
             String url = urlMap.keySet().iterator().next();            
-            paths.put(name, url.substring(0, url.length() - ".js".length()));            
-
-            //
-            List<Module> modules = resource.getModules();         
-            if (FetchMode.IMMEDIATE.equals(resource.getFetchMode()) || 
-                     (modules.size() > 0 && modules.get(0) instanceof Module.Remote))
-            {
-               JSONArray deps = new JSONArray(resource.getDependencies());               
-               if (deps.length() > 0)
-               {
-                  shim.put(name, new JSONObject().put("deps", deps));               
-               }
-            }
+            paths.put(name, url.substring(0, url.length() - ".js".length()));
          }         
       }
                  

@@ -140,9 +140,9 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       JSONObject shim = config.getJSONObject("shim");
       assertNotNull(shim);
       
-      JSONObject remoteDep = shim.getJSONObject("SHARED/remote2");
+      JSONObject remoteDep = shim.getJSONObject("remote2");
       assertNotNull(remoteDep);
-      assertEquals("{\"deps\":[\"SHARED/remote1\"]}", remoteDep.toString());
+      assertEquals("{\"deps\":[\"remote1\"]}", remoteDep.toString());
       
       JSONObject scriptDep = shim.getJSONObject("SHARED/script2");
       assertNotNull(scriptDep);
@@ -153,8 +153,8 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       JSONObject paths = config.getJSONObject("paths");
       assertNotNull(paths);
       //Return remote module/script url as it's  declared in gatein-resources.xml
-      assertEquals("/js/remote1", paths.getString("SHARED/remote1"));
-      assertEquals("/js/remote2", paths.getString("SHARED/remote2"));
+      assertEquals("/js/remote1", paths.getString("remote1"));
+      assertEquals("/js/remote2", paths.getString("remote2"));
       //navController url for modules and scripts
       assertEquals("mock_url_of_module1", paths.getString("SHARED/module1"));
       assertEquals("mock_url_of_module2", paths.getString("SHARED/module2"));

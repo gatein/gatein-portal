@@ -292,14 +292,8 @@ public class JavascriptConfigParser
       }
       else if (nativeElement != null)
       {
-         String resourceBundle = null;
-         Element bundleElt = XMLTools.getUniqueChild(nativeElement, "resource-bundle", false);
-         if (bundleElt != null)
-         {
-            resourceBundle = XMLTools.asString(bundleElt);
-         }
          String path = XMLTools.asString(nativeElement);
-         desc.modules.add(new Javascript.Native(desc.id, path, contextPath, path, resourceBundle, 0));
+         desc.modules.add(new Javascript.Native(desc.id, path, contextPath, path, null, 0));
       }
       else
       {
