@@ -31,14 +31,23 @@ public class ResourceId implements Serializable
 
    /** . */
    private final ResourceScope scope;
-
+   
    /** . */
    private final String name;
+   
+   /** . */
+   private boolean isFullId;
 
    public ResourceId(ResourceScope scope, String name)
    {
+      this(scope, name, true);
+   }
+   
+   public ResourceId(ResourceScope scope, String name, boolean isFullId)
+   {
       this.scope = scope;
       this.name = name;
+      this.isFullId = isFullId;
    }
 
    public ResourceScope getScope()
@@ -51,6 +60,11 @@ public class ResourceId implements Serializable
       return name;
    }
 
+   public void setFullId(boolean isFullId)
+   {
+      this.isFullId = isFullId;
+   }
+   
    @Override
    public boolean equals(Object obj)
    {
@@ -75,6 +89,8 @@ public class ResourceId implements Serializable
    @Override
    public String toString()
    {
+      if (!isFullId)
+         return name;
       return scope + "/" + name;
    }
 }

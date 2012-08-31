@@ -155,6 +155,11 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       //Return remote module/script url as it's  declared in gatein-resources.xml
       assertEquals("/js/remote1", paths.getString("remote1"));
       assertEquals("/js/remote2", paths.getString("remote2"));
+      
+      //Return native module/script url as it's  declared in gatein-resources.xml
+      assertEquals("mock_url_of_native1", paths.getString("native1"));
+      assertEquals("mock_url_of_native2", paths.getString("native2"));
+      
       //navController url for modules and scripts
       assertEquals("mock_url_of_module1", paths.getString("SHARED/module1"));
       assertEquals("mock_url_of_module2", paths.getString("SHARED/module2"));
@@ -171,6 +176,12 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertTrue(remoteURL.size() > 0);
       //Return remote module/script url as it's  declared in gatein-resources.xml
       assertEquals("/js/remote1.js", remoteURL.keySet().iterator().next());
+      
+      tmp.clear();
+      tmp.put(new ResourceId(ResourceScope.SHARED, "native1"), null);      
+      remoteURL = jsService.resolveURLs(CONTROLLER_CONTEXT, tmp, false, false, null);
+      assertTrue(remoteURL.size() > 0);
+      assertEquals("mock_url_of_native1.js", remoteURL.keySet().iterator().next());
       
       tmp.clear();
       tmp.put(new ResourceId(ResourceScope.SHARED, "module1"), null);      

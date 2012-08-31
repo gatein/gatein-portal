@@ -152,16 +152,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             JSONArray deps = new JSONArray();
             for (ResourceId id : resource.getDependencies())
             {
-               ScriptResource rs = scripts.getResource(id);
-               if (rs.getModules().get(0) instanceof Module.Remote || 
-                   rs.getModules().get(0) instanceof Module.Native)
-               {
-                  deps.put(id.getName());
-               }
-               else
-               {
-                  deps.put(id.toString());
-               }
+               deps.put(scripts.getResource(id).getId().toString());
             }
             buffer.append(deps);            
             buffer.append(", function(");
@@ -289,16 +280,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                JSONArray deps = new JSONArray();
                for (ResourceId id : resource.getDependencies())
                {
-                  ScriptResource rs = scripts.getResource(id);
-                  if (rs.getModules().get(0) instanceof Module.Remote || 
-                      rs.getModules().get(0) instanceof Module.Native)
-                  {
-                     deps.put(id.getName());
-                  }
-                  else
-                  {
-                     deps.put(id.toString());
-                  }
+                  deps.put(scripts.getResource(id).getId().toString());
                }
                if (deps.length() > 0)
                {

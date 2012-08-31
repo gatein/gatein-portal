@@ -251,13 +251,14 @@ public class JavascriptConfigParser
             ScriptResourceDescriptor desc = scripts.get(id);
             if (desc == null)
             {
-               scripts.put(id, desc = new ScriptResourceDescriptor(id, fetchMode, parseAlias(element)));
+               desc = new ScriptResourceDescriptor(id, fetchMode, parseAlias(element));
             }
             else
             {
                desc.fetchMode = fetchMode;
             }
             parseDesc(resourceElt, desc);
+            scripts.put(id, desc);
          }
       }
       else if (MODULE_TAG.equals(element.getTagName()) || SCRIPTS_TAG.equals(element.getTagName()))
@@ -268,9 +269,10 @@ public class JavascriptConfigParser
          ScriptResourceDescriptor desc = scripts.get(id);
          if (desc == null)
          {
-            scripts.put(id, desc = new ScriptResourceDescriptor(id, fetchMode, parseAlias(element)));
+            desc = new ScriptResourceDescriptor(id, fetchMode, parseAlias(element));
          }
          parseDesc(element, desc);
+         scripts.put(id, desc);
       }
       else
       {
@@ -288,11 +290,13 @@ public class JavascriptConfigParser
       if(urlElement != null)
       {
          String remoteURL = XMLTools.asString(urlElement);
+         desc.id.setFullId(false);
          desc.modules.add(new Javascript.Remote(desc.id, remoteURL, contextPath, remoteURL, 0));
       }
       else if (nativeElement != null)
       {
          String path = XMLTools.asString(nativeElement);
+         desc.id.setFullId(false);
          desc.modules.add(new Javascript.Native(desc.id, path, contextPath, path, null, 0));
       }
       else
