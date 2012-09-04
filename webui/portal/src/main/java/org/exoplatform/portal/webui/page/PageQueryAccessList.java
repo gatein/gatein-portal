@@ -23,15 +23,21 @@ import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.commons.utils.PageListAccess;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.QueryResult;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageService;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PageQueryAccessList extends PageListAccess<Page, Query<Page>>
+public class PageQueryAccessList extends PageListAccess<PageModel, Query<Page>>
 {
 
    public PageQueryAccessList(Query<Page> state, int pageSize)
@@ -40,10 +46,39 @@ public class PageQueryAccessList extends PageListAccess<Page, Query<Page>>
    }
 
    @Override
-   protected ListAccess<Page> create(Query<Page> state) throws Exception
+   protected ListAccess<PageModel> create(Query<Page> state) throws Exception
    {
       ExoContainer container = PortalContainer.getInstance();
-      DataStorage service = (DataStorage)container.getComponentInstance(DataStorage.class);
-      return service.find2(state);
+      final PageService pageService = (PageService) container.getComponentInstance(PageService.class);
+      final SiteType siteType = SiteType.valueOf(state.getOwnerType().toUpperCase());
+      final String siteName = state.getOwnerId();
+      final String name = state.getName();
+      final String title = state.getTitle();
+      final QueryResult<PageContext> total = pageService.findPages(0, 1, siteType, null, null, null);
+      
+      //
+      ListAccess<PageModel> result = new ListAccess<PageModel>()
+      {
+         @Override
+         public PageModel[] load(int index, int length) throws Exception
+         {
+            Iterator<PageContext> iterator = pageService.findPages(index, length, siteType, siteName, name, title).iterator();
+            ArrayList<PageModel> copy = new ArrayList<PageModel>();
+            while(iterator.hasNext())
+            {
+               copy.add(new PageModel(iterator.next()));
+            }
+            return copy.toArray(new PageModel[copy.size()]);
+         }
+
+         @Override
+         public int getSize() throws Exception
+         {
+            return total.getHits();
+         }
+      };
+      
+      //
+      return result;
    }
 }
