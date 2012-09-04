@@ -98,5 +98,16 @@
         <as>jQuery</as>
       </depends>
    </module>
+
+   <module>
+      <name>math</name>
+      <native-script>commonjs/math.js</native-script>
+   </module>
+
+   <module>
+      <name>increment</name>
+      <native-script>commonjs/increment.js</native-script>
+   </module>
+
 </gatein-resources>
 

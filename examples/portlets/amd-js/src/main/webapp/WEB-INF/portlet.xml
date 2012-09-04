@@ -43,4 +43,20 @@ version="2.0"
          <short-title>RequireJS Plugins</short-title>
       </portlet-info>
    </portlet>
+
+   <portlet>
+      <description>CommonJS Sample Portlet</description>
+      <portlet-name>CommonJSPortlet</portlet-name>
+      <display-name>CommonJS Portlet</display-name>
+      <portlet-class>org.gatein.portlet.commonjs.CommonJSPortlet</portlet-class>
+
+      <supports>
+         <mime-type>text/html</mime-type>
+      </supports>
+
+      <portlet-info>
+         <title>CommonJS Sample Portlet</title>
+         <short-title>CommonJS Portlet</short-title>
+      </portlet-info>
+   </portlet>
 </portlet-app>
