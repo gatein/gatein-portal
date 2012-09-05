@@ -299,12 +299,9 @@ public class UserPortalImpl implements UserPortal
       {
          UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
          NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, userNavigation.navigation, this, null);
-         if (context != null)
+         if (score > 0)
          {
-            if (score > 0)
-            {
-               userNode = nodeContext.getNode().filter().find(id);
-            }
+            userNode = nodeContext.getNode().filter().find(id);
          }
       }
 
@@ -348,18 +345,29 @@ public class UserPortalImpl implements UserPortal
       NavigationContext navigation = userNavigation.navigation;
       if (navigation.getState() != null)
       {
-         UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
+         UserNodeContext context = new UserNodeContext(userNavigation, null);
          NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, navigation, Scope.CHILDREN, null);
          if (nodeContext != null)
          {
-            UserNode root = nodeContext.getNode().filter();
+            UserNode root = nodeContext.getNode();
+
+            //
+            if (filterConfig == null)
+            {
+               filterConfig = UserNodeFilterConfig.builder().build();
+            }
+            UserNodeFilter filter = new UserNodeFilter(userNavigation.portal, filterConfig);
+
+            // Filter node by node
             for (UserNode node : root.getChildren())
             {
-               return node;
+               if (node.context.accept(filter))
+               {
+                  return node;
+               }
             }
          }
       }
-      
       return null;
    }
 
@@ -379,6 +387,15 @@ public class UserPortalImpl implements UserPortal
       {
          return getDefaultPath(filterConfig);
       }
+
+      // Create a filter as we need one for the path
+      if (filterConfig == null)
+      {
+         filterConfig = UserNodeFilterConfig.builder().build();
+      }
+
+      // Restrict the filter with path
+      filterConfig.path = segments;
 
       // Get navigations
       List<UserNavigation> navigations = getNavigations();
@@ -441,6 +458,15 @@ public class UserPortalImpl implements UserPortal
       {
          return null;
       }
+
+      // Create a filter as we need one for the path
+      if (filterConfig == null)
+      {
+         filterConfig = UserNodeFilterConfig.builder().build();
+      }
+
+      // Restrict the filter with the path
+      filterConfig.path = segments;
 
       //
       MatchingScope scope = new MatchingScope(navigation, filterConfig, segments);

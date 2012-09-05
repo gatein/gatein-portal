@@ -62,6 +62,21 @@ public class ListTree<T extends ListTree<T>>
    }
 
    /**
+    * Returns the depth.
+    *
+    * @return the depth
+    */
+   public final int getDepth()
+   {
+      int depth = 0;
+      for (T current = parent;current != null;current = current.parent)
+      {
+         depth++;
+      }
+      return depth;
+   }
+
+   /**
     * Returns the tree.
     *
     * @return the tree

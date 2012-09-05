@@ -36,7 +36,6 @@ import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationServiceImpl;
 import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.mop.user.UserNodeFilterConfig.Builder;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.listener.Event;
@@ -624,6 +623,26 @@ public class TestUserPortal extends AbstractPortalTest
             path = userPortal.resolvePath(navigation, null, "/administration/communityManagement");
             assertNotNull(path);
             assertEquals("communityManagement", path.getName());
+         }
+      }.execute("root");
+   }
+
+   public void testDefaultNodeResolution()
+   {
+      new UnitTest()
+      {
+         public void doExecute() throws Exception
+         {
+            UserPortalConfig userPortalCfg = userPortalConfigSer_.getUserPortalConfig("classic", getUserId());
+            UserPortal userPortal = userPortalCfg.getUserPortal();
+            UserNavigation navigation = userPortal.getNavigation(SiteKey.portal("classic"));
+
+            UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
+            builder.withReadCheck();
+            UserNodeFilterConfig filterConfig = builder.build();
+            
+            UserNode defaultNode = userPortal.getDefaultPath(navigation, filterConfig);
+            assertEquals("home", defaultNode.getName());
          }
       }.execute("root");
    }

@@ -110,6 +110,12 @@ class UserNodeFilter implements NodeFilter
          return false;
       }
 
+      // Filter by path
+      if (depth > 0 && config.path != null && (depth - 1 >= config.path.length || !config.path[depth - 1].equals(name)))
+      {
+         return false;
+      }
+
       //
       UserACL acl = userPortal.service.getUserACL();
 

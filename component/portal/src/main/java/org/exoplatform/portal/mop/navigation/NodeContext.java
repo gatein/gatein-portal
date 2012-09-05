@@ -299,20 +299,27 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>>
     */
    public void filter(NodeFilter filter)
    {
-      doFilter(0, filter);
-   }
 
-   private void doFilter(int depth, NodeFilter filter)
-   {
-      boolean accept = filter.accept(depth, getId(), name, getState());
-      setHidden(!accept);
+      setHidden(!accept(filter));
       if (expanded)
       {
          for (NodeContext<N> node = getFirst();node != null;node = node.getNext())
          {
-            node.doFilter(depth + 1, filter);
+            node.filter(filter);
          }
       }
+   }
+
+   /**
+    * Apply the filter logic on this node only. This method will not modify the state of
+    * this node.
+    *
+    * @param filter the filter to apply
+    * @return true if the filter accepts this node
+    */
+   public boolean accept(NodeFilter filter)
+   {
+      return filter.accept(getDepth(), getId(), getName(), getState());
    }
 
    /**
