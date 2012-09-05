@@ -172,10 +172,10 @@ public class PortalRequestHandler extends WebRequestHandler
       List<ApplicationLifecycle> lifecycles = app.getApplicationLifecycle();
       try
       {
-         for (ApplicationLifecycle lifecycle : lifecycles)
-            lifecycle.onStartRequest(app, context);
          if (context.getUIApplication() != uiApp)
             context.setUIApplication(uiApp);
+         for (ApplicationLifecycle lifecycle : lifecycles)
+            lifecycle.onStartRequest(app, context);
          
          if (uiApp != null)
          {

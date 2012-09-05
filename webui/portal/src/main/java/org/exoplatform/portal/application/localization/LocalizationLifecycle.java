@@ -168,6 +168,7 @@ public class LocalizationLifecycle implements ApplicationRequestPhaseLifecycle<W
       }
       reqCtx.setLocale(locale);
       calculatedLocale.set(locale);
+      resetOrientation(reqCtx, locale);
    }
 
    /**
