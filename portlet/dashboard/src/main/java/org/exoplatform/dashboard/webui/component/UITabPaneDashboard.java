@@ -19,6 +19,7 @@
 
 package org.exoplatform.dashboard.webui.component;
 
+import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -268,7 +269,7 @@ public class UITabPaneDashboard extends UIContainer
          SiteKey siteKey = userNav.getKey();
          Page page =
             configService.createPageTemplate(UITabPaneDashboard.PAGE_TEMPLATE, siteKey.getTypeName(), siteKey.getName());
-         page.setTitle(nodeLabel);
+         page.setTitle(HTMLEntityEncoder.getInstance().encode(nodeLabel));
          page.setName(uniqueNodeName + page.hashCode());
          
          //
@@ -361,7 +362,8 @@ public class UITabPaneDashboard extends UIContainer
             if (page != null)
             {
                PageState state = page.getState();
-               page.setState(state.builder().name(newNodeLabel).build());
+               String encodedLabel = HTMLEntityEncoder.getInstance().encode(newNodeLabel);
+               page.setState(state.builder().name(encodedLabel).build());
                configService.getPageService().savePage(page);
             }
          }
