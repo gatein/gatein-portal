@@ -19,6 +19,11 @@
 
 package org.exoplatform.navigation.webui.component;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 import org.exoplatform.navigation.webui.TreeNode;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
@@ -34,6 +39,7 @@ import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -46,8 +52,6 @@ import org.exoplatform.portal.webui.workspace.UIEditInlineWorkspace;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.portal.webui.workspace.UIPortalToolPanel;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -63,11 +67,6 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 import org.gatein.common.util.ParameterValidation;
-
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 /** Copied by The eXo Platform SARL Author May 28, 2009 3:07:15 PM */
 @ComponentConfigs({
@@ -687,9 +686,7 @@ public class UINavigationNodeSelector extends UIContainer
    {
       private UINavigationNodeSelector uiNodeSelector;
 
-      private DataStorage dataStorage;
-
-      private UserPortalConfigService service;
+      private PageService pageService;
 
       public void execute(Event<UIRightClickPopupMenu> event) throws Exception
       {
@@ -750,8 +747,7 @@ public class UINavigationNodeSelector extends UIContainer
             return;
          }
 
-         service = uiNodeSelector.getApplicationComponent(UserPortalConfigService.class);
-         dataStorage = uiNodeSelector.getApplicationComponent(DataStorage.class);
+         pageService = uiNodeSelector.getApplicationComponent(PageService.class);
          pasteNode(sourceNode, targetNode, sourceNode.isCloneNode());
          uiNodeSelector.selectNode(targetNode);
       }
@@ -790,11 +786,12 @@ public class UINavigationNodeSelector extends UIContainer
          String pageId = node.getPageRef();
          if (pageId != null)
          {
-            Page page = service.getPage(pageId);
+            PageKey sourceKey = PageKey.parse(pageId);
+            PageContext page = pageService.loadPage(sourceKey);
             if (page != null)
             {
-               page = dataStorage.clonePage(pageId, siteKey.getTypeName(), siteKey.getName(), pageName);
-               return page.getPageId();
+               page = pageService.clone(sourceKey, siteKey.page(pageName));
+               return page.getKey().format();
             }
          }
          return null;
