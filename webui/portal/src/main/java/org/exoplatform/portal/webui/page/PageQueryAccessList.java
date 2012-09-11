@@ -54,11 +54,12 @@ public class PageQueryAccessList extends PageListAccess<PageModel, Query<Page>>
       final String siteName = state.getOwnerId();
       final String name = state.getName();
       final String title = state.getTitle();
-      final QueryResult<PageContext> total = pageService.findPages(0, 1, siteType, null, null, null);
       
       //
       ListAccess<PageModel> result = new ListAccess<PageModel>()
       {
+         int size = -1;
+         
          @Override
          public PageModel[] load(int index, int length) throws Exception
          {
@@ -74,7 +75,12 @@ public class PageQueryAccessList extends PageListAccess<PageModel, Query<Page>>
          @Override
          public int getSize() throws Exception
          {
-            return total.getHits();
+            if (size == -1)
+            {
+               QueryResult<PageContext> total = pageService.findPages(0, 1, siteType, siteName, name, title);
+               size = total.getHits();
+            }
+            return size;
          }
       };
       
