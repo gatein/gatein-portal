@@ -30,6 +30,10 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
+import org.exoplatform.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -47,6 +51,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -233,6 +238,19 @@ public class UIPageActionListener
                   {
                      page.setChildren(new ArrayList<ModelObject>());
                   }
+                  
+                  //
+                  PageService pageService = uiPage.getApplicationComponent(PageService.class);
+                  PageState pageState = new PageState(
+                     page.getTitle(), 
+                     page.getDescription(), 
+                     page.isShowMaxWindow(), 
+                     page.getFactoryId(), 
+                     page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
+                     page.getEditPermission());
+                  pageService.savePage(new PageContext(PageKey.parse(page.getPageId()), pageState));
+                  
+                  //
                   DataStorage dataService = uiPage.getApplicationComponent(DataStorage.class);
                   dataService.save(page);
                }
@@ -261,8 +279,23 @@ public class UIPageActionListener
             {
                page.setChildren(new ArrayList<ModelObject>());
             }
+            
+            //
+            PageService pageService = uiPage.getApplicationComponent(PageService.class);
+            PageState pageState = new PageState(
+               page.getTitle(), 
+               page.getDescription(), 
+               page.isShowMaxWindow(), 
+               page.getFactoryId(), 
+               page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
+               page.getEditPermission());
+            pageService.savePage(new PageContext(PageKey.parse(page.getPageId()), pageState));
+            
+            //
             DataStorage dataService = uiPage.getApplicationComponent(DataStorage.class);
             dataService.save(page);
+            
+            //
             pcontext.ignoreAJAXUpdateOnPortlets(false);
             pcontext.setResponseComplete(true);
             pcontext.getWriter().write(EventListener.RESULT_OK);

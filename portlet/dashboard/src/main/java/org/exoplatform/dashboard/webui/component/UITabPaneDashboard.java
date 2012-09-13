@@ -51,10 +51,10 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import javax.portlet.ActionResponse;
 
 /**
  * 
@@ -270,8 +270,21 @@ public class UITabPaneDashboard extends UIContainer
             configService.createPageTemplate(UITabPaneDashboard.PAGE_TEMPLATE, siteKey.getTypeName(), siteKey.getName());
          page.setTitle(nodeLabel);
          page.setName(uniqueNodeName + page.hashCode());
-         dataService.create(page);
+         
+         //
+         PageKey pageKey = new PageKey(siteKey, page.getName());
+         PageState pageState = new PageState(
+            page.getTitle(), 
+            page.getDescription(), 
+            page.isShowMaxWindow(), 
+            page.getFactoryId(), 
+            page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
+            page.getEditPermission());
+         configService.getPageService().savePage(new PageContext(pageKey, pageState));
 
+         //
+         dataService.create(page);
+         
          if (parentNode.getChild(uniqueNodeName) != null)
          {
             uniqueNodeName = uniqueNodeName + "_" + System.currentTimeMillis();

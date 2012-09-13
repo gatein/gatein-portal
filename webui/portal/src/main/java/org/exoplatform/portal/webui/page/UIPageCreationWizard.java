@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.page;
 
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,7 +30,6 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
@@ -38,6 +38,7 @@ import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
+import org.exoplatform.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
@@ -111,9 +112,22 @@ public class UIPageCreationWizard extends UIPageWizard
       UserNode createdNode = uiPageInfo.createUserNode(selectedNode);
       
       createdNode.setPageRef(PageKey.parse(page.getPageId()));
+      
+      //
+      PageService pageService = getApplicationComponent(PageService.class);
+      PageState pageState = new PageState(
+         page.getTitle(), 
+         page.getDescription(), 
+         page.isShowMaxWindow(), 
+         page.getFactoryId(), 
+         page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
+         page.getEditPermission());
+      pageService.savePage(new PageContext(PageKey.parse(page.getPageId()), pageState));
+
+      //
       DataStorage dataService = getApplicationComponent(DataStorage.class); 
       dataService.create(page);
-
+      
       UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
       userPortal.saveNode(selectedNode, null);
       

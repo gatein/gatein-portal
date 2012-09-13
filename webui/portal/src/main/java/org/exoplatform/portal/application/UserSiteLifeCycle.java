@@ -28,7 +28,10 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
+import org.exoplatform.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -38,6 +41,8 @@ import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.web.application.RequestFailure;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+
+import java.util.Arrays;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -87,8 +92,21 @@ public class UserSiteLifeCycle implements ApplicationLifecycle<PortalRequestCont
                Page page = configService.createPageTemplate(PAGE_TEMPLATE, siteKey.getTypeName(), siteKey.getName());
                page.setName(DEFAULT_TAB_NAME);
                page.setTitle(DEFAULT_TAB_NAME);
+               
+               //
+               PageState pageState = new PageState(
+                  page.getTitle(), 
+                  page.getDescription(), 
+                  page.isShowMaxWindow(), 
+                  page.getFactoryId(), 
+                  page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
+                  page.getEditPermission());
+               configService.getPageService().savePage(new PageContext(PageKey.parse(page.getPageId()), pageState));
+               
+               //
                storage.save(page);
-
+               
+               //
                UserNode tabNode = rootNode.addChild(DEFAULT_TAB_NAME);
                tabNode.setLabel(DEFAULT_TAB_NAME);
                tabNode.setPageRef(PageKey.parse(page.getPageId()));

@@ -20,6 +20,7 @@
 package org.exoplatform.navigation.webui.component;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -47,6 +48,7 @@ import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
+import org.exoplatform.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.webui.page.UIPageSelector;
 import org.exoplatform.portal.webui.page.UIWizardPageSetInfo;
@@ -532,8 +534,20 @@ public class UIPageNodeForm extends UIFormTabPane
             Page page = pageSelector.getPage();
             DataStorage storage = uiPageNodeForm.getApplicationComponent(DataStorage.class);
             PageService pageService = uiPageNodeForm.getApplicationComponent(PageService.class);
-            if (pageService.loadPage(PageKey.parse(page.getPageId())) == null)
+            PageKey pageKey = PageKey.parse(page.getPageId());
+            if (pageService.loadPage(pageKey) == null)
             {
+               //
+               PageState pageState = new PageState(
+                  page.getTitle(), 
+                  page.getDescription(), 
+                  page.isShowMaxWindow(), 
+                  page.getFactoryId(), 
+                  page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
+                  page.getEditPermission());
+               pageService.savePage(new PageContext(pageKey, pageState));
+               
+               //
                storage.create(page);
                pageSelector.setValue(page.getPageId());
             }

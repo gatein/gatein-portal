@@ -31,7 +31,10 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
+import org.exoplatform.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -65,6 +68,7 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.Event.Phase;
 import org.exoplatform.webui.event.EventListener;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -749,8 +753,17 @@ public class UIPortalComposer extends UIContainer
 
          // Perform model update
          DataStorage dataService = uiWorkingWS.getApplicationComponent(DataStorage.class);
+         PageService pageService = uiWorkingWS.getApplicationComponent(PageService.class);
          try
          {
+            PageState pageState = new PageState(
+               page.getTitle(), 
+               page.getDescription(), 
+               page.isShowMaxWindow(), 
+               page.getFactoryId(), 
+               page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
+               page.getEditPermission());
+            pageService.savePage(new PageContext(PageKey.parse(page.getPageId()), pageState));
             dataService.save(page);
          }
          catch (StaleModelException ex)

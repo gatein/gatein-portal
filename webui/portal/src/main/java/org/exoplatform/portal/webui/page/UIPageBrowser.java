@@ -20,6 +20,7 @@
 package org.exoplatform.portal.webui.page;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -43,6 +44,7 @@ import org.exoplatform.portal.mop.navigation.Scope;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
+import org.exoplatform.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
@@ -449,7 +451,8 @@ public class UIPageBrowser extends UIContainer
          if (uiPage == null)
          {
             PageService pageService = uiPageForm.getApplicationComponent(PageService.class);
-            PageContext existPage = pageService.loadPage(PageKey.parse(page.getPageId()));
+            PageKey pageKey = PageKey.parse(page.getPageId());
+            PageContext existPage = pageService.loadPage(pageKey);
             if (existPage != null)
             {
                uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.sameName", null));
@@ -457,7 +460,21 @@ public class UIPageBrowser extends UIContainer
             }
             page.setModifiable(true);
             if (page.getChildren() == null)
+            {
                page.setChildren(new ArrayList<ModelObject>());
+            }
+            
+            //
+            PageState pageState = new PageState(
+               page.getTitle(), 
+               page.getDescription(), 
+               page.isShowMaxWindow(), 
+               page.getFactoryId(), 
+               page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
+               page.getEditPermission());
+            pageService.savePage(new PageContext(pageKey, pageState));
+            
+            //
             dataService.create(page);
             postSave(uiPortalApp, pcontext);
             return;
