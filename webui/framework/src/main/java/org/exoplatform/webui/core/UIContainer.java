@@ -19,16 +19,16 @@
 
 package org.exoplatform.webui.core;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /** Created by The eXo Platform SAS May 7, 2006 */
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
@@ -40,19 +40,19 @@ public class UIContainer extends UIComponent
 
    public boolean hasChildren()
    {
-      return children != null;
+      return children != null && children.size() > 0;
    }
 
    public void setChildren(List<UIComponent> ls)
    {
-      this.children = ls;
+      this.children = new CopyOnWriteArrayList<UIComponent>(ls);
    }
 
    public List<UIComponent> getChildren()
    {
       if (children == null)
       {
-         children = new ArrayList<UIComponent>(3);
+         children = new CopyOnWriteArrayList<UIComponent>();
       }
       return children;
    }
@@ -61,7 +61,7 @@ public class UIContainer extends UIComponent
    {
       if (children == null)
       {
-         children = new ArrayList<UIComponent>(3);
+         children = new CopyOnWriteArrayList<UIComponent>();
       }
       uicomponent.setParent(this);
       children.add(uicomponent);
