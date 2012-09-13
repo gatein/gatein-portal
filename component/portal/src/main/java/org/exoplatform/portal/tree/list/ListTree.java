@@ -69,7 +69,7 @@ public class ListTree<T extends ListTree<T>>
    public final int getDepth()
    {
       int depth = 0;
-      for (T current = parent;current != null;current = current.parent)
+      for (T current = parent;current != null;current = ((ListTree<T>)current).parent)
       {
          depth++;
       }
