@@ -51,21 +51,15 @@
      </module>
    </portlet>
   
-   <scripts>
-      <name>textPlugin</name>     
-      <script>
-         <name>text</name>
-         <path>/assets/js/plugins/text.js</path>
-      </script>
-   </scripts>
+   <module>
+      <name>text</name>     
+      <native-script>/assets/js/plugins/text.js</native-script>
+   </module>
    
-   <scripts>
-      <name>mustacheTemplate</name>     
-      <script>
-         <name>mustache</name>
-         <path>/assets/js/plugins/mustache.js</path>
-      </script>
-   </scripts>
+   <module>
+      <name>mustache</name>     
+      <native-script>/assets/js/plugins/mustache.js</native-script>
+   </module>
    
    <module>
       <name>foo</name>     

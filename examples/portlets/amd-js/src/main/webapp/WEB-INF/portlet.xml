@@ -32,7 +32,7 @@ version="2.0"
       <description xml:lang="EN">RequireJS Plugins Sample Portlet</description>
       <portlet-name>RequireJSPluginPortlet</portlet-name>
       <display-name xml:lang="EN">RequireJS Plugins Portlet</display-name>
-      <portlet-class>org.gatein.portlet.samples.RequireJSPluginsPortlet</portlet-class>
+      <portlet-class>org.gatein.portlet.plugin.RequireJSPluginsPortlet</portlet-class>
 
       <supports>
          <mime-type>text/html</mime-type>

@@ -133,76 +133,88 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       
       if (resource != null)
       {  
-         List<Module> modules = new ArrayList<Module>(resource.getModules());
-         if (modules.size() > 0 && modules.get(0) instanceof Module.Native)
-         {
-            Reader jScript = getJavascript(resource, modules.get(0).getName(), locale);
-            return new CompositeReader(jScript);
-         }
+         List<Module> modules = new ArrayList<Module>(resource.getModules());         
          
          Collections.sort(modules, MODULE_COMPARATOR);
-         ArrayList<Reader> readers = new ArrayList<Reader>(modules.size() * 2);
+         ArrayList<Reader> readers = new ArrayList<Reader>(modules.size() * 2);         
+         StringBuilder buffer = new StringBuilder();
          
          //
-         StringBuilder buffer = new StringBuilder();
          boolean isModule = FetchMode.ON_LOAD.equals(resource.getFetchMode());
-         if (isModule)
+         boolean isNative = modules.size() > 0 && modules.get(0) instanceof Module.Native; 
+         
+         if (isNative)
          {
-            buffer.append("define('").append(resourceId).append("', ");
-            JSONArray deps = new JSONArray();
-            for (ResourceId id : resource.getDependencies())
+            Reader jScript = getJavascript(resource, modules.get(0).getName(), locale);
+            readers.add(jScript);
+         }
+         else
+         {
+            if (isModule)
             {
-               deps.put(scripts.getResource(id).getId().toString());
-            }
-            buffer.append(deps);            
-            buffer.append(", function(");
-            for (ResourceId resId : resource.getDependencies()) 
-            {               
-               String alias = resource.getDependencyAlias(resId);
-               ScriptResource dep = getResource(resId);
-               if (dep != null) 
+               buffer.append("define('").append(resourceId).append("', ");
+               JSONArray deps = new JSONArray();
+               for (ResourceId id : resource.getDependencies())
                {
-                  buffer.append(alias == null ? dep.getAlias() : alias).append(",");                  
+                  ScriptResource dep = getResource(id);
+                  if (dep != null)
+                  {
+                     deps.put(dep.getId());                     
+                  }
                }
-            }
-            if (buffer.charAt(buffer.length() - 1) == ',') 
-            {
-               buffer.deleteCharAt(buffer.length() - 1);
+               buffer.append(deps);
+               buffer.append(", function(");
+               for (ResourceId resId : resource.getDependencies()) 
+               {               
+                  ScriptResource dep = getResource(resId);
+                  if (dep != null) 
+                  {
+                     String alias = resource.getDependencyAlias(resId);
+                     buffer.append(alias == null ? dep.getAlias() : alias).append(",");                  
+                  }
+               }
+               if (buffer.charAt(buffer.length() - 1) == ',') 
+               {
+                  buffer.deleteCharAt(buffer.length() - 1);
+               }
+               
+               //                        
+               buffer.append(") { var _module = {};(function() {");
             }
             
-            //                        
-            buffer.append(") { var _module = {};(function() {");
+            //
+            for (Module js : modules)
+            {
+               Reader jScript = getJavascript(resource, js.getName(), locale);
+               if (jScript != null)
+               {                                                     
+                  buffer.append("// Begin ").append(js.getName()).append("\n");                          
+                  
+                  //
+                  readers.add(new StringReader(buffer.toString()));                  
+                  buffer.setLength(0);                  
+                  readers.add(jScript);
+                  
+                  //
+                  buffer.append("// End ").append(js.getName()).append("\n");
+               }                                             
+            }                     
          }
          
-         //
-         for (Module js : modules)
-         {
-            Reader jScript = getJavascript(resource, js.getName(), locale);
-            if (jScript != null)
-            {                                                     
-               buffer.append("// Begin ").append(js.getName()).append("\n");                          
-
-               //
-               readers.add(new StringReader(buffer.toString()));                  
-               buffer.setLength(0);                  
-               readers.add(jScript);
-
-               //
-               buffer.append("// End ").append(js.getName()).append("\n");
-            }                                             
-         }         
-            
          if (isModule)
          {
-            buffer.append("})();");
-            buffer.append("return _module;});");     
+            if (!isNative)
+            {
+               buffer.append("})();");
+               buffer.append("return _module;});");                    
+            }
          }
          else 
          {
-            buffer.append("if (typeof define === 'function' && define.amd && !require.specified('").append(resourceId).append("')) {");
-            buffer.append("define('").append(resourceId).append("');}");            
+            buffer.append("if (typeof define === 'function' && define.amd && !require.specified('").append(resource.getId()).append("')) {");
+            buffer.append("define('").append(resource.getId()).append("');}");            
          }
-         readers.add(new StringReader(buffer.toString()));
+         readers.add(new StringReader(buffer.toString()));            
          
          return new CompositeReader(readers);
       }
@@ -268,19 +280,13 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             String name = resource.getId().toString();
             List<Module> modules = resource.getModules();
             
-            if (modules.get(0) instanceof Module.Remote
-                     || modules.get(0) instanceof Module.Native)
-            {
-               name = resource.getId().getName();
-            }
-            
             if (FetchMode.IMMEDIATE.equals(resource.getFetchMode()) || (modules.size() > 0 && (modules.get(0) instanceof Module.Remote
                      || modules.get(0) instanceof Module.Native)))
             {
                JSONArray deps = new JSONArray();
                for (ResourceId id : resource.getDependencies())
                {
-                  deps.put(scripts.getResource(id).getId().toString());
+                  deps.put(getResource(id).getId());
                }
                if (deps.length() > 0)
                {

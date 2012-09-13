@@ -128,7 +128,8 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
                "// Begin native2\n" + 
                "fff;" +  
                "// End native2\n" +
-               "})();return _module;});";
+               "})();return _module;});" +
+               "if (typeof define === 'function' && define.amd && !require.specified('native2')) {define('native2');}";
       assertReader(native2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "native2"), null));
    }
 

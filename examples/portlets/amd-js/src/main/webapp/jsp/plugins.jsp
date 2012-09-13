@@ -6,11 +6,12 @@
   </ul>
   <div class="tab-content" id="myTabContent">
     <div id="text" class="tab-pane fade in active">
+    	<div>This example show how to use NATIVE requirejs lib in GateIn</div>
     	<h4 class="well">    		 
     		<a href="https://github.com/requirejs/text">"Text" - a requirejs plugin</a><br/> 
     		<a href="http://mustache.github.com/">"Mustache" - logic-less templates</a> 
     	</h4>
-    	<div>Try it!</div>
+    	<h4>Try it!</h4>
     	<div style="float: left; margin-left:50px;">
     	  <input id="name" type="text" placeholder="Type your name..." />
 		  <button type="button" class="btn" onclick="sayHello()">Say hello</button>
@@ -22,32 +23,25 @@
 				<li>
 					Each js library should be a GateIn resource - declare it in gatein-resources.xml
 					<pre class="code" lang="html">
-	   &lt;scripts&gt;
-	      &lt;name&gt;textPlugin&lt;/name&gt;     
-	      &lt;script&gt;
-	         &lt;name&gt;text&lt;/name&gt;
-	         &lt;path&gt;/assets/js/plugins/text.js&lt;/path&gt;
-	      &lt;/script&gt;
-	   &lt;/scripts&gt;
+	   &lt;module&gt;
+	      &lt;name&gt;text&lt;/name&gt;     
+	      &lt;native-script&gt;/assets/js/plugins/text.js&lt;/native-script&gt;
+	   &lt;/module&gt;
 	   
-	   &lt;scripts&gt;
-	      &lt;name&gt;mustacheTemplate&lt;/name&gt;     
-	      &lt;script&gt;
-	         &lt;name&gt;mustache&lt;/name&gt;
-	         &lt;path&gt;/assets/js/plugins/mustache.js&lt;/path&gt;
-	      &lt;/script&gt;
-	   &lt;/scripts&gt;
+	   &lt;module&gt;
+	      &lt;name&gt;mustache&lt;/name&gt;     
+	      &lt;native-script&gt;/assets/js/plugins/mustache.js&lt;/native-script&gt;
+	   &lt;/module&gt;
 					</pre>
 					<b>Note:</b>
 					<ul>
 						<li>
-							These js libs are already AMD modules, they have to be declared as GateIn's IMMEDIATE 
-							script resources or native scripts
+							These js libs are already AMD modules, they have to be declared as GateIn's native scripts (&ltnative-script&gt;)
 						</li>
 						<li>
 							Each lib should be declared in separate GateIn resources or that lib need to specify its module name<br/> 
 							<pre class="code" lang="js">
-	   define('Text', ['module'], function (module) {	
+	   define('text', ['module'], function (module) {	
 	   	//Text plugin code
 	   });
 							</pre>
@@ -55,9 +49,10 @@
 					</ul> 						
 				</li>
 				<li>					
-					Load these libraries using Gatein's resourceID instead of normal names ("Text" or "Mustache") <br/>
+					Notice how we declare &lt;name&gt; for each native modules, they will be use as real requirejs module.
+					<br/>If you declare module's name explicitly in your native js, they should be the same<br/>
 					<pre class="code" lang="js">
-	   require(['SHARED/mustacheTemplate', 'SHARED/textPlugin!tmpl.mustache'],function(...) {
+	   require(['mustache', 'text!tmpl.mustache'],function(...) {
 	   	//Code that use template
 	   });
 					</pre>
@@ -84,7 +79,7 @@
     	<li>Javascript
     		<pre class="code" lang="js">
 	   function sayHello() {
-		  require(['SHARED/mustacheTemplate', 'SHARED/textPlugin!/amd-js/jsp/hello.mustache'], 
+		  require(['mustache', 'text!/amd-js/jsp/hello.mustache'], 
 			function(mustache, template){									
 				var name = document.getElementById("name").value;
 				name = name == "" ? "world" : name;
@@ -101,7 +96,7 @@
 </div>
 <script type="text/javascript">
 	function sayHello() {
-		require(['SHARED/mustacheTemplate', 'SHARED/textPlugin!/amd-js/jsp/hello.mustache'], 
+		require(['mustache', 'text!/amd-js/jsp/hello.mustache'], 
 			function(mustache, template){									
 				var name = document.getElementById("name").value;
 				name = name == "" ? "world" : name;
