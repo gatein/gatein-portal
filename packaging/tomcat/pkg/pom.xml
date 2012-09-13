@@ -907,7 +907,6 @@
         </property>
       </activation>
       <modules>
-        <module>tc6</module>
         <module>tc7</module>
       </modules>
     </profile>
@@ -920,20 +919,7 @@
         </property>
       </activation>
       <modules>
-        <module>tc6</module>
         <module>tc7</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>pkg-tomcat6</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>tomcat6</value>
-        </property>
-      </activation>
-      <modules>
-        <module>tc6</module>
       </modules>
     </profile>
     <profile>
