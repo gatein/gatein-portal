@@ -28,6 +28,8 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.navigation.NavigationContext;
+import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -74,6 +76,18 @@ public class UIPageActionListener
          SiteKey siteKey = pageNodeEvent.getSiteKey();
          if (siteKey != null)
          {
+            if (pcontext.getRemoteUser() == null && (siteKey.getType().equals(SiteType.GROUP) || siteKey.getType().equals(SiteType.USER)))
+            {
+               NavigationService service = uiPortalApp.getApplicationComponent(NavigationService.class);
+               NavigationContext navContext = service.loadNavigation(siteKey);
+               if (navContext != null)
+               {
+                  uiPortalApp.setLastRequestNavData(null);
+                  pcontext.requestAuthenticationLogin();
+                  return;
+               }
+            }
+
             UserNavigation navigation = userPortal.getNavigation(siteKey);
             if (navigation != null)
             {

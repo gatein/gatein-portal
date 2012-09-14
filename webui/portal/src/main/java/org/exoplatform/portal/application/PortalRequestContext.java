@@ -101,7 +101,7 @@ public class PortalRequestContext extends WebuiRequestContext
 
    final static private String LAST_PORTAL_NAME = "prc.lastPortalName";
    
-   final static private String DO_LOGIN_PATTERN = "dologin";
+   final static private String DO_LOGIN_PATTERN = "login";
 
    /** The path decoded from the request. */
    private final String nodePath_;

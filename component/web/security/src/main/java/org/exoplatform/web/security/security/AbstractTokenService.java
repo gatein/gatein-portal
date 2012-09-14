@@ -24,7 +24,7 @@ import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.management.annotations.*;
 import org.exoplatform.management.jmx.annotations.NameTemplate;
 import org.exoplatform.management.jmx.annotations.Property;
-import org.exoplatform.web.login.InitiateLoginServlet;
+import org.exoplatform.web.login.LoginServlet;
 import org.exoplatform.web.security.Token;
 import org.exoplatform.web.security.TokenStore;
 import org.gatein.wci.security.Credentials;
@@ -220,6 +220,6 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
 
    protected String nextTokenId()
    {
-      return InitiateLoginServlet.COOKIE_NAME + random.nextInt();
+      return LoginServlet.COOKIE_NAME + random.nextInt();
    }
 }

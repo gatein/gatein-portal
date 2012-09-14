@@ -57,7 +57,6 @@ import org.gatein.wci.WebApp;
 import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
 import org.gatein.wci.WebAppListener;
-import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.gatein.wsrp.WSRPConstants;
 import org.gatein.wsrp.consumer.migration.JCRMigrationService;
 import org.gatein.wsrp.consumer.migration.MigrationService;
@@ -201,8 +200,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
 
             // listen for web app events so that we can inject services into WSRP admin UI "cleanly"
             // todo: this service injection should really be done using CDI... :/
-            ServletContainerFactory factory = DefaultServletContainerFactory.getInstance();
-            ServletContainer servletContainer = factory.getServletContainer();
+            ServletContainer servletContainer = ServletContainerFactory.getServletContainer();
             servletContainer.addWebAppListener(this);
 
             log.info("WSRP Service version '" + WSRPConstants.WSRP_SERVICE_VERSION + "' STARTED");
@@ -418,8 +416,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
       if (!bypass)
       {
          // stop listening to web app events
-         ServletContainerFactory factory = DefaultServletContainerFactory.getInstance();
-         ServletContainer servletContainer = factory.getServletContainer();
+         ServletContainer servletContainer = ServletContainerFactory.getServletContainer();
          servletContainer.removeWebAppListener(this);
 
          stopProducer();

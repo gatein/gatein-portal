@@ -46,7 +46,7 @@
   <!-- ================================================================== -->
   <!--   RESOURCE FILTER TO CACHE MERGED JAVASCRIPT AND CSS               -->
   <!-- ================================================================== -->
-    <filter>
+  <filter>
 		<filter-name>LocalizationFilter</filter-name>
 		<filter-class>org.exoplatform.portal.application.localization.LocalizationFilter</filter-class>
 	</filter>
@@ -73,6 +73,11 @@
     </init-param>
   </filter>
 
+   <filter>
+      <filter-name>ConversationStateUpdateFilter</filter-name>
+      <filter-class>org.exoplatform.web.login.ConversationStateUpdateFilter</filter-class>
+   </filter>
+
   <filter>
     <filter-name>RestEncodingFilter</filter-name>
       <filter-class>org.exoplatform.services.rest.servlet.RestEncodingFilter</filter-class>
@@ -92,22 +97,22 @@
     <filter-class>org.exoplatform.web.login.RememberMeFilter</filter-class>
   </filter>
 
-   <filter>
+  <filter>
 		<filter-name>ClusteredSSOFilter</filter-name>
 		<filter-class>org.exoplatform.web.login.ClusteredSSOFilter</filter-class>
 	</filter>
 
-   <!--  Uncomment ErrorLoginFilter and LoginDetectorFilter for sending mail after successive number of bad login attempts. -->
-   <!--
-   <filter>
-      <filter-name>ErrorLoginFilter</filter-name>
-      <filter-class>org.exoplatform.web.security.errorlogin.ErrorLoginFilter</filter-class>
-   </filter>
-   <filter>
-      <filter-name>LoginDetectorFilter</filter-name>
-      <filter-class>org.exoplatform.web.security.errorlogin.LoginDetectorFilter</filter-class>
-   </filter>
-   -->
+  <!--  Uncomment ErrorLoginFilter and LoginDetectorFilter for sending mail after successive number of bad login attempts. -->
+  <!--
+  <filter>
+    <filter-name>ErrorLoginFilter</filter-name>
+    <filter-class>org.exoplatform.web.security.errorlogin.ErrorLoginFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>LoginDetectorFilter</filter-name>
+    <filter-class>org.exoplatform.web.security.errorlogin.LoginDetectorFilter</filter-class>
+  </filter>
+  -->
 
   <filter>
 	     <filter-name>PortalContainerFilter</filter-name>
@@ -119,12 +124,12 @@
 	  <url-pattern>/*</url-pattern>
   </filter-mapping>
   
-   <filter-mapping>
-     <filter-name>RememberMeFilter</filter-name>
-     <servlet-name>portal</servlet-name>
-   </filter-mapping>
+  <filter-mapping>
+    <filter-name>RememberMeFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 
-   <filter-mapping>
+  <filter-mapping>
 		<filter-name>ClusteredSSOFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
@@ -142,14 +147,14 @@
    </filter-mapping>
    -->
 
-   <filter-mapping>
-       <filter-name>LocalizationFilter</filter-name>
-       <url-pattern>*.jsp</url-pattern>
-       <dispatcher>INCLUDE</dispatcher>
-       <dispatcher>FORWARD</dispatcher>
-       <dispatcher>REQUEST</dispatcher>
-       <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
+  <filter-mapping>
+    <filter-name>LocalizationFilter</filter-name>
+    <url-pattern>*.jsp</url-pattern>
+    <dispatcher>INCLUDE</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>ERROR</dispatcher>
+  </filter-mapping>
 
 	<filter-mapping>
     <filter-name>ResourceRequestFilter</filter-name>
@@ -181,6 +186,11 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
+   <filter-mapping>
+      <filter-name>ConversationStateUpdateFilter</filter-name>
+      <url-pattern>/*</url-pattern>
+   </filter-mapping>
+
   <filter-mapping>
     <filter-name>ThreadLocalSessionProviderInitializedFilter</filter-name>
     <url-pattern>/*</url-pattern>
@@ -209,10 +219,10 @@
 	</listener>
 	<listener>
     <listener-class>org.exoplatform.services.security.web.JAASConversationStateListener</listener-class>
-   </listener>
-   <listener>
+  </listener>
+  <listener>
     <listener-class>org.exoplatform.web.security.AuthenticationRegistryListener</listener-class>
-   </listener>
+  </listener>
   <!-- ================================================================== -->
   <!--           SERVLET                                                  -->
   <!-- ================================================================== -->
@@ -232,11 +242,6 @@
     <load-on-startup>4</load-on-startup>
   </servlet>
 
-	<servlet>
-	  <servlet-name>javascript</servlet-name>
-	  <servlet-class>org.exoplatform.portal.webui.javascript.JavascriptServlet</servlet-class>
-	</servlet>
-
   <servlet>
     <servlet-name>Controller</servlet-name>
     <servlet-class>org.exoplatform.frameworks.jcr.web.CommandControllerServlet</servlet-class>
@@ -244,21 +249,9 @@
   </servlet>
 
   <servlet>
-    <servlet-name>PortalLoginController</servlet-name>
-    <servlet-class>org.exoplatform.web.security.PortalLoginController</servlet-class>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>org.exoplatform.web.login.LoginServlet</servlet-class>
   </servlet>
-  <servlet>
-    <servlet-name>InitiateLoginServlet</servlet-name>
-    <servlet-class>org.exoplatform.web.login.InitiateLoginServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>DoLoginServlet</servlet-name>
-    <servlet-class>org.exoplatform.web.login.DoLoginServlet</servlet-class>
-  </servlet>
-	<servlet>
-		<servlet-name>ErrorLoginServlet</servlet-name>
-		<servlet-class>org.exoplatform.web.login.ErrorLoginServlet</servlet-class>
-	</servlet>
 
   <servlet>
     <servlet-name>GateInServlet</servlet-name>
@@ -269,26 +262,13 @@
 	<!--  =================================================================  -->
 
 	<servlet-mapping>
-	  <servlet-name>InitiateLoginServlet</servlet-name>
-	  <url-pattern>/initiatelogin</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-		<servlet-name>ErrorLoginServlet</servlet-name>
-		<url-pattern>/errorlogin</url-pattern>
-	</servlet-mapping>
-	<servlet-mapping>
-	  <servlet-name>PortalLoginController</servlet-name>
+	  <servlet-name>LoginServlet</servlet-name>
 	  <url-pattern>/login</url-pattern>
 	</servlet-mapping>
   <servlet-mapping>
-    <servlet-name>DoLoginServlet</servlet-name>
+    <servlet-name>LoginServlet</servlet-name>
     <url-pattern>/dologin</url-pattern>
   </servlet-mapping>
-
-	<servlet-mapping>
-	  <servlet-name>javascript</servlet-name>
-	  <url-pattern>/javascript/*</url-pattern>
-	</servlet-mapping>
 
   <servlet-mapping>
     <servlet-name>RestServer</servlet-name>
@@ -314,10 +294,6 @@
 		<web-resource-collection>
 	  	<web-resource-name>user authentication</web-resource-name>
 	  	<url-pattern>/dologin</url-pattern>
-	  	<url-pattern>/private/*</url-pattern>
-	      <url-pattern>/standalone/*</url-pattern>
-	      <url-pattern>/g/*</url-pattern>
-	      <url-pattern>/u/*</url-pattern>
 	  	<http-method>POST</http-method>
 	  	<http-method>GET</http-method>
 	  </web-resource-collection>
@@ -332,16 +308,12 @@
 	  <auth-method>FORM</auth-method>
 	  <realm-name>gatein-domain</realm-name>
 		<form-login-config>
-		  <form-login-page>/initiatelogin</form-login-page>
-			<form-error-page>/errorlogin</form-error-page>
+		  <form-login-page>/login</form-login-page>
+			<form-error-page>/login</form-error-page>
 	  </form-login-config>
 	</login-config>
 	<security-role>
 	  <description>a simple user role</description>
 	  <role-name>users</role-name>
-	</security-role>
-	<security-role>
-	  <description>the admin role</description> 
-	  <role-name>admin</role-name>
 	</security-role>
 </web-app>

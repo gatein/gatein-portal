@@ -289,15 +289,6 @@
                 </security-domain>
                 <security-domain name="gatein-domain" cache-type="default">
                     <authentication>
-                        <login-module code="org.gatein.wci.security.WCILoginModule" flag="optional">
-                            <module-option name="portalContainerName" value="portal"/>
-                            <module-option name="realmName" value="gatein-domain"/>
-                        </login-module>
-                        <login-module code="org.exoplatform.services.security.jaas.SharedStateLoginModule"
-                                   flag="required">
-                            <module-option name="portalContainerName" value="portal"/>
-                            <module-option name="realmName" value="gatein-domain"/>
-                        </login-module>
                         <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
                             <module-option name="portalContainerName" value="portal"/>
                             <module-option name="realmName" value="gatein-domain"/>
@@ -306,15 +297,6 @@
                 </security-domain>
                 <security-domain name="gatein-domain-sample-portal" cache-type="default">
                     <authentication>
-                        <login-module code="org.gatein.wci.security.WCILoginModule" flag="optional">
-                            <module-option name="portalContainerName" value="sample-portal"/>
-                            <module-option name="realmName" value="gatein-domain-sample-portal"/>
-                        </login-module>
-                        <login-module code="org.exoplatform.services.security.jaas.SharedStateLoginModule"
-                                   flag="required">
-                            <module-option name="portalContainerName" value="sample-portal"/>
-                            <module-option name="realmName" value="gatein-domain-sample-portal"/>
-                        </login-module>
                         <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
                             <module-option name="portalContainerName" value="sample-portal"/>
                             <module-option name="realmName" value="gatein-domain-sample-portal"/>

@@ -55,13 +55,6 @@
          </exclusions>
       </dependency>
 
-
-      <!-- Gatein wci -->
-      <!--dependency>
-         <groupId>org.gatein.wci</groupId>
-         <artifactId>wci-exo</artifactId>
-      </dependency-->
-
       <dependency>
          <groupId>org.gatein.common</groupId>
          <artifactId>common-common</artifactId>

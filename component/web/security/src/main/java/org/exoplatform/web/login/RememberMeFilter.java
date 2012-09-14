@@ -21,22 +21,19 @@ package org.exoplatform.web.login;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractFilter;
-import org.exoplatform.web.security.AuthenticationRegistry;
 import org.exoplatform.web.security.security.CookieTokenService;
-import org.exoplatform.web.controller.router.PercentEncoding;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
-import org.gatein.common.text.FastURLEncoder;
+import org.gatein.wci.ServletContainer;
+import org.gatein.wci.ServletContainerFactory;
 import org.gatein.wci.security.Credentials;
 
 import javax.servlet.*;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Enumeration;
 
 /**
- * The remember me filter performs a send redirect on a portal private servlet mapping when the current request
+ * The remember me filter performs an authentication using the {@link ServletContainer} when the current request
  * is a GET request, the user is not authenticated and there is a remember me token cookie in the request.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -44,12 +41,7 @@ import java.util.Enumeration;
  */
 public class RememberMeFilter extends AbstractFilter
 {
-   /** . */
-   private static final FastURLEncoder CONVERTER = FastURLEncoder.getUTF8Instance();
 
-   /** . */
-   private static final Logger log = LoggerFactory.getLogger(RememberMeFilter.class);
-   
    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException
    {
       doFilter((HttpServletRequest)req, (HttpServletResponse)resp, chain);
@@ -59,65 +51,41 @@ public class RememberMeFilter extends AbstractFilter
    {
       if (req.getRemoteUser() == null && "GET".equals(req.getMethod()))
       {
-         String token = InitiateLoginServlet.getRememberMeTokenCookie(req);
+         String token = LoginServlet.getRememberMeTokenCookie(req);
          if (token != null)
          {
-            
             ExoContainer container = getContainer();
-            Object o =
-               ((CookieTokenService)container.getComponentInstanceOfType(CookieTokenService.class)).validateToken(
-               token, false);
-            if (o instanceof Credentials)
+            CookieTokenService tokenservice = (CookieTokenService)container.getComponentInstanceOfType(CookieTokenService.class);
+            Credentials credentials = tokenservice.validateToken(token, false);
+            if (credentials != null)
             {
-               AuthenticationRegistry authenticationRegistry = (AuthenticationRegistry)getContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
-               authenticationRegistry.setCredentials(req, (Credentials)o);
-
-               resp.sendRedirect(resp.encodeRedirectURL(
-                     loginUrl(
-                           req.getContextPath(),
-                           privateUri(req)
-                     )
-               ));
-               resp.flushBuffer();
+               ServletContainer servletContainer = ServletContainerFactory.getServletContainer();
+               try
+               {
+                  servletContainer.login(req, resp, credentials);
+               }
+               catch (Exception e)
+               {
+                  // Could not authenticate
+               }
             }
+         }
+
+         // Clear token cookie if we did not authenticate
+         if (req.getRemoteUser() == null)
+         {
+            Cookie cookie = new Cookie(LoginServlet.COOKIE_NAME, "");
+            cookie.setPath(req.getContextPath());
+            cookie.setMaxAge(0);
+            resp.addCookie(cookie);
          }
       }
 
-      //
-      if (!resp.isCommitted())
-      {
-         chain.doFilter(req, resp);
-      }
+      // Continue
+      chain.doFilter(req, resp);
    }
 
    public void destroy()
    {
-   }
-
-   private String privateUri(HttpServletRequest req)
-   {
-      StringBuilder builder = new StringBuilder(req.getRequestURI());
-      char sep = '?';
-      for (Enumeration<String> e = req.getParameterNames();e.hasMoreElements();)
-      {
-         String parameterName = e.nextElement();
-         for (String parameteValue : req.getParameterValues(parameterName))
-         {
-            builder.append(sep);
-            sep = '&';
-            builder.append(CONVERTER.encode(parameterName));
-            builder.append('=');
-            builder.append(CONVERTER.encode(parameteValue));
-         }
-      }
-      return PercentEncoding.QUERY_PARAM.encode(builder);
-   }
-
-   private String loginUrl(String context, String initUrl)
-   {
-      return String.format(
-            "%s/login?initialURI=%s",
-            context, initUrl
-      );
    }
 }

@@ -310,10 +310,6 @@
       <groupId>org.gatein.wci</groupId>
       <artifactId>wci-jetty</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.gatein.wci</groupId>
-      <artifactId>wci-exo</artifactId>
-    </dependency>
 
     <!-- Gatein PC -->
     <dependency>

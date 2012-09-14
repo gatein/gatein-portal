@@ -299,10 +299,6 @@
       <groupId>org.gatein.wci</groupId>
       <artifactId>wci-wci</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.gatein.wci</groupId>
-      <artifactId>wci-exo</artifactId>
-    </dependency>
 
     <!-- Gatein PC -->
     <dependency>

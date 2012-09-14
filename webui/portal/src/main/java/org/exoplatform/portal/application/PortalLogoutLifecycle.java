@@ -25,7 +25,7 @@ import org.exoplatform.web.application.ApplicationLifecycle;
 import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.gatein.wci.impl.DefaultServletContainerFactory;
+import org.gatein.wci.ServletContainerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -57,7 +57,7 @@ public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestC
          PortalRequestContext prContext = Util.getPortalRequestContext();
          HttpServletRequest request = prContext.getRequest();
          HttpServletResponse response = prContext.getResponse();
-         DefaultServletContainerFactory.getInstance().getServletContainer().logout(request, response);
+         ServletContainerFactory.getServletContainer().logout(request, response);
       }
    }
 

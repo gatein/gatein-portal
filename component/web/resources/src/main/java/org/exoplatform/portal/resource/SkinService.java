@@ -39,8 +39,8 @@ import org.exoplatform.portal.resource.compressor.ResourceType;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.resources.Orientation;
+import org.gatein.wci.ServletContainerFactory;
 import org.gatein.wci.WebAppListener;
-import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.picocontainer.Startable;
 
 import java.io.BufferedReader;
@@ -1026,8 +1026,8 @@ public class SkinService extends AbstractResourceService implements Startable
     */
    public void start()
    {
-      DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(deployer);
-      DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(removal);
+      ServletContainerFactory.getServletContainer().addWebAppListener(deployer);
+      ServletContainerFactory.getServletContainer().addWebAppListener(removal);
    }
 
    /**
@@ -1037,7 +1037,7 @@ public class SkinService extends AbstractResourceService implements Startable
     */
    public void stop()
    {
-      DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(deployer);
-      DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(removal);
+      ServletContainerFactory.getServletContainer().removeWebAppListener(deployer);
+      ServletContainerFactory.getServletContainer().removeWebAppListener(removal);
    }
 }

@@ -27,7 +27,6 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.bridge.BridgeInterceptor;
-import org.gatein.pc.federation.FederatedPortletInvoker;
 import org.gatein.pc.federation.FederatingPortletInvoker;
 import org.gatein.pc.federation.impl.FederatingPortletInvokerService;
 import org.gatein.pc.portlet.PortletInvokerInterceptor;
@@ -48,7 +47,7 @@ import org.gatein.pc.portlet.impl.state.StateManagementPolicyService;
 import org.gatein.pc.portlet.impl.state.producer.PortletStatePersistenceManagerService;
 import org.gatein.pc.portlet.state.StateConverter;
 import org.gatein.pc.portlet.state.producer.ProducerPortletInvoker;
-import org.gatein.wci.impl.DefaultServletContainerFactory;
+import org.gatein.wci.ServletContainerFactory;
 import org.picocontainer.Startable;
 
 /**
@@ -131,8 +130,8 @@ public class ExoKernelIntegration implements Startable
       valveInterceptor.setPortletApplicationRegistry(portletApplicationRegistry);
       valveInterceptor.setNext(secureTransportInterceptor);
 
-      portletApplicationRegistry.setServletContainerFactory(DefaultServletContainerFactory.getInstance());
-      contextDispatcherInterceptor.setServletContainerFactory(DefaultServletContainerFactory.getInstance());
+      portletApplicationRegistry.setServletContainerFactory(ServletContainerFactory.instance);
+      contextDispatcherInterceptor.setServletContainerFactory(ServletContainerFactory.instance);
 
       // The portlet container invoker continued
       containerPortletInvoker.setNext(valveInterceptor);

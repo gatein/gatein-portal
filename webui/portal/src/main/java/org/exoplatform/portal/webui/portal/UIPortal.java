@@ -45,13 +45,12 @@ import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.web.application.JavascriptManager;
-import org.exoplatform.web.login.InitiateLoginServlet;
+import org.exoplatform.web.login.LoginServlet;
 import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
-import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -374,7 +373,7 @@ public class UIPortal extends UIContainer
          createURL.setResource(new NavigationResource(SiteType.PORTAL, portalName, null));
          
          LogoutControl.wantLogout();
-         Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, "");
+         Cookie cookie = new Cookie(LoginServlet.COOKIE_NAME, "");
          cookie.setPath(req.getContextPath());
          cookie.setMaxAge(0);
          prContext.getResponse().addCookie(cookie);
@@ -389,7 +388,7 @@ public class UIPortal extends UIContainer
          {
             for (Cookie cookie : cookies)
             {
-               if (InitiateLoginServlet.COOKIE_NAME.equals(cookie.getName()))
+               if (LoginServlet.COOKIE_NAME.equals(cookie.getName()))
                {
                   return cookie.getValue();
                }

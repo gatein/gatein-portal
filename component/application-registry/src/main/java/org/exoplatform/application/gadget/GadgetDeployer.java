@@ -27,11 +27,11 @@ import org.exoplatform.container.RootContainer;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.xml.XMLTools;
+import org.gatein.wci.ServletContainerFactory;
 import org.gatein.wci.WebApp;
 import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
 import org.gatein.wci.WebAppListener;
-import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.picocontainer.Startable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -102,12 +102,12 @@ public class GadgetDeployer implements WebAppListener, Startable
 
    public void start()
    {
-      DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(this);
+      ServletContainerFactory.getServletContainer().addWebAppListener(this);
    }
 
    public void stop()
    {
-      DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(this);
+      ServletContainerFactory.getServletContainer().addWebAppListener(this);
    }
 
    private void handle(ServletContext scontext, URL gadgetsURL)

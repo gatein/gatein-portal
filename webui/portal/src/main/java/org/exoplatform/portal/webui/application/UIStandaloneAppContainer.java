@@ -26,7 +26,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.webui.util.PortalDataMapper;
 import org.exoplatform.services.security.ConversationState;
-import org.exoplatform.web.login.InitiateLoginServlet;
+import org.exoplatform.web.login.LoginServlet;
 import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
@@ -37,10 +37,9 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
-import java.util.Map;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @ComponentConfig(template = "system:/groovy/portal/webui/application/UIStandaloneAppContainer.gtmpl", events = {
    @EventConfig(listeners = UIStandaloneAppContainer.LogoutActionListener.class)})
@@ -161,7 +160,7 @@ public class UIStandaloneAppContainer extends UIContainer
          }
 
          LogoutControl.wantLogout();
-         Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, "");
+         Cookie cookie = new Cookie(LoginServlet.COOKIE_NAME, "");
          cookie.setPath(req.getContextPath());
          cookie.setMaxAge(0);
          context.getResponse().addCookie(cookie);
@@ -176,7 +175,7 @@ public class UIStandaloneAppContainer extends UIContainer
          {
             for (Cookie cookie : cookies)
             {
-               if (InitiateLoginServlet.COOKIE_NAME.equals(cookie.getName()))
+               if (LoginServlet.COOKIE_NAME.equals(cookie.getName()))
                {
                   return cookie.getValue();
                }

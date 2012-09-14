@@ -24,16 +24,15 @@
 <%@ page import="org.exoplatform.container.PortalContainer"%>
 <%@ page import="org.exoplatform.services.resources.ResourceBundleService"%>
 <%@ page import="java.util.ResourceBundle"%>
-<%@ page import="org.exoplatform.web.login.InitiateLoginServlet"%>
 <%@ page import="org.gatein.common.text.EntityEncoder"%>
 <%@ page language="java" %>
 <%@ page contentType="text/html; charset=utf-8" %>
 <%
   String contextPath = request.getContextPath() ;
 
-  String username = (String)request.getParameter("j_username");
+  String username = (String)request.getParameter("username");
   if(username == null) username = "";
- 	String password = (String)request.getParameter("j_password");
+ 	String password = (String)request.getParameter("password");
  	if(password == null) password = "";
 
  PortalContainer portalContainer = PortalContainer.getCurrentInstance(session.getServletContext());	
@@ -42,7 +41,7 @@
   
   String uri = (String)request.getAttribute("org.gatein.portal.login.initial_uri");
 
-  Cookie cookie = new Cookie(InitiateLoginServlet.COOKIE_NAME, "");
+  Cookie cookie = new Cookie(org.exoplatform.web.login.LoginServlet.COOKIE_NAME, "");
 	cookie.setPath(request.getContextPath());
 	cookie.setMaxAge(0);
 	response.addCookie(cookie);

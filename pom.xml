@@ -43,9 +43,9 @@
       <org.exoplatform.jcr.version>1.15.0-Beta01</org.exoplatform.jcr.version>
       <org.shindig.version>2.0.2-CP01</org.shindig.version>
       <nl.captcha.simplecaptcha.version>1.1.1-GA-Patch01</nl.captcha.simplecaptcha.version>
-      <org.gatein.common.version>2.0.4-GA</org.gatein.common.version>
-      <org.gatein.wci.version>2.2.0-Beta02</org.gatein.wci.version>
-      <org.gatein.pc.version>2.3.2-GA</org.gatein.pc.version>
+      <org.gatein.common.version>2.1.0.Alpha04</org.gatein.common.version>
+      <org.gatein.wci.version>2.3.0.Alpha04</org.gatein.wci.version>
+      <org.gatein.pc.version>2.4.0.Alpha02</org.gatein.pc.version>
       <org.picketlink.idm>1.4.0.M01</org.picketlink.idm>
       <org.gatein.wsrp.version>2.2.0-Beta04</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.1.1-GA</org.gatein.mop.version>
@@ -336,32 +336,12 @@
          </dependency>
          <dependency>
             <groupId>org.gatein.wci</groupId>
-            <artifactId>wci-exo</artifactId>
-            <version>${org.gatein.wci.version}</version>
-         </dependency>
-         <dependency>
-            <groupId>org.gatein.wci</groupId>
-            <artifactId>wci-tomcat6</artifactId>
-            <version>${org.gatein.wci.version}</version>
-         </dependency>
-         <dependency>
-            <groupId>org.gatein.wci</groupId>
             <artifactId>wci-tomcat7</artifactId>
             <version>${org.gatein.wci.version}</version>
          </dependency>
          <dependency>
             <groupId>org.gatein.wci</groupId>
-            <artifactId>wci-jboss6</artifactId>
-            <version>${org.gatein.wci.version}</version>
-         </dependency>
-         <dependency>
-            <groupId>org.gatein.wci</groupId>
             <artifactId>wci-jboss7</artifactId>
-            <version>${org.gatein.wci.version}</version>
-         </dependency>
-         <dependency>
-            <groupId>org.gatein.wci</groupId>
-            <artifactId>wci-jetty</artifactId>
             <version>${org.gatein.wci.version}</version>
          </dependency>
          <dependency>

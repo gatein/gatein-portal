@@ -50,9 +50,9 @@ import org.gatein.portal.controller.resource.script.FetchMode;
 import org.gatein.portal.controller.resource.script.Module;
 import org.gatein.portal.controller.resource.script.ScriptGraph;
 import org.gatein.portal.controller.resource.script.ScriptResource;
+import org.gatein.wci.ServletContainerFactory;
 import org.gatein.wci.WebApp;
 import org.gatein.wci.WebAppListener;
-import org.gatein.wci.impl.DefaultServletContainerFactory;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.picocontainer.Startable;
@@ -357,7 +357,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    public void start()
    {
       log.debug("Registering JavascriptConfigService for servlet container events");
-      DefaultServletContainerFactory.getInstance().getServletContainer().addWebAppListener(deployer);
+      ServletContainerFactory.getServletContainer().addWebAppListener(deployer);
    }
 
    /**
@@ -369,7 +369,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    public void stop()
    {
       log.debug("Unregistering JavascriptConfigService for servlet container events");
-      DefaultServletContainerFactory.getInstance().getServletContainer().removeWebAppListener(deployer);
+      ServletContainerFactory.getServletContainer().removeWebAppListener(deployer);
    }
    
    private Reader getJavascript(ScriptResource resource, String moduleName, Locale locale)

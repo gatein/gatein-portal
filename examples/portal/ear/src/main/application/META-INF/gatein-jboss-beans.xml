@@ -2,10 +2,6 @@
 
   <application-policy xmlns="urn:jboss:security-beans:1.0" name="gatein-domain-sample-portal">
     <authentication>
-      <login-module code="org.gatein.wci.security.WCILoginModule" flag="optional">
-      	<module-option name="portalContainerName">sample-portal</module-option>
-      	<module-option name="realmName">gatein-domain-sample-portal</module-option>
-      </login-module>
       <login-module code="org.exoplatform.web.security.PortalLoginModule" flag="required">
       	<module-option name="portalContainerName">sample-portal</module-option>
       	<module-option name="realmName">gatein-domain-sample-portal</module-option>
