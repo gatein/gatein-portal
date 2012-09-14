@@ -23,6 +23,7 @@ package org.gatein.integration.jboss.as7.deployment;
 
 import org.gatein.integration.jboss.as7.GateInExtension;
 import org.gatein.integration.jboss.as7.GateInConfiguration;
+import org.gatein.integration.jboss.as7.portal.GateInRuntimeService;
 import org.gatein.integration.jboss.as7.web.StartupService;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -99,6 +100,9 @@ public class GateInStarterDeploymentProcessor implements DeploymentUnitProcessor
             }
 
             builder.install();
+
+            // Add service dependent on StartupService so we can properly store the name of the portal containers
+            GateInRuntimeService.addService(phaseContext.getServiceTarget());
          }
       }
    }

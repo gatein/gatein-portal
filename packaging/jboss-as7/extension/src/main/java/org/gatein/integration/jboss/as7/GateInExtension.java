@@ -21,6 +21,7 @@
  */
 package org.gatein.integration.jboss.as7;
 
+import org.gatein.integration.jboss.as7.portal.PortalResourceRegistrar;
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.SubsystemRegistration;
@@ -37,7 +38,7 @@ import org.jboss.logging.Logger;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.msc.service.ServiceName;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.DESCRIBE;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.*;
 
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
@@ -76,7 +77,9 @@ public class GateInExtension implements Extension
 
       registration.registerSubModel(new DeploymentArchiveDefinition(config));
       registration.registerSubModel(new PortletWarDependencyDefinition(config));
-      registration.registerSubModel(new GateInPortalDefinition(config, DEFAULT_PORTAL_NAME));
+
+      // Register portal resources
+      PortalResourceRegistrar.registerPortalResources(registration, context.isRuntimeOnlyRegistrationValid());
 
       subsystem.registerXMLElementWriter(GateInSubsystemParser.getInstance());
    }

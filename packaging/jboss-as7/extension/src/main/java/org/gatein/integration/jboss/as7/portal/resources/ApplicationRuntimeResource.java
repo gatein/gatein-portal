@@ -1,6 +1,6 @@
 /*
  * JBoss, Home of Professional Open Source.
- * Copyright 2011, Red Hat, Inc., and individual contributors
+ * Copyright 2012, Red Hat, Inc., and individual contributors
  * as indicated by the @author tags. See the copyright.txt file in the
  * distribution for a full listing of individual contributors.
  *
@@ -19,28 +19,42 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.gatein.integration.jboss.as7;
+
+package org.gatein.integration.jboss.as7.portal.resources;
+
+import org.jboss.as.controller.PathElement;
+
+import java.util.Collections;
+import java.util.Set;
 
 /**
- * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
+ * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-interface Constants
+public class ApplicationRuntimeResource extends AbstractPortalResource
 {
-   // xml parser constants
-   String DEPLOYMENT_ARCHIVES = "deployment-archives";
-   String PORTLET_WAR_DEPENDENCIES = "portlet-war-dependencies";
-   String ARCHIVE = "archive";
-   String DEPENDENCY = "dependency";
-   String MAIN = "main";
-   String IMPORT_SERVICES = "import-services";
+   private final String applicationName;
 
-   String PORTAL = "portal";
-    
-   // MDR operations constants 
-   String DEPLOYMENT_ARCHIVE = "deployment-archive";
-   String PORTLET_WAR_DEPENDENCY = "portlet-war-dependency";
-   String TRUE = "true";
+   protected ApplicationRuntimeResource(PathElement pathElement, String portalContainerName)
+   {
+      super(pathElement, portalContainerName);
+      this.applicationName = pathElement.getValue();
+   }
 
-   String PATH = "path";
-   String RELATIVE_TO = "relative-to";
+   @Override
+   protected Set<String> getChildrenNames()
+   {
+      return Collections.emptySet();
+   }
+
+   @Override
+   protected ResourceEntry getChildEntry(String name)
+   {
+      return null;
+   }
+
+   @Override
+   public Set<String> getChildTypes()
+   {
+      return Collections.emptySet();
+   }
 }
