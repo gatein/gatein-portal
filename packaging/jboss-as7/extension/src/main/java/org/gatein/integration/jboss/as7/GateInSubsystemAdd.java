@@ -21,6 +21,8 @@
  */
 package org.gatein.integration.jboss.as7;
 
+import org.gatein.integration.jboss.as7.deployment.DeploymentScannerService;
+import org.gatein.integration.jboss.as7.deployment.GateInCleanupDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.GateInDependenciesDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.GateInInitDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.GateInStarterDeploymentProcessor;
@@ -33,7 +35,10 @@ import org.gatein.wci.jboss.GateInWCIService;
 import org.jboss.as.controller.AbstractBoottimeAddStepHandler;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
+import org.jboss.as.controller.OperationStepHandler;
+import org.jboss.as.controller.PathAddress;
 import org.jboss.as.controller.ServiceVerificationHandler;
+import org.jboss.as.controller.registry.Resource;
 import org.jboss.as.server.AbstractDeploymentChainStep;
 import org.jboss.as.server.DeploymentProcessorTarget;
 import org.jboss.as.server.deployment.Phase;
@@ -44,6 +49,9 @@ import org.jboss.msc.service.ServiceBuilder;
 import org.jboss.msc.service.ServiceController;
 
 import java.util.List;
+
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
 
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
@@ -68,6 +76,17 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
       this.config = config;
    }
 
+   protected void populateModel(final OperationContext context, final ModelNode operation, final Resource resource) throws  OperationFailedException
+   {
+      final DeploymentScannerService scannerService = new DeploymentScannerService(config);
+      ModelNode op = scannerService.prepareDeploymentModel();
+
+      final ModelNode result = new ModelNode();
+      final PathAddress opPath = PathAddress.pathAddress(op.get(OP_ADDR));
+      final OperationStepHandler handler = context.getRootResourceRegistration().getOperationHandler(opPath, op.get(OP).asString());
+      context.addStep(result, op, handler, OperationContext.Stage.MODEL);
+   }
+
    protected void populateModel(ModelNode operation, ModelNode model)
    {
       // DO NOTHING
@@ -82,9 +101,6 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
          protected void execute(DeploymentProcessorTarget processorTarget)
          {
             final SharedPortletTldsMetaDataBuilder tldsBuilder = new SharedPortletTldsMetaDataBuilder();
-
-            // if 'gatein' deployment scanner is set up, use it
-            DeploymentDirHandler.handleDeploymentDir(context, config);
 
             processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_GATEIN, new GateInStructureDeploymentProcessor(config));
             processorTarget.addDeploymentProcessor(Phase.PARSE, STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT, new PortletWarDeploymentInitializingProcessor(config));
@@ -106,9 +122,9 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
    {
       super.performRuntime(context, operation, model, verificationHandler, newControllers);
 
-      final GateInWCIService service = new GateInWCIService();
-      final ServiceBuilder<GateInWCIService> serviceBuilder = context.getServiceTarget().addService(GateInWCIService.NAME, service)
-         .addDependency(WebSubsystemServices.JBOSS_WEB, WebServer.class, service.getWebServer())
+      final GateInWCIService wciService = new GateInWCIService();
+      final ServiceBuilder<GateInWCIService> serviceBuilder = context.getServiceTarget().addService(GateInWCIService.NAME, wciService)
+         .addDependency(WebSubsystemServices.JBOSS_WEB, WebServer.class, wciService.getWebServer())
          .addListener(verificationHandler)
          .setInitialMode(ServiceController.Mode.ACTIVE);
       newControllers.add(serviceBuilder.install());

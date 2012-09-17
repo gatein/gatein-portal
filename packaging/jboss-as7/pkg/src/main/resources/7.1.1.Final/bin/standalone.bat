@@ -145,7 +145,7 @@ echo.
  "-Dorg.jboss.boot.log.file=%JBOSS_LOG_DIR%\boot.log" ^
  "-Dlogging.configuration=file:%JBOSS_CONFIG_DIR%/logging.properties" ^
     -jar "%JBOSS_HOME%\jboss-modules.jar" ^
-    -mp "%JBOSS_MODULEPATH%;%JBOSS_HOME%\gatein\modules" ^
+    -mp "%JBOSS_MODULEPATH%" ^
     -jaxpmodule "javax.xml.jaxp-provider" ^
      org.jboss.as.standalone ^
     -Djboss.home.dir="%JBOSS_HOME%" ^

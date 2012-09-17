@@ -12,8 +12,7 @@
    <name>GateIn JBoss AS 7.x.x packaging</name>
 
    <properties>
-      <version.jboss.as.release>7.1.0.Final</version.jboss.as.release>
-      <version.jboss.as>7.1.0.Final</version.jboss.as>
+      <version.jboss.as>7.1.1.Final</version.jboss.as>
       <version.org.jboss.vfs>3.1.0.Final</version.org.jboss.vfs>
       <version.org.gatein.naming>1.0.1.Final</version.org.gatein.naming>
       <server.name>jboss-as-${version.jboss.as}</server.name>
@@ -98,19 +97,6 @@
 
          <properties>
             <server.name>${jboss7.name}</server.name>
-         </properties>
-      </profile>
-      <profile>
-         <id>pkg-jbossas710</id>
-         <activation>
-            <property>
-               <name>gatein.dev</name>
-               <value>jbossas710</value>
-            </property>
-         </activation>
-
-         <properties>
-            <version.jboss.as>7.1.0.Final</version.jboss.as>
          </properties>
       </profile>
       <profile>

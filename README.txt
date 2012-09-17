@@ -32,7 +32,6 @@ The various values for gatein.dev are:
 - jbossas    : JBoss AS 5 and JBoss AS 6
 - jbossas5   : JBoss AS 5
 - jbosass6   : JBoss AS 6
-- jbossas710 : JBoss AS 7.1.0
 - jbossas711 : JBoss AS 7.1.1
 - jbossas712 : JBoss AS 7.1.2
 - jetty      : Jetty
@@ -119,7 +118,7 @@ Issue the following command:
 
 mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=$AS7_LABEL -Ddownload
 
-Where $AS7_LABEL is one of: jbossas710, jbossas711, or jbossas712.
+Where $AS7_LABEL is one of: jbossas711, or jbossas712.
 
 
 If you have an existing JBoss-AS-7.x.x distribution, unpack it into SERVERS_DIR directory so that you get SERVERS_DIR/jboss-as-7.x.x directory.

@@ -345,8 +345,8 @@ You can also use -Ddownload to automatically provide JBoss AS instance.
                         </goals>
                         <configuration>
                            <target>
-                              <zip destfile="${project.build.directory}/GateIn-${release.version}-jbossas7-preview.zip" basedir="${jbossas.target.dir}" />
-                              <attachartifact file="${project.build.directory}/GateIn-${release.version}-jbossas7-preview.zip" classifier="bundle" type="zip" />
+                              <zip destfile="${project.build.directory}/GateIn-${release.version}-jbossas7.zip" basedir="${jbossas.target.dir}" />
+                              <attachartifact file="${project.build.directory}/GateIn-${release.version}-jbossas7.zip" classifier="bundle" type="zip" />
                            </target>
                         </configuration>
                      </execution>

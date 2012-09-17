@@ -99,21 +99,6 @@
          </modules>
       </profile>
       <profile>
-         <id>pkg-jbossas710</id>
-         <activation>
-            <property>
-               <name>gatein.dev</name>
-               <value>jbossas710</value>
-            </property>
-         </activation>
-         <modules>
-            <module>extension</module>
-            <module>portal</module>
-            <module>portlets</module>
-            <module>skins</module>
-         </modules>
-      </profile>
-      <profile>
          <id>pkg-jbossas711</id>
          <activation>
             <property>
