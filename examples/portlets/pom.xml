@@ -21,6 +21,7 @@
       <module>simplesthelloworld</module>
       <module>struts-jpetstore</module>
       <module>resourceserving</module>
+      <module>useridentity</module>
    </modules>
 
 </project>

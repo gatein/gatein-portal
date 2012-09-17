@@ -55,6 +55,7 @@
             <module>extension-ear</module>
             <module>extension-ear-as5</module>
             <module>extension-ear-as6</module>
+            <module>extension-ear-as7</module>
          </modules>
       </profile>
       <profile>

@@ -105,6 +105,11 @@
          <version>${org.gatein.wsrp.version}</version>
          <type>war</type>
       </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-wss-jboss7</artifactId>
+         <version>${org.gatein.wsrp.version}</version>
+      </dependency>
 
       <!--         -->
       <!-- Samples -->

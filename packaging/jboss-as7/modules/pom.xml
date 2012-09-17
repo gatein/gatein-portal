@@ -878,6 +878,14 @@
          <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-wss</artifactId>
       </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-wss-jboss7</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-cxf-integration</artifactId>
+      </dependency>
 
       <dependency>
          <groupId>org.gatein.integration</groupId>

@@ -79,6 +79,11 @@
             <artifactId>extension-component</artifactId>
             <version>${project.version}</version>
          </dependency>
+         <dependency>
+            <groupId>org.gatein.wsrp</groupId>
+            <artifactId>wsrp-wss-jboss7</artifactId>
+            <version>${org.gatein.wsrp.version}</version>
+         </dependency>
       </dependencies>
    </dependencyManagement>
    <modules>

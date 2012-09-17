@@ -1,0 +1,2 @@
+Directory used to store ws-security configuration files for the consumer.
+Note: this file has to exist due to git not supporing empty directories property.

@@ -47,7 +47,7 @@
       <org.gatein.wci.version>2.3.0.Alpha04</org.gatein.wci.version>
       <org.gatein.pc.version>2.4.0.Alpha02</org.gatein.pc.version>
       <org.picketlink.idm>1.4.0.M01</org.picketlink.idm>
-      <org.gatein.wsrp.version>2.2.0-Beta04</org.gatein.wsrp.version>
+      <org.gatein.wsrp.version>2.2.0.Beta05</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.1.1-GA</org.gatein.mop.version>
       <org.gatein.mgmt.version>1.0.1-GA</org.gatein.mgmt.version>
       <org.slf4j.version>1.5.8</org.slf4j.version>
@@ -419,10 +419,23 @@
          </dependency>
          <dependency>
             <groupId>org.gatein.wsrp</groupId>
+            <artifactId>wsrp-cxf-integration</artifactId>
+            <scope>provided</scope>
+            <version>${org.gatein.wsrp.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.gatein.wsrp</groupId>
             <artifactId>wsrp-wss-jboss5</artifactId>
             <scope>provided</scope>
             <version>${org.gatein.wsrp.version}</version>
          </dependency>
+         <dependency>
+            <groupId>org.gatein.wsrp</groupId>
+            <artifactId>wsrp-wss-jboss7</artifactId>
+            <scope>provided</scope>
+            <version>${org.gatein.wsrp.version}</version>
+         </dependency>
+
         <!-- Needed by WSRP, here so that it can be picked up by module generation build.xml -->
         <dependency>
             <groupId>commons-httpclient</groupId>
@@ -867,10 +880,6 @@
             <artifactId>jcip-annotations</artifactId>
             <version>${jcip.version}</version>
          </dependency>
-
-
-
-
 
         <dependency>
            <groupId>org.gatein.shindig</groupId>

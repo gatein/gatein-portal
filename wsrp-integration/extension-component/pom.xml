@@ -74,6 +74,16 @@
       </dependency>
       <dependency>
          <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-wss-jboss7</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-cxf-integration</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
          <artifactId>wsrp-wss</artifactId>
          <scope>provided</scope>
       </dependency>

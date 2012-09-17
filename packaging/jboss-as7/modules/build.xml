@@ -268,6 +268,8 @@
        <module-def name="org.gatein.wsrp.integration">
           <maven-resource group="org.gatein.integration" artifact="extension-config" />
           <maven-resource group="org.gatein.integration" artifact="extension-component" />
+          <maven-resource group="org.gatein.wsrp" artifact="wsrp-wss-jboss7" />
+          <maven-resource group="org.gatein.wsrp" artifact="wsrp-cxf-integration"/>
        </module-def>
 
        <module-def name="org.apache.commons-httpclient" slot="gatein">

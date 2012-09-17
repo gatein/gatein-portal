@@ -25,6 +25,8 @@
 <module xmlns="urn:jboss:module:1.0" name="org.gatein.wsrp.integration">
     <resources>
        <!-- Insert resources here -->
+       <resource-root path="../../../../../../standalone/configuration/gatein/wsrp/cxf/ws-security/consumer"/>
+       <resource-root path="../../../../../../standalone/configuration/gatein/wsrp/cxf/ws-security/producer"/>
     </resources>
 
     <dependencies>
@@ -43,5 +45,8 @@
        <module name="org.slf4j" />
        <module name="org.reflext" />
        <module name="org.chromattic" />
+       <module name="org.apache.cxf" />
+       <module name="org.apache.ws.security" />
+       <module name="org.jboss.ws.cxf.jbossws-cxf-server"/>
     </dependencies>
 </module>

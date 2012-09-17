@@ -1,6 +1,6 @@
 /******************************************************************************
  * JBoss, a division of Red Hat                                               *
- * Copyright 2011, Red Hat Middleware, LLC, and individual                    *
+ * Copyright 2008, Red Hat Middleware, LLC, and individual                    *
  * contributors as indicated by the @authors tag. See the                     *
  * copyright.txt in the distribution for a full listing of                    *
  * individual contributors.                                                   *
@@ -20,47 +20,35 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA         *
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.                   *
  ******************************************************************************/
-package org.gatein.integration.wsrp.wss;
+package org.jboss.portal.portlet.samples;
 
-import org.gatein.wsrp.wss.WebServiceSecurityFactory;
-import org.gatein.wsrp.wss.credentials.CredentialsAccessor;
-import org.picocontainer.Startable;
-import org.wsrp.wss.jboss5.handlers.consumer.JBWSCustomizePortListener;
+import java.io.IOException;
 
-/**
- * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
- * @version $Revision$
- */
-public class JBoss5WSSServiceIntegration implements Startable
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
+import javax.portlet.GenericPortlet;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequestDispatcher;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
+import javax.portlet.UnavailableException;
+
+public class UserIdentityPortlet extends GenericPortlet
 {
-   private final WebServiceSecurityFactory wssFactory;
    
-   private final JBWSCustomizePortListener JBWS_CUSTOMIZE_PORT_LISTENER = new JBWSCustomizePortListener(); 
-   
-   public JBoss5WSSServiceIntegration(CredentialsAccessor credentialsAccessor)
+   public void doView(RenderRequest request, RenderResponse rResponse) throws PortletException, IOException
    {
-      wssFactory = WebServiceSecurityFactory.getInstance();
-      wssFactory.setCredentialsAccessor(credentialsAccessor);
-   }
-   
-   public void start()
-   {
-      startConsumer();
+      rResponse.setContentType("text/html");
+      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/hello.jsp");
+      prd.include(request, rResponse);
    }
 
-   public void stop()
+   protected void doHelp(RenderRequest rRequest, RenderResponse rResponse) throws PortletException, IOException,
+         UnavailableException
    {
-      stopConsumer();
-   }
-   
-   protected void startConsumer()
-   {      
-      wssFactory.addCustomizePortListener(JBWS_CUSTOMIZE_PORT_LISTENER);
+      rResponse.setContentType("text/html");
+      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/help.jsp");
+      prd.include(rRequest, rResponse);
    }
 
-   protected void stopConsumer()
-   {
-      wssFactory.removeCustomizePortListener(JBWS_CUSTOMIZE_PORT_LISTENER);
-   }
 }
-
