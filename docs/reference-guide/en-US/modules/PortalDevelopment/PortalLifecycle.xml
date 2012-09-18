@@ -5,12 +5,10 @@
 ]>
 <section id="sect-Reference_Guide-Portal_Lifecycle">
 	<title>Portal Lifecycle</title>
-	<section id="sect-Reference_Guide-Portal_Lifecycle-Overview">
-		<title>Overview</title>
-		<para>
-			This chapter describes the portal lifecycle from the application server start to its stop as well as how requests are handled.
-		</para>
-	</section>
+	<para>
+	 This section describes the portal lifecycle from the application server start to its stop and how requests are handled.
+  </para>
+
 	
 	<section id="sect-Reference_Guide-Portal_Lifecycle-Application_Server_start_and_stop">
 		<title>Application Server start and stop</title>
@@ -18,7 +16,7 @@
 			A portal instance is simply a web application deployed as a WAR in an application server. Portlets are also part of an enhanced WAR called a portlet application.
 		</para>
 		<para>
-			&PRODUCT; doesn&#39;t require any particular setup for your portlet in most common scenarios and the <filename>web.xml</filename> file can remain without any &PRODUCT; specific configuration.
+			&PRODUCT; does not require any particular setup for your portlet in most common scenarios and the <filename>web.xml</filename> file can remain without any &PRODUCT; specific configuration.
 		</para>
 		<para>
 			During deployment, &PRODUCT; will automatically and transparently inject a servlet into the portlet application to be able to interact with it. This feature is dependent on the underlying servlet container but will work out of the box on the proposed bundles.
@@ -89,16 +87,16 @@
 </programlisting>
    -->
 	<section id="sect-Reference_Guide-Portal_Lifecycle-The_Command_Servlet">
-		<title>The Command Servlet</title>
+		<title>Command Servlet</title>
 		<para>
-			The servlet is the main entry point for incoming requests, it also includes some init code when the portal is launched. This servlet (<literal>org.gatein.wci.command.CommandServlet</literal>) is automatically added during deployment and mapped to <literal>/tomcatgateinservlet</literal>.
+			The servlet is the main entry point for incoming requests, it also includes some init codes when the portal is launched. This servlet (<literal>org.gatein.wci.command.CommandServlet</literal>) is automatically added during deployment and mapped to <literal>/tomcatgateinservlet</literal>.
 		</para>
 		<para>
-			This is equivalent to adding the following into <filename>web.xml</filename>.
+			This is equivalent to adding the following to <filename>web.xml</filename>.
 		</para>
 		<note>
 			<para>
-				As the servlet is already configured this example is for information only.
+				As the servlet is already configured, this example is for information only.
 			</para>
 		</note>
 		
@@ -157,7 +155,7 @@ public class MyFilter implements javax.servlet.Filter {
 }
 </programlisting>
 		<para>
-			The Java EE web application configuration file (<filename>web.xml</filename>) of the portlet on which we want to know the time to serve a portlet request. As mentioned above nothing specific to &PRODUCT; needs to be included, only the URL pattern to set has to be known.
+			The Java EE web application configuration file (<filename>web.xml</filename>) of the portlet on which we want to know the time to serve a portlet request. As mentioned above, &PRODUCT; does not require anything special to be included, only the URL pattern to set has to be known.
 		</para>
 		
 <programlisting role="XML">
@@ -183,7 +181,7 @@ public class MyFilter implements javax.servlet.Filter {
 			<note>
 				<title>INCLUDE dispatcher</title>
 				<para>
-					It is important to set <literal>INCLUDE</literal> as dispatcher as the portal will always hit the CommandServlet through a request dispatcher. Without this, the filter will not be triggered, unless direct access to a resource (such as an image).
+					It is important to set <literal>INCLUDE</literal> as a dispatcher as the portal always hits the CommandServlet through a request dispatcher. Without this, the filter will not be triggered, unless the direct access to a resource, such as an image.
 				</para>
 			</note>
 		</para>
@@ -1036,5 +1034,3 @@ abstract public class WebuiRequestContext extends RequestContext {
 	</section>
   -->
 </section>
-
-

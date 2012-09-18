@@ -5,28 +5,26 @@
 ]>
 <section id="sect-Reference_Guide-Internationalization_Configuration">
 	<title>Internationalization Configuration</title>
-	<section id="sect-Reference_Guide-Internationalization_Configuration-Overview">
-		<title>Overview</title>
 		<note>
 			<title>Assumed Knowledge</title>
 			<para>
-				&PRODUCT; is fully configurable for internationalization, however users should have a general knowledge of Internationalization in Java products before attempting these configurations.
+				&PRODUCT; is fully configurable for internationalization; however, users should have a general knowledge of Internationalization in Java products before attempting these configurations.
 			</para>
 			<para>
-				Sun Java hosts a comprehensive guide to internationalizing java products at <ulink url="http://java.sun.com/docs/books/tutorial/i18n/TOC.html" />.
+				Sun Java hosts a comprehensive guide to internationalize Java products at <ulink url="http://java.sun.com/docs/books/tutorial/i18n/TOC.html" />.
 			</para>
 		</note>
-		<para>
+		<para xml:id="sect-Reference_Guide-Internationalization_Configuration-Overview">
 			All &PRODUCT; applications contain property files for various languages. They are packaged with the portlets applications in a <filename>WEB-INF/classes/locale/</filename> directory.
 		</para>
 		<para>
-			These files are located in the <literal>classes</literal> folder of the WEB-INF directory, so as to be loaded by the ClassLoader.
+			These files are located in the <literal>classes</literal> folder of the WEB-INF directory to be loaded by the ClassLoader.
 		</para>
 		<para>
 			All resource files are in a subfolder named <literal>locale</literal>.
 		</para>
 		<para>
-			For instance; the translations for the <emphasis>NavigationPortlet</emphasis> are located in <literal>web.war/WEB-INF/classes/locale/portlet/portal</literal>
+			For example, the translations for the <emphasis>NavigationPortlet</emphasis> are located in <filename>web.war/WEB-INF/classes/locale/portlet/portal</filename>.
 		</para>
 		
 <programlisting>NavigationPortlet_de.properties
@@ -39,7 +37,7 @@ NavigationPortlet_uk.properties
 NavigationPortlet_ar.xml
 </programlisting>
 		<para>
-			Inside those file are typical <literal>key=value</literal> Java EE properties. For example the French one:
+			Those files contain typical <literal>key=value</literal> Java EE properties. For example, the French one:
 		</para>
 		
 <programlisting>javax.portlet.title=Portlet Navigation
@@ -48,26 +46,25 @@ NavigationPortlet_ar.xml
 			There are also properties files in the portal itself. They form the <emphasis role="bold">portal resource bundle</emphasis>.
 		</para>
 		<para>
-			From a portlet you can then access translations from the portlet itself or shared at the portal level, both are aggregated when you need them.
+			From a portlet, you can then access translations from the portlet itself or shared at the portal level, both are aggregated when you need them.
 		</para>
 		<note>
 			<title>Translation in XML format</title>
 			<para>
-				It is also possible to use a proprietary XML format to define translations. This is a more convenient way to translate a document for some languages such as Japanese, Arabic or Russian. Property files have te be ASCII encoded, while the XML file can define its encoding. As a result it&#39;s easier for a human being to read (and fix) a translation in XML instead of having to decode and encode the property file.
+				It is also possible to use a proprietary XML format to define translations. This is a more convenient way to translate a document for some languages, such as Japanese, Arabic or Russian. Property files have to be ASCII encoded, while the XML file can define its encoding. As a result, it is easier for you to read or edit a translation in XML instead of having to decode and encode the property file.
 			</para>
 			<para>
-				For more information refer to: <xref linkend="sect-Reference_Guide-XML_Resources_Bundles" />
+				For more information, refer to <xref linkend="sect-Reference_Guide-XML_Resources_Bundles" />.
 			</para>
 		</note>
-	</section>
 	
 	<section id="sect-Reference_Guide-Internationalization_Configuration-Locales_configuration">
 		<title>Locales configuration</title>
 		<para>
-			Various languages are available in the portal package. The configuration below will define which languages are shown in the &#34;Change Language&#34; section and made available to users.
+			Various languages are available in the portal package. The configuration below will define which languages shown in the &#34;Change Language&#34; section and made available to users.
 		</para>
 		<para>
-			The <filename>02portal.war:/WEB-INF/conf/common/common-configuration.xml</filename> file of your installation contains the following section:
+			The <filename>portal.war:/WEB-INF/conf/common/common-configuration.xml</filename> file of your installation contains the following section:
 		</para>
 		
 <programlisting role="XML">&#60;component&#62;
@@ -82,10 +79,7 @@ NavigationPortlet_ar.xml
 &#60;/component&#62;
 </programlisting>
 		<para>
-			This configuration points to the locale configuration file.
-		</para>
-		<para>
-			The locale configuration file (<filename>02portal.war:/WEB-INF/conf/common/locales-config.xml</filename>) contains the following code:
+			This configuration points to the locale configuration file (<filename>portal.war:/WEB-INF/conf/common/locales-config.xml</filename>) which contains the following code:
 		</para>
 		<programlistingco>
 			<areaspec>
@@ -95,7 +89,7 @@ NavigationPortlet_ar.xml
 				<area coords="7" id="area-Reference_Guide-i18n.locales.configuration.description" />
 				<area coords="22" id="area-Reference_Guide-i18n.locales.configuration.orientation" />
 			</areaspec>
-<programlisting>&#60;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&#62;
+<programlisting language="xml">&#60;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&#62;
 &#60;locales-config&#62;
   &#60;locale-config&#62;
     &#60;locale&#62;en&#60;/locale&#62;
@@ -123,38 +117,37 @@ NavigationPortlet_ar.xml
 			<calloutlist>
 				<callout arearefs="area-Reference_Guide-i18n.locales.configuration.locale">
 					<para>
-						<emphasis>locale</emphasis> The locale has to be defined such as defined here <ulink type="http" url="http://ftp.ics.uci.edu-pub-ietf-http-related-iso639.txt" />. In this example &#34;<emphasis>ar</emphasis>&#34; is Arabic.
+						<parameter>locale</parameter>: This has to be defined, such as <ulink type="http" url="http://ftp.ics.uci.edu-pub-ietf-http-related-iso639.txt" />. In this example, &#34;<emphasis>ar</emphasis>&#34; is Arabic.
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-i18n.locales.configuration.output-encoding">
 					<para>
-						<emphasis>output-encoding</emphasis> deals with character encoding. It is recommended that <emphasis role="bold">UTF-8</emphasis> be used.
+						<parameter>output-encoding</parameter>: This deals with the character encoding. It is recommended that <emphasis role="bold">UTF-8</emphasis> be used.
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-i18n.locales.configuration.input-encoding">
 					<para>
-						<emphasis>input-encoding</emphasis> In the java implementation, the encoding parameters will be used for the request response stream. The input-encoding parameter will be used for request setCharacterEncoding(..).
+						<parameter>input-encoding</parameter>: In the Java implementation, the encoding parameters will be used for the request response stream. The input-encoding parameter will be used for requesting setCharacterEncoding(..).
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-i18n.locales.configuration.description">
 					<para>
-						<emphasis>description</emphasis> Description for the language
+						<parameter>description</parameter>: Brief description of the language.
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-i18n.locales.configuration.orientation">
 					<para>
-						<emphasis>orientation</emphasis> The default orientation of text and images is Left-To-Right. &PRODUCT; supports <emphasis role="bold">Right-To-Left</emphasis> orientation. Modifying text orientation is explained in <xref linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework" />.
+						<parameter>orientation</parameter>: The default orientation of text and images is Left-To-Right. &PRODUCT; supports <emphasis role="bold">Right-To-Left</emphasis> orientation. Modifying the text orientation is explained in <xref linkend="sect-Reference_Guide-RTL_Right_To_Left_Framework" />.
 					</para>
 				</callout>
 			</calloutlist>
 		</programlistingco>
-
 	</section>
 	
 	<section id="sect-Reference_Guide-Internationalization_Configuration-ResourceBundleService">
 		<title>ResourceBundleService</title>
 		<para>
-			The resource bundle service is configured in: <filename>02portal.war:/WEB-INF/conf/common/common-configuration.xml</filename>:
+			The resource bundle service is configured in <filename>portal.war:/WEB-INF/conf/common/common-configuration.xml</filename>.
 		</para>
 		<programlistingco>
 			<areaspec>
@@ -162,7 +155,7 @@ NavigationPortlet_ar.xml
 				<area coords="11" id="area-Reference_Guide-i18n.rb.service.init_resources" />
 				<area coords="24" id="area-Reference_Guide-i18n.rb.service.portal_resource_names" />
 			</areaspec>
-<programlisting>&#60;component&#62;
+<programlisting language="xml">&#60;component&#62;
   &#60;key&#62;org.exoplatform.services.resources.ResourceBundleService&#60;/key&#62;
   &#60;type&#62;org.exoplatform.services.resources.impl.SimpleResourceBundleService&#60;/type&#62;
   &#60;init-params&#62;
@@ -199,20 +192,20 @@ NavigationPortlet_ar.xml
 			<calloutlist>
 				<callout arearefs="area-Reference_Guide-i18n.rb.service.classpath_resources">
 					<para>
-						<emphasis>classpath.resources</emphasis> are discussed in a later section.
+						<parameter>classpath.resources</parameter>: This is discussed in the later section.
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-i18n.rb.service.init_resources">
 					<para>
-						<emphasis>init.resources</emphasis> TODO
+						<parameter>init.resources</parameter>: Initiate resources related to portal, group, user resource bundles.
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide-i18n.rb.service.portal_resource_names">
 					<para>
-						<emphasis>portal.resource.names</emphasis> Defines all resources that belong to the <emphasis>Portal Resource Bundle</emphasis>.
+						<parameter>portal.resource.names</parameter>: Define all resources that belong to the <emphasis role="bold">Portal Resource Bundle</emphasis>.
 					</para>
 					<para>
-						These resources are merged to a single resource bundle which is accessible from anywhere in &PRODUCT;. All these keys are located in the same bundle, which is separated from the navigation resource bundles.
+						These resources are merged into a single resource bundle which is accessible from anywhere in &PRODUCT;. All these keys are located in the same bundle, which is separated from the navigation resource bundles.
 					</para>
 				</callout>
 			</calloutlist>
@@ -229,13 +222,13 @@ NavigationPortlet_ar.xml
 			The previous example shows bundle definitions for the navigation of the classic portal and of four different groups. Each of these resource bundles occupies a different sphere, they are independent of each other and they are not included in the <parameter>portal.resource.names</parameter> parameter.
 		</para>
 		<para>
-			The properties for a group must be in the <filename>WEB-INF/classes/locale/navigation/group/</filename> folder. <literal>/WEB-INF/classes/locale/navigation/group/organization/management/executive-board_en.properties</literal>, for example.
+			The properties for a group must be in the <filename>WEB-INF/classes/locale/navigation/group/</filename> folder. For example, <filename>/WEB-INF/classes/locale/navigation/group/organization/management/executive-board_en.properties</filename>.
 		</para>
 		<para>
-			The folder and file names must correspond to the group hierarchy. The group name &#34;<parameter>executive-board</parameter>&#34; is followed by the iso 639 code.
+			The folder and file names must correspond to the group hierarchy. The group name &#34;<parameter>executive-board</parameter>&#34; is followed by the ISO 639 code.
 		</para>
 		<para>
-			For each language defined in <parameter>LocalesConfig</parameter> must have a resource file defined. If the name of a group is changed the name of the folder and/or files of the correspondent navigation resource bundles must also be changed.
+			Each language defined in <parameter>LocalesConfig</parameter> must have a resource file defined. If the name of a group is changed the name of the folder and/or files of the correspondent navigation resource bundles must also be changed.
 		</para>
 		<para>
 			Content of <filename>executive-board_en.properties</filename>: 
@@ -255,23 +248,18 @@ organization.management=Management
 			Portlets are independent applications and deliver their own resource files.
 		</para>
 		<para>
-			All shipped portlet resources are located in the <emphasis role="bold">locale/portlet</emphasis> subfolder. The ResourceBundleService parameter <emphasis role="bold">classpath.resources</emphasis> defines this subfolder. <!--   Doing so the resource file that are in ~~locale/portlet~~ will never be stored in the JCR and reloaded at each start of the application server.   -->
+			All shipped portlet resources are located in the <emphasis role="bold">locale/portlet</emphasis> subfolder. The <parameter>ResourceBundleService</parameter> parameter called <emphasis role="bold">classpath.resources</emphasis> defines this subfolder. <!--   Doing so the resource file that are in ~~locale/portlet~~ will never be stored in the JCR and reloaded at each start of the application server.   -->
 		</para>
 		<procedure id="proc-Reference_Guide-_Portlets_-Example">
-			<title>Example</title>
+			<title>Add a Spanish translation to the <parameter>GadgetPortlet</parameter></title>
 			<step>
 				<para>
-					To add a Spanish translation to the <parameter>GadgetPortlet</parameter>.
+					Create the <filename>GadgetPortlet_es.properties</filename> file in <filename>WEB-INF/classes/locale/portlet/gadget/GadgetPortlet</filename>.
 				</para>
 			</step>
 			<step>
 				<para>
-					Create the file <literal>GadgetPortlet_es.properties</literal> in: <filename>WEB-INF/classes/locale/portlet/gadget/GadgetPortlet</filename>.
-				</para>
-			</step>
-			<step>
-				<para>
-					In <filename>portlet.xml</filename>, add <parameter>Spanish</parameter> as a <emphasis role="bold">supported-locale</emphasis> (&#39;es&#39; is the 2 letters code for Spanish), the <emphasis role="bold">resource-bundle</emphasis> is already declared and is the same for all languages :
+					Add <parameter>Spanish</parameter> as a <emphasis role="bold">supported-locale</emphasis> to <filename>portlet.xml</filename> (&#39;es&#39; is the 2 letters code for Spanish). The <emphasis role="bold">resource-bundle</emphasis> is already declared and is the same for all languages:
 				</para>
 				
 <programlisting role="XML">&#60;supported-locale&#62;en&#60;/supported-locale&#62;
@@ -282,12 +270,12 @@ organization.management=Management
 		</procedure>
 		
 		<para>
-			See the portlet specification for more details about portlet internationalization.
+			See the portlet specification for more details about the portlet internationalization.
 		</para>
 		<section id="sect-Reference_Guide-_Portlets_-Standard_portlet_resource_keys">
 			<title>Standard portlet resource keys</title>
 			<para>
-				The portlet specifications defines three standard keys: Title, Short Title and Keywords. Keywords is formatted as a comma-separated list of tags.
+				The portlet specifications define three standard keys: Title, Short Title and Keywords. Keywords are formatted as a comma-separated list of tags.
 			</para>
 			
 <programlisting> javax.portlet.title=Breadcrumbs Portlet
@@ -299,47 +287,48 @@ organization.management=Management
 		<section id="sect-Reference_Guide-_Portlets_-Debugging_resource_bundle_usage">
 			<title>Debugging resource bundle usage</title>
 			<para>
-				When translating an application it can sometimes be difficult to find the right key for a given property.
+				When translating an application, it can sometimes be difficult to find the right key for a given property.
 			</para>
 			<para>
-				Execute the portal in <emphasis role="bold">debug mode</emphasis> and select, from the available languages, select the special language; <emphasis role="bold">Magic locale</emphasis>.
+				Execute the portal in the <emphasis role="bold">debug mode</emphasis> and select the special language from the available languages: <emphasis role="bold">Magic locale</emphasis>.
 			</para>
 			<para>
 				This feature translates a key to the same key value.
 			</para>
 			<para>
-				For example, the translated value for the key &#34;<parameter>organization.title</parameter>&#34; is simply the value &#34;<parameter>organization.title</parameter>&#34;. Selecting that language allows use of the portal and its applications with all the keys visible. This makes it easier to find out the correct key for a given label in the portal page.
+				For example, the translated value for the &#34;<parameter>organization.title</parameter>&#34; key is simply the value &#34;<parameter>organization.title</parameter>&#34;. Selecting that language allows use of the portal and its applications with all the keys visible. This makes it easier to find out the correct key for a given label in the portal page.
 			</para>
 		</section>
 
 	</section>
-	<section>
-        <title>Translating the language selection form</title>	
+	<section id="sect-Reference_Guide-Database_Configuration-Translate-language-selection-form">
+        <title>Translate the language selection form</title>	
 	    <mediaobject>
-           <imageobject>
-              <imagedata fileref="images/PortalDevelopment/InternationalizationConfiguration/LanguageChoice.png" format="PNG" align="center" valign="middle"
+           <imageobject role="html">
+              <imagedata fileref="images/PortalDevelopment/InternationalizationConfiguration/LanguageChoice.png" format="PNG" align="center" width="444"
+                        />
+           </imageobject>
+            <imageobject role="fo">
+              <imagedata fileref="images/PortalDevelopment/InternationalizationConfiguration/LanguageChoice.png" format="PNG" align="center" width="120mm"
                         scalefit="1"/>
            </imageobject>
         </mediaobject>
         <para>When choosing a language as on the screenshot above, the user is presented with a list of languages on the left side in the current chosen language
         and on the right side, the same language translated into its own language. 
         Those texts are obtained from the JDK API <literal>java.util.Locale.getDisplayedLanguage()</literal> and <literal>java.util.Locale.getDisplayedCountry()</literal> (if needed) and all languages may not be translated and can also depend on the JVM currently used.
-        It is still possible to override those values by editing the <literal>locale.portal.webui</literal> resource bundle, to do so edit the file <filename>gatein.ear/02portal.war/WEB-INF/classes/locale/portal/webui_xx_yy.properties</filename> where <literal>xx_yy</literal>
+        It is still possible to override those values by editing the <literal>locale.portal.webui</literal> resource bundle, to do so edit the <filename>gatein.ear/portal.war/WEB-INF/classes/locale/portal/webui_xx_yy.properties</filename> file where <emphasis>xx_yy</emphasis>
         represents the country code of the language in which you want to translate a particular language.
         In that file, add or modify a key such as <literal>Locale.xx_yy</literal> with the value being the translated string.
         </para>
         <example>
            <title>Changing the displayed text for Traditional Chinese in French</title>
-           <para>First edit <filename>gatein.ear/02portal.war/WEB-INF/classes/locale/portal/webui_fr.properties</filename> where <literal>ne</literal> is the country code for French, and add
+           <para>First, edit <filename>gatein.ear/portal.war/WEB-INF/classes/locale/portal/webui_fr.properties</filename> where <emphasis>ne</emphasis> is the country code for French, and add
            the following key into it:
-           <programlisting>
-              Locale.zh_TW=Chinois traditionnel
-           </programlisting>
-           After a restart the language will be updated in the user interface when a user is trying to change the current language.
+<programlisting>
+Locale.zh_TW=Chinois traditionnel
+</programlisting>
+           After a restart, the language will be updated in the user interface when a user is trying to change the current language.
            </para>
         </example>
 	</section>
-
 </section>
-
-

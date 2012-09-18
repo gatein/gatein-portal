@@ -4,7 +4,7 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Accessing_User_Profile">
-	<title>Accessing User Profile</title>
+	<title>Access User Profile</title>
 	<para>
 		The following code retrieves the details for a logged-in user:
 	</para>
@@ -29,20 +29,18 @@ if (userId != null)
 	<para>
 		Below are two alternatives for retrieving the Organization Service:
 	</para>
-	<orderedlist>
+	<itemizedlist>
 		<listitem>
-			
-<programlisting role="JAVA">OrganizationService service = (OrganizationService)
-   ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
-</programlisting>
+		<para>The first alternative</para>
+	<programlisting role="JAVA">OrganizationService service = (OrganizationService)
+	   ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+	</programlisting>
 		</listitem>
 		<listitem>
-			
-<programlisting role="JAVA">OrganizationService service = (OrganizationService)
-   PortalContainer.getInstance().getComponentInstanceOfType(OrganizationService.class);
-</programlisting>
+		<para>The second alternative</para>	
+		<programlisting role="JAVA">OrganizationService service = (OrganizationService)
+		   PortalContainer.getInstance().getComponentInstanceOfType(OrganizationService.class);
+		</programlisting>
 		</listitem>
-	</orderedlist>
+	</itemizedlist>
 </section>
-
-

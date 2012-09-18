@@ -6,13 +6,9 @@
    ]>
 <section id="sect-Reference_Guide-Validator_Configuration">
    <title>Configuration of custom data validators</title>
-
-   <section id="sect-Reference_Guide-Validator_Configuration-Overview">
-      <title>Overview</title>
-
-      <para>&PRODUCT; includes a user-configurable validator that can be applied to
+      <para xml:id="sect-Reference_Guide-Validator_Configuration-Overview">&PRODUCT; includes a user-configurable validator that can be applied to
          input fields of different bundled portlets. Currently, this validator is only used to configure the
-         validation of user name formats in the user account, user registration and group membership portlets, though
+         validation of username formats in the user account, user registration and group membership portlets, though
          the architecture allows for configurable validation to be used in different contexts if needed.
       </para>
       <para>
@@ -28,20 +24,15 @@
       <para>
          The architecture supports several configurations that can be activated and associated to specific instances of
          the user-configurable validator when they are created and assigned to fields in portlets. We will only concern
-         ourselves with the currently supported use cases, which are creation/modification of a user name during
+         ourselves with the currently supported use cases, which are creation/modification of a username during
          registration/modification of a user and group membership assignments.
       </para>
-
-   </section>
 
    <section id="sect-Reference_Guide-Validator_Configuration-Configuration">
       <title>Validator configuration</title>
 
       <para>
-         A configuration is created by adding an entry in
-         <filename>configuration.properties</filename>
-         using the
-         <literal>gatein.validators.</literal>
+         A configuration is created by adding an entry to <filename>configuration.properties</filename> using the <literal>gatein.validators.</literal>
          prefix followed by the name of the configuration, a period '.' and the name of the validation aspect you want
          to configure. The user-configurable validator currently supports four different aspects per configuration, as
          follows, where
@@ -49,54 +40,55 @@
          refers to the configuration name:
          <itemizedlist>
             <listitem>
-               <para><literal>gatein.validators.{configuration}.length.min</literal>: minimal length of the validated
-                  field
+               <para><literal>gatein.validators.{configuration}.length.min</literal>: Minimal length of the validated
+                  field.
                </para>
             </listitem>
             <listitem>
-               <para><literal>gatein.validators.{configuration}.length.max</literal>: maximal length of the validated
-                  field
+               <para><literal>gatein.validators.{configuration}.length.max</literal>: Maximal length of the validated
+                  field.
                </para>
             </listitem>
             <listitem>
-               <para><literal>gatein.validators.{configuration}.regexp</literal>: regular expression to which values of
-                  the validated field must conform
+               <para><literal>gatein.validators.{configuration}.regexp</literal>: Regular expression to which values of
+                  the validated field must conform.
                </para>
             </listitem>
             <listitem>
-               <para><literal>gatein.validators.{configuration}.format.message</literal>: information message to display
-                  when the value of the validated field doesn't conform to the
-                  specified regular expression
+               <para><literal>gatein.validators.{configuration}.format.message</literal>: Information message to display
+                  when the value of the validated field does not conform to the
+                  specified regular expression.
                </para>
             </listitem>
          </itemizedlist>
       </para>
 
       <para>
-         Only two configurations are currently supported by &PRODUCT_NAME;, one, named
-         <literal>username</literal>, to configure validation of user names when they are created/modified and the
-         other, named
-         <literal>groupmembership</literal>,
-         to configure validation of user names in the context of group memberships.
-      </para>
-
+         Only two configurations are currently supported by &PRODUCT_NAME;:
+	  <itemizedlist>
+		<listitem>
+         <para><literal>username</literal> which configures the validation of usernames when they are created/modified.</para>
+		</listitem>
+		<listitem>
+		 <para><literal>groupmembership</literal> which configures the validation of usernames in the context of group memberships.</para>
+		</listitem>
+	  </itemizedlist>
+	  </para>
+	  <example>
       <para>
-         For example, if you want to make sure that your users use an email address as their user name, you could use
+         If you want to make sure that your users use an email address as their usernames, you could use
          the following configuration:
       </para>
-      <example>
-         <para>
-            <programlisting>
-               # validators
-               gatein.validators.username.regexp=^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-za-z]{2,4}$
-               gatein.validators.username.format.message=Username must be a valid email address.
-            </programlisting>
-         </para>
+<programlisting>
+# validators
+gatein.validators.username.regexp=^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-za-z]{2,4}$
+gatein.validators.username.format.message=Username must be a valid email address.
+</programlisting>
       </example>
 
       <note>
          <para>
-            If you don't change the configuration of the validator, user names will be validated as follows:
+            If you do not change the configuration of the validator, the username will be validated as follows:
             <itemizedlist>
                <listitem>
                   <para>Length must be between 3 and 30 characters.</para>
@@ -119,8 +111,8 @@
 
       <important>
          <para>
-            Some components that leverage &PRODUCT_NAME; depend on user names being all lowercase. We therefore strongly
-            recommend that you also only accept lowercase user names.
+            Some components that leverage &PRODUCT_NAME; depend on usernames being all lowercase. Therefore, it is strongly
+            recommended that you only accept the lowercase usernames.
          </para>
       </important>
    </section>
@@ -129,43 +121,35 @@
       <title>Developer information</title>
 
       <para>
-         The user-configurable validator is implemented by the
-         <literal>org.exoplatform.webui.form.validator.UserConfigurableValidator</literal>
-         class. Please refer to its documentation for more details.
+         The user-configurable validator is implemented by the <classname>org.exoplatform.webui.form.validator.UserConfigurableValidator</classname> class. Please refer to its documentation for more details.
       </para>
 
       <para>
-         To use a specific validator configuration to validate a given field value, add the validator to the field as
-         follows, where
-         <literal>configurationName</literal>
-         is a
-         <literal>String</literal>
-         representing the name of the configuration to use:
-         <programlisting>
-            addValidator(UserConfigurableValidator.class, configurationName))
-         </programlisting>
+         To use a specific validator configuration to validate a given field value, add the validator to the field where
+         <literal>configurationName</literal> is a <literal>String</literal> representing the name of the configuration to use:
+<programlisting>
+addValidator(UserConfigurableValidator.class, configurationName))
+</programlisting>
       </para>
       <para>
          The validator instance can then be configured by adding the relevant information in <filename>configuration.properties</filename>, for example:
-         <programlisting>
-            # validators
-            gatein.validators.configurationName.length.min=5
-            gatein.validators.configurationName.length.max=10
-            gatein.validators.configurationName.regexp=^u\d{4,9}$
-            gatein.validators.configurationName.format.message=Username must start with ''u'' and be followed by 4 to 9 digits.
-         </programlisting>
+<programlisting>
+# validators
+gatein.validators.configurationName.length.min=5
+gatein.validators.configurationName.length.max=10
+gatein.validators.configurationName.regexp=^u\d{4,9}$
+gatein.validators.configurationName.format.message=Username must start with ''u'' and be followed by 4 to 9 digits.
+</programlisting>
       </para>
 
       <para>
          Alternatively, a resource key can also be passed to the
          <literal>addValidator</literal>
-         method to specify which localized message should be used in case a validation error occurs, for example as
-         follows:
-         <literal>configurationName</literal>
-         <programlisting>
-            addValidator(UserConfigurableValidator.class, UserConfigurableValidator.GROUPMEMBERSHIP,
-            UserConfigurableValidator.GROUP_MEMBERSHIP_LOCALIZATION_KEY);
-         </programlisting>
-      </para>
+         method to specify which localized message should be used in case a validation error occurs, for example <literal>configurationName</literal> as follows:
+	   </para>
+<programlisting>
+addValidator(UserConfigurableValidator.class, UserConfigurableValidator.GROUPMEMBERSHIP,
+UserConfigurableValidator.GROUP_MEMBERSHIP_LOCALIZATION_KEY);
+</programlisting>  
    </section>
 </section>

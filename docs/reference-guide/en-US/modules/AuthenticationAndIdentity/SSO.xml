@@ -5,16 +5,14 @@
 ]>
 <section id="chap-Reference_Guide-SSO_Single_Sign_On">
     <title>Single-Sign-On (SSO)</title>
-    <section id="sect-Reference_Guide-Single_Sign_On-Overview">
-        <title>Overview</title>
-        <para>
-            &PRODUCT; provides some form of Single Sign On (<literal>SSO</literal>) as an integration and aggregation platform.
+  
+        <para xml:id="sect-Reference_Guide-Single_Sign_On-Overview">
+            &PRODUCT; provides some forms of Single Sign On (<literal>SSO</literal>) as an integration and aggregation platform.
         </para>
         <para>
-            When logging into the portal users gain access to many systems through portlets using a single identity. In many cases, however, the portal infrastructure must be integrated with other SSO enabled systems. There are many different Identity Management solutions available. In most cases each SSO framework provides a unique way to plug into a Java EE application.
+            When logging into the portal, users gain access to many systems through portlets using a single identity. In many cases, however, the portal infrastructure must be integrated with other SSO enabled systems. There are many different Identity Management solutions available. In most cases, each SSO framework provides a unique way to plug into a Java EE application.
         </para>
-        <section id="sect-Reference_Guide-Overview_of_SSO-Prerequisite">
-            <title>Prerequisites</title>
+        <para xml:id="sect-Reference_Guide-Overview_of_SSO-Prerequisite"><emphasis role="bold">Prerequisites</emphasis></para>
             <para>
                 In this tutorial, the SSO server is installed in a Tomcat installation. Tomcat can be obtained from <ulink type="http" url="http://tomcat.apache.org">http://tomcat.apache.org</ulink>.
             </para>
@@ -26,11 +24,7 @@
             <para>
                 Users are advised to not run any portal extensions that could override the data when manipulating the <filename>gatein.ear</filename> file directly.
             </para>
-        </section>
-
-    </section>
-
-
+        
 
    <section id="sect-Reference_Guide-SSO_Single_Sign_On-Enabling_SSO_using_JBoss_SSO_Valve">
       <title>Enabling SSO using JBoss SSO Valve</title>
@@ -54,25 +48,20 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
 
       <note>
          <para>
-            This behaviour is coming from the fact that same JAAS principal is added by SSO valve to all HTTP requests, even to other web applications.
-            So the same roles are required because of it. There is alternative that you can configure SSO valve with parameter <emphasis role="bold">requireReauthentication=true</emphasis>
-            , which will force SSO valve to perform reauthentication with saved credentials in each HTTP request against security domain of particular web application where the request is coming.
+            This behavior is coming from the fact that the same JAAS principal is added by the SSO valve to all HTTP requests, even to other web applications.
+            So the same roles are required because of it. There is alternative that you can configure SSO valve with the parameter <emphasis role="bold">requireReauthentication=true</emphasis>, which will force SSO valve to perform reauthentication with saved credentials in each HTTP request against security domain of particular web application where the request is coming.
             This will enforce that new principal for that web application will be created with updated roles for that web application.
-            In other words, when requireReauthentication is <emphasis role="bold">false</emphasis> (default state), you need to have same roles among web applications.
-            When requireReauthentication is <emphasis role="bold">true</emphasis> you need to have same username and passwords.
+            In other words, when <literal>requireReauthentication</literal> is <literal>false</literal> (default state), you need to have same roles among web applications.
+            When <literal>requireReauthentication</literal> is <literal>true</literal>, you need to have the same username and passwords.
          </para>
       </note>
 
       <para>
-         More info about the JBoss SSO valve can be found at <ulink type="http" url="http://community.jboss.org/wiki/JBossWebSingleSignOn" />.
-      </para>
-
-      <para>
-         To successfully implement SSO integration, do the following:
+        See <ulink type="http" url="http://community.jboss.org/wiki/JBossWebSingleSignOn" /> for more information about the JBoss SSO valve.
       </para>
 
       <procedure id="proc-Reference_Guide_eXo_JCR_1.14-Enabling_SSO_using_JBoss_SSO_Valve-SSO_Integration">
-         <title>SSO Integration</title>
+         <title>Do the SSO Integration</title>
 
          <step>
             <para>
@@ -84,7 +73,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
                   <para>
                      For a <emphasis>non-clustered</emphasis> implementation, uncomment:
                   </para>
-<programlisting language="XML" role="XML">&lt;Valve className="org.apache.catalina.authenticator.SingleSignOn" /&gt;
+<programlisting role="XML">&lt;Valve className="org.apache.catalina.authenticator.SingleSignOn" /&gt;
 </programlisting>
                </listitem>
 
@@ -92,7 +81,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
                   <para>
                      For a <emphasis>clustered</emphasis> implementation, uncomment:
                   </para>
-<programlisting language="XML" role="XML">&lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn" /&gt;
+<programlisting role="XML">&lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn" /&gt;
 </programlisting>
                </listitem>
             </itemizedlist>
@@ -101,19 +90,19 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
          <step>
             <para>
                For integration of SSO valve among different nodes of cluster, you need to ensure that all these nodes share the same domain (for example <emphasis>node1.yourdomain.com</emphasis> and <emphasis>node2.yourdomain.com</emphasis>).
-               This domain needs to be configured with parameter <emphasis role="bold">cookieDomain</emphasis> of SSO valve. Thing is that SSO valve is adding cookie <emphasis role="bold">JSESSIONIDSSO</emphasis>,
-               which is by default bound only to host where the request is coming. When used cookieDomain parameter, cookie is bound to domain (like <emphasis>yourdomain.com</emphasis>),
-               which will ensure that it is shared among both hosts <emphasis>node1.yourdomain.com</emphasis> and <emphasis>node2.yourdomain.com</emphasis>. So in this case, valve configuration can look like this:
+               This domain needs to be configured with the <emphasis role="bold">cookieDomain</emphasis> parameter of SSO valve. Thing is that SSO valve is adding cookie <emphasis role="bold">JSESSIONIDSSO</emphasis>,
+               which is by default bound only to host where the request is coming. When the <literal>cookieDomain</literal> parameter is used, the cookie is bound to domain (like <emphasis>yourdomain.com</emphasis>),
+               which will ensure that it is shared among both hosts <emphasis>node1.yourdomain.com</emphasis> and <emphasis>node2.yourdomain.com</emphasis>. So in this case, the valve configuration can look like this:
             </para>
-<programlisting language="XML" role="XML">&lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn"
+<programlisting role="XML">&lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn"
    cookieDomain="yourdomain.com" /&gt;
 </programlisting>
          </step>
 
          <step>
             <para>
-               Another important thing is that both cluster nodes needs to be on same cluster (using same parameter <emphasis role="bold">-g</emphasis> and same parameter <emphasis role="bold">-u</emphasis> and also using parameter <emphasis role="bold">-Dexo.profiles=cluster</emphasis>).
-               It's also needed for them to share the same NFS directory and same database and apply all the configuration needed for &PRODUCT; cluster.
+               Another important thing is that both cluster nodes need to be on the same cluster (using same parameter <emphasis role="bold">-g</emphasis> and same parameter <emphasis role="bold">-u</emphasis> and also using parameter <emphasis role="bold">-Dexo.profiles=cluster</emphasis>).
+               It is also needed for them to share the same NFS directory and same database and apply all the configuration needed for the &PRODUCT; cluster.
             </para>
          </step>
       </procedure>
@@ -122,19 +111,17 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
          <title>Testing SSO in a physical cluster</title>
 
          <para>
-            In this example, we will try to simulate testing on more physical machines by simply using virtual hosts on single machine.
+            This example will try to simulate testing on more physical machines by simply using virtual hosts on a single machine.
          </para>
       </formalpara>
 
       <procedure>
          <step>
             <para>
-               If you are on Linux, you can configure file <emphasis role="bold">/etc/hosts</emphasis> to contain these lines:
+               If you are on Linux, you can configure the <filename>/etc/hosts</filename> file which contains these lines:
              </para>
-<programlisting>
-127.0.1.1 machine1.yourdomain.com
-127.0.1.2 machine2.yourdomain.com
-</programlisting>
+<programlisting>127.0.1.1 machine1.yourdomain.com
+127.0.1.2 machine2.yourdomain.com</programlisting>
          </step>
          <step>
             <para>
@@ -146,19 +133,16 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
             <para>
                Uncomment the line:
             </para>
-<programlisting language="XML" role="XML">&lt;!--
+<programlisting role="XML">&lt;!--
 &lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn" /&gt;
---&gt;
-</programlisting>
+--&gt;</programlisting>
          </step>
-
          <step>
             <para>
                And edit it to match the following:
             </para>
-<programlisting language="XML" role="XML">&lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn"
-   cookieDomain="yourdomain.com" /&gt;
-</programlisting>
+<programlisting role="XML">&lt;Valve className="org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn"
+   cookieDomain="yourdomain.com" /&gt;</programlisting>
             <para>
                This will ensure the <literal>JSESSIONIDSSO</literal> cookie is used in the correct domain, allowing the SSO authentication to occur.
             </para>
@@ -173,23 +157,27 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
          <step>
             <para>
                Start both cluster nodes with commands:
-            </para>
-<programlisting>
-./run.sh -c node1 -b machine1.yourdomain.com -Dexo.profiles=cluster -Djboss.messaging.ServerPeerID=0 &amp;
-./run.sh -c node2 -b machine2.yourdomain.com -Dexo.profiles=cluster -Djboss.messaging.ServerPeerID=1 &amp;
-</programlisting>
+				<itemizedlist>
+				<listitem>
+					<command>./run.sh -c node1 -b machine1.yourdomain.com -Dexo.profiles=cluster -Djboss.messaging.ServerPeerID=0</command>
+				</listitem>
+				<listitem>
+					<command>./run.sh -c node2 -b machine2.yourdomain.com -Dexo.profiles=cluster -Djboss.messaging.ServerPeerID=1</command>
+				</listitem>
+				</itemizedlist>
+			</para>
          </step>
 
          <step>
             <para>
-               Let's go to <ulink type="http" url="http://machine1.yourdomain.com:8080/portal">http://machine1.yourdomain.com:8080/portal</ulink> and login as some user.
+               Go to <ulink type="http" url="http://machine1.yourdomain.com:8080/portal">http://machine1.yourdomain.com:8080/portal</ulink> and log in as a user.
             </para>
          </step>
 
          <step>
             <para>
-               Access some private url on second host like <ulink type="http" url="http://machine2.yourdomain.com:8080/portal/dologin">http://machine2.yourdomain.com:8080/portal/dologin</ulink>.
-               Now you should be logged directly into machine2 thanks to SSO valve.
+               Access some private URLs on the second host, such as <ulink type="http" url="http://machine2.yourdomain.com:8080/portal/dologin">http://machine2.yourdomain.com:8080/portal/dologin</ulink>.
+               Now you should be logged directly into machine2 thanks to the SSO valve.
             </para>
          </step>
 
@@ -202,7 +190,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
       </procedure>
 
       <formalpara id="form-Reference_Guide_eXo_JCR_1.14-Enabling_SSO_using_JBoss_SSO_Valve-Enabling_SSO_with_Other_Web_Applications">
-         <title>Enabling SSO with Other Web Applications</title>
+         <title>Enabling SSO with other Web Applications</title>
 
          <para>
             As mentioned earlier, in order to use SSO authentication between JBoss Enterprise Portal Platform instances and other web applications, the roles defined in the web application must match those used in the portal instance
@@ -210,41 +198,31 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
          </para>
       </formalpara>
 
-      <para>
-         As an example, to use the SSO Valve to authenticate a user in both a portal instance and the JMX Console, the following actions would be required:
-      </para>
-
-      <procedure>
-         <title></title>
-
-         <step>
-            <para>
-               Open the <filename><replaceable>&lt;JBOSS_HOME&gt;</replaceable>/server/node1/deploy/jmx-console.war/WEB-INF/web.xml</filename> file and edit it as follows:
-            </para>
-
-            <substeps>
-               <step>
+      <example>
+        <para>To use the SSO Valve to authenticate a user in both a portal instance and the JMX Console, you need to open the <filename><replaceable>&lt;JBOSS_HOME&gt;</replaceable>/server/node1/deploy/jmx-console.war/WEB-INF/web.xml</filename> file and edit it as follows:
+        </para>
+		<itemizedlist>
+			<listitem>
                   <para>
                      Change the <parameter>&lt;role-name&gt;</parameter> entry in the <parameter>&lt;auth-constraint&gt;</parameter> element (line <literal>110</literal>) from <literal>JBossAdmin</literal> to <literal>users</literal>:
                   </para>
-<programlisting language="XML" role="XML">&lt;auth-constraint&gt;
+<programlisting role="XML">&lt;auth-constraint&gt;
   &lt;!--&lt;role-name&gt;JBossAdmin&lt;/role-name&gt;--&gt;
   &lt;role-name&gt;users&lt;/role-name&gt;
 &lt;/auth-constraint&gt;</programlisting>
-               </step>
+               </listitem>
 
-               <step>
+               <listitem>
                   <para>
-                     Change the <parameter>&lt;role-name&gt;</parameter> entry in the <parameter>&lt;security-role&gt;</parameter> element (line <literal>120</literal>) from <literal>JBossAdmin</literal> to <literal>users</literal>
+                     Change the <parameter>&lt;role-name&gt;</parameter> entry in the <parameter>&lt;security-role&gt;</parameter> element (line <literal>120</literal>) from <literal>JBossAdmin</literal> to <literal>users</literal>:
                   </para>
-<programlisting language="XML" role="XML">&lt;security-role&gt;
+<programlisting role="XML">&lt;security-role&gt;
   &lt;!--&lt;role-name&gt;JBossAdmin&lt;/role-name&gt;--&gt;
   &lt;role-name&gt;users&lt;/role-name&gt;
 &lt;/security-role&gt;</programlisting>
-               </step>
-            </substeps>
-         </step>
-      </procedure>
+               </listitem>
+            </itemizedlist>
+      </example>
 
       <formalpara id="form-Reference_Guide_eXo_JCR_1.14-Enabling_SSO_using_JBoss_SSO_Valve-Testing_SSO_With_Other_Web_Applications">
          <title>Testing SSO With Other Web Applications</title>
@@ -256,21 +234,21 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
 
       <procedure id="proc-Reference_Guide_eXo_JCR_1.14-Enabling_SSO_using_JBoss_SSO_Valve-Test_SSO_Between_Portal_and_JMX_Console">
          <title>Test SSO Between Portal and JMX Console</title>
-
          <step>
             <para>
                Start a portal instance on one node:
+				<itemizedlist>
+					<listitem>
+						<command>./run.sh -c node1 -b machine1.yourdomain.com -Dexo.profiles=cluster -Djboss.messaging.ServerPeerID=0 &amp;</command>
+					</listitem>
+				</itemizedlist>
             </para>
-<programlisting>./run.sh -c node1 -b machine1.yourdomain.com -Dexo.profiles=cluster -Djboss.messaging.ServerPeerID=0 &amp;
-</programlisting>
          </step>
-
          <step>
             <para>
-               Navigate to <ulink type="http" url="http://machine1.yourdomain.com:8080/portal/private/classic" /> and authenticate with the pre-configured user account "<systemitem> root </systemitem>" (password "<systemitem> gtn </systemitem>").
+               Navigate to <ulink type="http" url="http://machine1.yourdomain.com:8080/portal/private/classic" /> and authenticate with the pre-configured user account "<systemitem>root</systemitem>" (password "<systemitem>gtn</systemitem>").
             </para>
          </step>
-
          <step>
             <para>
                Navigate to <ulink type="http" url="http://machine1.yourdomain.com:8080/jmx-console" />. You should be automatically authenticated into the JMX Console.
@@ -282,12 +260,12 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
          <title>Using SSO to Authenticate From the Public Page</title>
 
          <para>
-            The previous configuration changes in this section are useful if a user is using a secured URL ( <ulink type="http" url="http://localhost:8080/portal/private/classic" />, for example) to log in to the portal instance.
+            The previous configuration changes in this section are useful if a user is using a secured URL (<ulink type="http" url="http://localhost:8080/portal/private/classic" />, for example) to log in the portal instance.
          </para>
       </formalpara>
 
       <para>
-         Further changes are needed however, if SSO authentication is required to work with the <guilabel>Sign In</guilabel> button on the front page of the portal ( <ulink type="http" url="http://localhost:8080/portal/classic" /> ).
+         Further changes are needed; however, if the SSO authentication is required to work with the <guilabel>Sign In</guilabel> button on the front page of the portal (<ulink type="http" url="http://localhost:8080/portal/classic" />).
       </para>
 
       <para>
@@ -299,15 +277,21 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
 
          <step>
             <para>
-               Open the <filename><replaceable>&lt;JBOSS_HOME&gt;</replaceable>/server/<replaceable>&lt;PROFILE&gt;</replaceable>/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file and edit the line:
+               Open the file:
+				<itemizedlist>
+					<listitem>
+						<filename><replaceable>&lt;JBOSS_HOME&gt;</replaceable>/server/<replaceable>&lt;PROFILE&gt;</replaceable>/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename>
+					</listitem>
+				</itemizedlist> 
             </para>
-<programlisting language="Java" role="java">&lt;a class="Login"
+			<para>Then, edit the line:</para>
+<programlisting role="JAVA">&lt;a class="Login"
    onclick="$signInAction"&gt;&lt;%=_ctx.appRes("UILoginForm.label.Signin")%&gt;&lt;/a&gt;
 </programlisting>
             <para>
                To read:
             </para>
-<programlisting language="Java" role="java">&lt;a class="Login"
+<programlisting role="JAVA">&lt;a class="Login"
    href="/portal/private/classic"&gt;&lt;%=_ctx.appRes("UILoginForm.label.Signin")%&gt;&lt;/a&gt;
 </programlisting>
          </step>
@@ -316,12 +300,12 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
             <para>
                Open the <filename><replaceable>&lt;JBOSS_HOME&gt;</replaceable>/server/<replaceable>&lt;PROFILE&gt;</replaceable>/deploy/gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file and change the line:
             </para>
-<programlisting language="Java" role="java">&lt;a onclick="$signInAction"&gt;&lt;%=_ctx.appRes("UILogoPortlet.action.signin")%&gt;&lt;/a&gt;
+<programlisting role="JAVA">&lt;a onclick="$signInAction"&gt;&lt;%=_ctx.appRes("UILogoPortlet.action.signin")%&gt;&lt;/a&gt;
 </programlisting>
             <para>
                To read:
             </para>
-<programlisting language="Java" role="java">&lt;a href="/portal/private/classic"&gt;&lt;%=_ctx.appRes("UILogoPortlet.action.signin")%&gt;&lt;/a&gt;
+<programlisting role="JAVA">&lt;a href="/portal/private/classic"&gt;&lt;%=_ctx.appRes("UILogoPortlet.action.signin")%&gt;&lt;/a&gt;
 </programlisting>
          </step>
       </procedure>
@@ -333,7 +317,16 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
             This Single Sign On plugin enables seamless integration between &PRODUCT; and the CAS Single Sign On Framework. Details about CAS can be found <ulink url="http://www.jasig.org/cas">here</ulink>.
         </para>
         <para>
-            The integration consists of two parts; the first part consists of installing or configuring a CAS server, the second part consists of setting up the portal to use the CAS server.
+            The integration consists of two parts:
+			<itemizedlist>
+				<listitem>
+					<para>The first consists of installing or configuring a CAS server.</para>
+				</listitem>
+				<listitem>
+					<para>The second consists of setting up the portal to use the CAS server.
+					</para>
+				</listitem>
+			</itemizedlist>
         </para>
         <section id="sect-Reference_Guide-CAS_Central_Authentication_Service-CAS_server">
             <title>CAS server</title>
@@ -344,7 +337,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
                 <title>Obtaining CAS</title>
                 <para>
                     CAS can be downloaded from <ulink type="http" url="http://www.jasig.org/cas/download">http://www.jasig.org/cas/download</ulink>.
-                    Tested version, which should work with these instructions is <emphasis role="bold">CAS 3.3.5</emphasis>, however other versions can also work without problems.
+                    The tested version which should work with these instructions is <emphasis role="bold">CAS 3.3.5</emphasis>. However, other versions can also work without problems.
                 </para>
                 <para>
                     Extract the downloaded file into a suitable location. This location will be referred to as <literal>$CAS_HOME</literal> in the following instructions.
@@ -374,12 +367,12 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
                 <procedure>
                     <step>
                         <para>
-                            Open <filename>CAS_HOME/cas-server-webapp/src/main/webapp/WEB-INF/deployerConfigContext.xml</filename>
+                            Open <filename>CAS_HOME/cas-server-webapp/src/main/webapp/WEB-INF/deployerConfigContext.xml</filename>.
                         </para>
                     </step>
                     <step>
                         <para>
-                            Replace:
+                            Replace
 <programlisting> &#60;!--
   | Whereas CredentialsToPrincipalResolvers identify who it is some Credentials might authenticate, 
   | AuthenticationHandlers actually authenticate credentials.  Here e declare the AuthenticationHandlers that
@@ -407,7 +400,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
  &#60;/property&#62;
 </programlisting>                        
                         <para>
-                            With the following (Make sure to set the host, port and context with the values corresponding to your portal). Also available in <filename>GATEIN_SSO_HOME/cas/plugin/WEB-INF/deployerConfigContext.xml</filename>.
+                            With the following that is also available in <filename>GATEIN_SSO_HOME/cas/plugin/WEB-INF/deployerConfigContext.xml</filename> (Make sure you set the host, port and context with the values corresponding to your portal).
                         </para>
 
 <programlisting>&#60;!--
@@ -456,7 +449,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
                             Get an installation of Tomcat and extract it into a suitable location (which will be called <filename>TOMCAT_HOME</filename> for these instructions). 
                         </para>
                         <para>
-                            Change the default port to avoid a conflict with the default &PRODUCT; (for testing purposes). Edit <filename>TOMCAT_HOME/conf/server.xml</filename> and replace the 8080 port to 8888.
+                            Change the default port to avoid a conflict with the default &PRODUCT; (for testing purposes). Edit <filename>TOMCAT_HOME/conf/server.xml</filename> and replace the 8080 port with 8888.
                             <note>
                                 <para>
                                     If &PRODUCT; is running on the same machine as Tomcat, other ports need to be changed in addition to 8080 to avoid port conflicts.
@@ -467,9 +460,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
                     </step>
                     <step>
                         <para>
-                            Go to <filename>CAS_HOME/cas-server-webapp</filename> and execute the command:
-<programlisting>mvn install
-</programlisting>
+                            Go to <filename>CAS_HOME/cas-server-webapp</filename> and execute the <command>mvn install</command> command.
                         </para>
                     </step>
                     <step>
@@ -477,30 +468,31 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
                             Copy <filename>CAS_HOME/cas-server-webapp/target/cas.war</filename> into <filename>TOMCAT_HOME/webapps</filename>.
                         </para>
                         <para>
-                            Tomcat should start and be accessible at <ulink type="http" url="http://localhost:8888/cas">http://localhost:8888/cas</ulink>. Note that at this stage login won't be available.
+                            Tomcat should start and be accessible at <ulink type="http" url="http://localhost:8888/cas">http://localhost:8888/cas</ulink>.
                         </para>
                         <mediaobject>
                             <imageobject>
                                 <imagedata fileref="images/AuthenticationAndIdentity/SSO/cas.png" format="PNG" width="444" />
                             </imageobject>
                         </mediaobject>
+					<note>
+						<para>The login will not be available at this stage.</para>
+					</note>
                     </step>
                 </procedure>
             </section>
-            <note>
-                <para>
-                  By default on logout the CAS server will display the CAS logout page with a link to return to the portal. To make the CAS server redirect to the portal page after a logout, modify the 
-                                  <filename>cas.war/WEB-INF/cas-servlet.xml</filename> to include the follow line :
-                </para>
-                                <programlisting>
-        &#60;bean id=&#34;logoutController&#34; class=&#34;org.jasig.cas.web.LogoutController&#34;
-                  p:centralAuthenticationService-ref=&#34;centralAuthenticationService&#34;
-                  p:logoutView=&#34;casLogoutView&#34;
-                  p:warnCookieGenerator-ref=&#34;warnCookieGenerator&#34;
-                  p:ticketGrantingTicketCookieGenerator-ref=&#34;ticketGrantingTicketCookieGenerator&#34;
-                <emphasis role="bold">p:followServiceRedirects=&#34;true&#34;/&#62;</emphasis>
-                </programlisting>
-            </note>
+<note>
+<para>
+  By default on logout the CAS server will display the CAS logout page with a link to return to the portal. To make the CAS server redirect to the portal page after a logout, modify <filename>cas.war/WEB-INF/cas-servlet.xml</filename> to include the following lines:
+</para>
+<programlisting>&#60;bean id=&#34;logoutController&#34; class=&#34;org.jasig.cas.web.LogoutController&#34;
+p:centralAuthenticationService-ref=&#34;centralAuthenticationService&#34;
+p:logoutView=&#34;casLogoutView&#34;
+p:warnCookieGenerator-ref=&#34;warnCookieGenerator&#34;
+p:ticketGrantingTicketCookieGenerator-ref=&#34;ticketGrantingTicketCookieGenerator&#34;
+<emphasis role="bold">p:followServiceRedirects=&#34;true&#34;/&#62;</emphasis>
+</programlisting>
+</note>
         </section>
         
         <section id="sect-Reference_Guide-CAS_Central_Authentication_Service-Setup_the_CAS_client">
@@ -508,7 +500,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
             <procedure>
                 <step>
                     <para>
-                        Copy all libraries from <filename>GATEIN_SSO_HOME/cas/gatein.ear/lib</filename> into <filename>JBOSS_HOME/server/default/deploy/gatein.ear/lib</filename> (Or in Tomcat, into $<filename>GATEIN_HOME/lib</filename>)
+                        Copy all libraries from <filename>GATEIN_SSO_HOME/cas/gatein.ear/lib</filename> into <filename>JBOSS_HOME/server/default/deploy/gatein.ear/lib</filename> (Or in Tomcat, into $<filename>GATEIN_HOME/lib</filename>).
                     </para>
                 </step>
                 <step>
@@ -517,9 +509,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
                             <para>
                             In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment on this section:
                             </para>
-<programlisting>
-<![CDATA[
-<authentication>
+<programlisting role="XML"><![CDATA[<authentication>
   <login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required">
     <module-option name="portalContainerName">portal</module-option>
     <module-option name="realmName">gatein-domain</module-option>
@@ -529,9 +519,7 @@ Author [w/email]: Marek Posolda  (mposolda@redhat.com)
     <module-option name="realmName">gatein-domain</module-option>
   </login-module>
 </authentication>
-]]>
-</programlisting>
-
+]]></programlisting>
                         </listitem>
                         <listitem>
                             <para>
@@ -561,24 +549,26 @@ realmName=gatein-domain;
 ]]>
                    </programlisting>
                 </step>
-                <step>
-                    <para>
-                        The installation can be tested at this point:
-                    </para>
-                    <procedure>
-                        <step>
-                            <para>
-                                Start (or restart) &PRODUCT;, and (assuming the CAS server on Tomcat is running) direct your browser to <ulink type="http" url="http://localhost:8888/cas">http://localhost:8888/cas</ulink>.
-                            </para>
-                        </step>
-                        <step>
-                            <para>
-                                Login with the username <literal>root</literal> and the password <literal>gtn</literal> (or any account created through the portal).
-                            </para>
-                        </step>
-                    </procedure>
-                </step>
-            </procedure>
+			</procedure>
+			<note>
+				<para>
+					The installation can be tested at this point:
+				
+				<procedure>
+					<step>
+						<para>
+							Start (or restart) &PRODUCT;, and (assuming the CAS server on Tomcat is running) direct your browser to <ulink type="http" url="http://localhost:8888/cas">http://localhost:8888/cas</ulink>.
+						</para>
+					</step>
+					<step>
+						<para>
+							Login with the username <literal>root</literal> and the password <literal>gtn</literal> (or any account created through the portal).
+						</para>
+					</step>
+				</procedure>
+                </para>
+			</note>
+            
         </section>
         
         <section id="sect-Reference_Guide-CAS_Central_Authentication_Service-Redirect_to_CAS">
@@ -586,12 +576,12 @@ realmName=gatein-domain;
             <para>
                 To utilize the Central Authentication Service, &PRODUCT; needs to redirect all user authentication to the CAS server.
             </para>
-            <para>
+			<para>
                 Information about where the CAS is hosted must be properly configured within the &PRODUCT; instance. The required configuration is done by modifying three files:
+			</para>
                 <itemizedlist>
                     <listitem>
-                        <para>
-                        In the <filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
+                        <para>In the <filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file, modify the 'Sign In' link as follows:</para>
 <programlisting>
 <![CDATA[
 <!--
@@ -600,11 +590,12 @@ realmName=gatein-domain;
 <a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
 ]]>
 </programlisting>
-                        </para>
+                        
                     </listitem>
                     <listitem>
                         <para>
                         In the <filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file, modify the 'Sign In' link as follows:
+						</para>
 <programlisting>
 <![CDATA[
 <!--
@@ -613,13 +604,13 @@ realmName=gatein-domain;
 <a href="/portal/sso"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a> 
 ]]>
 </programlisting>
-                        </para>
+                        
                     </listitem>
                     <listitem>
                         <para>
-                            Replace the entire contents of <filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename> with:
+                            Replace the entire content of <filename>gatein.ear/portal.war/login/jsp/login.jsp</filename> with:
                         </para>
-<programlisting>&#60;html&#62;
+<programlisting role="XML">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
      window.location = &#39;/portal/sso&#39;;
@@ -632,49 +623,48 @@ realmName=gatein-domain;
                     </listitem>
                     <listitem>
                         <para>
-                            Add the following Filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
+                            Add the following filters at the top of the filter chain in <filename>gatein.ear/portal.war/WEB-INF/web.xml</filename>.</para>
 
-
-                            <programlisting><![CDATA[<filter>
-   <filter-name>LoginRedirectFilter</filter-name>
-   <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
-   <init-param>
-      <!-- This should point to your SSO authentication server -->
-      <param-name>LOGIN_URL</param-name>
-      <!-- If casRenewTicket param value of InitiateLoginServlet is: not specified or false -->
-      <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/initiatessologin</param-value>
-      <!-- If casRenewTicket param value of InitiateLoginServlet is : true -->
-      <!-- <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/initiatessologin&amp;renew=true</param-value> -->
-   </init-param>
+<programlisting role="XML"><![CDATA[<filter>
+	<filter-name>LoginRedirectFilter</filter-name>
+	<filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
+	<init-param>
+	  <!-- This should point to your SSO authentication server -->
+	  <param-name>LOGIN_URL</param-name>
+	  <!-- If casRenewTicket param value of InitiateLoginServlet is: not specified or false -->
+	  <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/initiatessologin</param-value>
+	  <!-- If casRenewTicket param value of InitiateLoginServlet is : true -->
+	  <!-- <param-value>http://localhost:8888/cas/login?service=http://localhost:8080/portal/initiatessologin&amp;renew=true</param-value> -->
+	</init-param>
 </filter>
 <filter>
-   <filter-name>CASLogoutFilter</filter-name>
-   <filter-class>org.gatein.sso.agent.filter.CASLogoutFilter</filter-class>
-   <init-param>
-      <!-- This should point to your JOSSO authentication server -->
-      <param-name>LOGOUT_URL</param-name>
-      <param-value>http://localhost:8888/cas/logout</param-value>
-   </init-param>
+	<filter-name>CASLogoutFilter</filter-name>
+	<filter-class>org.gatein.sso.agent.filter.CASLogoutFilter</filter-class>
+	<init-param>
+	  <!-- This should point to your JOSSO authentication server -->
+	  <param-name>LOGOUT_URL</param-name>
+	  <param-value>http://localhost:8888/cas/logout</param-value>
+	</init-param>
 </filter>
 <filter>
-   <filter-name>InitiateLoginFilter</filter-name>
-   <filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
-   <init-param>
-      <param-name>ssoServerUrl</param-name>
-      <param-value>http://localhost:8888/cas</param-value>
-   </init-param>
-   <init-param>
-      <param-name>casRenewTicket</param-name>
-      <param-value>false</param-value>
-   </init-param>
-   <init-param>
-      <param-name>casServiceUrl</param-name>
-      <param-value>http://localhost:8080/portal/initiatessologin</param-value>
-   </init-param>
-   <init-param>
-      <param-name>loginUrl</param-name>
-      <param-value>http://localhost:8080/portal/dologin</param-value>
-   </init-param>
+	<filter-name>InitiateLoginFilter</filter-name>
+	<filter-class>org.gatein.sso.agent.filter.InitiateLoginFilter</filter-class>
+	<init-param>
+	  <param-name>ssoServerUrl</param-name>
+	  <param-value>http://localhost:8888/cas</param-value>
+	</init-param>
+	<init-param>
+	  <param-name>casRenewTicket</param-name>
+	  <param-value>false</param-value>
+	</init-param>
+	<init-param>
+	  <param-name>casServiceUrl</param-name>
+	  <param-value>http://localhost:8080/portal/initiatessologin</param-value>
+	</init-param>
+	<init-param>
+	  <param-name>loginUrl</param-name>
+	  <param-value>http://localhost:8080/portal/dologin</param-value>
+	</init-param>
 </filter>
 
 <!-- Mapping the filters at the very top of the filter chain -->
@@ -689,17 +679,13 @@ realmName=gatein-domain;
 <filter-mapping>
    <filter-name>InitiateLoginFilter</filter-name>
    <url-pattern>/initiatessologin</url-pattern>
-</filter-mapping>]]>  
-                            </programlisting>
-                        </para>
+</filter-mapping>]]></programlisting>
                     </listitem>
                 </itemizedlist>
-            </para>
             <para>
                 Once these changes have been made, all links to the user authentication pages will redirect to the CAS centralized authentication form.
             </para>
         </section>
-
     </section>
     
     <section id="sect-Reference_Guide-Single_Sign_On-JOSSO">
@@ -727,7 +713,7 @@ realmName=gatein-domain;
                     Once downloaded, extract the package into what will be called <filename>JOSSO_HOME</filename> in this example.
                 </para>
         <warning>
-          <para>The steps described later are only correct in case of JOSSO v.1.8</para>
+          <para>The steps described later are only correct in case of JOSSO v.1.8.</para>
         </warning>
             </section>
             
@@ -755,11 +741,6 @@ realmName=gatein-domain;
                                     <filename>JOSSO_HOME/lib/josso-gateway-gatein-stores.xml</filename>
                                 </para>
                             </listitem>
-                        </itemizedlist>
-                        <para>
-                            and
-                        </para>
-                        <itemizedlist>
                             <listitem>
                                 <para>
                                     <filename>JOSSO_HOME/webapps/josso/WEB-INF/classes/gatein.properties</filename>
@@ -781,7 +762,7 @@ realmName=gatein-domain;
                     </step>
                     <step>
                         <para>
-                            Tomcat should now start and allow access to <ulink type="http" url="http://localhost:8888/josso/signon/login.do">http://localhost:8888/josso/signon/login.do</ulink> but at this stage login will not be available.
+                            Start Tomcat now that allows access to <ulink type="http" url="http://localhost:8888/josso/signon/login.do">http://localhost:8888/josso/signon/login.do</ulink>. However, at this stage, the login will not be available.
                         </para>
                         <mediaobject>
                             <imageobject>
@@ -797,19 +778,21 @@ realmName=gatein-domain;
         <section id="sect-Reference_Guide-JOSSO-Setup_the_JOSSO_client">
             <title>Setup the JOSSO client</title>
             <note>
-               There are some changes in JOSSO agent api among versions 1.8.1 and 1.8.2, which means that we need to use different modules for different JOSSO versions.
-               In next section, we will use directory with key <emphasis role="bold">josso-18X</emphasis>, which will be directory <emphasis>josso-181</emphasis> if you
+			<para>
+               There are some changes in JOSSO agent api among versions 1.8.1 and 1.8.2, which means that you need to use different modules for different JOSSO versions.
+               In next section, you will use directory with the <emphasis role="bold">josso-18X</emphasis> key, which will be <emphasis>josso-181</emphasis> directory if you
                have JOSSO 1.8.1 and <emphasis>josso-182</emphasis> if you have JOSSO 1.8.2 or newer.
-            </note>
+            </para>
+			</note>
             <procedure>
                 <step>
                     <para>
-                        Copy the library files from <filename>GATEIN_SSO_HOME/josso/josso-18X/gatein.ear/lib</filename> into <filename>gatein.ear/lib</filename> (or into <filename>GATEIN_HOME/lib</filename> if &PRODUCT; is  running in Tomcat)
+                        Copy the library files from <filename>GATEIN_SSO_HOME/josso/josso-18X/gatein.ear/lib</filename> into <filename>gatein.ear/lib</filename> (or into <filename>GATEIN_HOME/lib</filename> if &PRODUCT; is  running in Tomcat).
                     </para>
                 </step>
             <step>
                <para>
-                  Copy the file <filename>GATEIN_SSO_HOME/josso/josso-18X/gatein.ear/portal.war/WEB-INF/classes/josso-agent-config.xml</filename> into <filename>gatein.ear/02portal.war/WEB-INF/classes</filename> (or into <filename>GATEIN_HOME/webapps/portal.war/WEB-INF/classes</filename>, or <filename>GATEIN_HOME/conf</filename> if &PRODUCT; is  running in Tomcat)
+                  Copy the <filename>GATEIN_SSO_HOME/josso/josso-18X/gatein.ear/portal.war/WEB-INF/classes/josso-agent-config.xml</filename> file into <filename>gatein.ear/portal.war/WEB-INF/classes</filename> (or into <filename>GATEIN_HOME/webapps/portal.war/WEB-INF/classes</filename>, or <filename>GATEIN_HOME/conf</filename> if &PRODUCT; is  running in Tomcat).
                </para>
             </step>
                 <step>
@@ -818,8 +801,7 @@ realmName=gatein-domain;
                             <para>
                                 In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment this section:
                             </para>
-<programlisting>
-<![CDATA[
+<programlisting><![CDATA[
 <authentication>
   <login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required">
     <module-option name="portalContainerName">portal</module-option>
@@ -861,10 +843,10 @@ realmName=gatein-domain;
 ]]>
                   </programlisting>
                 </step>
-                <step>
+			</procedure>
+                <note>
                     <para>
                         The installation can be tested at this point.
-                    </para>
                     <procedure>
                         <step>
                             <para>
@@ -877,8 +859,8 @@ realmName=gatein-domain;
                             </para>
                         </step>
                     </procedure>
-                </step>
-            </procedure>
+					</para>
+			</note>
         </section>
         
         <section id="sect-Reference_Guide-JOSSO-Setup_the_portal_to_redirect_to_JOSSO">
@@ -888,12 +870,12 @@ realmName=gatein-domain;
             </para>
             <para>
                 Information about where the JOSSO server is hosted must be properly configured within the &PRODUCT; instance. The required configuration is done by modifying four files:
+			</para>
                 <itemizedlist>
                     <listitem>
                         <para>
-                        In the <filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
-<programlisting>
-<![CDATA[
+                        In the <filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file, modify the 'Sign In' link as follows:
+<programlisting><![CDATA[
 <!--
 <a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
 -->
@@ -904,9 +886,8 @@ realmName=gatein-domain;
                     </listitem>
                     <listitem>
                         <para>
-                        In the <filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file modify the 'Sign In' link as follows:
-<programlisting>
-<![CDATA[
+                        In the <filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file, modify the 'Sign In' link as follows:
+<programlisting><![CDATA[
 <!--
 <a onclick="$signInAction"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
 -->
@@ -917,7 +898,7 @@ realmName=gatein-domain;
                     </listitem>
                     <listitem>
                         <para>
-                            Replace the entire contents of <filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename> with:
+                            Replace the entire content of <filename>gatein.ear/portal.war/login/jsp/login.jsp</filename> with:
                         </para>
 <programlisting>&#60;html&#62;
   &#60;head&#62;
@@ -932,10 +913,10 @@ realmName=gatein-domain;
                     </listitem>
                     <listitem>
                         <para>
-                            Add the following Filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
+                            Add the following filters at the top of the filter chain in <filename>gatein.ear/portal.war/WEB-INF/web.xml</filename>.
+						</para>
 
-
-<programlisting><![CDATA[<filter>
+<programlisting role="XML"><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
    <init-param>
@@ -978,11 +959,9 @@ realmName=gatein-domain;
 <filter-mapping>
    <filter-name>InitiateLoginFilter</filter-name>
    <url-pattern>/initiatessologin</url-pattern>
-</filter-mapping>]]></programlisting>
-                        </para>
+</filter-mapping>]]></programlisting>   
                     </listitem>
                 </itemizedlist>
-            </para>
             <para>
                 From now on, all links redirecting to the user authentication pages will redirect to the JOSSO centralized authentication form.
             </para>
@@ -991,7 +970,7 @@ realmName=gatein-domain;
     </section>
     
     <section id="sect-Reference_Guide-Single_Sign_On-OpenSSO_The_Open_Web_SSO_project">
-        <title>OpenSSO - The Open Web SSO project</title>
+        <title>OpenSSO - Open Web SSO project</title>
         <para>
             Setting up this integration involves two steps. The first step is to install or configure an OpenSSO server, and the second is to set up the portal to use the OpenSSO server.
         </para>
@@ -1001,7 +980,7 @@ realmName=gatein-domain;
                  This section details the setting up of OpenSSO server to authenticate against the &PRODUCT; login module.
             </para>
             <para>
-                In this example the OpenSSO server will be installed on Tomcat.
+                In this example, the OpenSSO server will be installed on Tomcat.
             </para>
             <section id="sect-Reference_Guide-OpenSSO_server-Obtaining_OpenSSO">
                 <title>Obtaining OpenSSO</title>
@@ -1009,15 +988,15 @@ realmName=gatein-domain;
                     OpenSSO must be purchased from <ulink type="http" url="http://www.oracle.com/technetwork/middleware/id-mgmt/overview/index.html">Oracle</ulink>.
                 </para>
                 <para>
-                    For testing purpose, we will use OpenSSO_80U2 can be downloaded from <ulink type="http" url="http://download.oracle.com/otn/nt/middleware/11g/oracle_opensso_80U2.zip">Oracle</ulink>.
+                    For testing purpose, you will need to use OpenSSO_80U2 that can be downloaded from <ulink type="http" url="http://download.oracle.com/otn/nt/middleware/11g/oracle_opensso_80U2.zip">Oracle</ulink>.
                 </para>
                 <para>
                     Once downloaded, extract the package into a suitable location. This location will be referred to as <filename>OPENSSO_HOME</filename> in this example.
                 </para>
                 <note>
                    <para>
-                       There is also possibility to use OpenAM instead of OpenSSO server. OpenAM is free and integration steps with &PRODUCT; and OpenAM are very similar as with OpenSSO. More info is
-                       <ulink type="http" url="http://community.jboss.org/wiki/GateInAndOpenAMIntegration">here</ulink> .
+                       There is also possibility to use OpenAM instead of OpenSSO server. OpenAM is free and integration steps with &PRODUCT; and OpenAM are very similar as with OpenSSO. See 
+                       <ulink type="http" url="http://community.jboss.org/wiki/GateInAndOpenAMIntegration">here</ulink> for more information.
                    </para>
                 </note>
             </section>
@@ -1056,8 +1035,8 @@ realmName=gatein-domain;
                     <step>
                         <para>
                             Ensure the <filename>TOMCAT_HOME/webapps/opensso/config/auth/default/AuthenticationPlugin.xml</filename> file looks like this:
-<programlisting>
-&#60;?xml version=&#39;1.0&#39; encoding=&#34;UTF-8&#34;?&#62;
+						</para>
+<programlisting role="JAVA">&#60;?xml version=&#39;1.0&#39; encoding=&#34;UTF-8&#34;?&#62;
 
 &#60;!DOCTYPE ModuleProperties PUBLIC &#34;=//iPlanet//Authentication Module Properties XML Interface 1.0 DTD//EN&#34;
           &#34;jar://com/sun/identity/authentication/Auth_Module_Properties.dtd&#34;&#62;
@@ -1078,7 +1057,7 @@ realmName=gatein-domain;
   &#60;/Callbacks&#62;
 &#60;/ModuleProperties&#62;
 </programlisting>
-                        </para>
+                        
                     </step>
                     <step>
                         <para>
@@ -1087,13 +1066,13 @@ realmName=gatein-domain;
                     </step>
                     <step>
                         <para>
-                            Copy <filename>GATEIN_SSO_HOME/opensso/plugin/WEB-INF/classes/gatein.properties</filename> into <filename>TOMCAT_HOME/webapps/opensso/WEB-INF/classes</filename>
+                            Copy <filename>GATEIN_SSO_HOME/opensso/plugin/WEB-INF/classes/gatein.properties</filename> into <filename>TOMCAT_HOME/webapps/opensso/WEB-INF/classes</filename>.
                         </para>
                     </step>
 
                     <step>
                         <para>
-                            Tomcat should start and be able to access <ulink type="http" url="http://localhost:8888/opensso/UI/Login?realm=gatein">http://localhost:8888/opensso/UI/Login?realm=gatein</ulink>. Login will not be available at this point.
+                            Start Tomcat to be able to access <ulink type="http" url="http://localhost:8888/opensso/UI/Login?realm=gatein">http://localhost:8888/opensso/UI/Login?realm=gatein</ulink>. Login will not be available at this point.
                         </para>
                         <mediaobject>
                             <imageobject>
@@ -1102,49 +1081,48 @@ realmName=gatein-domain;
                         </mediaobject>
                     </step>
             </procedure>
-
-            <para>Configure "gatein" realm:</para>
+            <para><emphasis role="bold">Configure the "gatein" realm</emphasis></para>
             <procedure>
                <step>
-                     <para>Direct your browser to <ulink type="http" url="http://localhost:8888/opensso">http://localhost:8888/opensso</ulink></para>
+                     <para>Direct your browser to <ulink type="http" url="http://localhost:8888/opensso">http://localhost:8888/opensso</ulink>.</para>
                </step>
                <step>
-                     <para>Create default configuration</para>
+                     <para>Create the default configuration.</para>
                </step>
                <step>
-                     <para>Login as <literal>amadmin</literal> and then go to tab <emphasis role="bold">Configuration</emphasis> -> tab <emphasis role="bold">Authentication</emphasis> -> link <emphasis role="bold">Core</emphasis> ->
-                        add new value and fill in the class name <emphasis role="bold">org.gatein.sso.opensso.plugin.AuthenticationPlugin</emphasis>.
-                        This step is really important. Without it AuthenticationPlugin is not available among other OpenSSO authentication modules.
+                     <para>Login as <literal>amadmin</literal> and then go to <menuchoice><guimenu>Configuration</guimenu> <guimenuitem>Authentication</guimenuitem></menuchoice>. Next, select the <emphasis role="bold">Core</emphasis> link, 
+                        and add new value and fill in the <classname>org.gatein.sso.opensso.plugin.AuthenticationPlugin</classname> class name.
+                        This step is really important. Without it, <literal>AuthenticationPlugin</literal> is not available among other OpenSSO authentication modules.
                      </para>
                </step>
                <step>
-                  <para>Go to tab <emphasis role="bold">Access control</emphasis> and create new realm called <emphasis role="bold">gatein</emphasis>.</para>
+                  <para>Go to the <emphasis role="bold">Access control</emphasis> tab and create a new realm called <literal>gatein</literal>.</para>
                </step>
                <step>
-                  <para>Go to "gatein" realm and click on <emphasis role="bold">Authentication</emphasis> tab. At the bottom in the section <emphasis role="bold">Authentication chaining</emphasis> click on <emphasis role="bold">ldapService</emphasis>.
+                  <para>Go to the "gatein" realm, and click on the <emphasis role="bold">Authentication</emphasis> tab. At the bottom in the <emphasis role="bold">Authentication chaining</emphasis> section, click on <emphasis role="bold">ldapService</emphasis>.
                      Here change the selection from "Datastore", which is the default module in the authentication chain, to <emphasis role="bold">AuthenticationPlugin</emphasis>.
-                     This enables authentication of "gatein" realm by using GateIn REST service instead of the OpenSSO LDAP server.</para>
+                     This enables authentication of the "gatein" realm by using GateIn REST service instead of the OpenSSO LDAP server.</para>
                </step>
                <step>
                   <para>
                      Go to <emphasis role="bold">Advanced properties</emphasis> and change UserProfile from "Required" to <emphasis role="bold">Dynamic</emphasis>. This step is needed
-                     because &PRODUCT; users are not in OpenSSO Datastore (LDAP server), so their profiles can't be obtained
-                     if "Required" is active. By using "Dynamic" all new users are automatically
+                     because &PRODUCT; users are not in OpenSSO Datastore (LDAP server), so their profiles can not be obtained
+                     if "Required" is active. By using "Dynamic", all new users are automatically
                      created in OpenSSO datastore after successful authentication.
                   </para>
                </step>
                <step>
                   <para>
-                     Increase the user privileges to allow REST access. Go to <emphasis role="bold">Access control</emphasis> ->
-                     <emphasis role="bold">Top level realm</emphasis> -> <emphasis role="bold">Privileges</emphasis> tab -> <emphasis role="bold">All authenticated users</emphasis>, and check the last two checkboxes:
+                     Increase the user privileges to allow REST access. Go to <menuchoice><guimenu>Access control</guimenu> 
+                     <guisubmenu>Top level realm</guisubmenu><guisubmenu>Privileges</guisubmenu> <guimenuitem>All authenticated users</guimenuitem></menuchoice>, and check the last two checkboxes:
                      <itemizedlist>
-                        <listitem><para>Read and write access only for policy properties</para></listitem>
-                        <listitem><para>Read and write access to all realm and policy properties</para></listitem>
+                        <listitem><guilabel>Read and write access only for policy properties</guilabel></listitem>
+                        <listitem><guilabel>Read and write access to all realm and policy properties</guilabel></listitem>
                      </itemizedlist>
                   </para>
                </step>
                <step>
-                  <para>Repeat previous step with increasing privileges for <emphasis role="bold">gatein</emphasis> realm as well.</para>
+                  <para>Repeat previous step with increasing privileges for the <emphasis role="bold">gatein</emphasis> realm as well.</para>
                </step>
             </procedure>
          </section>
@@ -1155,18 +1133,16 @@ realmName=gatein-domain;
             <procedure>
                 <step>
                     <para>
-                        Copy all libraries from <filename>GATEIN_SSO_HOME/opensso/gatein.ear/lib</filename> into <filename>JBOSS_HOME/server/default/deploy/gatein.ear/lib</filename> (Or, in Tomcat, into <filename>GATEIN_HOME/lib</filename>)
+                        Copy all libraries from <filename>GATEIN_SSO_HOME/opensso/gatein.ear/lib</filename> into <filename>JBOSS_HOME/server/default/deploy/gatein.ear/lib</filename> (Or, in Tomcat, into <filename>GATEIN_HOME/lib</filename>).
                     </para>
                 </step>
                 <step>
                     <itemizedlist>
                         <listitem>
                             <para>
-                                In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment this section
+                                In JBoss AS, edit <filename>gatein.ear/META-INF/gatein-jboss-beans.xml</filename> and uncomment this section:
                             </para>
-<programlisting>
-<![CDATA[
-<authentication>
+<programlisting role="XML"><![CDATA[<authentication>
   <login-module code="org.gatein.sso.agent.login.SSOLoginModule" flag="required">
     <module-option name="portalContainerName">portal</module-option>
     <module-option name="realmName">gatein-domain</module-option>
@@ -1176,8 +1152,7 @@ realmName=gatein-domain;
     <module-option name="realmName">gatein-domain</module-option>
   </login-module>
 </authentication>
-]]>
-</programlisting>
+]]></programlisting>
 
                         </listitem>
                         <listitem>
@@ -1198,21 +1173,18 @@ realmName=gatein-domain;
                      In Tomcat, edit <filename>GATEIN_HOME/webapps/portal.war/META-INF/context.xml</filename> and add
                      <literal>ServletAccessValve</literal> into configuration as first sub-element of <literal>Context</literal>:
                   </para>
-                  <programlisting>
-                     <![CDATA[
-<Context path='/portal' docBase='portal' ... >
+<programlisting><![CDATA[<Context path='/portal' docBase='portal' ... >
 
    ]]><emphasis role="bold"><![CDATA[<Valve className='org.gatein.sso.agent.tomcat.ServletAccessValve' />]]></emphasis><![CDATA[
 
    ...
 </Context>
-]]>
-                  </programlisting>
+]]></programlisting>
                 </step>
-                <step>
+			</procedure>
+			<note>
                     <para>
                         At this point the installation can be tested:
-                    </para>
                     <procedure>
                         <step>
                             <para>
@@ -1225,8 +1197,8 @@ realmName=gatein-domain;
                             </para>
                         </step>
                     </procedure>
-                    </step>
-            </procedure>
+					</para>
+            </note>
         </section>
         
         <section id="sect-Reference_Guide-OpenSSO_The_Open_Web_SSO_project-Setup_the_portal_to_redirect_to_OpenSSO">
@@ -1236,38 +1208,35 @@ realmName=gatein-domain;
             </para>
             <para>
                 Information about where the OpenSSO server is hosted must be properly configured within the Enterprise Portal Platform instance. The required configuration is done by modifying three files:
+			</para>
                 <itemizedlist>
                     <listitem>
                         <para>
-                        In the <filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
-<programlisting>
-<![CDATA[
+                        In the <filename>gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file, modify the 'Sign In' link as follows:
+<programlisting><![CDATA[
 <!--
 <a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
 -->
 <a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
-]]>
-</programlisting>
+]]></programlisting>
                         </para>
                     </listitem>
                     <listitem>
                         <para>
                         In the <filename>gatein.ear/web.war/groovy/portal/webui/component/UILogoPortlet.gtmpl</filename> file modify the 'Sign In' link as follows:
-<programlisting>
-<![CDATA[
+<programlisting><![CDATA[
 <!--
 <a onclick="$signInAction"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
 -->
 <a href="/portal/sso"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a> 
-]]>
-</programlisting>
+]]></programlisting>
                         </para>
                     </listitem>
                     <listitem>
                         <para>
-                            Replace the entire contents of <filename>gatein.ear/02portal.war/login/jsp/login.jsp</filename> with:
+                            Replace the entire content of <filename>gatein.ear/portal.war/login/jsp/login.jsp</filename> with:
                         </para>
-<programlisting>&#60;html&#62;
+<programlisting role="HTML">&#60;html&#62;
   &#60;head&#62;
     &#60;script type=&#34;text/javascript&#34;&#62;
      window.location = &#39;/portal/sso&#39;;
@@ -1280,10 +1249,8 @@ realmName=gatein-domain;
                     </listitem>
                     <listitem>
                         <para>
-                            Add the following Filters at the top of the filter chain in <filename>gatein.ear/02portal.war/WEB-INF/web.xml</filename>:
-
-
-<programlisting><![CDATA[<filter>
+                            Add the following filters at the top of the filter chain in <filename>gatein.ear/portal.war/WEB-INF/web.xml</filename>.</para>
+<programlisting role="XML"><![CDATA[<filter>
    <filter-name>LoginRedirectFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
    <init-param>
@@ -1331,18 +1298,15 @@ realmName=gatein-domain;
    <filter-name>InitiateLoginFilter</filter-name>
    <url-pattern>/initiatessologin</url-pattern>
 </filter-mapping>]]></programlisting>
-                        </para>
                     </listitem>
                 </itemizedlist>
-            </para>
             <para>
                 From now on, all links redirecting to the user authentication pages will redirect to the OpenSSO centralized authentication form.
             </para>
         </section>
-
        <section id="sect-Reference_Guide-OpenSSO_The_Open_Web_SSO_project-Setup_cross_context_login">
           <title>Cross-domain authentication with OpenSSO</title>
-          <para>Authentication scenario described in previous parts assumes that &PRODUCT; and OpenSSO are deployed on same
+          <para>The authentication scenario described in previous parts assumes that &PRODUCT; and OpenSSO are deployed on the same
              server or in same DNS domain (like OpenSSO on <emphasis role="bold">opensso.shareddomain.com</emphasis> and
              &PRODUCT; on <emphasis role="bold">portal.shareddomain.com</emphasis>).
           </para>
@@ -1351,45 +1315,41 @@ realmName=gatein-domain;
              from this cookie because cookie is in same DNS domain, so it can perform validation of token. In other words,
              exchange of secret token between OpenSSO and &PRODUCT; is done through this shared cookie.
           </para>
-          <para>This approach can't work in situations, when &PRODUCT; server and OpenSSO server are in different domains
-             and can't share cookie. For this scenario, OpenSSO provides special servlet <emphasis role="bold">CDCServlet</emphasis>.
+          <para>This approach cannot work in situations, when &PRODUCT; server and OpenSSO server are in different domains
+             and cannot share cookie. For this scenario, OpenSSO provides special servlet <emphasis role="bold">CDCServlet</emphasis>.
              Authenticated user can send request to this servlet and servlet will send him encoded SAML message with SSO token and
-             other informations. Portal agent is then able to parse and validate this message, obtain SSO token and establish
+             other information. Portal agent is then able to parse and validate this message, obtain SSO token and establish
              iPlanetDirectoryPro cookie for server where portal is deployed. Once OpenSSO agent on portal side has token,
-             it can perform other validations of this token and successfuly finish authentication of user.
+             it can perform other validations of this token and successfully finish authentication of user.
           </para>
           <para>
              You can follow <ulink url="http://docs.oracle.com/cd/E19575-01/820-3746/gipjl/index.html">this link</ulink>
-             for more technical informations about CDCServlet or <ulink url="http://developers.sun.com/identity/reference/techart/troubleshooting3.html">this link</ulink>
-             for more info about whole OpenSSO Cross-Domain workflow with possible troubleshooting tips.
+             for more technical information about CDCServlet or <ulink url="http://developers.sun.com/identity/reference/techart/troubleshooting3.html">this link</ulink>
+             for more information about the whole OpenSSO Cross-Domain workflow with possible troubleshooting tips.
           </para>
           <section id="sect-Reference_Guide-OpenSSO_The_Open_Web_SSO_project-Setup_cross_context_login_configuration">
              <title>Cross-domain authentication configuration</title>
              <procedure>
                 <step>
                    <para>
-                      Let's assume that your OpenSSO server is deployed on opensso.mydomain.com and &PRODUCT; on portal.yourdomain.com.
+                      Assume that your OpenSSO server is deployed on opensso.mydomain.com and &PRODUCT; on portal.yourdomain.com.
                       If you are on single machine, you can simply simulate this scenario by using virtual hosts. On linux
-                      you can simply edit <emphasis role="bold">/etc/hosts</emphasis> file and add those records:
-                      <programlisting>
-                         opensso.mydomain.com 127.0.0.1
-                         portal.yourdomain.com 127.0.1.1
-                      </programlisting>
-                   </para>
+                      you can simply edit the <filename>/etc/hosts</filename> file and add those records:</para>
+<programlisting>opensso.mydomain.com 127.0.0.1
+ portal.yourdomain.com 127.0.1.1
+</programlisting>
                 </step>
                 <step>
                    <para>
                       Now you can follow steps in previous sections about &PRODUCT; and OpenSSO integration. Assumption
                       is that OpenSSO will be deployed on Tomcat server on <emphasis role="bold">opensso.mydomain.com:8888</emphasis>
                       and &PRODUCT; will be deployed on <emphasis role="bold">portal.yourdomain.com:8080</emphasis>. Configuration of
-                      <emphasis role="bold">LoginRedirectFilter</emphasis> on &PRODUCT; side in file
-                      <emphasis role="bold">gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> will be different. We will
-                      use different class for filter and different parameters, because now we don't redirect user directly
-                      to OpenSSO console but we need to redirect him to CDCServlet. Configuration will look as follows:
+                      <emphasis role="bold">LoginRedirectFilter</emphasis> on &PRODUCT; side in the 
+                      <emphasis role="bold">gatein.ear/portal.war/WEB-INF/web.xml</emphasis> file will be different. You will
+                      use different class for filter and different parameters, because now you do not redirect user directly
+                      to the OpenSSO console but you need to redirect him to CDCServlet. The configuration will look as follows:
                    </para>
-                   <programlisting>
-                      <![CDATA[
-<filter>
+                   <programlisting role="XML"><![CDATA[<filter>
   <filter-name>LoginRedirectFilter</filter-name>
   <filter-class>org.gatein.sso.agent.filter.OpenSSOCDLoginRedirectFilter</filter-class>
   <init-param>
@@ -1410,14 +1370,10 @@ realmName=gatein-domain;
     <param-value>http://portal.yourdomain.com:8080/portal/initiatessologin</param-value>
   </init-param>
 </filter>
-]]>
-                   </programlisting>
-                   <para>Configuration of OpenSSOLogoutFilter and InitiateLoginFilter will be quite similar like in previous scenario.
-                      Only difference are different host names:
+]]></programlisting>
+                   <para>Configuration of <literal>OpenSSOLogoutFilter</literal> and <literal>InitiateLoginFilter</literal> will be quite similar like in previous scenario. The only difference is different host names:
                    </para>
-                   <programlisting>
-                      <![CDATA[
-<filter>
+<programlisting role="XML"><![CDATA[<filter>
   <filter-name>OpenSSOLogoutFilter</filter-name>
   <filter-class>org.gatein.sso.agent.filter.OpenSSOLogoutFilter</filter-class>
   <init-param>
@@ -1442,27 +1398,25 @@ realmName=gatein-domain;
     <param-value>iPlanetDirectoryPro</param-value>
   </init-param>
 </filter>
-]]>
-                   </programlisting>
+]]></programlisting>
                 </step>
                 <step>
                    <para>
-                      In case that you are on OpenAM instead of OpenSSO, it's mandatory to create agent for &PRODUCT; server.
+                      In case that you are on OpenAM instead of OpenSSO, it is mandatory to create agent for &PRODUCT; server.
                       This agent is required by CDCServlet to work properly. You can create agent in OpenAM UI by performing these steps:
                    </para>
                    <itemizedlist>
                       <listitem><para>Go to <ulink url="http://opensso.mydomain.com:8888/opensso">http://opensso.mydomain.com:8888/opensso</ulink>
-                         and login as <emphasis>amadmin</emphasis></para>
+                         and login as <emphasis>amadmin</emphasis>.</para>
                       </listitem>
                       <listitem>
-                         <para>Go to <emphasis role="bold">Access Control</emphasis> --> <emphasis role="bold">Realm "gatein"</emphasis> -->
-                            <emphasis role="bold">Agents</emphasis> --> <emphasis role="bold">Web</emphasis></para>
+                         <para>Go to <menuchoice><guimenu>Access Control</guimenu><guisubmenu>Realm "gatein"</guisubmenu><guisubmenu>Agents</guisubmenu><guimenuitem>Web</guimenuitem></menuchoice>.</para>
                       </listitem>
                       <listitem>
                          <para>Create new web agent through the wizard. You can use these properties:</para>
                          <itemizedlist>
                             <listitem><para>Name: GateInAgent</para></listitem>
-                            <listitem><para>Password: Whatever you want...</para></listitem>
+                            <listitem><para>Password: Whatever you want.</para></listitem>
                             <listitem><para>Configuration: Centralized</para></listitem>
                             <listitem><para>Server URL: http://opensso.mydomain.com:8888/opensso</para></listitem>
                             <listitem><para>Agent URL: http://portal.yourdomain.com:8080</para></listitem>
@@ -1480,7 +1434,9 @@ realmName=gatein-domain;
                 </step>
              </procedure>
              <note>
+				<para>
                 Support for Cross-Domain scenario has been tested with &PRODUCT; and with OpenSSO of version 8.0-Update1 and OpenAM of version 9.5.2 as SSO servers.
+				</para>
              </note>
           </section>
        </section>
@@ -1519,12 +1475,11 @@ realmName=gatein-domain;
   <section id="SPNEGO_server_configuration">
     <title>SPNEGO Server Configuration</title>
     <para>
-       In this section, we will describe some necessary steps for setup Kerberos server on Linux. This server will then be used for SPNEGO authentication against &PRODUCT;
+       In this section, there are some necessary steps for setting up the Kerberos server on Linux. This server will then be used for SPNEGO authentication against &PRODUCT;
     </para>
     <note>
-      <para>If you don't have Linux but you are using Windows and Active Directory domain,
-         then these informations are not important for you and you may jump to the <xref linkend="Single_Sign_On-SPNEGO-GateIn_Configuration" /> to see how to integrate SPNEGO with &PRODUCT;.
-         Please note that Kerberos setup is also dependent on your Linux distribution and so steps can be slightly different in your environment.
+      <para>If you do not have Linux but you are using the Windows and Active Directory domain, the information is not important for you and you may jump to the <xref linkend="Single_Sign_On-SPNEGO-GateIn_Configuration" /> to see how to integrate SPNEGO with &PRODUCT;.
+         Please note that Kerberos setup is also dependent on your Linux distribution, so steps can be slightly different in your environment.
       </para>
     </note>
     <procedure>
@@ -1532,25 +1487,22 @@ realmName=gatein-domain;
           <para>Correct the setup of network on the machine. For example, if you are using the "server.local.network" domain as your machine where Kerberos and &PRODUCT; are located,
           add the line containing the machine's IP address to the <emphasis role="bold">/etc/hosts</emphasis> file.
           </para>
-          <programlisting>
-192.168.1.88  server.local.network
-          </programlisting>
+          <programlisting>192.168.1.88  server.local.network</programlisting>
           <note>
           <para>It is not recommended to use loopback addresses.</para>
           </note>
         </step>
         <step>
-          <para>Install Kerberos with these packages: krb5-admin-server, krb5-kdc, krb5-config, krb5-user, krb5-clients, and krb5-rsh-server.
+          <para>Install Kerberos with these packages: <literal>krb5-admin-server</literal>, <literal>krb5-kdc</literal>, <literal>krb5-config</literal>, <literal>krb5-user</literal>, <literal>krb5-clients</literal>, and <literal>krb5-rsh-server</literal>.
           </para>
         </step>
         <step>
-          <para>Edit the Kerberos configuration file at <emphasis role="bold">/etc/krb5.config</emphasis>, including:
+          <para>Edit the Kerberos configuration file at <filename>/etc/krb5.config</filename>, including:
           </para>
           <itemizedlist>
             <listitem>
               <para>Uncomment on these lines:</para>
-<programlisting>
-default_tgs_enctypes = des3-hmac-sha1
+<programlisting>default_tgs_enctypes = des3-hmac-sha1
 default_tkt_enctypes = des3-hmac-sha1
 permitted_enctypes = des3-hmac-sha1
 </programlisting>
@@ -1615,10 +1567,9 @@ permitted_enctypes = des3-hmac-sha1
           </itemizedlist>
         </step>
         <step>
-          <para>Edit the KDC configuraton file at <emphasis role="bold">/etc/krb5kdc/kdc.conf</emphasis> that looks like.
+          <para>Edit the KDC configuraton file at <filename>/etc/krb5kdc/kdc.conf</filename> that looks like.
           </para>
-<programlisting>
-[kdcdefaults]
+<programlisting>[kdcdefaults]
     kdc_ports = 750,88
  
 [realms]
@@ -1637,23 +1588,23 @@ permitted_enctypes = des3-hmac-sha1
  
 [logging]
         kdc = FILE:/home/gatein/krb5logs/kdc.log
-        admin_server = FILE:/home/gatein/krb5logs/kadmin.log
-</programlisting>
+        admin_server = FILE:/home/gatein/krb5logs/kadmin.log</programlisting>
           <itemizedlist>
             <listitem>
-              <para>Create krb5kdc and krb5logs directory for Kerberos database as shown in the configuration file above.</para></listitem>
+              <para>Create <literal>krb5kdc</literal> and <literal>krb5logs</literal> directory for Kerberos database as shown in the configuration file above.</para></listitem>
             <listitem>
-              <para>Next, create a KDC database using the following command.</para>
-<programlisting>
-sudo krb5_newrealm
-</programlisting>
+              <para>Next, create a KDC database using the <command>sudo krb5_newrealm</command> command.</para>
             </listitem>
             <listitem>
               <para>Start the KDC and Kerberos admin servers using these commands:</para>
-<programlisting>
-sudo /etc/init.d/krb5-kdc restart
-sudo /etc/init.d/krb-admin-server restart
-</programlisting>
+				<itemizedlist>
+					<listitem>
+						<command>sudo /etc/init.d/krb5-kdc restart</command>
+					</listitem>
+					<listitem>
+						<command>sudo /etc/init.d/krb-admin-server restart</command>
+					</listitem>
+				</itemizedlist>
             </listitem>
           </itemizedlist>
         </step>
@@ -1661,51 +1612,48 @@ sudo /etc/init.d/krb-admin-server restart
           <para>Add Principals and create Keys.</para>
           <itemizedlist>
             <listitem>
-              <para>Start an interactive 'kadmin' session and create the necessary Principals.</para>
-<programlisting>
-sudo kadmin.local
-</programlisting>
+              <para>Start an interactive 'kadmin' session and create the necessary Principals using the <command>sudo kadmin.local</command> command.</para>
             </listitem>
             <listitem>
-              <para>Add the &PRODUCT; machine and keytab file that need to be authenticated.</para>
-<programlisting>
+              <para>Add the &PRODUCT; machine and keytab file that need to be authenticated using the
+<command>
 addprinc -randkey HTTP/server.local.network@LOCAL.NETWORK
 ktadd HTTP/server.local.network@LOCAL.NETWORK
-</programlisting>
+</command> command.</para>
             </listitem>
             <listitem>
-              <para>Add the default &PRODUCT; user accounts and enter the password for each created user that will be authenticated.</para>
-<programlisting>
+              <para>Add the default &PRODUCT; user accounts and enter the password for each created user that will be authenticated using the
+<command>
 addprinc john
 addprinc demo
 addprinc root
-</programlisting>
+</command> command.</para>
             </listitem>
           </itemizedlist>
         </step>
         <step>
-          <para>Test your changed setup by using the command.</para>
-<programlisting>
+          <para>Test your changed setup by using the
+<command>
 kinit -A demo
-</programlisting>
+</command> command.</para>
           <itemizedlist>
             <listitem>
               <para>If the setup works well, you are required to enter the password created for this user in Step 5.
-                 Without the -A, the kerberos ticket validation involved reverse DNS lookups, which can get very cumbersome to debug if your network's DNS setup is not great.
-                 This is a production level security feature, which is not necessary in this development setup. In production environment, it will be better to avoid -A option.
+                 Without <literal>-A</literal>, the kerberos ticket validation involved reverse DNS lookups, which can get very cumbersome to debug if your network's DNS setup is not great.
+                 This is a production level security feature, which is not necessary in this development setup. In production environment, it will be better to avoid <literal>-A</literal> option.
               </para>
             </listitem>
             <listitem>
-               <para>After successful login to Kerberos, you can see your Kerberos ticket when using this command.</para>
-<programlisting>
+               <para>After successful login to Kerberos, you can see your Kerberos ticket when using the
+<command>
 klist
-</programlisting>
+</command> command.</para>
             </listitem>
             <listitem>
-              <para>If you want to logout and destroy your ticket, use this command.</para>
-<programlisting>
+              <para>If you want to logout and destroy your ticket, use the
+<command>
 kdestroy
-</programlisting>
+</command> command. </para>
             </listitem>
           </itemizedlist>
       </step>
@@ -1717,7 +1665,7 @@ kdestroy
           </para>
     <procedure>
           <step>
-            <para>Start Firefox, then enter the command: <emphasis role="bold">about:config </emphasis> into the address field.</para>
+            <para>Start Firefox, then enter the <command>about:config </command> command into the address field.</para>
           </step>
           <step>
             <para>Enter <emphasis role="bold">network.negotiate-auth</emphasis> and set the value as below:</para>
@@ -1732,7 +1680,7 @@ network.negotiate-auth.using-native-gsslib = true
     </procedure>
      <note>
         <para>
-          Consult documentation of your OS or web browser if using different browser than Firefox.
+          Consult the documentation of your OS or web browser if using different browser than Firefox.
         </para>
      </note>
   </section>
@@ -1745,9 +1693,9 @@ network.negotiate-auth.using-native-gsslib = true
             <procedure>
                 <step>
                     <para>
-                        Activate the Host authentication under the <emphasis role="bold">JBOSS_HOME/server/default/conf/login-config.xml </emphasis> file by adding the following host login module:
+                        Activate the Host authentication under the <filename>JBOSS_HOME/server/default/conf/login-config.xml</filename> file by adding the following host login module:
           </para>
-                        <programlisting><![CDATA[<!-- SPNEGO domain -->
+<programlisting role="XML"><![CDATA[<!-- SPNEGO domain -->
 <application-policy name="host">
   <authentication>
     <login-module code="com.sun.security.auth.module.Krb5LoginModule" flag="required">
@@ -1763,21 +1711,20 @@ network.negotiate-auth.using-native-gsslib = true
 ]]></programlisting>
 
             <para>
-               The 'keyTab' value should point to the keytab file that was
-               generated by the kadmin kerberos tool. When using Kerberos on Linux, it should be value of parameter <emphasis role="bold">admin_keytab</emphasis> from kdc.conf file.
-               See the <xref linkend="SPNEGO_server_configuration"/> section for more details.
+               The <literal>keyTab</literal> value should point to the <filename>keytab</filename> file that was
+               generated by the kadmin kerberos tool. When using Kerberos on Linux, it should be value of the <parameter>admin_keytab</parameter> parameter from the <filename>kdc.conf</filename> file.
+               See <xref linkend="SPNEGO_server_configuration"/> for more details.
             </para>
                 </step>
                 
         <step>
                     <para>
                         Extend the core authentication mechanisms to support SPNEGO under
-                        <emphasis role="bold">JBOSS_HOME/server/default/deployers/jbossweb.deployer/META-INF/war-deployers-jboss-beans.xml</emphasis> by
+                        <filename>JBOSS_HOME/server/default/deployers/jbossweb.deployer/META-INF/war-deployers-jboss-beans.xml</filename> by
                         adding the 'SPNEGO' authenticators property.
           </para>
 
-<programlisting language="XML">
-<![CDATA[<deployment xmlns="urn:jboss:bean-deployer:2.0">
+<programlisting role="XML"><![CDATA[<deployment xmlns="urn:jboss:bean-deployer:2.0">
 <property name="authenticators">
   <map class="java.util.Properties" keyClass="java.lang.String" valueClass="java.lang.String">
      <entry>
@@ -1808,8 +1755,7 @@ network.negotiate-auth.using-native-gsslib = true
      </entry>
   </map>
 </property>
-]]>
-</programlisting>
+]]></programlisting>
                 </step>
                 <step>
                    <para>
@@ -1819,19 +1765,17 @@ network.negotiate-auth.using-native-gsslib = true
                 </step>
                 <step>
                    <para>
-                      Download library <filename>jboss-negotiation-2.0.4.GA</filename> from location
+                      Download the <filename>jboss-negotiation-2.0.4.GA</filename> library from 
                       <ulink type="html" url="https://repository.jboss.org/nexus/content/groups/public/org/jboss/security/jboss-negotiation/2.0.4.GA/jboss-negotiation-2.0.4.GA.jar">https://repository.jboss.org/nexus/content/groups/public/org/jboss/security/jboss-negotiation/2.0.4.GA/jboss-negotiation-2.0.4.GA.jar</ulink>
                       and copy this file to <filename>JBOSS_HOME/server/default/lib</filename> directory as well.
                    </para>
                 </step>
                 <step>
                     <para>
-                        Modify the <emphasis role="bold">JBOSS_HOME/server/defaut/deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</emphasis> file as below:
+                        Modify the <filename>JBOSS_HOME/server/defaut/deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</filename> file as below:
                     </para>
 
-                        <programlisting language="XML"><![CDATA[
-<deployment xmlns="urn:jboss:bean-deployer:2.0">
-
+<programlisting role="XML"><![CDATA[<deployment xmlns="urn:jboss:bean-deployer:2.0">
   <application-policy xmlns="urn:jboss:security-beans:1.0" name="gatein-form-auth-domain">
     <authentication>
       <login-module code="org.gatein.wci.security.WCILoginModule" flag="optional">
@@ -1884,18 +1828,16 @@ network.negotiate-auth.using-native-gsslib = true
   </application-policy>
 
 </deployment>
-]]>
-</programlisting>
+]]></programlisting>
                    <para>
-                      This activates SPNEGO LoginModules with fallback to FORM authentication. When SPNEGO is not available and it needs to fallback to FORM, it will use <emphasis role="bold">gatein-form-auth-domain</emphasis> security domain.
-                      More details below.
+                      This activates the SPNEGO LoginModules with fallback to the FORM authentication. When SPNEGO is not available and it needs to fallback to <literal>FORM</literal>, it will use the <literal>gatein-form-auth-domain</literal> security domain.
                    </para>
                 </step>
                 <step>
                     <para>
-                        Modify <emphasis role="bold">JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> as below.</para>
+                        Modify <filename>JBOSS_HOME/server/default/deploy/gatein.ear/portal.war/WEB-INF/web.xml</filename> as below.</para>
 
-                        <programlisting language="XML"><![CDATA[
+<programlisting role="XML"><![CDATA[
 <!--	<login-config>
 	  <auth-method>FORM</auth-method>
 	  <realm-name>gatein-domain</realm-name>
@@ -1916,15 +1858,16 @@ network.negotiate-auth.using-native-gsslib = true
 ]]>
 </programlisting>
           <para>
-             This integrates SPNEGO support into the Portal web archive by switching the authentication mechanism from the default "FORM"-based to "SPNEGO"-based authentication.
-             You can notice that SPNEGO part also contains element <emphasis role="bold">form-login-config</emphasis>, which is needed if you want to enable fallback to FORM based authentication.
-             In this case, portal will try to authenticate user with his Kerberos ticket through SPNEGO. If user don't have Kerberos ticket, he will be redirected to FORM (&PRODUCT; login screen).
-             So first attempt is for login with SPNEGO and next attempt is for login with FORM, which is used only if login through SPNEGO is not successful (For example user don't have
-             valid Kerberos ticket or his browser doesn't support SPNEGO with our Kerberos server).
+             This integrates the SPNEGO support into the Portal web archive by switching the authentication mechanism from the default "FORM"-based to "SPNEGO"-based authentication.
+             You can notice that SPNEGO part also contains the <emphasis role="bold">form-login-config</emphasis> element, which is needed if you want to enable fallback to FORM based authentication.
+             In this case, portal will try to authenticate user with his Kerberos ticket through SPNEGO. If the user does not have the Kerberos ticket, he will be redirected to FORM (&PRODUCT; login screen).
+             So the first attempt is for login with SPNEGO and next attempt is for login with FORM, which is used only if login through SPNEGO is not successful (for example the user does not have
+             the valid Kerberos ticket or his browser does not support SPNEGO with our Kerberos server).
           </para>
           <para>
-             If you don't want fallback to FORM, you can disable form-login-config part and have only:
-                        <programlisting language="xml"><![CDATA[
+             If you do not want fallback to FORM, you can disable the <literal>form-login-config</literal> part and have only:
+		  </para>
+<programlisting role="xml"><![CDATA[
     <login-config>
       <auth-method>SPNEGO</auth-method>
       <realm-name>SPNEGO</realm-name>
@@ -1936,16 +1879,16 @@ network.negotiate-auth.using-native-gsslib = true
     </login-config>
 ]]>
 </programlisting>
-          In this case user needs to authenticate through SPNEGO and if that fails, FORM is not shown but user has authentication error with HTTP code 401.
+		  <para>
+          In this case, the user needs to authenticate through SPNEGO. If the authentication is failed, the <literal>FORM</literal> is not shown but user has authentication error with HTTP code 401.
           </para>
         </step>
         <step>
-                    <para>Integrate the request pre-processing needed for SPNEGO via filters by adding the following filters to the
-                       <emphasis role="bold">JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</emphasis> at the top of the Filter chain.
-                    </para>
+			<para>Integrate the request pre-processing needed for SPNEGO via filters by adding the following filters to 
+			   <filename>JBOSS_HOME/server/default/deploy/gatein.ear/portal.war/WEB-INF/web.xml</filename> at the top of the Filter chain.
+			</para>
 
-<programlisting><![CDATA[
-<filter>
+<programlisting role="XML"><![CDATA[<filter>
   <filter-name>LoginRedirectFilter</filter-name>
   <filter-class>org.gatein.sso.agent.filter.LoginRedirectFilter</filter-class>
   <init-param>
@@ -1969,40 +1912,45 @@ network.negotiate-auth.using-native-gsslib = true
   <filter-name>SPNEGOFilter</filter-name>
   <url-pattern>/login</url-pattern>
 </filter-mapping>
-]]>
-</programlisting>
-                    
+]]></programlisting>
+                   
         </step>
         <step>
           <para>
-          In <filename>JBOSS_HOME/server/default/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
-<programlisting>
-<![CDATA[
+          Open the file:
+			<itemizedlist>
+				<listitem>
+					<filename>JBOSS_HOME/server/default/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename>
+				</listitem>
+			</itemizedlist>
+			</para>
+			<para>Then, modify the 'Sign In' link as follows:</para>
+<programlisting><![CDATA[
 <!--
 <a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
 -->
 <a class="Login" href="/portal/sso"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
 ]]>
 </programlisting>
-          </para>
+          
         </step>
         <step>
                     <para>
-                        Start the &PRODUCT; portal using the command below.
-                    </para>
-                    <programlisting>sudo ./run.sh -Djava.security.krb5.realm=LOCAL.NETWORK -Djava.security.krb5.kdc=server.local.network -c default -b server.local.network</programlisting>
+                        Start the &PRODUCT; portal using the command:
+					</para>
+<programlisting>sudo ./run.sh -Djava.security.krb5.realm=LOCAL.NETWORK -Djava.security.krb5.kdc=server.local.network -c default -b server.local.network</programlisting>
         </step>
         <step>
-                    <para>Login to Kerberos with the command.</para>
-                        <programlisting>kinit -A demo</programlisting>
-                        <para>You should be able to click the 'Sign In' link on the &PRODUCT; portal
+                    <para>Log into Kerberos with the 
+                        <command>kinit -A demo</command> command.</para>
+					<para>You should be able to click the 'Sign In' link on the &PRODUCT; portal
                         and the 'demo' user from the &PRODUCT; portal should be automatically
                         logged in.
                     </para>
                 </step>
                 <step>
                    <para>
-                      Let's try to destroy kerberos ticket with command <programlisting>kdestroy</programlisting> Then try to login again. You will now be placed to login screen of &PRODUCT; because you don't have active Kerberos ticket. You can login with predefined account and password "demo"/"gtn" .
+                      Try to destroy the kerberos ticket with the <command>kdestroy</command> command. Then try to login again. You will now be placed to login screen of &PRODUCT; because you do not have the active Kerberos ticket. You can log in with predefined account and password "demo"/"gtn" .
                    </para>
                 </step>
             </procedure>
@@ -2021,10 +1969,10 @@ network.negotiate-auth.using-native-gsslib = true
           SAML2 standard is described in set of specifications, which provides exact format of XML messages and context how these messages
           are exchanged between Identity Provider  (IDP, Web application, which acts as SSO provider and users are
           authenticated against it) and Service Provider (SP, Web application, which is used by client who wants to authenticate).
-          More info about specifications in document <ulink type="http" url="http://docs.oasis-open.org/security/saml/v2.0/">http://docs.oasis-open.org/security/saml/v2.0/</ulink> .
+          See <ulink type="http" url="http://docs.oasis-open.org/security/saml/v2.0/">http://docs.oasis-open.org/security/saml/v2.0/</ulink> for more information about specifications.
        </para>
        <para>
-          SAML2 based authentication is provided in &PRODUCT; SSO component. We support scenarios with &PRODUCT; acting
+          The SAML2-based authentication is provided in &PRODUCT; SSO component. We support scenarios with &PRODUCT; acting
           as Service Provider (SP) or Identity Provider (IDP).
        </para>
        <section id="sect-Reference_Guide-SSO_SAML-Overview">
@@ -2039,7 +1987,7 @@ network.negotiate-auth.using-native-gsslib = true
                 <imagedata fileref="images/AuthenticationAndIdentity/SSO/saml-sso.png" format="PNG" align="center" valign="middle" scalefit="1" />
              </imageobject>
           </mediaobject>
-          <para>Authentication works as follows (flow with &PRODUCT; as SAML2 SP):</para>
+          <para>The authentication works as follows (flow with &PRODUCT; as SAML2 SP):</para>
           <procedure>
             <step>User sends request to secured resource like <ulink type="http" url="http://localhost:8080/portal/dologin">http://localhost:8080/portal/dologin</ulink>
             </step>
@@ -2072,15 +2020,16 @@ network.negotiate-auth.using-native-gsslib = true
                callback request via REST API back to &PRODUCT;. This is similar approach like authentication with other
                SSO providers like CAS, which are also leveraging this REST service.
                <note>
+				<para>
                   Portal administrators are free to use their own login module stack instead of our REST callback based login module.
                   However they need to make sure that authenticated users also need to exist in &PRODUCT; database.
                   Otherwise their users may have authorization errors with 403 response when they try to access portal.
+				</para>
                </note>
             </step>
             <step>
-               So after successful authentication will IDP create SAML assertion ticket and it creates SAML Response message with this ticket. Message can looks like this:
-<programlisting>
-<![CDATA[
+               So after successful authentication, IDP will create SAML assertion ticket and it creates SAML Response message with this ticket. Message can looks like this:
+<programlisting role="XML"><![CDATA[
 <samlp:Response ID="ID_5291c49e-5450-4b3b-9f99-f76606db9929" Version="2.0" IssueInstant="2012-04-12T17:53:59.237+01:00" Destination="http://localhost:8080/portal/dologin" InResponseTo="ID_101dcb5e-f432-4f45-87cb-47daff92edef">
    <saml:Issuer>http://localhost:8080/idp/</saml:Issuer>
    <samlp:Status>
@@ -2125,13 +2074,12 @@ network.negotiate-auth.using-native-gsslib = true
                and registering it into IdentityRegistry. Now user is successfully authenticated.
             </step>
             <step>
-               User is redirected back to secure resource
-               <ulink type="http" url="http://localhost:8080/portal/dologin">http://localhost:8080/portal/dologin</ulink>
-               , which in next turn will redirect him to &PRODUCT; as authenticated user.
+               User is redirected back to the secure resource
+               <ulink type="http" url="http://localhost:8080/portal/dologin">http://localhost:8080/portal/dologin</ulink>, which in next turn will redirect him to &PRODUCT; as authenticated user.
             </step>
           </procedure>
           <para>
-             If user wants to authenticate against different SP application within same browser session (&PRODUCT; on different host
+             If the user wants to authenticate against different SP application within same browser session (&PRODUCT; on different host
              or completely different web application), then he does not need to provide credentials again on IDP side
              because he has been already authenticated against IDP. So he has automatic authentication thanks to SSO.
           </para>
@@ -2143,82 +2091,95 @@ network.negotiate-auth.using-native-gsslib = true
 
        <section id="sect-Reference_Guide-SSO_SAML-SingleHostScenario">
           <title>Single host scenario</title>
-          <para>This scenario is good starting point for other use cases. &PRODUCT; will act as SAML2 SP.
+          <para>This scenario is good starting point for other usecases. &PRODUCT; will act as SAML2 SP.
              We will have &PRODUCT; and SAML2 IDP on same host
              and we will use JBoss 5 as target server. So assumption is that you have &PRODUCT; bundle for JBoss 5.
              Directory with &PRODUCT; will be referred to as <emphasis role="bold">JBOSS_HOME</emphasis>. Directory with unpacked SSO packaging zip will be referred to as
              <emphasis role="bold">GATEIN_SSO_HOME</emphasis> similarly like in previous sections.
           </para>
           <procedure>
-             <step>Download <emphasis role="bold">idp-sig</emphasis> application.
-                It's sample quickstart application for Picketlink Federation and it's preconfigured to act as SAML2 IDP,
-                which uses signed SAML messages. It can be downloaded from <ulink type="html" url="https://repository.jboss.org/nexus/index.html#nexus-search;quick~picketlink-quickstarts">https://repository.jboss.org/nexus/index.html#nexus-search;quick~picketlink-quickstarts</ulink> .
+             <step>
+				<para>Download the <emphasis role="bold">idp-sig</emphasis> application.
+                It is a sample quickstart application for Picketlink Federation and it is preconfigured to act as SAML2 IDP,
+                which uses signed SAML messages. It can be downloaded from <ulink type="html" url="https://repository.jboss.org/nexus/index.html#nexus-search;quick~picketlink-quickstarts">https://repository.jboss.org/nexus/index.html#nexus-search;quick~picketlink-quickstarts</ulink>.
                 You will need version for JBoss AS5.
+				</para>
              </step>
              <step>
-                Deploy downloaded <filename>idp-sig-VERSION.war</filename> into directory <filename>JBOSS_HOME/server/default/deploy/</filename> .
-             </step>
+				<para>
+                Deploy downloaded <filename>idp-sig-VERSION.war</filename> into directory <filename>JBOSS_HOME/server/default/deploy/</filename>.
+				</para>
+			 </step>
              <step>
-                Copy all JAR files from <filename>GATEIN_SSO_HOME/saml/gatein.ear/lib/*</filename> into <filename>JBOSS_HOME/server/default/deploy/gatein.ear/lib/</filename>
-             </step>
+				<para>	
+                Copy all JAR files from <filename>GATEIN_SSO_HOME/saml/gatein.ear/lib/*</filename> into <filename>JBOSS_HOME/server/default/deploy/gatein.ear/lib/</filename>.
+				</para>
+			</step>
              <step>
-                Copy main configuration file for Picketlink Federation from location <filename>GATEIN_SSO_HOME/saml/gatein.ear/02portal.war/WEB-INF/picketlink.xml</filename>
-                to location <filename>JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/</filename>
-             </step>
+				<para>
+                Copy the main configuration file for Picketlink Federation from <filename>GATEIN_SSO_HOME/saml/gatein.ear/portal.war/WEB-INF/picketlink.xml</filename>
+                to <filename>JBOSS_HOME/server/default/deploy/gatein.ear/portal.war/WEB-INF/</filename>.
+				</para>
+			</step>
              <step>
-                Copy example keystore file for picketlink federation from <filename>GATEIN_SSO_HOME/saml/gatein.ear/02portal.war/WEB-INF/classes/jbid_test_keystore.jks</filename>
-                to <filename>JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/classes/</filename> .
+				<para>
+                Copy example keystore file for picketlink federation from <filename>GATEIN_SSO_HOME/saml/gatein.ear/portal.war/WEB-INF/classes/jbid_test_keystore.jks</filename>
+                to <filename>JBOSS_HOME/server/default/deploy/gatein.ear/portal.war/WEB-INF/classes/</filename>.
                 This is example keystore file, which uses same keys on both &PRODUCT; and IDP side. Since it's prebundled
-                keystore, it should not be used for production environment (more details in <xref linkend="sect-Reference_Guide-SSO_SAML-KeystoreUpdate" />).
+                keystore, it should not be used for production environment (See <xref linkend="sect-Reference_Guide-SSO_SAML-KeystoreUpdate" /> for more details).
+				</para>
              </step>
              <step>
-                Copy file <filename>gatein-jboss-beans</filename> from <filename>GATEIN_SSO_HOME/saml/gatein.ear/META-INF/gatein-jboss-beans.xml</filename>
-                to <filename>JBOSS_HOME/server/default/deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</filename> .
-                This will replace original file with new configuration, which contains JAAS login modules needed for SAML integration.
-                There are 2 login modules by default: <emphasis role="bold">SAML2IntegrationLoginModule</emphasis> and <emphasis role="bold">JbossLoginModule</emphasis>.
+				<para>
+                Copy <filename>gatein-jboss-beans</filename> from <filename>GATEIN_SSO_HOME/saml/gatein.ear/META-INF/gatein-jboss-beans.xml</filename>
+                to <filename>JBOSS_HOME/server/default/deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</filename>.
+                This will replace original file with new configuration, which contains the JAAS login modules needed for the SAML integration.
+                There are 2 login modules by default: <literal>SAML2IntegrationLoginModule</literal> and <literal>JbossLoginModule</literal>.
+				</para>
              </step>
              <step>
-                Add and configure new Valve in <filename>JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/context.xml</filename> .
+				<para>
+                Add and configure new Valve in <filename>JBOSS_HOME/server/default/deploy/gatein.ear/portal.war/WEB-INF/context.xml</filename>.
                 Configuration of new valve should be like this:
-<programlisting>
-<![CDATA[
+				</para>
+<programlisting><![CDATA[
 <Valve className="org.picketlink.identity.federation.bindings.tomcat.sp.ServiceProviderAuthenticator" />
-]]>
-</programlisting>
+]]></programlisting>
              </step>
              <step>
-                Add new filter and filter-mapping for this filter into <filename>JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</filename> .
-                <para>Filter configuration should look like this:</para>
-<programlisting>
-<![CDATA[
-<filter>
+				<para>
+                Add new filter and filter-mapping for this filter into <filename>JBOSS_HOME/server/default/deploy/gatein.ear/portal.war/WEB-INF/web.xml</filename>.
+				</para>
+                <para>The filter configuration should look like this:</para>
+<programlisting role="XML"><![CDATA[<filter>
    <filter-name>SAML2LogoutFilter</filter-name>
    <filter-class>org.gatein.sso.agent.filter.SAML2LogoutFilter</filter-class>
 </filter>
-]]>
-</programlisting>
+]]></programlisting>
                 <para>And filter-mapping for this filter as first filter in filter-mapping section:</para>
-<programlisting>
-<![CDATA[
-<filter-mapping>
+<programlisting role="XML"><![CDATA[<filter-mapping>
    <filter-name>SAML2LogoutFilter</filter-name>
    <url-pattern>/*</url-pattern>
 </filter-mapping>
-]]>
-</programlisting>
+]]></programlisting>
                 <note>
+				 <para>
                    Filter is needed for "Single Logout" (Global logout) feature of SAML2 specification. Actually it means that when you are logged in more SP
-                   applications, you will be logged out automatically from all of them by initiating global logout. You can skip this filter if you don't want global logout and
+                   applications, you will be logged out automatically from all of them by initiating global logout. You can skip this filter if you do not want the global logout and
                    you want to be logged out only from &PRODUCT; when pressing <emphasis>Sign out</emphasis>.
+				 </para>
                 </note>
              </step>
              <step>
-                In file <filename>JBOSS_HOME/server/default/conf/login-config.xml</filename> you need to add one new application-policy.
-                It is needed by IDP authentication, so that IDP won't use UsersPasswordLoginModule, but it will use login module for REST callback to &PRODUCT;.
-                It means that you will be able to login in SAML IDP screen with same username and passwords as to &PRODUCT; (root/gtn, john/gtn etc.).
-                New policy needs to look like this:
-<programlisting>
-<![CDATA[
+				<para>
+                In the <filename>JBOSS_HOME/server/default/conf/login-config.xml</filename> file, you need to add one new application-policy.
+                It is needed by IDP authentication, so that IDP will not use UsersPasswordLoginModule, but it will use login module for REST callback to &PRODUCT;.
+                It means that you will be able to login in SAML IDP screen with same username and passwords as to &PRODUCT; (root/gtn, john/gtn, and more).
+                </para>
+				<para>
+				The new policy needs to look like this:
+				</para>
+<programlisting role="XML"><![CDATA[
 <application-policy xmlns="urn:jboss:security-beans:1.0" name="idp">
    <authentication>
       <login-module code="org.gatein.sso.saml.plugin.SAML2IdpLoginModule" flag="required">
@@ -2228,15 +2189,17 @@ network.negotiate-auth.using-native-gsslib = true
       </login-module>
    </authentication>
 </application-policy>
-]]>
-</programlisting>
+]]></programlisting>
              </step>
              <step>
-                Copy file <filename>GATEIN_SSO_HOME/saml/idp-lib/sso-saml-plugin-VERSION.jar</filename> into file
-                <filename>JBOSS_HOME/server/default/lib/</filename> . This JAR file is needed by IDP for supporting REST callbacks described in previous step.
+				<para>
+                Copy <filename>GATEIN_SSO_HOME/saml/idp-lib/sso-saml-plugin-VERSION.jar</filename> into <filename>JBOSS_HOME/server/default/lib/</filename>. This JAR file is needed by IDP for supporting REST callbacks described in the previous step.
+				</para>
              </step>
              <step>
-                In the <filename>JBOSS_HOME/server/default/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename> file modify the 'Sign In' link as follows:
+				<para>
+                In <filename>JBOSS_HOME/server/default/deploy/gatein.ear/web.war/groovy/groovy/webui/component/UIBannerPortlet.gtml</filename>, modify the 'Sign In' link as follows:
+				</para>
 <programlisting>
 <![CDATA[
 <!--
@@ -2247,9 +2210,11 @@ network.negotiate-auth.using-native-gsslib = true
 </programlisting>
              </step>
              <step>
+				<para>
                 Test it. You can restart server and go to <ulink type="html" url="http://localhost:8080/portal">http://localhost:8080/portal</ulink> and click to "Sign in".
                 You will be redirected to IDP console where you can fill standard &PRODUCT; username/password for authentication (like john/gtn for instance).
                 After correct login, you will be redirected to &PRODUCT; as logged user.
+				</para>
              </step>
           </procedure>
        </section>
@@ -2259,66 +2224,72 @@ network.negotiate-auth.using-native-gsslib = true
           <para>In this procedure, you will generate and use your own Keystores. This will add more safety into trusted
              communication between &PRODUCT; and IDP because default packaging is using prepackaged keystore "jbid_test_keystore.jks".
              For secure and trusted communication, you will need your own keystores with your own keys. Default keystore is
-             useful only for testing purpose, but should not be used in production. We will use separate keys for &PRODUCT;
-             and for IDP in this scenario.
+             useful only for testing purpose, but should not be used in production. Separate keys for &PRODUCT;
+             and for IDP are used in this scenario.
           </para>
-          <note>Scenario below can be simplified by using single keystore file for both &PRODUCT; and IDP.
+          <note>
+			<para>Scenario below can be simplified by using single keystore file for both &PRODUCT; and IDP.
              It depends on your needs if you use same keystore for both or separate keystores for each.
+			</para>
           </note>
           <procedure>
              <step>
-                Create new keystore for IDP and generate new pair of public/private keys. In directory
-                <filename>JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/classes</filename> (Assumption is exploded WAR archive idp-sig.war)
-                you can do it with command like:
-                <programlisting>keytool -genkey -alias idp-key -keyalg RSA -keystore idp-keystore.jks</programlisting>
-                You need to choose keystore password and private key password. Let's assume that your keystore password
-                is "keystorepass" a private key password is "keypass" .
+				<para>
+                Create new keystore for IDP and generate new pair of public/private keys. In the 
+                <filename>JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/classes</filename> directory (assumption is exploded WAR archive idp-sig.war), you can do it with the 
+                <command>keytool -genkey -alias idp-key -keyalg RSA -keystore idp-keystore.jks</command> command. You need to choose keystore password and private key password. Let's assume that your keystore password
+                is "keystorepass" and a private key password is "keypass".
+				</para>
              </step>
              <step>
-                Export IDP cerificate and public key into file <filename>idp.crt</filename>
-                <programlisting>keytool -export -alias idp-key -file idp.crt -keystore idp-keystore.jks</programlisting>
+				<para>
+                Export IDP cerificate and public key into the <filename>idp.crt</filename> file using the 
+                <command>keytool -export -alias idp-key -file idp.crt -keystore idp-keystore.jks</command> command.
+				</para>
              </step>
              <step>
-                Create new keystore for &PRODUCT; (SP) and generate new pair of public/private keys. In directory
-                <filename>JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/classes</filename>, you can use command like:
-                <programlisting>keytool -genkey -alias sp-key -keyalg RSA -keystore sp-keystore.jks</programlisting>
-                You need to choose keystore password and private key password. Let's assume that your keystore password is
-                "spkeystorepass" a private key password is "spkeypass".
+				<para>
+                Create a new keystore for &PRODUCT; (SP) and generate new pair of public/private keys. In the 
+                <filename>JBOSS_HOME/server/default/deploy/gatein.ear/portal.war/WEB-INF/classes</filename> directory, you can use the
+                <command>keytool -genkey -alias sp-key -keyalg RSA -keystore sp-keystore.jks</command> command. You need to choose keystore password and private key password. Let's assume that your keystore password is
+                "spkeystorepass" and a private key password is "spkeypass".
+				</para>
              </step>
              <step>
-                Export &PRODUCT; cerificate and public key into file sp.crt
-                <programlisting>keytool -export -alias sp-key -file sp.crt -keystore sp-keystore.jks</programlisting>
+				<para>
+                Export &PRODUCT; cerificate and public key into the <filename>sp.crt</filename> file using the 
+                <command>keytool -export -alias sp-key -file sp.crt -keystore sp-keystore.jks</command> command.
+				</para>
              </step>
              <step>
+				<para>
                 Import IDP certificate and public key to SP keystore. This will ensure that SP will trust public key from IDP.
-                You can use commands:
-<programlisting>
-<![CDATA[
-mv $JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/classes/idp.crt $JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/classes/idp.crt
+                You can use commands:</para>
+<programlisting><![CDATA[
+mv $JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/classes/idp.crt $JBOSS_HOME/server/default/deploy/gatein.ear/portal.war/WEB-INF/classes/idp.crt
 keytool -printcert -v -file idp.crt # Command only for debugging purposes. You can check certificate with it.
 keytool -import -trustcacerts -alias idp-cert -file idp.crt -keystore sp-keystore.jks
 rm idp.crt
-]]>
-</programlisting>
+]]></programlisting>
              </step>
              <step>
+				<para>
                 Import &PRODUCT; certificate and public key to IDP keystore. This will ensure that IDP will trust public
-                key from SP. In directory <filename>JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/classes/</filename> ,
+                key from SP. In the <filename>JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/classes/</filename> directory,
                 you can use commands:
-<programlisting>
-<![CDATA[
-mv $JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/classes/sp.crt $JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/classes/sp.crt
+				</para>
+<programlisting><![CDATA[
+mv $JBOSS_HOME/server/default/deploy/gatein.ear/portal.war/WEB-INF/classes/sp.crt $JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/classes/sp.crt
 keytool -printcert -v -file sp.crt # Command only for debugging purposes. You can check certificate with it.
 keytool -import -trustcacerts -alias sp-cert -file sp.crt -keystore idp-keystore.jks
 rm sp.crt
-]]>
-</programlisting>
+]]></programlisting>
              </step>
              <step>
-                Configuration of KeyProvider in file <filename>JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/picketlink.xml</filename>
-                can look like this:
-<programlisting>
-<![CDATA[
+				<para>
+                Configuration of KeyProvider in the <filename>JBOSS_HOME/server/default/deploy/idp-sig.war/WEB-INF/picketlink.xml</filename> file may look like this:
+				</para>
+<programlisting><![CDATA[
 <KeyProvider ClassName="org.picketlink.identity.federation.core.impl.KeyStoreKeyManager">
    <Auth Key="KeyStoreURL" Value="/idp-keystore.jks" />
    <Auth Key="KeyStorePass" Value="keystorepass" />
@@ -2326,14 +2297,13 @@ rm sp.crt
    <Auth Key="SigningKeyAlias" Value="idp-key" />
    <ValidatingAlias Key="${portal.sp.host::localhost}" Value="sp-cert"/>
 </KeyProvider>
-]]>
-</programlisting>
+]]></programlisting>
              </step>
              <step>
-                Configuration of KeyProvider in file <filename>JBOSS_HOME/server/default/deploy/gatein.ear/02portal.war/WEB-INF/picketlink.xml</filename>
-                can look like this:
-<programlisting>
-<![CDATA[
+				<para>
+                Configuration of KeyProvider in the <filename>JBOSS_HOME/server/default/deploy/gatein.ear/portal.war/WEB-INF/picketlink.xml</filename> file may look like this:
+				</para>
+<programlisting><![CDATA[
 <KeyProvider ClassName="org.picketlink.identity.federation.core.impl.KeyStoreKeyManager">
    <Auth Key="KeyStoreURL" Value="/sp-keystore.jks" />
    <Auth Key="KeyStorePass" Value="spkeystorepass" />
@@ -2341,15 +2311,15 @@ rm sp.crt
    <Auth Key="SigningKeyAlias" Value="sp-key" />
    <ValidatingAlias Key="${idp.host::localhost}" Value="idp-cert"/>
 </KeyProvider>
-]]>
-</programlisting>
-
+]]></programlisting>
              </step>
           </procedure>
-          <note>It may be slightly better to use certificates signed by certification authority. But for our purpose it's fine
-             to use self-signed certificates. For more info, you can check additional sources like
-             <ulink type="html" url="http://docs.oracle.com/javase/tutorial/security/sigcert/index.html">http://docs.oracle.com/javase/tutorial/security/sigcert/index.html</ulink> .
-          </note>
+          <note>
+			<para>It may be slightly better to use certificates signed by certification authority. But for our purpose, it is fine
+             to use self-signed certificates. For more information, you can check additional sources like
+             <ulink type="html" url="http://docs.oracle.com/javase/tutorial/security/sigcert/index.html">http://docs.oracle.com/javase/tutorial/security/sigcert/index.html</ulink>.
+			</para>
+		   </note>
        </section>
 
        <section id="sect-Reference_Guide-SSO_SAML-MultipleHostsScenario">
@@ -2361,63 +2331,67 @@ rm sp.crt
           </para>
           <procedure>
              <step>
-                You will need to add virtual hosts to file <filename>/etc/hosts</filename> if you want to test this scenario on single
-                physical machine. On linux, it can be done by adding those entries:
-<programlisting>
-<![CDATA[
+				<para>
+                You will need to add virtual hosts to the <filename>/etc/hosts</filename> file if you want to test this scenario on single
+                physical machine. On Linux, it can be done by adding those entries:
+				</para>
+<programlisting><![CDATA[
 127.0.1.1 www.node1.com
 127.0.1.2 www.node2.com
 127.0.1.3 www.node3.com
-]]>
-</programlisting>
+]]></programlisting>
              </step>
              <step>
+				<para>
                 Copy <filename>JBOSS_HOME/server/default</filename> into more separate configurations:
-<programlisting>
-<![CDATA[
+				</para>
+<programlisting><![CDATA[
 cd $JBOSS_HOME/server
 cp -r default node1
 cp -r default node2
 cp -r default node3
-]]>
-</programlisting>
+]]></programlisting>
              </step>
              <step>
-                In file <filename>JBOSS_HOME/server/node3/deploy/idp-sig.war/WEB-INF/picketlink.xml</filename> you will
+				<para>
+                In the <filename>JBOSS_HOME/server/node3/deploy/idp-sig.war/WEB-INF/picketlink.xml</filename> file, you will
                 need to change trusted domains list to ensure that IDP will trust your domains.
-<programlisting>
-<![CDATA[
+				</para>
+<programlisting><![CDATA[
 <Trust>
    <Domains>node1.com,node2.com,node3.com</Domains>
 </Trust>
-]]>
-</programlisting>
+]]></programlisting>
+				<para>
                 IDP will also serves requests from both <filename>www.node1.com</filename> and <filename>www.node2.com</filename>.
-                So in KeyProvider configuration, you need to have two "ValidatingAlias" instead of default one. They should look like:
-<programlisting>
-<![CDATA[
+                So in KeyProvider configuration, you need to have two "ValidatingAlias" instead of default one. They should look like:	
+				</para>
+<programlisting><![CDATA[
 <ValidatingAlias Key="www.node1.com" Value="sp-cert"/>
 <ValidatingAlias Key="www.node2.com" Value="sp-cert"/>
 ]]>
 </programlisting>
              </step>
              <step>
+				<para>
                 Start node1 with command:
-<programlisting>
-<![CDATA[
+				</para>
+<programlisting><![CDATA[
 ./run.sh -c node1 -b www.node1.com
 -Didp-sig.url=http://www.node3.com:8080/idp-sig/
 -Didp.url=http://www.node3.com:8080/idp-sig/
 -Dportal.sp.url=http://www.node1.com:8080/portal/dologin
 -Didp.host=www.node3.com
  -Dportal.sp.host=www.node1.com
-]]>
-</programlisting>
-                This will start the portal and set all the system properties, which are replaced in files <filename>picketlink.xml</filename>
-                and <filename>login-config.xml</filename>.
+]]></programlisting>
+				<para>
+                This will start the portal and set all the system properties, which are replaced in the <filename>picketlink.xml</filename> and <filename>login-config.xml</filename> files.
+				</para>
              </step>
              <step>
+				<para>
                 Start node3 (IDP host) with command:
+				</para>
 <programlisting>
 <![CDATA[
 ./run.sh -c node3 -b www.node3.com
@@ -2427,33 +2401,34 @@ cp -r default node3
 </programlisting>
              </step>
              <step>
+				<para>
                 After start the server, you can test that you can access <ulink type="html" url="http://www.node1.com:8080/portal">http://www.node1.com:8080/portal</ulink>
                 and when trying to login, you will be redirected to IDP on
                 <ulink type="html" url="http://www.node3.com:8080/idp-sig">http://www.node3.com:8080/idp-sig</ulink>
-                where you can login with credentials like john/gtn .
+                where you can login with credentials like john/gtn.
+				</para>
              </step>
              <step>
-                Start second host node2. We will use again "www.node3.com" as IDP so startup commands can look like:
-<programlisting>
-<![CDATA[
+				<para>
+                Start the second host node2. We will use "www.node3.com"  again as IDP so startup commands can look like:
+				</para>
+<programlisting><![CDATA[
 ./run.sh -c node2 -b www.node2.com
 -Didp-sig.url=http://www.node3.com:8080/idp-sig/
 -Didp.url=http://www.node3.com:8080/idp-sig/
 -Dportal.sp.url=http://www.node2.com:8080/portal/dologin
 -Didp.host=www.node3.com -Dportal.sp.host=www.node2.com
-]]>
-</programlisting>
+]]></programlisting>
              </step>
              <step>
-                Now you can go to <ulink type="html" url="http://www.node2.com:8080/portal">http://www.node2.com:8080/portal</ulink>
-                and after click to "Sign in", you will be logged automatically thanks to SSO. When click to "Sign out", you will then be automatically logged out
-                from both &PRODUCT; hosts and also IDP host thanks to SAML2 Global logout. If you don't want global logout,
-                you can skip it by commenting of <emphasis>SAML2LogoutFilter</emphasis> in <filename>web.xml</filename>
-                (more info about this filter is in first scenario <xref linkend="sect-Reference_Guide-SSO_SAML-SingleHostScenario" /> ).
+				<para>
+                Now you can go to <ulink type="html" url="http://www.node2.com:8080/portal">http://www.node2.com:8080/portal</ulink>. After clicking "Sign in", you will be logged automatically thanks to SSO. When clicking "Sign out", you will then be automatically logged out
+                from both &PRODUCT; hosts and also IDP host thanks to SAML2 Global logout. If you do not want global logout,
+                you can skip it by commenting <emphasis>SAML2LogoutFilter</emphasis> in <filename>web.xml</filename>. See the <link linkend="sect-Reference_Guide-SSO_SAML-SingleHostScenario">first scenario</link> for more information about this filter.
+				</para>
              </step>
           </procedure>
        </section>
-
 
        <section id="sect-Reference_Guide-SSO_SAML-PortalAsIDP">
           <title>&PRODUCT; as Identity Provider</title>
@@ -2462,43 +2437,47 @@ cp -r default node3
              Service Provider (SP).
           </para>
           <procedure>
-             <step>Copy configuration <emphasis>portal-idp</emphasis>, which will be used for &PRODUCT; as IDP
-                <programlisting>cp -r node1 portal-idp</programlisting>
+             <step>
+				<para>Copy the <literal>portal-idp</literal> configuration which will be used for &PRODUCT; as IDP using the 
+                <command>cp -r node1 portal-idp</command> command.
+				</para>
              </step>
              <step>
-                In file <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/02portal.war/WEB-INF/web.xml</filename> we
+				<para>
+                In the <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/portal.war/WEB-INF/web.xml</filename> file, you
                 need to add one special listener to cleaning expired SAML tokens:
-<programlisting>
-<![CDATA[
-<listener>
+				</para>
+<programlisting role="XML"><![CDATA[<listener>
    <listener-class>org.picketlink.identity.federation.web.listeners.IDPHttpSessionListener</listener-class>
 </listener>
 ]]>
 </programlisting>
                 <note>
-                   Filter <filename>SAML2LogoutFilter</filename> should be commented in this file as it's used only for
+				 <para>
+                   The <literal>SAML2LogoutFilter</literal> filter should be commented in this file as it is used only for
                    SP scenario.
+				 </para>
                 </note>
              </step>
              <step>
-                In <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/02portal.war/WEB-INF/context.xml</filename> we
-                need to add valve <emphasis>org.gatein.sso.saml.plugin.valve.PortalIDPWebBrowserSSOValve</emphasis>:
-<programlisting>
-<![CDATA[
-<Valve
-   className="org.gatein.sso.saml.plugin.valve.PortalIDPWebBrowserSSOValve" />
-]]>
-</programlisting>
-                <note>Previous valve <filename>ServiceProviderAuthenticator</filename> should be commented as it's used
+				<para>
+                In <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/portal.war/WEB-INF/context.xml</filename>, you 
+                need to add the <literal>org.gatein.sso.saml.plugin.valve.PortalIDPWebBrowserSSOValve</literal> valve:
+				</para>
+<programlisting role="XML"><![CDATA[<Valve className="org.gatein.sso.saml.plugin.valve.PortalIDPWebBrowserSSOValve" />
+]]></programlisting>
+                <note>
+				 <para>The previous valve (<literal>ServiceProviderAuthenticator</literal>) should be commented as it is used
                    only for SP scenario.
+				 </para>
                 </note>
              </step>
              <step>
-                File <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/02portal.war/WEB-INF/picketlink.xml</filename>
+				<para>
+                The <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/portal.war/WEB-INF/picketlink.xml</filename> file 
                 needs to be configured as Identity provider. It can look like this:
-<programlisting>
-<![CDATA[
-<PicketLink xmlns="urn:picketlink:identity-federation:config:2.1">
+				</para>
+<programlisting role="XML"><![CDATA[<PicketLink xmlns="urn:picketlink:identity-federation:config:2.1">
    <PicketLinkIDP xmlns="urn:picketlink:identity-federation:config:1.0" SupportsSignatures="true">
       <IdentityURL>${idp-sig.url::http://localhost:8080/portal/dologin}</IdentityURL>
       <Trust>
@@ -2531,15 +2510,13 @@ cp -r default node3
          class="org.picketlink.identity.federation.web.handlers.saml2.SAML2SignatureValidationHandler" />
    </Handlers>
 </PicketLink>
-]]>
-</programlisting>
+]]></programlisting>
              </step>
              <step>
-                File <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</filename> needs
+				<para>The <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/META-INF/gatein-jboss-beans.xml</filename> file needs
                 to have all login modules configured as normally, because we will use &PRODUCT; as SAML IDP now.
-<programlisting>
-<![CDATA[
-<application-policy xmlns="urn:jboss:security-beans:1.0" name="gatein-domain">
+				</para>
+<programlisting role="XML"><![CDATA[<application-policy xmlns="urn:jboss:security-beans:1.0" name="gatein-domain">
   <authentication>
     <login-module code="org.gatein.wci.security.WCILoginModule" flag="optional">
       <module-option name="portalContainerName">portal</module-option>
@@ -2561,21 +2538,25 @@ cp -r default node3
 
     </authentication>
 </application-policy>
-]]>
-</programlisting>
+]]></programlisting>
              </step>
              <step>
-                You need to copy keystore "idp-keystore.jks" created in previous tutorials into
-                <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/02portal.war/WEB-INF/classes/</filename>
+				<para>
+                You need to copy the <literal>idp-keystore.jks</literal> keystore created in previous tutorials into
+                <filename>JBOSS_HOME/server/portal-idp/deploy/gatein.ear/portal.war/WEB-INF/classes/</filename>.
+				</para>
              </step>
              <step>
+				<para>
                 Start &PRODUCT; as IDP with:
-                <programlisting>./run.sh -c portal-idp -b www.node1.com -Didp-sig.url=http://www.node1.com:8080/portal/dologin</programlisting>
-                Note that we use configuration <emphasis>portal-idp</emphasis> but we will bind it to <emphasis>www.node1.com</emphasis> .
+                <command>./run.sh -c portal-idp -b www.node1.com -Didp-sig.url=http://www.node1.com:8080/portal/dologin</command>
+                Note that we use configuration <literal>portal-idp</literal> but we will bind it to <emphasis>www.node1.com</emphasis>.
+				</para>
              </step>
-             <step>Start second node, which will act as SP
-<programlisting>
-<![CDATA[
+             <step>
+				<para>Start second node, which will act as SP.
+				</para>
+<programlisting><![CDATA[
 ./run.sh -c node2 -b www.node2.com
 -Didp.url=http://www.node1.com:8080/portal/dologin
 -Dportal.sp.url=http://www.node2.com:8080/portal/dologin
@@ -2586,17 +2567,16 @@ cp -r default node3
              <step>
                 <para>
                    You can test by going to <ulink type="http" url="http://www.node2.com:8080/portal">http://www.node2.com:8080/portal</ulink>
-                   and when click to "Sign in", you will be redirected to login screen on node1. After successful login,
+                   and when clicking "Sign in", you will be redirected to login screen on node1. After successful login,
                    you will be redirected back to node2.
                 </para>
                 <para>
-                   You can also try other SP applications (like picketlink quickstarts examples from <ulink type="html" url="https://repository.jboss.org/nexus/index.html#nexus-search;quick~picketlink-quickstarts">https://repository.jboss.org/nexus/index.html#nexus-search;quick~picketlink-quickstarts</ulink> )
+                   You can also try other SP applications (like picketlink quickstarts examples from <ulink type="html" url="https://repository.jboss.org/nexus/index.html#nexus-search;quick~picketlink-quickstarts">https://repository.jboss.org/nexus/index.html#nexus-search;quick~picketlink-quickstarts</ulink>)
                    and configure them for login against &PRODUCT; IDP, so you will be able to login into example application
                    on behalf of &PRODUCT; SAML2 IDP.
                 </para>
              </step>
           </procedure>
        </section>
-
     </section>
 </section>

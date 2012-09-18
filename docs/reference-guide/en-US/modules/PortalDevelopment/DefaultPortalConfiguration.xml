@@ -5,26 +5,24 @@
 ]>
 <section id="sect-Reference_Guide-Default_Portal_Configuration">
 	<title>Default Portal Configuration</title>
-	<section id="sect-Reference_Guide-Default_Portal_Configuration-Overview">
-		<title>Overview</title>
-		<para>
+		<para xml:id="sect-Reference_Guide-Default_Portal_Configuration-Overview">
 			&PRODUCT; default home page URL is <literal>http://{hostname}:{port}/portal/</literal>.
          There may be multiple independent portals deployed in parallel at any given time, each of which has its root
-         context (i.e.: <literal>http://{hostname}:{port}/sample-portal/</literal>).
-         Each portal is internally composed of one or more, what we again call 'portals'. There needs to be at least
-         one such portal - the default one is called 'classic'. When accessing &PRODUCT; default home page URL, you
-         are automatically redirected to 'classic' portal.
-
-         The default portal performs another important task. When starting up &PRODUCT; for the first time, its
-         JCR database will be empty (that's where portals keep their runtime-configurable settings).
-         It's the default portal that's used to detect this, and to trigger automatic data initialization.
+         context (for example, <literal>http://{hostname}:{port}/sample-portal/</literal>).
+         Each portal is internally composed of one or more, what we again call 'portals'. It is required to have at least
+         one such portal - the default one called 'classic'. When accessing the &PRODUCT; default homepage URL, you
+         are automatically redirected to the 'classic' portal.
 		</para>
-	</section>
+		<para>
+         The default portal performs another important task. When starting up &PRODUCT; for the first time, its
+         JCR database will be empty (that is where portals keep their runtime-configurable settings).
+         It is the default portal used to detect this, and to trigger automatic data initialization.
+		</para>
 	
 	<section id="sect-Reference_Guide-Default_Portal_Configuration-Configuration">
 		<title>Configuration</title>
 		<para>
-			The following example configuration can be found at: &#34;<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
+			The following example configuration can be found at: &#34;<filename>portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
 		</para>
 		
 <programlisting role="XML">&#60;component&#62;
@@ -49,7 +47,7 @@
   &#60;/component&#62;
 </programlisting>
 		<para>
-			In this example the <emphasis role="bold">classic</emphasis> portal has been set as the default.
+			In this example, the <emphasis role="bold">classic</emphasis> portal has been set as the default.
 		</para>
       <note>
          <para>
@@ -60,7 +58,68 @@
          </para>
       </note>
 	</section>
-
+<section id="sect-Reference_Guide-Default_Portal_Configuration-Tips">
+    <title>Tips</title>
+    <section id="sect-Reference_Guide-Default_Portal_Configuration-Tips-Delete_Portals_Definition">
+      <title>Delete Portals Definition by Configuration</title>
+        <para>
+            In some cases, some portal definitions are defined but not used any more. If you want to delete them, you can add some configurations to
+            <filename>portal.war/WEB-INF/conf/portal/portal-configuration.xml</filename>.
+        </para>
+        <para>
+            To delete a portal definition or a portal template definition, you need to define a component plug-in as the example below:
+        </para>
+        <programlisting role="XML"><![CDATA[
+<external-component-plugins>
+    <target-component>org.exoplatform.portal.config.UserPortalConfigService</target-component>
+ <component-plugin>
+   <name>new.portal.config.user.listener</name>
+   <set-method>deleteListenerElements</set-method>
+   <type>org.exoplatform.portal.config.NewPortalConfigListener</type>
+   <description>this listener delete some predefined portal and templates configuration</description>
+   <init-params>
+  <object-param>
+    <name>site.templates.location</name>
+    <description>description</description>
+    <object type="org.exoplatform.portal.config.SiteConfigTemplates">
+   <field name="portalTemplates">
+     <collection type="java.util.HashSet">
+    <value>
+      <string>basic</string>
+    </value>
+    <value>
+      <string>classic</string>
+    </value>
+     </collection>
+   </field>
+    </object>
+  </object-param>
+  <object-param>
+    <name>portal.configuration</name>
+    <description>description</description>
+    <object type="org.exoplatform.portal.config.NewPortalConfig">
+   <field  name="predefinedOwner">
+     <collection type="java.util.HashSet">
+    <value><string>classic</string></value>
+     </collection>
+   </field>
+   <field name="ownerType"><string>portal</string></field>
+    </object>
+  </object-param>
+   </init-params>
+ </component-plugin>
+</external-component-plugins>
+         ]]></programlisting>
+        </section>
+        <section id="sect-Reference_Guide-Default_Portal_Configuration-Tips-Show_Info_bar_portlet">
+            <title>Set Info bar</title>
+            <para>You can set the info bar shown by default for portlets of a portal by adding a property to the <literal>portal-config</literal> configuration of the <filename>portal.xml</filename> file.</para>
+            <programlisting><![CDATA[
+                    <properties>
+                        <entry key="showPortletInfo">1</entry>
+                    </properties>
+            ]]></programlisting>
+            <para>There are two values for "showPortletInfo": 0 and 1. If the value is 1, the info bar of portlets is shown by default. If the value is 0, it is hidden.</para>
+        </section>
+    </section>
 </section>
-
-

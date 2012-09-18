@@ -4,95 +4,57 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_">
-	<title>Deactivation of the Ajax Loading Mask Layer </title>
-	<!-- 	<section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Overview">
-		<title>Overview</title>
-		<para>
-			In this article, you will learn:
-		</para>
-		<itemizedlist>
-			<listitem>
-				<para>
-					Purpose of ajax-loading mask.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					How to deactivate ajax-loading mask.
-				</para>
-			</listitem>
-			<listitem>
-				<para>
-					Synchronous / Asynchronous issue.
-				</para>
-			</listitem>
-		</itemizedlist>
-	</section>  -->
-	<section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Purpose">
-		<title>Purpose</title>
-		<para>
-			The loading mask layer is deployed after an ajax-call. Its purpose is to block the GUI in order to prevent further user actions until the the ajax-request has been completed.
+	<title>Deactivation of the Ajax Loading Mask Layer</title>
+		<para xml:id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Purpose">
+			The loading mask layer is deployed after an ajax-call. It aims at blocking the GUI to prevent further user actions until the the ajax-request has been completed.
 		</para>
 		<para>
-			However, the mask layer may need to be deactivated in instances where the portal requires user instructions before previous instructions have been carried out.
+			However, the mask layer may need to be deactivated in instances where the portal requires user instructions before the previous instructions have been carried out.
 		</para>
-		<procedure id="proc-Reference_Guide-Purpose-How_to_deactivate_the_ajax_loading_mask">
-			<title>How to deactivate the ajax-loading mask</title>
-			<step>
+		<para xml:id="proc-Reference_Guide-Purpose-How_to_deactivate_the_ajax_loading_mask"><emphasis role="bold">Deactivate the ajax-loading mask</emphasis></para>
 				<para>
-					Generate a script to make an asynchronous ajax-call. Use the <literal>uicomponent.doAsync()</literal> method rather than the <literal>uicomponent.event()</literal> method.
-				</para>
-				<para>
+					Simply enerate a script to make an asynchronous ajax-call. Use the <literal>uicomponent.doAsync()</literal> method rather than the <literal>uicomponent.event()</literal> method.
 					For example:
 				</para>
 				
 <programlisting>&#60;a href=&#34;&#60;%=uicomponent.doAsync(action, beanId, params)%&#62;&#34; alt=&#34;&#34;&#62;Asynchronous&#60;/a&#62;
 </programlisting>
-			</step>
-			<step>
+		<itemizedlist>
+			<listitem>
 				<para>
-					The <literal>doAsync()</literal> method automatically adds the following new parameter into the parameters list; <literal>asyncparam = new Parameter(AJAX ASYNC,&#34;true&#34;); (AJAX ASYNC == &#34;ajax async&#34;)</literal>
+					The <literal>doAsync()</literal> method automatically adds the following new parameter to the parameters list: <literal>asyncparam = new Parameter(AJAX&#95;ASYNC,&#34;true&#34;); (AJAX&#95;ASYNC == &#34;ajax&#95;async&#34;)</literal>.
 				</para>
+			</listitem>
+			<listitem>
 				<para>
 					This request is asynchronous and the ajax-loading mask will not deployed.
 				</para>
-				<note>
-					<para>
-						An asynchronous request can still be made using the <literal>uicomponent.event()</literal>. When using this method, however, the asyncparam must be added manually.
-					</para>
-				</note>
-			</step>
-		</procedure>
-		
+			</listitem>
+		</itemizedlist>
+		<note>
+			<para>
+				An asynchronous request can still be made using the <literal>uicomponent.event()</literal>. When using this method, the asyncparam must be added manually.
+			</para>
+		</note>
+	
 		<para>
-			The GUI will be blocked to ensure a user can only request one action at a time and while the request seems to be synchronous, all ajax requests are, in fact always asynchronous. For further information refer to <xref linkend="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Synchronous_issue" />.
+			The GUI will be blocked to ensure that the user can only request one action at one time and while the request seems to be synchronous, all ajax requests are always asynchronous. For further information, refer to <xref linkend="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Synchronous_issue" />.
 		</para>
-	</section>
 	
 	<section id="sect-Reference_Guide-Deactivation_of_the_Ajax_Loading_Mask_Layer_-Synchronous_issue">
 		<title>Synchronous issue</title>
 		<para>
-			Most web browsers support ajax requests in two modes: <emphasis>Synchronous</emphasis> and <emphasis>Asynchronous</emphasis>. This mode is specified with a boolean <literal>bAsync</literal> parameter.
+			Most web browsers support ajax requests in two modes: <emphasis>Synchronous</emphasis> and <emphasis>Asynchronous</emphasis>. This mode is specified with a boolean <parameter>bAsync</parameter> parameter.
 		</para>
 		
-<programlisting>var bAsync = false; // Synchronous
+<programlisting role="JAVA">var bAsync = false; // Synchronous
 request.open(instance.method, instance.url, bAsync);
 </programlisting>
 		<para>
-			However, in order to work with browsers that do not support <emphasis>Synchronous</emphasis> requests, <literal>bAsync</literal> is set to always be true (Ajax request will always be asynchronous).
+			However, to work with browsers that do not support the <emphasis>Synchronous</emphasis> requests, <literal>bAsync</literal> is always set to <literal>true</literal> (The Ajax request will always be asynchronous).
 		</para>
-		<!-- 		
-<programlisting>var bAsync = false; // Synchronous
-request.open(instance.method, instance.url, bAsync); // Firefox will not execute
-</programlisting>
-		<para>
-			So 
-		</para>  -->
-<programlisting>// Asynchronous request
+<programlisting role="JAVA">// Asynchronous request
 request.open(instance.method, instance.url, true);
 </programlisting>
 	</section>
-
 </section>
-
-

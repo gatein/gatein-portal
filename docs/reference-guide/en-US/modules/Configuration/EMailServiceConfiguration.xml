@@ -5,24 +5,27 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-EMail_Service_Configuration">
-  <title>E-Mail Service Configuration</title>
-
-  <section id="sect-Reference_Guide-EMail_Service_Configuration-Overview">
-    <title>Overview</title>
-
-    <para>&PRODUCT; includes an e-mail sending service that needs to be configured
-    before it can function properly. This service, for instance, is used to send e-mails to users who forgot
+  <title>Email Service Configuration</title>
+    <para xml:id="sect-Reference_Guide-EMail_Service_Configuration-Overview">&PRODUCT; includes an email sending service that needs to be configured
+    before it can function properly. This service, for instance, is used to send emails to users who forgot
     their password or username.</para>
 
-  </section>
-
   <section id="sect-Reference_Guide-EMail_Service_Configuration-Parameters">
-    <title>Configuring the outgoing e-mail account</title>
+    <title>Configure the outgoing email account</title>
 
-    <para>The e-mail service can use any SMTP account configured in
-    $JBOSS_HOME/server/default/conf/gatein/configuration.properties
-    (or $TOMCAT_HOME/gatein/conf/configuration.properties if you are using Tomcat).</para>
-
+    <para>The email service can use any SMTP account configured in:</para>
+	<itemizedlist>
+		<listitem>
+			<para>
+				For JBoss: <filename>$JBOSS_HOME/server/default/conf/gatein/configuration.properties</filename>
+			</para>
+		</listitem>
+		<listitem>
+			<para>
+				For Tomcat: <filename>$TOMCAT_HOME/gatein/conf/configuration.properties</filename>
+			</para>
+		</listitem>
+	</itemizedlist>
     <para>The relevant section looks like:</para>
     
     <programlisting># EMail
@@ -36,10 +39,10 @@ gatein.email.smtp.socketFactory.port=465
 gatein.email.smtp.socketFactory.class=javax.net.ssl.SSLSocketFactory</programlisting>
 
     <para>It is preconfigured for GMail, so that any GMail account can easily be used (simply use the full GMail address
-    as username, and fill-in the password.</para>
+   with username and password.</para>
 
-    <para>In corporate environments you will want to use your corporate SMTP gateway. When using it over SSL,
-       like in default configuration, you may need to configure a certificate truststore, containing your SMTP server's
+    <para>In corporate environments, if you want to use your corporate SMTP gateway over SSL,
+       like in the default configuration, configure a certificate truststore containing your SMTP server's
        public certificate. Depending on the key sizes, you may then also need to install Java Cryptography Extension (JCE) 
        Unlimited Strength Jurisdiction Policy Files for your Java Runtime Environment.</para>
   </section>

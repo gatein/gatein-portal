@@ -1,109 +1,99 @@
-<?xml version='1.0' encoding='utf-8' ?>
-<!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- This document was created with Syntext Serna Free. --><!DOCTYPE section PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" [
 <!ENTITY % BOOK_ENTITIES SYSTEM "../../Reference_Guide.ent">
 %BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Javascript_Configuration">
-	<title>Javascript Configuration</title>
-	<para>
-		Managing Javascript scripts in an application like &PRODUCT; is a critical part of the configuration work.
-      Configuring the scripts correctly will result in a faster response time from the portal.
-	</para>
-	<para>
-		Every portlet can have its own javscript code but in many cases it is more convenient to reuse some existing
+  <title>Javascript Configuration</title>
+  <para>
+  Managing Javascript in an application like &PRODUCT; is a critical part of the configuration work.
+      Configuring the scripts correctly will result in the faster response time from the portal.
+ </para>
+  <para>
+  Every portlet can have its own Javascript code but in many cases, it is more convenient to reuse some existing
       shared libraries. For that reason, &PRODUCT; has a mechanism to easily register the libraries that will be loaded
-      when the first page will be rendered.
-	</para>
-	<para>
-		To do so, every WAR deployed in &PRODUCT; can register the <filename>.js</filename> files with the groovy script
-      <filename>WEB-INF/conf/script/groovy/JavascriptScript.groovy</filename>. (TODO: this file doesn't seem to exist)
-	</para>
-	<para>
-		The example file below is found in the 01eXoResources.war
-	</para>
-	
-<programlisting role="JAVA">JavascriptService.addJavascript(&#34;eXo&#34;, &#34;/javascript/eXo.js&#34;, ServletContext);
-/* Animation Javascripts */
-JavascriptService.addJavascript(&#34;eXo.animation.ImplodeExplode&#34;, &#34;/javascript/eXo/animation/ImplodeExplode.js&#34;, ServletContext);
-/* Application descriptor */
-JavascriptService.addJavascript(&#34;eXo.application.ApplicationDescriptor&#34;, &#34;/javascript/eXo/application/ApplicationDescriptor.js&#34;, ServletContext);
-/* CORE Javascripts */
-JavascriptService.addJavascript(&#34;eXo.core.Utils&#34;, &#34;/javascript/eXo/core/Util.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.core.DOMUtil&#34;, &#34;/javascript/eXo/core/DOMUtil.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.core.Browser&#34;, &#34;/javascript/eXo/core/Browser.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.core.MouseEventManager&#34;, &#34;/javascript/eXo/core/MouseEventManager.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.core.UIMaskLayer&#34;, &#34;/javascript/eXo/core/UIMaskLayer.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.core.Skin&#34;, &#34;/javascript/eXo/core/Skin.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.core.DragDrop&#34;, &#34;/javascript/eXo/core/DragDrop.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.core.TemplateEngine&#34;, &#34;/javascript/eXo/core/TemplateEngine.js&#34;, ServletContext);
-/* Widget Javascripts */
-JavascriptService.addJavascript(&#34;eXo.widget.UIWidget&#34;, &#34;/javascript/eXo/widget/UIWidget.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.widget.UIAddWidget&#34;, &#34;/javascript/eXo/widget/UIAddWidget.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.widget.UIExoWidget&#34;, &#34;/javascript/eXo/widget/UIExoWidget.js&#34;, ServletContext);
-/* Desktop Javascripts */
-JavascriptService.addJavascript(&#34;eXo.desktop.UIDockbar&#34;, &#34;/javascript/eXo/desktop/UIDockbar.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.desktop.UIDesktop&#34;, &#34;/javascript/eXo/desktop/UIDesktop.js&#34;, ServletContext);
-/* WebUI Javascripts */ 
-JavascriptService.addJavascript(&#34;eXo.webui.UIItemSelector&#34;, &#34;/javascript/eXo/webui/UIItemSelector.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.webui.UIForm&#34;, &#34;/javascript/eXo/webui/UIForm.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.webui.UIPopup&#34;, &#34;/javascript/eXo/webui/UIPopup.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.webui.UIPopupSelectCategory&#34;, &#34;/javascript/eXo/webui/UIPopupSelectCategory.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.webui.UIPopupWindow&#34;, &#34;/javascript/eXo/webui/UIPopupWindow.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.webui.UIVerticalScroller&#34;, &#34;/javascript/eXo/webui/UIVerticalScroller.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.webui.UIHorizontalTabs&#34;, &#34;/javascript/eXo/webui/UIHorizontalTabs.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.webui.UIPopupMenu&#34;, &#34;/javascript/eXo/webui/UIPopupMenu.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.webui.UIDropDownControl&#34;, &#34;/javascript/eXo/webui/UIDropDownControl.js&#34;, ServletContext);
-/* Portal Javascripts */ 
-JavascriptService.addJavascript(&#34;eXo.portal.PortalHttpRequest&#34;, &#34;/javascript/eXo/portal/PortalHttpRequest.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.portal.UIPortal&#34;, &#34;/javascript/eXo/portal/UIPortal.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.portal.UIWorkspace&#34;, &#34;/javascript/eXo/portal/UIWorkspace.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.portal.UIPortalControl&#34;, &#34;/javascript/eXo/portal/UIPortalControl.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.portal.PortalDragDrop&#34;, &#34;/javascript/eXo/portal/PortalDragDrop.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.portal.UIPortalNavigation&#34;, &#34;/javascript/eXo/portal/UIPortalNavigation.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.portal.UIMaskWorkspace&#34;, &#34;/javascript/eXo/portal/UIMaskWorkspace.js&#34;, ServletContext);
-JavascriptService.addJavascript(&#34;eXo.portal.UIExoStartMenu&#34;, &#34;/javascript/eXo/portal/UIExoStartMenu.js&#34;, ServletContext);
-/* Desktop Javascripts 2 */
-JavascriptService.addJavascript(&#34;eXo.desktop.UIWindow&#34;, &#34;/javascript/eXo/desktop/UIWindow.js&#34;, ServletContext);
-</programlisting>
-	<para>
-		Note that even registered dedicated javascripts will be merged into a single <literal>merged.js</literal> file when the server loads. This reduces the number of HTTP calls as seen in the home page source code:
-	</para>
-	
-<programlisting role="XML">&#60;script type=&#34;text/javascript&#34; src=&#34;/portal/javascript/merged.js&#34;&#62;&#60;/script&#62;
-</programlisting>
-	<para>
-		Although this optimization is useful for a production environment, it may be easier to deactivate this optimization while debugging javascript problems.
-	</para>
-	<para>
-		To do this, set the java system property <literal>exo.product.developing</literal> to <literal>true</literal>.
-	</para>
-	<para>
-		To see or use the merged file set this property to <literal>false</literal>.
-	</para>
-	<para>
-		The property can be passed as a JVM parameter with the <literal>-D</literal> option in your <literal>GateIn.sh</literal> or <literal>GateIn.bat</literal> startup script.
-	</para>
-	<para>
-		Every javascript file is associated with a module name which acts as a namespace.
+      when every page is rendered.
+ </para>
+  <para>
+  To do so, every WAR deployed in &PRODUCT; can register the <filename>.js</filename> files with the <filename>gatein-resources.xml</filename> configuration file.</para>
+  <para>
+  The example code snippet below is found in <filename>gatein-resources.xml</filename> of <filename>eXoResources.war </filename>.</para>
+  <programlisting role="XML">&lt;javascript&gt;
+  &lt;param&gt;
+    &lt;js-module&gt;eXo&lt;/js-module&gt;
+    &lt;js-path&gt;/javascript/eXo.js&lt;/js-path&gt;
+    &lt;js-priority&gt;0&lt;/js-priority&gt;
+  &lt;/param&gt;
+&lt;/javascript&gt;
 
-      The module name is passed as a first parameter to JavascriptService.addJavascript() function as in the following example:
-   </para>
-   <programlisting role="JAVA">
-JavascriptService.addJavascript(&#34;eXo.core.DragDrop&#34;,
-      &#34;/javascript/eXo/core/DragDrop.js&#34;, ServletContext);
-   </programlisting>
-   <para>
-      Inside the associated javascript files, functions are exposed as global javascript function variables using the module name.
-	</para>
-	<para> For example:</para>
-   <programlisting role="JAVA">
+&lt;!-- CORE Javascripts --&gt;
+&lt;javascript&gt;
+  &lt;param&gt;
+    &lt;js-module&gt;eXo.core.Utils&lt;/js-module&gt;
+    &lt;js-path&gt;/javascript/eXo/core/Util.js&lt;/js-path&gt;
+    &lt;js-priority&gt;1&lt;/js-priority&gt;
+  &lt;/param&gt;
+  &lt;param&gt;
+    &lt;js-module&gt;eXo.core.DOMUtil&lt;/js-module&gt;
+    &lt;js-path&gt;/javascript/eXo/core/DOMUtil.js&lt;/js-path&gt;
+    &lt;js-priority&gt;1&lt;/js-priority&gt;
+  &lt;/param&gt;
+  &lt;param&gt;
+    &lt;js-module&gt;eXo.core.Browser&lt;/js-module&gt;
+    &lt;js-path&gt;/javascript/eXo/core/Browser.js&lt;/js-path&gt;
+    &lt;js-priority&gt;2&lt;/js-priority&gt;
+  &lt;/param&gt;
+  &lt;param&gt;
+    &lt;js-module&gt;eXo.core.MouseEventManager&lt;/js-module&gt;
+    &lt;js-path&gt;/javascript/eXo/core/MouseEventManager.js&lt;/js-path&gt;
+  &lt;/param&gt;
+  &lt;param&gt;
+    &lt;js-module&gt;eXo.core.UIMaskLayer&lt;/js-module&gt;
+    &lt;js-path&gt;/javascript/eXo/core/UIMaskLayer.js&lt;/js-path&gt;
+  &lt;/param&gt;
+  &lt;param&gt;
+    &lt;js-module&gt;eXo.core.Skin&lt;/js-module&gt;
+    &lt;js-path&gt;/javascript/eXo/core/Skin.js&lt;/js-path&gt;
+  &lt;/param&gt;
+  &lt;param&gt;
+    &lt;js-module&gt;eXo.core.DragDrop&lt;/js-module&gt;
+    &lt;js-path&gt;/javascript/eXo/core/DragDrop.js&lt;/js-path&gt;
+  &lt;/param&gt;
+  &lt;param&gt;
+    &lt;js-module&gt;eXo.core.DragDrop2&lt;/js-module&gt;
+    &lt;js-path&gt;/javascript/eXo/core/DragDrop2.js&lt;/js-path&gt;
+  &lt;/param&gt;
+&lt;/javascript&gt;
+</programlisting>
+  <para>
+  Note that registered Javascript files will be merged into a single <filename>merged.js</filename> file when the server loads. This reduces the number of HTTP calls as shown in the homepage source code:
+ </para>
+  <programlisting role="XML">&lt;script type=&quot;text/javascript&quot; src=&quot;/portal/javascript/merged.js&quot;&gt;&lt;/script&gt;
+</programlisting>
+  <para>
+  Although this optimization is useful for a production environment, it may be easier to deactivate this optimization while debugging Javascript problems.
+ </para>
+  <para>
+  To do this, set the Java system property <literal>exo.product.developing</literal> to <literal>true</literal>.
+	GateIn provides two startup scripts that define this property in <filename>gatein-dev.sh</filename> (for Linux, Mac) and <filename>gatein-dev.bat</filename> (for Windows).</para>
+  <para>
+  To generate the <filename>merged.js</filename> file, set this property to <literal>false</literal>.
+ If the property is not set, the default value is false. </para>
+  <para>
+  The property can be passed as a JVM parameter with the <emphasis>-D</emphasis> option in your <filename>gatein.sh</filename> or <filename>gatein.bat</filename> startup script.
+ </para>
+  <para>
+  Every Javascript file is associated with a module name which acts as a namespace.
+  </para>
+  <para>
+      Inside the associated Javascript files, the eXo Javascript objects are exposed as global variables named after the module.</para>
+  <para> For example:</para>
+  <programlisting role="JAVA">
 eXo.core.DragDrop = new DragDrop();
    </programlisting>
-	<para>
-		It is also possible to use <literal>eXo.require()</literal> javascript method to lazy load and evaluate some javascript code.
-      This is quite useful for the portlet or widget applications that will use this javascript only once. Otherwise,
-      if the library is reusable in several places it is better to reference it in the groovy file.
-	</para>
+  <para>
+  It is also possible to use the <literal>eXo.require()</literal> method to lazy load and evaluate some Javascript codes.
+      This is quite useful for the portlet or gadget applications that will use this Javascript only once. Otherwise,
+      if the library is reusable in several places, it is better to define it in the <filename>gatein-resources.xml</filename> file.
+ </para>
 </section>
-
-

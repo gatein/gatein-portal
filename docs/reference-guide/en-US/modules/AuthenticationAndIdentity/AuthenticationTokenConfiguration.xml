@@ -5,49 +5,41 @@
 ]>
 <section id="sect-Reference_Guide-Authentication_Token_Configuration">
 	<title>Authentication Token Configuration</title>
-	<section id="sect-Reference_Guide-Authentication_Token_Configuration-What_is_token_service">
-		<title>What is Token Service?</title>
-		<para>
-			<emphasis>Token Service</emphasis> is used in authentication.
+		<para xml:id="sect-Reference_Guide-Authentication_Token_Configuration-What_is_token_service">
+			<emphasis role="bold">Token Service</emphasis> is used in authentication. The token system prevents user account information being sent in the clear text mode within inbound requests. This increases authentication security.
 		</para>
 		<para>
-			The token system prevents user account information being sent in clear text mode within inbound requests. This increases authentication security.
-		</para>
-		<para>
-			Token service allows administrators to create, delete, retrieve and clean tokens as required.
+		 The token service allows administrators to create, delete, retrieve and clean tokens as required.
          The service also defines a validity period of any given token. The token becomes invalid once this period expires.
 		</para>
-	</section>
 	
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Implement_token_services_API">
-		<title>Implementing the Token Service API</title>
+		<title>Implement the Token Service API</title>
 		<para>
-			All token services used in &PRODUCT; authentication must be implemented by subclassing an <emphasis role="bold">AbstractTokenService</emphasis> abstract class.
-         The following <emphasis role="bold">AbstractTokenService</emphasis> methods represent the contract between authentication runtime, and a token service implementation.
+			All token services used in the &PRODUCT; authentication must be implemented by subclassing an <classname>AbstractTokenService</classname> abstract class.
+         The following <classname>AbstractTokenService</classname> methods represent the contract between authentication runtime, and a token service implementation.
 		</para>
 		
-<programlisting role="JAVA">
-		public Token getToken(String id) throws PathNotFoundException, RepositoryException;
-		public Token deleteToken(String id) throws PathNotFoundException, RepositoryException;
-		public String[] getAllTokens();
-		public long getNumberTokens() throws Exception;
-		public String createToken(Credentials credentials) throws IllegalArgumentException,NullPointerException;
-		public Credentials validateToken(String tokenKey, boolean remove) throws NullPointerException;
-</programlisting>
+<programlisting role="JAVA">public Token getToken(String id) throws PathNotFoundException, RepositoryException;
+public Token deleteToken(String id) throws PathNotFoundException, RepositoryException;
+public String[] getAllTokens();
+public long getNumberTokens() throws Exception;
+public String createToken(Credentials credentials) throws IllegalArgumentException,NullPointerException;
+public Credentials validateToken(String tokenKey, boolean remove) throws NullPointerException;</programlisting>
 		<para>
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Authentication_Token_Configuration-Configure_token_services">
-		<title>Configuring token services</title>
+		<title>Configure token services</title>
 		<para>
-			Token services configuration includes specifying the token validity period. The token service is configured as a portal component (in portal scope, as opposed to root scope - more about that in Foundations chapter).
+			The token services configuration includes specifying the token validity period. The token service is configured as a portal component (in the portal scope, as opposed to the root scope - See <xref linkend="sect-Reference_Guide-Foundations"/> for more information).
 		</para>
 		<para>
-			In the example below, <emphasis>CookieTokenService</emphasis> is a subclass of <emphasis role="bold">AbstractTokenService</emphasis> so it has a property which specifies the validity period of the token.
+			In the example below, <classname>CookieTokenService</classname> is a subclass of <classname>AbstractTokenService</classname>, so it has a property which specifies the validity period of the token.
 		</para>
 		<para>
-			The token service will initialize this validity property by looking for an <parameter>init-param</parameter> named <emphasis role="bold">service.configuration</emphasis>.
+			The token service will initialize this validity property by looking for an <parameter>init-param</parameter> named <parameter>service.configuration</parameter>.
 		</para>
 		<para>
 			This property must have three values.
@@ -58,7 +50,7 @@
 				<area coords="8" id="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-time" />
 				<area coords="9" id="area-Reference_Guide-Authentication_Token_Configuration-Configure_token_services-unit" />
 			</areaspec>
-<programlisting>&#60;component&#62;
+<programlisting language="xml">&#60;component&#62;
   &#60;key&#62;org.exoplatform.web.security.security.CookieTokenService&#60;/key&#62;
   &#60;type&#62;org.exoplatform.web.security.security.CookieTokenService&#60;/type&#62;
   &#60;init-params&#62;
@@ -91,12 +83,12 @@
 		</programlistingco>
 		
 		<para>
-			In this case, the service name is <emphasis role="bold">jcr-token</emphasis> and the token expiration time is one week.
+			In this case, the service name is <literal>jcr-token</literal> and the token expiration time is one week.
 		</para>
 		<para>
 			&PRODUCT; supports <emphasis>four</emphasis> time units:
 		</para>
-		<orderedlist numeration="arabic">
+		<itemizedlist>
 			<listitem>
 				<para>
 					<parameter>SECOND</parameter>
@@ -117,9 +109,6 @@
 					<parameter>DAY</parameter>
 				</para>
 			</listitem>
-		</orderedlist>
+		</itemizedlist>
 	</section>
-
 </section>
-
-

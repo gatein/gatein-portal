@@ -3,25 +3,26 @@
 <!ENTITY % BOOK_ENTITIES SYSTEM "../Reference_Guide.ent">
 %BOOK_ENTITIES;
 ]>
-<chapter id="chap-Reference_Guide-Introduction">
-<title>Introduction</title>
+<preface id="preface-Reference_Guide-Introduction">
+<title>About GateIn</title>
 
 	<para>
-		&PRODUCT; is the merge of two mature Java projects; JBoss Portal and eXo Portal. This new community project takes the best of both offerings and incorporates them into a single portal framework. The aim is to provide an intuitive user-friendly portal, and a framework to address the needs of today's Web 2.0 applications.
+		&PRODUCT; is the merge of two mature Java projects: JBoss Portal and eXo Portal. This new community project takes the best of both offerings and incorporates them into a single portal framework. GateIn aims at providing an intuitive user-friendly portal, and a framework to address the needs of Web 2.0 applications today.
 	</para>
 	<mediaobject>
 		<imageobject role="html">
-			<imagedata fileref="images/Common/Frontpage.png" format="PNG" align="center" scale="110" />
+			<imagedata fileref="images/Common/Frontpage.png" format="PNG" align="center" scale="1" width="444" />
 		</imageobject>
 		<imageobject role="fo">
-			<imagedata fileref="images/Common/Frontpage.png" format="PNG" align="center" contentwidth="150mm" />
+			<imagedata fileref="images/Common/Frontpage.png" format="PNG" align="center" scalefit="1" width="150mm" />
 		</imageobject>
 	</mediaobject>
 	<para>
-		This book provides a deep-dive information about installation and configuration of the services provided by GateIn.
+		This book provides thorough information about installation and configuration of the services provided by GateIn.
 	</para>
-	<section id="sect-Install_Guide-Introduction-Related_Links">
-		<title>Related Links</title>
+	<para id="sect-Install_Guide-Introduction-Related_Links">
+		<citetitle><emphasis role="bold">Related Links</emphasis></citetitle>
+    </para>
 		<itemizedlist>
 			<listitem>
 				<para>
@@ -48,7 +49,5 @@
 				</para>
 			</listitem>
 		</itemizedlist>
-	</section>
-
-</chapter>
+</preface>
 

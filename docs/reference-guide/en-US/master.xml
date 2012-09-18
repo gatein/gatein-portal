@@ -5,9 +5,9 @@
 %BOOK_ENTITIES;
 ]>
 
-<book lang="en">
+<book lang="en" xml:id="GateInReferenceGuide">
 	<bookinfo>
-		<title>GateIn Reference Guide</title>
+		<title>Reference Guide / GateIn</title>
 		<subtitle>
 <!--
 LT 20010312: could not find a way to configure image scaling properly (tried width, scale, etc...). Feel free to investigate.
@@ -17,7 +17,7 @@ LT 20010312: could not find a way to configure image scaling properly (tried wid
 					<imagedata fileref="images/Common/gatein_logo.png" format="PNG" align="center"/>
 				</imageobject>
 				<imageobject role="fo">
-					<imagedata fileref="images/Common/gatein_logo.png" format="PNG" align="center"/>
+					<imagedata fileref="images/Common/gatein_logo.png" format="PNG" align="center" scalefit="1" width="120mm"/>
 				</imageobject>
 			</mediaobject>
 
@@ -83,16 +83,12 @@ LT 20010312: could not find a way to configure image scaling properly (tried wid
 			</othercredit>
 -->
 		</authorgroup>
-
-
         </bookinfo>
-
-
+	
 	<xi:include href="modules/Introduction.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
     <!--  Only in the project  -->
 	<xi:include href="modules/Configuration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-
 	<xi:include href="modules/PortalDevelopment.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
  	<xi:include href="modules/PortletDevelopment.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="modules/GadgetDevelopment.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />

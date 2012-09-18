@@ -9,7 +9,7 @@
 		A gadget is a mini web application, embedded in a web page and running on an application server platform. These small applications help users perform various tasks.
 	</para>
 	<para>
-		&PRODUCT; supports gadgets such as: Todo gadget, Calendar gadget, Calculator gadget, Weather Forecasts and and RSS Reader.
+		&PRODUCT; supports gadgets, such as <emphasis role="bold">Todo</emphasis>, <emphasis role="bold">Calendar</emphasis>, <emphasis role="bold">Calculator</emphasis>, <emphasis role="bold">Weather Forecasts</emphasis> and <emphasis role="bold">RSS Reader</emphasis>.
 	</para>
 	<variablelist id="vari-Reference_Guide-Gadgets-Default_Gadgets">
 		<title>Default Gadgets:</title>
@@ -17,11 +17,14 @@
 			<term>Calendar</term>
 			<listitem>
 				<para>
-					The calendar gadget allows users to switch easily between daily, monthly and yearly view and, again, is customizable to match your portal&#39;s theme.
+					The calendar gadget allows you to switch easily between daily, monthly and yearly views. Also, this gadget is customizable to match your portal&#39;s theme.
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/GadgetDevelopment/Calendar.png" format="PNG" />
+					<imageobject role="html">
+						<imagedata fileref="images/GadgetDevelopment/Calendar.png" format="PNG" align="center" />
+					</imageobject>
+                    <imageobject role="fo">
+						<imagedata fileref="images/GadgetDevelopment/Calendar.png" format="PNG" align="center" scalefit="1" width="70mm" />
 					</imageobject>
 				</mediaobject>
 			</listitem>
@@ -33,8 +36,11 @@
 					This application helps you organize your day and work group. It is designed to keep track of your tasks in a convenient and transparent way. Tasks can be highlighted with different colors.
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/GadgetDevelopment/Todo.png" format="PNG" />
+					<imageobject role="html">
+						<imagedata fileref="images/GadgetDevelopment/Todo.png" format="PNG" align="center" />
+					</imageobject>
+                    <imageobject role="fo">
+						<imagedata fileref="images/GadgetDevelopment/Todo.png" format="PNG" align="center" width="70mm" scalefit="1" />
 					</imageobject>
 				</mediaobject>
 			</listitem>
@@ -43,11 +49,14 @@
 			<term>Calculator</term>
 			<listitem>
 				<para>
-					This mini-application lets you perform most basic arithmetic operations and can be themed to match the rest of your portal.
+					This mini-application lets you perform the most basic arithmetic operations and can be themed to match the rest of your portal.
 				</para>
 				<mediaobject>
-					<imageobject>
-						<imagedata fileref="images/GadgetDevelopment/Calculator.png" format="PNG" />
+					<imageobject role="html">
+						<imagedata fileref="images/GadgetDevelopment/Calculator.png" format="PNG" align="center" />
+					</imageobject>
+                    <imageobject role="fo">
+						<imagedata fileref="images/GadgetDevelopment/Calculator.png" format="PNG" align="center" scalefit="1" width="70mm" />
 					</imageobject>
 				</mediaobject>
 			</listitem>
@@ -56,7 +65,7 @@
 			<term>RSS Reader</term>
 			<listitem>
 				<para>
-					An RSS reader, or aggregator, collates content from various, user-specified feed sources and displays them in one location. This content can include, but isn&#39;t limited to, news headlines, blog posts or email. The RSS Reader gadget displays this content in a single window on your Portal page.
+					An RSS reader, or aggregator collects content from various, user-specified feed sources and displays them in one location. This content can include, but is not limited to, news headlines, blog posts or email. The RSS Reader gadget displays this content in a single window on your Portal page.
 				</para>
 				<!--   <mediaobject>
 						<imageobject>
@@ -82,8 +91,11 @@
 	<section id="sect-Reference_Guide-Gadgets-Existing_Gadgets">
 		<title>Existing Gadgets</title>
 		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/GadgetDevelopment/Liste.png" format="PNG" width="444" />
+			<imageobject role="html">
+				<imagedata fileref="images/GadgetDevelopment/Liste.png" format="PNG" width="444" align="center" />
+			</imageobject>
+            <imageobject role="fo">
+				<imagedata fileref="images/GadgetDevelopment/Liste.png" format="PNG" width="150mm" scalefit="1" align="center" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -91,8 +103,11 @@
 	<section id="sect-Reference_Guide-Gadgets-Create_a_new_Gadget">
 		<title>Create a new Gadget</title>
 		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/GadgetDevelopment/New.png" format="PNG" width="444" />
+			<imageobject role="html">
+				<imagedata fileref="images/GadgetDevelopment/New.png" format="PNG" width="444" align="center" />
+			</imageobject>
+            <imageobject role="fo">
+				<imagedata fileref="images/GadgetDevelopment/New.png" format="PNG" width="150mm" scalefit="1" align="center" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -103,8 +118,11 @@
 			This is the reference to a remote gadget (stock one).
 		</para>
 		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/GadgetDevelopment/Import.png" format="PNG" width="444" />
+			<imageobject role="html">
+				<imagedata fileref="images/GadgetDevelopment/Import.png" format="PNG" width="444" align="center" />
+			</imageobject>
+            <imageobject role="fo">
+				<imagedata fileref="images/GadgetDevelopment/Import.png" format="PNG" width="150mm" scalefit="1" align="center" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -112,11 +130,14 @@
 	<section id="sect-Reference_Guide-Gadgets-Gadget_Importing">
 		<title>Gadget Importing</title>
 		<para>
-			After referencing the gadget successfully, then import it into the local repository.
+			After referencing the gadget successfully, you can import it into the local repository.
 		</para>
 		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/GadgetDevelopment/Imported.png" format="PNG" width="444" />
+			<imageobject role="html">
+				<imagedata fileref="images/GadgetDevelopment/Imported.png" format="PNG" width="444" align="center" />
+			</imageobject>
+            <imageobject role="fo">
+				<imagedata fileref="images/GadgetDevelopment/Imported.png" format="PNG" width="150mm" align="center" scalefit="1" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -124,11 +145,14 @@
 	<section id="sect-Reference_Guide-Gadgets-Gadget_Web_Editing">
 		<title>Gadget Web Editing</title>
 		<para>
-			Edit it from the Web the imported Gadget to modify it:
+			Modify it from the Web where the Gadget was imported:
 		</para>
 		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/GadgetDevelopment/EditImportedOnline.png" format="PNG" width="444" />
+			<imageobject role="html">
+				<imagedata fileref="images/GadgetDevelopment/EditImportedOnline.png" format="PNG" width="444" align="center" />
+			</imageobject>
+            <imageobject role="fo">
+				<imagedata fileref="images/GadgetDevelopment/EditImportedOnline.png" format="PNG" width="150mm" scalefit="1" align="center" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -139,8 +163,11 @@
 			Edit it from your IDE thanks to the WebDAV protocol:
 		</para>
 		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/GadgetDevelopment/EditImportedWebDAV.png" format="PNG" width="444" />
+			<imageobject role="html">
+				<imagedata fileref="images/GadgetDevelopment/EditImportedWebDAV.png" format="PNG" width="444" align="center" />
+			</imageobject>
+            <imageobject role="fo">
+				<imagedata fileref="images/GadgetDevelopment/EditImportedWebDAV.png" format="PNG" width="150mm" scalefit="1" align="center" />
 			</imageobject>
 		</mediaobject>
 	</section>
@@ -151,12 +178,15 @@
 			View it from the Dashboard when you drag and drop the Gadget from listing to the dashboard.
 		</para>
 		<mediaobject>
-			<imageobject>
-				<imagedata fileref="images/GadgetDevelopment/Dashboard.png" format="PNG" width="444" />
+			<imageobject role="html">
+				<imagedata fileref="images/GadgetDevelopment/Dashboard.png" format="PNG" width="444" align="center" />
+			</imageobject>
+            <imageobject role="fo">
+				<imagedata fileref="images/GadgetDevelopment/Dashboard.png" format="PNG" scalefit="1" width="150mm" align="center" />
 			</imageobject>
 		</mediaobject>
 	</section>
 
+  <xi:include href="StandardWebApp.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+
 </section>
-
-

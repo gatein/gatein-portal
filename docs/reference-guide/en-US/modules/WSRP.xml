@@ -5,16 +5,13 @@
    ]>
 <chapter id="wsrp">
    <title>Web Services for Remote Portlets (WSRP)</title>
-
-   <sect1>
-      <title>Introduction</title>
       <para>The Web Services for Remote Portlets specification defines a web service interface for accessing and
          interacting with interactive presentation-oriented web services. It has been produced through the efforts of
          the Web Services for Remote Portlets (WSRP) OASIS Technical Committee. It is based on the requirements
          gathered and on the concrete proposals made to the committee.
       </para>
 
-      <para>Scenarios that motivate WSRP functionality include:
+      <para>Scenarios that motivate the WSRP functionality include:
          <itemizedlist>
             <listitem>
                <para>Content hosts, such as portal servers, providing Portlets as presentation-oriented web services
@@ -31,17 +28,16 @@
 
       <para>More information on WSRP can be found on the
          <ulink url="http://www.oasis-open.org/committees/tc_home.php?wg_abbrev=wsrp">official website for WSRP</ulink>.
-         We suggest reading the
+         It is suggested that you read the
          <ulink url="http://www.oasis-open.org/committees/download.php/10539/wsrp-primer-1.0.html">primer</ulink>
-         for a good, albeit technical, overview of WSRP.
+         for a good, and albeit technical overview of WSRP.
       </para>
-   </sect1>
 
-   <sect1 id="wsrp_support">
+   <section id="wsrp_support">
       <title>Level of support in &PRODUCT;</title>
       <para>The WSRP Technical Committee defined
          <ulink url="http://www.oasis-open.org/committees/download.php/3073">WSRP Use Profiles</ulink>
-         to help with WSRP interoperability. We will refer to terms defined in that document in
+         to help with the WSRP interoperability. You can refer to terms defined in that document in
          this section.
       </para>
 
@@ -75,12 +71,12 @@
 
       <note>
          <para>As of version &PRODUCT_VERSION; of &PRODUCT_NAME;, WSRP is only activated and supported
-            when &PRODUCT_NAME; is deployed on JBoss Application Server.
+            when &PRODUCT_NAME; is deployed on the JBoss Application Server.
          </para>
       </note>
-   </sect1>
+   </section>
 
-   <sect1>
+   <section id="wsrp-Deploy_GateIn_wsrp_services">
       <title>Deploying &PRODUCT_NAME;'s WSRP services</title>
       <para>
          &PRODUCT_NAME; provides a complete support of WSRP 1.0 and 2.0 standard interfaces and offers both consumer and
@@ -154,14 +150,14 @@
          </itemizedlist>
       </para>
       <para>
-         If you're not going to use WSRP in &PRODUCT_NAME;, it won't adversely affect your installation to leave it
+         If you are not going to use WSRP in &PRODUCT_NAME;, it will not adversely affect your installation to leave it
          as-is. Otherwise, you can just remove the
          <filename>gatein-wsrp-integration.ear</filename>
          file from your AS deploy directory.
       </para>
 
-      <sect2 id="wsrp-ports">
-         <title>Considerations to use WSRP when running &PRODUCT_NAME; on a non-default port or hostname</title>
+      <section id="wsrp-ports">
+         <title>WSRP use when running &PRODUCT_NAME; on a non-default port or hostname</title>
          <para>
             JBoss WS (the web service stack that &PRODUCT_NAME; uses) should take care of the details of updating the
             port and host name used in WSDL. See the
@@ -172,26 +168,25 @@
          </para>
          <para>
             Of course, if you have modified the host name and port on which your server runs, you will
-            need to
-            update the configuration for the consumer used to consume &PRODUCT_NAME;'s 'self' producer. Please refer to
+            need to update the configuration for the consumer used to consume &PRODUCT_NAME;'s 'self' producer. Please refer to
             the
             <xref linkend="consumer_configuration"/>
             to learn how to do so.
          </para>
-      </sect2>
-   </sect1>
+      </section>
+   </section>
 
-   <sect1>
+   <section id="wsrp-Securing_WSRP">
       <title>Securing WSRP</title>
-      <sect2>
+      <section id="wsrp-Deploy_GateIn_wsrp_services-Considerations_to_use_wsrp_with_SSL">
          <title>Considerations to use WSRP with SSL</title>
          <para>It is possible to use WSRP over SSL for secure exchange of data. Please refer to the
             <ulink url="http://community.jboss.org/wiki/ConfiguringWSRPforuseoverSSL">instructions</ulink>
-            on how to do so from
+            on how to do from
             <ulink url="http://community.jboss.org/wiki/GateIn">GateIn's wiki</ulink>.
          </para>
-      </sect2>
-      <sect2>
+      </section>
+      <section id="wsrp-Deploy_GateIn_wsrp_services-WSRP_WS_Security">
         <title>WSRP and WS-Security</title>
         <para>Portlets may present different data or options depending on the currently authenticated user. For remote
               portlets, this means having to propagate the user credentials from the consumer back to the producer in
@@ -221,22 +216,22 @@
                 that the username and password must be the same and valid on both servers.
          </para>
          <para>The recommended approach for this situation would be to use a common ldap configuration. Please
-               see the user guide on how to configure ldap for use with &PRODUCT_NAME;
+               see the user guide on how to configure ldap for use with &PRODUCT_NAME;.
          </para>
         </important>
         <para>The GateIn Wiki article, <ulink url="http://community.jboss.org/wiki/GateInWSRPAndWebServiceSecurity">
               GateIn WSRP and Web Service Security</ulink>, also provides a step-by-step example on how to configure
               WSRP with WS-Security.
         </para>
-        <sect3 id="wss_configuration">
+        <section id="wss_configuration">
           <title>WS-Security Configuration</title>
           <para>&PRODUCT_NAME; uses JBossWS Native to handle ws-security. Please see the WS-Security section of the
                 <ulink url="http://www.jboss.org/jbossas/docs/5-x">JBoss AS 5 Administration and Configuration Guide
-                </ulink> for indepth configuration options. Please note that since the consumer passes its credentials
+                </ulink> for in-depth configuration options. Please note that since the consumer passes its credentials
                 to the producer, the consumer will act as the wss client and the producer will act as the wss server.
           </para>
-          <para> The JBossWS Native configuration files which need to be configure for WSRP are to be located in the
-                 /conf/gatein directory. These files may not exist by default and may need to be added.
+          <para> The JBossWS Native configuration files which need to be configured for WSRP are to be located in the
+                 <filename>/conf/gatein</filename> directory. These files may not exist by default and may need to be added.
           </para>
           <itemizedlist>
             <listitem>
@@ -252,15 +247,15 @@
               </para>
             </listitem>
           </itemizedlist>
-        </sect3>
-        <sect3>
+        </section>
+        <section id="wss-Security_Producer_Configuration">
           <title>WS-Security Producer Configuration</title>
           <para>
             Other than the JBossWS configuration file mention above, no other configuration changes should be necessary
             for the producer.
           </para>
-        </sect3>
-        <sect3>
+        </section>
+        <section id="wss-WS_Security_Consumer_Configuration">
           <title>WS-Security Consumer Configuration</title>
           <para>
             In the WSRP Configuration portlet, in the consumer configuration options, you will need to check the 'Enable 
@@ -277,11 +272,11 @@
               <imagedata fileref="images/WSRP/config_wss_selected.png" format="PNG" align="center" valign="middle" scalefit="1"/>
             </imageobject>
           </mediaobject>
-        </sect3>
-      </sect2>
-   </sect1>
+        </section>
+      </section>
+   </section>
 
-   <sect1>
+   <section id="wsrp-Make_portlet_remotable">
       <title>Making a portlet remotable</title>
       <important>
          <para>
@@ -296,17 +291,15 @@
          <filename>portlet.xml</filename>. This is accomplished by using a specific
          <code>org.gatein.pc.remotable container-runtime-option</code>. Setting its value to
          <code>true</code>
-         makes the portlet available for remote consumption, while setting its value to
+         makes the portlet available for the remote consumption, while setting its value to
          <code>false</code>
          will not publish it remotely. As specifying the remotable status for a portlet is optional, you do not need to
-         do anything if you don't need your portlet to be available remotely.
-      </para>
-      <para>In the following example, the "BasicPortlet" portlet is specified as being remotable.
+         do anything if you do not need your portlet to be available remotely.
       </para>
       <example>
-         <para>
-            <programlisting><![CDATA[
-<?xml version="1.0" standalone="yes"?>
+			<title>"BasicPortlet" portlet is specified as being remotable</title>
+         
+<programlisting role="XML"><![CDATA[<?xml version="1.0" standalone="yes"?>
 <portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
@@ -323,22 +316,14 @@
       </container-runtime-option>
    </portlet>
 </portlet-app>]]></programlisting>
-         </para>
-
       </example>
       <para>
          It is also possible to specify that all the portlets declared within a given portlet application to be
-         remotable by default. This is done by specifying the
-         <code>container-runtime-option</code>
-         at the
-         <code>portlet-app</code>
-         element level. Individual portlets can override that value to not be remotely exposed. Let's look at an
-         example:
+         remotable by default. This is done by specifying <code>container-runtime-option</code>
+         at the <code>portlet-app</code> element level. Individual portlets can override that value to not be remotely exposed.
       </para>
       <example>
-         <para>
-            <programlisting><![CDATA[
-<?xml version="1.0" standalone="yes"?>
+<programlisting role="XML"><![CDATA[<?xml version="1.0" standalone="yes"?>
 <portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
@@ -364,20 +349,14 @@
    </container-runtime-option>
 </portlet-app>]]>
             </programlisting>
-         </para>
-
       </example>
 
       <para>
-         In the example above, we defined two portlets. The
-         <code>org.gatein.pc.remotable container-runtime-option</code>
-         being set to
-         <code>true</code>
+         In the example above, two portlets are defined. The
+         <code>org.gatein.pc.remotable container-runtime-option</code> is set to <literal>true</literal> 
          at the
          <code>portlet-app</code>
-         level, all portlets defined in this particular portlet application are exposed remotely by &PRODUCT_NAME;'s
-         WSRP
-         producer.
+         level, meaning that all portlets defined in this particular portlet application are exposed remotely by &PRODUCT_NAME;'s WSRP producer.
          Note, however, that it is possible to override the default behavior: specifying a value for the
          <code>org.gatein.pc.remotable container-runtime-option</code>
          at the
@@ -390,15 +369,15 @@
          The<varname>NotRemotelyExposedPortlet</varname>, however, overrides the default behavior and is not remotely
          exposed. Note that in the absence of a top-level
          <code>org.gatein.pc.remotable container-runtime-option</code>
-         value set to <code>true</code>, portlets are NOT remotely exposed.
+         value set to <literal>true</literal>, portlets are NOT remotely exposed.
       </para>
-   </sect1>
+   </section>
 
-   <sect1>
+   <section id="wsrp-Consume_GateIn_wsrp_portlets_from_remote_consumer">
       <title>Consuming &PRODUCT_NAME;'s WSRP portlets from a remote Consumer</title>
-      <para>WSRP Producers vary a lot as far as how they are configured. Most of them require that you specify
+      <para>WSRP Producers vary a lot as far as how they are configured. Most of them require you to specify 
          the URL for the Producer's WSDL definition. Please refer to the remote producer's documentation for specific
-         instructions. For instructions on how to do so in &PRODUCT_NAME;, please refer to
+         instructions. For instructions on how to do so in &PRODUCT_NAME;, refer to
          <xref linkend="consumer_configuration"/>.
       </para>
       <para>
@@ -411,14 +390,12 @@
          <literal>localhost</literal>
          and the default port is 8080.
       </para>
-   </sect1>
+   </section>
 
-   <sect1 id="consumer_configuration">
+   <section id="consumer_configuration">
       <title>Consuming remote WSRP portlets in &PRODUCT_NAME;</title>
-      <sect2>
-         <title>Overview</title>
          <para>
-            To be able to consume WSRP portlets exposed by a remote producer, &PRODUCT_NAME;'s WSRP consumer needs to
+            To consume the WSRP portlets exposed by a remote producer, &PRODUCT_NAME;'s WSRP consumer needs to
             know how to access that remote producer. One can configure access to a remote producer using the provided
             configuration portlet. Alternatively, it is also possible to configure access to remote producers using an
             XML descriptor, though it is recommended (and easier) to do so via the configuration portlet.
@@ -427,9 +404,11 @@
             Once a remote producer has been configured, the portlets that it exposes are then available in the
             Application Registry to be added to categories and then to pages.
          </para>
-      </sect2>
-
-      <sect2 id="consumer_gui">
+<para>
+   As a way to test the WSRP producer service and to check that the portlets that you want to expose remotely are correctly published via WSRP, a default consumer named <emphasis>self</emphasis>, that consumes the portlets exposed by GateIn's producer, has been configured. 
+</para>
+     
+      <section id="consumer_gui">
          <title>Configuring a remote producer using the configuration portlet</title>
          <para>
             Let's work through the steps of defining access to a remote producer using the configuration portlet so that its portlets can be
@@ -552,8 +531,8 @@
                <para>At this point, there is no automated way to learn about which possible values (if any) are
                   expected by the remote Producer. Sometimes, the possible values will be indicated in the
                   registration
-                  property description but this is not always the case... Please refer to the specific Producer's
-                  documentation.
+                  property description but this is not always the case. Please refer to the specific Producer's
+                  documentation for more details.
                </para>
             </note>
          </para>
@@ -571,9 +550,9 @@
                </imageobject>
             </mediaobject>
          </para>
-      </sect2>
+      </section>
 
-      <sect2 id="consumer_xml">
+      <section id="consumer_xml">
          <title>Configuring access to remote producers via XML</title>
 
          <para>While we recommend you use the WSRP Configuration portlet to configure Consumers, we provide an
@@ -582,10 +561,8 @@
                <filename>$JBOSS_PROFILE_HOME/conf/gatein/</filename> directory.
             <note>
                <para>An XML Schema defining which elements are available to configure Consumers via XML can be found
-                  in
-                  <filename>
-                     $JBOSS_PROFILE_HOME/deploy/gatein-wsrp-integration.ear/lib/wsrp-integration-api-$WSRP_VERSION.jar/xsd/gatein_wsrp_consumer_1_0.xsd
-                  </filename>
+                  in <filename>$JBOSS_PROFILE_HOME/deploy/gatein-wsrp-integration.ear/lib/</filename></para>
+				<para><filename>wsrp-integration-api-$WSRP_VERSION.jar/xsd/gatein_wsrp_consumer_1_0.xsd</filename>
                </para>
             </note>
             <important>
@@ -617,7 +594,7 @@
             </important>
          </para>
 
-         <sect3>
+         <section id="consumer_xml-Required_configuration_information">
             <title>Required configuration information</title>
 
             <para>Let's now look at which information needs to be provided to configure access to a remote producer.
@@ -644,11 +621,11 @@
                <literal>&lt;endpoint-wsdl-url&gt;</literal>
                elements are required for a functional remote producer configuration.
             </para>
-         </sect3>
+         </section>
 
-         <sect3>
+         <section id="consumer_xml-Optional_configuration">
             <title>Optional configuration</title>
-            <para>It is also possible to provide addtional configuration, which, in some cases, might be important to
+            <para>It is also possible to provide additional configuration, which, in some cases, might be important to
                establish a proper connection to the remote producer.
             </para>
 
@@ -702,20 +679,22 @@
                element. If you choose to provide a consumer name, please remember that this should uniquely identify
                your consumer.
             </para>
-         </sect3>
+         </section>
 
-         <sect3>
+         <section id="consumer_xml-Examples">
             <title>Examples</title>
 
             <para>
-               Here is the configuration of the
-               <literal>selfv1</literal>
-               and
-               <literal>selfv2</literal>
-               consumers as found in
-               <filename>$JBOSS_PROFILE_HOME/deploy/gatein-wsrp-integration.ear/lib/extension-component-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>
+               Here is the configuration of the <literal>selfv1</literal> and <literal>selfv2</literal> consumers as found in:
+			</para>
+			<itemizedlist>
+				<listitem>
+					<filename>$JBOSS_PROFILE_HOME/deploy/gatein-wsrp-integration.ear/lib/extension-component-$WSRP_VERSION.jar/conf/wsrp-consumers-config.xml</filename>
+				</listitem>
+			</itemizedlist>
+			<para>
                with a cache expiring every 500 seconds and with a 50 second timeout for web service operations.
-               <note>
+            <note>
                   <para>
                      This file contains the default configuration and you shouldn't need to edit it. If you want to make
                      modifications to it, we recommend that you follow the procedure detailed in
@@ -725,9 +704,7 @@
             </para>
 
             <example>
-               <para>
-                  <programlisting><![CDATA[
-<?xml version='1.0' encoding='UTF-8' ?>
+<programlisting role="XML"><![CDATA[<?xml version='1.0' encoding='UTF-8' ?>
 <deployments xmlns="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0 http://www.jboss.org/portal/xsd/gatein_wsrp_consumer_1_0.xsd">
@@ -743,18 +720,14 @@
          <registration-data/>
       </wsrp-producer>
    </deployment>
-</deployments>]]>
-                  </programlisting>
-               </para>
+</deployments>]]></programlisting>
 
             </example>
 
             <para>Here is an example of a WSRP descriptor with registration data and cache expiring every minute:</para>
 
             <example>
-               <para>
-                  <programlisting><![CDATA[
-<?xml version='1.0' encoding='UTF-8' ?>
+<programlisting role="XML"><![CDATA[<?xml version='1.0' encoding='UTF-8' ?>
 <deployments xmlns="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0 http://www.jboss.org/portal/xsd/gatein_wsrp_consumer_1_0.xsd">
@@ -772,12 +745,11 @@
       </wsrp-producer>
    </deployment>
 </deployments>]]></programlisting>
-               </para>
-            </example>
-         </sect3>
-      </sect2>
+			</example>
+         </section>
+      </section>
 
-      <sect2>
+      <section id="Adding_remote_portlets_to_categories">
          <title>Adding remote portlets to categories</title>
          <para>
             If we go to the Application Registry and examine the available portlets by clicking on the
@@ -792,7 +764,7 @@
          </para>
 
          <para>
-            These portlets are, of course, available to be used such as regular portlets: they can be used in
+            These portlets are available to be used. For example, regular portlets can be used in
             categories and added to pages. If you use the Import Applications functionality, they will also be
             automatically imported in categories based on the keywords they define.
          </para>
@@ -810,9 +782,9 @@
                </imageobject>
             </mediaobject>
          </para>
-      </sect2>
+      </section>
 
-      <sect2>
+      <section>
          <title>Adding remote portlets to pages</title>
          <para>
             Since remote portlets can be manipulated just like regular portlets, you can add them to pages just like you
@@ -839,7 +811,7 @@
             portlet and the portlet handle identifying the portlet within the context of the producer.
          </para>
          <para>
-            The format for such a reference to a remote portlet is a follows: first, the identifier of the
+            The format for such a reference to a remote portlet is as follows: first, the identifier of the
             consumer that accesses the remote producer publishing the remote portlet, then a separator (currently a
             period (<literal>.</literal>)) and finally the portlet handle for that
             portlet, which is a string provided by the producer to identify the portlet.
@@ -857,17 +829,12 @@
                format.
             </para>
          </note>
-         <sect3>
+         <section>
             <title>Example</title>
             <para>
-               In the following example, we define 2 portlets for a page named
-               <literal>Test</literal>
-               in our
-               <filename>pages.xml</filename>
-               configuration. They are actually references to the same portlet, albeit one accessed locally and the
-               other
-               one accessing it via the
-               <literal>selfv2</literal>
+               In the following example, we define 2 portlets for a page named <literal>Test</literal> in the <filename>pages.xml</filename>
+               configuration file. They are actually references to the same portlet, albeit one accessed locally and the
+               other one accessing it via the <literal>selfv2</literal>
                consumer which consumes &PRODUCT_NAME;'s WSRP producer. You can see that the first one is local (the
                <code>&lt;portlet-application&gt;</code>
                with the
@@ -883,9 +850,7 @@
                element and follows the format for portlets coming from the &PRODUCT_NAME;'s WSRP producer.
             </para>
             <example>
-               <para>
-                  <programlisting><![CDATA[
-<page>
+<programlisting role="XML"><![CDATA[<page>
    <name>Test</name>
 
    ...
@@ -909,20 +874,19 @@
 
    </portlet-application>
 </page>]]></programlisting>
-               </para>
             </example>
-         </sect3>
+         </section>
 
-      </sect2>
-   </sect1>
+      </section>
+   </section>
 
-   <sect1>
+   <section>
       <title>Consumers maintenance</title>
 
-      <sect2>
+      <section>
          <title>Modifying a currently held registration</title>
 
-         <sect3>
+         <section>
             <title>Registration modification for service upgrade</title>
             <para>
                Producers often offer several levels of service depending on consumers' subscription levels (for
@@ -973,9 +937,9 @@
                </mediaobject>
             </para>
 
-         </sect3>
+         </section>
 
-         <sect3 id="reg_mod_error">
+         <section id="reg_mod_error">
             <title>Registration modification on producer error</title>
 
             <para>
@@ -1033,10 +997,10 @@
 
                </note>
             </para>
-         </sect3>
-      </sect2>
+         </section>
+      </section>
 
-      <sect2>
+      <section>
          <title>Consumer operations</title>
          <para>
             Several operations are available from the consumer list view of the WSRP configuration portlet:
@@ -1088,9 +1052,9 @@
                functionality. Import functionality is only available if portlets had previously been exported.
             </para>
          </note>
-      </sect2>
+      </section>
 
-      <sect2>
+      <section>
          <title>Importing and exporting portlets</title>
          <para>Import and export are new functionalities added in WSRP 2. Exporting a portlet allows a consumer to get
             an opaque representation of the portlet which can then be use by the corresponding import operation to
@@ -1206,9 +1170,9 @@
                <imagedata fileref="images/WSRP/import_modified_page.png" format="PNG" align="center" valign="middle"/>
             </imageobject>
          </mediaobject>
-      </sect2>
+      </section>
 
-      <sect2>
+      <section>
          <title>Erasing local registration data</title>
          <para>
             There are rare cases where it might be required to erase the local information without being able to
@@ -1223,24 +1187,23 @@
                <imagedata fileref="images/WSRP/erase_registration.png" format="PNG" align="center" valign="middle"/>
             </imageobject>
          </mediaobject>
-         <para>
-            <emphasis>Warning:</emphasis>
+         <warning>
+            <para>
             This operation is dangerous as it can result in inability to interact with the remote producer if invoked
             when not required. A warning screen will be displayed to give you a chance to change your mind:
-         </para>
+			</para>
+		 </warning>
          <mediaobject>
             <imageobject>
                <imagedata fileref="images/WSRP/erase_registration_warning.png" format="PNG" align="center"
                           valign="middle"/>
             </imageobject>
          </mediaobject>
-      </sect2>
-   </sect1>
+      </section>
+   </section>
 
-   <sect1 id="producer_config">
+   <section id="producer_config">
       <title>Configuring &PRODUCT_NAME;'s WSRP Producer</title>
-      <sect2>
-         <title>Overview</title>
          <para>
             The preferred way to configure the behavior of Portal's WSRP Producer is via the WSRP configuration portlet.
             Alternatively, it is possible to add an XML file called
@@ -1252,11 +1215,13 @@
             the Producer's services.
             <note>
                <para>An XML Schema defining which elements are available to configure Consumers via XML can be found
-                  in
-                  <filename>
-                     $JBOSS_PROFILE_HOME/deploy/gatein-wsrp-integration.ear/lib/wsrp-integration-api-$WSRP_VERSION.jar/xsd/gatein_wsrp_producer_1_0.xsd
-                  </filename>
-               </para>
+                  in:</para>
+			   <para>
+                  <filename>$JBOSS_PROFILE_HOME/deploy/gatein-wsrp-integration.ear/lib/</filename>
+				</para>
+				<para>
+				   <filename>wsrp-integration-api-$WSRP_VER SION.jar/xsd/gatein_wsrp_producer_1_0.xsd</filename>
+			   </para>
             </note>
             <important>
                <para>
@@ -1268,13 +1233,13 @@
             </important>
             <note>
                <para>
-                  The default configuration file for the producer can be found at
-                  <filename>$JBOSS_PROFILE_HOME/deploy/gatein-wsrp-integration.ear/lib/extension-component-$WSRP_VERSION.jar/conf/wsrp-producer-config.xml</filename>
-               </para>
+                  The default configuration file for the producer can be found at:
+			   </para>
+                  <para><filename>$JBOSS_PROFILE_HOME/deploy/gatein-wsrp-integration.ear/lib/</filename></para>
+				  <para><filename>extension-component-$WSRP_VERSION.jar/conf/wsrp-producer-config.xml</filename></para>
             </note>
          </para>
-      </sect2>
-      <sect2>
+      <section>
          <title>Default configuration</title>
          <para>
             The default producer configuration is to require that consumers register with it before providing access its
@@ -1285,7 +1250,7 @@
             <classname>RegistrationPolicy</classname>
             paired with the default
             <classname>RegistrationPropertyValidator</classname>. We will look into property
-            validators in greater detail later in<xref linkend="registration-configuration"/>. Suffice to say for now
+            validators in greater detail later in <xref linkend="registration-configuration"/>. Suffice to say for now
             that this allows users to customize how Portal's WSRP Producer decides whether a given registration property
             is valid or not.
          </para>
@@ -1310,9 +1275,9 @@
          <para>New in &PRODUCT;, we now display the WSDL URLs to access &PRODUCT_NAME;'s WSRP producer either in WSRP 1
             or WSRP 2 mode.
          </para>
-      </sect2>
+      </section>
 
-      <sect2 id="registration-configuration">
+      <section id="registration-configuration">
          <title>Registration configuration</title>
          <para>
             In order to require consumers to register with Portal's producer before interacting with it, you need to
@@ -1373,7 +1338,7 @@
             </note>
          </para>
 
-         <sect3 id="custom_registration">
+         <section id="custom_registration">
             <title>Customization of Registration handling behavior</title>
             <para>
                Registration handling behavior can be customized by users to suit their Producer needs. This is
@@ -1417,9 +1382,9 @@
                   </para>
                </note>
             </para>
-         </sect3>
-      </sect2>
-      <sect2 id="strict-mode">
+         </section>
+      </section>
+      <section id="strict-mode">
          <title>WSRP validation mode</title>
          <para>The lack of conformance kit and the wording of the WSRP specification leaves room for differing
             interpretations, resulting in interoperability issues. It is therefore possible to encounter issues when
@@ -1433,7 +1398,7 @@
             you might want to try to relax the validation mode. This is accomplished by unchecking the "Use strict WSRP
             compliance." checkbox on the Producer configuration screen.
          </para>
-      </sect2>
+      </section>
 
-   </sect1>
+   </section>
 </chapter>

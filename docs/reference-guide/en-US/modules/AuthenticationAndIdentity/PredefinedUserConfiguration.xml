@@ -5,24 +5,21 @@
 ]>
 <section id="sect-Reference_Guide-Predefined_User_Configuration">
 	<title>Predefined User Configuration</title>
-	<section id="sect-Reference_Guide-Predefined_User_Configuration-Overview">
-		<title>Overview</title>
-		<para>
-			To specify the initial Organization configuration, the content of <literal>02portal.war:/WEB-INF/conf/organization/organization-configuration.xml </literal> should be edited. This file uses the portal XML configuration schema. It lists several configuration plugins.
+		<para xml:id="sect-Reference_Guide-Predefined_User_Configuration-Overview">
+			To specify the initial Organization configuration, the content of <filename>portal.war:/WEB-INF/conf/organization/organization-configuration.xml</filename> should be edited. This file uses the portal XML configuration schema. It lists several configuration plugins.
 		</para>
-	</section>
 	
 	<section id="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_adding_users_groups_and_membership_types">
 		<title>Plugin for adding users, groups and membership types</title>
 		<para>
-			The plugin of type <literal>org.exoplatform.services.organization.OrganizationDatabaseInitializer</literal> is used to specify a list of membership types, a list of groups, and a list of users to be created.
+			The plugin of type <literal>org.exoplatform.services.organization.OrganizationDatabaseInitializer</literal> is used to specify the list of membership types/groups/users to be created.
 		</para>
 		<para>
-			The <emphasis role="bold">checkDatabaseAlgorithm</emphasis> initialization parameter determines how the database update is performed.
+			The <parameter>checkDatabaseAlgorithm</parameter> initialization parameter determines how the database update is performed.
 		</para>
 		<para>
-			If its value is set to <emphasis role="bold">entry</emphasis> it means that each user, group and membership listed in the configuration is checked each time &PRODUCT; is started.
-         If the entry doesn&#39;t yet exist in the database, it is created. If <emphasis role="bold">checkDatabaseAlgorithm</emphasis> parameter value is set to <emphasis role="bold">empty</emphasis>,
+			If its value is set to <literal>entry</literal>, it means that each user, group and membership listed in the configuration is checked each time &PRODUCT; is started.
+         If the entry does not exist in the database yet, it is created. If the <parameter>checkDatabaseAlgorithm</parameter> parameter value is set to <literal>empty</literal>,
          the configuration data will be updated to the database only if the database is empty.
 		</para>
 	</section>
@@ -30,11 +27,11 @@
 	<section id="sect-Reference_Guide-Predefined_User_Configuration-Membership_types">
 		<title>Membership types</title>
 		<para>
-			The predefined membership types are specified in the <emphasis role="bold">membershipType</emphasis> field of the <emphasis role="bold">OrganizationConfig</emphasis> plugin parameter.
+			The predefined membership types are specified in the <guilabel>membershipType</guilabel> field of the <parameter>OrganizationConfig</parameter> plugin parameter.
 		</para>
       <note>
          <para>
-            See <literal>02portal.war:/WEB-INF/conf/organization/organization-configuration.xml</literal> for the full content.
+            See <filename>portal.war:/WEB-INF/conf/organization/organization-configuration.xml</filename> for the full content.
          </para>
       </note>
 		
@@ -78,7 +75,7 @@
 	<section id="sect-Reference_Guide-Predefined_User_Configuration-Groups">
 		<title>Groups</title>
 		<para>
-			The predefined groups are specified in the <emphasis role="bold">group</emphasis> field of the <emphasis role="bold">OrganizationConfig</emphasis> plugin parameter.
+			The predefined groups are specified in the <guilabel>group</guilabel> field of the <parameter>OrganizationConfig</parameter> plugin parameter.
 		</para>
 		
 <programlisting role="XML">&#60;field name=&#34;group&#34;&#62;
@@ -124,7 +121,7 @@
 	<section id="sect-Reference_Guide-Predefined_User_Configuration-Users">
 		<title>Users</title>
 		<para>
-			The predefined users are specified in the <emphasis role="bold">membershipType</emphasis> field of the <emphasis role="bold">OrganizationConfig</emphasis> plugin parameter.
+			The predefined users are specified in the <guilabel>membershipType</guilabel> field of the <parameter>OrganizationConfig</parameter> plugin parameter.
 		</para>
 		
 <programlisting role="XML">&#60;field name=&#34;user&#34;&#62;
@@ -158,10 +155,10 @@
 	<section id="sect-Reference_Guide-Predefined_User_Configuration-Plugin_for_monitoring_user_creation">
 		<title>Plugin for monitoring user creation</title>
 		<para>
-			The plugin of type <literal>org.exoplatform.services.organization.impl.NewUserEventListener </literal> specifies
+			The plugin of type <parameter>org.exoplatform.services.organization.impl.NewUserEventListener</parameter> specifies
          which groups all the newly created users should become members of. It specifies the groups and the memberships to use
-         (while group is just a set of users, a membership type represents a user's role within a group).
-         It also specifies a list of users that should not be processed (i.e. administrative users like 'root').
+         (while the group is just a set of users, a membership type represents a user's role within a group).
+         It also specifies a list of users that should not be processed (for example, administrative users like 'root').
 		</para>
       <note>
          <para>The terms 'membership' and 'membership type' refer to the same thing, and are used interchangeably.</para>
@@ -201,7 +198,4 @@
 &#60;/component-plugin&#62;
 </programlisting>
 	</section>
-
 </section>
-
-

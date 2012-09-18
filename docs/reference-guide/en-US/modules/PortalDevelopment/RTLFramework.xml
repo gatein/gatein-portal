@@ -9,57 +9,57 @@
 		The text orientation depends on the current locale setting. The orientation is a Java 5 enum that provides a set of functionalities:
 	</para>
 	
-<programlisting>
-   LT, // Western Europe
-   RT, // Middle East (Arabic, Hebrew)
-   TL, // Japanese, Chinese, Korean
-   TR; // Mongolian
-   public boolean isLT() { ... }
-   public boolean isRT() { ... }
-   public boolean isTL() { ... }
-   public boolean isTR() { ... }
+<programlisting role="JAVA">
+LT, // Western Europe
+RT, // Middle East (Arabic, Hebrew)
+TL, // Japanese, Chinese, Korean
+TR; // Mongolian
+public boolean isLT() { ... }
+public boolean isRT() { ... }
+public boolean isTL() { ... }
+public boolean isTR() { ... }
 </programlisting>
 	<para>
-		The object defining the Orientation for the current request is the <literal>UIPortalApplication</literal>. However it should be accessed at runtime using the <literal>RequestContext</literal> that delegates to the <literal>UIPortalApplication</literal>.
+		The object defining the Orientation for the current request is the <literal>UIPortalApplication</literal>. However, it should be accessed at runtime using the <literal>RequestContext</literal> that delegates to the <literal>UIPortalApplication</literal>.
 	</para>
 	<para>
-		In the case of a <literal>PortalRequestContext</literal> it is a direct delegate as the <literal>PortalRequestContext</literal> has a reference to the current <literal>UIPortalApplication</literal>.
+		In case of <literal>PortalRequestContext</literal>, it directly delegates as the <literal>PortalRequestContext</literal> that has a reference to the current <literal>UIPortalApplication</literal>.
 	</para>
 	<para>
-		In the case of a different context such as the <literal>PortletRequestContext</literal>, it delegates to the parent context given the fact that the root <literal>RequestContext</literal> is always a <literal>PortalRequestContext</literal>.
+		In case of a different context, such as the <literal>PortletRequestContext</literal>, it delegates to the parent context given the fact that the root <literal>RequestContext</literal> is always a <literal>PortalRequestContext</literal>.
 	</para>
 	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Groovy_templates">
 		<title>Groovy templates</title>
 		<para>
-			Orientation is defined by implicit variables in the groovy binding context:
+			Orientation is defined by implicit variables in the Groovy binding context:
 		</para>
 		<variablelist>
 			<varlistentry>
-				<term>Orientation</term>
+				<term><emphasis role="bold">Orientation</emphasis></term>
 				<listitem>
 					<para>
-						The current orientation as an Orientation
+						The current orientation as an Orientation.
 					</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>isLT</term>
+				<term><emphasis role="bold">isLT</emphasis></term>
 				<listitem>
 					<para>
-						The value of orientation.isLT()
+						The value of orientation.isLT().
 					</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>isRT</term>
+				<term><emphasis role="bold">isRT</emphasis></term>
 				<listitem>
 					<para>
-						The value of orientation.isRT()
+						The value of orientation.isRT().
 					</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>dir</term>
+				<term><emphasis role="bold">dir</emphasis></term>
 				<listitem>
 					<para>
 						The string &#39;ltr&#39; if the orientation is LT or the string &#39;rtl&#39; if the orientation is RT.
@@ -80,87 +80,83 @@
 		<para>
 			Stylesheet authors can annotate their stylesheet to create content that depends on the orientation.
 		</para>
-		<formalpara id="form-Reference_Guide-Stylesheet-Example_1">
-			<title>Example 1</title>
+    
+		<example>
 			<para>
-				In the example we need to use the orientation to modify the float attribute that will make the horizontal tabs either float on left or on right: 
-<programlisting>
-float: left; /* orientation=lt */
+				In this example, the orientation is used to modify the float attribute that will make the horizontal tabs either float on left or on right:</para>
+<programlisting role="CSS">float: left; /* orientation=lt */
 float: right; /* orientation=rt */
 font-weight: bold;
 text-align: center;
 white-space: nowrap;
 </programlisting>
-				 The LT produced output will be: 
-<programlisting>
-float: left; /* orientation=lt */
+
+				 <para>The LT produced output will be:</para>
+         
+<programlisting role="CSS">float: left; /* orientation=lt */
 font-weight: bold;
 text-align: center;
 white-space: nowrap;
 </programlisting>
-				 The RT produced output will be: 
-<programlisting> 
-float: right; /* orientation=rt */
+				 
+         <para>The RT produced output will be:</para>
+         
+<programlisting role="CSS">float: right; /* orientation=rt */
 font-weight: bold;
 text-align: center;
 white-space: nowrap;
 </programlisting>
-			</para>
-		</formalpara>
-		<formalpara id="form-Reference_Guide-Stylesheet-Example_2">
-			<title>Example 2</title>
+			</example>
+		
+		<example>
 			<para>
-				In this example we need to modify the padding according to the orientation: 
-<programlisting>
-color: white;
+				In this example, you need to modify the padding according to the orientation:</para>
+        
+<programlisting role="CSS">color: white;
 line-height: 24px;
 padding: 0px 5px 0px 0px; /* orientation=lt */
 padding: 0px 0px 0px 5px; /* &#62;orientation=rt */
 </programlisting>
-				 The LT produced output will be: 
-<programlisting> 
-color: white;
+
+				 <para>The LT produced output will be:</para>
+         
+<programlisting role="CSS">color: white;
 line-height: 24px;
 padding: 0px 5px 0px 0px; /* orientation=lt */
 </programlisting>
-				 The RT produced output will be: 
-<programlisting> 
-color: white;
+
+				 <para>The RT produced output will be:</para>
+         
+<programlisting role="CSS">color: white;
 line-height: 24px;
 padding: 0px 0px 0px 5px; /* orientation=rt */
 </programlisting>
-			</para>
-		</formalpara>
+		</example>
 	</section>
 	
 	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Images">
 		<title>Images</title>
 		<para>
-			Sometimes it is necessary to create an RT version of an image that will be used from a template or from a stylesheet. However symmetric images can be automatically generated avoiding the necessity to create a mirrored version of an image and furthermore avoiding maintenance cost.
+			Sometimes, it is necessary to create the RT version of an image that will be used from a template or from a stylesheet. However, symmetric images can be automatically generated avoiding the necessity to create a mirrored version of an image and furthermore avoiding maintenance cost.
 		</para>
 		<para>
-			The web resource filter uses the same naming pattern as the skin service. When an image ends with the -rt suffix the portal will attempt to locate the original image and create a mirror of it.
-		</para>
-		<para>
-			For instance: requesting the image <filename>/GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle-rt.gif</filename> returns a mirror of the image <filename>/GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle.gif</filename>.
+			The web resource filter uses the same naming pattern as the skin service. When an image ends with the -rt suffix, the portal will attempt to locate the original image and create a mirror of it.
+			For example, when <filename>/GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle-rt.gif</filename> is requested, a mirror of <filename>/GateInResources/skin/DefaultSkin/webui/component/UITabSystem/UITabs/background/NormalTabStyle.gif</filename> is returned.
 		</para>
 		<note>
 			<para>
-				It is important to consider whether the image to be mirrored is symmetrical as this will impact it&#39;s final appearance.
+				It is important to consider whether the image to be mirrored is symmetrical as this will impact its final appearance.
 			</para>
 		</note>
-		<para>
-			Here is an example combining stylesheet and images:
-		</para>
-		
-<programlisting>
-line-height: 24px; 
+		<example>
+			<title>Combine stylesheet and images:</title>
+<programlisting role="CSS">line-height: 24px; 
 background: url(&#39;background/NavigationTab.gif&#39;) no-repeat right top; /* orientation=lt */
 background: url(&#39;background/NavigationTab-rt.gif&#39;) no-repeat left top; /* orientation=rt */
 padding-right: 2px; /* orientation=lt */
-padding-left: 2px; /* orientation=rt */
-</programlisting>
-	</section>
+padding-left: 2px; /* orientation=rt */</programlisting>
+		</example>
+  </section>
 	
 	<section id="sect-Reference_Guide-RTL_Right_To_Left_Framework-Client_side_JavaScript">
 		<title>Client side JavaScript</title>
@@ -169,40 +165,37 @@ padding-left: 2px; /* orientation=rt */
 		</para>
 		<variablelist>
 			<varlistentry>
-				<term>getOrientation()</term>
+				<term><parameter>getOrientation()</parameter></term>
 				<listitem>
 					<para>
-						Returns either the string lt or rt
+						Return either the string lt or rt.
 					</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>getDir()</term>
+				<term><parameter>getDir()</parameter></term>
 				<listitem>
 					<para>
-						Returns either the string ltr or rtl
+						Return either the string ltr or rtl.
 					</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>isLT()</term>
+				<term><parameter>isLT()</parameter></term>
 				<listitem>
 					<para>
-						Returns true for LT
+						Return true for LT.
 					</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>isRT()</term>
+				<term><parameter>isRT()</parameter></term>
 				<listitem>
 					<para>
-						Returns true of RT
+						Return true of RT.
 					</para>
 				</listitem>
 			</varlistentry>
 		</variablelist>
 	</section>
-
 </section>
-
-

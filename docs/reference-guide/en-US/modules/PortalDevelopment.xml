@@ -15,10 +15,8 @@
 	<xi:include href="PortalDevelopment/LocalizationConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/RTLFramework.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/XMLResourceBundles.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-	<xi:include href="PortalDevelopment/JavascriptInterApplicationCommunication.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/UploadComponent.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/AjaxLoadingMaskLayerDeactivation.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 	<xi:include href="PortalDevelopment/JavascriptConfiguration.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
-       <xi:include href="PortalDevelopment/NavigationController.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+    <xi:include href="PortalDevelopment/NavigationController.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 </chapter>
-

@@ -4,7 +4,6 @@
 %BOOK_ENTITIES;
 ]>
 <section id="sect-Reference_Guide-Foundations">
-
    <title>Foundations</title>
    <section id="sect-Reference_Guide-Foundations-Kernel">
       <title>GateIn Kernel</title>
@@ -46,17 +45,16 @@
    <section id="sect-Reference_Guide-Foundations-Configuring_services">
       <title>Configuring services</title>
 
-      <para>GateIn Kernel uses dependency injection to create services based on <emphasis role="bold">configuration.xml</emphasis> configuration files.
+      <para>GateIn Kernel uses dependency injection to create services based on <filename>configuration.xml</filename> configuration files.
          The location of the configuration files determines if services are placed into RootContainer scope, or into PortalContainer scope.
-         All configuration.xml files located at <emphasis role="bold">conf/configuration.xml</emphasis> in the classpath (any directory, or any jar in the classpath) will have their
+         All <filename>configuration.xml</filename> files located at <filename>conf/configuration.xml</filename> in the classpath (any directory, or any jar in the classpath) will have their
       services configured at RootContainer scope.
-      All configuration.xml files located at <emphasis role="bold">conf/portal/configuration.xml</emphasis> in the classpath will have their services configured at PortalContainer scope.
-      Additionally, <emphasis role="bold">portal extensions</emphasis> can contain configuration in <emphasis role="bold">WEB-INF/conf/configuration.xml</emphasis>, and will also have their services configured at PortalContainer scope.
+      All configuration.xml files located at <filename>conf/portal/configuration.xml</filename> in the classpath will have their services configured at PortalContainer scope.
+      Additionally, <filename>portal extensions</filename> can contain configuration in <filename>WEB-INF/conf/configuration.xml</filename>, and will also have their services configured at <literal>PortalContainer</literal> scope.
       </para>
       <note>
          <para>Portal extensions are described later on.</para>
       </note>
-
    </section>
 
    <section id="sect-Reference_Guide-Foundations-Configuration_syntax">
@@ -64,9 +62,9 @@
 
       <section id="sect-Reference_Guide-Foundations-Configuration_syntax-Component">
          <title>Components</title>
-         <para>A service component is defined in <emphasis role="bold">configuration.xml</emphasis> by using <emphasis role="bold">&lt;component&gt;</emphasis> element.</para>
-         <para>There is only one required information when defining a service - the service implementation class, specified using <emphasis role="bold">&lt;type&gt;</emphasis></para>
-         <para>Every component has a <emphasis role="bold">&lt;key&gt;</emphasis> that identifies it. If not explicitly set, a key defaults to the value of &lt;type&gt;.
+         <para>A service component is defined in <filename>configuration.xml</filename> by using <literal>&lt;component&gt;</literal> element.</para>
+         <para>There is only one required information when defining a service - the service implementation class, specified using <literal>&lt;type&gt;</literal>.</para>
+         <para>Every component has a <literal>&lt;key&gt;</literal> that identifies it. If not explicitly set, a key defaults to the value of <literal>&lt;type&gt;</literal>.
          If key can be loaded as a class, a Class object is used as a key, otherwise a String is used.</para>
          <para>The usual approach is to specify an interface as a key.</para>
 
@@ -134,7 +132,7 @@
 
       <section id="sect-Reference_Guide-Foundations-Configuration_syntax-Includes">
          <title>Includes, and special URLs</title>
-         <para>It is possible to break <emphasis role="bold">configuration.xml</emphasis> file into many smaller files, that are then included into a 'master' configuration file.
+         <para>It is possible to break the <filename>configuration.xml</filename> file into many smaller files, that are then included into a 'master' configuration file.
          The included files are complete configuration xml documents by themselves - they are not fragments of text.</para>
          <para>An example configuration.xml that 'outsources' its content into several files:</para>
          <programlisting role="XML"><![CDATA[
@@ -220,7 +218,7 @@
          Service components that form the &PRODUCT; insfrastructure use <literal>InitParams</literal> object to configure themselves.
          A component can have one instance of InitParams injected at most. If the service component's constructor takes InitParams
          as any of the parameters it will automatically be injected at component instantiation time. The xml configuration
-         for a service component that expects InitParams object must include &lt;init-params&gt; element (even if an empty one).
+         for a service component that expects <literal>InitParams</literal> object must include <literal>&lt;init-params&gt;</literal> element (even if an empty one).
       </para>
 
       <para>
@@ -246,15 +244,15 @@
       </example>
 
       <para>
-         InitParams object description begins with &lt;init-params&gt; element. It can have zero or more children elements
-         each of which is one of &lt;value-param&gt;, &lt;values-param&gt;, &lt;properties-param&gt;, or &lt;object-param&gt;.
-         Each of these child elements takes a &lt;name&gt; that serves as a map entry key, and an optional &lt;description&gt;.
+         The <literal>InitParams</literal> object description begins with <literal>&lt;init-params&gt;</literal> element. It can have zero or more children elements
+         each of which is one of <literal>&lt;value-param&gt;</literal>, <literal>&lt;values-param&gt;</literal>, <literal>&lt;properties-param&gt;</literal>, or <literal>&lt;object-param&gt;</literal>.
+         Each of these child elements takes a &lt;name&gt; that serves as a map entry key, and an optional <literal>&lt;description&gt;</literal>.
          It also takes a type-specific value specification.
       </para>
 
       <para>
-         For &lt;properties-param&gt; the value specification is in the form of one or more &lt;property&gt; elements,
-         each of which specifies two strings - a property name, and a property value. Each &lt;properties-params&gt;
+         For <literal>&lt;properties-param&gt;</literal>, the value specification is in the form of one or more <literal>&lt;property&gt;</literal> elements,
+         each of which specifies two strings - a property name, and a property value. Each <literal>&lt;properties-params&gt;</literal>
          defines one <literal>java.util.Properties</literal> instance. Also see
          <xref linkend="sect-Reference_Guide-Foundations-Configuration_syntax-Special_vars-Example"/> for an example.
       </para>
@@ -276,7 +274,7 @@
       </example>
 
       <para>
-         For &lt;value-param&gt; the value specification is in the form of &lt;value&gt; element, which defines
+         For <literal>&lt;value-param&gt;</literal>, the value specification is in the form of <literal>&lt;value&gt;</literal> element, which defines
          one <literal>String</literal> instance.         
       </para>
 
@@ -312,7 +310,7 @@
       </example>
 
       <para>
-      For &lt;values-param&gt; the value specification is in the form of one or more &lt;value&gt; elements,
+      For <literal>&lt;values-param&gt;</literal>, the value specification is in the form of one or more &lt;value&gt; elements,
          each of which represents one <literal>String</literal> instance, where all the <literal>String</literal> values
          are then collected into a <literal>java.util.List</literal> instance.
       </para>
@@ -352,8 +350,8 @@
       </example>
 
       <para>
-         For &lt;object-param&gt; in our case, the value specification comes in a form of &lt;object&gt; element, which is
-         used for POJO style object specification (you specify an implementation class - &lt;type&gt;, and property values - &lt;field&gt;).
+         For <literal>&lt;object-param&gt;</literal> in our case, the value specification comes in a form of <literal>&lt;object&gt;</literal> element, which is
+         used for POJO style object specification (you specify an implementation class - <literal>&lt;type&gt;</literal>, and property values - <literal>&lt;field&gt;</literal>).
       </para>
       
       <para>
@@ -489,16 +487,16 @@
          Every <emphasis role="bold">portal container</emphasis> is represented by a <emphasis role="bold">PortalContainer instance</emphasis>, which contains:
          <itemizedlist>
             <listitem>
-               <para>associated <emphasis role="bold">ExoContainerContext</emphasis>, which contains information about the portal</para>
+               <para>associated <emphasis role="bold">ExoContainerContext</emphasis>, which contains information about the portal.</para>
             </listitem>
             <listitem>
-               <para><emphasis role="bold">unified servlet context</emphasis>, for web-archive-relative resource loading</para>
+               <para><emphasis role="bold">unified servlet context</emphasis>, for web-archive-relative resource loading.</para>
             </listitem>
             <listitem>
-               <para><emphasis role="bold">unified classloader</emphasis>, for classpath based resource loading</para>
+               <para><emphasis role="bold">unified classloader</emphasis>, for classpath based resource loading.</para>
             </listitem>
             <listitem>
-               <para>methods for retrieving services</para>
+               <para>methods for retrieving services.</para>
             </listitem>
          </itemizedlist>
       </para>
@@ -556,7 +554,7 @@
          of all the portal containers that you want to have access to its resources.
       </para>
       <para>
-         After this step your web archive will be on portal's unified classpath, and unified servlet context resource path.
+         After this step, your web archive will be on portal's unified classpath, and unified servlet context resource path.
          The later in the Dependencies list your application is, the higher priority it has when resources are loaded by portal.
       </para>
 
@@ -624,8 +622,8 @@ protected void onService(ExoContainer container, HttpServletRequest req,
          </para>
       </note>
       <para>
-         You may also need to access portal information within your <emphasis role="bold">HttpSessionListener</emphasis>. Again, make sure to extend the
-         provided abstract class - <emphasis role="bold">org.exoplatform.container.web. AbstractHttpSessionListener</emphasis>.
+         You may also need to access portal information within your <literal>HttpSessionListener</literal>. Again, make sure to extend the
+         provided abstract class - <literal>org.exoplatform.container.web. AbstractHttpSessionListener</literal>.
          Also, modify your method signatures as follows:</para>
          <programlisting role="JAVA"><![CDATA[
 /**
@@ -651,15 +649,15 @@ protected boolean requirePortalEnvironment();
          If this method returns true, current thread's context classloader is set up according to <emphasis role="bold">Dependencies</emphasis>
          configuration, and availability of the associated web applications. If it returns false, the standard
          application separation rules are used for resource loading (effectively turning off the
-         extension mechanism). This method exists on <emphasis role="bold">AbstractHttpServlet</emphasis> and <emphasis role="bold">AbstractFilter</emphasis> as well, where there is a
+         extension mechanism). This method exists on <literal>AbstractHttpServlet</literal> and <literal>AbstractFilter</literal> as well, where there is a
          default implementation that automatically returns true, when it detects there is a current PortalContainer
          present, otherwise it returns false.
 
       </para>
 
       <para>
-         We still have to explain how to properly perform <emphasis role="bold">ServletContextListener</emphasis> based initialization, when you need
-         access to current PortalContainer.
+         We still have to explain how to properly perform <literal>ServletContextListener</literal> based initialization, when you need
+         access to current <literal>PortalContainer</literal>.
       </para>
 
       <para>
@@ -714,20 +712,18 @@ public class GadgetRegister implements ServletContextListener
       ]]></programlisting>
 
       <para>
-         The above example uses <emphasis role="bold">PortalContainerPostInitTask</emphasis>, which gets executed after the portal container has been
+         The above example uses <literal>PortalContainerPostInitTask</literal>, which gets executed after the portal container has been
          initialized. In some situations you may want to execute initialization after portal container was instantiated,
-         but before it was initialized - use <emphasis role="bold">PortalContainerPreInitTask</emphasis> in that case. Or, you may want to execute
-         initialization after all the post-init tasks have been executed - use <emphasis role="bold">PortalContainerPostCreateTask</emphasis> in that case.
+         but before it was initialized - use <literal>PortalContainerPreInitTask</literal> in that case. Or, you may want to execute
+         initialization after all the post-init tasks have been executed - use <literal>PortalContainerPostCreateTask</literal> in that case.
       </para>
 
       <para>
-         One more area that may need your attention are <emphasis role="bold">LoginModules</emphasis>. If you use custom LoginModules, that require
-         current ExoContainer, make sure they extend <emphasis role="bold">org.exoplatform.services.security.jaas.AbstractLoginModule</emphasis> for
-         proper initialization. AbstractLoginModule also takes care of the basic configuration - it recognizes two
-         initialization options - <emphasis role="bold">portalContainerName</emphasis>, and <emphasis role="bold">realmName</emphasis> whose values you can access via protected fields of
+         One more area that may need your attention are <literal>LoginModules</literal>. If you use custom LoginModules, that require
+         current ExoContainer, make sure they extend <literal>org.exoplatform.services.security.jaas.AbstractLoginModule</literal> for
+         proper initialization. <literal>AbstractLoginModule</literal> also takes care of the basic configuration - it recognizes two
+         initialization options - <literal>portalContainerName</literal>, and <literal>realmName</literal> whose values you can access via protected fields of
          the same name.
       </para>
-
    </section>
-
 </section>

@@ -6,12 +6,12 @@
 <section id="sect-Reference_Guide-PicketLink_IDM_integration">
 	<title>PicketLink IDM integration</title>
 	<para>
-		&PRODUCT; uses PicketLink IDM component to keep the necessary identity information (users, groups, memberships, etc.).
-      While legacy interfaces are still used (org.exoplatform.services.organization) for identity management,
-      there is a wrapper implementation that delegates to PicketLink IDM framework.
+		&PRODUCT; uses the PicketLink IDM component to keep the necessary identity information (users, groups, memberships, and more).
+      While the legacy interfaces are still used (<literal>org.exoplatform.services.organization</literal>) for identity management,
+      there is a wrapper implementation that delegates to the PicketLink IDM framework.
 	</para>
 	<para>
-		This section doesn&#39;t provide information about PicketLink IDM and its configuration. Please, refer to the appropriate project documentation (<ulink url="http://jboss.org/picketlink/IDM.html" />) for further information.
+		This section does not provide information about PicketLink IDM and its configuration. Refer to <ulink url="http://jboss.org/picketlink/IDM.html"/>) for further information.
 	</para>
 	<note>
 		<para>
@@ -21,25 +21,26 @@
 	<para>
 		The identity model represented in &#39;<emphasis role="bold">org.exoplatform.services.organization</emphasis>&#39; interfaces and the one used in <emphasis role="bold">PicketLink IDM</emphasis> have some major differences.
 	</para>
-   <para>TODO: tell more about org.exoplatform.services.organization</para>
+	<example>
 	<para>
-		For example: <emphasis role="bold">PicketLink IDM</emphasis> provides greater abstraction. It is possible for groups in <emphasis role="bold">IDM</emphasis> framework to form memberships with many parents (which requires recursive ID translation),
+		<emphasis role="bold">PicketLink IDM</emphasis> provides greater abstraction. It is possible for groups in <emphasis role="bold">IDM</emphasis> framework to form memberships with many parents (which requires recursive ID translation),
       while GateIn model allows only pure tree-like membership structures.
 	</para>
+	</example>
 	<para>
-		Additionally, GateIn <emphasis>membership</emphasis> concept needs to be translated into the IDM <emphasis>Role</emphasis> concept. Therefore <emphasis role="bold">PicketLink IDM</emphasis> model is used in a limited way. All these translations are applied by the integration layer.
+		Additionally, GateIn <emphasis>membership</emphasis> concept needs to be translated into the IDM <emphasis>Role</emphasis> concept. Therefore, the <emphasis role="bold">PicketLink IDM</emphasis> model is used in a limited way. All these translations are applied by the integration layer.
 	</para>
 	<section id="sect-Reference_Guide-PicketLink_IDM_integration-Configuration_files">
 		<title>Configuration files</title>
 		<para>
-			The main configuration file is <emphasis role="bold">idm-configuration.xml</emphasis>:
+			The main configuration file is <filename>idm-configuration.xml</filename>:
 		</para>
 		<programlistingco>
 			<areaspec>
 				<area coords="5" id="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMServiceImpl" />
 				<area coords="22" id="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMOrganizationServiceImpl" />
 			</areaspec>
-<programlisting>&#60;configuration xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
+<programlisting language="xml">&#60;configuration xmlns:xsi=&#34;http://www.w3.org/2001/XMLSchema-instance&#34;
                xsi:schemaLocation=&#34;http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd&#34;
                xmlns=&#34;http://www.exoplaform.org/xml/ns/kernel_1_2.xsd&#34;&#62;
  
@@ -123,7 +124,7 @@
 			<calloutlist>
 				<callout arearefs="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMServiceImpl">
 					<para>
-						The <emphasis role="bold">org.exoplatform.services.organization.idm.PicketLinkIDMServiceImpl</emphasis> service has the following options:
+						The <literal>org.exoplatform.services.organization.idm.PicketLinkIDMServiceImpl</literal> service has the following options:
 					</para>
 					<variablelist>
 					<varlistentry>
@@ -133,7 +134,7 @@
 								(value-param)
 							</para>
 							<para>
-								PicketLink IDM configuration file
+								The PicketLink IDM configuration file.
 							</para>
 						</listitem>
 					</varlistentry>
@@ -160,7 +161,7 @@
 						<term>hibernate.mappings</term>
 						<listitem>							
 							<para>
-								A list of xml files that will be added to hibernate configuration as mapping files.
+								A list of <filename>.xml</filename> files that will be added to hibernate configuration as mapping files.
 							</para>
 						</listitem>
 					</varlistentry>
@@ -171,7 +172,7 @@
 								(value-param)
 							</para>
 							<para>
-								If the &#39;config&#39; parameter is not provided, this parameter will be used to perform JNDI lookup for IdentitySessionFactory
+								If the &#39;config&#39; parameter is not provided, this parameter will be used to perform JNDI lookup for <literal>IdentitySessionFactory</literal>.
 							</para>
 						</listitem>
 					</varlistentry>
@@ -182,7 +183,7 @@
 								(value-param)
 							</para>
 							<para>
-								The realm name that should be used to obtain proper IdentitySession. The default is &#39;PortalRealm&#39;.
+								The realm name that should be used to obtain proper <literal>IdentitySession</literal>. The default is <literal>&#39;PortalRealm&#39;</literal>.
 							</para>
 						</listitem>
 					</varlistentry>
@@ -190,21 +191,20 @@
 				</callout>
 				<callout arearefs="area-Reference_Guide-PicketLink_IDM_integration-Configuration_files-JBossIDMOrganizationServiceImpl">
 					<para>
-						The <emphasis role="bold">org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl</emphasis>
-            key is a main entrypoint implementing <emphasis role="bold">org.exoplatform.services.organization.OrganizationService</emphasis>
-            and is dependant on <emphasis role="bold">org.exoplatform.services.organization.idm.PicketLinkIDMService</emphasis>
+						The <literal>org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl</literal>
+            key is a main entrypoint implementing <literal>org.exoplatform.services.organization.OrganizationService</literal>
+            and is dependent on <literal>org.exoplatform.services.organization.idm.PicketLinkIDMService</literal>.
 					</para>
 					<para>
-						<emphasis role="bold">org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl</emphasis>
-            service has the following options defined as fields of object-param of type
-            <emphasis role="bold">org.exoplatform.services.organization.idm.Config</emphasis>:
+						The <literal>org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl</literal>
+            service has the following options defined as fields of object-param of the <literal>org.exoplatform.services.organization.idm.Config</literal> type:
 					</para>
       					<variablelist>
 					<varlistentry>
 						<term>defaultGroupType</term>
 						<listitem>
 							<para>
-								The name of the PicketLink IDM GroupType that will be used to store groups. The default is &#39;GTN_GROUP_TYPE&#39;.
+								The name of the PicketLink IDM GroupType that will be used to store groups. The default is <literal>&#39;GTN_GROUP_TYPE&#39;</literal>.
 							</para>
 						</listitem>
 					</varlistentry>
@@ -212,7 +212,7 @@
 						<term>rootGroupName</term>
 							<listitem>
 								<para>
-									 The name of the PicketLink IDM Group that will be used as a root parent. The default is &#39;GTN_ROOT_GROUP&#39;
+									 The name of the PicketLink IDM Group that will be used as a root parent. The default is <literal>&#39;GTN_ROOT_GROUP&#39;</literal>.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -220,7 +220,7 @@
 							<term>passwordAsAttribute</term>
 							<listitem>
 								<para>
-									This parameter specifies if a password should be stored using PicketLink IDM Credential object or as a plain attribute. The default is false.
+									This parameter specifies if a password should be stored using PicketLink IDM Credential object or as a plain attribute. The default is <literal>false</literal>.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -229,7 +229,7 @@
 							<listitem>
 							<para>
 								This parameter stores the parent ID path as a group type in PicketLink IDM for any IDs not mapped with a specific type in 'groupTypeMappings'.
-                        If this option is set to false, and no mappings are provided under 'groupTypeMappings', then only one group with the given name can exist in the &PRODUCT; group tree.
+                        If this option is set to <literal>false</literal>, and no mappings are provided under 'groupTypeMappings', then only one group with the given name can exist in the &PRODUCT; group tree.
 							</para>
 							</listitem>
 						</varlistentry>
@@ -237,7 +237,7 @@
 							<term>pathSeparator</term>
 							<listitem>
 								<para>
-									When 'userParentIdAsGroupType is set to true, this value will be used to replace all "/" characters in IDs. The "/" character is not allowed to be used in group type name in PicketLink IDM.
+									When 'userParentIdAsGroupType is set to <literal>true</literal>, this value will be used to replace all "/" characters in IDs. The "/" character is not allowed to be used in group type name in PicketLink IDM.
 								</para>
 							</listitem>
 						</varlistentry>
@@ -284,22 +284,22 @@
 						</varlistentry>
   				</variablelist>
 					<para>
-						Additionally, <emphasis role="bold">JBossIDMOrganizationServiceImpl</emphasis> uses those defaults to perform identity management operations
+						Additionally, <emphasis role="bold">JBossIDMOrganizationServiceImpl</emphasis> uses those defaults to perform identity management operations.
 					</para>
 					<itemizedlist>
 						<listitem>
 							<para>
-								&PRODUCT; User interface properties fields are persisted in JBoss Identity IDM using those attributes names: firstName, lastName, email, createdDate, lastLoginTime, organizationId, password (if password is configured to be stored as attribute)
+								&PRODUCT; User interface properties fields are persisted in JBoss Identity IDM using those attributes names: firstName, lastName, email, createdDate, lastLoginTime, organizationId, password (if password is configured to be stored as attribute).
 							</para>
 						</listitem>
 						<listitem>
 							<para>
-								&PRODUCT; Group interface properties fields are persisted in JBoss Identity IDM using those attributes names: label, description
+								&PRODUCT; Group interface properties fields are persisted in JBoss Identity IDM using those attributes names: label, description.
 							</para>
 						</listitem>
 						<listitem>
 							<para>
-								&PRODUCT; MembershipType interface properties fields are persisted in JBoss Identity IDM using those RoleType properties: description, owner, create_date, modified_date
+								&PRODUCT; MembershipType interface properties fields are persisted in JBoss Identity IDM using those RoleType properties: description, owner, create_date, modified_date.
 							</para>
 						</listitem>
 					</itemizedlist>
@@ -309,7 +309,7 @@
 		
 
 		<para>
-			A sample <emphasis role="bold">PicketLink IDM</emphasis> configuration file is shown below. To understand all the options it contains, please refer to the PicketLink IDM Reference Guide
+			A sample <emphasis role="bold">PicketLink IDM</emphasis> configuration file is shown below. To understand all the options it contains, please refer to the PicketLink IDM Reference Guide.
 		</para>
 		
 <programlisting role="XML">&#60;jboss-identity xmlns=&#34;urn:jboss:identity:idm:config:v1_0_beta&#34;

@@ -5,42 +5,40 @@
 ]>
 <section id="sect-Reference_Guide-Portal_Default_Permission_Configuration">
 	<title>Portal Default Permission Configuration</title>
-	<section id="sect-Reference_Guide-Portal_Default_Permission_Configuration-Overview">
-		<title>Overview</title>
-		<para>
-			The default permission configuration for the portal is defined through <literal>org.exoplatform.portal.config.UserACL</literal>
-         component configuration in the file <filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>.
+		<para xml:id="sect-Reference_Guide-Portal_Default_Permission_Configuration-Overview">
+			The default permission configuration for the portal is defined through the <literal>org.exoplatform.portal.config.UserACL</literal>
+         component configuration in the <filename>portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename> file.
 		</para>
 		<para>
 			It defines 8 permissions types:
 		</para>
 		<variablelist>
 			<varlistentry>
-				<term>super.user</term>
+				<term><emphasis role="bold">super.user</emphasis></term>
 				<listitem>
 					<para>
-						The super user has all the rights on the platform, this user is referred to as <emphasis>root</emphasis>.
+						The super-user as <literal>root</literal> has all the rights on the the platform.
 					</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>portal.administrator.groups</term>
+				<term><emphasis role="bold">portal.administrator.groups</emphasis></term>
 				<listitem>
 					<para>
-						Any member of those groups are considered administrators. Default value is <literal>/platform/administrators</literal>.
+						Any member of those groups are considered administrators. The default value is <literal>/platform/administrators</literal>.
 					</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>portal.administrator.mstype</term>
+				<term><emphasis role="bold">portal.administrator.mstype</emphasis></term>
 				<listitem>
 					<para>
-						Any user with that membership type would be considered administrator or the associated group. Default value is <literal>manager</literal>.
+						Any user with that membership type would be considered administrator or the associated group with the <literal>manager</literal> by default.
 					</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>portal.creator.groups</term>
+				<term><emphasis role="bold">portal.creator.groups</emphasis></term>
 				<listitem>
 					<para>
 						This list defines all groups that will be able to manage the different portals. Members of this group
@@ -49,7 +47,7 @@
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>navigation.creator.membership.type</term>
+				<term><emphasis role="bold">navigation.creator.membership.type</emphasis></term>
 				<listitem>
 					<para>
 						Defines the membership type of group managers. The group managers have the permission to create and edit group pages and they can modify the group navigation.
@@ -57,7 +55,7 @@
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>guests.group</term>
+				<term><emphasis role="bold">guests.group</emphasis></term>
 				<listitem>
 					<para>
 						Any anonymous user automatically becomes a member of this group when they enter the public pages.
@@ -65,18 +63,18 @@
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>mandatory.groups</term>
+				<term><emphasis role="bold">mandatory.groups</emphasis></term>
 				<listitem>
 					<para>
-						Groups that can't be deleted.
+						Groups that cannot be deleted.
 					</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>mandatory.mstypes</term>
+				<term><emphasis role="bold">mandatory.mstypes</emphasis></term>
 				<listitem>
 					<para>
-						Membership types that can't be deleted.
+						Membership types that cannot be deleted.
 					</para>
 				</listitem>
 			</varlistentry>
@@ -116,12 +114,11 @@
   &#60;/init-params&#62;   
 &#60;/component&#62;
 </programlisting>
-	</section>
 	
 	<section id="sect-Reference_Guide-Portal_Default_Permission_Configuration-Overwrite_Portal_Default_Permissions">
 		<title>Overwrite Portal Default Permissions</title>
 
-      <para>When creating custom portals and portal extensions it's possible to override the default configuration by
+      <para>When creating the custom portals and portal extensions, it is possible to override the default configuration by
       using <literal>org.exoplatform.portal.config.PortalACLPlugin</literal>, configuring it as an external-plugin of
       <literal>org.exoplatform.portal.config.UserACL</literal> service:</para>
 

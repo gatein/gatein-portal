@@ -11,10 +11,8 @@
 		package has five main components: user, user profile, group,
 		membership type and membership.
 		There is an additional component that serves as an entry point into
-		Organization API -
-		<literal>OrganizationService</literal>
-		component,
-		that provides handling functionality for the five components.
+		Organization API - <literal>OrganizationService</literal> component
+		that provides the handling functionality for the five components.
 	</para>
 	<para>
 		<mediaobject>
@@ -22,42 +20,33 @@
 				<imagedata fileref="images/AuthenticationAndIdentity/OrganizationServiceClassDiagram.png" format="PNG" align="center"/>
 			</imageobject>
 			<imageobject role="fo">
-				<imagedata fileref="images/AuthenticationAndIdentity/OrganizationServiceClassDiagram.png" scalefit="1" format="PNG" align="center"/>
+				<imagedata fileref="images/AuthenticationAndIdentity/OrganizationServiceClassDiagram.png" scalefit="1" width="150mm" format="PNG" align="center"/>
 			</imageobject>
 		</mediaobject>
 	</para>
 	<para>
 		The
 		<literal>User</literal>
-		component contains basic information about a user - such as
+		component contains basic information about the user, such as
 		username, password, first name, last name, and email. The
-		<literal>User Profile</literal>
-		component contains extra information about a user, such as user's
+		<literal>User Profile</literal> component contains extra information about a user, such as user's
 		personal information, and business information.
 		You can also add additional information about a user if your application
 		requires it.
-		The
-		<literal>Group</literal>
-		component contains a group graph. The
+		The <literal>Group</literal> component contains a group graph. The
 		<literal>Membership Type</literal>
 		component
-		contains a list of predefined membership types.
-		Finally, the
-		<literal>Membership</literal>
-		component connects a User, a Group and a Membership Type.
+		contains a list of predefined membership types. Finally, the
+		<literal>Membership</literal> component connects a User, a Group and a Membership Type.
 	</para>
 	<para>
 		A user can have one or more memberships within a group, for example:
-		user A can have the 'member' and 'admin' memberships in group /user.
+		the user A can have two memberships: 'member' and 'admin' in the group /user.
 		A user belongs to a group if he has at least one membership in that
 		group.
       </para>
 	<para>
-		Exposing the Organization API to developers the OrganizationService component
-		provides developers with access
-		to handler objects for managing each of the five components -
-		UserHandler, UserProfileHandler, GroupHandler, MembershipTypeHandler,
-		and MembershipHandler.
+		Exposing the Organization API to developers who have access to the handler objects provided by the OrganizationService component. These handler objects are used to manage each of the five components, including <literal>UserHandler</literal>, <literal>UserProfileHandler</literal>, <literal>GroupHandler</literal>, <literal>MembershipTypeHandler</literal>, and <literal>MembershipHandler</literal>.
       </para>
 	<para>
 		The five central API components are really designed like persistent
@@ -67,7 +56,7 @@
 	<para>
 		Organization API simply describes a contract, meaning it is not a concrete
 		implementation. The described components are interfaces,
-		allowing for different concrete implementations. In practial terms that means,
+		allowing different concrete implementations. Practically, it means that
 		you can replace the existing implementation with a different one.
 	</para>
 </section>

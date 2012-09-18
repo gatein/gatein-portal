@@ -5,9 +5,7 @@
 ]>
 <section id="sect-Reference_Guide-Portal_Navigation_Configuration">
 	<title>Portal Navigation Configuration</title>
-	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Overview">
-		<title>Overview</title>
-		<para>
+		<para xml:id="sect-Reference_Guide-Portal_Navigation_Configuration-Overview">
 			There are three navigation types available to portal users:
 		</para>
 		<itemizedlist>
@@ -28,7 +26,7 @@
 			</listitem>
 		</itemizedlist>
 		<para>
-			These navigations are configured using the standard XML syntax in the file; &#34;<filename>02portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename>&#34;.
+			These navigations are configured using the standard XML syntax in the <filename>portal.war:/WEB-INF/conf/portal/portal-configuration.xml</filename> file.
 		</para>
 		
 <programlisting role="XML"><![CDATA[<component>
@@ -160,10 +158,11 @@
  This XML configuration defines where in the portal's war to look for configuration, and which portals, groups, and user specific views
  to include in <literal>portal/group/user</literal> navigation. Those files will be used to create an initial navigation when the portal is launched in the first time.
  That information will then be stored in the JCR content repository, and can then be modified and managed from the portal UI.
- </para>
+</para>
 		 
 <para>
 Each portal, groups and users navigation is indicated by a configuration paragraph, for example:
+</para>
 
 <programlistingco>
 			<areaspec>
@@ -194,62 +193,80 @@ Each portal, groups and users navigation is indicated by a configuration paragra
 </object-param>]]>
 </programlisting>
 </programlistingco>
-
 <calloutlist>
 				<callout arearefs="area-Reference_Guide.Portalconf.predifinedOwner">
 					<para>
-						<emphasis> predefinedOwner</emphasis> define the navigation owner, portal will look for the configuration files in folder with this name, if there is no suiable folder, a default portal will be created with name is this value.
+						<parameter>predefinedOwner</parameter>: Define the navigation owner. The portal will look for the configuration files in folder with this name. If there is no suitable folder, a default portal will be created with name is this value.
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide.Portalconf.ownerType">
 					<para>
-						<emphasis> ownerType</emphasis> define the type of portal navigation. It may be a portal, group or user
+						<parameter>ownerType</parameter>: Define the type of portal navigation. It may be a portal, group or user.
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide.Portalconf.templateLocation">
 					<para>
-						<emphasis> templateLocation</emphasis> the classpath where contains all portal configuration files
+						<parameter>templateLocation</parameter>: Define the classpath where all portal configuration files are contained.
 					</para>
 				</callout>
 				<callout arearefs="area-Reference_Guide.Portalconf.importMode">
 					<para>
-						<emphasis> importMode</emphasis> The mode for navigation import. There are 4 types of import mode:
+						<parameter>importMode</parameter>: Define the mode for navigation import. There are 4 types of import mode:
 					</para>
 					<itemizedlist>
 						<listitem>
-						<emphasis>conserve</emphasis>: Import data when it does not exist, otherwise do nothing.
+						<parameter>conserve</parameter>: Import data when it does not exist, otherwise do nothing.
 						</listitem>
 						<listitem>
-						<emphasis>insert</emphasis>: Import data when it does not exist, otherwise performs a strategy that adds new data only.
+						<parameter>insert</parameter>: Import data when it does not exist, otherwise perform a strategy that adds new data only.
 						</listitem>
 						<listitem>
-						<emphasis>merge</emphasis>: Import data when it does not exist, update data when it exists.
+						<parameter>merge</parameter>: Import data when it does not exist, otherwise update data when it exists.
 						</listitem>
 						<listitem>
-						<emphasis>rewrite</emphasis>: Overwrite data whatsoever.
+						<parameter>rewrite</parameter>: Overwrite data whatsoever.
 						</listitem>
-						</itemizedlist>
+					</itemizedlist>
 				</callout>
 </calloutlist>
-		</para>
-	
 	<para>	
-Base on these parameters, portal will look for the configuration files and create a relevant portal navigation, pages and data import strategy. The portal configuration files will be stored in folders with path look like <literal>{templateLocation}/{ownerType}/{predefinedOwner}</literal>, all navigations are defined in the <literal>navigation.xml</literal> file, pages are defined in pages.xml and portal configuration is defined in <literal>{ownerType}.xml</literal>.
-For example, with the above configuration, prtal will look for all configuration files from <literal>war:/conf/portal/portal/classic path.</literal>
+Based on these parameters, portal will look for the configuration files and create a relevant portal navigation, pages and data import strategy.
+<itemizedlist>
+	<listitem>
+		<para>
+		The portal configuration files are stored in folders with the <filename>{templateLocation}/{ownerType}/{predefinedOwner}</filename> path.
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+		All navigations are defined in the <filename>navigation.xml</filename> file.
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+		Pages are defined in <filename>pages.xml</filename>.
+		</para>
+	</listitem>
+	<listitem>
+		<para>
+		Portal configuration is defined in <filename>{ownerType}.xml</filename>.
+		</para>
+	</listitem>
+</itemizedlist>
+For example, with the above configuration, the portal will look for all configuration files from the <filename>war:/conf/portal/portal/classic</filename> path.
 	</para>
-	</section>
 	
 	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation">
 		<title>Portal Navigation</title>
 		<para>
-		The portal navigation incorporates the pages that can be accessed even when the user is not logged in assuming the applicable permissions allow the public access). For example, several portal navigations are used when a company owns multiple trademarks, and sets up a website for each of them.
+		The portal navigation incorporates the pages that can be accessed even when the user is not logged in (assuming the applicable permissions allow the public access). For example, several portal navigations are used when a company owns multiple trademarks, and sets up a website for each of them.
 		</para>
 		<para>
-			The <emphasis role="bold">classic</emphasis> portal is configured by four XML files in the <filename>02portal.war:/WEB-INF/conf/portal/portal/classic</filename> directory:
+			The <emphasis role="bold">classic</emphasis> portal is configured by four XML files in the <filename>portal.war:/WEB-INF/conf/portal/portal/classic</filename> directory:
 		</para>
 		<variablelist>
 			<varlistentry>
-				<term>portal.xml</term>
+				<term><filename>portal.xml</filename></term>
 				<listitem>
 					<para>
 						This file describes the layout and portlets that will be shown on all pages. The layout usually contains the banner, footer, menu and breadcrumbs portlets.
@@ -330,32 +347,26 @@ For example, with the above configuration, prtal will look for all configuration
 						It is also possible to apply a nested container that can also contain portlets. Row, column or tab containers are then responsible for the layout of their child portlets.
 					</para>
 					<para>
-						Each application references a portlet using the id <literal>portal#{portalName}:/{portletWarName}/{portletName}/{uniqueId}</literal>
-					</para>
-					<para>
 						Use the <literal>page-body</literal> tag to define where &PRODUCT; should render the current page.
 					</para>
 					<para>
-						The defined <emphasis role="bold">classic</emphasis> portal is accessible to &#34;Everyone&#34; (at <literal>/portal/public/classic</literal>) but only members of the group <literal>/platform/administrators</literal> can edit it.
+						The defined <emphasis role="bold">classic</emphasis> portal is accessible to &#34;Everyone&#34; (at <literal>/portal/public/classic</literal>) but only members of the <literal>/platform/administrators</literal> group can edit it.
 					</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>navigation.xml</term>
+				<term><filename>navigation.xml</filename></term>
 				<listitem>
 					<para>
-						This file defines all the navigation nodes of the portal. The syntax is simple using the nested node tags. Each node refers to a page defined in the <literal>pages.xml</literal> file (explained next).
+						This file defines all the navigation nodes of the portal. The syntax is simple using the nested node tags. Each node refers to a page defined in the <filename>pages.xml</filename> file.
 					</para>
 					<para>
-						If the administrator want to create node labels for each language, they will have to use <literal>xml:lang</literal> attribute in the label tag with value of <literal>xml:lang</literal> is the relevant locale.
+						If the administrators want to create node labels for each language, they will have to use the <literal>xml:lang</literal> attribute in the label tag with value of <literal>xml:lang</literal> which is the relevant locale.
 					</para>
 					<para>
-						Otherwise, if they want the node label is localized by resource bundle files, the <literal>#{...}</literal> syntax will be used, the enclosed property name serves as a key that is automatically passed to the internationalization mechanism. Thus the literal property name is replaced by a localized value taken from the associated properties file matching the current locale. 
-					<para>	
-						For example:
+						Otherwise, if they want the node label to be localized by the resource bundle files, the <literal>#{...}</literal> syntax will be used. The enclosed property name serves as a key that is automatically passed to the internationalization mechanism. Thus, the literal property name is replaced by a localized value taken from the associated properties file matching the current locale. 
 					</para>
-					</para>
-
+					<example>
 <programlisting role="XML"><![CDATA[<node-navigation 
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2"
@@ -377,14 +388,14 @@ For example, with the above configuration, prtal will look for all configuration
    </page-nodes>
 </node-navigation>]]>
 </programlisting>
-					
-					<para>
-						This navigation tree can have multiple views inside portlets (such as the breadcrumbs portlet) that render the current view node, the site map or the menu portlets.
-					</para>
+					</example>
+						<para>
+							This navigation tree can have multiple views inside portlets (such as the breadcrumbs portlet) that render the current view node, the sitemap or the menu portlets.
+						</para>
 				</listitem>
 			</varlistentry>
 			<varlistentry>
-				<term>pages.xml</term>
+				<term><filename>pages.xml</filename></term>
 				<listitem>
 					<para>
 						This configuration file structure is very similar to <filename>portal.xml</filename> and it can also contain container tags.
@@ -395,7 +406,6 @@ For example, with the above configuration, prtal will look for all configuration
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_2 http://www.gatein.org/xml/ns/gatein_objects_1_2" 
    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_2">
-
    <page>
       <name>homepage</name>
       <title>Home Page</title>
@@ -451,22 +461,20 @@ For example, with the above configuration, prtal will look for all configuration
 			Group navigations are dynamically added to the user navigation at login. This allows users to see the menu of all pages assigned to any groups they belong to.
 		</para>
 		<para>
-			The group navigation menu is configured by three XML files (<filename>navigation.xml</filename>, <filename>pages.xml</filename> and <filename>portlet-preferences.xml</filename>). The syntax used in these files is the same as those covered in <xref linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation" />.
+			The group navigation menu is configured by two XML files (<filename>navigation.xml</filename> and <filename>pages.xml</filename>). The syntax used in these files is the same as those covered in <xref linkend="sect-Reference_Guide-Portal_Navigation_Configuration-Portal_Navigation" />.
 		</para>
 		<para>
-			They are also located in the <filename>{templateLocation}/{ownerType}/{predefinedOwner}</filename> directory with <literal>ownerType</literal> is <literal>group</literal> and <literal>predefinedOwner</literal> is the path to the group. For example, <filename>portal.war/WEB-INF/conf/portal/group/platform/administrators/</filename>.
+			They are also located in the <filename>{templateLocation}/{ownerType}/{predefinedOwner}</filename> directory where <literal>ownerType</literal> is <literal>group</literal> and <literal>predefinedOwner</literal> is the path to the group. For example, <filename>portal.war/WEB-INF/conf/portal/group/platform/administrators/</filename>.
 		</para>
 	</section>
 	
 	<section id="sect-Reference_Guide-Portal_Navigation_Configuration-User_Navigation">
 		<title>User Navigation</title>
 		<para>
-			User navigation is the set of nodes and pages that are owned by the user. They are part of the user's dashboard.
+			User navigation is a set of nodes and pages that are owned by the user. They are part of the user's dashboard.
 		</para>
 		<para>
-			Three files configure the user navigation (<filename>navigation.xml</filename>, <filename>pages.xml</filename> and <filename>portlet-preferences.xml</filename>). They are located in the <filename>{templateLocation}/{ownerType}/{predefinedOwner}</filename> directory with <literal>ownerType</literal> is <literal>user</literal> and <literal>predefinedOwner</literal> is username that want to create the navigation. For example, if administrator want to create navigation for user <literal>root</literal>, he has to locate the configuration files in <filename>portal.war/WEB-INF/conf/portal/user/root </filename>
+			Two files configure the user navigation (<filename>navigation.xml</filename> and <filename>pages.xml</filename>). They are located in the <filename>{templateLocation}/{ownerType}/{predefinedOwner}</filename> directory where <literal>ownerType</literal> is <literal>user</literal> and <literal>predefinedOwner</literal> is name of user who wants to create the navigation. For example, if the administrator wants to create navigation for the user named <literal>root</literal>, he has to locate the configuration files in <filename>portal.war/WEB-INF/conf/portal/user/root</filename>.
 		</para>
 	</section>
 </section>
-
-
