@@ -8,7 +8,7 @@ Prerequisites
 =============
 
 - Java Development Kit 1.6
-- Recent Subversion client
+- Recent Git client
 - Recent Maven 3 (might work with Maven 2.2.1 as well)
 
 
