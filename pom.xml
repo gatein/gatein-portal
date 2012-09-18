@@ -426,6 +426,12 @@
             <scope>provided</scope>
             <version>${org.gatein.wsrp.version}</version>
          </dependency>
+         <!-- Needed by WSRP, here so that it can be picked up by module generation build.xml -->
+         <dependency>
+            <groupId>commons-httpclient</groupId>
+            <artifactId>commons-httpclient</artifactId>
+            <version>3.1</version>
+         </dependency>
 
          <!-- GateIn -->
          <dependency>

@@ -302,6 +302,10 @@
        <module-def name="com.google.guava" slot="gatein">
           <maven-resource group="com.google.guava" artifact="guava" />
        </module-def>
+
+       <module-def name="org.apache.commons-httpclient" slot="gatein">
+          <maven-resource group="commons-httpclient" artifact="commons-httpclient" />
+       </module-def>
     </target>
 
     <target name="clean-target">

@@ -49,7 +49,7 @@
         <module name="javax.ws.rs.api" />
         <module name="org.chromattic" services="export" export="true"/>
         <module name="org.gatein.common" />
-        <module name="org.apache.commons.logging" />
+        <module name="org.apache.commons.logging" export="true" />
         <module name="org.apache.commons.collections" />
         <module name="org.apache.httpcomponents" />
         <module name="org.gatein.naming" export="true"/>
