@@ -45,7 +45,7 @@ public class JavascriptTask
    {
       for (ScriptResourceDescriptor desc : descriptors)
       {
-         ScriptResource resource = service.scripts.addResource(desc.id, desc.fetchMode, desc.alias);
+         ScriptResource resource = service.scripts.addResource(desc.id, desc.fetchMode, desc.alias, desc.group);
          if (resource != null)
          {
             for (Javascript module : desc.modules)

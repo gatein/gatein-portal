@@ -25,7 +25,7 @@ package org.gatein.portal.controller.resource;
 public enum ResourceScope
 {
 
-   SHARED, PORTAL, PORTLET ;
+   SHARED, PORTAL, PORTLET, GROUP;
 
    /**
     * Returns a new <code>ResourceId</code> scoped with this enum instance.

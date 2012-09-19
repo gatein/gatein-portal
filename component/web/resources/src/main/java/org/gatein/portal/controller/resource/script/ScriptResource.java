@@ -19,13 +19,6 @@
 
 package org.gatein.portal.controller.resource.script;
 
-import org.exoplatform.commons.utils.I18N;
-import org.exoplatform.web.WebAppController;
-import org.exoplatform.web.controller.QualifiedName;
-import org.gatein.portal.controller.resource.Resource;
-import org.gatein.portal.controller.resource.ResourceId;
-import org.gatein.portal.controller.resource.ResourceRequestHandler;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,6 +27,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import org.gatein.portal.controller.resource.ResourceId;
 
 /**
  * <p></p>
@@ -44,26 +39,10 @@ import java.util.Set;
  * 
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ScriptResource extends Resource<ScriptResource> implements Comparable<ScriptResource>
+public class ScriptResource extends BaseScriptResource<ScriptResource> implements Comparable<ScriptResource>
 {
-
-   /** . */
-   ScriptGraph graph;
-   
    /** . */
    private final List<Module> modules;
-
-   /** . */
-   private final Map<QualifiedName, String> parameters;
-
-   /** . */
-   private final Map<Locale, Map<QualifiedName, String>> parametersMap;
-
-   /** . */
-   private final Map<QualifiedName, String> minParameters;
-
-   /** . */
-   private final  Map<Locale, Map<QualifiedName, String>> minParametersMap;
 
    /** . */
    final HashMap<ResourceId, String> dependencies;
@@ -76,39 +55,23 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    
    /** . */
    final String alias;
+   
+   /** . */
+   final ScriptGroup group;
 
    ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode)
    {
-      this(graph, id, fetchMode, null);
+      this(graph, id, fetchMode, null, null);
    }
 
-   ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode, String alias)
+   ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode, String alias, ScriptGroup group)
    {
-      super(id);
+      super(graph, id);
 
-      //
-      Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
-      parameters.put(WebAppController.HANDLER_PARAM, "script");
-      parameters.put(ResourceRequestHandler.RESOURCE_QN, id.getName());
-      parameters.put(ResourceRequestHandler.SCOPE_QN, id.getScope().name());
-      parameters.put(ResourceRequestHandler.COMPRESS_QN, "");
-      parameters.put(ResourceRequestHandler.VERSION_QN, ResourceRequestHandler.VERSION);
-      parameters.put(ResourceRequestHandler.LANG_QN, "");
-
-      //
-      Map<QualifiedName, String> minifiedParameters = new HashMap<QualifiedName, String>(parameters);
-      minifiedParameters.put(ResourceRequestHandler.COMPRESS_QN, "min");
-
-      //
-      this.parameters = parameters;
-      this.minParameters = minifiedParameters;
-      this.graph = graph;
       this.modules = new ArrayList<Module>();
       this.closure = new HashSet<ResourceId>();
       this.dependencies = new HashMap<ResourceId, String>();
       this.fetchMode = fetchMode;
-      this.parametersMap = new HashMap<Locale, Map<QualifiedName, String>>();
-      this.minParametersMap = new HashMap<Locale, Map<QualifiedName, String>>();
       
       if (alias == null)
       {
@@ -116,6 +79,7 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
          alias = resName.substring(resName.lastIndexOf("/") + 1);         
       }
       this.alias = alias;
+      this.group = group;
    }
    
    public boolean isEmpty()
@@ -126,20 +90,6 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    public FetchMode getFetchMode()
    {
       return fetchMode;
-   }
-
-   public Map<QualifiedName, String> getParameters(boolean minified, Locale locale)
-   {
-      Map<Locale, Map<QualifiedName, String>> map = minified ? minParametersMap : parametersMap;
-      for (Locale current = locale;current != null;current = I18N.getParent(current))
-      {
-         Map<QualifiedName, String> ret = map.get(locale);
-         if (ret != null)
-         {
-            return ret;
-         }
-      }
-      return minified ? minParameters : parameters;
    }
 
    public void addDependency(ResourceId dependencyId)
@@ -214,7 +164,17 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       modules.add(module);
       return module;
    }
-   
+
+   @Override
+   public void addSupportedLocale(Locale locale)
+   {
+      super.addSupportedLocale(locale);
+      if (group != null)
+      {
+         group.addSupportedLocale(locale);
+      }
+   }
+
    public List<Module> removeModuleByName(String name)
    {
       ArrayList<Module> removed = new ArrayList<Module>();
@@ -288,19 +248,6 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       }
    }
    
-   public void addSupportedLocale(Locale locale)
-   {
-      if (!parametersMap.containsKey(locale))
-      {
-         Map<QualifiedName, String> localizedParameters = new HashMap<QualifiedName, String>(parameters);
-         localizedParameters.put(ResourceRequestHandler.LANG_QN, I18N.toTagIdentifier(locale));
-         parametersMap.put(locale, localizedParameters);
-         Map<QualifiedName, String> localizedMinParameters = new HashMap<QualifiedName, String>(minParameters);
-         localizedMinParameters.put(ResourceRequestHandler.LANG_QN, I18N.toTagIdentifier(locale));
-         minParametersMap.put(locale, localizedMinParameters);
-      }
-   }
-
    @Override
    public Set<ResourceId> getDependencies()
    {
@@ -325,5 +272,10 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    public String toString()
    {
       return "ScriptResource[id=" + id + "]";
+   }
+
+   public ScriptGroup getGroup()
+   {
+      return group;
    }
 }

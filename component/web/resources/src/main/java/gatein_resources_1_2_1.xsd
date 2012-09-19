@@ -143,6 +143,7 @@
       <xs:element name="as" type="xs:string" minOccurs="0" maxOccurs="1"/>
       <xs:choice>
         <xs:sequence>
+          <xs:element name="load-group" type="xs:string" minOccurs="0" maxOccurs="1"/>
           <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
           <xs:element name="script" type="script" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
@@ -186,6 +187,7 @@
               <xs:choice>
                 <xs:sequence>
                   <xs:element name="as" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                  <xs:element name="load-group" type="xs:string" minOccurs="0" maxOccurs="1"/>
                   <xs:element name="supported-locale" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
                   <xs:element name="script" type="script" minOccurs="0" maxOccurs="unbounded"/>
                 </xs:sequence>

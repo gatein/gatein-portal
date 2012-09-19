@@ -36,6 +36,9 @@ public class ScriptResourceDescriptor
    final ResourceId id;
    
    /** . */
+   final String group;
+   
+   /** . */
    final String alias;
 
    /** . */
@@ -52,10 +55,10 @@ public class ScriptResourceDescriptor
 
    public ScriptResourceDescriptor(ResourceId id, FetchMode fetchMode)
    {
-      this(id, fetchMode, null);
+      this(id, fetchMode, null, null);
    }
    
-   public ScriptResourceDescriptor(ResourceId id, FetchMode fetchMode, String alias)
+   public ScriptResourceDescriptor(ResourceId id, FetchMode fetchMode, String alias, String group)
    {
       this.id = id;
       this.modules = new ArrayList<Javascript>();
@@ -63,6 +66,7 @@ public class ScriptResourceDescriptor
       this.supportedLocales = new ArrayList<Locale>();
       this.fetchMode = fetchMode;
       this.alias = alias;
+      this.group = group;
    }
 
    public ResourceId getId()
@@ -88,5 +92,10 @@ public class ScriptResourceDescriptor
    public String getAlias()
    {
       return alias;
+   }
+   
+   public String getGroup()
+   {
+      return group;
    }
 }

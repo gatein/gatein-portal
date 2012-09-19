@@ -283,4 +283,67 @@ public class TestParser extends AbstractGateInTest
       assertEquals("z", portalDesc.getAlias());
       assertEquals("zz", portalDesc.getDependencies().get(0).getAlias());
    }
+   
+   public void testLoadGroup() throws Exception
+   {
+      String config = "" +
+               "<gatein-resources>" + 
+               "<module>" + 
+               "<name>foo_module</name>" +
+               "<load-group>foo_group</load-group>" +
+               "<script>" + "<name>foo_module</name>" + "<path>/foo_module.js</path>" + "</script>" +
+               "</module>" +
+
+               "<portal>" +
+               "<name>foo_portal</name>" +
+               "<module>" +
+               "<load-group>foo_group</load-group>" +
+                "<script>" + "<name>foo_portal</name>" + "<path>/foo_portal.js</path>" + "</script>" +
+                "</module>" +
+               "</portal>" +
+               
+               "<portlet>" +
+               "<name>foo_portlet</name>" +
+               "<module>" +
+               "<load-group>foo_group</load-group>" +
+                "<script>" + "<name>foo_portlet</name>" + "<path>/foo_portlet.js</path>" + "</script>" +
+                "</module>" +
+               "</portlet>" +
+               "</gatein-resources>";
+      
+      JavascriptConfigParser parser = new JavascriptConfigParser("/mypath");
+      List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
+      
+      assertEquals(3, scripts.size());
+      for (ScriptResourceDescriptor des : scripts)
+      {
+         assertEquals("foo_group", des.getGroup());
+      }
+   }
+   
+   public void testLoadGroupRestriction() throws Exception
+   {
+      String config = "" +
+               "<gatein-resources>" + 
+               "<scripts>" +
+               "<name>foo_scripts</name>" +
+               "<load-group>foo_group</load-group>" +
+               "<script>" + "<name>foo_module</name>" + "<path>/foo_module.js</path>" + "</script>" +
+               "</scripts>" +
+               
+               "<module>" + 
+               "<name>foo_module</name>" +
+               "<load-group>foo_group</load-group>" +
+               "<url>testURL</url>" +
+               "</module>" +
+               "</gatein-resources>";
+      JavascriptConfigParser parser = new JavascriptConfigParser("/mypath");
+      List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
+      
+      assertEquals(2, scripts.size());
+      for (ScriptResourceDescriptor des : scripts)
+      {
+         assertNull(des.getGroup());
+      }
+   }
 }

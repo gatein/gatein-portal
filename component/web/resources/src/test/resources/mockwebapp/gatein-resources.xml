@@ -101,8 +101,9 @@
    </scripts>
 
    <module>
-      <name>module1</name>     
+      <name>module1</name>           
       <as>m1</as> 
+      <load-group>fooGroup</load-group>
       <script>
          <name>eXo.module1</name>
          <path>/js/module1.js</path>
@@ -111,6 +112,7 @@
    
    <module>
       <name>module2</name>     
+      <load-group>fooGroup</load-group>
       <script>
          <name>eXo.module2</name>
          <path>/js/module2.js</path>

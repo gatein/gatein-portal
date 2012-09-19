@@ -98,6 +98,9 @@ public class JavascriptConfigParser
    
    /** . */
    final public static String NATIVE_TAG = "native-script";
+   
+   /** . */
+   final public static String GROUP_TAG = "load-group";
 
    /** . */
    private final String contextPath;
@@ -235,23 +238,29 @@ public class JavascriptConfigParser
          }
          ResourceId id = new ResourceId(resourceScope, resourceName);
          FetchMode fetchMode;
+         String group = null;
+         
          Element resourceElt = XMLTools.getUniqueChild(element, MODULE_TAG, false);
          if (resourceElt != null)
          {
             fetchMode = FetchMode.ON_LOAD;
+            if (XMLTools.getUniqueChild(resourceElt, URL_TAG, false) == null) 
+            {
+               group = parseGroup(resourceElt);
+            }
          }
          else
          {
             resourceElt = XMLTools.getUniqueChild(element, SCRIPTS_TAG, false);
             fetchMode = FetchMode.IMMEDIATE;
          }
-
+         
          if (resourceElt != null)
          {
             ScriptResourceDescriptor desc = scripts.get(id);
             if (desc == null)
             {
-               desc = new ScriptResourceDescriptor(id, fetchMode, parseAlias(element));
+               desc = new ScriptResourceDescriptor(id, fetchMode, parseAlias(element), group);
             }
             else
             {
@@ -264,12 +273,27 @@ public class JavascriptConfigParser
       else if (MODULE_TAG.equals(element.getTagName()) || SCRIPTS_TAG.equals(element.getTagName()))
       {
          String resourceName = XMLTools.asString(XMLTools.getUniqueChild(element, "name", true));
-         ResourceId id = new ResourceId(ResourceScope.SHARED, resourceName);
-         FetchMode fetchMode = MODULE_TAG.equals(element.getTagName()) ? FetchMode.ON_LOAD : FetchMode.IMMEDIATE;
+         ResourceId id = new ResourceId(ResourceScope.SHARED, resourceName);         
+         FetchMode fetchMode;
+         String group = null;
+         
+         if (MODULE_TAG.equals(element.getTagName()))
+         {
+            fetchMode = FetchMode.ON_LOAD;
+            if (XMLTools.getUniqueChild(element, URL_TAG, false) == null) 
+            {
+               group = parseGroup(element);
+            }
+         }
+         else
+         {
+            fetchMode = FetchMode.IMMEDIATE;
+         }
+         
          ScriptResourceDescriptor desc = scripts.get(id);
          if (desc == null)
          {
-            desc = new ScriptResourceDescriptor(id, fetchMode, parseAlias(element));
+            desc = new ScriptResourceDescriptor(id, fetchMode, parseAlias(element), group);
          }
          parseDesc(element, desc);
          scripts.put(id, desc);
@@ -281,8 +305,8 @@ public class JavascriptConfigParser
 
       //
       return scripts.values();
-   }
-   
+   }   
+
    private void parseDesc(Element element, ScriptResourceDescriptor desc)
    {
       Element urlElement = XMLTools.getUniqueChild(element, URL_TAG, false);
@@ -333,6 +357,24 @@ public class JavascriptConfigParser
          ResourceId resourceId = new ResourceId(ResourceScope.SHARED, XMLTools.asString(dependencyElt));
          DependencyDescriptor dependency = new DependencyDescriptor(resourceId, parseAlias(moduleElt));
          desc.dependencies.add(dependency);
+      }
+   }
+
+   private String parseGroup(Element element)
+   {
+      Element group = XMLTools.getUniqueChild(element, GROUP_TAG, false);
+      if (group != null)
+      {
+         String grpName = XMLTools.asString(group, true);
+         if (grpName.isEmpty())
+         {
+            grpName = null;
+         }
+         return grpName;
+      }
+      else
+      {
+         return null;          
       }
    }
    

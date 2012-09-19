@@ -34,7 +34,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.exoplatform.commons.utils.CompositeReader;
 import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.container.ExoContainerContext;
@@ -44,12 +46,13 @@ import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.controller.router.URIWriter;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.gatein.portal.controller.resource.Resource;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
+import org.gatein.portal.controller.resource.script.BaseScriptResource;
 import org.gatein.portal.controller.resource.script.FetchMode;
 import org.gatein.portal.controller.resource.script.Module;
 import org.gatein.portal.controller.resource.script.ScriptGraph;
+import org.gatein.portal.controller.resource.script.ScriptGroup;
 import org.gatein.portal.controller.resource.script.ScriptResource;
 import org.gatein.wci.ServletContainerFactory;
 import org.gatein.wci.WebApp;
@@ -129,138 +132,146 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    
    public Reader getScript(ResourceId resourceId, Locale locale)
    {
-      ScriptResource resource = getResource(resourceId);
-      
-      if (resource != null)
-      {  
-         List<Module> modules = new ArrayList<Module>(resource.getModules());         
-         
-         Collections.sort(modules, MODULE_COMPARATOR);
-         ArrayList<Reader> readers = new ArrayList<Reader>(modules.size() * 2);         
-         StringBuilder buffer = new StringBuilder();
-         
-         //
-         boolean isModule = FetchMode.ON_LOAD.equals(resource.getFetchMode());
-         boolean isNative = modules.size() > 0 && modules.get(0) instanceof Module.Native; 
-         
-         if (isNative)
+      if (ResourceScope.GROUP.equals(resourceId.getScope()))
+      {
+         ScriptGroup loadGroup = scripts.getLoadGroup(resourceId.getName());
+         if (loadGroup != null)
          {
-            Reader jScript = getJavascript(resource, modules.get(0).getName(), locale);
-            readers.add(jScript);
+            List<Reader> readers = new ArrayList<Reader>(loadGroup.getDependencies().size());
+            for (ResourceId id : loadGroup.getDependencies())
+            {
+               Reader rd = getScript(id, locale);
+               if (rd != null)
+               {
+                  readers.add(rd);
+               }
+            }
+            return new CompositeReader(readers);
          }
          else
          {
-            if (isModule)
+            return null;
+         }
+      }
+      else
+      {
+         ScriptResource resource = getResource(resourceId);
+         
+         if (resource != null)
+         {  
+            List<Module> modules = new ArrayList<Module>(resource.getModules());         
+            
+            Collections.sort(modules, MODULE_COMPARATOR);
+            ArrayList<Reader> readers = new ArrayList<Reader>(modules.size() * 2);         
+            StringBuilder buffer = new StringBuilder();
+            
+            //
+            boolean isModule = FetchMode.ON_LOAD.equals(resource.getFetchMode());
+            boolean isNative = modules.size() > 0 && modules.get(0) instanceof Module.Native; 
+            
+            if (isModule && !isNative)
             {
                buffer.append("define('").append(resourceId).append("', ");
+               
                JSONArray deps = new JSONArray();
+               List<String> alias = new LinkedList<String>();
                for (ResourceId id : resource.getDependencies())
                {
                   ScriptResource dep = getResource(id);
                   if (dep != null)
                   {
                      deps.put(dep.getId());                     
+                     
+                     //
+                     String als = resource.getDependencyAlias(id);
+                     alias.add(als == null ? dep.getAlias() : als);
                   }
                }
                buffer.append(deps);
                buffer.append(", function(");
-               for (ResourceId resId : resource.getDependencies()) 
-               {               
-                  ScriptResource dep = getResource(resId);
-                  if (dep != null) 
-                  {
-                     String alias = resource.getDependencyAlias(resId);
-                     buffer.append(alias == null ? dep.getAlias() : alias).append(",");                  
-                  }
-               }
-               if (buffer.charAt(buffer.length() - 1) == ',') 
-               {
-                  buffer.deleteCharAt(buffer.length() - 1);
-               }
+               buffer.append(StringUtils.join(alias, ","));
                
                //                        
-               buffer.append(") { var _module = {};(function() {");
+               buffer.append(") {return ");
             }
             
             //
             for (Module js : modules)
-            {
+            {            
                Reader jScript = getJavascript(resource, js.getName(), locale);
                if (jScript != null)
                {                                                     
-                  buffer.append("// Begin ").append(js.getName()).append("\n");                          
-                  
-                  //
                   readers.add(new StringReader(buffer.toString()));                  
                   buffer.setLength(0);                  
                   readers.add(jScript);
-                  
-                  //
-                  buffer.append("// End ").append(js.getName()).append("\n");
                }                                             
-            }                     
-         }
-         
-         if (isModule)
-         {
-            if (!isNative)
+            }                  
+            
+            if (isModule)
+            {            
+               if (!isNative)
+               {
+                  buffer.append("});");                                   
+               }
+            }
+            else 
             {
-               buffer.append("})();");
-               buffer.append("return _module;});");                    
+               buffer.append("if (typeof define === 'function' && define.amd && !require.specified('").append(resource.getId()).append("')) {");
+               buffer.append("define('").append(resource.getId()).append("');}");            
+            }
+            readers.add(new StringReader(buffer.toString()));            
+            
+            return new CompositeReader(readers);
+         }
+         else
+         {
+            return null;         
+         }
+      }      
+   }
+   
+   @SuppressWarnings("unchecked")
+   public String generateURL(
+      ControllerContext controllerContext,
+      ResourceId id,
+      boolean merge,
+      boolean minified,
+      Locale locale) throws IOException
+   {      
+      @SuppressWarnings("rawtypes")
+      BaseScriptResource resource = null;
+      if (ResourceScope.GROUP.equals(id.getScope()))
+      {
+         resource = scripts.getLoadGroup(id.getName());
+      }
+      else
+      {
+         resource = getResource(id);            
+      }
+             
+      //
+      if (resource != null)
+      {         
+         if (resource instanceof ScriptResource)
+         {
+            ScriptResource rs = (ScriptResource)resource;
+            
+            List<Module> modules = rs.getModules();
+            if (modules.size() > 0 && modules.get(0) instanceof Module.Remote)
+            {
+               return ((Module.Remote)modules.get(0)).getURI();
             }
          }
-         else 
-         {
-            buffer.append("if (typeof define === 'function' && define.amd && !require.specified('").append(resource.getId()).append("')) {");
-            buffer.append("define('").append(resource.getId()).append("');}");            
-         }
-         readers.add(new StringReader(buffer.toString()));            
-         
-         return new CompositeReader(readers);
+
+         StringBuilder buffer = new StringBuilder();
+         URIWriter writer = new URIWriter(buffer);
+         controllerContext.renderURL(resource.getParameters(minified, locale), writer);
+         return buffer.toString();            
       }
       else
       {
          return null;         
       }
-   }
-   
-   public Map<String, FetchMode> resolveURLs(
-      ControllerContext controllerContext,
-      Map<ResourceId, FetchMode> ids,
-      boolean merge,
-      boolean minified,
-      Locale locale) throws IOException
-   {
-      Map<String, FetchMode> urls = new LinkedHashMap<String, FetchMode>();
-      StringBuilder buffer = new StringBuilder();
-      URIWriter writer = new URIWriter(buffer);
-
-      //
-      if (ids.size() > 0)
-      {
-         ScriptResource resource = getResource(ids.keySet().iterator().next());
-                
-         //
-         if (resource != null)
-         {
-            FetchMode mode = resource.getFetchMode();
-            List<Module> modules = resource.getModules();
-            if (modules.size() > 0 && modules.get(0) instanceof Module.Remote)
-            {
-               urls.put(((Module.Remote)modules.get(0)).getURI(), mode);
-            }
-            else
-            {
-               controllerContext.renderURL(resource.getParameters(minified, locale), writer);
-               urls.put(buffer.toString(), mode);
-               buffer.setLength(0);
-               writer.reset(buffer);
-            }            
-         }
-      }
-
-      //
-      return urls;
    }
 
    public Map<ScriptResource, FetchMode> resolveIds(Map<ResourceId, FetchMode> ids)
@@ -273,6 +284,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       JSONObject paths = new JSONObject();
       JSONObject shim = new JSONObject();      
             
+      Map<ResourceId, String> groupURLs = new HashMap<ResourceId, String>();
       for (ScriptResource resource : getAllResources())
       {         
          if (!resource.isEmpty() || ResourceScope.SHARED.equals(resource.getId().getScope()))
@@ -294,13 +306,24 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                }
             }
             
-            HashMap<ResourceId, FetchMode> ids = new HashMap<ResourceId, FetchMode>();
-            ids.put(resource.getId(), null);                     
-            Map<String, FetchMode> urlMap = resolveURLs(controllerContext, ids, !PropertyManager.isDevelopping(),
-               !PropertyManager.isDevelopping(), locale);         
-            
-            String url = urlMap.keySet().iterator().next();            
-            paths.put(name, url.substring(0, url.length() - ".js".length()));
+                   
+            String url;
+            ScriptGroup group = resource.getGroup();
+            if (group != null)
+            {
+               ResourceId grpId = group.getId();
+               url = groupURLs.get(grpId);
+               if (url == null)
+               {
+                  url = buildURL(grpId, controllerContext, locale);
+                  groupURLs.put(grpId, url);
+               }
+            }
+            else
+            {
+               url = buildURL(resource.getId(), controllerContext, locale);                                    
+            }
+            paths.put(name, url);
          }         
       }
                  
@@ -308,17 +331,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       config.put("paths", paths);
       config.put("shim", shim);
       return config;
-   }
-   
-   private List<ScriptResource> getAllResources()
-   {
-      List<ScriptResource> resources = new LinkedList<ScriptResource>();
-      for (ResourceScope scope : ResourceScope.values())
-      {
-         resources.addAll(scripts.getResources(scope));
-      }
-      return resources;
-   }
+   }  
    
    public ScriptResource getResource(ResourceId resource)
    {
@@ -414,5 +427,30 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          }
       }
       return null;
+   }
+   
+   private String buildURL(ResourceId id, ControllerContext context, Locale locale) throws Exception
+   {      
+      String url = generateURL(context, id, !PropertyManager.isDevelopping(),
+         !PropertyManager.isDevelopping(), locale);         
+      
+      if (url != null && url.endsWith(".js"))
+      {            
+         return url.substring(0, url.length() - ".js".length());         
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+   private List<ScriptResource> getAllResources()
+   {
+      List<ScriptResource> resources = new LinkedList<ScriptResource>();
+      for (ResourceScope scope : ResourceScope.values())
+      {
+         resources.addAll(scripts.getResources(scope));
+      }
+      return resources;
    }
 }

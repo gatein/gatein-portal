@@ -26,10 +26,12 @@ import org.gatein.portal.controller.resource.ResourceScope;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -39,6 +41,9 @@ public class ScriptGraph
    
    /** . */
    final EnumMap<ResourceScope, Map<String, ScriptResource>> resources;
+   
+   /** . */
+   final Map<String, ScriptGroup> loadGroups;
 
    public ScriptGraph()
    {
@@ -46,10 +51,11 @@ public class ScriptGraph
       for (ResourceScope scope : ResourceScope.values())
       {
          resources.put(scope, new HashMap<String, ScriptResource>());
-      }
+      }           
       
       //
       this.resources = resources;
+      this.loadGroups = new HashMap<String, ScriptGroup>();      
    }
 
    /**
@@ -177,7 +183,7 @@ public class ScriptGraph
 
    public ScriptResource addResource(ResourceId id, FetchMode fetchMode) throws NullPointerException
    {
-      return addResource(id, fetchMode, null);
+      return addResource(id, fetchMode, null, null);
    }
    
    /**
@@ -190,7 +196,7 @@ public class ScriptGraph
     * @return the resource
     * @throws NullPointerException if id or fetchMode is null
     */
-   public ScriptResource addResource(ResourceId id, FetchMode fetchMode, String alias) throws NullPointerException
+   public ScriptResource addResource(ResourceId id, FetchMode fetchMode, String alias, String groupName) throws NullPointerException
    {
       if (id == null)
       {
@@ -222,13 +228,25 @@ public class ScriptGraph
       ScriptResource resource = map.get(name);
       if (resource == null)
       {
-         map.put(name, resource = new ScriptResource(this, id, fetchMode, alias));
+         ScriptGroup group = null;
+         if (groupName != null)
+         {
+            group = loadGroups.get(groupName);
+            if (group == null)
+            {
+               ResourceId grpId = new ResourceId(ResourceScope.GROUP, groupName);
+               loadGroups.put(groupName, group = new ScriptGroup(this, grpId));
+            }
+            group.addDependency(id);
+         }
+         
+         map.put(name, resource = new ScriptResource(this, id, fetchMode, alias, group));         
       }
       else if (!(id.getScope().equals(ResourceScope.SHARED) && JavascriptConfigParser.LEGACY_JAVA_SCRIPT.equals(name)))
       {
          throw new IllegalStateException("Duplicate ResourceId : " + id + ", later resource definition will be ignored");
       }                     
-      
+     
       return resource;            
    }
    
@@ -242,4 +260,8 @@ public class ScriptGraph
       return removed;
    }
 
+   public ScriptGroup getLoadGroup(String groupName)
+   {
+      return loadGroups.get(groupName);
+   }
 }

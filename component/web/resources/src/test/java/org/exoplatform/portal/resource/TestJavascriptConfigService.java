@@ -75,11 +75,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
          resources.put("/js/module1.js", "ccc;");
          resources.put("/js/module2.js", "ddd;");
          resources.put("/js/native1.js", "eee;");
-         resources.put("/js/native2.js", "define('SHARED/native2', [], function() { var _module = {};(function() {" +      
-                                          "// Begin native2\n" + 
-                                          "fff;" +  
-                                          "// End native2\n" +
-                                          "})();return _module;});");
+         resources.put("/js/native2.js", "fff;");
          mockServletContext = new MockJSServletContext("mockwebapp", resources);
          jsService.registerContext(new WebAppImpl(mockServletContext, Thread.currentThread().getContextClassLoader()));
 
@@ -93,30 +89,45 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    public void testGetScript() throws Exception
    {      
       //no wrapper for SCRIPTS
-      String script1 = "// Begin eXo.script1\naaa;// End eXo.script1\n" +
+      String script1 = "aaa;" +
                                "if (typeof define === 'function' && define.amd && !require.specified('SHARED/script1')) {define('SHARED/script1');}";
-      String script2 = "// Begin eXo.script2\nbbb;// End eXo.script2\n" +
+      String script2 = "bbb;" +
                                "if (typeof define === 'function' && define.amd && !require.specified('SHARED/script2')) {define('SHARED/script2');}";
       assertReader(script1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "script1"), null));
       assertReader(script2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "script2"), null));          
       
       //wrapper for MODULE
       //test for Alias : module1 is used with 'm1' alias
-      String module1 = "define('SHARED/module1', [], function() { var _module = {};(function() {" +      
-                                 "// Begin eXo.module1\n" + 
+      String module1 = "define('SHARED/module1', [], function() {return " +      
                                  "ccc;" +  
-                                 "// End eXo.module1\n" +
-                                 "})();return _module;});";
+                                 "});";
       assertReader(module1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module1"), null));
       
       //module2 depends on module1
       //test for Alias : module1 is used with 'mod1' alias, module2 use default name for alias
-      String module2 = "define('SHARED/module2', [\"SHARED/module1\"], function(mod1) { var _module = {};(function() {" +
-                                 "// Begin eXo.module2\n" + 
+      String module2 = "define('SHARED/module2', [\"SHARED/module1\"], function(mod1) {return " +
                                  "ddd;" +
-                                 "// End eXo.module2\n" +
-                                  "})();return _module;});";
+                                  "});";
       assertReader(module2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module2"), null));
+   }
+   
+   public void testGroupingScript() throws Exception
+   {
+      String module1 = "define('SHARED/module1', [], function() {return " +      
+               "ccc;" +  
+               "});";
+      String module2 = "define('SHARED/module2', [\"SHARED/module1\"], function(mod1) {return " +
+               "ddd;" +
+                "});";
+      
+      StringWriter buffer = new StringWriter();
+      IOTools.copy(jsService.getScript(new ResourceId(ResourceScope.GROUP, "fooGroup"), null), buffer);
+      
+      //the order of module1, and module2 in group is not known
+      String result = buffer.toString();
+      result = result.replace(module1, "");
+      result = result.replace(module2, "");
+      assertTrue(result.isEmpty());
    }
    
    public void testGetNativeScript() throws Exception
@@ -124,11 +135,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       String native1 = "eee;";
       assertReader(native1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "native1"), null));
       
-      String native2 = "define('SHARED/native2', [], function() { var _module = {};(function() {" +      
-               "// Begin native2\n" + 
-               "fff;" +  
-               "// End native2\n" +
-               "})();return _module;});" +
+      String native2 = "fff;" +
                "if (typeof define === 'function' && define.amd && !require.specified('native2')) {define('native2');}";
       assertReader(native2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "native2"), null));
    }
@@ -136,7 +143,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    public void testGetJSConfig() throws Exception
    {            
       JSONObject config = jsService.getJSConfig(CONTROLLER_CONTEXT, null);
-      
+
       //All SCRIPTS and remote resource have to had dependencies declared in shim configuration
       JSONObject shim = config.getJSONObject("shim");
       assertNotNull(shim);
@@ -161,34 +168,29 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertEquals("mock_url_of_native1", paths.getString("native1"));
       assertEquals("mock_url_of_native2", paths.getString("native2"));
       
-      //navController url for modules and scripts
-      assertEquals("mock_url_of_module1", paths.getString("SHARED/module1"));
-      assertEquals("mock_url_of_module2", paths.getString("SHARED/module2"));
+      //module1 and module2 are grouped
+      assertEquals("mock_url_of_fooGroup", paths.getString("SHARED/module1"));
+      assertEquals("mock_url_of_fooGroup", paths.getString("SHARED/module2"));
+
+      //navController url for scripts
       assertEquals("mock_url_of_script1", paths.getString("SHARED/script1"));
       assertEquals("mock_url_of_script2", paths.getString("SHARED/script2"));
    }
    
-   public void testResolveURL() throws Exception
+   public void testGenerateURL() throws Exception
    {
-      Map<ResourceId, FetchMode> tmp = new HashMap<ResourceId, FetchMode>();
-      tmp.put(new ResourceId(ResourceScope.SHARED, "remote1"), null);
-      
-      Map<String, FetchMode> remoteURL = jsService.resolveURLs(CONTROLLER_CONTEXT, tmp, false, false, null);
-      assertTrue(remoteURL.size() > 0);
+      ResourceId remote1 = new ResourceId(ResourceScope.SHARED, "remote1");
+      String remoteURL = jsService.generateURL(CONTROLLER_CONTEXT, remote1, false, false, null);
       //Return remote module/script url as it's  declared in gatein-resources.xml
-      assertEquals("/js/remote1.js", remoteURL.keySet().iterator().next());
+      assertEquals("/js/remote1.js", remoteURL);
       
-      tmp.clear();
-      tmp.put(new ResourceId(ResourceScope.SHARED, "native1"), null);      
-      remoteURL = jsService.resolveURLs(CONTROLLER_CONTEXT, tmp, false, false, null);
-      assertTrue(remoteURL.size() > 0);
-      assertEquals("mock_url_of_native1.js", remoteURL.keySet().iterator().next());
+      ResourceId native1 = new ResourceId(ResourceScope.SHARED, "native1");      
+      remoteURL = jsService.generateURL(CONTROLLER_CONTEXT, native1, false, false, null);
+      assertEquals("mock_url_of_native1.js", remoteURL);
       
-      tmp.clear();
-      tmp.put(new ResourceId(ResourceScope.SHARED, "module1"), null);      
-      remoteURL = jsService.resolveURLs(CONTROLLER_CONTEXT, tmp, false, false, null);
-      assertTrue(remoteURL.size() > 0);
-      assertEquals("mock_url_of_module1.js", remoteURL.keySet().iterator().next());
+      ResourceId module1 = new ResourceId(ResourceScope.SHARED, "module1");      
+      remoteURL = jsService.generateURL(CONTROLLER_CONTEXT, module1, false, false, null);
+      assertEquals("mock_url_of_module1.js", remoteURL);
    }
    
    public void testResolveIDs()
