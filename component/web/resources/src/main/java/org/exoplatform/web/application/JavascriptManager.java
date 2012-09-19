@@ -146,7 +146,6 @@ public class JavascriptManager
       {
          String id = Integer.toString(Math.abs(s.hashCode()));
          StringBuilder script = new StringBuilder("base.Browser.addOnLoadCallback('mid");
-         script.append("base.Browser.addOnLoadCallback('mid");
          script.append(id);
          script.append("',");
          script.append(s instanceof String ? (String)s : s.toString());

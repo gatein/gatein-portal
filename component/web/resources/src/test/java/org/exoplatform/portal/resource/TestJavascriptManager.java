@@ -99,4 +99,17 @@ public class TestJavascriptManager extends AbstractWebResourceTest
       String expected = "require([\"SHARED/base\",\"SHARED/jquery\",\"SHARED/webui\"],function(base,$) {\n});";
       assertEquals(expected, require.toString());
    }
+   
+   public void testAddOnLoadJavascript()
+   {
+      jsManager.require("foo", "bar").addScripts("bar.zoo;");
+      
+      String onload = "eXo.core.Browser.init";
+      jsManager.addOnLoadJavascript(onload);
+      
+      String expected = "require([\"SHARED/base\",\"foo\"],function(base,bar) {\n" +
+                                   "bar.zoo;base.Browser.addOnLoadCallback('mid" + Math.abs(onload.hashCode()) + 
+                                   "'," + onload + ");base.Browser.onLoad();});";
+      assertEquals(expected, jsManager.getJavaScripts());
+   }
 }
