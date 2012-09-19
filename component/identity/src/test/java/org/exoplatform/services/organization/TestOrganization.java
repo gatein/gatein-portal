@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -46,16 +46,16 @@ import java.util.List;
 public class TestOrganization extends AbstractKernelTest
 {
 
-	private static final String GROUP_1 = "testOrganization_group1";
-	private static final String GROUP_2 = "testOrganization_group2";
-	private static final String GROUP_3 = "testOrganization_group3";
-	
-	private static final String USER_1 = "testOrganization_user1";
-	private static final String USER_2 = "testOrganization_user2";
-	private static final String USER_3 = "testOrganization_user3";
-	private static final String DEFAULT_PASSWORD = "defaultpassword";
-	private static final String DESCRIPTION = " Description";
-	
+   private static final String GROUP_1 = "testOrganization_group1";
+   private static final String GROUP_2 = "testOrganization_group2";
+   private static final String GROUP_3 = "testOrganization_group3";
+
+   private static final String USER_1 = "testOrganization_user1";
+   private static final String USER_2 = "testOrganization_user2";
+   private static final String USER_3 = "testOrganization_user3";
+   private static final String DEFAULT_PASSWORD = "defaultpassword";
+   private static final String DESCRIPTION = " Description";
+
    private OrganizationService organizationService;
 
    @Override
@@ -65,11 +65,11 @@ public class TestOrganization extends AbstractKernelTest
       begin();
       PortalContainer container = getContainer();
       organizationService = (OrganizationService)container.getComponentInstance(OrganizationService.class);
-      
+
       createGroup(null, GROUP_1);
       createGroup(GROUP_1, GROUP_2);
       createGroup(GROUP_1, GROUP_3);
-      
+
       createUser(USER_1, GROUP_1);
       createUser(USER_2, GROUP_2);
       createUser(USER_3, GROUP_1);
@@ -91,11 +91,11 @@ public class TestOrganization extends AbstractKernelTest
    }
 
    public void testFindGroupNotFound() throws Exception {
-	   GroupHandler groupHander = organizationService.getGroupHandler();
-	   Group group = groupHander.findGroupById(GROUP_1 + "NOTFOUND");
-	   assertNull(group);
+      GroupHandler groupHander = organizationService.getGroupHandler();
+      Group group = groupHander.findGroupById(GROUP_1 + "NOTFOUND");
+      assertNull(group);
    }
-   
+
    public void testFindGroupFromRoot() throws Exception
    {
       GroupHandler handler = organizationService.getGroupHandler();
@@ -110,27 +110,27 @@ public class TestOrganization extends AbstractKernelTest
       assertNotNull(group);
       assertEquals(GROUP_1, group.getGroupName());
       assertEquals(GROUP_1 + DESCRIPTION, group.getDescription());
-      
+
       group = groupHandler.findGroupById(GROUP_3);
       assertNotNull(group);
       assertEquals(GROUP_3, group.getGroupName());
    }
-   
+
    public void testFindGroupOfUser() {
-	   GroupHandler groupHandler = organizationService.getGroupHandler();
-	   try {
-		Collection<Group> groups = groupHandler.findGroupsOfUser(USER_1);
-		assertNotNull(groups);
-		assertTrue(groups.size() >= 1);
-	} catch (Exception e) {
-		fail();
-	}
+      GroupHandler groupHandler = organizationService.getGroupHandler();
+      try {
+         Collection<Group> groups = groupHandler.findGroupsOfUser(USER_1);
+         assertNotNull(groups);
+         assertTrue(groups.size() >= 1);
+      } catch (Exception e) {
+         fail();
+      }
    }
 
    public void testFindUserByGroup() throws Exception
    {
-	  GroupHandler groupHandler = organizationService.getGroupHandler();
-	  Group group = groupHandler.findGroupById(GROUP_1);
+      GroupHandler groupHandler = organizationService.getGroupHandler();
+      Group group = groupHandler.findGroupById(GROUP_1);
       UserHandler uHandler = organizationService.getUserHandler();
       PageList users = uHandler.findUsersByGroup("/platform/administrators");
       Assert.assertTrue(users.getAvailable() > 0);
@@ -149,7 +149,7 @@ public class TestOrganization extends AbstractKernelTest
       User user = uHandler.findUserByName("root");
       Assert.assertNotNull(user);
       Assert.assertTrue(uHandler.authenticate("root", "gtn"));
-      
+
       // Test changing password
       user.setPassword("newPassword");
       uHandler.saveUser(user, false);
@@ -162,7 +162,7 @@ public class TestOrganization extends AbstractKernelTest
       uHandler.saveUser(user, false);
 
    }
-   
+
    public void testDisplayName() throws Exception
    {
       UserHandler uHandler = organizationService.getUserHandler();
@@ -182,7 +182,7 @@ public class TestOrganization extends AbstractKernelTest
       uHandler.saveUser(john, false);
       john = uHandler.findUserByName("john");
       Assert.assertEquals("John Anthony", john.getFullName());
-      
+
 //    TODO: GTNPORTAL-2358 uncomment once displayName will be available      
 //      // Test that "root" and "john" have displayName but demo not.
 //      Assert.assertEquals("Root Root", root.getDisplayName());
@@ -222,7 +222,7 @@ public class TestOrganization extends AbstractKernelTest
          }
          groupHandler.saveGroup(newGroup, true);
       }
-      
+
       catch (Exception e)
       {
          e.printStackTrace();

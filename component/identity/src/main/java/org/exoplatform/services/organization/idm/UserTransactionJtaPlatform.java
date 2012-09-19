@@ -21,38 +21,31 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.common.transaction;
+package org.exoplatform.services.organization.idm;
 
 import javax.transaction.UserTransaction;
 
-/**
- * Service provides methods for managing lifecycle of JTA transaction
- *
- * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
- */
-public interface JTAUserTransactionLifecycleService
+import org.hibernate.service.jndi.JndiException;
+import org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform;
+
+// We need fallback to "java:jboss/UserTransaction" because "java:comp/UserTransaction" is not available
+// during eXo kernel boot in AS7 environment.
+// TODO: Remove class once https://issues.jboss.org/browse/HIBERNATE-137 will be fixed
+public class UserTransactionJtaPlatform extends JBossAppServerJtaPlatform
 {
+   // Should always work with AS7 even during GateIn(exo kernel) boot from MSC thread
+   public static final String JBOSS_CTX_UT_NAME = "java:jboss/UserTransaction";
 
-   /**
-    * @return instance of UserTransaction
-    */
-   public UserTransaction getUserTransaction();
-
-
-   /**
-    * Commit or Rollback JTA transaction according to it's current status
-    */
-   public void finishJTATransaction();
-
-
-   /**
-    * Starts JTA transaction if not already started
-    */
-   public void beginJTATransaction();
-
-   /**
-    * Register listener to perform some operations during transaction lifecycle
-    * @param listener to be registered
-    */
-   public void registerListener(JTAUserTransactionLifecycleListener listener);
+   @Override
+   protected UserTransaction locateUserTransaction()
+   {
+      try
+      {
+         return (UserTransaction) jndiService().locate(UT_NAME);
+      }
+      catch(JndiException jndiException)
+      {
+         return (UserTransaction) jndiService().locate(JBOSS_CTX_UT_NAME);
+      }
+   }
 }

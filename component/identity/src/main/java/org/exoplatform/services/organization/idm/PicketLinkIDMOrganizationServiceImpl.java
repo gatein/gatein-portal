@@ -109,6 +109,10 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
 
       try
       {
+         if (configuration.isUseJTA())
+         {
+            jtaTransactionLifecycleService.registerListener(new IDMTransactionSyncListener(idmService_));
+         }
 
          RequestLifeCycle.begin(this);
 

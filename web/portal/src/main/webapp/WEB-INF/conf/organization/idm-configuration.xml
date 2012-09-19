@@ -35,29 +35,44 @@
     <type>org.gatein.common.transaction.JTAUserTransactionLifecycleServiceImpl</type>
   </component>
 
-  <component>
-    <key>org.exoplatform.services.database.HibernateService</key>
-    <jmx-name>database:type=HibernateService</jmx-name>
-    <type>org.exoplatform.services.database.impl.HibernateServiceImpl</type>
-    <init-params>
-      <properties-param>
-        <name>hibernate.properties</name>
-        <description>Default Hibernate Service</description>
-        <property name="hibernate.show_sql" value="false"/>
-        <property name="hibernate.current_session_context_class" value="thread"/>
-        <property name="hibernate.cache.use_second_level_cache" value="true"/>
-        <property name="hibernate.cache.use_query_cache" value="true"/>
-        <!--CHANGEME HashtableCacheProvider shold not be used in production env-->
-        <property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider"/>
-        <property name="hibernate.connection.datasource" value="${gatein.idm.datasource.name}${container.name.suffix}"/>
-        <property name="hibernate.connection.autocommit" value="true"/>
-        <!--
-        	Should be automatically detected. Force otherwise 
-        <property name="hibernate.dialect" value="org.hibernate.dialect.XXXDialect"/>
-         -->
-      </properties-param>
-    </init-params>
-  </component>
+   <component>
+      <key>org.exoplatform.services.database.HibernateService</key>
+      <jmx-name>database:type=HibernateService</jmx-name>
+      <type>org.exoplatform.services.database.impl.HibernateServiceImpl</type>
+      <init-params>
+         <properties-param>
+            <name>hibernate.properties</name>
+            <description>Default Hibernate Service</description>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.connection.datasource" value="${gatein.idm.datasource.name}${container.name.suffix}"/>
+            <property name="hibernate.connection.autocommit" value="false"/>
+
+            <!-- Non-JTA setup -->
+            <property name="hibernate.current_session_context_class" value="thread"/>
+
+            <!-- JTA setup -->
+            <!--<property name="hibernate.current_session_context_class" value="jta"/>
+            <property name="hibernate.transaction.factory_class" value="org.hibernate.transaction.JTATransactionFactory" />
+            <property name="hibernate.transaction.jta.platform" value="org.exoplatform.services.organization.idm.UserTransactionJtaPlatform" />-->
+
+            <property name="hibernate.cache.use_second_level_cache" value="false"/>
+            <property name="hibernate.cache.use_query_cache" value="false"/>
+            <!-- Uncomment for enable 2nd level cache based on Infinispan -->
+            <!--<property name="hibernate.cache.region.factory_class" value="org.jboss.as.jpa.hibernate4.infinispan.InfinispanRegionFactory" />-->
+            <!-- Uncomment to enable cache statistics for infinispan />-->
+            <!--<property name="hibernate.cache.infinispan.statistics" value="true" />-->
+            <!-- Uncomment to use custom infinispan configuration file instead of the default bundled in hibernate-infinispan jar -->
+            <!--<property name="hibernate.cache.infinispan.cfg" value="/home/infinispan/cacheprovider-configs.xml"/>-->
+
+            <!--
+              Should be automatically detected. Force otherwise
+               <property name="hibernate.dialect" value="org.hibernate.dialect.XXXDialect"/>
+            -->
+            <property name="hibernate.listeners.envers.autoRegister" value="false" />
+         </properties-param>
+      </init-params>
+   </component>
 
   <component>
     <key>org.exoplatform.services.organization.idm.PicketLinkIDMService</key>
@@ -84,7 +99,7 @@
 
         <!--MSAD Read Only "ACME" LDAP Example-->
         <!--<value>war:/conf/organization/picketlink-idm/examples/picketlink-idm-msad-readonly-config.xml</value>-->
-        
+
       </value-param>
 
       <!-- In default PicketLink IDM configuration hibernate store will namespace identity objects using this realm name
@@ -98,7 +113,7 @@
         <name>apiCacheConfig</name>
         <value>war:/conf/organization/picketlink-idm/jboss-cache.xml</value>
       </value-param>
-      
+
       <value-param profiles="cluster">
         <name>apiCacheConfig</name>
         <value>war:/conf/organization/picketlink-idm/jboss-cache-api-cluster.xml</value>
@@ -128,7 +143,6 @@
         <name>cacheExpiration</name>
         <value>1800000</value>
       </value-param>
-
 
     </init-params>
   </component>

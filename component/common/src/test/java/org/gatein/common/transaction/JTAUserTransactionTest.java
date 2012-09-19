@@ -23,20 +23,13 @@
 
 package org.gatein.common.transaction;
 
-import junit.framework.TestCase;
-import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
 
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
 import javax.transaction.Status;
-import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
 /**
@@ -81,6 +74,31 @@ public class JTAUserTransactionTest extends AbstractKernelTest
       tx.setRollbackOnly();
       jtaUserTransactionLifecycleService.finishJTATransaction();
       assertStatus(Status.STATUS_NO_TRANSACTION);
+   }
+
+   public void testListener() throws Exception
+   {
+      CounterListener counterListener = new CounterListener();
+      jtaUserTransactionLifecycleService.registerListener(counterListener);
+
+      UserTransaction tx = jtaUserTransactionLifecycleService.getUserTransaction();
+      assertNotNull(tx);
+
+      assertEquals(counterListener.getBeforeBeginCounter(), 0);
+      assertEquals(counterListener.getAfterBeginCounter(), 0);
+
+      jtaUserTransactionLifecycleService.beginJTATransaction();
+      assertEquals(counterListener.getBeforeBeginCounter(), 1);
+      assertEquals(counterListener.getAfterBeginCounter(), 1);
+
+      jtaUserTransactionLifecycleService.finishJTATransaction();
+      jtaUserTransactionLifecycleService.beginJTATransaction();
+      assertEquals(counterListener.getBeforeBeginCounter(), 2);
+      assertEquals(counterListener.getAfterBeginCounter(), 2);
+
+      jtaUserTransactionLifecycleService.finishJTATransaction();
+      assertEquals(counterListener.getBeforeBeginCounter(), 2);
+      assertEquals(counterListener.getAfterBeginCounter(), 2);
    }
 
    private void assertStatus(int expectedStatus) throws Exception

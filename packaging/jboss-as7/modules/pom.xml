@@ -209,41 +209,17 @@
       </dependency>
 
       <!-- Hibernate -->
-      <!--dependency>
-         <groupId>org.hibernate</groupId>
-         <artifactId>hibernate-core</artifactId>
+      <dependency>
+        <groupId>org.hibernate.javax.persistence</groupId>
+        <artifactId>hibernate-jpa-2.0-api</artifactId>
       </dependency>
       <dependency>
-         <groupId>org.hibernate</groupId>
-         <artifactId>hibernate-commons-annotations</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.hibernate.javax.persistence</groupId>
-         <artifactId>hibernate-jpa-2.0-api</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.hibernate</groupId>
-         <artifactId>hibernate-validator</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.hibernate</groupId>
-         <artifactId>hibernate-validator-legacy</artifactId>
-      </dependency-->
-      <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>ejb3-persistence</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.hibernate</groupId>
+        <groupId>org.hibernate.common</groupId>
         <artifactId>hibernate-commons-annotations</artifactId>
       </dependency>
       <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-core</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-annotations</artifactId>
       </dependency>
 
 
@@ -403,15 +379,11 @@
                <artifactId>hibernate-core</artifactId>
             </exclusion>
             <exclusion>
-               <groupId>org.hibernate</groupId>
-               <artifactId>hibernate-annotations</artifactId>
+               <groupId>org.hibernate.javax.persistence</groupId>
+               <artifactId>hibernate-jpa-2.0-api</artifactId>
             </exclusion>
             <exclusion>
-               <groupId>org.hibernate</groupId>
-               <artifactId>ejb3-persistence</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.hibernate</groupId>
+               <groupId>org.hibernate.common</groupId>
                <artifactId>hibernate-commons-annotations</artifactId>
             </exclusion>
          </exclusions>
@@ -1135,17 +1107,14 @@
       <dependency>
          <groupId>org.apache.lucene</groupId>
          <artifactId>lucene-core</artifactId>
-         <version>2.9.4</version>
       </dependency>
       <dependency>
          <groupId>org.apache.lucene</groupId>
          <artifactId>lucene-memory</artifactId>
-         <version>2.9.4</version>
       </dependency>
       <dependency>
          <groupId>org.apache.lucene</groupId>
          <artifactId>lucene-spellchecker</artifactId>
-         <version>2.9.4</version>
       </dependency>
       <dependency>
          <groupId>net.sourceforge.nekohtml</groupId>
@@ -1319,12 +1288,10 @@
       <dependency>
         <groupId>org.apache.tika</groupId>
         <artifactId>tika-core</artifactId>
-        <version>0.7</version>
       </dependency>
       <dependency>
         <groupId>org.apache.tika</groupId>
         <artifactId>tika-parsers</artifactId>
-        <version>0.7</version>
          <exclusions>
             <exclusion>
                <groupId>org.apache.commons</groupId>
@@ -1338,10 +1305,10 @@
                <groupId>org.bouncycastle</groupId>
                <artifactId>bcprov-jdk15</artifactId>
             </exclusion>
-            <exclusion>
-               <groupId>org.ccil.cowan.tagsoup</groupId>
-               <artifactId>tagsoup</artifactId>
-            </exclusion>
+            <!--<exclusion>-->
+               <!--<groupId>org.ccil.cowan.tagsoup</groupId>-->
+               <!--<artifactId>tagsoup</artifactId>-->
+            <!--</exclusion>-->
             <exclusion>
                <groupId>com.drewnoakes</groupId>
                <artifactId>metadata-extractor</artifactId>
@@ -1349,36 +1316,9 @@
          </exclusions>
       </dependency>
       <dependency>
-        <groupId>org.apache.tika</groupId>
-        <artifactId>tika-core</artifactId>
-        <version>0.7</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.tika</groupId>
-        <artifactId>tika-parsers</artifactId>
-        <version>0.7</version>
-         <exclusions>
-            <exclusion>
-               <groupId>org.apache.commons</groupId>
-               <artifactId>commons-compress</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.bouncycastle</groupId>
-               <artifactId>bcmail-jdk15</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.bouncycastle</groupId>
-               <artifactId>bcprov-jdk15</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.ccil.cowan.tagsoup</groupId>
-               <artifactId>tagsoup</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>com.drewnoakes</groupId>
-               <artifactId>metadata-extractor</artifactId>
-            </exclusion>
-         </exclusions>
+         <groupId>com.googlecode.juniversalchardet</groupId>
+         <artifactId>juniversalchardet</artifactId>
+         <version>1.0.3</version>
       </dependency>
       <dependency>
         <groupId>com.google.javascript</groupId>

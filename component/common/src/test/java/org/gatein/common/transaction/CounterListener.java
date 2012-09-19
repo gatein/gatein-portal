@@ -23,36 +23,37 @@
 
 package org.gatein.common.transaction;
 
-import javax.transaction.UserTransaction;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Service provides methods for managing lifecycle of JTA transaction
+ * Mock listener
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface JTAUserTransactionLifecycleService
+public class CounterListener implements JTAUserTransactionLifecycleListener
 {
+   private AtomicInteger beforeBeginCounter = new AtomicInteger(0);
+   private AtomicInteger afterBeginCounter = new AtomicInteger(0);
 
-   /**
-    * @return instance of UserTransaction
-    */
-   public UserTransaction getUserTransaction();
+   @Override
+   public void beforeBegin()
+   {
+      beforeBeginCounter.incrementAndGet();
+   }
 
+   @Override
+   public void afterBegin()
+   {
+      afterBeginCounter.incrementAndGet();
+   }
 
-   /**
-    * Commit or Rollback JTA transaction according to it's current status
-    */
-   public void finishJTATransaction();
+   int getBeforeBeginCounter()
+   {
+      return beforeBeginCounter.get();
+   }
 
-
-   /**
-    * Starts JTA transaction if not already started
-    */
-   public void beginJTATransaction();
-
-   /**
-    * Register listener to perform some operations during transaction lifecycle
-    * @param listener to be registered
-    */
-   public void registerListener(JTAUserTransactionLifecycleListener listener);
+   int getAfterBeginCounter()
+   {
+      return afterBeginCounter.get();
+   }
 }

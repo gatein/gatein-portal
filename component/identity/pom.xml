@@ -40,10 +40,6 @@
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-core</artifactId>
             </exclusion>
-            <exclusion>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-annotations</artifactId>
-            </exclusion>
         </exclusions>
     </dependency>
 

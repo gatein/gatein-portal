@@ -44,7 +44,6 @@ import org.picketlink.idm.impl.configuration.jaxb2.JAXB2IdentityConfiguration;
 import org.picketlink.idm.spi.configuration.metadata.IdentityConfigurationMetaData;
 import org.picocontainer.Startable;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 

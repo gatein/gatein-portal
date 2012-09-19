@@ -39,6 +39,12 @@
      <dependency>
        <groupId>org.exoplatform.portal</groupId>    
        <artifactId>exo.portal.component.common</artifactId>
+       <exclusions>
+         <exclusion>
+           <groupId>org.jboss.logging</groupId>
+           <artifactId>jboss-logging-spi</artifactId>
+         </exclusion>
+       </exclusions>
      </dependency>
      <dependency>
        <groupId>org.exoplatform.portal</groupId>

@@ -55,7 +55,7 @@ public class UserImpl extends org.exoplatform.services.organization.impl.UserImp
       this.displayName = fullName;
    }
 
-   String getDisplayName()
+   public String getDisplayName()
    {
       return this.displayName;
    }

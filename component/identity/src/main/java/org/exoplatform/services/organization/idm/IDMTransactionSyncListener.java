@@ -21,38 +21,44 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.common.transaction;
+package org.exoplatform.services.organization.idm;
 
-import javax.transaction.UserTransaction;
+import org.gatein.common.transaction.JTAUserTransactionLifecycleListener;
 
 /**
- * Service provides methods for managing lifecycle of JTA transaction
+ * Listener used for sync global JTA transaction and underlying IDM (Hibernate) transaction
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface JTAUserTransactionLifecycleService
+class IDMTransactionSyncListener implements JTAUserTransactionLifecycleListener
 {
+   private PicketLinkIDMService idmService;
 
-   /**
-    * @return instance of UserTransaction
-    */
-   public UserTransaction getUserTransaction();
+   public IDMTransactionSyncListener(PicketLinkIDMService idmService)
+   {
+      this.idmService = idmService;
+   }
 
+   @Override
+   public void beforeBegin()
+   {
+   }
 
-   /**
-    * Commit or Rollback JTA transaction according to it's current status
-    */
-   public void finishJTATransaction();
-
-
-   /**
-    * Starts JTA transaction if not already started
-    */
-   public void beginJTATransaction();
-
-   /**
-    * Register listener to perform some operations during transaction lifecycle
-    * @param listener to be registered
-    */
-   public void registerListener(JTAUserTransactionLifecycleListener listener);
+   @Override
+   public void afterBegin()
+   {
+      try
+      {
+         // We need this as from Hibernate4 and with JTATransactionFactory, there is need to separately start IDM (Hibernate)
+         // transaction as well even if JTA transaction is started
+         if (!idmService.getIdentitySession().getTransaction().isActive())
+         {
+            idmService.getIdentitySession().beginTransaction();
+         }
+      }
+      catch (Exception e)
+      {
+         throw new RuntimeException(e);
+      }
+   }
 }

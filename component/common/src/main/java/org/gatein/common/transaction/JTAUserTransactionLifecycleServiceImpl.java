@@ -31,6 +31,9 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.transaction.Status;
 import javax.transaction.UserTransaction;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Base implementation of {@link JTAUserTransactionLifecycleService} .
@@ -44,6 +47,9 @@ public class JTAUserTransactionLifecycleServiceImpl implements JTAUserTransactio
    private UserTransaction userTransaction;
 
    private TransactionService transactionService;
+
+   // For now, we have one listener instance for all transactions
+   private List<JTAUserTransactionLifecycleListener> listeners = new LinkedList<JTAUserTransactionLifecycleListener>();
 
    public JTAUserTransactionLifecycleServiceImpl(TransactionService transactionService)
    {
@@ -61,7 +67,9 @@ public class JTAUserTransactionLifecycleServiceImpl implements JTAUserTransactio
       {
          if (tx.getStatus() == Status.STATUS_NO_TRANSACTION)
          {
+            executeListenersBeforeBegin();
             tx.begin();
+            executeListenersAfterBegin();
          }
          else
          {
@@ -107,7 +115,7 @@ public class JTAUserTransactionLifecycleServiceImpl implements JTAUserTransactio
 
 
    /**
-    * Obtain {@link UserTransaction} via JNDI call
+    * Obtain {@link UserTransaction} via JNDI call or via {@link TransactionService} if that fails
     *
     * @return transaction
     */
@@ -136,4 +144,36 @@ public class JTAUserTransactionLifecycleServiceImpl implements JTAUserTransactio
       return userTransaction;
    }
 
+   /**
+    * {@inheritDoc}
+    */
+   public void registerListener(JTAUserTransactionLifecycleListener listener)
+   {
+      log.info("Registered listener " + listener);
+      listeners.add(listener);
+   }
+
+   protected void executeListenersBeforeBegin()
+   {
+      for (JTAUserTransactionLifecycleListener listener : listeners)
+      {
+         if (log.isTraceEnabled())
+         {
+            log.trace("Execute listener " + listener + " before begin of JTA transaction");
+         }
+         listener.beforeBegin();
+      }
+   }
+
+   protected void executeListenersAfterBegin()
+   {
+      for (JTAUserTransactionLifecycleListener listener : listeners)
+      {
+         if (log.isTraceEnabled())
+         {
+            log.trace("Execute listener " + listener + " after begin of JTA transaction");
+         }
+         listener.afterBegin();
+      }
+   }
 }

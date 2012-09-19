@@ -1,5 +1,9 @@
-/**
- * Copyright (C) 2009 eXo Platform SAS.
+/*
+ * JBoss, a division of Red Hat
+ * Copyright 2012, Red Hat Middleware, LLC, and individual
+ * contributors as indicated by the @authors tag. See the
+ * copyright.txt in the distribution for a full listing of
+ * individual contributors.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -29,26 +33,25 @@ import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.organization.idm.Config;
 import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl;
-import org.exoplatform.services.organization.idm.UserDAOImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by The eXo Platform SAS Author : Hoa Pham hoapham@exoplatform.com,phamvuxuanhoa@yahoo.com
- * Oct 27, 2005
+ * Test of OrganizationService with enabled JTA setup for Hibernate
+ *
+ * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-
 @ConfiguredBy({
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/services/organization/TestOrganizationService-jdbc-configuration.xml"),
+   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/services/organization/TestOrganizationService-jta-configuration.xml"),
    @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/services/organization/TestOrganizationService-configuration.xml")
 })
-public class TestOrganizationService extends AbstractTestOrganizationService
+public class TestOrganizationServiceJTA extends AbstractTestOrganizationService
 {
-   public TestOrganizationService(String s)
+
+   public TestOrganizationServiceJTA(String s)
    {
       super(s);
    }
-
 }

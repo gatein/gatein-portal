@@ -37,16 +37,16 @@
    <name>GateIn - Portal</name>
 
    <properties>
-      <org.exoplatform.kernel.version>2.3.6-GA</org.exoplatform.kernel.version>
-      <org.exoplatform.core.version>2.4.6-GA</org.exoplatform.core.version>
-      <org.exoplatform.ws.version>2.2.6-GA</org.exoplatform.ws.version>
-      <org.exoplatform.jcr.version>1.14.6-GA</org.exoplatform.jcr.version>
+      <org.exoplatform.kernel.version>2.4.0-Beta01</org.exoplatform.kernel.version>
+      <org.exoplatform.core.version>2.5.0-Beta01</org.exoplatform.core.version>
+      <org.exoplatform.ws.version>2.3.0-Beta01</org.exoplatform.ws.version>
+      <org.exoplatform.jcr.version>1.15.0-Beta01</org.exoplatform.jcr.version>
       <org.shindig.version>2.0.2-CP01</org.shindig.version>
       <nl.captcha.simplecaptcha.version>1.1.1-GA-Patch01</nl.captcha.simplecaptcha.version>
       <org.gatein.common.version>2.0.4-GA</org.gatein.common.version>
       <org.gatein.wci.version>2.2.0-Beta02</org.gatein.wci.version>
       <org.gatein.pc.version>2.3.2-GA</org.gatein.pc.version>
-      <org.picketlink.idm>1.3.2.CR02</org.picketlink.idm>
+      <org.picketlink.idm>1.4.0.M01</org.picketlink.idm>
       <org.gatein.wsrp.version>2.2.0-Beta04</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.1.1-GA</org.gatein.mop.version>
       <org.gatein.mgmt.version>1.0.1-GA</org.gatein.mgmt.version>
@@ -79,6 +79,15 @@
 
       <!-- -->
       <surefire.exo.profiles>hsqldb</surefire.exo.profiles>
+
+      <!-- To port back into gatein-dep -->
+      <version.hibernate.javax.persistence>1.0.1.Final</version.hibernate.javax.persistence>
+      <version.hibernate.commonsannotations>4.0.1.Final</version.hibernate.commonsannotations>
+      <version.hibernate.core>4.1.6.Final</version.hibernate.core>
+      <version.jboss.logging>3.1.2.GA</version.jboss.logging>
+      <version.apache.tika>1.2</version.apache.tika>
+      <version.apache.lucene>3.5.0</version.apache.lucene>
+
 
    </properties>
 
@@ -114,12 +123,57 @@
             <scope>import</scope>
          </dependency>
 
-         <!-- to move to gatein-dep -->
-         <dependency>
-           <groupId>com.google.javascript</groupId>
-           <artifactId>closure-compiler</artifactId>
-           <version>${com.google.javascript.version}</version>
-         </dependency>
+        <!-- to move to gatein-dep -->
+        <dependency>
+          <groupId>com.google.javascript</groupId>
+          <artifactId>closure-compiler</artifactId>
+          <version>${com.google.javascript.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.hibernate.javax.persistence</groupId>
+          <artifactId>hibernate-jpa-2.0-api</artifactId>
+          <version>${version.hibernate.javax.persistence}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.hibernate.common</groupId>
+          <artifactId>hibernate-commons-annotations</artifactId>
+          <version>${version.hibernate.commonsannotations}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.hibernate</groupId>
+          <artifactId>hibernate-core</artifactId>
+          <version>${version.hibernate.core}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.jboss.logging</groupId>
+          <artifactId>jboss-logging</artifactId>
+          <version>${version.jboss.logging}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.lucene</groupId>
+          <artifactId>lucene-core</artifactId>
+          <version>${version.apache.lucene}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.lucene</groupId>
+          <artifactId>lucene-memory</artifactId>
+          <version>${version.apache.lucene}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.lucene</groupId>
+          <artifactId>lucene-spellchecker</artifactId>
+          <version>${version.apache.lucene}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.tika</groupId>
+          <artifactId>tika-core</artifactId>
+          <version>${version.apache.tika}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.apache.tika</groupId>
+          <artifactId>tika-parsers</artifactId>
+          <version>${version.apache.tika}</version>
+        </dependency>
 
          <!-- eXo JCR stack -->
          <dependency>
@@ -216,6 +270,12 @@
             <groupId>org.exoplatform.jcr</groupId>
             <artifactId>exo.jcr.component.ext</artifactId>
             <version>${org.exoplatform.jcr.version}</version>
+            <exclusions>
+              <exclusion>
+                <groupId>org.jboss.logging</groupId>
+                <artifactId>jboss-logging-spi</artifactId>
+              </exclusion>
+            </exclusions>
          </dependency>
          <dependency>
             <groupId>org.exoplatform.jcr</groupId>

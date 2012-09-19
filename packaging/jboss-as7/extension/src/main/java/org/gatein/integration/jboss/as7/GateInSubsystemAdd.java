@@ -25,6 +25,7 @@ import org.gatein.integration.jboss.as7.deployment.GateInDependenciesDeploymentP
 import org.gatein.integration.jboss.as7.deployment.GateInInitDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.GateInStarterDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.GateInStructureDeploymentProcessor;
+import org.gatein.integration.jboss.as7.deployment.GateInTransactionsFixProcessor;
 import org.gatein.integration.jboss.as7.deployment.PortletWarClassloadingDependencyProcessor;
 import org.gatein.integration.jboss.as7.deployment.PortletWarDeploymentInitializingProcessor;
 import org.gatein.integration.jboss.as7.deployment.WarDependenciesDeploymentProcessor;
@@ -58,6 +59,7 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
    static final int INSTALL_GATEIN_START = 0x4000;
    static final int MANIFEST_DEPENDENCIES_GATEIN = 0x4000;
    static final int CLEANUP_ATTACHMENTS = 0x4000;
+   static final int GATEIN_TRANSACTIONS_FIX = 0x4000;
 
    private GateInConfiguration config;
 
@@ -88,6 +90,7 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
             processorTarget.addDeploymentProcessor(Phase.PARSE, STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT, new PortletWarDeploymentInitializingProcessor(config));
             processorTarget.addDeploymentProcessor(Phase.PARSE, MANIFEST_DEPENDENCIES_GATEIN, new GateInDependenciesDeploymentProcessor());
             processorTarget.addDeploymentProcessor(Phase.PARSE, INSTALL_GATEIN_CHILD_WARS, new WarDependenciesDeploymentProcessor());
+            processorTarget.addDeploymentProcessor(Phase.PARSE, GATEIN_TRANSACTIONS_FIX, new GateInTransactionsFixProcessor());
 
             processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_PORTLET_MODULE, new PortletWarClassloadingDependencyProcessor(tldsBuilder.create()));
             processorTarget.addDeploymentProcessor(Phase.POST_MODULE, POST_MODULE_GATEIN_INIT, new GateInInitDeploymentProcessor());
