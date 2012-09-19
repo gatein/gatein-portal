@@ -21,7 +21,11 @@
  */
 package org.gatein.integration.jboss.as7;
 
+
 import org.gatein.integration.jboss.as7.portal.PortalResourceRegistrar;
+
+import java.io.File;
+
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.SubsystemRegistration;
@@ -61,6 +65,26 @@ public class GateInExtension implements Extension
    static ResourceDescriptionResolver getResourceDescriptionResolver(final String keyPrefix)
    {
       return new StandardResourceDescriptionResolver(keyPrefix, RESOURCE_NAME, GateInExtension.class.getClassLoader(), true, false);
+   }
+   
+   public GateInExtension() 
+   {
+      String confDir = new File(System.getProperty("jboss.server.config.dir"), "gatein").getAbsolutePath();
+      if (!System.getProperties().containsKey("exo.conf.dir")) 
+      {
+          log.info("Setting 'exo.conf.dir'");
+         System.setProperty("exo.conf.dir", confDir);
+      }
+      if (!System.getProperties().containsKey("exo.conf.dir.name")) 
+      {
+          log.info("Setting 'exo.conf.dir.name'");
+         System.setProperty("exo.conf.dir.name", "gatein");
+      }
+      if (!System.getProperties().containsKey("gatein.conf.dir")) 
+      {
+          log.info("Setting 'gatein.conf.dir'");
+         System.setProperty("gatein.conf.dir", confDir);
+      }
    }
 
    /**
