@@ -22,24 +22,29 @@
 package org.gatein.integration.jboss.as7.web;
 
 import org.exoplatform.container.RootContainer;
-import org.gatein.integration.jboss.as7.GateInExtension;
-import org.jboss.as.server.moduleservice.ServiceModuleLoader;
+import org.gatein.integration.jboss.as7.GateInConfiguration;
+import org.gatein.integration.wsrp.WSRPServiceIntegration;
+import org.gatein.integration.wsrp.plugins.AS7Plugins;
 import org.jboss.modules.Module;
-import org.jboss.modules.ModuleIdentifier;
 import org.jboss.msc.service.Service;
 import org.jboss.msc.service.ServiceName;
 import org.jboss.msc.service.StartContext;
 import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
 
-/**
- * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
- */
+/** @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a> */
 public class StartupService implements Service<StartupService>
 {
    private Module module;
 
-   public static final ServiceName SERVICE_NAME = ServiceName.of((ServiceName) null, "org", "gatein", "startup");
+   private final GateInConfiguration configuration;
+
+   public static final ServiceName SERVICE_NAME = ServiceName.of((ServiceName)null, "org", "gatein", "startup");
+
+   public StartupService(GateInConfiguration config)
+   {
+      this.configuration = config;
+   }
 
    @Override
    public void start(StartContext context) throws StartException
@@ -52,6 +57,10 @@ public class StartupService implements Service<StartupService>
 
          // Trigger startup
          RootContainer rootContainer = RootContainer.getInstance();
+
+         // register WSRP plugins service so that it's available when the WSRP service starts
+         rootContainer.registerComponentInstance(AS7Plugins.class, configuration.getWSRPPlugins());
+
          rootContainer.createPortalContainers();
       }
       finally

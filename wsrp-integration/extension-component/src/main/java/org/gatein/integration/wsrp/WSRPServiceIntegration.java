@@ -35,6 +35,7 @@ import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.integration.wsrp.jcr.JCRPersister;
+import org.gatein.integration.wsrp.plugins.AS7Plugins;
 import org.gatein.integration.wsrp.structure.MOPConsumerStructureProvider;
 import org.gatein.integration.wsrp.structure.MOPPortalStructureAccess;
 import org.gatein.integration.wsrp.structure.PortalStructureAccess;
@@ -58,6 +59,8 @@ import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
 import org.gatein.wci.WebAppListener;
 import org.gatein.wsrp.WSRPConstants;
+import org.gatein.wsrp.api.plugins.Plugins;
+import org.gatein.wsrp.api.plugins.PluginsAccess;
 import org.gatein.wsrp.consumer.migration.JCRMigrationService;
 import org.gatein.wsrp.consumer.migration.MigrationService;
 import org.gatein.wsrp.consumer.registry.ConsumerRegistry;
@@ -109,7 +112,7 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
    private int consumersInitDelay;
 
    public WSRPServiceIntegration(ExoContainerContext context, InitParams params, ConfigurationManager configurationManager,
-                                 ExoKernelIntegration pc, NodeHierarchyCreator nhc) throws Exception
+                                 ExoKernelIntegration pc, NodeHierarchyCreator nhc, AS7Plugins plugins) throws Exception
    {
       // IMPORTANT: even though NodeHierarchyCreator is not used anywhere in the code, it's still needed for pico
       // to properly make sure that this service is started after the PC one. Yes, Pico is crap. :/
@@ -161,6 +164,8 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          exoKernelIntegration = pc;
 
          bypass = false;
+
+         PluginsAccess.register(plugins);
       }
       else
       {
@@ -471,5 +476,4 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          }
       }
    }
-
 }

@@ -23,7 +23,9 @@ package org.gatein.integration.jboss.as7;
 
 import org.gatein.integration.jboss.as7.deployment.GateInEarKey;
 import org.gatein.integration.jboss.as7.deployment.GateInExtKey;
+import org.gatein.integration.jboss.as7.deployment.wsrp.GateInWSRPKey;
 import org.gatein.integration.jboss.as7.deployment.PortletWarKey;
+import org.gatein.integration.wsrp.plugins.AS7Plugins;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.module.ModuleDependency;
 import org.jboss.modules.Module;
@@ -51,11 +53,12 @@ public class GateInConfiguration
    private final List<ServiceName> childSubUnits = new ArrayList<ServiceName>();
 
    final ModuleLoader moduleLoader = Module.getBootModuleLoader();
+   private AS7Plugins wsrpPlugins;
 
    GateInConfiguration()
    {
    }
-   
+
    public synchronized void addDeploymentArchive(String archive, boolean main)
    {
       String moduleId = DEPLOYMENT_SUFFIX + archive;
@@ -63,7 +66,7 @@ public class GateInConfiguration
       if (main)
          earModule = ModuleIdentifier.create(moduleId);
    }
-   
+
    public synchronized void addPortletWarDependency(String dependency, boolean importSvcs)
    {
       String [] parts = parseNameSlotPair(dependency);
@@ -127,7 +130,7 @@ public class GateInConfiguration
    public synchronized void addChildWar(ServiceName deploymentServiceName) {
       childWars.add(deploymentServiceName);
    }
-    
+
    public synchronized List<ServiceName> getChildSubUnits()
    {
       return Collections.unmodifiableList(new ArrayList(childSubUnits));
@@ -157,13 +160,12 @@ public class GateInConfiguration
 
    public static boolean isGateInArchive(DeploymentUnit du)
    {
-      return du.getAttachment(GateInEarKey.KEY) != null
-            || du.getAttachment(GateInExtKey.KEY) != null;
+      return du.hasAttachment(GateInEarKey.KEY) || du.hasAttachment(GateInExtKey.KEY);
    }
 
    public static boolean isPortletArchive(DeploymentUnit du)
    {
-      return du.getAttachment(PortletWarKey.INSTANCE) != null;
+      return du.hasAttachment(PortletWarKey.INSTANCE);
    }
 
    public static boolean isNonGateInPortletArchive(DeploymentUnit du)
@@ -174,5 +176,15 @@ public class GateInConfiguration
    public static boolean isGateInOrPortletArchive(DeploymentUnit du)
    {
       return isGateInArchive(du) || isPortletArchive(du);
+   }
+
+   public AS7Plugins getWSRPPlugins()
+   {
+      return wsrpPlugins;
+   }
+
+   public void setWSRPPlugins(AS7Plugins plugins)
+   {
+      this.wsrpPlugins = plugins;
    }
 }

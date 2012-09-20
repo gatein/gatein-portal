@@ -23,22 +23,27 @@ package org.gatein.integration.jboss.as7.deployment;
 
 import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.gatein.integration.jboss.as7.GateInExtension;
+import org.gatein.integration.jboss.as7.deployment.wsrp.GateInWSRPKey;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.as.server.deployment.Services;
+import org.jboss.as.server.deployment.module.ModuleDependency;
+import org.jboss.as.server.deployment.module.ModuleSpecification;
+import org.jboss.as.server.deployment.module.ResourceRoot;
 import org.jboss.logging.Logger;
+import org.jboss.modules.Module;
 import org.jboss.modules.ModuleIdentifier;
+import org.jboss.modules.ModuleLoader;
 import org.jboss.msc.service.AbstractServiceListener;
 import org.jboss.msc.service.ServiceController;
 import org.jboss.msc.service.ServiceListener;
 import org.jboss.msc.service.ServiceName;
+import org.jboss.vfs.VirtualFile;
 
-/**
- * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
- */
+/** @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a> */
 public class GateInStructureDeploymentProcessor implements DeploymentUnitProcessor
 {
    private static Logger log = Logger.getLogger(GateInStructureDeploymentProcessor.class);
@@ -101,6 +106,7 @@ public class GateInStructureDeploymentProcessor implements DeploymentUnitProcess
             log.debugf("Recognized %s as part of GateIn deployment", moduleId);
             du.putAttachment(GateInExtKey.KEY, GateInExtKey.INSTANCE);
             du.putAttachment(GateInConfigurationKey.KEY, config);
+
             if (log.isTraceEnabled())
             {
                installListener(phaseContext, moduleId);

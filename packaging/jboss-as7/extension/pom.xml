@@ -68,6 +68,14 @@
          <artifactId>wci-jboss7</artifactId>
       </dependency>
       <dependency>
+         <groupId>org.gatein.integration</groupId>
+         <artifactId>extension-component</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.wsrp</groupId>
+         <artifactId>wsrp-integration-api</artifactId>
+      </dependency>
+      <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
          <scope>test</scope>
