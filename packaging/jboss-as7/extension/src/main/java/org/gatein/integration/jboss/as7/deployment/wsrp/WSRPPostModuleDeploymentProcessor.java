@@ -39,7 +39,7 @@ import java.util.List;
 /** @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a> */
 public class WSRPPostModuleDeploymentProcessor implements DeploymentUnitProcessor
 {
-   private static final AS7Plugins plugins = new AS7Plugins();
+   public static final AS7Plugins plugins = new AS7Plugins();
    static final List<String> KNOWN_PLUGIN_INTERFACE_NAMES = plugins.getKnownPluginInterfaceNames();
 
 
@@ -49,12 +49,6 @@ public class WSRPPostModuleDeploymentProcessor implements DeploymentUnitProcesso
       final DeploymentUnit du = phaseContext.getDeploymentUnit();
       if (GateInWSRPKey.isGateInWSRPArchive(du))
       {
-         final GateInConfiguration config = du.getAttachment(GateInConfigurationKey.KEY);
-         if(config.getWSRPPlugins() == null)
-         {
-            config.setWSRPPlugins(plugins);
-         }
-
          final ServicesAttachment services = du.getAttachment(Attachments.SERVICES);
          final Module module = du.getAttachment(Attachments.MODULE);
          final ModuleClassLoader classLoader;

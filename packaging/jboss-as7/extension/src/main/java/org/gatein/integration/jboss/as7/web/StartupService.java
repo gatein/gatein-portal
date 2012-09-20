@@ -23,6 +23,7 @@ package org.gatein.integration.jboss.as7.web;
 
 import org.exoplatform.container.RootContainer;
 import org.gatein.integration.jboss.as7.GateInConfiguration;
+import org.gatein.integration.jboss.as7.deployment.wsrp.WSRPPostModuleDeploymentProcessor;
 import org.gatein.integration.wsrp.WSRPServiceIntegration;
 import org.gatein.integration.wsrp.plugins.AS7Plugins;
 import org.jboss.modules.Module;
@@ -37,14 +38,7 @@ public class StartupService implements Service<StartupService>
 {
    private Module module;
 
-   private final GateInConfiguration configuration;
-
-   public static final ServiceName SERVICE_NAME = ServiceName.of((ServiceName)null, "org", "gatein", "startup");
-
-   public StartupService(GateInConfiguration config)
-   {
-      this.configuration = config;
-   }
+   public static final ServiceName SERVICE_NAME = ServiceName.of((ServiceName) null, "org", "gatein", "startup");
 
    @Override
    public void start(StartContext context) throws StartException
@@ -59,7 +53,7 @@ public class StartupService implements Service<StartupService>
          RootContainer rootContainer = RootContainer.getInstance();
 
          // register WSRP plugins service so that it's available when the WSRP service starts
-         rootContainer.registerComponentInstance(AS7Plugins.class, configuration.getWSRPPlugins());
+         rootContainer.registerComponentInstance(AS7Plugins.class, WSRPPostModuleDeploymentProcessor.plugins);
 
          rootContainer.createPortalContainers();
       }
