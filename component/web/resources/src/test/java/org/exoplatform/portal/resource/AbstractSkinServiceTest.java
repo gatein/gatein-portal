@@ -81,6 +81,11 @@ public abstract class AbstractSkinServiceTest extends AbstractKernelTest
       }
    }
 
+   protected void tearDown() throws Exception
+   {
+      skinService.reloadSkins();
+   }
+
    public void testInitializing()
    {
       assertEquals(1, skinService.getAvailableSkinNames().size());
