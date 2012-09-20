@@ -408,7 +408,7 @@ function HttpResponseHandler() {
 	  }
 	} ;
 
-	instance.updateHtmlHead = function(response) {
+	instance.updateHtmlHead = function(response, callback) {
 		if (!response) return;      
 		cleanHtmlHead(response);
 		var head = $("head");
@@ -429,7 +429,37 @@ function HttpResponseHandler() {
 		appendElementsToHead(head, markupHeadElements.bases);
 		appendElementsToHead(head, markupHeadElements.links);                         
 		appendElementsToHead(head, markupHeadElements.styles);
-		appendElementsToHead(head, markupHeadElements.scripts);		
+		
+		var that = this;
+		var appendScript = function() {
+			if (!markupHeadElements.scripts.length) {
+				callback.apply(that);
+			} else {
+				var tmp = markupHeadElements.scripts.splice(0, 1);
+				appendElementsToHead(head, $(tmp));				
+				if (!tmp[0].src) {
+					appendScript.apply(that);
+				}
+			} 
+		};
+				
+		for (var i = 0; i < markupHeadElements.scripts.length; i++) {
+			var script = markupHeadElements.scripts[i];
+			
+			if (script.src) {
+				if (_module.Browser.isIE()) {
+					script.onreadystatechange = function () {
+						if (/loaded|complete/.test(script.readyState)) {
+							script.onreadystatechange = null;
+							appendScript.apply(that);
+						}
+					};          
+				} else {
+					script.onload = script.onerror = function() {appendScript.apply(that);};
+				}				
+			}
+		}
+		appendScript.apply(that);
 	};
 
   function cleanHtmlHead(response)
@@ -546,14 +576,22 @@ function HttpResponseHandler() {
 	instance.ajaxResponse = function(request, response) {
 	  var that = this;
 	  if (!response) {
-		var response = new PortalResponse(that.responseText) ;		  
-        instance.updateHtmlHead(response);
+		  var response = new PortalResponse(that.responseText) ;		          
 	  }
+	  
 	  var loadingScripts = response.loadingScripts;
 	  var immediateScripts = loadingScripts ? loadingScripts.immediateScripts : [];	    
 	  if (immediateScripts.length) {		  
 		  require(immediateScripts, function() {
 			  immediateScripts.length = 0;
+			  instance.ajaxResponse.apply(that, [request, response]);
+		  });
+		  return;
+	  }
+	  
+	  if (response.markupHeadElements)	 {
+		  instance.updateHtmlHead(response, function() {
+			  response.markupHeadElements  = null;
 			  instance.ajaxResponse.apply(that, [request, response]);
 		  });
 		  return;
