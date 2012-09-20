@@ -18,9 +18,16 @@
  */
 package org.exoplatform.portal.resource;
 
-import java.util.Arrays;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.pathParam;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.route;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.routeParam;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.router;
 
 import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.controller.router.Router;
+import org.exoplatform.web.controller.router.RouterConfigException;
+
+import java.util.Arrays;
 
 
 
@@ -45,6 +52,27 @@ public class TestSkinServiceInDevelopingMode extends AbstractSkinServiceTest
    }
 
    @Override
+   Router getRouter()
+   {
+      Router router;
+      try
+      {
+         router = router().add(
+            route("/skins/{gtn:version}/{gtn:resource}{gtn:compress}{gtn:orientation}.css")
+               .with(routeParam("gtn:handler").withValue("skin"))
+               .with(pathParam("gtn:version").matchedBy("[^/]*").preservePath())
+               .with(pathParam("gtn:orientation").matchedBy("-(lt)|-(rt)|").captureGroup(true))
+               .with(pathParam("gtn:compress").matchedBy("-(min)|").captureGroup(true))
+               .with(pathParam("gtn:resource").matchedBy(".+?").preservePath())).build();
+         return router;
+      }
+      catch (RouterConfigException e)
+      {
+         return null;
+      }
+   }
+
+   @Override
    void touchSetUp()
    {
       isFirstStartup = false;
@@ -58,45 +86,45 @@ public class TestSkinServiceInDevelopingMode extends AbstractSkinServiceTest
       assertNotNull(sSkin);
 
       Skin merged = skinService.merge(Arrays.asList(fSkin, sSkin));
-      SkinURL url = merged.createURL(new MockControllerContext());
+      SkinURL url = merged.createURL(controllerCtx);
       
       url.setOrientation(Orientation.LT);
       assertEquals(
-         "@import url(/portal/skins/mockwebapp/skin/FirstPortlet-lt.css);\n" +
-         "@import url(/portal/skins/mockwebapp/skin/SecondPortlet-lt.css);", 
-         skinService.getCSS(new MockControllerContext(), url.toString().substring("/portal/skins".length()), false));
+         "@import url(/portal/skins/" + ASSETS_VERSION + "/mockwebapp/skin/FirstPortlet-lt.css);\n" +
+         "@import url(/portal/skins/" + ASSETS_VERSION + "/mockwebapp/skin/SecondPortlet-lt.css);", 
+         skinService.getCSS(newControllerContext(getRouter(), url.toString()), false));
 
       url.setOrientation(Orientation.RT);
       assertEquals(
-         "@import url(/portal/skins/mockwebapp/skin/FirstPortlet-rt.css);\n" +
-         "@import url(/portal/skins/mockwebapp/skin/SecondPortlet-rt.css);", 
-         skinService.getCSS(new MockControllerContext(), url.toString().substring("/portal/skins".length()), false));
+         "@import url(/portal/skins/" + ASSETS_VERSION + "/mockwebapp/skin/FirstPortlet-rt.css);\n" +
+         "@import url(/portal/skins/" + ASSETS_VERSION + "/mockwebapp/skin/SecondPortlet-rt.css);", 
+         skinService.getCSS(newControllerContext(getRouter(), url.toString()), false));
    }
 
    public void testCache() throws Exception
    {
-      String path = "/path/to/test/caching.css";
+      String resource = "/path/to/test/caching.css";
+      String url = newSimpleSkin(resource).createURL(controllerCtx).toString();
+      resResolver.addResource(resource, "foo");
+      assertEquals("foo", skinService.getCSS(newControllerContext(getRouter(), url), false));
 
-      resResolver.addResource(path, "foo");
-      assertEquals("foo", skinService.getCSS(new MockControllerContext(), path, false));
-
-      resResolver.addResource(path, "bar");
-      assertEquals("bar", skinService.getCSS(new MockControllerContext(), path, false));
+      resResolver.addResource(resource, "bar");
+      assertEquals("bar", skinService.getCSS(newControllerContext(getRouter(), url), false));
    }
    
    public void testProcessImportCSS() throws Exception
    {
       String parent = "/process/import/css.css";
-
+      String parentURL = newSimpleSkin(parent).createURL(controllerCtx).toString();
       resResolver.addResource(parent, "@import url(Portlet/Stylesheet.css); aaa;");
       assertEquals(
-         "@import url(/portal/skins/process/import/Portlet/Stylesheet-lt.css); aaa;", 
-         skinService.getCSS(new MockControllerContext(), parent, false));
+         "@import url(/portal/skins/" + ASSETS_VERSION + "/process/import/Portlet/Stylesheet-lt.css); aaa;", 
+         skinService.getCSS(newControllerContext(getRouter(), parentURL), false));
       
       resResolver.addResource(parent, "@import url('/Portlet/Stylesheet.css'); aaa;");
       assertEquals(
-         "@import url('/portal/skins/Portlet/Stylesheet-lt.css'); aaa;", 
-         skinService.getCSS(new MockControllerContext(), parent, false));
+         "@import url('/portal/skins/" + ASSETS_VERSION + "/Portlet/Stylesheet-lt.css'); aaa;", 
+         skinService.getCSS(newControllerContext(getRouter(), parentURL), false));
 
       //parent file import child css file
       resResolver.addResource(parent, "@import url(childCSS/child.css);  background:url(images/foo.gif);");
@@ -110,16 +138,19 @@ public class TestSkinServiceInDevelopingMode extends AbstractSkinServiceTest
        *                                        /childCSS/child.css
        *                                                        /bar.gif
        */
-      assertEquals("@import url(/portal/skins/process/import/childCSS/child-lt.css);  background:url(/process/import/images/foo.gif);",
-         skinService.getCSS(new MockControllerContext(), parent, false));
+      assertEquals("@import url(/portal/skins/" + ASSETS_VERSION + "/process/import/childCSS/child-lt.css);  background:url(/process/import/images/foo.gif);",
+         skinService.getCSS(newControllerContext(getRouter(), parentURL), false));
    }
 
    public void testLastModifiedSince() throws Exception
    {
-      String path = "/last/modify/since.css";
-      resResolver.addResource(path, "foo");
+      String resource = "/last/modify/since.css";
+      SkinURL skinURL = newSimpleSkin(resource).createURL(controllerCtx);
+      resResolver.addResource(resource, "foo");
 
-      assertTrue(skinService.getCSS(new MockControllerContext(), path, false).length() > 0);
-      assertEquals(Long.MAX_VALUE, skinService.getLastModified(new MockControllerContext(), path));
+      assertTrue(skinService.getCSS(newControllerContext(getRouter(), skinURL.toString()), false).length() > 0);
+      assertEquals(Long.MAX_VALUE, skinService.getLastModified(newControllerContext(getRouter(), skinURL.toString())));
+      skinURL.setOrientation(Orientation.RT);
+      assertEquals(Long.MAX_VALUE, skinService.getLastModified(newControllerContext(getRouter(), skinURL.toString())));
    }
 }

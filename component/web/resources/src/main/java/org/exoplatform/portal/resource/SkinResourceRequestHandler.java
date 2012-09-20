@@ -47,8 +47,6 @@ public class SkinResourceRequestHandler extends WebRequestHandler
    @Override
    public boolean execute(final ControllerContext context) throws Exception
    {
-      final String resource = "/" + context.getParameter(ResourceRequestHandler.RESOURCE_QN) + ".css";
-      String versionParam = context.getParameter(ResourceRequestHandler.VERSION_QN);
       String compressParam = context.getParameter(ResourceRequestHandler.COMPRESS_QN);
       boolean compress = "min".equals(compressParam);
 
@@ -57,7 +55,7 @@ public class SkinResourceRequestHandler extends WebRequestHandler
 
       // Check if cached resource has not been modifed, return 304 code
       long ifModifiedSince = context.getRequest().getDateHeader(IF_MODIFIED_SINCE);
-      long cssLastModified = skinService.getLastModified(context, resource);
+      long cssLastModified = skinService.getLastModified(context);
       if (isNotModified(ifModifiedSince, cssLastModified))
       {
          response.setStatus(HttpServletResponse.SC_NOT_MODIFIED);
@@ -105,15 +103,16 @@ public class SkinResourceRequestHandler extends WebRequestHandler
                   response.setHeader("Cache-Control", "no-cache");
                }
 
-               long lastModified = skinService.getLastModified(context, resource);
+               long lastModified = skinService.getLastModified(context);
                response.setDateHeader(LAST_MODIFIED, lastModified);
             }
          };
 
          //
+         final String resource = "/" + context.getParameter(ResourceRequestHandler.RESOURCE_QN) + ".css";
          try
          {
-            if (skinService.renderCSS(context, renderer, resource, compress))
+            if (skinService.renderCSS(context, renderer, compress))
             {
                // Ok we did the job
                return true;

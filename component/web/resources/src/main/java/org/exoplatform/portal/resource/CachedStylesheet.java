@@ -19,12 +19,15 @@
 
 package org.exoplatform.portal.resource;
 
-import org.exoplatform.commons.utils.*;
+import org.exoplatform.commons.utils.BinaryOutput;
+import org.exoplatform.commons.utils.CharsetCharEncoder;
+import org.exoplatform.commons.utils.CharsetTextEncoder;
+import org.exoplatform.commons.utils.TableCharEncoder;
+import org.exoplatform.commons.utils.TextEncoder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.lang.reflect.UndeclaredThrowableException;
-import java.util.Date;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -62,8 +65,8 @@ public class CachedStylesheet
       //
       this.text = text;
       this.bytes = bytes;
-//  Remove miliseconds because string of date retrieve from Http header doesn't have miliseconds 
-      lastModified = (new Date().getTime() / 1000) * 1000;
+      //  Remove miliseconds because string of date retrieve from Http header doesn't have miliseconds 
+      lastModified = (System.currentTimeMillis() / 1000) * 1000;
    }
 
    public String getText()

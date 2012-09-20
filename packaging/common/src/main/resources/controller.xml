@@ -77,7 +77,7 @@
   </route>
 
   <!-- Skin handler -->
-	<route path="/skins/{gtn:version}/{gtn:resource}{gtn:compress}{gtn:orientation}.css">
+  <route path="/skins/{gtn:version}/{gtn:resource}{gtn:compress}{gtn:orientation}.css">
     <route-param qname="gtn:handler">
       <value>skin</value>
     </route-param>
@@ -88,7 +88,7 @@
       <pattern>-(min)|</pattern>
     </path-param>
     <path-param qname="gtn:orientation" capture-group="true">
-      <pattern>-(lt)|-(rt)</pattern>
+      <pattern>-(lt)|-(rt)|</pattern>
     </path-param>
 	  <path-param qname="gtn:resource" encoding="preserve-path">
       <pattern>.+?</pattern>
