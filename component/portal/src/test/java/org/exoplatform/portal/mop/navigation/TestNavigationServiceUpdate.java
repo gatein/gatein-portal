@@ -63,7 +63,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService
       sync(true);
 
       //
-      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_no_op"));
+      NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_cannot_save"));
       Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
 
       //
