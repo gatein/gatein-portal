@@ -65,7 +65,7 @@ public class UserNodeFilterConfig
       this.visibility = Safe.unmodifiableSet(builder.withVisibility);
       this.authorizationMode = builder.withAuthorizationMode;
       this.temporalCheck = builder.withTemporalCheck;
-      this.path = null;
+      this.path = builder.path;
    }
 
    public Set<Visibility> getVisibility()

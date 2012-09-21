@@ -393,6 +393,10 @@ public class UserPortalImpl implements UserPortal
       {
          filterConfig = UserNodeFilterConfig.builder().build();
       }
+      else
+      {
+         filterConfig = UserNodeFilterConfig.builder(filterConfig).build();
+      }
 
       // Restrict the filter with path
       filterConfig.path = segments;
@@ -430,7 +434,12 @@ public class UserPortalImpl implements UserPortal
       //
       if (best != null && best.score > 0)
       {
-         return best.userNode;
+         UserNode ret = best.userNode;
+         if (ret != null)
+         {
+            ret.owner.filterConfig.path = null;            
+         }
+         return ret;
       }
       else
       {
@@ -464,6 +473,10 @@ public class UserPortalImpl implements UserPortal
       {
          filterConfig = UserNodeFilterConfig.builder().build();
       }
+      else
+      {
+         filterConfig = UserNodeFilterConfig.builder(filterConfig).build();
+      }
 
       // Restrict the filter with the path
       filterConfig.path = segments;
@@ -475,7 +488,12 @@ public class UserPortalImpl implements UserPortal
       //
       if (scope.score > 0)
       {
-         return scope.userNode;
+         UserNode ret = scope.userNode;
+         if (ret != null)
+         {
+            ret.owner.filterConfig.path = null;            
+         }
+         return ret;
       }
       else
       {
