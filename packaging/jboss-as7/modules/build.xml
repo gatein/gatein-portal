@@ -86,7 +86,7 @@
            <maven-resource group="commons-lang" artifact="commons-lang" />
            <maven-resource group="commons-pool" artifact="commons-pool" />
            <maven-resource group="oswego-concurrent" artifact="concurrent" />
-           <maven-resource group="net.sf.ehcache" artifact="ehcache" />
+           <maven-resource group="net.sf.ehcache" artifact="ehcache-core" />
            <maven-resource group="org.ccil.cowan.tagsoup" artifact="tagsoup" />
            <maven-resource group="org.exoplatform.core" artifact="exo.core.component.database" />
            <maven-resource group="org.exoplatform.core" artifact="exo.core.component.document" />
@@ -261,7 +261,7 @@
        </module-def>
 
        <module-def name="org.hsqldb">
-           <maven-resource group="hsqldb" artifact="hsqldb" />
+           <maven-resource group="org.hsqldb" artifact="hsqldb" />
        </module-def>
        
        <module-def name="org.apache.commons-fileupload">

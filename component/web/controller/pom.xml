@@ -99,13 +99,11 @@
     <dependency>
       <groupId>net.sourceforge.jregex</groupId>
       <artifactId>jregex</artifactId>
-      <version>1.2_01</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>com.sun.japex</groupId>
       <artifactId>japex</artifactId>
-      <version>1.2.3</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -128,7 +126,6 @@
           <plugin>
             <groupId>com.sun.japex</groupId>
             <artifactId>japex-maven-plugin</artifactId>
-            <version>1.2.3</version>
             <executions>
               <execution>
                 <id>japex</id>

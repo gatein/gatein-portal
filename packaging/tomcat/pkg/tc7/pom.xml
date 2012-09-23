@@ -80,7 +80,6 @@ You can also use -Ddownload to automatically provide Tomcat instance.
       </plugin>
       <plugin>
         <artifactId>maven-clean-plugin</artifactId>
-        <version>2.4.1</version>
         <executions>
           <execution>
             <id>auto-clean</id>
@@ -94,7 +93,6 @@ You can also use -Ddownload to automatically provide Tomcat instance.
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
-        <version>1.6</version>
         <executions>
           <execution>
             <id>prepare-package</id>
@@ -155,7 +153,6 @@ You can also use -Ddownload to automatically provide Tomcat instance.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-antrun-plugin</artifactId>
-            <version>1.6</version>
             <executions>
               <execution>
                 <id>prepare-package</id>
@@ -186,7 +183,6 @@ You can also use -Ddownload to automatically provide Tomcat instance.
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-antrun-plugin</artifactId>
-            <version>1.6</version>
             <executions>
               <execution>
                 <id>package</id>

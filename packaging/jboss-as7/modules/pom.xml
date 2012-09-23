@@ -99,7 +99,7 @@
             </exclusion>
             <exclusion>
                <groupId>javax.servlet</groupId>
-               <artifactId>servlet-api</artifactId>
+               <artifactId>javax.servlet-api</artifactId>
             </exclusion>
             <exclusion>
                <groupId>junit</groupId>
@@ -172,12 +172,10 @@
       <dependency>
          <groupId>commons-dbcp</groupId>
          <artifactId>commons-dbcp</artifactId>
-         <version>1.4</version>
       </dependency>
       <dependency>
          <groupId>commons-digester</groupId>
          <artifactId>commons-digester</artifactId>
-         <version>1.8.1</version>
       </dependency>
       <dependency>
          <groupId>commons-fileupload</groupId>
@@ -186,7 +184,6 @@
       <dependency>
          <groupId>commons-httpclient</groupId>
          <artifactId>commons-httpclient</artifactId>
-         <version>3.1</version>
       </dependency>
       <dependency>
          <groupId>commons-io</groupId>
@@ -221,7 +218,6 @@
       <dependency>
          <groupId>org.jboss.cache</groupId>
          <artifactId>jbosscache-core</artifactId>
-         <version>3.2.6.GA</version>
             <exclusions>
                <exclusion>
                   <groupId>jgroups</groupId>
@@ -240,12 +236,10 @@
       <dependency>
          <groupId>org.jgroups</groupId>
          <artifactId>jgroups</artifactId>
-         <version>2.11.1.Final</version>
       </dependency>
       <dependency>
          <groupId>org.jboss.slf4j</groupId>
          <artifactId>slf4j-jboss-logmanager</artifactId>
-         <version>1.0.0.GA</version>
       </dependency>
       <dependency>
          <groupId>org.slf4j</groupId>
@@ -605,7 +599,6 @@
       <dependency>
          <groupId>eu.medsea.mimeutil</groupId>
          <artifactId>mime-util</artifactId>
-         <version>2.1.3</version>
       </dependency>
 
       <!-- Staxnav -->
@@ -862,53 +855,43 @@
       <dependency>
         <groupId>javax.inject</groupId>
         <artifactId>javax.inject</artifactId>
-        <version>1</version>
       </dependency>
       <dependency>
          <groupId>javax.activation</groupId>
          <artifactId>activation</artifactId>
-         <version>1.1.1</version>
       </dependency>
       <dependency>
          <groupId>javax.jcr</groupId>
          <artifactId>jcr</artifactId>
-         <version>1.0</version>
       </dependency>
       <dependency>
          <groupId>javax.annotation</groupId>
          <artifactId>jsr250-api</artifactId>
-         <version>1.0</version>
       </dependency>
       <dependency>
          <groupId>javax.ws.rs</groupId>
          <artifactId>jsr311-api</artifactId>
-         <version>1.0</version>
       </dependency>
       <dependency>
          <groupId>javax.resource</groupId>
          <artifactId>connector-api</artifactId>
-         <version>1.5</version>
       </dependency>
 
       <dependency>
          <groupId>javax.xml.bind</groupId>
          <artifactId>jaxb-api</artifactId>
-         <version>2.1</version>
       </dependency>
       <dependency>
          <groupId>com.sun.xml.bind</groupId>
          <artifactId>jaxb-impl</artifactId>
-         <version>2.1.7</version>
       </dependency>
       <dependency>
          <groupId>javax.xml.stream</groupId>
          <artifactId>stax-api</artifactId>
-         <version>1.0-2</version>
       </dependency>
       <dependency>
          <groupId>com.sun.xml.stream</groupId>
          <artifactId>sjsxp</artifactId>
-         <version>1.0.1</version>
       </dependency>
 
       <!-- WSRP -->
@@ -971,22 +954,18 @@
       <dependency>
          <groupId>aopalliance</groupId>
          <artifactId>aopalliance</artifactId>
-         <version>1.0</version>
       </dependency>
       <dependency>
          <groupId>asm</groupId>
          <artifactId>asm</artifactId>
-         <version>1.5.3</version>
       </dependency>
       <dependency>
          <groupId>bouncycastle</groupId>
          <artifactId>bcmail-jdk14</artifactId>
-         <version>136</version>
       </dependency>
       <dependency>
          <groupId>bouncycastle</groupId>
          <artifactId>bcprov-jdk14</artifactId>
-         <version>136</version>
       </dependency>
       <dependency>
          <groupId>caja</groupId>
@@ -1005,27 +984,22 @@
       <dependency>
          <groupId>oswego-concurrent</groupId>
          <artifactId>concurrent</artifactId>
-         <version>1.3.4</version>
       </dependency>
       <dependency>
          <groupId>dom4j</groupId>
          <artifactId>dom4j</artifactId>
-         <version>1.6.1</version>
       </dependency>
       <dependency>
          <groupId>howl</groupId>
          <artifactId>howl-logger</artifactId>
-         <version>0.1.11</version>
       </dependency>
       <dependency>
          <groupId>net.sf.ehcache</groupId>
-         <artifactId>ehcache</artifactId>
-         <version>1.6.0</version>
+         <artifactId>ehcache-core</artifactId>
       </dependency>
       <dependency>
          <groupId>com.jhlabs</groupId>
          <artifactId>filters</artifactId>
-         <version>2.0.235</version>
       </dependency>
       <dependency>
         <groupId>com.google.guava</groupId>
@@ -1038,7 +1012,6 @@
       <dependency>
          <groupId>org.htmlparser</groupId>
          <artifactId>htmlparser</artifactId>
-         <version>1.6</version>
          <exclusions>
             <exclusion>
                <groupId>com.sun</groupId>
@@ -1053,7 +1026,6 @@
       <dependency>
          <groupId>jdom</groupId>
          <artifactId>jdom</artifactId>
-         <version>1.0</version>
       </dependency>
       <dependency>
          <groupId>org.jibx</groupId>
@@ -1078,7 +1050,6 @@
       <dependency>
          <groupId>joda-time</groupId>
          <artifactId>joda-time</artifactId>
-         <version>1.6</version>
       </dependency>
       <dependency>
          <groupId>rhino</groupId>
@@ -1087,7 +1058,6 @@
       <dependency>
          <groupId>org.jsecurity</groupId>
          <artifactId>jsecurity</artifactId>
-         <version>0.9.0</version>
       </dependency>
       <dependency>
          <groupId>org.json</groupId>
@@ -1116,7 +1086,6 @@
       <dependency>
          <groupId>org.apache.pdfbox</groupId>
          <artifactId>pdfbox</artifactId>
-         <version>1.4.0</version>
          <exclusions>
             <exclusion>
                <groupId>org.apache.pdfbox</groupId>
@@ -1131,7 +1100,6 @@
       <dependency>
          <groupId>picocontainer</groupId>
          <artifactId>picocontainer</artifactId>
-         <version>1.1</version>
          <exclusions>
             <exclusion>
                <groupId>jmock</groupId>
@@ -1142,12 +1110,10 @@
       <dependency>
          <groupId>org.apache.poi</groupId>
          <artifactId>poi</artifactId>
-         <version>3.6</version>
       </dependency>
       <dependency>
          <groupId>org.apache.poi</groupId>
          <artifactId>poi-ooxml</artifactId>
-         <version>3.6</version>
          <exclusions>
             <exclusion>
                <groupId>org.apache.poi</groupId>
@@ -1158,12 +1124,10 @@
       <dependency>
          <groupId>org.apache.poi</groupId>
          <artifactId>poi-scratchpad</artifactId>
-         <version>3.6</version>
       </dependency>
       <dependency>
          <groupId>org.apache.portals.bridges</groupId>
          <artifactId>portals-bridges-common</artifactId>
-         <version>1.0.4</version>
       </dependency>
       <dependency>
          <groupId>rome</groupId>
@@ -1172,17 +1136,14 @@
       <dependency>
          <groupId>org.apache.sanselan</groupId>
          <artifactId>sanselan</artifactId>
-         <version>0.97-incubator</version>
       </dependency>
       <dependency>
          <groupId>org.apache.ws.commons</groupId>
          <artifactId>ws-commons-util</artifactId>
-         <version>1.0.1</version>
       </dependency>
       <dependency>
          <groupId>org.apache.xmlbeans</groupId>
          <artifactId>xmlbeans</artifactId>
-         <version>2.3.0</version>
          <exclusions>
             <exclusion>
                <groupId>stax</groupId>
@@ -1193,12 +1154,10 @@
       <dependency>
          <groupId>xpp3</groupId>
          <artifactId>xpp3</artifactId>
-         <version>1.1.4c</version>
       </dependency>
       <dependency>
          <groupId>com.thoughtworks.xstream</groupId>
          <artifactId>xstream</artifactId>
-         <version>1.3.1</version>
          <exclusions>
             <exclusion>
                <groupId>xpp3</groupId>
@@ -1209,74 +1168,26 @@
       <dependency>
          <groupId>org.jvnet.jaxb2.maven2</groupId>
          <artifactId>maven-jaxb2-plugin</artifactId>
-         <version>0.7.4</version>
-         <exclusions>
-            <exclusion>
-               <groupId>org.jvnet.jaxb2.maven2</groupId>
-               <artifactId>maven-jaxb2-plugin-raw</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.jvnet.jaxb2_commons</groupId>
-               <artifactId>jaxb2-basics-jaxb-xjc</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>com.sun.codemodel</groupId>
-               <artifactId>codemodel</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>com.sun.xml.dtd-parser</groupId>
-               <artifactId>dtd-parser</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>com.sun.istack</groupId>
-               <artifactId>istack-commons-tools</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>relaxngDatatype</groupId>
-               <artifactId>relaxngDatatype</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>com.sun.org.apache.xml.internal</groupId>
-               <artifactId>resolver</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>org.kohsuke.rngom</groupId>
-               <artifactId>rngom</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>com.sun.xsom</groupId>
-               <artifactId>xsom</artifactId>
-            </exclusion>
-            <exclusion>
-               <groupId>sun.jdk</groupId>
-               <artifactId>tools</artifactId>
-            </exclusion>
-         </exclusions>
       </dependency>
       <dependency>
          <groupId>com.experlog</groupId>
          <artifactId>xapool</artifactId>
-         <version>1.5.0</version>
       </dependency>
       <dependency>
          <groupId>xdoclet</groupId>
          <artifactId>xdoclet</artifactId>
-         <version>1.2.3</version>
       </dependency>
       <dependency>
          <groupId>xdoclet</groupId>
          <artifactId>xdoclet-hibernate-module</artifactId>
-         <version>1.2.3</version>
       </dependency>
       <dependency>
          <groupId>xdoclet</groupId>
          <artifactId>xdoclet-xdoclet-module</artifactId>
-         <version>1.2.3</version>
       </dependency>
       <dependency>
          <groupId>xdoclet</groupId>
          <artifactId>xjavadoc</artifactId>
-         <version>1.2.3</version>
       </dependency>
       <dependency>
         <groupId>org.apache.tika</groupId>
@@ -1311,12 +1222,10 @@
       <dependency>
          <groupId>com.googlecode.juniversalchardet</groupId>
          <artifactId>juniversalchardet</artifactId>
-         <version>1.0.3</version>
       </dependency>
       <dependency>
         <groupId>com.google.javascript</groupId>
         <artifactId>closure-compiler</artifactId>
-        <version>r706</version>
          <exclusions>
             <exclusion>
                <groupId>args4j</groupId>
@@ -1337,9 +1246,8 @@
          </exclusions>
       </dependency>
       <dependency>
-         <groupId>hsqldb</groupId>
+         <groupId>org.hsqldb</groupId>
          <artifactId>hsqldb</artifactId>
-         <version>1.8.0.10</version>
       </dependency>
 
    </dependencies>
@@ -1349,7 +1257,6 @@
            <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-antrun-plugin</artifactId>
-               <version>1.4</version>
                <inherited>false</inherited>
                <executions>
                    <execution>

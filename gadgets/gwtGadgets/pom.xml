@@ -35,8 +35,7 @@
    <name>GateIn Portal GWT Gadgets Application</name>
 
    <properties>
-      <com.google.gwt.version>2.1.0</com.google.gwt.version>
-      <com.googlecode.gwtupload.version>0.6.3-compat</com.googlecode.gwtupload.version>
+
    </properties>
 
    <dependencies>
@@ -59,18 +58,15 @@
       <dependency>
          <groupId>com.google.gwt</groupId>
          <artifactId>gwt-servlet</artifactId>
-         <version>${com.google.gwt.version}</version>
       </dependency>
       <dependency>
          <groupId>com.google.gwt</groupId>
          <artifactId>gwt-user</artifactId>
-         <version>${com.google.gwt.version}</version>
          <scope>provided</scope>
       </dependency>
       <dependency>
          <groupId>com.googlecode.gwtupload</groupId>
          <artifactId>gwtupload</artifactId>
-         <version>${com.googlecode.gwtupload.version}</version>
       </dependency>
       <dependency>
          <groupId>com.google.gwt.google-apis</groupId>
@@ -89,7 +85,6 @@
          <plugin>
             <groupId>org.codehaus.mojo</groupId>
             <artifactId>gwt-maven-plugin</artifactId>
-            <version>2.1.0</version>
             <executions>
                <execution>
                   <goals>

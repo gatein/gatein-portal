@@ -30,6 +30,10 @@
   <packaging>jar</packaging>
   <name>GateIn Portal Component Web Test</name>
 
+  <properties>
+    <version.javax.servlet>2.5</version.javax.servlet>
+  </properties>
+
   <dependencies>
 
     <dependency>
@@ -45,6 +49,7 @@
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
+      <version>${version.javax.servlet}</version>
     </dependency>
 
     <dependency>

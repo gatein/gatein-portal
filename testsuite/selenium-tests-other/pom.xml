@@ -70,7 +70,7 @@
 
 
    <repositories>
-      <repository>
+      <!--<repository>
          <id>repository.jboss.org</id>
          <url>http://repository.jboss.org/maven2</url>
          <releases>
@@ -89,7 +89,7 @@
          <snapshots>
             <enabled>true</enabled>
          </snapshots>
-      </repository>
+      </repository>-->
       <repository>
          <id>jboss-releases</id>
          <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
@@ -435,7 +435,6 @@
       <dependency>
          <groupId>org.testng</groupId>
          <artifactId>testng</artifactId>
-         <version>5.12.1</version>
          <scope>test</scope>
       </dependency>
       <dependency>
@@ -452,27 +451,22 @@
       <dependency>
          <groupId>commons-io</groupId>
          <artifactId>commons-io</artifactId>
-         <version>1.3.2</version>
       </dependency>
       <dependency>
          <groupId>commons-lang</groupId>
          <artifactId>commons-lang</artifactId>
-         <version>2.6</version>
       </dependency>
       <dependency>
          <groupId>org.jboss.test</groupId>
          <artifactId>richfaces-selenium</artifactId>
-         <version>1.5.0.Alpha1</version>
       </dependency>
       <dependency>
          <groupId>org.apache.maven</groupId>
          <artifactId>maven-ant-tasks</artifactId>
-         <version>2.1.1</version>
       </dependency>
       <dependency>
          <groupId>org.apache.ant</groupId>
          <artifactId>ant</artifactId>
-         <version>1.7.1</version>
       </dependency>
    </dependencies>
 </project>

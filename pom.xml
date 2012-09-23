@@ -62,31 +62,33 @@
       <commons-dbcp.version>1.2.2</commons-dbcp.version>
       <com.google.javascript.version>r1592</com.google.javascript.version>
 
-      <!-- ************** -->
-      <!-- Build settings -->
-      <!-- ************** -->
+     <!-- ************** -->
+     <!-- Build settings -->
+     <!-- ************** -->
 
-      <!-- maven-enforcer-plugin -->
-      <jdk.min.version>1.6</jdk.min.version>
-      
-      <!-- maven-release-plugin -->
-      <useReleaseProfile>false</useReleaseProfile>
-      <version.release.plugin>2.2.1</version.release.plugin>
-      <pushChanges>false</pushChanges>
-      
-      <!-- buildnumber-maven-plugin : needs 1.0 for git -->
-      <version.buildnumber.plugin>1.0</version.buildnumber.plugin>
+     <!-- maven-enforcer-plugin -->
+     <jdk.min.version>1.6</jdk.min.version>
 
-      <!-- -->
-      <surefire.exo.profiles>hsqldb</surefire.exo.profiles>
+     <!-- maven-release-plugin -->
+     <useReleaseProfile>false</useReleaseProfile>
+     <version.release.plugin>2.2.1</version.release.plugin>
+     <pushChanges>false</pushChanges>
 
-      <!-- To port back into gatein-dep -->
-      <version.hibernate.javax.persistence>1.0.1.Final</version.hibernate.javax.persistence>
-      <version.hibernate.commonsannotations>4.0.1.Final</version.hibernate.commonsannotations>
-      <version.hibernate.core>4.1.6.Final</version.hibernate.core>
-      <version.jboss.logging>3.1.2.GA</version.jboss.logging>
-      <version.apache.tika>1.2</version.apache.tika>
-      <version.apache.lucene>3.5.0</version.apache.lucene>
+     <!-- buildnumber-maven-plugin : needs 1.0 for git -->
+     <version.buildnumber.plugin>1.0</version.buildnumber.plugin>
+
+     <!-- -->
+     <surefire.exo.profiles>hsqldb</surefire.exo.profiles>
+
+     <version.plugin.gwt>2.1.0</version.plugin.gwt>
+     <version.plugin.clean>2.4.1</version.plugin.clean>
+     <version.yuicompressor-maven-plugin>0.7.1</version.yuicompressor-maven-plugin>
+     <version.plugin.japex>1.2.3</version.plugin.japex>
+
+
+
+
+
 
 
    </properties>
@@ -115,10 +117,10 @@
          <!-- Needed becuase of a Maven bug. Components depend on gatein-dep and for some
               reasons with Maven 2.2.1 it can't find that dependency anymore
          -->
-         <dependency>
+        <dependency>
             <groupId>org.gatein</groupId>
             <artifactId>gatein-dep</artifactId>
-            <version>1.1.0-GA</version>
+            <version>1.2.0.Alpha04</version>
             <type>pom</type>
             <scope>import</scope>
          </dependency>
@@ -129,54 +131,9 @@
           <artifactId>closure-compiler</artifactId>
           <version>${com.google.javascript.version}</version>
         </dependency>
-        <dependency>
-          <groupId>org.hibernate.javax.persistence</groupId>
-          <artifactId>hibernate-jpa-2.0-api</artifactId>
-          <version>${version.hibernate.javax.persistence}</version>
-        </dependency>
-        <dependency>
-          <groupId>org.hibernate.common</groupId>
-          <artifactId>hibernate-commons-annotations</artifactId>
-          <version>${version.hibernate.commonsannotations}</version>
-        </dependency>
-        <dependency>
-          <groupId>org.hibernate</groupId>
-          <artifactId>hibernate-core</artifactId>
-          <version>${version.hibernate.core}</version>
-        </dependency>
-        <dependency>
-          <groupId>org.jboss.logging</groupId>
-          <artifactId>jboss-logging</artifactId>
-          <version>${version.jboss.logging}</version>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.lucene</groupId>
-          <artifactId>lucene-core</artifactId>
-          <version>${version.apache.lucene}</version>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.lucene</groupId>
-          <artifactId>lucene-memory</artifactId>
-          <version>${version.apache.lucene}</version>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.lucene</groupId>
-          <artifactId>lucene-spellchecker</artifactId>
-          <version>${version.apache.lucene}</version>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.tika</groupId>
-          <artifactId>tika-core</artifactId>
-          <version>${version.apache.tika}</version>
-        </dependency>
-        <dependency>
-          <groupId>org.apache.tika</groupId>
-          <artifactId>tika-parsers</artifactId>
-          <version>${version.apache.tika}</version>
-        </dependency>
 
-         <!-- eXo JCR stack -->
-         <dependency>
+        <!-- eXo JCR stack -->
+        <dependency>
             <groupId>org.exoplatform.kernel</groupId>
             <artifactId>exo.kernel.commons</artifactId>
             <version>${org.exoplatform.kernel.version}</version>
@@ -318,8 +275,8 @@
             <version>${org.exoplatform.ws.version}</version>
          </dependency>
 
-         <!-- GateIn components -->
-         <dependency>
+        <!-- GateIn components -->
+        <dependency>
             <groupId>org.gatein.common</groupId>
             <artifactId>common-logging</artifactId>
             <version>${org.gatein.common.version}</version>
@@ -390,8 +347,8 @@
               </exclusion>
             </exclusions>
          </dependency>
-         <!-- Gatein Mgmt -->
-         <dependency>
+        <!-- Gatein Mgmt -->
+        <dependency>
             <groupId>org.gatein.management</groupId>
             <artifactId>gatein-management-api</artifactId>
             <version>${org.gatein.mgmt.version}</version>
@@ -411,8 +368,8 @@
             <artifactId>gatein-management-rest</artifactId>
             <version>${org.gatein.mgmt.version}</version>
          </dependency>
-         <!-- WSRP -->
-         <dependency>
+        <!-- WSRP -->
+        <dependency>
             <groupId>org.gatein.wsrp</groupId>
             <artifactId>wsrp-producer-lib</artifactId>
             <scope>provided</scope>
@@ -466,15 +423,15 @@
             <scope>provided</scope>
             <version>${org.gatein.wsrp.version}</version>
          </dependency>
-         <!-- Needed by WSRP, here so that it can be picked up by module generation build.xml -->
-         <dependency>
+        <!-- Needed by WSRP, here so that it can be picked up by module generation build.xml -->
+        <dependency>
             <groupId>commons-httpclient</groupId>
             <artifactId>commons-httpclient</artifactId>
             <version>3.1</version>
          </dependency>
 
-         <!-- GateIn -->
-         <dependency>
+        <!-- GateIn -->
+        <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.common</artifactId>
             <version>3.5.0.Beta01-SNAPSHOT</version>
@@ -601,7 +558,7 @@
             <artifactId>exo.portal.component.test.core</artifactId>
             <version>3.5.0.Beta01-SNAPSHOT</version>
             <type>test-jar</type>
-	</dependency>	
+         </dependency>
          <dependency>
             <groupId>org.exoplatform.portal</groupId>
             <artifactId>exo.portal.component.test.jcr</artifactId>
@@ -690,8 +647,8 @@
             <type>war</type>
          </dependency>
 
-         <!-- GateIn Redirect -->
-         <dependency>
+        <!-- GateIn Redirect -->
+        <dependency>
             <groupId>org.gatein.web</groupId>
             <artifactId>redirect</artifactId>
             <version>${project.version}</version>
@@ -703,8 +660,8 @@
             <type>war</type>
          </dependency>
 
-         <!-- Reflext -->
-         <dependency>
+        <!-- Reflext -->
+        <dependency>
             <groupId>org.reflext</groupId>
             <artifactId>reflext.api</artifactId>
             <version>${version.reflext}</version>
@@ -730,8 +687,8 @@
             <version>${version.reflext}</version>
          </dependency>
 
-         <!-- Chromattic -->
-         <dependency>
+        <!-- Chromattic -->
+        <dependency>
             <groupId>org.chromattic</groupId>
             <artifactId>chromattic.apt</artifactId>
             <version>${version.chromattic}</version>
@@ -757,8 +714,8 @@
             <groupId>org.chromattic</groupId>
             <artifactId>chromattic.core</artifactId>
             <version>${version.chromattic}</version>
-            <!-- GTNPORTAL-2095: temporary exclusion for missing dependency -->
-            <exclusions>
+           <!-- GTNPORTAL-2095: temporary exclusion for missing dependency -->
+           <exclusions>
                <exclusion>
                   <groupId>com.google.code.javaparser</groupId>
                   <artifactId>javaparser</artifactId>
@@ -787,8 +744,8 @@
             </exclusions>
          </dependency>
 
-         <!-- Picketlink -->
-         <dependency>
+        <!-- Picketlink -->
+        <dependency>
             <groupId>org.picketlink.idm</groupId>
             <artifactId>picketlink-idm-api</artifactId>
             <version>${org.picketlink.idm}</version>
@@ -837,6 +794,12 @@
          <dependency>
             <groupId>org.gatein.shindig</groupId>
             <artifactId>shindig-gadgets</artifactId>
+            <exclusions>
+             <exclusion>
+               <groupId>net.sf.ehcache</groupId>
+               <artifactId>ehcache-core</artifactId>
+             </exclusion>
+            </exclusions>
             <version>${org.shindig.version}</version>
          </dependency>
          <dependency>
@@ -848,7 +811,26 @@
             <groupId>org.gatein.shindig</groupId>
             <artifactId>shindig-common</artifactId>
             <version>${org.shindig.version}</version>
+           <exclusions>
+             <exclusion>
+               <groupId>net.sf.ehcache</groupId>
+               <artifactId>ehcache-core</artifactId>
+             </exclusion>
+           </exclusions>
          </dependency>
+        <dependency>
+          <groupId>org.gatein.shindig</groupId>
+          <artifactId>shindig-common</artifactId>
+          <classifier>tests</classifier>
+          <version>${org.shindig.version}</version>
+          <exclusions>
+            <exclusion>
+              <groupId>net.sf.ehcache</groupId>
+              <artifactId>ehcache-core</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+
          <dependency>
             <groupId>org.gatein.shindig</groupId>
             <artifactId>shindig-social-api</artifactId>
@@ -860,8 +842,8 @@
             <version>${nl.captcha.simplecaptcha.version}</version>
          </dependency>
 
-         <!-- Staxnav -->
-         <dependency>
+        <!-- Staxnav -->
+        <dependency>
             <groupId>org.staxnav</groupId>
             <artifactId>staxnav.core</artifactId>
             <version>${org.staxnav.version}</version>
@@ -879,13 +861,25 @@
             </exclusions>
          </dependency>
 
-         <!-- needed for the IBM jdk, should be remove in the future when IBM fixes its jdk (see GTNPORTAL-636) -->
-         <dependency>
+        <!-- needed for the IBM jdk, should be remove in the future when IBM fixes its jdk (see GTNPORTAL-636) -->
+        <dependency>
             <groupId>net.jcip</groupId>
             <artifactId>jcip-annotations</artifactId>
             <version>${jcip.version}</version>
          </dependency>
-	 
+
+
+
+
+
+        <dependency>
+           <groupId>org.gatein.shindig</groupId>
+           <artifactId>shindig-common</artifactId>
+           <version>${org.shindig.version}</version>
+           <type>test-jar</type>
+           <scope>test</scope>
+        </dependency>
+
       </dependencies>
 
    </dependencyManagement>
@@ -893,7 +887,7 @@
    <dependencies>
       <dependency>
          <groupId>org.slf4j</groupId>
-         <artifactId>slf4j-jdk14</artifactId>
+         <artifactId>slf4j-simple</artifactId>
          <scope>test</scope>
       </dependency>
       <dependency>
@@ -902,7 +896,7 @@
          <scope>test</scope>
       </dependency>
    </dependencies>
-   
+
    <build>
       <resources>
          <resource>
@@ -985,10 +979,10 @@
                   </systemProperties>
                </configuration>
             </plugin>
-            <!-- we shouldn't need to specify this plugin here, but the maven compiler plugin is not accepting its 
-                 memory option properties. This should be removed when we can just set the compiler properties -->
-            <!-- we need to specify this as building GateIn can cause memory problems with some JDKs (ie IBM) -->
-            <plugin>
+           <!-- we shouldn't need to specify this plugin here, but the maven compiler plugin is not accepting its
+memory option properties. This should be removed when we can just set the compiler properties -->
+           <!-- we need to specify this as building GateIn can cause memory problems with some JDKs (ie IBM) -->
+           <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-compiler-plugin</artifactId>
                <configuration>
@@ -1078,8 +1072,25 @@
            		</lifecycleMappingMetadata>
            	</configuration>
            </plugin>
-         </plugins>
+           <plugin>
+             <groupId>com.sun.japex</groupId>
+             <artifactId>japex-maven-plugin</artifactId>
+             <version>${version.plugin.japex}</version>
+           </plugin>
+           <plugin>
+             <!-- Use to compress javascript gadget features -->
+             <groupId>net.sf.alchim</groupId>
+             <artifactId>yuicompressor-maven-plugin</artifactId>
+             <version>${version.yuicompressor-maven-plugin}</version>
+           </plugin>
+           <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>gwt-maven-plugin</artifactId>
+            <version>${version.plugin.gwt}</version>
+         </plugin>
+        </plugins>
       </pluginManagement>
+
       <plugins>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
@@ -1103,6 +1114,10 @@
                   </goals>
                </execution>
             </executions>
+         </plugin>
+         <plugin>
+            <artifactId>maven-clean-plugin</artifactId>
+            <version>${version.plugin.clean}</version>
          </plugin>
       </plugins>
    </build>
@@ -1141,8 +1156,8 @@
       </profile>
    </profiles>
 
-   <!-- To be removed and replaced by settings in user config -->
-   <repositories>
+  <!-- To be removed and replaced by settings in user config -->
+  <repositories>
       <repository>
          <id>jboss-public-repository-group</id>
          <name>JBoss Public Maven Repository Group</name>
@@ -1166,8 +1181,8 @@
          <url>http://oauth.googlecode.com/svn/code/maven</url>
       </repository>
 
-      <!-- Redefine legacy jboss repository to go to JBoss Nexus instead to http://repository.jboss.org/maven2 -->
-      <repository>
+    <!-- Redefine legacy jboss repository to go to JBoss Nexus instead to http://repository.jboss.org/maven2 -->
+    <repository>
          <id>jboss</id>
          <name>JBoss Public Maven Repository Group</name>
          <url>https://repository.jboss.org/nexus/content/groups/public/</url>
@@ -1195,6 +1210,16 @@
             <updatePolicy>never</updatePolicy>
          </snapshots>
       </repository>
+     <!--<repository>-->
+       <!--<releases>-->
+         <!--<enabled>false</enabled>-->
+       <!--</releases>-->
+       <!--<snapshots>-->
+         <!--<enabled>true</enabled>-->
+       <!--</snapshots>-->
+       <!--<id>snapshots.jboss.org</id>-->
+       <!--<url>https://repository.jboss.org/nexus/content/groups/public/</url>-->
+     <!--</repository>-->
    </repositories>
    <pluginRepositories>
       <pluginRepository>
