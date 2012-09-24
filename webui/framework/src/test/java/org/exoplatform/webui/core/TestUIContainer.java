@@ -80,12 +80,17 @@ public class TestUIContainer extends TestCase
             container.addChild(new MockUIComponent("c_foo"));
          }
       });
-      t.start();
 
       Iterator<UIComponent> iterator = container.getChildren().iterator();
       List<String> list = new ArrayList<String>();
+      boolean active = true;
       while (iterator.hasNext())
       {
+         if (active)
+         {
+            t.start();
+            active = false;
+         }
          // Just loop through the list to do something
          list.add(iterator.next().getId());
          Thread.sleep(5);
