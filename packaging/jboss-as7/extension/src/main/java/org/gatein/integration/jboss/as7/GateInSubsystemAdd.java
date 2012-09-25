@@ -78,13 +78,15 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
 
    protected void populateModel(final OperationContext context, final ModelNode operation, final Resource resource) throws  OperationFailedException
    {
-      final DeploymentScannerService scannerService = new DeploymentScannerService(config);
-      ModelNode op = scannerService.prepareDeploymentModel();
+      if (requiresRuntime(context)) {
+         final DeploymentScannerService scannerService = new DeploymentScannerService(config);
+         ModelNode op = scannerService.prepareDeploymentModel();
 
-      final ModelNode result = new ModelNode();
-      final PathAddress opPath = PathAddress.pathAddress(op.get(OP_ADDR));
-      final OperationStepHandler handler = context.getRootResourceRegistration().getOperationHandler(opPath, op.get(OP).asString());
-      context.addStep(result, op, handler, OperationContext.Stage.MODEL);
+         final ModelNode result = new ModelNode();
+         final PathAddress opPath = PathAddress.pathAddress(op.get(OP_ADDR));
+         final OperationStepHandler handler = context.getRootResourceRegistration().getOperationHandler(opPath, op.get(OP).asString());
+         context.addStep(result, op, handler, OperationContext.Stage.MODEL);
+      }
    }
 
    protected void populateModel(ModelNode operation, ModelNode model)

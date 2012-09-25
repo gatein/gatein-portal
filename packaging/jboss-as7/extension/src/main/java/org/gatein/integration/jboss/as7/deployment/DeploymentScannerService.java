@@ -60,7 +60,13 @@ public class DeploymentScannerService implements Service<DeploymentScannerServic
    public DeploymentScannerService(GateInConfiguration config)
    {
       this.config = config;
-      gateinHome = new File(System.getProperty("jboss.home.dir"));
+      String jbossHome = System.getProperty("jboss.home.dir");
+      if (jbossHome == null)
+      {
+         jbossHome = System.getProperty("user.dir");
+         log.warn("System property jboss.home.dir not set! Using current working dir: " + jbossHome);
+      }
+      gateinHome = new File(jbossHome);
    }
 
    public ModelNode prepareDeploymentModel()
