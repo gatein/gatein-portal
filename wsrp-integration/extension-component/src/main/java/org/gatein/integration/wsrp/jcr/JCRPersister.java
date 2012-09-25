@@ -23,30 +23,20 @@
 
 package org.gatein.integration.wsrp.jcr;
 
-import org.chromattic.api.Chromattic;
+import javax.jcr.Credentials;
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+
 import org.chromattic.api.ChromatticBuilder;
-import org.chromattic.api.ChromatticSession;
 import org.chromattic.api.format.FormatterContext;
 import org.chromattic.api.format.ObjectFormatter;
 import org.chromattic.spi.jcr.SessionLifeCycle;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.jcr.ext.common.SessionProvider;
-import org.gatein.common.util.ParameterValidation;
 import org.gatein.wsrp.jcr.BaseChromatticPersister;
-import org.gatein.wsrp.jcr.mapping.BaseMapping;
-
-import javax.jcr.Credentials;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -79,7 +69,7 @@ public class JCRPersister extends BaseChromatticPersister
    public static class WSRPSessionLifeCycle implements SessionLifeCycle
    {
       private ManageableRepository repository;
-      private SessionProvider provider;
+      private ThreadLocal<SessionProvider> provider = new ThreadLocal<SessionProvider>();
 
       public WSRPSessionLifeCycle()
       {
@@ -93,13 +83,19 @@ public class JCRPersister extends BaseChromatticPersister
          {
             throw new RuntimeException(e);
          }
-
-         provider = SessionProvider.createSystemProvider();
       }
 
       public Session login() throws RepositoryException
       {
-         return provider.getSession(WSRP_WORKSPACE_NAME, repository);
+         SessionProvider sessionProvider = provider.get();
+         if (sessionProvider == null)
+         {
+            sessionProvider =  SessionProvider.createSystemProvider();
+            provider.set(sessionProvider);
+         }
+         
+         Session session = sessionProvider.getSession(WSRP_WORKSPACE_NAME, repository);
+         return session;
       }
 
       public Session login(String s) throws RepositoryException
