@@ -32,6 +32,7 @@ import org.exoplatform.portal.resource.Skin;
 import org.exoplatform.portal.resource.SkinConfig;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.resource.SkinURL;
+import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.url.MimeType;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -737,7 +738,7 @@ public class UIPortalApplication extends UIApplication
          w.write("</div>");
          w.write("<div class=\"PortalResponseScript\">");
          JavascriptManager jsManager = pcontext.getJavascriptManager();
-         String skin = getAddSkinScript(list);
+         String skin = getAddSkinScript(pcontext.getControllerContext(), list);
          if (skin != null)
          {
             jsManager.require("SHARED/base").addScripts(skin);
@@ -757,7 +758,7 @@ public class UIPortalApplication extends UIApplication
       w.write("</div>");      
    }
    
-   private String getAddSkinScript(Set<UIComponent> updateComponents)
+   private String getAddSkinScript(ControllerContext context, Set<UIComponent> updateComponents)
    {
       if (updateComponents == null)
          return null;
@@ -794,7 +795,7 @@ public class UIPortalApplication extends UIApplication
       StringBuilder b = new StringBuilder(1000);
       for (SkinConfig ele : skins)
       {
-         SkinURL url = ele.createURL();
+         SkinURL url = ele.createURL(context);
          url.setOrientation(orientation_);
          b.append("eXo.core.Skin.addSkin('").append(ele.getId()).append("','").append(url).append("');\n");
       }

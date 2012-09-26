@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.resource;
 
+import org.exoplatform.web.ControllerContext;
+
 /**
  * A skin.
  *
@@ -38,8 +40,10 @@ public interface Skin
    /**
     * Creates and return a skin URL.
     *
+    * @param context the controller context
     * @return the skin URL
+    * @throws NullPointerException if the controller context argument is null
     */
-   SkinURL createURL();
+   SkinURL createURL(ControllerContext context) throws NullPointerException;
 
 }

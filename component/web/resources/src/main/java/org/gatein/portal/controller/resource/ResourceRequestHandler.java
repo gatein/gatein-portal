@@ -133,6 +133,9 @@ public class ResourceRequestHandler extends WebRequestHandler
 
    /** . */
    public static final QualifiedName COMPRESS_QN = QualifiedName.create("gtn", "compress");
+   
+   /** . */
+   public static final QualifiedName ORIENTATION_QN = QualifiedName.create("gtn", "orientation");
 
    /** . */
    public static final QualifiedName LANG_QN = QualifiedName.create("gtn", "lang");

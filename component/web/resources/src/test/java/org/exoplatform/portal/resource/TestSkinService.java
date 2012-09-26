@@ -18,8 +18,16 @@
  */
 package org.exoplatform.portal.resource;
 
-import org.exoplatform.services.resources.Orientation;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.pathParam;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.route;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.routeParam;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.router;
 
+import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.controller.router.Router;
+import org.exoplatform.web.controller.router.RouterConfigException;
+
+import java.net.MalformedURLException;
 import java.util.Arrays;
 
 /**
@@ -41,13 +49,41 @@ public class TestSkinService extends AbstractSkinServiceTest
       return isFirstStartup;
    }
 
+   Router getRouter()
+   {
+      Router router;
+      try
+      {
+         router = router().add(
+            route("/skins/{gtn:version}/{gtn:resource}{gtn:compress}{gtn:orientation}.css")
+               .with(routeParam("gtn:handler").withValue("skin"))
+               .with(pathParam("gtn:version").matchedBy("[^/]*").preservePath())
+               .with(pathParam("gtn:orientation").matchedBy("-(lt)|-(rt)|").captureGroup(true))
+               .with(pathParam("gtn:compress").matchedBy("-(min)|").captureGroup(true))
+               .with(pathParam("gtn:resource").matchedBy(".+?").preservePath())).build();
+         return router;
+      }
+      catch (RouterConfigException e)
+      {
+         return null;
+      }
+   }
+
    @Override
    void touchSetUp()
    {
       isFirstStartup = false;
    }
 
-   public void testCompositeSkin()
+   public void testRenderURL()
+   {
+      SkinURL skinURL = skinService.getSkin("mockwebapp/FirstPortlet", "TestSkin").createURL(controllerCtx);
+      assertEquals("/portal/skins/" + ASSETS_VERSION + "/mockwebapp/skin/FirstPortlet-min-lt.css", skinURL.toString());
+      skinURL.setOrientation(Orientation.RT);
+      assertEquals("/portal/skins/" + ASSETS_VERSION + "/mockwebapp/skin/FirstPortlet-min-rt.css", skinURL.toString());
+   }
+   
+   public void testCompositeSkin() throws NullPointerException, MalformedURLException
    {
       SkinConfig fSkin = skinService.getSkin("mockwebapp/FirstPortlet", "TestSkin");
       SkinConfig sSkin = skinService.getSkin("mockwebapp/SecondPortlet", "TestSkin");
@@ -55,78 +91,93 @@ public class TestSkinService extends AbstractSkinServiceTest
       assertNotNull(sSkin);
 
       Skin merged = skinService.merge(Arrays.asList(fSkin, sSkin));
-      SkinURL url = merged.createURL();
+      SkinURL url = merged.createURL(controllerCtx);
 
       url.setOrientation(Orientation.LT);
       assertEquals(
-         ".FirstPortlet {foo1 : bar1}\n" +
-         ".SecondPortlet {foo2 : bar2}",
-         skinService.getCSS(url.toString()));
+         ".FirstPortlet {foo1 : bar1}\n.SecondPortlet {foo2 : bar2}",
+         skinService.getCSS(newControllerContext(getRouter(), url.toString()), true));
 
       url.setOrientation(Orientation.RT);
       assertEquals(
-         ".FirstPortlet {foo1 : bar1}\n" +
-         ".SecondPortlet {foo2 : bar2}",
-         skinService.getCSS(url.toString()));
+         ".FirstPortlet {foo1 : bar1}\n.SecondPortlet {foo2 : bar2}",
+         skinService.getCSS(newControllerContext(getRouter(), url.toString()), true));
    }
 
-   public void testCache()
+   public void testCache() throws Exception
    {
-      String path = "/path/to/test/caching.css";
+      String resource = "/path/to/test/cache.css";
+      String url = newSimpleSkin(resource).createURL(controllerCtx).toString();
 
-      resResolver.addResource(path, "foo");
-      assertEquals("foo", skinService.getCSS(path));
+      resResolver.addResource(resource, "foo");
+      assertEquals("foo", skinService.getCSS(newControllerContext(getRouter(), url), true));
 
-      resResolver.addResource(path, "bar");
-      assertEquals("foo", skinService.getCSS(path));
-   }
-   
-   public void testInvalidateCache()
-   {
-      String path = "/path/to/test/caching.css";
-
-      resResolver.addResource(path, "foo");
-      assertEquals("foo", skinService.getCSS(path));
-
-      resResolver.addResource(path, "bar");
-      skinService.invalidateCachedSkin(path);
-      assertEquals("bar", skinService.getCSS(path));
+      resResolver.addResource(resource, "bar");
+      assertEquals("foo", skinService.getCSS(newControllerContext(getRouter(), url), true));
    }
 
-   public void testProcessImportCSS()
+   public void testInvalidateCache() throws Exception
    {
-      String parent = "/process/import/css.css";
+      String resource = "/path/to/test/invalidate/cache.css";
+      String url = newSimpleSkin(resource).createURL(controllerCtx).toString();
 
-      resResolver.addResource(parent, "@import url(Portlet/Stylesheet.css); aaa;");
-      assertEquals(" aaa;", skinService.getCSS(parent));
-      skinService.invalidateCachedSkin(parent);
+      resResolver.addResource(resource, "foo");
+      assertEquals("foo", skinService.getCSS(newControllerContext(getRouter(), url), true));
+
+      resResolver.addResource(resource, "bar");
+      skinService.invalidateCachedSkin(resource);
+      assertEquals("bar", skinService.getCSS(newControllerContext(getRouter(), url), true));
+   }
+
+   public void testProcessImportCSS() throws Exception
+   {
+      String resource = "/process/import/css.css";
+      String url = newSimpleSkin(resource).createURL(controllerCtx).toString();
+
+      resResolver.addResource(resource, "@import url(Portlet/Stylesheet.css); aaa;");
+      assertEquals(" aaa;", skinService.getCSS(newControllerContext(getRouter(), url), true));
+      skinService.invalidateCachedSkin(resource);
       
-      resResolver.addResource(parent, "@import url('/Portlet/Stylesheet.css'); aaa;");
-      assertEquals(" aaa;", skinService.getCSS(parent));
-      skinService.invalidateCachedSkin(parent);
+      resResolver.addResource(resource, "@import url('/Portlet/Stylesheet.css'); aaa;");
+      assertEquals(" aaa;", skinService.getCSS(newControllerContext(getRouter(), url), true));
+      skinService.invalidateCachedSkin(resource);
 
       //parent file import child css file
-      resResolver.addResource(parent, "@import url(childCSS/child.css);  background:url(images/foo.gif);");
-      String child = "/process/import/childCSS/child.css";
-      resResolver.addResource(child, "background:url(bar.gif);");
+      resResolver.addResource(resource, "@import url(childCSS/child.css);  background:url(images/foo.gif);");
+      String childResource = "/process/import/childCSS/child.css";
+      resResolver.addResource(childResource, "background:url(bar.gif);");
 
-      /*
+      /* 
        * Now test merge and process recursively (run in non-dev mode)
        * We have folder /path/to/parent.css
        *                                        /images/foo.gif
        *                                        /childCSS/child.css
        *                                                        /bar.gif
        */
-      assertEquals("background:url(/process/import/childCSS/bar.gif);  background:url(/process/import/images/foo.gif);",
-         skinService.getCSS(parent));
+      assertEquals(
+         "background:url(/process/import/childCSS/bar.gif);  background:url(/process/import/images/foo.gif);",
+         skinService.getCSS(newControllerContext(getRouter(), url), true));
+
+      url = newSimpleSkin(childResource).createURL(controllerCtx).toString();
+      assertEquals(
+         "background:url(/process/import/childCSS/bar.gif);",
+         skinService.getCSS(newControllerContext(getRouter(), url), true));
    }
 
-   public void testLastModifiedSince()
+   public void testLastModifiedSince() throws Exception
    {
-      String path = "/last/modify/since.css";
-      resResolver.addResource(path, "foo");
-
-      assertTrue(skinService.getCSS(path).length() > 0);
-      assertTrue(skinService.getLastModified(path) < System.currentTimeMillis());
+      String resource = "/last/modify/since.css";
+      SkinURL skinURL = newSimpleSkin(resource).createURL(controllerCtx);
+      
+      resResolver.addResource(resource, "foo");
+      
+      assertTrue(skinService.getCSS(newControllerContext(getRouter(), skinURL.toString()), true).length() > 0);
+      long lastModified = skinService.getLastModified(newControllerContext(getRouter(), skinURL.toString()));
+      Thread.sleep(1000);
+      assertEquals(lastModified, skinService.getLastModified(newControllerContext(getRouter(), skinURL.toString())));
+      
+      skinURL.setOrientation(Orientation.RT);
+      Thread.sleep(1000);
+      assertTrue(lastModified < skinService.getLastModified(newControllerContext(getRouter(), skinURL.toString())));
    }
 }
