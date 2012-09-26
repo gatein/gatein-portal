@@ -632,7 +632,7 @@
       <artifactId>jcip-annotations</artifactId>
     </dependency>
     <dependency>
-      <groupId>jdom</groupId>
+      <groupId>org.jdom</groupId>
       <artifactId>jdom</artifactId>
     </dependency>
     <dependency>

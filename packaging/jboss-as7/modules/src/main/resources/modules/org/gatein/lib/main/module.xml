@@ -37,6 +37,7 @@
             </paths>
         </system>
 
+        <module name="asm.asm"/>
         <module name="org.apache.xerces" services="export" export="true"/>
         <module name="com.sun.xml.bind" services="export" export="true" />
         <module name="javax.xml.bind.api" />
@@ -51,15 +52,22 @@
         <module name="org.gatein.common" />
         <module name="org.apache.commons.logging" export="true" />
         <module name="org.apache.commons.collections" />
+        <module name="org.apache.commons.beanutils" />
+        <module name="org.apache.commons.codec" />
+        <module name="org.apache.commons.io" />
+        <module name="org.apache.commons.lang" />
+        <module name="org.apache.commons.pool" />
         <module name="org.apache.httpcomponents" />
         <module name="org.gatein.naming" export="true"/>
         <module name="org.gatein.pc" />
         <module name="org.gatein.wci" export="true"/>
         <module name="org.hibernate" />
         <module name="org.javassist"/>
-        <module name="org.slf4j" slot="gatein" />
+        <module name="org.joda.time"/>
+        <module name="org.jdom"/>
+        <module name="org.slf4j" />
         <module name="org.staxnav" />
-        <module name="com.google.guava" slot="gatein" export="true"/>
+        <module name="com.google.guava" export="true"/>
 
         <module name="org.jboss.threads"/>
         <module name="org.jboss.logging"/>

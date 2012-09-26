@@ -152,22 +152,8 @@
 
       <!-- Apache commons -->
       <dependency>
-         <groupId>commons-beanutils</groupId>
-         <artifactId>commons-beanutils</artifactId>
-         <exclusions>
-            <exclusion>
-               <groupId>commons-logging</groupId>
-               <artifactId>commons-logging</artifactId>
-            </exclusion>
-         </exclusions>
-      </dependency>
-      <dependency>
          <groupId>commons-chain</groupId>
          <artifactId>commons-chain</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>commons-codec</groupId>
-         <artifactId>commons-codec</artifactId>
       </dependency>
       <dependency>
          <groupId>commons-dbcp</groupId>
@@ -185,34 +171,6 @@
          <groupId>commons-httpclient</groupId>
          <artifactId>commons-httpclient</artifactId>
       </dependency>
-      <dependency>
-         <groupId>commons-io</groupId>
-         <artifactId>commons-io</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>commons-lang</groupId>
-         <artifactId>commons-lang</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>commons-pool</groupId>
-         <artifactId>commons-pool</artifactId>
-      </dependency>
-
-      <!-- Hibernate -->
-      <dependency>
-        <groupId>org.hibernate.javax.persistence</groupId>
-        <artifactId>hibernate-jpa-2.0-api</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.hibernate.common</groupId>
-        <artifactId>hibernate-commons-annotations</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>org.hibernate</groupId>
-        <artifactId>hibernate-core</artifactId>
-      </dependency>
-
-
 
       <!-- JBoss -->
       <dependency>
@@ -236,14 +194,6 @@
       <dependency>
          <groupId>org.jgroups</groupId>
          <artifactId>jgroups</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.slf4j</groupId>
-         <artifactId>slf4j-jboss-logmanager</artifactId>
-      </dependency>
-      <dependency>
-         <groupId>org.slf4j</groupId>
-         <artifactId>slf4j-api</artifactId>
       </dependency>
 
       <!--dependency>
@@ -956,10 +906,6 @@
          <artifactId>aopalliance</artifactId>
       </dependency>
       <dependency>
-         <groupId>asm</groupId>
-         <artifactId>asm</artifactId>
-      </dependency>
-      <dependency>
          <groupId>bouncycastle</groupId>
          <artifactId>bcmail-jdk14</artifactId>
       </dependency>
@@ -1001,10 +947,10 @@
          <groupId>com.jhlabs</groupId>
          <artifactId>filters</artifactId>
       </dependency>
-      <dependency>
-        <groupId>com.google.guava</groupId>
-        <artifactId>guava</artifactId>
-      </dependency>
+      <!--<dependency>-->
+        <!--<groupId>com.google.guava</groupId>-->
+        <!--<artifactId>guava</artifactId>-->
+      <!--</dependency>-->
       <dependency>
          <groupId>org.codehaus.groovy</groupId>
          <artifactId>groovy-all</artifactId>
@@ -1023,10 +969,10 @@
          <groupId>com.ibm.icu</groupId>
          <artifactId>icu4j</artifactId>
       </dependency>
-      <dependency>
-         <groupId>jdom</groupId>
-         <artifactId>jdom</artifactId>
-      </dependency>
+      <!--<dependency>-->
+         <!--<groupId>org.jdom</groupId>-->
+         <!--<artifactId>jdom</artifactId>-->
+      <!--</dependency>-->
       <dependency>
          <groupId>org.jibx</groupId>
          <artifactId>jibx-bind</artifactId>
@@ -1047,10 +993,10 @@
             </exclusion>
          </exclusions>
       </dependency>
-      <dependency>
-         <groupId>joda-time</groupId>
-         <artifactId>joda-time</artifactId>
-      </dependency>
+      <!--<dependency>-->
+         <!--<groupId>joda-time</groupId>-->
+         <!--<artifactId>joda-time</artifactId>-->
+      <!--</dependency>-->
       <dependency>
          <groupId>rhino</groupId>
          <artifactId>js</artifactId>

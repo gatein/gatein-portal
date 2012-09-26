@@ -31,6 +31,6 @@
        <module name="javax.api" />
        <module name="javax.jcr.api" />
        <module name="org.reflext" />
-       <module name="org.slf4j" slot="gatein" />
+       <module name="org.slf4j" />
     </dependencies>
 </module>

@@ -69,22 +69,15 @@
         <module-def name="org.gatein.lib">
            <!-- maven-resource group="javax.activation" artifact="activation" / -->
            <maven-resource group="aopalliance" artifact="aopalliance" />
-           <maven-resource group="asm" artifact="asm" />
            <maven-resource group="bouncycastle" artifact="bcmail-jdk14" />
            <maven-resource group="bouncycastle" artifact="bcprov-jdk14" />
            <maven-resource group="caja" artifact="caja" />
            <maven-resource group="com.google.javascript" artifact="closure-compiler" />
-           <!--maven-resource group="org.gatein.common" artifact="common-common" /-->
-           <!--maven-resource group="org.gatein.common" artifact="common-logging" /-->
-           <maven-resource group="commons-beanutils" artifact="commons-beanutils" />
            <maven-resource group="commons-chain" artifact="commons-chain" />
-           <maven-resource group="commons-codec" artifact="commons-codec" />
+           <!--<maven-resource group="commons-codec" artifact="commons-codec" />-->
            <maven-resource group="commons-dbcp" artifact="commons-dbcp" />
            <maven-resource group="commons-digester" artifact="commons-digester" />
            <maven-resource group="commons-httpclient" artifact="commons-httpclient" />
-           <maven-resource group="commons-io" artifact="commons-io" />
-           <maven-resource group="commons-lang" artifact="commons-lang" />
-           <maven-resource group="commons-pool" artifact="commons-pool" />
            <maven-resource group="oswego-concurrent" artifact="concurrent" />
            <maven-resource group="net.sf.ehcache" artifact="ehcache-core" />
            <maven-resource group="org.ccil.cowan.tagsoup" artifact="tagsoup" />
@@ -148,11 +141,9 @@
            <maven-resource group="com.ibm.icu" artifact="icu4j" />
            <maven-resource group="org.jboss.cache" artifact="jbosscache-core" />
            <!--maven-resource group="org.jboss.jbossts" artifact="jbossjts" /-->
-           <maven-resource group="jdom" artifact="jdom" />
            <maven-resource group="org.jgroups" artifact="jgroups" />
            <maven-resource group="org.jibx" artifact="jibx-bind" />
            <maven-resource group="org.jibx" artifact="jibx-run" />
-           <maven-resource group="joda-time" artifact="joda-time" />
            <maven-resource group="rhino" artifact="js" />
            <maven-resource group="org.jsecurity" artifact="jsecurity" />
            <maven-resource group="caja" artifact="json_simple" />
@@ -255,10 +246,6 @@
            <maven-resource group="javax.jcr" artifact="jcr" />
        </module-def>
 
-       <module-def name="org.slf4j" slot="gatein">
-           <maven-resource group="org.slf4j" artifact="slf4j-api" />
-           <maven-resource group="org.jboss.slf4j" artifact="slf4j-jboss-logmanager" />
-       </module-def>
 
        <module-def name="org.hsqldb">
            <maven-resource group="org.hsqldb" artifact="hsqldb" />
@@ -286,10 +273,6 @@
        <module-def name="org.gatein.wsrp.integration">
           <maven-resource group="org.gatein.integration" artifact="extension-config" />
           <maven-resource group="org.gatein.integration" artifact="extension-component" />
-       </module-def>
-
-       <module-def name="com.google.guava" slot="gatein">
-          <maven-resource group="com.google.guava" artifact="guava" />
        </module-def>
 
        <module-def name="org.apache.commons-httpclient" slot="gatein">

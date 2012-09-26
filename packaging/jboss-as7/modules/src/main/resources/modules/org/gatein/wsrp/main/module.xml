@@ -35,7 +35,7 @@
        <module name="javax.xml.ws.api" />
        <module name="javax.jcr.api" />
        <module name="javax.wsdl4j.api" />
-       <module name="org.slf4j" slot="gatein" />
+       <module name="org.slf4j"/>
        <module name="org.gatein.pc" />
        <module name="org.gatein.common" />
        <module name="org.gatein.wsrp.integration" services="export" />
@@ -45,6 +45,6 @@
        <module name="org.jboss.common-core" />
        <module name="org.apache.commons-fileupload" />
        <module name="org.apache.commons-httpclient" slot="gatein" />
-       <module name="com.google.guava" slot="gatein"/>
+       <module name="com.google.guava"/>
     </dependencies>
 </module>

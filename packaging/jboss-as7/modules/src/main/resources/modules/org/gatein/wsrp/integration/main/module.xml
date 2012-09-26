@@ -38,9 +38,9 @@
        <module name="javax.servlet.api" />
        <module name="javax.jws.api" />
        <module name="javax.xml.ws.api" />
-       <module name="com.google.guava" slot="gatein" />
+       <module name="com.google.guava"/>
        <module name="javax.jcr.api" />
-       <module name="org.slf4j" slot="gatein" />
+       <module name="org.slf4j" />
        <module name="org.reflext" />
        <module name="org.chromattic" />
     </dependencies>
