@@ -246,11 +246,6 @@
            <maven-resource group="javax.jcr" artifact="jcr" />
        </module-def>
 
-
-       <module-def name="org.hsqldb">
-           <maven-resource group="org.hsqldb" artifact="hsqldb" />
-       </module-def>
-       
        <module-def name="org.apache.commons-fileupload">
           <maven-resource group="commons-fileupload" artifact="commons-fileupload" />
        </module-def>
