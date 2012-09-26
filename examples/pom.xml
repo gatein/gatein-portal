@@ -114,11 +114,11 @@
          </modules>
       </profile>
       <profile>
-         <id>pkg-jbossas712</id>
+         <id>pkg-jbossas713</id>
          <activation>
             <property>
                <name>gatein.dev</name>
-               <value>jbossas712</value>
+               <value>jbossas713</value>
             </property>
          </activation>
          <modules>
