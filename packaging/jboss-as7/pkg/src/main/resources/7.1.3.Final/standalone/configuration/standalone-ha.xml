@@ -27,6 +27,7 @@
         <extension module="org.jboss.as.web"/>
         <extension module="org.jboss.as.webservices"/>
         <extension module="org.jboss.as.weld"/>
+        <extension module="org.gatein"/>
     </extensions>
     <management>
         <security-realms>
@@ -105,9 +106,27 @@
                         <password>sa</password>
                     </security>
                 </datasource>
+
+                <datasource jndi-name="java:/gatein-jcr" pool-name="GateInDS" enabled="true"
+                           use-java-context="true">
+                    <connection-url>
+                     jdbc:mysql://localhost/gateinjcr?jdbcCompliantTruncation=false
+                    </connection-url>
+                    <driver>mysql</driver>
+                    <security>
+                        <user-name>gateinjcr</user-name>
+                        <password>gateinjcr</password>
+                    </security>
+                </datasource>
+
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
+                    </driver>
+                </drivers>
+                <drivers>
+                    <driver name="mysql" module="com.mysql.jdbc">
+                        <xa-datasource-class>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</xa-datasource-class>
                     </driver>
                 </drivers>
             </datasources>
@@ -328,6 +347,24 @@
                         <policy-module code="Delegating" flag="required"/>
                     </authorization>
                 </security-domain>
+                <security-domain name="gatein-domain" cache-type="default">
+                    <authentication>
+                        <login-module code="org.gatein.wci.security.WCILoginModule" flag="optional">
+                            <module-option name="portalContainerName" value="portal"/>
+                            <module-option name="realmName" value="gatein-domain"/>
+                        </login-module>
+                        <login-module code="org.exoplatform.services.security.jaas.SharedStateLoginModule"
+                                   flag="required">
+                            <module-option name="portalContainerName" value="portal"/>
+                            <module-option name="realmName" value="gatein-domain"/>
+                        </login-module>
+                        <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
+                            <module-option name="portalContainerName" value="portal"/>
+                            <module-option name="realmName" value="gatein-domain"/>
+                        </login-module>
+                    </authentication>
+               </security-domain>
+
             </security-domains>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:threads:1.1"/>
@@ -359,6 +396,13 @@
             </endpoint-config>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:weld:1.0"/>
+        <subsystem xmlns="urn:jboss:domain:gatein:1.0">
+            <portlet-war-dependencies>
+                <dependency name="org.gatein.wci"/>
+                <dependency name="org.gatein.pc"/>
+                <dependency name="javax.portlet.api"/>
+            </portlet-war-dependencies>
+       </subsystem>
     </profile>
     <interfaces>
         <interface name="management">
