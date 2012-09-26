@@ -230,6 +230,14 @@
           <maven-resource group="org.reflext" artifact="reflext.spi" />
        </module-def>
 
+       <module-def name="org.jboss.portletbridge.api">
+           <maven-resource group="org.jboss.portletbridge" artifact="portletbridge-api" />    	
+       </module-def>
+
+        <module-def name="org.jboss.portletbridge.impl">
+            <maven-resource group="org.jboss.portletbridge" artifact="portletbridge-impl" />    	
+        </module-def>
+
        <module-def name="org.staxnav">
            <maven-resource group="org.staxnav" artifact="staxnav.core" />
        </module-def>

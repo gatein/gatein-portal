@@ -61,6 +61,7 @@
       <jcip.version>1.0</jcip.version>
       <commons-dbcp.version>1.2.2</commons-dbcp.version>
       <com.google.javascript.version>r1592</com.google.javascript.version>
+      <org.jboss.portletbridge.version>3.1.0.Beta1</org.jboss.portletbridge.version>
 
      <!-- ************** -->
      <!-- Build settings -->
@@ -872,6 +873,18 @@
                   <artifactId>xercesImpl</artifactId>
                </exclusion>
             </exclusions>
+         </dependency>
+      
+         <!-- Portlet Bridge -->
+         <dependency>
+            <groupId>org.jboss.portletbridge</groupId>
+            <artifactId>portletbridge-api</artifactId>
+            <version>${org.jboss.portletbridge.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.jboss.portletbridge</groupId>
+            <artifactId>portletbridge-impl</artifactId>
+            <version>${org.jboss.portletbridge.version}</version>
          </dependency>
 
         <!-- needed for the IBM jdk, should be remove in the future when IBM fixes its jdk (see GTNPORTAL-636) -->

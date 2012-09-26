@@ -28,6 +28,7 @@ import org.gatein.integration.jboss.as7.deployment.GateInInitDeploymentProcessor
 import org.gatein.integration.jboss.as7.deployment.GateInStarterDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.GateInStructureDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.GateInTransactionsFixProcessor;
+import org.gatein.integration.jboss.as7.deployment.PortletBridgeDependencyProcessor;
 import org.gatein.integration.jboss.as7.deployment.PortletWarClassloadingDependencyProcessor;
 import org.gatein.integration.jboss.as7.deployment.PortletWarDeploymentInitializingProcessor;
 import org.gatein.integration.jboss.as7.deployment.WarDependenciesDeploymentProcessor;
@@ -61,6 +62,7 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
 
    static final int STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT = 0x0B80;
    static final int DEPENDENCIES_PORTLET_MODULE = 0x1100;
+   static final int DEPENDENCIES_PORTLET_BRIDGE_MODULE = 0x2300;
    static final int STRUCTURE_GATEIN = 0x2000;
    static final int POST_MODULE_GATEIN_INIT = 0x2000;
    static final int INSTALL_GATEIN_CHILD_WARS = 0x4000;
@@ -111,6 +113,8 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
             processorTarget.addDeploymentProcessor(Phase.PARSE, GATEIN_TRANSACTIONS_FIX, new GateInTransactionsFixProcessor());
 
             processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_PORTLET_MODULE, new PortletWarClassloadingDependencyProcessor(tldsBuilder.create()));
+            processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_PORTLET_BRIDGE_MODULE, new PortletBridgeDependencyProcessor());
+
             processorTarget.addDeploymentProcessor(Phase.POST_MODULE, POST_MODULE_GATEIN_INIT, new GateInInitDeploymentProcessor());
             processorTarget.addDeploymentProcessor(Phase.INSTALL, INSTALL_GATEIN_START, new GateInStarterDeploymentProcessor());
             processorTarget.addDeploymentProcessor(Phase.CLEANUP, CLEANUP_ATTACHMENTS, new GateInCleanupDeploymentProcessor());

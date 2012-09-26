@@ -431,8 +431,16 @@
          <groupId>org.exoplatform.ws</groupId>
          <artifactId>exo.ws.rest.ext</artifactId>
       </dependency>
-
-
+      
+      <!-- Portlet Bridge -->
+      <dependency>
+         <groupId>org.jboss.portletbridge</groupId>
+         <artifactId>portletbridge-api</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.portletbridge</groupId>
+         <artifactId>portletbridge-impl</artifactId>
+      </dependency>
 
       <!-- Reflext -->
       <dependency>
