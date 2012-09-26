@@ -104,7 +104,7 @@
           </option>
           <option>
             <name>lazyStartOfHibernateTransaction</name>
-            <value>true</value>
+            <value>false</value>
           </option>
         </options>
       </identity-store>

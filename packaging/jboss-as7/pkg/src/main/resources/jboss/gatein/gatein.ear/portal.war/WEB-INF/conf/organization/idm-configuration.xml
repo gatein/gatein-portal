@@ -49,12 +49,12 @@
             <property name="hibernate.connection.autocommit" value="false"/>
 
             <!-- Non-JTA setup -->
-            <property name="hibernate.current_session_context_class" value="thread"/>
+            <!-- <property name="hibernate.current_session_context_class" value="thread"/> -->
 
             <!-- JTA setup -->
-            <!--<property name="hibernate.current_session_context_class" value="jta"/>
+            <property name="hibernate.current_session_context_class" value="jta"/>
             <property name="hibernate.transaction.factory_class" value="org.hibernate.transaction.JTATransactionFactory" />
-            <property name="hibernate.transaction.jta.platform" value="org.exoplatform.services.organization.idm.UserTransactionJtaPlatform" />-->
+            <property name="hibernate.transaction.jta.platform" value="org.exoplatform.services.organization.idm.UserTransactionJtaPlatform" />
 
             <property name="hibernate.cache.use_second_level_cache" value="false"/>
             <property name="hibernate.cache.use_query_cache" value="false"/>
@@ -243,7 +243,7 @@ is that there can be only one group with a given name in all GateIn group tree--
                </field>
                <!-- If 'true' will use JTA UserTransaction. If 'false' will use IDM transaction API -->
                <field name="useJTA">
-                  <boolean>false</boolean>
+                  <boolean>true</boolean>
                </field>
 
                <!-- If PLIDM group will have name containing slash "/" char than it will be replace with following string.
@@ -279,7 +279,7 @@ It will result in more accurate results and paginated list size info however can
       </init-params>
    </component>
 
-   <external-component-plugins>
+   <!-- <external-component-plugins>
       <target-component>org.exoplatform.services.naming.InitialContextInitializer</target-component>
       <component-plugin>
          <name>bind.datasource</name>
@@ -309,7 +309,7 @@ It will result in more accurate results and paginated list size info however can
             </properties-param>
          </init-params>
       </component-plugin>
-   </external-component-plugins>
+   </external-component-plugins> -->
 
    <external-component-plugins>
       <target-component>org.exoplatform.services.database.HibernateService</target-component>

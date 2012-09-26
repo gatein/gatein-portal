@@ -109,6 +109,17 @@
       </init-params>
    </component>
 
+   <component>
+      <key>org.exoplatform.services.jdbc.DataSourceProvider</key>
+      <type>org.exoplatform.services.jdbc.impl.DataSourceProviderImpl</type>
+      <init-params>
+         <value-param>
+            <name>always-managed</name>
+            <value>true</value>
+         </value-param>
+      </init-params>
+   </component>
+
    <external-component-plugins>
       <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
       <component-plugin>
@@ -145,7 +156,7 @@
       </component-plugin>
    </external-component-plugins>
 
-   <external-component-plugins>
+   <!-- <external-component-plugins>
       <target-component>org.exoplatform.services.naming.InitialContextInitializer</target-component>
       <component-plugin>
          <name>bind.datasource</name>
@@ -174,7 +185,7 @@
             </properties-param>
          </init-params>
       </component-plugin>
-   </external-component-plugins>
+   </external-component-plugins> -->
 
    <external-component-plugins>
       <target-component>org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator</target-component>
@@ -187,6 +198,7 @@
                <name>gadgets.root</name>
                <description>Create gadget root node</description>
                <object type="org.exoplatform.services.jcr.ext.hierarchy.impl.HierarchyConfig">
+                  <field name="repository"><string>repository</string></field>
                   <field name="workspaces">
                      <collection type="java.util.ArrayList">
                         <value><string>portal-system</string></value>
