@@ -1,9 +1,5 @@
 /*
- * JBoss, a division of Red Hat
- * Copyright 2012, Red Hat Middleware, LLC, and individual
- * contributors as indicated by the @authors tag. See the
- * copyright.txt in the distribution for a full listing of
- * individual contributors.
+ * Copyright (C) 2012 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -23,19 +19,11 @@
 
 package org.exoplatform.services.organization;
 
-import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.ComponentRequestLifecycle;
-import org.exoplatform.container.component.RequestLifeCycle;
-import org.exoplatform.services.organization.idm.Config;
-import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.exoplatform.component.test.KernelLifeCycle;
+import org.junit.ClassRule;
 
 /**
  * Test of OrganizationService with enabled JTA setup for Hibernate
@@ -49,9 +37,6 @@ import java.util.List;
 })
 public class TestOrganizationServiceJTA extends AbstractTestOrganizationService
 {
-
-   public TestOrganizationServiceJTA(String s)
-   {
-      super(s);
-   }
+   @ClassRule
+   public static KernelLifeCycle kernel = new KernelLifeCycle();
 }

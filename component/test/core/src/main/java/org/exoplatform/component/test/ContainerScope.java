@@ -25,6 +25,14 @@ package org.exoplatform.component.test;
 public enum ContainerScope
 {
 
-   ROOT, PORTAL
+   /**
+    * The root container scope.
+    */
+   ROOT,
+
+   /**
+    * The portal container scope.
+    */
+   PORTAL
 
 }

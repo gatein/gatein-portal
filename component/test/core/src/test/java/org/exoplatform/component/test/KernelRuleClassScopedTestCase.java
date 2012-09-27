@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2009 eXo Platform SAS.
+ * Copyright (C) 2012 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,32 +16,41 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+
 package org.exoplatform.component.test;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import static junit.framework.Assert.*;
+import org.exoplatform.container.PortalContainer;
+import org.junit.ClassRule;
+import org.junit.Test;
 
-/**
- * <p>Declares a set a configuratin for kernel based tests. Such annotation is used when a {@link KernelLifeCycle}
- * JUnit rule is declared in the test or when a class extends the {@link AbstractKernelTest}.</p>
- *
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
- */
-@Target({ElementType.TYPE,ElementType.METHOD})
-@Retention(RetentionPolicy.RUNTIME)
-@Inherited
-public @interface ConfiguredBy
+/** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
+@ConfiguredBy({})
+public class KernelRuleClassScopedTestCase
 {
 
-   /**
-    * Returns the various relevant configuration units.
-    *
-    * @return the configuration units
-    */
-   ConfigurationUnit[] value();
+   @ClassRule
+   public static KernelLifeCycle kernel = new KernelLifeCycle();
 
+   /** . */
+   private PortalContainer container;
+
+   @Test
+   public void testA()
+   {
+      if (container == null)
+      {
+         container = kernel.getContainer();
+      }
+      else
+      {
+         assertSame(container, kernel.getContainer());
+      }
+   }
+
+   @Test
+   public void testB() throws Exception
+   {
+      testA();
+   }
 }

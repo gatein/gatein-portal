@@ -20,6 +20,7 @@
 package org.exoplatform.component.test;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.naming.InitialContextInitializer;
 
 import javax.naming.InitialContext;
@@ -44,10 +45,10 @@ public class BootstrapTestCase extends AbstractKernelTest
       PortalContainer container = PortalContainer.getInstance();
       CustomService testService = (CustomService)container.getComponentInstanceOfType(CustomService.class);
       assertNull(testService.currentContainer);
-      begin();
+      RequestLifeCycle.begin(container);
       assertNotNull(testService);
       assertSame(container, testService.currentContainer);
-      end();
+      RequestLifeCycle.end();
       assertNull(testService.currentContainer);
    }
 

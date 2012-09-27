@@ -18,13 +18,13 @@
  */
 package org.exoplatform.component.test;
 
-import junit.framework.TestCase;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
-import java.util.*;
+import java.util.Map;
 
 /**
+ * A base class for tests that provides base function test.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$

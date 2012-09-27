@@ -33,10 +33,6 @@
    <artifactId>jboss-as7-integration-extension</artifactId>
    <name>GateIn - Portlet Container (JBoss AS7 Extension)</name>
 
-   <properties>
-      <version.junit>4.8.2</version.junit>
-   </properties>
-
    <dependencies>
 
       <dependency>
@@ -74,7 +70,6 @@
       <dependency>
          <groupId>junit</groupId>
          <artifactId>junit</artifactId>
-         <version>${version.junit}</version>
          <scope>test</scope>
       </dependency>
       <dependency>

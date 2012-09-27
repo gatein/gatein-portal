@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 eXo Platform SAS.
+ * Copyright (C) 2012 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -19,46 +19,29 @@
 
 package org.exoplatform.component.test;
 
-import junit.framework.TestResult;
-import junit.framework.TestSuite;
+import org.junit.ClassRule;
+import org.junit.Test;
 
-/**
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- */
-final class KernelTestSuite extends TestSuite
+/** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
+@ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml")})
+public class KernelRuleTestCase
 {
 
+   @ClassRule
+   public static KernelLifeCycle kernel = new KernelLifeCycle();
+
    /** . */
-   private final Class<? extends AbstractKernelTest> testClass;
+   private BootstrapTestCase delegate = new BootstrapTestCase();
 
-   KernelTestSuite(Class<? extends AbstractKernelTest> testClass)
+   @Test
+   public void testRequestLifeCycle()
    {
-      super(testClass);
-
-      //
-      this.testClass = testClass;
+      delegate.testRequestLifeCycle();
    }
 
-   @Override
-   public void run(TestResult result)
+   @Test
+   public void testDataSource() throws Exception
    {
-      KernelBootstrap bootstrap = new KernelBootstrap(Thread.currentThread().getContextClassLoader());
-
-      //
-      try
-      {
-         // Configure ourselves
-         bootstrap.addConfiguration(testClass);
-
-         //
-         bootstrap.boot();
-
-         //
-         super.run(result);
-      }
-      finally
-      {
-         bootstrap.dispose();
-      }
+      delegate.testDataSource();
    }
 }

@@ -19,7 +19,7 @@
 
 package org.exoplatform.component.test.web;
 
-import junit.framework.TestCase;
+import static junit.framework.TestCase.*;
 import org.gatein.common.io.IOTools;
 
 import java.io.File;
@@ -28,7 +28,7 @@ import java.net.URL;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ServletContextTestCase extends TestCase
+public class ServletContextTestCase
 {
 
    public void testFileGetResource() throws Exception

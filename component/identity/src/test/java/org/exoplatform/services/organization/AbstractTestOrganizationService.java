@@ -31,6 +31,11 @@ import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.services.organization.idm.Config;
 import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl;
 import org.exoplatform.services.organization.idm.UserDAOImpl;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +44,7 @@ import java.util.List;
  * Created by The eXo Platform SAS Author : Hoa Pham hoapham@exoplatform.com,phamvuxuanhoa@yahoo.com
  * Oct 27, 2005
  */
-public class AbstractTestOrganizationService extends AbstractKernelTest
+public class AbstractTestOrganizationService
 {
    private static String Group1 = "Group1";
 
@@ -80,11 +85,7 @@ public class AbstractTestOrganizationService extends AbstractKernelTest
          USERS.add(USER + "_" + i);
    }
 
-   public AbstractTestOrganizationService(String s)
-   {
-      super(s);
-   }
-
+   @Before
    public void setUp() throws Exception
    {
       if (!runtest)
@@ -102,6 +103,7 @@ public class AbstractTestOrganizationService extends AbstractKernelTest
 
    }
 
+   @After
    public void tearDown() throws Exception
    {
       Query query = new Query();
@@ -119,6 +121,7 @@ public class AbstractTestOrganizationService extends AbstractKernelTest
       RequestLifeCycle.end();
    }
 
+   @Test
    public void testSimple() throws Exception
    {
       assertTrue(true);
@@ -149,6 +152,7 @@ public class AbstractTestOrganizationService extends AbstractKernelTest
       assertEquals(config.getGroupType("/toto/lolo/tutu"), "toto_type");
    }
 
+   @Test
    public void testUserPageSize() throws Exception
    {
       for (String name : USERS)
@@ -167,6 +171,7 @@ public class AbstractTestOrganizationService extends AbstractKernelTest
       }
    }
 
+   @Test
    public void testUser() throws Exception
    {
       createUser(USER);
@@ -211,6 +216,7 @@ public class AbstractTestOrganizationService extends AbstractKernelTest
       assertNull(" user's profile of USER was removed:", profileHandler_.findUserProfileByName(USER));
    }
 
+   @Test
    public void testUniqueAttribute() throws Exception
    {
       if (userHandler_ instanceof UserDAOImpl)
@@ -241,6 +247,7 @@ public class AbstractTestOrganizationService extends AbstractKernelTest
       }
    }
 
+   @Test
    public void testFindUsers() throws Exception
    {
       if (userHandler_ instanceof UserDAOImpl)
@@ -293,7 +300,8 @@ public class AbstractTestOrganizationService extends AbstractKernelTest
          ud.removeUser("foobar", true);
       }
    }
-   //
+
+   @Test
    public void testGroup() throws Exception
    {
       /* Create a parent group with name is: GroupParent */
@@ -344,6 +352,7 @@ public class AbstractTestOrganizationService extends AbstractKernelTest
       assertEquals("Expect all child group is removed: ", 0, groupHandler_.findGroups(groupParent).size());
    }
 
+   @Test
    public void testMembershipType() throws Exception
    {
       /* Create a membershipType */
@@ -387,6 +396,7 @@ public class AbstractTestOrganizationService extends AbstractKernelTest
       /* All membershipType was removed(except default membership) */
    }
 
+   @Test
    public void testMembership() throws Exception
    {
       /* Create 2 user: benj and tuan */
@@ -524,6 +534,7 @@ public class AbstractTestOrganizationService extends AbstractKernelTest
       mtHandler_.removeMembershipType("membershipType3", true);
    }
 
+   @Test
    public void testRemoveMembershipByUser() throws Exception
    {
       String Benj = "B";
@@ -579,6 +590,7 @@ public class AbstractTestOrganizationService extends AbstractKernelTest
 //      userHandler_.removeUser(user.getUserName(), false);
 //   }
 
+   @Test
    public void testLinkMembership() throws Exception {
       String g1 = "grp1";
       String usr1 = "usr1";
@@ -610,6 +622,7 @@ public class AbstractTestOrganizationService extends AbstractKernelTest
    }
 
 
+   @Test
    public void testFindUsersByGroupId() throws Exception
    {
       PageList users = userHandler_.findUsersByGroup("/users");

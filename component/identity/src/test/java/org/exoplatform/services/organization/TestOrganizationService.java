@@ -19,20 +19,11 @@
 
 package org.exoplatform.services.organization;
 
-import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.ComponentRequestLifecycle;
-import org.exoplatform.container.component.RequestLifeCycle;
-import org.exoplatform.services.organization.idm.Config;
-import org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl;
-import org.exoplatform.services.organization.idm.UserDAOImpl;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.exoplatform.component.test.KernelLifeCycle;
+import org.junit.ClassRule;
 
 /**
  * Created by The eXo Platform SAS Author : Hoa Pham hoapham@exoplatform.com,phamvuxuanhoa@yahoo.com
@@ -46,9 +37,6 @@ import java.util.List;
 })
 public class TestOrganizationService extends AbstractTestOrganizationService
 {
-   public TestOrganizationService(String s)
-   {
-      super(s);
-   }
-
+   @ClassRule
+   public static KernelLifeCycle kernel = new KernelLifeCycle();
 }

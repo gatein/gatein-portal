@@ -22,6 +22,9 @@ import org.exoplatform.component.test.*;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
+import static org.junit.Assert.*;
+import org.junit.ClassRule;
+import org.junit.Test;
 
 import javax.jcr.Session;
 
@@ -30,9 +33,13 @@ import javax.jcr.Session;
  * @version $Revision$
  */
 @ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml")})
-public class BootstrapTestCase extends AbstractKernelTest
+public class BootstrapTestCase
 {
 
+   @ClassRule
+   public static KernelLifeCycle kernel = new KernelLifeCycle();
+
+   @Test
    public void testWorkspace() throws Exception
    {
       PortalContainer container = PortalContainer.getInstance();

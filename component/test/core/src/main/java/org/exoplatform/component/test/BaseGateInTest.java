@@ -19,7 +19,6 @@
 
 package org.exoplatform.component.test;
 
-import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
