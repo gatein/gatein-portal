@@ -43,6 +43,7 @@ import org.exoplatform.portal.mop.importer.NavigationImporter;
 import org.exoplatform.portal.mop.importer.PageImporter;
 import org.exoplatform.portal.mop.importer.PortalConfigImporter;
 import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.common.logging.Logger;
@@ -77,6 +78,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin
    /** . */
    private DataStorage dataStorage_;
 
+   /** . */
+   private PageService pageService_;
+   
    /** . */
    private volatile List<NewPortalConfig> configs;
 
@@ -124,6 +128,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       UserPortalConfigService owner,
       POMSessionManager pomMgr,
       DataStorage dataStorage,
+      PageService pageService,
       ConfigurationManager cmanager,
       InitParams params,
       NavigationService navigationService,
@@ -133,6 +138,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
       owner_ = owner;
       cmanager_ = cmanager;
       dataStorage_ = dataStorage;
+      pageService_ = pageService;
       navigationService_ = navigationService;
       descriptionService_ = descriptionService;
 
@@ -609,7 +615,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin
          {      //
             ImportMode importMode = getRightMode(config.getImportMode());
 
-            PageImporter importer = new PageImporter(importMode, page, dataStorage_);
+            PageImporter importer = new PageImporter(importMode, page, dataStorage_, pageService_);
             importer.perform();
          }
          finally
