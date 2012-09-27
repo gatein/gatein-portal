@@ -107,26 +107,43 @@
                     </security>
                 </datasource>
 
-                <datasource jndi-name="java:/gatein-jcr" pool-name="GateInDS" enabled="true"
-                           use-java-context="true">
-                    <connection-url>
-                     jdbc:mysql://localhost/gateinjcr?jdbcCompliantTruncation=false
-                    </connection-url>
-                    <driver>mysql</driver>
-                    <security>
-                        <user-name>gateinjcr</user-name>
-                        <password>gateinjcr</password>
-                    </security>
-                </datasource>
+                <!-- To run H2 server open console, cd to JBOSS_HOME and run:
 
-                <drivers>
+                  java -cp modules/com/h2database/h2/main/h2-1.3.168.jar org.h2.tools.Server
+
+                  -->
+
+               <xa-datasource jndi-name="java:/jdbcidm_portal" pool-name="IDMPortalDS" enabled="true"
+                              use-java-context="true" jta="true" use-ccm="true">
+                  <xa-datasource-property name="URL">jdbc:h2:tcp://localhost/~/jdbcidm_portal</xa-datasource-property>
+                  <xa-datasource-property name="User">sa</xa-datasource-property>
+                  <xa-datasource-property name="Password">sa</xa-datasource-property>
+
+                  <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
+                  <xa-pool>
+                     <is-same-rm-override>false</is-same-rm-override>
+                     <no-tx-separate-pools />
+                  </xa-pool>
+                  <driver>h2</driver>
+               </xa-datasource>
+
+               <xa-datasource jndi-name="java:/jdbcjcr_portal" pool-name="JCRPortalDS"
+                              enabled="true" use-java-context="true" jta="true" use-ccm="true">
+                  <xa-datasource-property name="URL">jdbc:h2:tcp://localhost/~/jdbcjcr_portal</xa-datasource-property>
+                  <xa-datasource-property name="User">sa</xa-datasource-property>
+                  <xa-datasource-property name="Password">sa</xa-datasource-property>
+
+                  <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
+                  <xa-pool>
+                     <is-same-rm-override>false</is-same-rm-override>
+                     <no-tx-separate-pools />
+                  </xa-pool>
+                  <driver>h2</driver>
+               </xa-datasource>
+
+               <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
-                    </driver>
-                </drivers>
-                <drivers>
-                    <driver name="mysql" module="com.mysql.jdbc">
-                        <xa-datasource-class>com.mysql.jdbc.jdbc2.optional.MysqlXADataSource</xa-datasource-class>
                     </driver>
                 </drivers>
             </datasources>
@@ -347,22 +364,21 @@
                         <policy-module code="Delegating" flag="required"/>
                     </authorization>
                 </security-domain>
-                <security-domain name="gatein-domain" cache-type="default">
-                    <authentication>
-                        <login-module code="org.gatein.wci.security.WCILoginModule" flag="optional">
-                            <module-option name="portalContainerName" value="portal"/>
-                            <module-option name="realmName" value="gatein-domain"/>
-                        </login-module>
-                        <login-module code="org.exoplatform.services.security.jaas.SharedStateLoginModule"
-                                   flag="required">
-                            <module-option name="portalContainerName" value="portal"/>
-                            <module-option name="realmName" value="gatein-domain"/>
-                        </login-module>
-                        <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
-                            <module-option name="portalContainerName" value="portal"/>
-                            <module-option name="realmName" value="gatein-domain"/>
-                        </login-module>
-                    </authentication>
+               <security-domain name="gatein-domain" cache-type="default">
+                  <authentication>
+                     <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
+                        <module-option name="portalContainerName" value="portal"/>
+                        <module-option name="realmName" value="gatein-domain"/>
+                     </login-module>
+                  </authentication>
+               </security-domain>
+               <security-domain name="gatein-domain-sample-portal" cache-type="default">
+                  <authentication>
+                     <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
+                        <module-option name="portalContainerName" value="sample-portal"/>
+                        <module-option name="realmName" value="gatein-domain-sample-portal"/>
+                     </login-module>
+                  </authentication>
                </security-domain>
 
             </security-domains>
@@ -383,6 +399,7 @@
             <virtual-server name="default-host" enable-welcome-root="true">
                 <alias name="localhost"/>
                 <alias name="example.com"/>
+                <sso cache-container="web" cache-name="sso" reauthenticate="false"/>
             </virtual-server>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:1.1">
