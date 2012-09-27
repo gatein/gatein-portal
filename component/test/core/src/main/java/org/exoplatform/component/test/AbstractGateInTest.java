@@ -67,6 +67,10 @@ public abstract class AbstractGateInTest extends BaseGateInTest
          System.setProperty("gatein.test.datasource.password", "");
       }
 
+      // We use system.out.println on purpose to bypass the logging layer
+      // and have this information going to the user
+      System.out.println("Running unit test:" + getName());
+
       //
       log.info("Running unit test:" + getName());
       for (Map.Entry<?, ?> entry : System.getProperties().entrySet())
@@ -85,11 +89,15 @@ public abstract class AbstractGateInTest extends BaseGateInTest
       try
       {
          super.runBare();
-         log.info("Unit test " + getName() + " completed");
       }
       catch (Throwable throwable)
       {
          log.error("Unit test " + getName() + " did not complete", throwable);
+
+         // We use system.out.println on purpose to bypass the logging layer
+         // and have this information going to the user
+         System.out.println("Unit test " + getName() + " did not complete:");
+         throwable.printStackTrace(System.out);
 
          //
          throw throwable;

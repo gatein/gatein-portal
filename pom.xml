@@ -50,7 +50,7 @@
       <org.gatein.wsrp.version>2.2.0.Beta05</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.1.1-GA</org.gatein.mop.version>
       <org.gatein.mgmt.version>1.0.1-GA</org.gatein.mgmt.version>
-      <org.slf4j.version>1.5.8</org.slf4j.version>
+      <org.slf4j.version>1.6.1</org.slf4j.version>
       <commons-pool.version>1.5.5</commons-pool.version>
       <rhino.version>1.6R5</rhino.version>
       <org.codehaus.groovy.version>1.7.6</org.codehaus.groovy.version>
@@ -62,6 +62,14 @@
       <commons-dbcp.version>1.2.2</commons-dbcp.version>
       <com.google.javascript.version>r1592</com.google.javascript.version>
       <org.jboss.portletbridge.version>3.1.0.Beta1</org.jboss.portletbridge.version>
+
+     <!--
+       Various log4j properties for unit tests, examples:
+       -Dlog4j.debug=true : show log4j bootstrap (useful for debugging resolution to configuration property file)
+       -Dlog4j.level=all : very verbose logging (slow down though)
+       -->
+     <log4j.debug>false</log4j.debug>
+     <log4j.level>info</log4j.level>
 
      <!-- ************** -->
      <!-- Build settings -->
@@ -909,7 +917,20 @@
    <dependencies>
       <dependency>
          <groupId>org.slf4j</groupId>
-         <artifactId>slf4j-simple</artifactId>
+         <artifactId>slf4j-log4j12</artifactId>
+         <version>${org.slf4j.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>jul-to-slf4j</artifactId>
+         <version>${org.slf4j.version}</version>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>commons-logging</groupId>
+         <artifactId>commons-logging</artifactId>
+         <version>1.1.1</version>
          <scope>test</scope>
       </dependency>
       <dependency>
@@ -967,8 +988,24 @@
                   <argLine>-Xms512m -Xmx512m</argLine>
                   <systemProperties>
                      <property>
+                        <name>log4j.configuration</name>
+                        <value>gatein-log4j.properties</value>
+                     </property>
+                     <property>
+                        <name>log4j.debug</name>
+                        <value>${log4j.debug}</value>
+                     </property>
+                     <property>
+                        <name>log4j.level</name>
+                        <value>${log4j.level}</value>
+                     </property>
+                     <property>
+                        <name>gatein.test.output.path</name>
+                        <value>${project.build.directory}</value>
+                     </property>
+                     <property>
                         <name>org.apache.commons.logging.Log</name>
-                        <value>org.apache.commons.logging.impl.SimpleLog</value>
+                        <value>org.apache.commons.logging.impl.Log4JLogger</value>
                      </property>
                      <property>
                         <name>org.apache.commons.logging.simplelog.defaultlog</name>
@@ -985,10 +1022,6 @@
                      <property>
                         <name>java.naming.factory.initial</name>
                         <value>org.exoplatform.services.naming.SimpleContextFactory</value>
-                     </property>
-                     <property>
-                        <name>java.util.logging.config.class</name>
-                        <value>org.exoplatform.component.test.logging.LogConfigurator</value>
                      </property>
                      <property>
                         <name>com.arjuna.ats.arjuna.objectstore.objectStoreDir</name>

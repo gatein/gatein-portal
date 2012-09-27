@@ -74,7 +74,7 @@ public class KernelBootstrap
       configs.put(ContainerScope.PORTAL, portalConfigPaths);
 
       //
-      File targetDir = new File(new File(System.getProperty("basedir")), "target");
+      File targetDir = new File(System.getProperty("gatein.test.output.path"));
       if (!targetDir.exists())
       {
          throw new AssertionFailedError("Target dir for unit test does not exist");
