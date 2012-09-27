@@ -39,7 +39,7 @@
             <!--<property name="hibernate.format_sql" value="true"/>-->
             <property name="hibernate.current_session_context_class" value="jta"/>
             <property name="hibernate.transaction.factory_class" value="org.hibernate.engine.transaction.internal.jta.JtaTransactionFactory" />
-            <property name="hibernate.transaction.jta.platform" value="org.exoplatform.services.organization.StandaloneTestJtaPlatform" />
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossStandAloneJtaPlatform" />
 
             <property name="hibernate.jdbc.batch_size" value="0"/>
             <property name="hibernate.cache.use_second_level_cache" value="false"/>
