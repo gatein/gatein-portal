@@ -36,7 +36,6 @@ import org.exoplatform.webui.event.EventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -90,26 +89,48 @@ public class UIApplicationList extends UIContainer
    {
       if (selectedCategory == null)
          return null;
-      List<Application> apps = selectedCategory.getApplications();
 
-      //Correct IconURL of Gadget
-      GadgetRegistryService gadgetService = getApplicationComponent(GadgetRegistryService.class);
-      for (Application app : apps)
+      String remoteUser = Util.getPortalRequestContext().getRemoteUser();
+      if (remoteUser == null || remoteUser.equals(""))
+      { return null; }         
+         
+      UserACL userACL = getApplicationComponent(UserACL.class);
+               
+      List<Application> allApps = selectedCategory.getApplications();
+      List<Application> apps = new ArrayList<Application>();
+      
+      for (Application app : allApps)      
       {
-         if (ApplicationType.GADGET.equals(app.getType()))
+         List<String> accessPermission = app.getAccessPermissions();
+         if (accessPermission == null || accessPermission.size() == 0)
          {
-            try
-            {
-               Gadget gadget;
-               gadget = gadgetService.getGadget(app.getApplicationName());
-               if (gadget != null)
-                  app.setIconURL(gadget.getThumbnail());
-            }
-            catch (Exception e)
-            {
-            }
+            continue;
          }
+
+         GadgetRegistryService gadgetService = getApplicationComponent(GadgetRegistryService.class);
+         for (String p : accessPermission)
+         {
+            if (userACL.hasPermission(p))
+            {
+               if (ApplicationType.GADGET.equals(app.getType()))
+               {
+                  try
+                  {
+                     Gadget gadget;
+                     gadget = gadgetService.getGadget(app.getApplicationName());
+                     if (gadget != null)
+                        app.setIconURL(gadget.getThumbnail());
+                  }
+                  catch (Exception e)
+                  {
+                  }
+               }
+               apps.add(app);
+               break;
+            }
+         }         
       }
+
       return apps;
    }
 
@@ -137,7 +158,7 @@ public class UIApplicationList extends UIContainer
       { return; }
 
       ApplicationRegistryService service = getApplicationComponent(ApplicationRegistryService.class);
-      UserACL userACL = Util.getUIPortalApplication().getApplicationComponent(UserACL.class);
+      UserACL userACL = getApplicationComponent(UserACL.class);
 
       final Comparator<Application> appComparator = new Comparator<Application>()
       {
@@ -166,7 +187,6 @@ public class UIApplicationList extends UIContainer
             continue;
          }
 
-         accessCheck:
          for (String p : accessPermission)
          {
             if (userACL.hasPermission(p))
@@ -176,8 +196,8 @@ public class UIApplicationList extends UIContainer
                   Collections.sort(apps, appComparator);
                }
                categories.add(category);
+               break;
             }
-            break accessCheck;
          }
       }
 
