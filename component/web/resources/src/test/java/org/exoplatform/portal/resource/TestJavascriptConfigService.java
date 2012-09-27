@@ -76,6 +76,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
          resources.put("/js/module2.js", "ddd;");
          resources.put("/js/native1.js", "eee;");
          resources.put("/js/native2.js", "fff;");
+         resources.put("/js/normalize_test.js", " \n /* // */  //  /* \n  /* /*  */  \n  ggg; // /* */ \n");
          mockServletContext = new MockJSServletContext("mockwebapp", resources);
          jsService.registerContext(new WebAppImpl(mockServletContext, Thread.currentThread().getContextClassLoader()));
 
@@ -193,6 +194,12 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertEquals("mock_url_of_module1.js", remoteURL);
    }
    
+   public void testNormalize() throws Exception
+   {
+      String normalizedJS = "define('SHARED/normalize_test', [], function() {return ggg; // /* */ \n});";
+      assertReader(normalizedJS, jsService.getScript(new ResourceId(ResourceScope.SHARED, "normalize_test"), null));
+   }
+   
    public void testResolveIDs()
    {
       Map<ResourceId, FetchMode> tmp = new HashMap<ResourceId, FetchMode>();
@@ -234,7 +241,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    private void assertReader(String expected, Reader actual) throws Exception
    {
       StringWriter buffer = new StringWriter();
-      IOTools.copy(actual, buffer);
+      IOTools.copy(actual, buffer, 1);
       assertEquals(expected, buffer.toString());
    }
 

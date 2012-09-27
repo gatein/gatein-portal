@@ -145,4 +145,12 @@
       <name>native2</name> 
       <native-script>/js/native2.js</native-script>
    </scripts>
+   
+   <module>
+      <name>normalize_test</name>     
+      <script>
+         <name>eXo.normalize</name>
+         <path>/js/normalize_test.js</path>
+      </script>
+   </module>
 </gatein-resources>
