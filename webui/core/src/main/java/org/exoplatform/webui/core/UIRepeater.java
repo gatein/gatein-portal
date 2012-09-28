@@ -19,14 +19,12 @@
 
 package org.exoplatform.webui.core;
 
-import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.util.ReflectionUtil;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.webui.bean.UIDataFeed;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 
 import java.lang.reflect.Method;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -37,10 +35,8 @@ import java.util.List;
  */
 @ComponentConfig(template = "system:/groovy/webui/core/UIRepeater.gtmpl")
 @Serialized
-public class UIRepeater extends UIComponent implements UIDataFeed
+public class UIRepeater extends UIComponent
 {
-
-   private PageList datasource = PageList.EMPTY_LIST;
 
    public UIRepeater() throws Exception
    {
@@ -63,7 +59,9 @@ public class UIRepeater extends UIComponent implements UIDataFeed
    protected String[] action_;
 
    protected String label_;
-
+   
+   protected Iterator<List<?>> source;
+   
    public UIRepeater configure(String beanIdField, String[] beanField, String[] action)
    {
       this.beanIdField_ = beanIdField;
@@ -89,7 +87,7 @@ public class UIRepeater extends UIComponent implements UIDataFeed
 
    public List<?> getBeans() throws Exception
    {
-      return datasource.currentPage();
+      return source.next();
    }
 
    public String getLabel()
@@ -108,6 +106,7 @@ public class UIRepeater extends UIComponent implements UIDataFeed
       return method.invoke(bean, ReflectionUtil.EMPTY_ARGS);
    }
 
+   /*
    public void feedNext() throws NoSuchDataException, Exception
    {
       int page = datasource.getCurrentPage();
@@ -131,25 +130,20 @@ public class UIRepeater extends UIComponent implements UIDataFeed
          throw new NoSuchDataException(e);
       }
    }
+   */
 
    public boolean hasNext()
    {
-      int page = datasource.getCurrentPage();
-      if (page >= datasource.getAvailablePage())
-      {
-         return false;
-      }
-      return true;
+      return source.hasNext();
    }
 
-   public void setDataSource(PageList datasource) throws Exception
+   public void setSource(Iterator<List<?>> source) throws Exception
    {
-      this.datasource = datasource;
-      datasource.getPage(1);
+      this.source = source;
    }
 
-   public PageList getDataSource()
+   public Iterator<List<?>> getSource()
    {
-      return this.datasource;
+      return this.source;
    }
 }

@@ -22,9 +22,9 @@ package org.exoplatform.portal.webui.navigation;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
-import org.exoplatform.commons.utils.ObjectPageList;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
@@ -68,7 +68,6 @@ public class UIAddGroupNavigation extends UIContainer
    public UIAddGroupNavigation() throws Exception
    {
       UIVirtualList virtualList = addChild(UIVirtualList.class, null, "AddGroupNavList");
-      virtualList.setPageSize(6);
       UIRepeater repeater = createUIComponent(UIRepeater.class, "UIAddGroupNavigationGrid", null);
       virtualList.setUIComponent(repeater);
       UIPopupWindow editGroup = addChild(UIPopupWindow.class, null, "EditGroup");
@@ -81,14 +80,13 @@ public class UIAddGroupNavigation extends UIContainer
       UserPortalConfigService dataService = getApplicationComponent(UserPortalConfigService.class);
       UserACL userACL = getApplicationComponent(UserACL.class);
       OrganizationService orgService = getApplicationComponent(OrganizationService.class);
-      List<String> listGroup = null;
+      final List<String> listGroup = new ArrayList<String>();;
       // get all group that user has permission
       if (userACL.isUserInGroup(userACL.getAdminGroups()) && !userACL.getSuperUser().equals(pContext.getRemoteUser()))
       {
          Collection<?> temp = (List)orgService.getGroupHandler().findGroupsOfUser(pContext.getRemoteUser());
          if (temp != null)
          {
-            listGroup = new ArrayList<String>();
             for (Object group : temp)
             {
                Group m = (Group)group;
@@ -99,12 +97,7 @@ public class UIAddGroupNavigation extends UIContainer
       }
       else
       {
-         listGroup = dataService.getMakableNavigations(pContext.getRemoteUser(), false);
-      }
-
-      if (listGroup == null)
-      {
-         listGroup = new ArrayList<String>();
+         listGroup.addAll(dataService.getMakableNavigations(pContext.getRemoteUser(), false));
       }
 
       //Filter all groups having navigation
@@ -121,7 +114,52 @@ public class UIAddGroupNavigation extends UIContainer
       listGroup.removeAll(groupsHavingNavigation);
 
       UIVirtualList virtualList = getChild(UIVirtualList.class);
-      virtualList.dataBind(new ObjectPageList<String>(listGroup, listGroup.size()));
+      final int pageSize = 6;
+      Iterator<List<?>> source = new Iterator<List<?>>()
+      {
+         int currentIndex = 0;
+         
+         @Override
+         public boolean hasNext()
+         {
+            return currentIndex < listGroup.size();
+         }
+
+         @Override
+         public List<String> next()
+         {
+            if(hasNext()) 
+            {
+               List<String> list = new ArrayList<String>(pageSize);
+               for(int i = currentIndex; i < currentIndex + pageSize; i++)
+               {
+                  if(i < listGroup.size())
+                  {
+                     list.add(listGroup.get(i));
+                  }
+                  else
+                  {
+                     break;
+                  }
+               }
+               
+               //
+               currentIndex += pageSize;
+               return list;
+            }
+            else
+            {
+               return null;
+            }
+         }
+
+         @Override
+         public void remove()
+         {
+            throw new UnsupportedOperationException();
+         }
+      };
+      virtualList.dataBind(source);
    }
 
    static public class AddNavigationActionListener extends EventListener<UIAddGroupNavigation>

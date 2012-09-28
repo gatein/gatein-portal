@@ -28,7 +28,6 @@ import javax.portlet.ActionResponse;
 import javax.xml.namespace.QName;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.commons.utils.PageListAccess;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
@@ -124,7 +123,6 @@ public class UIPageBrowser extends UIContainer
       lastQuery_.setOwnerType(OPTIONS.get(0).getValue());
       
       UIVirtualList virtualList = addChild(UIVirtualList.class, null, null);
-      virtualList.setPageSize(10);
       virtualList.setUIComponent(uiRepeater);
    }
 
@@ -175,12 +173,18 @@ public class UIPageBrowser extends UIContainer
       {
          lastQuery_ = new Query<Page>(null, null, null, null, Page.class);
       }
-      virtualList.dataBind(new PageQueryAccessList(lastQuery_, 10));
+      
+      //virtualList.dataBind(new PageQueryAccessList(lastQuery_, 10));
+      virtualList.dataBind(new PageIterator(
+         lastQuery_.getOwnerType(),
+         lastQuery_.getOwnerId(),
+         lastQuery_.getName(),
+         lastQuery_.getTitle(),
+         10));
 
-      UIRepeater repeater = (UIRepeater)virtualList.getDataFeed();
-      PageList datasource = repeater.getDataSource();
-
-      if (datasource.getAvailable() > 0)
+      //
+      UIRepeater repeater = (UIRepeater)virtualList.getRepeater();
+      if (repeater.hasNext())
       {
          return true;
       }
@@ -285,11 +289,6 @@ public class UIPageBrowser extends UIContainer
             return;
          }
          
-         UIVirtualList virtualList = uiPageBrowser.getChild(UIVirtualList.class);
-         UIRepeater repeater = (UIRepeater)virtualList.getDataFeed();
-         PageListAccess datasource = (PageListAccess)repeater.getDataSource();
-         int currentPage = datasource.getCurrentPage();
-
          //Update navigation and UserToolbarGroupPortlet if deleted page is dashboard page
          if(page.getKey().getSite().equals(SiteType.USER)){
             removePageNode(page, event);
@@ -315,9 +314,6 @@ public class UIPageBrowser extends UIContainer
             {
                showNoResultMessagePopup();
             }
-            if (currentPage > datasource.getAvailablePage())
-               currentPage = datasource.getAvailablePage();
-            datasource.getPage(currentPage);
             event.getRequestContext().addUIComponentToUpdateByAjax(uiPageBrowser);
          }
       }

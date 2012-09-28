@@ -1,11 +1,5 @@
 package org.exoplatform.sample.webui.component;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import org.exoplatform.commons.utils.LazyPageList;
-import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.sample.webui.component.bean.User;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.application.WebuiRequestContext;
@@ -17,6 +11,11 @@ import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 @ComponentConfig(lifecycle = UIContainerLifecycle.class, events = {
    @EventConfig(listeners = UISampleVirtualList.ViewActionListener.class),
@@ -34,7 +33,7 @@ public class UISampleVirtualList extends UIContainer
    {
       UIRepeater uiRepeater = createUIComponent(UIRepeater.class, null, null);
       uiRepeater.configure(BEAN_ID, BEAN_NAMES, ACTIONS);      
-      uiRepeater.setDataSource(makeDataSource());
+      uiRepeater.setSource(makeDataSource());
       
       UIVirtualList uiVirtualList = addChild(UIVirtualList.class, null, null);
       uiVirtualList.setUIComponent(uiRepeater);      
@@ -45,10 +44,64 @@ public class UISampleVirtualList extends UIContainer
       rcontext.getUIApplication().addMessage(new ApplicationMessage(msg, null));   
    }
    
-   private LazyPageList<User> makeDataSource()
+   @Override
+   public void processRender(WebuiRequestContext context) throws Exception 
    {
-      List<User> userList = makeUserList();
-      return new LazyPageList<User>(new ListAccessImpl<User>(User.class, userList), 5);
+      UIVirtualList uiVirtualList = getChild(UIVirtualList.class);
+      UIRepeater uiRepeater = uiVirtualList.getRepeater();
+      uiRepeater.setSource(makeDataSource());
+      super.processRender(context);
+   }
+   
+   private Iterator<List<?>> makeDataSource()
+   {
+      final List<User> userList = makeUserList();
+      final int pageSize = 5;
+      Iterator<List<?>> iterator = new Iterator<List<?>>()
+      {
+         int currentIndex = 0;
+         
+         @Override
+         public boolean hasNext()
+         {
+            return currentIndex < userList.size();
+         }
+
+         @Override
+         public List<?> next()
+         {
+            if(hasNext())
+            {
+               List<User> list = new ArrayList<User>(pageSize);
+               for(int i = currentIndex; i < currentIndex + pageSize; i++)
+               {
+                  if(i < userList.size()) 
+                  {
+                     list.add(userList.get(i));
+                  }
+                  else
+                  {
+                     break;
+                  }
+               }
+               
+               //
+               currentIndex += pageSize;
+               return list;
+            } 
+            else 
+            {
+               return null;
+            }
+         }
+
+         @Override
+         public void remove()
+         {
+            throw new UnsupportedOperationException();
+         }
+      };
+      return iterator;
    }
 
    private List<User> makeUserList()

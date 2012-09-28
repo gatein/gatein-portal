@@ -1,8 +1,7 @@
 <%  
     import org.exoplatform.webui.core.UIComponent;
-    import org.exoplatform.webui.bean.UIDataFeed;
     
-    boolean hasNext = uicomponent.getDataFeed().hasNext();
+    boolean hasNext = uicomponent.getRepeater().hasNext();
     boolean isAutoAdjustHeight = uicomponent.isAutoAdjustHeight();
     def rcontext = _ctx.getRequestContext();
     

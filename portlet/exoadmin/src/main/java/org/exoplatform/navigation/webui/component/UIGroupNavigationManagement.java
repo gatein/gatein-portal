@@ -54,6 +54,7 @@ import org.exoplatform.webui.event.EventListener;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -93,7 +94,6 @@ public class UIGroupNavigationManagement extends UIContainer
    public UIGroupNavigationManagement() throws Exception
    {
       UIVirtualList virtualList = addChild(UIVirtualList.class, null, "GroupNavigationList");
-      virtualList.setPageSize(4);
       UIRepeater repeater = createUIComponent(UIRepeater.class, "UIGroupNavigationGrid", null);
       virtualList.setUIComponent(repeater);
       UIPopupWindow editNavigation = addChild(UIPopupWindow.class, null, null);
@@ -105,7 +105,7 @@ public class UIGroupNavigationManagement extends UIContainer
       UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
 
       List<UserNavigation> allNavs = userPortal.getNavigations();
-      List<UserNavigation> groupNav = new ArrayList<UserNavigation>();
+      final List<UserNavigation> groupNav = new ArrayList<UserNavigation>();
       for (UserNavigation nav : allNavs)
       {
          if (nav.getKey().getType().equals(SiteType.GROUP) && nav.isModifiable())
@@ -114,8 +114,55 @@ public class UIGroupNavigationManagement extends UIContainer
          }
       }
 
-      UIVirtualList virtualList = getChild(UIVirtualList.class);                  
-      virtualList.dataBind(new ObjectPageList<UserNavigation>(groupNav, groupNav.size()));
+      //
+      UIVirtualList virtualList = getChild(UIVirtualList.class);
+      final int pageSize = 4;
+      Iterator<List<?>> source = new Iterator<List<?>>()
+      {
+         int currentIndex = 0;
+         
+         @Override
+         public boolean hasNext()
+         {
+            return currentIndex < groupNav.size();
+         }
+
+         @Override
+         public List<UserNavigation> next()
+         {
+            if(hasNext()) 
+            {
+               List<UserNavigation> list = new ArrayList<UserNavigation>(pageSize);
+               for(int i = currentIndex; i < currentIndex + pageSize; i++)
+               {
+                  if(i < groupNav.size())
+                  {
+                     UserNavigation u = groupNav.get(i);
+                     list.add(u);
+                  }
+                  else
+                  {
+                     break;
+                  }
+               }
+               
+               //
+               currentIndex += pageSize;
+               return list;
+            }
+            else
+            {
+               return null;
+            }
+         }
+
+         @Override
+         public void remove()
+         {
+            throw new UnsupportedOperationException();
+         }
+      };
+      virtualList.dataBind(source);
       virtualList.setAutoAdjustHeight(true);
    }
 

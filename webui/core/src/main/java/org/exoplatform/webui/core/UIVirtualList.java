@@ -19,38 +19,25 @@
 
 package org.exoplatform.webui.core;
 
-import org.exoplatform.commons.utils.PageList;
-import org.exoplatform.portal.config.NoSuchDataException;
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.web.application.RequireJS;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.webui.bean.UIDataFeed;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
+import java.util.Iterator;
+import java.util.List;
+
 @ComponentConfig(template = "system:/groovy/webui/core/UIVirtualList.gtmpl", events = {@EventConfig(listeners = UIVirtualList.LoadNextActionListener.class)})
 @Serialized
 public class UIVirtualList extends UIComponentDecorator
 {
-
-   private int pageSize = 1;
-   
    private int height;
    
    private boolean autoAdjustHeight;
 
-   public int getPageSize()
-   {
-      return pageSize;
-   }
-
-   public void setPageSize(int pageSize)
-   {
-      this.pageSize = pageSize;
-   }
-   
    public int getHeight()
    {
       return height;
@@ -77,22 +64,21 @@ public class UIVirtualList extends UIComponentDecorator
       return parent.event(name, beanId);
    }
 
-   public void dataBind(PageList datasource) throws Exception
+   public void dataBind(Iterator<List<?>> source) throws Exception
    {
-      UIDataFeed dataFeed = this.getDataFeed();
-      datasource.setPageSize(this.getPageSize());
-      dataFeed.setDataSource(datasource);
+      UIRepeater repeater = this.getRepeater();
+      repeater.setSource(source);
    }
 
-   public UIDataFeed getDataFeed()
+   public UIRepeater getRepeater()
    {
       try
       {
-         return (UIDataFeed)this.uicomponent_;
+         return (UIRepeater)this.uicomponent_;
       }
       catch (Exception e)
       {
-         throw new NullPointerException("dataFeed doesn't attached");
+         throw new NullPointerException("Repeater doesn't attached");
       }
    }
 
@@ -101,8 +87,10 @@ public class UIVirtualList extends UIComponentDecorator
       public void execute(Event<UIVirtualList> event) throws Exception
       {
          UIVirtualList virtualList = event.getSource();
-         UIDataFeed dataFeed = virtualList.getDataFeed();
+         UIRepeater repeater = virtualList.getRepeater();
          WebuiRequestContext rContext = event.getRequestContext();
+         //TODO: check concurrent delete page
+         /*
          try
          {
             dataFeed.feedNext();
@@ -112,10 +100,10 @@ public class UIVirtualList extends UIComponentDecorator
             // Update parent of virtual list to refresh
             event.getRequestContext().addUIComponentToUpdateByAjax(virtualList.getParent());
             return;
-         }
+         }*/
          
          RequireJS require = rContext.getJavascriptManager().require("SHARED/webui-ext", "webuiExt");
-         if (dataFeed.hasNext())
+         if (repeater.hasNext())
          {
             require.addScripts("webuiExt.UIVirtualList.updateList('" + virtualList.getId() + "', true);");
          }
@@ -124,7 +112,7 @@ public class UIVirtualList extends UIComponentDecorator
             require.addScripts("webuiExt.UIVirtualList.updateList('" + virtualList.getId() + "', false);");
          }
          
-         rContext.addUIComponentToUpdateByAjax((UIComponent)dataFeed);
+         rContext.addUIComponentToUpdateByAjax((UIComponent)repeater);
       }
    }
 }
