@@ -1210,6 +1210,44 @@ memory option properties. This should be removed when we can just set the compil
          </modules>
       </profile>
       <profile>
+         <id>pkg-jbossas710</id>
+         <activation>
+            <property>
+               <name>gatein.dev</name>
+               <value>jbossas710</value>
+            </property>
+         </activation>
+
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-enforcer-plugin</artifactId>
+                  <executions>
+                     <execution>
+                        <id>check-servers-dir-specified</id>
+                        <goals>
+                           <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                           <rules>
+                              <requireProperty>
+                                 <message>"
+
+Build profile 'jbossas710' is no longer supported. You may want to use: 'jbossas711'.
+
+"
+                                 </message>
+                              </requireProperty>
+                           </rules>
+                        </configuration>
+                     </execution>
+                  </executions>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+      <profile>
          <id>pkg-jbossas712</id>
          <activation>
             <property>

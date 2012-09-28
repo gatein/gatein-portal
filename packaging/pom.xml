@@ -73,19 +73,6 @@
             </modules>
         </profile>
         <profile>
-            <id>pkg-tomcat6</id>
-            <activation>
-                <property>
-                    <name>gatein.dev</name>
-                    <value>tomcat6</value>
-                </property>
-            </activation>
-            <modules>
-                <module>common</module>
-                <module>tomcat</module>
-            </modules>
-        </profile>
-        <profile>
             <id>pkg-jetty</id>
             <activation>
                 <property>
@@ -109,30 +96,6 @@
             <modules>
               <module>common</module>
               <module>jboss-as7</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>pkg-jbossas6</id>
-            <activation>
-                <property>
-                    <name>gatein.dev</name>
-                    <value>jbossas6</value>
-                </property>
-            </activation>
-            <modules>
-                <module>common</module>
-            </modules>
-        </profile>
-        <profile>
-            <id>pkg-jbossas5</id>
-            <activation>
-                <property>
-                    <name>gatein.dev</name>
-                    <value>jbossas5</value>
-                </property>
-            </activation>
-            <modules>
-                <module>common</module>
             </modules>
         </profile>
         <profile>

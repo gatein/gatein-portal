@@ -49,7 +49,7 @@ mvn clean install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=jbossas713
 This will look for jboss-as-7.1.3.Final directory inside your $SERVERS_DIR.
 
 
-The packaged GateIn is available in packaging/jboss-as7/pkg/target/jboss-as-7.x.x.y.
+The packaged GateIn is available in packaging/jboss-as7/pkg/target/jboss-as-7.x.x.
 
 To start it, go to jboss directory, and run 'bin/standalone.sh' ('bin\standalone.bat' on Windows).
 
@@ -66,17 +66,17 @@ GateIn deployment archives are located in JBOSS_HOME/gatein containing the follo
 
  - gatein.ear
 
-   This is the application archive containing GateIn portal. The libraries are statically deployed as jboss-modules under JBOSS_HOME/modules.
+   This is the application archive containing GateIn portal. The libraries are available as modules under JBOSS_HOME/modules, and are not part of the deployment archive.
 
  - extensions/
 
-   This is a directory that contains all the portal extensions to be installed into GateIn when it starts.
-   Any archives that perform integration with GateIn kernel via configuration.xml files, or take part in GateIn's extension mechanism in order to override the default portal behaviour should be placed in this directory.
-   At boot time GateIn will scan the directory and deploy, and integrate these archive into the portal.
-   This directory does not support hot deploy, and should not be used for ordinary portlet archives, that just provide portlets. Regular AS7 deployment mechanisms like JBOSS_HOME/standalone/deployments directory, CLI admin client, web admin console, or maven jboss-as:deploy are the appropriate mechanisms to use in that case.
+   This is a directory that contains all the portal extensions to be installed when GateIn starts.
+   Any archives that perform integration with GateIn kernel using configuration.xml files, or take part in GateIn's extension mechanism in order to override the default portal behaviour should be placed in this directory.
+   At boot time GateIn will scan the directory and deploy containing archives.
+   This directory does not support hot re-deploy, and should not be used for ordinary portlet archives, that only provide portlets. Regular AS7 deployment mechanisms like JBOSS_HOME/standalone/deployments directory, CLI admin client, web admin console, or maven jboss-as:deploy are the appropriate mechanisms to use in that case.
 
 
-Portlet archives are web applications that contain portlet.xml file as per Portlet Specification. GateIn automatically provides some libraries to these archives so that they can properly integrate with the portal.
+Portlet archives are web applications that contain portlet.xml file as per Portlet Specification. GateIn automatically provides some libraries to these applications so that they can properly integrate with the portal.
 The list of libraries provided to portlet archives by default can be configured via JBOSS_HOME/standalone/configuration/standalone.xml which contains the following default configuration:
 
        <subsystem xmlns="urn:jboss:domain:gatein:1.0">
@@ -87,7 +87,7 @@ The list of libraries provided to portlet archives by default can be configured 
             </portlet-war-dependencies>
         </subsystem>
 
-JBoss AS7 provides mechanisms for configuring modules visibility for each individual deployment archive (i.e.: Dependencies attribute in MANIFEST.MF, or jboss-deployment-structure.xml).
+JBoss AS7 provides mechanisms for configuring which modules are visible to a specific deployment archive (i.e.: Dependencies attribute in MANIFEST.MF, or jboss-deployment-structure.xml).
 
 
 
@@ -107,14 +107,14 @@ cd packaging/jboss-as7/pkg/target/
 cp -r jboss ~/gatein-node1
 cp -r jboss ~/gatein-node2
 
-Now open two more consoles, and in all of them 'cd $HOME'.
+Now open three consoles, and in all of them do 'cd $HOME'.
 
-Now in first console run the database:
+In first console run the database:
 
 java -cp gatein-node1/modules/com/h2database/h2/main/h2-1.3.168.jar org.h2.tools.Server
 
 
-In second console run first GateIn node
+In second console run the first GateIn node:
 
 cd gatein-node1
 bin/standalone.sh --server-config=standalone-ha.xml -Djboss.node.name=node1 -Djboss.socket.binding.port-offset=100 -Dexo.profiles=cluster
@@ -126,7 +126,7 @@ cd gatein-node2
 bin/standalone.sh --server-config=standalone-ha.xml -Djboss.node.name=node2 -Djboss.socket.binding.port-offset=200 -Dexo.profiles=cluster
 
 
-Point your browser to http://localhost:8180/portal for first instance, and http://localhost:8280/portal for second instance.
+Point your browser to http://localhost:8180/portal to access the first instance, and http://localhost:8280/portal for the second instance.
 
 
 

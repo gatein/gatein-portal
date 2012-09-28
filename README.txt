@@ -26,14 +26,9 @@ When the gatein.dev property is set it will build and package one or several ser
 
 The various values for gatein.dev are:
 
-- tomcat     : Tomcat 6 and Tomcat 7
-- tomcat6    : Tomcat 6
 - tomcat7    : Tomcat 7
-- jbossas    : JBoss AS 5 and JBoss AS 6
-- jbossas5   : JBoss AS 5
-- jbosass6   : JBoss AS 6
-- jbossas711 : JBoss AS 7.1.1
-- jbossas712 : JBoss AS 7.1.2
+- jbossas711 : JBoss AS 7.1.1.Final
+- jbossas713 : JBoss AS 7.1.3.Final
 - jetty      : Jetty
 
 
@@ -51,6 +46,8 @@ Build instructions
 git clone git://github.com/gatein/gatein-portal.git
 cd gatein-portal
 
+
+You may want to fork it into your own github.com space, and clone your forked version, but that is beyond the scope of this README.
 
 
 2) Prepare containers to use for packaging
@@ -85,30 +82,6 @@ There are server specific equivalents that have to be used when packaging severa
 
 
 
-  Packaging with JBoss-AS-5.1.0.GA
-  --------------------------------
-
-If you don’t have an existing JBoss AS distribution, the build can automatically download it for you.
-
-Issue the following command:
-
-mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=jbossas5 -Ddownload
-
-
-If you have an existing JBoss-AS-5.1.0.GA distribution, unpack it into SERVERS_DIR directory so that you get SERVERS_DIR/jboss-5.1.0.GA directory.
-
-In this case you can issue the following command:
-
-mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=jbossas5
-
-
-The packaged GateIn is available in packaging/jboss-as5/pkg/target/jboss.
-
-To start it, go to jboss directory, and run 'bin/run.sh' ('bin\run.bat' on Windows).
-
-Access the portal at: http://localhost:8080/portal
-
-
   Packaging with JBoss-AS-7.x.x
   -----------------------------------
 
@@ -118,7 +91,7 @@ Issue the following command:
 
 mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=$AS7_LABEL -Ddownload
 
-Where $AS7_LABEL is one of: jbossas711, or jbossas712.
+Where $AS7_LABEL is one of: jbossas711, or jbossas713.
 
 
 If you have an existing JBoss-AS-7.x.x distribution, unpack it into SERVERS_DIR directory so that you get SERVERS_DIR/jboss-as-7.x.x directory.
@@ -140,29 +113,8 @@ To start it, go to jboss directory, and run 'bin/standalone.sh' ('bin\standalone
 
 Access the portal at: http://localhost:8080/portal
 
+For more info about JBoss AS7 support see packaging/jboss-as7/README.txt
 
-  Packaging with JBoss-AS-6.0.0.Final
-  -----------------------------------
-
-If you don’t have an existing JBoss-AS distribution, the build can automatically download it for you.
-
-Issue the following command:
-
-mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=jbossas6 -Pdownload
-
-
-If you have an existing JBoss-AS-6.0.0.Final distribution, unpack it into SERVERS_DIR directory so that you get SERVERS_DIR/jboss-6.0.0.Final directory.
-
-In this case you can issue the following command:
-
-mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=jbossas6
-
-
-The packaged GateIn is available in packaging/jboss-as6/pkg/target/jboss.
-
-To start, go to jboss directory, and run 'bin/run.sh' ('bin\run.bat' on Windows)
-
-Access the portal at: http://localhost:8080/portal
 
 
   Packaging with Tomcat 7.x.x
@@ -191,32 +143,6 @@ Alternatively you can use 'bin/gatein.sh start' ('bin\gatein.bat start' on Windo
 
 Access the portal at: http://localhost:8080/portal
 
-
-  Packaging with Tomcat 6.x.x
-  ---------------------------
-
-If you don’t have an existing Tomcat 6.x.x distribution, the build can automatically download it for you.
-
-Issue the following command:
-
-mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=tomcat6 -Pdownload
-
-
-If you have an existing Tomcat 6.x.x distribution, unpack it into SERVERS_DIR directory so that you get SERVERS_DIR/apache-tomcat-6.x.x directory.
-
-In this case you can issue the following command:
-
-mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=tomcat6 -Dserver.name=apache-tomcat-6.x.x
-
-(fix tomcat version in 'server.name')
-
-
-The packaged GateIn is available in packaging/tomcat/pkg/tc6/target/tomcat6.
-
-To start, go to tomcat6 directory, and run 'bin/gatein.sh run' ('bin\gatein.bat run' on Windows).
-Alternatively you can use 'bin/gatein.sh start' ('bin\gatein.bat start' on Windows).
-
-Access the portal at: http://localhost:8080/portal
 
 
   Packaging with Jetty 6.x.x
@@ -257,11 +183,12 @@ mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Ddownload
 
 You can also specify server names for each container - for example:
 
-mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Djboss5.name=jboss-5.1.0 -Djboss7.name=jboss-7.1.0 -Djboss6.name=jboss-6.0.0 -Dtomcat6.name=tomcat-6.0.35 -Dtomcat7.name=tomcat-7.0.19 -Djetty.name=jetty-6.0.24
+mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Djboss7.name=jboss-7.1.0 -Dtomcat7.name=tomcat-7.0.19 -Djetty.name=jetty-6.0.24
 
 
-For JBoss AS7 packaging the version used in this case would be 7.1.0.Final. If you want to use a different version you have to specify it with -Dversion.jboss.as=.
-Valid values are: 7.1.0.Final, 7.1.1.Final, and 7.1.2.Final
+For JBoss AS7 packaging the version used in this case would be 7.1.1.Final. If you want to use a different version you have to specify it with -Dversion.jboss.as=.
+Valid values are: 7.1.1.Final, and 7.1.3.Final
+
 
 
 Release instructions
@@ -272,6 +199,7 @@ You should execute this magic command line:
 
 mvn release:prepare
 mvn release:perform
+
 
 
 Troubleshooting
