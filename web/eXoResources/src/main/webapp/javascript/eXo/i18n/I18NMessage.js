@@ -17,50 +17,52 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-eXo.i18n.I18NMessage = {
-
-  /**
-   * Get message from resource bundle files, this function often is called from .js files
-   * @param {String} str know as key in Message Resource bundle file
-   * @param {Array} params parameter that can used to set value in message
-   * @return {String} message string
-   */
-  getMessage : function(str, params) {
-    var msg;
-    try {
-      msg = eval("this." + str);
-    } catch (e) {
-    }
-    if (msg == null || msg == "undefined")
-      msg = str;
-
-    if (params != null && params.constructor.toString().indexOf("Array") > 0) {
-      for ( var i = 0; i < params.length; i++) {
-        msg = msg.replace("{" + i + "}", params[i]);
-      }
-    }
-    return msg;
-  },
-
-  SessionTimeout : "${SessionTimeout}",
-  TargetBlockNotFound : "${TargetBlockNotFound}",
-  BlockUpdateNotFound : "${BlockUpdateNotFound}",
-  DefaultTheme : "${DefaultTheme}",
-  PreviousMonth : "${PreviousMonth}",
-  NextMonth : "${NextMonth}",
-  PreviousYear : "${PreviousYear}",
-  NextYear : "${NextYear}",
-  weekdays : [
-      "${weekdays.sun}",
-      "${weekdays.mon}",
-      "${weekdays.tue}",
-      "${weekdays.wed}",
-      "${weekdays.thu}",
-      "${weekdays.fri}",
-      "${weekdays.sat}"
-  ],
-  Save : "${Save}",
-  Cancel : "${Cancel}"
-};
-
-_module.I18NMessage = eXo.i18n.I18NMessage;
+(function() {
+	eXo.i18n.I18NMessage = {
+	
+	  /**
+	   * Get message from resource bundle files, this function often is called from .js files
+	   * @param {String} str know as key in Message Resource bundle file
+	   * @param {Array} params parameter that can used to set value in message
+	   * @return {String} message string
+	   */
+	  getMessage : function(str, params) {
+	    var msg;
+	    try {
+	      msg = eval("this." + str);
+	    } catch (e) {
+	    }
+	    if (msg == null || msg == "undefined")
+	      msg = str;
+	
+	    if (params != null && params.constructor.toString().indexOf("Array") > 0) {
+	      for ( var i = 0; i < params.length; i++) {
+	        msg = msg.replace("{" + i + "}", params[i]);
+	      }
+	    }
+	    return msg;
+	  },
+	
+	  SessionTimeout : "${SessionTimeout}",
+	  TargetBlockNotFound : "${TargetBlockNotFound}",
+	  BlockUpdateNotFound : "${BlockUpdateNotFound}",
+	  DefaultTheme : "${DefaultTheme}",
+	  PreviousMonth : "${PreviousMonth}",
+	  NextMonth : "${NextMonth}",
+	  PreviousYear : "${PreviousYear}",
+	  NextYear : "${NextYear}",
+	  weekdays : [
+	      "${weekdays.sun}",
+	      "${weekdays.mon}",
+	      "${weekdays.tue}",
+	      "${weekdays.wed}",
+	      "${weekdays.thu}",
+	      "${weekdays.fri}",
+	      "${weekdays.sat}"
+	  ],
+	  Save : "${Save}",
+	  Cancel : "${Cancel}"
+	};
+	
+	return eXo.i18n.I18NMessage;
+})();

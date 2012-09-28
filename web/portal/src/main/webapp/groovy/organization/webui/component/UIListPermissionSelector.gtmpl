@@ -8,8 +8,8 @@
  	
  	def popupId = uicomponent.getChild(UIFormPopupWindow.class).getId();
  	def btn = "#$uicomponent.id .UIAction > span";
-	rcontext.getJavascriptManager().require("SHARED/jquery", "\$").require("SHARED/webui")
-			  .addScripts("\$('$btn').click(function() {webui.UIPopupWindow.show('$popupId')});");
+	rcontext.getJavascriptManager().require("SHARED/jquery", "\$").require("SHARED/uiPopupWindow", "uiPopupWindow")
+			  .addScripts("\$('$btn').click(function() {uiPopupWindow.show('$popupId')});");
 %>
 <div id="<%=uicomponent.getId();%>" class="UIAccessGroup">
 	<div class="PublicCheck">

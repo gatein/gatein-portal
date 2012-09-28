@@ -5,8 +5,8 @@
 	UIForm form = uicomponent.getAncestorOfType(UIForm.class);	
 	
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().require("SHARED/webui", "webui")
-			  .addScripts("webui.UIItemSelector.init('#$uicomponent.id .ItemList > div');");
+	rcontext.getJavascriptManager().require("SHARED/selectors", "selectors").require("SHARED/uiForm")
+			  .addScripts("selectors.UIItemSelector.init('#$uicomponent.id .ItemList > div');");
 %>
 <div class="UIItemSelector" id="$uicomponent.id">	
 	<div class="RightColumnStyle" style="width: 99.5%;">
@@ -21,8 +21,8 @@
 				<%
 					for(opt in options) { 
 						String itemSelected = "Item" ;
-						String setHiddenValue = "_module.UIForm.setHiddenValue('$form.name', '$uicomponent.name','$opt.name')";
-						String submitEvent = "_module.UIForm.submitEvent('$form.id','SelectItemOption', '')";
+						String setHiddenValue = "eXo.webui.UIForm.setHiddenValue('$form.name', '$uicomponent.name','$opt.name')";
+						String submitEvent = "eXo.webui.UIForm.submitEvent('$form.id','SelectItemOption', '')";
 						if (opt.isSelected()) itemSelected = "SelectedItem Item" ;
 				 %>
 						<div class="$itemSelected">

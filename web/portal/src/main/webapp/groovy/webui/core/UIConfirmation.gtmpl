@@ -11,7 +11,7 @@
 	
 	String popupId = uicomponent.getId();
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().require("SHARED/webui");
+	rcontext.getJavascriptManager().require("SHARED/portalControl");
 	
 	def message = uicomponent.getMessage();
 	def actions = uicomponent.getActions();
@@ -89,10 +89,10 @@
 	</div>
 	
 	<%
-    def module = rcontext.getJavascriptManager().require("SHARED/webui", "webui");
+    def module = rcontext.getJavascriptManager().require("SHARED/uiPopupWindow", "uiPopupWindow");
 		if(uicomponent.hasMessage()){
-			module.addScripts("webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);");
+			module.addScripts("uiPopupWindow.show('$popupId', $uicomponent.showMask);");
 		} else if (rcontext.useAjax()) {
-      module.addScripts("webui.UIPopupWindow.hide('$popupId', $uicomponent.showMask);");
+      module.addScripts("uiPopupWindow.hide('$popupId', $uicomponent.showMask);");
 		}
 	%>

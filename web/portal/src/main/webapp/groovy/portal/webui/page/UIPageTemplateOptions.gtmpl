@@ -4,8 +4,8 @@
 	import org.exoplatform.webui.core.model.SelectItemOption;
 
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().require("SHARED/portal")
-			  .require("SHARED/webui", "webui").addScripts("webui.UIItemSelector.init('#$uicomponent.id .ItemList > div');"); 
+	rcontext.getJavascriptManager().require("SHARED/portal").require("SHARED/uiForm")
+			  .require("SHARED/selectors", "selectors").addScripts("selectors.UIItemSelector.init('#$uicomponent.id .ItemList > div');"); 
 
 	def categories = uicomponent.getItemCategories(); 
 	UIForm form = uicomponent.getParent(); 
@@ -39,8 +39,8 @@
 						<%
 							for(template in templates){
 								String itemSelected = "Item"; 
-								String setHiddenValue = "_module.UIForm.setHiddenValue('$form.name', '$uicomponent.name','$template.label' )";
-								String submitEvent = "_module.UIForm.submitEvent('$form.id','SelectItemOption', '')";
+								String setHiddenValue = "eXo.webui.UIForm.setHiddenValue('$form.name', '$uicomponent.name','$template.label' )";
+								String submitEvent = "eXo.webui.UIForm.submitEvent('$form.id','SelectItemOption', '')";
 								if (template.isSelected()) itemSelected = "SelectedItem Item"; 
 						%>
 								<div class="$itemSelected">

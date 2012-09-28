@@ -202,7 +202,7 @@ public class UIPortalComponentActionListener
          buffer.append("');");
          module.addScripts(buffer.toString());
       }
-      module.addScripts("portal.PortalComposer.toggleSaveButton();");
+      module.require("SHARED/portalComposer", "portalComposer").addScripts("portalComposer.toggleSaveButton();");
    }
 
    static public class MoveChildActionListener extends EventListener<UIContainer>

@@ -18,8 +18,8 @@
     int width = uicomponent.getWindowWidth();
     int height = uicomponent.getWindowHeight();
 
-    String script = "base.UIMaskWorkspace.show('"+maskId+"', "+width+", "+height+");";
-    rcontext.getJavascriptManager().require("SHARED/base", "base").addScripts(script) ;
+    String script = "maskWS.show('"+maskId+"', "+width+", "+height+");";
+    rcontext.getJavascriptManager().require("SHARED/uiMaskWorkspace", "maskWS").addScripts(script) ;
 %>
     <div class="MaskContainer">
       <%uicomponent.renderChildren();%>

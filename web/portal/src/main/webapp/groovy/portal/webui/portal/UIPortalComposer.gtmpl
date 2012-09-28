@@ -5,9 +5,9 @@
 	boolean isEditted = uicomponent.isEditted; 
 	def portalMode = uicomponent.getPortalMode();
 	rcontext.getJavascriptManager()
-    .require("SHARED/webui", "webui").addScripts("webui.UIPopupWindow.show('$popupId');")
-    .require("SHARED/base", "base").addScripts("base.UIPopup.setAlign('$popupId', 2, 5, 5);")
-    .require("SHARED/portal", "portal").addScripts("portal.PortalComposer.init('$uicomponent.id', 200, 200, $isEditted, $portalMode);");
+    .require("SHARED/uiPopupWindow", "uiPopupWindow").addScripts("uiPopupWindow.show('$popupId');")
+    .require("SHARED/uiPopup", "uiPopup").addScripts("uiPopup.setAlign('$popupId', 2, 5, 5);")
+    .require("SHARED/portalComposer", "portalComposer").addScripts("portalComposer.init('$uicomponent.id', 200, 200, $isEditted, $portalMode);");
 %>
 <div class="UIPopupWindow UIDragObject UIPortalComposer" id="$uicomponent.id" style="width: 320px; display: block;">
 	<div class="OverflowContainer ClearFix">

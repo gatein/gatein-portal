@@ -1,7 +1,7 @@
 <%		
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().require("SHARED/webui", "webui")
-			  .addScripts("webui.UIItemSelector.init('.UIPersonalInfo .ItemList .ImageDecorator > div', null, true);"); 
+	rcontext.getJavascriptManager().require("SHARED/selectors", "selectors")
+			  .addScripts("selectors.UIItemSelector.init('.UIPersonalInfo .ItemList .ImageDecorator > div', null, true);"); 
 %>
 <div class="UIPersonalInfo">
 	<div class="UIItemSelector">

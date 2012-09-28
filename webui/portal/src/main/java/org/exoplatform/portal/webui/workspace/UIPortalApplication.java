@@ -741,7 +741,7 @@ public class UIPortalApplication extends UIApplication
          String skin = getAddSkinScript(pcontext.getControllerContext(), list);
          if (skin != null)
          {
-            jsManager.require("SHARED/base").addScripts(skin);
+            jsManager.require("SHARED/skin", "skin").addScripts(skin);
          }
          w.write(jsManager.getJavaScripts());
          w.write("</div>");
@@ -797,7 +797,7 @@ public class UIPortalApplication extends UIApplication
       {
          SkinURL url = ele.createURL(context);
          url.setOrientation(orientation_);
-         b.append("eXo.core.Skin.addSkin('").append(ele.getId()).append("','").append(url).append("');\n");
+         b.append("skin.addSkin('").append(ele.getId()).append("','").append(url).append("');\n");
       }
       return b.toString();
    }

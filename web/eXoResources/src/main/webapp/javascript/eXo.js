@@ -44,7 +44,7 @@ var eXo  = {
 */
 window.ajaxGet = function(url, callback) {
   if (!callback) callback = null ;
-  require(["SHARED/base"], function() {
+  require(["SHARED/portalRequest"], function() {
 	  doRequest("Get", url, null, callback);	  
   });
 };
@@ -55,7 +55,7 @@ window.ajaxGet = function(url, callback) {
  */
 window.ajaxPost = function(url, queryString, callback) {
   if (!callback) callback = null ;
-  require(["SHARED/base"], function() {
+  require(["SHARED/portalRequest"], function() {
 	  doRequest("POST", url, queryString, callback) ;
   });
 };

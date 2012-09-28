@@ -40,9 +40,6 @@
       <depends>
         <module>dashboard</module>
       </depends>
-      <depends>
-        <module>webui</module>
-      </depends>
     </module>
   </portlet>
 

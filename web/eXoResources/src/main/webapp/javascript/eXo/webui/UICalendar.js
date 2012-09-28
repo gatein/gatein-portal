@@ -16,498 +16,501 @@
  * Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF
  * site: http://www.fsf.org.
  */
-eXo.webui.UICalendar = {
-  calendarId : "UICalendarControl",
-  dateField : null,
-  datePattern : null,
-  value : null,
-  currentDate : null, // Datetime value base of selectedDate for displaying
-                      // calendar below
-  // if selectedDate is invalid, currentDate deals with system time;
-  selectedDate : null, // Datetime value of input date&time field
-  months : null,
 
-  firstDayOfWeek : 1,// Indecates what the first day of the week is; e.g.,
-                      // SUNDAY (1) in the U.S, MONDAY (2) in France, TUESDAY
-                      // (3), etc
-  weekdays : null,
-
-  init : function(field, isDisplayTime, datePattern, value, monthNames) {
-    this.isDisplayTime = isDisplayTime;
-
-    if (this.dateField) {
-      this.dateField.parentNode.style.position = '';
-    }
-    this.dateField = field;
-    this.datePattern = datePattern;
-    this.value = value;
-
-    this.months = new Array();
-    this.months = monthNames.split(',');
-    this.months.pop();
-
-    var weekdays = base.I18NMessage.getMessage("weekdays");
-    if (weekdays != null && typeof (weekdays) == "object") {
-      this.weekdays = weekdays;
-    }
-
-    if (!document.getElementById(this.calendarId))
-      this.create();
-    this.show();
-
-    // fix bug for IE 6
-    var cld = document.getElementById(this.calendarId);
-    if (base.Browser.isIE6()) {
-      var blockClnd = document.getElementById('BlockCaledar');
-      var iframe = document.getElementById(this.calendarId + 'IFrame');
-      iframe.style.height = blockClnd.offsetHeight + "px";
-    }
-    field.parentNode.insertBefore(cld, field);
-  },
-
-  create : function() {
-    var clndr = document.createElement("div");
-    clndr.id = this.calendarId;
-    clndr.style.position = "absolute";
-    if (base.Browser.isIE6()) {
-      clndr.innerHTML = "<div class='UICalendarComponent'><iframe id='"
-          + this.calendarId
-          + "IFrame' frameBorder='0' style='position:absolute;height:100%;' scrolling='no'></iframe><div style='position:absolute;'></div></div>";
-    } else {
-      clndr.innerHTML = "<div class='UICalendarComponent'><div style='position: absolute; width: 100%;'></div></div>";
-    }
-    document.body.appendChild(clndr);
-  },
-
-  show : function() {
-    document.onclick = function() {_module.UICalendar.hide()};
-    var re = /^(\d{1,2}\/\d{1,2}\/\d{1,4})\s*(\s+\d{1,2}:\d{1,2}:\d{1,2})?$/i;
-    this.selectedDate = new Date();
-
-    // if (re.test(this.dateField.value)) {
-    // var dateParts = this.dateField.value.split(" ") ;
-    // var arr = dateParts[0].split("/") ;
-    // this.selectedDate.setMonth(parseInt(arr[0],10) - 1) ;
-    // this.selectedDate.setDate(parseInt(arr[1],10)) ;
-    // this.selectedDate.setFullYear(parseInt(arr[2],10)) ;
-    // if (dateParts.length > 1 && dateParts[dateParts.length - 1] != "") {
-    // arr = dateParts[dateParts.length - 1].split(":") ;
-    // this.selectedDate.setHours(arr[0], 10) ;
-    // this.selectedDate.setMinutes(arr[1], 10) ;
-    // this.selectedDate.setSeconds(arr[2], 10) ;
-    // }
-    // }
-    if (this.dateField.value != '') {
-      // TODO: tamnd - set selected date to calendar
-      var dateFieldValue = this.dateField.value;
-
-      var dateIndex = this.datePattern.indexOf("dd");
-      var dateValue = parseInt(dateFieldValue.substring(dateIndex,
-          dateIndex + 2), 10);
-
-      var monthIndex = this.datePattern.indexOf("MM");
-      var monthValue = parseInt(dateFieldValue.substring(monthIndex,
-          monthIndex + 2) - 1, 10);
-
-      var yearIndex = this.datePattern.indexOf("yyyy");
-      var yearValue = parseInt(dateFieldValue.substring(yearIndex,
-          yearIndex + 4), 10);
-
-      var hourIndex = this.datePattern.indexOf("HH");
-      var hoursValue = parseInt(dateFieldValue.substring(hourIndex,
-          hourIndex + 2), 10);
-
-      var minuteIndex = this.datePattern.indexOf("mm");
-      var minutesValue = parseInt(dateFieldValue.substring(minuteIndex,
-          minuteIndex + 2), 10);
-
-      var secondIndex = this.datePattern.indexOf("ss");
-      var secondValue = parseInt(dateFieldValue.substring(secondIndex,
-          secondIndex + 2), 10);
-
-      if (isNaN(secondValue)) {
-        secondValue = "00";
-      }
-      if (isNaN(minutesValue)) {
-        minutesValue = "00";
-      }
-      if (isNaN(hoursValue)) {
-        hoursValue = "00";
-      }
-
-      var testDate = "MM/dd/yyyy HH:mm:ss";
-      testDate = testDate.replace("dd", dateValue);
-      testDate = testDate.replace("MM", monthValue + 1);
-      testDate = testDate.replace("yyyy", yearValue);
-      testDate = testDate.replace("HH", hoursValue);
-      testDate = testDate.replace("mm", minutesValue);
-      testDate = testDate.replace("ss", secondValue);
-
-      if (re.test(testDate)) {
-        this.selectedDate.setDate(dateValue);
-        this.selectedDate.setMonth(monthValue);
-        this.selectedDate.setFullYear(yearValue);
-        this.selectedDate.setHours(hoursValue);
-        this.selectedDate.setMinutes(minutesValue);
-        this.selectedDate.setSeconds(secondValue);
-      }
-
-    }
-    this.currentDate = new Date(this.selectedDate.valueOf());
-    var clndr = document.getElementById(this.calendarId);
-    clndr.firstChild.lastChild.innerHTML = this.renderCalendar();
-    // var x = 0 ;
-    var y = this.dateField.offsetHeight;
-    var beforeShow = $(window).height();
-    with (clndr.firstChild.style) {
-      display = 'block';
-      // left = x + "px" ;
-      top = y + "px";
-      if (eXo.core.I18n.isLT())
-        left = "0px";
-      else
-        right = "0px";
-    }
-    var posCal = $(this.dateField).offset().top - y;
-    var heightCal = document.getElementById('BlockCaledar');
-    var afterShow = posCal + heightCal.offsetHeight;
-    if (afterShow > beforeShow) {
-      clndr.firstChild.style.top = -heightCal.offsetHeight + 'px';
-    }
-
-    _module.UICalendar.initDragDrop();
-
-    var primary = $(this.dateField).closest("#UIECMSearch");
-    if (primary.length && base.Browser.isFF()) {
-      var calendar = clndr.firstChild;
-      calendar.style.top = "0px";
-      calendar.style.left = this.dateField.offsetLeft
-          - this.dateField.offsetWidth - 32 + "px";
-    }
-  },
-
-  onTabOut : function(event) {
-    var keyCode = event.keyCode;
-
-    // identify the tab key
-    if (keyCode == 9) {
-      _module.UICalendar.hide();
-    }
-  },
-
-  hide : function() {
-    if (this.dateField) {
-      document.getElementById(this.calendarId).firstChild.style.display = 'none';
-      // this.dateField.parentNode.style.position = '' ;
-      this.dateField.blur();
-      this.dateField = null;
-    }
-    document.onclick = null;
-    // document.onmousedown = null;
-  },
-
-  /* TODO: Move HTML code to a javascript template file (.jstmpl) */
-  renderCalendar : function() {
-    var dayOfMonth = 1;
-    var validDay = 0;
-    var startDayOfWeek = this.getDayOfWeek(this.currentDate.getFullYear(),
-        this.currentDate.getMonth() + 1, dayOfMonth);
-    var daysInMonth = this.getDaysInMonth(this.currentDate.getFullYear(),
-        this.currentDate.getMonth());
-    var clazz = null;
-    var table = '<div id="BlockCaledar" class="BlockCalendar" onclick="event.cancelBubble = true">';
-    table += '<div class="UICalendar" onmousedown="event.cancelBubble = true">';
-    table += '	<table class="MonthYearBox">';
-    table += '	  <tr>';
-    table += '			<td class="MonthButton"><a class="PreviousMonth" href="#PreviousMonth" onclick="eXo.webui.UICalendar.changeMonth(-1);" title="'
-        + base.I18NMessage.getMessage("PreviousMonth") + '"></a></td>';
-    table += '			<td class="YearButton"><a class="PreviousYear" href="#PreviousYear" onclick="eXo.webui.UICalendar.changeYear(-1);" title="'
-        + base.I18NMessage.getMessage("PreviousYear") + '"></a></td>';
-    table += '			<td><font color="#f89302">'
-        + this.months[this.currentDate.getMonth()] + '</font> - '
-        + this.currentDate.getFullYear() + '</td>';
-    table += '			<td class="YearButton"><a class="NextYear" href="#NextYear" onclick="eXo.webui.UICalendar.changeYear(1);" title="'
-        + base.I18NMessage.getMessage("NextYear") + '"></a></td>';
-    table += '			<td class="MonthButton"><a class="NextMonth" href="#NextMonth" onclick="eXo.webui.UICalendar.changeMonth(1);" title="'
-        + base.I18NMessage.getMessage("NextMonth") + '"></a></td>';
-    table += '		</tr>';
-    table += '	</table>';
-    table += '	<div style="margin-top: 6px;padding: 0px 5px;">';
-    table += '		<table>';
-    table += '			<tr>';
-    if (this.weekdays == null) {
-      this.weekdays = new Array("S", "M", "T", "W", "T", "F", "S");
-    }
-    for ( var i = 0; i < 7; i++) {
-      if (i == (8 - this.firstDayOfWeek) % 7) {
-        table += ' <td><font color="red">'
-            + this.weekdays[(i + this.firstDayOfWeek - 1) % 7] + '</font></td>';
-      } else {
-        table += ' <td>' + this.weekdays[(i + this.firstDayOfWeek - 1) % 7]
-            + '</td>';
-      }
-    }
-    table += '			</tr>';
-    table += '		</table>';
-    table += '	</div>';
-    table += '	<div class="CalendarGrid">';
-    table += '	<table>';
-
-    for ( var week = 0; week < 6; week++) {
-      table += "<tr>";
-      for ( var dayOfWeek = 0; dayOfWeek <= 6; dayOfWeek++) {
-        if (week == 0
-            && dayOfWeek == (startDayOfWeek + ((8 - this.firstDayOfWeek) % 7)) % 7) {
-          validDay = 1;
-        } else if (validDay == 1 && dayOfMonth > daysInMonth) {
-          validDay = 0;
-        }
-        if (validDay) {
-          if (dayOfMonth == this.selectedDate.getDate()
-              && this.currentDate.getFullYear() == this.selectedDate
-                  .getFullYear()
-              && this.currentDate.getMonth() == this.selectedDate.getMonth()) {
-            clazz = 'Current';
-          } else if (dayOfWeek == 0 || dayOfWeek == 6) {
-            clazz = 'Weekend';
-          } else {
-            clazz = 'Weekday';
-          }
-
-          table = table + '<td><a class="' + clazz
-              + '" href="#SelectDate" onclick="eXo.webui.UICalendar.setDate('
-              + this.currentDate.getFullYear() + ','
-              + (this.currentDate.getMonth() + 1) + ',' + dayOfMonth + ')">'
-              + dayOfMonth + '</a></td>';
-          dayOfMonth++;
-        } else {
-          table = table + "<td class='empty'><div>&nbsp;</div></td>";
-        }
-      }
-      table += "</tr>";
-    }
-    table += '		</table>';
-    table += '	</div>';
-    if (this.isDisplayTime) {
-      table += '	<div class="CalendarTimeBox">';
-      table += '		<div class="CalendarTimeBoxR">';
-      table += '			<div class="CalendarTimeBoxM"><span><input class="InputTime" size="2" maxlength="2" value="'
-          + ((this.currentDate.getHours()) > 9 ? this.currentDate.getHours()
-              : "0" + this.currentDate.getHours())
-          + '" onkeyup="eXo.webui.UICalendar.setHour(this)" >:<input size="2" class="InputTime" maxlength="2" value="'
-          + ((this.currentDate.getMinutes()) > 9 ? this.currentDate
-              .getMinutes() : "0" + this.currentDate.getMinutes())
-          + '" onkeyup = "eXo.webui.UICalendar.setMinus(this)">:<input size="2" class="InputTime" maxlength="2" value="'
-          + ((this.currentDate.getSeconds()) > 9 ? this.currentDate
-              .getSeconds() : "0" + this.currentDate.getSeconds())
-          + '" onkeyup = "eXo.webui.UICalendar.setSeconds(this)"></span></div>';
-      table += '		</div>';
-      table += '	</div>';
-    }
-    table += '</div>';
-    table += '</div>';
-    return table;
-  },
-
-  changeMonth : function(change) {
-    this.currentDate.setDate(1);
-    this.currentDate.setMonth(this.currentDate.getMonth() + change);
-    var clndr = document.getElementById(this.calendarId);
-    clndr.firstChild.lastChild.innerHTML = this.renderCalendar();
-
-    _module.UICalendar.initDragDrop();
-  },
-
-  initDragDrop : function() {
-    var drag = $("#BlockCaledar");
-    var component = drag.closest(".UICalendarComponent");    
-    var calendar = drag.children(".UICalendar").first();
-    var innerWidth = drag[0].offsetWidth;
-
-    common.DragDrop.init(drag[0], component[0]);
-    component[0].onDragStart = function() {
-      if (base.Browser.isIE7())
-        drag.height(calendar[0].offsetHeight);
-      drag.width(innerWidth);
-    }
-  },
-
-  changeYear : function(change) {
-    this.currentDate.setFullYear(this.currentDate.getFullYear() + change);
-    this.currentDay = 0;
-    var clndr = document.getElementById(this.calendarId);
-    clndr.firstChild.lastChild.innerHTML = this.renderCalendar();
-
-    _module.UICalendar.initDragDrop();
-  },
-
-  setDate : function(year, month, day) {
-    if (this.dateField) {
-      if (month < 10)
-        month = "0" + month;
-      if (day < 10)
-        day = "0" + day;
-      var dateString = this.datePattern;
-      dateString = dateString.replace("dd", day);
-      dateString = dateString.replace("MM", month);
-      dateString = dateString.replace("yyyy", year);
-
-      this.currentHours = this.currentDate.getHours();
-      this.currentMinutes = this.currentDate.getMinutes();
-      this.currentSeconds = this.currentDate.getSeconds();
-      if (this.isDisplayTime) {
-        if (typeof (this.currentHours) != "string")
-          hour = this.currentHours.toString();
-        if (typeof (this.currentMinutes) != "string")
-          minute = this.currentMinutes.toString();
-        if (typeof (this.currentSeconds) != "year")
-          second = this.currentSeconds.toString();
-
-        while (hour.length < 2) {
-          hour = "0" + hour;
-        }
-        while (minute.length < 2) {
-          minute = "0" + minute;
-        }
-        while (second.length < 2) {
-          second = "0" + second;
-        }
-
-        dateString = dateString.replace("HH", hour);
-        dateString = dateString.replace("mm", minute);
-        dateString = dateString.replace("ss", second);
-      }
-      this.dateField.value = dateString;
-      this.hide();
-    }
-    return;
-  },
-
-  getDateTimeString : function() {
-    if (!this.currentDate)
-      return this.datePattern;
-    var year = "" + this.currentDate.getFullYear();
-    var month = "" + (this.currentDate.getMonth() + 1);
-    if (month.length < 2)
-      month = "0" + month;
-    var day = "" + this.currentDate.getDate();
-    if (day.length < 2)
-      day = "0" + day;
-    var hour = "" + this.currentDate.getHours();
-    if (hour.length < 2)
-      hour = "0" + hour;
-    var minute = "" + this.currentDate.getMinutes();
-    if (minute.length < 2)
-      minute = "0" + minute;
-    var second = "" + this.currentDate.getSeconds();
-    if (second.length < 2)
-      second = "0" + second;
-
-    var dateString = $.trim(this.datePattern);
-    if (!this.isDisplayTime) {
-      var ptStrings = dateString.split(" ");
-      for ( var i = 0; i < ptStrings.length; i++) {
-        if (ptStrings[i].indexOf("yyyy") >= 0) {
-          dateString = ptStrings[i];
-          break;
-        }
-      }
-    }
-
-    dateString = dateString.replace("dd", day);
-    dateString = dateString.replace("MM", month);
-    dateString = dateString.replace("yyyy", year);
-    if (this.isDisplayTime) {
-      dateString = dateString.replace("HH", hour);
-      dateString = dateString.replace("mm", minute);
-      dateString = dateString.replace("ss", second);
-    }
-
-    return dateString;
-  },
-
-  setSeconds : function(object) {
-    if (this.dateField) {
-      var seconds = object.value;
-      if (isNaN(seconds))
-        return;
-      if (seconds >= 60) {
-        object.value = seconds.substring(0, 1);
-        return;
-      }
-      if (seconds.length < 2)
-        seconds = "0" + seconds;
-      this.currentDate.setSeconds(seconds);
-      this.currentDay = this.currentDate.getDate();
-      this.currentMonth = this.currentDate.getMonth() + 1;
-      this.currentYear = this.currentDate.getFullYear();
-      this.dateField.value = this.getDateTimeString();
-    }
-    return;
-  },
-
-  setMinus : function(object) {
-    if (this.dateField) {
-      var minus = object.value;
-      if (isNaN(minus))
-        return;
-      if (minus >= 60) {
-        object.value = minus.substring(0, 1);
-        return;
-      }
-      if (minus.length < 2)
-        minus = "0" + minus;
-      this.currentDate.setMinutes(minus);
-      this.currentDay = this.currentDate.getDate();
-      this.currentMonth = this.currentDate.getMonth() + 1;
-      this.currentYear = this.currentDate.getFullYear();
-      this.dateField.value = this.getDateTimeString();
-    }
-    return;
-  },
-
-  setHour : function(object) {
-    if (this.dateField) {
-      var hour = object.value;
-      if (isNaN(hour))
-        return;
-      if (hour >= 24) {
-        object.value = hour.substring(0, 1);
-        return;
-      }
-      if (hour.length < 2)
-        hour = "0" + hour;
-      this.currentDate.setHours(hour);
-      this.currentDay = this.currentDate.getDate();
-      this.currentMonth = this.currentDate.getMonth() + 1;
-      this.currentYear = this.currentDate.getFullYear();
-      this.dateField.value = this.getDateTimeString();
-    }
-    return;
-  },
-
-  clearDate : function() {
-    this.dateField.value = '';
-    this.hide();
-  },
-
-  getDayOfWeek : function(year, month, day) {
-    var date = new Date(year, month - 1, day);
-    return date.getDay();
-  },
-
-  getDaysInMonth : function(year, month) {
-    return [ 31, ((!(year % 4) && ((year % 100) || !(year % 400))) ? 29 : 28),
-        31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ][month];
-  },
-
-  getFirstDayOfWeek : function() {
-    return this.firstDayOfWeek;
-  },
-
-  setFirstDayOfWeek : function(dayOfWeek) {
-    this.firstDayOfWeek = dayOfWeek;
-  }
-};
-
-_module.UICalendar = eXo.webui.UICalendar;
+(function($, base, common, msg) {
+	eXo.webui.UICalendar = {
+	  calendarId : "UICalendarControl",
+	  dateField : null,
+	  datePattern : null,
+	  value : null,
+	  currentDate : null, // Datetime value base of selectedDate for displaying
+	                      // calendar below
+	  // if selectedDate is invalid, currentDate deals with system time;
+	  selectedDate : null, // Datetime value of input date&time field
+	  months : null,
+	
+	  firstDayOfWeek : 1,// Indecates what the first day of the week is; e.g.,
+	                      // SUNDAY (1) in the U.S, MONDAY (2) in France, TUESDAY
+	                      // (3), etc
+	  weekdays : null,
+	
+	  init : function(field, isDisplayTime, datePattern, value, monthNames) {
+	    this.isDisplayTime = isDisplayTime;
+	
+	    if (this.dateField) {
+	      this.dateField.parentNode.style.position = '';
+	    }
+	    this.dateField = field;
+	    this.datePattern = datePattern;
+	    this.value = value;
+	
+	    this.months = new Array();
+	    this.months = monthNames.split(',');
+	    this.months.pop();
+	
+	    var weekdays = msg.getMessage("weekdays");
+	    if (weekdays != null && typeof (weekdays) == "object") {
+	      this.weekdays = weekdays;
+	    }
+	
+	    if (!document.getElementById(this.calendarId))
+	      this.create();
+	    this.show();
+	
+	    // fix bug for IE 6
+	    var cld = document.getElementById(this.calendarId);
+	    if (base.Browser.isIE6()) {
+	      var blockClnd = document.getElementById('BlockCaledar');
+	      var iframe = document.getElementById(this.calendarId + 'IFrame');
+	      iframe.style.height = blockClnd.offsetHeight + "px";
+	    }
+	    field.parentNode.insertBefore(cld, field);
+	  },
+	
+	  create : function() {
+	    var clndr = document.createElement("div");
+	    clndr.id = this.calendarId;
+	    clndr.style.position = "absolute";
+	    if (base.Browser.isIE6()) {
+	      clndr.innerHTML = "<div class='UICalendarComponent'><iframe id='"
+	          + this.calendarId
+	          + "IFrame' frameBorder='0' style='position:absolute;height:100%;' scrolling='no'></iframe><div style='position:absolute;'></div></div>";
+	    } else {
+	      clndr.innerHTML = "<div class='UICalendarComponent'><div style='position: absolute; width: 100%;'></div></div>";
+	    }
+	    document.body.appendChild(clndr);
+	  },
+	
+	  show : function() {
+	    document.onclick = function() {eXo.webui.UICalendar.hide()};
+	    var re = /^(\d{1,2}\/\d{1,2}\/\d{1,4})\s*(\s+\d{1,2}:\d{1,2}:\d{1,2})?$/i;
+	    this.selectedDate = new Date();
+	
+	    // if (re.test(this.dateField.value)) {
+	    // var dateParts = this.dateField.value.split(" ") ;
+	    // var arr = dateParts[0].split("/") ;
+	    // this.selectedDate.setMonth(parseInt(arr[0],10) - 1) ;
+	    // this.selectedDate.setDate(parseInt(arr[1],10)) ;
+	    // this.selectedDate.setFullYear(parseInt(arr[2],10)) ;
+	    // if (dateParts.length > 1 && dateParts[dateParts.length - 1] != "") {
+	    // arr = dateParts[dateParts.length - 1].split(":") ;
+	    // this.selectedDate.setHours(arr[0], 10) ;
+	    // this.selectedDate.setMinutes(arr[1], 10) ;
+	    // this.selectedDate.setSeconds(arr[2], 10) ;
+	    // }
+	    // }
+	    if (this.dateField.value != '') {
+	      // TODO: tamnd - set selected date to calendar
+	      var dateFieldValue = this.dateField.value;
+	
+	      var dateIndex = this.datePattern.indexOf("dd");
+	      var dateValue = parseInt(dateFieldValue.substring(dateIndex,
+	          dateIndex + 2), 10);
+	
+	      var monthIndex = this.datePattern.indexOf("MM");
+	      var monthValue = parseInt(dateFieldValue.substring(monthIndex,
+	          monthIndex + 2) - 1, 10);
+	
+	      var yearIndex = this.datePattern.indexOf("yyyy");
+	      var yearValue = parseInt(dateFieldValue.substring(yearIndex,
+	          yearIndex + 4), 10);
+	
+	      var hourIndex = this.datePattern.indexOf("HH");
+	      var hoursValue = parseInt(dateFieldValue.substring(hourIndex,
+	          hourIndex + 2), 10);
+	
+	      var minuteIndex = this.datePattern.indexOf("mm");
+	      var minutesValue = parseInt(dateFieldValue.substring(minuteIndex,
+	          minuteIndex + 2), 10);
+	
+	      var secondIndex = this.datePattern.indexOf("ss");
+	      var secondValue = parseInt(dateFieldValue.substring(secondIndex,
+	          secondIndex + 2), 10);
+	
+	      if (isNaN(secondValue)) {
+	        secondValue = "00";
+	      }
+	      if (isNaN(minutesValue)) {
+	        minutesValue = "00";
+	      }
+	      if (isNaN(hoursValue)) {
+	        hoursValue = "00";
+	      }
+	
+	      var testDate = "MM/dd/yyyy HH:mm:ss";
+	      testDate = testDate.replace("dd", dateValue);
+	      testDate = testDate.replace("MM", monthValue + 1);
+	      testDate = testDate.replace("yyyy", yearValue);
+	      testDate = testDate.replace("HH", hoursValue);
+	      testDate = testDate.replace("mm", minutesValue);
+	      testDate = testDate.replace("ss", secondValue);
+	
+	      if (re.test(testDate)) {
+	        this.selectedDate.setDate(dateValue);
+	        this.selectedDate.setMonth(monthValue);
+	        this.selectedDate.setFullYear(yearValue);
+	        this.selectedDate.setHours(hoursValue);
+	        this.selectedDate.setMinutes(minutesValue);
+	        this.selectedDate.setSeconds(secondValue);
+	      }
+	
+	    }
+	    this.currentDate = new Date(this.selectedDate.valueOf());
+	    var clndr = document.getElementById(this.calendarId);
+	    clndr.firstChild.lastChild.innerHTML = this.renderCalendar();
+	    // var x = 0 ;
+	    var y = this.dateField.offsetHeight;
+	    var beforeShow = $(window).height();
+	    with (clndr.firstChild.style) {
+	      display = 'block';
+	      // left = x + "px" ;
+	      top = y + "px";
+	      if (eXo.core.I18n.isLT())
+	        left = "0px";
+	      else
+	        right = "0px";
+	    }
+	    var posCal = $(this.dateField).offset().top - y;
+	    var heightCal = document.getElementById('BlockCaledar');
+	    var afterShow = posCal + heightCal.offsetHeight;
+	    if (afterShow > beforeShow) {
+	      clndr.firstChild.style.top = -heightCal.offsetHeight + 'px';
+	    }
+	
+	    eXo.webui.UICalendar.initDragDrop();
+	
+	    var primary = $(this.dateField).closest("#UIECMSearch");
+	    if (primary.length && base.Browser.isFF()) {
+	      var calendar = clndr.firstChild;
+	      calendar.style.top = "0px";
+	      calendar.style.left = this.dateField.offsetLeft
+	          - this.dateField.offsetWidth - 32 + "px";
+	    }
+	  },
+	
+	  onTabOut : function(event) {
+	    var keyCode = event.keyCode;
+	
+	    // identify the tab key
+	    if (keyCode == 9) {
+	      eXo.webui.UICalendar.hide();
+	    }
+	  },
+	
+	  hide : function() {
+	    if (this.dateField) {
+	      document.getElementById(this.calendarId).firstChild.style.display = 'none';
+	      // this.dateField.parentNode.style.position = '' ;
+	      this.dateField.blur();
+	      this.dateField = null;
+	    }
+	    document.onclick = null;
+	    // document.onmousedown = null;
+	  },
+	
+	  /* TODO: Move HTML code to a javascript template file (.jstmpl) */
+	  renderCalendar : function() {
+	    var dayOfMonth = 1;
+	    var validDay = 0;
+	    var startDayOfWeek = this.getDayOfWeek(this.currentDate.getFullYear(),
+	        this.currentDate.getMonth() + 1, dayOfMonth);
+	    var daysInMonth = this.getDaysInMonth(this.currentDate.getFullYear(),
+	        this.currentDate.getMonth());
+	    var clazz = null;
+	    var table = '<div id="BlockCaledar" class="BlockCalendar" onclick="event.cancelBubble = true">';
+	    table += '<div class="UICalendar" onmousedown="event.cancelBubble = true">';
+	    table += '	<table class="MonthYearBox">';
+	    table += '	  <tr>';
+	    table += '			<td class="MonthButton"><a class="PreviousMonth" href="#PreviousMonth" onclick="eXo.webui.UICalendar.changeMonth(-1);" title="'
+	        + msg.getMessage("PreviousMonth") + '"></a></td>';
+	    table += '			<td class="YearButton"><a class="PreviousYear" href="#PreviousYear" onclick="eXo.webui.UICalendar.changeYear(-1);" title="'
+	        + msg.getMessage("PreviousYear") + '"></a></td>';
+	    table += '			<td><font color="#f89302">'
+	        + this.months[this.currentDate.getMonth()] + '</font> - '
+	        + this.currentDate.getFullYear() + '</td>';
+	    table += '			<td class="YearButton"><a class="NextYear" href="#NextYear" onclick="eXo.webui.UICalendar.changeYear(1);" title="'
+	        + msg.getMessage("NextYear") + '"></a></td>';
+	    table += '			<td class="MonthButton"><a class="NextMonth" href="#NextMonth" onclick="eXo.webui.UICalendar.changeMonth(1);" title="'
+	        + msg.getMessage("NextMonth") + '"></a></td>';
+	    table += '		</tr>';
+	    table += '	</table>';
+	    table += '	<div style="margin-top: 6px;padding: 0px 5px;">';
+	    table += '		<table>';
+	    table += '			<tr>';
+	    if (this.weekdays == null) {
+	      this.weekdays = new Array("S", "M", "T", "W", "T", "F", "S");
+	    }
+	    for ( var i = 0; i < 7; i++) {
+	      if (i == (8 - this.firstDayOfWeek) % 7) {
+	        table += ' <td><font color="red">'
+	            + this.weekdays[(i + this.firstDayOfWeek - 1) % 7] + '</font></td>';
+	      } else {
+	        table += ' <td>' + this.weekdays[(i + this.firstDayOfWeek - 1) % 7]
+	            + '</td>';
+	      }
+	    }
+	    table += '			</tr>';
+	    table += '		</table>';
+	    table += '	</div>';
+	    table += '	<div class="CalendarGrid">';
+	    table += '	<table>';
+	
+	    for ( var week = 0; week < 6; week++) {
+	      table += "<tr>";
+	      for ( var dayOfWeek = 0; dayOfWeek <= 6; dayOfWeek++) {
+	        if (week == 0
+	            && dayOfWeek == (startDayOfWeek + ((8 - this.firstDayOfWeek) % 7)) % 7) {
+	          validDay = 1;
+	        } else if (validDay == 1 && dayOfMonth > daysInMonth) {
+	          validDay = 0;
+	        }
+	        if (validDay) {
+	          if (dayOfMonth == this.selectedDate.getDate()
+	              && this.currentDate.getFullYear() == this.selectedDate
+	                  .getFullYear()
+	              && this.currentDate.getMonth() == this.selectedDate.getMonth()) {
+	            clazz = 'Current';
+	          } else if (dayOfWeek == 0 || dayOfWeek == 6) {
+	            clazz = 'Weekend';
+	          } else {
+	            clazz = 'Weekday';
+	          }
+	
+	          table = table + '<td><a class="' + clazz
+	              + '" href="#SelectDate" onclick="eXo.webui.UICalendar.setDate('
+	              + this.currentDate.getFullYear() + ','
+	              + (this.currentDate.getMonth() + 1) + ',' + dayOfMonth + ')">'
+	              + dayOfMonth + '</a></td>';
+	          dayOfMonth++;
+	        } else {
+	          table = table + "<td class='empty'><div>&nbsp;</div></td>";
+	        }
+	      }
+	      table += "</tr>";
+	    }
+	    table += '		</table>';
+	    table += '	</div>';
+	    if (this.isDisplayTime) {
+	      table += '	<div class="CalendarTimeBox">';
+	      table += '		<div class="CalendarTimeBoxR">';
+	      table += '			<div class="CalendarTimeBoxM"><span><input class="InputTime" size="2" maxlength="2" value="'
+	          + ((this.currentDate.getHours()) > 9 ? this.currentDate.getHours()
+	              : "0" + this.currentDate.getHours())
+	          + '" onkeyup="eXo.webui.UICalendar.setHour(this)" >:<input size="2" class="InputTime" maxlength="2" value="'
+	          + ((this.currentDate.getMinutes()) > 9 ? this.currentDate
+	              .getMinutes() : "0" + this.currentDate.getMinutes())
+	          + '" onkeyup = "eXo.webui.UICalendar.setMinus(this)">:<input size="2" class="InputTime" maxlength="2" value="'
+	          + ((this.currentDate.getSeconds()) > 9 ? this.currentDate
+	              .getSeconds() : "0" + this.currentDate.getSeconds())
+	          + '" onkeyup = "eXo.webui.UICalendar.setSeconds(this)"></span></div>';
+	      table += '		</div>';
+	      table += '	</div>';
+	    }
+	    table += '</div>';
+	    table += '</div>';
+	    return table;
+	  },
+	
+	  changeMonth : function(change) {
+	    this.currentDate.setDate(1);
+	    this.currentDate.setMonth(this.currentDate.getMonth() + change);
+	    var clndr = document.getElementById(this.calendarId);
+	    clndr.firstChild.lastChild.innerHTML = this.renderCalendar();
+	
+	    eXo.webui.UICalendar.initDragDrop();
+	  },
+	
+	  initDragDrop : function() {
+	    var drag = $("#BlockCaledar");
+	    var component = drag.closest(".UICalendarComponent");    
+	    var calendar = drag.children(".UICalendar").first();
+	    var innerWidth = drag[0].offsetWidth;
+	
+	    common.DragDrop.init(drag[0], component[0]);
+	    component[0].onDragStart = function() {
+	      if (base.Browser.isIE7())
+	        drag.height(calendar[0].offsetHeight);
+	      drag.width(innerWidth);
+	    }
+	  },
+	
+	  changeYear : function(change) {
+	    this.currentDate.setFullYear(this.currentDate.getFullYear() + change);
+	    this.currentDay = 0;
+	    var clndr = document.getElementById(this.calendarId);
+	    clndr.firstChild.lastChild.innerHTML = this.renderCalendar();
+	
+	    eXo.webui.UICalendar.initDragDrop();
+	  },
+	
+	  setDate : function(year, month, day) {
+	    if (this.dateField) {
+	      if (month < 10)
+	        month = "0" + month;
+	      if (day < 10)
+	        day = "0" + day;
+	      var dateString = this.datePattern;
+	      dateString = dateString.replace("dd", day);
+	      dateString = dateString.replace("MM", month);
+	      dateString = dateString.replace("yyyy", year);
+	
+	      this.currentHours = this.currentDate.getHours();
+	      this.currentMinutes = this.currentDate.getMinutes();
+	      this.currentSeconds = this.currentDate.getSeconds();
+	      if (this.isDisplayTime) {
+	        if (typeof (this.currentHours) != "string")
+	          hour = this.currentHours.toString();
+	        if (typeof (this.currentMinutes) != "string")
+	          minute = this.currentMinutes.toString();
+	        if (typeof (this.currentSeconds) != "year")
+	          second = this.currentSeconds.toString();
+	
+	        while (hour.length < 2) {
+	          hour = "0" + hour;
+	        }
+	        while (minute.length < 2) {
+	          minute = "0" + minute;
+	        }
+	        while (second.length < 2) {
+	          second = "0" + second;
+	        }
+	
+	        dateString = dateString.replace("HH", hour);
+	        dateString = dateString.replace("mm", minute);
+	        dateString = dateString.replace("ss", second);
+	      }
+	      this.dateField.value = dateString;
+	      this.hide();
+	    }
+	    return;
+	  },
+	
+	  getDateTimeString : function() {
+	    if (!this.currentDate)
+	      return this.datePattern;
+	    var year = "" + this.currentDate.getFullYear();
+	    var month = "" + (this.currentDate.getMonth() + 1);
+	    if (month.length < 2)
+	      month = "0" + month;
+	    var day = "" + this.currentDate.getDate();
+	    if (day.length < 2)
+	      day = "0" + day;
+	    var hour = "" + this.currentDate.getHours();
+	    if (hour.length < 2)
+	      hour = "0" + hour;
+	    var minute = "" + this.currentDate.getMinutes();
+	    if (minute.length < 2)
+	      minute = "0" + minute;
+	    var second = "" + this.currentDate.getSeconds();
+	    if (second.length < 2)
+	      second = "0" + second;
+	
+	    var dateString = $.trim(this.datePattern);
+	    if (!this.isDisplayTime) {
+	      var ptStrings = dateString.split(" ");
+	      for ( var i = 0; i < ptStrings.length; i++) {
+	        if (ptStrings[i].indexOf("yyyy") >= 0) {
+	          dateString = ptStrings[i];
+	          break;
+	        }
+	      }
+	    }
+	
+	    dateString = dateString.replace("dd", day);
+	    dateString = dateString.replace("MM", month);
+	    dateString = dateString.replace("yyyy", year);
+	    if (this.isDisplayTime) {
+	      dateString = dateString.replace("HH", hour);
+	      dateString = dateString.replace("mm", minute);
+	      dateString = dateString.replace("ss", second);
+	    }
+	
+	    return dateString;
+	  },
+	
+	  setSeconds : function(object) {
+	    if (this.dateField) {
+	      var seconds = object.value;
+	      if (isNaN(seconds))
+	        return;
+	      if (seconds >= 60) {
+	        object.value = seconds.substring(0, 1);
+	        return;
+	      }
+	      if (seconds.length < 2)
+	        seconds = "0" + seconds;
+	      this.currentDate.setSeconds(seconds);
+	      this.currentDay = this.currentDate.getDate();
+	      this.currentMonth = this.currentDate.getMonth() + 1;
+	      this.currentYear = this.currentDate.getFullYear();
+	      this.dateField.value = this.getDateTimeString();
+	    }
+	    return;
+	  },
+	
+	  setMinus : function(object) {
+	    if (this.dateField) {
+	      var minus = object.value;
+	      if (isNaN(minus))
+	        return;
+	      if (minus >= 60) {
+	        object.value = minus.substring(0, 1);
+	        return;
+	      }
+	      if (minus.length < 2)
+	        minus = "0" + minus;
+	      this.currentDate.setMinutes(minus);
+	      this.currentDay = this.currentDate.getDate();
+	      this.currentMonth = this.currentDate.getMonth() + 1;
+	      this.currentYear = this.currentDate.getFullYear();
+	      this.dateField.value = this.getDateTimeString();
+	    }
+	    return;
+	  },
+	
+	  setHour : function(object) {
+	    if (this.dateField) {
+	      var hour = object.value;
+	      if (isNaN(hour))
+	        return;
+	      if (hour >= 24) {
+	        object.value = hour.substring(0, 1);
+	        return;
+	      }
+	      if (hour.length < 2)
+	        hour = "0" + hour;
+	      this.currentDate.setHours(hour);
+	      this.currentDay = this.currentDate.getDate();
+	      this.currentMonth = this.currentDate.getMonth() + 1;
+	      this.currentYear = this.currentDate.getFullYear();
+	      this.dateField.value = this.getDateTimeString();
+	    }
+	    return;
+	  },
+	
+	  clearDate : function() {
+	    this.dateField.value = '';
+	    this.hide();
+	  },
+	
+	  getDayOfWeek : function(year, month, day) {
+	    var date = new Date(year, month - 1, day);
+	    return date.getDay();
+	  },
+	
+	  getDaysInMonth : function(year, month) {
+	    return [ 31, ((!(year % 4) && ((year % 100) || !(year % 400))) ? 29 : 28),
+	        31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ][month];
+	  },
+	
+	  getFirstDayOfWeek : function() {
+	    return this.firstDayOfWeek;
+	  },
+	
+	  setFirstDayOfWeek : function(dayOfWeek) {
+	    this.firstDayOfWeek = dayOfWeek;
+	  }
+	};
+	
+	return eXo.webui.UICalendar;
+})($, base, common, msg);

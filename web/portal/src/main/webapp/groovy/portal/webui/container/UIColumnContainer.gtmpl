@@ -77,8 +77,8 @@
 										%>
 										<div class="ContainerIcon"><%=hasPermission ? strTitle : _ctx.appRes("UIPortlet.label.protectedContent")%></div>
 										<%if(hasPermission) {
-										   rcontext.getJavascriptManager().require("SHARED/base", "base")
-										   		  .addScripts("base.UIPopupSelectCategory.init('" + uicomponent.id + "');");
+										   rcontext.getJavascriptManager().require("SHARED/popupCategory", "popup")
+										   		  .addScripts("popup.init('" + uicomponent.id + "');");
 										%>
 											<div class="ControlIcon ArrowDownIcon" title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertColumn") %>">
 												<% /*Begin Popup Menu*/ %>

@@ -99,9 +99,9 @@
    <portlet>
       <name>LogoPortlet</name>
       <module>
-         <depends>
-            <module>webui</module>
-         </depends>
+        <depends>
+         <module>uiForm</module>
+        </depends>
       </module>
    </portlet>
 

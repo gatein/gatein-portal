@@ -3,7 +3,6 @@
   import org.json.JSONArray;
   
   def rcontext = _ctx.getRequestContext(); 
-  rcontext.getJavascriptManager().require("SHARED/webui"); 
   
   def selected = null, selectOptions = new JSONArray();  
   
@@ -79,8 +78,8 @@
               </div>
               <%
               	 }
-              	 rcontext.getJavascriptManager().require("SHARED/webui", "webui")
-              	 			.addScripts("webui.UILanguageSelector.init($selected, $selectOptions);");              
+              	 rcontext.getJavascriptManager().require("SHARED/selectors", "selectors")
+              	 			.addScripts("selectors.UILanguageSelector.init($selected, $selectOptions);");              
               %>
             </div>
             <div class="UIAction"> 

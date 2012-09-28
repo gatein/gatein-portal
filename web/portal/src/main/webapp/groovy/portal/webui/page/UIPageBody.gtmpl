@@ -9,7 +9,7 @@
 	JavascriptManager jsManager = rcontext.getJavascriptManager();
 	if (portalMode == UIPortalApplication.APP_BLOCK_EDIT_MODE || 
 	         portalMode == UIPortalApplication.APP_VIEW_EDIT_MODE) {
-		jsManager.require("SHARED/portal", "portal").addScripts("portal.PortalDragDrop.init(['UIPageBody']);");		   
+		jsManager.require("SHARED/portalDragDrop", "portalDragDrop").addScripts("portalDragDrop.init(['UIPageBody']);");		   
 	}
 %>
 <div class="UIPageBody" id="${uicomponent.id}">		

@@ -1,6 +1,6 @@
 <%	
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().require("SHARED/webui");
+	rcontext.getJavascriptManager().require("SHARED/portalControl");
 %>
 
 <div class="UITabSelector" id="$uicomponent.id">

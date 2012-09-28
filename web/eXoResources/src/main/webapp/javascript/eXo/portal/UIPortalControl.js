@@ -17,6 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
+(function() {	
 var uiPortalControl = {
 
   /**
@@ -26,7 +27,6 @@ var uiPortalControl = {
    *          selectedElement first object of tree
    */
   collapseTree : function(selectedElement) {
-
     var ancest = $(selectedElement).parent().closest(".Node");
     var childrenCont = ancest.find("div.ChildrenContainer").eq(0);
     var newHTML = "<div onclick=\""
@@ -97,4 +97,125 @@ var uiPortalControl = {
   }
 };
 
-_module.UIPortalControl = uiPortalControl;
+eXo.portal.VerticalScrollManager = {
+  repeat : null,
+
+  initScroll : function(clickedEle, isUp, step) {
+    var verticalScroll = eXo.portal.VerticalScrollManager;
+    var container = $(clickedEle).closest(".ItemContainer");
+    var middleCont = container.find(".MiddleItemContainer").first()[0];
+    if (!middleCont.id)
+      middleCont.id = "IC" + new Date().getTime()
+          + Math.random().toString().substring(2);
+    verticalScroll.scrollComponent(middleCont.id, isUp, step);
+    document.onmouseup = verticalScroll.cancelScroll;
+  },
+
+  scrollComponent : function(id, isUp, step) {
+    var verticalScroll = eXo.portal.VerticalScrollManager;
+    var scrollComp = document.getElementById(id);
+    if (isUp) {
+      scrollComp.scrollTop -= step;
+    } else {
+      scrollComp.scrollTop += step;
+    }
+    if (verticalScroll.repeat) {
+      verticalScroll.cancelScroll();
+    }
+    verticalScroll.repeat = setTimeout(function() {
+    	eXo.portal.VerticalScrollManager.scrollComponent(id, isUp, step);
+    }, 100);
+  },
+
+  cancelScroll : function() {
+    clearTimeout(eXo.portal.VerticalScrollManager.repeat);
+    eXo.portal.VerticalScrollManager.repeat = null;
+  }
+};
+
+eXo.webui.UIHorizontalTabs = {
+
+  init : function(id) {
+    if(id)
+    {
+      $("#" + id).find("div.TabsContainer").find("div.UITab").find("div.MiddleTab").not(".LockedTab").on("click", function()
+      {
+        eXo.webui.UIHorizontalTabs.displayTabContent(this);
+      });
+    }
+  },
+
+  /**
+   * Calls changeTabForUITabPane to display tab content
+   */
+  displayTabContent : function(clickedEle) {
+    this.changeTabForUITabPane(clickedEle, null, null);
+  },
+  /**
+   * Gets the tab element and the tab content associated and displays them .
+   * changes the style of the tab . displays the tab content of the selected tab
+   * (display: block) if tabId are provided, can get the tab content by Ajax
+   */
+  changeTabForUITabPane : function(clickedEle, tabId, url) {
+    var uiSelectTab = $(clickedEle).parents(".UITab").eq(0);
+    var uiHorizontalTabs = $(clickedEle).parents(".UIHorizontalTabs");
+    var uiTabs = uiHorizontalTabs.find("div.UITab");
+    var parentdHorizontabTab = uiHorizontalTabs.parent();
+    var contentTabContainer = parentdHorizontabTab.find("div.UITabContentContainer");
+    var uiTabContents = contentTabContainer.children("div.UITabContent");
+
+    //TODO: Remove this! A generic method should not contain code handling specially tabs in form
+    var form = contentTabContainer.children("form").eq(0);
+    if(form)
+    {
+      //Note that the method add() in jQuery creates a completely new set and does not modify original object
+      uiTabContents = uiTabContents.add("div.UITabContent", form);
+    }
+
+    uiTabs.each(function(index)
+    {
+      var styleTabDiv = $(this).children("div").eq(0);
+      if(styleTabDiv.attr("class") == "DisabledTab")
+      {
+        return;
+      }
+      if ($(this)[0] == uiSelectTab[0])
+      {
+        styleTabDiv.removeAttr("class").attr("class", "SelectedTab");
+        uiTabContents.eq(index).css("display", "block");
+      }
+      else
+      {
+        styleTabDiv.removeAttr("class").attr("class", "NormalTab");
+        uiTabContents.eq(index).css("display", "none");
+      }
+    });
+  },
+
+  checkContentAvailable : function(id) {
+    var tabContent = document.getElementById(id).parentNode;
+    // var textTrimmed = tabContent.innerHTML.replace(/\n/g, '')
+    if (!tabContent.isLoaded) {
+      tabContent.isLoaded = true;
+      return false;
+    }
+
+    tabContent.style.display = 'block';
+    return true;
+  },
+
+  /**
+   * 
+   */
+  changeTabForUIFormTabpane : function(clickedElemt, formId, hiddenValue) {
+    this.displayTabContent(clickedElemt);
+    uiForm.setHiddenValue(formId, 'currentSelectedTab', hiddenValue);
+  }
+};
+
+return {
+	UIPortalControl : uiPortalControl,
+	UIHorizontalTabs : eXo.webui.UIHorizontalTabs,
+	VerticalScrollManager : eXo.portal.VerticalScrollManager
+};
+})($, uiForm);
