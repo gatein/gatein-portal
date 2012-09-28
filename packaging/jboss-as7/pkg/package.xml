@@ -31,29 +31,13 @@
    </target>
 
    <target name="package-cluster" if="pkg.cluster">
-      <echo>
-
-             =====
-  ================       Cluster!
-             =====
-
-      </echo>
-
       <!-- Copy version specific bin, modules, configuration files -->
       <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true" failonerror="false">
          <fileset dir="${maven.project.basedir}/src/main/resources/${version.jboss.as}/cluster" />
       </copy>
-
    </target>
 
    <target name="package-samples" unless="pkg.nosamples">
-      <echo>
-
-             *****
-  =  ==  == =*****       Samples!
-             *****
-
-      </echo>
       <!--copy tofile="${jbossas.target.dir}/gatein/deployments/gatein-sample-portal.ear" >
          <fileset refid="org.exoplatform.portal:gatein-sample-portal:ear"/>
       </copy-->
@@ -105,7 +89,7 @@
       <!-- maven-ant integration - calling pom.xml dependencies as filesets -->
       <dependencyfilesets/>
 
-      <!-- Copy deployment archives -->
+      <!-- Copy gatein.ear -->
 
       <unzip dest="${jbossas.target.dir}/gatein/gatein.ear/eXoResources.war">
          <fileset refid="org.exoplatform.portal:exo.portal.web.eXoResources:war"/>
@@ -174,8 +158,10 @@
         </patternset>
       </unzip>
 
+      <!-- Package samples specific configuration if requested -->
       <antcall target="package-samples" inheritAll="true" inheritRefs="true"/>
 
+      <!-- Package cluster specific configuration if requested -->
       <antcall target="package-cluster" inheritAll="true" inheritRefs="true"/>
 
       <!-- File permissions -->
