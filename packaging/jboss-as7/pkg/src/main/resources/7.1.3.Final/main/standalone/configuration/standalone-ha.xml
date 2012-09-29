@@ -3,6 +3,7 @@
 <server xmlns="urn:jboss:domain:1.3">
     <extensions>
         <extension module="org.jboss.as.clustering.infinispan"/>
+        <extension module="org.jboss.as.clustering.jgroups"/>
         <extension module="org.jboss.as.configadmin"/>
         <extension module="org.jboss.as.connector"/>
         <extension module="org.jboss.as.deployment-scanner"/>
@@ -14,6 +15,7 @@
         <extension module="org.jboss.as.jpa"/>
         <extension module="org.jboss.as.logging"/>
         <extension module="org.jboss.as.mail"/>
+        <extension module="org.jboss.as.modcluster"/>
         <extension module="org.jboss.as.naming"/>
         <extension module="org.jboss.as.osgi"/>
         <extension module="org.jboss.as.pojo"/>
@@ -70,9 +72,6 @@
                 <suffix value=".yyyy-MM-dd"/>
                 <append value="true"/>
             </periodic-rotating-file-handler>
-            <logger category="com.google.javascript.jscomp">
-                <level name="WARN"/>
-            </logger>
             <logger category="com.arjuna">
                 <level name="WARN"/>
             </logger>
@@ -107,51 +106,42 @@
                         <password>sa</password>
                     </security>
                 </datasource>
-                <datasource jndi-name="java:/jdbcidm_portal" pool-name="IDMPortalDS" enabled="true"
-                            use-java-context="true">
-                    <connection-url>
-                        jdbc:h2:file:${jboss.server.data.dir}/gatein/portal/jdbcidm_portal;DB_CLOSE_DELAY=-1
-                    </connection-url>
-                    <driver>h2</driver>
-                    <security>
-                        <user-name>sa</user-name>
-                        <password>sa</password>
-                    </security>
-                </datasource>
-                <datasource jndi-name="java:/jdbcidm_sample-portal" pool-name="IDMSamplePortalDS" enabled="true"
-                            use-java-context="true">
-                    <connection-url>
-                        jdbc:h2:file:${jboss.server.data.dir}/gatein/sample-portal/jdbcidm_sample_portal;DB_CLOSE_DELAY=-1
-                    </connection-url>
-                    <driver>h2</driver>
-                    <security>
-                        <user-name>sa</user-name>
-                        <password>sa</password>
-                    </security>
-                </datasource>
-                <datasource jndi-name="java:/jdbcjcr_portal" pool-name="JCRPortalDS"
-                            enabled="true" use-java-context="true">
-                    <connection-url>
-                        jdbc:h2:file:${jboss.server.data.dir}/gatein/portal/jdbcjcr_portal;DB_CLOSE_DELAY=-1
-                    </connection-url>
-                    <driver>h2</driver>
-                    <security>
-                        <user-name>sa</user-name>
-                        <password>sa</password>
-                    </security>
-                </datasource>
-                <datasource jndi-name="java:/jdbcjcr_sample-portal"
-                            pool-name="JCRSamplePortalDS" enabled="true" use-java-context="true">
-                    <connection-url>
-                        jdbc:h2:file:${jboss.server.data.dir}/gatein/sample-portal/jdbcjcr_sample_portal;DB_CLOSE_DELAY=-1
-                    </connection-url>
-                    <driver>h2</driver>
-                    <security>
-                        <user-name>sa</user-name>
-                        <password>sa</password>
-                    </security>
-                </datasource>
-                <drivers>
+
+                <!-- To run H2 server open console, cd to JBOSS_HOME and run:
+
+                  java -cp modules/com/h2database/h2/main/h2-1.3.168.jar org.h2.tools.Server
+
+                  -->
+
+               <xa-datasource jndi-name="java:/jdbcidm_portal" pool-name="IDMPortalDS" enabled="true"
+                              use-java-context="true" jta="true" use-ccm="true">
+                  <xa-datasource-property name="URL">jdbc:h2:tcp://localhost/~/jdbcidm_portal</xa-datasource-property>
+                  <xa-datasource-property name="User">sa</xa-datasource-property>
+                  <xa-datasource-property name="Password">sa</xa-datasource-property>
+
+                  <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
+                  <xa-pool>
+                     <is-same-rm-override>false</is-same-rm-override>
+                     <no-tx-separate-pools />
+                  </xa-pool>
+                  <driver>h2</driver>
+               </xa-datasource>
+
+               <xa-datasource jndi-name="java:/jdbcjcr_portal" pool-name="JCRPortalDS"
+                              enabled="true" use-java-context="true" jta="true" use-ccm="true">
+                  <xa-datasource-property name="URL">jdbc:h2:tcp://localhost/~/jdbcjcr_portal</xa-datasource-property>
+                  <xa-datasource-property name="User">sa</xa-datasource-property>
+                  <xa-datasource-property name="Password">sa</xa-datasource-property>
+
+                  <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
+                  <xa-pool>
+                     <is-same-rm-override>false</is-same-rm-override>
+                     <no-tx-separate-pools />
+                  </xa-pool>
+                  <driver>h2</driver>
+               </xa-datasource>
+
+               <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
                     </driver>
@@ -159,7 +149,7 @@
             </datasources>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:deployment-scanner:1.1">
-            <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000" deployment-timeout="300"/>
+            <deployment-scanner path="deployments" relative-to="jboss.server.base.dir" scan-interval="5000"/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:ee:1.1">
             <spec-descriptor-property-replacement>false</spec-descriptor-property-replacement>
@@ -170,7 +160,7 @@
                 <stateless>
                     <bean-instance-pool-ref pool-name="slsb-strict-max-pool"/>
                 </stateless>
-                <stateful default-access-timeout="5000" cache-ref="simple"/>
+                <stateful default-access-timeout="5000" cache-ref="simple" clustered-cache-ref="clustered"/>
                 <singleton default-access-timeout="5000"/>
             </session-bean>
             <pools>
@@ -182,9 +172,11 @@
             <caches>
                 <cache name="simple" aliases="NoPassivationCache"/>
                 <cache name="passivating" passivation-store-ref="file" aliases="SimpleStatefulCache"/>
+                <cache name="clustered" passivation-store-ref="infinispan" aliases="StatefulTreeCache"/>
             </caches>
             <passivation-stores>
                 <file-passivation-store name="file"/>
+                <cluster-passivation-store name="infinispan" cache-container="ejb"/>
             </passivation-stores>
             <async thread-pool-name="default"/>
             <timer-service thread-pool-name="default">
@@ -199,21 +191,54 @@
             </thread-pools>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:infinispan:1.3">
-            <cache-container name="hibernate" default-cache="local-query" module="org.jboss.as.jpa.hibernate:4">
-                <local-cache name="entity">
-                    <transaction mode="NON_XA"/>
+            <cache-container name="cluster" aliases="ha-partition" default-cache="default">
+                <transport lock-timeout="60000"/>
+                <replicated-cache name="default" mode="SYNC" batching="true">
+                    <locking isolation="REPEATABLE_READ"/>
+                </replicated-cache>
+            </cache-container>
+            <cache-container name="web" aliases="standard-session-cache" default-cache="repl" module="org.jboss.as.clustering.web.infinispan">
+                <transport lock-timeout="60000"/>
+                <replicated-cache name="repl" mode="ASYNC" batching="true">
+                    <file-store/>
+                </replicated-cache>
+                <replicated-cache name="sso" mode="SYNC" batching="true"/>
+                <distributed-cache name="dist" mode="ASYNC" batching="true" l1-lifespan="0">
+                    <file-store/>
+                </distributed-cache>
+            </cache-container>
+            <cache-container name="ejb" aliases="sfsb sfsb-cache" default-cache="repl" module="org.jboss.as.clustering.ejb3.infinispan">
+                <transport lock-timeout="60000"/>
+                <replicated-cache name="repl" mode="ASYNC" batching="true">
                     <eviction strategy="LRU" max-entries="10000"/>
-                    <expiration max-idle="100000"/>
-                </local-cache>
+                    <file-store/>
+                </replicated-cache>
+                <!--
+                  ~  Clustered cache used internally by EJB subsytem for managing the client-mapping(s) of
+                  ~                 the socketbinding referenced by the EJB remoting connector 
+                  -->
+                <replicated-cache name="remote-connector-client-mappings" mode="SYNC" batching="true"/>
+                <distributed-cache name="dist" mode="ASYNC" batching="true" l1-lifespan="0">
+                    <eviction strategy="LRU" max-entries="10000"/>
+                    <file-store/>
+                </distributed-cache>
+            </cache-container>
+            <cache-container name="hibernate" default-cache="local-query" module="org.jboss.as.jpa.hibernate:4">
+                <transport lock-timeout="60000"/>
                 <local-cache name="local-query">
                     <transaction mode="NONE"/>
                     <eviction strategy="LRU" max-entries="10000"/>
                     <expiration max-idle="100000"/>
                 </local-cache>
-                <local-cache name="timestamps">
+                <invalidation-cache name="entity" mode="SYNC">
+                    <transaction mode="NON_XA"/>
+                    <eviction strategy="LRU" max-entries="10000"/>
+                    <expiration max-idle="100000"/>
+                </invalidation-cache>
+                <replicated-cache name="timestamps" mode="ASYNC">
                     <transaction mode="NONE"/>
                     <eviction strategy="NONE"/>
-                </local-cache>
+                </replicated-cache>
             </cache-container>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:jaxrs:1.0"/>
@@ -237,6 +262,42 @@
             <cached-connection-manager/>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:jdr:1.0"/>
+        <subsystem xmlns="urn:jboss:domain:jgroups:1.1" default-stack="udp">
+            <stack name="udp">
+                <transport type="UDP" socket-binding="jgroups-udp"/>
+                <protocol type="PING"/>
+                <protocol type="MERGE2"/>
+                <protocol type="FD_SOCK" socket-binding="jgroups-udp-fd"/>
+                <protocol type="FD"/>
+                <protocol type="VERIFY_SUSPECT"/>
+                <protocol type="BARRIER"/>
+                <protocol type="pbcast.NAKACK"/>
+                <protocol type="UNICAST2"/>
+                <protocol type="pbcast.STABLE"/>
+                <protocol type="pbcast.GMS"/>
+                <protocol type="UFC"/>
+                <protocol type="MFC"/>
+                <protocol type="FRAG2"/>
+                <protocol type="RSVP"/>
+            </stack>
+            <stack name="tcp">
+                <transport type="TCP" socket-binding="jgroups-tcp"/>
+                <protocol type="MPING" socket-binding="jgroups-mping"/>
+                <protocol type="MERGE2"/>
+                <protocol type="FD_SOCK" socket-binding="jgroups-tcp-fd"/>
+                <protocol type="FD"/>
+                <protocol type="VERIFY_SUSPECT"/>
+                <protocol type="BARRIER"/>
+                <protocol type="pbcast.NAKACK"/>
+                <protocol type="UNICAST2"/>
+                <protocol type="pbcast.STABLE"/>
+                <protocol type="pbcast.GMS"/>
+                <protocol type="UFC"/>
+                <protocol type="MFC"/>
+                <protocol type="FRAG2"/>
+                <protocol type="RSVP"/>
+            </stack>
+        </subsystem>
         <subsystem xmlns="urn:jboss:domain:jmx:1.1">
             <show-model value="true"/>
             <remoting-connector/>
@@ -248,6 +309,13 @@
             <mail-session jndi-name="java:jboss/mail/Default">
                 <smtp-server outbound-socket-binding-ref="mail-smtp"/>
             </mail-session>
+        </subsystem>
+        <subsystem xmlns="urn:jboss:domain:modcluster:1.1">
+            <mod-cluster-config advertise-socket="modcluster" connector="ajp">
+                <dynamic-load-provider>
+                    <load-metric type="busyness"/>
+                </dynamic-load-provider>
+            </mod-cluster-config>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:naming:1.2">
             <remote-naming/>
@@ -296,22 +364,15 @@
                         <policy-module code="Delegating" flag="required"/>
                     </authorization>
                 </security-domain>
-                <security-domain name="gatein-domain" cache-type="default">
-                    <authentication>
-                        <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
-                            <module-option name="portalContainerName" value="portal"/>
-                            <module-option name="realmName" value="gatein-domain"/>
-                        </login-module>
-                    </authentication>
-                </security-domain>
-                <security-domain name="gatein-domain-sample-portal" cache-type="default">
-                    <authentication>
-                        <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
-                            <module-option name="portalContainerName" value="sample-portal"/>
-                            <module-option name="realmName" value="gatein-domain-sample-portal"/>
-                        </login-module>
-                    </authentication>
-                </security-domain>
+               <security-domain name="gatein-domain" cache-type="default">
+                  <authentication>
+                     <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
+                        <module-option name="portalContainerName" value="portal"/>
+                        <module-option name="realmName" value="gatein-domain"/>
+                     </login-module>
+                  </authentication>
+               </security-domain>
+
             </security-domains>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:threads:1.1"/>
@@ -324,11 +385,13 @@
             <recovery-environment socket-binding="txn-recovery-environment" status-socket-binding="txn-status-manager"/>
             <coordinator-environment default-timeout="300"/>
         </subsystem>
-        <subsystem xmlns="urn:jboss:domain:web:1.1" default-virtual-server="default-host" native="false">
+        <subsystem xmlns="urn:jboss:domain:web:1.2" default-virtual-server="default-host" native="false">
             <connector name="http" protocol="HTTP/1.1" scheme="http" socket-binding="http"/>
+            <connector name="ajp" protocol="AJP/1.3" scheme="http" socket-binding="ajp"/>
             <virtual-server name="default-host" enable-welcome-root="true">
                 <alias name="localhost"/>
                 <alias name="example.com"/>
+                <sso cache-container="web" cache-name="sso" reauthenticate="false"/>
             </virtual-server>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:webservices:1.1">
@@ -348,7 +411,7 @@
                 <dependency name="org.gatein.pc"/>
                 <dependency name="javax.portlet.api"/>
             </portlet-war-dependencies>
-        </subsystem>
+       </subsystem>
     </profile>
     <interfaces>
         <interface name="management">
@@ -373,6 +436,12 @@
         <socket-binding name="ajp" port="8009"/>
         <socket-binding name="http" port="8080"/>
         <socket-binding name="https" port="8443"/>
+        <socket-binding name="jgroups-mping" port="0" multicast-address="${jboss.default.multicast.address:230.0.0.4}" multicast-port="45700"/>
+        <socket-binding name="jgroups-tcp" port="7600"/>
+        <socket-binding name="jgroups-tcp-fd" port="57600"/>
+        <socket-binding name="jgroups-udp" port="55200" multicast-address="${jboss.default.multicast.address:230.0.0.4}" multicast-port="45688"/>
+        <socket-binding name="jgroups-udp-fd" port="54200"/>
+        <socket-binding name="modcluster" port="0" multicast-address="224.0.1.105" multicast-port="23364"/>
         <socket-binding name="osgi-http" interface="management" port="8090"/>
         <socket-binding name="remoting" port="4447"/>
         <socket-binding name="txn-recovery-environment" port="4712"/>

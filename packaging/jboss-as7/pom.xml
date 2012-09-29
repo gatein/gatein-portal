@@ -118,16 +118,16 @@
          </properties>
       </profile>
       <profile>
-         <id>pkg-jbossas712</id>
+         <id>pkg-jbossas713</id>
          <activation>
             <property>
                <name>gatein.dev</name>
-               <value>jbossas712</value>
+               <value>jbossas713</value>
             </property>
          </activation>
 
          <properties>
-            <version.jboss.as>7.1.2.Final</version.jboss.as>
+            <version.jboss.as>7.1.3.Final</version.jboss.as>
          </properties>
       </profile>
    </profiles>

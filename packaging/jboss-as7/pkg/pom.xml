@@ -360,5 +360,18 @@ You can also use -Ddownload to automatically provide JBoss AS instance.
             </plugins>
          </build>
       </profile>
+
+      <profile>
+         <id>cluster</id>
+         <activation>
+            <property>
+               <name>cluster</name>
+            </property>
+         </activation>
+         <properties>
+            <pkg.cluster/>
+            <pkg.nosamples/>
+         </properties>
+      </profile>
    </profiles>
 </project>

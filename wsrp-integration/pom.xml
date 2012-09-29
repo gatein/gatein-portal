@@ -104,21 +104,6 @@
          </modules>
       </profile>
       <profile>
-         <id>pkg-jbossas710</id>
-         <activation>
-            <property>
-               <name>gatein.dev</name>
-               <value>jbossas710</value>
-            </property>
-         </activation>
-         <modules>
-            <module>extension-config</module>
-            <module>extension-component</module>
-            <module>extension-war</module>
-            <module>extension-ear</module>
-         </modules>
-      </profile>
-      <profile>
          <id>pkg-jbossas711</id>
          <activation>
             <property>
@@ -134,11 +119,11 @@
          </modules>
       </profile>
       <profile>
-         <id>pkg-jbossas712</id>
+         <id>pkg-jbossas713</id>
          <activation>
             <property>
                <name>gatein.dev</name>
-               <value>jbossas712</value>
+               <value>jbossas713</value>
             </property>
          </activation>
          <modules>

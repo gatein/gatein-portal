@@ -10,7 +10,7 @@ There is a new packaging module called 'jboss-as7'. It contains three sub-module
 - extension
 -----------
 
-Provides JBoss AS7 'gatein' subsystem implementation in the form of 'extension'. Extensions are the mechanism to extend JBoss AS7 functionality. GateIn extension plugs interceptors into JBoss AS7 deployment, management, services engine to provide proper startup order of GateIn deployment archives, and proper class visibility.
+Provides JBoss AS7 'gatein' subsystem implementation in the form of 'extension'. Extensions are a mechanism to extend JBoss AS7 functionality. GateIn extension plugs interceptors into JBoss AS7 deployment, management, services engine to provide proper startup order of GateIn deployment archives, and proper class visibility.
 
 
 - modules
@@ -26,15 +26,10 @@ Provides packaging for the build, with automated JBoss AS7 download support.
 
 
 
-
 Known Issues
 ============
 
-- JBoss AS 7 versions 7.1.0.Final, 7.1.1.Final, and 7.1.2.Final are supported at the moment
-- Special release of JCR Kernel is used (2.3.6-GA-JBAS7) that supports classloader isolated environment
-- WSRP is not yet supported
-- <distributable/> is not yet supported
-- Sample ears have been repackaged as their current default packaging is not supported
+- JBoss AS 7 versions 7.1.1.Final, and 7.1.3.Final are supported at the moment
 - Exception occurs, and is ignored when logging out (EXOJCR-1619)
 
 
@@ -42,23 +37,24 @@ Known Issues
 Building
 ========
 
-By default JBoss AS 7.1.0.Final is the version used. You can specify a different version by using -Dversion.jboss.as system property.
+By default JBoss AS 7.1.1.Final is the version used.
 
 For general build instructions see ../../README.txt
 
 
-If you want to use JBoss AS 7.1.1.Final instead of default version, issue the following command:
+If you want to use JBoss AS 7.1.3.Final instead of default version, issue the following command:
 
-mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=jbossas7 -Ddownload -Dversion.jboss.as=7.1.1.Final
+mvn clean install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=jbossas713
 
-This will look for jboss-as-7.1.1.Final directory inside your $SERVERS_DIR, and download the JBoss AS distribution if necessary.
+This will look for jboss-as-7.1.3.Final directory inside your $SERVERS_DIR.
 
 
-The packaged GateIn is available in packaging/jboss-as7/pkg/target/jboss-as-7.x.x.x.
+The packaged GateIn is available in packaging/jboss-as7/pkg/target/jboss-as-7.x.x.
 
 To start it, go to jboss directory, and run 'bin/standalone.sh' ('bin\standalone.bat' on Windows).
 
 Access the portal at: http://localhost:8080/portal
+
 
 
 Customizing
@@ -66,16 +62,24 @@ Customizing
 
 Packaging deploys a basic GateIn portal (gatein.ear), but also a sample portal extension, a sample portal site bound to a separate context, and a sample skin.
 
-Samples archives can be removed, and custom portal extension archives can be added. Currently GateIn subsystem has to know about extensions in advance.
-This is configured via JBOSS_HOME/standalone/configuration/standalone.xml which contains the following default configuration:
+GateIn deployment archives are located in JBOSS_HOME/gatein containing the following:
+
+ - gatein.ear
+
+   This is the application archive containing GateIn portal. The libraries are available as modules under JBOSS_HOME/modules, and are not part of the deployment archive.
+
+ - extensions/
+
+   This is a directory that contains all the portal extensions to be installed when GateIn starts.
+   Any archives that perform integration with GateIn kernel using configuration.xml files, or take part in GateIn's extension mechanism in order to override the default portal behaviour should be placed in this directory.
+   At boot time GateIn will scan the directory and deploy containing archives.
+   This directory does not support hot re-deploy, and should not be used for ordinary portlet archives, that only provide portlets. Regular AS7 deployment mechanisms like JBOSS_HOME/standalone/deployments directory, CLI admin client, web admin console, or maven jboss-as:deploy are the appropriate mechanisms to use in that case.
+
+
+Portlet archives are web applications that contain portlet.xml file as per Portlet Specification. GateIn automatically provides some libraries to these applications so that they can properly integrate with the portal.
+The list of libraries provided to portlet archives by default can be configured via JBOSS_HOME/standalone/configuration/standalone.xml which contains the following default configuration:
 
        <subsystem xmlns="urn:jboss:domain:gatein:1.0">
-            <deployment-archives>
-                <archive name="gatein.ear" main="true"/>
-                <archive name="gatein-sample-extension.ear"/>
-                <archive name="gatein-sample-portal.ear"/>
-                <archive name="gatein-sample-skin.war"/>
-            </deployment-archives>
             <portlet-war-dependencies>
                 <dependency name="org.gatein.wci"/>
                 <dependency name="org.gatein.pc"/>
@@ -83,16 +87,46 @@ This is configured via JBOSS_HOME/standalone/configuration/standalone.xml which 
             </portlet-war-dependencies>
         </subsystem>
 
-The <deployment-archives> section contains a list of GateIn portal extensions. These are archives constructed specifically to 'plug into' GateIn portal. To that end they contain a special configuration.
-
-The archives in the list have to be deployed in JBOSS_HOME/standalone/deployments, otherwise GateIn portal won't start. So, if you want to remove some or all of the samples, it's not enough to just remove the archives from 'deployments' directory. Archive references also have to be removed from <deployment-archives> section of standalone.xml.
-
-Similarly, when deploying any additional GateIn portal extension archive it has to be referenced via <archive> entry in <deployment-archives> section in standalone.xml.
-
-On the other hand, user applications that only provide portlets, can simply be deployed as any web archive by dropping them into 'deployments' directory WITHOUT having to reference them in 'gatein' subsystem section of standalone.xml.
+JBoss AS7 provides mechanisms for configuring which modules are visible to a specific deployment archive (i.e.: Dependencies attribute in MANIFEST.MF, or jboss-deployment-structure.xml).
 
 
-Portlet-war-dependency section allows customizing which modules are automatically made available to portlet archives (.war arhives containing portlet.xml), so that they can be deployed without any explicit JBoss modules configuration (i.e. Dependencies attribute in MANIFEST.MF, or jboss-deployment-structure.xml)
+
+
+Clustered mode
+==============
+
+There is a simple 'cluster' build profile available for JBoss AS 7.1.3.Final packaging.
+
+Here's how to build it, and run two nodes on the same host in order to play with it:
+
+
+mvn clean install -Dgatein.dev=jbossas713 -Dservers.dir=$SERVERS_DIR -DskipTests -Dcluster
+
+cd packaging/jboss-as7/pkg/target/
+
+cp -r jboss ~/gatein-node1
+cp -r jboss ~/gatein-node2
+
+Now open three consoles, and in all of them do 'cd $HOME'.
+
+In first console run the database:
+
+java -cp gatein-node1/modules/com/h2database/h2/main/h2-1.3.168.jar org.h2.tools.Server
+
+
+In second console run the first GateIn node:
+
+cd gatein-node1
+bin/standalone.sh --server-config=standalone-ha.xml -Djboss.node.name=node1 -Djboss.socket.binding.port-offset=100 -Dexo.profiles=cluster
+
+
+And in third console run the second GateIn node:
+
+cd gatein-node2
+bin/standalone.sh --server-config=standalone-ha.xml -Djboss.node.name=node2 -Djboss.socket.binding.port-offset=200 -Dexo.profiles=cluster
+
+
+Point your browser to http://localhost:8180/portal to access the first instance, and http://localhost:8280/portal for the second instance.
 
 
 
@@ -107,5 +141,3 @@ Ask questions, and provide suggestions and feedback on forums: http://community.
 
 
 Have a nice day :)
-
-
