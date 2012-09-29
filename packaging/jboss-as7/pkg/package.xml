@@ -2,6 +2,9 @@
 
 <project name="package" xmlns:mvn="http://maven.apache.org/POM/4.0.0">
 
+   <property name="samples.dir" value="${maven.project.basedir}/src/main/resources/${version.jboss.as}/samples" />
+   <property name="cluster.dir" value="${maven.project.basedir}/src/main/resources/${version.jboss.as}/cluster" />
+
    <target name="prepare" depends="prepare-server-dir,package">
    </target>
 
@@ -30,10 +33,34 @@
       <unzip src="${jbossas.zip}" dest="${servers.dir}" overwrite="false" />
    </target>
 
-   <target name="package-cluster" if="pkg.cluster">
+   <target name="package-cluster-checkdir">
+      <condition property="pkg.cluster.hasdir">
+         <available file="${cluster.dir}" type="dir"/>
+      </condition>
+   </target>
+
+   <target name="package-cluster-copy" depends="package-cluster-checkdir" if="pkg.cluster.hasdir">
       <!-- Copy version specific bin, modules, configuration files -->
-      <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true" failonerror="false">
-         <fileset dir="${maven.project.basedir}/src/main/resources/${version.jboss.as}/cluster" />
+      <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
+         <fileset dir="${cluster.dir}" />
+      </copy>
+   </target>
+
+   <target name="package-cluster" if="pkg.cluster">
+      <!-- Package cluster specific configuration if requested -->
+      <antcall target="package-cluster-copy" inheritAll="true" inheritRefs="true"/>
+   </target>
+
+   <target name="package-samples-checkdir">
+      <condition property="pkg.samples.hasdir">
+         <available file="${samples.dir}" type="dir"/>
+      </condition>
+   </target>
+
+   <target name="package-samples-copy" depends="package-samples-checkdir" if="pkg.samples.hasdir">
+      <!-- Copy version specific bin, modules, configuration files -->
+      <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
+         <fileset dir="${samples.dir}" />
       </copy>
    </target>
 
@@ -71,10 +98,13 @@
          <fileset refid="org.gatein.portal.examples.skins:gatein-sample-skin:war"/>
       </copy>
 
-      <!-- Copy version specific bin, modules, configuration files -->
-      <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true" failonerror="false">
-         <fileset dir="${maven.project.basedir}/src/main/resources/${version.jboss.as}/samples" />
+      <!-- Copy non-version-specific samples resources -->
+      <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
+         <fileset dir="${maven.project.basedir}/src/main/resources/jboss/samples" />
       </copy>
+
+      <!-- Package version specific samples configuration if requested -->
+      <antcall target="package-samples-copy" inheritAll="true" inheritRefs="true"/>
   </target>
 
   <target name="package">
