@@ -14,7 +14,7 @@
     uicomponent.setId(componentId.substring("UIContainer-".length()));
   }
   
-  ArrayList children = uicomponent.getChildren();
+  def children = uicomponent.getChildren();
   
   if(children != null && children.size() > 0){
     boolean hasRenderedChild = false; 
