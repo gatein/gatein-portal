@@ -52,7 +52,7 @@ public class ResourceRequestHandler extends WebRequestHandler
    public static final String LAST_MODIFIED     = "Last-Modified";
    
    /** . */
-   private static String PATH = "META-INF/maven/org.exoplatform.portal/exo.portal.component.web.resources/pom.properties";
+   private static String PATH = "META-INF/maven/org.gatein.portal/exo.portal.component.web.resources/pom.properties";
 
    /** . */
    private static final Logger log = LoggerFactory.getLogger(ResourceRequestHandler.class);

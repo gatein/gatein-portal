@@ -63,7 +63,7 @@
           ~ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
           -->
         <module-def name="org.gatein">
-            <maven-resource group="org.exoplatform.portal" artifact="jboss-as7-integration-extension" />
+            <maven-resource group="org.gatein.portal" artifact="jboss-as7-integration-extension" />
         </module-def>
 
         <module-def name="org.gatein.lib">
@@ -101,26 +101,26 @@
            <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.common" />
            <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.ext.cache.impl.jboss.v3" />
            <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.container" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.component.application-registry" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.component.common" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.component.identity" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.component.management" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.component.pc" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.component.portal" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.component.resources" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.component.scripting" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.component.web.api" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.component.web.controller" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.component.web.resources" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.component.web.security" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.component.web.server" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.gadgets-core" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.webui.core" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.webui.dashboard" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.webui.eXo" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.webui.framework" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.webui.portal" />
-           <maven-resource group="org.exoplatform.portal" artifact="exo.portal.webui.portlet" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.application-registry" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.common" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.identity" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.management" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.pc" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.portal" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.resources" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.scripting" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.api" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.controller" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.resources" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.security" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.server" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.gadgets-core" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.core" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.dashboard" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.eXo" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.framework" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.portal" />
+           <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.portlet" />
            <maven-resource group="org.exoplatform.ws" artifact="exo.ws.commons" />
            <maven-resource group="org.exoplatform.ws" artifact="exo.ws.frameworks.json" />
            <maven-resource group="org.exoplatform.ws" artifact="exo.ws.frameworks.servlet" />

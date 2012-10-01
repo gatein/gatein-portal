@@ -7,7 +7,7 @@
       and version
    -->
    <parent>
-      <groupId>org.exoplatform.portal</groupId>
+      <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.portlet</artifactId>
       <version>3.5.0.Beta01-SNAPSHOT</version>
    </parent>

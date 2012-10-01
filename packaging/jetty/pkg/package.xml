@@ -64,7 +64,7 @@
       </copy>
 
       <!-- Extract common config from packaging.common artifact to gatein/conf -->
-      <unzip src="${org.exoplatform.portal:exo.portal.packaging.common:jar}" dest="${maven.project.build.directory}/jetty/gatein/conf">
+      <unzip src="${org.gatein.portal:exo.portal.packaging.common:jar}" dest="${maven.project.build.directory}/jetty/gatein/conf">
         <patternset>
           <exclude name="META-INF/"/>
         </patternset>

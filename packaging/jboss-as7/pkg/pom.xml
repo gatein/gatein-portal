@@ -4,7 +4,7 @@
    <modelVersion>4.0.0</modelVersion>
 
    <parent>
-      <groupId>org.exoplatform.portal</groupId>
+      <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.packaging.jboss7</artifactId>
       <version>3.5.0.Beta01-SNAPSHOT</version>
    </parent>
@@ -25,11 +25,11 @@
 
    <dependencies>
       <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>jboss-as7-integration-extension</artifactId>
       </dependency>
       <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>jboss-as7-integration-modules</artifactId>
       </dependency>
 
@@ -39,47 +39,47 @@
 
       <!-- Default Portal -->
       <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>exo.portal.web.eXoResources</artifactId>
          <type>war</type>
       </dependency>
       <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>exo.portal.web.portal</artifactId>
          <type>war</type>
       </dependency>
       <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>exo.portal.gadgets-server</artifactId>
          <type>war</type>
       </dependency>
       <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>exo.portal.eXoGadgets</artifactId>
          <type>war</type>
       </dependency>
       <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>exo.portal.gwtGadgets</artifactId>
          <type>war</type>
       </dependency>
       <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>exo.portal.portlet.web</artifactId>
          <type>war</type>
       </dependency>
       <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>exo.portal.web.rest</artifactId>
          <type>war</type>
       </dependency>
       <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>exo.portal.portlet.exoadmin</artifactId>
          <type>war</type>
       </dependency>
       <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>exo.portal.portlet.dashboard</artifactId>
          <type>war</type>
       </dependency>
@@ -117,29 +117,29 @@
 
       <!-- Sample Portal -->
       <!--dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>gatein-sample-portal</artifactId>
          <type>ear</type>
          <version>${project.version}</version>
       </dependency-->
       <dependency>
-        <groupId>org.exoplatform.portal</groupId>
+        <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.sample.portal.config</artifactId>
          <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.exoplatform.portal</groupId>
+        <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.sample.portal.jar</artifactId>
          <version>${project.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.exoplatform.portal</groupId>
+        <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.sample.portal.war</artifactId>
          <version>${project.version}</version>
         <type>war</type>
       </dependency>
       <dependency>
-        <groupId>org.exoplatform.portal</groupId>
+        <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.sample.portal.rest-war</artifactId>
          <version>${project.version}</version>
         <type>war</type>
@@ -148,23 +148,23 @@
 
       <!-- Sample Extension -->
       <!--dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>gatein-sample-extension</artifactId>
          <type>ear</type>
          <version>${project.version}</version>
       </dependency-->
       <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>exo.portal.sample.extension.config</artifactId>
          <version>${project.version}</version>
        </dependency>
        <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>exo.portal.sample.extension.jar</artifactId>
           <version>${project.version}</version>
        </dependency>
        <dependency>
-         <groupId>org.exoplatform.portal</groupId>
+         <groupId>org.gatein.portal</groupId>
          <artifactId>exo.portal.sample.extension.war</artifactId>
           <version>${project.version}</version>
          <type>war</type>
@@ -186,7 +186,7 @@
 
       <!-- Need to declare this artifact to have access to its path from package.xml -->
       <dependency>
-        <groupId>org.exoplatform.portal</groupId>
+        <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.packaging.common</artifactId>
       </dependency>
 

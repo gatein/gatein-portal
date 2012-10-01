@@ -66,32 +66,32 @@
 
    <target name="package-samples" unless="pkg.nosamples">
       <!--copy tofile="${jbossas.target.dir}/gatein/deployments/gatein-sample-portal.ear" >
-         <fileset refid="org.exoplatform.portal:gatein-sample-portal:ear"/>
+         <fileset refid="org.gatein.portal:gatein-sample-portal:ear"/>
       </copy-->
       <copy todir="${jbossas.target.dir}/gatein/extensions/gatein-sample-portal.ear/lib" >
-         <fileset refid="org.exoplatform.portal:exo.portal.sample.portal.config:jar"/>
+         <fileset refid="org.gatein.portal:exo.portal.sample.portal.config:jar"/>
       </copy>
       <copy todir="${jbossas.target.dir}/gatein/extensions/gatein-sample-portal.ear/lib" >
-         <fileset refid="org.exoplatform.portal:exo.portal.sample.portal.jar:jar"/>
+         <fileset refid="org.gatein.portal:exo.portal.sample.portal.jar:jar"/>
       </copy>
       <copy tofile="${jbossas.target.dir}/gatein/extensions/gatein-sample-portal.ear/sample-portal.war" >
-         <fileset refid="org.exoplatform.portal:exo.portal.sample.portal.war:war"/>
+         <fileset refid="org.gatein.portal:exo.portal.sample.portal.war:war"/>
       </copy>
       <copy tofile="${jbossas.target.dir}/gatein/extensions/gatein-sample-portal.ear/rest-sample-portal.war" >
-         <fileset refid="org.exoplatform.portal:exo.portal.sample.portal.rest-war:war"/>
+         <fileset refid="org.gatein.portal:exo.portal.sample.portal.rest-war:war"/>
       </copy>
 
       <!--copy tofile="${jbossas.target.dir}/gatein/deployments/gatein-sample-extension.ear">
-         <fileset refid="org.exoplatform.portal:gatein-sample-extension:ear"/>
+         <fileset refid="org.gatein.portal:gatein-sample-extension:ear"/>
       </copy-->
       <copy todir="${jbossas.target.dir}/gatein/extensions/gatein-sample-extension.ear/lib" >
-         <fileset refid="org.exoplatform.portal:exo.portal.sample.extension.config:jar"/>
+         <fileset refid="org.gatein.portal:exo.portal.sample.extension.config:jar"/>
       </copy>
       <copy todir="${jbossas.target.dir}/gatein/extensions/gatein-sample-extension.ear/lib" >
-         <fileset refid="org.exoplatform.portal:exo.portal.sample.extension.jar:jar"/>
+         <fileset refid="org.gatein.portal:exo.portal.sample.extension.jar:jar"/>
       </copy>
       <copy tofile="${jbossas.target.dir}/gatein/extensions/gatein-sample-extension.ear/sample-ext.war" >
-         <fileset refid="org.exoplatform.portal:exo.portal.sample.extension.war:war"/>
+         <fileset refid="org.gatein.portal:exo.portal.sample.extension.war:war"/>
       </copy>
 
       <copy tofile="${jbossas.target.dir}/gatein/extensions/gatein-sample-skin.war">
@@ -122,31 +122,31 @@
       <!-- Copy gatein.ear -->
 
       <unzip dest="${jbossas.target.dir}/gatein/gatein.ear/eXoResources.war">
-         <fileset refid="org.exoplatform.portal:exo.portal.web.eXoResources:war"/>
+         <fileset refid="org.gatein.portal:exo.portal.web.eXoResources:war"/>
       </unzip>
       <unzip dest="${jbossas.target.dir}/gatein/gatein.ear/portal.war">
-         <fileset refid="org.exoplatform.portal:exo.portal.web.portal:war"/>
+         <fileset refid="org.gatein.portal:exo.portal.web.portal:war"/>
       </unzip>
       <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/dashboard.war" >
-         <fileset refid="org.exoplatform.portal:exo.portal.portlet.dashboard:war"/>
+         <fileset refid="org.gatein.portal:exo.portal.portlet.dashboard:war"/>
       </copy>
       <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/exoadmin.war" >
-         <fileset refid="org.exoplatform.portal:exo.portal.portlet.exoadmin:war"/>
+         <fileset refid="org.gatein.portal:exo.portal.portlet.exoadmin:war"/>
       </copy>
       <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/eXoGadgets.war" >
-         <fileset refid="org.exoplatform.portal:exo.portal.eXoGadgets:war"/>
+         <fileset refid="org.gatein.portal:exo.portal.eXoGadgets:war"/>
       </copy>
       <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/gwtGadgets.war" >
-         <fileset refid="org.exoplatform.portal:exo.portal.gwtGadgets:war"/>
+         <fileset refid="org.gatein.portal:exo.portal.gwtGadgets:war"/>
       </copy>
       <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/eXoGadgetServer.war" >
-         <fileset refid="org.exoplatform.portal:exo.portal.gadgets-server:war"/>
+         <fileset refid="org.gatein.portal:exo.portal.gadgets-server:war"/>
       </copy>
       <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/rest.war" >
-         <fileset refid="org.exoplatform.portal:exo.portal.web.rest:war"/>
+         <fileset refid="org.gatein.portal:exo.portal.web.rest:war"/>
       </copy>
       <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/web.war" >
-         <fileset refid="org.exoplatform.portal:exo.portal.portlet.web:war"/>
+         <fileset refid="org.gatein.portal:exo.portal.portlet.web:war"/>
       </copy>
       <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/redirect-portlet.war">
          <fileset refid="org.gatein.portal.portlet:redirect:war"/>
@@ -182,7 +182,7 @@
       </copy>
 
       <!-- Extract common config from packaging.common artifact to gatein/conf -->
-      <unzip src="${org.exoplatform.portal:exo.portal.packaging.common:jar}" dest="${jbossas.target.dir}/standalone/configuration/gatein">
+      <unzip src="${org.gatein.portal:exo.portal.packaging.common:jar}" dest="${jbossas.target.dir}/standalone/configuration/gatein">
         <patternset>
           <exclude name="META-INF/"/>
         </patternset>
