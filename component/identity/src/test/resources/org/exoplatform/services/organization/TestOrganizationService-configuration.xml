@@ -118,6 +118,10 @@
         <name>config</name>
         <value>jar:/conf/portal/idm-config.xml</value>
       </value-param>
+      <value-param>
+        <name>apiCacheConfig</name>
+        <value>classpath:/conf/cache/infinispan.xml</value>
+      </value-param>
     </init-params>
   </component>
 

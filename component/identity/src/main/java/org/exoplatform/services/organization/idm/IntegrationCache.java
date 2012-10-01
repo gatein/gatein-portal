@@ -1,24 +1,16 @@
 package org.exoplatform.services.organization.idm;
 
-import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.services.organization.Query;
 
-import org.jboss.cache.Cache;
-import org.jboss.cache.CacheFactory;
-import org.jboss.cache.CacheStatus;
-import org.jboss.cache.DefaultCacheFactory;
-import org.jboss.cache.Fqn;
-import org.jboss.cache.Node;
-import org.jboss.cache.eviction.ExpirationAlgorithmConfig;
-import org.jboss.cache.eviction.ExpirationConfiguration;
-
+import org.gatein.common.NotYetImplemented;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+import org.infinispan.tree.Fqn;
+import org.infinispan.tree.Node;
+import org.infinispan.tree.TreeCache;
 import org.picketlink.idm.api.Group;
-import org.picketlink.idm.api.User;
-
-import java.io.InputStream;
-import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.picketlink.idm.common.exception.IdentityException;
+import org.picketlink.idm.impl.cache.AbstractInfinispanCacheProvider;
 
 /*
 * JBoss, a division of Red Hat
@@ -45,17 +37,13 @@ import java.util.logging.Logger;
 /**
  * Provides cache for some data used in integration layer between PicketLink IDM and GateIn
  */
-public class IntegrationCache
+public class IntegrationCache extends AbstractInfinispanCacheProvider
 {
-   private static Logger log = Logger.getLogger(IntegrationCache.class.getName());
-
-   private Cache cache;
+   private static final Logger log = LoggerFactory.getLogger(IntegrationCache.class);
 
    public static final String NODE_GTN_GROUP_ID = "NODE_GTN_GROUP_ID";
 
    public static final String NODE_PLIDM_ROOT_GROUP = "NODE_PLIDM_ROOT_GROUP";
-
-   public static final String NULL_NS_NODE = "GTN_IC_COMMON_NS";
 
    public static final String USER_QUERY_NODE = "GTN_USER_QUERY_LAZY_LIST";
 
@@ -63,88 +51,16 @@ public class IntegrationCache
 
    public static final String NODE_OBJECT_KEY = "object";
 
-   private int expiration = -1;
-
-   private Fqn getRootNode()
+   @Override
+   protected Fqn getRootNode()
    {
       return Fqn.fromString("/" + MAIN_ROOT);
    }
 
-   private Fqn getNamespacedFqn(String ns)
+   // Not needed for integration cache
+   protected TreeCache<Object, Object> getCacheFromRegistry(Object registry, String registryName)  throws IdentityException
    {
-      String namespace = ns != null ? ns : NULL_NS_NODE;
-      namespace = namespace.replaceAll("/", "_");
-      return Fqn.fromString(getRootNode() + "/" + namespace);
-   }
-
-   private Fqn getFqn(String ns, String node, Object o)
-   {
-      return Fqn.fromString(getNamespacedFqn(ns) + "/" + node + "/" + o);
-   }
-
-   private Fqn getFqn(String ns, String node)
-   {
-      return Fqn.fromString(getNamespacedFqn(ns) + "/" + node);
-   }
-
-   public void initialize(InputStream jbossCacheConfiguration)
-   {
-      CacheFactory factory = new DefaultCacheFactory();
-
-      if (jbossCacheConfiguration == null)
-      {
-         throw new IllegalArgumentException("JBoss Cache configuration InputStream is null");
-      }
-
-      this.cache = factory.createCache(jbossCacheConfiguration);
-
-      this.cache.create();
-      this.cache.start();
-
-   }
-
-    public void initialize(Cache cache)
-   {
-      this.cache = cache;
-
-      CacheStatus status = cache.getCacheStatus();
-
-      if (status.createAllowed())
-      {
-         this.cache.create();
-      }
-      if (status.startAllowed())
-      {
-         this.cache.start();
-      }
-
-   }
-
-   Cache getCache()
-   {
-      return cache;
-   }
-
-
-   public void invalidate(String ns)
-   {
-
-      boolean success = cache.getRoot().removeChild(getNamespacedFqn(ns));
-
-      if (log.isLoggable(Level.FINER))
-      {
-         log.finer(this.toString() + "Invalidating namespace:" + ns + "; success=" + success);
-      }
-   }
-
-   public void invalidateAll()
-   {
-      boolean success = cache.getRoot().removeChild(getRootNode());
-
-      if (log.isLoggable(Level.FINER))
-      {
-         log.finer(this.toString() + "Invalidating whole cache - success=" + success);
-      }
+      throw new NotYetImplemented("getCacheFromRegistry not implemented on IntegrationCache");
    }
 
    /**
@@ -162,12 +78,11 @@ public class IntegrationCache
       if (ioNode != null)
       {
          ioNode.put(NODE_OBJECT_KEY, id);
-         setExpiration(ioNode);
 
-         if (log.isLoggable(Level.FINER))
+         if (log.isTraceEnabled())
          {
 
-            log.finer(this.toString() + "GateIn group id cached. PLIDM group id: " + pLIDMId +
+            log.trace(this.toString() + "GateIn group id cached. PLIDM group id: " + pLIDMId +
                "GateIn group id: " + id + ";namespace=" + ns);
          }
       }
@@ -190,9 +105,9 @@ public class IntegrationCache
       {
          String id = (String)node.get(NODE_OBJECT_KEY);
 
-         if (log.isLoggable(Level.FINER) && id != null)
+         if (log.isTraceEnabled() && id != null)
          {
-            log.finer(this.toString() + "GateIn group id found in cache. PLIDM group id: " + pLIDMId +
+            log.trace(this.toString() + "GateIn group id found in cache. PLIDM group id: " + pLIDMId +
             "GateIn group id: " + id + ";namespace=" + ns);
          }
 
@@ -218,12 +133,11 @@ public class IntegrationCache
       if (ioNode != null)
       {
          ioNode.put(NODE_OBJECT_KEY, list);
-         setExpiration(ioNode);
 
-         if (log.isLoggable(Level.FINER))
+         if (log.isTraceEnabled())
          {
 
-            log.finer(this.toString() + "GateIn user query list cached. Query: " + getQueryKey(query) + ";namespace=" + ns);
+            log.trace(this.toString() + "GateIn user query list cached. Query: " + getQueryKey(query) + ";namespace=" + ns);
          }
       }
    }
@@ -245,9 +159,9 @@ public class IntegrationCache
       {
          IDMUserListAccess list = (IDMUserListAccess)node.get(NODE_OBJECT_KEY);
 
-         if (log.isLoggable(Level.FINER) && list != null)
+         if (log.isTraceEnabled() && list != null)
          {
-             log.finer(this.toString() + "GateIn user query list found in cache. Query: " + getQueryKey(query) + ";namespace=" + ns);
+             log.trace(this.toString() + "GateIn user query list found in cache. Query: " + getQueryKey(query) + ";namespace=" + ns);
          }
 
          return list;
@@ -270,13 +184,12 @@ public class IntegrationCache
 
       if (ioNode != null)
       {
-         setExpiration(ioNode);
          ioNode.put(NODE_OBJECT_KEY, rootGroup);
 
-         if (log.isLoggable(Level.FINER))
+         if (log.isTraceEnabled())
          {
 
-            log.finer(this.toString() + "GateIn root group stored in cache" + ";namespace=" + ns);
+            log.trace(this.toString() + "GateIn root group stored in cache" + ";namespace=" + ns);
          }
       }
    }
@@ -296,9 +209,9 @@ public class IntegrationCache
       {
          Group rootGroup = (Group)node.get(NODE_OBJECT_KEY);
 
-         if (log.isLoggable(Level.FINER) && rootGroup != null)
+         if (log.isTraceEnabled() && rootGroup != null)
          {
-            log.finer(this.toString() + "GateIn root group found in cache" + ";namespace=" + ns);
+            log.trace(this.toString() + "GateIn root group found in cache" + ";namespace=" + ns);
          }
 
          return rootGroup;
@@ -306,25 +219,6 @@ public class IntegrationCache
 
       return null;
 
-   }
-
-   public void setExpiration(Node node)
-   {
-      if (expiration != -1 && expiration > 0)
-      {
-         Long future = new Long(System.currentTimeMillis() + expiration);
-         node.put(ExpirationAlgorithmConfig.EXPIRATION_KEY, future);
-      }
-   }
-
-   public int getExpiration()
-   {
-      return expiration;
-   }
-
-   public void setExpiration(int expiration)
-   {
-      this.expiration = expiration;
    }
 
    String getQueryKey(Query query)

@@ -62,6 +62,7 @@
         <module name="org.gatein.pc" />
         <module name="org.gatein.wci" export="true"/>
         <module name="org.hibernate" />
+        <module name="org.infinispan" />
         <module name="org.javassist"/>
         <module name="org.joda.time"/>
         <module name="org.jdom"/>

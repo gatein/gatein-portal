@@ -21,24 +21,34 @@ package org.exoplatform.services.organization.idm;
 
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.configuration.ConfigurationManager;
+import org.exoplatform.container.monitor.jvm.J2EEServerInfo;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.database.HibernateService;
 import org.exoplatform.services.naming.InitialContextInitializer;
-import org.jboss.cache.Cache;
-import org.jboss.cache.CacheFactory;
-import org.jboss.cache.DefaultCacheFactory;
 
-import org.jboss.cache.config.Configuration;
-import org.jgroups.JChannelFactory;
+import org.gatein.common.classloader.DelegatingClassLoader;
+import org.infinispan.Cache;
+import org.infinispan.configuration.cache.Configuration;
+import org.infinispan.configuration.cache.ConfigurationBuilder;
+import org.infinispan.configuration.global.GlobalConfiguration;
+import org.infinispan.configuration.global.GlobalConfigurationBuilder;
+import org.infinispan.configuration.parsing.ConfigurationBuilderHolder;
+import org.infinispan.manager.DefaultCacheManager;
+import org.infinispan.manager.EmbeddedCacheManager;
+import org.infinispan.remoting.transport.jgroups.JGroupsTransport;
+import org.infinispan.transaction.lookup.JBossStandaloneJTAManagerLookup;
+import org.infinispan.transaction.lookup.JBossTransactionManagerLookup;
+import org.infinispan.transaction.lookup.TransactionManagerLookup;
+import org.jgroups.conf.XmlConfigurator;
 import org.picketlink.idm.api.IdentitySession;
 import org.picketlink.idm.api.IdentitySessionFactory;
 import org.picketlink.idm.api.cfg.IdentityConfiguration;
 import org.picketlink.idm.common.exception.IdentityConfigurationException;
-import org.picketlink.idm.impl.cache.JBossCacheAPICacheProviderImpl;
-import org.picketlink.idm.impl.cache.JBossCacheIdentityStoreCacheProviderImpl;
+import org.picketlink.idm.impl.cache.InfinispanAPICacheProviderImpl;
+import org.picketlink.idm.impl.cache.InfinispanIdentityStoreCacheProviderImpl;
 import org.picketlink.idm.impl.configuration.IdentityConfigurationImpl;
 import org.picketlink.idm.impl.configuration.jaxb2.JAXB2IdentityConfiguration;
 import org.picketlink.idm.spi.configuration.metadata.IdentityConfigurationMetaData;
@@ -59,12 +69,6 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
    public static final String PARAM_CONFIG_OPTION = "config";
 
-   public static final String PARAM_HIBERNATE_PROPS = "hibernate.properties";
-
-   public static final String PARAM_HIBERNATE_MAPPINGS = "hibernate.mappings";
-
-   public static final String PARAM_HIBERNATE_ANNOTATIONS = "hibernate.annotations";
-
    public static final String PARAM_JNDI_NAME_OPTION = "jndiName";
 
    public static final String REALM_NAME_OPTION = "portalRealm";
@@ -72,12 +76,6 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
    public static final String CACHE_CONFIG_API_OPTION = "apiCacheConfig";
 
    public static final String CACHE_CONFIG_STORE_OPTION = "storeCacheConfig";
-
-   public static final String JGROUPS_CONFIG = "jgroups-configuration";
-
-   public static final String JGROUPS_MUX_ENABLED = "jgroups-multiplexer-stack";
-
-   public static final String CACHE_EXPIRATION = "cacheExpiration";
 
    private IdentitySessionFactory identitySessionFactory;
 
@@ -89,9 +87,10 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
    private IntegrationCache integrationCache;
 
-   private static final JChannelFactory CHANNEL_FACTORY = new JChannelFactory();
-
    private HibernateService hibernateService;
+
+   // Infinispan cache manager is shared between all portal containers, TODO: Move to separate service?
+   private static EmbeddedCacheManager cacheManager;
 
    private PicketLinkIDMServiceImpl()
    {
@@ -110,9 +109,6 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
       ValueParam realmName = initParams.getValueParam(REALM_NAME_OPTION);
       ValueParam apiCacheConfig = initParams.getValueParam(CACHE_CONFIG_API_OPTION);
       ValueParam storeCacheConfig = initParams.getValueParam(CACHE_CONFIG_STORE_OPTION);
-      ValueParam jgroupsStack = initParams.getValueParam(JGROUPS_MUX_ENABLED);
-      ValueParam jgroupsConfig = initParams.getValueParam(JGROUPS_CONFIG);
-      ValueParam cacheExpirationParam = initParams.getValueParam(CACHE_EXPIRATION);
 
       this.hibernateService = hibernateService;
 
@@ -145,55 +141,28 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
 
          identityConfiguration.getIdentityConfigurationRegistry().register(hibernateService.getSessionFactory(), "hibernateSessionFactory");
 
-         int expiration = -1;
-
-         if (cacheExpirationParam != null &&
-             cacheExpirationParam.getValue() != null &&
-             cacheExpirationParam.getValue().length() > 0)
-         {
-            expiration = Integer.decode(cacheExpirationParam.getValue());
-         }
-
          if (apiCacheConfig != null)
          {
 
             InputStream configStream = confManager.getInputStream(apiCacheConfig.getValue());
 
-            CacheFactory factory = new DefaultCacheFactory();
-
             if (configStream == null)
             {
-               throw new IllegalArgumentException("JBoss Cache configuration InputStream is null");
+               throw new IllegalArgumentException("Infinispan configuration InputStream is null");
             }
 
-            Cache cache = factory.createCache(configStream, false);
-
-            Configuration cfg = cache.getConfiguration();
-            // we need unique cluster name for each portal container
-            String clusterName = cfg.getClusterName();
-            if (clusterName != null && (clusterName = clusterName.trim()).length() > 0)
-            {
-                cfg.setClusterName(clusterName + "-" + exoContainerContext.getName());
-            }
-
-
-            applyJGroupsConfig(cache, confManager, jgroupsStack, jgroupsConfig);
-
-            cache.create();
-            cache.start();
+            Cache cache = initInfinispanCache(configStream, exoContainerContext.getPortalContainerName(), "api");
 
             configStream.close();
 
             // PLIDM API cache
-            JBossCacheAPICacheProviderImpl apiCacheProvider = new JBossCacheAPICacheProviderImpl();
-            apiCacheProvider.setExpiration(expiration);
+            InfinispanAPICacheProviderImpl apiCacheProvider = new InfinispanAPICacheProviderImpl();
             apiCacheProvider.initialize(cache);
             picketLinkIDMCache.register(apiCacheProvider);
             identityConfiguration.getIdentityConfigurationRegistry().register(apiCacheProvider, "apiCacheProvider");
 
             //Integration cache
             integrationCache = new IntegrationCache();
-            integrationCache.setExpiration(expiration);
             integrationCache.initialize(cache);
             picketLinkIDMCache.register(integrationCache);
 
@@ -204,39 +173,19 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
          {
             InputStream configStream = confManager.getInputStream(storeCacheConfig.getValue());
 
-            CacheFactory factory = new DefaultCacheFactory();
-
             if (configStream == null)
             {
-               throw new IllegalArgumentException("JBoss Cache configuration InputStream is null");
+               throw new IllegalArgumentException("Infinispan configuration InputStream is null");
             }
 
-            Cache cache = factory.createCache(configStream, false);
-
-            Configuration cfg = cache.getConfiguration();
-            // we need unique cluster name for each portal container
-            String clusterName = cfg.getClusterName();
-            if (clusterName != null && (clusterName = clusterName.trim()).length() > 0)
-            {
-                cfg.setClusterName(clusterName + "-" + exoContainerContext.getName());
-            }
-
-            applyJGroupsConfig(cache, confManager, jgroupsStack, jgroupsConfig);
-
-            cache.create();
-            cache.start();
+            Cache cache = initInfinispanCache(configStream, exoContainerContext.getPortalContainerName(), "store");
 
             configStream.close();
 
-            JBossCacheIdentityStoreCacheProviderImpl storeCacheProvider = new JBossCacheIdentityStoreCacheProviderImpl();
-            storeCacheProvider.setExpiration(expiration);
+            InfinispanIdentityStoreCacheProviderImpl storeCacheProvider = new InfinispanIdentityStoreCacheProviderImpl();
             storeCacheProvider.initialize(cache);
             picketLinkIDMCache.register(storeCacheProvider);
             identityConfiguration.getIdentityConfigurationRegistry().register(storeCacheProvider, "storeCacheProvider");
-
-
-            configStream.close();
-
          }
       }
       else
@@ -294,65 +243,94 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
       return realmName;
    }
 
-   /**
-    * Applying JGroups configuration for JBossCache.
-    * Code forked from org.exoplatform.services.jcr.jbosscacheExoJBossCacheFactory
-    *
-    * @param cache
-    * @param configurationManager
-    * @param jgroupsEnabledParam
-    * @param jgroupsConfigurationParam
-    */
-   private void applyJGroupsConfig(Cache cache,
-                                   ConfigurationManager configurationManager,
-                                   ValueParam jgroupsEnabledParam,
-                                   ValueParam jgroupsConfigurationParam)
-   {
-
-      String jgroupsEnabled = jgroupsEnabledParam != null ? jgroupsEnabledParam.getValue() : null;
-      String jgroupsConfiguration = jgroupsConfigurationParam != null ? jgroupsConfigurationParam.getValue() : null;
-
-      // JGroups multiplexer configuration if enabled
-      if (jgroupsEnabled != null && jgroupsEnabled.equalsIgnoreCase("true"))
-      {
-         try
-         {
-           if (jgroupsConfiguration != null)
-            {
-               // Create and inject multiplexer factory
-               CHANNEL_FACTORY.setMultiplexerConfig(configurationManager.getResource(jgroupsConfiguration));
-               cache.getConfiguration().getRuntimeConfig().setMuxChannelFactory(CHANNEL_FACTORY);
-               log.info("Multiplexer stack successfully enabled for the cache.");
-            }
-         }
-         catch (Exception e)
-         {
-            // exception occurred setting mux factory
-            throw new IllegalStateException("Error setting multiplexer configuration.", e);
-         }
-      }
-      else
-      {
-         // Multiplexer is not enabled. If jGroups configuration preset it is applied
-         if (jgroupsConfiguration != null)
-         {
-            try
-            {
-               cache.getConfiguration().setJgroupsConfigFile(
-                  configurationManager.getResource(jgroupsConfiguration));
-               log.info("Custom JGroups configuration set:"
-                  + configurationManager.getResource(jgroupsConfiguration));
-            }
-            catch (Exception e)
-            {
-               throw new IllegalStateException("Error setting JGroups configuration.", e);
-            }
-         }
-      }
-   }
-
    public HibernateService getHibernateService()
    {
       return hibernateService;
+   }
+
+   /**
+    * Create, configure and start infinispan cache
+    *
+    * @param configStream input stream with infinispan configuration. Some things from this stream will be changed
+    *                     programmatically before cache creation
+    * @param portalContainerName name of portal container
+    * @param apiOrStore Value can be either "api" if cache will be for apiCacheProvider or "store" for storeCacheProvider
+    * @return created and started infinispan cache
+    * @throws Exception
+    */
+   private Cache initInfinispanCache(InputStream configStream, String portalContainerName, String apiOrStore) throws Exception
+   {
+      ClassLoader infinispanCl = EmbeddedCacheManager.class.getClassLoader();
+      ClassLoader portalCl = Thread.currentThread().getContextClassLoader();
+
+      // Infinispan classloader is first delegate, so in AS7 environment, infinispan is able to see
+      // jgroups3 classes with bigger priority than jgroups2 classes
+      ClassLoader delegating = new DelegatingClassLoader(infinispanCl, portalCl);
+
+      try
+      {
+         // Set delegating classloader as tccl
+         Thread.currentThread().setContextClassLoader(delegating);
+
+         String cacheName = "idm-" + portalContainerName + "-" + apiOrStore;
+         EmbeddedCacheManager cacheManager = getSharedCacheManager(configStream);
+         return cacheManager.getCache(cacheName);
+      }
+      finally
+      {
+         // Put portal classloader to be tccl again
+         Thread.currentThread().setContextClassLoader(portalCl);
+      }
+   }
+
+   /**
+    * Create and configure cacheManager, which will be used to create infinispan caches.
+    *
+    * @param configStream stream with infinispan configuration
+    * @return cacheManager
+    * @throws Exception
+    */
+   private static EmbeddedCacheManager getSharedCacheManager(InputStream configStream) throws Exception
+   {
+      if (cacheManager == null)
+      {
+         EmbeddedCacheManager cacheManager = new DefaultCacheManager(configStream, false);
+         GlobalConfiguration globalConfigFromXml = cacheManager.getCacheManagerConfiguration();
+
+         ConfigurationBuilderHolder builderHolder = new ConfigurationBuilderHolder();
+         builderHolder.getGlobalConfigurationBuilder().read(globalConfigFromXml);
+
+         Configuration configFromXml = cacheManager.getDefaultCacheConfiguration();
+         ConfigurationBuilder configBuilder = builderHolder.getDefaultConfigurationBuilder().read(configFromXml);
+
+         // Configure transactionManagerLookup programmatically if not provided in configuration
+         TransactionManagerLookup tmLookup = configFromXml.transaction().transactionManagerLookup();
+         if (tmLookup == null)
+         {
+            tmLookup = getTransactionManagerLookup();
+            configBuilder.transaction().transactionManagerLookup(tmLookup);
+         }
+         log.debug("Infinispan transaction manager lookup: " + tmLookup);
+
+         cacheManager = new DefaultCacheManager(builderHolder, true);
+         PicketLinkIDMServiceImpl.cacheManager = cacheManager;
+      }
+
+      return cacheManager;
+   }
+
+   /**
+    * @return JBossTransactionManagerLookup if we are in AS7 or JBossStandaloneJTAManagerLookup otherwise
+    */
+   private static TransactionManagerLookup getTransactionManagerLookup()
+   {
+      if (new J2EEServerInfo().isJBoss())
+      {
+         return new JBossTransactionManagerLookup();
+      }
+      else
+      {
+         return new JBossStandaloneJTAManagerLookup();
+      }
    }
 }
