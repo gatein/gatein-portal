@@ -53,7 +53,6 @@ public class GateInConfiguration
    private final List<ServiceName> childSubUnits = new ArrayList<ServiceName>();
 
    final ModuleLoader moduleLoader = Module.getBootModuleLoader();
-   private AS7Plugins wsrpPlugins;
 
    GateInConfiguration()
    {
@@ -176,15 +175,5 @@ public class GateInConfiguration
    public static boolean isGateInOrPortletArchive(DeploymentUnit du)
    {
       return isGateInArchive(du) || isPortletArchive(du);
-   }
-
-   public AS7Plugins getWSRPPlugins()
-   {
-      return wsrpPlugins;
-   }
-
-   public void setWSRPPlugins(AS7Plugins plugins)
-   {
-      this.wsrpPlugins = plugins;
    }
 }

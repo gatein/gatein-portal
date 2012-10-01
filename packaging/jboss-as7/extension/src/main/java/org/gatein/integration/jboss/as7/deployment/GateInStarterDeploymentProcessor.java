@@ -62,7 +62,7 @@ public class GateInStarterDeploymentProcessor implements DeploymentUnitProcessor
 
          if (isLastModuleStarting(config, moduleId))
          {
-            final StartupService startup = new StartupService(config);
+            final StartupService startup = new StartupService();
             startup.setGateInModule(du.getAttachment(Attachments.MODULE));
 
             final ServiceBuilder<StartupService> builder = phaseContext.getServiceTarget()
