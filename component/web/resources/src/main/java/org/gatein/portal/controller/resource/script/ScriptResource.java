@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -70,7 +71,7 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
 
       this.modules = new ArrayList<Module>();
       this.closure = new HashSet<ResourceId>();
-      this.dependencies = new HashMap<ResourceId, String>();
+      this.dependencies = new LinkedHashMap<ResourceId, String>();
       this.fetchMode = fetchMode;
       
       if (alias == null)

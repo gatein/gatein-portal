@@ -107,7 +107,7 @@
       <script>
          <name>eXo.module1</name>
          <path>/js/module1.js</path>
-      </script>
+      </script>      
    </module>
    
    <module>
@@ -120,6 +120,23 @@
       <depends>
           <module>module1</module>
           <as>mod1</as>
+      </depends>
+   </module>
+   
+   <module>
+   	<name>commonjs</name>
+   	<script>
+   		<name>support.commonjs</name>
+   		<path>/js/common.js</path>
+   	</script>
+   	<depends>
+      	<module>require</module>
+		</depends>
+      <depends>
+      	<module>exports</module>
+      </depends>
+      <depends>
+      	<module>module</module>
       </depends>
    </module>
    

@@ -256,7 +256,7 @@
 		    
 		    eXo.portal.isInDragging = false;
 		    if (hasChanged) {
-		   	 require(["SHARED/portalComposer"], function(composer) {
+		   	 window.require(["SHARED/portalComposer"], function(composer) {
 		   		 composer.toggleSaveButton();	   		 
 		   	 });
 		    }

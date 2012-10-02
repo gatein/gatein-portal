@@ -76,6 +76,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
          resources.put("/js/module2.js", "ddd;");
          resources.put("/js/native1.js", "eee;");
          resources.put("/js/native2.js", "fff;");
+         resources.put("/js/common.js", "kkk;");
          resources.put("/js/normalize_test.js", " \n /* // */  //  /* \n  /* /*  */  \n  ggg; // /* */ \n");
          mockServletContext = new MockJSServletContext("mockwebapp", resources);
          jsService.registerContext(new WebAppImpl(mockServletContext, Thread.currentThread().getContextClassLoader()));
@@ -99,27 +100,36 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       
       //wrapper for MODULE
       //test for Alias : module1 is used with 'm1' alias
-      String module1 = "define('SHARED/module1', [], function() {return " +      
-                                 "ccc;" +  
-                                 "});";
+      String module1 = "define('SHARED/module1', [], function() {" +
+                                 "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[];define.deps=[];" +      
+                                 "return ccc;});";
       assertReader(module1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module1"), null));
       
       //module2 depends on module1
       //test for Alias : module1 is used with 'mod1' alias, module2 use default name for alias
-      String module2 = "define('SHARED/module2', [\"SHARED/module1\"], function(mod1) {return " +
-                                 "ddd;" +
-                                  "});";
+      String module2 = "define('SHARED/module2', [\"SHARED/module1\"], function(mod1) {" +
+                                 "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[\"mod1\"];define.deps=[mod1];" +
+                                 "return ddd;});";
       assertReader(module2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module2"), null));
+   }
+     
+   public void testCommonJS() throws Exception
+   {
+      String commonjs = "define('SHARED/commonjs', [\"require\",\"exports\",\"module\"], function(require,exports,module) {" +
+               "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[\"require\",\"exports\",\"module\"];" +
+               "define.deps=[eXo.require,exports,module];" +      
+               "return kkk;});";
+      assertReader(commonjs, jsService.getScript(new ResourceId(ResourceScope.SHARED, "commonjs"), null));
    }
    
    public void testGroupingScript() throws Exception
    {
-      String module1 = "define('SHARED/module1', [], function() {return " +      
-               "ccc;" +  
-               "});";
-      String module2 = "define('SHARED/module2', [\"SHARED/module1\"], function(mod1) {return " +
-               "ddd;" +
-                "});";
+      String module1 = "define('SHARED/module1', [], function() {" +      
+               "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[];define.deps=[];" +
+               "return ccc;});";
+      String module2 = "define('SHARED/module2', [\"SHARED/module1\"], function(mod1) {" +
+               "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[\"mod1\"];define.deps=[mod1];" +
+               "return ddd;});";
       
       StringWriter buffer = new StringWriter();
       IOTools.copy(jsService.getScript(new ResourceId(ResourceScope.GROUP, "fooGroup"), null), buffer);
@@ -196,7 +206,9 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    
    public void testNormalize() throws Exception
    {
-      String normalizedJS = "define('SHARED/normalize_test', [], function() {return ggg; // /* */ \n});";
+      String normalizedJS = "define('SHARED/normalize_test', [], function() {" +
+                                          "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[];define.deps=[];" +
+                                          "return ggg; // /* */ \n});";
       assertReader(normalizedJS, jsService.getScript(new ResourceId(ResourceScope.SHARED, "normalize_test"), null));
    }
    

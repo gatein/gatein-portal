@@ -50,6 +50,62 @@
        </depends>
      </module>
    </portlet>
+   
+   <portlet>
+     <name>CommonJSPortlet</name>
+     <module>
+       <script>
+         <name>starter</name>
+         <path>/commonjs/starter.js</path>
+       </script>
+       <depends>
+         <module>require</module>
+       </depends>
+       <depends>
+         <module>jquery</module>
+       </depends>
+       <depends>
+         <module>increment</module>
+       </depends>
+     </module>
+   </portlet>
+   
+   <module>
+      <name>math</name>
+      <script>
+         <name>commonjs.math</name>
+         <path>/commonjs/math.js</path>
+       </script>
+      <depends>
+         <module>require</module>
+       </depends>
+       <depends>
+         <module>exports</module>
+       </depends>
+       <depends>
+         <module>modules</module>
+       </depends>
+   </module>
+
+   <module>
+      <name>increment</name>
+      <script>
+         <name>commonjs.increment</name>
+         <path>/commonjs/increment.js</path>
+       </script>
+       <depends>
+         <module>require</module>
+       </depends>
+       <depends>
+         <module>exports</module>
+       </depends>
+       <depends>
+         <module>modules</module>
+       </depends>
+       <depends>
+         <module>math</module>
+       </depends>
+   </module>
   
    <module>
       <name>text</name>     
@@ -91,17 +147,7 @@
         <module>jquery</module>
         <as>jQuery</as>
       </depends>
-   </module>
-
-   <module>
-      <name>math</name>
-      <native-script>commonjs/math.js</native-script>
-   </module>
-
-   <module>
-      <name>increment</name>
-      <native-script>commonjs/increment.js</native-script>
-   </module>
+   </module>   
 
 </gatein-resources>
 

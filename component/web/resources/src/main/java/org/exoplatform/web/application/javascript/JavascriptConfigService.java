@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -70,6 +71,9 @@ public class JavascriptConfigService extends AbstractResourceService implements 
 
    /** . */
    private final WebAppListener deployer;
+   
+   /** . */
+   public static final List<String> RESERVED_MODULE = Arrays.asList("require", "exports", "module");
 
    /** . */
    public static final Comparator<Module> MODULE_COMPARATOR = new Comparator<Module>()
@@ -115,7 +119,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       return paths;
    }
 
-   public Reader getScript(ResourceId id, String name, Locale locale)
+   public Reader getScript(ResourceId id, String name, Locale locale) throws Exception
    {
       ScriptResource script = getResource(id);
       if (script != null && !"merged".equals(name))
@@ -128,7 +132,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       }
    }
    
-   public Reader getScript(ResourceId resourceId, Locale locale)
+   public Reader getScript(ResourceId resourceId, Locale locale) throws Exception
    {
       if (ResourceScope.GROUP.equals(resourceId.getScope()))
       {
@@ -171,7 +175,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             {
                buffer.append("define('").append(resourceId).append("', ");
                
-               JSONArray deps = new JSONArray();
+               JSONArray deps = new JSONArray();               
                List<String> alias = new LinkedList<String>();
                for (ResourceId id : resource.getDependencies())
                {
@@ -184,13 +188,27 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                      String als = resource.getDependencyAlias(id);
                      alias.add(als == null ? dep.getAlias() : als);
                   }
+                  else if (RESERVED_MODULE.contains(id.getName()))
+                  {
+                     String reserved = id.getName();
+                     deps.put(reserved);
+                     alias.add(reserved);
+                  }
                }
                buffer.append(deps);
                buffer.append(", function(");
                buffer.append(StringUtils.join(alias, ","));
                
                //                        
-               buffer.append(") {return ");
+               buffer.append(") {var require = eXo.require,requirejs = require,define = eXo.define;");
+               buffer.append("define.names=").append(new JSONArray(alias)).append(";");
+               int idx = alias.indexOf("require");
+               if (idx != -1)
+               {
+                  alias.set(idx, "eXo.require");
+               }
+               buffer.append("define.deps=[").append(StringUtils.join(alias, ",")).append("]").append(";");
+               buffer.append("return ");
             }
             
             //

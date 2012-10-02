@@ -583,7 +583,7 @@
 		  var loadingScripts = response.loadingScripts;
 		  var immediateScripts = loadingScripts ? loadingScripts.immediateScripts : [];	    
 		  if (immediateScripts.length) {		  
-			  require(immediateScripts, function() {
+			  window.require(immediateScripts, function() {
 				  immediateScripts.length = 0;
 				  instance.ajaxResponse.apply(that, [request, response]);
 			  });
