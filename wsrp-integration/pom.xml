@@ -53,54 +53,7 @@
             <module>extension-component</module>
             <module>extension-war</module>
             <module>extension-ear</module>
-            <module>extension-ear-as5</module>
-            <module>extension-ear-as6</module>
             <module>extension-ear-as7</module>
-         </modules>
-      </profile>
-      <profile>
-         <id>pkg-jbossas</id>
-         <activation>
-            <property>
-               <name>gatein.dev</name>
-               <value>jbossas</value>
-            </property>
-         </activation>
-         <modules>
-            <module>extension-config</module>
-            <module>extension-component</module>
-            <module>extension-war</module>
-            <module>extension-ear-as5</module>
-         </modules>
-      </profile>
-      <profile>
-         <id>pkg-jbossas6</id>
-         <activation>
-            <property>
-               <name>gatein.dev</name>
-               <value>jbossas6</value>
-            </property>
-         </activation>
-         <modules>
-            <module>extension-config</module>
-            <module>extension-component</module>
-            <module>extension-war</module>
-            <module>extension-ear-as6</module>
-         </modules>
-      </profile>
-      <profile>
-         <id>pkg-jbossas5</id>
-         <activation>
-            <property>
-               <name>gatein.dev</name>
-               <value>jbossas5</value>
-            </property>
-         </activation>
-         <modules>
-            <module>extension-config</module>
-            <module>extension-component</module>
-            <module>extension-war</module>
-            <module>extension-ear-as5</module>
          </modules>
       </profile>
       <profile>
