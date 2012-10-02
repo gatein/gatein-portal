@@ -39,6 +39,7 @@ import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
+import org.exoplatform.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortalContext;
 import org.exoplatform.portal.pom.data.ModelChange;
@@ -428,7 +429,26 @@ public class UserPortalConfigService implements Startable
       {
          return null;
       }
-      return storage_.getPage(pageId); // TODO: pageConfigCache_ needs to be
+      
+      PageContext pageContext = pageService.loadPage(PageKey.parse(pageId));
+      if(pageContext == null)
+      {
+         return null;
+      }
+      
+      Page page = storage_.getPage(pageId);
+      if(page == null)
+      {
+         return null;
+      }
+      page.setFactoryId(pageContext.getState().getFactoryId());
+      page.setShowMaxWindow(pageContext.getState().getShowMaxWindow());
+      page.setTitle(pageContext.getState().getName());
+      page.setDescription(pageContext.getState().getDescription());
+      List<String> accessPermissions = pageContext.getState().getAccessPermissions();
+      page.setAccessPermissions(accessPermissions != null ? accessPermissions.toArray(new String[accessPermissions.size()]) : null);
+      page.setEditPermission(pageContext.getState().getEditPermission());
+      return page;
    }
 
    /**

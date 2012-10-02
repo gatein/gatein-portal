@@ -28,6 +28,7 @@ import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.DashboardData;
 import org.exoplatform.portal.pom.data.ModelChange;
@@ -63,11 +64,13 @@ public class DataStorageImpl implements DataStorage
       this.listenerServ_ = listenerServ;
    }
 
+   /**
+    * @deprecated replaced by {@link PageService#clone(org.exoplatform.portal.mop.page.PageKey, org.exoplatform.portal.mop.page.PageKey)}
+    * 
+    */
    public Page clonePage(String pageId, String clonedOwnerType, String clonedOwnerId, String clonedName) throws Exception
    {
-      PageKey key = PageKey.create(pageId);
-      PageKey cloneKey = new PageKey(clonedOwnerType, clonedOwnerId, clonedName);
-      return new Page(delegate.clonePage(key, cloneKey));
+      throw new UnsupportedOperationException();
    }
 
    public void create(PortalConfig config) throws Exception
@@ -101,10 +104,13 @@ public class DataStorageImpl implements DataStorage
       return changes;
    }
 
+   /**
+    * @deprecated replaced by {@link PageService#destroyPage(org.exoplatform.portal.mop.page.PageKey)}
+    * 
+    */
    public void remove(Page page) throws Exception
    {
-      delegate.remove(page.build());
-      listenerServ_.broadcast(PAGE_REMOVED, this, page);
+      throw new UnsupportedOperationException();
    }
 
    public <S> S load(ApplicationState<S> state, ApplicationType<S> type) throws Exception

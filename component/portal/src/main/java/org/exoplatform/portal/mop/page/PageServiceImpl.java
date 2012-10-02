@@ -253,10 +253,10 @@ public class PageServiceImpl implements PageService
       dstDescribed.setDescription(srcDescribed.getDescription());
 
       // Copy src permissions to dst permission
-      org.exoplatform.portal.pom.data.PageData srcPageData = new Mapper(session).load(srcPage);
-      ProtectedResource pr = dstPage.adapt(ProtectedResource.class);
-      pr.setAccessPermissions(srcPageData.getAccessPermissions());
-      pr.setEditPermission(srcPageData.getEditPermission());
+      ProtectedResource srcPR = srcPage.adapt(ProtectedResource.class);
+      ProtectedResource dstPR = dstPage.adapt(ProtectedResource.class);
+      dstPR.setAccessPermissions(srcPR.getAccessPermissions());
+      dstPR.setEditPermission(srcPR.getEditPermission());
 
       // Need to clone page data structure as well
       copy(srcPage, dstPage, srcPage.getRootComponent(), dstPage.getRootComponent());

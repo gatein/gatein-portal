@@ -460,36 +460,23 @@ public class Mapper
       Attributes attrs = src.getAttributes();
 
       //
-      List<String> accessPermissions = Collections.emptyList();
-      String editPermission = null;
-      if (src.isAdapted(ProtectedResource.class))
-      {
-         ProtectedResource pr = src.adapt(ProtectedResource.class);
-         accessPermissions = pr.getAccessPermissions();
-         editPermission = pr.getEditPermission();
-      }
-
-      //
-      Described described = src.adapt(Described.class);
-
-      //
       return new PageData(
          src.getObjectId(),
          null,
          name,
          null,
          null,
-         attrs.getValue(MappedAttributes.FACTORY_ID),
-         described.getName(),
-         described.getDescription(),
          null,
          null,
-         Utils.safeImmutableList(accessPermissions),
+         null,
+         null,
+         null,
+         Collections.<String>emptyList(),
          children,
          ownerType,
          ownerId,
-         editPermission,
-         attrs.getValue(MappedAttributes.SHOW_MAX_WINDOW, false)
+         null,
+         false
       );
    }
 
@@ -633,21 +620,6 @@ public class Mapper
       }
 
       //
-      ProtectedResource pr = dst.adapt(ProtectedResource.class);
-      pr.setAccessPermissions(src.getAccessPermissions());
-      pr.setEditPermission(src.getEditPermission());
-
-      //
-      Described described = dst.adapt(Described.class);
-      described.setName(src.getTitle());
-      described.setDescription(src.getDescription());
-
-      //
-      Attributes attrs = dst.getAttributes();
-      attrs.setValue(MappedAttributes.FACTORY_ID, src.getFactoryId());
-      attrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, src.isShowMaxWindow());
-
-      //
       UIContainer rootContainer = dst.getRootComponent();
 
       // We are creating a new Page with the root container id as this one is lost
@@ -659,17 +631,17 @@ public class Mapper
          src.getName(),
          src.getIcon(),
          src.getTemplate(),
-         src.getFactoryId(),
-         src.getTitle(),
-         src.getDescription(),
+         null,
+         null,
+         null,
          src.getWidth(),
          src.getHeight(),
-         src.getAccessPermissions(),
+         Collections.<String>emptyList(),
          src.getChildren(),
          src.getOwnerType(),
          src.getOwnerId(),
-         src.getEditPermission(),
-         src.isShowMaxWindow()
+         null,
+         false
       );
 
       //

@@ -27,6 +27,7 @@ import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.Container;
+import org.exoplatform.portal.mop.page.PageService;
 
 /**
  * Created by The eXo Platform SAS
@@ -49,16 +50,16 @@ public interface ModelDataStorage
    public PageData getPage(PageKey key) throws Exception;
 
    /**
-    * Clones a page.
-    *
-    * @param key the key of the page to clone
-    * @param cloneKey the key of the clone
-    * @return the cloned page
-    * @throws Exception any exception
+    * @deprecated replaced by {@link PageService#clone(org.exoplatform.portal.mop.page.PageKey, org.exoplatform.portal.mop.page.PageKey)}
+    * 
     */
    public PageData clonePage(PageKey key, PageKey cloneKey)
       throws Exception;
 
+   /**
+    * @deprecated replaced by {@link PageService#destroyPage(org.exoplatform.portal.mop.page.PageKey)}
+    * 
+    */
    public void remove(PageData page) throws Exception;
 
    public void create(PageData page) throws Exception;

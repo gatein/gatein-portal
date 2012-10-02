@@ -20,14 +20,10 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.application.PortletPreferences;
-import org.exoplatform.portal.application.Preference;
 import org.exoplatform.portal.config.model.Application;
-import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.Container;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.ProtectedResource;
@@ -39,6 +35,9 @@ import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.mop.api.Attributes;
@@ -71,6 +70,9 @@ public class TestMOP extends AbstractConfigTest
 
    /** . */
    private DataStorage storage;
+   
+   /** . */
+   private PageService pageService;
 
    /** . */
    private POMSessionManager mgr;
@@ -93,6 +95,7 @@ public class TestMOP extends AbstractConfigTest
       PortalContainer container = getContainer();
       portalConfigService = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
       storage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      pageService = (PageService)container.getComponentInstanceOfType(PageService.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       navService = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       session = mgr.openSession();
@@ -192,13 +195,16 @@ public class TestMOP extends AbstractConfigTest
    {
       Page page = storage.getPage("portal::test::test1");
       assertNotNull(page);
-
+      
+      PageContext pageContext = pageService.loadPage(PageKey.parse(page.getPageId()));
+      assertNotNull(pageContext);
+      
       //
-      assertEquals("test_title", page.getTitle());
-      assertEquals("test_factory_id", page.getFactoryId());
-      assertTrue(Arrays.equals(new String[]{"test_access_permissions"}, page.getAccessPermissions()));
-      assertEquals("test_edit_permission", page.getEditPermission());
-      assertEquals(true, page.isShowMaxWindow());
+      assertEquals("test_title", pageContext.getState().getName());
+      assertEquals("test_factory_id", pageContext.getState().getFactoryId());
+      assertEquals(Arrays.<String>asList("test_access_permissions"), pageContext.getState().getAccessPermissions());
+      assertEquals("test_edit_permission", pageContext.getState().getEditPermission());
+      assertEquals(true, pageContext.getState().getShowMaxWindow());
 
       //
       List<ModelObject> children = page.getChildren();
@@ -229,149 +235,6 @@ public class TestMOP extends AbstractConfigTest
       assertEquals("application_1_width", application1.getWidth());
       assertEquals("application_1_height", application1.getHeight());
       //    assertEquals("portal#test:/web/BannerPortlet/banner", application1.getInstanceState().getWeakReference());
-   }
-
-/*
-   public void testFindPageByTitle() throws Exception
-   {
-      Query<Page> query = new Query<Page>(null, null, null, "TestTitle", Page.class);
-      List<Page> list = storage.find(query).getAll();
-      assertEquals("Expected two result instead of " + list, 2, list.size());
-      Set<String> ids = new HashSet<String>(Arrays.asList(list.get(0).getPageId(), list.get(1).getPageId()));
-      HashSet<String> expectedIds =
-         new HashSet<String>(Arrays.asList("group::/test/legacy::register",
-            "group::/test/normalized::register"));
-      assertEquals(expectedIds, ids);
-   }
-*/
-
-/*
-   public void testFindPageByName() throws Exception
-   {
-      Query<Page> query = new Query<Page>("portal", "test", null, null, Page.class);
-      List<Page> list = storage.find(query).getAll();
-      assertEquals("Expected 4 results instead of " + list, 4, list.size());
-      Set<String> names = new HashSet<String>();
-      for (Page page : list)
-      {
-         assertEquals("portal", page.getOwnerType());
-         assertEquals("test", page.getOwnerId());
-         names.add(page.getName());
-      }
-      HashSet<String> expectedNames = new HashSet<String>(Arrays.asList("test1", "test2", "test3", "test4"));
-      assertEquals(expectedNames, names);
-   }
-*/
-
-   public void testLoadAnonymousPreferencesSavePage() throws Exception
-   {
-      Page page = storage.getPage("portal::test::test3");
-
-      // Save it again
-      storage.save(page);
-
-      //
-      page = storage.getPage("portal::test::test3");
-
-      //
-      Application app = (Application)page.getChildren().get(0);
-      //    String instanceId = app.getInstanceState().getWeakReference();
-
-      // Check instance id
-      //    String[] chunks = Mapper.parseWindowId(instanceId);
-      //    assertEquals("portal", chunks[0]);
-      //    assertEquals("test", chunks[1]);
-      //    assertEquals("web", chunks[2]);
-      //    assertEquals("BannerPortlet", chunks[3]);
-      //    assertEquals("banner2", chunks[4]);
-
-      // Check state
-      //    assertNull(storage.getPortletPreferences(instanceId));
-   }
-
-   public void testLoadAnonymousPreference() throws Exception
-   {
-      Page page = storage.getPage("portal::test::test3");
-      Application app = (Application)page.getChildren().get(0);
-      //    String instanceId = app.getInstanceState().getWeakReference();
-
-      // Check instance id
-      //    String[] chunks = Mapper.parseWindowId(instanceId);
-      //    assertEquals("portal", chunks[0]);
-      //    assertEquals("test", chunks[1]);
-      //    assertEquals("web", chunks[2]);
-      //    assertEquals("BannerPortlet", chunks[3]);
-      //    assertEquals("banner2", chunks[4]);
-
-      // Check initial state
-      //    assertNull(storage.getPortletPreferences(instanceId));
-
-      // Save state
-      //    PortletPreferences prefs = new PortletPreferences();
-      //    prefs.setWindowId(instanceId);
-      //    prefs.setPreferences(new ArrayList<Preference>());
-      //    Preference pref = new Preference();
-      //    pref.setName("foo");
-      //    pref.setValues(new ArrayList<String>(Arrays.asList("foo1")));
-      //    pref.setReadOnly(false);
-      //    prefs.getPreferences().add(pref);
-      //    storage.save(prefs);
-
-      // Now save the page
-      //    storage.save(page);
-
-      // Check we have the same instance id
-      //    page = storage.getPage(page.getPageId());
-      //    app = (Application)page.getChildren().get(0);
-      //    assertEquals(instanceId, app.getInstanceState().getWeakReference());
-
-      // Now check state
-      //    prefs = storage.getPortletPreferences(app.getInstanceState().getWeakReference());
-      //    assertEquals(1, prefs.getPreferences().size());
-      //    assertEquals("foo", prefs.getPreferences().get(0).getName());
-      //    assertEquals(1, prefs.getPreferences().get(0).getValues().size());
-      //    assertEquals("foo1", prefs.getPreferences().get(0).getValues().get(0));
-   }
-
-   public void testLoadSitePreferences() throws Exception
-   {
-      //    Page page = storage.getPage("portal::test::test4");
-      //    Application app = (Application)page.getChildren().get(0);
-      //    String instanceId = app.getInstanceState().getWeakReference();
-
-      // Check instance id
-      //    String[] chunks = Mapper.parseWindowId(instanceId);
-      //    assertEquals("portal", chunks[0]);
-      //    assertEquals("test", chunks[1]);
-      //    assertEquals("web", chunks[2]);
-      //    assertEquals("BannerPortlet", chunks[3]);
-      //    assertEquals("banner", chunks[4]);
-
-      // Check initial state
-      //    PortletPreferences prefs = storage.getPortletPreferences(instanceId);
-      //    assertEquals(1, prefs.getPreferences().size());
-      //    assertEquals("template", prefs.getPreferences().get(0).getName());
-      //    assertEquals(1, prefs.getPreferences().get(0).getValues().size());
-      //    assertEquals("par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl", prefs.getPreferences().get(0).getValues().get(0));
-      //
-      // Save state
-      //    prefs.getPreferences().get(0).setValues(new ArrayList<String>(Arrays.asList("foo")));
-      //    storage.save(prefs);
-
-      // Now save the page
-      //    storage.save(page);
-
-      // Check we have the same instance id
-      //    page = storage.getPage(page.getPageId());
-      //    app = (Application)page.getChildren().get(0);
-      //    assertEquals(instanceId, app.getInstanceState().getWeakReference());
-
-      // Now check state
-      //    prefs = storage.getPortletPreferences(instanceId);
-      //    assertEquals(1, prefs.getPreferences().size());
-      //    assertEquals("template", prefs.getPreferences().get(0).getName());
-      //    assertEquals(1, prefs.getPreferences().get(0).getValues().size());
-      //    assertEquals("foo", prefs.getPreferences().get(0).getValues().get(0));
    }
 
    public void testSaveNavigation() throws Exception

@@ -8,6 +8,9 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.importer.Imported;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.gatein.mop.api.workspace.Workspace;
@@ -42,23 +45,24 @@ public abstract class AbstractSiteDataImportTest extends AbstractDataImportTest
       
       // Test portal
       DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      PageService pageService = (PageService)container.getComponentInstanceOfType(PageService.class);
       PortalConfig portal = dataStorage.getPortalConfig("classic");
       Container layout = portal.getPortalLayout();
       assertEquals(1, layout.getChildren().size());
       Application<Portlet> layoutPortlet = (Application<Portlet>)layout.getChildren().get(0);
       assertEquals("site2/layout", dataStorage.getId(layoutPortlet.getState()));
       
-      Page page = dataStorage.getPage("portal::classic::home");
+      PageContext page = pageService.loadPage(PageKey.parse("portal::classic::home"));
       assertNotNull(page);
-      assertEquals("site 1", page.getTitle());
+      assertEquals("site 1", page.getState().getName());
       
-      page = dataStorage.getPage("portal::classic::page1");
+      page = pageService.loadPage(PageKey.parse("portal::classic::page1"));
       assertNotNull(page);
-      assertEquals("site 2", page.getTitle());
+      assertEquals("site 2", page.getState().getName());
       
-      page = dataStorage.getPage("portal::classic::page2");
+      page = pageService.loadPage(PageKey.parse("portal::classic::page2"));
       assertNotNull(page);
-      assertEquals("site 2", page.getTitle());
+      assertEquals("site 2", page.getState().getName());
 
       // Test group
       portal = dataStorage.getPortalConfig(SiteType.GROUP.getName(), "/platform/administrators");
@@ -67,14 +71,14 @@ public abstract class AbstractSiteDataImportTest extends AbstractDataImportTest
       layoutPortlet = (Application<Portlet>)layout.getChildren().get(0);
       assertEquals("site1/layout", dataStorage.getId(layoutPortlet.getState()));
       
-      page = dataStorage.getPage("group::/platform/administrators::page1");
+      page = pageService.loadPage(PageKey.parse("group::/platform/administrators::page1"));
       assertNotNull(page);
-      assertEquals("site 2", page.getTitle());
+      assertEquals("site 2", page.getState().getName());
       
       // Test user
-      Page dashboard1 = dataStorage.getPage("user::root::dashboard1");
+      PageContext dashboard1 = pageService.loadPage(PageKey.parse("user::root::dashboard1"));
       assertNotNull(dashboard1);
-      assertEquals("site 2", dashboard1.getTitle());
+      assertEquals("site 2", dashboard1.getState().getName());
       
       RequestLifeCycle.end();
    }
@@ -90,21 +94,22 @@ public abstract class AbstractSiteDataImportTest extends AbstractDataImportTest
       
       // Test portal
       DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      PageService pageService = (PageService)container.getComponentInstanceOfType(PageService.class);
       PortalConfig portal = dataStorage.getPortalConfig("classic");
       Container layout = portal.getPortalLayout();
       assertEquals(1, layout.getChildren().size());
       Application<Portlet> layoutPortlet = (Application<Portlet>)layout.getChildren().get(0);
       assertEquals("site1/layout", dataStorage.getId(layoutPortlet.getState()));
       
-      Page page = dataStorage.getPage("portal::classic::home");
+      PageContext page = pageService.loadPage(PageKey.parse("portal::classic::home"));
       assertNotNull(page);
-      assertEquals("site 1", page.getTitle());
+      assertEquals("site 1", page.getState().getName());
       
-      page = dataStorage.getPage("portal::classic::page1");
+      page = pageService.loadPage(PageKey.parse("portal::classic::page1"));
       assertNotNull(page);
-      assertEquals("site 1", page.getTitle());
+      assertEquals("site 1", page.getState().getName());
       
-      page = dataStorage.getPage("portal::classic::page2");
+      page = pageService.loadPage(PageKey.parse("portal::classic::page2"));
       assertNull(page);
 
       // Test group
@@ -114,7 +119,7 @@ public abstract class AbstractSiteDataImportTest extends AbstractDataImportTest
       layoutPortlet = (Application<Portlet>)layout.getChildren().get(0);
       assertEquals("site1/layout", dataStorage.getId(layoutPortlet.getState()));
       
-      page = dataStorage.getPage("group::/platform/administrators::page1");
+      page = pageService.loadPage(PageKey.parse("group::/platform/administrators::page1"));
       assertNull(page);
       
       // Test user

@@ -94,7 +94,9 @@ public class PageServiceWrapper implements PageService
    @Override
    public PageContext clone(PageKey src, PageKey dst)
    {
-      return service.clone(src, dst);
+      PageContext pageContext = service.clone(src, dst);
+      notify(EventType.PAGE_CREATED, dst);
+      return pageContext;
    }
 
    @Override

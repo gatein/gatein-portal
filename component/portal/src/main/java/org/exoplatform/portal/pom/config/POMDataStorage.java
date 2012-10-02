@@ -42,6 +42,7 @@ import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
 import org.exoplatform.portal.pom.config.tasks.MOPAccess;
 import org.exoplatform.portal.pom.config.tasks.PageTask;
@@ -154,14 +155,22 @@ public class POMDataStorage implements ModelDataStorage
       return pomMgr.execute(new PageTask.Load(key));
    }
 
+   /**
+    * @deprecated replaced by {@link PageService#clone(org.exoplatform.portal.mop.page.PageKey, org.exoplatform.portal.mop.page.PageKey)}
+    * 
+    */
    public PageData clonePage(PageKey key, PageKey cloneKey) throws Exception
    {
-      return pomMgr.execute(new PageTask.Clone(key, cloneKey, true));
+      throw new UnsupportedOperationException();
    }
 
+   /**
+    * @deprecated replaced by {@link PageService#destroyPage(org.exoplatform.portal.mop.page.PageKey)}
+    * 
+    */
    public void remove(PageData page) throws Exception
    {
-      pomMgr.execute(new PageTask.Remove(page));
+      throw new UnsupportedOperationException();
    }
 
    public void create(PageData page) throws Exception

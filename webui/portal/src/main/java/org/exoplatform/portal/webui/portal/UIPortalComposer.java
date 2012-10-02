@@ -752,6 +752,7 @@ public class UIPortalComposer extends UIContainer
          }
 
          // Perform model update
+         UserPortalConfigService configService = uiWorkingWS.getApplicationComponent(UserPortalConfigService.class);
          DataStorage dataService = uiWorkingWS.getApplicationComponent(DataStorage.class);
          PageService pageService = uiWorkingWS.getApplicationComponent(PageService.class);
          try
@@ -775,7 +776,7 @@ public class UIPortalComposer extends UIContainer
 
          // Synchronize model object with UIPage object, that seems  redundant but in fact
          // mandatory to have consequent edit actions (on the same page) work properly
-         page = dataService.getPage(page.getPageId());
+         page = configService.getPage(page.getPageId());
          uiPage.getChildren().clear();
          PortalDataMapper.toUIPage(uiPage, page);
          

@@ -39,7 +39,9 @@ import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeModel;
 import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.portal.pom.spi.gadget.Gadget;
@@ -77,6 +79,9 @@ public class TestDataStorage extends AbstractConfigTest
 
    /** . */
    private DataStorage storage_;
+   
+   /** . */
+   private PageService pageService;
 
    /** . */
    private NavigationService navService;
@@ -115,6 +120,7 @@ public class TestDataStorage extends AbstractConfigTest
       super.setUp();
       PortalContainer container = PortalContainer.getInstance();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      pageService = (PageService)container.getComponentInstanceOfType(PageService.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       navService = (NavigationService)container.getComponentInstanceOfType(NavigationService.class);
       events = new LinkedList<Event>();
@@ -218,7 +224,6 @@ public class TestDataStorage extends AbstractConfigTest
    public void testCreatePage() throws Exception
    {
       Page page = new Page();
-      page.setTitle("MyTitle");
       page.setOwnerType(PortalConfig.PORTAL_TYPE);
       page.setOwnerId("test");
       page.setName("foo");
@@ -236,14 +241,12 @@ public class TestDataStorage extends AbstractConfigTest
       assertEquals("portal", page2.getOwnerType());
       assertEquals("test", page2.getOwnerId());
       assertEquals("foo", page2.getName());
-      assertEquals("MyTitle", page2.getTitle());
       assertEquals(0, page2.getChildren().size());
    }
 
    public void testSavePage() throws Exception
    {
       Page page = new Page();
-      page.setTitle("MyTitle");
       page.setOwnerType(PortalConfig.PORTAL_TYPE);
       page.setOwnerId("test");
       page.setName("foo");
@@ -252,6 +255,11 @@ public class TestDataStorage extends AbstractConfigTest
       //
       storage_.create(page);
       assertEquals(1, events.size());
+      
+      //
+      PageContext pageContext = pageService.loadPage(PageKey.parse(page.getPageId()));
+      pageContext.setState(pageContext.getState().builder().name("MyTitle").showMaxWindow(true).build());
+      pageService.savePage(pageContext);
 
       //
       Page page2 = storage_.getPage(page.getPageId());
@@ -266,9 +274,13 @@ public class TestDataStorage extends AbstractConfigTest
       assertEquals("portal", page2.getOwnerType());
       assertEquals("test", page2.getOwnerId());
       assertEquals("foo", page2.getName());
-      assertEquals("MyTitle2", page2.getTitle());
+      assertNull(page2.getTitle());
       assertEquals(0, page2.getChildren().size());
-      assertEquals(true, page2.isShowMaxWindow());
+      assertEquals(false, page2.isShowMaxWindow());
+      
+      pageContext = pageService.loadPage(PageKey.parse(page.getPageId()));
+      assertEquals("MyTitle", pageContext.getState().getName());
+      assertEquals(true, pageContext.getState().getShowMaxWindow());
    }
    
    public void testChangingPortletThemeInPage() throws Exception {
@@ -298,12 +310,14 @@ public class TestDataStorage extends AbstractConfigTest
       assertNotNull(page);
 
       //
-      storage_.remove(page);
-      assertEquals(1, events.size());
-      
-      //
-      page = storage_.getPage(testPage);
-      assertNull(page);
+      try
+      {
+         storage_.remove(page);
+         fail();
+      } 
+      catch(UnsupportedOperationException e)
+      {
+      }
    }
 
    public void testWindowMove1() throws Exception
@@ -416,10 +430,6 @@ public class TestDataStorage extends AbstractConfigTest
       assertTrue(formerTransientCont.getChildren().get(0) instanceof Application);
 
       assertEquals(persistedApp2.getStorageId(), formerTransientCont.getChildren().get(0).getStorageId());
-
-      storage_.remove(page3);
-
-      assertNull(storage_.getPage("portal::test::testWindowMove3"));
    }
 
    /**
@@ -546,7 +556,7 @@ public class TestDataStorage extends AbstractConfigTest
 
    public void testClone() throws Exception
    {
-      storage_.clonePage("portal::test::test4", "portal", "test", "_test4");
+      pageService.clone(PageKey.parse("portal::test::test4"), PageKey.parse("portal::test::_test4"));
 
       // Get cloned page
       Page clone = storage_.getPage("portal::test::_test4");
@@ -559,23 +569,6 @@ public class TestDataStorage extends AbstractConfigTest
 
       // Check state
       Portlet pagePrefs = storage_.load(instanceId, ApplicationType.PORTLET);
-      assertEquals(new PortletBuilder().add("template", "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl")
-         .build(), pagePrefs);
-
-      // Now save the cloned page
-      storage_.save(clone);
-
-      // Get cloned page
-      clone = storage_.getPage("portal::test::_test4");
-      assertEquals(2, clone.getChildren().size());
-      banner1 = (Application<Portlet>)clone.getChildren().get(0);
-      instanceId = banner1.getState();
-
-      // Check instance id format
-      assertEquals("web/BannerPortlet", storage_.getId(banner1.getState()));
-
-      // Check that page prefs have not changed
-      pagePrefs = storage_.load(instanceId, ApplicationType.PORTLET);
       assertEquals(new PortletBuilder().add("template", "par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl")
          .build(), pagePrefs);
 
@@ -592,27 +585,31 @@ public class TestDataStorage extends AbstractConfigTest
       assertEquals(2, container.getChildren().size());
 
       //
-      Application banner2 = (Application)container.getChildren().get(0);
-      // assertEquals(banner2.getInstanceId(), banner1.getInstanceId());
+      Page srcPage = storage_.getPage("portal::test::test4");
+      PageContext srcPageContext = pageService.loadPage(PageKey.parse(srcPage.getPageId()));
+      srcPageContext.setState(srcPageContext.getState().builder().editPermission("Administrator").build());
+      pageService.savePage(srcPageContext);
 
       //
-      Page srcPage = storage_.getPage("portal::test::test4");
-      srcPage.setEditPermission("Administrator");
       Application<Portlet>portlet = (Application<Portlet>)srcPage.getChildren().get(0);
       portlet.setDescription("NewPortlet");
-
       ArrayList<ModelObject> modelObject = srcPage.getChildren();
       modelObject.set(0, portlet);
-
       srcPage.setChildren(modelObject);
-
       storage_.save(srcPage);
-      Page dstPage = storage_.clonePage(srcPage.getPageId(), srcPage.getOwnerType(), srcPage.getOwnerId(), "_PageTest1234");
+      
+      //
+      PageKey dstKey = PageKey.parse(srcPage.getOwnerType() + "::" + srcPage.getOwnerId() + "::" + "_PageTest1234");
+      PageContext dstPageContext = pageService.clone(srcPageContext.getKey(), dstKey);
+      Page dstPage = storage_.getPage(dstKey.format()); 
       Application<Portlet>portlet1 = (Application<Portlet>)dstPage.getChildren().get(0);
+      
       // Check src's edit permission and dst's edit permission
-      assertEquals(srcPage.getEditPermission(), dstPage.getEditPermission());
+      assertNotNull(dstPageContext.getState().getEditPermission());
+      assertEquals(srcPageContext.getState().getEditPermission(), dstPageContext.getState().getEditPermission());
 
       // Check src's children and dst's children
+      assertNotNull(portlet1.getDescription());
       assertEquals(portlet.getDescription(), portlet1.getDescription());
    }
 
@@ -993,8 +990,11 @@ public class TestDataStorage extends AbstractConfigTest
    {
       Page page = new Page();
       page.setPageId("portal::test::searchedpage");
-      page.setTitle("Juuu Ziii");
       storage_.create(page);
+      
+      PageContext pageContext = pageService.loadPage(PageKey.parse(page.getPageId()));
+      pageContext.setState(pageContext.getState().builder().name("Juuu Ziii").build());
+      pageService.savePage(pageContext);
 
       //
       assertPageFound(new Query<Page>(null, null, null, "Juuu Ziii", Page.class), "portal::test::searchedpage");
@@ -1078,7 +1078,6 @@ public class TestDataStorage extends AbstractConfigTest
    public void testAccessMixin() throws Exception
    {
       Page page = new Page();
-      page.setTitle("MyTitle");
       page.setOwnerType(PortalConfig.PORTAL_TYPE);
       page.setOwnerId("test");
       page.setName("foo");
@@ -1087,7 +1086,6 @@ public class TestDataStorage extends AbstractConfigTest
       //
       page = storage_.getPage("portal::test::foo");
       assertNotNull(page);
-      assertEquals("MyTitle", page.getTitle());
       assertEquals("test", page.getOwnerId());
       assertEquals("foo", page.getName());
 
@@ -1100,7 +1098,6 @@ public class TestDataStorage extends AbstractConfigTest
    public void testModifyMixin() throws Exception
    {
       Page page = new Page();
-      page.setTitle("MyTitle");
       page.setOwnerType(PortalConfig.PORTAL_TYPE);
       page.setOwnerId("test");
       page.setName("foo");
@@ -1109,7 +1106,6 @@ public class TestDataStorage extends AbstractConfigTest
       //
       page = storage_.getPage("portal::test::foo");
       assertNotNull(page);
-      assertEquals("MyTitle", page.getTitle());
       assertEquals("test", page.getOwnerId());
       assertEquals("foo", page.getName());
 
@@ -1252,14 +1248,17 @@ public class TestDataStorage extends AbstractConfigTest
 
       Page page = new Page();
       page.setPageId("portal::test::searchedpage2");
-      page.setTitle("Juuu2 Ziii2");
       storage_.create(page);
+      
+      PageContext pageContext = pageService.loadPage(PageKey.parse(page.getPageId()));
+      pageContext.setState(pageContext.getState().builder().name("Juuu2 Ziii2").build());
+      pageService.savePage(pageContext);
 
       assertPageFound(new Query<Page>(null, null, null, "Juuu2 Ziii2", Page.class), "portal::test::searchedpage2");
       jtaUserTransactionLifecycleService.finishJTATransaction();
 
       jtaUserTransactionLifecycleService.beginJTATransaction();
-      storage_.remove(page);
+      pageService.destroyPage(pageContext.getKey());
       assertPageNotFound(new Query<Page>(null, null, null, "Juuu2 Ziii2", Page.class));
       jtaUserTransactionLifecycleService.finishJTATransaction();
    }

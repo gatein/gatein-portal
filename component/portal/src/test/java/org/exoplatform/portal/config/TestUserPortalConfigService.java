@@ -30,7 +30,9 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.pom.config.POMDataStorage;
@@ -74,6 +76,9 @@ public class TestUserPortalConfigService extends AbstractConfigTest
 
    /** . */
    private DataStorage storage_;
+   
+   /** . */
+   private PageService pageService;
 
    /** . */
    private POMSessionManager mgr;
@@ -122,6 +127,7 @@ public class TestUserPortalConfigService extends AbstractConfigTest
       listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
       events = new LinkedList<Event>();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      pageService = (PageService)container.getComponentInstanceOfType(PageService.class);
       mopStorage = (POMDataStorage)container.getComponentInstanceOfType(POMDataStorage.class);
 
       // Register only once for all unit tests
@@ -130,8 +136,8 @@ public class TestUserPortalConfigService extends AbstractConfigTest
          // I'm using this due to crappy design of
          // org.exoplatform.services.listener.ListenerService
          listenerService.addListener(DataStorage.PAGE_CREATED, listener);
-         listenerService.addListener(DataStorage.PAGE_REMOVED, listener);
-         listenerService.addListener(DataStorage.PAGE_UPDATED, listener);
+         listenerService.addListener(EventType.PAGE_DESTROYED, listener);
+         listenerService.addListener(EventType.PAGE_UPDATED, listener);
          listenerService.addListener(EventType.NAVIGATION_CREATED, listener);
          listenerService.addListener(EventType.NAVIGATION_DESTROYED, listener);
          listenerService.addListener(EventType.NAVIGATION_UPDATED, listener);
@@ -463,13 +469,13 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             page.setOwnerId("/platform/administrators");
             page.setName("newAccount");
             assertTrue(events.isEmpty());
-            storage_.remove(page);
+            pageService.destroyPage(PageKey.parse(page.getPageId()));
             assertEquals(1, events.size());
             Event event = events.removeFirst();
-            assertEquals(DataStorage.PAGE_REMOVED, event.getEventName());
-            Page p = ((Page)event.getData());
-            assertEquals("group", p.getOwnerType());
-            assertEquals("/platform/administrators", p.getOwnerId());
+            assertEquals(EventType.PAGE_DESTROYED, event.getEventName());
+            PageKey p = ((PageKey)event.getData());
+            assertEquals("group", p.getSite().getTypeName());
+            assertEquals("/platform/administrators", p.getSite().getName());
             assertEquals("newAccount", p.getName());
             assertEquals(null, userPortalConfigSer_.getPage(PageKey.parse("group::/platform/administrators::newAccount")));
          }
@@ -512,14 +518,17 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             page.setOwnerType("group");
             page.setOwnerId("/platform/administrators");
             page.setName("whatever");
-            page.setTitle("testTitle");
             storage_.create(page);
+            
+            PageContext pageContext = pageService.loadPage(PageKey.parse(page.getPageId()));
+            pageContext.setState(pageContext.getState().builder().name("testTitle").build());
+            pageService.savePage(pageContext);
 
             String newName = "newPage";
-            Page newPage = storage_.clonePage(page.getPageId(), page.getOwnerType(), page.getOwnerId(), newName);
+            PageContext newPage = pageService.clone(pageContext.getKey(), PageKey.parse(page.getOwnerType() + "::" + page.getOwnerId() + "::" + newName));
             
-            assertEquals(newName, newPage.getName());
-            assertEquals(page.getTitle(), newPage.getTitle());
+            assertEquals(newName, newPage.getKey().getName());
+            assertEquals(pageContext.getState().getName(), newPage.getState().getName());
          }
       }.execute(null);
    }
@@ -548,36 +557,20 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             assertEquals("newAccount title", p.getTitle());
             assertTrue(p.isShowMaxWindow());
 
-            p.setShowMaxWindow(false);
-            storage_.save(p);
+            PageContext pageContext = pageService.loadPage(PageKey.parse(p.getPageId()));
+            pageContext.setState(pageContext.getState().builder().showMaxWindow(false).build());
+            pageService.savePage(pageContext);
             p = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
             assertFalse(p.isShowMaxWindow());
-            p.setShowMaxWindow(true);
-            storage_.save(p);
-            p = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
-            assertTrue(p.isShowMaxWindow());
-            p.setShowMaxWindow(false);
-            storage_.save(p);
-            p = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
-            assertFalse(p.isShowMaxWindow());
-            p.setShowMaxWindow(true);
-            storage_.save(p);
-            p = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
-            assertTrue(p.isShowMaxWindow());
-
+            
+            pageContext.setState(pageContext.getState().builder().name("newAccount title").showMaxWindow(true).build());
+            pageService.savePage(pageContext);
             Page p2 = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
+            assertTrue(p2.isShowMaxWindow());
             assertEquals("group", p2.getOwnerType());
             assertEquals("/platform/administrators", p2.getOwnerId());
             assertEquals("newAccount", p2.getName());
-            //            assertFalse(p2.isShowMaxWindow());
-            p2.setTitle("newAccount title 1");
-            p2.setShowMaxWindow(true);
-            storage_.save(p2);
-
-            Page p3 = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
-            assertEquals("newAccount title 1", p3.getTitle());
-            //            assertTrue(p3.isShowMaxWindow());
-
+            assertEquals("newAccount title", p2.getTitle());
          }
       }.execute(null);
    }
@@ -587,13 +580,14 @@ public class TestUserPortalConfigService extends AbstractConfigTest
       {
          public void execute() throws Exception
          {
-            Page clone = storage_.clonePage("portal::test::test4", "portal", "test", "test5");
-            assertNotNull(clone);
-            assertEquals("portal", clone.getOwnerType());
-            assertEquals("test", clone.getOwnerId());
-            assertEquals("test5", clone.getName());
+            PageContext cloneContext = pageService.clone(PageKey.parse("portal::test::test4"), PageKey.parse("portal::test::test5"));
+            assertNotNull(cloneContext);
+            assertEquals("portal", cloneContext.getKey().getSite().getTypeName());
+            assertEquals("test", cloneContext.getKey().getSite().getName());
+            assertEquals("test5", cloneContext.getKey().getName());
 
             //
+            Page clone = storage_.getPage("portal::test::test5");
             Application<Portlet> app = (Application<Portlet>)clone.getChildren().get(0);
             Portlet prefs2 = storage_.load(app.getState(), ApplicationType.PORTLET);
             assertEquals(new PortletBuilder().add("template",

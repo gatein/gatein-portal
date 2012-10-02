@@ -32,6 +32,7 @@ import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.data.ModelChange;
 
@@ -98,23 +99,15 @@ public interface DataStorage
    public Page getPage(String pageId) throws Exception;
 
    /**
-    * Clones a page.
-    *
-    * @param pageId the id of the page to clone
-    * @param clonedOwnerType the target owner type of the clone
-    * @param clonedOwnerId the target owner id of the clone
-    * @param clonedName the target name of the clone
-    * @return the cloned page
-    * @throws Exception any exception
+    * @deprecated replaced by {@link PageService#clone(org.exoplatform.portal.mop.page.PageKey, org.exoplatform.portal.mop.page.PageKey)}
+    * 
     */
    public Page clonePage(String pageId, String clonedOwnerType, String clonedOwnerId, String clonedName)
       throws Exception;
 
    /**
-    * Remove Page from database <br />
-    * Then broadcast PAGE_REMOVED event
-    * @param page
-    * @throws Exception
+    * @deprecated replaced by {@link PageService#destroyPage(org.exoplatform.portal.mop.page.PageKey)}
+    * 
     */
    public void remove(Page page) throws Exception;
 

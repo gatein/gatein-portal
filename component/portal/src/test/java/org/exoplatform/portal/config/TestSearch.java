@@ -21,6 +21,9 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 
@@ -35,6 +38,9 @@ public class TestSearch extends AbstractConfigTest
 
    /** . */
    private DataStorage storage;
+   
+   /** . */
+   private PageService pageService;
 
    /** . */
    private POMSessionManager mgr;
@@ -48,6 +54,7 @@ public class TestSearch extends AbstractConfigTest
       begin();
       PortalContainer container = PortalContainer.getInstance();
       storage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      pageService = (PageService)container.getComponentInstanceOfType(PageService.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
       session = mgr.openSession();
    }
@@ -76,8 +83,12 @@ public class TestSearch extends AbstractConfigTest
    {
       Page page = new Page();
       page.setPageId("portal::test::searchedpage");
-      page.setTitle("Juuu Ziii");
       storage.create(page);
+      session.save();
+      
+      PageContext pageContext = pageService.loadPage(PageKey.parse(page.getPageId()));
+      pageContext.setState(pageContext.getState().builder().name("Juuu Ziii").build());
+      pageService.savePage(pageContext);
       session.save();
 
       //

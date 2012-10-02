@@ -120,30 +120,25 @@ public class TestPageServiceWrapper extends AbstractMOPTest
       //
       DataStorage storage = (DataStorage)getContainer().getComponentInstanceOfType(DataStorage.class);
       Page fooPage = new Page("portal", "datastorage_sync", "foo");
-      fooPage.setTitle("foo_name");
       storage.save(fooPage);
       sync(true);
 
       // Force cache loading
       fooPage = storage.getPage("portal::datastorage_sync::foo");
-      assertEquals("foo_name", fooPage.getTitle());
 
       // Save
       PageKey fooKey = SiteKey.portal("datastorage_sync").page("foo");
       PageContext foo = serviceWrapper.loadPage(fooKey);
       PageState fooState = foo.getState();
-      assertEquals("foo_name", fooState.getName());
-      foo.setState(fooState.builder().name("foo_name_2").build());
+      foo.setState(fooState.builder().name("foo_name").build());
       assertFalse(serviceWrapper.savePage(foo));
-
-      // Check cache was invalidated
-      fooPage = storage.getPage("portal::datastorage_sync::foo");
-      assertEquals("foo_name_2", fooPage.getTitle());
       sync(true);
 
       // Check cache remains invalidated after synchronization
       fooPage = storage.getPage("portal::datastorage_sync::foo");
-      assertEquals("foo_name_2", fooPage.getTitle());
+      assertNull(fooPage.getTitle());
+      foo = serviceWrapper.loadPage(fooKey);
+      assertEquals("foo_name", foo.getState().name);
 
       // Delete
       assertTrue(serviceWrapper.destroyPage(fooKey));
