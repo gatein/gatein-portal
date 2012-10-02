@@ -1,18 +1,18 @@
 <%	 
-	import org.exoplatform.portal.config.model.Page; 
+	import org.exoplatform.portal.mop.page.PageContext; 
 	import org.exoplatform.webui.core.UIPopupWindow;
 	import org.exoplatform.webui.form.UIForm; 
 	import org.exoplatform.webui.form.UIFormInputSet;
 
 
-	Page page	= uicomponent.getPage();		
+	PageContext page	= uicomponent.getPage();		
 	String name = "";
 	String title = "";
 	String pageId = ""; 
 	if(page != null) {
-		name = page.getName();
-		pageId = page.getPageId();
-		title = page.getTitle();
+		name = page.getKey().getName();
+		pageId = page.getKey().format();
+		title = page.getState().getName();
 		if (pageId == null) pageId = ""; 
 		if (name == null) name = ""; 
 		if (title == null) title = ""; 

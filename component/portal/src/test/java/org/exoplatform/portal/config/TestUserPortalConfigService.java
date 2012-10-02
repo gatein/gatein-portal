@@ -501,7 +501,7 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             assertEquals("group", p.getOwnerType());
             assertEquals("/platform/administrators", p.getOwnerId());
             assertEquals("whatever", p.getName());
-            assertNotNull(userPortalConfigSer_.getPage("group::/platform/administrators::whatever"));
+            assertNotNull(userPortalConfigSer_.getPageService().loadPage(PageKey.parse(page.getPageId())));
          }
       }.execute(null);
    }
@@ -560,17 +560,17 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             PageContext pageContext = pageService.loadPage(PageKey.parse(p.getPageId()));
             pageContext.setState(pageContext.getState().builder().showMaxWindow(false).build());
             pageService.savePage(pageContext);
-            p = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
-            assertFalse(p.isShowMaxWindow());
+            pageContext = userPortalConfigSer_.getPageService().loadPage(PageKey.parse(p.getPageId()));
+            assertFalse(pageContext.getState().getShowMaxWindow());
             
             pageContext.setState(pageContext.getState().builder().name("newAccount title").showMaxWindow(true).build());
             pageService.savePage(pageContext);
-            Page p2 = userPortalConfigSer_.getPage("group::/platform/administrators::newAccount");
-            assertTrue(p2.isShowMaxWindow());
-            assertEquals("group", p2.getOwnerType());
-            assertEquals("/platform/administrators", p2.getOwnerId());
-            assertEquals("newAccount", p2.getName());
-            assertEquals("newAccount title", p2.getTitle());
+            PageContext p2 = userPortalConfigSer_.getPageService().loadPage(pageContext.getKey());
+            assertTrue(p2.getState().getShowMaxWindow());
+            assertEquals("group", p2.getKey().getSite().getTypeName());
+            assertEquals("/platform/administrators", p2.getKey().getSite().getName());
+            assertEquals("newAccount", p2.getKey().getName());
+            assertEquals("newAccount title", p2.getState().getName());
          }
       }.execute(null);
    }
@@ -747,10 +747,10 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             mgr.clearCache();
             DataCache cache = mgr.getDecorator(DataCache.class);
             long readCount0 = cache.getReadCount();
-            userPortalConfigSer_.getPage("portal::test::test1");
+            userPortalConfigSer_.getDataStorage().getPage("portal::test::test1");
             long readCount1 = cache.getReadCount();
             assertTrue(readCount1 > readCount0);
-            userPortalConfigSer_.getPage("portal::test::test1");
+            userPortalConfigSer_.getDataStorage().getPage("portal::test::test1");
             long readCount2 = cache.getReadCount();
             assertEquals(readCount1, readCount2);
          }
@@ -766,10 +766,10 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             mgr.clearCache();
             DataCache cache = mgr.getDecorator(DataCache.class);
             long readCount0 = cache.getReadCount();
-            userPortalConfigSer_.getPage("portal::test::test1");
+            userPortalConfigSer_.getDataStorage().getPage("portal::test::test1");
             long readCount1 = cache.getReadCount();
             assertTrue(readCount1 > readCount0);
-            userPortalConfigSer_.getPage("portal::test::test1");
+            userPortalConfigSer_.getDataStorage().getPage("portal::test::test1");
             long readCount2 = cache.getReadCount();
             assertEquals(readCount1, readCount2);
 
@@ -778,7 +778,7 @@ public class TestUserPortalConfigService extends AbstractConfigTest
             session.scheduleForEviction(new org.exoplatform.portal.pom.data.PageKey("portal", "test", "test1"));
             session.save();
 
-            userPortalConfigSer_.getPage("portal::test::test1");
+            userPortalConfigSer_.getDataStorage().getPage("portal::test::test1");
             assertTrue(readCount2 < cache.getReadCount());
          }
       }.execute(null);

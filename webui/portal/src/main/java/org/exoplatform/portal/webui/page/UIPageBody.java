@@ -23,6 +23,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
+import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComponent;
@@ -113,23 +114,24 @@ public class UIPageBody extends UIComponentDecorator
    private UIPage getUIPage(UserNode pageNode, UIPortal uiPortal, WebuiRequestContext context)
       throws Exception
    {
-      Page page = null;
+      PageContext pageContext = null;
       String pageReference = null;
+      ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
+      UserPortalConfigService userPortalConfigService =
+         (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
+      
       
       if (pageNode != null)
       {
          pageReference = pageNode.getPageRef().format();
          if (pageReference != null)
          {
-            ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
-            UserPortalConfigService userPortalConfigService =
-               (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
-            page = userPortalConfigService.getPage(pageReference, context.getRemoteUser());
+            pageContext = userPortalConfigService.getPage(pageNode.getPageRef());
          }
       }
       
       //The page has been deleted
-      if(page == null)
+      if(pageContext == null)
       {
          //Clear the UIPage from cache in UIPortal
          uiPortal.clearUIPage(pageReference);
@@ -142,9 +144,11 @@ public class UIPageBody extends UIComponentDecorator
          return uiPage;
       }
                                                                                                   
-      UIPageFactory clazz =  UIPageFactory.getInstance(page.getFactoryId());
+      UIPageFactory clazz =  UIPageFactory.getInstance(pageContext.getState().getFactoryId());
       uiPage = clazz.createUIPage(context);
       
+      Page page = userPortalConfigService.getDataStorage().getPage(pageReference);
+      pageContext.update(page);
       PortalDataMapper.toUIPage(uiPage, page);
       uiPortal.setUIPage(pageReference, uiPage);
 

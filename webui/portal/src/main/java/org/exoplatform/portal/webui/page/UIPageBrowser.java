@@ -380,8 +380,8 @@ public class UIPageBrowser extends UIContainer
          UserPortalConfigService service = uiPageBrowser.getApplicationComponent(UserPortalConfigService.class);
 
          //Check existence of the page
-         Page page = service.getPage(id);
-         if (page == null)
+         PageContext pageContext = service.getPage(PageKey.parse(id));
+         if (pageContext == null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{id}, 1));
             return;
@@ -389,15 +389,17 @@ public class UIPageBrowser extends UIContainer
 
          //Check current user 's permissions on the page
          UserACL userACL = uiPageBrowser.getApplicationComponent(UserACL.class);
-         if (!userACL.hasEditPermission(page))
+         if (!userACL.hasEditPermission(pageContext))
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.edit.NotEditPage", new String[]{id}, 1));
             return;
          }
          
          //Need this code to override editpage action in extension project
-         UIPageFactory clazz = UIPageFactory.getInstance(page.getFactoryId());
+         UIPageFactory clazz = UIPageFactory.getInstance(pageContext.getState().getFactoryId());
          UIPage uipage = clazz.createUIPage(null);
+         Page page = service.getDataStorage().getPage(id);
+         pageContext.update(page);
          uipage.switchToEditMode(page);
       }
    }

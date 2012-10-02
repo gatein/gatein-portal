@@ -486,11 +486,11 @@ public class UINavigationNodeSelector extends UIContainer
 
          // get selected page
          String pageId = node.getPageRef();
-         Page selectPage = (pageId != null) ? userService.getPage(pageId) : null;
-         if (selectPage != null)
+         PageContext pageContext = (pageId != null) ? userService.getPageService().loadPage(PageKey.parse(pageId)) : null;
+         if (pageContext != null)
          {
             UserACL userACL = uiApp.getApplicationComponent(UserACL.class);
-            if (!userACL.hasEditPermission(selectPage))
+            if (!userACL.hasEditPermission(pageContext))
             {
                uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.UserNotPermission", new String[]{pageId}, 1));
                return;
@@ -518,11 +518,14 @@ public class UINavigationNodeSelector extends UIContainer
             uiToolPanel.setWorkingComponent(UIPage.class, null);
             UIPage uiPage = (UIPage)uiToolPanel.getUIComponent();
 
-            if (selectPage.getTitle() == null)
-               selectPage.setTitle(node.getLabel());
+            if (pageContext.getState().getName() == null)
+               pageContext.getState().builder().name(node.getLabel());
 
+            Page page = userService.getDataStorage().getPage(pageId);
+            pageContext.update(page);
+            
             // convert Page to UIPage
-            PortalDataMapper.toUIPage(uiPage, selectPage);
+            PortalDataMapper.toUIPage(uiPage, page);
             Util.getPortalRequestContext().addUIComponentToUpdateByAjax(uiWorkingWS);
             Util.getPortalRequestContext().ignoreAJAXUpdateOnPortlets(true);
          }

@@ -531,23 +531,34 @@ public class UIPageNodeForm extends UIFormTabPane
          }
          else
          {
-            Page page = pageSelector.getPage();
+            PageContext pageContext = pageSelector.getPage();
             DataStorage storage = uiPageNodeForm.getApplicationComponent(DataStorage.class);
             PageService pageService = uiPageNodeForm.getApplicationComponent(PageService.class);
-            PageKey pageKey = PageKey.parse(page.getPageId());
-            if (pageService.loadPage(pageKey) == null)
+            if (pageService.loadPage(pageContext.getKey()) == null)
             {
-               //
-               PageState pageState = new PageState(
-                  page.getTitle(), 
-                  page.getDescription(), 
-                  page.isShowMaxWindow(), 
-                  page.getFactoryId(), 
-                  page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
-                  page.getEditPermission());
-               pageService.savePage(new PageContext(pageKey, pageState));
+               pageService.savePage(pageContext);
                
                //
+               Page page = new Page();
+               page.setOwnerType(pageContext.getKey().getSite().getTypeName());
+               page.setOwnerId(pageContext.getKey().getSite().getName());
+               page.setName(pageContext.getKey().getName());
+               String title = pageContext.getState().getName();
+               String[] accessPermission = pageContext.getState().getAccessPermissions() == null ? null : pageContext.getState().getAccessPermissions().toArray(new String[pageContext.getState().getAccessPermissions().size()]);
+               if (title == null || title.trim().length() < 1)
+               {
+                  title = page.getName();
+               }
+               page.setTitle(title);
+               page.setShowMaxWindow(false);
+               page.setAccessPermissions(accessPermission);
+               page.setEditPermission(pageContext.getState().getEditPermission());
+               page.setModifiable(true);
+               if (page.getChildren() == null)
+               {
+                  page.setChildren(new ArrayList<ModelObject>());
+               }
+
                storage.create(page);
                pageSelector.setValue(page.getPageId());
             }
@@ -722,35 +733,24 @@ public class UIPageNodeForm extends UIFormTabPane
          UIFormStringInput uiPageName = uiInputSet.getChildById("pageName");
          UIFormStringInput uiPageTitle = uiInputSet.getChildById("pageTitle");
 
-         //
-         Page page = new Page();
-         page.setOwnerType(uiForm.getOwnerType().getName());
-         page.setOwnerId(ownerId);
-         page.setName(uiPageName.getValue());
-         String title = uiPageTitle.getValue();
-         if (title == null || title.trim().length() < 1)
-         {
-            title = page.getName();
-         }
-         page.setTitle(title);
-         page.setShowMaxWindow(false);
-         page.setAccessPermissions(accessPermission);
-         page.setEditPermission(editPermission);
-         page.setModifiable(true);
-         if (page.getChildren() == null)
-         {
-            page.setChildren(new ArrayList<ModelObject>());
-         }
+         PageState pageState = new PageState(
+            uiPageTitle.getValue(),
+            null, 
+            false, 
+            null, 
+            accessPermission != null ? Arrays.asList(accessPermission) : null,
+            editPermission);
 
          // check page is exist
+         PageKey pageKey = PageKey.parse(uiForm.getOwnerType().getName() + "::" + ownerId + "::" + uiPageName.getValue());
          PageService pageService = uiForm.getApplicationComponent(PageService.class);
-         PageContext existPage = pageService.loadPage(PageKey.parse(page.getPageId()));
+         PageContext existPage = pageService.loadPage(pageKey);
          if (existPage != null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.sameName", null));
             return;
          }
-         pageSelector.setPage(page);
+         pageSelector.setPage(new PageContext(pageKey, pageState));
          event.getRequestContext().addUIComponentToUpdateByAjax(pageSelector);
       }
    }

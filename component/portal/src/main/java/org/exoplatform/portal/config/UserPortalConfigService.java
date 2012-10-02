@@ -39,10 +39,8 @@ import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
-import org.exoplatform.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortalContext;
-import org.exoplatform.portal.pom.data.ModelChange;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
@@ -128,6 +126,11 @@ public class UserPortalConfigService implements Startable
    public PageService getPageService()
    {
       return pageService;
+   }
+   
+   public DataStorage getDataStorage()
+   {
+      return storage_;
    }
 
    public ImportMode getDefaultImportMode()
@@ -402,28 +405,13 @@ public class UserPortalConfigService implements Startable
    }
 
    /**
-    * This method should update the PortalConfig object
-    * 
-    * @deprecated This method is not useful anymore. The preferred way to do this is 
-    * using directly {@link org.exoplatform.portal.config.DataStorage#save(PortalConfig)}
-    * 
-    * @param portal
-    * @throws Exception
-    */
-   @Deprecated
-   public void update(PortalConfig portal) throws Exception
-   {
-      storage_.save(portal);
-   }
-
-   /**
     * This method load the page according to the pageId and returns.
     *
     * @param pageId the page id
     * @return the page
     * @throws Exception any exception
     */
-   public Page getPage(String pageId) throws Exception
+  /* public Page getPage(String pageId) throws Exception
    {
       if (pageId == null)
       {
@@ -449,7 +437,7 @@ public class UserPortalConfigService implements Startable
       page.setAccessPermissions(accessPermissions != null ? accessPermissions.toArray(new String[accessPermissions.size()]) : null);
       page.setEditPermission(pageContext.getState().getEditPermission());
       return page;
-   }
+   }*/
 
    /**
     * This method load the page according to the pageId and returns it if the current thread is associated with an
@@ -461,7 +449,7 @@ public class UserPortalConfigService implements Startable
     * @return the page
     * @throws Exception any exception
     */
-   public Page getPage(String pageId, String accessUser) throws Exception
+   /*public Page getPage(String pageId, String accessUser) throws Exception
    {
       Page page = getPage(pageId);
       if (page == null || !userACL_.hasPermission(page))
@@ -469,7 +457,7 @@ public class UserPortalConfigService implements Startable
          return null;
       }
       return page;
-   }
+   }*/
    
    /**
     * Use {@link PageService} to load metadata of specify page
@@ -485,77 +473,6 @@ public class UserPortalConfigService implements Startable
          return null;
       }
       return page;
-   }
-
-   /**
-    * Removes a page and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#PAGE_REMOVED}
-    * when the removal is successful.
-    * 
-    * @deprecated This method is not useful anymore. The preferred way to do this is 
-    * using directly {@link org.exoplatform.portal.config.DataStorage#remove(Page)}
-
-    *
-    * @param page the page to remove
-    * @throws Exception any exception
-    */
-   @Deprecated
-   public void remove(Page page) throws Exception
-   {
-      storage_.remove(page);
-   }
-
-   /**
-    * Creates a page and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#CREATE_PAGE_EVENT}
-    * when the creation is successful.
-    * 
-    * @deprecated This method is not useful anymore. The preferred way to do this is 
-    * using directly {@link org.exoplatform.portal.config.DataStorage#create(Page)}
-    *
-    * @param page the page to create
-    * @throws Exception any exception
-    */
-   @Deprecated
-   public void create(Page page) throws Exception
-   {
-      storage_.create(page);
-   }
-
-   /**
-    * Updates a page and broadcast an event labelled as {@link org.exoplatform.portal.config.UserPortalConfigService#PAGE_UPDATED}
-    * when the creation is successful.
-    * 
-    * @deprecated This method is not useful anymore. The preferred way to do this is 
-    * using directly {@link org.exoplatform.portal.config.DataStorage#save(Page)}
-
-    *
-    * @param page the page to update
-    * @return the list of model changes that occured
-    * @throws Exception any exception
-    */
-   @Deprecated
-   public List<ModelChange> update(Page page) throws Exception
-   {
-      List<ModelChange> changes = storage_.save(page);
-      return changes;
-   }
-
-   /**
-    * Clones a page.
-    * 
-    * @deprecated This method is not useful anymore. The preferred way to do this is 
-    * using directly {@link org.exoplatform.portal.config.DataStorage#clonePage(String, String, String, String)}
-    *
-    * @param pageId    the id of the page to clone
-    * @param pageName  the new page name
-    * @param ownerType the new page owner type
-    * @param ownerId   the new page owner id
-    * @return the newly created page
-    * @throws Exception any exception
-    */
-   @Deprecated
-   public Page renewPage(String pageId, String pageName, String ownerType, String ownerId) throws Exception
-   {
-      return storage_.clonePage(pageId, ownerType, ownerId, pageName);
    }
 
    /**

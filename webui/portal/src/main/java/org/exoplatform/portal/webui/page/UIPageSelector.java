@@ -21,7 +21,7 @@ package org.exoplatform.portal.webui.page;
 
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -59,7 +59,7 @@ import java.util.List;
 public class UIPageSelector extends UIFormInputContainer<String>
 {
 
-   private Page page_;
+   private PageContext page_;
 
    private static Log logger = ExoLogger.getExoLogger(UIPageSelector.class);
 
@@ -104,20 +104,19 @@ public class UIPageSelector extends UIFormInputContainer<String>
 
    public UIFormInput<?> setValue(String value) throws Exception
    {
-      WebuiRequestContext ctx = WebuiRequestContext.getCurrentInstance();
       UserPortalConfigService service = getApplicationComponent(UserPortalConfigService.class);
-      Page page = service.getPage(value, ctx.getRemoteUser());
+      PageContext page = service.getPage(PageKey.parse(value));
       page_ = page;
       super.setValue(value);
       return this;
    }
 
-   public Page getPage()
+   public PageContext getPage()
    {
       return page_;
    }
 
-   public void setPage(Page page)
+   public void setPage(PageContext page)
    {
       page_ = page;
    }

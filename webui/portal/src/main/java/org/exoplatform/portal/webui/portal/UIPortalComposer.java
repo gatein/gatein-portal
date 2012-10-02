@@ -776,8 +776,9 @@ public class UIPortalComposer extends UIContainer
 
          // Synchronize model object with UIPage object, that seems  redundant but in fact
          // mandatory to have consequent edit actions (on the same page) work properly
-         page = configService.getPage(page.getPageId());
          uiPage.getChildren().clear();
+         PageContext pageContext = configService.getPage(PageKey.parse(page.getPageId()));
+         pageContext.update(page);
          PortalDataMapper.toUIPage(uiPage, page);
          
          // Update UIPage cache on UIPortal
