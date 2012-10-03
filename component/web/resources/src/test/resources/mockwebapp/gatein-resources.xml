@@ -141,6 +141,27 @@
    </module>
    
    <module>
+      <name>pluginTest</name>           
+      <script>
+         <name>eXo.pluginTest</name>
+         <path>/js/pluginTest.js</path>
+      </script>      
+      <depends>
+      	<module>text</module>
+      	<as>text</as>
+      	<resource>/path/to/file.js</resource>
+      </depends>
+   </module>
+   
+   <module>
+      <name>text</name>           
+      <script>
+         <name>eXo.text</name>
+         <path>/js/text.js</path>
+      </script>      
+   </module>
+   
+   <module>
       <name>remote1</name>
       <url>/js/remote1.js</url>       
    </module>

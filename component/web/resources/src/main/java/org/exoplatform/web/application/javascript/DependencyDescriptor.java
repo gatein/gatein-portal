@@ -33,12 +33,15 @@ public class DependencyDescriptor
    /** . */
    private final String alias;
 
+   /** . */
+   private String pluginRS;
+
    public DependencyDescriptor(ResourceId resourceId) throws NullPointerException
    {
-      this(resourceId, null);
+      this(resourceId, null, null);
    }
    
-   public DependencyDescriptor(ResourceId resourceId, String alias) throws NullPointerException
+   public DependencyDescriptor(ResourceId resourceId, String alias, String pluginRS) throws NullPointerException
    {
       if (resourceId == null)
       {
@@ -48,6 +51,7 @@ public class DependencyDescriptor
       //
       this.resourceId = resourceId;
       this.alias = alias;
+      this.pluginRS = pluginRS;
    }
 
    public ResourceId getResourceId()
@@ -60,6 +64,11 @@ public class DependencyDescriptor
       return alias;
    }
 
+   public String getPluginResource()
+   {
+      return pluginRS;
+   }
+   
    @Override
    public boolean equals(Object obj)
    {

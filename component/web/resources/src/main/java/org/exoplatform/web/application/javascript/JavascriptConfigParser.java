@@ -260,7 +260,7 @@ public class JavascriptConfigParser
             ScriptResourceDescriptor desc = scripts.get(id);
             if (desc == null)
             {
-               desc = new ScriptResourceDescriptor(id, fetchMode, parseAlias(element), group);
+               desc = new ScriptResourceDescriptor(id, fetchMode, parseOptString(element, AS_TAG), group);
             }
             else
             {
@@ -293,7 +293,7 @@ public class JavascriptConfigParser
          ScriptResourceDescriptor desc = scripts.get(id);
          if (desc == null)
          {
-            desc = new ScriptResourceDescriptor(id, fetchMode, parseAlias(element), group);
+            desc = new ScriptResourceDescriptor(id, fetchMode, parseOptString(element, AS_TAG), group);
          }
          parseDesc(element, desc);
          scripts.put(id, desc);
@@ -355,7 +355,7 @@ public class JavascriptConfigParser
             dependencyElt = XMLTools.getUniqueChild(moduleElt, "scripts", false);
          }
          ResourceId resourceId = new ResourceId(ResourceScope.SHARED, XMLTools.asString(dependencyElt));
-         DependencyDescriptor dependency = new DependencyDescriptor(resourceId, parseAlias(moduleElt));
+         DependencyDescriptor dependency = new DependencyDescriptor(resourceId, parseOptString(moduleElt, AS_TAG), parseOptString(moduleElt, RESOURCE_TAG));
          desc.dependencies.add(dependency);
       }
    }
@@ -377,11 +377,10 @@ public class JavascriptConfigParser
          return null;          
       }
    }
-   
-   private String parseAlias(Element element) 
-   {
-      Element aliasElt = XMLTools.getUniqueChild(element, AS_TAG, false);
-      return aliasElt == null ? null : XMLTools.asString(aliasElt, true);
-   }
 
+   private String parseOptString(Element element, String childTag)
+   {
+      Element childElt = XMLTools.getUniqueChild(element, childTag, false);
+      return childElt == null ? null : XMLTools.asString(childElt, true);
+   }
 }

@@ -1,59 +1,42 @@
-/**
+/*
  * Copyright (C) 2012 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-@import url(bootstrap/css/bootstrap.css);
+package org.gatein.portlet.requirejs;
 
-.requirejs-plugins-example {
-	position: relative;
-	margin: 15px 0;
-	padding: 39px 19px 14px;
-	background-color: white;
-	border: 1px solid #DDD;
-	border-radius: 4px;
-	border-radius: 4px;
-}
+import javax.portlet.GenericPortlet;
+import javax.portlet.PortletException;
+import javax.portlet.PortletRequestDispatcher;
+import javax.portlet.RenderRequest;
+import javax.portlet.RenderResponse;
 
-.requirejs-plugins-example::after {
-	content: "Example";
-	position: absolute;
-	top: -1px;
-	left: -1px;
-	padding: 3px 7px;
-	font-size: 12px;
-	font-weight: bold;
-	background-color: whiteSmoke;
-	border: 1px solid #DDD;
-	color: #9DA0A4;
-	border-radius: 4px 0 4px 0;
-}
+import java.io.IOException;
 
-ul.nav-tabs {
-	padding: 0px;
-}
-
-.requirejs-plugins-example {
-	margin-left: auto;
-	margin-right: auto;
-	top: 12px;
-	width: 90%;
-}
-
-.requirejs-plugins-example div.highlight {
-	margin-top: 10px;
-	margin-bottom: 10px;
+/**
+ * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
+ * @version $Id$
+ *
+ */
+public class RequireJSPortlet extends GenericPortlet
+{
+   @Override
+   public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException
+   {
+      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/requirejs/jsp/requirejsPortlet.jsp");
+      prd.include(request, response);
+   }
 }

@@ -58,7 +58,7 @@ public class JavascriptTask
             }
             for (DependencyDescriptor dependency : desc.dependencies)
             {
-               resource.addDependency(dependency.getResourceId(), dependency.getAlias());
+               resource.addDependency(dependency.getResourceId(), dependency.getAlias(), dependency.getPluginResource());
             }            
          }
       }

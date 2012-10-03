@@ -33,20 +33,30 @@
 
    <portlet-skin>
       <application-name>amd-js</application-name>
-      <portlet-name>RequireJSPluginPortlet</portlet-name>
+      <portlet-name>RequireJSPortlet</portlet-name>
       <skin-name>Default</skin-name>
-      <css-path>/assets/skin/RequireJSPluginPortlet/DefaultStylesheet.css</css-path>
+      <css-path>/requirejs/skin/RequireJSPortlet/DefaultStylesheet.css</css-path>
    </portlet-skin>
 
    <portlet>
-     <name>RequireJSPluginPortlet</name>
+     <name>RequireJSPortlet</name>
      <module>
        <script>
-         <name>twitterBootstrap</name>
-         <path>/assets/js/bootstrap/bootstrap.js</path>
+         <name>starter</name>
+         <path>/requirejs/js/requirejsPortlet.js</path>
        </script>
        <depends>
-         <module>jquery</module>
+       	<module>jquery</module>
+       	<as>jquery</as>
+       </depends>
+       <depends>
+         <module>mustache</module>
+         <as>mustache</as>
+       </depends>
+       <depends>
+         <module>text</module>
+         <as>text</as>
+         <resource>/amd-js/requirejs/jsp/hello.mustache</resource>
        </depends>
      </module>
    </portlet>
@@ -73,55 +83,61 @@
    <module>
       <name>math</name>
       <script>
-         <name>commonjs.math</name>
-         <path>/commonjs/math.js</path>
+        <name>commonjs.math</name>
+        <path>/commonjs/math.js</path>
        </script>
       <depends>
-         <module>require</module>
-       </depends>
-       <depends>
-         <module>exports</module>
-       </depends>
-       <depends>
-         <module>modules</module>
-       </depends>
+        <module>require</module>
+      </depends>
+      <depends>
+        <module>exports</module>
+      </depends>
+      <depends>
+        <module>module</module>
+      </depends>
    </module>
 
    <module>
       <name>increment</name>
       <script>
-         <name>commonjs.increment</name>
-         <path>/commonjs/increment.js</path>
-       </script>
-       <depends>
-         <module>require</module>
-       </depends>
-       <depends>
-         <module>exports</module>
-       </depends>
-       <depends>
-         <module>modules</module>
-       </depends>
-       <depends>
-         <module>math</module>
-       </depends>
+        <name>commonjs.increment</name>
+        <path>/commonjs/increment.js</path>
+      </script>
+      <depends>
+        <module>require</module>
+      </depends>
+      <depends>
+        <module>exports</module>
+      </depends>
+      <depends>
+        <module>module</module>
+      </depends>
+      <depends>
+        <module>math</module>
+      </depends>
    </module>
   
    <module>
       <name>text</name>     
-      <native-script>/assets/js/plugins/text.js</native-script>
+      <script>
+        <name>requirejs.text</name>
+        <path>/requirejs/js/plugins/text.js</path>
+      </script>
+      <depends>
+      	<module>module</module>
+      </depends>
    </module>
    
    <module>
       <name>mustache</name>     
-      <native-script>/assets/js/plugins/mustache.js</native-script>
+      <native-script>/requirejs/js/plugins/mustache.js</native-script>
    </module>
    
    <module>
       <name>foo</name>     
       <script>
          <name>foo</name>
-         <path>/assets/js/foo.js</path>
+         <path>/sample1/foo.js</path>
       </script>
    </module>
 

@@ -29,18 +29,18 @@ version="2.0"
    </portlet>
    
    <portlet>
-      <description xml:lang="EN">RequireJS Plugins Sample Portlet</description>
-      <portlet-name>RequireJSPluginPortlet</portlet-name>
-      <display-name xml:lang="EN">RequireJS Plugins Portlet</display-name>
-      <portlet-class>org.gatein.portlet.plugin.RequireJSPluginsPortlet</portlet-class>
+      <description xml:lang="EN">RequireJS Sample Portlet</description>
+      <portlet-name>RequireJSPortlet</portlet-name>
+      <display-name xml:lang="EN">RequireJS Portlet</display-name>
+      <portlet-class>org.gatein.portlet.requirejs.RequireJSPortlet</portlet-class>
 
       <supports>
          <mime-type>text/html</mime-type>
       </supports>
 
       <portlet-info>
-         <title>RequireJS Plugins Portlet</title>
-         <short-title>RequireJS Plugins</short-title>
+         <title>RequireJS Portlet</title>
+         <short-title>RequireJS</short-title>
       </portlet-info>
    </portlet>
 

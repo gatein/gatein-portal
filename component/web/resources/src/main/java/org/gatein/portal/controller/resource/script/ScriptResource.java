@@ -46,7 +46,7 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
    private final List<Module> modules;
 
    /** . */
-   final HashMap<ResourceId, String> dependencies;
+   final HashMap<ResourceId, String[]> dependencies;
 
    /** . */
    final HashSet<ResourceId> closure;
@@ -71,7 +71,7 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
 
       this.modules = new ArrayList<Module>();
       this.closure = new HashSet<ResourceId>();
-      this.dependencies = new LinkedHashMap<ResourceId, String>();
+      this.dependencies = new LinkedHashMap<ResourceId, String[]>();
       this.fetchMode = fetchMode;
       
       if (alias == null)
@@ -95,10 +95,10 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
 
    public void addDependency(ResourceId dependencyId)
    {
-      addDependency(dependencyId, null);
+      addDependency(dependencyId, null, null);
    }
 
-   public void addDependency(ResourceId dependencyId, String alias)
+   public void addDependency(ResourceId dependencyId, String alias, String pluginRS)
    {
       ScriptResource dependency = graph.getResource(dependencyId);
 
@@ -137,7 +137,7 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
       }                
       
       //
-      dependencies.put(dependencyId, alias);
+      dependencies.put(dependencyId, new String[] {alias, pluginRS});
    }
    
    public Set<ResourceId> getClosure()
@@ -257,7 +257,28 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
    
    public String getDependencyAlias(ResourceId id)
    {
-      return dependencies.get(id);
+      String[] depInfo = dependencies.get(id);
+      if (depInfo != null) 
+      {
+         return depInfo[0];
+      }
+      else 
+      {
+         return null;
+      }
+   }
+   
+   public String getPluginResource(ResourceId id)
+   {
+      String[] depInfo = dependencies.get(id);
+      if (depInfo != null) 
+      {
+         return depInfo[1];
+      }
+      else 
+      {
+         return null;
+      }
    }
 
    /**

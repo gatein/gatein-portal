@@ -77,6 +77,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
          resources.put("/js/native1.js", "eee;");
          resources.put("/js/native2.js", "fff;");
          resources.put("/js/common.js", "kkk;");
+         resources.put("/js/pluginTest.js", "iii;");
          resources.put("/js/normalize_test.js", " \n /* // */  //  /* \n  /* /*  */  \n  ggg; // /* */ \n");
          mockServletContext = new MockJSServletContext("mockwebapp", resources);
          jsService.registerContext(new WebAppImpl(mockServletContext, Thread.currentThread().getContextClassLoader()));
@@ -120,6 +121,15 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
                "define.deps=[eXo.require,exports,module];" +      
                "return kkk;});";
       assertReader(commonjs, jsService.getScript(new ResourceId(ResourceScope.SHARED, "commonjs"), null));
+   }
+   
+   public void testRequireJSPlugin() throws Exception
+   {
+      String pluginTest = "define('SHARED/pluginTest', [\"SHARED/text!/path/to/file.js\"], function(text) {" +
+               "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[\"text!/path/to/file.js\"];" +
+               "define.deps=[text];" +      
+               "return iii;});";
+      assertReader(pluginTest, jsService.getScript(new ResourceId(ResourceScope.SHARED, "pluginTest"), null));
    }
    
    public void testGroupingScript() throws Exception

@@ -34,11 +34,11 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
-.requirejs-plugins-example a {
+.requirejs-example a {
   color: #0088cc;
   text-decoration: none;
 }
-.requirejs-plugins-example a:hover {
+.requirejs-example a:hover {
   color: #005580;
   text-decoration: underline;
 }
@@ -112,8 +112,8 @@
   -moz-border-radius: 9px;
   border-radius: 9px;
 }
-.requirejs-plugins-example a.label:hover,
-.requirejs-plugins-example a.badge:hover {
+.requirejs-example a.label:hover,
+.requirejs-example a.badge:hover {
   color: #ffffff;
   text-decoration: none;
   cursor: pointer;

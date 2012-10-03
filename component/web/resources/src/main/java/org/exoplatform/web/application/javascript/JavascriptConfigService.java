@@ -172,42 +172,48 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             boolean isNative = modules.size() > 0 && modules.get(0) instanceof Module.Native; 
             
             if (isModule && !isNative)
-            {
-               buffer.append("define('").append(resourceId).append("', ");
-               
+            {                              
                JSONArray deps = new JSONArray();               
-               List<String> alias = new LinkedList<String>();
+               LinkedList<String> alias = new LinkedList<String>();
+               List<String> argNames = new LinkedList<String>();                              
                for (ResourceId id : resource.getDependencies())
                {
                   ScriptResource dep = getResource(id);
                   if (dep != null)
-                  {
-                     deps.put(dep.getId());                     
+                  {                     
+                     String pluginRS = resource.getPluginResource(id);
+                     deps.put(parsePluginRS(dep.getId().toString(), pluginRS));                     
                      
                      //
                      String als = resource.getDependencyAlias(id);
                      alias.add(als == null ? dep.getAlias() : als);
+                     
+                     //
+                     argNames.add(parsePluginRS(alias.getLast(), pluginRS));                     
                   }
                   else if (RESERVED_MODULE.contains(id.getName()))
                   {
                      String reserved = id.getName();
                      deps.put(reserved);
                      alias.add(reserved);
+                     argNames.add(reserved);
                   }
                }
+               List<String> argValues = new LinkedList<String>(alias);
+               int reserveIdx = argValues.indexOf("require");
+               if (reserveIdx != -1)
+               {
+                  argValues.set(reserveIdx, "eXo.require");
+               }
+               
+               //
+               buffer.append("define('").append(resourceId).append("', ");
                buffer.append(deps);
                buffer.append(", function(");
-               buffer.append(StringUtils.join(alias, ","));
-               
-               //                        
+               buffer.append(StringUtils.join(alias, ","));               
                buffer.append(") {var require = eXo.require,requirejs = require,define = eXo.define;");
-               buffer.append("define.names=").append(new JSONArray(alias)).append(";");
-               int idx = alias.indexOf("require");
-               if (idx != -1)
-               {
-                  alias.set(idx, "eXo.require");
-               }
-               buffer.append("define.deps=[").append(StringUtils.join(alias, ",")).append("]").append(";");
+               buffer.append("define.names=").append(new JSONArray(argNames)).append(";");
+               buffer.append("define.deps=[").append(StringUtils.join(argValues, ",")).append("]").append(";");
                buffer.append("return ");
             }
             
@@ -246,6 +252,16 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       }      
    }
    
+   private String parsePluginRS(String name, String pluginRS)
+   {
+      StringBuilder depBuild = new StringBuilder(name);       
+      if (pluginRS != null)
+      {
+         depBuild.append("!").append(pluginRS);
+      }
+      return depBuild.toString();
+   }
+
    @SuppressWarnings("unchecked")
    public String generateURL(
       ControllerContext controllerContext,

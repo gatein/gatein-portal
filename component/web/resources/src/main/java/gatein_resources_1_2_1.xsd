@@ -247,6 +247,7 @@
     <xs:sequence>
       <xs:element name="module" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:element name="as" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="resource" type="xs:string" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
 
