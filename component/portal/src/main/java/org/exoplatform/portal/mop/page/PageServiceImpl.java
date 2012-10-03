@@ -362,7 +362,6 @@ public class PageServiceImpl implements PageService
          title,
          from,
          to);
-      int hits = a.hits();
       int size = a.size();
       PageContext[] array = new PageContext[size];
       int ptr = 0;
@@ -373,10 +372,7 @@ public class PageServiceImpl implements PageService
          dataCache.putPage(data);
          array[ptr++] = new PageContext(data);
       }
-      return new QueryResult<PageContext>(
-         hits,
-         from, size, Arrays.asList(array)
-      );
+      return new QueryResult<PageContext>(from, size, Arrays.asList(array));
    }
 
    public void clearCache()

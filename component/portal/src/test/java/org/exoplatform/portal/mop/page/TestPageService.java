@@ -210,7 +210,6 @@ public class TestPageService extends AbstractTestPageService
       //
       QueryResult<PageContext> result = service.findPages(0, 10, SiteType.PORTAL, "find_pages", null, null);
       assertEquals(2, result.getSize());
-      assertEquals(2, result.getHits());
    }
 
    public void testClone() throws Exception
