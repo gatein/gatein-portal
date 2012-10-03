@@ -23,6 +23,8 @@ package org.gatein.integration.jboss.as7.web;
 
 import org.exoplatform.container.RootContainer;
 import org.gatein.integration.jboss.as7.GateInConfiguration;
+import org.gatein.integration.jboss.as7.deployment.wsrp.WSRPPostModuleDeploymentProcessor;
+import org.gatein.integration.wsrp.plugins.AS7Plugins;
 import org.jboss.as.server.moduleservice.ModuleLoadService;
 import org.jboss.as.server.moduleservice.ServiceModuleLoader;
 import org.jboss.modules.Module;
@@ -32,14 +34,12 @@ import org.jboss.msc.service.StartContext;
 import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
 
-/**
- * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
- */
+/** @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a> */
 public class InitService implements Service<InitService>
 {
 
    private GateInConfiguration config;
-      
+
    public InitService(GateInConfiguration config)
    {
       this.config = config;
@@ -52,7 +52,7 @@ public class InitService implements Service<InitService>
       ServiceController<?> svc = context.getController().getServiceContainer()
          .getRequiredService(ServiceModuleLoader.moduleServiceName(config.getGateInEarModule()));
 
-      ModuleLoadService modService = (ModuleLoadService) svc.getService();
+      ModuleLoadService modService = (ModuleLoadService)svc.getService();
       Module module = modService.getValue();
 
       ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
@@ -60,7 +60,10 @@ public class InitService implements Service<InitService>
       {
          // set TCCL to this module's CL
          Thread.currentThread().setContextClassLoader(module.getClassLoader());
-         RootContainer.getInstance();
+         final RootContainer rootContainer = RootContainer.getInstance();
+
+         // register WSRP plugins service so that it's available when the WSRP service starts
+         rootContainer.registerComponentInstance(AS7Plugins.class, WSRPPostModuleDeploymentProcessor.plugins);
       }
       finally
       {
