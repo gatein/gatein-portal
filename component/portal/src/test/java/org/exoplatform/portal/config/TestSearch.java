@@ -21,6 +21,8 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.QueryResult;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
@@ -66,17 +68,30 @@ public class TestSearch extends AbstractConfigTest
       super.tearDown();
    }
 
-   private void assertPageFound(Query<Page> q, String expectedPage) throws Exception
+   private void assertPageFound(
+      int offset,
+      int limit,
+      SiteType siteType,
+      String siteName,
+      String pageName,
+      String title,
+      String expectedPage) throws Exception
    {
-      List<Page> res = storage.find(q).getAll();
-      assertEquals(1, res.size());
-      assertEquals(expectedPage, res.get(0).getPageId());
+      QueryResult<PageContext> res = pageService.findPages(offset, limit, siteType, siteName, pageName, title);
+      assertEquals(1, res.getSize());
+      assertEquals(expectedPage, res.iterator().next().getKey().format());
    }
 
-   private void assertPageNotFound(Query<Page> q) throws Exception
+   private void assertPageNotFound(
+      int offset,
+      int limit,
+      SiteType siteType,
+      String siteName,
+      String pageName,
+      String title) throws Exception
    {
-      List<Page> res = storage.find(q).getAll();
-      assertEquals(0, res.size());
+      QueryResult<PageContext> res = pageService.findPages(offset, limit, siteType, siteName, pageName, title);
+      assertEquals(0, res.getSize());
    }
 
    public void testSearchPage() throws Exception
@@ -92,41 +107,38 @@ public class TestSearch extends AbstractConfigTest
       session.save();
 
       //
-      assertPageFound(new Query<Page>(null, null, null, "Juuu Ziii", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "Juuu", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "Ziii", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "juuu ziii", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "juuu", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "ziii", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "juu", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "zii", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "ju", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "zi", Page.class), "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "Juuu Ziii", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "Juuu", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "Ziii", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "juuu ziii", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "juuu", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "ziii", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "juu", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "zii", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "ju", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "zi", "portal::test::searchedpage");
 
-      assertPageNotFound(new Query<Page>(null, null, null, "foo", Page.class));
-      assertPageNotFound(new Query<Page>(null, null, null, "foo bar", Page.class));
-      assertPageNotFound(new Query<Page>("test", null, null, null, Page.class));
+      assertPageNotFound(0, 10, null, null, null, "foo");
+      assertPageNotFound(0, 10, null, null, null, "foo bar");
    }
    
    public void testSearchPageByOwnerID() throws Exception
    {
-      Query<Page> q = new Query<Page>(null, "foo", Page.class);
-      List<Page> res = storage.find(q).getAll();
-      assertEquals(0, res.size());
+//      Query<Page> q = new Query<Page>(null, "foo", Page.class);
+//      List<Page> res = storage.find(q).getAll();
+      QueryResult<PageContext> res = pageService.findPages(0, 10, null, "foo", null, null);
+      assertEquals(0, res.getSize());
       
-      q.setOwnerId("test");
-      res = storage.find(q).getAll();
-      int pageNum = res.size();
+      res = pageService.findPages(0, 10, null, "test", null, null);
+      int pageNum = res.getSize();
       assertTrue(pageNum > 0);
       
       //Test trim ownerID
-      q.setOwnerId("   test   ");
-      res = storage.find(q).getAll();
-      assertEquals(pageNum, res.size());
+      res = pageService.findPages(0, 10, null, "   test   ", null, null);
+      assertEquals(pageNum, res.getSize());
       
       //This should returns all pages
-      q.setOwnerId(null);
-      res = storage.find(q).getAll();
-      assertTrue(res.size() > 0);
+      res = pageService.findPages(0, 10, null, null, null, null);
+      assertTrue(res.getSize() > 0);
    }
 }

@@ -266,35 +266,8 @@ public class POMDataStorage implements ModelDataStorage
    {
       Class<T> type = q.getClassType();
       if (PageData.class.equals(type))
-      {
-         ListAccess<PageData> pageAccess;
-         try
-         {
-            pageAccess = new MOPAccess.PageAccess(pomMgr, (Query<PageData>)q);
-         }
-         catch (IllegalArgumentException e)
-         {
-            pageAccess = new ListAccess<PageData>()
-            {
-               @Override
-               public PageData[] load(int index, int length) throws Exception, IllegalArgumentException
-               {
-                  return new PageData[0];
-               }
-
-               @Override
-               public int getSize() throws Exception
-               {
-                  return 0;
-               }
-               
-            };
-         }
-
-         // Commit pending changes if JTA is enabled to ensure that query result contains latest stuff from persistent storage
-         syncUserTransactionIfJTAEnabled();
-
-         return (LazyPageList<T>)new LazyPageList<PageData>(pageAccess, 10);
+      {  
+         throw new UnsupportedOperationException("Use PageService.findPages to instead of");
       }
       else if (PortletPreferences.class.equals(type))
       {

@@ -32,7 +32,9 @@ import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.QueryResult;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationState;
@@ -149,17 +151,30 @@ public class TestDataStorage extends AbstractConfigTest
       super.tearDown();
    }
 
-   private void assertPageFound(Query<Page> q, String expectedPage) throws Exception
+   private void assertPageFound(
+      int offset,
+      int limit,
+      SiteType siteType,
+      String siteName,
+      String pageName,
+      String title,
+      String expectedPage) throws Exception
    {
-      List<Page> res = storage_.find(q).getAll();
-      assertEquals(1, res.size());
-      assertEquals(expectedPage, res.get(0).getPageId());
+      QueryResult<PageContext> res = pageService.findPages(offset, limit, siteType, siteName, pageName, title);
+      assertEquals(1, res.getSize());
+      assertEquals(expectedPage, res.iterator().next().getKey().format());
    }
 
-   private void assertPageNotFound(Query<Page> q) throws Exception
+   private void assertPageNotFound(
+      int offset,
+      int limit,
+      SiteType siteType,
+      String siteName,
+      String pageName,
+      String title) throws Exception
    {
-      List<Page> res = storage_.find(q).getAll();
-      assertEquals(0, res.size());
+      QueryResult<PageContext> res = pageService.findPages(offset, limit, siteType, siteName, pageName, title);
+      assertEquals(0, res.getSize());
    }
 
    public void testCreatePortal() throws Exception
@@ -997,20 +1012,19 @@ public class TestDataStorage extends AbstractConfigTest
       pageService.savePage(pageContext);
 
       //
-      assertPageFound(new Query<Page>(null, null, null, "Juuu Ziii", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "Juuu", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "Ziii", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "juuu ziii", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "juuu", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "ziii", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "juu", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "zii", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "ju", Page.class), "portal::test::searchedpage");
-      assertPageFound(new Query<Page>(null, null, null, "zi", Page.class), "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "Juuu Ziii", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "Juuu", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "Ziii", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "juuu ziii", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "juuu", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "ziii", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "juu", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "zii", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "ju", "portal::test::searchedpage");
+      assertPageFound(0, 10, null, null, null, "zi", "portal::test::searchedpage");
 
-      assertPageNotFound(new Query<Page>(null, null, null, "foo", Page.class));
-      assertPageNotFound(new Query<Page>(null, null, null, "foo bar", Page.class));
-      assertPageNotFound(new Query<Page>("test", null, null, null, Page.class));
+      assertPageNotFound(0, 10, null, null, null, "foo");
+      assertPageNotFound(0, 10, null, null, null, "foo bar");
    }
 
    public void testGadget() throws Exception
@@ -1254,12 +1268,12 @@ public class TestDataStorage extends AbstractConfigTest
       pageContext.setState(pageContext.getState().builder().name("Juuu2 Ziii2").build());
       pageService.savePage(pageContext);
 
-      assertPageFound(new Query<Page>(null, null, null, "Juuu2 Ziii2", Page.class), "portal::test::searchedpage2");
+      assertPageFound(0, 10, null, null, null, "Juuu2 Ziii2", "portal::test::searchedpage2");
       jtaUserTransactionLifecycleService.finishJTATransaction();
 
       jtaUserTransactionLifecycleService.beginJTATransaction();
       pageService.destroyPage(pageContext.getKey());
-      assertPageNotFound(new Query<Page>(null, null, null, "Juuu2 Ziii2", Page.class));
+      assertPageNotFound(0, 10, null, null, null, "Juuu2 Ziii2");
       jtaUserTransactionLifecycleService.finishJTATransaction();
    }
    

@@ -1,13 +1,18 @@
 package org.exoplatform.portal.mop.page;
 
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.QueryResult;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.common.transaction.JTAUserTransactionLifecycleService;
+
+import javax.transaction.Status;
 
 /**
  * <p>A wrapper for the {@link PageServiceImpl}, the wrappers takes care of integrating the implementation
@@ -102,6 +107,31 @@ public class PageServiceWrapper implements PageService
    @Override
    public QueryResult<PageContext> findPages(int offset, int limit, SiteType siteType, String siteName, String pageName, String title)
    {
+      try
+      {
+         JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService = (JTAUserTransactionLifecycleService)PortalContainer.getInstance().getComponentInstanceOfType(JTAUserTransactionLifecycleService.class);
+         if (jtaUserTransactionLifecycleService.getUserTransaction().getStatus() == Status.STATUS_ACTIVE)
+         {
+            POMSession pomSession = manager.getSession();
+            if (pomSession.isModified())
+            {
+               if (log.isTraceEnabled())
+               {
+                  log.trace("Active JTA transaction found. Going to sync MOP session and JTA transaction");
+               }
+
+               // Sync current MOP session first
+               pomSession.save();
+
+               jtaUserTransactionLifecycleService.finishJTATransaction();
+               jtaUserTransactionLifecycleService.beginJTATransaction();
+            }
+         }
+      }
+      catch (Exception e)
+      {
+         log.warn("Error during sync of JTA transaction", e);
+      }
       return service.findPages(offset, limit, siteType, siteName, pageName, title);
    }
 

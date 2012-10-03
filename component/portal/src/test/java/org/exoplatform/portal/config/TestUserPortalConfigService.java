@@ -30,6 +30,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
@@ -329,10 +330,9 @@ public class TestUserPortalConfigService extends AbstractConfigTest
 
          private void queryPage()
          {
-            Query<Page> query = new Query<Page>("portal", null, null, null, Page.class);
             try
             {
-               storage_.find(query);
+               pageService.findPages(0, 10, SiteType.PORTAL, null, null, null);
             }
             catch (Exception ex)
             {
