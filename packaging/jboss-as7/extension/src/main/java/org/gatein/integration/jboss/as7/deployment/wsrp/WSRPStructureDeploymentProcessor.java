@@ -29,6 +29,7 @@ import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
+import org.jboss.as.server.deployment.ServicesAttachment;
 import org.jboss.as.server.deployment.module.ModuleDependency;
 import org.jboss.as.server.deployment.module.ModuleSpecification;
 import org.jboss.as.server.deployment.module.ResourceRoot;
@@ -51,15 +52,21 @@ public class WSRPStructureDeploymentProcessor implements DeploymentUnitProcessor
       {
          du.putAttachment(GateInWSRPKey.KEY, GateInWSRPKey.INSTANCE);
 
-         // add WSRP and PC modules as dependencies
+         // add dependencies
          final ModuleSpecification moduleSpecification = du.getAttachment(Attachments.MODULE_SPECIFICATION);
          final ModuleLoader moduleLoader = Module.getBootModuleLoader();
-         ModuleDependency dependency = new ModuleDependency(moduleLoader, ModuleIdentifier.fromString("org.gatein.wsrp"), false, false, true, false);
+         ModuleDependency dependency = new ModuleDependency(moduleLoader, ModuleIdentifier.fromString("org.gatein.wsrp"), false, false, false, false);
          moduleSpecification.addSystemDependency(dependency);
+
+         // PC dependency is needed for InvocationHandlerDelegate implementations
          dependency = new ModuleDependency(moduleLoader, ModuleIdentifier.fromString("org.gatein.pc"), false, false, false, false);
          moduleSpecification.addSystemDependency(dependency);
 
-         log.infof("Adding WSRP & PC dependencies to %s", du.getName());
+         // Apache WS Security is needed for CallbackHandler implementations
+         dependency = new ModuleDependency(moduleLoader, ModuleIdentifier.fromString("org.apache.ws.security"), false, false, false, false);
+         moduleSpecification.addSystemDependency(dependency);
+
+         log.infof("Adding WSRP, PC & Apache WS Security  dependencies to %s", du.getName());
       }
    }
 

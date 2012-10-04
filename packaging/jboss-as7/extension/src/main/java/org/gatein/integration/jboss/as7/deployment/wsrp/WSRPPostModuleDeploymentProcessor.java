@@ -22,8 +22,6 @@
 
 package org.gatein.integration.jboss.as7.deployment.wsrp;
 
-import org.gatein.integration.jboss.as7.GateInConfiguration;
-import org.gatein.integration.jboss.as7.deployment.GateInConfigurationKey;
 import org.gatein.integration.wsrp.plugins.AS7Plugins;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -49,27 +47,31 @@ public class WSRPPostModuleDeploymentProcessor implements DeploymentUnitProcesso
       final DeploymentUnit du = phaseContext.getDeploymentUnit();
       if (GateInWSRPKey.isGateInWSRPArchive(du))
       {
+         // Only process if we have a META-INF/services ServiceLoader directory in the archive
          final ServicesAttachment services = du.getAttachment(Attachments.SERVICES);
-         final Module module = du.getAttachment(Attachments.MODULE);
-         final ModuleClassLoader classLoader;
-         if(module != null)
+         if (services != null)
          {
-            classLoader = module.getClassLoader();
-         }
-         else
-         {
-            classLoader = null;
-         }
+            // get the module class loader
+            final Module module = du.getAttachment(Attachments.MODULE);
+            final ModuleClassLoader classLoader;
+            if (module != null)
+            {
+               classLoader = module.getClassLoader();
+            }
+            else
+            {
+               classLoader = null;
+            }
 
-         if(services != null)
-         {
             for (String interfaceName : KNOWN_PLUGIN_INTERFACE_NAMES)
             {
+               // retrieve all service implementations for each known plugin interface and add them if they exist
                final List<String> serviceImplementations = services.getServiceImplementations(interfaceName);
                plugins.addPluginImplementations(interfaceName, serviceImplementations);
 
                if (classLoader != null)
                {
+                  // remember the module for each service implementation
                   for (String implementation : serviceImplementations)
                   {
                      plugins.registerClassloader(implementation, classLoader);
