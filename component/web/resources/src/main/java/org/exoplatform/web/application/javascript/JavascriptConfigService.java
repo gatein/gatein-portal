@@ -145,7 +145,9 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                Reader rd = getScript(id, locale);
                if (rd != null)
                {
+                  readers.add(new StringReader("\n//Begin " + id));
                   readers.add(rd);
+                  readers.add(new StringReader("\n//End " + id));
                }
             }
             return new CompositeReader(readers);
@@ -207,14 +209,14 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                }
                
                //
-               buffer.append("define('").append(resourceId).append("', ");
+               buffer.append("\ndefine('").append(resourceId).append("', ");
                buffer.append(deps);
                buffer.append(", function(");
                buffer.append(StringUtils.join(alias, ","));               
-               buffer.append(") {var require = eXo.require,requirejs = require,define = eXo.define;");
-               buffer.append("define.names=").append(new JSONArray(argNames)).append(";");
-               buffer.append("define.deps=[").append(StringUtils.join(argValues, ",")).append("]").append(";");
-               buffer.append("return ");
+               buffer.append(") {\nvar require = eXo.require,requirejs = require,define = eXo.define;");
+               buffer.append("\neXo.define.names=").append(new JSONArray(argNames)).append(";");
+               buffer.append("\neXo.define.deps=[").append(StringUtils.join(argValues, ",")).append("]").append(";");
+               buffer.append("\nreturn ");
             }
             
             //
@@ -233,12 +235,12 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             {            
                if (!isNative)
                {
-                  buffer.append("});");                                   
+                  buffer.append("\n});");                                   
                }
             }
             else 
             {
-               buffer.append("if (typeof define === 'function' && define.amd && !require.specified('").append(resource.getId()).append("')) {");
+               buffer.append("\nif (typeof define === 'function' && define.amd && !require.specified('").append(resource.getId()).append("')) {");
                buffer.append("define('").append(resource.getId()).append("');}");            
             }
             readers.add(new StringReader(buffer.toString()));            

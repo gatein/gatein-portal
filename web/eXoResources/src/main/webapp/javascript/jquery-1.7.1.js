@@ -9261,7 +9261,4 @@ if ( typeof define === "function" && define.amd && define.amd.jQuery ) {
 	define( "jquery", [], function () { return jQuery; } );
 }
 
-//This jquery instance will be transformed to requireJS module by GateIn
-//We will remove global jquery and use it as a module (SHARED/jquery)
-return jQuery.noConflict(true);
 })( window );

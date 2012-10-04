@@ -19,6 +19,7 @@
 
 package org.gatein.portal.controller.resource.script;
 
+import org.exoplatform.commons.utils.CompositeReader;
 import org.exoplatform.commons.utils.PropertyResolverReader;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
@@ -31,7 +32,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringReader;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -112,10 +116,9 @@ public abstract class Module
    }
    
    public static class Local extends Module
-   {
-
+   {      
       /** . */
-      private final String path;
+      private final Content[] contents;
 
       /** . */
       private final String resourceBundle;
@@ -124,6 +127,11 @@ public abstract class Module
       private final Map<QualifiedName, String> parameters;
 
       Local(ScriptResource resource, String contextPath, String name, String path, String resourceBundle, int priority)
+      {
+         this(resource, contextPath, name, new Content[] {new Content(path)}, resourceBundle, priority);
+      }
+      
+      Local(ScriptResource resource, String contextPath, String name, Content[] contents, String resourceBundle, int priority)
       {
          super(resource, contextPath, name, priority);
 
@@ -135,14 +143,30 @@ public abstract class Module
          parameters.put(ResourceRequestHandler.MODULE_QN, name);
          
          //
-         this.path = path;
+         if (contents == null)
+         {
+            throw new IllegalArgumentException("contents must be not null");
+         }
+         this.contents = contents;
          this.parameters = parameters;
          this.resourceBundle = resourceBundle;
       }
 
       public String getPath()
       {
-         return path;
+         for (Content ct : contents)
+         {
+            if (ct.isPath())
+            {
+               return ct.getSource();
+            }
+         }
+         return null;
+      }
+      
+      public Content[] getContents()
+      {
+         return contents;
       }
 
       public String getResourceBundle()
@@ -164,7 +188,7 @@ public abstract class Module
       @Override
       public String getURI()
       {
-         return contextPath + path;
+         return contextPath + getPath();
       }
 
       /**
@@ -176,7 +200,36 @@ public abstract class Module
        */
       public Reader read(Locale locale, ServletContext scriptLoader, ClassLoader bundleLoader)
       {
-         InputStream in = scriptLoader.getResourceAsStream(path);
+         List<Reader> readers = new LinkedList<Reader>();
+         for (Content content : contents)
+         {
+            if (content.isPath())
+            {
+               Reader script = getScript(content.getSource(), locale, scriptLoader, bundleLoader);
+               if (script != null)
+               {
+                  readers.add(script);                  
+               }
+            }
+            else
+            {
+               readers.add(new StringReader("\n" + content.getSource() + "\n"));
+            }            
+         }
+         
+         if (readers.size() > 0)
+         {
+            return new CompositeReader(readers);                    
+         }
+         else
+         {
+            return null;
+         }
+      }
+
+      private Reader getScript(String pt, Locale locale, ServletContext scriptLoader, ClassLoader bundleLoader)
+      {
+         InputStream in = scriptLoader.getResourceAsStream(pt);
          if (in != null)
          {
             Reader reader = new InputStreamReader(in);
@@ -216,6 +269,33 @@ public abstract class Module
             return reader;
          }
          return null;
+      }
+      
+      public static class Content
+      {
+         private String source;
+         private boolean isPath;
+         
+         public Content(String source)
+         {
+            this(source, true);
+         }
+         
+         public Content(String content, boolean isPath)
+         {
+            this.source = content;
+            this.isPath = isPath;
+         }
+
+         public String getSource()
+         {
+            return source;
+         }
+
+         public boolean isPath()
+         {
+            return isPath;
+         }     
       }
    }
 

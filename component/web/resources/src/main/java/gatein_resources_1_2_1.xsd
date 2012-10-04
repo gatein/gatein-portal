@@ -250,12 +250,21 @@
       <xs:element name="resource" type="xs:string" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
-
+  
   <xs:complexType name="script">
     <xs:sequence>
       <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
-      <xs:element name="path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+      <xs:choice>
+        <xs:element name="path" type="xs:string" minOccurs="1" maxOccurs="1"/>
+        <xs:element name="adapter" type="adapter" minOccurs="1" maxOccurs="1"/>
+      </xs:choice>
       <xs:element name="resource-bundle" type="xs:string" minOccurs="0" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="adapter" mixed="true">
+    <xs:sequence>
+      <xs:element name="include" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
   

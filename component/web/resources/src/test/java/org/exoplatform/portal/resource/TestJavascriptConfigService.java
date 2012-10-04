@@ -93,53 +93,53 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    {      
       //no wrapper for SCRIPTS
       String script1 = "aaa;" +
-                               "if (typeof define === 'function' && define.amd && !require.specified('SHARED/script1')) {define('SHARED/script1');}";
+                               "\nif (typeof define === 'function' && define.amd && !require.specified('SHARED/script1')) {define('SHARED/script1');}";
       String script2 = "bbb;" +
-                               "if (typeof define === 'function' && define.amd && !require.specified('SHARED/script2')) {define('SHARED/script2');}";
+                               "\nif (typeof define === 'function' && define.amd && !require.specified('SHARED/script2')) {define('SHARED/script2');}";
       assertReader(script1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "script1"), null));
       assertReader(script2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "script2"), null));          
       
       //wrapper for MODULE
       //test for Alias : module1 is used with 'm1' alias
-      String module1 = "define('SHARED/module1', [], function() {" +
-                                 "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[];define.deps=[];" +      
-                                 "return ccc;});";
+      String module1 = "\ndefine('SHARED/module1', [], function() {" +
+                                 "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[];\neXo.define.deps=[];" +      
+                                 "\nreturn ccc;\n});";
       assertReader(module1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module1"), null));
       
       //module2 depends on module1
       //test for Alias : module1 is used with 'mod1' alias, module2 use default name for alias
-      String module2 = "define('SHARED/module2', [\"SHARED/module1\"], function(mod1) {" +
-                                 "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[\"mod1\"];define.deps=[mod1];" +
-                                 "return ddd;});";
+      String module2 = "\ndefine('SHARED/module2', [\"SHARED/module1\"], function(mod1) {" +
+                                 "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[\"mod1\"];\neXo.define.deps=[mod1];" +
+                                 "\nreturn ddd;\n});";
       assertReader(module2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module2"), null));
    }
      
    public void testCommonJS() throws Exception
    {
-      String commonjs = "define('SHARED/commonjs', [\"require\",\"exports\",\"module\"], function(require,exports,module) {" +
-               "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[\"require\",\"exports\",\"module\"];" +
-               "define.deps=[eXo.require,exports,module];" +      
-               "return kkk;});";
+      String commonjs = "\ndefine('SHARED/commonjs', [\"require\",\"exports\",\"module\"], function(require,exports,module) {" +
+               "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[\"require\",\"exports\",\"module\"];" +
+               "\neXo.define.deps=[eXo.require,exports,module];" +      
+               "\nreturn kkk;\n});";
       assertReader(commonjs, jsService.getScript(new ResourceId(ResourceScope.SHARED, "commonjs"), null));
    }
    
    public void testRequireJSPlugin() throws Exception
    {
-      String pluginTest = "define('SHARED/pluginTest', [\"SHARED/text!/path/to/file.js\"], function(text) {" +
-               "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[\"text!/path/to/file.js\"];" +
-               "define.deps=[text];" +      
-               "return iii;});";
+      String pluginTest = "\ndefine('SHARED/pluginTest', [\"SHARED/text!/path/to/file.js\"], function(text) {" +
+               "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[\"text!/path/to/file.js\"];" +
+               "\neXo.define.deps=[text];" +      
+               "\nreturn iii;\n});";
       assertReader(pluginTest, jsService.getScript(new ResourceId(ResourceScope.SHARED, "pluginTest"), null));
    }
    
    public void testGroupingScript() throws Exception
    {
-      String module1 = "define('SHARED/module1', [], function() {" +      
-               "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[];define.deps=[];" +
-               "return ccc;});";
-      String module2 = "define('SHARED/module2', [\"SHARED/module1\"], function(mod1) {" +
-               "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[\"mod1\"];define.deps=[mod1];" +
-               "return ddd;});";
+      String module1 = "\n//Begin SHARED/module1\ndefine('SHARED/module1', [], function() {" +      
+               "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[];\neXo.define.deps=[];" +
+               "\nreturn ccc;\n});\n//End SHARED/module1";
+      String module2 = "\n//Begin SHARED/module2\ndefine('SHARED/module2', [\"SHARED/module1\"], function(mod1) {" +
+               "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[\"mod1\"];\neXo.define.deps=[mod1];" +
+               "\nreturn ddd;\n});\n//End SHARED/module2";
       
       StringWriter buffer = new StringWriter();
       IOTools.copy(jsService.getScript(new ResourceId(ResourceScope.GROUP, "fooGroup"), null), buffer);
@@ -157,7 +157,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertReader(native1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "native1"), null));
       
       String native2 = "fff;" +
-               "if (typeof define === 'function' && define.amd && !require.specified('native2')) {define('native2');}";
+               "\nif (typeof define === 'function' && define.amd && !require.specified('native2')) {define('native2');}";
       assertReader(native2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "native2"), null));
    }
 
@@ -216,9 +216,9 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    
    public void testNormalize() throws Exception
    {
-      String normalizedJS = "define('SHARED/normalize_test', [], function() {" +
-                                          "var require = eXo.require,requirejs = require,define = eXo.define;define.names=[];define.deps=[];" +
-                                          "return ggg; // /* */ \n});";
+      String normalizedJS = "\ndefine('SHARED/normalize_test', [], function() {" +
+                                          "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[];\neXo.define.deps=[];" +
+                                          "\nreturn ggg; // /* */ \n\n});";
       assertReader(normalizedJS, jsService.getScript(new ResourceId(ResourceScope.SHARED, "normalize_test"), null));
    }
    

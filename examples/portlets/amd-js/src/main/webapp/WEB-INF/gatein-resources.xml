@@ -84,7 +84,11 @@
       <name>math</name>
       <script>
         <name>commonjs.math</name>
-        <path>/commonjs/math.js</path>
+        <adapter>
+        	define(["require", "exports"], function(require, exports) {
+         	<include>/commonjs/math.js</include>        		
+        	});
+        </adapter>
        </script>
       <depends>
         <module>require</module>
@@ -92,25 +96,23 @@
       <depends>
         <module>exports</module>
       </depends>
-      <depends>
-        <module>module</module>
-      </depends>
    </module>
 
    <module>
       <name>increment</name>
       <script>
         <name>commonjs.increment</name>
-        <path>/commonjs/increment.js</path>
+        <adapter>
+        	define(["require", "exports", "math"], function(require, exports) {
+         	<include>/commonjs/increment.js</include>        		
+        	});
+        </adapter>
       </script>
       <depends>
         <module>require</module>
       </depends>
       <depends>
         <module>exports</module>
-      </depends>
-      <depends>
-        <module>module</module>
       </depends>
       <depends>
         <module>math</module>
@@ -130,7 +132,23 @@
    
    <module>
       <name>mustache</name>     
-      <native-script>/requirejs/js/plugins/mustache.js</native-script>
+      <script>
+      	<name>mustache</name>
+	      <adapter>
+        	define(["require", "exports", "module"], function(require, exports, module) {
+         	<include>/requirejs/js/plugins/mustache.js</include>        		
+        	});
+        </adapter>
+      </script>
+      <depends>
+        <module>require</module>
+      </depends>
+      <depends>
+        <module>exports</module>
+      </depends>
+      <depends>
+        <module>module</module>
+      </depends>
    </module>
    
    <module>

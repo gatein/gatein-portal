@@ -22,6 +22,7 @@ package org.exoplatform.web.application.javascript;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.script.Module;
 import org.gatein.portal.controller.resource.script.ScriptResource;
+import org.gatein.portal.controller.resource.script.Module.Local.Content;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -52,7 +53,7 @@ public abstract class Javascript
       else
       {
          Module.Local local = (Module.Local)module;
-         return new Local(local.getResource().getId(), local.getName(), local.getContextPath(), local.getPath(), local.getResourceBundle(), local.getPriority());
+         return new Local(local.getResource().getId(), local.getName(), local.getContextPath(), local.getContents(), local.getResourceBundle(), local.getPriority());
       }
    }
 
@@ -110,26 +111,40 @@ public abstract class Javascript
    {
 
       /** . */
-      protected final String path;
+      protected final Content[] contents;
 
       /** . */
       protected final String resourceBundle;
 
       public Local(ResourceId resource, String module, String contextPath, String path, String resourceBundle, int priority)
       {
+         this(resource, module, contextPath, new Content[] {new Content(path)}, resourceBundle, priority);         
+      }
+      
+      public Local(ResourceId resource, String module, String contextPath, Content[] contents, String resourceBundle, int priority)
+      {
          super(resource, module, contextPath, priority);
 
          //
-         this.path = path;
+         if (contents == null)
+         {
+            throw new IllegalArgumentException("contents must be not null");
+         }
+         this.contents = contents;
          this.resourceBundle = resourceBundle;
       }
 
       @Override
       Module addModuleTo(ScriptResource resource)
       {
-         return resource.addLocalModule(contextPath, module, path, resourceBundle, priority);
+         return resource.addLocalModule(contextPath, module, contents, resourceBundle, priority);
       }
 
+      public Content[] getContents()
+      {
+         return contents;
+      }
+      
       public String getResourceBundle()
       {
          return resourceBundle;
@@ -139,7 +154,7 @@ public abstract class Javascript
       public boolean isExternalScript()
       {
          return false;
-      }
+      }      
    }
 
    public static class Remote extends Javascript
@@ -179,7 +194,7 @@ public abstract class Javascript
       @Override
       Module addModuleTo(ScriptResource resource)
       {
-         return resource.addNativeModule(contextPath, module, path, resourceBundle, priority);
+         return resource.addNativeModule(contextPath, module, contents[0].getSource(), resourceBundle, priority);
       }
 
       @Override

@@ -25,14 +25,18 @@ import org.gatein.common.xml.XMLTools;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMode;
+import org.gatein.portal.controller.resource.script.Module.Local.Content;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.ServletContext;
@@ -95,6 +99,12 @@ public class JavascriptConfigParser
    
    /** . */
    final public static String AS_TAG = "as";
+   
+   /** . */
+   final public static String ADAPTER_TAG = "adapter";
+   
+   /** . */
+   final public static String INCLUDE_TAG = "include";
    
    /** . */
    final public static String NATIVE_TAG = "native-script";
@@ -334,16 +344,42 @@ public class JavascriptConfigParser
          for (Element scriptElt : XMLTools.getChildren(element, SCRIPT_TAG))
          {
             String scriptName = XMLTools.asString(XMLTools.getUniqueChild(scriptElt, "name", true));
-            Javascript script;
-            Element path = XMLTools.getUniqueChild(scriptElt, "path", true);
-            String resourceBundle = null;
-            Element bundleElt = XMLTools.getUniqueChild(scriptElt, "resource-bundle", false);
-            if (bundleElt != null)
+            String resourceBundle = parseOptString(scriptElt, "resource-bundle");
+
+            List<Content> contents = new LinkedList<Content>();
+            Element adapter = XMLTools.getUniqueChild(scriptElt, ADAPTER_TAG, false);
+            String scriptPath = parseOptString(scriptElt, "path");            
+            if (scriptPath != null)
             {
-               resourceBundle = XMLTools.asString(bundleElt);
+               contents.add(new Content(scriptPath));
+            } 
+            else if (adapter != null)
+            {
+               if (adapter != null)
+               {          
+                  NodeList childs = adapter.getChildNodes();
+                  for (int i = 0; i < childs.getLength(); i++)
+                  {
+                     Node item = childs.item(i);
+                     if (item instanceof Element)
+                     {
+                        Element include = (Element)item;
+                        if (INCLUDE_TAG.equals(include.getTagName()))
+                        {
+                           contents.add(new Content(XMLTools.asString(include, true)));                                                   
+                        }
+                     }
+                     else if (item.getNodeType() == Node.TEXT_NODE)
+                     {
+                        contents.add(new Content(item.getNodeValue().trim(), false));                                                
+                     }
+                  }         
+               }
             }
-            String scriptPath = XMLTools.asString(path);
-            script = new Javascript.Local(desc.id, scriptName, contextPath, scriptPath, resourceBundle, 0);
+            Content[] tmp = contents.toArray(new Content[contents.size()]);
+            
+            //
+            Javascript script = new Javascript.Local(desc.id, scriptName, contextPath, tmp, resourceBundle, 0);
             desc.modules.add(script);
          }
       }

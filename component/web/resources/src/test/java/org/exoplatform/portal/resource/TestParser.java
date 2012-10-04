@@ -26,6 +26,8 @@ import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.ScriptResourceDescriptor;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
+import org.gatein.portal.controller.resource.script.Module.Local.Content;
+
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -345,5 +347,32 @@ public class TestParser extends AbstractGateInTest
       {
          assertNull(des.getGroup());
       }
+   }
+   
+   public void testAdapter() throws Exception
+   {
+      String config = "" +
+               "<gatein-resources>" + 
+               "<module>" + 
+               "<name>foo_module</name>" +
+               "<script><name>foo</name>" + 
+               "<adapter>aaa;<include>/foo_module.js</include>bbb;</adapter>" + 
+               "</script>" +
+               "</module>" +
+               "</gatein-resources>";
+      
+      JavascriptConfigParser parser = new JavascriptConfigParser("/mypath");
+      List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
+      
+      ScriptResourceDescriptor des = scripts.get(0);
+      Javascript.Local module = (Javascript.Local)des.getModules().get(0);
+      Content[] contents = module.getContents();
+      
+      assertNotNull(contents);
+      assertEquals(3, contents.length);
+      assertEquals("aaa;", contents[0].getSource());
+      assertFalse(contents[0].isPath());
+      assertEquals("/foo_module.js", contents[1].getSource());
+      assertTrue(contents[1].isPath());        
    }
 }

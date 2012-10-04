@@ -30,6 +30,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.gatein.portal.controller.resource.ResourceId;
+import org.gatein.portal.controller.resource.script.Module.Local.Content;
 
 /**
  * <p></p>
@@ -147,7 +148,12 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
 
    public Module.Local addLocalModule(String contextPath, String name, String path, String resourceBundle, int priority)
    {
-      Module.Local module = new Module.Local(this, contextPath, name, path, resourceBundle, priority);
+      return addLocalModule(contextPath, name, new Content[] {new Content(path)}, resourceBundle, priority);
+   }
+   
+   public Module.Local addLocalModule(String contextPath, String name, Content[] contents, String resourceBundle, int priority)
+   {
+      Module.Local module = new Module.Local(this, contextPath, name, contents, resourceBundle, priority);
       modules.add(module);
       return module;
    }

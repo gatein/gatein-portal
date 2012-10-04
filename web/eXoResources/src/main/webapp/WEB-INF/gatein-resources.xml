@@ -128,7 +128,12 @@
       <as>$</as> 
       <script>
          <name>jquery</name>
-         <path>/javascript/jquery-1.7.1.js</path>
+         <adapter>	                 		
+	        	(function() {
+        		  <include>/javascript/jquery-1.7.1.js</include>
+		        return jQuery.noConflict(true);
+		      })();
+         </adapter>
       </script>
    </module>
 

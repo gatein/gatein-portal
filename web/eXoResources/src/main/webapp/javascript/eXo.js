@@ -155,9 +155,13 @@ eXo.define = function() {
 	var result;
 	if (callback instanceof Function) {
 		var result = callback.apply(this, deps);
-		var expIdx = reqList.indexOf("exports");
-		if (expIdx !== -1) {
-			result = deps[expIdx];
+		if (!result) {
+			var idx = reqList.indexOf("module");
+			if (idx !== -1) {
+				result = deps[idx].exports;
+			} else if ((idx = reqList.indexOf("exports")) != -1) {
+				result = deps[idx];
+			}			
 		}
 	} else {
 		result = callback;

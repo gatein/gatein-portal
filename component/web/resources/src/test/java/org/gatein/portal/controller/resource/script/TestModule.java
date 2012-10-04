@@ -24,6 +24,7 @@ import org.exoplatform.component.test.web.ServletContextImpl;
 import org.gatein.common.io.IOTools;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.Module;
+import org.gatein.portal.controller.resource.script.Module.Local.Content;
 import org.gatein.portal.controller.resource.script.ScriptGraph;
 import org.gatein.portal.controller.resource.script.ScriptResource;
 
@@ -157,6 +158,16 @@ public class TestModule extends AbstractGateInTest
       Module.Local module = foo.addLocalModule("/webapp", "module", "/localized.js", "bundle", 0);
       Reader reader = module.read(Locale.FRANCE, servletContext, classLoader);
       assertReader("foo_fr_FR", reader);
+   }
+   
+   public void testAdapter() throws Exception
+   {
+      ScriptGraph graph = new ScriptGraph();
+      ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("module"));
+      Content[] contents = new Content[] {new Content("var a;", false), new Content("/localized.js"), new Content("var b;", false)};
+      Module.Local module = foo.addLocalModule("/webapp", "module", contents, "bundle", 0);
+      Reader reader = module.read(Locale.ENGLISH, servletContext, classLoader);
+      assertReader("foo_en", reader);
    }
 
    private void assertReader(Object expected, Reader reader)
