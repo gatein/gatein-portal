@@ -162,7 +162,7 @@ public class UIGroupMembershipSelector extends UIContainer
       {
          return list;
       }
-      list.add(0, new LocalPath(group.getId(), group.getGroupName()));
+      list.add(0, new LocalPath(group.getId(), group.getLabel()));
       getPath(list, group.getParentId());
       return list;
    }
