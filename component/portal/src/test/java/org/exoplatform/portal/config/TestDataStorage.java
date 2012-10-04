@@ -20,6 +20,7 @@
 package org.exoplatform.portal.config;
 
 import junit.framework.AssertionFailedError;
+
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
@@ -249,7 +250,7 @@ public class TestDataStorage extends AbstractConfigTest
       {
          storage_.save(page);
          fail();
-      } catch(IllegalStateException e)
+      } catch(NoSuchDataException e)
       {
       }
       pageService.savePage(new PageContext(page.getPageKey(), null));

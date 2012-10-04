@@ -8,7 +8,6 @@ import org.exoplatform.portal.mop.Utils;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.MappedAttributes;
-import org.exoplatform.portal.pom.data.Mapper;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;

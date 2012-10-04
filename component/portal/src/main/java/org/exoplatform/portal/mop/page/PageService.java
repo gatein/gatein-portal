@@ -25,10 +25,15 @@ public interface PageService
    /**
     * Create, update a page. When the page state is not null, the page
     * will be created or updated depending on whether or not the page already exists.
+    * 
     *
     * @param page the page
+    * 
+    * @return true if the page is not already existed, otherwise return false.
+    * 
     * @throws NullPointerException if the key is null
     * @throws PageServiceException anything that would prevent the operation to succeed
+    * 
     */
    boolean savePage(PageContext page) throws NullPointerException, PageServiceException;
 

@@ -26,7 +26,6 @@ import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -54,28 +53,6 @@ public class TestCache extends AbstractConfigTest
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
       pageService = (PageService)container.getComponentInstanceOfType(PageService.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-   }
-
-   public void testGetNullInvalidation() throws Exception
-   {
-      begin();
-      session = mgr.openSession();
-      assertNull(storage_.getPage("portal::test::nonexisting"));
-      Page page = new Page();
-      page.setPageId("portal::test::nonexisting");
-      try
-      {
-         storage_.save(page);
-         fail();
-      } catch(IllegalStateException e)
-      {
-      }
-      pageService.savePage(new PageContext(page.getPageKey(), null));
-      end(true);
-      begin();
-      session = mgr.openSession();
-      assertNotNull(storage_.getPage("portal::test::nonexisting"));
-      end();
    }
 
    public void testGetPageFromRemovedPortal() throws Exception

@@ -25,16 +25,17 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.exoplatform.portal.config.model.CloneApplicationState;
-import org.exoplatform.portal.mop.*;
+import org.exoplatform.portal.config.model.PersistentApplicationState;
+import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.config.model.TransientApplicationState;
+import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.mop.redirects.Condition;
 import org.exoplatform.portal.mop.redirects.DeviceProperty;
 import org.exoplatform.portal.mop.redirects.Mappings;
 import org.exoplatform.portal.mop.redirects.NodeMap;
 import org.exoplatform.portal.mop.redirects.Redirect;
 import org.exoplatform.portal.mop.redirects.Redirectable;
-import org.exoplatform.portal.config.model.PersistentApplicationState;
-import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
@@ -42,7 +43,10 @@ import org.exoplatform.services.jcr.util.Text;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
-import org.gatein.mop.api.workspace.*;
+import org.gatein.mop.api.workspace.ObjectType;
+import org.gatein.mop.api.workspace.Site;
+import org.gatein.mop.api.workspace.Templatized;
+import org.gatein.mop.api.workspace.WorkspaceObject;
 import org.gatein.mop.api.workspace.ui.UIBody;
 import org.gatein.mop.api.workspace.ui.UIComponent;
 import org.gatein.mop.api.workspace.ui.UIContainer;
@@ -611,7 +615,7 @@ public class Mapper
       //
       if (dst == null)
       {
-         throw new IllegalStateException("The page " + name + " not found");
+         throw new NoSuchDataException("The page " + name + " not found");
       }
       else
       {

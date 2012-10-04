@@ -128,7 +128,7 @@ public class TestPageService extends AbstractTestPageService
          "foo_description_2",
          false,
          "foo_factory_id_2",
-         Arrays.asList("foo_access_permission_2"),
+         Arrays.asList("foo_access_permission_2", "foo_2_access_permission_2"),
          "foo_edit_permission_2"
       ));
       assertFalse(service.savePage(page));
@@ -145,7 +145,7 @@ public class TestPageService extends AbstractTestPageService
       assertEquals("foo_name_2", fooDescribed.getName());
       assertEquals("foo_description_2", fooDescribed.getDescription());
       fooResource = foo.adapt(ProtectedResource.class);
-      assertEquals(Arrays.asList("foo_access_permission_2"), fooResource.getAccessPermissions());
+      assertEquals(Arrays.asList("foo_access_permission_2", "foo_2_access_permission_2"), fooResource.getAccessPermissions());
       assertEquals("foo_edit_permission_2", fooResource.getEditPermission());
       fooAttrs = foo.getAttributes();
       assertEquals("foo_factory_id_2", fooAttrs.getValue(MappedAttributes.FACTORY_ID));

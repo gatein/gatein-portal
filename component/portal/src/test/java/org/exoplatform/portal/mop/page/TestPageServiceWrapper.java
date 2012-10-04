@@ -15,6 +15,7 @@ import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.mop.api.workspace.ObjectType;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -49,6 +50,19 @@ public class TestPageServiceWrapper extends AbstractMOPTest
 
       //
       super.setUp();
+   }
+
+   public void testInitialization()
+   {
+      PageContext page = serviceWrapper.loadPage(SiteKey.portal("classic").page("homepage"));
+      assertNotNull(page);
+      
+      PageState state = page.getState();
+      assertEquals("Home Page", state.getName());
+      assertEquals(Arrays.asList("Everyone"), state.getAccessPermissions());
+      assertEquals("*:/platform/administrators", state.getEditPermission());
+      assertNull(state.getFactoryId());
+      assertFalse(state.getShowMaxWindow());
    }
 
    public void testNotification()
@@ -114,40 +128,27 @@ public class TestPageServiceWrapper extends AbstractMOPTest
 
    public void testDataStorageSynchronization() throws Exception
    {
-      mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "datastorage_sync").getRootPage().addChild("pages");
+      // Create a page *foo*
+      mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "datastorage_sync").getRootPage().addChild("pages").addChild("foo");
       sync(true);
 
-      //
-      DataStorage storage = (DataStorage)getContainer().getComponentInstanceOfType(DataStorage.class);
-      Page fooPage = new Page("portal", "datastorage_sync", "foo");
-      storage.save(fooPage);
-      sync(true);
-
-      // Force cache loading
-      fooPage = storage.getPage("portal::datastorage_sync::foo");
-
-      // Save
       PageKey fooKey = SiteKey.portal("datastorage_sync").page("foo");
-      PageContext foo = serviceWrapper.loadPage(fooKey);
-      PageState fooState = foo.getState();
-      foo.setState(fooState.builder().name("foo_name").build());
-      assertFalse(serviceWrapper.savePage(foo));
-      sync(true);
 
-      // Check cache remains invalidated after synchronization
-      fooPage = storage.getPage("portal::datastorage_sync::foo");
-      assertNull(fooPage.getTitle());
-      foo = serviceWrapper.loadPage(fooKey);
-      assertEquals("foo_name", foo.getState().name);
+      // Check the existence of the page and its layout
+      DataStorage storage = (DataStorage)getContainer().getComponentInstanceOfType(DataStorage.class);
+      Page page = storage.getPage(fooKey.format());
+      assertNotNull(page);
+      assertEquals("foo", page.getName());
+      assertEquals(Collections.EMPTY_LIST, page.getChildren());
+      assertNotNull(serviceWrapper.loadPage(fooKey));
 
-      // Delete
+      // Delete page
       assertTrue(serviceWrapper.destroyPage(fooKey));
-      fooPage = storage.getPage("portal::datastorage_sync::foo");
-      assertNull(fooPage);
+      assertNull(storage.getPage(fooKey.format()));
+      assertNull(serviceWrapper.loadPage(fooKey));
       sync(true);
 
-      // Check cache remains invalidated after synchronization
-      fooPage = storage.getPage("portal::datastorage_sync::foo");
-      assertNull(fooPage);
+      // Check for subsequence actions
+      assertNull(storage.getPage(fooKey.format()));
    }
 }
