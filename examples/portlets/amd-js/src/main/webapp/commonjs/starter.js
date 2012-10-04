@@ -1,7 +1,7 @@
 (function(require, $) {
 	var increOp = require("increment").increment;
 
-   $("#incre").on("click", function()
+   $("body").on("click", ".incre", function()
    {
      alert(increOp(100));
    });

@@ -1,4 +1,4 @@
-<div style="padding: 10px;">
+<div class="sample1" style="padding: 10px;">
   <h1>Showing how to use AMD module in GateIn portal</h1>
 
   <h2>Define a shared immediately loaded module</h2>
@@ -41,8 +41,7 @@
 <script type="text/javascript">
 <!--
 require(['SHARED/highlight'], function($){
-  $('pre.code').highlight({source:1, zebra:1, indent:'space', list:'ol'});
+  $('.sample1 pre.code').highlight({source:1, zebra:1, indent:'space', list:'ol'});
 });
 //-->
 </script>
-

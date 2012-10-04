@@ -1,3 +1,3 @@
 <div>
-   <input type="button" id="incre" value="Incre"/>
+   <input type="button" class="incre" value="Incre"/>
 </div>

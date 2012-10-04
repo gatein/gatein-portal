@@ -296,5 +296,3 @@
 	}	
 	
 })(jQuery);
-
-_module = jQuery;

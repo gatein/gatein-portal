@@ -1,8 +1,8 @@
 <div class="requirejs-example">
   <h2 style="margin-left:auto; margin-right:auto; width: 300px;">RequireJS example</h2>
   <ul class="nav nav-tabs" id="myTab">
-    <li class="active"><a data-toggle="tab" href="#text">Text - Mustache</a></li>
-    <li><a data-toggle="tab" href="#sourceCode">Source Code</a></li>
+    <li class="active"><a data-toggle="tab" class="text">Text - Mustache</a></li>
+    <li><a data-toggle="tab" class="sourceCode">Source Code</a></li>
   </ul>
   <div class="tab-content" id="myTabContent">
     <div id="text" class="tab-pane fade in active">
@@ -13,10 +13,10 @@
     	</h4>
     	<h4>Try it!</h4>
     	<div style="float: left; margin-left:50px;">
-    	  <input id="name" type="text" placeholder="Type your name..." />
+    	  <input class="name" type="text" placeholder="Type your name..." />
 		  <button type="button" class="btn">Say hello</button>
 		</div>
-		<div id="result" style="float: left; margin-left: 50px;"></div>
+		<div class="result" style="float: left; margin-left: 50px;"></div>
 		<div style="clear: both;margin-top:51px;
 				border-color: #DDDDDD #DDDDDD transparent; border-top-style: solid; border-top-width: 1px;">
 			<ol>
@@ -109,24 +109,25 @@
     	<li>Html
     		<pre class="code" lang="html">
 	   &lt;div&gt;
-    	  &lt;input id="name" type="text" placeholder="Type your name..."/&gt;
-		  &lt;button type="button" class="btn" onclick="sayHello()"&gt;Say hello&lt;/button&gt;
+    	  &lt;input class="name" type="text" placeholder="Type your name..."/&gt;
+		  &lt;button type="button" class="btn"&gt;Say hello&lt;/button&gt;
 		&lt;/div&gt;
-		&lt;div id="result"&gt;&lt;/div&gt;
+		&lt;div class="result"&gt;&lt;/div&gt;
 			</pre>
     	</li>
     	<li>Javascript
     		<pre class="code" lang="js">
-	   function sayHello() {
-		  require(['mustache', 'text!/amd-js/jsp/hello.mustache'], 
-			function(mustache, template){									
-				var name = document.getElementById("name").value;
-				name = name == "" ? "world" : name;
-				
-				var output = mustache.render(template, {"name": name});
-				document.getElementById("result").innerHTML = output;
-			});
-		}
+   require(['jquery', 'mustache', 'text!/amd-js/requirejs/jsp/hello.mustache'], function($, mustache, template) {	
+	   $("body").on("click", ".requirejs-example button", function() {
+			var portlet = $(this).closest(".requirejs-example"); 
+			
+			var name = portlet.find(".name").val();
+			name = name == "" ? "world" : name;
+			
+			var output = mustache.render(template, {"name": name});
+			portlet.find(".result").html(output);
+		});
+	});
 			</pre>
     	</li>
     </ul>    		      				

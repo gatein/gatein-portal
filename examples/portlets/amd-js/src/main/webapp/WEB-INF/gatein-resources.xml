@@ -46,8 +46,8 @@
          <path>/requirejs/js/requirejsPortlet.js</path>
        </script>
        <depends>
-       	<module>jquery</module>
-       	<as>jquery</as>
+       	<module>highlight</module>
+       	<as>highlight</as>
        </depends>
        <depends>
          <module>mustache</module>
@@ -163,11 +163,16 @@
       <name>jquery-plugin</name>     
       <script>
          <name>jquery-plugin</name>
-         <path>/sample2/jquery-plugin.js</path>
+         <adapter> 
+         	(function(jQuery) {           
+              <include>/sample2/jquery-plugin.js</include>
+              return jQuery;
+		      })($);
+         </adapter>
       </script>
       <depends>
         <module>jquery</module>
-        <as>jQuery</as>
+        <as>$</as>
       </depends>
    </module>
 
@@ -175,11 +180,15 @@
       <name>highlight</name>     
       <script>
          <name>highlight</name>
-         <path>/highlight/highlight.js</path>
+         <adapter> 
+         	(function(jQuery) {           
+              <include>/highlight/highlight.js</include>
+              return jQuery;
+		      })($);
+         </adapter>
       </script>
       <depends>
         <module>jquery</module>
-        <as>jQuery</as>
       </depends>
    </module>   
 
