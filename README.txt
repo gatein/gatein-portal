@@ -29,7 +29,7 @@ The various values for gatein.dev are:
 - tomcat7    : Tomcat 7
 - jbossas711 : JBoss AS 7.1.1.Final
 - jbossas713 : JBoss AS 7.1.3.Final
-- jetty      : Jetty
+- jetty      : Jetty (unsupported at the moment)
 
 
 2) Database configuration
@@ -136,7 +136,7 @@ mvn install -DskipTests -Dservers.dir=$SERVERS_DIR -Dgatein.dev=tomcat7 -Dserver
 (fix tomcat version in 'server.name')
 
 
-The packaged GateIn is available in packaging/tomcat/pkg/tc7/target/tomcat7.
+The packaged GateIn is available in packaging/tomcat/tomcat7/target/tomcat.
 
 To start, go to tomcat7 directory, and run 'bin/gatein.sh run' ('bin\gatein.bat run' on Windows).
 Alternatively you can use 'bin/gatein.sh start' ('bin\gatein.bat start' on Windows).
@@ -145,7 +145,7 @@ Access the portal at: http://localhost:8080/portal
 
 
 
-  Packaging with Jetty 6.x.x
+  Packaging with Jetty 6.x.x (unsupported at the moment)
   ---------------------------
 
 If you don’t have an existing Jetty 6.x.x distribution, the build can automatically download it for you.
