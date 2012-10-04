@@ -107,9 +107,6 @@ public class JavascriptConfigParser
    final public static String INCLUDE_TAG = "include";
    
    /** . */
-   final public static String NATIVE_TAG = "native-script";
-   
-   /** . */
    final public static String GROUP_TAG = "load-group";
 
    /** . */
@@ -320,18 +317,11 @@ public class JavascriptConfigParser
    private void parseDesc(Element element, ScriptResourceDescriptor desc)
    {
       Element urlElement = XMLTools.getUniqueChild(element, URL_TAG, false);
-      Element nativeElement = XMLTools.getUniqueChild(element, NATIVE_TAG, false);
       if(urlElement != null)
       {
          String remoteURL = XMLTools.asString(urlElement);
          desc.id.setFullId(false);
          desc.modules.add(new Javascript.Remote(desc.id, remoteURL, contextPath, remoteURL, 0));
-      }
-      else if (nativeElement != null)
-      {
-         String path = XMLTools.asString(nativeElement);
-         desc.id.setFullId(false);
-         desc.modules.add(new Javascript.Native(desc.id, path, contextPath, path, null, 0));
       }
       else
       {

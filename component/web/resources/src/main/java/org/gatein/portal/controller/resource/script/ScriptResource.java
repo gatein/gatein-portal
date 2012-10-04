@@ -164,13 +164,6 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
       modules.add(module);
       return module;
    }
-   
-   public Module.Native addNativeModule(String contextPath, String name, String path, String resourceBundle, int priority)
-   {
-      Module.Native module = new Module.Native(this, contextPath, name, path, resourceBundle, priority);
-      modules.add(module);
-      return module;
-   }
 
    @Override
    public void addSupportedLocale(Locale locale)

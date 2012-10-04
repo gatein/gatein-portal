@@ -74,8 +74,6 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
          resources.put("/js/script2.js", "bbb;");
          resources.put("/js/module1.js", "ccc;");
          resources.put("/js/module2.js", "ddd;");
-         resources.put("/js/native1.js", "eee;");
-         resources.put("/js/native2.js", "fff;");
          resources.put("/js/common.js", "kkk;");
          resources.put("/js/pluginTest.js", "iii;");
          resources.put("/js/normalize_test.js", " \n /* // */  //  /* \n  /* /*  */  \n  ggg; // /* */ \n");
@@ -150,16 +148,6 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       result = result.replace(module2, "");
       assertTrue(result.isEmpty());
    }
-   
-   public void testGetNativeScript() throws Exception
-   {
-      String native1 = "eee;";
-      assertReader(native1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "native1"), null));
-      
-      String native2 = "fff;" +
-               "\nif (typeof define === 'function' && define.amd && !require.specified('native2')) {define('native2');}";
-      assertReader(native2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "native2"), null));
-   }
 
    public void testGetJSConfig() throws Exception
    {            
@@ -185,10 +173,6 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       assertEquals("/js/remote1", paths.getString("remote1"));
       assertEquals("/js/remote2", paths.getString("remote2"));
       
-      //Return native module/script url as it's  declared in gatein-resources.xml
-      assertEquals("mock_url_of_native1", paths.getString("native1"));
-      assertEquals("mock_url_of_native2", paths.getString("native2"));
-      
       //module1 and module2 are grouped
       assertEquals("mock_url_of_fooGroup", paths.getString("SHARED/module1"));
       assertEquals("mock_url_of_fooGroup", paths.getString("SHARED/module2"));
@@ -204,10 +188,6 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       String remoteURL = jsService.generateURL(CONTROLLER_CONTEXT, remote1, false, false, null);
       //Return remote module/script url as it's  declared in gatein-resources.xml
       assertEquals("/js/remote1.js", remoteURL);
-      
-      ResourceId native1 = new ResourceId(ResourceScope.SHARED, "native1");      
-      remoteURL = jsService.generateURL(CONTROLLER_CONTEXT, native1, false, false, null);
-      assertEquals("mock_url_of_native1.js", remoteURL);
       
       ResourceId module1 = new ResourceId(ResourceScope.SHARED, "module1");      
       remoteURL = jsService.generateURL(CONTROLLER_CONTEXT, module1, false, false, null);

@@ -171,9 +171,8 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             
             //
             boolean isModule = FetchMode.ON_LOAD.equals(resource.getFetchMode());
-            boolean isNative = modules.size() > 0 && modules.get(0) instanceof Module.Native; 
             
-            if (isModule && !isNative)
+            if (isModule)
             {                              
                JSONArray deps = new JSONArray();               
                LinkedList<String> alias = new LinkedList<String>();
@@ -233,10 +232,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             
             if (isModule)
             {            
-               if (!isNative)
-               {
-                  buffer.append("\n});");                                   
-               }
+               buffer.append("\n});");                                   
             }
             else 
             {
@@ -326,8 +322,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             String name = resource.getId().toString();
             List<Module> modules = resource.getModules();
             
-            if (FetchMode.IMMEDIATE.equals(resource.getFetchMode()) || (modules.size() > 0 && (modules.get(0) instanceof Module.Remote
-                     || modules.get(0) instanceof Module.Native)))
+            if (FetchMode.IMMEDIATE.equals(resource.getFetchMode()) || (modules.size() > 0 && modules.get(0) instanceof Module.Remote))
             {
                JSONArray deps = new JSONArray();
                for (ResourceId id : resource.getDependencies())
@@ -450,7 +445,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    private Reader getJavascript(ScriptResource resource, String moduleName, Locale locale)
    {
       Module module = resource.getModule(moduleName);
-      if (module instanceof Module.Local || module instanceof Module.Native)
+      if (module instanceof Module.Local)
       {
          Module.Local localModule = (Module.Local)module;
          final WebApp webApp = contexts.get(localModule.getContextPath());
