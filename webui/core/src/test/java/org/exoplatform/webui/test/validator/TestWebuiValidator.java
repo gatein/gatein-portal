@@ -144,6 +144,8 @@ public class TestWebuiValidator extends TestCase
       assertTrue(expected(validator, "root.gtn@exoplatform.com"));
       assertTrue(expected(validator, "root.exo.gtn.portal@explatform.biz.edu.vn"));
       assertTrue(expected(validator, "root_exo_gtn_portal@explatform-edu.biz.vn"));
+      assertTrue(expected(validator, "exo-sys@exoplatform.com"));
+      assertFalse(expected(validator, "exo--sys@exoplatform.com"));
       assertFalse(expected(validator, "root_exo_gtn_portal@explatform-edu.biz-vn"));
       assertFalse(expected(validator, "root_exo_gtn_portal@explatform-edu.biz9vn"));
       assertFalse(expected(validator, "root_exo_gtn_portal@explatform--edu.biz.vn"));

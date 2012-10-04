@@ -36,10 +36,11 @@ import org.exoplatform.webui.form.UIFormInput;
  *     - (dash) or . (dot) but not as a starting or ending character
  *     . (dot) as a separator for the textual portions of a domain name
  *     
- * Valid characters that can be used in a domain name are:
+ * Valid characters that can be used in a local part are:
  *     a-z
  *     0-9
- *     _ (underscore) or .  (dot) but not as a starting or ending character
+ *     - (dash) or _ (underscore) or .  (dot) but not as a starting or ending character
+ *     and not appear two or more times consecutively
  */
 @Serialized
 public class EmailAddressValidator extends MultipleConditionsValidator
@@ -128,7 +129,7 @@ public class EmailAddressValidator extends MultipleConditionsValidator
 
    private boolean isLocalPartSymbol(char c)
    {
-      return c == '_' || c == '.';
+      return c == '-' || c == '_' || c == '.';
    }
    
    private boolean isDomainNameSymbol(char c)
