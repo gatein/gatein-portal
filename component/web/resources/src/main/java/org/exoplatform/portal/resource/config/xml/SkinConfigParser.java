@@ -55,7 +55,7 @@ public class SkinConfigParser
    public static final String GATEIN_RESOURCES_1_2_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_2";
 
    /** . */
-   public static final String GATEIN_RESOURCES_1_2_1_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_2_1";
+   public static final String GATEIN_RESOURCES_1_3_SYSTEM_ID = "http://www.gatein.org/xml/ns/gatein_resources_1_3";
 
    /** . */
    private static final String GATEIN_RESOURCE_1_0_XSD_PATH = "gatein_resources_1_0.xsd";
@@ -67,7 +67,7 @@ public class SkinConfigParser
    private static final String GATEIN_RESOURCE_1_2_XSD_PATH = "gatein_resources_1_2.xsd";
 
    /** . */
-   private static final String GATEIN_RESOURCE_1_2_1_XSD_PATH = "gatein_resources_1_2_1.xsd";
+   private static final String GATEIN_RESOURCE_1_3_XSD_PATH = "gatein_resources_1_3.xsd";
 
    /** . */
    private static final XMLValidator VALIDATOR;
@@ -117,7 +117,7 @@ public class SkinConfigParser
       systemIdToResourcePath.put(GATEIN_RESOURCES_1_0_SYSTEM_ID, GATEIN_RESOURCE_1_0_XSD_PATH);
       systemIdToResourcePath.put(GATEIN_RESOURCES_1_1_SYSTEM_ID, GATEIN_RESOURCE_1_1_XSD_PATH);
       systemIdToResourcePath.put(GATEIN_RESOURCES_1_2_SYSTEM_ID, GATEIN_RESOURCE_1_2_XSD_PATH);
-      systemIdToResourcePath.put(GATEIN_RESOURCES_1_2_1_SYSTEM_ID, GATEIN_RESOURCE_1_2_1_XSD_PATH);
+      systemIdToResourcePath.put(GATEIN_RESOURCES_1_3_SYSTEM_ID, GATEIN_RESOURCE_1_3_XSD_PATH);
       VALIDATOR = new XMLValidator(SkinConfigParser.class, systemIdToResourcePath);
    }
 

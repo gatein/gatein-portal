@@ -19,15 +19,15 @@
   -->
 
 <xs:schema
-    targetNamespace="http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
-    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
+    targetNamespace="http://www.gatein.org/xml/ns/gatein_resources_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3"
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     elementFormDefault="qualified"
     attributeFormDefault="unqualified"
     version="1.0">
 
   <!-- The root element type that contains the various resource declarations -->
-  <xs:element name="gatein-resources" xmlns:gt="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
+  <xs:element name="gatein-resources" xmlns:gt="http://www.gatein.org/xml/ns/gatein_resources_1_3">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
         <xs:element name="portal-skin" type="portal-skin" />

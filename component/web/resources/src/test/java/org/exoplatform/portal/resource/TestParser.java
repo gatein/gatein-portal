@@ -231,7 +231,7 @@ public class TestParser extends AbstractGateInTest
    {
 
       String validConfig = "" +
-         "<gatein-resources xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.gatein.org/xml/ns/gatein_resources_1_2_1 http://www.gatein.org/xml/ns/gatein_resources_1_2_1\" xmlns=\"http://www.gatein.org/xml/ns/gatein_resources_1_2_1\">" +
+         "<gatein-resources xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3\" xmlns=\"http://www.gatein.org/xml/ns/gatein_resources_1_3\">" +
          "<module><name>foo</name><url>http://jquery.com/jquery.js</url></module>" +
          "</gatein-resources>";
 
