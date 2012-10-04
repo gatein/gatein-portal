@@ -35,7 +35,7 @@
     <echo>Using Tomcat at: ${tomcat.dir}</echo>
 
     <!-- Copy tomcat 7 -->
-    <copy todir="${maven.project.build.directory}/tomcat7">
+    <copy todir="${maven.project.build.directory}/tomcat">
       <fileset dir="${tomcat.dir}">
         <exclude name="webapps/ROOT/**"/>
         <exclude name="webapps/examples/**"/>
@@ -44,27 +44,27 @@
     </copy>
 
     <!-- Copy generic tomcat packaging -->
-    <copy todir="${maven.project.build.directory}/tomcat7">
-      <fileset dir="${maven.project.build.directory}/../../target/tomcat"/>
+    <copy todir="${maven.project.build.directory}/tomcat">
+      <fileset dir="${maven.project.build.directory}/../../pkg/target/tomcat"/>
     </copy>
 
     <!-- Copy specific tomcat configration -->
-    <copy todir="${maven.project.build.directory}/tomcat7" overwrite="true">
+    <copy todir="${maven.project.build.directory}/tomcat" overwrite="true">
       <fileset dir="${maven.project.basedir}/src/main/resources/tomcat"/>
     </copy>
 
     <!-- Tomcat 7 specific dependencies -->
     <copy
         file="${maven.dependency.org.gatein.wci.wci-tomcat7.jar.path}"
-        todir="${maven.project.build.directory}/tomcat7/lib"/>
+        todir="${maven.project.build.directory}/tomcat/lib"/>
 
-    <!-- Tomcat 7 specific configuration -->
-    <copy
-        file="${maven.project.basedir}/src/main/resources/conf/integration/web.xml"
-        tofile="${maven.project.build.directory}/tomcat7/webapps/integration/WEB-INF/web.xml"/>
+    <!-- WCI integration -->
+    <copy todir="${maven.project.build.directory}/tomcat/webapps/integration/">
+      <fileset dir="${maven.project.basedir}/src/main/webapp"/>
+    </copy>
 
     <!-- Extract common config from packaging.common artifact to gatein/conf -->
-    <unzip src="${org.gatein.portal:exo.portal.packaging.common:jar}" dest="${maven.project.build.directory}/tomcat7/gatein/conf">
+    <unzip src="${org.gatein.portal:exo.portal.packaging.common:jar}" dest="${maven.project.build.directory}/tomcat/gatein/conf">
       <patternset>
         <exclude name="META-INF/"/>
       </patternset>
@@ -73,8 +73,8 @@
 
     <!-- File permissions -->
     <!-- Excluded due to ARG_MAX limitation on Mac OS X -->
-    <!--chmod perm="0644" type="file" dir="${project.build.directory}/tomcat7" excludes="**/*.sh"/-->
-    <chmod perm="0755" type="file" dir="${maven.project.build.directory}/tomcat7" includes="**/*.sh"/>
+    <!--chmod perm="0644" type="file" dir="${project.build.directory}/tomcat" excludes="**/*.sh"/-->
+    <chmod perm="0755" type="file" dir="${maven.project.build.directory}/tomcat" includes="**/*.sh"/>
 
   </target>
 </project>

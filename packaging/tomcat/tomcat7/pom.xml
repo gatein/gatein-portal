@@ -8,7 +8,7 @@
     <artifactId>exo.portal.packaging.tomcat.pkg</artifactId>
     <version>3.5.0.Beta01-SNAPSHOT</version>
   </parent>
-  <artifactId>exo.portal.packaging.tomcat.pkg.tc7</artifactId>
+  <artifactId>exo.portal.packaging.tomcat.tomcat7</artifactId>
   <packaging>pom</packaging>
   <name>GateIn for Tomcat 7 packaging</name>
 

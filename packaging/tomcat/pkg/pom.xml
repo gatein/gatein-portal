@@ -837,14 +837,6 @@
        <type>war</type>
     </dependency>
 
-    <dependency>
-      <?rename integration.war?>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.packaging.tomcat.integration</artifactId>
-      <version>${project.version}</version>
-      <type>war</type>
-    </dependency>
-
   </dependencies>
 
   <build>
@@ -891,42 +883,4 @@
       </plugin>
     </plugins>
   </build>
-
-  <profiles>
-    <profile>
-      <id>pkg-all</id>
-      <activation>
-        <property>
-          <name>!gatein.dev</name>
-        </property>
-      </activation>
-      <modules>
-        <module>tc7</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>pkg-tomcat</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>tomcat</value>
-        </property>
-      </activation>
-      <modules>
-        <module>tc7</module>
-      </modules>
-    </profile>
-    <profile>
-      <id>pkg-tomcat7</id>
-      <activation>
-        <property>
-          <name>gatein.dev</name>
-          <value>tomcat7</value>
-        </property>
-      </activation>
-      <modules>
-        <module>tc7</module>
-      </modules>
-    </profile>
-  </profiles>
 </project>

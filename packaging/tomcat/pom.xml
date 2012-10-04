@@ -10,8 +10,49 @@
   <name>GateIn Tomcat package</name>
 
   <modules>
-    <module>integration</module>
     <module>pkg</module>
+    <module>tomcat7</module>
   </modules>
+
+  <profiles>
+    <profile>
+      <id>pkg-all</id>
+      <activation>
+        <property>
+          <name>!gatein.dev</name>
+        </property>
+      </activation>
+      <modules>
+        <module>pkg</module>
+        <module>tomcat7</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>pkg-tomcat</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>tomcat</value>
+        </property>
+      </activation>
+      <modules>
+        <module>pkg</module>
+        <module>tomcat7</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>pkg-tomcat7</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>tomcat7</value>
+        </property>
+      </activation>
+      <modules>
+        <module>pkg</module>
+        <module>tomcat7</module>
+      </modules>
+    </profile>
+  </profiles>
 
 </project>
