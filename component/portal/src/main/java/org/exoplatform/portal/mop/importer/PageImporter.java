@@ -56,8 +56,7 @@ public class PageImporter
 
    public void perform() throws Exception
    {
-      PageKey key = PageKey.parse(src.getPageId());
-      PageContext existingPage = pageService.loadPage(key);
+      PageContext existingPage = pageService.loadPage(src.getPageKey());
       Page dst;
 
       //
@@ -95,7 +94,7 @@ public class PageImporter
                dst.getAccessPermissions() != null ? Arrays.asList(dst.getAccessPermissions()) : null,
                dst.getEditPermission());
 
-         pageService.savePage(new PageContext(key, dstState));
+         pageService.savePage(new PageContext(src.getPageKey(), dstState));
          service.save(dst);
       }
    }

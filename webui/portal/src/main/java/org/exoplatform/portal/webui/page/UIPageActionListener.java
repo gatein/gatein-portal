@@ -248,7 +248,7 @@ public class UIPageActionListener
                      page.getFactoryId(), 
                      page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
                      page.getEditPermission());
-                  pageService.savePage(new PageContext(PageKey.parse(page.getPageId()), pageState));
+                  pageService.savePage(new PageContext(page.getPageKey(), pageState));
                   
                   //
                   DataStorage dataService = uiPage.getApplicationComponent(DataStorage.class);
@@ -289,7 +289,7 @@ public class UIPageActionListener
                page.getFactoryId(), 
                page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
                page.getEditPermission());
-            pageService.savePage(new PageContext(PageKey.parse(page.getPageId()), pageState));
+            pageService.savePage(new PageContext(page.getPageKey(), pageState));
             
             //
             DataStorage dataService = uiPage.getApplicationComponent(DataStorage.class);

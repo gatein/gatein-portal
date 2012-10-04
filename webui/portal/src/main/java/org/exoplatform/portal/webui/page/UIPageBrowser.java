@@ -449,8 +449,7 @@ public class UIPageBrowser extends UIContainer
          if (uiPage == null)
          {
             PageService pageService = uiPageForm.getApplicationComponent(PageService.class);
-            PageKey pageKey = PageKey.parse(page.getPageId());
-            PageContext existPage = pageService.loadPage(pageKey);
+            PageContext existPage = pageService.loadPage(page.getPageKey());
             if (existPage != null)
             {
                uiPortalApp.addMessage(new ApplicationMessage("UIPageForm.msg.sameName", null));
@@ -470,10 +469,10 @@ public class UIPageBrowser extends UIContainer
                page.getFactoryId(), 
                page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
                page.getEditPermission());
-            pageService.savePage(new PageContext(pageKey, pageState));
+            pageService.savePage(new PageContext(page.getPageKey(), pageState));
             
             //
-            dataService.create(page);
+            dataService.save(page);
             postSave(uiPortalApp, pcontext);
             return;
          }

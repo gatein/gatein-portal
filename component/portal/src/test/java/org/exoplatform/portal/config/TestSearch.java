@@ -98,10 +98,10 @@ public class TestSearch extends AbstractConfigTest
    {
       Page page = new Page();
       page.setPageId("portal::test::searchedpage");
-      storage.create(page);
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       session.save();
       
-      PageContext pageContext = pageService.loadPage(PageKey.parse(page.getPageId()));
+      PageContext pageContext = pageService.loadPage(page.getPageKey());
       pageContext.setState(pageContext.getState().builder().name("Juuu Ziii").build());
       pageService.savePage(pageContext);
       session.save();

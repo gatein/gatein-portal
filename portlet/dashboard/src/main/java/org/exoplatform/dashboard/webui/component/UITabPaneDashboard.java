@@ -283,7 +283,7 @@ public class UITabPaneDashboard extends UIContainer
          configService.getPageService().savePage(new PageContext(pageKey, pageState));
 
          //
-         dataService.create(page);
+         dataService.save(page);
          
          if (parentNode.getChild(uniqueNodeName) != null)
          {
@@ -292,7 +292,7 @@ public class UITabPaneDashboard extends UIContainer
 
          UserNode tabNode = parentNode.addChild(uniqueNodeName);
          tabNode.setLabel(nodeLabel);
-         tabNode.setPageRef(PageKey.parse(page.getPageId()));
+         tabNode.setPageRef(page.getPageKey());
 
          getUserPortal().saveNode(parentNode, null);
 

@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.config;
 
-import javassist.NotFoundException;
-
 import java.util.Comparator;
 import java.util.List;
 
@@ -128,7 +126,7 @@ public interface DataStorage
 
    /**
     * Saves a page. If a page with the same id already exists then a merge operation will occur,
-    * otherwise it throws {@link NotFoundException} <br />
+    * otherwise it throws {@link IllegalStateException} <br />
     *
     * The operation returns a list of the change object that describes the changes that occured during the
     * save operation. <br/>

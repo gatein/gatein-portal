@@ -131,8 +131,8 @@ public class TestDataStorage extends AbstractConfigTest
       jtaUserTransactionLifecycleService = (JTAUserTransactionLifecycleService)container.getComponentInstanceOfType(JTAUserTransactionLifecycleService.class);
 
       //
-      listenerService.addListener(DataStorage.PAGE_CREATED, listener);
-      listenerService.addListener(DataStorage.PAGE_REMOVED, listener);
+      listenerService.addListener(EventType.PAGE_CREATED, listener);
+      listenerService.addListener(EventType.PAGE_DESTROYED, listener);
       listenerService.addListener(DataStorage.PAGE_UPDATED, listener);
       listenerService.addListener(EventType.NAVIGATION_CREATED, listener);
       listenerService.addListener(EventType.NAVIGATION_DESTROYED, listener);
@@ -236,29 +236,6 @@ public class TestDataStorage extends AbstractConfigTest
       }
    }
 
-   public void testCreatePage() throws Exception
-   {
-      Page page = new Page();
-      page.setOwnerType(PortalConfig.PORTAL_TYPE);
-      page.setOwnerId("test");
-      page.setName("foo");
-
-      //
-      storage_.create(page);
-      assertEquals(1, events.size());
-
-      //
-      Page page2 = storage_.getPage(page.getPageId());
-
-      //
-      assertNotNull(page2);
-      assertEquals("portal::test::foo", page2.getPageId());
-      assertEquals("portal", page2.getOwnerType());
-      assertEquals("test", page2.getOwnerId());
-      assertEquals("foo", page2.getName());
-      assertEquals(0, page2.getChildren().size());
-   }
-
    public void testSavePage() throws Exception
    {
       Page page = new Page();
@@ -268,11 +245,18 @@ public class TestDataStorage extends AbstractConfigTest
       page.setShowMaxWindow(false);
 
       //
-      storage_.create(page);
+      try
+      {
+         storage_.save(page);
+         fail();
+      } catch(IllegalStateException e)
+      {
+      }
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       assertEquals(1, events.size());
       
       //
-      PageContext pageContext = pageService.loadPage(PageKey.parse(page.getPageId()));
+      PageContext pageContext = pageService.loadPage(page.getPageKey());
       pageContext.setState(pageContext.getState().builder().name("MyTitle").showMaxWindow(true).build());
       pageService.savePage(pageContext);
 
@@ -293,7 +277,7 @@ public class TestDataStorage extends AbstractConfigTest
       assertEquals(0, page2.getChildren().size());
       assertEquals(false, page2.isShowMaxWindow());
       
-      pageContext = pageService.loadPage(PageKey.parse(page.getPageId()));
+      pageContext = pageService.loadPage(page.getPageKey());
       assertEquals("MyTitle", pageContext.getState().getName());
       assertEquals(true, pageContext.getState().getShowMaxWindow());
    }
@@ -417,6 +401,7 @@ public class TestDataStorage extends AbstractConfigTest
       page.getChildren().add(app1);
       page.getChildren().add(parentOfApp2);
 
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       storage_.save(page);
 
       Page page2 = storage_.getPage("portal::test::testWindowMove3");
@@ -465,14 +450,14 @@ public class TestDataStorage extends AbstractConfigTest
       page.setOwnerType(PortalConfig.PORTAL_TYPE);
       page.setOwnerId("test");
       page.setName("foo");
-      storage_.create(page);
+      pageService.savePage(new PageContext(page.getPageKey(), null));
 
       // create a new page navigation and add node
       NavigationContext nav = new NavigationContext(SiteKey.portal("foo"), new NavigationState(0));
       navService.saveNavigation(nav);
       NodeContext<?> node = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.CHILDREN, null);
       NodeContext<?> test = node.add(null, "testPage");
-      test.setState(test.getState().builder().pageRef(PageKey.parse(page.getPageId())).build());
+      test.setState(test.getState().builder().pageRef(page.getPageKey()).build());
       navService.saveNode(node, null);
 
       // get the page reference from the created page and check that it exists
@@ -496,6 +481,7 @@ public class TestDataStorage extends AbstractConfigTest
       Application<Portlet> app = Application.createPortletApplication();
       app.setState(state);
       page.getChildren().add(app);
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       storage_.save(page);
       page = storage_.getPage(page.getPageId());
       app = (Application<Portlet>)page.getChildren().get(0);
@@ -601,7 +587,7 @@ public class TestDataStorage extends AbstractConfigTest
 
       //
       Page srcPage = storage_.getPage("portal::test::test4");
-      PageContext srcPageContext = pageService.loadPage(PageKey.parse(srcPage.getPageId()));
+      PageContext srcPageContext = pageService.loadPage(srcPage.getPageKey());
       srcPageContext.setState(srcPageContext.getState().builder().editPermission("Administrator").build());
       pageService.savePage(srcPageContext);
 
@@ -633,6 +619,7 @@ public class TestDataStorage extends AbstractConfigTest
       Page page = new Page();
       page.setPageId("portal::test::foo");
       page.getChildren().add(new Dashboard());
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       storage_.save(page);
 
       //
@@ -701,6 +688,7 @@ public class TestDataStorage extends AbstractConfigTest
 
       page.getChildren().add(dashboardPortlet);
       page.getChildren().add(normalPortlet);
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       storage_.save(page);
 
       //
@@ -748,6 +736,7 @@ public class TestDataStorage extends AbstractConfigTest
       Page page = new Page();
       page.setPageId("portal::test::foo");
       page.getChildren().add(dashboardPortlet);
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       storage_.save(page);
 
       //
@@ -774,6 +763,7 @@ public class TestDataStorage extends AbstractConfigTest
       app.setAccessPermissions(new String[]{"perm1","perm2"});
       app.setState(new TransientApplicationState<Portlet>("dashboard/DashboardPortlet"));
       page.getChildren().add(app);
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       storage_.save(page);
       page = storage_.getPage("portal::test::foo");
       String id = page.getChildren().get(0).getStorageId();
@@ -799,6 +789,7 @@ public class TestDataStorage extends AbstractConfigTest
       Application<Portlet> app = Application.createPortletApplication();
       app.setState(new TransientApplicationState<Portlet>("dashboard/DashboardPortlet"));
       page.getChildren().add(app);
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       storage_.save(page);
       page = storage_.getPage("portal::test::foo");
       String id = page.getChildren().get(0).getStorageId();
@@ -843,6 +834,7 @@ public class TestDataStorage extends AbstractConfigTest
       Application<Portlet> app = Application.createPortletApplication();
       app.setState(new TransientApplicationState<Portlet>("dashboard/DashboardPortlet"));
       page.getChildren().add(app);
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       storage_.save(page);
       page = storage_.getPage("portal::test::foo");
       String id = page.getChildren().get(0).getStorageId();
@@ -1001,32 +993,6 @@ public class TestDataStorage extends AbstractConfigTest
       assertEquals(new HashSet<String>(names), new HashSet<String>(afterNames));
    }
 
-   public void testSearchPage() throws Exception
-   {
-      Page page = new Page();
-      page.setPageId("portal::test::searchedpage");
-      storage_.create(page);
-      
-      PageContext pageContext = pageService.loadPage(PageKey.parse(page.getPageId()));
-      pageContext.setState(pageContext.getState().builder().name("Juuu Ziii").build());
-      pageService.savePage(pageContext);
-
-      //
-      assertPageFound(0, 10, null, null, null, "Juuu Ziii", "portal::test::searchedpage");
-      assertPageFound(0, 10, null, null, null, "Juuu", "portal::test::searchedpage");
-      assertPageFound(0, 10, null, null, null, "Ziii", "portal::test::searchedpage");
-      assertPageFound(0, 10, null, null, null, "juuu ziii", "portal::test::searchedpage");
-      assertPageFound(0, 10, null, null, null, "juuu", "portal::test::searchedpage");
-      assertPageFound(0, 10, null, null, null, "ziii", "portal::test::searchedpage");
-      assertPageFound(0, 10, null, null, null, "juu", "portal::test::searchedpage");
-      assertPageFound(0, 10, null, null, null, "zii", "portal::test::searchedpage");
-      assertPageFound(0, 10, null, null, null, "ju", "portal::test::searchedpage");
-      assertPageFound(0, 10, null, null, null, "zi", "portal::test::searchedpage");
-
-      assertPageNotFound(0, 10, null, null, null, "foo");
-      assertPageNotFound(0, 10, null, null, null, "foo bar");
-   }
-
    public void testGadget() throws Exception
    {
       Gadget gadget = new Gadget();
@@ -1039,7 +1005,8 @@ public class TestDataStorage extends AbstractConfigTest
       container.setPageId("portal::test::gadget_page");
       container.getChildren().add(gadgetApplication);
 
-      storage_.create(container);
+      pageService.savePage(new PageContext(container.getPageKey(), null));
+      storage_.save(container);
 
       container = storage_.getPage("portal::test::gadget_page");
       gadgetApplication = (Application<Gadget>)container.getChildren().get(0);
@@ -1095,6 +1062,7 @@ public class TestDataStorage extends AbstractConfigTest
       page.setOwnerType(PortalConfig.PORTAL_TYPE);
       page.setOwnerId("test");
       page.setName("foo");
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       storage_.save(page);
 
       //
@@ -1115,6 +1083,7 @@ public class TestDataStorage extends AbstractConfigTest
       page.setOwnerType(PortalConfig.PORTAL_TYPE);
       page.setOwnerId("test");
       page.setName("foo");
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       storage_.save(page);
 
       //
@@ -1245,8 +1214,8 @@ public class TestDataStorage extends AbstractConfigTest
       String pageId = "portal::test::wsrp_page";
       container.setPageId(pageId);
       container.getChildren().add(wsrpApplication);
-
-      storage_.create(container);
+      pageService.savePage(new PageContext(container.getPageKey(), null));
+      storage_.save(container);
 
       container = storage_.getPage(pageId);
       wsrpApplication = (Application<WSRP>)container.getChildren().get(0);
@@ -1262,9 +1231,9 @@ public class TestDataStorage extends AbstractConfigTest
 
       Page page = new Page();
       page.setPageId("portal::test::searchedpage2");
-      storage_.create(page);
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       
-      PageContext pageContext = pageService.loadPage(PageKey.parse(page.getPageId()));
+      PageContext pageContext = pageService.loadPage(page.getPageKey());
       pageContext.setState(pageContext.getState().builder().name("Juuu2 Ziii2").build());
       pageService.savePage(pageContext);
 
@@ -1284,6 +1253,7 @@ public class TestDataStorage extends AbstractConfigTest
       Application<Portlet> app = Application.createPortletApplication();
       app.setState(new TransientApplicationState<Portlet>("dashboard/DashboardPortlet"));
       page.getChildren().add(app);
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       storage_.save(page);
       page = storage_.getPage("user::john::foo");
       String id = page.getChildren().get(0).getStorageId();

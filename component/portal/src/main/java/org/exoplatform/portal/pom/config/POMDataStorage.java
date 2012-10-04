@@ -153,29 +153,6 @@ public class POMDataStorage implements ModelDataStorage
       return pomMgr.execute(new PageTask.Load(key));
    }
 
-   /**
-    * @deprecated replaced by {@link PageService#clone(org.exoplatform.portal.mop.page.PageKey, org.exoplatform.portal.mop.page.PageKey)}
-    * 
-    */
-   public PageData clonePage(PageKey key, PageKey cloneKey) throws Exception
-   {
-      throw new UnsupportedOperationException();
-   }
-
-   /**
-    * @deprecated replaced by {@link PageService#destroyPage(org.exoplatform.portal.mop.page.PageKey)}
-    * 
-    */
-   public void remove(PageData page) throws Exception
-   {
-      throw new UnsupportedOperationException();
-   }
-
-   public void create(PageData page) throws Exception
-   {
-      pomMgr.execute(new PageTask.Save(page));
-   }
-
    public List<ModelChange> save(PageData page) throws Exception
    {
       PageTask.Save task = new PageTask.Save(page);

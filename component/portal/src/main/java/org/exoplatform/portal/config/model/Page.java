@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.config.model;
 
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.PageData;
@@ -32,6 +33,8 @@ import java.util.List;
 public class Page extends Container
 {
    final static public String DEFAULT_PAGE = "Default";
+   
+   private PageKey pageKey;
 
    private String ownerType;
 
@@ -108,6 +111,15 @@ public class Page extends Container
    public void setShowMaxWindow(Boolean showMaxWindow)
    {
       this.showMaxWindow = showMaxWindow.booleanValue();
+   }
+   
+   public PageKey getPageKey() 
+   {
+      if(pageKey == null)
+      {
+         pageKey = PageKey.parse(getPageId());
+      }
+      return pageKey;
    }
 
    public String getPageId()

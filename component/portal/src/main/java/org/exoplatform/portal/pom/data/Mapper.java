@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.pom.data;
 
-import javassist.NotFoundException;
-
 import org.exoplatform.portal.config.NoSuchDataException;
 import org.exoplatform.portal.config.StaleModelException;
 import org.exoplatform.portal.config.UserACL;
@@ -601,7 +599,7 @@ public class Mapper
       return children;
    }
 
-   public List<ModelChange> save(PageData src, Site site, String name) throws NotFoundException
+   public List<ModelChange> save(PageData src, Site site, String name) throws IllegalStateException
    {
       org.gatein.mop.api.workspace.Page root = site.getRootPage();
       org.gatein.mop.api.workspace.Page pages = root.getChild("pages");
@@ -613,7 +611,7 @@ public class Mapper
       //
       if (dst == null)
       {
-         throw new NotFoundException("The page " + name + " not found");
+         throw new IllegalStateException("The page " + name + " not found");
       }
       else
       {

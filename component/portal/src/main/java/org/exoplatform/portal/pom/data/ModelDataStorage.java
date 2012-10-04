@@ -50,23 +50,8 @@ public interface ModelDataStorage
    public PageData getPage(PageKey key) throws Exception;
 
    /**
-    * @deprecated replaced by {@link PageService#clone(org.exoplatform.portal.mop.page.PageKey, org.exoplatform.portal.mop.page.PageKey)}
-    * 
-    */
-   public PageData clonePage(PageKey key, PageKey cloneKey)
-      throws Exception;
-
-   /**
-    * @deprecated replaced by {@link PageService#destroyPage(org.exoplatform.portal.mop.page.PageKey)}
-    * 
-    */
-   public void remove(PageData page) throws Exception;
-
-   public void create(PageData page) throws Exception;
-
-   /**
-    * Saves a page. If a page with the same id already exists then a merge operation will occur, otherwise
-    * a new page will be created from the provided argument.
+    * Saves a page. If a page with the same id already exists then a merge operation will occur, 
+    * otherwise it throws {@link IllegalStateException}
     *
     * The operation returns a list of the change object that describes the changes that occured during the
     * save operation.

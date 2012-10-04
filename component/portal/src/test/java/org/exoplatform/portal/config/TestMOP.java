@@ -196,7 +196,7 @@ public class TestMOP extends AbstractConfigTest
       Page page = storage.getPage("portal::test::test1");
       assertNotNull(page);
       
-      PageContext pageContext = pageService.loadPage(PageKey.parse(page.getPageId()));
+      PageContext pageContext = pageService.loadPage(page.getPageKey());
       assertNotNull(pageContext);
       
       //

@@ -21,6 +21,9 @@ package org.exoplatform.portal.config;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -33,7 +36,10 @@ public class TestCache extends AbstractConfigTest
 {
 
    /** . */
-   DataStorage storage_;
+   private DataStorage storage_;
+   
+   /** . */
+   private PageService pageService;
 
    /** . */
    private POMSessionManager mgr;
@@ -46,6 +52,7 @@ public class TestCache extends AbstractConfigTest
       super.setUp();
       PortalContainer container = getContainer();
       storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+      pageService = (PageService)container.getComponentInstanceOfType(PageService.class);
       mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
    }
 
@@ -56,81 +63,19 @@ public class TestCache extends AbstractConfigTest
       assertNull(storage_.getPage("portal::test::nonexisting"));
       Page page = new Page();
       page.setPageId("portal::test::nonexisting");
-      storage_.create(page);
+      try
+      {
+         storage_.save(page);
+         fail();
+      } catch(IllegalStateException e)
+      {
+      }
+      pageService.savePage(new PageContext(page.getPageKey(), null));
       end(true);
       begin();
       session = mgr.openSession();
       assertNotNull(storage_.getPage("portal::test::nonexisting"));
       end();
-   }
-
-   public void _testDirtyWrite() throws Exception
-   {
-      begin();
-      session = mgr.openSession();
-
-      // Read
-      Page page = storage_.getPage("portal::test::test4");
-      assertEquals(null, page.getTitle());
-
-      // Update and save
-      page.setTitle("foo");
-      storage_.save(page);
-
-      //
-      final AtomicBoolean go = new AtomicBoolean(false);
-
-      // Force a cache update with the entry that will be modified
-      // when the main session is closed
-     
-      new Thread()
-      {
-         @Override
-         public void run()
-         {
-            try
-            {
-               begin();
-               mgr.openSession();
-               storage_.getPage("portal::test::test4");
-               session.close();
-               end();
-            }
-            catch (Exception e)
-            {
-               throw new Error(e);
-            }
-            finally
-            {
-               go.set(true);
-            }
-         }
-      }.start();
-
-      //
-      while (!go.get())
-      {
-         Thread.sleep(1);
-      }
-
-      // Save the cache should be invalidated
-      session.close();
-      end(true);
-
-      // Reopen session with no modifications that use the cache
-      begin();
-      mgr.openSession();
-
-      //
-      page = storage_.getPage("portal::test::test4");
-      assertEquals("foo", page.getTitle());
-
-      // Restore to orginal value
-      page.setTitle(null);
-      storage_.save(page);
-      
-      //
-      end(true);
    }
 
    public void testGetPageFromRemovedPortal() throws Exception
@@ -140,7 +85,7 @@ public class TestCache extends AbstractConfigTest
       session = mgr.openSession();
       PortalConfig portalConfig = new PortalConfig("portal", "testGetPageFromRemovedPortal");
       storage_.create(portalConfig);
-      storage_.create(new Page("portal", "testGetPageFromRemovedPortal", "home"));
+      pageService.savePage(new PageContext(PageKey.parse("portal::testGetPageFromRemovedPortal::home"), null));
       end(true);
 
       // Clear cache

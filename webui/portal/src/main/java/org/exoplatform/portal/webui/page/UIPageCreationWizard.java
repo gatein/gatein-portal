@@ -111,7 +111,7 @@ public class UIPageCreationWizard extends UIPageWizard
       Page page = (Page)PortalDataMapper.buildModelObject(uiPage);
       UserNode createdNode = uiPageInfo.createUserNode(selectedNode);
       
-      createdNode.setPageRef(PageKey.parse(page.getPageId()));
+      createdNode.setPageRef(page.getPageKey());
       
       //
       PageService pageService = getApplicationComponent(PageService.class);
@@ -122,11 +122,11 @@ public class UIPageCreationWizard extends UIPageWizard
          page.getFactoryId(), 
          page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
          page.getEditPermission());
-      pageService.savePage(new PageContext(PageKey.parse(page.getPageId()), pageState));
+      pageService.savePage(new PageContext(page.getPageKey(), pageState));
 
       //
       DataStorage dataService = getApplicationComponent(DataStorage.class); 
-      dataService.create(page);
+      dataService.save(page);
       
       UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
       userPortal.saveNode(selectedNode, null);

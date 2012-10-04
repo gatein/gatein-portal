@@ -100,7 +100,7 @@ public class UserSiteLifeCycle implements ApplicationLifecycle<PortalRequestCont
                   page.getFactoryId(), 
                   page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, 
                   page.getEditPermission());
-               configService.getPageService().savePage(new PageContext(PageKey.parse(page.getPageId()), pageState));
+               configService.getPageService().savePage(new PageContext(page.getPageKey(), pageState));
                
                //
                storage.save(page);

@@ -559,7 +559,7 @@ public class UIPageNodeForm extends UIFormTabPane
                   page.setChildren(new ArrayList<ModelObject>());
                }
 
-               storage.create(page);
+               storage.save(page);
                pageSelector.setValue(page.getPageId());
             }
          }
