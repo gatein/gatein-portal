@@ -210,6 +210,10 @@ public abstract class Module
                {
                   readers.add(script);                  
                }
+               else 
+               {
+                  log.warn("File not found: " + content.getSource());
+               }
             }
             else
             {

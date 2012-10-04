@@ -14,12 +14,12 @@ import javax.portlet.RenderResponse;
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class Sample2Portlet extends GenericPortlet
+public class JQueryPluginPortlet extends GenericPortlet
 {
 
    public void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException
    {
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/sample2/view.jsp");
+      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jqueryPlugin/view.jsp");
       prd.include(request, response);
    }
 }

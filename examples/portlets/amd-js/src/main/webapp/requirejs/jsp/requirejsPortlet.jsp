@@ -94,7 +94,7 @@
                  &lt;/module&gt;	   
 					</pre>
 					Then portal will resolve <strong>"mustache"</strong> module and injected it with the name equal to dependency list<br/>
-					If you don't have <strong>&lt;as&gt;</strong> declared, it will be injected with default name ("SHARED/mustache") 
+					If you don't have <strong>&lt;as&gt;</strong> declared, it will be injected with default name
 				</li>
 			</ol>
 		</div>		

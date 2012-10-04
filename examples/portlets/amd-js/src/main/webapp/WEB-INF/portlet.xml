@@ -17,14 +17,16 @@ version="2.0"
    </portlet>
 
    <portlet>
-      <portlet-name>Sample2Portlet</portlet-name>
-      <portlet-class>org.gatein.portlet.amd.Sample2Portlet</portlet-class>
+   	<description xml:lang="EN">JQuery Plugin Sample Portlet</description>
+      <portlet-name>JQueryPluginPortlet</portlet-name>
+      <display-name xml:lang="EN">JQuery Plugin Portlet</display-name>
+      <portlet-class>org.gatein.portlet.amd.JQueryPluginPortlet</portlet-class>
       <supports>
          <mime-type>text/html</mime-type>
          <portlet-mode>view</portlet-mode>
       </supports>
       <portlet-info>
-         <title>Sample 2: Use jQuery plugin with the built-in jQuery</title>
+         <title>Use jQuery plugin with the built-in jQuery</title>
       </portlet-info>
    </portlet>
    

@@ -1,4 +1,4 @@
-require(['highlight', 'mustache', 'text!/amd-js/requirejs/jsp/hello.mustache'], function($, mustache, template) {									
+require(['jquery', 'mustache', 'text!/amd-js/requirejs/jsp/hello.mustache'], function($, mustache, template) {									
 	
 	$("body").on("click", ".requirejs-example button", function() {
 		var portlet = $(this).closest(".requirejs-example"); 

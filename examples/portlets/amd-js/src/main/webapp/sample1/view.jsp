@@ -40,7 +40,7 @@
 
 <script type="text/javascript">
 <!--
-require(['SHARED/highlight'], function($){
+require(['SHARED/jquery', 'SHARED/highlight'], function($){
   $('.sample1 pre.code').highlight({source:1, zebra:1, indent:'space', list:'ol'});
 });
 //-->
