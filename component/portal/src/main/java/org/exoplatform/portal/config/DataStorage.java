@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.config;
 
+import javassist.NotFoundException;
+
 import java.util.Comparator;
 import java.util.List;
 
@@ -102,31 +104,36 @@ public interface DataStorage
     * @deprecated replaced by {@link PageService#clone(org.exoplatform.portal.mop.page.PageKey, org.exoplatform.portal.mop.page.PageKey)}
     * 
     */
+   @Deprecated
    public Page clonePage(String pageId, String clonedOwnerType, String clonedOwnerId, String clonedName)
       throws Exception;
 
    /**
     * @deprecated replaced by {@link PageService#destroyPage(org.exoplatform.portal.mop.page.PageKey)}
-    * 
     */
+   @Deprecated
    public void remove(Page page) throws Exception;
 
    /**
     * This method should create  or  udate the given page object <br />
     * Then broasdcast PAGE_CREATED event
+    * 
+    * @deprecated This is replaced by {@link PageService#savePage(org.exoplatform.portal.mop.page.PageContext)}
+    * 
     * @param page
     * @throws Exception
     */
+   @Deprecated
    public void create(Page page) throws Exception;
 
    /**
-    * Saves a page. If a page with the same id already exists then a merge operation will occur, otherwise
-    * a new page will be created from the provided argument. <br />
+    * Saves a page. If a page with the same id already exists then a merge operation will occur,
+    * otherwise it throws {@link NotFoundException} <br />
     *
     * The operation returns a list of the change object that describes the changes that occured during the
     * save operation. <br/>
     *
-    *Then broadcast PAGE_UPDATED event
+    * Then broadcast PAGE_UPDATED event
     *
     * @param page the page to save
     * @return the list of model changes that occured during the save operation

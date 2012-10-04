@@ -93,8 +93,7 @@ public class DataStorageImpl implements DataStorage
 
    public void create(Page page) throws Exception
    {
-      delegate.create(page.build());
-      listenerServ_.broadcast(PAGE_CREATED, this, page);
+      throw new UnsupportedOperationException();
    }
 
    public List<ModelChange> save(Page page) throws Exception
