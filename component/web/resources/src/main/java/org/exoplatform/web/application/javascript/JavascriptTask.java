@@ -45,7 +45,13 @@ public class JavascriptTask
    {
       for (ScriptResourceDescriptor desc : descriptors)
       {
-         ScriptResource resource = service.scripts.addResource(desc.id, desc.fetchMode, desc.alias, desc.group);
+         String contextPath = null;
+         if (desc.modules.size() > 0)
+         {
+            contextPath = desc.modules.get(0).getContextPath();
+         }
+         
+         ScriptResource resource = service.scripts.addResource(desc.id, desc.fetchMode, desc.alias, desc.group, contextPath);
          if (resource != null)
          {
             for (Javascript module : desc.modules)
