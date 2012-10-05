@@ -29,7 +29,6 @@
   <scripts>
     <name>jquery-1.6.4</name>
     <script>
-      <name>jquery-1.6.4</name>
       <path>/javascript/jquery-1.6.4.js</path>
     </script>
   </scripts>
@@ -38,7 +37,6 @@
     <name>JQueryPortlet</name>
     <scripts>
       <script>
-        <name>version</name>
         <path>/javascript/version.js</path>
       </script>
       <depends>

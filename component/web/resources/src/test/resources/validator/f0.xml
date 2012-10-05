@@ -29,7 +29,6 @@
     <name>P0</name>
     <module>
       <script>
-        <name>foo</name>
         <path>foo.js</path>
       </script>
       <depends>

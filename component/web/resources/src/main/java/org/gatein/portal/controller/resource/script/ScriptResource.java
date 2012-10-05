@@ -146,21 +146,21 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
       return closure;
    }
 
-   public Module.Local addLocalModule(String contextPath, String name, String path, String resourceBundle, int priority)
+   public Module.Local addLocalModule(String contextPath, String path, String resourceBundle, int priority)
    {
-      return addLocalModule(contextPath, name, new Content[] {new Content(path)}, resourceBundle, priority);
+      return addLocalModule(contextPath, new Content[] {new Content(path)}, resourceBundle, priority);
    }
    
-   public Module.Local addLocalModule(String contextPath, String name, Content[] contents, String resourceBundle, int priority)
+   public Module.Local addLocalModule(String contextPath, Content[] contents, String resourceBundle, int priority)
    {
-      Module.Local module = new Module.Local(this, contextPath, name, contents, resourceBundle, priority);
+      Module.Local module = new Module.Local(this, contextPath, contents, resourceBundle, priority);
       modules.add(module);
       return module;
    }
 
-   public Module.Remote addRemoteModule(String contextPath, String name, String path, int priority)
+   public Module.Remote addRemoteModule(String contextPath, String path, int priority)
    {
-      Module.Remote module = new Module.Remote(this, contextPath, name, path, priority);
+      Module.Remote module = new Module.Remote(this, contextPath, path, priority);
       modules.add(module);
       return module;
    }
@@ -173,33 +173,6 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
       {
          group.addSupportedLocale(locale);
       }
-   }
-
-   public List<Module> removeModuleByName(String name)
-   {
-      ArrayList<Module> removed = new ArrayList<Module>();
-      for (Iterator<Module> i = modules.iterator();i.hasNext();)
-      {
-         Module module = i.next();
-         if (module.getName().equals(name))
-         {
-            removed.add(module);
-            i.remove();
-         }
-      }
-      return removed;
-   }
-   
-   public Module getModule(String name)
-   {
-      for (Module module : modules)
-      {
-         if (module.getName().equals(name))
-         {
-            return module;
-         }
-      }
-      return null;
    }
 
    public List<Module> removeModuleByContextPath(String contextPath)
@@ -220,16 +193,6 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
    public List<Module> getModules()
    {
       return modules;
-   }
-   
-   public List<String> getModulesNames()
-   {
-      ArrayList<String> names = new ArrayList<String>();
-      for (Module script : modules)
-      {
-         names.add(script.getName());
-      }
-      return names;
    }
 
    public int compareTo(ScriptResource o)

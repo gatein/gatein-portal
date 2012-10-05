@@ -29,7 +29,6 @@
     <name>Foo</name>
     <scripts>
       <script>
-        <name>foo</name>
         <path>foo.js</path>
       </script>
       <depends>

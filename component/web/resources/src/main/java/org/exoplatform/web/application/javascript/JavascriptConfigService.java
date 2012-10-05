@@ -26,7 +26,6 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -93,45 +92,6 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       this.deployer = new JavascriptConfigDeployer(context.getPortalContainerName(), this);
    }
 
-   public Collection<String> getAvailableScripts()
-   {
-      ArrayList<String> list = new ArrayList<String>();
-      for (ScriptResource shared : scripts.getResources(ResourceScope.SHARED))
-      {
-         list.addAll(shared.getModulesNames());
-      }
-      return list;
-   }
-
-   public Collection<String> getAvailableScriptsPaths()
-   {
-      ArrayList<Module> sharedModules = new ArrayList<Module>();
-      for (ScriptResource shared : scripts.getResources(ResourceScope.SHARED))
-      {
-         sharedModules.addAll(shared.getModules());
-      }
-      Collections.sort(sharedModules, MODULE_COMPARATOR);
-      List<String> paths = new ArrayList<String>();
-      for (Module module : sharedModules)
-      {
-         paths.add(module.getURI());
-      }
-      return paths;
-   }
-
-   public Reader getScript(ResourceId id, String name, Locale locale) throws Exception
-   {
-      ScriptResource script = getResource(id);
-      if (script != null && !"merged".equals(name))
-      {
-         return getJavascript(script, name, locale);
-      }
-      else
-      {
-         return getScript(id, locale);
-      }
-   }
-   
    public Reader getScript(ResourceId resourceId, Locale locale) throws Exception
    {
       if (ResourceScope.GROUP.equals(resourceId.getScope()))
@@ -221,7 +181,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             //
             for (Module js : modules)
             {            
-               Reader jScript = getJavascript(resource, js.getName(), locale);
+               Reader jScript = getJavascript(js, locale);
                if (jScript != null)
                {                                                     
                   readers.add(new StringReader(buffer.toString()));                  
@@ -248,16 +208,6 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             return null;         
          }
       }      
-   }
-   
-   private String parsePluginRS(String name, String pluginRS)
-   {
-      StringBuilder depBuild = new StringBuilder(name);       
-      if (pluginRS != null)
-      {
-         depBuild.append("!").append(pluginRS);
-      }
-      return depBuild.toString();
    }
 
    @SuppressWarnings("unchecked")
@@ -367,57 +317,6 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       return scripts.getResource(resource);
    }
 
-   //TODO: This method should be removed once there is no call to importJavascript from Groovy template
-   public ScriptResource getResourceIncludingModule(String moduleName)
-   {
-      //We accept repeated graph traversing for the moment
-      for(ScriptResource sharedRes : scripts.getResources(ResourceScope.SHARED))
-      {
-         if(sharedRes.getModule(moduleName) != null)
-         {
-            return sharedRes;
-         }
-      }
-
-      for(ScriptResource portletRes : scripts.getResources(ResourceScope.PORTLET))
-      {
-         if(portletRes.getModule(moduleName) != null)
-         {
-            return portletRes;
-         }
-      }
-
-      for(ScriptResource portalRes : scripts.getResources(ResourceScope.PORTAL))
-      {
-         if(portalRes.getModule(moduleName) != null)
-         {
-            return portalRes;
-         }
-      }
-
-      return null;
-   }
-
-   public boolean isModuleLoaded(CharSequence module)
-   {
-      return getAvailableScripts().contains(module.toString());
-   }
-   
-   public boolean isJavascriptLoaded(String path)
-   {
-      for (ScriptResource shared : scripts.getResources(ResourceScope.SHARED))
-      {
-         for (Module module : shared.getModules())
-         {
-            if (module.getURI().equals(path))
-            {
-               return true;
-            }
-         }
-      }      
-      return false;
-   }
-
    /**
     * Start service.
     * Registry org.exoplatform.web.application.javascript.JavascriptDeployer,
@@ -442,9 +341,8 @@ public class JavascriptConfigService extends AbstractResourceService implements 
       ServletContainerFactory.getServletContainer().removeWebAppListener(deployer);
    }
    
-   private Reader getJavascript(ScriptResource resource, String moduleName, Locale locale)
+   private Reader getJavascript(Module module, Locale locale)
    {
-      Module module = resource.getModule(moduleName);
       if (module instanceof Module.Local)
       {
          Module.Local localModule = (Module.Local)module;
@@ -481,6 +379,16 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          resources.addAll(scripts.getResources(scope));
       }
       return resources;
+   }
+   
+   private String parsePluginRS(String name, String pluginRS)
+   {
+      StringBuilder depBuild = new StringBuilder(name);       
+      if (pluginRS != null)
+      {
+         depBuild.append("!").append(pluginRS);
+      }
+      return depBuild.toString();
    }
    
    private class NormalizeJSReader extends Reader

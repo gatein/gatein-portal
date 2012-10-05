@@ -170,8 +170,8 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       JSONObject paths = config.getJSONObject("paths");
       assertNotNull(paths);
       //Return remote module/script url as it's  declared in gatein-resources.xml
-      assertEquals("/js/remote1", paths.getString("remote1"));
-      assertEquals("/js/remote2", paths.getString("remote2"));
+      assertEquals("http://js/remote1", paths.getString("remote1"));
+      assertEquals("http://js/remote2", paths.getString("remote2"));
       
       //module1 and module2 are grouped
       assertEquals("mock_url_of_fooGroup", paths.getString("SHARED/module1"));
@@ -187,7 +187,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       ResourceId remote1 = new ResourceId(ResourceScope.SHARED, "remote1");
       String remoteURL = jsService.generateURL(CONTROLLER_CONTEXT, remote1, false, false, null);
       //Return remote module/script url as it's  declared in gatein-resources.xml
-      assertEquals("/js/remote1.js", remoteURL);
+      assertEquals("http://js/remote1.js", remoteURL);
       
       ResourceId module1 = new ResourceId(ResourceScope.SHARED, "module1");      
       remoteURL = jsService.generateURL(CONTROLLER_CONTEXT, module1, false, false, null);

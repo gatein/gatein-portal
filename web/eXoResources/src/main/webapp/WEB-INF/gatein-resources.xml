@@ -114,12 +114,10 @@
    <scripts>
       <name>bootstrap</name>
       <script>
-         <name>eXo</name>
          <path>/javascript/eXo.js</path>
       </script>      
       <script>
-      	<name>eXo.core.RequireJS</name>
-         <path>/javascript/eXo/core/require.js</path>
+      	<path>/javascript/eXo/core/require.js</path>
       </script>
    </scripts>
 
@@ -127,7 +125,6 @@
       <name>jquery</name>     
       <as>$</as> 
       <script>
-         <name>jquery</name>
          <adapter>	                 		
 	        	(function() {
         		  <include>/javascript/jquery-1.7.1.js</include>
@@ -142,7 +139,6 @@
       <name>base</name>
       <load-group>baseGRP</load-group>      
       <script>
-         <name>eXo.core.Base</name>
          <path>/javascript/eXo/core/Base.js</path>
       </script>                                              
       <depends>
@@ -154,7 +150,6 @@
    	<name>portalRequest</name>
    	<load-group>baseGRP</load-group>
    	<script>
-         <name>eXo.portal.PortalHttpRequest</name>
          <path>/javascript/eXo/portal/PortalHttpRequest.js</path>
       </script>
       <depends>
@@ -181,7 +176,6 @@
       <supported-locale>ru</supported-locale>
       <supported-locale>vi</supported-locale>
    	<script>
-        <name>eXo.i18n.I18NMessage</name>
         <path>/javascript/eXo/i18n/I18NMessage.js</path>
         <resource-bundle>eXo.portal</resource-bundle>
       </script>
@@ -191,7 +185,6 @@
    	<name>skin</name>
    	<load-group>baseGRP</load-group>
    	<script>
-         <name>eXo.core.Skin</name>
          <path>/javascript/eXo/core/Skin.js</path>
       </script>
    </module>
@@ -200,7 +193,6 @@
    	<name>uiPopup</name>
    	<load-group>baseGRP</load-group>
    	<script>
-         <name>eXo.webui.UIPopup</name>
          <path>/javascript/eXo/webui/UIPopup.js</path>
       </script>
       <depends>
@@ -215,7 +207,6 @@
    	<name>uiMaskLayer</name>
    	<load-group>baseGRP</load-group>
    	<script>
-         <name>eXo.core.UIMaskLayer</name>
          <path>/javascript/eXo/core/UIMaskLayer.js</path>
       </script>
       <depends>
@@ -233,7 +224,6 @@
    	<name>uiMaskWorkspace</name>
    	<load-group>baseGRP</load-group>
    	<script>
-         <name>eXo.portal.UIMaskWorkspace</name>
          <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
       </script>
       <depends>
@@ -248,7 +238,6 @@
    	<name>popupCategory</name>
    	<load-group>baseGRP</load-group>
    	<script>
-         <name>eXo.webui.UIPopupSelectCategory</name>
          <path>/javascript/eXo/webui/UIPopupSelectCategory.js</path>
       </script>
       <depends>
@@ -260,7 +249,6 @@
    <module>
       <name>common</name>
       <script>
-         <name>eXo.core.DragDrop</name>
          <path>/javascript/eXo/core/DragDrop.js</path>
       </script>
       <depends>
@@ -277,7 +265,6 @@
       <supported-locale>ru</supported-locale>
       <supported-locale>vi</supported-locale>
       <script>
-         <name>eXo.gadget.UIGadget</name>
          <path>/javascript/eXo/gadget/UIGadget.js</path>
          <resource-bundle>eXo.portal</resource-bundle>
       </script>
@@ -297,7 +284,6 @@
       <name>portal</name>
       <load-group>portalGRP</load-group>
       <script>
-         <name>eXo.portal.UIPortal</name>
          <path>/javascript/eXo/portal/UIPortal.js</path>
       </script>
       <depends>
@@ -315,7 +301,6 @@
 		<name>portalComposer</name>
 		<load-group>portalGRP</load-group>
 		<script>
-         <name>eXo.portal.PortalComposer</name>
          <path>/javascript/eXo/portal/PortalComposer.js</path>
       </script>
       <depends>
@@ -336,7 +321,6 @@
 		<name>portalDragDrop</name>
 		<load-group>portalGRP</load-group>
 		<script>
-         <name>eXo.portal.PortalDragDrop</name>
          <path>/javascript/eXo/portal/PortalDragDrop.js</path>
       </script>
       <depends>
@@ -355,7 +339,6 @@
       <name>portalControl</name>            
       <load-group>webuiGRP</load-group>
       <script>
-         <name>eXo.portal.UIPortalControl</name>
          <path>/javascript/eXo/portal/UIPortalControl.js</path>
       </script>    
       <depends>
@@ -370,7 +353,6 @@
 		<name>selectors</name>
 		<load-group>webuiGRP</load-group>
 		<script>
-         <name>eXo.webui.Selectors</name>
          <path>/javascript/eXo/webui/Selectors.js</path>
       </script>
       <depends>
@@ -382,7 +364,6 @@
 		<name>uiForm</name>
 		<load-group>webuiGRP</load-group>
 		<script>
-         <name>eXo.webui.UIForm</name>
          <path>/javascript/eXo/webui/UIForm.js</path>
       </script>      		      
       <depends>
@@ -397,7 +378,6 @@
 		<name>uiPopupWindow</name>
 		<load-group>webuiGRP</load-group>
 		<script>
-         <name>eXo.webui.UIPopupWindow</name>
          <path>/javascript/eXo/webui/UIPopupWindow.js</path>
       </script>
       <depends>
@@ -424,7 +404,6 @@
       <as>webuiExt</as>               
       <load-group>webuiExtGRP</load-group>         
       <script>
-         <name>eXo.webui.WebUIExt</name>
          <path>/javascript/eXo/webui/WebUIExt.js</path>
       </script>                  
       <depends>
@@ -445,7 +424,6 @@
 		<name>upload</name>
 		<load-group>webuiExtGRP</load-group>
 		<script>
-         <name>eXo.webui.Upload</name>
          <path>/javascript/eXo/webui/Upload.js</path>
       </script>
       <depends>
@@ -463,7 +441,6 @@
 		<name>uiCalendar</name>
 		<load-group>webuiExtGRP</load-group>
 		<script>
-         <name>eXo.webui.UICalendar</name>
          <path>/javascript/eXo/webui/UICalendar.js</path>
       </script>
       <depends>
@@ -484,7 +461,6 @@
 		<name>uiRightClickPopupMenu</name>
 		<load-group>webuiExtGRP</load-group>
 		<script>
-         <name>eXo.webui.UIRightClickPopupMenu</name>
          <path>/javascript/eXo/webui/UIRightClickPopupMenu.js</path>
       </script>
       <depends>
@@ -502,7 +478,6 @@
 		<name>uiVirtualList</name>
 		<load-group>webuiExtGRP</load-group>
 		<script>
-         <name>eXo.webui.UIVirtualList</name>
          <path>/javascript/eXo/webui/UIVirtualList.js</path>
       </script>
       <depends>
@@ -519,7 +494,6 @@
    <module>
       <name>navigation</name>
       <script>
-         <name>eXo.portal.UIPortalNavigation</name>
          <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
       </script>
       <depends>
@@ -539,7 +513,6 @@
    <module>
       <name>dashboard</name>
       <script>
-         <name>eXo.webui.UIDashboard</name>
          <path>/javascript/eXo/webui/UIDashboard.js</path>
       </script>
       <depends>

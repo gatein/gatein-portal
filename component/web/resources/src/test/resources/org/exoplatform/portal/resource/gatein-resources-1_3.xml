@@ -28,7 +28,6 @@
     <supported-locale>EN</supported-locale>
     <supported-locale>FR</supported-locale>
     <script>
-      <name>foo</name>
       <path>/foo.js</path>
       <resource-bundle>zefzfeze</resource-bundle>
     </script>
@@ -45,7 +44,6 @@
     <module>
       <supported-locale>EN</supported-locale>
       <script>
-        <name>zezef</name>
         <path>zefzf</path>
       </script>
       <depends>

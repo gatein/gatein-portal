@@ -28,7 +28,6 @@
   <module>
     <name>Foo</name>
      <script>
-       <name>foo</name>
        <path>foo.js</path>
      </script>     
      <depends>
@@ -40,7 +39,6 @@
       <name>Foo</name>
       <module>
         <script>
-	       <name>foo</name>
 	       <path>foo.js</path>
 	     </script>
 	     <depends>
@@ -53,7 +51,6 @@
       <name>Foo</name>
       <module>
         <script>
-	       <name>foo</name>
 	       <path>foo.js</path>
 	     </script>
 	     <depends>

@@ -175,7 +175,7 @@ public class TestParser extends AbstractGateInTest
       
       Javascript local = modules.get(0); 
       assertTrue(local instanceof Javascript.Local);
-      assertEquals("local_module", local.getModule());
+      assertEquals("/local_module.js", ((Javascript.Local)local).getContents()[0].getSource());
    }
    
    public void testResourceBundle() throws Exception

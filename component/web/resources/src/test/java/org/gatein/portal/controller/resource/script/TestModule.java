@@ -76,7 +76,7 @@ public class TestModule extends AbstractGateInTest
    {
       ScriptGraph graph = new ScriptGraph();
       ScriptResource module = graph.addResource(ResourceScope.SHARED.create("module"));
-      Module.Local bar = module.addLocalModule("/webapp", "simple", "/simple.js", null, 0);
+      Module.Local bar = module.addLocalModule("/webapp", "/simple.js", null, 0);
       Reader reader = bar.read(null, servletContext, classLoader);
       assertReader("pass", reader);
    }
@@ -85,7 +85,7 @@ public class TestModule extends AbstractGateInTest
    {
       ScriptGraph graph = new ScriptGraph();
       ScriptResource module = graph.addResource(ResourceScope.SHARED.create("module"));
-      Module.Local bar = module.addLocalModule("/webapp", "simple", "/notfound.js", null, 0);
+      Module.Local bar = module.addLocalModule("/webapp", "/notfound.js", null, 0);
       assertNull(bar.read(null, servletContext, classLoader));
    }
 
@@ -93,7 +93,7 @@ public class TestModule extends AbstractGateInTest
    {
       ScriptGraph graph = new ScriptGraph();
       ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("module"));
-      Module.Local module = foo.addLocalModule("/webapp", "module", "/localized.js", null, 0);
+      Module.Local module = foo.addLocalModule("/webapp", "/localized.js", null, 0);
       Reader reader = module.read(null, servletContext, classLoader);
       assertReader("${foo}", reader);
    }
@@ -102,7 +102,7 @@ public class TestModule extends AbstractGateInTest
    {
       ScriptGraph graph = new ScriptGraph();
       ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("module"));
-      Module.Local module = foo.addLocalModule("/webapp", "module", "/missing.js", "bundle", 0);
+      Module.Local module = foo.addLocalModule("/webapp", "/missing.js", "bundle", 0);
       Reader reader = module.read(null, servletContext, classLoader);
       assertReader("", reader);
    }
@@ -110,7 +110,7 @@ public class TestModule extends AbstractGateInTest
    {
       ScriptGraph graph = new ScriptGraph();
       ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("module"));
-      Module.Local module = foo.addLocalModule("/webapp", "module", "/localized.js", "double_quote_bundle", 0);
+      Module.Local module = foo.addLocalModule("/webapp", "/localized.js", "double_quote_bundle", 0);
       Reader reader = module.read(Locale.ENGLISH, servletContext, classLoader);
       assertReader("\"", reader);
    }
@@ -119,7 +119,7 @@ public class TestModule extends AbstractGateInTest
    {
       ScriptGraph graph = new ScriptGraph();
       ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("module"));
-      Module.Local module = foo.addLocalModule("/webapp", "module", "/localized.js", "simple_quote_bundle", 0);
+      Module.Local module = foo.addLocalModule("/webapp", "/localized.js", "simple_quote_bundle", 0);
       Reader reader = module.read(Locale.ENGLISH, servletContext, classLoader);
       assertReader("'", reader);
    }
@@ -128,7 +128,7 @@ public class TestModule extends AbstractGateInTest
    {
       ScriptGraph graph = new ScriptGraph();
       ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("module"));
-      Module.Local module = foo.addLocalModule("/webapp", "module", "/localized.js", "bundle", 0);
+      Module.Local module = foo.addLocalModule("/webapp", "/localized.js", "bundle", 0);
       Reader reader = module.read(null, servletContext, classLoader);
       assertReader("foo_en", reader);
    }
@@ -137,7 +137,7 @@ public class TestModule extends AbstractGateInTest
    {
       ScriptGraph graph = new ScriptGraph();
       ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("module"));
-      Module.Local module = foo.addLocalModule("/webapp", "module", "/localized.js", "bundle", 0);
+      Module.Local module = foo.addLocalModule("/webapp", "/localized.js", "bundle", 0);
       Reader reader = module.read(Locale.CANADA, servletContext, classLoader);
       assertReader("foo_en", reader);
    }
@@ -146,7 +146,7 @@ public class TestModule extends AbstractGateInTest
    {
       ScriptGraph graph = new ScriptGraph();
       ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("module"));
-      Module.Local module = foo.addLocalModule("/webapp", "module", "/localized.js", "bundle", 0);
+      Module.Local module = foo.addLocalModule("/webapp", "/localized.js", "bundle", 0);
       Reader reader = module.read(Locale.FRENCH, servletContext, classLoader);
       assertReader("foo_fr", reader);
    }
@@ -155,7 +155,7 @@ public class TestModule extends AbstractGateInTest
    {
       ScriptGraph graph = new ScriptGraph();
       ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("module"));
-      Module.Local module = foo.addLocalModule("/webapp", "module", "/localized.js", "bundle", 0);
+      Module.Local module = foo.addLocalModule("/webapp", "/localized.js", "bundle", 0);
       Reader reader = module.read(Locale.FRANCE, servletContext, classLoader);
       assertReader("foo_fr_FR", reader);
    }
@@ -165,7 +165,7 @@ public class TestModule extends AbstractGateInTest
       ScriptGraph graph = new ScriptGraph();
       ScriptResource foo = graph.addResource(ResourceScope.SHARED.create("module"));
       Content[] contents = new Content[] {new Content("var a;", false), new Content("/localized.js"), new Content("var b;", false)};
-      Module.Local module = foo.addLocalModule("/webapp", "module", contents, "bundle", 0);
+      Module.Local module = foo.addLocalModule("/webapp", contents, "bundle", 0);
       Reader reader = module.read(Locale.ENGLISH, servletContext, classLoader);
       assertReader("foo_en", reader);
    }

@@ -241,7 +241,6 @@
   
   <xs:complexType name="script">
     <xs:sequence>
-      <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:choice>
         <xs:element name="path" type="xs:string" minOccurs="1" maxOccurs="1"/>
         <xs:element name="adapter" type="adapter" minOccurs="1" maxOccurs="1"/>

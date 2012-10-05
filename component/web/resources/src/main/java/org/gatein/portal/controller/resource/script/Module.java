@@ -67,16 +67,12 @@ public abstract class Module
    protected final String contextPath;
 
    /** . */
-   protected final String name;
-
-   /** . */
    protected int priority;
 
-   Module(ScriptResource resource, String contextPath, String name, int priority)
+   Module(ScriptResource resource, String contextPath, int priority)
    {
       this.resource = resource;
       this.contextPath = contextPath;
-      this.name = name;
       this.priority = priority;
    }
    
@@ -86,9 +82,9 @@ public abstract class Module
       /** . */
       private final String uri;
 
-      Remote(ScriptResource resource, String contextPath, String name, String uri, int priority)
+      Remote(ScriptResource resource, String contextPath, String uri, int priority)
       {
-         super(resource, contextPath, name, priority);
+         super(resource, contextPath, priority);
          
          //
          this.uri = uri;
@@ -118,21 +114,20 @@ public abstract class Module
       /** . */
       private final Map<QualifiedName, String> parameters;
 
-      Local(ScriptResource resource, String contextPath, String name, String path, String resourceBundle, int priority)
+      Local(ScriptResource resource, String contextPath, String path, String resourceBundle, int priority)
       {
-         this(resource, contextPath, name, new Content[] {new Content(path)}, resourceBundle, priority);
+         this(resource, contextPath, new Content[] {new Content(path)}, resourceBundle, priority);
       }
       
-      Local(ScriptResource resource, String contextPath, String name, Content[] contents, String resourceBundle, int priority)
+      Local(ScriptResource resource, String contextPath, Content[] contents, String resourceBundle, int priority)
       {
-         super(resource, contextPath, name, priority);
+         super(resource, contextPath, priority);
 
          //
          Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
          parameters.put(WebAppController.HANDLER_PARAM, "script");
          parameters.put(ResourceRequestHandler.RESOURCE_QN, resource.getId().getName());
          parameters.put(ResourceRequestHandler.SCOPE_QN, resource.getId().getScope().name());
-         parameters.put(ResourceRequestHandler.MODULE_QN, name);
          
          //
          if (contents == null)
@@ -307,11 +302,6 @@ public abstract class Module
    public String getContextPath()
    {
       return contextPath;
-   }
-
-   public String getName()
-   {
-      return name;
    }
 
    public int getPriority()

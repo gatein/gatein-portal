@@ -56,7 +56,6 @@
       <name>TabbedDashboardPortlet</name>
       <scripts>
          <script>
-            <name>eXo.webui.UITabbedDashboard</name>
             <path>/javascript/eXo/webui/UITabbedDashboard.js</path>
          </script>
          <depends>

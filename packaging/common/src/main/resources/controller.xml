@@ -195,17 +195,6 @@
         <pattern>-(min)|</pattern>
       </path-param>
     </route>
-    <route path="/{gtn:resource}/{gtn:module}{gtn:lang}{gtn:compress}.js">
-      <path-param qname="gtn:module">
-        <pattern>.+?</pattern>
-      </path-param>
-      <path-param qname="gtn:lang" capture-group="true">
-        <pattern>-([A-Za-z]{2}(-[A-Za-z]{2})?)|</pattern>
-      </path-param>
-      <path-param qname="gtn:compress" capture-group="true">
-        <pattern>-(min)|</pattern>
-      </path-param>
-    </route>
   </route>
 
   <!-- Default handler -->

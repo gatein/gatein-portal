@@ -83,9 +83,6 @@ public class JavascriptConfigParser
    final public static String SCOPE_TAG = "scope";
 
    /** . */
-   final public static String NAME_TAG = "name";
-
-   /** . */
    final public static String MODULE_TAG = "module";
 
    /** . */
@@ -175,8 +172,6 @@ public class JavascriptConfigParser
             for (int i = 0; i < length; i++)
             {
                Element param_ele = (Element)nodes.item(i);
-               String js_module =
-                  param_ele.getElementsByTagName(JAVA_SCRIPT_MODULE).item(0).getFirstChild().getNodeValue();
                String js_path =
                   param_ele.getElementsByTagName(JAVA_SCRIPT_PATH).item(0).getFirstChild().getNodeValue();
                
@@ -209,11 +204,11 @@ public class JavascriptConfigParser
                Javascript js;
                if (portalName == null)
                {
-                  js = Javascript.create(new ResourceId(ResourceScope.SHARED, LEGACY_JAVA_SCRIPT), js_module, js_path, contextPath, priority);
+                  js = Javascript.create(new ResourceId(ResourceScope.SHARED, LEGACY_JAVA_SCRIPT), js_path, contextPath, priority);
                }
                else
                {
-                  js = Javascript.create(new ResourceId(ResourceScope.PORTAL, portalName), js_module, js_path, contextPath, priority);
+                  js = Javascript.create(new ResourceId(ResourceScope.PORTAL, portalName), js_path, contextPath, priority);
                }
                
                //
@@ -321,7 +316,7 @@ public class JavascriptConfigParser
       {
          String remoteURL = XMLTools.asString(urlElement);
          desc.id.setFullId(false);
-         desc.modules.add(new Javascript.Remote(desc.id, remoteURL, contextPath, remoteURL, 0));
+         desc.modules.add(new Javascript.Remote(desc.id, contextPath, remoteURL, 0));
       }
       else
       {
@@ -333,7 +328,6 @@ public class JavascriptConfigParser
          }
          for (Element scriptElt : XMLTools.getChildren(element, SCRIPT_TAG))
          {
-            String scriptName = XMLTools.asString(XMLTools.getUniqueChild(scriptElt, "name", true));
             String resourceBundle = parseOptString(scriptElt, "resource-bundle");
 
             List<Content> contents = new LinkedList<Content>();
@@ -369,7 +363,7 @@ public class JavascriptConfigParser
             Content[] tmp = contents.toArray(new Content[contents.size()]);
             
             //
-            Javascript script = new Javascript.Local(desc.id, scriptName, contextPath, tmp, resourceBundle, 0);
+            Javascript script = new Javascript.Local(desc.id, contextPath, tmp, resourceBundle, 0);
             desc.modules.add(script);
          }
       }

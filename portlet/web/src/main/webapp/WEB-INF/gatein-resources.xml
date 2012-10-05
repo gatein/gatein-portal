@@ -77,7 +77,6 @@
       <name>SiteMapPortlet</name>
       <scripts>
          <script>
-            <name>eXo.webui.UISiteMap</name>
             <path>/javascript/eXo/webui/UISiteMap.js</path>
          </script>
          <depends>
@@ -109,7 +108,6 @@
       <name>IFramePortlet</name>
       <scripts>
          <script>
-            <name>eXo.webui.UIIFramePortlet</name>
             <path>/javascript/eXo/webui/UIIFramePortlet.js</path>
          </script>
          <depends>

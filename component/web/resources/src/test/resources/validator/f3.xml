@@ -29,7 +29,6 @@
     <name>P3</name>
     <module>
       <script>
-        <name>foo</name>
         <path>foo.js</path>
       </script>
       <url>http://jquery.com/jquery.js</url>

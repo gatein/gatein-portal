@@ -37,7 +37,6 @@
       <name>UISamplePortlet</name>
       <scripts>
          <script>
-            <name>eXo.webui.UISampleTOC</name>
             <path>/javascript/eXo/webui/UISampleTOC.js</path>
          </script>
          <depends>

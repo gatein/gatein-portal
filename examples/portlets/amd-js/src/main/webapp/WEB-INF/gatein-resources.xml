@@ -42,7 +42,6 @@
      <name>RequireJSPortlet</name>
      <module>
        <script>
-         <name>starter</name>
          <path>/requirejs/js/requirejsPortlet.js</path>
        </script>
        <depends>
@@ -68,7 +67,6 @@
      <name>CommonJSPortlet</name>
      <module>
        <script>
-         <name>starter</name>
          <path>/commonjs/starter.js</path>
        </script>
        <depends>
@@ -87,7 +85,6 @@
      <name>JQueryPluginPortlet</name>
      <module>
        <script>
-         <name>jqueryPlugin</name>
          <path>/jqueryPlugin/jqueryPluginPortlet.js</path>
        </script>
        <depends>
@@ -106,7 +103,6 @@
    <module>
       <name>math</name>
       <script>
-        <name>commonjs.math</name>
         <adapter>
         	define(["require", "exports"], function(require, exports) {
          	<include>/commonjs/math.js</include>        		
@@ -124,7 +120,6 @@
    <module>
       <name>increment</name>
       <script>
-        <name>commonjs.increment</name>
         <adapter>
         	define(["require", "exports", "math"], function(require, exports) {
          	<include>/commonjs/increment.js</include>        		
@@ -145,7 +140,6 @@
    <module>
       <name>text</name>     
       <script>
-        <name>requirejs.text</name>
         <path>/requirejs/js/plugins/text.js</path>
       </script>
       <depends>
@@ -156,8 +150,7 @@
    <module>
       <name>mustache</name>     
       <script>
-      	<name>mustache</name>
-	      <adapter>
+      	<adapter>
         	define(["require", "exports", "module"], function(require, exports, module) {
          	<include>/requirejs/js/plugins/mustache.js</include>        		
         	});
@@ -177,7 +170,6 @@
    <module>
       <name>foo</name>     
       <script>
-         <name>foo</name>
          <path>/sample1/foo.js</path>
       </script>
    </module>
@@ -186,7 +178,6 @@
       <name>jquery-plugin</name>     
       <as>jqPlugin</as>
       <script>
-         <name>jquery-plugin</name>
          <path>/jqueryPlugin/jquery-plugin.js</path>
       </script>
       <depends>
@@ -198,8 +189,7 @@
    <module>
       <name>highlight</name>     
       <script>
-         <name>highlight</name>
-		   <path>/highlight/highlight.js</path>
+         <path>/highlight/highlight.js</path>
       </script>
       <depends>
         <module>jquery</module>

@@ -129,9 +129,6 @@ public class ResourceRequestHandler extends WebRequestHandler
    public static final QualifiedName SCOPE_QN = QualifiedName.create("gtn", "scope");
 
    /** . */
-   public static final QualifiedName MODULE_QN = QualifiedName.create("gtn", "module");
-
-   /** . */
    public static final QualifiedName COMPRESS_QN = QualifiedName.create("gtn", "compress");
    
    /** . */
@@ -165,7 +162,6 @@ public class ResourceRequestHandler extends WebRequestHandler
       {
          String compressParam = context.getParameter(COMPRESS_QN);
          String lang = context.getParameter(LANG_QN);
-         String moduleParam = context.getParameter(MODULE_QN);
 
          //
          Locale locale = null;
@@ -194,7 +190,6 @@ public class ResourceRequestHandler extends WebRequestHandler
          
          ScriptKey key = new ScriptKey(
             resource,
-            moduleParam,
             "min".equals(compressParam),
             locale
          );

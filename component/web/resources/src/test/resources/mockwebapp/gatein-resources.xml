@@ -84,7 +84,6 @@
    <scripts>
       <name>script1</name>
       <script>
-         <name>eXo.script1</name>
          <path>/js/script1.js</path>
       </script>
    </scripts>
@@ -92,7 +91,6 @@
    <scripts>
       <name>script2</name>
       <script>
-         <name>eXo.script2</name>
          <path>/js/script2.js</path>
       </script>      
       <depends>
@@ -105,7 +103,6 @@
       <as>m1</as> 
       <load-group>fooGroup</load-group>
       <script>
-         <name>eXo.module1</name>
          <path>/js/module1.js</path>
       </script>      
    </module>
@@ -114,7 +111,6 @@
       <name>module2</name>     
       <load-group>fooGroup</load-group>
       <script>
-         <name>eXo.module2</name>
          <path>/js/module2.js</path>
       </script>
       <depends>
@@ -126,7 +122,6 @@
    <module>
    	<name>commonjs</name>
    	<script>
-   		<name>support.commonjs</name>
    		<path>/js/common.js</path>
    	</script>
    	<depends>
@@ -143,7 +138,6 @@
    <module>
       <name>pluginTest</name>           
       <script>
-         <name>eXo.pluginTest</name>
          <path>/js/pluginTest.js</path>
       </script>      
       <depends>
@@ -156,19 +150,18 @@
    <module>
       <name>text</name>           
       <script>
-         <name>eXo.text</name>
          <path>/js/text.js</path>
       </script>      
    </module>
    
    <module>
       <name>remote1</name>
-      <url>/js/remote1.js</url>       
+      <url>http://js/remote1.js</url>       
    </module>
    
    <module>
       <name>remote2</name>
-      <url>/js/remote2.js</url>
+      <url>http://js/remote2.js</url>
       <depends>
           <module>remote1</module>
       </depends>       
@@ -177,7 +170,6 @@
    <module>
       <name>normalize_test</name>     
       <script>
-         <name>eXo.normalize</name>
          <path>/js/normalize_test.js</path>
       </script>
    </module>

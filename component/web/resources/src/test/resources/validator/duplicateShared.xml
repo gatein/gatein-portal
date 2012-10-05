@@ -28,7 +28,6 @@
   <module>
     <name>Foo</name>
      <script>
-       <name>foo</name>
        <path>foo.js</path>
      </script>     
   </module>
@@ -36,7 +35,6 @@
   <scripts>
    <name>Foo</name>
     <script>
-      <name>foo</name>
       <path>foo.js</path>
     </script>
   </scripts>
@@ -44,7 +42,6 @@
   <module>
    <name>Foo</name>
     <script>
-      <name>foo</name>
       <path>foo.js</path>
     </script>
   </module> 
