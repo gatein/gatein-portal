@@ -672,6 +672,12 @@
             <version>3.5.0.Beta01-SNAPSHOT</version>
             <type>war</type>
          </dependency>
+         <dependency>
+            <groupId>org.gatein.portal</groupId>
+            <artifactId>exo.portal.starter.war</artifactId>
+            <version>3.5.0.Beta01-SNAPSHOT</version>
+            <type>war</type>
+         </dependency>
 
         <!-- GateIn Redirect -->
         <dependency>
