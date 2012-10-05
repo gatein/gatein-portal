@@ -97,7 +97,7 @@ eXo.require = function() {
 		var ctxDepNames = eXo.define.names;
 		var ctxDeps = eXo.define.deps;
 		
-		var idx = ctxDepNames.indexOf(arguments[0]);
+		var idx = eXo.inArray(ctxDepNames, arguments[0]);
 		if (idx !== -1) {
 			return ctxDeps[idx];
 		} else {
@@ -144,7 +144,7 @@ eXo.define = function() {
 	
 	var deps = [];	
 	for (var i = 0; i < reqList.length; i++) {
-		var idx = ctxDepNames.indexOf(reqList[i]);
+		var idx = eXo.inArray(ctxDepNames, reqList[i]);
 		if (idx !== -1) {
 			deps[i] = ctxDeps[idx];
 		} else {
@@ -156,10 +156,10 @@ eXo.define = function() {
 	if (callback instanceof Function) {
 		var result = callback.apply(this, deps);
 		if (!result) {
-			var idx = reqList.indexOf("module");
+			var idx = eXo.inArray(reqList, "module");
 			if (idx !== -1) {
 				result = deps[idx].exports;
-			} else if ((idx = reqList.indexOf("exports")) != -1) {
+			} else if ((idx = eXo.inArray(reqList, "exports")) != -1) {
 				result = deps[idx];
 			}			
 		}
@@ -167,4 +167,15 @@ eXo.define = function() {
 		result = callback;
 	}
 	return result;
+};
+
+//IE doesn't support Array#indexOf
+eXo.inArray = function(arr, itm) {
+	if (!arr) return -1;
+	for (var i = 0; i < arr.length; i++) {
+		if (arr[i] === itm) {
+			return i;
+		} 
+	}
+	return -1;
 };
