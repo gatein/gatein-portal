@@ -24,6 +24,10 @@
       <groupId>org.gatein.wci</groupId>
       <artifactId>wci-tomcat7</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.packaging.common</artifactId>
+    </dependency>
   </dependencies>
 
   <build>
