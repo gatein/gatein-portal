@@ -21,12 +21,14 @@
 				border-color: #DDDDDD #DDDDDD transparent; border-top-style: solid; border-top-width: 1px;">
 			<ol>
 				<li>
+					All js files in this example are native requirejs. The code shown is simplified to make it easier to read
+				</li>
+				<li>
 					Each js library should be a GateIn resource - declare it in gatein-resources.xml
 					<pre class="code" lang="html">
                  &lt;module&gt;
                     &lt;name&gt;text&lt;/name&gt;     
                     &lt;script&gt;
-                       &lt;name&gt;requirejs.text&lt;/name&gt;
                        &lt;path&gt;/requirejs/js/plugins/text.js&lt;/path&gt;
                     &lt;/script&gt;
                     &lt;depends&gt;
@@ -39,7 +41,6 @@
                    &lt;name&gt;RequireJSPortlet&lt;/name&gt;
                    &lt;module&gt;
                       &lt;script&gt;
-                         &lt;name&gt;starter&lt;/name&gt;
                          &lt;path&gt;/requirejs/js/requirejsPortlet.js&lt;/path&gt;
                       &lt;/script&gt;
                       &lt;depends&gt;
@@ -62,7 +63,7 @@
 					<ul>
 						<li>
 							<strong>"text.js"</strong> is not only a native requirejs lib, but also a requirejs-plugin. We use <strong>&lt;resource&gt;</strong> tag 
-							to declare a requirejs-plugin resource
+							to declare a <a href="http://requirejs.org/docs/plugins.html" target="_blank">requirejs-plugin resource</a>
 						</li>
 						<li>
 							Notice how we use <strong>&lt;depends&gt;</strong> tag to declare dependencies - 
@@ -84,7 +85,6 @@
                  &lt;module&gt;
                     &lt;name&gt;foo&lt;/name&gt;     
                     &lt;script&gt;
-                       &lt;name&gt;foo&lt;/name&gt;
                        &lt;path&gt;/path/foo.js&lt;/path&gt;
                     &lt;/script&gt;
                     &lt;depends&gt;

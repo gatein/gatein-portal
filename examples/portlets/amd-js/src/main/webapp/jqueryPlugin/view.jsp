@@ -17,7 +17,6 @@
   &lt;module&gt;
       &lt;name&gt;jquery-plugin&lt;/name&gt;     
       &lt;script&gt;
-         &lt;name&gt;jquery-plugin&lt;/name&gt;
          &lt;path&gt;/jqueryPlugin/jquery-plugin.js&lt;/path&gt;
       &lt;/script&gt;
       &lt;depends&gt;
@@ -30,7 +29,6 @@
      &lt;name&gt;JQueryPluginPortlet&lt;/name&gt;
      &lt;module&gt;
        &lt;script&gt;
-         &lt;name&gt;jqueryPlugin&lt;/name&gt;
          &lt;path&gt;/jqueryPlugin/jqueryPluginPortlet.js&lt;/path&gt;
        &lt;/script&gt;
        &lt;depends&gt;
