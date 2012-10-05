@@ -339,26 +339,23 @@ public class JavascriptConfigParser
             } 
             else if (adapter != null)
             {
-               if (adapter != null)
-               {          
-                  NodeList childs = adapter.getChildNodes();
-                  for (int i = 0; i < childs.getLength(); i++)
+               NodeList childs = adapter.getChildNodes();
+               for (int i = 0; i < childs.getLength(); i++)
+               {
+                  Node item = childs.item(i);
+                  if (item instanceof Element)
                   {
-                     Node item = childs.item(i);
-                     if (item instanceof Element)
+                     Element include = (Element)item;
+                     if (INCLUDE_TAG.equals(include.getTagName()))
                      {
-                        Element include = (Element)item;
-                        if (INCLUDE_TAG.equals(include.getTagName()))
-                        {
-                           contents.add(new Content(XMLTools.asString(include, true)));                                                   
-                        }
+                        contents.add(new Content(XMLTools.asString(include, true)));                                                   
                      }
-                     else if (item.getNodeType() == Node.TEXT_NODE)
-                     {
-                        contents.add(new Content(item.getNodeValue().trim(), false));                                                
-                     }
-                  }         
-               }
+                  }
+                  else if (item.getNodeType() == Node.TEXT_NODE)
+                  {
+                     contents.add(new Content(item.getNodeValue().trim(), false));                                                
+                  }
+               }         
             }
             Content[] tmp = contents.toArray(new Content[contents.size()]);
             
