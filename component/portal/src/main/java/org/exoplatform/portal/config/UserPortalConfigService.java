@@ -405,61 +405,6 @@ public class UserPortalConfigService implements Startable
    }
 
    /**
-    * This method load the page according to the pageId and returns.
-    *
-    * @param pageId the page id
-    * @return the page
-    * @throws Exception any exception
-    */
-  /* public Page getPage(String pageId) throws Exception
-   {
-      if (pageId == null)
-      {
-         return null;
-      }
-      
-      PageContext pageContext = pageService.loadPage(PageKey.parse(pageId));
-      if(pageContext == null)
-      {
-         return null;
-      }
-      
-      Page page = storage_.getPage(pageId);
-      if(page == null)
-      {
-         return null;
-      }
-      page.setFactoryId(pageContext.getState().getFactoryId());
-      page.setShowMaxWindow(pageContext.getState().getShowMaxWindow());
-      page.setTitle(pageContext.getState().getName());
-      page.setDescription(pageContext.getState().getDescription());
-      List<String> accessPermissions = pageContext.getState().getAccessPermissions();
-      page.setAccessPermissions(accessPermissions != null ? accessPermissions.toArray(new String[accessPermissions.size()]) : null);
-      page.setEditPermission(pageContext.getState().getEditPermission());
-      return page;
-   }*/
-
-   /**
-    * This method load the page according to the pageId and returns it if the current thread is associated with an
-    * identity that allows to view the page according to the {@link UserACL#hasPermission(org.exoplatform.portal.config.model.Page)}
-    * method.
-    *
-    * @param pageId     the page id
-    * @param accessUser never used
-    * @return the page
-    * @throws Exception any exception
-    */
-   /*public Page getPage(String pageId, String accessUser) throws Exception
-   {
-      Page page = getPage(pageId);
-      if (page == null || !userACL_.hasPermission(page))
-      {
-         return null;
-      }
-      return page;
-   }*/
-   
-   /**
     * Use {@link PageService} to load metadata of specify page
     * 
     * @param pageRef the PageKey
@@ -467,6 +412,11 @@ public class UserPortalConfigService implements Startable
     */
    public PageContext getPage(PageKey pageRef)
    {
+      if (pageRef == null)
+      {
+         return null;
+      }
+
       PageContext page = pageService.loadPage(pageRef);
       if(page == null || !userACL_.hasPermission(page))
       {

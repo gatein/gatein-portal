@@ -371,7 +371,7 @@ public class PortalRequestContext extends WebuiRequestContext
             container.getComponentInstanceOfType(UserPortalConfigService.class);
             UserPortalConfigService configService = (UserPortalConfigService)container.getComponentInstanceOfType(UserPortalConfigService.class);
             PageKey pageRef = node.getPageRef();
-            PageContext page = configService.getPageService().loadPage(pageRef);
+            PageContext page = configService.getPage(pageRef);
 
             //
             if (page != null)

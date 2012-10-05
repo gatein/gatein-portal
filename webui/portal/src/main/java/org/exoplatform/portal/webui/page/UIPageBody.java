@@ -121,15 +121,12 @@ public class UIPageBody extends UIComponentDecorator
          (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
       
       
-      if (pageNode != null)
+      if (pageNode != null && pageNode.getPageRef() != null)
       {
          pageReference = pageNode.getPageRef().format();
-         if (pageReference != null)
-         {
-            pageContext = userPortalConfigService.getPage(pageNode.getPageRef());
-         }
+         pageContext = userPortalConfigService.getPage(pageNode.getPageRef());
       }
-      
+
       //The page has been deleted
       if(pageContext == null)
       {

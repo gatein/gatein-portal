@@ -222,7 +222,7 @@ public class UITabPaneDashboard extends UIContainer
             PageKey pageRef = tobeRemoved.getPageRef();
             if (pageRef != null)
             {
-               PageContext page = configService.getPage(pageRef);
+               PageContext page = configService.getPageService().loadPage(pageRef);
                if (page != null)
                {
                   configService.getPageService().destroyPage(pageRef);
@@ -354,12 +354,15 @@ public class UITabPaneDashboard extends UIContainer
          }
          renamedNode.setName(newNodeName);
 
-         PageContext page = configService.getPageService().loadPage(renamedNode.getPageRef());
-         if (page != null)
+         if (renamedNode.getPageRef() != null)
          {
-            PageState state = page.getState();
-            page.setState(state.builder().name(newNodeLabel).build());
-            configService.getPageService().savePage(page);
+            PageContext page = configService.getPageService().loadPage(renamedNode.getPageRef());
+            if (page != null)
+            {
+               PageState state = page.getState();
+               page.setState(state.builder().name(newNodeLabel).build());
+               configService.getPageService().savePage(page);
+            }
          }
 
          getUserPortal().saveNode(parentNode, null);

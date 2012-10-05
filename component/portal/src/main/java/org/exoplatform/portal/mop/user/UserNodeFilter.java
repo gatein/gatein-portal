@@ -62,7 +62,6 @@ class UserNodeFilter implements NodeFilter
       {
          try
          {
-//            PageService pageService = userPortal.service.getPageService();
             PageContext page = userPortal.service.getPageService().loadPage(pageRef);
             if (page != null)
             {

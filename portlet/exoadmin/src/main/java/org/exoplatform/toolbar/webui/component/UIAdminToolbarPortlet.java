@@ -103,15 +103,15 @@ public class UIAdminToolbarPortlet extends UIPortletApplication
       {
          UIPortal currentUIPortal = portalApp.<UIWorkingWorkspace>findComponentById(UIPortalApplication.UI_WORKING_WS_ID).findFirstComponentOfType(UIPortal.class);
          UserNode currentNode = currentUIPortal.getSelectedUserNode();
-         String pageReference = currentNode.getPageRef().format();
-         if(pageReference == null)
+         PageKey pageKey = currentNode.getPageRef();
+         if(pageKey == null)
          {
             return false;
          }
          else
          {
             PageService pageService = portalApp.getApplicationComponent(PageService.class);
-            PageContext page = pageService.loadPage(PageKey.parse(pageReference));
+            PageContext page = pageService.loadPage(pageKey);
             if(page == null)
             {
                return false;

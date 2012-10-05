@@ -263,16 +263,16 @@ public class UIPageBrowser extends UIContainer
          String id = context.getRequestParameter(OBJECTID);
 
          UserPortalConfigService service = uiPageBrowser.getApplicationComponent(UserPortalConfigService.class);
-         PageContext page = service.getPageService().loadPage(PageKey.parse(id));
-         UserACL userACL = uiPageBrowser.getApplicationComponent(UserACL.class);
-         
          UIApplication uiApp = context.getUIApplication();
+         PageContext page = (id != null) ? service.getPageService().loadPage(PageKey.parse(id)) : null;
+         
          if(page == null)
          {
             uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{id}, 1));
             return;
          }
 
+         UserACL userACL = uiPageBrowser.getApplicationComponent(UserACL.class);
          if (!userACL.hasEditPermission(page))
          {
             uiApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.delete.NotDelete", new String[]{id}, 1));
@@ -281,7 +281,7 @@ public class UIPageBrowser extends UIContainer
          
          UIPortal uiPortal = Util.getUIPortal();
          UserNode userNode = uiPortal.getSelectedUserNode();
-         boolean isDeleteCurrentPage = userNode.getPageRef().equals(page.getKey());
+         boolean isDeleteCurrentPage = page.getKey().equals(userNode.getPageRef());
          if (isDeleteCurrentPage && page.getKey().getSite().equals(SiteType.USER))
          {
             ApplicationMessage msg = new ApplicationMessage("UIPageBrowser.msg.delete.DeleteCurrentUserPage", null, ApplicationMessage.WARNING);
@@ -380,7 +380,7 @@ public class UIPageBrowser extends UIContainer
          UserPortalConfigService service = uiPageBrowser.getApplicationComponent(UserPortalConfigService.class);
 
          //Check existence of the page
-         PageContext pageContext = service.getPage(PageKey.parse(id));
+         PageContext pageContext = (id != null) ? service.getPage(PageKey.parse(id)) : null;
          if (pageContext == null)
          {
             uiPortalApp.addMessage(new ApplicationMessage("UIPageBrowser.msg.PageNotExist", new String[]{id}, 1));
