@@ -30,7 +30,7 @@
 						<div class="LeftLoginContainer">
 							<div class="RightLoginContainer">
 								<div class="MiddleLoginContainer Signin ClearFix">
-									<a class="Login" onclick="$signInAction"><%=_ctx.appRes("UILoginForm.label.Signin")%></a>
+									<%= uicomponent.renderLoginLink(signInAction, _ctx.appRes("UILoginForm.label.Signin")) %>
 									<a class="Register" href="$registerURI">
 										<%=_ctx.appRes("UIBannerPortlet.action.register")%>
 									</a>						

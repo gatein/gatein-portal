@@ -19,14 +19,10 @@
 
 -->
 
-<webui-configuration> 
-  <ui-component-config id="UIBannerPortlet">
-    <type>org.exoplatform.portal.webui.application.UIGroovyPortlet</type>
-    <lifecycle>org.exoplatform.groovy.webui.component.lifecycle.UIGroovyPortletLifecycle</lifecycle>
-  </ui-component-config>
+<webui-configuration>
 
   <application> 
-    <ui-component-root>org.exoplatform.portal.webui.application.UIGroovyPortlet</ui-component-root>
+    <ui-component-root>org.exoplatform.portal.webui.component.UIBannerPortlet</ui-component-root>
     <state-manager>org.exoplatform.webui.application.portlet.ParentAppStateManager</state-manager>
 
     <application-lifecycle-listeners>       

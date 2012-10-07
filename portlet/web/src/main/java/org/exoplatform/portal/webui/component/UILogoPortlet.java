@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.webui.component;
 
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -26,6 +27,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.CacheUserProfileFilter;
+import org.exoplatform.web.security.sso.SSOHelper;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -41,9 +43,12 @@ import javax.portlet.PortletPreferences;
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/portal/webui/component/UILogoPortlet.gtmpl")
 public class UILogoPortlet extends UIPortletApplication
 {
+   private final SSOHelper ssoHelper;
+
    public UILogoPortlet() throws Exception
    {
       addChild(UILogoEditMode.class, null, null);
+      ssoHelper = getApplicationComponent(SSOHelper.class);
    }
 
    public String getURL()
@@ -68,5 +73,20 @@ public class UILogoPortlet extends UIPortletApplication
          return user.getFullName();
       }
       return "";
+   }
+
+   public String renderLoginLink(String signInAction, String signInLocalizedText)
+   {
+      // If SSO is enabled, we need to redirect to "/portal/sso" instead of showing login window
+      if (ssoHelper.isSSOEnabled())
+      {
+         PortalRequestContext pContext = Util.getPortalRequestContext();
+         String ssoRedirectURL = pContext.getRequest().getContextPath() + ssoHelper.getSSORedirectURLSuffix();
+         return "<a href=\"" + ssoRedirectURL + "\">" + signInLocalizedText + "</a>";
+      }
+      else
+      {
+         return "<a onclick=\"" + signInAction + "\">" + signInLocalizedText + "</a>";
+      }
    }
 }

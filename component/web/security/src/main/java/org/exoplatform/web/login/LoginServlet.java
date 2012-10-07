@@ -25,6 +25,7 @@ import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.security.AuthenticationRegistry;
 import org.exoplatform.web.security.security.AbstractTokenService;
 import org.exoplatform.web.security.security.CookieTokenService;
+import org.exoplatform.web.security.sso.SSOHelper;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.ServletContainer;
@@ -214,9 +215,23 @@ public class LoginServlet extends AbstractHttpServlet
             req.setAttribute("org.gatein.portal.login.error", "whatever");
          }
 
-         // Show login form
+         // Show login form or redirect to SSO url (/portal/sso) if SSO is enabled
          req.setAttribute("org.gatein.portal.login.initial_uri", uri);
-         getServletContext().getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
+         SSOHelper ssoHelper = (SSOHelper)getContainer().getComponentInstanceOfType(SSOHelper.class);
+         if (ssoHelper.isSSOEnabled())
+         {
+            String ssoRedirectUrl = req.getContextPath() + ssoHelper.getSSORedirectURLSuffix();
+            ssoRedirectUrl = resp.encodeRedirectURL(ssoRedirectUrl);
+            if (log.isTraceEnabled())
+            {
+               log.trace("Redirected to SSO login URL: " + ssoRedirectUrl);
+            }
+            resp.sendRedirect(ssoRedirectUrl);
+         }
+         else
+         {
+            getServletContext().getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
+         }
       }
    }
 

@@ -38,7 +38,7 @@
 		<div class="Signin ClearFix">
 			<a onclick="$changeLanguageAction"><%=_ctx.appRes("UILogoPortlet.action.changeLanguage")%></a>
 			<a href="$registerURI"><%=_ctx.appRes("UILogoPortlet.action.Register")%></a>	
-			<a onclick="$signInAction"><%=_ctx.appRes("UILogoPortlet.action.signin")%></a>
+			<%= uicomponent.renderLoginLink(signInAction, _ctx.appRes("UILogoPortlet.action.signin")) %>
 		</div>
 		<% } %>
 	
