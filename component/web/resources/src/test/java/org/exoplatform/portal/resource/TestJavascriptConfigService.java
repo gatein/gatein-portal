@@ -123,9 +123,11 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    
    public void testRequireJSPlugin() throws Exception
    {
-      String pluginTest = "\ndefine('SHARED/pluginTest', [\"SHARED/text!/path/to/file.js\"], function(text) {" +
-               "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[\"text!/path/to/file.js\"];" +
-               "\neXo.define.deps=[text];" +      
+      String pluginTest = "\ndefine('SHARED/pluginTest', [\"SHARED/text!/path/to/file.js\",\"SHARED/text!/path/to/file2.js\"]," +
+               " function(text,text_1) {" +
+               "\nvar require = eXo.require,requirejs = require,define = eXo.define;\n" +
+               "eXo.define.names=[\"text!/path/to/file.js\",\"text!/path/to/file2.js\"];" +
+               "\neXo.define.deps=[text,text_1];" +      
                "\nreturn iii;\n});";
       assertReader(pluginTest, jsService.getScript(new ResourceId(ResourceScope.SHARED, "pluginTest"), null));
    }

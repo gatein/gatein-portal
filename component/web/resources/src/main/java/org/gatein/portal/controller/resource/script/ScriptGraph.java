@@ -22,6 +22,7 @@ package org.gatein.portal.controller.resource.script;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
+import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 
@@ -222,6 +223,11 @@ public class ScriptGraph
                   throw new IllegalStateException("ScriptResource " + rs.getId() + " can't depend on " + id + ". They have difference fetchMode");
                }
             }                     
+         }
+         
+         if (JavascriptConfigService.RESERVED_MODULE.contains(id.getName()))
+         {
+            throw new IllegalStateException("Can't not add " + id + ". The name " + id.getName() + " is reserved name");
          }
       }
       

@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -47,7 +48,7 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
    private final List<Module> modules;
 
    /** . */
-   final HashMap<ResourceId, String[]> dependencies;
+   final HashMap<ResourceId, Set<DepInfo>> dependencies;
 
    /** . */
    final HashSet<ResourceId> closure;
@@ -72,7 +73,7 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
 
       this.modules = new ArrayList<Module>();
       this.closure = new HashSet<ResourceId>();
-      this.dependencies = new LinkedHashMap<ResourceId, String[]>();
+      this.dependencies = new LinkedHashMap<ResourceId, Set<DepInfo>>();
       this.fetchMode = fetchMode;
       
       if (alias == null)
@@ -138,7 +139,12 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
       }                
       
       //
-      dependencies.put(dependencyId, new String[] {alias, pluginRS});
+      Set<DepInfo> infos = dependencies.get(dependencyId);
+      if (infos == null)
+      {
+         dependencies.put(dependencyId, infos = new LinkedHashSet<DepInfo>());
+      }
+      infos.add(new DepInfo(alias, pluginRS));
    }
    
    public Set<ResourceId> getClosure()
@@ -217,31 +223,10 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
       return dependencies.keySet();
    }
    
-   public String getDependencyAlias(ResourceId id)
+   public Set<DepInfo> getDepInfo(ResourceId id)
    {
-      String[] depInfo = dependencies.get(id);
-      if (depInfo != null) 
-      {
-         return depInfo[0];
-      }
-      else 
-      {
-         return null;
-      }
-   }
-   
-   public String getPluginResource(ResourceId id)
-   {
-      String[] depInfo = dependencies.get(id);
-      if (depInfo != null) 
-      {
-         return depInfo[1];
-      }
-      else 
-      {
-         return null;
-      }
-   }
+      return dependencies.get(id);
+   }   
 
    /**
     * If no alias was set, return the last part of the resource name
@@ -261,5 +246,49 @@ public class ScriptResource extends BaseScriptResource<ScriptResource> implement
    public ScriptGroup getGroup()
    {
       return group;
+   }
+   
+   public class DepInfo 
+   {
+      final String alias;
+      final String pluginRS;
+      
+      DepInfo(String alias, String pluginRS)
+      {
+         this.alias = alias;
+         this.pluginRS = pluginRS;
+      }
+
+      public String getAlias()
+      {
+         return alias;
+      }
+
+      public String getPluginRS()
+      {
+         return pluginRS;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         final int prime = 31;
+         int result = 1;
+         result = prime * result + ((alias == null) ? 0 : alias.hashCode());
+         result = prime * result + ((pluginRS == null) ? 0 : pluginRS.hashCode());
+         return result;
+      }
+
+      @Override
+      public boolean equals(Object obj)
+      {
+         if (this == obj)
+            return true;
+         if (obj == null || !(obj instanceof DepInfo))
+            return false;
+         DepInfo other = (DepInfo)obj;
+         return ((alias == other.alias || alias != null && alias.equals(other.alias)) && 
+            (pluginRS == other.pluginRS || pluginRS != null && pluginRS.equals(other.pluginRS)));
+      }   
    }
 }

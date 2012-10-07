@@ -29,10 +29,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringUtils;
 import org.exoplatform.commons.utils.CompositeReader;
@@ -52,6 +56,7 @@ import org.gatein.portal.controller.resource.script.Module;
 import org.gatein.portal.controller.resource.script.ScriptGraph;
 import org.gatein.portal.controller.resource.script.ScriptGroup;
 import org.gatein.portal.controller.resource.script.ScriptResource;
+import org.gatein.portal.controller.resource.script.ScriptResource.DepInfo;
 import org.gatein.wci.ServletContainerFactory;
 import org.gatein.wci.WebApp;
 import org.gatein.wci.WebAppListener;
@@ -73,6 +78,9 @@ public class JavascriptConfigService extends AbstractResourceService implements 
    
    /** . */
    public static final List<String> RESERVED_MODULE = Arrays.asList("require", "exports", "module");
+   
+   /** . */
+   private static final Pattern INDEX_PATTERN = Pattern.compile("^.+?(_([1-9]+))$");
 
    /** . */
    public static final Comparator<Module> MODULE_COMPARATOR = new Comparator<Module>()
@@ -133,34 +141,40 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             boolean isModule = FetchMode.ON_LOAD.equals(resource.getFetchMode());
             
             if (isModule)
-            {                              
+            {                                             
                JSONArray deps = new JSONArray();               
-               LinkedList<String> alias = new LinkedList<String>();
-               List<String> argNames = new LinkedList<String>();                              
+               LinkedList<String> params = new LinkedList<String>();
+               List<String> argNames = new LinkedList<String>();                            
+               List<String> argValues = new LinkedList<String>(params);
                for (ResourceId id : resource.getDependencies())
                {
                   ScriptResource dep = getResource(id);
                   if (dep != null)
                   {                     
-                     String pluginRS = resource.getPluginResource(id);
-                     deps.put(parsePluginRS(dep.getId().toString(), pluginRS));                     
-                     
-                     //
-                     String als = resource.getDependencyAlias(id);
-                     alias.add(als == null ? dep.getAlias() : als);
-                     
-                     //
-                     argNames.add(parsePluginRS(alias.getLast(), pluginRS));                     
+                     Set<DepInfo> depInfos = resource.getDepInfo(id);
+                     for (DepInfo info : depInfos)
+                     {
+                        String pluginRS = info.getPluginRS();
+                        String alias = info.getAlias();
+                        if (alias == null)
+                        {
+                           alias = dep.getAlias();
+                        }
+                        
+                        deps.put(parsePluginRS(dep.getId().toString(), pluginRS));                     
+                        params.add(encode(params, alias));                        
+                        argNames.add(parsePluginRS(alias, pluginRS));                  
+                     }                     
                   }
                   else if (RESERVED_MODULE.contains(id.getName()))
                   {
                      String reserved = id.getName();
                      deps.put(reserved);
-                     alias.add(reserved);
+                     params.add(reserved);
                      argNames.add(reserved);
                   }
                }
-               List<String> argValues = new LinkedList<String>(alias);
+               argValues.addAll(params);
                int reserveIdx = argValues.indexOf("require");
                if (reserveIdx != -1)
                {
@@ -171,7 +185,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                buffer.append("\ndefine('").append(resourceId).append("', ");
                buffer.append(deps);
                buffer.append(", function(");
-               buffer.append(StringUtils.join(alias, ","));               
+               buffer.append(StringUtils.join(params, ","));               
                buffer.append(") {\nvar require = eXo.require,requirejs = require,define = eXo.define;");
                buffer.append("\neXo.define.names=").append(new JSONArray(argNames)).append(";");
                buffer.append("\neXo.define.deps=[").append(StringUtils.join(argValues, ",")).append("]").append(";");
@@ -208,7 +222,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
             return null;         
          }
       }      
-   }
+   }   
 
    @SuppressWarnings("unchecked")
    public String generateURL(
@@ -379,6 +393,38 @@ public class JavascriptConfigService extends AbstractResourceService implements 
          resources.addAll(scripts.getResources(scope));
       }
       return resources;
+   }
+   
+   private String encode(LinkedList<String> params, String alias)
+   {
+      alias = alias.replace("/", "_");
+      int idx = -1;
+      Iterator<String> iterator = params.descendingIterator();
+      while (iterator.hasNext())
+      {
+         String param = iterator.next();
+         Matcher matcher = INDEX_PATTERN.matcher(param); 
+         if (matcher.matches())
+         {
+            idx = Integer.parseInt(matcher.group(2));      
+            break;
+         }
+         else if (alias.equals(param))
+         {
+            idx = 0;
+            break;
+         }
+      }
+      if (idx != -1)
+      {
+         StringBuilder tmp = new StringBuilder(alias);
+         tmp.append("_").append(idx + 1);
+         return tmp.toString();
+      }
+      else
+      {
+         return alias;
+      }
    }
    
    private String parsePluginRS(String name, String pluginRS)

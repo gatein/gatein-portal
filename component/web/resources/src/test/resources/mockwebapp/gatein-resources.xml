@@ -145,6 +145,11 @@
       	<as>text</as>
       	<resource>/path/to/file.js</resource>
       </depends>
+      <depends>
+      	<module>text</module>
+      	<as>text</as>
+      	<resource>/path/to/file2.js</resource>
+      </depends>
    </module>
    
    <module>
