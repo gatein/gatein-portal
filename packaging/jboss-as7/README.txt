@@ -129,6 +129,10 @@ bin/standalone.sh --server-config=standalone-ha.xml -Djboss.node.name=node2 -Djb
 Point your browser to http://localhost:8180/portal to access the first instance, and http://localhost:8280/portal for the second instance.
 
 
+If there are multiple interfaces in the system another parameter may have to be used: -Djgroups.bind_addr=IP_ADDRESS
+
+This one tells jgroups - a library used for session replication on AS7 - to bind to specific interface. It may use a wrong one by default, preventing session replication from working.
+
 
 Help
 ====

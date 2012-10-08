@@ -370,7 +370,6 @@ You can also use -Ddownload to automatically provide JBoss AS instance.
          </activation>
          <properties>
             <pkg.cluster/>
-            <pkg.nosamples/>
          </properties>
       </profile>
    </profiles>

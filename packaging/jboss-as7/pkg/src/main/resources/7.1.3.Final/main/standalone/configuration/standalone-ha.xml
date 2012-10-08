@@ -113,33 +113,50 @@
 
                   -->
 
-               <xa-datasource jndi-name="java:/jdbcidm_portal" pool-name="IDMPortalDS" enabled="true"
-                              use-java-context="true" jta="true" use-ccm="true">
-                  <xa-datasource-property name="URL">jdbc:h2:tcp://localhost/~/jdbcidm_portal</xa-datasource-property>
-                  <xa-datasource-property name="User">sa</xa-datasource-property>
-                  <xa-datasource-property name="Password">sa</xa-datasource-property>
-
-                  <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
-                  <xa-pool>
-                     <is-same-rm-override>false</is-same-rm-override>
-                     <no-tx-separate-pools />
-                  </xa-pool>
+               <datasource jndi-name="java:/jdbcidm_portal" pool-name="IDMPortalDS" enabled="true"
+                           use-java-context="true">
+                  <connection-url>
+                     jdbc:h2:tcp://localhost/~/jdbcidm_portal
+                  </connection-url>
                   <driver>h2</driver>
-               </xa-datasource>
-
-               <xa-datasource jndi-name="java:/jdbcjcr_portal" pool-name="JCRPortalDS"
-                              enabled="true" use-java-context="true" jta="true" use-ccm="true">
-                  <xa-datasource-property name="URL">jdbc:h2:tcp://localhost/~/jdbcjcr_portal</xa-datasource-property>
-                  <xa-datasource-property name="User">sa</xa-datasource-property>
-                  <xa-datasource-property name="Password">sa</xa-datasource-property>
-
-                  <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
-                  <xa-pool>
-                     <is-same-rm-override>false</is-same-rm-override>
-                     <no-tx-separate-pools />
-                  </xa-pool>
+                  <security>
+                     <user-name>sa</user-name>
+                     <password>sa</password>
+                  </security>
+               </datasource>
+               <datasource jndi-name="java:/jdbcidm_sample-portal" pool-name="IDMSamplePortalDS" enabled="true"
+                           use-java-context="true">
+                  <connection-url>
+                     jdbc:h2:tcp://localhost/~/jdbcidm_sample_portal
+                  </connection-url>
                   <driver>h2</driver>
-               </xa-datasource>
+                  <security>
+                     <user-name>sa</user-name>
+                     <password>sa</password>
+                  </security>
+               </datasource>
+               <datasource jndi-name="java:/jdbcjcr_portal" pool-name="JCRPortalDS"
+                           enabled="true" use-java-context="true">
+                  <connection-url>
+                     jdbc:h2:tcp://localhost/~/jdbcjcr_portal
+                  </connection-url>
+                  <driver>h2</driver>
+                  <security>
+                     <user-name>sa</user-name>
+                     <password>sa</password>
+                  </security>
+               </datasource>
+               <datasource jndi-name="java:/jdbcjcr_sample-portal"
+                           pool-name="JCRSamplePortalDS" enabled="true" use-java-context="true">
+                  <connection-url>
+                     jdbc:h2:tcp://localhost/~/jdbcjcr_sample_portal
+                  </connection-url>
+                  <driver>h2</driver>
+                  <security>
+                     <user-name>sa</user-name>
+                     <password>sa</password>
+                  </security>
+               </datasource>
 
                <drivers>
                     <driver name="h2" module="com.h2database.h2">
@@ -372,7 +389,14 @@
                      </login-module>
                   </authentication>
                </security-domain>
-
+               <security-domain name="gatein-domain-sample-portal" cache-type="default">
+                  <authentication>
+                     <login-module code="org.exoplatform.services.security.j2ee.JbossLoginModule" flag="required">
+                        <module-option name="portalContainerName" value="sample-portal"/>
+                        <module-option name="realmName" value="gatein-domain-sample-portal"/>
+                     </login-module>
+                  </authentication>
+               </security-domain>
             </security-domains>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:threads:1.1"/>
