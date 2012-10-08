@@ -181,4 +181,42 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService
       }
       end();
    }
+   
+   public void testCachingInMultiThreading() throws InterruptedException
+   {
+      final SiteKey foo = SiteKey.portal("test_caching_in_multi_threading");
+      assertNull(navigationService.loadNavigation(foo));
+      mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "test_caching_in_multi_threading");
+      assertTrue(mgr.getSession().isModified());
+
+      sync(true);
+
+      navigationService.saveNavigation(new NavigationContext(foo, new NavigationState(0)));
+
+      // Start a new thread to work with navigations in parallels
+      Thread t = new Thread(new Runnable()
+      {
+         @Override
+         public void run()
+         {
+            begin();
+            // Loading the foo navigation and update into the cache if any
+            assertFalse(mgr.getSession().isModified());
+            assertNull(navigationService.loadNavigation(foo));
+            end(true);
+         }
+      });
+      t.start();
+      t.join();
+
+      // It loads directly from DB
+      assertTrue(mgr.getSession().isModified());
+      assertNotNull(navigationService.loadNavigation(foo));
+
+      sync(true);
+
+      // It will load from Cache first if any
+      assertFalse(mgr.getSession().isModified());
+      assertNotNull(navigationService.loadNavigation(foo));
+   }
 }

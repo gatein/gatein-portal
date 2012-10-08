@@ -52,7 +52,8 @@ public class ExoDataCache extends DataCache
          Object key = scopedKey.getKey();
          if (key instanceof SiteKey)
          {
-            return loadNavigation(session, (SiteKey)key);
+            NavigationData data = loadNavigation(session, (SiteKey)key); 
+            return data == NavigationData.EMPTY ? null : data;
          }
          else
          {
