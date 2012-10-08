@@ -24,8 +24,10 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 
 import java.lang.reflect.Method;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * Created by The eXo Platform SARL * A grid element (represented by an HTML
@@ -87,7 +89,14 @@ public class UIRepeater extends UIComponent
 
    public List<?> getBeans() throws Exception
    {
-      return source.next();
+      try 
+      {
+         return source.next();
+      } 
+      catch (NoSuchElementException e)
+      {
+         return Collections.emptyList();
+      }
    }
 
    public String getLabel()

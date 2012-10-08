@@ -50,6 +50,7 @@ import org.exoplatform.webui.core.UIRepeater;
 import org.exoplatform.webui.core.UIVirtualList;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
+import org.gatein.common.xml.NoSuchElementException;
 
 /*
  * Created by The eXo Platform SAS
@@ -70,7 +71,7 @@ public class UIAddGroupNavigation extends UIContainer
       UIVirtualList virtualList = addChild(UIVirtualList.class, null, "AddGroupNavList");
       UIRepeater repeater = createUIComponent(UIRepeater.class, "UIAddGroupNavigationGrid", null);
       virtualList.setUIComponent(repeater);
-      UIPopupWindow editGroup = addChild(UIPopupWindow.class, null, "EditGroup");
+      addChild(UIPopupWindow.class, null, "EditGroup");
    }
 
    public void loadGroups() throws Exception
@@ -84,7 +85,7 @@ public class UIAddGroupNavigation extends UIContainer
       // get all group that user has permission
       if (userACL.isUserInGroup(userACL.getAdminGroups()) && !userACL.getSuperUser().equals(pContext.getRemoteUser()))
       {
-         Collection<?> temp = (List)orgService.getGroupHandler().findGroupsOfUser(pContext.getRemoteUser());
+         Collection<?> temp = orgService.getGroupHandler().findGroupsOfUser(pContext.getRemoteUser());
          if (temp != null)
          {
             for (Object group : temp)
@@ -149,7 +150,7 @@ public class UIAddGroupNavigation extends UIContainer
             }
             else
             {
-               return null;
+               throw new NoSuchElementException();
             }
          }
 

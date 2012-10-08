@@ -105,7 +105,7 @@ public class UIPageSelector extends UIFormInputContainer<String>
    public UIFormInput<?> setValue(String value) throws Exception
    {
       UserPortalConfigService service = getApplicationComponent(UserPortalConfigService.class);
-      PageContext page = service.getPage(PageKey.parse(value));
+      PageContext page = value != null ? service.getPage(PageKey.parse(value)) : null;
       page_ = page;
       super.setValue(value);
       return this;
