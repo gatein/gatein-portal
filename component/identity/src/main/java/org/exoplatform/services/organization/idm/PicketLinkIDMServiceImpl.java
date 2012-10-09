@@ -297,11 +297,11 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
          EmbeddedCacheManager cacheManager = new DefaultCacheManager(configStream, false);
          GlobalConfiguration globalConfigFromXml = cacheManager.getCacheManagerConfiguration();
 
-         ConfigurationBuilderHolder builderHolder = new ConfigurationBuilderHolder();
-         builderHolder.getGlobalConfigurationBuilder().read(globalConfigFromXml);
+         GlobalConfigurationBuilder globalConfigBuilder = new GlobalConfigurationBuilder();
+         globalConfigBuilder.read(globalConfigFromXml);
 
          Configuration configFromXml = cacheManager.getDefaultCacheConfiguration();
-         ConfigurationBuilder configBuilder = builderHolder.getDefaultConfigurationBuilder().read(configFromXml);
+         ConfigurationBuilder configBuilder = new ConfigurationBuilder().read(configFromXml);
 
          // Configure transactionManagerLookup programmatically if not provided in configuration
          TransactionManagerLookup tmLookup = configFromXml.transaction().transactionManagerLookup();
@@ -312,7 +312,7 @@ public class PicketLinkIDMServiceImpl implements PicketLinkIDMService, Startable
          }
          log.debug("Infinispan transaction manager lookup: " + tmLookup);
 
-         cacheManager = new DefaultCacheManager(builderHolder, true);
+         cacheManager = new DefaultCacheManager(globalConfigBuilder.build(), configBuilder.build(), true);
          PicketLinkIDMServiceImpl.cacheManager = cacheManager;
       }
 
