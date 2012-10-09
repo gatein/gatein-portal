@@ -65,9 +65,8 @@
    </target>
 
    <target name="package-samples" unless="pkg.nosamples">
-      <!--copy tofile="${jbossas.target.dir}/gatein/deployments/gatein-sample-portal.ear" >
-         <fileset refid="org.gatein.portal:gatein-sample-portal:ear"/>
-      </copy-->
+      <!-- The following is commented out because of GTNPORTAL-2639 -->
+ 	  <!--
       <copy todir="${jbossas.target.dir}/gatein/extensions/gatein-sample-portal.ear/lib" >
          <fileset refid="org.gatein.portal:exo.portal.sample.portal.config:jar"/>
       </copy>
@@ -80,10 +79,10 @@
       <copy tofile="${jbossas.target.dir}/gatein/extensions/gatein-sample-portal.ear/rest-sample-portal.war" >
          <fileset refid="org.gatein.portal:exo.portal.sample.portal.rest-war:war"/>
       </copy>
+ 	  -->
 
-      <!--copy tofile="${jbossas.target.dir}/gatein/deployments/gatein-sample-extension.ear">
-         <fileset refid="org.gatein.portal:gatein-sample-extension:ear"/>
-      </copy-->
+      <!-- The following is commented out because of GTNPORTAL-2639 -->
+   	  <!--
       <copy todir="${jbossas.target.dir}/gatein/extensions/gatein-sample-extension.ear/lib" >
          <fileset refid="org.gatein.portal:exo.portal.sample.extension.config:jar"/>
       </copy>
@@ -97,11 +96,15 @@
       <copy tofile="${jbossas.target.dir}/gatein/extensions/gatein-sample-skin.war">
          <fileset refid="org.gatein.portal.examples.skins:gatein-sample-skin:war"/>
       </copy>
+   	  -->
 
       <!-- Copy non-version-specific samples resources -->
+      <!-- The following is commented out because of GTNPORTAL-2639 -->
+   	  <!--
       <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
          <fileset dir="${maven.project.basedir}/src/main/resources/jboss/samples" />
       </copy>
+      -->
 
       <!-- Package version specific samples configuration if requested -->
       <antcall target="package-samples-copy" inheritAll="true" inheritRefs="true"/>
