@@ -2,7 +2,7 @@
 	import org.exoplatform.webui.core.UIItemSelector; 
 	
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().require("SHARED/webui", "webui").addScripts("webui.UISkinSelector.init();");
+	rcontext.getJavascriptManager().require("SHARED/selectors", "selectors").addScripts("selectors.UISkinSelector.init();");
 %>
 <div class="UIChangeSkinForm">
 	<div class="UIFormTabPane">

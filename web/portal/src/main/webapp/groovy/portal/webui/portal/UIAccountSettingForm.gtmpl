@@ -4,7 +4,7 @@
 
   def rcontext = _ctx.getRequestContext();
   JavascriptManager jsManager = rcontext.getJavascriptManager();
-  jsManager.require("SHARED/webui", "webui").addScripts("webui.UIHorizontalTabs.init('$uicomponent.id');");
+  jsManager.require("SHARED/portalControl", "portalControl").addScripts("portalControl.UIHorizontalTabs.init('$uicomponent.id');");
 %>
 
 <div class="UIAccountSettingForm" id="<%=uicomponent.getId();%>">

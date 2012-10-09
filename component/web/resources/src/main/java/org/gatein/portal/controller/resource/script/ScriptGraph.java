@@ -19,7 +19,10 @@
 
 package org.gatein.portal.controller.resource.script;
 
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
+import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 
@@ -39,6 +42,12 @@ public class ScriptGraph
    
    /** . */
    final EnumMap<ResourceScope, Map<String, ScriptResource>> resources;
+   
+   /** . */
+   final Map<String, ScriptGroup> loadGroups;
+   
+   /** . */
+   private static final Log log = ExoLogger.getExoLogger(ScriptGraph.class);
 
    public ScriptGraph()
    {
@@ -46,10 +55,11 @@ public class ScriptGraph
       for (ResourceScope scope : ResourceScope.values())
       {
          resources.put(scope, new HashMap<String, ScriptResource>());
-      }
+      }           
       
       //
       this.resources = resources;
+      this.loadGroups = new HashMap<String, ScriptGroup>();      
    }
 
    /**
@@ -177,7 +187,7 @@ public class ScriptGraph
 
    public ScriptResource addResource(ResourceId id, FetchMode fetchMode) throws NullPointerException
    {
-      return addResource(id, fetchMode, null);
+      return addResource(id, fetchMode, null, null, null);
    }
    
    /**
@@ -190,7 +200,7 @@ public class ScriptGraph
     * @return the resource
     * @throws NullPointerException if id or fetchMode is null
     */
-   public ScriptResource addResource(ResourceId id, FetchMode fetchMode, String alias) throws NullPointerException
+   public ScriptResource addResource(ResourceId id, FetchMode fetchMode, String alias, String groupName, String contextPath) throws NullPointerException
    {
       if (id == null)
       {
@@ -214,6 +224,11 @@ public class ScriptGraph
                }
             }                     
          }
+         
+         if (JavascriptConfigService.RESERVED_MODULE.contains(id.getName()))
+         {
+            throw new IllegalStateException("Can't not add " + id + ". The name " + id.getName() + " is reserved name");
+         }
       }
       
       //
@@ -222,13 +237,34 @@ public class ScriptGraph
       ScriptResource resource = map.get(name);
       if (resource == null)
       {
-         map.put(name, resource = new ScriptResource(this, id, fetchMode, alias));
+         ScriptGroup group = null;
+         if (groupName != null && contextPath != null)
+         {            
+            group = loadGroups.get(groupName);
+            if (group == null)
+            {
+               ResourceId grpId = new ResourceId(ResourceScope.GROUP, groupName);
+               loadGroups.put(groupName, group = new ScriptGroup(this, grpId, contextPath));
+               group.addDependency(id);
+            }
+            else if (!contextPath.equals(group.contextPath))
+            {
+               log.warn("Can't add cross context resource {} to {} group", id, groupName);
+               group = null;
+            }
+            else             
+            {
+               group.addDependency(id);               
+            }
+         }
+         
+         map.put(name, resource = new ScriptResource(this, id, fetchMode, alias, group));         
       }
       else if (!(id.getScope().equals(ResourceScope.SHARED) && JavascriptConfigParser.LEGACY_JAVA_SCRIPT.equals(name)))
       {
          throw new IllegalStateException("Duplicate ResourceId : " + id + ", later resource definition will be ignored");
       }                     
-      
+     
       return resource;            
    }
    
@@ -242,4 +278,8 @@ public class ScriptGraph
       return removed;
    }
 
+   public ScriptGroup getLoadGroup(String groupName)
+   {
+      return loadGroups.get(groupName);
+   }
 }

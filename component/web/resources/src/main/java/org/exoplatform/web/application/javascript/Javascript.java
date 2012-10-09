@@ -22,6 +22,7 @@ package org.exoplatform.web.application.javascript;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.script.Module;
 import org.gatein.portal.controller.resource.script.ScriptResource;
+import org.gatein.portal.controller.resource.script.Module.Local.Content;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -30,15 +31,15 @@ import org.gatein.portal.controller.resource.script.ScriptResource;
 public abstract class Javascript
 {
 
-   public static Javascript create(ResourceId resource, String module, String path, String contextPath, int priority)
+   public static Javascript create(ResourceId resource, String path, String contextPath, int priority)
    {
       if (path.startsWith("http://") || path.startsWith("https://"))
       {
-         return new Remote(resource, module, contextPath, path, priority);
+         return new Remote(resource, contextPath, path, priority);
       }
       else
       {
-         return new Local(resource, module, contextPath, path, null, priority);
+         return new Local(resource, contextPath, path, null, priority);
       }
    }
 
@@ -47,12 +48,12 @@ public abstract class Javascript
       if (module instanceof Module.Remote)
       {
          Module.Remote remote = (Module.Remote)module;
-         return new Remote(module.getResource().getId(), remote.getName(), remote.getContextPath(), remote.getURI(), remote.getPriority());
+         return new Remote(module.getResource().getId(), remote.getContextPath(), remote.getURI(), remote.getPriority());
       }
       else
       {
          Module.Local local = (Module.Local)module;
-         return new Local(local.getResource().getId(), local.getName(), local.getContextPath(), local.getPath(), local.getResourceBundle(), local.getPriority());
+         return new Local(local.getResource().getId(), local.getContextPath(), local.getContents(), local.getResourceBundle(), local.getPriority());
       }
    }
 
@@ -63,27 +64,18 @@ public abstract class Javascript
    protected final String contextPath;
 
    /** . */
-   protected final String module;
-
-   /** . */
    protected final int priority;
    
-   private Javascript(ResourceId resource, String module, String contextPath, int priority)
+   private Javascript(ResourceId resource, String contextPath, int priority)
    {
       this.resource = resource;
       this.contextPath = contextPath;
-      this.module = module;
       this.priority = priority < 0 ? Integer.MAX_VALUE : priority;
    }
 
    public ResourceId getResource()
    {
       return resource;
-   }
-
-   public String getModule()
-   {
-      return module;
    }
 
    public String getContextPath()
@@ -99,37 +91,45 @@ public abstract class Javascript
    abstract Module addModuleTo(ScriptResource resource);
 
    public abstract boolean isExternalScript();
-
-   @Override
-   public String toString()
-   {
-      return "Javascript[scope=" + resource + ", module=" + module +"]";
-   }
    
    public static class Local extends Javascript
    {
 
       /** . */
-      protected final String path;
+      protected final Content[] contents;
 
       /** . */
       protected final String resourceBundle;
 
-      public Local(ResourceId resource, String module, String contextPath, String path, String resourceBundle, int priority)
+      public Local(ResourceId resource, String contextPath, String path, String resourceBundle, int priority)
       {
-         super(resource, module, contextPath, priority);
+         this(resource, contextPath, new Content[] {new Content(path)}, resourceBundle, priority);         
+      }
+      
+      public Local(ResourceId resource, String contextPath, Content[] contents, String resourceBundle, int priority)
+      {
+         super(resource, contextPath, priority);
 
          //
-         this.path = path;
+         if (contents == null)
+         {
+            throw new IllegalArgumentException("contents must be not null");
+         }
+         this.contents = contents;
          this.resourceBundle = resourceBundle;
       }
 
       @Override
       Module addModuleTo(ScriptResource resource)
       {
-         return resource.addLocalModule(contextPath, module, path, resourceBundle, priority);
+         return resource.addLocalModule(contextPath, contents, resourceBundle, priority);
       }
 
+      public Content[] getContents()
+      {
+         return contents;
+      }
+      
       public String getResourceBundle()
       {
          return resourceBundle;
@@ -139,7 +139,7 @@ public abstract class Javascript
       public boolean isExternalScript()
       {
          return false;
-      }
+      }      
    }
 
    public static class Remote extends Javascript
@@ -148,9 +148,9 @@ public abstract class Javascript
       /** . */
       protected final String uri;
 
-      public Remote(ResourceId resource, String module, String contextPath, String uri, int priority)
+      public Remote(ResourceId resource, String contextPath, String uri, int priority)
       {
-         super(resource, module, contextPath, priority);
+         super(resource, contextPath, priority);
 
          //
          this.uri = uri;
@@ -159,7 +159,7 @@ public abstract class Javascript
       @Override
       Module addModuleTo(ScriptResource resource)
       {
-         return resource.addRemoteModule(contextPath, module, uri, priority);
+         return resource.addRemoteModule(contextPath, uri, priority);
       }
 
       @Override

@@ -26,6 +26,8 @@ import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.ScriptResourceDescriptor;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
+import org.gatein.portal.controller.resource.script.Module.Local.Content;
+
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import java.util.List;
@@ -173,7 +175,7 @@ public class TestParser extends AbstractGateInTest
       
       Javascript local = modules.get(0); 
       assertTrue(local instanceof Javascript.Local);
-      assertEquals("local_module", local.getModule());
+      assertEquals("/local_module.js", ((Javascript.Local)local).getContents()[0].getSource());
    }
    
    public void testResourceBundle() throws Exception
@@ -229,7 +231,7 @@ public class TestParser extends AbstractGateInTest
    {
 
       String validConfig = "" +
-         "<gatein-resources xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.gatein.org/xml/ns/gatein_resources_1_2_1 http://www.gatein.org/xml/ns/gatein_resources_1_2_1\" xmlns=\"http://www.gatein.org/xml/ns/gatein_resources_1_2_1\">" +
+         "<gatein-resources xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3\" xmlns=\"http://www.gatein.org/xml/ns/gatein_resources_1_3\">" +
          "<module><name>foo</name><url>http://jquery.com/jquery.js</url></module>" +
          "</gatein-resources>";
 
@@ -282,5 +284,95 @@ public class TestParser extends AbstractGateInTest
       ScriptResourceDescriptor portalDesc = ptScripts.get(0);
       assertEquals("z", portalDesc.getAlias());
       assertEquals("zz", portalDesc.getDependencies().get(0).getAlias());
+   }
+   
+   public void testLoadGroup() throws Exception
+   {
+      String config = "" +
+               "<gatein-resources>" + 
+               "<module>" + 
+               "<name>foo_module</name>" +
+               "<load-group>foo_group</load-group>" +
+               "<script>" + "<name>foo_module</name>" + "<path>/foo_module.js</path>" + "</script>" +
+               "</module>" +
+
+               "<portal>" +
+               "<name>foo_portal</name>" +
+               "<module>" +
+               "<load-group>foo_group</load-group>" +
+                "<script>" + "<name>foo_portal</name>" + "<path>/foo_portal.js</path>" + "</script>" +
+                "</module>" +
+               "</portal>" +
+               
+               "<portlet>" +
+               "<name>foo_portlet</name>" +
+               "<module>" +
+               "<load-group>foo_group</load-group>" +
+                "<script>" + "<name>foo_portlet</name>" + "<path>/foo_portlet.js</path>" + "</script>" +
+                "</module>" +
+               "</portlet>" +
+               "</gatein-resources>";
+      
+      JavascriptConfigParser parser = new JavascriptConfigParser("/mypath");
+      List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
+      
+      assertEquals(3, scripts.size());
+      for (ScriptResourceDescriptor des : scripts)
+      {
+         assertEquals("foo_group", des.getGroup());
+      }
+   }
+   
+   public void testLoadGroupRestriction() throws Exception
+   {
+      String config = "" +
+               "<gatein-resources>" + 
+               "<scripts>" +
+               "<name>foo_scripts</name>" +
+               "<load-group>foo_group</load-group>" +
+               "<script>" + "<name>foo_module</name>" + "<path>/foo_module.js</path>" + "</script>" +
+               "</scripts>" +
+               
+               "<module>" + 
+               "<name>foo_module</name>" +
+               "<load-group>foo_group</load-group>" +
+               "<url>testURL</url>" +
+               "</module>" +
+               "</gatein-resources>";
+      JavascriptConfigParser parser = new JavascriptConfigParser("/mypath");
+      List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
+      
+      assertEquals(2, scripts.size());
+      for (ScriptResourceDescriptor des : scripts)
+      {
+         assertNull(des.getGroup());
+      }
+   }
+   
+   public void testAdapter() throws Exception
+   {
+      String config = "" +
+               "<gatein-resources>" + 
+               "<module>" + 
+               "<name>foo_module</name>" +
+               "<script><name>foo</name>" + 
+               "<adapter>aaa;<include>/foo_module.js</include>bbb;</adapter>" + 
+               "</script>" +
+               "</module>" +
+               "</gatein-resources>";
+      
+      JavascriptConfigParser parser = new JavascriptConfigParser("/mypath");
+      List<ScriptResourceDescriptor> scripts = parser.parseConfig(new ByteArrayInputStream(config.getBytes("UTF-8")));
+      
+      ScriptResourceDescriptor des = scripts.get(0);
+      Javascript.Local module = (Javascript.Local)des.getModules().get(0);
+      Content[] contents = module.getContents();
+      
+      assertNotNull(contents);
+      assertEquals(3, contents.length);
+      assertEquals("aaa;", contents[0].getSource());
+      assertFalse(contents[0].isPath());
+      assertEquals("/foo_module.js", contents[1].getSource());
+      assertTrue(contents[1].isPath());        
    }
 }

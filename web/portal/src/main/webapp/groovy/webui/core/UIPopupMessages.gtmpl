@@ -65,9 +65,9 @@
     def rcontext = _ctx.getRequestContext();
 
     if(uicomponent.hasMessage()){
-      rcontext.getJavascriptManager().require("SHARED/webui", "webui")
-      	                             .addScripts("webui.UIPopupWindow.show('$popupId', $uicomponent.showMask);")
-                                      .addScripts("webui.UIHorizontalTabs.init('$popupId');");
+      rcontext.getJavascriptManager().require("SHARED/portalControl", "portalControl").require("SHARED/uiPopupWindow", "uiPopupWindow")
+      	                             .addScripts("uiPopupWindow.show('$popupId', $uicomponent.showMask);")
+                                      .addScripts("portalControl.UIHorizontalTabs.init('$popupId');");
 
       def errors = uicomponent.getErrors();
       def warnings = uicomponent.getWarnings();
@@ -105,8 +105,8 @@
 	</div>
 	<%
     } else if (rcontext.useAjax()) {
-        rcontext.getJavascriptManager().require("SHARED/webui", "webui")
-                                       .addScripts("webui.UIPopupWindow.hide('$popupId', $uicomponent.showMask);");
+        rcontext.getJavascriptManager().require("SHARED/uiPopupWindow", "uiPopupWindow")
+                                       .addScripts("uiPopupWindow.hide('$popupId', $uicomponent.showMask);");
     }
 	%>
 </div>

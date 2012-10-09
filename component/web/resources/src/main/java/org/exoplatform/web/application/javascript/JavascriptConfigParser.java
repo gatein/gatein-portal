@@ -25,14 +25,18 @@ import org.gatein.common.xml.XMLTools;
 import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.ResourceScope;
 import org.gatein.portal.controller.resource.script.FetchMode;
+import org.gatein.portal.controller.resource.script.Module.Local.Content;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import javax.servlet.ServletContext;
@@ -79,9 +83,6 @@ public class JavascriptConfigParser
    final public static String SCOPE_TAG = "scope";
 
    /** . */
-   final public static String NAME_TAG = "name";
-
-   /** . */
    final public static String MODULE_TAG = "module";
 
    /** . */
@@ -95,6 +96,15 @@ public class JavascriptConfigParser
    
    /** . */
    final public static String AS_TAG = "as";
+   
+   /** . */
+   final public static String ADAPTER_TAG = "adapter";
+   
+   /** . */
+   final public static String INCLUDE_TAG = "include";
+   
+   /** . */
+   final public static String GROUP_TAG = "load-group";
 
    /** . */
    private final String contextPath;
@@ -162,8 +172,6 @@ public class JavascriptConfigParser
             for (int i = 0; i < length; i++)
             {
                Element param_ele = (Element)nodes.item(i);
-               String js_module =
-                  param_ele.getElementsByTagName(JAVA_SCRIPT_MODULE).item(0).getFirstChild().getNodeValue();
                String js_path =
                   param_ele.getElementsByTagName(JAVA_SCRIPT_PATH).item(0).getFirstChild().getNodeValue();
                
@@ -196,11 +204,11 @@ public class JavascriptConfigParser
                Javascript js;
                if (portalName == null)
                {
-                  js = Javascript.create(new ResourceId(ResourceScope.SHARED, LEGACY_JAVA_SCRIPT), js_module, js_path, contextPath, priority);
+                  js = Javascript.create(new ResourceId(ResourceScope.SHARED, LEGACY_JAVA_SCRIPT), js_path, contextPath, priority);
                }
                else
                {
-                  js = Javascript.create(new ResourceId(ResourceScope.PORTAL, portalName), js_module, js_path, contextPath, priority);
+                  js = Javascript.create(new ResourceId(ResourceScope.PORTAL, portalName), js_path, contextPath, priority);
                }
                
                //
@@ -232,42 +240,65 @@ public class JavascriptConfigParser
          }
          ResourceId id = new ResourceId(resourceScope, resourceName);
          FetchMode fetchMode;
+         String group = null;
+         
          Element resourceElt = XMLTools.getUniqueChild(element, MODULE_TAG, false);
          if (resourceElt != null)
          {
             fetchMode = FetchMode.ON_LOAD;
+            if (XMLTools.getUniqueChild(resourceElt, URL_TAG, false) == null) 
+            {
+               group = parseGroup(resourceElt);
+            }
          }
          else
          {
             resourceElt = XMLTools.getUniqueChild(element, SCRIPTS_TAG, false);
             fetchMode = FetchMode.IMMEDIATE;
          }
-
+         
          if (resourceElt != null)
          {
             ScriptResourceDescriptor desc = scripts.get(id);
             if (desc == null)
             {
-               scripts.put(id, desc = new ScriptResourceDescriptor(id, fetchMode, parseAlias(element)));
+               desc = new ScriptResourceDescriptor(id, fetchMode, parseOptString(element, AS_TAG), group);
             }
             else
             {
                desc.fetchMode = fetchMode;
             }
             parseDesc(resourceElt, desc);
+            scripts.put(id, desc);
          }
       }
       else if (MODULE_TAG.equals(element.getTagName()) || SCRIPTS_TAG.equals(element.getTagName()))
       {
          String resourceName = XMLTools.asString(XMLTools.getUniqueChild(element, "name", true));
-         ResourceId id = new ResourceId(ResourceScope.SHARED, resourceName);
-         FetchMode fetchMode = MODULE_TAG.equals(element.getTagName()) ? FetchMode.ON_LOAD : FetchMode.IMMEDIATE;
+         ResourceId id = new ResourceId(ResourceScope.SHARED, resourceName);         
+         FetchMode fetchMode;
+         String group = null;
+         
+         if (MODULE_TAG.equals(element.getTagName()))
+         {
+            fetchMode = FetchMode.ON_LOAD;
+            if (XMLTools.getUniqueChild(element, URL_TAG, false) == null) 
+            {
+               group = parseGroup(element);
+            }
+         }
+         else
+         {
+            fetchMode = FetchMode.IMMEDIATE;
+         }
+         
          ScriptResourceDescriptor desc = scripts.get(id);
          if (desc == null)
          {
-            scripts.put(id, desc = new ScriptResourceDescriptor(id, fetchMode, parseAlias(element)));
+            desc = new ScriptResourceDescriptor(id, fetchMode, parseOptString(element, AS_TAG), group);
          }
          parseDesc(element, desc);
+         scripts.put(id, desc);
       }
       else
       {
@@ -276,15 +307,16 @@ public class JavascriptConfigParser
 
       //
       return scripts.values();
-   }
-   
+   }   
+
    private void parseDesc(Element element, ScriptResourceDescriptor desc)
    {
       Element urlElement = XMLTools.getUniqueChild(element, URL_TAG, false);
       if(urlElement != null)
       {
          String remoteURL = XMLTools.asString(urlElement);
-         desc.modules.add(new Javascript.Remote(desc.id, remoteURL, contextPath, remoteURL, 0));
+         desc.id.setFullId(false);
+         desc.modules.add(new Javascript.Remote(desc.id, contextPath, remoteURL, 0));
       }
       else
       {
@@ -296,17 +328,39 @@ public class JavascriptConfigParser
          }
          for (Element scriptElt : XMLTools.getChildren(element, SCRIPT_TAG))
          {
-            String scriptName = XMLTools.asString(XMLTools.getUniqueChild(scriptElt, "name", true));
-            Javascript script;
-            Element path = XMLTools.getUniqueChild(scriptElt, "path", true);
-            String resourceBundle = null;
-            Element bundleElt = XMLTools.getUniqueChild(scriptElt, "resource-bundle", false);
-            if (bundleElt != null)
+            String resourceBundle = parseOptString(scriptElt, "resource-bundle");
+
+            List<Content> contents = new LinkedList<Content>();
+            Element adapter = XMLTools.getUniqueChild(scriptElt, ADAPTER_TAG, false);
+            String scriptPath = parseOptString(scriptElt, "path");            
+            if (scriptPath != null)
             {
-               resourceBundle = XMLTools.asString(bundleElt);
+               contents.add(new Content(scriptPath));
+            } 
+            else if (adapter != null)
+            {
+               NodeList childs = adapter.getChildNodes();
+               for (int i = 0; i < childs.getLength(); i++)
+               {
+                  Node item = childs.item(i);
+                  if (item instanceof Element)
+                  {
+                     Element include = (Element)item;
+                     if (INCLUDE_TAG.equals(include.getTagName()))
+                     {
+                        contents.add(new Content(XMLTools.asString(include, true)));                                                   
+                     }
+                  }
+                  else if (item.getNodeType() == Node.TEXT_NODE)
+                  {
+                     contents.add(new Content(item.getNodeValue().trim(), false));                                                
+                  }
+               }         
             }
-            String scriptPath = XMLTools.asString(path);
-            script = new Javascript.Local(desc.id, scriptName, contextPath, scriptPath, resourceBundle, 0);
+            Content[] tmp = contents.toArray(new Content[contents.size()]);
+            
+            //
+            Javascript script = new Javascript.Local(desc.id, contextPath, tmp, resourceBundle, 0);
             desc.modules.add(script);
          }
       }
@@ -318,15 +372,32 @@ public class JavascriptConfigParser
             dependencyElt = XMLTools.getUniqueChild(moduleElt, "scripts", false);
          }
          ResourceId resourceId = new ResourceId(ResourceScope.SHARED, XMLTools.asString(dependencyElt));
-         DependencyDescriptor dependency = new DependencyDescriptor(resourceId, parseAlias(moduleElt));
+         DependencyDescriptor dependency = new DependencyDescriptor(resourceId, parseOptString(moduleElt, AS_TAG), parseOptString(moduleElt, RESOURCE_TAG));
          desc.dependencies.add(dependency);
       }
    }
-   
-   private String parseAlias(Element element) 
+
+   private String parseGroup(Element element)
    {
-      Element aliasElt = XMLTools.getUniqueChild(element, AS_TAG, false);
-      return aliasElt == null ? null : XMLTools.asString(aliasElt, true);
+      Element group = XMLTools.getUniqueChild(element, GROUP_TAG, false);
+      if (group != null)
+      {
+         String grpName = XMLTools.asString(group, true);
+         if (grpName.isEmpty())
+         {
+            grpName = null;
+         }
+         return grpName;
+      }
+      else
+      {
+         return null;          
+      }
    }
 
+   private String parseOptString(Element element, String childTag)
+   {
+      Element childElt = XMLTools.getUniqueChild(element, childTag, false);
+      return childElt == null ? null : XMLTools.asString(childElt, true);
+   }
 }

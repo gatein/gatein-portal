@@ -55,8 +55,8 @@
 		   def rcontext = _ctx.getRequestContext();
 			def popupId = uicomponent.getChild(UIFormPopupWindow.class).getId();
 		 	def btn = "#UIUserMembershipSelector .UIAction > a";
-			rcontext.getJavascriptManager().require("SHARED/jquery", "\$").require("SHARED/webui")
-					  .addScripts("\$('$btn').click(function() {webui.UIPopupWindow.show('$popupId')});");
+			rcontext.getJavascriptManager().require("SHARED/jquery", "\$").require("SHARED/uiPopupWindow", "uiPopupWindow")
+					  .addScripts("\$('$btn').click(function() {uiPopupWindow.show('$popupId')});");
 	%>
 	
 	<div class="UIAction"> 

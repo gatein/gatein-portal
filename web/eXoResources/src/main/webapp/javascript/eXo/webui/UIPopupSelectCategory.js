@@ -17,40 +17,43 @@
  * site: http://www.fsf.org.
  */
 
-eXo.webui.UIPopupSelectCategory = {
+(function($) {	
+  eXo.webui.UIPopupSelectCategory = {
 
-  init : function(parentId) {
-	  var parent = parentId;
-	  if (typeof parent == "string") {
-		  parent = $("#" + parentId);
+	  init : function(parentId) {
+		  var parent = parentId;
+		  if (typeof parent == "string") {
+			  parent = $("#" + parentId);
+		  }
+		  $(parent).find(".UIPopupCategory").closest(".ControlIcon, .EditIcon").off("click").on("click", function(event) {
+			  eXo.webui.UIPopupSelectCategory.show(this, event);
+		  });
+		  return false;
+	  }, 
+	  
+	  /**
+	   * Show UIPopupCategory object
+	   * 
+	   * @param {Object}
+	   *          obj document object contains UIPopupCategory
+	   * @param {Event}
+	   *          evt
+	   */
+	  show : function(obj, evt) {
+	    var popup = $(obj).find("div.UIPopupCategory");
+	    if (popup.length && popup.css("display") == "none")
+	    {
+	      popup.show();
+	      $(document).one("click", function()
+		  {
+	    	  $(document).one("click", function() {
+	    		  popup.hide();    		  
+	    	  });
+		  });
+	    } 
 	  }
-	  $(parent).find(".UIPopupCategory").closest(".ControlIcon, .EditIcon").off("click").on("click", function(event) {
-		  _module.UIPopupSelectCategory.show(this, event);
-	  });
-	  return false;
-  }, 
   
-  /**
-   * Show UIPopupCategory object
-   * 
-   * @param {Object}
-   *          obj document object contains UIPopupCategory
-   * @param {Event}
-   *          evt
-   */
-  show : function(obj, evt) {
-    var popup = $(obj).find("div.UIPopupCategory");
-    if (popup.length && popup.css("display") == "none")
-    {
-      popup.show();
-      $(document).one("click", function()
-	  {
-    	  $(document).one("click", function() {
-    		  popup.hide();    		  
-    	  });
-	  });
-    } 
-  }
-};
+  };
 
-_module.UIPopupSelectCategory = eXo.webui.UIPopupSelectCategory;
+  return eXo.webui.UIPopupSelectCategory;
+})($);

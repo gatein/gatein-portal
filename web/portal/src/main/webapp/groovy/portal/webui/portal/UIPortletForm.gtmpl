@@ -1,7 +1,7 @@
 <%
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().require("SHARED/webui", "webui").require("SHARED/webui-ext", "webuiExt")
-				.addScripts("webuiExt.UIPortletForm.init('tab-$uicomponent.id', webui);");
+	rcontext.getJavascriptManager().require("SHARED/portalControl", "portalControl").require("SHARED/webui-ext", "webuiExt")
+				.addScripts("webuiExt.UIPortletForm.init('tab-$uicomponent.id', portalControl);");
 %>
 
 <div class="UIFormTabPane" id="tab-$uicomponent.id">

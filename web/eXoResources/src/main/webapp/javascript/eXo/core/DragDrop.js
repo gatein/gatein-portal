@@ -17,86 +17,88 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-function DragDrop() {
-	var obj = null;
-	
-	DragDrop.prototype.init = function(o, oRoot) {
-		var jObj = $(o);
-		jObj.off("mousedown");
-		jObj.on("mousedown", _module.DragDrop.start);
-
-		o.root = oRoot && oRoot != null ? oRoot : o ;
+(function($) {	
+	function DragDrop() {
+		var obj = null;
 		
-		o.root.onDragStart = new Function();
-		o.root.onDragEnd = new Function();
-		o.root.onDrag = new Function();
-	};
+		DragDrop.prototype.init = function(o, oRoot) {
+			var jObj = $(o);
+			jObj.off("mousedown");
+			jObj.on("mousedown", eXo.core.DragDrop.start);
 	
-	DragDrop.prototype.start = function(e)	{
-		var o = obj = this;
-		var jRoot = $(o.root);
+			o.root = oRoot && oRoot != null ? oRoot : o ;
+			
+			o.root.onDragStart = new Function();
+			o.root.onDragEnd = new Function();
+			o.root.onDrag = new Function();
+		};
 		
-		if((e.which && e.which != 1) || jRoot.data("dragging"))	{
+		DragDrop.prototype.start = function(e)	{
+			var o = obj = this;
+			var jRoot = $(o.root);
+			
+			if((e.which && e.which != 1) || jRoot.data("dragging"))	{
+				return false;
+			}
+			var position = jRoot.position();
+			o.lastMouseX = e.pageX;
+			o.lastMouseY = e.pageY;
+			o.root.onDragStart(position.left, position.top, o.lastMouseX, o.lastMouseY, e);
+			$(document).on({"mousemove" : eXo.core.DragDrop.drag,
+				"mouseup" : eXo.core.DragDrop.end,
+				"keydown" : eXo.core.DragDrop.onKeyDownEvt,
+				"mouseout" : eXo.core.DragDrop.cancel});
+			jRoot.data("dragging", true);
+			return false;
+		};
+		
+		DragDrop.prototype.drag = function(e) {
+			var o = obj;
+			var ey = e.pageY;
+			var ex = e.pageX;
+			
+			var jRoot = $(o.root);
+			var y = parseInt(jRoot.css("top"));
+			var x = parseInt(jRoot.css("left"));
+	
+			var nx, ny;
+			nx = x + (ex - o.lastMouseX);
+			ny = y + (ey - o.lastMouseY);
+			obj.root.style["right"] = "";
+			obj.root.style["left"] = nx + "px";
+			obj.root.style["top"] = ny + "px";
+			obj.lastMouseX = ex;
+			obj.lastMouseY = ey;
+	
+			obj.root.onDrag(nx, ny, ex, ey, e);
+			return false;
+		};
+		
+		DragDrop.prototype.end = function(e) {
+			$(document).off("mousemove mouseup mouseout keydown");
+			
+			var jRoot = $(obj.root);
+			var position = jRoot.position();
+			var y = position.top;
+			var x = position.left;
+			
+			obj.root.onDragEnd( position.left, position.top, e.clientX, e.clientY, e);
+			obj = null;
+			jRoot.removeData("dragging");
+			return false;
+		};
+		
+		DragDrop.prototype.cancel = function(e) {
+			if(obj.root.onCancel) obj.root.onCancel(e);
+			return false;
+		};
+		
+		DragDrop.prototype.onKeyDownEvt = function(e) {
+			if(e.which === 27) eXo.core.DragDrop.end(e) ;
 			return false;
 		}
-		var position = jRoot.position();
-		o.lastMouseX = e.pageX;
-		o.lastMouseY = e.pageY;
-		o.root.onDragStart(position.left, position.top, o.lastMouseX, o.lastMouseY, e);
-		$(document).on({"mousemove" : _module.DragDrop.drag,
-			"mouseup" : _module.DragDrop.end,
-			"keydown" : _module.DragDrop.onKeyDownEvt,
-			"mouseout" : _module.DragDrop.cancel});
-		jRoot.data("dragging", true);
-		return false;
 	};
 	
-	DragDrop.prototype.drag = function(e) {
-		var o = obj;
-		var ey = e.pageY;
-		var ex = e.pageX;
-		
-		var jRoot = $(o.root);
-		var y = parseInt(jRoot.css("top"));
-		var x = parseInt(jRoot.css("left"));
-
-		var nx, ny;
-		nx = x + (ex - o.lastMouseX);
-		ny = y + (ey - o.lastMouseY);
-		obj.root.style["right"] = "";
-		obj.root.style["left"] = nx + "px";
-		obj.root.style["top"] = ny + "px";
-		obj.lastMouseX = ex;
-		obj.lastMouseY = ey;
-
-		obj.root.onDrag(nx, ny, ex, ey, e);
-		return false;
-	};
-	
-	DragDrop.prototype.end = function(e) {
-		$(document).off("mousemove mouseup mouseout keydown");
-		
-		var jRoot = $(obj.root);
-		var position = jRoot.position();
-		var y = position.top;
-		var x = position.left;
-		
-		obj.root.onDragEnd( position.left, position.top, e.clientX, e.clientY, e);
-		obj = null;
-		jRoot.removeData("dragging");
-		return false;
-	};
-	
-	DragDrop.prototype.cancel = function(e) {
-		if(obj.root.onCancel) obj.root.onCancel(e);
-		return false;
-	};
-	
-	DragDrop.prototype.onKeyDownEvt = function(e) {
-		if(e.which === 27) _module.DragDrop.end(e) ;
-		return false;
-	}
-};
-
-eXo.core.DragDrop = new DragDrop();
-_module.DragDrop = eXo.core.DragDrop;
+	eXo.core.DragDrop = new DragDrop();
+	return {DragDrop : eXo.core.DragDrop};
+})($);

@@ -22,6 +22,7 @@
       <module>struts-jpetstore</module>
       <module>resourceserving</module>
       <module>useridentity</module>
+      <module>amd-js</module>
    </modules>
 
 </project>

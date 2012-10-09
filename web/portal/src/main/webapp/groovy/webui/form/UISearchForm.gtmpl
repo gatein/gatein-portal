@@ -3,9 +3,9 @@
 	def jsManager = rcontext.getJavascriptManager();	
 
 	String quickSearchlink = uicomponent.event("QuickSearch");							 	
-	def keyPressAct = "webui.UIPortalControl.onEnterPress(event, executeScript);";
+	def keyPressAct = "portalControl.UIPortalControl.onEnterPress(event, executeScript);";
 	
-	jsManager.require("SHARED/jquery", "\$").require("SHARED/webui", "webui")
+	jsManager.require("SHARED/jquery", "\$").require("SHARED/portalControl", "portalControl")
 				.addScripts("var executeScript = \$('#$uiform.id a.SimpleSearchIcon').attr('href');")
 				.addScripts("\$('#$uiform.id .QuickSet').on('keypress', function(event) {$keyPressAct});");
 %>

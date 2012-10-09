@@ -13,7 +13,7 @@
 		
 		JavascriptManager jsmanager = _ctx.getRequestContext().getJavascriptManager();
     popupMenu = uiPopupMenu.getJSOnclickShowPopup("", "AddNode,EditNavigation,SaveNavigation,DeleteNavigation");
-		jsmanager.require("SHARED/webui-ext", "webuiExt").addScripts("webuiExt.UIRightClickPopupMenu.disableContextMenu('"+id+"');");
+		jsmanager.require("SHARED/uiRightClickPopupMenu", "uiRightClickPopupMenu").addScripts("uiRightClickPopupMenu.disableContextMenu('"+id+"');");
 		uicomponent.renderUIComponent(uiPopupMenu);
 	 
 	}

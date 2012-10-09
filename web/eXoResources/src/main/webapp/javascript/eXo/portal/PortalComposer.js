@@ -17,86 +17,88 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-var portalComposer = {
-
-  init : function(id, width, height, isEditted, portalMode)
-  {
-	eXo.portal.portalMode = portalMode;
-	eXo.portal.hasEditted = isEditted;
-		
-    $("div#" + id).attr("exo:minWidth", width).attr("exo:minHeight", height).find("div.OverflowContainer > span").eq(0).on("click", function()
-    {
-      _module.PortalComposer.toggle($(this));
-    });
-  },
-  
-  initComposerContent : function(id, selTabId, webui) 
-  {
-	  _module.PortalComposer.showTab(selTabId);
+(function($, portalControl, portalDragDrop) {	
+	var portalComposer = {
+	
+	  init : function(id, width, height, isEditted, portalMode)
+	  {
+		eXo.portal.portalMode = portalMode;
+		eXo.portal.hasEditted = isEditted;
+			
+	    $("div#" + id).attr("exo:minWidth", width).attr("exo:minHeight", height).find("div.OverflowContainer > span").eq(0).on("click", function()
+	    {
+	      portalComposer.toggle($(this));
+	    });
+	  },
 	  
-	  var tabs = $("#" + id + " .MiddleTab");
-	  tabs.each(function(index) {
-		  $(this).on("click", function() {
-			  webui.UIHorizontalTabs.changeTabForUITabPane(this);
-			  var hiddenInput = $(this).children("input");		  
-			  _module.PortalComposer.showTab(hiddenInput.attr("name"));
-			  $.globalEval(hiddenInput.attr("value"));
-			  
-			  if(eXo.portal.portalMode) eXo.portal.portalMode += (index==0 ? -1 : 1)*2;  		  
+	  initComposerContent : function(id, selTabId) 
+	  {
+		  portalComposer.showTab(selTabId);
+		  
+		  var tabs = $("#" + id + " .MiddleTab");
+		  tabs.each(function(index) {
+			  $(this).on("click", function() {
+				  portalControl.UIHorizontalTabs.changeTabForUITabPane(this);
+				  var hiddenInput = $(this).children("input");		  
+				  portalComposer.showTab(hiddenInput.attr("name"));
+				  $.globalEval(hiddenInput.attr("value"));
+				  
+				  if(eXo.portal.portalMode) eXo.portal.portalMode += (index==0 ? -1 : 1)*2;  		  
+			  });
 		  });
-	  });
-  },
-
-  toggle : function(icon)
-  {
-    var compWindow = icon.parent().closest(".UIPortalComposer");
-    var contWindow = compWindow.children("div.UIWindowContent").eq(0);
-    if(contWindow.css("display") == "block")
-    {
-      contWindow.css("display", "none");
-      icon.attr("class", "CollapseIcon");
-    }
-    else
-    {
-      contWindow.css("display", "block");
-      icon.attr("class", "ExpandIcon");
-    }
-
-    ajaxAsyncGetRequest(eXo.env.server.createPortalURL(compWindow.attr("id"), "Toggle", true));
-  },
-
-  showTab : function(id)
-  {
-    var toolPanel = $("#UIPortalToolPanel");
-    if(id == "UIApplicationList")
-    {
-      toolPanel.attr("class", "ApplicationMode");
-      _module.PortalDragDrop.init(['UIPageBody']);
-    }
-    else if(id == "UIContainerList")
-    {
-      toolPanel.attr("class", "ContainerMode");
-      $("#UIPageBody .DragControlArea").off("mousedown");
-    }    
-  },
-
-  /**
-   * Invoked when content is modified (comparing to persisted one)
-   *
-   * The method toggles the floppy-disk icon to 'THERE IS SOME NEW STUFF' status.
-   */
-  toggleSaveButton : function()
-  {
-    //Avoid execute method body multiple times
-    if(!eXo.portal.hasEditted)
-    {
-      eXo.portal.hasEditted = true;
-      var compWindow = $("#UIWorkingWorkspace").find("div.UIPortalComposer").eq(0);
-      compWindow.find("a.SaveButton").attr("class", "EdittedSaveButton");
-
-      ajaxAsyncGetRequest(eXo.env.server.createPortalURL(compWindow.attr("id"), "ChangeEdittedState", true));
-    }
-  }
-};
-
-_module.PortalComposer = portalComposer;
+	  },
+	
+	  toggle : function(icon)
+	  {
+	    var compWindow = icon.parent().closest(".UIPortalComposer");
+	    var contWindow = compWindow.children("div.UIWindowContent").eq(0);
+	    if(contWindow.css("display") == "block")
+	    {
+	      contWindow.css("display", "none");
+	      icon.attr("class", "CollapseIcon");
+	    }
+	    else
+	    {
+	      contWindow.css("display", "block");
+	      icon.attr("class", "ExpandIcon");
+	    }
+	
+	    ajaxAsyncGetRequest(eXo.env.server.createPortalURL(compWindow.attr("id"), "Toggle", true));
+	  },
+	
+	  showTab : function(id)
+	  {
+	    var toolPanel = $("#UIPortalToolPanel");
+	    if(id == "UIApplicationList")
+	    {
+	      toolPanel.attr("class", "ApplicationMode");
+	      portalDragDrop.init(['UIPageBody']);
+	    }
+	    else if(id == "UIContainerList")
+	    {
+	      toolPanel.attr("class", "ContainerMode");
+	      $("#UIPageBody .DragControlArea").off("mousedown");
+	    }    
+	  },
+	
+	  /**
+	   * Invoked when content is modified (comparing to persisted one)
+	   *
+	   * The method toggles the floppy-disk icon to 'THERE IS SOME NEW STUFF' status.
+	   */
+	  toggleSaveButton : function()
+	  {
+	    //Avoid execute method body multiple times
+	    if(!eXo.portal.hasEditted)
+	    {
+	      eXo.portal.hasEditted = true;
+	      var compWindow = $("#UIWorkingWorkspace").find("div.UIPortalComposer").eq(0);
+	      compWindow.find("a.SaveButton").attr("class", "EdittedSaveButton");
+	
+	      ajaxAsyncGetRequest(eXo.env.server.createPortalURL(compWindow.attr("id"), "ChangeEdittedState", true));
+	    }
+	  }
+	};
+	
+	return portalComposer;
+})($, portalControl, portalDragDrop);

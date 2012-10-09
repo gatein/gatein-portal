@@ -45,7 +45,7 @@ public class TestXSDValidator extends TestCase
    static
    {
       CTX_LOADER = Thread.currentThread().getContextClassLoader();
-      URL xsdFile = CTX_LOADER.getResource("gatein_resources_1_2_1.xsd");
+      URL xsdFile = CTX_LOADER.getResource("gatein_resources_1_3.xsd");
       VALIDATOR = createXSDValidator(xsdFile);
 
       testScenarios.put("f0.xml", false);

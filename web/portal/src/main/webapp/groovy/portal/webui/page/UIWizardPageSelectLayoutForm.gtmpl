@@ -3,7 +3,9 @@
 	import org.exoplatform.webui.core.UIDropDownControl;
 
 	def rcontext = _ctx.getRequestContext(); 
-	rcontext.getJavascriptManager().require("SHARED/webui", "webui").addScripts("webui.UIItemSelector.init('#$uicomponent.id .ItemList > div');");
+	rcontext.getJavascriptManager().require("SHARED/selectors", "selectors")
+											.require("SHARED/uiForm").require("SHARED/portal")
+				.addScripts("selectors.UIItemSelector.init('#$uicomponent.id .ItemList > div');");
 
 	def categories = uicomponent.getItemCategories();
 	UIForm form = uicomponent.getParent();

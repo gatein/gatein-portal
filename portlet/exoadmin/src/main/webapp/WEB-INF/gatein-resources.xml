@@ -22,8 +22,8 @@
 
 <gatein-resources
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2_1 http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
-   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
+   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
 
 
 	<!-- OrganizationPortlet skins -->
@@ -88,8 +88,8 @@
      <name>RegisterPortlet</name>
      <module>
        <depends>
-         <module>webui</module>
-       </depends>
+         <module>uiForm</module>
+      </depends>
      </module>
    </portlet>
 
@@ -142,7 +142,7 @@
      <name>ApplicationRegistryPortlet</name>
      <module>
        <depends>
-         <module>webui</module>
+         <module>uiForm</module>
        </depends>
      </module>
    </portlet>
@@ -151,7 +151,7 @@
      <name>OrganizationPortlet</name>
      <module>
        <depends>
-         <module>webui</module>
+         <module>uiForm</module>
        </depends>
      </module>
    </portlet>
@@ -160,7 +160,7 @@
      <name>AccountPortlet</name>
      <module>
        <depends>
-         <module>webui</module>
+         <module>uiForm</module>
        </depends>
      </module>
    </portlet>
@@ -168,9 +168,6 @@
    <portlet>
      <name>GroupNavigationPortlet</name>
      <module>
-       <depends>
-         <module>webui</module>
-       </depends>
        <depends>
          <module>webui-ext</module>
        </depends>
@@ -180,10 +177,7 @@
    <portlet>
      <name>PortalNavigationPortlet</name>
      <module>
-       <depends>
-         <module>webui</module>
-       </depends>
-       <depends>
+        <depends>
          <module>webui-ext</module>
        </depends>
      </module>
@@ -196,7 +190,7 @@
          <module>portal</module>
        </depends>
        <depends>
-         <module>webui</module>
+         <module>uiForm</module>
        </depends>
        <depends>
          <module>webui-ext</module>

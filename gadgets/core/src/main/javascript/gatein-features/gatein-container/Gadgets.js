@@ -700,11 +700,11 @@ gadgets.IfrGadget.prototype.generateForm = function(gadget) {
     parentEl.appendChild(formEl);
 
     var gadget = this;
-    require(['SHARED/base'], function(base) {
+    require(['SHARED/I18NMessage'], function(msg) {
       var saveEl = document.createElement("div");
       saveEl.className = gadget.cssClassGadgetUserPrefsDialogActionBar;
-      saveEl.innerHTML = '<input type="button" value="'+base.I18NMessage.getMessage("Save")+'" onclick="gadgets.container.getGadget(' +
-      gadget.id +').handleSaveUserPrefs()"> <input type="button" value="'+base.I18NMessage.getMessage("Cancel")+'" onclick="gadgets.container.getGadget(' +
+      saveEl.innerHTML = '<input type="button" value="'+msg.getMessage("Save")+'" onclick="gadgets.container.getGadget(' +
+      gadget.id +').handleSaveUserPrefs()"> <input type="button" value="'+msg.getMessage("Cancel")+'" onclick="gadgets.container.getGadget(' +
       gadget.id +').handleCancelUserPrefs()">';
       parentEl.appendChild(saveEl);
     });

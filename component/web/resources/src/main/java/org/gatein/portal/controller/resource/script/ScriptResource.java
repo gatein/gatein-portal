@@ -19,21 +19,19 @@
 
 package org.gatein.portal.controller.resource.script;
 
-import org.exoplatform.commons.utils.I18N;
-import org.exoplatform.web.WebAppController;
-import org.exoplatform.web.controller.QualifiedName;
-import org.gatein.portal.controller.resource.Resource;
-import org.gatein.portal.controller.resource.ResourceId;
-import org.gatein.portal.controller.resource.ResourceRequestHandler;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+
+import org.gatein.portal.controller.resource.ResourceId;
+import org.gatein.portal.controller.resource.script.Module.Local.Content;
 
 /**
  * <p></p>
@@ -44,29 +42,13 @@ import java.util.Set;
  * 
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ScriptResource extends Resource<ScriptResource> implements Comparable<ScriptResource>
+public class ScriptResource extends BaseScriptResource<ScriptResource> implements Comparable<ScriptResource>
 {
-
-   /** . */
-   ScriptGraph graph;
-   
    /** . */
    private final List<Module> modules;
 
    /** . */
-   private final Map<QualifiedName, String> parameters;
-
-   /** . */
-   private final Map<Locale, Map<QualifiedName, String>> parametersMap;
-
-   /** . */
-   private final Map<QualifiedName, String> minParameters;
-
-   /** . */
-   private final  Map<Locale, Map<QualifiedName, String>> minParametersMap;
-
-   /** . */
-   final HashMap<ResourceId, String> dependencies;
+   final HashMap<ResourceId, Set<DepInfo>> dependencies;
 
    /** . */
    final HashSet<ResourceId> closure;
@@ -76,39 +58,23 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    
    /** . */
    final String alias;
+   
+   /** . */
+   final ScriptGroup group;
 
    ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode)
    {
-      this(graph, id, fetchMode, null);
+      this(graph, id, fetchMode, null, null);
    }
 
-   ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode, String alias)
+   ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode, String alias, ScriptGroup group)
    {
-      super(id);
+      super(graph, id);
 
-      //
-      Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
-      parameters.put(WebAppController.HANDLER_PARAM, "script");
-      parameters.put(ResourceRequestHandler.RESOURCE_QN, id.getName());
-      parameters.put(ResourceRequestHandler.SCOPE_QN, id.getScope().name());
-      parameters.put(ResourceRequestHandler.COMPRESS_QN, "");
-      parameters.put(ResourceRequestHandler.VERSION_QN, ResourceRequestHandler.VERSION);
-      parameters.put(ResourceRequestHandler.LANG_QN, "");
-
-      //
-      Map<QualifiedName, String> minifiedParameters = new HashMap<QualifiedName, String>(parameters);
-      minifiedParameters.put(ResourceRequestHandler.COMPRESS_QN, "min");
-
-      //
-      this.parameters = parameters;
-      this.minParameters = minifiedParameters;
-      this.graph = graph;
       this.modules = new ArrayList<Module>();
       this.closure = new HashSet<ResourceId>();
-      this.dependencies = new HashMap<ResourceId, String>();
+      this.dependencies = new LinkedHashMap<ResourceId, Set<DepInfo>>();
       this.fetchMode = fetchMode;
-      this.parametersMap = new HashMap<Locale, Map<QualifiedName, String>>();
-      this.minParametersMap = new HashMap<Locale, Map<QualifiedName, String>>();
       
       if (alias == null)
       {
@@ -116,6 +82,7 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
          alias = resName.substring(resName.lastIndexOf("/") + 1);         
       }
       this.alias = alias;
+      this.group = group;
    }
    
    public boolean isEmpty()
@@ -128,26 +95,12 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       return fetchMode;
    }
 
-   public Map<QualifiedName, String> getParameters(boolean minified, Locale locale)
-   {
-      Map<Locale, Map<QualifiedName, String>> map = minified ? minParametersMap : parametersMap;
-      for (Locale current = locale;current != null;current = I18N.getParent(current))
-      {
-         Map<QualifiedName, String> ret = map.get(locale);
-         if (ret != null)
-         {
-            return ret;
-         }
-      }
-      return minified ? minParameters : parameters;
-   }
-
    public void addDependency(ResourceId dependencyId)
    {
-      addDependency(dependencyId, null);
+      addDependency(dependencyId, null, null);
    }
 
-   public void addDependency(ResourceId dependencyId, String alias)
+   public void addDependency(ResourceId dependencyId, String alias, String pluginRS)
    {
       ScriptResource dependency = graph.getResource(dependencyId);
 
@@ -186,7 +139,12 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       }                
       
       //
-      dependencies.put(dependencyId, alias);
+      Set<DepInfo> infos = dependencies.get(dependencyId);
+      if (infos == null)
+      {
+         dependencies.put(dependencyId, infos = new LinkedHashSet<DepInfo>());
+      }
+      infos.add(new DepInfo(alias, pluginRS));
    }
    
    public Set<ResourceId> getClosure()
@@ -194,45 +152,33 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       return closure;
    }
 
-   public Module.Local addLocalModule(String contextPath, String name, String path, String resourceBundle, int priority)
+   public Module.Local addLocalModule(String contextPath, String path, String resourceBundle, int priority)
    {
-      Module.Local module = new Module.Local(this, contextPath, name, path, resourceBundle, priority);
+      return addLocalModule(contextPath, new Content[] {new Content(path)}, resourceBundle, priority);
+   }
+   
+   public Module.Local addLocalModule(String contextPath, Content[] contents, String resourceBundle, int priority)
+   {
+      Module.Local module = new Module.Local(this, contextPath, contents, resourceBundle, priority);
       modules.add(module);
       return module;
    }
 
-   public Module.Remote addRemoteModule(String contextPath, String name, String path, int priority)
+   public Module.Remote addRemoteModule(String contextPath, String path, int priority)
    {
-      Module.Remote module = new Module.Remote(this, contextPath, name, path, priority);
+      Module.Remote module = new Module.Remote(this, contextPath, path, priority);
       modules.add(module);
       return module;
    }
-   
-   public List<Module> removeModuleByName(String name)
+
+   @Override
+   public void addSupportedLocale(Locale locale)
    {
-      ArrayList<Module> removed = new ArrayList<Module>();
-      for (Iterator<Module> i = modules.iterator();i.hasNext();)
+      super.addSupportedLocale(locale);
+      if (group != null)
       {
-         Module module = i.next();
-         if (module.getName().equals(name))
-         {
-            removed.add(module);
-            i.remove();
-         }
+         group.addSupportedLocale(locale);
       }
-      return removed;
-   }
-   
-   public Module getModule(String name)
-   {
-      for (Module module : modules)
-      {
-         if (module.getName().equals(name))
-         {
-            return module;
-         }
-      }
-      return null;
    }
 
    public List<Module> removeModuleByContextPath(String contextPath)
@@ -254,16 +200,6 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    {
       return modules;
    }
-   
-   public List<String> getModulesNames()
-   {
-      ArrayList<String> names = new ArrayList<String>();
-      for (Module script : modules)
-      {
-         names.add(script.getName());
-      }
-      return names;
-   }
 
    public int compareTo(ScriptResource o)
    {
@@ -281,29 +217,16 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
       }
    }
    
-   public void addSupportedLocale(Locale locale)
-   {
-      if (!parametersMap.containsKey(locale))
-      {
-         Map<QualifiedName, String> localizedParameters = new HashMap<QualifiedName, String>(parameters);
-         localizedParameters.put(ResourceRequestHandler.LANG_QN, I18N.toTagIdentifier(locale));
-         parametersMap.put(locale, localizedParameters);
-         Map<QualifiedName, String> localizedMinParameters = new HashMap<QualifiedName, String>(minParameters);
-         localizedMinParameters.put(ResourceRequestHandler.LANG_QN, I18N.toTagIdentifier(locale));
-         minParametersMap.put(locale, localizedMinParameters);
-      }
-   }
-
    @Override
    public Set<ResourceId> getDependencies()
    {
       return dependencies.keySet();
    }
    
-   public String getDependencyAlias(ResourceId id)
+   public Set<DepInfo> getDepInfo(ResourceId id)
    {
       return dependencies.get(id);
-   }
+   }   
 
    /**
     * If no alias was set, return the last part of the resource name
@@ -318,5 +241,54 @@ public class ScriptResource extends Resource<ScriptResource> implements Comparab
    public String toString()
    {
       return "ScriptResource[id=" + id + "]";
+   }
+
+   public ScriptGroup getGroup()
+   {
+      return group;
+   }
+   
+   public class DepInfo 
+   {
+      final String alias;
+      final String pluginRS;
+      
+      DepInfo(String alias, String pluginRS)
+      {
+         this.alias = alias;
+         this.pluginRS = pluginRS;
+      }
+
+      public String getAlias()
+      {
+         return alias;
+      }
+
+      public String getPluginRS()
+      {
+         return pluginRS;
+      }
+
+      @Override
+      public int hashCode()
+      {
+         final int prime = 31;
+         int result = 1;
+         result = prime * result + ((alias == null) ? 0 : alias.hashCode());
+         result = prime * result + ((pluginRS == null) ? 0 : pluginRS.hashCode());
+         return result;
+      }
+
+      @Override
+      public boolean equals(Object obj)
+      {
+         if (this == obj)
+            return true;
+         if (obj == null || !(obj instanceof DepInfo))
+            return false;
+         DepInfo other = (DepInfo)obj;
+         return ((alias == other.alias || alias != null && alias.equals(other.alias)) && 
+            (pluginRS == other.pluginRS || pluginRS != null && pluginRS.equals(other.pluginRS)));
+      }   
    }
 }

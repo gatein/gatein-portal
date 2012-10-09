@@ -11,8 +11,8 @@
     String id = uicomponent.getParent().getId();
   	
   	JavascriptManager jsmanager = _ctx.getRequestContext().getJavascriptManager();
-  	jsmanager.require("SHARED/webui-ext", "webuiExt")
-             .addScripts("webuiExt.UIRightClickPopupMenu.disableContextMenu('"+id+"') ;");
+  	jsmanager.require("SHARED/uiRightClickPopupMenu", "uiRightClickPopupMenu")
+             .addScripts("uiRightClickPopupMenu.disableContextMenu('"+id+"') ;");
     uicomponent.renderUIComponent(uiPopupMenu) ;
   }
 %>

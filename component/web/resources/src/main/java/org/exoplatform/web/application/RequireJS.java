@@ -101,7 +101,7 @@ public class RequireJS
       StringBuilder builder = new StringBuilder();
       if (depends.size() > 0 || noAlias.size() > 0)
       {
-         builder.append("require(");
+         builder.append("window.require(");
          List<String> tmp = new LinkedList<String>(depends.values());
          noAlias.removeAll(depends.values());
          tmp.addAll(noAlias);

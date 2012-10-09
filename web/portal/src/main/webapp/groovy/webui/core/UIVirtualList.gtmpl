@@ -15,7 +15,7 @@
 <div id="$uicomponent.id" class="UIVirtualList" style="overflow:auto; $css">    
   <% uicomponent.renderChildren();%>
   <% 
-    rcontext.getJavascriptManager().require("SHARED/webui-ext", "webuiExt")
-      .addScripts("webuiExt.UIVirtualList.init('$uicomponent.id', $hasNext, $isAutoAdjustHeight, '$url');");
+    rcontext.getJavascriptManager().require("SHARED/uiVirtualList", "uiVirtualList")
+      .addScripts("uiVirtualList.init('$uicomponent.id', $hasNext, $isAutoAdjustHeight, '$url');");
   %>
 </div>

@@ -19,8 +19,8 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
 -->
-<gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2_1 http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
-   xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
+<gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+   xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
 
    <portal-skin>
       <skin-name>TestSkin</skin-name>
@@ -84,7 +84,6 @@
    <scripts>
       <name>script1</name>
       <script>
-         <name>eXo.script1</name>
          <path>/js/script1.js</path>
       </script>
    </scripts>
@@ -92,7 +91,6 @@
    <scripts>
       <name>script2</name>
       <script>
-         <name>eXo.script2</name>
          <path>/js/script2.js</path>
       </script>      
       <depends>
@@ -101,18 +99,18 @@
    </scripts>
 
    <module>
-      <name>module1</name>     
+      <name>module1</name>           
       <as>m1</as> 
+      <load-group>fooGroup</load-group>
       <script>
-         <name>eXo.module1</name>
          <path>/js/module1.js</path>
-      </script>
+      </script>      
    </module>
    
    <module>
       <name>module2</name>     
+      <load-group>fooGroup</load-group>
       <script>
-         <name>eXo.module2</name>
          <path>/js/module2.js</path>
       </script>
       <depends>
@@ -122,15 +120,62 @@
    </module>
    
    <module>
+   	<name>commonjs</name>
+   	<script>
+   		<path>/js/common.js</path>
+   	</script>
+   	<depends>
+      	<module>require</module>
+		</depends>
+      <depends>
+      	<module>exports</module>
+      </depends>
+      <depends>
+      	<module>module</module>
+      </depends>
+   </module>
+   
+   <module>
+      <name>pluginTest</name>           
+      <script>
+         <path>/js/pluginTest.js</path>
+      </script>      
+      <depends>
+      	<module>text</module>
+      	<as>text</as>
+      	<resource>/path/to/file.js</resource>
+      </depends>
+      <depends>
+      	<module>text</module>
+      	<as>text</as>
+      	<resource>/path/to/file2.js</resource>
+      </depends>
+   </module>
+   
+   <module>
+      <name>text</name>           
+      <script>
+         <path>/js/text.js</path>
+      </script>      
+   </module>
+   
+   <module>
       <name>remote1</name>
-      <url>/js/remote1.js</url>       
+      <url>http://js/remote1.js</url>       
    </module>
    
    <module>
       <name>remote2</name>
-      <url>/js/remote2.js</url>
+      <url>http://js/remote2.js</url>
       <depends>
           <module>remote1</module>
       </depends>       
+   </module>
+   
+   <module>
+      <name>normalize_test</name>     
+      <script>
+         <path>/js/normalize_test.js</path>
+      </script>
    </module>
 </gatein-resources>

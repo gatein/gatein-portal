@@ -129,7 +129,7 @@ public class UITabContainer extends UIContainer
          container.moveTab(container, objectId, isToLeft);
          WebuiRequestContext context = event.getRequestContext(); 
          context.addUIComponentToUpdateByAjax(container);
-         context.getJavascriptManager().require("SHARED/portal", "portal").addScripts("portal.PortalComposer.toggleSaveButton();");
+         context.getJavascriptManager().require("SHARED/portalComposer", "portalComposer").addScripts("portalComposer.toggleSaveButton();");
       }
    }
    
@@ -174,7 +174,7 @@ public class UITabContainer extends UIContainer
                newTabContainer.setRendered(true);
                newTabContainer.setId(String.valueOf(newTabContainer.hashCode()));
                pcontext.addUIComponentToUpdateByAjax(container);
-               pcontext.getJavascriptManager().require("SHARED/portal", "portal").addScripts("portal.PortalComposer.toggleSaveButton();");
+               pcontext.getJavascriptManager().require("SHARED/portalComposer", "portalComposer").addScripts("portalComposer.toggleSaveButton();");
                return;
             }
          }

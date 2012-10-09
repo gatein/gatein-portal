@@ -6,8 +6,8 @@
 	def jsManager = rcontext.getJavascriptManager();
 	
 	String selTabId = uicomponent.getSelectedTabId(); 
-	jsManager.require("SHARED/webui").require("SHARED/portal", "portal")
-				.addScripts("portal.PortalComposer.initComposerContent('$uicomponent.id', '$selTabId', webui);");
+	jsManager.require("SHARED/portalComposer", "portalComposer")
+				.addScripts("portalComposer.initComposerContent('$uicomponent.id', '$selTabId');");
 %>
 
 <div class="UITabPane" id="$uicomponent.id">

@@ -2,8 +2,8 @@
 	String uploadId = uicomponent.getUploadId();
 	boolean isAutoUpload = uicomponent.isAutoUpload();
 	def rcontext = _ctx.getRequestContext();
-	rcontext.getJavascriptManager().require("SHARED/webui-ext", "webuiExt")
-    .addScripts("webuiExt.UIUpload.initUploadEntry('"+uploadId+"',"+isAutoUpload+");");
+	rcontext.getJavascriptManager().require("SHARED/upload", "upload")
+    .addScripts("upload.UIUpload.initUploadEntry('"+uploadId+"',"+isAutoUpload+");");
 %>
 <div class="UIFormUploadInput" id="$uploadId">
 	<div class="LimitMessage" style="display: none;"><%= _ctx.appRes("UIFormUploadInput.msg.limit"); %></div>

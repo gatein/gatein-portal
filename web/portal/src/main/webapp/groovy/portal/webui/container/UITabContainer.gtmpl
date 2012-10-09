@@ -47,8 +47,8 @@
           <div class="TabsContainer"> 
             <%
 	           if(modeState > 0){
-	             jsmanager.require("SHARED/portal", "portal").addScripts("portal.PortalDragDrop.init(['UIContainer']);")
-	               		 .require("SHARED/base", "base").addScripts("base.UIPopupSelectCategory.init('" + id + "');");
+	             jsmanager.require("SHARED/portalDragDrop", "portalDragDrop").addScripts("portalDragDrop.init(['UIContainer']);")
+	               		 .require("SHARED/popupCategory", "popup").addScripts("popup.init('" + id + "');");
 	           }
               int counter = 1;
               for(uiChild in uicomponent.getChildren()) {

@@ -17,14 +17,94 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
+(function($, base, msg) {
+	
+
+var uiFormInputThemeSelector = {
+
+  initForm : function() {
+	  $(".UIFormInputThemeSelector").find(".SetDefault").on("click", function() {
+		  uiFormInputThemeSelector.setDefaultTheme(this,'DefaultTheme');
+	  });	  
+  },
+  
+  initSelector : function() {
+	  $(".UIFormInputThemeSelector").find(".UIThemeSelector").parent().on("click", function() {
+		  var theme = $(this).children("div").attr("class").replace("UIThemeSelector ", "");
+		  uiFormInputThemeSelector.showThemeSelected(this, theme); 
+	  });
+  },
+  
+  showThemeSelected : function(obj, param) {
+    var jqObj = $(obj);
+    var itemListContainer = jqObj.parent().closest(".ItemListContainer");
+    var detailList = itemListContainer.next("div").find("div.UIThemeSelector").eq(0);
+    detailList.next("div").html(jqObj.find("div.NameStyle").eq(0).html());
+    detailList.attr("class", "UIThemeSelector " + param);
+    //jqObj.parent().prev("input")[0].value = param;//This does not work as 'prev' in jQuery does not return hidden input
+    jqObj.parent().parent().children("input").eq(0).val(param);
+  },
+
+  setDefaultTheme : function(obj, param) {
+    var itemDetailList = $(obj).parent().closest(".ItemDetailList");
+    var detailList = itemDetailList.find("div.UIThemeSelector").eq(0);
+    detailList.attr("class", "UIThemeSelector " + param);
+
+    detailList.next("div").html(msg.getMessage("DefaultTheme"));
+    itemDetailList.prev("div").find("div.ItemList").eq(0).parent().children("input").eq(0).val(param);
+  }  
+};
+
+eXo.webui.UIPageTemplateOptions = {
+
+  /**
+   * @author dang.tung
+   * 
+   * TODO To change the template layout in page config Called by
+   * UIPageTemplateOptions.java Review UIDropDownControl.java: set javascrip
+   * action UIDropDownControl.js : set this method to do
+   */
+  selectPageLayout : function(id, selectedIndex) {
+    var dropDownControl = $("#" + id);
+    var itemSelectorAncest = dropDownControl.closest(".ItemSelectorAncestor");
+    var itemList = itemSelectorAncest.find("div.ItemList");
+    var itemSelectorLabel = itemSelectorAncest.find("a.OptionItem");
+    var itemSelector = dropDownControl.find("div.UIItemSelector");
+    var itemDetailList = itemSelector.find("div.ItemDetailList");
+    if (itemList.length == 0)
+      return;
+    for (i = 0; i < itemSelectorLabel.length; ++i) {
+      if (i >= itemList.length)
+        continue;
+      if (i == selectedIndex) {
+        itemList[i].style.display = "block";
+        if (itemDetailList.length < 1)
+          continue;
+        itemDetailList[i].style.display = "block";
+        var selectedItem = $(itemList[i]).find("div.SelectedItem").eq(0);
+        if (!selectedItem || selectedItem == null)
+          continue;
+        var setValue = selectedItem.find("#SetValue")[0];
+        if (setValue == null)
+          continue;
+        eval(setValue.innerHTML);
+      } else {
+        itemList[i].style.display = "none";
+        if (itemDetailList.length > 0)
+          itemDetailList[i].style.display = "none";
+      }
+    }
+  }
+};
+
 eXo.portal.UIPortal = {
   portalUIComponentDragDrop : false,
 
   initMouseHover : function(id) {
 	  var comp = $("#" + id);
 	  if (!comp.length) return;
-	  comp[0].onmouseover = function(event) {_module.UIPortal.blockOnMouseOver(event, this, true);};
-	  comp[0].onmouseout = function(event) {_module.UIPortal.blockOnMouseOver(event, this, false);};
+	  comp[0].onmouseover = function(event) {eXo.portal.UIPortal.blockOnMouseOver(event, this, true);};
+	  comp[0].onmouseout = function(event) {eXo.portal.UIPortal.blockOnMouseOver(event, this, false);};
   },
   
   blockOnMouseOver : function(event, block, isOver) {
@@ -233,4 +313,7 @@ eXo.portal.UIPortal = {
   }  
 };
 
-_module.UIPortal = eXo.portal.UIPortal;
+return {UIPortal : eXo.portal.UIPortal,
+			  UIPageTemplateOptions : eXo.webui.UIPageTemplateOptions,
+			  UIFormInputThemeSelector : uiFormInputThemeSelector};
+})($, base, msg);

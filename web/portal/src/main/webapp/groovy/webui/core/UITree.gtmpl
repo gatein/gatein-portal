@@ -9,8 +9,8 @@
 	
 	def rcontext = _ctx.getRequestContext();
 	def jsMan = rcontext.getJavascriptManager(); 
-	jsMan.require("SHARED/webui-ext", "webuiExt").require("SHARED/webui", "webui")
-		  .addScripts("webuiExt.UITree.init('$id', '$uicomponent.colapseIcon',${uiPopupMenu != null},webui);");
+	jsMan.require("SHARED/webui-ext", "webuiExt").require("SHARED/portalControl", "portalControl")
+		  .addScripts("webuiExt.UITree.init('$id', '$uicomponent.colapseIcon',${uiPopupMenu != null},portalControl);");
 	
 	if(uiPopupMenu != null){
 		uicomponent.renderUIComponent(uiPopupMenu); 

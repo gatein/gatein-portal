@@ -69,11 +69,14 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       
       if (isFirstStartup)
       {
-         Map<String, String> resources = new HashMap<String, String>(4);
+         Map<String, String> resources = new HashMap<String, String>(6);
          resources.put("/js/script1.js", "aaa;");
          resources.put("/js/script2.js", "bbb;");
          resources.put("/js/module1.js", "ccc;");
          resources.put("/js/module2.js", "ddd;");
+         resources.put("/js/common.js", "kkk;");
+         resources.put("/js/pluginTest.js", "iii;");
+         resources.put("/js/normalize_test.js", " \n /* // */  //  /* \n  /* /*  */  \n  ggg; // /* */ \n");
          mockServletContext = new MockJSServletContext("mockwebapp", resources);
          jsService.registerContext(new WebAppImpl(mockServletContext, Thread.currentThread().getContextClassLoader()));
 
@@ -87,43 +90,78 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    public void testGetScript() throws Exception
    {      
       //no wrapper for SCRIPTS
-      String script1 = "// Begin eXo.script1\naaa;// End eXo.script1\n" +
-                               "if (typeof define === 'function' && define.amd) {define('SHARED/script1');}";
-      String script2 = "// Begin eXo.script2\nbbb;// End eXo.script2\n" +
-                               "if (typeof define === 'function' && define.amd) {define('SHARED/script2');}";
+      String script1 = "aaa;" +
+                               "\nif (typeof define === 'function' && define.amd && !require.specified('SHARED/script1')) {define('SHARED/script1');}";
+      String script2 = "bbb;" +
+                               "\nif (typeof define === 'function' && define.amd && !require.specified('SHARED/script2')) {define('SHARED/script2');}";
       assertReader(script1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "script1"), null));
       assertReader(script2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "script2"), null));          
       
       //wrapper for MODULE
       //test for Alias : module1 is used with 'm1' alias
-      String module1 = "define('SHARED/module1', [], function() { var _module = {};(function() {" +      
-                                 "// Begin eXo.module1\n" + 
-                                 "ccc;" +  
-                                 "// End eXo.module1\n" +
-                                 "})();return _module;});";
+      String module1 = "\ndefine('SHARED/module1', [], function() {" +
+                                 "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\neXo.define.names=[];\neXo.define.deps=[];" +      
+                                 "\nreturn ccc;\n});";
       assertReader(module1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module1"), null));
       
       //module2 depends on module1
       //test for Alias : module1 is used with 'mod1' alias, module2 use default name for alias
-      String module2 = "define('SHARED/module2', [\"SHARED/module1\"], function(mod1) { var _module = {};(function() {" +
-                                 "// Begin eXo.module2\n" + 
-                                 "ddd;" +
-                                 "// End eXo.module2\n" +
-                                  "})();return _module;});";
+      String module2 = "\ndefine('SHARED/module2', [\"SHARED/module1\"], function(mod1) {" +
+                                 "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\neXo.define.names=[\"mod1\"];\neXo.define.deps=[mod1];" +
+                                 "\nreturn ddd;\n});";
       assertReader(module2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module2"), null));
+   }
+     
+   public void testCommonJS() throws Exception
+   {
+      String commonjs = "\ndefine('SHARED/commonjs', [\"require\",\"exports\",\"module\"], function(require,exports,module) {" +
+               "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\neXo.define.names=[\"require\",\"exports\",\"module\"];" +
+               "\neXo.define.deps=[eXo.require,exports,module];" +      
+               "\nreturn kkk;\n});";
+      assertReader(commonjs, jsService.getScript(new ResourceId(ResourceScope.SHARED, "commonjs"), null));
+   }
+   
+   public void testRequireJSPlugin() throws Exception
+   {
+      String pluginTest = "\ndefine('SHARED/pluginTest', [\"SHARED/text!/path/to/file.js\",\"SHARED/text!/path/to/file2.js\"]," +
+               " function(text,text_1) {" +
+               "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\n" +
+               "eXo.define.names=[\"text!/path/to/file.js\",\"text!/path/to/file2.js\"];" +
+               "\neXo.define.deps=[text,text_1];" +      
+               "\nreturn iii;\n});";
+      assertReader(pluginTest, jsService.getScript(new ResourceId(ResourceScope.SHARED, "pluginTest"), null));
+   }
+   
+   public void testGroupingScript() throws Exception
+   {
+      String module1 = "\n//Begin SHARED/module1\ndefine('SHARED/module1', [], function() {" +      
+               "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\neXo.define.names=[];\neXo.define.deps=[];" +
+               "\nreturn ccc;\n});\n//End SHARED/module1";
+      String module2 = "\n//Begin SHARED/module2\ndefine('SHARED/module2', [\"SHARED/module1\"], function(mod1) {" +
+               "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\neXo.define.names=[\"mod1\"];\neXo.define.deps=[mod1];" +
+               "\nreturn ddd;\n});\n//End SHARED/module2";
+      
+      StringWriter buffer = new StringWriter();
+      IOTools.copy(jsService.getScript(new ResourceId(ResourceScope.GROUP, "fooGroup"), null), buffer);
+      
+      //the order of module1, and module2 in group is not known
+      String result = buffer.toString();
+      result = result.replace(module1, "");
+      result = result.replace(module2, "");
+      assertTrue(result.isEmpty());
    }
 
    public void testGetJSConfig() throws Exception
    {            
       JSONObject config = jsService.getJSConfig(CONTROLLER_CONTEXT, null);
-      
+
       //All SCRIPTS and remote resource have to had dependencies declared in shim configuration
       JSONObject shim = config.getJSONObject("shim");
       assertNotNull(shim);
       
-      JSONObject remoteDep = shim.getJSONObject("SHARED/remote2");
+      JSONObject remoteDep = shim.getJSONObject("remote2");
       assertNotNull(remoteDep);
-      assertEquals("{\"deps\":[\"SHARED/remote1\"]}", remoteDep.toString());
+      assertEquals("{\"deps\":[\"remote1\"]}", remoteDep.toString());
       
       JSONObject scriptDep = shim.getJSONObject("SHARED/script2");
       assertNotNull(scriptDep);
@@ -134,30 +172,36 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       JSONObject paths = config.getJSONObject("paths");
       assertNotNull(paths);
       //Return remote module/script url as it's  declared in gatein-resources.xml
-      assertEquals("/js/remote1", paths.getString("SHARED/remote1"));
-      assertEquals("/js/remote2", paths.getString("SHARED/remote2"));
-      //navController url for modules and scripts
-      assertEquals("mock_url_of_module1", paths.getString("SHARED/module1"));
-      assertEquals("mock_url_of_module2", paths.getString("SHARED/module2"));
+      assertEquals("http://js/remote1", paths.getString("remote1"));
+      assertEquals("http://js/remote2", paths.getString("remote2"));
+      
+      //module1 and module2 are grouped
+      assertEquals("mock_url_of_fooGroup", paths.getString("SHARED/module1"));
+      assertEquals("mock_url_of_fooGroup", paths.getString("SHARED/module2"));
+
+      //navController url for scripts
       assertEquals("mock_url_of_script1", paths.getString("SHARED/script1"));
       assertEquals("mock_url_of_script2", paths.getString("SHARED/script2"));
    }
    
-   public void testResolveURL() throws Exception
+   public void testGenerateURL() throws Exception
    {
-      Map<ResourceId, FetchMode> tmp = new HashMap<ResourceId, FetchMode>();
-      tmp.put(new ResourceId(ResourceScope.SHARED, "remote1"), null);
-      
-      Map<String, FetchMode> remoteURL = jsService.resolveURLs(CONTROLLER_CONTEXT, tmp, false, false, null);
-      assertTrue(remoteURL.size() > 0);
+      ResourceId remote1 = new ResourceId(ResourceScope.SHARED, "remote1");
+      String remoteURL = jsService.generateURL(CONTROLLER_CONTEXT, remote1, false, false, null);
       //Return remote module/script url as it's  declared in gatein-resources.xml
-      assertEquals("/js/remote1.js", remoteURL.keySet().iterator().next());
+      assertEquals("http://js/remote1.js", remoteURL);
       
-      tmp.clear();
-      tmp.put(new ResourceId(ResourceScope.SHARED, "module1"), null);      
-      remoteURL = jsService.resolveURLs(CONTROLLER_CONTEXT, tmp, false, false, null);
-      assertTrue(remoteURL.size() > 0);
-      assertEquals("mock_url_of_module1.js", remoteURL.keySet().iterator().next());
+      ResourceId module1 = new ResourceId(ResourceScope.SHARED, "module1");      
+      remoteURL = jsService.generateURL(CONTROLLER_CONTEXT, module1, false, false, null);
+      assertEquals("mock_url_of_module1.js", remoteURL);
+   }
+   
+   public void testNormalize() throws Exception
+   {
+      String normalizedJS = "\ndefine('SHARED/normalize_test', [], function() {" +
+                                          "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\neXo.define.names=[];\neXo.define.deps=[];" +
+                                          "\nreturn ggg; // /* */ \n\n});";
+      assertReader(normalizedJS, jsService.getScript(new ResourceId(ResourceScope.SHARED, "normalize_test"), null));
    }
    
    public void testResolveIDs()
@@ -201,7 +245,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    private void assertReader(String expected, Reader actual) throws Exception
    {
       StringWriter buffer = new StringWriter();
-      IOTools.copy(actual, buffer);
+      IOTools.copy(actual, buffer, 1);
       assertEquals(expected, buffer.toString());
    }
 

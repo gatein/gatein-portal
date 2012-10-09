@@ -9,8 +9,8 @@
 		if(i < uploadId.length - 1) b.append(",");
 	}
 	b.append("]");
-	rcontext.getJavascriptManager().require("SHARED/webui-ext", "webuiExt")
-    .addScripts("webuiExt.UIUploadInput.initUploadEntry(" +b.toString()+ ", " +isDynamicMode+ ");");
+	rcontext.getJavascriptManager().require("SHARED/upload", "upload")
+    .addScripts("upload.UIUploadInput.initUploadEntry(" +b.toString()+ ", " +isDynamicMode+ ");");
 %>
 <div id="<%=uicomponent.getId()%>">
 <input type="hidden" id="RemoveInputLabel" value="<%= _ctx.appRes("UIFormUploadInput.label.RemoveInput"); %>"/>

@@ -19,8 +19,8 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
 -->
-<gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_2_1 http://www.gatein.org/xml/ns/gatein_resources_1_2_1"
-   xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_2_1">
+<gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+   xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
 
    <portal-skin>
       <skin-name>Default</skin-name>
@@ -114,12 +114,10 @@
    <scripts>
       <name>bootstrap</name>
       <script>
-         <name>eXo</name>
          <path>/javascript/eXo.js</path>
       </script>      
       <script>
-      	<name>eXo.core.RequireJS</name>
-         <path>/javascript/eXo/core/require.js</path>
+      	<path>/javascript/eXo/core/require.js</path>
       </script>
    </scripts>
 
@@ -127,84 +125,132 @@
       <name>jquery</name>     
       <as>$</as> 
       <script>
-         <name>jquery</name>
-         <path>/javascript/jquery-1.7.1.js</path>
-      </script>
-      <script>
-         <name>jquery-patch</name>
-         <path>/javascript/jquery-patch.js</path>
+         <adapter>	                 		
+	        	(function() {
+        		  <include>/javascript/jquery-1.7.1.js</include>
+		        return jQuery.noConflict(true);
+		      })();
+         </adapter>
       </script>
    </module>
 
    <!-- Base Javascripts for anonymous mode -->
    <module>
       <name>base</name>
-      <supported-locale>de</supported-locale>
+      <load-group>baseGRP</load-group>      
+      <script>
+         <path>/javascript/eXo/core/Base.js</path>
+      </script>                                              
+      <depends>
+        <module>jquery</module>
+      </depends>
+   </module>
+   
+   <module>
+   	<name>portalRequest</name>
+   	<load-group>baseGRP</load-group>
+   	<script>
+         <path>/javascript/eXo/portal/PortalHttpRequest.js</path>
+      </script>
+      <depends>
+        <module>jquery</module>
+      </depends>
+      <depends>
+        <module>uiMaskLayer</module>
+      </depends>
+      <depends>
+        <module>I18NMessage</module>
+      </depends>
+      <depends>
+        <module>base</module>
+      </depends>
+   </module>
+   
+   <module>
+   	<name>I18NMessage</name>
+   	<as>msg</as>
+   	<load-group>baseGRP</load-group>
+   	<supported-locale>de</supported-locale>
       <supported-locale>en</supported-locale>
       <supported-locale>fr</supported-locale>
       <supported-locale>ru</supported-locale>
       <supported-locale>vi</supported-locale>
-      <script>
-         <name>eXo.core.Utils</name>
-         <path>/javascript/eXo/core/Util.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIPopupSelectCategory</name>
-         <path>/javascript/eXo/webui/UIPopupSelectCategory.js</path>
-      </script>
-      <script>
-         <name>eXo.core.Browser</name>
-         <path>/javascript/eXo/core/Browser.js</path>
-      </script>
-      <script>
-         <name>eXo.core.I18n</name>
-         <path>/javascript/eXo/core/I18n.js</path>
-      </script>
-      <script>
-         <name>eXo.core.Skin</name>
-         <path>/javascript/eXo/core/Skin.js</path>
-      </script>
-      <script>
-         <name>eXo.portal.PortalHttpRequest</name>
-         <path>/javascript/eXo/portal/PortalHttpRequest.js</path>
-      </script>
-
-      <script>
-         <name>eXo.webui.UIPopup</name>
-         <path>/javascript/eXo/webui/UIPopup.js</path>
-      </script>
-
-      <script>
-         <name>eXo.core.UIMaskLayer</name>
-         <path>/javascript/eXo/core/UIMaskLayer.js</path>
-      </script>
-      <script>
-         <name>eXo.portal.UIMaskWorkspace</name>
-         <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
-      </script>
-
-      <script>
-        <name>eXo.i18n.I18NMessage</name>
+   	<script>
         <path>/javascript/eXo/i18n/I18NMessage.js</path>
         <resource-bundle>eXo.portal</resource-bundle>
+      </script>
+   </module>
+   
+   <module>
+   	<name>skin</name>
+   	<load-group>baseGRP</load-group>
+   	<script>
+         <path>/javascript/eXo/core/Skin.js</path>
+      </script>
+   </module>
+   
+   <module>
+   	<name>uiPopup</name>
+   	<load-group>baseGRP</load-group>
+   	<script>
+         <path>/javascript/eXo/webui/UIPopup.js</path>
+      </script>
+      <depends>
+        <module>base</module>
+      </depends>
+      <depends>
+        <module>jquery</module>
+      </depends>
+   </module>
+   
+   <module>
+   	<name>uiMaskLayer</name>
+   	<load-group>baseGRP</load-group>
+   	<script>
+         <path>/javascript/eXo/core/UIMaskLayer.js</path>
+      </script>
+      <depends>
+        <module>jquery</module>
+      </depends>
+      <depends>
+        <module>base</module>
+      </depends>
+      <depends>
+        <module>uiPopup</module>
+      </depends>
+   </module>
+   
+   <module>
+   	<name>uiMaskWorkspace</name>
+   	<load-group>baseGRP</load-group>
+   	<script>
+         <path>/javascript/eXo/portal/UIMaskWorkspace.js</path>
+      </script>
+      <depends>
+        <module>uiMaskLayer</module>
+      </depends>
+      <depends>
+        <module>base</module>
+      </depends>
+   </module>
+   
+   <module>
+   	<name>popupCategory</name>
+   	<load-group>baseGRP</load-group>
+   	<script>
+         <path>/javascript/eXo/webui/UIPopupSelectCategory.js</path>
       </script>
       <depends>
         <module>jquery</module>
       </depends>
    </module>
 
-
    <!-- CORE Javascripts -->
    <module>
       <name>common</name>
       <script>
-         <name>eXo.core.DragDrop</name>
          <path>/javascript/eXo/core/DragDrop.js</path>
       </script>
-
-      <depends>
-         <module>base</module>
-      </depends>
       <depends>
          <module>jquery</module>
       </depends>
@@ -219,7 +265,6 @@
       <supported-locale>ru</supported-locale>
       <supported-locale>vi</supported-locale>
       <script>
-         <name>eXo.gadget.UIGadget</name>
          <path>/javascript/eXo/gadget/UIGadget.js</path>
          <resource-bundle>eXo.portal</resource-bundle>
       </script>
@@ -237,126 +282,166 @@
    <!-- Portal Javascripts -->
    <module>
       <name>portal</name>
+      <load-group>portalGRP</load-group>
       <script>
-         <name>eXo.portal.UIPortal</name>
          <path>/javascript/eXo/portal/UIPortal.js</path>
       </script>
-      <script>
-         <name>eXo.portal.PortalComposer</name>
+      <depends>
+         <module>base</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
+      </depends>
+      <depends>
+         <module>I18NMessage</module>
+      </depends>
+   </module>
+
+	<module>
+		<name>portalComposer</name>
+		<load-group>portalGRP</load-group>
+		<script>
          <path>/javascript/eXo/portal/PortalComposer.js</path>
       </script>
-      <script>
-         <name>eXo.portal.PortalDragDrop</name>
+      <depends>
+         <module>portalControl</module>
+      </depends>
+      <depends>
+         <module>portalDragDrop</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
+      </depends>
+      <depends>
+         <module>portalRequest</module>
+      </depends>
+	</module>
+
+	<module>
+		<name>portalDragDrop</name>
+		<load-group>portalGRP</load-group>
+		<script>
          <path>/javascript/eXo/portal/PortalDragDrop.js</path>
       </script>
-      <script>
-         <name>eXo.webui.UIFormInputThemeSelector</name>
-         <path>/javascript/eXo/webui/UIFormInputThemeSelector.js</path>
-      </script>
-      <depends>
-         <module>common</module>
-      </depends>
       <depends>
          <module>base</module>
       </depends>
       <depends>
          <module>jquery</module>
       </depends>
-   </module>
-
-
+      <depends>
+         <module>common</module>
+      </depends>
+	</module>
+	
    <!-- WebUI Javascripts -->
    <module>
-      <name>webui</name>
+      <name>portalControl</name>            
+      <load-group>webuiGRP</load-group>
       <script>
-         <name>eXo.webui.UIItemSelector</name>
-         <path>/javascript/eXo/webui/UIItemSelector.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIUserSelector</name>
-         <path>/javascript/eXo/webui/UIUserSelector.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UILanguageSelector</name>
-         <path>/javascript/eXo/webui/UILanguageSelector.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UISkinSelector</name>
-         <path>/javascript/eXo/webui/UISkinSelector.js</path>
-      </script>
-      <script>
-         <name>eXo.portal.UIPortalControl</name>
          <path>/javascript/eXo/portal/UIPortalControl.js</path>
-      </script>
-      <script>
-         <name>eXo.portal.VerticalScrollManager</name>
-         <path>/javascript/eXo/portal/VerticalScrollManager.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIForm</name>
-         <path>/javascript/eXo/webui/UIForm.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIPopupWindow</name>
-         <path>/javascript/eXo/webui/UIPopupWindow.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIHorizontalTabs</name>
-         <path>/javascript/eXo/webui/UIHorizontalTabs.js</path>
-      </script>      
+      </script>    
       <depends>
-         <module>common</module>
-      </depends>
-      <depends>
-         <module>base</module>
-      </depends>
+         <module>uiForm</module>
+      </depends>    
       <depends>
          <module>jquery</module>
       </depends>
    </module>
 
+	<module>
+		<name>selectors</name>
+		<load-group>webuiGRP</load-group>
+		<script>
+         <path>/javascript/eXo/webui/Selectors.js</path>
+      </script>
+      <depends>
+         <module>jquery</module>
+      </depends>
+	</module>
+
+	<module>
+		<name>uiForm</name>
+		<load-group>webuiGRP</load-group>
+		<script>
+         <path>/javascript/eXo/webui/UIForm.js</path>
+      </script>      		      
+      <depends>
+         <module>jquery</module>
+      </depends>
+      <depends>
+         <module>portalRequest</module>
+      </depends>
+	</module>
+	
+	<module>
+		<name>uiPopupWindow</name>
+		<load-group>webuiGRP</load-group>
+		<script>
+         <path>/javascript/eXo/webui/UIPopupWindow.js</path>
+      </script>
+      <depends>
+         <module>common</module>
+      </depends>
+      <depends>
+         <module>uiPopup</module>
+      </depends>
+      <depends>
+         <module>uiMaskLayer</module>
+      </depends>
+      <depends>
+         <module>base</module>
+      </depends>      
+      <depends>
+         <module>jquery</module>
+      </depends>
+	</module>
+
+	<!-- WebUI-EXT Javascripts -->
+	
    <module>
       <name>webui-ext</name>
-      <as>webuiExt</as>
+      <as>webuiExt</as>               
+      <load-group>webuiExtGRP</load-group>         
       <script>
-         <name>eXo.webui.UICalendar</name>
+         <path>/javascript/eXo/webui/WebUIExt.js</path>
+      </script>                  
+      <depends>
+         <module>base</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
+      </depends>
+      <depends>
+         <module>portalControl</module>
+      </depends>
+      <depends>
+         <module>uiRightClickPopupMenu</module>
+      </depends>      
+   </module>
+
+	<module>
+		<name>upload</name>
+		<load-group>webuiExtGRP</load-group>
+		<script>
+         <path>/javascript/eXo/webui/Upload.js</path>
+      </script>
+      <depends>
+         <module>base</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
+      </depends>
+      <depends>
+         <module>portalRequest</module>
+      </depends>
+	</module>
+
+	<module>
+		<name>uiCalendar</name>
+		<load-group>webuiExtGRP</load-group>
+		<script>
          <path>/javascript/eXo/webui/UICalendar.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIUpload</name>
-         <path>/javascript/eXo/webui/UIUpload.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIUploadInput</name>
-         <path>/javascript/eXo/webui/UIUploadInput.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIRightClickPopupMenu</name>
-         <path>/javascript/eXo/webui/UIRightClickPopupMenu.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIDropDownControl</name>
-         <path>/javascript/eXo/webui/UIDropDownControl.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIVirtualList</name>
-         <path>/javascript/eXo/webui/UIVirtualList.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIColorPicker</name>
-         <path>/javascript/eXo/webui/UIColorPicker.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UICombobox</name>
-         <path>/javascript/eXo/webui/UICombobox.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIPortletForm</name>
-         <path>/javascript/eXo/webui/UIPortletForm.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UITree</name>
-         <path>/javascript/eXo/webui/UITree.js</path>
       </script>
       <depends>
          <module>common</module>
@@ -367,24 +452,58 @@
       <depends>
          <module>jquery</module>
       </depends>
-   </module>
+      <depends>
+         <module>I18NMessage</module>
+      </depends>
+	</module>
+	
+	<module>
+		<name>uiRightClickPopupMenu</name>
+		<load-group>webuiExtGRP</load-group>
+		<script>
+         <path>/javascript/eXo/webui/UIRightClickPopupMenu.js</path>
+      </script>
+      <depends>
+         <module>base</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
+      </depends>
+      <depends>
+         <module>uiPopup</module>
+      </depends>
+	</module>
+	
+	<module>
+		<name>uiVirtualList</name>
+		<load-group>webuiExtGRP</load-group>
+		<script>
+         <path>/javascript/eXo/webui/UIVirtualList.js</path>
+      </script>
+      <depends>
+         <module>base</module>
+      </depends>
+      <depends>
+         <module>jquery</module>
+      </depends>
+      <depends>
+         <module>portalRequest</module>
+      </depends>
+	</module>
 
    <module>
       <name>navigation</name>
       <script>
-         <name>eXo.portal.ScrollManager</name>
-         <path>/javascript/eXo/portal/ScrollManager.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIPopupMenu</name>
-         <path>/javascript/eXo/webui/UIPopupMenu.js</path>
-      </script>
-      <script>
-         <name>eXo.portal.UIPortalNavigation</name>
          <path>/javascript/eXo/portal/UIPortalNavigation.js</path>
       </script>
       <depends>
          <module>base</module>
+      </depends>
+      <depends>
+         <module>uiPopup</module>
+      </depends>
+      <depends>
+      	<module>portalRequest</module>
       </depends>
       <depends>
          <module>jquery</module>
@@ -394,24 +513,19 @@
    <module>
       <name>dashboard</name>
       <script>
-         <name>eXo.webui.UIDashboard</name>
          <path>/javascript/eXo/webui/UIDashboard.js</path>
-      </script>
-      <script>
-         <name>eXo.webui.UIDashboardUtil</name>
-         <path>/javascript/eXo/webui/UIDashboardUtil.js</path>
       </script>
       <depends>
          <module>common</module>
       </depends>
       <depends>
-         <module>gadget</module>
+         <module>portalRequest</module>
       </depends>
       <depends>
          <module>base</module>
       </depends>
       <depends>
-         <module>webui</module>
+         <module>portalControl</module>
       </depends>
       <depends>
          <module>jquery</module>

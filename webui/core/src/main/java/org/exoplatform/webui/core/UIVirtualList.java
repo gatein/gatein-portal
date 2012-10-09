@@ -102,14 +102,14 @@ public class UIVirtualList extends UIComponentDecorator
             return;
          }*/
          
-         RequireJS require = rContext.getJavascriptManager().require("SHARED/webui-ext", "webuiExt");
+         RequireJS require = rContext.getJavascriptManager().require("SHARED/uiVirtualList", "uiVirtualList");
          if (repeater.hasNext())
          {
-            require.addScripts("webuiExt.UIVirtualList.updateList('" + virtualList.getId() + "', true);");
+            require.addScripts("uiVirtualList.updateList('" + virtualList.getId() + "', true);");
          }
          else
          {
-            require.addScripts("webuiExt.UIVirtualList.updateList('" + virtualList.getId() + "', false);");
+            require.addScripts("uiVirtualList.updateList('" + virtualList.getId() + "', false);");
          }
          
          rContext.addUIComponentToUpdateByAjax((UIComponent)repeater);

@@ -2,8 +2,8 @@
 	import org.exoplatform.webui.core.UIComponent;
 
 	def rcontext = _ctx.getRequestContext();	
-	rcontext.getJavascriptManager().require("SHARED/webui-ext", "webuiExt")
-                                 .addScripts("webuiExt.UIRightClickPopupMenu.init('" + uicomponent.getId() + "');");
+	rcontext.getJavascriptManager().require("SHARED/uiRightClickPopupMenu", "uiRightClickPopupMenu")
+                                 .addScripts("uiRightClickPopupMenu.init('" + uicomponent.getId() + "');");
 %>
 <div class="UIRightClickPopupMenu" id="$uicomponent.id">
 	<div class="UIContextMenuContainer">

@@ -20,56 +20,60 @@
 /**
  * The mask layer, that appears when an ajax call waits for its result
  */
-eXo.portal.UIMaskWorkspace = {
 
-  show : function(maskId, width, height) {
-    this.maskWorkpace = document.getElementById(maskId);
-    if (this.maskWorkpace) {
-      if (width > -1) {
-        this.maskWorkpace.style.width = width + "px";
-      }
-
-      if (_module.UIMaskWorkspace.maskLayer == null) {
-        var maskLayer = _module.UIMaskLayer.createMask("UIPortalApplication",
-            this.maskWorkpace, 30);
-        _module.UIMaskWorkspace.maskLayer = maskLayer;
-      }
-      this.maskWorkpace.style.margin = "auto";
-      this.maskWorkpace.style.display = "block";
-
-      var browser = _module.Browser; 
-      browser.addOnResizeCallback('mid_maskWorkspace',
-          _module.UIMaskWorkspace.resetPositionEvt);
-      browser.addOnScrollCallback("setPosition_maskWorkspace", _module.UIMaskWorkspace.resetPositionEvt);
-    }
-  },
-
-  hide : function(maskId) {
-    this.maskWorkpace = document.getElementById(maskId);
-    if (_module.UIMaskWorkspace.maskLayer == undefined || !this.maskWorkpace) {
-      return;
-    }
-    _module.UIMaskLayer.removeMask(_module.UIMaskWorkspace.maskLayer);
-    _module.UIMaskWorkspace.maskLayer = null;
-    this.maskWorkpace.style.display = "none";
-  },
-
-  /**
-   * Resets the position of the mask calls eXo.core.UIMaskLayer.setPosition to
-   * perform this operation
-   */
-  resetPositionEvt : function() {
-    var maskWorkpace = _module.UIMaskWorkspace.maskWorkpace;
-    if (maskWorkpace && (maskWorkpace.style.display == "block")) {
-      try {
-        _module.UIMaskLayer.blockContainer = document
-            .getElementById("UIPortalApplication");
-        _module.UIMaskLayer.object = maskWorkpace;
-        _module.UIMaskLayer.setPosition();
-      } catch (e) {
-      }
-    }
-  }
-};
-
-_module.UIMaskWorkspace = eXo.portal.UIMaskWorkspace;
+(function(base, uiMaskLayer) {
+	
+	eXo.portal.UIMaskWorkspace = {
+	
+	  show : function(maskId, width, height) {
+	    this.maskWorkpace = document.getElementById(maskId);
+	    if (this.maskWorkpace) {
+	      if (width > -1) {
+	        this.maskWorkpace.style.width = width + "px";
+	      }
+	
+	      if (eXo.portal.UIMaskWorkspace.maskLayer == null) {
+	        var maskLayer = uiMaskLayer.createMask("UIPortalApplication",
+	            this.maskWorkpace, 30);
+	        eXo.portal.UIMaskWorkspace.maskLayer = maskLayer;
+	      }
+	      this.maskWorkpace.style.margin = "auto";
+	      this.maskWorkpace.style.display = "block";
+	
+	      var browser = base.Browser; 
+	      browser.addOnResizeCallback('mid_maskWorkspace',
+	          eXo.portal.UIMaskWorkspace.resetPositionEvt);
+	      browser.addOnScrollCallback("setPosition_maskWorkspace", eXo.portal.UIMaskWorkspace.resetPositionEvt);
+	    }
+	  },
+	
+	  hide : function(maskId) {
+	    this.maskWorkpace = document.getElementById(maskId);
+	    if (eXo.portal.UIMaskWorkspace.maskLayer == undefined || !this.maskWorkpace) {
+	      return;
+	    }
+	    uiMaskLayer.removeMask(eXo.portal.UIMaskWorkspace.maskLayer);
+	    eXo.portal.UIMaskWorkspace.maskLayer = null;
+	    this.maskWorkpace.style.display = "none";
+	  },
+	
+	  /**
+	   * Resets the position of the mask calls eXo.core.uiMaskLayer.setPosition to
+	   * perform this operation
+	   */
+	  resetPositionEvt : function() {
+	    var maskWorkpace = eXo.portal.UIMaskWorkspace.maskWorkpace;
+	    if (maskWorkpace && (maskWorkpace.style.display == "block")) {
+	      try {
+	        uiMaskLayer.blockContainer = document
+	            .getElementById("UIPortalApplication");
+	        uiMaskLayer.object = maskWorkpace;
+	        uiMaskLayer.setPosition();
+	      } catch (e) {
+	      }
+	    }
+	  }
+	};
+	
+	return eXo.portal.UIMaskWorkspace;
+})(base, uiMaskLayer);

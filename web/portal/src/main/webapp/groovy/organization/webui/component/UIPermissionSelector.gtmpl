@@ -10,8 +10,8 @@
 
 	def popupId = uicomponent.getChild(UIPopupWindow.class).getId();
 	def btn = "#UIPermissionSelector .ActionButton";
-	rcontext.getJavascriptManager().require("SHARED/jquery", "\$").require("SHARED/webui", "webui")
-			  .addScripts("\$('$btn').eq(1).click(function() {webui.UIPopupWindow.show('$popupId', true)});");
+	rcontext.getJavascriptManager().require("SHARED/jquery", "\$").require("SHARED/uiPopupWindow", "uiPopupWindow")
+			  .addScripts("\$('$btn').eq(1).click(function() {uiPopupWindow.show('$popupId', true)});");
 %>
 <div class="UIPermissionSelector" id="UIPermissionSelector">
 	<div class="PermissionInfoContainer">

@@ -46,18 +46,8 @@ class ScriptLoader implements Loader<ScriptKey, ScriptResult, ControllerContext>
       JavascriptConfigService service = (JavascriptConfigService) PortalContainer.getComponent(JavascriptConfigService.class);
 
       //
-      Reader script;
-      String sourceName;
-      if (key.module != null)
-      {
-         script = service.getScript(key.id, key.module, key.locale);
-         sourceName = key.id.getScope() + "/" + key.id.getName() + "/" + key.module  + ".js";
-      }
-      else
-      {
-         script = service.getScript(key.id, key.locale);
-         sourceName = key.id.getScope() + "/" + key.id.getName() + ".js";
-      }
+      Reader script = service.getScript(key.id, key.locale);
+      String sourceName = key.id.getScope() + "/" + key.id.getName() + ".js";
 
       //
       if (script != null)

@@ -40,18 +40,14 @@ class ScriptKey implements Serializable
    final Locale locale;
 
    /** . */
-   final String module;
-
-   /** . */
    final int hashCode;
 
-   ScriptKey(ResourceId id, String module, boolean minified, Locale locale)
+   ScriptKey(ResourceId id, boolean minified, Locale locale)
    {
       this.id = id;
       this.minified = minified;
       this.locale = locale;
-      this.module = module;
-      this.hashCode = id.hashCode() ^ (module != null ? module.hashCode() : 0) ^ (locale != null ? locale.hashCode() : 0) ^ (minified ? ~1 : 0);
+      this.hashCode = id.hashCode() ^ (locale != null ? locale.hashCode() : 0) ^ (minified ? ~1 : 0);
    }
 
    @Override
@@ -73,7 +69,6 @@ class ScriptKey implements Serializable
          return
             id.equals(that.id) &&
             minified &&
-            Safe.equals(module, that.module) &&
             that.minified &&
             Safe.equals(locale, that.locale);
       }
@@ -83,6 +78,6 @@ class ScriptKey implements Serializable
    @Override
    public String toString()
    {
-      return "ScriptKey[id=" + id + ",module=" + module + ",minified=" + minified + ",locale=" + locale + "]";
+      return "ScriptKey[id=" + id + ",minified=" + minified + ",locale=" + locale + "]";
    }
 }

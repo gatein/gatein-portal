@@ -86,7 +86,7 @@ public class TestJavascriptManager extends AbstractWebResourceTest
       RequireJS require = jsManager.require("SHARED/jquery", "$");
       require.addScripts("$('body').css('color : red');");
 
-      String expected = "require([\"SHARED/base\",\"SHARED/jquery\"],function(base,$) {\n$('body').css('color : red');});";
+      String expected = "window.require([\"SHARED/base\",\"SHARED/jquery\"],function(base,$) {\n$('body').css('color : red');});";
       assertEquals(expected, require.toString());
    }
    
@@ -96,7 +96,7 @@ public class TestJavascriptManager extends AbstractWebResourceTest
       require.require("SHARED/jquery", "$");
 
       //Any module without alias will be pushed to the end of dependency list
-      String expected = "require([\"SHARED/base\",\"SHARED/jquery\",\"SHARED/webui\"],function(base,$) {\n});";
+      String expected = "window.require([\"SHARED/base\",\"SHARED/jquery\",\"SHARED/webui\"],function(base,$) {\n});";
       assertEquals(expected, require.toString());
    }
    
@@ -107,7 +107,7 @@ public class TestJavascriptManager extends AbstractWebResourceTest
       String onload = "eXo.core.Browser.init";
       jsManager.addOnLoadJavascript(onload);
       
-      String expected = "require([\"SHARED/base\",\"foo\"],function(base,bar) {\n" +
+      String expected = "window.require([\"SHARED/base\",\"foo\"],function(base,bar) {\n" +
                                    "bar.zoo;base.Browser.addOnLoadCallback('mid" + Math.abs(onload.hashCode()) + 
                                    "'," + onload + ");base.Browser.onLoad();});";
       assertEquals(expected, jsManager.getJavaScripts());

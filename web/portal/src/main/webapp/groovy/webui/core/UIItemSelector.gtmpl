@@ -48,8 +48,8 @@
 				<%
 					}
 					def rcontext = _ctx.getRequestContext(); 
-					rcontext.getJavascriptManager().require("SHARED/webui", "webui")
-							  .addScripts("webui.UIItemSelector.init('#$uicomponent.id .ItemList > div', $data);");
+					rcontext.getJavascriptManager().require("SHARED/selectors", "selectors")
+							  .addScripts("selectors.UIItemSelector.init('#$uicomponent.id .ItemList > div', $data);");
 				%>
 			</div>
 		</div>
