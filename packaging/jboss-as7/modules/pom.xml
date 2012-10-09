@@ -720,8 +720,33 @@
       </dependency>
 
 
+      <!-- GateIn SSO -->
+      <dependency>
+         <groupId>org.gatein.sso</groupId>
+         <artifactId>sso-auth-callback</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.sso</groupId>
+         <artifactId>sso-agent</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.sso</groupId>
+         <artifactId>spnego</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>org.gatein.sso</groupId>
+        <artifactId>sso-saml-plugin</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.sso</groupId>
+         <artifactId>sso-integration</artifactId>
+      </dependency>
+      <dependency>
+         <groupId>org.jasig.cas.client</groupId>
+         <artifactId>cas-client-core</artifactId>
+      </dependency>
 
-      <!-- GateIn -->
+     <!-- GateIn -->
       <dependency>
          <groupId>org.gatein.portal</groupId>
          <artifactId>exo.portal.component.application-registry</artifactId>

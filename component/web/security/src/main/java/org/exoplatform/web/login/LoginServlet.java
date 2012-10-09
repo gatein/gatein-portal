@@ -218,7 +218,7 @@ public class LoginServlet extends AbstractHttpServlet
          // Show login form or redirect to SSO url (/portal/sso) if SSO is enabled
          req.setAttribute("org.gatein.portal.login.initial_uri", uri);
          SSOHelper ssoHelper = (SSOHelper)getContainer().getComponentInstanceOfType(SSOHelper.class);
-         if (ssoHelper.isSSOEnabled())
+         if (ssoHelper.skipJSPRedirection())
          {
             String ssoRedirectUrl = req.getContextPath() + ssoHelper.getSSORedirectURLSuffix();
             ssoRedirectUrl = resp.encodeRedirectURL(ssoRedirectUrl);

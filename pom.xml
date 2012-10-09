@@ -46,6 +46,7 @@
       <org.gatein.common.version>2.1.0.Beta01</org.gatein.common.version>
       <org.gatein.wci.version>2.3.0.Beta02</org.gatein.wci.version>
       <org.gatein.pc.version>2.4.0.Beta02</org.gatein.pc.version>
+      <org.gatein.sso.version>1.3.0.Beta01</org.gatein.sso.version>
       <org.picketlink.idm>1.4.0.M02</org.picketlink.idm>
       <org.gatein.wsrp.version>2.2.0.Beta08</org.gatein.wsrp.version>
       <org.gatein.mop.version>1.2.0.Beta01</org.gatein.mop.version>
@@ -66,6 +67,9 @@
       <!-- TODO: Move to gatein dep -->
       <org.infinispan.version>5.1.7.Final</org.infinispan.version>
       <org.jboss.marshalling.version>1.3.15.GA</org.jboss.marshalling.version>
+
+     <!-- SSO deps -->
+      <version.cas.client>3.2.1</version.cas.client>
 
      <!--
        Various log4j properties for unit tests, examples:
@@ -930,6 +934,40 @@
            <version>${org.shindig.version}</version>
            <type>test-jar</type>
            <scope>test</scope>
+        </dependency>
+
+        <!-- SSO -->
+        <dependency>
+          <groupId>org.gatein.sso</groupId>
+          <artifactId>sso-auth-callback</artifactId>
+          <version>${org.gatein.sso.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.gatein.sso</groupId>
+          <artifactId>sso-agent</artifactId>
+          <version>${org.gatein.sso.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.gatein.sso</groupId>
+          <artifactId>spnego</artifactId>
+          <version>${org.gatein.sso.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.gatein.sso</groupId>
+          <artifactId>sso-integration</artifactId>
+          <version>${org.gatein.sso.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.gatein.sso</groupId>
+          <artifactId>sso-saml-plugin</artifactId>
+          <version>${org.gatein.sso.version}</version>
+        </dependency>
+
+        <!-- SSO 3rd party deps -->
+        <dependency>
+          <groupId>org.jasig.cas.client</groupId>
+          <artifactId>cas-client-core</artifactId>
+          <version>${version.cas.client}</version>
         </dependency>
 
         <!-- TODO: Move to gatein-dep -->

@@ -25,4 +25,19 @@
   <valve>
     <class-name>org.exoplatform.web.login.PortalClusteredSSOSupportValve</class-name>
   </valve>
+  <valve>
+    <class-name>org.gatein.sso.integration.SSODelegateValve</class-name>
+    <param>
+      <param-name>ssoDelegationEnabled</param-name>
+      <param-value>#{gatein.sso.valve.enabled:false}</param-value>
+    </param>
+    <param>
+      <param-name>delegateValveClassName</param-name>
+      <param-value>#{gatein.sso.valve.class}</param-value>
+    </param>
+    <param>
+      <param-name>samlSPConfigFile</param-name>
+      <param-value>#{gatein.sso.saml.config.file}</param-value>
+    </param>
+  </valve>
 </jboss-web>

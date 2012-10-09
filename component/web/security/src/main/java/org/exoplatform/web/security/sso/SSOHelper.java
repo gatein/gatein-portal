@@ -35,6 +35,7 @@ import org.gatein.common.logging.LoggerFactory;
 public class SSOHelper
 {
    private final boolean ssoEnabled;
+   private final boolean skipJSPRedirection;
    private final String ssoRedirectURLSuffix;
 
    private static final Logger log = LoggerFactory.getLogger(SSOHelper.class);
@@ -42,14 +43,32 @@ public class SSOHelper
    public SSOHelper(InitParams params)
    {
       String ssoEnabledParam = params.getValueParam("isSSOEnabled").getValue();
-      ssoEnabled = Boolean.parseBoolean(ssoEnabledParam);
-      ssoRedirectURLSuffix = params.getValueParam("SSORedirectURLSuffix").getValue();
-      log.debug("SSOHelper initialized. ssoEnabled: " + ssoEnabled + ", ssoRedirectURLSuffix: " + ssoRedirectURLSuffix);
+      this.ssoEnabled = Boolean.parseBoolean(ssoEnabledParam);
+
+      // Needs to be explicitly specified as "false", otherwise will have same value like ssoEnabled
+      String ssoJSPRedirectionEnabledParam = params.getValueParam("skipJSPRedirection").getValue();
+      if ("false".equals(ssoJSPRedirectionEnabledParam))
+      {
+         this.skipJSPRedirection = false;
+      }
+      else
+      {
+         this.skipJSPRedirection = this.ssoEnabled;
+      }
+
+      this.ssoRedirectURLSuffix = params.getValueParam("SSORedirectURLSuffix").getValue();
+      log.debug("SSOHelper initialized. ssoEnabled: " + ssoEnabled + ", skipJSPRedirection: " + skipJSPRedirection +
+            ", ssoRedirectURLSuffix: " + ssoRedirectURLSuffix);
    }
 
    public boolean isSSOEnabled()
    {
       return ssoEnabled;
+   }
+
+   public boolean skipJSPRedirection()
+   {
+      return skipJSPRedirection;
    }
 
    public String getSSORedirectURLSuffix()

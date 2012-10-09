@@ -209,6 +209,15 @@
            <maven-resource group="org.gatein.naming" artifact="gatein-naming" />
        </module-def>
 
+       <module-def name="org.gatein.sso">
+           <maven-resource group="org.gatein.sso" artifact="sso-auth-callback" />
+           <maven-resource group="org.gatein.sso" artifact="sso-agent" />
+           <maven-resource group="org.gatein.sso" artifact="spnego" />
+           <maven-resource group="org.gatein.sso" artifact="sso-saml-plugin" />
+           <maven-resource group="org.gatein.sso" artifact="sso-integration" />
+           <maven-resource group="org.jasig.cas.client" artifact="cas-client-core" />
+       </module-def>
+
        <module-def name="org.picocontainer">
           <maven-resource group="picocontainer" artifact="picocontainer" />
        </module-def>
