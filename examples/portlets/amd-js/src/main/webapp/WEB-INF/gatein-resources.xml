@@ -168,9 +168,9 @@
    </module>
    
    <module>
-      <name>foo</name>     
+      <name>sample1</name>     
       <script>
-         <path>/sample1/foo.js</path>
+         <path>/sample1/script.js</path>
       </script>
    </module>
 

@@ -100,14 +100,14 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
       //wrapper for MODULE
       //test for Alias : module1 is used with 'm1' alias
       String module1 = "\ndefine('SHARED/module1', [], function() {" +
-                                 "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[];\neXo.define.deps=[];" +      
+                                 "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\neXo.define.names=[];\neXo.define.deps=[];" +      
                                  "\nreturn ccc;\n});";
       assertReader(module1, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module1"), null));
       
       //module2 depends on module1
       //test for Alias : module1 is used with 'mod1' alias, module2 use default name for alias
       String module2 = "\ndefine('SHARED/module2', [\"SHARED/module1\"], function(mod1) {" +
-                                 "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[\"mod1\"];\neXo.define.deps=[mod1];" +
+                                 "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\neXo.define.names=[\"mod1\"];\neXo.define.deps=[mod1];" +
                                  "\nreturn ddd;\n});";
       assertReader(module2, jsService.getScript(new ResourceId(ResourceScope.SHARED, "module2"), null));
    }
@@ -115,7 +115,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    public void testCommonJS() throws Exception
    {
       String commonjs = "\ndefine('SHARED/commonjs', [\"require\",\"exports\",\"module\"], function(require,exports,module) {" +
-               "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[\"require\",\"exports\",\"module\"];" +
+               "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\neXo.define.names=[\"require\",\"exports\",\"module\"];" +
                "\neXo.define.deps=[eXo.require,exports,module];" +      
                "\nreturn kkk;\n});";
       assertReader(commonjs, jsService.getScript(new ResourceId(ResourceScope.SHARED, "commonjs"), null));
@@ -125,7 +125,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    {
       String pluginTest = "\ndefine('SHARED/pluginTest', [\"SHARED/text!/path/to/file.js\",\"SHARED/text!/path/to/file2.js\"]," +
                " function(text,text_1) {" +
-               "\nvar require = eXo.require,requirejs = require,define = eXo.define;\n" +
+               "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\n" +
                "eXo.define.names=[\"text!/path/to/file.js\",\"text!/path/to/file2.js\"];" +
                "\neXo.define.deps=[text,text_1];" +      
                "\nreturn iii;\n});";
@@ -135,10 +135,10 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    public void testGroupingScript() throws Exception
    {
       String module1 = "\n//Begin SHARED/module1\ndefine('SHARED/module1', [], function() {" +      
-               "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[];\neXo.define.deps=[];" +
+               "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\neXo.define.names=[];\neXo.define.deps=[];" +
                "\nreturn ccc;\n});\n//End SHARED/module1";
       String module2 = "\n//Begin SHARED/module2\ndefine('SHARED/module2', [\"SHARED/module1\"], function(mod1) {" +
-               "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[\"mod1\"];\neXo.define.deps=[mod1];" +
+               "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\neXo.define.names=[\"mod1\"];\neXo.define.deps=[mod1];" +
                "\nreturn ddd;\n});\n//End SHARED/module2";
       
       StringWriter buffer = new StringWriter();
@@ -199,7 +199,7 @@ public class TestJavascriptConfigService extends AbstractWebResourceTest
    public void testNormalize() throws Exception
    {
       String normalizedJS = "\ndefine('SHARED/normalize_test', [], function() {" +
-                                          "\nvar require = eXo.require,requirejs = require,define = eXo.define;\neXo.define.names=[];\neXo.define.deps=[];" +
+                                          "\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;\neXo.define.names=[];\neXo.define.deps=[];" +
                                           "\nreturn ggg; // /* */ \n\n});";
       assertReader(normalizedJS, jsService.getScript(new ResourceId(ResourceScope.SHARED, "normalize_test"), null));
    }

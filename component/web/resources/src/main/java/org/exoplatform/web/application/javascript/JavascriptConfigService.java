@@ -186,7 +186,7 @@ public class JavascriptConfigService extends AbstractResourceService implements 
                buffer.append(deps);
                buffer.append(", function(");
                buffer.append(StringUtils.join(params, ","));               
-               buffer.append(") {\nvar require = eXo.require,requirejs = require,define = eXo.define;");
+               buffer.append(") {\nvar require = eXo.require, requirejs = eXo.require,define = eXo.define;");
                buffer.append("\neXo.define.names=").append(new JSONArray(argNames)).append(";");
                buffer.append("\neXo.define.deps=[").append(StringUtils.join(argValues, ",")).append("]").append(";");
                buffer.append("\nreturn ");
