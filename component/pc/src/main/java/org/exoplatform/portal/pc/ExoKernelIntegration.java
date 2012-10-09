@@ -42,19 +42,23 @@ import org.gatein.pc.portlet.aspects.SessionInvalidatorInterceptor;
 import org.gatein.pc.portlet.aspects.ValveInterceptor;
 import org.gatein.pc.portlet.container.ContainerPortletDispatcher;
 import org.gatein.pc.portlet.container.ContainerPortletInvoker;
+import org.gatein.pc.portlet.impl.deployment.DeploymentException;
 import org.gatein.pc.portlet.impl.deployment.PortletApplicationDeployer;
 import org.gatein.pc.portlet.impl.state.StateManagementPolicyService;
 import org.gatein.pc.portlet.impl.state.producer.PortletStatePersistenceManagerService;
 import org.gatein.pc.portlet.state.StateConverter;
 import org.gatein.pc.portlet.state.producer.ProducerPortletInvoker;
 import org.gatein.wci.ServletContainerFactory;
+import org.gatein.wci.WebAppEvent;
+import org.gatein.wci.WebAppLifeCycleEvent;
+import org.gatein.wci.WebAppListener;
 import org.picocontainer.Startable;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ExoKernelIntegration implements Startable
+public class ExoKernelIntegration implements Startable, WebAppListener
 {
 
    /** . */
@@ -130,9 +134,6 @@ public class ExoKernelIntegration implements Startable
       valveInterceptor.setPortletApplicationRegistry(portletApplicationRegistry);
       valveInterceptor.setNext(secureTransportInterceptor);
 
-      portletApplicationRegistry.setServletContainerFactory(ServletContainerFactory.instance);
-      contextDispatcherInterceptor.setServletContainerFactory(ServletContainerFactory.instance);
-
       // The portlet container invoker continued
       containerPortletInvoker.setNext(valveInterceptor);
 
@@ -174,19 +175,43 @@ public class ExoKernelIntegration implements Startable
       container.registerComponentInstance(PortletInvoker.class, consumerPortletInvoker);
       container.registerComponentInstance(FederatingPortletInvoker.class, federatingPortletInvoker);
 
-      portletApplicationRegistry.start();
+      //
+      ServletContainerFactory.getServletContainer().addWebAppListener(this);
    }
 
    public void stop()
    {
-      if (portletApplicationRegistry != null)
-      {
-         portletApplicationRegistry.stop();
-      }
+      ServletContainerFactory.getServletContainer().removeWebAppListener(this);
    }
 
    public PortletApplicationDeployer getPortletApplicationRegistry()
    {
       return portletApplicationRegistry;
+   }
+
+   @Override
+   public void onEvent(WebAppEvent event)
+   {
+      if (event instanceof WebAppLifeCycleEvent)
+      {
+         WebAppLifeCycleEvent lifeCycleEvent = (WebAppLifeCycleEvent)event;
+         int type = lifeCycleEvent.getType();
+         if (type == WebAppLifeCycleEvent.ADDED)
+         {
+            try
+            {
+               portletApplicationRegistry.add(lifeCycleEvent.getWebApp().getServletContext());
+            }
+            catch (DeploymentException e)
+            {
+               // Portlet deployment failed
+               e.printStackTrace();
+            }
+         }
+         else if (type == WebAppLifeCycleEvent.REMOVED)
+         {
+            portletApplicationRegistry.remove(lifeCycleEvent.getWebApp().getServletContext());
+         }
+      }
    }
 }

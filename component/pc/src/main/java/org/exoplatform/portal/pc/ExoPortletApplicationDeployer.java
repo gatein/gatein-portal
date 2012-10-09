@@ -23,11 +23,13 @@ import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.commons.utils.Safe;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.pc.portlet.impl.deployment.DeploymentException;
 import org.gatein.pc.portlet.impl.deployment.PortletApplicationDeployer;
 import org.gatein.pc.portlet.impl.deployment.staxnav.PortletApplicationMetaDataBuilder;
 import org.gatein.pc.portlet.impl.metadata.PortletApplication10MetaData;
 import org.gatein.wci.WebApp;
 
+import javax.servlet.ServletContext;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
@@ -47,7 +49,7 @@ public class ExoPortletApplicationDeployer extends PortletApplicationDeployer
    private final Logger log = LoggerFactory.getLogger(ExoPortletApplicationDeployer.class);
 
    @Override
-   protected PortletApplication10MetaData buildPortletApplicationMetaData(WebApp webApp)
+   protected PortletApplication10MetaData buildPortletApplicationMetaData(ServletContext webApp) throws DeploymentException
    {
       PortletApplication10MetaData md = super.buildPortletApplicationMetaData(webApp);
       if (md != null)
@@ -64,7 +66,7 @@ public class ExoPortletApplicationDeployer extends PortletApplicationDeployer
                if (log.isDebugEnabled())
                {
                   log.debug("Complete merging global portlet metadata to portlet application "
-                     + webApp.getServletContext().getServletContextName());
+                     + webApp.getServletContextName());
                }
             }
             catch (Exception ex)
@@ -72,7 +74,7 @@ public class ExoPortletApplicationDeployer extends PortletApplicationDeployer
                if (log.isErrorEnabled())
                {
                   log.error("Error during merge global portlet metadata to portlet application "
-                     + webApp.getServletContext().getServletContextName(), ex);
+                     + webApp.getServletContextName(), ex);
                }
             }
          }

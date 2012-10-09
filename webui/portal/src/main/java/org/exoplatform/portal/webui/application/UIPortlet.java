@@ -820,6 +820,10 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          throw new AssertionError();
       }
 
+      //
+      invocation.setRequest(servletRequest);
+      invocation.setResponse(prc.getResponse());
+
       // Navigational state
       invocation.setNavigationalState(navigationalState);
 
@@ -899,9 +903,7 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication
          invocation.setTarget(preferencesPortletContext);
       }
       invocation.setInstanceContext(instanceContext);
-
-      invocation.setServerContext(new AbstractServerContext(servletRequest, prc.getResponse()));
-      //TODO: ExoUserContext impl not tested
+      invocation.setServerContext(new ExoServerContext(servletRequest, prc.getResponse()));
       invocation.setUserContext(new ExoUserContext(servletRequest, userProfile));
       invocation.setWindowContext(new AbstractWindowContext(storageName));
       invocation.setPortalContext(PORTAL_CONTEXT);

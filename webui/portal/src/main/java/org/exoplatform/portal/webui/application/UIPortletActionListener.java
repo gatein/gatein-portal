@@ -397,6 +397,7 @@ public class UIPortletActionListener
             int statusCode;
             MultiValuedPropertyMap<String> transportHeaders;
             String contentType;
+            String charset;
             Object content;
             if (!(portletResponse instanceof ContentResponse))
             {
@@ -423,6 +424,7 @@ public class UIPortletActionListener
                }
                statusCode = HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
                contentType = null;
+               charset = null;
                transportHeaders = null;
                content = null;
             }
@@ -453,6 +455,7 @@ public class UIPortletActionListener
 
                //
                contentType = piResponse.getContentType();
+               charset = piResponse.getEncoding();
 
                //
                log.trace("Try to get a resource of type: " + contentType + " for the portlet: " + uiPortlet.getPortletContext());
@@ -477,6 +480,12 @@ public class UIPortletActionListener
             if (contentType != null)
             {
                response.setContentType(contentType);
+            }
+
+            // Set encoding
+            if (charset != null)
+            {
+               response.setCharacterEncoding(charset);
             }
 
             // Send headers if any

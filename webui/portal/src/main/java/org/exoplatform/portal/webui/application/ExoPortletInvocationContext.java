@@ -29,7 +29,6 @@ import org.exoplatform.webui.url.ComponentURL;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.net.media.MediaType;
-import org.gatein.common.util.MarkupInfo;
 import org.gatein.common.util.ParameterValidation;
 import org.gatein.pc.api.ActionURL;
 import org.gatein.pc.api.ContainerURL;
@@ -73,7 +72,7 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
 
    public ExoPortletInvocationContext(PortalRequestContext portalRequestContext, UIPortlet portlet)
    {
-      super(new MarkupInfo(MediaType.TEXT_HTML, "UTF-8"));
+      super(MediaType.TEXT_HTML);
 
       //
       ComponentURL url = portalRequestContext.createURL(ComponentURL.TYPE, portlet);
@@ -101,11 +100,6 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
    public String encodeResourceURL(String url) throws IllegalArgumentException
    {
       return response.encodeURL(url);
-   }
-
-   public MarkupInfo getMarkupInfo()
-   {
-      return this.markupInfo;
    }
 
    public String renderURL(ContainerURL containerURL, URLFormat format)
