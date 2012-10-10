@@ -117,13 +117,13 @@ java -cp gatein-node1/modules/com/h2database/h2/main/h2-1.3.168.jar org.h2.tools
 In second console run the first GateIn node:
 
 cd gatein-node1
-bin/standalone.sh --server-config=standalone-ha.xml -Djboss.node.name=node1 -Djboss.socket.binding.port-offset=100 -Dexo.profiles=cluster
+bin/standalone.sh --server-config=standalone-ha.xml -Djboss.node.name=node1 -Djboss.socket.binding.port-offset=100
 
 
 And in third console run the second GateIn node:
 
 cd gatein-node2
-bin/standalone.sh --server-config=standalone-ha.xml -Djboss.node.name=node2 -Djboss.socket.binding.port-offset=200 -Dexo.profiles=cluster
+bin/standalone.sh --server-config=standalone-ha.xml -Djboss.node.name=node2 -Djboss.socket.binding.port-offset=200
 
 
 Point your browser to http://localhost:8180/portal to access the first instance, and http://localhost:8280/portal for the second instance.
