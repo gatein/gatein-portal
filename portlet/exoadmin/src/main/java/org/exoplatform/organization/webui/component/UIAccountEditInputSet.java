@@ -36,9 +36,11 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NaturalLanguageValidator;
 import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
 import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
+import org.exoplatform.webui.form.validator.UserConfigurableValidator;
 import org.exoplatform.webui.organization.UIUserProfileInputSet;
 
 /** Created by The eXo Platform SARL Author : dang.tung tungcnw@gmail.com Jun 25, 2008 */
@@ -62,13 +64,11 @@ public class UIAccountEditInputSet extends UIFormInputSet
    {
       super(name);
       addUIFormInput(new UIFormStringInput(USERNAME, "userName", null).setReadOnly(true).addValidator(
-         MandatoryValidator.class).addValidator(StringLengthValidator.class, 3, 30).addValidator(
-         ResourceValidator.class).addValidator(ExpressionValidator.class, Utils.USER_NAME_VALIDATOR_REGEX,
-         "ResourceValidator.msg.Invalid-char"));
-      addUIFormInput(new UIFormStringInput("firstName", "firstName", null).addValidator(
-         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
-      addUIFormInput(new UIFormStringInput("lastName", "lastName", null).addValidator(
-         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
+         MandatoryValidator.class).addValidator(UserConfigurableValidator.class, UserConfigurableValidator.USERNAME));
+      addUIFormInput(new UIFormStringInput("firstName", "firstName", null).
+         addValidator(StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class).addValidator(NaturalLanguageValidator.class));
+      addUIFormInput(new UIFormStringInput("lastName", "lastName", null)
+      .addValidator(StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class).addValidator(NaturalLanguageValidator.class));
 
       // TODO: GTNPORTAL-2358 switch bindingField fullName to displayName once displayName will be available in Organization API
       addUIFormInput(new UIFormStringInput("displayName", "fullName", null).addValidator(
