@@ -3,6 +3,7 @@ package org.exoplatform.portal.mop.page;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.QueryResult;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -13,6 +14,7 @@ import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.transaction.JTAUserTransactionLifecycleService;
 
 import javax.transaction.Status;
+import java.util.List;
 
 /**
  * <p>A wrapper for the {@link PageServiceImpl}, the wrappers takes care of integrating the implementation
@@ -60,6 +62,11 @@ public class PageServiceWrapper implements PageService
    public PageContext loadPage(PageKey key)
    {
       return service.loadPage(key);
+   }
+
+   public List<PageContext> loadPages(SiteKey siteKey) throws NullPointerException, PageServiceException
+   {
+      return service.loadPages(siteKey);
    }
 
    @Override

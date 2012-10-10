@@ -1,5 +1,6 @@
 package org.exoplatform.portal.mop.page;
 
+import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.pom.config.Utils;
@@ -109,6 +110,38 @@ public class PageState implements Serializable
    public List<String> getAccessPermissions()
    {
       return accessPermissions;
+   }
+
+   @Override
+   public boolean equals(Object o)
+   {
+      if (this == o)
+      {
+         return true;
+      }
+      if (!(o instanceof PageState))
+      {
+         return false;
+      }
+      PageState that = (PageState) o;
+      return Safe.equals(editPermission, that.editPermission)
+         && showMaxWindow == that.showMaxWindow
+         && Safe.equals(factoryId, that.factoryId)
+         && Safe.equals(name, that.name)
+         && Safe.equals(description, that.description)
+         && Safe.equals(accessPermissions, that.accessPermissions);
+   }
+
+   @Override
+   public int hashCode()
+   {
+      int result = editPermission != null ? editPermission.hashCode() : 0;
+      result = 31 * result + (showMaxWindow ? 1 : 0);
+      result = 31 * result + (factoryId != null ? factoryId.hashCode() : 0);
+      result = 31 * result + (name != null ? name.hashCode() : 0);
+      result = 31 * result + (description != null ? description.hashCode() : 0);
+      result = 31 * result + (accessPermissions != null ? accessPermissions.hashCode() : 0);
+      return result;
    }
 
    public Builder builder()

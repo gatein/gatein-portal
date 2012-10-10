@@ -3,6 +3,7 @@ package org.exoplatform.portal.mop.page;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.mop.QueryResult;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Utils;
 import org.exoplatform.portal.pom.config.POMSession;
@@ -20,7 +21,10 @@ import org.gatein.mop.api.workspace.ui.UIComponent;
 import org.gatein.mop.api.workspace.ui.UIContainer;
 import org.gatein.mop.api.workspace.ui.UIWindow;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * This class implements the {@link PageService} business methods.
@@ -80,6 +84,47 @@ public class PageServiceImpl implements PageService
       POMSession session = manager.getSession();
       PageData data = dataCache.getPageData(session, key);
       return data != null && data != PageData.EMPTY ? new PageContext(data) : null;
+   }
+
+   /**
+    * <p>Load all the pages of a specific site. Note that this method can potentially raise performance
+    * issues if the number of pages is very large and should be used with cautions. That's the motiviation
+    * for not having this method on the {@link PageService} interface.</p>
+    *
+    * @param siteKey the site key
+    * @return the list of pages
+    * @throws NullPointerException if the site key argument is null
+    * @throws PageServiceException anything that would prevent the operation to succeed
+    */
+   public List<PageContext> loadPages(SiteKey siteKey) throws NullPointerException, PageServiceException
+   {
+      if (siteKey == null)
+      {
+         throw new NullPointerException("No null site key accepted");
+      }
+
+      //
+      POMSession session = manager.getSession();
+      ObjectType<Site> objectType = Utils.objectType(siteKey.getType());
+      Workspace workspace = session.getWorkspace();
+      Site site = workspace.getSite(objectType, siteKey.getName());
+
+      //
+      if (site == null)
+      {
+         throw new PageServiceException(PageError.NO_SITE);
+      }
+
+      //
+      org.gatein.mop.api.workspace.Page root = site.getRootPage();
+      Collection<org.gatein.mop.api.workspace.Page> pages = root.getChild("pages").getChildren();
+      List<PageContext> list = new ArrayList<PageContext>(pages.size());
+      for (Page page : pages)
+      {
+         list.add(loadPage(new PageKey(siteKey, page.getName())));
+      }
+
+      return list;
    }
 
    @Override

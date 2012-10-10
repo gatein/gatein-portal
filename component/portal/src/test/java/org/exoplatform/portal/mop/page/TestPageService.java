@@ -11,6 +11,8 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Page;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
 public class TestPageService extends AbstractTestPageService
@@ -57,6 +59,85 @@ public class TestPageService extends AbstractTestPageService
       assertEquals(Arrays.asList("foo_access_permission"), state.getAccessPermissions());
       assertEquals("foo_edit_permission", state.getEditPermission());
       assertEquals("foo_factory_id", state.getFactoryId());
+      assertEquals(true, state.getShowMaxWindow());
+   }
+
+   public void testLoadPages()
+   {
+      mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "load_pages").getRootPage().addChild("pages");
+      sync(true);
+
+      //
+      SiteKey site = SiteKey.portal("load_pages");
+
+      // Read twice (to load and check and the get from cache and check)
+      assertNotNull(service.loadPages(site));
+      assertNotNull(service.loadPages(site));
+      assertEquals(0, service.loadPages(site).size());
+
+      //
+      Page foo = mgr.getPOMService().getModel().getWorkspace().
+         getSite(ObjectType.PORTAL_SITE, "load_pages").
+         getRootPage().
+         getChild("pages").
+         addChild("foo");
+      Described fooDescribed = foo.adapt(Described.class);
+      fooDescribed.setName("foo_name");
+      fooDescribed.setDescription("foo_description");
+      ProtectedResource fooResource = foo.adapt(ProtectedResource.class);
+      fooResource.setAccessPermissions(Arrays.asList("foo_access_permission"));
+      fooResource.setEditPermission("foo_edit_permission");
+      Attributes fooAttrs = foo.getAttributes();
+      fooAttrs.setValue(MappedAttributes.FACTORY_ID, "foo_factory_id");
+      fooAttrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, true);
+
+      Page bar = mgr.getPOMService().getModel().getWorkspace().
+         getSite(ObjectType.PORTAL_SITE, "load_pages").
+         getRootPage().
+         getChild("pages").
+         addChild("bar");
+      Described barDescribed = bar.adapt(Described.class);
+      barDescribed.setName("bar_name");
+      barDescribed.setDescription("bar_description");
+      ProtectedResource barResource = bar.adapt(ProtectedResource.class);
+      barResource.setAccessPermissions(Arrays.asList("bar_access_permission"));
+      barResource.setEditPermission("bar_edit_permission");
+      Attributes barAttrs = bar.getAttributes();
+      barAttrs.setValue(MappedAttributes.FACTORY_ID, "bar_factory_id");
+      barAttrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, true);
+
+      sync(true);
+
+      //
+      service.clearCache();
+
+      List<PageContext> pages = service.loadPages(site);
+      assertNotNull(pages);
+      assertEquals(2, pages.size());
+
+      Iterator<PageContext> iterator = pages.iterator();
+      PageContext page = iterator.next();
+      assertNotNull(page);
+      assertNull(page.state);
+      assertNotNull(page.data);
+      PageState state = page.getState();
+      assertEquals("foo_name", state.getName());
+      assertEquals("foo_description", state.getDescription());
+      assertEquals(Arrays.asList("foo_access_permission"), state.getAccessPermissions());
+      assertEquals("foo_edit_permission", state.getEditPermission());
+      assertEquals("foo_factory_id", state.getFactoryId());
+      assertEquals(true, state.getShowMaxWindow());
+
+      page = iterator.next();
+      assertNotNull(page);
+      assertNull(page.state);
+      assertNotNull(page.data);
+      state = page.getState();
+      assertEquals("bar_name", state.getName());
+      assertEquals("bar_description", state.getDescription());
+      assertEquals(Arrays.asList("bar_access_permission"), state.getAccessPermissions());
+      assertEquals("bar_edit_permission", state.getEditPermission());
+      assertEquals("bar_factory_id", state.getFactoryId());
       assertEquals(true, state.getShowMaxWindow());
    }
 
