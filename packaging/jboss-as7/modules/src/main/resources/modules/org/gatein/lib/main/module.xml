@@ -90,5 +90,7 @@
         <module name="org.apache.commons-fileupload" />
 
         <module name="org.gatein.wsrp.integration" export="true" optional="true"/>
+
+	<module name="org.jboss.as.web"/>
     </dependencies>
 </module>

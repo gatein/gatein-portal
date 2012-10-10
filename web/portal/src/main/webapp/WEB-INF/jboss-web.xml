@@ -22,4 +22,7 @@
 
 <jboss-web>
   <security-domain>java:/jaas/gatein-domain</security-domain>
+  <valve>
+    <class-name>org.exoplatform.web.login.PortalClusteredSSOSupportValve</class-name>
+  </valve>
 </jboss-web>

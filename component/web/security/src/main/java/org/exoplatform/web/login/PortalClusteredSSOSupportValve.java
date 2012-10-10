@@ -23,141 +23,115 @@
 
 package org.exoplatform.web.login;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+
 import org.apache.catalina.Container;
-import org.apache.catalina.Context;
+import org.apache.catalina.Lifecycle;
+import org.apache.catalina.LifecycleException;
+import org.apache.catalina.LifecycleListener;
 import org.apache.catalina.Pipeline;
+import org.apache.catalina.Realm;
 import org.apache.catalina.Session;
 import org.apache.catalina.Valve;
 import org.apache.catalina.authenticator.Constants;
+import org.apache.catalina.authenticator.SingleSignOn;
 import org.apache.catalina.connector.Request;
 import org.apache.catalina.connector.Response;
+import org.apache.catalina.util.LifecycleSupport;
 import org.apache.catalina.valves.ValveBase;
 import org.exoplatform.container.ExoContainer;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import org.jboss.web.tomcat.service.sso.ClusteredSingleSignOn;
-
-import javax.servlet.ServletException;
-import java.io.IOException;
 
 /**
- * Helper valve for supporting JBoss clustered SSO Valve. Clustered SSO Valve requires reauthentication of user with same password on
- * all cluster nodes. So we need to use real password of user instead of wci ticket for updating SSO valve, which ensure that user
- * will be reauthenticated on second cluster node by SSO valve with his real password.
- *
+ * Helper valve for supporting JBoss clustered SSO Valve. Re-authentication is not initiated by JBoss as it is not aware that
+ * the resources require authentication. This valve forces re-authentication when a single-sign-on identify is present in the
+ * session and there is no principal authenticated for the request.
+ * 
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
+ * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
  */
-public class PortalClusteredSSOSupportValve extends ValveBase
-{
+public class PortalClusteredSSOSupportValve extends ValveBase implements Lifecycle {
 
-   // Name of session note where credentials will be stored. Credentials are removed after update of SSO valve
-   private static final String NOTE_CREDENTIALS = "org.exoplatform.web.login.PortalClusteredSSOSupportValve.NOTE_CREDENTIALS";
+    private static final Logger log = LoggerFactory.getLogger(PortalClusteredSSOSupportValve.class);
 
-   // Logger
-   private static final Logger log = LoggerFactory.getLogger(PortalClusteredSSOSupportValve.class);
+    private final LifecycleSupport support = new LifecycleSupport(this);
 
-   // JBoss clustered SSO valve
-   private ClusteredSingleSignOn ssoValve = null;
+    private SingleSignOn sso = null;
 
-   // The Context to which this Valve is attached.
-   private Context context = null;
-
-
-   @Override
-   public void setContainer(Container container)
-   {
-      if (!(container instanceof Context))
-      {
-         throw new IllegalArgumentException(sm.getString("authenticator.notContext"));
-      }
-      super.setContainer(container);
-      this.context = (Context) container;
-
-      findSSOValve();
-   }
-
-   @Override
-   public void invoke(Request request, Response response) throws IOException, ServletException
-   {
-      if (ssoValve != null)
-      {
-         Session tomcatSession = request.getSessionInternal();
-
-         // This means that request is going to PortalLoginController to start Login request
-         if ("/login".equals(request.getServletPath()) && request.getNote(Constants.REQ_SSOID_NOTE) == null)
-         {
-            String password = request.getParameter("password");
-            if (log.isDebugEnabled())
-            {
-               log.debug("Saving ccredentials into session note for SSO valve.");
-            }
-            tomcatSession.setNote(NOTE_CREDENTIALS, password);
-         }
-         else if (tomcatSession.getNote(NOTE_CREDENTIALS) != null && tomcatSession.getPrincipal() != null)
-         {
-            // We are just logged. SSO valve needs to be updated with "real" password of user instead of wci ticket.
-            String password = (String) tomcatSession.getNote(NOTE_CREDENTIALS);
-            tomcatSession.removeNote(NOTE_CREDENTIALS);
+    @Override
+    public void invoke(Request request, Response response) throws IOException, ServletException {
+        if (sso != null) {
+            Session session = request.getSessionInternal();
             String ssoId = (String) request.getNote(Constants.REQ_SSOID_NOTE);
+            if (ssoId != null && request.getUserPrincipal() == null) {
+                if (sso != null) {
+                    Container parent = getContainer();
+                    if (parent != null) {
+                        Realm realm = parent.getRealm();
+                        if (realm != null) {
+                            if (sso.reauthenticate(ssoId, realm, request)) {
+                                sso.associate(ssoId, session);
 
-            if (password != null && ssoId != null)
-            {
-               if (log.isDebugEnabled())
-               {
-                  log.debug("Update SSO valve values with real credentials of user " + request.getRemoteUser());
-               }
-               ssoValve.register(
-                     ssoId,
-                     tomcatSession.getPrincipal(),
-                     tomcatSession.getAuthType(),
-                     request.getRemoteUser(),
-                     password);
+                                if (log.isDebugEnabled()) {
+                                    log.debug(" Reauthenticated cached principal '" + request.getUserPrincipal().getName()
+                                            + "' with auth type '" + request.getAuthType() + "'");
+                                }
+                            }
+                        }
+                    }
+                }
             }
-         }
-      }
+        }
 
-      // Continue with HTTP request processing
-      getNext().invoke(request, response);
-   }
+        getNext().invoke(request, response);
+    }
 
-   // finding sso valve
-   private void findSSOValve()
-   {
-      if (!ExoContainer.getProfiles().contains("cluster"))
-      {
-         return;
-      }
+    private SingleSignOn findSSOValve() {
+        if (!ExoContainer.getProfiles().contains("cluster")) {
+            return null;
+        }
 
-      Container parent = context.getParent();
-      while ((ssoValve == null) && (parent != null))
-      {
-         if (!(parent instanceof Pipeline))
-         {
-            parent = parent.getParent();
-            continue;
-         }
-         Valve valves[] = ((Pipeline) parent).getValves();
-         for (Valve valve : ((Pipeline) parent).getValves())
-         {
-            if (valve instanceof ClusteredSingleSignOn)
-            {
-               ssoValve = (ClusteredSingleSignOn) valve;
-               break;
+        for (Container parent = container.getParent(); parent != null; parent = parent.getParent()) {
+            if (parent instanceof Pipeline) {
+                Valve valves[] = ((Pipeline) parent).getValves();
+                for (int i = 0; i < valves.length; i++) {
+                    if (valves[i] instanceof SingleSignOn) {
+                        SingleSignOn sso = (SingleSignOn) valves[i];
+                        log.debug("Found SingleSignOn Valve at " + sso);
+                        return sso;
+                    }
+                }
             }
-         }
-         if (ssoValve == null)
-         {
-            parent = parent.getParent();
-         }
-      }
+        }
 
-      if (ssoValve != null)
-      {
-         log.info("Found JBoss ClusteredSingleSignOn Valve at " + ssoValve);
-      }
-      else
-      {
-         log.info("No JBoss ClusteredSingleSignOn Valve is present");
-      }
-   }
+        log.debug("No SingleSignOn Valve is present");
+        return null;
+    }
+
+    public void start() throws LifecycleException {
+        sso = findSSOValve();
+        support.fireLifecycleEvent(START_EVENT, this);
+    }
+
+    public void stop() throws LifecycleException {
+        support.fireLifecycleEvent(STOP_EVENT, this);
+    }
+
+    @Override
+    public void addLifecycleListener(LifecycleListener listener) {
+        support.addLifecycleListener(listener);
+    }
+
+    @Override
+    public void removeLifecycleListener(LifecycleListener listener) {
+        support.removeLifecycleListener(listener);
+    }
+
+    @Override
+    public LifecycleListener[] findLifecycleListeners() {
+        return support.findLifecycleListeners();
+    }
 }
