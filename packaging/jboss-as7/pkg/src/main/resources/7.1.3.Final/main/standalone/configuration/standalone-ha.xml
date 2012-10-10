@@ -72,6 +72,9 @@
                 <suffix value=".yyyy-MM-dd"/>
                 <append value="true"/>
             </periodic-rotating-file-handler>
+            <logger category="com.google.javascript.jscomp">
+                <level name="WARN"/>
+            </logger>
             <logger category="com.arjuna">
                 <level name="WARN"/>
             </logger>
