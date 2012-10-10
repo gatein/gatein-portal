@@ -21,6 +21,7 @@ package org.exoplatform.portal.webui.navigation;
 
 import java.util.Iterator;
 
+import org.exoplatform.portal.mop.navigation.GenericScope;
 import org.exoplatform.portal.mop.navigation.NodeChange;
 import org.exoplatform.portal.mop.navigation.NodeChangeQueue;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -81,25 +82,27 @@ public class UIPageNodeSelector extends UIContainer
       //If node has been deleted --> select root node
       if(node == null)
       {
-         node = getRootNode();
-      }
-      
-      UITree tree = getChild(UITree.class);
-      tree.setSelected(node);
-      UserNode parent = node.getParent();
-      if (parent != null)
-      {        
-         tree.setChildren(node.getChildren());
-         tree.setSibbling(parent.getChildren());
-         tree.setParentSelected(parent);
+         configure(getRootNode());
       }
       else
       {
-         tree.setChildren(null);
-         tree.setSibbling(node.getChildren());
-         tree.setParentSelected(node);
+         UITree tree = getChild(UITree.class);
+         tree.setSelected(node);
+         UserNode parent = node.getParent();
+         if (parent != null)
+         {        
+            tree.setChildren(node.getChildren());
+            tree.setSibbling(parent.getChildren());
+            tree.setParentSelected(parent);
+         }
+         else
+         {
+            tree.setChildren(null);
+            tree.setSibbling(node.getChildren());
+            tree.setParentSelected(node);
+         }
+         selectedNode = node;         
       }
-      selectedNode = node;
    }
    
    private UserNode updateNode(UserNode node) throws Exception
@@ -107,11 +110,20 @@ public class UIPageNodeSelector extends UIContainer
       if (node == null) 
       {
          return null;
-      }
-      
+      }      
       
       NodeChangeQueue<UserNode> queue = new NodeChangeQueue<UserNode>();
-      userPortal.updateNode(node, Scope.GRANDCHILDREN, queue);
+      if (node.getParent() != null)
+      {
+         //The node may be resolved by UserPortal#resolvePath and this will filter all sibling nodes
+         //We need to update from parent to make sure all sibling nodes can be retrieved
+         userPortal.updateNode(node.getParent(), GenericScope.treeShape(3), queue);         
+      }
+      else
+      {
+         userPortal.updateNode(node, Scope.GRANDCHILDREN, queue);
+      }
+      
       for (NodeChange<UserNode> change : queue)
       {
          if (change instanceof NodeChange.Removed)
@@ -124,8 +136,7 @@ public class UIPageNodeSelector extends UIContainer
          }
       }
       
-      UserNavigation nav = userPortal.getNavigation(node.getNavigation().getKey());
-      return userPortal.resolvePath(nav, null, node.getURI());
+      return node;
    }
    
    public void setSelectedURI(String uri) throws Exception
