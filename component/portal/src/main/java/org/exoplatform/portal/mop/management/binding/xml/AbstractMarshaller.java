@@ -610,6 +610,8 @@ public abstract class AbstractMarshaller<T> implements Marshaller<T>
 
    protected void marshalAccessPermissions(StaxWriter<Element> writer, String[] accessPermissions) throws XMLStreamException
    {
+      accessPermissions = (accessPermissions == null || accessPermissions.length == 0) ? null : accessPermissions;
+
       writeOptionalElement(writer, Element.ACCESS_PERMISSIONS, DelimitedValueType.SEMI_COLON, accessPermissions);
    }
 

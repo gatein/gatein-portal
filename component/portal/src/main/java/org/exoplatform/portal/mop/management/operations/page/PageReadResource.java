@@ -1,6 +1,7 @@
 package org.exoplatform.portal.mop.management.operations.page;
 
-import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.gatein.management.api.exceptions.OperationException;
 import org.gatein.management.api.exceptions.ResourceNotFoundException;
 import org.gatein.management.api.operation.OperationContext;
@@ -36,10 +37,10 @@ public class PageReadResource extends AbstractPageOperationHandler
       }
       else
       {
-         DataStorage dataStorage = operationContext.getRuntimeContext().getRuntimeComponent(DataStorage.class);
+         PageService pageService = operationContext.getRuntimeContext().getRuntimeComponent(PageService.class);
          PageKey pageKey = new PageKey(getSiteKey(rootPage.getSite()), pageName);
 
-         if (PageUtils.getPage(dataStorage, pageKey, operationContext.getOperationName()) == null)
+         if (pageService.loadPage(pageKey) == null)
          {
             throw new ResourceNotFoundException("No page found for " + pageKey);
          }

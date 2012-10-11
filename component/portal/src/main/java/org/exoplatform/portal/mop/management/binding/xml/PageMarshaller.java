@@ -212,8 +212,6 @@ public class PageMarshaller extends AbstractMarshaller<Page.PageSet>
                throw unexpectedElement(navigator);
          }
       }
-      //TODO: We should raise this exception as soon as we know so location is accurate
-      if (page.getAccessPermissions() == null) throw expectedElement(navigator, Element.ACCESS_PERMISSIONS);
 
       return page;
    }

@@ -4,7 +4,6 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
@@ -17,9 +16,15 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.SiteKey;
-import org.gatein.management.api.exceptions.OperationException;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
+import org.exoplatform.portal.mop.page.PageServiceImpl;
+import org.exoplatform.portal.mop.page.PageServiceWrapper;
+import org.exoplatform.portal.mop.page.PageState;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,35 +33,59 @@ import java.util.List;
  */
 public class PageUtils
 {
-   private PageUtils(){}
-
-   public static Page getPage(DataStorage dataStorage, PageKey pageKey, String operationName)
+   private PageUtils()
    {
-      try
-      {
-         return dataStorage.getPage(pageKey.getPageId());
-      }
-      catch (Exception e)
-      {
-         throw new OperationException(operationName, "Operation failed getting page for " + pageKey, e);
-      }
    }
 
-   public static Page.PageSet getAllPages(DataStorage dataStorage, SiteKey siteKey, String operationName)
+   public static Page getPage(DataStorage dataStorage, PageService pageService, PageKey pageKey) throws Exception
    {
-      Query<Page> query = new Query<Page>(siteKey.getTypeName(), siteKey.getName(), Page.class);
-      try
-      {
-         List<Page> pageList = dataStorage.find(query).getAll();
-         Page.PageSet pages = new Page.PageSet();
-         pages.setPages(new ArrayList<Page>(pageList));
+      PageContext pageContext = pageService.loadPage(pageKey);
+      if (pageContext == null) return null;
 
-         return pages;
-      }
-      catch (Exception e)
+      // PageService does not support the entire page at the moment, so we must grab the page from legacy service
+      // and update it with data page service does support.
+      Page page = dataStorage.getPage(pageKey.format());
+      pageContext.update(page);
+
+      return page;
+   }
+
+   public static Page.PageSet getAllPages(DataStorage dataStorage, PageService pageService, SiteKey siteKey) throws Exception
+   {
+      Page.PageSet pages = new Page.PageSet();
+      List<PageContext> pageContextList;
+
+      // If the PageService interface ever supports a loadPages method, remove casting.
+      if (pageService instanceof PageServiceWrapper)
       {
-         throw new OperationException(operationName, "Could not retrieve pages for site " + siteKey);
+         pageContextList = ((PageServiceWrapper) pageService).loadPages(siteKey);
       }
+      else if (pageService instanceof PageServiceImpl)
+      {
+         pageContextList = ((PageServiceImpl) pageService).loadPages(siteKey);
+      }
+      else
+      {
+         throw new IllegalArgumentException("Unknown page service implementation " + pageService.getClass());
+      }
+
+      ArrayList<Page> pageList = new ArrayList<Page>(pageContextList.size());
+      for (PageContext pageContext : pageContextList)
+      {
+         Page page = dataStorage.getPage(pageContext.getKey().format());
+         pageContext.update(page);
+         pageList.add(page);
+      }
+
+      pages.setPages(pageList);
+
+      return pages;
+   }
+
+   public static PageState toPageState(Page page)
+   {
+      return new PageState(page.getTitle(), page.getDescription(), page.isShowMaxWindow(),page.getFactoryId(),
+         page.getAccessPermissions() != null ? Arrays.asList(page.getAccessPermissions()) : null, page.getEditPermission());
    }
 
    public static <S> Application<S> copy(Application<S> existing)

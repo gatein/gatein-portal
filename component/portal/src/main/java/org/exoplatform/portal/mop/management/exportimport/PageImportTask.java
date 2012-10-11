@@ -22,13 +22,15 @@
 
 package org.exoplatform.portal.mop.management.exportimport;
 
-import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.QueryResult;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.management.operations.page.PageUtils;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,13 +42,15 @@ import java.util.List;
 public class PageImportTask extends AbstractImportTask<Page.PageSet>
 {
    private final DataStorage dataStorage;
+   private final PageService pageService;
    private Page.PageSet rollbackSaves;
    private Page.PageSet rollbackDeletes;
 
-   public PageImportTask(Page.PageSet data, SiteKey siteKey, DataStorage dataStorage)
+   public PageImportTask(Page.PageSet data, SiteKey siteKey, DataStorage dataStorage, PageService pageService)
    {
       super(data, siteKey);
       this.dataStorage = dataStorage;
+      this.pageService = pageService;
    }
 
    @Override
@@ -54,17 +58,17 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
    {
       if (data == null || data.getPages() == null || data.getPages().isEmpty()) return;
 
-      Query<Page> query = new Query<Page>(siteKey.getTypeName(), siteKey.getName(), Page.class);
-      LazyPageList<Page> list = dataStorage.find(query);
-      int size = list.getAvailable();
+      // Find any page to determine if any pages exist for the site.
+      QueryResult<PageContext> pages = pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      int size = pages.getSize();
 
       Page.PageSet dst = null;
       switch (importMode)
       {
          case CONSERVE:
-            if (size == 0)
+            if (size == 0) // No pages exist yet.
             {
-               dst = data; // No pages exist yet.
+               dst = data;
                rollbackDeletes = data;
             }
             else
@@ -73,21 +77,18 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
             }
             break;
          case INSERT:
-            if (size == 0)
+            if (size == 0) // No pages exist yet.
             {
-               dst = data; // No pages exist yet.
+               dst = data;
                rollbackDeletes = data;
             }
             else
             {
                dst = new Page.PageSet();
-               dst.setPages(new ArrayList<Page>());
-               List<Page> existingPages = list.getAll();
                rollbackDeletes = new Page.PageSet();
-               rollbackDeletes.setPages(new ArrayList<Page>());
                for (Page src : data.getPages())
                {
-                  Page found = findPage(existingPages, src);
+                  PageContext found = pageService.loadPage(siteKey.page(src.getName()));
                   if (found == null)
                   {
                      dst.getPages().add(src);
@@ -105,51 +106,48 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
             else
             {
                dst = new Page.PageSet();
-               dst.setPages(new ArrayList<Page>(data.getPages().size()));
-               List<Page> existingPages = list.getAll();
                rollbackSaves = new Page.PageSet();
-               rollbackSaves.setPages(new ArrayList<Page>(size));
                rollbackDeletes = new Page.PageSet();
-               rollbackDeletes.setPages(new ArrayList<Page>());
                for (Page src : data.getPages())
                {
                   dst.getPages().add(src);
-
-                  Page found = findPage(existingPages, src);
+                  PageKey pageKey = siteKey.page(src.getName());
+                  PageContext found = pageService.loadPage(pageKey);
                   if (found == null)
                   {
                      rollbackDeletes.getPages().add(src);
                   }
                   else
                   {
-                     rollbackSaves.getPages().add(PageUtils.copy(found));
+                     Page existing = dataStorage.getPage(found.getKey().format());
+                     found.update(existing);
+                     rollbackSaves.getPages().add(PageUtils.copy(existing));
                   }
                }
             }
             break;
          case OVERWRITE:
-            if (size == 0)
+            if (size == 0) // No pages exist yet.
             {
                dst = data;
                rollbackDeletes = data;
             }
             else
             {
-               List<Page> existingPages = new ArrayList<Page>(list.getAll());
+               List<Page> list = PageUtils.getAllPages(dataStorage, pageService, siteKey).getPages();
                rollbackSaves = new Page.PageSet();
-               rollbackSaves.setPages(new ArrayList<Page>(size));
+               rollbackSaves.setPages(new ArrayList<Page>(list.size()));
                rollbackDeletes = new Page.PageSet();
-               rollbackDeletes.setPages(new ArrayList<Page>());
-               for (Page page : existingPages)
+               for (Page page : list)
                {
                   Page copy = PageUtils.copy(page);
-                  dataStorage.remove(page);
+                  pageService.destroyPage(siteKey.page(page.getName()));
                   dataStorage.save();
                   rollbackSaves.getPages().add(copy);
                }
                for (Page src : data.getPages())
                {
-                  Page found = findPage(rollbackSaves.getPages(), src);
+                  Page found = findPage(list, src);
                   if (found == null)
                   {
                      rollbackDeletes.getPages().add(src);
@@ -165,6 +163,7 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
       {
          for (Page page : dst.getPages())
          {
+            pageService.savePage(new PageContext(siteKey.page(page.getName()), PageUtils.toPageState(page)));
             dataStorage.save(page);
             dataStorage.save();
          }
@@ -178,7 +177,7 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
       {
          for (Page page : rollbackDeletes.getPages())
          {
-            dataStorage.remove(page);
+            pageService.destroyPage(siteKey.page(page.getName()));
             dataStorage.save();
          }
       }
@@ -186,6 +185,7 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
       {
          for (Page page : rollbackSaves.getPages())
          {
+            pageService.savePage(new PageContext(siteKey.page(page.getName()), PageUtils.toPageState(page)));
             dataStorage.save(page);
             dataStorage.save();
          }
@@ -202,7 +202,7 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
       return rollbackDeletes;
    }
 
-   private Page findPage(List<Page> pages, Page src)
+   private static Page findPage(List<Page> pages, Page src)
    {
       Page found = null;
       for (Page page : pages)

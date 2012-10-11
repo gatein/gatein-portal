@@ -23,16 +23,14 @@
 package org.exoplatform.portal.mop.management.operations.page;
 
 import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.config.Query;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.gatein.management.api.exceptions.OperationException;
 import org.gatein.management.api.exceptions.ResourceNotFoundException;
 import org.gatein.management.api.operation.OperationContext;
 import org.gatein.management.api.operation.ResultHandler;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
@@ -43,25 +41,49 @@ public class PageReadConfigAsXml extends AbstractPageOperationHandler
    @Override
    protected void execute(OperationContext operationContext, ResultHandler resultHandler, org.gatein.mop.api.workspace.Page rootPage)  throws ResourceNotFoundException, OperationException
    {
+      String operationName = operationContext.getOperationName();
       SiteKey siteKey = getSiteKey(rootPage.getSite());
       DataStorage dataStorage = operationContext.getRuntimeContext().getRuntimeComponent(DataStorage.class);
+      PageService pageService = operationContext.getRuntimeContext().getRuntimeComponent(PageService.class);
 
       String pageName = operationContext.getAddress().resolvePathTemplate("page-name");
-      if (pageName == null)
+      if (pageName == null) // retrieve pages
       {
-         resultHandler.completed(PageUtils.getAllPages(dataStorage, siteKey, operationContext.getOperationName()));
+         try
+         {
+            resultHandler.completed(PageUtils.getAllPages(dataStorage, pageService, siteKey));
+         }
+         catch (Exception e)
+         {
+            throw new OperationException(operationName, "Could not retrieve pages for site " + siteKey);
+         }
       }
       else
       {
          PageKey key = new PageKey(siteKey, pageName);
-         Page page = PageUtils.getPage(dataStorage, key, operationContext.getOperationName());
-         if (page == null)
+         try
          {
-            throw new ResourceNotFoundException("No page found for " + key);
+            Page page = PageUtils.getPage(dataStorage, pageService, key);
+            if (page == null)
+            {
+               throw new ResourceNotFoundException("No page found for " + key);
+            }
+            else
+            {
+               resultHandler.completed(page);
+            }
          }
-         else
+         catch (ResourceNotFoundException e)
          {
-            resultHandler.completed(page);
+            throw e;
+         }
+         catch (OperationException e)
+         {
+            throw e;
+         }
+         catch (Exception e)
+         {
+            throw new OperationException(operationName, "Operation failed getting page for " + key, e);
          }
       }
    }

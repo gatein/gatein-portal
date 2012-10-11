@@ -27,8 +27,6 @@
    <page>
       <name>empty-page</name>
       <title>Empty</title>
-      <access-permissions>Everyone</access-permissions>
-      <edit-permission>*:/platform/administrators</edit-permission>
       <show-max-window>false</show-max-window>
    </page>
 

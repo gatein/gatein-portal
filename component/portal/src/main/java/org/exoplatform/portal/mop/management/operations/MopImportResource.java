@@ -36,6 +36,7 @@ import org.exoplatform.portal.mop.management.exportimport.PageImportTask;
 import org.exoplatform.portal.mop.management.exportimport.SiteLayoutExportTask;
 import org.exoplatform.portal.mop.management.exportimport.SiteLayoutImportTask;
 import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.common.logging.Logger;
@@ -89,6 +90,9 @@ public class MopImportResource implements OperationHandler
 
       DataStorage dataStorage = operationContext.getRuntimeContext().getRuntimeComponent(DataStorage.class);
       if (dataStorage == null) throw new OperationException(operationName, "DataStorage was null");
+
+      PageService pageService = operationContext.getRuntimeContext().getRuntimeComponent(PageService.class);
+      if (pageService == null) throw new OperationException(operationName, "PageService was null");
 
       NavigationService navigationService = operationContext.getRuntimeContext().getRuntimeComponent(NavigationService.class);
       if (navigationService == null) throw new OperationException(operationName, "Navigation service was null");
@@ -162,7 +166,7 @@ public class MopImportResource implements OperationHandler
                }
 
                // Add import task to run later.
-               mopImport.pageTask = new PageImportTask(pages, siteKey, dataStorage);
+               mopImport.pageTask = new PageImportTask(pages, siteKey, dataStorage, pageService);
             }
             else if (file.equals(NavigationExportTask.FILE))
             {

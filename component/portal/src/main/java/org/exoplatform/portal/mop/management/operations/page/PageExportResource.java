@@ -25,6 +25,8 @@ package org.exoplatform.portal.mop.management.operations.page;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.management.exportimport.PageExportTask;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.gatein.management.api.ContentType;
 import org.gatein.management.api.PathAddress;
 import org.gatein.management.api.PathTemplateFilter;
@@ -55,13 +57,14 @@ public class PageExportResource extends AbstractPageOperationHandler
       SiteKey siteKey = getSiteKey(pages.getSite());
 
       DataStorage dataStorage = operationContext.getRuntimeContext().getRuntimeComponent(DataStorage.class);
+      PageService pageService = operationContext.getRuntimeContext().getRuntimeComponent(PageService.class);
       BindingProvider bindingProvider = operationContext.getBindingProvider();
 
       Collection<Page> pagesList = pages.getChildren();
       List<ExportTask> tasks = new ArrayList<ExportTask>(pagesList.size());
 
       PageExportTask pageExportTask =
-         new PageExportTask(siteKey, dataStorage, bindingProvider.getMarshaller(
+         new PageExportTask(siteKey, dataStorage, pageService, bindingProvider.getMarshaller(
             org.exoplatform.portal.config.model.Page.PageSet.class, ContentType.XML));
 
       String pageName = operationContext.getAddress().resolvePathTemplate("page-name");

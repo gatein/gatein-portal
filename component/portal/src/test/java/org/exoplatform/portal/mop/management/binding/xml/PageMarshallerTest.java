@@ -357,6 +357,8 @@ public class PageMarshallerTest extends AbstractMarshallerTest
       assertNotNull(page);
       assertEquals("empty-page", page.getName());
       assertEquals("Empty", page.getTitle());
+      assertNull(page.getAccessPermissions());
+      assertNull(page.getEditPermission());
       assertNotNull(page.getChildren());
       assertTrue(page.getChildren().isEmpty());
    }

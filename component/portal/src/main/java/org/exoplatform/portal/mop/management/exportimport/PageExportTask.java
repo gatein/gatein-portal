@@ -25,8 +25,9 @@ package org.exoplatform.portal.mop.management.exportimport;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.Utils;
+import org.exoplatform.portal.mop.management.operations.page.PageUtils;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.gatein.management.api.binding.Marshaller;
 import org.gatein.management.api.operation.model.ExportTask;
 
@@ -45,13 +46,15 @@ public class PageExportTask extends AbstractExportTask implements ExportTask
    public static final String FILE = "pages.xml";
 
    private final DataStorage dataStorage;
+   private final PageService pageService;
    private final Marshaller<Page.PageSet> marshaller;
    private final List<String> pageNames;
 
-   public PageExportTask(SiteKey siteKey, DataStorage dataStorage, Marshaller<Page.PageSet> marshaller)
+   public PageExportTask(SiteKey siteKey, DataStorage dataStorage, PageService pageService, Marshaller<Page.PageSet> marshaller)
    {
       super(siteKey);
       this.dataStorage = dataStorage;
+      this.pageService = pageService;
       this.marshaller = marshaller;
       pageNames = new ArrayList<String>();
    }
@@ -65,8 +68,8 @@ public class PageExportTask extends AbstractExportTask implements ExportTask
       {
          try
          {
-            Page page = dataStorage.getPage(Utils.join("::", siteKey.getTypeName(), siteKey.getName(), pageName));
-            pages.getPages().add(page);
+            PageKey pageKey = new PageKey(siteKey, pageName);
+            pages.getPages().add(PageUtils.getPage(dataStorage, pageService, pageKey));
          }
          catch (Exception e)
          {
