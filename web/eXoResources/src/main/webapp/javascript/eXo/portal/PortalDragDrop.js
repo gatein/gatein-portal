@@ -226,7 +226,12 @@
 		        }
 		      }
 		  	}
-	
+            
+		    if(!dragObject.isAddingNewly) {
+		    	jDragObj.find(".EDITION-BLOCK").last().hide();
+		    	$.extend(dragObject.style, jDragObj.data("origDragObjectStyle"));
+		    }
+		  	
 		    if(e.which !== 27) {
 		    	eXo.portal.PortalDragDrop.doDropCallback(dragObject);
 		    } else {
@@ -244,12 +249,7 @@
 		      if(dragObject.isAddingNewly) {
 				dragObject.parentNode.removeChild(dragObject);
 			  }
-		    }
-		    
-		    if(!dragObject.isAddingNewly) {
-		    	jDragObj.find(".EDITION-BLOCK").last().hide();
-		    	$.extend(dragObject.style, jDragObj.data("origDragObjectStyle"));
-		    }
+		    }		   		    
 		    
 		    if(previewBlock) previewBlock.parentNode.removeChild(previewBlock);
 		    previewBlock = null;
@@ -299,8 +299,10 @@
 		  if(!targetElement || foundIndex == undefined) {
 		  	if(dragObject.isAddingNewly) {
 			    dragObject.parentNode.removeChild(dragObject);
+		  	} else {
+		  		//Make IE7 rerender dom correctlly, this is a workaround for EXOGTN-1092
+		  		dragObject.parentNode.replaceChild(dragObject, dragObject);
 		  	}
-		  	dragObject.style.width = "auto";
 		  	return;
 		  }
 		  
@@ -470,7 +472,6 @@
 		divRowContainerAddChild : function(srcElement, targetElement, insertPosition) {	  
 		  var listComponent = $(srcElement).data("listComponentInTarget");
 		  var uiRowContainer = $(targetElement).find(".UIRowContainer").first();
-		  srcElement.style.width = "auto" ;
 		  
 		  var parentNode = srcElement.parentNode;
 		  if(insertPosition >= 0) {
