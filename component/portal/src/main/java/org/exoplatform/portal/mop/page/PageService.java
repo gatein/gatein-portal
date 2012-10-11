@@ -45,16 +45,38 @@ public interface PageService
     * @throws NullPointerException if the page key is null
     * @throws PageServiceException anything that would prevent the operation to succeed
     */
-   boolean destroyPage(PageKey key) throws PageServiceException;
+   boolean destroyPage(PageKey key) throws NullPointerException, PageServiceException;
 
-   PageContext clone(PageKey src, PageKey dst) throws PageServiceException;
+   /**
+    * Clone a page.
+    *
+    * @param src the source key
+    * @param dst the destination key
+    * @return the cloned page
+    * @throws NullPointerException if any key argument is null
+    * @throws PageServiceException anything that would prevent the operation to succeed
+    */
+   PageContext clone(PageKey src, PageKey dst) throws NullPointerException, PageServiceException;
 
+   /**
+    * Query the page service to find pages that match the <code>siteType</code>, <code>siteName</code>,
+    * <code>pageName</code> and <code>title</code> criterions.
+    *
+    * @param offset the query offset
+    * @param limit the query limit
+    * @param siteType the site type
+    * @param siteName the site name
+    * @param pageName the page name
+    * @param pageTitle the page title
+    * @return the query result
+    * @throws PageServiceException anything that would prevent the operation to succeed
+    */
    QueryResult<PageContext> findPages(
       int offset,
       int limit,
       SiteType siteType,
       String siteName,
       String pageName,
-      String title) throws PageServiceException;
+      String pageTitle) throws PageServiceException;
 
 }

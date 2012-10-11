@@ -396,14 +396,14 @@ public class PageServiceImpl implements PageService
    }
 
    @Override
-   public QueryResult<PageContext> findPages(int from, int to, SiteType siteType, String siteName, String pageName, String title)
+   public QueryResult<PageContext> findPages(int from, int to, SiteType siteType, String siteName, String pageName, String pageTitle)
    {
       POMSession session = manager.getSession();
       org.chromattic.api.query.QueryResult<Page> a = session.findObjects(
          ObjectType.PAGE,
          Utils.objectType(siteType),
          siteName,
-         title,
+         pageTitle,
          from,
          to);
       int size = a.size();

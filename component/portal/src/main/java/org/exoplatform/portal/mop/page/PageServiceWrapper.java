@@ -112,7 +112,7 @@ public class PageServiceWrapper implements PageService
    }
 
    @Override
-   public QueryResult<PageContext> findPages(int offset, int limit, SiteType siteType, String siteName, String pageName, String title)
+   public QueryResult<PageContext> findPages(int offset, int limit, SiteType siteType, String siteName, String pageName, String pageTitle)
    {
       try
       {
@@ -139,7 +139,7 @@ public class PageServiceWrapper implements PageService
       {
          log.warn("Error during sync of JTA transaction", e);
       }
-      return service.findPages(offset, limit, siteType, siteName, pageName, title);
+      return service.findPages(offset, limit, siteType, siteName, pageName, pageTitle);
    }
 
    private void notify(String name, PageKey key)

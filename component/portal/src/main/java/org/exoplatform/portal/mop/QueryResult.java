@@ -21,7 +21,11 @@ package org.exoplatform.portal.mop;
 
 import java.util.Iterator;
 
-/** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
+/**
+ * A query result.
+ *
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ */
 public final class QueryResult<T> implements Iterable<T>
 {
 
