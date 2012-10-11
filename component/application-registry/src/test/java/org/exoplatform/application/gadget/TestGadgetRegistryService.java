@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -19,6 +19,7 @@
 
 package org.exoplatform.application.gadget;
 
+import org.apache.shindig.gadgets.spec.ModulePrefs;
 import org.chromattic.ext.ntdef.NTFolder;
 import org.chromattic.ext.ntdef.Resource;
 import org.exoplatform.application.AbstractApplicationRegistryTest;
@@ -31,7 +32,6 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.gatein.common.io.IOTools;
 import org.gatein.common.net.URLTools;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,9 +53,9 @@ public class TestGadgetRegistryService extends AbstractApplicationRegistryTest
    public void setUp() throws Exception
    {
       PortalContainer container = PortalContainer.getInstance();
-      service_ = (GadgetRegistryServiceImpl) container.getComponentInstanceOfType(GadgetRegistryService.class);
-      chromatticManager = (ChromatticManager) container.getComponentInstanceOfType(ChromatticManager.class);
-      configurationManager = (ConfigurationManager) container.getComponentInstanceOfType(ConfigurationManager.class);
+      service_ = (GadgetRegistryServiceImpl)container.getComponentInstanceOfType(GadgetRegistryService.class);
+      chromatticManager = (ChromatticManager)container.getComponentInstanceOfType(ChromatticManager.class);
+      configurationManager = (ConfigurationManager)container.getComponentInstanceOfType(ConfigurationManager.class);
       begin();
    }
 
@@ -71,12 +71,28 @@ public class TestGadgetRegistryService extends AbstractApplicationRegistryTest
       String gadgetName = "local_test";
       TestGadgetImporter importer = new TestGadgetImporter(configurationManager, gadgetName, "org/exoplatform/application/gadgets/weather.xml", true);
       importer.doImport();
+
+      GadgetDefinition def = service_.getRegistry().getGadget(gadgetName);
+      assertNotNull(def);
+      //No metadata is persisted in JCR
+      assertNull(def.getDescription());
+      assertNull(def.getTitle());
+      assertNull(def.getThumbnail());
+      assertNull(def.getReferenceURL());
+
       assertEquals(1, service_.getAllGadgets().size());
-      assertEquals(gadgetName, service_.getGadget(gadgetName).getName());
+      Gadget gadget = service_.getGadget(gadgetName);
+      assertNotNull(gadget);
+      assertEquals(gadgetName, gadget.getName());
+      assertEquals("__MSG_description__", gadget.getDescription());
+      assertEquals("__MSG_gTitle__", gadget.getTitle());
+      assertEquals("http://www.labpixies.com/campaigns/weather/images/thumbnail.jpg", gadget.getThumbnail());
+      assertEquals("http://www.labpixies.com", gadget.getReferenceUrl());
+
       service_.removeGadget(gadgetName);
       assertNull(service_.getGadget(gadgetName));
    }
-   
+
    public void testRemoteGadget() throws Exception
    {
       String gadgetName = "remote_test";
@@ -95,7 +111,7 @@ public class TestGadgetRegistryService extends AbstractApplicationRegistryTest
       private ConfigurationManager configurationManager;
 
       protected TestGadgetImporter(ConfigurationManager configurationManager, String gadgetName, String gadgetURI,
-            boolean local)
+                                   boolean local)
       {
          super(gadgetName, gadgetURI);
          this.local_ = local;
@@ -147,18 +163,51 @@ public class TestGadgetRegistryService extends AbstractApplicationRegistryTest
             byte[] content = getGadgetBytes(gadgetURI);
             if (content != null)
             {
-               LocalGadgetData data = (LocalGadgetData) def.getData();
-               data.setFileName(gadgetURI);
+               LocalGadgetData data = (LocalGadgetData)def.getData();
+               String fileName = getName(gadgetURI);
+               data.setFileName(fileName);
                NTFolder folder = data.getResources();
                String encoding = EncodingDetector.detect(new ByteArrayInputStream(content));
-               folder.createFile(getName(gadgetURI), new Resource(LocalGadgetData.GADGET_MIME_TYPE, encoding, content));
+               folder.createFile(fileName, new Resource(LocalGadgetData.GADGET_MIME_TYPE, encoding, content));
             }
          }
          else
          {
-            RemoteGadgetData data = (RemoteGadgetData) def.getData();
+            RemoteGadgetData data = (RemoteGadgetData)def.getData();
             data.setURL(gadgetURI);
          }
+      }
+
+      @Override
+      protected void processMetadata(ModulePrefs prefs, GadgetDefinition def) throws Exception
+      {
+         if (!def.isLocal())
+         {
+            String gadgetName = def.getName();
+            String description = prefs.getDescription();
+            String thumbnail = prefs.getThumbnail().toString();
+            String title = getGadgetTitle(prefs, gadgetName);
+            String referenceURL = prefs.getTitleUrl().toString();
+
+            def.setDescription(description);
+            def.setThumbnail(thumbnail);
+            def.setTitle(title);
+            def.setReferenceURL(referenceURL);
+         }
+      }
+
+      private String getGadgetTitle(ModulePrefs prefs, String defaultValue)
+      {
+         String title = prefs.getDirectoryTitle();
+         if (title == null || title.trim().length() < 1)
+         {
+            title = prefs.getTitle();
+         }
+         if (title == null || title.trim().length() < 1)
+         {
+            return defaultValue;
+         }
+         return title;
       }
 
       private String getName(String resourcePath) throws IOException

@@ -18,6 +18,7 @@
  */
 package org.exoplatform.application.gadget;
 
+import org.apache.shindig.gadgets.spec.ModulePrefs;
 import org.chromattic.ext.ntdef.NTFolder;
 import org.chromattic.ext.ntdef.Resource;
 import org.exoplatform.application.gadget.impl.GadgetDefinition;
@@ -25,12 +26,11 @@ import org.exoplatform.application.gadget.impl.LocalGadgetData;
 import org.gatein.common.io.IOTools;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-
-import javax.servlet.ServletContext;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Set;
+import javax.servlet.ServletContext;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -47,7 +47,7 @@ public class ServletLocalImporter extends GadgetImporter
 
    /** Used temporarily when importing resources. */
    private NTFolder folder;
-   
+
    private GadgetRegistryService gadgetService;
 
    public ServletLocalImporter(
@@ -73,6 +73,12 @@ public class ServletLocalImporter extends GadgetImporter
    protected String getGadgetURL() throws Exception
    {
       return gadgetService.getGadgetURL(getGadgetName());
+   }
+
+   @Override
+   protected void processMetadata(ModulePrefs prefs, GadgetDefinition def) throws Exception
+   {
+      //We store no metadata for local gadget
    }
 
    @Override
@@ -120,7 +126,8 @@ public class ServletLocalImporter extends GadgetImporter
             }
 
             // Correct mime type for gadgets
-            if (resourcePath.equals(uri)) {
+            if (resourcePath.equals(uri))
+            {
                mimeType = LocalGadgetData.GADGET_MIME_TYPE;
             }
 

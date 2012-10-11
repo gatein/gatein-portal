@@ -19,10 +19,10 @@
 
 package org.exoplatform.application.gadget;
 
+import org.apache.shindig.gadgets.spec.ModulePrefs;
 import org.exoplatform.application.gadget.impl.GadgetDefinition;
 import org.exoplatform.application.gadget.impl.RemoteGadgetData;
 import org.gatein.common.net.URLTools;
-
 import java.io.IOException;
 import java.net.URL;
 
@@ -61,5 +61,38 @@ public class RemoteImporter extends GadgetImporter
 
       // Set remote URL
       data.setURL(gadgetURI);
+   }
+
+   @Override
+   protected void processMetadata(ModulePrefs prefs, GadgetDefinition def) throws Exception
+   {
+      String gadgetName = def.getName();
+      String description = prefs.getDescription();
+      String thumbnail = prefs.getThumbnail().toString();
+      String title = getGadgetTitle(prefs, gadgetName);
+      String referenceURL = prefs.getTitleUrl().toString();
+
+      log.info("Importing gadget name=" + gadgetName + " description=" + description + " thumbnail=" + thumbnail + " title=" +
+         thumbnail + " title=" + title);
+
+      def.setDescription(description);
+      def.setThumbnail(thumbnail);
+      def.setTitle(title);
+      def.setReferenceURL(referenceURL);
+
+   }
+
+   private String getGadgetTitle(ModulePrefs prefs, String defaultValue)
+   {
+      String title = prefs.getDirectoryTitle();
+      if (title == null || title.trim().length() < 1)
+      {
+         title = prefs.getTitle();
+      }
+      if (title == null || title.trim().length() < 1)
+      {
+         return defaultValue;
+      }
+      return title;
    }
 }

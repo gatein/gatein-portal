@@ -25,7 +25,6 @@ import org.apache.shindig.gadgets.spec.ModulePrefs;
 import org.exoplatform.application.gadget.impl.GadgetDefinition;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
@@ -37,7 +36,7 @@ public abstract class GadgetImporter
 {
 
    /** . */
-   private static final Logger log = LoggerFactory.getLogger(GadgetImporter.class);
+   protected static final Logger log = LoggerFactory.getLogger(GadgetImporter.class);
 
    /** The gadget name as seen by GateIn. */
    private String gadgetName;
@@ -69,19 +68,7 @@ public abstract class GadgetImporter
 
    protected abstract void process(String gadgetURI, GadgetDefinition def) throws Exception;
 
-   private String getGadgetTitle(ModulePrefs prefs, String defaultValue)
-   {
-      String title = prefs.getDirectoryTitle();
-      if (title == null || title.trim().length() < 1)
-      {
-         title = prefs.getTitle();
-      }
-      if (title == null || title.trim().length() < 1)
-      {
-         return defaultValue;
-      }
-      return title;
-   }
+   protected abstract void processMetadata(ModulePrefs prefs, GadgetDefinition def) throws Exception;
 
    public void doImport(GadgetDefinition def) throws Exception
    {
@@ -92,37 +79,16 @@ public abstract class GadgetImporter
          log.error("Cannot import gadget " + gadgetURI + " because its data could not be found");
          throw new IOException();
       }
-      
+
       //
       process(gadgetURI, def);
 
-      // Get encoding
       String encoding = EncodingDetector.detect(new ByteArrayInputStream(bytes));
-
-      //
       String gadget = new String(bytes, encoding);
-
-      //
       String gadgetURL = getGadgetURL();
       GadgetSpec spec = new GadgetSpec(Uri.parse(gadgetURL), gadget);
       ModulePrefs prefs = spec.getModulePrefs();
-
-
-      //
-      String description = prefs.getDescription();
-      String thumbnail = prefs.getThumbnail().toString();
-      String title = getGadgetTitle(prefs, gadgetName);
-      String referenceURL = prefs.getTitleUrl().toString();
-
-      //
-      log.info("Importing gadget name=" + gadgetName + " description=" + description + " thumbnail=" + thumbnail + " title=" +
-               thumbnail + " title=" + title);
-
-      //
-      def.setDescription(description);
-      def.setThumbnail(thumbnail);
-      def.setTitle(title);
-      def.setReferenceURL(referenceURL);
+      processMetadata(prefs, def);
    }
 
    @Override

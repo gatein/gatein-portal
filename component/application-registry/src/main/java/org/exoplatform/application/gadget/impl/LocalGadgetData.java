@@ -18,10 +18,6 @@
  */
 package org.exoplatform.application.gadget.impl;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.util.Date;
-
 import org.apache.shindig.common.uri.Uri;
 import org.apache.shindig.gadgets.spec.GadgetSpec;
 import org.apache.shindig.gadgets.spec.ModulePrefs;
@@ -39,6 +35,9 @@ import org.chromattic.ext.ntdef.NTFile;
 import org.chromattic.ext.ntdef.NTFolder;
 import org.chromattic.ext.ntdef.Resource;
 import org.exoplatform.commons.xml.XMLDeclarationParser;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.util.Date;
 
 
 /**
@@ -72,7 +71,8 @@ public abstract class LocalGadgetData extends GadgetData
    @Path
    public abstract String getPath();
 
-   private NTFile getGadgetContent() {
+   private NTFile getGadgetContent()
+   {
       String fileName = getFileName();
       NTFolder resources = getResources();
       return resources.getFile(fileName);
@@ -86,12 +86,13 @@ public abstract class LocalGadgetData extends GadgetData
       // Get the related content
       GadgetSpec spec = new GadgetSpec(Uri.parse("http://www.gatein.org"), gadgetXML);
       ModulePrefs prefs = spec.getModulePrefs();
-      
+
       // detect the encoding declared in the XML source
       // note that we do not need to detect the encoding of gadgetXML because 
       // it is a String and not a stream 
       String encoding = new XMLDeclarationParser(gadgetXML).parse().get(XMLDeclarationParser.ENCODING);
-      if (encoding == null || !Charset.isSupported(encoding)) {
+      if (encoding == null || !Charset.isSupported(encoding))
+      {
          throw new UnsupportedEncodingException(encoding);
       }
       // get the bytes in the declared encoding
@@ -100,7 +101,7 @@ public abstract class LocalGadgetData extends GadgetData
       // Update def
       def.setDescription(prefs.getDescription());
       def.setThumbnail(prefs.getThumbnail().toString()); // Do something better than that
-      def.setTitle(getGadgetTitle(prefs, def.getName()));
+      def.setTitle(prefs.getTitle());
       def.setReferenceURL(prefs.getTitleUrl().toString());
 
       // Update content

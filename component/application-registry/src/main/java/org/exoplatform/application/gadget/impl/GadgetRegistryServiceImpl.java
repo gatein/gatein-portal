@@ -18,12 +18,15 @@
  */
 package org.exoplatform.application.gadget.impl;
 
+import org.apache.shindig.common.uri.Uri;
+import org.apache.shindig.gadgets.spec.GadgetSpec;
+import org.apache.shindig.gadgets.spec.ModulePrefs;
 import org.chromattic.api.Chromattic;
 import org.chromattic.api.ChromatticSession;
 import org.chromattic.ext.ntdef.Resource;
 import org.exoplatform.application.gadget.Gadget;
-import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.gadget.GadgetImporter;
+import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.registry.impl.ApplicationRegistryChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticLifeCycle;
 import org.exoplatform.commons.chromattic.ChromatticManager;
@@ -34,7 +37,6 @@ import org.exoplatform.container.xml.PropertiesParam;
 import org.exoplatform.container.xml.ValueParam;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -55,13 +57,7 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
    private static final String DEFAULT_DEVELOPER_GROUP = "/platform/administrators";
 
    /** . */
-   private ChromatticManager chromatticManager;
-
-   /** . */
    private ChromatticLifeCycle chromatticLifeCycle;
-
-   /** . */
-   private String gadgetDeveloperGroup;
 
    /** . */
    private String country;
@@ -111,8 +107,6 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
       this.language = language;
       this.moduleId = moduleId;
       this.hostName = hostName;
-      this.gadgetDeveloperGroup = gadgetDeveloperGroup;
-      this.chromatticManager = chromatticManager;
       this.chromatticLifeCycle = lifeCycle;
    }
 
@@ -212,8 +206,13 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
          }
       }
 
-      //
-      saveGadget(def, gadget);
+      if (!gadget.isLocal())
+      {
+         def.setDescription(gadget.getDescription());
+         def.setReferenceURL(gadget.getReferenceUrl());
+         def.setTitle(gadget.getTitle());
+         def.setThumbnail(gadget.getThumbnail());
+      }
    }
 
    public void removeGadget(String name) throws Exception
@@ -236,14 +235,14 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
       //
       registry.removeGadget(name);
    }
-   
+
    public String getGadgetURL(String gadgetName)
    {
       String url;
       GadgetData data = this.getRegistry().getGadget(gadgetName).getData();
       if (data instanceof LocalGadgetData)
       {
-         LocalGadgetData localData = (LocalGadgetData) data;
+         LocalGadgetData localData = (LocalGadgetData)data;
          url = "/" + PortalContainer.getCurrentRestContextName() + "/" + getJCRGadgetURL(localData);
       }
       else if (data instanceof RemoteGadgetData)
@@ -255,50 +254,67 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
       {
          throw new IllegalStateException("Gadget has to be instance of LocalGadgetData or RemoteGadgetData");
       }
-      
+
       return url;
    }
-   
+
    private String getJCRGadgetURL(LocalGadgetData data)
    {
       return "jcr/" + chromatticLifeCycle.getRepositoryName() + "/" + chromatticLifeCycle.getWorkspaceName()
-            + data.getPath() + "/app:resources/" + data.getFileName();
-   }
-
-   private void saveGadget(GadgetDefinition def, Gadget gadget)
-   {
-      def.setDescription(gadget.getDescription());
-      def.setReferenceURL(gadget.getReferenceUrl());
-      def.setTitle(gadget.getTitle());
-      def.setThumbnail(gadget.getThumbnail());
+         + data.getPath() + "/app:resources/" + data.getFileName();
    }
 
    private Gadget loadGadget(GadgetDefinition def)
    {
       GadgetData data = def.getData();
+      Gadget gadget = new Gadget();
 
       //
-      String url;
       if (data instanceof LocalGadgetData)
       {
-         LocalGadgetData localData = (LocalGadgetData)data;
-         url = getJCRGadgetURL(localData);
+         try
+         {
+            String gadgetName = def.getName();
+            LocalGadgetData localData = (LocalGadgetData)data;
+            Resource resource = localData.getResources().getFile(localData.getFileName()).getContentResource();
+            String content = new String(resource.getData(), resource.getEncoding());
+            GadgetSpec gadgetSpec = new GadgetSpec(Uri.parse(getGadgetURL(gadgetName)), content);
+            ModulePrefs prefs = gadgetSpec.getModulePrefs();
+
+            String title = prefs.getDirectoryTitle();
+            if (title == null || title.trim().length() < 1)
+            {
+               title = prefs.getTitle();
+            }
+            if (title == null || title.trim().length() < 1)
+            {
+               title = gadgetName;
+            }
+            gadget.setName(def.getName());
+            gadget.setDescription(prefs.getDescription());
+            gadget.setLocal(true);
+            gadget.setTitle(title);
+            gadget.setReferenceUrl(prefs.getTitleUrl().toString());
+            gadget.setThumbnail(prefs.getThumbnail().toString());
+            gadget.setUrl(getJCRGadgetURL(localData));
+         }
+         catch (Exception ex)
+         {
+            log.error("Error while loading the content of local gadget " + def.getName(), ex);
+         }
       }
       else
       {
          RemoteGadgetData remoteData = (RemoteGadgetData)data;
-         url = remoteData.getURL();
+         gadget.setName(def.getName());
+         gadget.setDescription(def.getDescription());
+         gadget.setLocal(false);
+         gadget.setTitle(def.getTitle());
+         gadget.setReferenceUrl(def.getReferenceURL());
+         gadget.setThumbnail(def.getThumbnail());
+         gadget.setUrl(remoteData.getURL());
       }
-
       //
-      Gadget gadget = new Gadget();
-      gadget.setName(def.getName());
-      gadget.setDescription(def.getDescription());
-      gadget.setLocal(def.isLocal());
-      gadget.setTitle(def.getTitle());
-      gadget.setReferenceUrl(def.getReferenceURL());
-      gadget.setThumbnail(def.getThumbnail());
-      gadget.setUrl(url);
       return gadget;
    }
 
@@ -332,7 +348,7 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
 
       /** . */
       private final GadgetImporter importer;
-      
+
       private DeployTask(GadgetImporter importer)
       {
          this.importer = importer;
@@ -343,7 +359,7 @@ public class GadgetRegistryServiceImpl implements GadgetRegistryService
          chromatticLifeCycle.openContext();
          boolean done = true;
          try
-         {            
+         {
             if (getRegistry().getGadget(importer.getGadgetName()) == null)
             {
                GadgetDefinition def = getRegistry().addGadget(importer.getGadgetName());

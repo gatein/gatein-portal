@@ -18,15 +18,10 @@
  */
 package org.exoplatform.application.gadget.impl;
 
-import org.apache.shindig.common.uri.Uri;
-import org.apache.shindig.gadgets.spec.GadgetSpec;
-import org.apache.shindig.gadgets.spec.ModulePrefs;
-import org.chromattic.ext.ntdef.Resource;
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.gadget.Source;
 import org.exoplatform.application.gadget.SourceStorage;
-
 import java.util.Calendar;
 
 /**
@@ -98,22 +93,6 @@ public class SourceStorageImpl implements SourceStorage
       GadgetData data = def.getData();
       if (data instanceof LocalGadgetData)
       {
-         GadgetSpec spec = new GadgetSpec(Uri.parse("http://www.gatein.org"), source.getTextContent());
-         ModulePrefs prefs = spec.getModulePrefs();
-
-         //
-         String description = prefs.getDescription();
-         String thumbnail = prefs.getThumbnail().toString();
-         String title = getGadgetTitle(prefs, gadget.getName());
-         String referenceURL = prefs.getTitleUrl().toString();
-
-         // Update state from XML
-         def.setDescription(description);
-         def.setThumbnail(thumbnail); // Do something better than that
-         def.setTitle(title);
-         def.setReferenceURL(referenceURL);
-
-         // Save text content
          LocalGadgetData localData = (LocalGadgetData)data;
          localData.setSource(source.getTextContent());
       }
@@ -121,20 +100,6 @@ public class SourceStorageImpl implements SourceStorage
       {
          throw new IllegalArgumentException("The provided gadget is remote");
       }
-   }
-
-   private String getGadgetTitle(ModulePrefs prefs, String defaultValue)
-   {
-      String title = prefs.getDirectoryTitle();
-      if (title == null || title.trim().length() < 1)
-      {
-         title = prefs.getTitle();
-      }
-      if (title == null || title.trim().length() < 1)
-      {
-         return defaultValue;
-      }
-      return title;
    }
 
    public void removeSource(String sourcePath) throws Exception
