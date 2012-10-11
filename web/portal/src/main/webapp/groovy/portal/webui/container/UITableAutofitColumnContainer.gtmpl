@@ -19,7 +19,7 @@
 	if (uiPortalApp.isEditing())
 	{
 		JavascriptManager jsManager = rcontext.getJavascriptManager();
-	  	jsManager.require("SHARED/portal", "portal").require("SHARED/portalDragDrop", "portalDragDrop");
+	  	jsManager.require("SHARED/portal", "portal").require("SHARED/portalDragDrop", "portalDragDrop")
 	  				.addScripts("portalDragDrop.init(['UIContainer']);")
 	  				.addScripts("portal.UIPortal.initMouseHover('" + uicomponent.id + "');");
 %>  
