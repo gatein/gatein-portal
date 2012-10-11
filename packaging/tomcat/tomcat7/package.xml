@@ -70,8 +70,10 @@
       </patternset>
     </unzip>
 
+    <!-- Create portal.xml to fix issue GTNPORTAL-2651-->
+    <copy file="{maven.project.build.directory}/../../../../web/portal/src/main/webapp/META-INF/context.xml" tofile="${maven.project.build.directory}/tomcat/conf/Catalina/localhost/portal.xml"/>
 
-    <!-- File permissions -->
+     <!-- File permissions -->
     <!-- Excluded due to ARG_MAX limitation on Mac OS X -->
     <!--chmod perm="0644" type="file" dir="${project.build.directory}/tomcat" excludes="**/*.sh"/-->
     <chmod perm="0755" type="file" dir="${maven.project.build.directory}/tomcat" includes="**/*.sh"/>
