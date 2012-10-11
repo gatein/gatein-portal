@@ -19,6 +19,9 @@
 
 package org.exoplatform.portal.application;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.ApplicationLifecycle;
@@ -26,9 +29,6 @@ import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.web.login.LogoutControl;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.gatein.wci.ServletContainerFactory;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
@@ -57,6 +57,10 @@ public class PortalLogoutLifecycle implements ApplicationLifecycle<WebuiRequestC
          PortalRequestContext prContext = Util.getPortalRequestContext();
          HttpServletRequest request = prContext.getRequest();
          HttpServletResponse response = prContext.getResponse();
+         
+         // TODO Remove once https://issues.jboss.org/browse/AS7-5728 has been resolved
+         request.getSession().invalidate();
+         
          ServletContainerFactory.getServletContainer().logout(request, response);
       }
    }
