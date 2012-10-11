@@ -344,15 +344,16 @@ public class UITabPaneDashboard extends UIContainer
          {
             return null;
          }
-         UserNode renamedNode = parentNode.getChild(nodeName);
-         renamedNode.setLabel(newNodeLabel);
 
          String newNodeName = buildName(newNodeLabel);
          if (parentNode.getChild(newNodeName) != null)
          {
             newNodeName = newNodeName + "_" + System.currentTimeMillis();
          }
+         
+         UserNode renamedNode = parentNode.getChild(nodeName);
          renamedNode.setName(newNodeName);
+         renamedNode.setLabel(newNodeLabel);
 
          if (renamedNode.getPageRef() != null)
          {
