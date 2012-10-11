@@ -319,13 +319,13 @@ abstract public class UIComponent
       //
       if (ajax)
       {
-         return urlBuilder.createAjaxURL(this, event.getName(), confirm, beanId, params);
+         return urlBuilder.createAjaxURL(this, event.getName(), confirm, beanId, params, event.isCsrfCheck());
       }
       else
       {
          try
          {
-            return urlBuilder.createURL(this, event.getName(), confirm, beanId, params);
+            return urlBuilder.createURL(this, event.getName(), confirm, beanId, params, event.isCsrfCheck());
          }
          catch (Exception e)
          {
@@ -352,6 +352,8 @@ abstract public class UIComponent
       {
          return;
       }
+      event.setCsrfCheck(econfig.isCsrfCheck());
+      
       Phase executionPhase = econfig.getExecutionPhase();
       if (executionPhase == phase || executionPhase == Event.Phase.ANY)
       {
@@ -461,6 +463,7 @@ abstract public class UIComponent
          Event<UIComponent> event = new Event<UIComponent>(this, name, context);
          event.setExecutionPhase(phase);
          event.setEventListeners(econfig.getCachedEventListeners());
+         event.setCsrfCheck(econfig.isCsrfCheck());
          return event;
       }
       return null;

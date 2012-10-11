@@ -19,6 +19,13 @@
 
 package org.exoplatform.portal.url;
 
+import javax.servlet.http.HttpServletRequest;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+
 import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.portal.application.PortalRequestHandler;
 import org.exoplatform.portal.mop.SiteKey;
@@ -28,13 +35,8 @@ import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.URIWriter;
 import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.URLContext;
+import org.exoplatform.webui.CSRFTokenUtil;
 import org.gatein.common.io.UndeclaredIOException;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -187,6 +189,21 @@ public class PortalURLContext implements URLContext
             {
                writer.appendQueryParameter(entry.getKey(), value);
             }
+         }
+      }
+      
+      //CSRF token
+      if (url.isCSRFCheck())
+      {
+         String token;
+         try
+         {
+            token = CSRFTokenUtil.getToken();
+            writer.appendQueryParameter(CSRFTokenUtil.CSRF_TOKEN, token);
+         }
+         catch (Exception e)
+         {            
+            throw new IllegalStateException("Can't add csrf token to url", e);
          }
       }
 

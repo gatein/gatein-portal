@@ -19,6 +19,7 @@
 
 package org.exoplatform.webui.form;
 
+import org.exoplatform.webui.CSRFTokenUtil;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
@@ -187,7 +188,10 @@ public class UIForm extends UIContainer
          writer.append(" enctype=\"multipart/form-data\"");
       }
       writer.append(" method=\"post\">");
-      writer.append("<div><input type=\"hidden\" name=\"").append(ACTION).append("\" value=\"\"/></div>");
+      writer.append("<div><input type=\"hidden\" name=\"").append(ACTION).append("\" value=\"\"/>");
+      writer.append("<input type=\"hidden\" name=\"").append(CSRFTokenUtil.CSRF_TOKEN).append("\" value=\"");
+      writer.append(CSRFTokenUtil.getToken());
+      writer.append("\"/></div>");
    }
 
    @Override

@@ -43,6 +43,9 @@ public abstract class PortalURL<R, U extends PortalURL<R, U>>
 
    /** . */
    private boolean authorityUse;
+   
+   /** . */
+   private boolean csrfCheck;
 
    /** . */
    protected Boolean ajax;
@@ -240,6 +243,16 @@ public abstract class PortalURL<R, U extends PortalURL<R, U>>
    public void setLocale(Locale locale)
    {
       this.locale = locale;
+   }
+
+   public boolean isCSRFCheck()
+   {
+      return csrfCheck;
+   }
+
+   public void setCSRFCheck(boolean csrfCheck)
+   {
+      this.csrfCheck = csrfCheck;
    }
 
    /**

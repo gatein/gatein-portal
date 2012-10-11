@@ -35,27 +35,29 @@ public class PortletURLBuilder extends URLBuilder<UIComponent>
 
    /** . */
    private final PortletURL url;
+   
+   public static final String CSRF_PROP = "gtn:csrfCheck";
 
    public PortletURLBuilder(PortletURL url)
    {
       this.url = url;
    }
 
-   public String createAjaxURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
+   public String createAjaxURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params, boolean csrfCheck)
    {
-      return createURL(true, confirm, targetComponent, action, targetBeanId, params);
+      return createURL(true, confirm, targetComponent, action, targetBeanId, params, csrfCheck);
    }
 
-   public String createURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
+   public String createURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params, boolean csrfCheck)
    {
-      return createURL(false, confirm, targetComponent, action, targetBeanId, params);
+      return createURL(false, confirm, targetComponent, action, targetBeanId, params, csrfCheck);
    }
 
    private String createURL(
       boolean ajax,
       String confirm,
       UIComponent targetComponent, String action, String targetBeanId,
-      Parameter[] params)
+      Parameter[] params, boolean csrfCheck)
    {
       // Clear URL
       url.getParameterMap().clear();
@@ -99,6 +101,12 @@ public class PortletURLBuilder extends URLBuilder<UIComponent>
       }
 
       //
+      if (csrfCheck)
+      {
+         url.setProperty(CSRF_PROP, Boolean.TRUE.toString());
+      }      
+      
       return url.toString();
+
    }
 }

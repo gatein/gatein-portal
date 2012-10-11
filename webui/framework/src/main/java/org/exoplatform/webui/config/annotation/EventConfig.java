@@ -40,6 +40,8 @@ public @interface EventConfig {
    Class[] listeners();
 
    Phase phase() default Phase.PROCESS;
+   
+   boolean csrfCheck() default false;
 
    ParamConfig[] initParams() default {};
 }

@@ -374,6 +374,7 @@ public class ConfigurationManager
          event.setName(name);
       }
       event.setListeners(listeners);
+      event.setCsrfCheck(annotation.csrfCheck());
       return event;
    }
 

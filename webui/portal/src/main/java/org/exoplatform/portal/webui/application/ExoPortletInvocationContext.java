@@ -24,6 +24,7 @@ import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.web.url.MimeType;
 import org.exoplatform.web.url.PortalURL;
+import org.exoplatform.webui.application.portlet.PortletURLBuilder;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.url.ComponentURL;
 import org.gatein.common.logging.Logger;
@@ -276,6 +277,10 @@ class ExoPortletInvocationContext extends AbstractPortletInvocationContext
 
       // Confirm messsage
       url.setConfirm(props.get("gtn:confirm"));
+      
+      //
+      String csrfCheck = props.get(PortletURLBuilder.CSRF_PROP);
+      url.setCSRFCheck(Boolean.parseBoolean(csrfCheck));
 
       //
       MimeType mimeType = Boolean.TRUE.equals(format.getWantEscapeXML()) ? MimeType.XHTML : MimeType.PLAIN;

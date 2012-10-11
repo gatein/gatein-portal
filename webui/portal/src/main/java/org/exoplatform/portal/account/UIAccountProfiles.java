@@ -53,7 +53,7 @@ import org.exoplatform.webui.form.validator.StringLengthValidator;
 
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl",
 
-events = {@EventConfig(listeners = UIAccountProfiles.SaveActionListener.class),
+events = {@EventConfig(listeners = UIAccountProfiles.SaveActionListener.class, csrfCheck = true),
    @EventConfig(listeners = UIAccountProfiles.ResetActionListener.class, phase = Phase.DECODE)})
 public class UIAccountProfiles extends UIForm
 {

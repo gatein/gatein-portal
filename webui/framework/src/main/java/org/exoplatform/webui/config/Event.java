@@ -39,6 +39,8 @@ public class Event
    private InitParams initParams;
 
    private ArrayList<String> listeners;
+   
+   private boolean csrfCheck;
 
    transient private List<EventListener> eventListeners_;
 
@@ -124,6 +126,16 @@ public class Event
    public void setCachedEventListeners(List<EventListener> list)
    {
       eventListeners_ = list;
+   }
+
+   public boolean isCsrfCheck()
+   {
+      return csrfCheck;
+   }
+
+   public void setCsrfCheck(boolean csrfCheck)
+   {
+      this.csrfCheck = csrfCheck;
    }
 
 }

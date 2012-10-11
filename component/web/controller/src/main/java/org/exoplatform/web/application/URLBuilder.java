@@ -78,20 +78,20 @@ abstract public class URLBuilder<T>
 
    public final String createURL(T targetComponent, String action, String targetBeanId)
    {
-      return createURL(targetComponent, action, null, targetBeanId, (Parameter[])null);
+      return createURL(targetComponent, action, null, targetBeanId, (Parameter[])null, false);
    }
 
    public final String createAjaxURL(T targetComponent, String action, String targetBeanId)
    {
-      return createAjaxURL(targetComponent, action, null, targetBeanId, (Parameter[])null);
+      return createAjaxURL(targetComponent, action, null, targetBeanId, (Parameter[])null, false);
    }
 
    public final String createAjaxURL(T targetComponent, String action, String confirm, String targetBeanId)
    {
-      return createAjaxURL(targetComponent, action, confirm, targetBeanId, (Parameter[])null);
+      return createAjaxURL(targetComponent, action, confirm, targetBeanId, (Parameter[])null, false);
    }
 
-   public abstract String createAjaxURL(T targetComponent, String action, String confirm, String targetBeanId, Parameter[] params);
+   public abstract String createAjaxURL(T targetComponent, String action, String confirm, String targetBeanId, Parameter[] params, boolean csrfCheck);
 
-   public abstract String createURL(T targetComponent, String action, String confirm, String targetBeanId, Parameter[] params);
+   public abstract String createURL(T targetComponent, String action, String confirm, String targetBeanId, Parameter[] params, boolean csrfCheck);
 }

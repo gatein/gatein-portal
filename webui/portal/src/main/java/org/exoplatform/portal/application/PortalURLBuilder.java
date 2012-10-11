@@ -46,18 +46,18 @@ public class PortalURLBuilder extends URLBuilder<UIComponent>
    }
 
    @Override
-   public String createAjaxURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
+   public String createAjaxURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params, boolean csrfCheck)
    {
-      return createURL(true, targetComponent, action, confirm, targetBeanId, params);
+      return createURL(true, targetComponent, action, confirm, targetBeanId, params, csrfCheck);
    }
 
    @Override
-   public String createURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
+   public String createURL(UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params, boolean csrfCheck)
    {
-      return createURL(false, targetComponent, action, confirm, targetBeanId, params);
+      return createURL(false, targetComponent, action, confirm, targetBeanId, params, csrfCheck);
    }
 
-   private String createURL(boolean ajax, UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params)
+   private String createURL(boolean ajax, UIComponent targetComponent, String action, String confirm, String targetBeanId, Parameter[] params, boolean csrfCheck)
    {
       url.reset();
 
@@ -88,6 +88,8 @@ public class PortalURLBuilder extends URLBuilder<UIComponent>
       {
          url.setLocale(locale);
       }
+      
+      url.setCSRFCheck(csrfCheck);
 
       //
       return url.toString();

@@ -19,9 +19,12 @@
 
 package org.exoplatform.webui.event;
 
-import org.exoplatform.webui.application.WebuiRequestContext;
-
 import java.util.List;
+
+import org.exoplatform.services.log.ExoLogger;
+import org.exoplatform.services.log.Log;
+import org.exoplatform.webui.CSRFTokenUtil;
+import org.exoplatform.webui.application.WebuiRequestContext;
 
 public class Event<T>
 {
@@ -35,6 +38,10 @@ public class Event<T>
    private WebuiRequestContext context_;
 
    private List<EventListener> listeners_;
+   
+   private boolean csrfCheck;
+   
+   private static final Log log = ExoLogger.getLogger(Event.class.getName());
 
    public Event(T source, String name, WebuiRequestContext context)
    {
@@ -83,10 +90,28 @@ public class Event<T>
       listeners_ = listeners;
    }
 
-   final public void broadcast() throws Exception
+   public boolean isCsrfCheck()
    {
-      for (EventListener<T> listener : listeners_)
-         listener.execute(this);
+      return csrfCheck;
+   }
+
+   public void setCsrfCheck(boolean csrfCheck)
+   {
+      this.csrfCheck = csrfCheck;
+   }
+
+   final public void broadcast() throws Exception
+   {      
+      if (isCsrfCheck() && !CSRFTokenUtil.check())
+      {
+         getRequestContext().setResponseComplete(true);
+         log.error("csrfToken is lost or this is an csrf attack");
+      }
+      else
+      {
+         for (EventListener<T> listener : listeners_)
+            listener.execute(this);         
+      }
    }
 
    static public enum Phase {
