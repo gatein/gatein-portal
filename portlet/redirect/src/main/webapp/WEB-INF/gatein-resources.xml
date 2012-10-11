@@ -11,11 +11,4 @@
     <css-path>/css/DefaultStylesheet.css</css-path>
   </portlet-skin>
 
-  <portlet-skin>
-    <application-name>redirect-portlet</application-name>
-    <portlet-name>SiteRedirectPortlet</portlet-name>
-    <skin-name>SimpleSkin</skin-name>
-    <css-path>/css/SimpleSkinStylesheet.css</css-path>
-  </portlet-skin>
-
 </gatein-resources>
