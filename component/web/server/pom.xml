@@ -43,9 +43,5 @@
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.component.web.controller</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.gatein.captcha</groupId>
-      <artifactId>simplecaptcha</artifactId>
-    </dependency>
   </dependencies>
 </project>
