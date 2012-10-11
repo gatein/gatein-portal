@@ -3,7 +3,6 @@
 <project name="package" xmlns:mvn="http://maven.apache.org/POM/4.0.0">
 
    <property name="samples.dir" value="${maven.project.basedir}/src/main/resources/${version.jboss.as}/samples" />
-   <property name="cluster.dir" value="${maven.project.basedir}/src/main/resources/${version.jboss.as}/cluster" />
 
    <target name="prepare" depends="prepare-server-dir,package">
    </target>
@@ -31,24 +30,6 @@
 
       <!-- Extract downloaded JBossAS to servers dir -->
       <unzip src="${jbossas.zip}" dest="${servers.dir}" overwrite="false" />
-   </target>
-
-   <target name="package-cluster-checkdir">
-      <condition property="pkg.cluster.hasdir">
-         <available file="${cluster.dir}" type="dir"/>
-      </condition>
-   </target>
-
-   <target name="package-cluster-copy" depends="package-cluster-checkdir" if="pkg.cluster.hasdir">
-      <!-- Copy version specific bin, modules, configuration files -->
-      <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
-         <fileset dir="${cluster.dir}" />
-      </copy>
-   </target>
-
-   <target name="package-cluster" if="pkg.cluster">
-      <!-- Package cluster specific configuration if requested -->
-      <antcall target="package-cluster-copy" inheritAll="true" inheritRefs="true"/>
    </target>
 
    <target name="package-samples-checkdir">
@@ -193,9 +174,6 @@
 
       <!-- Package samples specific configuration if requested -->
       <antcall target="package-samples" inheritAll="true" inheritRefs="true"/>
-
-      <!-- Package cluster specific configuration if requested -->
-      <antcall target="package-cluster" inheritAll="true" inheritRefs="true"/>
 
       <!-- File permissions -->
       <!-- Excluded due to ARG_MAX limitation on Mac OS X -->

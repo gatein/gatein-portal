@@ -29,6 +29,11 @@
         <extension module="org.jboss.as.weld"/>
         <extension module="org.gatein"/>
     </extensions>
+    <system-properties>
+        <property name="exo.profiles" value="cluster"/>
+        <property name="gatein.jcr.config.type" value="cluster"/>
+        <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.jbosscache.JBossCacheIndexChangesFilter"/>        
+    </system-properties>
     <management>
         <security-realms>
             <security-realm name="ManagementRealm">

@@ -27,6 +27,10 @@
         <extension module="org.jboss.as.weld"/>
         <extension module="org.gatein"/>
     </extensions>
+    <system-properties>
+        <property name="gatein.jcr.config.type" value="local"/>
+        <property name="gatein.jcr.index.changefilterclass" value="org.exoplatform.services.jcr.impl.core.query.DefaultChangesFilter"/>        
+    </system-properties>
     <management>
         <security-realms>
             <security-realm name="ManagementRealm">
