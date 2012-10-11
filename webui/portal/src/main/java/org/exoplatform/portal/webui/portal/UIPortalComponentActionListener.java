@@ -191,6 +191,7 @@ public class UIPortalComponentActionListener
       RequireJS module = pcontext.getJavascriptManager().require("SHARED/portal", "portal");
       if(isUpdate) {
          pcontext.addUIComponentToUpdateByAjax(uiParent);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
       } else {
          StringBuffer buffer = new StringBuffer();
          buffer.append("portal.UIPortal.removeComponent('");
@@ -385,6 +386,7 @@ public class UIPortalComponentActionListener
             {
                uiParent.getChildren().remove(uiSource);
                pcontext.addUIComponentToUpdateByAjax(uiParent);
+               pcontext.ignoreAJAXUpdateOnPortlets(true);
             }
          }
          else if (org.exoplatform.portal.webui.container.UIContainer.TABLE_COLUMN_CONTAINER.equals(uiParent

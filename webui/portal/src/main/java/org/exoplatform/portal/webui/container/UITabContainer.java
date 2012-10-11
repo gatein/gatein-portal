@@ -120,6 +120,7 @@ public class UITabContainer extends UIContainer
    {
       public void doMove(Event<UITabContainer> event, boolean isToLeft) throws Exception
       {
+         PortalRequestContext context = (PortalRequestContext)event.getRequestContext();
          UITabContainer container = event.getSource();
          String objectId = event.getRequestContext().getRequestParameter(OBJECTID);
          if (container == null || objectId == null)
@@ -127,8 +128,8 @@ public class UITabContainer extends UIContainer
             return;
          }
          container.moveTab(container, objectId, isToLeft);
-         WebuiRequestContext context = event.getRequestContext(); 
          context.addUIComponentToUpdateByAjax(container);
+         context.ignoreAJAXUpdateOnPortlets(true);
          context.getJavascriptManager().require("SHARED/portalComposer", "portalComposer").addScripts("portalComposer.toggleSaveButton();");
       }
    }
@@ -174,6 +175,7 @@ public class UITabContainer extends UIContainer
                newTabContainer.setRendered(true);
                newTabContainer.setId(String.valueOf(newTabContainer.hashCode()));
                pcontext.addUIComponentToUpdateByAjax(container);
+               pcontext.ignoreAJAXUpdateOnPortlets(true);
                pcontext.getJavascriptManager().require("SHARED/portalComposer", "portalComposer").addScripts("portalComposer.toggleSaveButton();");
                return;
             }

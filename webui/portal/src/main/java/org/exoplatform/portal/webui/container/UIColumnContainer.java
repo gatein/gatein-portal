@@ -78,6 +78,7 @@ public class UIColumnContainer extends UIContainer
 
          PortalRequestContext pcontext = (PortalRequestContext) event.getRequestContext();
          pcontext.addUIComponentToUpdateByAjax(uiParent);
+         pcontext.ignoreAJAXUpdateOnPortlets(true);
          pcontext.getJavascriptManager().require("SHARED/portalComposer", "portalComposer").addScripts("portalComposer.toggleSaveButton();");
       }
 
