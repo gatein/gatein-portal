@@ -69,11 +69,20 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
       res.setHeader("Cache-Control", "no-cache");
 
       //
+      String siteName = req.getRemoteUser();
       String requestPath = controllerContext.getParameter(REQUEST_PATH);
 
       StandaloneApplication app = controllerContext.getController().getApplication(StandaloneApplication.STANDALONE_APPLICATION_ID);
-      StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, controllerContext, requestPath);      
-      processRequest(context, app);
+      StandaloneAppRequestContext context = new StandaloneAppRequestContext(app, controllerContext, siteName == null ? "" : siteName, requestPath);
+      
+      if (req.getRemoteUser() == null)
+      {
+         context.requestAuthenticationLogin();
+      }
+      else
+      {
+         processRequest(context, app);         
+      }
       return true;
    }     
 }

@@ -34,10 +34,10 @@ import org.exoplatform.webui.core.UIApplication;
 
 public class StandaloneAppRequestContext extends PortalRequestContext
 {
-   public StandaloneAppRequestContext(StandaloneApplication app, ControllerContext controllerContext, String requestPath)
+   public StandaloneAppRequestContext(StandaloneApplication app, ControllerContext controllerContext, String siteName, String requestPath)
             throws Exception
    {
-      super(app, controllerContext, SiteType.USER.name(), controllerContext.getRequest().getRemoteUser(), requestPath, null);    
+      super(app, controllerContext, SiteType.USER.name(), siteName, requestPath, null);    
    }
 
    @Override
