@@ -22,6 +22,8 @@
 package org.gatein.integration.jboss.as7.web;
 
 import org.exoplatform.container.RootContainer;
+import org.gatein.version.Version;
+import org.jboss.logging.Logger;
 import org.jboss.modules.Module;
 import org.jboss.msc.service.Service;
 import org.jboss.msc.service.ServiceName;
@@ -35,6 +37,7 @@ public class StartupService implements Service<StartupService>
    private Module module;
 
    public static final ServiceName SERVICE_NAME = ServiceName.of((ServiceName)null, "org", "gatein", "startup");
+   private static final Logger log = Logger.getLogger("org.gatein");
 
    @Override
    public void start(StartContext context) throws StartException
@@ -55,6 +58,9 @@ public class StartupService implements Service<StartupService>
          {
             Thread.currentThread().setContextClassLoader(oldCl);
          }
+
+         // Startup message
+         log.info(Version.prettyVersion + " started.");
       }
    }
 
