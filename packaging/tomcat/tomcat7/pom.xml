@@ -196,7 +196,7 @@ You can also use -Ddownload to automatically provide Tomcat instance.
                 </goals>
                 <configuration>
                   <target>
-                    <zip destfile="${project.build.directory}/tomcat7.zip" basedir="${project.build.directory}/tomcat7" />
+                    <zip destfile="${project.build.directory}/tomcat7.zip" basedir="${project.build.directory}/tomcat" />
                     <attachartifact file="${project.build.directory}/tomcat7.zip" classifier="bundle" type="zip" />
                   </target>
                 </configuration>
