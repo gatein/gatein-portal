@@ -29,7 +29,6 @@ import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
 import org.jboss.as.server.deployment.DeploymentUnitProcessingException;
 import org.jboss.as.server.deployment.DeploymentUnitProcessor;
-import org.jboss.as.server.deployment.ServicesAttachment;
 import org.jboss.as.server.deployment.module.ModuleDependency;
 import org.jboss.as.server.deployment.module.ModuleSpecification;
 import org.jboss.as.server.deployment.module.ResourceRoot;
@@ -37,7 +36,14 @@ import org.jboss.logging.Logger;
 import org.jboss.modules.Module;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.modules.ModuleLoader;
+import org.jboss.modules.ResourceLoaderSpec;
+import org.jboss.modules.ResourceLoaders;
 import org.jboss.vfs.VirtualFile;
+
+import java.net.JarURLConnection;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.jar.JarFile;
 
 /** @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a> */
 public class WSRPStructureDeploymentProcessor implements DeploymentUnitProcessor
@@ -68,6 +74,35 @@ public class WSRPStructureDeploymentProcessor implements DeploymentUnitProcessor
 
          log.infof("Adding WSRP, PC & Apache WS Security  dependencies to %s", du.getName());
       }
+
+      // add JAX-WS catalog access to WSRP admin and extension
+      final String name = du.getName();
+      if (name.contains("wsrp-admin-gui") || name.contains("extension-war"))
+      {
+
+         ModuleSpecification moduleSpecification = du.getAttachment(Attachments.MODULE_SPECIFICATION);
+         ModuleLoader moduleLoader = Module.getBootModuleLoader();
+
+         try
+         {
+            Module module = moduleLoader.loadModule(ModuleIdentifier.fromString("org.gatein.wsrp.catalog"));
+            URL url = module.getClassLoader().getResource("META-INF/jax-ws-catalog.xml");
+            URLConnection connection = url.openConnection();
+
+            if (!(connection instanceof JarURLConnection))
+            {
+               throw new RuntimeException("JAX-WS catalog not found");
+            }
+
+            JarFile jarFile = ((JarURLConnection)connection).getJarFile();
+
+            moduleSpecification.addResourceLoader(ResourceLoaderSpec.createResourceLoaderSpec(ResourceLoaders.createJarResourceLoader("wsrp-catalog", jarFile)));
+         }
+         catch (Exception e)
+         {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+         }
+      }
    }
 
    @Override
@@ -97,7 +132,7 @@ public class WSRPStructureDeploymentProcessor implements DeploymentUnitProcessor
             {
                for (String interfaceName : WSRPPostModuleDeploymentProcessor.KNOWN_PLUGIN_INTERFACE_NAMES)
                {
-                  if(servicesDir.getChild(interfaceName).exists())
+                  if (servicesDir.getChild(interfaceName).exists())
                   {
                      return true;
                   }

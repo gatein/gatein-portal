@@ -232,11 +232,11 @@
        </module-def>
 
        <module-def name="org.jboss.portletbridge.api">
-           <maven-resource group="org.jboss.portletbridge" artifact="portletbridge-api" />    	
+           <maven-resource group="org.jboss.portletbridge" artifact="portletbridge-api" />
        </module-def>
 
         <module-def name="org.jboss.portletbridge.impl">
-            <maven-resource group="org.jboss.portletbridge" artifact="portletbridge-impl" />    	
+            <maven-resource group="org.jboss.portletbridge" artifact="portletbridge-impl" />
         </module-def>
 
        <module-def name="org.staxnav">
@@ -279,6 +279,10 @@
           <maven-resource group="org.gatein.integration" artifact="extension-component" />
           <maven-resource group="org.gatein.wsrp" artifact="wsrp-wss-jboss7" />
           <maven-resource group="org.gatein.wsrp" artifact="wsrp-cxf-integration"/>
+       </module-def>
+
+       <module-def name="org.gatein.wsrp.catalog">
+          <maven-resource group="org.gatein.wsrp" artifact="wsrp-catalog" />
        </module-def>
 
        <module-def name="org.apache.commons-httpclient" slot="gatein">

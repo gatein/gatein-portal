@@ -454,6 +454,12 @@
             <scope>provided</scope>
             <version>${org.gatein.wsrp.version}</version>
          </dependency>
+         <dependency>
+            <groupId>org.gatein.wsrp</groupId>
+            <artifactId>wsrp-catalog</artifactId>
+            <scope>provided</scope>
+            <version>${org.gatein.wsrp.version}</version>
+         </dependency>
 
         <!-- Needed by WSRP, here so that it can be picked up by module generation build.xml -->
         <dependency>
