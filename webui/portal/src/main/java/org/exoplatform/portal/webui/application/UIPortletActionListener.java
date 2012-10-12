@@ -519,7 +519,10 @@ public class UIPortletActionListener
          }
          catch (Exception e)
          {
-            log.error("Problem while serving resource " + (resourceId != null ? resourceId : "") + " for the portlet: " + uiPortlet.getPortletContext().getId(), e);
+            if (!e.getClass().toString().contains("ClientAbortException"))
+            {
+               log.error("Problem while serving resource " + (resourceId != null ? resourceId : "") + " for the portlet: " + uiPortlet.getPortletContext().getId(), e);
+            }
          }
          finally
          {
