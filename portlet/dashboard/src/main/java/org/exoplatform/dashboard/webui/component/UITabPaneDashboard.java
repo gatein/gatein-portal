@@ -88,8 +88,6 @@ public class UITabPaneDashboard extends UIContainer
 
    private UIPortal uiPortal;
    
-   private UserNode cachedParent;
-
    final private static int MAX_SHOWED_TAB_NUMBER = 6;
 
    final public static String PAGE_TEMPLATE = "dashboard";
@@ -134,35 +132,32 @@ public class UITabPaneDashboard extends UIContainer
    public UserNode getParentTab() throws Exception
    {
       UserPortal userPortal = getUserPortal();
-      UserNode selectedNode =  uiPortal.getSelectedUserNode();
+      UserNode selectedNode = uiPortal.getSelectedUserNode();
       UserNode currParent = selectedNode.getParent();
-      
-      UserNode parent = this.cachedParent;    
-      if (parent == null || (currParent != null && !currParent.getId().equals(parent.getId())))
-      {         
-         if ("".equals(currParent.getURI()))
-         {
-            this.cachedParent = userPortal.getNode(currParent.getNavigation(), TAB_PANE_DASHBOARD_SCOPE, filterConfig, null);
-         }
-         else
-         {
-            this.cachedParent = userPortal.resolvePath(currParent.getNavigation(), filterConfig, currParent.getURI());            
-         }
-         parent = this.cachedParent;
+
+      UserNode parent = null;
+      if ("".equals(currParent.getURI()))
+      {
+         parent = userPortal.getNode(currParent.getNavigation(), TAB_PANE_DASHBOARD_SCOPE, filterConfig, null);
       }
-            
+      else
+      {
+         parent = userPortal.resolvePath(currParent.getNavigation(), filterConfig, currParent.getURI());
+      }
+
       if (parent != null)
       {
          try
-         {            
+         {
             userPortal.updateNode(parent, TAB_PANE_DASHBOARD_SCOPE, null);
          }
          catch (NavigationServiceException e)
          {
             parent = null;
          }
-      }      
-      this.cachedParent = parent;      
+      }
+
+      //
       return parent;
    }
 
