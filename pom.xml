@@ -1069,7 +1069,11 @@
                      </property>
                      <property>
                         <name>com.arjuna.ats.arjuna.objectstore.objectStoreDir</name>
-                        <value>${project.build.directory}</value>
+                        <value>${project.build.directory}/com.arjuna.ats.arjuna.objectstore.objectStoreDir</value>
+                     </property>
+                     <property>
+                      <name>ObjectStoreEnvironmentBean.objectStoreDir</name>
+                      <value>${project.build.directory}/ObjectStoreEnvironmentBean.objectStoreDir</value>
                      </property>
                      <property>
                         <name>exo.profiles</name>
