@@ -31,7 +31,7 @@
          <init-params>
             <value-param>
                <name>default.portal</name>
-               <value>noRedirects</value>
+               <value>origin</value>
             </value-param>
             <value-param>
                <name>override</name>
@@ -42,6 +42,9 @@
                <object type="org.exoplatform.portal.config.NewPortalConfig">
                   <field name="predefinedOwner">
                      <collection type="java.util.HashSet">
+                        <value>
+                          <string>origin</string>
+                        </value>
                         <value>
                            <string>noRedirects</string>
                         </value>
