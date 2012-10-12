@@ -8,6 +8,7 @@
   def rcontext = _ctx.getRequestContext(); 
   ResourceBundle res = rcontext.getApplicationResourceBundle(); 
   JavascriptManager jsmanager = rcontext.getJavascriptManager();
+  jsmanager.require("SHARED/portalControl");
   
   /** Trim the prefix UIContainer- if any, this hardcoded part is needed to update nested container via Ajax */
   String componentId = uicomponent.getId();
