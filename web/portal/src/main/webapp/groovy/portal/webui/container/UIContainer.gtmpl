@@ -1,7 +1,7 @@
 <%
 	import org.exoplatform.commons.utils.ExpressionUtil;
 	import org.exoplatform.portal.webui.workspace.UIPortalApplication;
-	//import org.exoplatform.webui.config.Event;
+	import org.exoplatform.commons.utils.HTMLEntityEncoder;
 	
 	def rcontext = _ctx.getRequestContext();
 	ResourceBundle res = rcontext.getApplicationResourceBundle();
@@ -70,9 +70,10 @@
 								<% 
 									String strTitle = uicomponent.getTitle() != null ?
 												ExpressionUtil.getExpressionValue(res, uicomponent.getTitle()) :
-												_ctx.appRes("UIContainer.title.Container");
+												_ctx.appRes("UIContainer.title.Container"); 			
+									strTitle = hasPermission ? strTitle : _ctx.appRes("UIPortlet.label.protectedContent");																					
 								%>
-								<div class="ContainerIcon"><%=hasPermission ? strTitle : _ctx.appRes("UIPortlet.label.protectedContent")%></div>
+								<div class="ContainerIcon"><%=HTMLEntityEncoder.getInstance().encode(strTitle)%></div>
 								<%if(hasPermission) {%>
 									<a href="<%=uicomponent.event("EditContainer")%>" class="EditIcon" title="<%=_ctx.appRes("UIContainer.tooltip.editContainer")%>"></a>
 									<a href="<%=uicomponent.event("DeleteComponent")%>" class="DeleteIcon" title="<%=_ctx.appRes("UIContainer.tooltip.closeContainer")%>"><span></span></a>

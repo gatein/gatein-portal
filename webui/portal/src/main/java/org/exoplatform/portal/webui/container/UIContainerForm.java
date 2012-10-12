@@ -41,6 +41,7 @@ import org.exoplatform.webui.form.UIFormTabPane;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.form.validator.NameValidator;
+import org.exoplatform.webui.form.validator.NotHTMLTagValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.organization.UIListPermissionSelector;
 import org.exoplatform.webui.organization.UIListPermissionSelector.EmptyIteratorValidator;
@@ -75,7 +76,9 @@ public class UIContainerForm extends UIFormTabPane
       infoInputSet.addUIFormInput(
          new UIFormStringInput("id", "id", null).addValidator(MandatoryValidator.class).addValidator(
             StringLengthValidator.class, 3, 30).addValidator(NameValidator.class)).addUIFormInput(
-         new UIFormStringInput("title", "title", null).addValidator(StringLengthValidator.class, 50)).
+         new UIFormStringInput("title", "title", null)
+            .addValidator(StringLengthValidator.class, 50)
+            .addValidator(NotHTMLTagValidator.class, "UIContainerForm.msg.InvalidContainerTitle")).
          addUIFormInput(
             new UIFormStringInput("width", "width", null).addValidator(ExpressionValidator.class,
                "(^([1-9]\\d*)(px|%)$)?", "UIContainerForm.msg.InvalidWidthHeight")).addUIFormInput(

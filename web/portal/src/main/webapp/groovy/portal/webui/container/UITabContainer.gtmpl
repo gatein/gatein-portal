@@ -3,6 +3,7 @@
   import org.exoplatform.commons.utils.ExpressionUtil;  
   import org.exoplatform.portal.webui.util.Util;
   import org.exoplatform.web.application.JavascriptManager;
+  import org.exoplatform.commons.utils.HTMLEntityEncoder;
   
   def rcontext = _ctx.getRequestContext(); 
   ResourceBundle res = rcontext.getApplicationResourceBundle(); 
@@ -63,6 +64,7 @@
                 else title = ExpressionUtil.getExpressionValue(res, title);
                 String selectTab = uicomponent.event("SelectTab", tabId);
                 String tabState = uicomponent.getTabState(uiChild, uicomponent);
+                title = HTMLEntityEncoder.getInstance().encode(title);
             %>
                 <div class="UITab NormalTabStyle">
                   <div class="<%=status%>">
@@ -75,7 +77,9 @@
                               String moveRightAction = uicomponent.event("MoveRight", tabId);
                           %>
                             <div class="MiddleTab ClearFix"> 
-                              <div class="TabLabel FL" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this,'$id', '$tabId' );<%= selectTab %>"><%=title%></div>
+                              <div class="TabLabel FL" onclick="eXo.webui.UIHorizontalTabs.changeTabForUITabPane(this,'$id', '$tabId' );<%= selectTab %>">
+                              	<%=title%>
+                              </div>
                               <div class="EditIcon">
                                  <div style="position: relative; width: 100%">
                                     <div class="UIPopupCategory" style="display: none;">
