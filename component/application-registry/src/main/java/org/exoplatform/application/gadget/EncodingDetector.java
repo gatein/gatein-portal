@@ -22,12 +22,11 @@ import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.Locator2;
 import org.xml.sax.helpers.DefaultHandler;
-
+import java.io.IOException;
+import java.io.InputStream;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
-import java.io.IOException;
-import java.io.InputStream;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -39,7 +38,10 @@ public class EncodingDetector extends DefaultHandler
    public static String detect(InputStream in) throws IOException, ParserConfigurationException, SAXException
    {
       EncodingDetector detector = new EncodingDetector();
-      SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
+      SAXParserFactory factory = SAXParserFactory.newInstance();
+      //Set below feature to avoid loading external DTD - a buggy and slow action.
+      factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+      SAXParser parser = factory.newSAXParser();
       parser.parse(in, detector);
       return detector.encoding;
    }
