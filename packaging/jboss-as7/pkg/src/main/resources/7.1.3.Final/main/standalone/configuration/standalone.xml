@@ -111,56 +111,22 @@
                         <password>sa</password>
                     </security>
                 </datasource>
-                <datasource jndi-name="java:/jdbcidm_portal" pool-name="IDMPortalDS" enabled="true"
-                            use-java-context="true">
-                    <connection-url>
-                        jdbc:h2:file:${jboss.server.data.dir}/gatein/portal/jdbcidm_portal;DB_CLOSE_DELAY=-1
-                    </connection-url>
+                <datasource jndi-name="java:/jdbcidm_portal" pool-name="IDMPortalDS" enabled="true" use-java-context="true">
+                    <connection-url>jdbc:h2:file:${jboss.server.data.dir}/gatein/portal/jdbcidm_portal;DB_CLOSE_DELAY=-1</connection-url>
                     <driver>h2</driver>
                     <security>
                         <user-name>sa</user-name>
                         <password>sa</password>
                     </security>
                 </datasource>
-                <!-- The following is commented out because of GTNPORTAL-2639 -->
-                <!--
-                <datasource jndi-name="java:/jdbcidm_sample-portal" pool-name="IDMSamplePortalDS" enabled="true"
-                            use-java-context="true">
-                    <connection-url>
-                        jdbc:h2:file:${jboss.server.data.dir}/gatein/sample-portal/jdbcidm_sample_portal;DB_CLOSE_DELAY=-1
-                    </connection-url>
+                <datasource jndi-name="java:/jdbcjcr_portal" pool-name="JCRPortalDS" enabled="true" use-java-context="true">
+                    <connection-url>jdbc:h2:file:${jboss.server.data.dir}/gatein/portal/jdbcjcr_portal;DB_CLOSE_DELAY=-1</connection-url>
                     <driver>h2</driver>
                     <security>
                         <user-name>sa</user-name>
                         <password>sa</password>
                     </security>
                 </datasource>
-                -->
-                <datasource jndi-name="java:/jdbcjcr_portal" pool-name="JCRPortalDS"
-                            enabled="true" use-java-context="true">
-                    <connection-url>
-                        jdbc:h2:file:${jboss.server.data.dir}/gatein/portal/jdbcjcr_portal;DB_CLOSE_DELAY=-1
-                    </connection-url>
-                    <driver>h2</driver>
-                    <security>
-                        <user-name>sa</user-name>
-                        <password>sa</password>
-                    </security>
-                </datasource>
-                <!-- The following is commented out because of GTNPORTAL-2639 -->
-                <!--
-                <datasource jndi-name="java:/jdbcjcr_sample-portal"
-                            pool-name="JCRSamplePortalDS" enabled="true" use-java-context="true">
-                    <connection-url>
-                        jdbc:h2:file:${jboss.server.data.dir}/gatein/sample-portal/jdbcjcr_sample_portal;DB_CLOSE_DELAY=-1
-                    </connection-url>
-                    <driver>h2</driver>
-                    <security>
-                        <user-name>sa</user-name>
-                        <password>sa</password>
-                    </security>
-                </datasource>
-                -->
                 <drivers>
                     <driver name="h2" module="com.h2database.h2">
                         <xa-datasource-class>org.h2.jdbcx.JdbcDataSource</xa-datasource-class>
@@ -321,24 +287,6 @@
                         </login-module>
                     </authentication>
                 </security-domain>
-                <!-- The following is commented out because of GTNPORTAL-2639 -->
-                <!--
-                <security-domain name="gatein-domain-sample-portal" cache-type="default">
-                    <authentication>
-                        <login-module code="org.gatein.sso.integration.SSODelegateLoginModule" flag="required">
-                            <module-option name="enabled" value="${gatein.sso.login.module.enabled}" />
-                            <module-option name="delegateClassName" value="${gatein.sso.login.module.class}" />
-                            <module-option name="portalContainerName" value="portal" />
-                            <module-option name="realmName" value="gatein-domain" />
-                            <module-option name="password-stacking" value="useFirstPass" />
-                        </login-module>
-                        <login-module code="org.exoplatform.services.security.j2ee.JBossAS7LoginModule" flag="required">
-                            <module-option name="portalContainerName" value="sample-portal"/>
-                            <module-option name="realmName" value="gatein-domain-sample-portal"/>
-                        </login-module>
-                    </authentication>
-                </security-domain>
-                -->
             </security-domains>
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:threads:1.1"/>
