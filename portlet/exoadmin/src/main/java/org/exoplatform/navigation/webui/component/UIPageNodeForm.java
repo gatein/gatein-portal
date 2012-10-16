@@ -543,7 +543,7 @@ public class UIPageNodeForm extends UIFormTabPane
                page.setOwnerType(pageContext.getKey().getSite().getTypeName());
                page.setOwnerId(pageContext.getKey().getSite().getName());
                page.setName(pageContext.getKey().getName());
-               String title = pageContext.getState().getName();
+               String title = pageContext.getState().getDisplayName();
                String[] accessPermission = pageContext.getState().getAccessPermissions() == null ? null : pageContext.getState().getAccessPermissions().toArray(new String[pageContext.getState().getAccessPermissions().size()]);
                if (title == null || title.trim().length() < 1)
                {

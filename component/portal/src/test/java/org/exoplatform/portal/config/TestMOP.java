@@ -200,7 +200,7 @@ public class TestMOP extends AbstractConfigTest
       assertNotNull(pageContext);
       
       //
-      assertEquals("test_title", pageContext.getState().getName());
+      assertEquals("test_title", pageContext.getState().getDisplayName());
       assertEquals("test_factory_id", pageContext.getState().getFactoryId());
       assertEquals(Arrays.<String>asList("test_access_permissions"), pageContext.getState().getAccessPermissions());
       assertEquals("test_edit_permission", pageContext.getState().getEditPermission());

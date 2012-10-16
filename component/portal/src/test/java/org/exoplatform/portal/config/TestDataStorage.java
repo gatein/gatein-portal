@@ -258,7 +258,7 @@ public class TestDataStorage extends AbstractConfigTest
       
       //
       PageContext pageContext = pageService.loadPage(page.getPageKey());
-      pageContext.setState(pageContext.getState().builder().name("MyTitle").showMaxWindow(true).build());
+      pageContext.setState(pageContext.getState().builder().displayName("MyTitle").showMaxWindow(true).build());
       pageService.savePage(pageContext);
 
       //
@@ -279,7 +279,7 @@ public class TestDataStorage extends AbstractConfigTest
       assertEquals(false, page2.isShowMaxWindow());
       
       pageContext = pageService.loadPage(page.getPageKey());
-      assertEquals("MyTitle", pageContext.getState().getName());
+      assertEquals("MyTitle", pageContext.getState().getDisplayName());
       assertEquals(true, pageContext.getState().getShowMaxWindow());
    }
    
@@ -1235,7 +1235,7 @@ public class TestDataStorage extends AbstractConfigTest
       pageService.savePage(new PageContext(page.getPageKey(), null));
       
       PageContext pageContext = pageService.loadPage(page.getPageKey());
-      pageContext.setState(pageContext.getState().builder().name("Juuu2 Ziii2").build());
+      pageContext.setState(pageContext.getState().builder().displayName("Juuu2 Ziii2").build());
       pageService.savePage(pageContext);
 
       assertPageFound(0, 10, null, null, null, "Juuu2 Ziii2", "portal::test::searchedpage2");

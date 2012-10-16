@@ -89,7 +89,7 @@ public class PageContext
       {
          throw new NullPointerException();
       }
-      page.setTitle(getState().name);
+      page.setTitle(getState().displayName);
       page.setDescription(getState().description);
       page.setFactoryId(getState().factoryId);
       page.setShowMaxWindow(getState().showMaxWindow);

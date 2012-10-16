@@ -58,7 +58,7 @@ public class TestPageServiceWrapper extends AbstractMOPTest
       assertNotNull(page);
       
       PageState state = page.getState();
-      assertEquals("Home Page", state.getName());
+      assertEquals("Home Page", state.getDisplayName());
       assertEquals(Arrays.asList("Everyone"), state.getAccessPermissions());
       assertEquals("*:/platform/administrators", state.getEditPermission());
       assertNull(state.getFactoryId());

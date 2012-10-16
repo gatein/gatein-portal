@@ -518,8 +518,8 @@ public class UINavigationNodeSelector extends UIContainer
             uiToolPanel.setWorkingComponent(UIPage.class, null);
             UIPage uiPage = (UIPage)uiToolPanel.getUIComponent();
 
-            if (pageContext.getState().getName() == null)
-               pageContext.getState().builder().name(node.getLabel());
+            if (pageContext.getState().getDisplayName() == null)
+               pageContext.getState().builder().displayName(node.getLabel());
 
             Page page = userService.getDataStorage().getPage(pageId);
             pageContext.update(page);

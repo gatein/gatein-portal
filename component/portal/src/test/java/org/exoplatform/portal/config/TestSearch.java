@@ -102,7 +102,7 @@ public class TestSearch extends AbstractConfigTest
       session.save();
       
       PageContext pageContext = pageService.loadPage(page.getPageKey());
-      pageContext.setState(pageContext.getState().builder().name("Juuu Ziii").build());
+      pageContext.setState(pageContext.getState().builder().displayName("Juuu Ziii").build());
       pageService.savePage(pageContext);
       session.save();
 

@@ -174,7 +174,7 @@ public class PageServiceImpl implements PageService
 
          //
          Described described = dst.adapt(Described.class);
-         described.setName(page.state.name);
+         described.setName(page.state.displayName);
          described.setDescription(page.state.description);
 
          //

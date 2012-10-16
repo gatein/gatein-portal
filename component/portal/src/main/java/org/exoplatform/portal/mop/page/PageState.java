@@ -33,7 +33,7 @@ public class PageState implements Serializable
    final String factoryId;
 
    /** . */
-   final String name;
+   final String displayName;
 
    /** . */
    final String description;
@@ -59,7 +59,7 @@ public class PageState implements Serializable
 
       //
       this.factoryId = attrs.getValue(MappedAttributes.FACTORY_ID);
-      this.name = described.getName();
+      this.displayName = described.getName();
       this.description = described.getDescription();
       this.accessPermissions = Utils.safeImmutableList(accessPermissions);
       this.editPermission = editPermission;
@@ -67,7 +67,7 @@ public class PageState implements Serializable
    }
 
    public PageState(
-      String name,
+      String displayName,
       String description,
       boolean showMaxWindow,
       String factoryId,
@@ -77,7 +77,7 @@ public class PageState implements Serializable
       this.editPermission = editPermission;
       this.showMaxWindow = showMaxWindow;
       this.factoryId = factoryId;
-      this.name = name;
+      this.displayName = displayName;
       this.description = description;
       this.accessPermissions = accessPermissions;
    }
@@ -97,9 +97,9 @@ public class PageState implements Serializable
       return factoryId;
    }
 
-   public String getName()
+   public String getDisplayName()
    {
-      return name;
+      return displayName;
    }
 
    public String getDescription()
@@ -127,7 +127,7 @@ public class PageState implements Serializable
       return Safe.equals(editPermission, that.editPermission)
          && showMaxWindow == that.showMaxWindow
          && Safe.equals(factoryId, that.factoryId)
-         && Safe.equals(name, that.name)
+         && Safe.equals(displayName, that.displayName)
          && Safe.equals(description, that.description)
          && Safe.equals(accessPermissions, that.accessPermissions);
    }
@@ -138,7 +138,7 @@ public class PageState implements Serializable
       int result = editPermission != null ? editPermission.hashCode() : 0;
       result = 31 * result + (showMaxWindow ? 1 : 0);
       result = 31 * result + (factoryId != null ? factoryId.hashCode() : 0);
-      result = 31 * result + (name != null ? name.hashCode() : 0);
+      result = 31 * result + (displayName != null ? displayName.hashCode() : 0);
       result = 31 * result + (description != null ? description.hashCode() : 0);
       result = 31 * result + (accessPermissions != null ? accessPermissions.hashCode() : 0);
       return result;
@@ -150,7 +150,7 @@ public class PageState implements Serializable
          editPermission,
          showMaxWindow,
          factoryId,
-         name,
+         displayName,
          description,
          accessPermissions
       );
@@ -169,7 +169,7 @@ public class PageState implements Serializable
       private String factoryId;
 
       /** . */
-      private String name;
+      private String displayName;
 
       /** . */
       private String description;
@@ -177,12 +177,12 @@ public class PageState implements Serializable
       /** . */
       private List<String> accessPermissions;
 
-      private Builder(String editPermission, boolean showMaxWindow, String factoryId, String name, String description, List<String> accessPermissions)
+      private Builder(String editPermission, boolean showMaxWindow, String factoryId, String displayName, String description, List<String> accessPermissions)
       {
          this.editPermission = editPermission;
          this.showMaxWindow = showMaxWindow;
          this.factoryId = factoryId;
-         this.name = name;
+         this.displayName = displayName;
          this.description = description;
          this.accessPermissions = accessPermissions;
       }
@@ -211,9 +211,9 @@ public class PageState implements Serializable
          return this;
       }
 
-      public Builder name(String name)
+      public Builder displayName(String displayName)
       {
-         this.name = name;
+         this.displayName = displayName;
          return this;
       }
 
@@ -232,7 +232,7 @@ public class PageState implements Serializable
       public PageState build()
       {
          return new PageState(
-            name,
+            displayName,
             description,
             showMaxWindow,
             factoryId,

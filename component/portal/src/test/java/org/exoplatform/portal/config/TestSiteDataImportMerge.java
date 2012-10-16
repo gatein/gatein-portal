@@ -59,19 +59,19 @@ public class TestSiteDataImportMerge extends AbstractSiteDataImportTest
       //
       PageContext home = pageService.loadPage(PageKey.parse("portal::classic::home"));
       assertNotNull(home);
-      assertEquals("site 1", home.getState().getName());
+      assertEquals("site 1", home.getState().getDisplayName());
 
       PageContext page1 = pageService.loadPage(PageKey.parse("portal::classic::page1"));
       assertNotNull(page1);
-      assertEquals("site 2", page1.getState().getName());
+      assertEquals("site 2", page1.getState().getDisplayName());
       
       PageContext page2 = pageService.loadPage(PageKey.parse("portal::classic::page2"));
       assertNotNull(page2);
-      assertEquals("site 2", page2.getState().getName());
+      assertEquals("site 2", page2.getState().getDisplayName());
       
       PageContext dashboard1 = pageService.loadPage(PageKey.parse("user::root::dashboard1"));
       assertNotNull(dashboard1);
-      assertEquals("site 2", dashboard1.getState().getName());
+      assertEquals("site 2", dashboard1.getState().getDisplayName());
       
       RequestLifeCycle.end();    
    }

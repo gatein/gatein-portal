@@ -358,7 +358,7 @@ public class UITabPaneDashboard extends UIContainer
             {
                PageState state = page.getState();
                String encodedLabel = HTMLEntityEncoder.getInstance().encode(newNodeLabel);
-               page.setState(state.builder().name(encodedLabel).build());
+               page.setState(state.builder().displayName(encodedLabel).build());
                configService.getPageService().savePage(page);
             }
          }

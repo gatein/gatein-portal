@@ -376,7 +376,7 @@ public class PortalRequestContext extends WebuiRequestContext
             //
             if (page != null)
             {
-               title = page.getState().getName();
+               title = page.getState().getDisplayName();
                return ExpressionUtil.getExpressionValue(this.getApplicationResourceBundle(), title);
             }
             else

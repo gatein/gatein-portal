@@ -40,7 +40,7 @@ public class PageModel
    PageModel(PageContext context)
    {
       pageId = context.getKey().format();
-      title = context.getState().getName();
+      title = context.getState().getDisplayName();
       List<String> list = context.getState().getAccessPermissions();
       accessPermissions = list.toArray(new String[list.size()]);
       editPermission = context.getState().getEditPermission();

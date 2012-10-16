@@ -54,15 +54,15 @@ public abstract class AbstractSiteDataImportTest extends AbstractDataImportTest
       
       PageContext page = pageService.loadPage(PageKey.parse("portal::classic::home"));
       assertNotNull(page);
-      assertEquals("site 1", page.getState().getName());
+      assertEquals("site 1", page.getState().getDisplayName());
       
       page = pageService.loadPage(PageKey.parse("portal::classic::page1"));
       assertNotNull(page);
-      assertEquals("site 2", page.getState().getName());
+      assertEquals("site 2", page.getState().getDisplayName());
       
       page = pageService.loadPage(PageKey.parse("portal::classic::page2"));
       assertNotNull(page);
-      assertEquals("site 2", page.getState().getName());
+      assertEquals("site 2", page.getState().getDisplayName());
 
       // Test group
       portal = dataStorage.getPortalConfig(SiteType.GROUP.getName(), "/platform/administrators");
@@ -73,12 +73,12 @@ public abstract class AbstractSiteDataImportTest extends AbstractDataImportTest
       
       page = pageService.loadPage(PageKey.parse("group::/platform/administrators::page1"));
       assertNotNull(page);
-      assertEquals("site 2", page.getState().getName());
+      assertEquals("site 2", page.getState().getDisplayName());
       
       // Test user
       PageContext dashboard1 = pageService.loadPage(PageKey.parse("user::root::dashboard1"));
       assertNotNull(dashboard1);
-      assertEquals("site 2", dashboard1.getState().getName());
+      assertEquals("site 2", dashboard1.getState().getDisplayName());
       
       RequestLifeCycle.end();
    }
@@ -103,11 +103,11 @@ public abstract class AbstractSiteDataImportTest extends AbstractDataImportTest
       
       PageContext page = pageService.loadPage(PageKey.parse("portal::classic::home"));
       assertNotNull(page);
-      assertEquals("site 1", page.getState().getName());
+      assertEquals("site 1", page.getState().getDisplayName());
       
       page = pageService.loadPage(PageKey.parse("portal::classic::page1"));
       assertNotNull(page);
-      assertEquals("site 1", page.getState().getName());
+      assertEquals("site 1", page.getState().getDisplayName());
       
       page = pageService.loadPage(PageKey.parse("portal::classic::page2"));
       assertNull(page);

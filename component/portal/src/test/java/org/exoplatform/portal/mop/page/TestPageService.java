@@ -54,7 +54,7 @@ public class TestPageService extends AbstractTestPageService
       assertNull(page.state);
       assertNotNull(page.data);
       PageState state = page.getState();
-      assertEquals("foo_name", state.getName());
+      assertEquals("foo_name", state.getDisplayName());
       assertEquals("foo_description", state.getDescription());
       assertEquals(Arrays.asList("foo_access_permission"), state.getAccessPermissions());
       assertEquals("foo_edit_permission", state.getEditPermission());
@@ -121,7 +121,7 @@ public class TestPageService extends AbstractTestPageService
       assertNull(page.state);
       assertNotNull(page.data);
       PageState state = page.getState();
-      assertEquals("foo_name", state.getName());
+      assertEquals("foo_name", state.getDisplayName());
       assertEquals("foo_description", state.getDescription());
       assertEquals(Arrays.asList("foo_access_permission"), state.getAccessPermissions());
       assertEquals("foo_edit_permission", state.getEditPermission());
@@ -133,7 +133,7 @@ public class TestPageService extends AbstractTestPageService
       assertNull(page.state);
       assertNotNull(page.data);
       state = page.getState();
-      assertEquals("bar_name", state.getName());
+      assertEquals("bar_name", state.getDisplayName());
       assertEquals("bar_description", state.getDescription());
       assertEquals(Arrays.asList("bar_access_permission"), state.getAccessPermissions());
       assertEquals("bar_edit_permission", state.getEditPermission());
@@ -320,7 +320,7 @@ public class TestPageService extends AbstractTestPageService
       assertNull(bar.state);
       assertNotNull(bar.data);
       PageState state = bar.getState();
-      assertEquals("foo_name", state.getName());
+      assertEquals("foo_name", state.getDisplayName());
       assertEquals("foo_description", state.getDescription());
       assertEquals(Arrays.asList("foo_access_permission"), state.getAccessPermissions());
       assertEquals("foo_edit_permission", state.getEditPermission());
