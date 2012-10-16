@@ -26,7 +26,6 @@ import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageService;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -102,26 +101,28 @@ public class PageIterator implements Iterator<List<?>>
          name, 
          title);
       
-      Iterator<PageContext> iterator = result.iterator();
-      List<PageModel> holder = null;
-      while(iterator.hasNext())
-      {
-         if(holder == null)
-         {
-            holder = new ArrayList<PageModel>();
-         }
-         holder.add(new PageModel(iterator.next()));
-      }
-      
+      int size = result.getSize();
+      hasNext = size > pageSize;
+
       //
-      if(holder != null) 
+      if (size > 0)
       {
-         holder = Collections.unmodifiableList(holder);
-         hasNext = result.getSize() > pageSize;
+         int hsize = hasNext ? pageSize : size;
+         List<PageModel> holder = new ArrayList<PageModel>(hsize);
+         
+         Iterator<PageContext> iterator = result.iterator();
+         while(holder.size() < hsize)
+         {
+            holder.add(new PageModel(iterator.next()));
+         }
+         
+         currentIndex += holder.size();
+         return holder;         
       }
-      
-      currentIndex += pageSize;
-      return holder;
+      else
+      {
+         return null;
+      }
    }
 
    @Override

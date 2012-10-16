@@ -1,10 +1,11 @@
 <%  
     import org.exoplatform.webui.core.UIComponent;
     
-    boolean hasNext = uicomponent.getRepeater().hasNext();
     boolean isAutoAdjustHeight = uicomponent.isAutoAdjustHeight();
     def rcontext = _ctx.getRequestContext();
     
+    def uiRepeater = uicomponent.getRepeater();
+    uiRepeater.feedNext();
     
     String url = uicomponent.url("LoadNext") + "&ajaxRequest=true"; 
     String css = "";
@@ -15,6 +16,7 @@
 <div id="$uicomponent.id" class="UIVirtualList" style="overflow:auto; $css">    
   <% uicomponent.renderChildren();%>
   <% 
+    boolean hasNext = uiRepeater.hasNext();
     rcontext.getJavascriptManager().require("SHARED/uiVirtualList", "uiVirtualList")
       .addScripts("uiVirtualList.init('$uicomponent.id', $hasNext, $isAutoAdjustHeight, '$url');");
   %>

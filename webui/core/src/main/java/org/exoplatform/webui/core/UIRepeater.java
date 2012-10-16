@@ -38,12 +38,7 @@ import java.util.NoSuchElementException;
 @ComponentConfig(template = "system:/groovy/webui/core/UIRepeater.gtmpl")
 @Serialized
 public class UIRepeater extends UIComponent
-{
-
-   public UIRepeater() throws Exception
-   {
-      super();
-   }
+{        
 
    /**
     * The bean field that holds the id of this bean
@@ -63,6 +58,8 @@ public class UIRepeater extends UIComponent
    protected String label_;
    
    protected Iterator<List<?>> source;
+   
+   private List<?> fetchedBeans = Collections.emptyList();
    
    public UIRepeater configure(String beanIdField, String[] beanField, String[] action)
    {
@@ -85,18 +82,11 @@ public class UIRepeater extends UIComponent
    public String[] getBeanActions()
    {
       return action_;
-   }
+   }  
 
    public List<?> getBeans() throws Exception
    {
-      try 
-      {
-         return source.next();
-      } 
-      catch (NoSuchElementException e)
-      {
-         return Collections.emptyList();
-      }
+      return this.fetchedBeans;
    }
 
    public String getLabel()
@@ -115,31 +105,17 @@ public class UIRepeater extends UIComponent
       return method.invoke(bean, ReflectionUtil.EMPTY_ARGS);
    }
 
-   /*
-   public void feedNext() throws NoSuchDataException, Exception
+   public void feedNext() throws Exception
    {
-      int page = datasource.getCurrentPage();
-      page++;
-      if (page <= datasource.getAvailablePage())
+      try 
       {
-         datasource.getPage(page);
-      }
-
-      // Check LazyList load current page
-      try
+         this.fetchedBeans = source.next();
+      } 
+      catch (NoSuchElementException e)
       {
-         List<?> objects = datasource.currentPage();
-         for (Object obj : objects) {
-            if (obj == null) throw new Exception("Data Row is Null");
-         }
-      }
-      catch (Exception e)
-      {
-         datasource.getPage(page--);
-         throw new NoSuchDataException(e);
+         this.fetchedBeans = Collections.emptyList();
       }
    }
-   */
 
    public boolean hasNext()
    {

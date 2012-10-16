@@ -89,19 +89,8 @@ public class UIVirtualList extends UIComponentDecorator
          UIVirtualList virtualList = event.getSource();
          UIRepeater repeater = virtualList.getRepeater();
          WebuiRequestContext rContext = event.getRequestContext();
-         //TODO: check concurrent delete page
-         /*
-         try
-         {
-            dataFeed.feedNext();
-         }
-         catch (NoSuchDataException e)
-         {
-            // Update parent of virtual list to refresh
-            event.getRequestContext().addUIComponentToUpdateByAjax(virtualList.getParent());
-            return;
-         }*/
          
+         repeater.feedNext();         
          RequireJS require = rContext.getJavascriptManager().require("SHARED/uiVirtualList", "uiVirtualList");
          if (repeater.hasNext())
          {
