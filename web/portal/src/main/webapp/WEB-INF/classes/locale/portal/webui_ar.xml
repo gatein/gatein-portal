@@ -472,7 +472,7 @@
 			<ForAccount> سجل الآن للحصول على حساب</ForAccount>
 			<SigninFail> تسجيل الدخول الفاشلة. اسم المستخدم أو كلمة المرور خاطئة.
 			</SigninFail>
-			<Copyright> حقوق الطبع والنشر © 2009-2010. جميع الحقوق محفوظة ،
+			<Copyright> حقوق الطبع والنشر © 2009-2012. جميع الحقوق محفوظة ،
 				القبعة الحمراء ، وشركة SAS ,EXO وINC</Copyright>
 		</label>
 	</UILoginForm>
@@ -1856,7 +1856,7 @@
 	</UISitemap>
 	<UISitemapPortlet>
 		<label>
-			<copyrightText>جميع الحقوق محفوظة © 2010. جميع الحقوق محفوظة
+			<copyrightText>جميع الحقوق محفوظة © 2009-2012. جميع الحقوق محفوظة
 			</copyrightText>
 			<companyTitleText>Red Hat, Inc and eXo Platform SAS
 			</companyTitleText>
