@@ -71,6 +71,14 @@
           <property name="username" value="root"/>
           <property name="password" value=""/>
         </properties-param>
+        <properties-param profiles="h2">
+          <name>ref-addresses</name>
+          <description>ref-addresses</description>
+          <property name="driverClassName" value="org.h2.Driver"/>
+          <property name="url" value="jdbc:h2:file:${gatein.test.tmp.dir}/db/data/jdbcjcr;DB_CLOSE_DELAY=-1"/>
+          <property name="username" value="sa"/>
+          <property name="password" value="sa"/>
+        </properties-param>
       </init-params>
     </component-plugin>
   </external-component-plugins>
