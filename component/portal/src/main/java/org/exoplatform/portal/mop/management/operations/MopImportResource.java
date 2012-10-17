@@ -50,6 +50,7 @@ import org.gatein.management.api.operation.OperationContext;
 import org.gatein.management.api.operation.OperationHandler;
 import org.gatein.management.api.operation.ResultHandler;
 import org.gatein.management.api.operation.model.NoResultModel;
+import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
 
 import java.io.IOException;
@@ -81,7 +82,7 @@ public class MopImportResource implements OperationHandler
       InputStream inputStream = attachment.getStream();
       if (inputStream == null) throw new OperationException(operationContext.getOperationName(), "No data stream available for import.");
 
-      POMSessionManager mgr = operationContext.getRuntimeContext().getRuntimeComponent(POMSessionManager.class);
+      final POMSessionManager mgr = operationContext.getRuntimeContext().getRuntimeComponent(POMSessionManager.class);
       POMSession session = mgr.getSession();
       if (session == null) throw new OperationException(operationName, "MOP session was null");
 
@@ -165,8 +166,17 @@ public class MopImportResource implements OperationHandler
                   page.setOwnerId(siteKey.getName());
                }
 
+               // Obtain the site from the session when it's needed.
+               MOPSiteProvider siteProvider = new MOPSiteProvider()
+               {
+                  @Override
+                  public Site getSite(SiteKey siteKey)
+                  {
+                     return mgr.getSession().getWorkspace().getSite(Utils.getObjectType(siteKey.getType()), siteKey.getName());
+                  }
+               };
                // Add import task to run later.
-               mopImport.pageTask = new PageImportTask(pages, siteKey, dataStorage, pageService);
+               mopImport.pageTask = new PageImportTask(pages, siteKey, dataStorage, pageService, siteProvider);
             }
             else if (file.equals(NavigationExportTask.FILE))
             {

@@ -88,6 +88,7 @@ public class SiteLayoutImportTask extends AbstractImportTask<PortalConfig>
          {
             dataStorage.create(dst);
          }
+         dataStorage.save();
       }
    }
 
@@ -101,6 +102,7 @@ public class SiteLayoutImportTask extends AbstractImportTask<PortalConfig>
       else if (rollbackSave != null)
       {
          dataStorage.save(rollbackSave);
+         dataStorage.save();
       }
    }
 }

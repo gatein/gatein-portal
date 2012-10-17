@@ -27,10 +27,15 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.QueryResult;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.importer.ImportMode;
+import org.exoplatform.portal.mop.management.operations.MOPSiteProvider;
+import org.exoplatform.portal.mop.management.operations.Utils;
 import org.exoplatform.portal.mop.management.operations.page.PageUtils;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
+import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.gatein.mop.api.workspace.Site;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,14 +48,16 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
 {
    private final DataStorage dataStorage;
    private final PageService pageService;
+   private final MOPSiteProvider siteProvider;
    private Page.PageSet rollbackSaves;
    private Page.PageSet rollbackDeletes;
 
-   public PageImportTask(Page.PageSet data, SiteKey siteKey, DataStorage dataStorage, PageService pageService)
+   public PageImportTask(Page.PageSet data, SiteKey siteKey, DataStorage dataStorage, PageService pageService, MOPSiteProvider siteProvider)
    {
       super(data, siteKey);
       this.dataStorage = dataStorage;
       this.pageService = pageService;
+      this.siteProvider = siteProvider;
    }
 
    @Override
@@ -58,9 +65,10 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
    {
       if (data == null || data.getPages() == null || data.getPages().isEmpty()) return;
 
-      // Find any page to determine if any pages exist for the site.
-      QueryResult<PageContext> pages = pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
-      int size = pages.getSize();
+      Site site = siteProvider.getSite(siteKey);
+      if (site == null) throw new Exception("Cannot import pages because site does not exist for " + siteKey);
+      org.gatein.mop.api.workspace.Page pages = site.getRootPage().getChild("pages");
+      int size = (pages == null) ? 0 : pages.getChildren().size();
 
       Page.PageSet dst = null;
       switch (importMode)
@@ -88,8 +96,7 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
                rollbackDeletes = new Page.PageSet();
                for (Page src : data.getPages())
                {
-                  PageContext found = pageService.loadPage(siteKey.page(src.getName()));
-                  if (found == null)
+                  if (pages.getChild(src.getName()) == null)
                   {
                      dst.getPages().add(src);
                      rollbackDeletes.getPages().add(src);
@@ -112,15 +119,15 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet>
                {
                   dst.getPages().add(src);
                   PageKey pageKey = siteKey.page(src.getName());
-                  PageContext found = pageService.loadPage(pageKey);
-                  if (found == null)
+                  if (pages.getChild(src.getName()) == null)
                   {
                      rollbackDeletes.getPages().add(src);
                   }
                   else
                   {
-                     Page existing = dataStorage.getPage(found.getKey().format());
-                     found.update(existing);
+                     PageContext pageContext = pageService.loadPage(pageKey);
+                     Page existing = dataStorage.getPage(pageKey.format());
+                     pageContext.update(existing);
                      rollbackSaves.getPages().add(PageUtils.copy(existing));
                   }
                }

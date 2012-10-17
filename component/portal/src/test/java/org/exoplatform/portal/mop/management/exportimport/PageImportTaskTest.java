@@ -30,12 +30,16 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.QueryResult;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.importer.ImportMode;
+import org.exoplatform.portal.mop.management.operations.MOPSiteProvider;
 import org.exoplatform.portal.mop.management.operations.page.PageUtils;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageServiceImpl;
+import org.exoplatform.portal.mop.page.PageState;
+import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.PageData;
+import org.gatein.mop.api.workspace.Site;
 import org.mockito.ArgumentMatcher;
 
 import java.util.ArrayList;
@@ -53,7 +57,14 @@ public class PageImportTaskTest extends TestCase
 {
    private PageServiceImpl pageService;
    private DataStorage dataStorage;
+   private POMSession session;
+   private Site site;
+   private org.gatein.mop.api.workspace.Page pages;
+   private org.gatein.mop.api.workspace.Page rootPage;
+   private org.gatein.mop.api.workspace.Page mockPage;
    private SiteKey siteKey = new SiteKey("user", "foo");
+
+   private MOPSiteProvider siteProvider;
 
    @Override
    @SuppressWarnings("unchecked")
@@ -61,19 +72,37 @@ public class PageImportTaskTest extends TestCase
    {
       dataStorage = mock(DataStorage.class);
       pageService = mock(PageServiceImpl.class);
+      rootPage = mock(org.gatein.mop.api.workspace.Page.class);
+      pages = mock(org.gatein.mop.api.workspace.Page.class);
+      mockPage = mock(org.gatein.mop.api.workspace.Page.class);
+      site = mock(Site.class);
+      siteProvider = new MOPSiteProvider()
+      {
+         @Override
+         public Site getSite(SiteKey siteKey)
+         {
+            return site;
+         }
+      };
+   }
+
+   private org.gatein.mop.api.workspace.Page getRootPage()
+   {
+      return null;
    }
 
    public void testConserve_NoPages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, 0, Collections.<PageContext>emptyList());
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>emptyList());
 
       task.importData(ImportMode.CONSERVE);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
 
       for (Page page : importing.getPages())
       {
@@ -83,7 +112,7 @@ public class PageImportTaskTest extends TestCase
       }
       verify(dataStorage, times(3)).save();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       Assert.assertNotNull(task.getRollbackDeletes());
       Assert.assertEquals(importing, task.getRollbackDeletes());
@@ -93,22 +122,22 @@ public class PageImportTaskTest extends TestCase
    public void testConserve_SamePages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      List<PageContext> existing = pages("page1", "page2", "page3");
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, existing.size(), existing);
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
-      for (PageContext pc : existing)
+      List<String> existing = pages("page1", "page2", "page3");
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>singleton(mockPage));
+      for (String name : existing)
       {
-         Page page = new Page(siteKey.getTypeName(), siteKey.getName(), pc.getState().getName());
-         when(dataStorage.getPage(pc.getKey().format())).thenReturn(page);
+         when(pages.getChild(name)).thenReturn(mockPage);
       }
 
       task.importData(ImportMode.CONSERVE);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       assertNullOrEmpty(task.getRollbackDeletes());
       assertNullOrEmpty(task.getRollbackSaves());
@@ -117,22 +146,22 @@ public class PageImportTaskTest extends TestCase
    public void testConserve_NewPages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      List<PageContext> existing = pages("foo", "bar", "baz");
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, existing.size(), existing);
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
-      for (PageContext pc : existing)
+      List<String> existing = pages("foo", "bar", "baz");
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>singleton(mockPage));
+      for (String name : existing)
       {
-         Page page = new Page(siteKey.getTypeName(), siteKey.getName(), pc.getState().getName());
-         when(dataStorage.getPage(pc.getKey().format())).thenReturn(page);
+         when(pages.getChild(name)).thenReturn(mockPage);
       }
 
       task.importData(ImportMode.CONSERVE);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       assertNullOrEmpty(task.getRollbackDeletes());
       assertNullOrEmpty(task.getRollbackSaves());
@@ -141,38 +170,39 @@ public class PageImportTaskTest extends TestCase
    public void testConserve_NewAndSamePages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").addPage("page4").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      List<PageContext> existing = pages("page1", "page2", "page3");
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, existing.size(), existing);
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
-      for (PageContext pc : existing)
+      List<String> existing = pages("page1", "page2", "page3");
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>singleton(mockPage));
+      for (String name : existing)
       {
-         Page page = new Page(siteKey.getTypeName(), siteKey.getName(), pc.getState().getName());
-         when(dataStorage.getPage(pc.getKey().format())).thenReturn(page);
+         when(pages.getChild(name)).thenReturn(mockPage);
       }
 
       task.importData(ImportMode.CONSERVE);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       assertNullOrEmpty(task.getRollbackDeletes());
       assertNullOrEmpty(task.getRollbackSaves());
    }
-   
+
    public void testInsert_NoPages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, 0, Collections.<PageContext>emptyList());
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>emptyList());
 
       task.importData(ImportMode.INSERT);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
 
       for (Page page : importing.getPages())
       {
@@ -183,7 +213,7 @@ public class PageImportTaskTest extends TestCase
 
       verify(dataStorage, times(importing.getPages().size())).save();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       Assert.assertNotNull(task.getRollbackDeletes());
       Assert.assertEquals(importing, task.getRollbackDeletes());
@@ -193,25 +223,27 @@ public class PageImportTaskTest extends TestCase
    public void testInsert_SamePages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      List<PageContext> existing = pages("page1", "page2", "page3");
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, existing.size(), existing);
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
-      for (PageContext page : existing)
+      List<String> existing = pages("page1", "page2", "page3");
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>singleton(mockPage));
+      for (String name : existing)
       {
-         when(pageService.loadPage(page.getKey())).thenReturn(page);
+         when(pages.getChild(name)).thenReturn(mockPage);
       }
 
       task.importData(ImportMode.INSERT);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
+
       for (Page page : importing.getPages())
       {
-         verify(pageService).loadPage(siteKey.page(page.getName()));
+         verify(pages).getChild(page.getName());
       }
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       assertNullOrEmpty(task.getRollbackDeletes());
       assertNullOrEmpty(task.getRollbackSaves());
@@ -220,22 +252,24 @@ public class PageImportTaskTest extends TestCase
    public void testInsert_NewPages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      List<PageContext> existing = pages("foo", "bar", "baz");
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, existing.size(), existing);
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
-      for (PageContext page : existing)
+      List<String> existing = pages("foo", "bar", "baz");
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>singleton(mockPage));
+      for (String name : existing)
       {
-         when(pageService.loadPage(page.getKey())).thenReturn(page);
+         when(pages.getChild(name)).thenReturn(mockPage);
       }
 
       task.importData(ImportMode.INSERT);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
+
       for (Page page : importing.getPages())
       {
-         verify(pageService).loadPage(siteKey.page(page.getName()));
+         verify(pages).getChild(page.getName());
 
          PageContext pageContext = new PageContext(siteKey.page(page.getName()), PageUtils.toPageState(page));
          verify(pageService).savePage(argThat(matches(pageContext)));
@@ -244,7 +278,7 @@ public class PageImportTaskTest extends TestCase
 
       verify(dataStorage, times(importing.getPages().size())).save();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       Assert.assertNotNull(task.getRollbackDeletes());
       Assert.assertEquals(importing.getPages(), task.getRollbackDeletes().getPages());
@@ -254,22 +288,25 @@ public class PageImportTaskTest extends TestCase
    public void testInsert_NewAndSamePages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").addPage("page4").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      List<PageContext> existing = pages("page2", "bar", "page3");
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, existing.size(), existing);
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
-      for (PageContext page : existing)
+      List<String> existing = pages("page2", "bar", "page3");
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>singleton(mockPage));
+      for (String name : existing)
       {
-         when(pageService.loadPage(page.getKey())).thenReturn(page);
+         when(pages.getChild(name)).thenReturn(mockPage);
       }
 
       task.importData(ImportMode.INSERT);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
+      
       for (Page page : importing.getPages())
       {
-         verify(pageService).loadPage(siteKey.page(page.getName()));
+         verify(pages).getChild(page.getName());
+
          if (page.getName().equals("page1") || page.getName().equals("page4"))
          {
             PageContext pageContext = new PageContext(siteKey.page(page.getName()), PageUtils.toPageState(page));
@@ -279,7 +316,7 @@ public class PageImportTaskTest extends TestCase
       }
       verify(dataStorage, times(2)).save();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       Assert.assertNotNull(task.getRollbackDeletes());
       Assert.assertEquals(2, task.getRollbackDeletes().getPages().size());
@@ -291,14 +328,15 @@ public class PageImportTaskTest extends TestCase
    public void testMerge_NoPages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, 0, Collections.<PageContext>emptyList());
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>emptyList());
 
       task.importData(ImportMode.MERGE);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
 
       for (Page page : importing.getPages())
       {
@@ -309,7 +347,7 @@ public class PageImportTaskTest extends TestCase
 
       verify(dataStorage, times(importing.getPages().size())).save();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       Assert.assertNotNull(task.getRollbackDeletes());
       Assert.assertEquals(importing, task.getRollbackDeletes());
@@ -319,61 +357,66 @@ public class PageImportTaskTest extends TestCase
    public void testMerge_SamePages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      List<PageContext> existing = pages("page1", "page2", "page3");
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, existing.size(), existing);
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
-      for (PageContext page : existing)
+      List<String> existing = pages("page1", "page2", "page3");
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>singleton(mockPage));
+      for (String name : existing)
       {
-         when(pageService.loadPage(page.getKey())).thenReturn(page);
-         Page p = new Page(siteKey.getTypeName(), siteKey.getName(), page.getKey().getName());
-         when(dataStorage.getPage(page.getKey().format())).thenReturn(p);
+         when(pages.getChild(name)).thenReturn(mockPage);
+         when(pageService.loadPage(siteKey.page(name))).thenReturn(new PageContextBuilder().page(name));
+         when(dataStorage.getPage(siteKey.page(name).format())).thenReturn(new Page(siteKey.getTypeName(), siteKey.getName(), name));
       }
 
       task.importData(ImportMode.MERGE);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
+
       for (Page page : importing.getPages())
       {
+         verify(pages).getChild(page.getName());
+
          PageKey pageKey = siteKey.page(page.getName());
          verify(pageService).loadPage(pageKey);
          verify(dataStorage).getPage(pageKey.format());
 
-         PageContext pageContext = new PageContext(siteKey.page(page.getName()), PageUtils.toPageState(page));
-         verify(pageService).savePage(argThat(matches(pageContext)));
+         verify(pageService).savePage(argThat(matches(new PageContextBuilder().page(page.getName()))));
          verify(dataStorage).save(page);
       }
 
       verify(dataStorage, times(importing.getPages().size())).save();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       assertNullOrEmpty(task.getRollbackDeletes());
       Assert.assertNotNull(task.getRollbackSaves());
       Assert.assertEquals(3, task.getRollbackSaves().getPages().size());
-      comparePages(existing, task.getRollbackSaves().getPages());
+      compareNames(existing, task.getRollbackSaves().getPages());
    }
 
    public void testMerge_NewPages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      List<PageContext> existing = pages("foo", "bar", "baz");
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, existing.size(), existing);
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
-      for (PageContext page : existing)
+      List<String> existing = pages("foo", "bar", "baz");
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>singleton(mockPage));
+      for (String name : existing)
       {
-         when(pageService.loadPage(page.getKey())).thenReturn(page);
+         when(pages.getChild(name)).thenReturn(mockPage);
       }
 
       task.importData(ImportMode.MERGE);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
+
       for (Page page : importing.getPages())
       {
-         verify(pageService).loadPage(siteKey.page(page.getName()));
+         verify(pages).getChild(page.getName());
 
          PageContext pageContext = new PageContext(siteKey.page(page.getName()), PageUtils.toPageState(page));
          verify(pageService).savePage(argThat(matches(pageContext)));
@@ -382,7 +425,7 @@ public class PageImportTaskTest extends TestCase
 
       verify(dataStorage, times(importing.getPages().size())).save();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       Assert.assertNotNull(task.getRollbackDeletes());
       Assert.assertEquals(importing.getPages(), task.getRollbackDeletes().getPages());
@@ -392,29 +435,29 @@ public class PageImportTaskTest extends TestCase
    public void testMerge_NewAndSamePages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").addPage("page4").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      List<PageContext> existing = pages("page2", "bar", "page3");
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, existing.size(), existing);
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
-      for (PageContext page : existing)
+      List<String> existing = pages("page2", "bar", "page3");
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>singleton(mockPage));
+      for (String name : existing)
       {
-         when(pageService.loadPage(page.getKey())).thenReturn(page);
-         if (page.getKey().getName().equals("page2") || page.getKey().getName().equals("page3"))
-         {
-            Page p = new Page(siteKey.getTypeName(), siteKey.getName(), page.getKey().getName());
-            when(dataStorage.getPage(page.getKey().format())).thenReturn(p);
-         }
+         when(pages.getChild(name)).thenReturn(mockPage);
+         when(pageService.loadPage(siteKey.page(name))).thenReturn(new PageContextBuilder().page(name));
+         when(dataStorage.getPage(siteKey.page(name).format())).thenReturn(new Page(siteKey.getTypeName(), siteKey.getName(), name));
       }
 
       task.importData(ImportMode.MERGE);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
+
       for (Page page : importing.getPages())
       {
-         verify(pageService).loadPage(siteKey.page(page.getName()));
+         verify(pages).getChild(page.getName());
          if (page.getName().equals("page2") || page.getName().equals("page3"))
          {
+            verify(pageService).loadPage(siteKey.page(page.getName()));
             verify(dataStorage).getPage(siteKey.page(page.getName()).format());
          }
          if (!page.getName().equals("bar"))
@@ -426,7 +469,7 @@ public class PageImportTaskTest extends TestCase
       }
       verify(dataStorage, times(4)).save();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       Assert.assertNotNull(task.getRollbackDeletes());
       Assert.assertEquals(2, task.getRollbackDeletes().getPages().size());
@@ -435,20 +478,21 @@ public class PageImportTaskTest extends TestCase
 
       Assert.assertNotNull(task.getRollbackSaves());
       Assert.assertEquals(2, task.getRollbackSaves().getPages().size());
-      comparePages(Arrays.asList(existing.get(0), existing.get(2)), task.getRollbackSaves().getPages());
+      compareNames(Arrays.asList(existing.get(0), existing.get(2)), task.getRollbackSaves().getPages());
    }
 
    public void testOverwrite_NoPages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, 0, Collections.<PageContext>emptyList());
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>emptyList());
 
       task.importData(ImportMode.OVERWRITE);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
 
       for (Page page : importing.getPages())
       {
@@ -459,7 +503,7 @@ public class PageImportTaskTest extends TestCase
 
       verify(dataStorage, times(importing.getPages().size())).save();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       Assert.assertNotNull(task.getRollbackDeletes());
       Assert.assertEquals(importing, task.getRollbackDeletes());
@@ -469,27 +513,28 @@ public class PageImportTaskTest extends TestCase
    public void testOverwrite_SamePages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      List<PageContext> existing = pages("page1", "page2", "page3");
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, existing.size(), existing);
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
-      when(pageService.loadPages(siteKey)).thenReturn(existing);
-      for (PageContext page : existing)
+      List<String> existing = pages("page1", "page2", "page3");
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>singleton(mockPage));
+      when(pageService.loadPages(siteKey)).thenReturn(new PageContextBuilder().pages(existing));
+      for (String name : existing)
       {
-         Page p = new Page(siteKey.getTypeName(), siteKey.getName(), page.getKey().getName());
-         when(dataStorage.getPage(page.getKey().format())).thenReturn(p);
+         when(pages.getChild(name)).thenReturn(mockPage);
+         when(dataStorage.getPage(siteKey.page(name).format())).thenReturn(new Page(siteKey.getTypeName(), siteKey.getName(), name));
       }
 
       task.importData(ImportMode.OVERWRITE);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
       verify(pageService).loadPages(siteKey);
 
-      for (PageContext page : existing)
+      for (String name : existing)
       {
-         verify(dataStorage).getPage(page.getKey().format());
-         verify(pageService).destroyPage(page.getKey());
+         verify(dataStorage).getPage(siteKey.page(name).format());
+         verify(pageService).destroyPage(siteKey.page(name));
       }
 
       for (Page page : importing.getPages())
@@ -500,38 +545,39 @@ public class PageImportTaskTest extends TestCase
       }
       verify(dataStorage, times(importing.getPages().size() + existing.size())).save();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       assertNullOrEmpty(task.getRollbackDeletes());
       Assert.assertNotNull(task.getRollbackSaves());
       Assert.assertEquals(3, task.getRollbackSaves().getPages().size());
-      comparePages(existing, task.getRollbackSaves().getPages());
+      compareNames(existing, task.getRollbackSaves().getPages());
    }
 
    public void testOverwrite_NewPages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      List<PageContext> existing = pages("foo", "bar", "baz");
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, existing.size(), existing);
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
-      when(pageService.loadPages(siteKey)).thenReturn(existing);
-      for (PageContext page : existing)
+      List<String> existing = pages("foo", "bar", "baz");
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>singleton(mockPage));
+      when(pageService.loadPages(siteKey)).thenReturn(new PageContextBuilder().pages(existing));
+      for (String name : existing)
       {
-         Page p = new Page(siteKey.getTypeName(), siteKey.getName(), page.getKey().getName());
-         when(dataStorage.getPage(page.getKey().format())).thenReturn(p);
+         when(pages.getChild(name)).thenReturn(mockPage);
+         when(dataStorage.getPage(siteKey.page(name).format())).thenReturn(new Page(siteKey.getTypeName(), siteKey.getName(), name));
       }
 
       task.importData(ImportMode.OVERWRITE);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
       verify(pageService).loadPages(siteKey);
 
-      for (PageContext page : existing)
+      for (String name : existing)
       {
-         verify(dataStorage).getPage(page.getKey().format());
-         verify(pageService).destroyPage(page.getKey());
+         verify(dataStorage).getPage(siteKey.page(name).format());
+         verify(pageService).destroyPage(siteKey.page(name));
       }
 
       for (Page page : importing.getPages())
@@ -542,39 +588,40 @@ public class PageImportTaskTest extends TestCase
       }
       verify(dataStorage, times(importing.getPages().size() + existing.size())).save();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       Assert.assertNotNull(task.getRollbackDeletes());
       Assert.assertEquals(importing.getPages(), task.getRollbackDeletes().getPages());
 
       Assert.assertNotNull(task.getRollbackSaves());
-      comparePages(existing, task.getRollbackSaves().getPages());
+      compareNames(existing, task.getRollbackSaves().getPages());
    }
 
    public void testOverwrite_NewAndSamePages() throws Exception
    {
       Page.PageSet importing = new Builder().addPage("page1").addPage("page2").addPage("page3").addPage("page4").build();
-      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService);
+      PageImportTask task = new PageImportTask(importing, siteKey, dataStorage, pageService, siteProvider);
 
-      List<PageContext> existing = pages("page2", "bar", "page3");
-      QueryResult<PageContext> result = new QueryResult<PageContext>(0, existing.size(), existing);
-      when(pageService.findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null)).thenReturn(result);
-      when(pageService.loadPages(siteKey)).thenReturn(existing);
-      for (PageContext page : existing)
+      List<String> existing = pages("page2", "bar", "page3");
+      when(site.getRootPage()).thenReturn(rootPage);
+      when(rootPage.getChild("pages")).thenReturn(pages);
+      when(pages.getChildren()).thenReturn(Collections.<org.gatein.mop.api.workspace.Page>singleton(mockPage));
+      when(pageService.loadPages(siteKey)).thenReturn(new PageContextBuilder().pages(existing));
+      for (String name : existing)
       {
-         Page p = new Page(siteKey.getTypeName(), siteKey.getName(), page.getKey().getName());
-         when(dataStorage.getPage(page.getKey().format())).thenReturn(p);
+         when(pages.getChild(name)).thenReturn(mockPage);
+         when(dataStorage.getPage(siteKey.page(name).format())).thenReturn(new Page(siteKey.getTypeName(), siteKey.getName(), name));
       }
 
       task.importData(ImportMode.OVERWRITE);
 
-      verify(pageService).findPages(0, 1, siteKey.getType(), siteKey.getName(), null, null);
+      verify(pages).getChildren();
       verify(pageService).loadPages(siteKey);
 
-      for (PageContext page : existing)
+      for (String name : existing)
       {
-         verify(dataStorage).getPage(page.getKey().format());
-         verify(pageService).destroyPage(page.getKey());
+         verify(dataStorage).getPage(siteKey.page(name).format());
+         verify(pageService).destroyPage(siteKey.page(name));
       }
 
       for (Page page : importing.getPages())
@@ -585,7 +632,7 @@ public class PageImportTaskTest extends TestCase
       }
       verify(dataStorage, times(importing.getPages().size() + existing.size())).save();
 
-      verifyNoMoreInteractions(dataStorage, pageService);
+      verifyNoMoreInteractions(dataStorage, pageService, pages);
 
       Assert.assertNotNull(task.getRollbackDeletes());
       Assert.assertEquals(2, task.getRollbackDeletes().getPages().size());
@@ -593,7 +640,7 @@ public class PageImportTaskTest extends TestCase
       Assert.assertEquals(importing.getPages().get(3), task.getRollbackDeletes().getPages().get(1));
 
       Assert.assertNotNull(task.getRollbackSaves());
-      comparePages(existing, task.getRollbackSaves().getPages());
+      compareNames(existing, task.getRollbackSaves().getPages());
    }
 
    private void assertNullOrEmpty(Page.PageSet pages)
@@ -604,7 +651,7 @@ public class PageImportTaskTest extends TestCase
       }
    }
 
-   private void comparePages(List<PageContext> expected, ArrayList<Page> actual)
+   private void compareNames(List<String> expected, ArrayList<Page> actual)
    {
       if (expected == null)
       {
@@ -616,72 +663,18 @@ public class PageImportTaskTest extends TestCase
 
       for (int i=0; i<expected.size(); i++)
       {
-         comparePage(expected.get(i), actual.get(i));
+         compareName(expected.get(i), actual.get(i));
       }
    }
 
-   private void comparePages(ArrayList<Page> expected, ArrayList<Page> actual)
+   private void compareName(String name, Page actual)
    {
-      if (expected == null)
-      {
-         assertNull(actual);
-         return;
-      }
-
-      assertEquals(expected.size(), actual.size());
-
-      for (int i=0; i<expected.size(); i++)
-      {
-         comparePage(expected.get(i), actual.get(i));
-      }
+      assertEquals(name, actual.getName());
    }
 
-   private void comparePage(Page expected, Page actual)
+   private List<String> pages(String...names)
    {
-      assertEquals(expected.getName(), actual.getName());
-   }
-
-   private void comparePage(PageContext expected, Page actual)
-   {
-      assertEquals(expected.getKey().getName(), actual.getName());
-   }
-
-   /*private Query<Page> query(String ownerType, String ownerId)
-   {
-      return argThat(new QueryMatcher(new Query<Page>(ownerType, ownerId, Page.class)));
-   }
-
-   private class QueryMatcher extends ArgumentMatcher<Query<Page>>
-   {
-      private Query<Page> query;
-
-      public QueryMatcher(Query<Page> query)
-      {
-         this.query = query;
-      }
-
-      @Override
-      public boolean matches(Object o)
-      {
-         if (query == o) return true;
-         if (!(o instanceof Query)) return false;
-
-         Query that = (Query) o;
-
-         if (!query.getClassType().equals(that.getClassType())) return false;
-         if (!query.getOwnerType().equals(that.getOwnerType())) return false;
-         if (!query.getOwnerId().equals(that.getOwnerId())) return false;
-
-         if (query.getName() != null ? !query.getName().equals(that.getName()) : that.getName() != null) return false;
-         if (query.getTitle() != null ? !query.getTitle().equals(that.getTitle()) : that.getTitle() != null) return false;
-
-         return true;
-      }
-   }*/
-
-   private List<PageContext> pages(String...names)
-   {
-      return new PageContextBuilder().pages(names).build();
+      return Arrays.asList(names);
    }
 
    private static ArgumentMatcher<PageContext> matches(PageContext context)
@@ -736,22 +729,25 @@ public class PageImportTaskTest extends TestCase
 
    private class PageContextBuilder
    {
-      private List<PageContext> pages = new ArrayList<PageContext>();
-
-      PageContextBuilder pages(String... names)
+      PageContext page(String name)
       {
-         for (String name : names)
-         {
-            Page page = new Page(siteKey.getTypeName(), siteKey.getName(), name);
-            pages.add(new PageContext(siteKey.page(page.getName()), PageUtils.toPageState(page)));
-         }
-
-         return this;
+         return new PageContext(siteKey.page(name), new PageState(null, null, false, null, Collections.<String>emptyList(), null));
       }
 
-      List<PageContext> build()
+      List<PageContext> pages(Iterable<String> names)
       {
+         List<PageContext> pages = new ArrayList<PageContext>();
+         for (String name : names)
+         {
+            pages.add(page(name));
+         }
+
          return pages;
+      }
+
+      List<PageContext> pages(String...names)
+      {
+         return pages(Arrays.asList(names));
       }
    }
 }
