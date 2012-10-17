@@ -183,7 +183,6 @@
            <maven-resource group="org.apache.ws.commons" artifact="ws-commons-util" />
            <maven-resource group="com.experlog" artifact="xapool" />
            <maven-resource group="org.apache.xmlbeans" artifact="xmlbeans" />
-           <maven-resource group="xpp3" artifact="xpp3" />
            <maven-resource group="com.thoughtworks.xstream" artifact="xstream" />
         </module-def>
 
@@ -296,6 +295,10 @@
 
        <module-def name="org.apache.commons-httpclient" slot="gatein">
           <maven-resource group="commons-httpclient" artifact="commons-httpclient" />
+       </module-def>
+
+       <module-def name="org.xmlpull" slot="main">
+          <maven-resource group="xpp3" artifact="xpp3" />
        </module-def>
     </target>
 

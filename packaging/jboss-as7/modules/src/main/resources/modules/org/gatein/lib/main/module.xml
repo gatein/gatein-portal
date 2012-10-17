@@ -90,6 +90,13 @@
         <module name="org.apache.commons-fileupload" />
 
         <module name="org.gatein.wsrp.integration" export="true" optional="true"/>
+       <module name="org.xmlpull" export="false" services="export">
+          <exports>
+             <include-set>
+                <path name="org/xmlpull"/>
+             </include-set>
+          </exports>
+       </module>
 
 	<module name="org.jboss.as.web"/>
     </dependencies>
