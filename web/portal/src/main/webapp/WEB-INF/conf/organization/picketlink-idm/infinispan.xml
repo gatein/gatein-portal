@@ -27,18 +27,13 @@
     xmlns="urn:infinispan:config:5.1">
 
   <global>
-
-    <!-- Uncomment to enable JMX statistics in platform MBean server. You also need to uncomment jmxStatistics if you
-    want to see statistics for cache  -->
-    <!--<globalJmxStatistics enabled="true" cacheManagerName="plidm" jmxDomain="org.infinispan.plidm"
-                         mBeanServerLookup="org.infinispan.jmx.PlatformMBeanServerLookup" />-->
-
+    <globalJmxStatistics enabled="true" cacheManagerName="plidm" jmxDomain="org.infinispan.plidm"
+                         mBeanServerLookup="org.infinispan.jmx.PlatformMBeanServerLookup" />
   </global>
 
   <default>
 
-    <!-- Uncomment to enable JMX statistics for infinispan cache. Will be good to uncomment globalJmxStatistics in global section as well -->
-    <!--<jmxStatistics enabled="true"/>-->
+    <jmxStatistics enabled="true"/>
 
     <!-- JTA configuration. transactionManagerLookupClass will be configured programmatically to be:
          - "org.infinispan.transaction.lookup.JBossTransactionManagerLookup" in JBoss AS environment
@@ -47,7 +42,7 @@
 
     <invocationBatching enabled="true" />
 
-    <expiration lifespan="180000" wakeUpInterval="5000" />
+    <expiration lifespan="1800000" wakeUpInterval="5000" />
     <eviction strategy="LRU" maxEntries="100000" />
 
   </default>

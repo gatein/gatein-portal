@@ -35,17 +35,14 @@
       </properties>
     </transport>
 
-    <!-- Uncomment to enable JMX statistics in platform MBean server. You also need to uncomment jmxStatistics if you
-    want to see statistics for cache  -->
-    <!--<globalJmxStatistics enabled="true" cacheManagerName="plidm" jmxDomain="org.infinispan.plidm"
-                         mBeanServerLookup="org.infinispan.jmx.PlatformMBeanServerLookup" />-->
+    <globalJmxStatistics enabled="true" cacheManagerName="plidm" jmxDomain="org.infinispan.plidm"
+                         mBeanServerLookup="org.infinispan.jmx.PlatformMBeanServerLookup" />
 
   </global>
 
   <default>
 
-    <!-- Uncomment to enable JMX statistics for infinispan cache. You need to uncomment globalJmxStatistics in global section as well -->
-    <!--<jmxStatistics enabled="true"/>-->
+    <jmxStatistics enabled="true"/>
 
     <clustering mode="replication">
       <stateTransfer timeout="60000" fetchInMemoryState="true" />
@@ -59,7 +56,7 @@
 
     <invocationBatching enabled="true" />
 
-    <expiration lifespan="180000" wakeUpInterval="5000" />
+    <expiration lifespan="1800000" wakeUpInterval="5000" />
     <eviction strategy="LRU" maxEntries="100000" />
 
   </default>
