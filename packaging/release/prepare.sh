@@ -26,17 +26,18 @@ mkdir ./test
 mkdir ./test/server-bundles
 echo 'Copying all packaged servers into ./test/server-bundles/'
 cp -R ../jboss-as7/pkg/target/jboss ./test/server-bundles/$NAME_AS7
-cp -R ../tomcat/pkg/tc7/target/tomcat7 ./test/server-bundles/$NAME_TC7
-cp -R ../jetty/pkg/target/jetty ./test/server-bundles/$NAME_JETTY
+cp -R ../tomcat/tomcat7/target/tomcat ./test/server-bundles/$NAME_TC7
+#cp -R ../jetty/pkg/target/jetty ./test/server-bundles/$NAME_JETTY
 
 #  Zip all servers
+mkdir upload
 mkdir upload/server-bundles
 mkdir upload/server-bundles/$VERSION
 echo 'Creating server bundles in ./upload/server-bundles/'
 cd ./test/server-bundles
 zip -r -q ./../../upload/server-bundles/$VERSION/$NAME_AS7.zip $NAME_AS7 -x "*.DS_Store"
 zip -r -q ./../../upload/server-bundles/$VERSION/$NAME_TC7.zip $NAME_TC7 -x "*.DS_Store"
-zip -r -q ./../../upload/server-bundles/$VERSION/$NAME_JETTY.zip $NAME_JETTY -x "*.DS_Store"
+#zip -r -q ./../../upload/server-bundles/$VERSION/$NAME_JETTY.zip $NAME_JETTY -x "*.DS_Store"
 cd ../../
 
 # Generate checksums

@@ -21,7 +21,7 @@ echo 'Validate following URLs: for server bundles'
 echo
 echo "http://downloads.jboss.org/gatein/Releases/Portal/$VERSION/$NAME_AS7.zip"
 echo "http://downloads.jboss.org/gatein/Releases/Portal/$VERSION/$NAME_TC7.zip"
-echo "http://downloads.jboss.org/gatein/Releases/Portal/$VERSION/$NAME_JETTY.zip"
+#echo "http://downloads.jboss.org/gatein/Releases/Portal/$VERSION/$NAME_JETTY.zip"
 
 
 
