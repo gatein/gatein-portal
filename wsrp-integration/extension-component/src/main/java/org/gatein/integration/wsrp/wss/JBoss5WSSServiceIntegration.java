@@ -22,10 +22,11 @@
  ******************************************************************************/
 package org.gatein.integration.wsrp.wss;
 
-import org.gatein.wsrp.wss.WebServiceSecurityFactory;
+import org.gatein.wsrp.services.PortCustomizerRegistry;
+import org.gatein.wsrp.wss.CredentialsAccess;
 import org.gatein.wsrp.wss.credentials.CredentialsAccessor;
 import org.picocontainer.Startable;
-import org.wsrp.wss.jboss5.handlers.consumer.JBWSCustomizePortListener;
+import org.wsrp.wss.jboss5.handlers.consumer.JBWSPortCustomizer;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
@@ -33,34 +34,22 @@ import org.wsrp.wss.jboss5.handlers.consumer.JBWSCustomizePortListener;
  */
 public class JBoss5WSSServiceIntegration implements Startable
 {
-   private final WebServiceSecurityFactory wssFactory;
-   
-   private final JBWSCustomizePortListener JBWS_CUSTOMIZE_PORT_LISTENER = new JBWSCustomizePortListener(); 
+   private final JBWSPortCustomizer JBWS_PORT_CUSTOMIZER = new JBWSPortCustomizer();
    
    public JBoss5WSSServiceIntegration(CredentialsAccessor credentialsAccessor)
    {
-      wssFactory = WebServiceSecurityFactory.getInstance();
-      wssFactory.setCredentialsAccessor(credentialsAccessor);
+      CredentialsAccess.getInstance().setCredentialsAccessor(credentialsAccessor);
    }
    
    public void start()
    {
-      startConsumer();
+      PortCustomizerRegistry.getInstance().register(JBWS_PORT_CUSTOMIZER);
    }
 
    public void stop()
    {
-      stopConsumer();
-   }
-   
-   protected void startConsumer()
-   {      
-      wssFactory.addCustomizePortListener(JBWS_CUSTOMIZE_PORT_LISTENER);
+      PortCustomizerRegistry.getInstance().unregister(JBWS_PORT_CUSTOMIZER);
    }
 
-   protected void stopConsumer()
-   {
-      wssFactory.removeCustomizePortListener(JBWS_CUSTOMIZE_PORT_LISTENER);
-   }
 }
 

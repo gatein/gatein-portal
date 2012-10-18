@@ -22,9 +22,12 @@
  ******************************************************************************/
 package org.gatein.integration.wsrp.wss;
 
-import org.gatein.wsrp.wss.WebServiceSecurityFactory;
+import org.gatein.wsrp.services.PortCustomizer;
+import org.gatein.wsrp.services.PortCustomizerRegistry;
+import org.gatein.wsrp.wss.CredentialsAccess;
 import org.gatein.wsrp.wss.credentials.CredentialsAccessor;
-import org.gatein.wsrp.wss.cxf.consumer.CXFCustomizePortListener;
+import org.gatein.wsrp.wss.cxf.consumer.BEAPolicyIgnoringPortCustomizer;
+import org.gatein.wsrp.wss.cxf.consumer.CXFPortCustomizer;
 import org.picocontainer.Startable;
 
 /**
@@ -33,34 +36,27 @@ import org.picocontainer.Startable;
  */
 public class CXFWSServiceIntegration implements Startable
 {
-   private final WebServiceSecurityFactory wssFactory;
-   
-   private final CXFCustomizePortListener CUSTOMIZE_PORT_LISTENER = new CXFCustomizePortListener(); 
-   
+   private final PortCustomizer WSS4J_CUSTOMIZER = new CXFPortCustomizer();
+   private final PortCustomizer BEA_POLICY_IGNORING_CUSTOMIZER = new BEAPolicyIgnoringPortCustomizer();
+
    public CXFWSServiceIntegration(CredentialsAccessor credentialsAccessor)
    {
-      wssFactory = WebServiceSecurityFactory.getInstance();
-      wssFactory.setCredentialsAccessor(credentialsAccessor);
+      CredentialsAccess.getInstance().setCredentialsAccessor(credentialsAccessor);
    }
-   
+
    public void start()
    {
-      startConsumer();
+      final PortCustomizerRegistry registry = PortCustomizerRegistry.getInstance();
+      registry.register(WSS4J_CUSTOMIZER);
+      registry.register(BEA_POLICY_IGNORING_CUSTOMIZER);
    }
 
    public void stop()
    {
-      stopConsumer();
-   }
-   
-   protected void startConsumer()
-   {      
-      wssFactory.addCustomizePortListener(CUSTOMIZE_PORT_LISTENER);
+      final PortCustomizerRegistry registry = PortCustomizerRegistry.getInstance();
+      registry.unregister(WSS4J_CUSTOMIZER);
+      registry.unregister(BEA_POLICY_IGNORING_CUSTOMIZER);
    }
 
-   protected void stopConsumer()
-   {
-      wssFactory.removeCustomizePortListener(CUSTOMIZE_PORT_LISTENER);
-   }
 }
 
