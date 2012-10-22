@@ -129,6 +129,11 @@
         <value>war:/conf/organization/picketlink-idm/infinispan-cluster.xml</value>
       </value-param>
 
+      <value-param>
+        <name>skipExpirationOfStructureCacheEntries</name>
+        <value>true</value>
+      </value-param>
+
     </init-params>
   </component>
 

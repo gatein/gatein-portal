@@ -6,11 +6,11 @@ import org.gatein.common.NotYetImplemented;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.infinispan.tree.Fqn;
-import org.infinispan.tree.Node;
-import org.infinispan.tree.TreeCache;
 import org.picketlink.idm.api.Group;
 import org.picketlink.idm.common.exception.IdentityException;
 import org.picketlink.idm.impl.cache.AbstractInfinispanCacheProvider;
+import org.picketlink.idm.impl.tree.Node;
+import org.picketlink.idm.impl.tree.TreeCache;
 
 /*
 * JBoss, a division of Red Hat
@@ -52,13 +52,13 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider
    public static final String NODE_OBJECT_KEY = "object";
 
    @Override
-   protected Fqn getRootNode()
+   protected String getRootNode()
    {
-      return Fqn.fromString("/" + MAIN_ROOT);
+      return MAIN_ROOT;
    }
 
    // Not needed for integration cache
-   protected TreeCache<Object, Object> getCacheFromRegistry(Object registry, String registryName)  throws IdentityException
+   protected TreeCache getCacheFromRegistry(Object registry, String registryName)  throws IdentityException
    {
       throw new NotYetImplemented("getCacheFromRegistry not implemented on IntegrationCache");
    }
@@ -73,7 +73,7 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider
    {
       Fqn nodeFqn = getFqn(ns, NODE_GTN_GROUP_ID, pLIDMId);
 
-      Node ioNode = getCache().getRoot().addChild(nodeFqn);
+      Node ioNode = addNode(nodeFqn);
 
       if (ioNode != null)
       {
@@ -99,7 +99,7 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider
 
       Fqn nodeFqn = getFqn(ns, NODE_GTN_GROUP_ID, pLIDMId);
 
-      Node node = getCache().getRoot().getChild(nodeFqn);
+      Node node = getNode(nodeFqn);
 
       if (node != null)
       {
@@ -128,7 +128,7 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider
    {
       Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query));
 
-      Node ioNode = getCache().getRoot().addChild(nodeFqn);
+      Node ioNode = addNode(nodeFqn);
 
       if (ioNode != null)
       {
@@ -153,7 +153,7 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider
 
       Fqn nodeFqn = getFqn(ns, USER_QUERY_NODE, getQueryKey(query));
 
-      Node node = getCache().getRoot().getChild(nodeFqn);
+      Node node = getNode(nodeFqn);
 
       if (node != null)
       {
@@ -180,7 +180,7 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider
    {
       Fqn nodeFqn = getFqn(ns, NODE_PLIDM_ROOT_GROUP);
 
-      Node ioNode = getCache().getRoot().addChild(nodeFqn);
+      Node ioNode = addNode(nodeFqn);
 
       if (ioNode != null)
       {
@@ -203,7 +203,7 @@ public class IntegrationCache extends AbstractInfinispanCacheProvider
    {
       Fqn nodeFqn = getFqn(ns, NODE_PLIDM_ROOT_GROUP);
 
-      Node node = getCache().getRoot().getChild(nodeFqn);
+      Node node = getNode(nodeFqn);
 
       if (node != null)
       {

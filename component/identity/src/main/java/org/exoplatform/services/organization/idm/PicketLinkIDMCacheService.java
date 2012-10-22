@@ -93,7 +93,7 @@ public class PicketLinkIDMCacheService
 
 
    @Managed
-   @ManagedDescription("Ivalidate cache namespace")
+   @ManagedDescription("Invalidate cache namespace")
    @Impact(ImpactType.WRITE)
    public void invalidate(@ManagedDescription("Cache namespace") @ManagedName("namespace")String namespace)
    {
@@ -109,7 +109,7 @@ public class PicketLinkIDMCacheService
    }
 
    @Managed
-   @ManagedDescription("Ivalidate all caches")
+   @ManagedDescription("Invalidate all caches")
    @Impact(ImpactType.WRITE)
    public void invalidateAll()
    {
@@ -127,5 +127,31 @@ public class PicketLinkIDMCacheService
       {
          cacheProvider.invalidateAll();
       }
+   }
+
+   @Managed
+   @ManagedDescription("Print content of all caches")
+   @Impact(ImpactType.READ)
+   public String printCaches()
+   {
+      StringBuilder builder = new StringBuilder("API CACHE PROVIDERS: \n\n");
+      for (APICacheProvider cacheProvider : apiCacheProviders)
+      {
+         builder.append(cacheProvider.printContent());
+      }
+
+      builder.append("\n\n\nSTORE CACHE PROVIDERS: \n\n");
+      for (IdentityStoreCacheProvider cacheProvider : storeCacheProviders)
+      {
+         builder.append(cacheProvider.printContent());
+      }
+
+      builder.append("\n\n\nINTEGRATION CACHES: \n\n");
+      for (IntegrationCache cacheProvider : integrationCache)
+      {
+         builder.append(cacheProvider.printContent());
+      }
+
+      return builder.toString();
    }
 }
