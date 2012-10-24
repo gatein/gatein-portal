@@ -93,7 +93,7 @@
 
 .UIHomePagePortlet .AdImageLeft {
 	background: url('DefaultSkin/background/RightHome.jpg') no-repeat left top; /* orientation=lt */
-	background: url('DefaultSkin/background/RightHome-rt.jpg') no-repeat right top /* orientation=rt */
+	background: url('DefaultSkin/background/RightHome-rt.jpg') no-repeat right top; /* orientation=rt */
 }
 
 *html .UIHomePagePortlet .AdImageLeft {
