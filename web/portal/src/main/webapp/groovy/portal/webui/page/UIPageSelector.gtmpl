@@ -12,7 +12,7 @@
 	if(page != null) {
 		name = page.getKey().getName();
 		pageId = page.getKey().format();
-		title = page.getState().getName();
+		title = page.getState().getDisplayName();
 		if (pageId == null) pageId = ""; 
 		if (name == null) name = ""; 
 		if (title == null) title = ""; 
