@@ -23,6 +23,7 @@
       <module>resourceserving</module>
       <module>useridentity</module>
       <module>amd-js</module>
+      <module>todomvc</module>
    </modules>
 
 </project>

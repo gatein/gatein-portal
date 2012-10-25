@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!--
+
+    Copyright (C) 2009 eXo Platform SAS.
+    
+    This is free software; you can redistribute it and/or modify it
+    under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation; either version 2.1 of
+    the License, or (at your option) any later version.
+    
+    This software is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+    Lesser General Public License for more details.
+    
+    You should have received a copy of the GNU Lesser General Public
+    License along with this software; if not, write to the Free
+    Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+    02110-1301 USA, or see the FSF site: http://www.fsf.org.
+
+-->
+
+<gatein-resources
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
+   
+   <portlet-skin>
+      <application-name>todomvc</application-name>
+      <portlet-name>TodoPortlet</portlet-name>
+      <skin-name>Default</skin-name>
+      <css-path>/todos/DefaultStylesheet.css</css-path>
+   </portlet-skin>
+
+   <portlet>
+     <name>TodoPortlet</name>
+     <module>
+       <script>
+         <path>/todos/todo.js</path>
+       </script>
+       <depends>
+       	<module>todomodel</module>
+       </depends>
+       <depends>
+         <module>todoview</module>
+       </depends>
+       <depends>
+       	<module>backbone</module>
+       </depends>
+       <depends>
+       	<module>jquery</module>
+       </depends>
+     </module>
+   </portlet>      
+
+	<module>
+      <name>todoview</name>     
+      <script>
+        <path>/todos/view.js</path>         	
+      </script>      
+      <depends>
+       	<module>backbone</module>
+       </depends>
+       <depends>
+         <module>underscore</module>
+       </depends>
+       <depends>
+         <module>jquery</module>
+       </depends>
+   </module>
+   
+   <module>
+      <name>todomodel</name>     
+      <script>
+        <path>/todos/model.js</path>         	
+      </script>      
+      <depends>
+       	<module>backbone</module>
+       </depends>
+       <depends>
+         <module>underscore</module>
+       </depends>
+       <depends>
+         <module>localStorage</module>
+       </depends>
+   </module>
+
+	<!-- Vendor library -->
+   <module>
+      <name>json2</name>    
+      <as>JSON</as> 
+      <script>
+         <adapter>
+         (function() {         	
+         	<include>/todos/vendor/json2.js</include>         	
+         	return this.JSON;
+         })();
+         </adapter>
+      </script>
+   </module>
+   
+   <module>
+      <name>underscore</name>     
+      <as>_</as>
+      <script>
+        <path>/todos/vendor/underscore.js</path>         	
+      </script>      
+      <depends>
+      	<module>require</module>      	
+      </depends>
+      <depends>
+      	<module>exports</module>      	
+      </depends>
+      <depends>
+      	<module>module</module>      	
+      </depends>
+   </module>
+   
+   <module>
+      <name>backbone</name>     
+      <as>Backbone</as>
+      <script>
+         <adapter>
+         (function() {         	
+         	<include>/todos/vendor/backbone.js</include>         	
+         }).call({jQuery: $});
+         </adapter>
+      </script>
+      <depends>
+      	<module>require</module>      	
+      </depends>
+      <depends>
+      	<module>exports</module>      	
+      </depends>
+      <depends>
+      	<module>underscore</module>
+      	<as>underscore</as>
+      </depends>
+      <depends>
+      	<module>json2</module>
+      </depends>
+      <depends>
+      	<module>jquery</module>
+      </depends>
+   </module>
+   
+   <module>
+      <name>localStorage</name>     
+      <script>
+         <path>/todos/vendor/backbone-localstorage.js</path>         	
+      </script>
+      <depends>
+      	<module>underscore</module>
+      </depends>
+      <depends>
+      	<module>backbone</module>
+      </depends>
+      <depends>
+      	<module>json2</module>
+      </depends>
+   </module>
+
+</gatein-resources>
