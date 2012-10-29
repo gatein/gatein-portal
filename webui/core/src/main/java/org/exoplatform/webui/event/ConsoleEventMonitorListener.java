@@ -43,19 +43,22 @@ public class ConsoleEventMonitorListener extends EventListener
 
    public void execute(Event event) throws Exception
    {
-      MonitorEvent mevent = (MonitorEvent)event;
-      StringBuilder b = new StringBuilder();
-      b.append("\nComponent ").append(event.getSource().getClass().getName()).append(
-         ", phase " + event.getExecutionPhase()).append("\n  Start event ").append(mevent.getName()).append(" at ")
-         .append(new Date(mevent.getStartExecutionTime()));
-      if (mevent.getEndExecutionTime() > 0)
+      if (log.isDebugEnabled())
       {
-         b.append("\n  End event ").append(mevent.getName()).append(" at ").append(
-            new Date(mevent.getEndExecutionTime()));
-         b.append("\n  Execute the event in ").append(mevent.getEndExecutionTime() - mevent.getStartExecutionTime());
+         MonitorEvent mevent = (MonitorEvent)event;
+         StringBuilder b = new StringBuilder();
+         b.append("\nComponent ").append(event.getSource().getClass().getName()).append(
+               ", phase " + event.getExecutionPhase()).append("\n  Start event ").append(mevent.getName()).append(" at ")
+               .append(new Date(mevent.getStartExecutionTime()));
+         if (mevent.getEndExecutionTime() > 0)
+         {
+            b.append("\n  End event ").append(mevent.getName()).append(" at ").append(
+                  new Date(mevent.getEndExecutionTime()));
+            b.append("\n  Execute the event in ").append(mevent.getEndExecutionTime() - mevent.getStartExecutionTime());
+         }
+         b.append("\n");
+         log.debug(b.toString());
       }
-      b.append("\n");
-      log.debug(b.toString());
    }
 
 }
