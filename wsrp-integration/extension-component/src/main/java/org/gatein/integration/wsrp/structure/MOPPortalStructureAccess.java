@@ -23,10 +23,12 @@
 
 package org.gatein.integration.wsrp.structure;
 
+import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.portal.pom.data.Mapper;
-import org.exoplatform.portal.pom.data.PageKey;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Page;
 import org.gatein.mop.api.workspace.Site;
@@ -88,7 +90,7 @@ public class MOPPortalStructureAccess implements PortalStructureAccess
       // mark page for cache invalidation otherwise DataCache will use the previous customization id when trying to set
       // the portlet state in UIPortlet.setState and will not find it resulting in an error
       Page page = window.getPage();
-      session.scheduleForEviction(new PageKey("portal", page.getSite().getName(), page.getName()));
+      session.scheduleForEviction(new org.exoplatform.portal.pom.data.PageKey("portal", page.getSite().getName(), page.getName()));
 
       // save
       session.save();
@@ -99,6 +101,16 @@ public class MOPPortalStructureAccess implements PortalStructureAccess
       POMSession session = pomManager.getSession();
       Site site = session.getWorkspace().getSite(Mapper.parseSiteType(portalPage.getOwnerType()), portalPage.getOwnerId());
       return getPagesFrom(site).getChild(portalPage.getName());
+   }
+
+   public Page getPageFrom(PageKey pageKey)
+   {
+      POMSession session = pomManager.getSession();
+      final SiteKey siteKey = pageKey.getSite();
+      final SiteType siteType = siteKey.getType();
+      final String siteName = siteKey.getName();
+      Site site = session.getWorkspace().getSite(Mapper.parseSiteType(siteType.getName()), siteName);
+      return getPagesFrom(site).getChild(pageKey.getName());
    }
 
    private Page getPagesFrom(Site site)

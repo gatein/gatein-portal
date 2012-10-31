@@ -23,6 +23,7 @@
 
 package org.gatein.integration.wsrp.structure;
 
+import org.exoplatform.portal.mop.page.PageKey;
 import org.gatein.mop.api.workspace.Page;
 import org.gatein.mop.api.workspace.ui.UIWindow;
 
@@ -41,4 +42,5 @@ public interface PortalStructureAccess
    void saveChangesTo(UIWindow window);
 
    Page getPageFrom(org.exoplatform.portal.config.model.Page portalPage);
+   Page getPageFrom(PageKey pageKey);
 }

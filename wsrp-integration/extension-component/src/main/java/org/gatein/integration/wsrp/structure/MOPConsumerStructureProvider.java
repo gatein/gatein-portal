@@ -25,6 +25,10 @@ package org.gatein.integration.wsrp.structure;
 
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
@@ -52,7 +56,7 @@ import java.util.Map;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exoplatform.portal.config.model.Page> implements ConsumerStructureProvider
+public class MOPConsumerStructureProvider extends Listener implements ConsumerStructureProvider
 {
    private final PortalStructureAccess structureAccess;
    private Map<String, PageInfo> pageInfos;
@@ -126,6 +130,10 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
             {
                Described described = component.adapt(Described.class);
                String name = described.getName();
+               if(name == null)
+               {
+                  name = described.getDescription();
+               }
 
                pageInfo.addWindow(name, component.getObjectId());
             }
@@ -186,32 +194,45 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
    }
 
    @Override
-   public void onEvent(Event<DataStorage, org.exoplatform.portal.config.model.Page> event) throws Exception
+   public void onEvent(Event event) throws Exception
    {
       String eventName = event.getEventName();
 
       // get the MOP page from the event data
-      org.exoplatform.portal.config.model.Page portalPage = event.getData();
-      Page page = structureAccess.getPageFrom(portalPage);
+      final Object eventData = event.getData();
+      final Page page;
+      PageKey pageKey = null;
+      if (eventData instanceof PageKey)
+      {
+         pageKey = (PageKey)eventData;
+         page = structureAccess.getPageFrom(pageKey);
+      }
+      else
+      {
+         org.exoplatform.portal.config.model.Page portalPage = (org.exoplatform.portal.config.model.Page)eventData;
+         page = structureAccess.getPageFrom(portalPage);
+      }
 
-      if (page == null && DataStorage.PAGE_REMOVED.equals(eventName))
+      if (pageKey != null && page == null && EventType.PAGE_DESTROYED.equals(eventName))
       {
          // if we try to remove a page, when we get this event, the page has already been removed from JCR
          // so we need to work around that fact by retrieving the corresponding PageInfo from the portal page title
          // which should match the Described name and check that it matches the internal name before removing it
-         removePage(portalPage.getTitle(), portalPage.getName());
+         final PageService pageService = (PageService) event.getSource();
+         final PageContext pageContext = pageService.loadPage(pageKey);
+         removePage(pageContext.getState().getDisplayName(), pageKey.getName());
 
          return;
       }
 
       if (page != null)
       {
-         if (DataStorage.PAGE_CREATED.equals(eventName))
+         if (EventType.PAGE_CREATED.equals(eventName))
          {
             // add information for new page
             addPage(page);
          }
-         else if (DataStorage.PAGE_UPDATED.equals(eventName))
+         else if (EventType.PAGE_UPDATED.equals(eventName) || DataStorage.PAGE_UPDATED.equals(eventName))
          {
             removePage(page);
             addPage(page);
@@ -273,7 +294,7 @@ public class MOPConsumerStructureProvider extends Listener<DataStorage, org.exop
       public void addWindow(String windowName, String uuid)
       {
          // if we don't have a window name, use the UUID
-         if(ParameterValidation.isNullOrEmpty(windowName))
+         if (ParameterValidation.isNullOrEmpty(windowName))
          {
             windowName = uuid;
          }

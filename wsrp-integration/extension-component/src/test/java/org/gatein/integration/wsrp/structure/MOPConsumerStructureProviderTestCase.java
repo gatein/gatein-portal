@@ -26,6 +26,11 @@ package org.gatein.integration.wsrp.structure;
 import junit.framework.TestCase;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.page.PageContext;
+import org.exoplatform.portal.mop.page.PageKey;
+import org.exoplatform.portal.mop.page.PageService;
+import org.exoplatform.portal.mop.page.PageState;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.services.listener.Event;
 import org.gatein.mop.api.content.Customization;
@@ -113,11 +118,15 @@ public class MOPConsumerStructureProviderTestCase extends TestCase
       Page foo1 = foo.getChild("foo1");
       addWindows(foo1, "windowfoo11");
       org.exoplatform.portal.config.model.Page portalPage = mock(org.exoplatform.portal.config.model.Page.class);
+      PageKey pageKey = mock(PageKey.class);
       when(structureAccess.getPageFrom(portalPage)).thenReturn(foo);
+      when(structureAccess.getPageFrom(pageKey)).thenReturn(foo);
 
       int pageNumber = provider.getPageIdentifiers().size();
 
-      provider.onEvent(new Event<DataStorage, org.exoplatform.portal.config.model.Page>(DataStorage.PAGE_CREATED, null, portalPage));
+      // when a page is created, the events being sent are now EventType.PAGE_CREATED and DataStorage.PAGE_UPDATED in that order
+      provider.onEvent(new Event<PageService, PageKey>(EventType.PAGE_CREATED, null, pageKey));
+      provider.onEvent(new Event<DataStorage, org.exoplatform.portal.config.model.Page>(DataStorage.PAGE_UPDATED, null, portalPage));
 
       List<String> identifiers = provider.getPageIdentifiers();
       assertEquals(pageNumber + 2, identifiers.size());
@@ -134,16 +143,23 @@ public class MOPConsumerStructureProviderTestCase extends TestCase
    {
       String pageToRemove = "page1";
 
-      org.exoplatform.portal.config.model.Page portalPage = mock(org.exoplatform.portal.config.model.Page.class);
-      when(portalPage.getName()).thenReturn(createInternalNameFrom(pageToRemove));
-      when(portalPage.getTitle()).thenReturn(pageToRemove);
+      // mocking internal behavior
+      PageKey pageKey = mock(PageKey.class);
+      when(pageKey.getName()).thenReturn(createInternalNameFrom(pageToRemove));
+      PageState pageState = mock(PageState.class);
+      when(pageState.getDisplayName()).thenReturn(pageToRemove);
+      PageContext pageContext = mock(PageContext.class);
+      when(pageContext.getState()).thenReturn(pageState);
+      PageService pageService = mock(PageService.class);
+      when(pageService.loadPage(pageKey)).thenReturn(pageContext);
 
       // on delete, we actually get the event after the page has been removed from JCR so we don't have an actual page
-      when(structureAccess.getPageFrom(portalPage)).thenReturn(null);
+      when(structureAccess.getPageFrom(pageKey)).thenReturn(null);
 
       int pageNumber = provider.getPageIdentifiers().size();
 
-      provider.onEvent(new Event<DataStorage, org.exoplatform.portal.config.model.Page>(DataStorage.PAGE_REMOVED, null, portalPage));
+      // when a page is deleted the event being sent is now EventType.PAGE_DESTROYED
+      provider.onEvent(new Event<PageService, PageKey>(EventType.PAGE_DESTROYED, pageService, pageKey));
 
       List<String> identifiers = provider.getPageIdentifiers();
       assertEquals(pageNumber - 1, identifiers.size());

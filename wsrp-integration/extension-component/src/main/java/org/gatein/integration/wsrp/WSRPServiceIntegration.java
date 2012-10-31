@@ -28,6 +28,7 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.pc.ExoKernelIntegration;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator;
@@ -372,8 +373,9 @@ public class WSRPServiceIntegration implements Startable, WebAppListener
          POMSessionManager sessionManager = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
          PortalStructureAccess structureAccess = new MOPPortalStructureAccess(sessionManager);
          MOPConsumerStructureProvider structureprovider = new MOPConsumerStructureProvider(structureAccess);
-         listenerService.addListener(DataStorage.PAGE_CREATED, structureprovider);
-         listenerService.addListener(DataStorage.PAGE_REMOVED, structureprovider);
+         listenerService.addListener(EventType.PAGE_CREATED, structureprovider);
+         listenerService.addListener(EventType.PAGE_DESTROYED, structureprovider);
+         listenerService.addListener(EventType.PAGE_UPDATED, structureprovider);
          listenerService.addListener(DataStorage.PAGE_UPDATED, structureprovider);
 
          // migration service
