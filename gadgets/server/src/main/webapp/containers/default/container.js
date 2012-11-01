@@ -46,7 +46,7 @@
 // to share configuration.
 // TODO: Move out accel container config into a separate accel.js file.
 // TODO : remove "" container
-{"gadgets.container" : ["default", "accel", ""],
+{"gadgets.container" : ["default", "portal", ""],
 
 // Set of regular expressions to validate the parent parameter. This is
 // necessary to support situations where you want a single container to support
