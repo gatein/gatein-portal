@@ -635,7 +635,7 @@
 	    var conts = tab.find("." + portalNav.containerStyleClass);
 	    if (conts.length)
 	    {
-	      portalNav.hideMenuTimeoutIds[conts[0].id] = window.setTimeout(function() {portalNav.hideMenu(conts[0].id); }, 300);
+	      portalNav.hideMenuTimeoutIds[conts[0].id] = window.setTimeout(function() {portalNav.hideMenu(conts[0].id); }, 0);
 	    }
 	    return false;
 	  },
