@@ -20,31 +20,22 @@ package org.exoplatform.portal.resource.compressor;
 
 import com.google.javascript.jscomp.*;
 import com.google.javascript.jscomp.Compiler;
-import org.apache.commons.io.IOUtils;
-import org.exoplatform.commons.utils.IOUtil;
-import org.exoplatform.component.test.AbstractKernelTest;
-import org.exoplatform.component.test.ConfigurationUnit;
-import org.exoplatform.component.test.ConfiguredBy;
-import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.container.xml.Parameter;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.resource.AbstractWebResourceTest;
 import org.exoplatform.portal.resource.compressor.impl.ClosureCompressorPlugin;
 import org.exoplatform.portal.resource.compressor.impl.JSMinCompressorPlugin;
 import org.exoplatform.portal.resource.compressor.impl.ResourceCompressorService;
 
-import java.io.BufferedInputStream;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.Scanner;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author <a href="trong.tran@exoplatform.com">Trong Tran</a>
@@ -113,7 +104,8 @@ public class TestResourceCompressorService extends AbstractWebResourceTest
       param.setName("plugin.priority");
       param.setValue("10");
       priorityParam.addParameter(param);
-      compressor.registerCompressorPlugin(new ClosureCompressorPlugin(priorityParam));
+      ClosureCompressorPlugin plugin = new ClosureCompressorPlugin(priorityParam);
+      compressor.registerCompressorPlugin(plugin);
       try
       {
          compressor.compress(reader, writer, ResourceType.JAVASCRIPT);
@@ -124,6 +116,7 @@ public class TestResourceCompressorService extends AbstractWebResourceTest
       }
       finally
       {
+         unregisterCompressorPlugin(compressor, plugin);
          reader.close();
          writer.close();
       }
@@ -135,6 +128,15 @@ public class TestResourceCompressorService extends AbstractWebResourceTest
 
       String expectedJS = closureCompress(jsFile);
       assertEquals(expectedJS.length(), jsCompressedFile.length());
+   }
+
+   private void unregisterCompressorPlugin(ResourceCompressorService compressor, ResourceCompressorPlugin plugin) throws Exception
+   {
+      Field pluginsField = compressor.getClass().getDeclaredField("plugins");
+      pluginsField.setAccessible(true);
+      @SuppressWarnings("unchecked")
+      Map<ResourceType, List<ResourceCompressorPlugin>> plugins = (Map<ResourceType, List<ResourceCompressorPlugin>>) pluginsField.get(compressor);
+      plugins.get(plugin.getResourceType()).remove(plugin);
    }
 
    private String closureCompress(File input) throws Exception
