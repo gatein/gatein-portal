@@ -37,10 +37,10 @@
    <name>GateIn - Portal</name>
 
    <properties>
-      <org.exoplatform.kernel.version>2.4.0-CR1</org.exoplatform.kernel.version>
-      <org.exoplatform.core.version>2.5.0-CR1</org.exoplatform.core.version>
-      <org.exoplatform.ws.version>2.3.0-CR1</org.exoplatform.ws.version>
-      <org.exoplatform.jcr.version>1.15.0-CR1</org.exoplatform.jcr.version>
+      <org.exoplatform.kernel.version>2.4.0-CR2</org.exoplatform.kernel.version>
+      <org.exoplatform.core.version>2.5.0-CR2</org.exoplatform.core.version>
+      <org.exoplatform.ws.version>2.3.0-CR2</org.exoplatform.ws.version>
+      <org.exoplatform.jcr.version>1.15.0-CR2</org.exoplatform.jcr.version>
       <org.shindig.version>2.0.2.Final-gatein-2</org.shindig.version>
       <nl.captcha.simplecaptcha.version>1.1.1.Final-gatein-2</nl.captcha.simplecaptcha.version>
       <org.gatein.common.version>2.1.0.Beta01</org.gatein.common.version>
@@ -56,7 +56,7 @@
       <rhino.version>1.6R5</rhino.version>
       <org.codehaus.groovy.version>1.7.6</org.codehaus.groovy.version>
       <javax.servlet.version>2.5</javax.servlet.version>
-      <version.chromattic>1.2.0-beta1</version.chromattic>
+      <version.chromattic>1.2.0-beta2</version.chromattic>
       <version.reflext>1.1.0</version.reflext>
       <org.staxnav.version>0.9.6</org.staxnav.version>
       <jcip.version>1.0</jcip.version>
