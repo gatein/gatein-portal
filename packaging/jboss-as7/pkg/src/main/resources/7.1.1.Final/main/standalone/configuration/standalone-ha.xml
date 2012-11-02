@@ -389,8 +389,8 @@
                         <login-module code="org.gatein.sso.integration.SSODelegateLoginModule" flag="required">
                             <module-option name="enabled" value="${gatein.sso.login.module.enabled}" />
                             <module-option name="delegateClassName" value="${gatein.sso.login.module.class}" />
-                            <module-option name="portalContainerName" value="portal" />
-                            <module-option name="realmName" value="gatein-domain" />
+                            <module-option name="portalContainerName" value="sample-portal" />
+                            <module-option name="realmName" value="gatein-domain-sample-portal" />
                             <module-option name="password-stacking" value="useFirstPass" />
                         </login-module>
                         <login-module code="org.exoplatform.services.security.j2ee.JBossAS7LoginModule" flag="required">
