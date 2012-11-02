@@ -27,9 +27,10 @@
 			boolean isCurrent = false;
 			String clazz = "";
 			String href = "#";
-				
-			for(int i = 0; i < uicomponent.getAllPortalNames().size(); i++) {
-				String portalName = uicomponent.getAllPortalNames().get(i);
+
+			List<String> allPortalNames = uicomponent.getAllPortalNames();
+			for(int i = 0; i < allPortalNames.size(); i++) {
+				String portalName = allPortalNames.get(i);
  				if(portalName.equals(uicomponent.getCurrentPortal())) {
 					isCurrent = true;
 			 	} else isCurrent = false; 	
