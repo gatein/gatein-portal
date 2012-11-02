@@ -31,7 +31,7 @@
             <properties>
               <property name="source-name" value="jdbcexo"/>
               <property name="dialect" value="auto"/>
-              <property name="multi-db" value="false"/>
+              <property name="db-structure-type" value="isolated" />
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
               <property name="swap-directory" value="${gatein.test.tmp.dir}/jcr/swap/system"/>
@@ -77,7 +77,7 @@
             <properties>
               <property name="source-name" value="jdbcexo"/>
               <property name="dialect" value="auto"/>
-              <property name="multi-db" value="false"/>
+              <property name="db-structure-type" value="isolated" />
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
               <property name="swap-directory" value="${gatein.test.tmp.dir}/jcr/swap/portal-test"/>
