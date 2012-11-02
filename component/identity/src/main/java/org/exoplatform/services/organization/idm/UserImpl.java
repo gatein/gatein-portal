@@ -55,6 +55,19 @@ public class UserImpl extends org.exoplatform.services.organization.impl.UserImp
       this.displayName = fullName;
    }
 
+   @Override
+   public void setDisplayName(String displayName)
+   {    
+      if (displayName != null) 
+      {
+        this.displayName = displayName.trim().isEmpty() ? null : displayName;
+      } else 
+      {
+        this.displayName = displayName;
+      }
+   }
+   
+   @Override
    public String getDisplayName()
    {
       return this.displayName;
