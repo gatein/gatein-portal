@@ -26,7 +26,7 @@
   <UDP
       singleton_name="gatein-udp-ispn"
       bind_port="${gatein.jgroups3.udp.bind_port:56300}"
-      mcast_addr="${gatein.jgroups3.udp.mcast_addr:231.0.0.4}"
+      mcast_addr="${jboss.default.multicast.address:230.0.0.4}"
       mcast_port="${gatein.jgroups3.udp.mcast_port:46700}"
       tos="8"
       ucast_recv_buf_size="20m"
