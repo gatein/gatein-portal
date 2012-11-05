@@ -33,12 +33,19 @@ public class KernelBootstrapTestCase extends TestCase
    public void testReboot()
    {
       KernelBootstrap bootstrap = new KernelBootstrap();
-      bootstrap.boot();
-      PortalContainer container1 = bootstrap.getContainer();
-      bootstrap.dispose();
-      bootstrap.boot();
-      PortalContainer container2 = bootstrap.getContainer();
-      assertNotSame(container1, container2);
+      try
+      {
+         bootstrap.boot();
+         PortalContainer container1 = bootstrap.getContainer();
+         bootstrap.dispose();
+         bootstrap.boot();
+         PortalContainer container2 = bootstrap.getContainer();
+         assertNotSame(container1, container2);
+      }
+      finally
+      {
+         bootstrap.dispose();
+      }
    }
 
    public void testGetTmpDir()
