@@ -42,6 +42,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.PersonalNameValidator;
 import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 
@@ -71,9 +72,9 @@ public class UIAccountProfiles extends UIForm
          .addValidator(ResourceValidator.class).addValidator(ExpressionValidator.class,
             Utils.USER_NAME_VALIDATOR_REGEX, "ResourceValidator.msg.Invalid-char"));
       addUIFormInput(new UIFormStringInput("firstName", "firstName", useraccount.getFirstName()).addValidator(
-         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
+         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class).addValidator(PersonalNameValidator.class));
       addUIFormInput(new UIFormStringInput("lastName", "lastName", useraccount.getLastName()).addValidator(
-         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class));
+         StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class).addValidator(PersonalNameValidator.class));
       addUIFormInput(new UIFormStringInput("displayName", "displayName", useraccount.getDisplayName()).addValidator(
             StringLengthValidator.class, 0, 90));
       addUIFormInput(new UIFormStringInput("email", "email", useraccount.getEmail()).addValidator(

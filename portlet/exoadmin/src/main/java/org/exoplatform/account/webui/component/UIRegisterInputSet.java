@@ -30,7 +30,7 @@ import org.exoplatform.webui.form.UIFormInputWithActions;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.exoplatform.webui.form.validator.NaturalLanguageValidator;
+import org.exoplatform.webui.form.validator.PersonalNameValidator;
 import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 import org.exoplatform.webui.form.validator.UserConfigurableValidator;
@@ -77,10 +77,10 @@ public class UIRegisterInputSet extends UIFormInputWithActions
          .addValidator(MandatoryValidator.class).addValidator(PasswordStringLengthValidator.class, 6, 30));
       
       addUIFormInput(new UIFormStringInput(FIRST_NAME, FIRST_NAME, null).addValidator(StringLengthValidator.class, 1,
-         45).addValidator(MandatoryValidator.class).addValidator(NaturalLanguageValidator.class));
+         45).addValidator(MandatoryValidator.class).addValidator(PersonalNameValidator.class));
       
       addUIFormInput(new UIFormStringInput(LAST_NAME, LAST_NAME, null).addValidator(StringLengthValidator.class, 1,
-         45).addValidator(MandatoryValidator.class).addValidator(NaturalLanguageValidator.class));
+         45).addValidator(MandatoryValidator.class).addValidator(PersonalNameValidator.class));
 
       addUIFormInput(new UIFormStringInput(DISPLAY_NAME, DISPLAY_NAME, null).addValidator(StringLengthValidator.class, 0,
             90));

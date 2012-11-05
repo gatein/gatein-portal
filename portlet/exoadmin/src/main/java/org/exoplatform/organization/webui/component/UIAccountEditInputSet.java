@@ -36,7 +36,7 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
-import org.exoplatform.webui.form.validator.NaturalLanguageValidator;
+import org.exoplatform.webui.form.validator.PersonalNameValidator;
 import org.exoplatform.webui.form.validator.PasswordStringLengthValidator;
 import org.exoplatform.webui.form.validator.ResourceValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
@@ -65,10 +65,12 @@ public class UIAccountEditInputSet extends UIFormInputSet
       super(name);
       addUIFormInput(new UIFormStringInput(USERNAME, "userName", null).setReadOnly(true).addValidator(
          MandatoryValidator.class).addValidator(UserConfigurableValidator.class, UserConfigurableValidator.USERNAME));
-      addUIFormInput(new UIFormStringInput("firstName", "firstName", null).
-         addValidator(StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class).addValidator(NaturalLanguageValidator.class));
+      addUIFormInput(new UIFormStringInput("firstName", "firstName", null)
+         .addValidator(StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class)
+         .addValidator(PersonalNameValidator.class));
       addUIFormInput(new UIFormStringInput("lastName", "lastName", null)
-      .addValidator(StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class).addValidator(NaturalLanguageValidator.class));
+         .addValidator(StringLengthValidator.class, 1, 45).addValidator(MandatoryValidator.class)
+         .addValidator(PersonalNameValidator.class));
 
       // TODO: GTNPORTAL-2358 switch bindingField fullName to displayName once displayName will be available in Organization API
       addUIFormInput(new UIFormStringInput("displayName", "fullName", null).addValidator(
