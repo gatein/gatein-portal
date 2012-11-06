@@ -230,6 +230,7 @@ public class LoginServlet extends AbstractHttpServlet
          }
          else
          {
+            resp.setContentType("text/html; charset=UTF-8");
             getServletContext().getRequestDispatcher("/login/jsp/login.jsp").include(req, resp);
          }
       }
