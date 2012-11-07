@@ -19,8 +19,12 @@
 
 package org.exoplatform.webui.application;
 
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.pc.ExoKernelIntegration;
 import org.exoplatform.resolver.ApplicationResourceResolver;
 import org.exoplatform.resolver.ResourceResolver;
+import org.exoplatform.services.resources.PortletConfigRegistry;
 import org.exoplatform.web.application.Application;
 import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.RequestContext;
@@ -33,6 +37,8 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
+
+import javax.portlet.PortletConfig;
 
 /**
  * Created by The eXo Platform SAS
@@ -102,8 +108,7 @@ abstract public class WebuiRequestContext extends RequestContext
       {
          try
          {
-            Locale locale = getLocale();
-            appRes_ = getApplication().getResourceBundle(locale);
+            appRes_ = findApplicationResourceBundle();
          }
          catch (Exception e)
          {
@@ -111,6 +116,33 @@ abstract public class WebuiRequestContext extends RequestContext
          }
       }
       return appRes_;
+   }
+
+   /**
+    * Dirty fix for GTNPORTAL-2700. When GTNPORTAL-2700 is solved in
+    * {@link ExoKernelIntegration}. This method can be changed to always return
+    * {@code getApplication().getResourceBundle(locale)}
+    * 
+    * @return
+    * @throws Exception
+    */
+   protected ResourceBundle findApplicationResourceBundle() throws Exception
+   {
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      PortletConfigRegistry registry = (PortletConfigRegistry) container
+            .getComponentInstanceOfType(PortletConfigRegistry.class);
+      String portlet = getApplication().getApplicationName();
+      PortletConfig config = registry.getPortletConfig(portlet);
+      Locale locale = getLocale();
+      if (config != null)
+      {
+         ResourceBundle result = config.getResourceBundle(locale);
+         if (result != null)
+         {
+            return result;
+         }
+      }
+      return getApplication().getResourceBundle(locale);
    }
 
    public String getActionParameterName()
@@ -185,12 +217,18 @@ abstract public class WebuiRequestContext extends RequestContext
          ApplicationResourceResolver appResolver = app.getResourceResolver();
          ResourceResolver resolver = appResolver.getResourceResolver(uri);
          if (resolver != null)
+         {
             return resolver;
-       	 pcontext = pcontext.getParentAppRequestContext();
+         }
+         pcontext = pcontext.getParentAppRequestContext();
          if (pcontext != null)
+         {
             app = pcontext.getApplication();
+         }
          else
+         {
             app = null;
+         }
       }
       return null;
    }

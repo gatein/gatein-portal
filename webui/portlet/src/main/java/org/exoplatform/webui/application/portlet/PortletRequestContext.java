@@ -107,7 +107,7 @@ public class PortletRequestContext extends WebuiRequestContext
    public void setUIApplication(UIApplication uiApplication) throws Exception
    {
       uiApplication_ = uiApplication;
-      appRes_ = getApplication().getResourceBundle(getParentAppRequestContext().getLocale());
+      appRes_ = findApplicationResourceBundle();
    }
 
    final public String getRequestParameter(String name)

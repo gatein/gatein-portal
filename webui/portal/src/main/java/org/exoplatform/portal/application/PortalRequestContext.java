@@ -345,7 +345,7 @@ public class PortalRequestContext extends WebuiRequestContext
 
    public void refreshResourceBundle() throws Exception
    {
-      appRes_ = getApplication().getResourceBundle(getLocale());
+      appRes_ = findApplicationResourceBundle();
    }
 
    public void requestAuthenticationLogin() throws Exception

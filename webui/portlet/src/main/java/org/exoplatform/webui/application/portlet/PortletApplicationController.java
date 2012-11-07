@@ -23,6 +23,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
+import org.exoplatform.services.resources.PortletConfigRegistry;
 import org.exoplatform.web.WebAppController;
 
 import java.io.IOException;
@@ -70,6 +71,11 @@ public class PortletApplicationController extends GenericPortlet
       PortletContext pcontext = config.getPortletContext();
       String contextName = pcontext.getPortletContextName();
       applicationId_ = contextName + "/" + config.getPortletName();
+      
+      // Dirty fix for GTNPORTAL-2700
+      ExoContainer container = ExoContainerContext.getCurrentContainer();
+      PortletConfigRegistry registry = (PortletConfigRegistry) container.getComponentInstanceOfType(PortletConfigRegistry.class);
+      registry.putPortletConfig(config.getPortletName(), config);
    }
 
    /**
