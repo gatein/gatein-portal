@@ -121,6 +121,7 @@ public class DescriptionServiceImpl implements DescriptionService
       WorkspaceObject obj = session.findObjectById(id);
       I18NAdapter able = obj.adapt(I18NAdapter.class);
       Described desc = able.getI18NMixin(Described.class, locale, true);
+      cache.removeState(new CacheKey(locale, id));
       desc.setState(description);
    }
 

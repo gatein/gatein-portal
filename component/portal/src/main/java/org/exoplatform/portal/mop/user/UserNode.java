@@ -226,6 +226,17 @@ public class UserNode
       }
       return resolvedLabel;
    }
+   
+   public void setResolvedLabel(String label){
+      String id = context.getId();      
+      Locale userLocale = owner.navigation.portal.context.getUserLocale();      
+      DescriptionService descriptionService = owner.navigation.portal.service.getDescriptionService();
+      
+      Described.State description = new Described.State(label, null);
+            
+      descriptionService.setDescription(id, userLocale, description);
+      this.resolvedLabel = label;
+   }
 
    public String getEncodedResolvedLabel()
    {

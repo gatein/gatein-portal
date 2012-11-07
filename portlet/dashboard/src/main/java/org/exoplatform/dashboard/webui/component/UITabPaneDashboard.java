@@ -349,7 +349,7 @@ public class UITabPaneDashboard extends UIContainer
          
          UserNode renamedNode = parentNode.getChild(nodeName);
          renamedNode.setName(newNodeName);
-         renamedNode.setLabel(newNodeLabel);
+         renamedNode.setResolvedLabel(newNodeLabel);
 
          if (renamedNode.getPageRef() != null)
          {
