@@ -37,6 +37,11 @@ public class TicketConfiguration extends AbstractTokenService<GateInToken, Strin
     }
 
     @Override
+    public void start() {
+        // Don't start garbage collection of expired tokens
+    }
+
+    @Override
     public GateInToken getToken(String id) {
         throw new NotYetImplemented();
     }

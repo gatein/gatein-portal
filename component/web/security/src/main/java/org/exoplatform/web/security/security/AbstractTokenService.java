@@ -36,6 +36,8 @@ import org.exoplatform.management.jmx.annotations.Property;
 import org.exoplatform.web.login.LoginServlet;
 import org.exoplatform.web.security.Token;
 import org.exoplatform.web.security.TokenStore;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.security.Credentials;
 import org.picocontainer.Startable;
 
@@ -52,6 +54,8 @@ import org.picocontainer.Startable;
 @ManagedDescription("Token Store Service")
 @NameTemplate({ @Property(key = "service", value = "TokenStore"), @Property(key = "name", value = "{Name}") })
 public abstract class AbstractTokenService<T extends Token, K> implements Startable, TokenStore {
+
+    private static final Logger log = LoggerFactory.getLogger(AbstractTokenService.class);
 
     protected static final String SERVICE_CONFIG = "service.configuration";
 
@@ -79,7 +83,11 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
         executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleWithFixedDelay(new Runnable() {
             public void run() {
-                service.cleanExpiredTokens();
+                try {
+                    service.cleanExpiredTokens();
+                } catch (Throwable t) {
+                    log.warn("Failed to clean expired tokens", t);
+                }
             }
         }, 0, DELAY_TIME, TimeUnit.SECONDS);
 
@@ -131,7 +139,7 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
         K[] ids = getAllTokens();
         for (K id : ids) {
             T token = getToken(id);
-            if (token.isExpired()) {
+            if (token != null && token.isExpired()) {
                 deleteToken(id);
             }
         }
