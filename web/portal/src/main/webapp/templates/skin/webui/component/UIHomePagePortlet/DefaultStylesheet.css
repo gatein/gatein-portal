@@ -24,8 +24,7 @@
 
 .UIHomePagePortlet {	
 	background: white;
-	padding: 8px 8px 0px;
-	width: 948px;
+	padding: 7px 8px 7px 7px;
 }
 
 .UIHomePagePortlet .TRContainer .PortletDecoration {	
@@ -33,13 +32,14 @@
 }
 
 .UIHomePagePortlet .TRContainer {
-	width: 222px;
-	height: 390px;
+	width: 225px;
+	height: 385px;
 	float: right; /* orientation=lt */
 	float: left; /* orientation=rt */
-	border: 1px solid #C6C6C6;	
+	border: 1px solid #eee;	
 	text-align: center;
 	background: url('DefaultSkin/background/BgRightColumn.gif') repeat-x bottom center;
+	margin-top:1px;
 }
 
 .UIHomePagePortlet .TRContainer a {
@@ -138,12 +138,10 @@
 }
 
 .UIHomePagePortlet .HomePortletContent {
-	margin-top: 8px;
+	margin-top: 5px;
 }
 
 .UIHomePagePortlet .HomePortletContent .LeftAccountsContainer {
-	padding-left: 3px;
-	background: url('DefaultSkin/background/HomePagePortlet.gif') no-repeat left -529px;
 }
 
 _html .UIHomePagePortlet .HomePortletContent .LeftAccountsContainer {
@@ -151,9 +149,6 @@ _html .UIHomePagePortlet .HomePortletContent .LeftAccountsContainer {
 }
 
 .UIHomePagePortlet .HomePortletContent .RightAccountsContainer {
-	background: url('DefaultSkin/background/HomePagePortlet.gif') no-repeat right -799px;
-	padding-right: 3px;
-	_padding-right: 0px;
 }
 
 _html .UIHomePagePortlet .HomePortletContent .RightAccountsContainer {
@@ -178,6 +173,8 @@ _html .UIHomePagePortlet .HomePortletContent .RightAccountsContainer {
 	color: #808185;
 	text-align: left; /* orientation=lt */
 	text-align: right; /* orientation=rt */
+	position:relative;
+	top: 4px;
 }
 
 .UIHomePagePortlet .HomePortletContent .AccountBlock {
