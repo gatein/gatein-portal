@@ -37,8 +37,10 @@ import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
+
 import java.util.List;
 import java.util.Locale;
+import java.util.ServiceLoader;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServletRequest;
@@ -56,6 +58,8 @@ public class PortalRequestHandler extends WebRequestHandler
 
    protected static Log log = ExoLogger.getLogger("portal:PortalRequestHandler");
 
+   private static PortalApplicationFactory appProvider;
+
    /** . */
    public static final QualifiedName REQUEST_PATH = QualifiedName.create("gtn", "path");
 
@@ -68,6 +72,17 @@ public class PortalRequestHandler extends WebRequestHandler
    /** . */
    public static final QualifiedName LANG = QualifiedName.create("gtn", "lang");
 
+   static
+   {
+      ServiceLoader<PortalApplicationFactory> loader = ServiceLoader.load(PortalApplicationFactory.class);
+      for (PortalApplicationFactory factory : loader)
+      {
+         // We are expecting only one
+         appProvider = factory;
+         break;
+      }
+   }
+
    public String getHandlerName()
    {
       return "portal";
@@ -76,7 +91,15 @@ public class PortalRequestHandler extends WebRequestHandler
    @Override
    public void onInit(WebAppController controller, ServletConfig sConfig) throws Exception
    {
-      PortalApplication application = new PortalApplication(sConfig);
+      PortalApplication application;
+      if (appProvider != null)
+      {
+         application = appProvider.createApplication(sConfig);
+      }
+      else
+      {
+         application = new PortalApplication(sConfig);
+      }
       application.onInit();
       controller.addApplication(application);
    }

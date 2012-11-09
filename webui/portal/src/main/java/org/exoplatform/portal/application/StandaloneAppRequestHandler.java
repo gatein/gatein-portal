@@ -25,15 +25,28 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
-import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
+
+import java.util.ServiceLoader;
 
 
 public class StandaloneAppRequestHandler extends PortalRequestHandler
 {
-   
+   private static StandaloneApplicationFactory appProvider;
+
    private String webuiConfigPath;
+
+   static
+   {
+      ServiceLoader<StandaloneApplicationFactory> loader = ServiceLoader.load(StandaloneApplicationFactory.class);
+      for (StandaloneApplicationFactory factory : loader)
+      {
+         // We are expecting only one
+         appProvider = factory;
+         break;
+      }
+   }
 
    public StandaloneAppRequestHandler(InitParams params)
    {
@@ -53,10 +66,18 @@ public class StandaloneAppRequestHandler extends PortalRequestHandler
    @Override
    public void onInit(WebAppController controller, ServletConfig sConfig) throws Exception
    {
-      StandaloneApplication standaloneApplication = new StandaloneApplication(sConfig);
-      standaloneApplication.setWebUIConfigPath(webuiConfigPath);
-      standaloneApplication.onInit();
-      controller.addApplication(standaloneApplication);
+      StandaloneApplication application;
+      if (appProvider != null)
+      {
+         application = appProvider.createApplication(sConfig);
+      }
+      else
+      {
+         application = new StandaloneApplication(sConfig);
+      }
+      application.setWebUIConfigPath(webuiConfigPath);
+      application.onInit();
+      controller.addApplication(application);
    }
    
    @Override

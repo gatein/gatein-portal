@@ -28,6 +28,7 @@ import org.exoplatform.web.WebAppController;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.ServiceLoader;
 
 import javax.portlet.ActionRequest;
 import javax.portlet.ActionResponse;
@@ -56,8 +57,21 @@ public class PortletApplicationController extends GenericPortlet
 
    protected static Log log = ExoLogger.getLogger(PortletApplicationController.class);
 
+   private static PortletApplicationFactory appProvider;
+
    private String applicationId_;
 
+   static
+   {
+      ServiceLoader<PortletApplicationFactory> loader = ServiceLoader.load(PortletApplicationFactory.class);
+      for (PortletApplicationFactory factory : loader)
+      {
+         // We are expecting only one
+         appProvider = factory;
+         break;
+      }
+   }
+   
    /**
     * This method is called when the portlet is initialised, in eXo this is a lazy loading
     * mechanism
@@ -155,7 +169,15 @@ public class PortletApplicationController extends GenericPortlet
       PortletApplication application = controller.getApplication(applicationId_);
       if (application == null)
       {
-         application = new PortletApplication(getPortletConfig());
+         if (appProvider != null)
+         {
+            //We are only expecting one
+            application = appProvider.createApplication(getPortletConfig());
+         }
+         else
+         {
+            application = new PortletApplication(getPortletConfig());
+         }
          application.onInit();
          application = controller.addApplication(application);
       }
