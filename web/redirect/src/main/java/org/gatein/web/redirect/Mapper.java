@@ -22,12 +22,8 @@
  ******************************************************************************/
 package org.gatein.web.redirect;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.portal.config.model.RedirectMappings;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.GenericScope;

@@ -24,7 +24,6 @@ package org.gatein.web.redirect;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletException;
@@ -34,7 +33,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.container.component.RequestLifeCycle;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.application.PortalRequestHandler;
@@ -50,7 +48,6 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.web.redirect.api.SiteRedirectService;
 import org.gatein.web.redirect.api.RedirectKey;
-import org.gatein.web.redirect.api.RedirectHandler;
 import org.gatein.web.redirect.api.RedirectType;
 import org.picocontainer.Startable;
 
@@ -104,15 +101,12 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
    @Override
    public boolean execute(ControllerContext context) throws Exception
    {
-      RequestLifeCycle.begin(ExoContainerContext.getCurrentContainer());
-      try
-      {
       HttpServletRequest request = context.getRequest();
       HttpServletResponse response = context.getResponse();
-      
+
       String originRequestPath = context.getParameter(PortalRequestHandler.REQUEST_PATH);
       SiteKey originSite = getOriginSiteKey(context);
-      
+
       if (originRequestPath != null && originRequestPath.equalsIgnoreCase("null"))
       {
          originRequestPath = null;
@@ -120,7 +114,7 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
 
       log.debug("Site Redirect being checked on [" + originSite.getName() + "], with type [" + originSite.getTypeName() 
             + "], and request path [" + originRequestPath + "]");
-      
+
       String redirectFlagValue = request.getParameter(REDIRECT_FLAG);
       if (redirectFlagValue != null && !redirectFlagValue.isEmpty())
       {
@@ -128,15 +122,15 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
          RedirectKey redirectKey =  RedirectKey.redirect(redirectSiteKey.getName());
          return performRedirect(originSite, redirectKey, originRequestPath, context, true);
       }
-      
+
       String referer = request.getHeader("Referer");
       String siteURL = request.getRequestURL().substring(0, request.getRequestURL().length() - request.getServletPath().length());
       if (referer != null && referer.startsWith(siteURL) && (context.getRequest().getSession(true).getAttribute(DEVICE_DETECTION_ATTEMPTED) == null))
       {
          return false;
       }
-      
-      
+
+
 
       RedirectKey redirectSite = getRedirect(originSite, request, context);
       if (redirectSite != null) // a redirect has already been set, use it
@@ -192,11 +186,6 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
             log.debug("Redirect for origin site " + originSite.getName() + " is being set to : " + redirectSite);
             return performRedirect(originSite, redirectSite, originRequestPath, context, false);
          }
-      }
-      }
-      finally
-      {
-         RequestLifeCycle.end();
       }
    }
 
@@ -376,8 +365,7 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
    @Override
    protected boolean getRequiresLifeCycle()
    {
-      // Do nothing for now
-      return false;
+      return true;
    }
 
    @Override

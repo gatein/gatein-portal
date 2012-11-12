@@ -22,10 +22,7 @@
  ******************************************************************************/
 package org.gatein.web.redirect.api;
 
-import java.util.List;
 import java.util.Map;
-
-import org.exoplatform.portal.mop.SiteKey;
 
 /**
  * Provides a service to perform redirects based on device characteristics, determine the node mappings for

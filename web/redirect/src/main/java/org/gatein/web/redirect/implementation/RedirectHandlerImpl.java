@@ -23,7 +23,6 @@
 package org.gatein.web.redirect.implementation;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.gatein.web.redirect.RedirectRequestHandler;
