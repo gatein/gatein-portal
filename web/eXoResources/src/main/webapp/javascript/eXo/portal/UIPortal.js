@@ -69,7 +69,7 @@ eXo.webui.UIPageTemplateOptions = {
     var itemSelectorAncest = dropDownControl.closest(".ItemSelectorAncestor");
     var itemList = itemSelectorAncest.find("div.ItemList");
     var itemSelectorLabel = itemSelectorAncest.find("a.OptionItem");
-    var itemSelector = dropDownControl.find("div.UIItemSelector");
+    var itemSelector = dropDownControl.parent().parent().parent("div.UIItemSelector");
     var itemDetailList = itemSelector.find("div.ItemDetailList");
     if (itemList.length == 0)
       return;
