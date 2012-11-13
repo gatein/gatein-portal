@@ -23,13 +23,15 @@
 
 package org.exoplatform.services.organization.idm;
 
+import java.io.Serializable;
+
 /**
  * TODO: This is temporary implementation, which should be removed after https://issues.jboss.org/browse/EXOJCR-1780 will be fixed
  * and available in GateIn.
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class UserImpl extends org.exoplatform.services.organization.impl.UserImpl
+public class UserImpl extends org.exoplatform.services.organization.impl.UserImpl implements Serializable
 {
    private String displayName;
 

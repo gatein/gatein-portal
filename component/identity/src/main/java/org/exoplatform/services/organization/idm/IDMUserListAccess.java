@@ -23,7 +23,6 @@ import org.exoplatform.commons.utils.ListAccess;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.impl.UserImpl;
 
 import org.gatein.common.logging.LogLevel;
 import org.gatein.common.logging.Logger;
