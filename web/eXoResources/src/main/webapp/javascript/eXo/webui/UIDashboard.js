@@ -139,6 +139,8 @@
 	    var portletFrag = jqDragObj.closest(".PORTLET-FRAGMENT");
 	
 	    var gadgetContainer = portletFrag.find("div.GadgetContainer").eq(0);
+
+            var gadgetPopup = jqDragObj.parents("div[id^=UIAddGadgetPopup]");
 	
 			common.DragDrop.init(dragItem, dragObj);
 	
@@ -212,7 +214,8 @@
 	      eXoDashBoard.scrollOnDrag(dragObj);
 	
 	      var targetArea = eXoDashBoard.targetObj;
-	      if (UTIL.isIn(ex, ey, gadgetContainer[0]))
+	      var isInGadgetPopup = UTIL.isIn(ex, ey, gadgetPopup.get()[0]);
+	      if (UTIL.isIn(ex, ey, gadgetContainer[0]) && !isInGadgetPopup)
 	      {
 	        if (!targetArea)
 	        {
