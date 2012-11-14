@@ -46,18 +46,11 @@
 		    <page-reference>group::/platform/users::mylink-blog</page-reference>
 		  </node>
 	  	
-	  	<node>
-		    <uri>mylink/google</uri>
-		    <name>google</name>
-		    <label>#{platform.users.mylink-google}</label>
-		    <page-reference>group::/platform/users::mylink-google</page-reference>
-		  </node>
-		  
 		  <node>
-		    <uri>mylink/facebooks</uri>
-		    <name>facebooks</name>
-		    <label>#{platform.users.mylink-facebook}</label>
-		    <page-reference>group::/platform/users::mylink-facebook</page-reference>
+		    <uri>mylink/fedora</uri>
+		    <name>fedora</name>
+		    <label>#{platform.users.mylink-fedora}</label>
+		    <page-reference>group::/platform/users::mylink-fedora</page-reference>
 		  </node>
 	  </node>
 	  

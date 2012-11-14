@@ -29,8 +29,7 @@
 <iframe> الإطار </iframe>
 <mylink>رابط  </mylink>
 <mylink-blog>رابط مدونة </mylink-blog>
-<mylink-google> رابط قوقل </mylink-google>
-<mylink-facebook> رابط فايسبوك</mylink-facebook>
+<!-- <mylink-fedora></mylink-fedora> -->
 </users>
 </platform>
 </bundle>
