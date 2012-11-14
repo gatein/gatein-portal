@@ -282,17 +282,6 @@ public class UIPageBrowser extends UIContainer
          UIPortal uiPortal = Util.getUIPortal();
          UserNode userNode = uiPortal.getSelectedUserNode();
          boolean isDeleteCurrentPage = page.getKey().equals(userNode.getPageRef());
-         if (isDeleteCurrentPage && page.getKey().getSite().equals(SiteType.USER))
-         {
-            ApplicationMessage msg = new ApplicationMessage("UIPageBrowser.msg.delete.DeleteCurrentUserPage", null, ApplicationMessage.WARNING);
-            event.getRequestContext().getUIApplication().addMessage(msg);
-            return;
-         }
-         
-         //Update navigation and UserToolbarGroupPortlet if deleted page is dashboard page
-         if(page.getKey().getSite().equals(SiteType.USER)){
-            removePageNode(page, event);
-         }
 
          service.getPageService().destroyPage(page.getKey());
          //Minh Hoang TO: The cached UIPage objects corresponding to removed Page should be removed here.
