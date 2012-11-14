@@ -171,6 +171,7 @@
            <maven-resource group="org.apache.poi" artifact="poi-ooxml" />
            <maven-resource group="org.apache.poi" artifact="poi-scratchpad" />
            <maven-resource group="rome" artifact="rome" />
+           <maven-resource group="rome" artifact="modules" />
            <maven-resource group="org.apache.sanselan" artifact="sanselan" />
            <maven-resource group="org.gatein.shindig" artifact="shindig-common" />
            <maven-resource group="org.gatein.shindig" artifact="shindig-features" />
