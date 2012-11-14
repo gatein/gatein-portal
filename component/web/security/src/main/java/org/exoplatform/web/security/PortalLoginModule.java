@@ -43,6 +43,9 @@ import java.lang.reflect.Method;
  * 
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
+ *
+ * @deprecated Cluster authentication is now handled by {@link org.exoplatform.web.login.PortalClusteredSSOSupportValve}
+ * and this login module is no longer used. Likely will be removed in the future.
  */
 public class PortalLoginModule extends AbstractLoginModule
 {

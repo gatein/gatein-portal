@@ -81,26 +81,35 @@ public class CustomMembershipLoginModule extends AbstractLoginModule
       }
       try
       {
-         // get identity set by SharedStateLoginModule in case of succesfful authentication
+         // Get identity set by SharedStateLoginModule in case of successful authentication
          Identity identity = null;
          if (sharedState.containsKey("exo.security.identity"))
          {
             identity = (Identity)sharedState.get("exo.security.identity");
          }
-         // return if identity is not present (this means that user authentication failed in SharedStateLoginModule)
+
+         // Return if identity is not present (this means that user authentication failed in SharedStateLoginModule)
          if (identity == null)
          {
-            return true;
+            log.warn("Identity not found in shared state under exo.security.identity. This login module will be ignored");
+            return false;
          }
-         // check if user is already added to our group with given membershipType. If yes, we don't need to do something.
+
+         // Check if user is already added to our group with given membershipType. If yes, we don't need to do something.
          if (identity.getMemberships().contains(requestedMembershipEntry))
          {
+            if (log.isTraceEnabled())
+            {
+               log.trace("Requested membership entry " + requestedMembershipEntry + " already presented for user " + identity.getUserId());
+            }
             return true;
          }
+
          // Now add our user to requested group
          log.info("User " + identity.getUserId() + " will be added to group " + groupId + " as " + membershipType + ".");
          addUserToPlatformUsers(identity.getUserId());
-         // recreate identity
+
+         // Recreate identity
          Authenticator authenticator = (Authenticator)getContainer().getComponentInstanceOfType(Authenticator.class);
          identity = authenticator.createIdentity(identity.getUserId());
          sharedState.put("exo.security.identity", identity);
