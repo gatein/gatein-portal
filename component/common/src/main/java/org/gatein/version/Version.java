@@ -21,11 +21,12 @@
  */
 package org.gatein.version;
 
-import org.gatein.integration.jboss.as7.Attribute;
-
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.jar.Manifest;
+import org.gatein.common.logging.LoggerFactory;
+import org.gatein.common.logging.Logger;
 
 /**
  * Common GateIn version.
@@ -37,17 +38,22 @@ public class Version {
    public static final String productVersion;
    public static final String implementationVersion;
    public static final String prettyVersion;
+   
+   private static final Logger log = LoggerFactory.getLogger(Version.class);
 
    static {
-      InputStream stream = Version.class.getClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
-      Manifest manifest = null;
-      if (stream != null) {
-         try {
-            manifest = new Manifest(stream);
-         } catch (IOException e) {
-            // manifest is null
-         }
-      }
+       URL url = Version.class.getProtectionDomain().getCodeSource().getLocation();
+
+       Manifest manifest = null;
+
+       try {
+           InputStream stream = new URL(url.toString() + "META-INF/MANIFEST.MF").openStream();
+           if (stream != null) {
+               manifest = new Manifest(stream);
+           }
+       } catch (IOException e) {
+           log.debug("Unable to get the MANIFEST.MF from the gatein portal common component jar.");
+       }
 
       if (manifest != null) {
          productName = manifest.getMainAttributes().getValue("JBoss-Product-Release-Name");
