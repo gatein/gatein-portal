@@ -279,6 +279,57 @@ You can also use -Ddownload to automatically provide JBoss AS instance.
                </execution>
             </executions>
          </plugin>
+
+         <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>xml-maven-plugin</artifactId>
+            <version>1.0</version>
+            <executions>
+               <execution>
+                  <id>generate-resources</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>transform</goal>
+                  </goals>
+                  <configuration>
+                     <transformationSets>
+                        <transformationSet>
+                           <dir>${jbossas.target.dir}/standalone/configuration</dir>
+                           <stylesheet>src/main/xslt/standalone.xsl</stylesheet>
+                           <includes>
+                              <include>standalone.xml</include>
+                              <include>standalone-full.xml</include>                              
+                           </includes>
+                           <outputDir>${jbossas.target.dir}/standalone/configuration</outputDir>
+                           <parameters>
+                              <parameter>
+                                 <name>config</name>
+                                 <value>default</value>
+                              </parameter>
+                           </parameters>
+                        </transformationSet>
+                        <transformationSet>
+                           <dir>${jbossas.target.dir}/standalone/configuration</dir>
+                           <stylesheet>src/main/xslt/standalone.xsl</stylesheet>
+                           <includes>
+                              <include>standalone-ha.xml</include>
+                              <include>standalone-full-ha.xml</include>                              
+                           </includes>
+                           <outputDir>${jbossas.target.dir}/standalone/configuration</outputDir>
+                           <parameters>
+                              <parameter>
+                                 <name>config</name>
+                                 <value>clustering</value>
+                              </parameter>
+                           </parameters>
+                        </transformationSet>                        
+                     </transformationSets>
+                     <targetDirectory>${project.build.directory}</targetDirectory>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         
       </plugins>
    </build>
 

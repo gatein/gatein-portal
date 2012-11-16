@@ -91,6 +91,18 @@
       <antcall target="package-samples-copy" inheritAll="true" inheritRefs="true"/>
   </target>
 
+   <target name="package-version-checkdir">
+      <condition property="pkg.version.hasdir">
+         <available file="${maven.project.basedir}/src/main/resources/${version.jboss.as}/main" type="dir"/>
+      </condition>
+   </target>
+
+   <target name="package-version-copy" depends="package-version-checkdir" if="pkg.version.hasdir">
+      <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
+         <fileset dir="${maven.project.basedir}/src/main/resources/${version.jboss.as}/main" />
+      </copy>
+   </target>
+
   <target name="package">
 
       <echo>Using JBoss AS at: ${jbossas.dir}</echo>
@@ -156,9 +168,7 @@
       </copy>
 
       <!-- Copy version specific bin, modules, configuration files -->
-      <copy todir="${jbossas.target.dir}" preservelastmodified="true" overwrite="true">
-         <fileset dir="${maven.project.basedir}/src/main/resources/${version.jboss.as}/main" />
-      </copy>
+      <antcall target="package-version-copy" inheritAll="true" inheritRefs="true"/>
 
       <!-- Copy modules -->
       <copy todir="${jbossas.target.dir}/modules" preservelastmodified="true" overwrite="true">

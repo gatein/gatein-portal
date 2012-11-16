@@ -1182,6 +1182,20 @@ memory option properties. This should be removed when we can just set the compil
            				</pluginExecution>
            				<pluginExecution>
            					<pluginExecutionFilter>
+           						<groupId>org.codehaus.mojo</groupId>
+           						<artifactId>xml-maven-plugin</artifactId>
+           						<versionRange>[1.0,)</versionRange>
+           						<goals>
+           							<goal>generate</goal>
+           							<goal>resources</goal>
+           						</goals>
+           					</pluginExecutionFilter>
+           					<action>
+           						<ignore />
+           					</action>
+           				</pluginExecution>
+           				<pluginExecution>
+           					<pluginExecutionFilter>
            						<groupId>org.jibx</groupId>
            						<artifactId>
            							maven-jibx-plugin
