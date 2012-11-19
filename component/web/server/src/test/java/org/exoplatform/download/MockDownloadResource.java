@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2009 eXo Platform SAS.
+/*
+ * Copyright (C) 2012 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,32 +16,34 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-
 package org.exoplatform.download;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Tuan Nguyen
- *          tuan08@users.sourceforge.net
- * Dec 26, 2005
- *
- * @deprecated It is better to avoid using this download resource
+ * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
+ * @date 11/19/12
  */
-public class InputStreamDownloadResource extends DownloadResource {
-    private InputStream is_;
+public class MockDownloadResource extends DownloadResource
+{
+   private String id;
 
-    public InputStreamDownloadResource(InputStream is, String resourceMimeType) {
-        this(null, is, resourceMimeType);
-    }
+   public MockDownloadResource(String id)
+   {
+      super(null);
+      this.id = id;
+   }
 
-    public InputStreamDownloadResource(String downloadType, InputStream is, String resourceMimeType) {
-        super(downloadType, resourceMimeType);
-        is_ = is;
-    }
+   @Override
+   public InputStream getInputStream() throws IOException
+   {
+      return null;
+   }
 
-    public InputStream getInputStream() {
-        return is_;
-    }
+   @Override
+   public int hashCode()
+   {
+      return id.hashCode();
+   }
 }
