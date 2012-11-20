@@ -48,9 +48,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
@@ -218,10 +220,7 @@ public class MOPConsumerStructureProvider extends Listener implements ConsumerSt
          // if we try to remove a page, when we get this event, the page has already been removed from JCR
          // so we need to work around that fact by retrieving the corresponding PageInfo from the portal page title
          // which should match the Described name and check that it matches the internal name before removing it
-         final PageService pageService = (PageService) event.getSource();
-         final PageContext pageContext = pageService.loadPage(pageKey);
-         removePage(pageContext.getState().getDisplayName(), pageKey.getName());
-
+         removePageByInternalName(pageKey.getName());
          return;
       }
 
@@ -255,6 +254,19 @@ public class MOPConsumerStructureProvider extends Listener implements ConsumerSt
       {
          // remove page info
          pageInfos.remove(name);
+      }
+   }
+
+   private void removePageByInternalName(String internalName)
+   {
+      Iterator<PageInfo> itr = pageInfos.values().iterator();
+      while (itr.hasNext())
+      {
+         if (itr.next().getInternalName().equals(internalName))
+         {
+            itr.remove();
+            return;
+         }
       }
    }
 
