@@ -71,6 +71,7 @@
 
     <!-- SSO deps -->
     <version.cas.client>3.2.1</version.cas.client>
+    <version.picketlink.fed>2.1.4.Final</version.picketlink.fed>
 
     <!--
     Various log4j properties for unit tests, examples:
@@ -969,6 +970,17 @@
         <groupId>org.jasig.cas.client</groupId>
         <artifactId>cas-client-core</artifactId>
         <version>${version.cas.client}</version>
+      </dependency>
+      <!-- Picketlink federation (SAML). It's needed only because we need newer version on JBoss AS 7.1.1. It could be removed when drop support for AS 7.1.1 -->
+      <dependency>
+        <groupId>org.picketlink</groupId>
+        <artifactId>picketlink-core</artifactId>
+        <version>${version.picketlink.fed}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.picketlink.distribution</groupId>
+        <artifactId>picketlink-jbas7</artifactId>
+        <version>${version.picketlink.fed}</version>
       </dependency>
 
       <!-- TODO: Move to gatein-dep -->
