@@ -36,8 +36,11 @@ import org.exoplatform.web.security.PortalLoginModule;
 import org.gatein.wci.security.Credentials;
 import org.jboss.web.tomcat.security.login.WebAuthentication;
 
-/*
+/**
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
+ *
+ * @deprecated This filter is no longer needed. Cluster SSO is handled by JBoss AS ClusteredValve and {@link PortalClusteredSSOSupportValve}
+ * Filter class should be removed in the future together with {@link PortalLoginModule}
  */
 public class ClusteredSSOFilter extends AbstractFilter {
 
