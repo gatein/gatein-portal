@@ -58,15 +58,14 @@ public class JCRPersister extends BaseChromatticPersister {
         }
     }
 
-    public static class WSRPSessionLifeCycle implements SessionLifeCycle {
+    public abstract static class AbstractSessionLifeCycle implements SessionLifeCycle {
         private ManageableRepository repository;
         private ThreadLocal<SessionProvider> provider = new ThreadLocal<SessionProvider>();
 
-        public WSRPSessionLifeCycle() {
+        public AbstractSessionLifeCycle() {
             try {
                 ExoContainer container = ExoContainerContext.getCurrentContainer();
-                RepositoryService repoService = (RepositoryService) container
-                        .getComponentInstanceOfType(RepositoryService.class);
+                RepositoryService repoService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
                 repository = repoService.getRepository(REPOSITORY_NAME);
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -80,9 +79,10 @@ public class JCRPersister extends BaseChromatticPersister {
                 provider.set(sessionProvider);
             }
 
-            Session session = sessionProvider.getSession(WSRP_WORKSPACE_NAME, repository);
-            return session;
+            return sessionProvider.getSession(getWorkspaceName(), repository);
         }
+
+        protected abstract String getWorkspaceName();
 
         public Session login(String s) throws RepositoryException {
             throw new UnsupportedOperationException();
@@ -105,45 +105,17 @@ public class JCRPersister extends BaseChromatticPersister {
         }
     }
 
-    public static class PortletStatesSessionLifeCycle implements SessionLifeCycle {
-        private ManageableRepository repository;
-        private SessionProvider provider;
-
-        public PortletStatesSessionLifeCycle() {
-            try {
-                ExoContainer container = ExoContainerContext.getCurrentContainer();
-                RepositoryService repoService = (RepositoryService) container
-                        .getComponentInstanceOfType(RepositoryService.class);
-                repository = repoService.getRepository(REPOSITORY_NAME);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-
-            provider = SessionProvider.createSystemProvider();
+    public static class WSRPSessionLifeCycle extends AbstractSessionLifeCycle {
+        @Override
+        protected String getWorkspaceName() {
+            return WSRP_WORKSPACE_NAME;
         }
+    }
 
-        public Session login() throws RepositoryException {
-            return provider.getSession(PORTLET_STATES_WORKSPACE_NAME, repository);
-        }
-
-        public Session login(String s) throws RepositoryException {
-            throw new UnsupportedOperationException();
-        }
-
-        public Session login(Credentials credentials, String s) throws RepositoryException {
-            throw new UnsupportedOperationException();
-        }
-
-        public Session login(Credentials credentials) throws RepositoryException {
-            throw new UnsupportedOperationException();
-        }
-
-        public void save(Session session) throws RepositoryException {
-            session.save();
-        }
-
-        public void close(Session session) {
-            session.logout();
+    public static class PortletStatesSessionLifeCycle extends AbstractSessionLifeCycle {
+        @Override
+        protected String getWorkspaceName() {
+            return PORTLET_STATES_WORKSPACE_NAME;
         }
     }
 
