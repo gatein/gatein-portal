@@ -25,11 +25,11 @@
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
 
-	<page>
-		<name>samplePage</name>
-		<title>Sample Page</title>
-		<access-permissions>Everyone</access-permissions>
-		<edit-permission>*:/platform/administrators</edit-permission>
+  <page>
+    <name>samplePage</name>
+    <title>Sample Page</title>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
         <application-ref>web</application-ref>
@@ -48,6 +48,6 @@
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
     </portlet-application>
-	</page>
+  </page>
 
 </page-set>

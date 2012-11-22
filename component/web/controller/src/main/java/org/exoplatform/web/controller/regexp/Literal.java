@@ -21,94 +21,78 @@ package org.exoplatform.web.controller.regexp;
 
 import java.io.IOException;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class Literal
-{
-   /**
-    * Return true if the char should be escaped. Note that the implementation sometime may escape the char
-    * although the context in which it is used would not require its escape.
-    *
-    * @param c the char to test
-    * @return true when the char should be escaped.
-    */
-   public static boolean isEscaped(char c)
-   {
-      return c >= '(' && c <= '+' // ()*+
-          || c == '?'
-          || c == '{'
-          || c == '}'
-          || c == '|'
-          || c == '$'
-          || c == '&'
-          || c == '^'
-          || c == '-'
-          || c == '.'
-          || c == '['
-          || c == ']'
-          || c == '\\';
-   }
+public class Literal {
+    /**
+     * Return true if the char should be escaped. Note that the implementation sometime may escape the char although the context
+     * in which it is used would not require its escape.
+     *
+     * @param c the char to test
+     * @return true when the char should be escaped.
+     */
+    public static boolean isEscaped(char c) {
+        return c >= '('
+                && c <= '+' // ()*+
+                || c == '?' || c == '{' || c == '}' || c == '|' || c == '$' || c == '&' || c == '^' || c == '-' || c == '.'
+                || c == '[' || c == ']' || c == '\\';
+    }
 
-   /**
-    * Return the char value as a string literal in a regexp. Note that the implementation does not tries
-    * to optimize the value with respect to the AST context, (for instance (?) would be fine as (?) but it
-    * will rewritten as (\?).
-    *
-    * @param value the value
-    * @return the escaped string
-    */
-   public String getEscape(char value)
-   {
-      switch (value)
-      {
-         case '|':
-            return "\\|";
-         case '&':
-            return "\\&";
-         case '$':
-            return "\\$";
-         case '^':
-            return "\\^";
-         case '-':
-            return "\\-";
-         case '.':
-            return "\\.";
-         case '?':
-            return "\\?";
-         case '+':
-            return "\\+";
-         case '*':
-            return "\\*";
-         case '[':
-            return "\\[";
-         case ']':
-            return "\\]";
-         case '(':
-            return "\\(";
-         case ')':
-            return "\\)";
-         case '{':
-            return "\\{";
-         case '}':
-            return "\\}";
-         case '\\':
-            return "\\\\";
-         default:
-            return Character.toString(value);
-      }
-   }
+    /**
+     * Return the char value as a string literal in a regexp. Note that the implementation does not tries to optimize the value
+     * with respect to the AST context, (for instance (?) would be fine as (?) but it will rewritten as (\?).
+     *
+     * @param value the value
+     * @return the escaped string
+     */
+    public String getEscape(char value) {
+        switch (value) {
+            case '|':
+                return "\\|";
+            case '&':
+                return "\\&";
+            case '$':
+                return "\\$";
+            case '^':
+                return "\\^";
+            case '-':
+                return "\\-";
+            case '.':
+                return "\\.";
+            case '?':
+                return "\\?";
+            case '+':
+                return "\\+";
+            case '*':
+                return "\\*";
+            case '[':
+                return "\\[";
+            case ']':
+                return "\\]";
+            case '(':
+                return "\\(";
+            case ')':
+                return "\\)";
+            case '{':
+                return "\\{";
+            case '}':
+                return "\\}";
+            case '\\':
+                return "\\\\";
+            default:
+                return Character.toString(value);
+        }
+    }
 
-   public static void escapeTo(char value, Appendable appendable) throws IOException, NullPointerException
-   {
-      if (appendable == null)
-      {
-         throw new NullPointerException();
-      }
-      if (isEscaped(value))
-      {
-         appendable.append('\\');
-      }
-      appendable.append(value);
-   }
+    public static void escapeTo(char value, Appendable appendable) throws IOException, NullPointerException {
+        if (appendable == null) {
+            throw new NullPointerException();
+        }
+        if (isEscaped(value)) {
+            appendable.append('\\');
+        }
+        appendable.append(value);
+    }
 }

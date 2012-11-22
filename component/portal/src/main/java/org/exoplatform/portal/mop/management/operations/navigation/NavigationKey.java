@@ -28,29 +28,24 @@ import org.exoplatform.portal.mop.SiteKey;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class NavigationKey
-{
-   private SiteKey siteKey;
-   private String navUri;
+public class NavigationKey {
+    private SiteKey siteKey;
+    private String navUri;
 
-   public NavigationKey(SiteKey siteKey)
-   {
-      this.siteKey = siteKey;
-   }
+    public NavigationKey(SiteKey siteKey) {
+        this.siteKey = siteKey;
+    }
 
-   public NavigationKey(SiteKey siteKey, String navUri)
-   {
-      this.siteKey = siteKey;
-      this.navUri = navUri;
-   }
+    public NavigationKey(SiteKey siteKey, String navUri) {
+        this.siteKey = siteKey;
+        this.navUri = navUri;
+    }
 
-   public SiteKey getSiteKey()
-   {
-      return siteKey;
-   }
+    public SiteKey getSiteKey() {
+        return siteKey;
+    }
 
-   public String getNavUri()
-   {
-      return navUri;
-   }
+    public String getNavUri() {
+        return navUri;
+    }
 }

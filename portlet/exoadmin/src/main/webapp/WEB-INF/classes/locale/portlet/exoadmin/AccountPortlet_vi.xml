@@ -138,9 +138,9 @@
     </title>
   </UIPopupWindow>
   <UISiteManagement>
-  	<action>
-  		<addNewPortal>Tạo Portal</addNewPortal>
-  	</action>
+    <action>
+      <addNewPortal>Tạo Portal</addNewPortal>
+    </action>
   </UISiteManagement>
 </bundle>
 

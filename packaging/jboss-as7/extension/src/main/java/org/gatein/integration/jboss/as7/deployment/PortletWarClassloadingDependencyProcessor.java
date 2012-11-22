@@ -21,6 +21,9 @@
  */
 package org.gatein.integration.jboss.as7.deployment;
 
+import java.util.List;
+import java.util.Map;
+
 import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -32,69 +35,55 @@ import org.jboss.as.server.deployment.module.ModuleSpecification;
 import org.jboss.as.web.deployment.TldsMetaData;
 import org.jboss.metadata.web.spec.TldMetaData;
 
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class PortletWarClassloadingDependencyProcessor implements DeploymentUnitProcessor
-{
+public class PortletWarClassloadingDependencyProcessor implements DeploymentUnitProcessor {
 
-   private List<TldMetaData> tldMetas;
+    private List<TldMetaData> tldMetas;
 
-   public PortletWarClassloadingDependencyProcessor(List<TldMetaData> tldMetaData)
-   {
-      this.tldMetas = tldMetaData;
-   }
+    public PortletWarClassloadingDependencyProcessor(List<TldMetaData> tldMetaData) {
+        this.tldMetas = tldMetaData;
+    }
 
-   @Override
-   public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
-   {
-      final DeploymentUnit du = phaseContext.getDeploymentUnit();
+    @Override
+    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
+        final DeploymentUnit du = phaseContext.getDeploymentUnit();
 
-      if (!GateInConfiguration.isPortletArchive(du))
-      {
-         return; // Skip non portlet deployments
-      }
+        if (!GateInConfiguration.isPortletArchive(du)) {
+            return; // Skip non portlet deployments
+        }
 
-      final ModuleSpecification moduleSpecification = du.getAttachment(Attachments.MODULE_SPECIFICATION);
+        final ModuleSpecification moduleSpecification = du.getAttachment(Attachments.MODULE_SPECIFICATION);
 
+        GateInConfiguration config = du.getAttachment(GateInConfigurationKey.KEY);
 
-      GateInConfiguration config = du.getAttachment(GateInConfigurationKey.KEY);
+        // Add module dependencies
+        for (ModuleDependency dep : config.getPortletWarDependencies()) {
+            moduleSpecification.addSystemDependency(dep);
+        }
 
-      // Add module dependencies
-      for (ModuleDependency dep: config.getPortletWarDependencies())
-      {
-         moduleSpecification.addSystemDependency(dep);
-      }
+        // Provide tlds for portlet taglibs
+        provideTlds(du);
+    }
 
-      // Provide tlds for portlet taglibs
-      provideTlds(du);
-   }
+    private void provideTlds(DeploymentUnit deploymentUnit) {
+        TldsMetaData tsmd = deploymentUnit.getAttachment(TldsMetaData.ATTACHMENT_KEY);
+        if (tsmd == null) {
+            throw new IllegalStateException("Attachment not present: TldsMetaData");
+        }
 
-   private void provideTlds(DeploymentUnit deploymentUnit)
-   {
-      TldsMetaData tsmd = deploymentUnit.getAttachment(TldsMetaData.ATTACHMENT_KEY);
-      if (tsmd == null)
-      {
-         throw new IllegalStateException("Attachment not present: TldsMetaData");
-      }
+        Map<String, TldMetaData> tlds = tsmd.getTlds();
+        if (tlds == null) {
+            throw new IllegalStateException("TldsMetaData.tlds == null");
+        }
 
-      Map<String, TldMetaData> tlds = tsmd.getTlds();
-      if (tlds == null)
-      {
-         throw new IllegalStateException("TldsMetaData.tlds == null");
-      }
+        for (TldMetaData tld : tldMetas) {
+            tlds.put(tld.getUri(), tld);
+        }
+    }
 
-      for (TldMetaData tld : tldMetas)
-      {
-         tlds.put(tld.getUri(), tld);
-      }
-   }
-
-   @Override
-   public void undeploy(DeploymentUnit context)
-   {
-   }
+    @Override
+    public void undeploy(DeploymentUnit context) {
+    }
 }

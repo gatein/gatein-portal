@@ -19,65 +19,54 @@
 
 package org.gatein.portal.controller.resource;
 
-import org.exoplatform.commons.utils.Safe;
-
 import java.io.Serializable;
 import java.util.Locale;
+
+import org.exoplatform.commons.utils.Safe;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class ScriptKey implements Serializable
-{
+class ScriptKey implements Serializable {
 
-   /** . */
-   final ResourceId id;
+    /** . */
+    final ResourceId id;
 
-   /** . */
-   final boolean minified;
+    /** . */
+    final boolean minified;
 
-   /** . */
-   final Locale locale;
+    /** . */
+    final Locale locale;
 
-   /** . */
-   final int hashCode;
+    /** . */
+    final int hashCode;
 
-   ScriptKey(ResourceId id, boolean minified, Locale locale)
-   {
-      this.id = id;
-      this.minified = minified;
-      this.locale = locale;
-      this.hashCode = id.hashCode() ^ (locale != null ? locale.hashCode() : 0) ^ (minified ? ~1 : 0);
-   }
+    ScriptKey(ResourceId id, boolean minified, Locale locale) {
+        this.id = id;
+        this.minified = minified;
+        this.locale = locale;
+        this.hashCode = id.hashCode() ^ (locale != null ? locale.hashCode() : 0) ^ (minified ? ~1 : 0);
+    }
 
-   @Override
-   public int hashCode()
-   {
-      return hashCode;
-   }
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (obj == this)
-      {
-         return true;
-      }
-      if (obj instanceof ScriptKey)
-      {
-         ScriptKey that = (ScriptKey)obj;
-         return
-            id.equals(that.id) &&
-            minified &&
-            that.minified &&
-            Safe.equals(locale, that.locale);
-      }
-      return false;
-   }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof ScriptKey) {
+            ScriptKey that = (ScriptKey) obj;
+            return id.equals(that.id) && minified && that.minified && Safe.equals(locale, that.locale);
+        }
+        return false;
+    }
 
-   @Override
-   public String toString()
-   {
-      return "ScriptKey[id=" + id + ",minified=" + minified + ",locale=" + locale + "]";
-   }
+    @Override
+    public String toString() {
+        return "ScriptKey[id=" + id + ",minified=" + minified + ",locale=" + locale + "]";
+    }
 }

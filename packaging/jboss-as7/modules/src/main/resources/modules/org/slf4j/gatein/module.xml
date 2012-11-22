@@ -23,11 +23,11 @@
   -->
 
 <module xmlns="urn:jboss:module:1.0" name="org.slf4j" slot="gatein">
-    <resources>
-        <!-- Insert resources here -->
-    </resources>
+  <resources>
+    <!-- Insert resources here -->
+  </resources>
 
-    <dependencies>
-        <module name="org.jboss.logmanager"/>
-    </dependencies>
+  <dependencies>
+    <module name="org.jboss.logmanager"/>
+  </dependencies>
 </module>

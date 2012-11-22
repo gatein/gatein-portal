@@ -28,124 +28,108 @@ import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputBase;
 
 /**
- *  <p>Represent an html checkbox input <br/> 
+ * <p>
+ * Represent an html checkbox input <br/>
  * This class is a replacement for {@link org.exoplatform.webui.form.UIFormCheckBoxInput} <br/>
- * Still support raising event when user click the checkbox, but now we only accept boolean value. </p>
- *  
+ * Still support raising event when user click the checkbox, but now we only accept boolean value.
+ * </p>
+ *
  * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
  * @version $Id$
  */
 @Serialized
-public class UICheckBoxInput extends UIFormInputBase<Boolean>
-{
-   /**
-    * Name of {@link org.exoplatform.webui.event.EventListener} that will be fired when checkbox state is changed 
-    */
-   private String onchange_;
+public class UICheckBoxInput extends UIFormInputBase<Boolean> {
+    /**
+     * Name of {@link org.exoplatform.webui.event.EventListener} that will be fired when checkbox state is changed
+     */
+    private String onchange_;
 
-   /**
-    * Id of {@link org.exoplatform.webui.core.UIComponent} that is configured with the fired event 
-    * This component must be in the same form with the checkbox
-    * If this field is null, event of the UIForm will be fire instead
-    */
-   private String componentEvent_ = null;
+    /**
+     * Id of {@link org.exoplatform.webui.core.UIComponent} that is configured with the fired event This component must be in
+     * the same form with the checkbox If this field is null, event of the UIForm will be fire instead
+     */
+    private String componentEvent_ = null;
 
-   public UICheckBoxInput()
-   {
-      this(null, null, false);
-   }
+    public UICheckBoxInput() {
+        this(null, null, false);
+    }
 
-   public UICheckBoxInput(String name, String bindingExpression, Boolean value)
-   {
-      super(name, bindingExpression, Boolean.class);
-      setValue(value);
-   }
+    public UICheckBoxInput(String name, String bindingExpression, Boolean value) {
+        super(name, bindingExpression, Boolean.class);
+        setValue(value);
+    }
 
-   public UIFormInput<Boolean> setValue(Boolean value)
-   {
-      if (value == null)
-      {
-         value = false;
-      }
-         
-      return super.setValue(value);
-   }
-   
-   /**
-    * This method is used to make the action more meaning in the context of a checkbox
-    */
-   public boolean isChecked()
-   {
-      return getValue() == null ? false : getValue();
-   }
+    public UIFormInput<Boolean> setValue(Boolean value) {
+        if (value == null) {
+            value = false;
+        }
 
-   /**
-    * This method is used to make the action more meaning in the context of a checkbox
-    */
-   public UICheckBoxInput setChecked(boolean check)
-   {
-      return (UICheckBoxInput)setValue(check);
-   }
+        return super.setValue(value);
+    }
 
-   public void setOnChange(String onchange)
-   {
-      onchange_ = onchange;
-   }
+    /**
+     * This method is used to make the action more meaning in the context of a checkbox
+     */
+    public boolean isChecked() {
+        return getValue() == null ? false : getValue();
+    }
 
-   public void setComponentEvent(String com)
-   {
-      componentEvent_ = com;
-   }
+    /**
+     * This method is used to make the action more meaning in the context of a checkbox
+     */
+    public UICheckBoxInput setChecked(boolean check) {
+        return (UICheckBoxInput) setValue(check);
+    }
 
-   public void setOnChange(String event, String com)
-   {
-      this.onchange_ = event;
-      this.componentEvent_ = com;
-   }
+    public void setOnChange(String onchange) {
+        onchange_ = onchange;
+    }
 
-   public String renderOnChangeEvent(UIForm uiForm) throws Exception
-   {
-      if (componentEvent_ == null)
-         return uiForm.event(onchange_, null);
-      return uiForm.event(onchange_, componentEvent_, (String)null);
-   }
+    public void setComponentEvent(String com) {
+        componentEvent_ = com;
+    }
 
-   public void decode(Object input, WebuiRequestContext context) throws Exception
-   {
-      if (isDisabled())
-         return;
+    public void setOnChange(String event, String com) {
+        this.onchange_ = event;
+        this.componentEvent_ = com;
+    }
 
-      if (input == null || "false".equals(input.toString()))
-      {
-         setValue(false);
-      }
-      else
-      {
-         setValue(true);
-      }
-   }
+    public String renderOnChangeEvent(UIForm uiForm) throws Exception {
+        if (componentEvent_ == null)
+            return uiForm.event(onchange_, null);
+        return uiForm.event(onchange_, componentEvent_, (String) null);
+    }
 
-   public void processRender(WebuiRequestContext context) throws Exception
-   {
-      Writer w = context.getWriter();
-      w.write("<input type=\"checkbox\" class=\"checkbox\" name=\"");
-      w.write(name);
-      w.write("\"");
-      if (onchange_ != null)
-      {
-         UIForm uiForm = getAncestorOfType(UIForm.class);
-         w.append(" onclick=\"").append(renderOnChangeEvent(uiForm)).append("\"");
-      }
-      if (isChecked())
-         w.write(" checked");
-      if (isDisabled())
-         w.write(" disabled");
+    public void decode(Object input, WebuiRequestContext context) {
+        if (isDisabled())
+            return;
 
-      renderHTMLAttributes(w);
+        if (input == null || "false".equals(input.toString())) {
+            setValue(false);
+        } else {
+            setValue(true);
+        }
+    }
 
-      w.write("/>");
-      if (this.isMandatory())
-         w.write(" *");
-   }
+    public void processRender(WebuiRequestContext context) throws Exception {
+        Writer w = context.getWriter();
+        w.write("<input type=\"checkbox\" class=\"checkbox\" name=\"");
+        w.write(name);
+        w.write("\"");
+        if (onchange_ != null) {
+            UIForm uiForm = getAncestorOfType(UIForm.class);
+            w.append(" onclick=\"").append(renderOnChangeEvent(uiForm)).append("\"");
+        }
+        if (isChecked())
+            w.write(" checked");
+        if (isDisabled())
+            w.write(" disabled");
+
+        renderHTMLAttributes(w);
+
+        w.write("/>");
+        if (this.isMandatory())
+            w.write(" *");
+    }
 
 }

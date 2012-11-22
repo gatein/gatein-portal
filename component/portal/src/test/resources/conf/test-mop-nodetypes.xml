@@ -16,14 +16,16 @@
   ~ Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
-<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0">
+<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
+           xmlns:jcr="http://www.jcp.org/jcr/1.0">
 
-    <nodeType name="gtn:sampleMixin" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
-      <propertyDefinitions>
-        <propertyDefinition name="gtn:sampleProperty" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-          <valueConstraints/>
-        </propertyDefinition>
-      </propertyDefinitions>
-    </nodeType>
+  <nodeType name="gtn:sampleMixin" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+    <propertyDefinitions>
+      <propertyDefinition name="gtn:sampleProperty" requiredType="String" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
+  </nodeType>
 
 </nodeTypes>

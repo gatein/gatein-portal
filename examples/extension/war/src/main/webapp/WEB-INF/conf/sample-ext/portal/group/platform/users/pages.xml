@@ -23,19 +23,19 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
-	<page>
+  <page>
     <name>sitemap</name>
     <title>Site Map</title>
-	  <access-permissions>*:/platform/users</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <portlet-application>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <portlet-application>
       <portlet>
         <application-ref>web</application-ref>
         <portlet-ref>SiteMapPortlet</portlet-ref>
       </portlet>
       <title>SiteMap</title>
       <access-permissions>*:/platform/users</access-permissions>
-      <show-info-bar>false</show-info-bar>      
+      <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
 </page-set>

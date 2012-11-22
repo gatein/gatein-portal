@@ -22,6 +22,9 @@
 
 package org.exoplatform.portal.mop.management.exportimport;
 
+import java.io.IOException;
+import java.io.OutputStream;
+
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
@@ -30,55 +33,47 @@ import org.exoplatform.portal.mop.management.operations.navigation.NavigationUti
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.gatein.management.api.binding.Marshaller;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class NavigationExportTask extends AbstractExportTask
-{
-   public static final String FILE = "navigation.xml";
+public class NavigationExportTask extends AbstractExportTask {
+    public static final String FILE = "navigation.xml";
 
-   private NavigationKey navigationKey;
-   private Marshaller<PageNavigation> marshaller;
-   private NavigationService navigationService;
-   private DescriptionService descriptionService;
+    private NavigationKey navigationKey;
+    private Marshaller<PageNavigation> marshaller;
+    private NavigationService navigationService;
+    private DescriptionService descriptionService;
 
-   public NavigationExportTask(NavigationKey navigationKey, NavigationService navigationService,
-                               DescriptionService descriptionService, Marshaller<PageNavigation> marshaller)
-   {
-      super(navigationKey.getSiteKey());
-      this.navigationKey = navigationKey;
-      this.navigationService = navigationService;
-      this.descriptionService = descriptionService;
-      this.marshaller = marshaller;
-   }
+    public NavigationExportTask(NavigationKey navigationKey, NavigationService navigationService,
+            DescriptionService descriptionService, Marshaller<PageNavigation> marshaller) {
+        super(navigationKey.getSiteKey());
+        this.navigationKey = navigationKey;
+        this.navigationService = navigationService;
+        this.descriptionService = descriptionService;
+        this.marshaller = marshaller;
+    }
 
-   // TODO: This is a little sloppy to support filtering, fix if we have time.
-   private PageNavigation navigation;
-   public NavigationExportTask(PageNavigation navigation, Marshaller<PageNavigation> marshaller)
-   {
-      super(new SiteKey(navigation.getOwnerType(), navigation.getOwnerId()));
-      this.navigation = navigation;
-      this.marshaller = marshaller;
-   }
+    // TODO: This is a little sloppy to support filtering, fix if we have time.
+    private PageNavigation navigation;
 
-   @Override
-   protected String getXmlFileName()
-   {
-      return FILE;
-   }
+    public NavigationExportTask(PageNavigation navigation, Marshaller<PageNavigation> marshaller) {
+        super(new SiteKey(navigation.getOwnerType(), navigation.getOwnerId()));
+        this.navigation = navigation;
+        this.marshaller = marshaller;
+    }
 
-   @Override
-   public void export(OutputStream outputStream) throws IOException
-   {
-      if (navigation == null)
-      {
-         navigation = NavigationUtils.loadPageNavigation(navigationKey, navigationService, descriptionService);
-      }
+    @Override
+    protected String getXmlFileName() {
+        return FILE;
+    }
 
-      marshaller.marshal(navigation, outputStream);
-   }
+    @Override
+    public void export(OutputStream outputStream) throws IOException {
+        if (navigation == null) {
+            navigation = NavigationUtils.loadPageNavigation(navigationKey, navigationService, descriptionService);
+        }
+
+        marshaller.marshal(navigation, outputStream);
+    }
 }

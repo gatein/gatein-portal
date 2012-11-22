@@ -19,574 +19,454 @@
 
 package org.exoplatform.web.controller.router;
 
-import org.exoplatform.web.controller.regexp.GroupType;
-import org.exoplatform.web.controller.regexp.RENode;
-import org.exoplatform.web.controller.regexp.RERenderer;
-import org.exoplatform.web.controller.regexp.REVisitor;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.exoplatform.web.controller.regexp.GroupType;
+import org.exoplatform.web.controller.regexp.RENode;
+import org.exoplatform.web.controller.regexp.RERenderer;
+import org.exoplatform.web.controller.regexp.REVisitor;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ValueResolverFactory extends REVisitor<RuntimeException>
-{
-   
-   static class Alternative
-   {
+public class ValueResolverFactory extends REVisitor<RuntimeException> {
 
-      /** . */
-      private StringBuilder resolvingExpression = new StringBuilder();
+    static class Alternative {
 
-      /** . */
-      private String prefix;
+        /** . */
+        private StringBuilder resolvingExpression = new StringBuilder();
 
-      /** . */
-      private String suffix;
+        /** . */
+        private String prefix;
 
-      /** . */
-      private StringBuilder buffer = new StringBuilder();
+        /** . */
+        private String suffix;
 
-      /** . */
-      private StringBuilder valueMatcher = new StringBuilder();
-      
-      public StringBuilder getResolvingExpression()
-      {
-         return resolvingExpression;
-      }
+        /** . */
+        private StringBuilder buffer = new StringBuilder();
 
-      public String getPrefix()
-      {
-         return prefix;
-      }
+        /** . */
+        private StringBuilder valueMatcher = new StringBuilder();
 
-      public String getSuffix()
-      {
-         return suffix;
-      }
+        public StringBuilder getResolvingExpression() {
+            return resolvingExpression;
+        }
 
-      public StringBuilder getValueMatcher()
-      {
-         return valueMatcher;
-      }
+        public String getPrefix() {
+            return prefix;
+        }
 
-      @Override
-      public String toString()
-      {
-         return getClass().getSimpleName() + "[" + resolvingExpression + "]";
-      }
-   }
+        public String getSuffix() {
+            return suffix;
+        }
 
-   /** . */
-   private List<Alternative> alternatives = new ArrayList<Alternative>();
+        public StringBuilder getValueMatcher() {
+            return valueMatcher;
+        }
 
-   /** . */
-   private Alternative current = null;
+        @Override
+        public String toString() {
+            return getClass().getSimpleName() + "[" + resolvingExpression + "]";
+        }
+    }
 
-   public List<Alternative> foo(RENode root)
-   {
-      alternatives.clear();
-      root.accept(this);
-      return alternatives;
-   }
+    /** . */
+    private List<Alternative> alternatives = new ArrayList<Alternative>();
 
-   @Override
-   protected void visit(RENode.Disjunction disjunction) throws RuntimeException
-   {
-      if (current != null)
-      {
-         RENode.Alternative alternative = disjunction.getAlternative();
-         if (alternative != null)
-         {
-            alternative.accept(this);
-         }
-      }
-      else
-      {
-         RENode.Alternative alternative = disjunction.getAlternative();
-         if (alternative != null)
-         {
-            current = new Alternative();
-            alternative.accept(this);
-            current.suffix = current.buffer.toString();
+    /** . */
+    private Alternative current = null;
+
+    public List<Alternative> foo(RENode root) {
+        alternatives.clear();
+        root.accept(this);
+        return alternatives;
+    }
+
+    @Override
+    protected void visit(RENode.Disjunction disjunction) throws RuntimeException {
+        if (current != null) {
+            RENode.Alternative alternative = disjunction.getAlternative();
+            if (alternative != null) {
+                alternative.accept(this);
+            }
+        } else {
+            RENode.Alternative alternative = disjunction.getAlternative();
+            if (alternative != null) {
+                current = new Alternative();
+                alternative.accept(this);
+                current.suffix = current.buffer.toString();
+                current.buffer.setLength(0);
+                alternatives.add(current);
+                current = null;
+            }
+
+            //
+            RENode.Disjunction next = disjunction.getNext();
+            if (next != null) {
+                next.accept(this);
+            }
+        }
+    }
+
+    @Override
+    protected void visit(RENode.Group expr) throws RuntimeException {
+        if (expr.getType() == GroupType.CAPTURING_GROUP) {
+            try {
+                RERenderer renderer = new RERenderer(current.resolvingExpression);
+                expr.accept(renderer);
+            } catch (IOException e) {
+                // Should not happen
+                throw new AssertionError(e);
+            }
+            try {
+                RERenderer renderer = new RERenderer(current.valueMatcher);
+                expr.accept(renderer);
+            } catch (IOException e) {
+                // Should not happen
+                throw new AssertionError(e);
+            }
+            current.prefix = current.buffer.toString();
             current.buffer.setLength(0);
-            alternatives.add(current);
-            current = null;
-         }
+        } else {
+            super.visit(expr);
+        }
+    }
 
-         //
-         RENode.Disjunction next = disjunction.getNext();
-         if (next != null)
-         {
+    @Override
+    protected void visit(RENode.Alternative alternative) throws RuntimeException {
+        alternative.getExpr().accept(this);
+        RENode.Alternative next = alternative.getNext();
+        if (next != null) {
             next.accept(this);
-         }
-      }
-   }
+        }
+    }
 
-   @Override
-   protected void visit(RENode.Group expr) throws RuntimeException
-   {
-      if (expr.getType() == GroupType.CAPTURING_GROUP)
-      {
-         try
-         {
-            RERenderer renderer = new RERenderer(current.resolvingExpression);
-            expr.accept(renderer);
-         }
-         catch (IOException e)
-         {
-            // Should not happen
-            throw new AssertionError(e);
-         }
-         try
-         {
-            RERenderer renderer = new RERenderer(current.valueMatcher);
-            expr.accept(renderer);
-         }
-         catch (IOException e)
-         {
-            // Should not happen
-            throw new AssertionError(e);
-         }
-         current.prefix = current.buffer.toString();
-         current.buffer.setLength(0);
-      }
-      else
-      {
-         super.visit(expr);
-      }
-   }
+    @Override
+    protected void visit(RENode.Char expr) throws RuntimeException {
+        for (int i = expr.getMin(); i > 0; i--) {
+            current.resolvingExpression.append(expr.getValue());
+            current.buffer.append(expr.getValue());
+        }
+    }
 
-   @Override
-   protected void visit(RENode.Alternative alternative) throws RuntimeException
-   {
-      alternative.getExpr().accept(this);
-      RENode.Alternative next = alternative.getNext();
-      if (next != null)
-      {
-         next.accept(this);
-      }
-   }
+    @Override
+    protected void visit(RENode.Any expr) throws RuntimeException {
+        for (int i = expr.getMin(); i > 0; i--) {
+            // Any can be 'a'
+            current.resolvingExpression.append('a');
+            current.buffer.append('a');
+        }
+    }
 
-   @Override
-   protected void visit(RENode.Char expr) throws RuntimeException
-   {
-      for (int i = expr.getMin();i > 0;i--)
-      {
-         current.resolvingExpression.append(expr.getValue());
-         current.buffer.append(expr.getValue());
-      }
-   }
+    /** . */
+    private Solver solver;
 
-   @Override
-   protected void visit(RENode.Any expr) throws RuntimeException
-   {
-      for (int i = expr.getMin();i > 0;i--)
-      {
-         // Any can be 'a'
-         current.resolvingExpression.append('a');
-         current.buffer.append('a');
-      }
-   }
+    @Override
+    protected void visit(RENode.CharacterClass expr) throws RuntimeException {
+        expr.getExpr().accept(this);
+        for (int i = expr.getMin(); i > 0; i--) {
+            if (solver.hasNext()) {
+                char c = solver.next();
+                current.resolvingExpression.append(c);
+                current.buffer.append(c);
+                solver.reset();
+            } else {
+                throw new UnsupportedOperationException("wtf?");
+            }
+        }
+    }
 
-   /** . */
-   private Solver solver;
+    @Override
+    protected void visit(RENode.CharacterClassExpr.Or expr) throws RuntimeException {
+        expr.getLeft().accept(this);
+        Solver left = solver;
+        expr.getRight().accept(this);
+        Solver right = solver;
+        solver = new Solver.Or(left, right);
+    }
 
-   @Override
-   protected void visit(RENode.CharacterClass expr) throws RuntimeException
-   {
-      expr.getExpr().accept(this);
-      for (int i = expr.getMin();i > 0;i--)
-      {
-         if (solver.hasNext())
-         {
-            char c = solver.next();
-            current.resolvingExpression.append(c);
-            current.buffer.append(c);
-            solver.reset();
-         }
-         else
-         {
-            throw new UnsupportedOperationException("wtf?");
-         }
-      }
-   }
+    @Override
+    protected void visit(RENode.CharacterClassExpr.Range expr) throws RuntimeException {
+        RENode.CharacterClassExpr.Char from = expr.getFrom();
+        RENode.CharacterClassExpr.Char to = expr.getTo();
+        solver = new Solver.Range(from.getValue(), to.getValue());
+    }
 
-   @Override
-   protected void visit(RENode.CharacterClassExpr.Or expr) throws RuntimeException
-   {
-      expr.getLeft().accept(this);
-      Solver left = solver;
-      expr.getRight().accept(this);
-      Solver right = solver;
-      solver = new Solver.Or(left, right);
-   }
+    @Override
+    protected void visit(RENode.CharacterClassExpr.Char expr) throws RuntimeException {
+        solver = new Solver.Char(expr.getValue());
+    }
 
-   @Override
-   protected void visit(RENode.CharacterClassExpr.Range expr) throws RuntimeException
-   {
-      RENode.CharacterClassExpr.Char from = expr.getFrom();
-      RENode.CharacterClassExpr.Char to = expr.getTo();
-      solver = new Solver.Range(from.getValue(), to.getValue());
-   }
+    @Override
+    protected void visit(RENode.CharacterClassExpr.And expr) throws RuntimeException {
+        expr.getLeft().accept(this);
+        Solver left = solver;
+        expr.getRight().accept(this);
+        Solver right = solver;
+        solver = new Solver.And(left, right);
+    }
 
-   @Override
-   protected void visit(RENode.CharacterClassExpr.Char expr) throws RuntimeException
-   {
-      solver = new Solver.Char(expr.getValue());
-   }
+    @Override
+    protected void visit(RENode.CharacterClassExpr.Not expr) throws RuntimeException {
+        RENode.CharacterClassExpr negated = expr.getNegated();
+        if (negated == null) {
+            // Do nothing ?
+        } else {
+            negate(negated);
+        }
+    }
 
-   @Override
-   protected void visit(RENode.CharacterClassExpr.And expr) throws RuntimeException
-   {
-      expr.getLeft().accept(this);
-      Solver left = solver;
-      expr.getRight().accept(this);
-      Solver right = solver;
-      solver = new Solver.And(left, right);
-   }
+    private void negate(RENode.CharacterClassExpr negated) throws RuntimeException {
+        if (negated instanceof RENode.CharacterClassExpr.Not) {
+            RENode.CharacterClassExpr nested = ((RENode.CharacterClassExpr.Not) negated).getNegated();
+            if (nested != null) {
+                nested.accept(this);
+            }
+        } else if (negated instanceof RENode.CharacterClassExpr.Or) {
+            RENode.CharacterClassExpr.Or or = (RENode.CharacterClassExpr.Or) negated;
+            negate(or.getLeft());
+            Solver left = solver;
+            negate(or.getRight());
+            Solver right = solver;
+            solver = new Solver.And(left, right);
+        } else if (negated instanceof RENode.CharacterClassExpr.And) {
+            RENode.CharacterClassExpr.And or = (RENode.CharacterClassExpr.And) negated;
+            negate(or.getLeft());
+            Solver left = solver;
+            negate(or.getRight());
+            Solver right = solver;
+            solver = new Solver.Or(left, right);
+        } else {
+            char from;
+            char to;
+            if (negated instanceof RENode.CharacterClassExpr.Char) {
+                from = to = ((RENode.CharacterClassExpr.Char) negated).getValue();
+            } else if (negated instanceof RENode.CharacterClassExpr.Range) {
+                RENode.CharacterClassExpr.Range range = (RENode.CharacterClassExpr.Range) negated;
+                from = range.getFrom().getValue();
+                to = range.getTo().getValue();
+            } else {
+                throw new UnsupportedOperationException();
+            }
+            Solver.Range left = null;
+            Character c = prevValid(--from);
+            if (c != null) {
+                left = new Solver.Range(' ', c);
+            }
+            Solver.Range right = null;
+            c = nextValid(++to);
+            if (c != null) {
+                right = new Solver.Range(c, Character.MAX_VALUE);
+            }
+            if (left == null) {
+                if (right != null) {
+                    solver = right;
+                }
+            } else {
+                if (right == null) {
+                    solver = left;
+                } else {
+                    solver = new Solver.Or(left, right);
+                }
+            }
+        }
+    }
 
-   @Override
-   protected void visit(RENode.CharacterClassExpr.Not expr) throws RuntimeException
-   {
-      RENode.CharacterClassExpr negated = expr.getNegated();
-      if (negated == null)
-      {
-         // Do nothing ?
-      }
-      else
-      {
-         negate(negated);
-      }
-   }
-   
-   private void negate(RENode.CharacterClassExpr negated) throws RuntimeException
-   {
-      if (negated instanceof RENode.CharacterClassExpr.Not)
-      {
-         RENode.CharacterClassExpr nested = ((RENode.CharacterClassExpr.Not)negated).getNegated();
-         if (nested != null)
-         {
-            nested.accept(this);
-         }
-      }
-      else if (negated instanceof RENode.CharacterClassExpr.Or)
-      {
-         RENode.CharacterClassExpr.Or or = (RENode.CharacterClassExpr.Or)negated;
-         negate(or.getLeft());
-         Solver left = solver;
-         negate(or.getRight());
-         Solver right = solver;
-         solver = new Solver.And(left, right);
-      }
-      else if (negated instanceof RENode.CharacterClassExpr.And)
-      {
-         RENode.CharacterClassExpr.And or = (RENode.CharacterClassExpr.And)negated;
-         negate(or.getLeft());
-         Solver left = solver;
-         negate(or.getRight());
-         Solver right = solver;
-         solver = new Solver.Or(left, right);
-      }
-      else 
-      {
-         char from;
-         char to;
-         if (negated instanceof RENode.CharacterClassExpr.Char)
-         {
-            from = to = ((RENode.CharacterClassExpr.Char)negated).getValue();
-         }
-         else if (negated instanceof RENode.CharacterClassExpr.Range)
-         {
-            RENode.CharacterClassExpr.Range range = (RENode.CharacterClassExpr.Range)negated;
-            from = range.getFrom().getValue();
-            to = range.getTo().getValue();
-         }
-         else
-         {
+    private abstract static class Solver implements Iterator<Character> {
+
+        public void remove() {
             throw new UnsupportedOperationException();
-         }
-         Solver.Range left = null;
-         Character c = prevValid(--from);
-         if (c != null)
-         {
-            left = new Solver.Range(' ', c);
-         }
-         Solver.Range right = null;
-         c = nextValid(++to);
-         if (c != null)
-         {
-            right = new Solver.Range(c, Character.MAX_VALUE);
-         }
-         if (left == null)
-         {
-            if (right != null)
-            {
-               solver = right;
+        }
+
+        protected abstract void reset();
+
+        private static class And extends Solver {
+
+            /** . */
+            private final Solver left;
+
+            /** . */
+            private final Solver right;
+
+            /** . */
+            private Character leftChar;
+
+            /** . */
+            private Character next;
+
+            private And(Solver left, Solver right) {
+                this.left = left;
+                this.right = right;
+                this.next = null;
+                this.leftChar = null;
             }
-         }
-         else 
-         {
-            if (right == null)
-            {
-               solver = left;
+
+            public boolean hasNext() {
+                while (next == null) {
+                    if (leftChar == null) {
+                        if (left.hasNext()) {
+                            leftChar = left.next();
+                        } else {
+                            break;
+                        }
+                    }
+                    if (right.hasNext()) {
+                        Character c = right.next();
+                        if (c == leftChar) {
+                            next = c;
+                        }
+                    } else {
+                        right.reset();
+                        leftChar = null;
+                    }
+                }
+                return next != null;
             }
-            else
-            {
-               solver = new Solver.Or(left, right);
+
+            public Character next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                Character tmp = next;
+                next = null;
+                return tmp;
             }
-         }
-      }
-   }
 
-   private static abstract class Solver implements Iterator<Character>
-   {
-
-      public void remove()
-      {
-         throw new UnsupportedOperationException();
-      }
-      
-      protected abstract void reset();
-
-      private static class And extends Solver
-      {
-
-         /** . */
-         private final Solver left;
-
-         /** . */
-         private final Solver right;
-
-         /** . */
-         private Character leftChar;
-
-         /** . */
-         private Character next;
-
-         private And(Solver left, Solver right)
-         {
-            this.left = left;
-            this.right = right;
-            this.next = null;
-            this.leftChar = null;
-         }
-
-         public boolean hasNext()
-         {
-            while (next == null)
-            {
-               if (leftChar == null)
-               {
-                  if (left.hasNext())
-                  {
-                     leftChar = left.next();
-                  }
-                  else
-                  {
-                     break;
-                  }
-               }
-               if (right.hasNext())
-               {
-                  Character c = right.next();
-                  if (c == leftChar)
-                  {
-                     next = c;
-                  }
-               }
-               else
-               {
-                  right.reset();
-                  leftChar = null;
-               }
+            @Override
+            protected void reset() {
+                left.reset();
+                right.reset();
             }
-            return next != null;
-         }
+        }
 
-         public Character next()
-         {
-            if (!hasNext())
-            {
-               throw new NoSuchElementException();
+        private static class Or extends Solver {
+
+            /** . */
+            private final Solver left;
+
+            /** . */
+            private final Solver right;
+
+            private Or(Solver left, Solver right) {
+                this.left = left;
+                this.right = right;
             }
-            Character tmp = next;
-            next = null;
-            return tmp;
-         }
 
-         @Override
-         protected void reset()
-         {
-            left.reset();
-            right.reset();
-         }
-      }
-
-      private static class Or extends Solver
-      {
-
-         /** . */
-         private final Solver left;
-
-         /** . */
-         private final Solver right;
-
-         private Or(Solver left, Solver right)
-         {
-            this.left = left;
-            this.right = right;
-         }
-
-         public boolean hasNext()
-         {
-            return left.hasNext() || right.hasNext();
-         }
-
-         public Character next()
-         {
-            if (left.hasNext())
-            {
-               return left.next();
+            public boolean hasNext() {
+                return left.hasNext() || right.hasNext();
             }
-            else if (right.hasNext())
-            {
-               return right.next();
+
+            public Character next() {
+                if (left.hasNext()) {
+                    return left.next();
+                } else if (right.hasNext()) {
+                    return right.next();
+                }
+                throw new NoSuchElementException();
             }
-            throw new NoSuchElementException();
-         }
 
-         @Override
-         protected void reset()
-         {
-            left.reset();
-            right.reset();
-         }
-      }
-
-      private static class Range extends Solver
-      {
-
-         /** . */
-         private char from;
-
-         /** . */
-         private char current;
-
-         /** . */
-         private char to;
-
-         private Range(char from, char to)
-         {
-            this.from = from;
-            this.current = from;
-            this.to = to;
-         }
-
-         public boolean hasNext()
-         {
-            return current < to;
-         }
-
-         public Character next()
-         {
-            if (current >= to)
-            {
-               throw new NoSuchElementException();
+            @Override
+            protected void reset() {
+                left.reset();
+                right.reset();
             }
-            return current++;
-         }
+        }
 
-         @Override
-         protected void reset()
-         {
-            current = from;
-         }
-      }
+        private static class Range extends Solver {
 
-      private static class Char extends Solver
-      {
+            /** . */
+            private char from;
 
-         /** . */
-         private final char value;
+            /** . */
+            private char current;
 
-         /** . */
-         private boolean done;
+            /** . */
+            private char to;
 
-         private Char(char value)
-         {
-            this.value = value;
-            this.done = false;
-         }
-
-         public boolean hasNext()
-         {
-            return !done;
-         }
-
-         public Character next()
-         {
-            if (done)
-            {
-               throw new NoSuchElementException();
+            private Range(char from, char to) {
+                this.from = from;
+                this.current = from;
+                this.to = to;
             }
-            done = true;
-            return value;
-         }
 
-         @Override
-         protected void reset()
-         {
-            done = false;
-         }
-      }
-   }
+            public boolean hasNext() {
+                return current < to;
+            }
 
-   private static Character nextValid(char from)
-   {
-      while (true)
-      {
-         if (!Character.isISOControl(from))
-         {
-            return from;
-         }
-         else
-         {
-            if (from == Character.MAX_VALUE)
-            {
-               return null;
+            public Character next() {
+                if (current >= to) {
+                    throw new NoSuchElementException();
+                }
+                return current++;
             }
-            else
-            {
-               from++;
-            }
-         }
-      }
-   }
 
-   private static Character prevValid(char from)
-   {
-      while (true)
-      {
-         if (!Character.isISOControl(from))
-         {
-            return from;
-         }
-         else
-         {
-            if (from == Character.MIN_VALUE)
-            {
-               return null;
+            @Override
+            protected void reset() {
+                current = from;
             }
-            else
-            {
-               from--;
+        }
+
+        private static class Char extends Solver {
+
+            /** . */
+            private final char value;
+
+            /** . */
+            private boolean done;
+
+            private Char(char value) {
+                this.value = value;
+                this.done = false;
             }
-         }
-      }
-   }
+
+            public boolean hasNext() {
+                return !done;
+            }
+
+            public Character next() {
+                if (done) {
+                    throw new NoSuchElementException();
+                }
+                done = true;
+                return value;
+            }
+
+            @Override
+            protected void reset() {
+                done = false;
+            }
+        }
+    }
+
+    private static Character nextValid(char from) {
+        while (true) {
+            if (!Character.isISOControl(from)) {
+                return from;
+            } else {
+                if (from == Character.MAX_VALUE) {
+                    return null;
+                } else {
+                    from++;
+                }
+            }
+        }
+    }
+
+    private static Character prevValid(char from) {
+        while (true) {
+            if (!Character.isISOControl(from)) {
+                return from;
+            } else {
+                if (from == Character.MIN_VALUE) {
+                    return null;
+                } else {
+                    from--;
+                }
+            }
+        }
+    }
 }

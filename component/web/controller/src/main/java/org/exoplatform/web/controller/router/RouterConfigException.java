@@ -22,25 +22,20 @@ package org.exoplatform.web.controller.router;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class RouterConfigException extends Exception
-{
+public class RouterConfigException extends Exception {
 
-   public RouterConfigException()
-   {
-   }
+    public RouterConfigException() {
+    }
 
-   public RouterConfigException(String message)
-   {
-      super(message);
-   }
+    public RouterConfigException(String message) {
+        super(message);
+    }
 
-   public RouterConfigException(String message, Throwable cause)
-   {
-      super(message, cause);
-   }
+    public RouterConfigException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-   public RouterConfigException(Throwable cause)
-   {
-      super(cause);
-   }
+    public RouterConfigException(Throwable cause) {
+        super(cause);
+    }
 }

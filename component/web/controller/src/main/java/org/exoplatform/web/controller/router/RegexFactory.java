@@ -20,29 +20,24 @@
 package org.exoplatform.web.controller.router;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
-public abstract class RegexFactory implements Cloneable
-{
+public abstract class RegexFactory implements Cloneable {
 
-   public static RegexFactory JAVA = new RegexFactory()
-   {
-      @Override
-      public Regex compile(String pattern)
-      {
-         return new Regex.Java(pattern);
-      }
+    public static RegexFactory JAVA = new RegexFactory() {
+        @Override
+        public Regex compile(String pattern) {
+            return new Regex.Java(pattern);
+        }
 
-      @Override
-      public String getName()
-      {
-         return "java";
-      }
-   };
+        @Override
+        public String getName() {
+            return "java";
+        }
+    };
 
-   protected RegexFactory()
-   {
-   }
+    protected RegexFactory() {
+    }
 
-   public abstract Regex compile(String pattern);
+    public abstract Regex compile(String pattern);
 
-   public abstract String getName();
+    public abstract String getName();
 }

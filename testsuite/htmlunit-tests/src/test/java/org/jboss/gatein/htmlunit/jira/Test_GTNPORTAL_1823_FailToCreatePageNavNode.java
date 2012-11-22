@@ -27,27 +27,22 @@ import org.testng.annotations.Test;
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class Test_GTNPORTAL_1823_FailToCreatePageNavNode extends Test_GTNPORTAL_1823_FailToCreatePage
-{
+public class Test_GTNPORTAL_1823_FailToCreatePageNavNode extends Test_GTNPORTAL_1823_FailToCreatePage {
 
-   /**
-    * This test method relies on TestNG parallel test execution facility
-    * to perform two concurrent executions of this method on a single instance of the test class
-    *
-    * @throws Throwable if test fails
-    */
-   @Test(invocationCount = TCOUNT, threadPoolSize = TCOUNT, groups = {"GateIn", "jira", "htmlunit"})
-   public void testMain() throws Throwable
-   {
-      try
-      {
-         test(true);
-      }
-      finally
-      {
-         // If exception occurs we don't want the other thread to lock up
-         // - so we perform another countDown()
-         sync.countDown();
-      }
-   }
+    /**
+     * This test method relies on TestNG parallel test execution facility to perform two concurrent executions of this method on
+     * a single instance of the test class
+     *
+     * @throws Throwable if test fails
+     */
+    @Test(invocationCount = TCOUNT, threadPoolSize = TCOUNT, groups = { "GateIn", "jira", "htmlunit" })
+    public void testMain() throws Throwable {
+        try {
+            test(true);
+        } finally {
+            // If exception occurs we don't want the other thread to lock up
+            // - so we perform another countDown()
+            sync.countDown();
+        }
+    }
 }

@@ -23,17 +23,15 @@ import org.chromattic.api.annotations.MixinType;
 import org.chromattic.api.annotations.Property;
 
 /**
- * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
- * Aug 26, 2010
+ * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a> Aug 26, 2010
  */
 
 @MixinType(name = "gtn:sampleMixin")
-public abstract class SampleMixin
-{
+public abstract class SampleMixin {
 
-   @Property(name = "gtn:sampleProperty")
-   @DefaultValue("SampleProperty")
-   public abstract String getSampleProperty();
-   
-   public abstract void setSampleProperty(String sampleProperty);
+    @Property(name = "gtn:sampleProperty")
+    @DefaultValue("SampleProperty")
+    public abstract String getSampleProperty();
+
+    public abstract void setSampleProperty(String sampleProperty);
 }

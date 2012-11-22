@@ -22,6 +22,8 @@
 
 package org.exoplatform.portal.mop.management.operations.site;
 
+import java.util.Collections;
+
 import org.gatein.management.api.exceptions.OperationException;
 import org.gatein.management.api.exceptions.ResourceNotFoundException;
 import org.gatein.management.api.operation.OperationContext;
@@ -29,20 +31,17 @@ import org.gatein.management.api.operation.ResultHandler;
 import org.gatein.management.api.operation.model.ReadResourceModel;
 import org.gatein.mop.api.workspace.Site;
 
-import java.util.Collections;
-
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class SiteLayoutReadResource extends AbstractSiteOperationHandler
-{
-   @Override
-   protected void execute(OperationContext operationContext, ResultHandler resultHandler, Site site) throws ResourceNotFoundException, OperationException
-   {
-      ReadResourceModel readResource = new ReadResourceModel(
-         "The site layout for site " + site.getName(), Collections.<String>emptySet());
+public class SiteLayoutReadResource extends AbstractSiteOperationHandler {
+    @Override
+    protected void execute(OperationContext operationContext, ResultHandler resultHandler, Site site)
+            throws ResourceNotFoundException, OperationException {
+        ReadResourceModel readResource = new ReadResourceModel("The site layout for site " + site.getName(),
+                Collections.<String> emptySet());
 
-      resultHandler.completed(readResource);
-   }
+        resultHandler.completed(readResource);
+    }
 }

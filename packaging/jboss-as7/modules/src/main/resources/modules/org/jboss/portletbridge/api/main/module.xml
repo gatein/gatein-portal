@@ -23,17 +23,17 @@
   -->
 
 <module xmlns="urn:jboss:module:1.0" name="org.jboss.portletbridge.api">
-    <properties>
-        <property name="jboss.api" value="private"/>
-    </properties>
-    
-    <resources>
-        <!-- Insert resources here -->
-    </resources>
+  <properties>
+    <property name="jboss.api" value="private"/>
+  </properties>
 
-    <dependencies>
-        <module name="javax.portlet.api"/>
-        <module name="javax.api"/>
-        <module name="javax.faces.api"/>
-    </dependencies>
+  <resources>
+    <!-- Insert resources here -->
+  </resources>
+
+  <dependencies>
+    <module name="javax.portlet.api"/>
+    <module name="javax.api"/>
+    <module name="javax.faces.api"/>
+  </dependencies>
 </module>

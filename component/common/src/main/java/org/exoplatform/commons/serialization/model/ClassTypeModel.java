@@ -23,55 +23,51 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class ClassTypeModel<O> extends TypeModel<O>
-{
+public final class ClassTypeModel<O> extends TypeModel<O> {
 
-   /** . */
-   private final ClassTypeModel<? super O> superType;
+    /** . */
+    private final ClassTypeModel<? super O> superType;
 
-   /** . */
-   private final Map<String, FieldModel<O, ?>> fields;
+    /** . */
+    private final Map<String, FieldModel<O, ?>> fields;
 
-   /** . */
-   private final Map<String, FieldModel<O, ?>> immutableFields;
+    /** . */
+    private final Map<String, FieldModel<O, ?>> immutableFields;
 
-   /** . */
-   private final SerializationMode serializationMode;
+    /** . */
+    private final SerializationMode serializationMode;
 
-   ClassTypeModel(Class<O> type, ClassTypeModel<? super O> superType, Map<String, FieldModel<O, ?>> fields, SerializationMode serializationMode)
-   {
-      super(type, superType);
+    ClassTypeModel(Class<O> type, ClassTypeModel<? super O> superType, Map<String, FieldModel<O, ?>> fields,
+            SerializationMode serializationMode) {
+        super(type, superType);
 
-      //
-      this.superType = superType;
-      this.fields = fields;
-      this.immutableFields = Collections.unmodifiableMap(fields);
-      this.serializationMode = serializationMode;
-   }
+        //
+        this.superType = superType;
+        this.fields = fields;
+        this.immutableFields = Collections.unmodifiableMap(fields);
+        this.serializationMode = serializationMode;
+    }
 
-   @Override
-   public ClassTypeModel<? super O> getSuperType()
-   {
-      return superType;
-   }
+    @Override
+    public ClassTypeModel<? super O> getSuperType() {
+        return superType;
+    }
 
-   public SerializationMode getSerializationMode()
-   {
-      return serializationMode;
-   }
+    public SerializationMode getSerializationMode() {
+        return serializationMode;
+    }
 
-   public Collection<FieldModel<O, ?>> getFields()
-   {
-      return immutableFields.values();
-   }
+    public Collection<FieldModel<O, ?>> getFields() {
+        return immutableFields.values();
+    }
 
-   public Map<String, FieldModel<O, ?>> getFieldMap()
-   {
-      return immutableFields;
-   }
+    public Map<String, FieldModel<O, ?>> getFieldMap() {
+        return immutableFields;
+    }
 
 }

@@ -19,42 +19,36 @@
 
 package org.exoplatform.commons.serialization.factory;
 
+import java.io.InvalidClassException;
+
 import org.exoplatform.commons.serialization.SerializationContext;
 import org.exoplatform.commons.serialization.model.TypeDomain;
 import org.exoplatform.component.test.AbstractGateInTest;
-
-import java.io.InvalidClassException;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestObjectFactory extends AbstractGateInTest
-{
+public class TestObjectFactory extends AbstractGateInTest {
 
-   public void testCustomFactory() throws Exception
-   {
-      TypeDomain domain = new TypeDomain();
-      domain.addTypeModel(A2.class);
-      SerializationContext context = new SerializationContext(domain);
-      context.addFactory(new A1());
-      A2 a2 = new A2();
-      assertSame(A1.instance, context.clone(a2));
-   }
+    public void testCustomFactory() throws Exception {
+        TypeDomain domain = new TypeDomain();
+        domain.addTypeModel(A2.class);
+        SerializationContext context = new SerializationContext(domain);
+        context.addFactory(new A1());
+        A2 a2 = new A2();
+        assertSame(A1.instance, context.clone(a2));
+    }
 
-   public void testFactoryThrowsException() throws Exception
-   {
-      TypeDomain domain = new TypeDomain();
-      domain.addTypeModel(B.class);
-      SerializationContext context = new SerializationContext(domain);
-      B b = new B(false);
-      try
-      {
-         context.clone(b);
-         fail();
-      }
-      catch (InvalidClassException e)
-      {
-      }
-   }
+    public void testFactoryThrowsException() throws Exception {
+        TypeDomain domain = new TypeDomain();
+        domain.addTypeModel(B.class);
+        SerializationContext context = new SerializationContext(domain);
+        B b = new B(false);
+        try {
+            context.clone(b);
+            fail();
+        } catch (InvalidClassException e) {
+        }
+    }
 }

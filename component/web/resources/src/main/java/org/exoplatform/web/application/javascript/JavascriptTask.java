@@ -18,60 +18,50 @@
  */
 package org.exoplatform.web.application.javascript;
 
-import org.gatein.portal.controller.resource.script.ScriptResource;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import javax.servlet.ServletContext;
 
+import org.gatein.portal.controller.resource.script.ScriptResource;
+
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
  * @version $Id$
- * 
+ *
  */
-public class JavascriptTask
-{
+public class JavascriptTask {
 
-   private List<ScriptResourceDescriptor> descriptors;
+    private List<ScriptResourceDescriptor> descriptors;
 
-   public JavascriptTask()
-   {
-      descriptors = new ArrayList<ScriptResourceDescriptor>();
-   }
+    public JavascriptTask() {
+        descriptors = new ArrayList<ScriptResourceDescriptor>();
+    }
 
-   public void execute(JavascriptConfigService service, ServletContext scontext)
-   {
-      for (ScriptResourceDescriptor desc : descriptors)
-      {
-         String contextPath = null;
-         if (desc.modules.size() > 0)
-         {
-            contextPath = desc.modules.get(0).getContextPath();
-         }
-         
-         ScriptResource resource = service.scripts.addResource(desc.id, desc.fetchMode, desc.alias, desc.group, contextPath);
-         if (resource != null)
-         {
-            for (Javascript module : desc.modules)
-            {
-               module.addModuleTo(resource);
+    public void execute(JavascriptConfigService service, ServletContext scontext) {
+        for (ScriptResourceDescriptor desc : descriptors) {
+            String contextPath = null;
+            if (desc.modules.size() > 0) {
+                contextPath = desc.modules.get(0).getContextPath();
             }
-            for (Locale locale : desc.getSupportedLocales())
-            {
-               resource.addSupportedLocale(locale);
-            }
-            for (DependencyDescriptor dependency : desc.dependencies)
-            {
-               resource.addDependency(dependency.getResourceId(), dependency.getAlias(), dependency.getPluginResource());
-            }            
-         }
-      }
-   }
 
-   public void addDescriptor(ScriptResourceDescriptor desc)
-   {
-      descriptors.add(desc);
-   }
+            ScriptResource resource = service.scripts.addResource(desc.id, desc.fetchMode, desc.alias, desc.group, contextPath);
+            if (resource != null) {
+                for (Javascript module : desc.modules) {
+                    module.addModuleTo(resource);
+                }
+                for (Locale locale : desc.getSupportedLocales()) {
+                    resource.addSupportedLocale(locale);
+                }
+                for (DependencyDescriptor dependency : desc.dependencies) {
+                    resource.addDependency(dependency.getResourceId(), dependency.getAlias(), dependency.getPluginResource());
+                }
+            }
+        }
+    }
+
+    public void addDescriptor(ScriptResourceDescriptor desc) {
+        descriptors.add(desc);
+    }
 }

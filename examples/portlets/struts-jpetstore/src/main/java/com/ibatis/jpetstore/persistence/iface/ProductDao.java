@@ -5,10 +5,10 @@ import com.ibatis.jpetstore.domain.Product;
 
 public interface ProductDao {
 
-  PaginatedList getProductListByCategory(String categoryId);
+    PaginatedList getProductListByCategory(String categoryId);
 
-  Product getProduct(String productId);
+    Product getProduct(String productId);
 
-  PaginatedList searchProductList(String keywords);
+    PaginatedList searchProductList(String keywords);
 
 }

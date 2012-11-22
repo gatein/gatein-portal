@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.application;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
@@ -29,47 +31,40 @@ import org.exoplatform.web.url.URLFactoryService;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
 
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class DefaultRequestHandler extends WebRequestHandler
-{
+public class DefaultRequestHandler extends WebRequestHandler {
 
-   /** . */
-   private final UserPortalConfigService configService;
+    /** . */
+    private final UserPortalConfigService configService;
 
-   /** . */
-   private final URLFactoryService urlFactory;
+    /** . */
+    private final URLFactoryService urlFactory;
 
-   public DefaultRequestHandler(UserPortalConfigService configService, URLFactoryService urlFactory)
-   {
-      this.configService = configService;
-      this.urlFactory = urlFactory;
-   }
+    public DefaultRequestHandler(UserPortalConfigService configService, URLFactoryService urlFactory) {
+        this.configService = configService;
+        this.urlFactory = urlFactory;
+    }
 
-   @Override
-   public String getHandlerName()
-   {
-      return "default";
-   }
+    @Override
+    public String getHandlerName() {
+        return "default";
+    }
 
-   @Override
-   public boolean execute(ControllerContext context) throws Exception
-   {
-      String defaultPortal = configService.getDefaultPortal();
-      PortalURLContext urlContext = new PortalURLContext(context, SiteKey.portal(defaultPortal));
-      NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
-      String s = url.setResource(new NavigationResource(SiteType.PORTAL, defaultPortal, "")).toString();
-      HttpServletResponse resp = context.getResponse();
-      resp.sendRedirect(resp.encodeRedirectURL(s));
-      return true;
-   }
+    @Override
+    public boolean execute(ControllerContext context) throws Exception {
+        String defaultPortal = configService.getDefaultPortal();
+        PortalURLContext urlContext = new PortalURLContext(context, SiteKey.portal(defaultPortal));
+        NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
+        String s = url.setResource(new NavigationResource(SiteType.PORTAL, defaultPortal, "")).toString();
+        HttpServletResponse resp = context.getResponse();
+        resp.sendRedirect(resp.encodeRedirectURL(s));
+        return true;
+    }
 
-   @Override
-   protected boolean getRequiresLifeCycle()
-   {
-      return false;
-   }
+    @Override
+    protected boolean getRequiresLifeCycle() {
+        return false;
+    }
 }

@@ -22,23 +22,22 @@ package org.exoplatform.web.controller.metadata;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public enum Element
-{
+public enum Element {
 
-   CONTROLLER,
+    CONTROLLER,
 
-   ROUTE,
+    ROUTE,
 
-   ROUTE_PARAM,
+    ROUTE_PARAM,
 
-   REQUEST_PARAM,
+    REQUEST_PARAM,
 
-   PATH_PARAM,
+    PATH_PARAM,
 
-   PATTERN,
+    PATTERN,
 
-   VALUE,
+    VALUE,
 
-   UNKNOWN
+    UNKNOWN
 
 }

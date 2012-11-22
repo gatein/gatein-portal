@@ -5,10 +5,10 @@ import com.ibatis.jpetstore.domain.Order;
 
 public interface OrderDao {
 
-  PaginatedList getOrdersByUsername(String username);
+    PaginatedList getOrdersByUsername(String username);
 
-  Order getOrder(int orderId);
+    Order getOrder(int orderId);
 
-  void insertOrder(Order order);
+    void insertOrder(Order order);
 
 }

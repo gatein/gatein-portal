@@ -19,136 +19,108 @@
 
 package org.exoplatform.web.controller.regexp;
 
+import java.io.IOException;
+
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
-
-import java.io.IOException;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestRegExpRenderer extends TestCase
-{
+public class TestRegExpRenderer extends TestCase {
 
-   static void assertRender(RENode re, String expected)
-   {
-      try
-      {
-         String rendered;
-         if (re != null)
-         {
-            rendered = RERenderer.render(re, new StringBuilder()).toString();
-         }
-         else
-         {
-            rendered = "";
-         }
-         assertEquals(expected, rendered);
-      }
-      catch (IOException e)
-      {
-         AssertionFailedError afe = new AssertionFailedError();
-         afe.initCause(e);
-         throw afe;
-      }
-   }
+    static void assertRender(RENode re, String expected) {
+        try {
+            String rendered;
+            if (re != null) {
+                rendered = RERenderer.render(re, new StringBuilder()).toString();
+            } else {
+                rendered = "";
+            }
+            assertEquals(expected, rendered);
+        } catch (IOException e) {
+            AssertionFailedError afe = new AssertionFailedError();
+            afe.initCause(e);
+            throw afe;
+        }
+    }
 
-   static RENode.Disjunction disjunction(String regexp)
-   {
-      try
-      {
-         REParser parser = new REParser(regexp);
-         RENode.Disjunction re = parser.parseDisjunction();
-         assertTrue(parser.isDone());
-         return re;
-      }
-      catch (SyntaxException e)
-      {
-         AssertionFailedError afe = new AssertionFailedError();
-         afe.initCause(e);
-         throw afe;
-      }
-   }
+    static RENode.Disjunction disjunction(String regexp) {
+        try {
+            REParser parser = new REParser(regexp);
+            RENode.Disjunction re = parser.parseDisjunction();
+            assertTrue(parser.isDone());
+            return re;
+        } catch (SyntaxException e) {
+            AssertionFailedError afe = new AssertionFailedError();
+            afe.initCause(e);
+            throw afe;
+        }
+    }
 
-   static RENode.Alternative alternative(String regexp)
-   {
-      try
-      {
-         REParser parser = new REParser(regexp);
-         RENode.Alternative re = parser.parseAlternative();
-         assertTrue(parser.isDone());
-         return re;
-      }
-      catch (SyntaxException e)
-      {
-         AssertionFailedError afe = new AssertionFailedError();
-         afe.initCause(e);
-         throw afe;
-      }
-   }
+    static RENode.Alternative alternative(String regexp) {
+        try {
+            REParser parser = new REParser(regexp);
+            RENode.Alternative re = parser.parseAlternative();
+            assertTrue(parser.isDone());
+            return re;
+        } catch (SyntaxException e) {
+            AssertionFailedError afe = new AssertionFailedError();
+            afe.initCause(e);
+            throw afe;
+        }
+    }
 
-   static RENode.Expr expression(String regexp)
-   {
-      try
-      {
-         REParser parser = new REParser(regexp);
-         RENode.Expr re = parser.parseExpression();
-         assertTrue(parser.isDone());
-         return re;
-      }
-      catch (SyntaxException e)
-      {
-         AssertionFailedError afe = new AssertionFailedError();
-         afe.initCause(e);
-         throw afe;
-      }
-   }
+    static RENode.Expr expression(String regexp) {
+        try {
+            REParser parser = new REParser(regexp);
+            RENode.Expr re = parser.parseExpression();
+            assertTrue(parser.isDone());
+            return re;
+        } catch (SyntaxException e) {
+            AssertionFailedError afe = new AssertionFailedError();
+            afe.initCause(e);
+            throw afe;
+        }
+    }
 
-   static RENode.CharacterClass characterClass(String regexp)
-   {
-      try
-      {
-         REParser parser = new REParser(regexp);
-         RENode.CharacterClass re = parser.parseCharacterClass();
-         assertTrue(parser.isDone());
-         return re;
-      }
-      catch (SyntaxException e)
-      {
-         AssertionFailedError afe = new AssertionFailedError();
-         afe.initCause(e);
-         throw afe;
-      }
-   }
+    static RENode.CharacterClass characterClass(String regexp) {
+        try {
+            REParser parser = new REParser(regexp);
+            RENode.CharacterClass re = parser.parseCharacterClass();
+            assertTrue(parser.isDone());
+            return re;
+        } catch (SyntaxException e) {
+            AssertionFailedError afe = new AssertionFailedError();
+            afe.initCause(e);
+            throw afe;
+        }
+    }
 
-   public void testSimple()
-   {
-      assertRender(expression("."), ".");
-      assertRender(expression("^"), "^");
-      assertRender(expression("\\."), "\\.");
-   }
+    public void testSimple() {
+        assertRender(expression("."), ".");
+        assertRender(expression("^"), "^");
+        assertRender(expression("\\."), "\\.");
+    }
 
-   public void testDisjunction()
-   {
-      assertRender(disjunction(""), "");
-      assertRender(disjunction("|"), "|");
-      assertRender(disjunction("a|"), "a|");
-      assertRender(disjunction("|a"), "|a");
-      assertRender(disjunction("a|b"), "a|b");
-   }
+    public void testDisjunction() {
+        assertRender(disjunction(""), "");
+        assertRender(disjunction("|"), "|");
+        assertRender(disjunction("a|"), "a|");
+        assertRender(disjunction("|a"), "|a");
+        assertRender(disjunction("a|b"), "a|b");
+    }
 
-   public void testAlternative()
-   {
-      assertRender(alternative(""), "");
-      assertRender(alternative("ab"), "ab");
-      assertRender(alternative("abc"), "abc");
-   }
+    public void testAlternative() {
+        assertRender(alternative(""), "");
+        assertRender(alternative("ab"), "ab");
+        assertRender(alternative("abc"), "abc");
+    }
 
-   public void testCharacterClass()
-   {
-      assertRender(characterClass(""), "");
-      assertRender(characterClass("[a]"), "[a]");
-      assertRender(characterClass("[ab]"), "[ab]");
-      assertRender(characterClass("[.\\]]"), "[\\.\\]]");
-   }
+    public void testCharacterClass() {
+        assertRender(characterClass(""), "");
+        assertRender(characterClass("[a]"), "[a]");
+        assertRender(characterClass("[ab]"), "[ab]");
+        assertRender(characterClass("[.\\]]"), "[\\.\\]]");
+    }
 }

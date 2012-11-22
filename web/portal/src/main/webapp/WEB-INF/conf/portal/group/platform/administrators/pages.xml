@@ -39,8 +39,8 @@
       <access-permissions>manager:/platform/administrators</access-permissions>
       <show-info-bar>false</show-info-bar>
     </portlet-application>
-  </page>           
-  
+  </page>
+
   <page>
     <name>communityManagement</name>
     <title>Community Management</title>
@@ -53,10 +53,10 @@
       </portlet>
       <title>Community Management</title>
       <access-permissions>manager:/platform/administrators</access-permissions>
-      <show-info-bar>false</show-info-bar>      
+      <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>registry</name>
     <title>Registry</title>
@@ -72,12 +72,12 @@
       <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>pageManagement</name>
     <title>Page Management</title>
-	  <access-permissions>manager:/platform/administrators</access-permissions>
-	  <edit-permission>manager:/platform/administrators</edit-permission>    
+    <access-permissions>manager:/platform/administrators</access-permissions>
+    <edit-permission>manager:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
         <application-ref>exoadmin</application-ref>
@@ -88,12 +88,12 @@
       <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>servicesManagement</name>
     <title>Services Management</title>
     <access-permissions>manager:/platform/administrators</access-permissions>
-    <edit-permission>manager:/platform/administrators</edit-permission>    
+    <edit-permission>manager:/platform/administrators</edit-permission>
     <gadget-application>
       <gadget>
         <gadget-ref>ServicesManagement</gadget-ref>

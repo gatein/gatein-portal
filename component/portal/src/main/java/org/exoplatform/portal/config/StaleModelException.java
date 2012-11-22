@@ -20,31 +20,26 @@
 package org.exoplatform.portal.config;
 
 /**
- * This exception signals that the passed argument model is stale and that the underlying update operation
- * could not be accomplished.
+ * This exception signals that the passed argument model is stale and that the underlying update operation could not be
+ * accomplished.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class StaleModelException extends StorageException
-{
+public class StaleModelException extends StorageException {
 
-   public StaleModelException()
-   {
-   }
+    public StaleModelException() {
+    }
 
-   public StaleModelException(String message)
-   {
-      super(message);
-   }
+    public StaleModelException(String message) {
+        super(message);
+    }
 
-   public StaleModelException(Throwable cause)
-   {
-      super(cause);
-   }
+    public StaleModelException(Throwable cause) {
+        super(cause);
+    }
 
-   public StaleModelException(String message, Throwable cause)
-   {
-      super(message, cause);
-   }
+    public StaleModelException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

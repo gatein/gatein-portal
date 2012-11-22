@@ -21,60 +21,60 @@
   -->
 
 <!DOCTYPE web-app PUBLIC
-   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-   "http://java.sun.com/dtd/web-app_2_3.dtd" >
+    "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
 
-   <display-name>gwtGadgets</display-name>
+  <display-name>gwtGadgets</display-name>
 
-   <!-- TODO: Determine if these parameters (maxSize and slowUploads) is what we want for this -->
-   <context-param>
-      <!-- max size of the upload request -->
-      <param-name>maxSize</param-name>
-      <param-value>3145728</param-value>
-   </context-param>
+  <!-- TODO: Determine if these parameters (maxSize and slowUploads) is what we want for this -->
+  <context-param>
+    <!-- max size of the upload request -->
+    <param-name>maxSize</param-name>
+    <param-value>3145728</param-value>
+  </context-param>
 
-   <context-param>
-      <!--
-         Useful in development mode to slow down the uploads in fast networks.
-         Put the number of milliseconds to sleep in each block received in the server.
-         false or 0, means don't use slow uploads
-      -->
-      <param-name>slowUploads</param-name>
-      <param-value>50</param-value>
-   </context-param>
+  <context-param>
+    <!--
+       Useful in development mode to slow down the uploads in fast networks.
+       Put the number of milliseconds to sleep in each block received in the server.
+       false or 0, means don't use slow uploads
+    -->
+    <param-name>slowUploads</param-name>
+    <param-value>50</param-value>
+  </context-param>
 
-   <!-- GateIn service servlet -->
-   <servlet>
-      <servlet-name>gtnService</servlet-name>
-      <servlet-class>org.gatein.management.gadget.mop.exportimport.server.GateInServiceImpl</servlet-class>
-   </servlet>
+  <!-- GateIn service servlet -->
+  <servlet>
+    <servlet-name>gtnService</servlet-name>
+    <servlet-class>org.gatein.management.gadget.mop.exportimport.server.GateInServiceImpl</servlet-class>
+  </servlet>
 
-   <!-- file upload servlet-->
-   <servlet>
-      <servlet-name>uploadServlet</servlet-name>
-      <servlet-class>org.gatein.management.gadget.mop.exportimport.server.FileUploadServlet</servlet-class>
-   </servlet>
+  <!-- file upload servlet-->
+  <servlet>
+    <servlet-name>uploadServlet</servlet-name>
+    <servlet-class>org.gatein.management.gadget.mop.exportimport.server.FileUploadServlet</servlet-class>
+  </servlet>
 
-   <servlet>
-      <servlet-name>downloadServlet</servlet-name>
-      <servlet-class>org.gatein.management.gadget.mop.exportimport.server.FileDownloadServlet</servlet-class>
-   </servlet>
+  <servlet>
+    <servlet-name>downloadServlet</servlet-name>
+    <servlet-class>org.gatein.management.gadget.mop.exportimport.server.FileDownloadServlet</servlet-class>
+  </servlet>
 
-   <servlet-mapping>
-      <servlet-name>gtnService</servlet-name>
-      <url-pattern>/exportimport/GateInService</url-pattern>
-   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>gtnService</servlet-name>
+    <url-pattern>/exportimport/GateInService</url-pattern>
+  </servlet-mapping>
 
-   <servlet-mapping>
-      <servlet-name>uploadServlet</servlet-name>
-      <url-pattern>/exportimport/upload</url-pattern>
-   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>uploadServlet</servlet-name>
+    <url-pattern>/exportimport/upload</url-pattern>
+  </servlet-mapping>
 
-   <servlet-mapping>
-      <servlet-name>downloadServlet</servlet-name>
-      <url-pattern>/exportimport/download</url-pattern>
-   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>downloadServlet</servlet-name>
+    <url-pattern>/exportimport/download</url-pattern>
+  </servlet-mapping>
 
 </web-app>

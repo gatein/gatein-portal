@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -18,6 +18,15 @@
  */
 
 package org.exoplatform.webui.organization;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.container.ExoContainer;
@@ -41,260 +50,213 @@ import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.MissingResourceException;
-
 /**
- * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com
- * Jun 28, 2006
+ * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 28, 2006
  */
 @ComponentConfig(template = "system:/groovy/webui/form/UIVTabInputSet.gtmpl")
 @Serialized
-public class UIUserProfileInputSet extends UIFormInputSet
-{
+public class UIUserProfileInputSet extends UIFormInputSet {
 
-   private String user_;
+    private String user_;
 
-   public final static String MALE = "male";
+    public static final String MALE = "male";
 
-   public final static String FEMALE = "female";
+    public static final String FEMALE = "female";
 
-   public UIUserProfileInputSet()
-   {
-   }
+    public UIUserProfileInputSet() {
+    }
 
-   public UIUserProfileInputSet(String name) throws Exception
-   {
-      super(name);
-      setComponentConfig(UIUserProfileInputSet.class, null);
+    public UIUserProfileInputSet(String name) {
+        super(name);
+        setComponentConfig(UIUserProfileInputSet.class, null);
 
-      UIFormInputSet personalInputSet = new UIFormInputSet("Profile");
-      addInput(personalInputSet, UserProfile.PERSONAL_INFO_KEYS);
-      addUIFormInput(personalInputSet);
+        UIFormInputSet personalInputSet = new UIFormInputSet("Profile");
+        addInput(personalInputSet, UserProfile.PERSONAL_INFO_KEYS);
+        addUIFormInput(personalInputSet);
 
-      UIFormInputSet homeInputSet = new UIFormInputSet("HomeInfo");
-      addInput(homeInputSet, UserProfile.HOME_INFO_KEYS);
-      homeInputSet.setRendered(false);
-      addUIFormInput(homeInputSet);
+        UIFormInputSet homeInputSet = new UIFormInputSet("HomeInfo");
+        addInput(homeInputSet, UserProfile.HOME_INFO_KEYS);
+        homeInputSet.setRendered(false);
+        addUIFormInput(homeInputSet);
 
-      UIFormInputSet businessInputSet = new UIFormInputSet("BusinessInfo");
-      addInput(businessInputSet, UserProfile.BUSINESE_INFO_KEYS);
-      businessInputSet.setRendered(false);
-      addUIFormInput(businessInputSet);
-   }
+        UIFormInputSet businessInputSet = new UIFormInputSet("BusinessInfo");
+        addInput(businessInputSet, UserProfile.BUSINESE_INFO_KEYS);
+        businessInputSet.setRendered(false);
+        addUIFormInput(businessInputSet);
+    }
 
-   public void reset()
-   {
-      for (UIComponent uiChild : getChildren())
-      {
-         if (uiChild instanceof UIFormInputSet || uiChild instanceof UIFormInput)
-         {
-            ((UIFormInputSet)uiChild).reset();
-         }
-      }
-   }
+    public void reset() {
+        for (UIComponent uiChild : getChildren()) {
+            if (uiChild instanceof UIFormInputSet || uiChild instanceof UIFormInput) {
+                ((UIFormInputSet) uiChild).reset();
+            }
+        }
+    }
 
-   private void addInput(UIFormInputSet set, String[] keys)
-   {
+    private void addInput(UIFormInputSet set, String[] keys) {
 
-      for (String key : keys)
-      {
-         if (key.equalsIgnoreCase("user.gender"))
-         {
-            List<SelectItemOption<String>> ls = new ArrayList<SelectItemOption<String>>();
-            ls.add(new SelectItemOption<String>(MALE, MALE));
-            ls.add(new SelectItemOption<String>(FEMALE, FEMALE));;
-            UIFormSelectBox genderSelectBox = new UIFormSelectBox(key, key, ls);
-            set.addUIFormInput(genderSelectBox);
-            continue;
-         }
-         else if (key.equalsIgnoreCase(Constants.USER_LANGUAGE))
-         {
-            UIFormSelectBox langSelectBox = new UIFormSelectBox(key, key, null);
-            set.addUIFormInput(langSelectBox);
-            initLanguageCombo(langSelectBox);
-            continue;
-         }
-         
-         set.addUIFormInput(new UIFormStringInput(key, null, null));
-      }
-   }
+        for (String key : keys) {
+            if (key.equalsIgnoreCase("user.gender")) {
+                List<SelectItemOption<String>> ls = new ArrayList<SelectItemOption<String>>();
+                ls.add(new SelectItemOption<String>(MALE, MALE));
+                ls.add(new SelectItemOption<String>(FEMALE, FEMALE));
+                UIFormSelectBox genderSelectBox = new UIFormSelectBox(key, key, ls);
+                set.addUIFormInput(genderSelectBox);
+                continue;
+            } else if (key.equalsIgnoreCase(Constants.USER_LANGUAGE)) {
+                UIFormSelectBox langSelectBox = new UIFormSelectBox(key, key, null);
+                set.addUIFormInput(langSelectBox);
+                initLanguageCombo(langSelectBox);
+                continue;
+            }
 
-   /**
-    * Update language select box
-    */
-   @Override
-   public void processRender(WebuiRequestContext context) throws Exception
-   {
-      UIFormSelectBox langSelectBox = this.findComponentById(Constants.USER_LANGUAGE);
-      initLanguageCombo(langSelectBox);
-      super.processRender(context);
-   }
+            set.addUIFormInput(new UIFormStringInput(key, null, null));
+        }
+    }
 
-   private void initLanguageCombo(UIFormSelectBox langSelectBox)
-   {
-      if (langSelectBox == null)
-         return;
-      String selectedLang = langSelectBox.getSelectedValues()[0];
+    /**
+     * Update language select box
+     */
+    @Override
+    public void processRender(WebuiRequestContext context) throws Exception {
+        UIFormSelectBox langSelectBox = this.findComponentById(Constants.USER_LANGUAGE);
+        initLanguageCombo(langSelectBox);
+        super.processRender(context);
+    }
 
-      List<SelectItemOption<String>> lang = new ArrayList<SelectItemOption<String>>();
-      langSelectBox.setOptions(lang); // Clear
+    private void initLanguageCombo(UIFormSelectBox langSelectBox) {
+        if (langSelectBox == null)
+            return;
+        String selectedLang = langSelectBox.getSelectedValues()[0];
 
-      LocaleConfigService localeService = getApplicationComponent(LocaleConfigService.class);
-      Locale currentLocale = ((PortletRequestContext)WebuiRequestContext.getCurrentInstance()).getLocale();
-      Iterator<LocaleConfig> i = localeService.getLocalConfigs().iterator();
-      String displayName = null;
-      String language = null;
-      String country = null;
-      SelectItemOption<String> option;
-      while (i.hasNext())
-      {
-         LocaleConfig config = i.next();
-         Locale locale = config.getLocale();
-         
-         language = locale.getLanguage();
-         country = locale.getCountry();
-         if (country != null && country.length() > 0)
-         {
-            language = language + "_" + country;
-         }
+        List<SelectItemOption<String>> lang = new ArrayList<SelectItemOption<String>>();
+        langSelectBox.setOptions(lang); // Clear
 
-         
-         ResourceBundle localeResourceBundle;
+        LocaleConfigService localeService = getApplicationComponent(LocaleConfigService.class);
+        Locale currentLocale = ((PortletRequestContext) WebuiRequestContext.getCurrentInstance()).getLocale();
+        Iterator<LocaleConfig> i = localeService.getLocalConfigs().iterator();
+        String displayName = null;
+        String language = null;
+        String country = null;
+        SelectItemOption<String> option;
+        while (i.hasNext()) {
+            LocaleConfig config = i.next();
+            Locale locale = config.getLocale();
 
-         displayName = null;
-         try
-         {
-            localeResourceBundle = getResourceBundle(currentLocale);
-            String key = "Locale." + language;
-            String translation = localeResourceBundle.getString(key);
-            displayName = translation;
-         }
-         catch (MissingResourceException e)
-         {
-            displayName = capitalizeFirstLetter(locale.getDisplayName(currentLocale));
-         }
-         catch (Exception e)
-         {
-     
-         }
-         
-         option = new SelectItemOption<String>(displayName, language);
-         if (language.equals(selectedLang))
-         {
-            option.setSelected(true);
-         }
-         lang.add(option);
-      }
-      
-      // Set default language for new user is empty
-      lang.add(new SelectItemOption<String>("", ""));
-      
-      Collections.sort(lang, new LanguagesComparator());
+            language = locale.getLanguage();
+            country = locale.getCountry();
+            if (country != null && country.length() > 0) {
+                language = language + "_" + country;
+            }
 
-      langSelectBox.setOptions(lang);
-   }
+            ResourceBundle localeResourceBundle;
 
-   @SuppressWarnings("deprecation")
-   public void setUserProfile(String user) throws Exception
-   {
-      user_ = user;
-      if (user == null)
-         return;
-      OrganizationService service = getApplicationComponent(OrganizationService.class);
-      UserProfile userProfile = service.getUserProfileHandler().findUserProfileByName(user);
-      if (userProfile == null)
-      {
-         userProfile = service.getUserProfileHandler().createUserProfileInstance();
-         userProfile.setUserName(user);
-      }
+            displayName = null;
+            try {
+                localeResourceBundle = getResourceBundle(currentLocale);
+                String key = "Locale." + language;
+                String translation = localeResourceBundle.getString(key);
+                displayName = translation;
+            } catch (MissingResourceException e) {
+                displayName = capitalizeFirstLetter(locale.getDisplayName(currentLocale));
+            } catch (Exception e) {
 
-      if (userProfile.getUserInfoMap() == null)
-         return;
-      for (UIComponent set : getChildren())
-      {
-         UIFormInputSet inputSet = (UIFormInputSet)set;
-         for (UIComponent uiComp : inputSet.getChildren())
-         {
-            UIFormStringInput uiInput = (UIFormStringInput)uiComp;
-            uiInput.setValue(userProfile.getAttribute(uiInput.getName()));
-         }
-      }
-   }
+            }
 
-   @SuppressWarnings("deprecation")
-   public void save(OrganizationService service, String user, boolean isnewUser) throws Exception
-   {
-      user_ = user;
-      UserProfileHandler hanlder = service.getUserProfileHandler();
-      UserProfile userProfile = hanlder.findUserProfileByName(user_);
+            option = new SelectItemOption<String>(displayName, language);
+            if (language.equals(selectedLang)) {
+                option.setSelected(true);
+            }
+            lang.add(option);
+        }
 
-      if (userProfile == null)
-      {
-         userProfile = hanlder.createUserProfileInstance();
-         userProfile.setUserName(user_);
-      }
+        // Set default language for new user is empty
+        lang.add(new SelectItemOption<String>("", ""));
 
-      for (UIComponent set : getChildren())
-      {
-         UIFormInputSet inputSet = (UIFormInputSet)set;
-         for (UIComponent uiComp : inputSet.getChildren())
-         {
-            UIFormStringInput uiInput = (UIFormStringInput)uiComp;
-            // if(uiInput.getValue() == null || uiInput.getValue().length() < 1)
-            // continue;
-            userProfile.getUserInfoMap().put(uiInput.getName(), uiInput.getValue());
-         }
-      }
+        Collections.sort(lang, new LanguagesComparator());
 
-      hanlder.saveUserProfile(userProfile, true);
+        langSelectBox.setOptions(lang);
+    }
 
-      Object[] args = {"UserProfile", user_};
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      UIApplication uiApp = context.getUIApplication();
-      if (isnewUser)
-      {
-         uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.successful.create.user", args));
-         return;
-      }
-      uiApp.addMessage(new ApplicationMessage("UIUserProfileInputSet.msg.sucsesful.update.userprofile", args));
-   }
-   
-   private String capitalizeFirstLetter(String word)
-   {
-      if (word == null)
-      {
-         return null;
-      }
-      if (word.length() == 0)
-      {
-         return word;
-      }
-      StringBuilder result = new StringBuilder(word);
-      result.replace(0, 1, result.substring(0, 1).toUpperCase());
-      return result.toString();
-   }
+    @SuppressWarnings("deprecation")
+    public void setUserProfile(String user) throws Exception {
+        user_ = user;
+        if (user == null)
+            return;
+        OrganizationService service = getApplicationComponent(OrganizationService.class);
+        UserProfile userProfile = service.getUserProfileHandler().findUserProfileByName(user);
+        if (userProfile == null) {
+            userProfile = service.getUserProfileHandler().createUserProfileInstance();
+            userProfile.setUserName(user);
+        }
 
-   private ResourceBundle getResourceBundle(Locale locale) throws Exception
-   {
-      ExoContainer appContainer = ExoContainerContext.getCurrentContainer();
-      ResourceBundleService service =
-         (ResourceBundleService)appContainer.getComponentInstanceOfType(ResourceBundleService.class);
-      ResourceBundle res = service.getResourceBundle("locale.portal.webui", locale);
-      return res;
-   }
-   
-   private class LanguagesComparator implements Comparator<SelectItemOption>
-   {
-      public int compare(SelectItemOption item0, SelectItemOption item1)
-      {
-         return item0.getLabel().compareToIgnoreCase(item1.getLabel());
-      }
-   }
+        if (userProfile.getUserInfoMap() == null)
+            return;
+        for (UIComponent set : getChildren()) {
+            UIFormInputSet inputSet = (UIFormInputSet) set;
+            for (UIComponent uiComp : inputSet.getChildren()) {
+                UIFormStringInput uiInput = (UIFormStringInput) uiComp;
+                uiInput.setValue(userProfile.getAttribute(uiInput.getName()));
+            }
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    public void save(OrganizationService service, String user, boolean isnewUser) throws Exception {
+        user_ = user;
+        UserProfileHandler hanlder = service.getUserProfileHandler();
+        UserProfile userProfile = hanlder.findUserProfileByName(user_);
+
+        if (userProfile == null) {
+            userProfile = hanlder.createUserProfileInstance();
+            userProfile.setUserName(user_);
+        }
+
+        for (UIComponent set : getChildren()) {
+            UIFormInputSet inputSet = (UIFormInputSet) set;
+            for (UIComponent uiComp : inputSet.getChildren()) {
+                UIFormStringInput uiInput = (UIFormStringInput) uiComp;
+                // if(uiInput.getValue() == null || uiInput.getValue().length() < 1)
+                // continue;
+                userProfile.getUserInfoMap().put(uiInput.getName(), uiInput.getValue());
+            }
+        }
+
+        hanlder.saveUserProfile(userProfile, true);
+
+        Object[] args = { "UserProfile", user_ };
+        WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+        UIApplication uiApp = context.getUIApplication();
+        if (isnewUser) {
+            uiApp.addMessage(new ApplicationMessage("UIAccountInputSet.msg.successful.create.user", args));
+            return;
+        }
+        uiApp.addMessage(new ApplicationMessage("UIUserProfileInputSet.msg.sucsesful.update.userprofile", args));
+    }
+
+    private String capitalizeFirstLetter(String word) {
+        if (word == null) {
+            return null;
+        }
+        if (word.length() == 0) {
+            return word;
+        }
+        StringBuilder result = new StringBuilder(word);
+        result.replace(0, 1, result.substring(0, 1).toUpperCase());
+        return result.toString();
+    }
+
+    private ResourceBundle getResourceBundle(Locale locale) {
+        ExoContainer appContainer = ExoContainerContext.getCurrentContainer();
+        ResourceBundleService service = (ResourceBundleService) appContainer
+                .getComponentInstanceOfType(ResourceBundleService.class);
+        ResourceBundle res = service.getResourceBundle("locale.portal.webui", locale);
+        return res;
+    }
+
+    private class LanguagesComparator implements Comparator<SelectItemOption> {
+        public int compare(SelectItemOption item0, SelectItemOption item1) {
+            return item0.getLabel().compareToIgnoreCase(item1.getLabel());
+        }
+    }
 }

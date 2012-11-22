@@ -35,44 +35,44 @@
     <type>org.gatein.common.transaction.JTAUserTransactionLifecycleServiceImpl</type>
   </component>
 
-   <component>
-      <key>org.exoplatform.services.database.HibernateService</key>
-      <jmx-name>database:type=HibernateService</jmx-name>
-      <type>org.exoplatform.services.organization.idm.CustomHibernateServiceImpl</type>
-      <init-params>
-         <properties-param>
-            <name>hibernate.properties</name>
-            <description>Default Hibernate Service</description>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
-            <property name="hibernate.show_sql" value="false"/>
-            <property name="hibernate.connection.datasource" value="${gatein.idm.datasource.name}${container.name.suffix}"/>
-            <property name="hibernate.connection.autocommit" value="false"/>
+  <component>
+    <key>org.exoplatform.services.database.HibernateService</key>
+    <jmx-name>database:type=HibernateService</jmx-name>
+    <type>org.exoplatform.services.organization.idm.CustomHibernateServiceImpl</type>
+    <init-params>
+      <properties-param>
+        <name>hibernate.properties</name>
+        <description>Default Hibernate Service</description>
+        <property name="hibernate.hbm2ddl.auto" value="update"/>
+        <property name="hibernate.show_sql" value="false"/>
+        <property name="hibernate.connection.datasource" value="${gatein.idm.datasource.name}${container.name.suffix}"/>
+        <property name="hibernate.connection.autocommit" value="false"/>
 
-            <!-- Non-JTA setup -->
-            <property name="hibernate.current_session_context_class" value="thread"/>
+        <!-- Non-JTA setup -->
+        <property name="hibernate.current_session_context_class" value="thread"/>
 
-            <!-- JTA setup -->
-            <!--<property name="hibernate.current_session_context_class" value="jta"/>
-            <property name="hibernate.transaction.factory_class" value="org.hibernate.transaction.JTATransactionFactory" />
-            <property name="hibernate.transaction.jta.platform" value="org.exoplatform.services.organization.idm.UserTransactionJtaPlatform" />-->
+        <!-- JTA setup -->
+        <!--<property name="hibernate.current_session_context_class" value="jta"/>
+     <property name="hibernate.transaction.factory_class" value="org.hibernate.transaction.JTATransactionFactory" />
+     <property name="hibernate.transaction.jta.platform" value="org.exoplatform.services.organization.idm.UserTransactionJtaPlatform" />-->
 
-            <property name="hibernate.cache.use_second_level_cache" value="false"/>
-            <property name="hibernate.cache.use_query_cache" value="false"/>
-            <!-- Uncomment for enable 2nd level cache based on Infinispan -->
-            <!--<property name="hibernate.cache.region.factory_class" value="org.jboss.as.jpa.hibernate4.infinispan.InfinispanRegionFactory" />-->
-            <!-- Uncomment to enable cache statistics for infinispan />-->
-            <!--<property name="hibernate.cache.infinispan.statistics" value="true" />-->
-            <!-- Uncomment to use custom infinispan configuration file instead of the default bundled in hibernate-infinispan jar -->
-            <!--<property name="hibernate.cache.infinispan.cfg" value="/home/infinispan/cacheprovider-configs.xml"/>-->
+        <property name="hibernate.cache.use_second_level_cache" value="false"/>
+        <property name="hibernate.cache.use_query_cache" value="false"/>
+        <!-- Uncomment for enable 2nd level cache based on Infinispan -->
+        <!--<property name="hibernate.cache.region.factory_class" value="org.jboss.as.jpa.hibernate4.infinispan.InfinispanRegionFactory" />-->
+        <!-- Uncomment to enable cache statistics for infinispan />-->
+        <!--<property name="hibernate.cache.infinispan.statistics" value="true" />-->
+        <!-- Uncomment to use custom infinispan configuration file instead of the default bundled in hibernate-infinispan jar -->
+        <!--<property name="hibernate.cache.infinispan.cfg" value="/home/infinispan/cacheprovider-configs.xml"/>-->
 
-            <!--
-              Should be automatically detected. Force otherwise
-               <property name="hibernate.dialect" value="org.hibernate.dialect.XXXDialect"/>
-            -->
-            <property name="hibernate.listeners.envers.autoRegister" value="false" />
-         </properties-param>
-      </init-params>
-   </component>
+        <!--
+          Should be automatically detected. Force otherwise
+           <property name="hibernate.dialect" value="org.hibernate.dialect.XXXDialect"/>
+        -->
+        <property name="hibernate.listeners.envers.autoRegister" value="false"/>
+      </properties-param>
+    </init-params>
+  </component>
 
   <component>
     <key>org.exoplatform.services.organization.idm.PicketLinkIDMService</key>
@@ -181,8 +181,12 @@
           <field name="groupTypeMappings">
             <map type="java.util.HashMap">
               <entry>
-                <key><string>/</string></key>
-                <value><string>root_type</string></value>
+                <key>
+                  <string>/</string>
+                </key>
+                <value>
+                  <string>root_type</string>
+                </value>
               </entry>
 
               <!-- Uncomment for sample LDAP configuration -->

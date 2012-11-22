@@ -23,7 +23,7 @@
   -->
 
 <module xmlns="urn:jboss:module:1.1" name="org.gatein.wsrp.catalog">
-   <resources>
-      <!-- Insert resources here -->
-   </resources>
+  <resources>
+    <!-- Insert resources here -->
+  </resources>
 </module>

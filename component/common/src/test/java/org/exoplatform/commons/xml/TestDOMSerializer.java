@@ -19,61 +19,55 @@
 
 package org.exoplatform.commons.xml;
 
-import junit.framework.TestCase;
-import org.w3c.dom.Element;
-import org.xml.sax.InputSource;
-
-import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.StringReader;
 import java.io.StringWriter;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import junit.framework.TestCase;
+
+import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestDOMSerializer extends TestCase
-{
+public class TestDOMSerializer extends TestCase {
 
-   @Override
-   protected void setUp() throws Exception
-   {
-   }
+    @Override
+    protected void setUp() throws Exception {
+    }
 
-   public void testScriptNoAttributes() throws Exception
-   {
-      assertSerialization("<script></script>", "<script/>");
-   }
+    public void testScriptNoAttributes() throws Exception {
+        assertSerialization("<script></script>", "<script/>");
+    }
 
-   public void testScriptWithAttribute() throws Exception
-   {
-      assertSerialization("<script type=\"text/javascript\"></script>", "<script type='text/javascript'/>");
-   }
+    public void testScriptWithAttribute() throws Exception {
+        assertSerialization("<script type=\"text/javascript\"></script>", "<script type='text/javascript'/>");
+    }
 
-   public void testMetaNoAttributes() throws Exception
-   {
-      assertSerialization("<meta/>", "<meta/>");
-   }
+    public void testMetaNoAttributes() throws Exception {
+        assertSerialization("<meta/>", "<meta/>");
+    }
 
-   public void testMetaWithAttribute() throws Exception
-   {
-      assertSerialization("<meta http-equiv=\"Content-Type\"/>", "<meta http-equiv='Content-Type'></meta>");
-   }
-   
-   public void testOrdinaryTextElement() throws Exception
-   {
-      assertSerialization("<div>Blah Blah</div>", "<div>Blah Blah</div>");
-   }
-   
-   public void testCDATaElement() throws Exception
-   {
-      assertSerialization("<div><![CDATA[Test Content]]></div>", "<div><![CDATA[Test Content]]></div>");
-   }
+    public void testMetaWithAttribute() throws Exception {
+        assertSerialization("<meta http-equiv=\"Content-Type\"/>", "<meta http-equiv='Content-Type'></meta>");
+    }
 
-   private void assertSerialization(String expectedMarkup, String markup) throws Exception
-   {
-      Element elt = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(new InputSource(new StringReader(markup))).getDocumentElement();
-      StringWriter writer = new StringWriter();
-      DOMSerializer.serialize(elt, writer);
-      assertEquals(expectedMarkup, writer.toString());
-   }
+    public void testOrdinaryTextElement() throws Exception {
+        assertSerialization("<div>Blah Blah</div>", "<div>Blah Blah</div>");
+    }
+
+    public void testCDATaElement() throws Exception {
+        assertSerialization("<div><![CDATA[Test Content]]></div>", "<div><![CDATA[Test Content]]></div>");
+    }
+
+    private void assertSerialization(String expectedMarkup, String markup) throws Exception {
+        Element elt = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                .parse(new InputSource(new StringReader(markup))).getDocumentElement();
+        StringWriter writer = new StringWriter();
+        DOMSerializer.serialize(elt, writer);
+        assertEquals(expectedMarkup, writer.toString());
+    }
 }

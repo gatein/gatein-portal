@@ -19,8 +19,6 @@
 
 package org.exoplatform.web.controller.metadata;
 
-import org.exoplatform.web.controller.QualifiedName;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -28,124 +26,105 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.exoplatform.web.controller.QualifiedName;
+
 /**
  * Describes a route.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RouteDescriptor
-{
+public class RouteDescriptor {
 
-   /** . */
-   private final String path;
+    /** . */
+    private final String path;
 
-   /** . */
-   private final Map<QualifiedName, RouteParamDescriptor> routeParams;
+    /** . */
+    private final Map<QualifiedName, RouteParamDescriptor> routeParams;
 
-   /** . */
-   private final Map<QualifiedName, PathParamDescriptor> pathParams;
+    /** . */
+    private final Map<QualifiedName, PathParamDescriptor> pathParams;
 
-   /** . */
-   private final Map<String, RequestParamDescriptor> requestParams;
+    /** . */
+    private final Map<String, RequestParamDescriptor> requestParams;
 
-   /** . */
-   private final List<RouteDescriptor> children;
+    /** . */
+    private final List<RouteDescriptor> children;
 
-   public RouteDescriptor(String path)
-   {
-      if (path == null)
-      {
-         throw new NullPointerException("Was not expecting a null path");
-      }
+    public RouteDescriptor(String path) {
+        if (path == null) {
+            throw new NullPointerException("Was not expecting a null path");
+        }
 
-      //
-      this.path = path;
-      this.routeParams = new HashMap<QualifiedName, RouteParamDescriptor>();
-      this.pathParams = new HashMap<QualifiedName, PathParamDescriptor>();
-      this.requestParams = new HashMap<String, RequestParamDescriptor>();
-      this.children = new ArrayList<RouteDescriptor>();
-   }
+        //
+        this.path = path;
+        this.routeParams = new HashMap<QualifiedName, RouteParamDescriptor>();
+        this.pathParams = new HashMap<QualifiedName, PathParamDescriptor>();
+        this.requestParams = new HashMap<String, RequestParamDescriptor>();
+        this.children = new ArrayList<RouteDescriptor>();
+    }
 
-   public String getPath()
-   {
-      return path;
-   }
+    public String getPath() {
+        return path;
+    }
 
-   public Set<QualifiedName> getRouteParamNames()
-   {
-      return routeParams.keySet();
-   }
+    public Set<QualifiedName> getRouteParamNames() {
+        return routeParams.keySet();
+    }
 
-   public Collection<RouteParamDescriptor> getRouteParams()
-   {
-      return routeParams.values();
-   }
+    public Collection<RouteParamDescriptor> getRouteParams() {
+        return routeParams.values();
+    }
 
-   public RouteParamDescriptor getRouteParam(QualifiedName name)
-   {
-      return routeParams.get(name);
-   }
+    public RouteParamDescriptor getRouteParam(QualifiedName name) {
+        return routeParams.get(name);
+    }
 
-   public RouteDescriptor with(ParamDescriptor... params)
-   {
-      if (params == null)
-      {
-         throw new NullPointerException();
-      }
-      for (ParamDescriptor param : params)
-      {
-         if (param == null)
-         {
-            throw new IllegalArgumentException();
-         }
-         if (param instanceof RouteParamDescriptor)
-         {
-            RouteParamDescriptor routeParam = (RouteParamDescriptor)param;
-            routeParams.put(routeParam.getQualifiedName(), routeParam);
-         }
-         else if (param instanceof RequestParamDescriptor)
-         {
-            RequestParamDescriptor requestParam = (RequestParamDescriptor)param;
-            requestParams.put(requestParam.getName(), requestParam);
-         }
-         if (param instanceof PathParamDescriptor)
-         {
-            PathParamDescriptor pathParam = (PathParamDescriptor)param;
-            pathParams.put(pathParam.getQualifiedName(), pathParam);
-         }
-      }
-      return this;
-   }
+    public RouteDescriptor with(ParamDescriptor... params) {
+        if (params == null) {
+            throw new NullPointerException();
+        }
+        for (ParamDescriptor param : params) {
+            if (param == null) {
+                throw new IllegalArgumentException();
+            }
+            if (param instanceof RouteParamDescriptor) {
+                RouteParamDescriptor routeParam = (RouteParamDescriptor) param;
+                routeParams.put(routeParam.getQualifiedName(), routeParam);
+            } else if (param instanceof RequestParamDescriptor) {
+                RequestParamDescriptor requestParam = (RequestParamDescriptor) param;
+                requestParams.put(requestParam.getName(), requestParam);
+            }
+            if (param instanceof PathParamDescriptor) {
+                PathParamDescriptor pathParam = (PathParamDescriptor) param;
+                pathParams.put(pathParam.getQualifiedName(), pathParam);
+            }
+        }
+        return this;
+    }
 
-   public Collection<RequestParamDescriptor> getRequestParams()
-   {
-      return requestParams.values();
-   }
+    public Collection<RequestParamDescriptor> getRequestParams() {
+        return requestParams.values();
+    }
 
-   public Set<String> getRequestParamMatchNames()
-   {
-      return requestParams.keySet();
-   }
+    public Set<String> getRequestParamMatchNames() {
+        return requestParams.keySet();
+    }
 
-   public RequestParamDescriptor getRequestParam(String matchName)
-   {
-      return requestParams.get(matchName);
-   }
+    public RequestParamDescriptor getRequestParam(String matchName) {
+        return requestParams.get(matchName);
+    }
 
-   public Map<QualifiedName, PathParamDescriptor> getPathParams()
-   {
-      return pathParams;
-   }
+    public Map<QualifiedName, PathParamDescriptor> getPathParams() {
+        return pathParams;
+    }
 
-   public RouteDescriptor sub(RouteDescriptor child)
-   {
-      children.add(child);
-      return this;
-   }
+    public RouteDescriptor sub(RouteDescriptor child) {
+        children.add(child);
+        return this;
+    }
 
-   public List<RouteDescriptor> getChildren()
-   {
-      return children;
-   }
+    public List<RouteDescriptor> getChildren() {
+        return children;
+    }
 }

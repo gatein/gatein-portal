@@ -23,43 +23,38 @@ import java.io.Serializable;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class FutureMap<K extends Serializable, V, C> extends FutureCache<K, V, C>
-{
+public class FutureMap<K extends Serializable, V, C> extends FutureCache<K, V, C> {
 
-   /** . */
-   final Map<K, V> data;
+    /** . */
+    final Map<K, V> data;
 
-   public FutureMap(Loader<K, V, C> loader)
-   {
-      super(loader);
+    public FutureMap(Loader<K, V, C> loader) {
+        super(loader);
 
-      //
-      this.data = new ConcurrentHashMap<K, V>();
-   }
+        //
+        this.data = new ConcurrentHashMap<K, V>();
+    }
 
-   public void clear()
-   {
-      data.clear();
-   }
+    public void clear() {
+        data.clear();
+    }
 
-   public void remove(K key)
-   {
-      data.remove(key);
-   }
+    public void remove(K key) {
+        data.remove(key);
+    }
 
-   @Override
-   protected V get(K key)
-   {
-      return data.get(key);
-   }
+    @Override
+    protected V get(K key) {
+        return data.get(key);
+    }
 
-   @Override
-   protected void put(K key, V value)
-   {
-      data.put(key, value);
-   }
+    @Override
+    protected void put(K key, V value) {
+        data.put(key, value);
+    }
 }

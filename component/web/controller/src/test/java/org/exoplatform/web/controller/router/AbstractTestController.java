@@ -19,37 +19,32 @@
 
 package org.exoplatform.web.controller.router;
 
+import java.util.Arrays;
+import java.util.Map;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
-import org.exoplatform.web.controller.QualifiedName;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Map;
+import org.exoplatform.web.controller.QualifiedName;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class AbstractTestController extends TestCase
-{
-   public static void assertEquals(Map<QualifiedName, String> expectedParameters, Map<QualifiedName, String> parameters)
-   {
-      assertNotNull("Was not expecting a null parameter set", parameters);
-      Assert.assertEquals(expectedParameters.keySet(), parameters.keySet());
-      for (Map.Entry<QualifiedName, String> expectedEntry : expectedParameters.entrySet())
-      {
-         Assert.assertEquals(expectedEntry.getValue(), parameters.get(expectedEntry.getKey()));
-      }
-   }
+public abstract class AbstractTestController extends TestCase {
+    public static void assertEquals(Map<QualifiedName, String> expectedParameters, Map<QualifiedName, String> parameters) {
+        assertNotNull("Was not expecting a null parameter set", parameters);
+        Assert.assertEquals(expectedParameters.keySet(), parameters.keySet());
+        for (Map.Entry<QualifiedName, String> expectedEntry : expectedParameters.entrySet()) {
+            Assert.assertEquals(expectedEntry.getValue(), parameters.get(expectedEntry.getKey()));
+        }
+    }
 
-   public static void assertMapEquals(Map<String, String[]> expectedParameters, Map<String, String[]> parameters)
-   {
-      assertNotNull("Was not expecting a null parameter set", parameters);
-      Assert.assertEquals(expectedParameters.keySet(), parameters.keySet());
-      for (Map.Entry<String, String[]> expectedEntry : expectedParameters.entrySet())
-      {
-         Assert.assertEquals(Arrays.asList(expectedEntry.getValue()), Arrays.asList(parameters.get(expectedEntry.getKey())));
-      }
-   }
+    public static void assertMapEquals(Map<String, String[]> expectedParameters, Map<String, String[]> parameters) {
+        assertNotNull("Was not expecting a null parameter set", parameters);
+        Assert.assertEquals(expectedParameters.keySet(), parameters.keySet());
+        for (Map.Entry<String, String[]> expectedEntry : expectedParameters.entrySet()) {
+            Assert.assertEquals(Arrays.asList(expectedEntry.getValue()), Arrays.asList(parameters.get(expectedEntry.getKey())));
+        }
+    }
 }

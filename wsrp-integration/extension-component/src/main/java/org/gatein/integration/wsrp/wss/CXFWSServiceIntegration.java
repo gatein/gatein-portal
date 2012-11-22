@@ -34,29 +34,24 @@ import org.picocontainer.Startable;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class CXFWSServiceIntegration implements Startable
-{
-   private final PortCustomizer WSS4J_CUSTOMIZER = new CXFPortCustomizer();
-   private final PortCustomizer BEA_POLICY_IGNORING_CUSTOMIZER = new BEAPolicyIgnoringPortCustomizer();
+public class CXFWSServiceIntegration implements Startable {
+    private final PortCustomizer WSS4J_CUSTOMIZER = new CXFPortCustomizer();
+    private final PortCustomizer BEA_POLICY_IGNORING_CUSTOMIZER = new BEAPolicyIgnoringPortCustomizer();
 
-   public CXFWSServiceIntegration(CredentialsAccessor credentialsAccessor)
-   {
-      CredentialsAccess.getInstance().setCredentialsAccessor(credentialsAccessor);
-   }
+    public CXFWSServiceIntegration(CredentialsAccessor credentialsAccessor) {
+        CredentialsAccess.getInstance().setCredentialsAccessor(credentialsAccessor);
+    }
 
-   public void start()
-   {
-      final PortCustomizerRegistry registry = PortCustomizerRegistry.getInstance();
-      registry.register(WSS4J_CUSTOMIZER);
-      registry.register(BEA_POLICY_IGNORING_CUSTOMIZER);
-   }
+    public void start() {
+        final PortCustomizerRegistry registry = PortCustomizerRegistry.getInstance();
+        registry.register(WSS4J_CUSTOMIZER);
+        registry.register(BEA_POLICY_IGNORING_CUSTOMIZER);
+    }
 
-   public void stop()
-   {
-      final PortCustomizerRegistry registry = PortCustomizerRegistry.getInstance();
-      registry.unregister(WSS4J_CUSTOMIZER);
-      registry.unregister(BEA_POLICY_IGNORING_CUSTOMIZER);
-   }
+    public void stop() {
+        final PortCustomizerRegistry registry = PortCustomizerRegistry.getInstance();
+        registry.unregister(WSS4J_CUSTOMIZER);
+        registry.unregister(BEA_POLICY_IGNORING_CUSTOMIZER);
+    }
 
 }
-

@@ -23,14 +23,14 @@
 
 package org.gatein.common.transaction;
 
+import javax.transaction.Status;
+import javax.transaction.UserTransaction;
+
 import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
-
-import javax.transaction.Status;
-import javax.transaction.UserTransaction;
 
 /**
  * test for {@link JTAUserTransactionLifecycleService}
@@ -38,72 +38,67 @@ import javax.transaction.UserTransaction;
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 @ConfiguredBy({
-      @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-      @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/gatein/common/transaction/configuration.xml")
-})
-public class JTAUserTransactionTest extends AbstractKernelTest
-{
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/gatein/common/transaction/configuration.xml") })
+public class JTAUserTransactionTest extends AbstractKernelTest {
 
-   private JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService;
+    private JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService;
 
-   @Override
-   protected void setUp() throws Exception
-   {
-      PortalContainer container = PortalContainer.getInstance();
-      jtaUserTransactionLifecycleService = (JTAUserTransactionLifecycleService)container.getComponentInstanceOfType(JTAUserTransactionLifecycleService.class);
-   }
+    @Override
+    protected void setUp() throws Exception {
+        PortalContainer container = PortalContainer.getInstance();
+        jtaUserTransactionLifecycleService = (JTAUserTransactionLifecycleService) container
+                .getComponentInstanceOfType(JTAUserTransactionLifecycleService.class);
+    }
 
-   public void testTransactionLifecycle() throws Exception
-   {
-      UserTransaction tx = jtaUserTransactionLifecycleService.getUserTransaction();
-      assertNotNull(tx);
+    public void testTransactionLifecycle() throws Exception {
+        UserTransaction tx = jtaUserTransactionLifecycleService.getUserTransaction();
+        assertNotNull(tx);
 
-      // Test normal workflow with begin/commit
-      assertStatus(Status.STATUS_NO_TRANSACTION);
+        // Test normal workflow with begin/commit
+        assertStatus(Status.STATUS_NO_TRANSACTION);
 
-      jtaUserTransactionLifecycleService.beginJTATransaction();
-      assertStatus(Status.STATUS_ACTIVE);
+        jtaUserTransactionLifecycleService.beginJTATransaction();
+        assertStatus(Status.STATUS_ACTIVE);
 
-      jtaUserTransactionLifecycleService.finishJTATransaction();
-      assertStatus(Status.STATUS_NO_TRANSACTION);
+        jtaUserTransactionLifecycleService.finishJTATransaction();
+        assertStatus(Status.STATUS_NO_TRANSACTION);
 
-      // Test workflow with setRollBackOnly
-      jtaUserTransactionLifecycleService.beginJTATransaction();
-      assertStatus(Status.STATUS_ACTIVE);
+        // Test workflow with setRollBackOnly
+        jtaUserTransactionLifecycleService.beginJTATransaction();
+        assertStatus(Status.STATUS_ACTIVE);
 
-      tx.setRollbackOnly();
-      jtaUserTransactionLifecycleService.finishJTATransaction();
-      assertStatus(Status.STATUS_NO_TRANSACTION);
-   }
+        tx.setRollbackOnly();
+        jtaUserTransactionLifecycleService.finishJTATransaction();
+        assertStatus(Status.STATUS_NO_TRANSACTION);
+    }
 
-   public void testListener() throws Exception
-   {
-      CounterListener counterListener = new CounterListener();
-      jtaUserTransactionLifecycleService.registerListener(counterListener);
+    public void testListener() throws Exception {
+        CounterListener counterListener = new CounterListener();
+        jtaUserTransactionLifecycleService.registerListener(counterListener);
 
-      UserTransaction tx = jtaUserTransactionLifecycleService.getUserTransaction();
-      assertNotNull(tx);
+        UserTransaction tx = jtaUserTransactionLifecycleService.getUserTransaction();
+        assertNotNull(tx);
 
-      assertEquals(counterListener.getBeforeBeginCounter(), 0);
-      assertEquals(counterListener.getAfterBeginCounter(), 0);
+        assertEquals(counterListener.getBeforeBeginCounter(), 0);
+        assertEquals(counterListener.getAfterBeginCounter(), 0);
 
-      jtaUserTransactionLifecycleService.beginJTATransaction();
-      assertEquals(counterListener.getBeforeBeginCounter(), 1);
-      assertEquals(counterListener.getAfterBeginCounter(), 1);
+        jtaUserTransactionLifecycleService.beginJTATransaction();
+        assertEquals(counterListener.getBeforeBeginCounter(), 1);
+        assertEquals(counterListener.getAfterBeginCounter(), 1);
 
-      jtaUserTransactionLifecycleService.finishJTATransaction();
-      jtaUserTransactionLifecycleService.beginJTATransaction();
-      assertEquals(counterListener.getBeforeBeginCounter(), 2);
-      assertEquals(counterListener.getAfterBeginCounter(), 2);
+        jtaUserTransactionLifecycleService.finishJTATransaction();
+        jtaUserTransactionLifecycleService.beginJTATransaction();
+        assertEquals(counterListener.getBeforeBeginCounter(), 2);
+        assertEquals(counterListener.getAfterBeginCounter(), 2);
 
-      jtaUserTransactionLifecycleService.finishJTATransaction();
-      assertEquals(counterListener.getBeforeBeginCounter(), 2);
-      assertEquals(counterListener.getAfterBeginCounter(), 2);
-   }
+        jtaUserTransactionLifecycleService.finishJTATransaction();
+        assertEquals(counterListener.getBeforeBeginCounter(), 2);
+        assertEquals(counterListener.getAfterBeginCounter(), 2);
+    }
 
-   private void assertStatus(int expectedStatus) throws Exception
-   {
-      int status = jtaUserTransactionLifecycleService.getUserTransaction().getStatus();
-      assertTrue(status == expectedStatus);
-   }
+    private void assertStatus(int expectedStatus) throws Exception {
+        int status = jtaUserTransactionLifecycleService.getUserTransaction().getStatus();
+        assertTrue(status == expectedStatus);
+    }
 }

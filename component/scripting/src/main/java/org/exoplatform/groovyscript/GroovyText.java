@@ -18,56 +18,48 @@
  */
 package org.exoplatform.groovyscript;
 
-import org.exoplatform.commons.utils.BinaryOutput;
-import org.exoplatform.commons.utils.Text;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.nio.charset.Charset;
 
+import org.exoplatform.commons.utils.BinaryOutput;
+import org.exoplatform.commons.utils.Text;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class GroovyText extends Text 
-{
+public class GroovyText extends Text {
 
-   /** . */
-   private final String s;
+    /** . */
+    private final String s;
 
-   /** . */
-   private final byte[] bytes;
+    /** . */
+    private final byte[] bytes;
 
-   /** . */
-   private static final Charset UTF_8 = Charset.forName("UTF-8");
+    /** . */
+    private static final Charset UTF_8 = Charset.forName("UTF-8");
 
-   public GroovyText(String s)
-   {
-      try
-      {
-         this.s = s;
-         this.bytes = s.getBytes("UTF-8");
-      }
-      catch (UnsupportedEncodingException e)
-      {
-         throw new UndeclaredThrowableException(e);
-      }
-   }
+    public GroovyText(String s) {
+        try {
+            this.s = s;
+            this.bytes = s.getBytes("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new UndeclaredThrowableException(e);
+        }
+    }
 
-   @Override
-   public void writeTo(Writer writer) throws IOException
-   {
-      if (writer instanceof BinaryOutput)
-      {
-         BinaryOutput osw = (BinaryOutput)writer;
-         if (UTF_8.equals(osw.getCharset()))
-         {
-            osw.write(bytes);
-            return;
-         }
-      }
-      writer.append(s);
-   }
+    @Override
+    public void writeTo(Writer writer) throws IOException {
+        if (writer instanceof BinaryOutput) {
+            BinaryOutput osw = (BinaryOutput) writer;
+            if (UTF_8.equals(osw.getCharset())) {
+                osw.write(bytes);
+                return;
+            }
+        }
+        writer.append(s);
+    }
 }

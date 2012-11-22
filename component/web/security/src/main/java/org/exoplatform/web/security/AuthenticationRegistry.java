@@ -23,12 +23,9 @@
 
 package org.exoplatform.web.security;
 
-import org.gatein.wci.security.Credentials;
-
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+
+import org.gatein.wci.security.Credentials;
 
 /**
  * Temporary registry for hold credentials (and potentially other attributes) during login process.
@@ -36,18 +33,14 @@ import java.util.concurrent.ConcurrentMap;
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface AuthenticationRegistry
-{
+public interface AuthenticationRegistry {
 
-   public Credentials getCredentials(HttpServletRequest request);
+    Credentials getCredentials(HttpServletRequest request);
 
+    void setCredentials(HttpServletRequest request, Credentials credentials);
 
-   public void setCredentials(HttpServletRequest request, Credentials credentials);
+    Credentials removeCredentials(HttpServletRequest request);
 
-
-   public Credentials removeCredentials(HttpServletRequest request);
-
-
-   public void removeClient(String sessionId);
+    void removeClient(String sessionId);
 
 }

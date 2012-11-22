@@ -25,6 +25,5 @@ import org.chromattic.api.annotations.PrimaryType;
  * @version $Revision$
  */
 @PrimaryType(name = "app:gadgetdata")
-public abstract class GadgetData
-{
+public abstract class GadgetData {
 }

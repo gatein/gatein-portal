@@ -22,34 +22,29 @@
 
 package org.exoplatform.web.security;
 
+import javax.servlet.http.HttpSessionEvent;
+
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.web.AbstractHttpSessionListener;
-
-import javax.servlet.http.HttpSessionEvent;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class AuthenticationRegistryListener extends AbstractHttpSessionListener
-{
+public class AuthenticationRegistryListener extends AbstractHttpSessionListener {
 
-   @Override
-   protected boolean requirePortalEnvironment()
-   {
-      return true;
-   }
+    @Override
+    protected boolean requirePortalEnvironment() {
+        return true;
+    }
 
+    @Override
+    protected void onSessionCreated(ExoContainer container, HttpSessionEvent event) {
+    }
 
-   @Override
-   protected void onSessionCreated(ExoContainer container, HttpSessionEvent event)
-   {
-   }
-
-
-   @Override
-   protected void onSessionDestroyed(ExoContainer container, HttpSessionEvent event)
-   {
-      AuthenticationRegistry authenticationRegistry = (AuthenticationRegistry)container.getComponentInstanceOfType(AuthenticationRegistry.class);
-      authenticationRegistry.removeClient(event.getSession().getId());
-   }
+    @Override
+    protected void onSessionDestroyed(ExoContainer container, HttpSessionEvent event) {
+        AuthenticationRegistry authenticationRegistry = (AuthenticationRegistry) container
+                .getComponentInstanceOfType(AuthenticationRegistry.class);
+        authenticationRegistry.removeClient(event.getSession().getId());
+    }
 }

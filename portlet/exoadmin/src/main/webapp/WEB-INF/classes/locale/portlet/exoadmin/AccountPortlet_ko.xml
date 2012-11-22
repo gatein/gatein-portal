@@ -138,9 +138,9 @@
     </title>
   </UIPopupWindow>
   <UISiteManagement>
-  	<action>
-  		<addNewPortal>포탈 추가</addNewPortal>
-  	</action>
+    <action>
+      <addNewPortal>포탈 추가</addNewPortal>
+    </action>
   </UISiteManagement>
 </bundle>
 

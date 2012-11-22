@@ -21,6 +21,11 @@
  */
 package org.gatein.integration.jboss.as7;
 
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADD;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.REMOVE;
+
+import java.util.EnumSet;
+
 import org.jboss.as.controller.PathElement;
 import org.jboss.as.controller.ReloadRequiredRemoveStepHandler;
 import org.jboss.as.controller.SimpleResourceDefinition;
@@ -32,32 +37,28 @@ import org.jboss.as.controller.descriptions.ResourceDescriptionResolver;
 import org.jboss.as.controller.registry.ManagementResourceRegistration;
 import org.jboss.as.controller.registry.OperationEntry;
 
-import java.util.EnumSet;
-
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.ADD;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.REMOVE;
-
 /**
  * @author Tomaz Cerar
  */
-public class GateInSubsystemDefinition extends SimpleResourceDefinition
-{
-   private GateInConfiguration config;
+public class GateInSubsystemDefinition extends SimpleResourceDefinition {
+    private GateInConfiguration config;
 
-   GateInSubsystemDefinition(GateInConfiguration config)
-   {
-      super(PathElement.pathElement(ModelDescriptionConstants.SUBSYSTEM, GateInExtension.SUBSYSTEM_NAME),
-         GateInExtension.getResourceDescriptionResolver(GateInExtension.SUBSYSTEM_NAME));
-      this.config = config;
-   }
+    GateInSubsystemDefinition(GateInConfiguration config) {
+        super(PathElement.pathElement(ModelDescriptionConstants.SUBSYSTEM, GateInExtension.SUBSYSTEM_NAME), GateInExtension
+                .getResourceDescriptionResolver(GateInExtension.SUBSYSTEM_NAME));
+        this.config = config;
+    }
 
-   @Override
-   public void registerOperations(final ManagementResourceRegistration registration)
-   {
-      final GateInSubsystemAdd subsystemAdd = new GateInSubsystemAdd(config);
-      final ResourceDescriptionResolver rootResolver = getResourceDescriptionResolver();
-      final DescriptionProvider subsystemAddDescription = new DefaultResourceAddDescriptionProvider(registration, rootResolver);
-      registration.registerOperationHandler(ADD, subsystemAdd, subsystemAddDescription, EnumSet.of(OperationEntry.Flag.RESTART_ALL_SERVICES));
-      registration.registerOperationHandler(REMOVE, ReloadRequiredRemoveStepHandler.INSTANCE, new DefaultResourceRemoveDescriptionProvider(rootResolver), EnumSet.of(OperationEntry.Flag.RESTART_ALL_SERVICES));
-   }
+    @Override
+    public void registerOperations(final ManagementResourceRegistration registration) {
+        final GateInSubsystemAdd subsystemAdd = new GateInSubsystemAdd(config);
+        final ResourceDescriptionResolver rootResolver = getResourceDescriptionResolver();
+        final DescriptionProvider subsystemAddDescription = new DefaultResourceAddDescriptionProvider(registration,
+                rootResolver);
+        registration.registerOperationHandler(ADD, subsystemAdd, subsystemAddDescription,
+                EnumSet.of(OperationEntry.Flag.RESTART_ALL_SERVICES));
+        registration.registerOperationHandler(REMOVE, ReloadRequiredRemoveStepHandler.INSTANCE,
+                new DefaultResourceRemoveDescriptionProvider(rootResolver),
+                EnumSet.of(OperationEntry.Flag.RESTART_ALL_SERVICES));
+    }
 }

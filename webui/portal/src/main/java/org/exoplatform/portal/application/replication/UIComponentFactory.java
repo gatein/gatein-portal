@@ -19,59 +19,50 @@
 
 package org.exoplatform.portal.application.replication;
 
-import org.exoplatform.webui.Util;
+import java.util.Map;
+
 import org.exoplatform.commons.serialization.api.factory.CreateException;
 import org.exoplatform.commons.serialization.api.factory.ObjectFactory;
 import org.exoplatform.commons.serialization.model.FieldModel;
+import org.exoplatform.webui.Util;
 import org.exoplatform.webui.config.Component;
 import org.exoplatform.webui.core.UIComponent;
-
-import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class UIComponentFactory extends ObjectFactory<UIComponent>
-{
+public class UIComponentFactory extends ObjectFactory<UIComponent> {
 
-   private <S extends UIComponent> Object getFieldValue(String fieldName, Map<FieldModel<? super S, ?>, ?> state)
-   {
-      for (Map.Entry<FieldModel<? super S, ?>, ?> entry : state.entrySet())
-      {
-         FieldModel<? super S, ?> fieldModel = entry.getKey();
-         if (fieldModel.getOwner().getJavaType() == UIComponent.class && fieldModel.getName().equals(fieldName))
-         {
-            return entry.getValue();
-         }
-      }
-      return null;
-   }
-
-   @Override
-   public <S extends UIComponent> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException
-   {
-      //
-      try
-      {
-         Component config = (Component)getFieldValue("config", state);
-
-         S instance = Util.createObject(type, config != null ? config.getInitParams() : null);
-
-         // Now set state
-         for (Map.Entry<FieldModel<? super S, ?>, ?> entry : state.entrySet())
-         {
+    private <S extends UIComponent> Object getFieldValue(String fieldName, Map<FieldModel<? super S, ?>, ?> state) {
+        for (Map.Entry<FieldModel<? super S, ?>, ?> entry : state.entrySet()) {
             FieldModel<? super S, ?> fieldModel = entry.getKey();
-            Object value = entry.getValue();
-            fieldModel.castAndSet(instance, value);
-         }
+            if (fieldModel.getOwner().getJavaType() == UIComponent.class && fieldModel.getName().equals(fieldName)) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
 
-         //
-         return instance;
-      }
-      catch (Exception e)
-      {
-         throw new CreateException(e);
-      }
-   }
+    @Override
+    public <S extends UIComponent> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException {
+        //
+        try {
+            Component config = (Component) getFieldValue("config", state);
+
+            S instance = Util.createObject(type, config != null ? config.getInitParams() : null);
+
+            // Now set state
+            for (Map.Entry<FieldModel<? super S, ?>, ?> entry : state.entrySet()) {
+                FieldModel<? super S, ?> fieldModel = entry.getKey();
+                Object value = entry.getValue();
+                fieldModel.castAndSet(instance, value);
+            }
+
+            //
+            return instance;
+        } catch (Exception e) {
+            throw new CreateException(e);
+        }
+    }
 }

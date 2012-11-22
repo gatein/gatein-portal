@@ -19,116 +19,104 @@
 
 package org.exoplatform.web.controller.router;
 
-import junit.framework.TestCase;
-import org.exoplatform.web.controller.QualifiedName;
 import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.TestCase;
+
+import org.exoplatform.web.controller.QualifiedName;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestLegacyPortal extends TestCase
-{
+public class TestLegacyPortal extends TestCase {
 
-   /** . */
-   private Router router;
+    /** . */
+    private Router router;
 
-   @Override
-   protected void setUp() throws Exception
-   {
-      this.router = router().
-         add(route("/").
-            with(
-               routeParam("gtn:handler").withValue("portal")).
-            sub(route("/public/{gtn:sitename}{gtn:path}").
-               with(
-                  routeParam("gtn:access").withValue("public"),
-                  pathParam("gtn:path").matchedBy(".*").preservePath())).
-            sub(route("/private/{gtn:sitename}{gtn:path}").
-               with(
-                  routeParam("gtn:access").withValue("private"),
-                  pathParam("gtn:path").matchedBy(".*").preservePath()))).
-         build();
-   }
+    @Override
+    protected void setUp() throws Exception {
+        this.router = router().add(
+                route("/")
+                        .with(routeParam("gtn:handler").withValue("portal"))
+                        .sub(route("/public/{gtn:sitename}{gtn:path}").with(routeParam("gtn:access").withValue("public"),
+                                pathParam("gtn:path").matchedBy(".*").preservePath()))
+                        .sub(route("/private/{gtn:sitename}{gtn:path}").with(routeParam("gtn:access").withValue("private"),
+                                pathParam("gtn:path").matchedBy(".*").preservePath()))).build();
+    }
 
-   public void testPrivateClassicComponent() throws Exception
-   {
-      Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(Names.GTN_HANDLER, "portal");
-      expectedParameters.put(Names.GTN_SITENAME, "classic");
-      expectedParameters.put(Names.GTN_ACCESS, "private");
-      expectedParameters.put(Names.GTN_PATH, "");
+    public void testPrivateClassicComponent() throws Exception {
+        Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
+        expectedParameters.put(Names.GTN_HANDLER, "portal");
+        expectedParameters.put(Names.GTN_SITENAME, "classic");
+        expectedParameters.put(Names.GTN_ACCESS, "private");
+        expectedParameters.put(Names.GTN_PATH, "");
 
-      //
-      assertEquals(expectedParameters, router.route("/private/classic"));
-      assertEquals("/private/classic", router.render(expectedParameters));
-   }
+        //
+        assertEquals(expectedParameters, router.route("/private/classic"));
+        assertEquals("/private/classic", router.render(expectedParameters));
+    }
 
-   public void testPrivateClassic() throws Exception
-   {
-      Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(Names.GTN_HANDLER, "portal");
-      expectedParameters.put(Names.GTN_SITENAME, "classic");
-      expectedParameters.put(Names.GTN_ACCESS, "private");
-      expectedParameters.put(Names.GTN_PATH, "");
+    public void testPrivateClassic() throws Exception {
+        Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
+        expectedParameters.put(Names.GTN_HANDLER, "portal");
+        expectedParameters.put(Names.GTN_SITENAME, "classic");
+        expectedParameters.put(Names.GTN_ACCESS, "private");
+        expectedParameters.put(Names.GTN_PATH, "");
 
-      //
-      assertEquals(expectedParameters, router.route("/private/classic"));
-      assertEquals("/private/classic", router.render(expectedParameters));
-   }
+        //
+        assertEquals(expectedParameters, router.route("/private/classic"));
+        assertEquals("/private/classic", router.render(expectedParameters));
+    }
 
-   public void testPrivateClassicSlash() throws Exception
-   {
-      Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(Names.GTN_HANDLER, "portal");
-      expectedParameters.put(Names.GTN_SITENAME, "classic");
-      expectedParameters.put(Names.GTN_ACCESS, "private");
-      expectedParameters.put(Names.GTN_PATH, "/");
+    public void testPrivateClassicSlash() throws Exception {
+        Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
+        expectedParameters.put(Names.GTN_HANDLER, "portal");
+        expectedParameters.put(Names.GTN_SITENAME, "classic");
+        expectedParameters.put(Names.GTN_ACCESS, "private");
+        expectedParameters.put(Names.GTN_PATH, "/");
 
-      //
-      assertEquals(expectedParameters, router.route("/private/classic/"));
-      assertEquals("/private/classic/", router.render(expectedParameters));
-   }
+        //
+        assertEquals(expectedParameters, router.route("/private/classic/"));
+        assertEquals("/private/classic/", router.render(expectedParameters));
+    }
 
-   public void testPrivateClassicSlashComponent() throws Exception
-   {
-      Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(Names.GTN_HANDLER, "portal");
-      expectedParameters.put(Names.GTN_SITENAME, "classic");
-      expectedParameters.put(Names.GTN_ACCESS, "private");
-      expectedParameters.put(Names.GTN_PATH, "/");
+    public void testPrivateClassicSlashComponent() throws Exception {
+        Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
+        expectedParameters.put(Names.GTN_HANDLER, "portal");
+        expectedParameters.put(Names.GTN_SITENAME, "classic");
+        expectedParameters.put(Names.GTN_ACCESS, "private");
+        expectedParameters.put(Names.GTN_PATH, "/");
 
-      //
-      assertEquals(expectedParameters, router.route("/private/classic/"));
-      assertEquals("/private/classic/", router.render(expectedParameters));
-   }
+        //
+        assertEquals(expectedParameters, router.route("/private/classic/"));
+        assertEquals("/private/classic/", router.render(expectedParameters));
+    }
 
-   public void testPrivateClassicHome() throws Exception
-   {
-      Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(Names.GTN_HANDLER, "portal");
-      expectedParameters.put(Names.GTN_SITENAME, "classic");
-      expectedParameters.put(Names.GTN_ACCESS, "private");
-      expectedParameters.put(Names.GTN_PATH, "/home");
+    public void testPrivateClassicHome() throws Exception {
+        Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
+        expectedParameters.put(Names.GTN_HANDLER, "portal");
+        expectedParameters.put(Names.GTN_SITENAME, "classic");
+        expectedParameters.put(Names.GTN_ACCESS, "private");
+        expectedParameters.put(Names.GTN_PATH, "/home");
 
-      //
-      assertEquals(expectedParameters, router.route("/private/classic/home"));
-      assertEquals("/private/classic/home", router.render(expectedParameters));
-   }
+        //
+        assertEquals(expectedParameters, router.route("/private/classic/home"));
+        assertEquals("/private/classic/home", router.render(expectedParameters));
+    }
 
-   public void testPrivateClassicHomeComponent() throws Exception
-   {
-      Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
-      expectedParameters.put(Names.GTN_HANDLER, "portal");
-      expectedParameters.put(Names.GTN_SITENAME, "classic");
-      expectedParameters.put(Names.GTN_ACCESS, "private");
-      expectedParameters.put(Names.GTN_PATH, "/home");
+    public void testPrivateClassicHomeComponent() throws Exception {
+        Map<QualifiedName, String> expectedParameters = new HashMap<QualifiedName, String>();
+        expectedParameters.put(Names.GTN_HANDLER, "portal");
+        expectedParameters.put(Names.GTN_SITENAME, "classic");
+        expectedParameters.put(Names.GTN_ACCESS, "private");
+        expectedParameters.put(Names.GTN_PATH, "/home");
 
-      //
-      assertEquals(expectedParameters, router.route("/private/classic/home"));
-      assertEquals("/private/classic/home", router.render(expectedParameters));
-   }
+        //
+        assertEquals(expectedParameters, router.route("/private/classic/home"));
+        assertEquals("/private/classic/home", router.render(expectedParameters));
+    }
 }

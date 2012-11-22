@@ -18,97 +18,83 @@
  */
 package org.exoplatform.application.gadget.impl;
 
+import java.util.Calendar;
+
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.gadget.GadgetRegistryService;
 import org.exoplatform.application.gadget.Source;
 import org.exoplatform.application.gadget.SourceStorage;
-import java.util.Calendar;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class SourceStorageImpl implements SourceStorage
-{
-   /** . */
-   private GadgetRegistryServiceImpl gadgetRegistryService;
+public class SourceStorageImpl implements SourceStorage {
+    /** . */
+    private GadgetRegistryServiceImpl gadgetRegistryService;
 
-   public SourceStorageImpl(GadgetRegistryService gadgetRegistryService)
-   {
-      this.gadgetRegistryService = (GadgetRegistryServiceImpl)gadgetRegistryService;
-   }
+    public SourceStorageImpl(GadgetRegistryService gadgetRegistryService) {
+        this.gadgetRegistryService = (GadgetRegistryServiceImpl) gadgetRegistryService;
+    }
 
-   public Source getSource(Gadget gadget) throws Exception
-   {
-      GadgetDefinition def = gadgetRegistryService.getRegistry().getGadget(gadget.getName());
+    public Source getSource(Gadget gadget) throws Exception {
+        GadgetDefinition def = gadgetRegistryService.getRegistry().getGadget(gadget.getName());
 
-      //
-      if (def == null)
-      {
-         return null;
-      }
+        //
+        if (def == null) {
+            return null;
+        }
 
-      //
-      GadgetData data = def.getData();
-      if (data instanceof LocalGadgetData)
-      {
-         LocalGadgetData localData = (LocalGadgetData)data;
-         String content = localData.getSource();
-         Calendar lastModified = Calendar.getInstance();
-         lastModified.setTime(localData.getLastModified());
+        //
+        GadgetData data = def.getData();
+        if (data instanceof LocalGadgetData) {
+            LocalGadgetData localData = (LocalGadgetData) data;
+            String content = localData.getSource();
+            Calendar lastModified = Calendar.getInstance();
+            lastModified.setTime(localData.getLastModified());
 
-         //
-         Source source = new Source(gadget.getName());
-         source.setMimeType(LocalGadgetData.GADGET_MIME_TYPE);
-         source.setLastModified(lastModified);
-         source.setTextContent(content);
+            //
+            Source source = new Source(gadget.getName());
+            source.setMimeType(LocalGadgetData.GADGET_MIME_TYPE);
+            source.setLastModified(lastModified);
+            source.setTextContent(content);
 
-         //
-         return source;
-      }
-      else
-      {
-         throw new IllegalArgumentException("The provided gadget is remote");
-      }
-   }
+            //
+            return source;
+        } else {
+            throw new IllegalArgumentException("The provided gadget is remote");
+        }
+    }
 
-   public void saveSource(Gadget gadget, Source source) throws Exception
-   {
-      if (gadget == null)
-      {
-         throw new NullPointerException();
-      }
-      if (source == null)
-      {
-         throw new NullPointerException();
-      }
+    public void saveSource(Gadget gadget, Source source) throws Exception {
+        if (gadget == null) {
+            throw new NullPointerException();
+        }
+        if (source == null) {
+            throw new NullPointerException();
+        }
 
-      //
-      GadgetRegistry registry = gadgetRegistryService.getRegistry();
+        //
+        GadgetRegistry registry = gadgetRegistryService.getRegistry();
 
-      //
-      GadgetDefinition def = registry.getGadget(gadget.getName());
+        //
+        GadgetDefinition def = registry.getGadget(gadget.getName());
 
-      //
-      GadgetData data = def.getData();
-      if (data instanceof LocalGadgetData)
-      {
-         LocalGadgetData localData = (LocalGadgetData)data;
-         localData.setSource(source.getTextContent());
-      }
-      else
-      {
-         throw new IllegalArgumentException("The provided gadget is remote");
-      }
-   }
+        //
+        GadgetData data = def.getData();
+        if (data instanceof LocalGadgetData) {
+            LocalGadgetData localData = (LocalGadgetData) data;
+            localData.setSource(source.getTextContent());
+        } else {
+            throw new IllegalArgumentException("The provided gadget is remote");
+        }
+    }
 
-   public void removeSource(String sourcePath) throws Exception
-   {
-      // No op
-   }
+    public void removeSource(String sourcePath) {
+        // No op
+    }
 
-   public String getSourceURI(String sourcePath)
-   {
-      throw new UnsupportedOperationException("Cannot obtain URI from source " + sourcePath);
-   }
+    public String getSourceURI(String sourcePath) {
+        throw new UnsupportedOperationException("Cannot obtain URI from source " + sourcePath);
+    }
 }

@@ -37,141 +37,114 @@ import org.gatein.common.logging.LoggerFactory;
 
 /**
  * Handles the mapping between the nodes when performing a redirect
- * 
+ *
  * TODO: create an interface for this and configure the service using the kernel
- * 
+ *
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class Mapper
-{
-   protected static Logger log = LoggerFactory.getLogger(Mapper.class);
+public class Mapper {
+    protected static Logger log = LoggerFactory.getLogger(Mapper.class);
 
-   NavigationService navService;
+    NavigationService navService;
 
-   public Mapper(NavigationService navService)
-   {
-      this.navService = navService;
-   }
+    public Mapper(NavigationService navService) {
+        this.navService = navService;
+    }
 
-   public String getRedirectPath(String originSite, String redirectSite, String originalRequestPath, RedirectMappings redirectMappings)
-   {
-      return getRequestPath(originSite, redirectSite, originalRequestPath, redirectMappings);
-   }
+    public String getRedirectPath(String originSite, String redirectSite, String originalRequestPath,
+            RedirectMappings redirectMappings) {
+        return getRequestPath(originSite, redirectSite, originalRequestPath, redirectMappings);
+    }
 
-   protected String getRequestPath(String originSite, String redirectSite, String requestPath, RedirectMappings redirectMappings)
-   {
-      if (redirectMappings == null)
-      {
-         return null;
-      }
-      
-      Map<String, String> mappings = redirectMappings.getMap();
-      //first check if we have explicit mappings for this requestPath, always blindly follow any explicit mappings
-      if (mappings != null && mappings.get(requestPath) != null)
-      {
-         return mappings.get(requestPath);
-      }
+    protected String getRequestPath(String originSite, String redirectSite, String requestPath,
+            RedirectMappings redirectMappings) {
+        if (redirectMappings == null) {
+            return null;
+        }
 
-      //next check if we use node name matching
-      if (redirectMappings.isUseNodeNameMatching())
-      {
-         String redirectRequestPath = getNodeIfExists(redirectSite, requestPath,
-               redirectMappings.getUnresolvedNode() == RedirectMappings.UnknownNodeMapping.COMMON_ANCESTOR_NAME_MATCH);
-         {
-            if (redirectRequestPath != null)
+        Map<String, String> mappings = redirectMappings.getMap();
+        // first check if we have explicit mappings for this requestPath, always blindly follow any explicit mappings
+        if (mappings != null && mappings.get(requestPath) != null) {
+            return mappings.get(requestPath);
+        }
+
+        // next check if we use node name matching
+        if (redirectMappings.isUseNodeNameMatching()) {
+            String redirectRequestPath = getNodeIfExists(redirectSite, requestPath,
+                    redirectMappings.getUnresolvedNode() == RedirectMappings.UnknownNodeMapping.COMMON_ANCESTOR_NAME_MATCH);
             {
-               return redirectRequestPath;
+                if (redirectRequestPath != null) {
+                    return redirectRequestPath;
+                }
             }
-         }
-      }
+        }
 
-      // if no explicit mapping, no name matching and not using common ancestor
-      if (redirectMappings.getUnresolvedNode() == RedirectMappings.UnknownNodeMapping.NO_REDIRECT)
-      {
-         return null;
-      }
-      else if (redirectMappings.getUnresolvedNode() == RedirectMappings.UnknownNodeMapping.REDIRECT)
-      {
-         return requestPath;
-      }
-      else if (redirectMappings.getUnresolvedNode() == RedirectMappings.UnknownNodeMapping.ROOT)
-      {
-         return "";
-      }
-      else
-      {
-         log.warn("Unknown redirect configuration option for an unknown node [" + redirectMappings.getUnresolvedNode() + "]. Will not perform redirect.");
-         return null;
-      }
-   }
+        // if no explicit mapping, no name matching and not using common ancestor
+        if (redirectMappings.getUnresolvedNode() == RedirectMappings.UnknownNodeMapping.NO_REDIRECT) {
+            return null;
+        } else if (redirectMappings.getUnresolvedNode() == RedirectMappings.UnknownNodeMapping.REDIRECT) {
+            return requestPath;
+        } else if (redirectMappings.getUnresolvedNode() == RedirectMappings.UnknownNodeMapping.ROOT) {
+            return "";
+        } else {
+            log.warn("Unknown redirect configuration option for an unknown node [" + redirectMappings.getUnresolvedNode()
+                    + "]. Will not perform redirect.");
+            return null;
+        }
+    }
 
-   protected String getNodeIfExists(String redirectSite, String requestPath, Boolean useCommonAncestor)
-   {
-      log.info("GetNodeExits called [" + redirectSite + "] : [" + requestPath + "]");
+    protected String getNodeIfExists(String redirectSite, String requestPath, Boolean useCommonAncestor) {
+        log.info("GetNodeExits called [" + redirectSite + "] : [" + requestPath + "]");
 
-      NavigationContext navContext = null;
-      
-      if (redirectSite == null || navService == null)
-      {
-         log.warn("Redirect site name [" + redirectSite + "] or the navigation service object [" + navService + "] is null. Cannot perform redirect.");
-         return null;
-      }
-      else
-      {
-        navContext = navService.loadNavigation(SiteKey.portal(redirectSite));
-      }
-      
-      if (navContext == null) //if the navContext is null, the redirectSite doesn't exist and we can't redirect to it.
-      {
-         log.warn("Cannot preform redirect since can't retrieve navigation for site : " + redirectSite);
-         return null;
-      }
-      else if (requestPath == null || requestPath.isEmpty()) //a nav context exists and we are checking the root node, no need to check anything else
-      {
-         return "";
-      }
-      
-      String[] path = requestPath.split("/");
-      NodeContext nodeContext = navService.loadNode(NodeModel.SELF_MODEL, navContext,
-            GenericScope.branchShape(path, Scope.ALL), null);
-      
-      boolean found = true;
-      String lastCommonAncestor = "";
+        NavigationContext navContext = null;
 
-      for (String nodeName : path)
-      {
-         nodeContext = nodeContext.get(nodeName);
-         if (nodeContext == null)
-         {
-            found = false;
-            break;
-         }
-         else
-         {
-            if (lastCommonAncestor.equals(""))
-            {
-               lastCommonAncestor += nodeContext.getName();
+        if (redirectSite == null || navService == null) {
+            log.warn("Redirect site name [" + redirectSite + "] or the navigation service object [" + navService
+                    + "] is null. Cannot perform redirect.");
+            return null;
+        } else {
+            navContext = navService.loadNavigation(SiteKey.portal(redirectSite));
+        }
+
+        if (navContext == null) // if the navContext is null, the redirectSite doesn't exist and we can't redirect to it.
+        {
+            log.warn("Cannot preform redirect since can't retrieve navigation for site : " + redirectSite);
+            return null;
+        } else if (requestPath == null || requestPath.isEmpty()) // a nav context exists and we are checking the root node, no
+                                                                 // need to check anything else
+        {
+            return "";
+        }
+
+        String[] path = requestPath.split("/");
+        NodeContext nodeContext = navService.loadNode(NodeModel.SELF_MODEL, navContext,
+                GenericScope.branchShape(path, Scope.ALL), null);
+
+        boolean found = true;
+        String lastCommonAncestor = "";
+
+        for (String nodeName : path) {
+            nodeContext = nodeContext.get(nodeName);
+            if (nodeContext == null) {
+                found = false;
+                break;
+            } else {
+                if (lastCommonAncestor.equals("")) {
+                    lastCommonAncestor += nodeContext.getName();
+                } else {
+                    lastCommonAncestor += "/" + nodeContext.getName();
+                }
             }
-            else
-            {
-               lastCommonAncestor += "/" + nodeContext.getName();
-            }
-         }
-      }
+        }
 
-      if (found == true)
-      {
-         return requestPath;
-      }
-      else if (useCommonAncestor)
-      {
-         return lastCommonAncestor;
-      }
-      else
-      {
-         return null;
-      }
-   }
+        if (found == true) {
+            return requestPath;
+        } else if (useCommonAncestor) {
+            return lastCommonAncestor;
+        } else {
+            return null;
+        }
+    }
 
 }

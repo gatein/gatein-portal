@@ -25,42 +25,37 @@ import org.exoplatform.component.test.AbstractGateInTest;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestSpliterator extends AbstractGateInTest
-{
+public class TestSpliterator extends AbstractGateInTest {
 
-   public void testEmptyString()
-   {
-      Spliterator i = new Spliterator("", ' ');
-      assertTrue(i.hasNext());
-      assertEquals("", i.next());
-      assertFalse(i.hasNext());
-   }
+    public void testEmptyString() {
+        Spliterator i = new Spliterator("", ' ');
+        assertTrue(i.hasNext());
+        assertEquals("", i.next());
+        assertFalse(i.hasNext());
+    }
 
-   public void testSeparatorString()
-   {
-      Spliterator i = new Spliterator(" ", ' ');
-      assertTrue(i.hasNext());
-      assertEquals("", i.next());
-      assertTrue(i.hasNext());
-      assertEquals("", i.next());
-      assertFalse(i.hasNext());
-   }
+    public void testSeparatorString() {
+        Spliterator i = new Spliterator(" ", ' ');
+        assertTrue(i.hasNext());
+        assertEquals("", i.next());
+        assertTrue(i.hasNext());
+        assertEquals("", i.next());
+        assertFalse(i.hasNext());
+    }
 
-   public void testEntireString()
-   {
-      Spliterator i = new Spliterator("a", ' ');
-      assertTrue(i.hasNext());
-      assertEquals("a", i.next());
-      assertFalse(i.hasNext());
-   }
+    public void testEntireString() {
+        Spliterator i = new Spliterator("a", ' ');
+        assertTrue(i.hasNext());
+        assertEquals("a", i.next());
+        assertFalse(i.hasNext());
+    }
 
-   public void testNormal()
-   {
-      Spliterator i = new Spliterator("a b", ' ');
-      assertTrue(i.hasNext());
-      assertEquals("a", i.next());
-      assertTrue(i.hasNext());
-      assertEquals("b", i.next());
-      assertFalse(i.hasNext());
-   }
+    public void testNormal() {
+        Spliterator i = new Spliterator("a b", ' ');
+        assertTrue(i.hasNext());
+        assertEquals("a", i.next());
+        assertTrue(i.hasNext());
+        assertEquals("b", i.next());
+        assertFalse(i.hasNext());
+    }
 }

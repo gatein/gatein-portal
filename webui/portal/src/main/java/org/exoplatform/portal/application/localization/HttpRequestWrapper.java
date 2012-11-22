@@ -21,77 +21,71 @@
  */
 package org.exoplatform.portal.application.localization;
 
-import org.exoplatform.portal.application.PortalRequestContext;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+
+import org.exoplatform.portal.application.PortalRequestContext;
+
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class HttpRequestWrapper extends HttpServletRequestWrapper
-{
-   private static final List<Locale> EMPTY_LOCALE_LIST = Collections.emptyList();
+public class HttpRequestWrapper extends HttpServletRequestWrapper {
+    private static final List<Locale> EMPTY_LOCALE_LIST = Collections.emptyList();
 
-   /**
-    * Constructs a request object wrapping the given request.
-    *
-    * @throws IllegalArgumentException if the request is null
-    */
-   public HttpRequestWrapper(HttpServletRequest request)
-   {
-      super(request);
-   }
+    /**
+     * Constructs a request object wrapping the given request.
+     *
+     * @throws IllegalArgumentException if the request is null
+     */
+    public HttpRequestWrapper(HttpServletRequest request) {
+        super(request);
+    }
 
-   /**
-    * Note: Keep the implementation here in sync with {@link org.exoplatform.portal.webui.application.ExoUserContext#getLocale}
-    * @return
-    */
-   @Override
-   public Locale getLocale()
-   {
-      if (PortalRequestContext.getCurrentInstance() != null)
-         return getRequest().getLocale();
-      
-      Locale current = LocalizationFilter.getCurrentLocale();
-      if (current != null)
-         return current;
+    /**
+     * Note: Keep the implementation here in sync with {@link org.exoplatform.portal.webui.application.ExoUserContext#getLocale}
+     *
+     * @return
+     */
+    @Override
+    public Locale getLocale() {
+        if (PortalRequestContext.getCurrentInstance() != null)
+            return getRequest().getLocale();
 
-      return getRequest().getLocale();
-   }
+        Locale current = LocalizationFilter.getCurrentLocale();
+        if (current != null)
+            return current;
 
-   @Override
-   public Enumeration getLocales()
-   {
-      Locale current = LocalizationFilter.getCurrentLocale();
-      if (PortalRequestContext.getCurrentInstance() != null || current == null)
-         return getRequest().getLocales();
+        return getRequest().getLocale();
+    }
 
-      Locale loc = getLocale();
-      if (loc == null)
-      {
-         return Collections.enumeration(EMPTY_LOCALE_LIST);
-      }
-      else
-      {
-         LinkedList<Locale> locs = new LinkedList<Locale>();
-         locs.add(loc);
+    @Override
+    public Enumeration getLocales() {
+        Locale current = LocalizationFilter.getCurrentLocale();
+        if (PortalRequestContext.getCurrentInstance() != null || current == null)
+            return getRequest().getLocales();
 
-         Enumeration<Locale> clientLocs = (Enumeration<Locale>) getRequest().getLocales();
-         while (clientLocs.hasMoreElements())
-         {
-            current = clientLocs.nextElement();
-            if (current.getLanguage().equals(loc.getLanguage()) && current.getCountry().equals(loc.getCountry()))
-               continue;
-            locs.add(current);
-         }
+        Locale loc = getLocale();
+        if (loc == null) {
+            return Collections.enumeration(EMPTY_LOCALE_LIST);
+        } else {
+            LinkedList<Locale> locs = new LinkedList<Locale>();
+            locs.add(loc);
 
-         return Collections.enumeration(locs);
-      }
-   }
+            Enumeration<Locale> clientLocs = (Enumeration<Locale>) getRequest().getLocales();
+            while (clientLocs.hasMoreElements()) {
+                current = clientLocs.nextElement();
+                if (current.getLanguage().equals(loc.getLanguage()) && current.getCountry().equals(loc.getCountry()))
+                    continue;
+                locs.add(current);
+            }
+
+            return Collections.enumeration(locs);
+        }
+    }
 }

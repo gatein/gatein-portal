@@ -42,203 +42,165 @@ import org.gatein.wsrp.jcr.BaseChromatticPersister;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class JCRPersister extends BaseChromatticPersister
-{
-   public JCRPersister(ExoContainer container, String workspaceName)
-   {
-      super(workspaceName);
-   }
+public class JCRPersister extends BaseChromatticPersister {
+    public JCRPersister(ExoContainer container, String workspaceName) {
+        super(workspaceName);
+    }
 
-   @Override
-   protected void setBuilderOptions(ChromatticBuilder builder)
-   {
-      if (PORTLET_STATES_WORKSPACE_NAME.equals(workspaceName))
-      {
-         builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, PortletStatesSessionLifeCycle.class.getName());
-      }
-      else if (WSRP_WORKSPACE_NAME.equals(workspaceName))
-      {
-         builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, WSRPSessionLifeCycle.class.getName());
-      }
-      else
-      {
-         throw new IllegalArgumentException("Unknown workspace name: '" + workspaceName + "'");
-      }
-   }
+    @Override
+    protected void setBuilderOptions(ChromatticBuilder builder) {
+        if (PORTLET_STATES_WORKSPACE_NAME.equals(workspaceName)) {
+            builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, PortletStatesSessionLifeCycle.class.getName());
+        } else if (WSRP_WORKSPACE_NAME.equals(workspaceName)) {
+            builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, WSRPSessionLifeCycle.class.getName());
+        } else {
+            throw new IllegalArgumentException("Unknown workspace name: '" + workspaceName + "'");
+        }
+    }
 
-   public static class WSRPSessionLifeCycle implements SessionLifeCycle
-   {
-      private ManageableRepository repository;
-      private ThreadLocal<SessionProvider> provider = new ThreadLocal<SessionProvider>();
+    public static class WSRPSessionLifeCycle implements SessionLifeCycle {
+        private ManageableRepository repository;
+        private ThreadLocal<SessionProvider> provider = new ThreadLocal<SessionProvider>();
 
-      public WSRPSessionLifeCycle()
-      {
-         try
-         {
-            ExoContainer container = ExoContainerContext.getCurrentContainer();
-            RepositoryService repoService = (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
-            repository = repoService.getRepository(REPOSITORY_NAME);
-         }
-         catch (Exception e)
-         {
-            throw new RuntimeException(e);
-         }
-      }
+        public WSRPSessionLifeCycle() {
+            try {
+                ExoContainer container = ExoContainerContext.getCurrentContainer();
+                RepositoryService repoService = (RepositoryService) container
+                        .getComponentInstanceOfType(RepositoryService.class);
+                repository = repoService.getRepository(REPOSITORY_NAME);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
 
-      public Session login() throws RepositoryException
-      {
-         SessionProvider sessionProvider = provider.get();
-         if (sessionProvider == null)
-         {
-            sessionProvider =  SessionProvider.createSystemProvider();
-            provider.set(sessionProvider);
-         }
-         
-         Session session = sessionProvider.getSession(WSRP_WORKSPACE_NAME, repository);
-         return session;
-      }
+        public Session login() throws RepositoryException {
+            SessionProvider sessionProvider = provider.get();
+            if (sessionProvider == null) {
+                sessionProvider = SessionProvider.createSystemProvider();
+                provider.set(sessionProvider);
+            }
 
-      public Session login(String s) throws RepositoryException
-      {
-         throw new UnsupportedOperationException();
-      }
+            Session session = sessionProvider.getSession(WSRP_WORKSPACE_NAME, repository);
+            return session;
+        }
 
-      public Session login(Credentials credentials, String s) throws RepositoryException
-      {
-         throw new UnsupportedOperationException();
-      }
+        public Session login(String s) throws RepositoryException {
+            throw new UnsupportedOperationException();
+        }
 
-      public Session login(Credentials credentials) throws RepositoryException
-      {
-         throw new UnsupportedOperationException();
-      }
+        public Session login(Credentials credentials, String s) throws RepositoryException {
+            throw new UnsupportedOperationException();
+        }
 
-      public void save(Session session) throws RepositoryException
-      {
-         session.save();
-      }
+        public Session login(Credentials credentials) throws RepositoryException {
+            throw new UnsupportedOperationException();
+        }
 
-      public void close(Session session)
-      {
-         session.logout();
-      }
-   }
+        public void save(Session session) throws RepositoryException {
+            session.save();
+        }
 
-   public static class PortletStatesSessionLifeCycle implements SessionLifeCycle
-   {
-      private ManageableRepository repository;
-      private SessionProvider provider;
+        public void close(Session session) {
+            session.logout();
+        }
+    }
 
-      public PortletStatesSessionLifeCycle()
-      {
-         try
-         {
-            ExoContainer container = ExoContainerContext.getCurrentContainer();
-            RepositoryService repoService = (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
-            repository = repoService.getRepository(REPOSITORY_NAME);
-         }
-         catch (Exception e)
-         {
-            throw new RuntimeException(e);
-         }
+    public static class PortletStatesSessionLifeCycle implements SessionLifeCycle {
+        private ManageableRepository repository;
+        private SessionProvider provider;
 
-         provider = SessionProvider.createSystemProvider();
-      }
+        public PortletStatesSessionLifeCycle() {
+            try {
+                ExoContainer container = ExoContainerContext.getCurrentContainer();
+                RepositoryService repoService = (RepositoryService) container
+                        .getComponentInstanceOfType(RepositoryService.class);
+                repository = repoService.getRepository(REPOSITORY_NAME);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
 
-      public Session login() throws RepositoryException
-      {
-         return provider.getSession(PORTLET_STATES_WORKSPACE_NAME, repository);
-      }
+            provider = SessionProvider.createSystemProvider();
+        }
 
-      public Session login(String s) throws RepositoryException
-      {
-         throw new UnsupportedOperationException();
-      }
+        public Session login() throws RepositoryException {
+            return provider.getSession(PORTLET_STATES_WORKSPACE_NAME, repository);
+        }
 
-      public Session login(Credentials credentials, String s) throws RepositoryException
-      {
-         throw new UnsupportedOperationException();
-      }
+        public Session login(String s) throws RepositoryException {
+            throw new UnsupportedOperationException();
+        }
 
-      public Session login(Credentials credentials) throws RepositoryException
-      {
-         throw new UnsupportedOperationException();
-      }
+        public Session login(Credentials credentials, String s) throws RepositoryException {
+            throw new UnsupportedOperationException();
+        }
 
-      public void save(Session session) throws RepositoryException
-      {
-         session.save();
-      }
+        public Session login(Credentials credentials) throws RepositoryException {
+            throw new UnsupportedOperationException();
+        }
 
-      public void close(Session session)
-      {
-         session.logout();
-      }
-   }
+        public void save(Session session) throws RepositoryException {
+            session.save();
+        }
 
-   public static class QNameFormatter implements ObjectFormatter
-   {
-      private static final String OPEN_BRACE_REPLACEMENT = "-__";
-      private static final String CLOSE_BRACE_REPLACEMENT = "__-";
-      private static final String COLON_REPLACEMENT = "_-_";
-      private static final String CLOSE_BRACE = "}";
-      private static final String OPEN_BRACE = "{";
-      private static final String COLON = ":";
+        public void close(Session session) {
+            session.logout();
+        }
+    }
 
-      public String decodeNodeName(FormatterContext formatterContext, String s)
-      {
-         return decode(s);
-      }
+    public static class QNameFormatter implements ObjectFormatter {
+        private static final String OPEN_BRACE_REPLACEMENT = "-__";
+        private static final String CLOSE_BRACE_REPLACEMENT = "__-";
+        private static final String COLON_REPLACEMENT = "_-_";
+        private static final String CLOSE_BRACE = "}";
+        private static final String OPEN_BRACE = "{";
+        private static final String COLON = ":";
 
-      public String encodeNodeName(FormatterContext formatterContext, String s)
-      {
-         return encode(s);
-      }
+        public String decodeNodeName(FormatterContext formatterContext, String s) {
+            return decode(s);
+        }
 
-      public String decodePropertyName(FormatterContext formatterContext, String s)
-      {
-         return decode(s);
-      }
+        public String encodeNodeName(FormatterContext formatterContext, String s) {
+            return encode(s);
+        }
 
-      public String encodePropertyName(FormatterContext formatterContext, String s)
-      {
-         return encode(s);
-      }
+        public String decodePropertyName(FormatterContext formatterContext, String s) {
+            return decode(s);
+        }
 
-      public static String decode(String s)
-      {
-         return s.replace(CLOSE_BRACE_REPLACEMENT, CLOSE_BRACE).replace(OPEN_BRACE_REPLACEMENT, OPEN_BRACE).replace(COLON_REPLACEMENT, COLON);
-      }
+        public String encodePropertyName(FormatterContext formatterContext, String s) {
+            return encode(s);
+        }
 
-      public static String encode(String s)
-      {
-         return s.replace(OPEN_BRACE, OPEN_BRACE_REPLACEMENT).replace(CLOSE_BRACE, CLOSE_BRACE_REPLACEMENT).replace(COLON, COLON_REPLACEMENT);
-      }
-   }
+        public static String decode(String s) {
+            return s.replace(CLOSE_BRACE_REPLACEMENT, CLOSE_BRACE).replace(OPEN_BRACE_REPLACEMENT, OPEN_BRACE)
+                    .replace(COLON_REPLACEMENT, COLON);
+        }
 
-   public static class PortletNameFormatter implements ObjectFormatter
-   {
-      public static final String SLASH_REPLACEMENT = "-_-";
-      private static final String SLASH = "/";
+        public static String encode(String s) {
+            return s.replace(OPEN_BRACE, OPEN_BRACE_REPLACEMENT).replace(CLOSE_BRACE, CLOSE_BRACE_REPLACEMENT)
+                    .replace(COLON, COLON_REPLACEMENT);
+        }
+    }
 
-      public String decodeNodeName(FormatterContext formatterContext, String s)
-      {
-         return decode(s);
-      }
+    public static class PortletNameFormatter implements ObjectFormatter {
+        public static final String SLASH_REPLACEMENT = "-_-";
+        private static final String SLASH = "/";
 
-      public static String decode(String s)
-      {
-         return s.replace(SLASH_REPLACEMENT, SLASH);
-      }
+        public String decodeNodeName(FormatterContext formatterContext, String s) {
+            return decode(s);
+        }
 
-      public String encodeNodeName(FormatterContext formatterContext, String s) throws IllegalArgumentException, NullPointerException
-      {
-         return encode(s);
-      }
+        public static String decode(String s) {
+            return s.replace(SLASH_REPLACEMENT, SLASH);
+        }
 
-      public static String encode(String s)
-      {
-         return s.replace(SLASH, SLASH_REPLACEMENT);
-      }
-   }
+        public String encodeNodeName(FormatterContext formatterContext, String s) throws IllegalArgumentException,
+                NullPointerException {
+            return encode(s);
+        }
+
+        public static String encode(String s) {
+            return s.replace(SLASH, SLASH_REPLACEMENT);
+        }
+    }
 }

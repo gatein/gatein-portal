@@ -34,28 +34,22 @@ import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class)
-public class UIBannerPortlet extends UIGroovyPortlet
-{
+public class UIBannerPortlet extends UIGroovyPortlet {
 
-   private final SSOHelper ssoHelper;
+    private final SSOHelper ssoHelper;
 
-   public UIBannerPortlet() throws Exception
-   {
-      ssoHelper = getApplicationComponent(SSOHelper.class);
-   }
+    public UIBannerPortlet() throws Exception {
+        ssoHelper = getApplicationComponent(SSOHelper.class);
+    }
 
-   public String renderLoginLink(String signInAction, String signInLocalizedText)
-   {
-      // If SSO is enabled, we need to redirect to "/portal/sso" instead of showing login window
-      if (ssoHelper.isSSOEnabled())
-      {
-         PortalRequestContext pContext = Util.getPortalRequestContext();
-         String ssoRedirectURL = pContext.getRequest().getContextPath() + ssoHelper.getSSORedirectURLSuffix();
-         return "<a class=\"Login\" href=\"" + ssoRedirectURL + "\">" + signInLocalizedText + "</a>";
-      }
-      else
-      {
-          return "<a class=\"Login\" onclick=\"" + signInAction + "\">" + signInLocalizedText + "</a>";
-      }
-   }
+    public String renderLoginLink(String signInAction, String signInLocalizedText) {
+        // If SSO is enabled, we need to redirect to "/portal/sso" instead of showing login window
+        if (ssoHelper.isSSOEnabled()) {
+            PortalRequestContext pContext = Util.getPortalRequestContext();
+            String ssoRedirectURL = pContext.getRequest().getContextPath() + ssoHelper.getSSORedirectURLSuffix();
+            return "<a class=\"Login\" href=\"" + ssoRedirectURL + "\">" + signInLocalizedText + "</a>";
+        } else {
+            return "<a class=\"Login\" onclick=\"" + signInAction + "\">" + signInLocalizedText + "</a>";
+        }
+    }
 }

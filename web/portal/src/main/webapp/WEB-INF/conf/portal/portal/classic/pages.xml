@@ -28,8 +28,8 @@
   <page>
     <name>homepage</name>
     <title>Home Page</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
         <application-ref>web</application-ref>
@@ -49,12 +49,12 @@
       <show-application-mode>false</show-application-mode>
     </portlet-application>
   </page>
-    
+
   <page>
     <name>groupnavigation</name>
     <title>Group Navigation</title>
-	  <access-permissions>*:/platform/users</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>    
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
         <application-ref>exoadmin</application-ref>
@@ -65,12 +65,12 @@
       <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>portalnavigation</name>
     <title>Portal Navigation</title>
-	  <access-permissions>*:/platform/users</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>    
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
         <application-ref>exoadmin</application-ref>
@@ -81,12 +81,12 @@
       <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>register</name>
     <title>Register</title>
-	  <access-permissions>*:/platform/guests</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>    
+    <access-permissions>*:/platform/guests</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
         <application-ref>exoadmin</application-ref>
@@ -94,14 +94,14 @@
       </portlet>
       <title>Register Account</title>
       <access-permissions>*:/platform/guests</access-permissions>
-      <show-info-bar>false</show-info-bar>      
+      <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
   <page>
     <name>sitemap</name>
     <title>Site Map</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
         <application-ref>web</application-ref>
@@ -116,7 +116,7 @@
       </portlet>
       <title>SiteMap</title>
       <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>      
+      <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
 </page-set>

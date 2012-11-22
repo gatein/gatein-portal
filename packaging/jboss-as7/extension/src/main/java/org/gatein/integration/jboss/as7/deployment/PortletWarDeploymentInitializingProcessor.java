@@ -35,36 +35,31 @@ import org.jboss.vfs.VirtualFile;
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class PortletWarDeploymentInitializingProcessor implements DeploymentUnitProcessor
-{
-   private static final String PORTLET_XML = "WEB-INF/portlet.xml";
+public class PortletWarDeploymentInitializingProcessor implements DeploymentUnitProcessor {
+    private static final String PORTLET_XML = "WEB-INF/portlet.xml";
 
-   private GateInConfiguration config;
+    private GateInConfiguration config;
 
-   public PortletWarDeploymentInitializingProcessor(GateInConfiguration config) {
-      this.config = config;
-   }
+    public PortletWarDeploymentInitializingProcessor(GateInConfiguration config) {
+        this.config = config;
+    }
 
-   @Override
-   public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
-   {
-      final DeploymentUnit du = phaseContext.getDeploymentUnit();
-      if (!DeploymentTypeMarker.isType(DeploymentType.WAR, du))
-      {
-         return; // Skip non web deployments
-      }
-      final ResourceRoot deploymentRoot = du.getAttachment(Attachments.DEPLOYMENT_ROOT);
-      final VirtualFile portletXml = deploymentRoot.getRoot().getChild(PORTLET_XML);
-      if (portletXml.exists())
-      {
-         // we don't care about the contents, its existence is enough to mark it as a portlet app
-         du.putAttachment(PortletWarKey.INSTANCE, Boolean.TRUE);
-         du.putAttachment(GateInConfigurationKey.KEY, config);
-      }
-   }
+    @Override
+    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
+        final DeploymentUnit du = phaseContext.getDeploymentUnit();
+        if (!DeploymentTypeMarker.isType(DeploymentType.WAR, du)) {
+            return; // Skip non web deployments
+        }
+        final ResourceRoot deploymentRoot = du.getAttachment(Attachments.DEPLOYMENT_ROOT);
+        final VirtualFile portletXml = deploymentRoot.getRoot().getChild(PORTLET_XML);
+        if (portletXml.exists()) {
+            // we don't care about the contents, its existence is enough to mark it as a portlet app
+            du.putAttachment(PortletWarKey.INSTANCE, Boolean.TRUE);
+            du.putAttachment(GateInConfigurationKey.KEY, config);
+        }
+    }
 
-   @Override
-   public void undeploy(DeploymentUnit context)
-   {
-   }
+    @Override
+    public void undeploy(DeploymentUnit context) {
+    }
 }

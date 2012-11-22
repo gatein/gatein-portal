@@ -20,20 +20,20 @@
 
   <select id="getItemListByProduct" resultClass="item" parameterClass="string" cacheModel="itemCache">
     SELECT
-      ITEMID,
-      LISTPRICE,
-      UNITCOST,
-      SUPPLIER AS supplierId,
-      I.PRODUCTID AS "product.productId",
-      NAME AS "product.name",
-      DESCN AS "product.description",
-      CATEGORY AS "product.categoryId",
-      STATUS,
-      ATTR1 AS attribute1,
-      ATTR2 AS attribute2,
-      ATTR3 AS attribute3,
-      ATTR4 AS attribute4,
-      ATTR5 AS attribute5
+    ITEMID,
+    LISTPRICE,
+    UNITCOST,
+    SUPPLIER AS supplierId,
+    I.PRODUCTID AS "product.productId",
+    NAME AS "product.name",
+    DESCN AS "product.description",
+    CATEGORY AS "product.categoryId",
+    STATUS,
+    ATTR1 AS attribute1,
+    ATTR2 AS attribute2,
+    ATTR3 AS attribute3,
+    ATTR4 AS attribute4,
+    ATTR5 AS attribute5
     FROM ITEM I, PRODUCT P
     WHERE P.PRODUCTID = I.PRODUCTID
     AND I.PRODUCTID = #value#
@@ -41,25 +41,25 @@
 
   <select id="getItem" resultClass="item" parameterClass="string" cacheModel="quantityCache">
     select
-      ITEMID,
-      LISTPRICE,
-      UNITCOST,
-      SUPPLIER AS supplierId,
-      I.PRODUCTID AS "product.productId",
-      NAME AS "product.name",
-      DESCN AS "product.description",
-      CATEGORY AS "product.categoryId",
-      STATUS,
-      ATTR1 AS attribute1,
-      ATTR2 AS attribute2,
-      ATTR3 AS attribute3,
-      ATTR4 AS attribute4,
-      ATTR5 AS attribute5,
-      QTY AS quantity
+    ITEMID,
+    LISTPRICE,
+    UNITCOST,
+    SUPPLIER AS supplierId,
+    I.PRODUCTID AS "product.productId",
+    NAME AS "product.name",
+    DESCN AS "product.description",
+    CATEGORY AS "product.categoryId",
+    STATUS,
+    ATTR1 AS attribute1,
+    ATTR2 AS attribute2,
+    ATTR3 AS attribute3,
+    ATTR4 AS attribute4,
+    ATTR5 AS attribute5,
+    QTY AS quantity
     from ITEM I, INVENTORY V, PRODUCT P
     where P.PRODUCTID = I.PRODUCTID
-      and I.ITEMID = V.ITEMID
-      and I.ITEMID = #value#
+    and I.ITEMID = V.ITEMID
+    and I.ITEMID = #value#
   </select>
 
   <select id="getInventoryQuantity" resultClass="int" parameterClass="string">
@@ -70,7 +70,7 @@
 
   <update id="updateInventoryQuantity" parameterClass="map">
     UPDATE INVENTORY SET
-      QTY = QTY - #increment#
+    QTY = QTY - #increment#
     WHERE ITEMID = #itemId#
   </update>
 

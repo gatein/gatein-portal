@@ -22,20 +22,20 @@
 -->
 
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
             http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
-        version="2.4">
-        <display-name>gatein-sample-skin</display-name>
-   <filter>
+         version="2.4">
+  <display-name>gatein-sample-skin</display-name>
+  <filter>
     <filter-name>ResourceRequestFilter</filter-name>
     <filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
   </filter>
-  
-  	 <filter-mapping>
-	    <filter-name>ResourceRequestFilter</filter-name>
-	    <url-pattern>/*</url-pattern>
-	  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>ResourceRequestFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 
   <servlet>
     <servlet-name>GateInServlet</servlet-name>
@@ -46,5 +46,5 @@
     <servlet-name>GateInServlet</servlet-name>
     <url-pattern>/gateinservlet</url-pattern>
   </servlet-mapping>
-        
+
 </web-app>

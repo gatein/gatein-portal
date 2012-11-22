@@ -22,43 +22,42 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+
 /**
- * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
- * Aug 19, 2010
+ * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a> Aug 19, 2010
  */
 
-public interface ResourceCompressorPlugin
-{
+public interface ResourceCompressorPlugin {
 
-   /**
-    * Return resource type this plugin could compress.
-    * 
-    * @return
-    */
-   public ResourceType getResourceType();
-   
-   /**
-    * Return priority of plugin.
-    * 
-    * @return
-    */
-   public int getPriority();
-   
-   /**
-    * Return name of the plugin
-    * 
-    * @return
-    */
-   public String getName();
-   
-   /**
-    * 
-    * Compress the specified input and produce compressed output.
-    * 
-    * @param input
-    * @param output
-    * @throws ResourceCompressorException
-    * @throws IOException
-    */
-   public void compress(Reader input, Writer output) throws ResourceCompressorException, IOException;
+    /**
+     * Return resource type this plugin could compress.
+     *
+     * @return
+     */
+    ResourceType getResourceType();
+
+    /**
+     * Return priority of plugin.
+     *
+     * @return
+     */
+    int getPriority();
+
+    /**
+     * Return name of the plugin
+     *
+     * @return
+     */
+    String getName();
+
+    /**
+     *
+     * Compress the specified input and produce compressed output.
+     *
+     * @param input
+     * @param output
+     * @throws ResourceCompressorException
+     * @throws IOException
+     */
+    void compress(Reader input, Writer output) throws ResourceCompressorException, IOException;
 }

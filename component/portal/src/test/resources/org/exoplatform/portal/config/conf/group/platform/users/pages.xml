@@ -24,7 +24,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
-  
+
   <page>
     <name>dashboard</name>
     <title>Dashboard</title>
@@ -40,7 +40,7 @@
       <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>webexplorer</name>
     <title>Web Explorer</title>
@@ -55,8 +55,8 @@
       <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
     </portlet-application>
-  </page>               
-       
+  </page>
+
   <page>
     <name>mylink-blog</name>
     <title>Blog</title>
@@ -81,7 +81,7 @@
       <show-application-mode>true</show-application-mode>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>mylink-fedora</name>
     <title>Fedora</title>
@@ -106,7 +106,7 @@
       <show-application-mode>true</show-application-mode>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>sitemap</name>
     <title>Site Map</title>
@@ -119,7 +119,7 @@
       </portlet>
       <title>SiteMap</title>
       <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>      
+      <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
 </page-set>

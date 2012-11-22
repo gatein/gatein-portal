@@ -35,114 +35,94 @@ import org.exoplatform.web.security.AbstractTokenServiceTest;
  * @version $Id$
  *
  */
-@ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/gadget-tokenservice-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/gadget-jcr-configuration.xml")
-})
-public class TestGadgetTokenInfoService extends AbstractTokenServiceTest<GadgetTokenInfoService>
-{
-   
-   public TestGadgetTokenInfoService()
-   {
-      super();
-   }
-   
-   protected void setUp() throws Exception
-   {
-      PortalContainer container = getContainer();
-      service = (GadgetTokenInfoService)container.getComponentInstanceOfType(GadgetTokenInfoService.class);
+@ConfiguredBy({ @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/gadget-tokenservice-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/gadget-jcr-configuration.xml") })
+public class TestGadgetTokenInfoService extends AbstractTokenServiceTest<GadgetTokenInfoService> {
 
-      // hack to make sure database is initialized before running tests (see GTNPORTAL-2710 and GTNPORTAL-2711)
-      Thread t = new Thread()
-      {
-         public void run()
-         {
-            try
-            {
-               service.getAllTokens();
+    public TestGadgetTokenInfoService() {
+        super();
+    }
+
+    protected void setUp() throws Exception {
+        PortalContainer container = getContainer();
+        service = (GadgetTokenInfoService) container.getComponentInstanceOfType(GadgetTokenInfoService.class);
+
+        // hack to make sure database is initialized before running tests (see GTNPORTAL-2710 and GTNPORTAL-2711)
+        Thread t = new Thread() {
+            public void run() {
+                try {
+                    service.getAllTokens();
+                } catch (Throwable t) {
+                }
             }
-            catch (Throwable t)
-            {
-            }
-         }
-      };
-      t.start();
-      t.join();
-   }
-   
-   private LinkedList<BasicOAuthStoreTokenIndex> createTokens() throws Exception
-   {
-      LinkedList<BasicOAuthStoreTokenIndex> tokenIndexHolder = new LinkedList<BasicOAuthStoreTokenIndex>();
-      for(int i = 0; i < 11; i++)
-      {
-         TokenInfo tokenInfo = new TokenInfo("accessToken" + i, "tokenSecret" + i, "sessionHandle" + i, 1);
-         BasicOAuthStoreTokenIndex tokenIndex = new BasicOAuthStoreTokenIndex();
-         tokenIndex.setGadgetUri("http://localhost:9090/gadgets" + i);
-         tokenIndex.setServiceName("gadgets" + i);
-         tokenIndex.setTokenName("gadgetToken" + i);
-         tokenIndex.setUserId("root" + i);
-         service.createToken(tokenIndex, tokenInfo);
-         tokenIndexHolder.add(tokenIndex);
-      }
-      return tokenIndexHolder;
-   }
-   
-   private LinkedList<GadgetToken> clearAllTokens() throws Exception
-   {
-      LinkedList<GadgetToken> holder = new LinkedList<GadgetToken>();
-      for(BasicOAuthStoreTokenIndex tokenIndex : service.getAllTokens())
-      {
-         holder.add(service.deleteToken(tokenIndex));
-      }
-      return holder;
-   }
+        };
+        t.start();
+        t.join();
+    }
 
-   @Override
-   public void testGetToken() throws Exception
-   {
-      LinkedList<BasicOAuthStoreTokenIndex> tokenIndexHolder = createTokens();
-      for(int i = 0; i < tokenIndexHolder.size(); i++)
-      {
-         GadgetToken token = service.getToken(tokenIndexHolder.get(i));
-         assertEquals("accessToken" + i, token.getAccessToken());
-         assertEquals("tokenSecret" + i, token.getTokenSecret());
-         assertEquals("sessionHandle" + i, token.getSessionHandle());
-      }
-      clearAllTokens();
-   }
+    private LinkedList<BasicOAuthStoreTokenIndex> createTokens() {
+        LinkedList<BasicOAuthStoreTokenIndex> tokenIndexHolder = new LinkedList<BasicOAuthStoreTokenIndex>();
+        for (int i = 0; i < 11; i++) {
+            TokenInfo tokenInfo = new TokenInfo("accessToken" + i, "tokenSecret" + i, "sessionHandle" + i, 1);
+            BasicOAuthStoreTokenIndex tokenIndex = new BasicOAuthStoreTokenIndex();
+            tokenIndex.setGadgetUri("http://localhost:9090/gadgets" + i);
+            tokenIndex.setServiceName("gadgets" + i);
+            tokenIndex.setTokenName("gadgetToken" + i);
+            tokenIndex.setUserId("root" + i);
+            service.createToken(tokenIndex, tokenInfo);
+            tokenIndexHolder.add(tokenIndex);
+        }
+        return tokenIndexHolder;
+    }
 
-   @Override
-   public void testGetAllToken() throws Exception
-   {
-      LinkedList<BasicOAuthStoreTokenIndex> tokenIndexHolder = createTokens();
-      for(int i = 0; i < tokenIndexHolder.size(); i++)
-      {
-         BasicOAuthStoreTokenIndex tokenIndex = service.getAllTokens()[i];
-         assertEquals(tokenIndex.getGadgetUri(), "http://localhost:9090/gadgets" + i);
-         assertEquals(tokenIndex.getServiceName(), "gadgets" + i);
-         assertEquals(tokenIndex.getTokenName(), "gadgetToken" + i);
-         assertEquals(tokenIndex.getUserId(), "root" + i);
-      }
-      clearAllTokens();
-   }
+    private LinkedList<GadgetToken> clearAllTokens() {
+        LinkedList<GadgetToken> holder = new LinkedList<GadgetToken>();
+        for (BasicOAuthStoreTokenIndex tokenIndex : service.getAllTokens()) {
+            holder.add(service.deleteToken(tokenIndex));
+        }
+        return holder;
+    }
 
-   @Override
-   public void testSize() throws Exception
-   {
-      createTokens();
-      assertEquals(11, service.size());
-      clearAllTokens();
-   }
+    @Override
+    public void testGetToken() throws Exception {
+        LinkedList<BasicOAuthStoreTokenIndex> tokenIndexHolder = createTokens();
+        for (int i = 0; i < tokenIndexHolder.size(); i++) {
+            GadgetToken token = service.getToken(tokenIndexHolder.get(i));
+            assertEquals("accessToken" + i, token.getAccessToken());
+            assertEquals("tokenSecret" + i, token.getTokenSecret());
+            assertEquals("sessionHandle" + i, token.getSessionHandle());
+        }
+        clearAllTokens();
+    }
 
-   @Override
-   public void testDeleteToken() throws Exception
-   {
-      BasicOAuthStoreTokenIndex tokenIndex = createTokens().get(0);
-      GadgetToken token = service.deleteToken(tokenIndex);
-      assertEquals(token.getAccessToken(), "accessToken0");
-      assertEquals(token.getSessionHandle(), "sessionHandle0");
-      assertEquals(token.getTokenSecret(), "tokenSecret0");
-      clearAllTokens();
-   }
+    @Override
+    public void testGetAllToken() throws Exception {
+        LinkedList<BasicOAuthStoreTokenIndex> tokenIndexHolder = createTokens();
+        for (int i = 0; i < tokenIndexHolder.size(); i++) {
+            BasicOAuthStoreTokenIndex tokenIndex = service.getAllTokens()[i];
+            assertEquals(tokenIndex.getGadgetUri(), "http://localhost:9090/gadgets" + i);
+            assertEquals(tokenIndex.getServiceName(), "gadgets" + i);
+            assertEquals(tokenIndex.getTokenName(), "gadgetToken" + i);
+            assertEquals(tokenIndex.getUserId(), "root" + i);
+        }
+        clearAllTokens();
+    }
+
+    @Override
+    public void testSize() throws Exception {
+        createTokens();
+        assertEquals(11, service.size());
+        clearAllTokens();
+    }
+
+    @Override
+    public void testDeleteToken() throws Exception {
+        BasicOAuthStoreTokenIndex tokenIndex = createTokens().get(0);
+        GadgetToken token = service.deleteToken(tokenIndex);
+        assertEquals(token.getAccessToken(), "accessToken0");
+        assertEquals(token.getSessionHandle(), "sessionHandle0");
+        assertEquals(token.getTokenSecret(), "tokenSecret0");
+        clearAllTokens();
+    }
 }

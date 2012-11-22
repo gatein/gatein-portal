@@ -24,26 +24,22 @@ import org.exoplatform.portal.mop.navigation.NodeContext;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public abstract class AbstractImportNavigationTest extends AbstractImportTest
-{
+public abstract class AbstractImportNavigationTest extends AbstractImportTest {
 
-   @Override
-   protected final String getConfig1()
-   {
-      return "navigation1";
-   }
+    @Override
+    protected final String getConfig1() {
+        return "navigation1";
+    }
 
-   @Override
-   protected final String getConfig2()
-   {
-      return "navigation2";
-   }
+    @Override
+    protected final String getConfig2() {
+        return "navigation2";
+    }
 
-   @Override
-   protected final void afterTwoPhaseNoOverrideReboot(NodeContext<?> root)
-   {
-      assertEquals(2, root.getNodeCount());
-      assertNotNull(root.get("foo"));
-      assertNotNull(root.get("daa"));
-   }
+    @Override
+    protected final void afterTwoPhaseNoOverrideReboot(NodeContext<?> root) {
+        assertEquals(2, root.getNodeCount());
+        assertNotNull(root.get("foo"));
+        assertNotNull(root.get("daa"));
+    }
 }

@@ -34,45 +34,42 @@ import org.exoplatform.portal.pom.spi.portlet.Portlet;
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class TestSiteDataImportMerge extends AbstractSiteDataImportTest
-{
-   
-   @Override
-   protected ImportMode getMode()
-   {
-      return ImportMode.MERGE;
-   }
-   
-   @Override
-   protected void afterSecondBootWithOverride(PortalContainer container) throws Exception
-   {
-      RequestLifeCycle.begin(container);
-      
-      DataStorage dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      PageService pageService = (PageService)container.getComponentInstanceOfType(PageService.class);
-      PortalConfig portal = dataStorage.getPortalConfig("classic");
-      Container layout = portal.getPortalLayout();
-      assertEquals(1, layout.getChildren().size());
-      Application<Portlet> layoutPortlet = (Application<Portlet>)layout.getChildren().get(0);
-      assertEquals("site2/layout", dataStorage.getId(layoutPortlet.getState()));
-      
-      //
-      PageContext home = pageService.loadPage(PageKey.parse("portal::classic::home"));
-      assertNotNull(home);
-      assertEquals("site 1", home.getState().getDisplayName());
+public class TestSiteDataImportMerge extends AbstractSiteDataImportTest {
 
-      PageContext page1 = pageService.loadPage(PageKey.parse("portal::classic::page1"));
-      assertNotNull(page1);
-      assertEquals("site 2", page1.getState().getDisplayName());
-      
-      PageContext page2 = pageService.loadPage(PageKey.parse("portal::classic::page2"));
-      assertNotNull(page2);
-      assertEquals("site 2", page2.getState().getDisplayName());
-      
-      PageContext dashboard1 = pageService.loadPage(PageKey.parse("user::root::dashboard1"));
-      assertNotNull(dashboard1);
-      assertEquals("site 2", dashboard1.getState().getDisplayName());
-      
-      RequestLifeCycle.end();    
-   }
+    @Override
+    protected ImportMode getMode() {
+        return ImportMode.MERGE;
+    }
+
+    @Override
+    protected void afterSecondBootWithOverride(PortalContainer container) throws Exception {
+        RequestLifeCycle.begin(container);
+
+        DataStorage dataStorage = (DataStorage) container.getComponentInstanceOfType(DataStorage.class);
+        PageService pageService = (PageService) container.getComponentInstanceOfType(PageService.class);
+        PortalConfig portal = dataStorage.getPortalConfig("classic");
+        Container layout = portal.getPortalLayout();
+        assertEquals(1, layout.getChildren().size());
+        Application<Portlet> layoutPortlet = (Application<Portlet>) layout.getChildren().get(0);
+        assertEquals("site2/layout", dataStorage.getId(layoutPortlet.getState()));
+
+        //
+        PageContext home = pageService.loadPage(PageKey.parse("portal::classic::home"));
+        assertNotNull(home);
+        assertEquals("site 1", home.getState().getDisplayName());
+
+        PageContext page1 = pageService.loadPage(PageKey.parse("portal::classic::page1"));
+        assertNotNull(page1);
+        assertEquals("site 2", page1.getState().getDisplayName());
+
+        PageContext page2 = pageService.loadPage(PageKey.parse("portal::classic::page2"));
+        assertNotNull(page2);
+        assertEquals("site 2", page2.getState().getDisplayName());
+
+        PageContext dashboard1 = pageService.loadPage(PageKey.parse("user::root::dashboard1"));
+        assertNotNull(dashboard1);
+        assertEquals("site 2", dashboard1.getState().getDisplayName());
+
+        RequestLifeCycle.end();
+    }
 }

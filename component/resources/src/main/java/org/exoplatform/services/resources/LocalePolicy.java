@@ -23,19 +23,19 @@ package org.exoplatform.services.resources;
 
 import java.util.Locale;
 
+
 /**
  * This interface represents a pluggable mechanism for different locale determining algorithms
  *
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public interface LocalePolicy
-{
-   /**
-    * Determine the Locale to be used for current request
-    *
-    * @param localeContext locale context info available to implementations
-    *        as inputs to use when determining appropriate Locale
-    * @return Locale to be used for current user's request
-    */
-   public Locale determineLocale(LocaleContextInfo localeContext);
+public interface LocalePolicy {
+    /**
+     * Determine the Locale to be used for current request
+     *
+     * @param localeContext locale context info available to implementations as inputs to use when determining appropriate
+     *        Locale
+     * @return Locale to be used for current user's request
+     */
+    Locale determineLocale(LocaleContextInfo localeContext);
 }

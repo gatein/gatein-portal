@@ -24,11 +24,9 @@ package org.gatein.common.xml.stax;
 
 import org.staxnav.Naming;
 
-public class LocalStaxWriterTest extends AbstractStaxWriterTest<String>
-{
-   @Override
-   public Naming<String> getNaming()
-   {
-      return new Naming.Local();
-   }
+public class LocalStaxWriterTest extends AbstractStaxWriterTest<String> {
+    @Override
+    public Naming<String> getNaming() {
+        return new Naming.Local();
+    }
 }

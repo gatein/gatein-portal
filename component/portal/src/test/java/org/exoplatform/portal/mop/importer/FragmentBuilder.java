@@ -24,19 +24,16 @@ import org.exoplatform.portal.config.model.NavigationFragment;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class FragmentBuilder extends Builder<FragmentBuilder>
-{
-   public FragmentBuilder(String parentURI)
-   {
-      super(parentURI);
-   }
+public class FragmentBuilder extends Builder<FragmentBuilder> {
+    public FragmentBuilder(String parentURI) {
+        super(parentURI);
+    }
 
-   @Override
-   public NavigationFragment build()
-   {
-      NavigationFragment fragment = new NavigationFragment();
-      fragment.setParentURI(value);
-      fragment.setNodes(buildNodes());
-      return fragment;
-   }
+    @Override
+    public NavigationFragment build() {
+        NavigationFragment fragment = new NavigationFragment();
+        fragment.setParentURI(value);
+        fragment.setNodes(buildNodes());
+        return fragment;
+    }
 }

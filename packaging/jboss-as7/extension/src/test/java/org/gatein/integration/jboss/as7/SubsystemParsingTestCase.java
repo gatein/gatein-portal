@@ -21,77 +21,59 @@
  */
 package org.gatein.integration.jboss.as7;
 
-import org.jboss.as.subsystem.test.*;
-
 import java.io.IOException;
+
+import org.jboss.as.subsystem.test.AbstractSubsystemBaseTest;
 
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class SubsystemParsingTestCase extends AbstractSubsystemBaseTest
-{
-   private static final String SUBSYSTEM_XML =
-      "<subsystem xmlns=\"" + GateInExtension.NAMESPACE + "\">\n" +
-         "   <deployment-archives>\n" +
-         "      <archive name=\"" + Archive.GATEIN.getLocalName() + "\" main=\"true\" />\n" +
-         "      <archive name=\"" + Archive.GATEIN_SAMPLE_EXTENSION.getLocalName() + "\" />\n" +
-         "      <archive name=\"" + Archive.GATEIN_SAMPLE_PORTAL.getLocalName() + "\" />\n" +
-         "      <archive name=\"" + Archive.GATEIN_SAMPLE_SKIN.getLocalName() + "\" />\n" +
-         "   </deployment-archives>\n" +
-         "   <portlet-war-dependencies>\n" +
-         "      <dependency name=\"" + Module.ORG_GATEIN_LIB.getLocalName() + "\" import-services=\"true\" />\n" +
-         "      <dependency name=\"" + Module.ORG_GATEIN_WCI.getLocalName() + "\" />\n" +
-         "      <dependency name=\"" + Module.JAVAX_PORTLET_API.getLocalName() + "\" />\n" +
-         "   </portlet-war-dependencies>\n" +
-         "</subsystem>";
+public class SubsystemParsingTestCase extends AbstractSubsystemBaseTest {
+    private static final String SUBSYSTEM_XML = "<subsystem xmlns=\"" + GateInExtension.NAMESPACE + "\">\n"
+            + "   <deployment-archives>\n" + "      <archive name=\"" + Archive.GATEIN.getLocalName() + "\" main=\"true\" />\n"
+            + "      <archive name=\"" + Archive.GATEIN_SAMPLE_EXTENSION.getLocalName() + "\" />\n" + "      <archive name=\""
+            + Archive.GATEIN_SAMPLE_PORTAL.getLocalName() + "\" />\n" + "      <archive name=\""
+            + Archive.GATEIN_SAMPLE_SKIN.getLocalName() + "\" />\n" + "   </deployment-archives>\n"
+            + "   <portlet-war-dependencies>\n" + "      <dependency name=\"" + Module.ORG_GATEIN_LIB.getLocalName()
+            + "\" import-services=\"true\" />\n" + "      <dependency name=\"" + Module.ORG_GATEIN_WCI.getLocalName()
+            + "\" />\n" + "      <dependency name=\"" + Module.JAVAX_PORTLET_API.getLocalName() + "\" />\n"
+            + "   </portlet-war-dependencies>\n" + "</subsystem>";
 
-   static enum Archive
-   {
-      GATEIN("gatein.ear"),
-      GATEIN_SAMPLE_EXTENSION("gatein-sample-extension.ear"),
-      GATEIN_SAMPLE_PORTAL("gatein-sample-portal.ear"),
-      GATEIN_SAMPLE_SKIN("gatein-sample-skin.war");
+    static enum Archive {
+        GATEIN("gatein.ear"), GATEIN_SAMPLE_EXTENSION("gatein-sample-extension.ear"), GATEIN_SAMPLE_PORTAL(
+                "gatein-sample-portal.ear"), GATEIN_SAMPLE_SKIN("gatein-sample-skin.war");
 
-      private String archive;
+        private String archive;
 
-      public String getLocalName()
-      {
-         return archive;
-      }
+        public String getLocalName() {
+            return archive;
+        }
 
-      private Archive(String name)
-      {
-         archive = name;
-      }
-   }
+        private Archive(String name) {
+            archive = name;
+        }
+    }
 
-   static enum Module
-   {
-      ORG_GATEIN_LIB("org.gatein.lib"),
-      ORG_GATEIN_WCI("org.gatein.wci"),
-      JAVAX_PORTLET_API("javax.portlet.api");
+    static enum Module {
+        ORG_GATEIN_LIB("org.gatein.lib"), ORG_GATEIN_WCI("org.gatein.wci"), JAVAX_PORTLET_API("javax.portlet.api");
 
-      private String module;
+        private String module;
 
-      public String getLocalName()
-      {
-         return module;
-      }
+        public String getLocalName() {
+            return module;
+        }
 
-      private Module(String name)
-      {
-         module = name;
-      }
-   }
+        private Module(String name) {
+            module = name;
+        }
+    }
 
-   public SubsystemParsingTestCase()
-   {
-      super(GateInExtension.SUBSYSTEM_NAME, new GateInExtension());
-   }
+    public SubsystemParsingTestCase() {
+        super(GateInExtension.SUBSYSTEM_NAME, new GateInExtension());
+    }
 
-   @Override
-   protected String getSubsystemXml() throws IOException
-   {
-      return SUBSYSTEM_XML;
-   }
+    @Override
+    protected String getSubsystemXml() throws IOException {
+        return SUBSYSTEM_XML;
+    }
 }

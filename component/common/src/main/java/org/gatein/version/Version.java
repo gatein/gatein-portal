@@ -25,8 +25,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.jar.Manifest;
-import org.gatein.common.logging.LoggerFactory;
+
 import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * Common GateIn version.
@@ -34,42 +35,42 @@ import org.gatein.common.logging.Logger;
  * @author Honza Fnukal
  */
 public class Version {
-   public static final String productName;
-   public static final String productVersion;
-   public static final String implementationVersion;
-   public static final String prettyVersion;
-   
-   private static final Logger log = LoggerFactory.getLogger(Version.class);
+    public static final String productName;
+    public static final String productVersion;
+    public static final String implementationVersion;
+    public static final String prettyVersion;
 
-   static {
-       URL url = Version.class.getProtectionDomain().getCodeSource().getLocation();
+    private static final Logger log = LoggerFactory.getLogger(Version.class);
 
-       Manifest manifest = null;
+    static {
+        URL url = Version.class.getProtectionDomain().getCodeSource().getLocation();
 
-       try {
-           InputStream stream = new URL(url.toString() + "META-INF/MANIFEST.MF").openStream();
-           if (stream != null) {
-               manifest = new Manifest(stream);
-           }
-       } catch (IOException e) {
-           log.debug("Unable to get the MANIFEST.MF from the gatein portal common component jar.");
-       }
+        Manifest manifest = null;
 
-      if (manifest != null) {
-         productName = manifest.getMainAttributes().getValue("JBoss-Product-Release-Name");
-         productVersion = manifest.getMainAttributes().getValue("JBoss-Product-Release-Version");
-         implementationVersion = manifest.getMainAttributes().getValue("Implementation-Version");
-      } else {
-         productName = null;
-         productVersion = "Unknown";
-         implementationVersion = "Unknown";
-      }
-      String iVersion = implementationVersion==null?"Unknown":implementationVersion;
-      String version = productVersion==null?iVersion:productVersion;
-      if(productName==null) {
-         prettyVersion = String.format("GateIn Portal %s", iVersion);
-      } else {
-         prettyVersion = String.format("%s %s (GateIn Portal %s)", productName, version, iVersion);
-      }
-   }
+        try {
+            InputStream stream = new URL(url.toString() + "META-INF/MANIFEST.MF").openStream();
+            if (stream != null) {
+                manifest = new Manifest(stream);
+            }
+        } catch (IOException e) {
+            log.debug("Unable to get the MANIFEST.MF from the gatein portal common component jar.");
+        }
+
+        if (manifest != null) {
+            productName = manifest.getMainAttributes().getValue("JBoss-Product-Release-Name");
+            productVersion = manifest.getMainAttributes().getValue("JBoss-Product-Release-Version");
+            implementationVersion = manifest.getMainAttributes().getValue("Implementation-Version");
+        } else {
+            productName = null;
+            productVersion = "Unknown";
+            implementationVersion = "Unknown";
+        }
+        String iVersion = implementationVersion == null ? "Unknown" : implementationVersion;
+        String version = productVersion == null ? iVersion : productVersion;
+        if (productName == null) {
+            prettyVersion = String.format("GateIn Portal %s", iVersion);
+        } else {
+            prettyVersion = String.format("%s %s (GateIn Portal %s)", productName, version, iVersion);
+        }
+    }
 }

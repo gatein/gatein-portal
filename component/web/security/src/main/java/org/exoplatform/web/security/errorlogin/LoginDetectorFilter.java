@@ -35,40 +35,36 @@ import org.exoplatform.services.security.ConversationState;
 
 /**
  * Filter should be called to detect successful login of user into portal and call InvalidLoginAttemptsService.
- * 
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  * @version $Revision$
  */
-public class LoginDetectorFilter extends AbstractFilter
-{   
-   private static final String ATTR_LOGIN_DETECTED = "LoginDetectorFilter.loginDetected";
+public class LoginDetectorFilter extends AbstractFilter {
+    private static final String ATTR_LOGIN_DETECTED = "LoginDetectorFilter.loginDetected";
 
-   @Override
-   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-         ServletException
-   {
-      HttpServletRequest httpRequest = (HttpServletRequest)request;
-      ConversationState state = ConversationState.getCurrent();
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+            ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        ConversationState state = ConversationState.getCurrent();
 
-      if (state != null)
-      {
-         if (state.getAttribute(ATTR_LOGIN_DETECTED) == null)
-         {
-            String clientIPAddress = request.getRemoteAddr();
-            String sessionID = httpRequest.getSession().getId();
-            String username = httpRequest.getRemoteUser();
-            state.setAttribute(ATTR_LOGIN_DETECTED, true);
-            
-            InvalidLoginAttemptsService invalidLoginService = (InvalidLoginAttemptsService)getContainer().getComponentInstanceOfType(InvalidLoginAttemptsService.class);
-            invalidLoginService.successfulLoginAttempt(sessionID, username, clientIPAddress);            
-         }
-      }
-      chain.doFilter(request, response);
-   }
+        if (state != null) {
+            if (state.getAttribute(ATTR_LOGIN_DETECTED) == null) {
+                String clientIPAddress = request.getRemoteAddr();
+                String sessionID = httpRequest.getSession().getId();
+                String username = httpRequest.getRemoteUser();
+                state.setAttribute(ATTR_LOGIN_DETECTED, true);
 
-   @Override
-   public void destroy()
-   {
-   }
+                InvalidLoginAttemptsService invalidLoginService = (InvalidLoginAttemptsService) getContainer()
+                        .getComponentInstanceOfType(InvalidLoginAttemptsService.class);
+                invalidLoginService.successfulLoginAttempt(sessionID, username, clientIPAddress);
+            }
+        }
+        chain.doFilter(request, response);
+    }
+
+    @Override
+    public void destroy() {
+    }
 
 }

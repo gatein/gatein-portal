@@ -18,10 +18,10 @@
  */
 package org.exoplatform.component.test;
 
+import java.util.Map;
+
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-
-import java.util.Map;
 
 /**
  * A base class for tests that provides base function test.
@@ -29,82 +29,68 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class AbstractGateInTest extends BaseGateInTest
-{
+public abstract class AbstractGateInTest extends BaseGateInTest {
 
-   /** . */
-   protected final Logger log = LoggerFactory.getLogger(getClass());
+    /** . */
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
-   protected AbstractGateInTest()
-   {
-   }
+    protected AbstractGateInTest() {
+    }
 
-   protected AbstractGateInTest(String name)
-   {
-      super(name);
-   }
+    protected AbstractGateInTest(String name) {
+        super(name);
+    }
 
-   protected void beforeRunBare() throws Exception
-   {
-      //
-   }
+    protected void beforeRunBare() {
+        //
+    }
 
-   /**
-    * After the run base, it should not throw anything as it is executed in a finally clause.
-    */
-   protected void afterRunBare()
-   {
-      //
-   }
+    /**
+     * After the run base, it should not throw anything as it is executed in a finally clause.
+     */
+    protected void afterRunBare() {
+        //
+    }
 
-   @Override
-   public final void runBare() throws Throwable
-   {
-      // Patch a bug with maven that does not pass properly the system property
-      // with an empty value
-      if ("org.hsqldb.jdbcDriver".equals(System.getProperty("gatein.test.datasource.driver")))
-      {
-         System.setProperty("gatein.test.datasource.password", "");
-      }
+    @Override
+    public final void runBare() throws Throwable {
+        // Patch a bug with maven that does not pass properly the system property
+        // with an empty value
+        if ("org.hsqldb.jdbcDriver".equals(System.getProperty("gatein.test.datasource.driver"))) {
+            System.setProperty("gatein.test.datasource.password", "");
+        }
 
-      // We use system.out.println on purpose to bypass the logging layer
-      // and have this information going to the user
-      System.out.println("Running unit test:" + getName());
+        // We use system.out.println on purpose to bypass the logging layer
+        // and have this information going to the user
+        System.out.println("Running unit test:" + getName());
 
-      //
-      log.info("Running unit test:" + getName());
-      for (Map.Entry<?, ?> entry : System.getProperties().entrySet())
-      {
-         if (entry.getKey() instanceof String)
-         {
-            String key = (String)entry.getKey();
-            log.debug(key + "=" + entry.getValue());
-         }
-      }
+        //
+        log.info("Running unit test:" + getName());
+        for (Map.Entry<?, ?> entry : System.getProperties().entrySet()) {
+            if (entry.getKey() instanceof String) {
+                String key = (String) entry.getKey();
+                log.debug(key + "=" + entry.getValue());
+            }
+        }
 
-      //
-      beforeRunBare();
+        //
+        beforeRunBare();
 
-      //
-      try
-      {
-         super.runBare();
-      }
-      catch (Throwable throwable)
-      {
-         log.error("Unit test " + getName() + " did not complete", throwable);
+        //
+        try {
+            super.runBare();
+        } catch (Throwable throwable) {
+            log.error("Unit test " + getName() + " did not complete", throwable);
 
-         // We use system.out.println on purpose to bypass the logging layer
-         // and have this information going to the user
-         System.out.println("Unit test " + getName() + " did not complete:");
-         throwable.printStackTrace(System.out);
+            // We use system.out.println on purpose to bypass the logging layer
+            // and have this information going to the user
+            System.out.println("Unit test " + getName() + " did not complete:");
+            throwable.printStackTrace(System.out);
 
-         //
-         throw throwable;
-      }
-      finally
-      {
-         afterRunBare();
-      }
-   }
+            //
+            throw throwable;
+        } finally {
+            afterRunBare();
+        }
+    }
 }

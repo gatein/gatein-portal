@@ -31,20 +31,16 @@ import org.exoplatform.portal.pom.spi.gadget.Gadget;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class GadgetApplication extends Application<Gadget>
-{
-   public GadgetApplication(ApplicationData<Gadget> gadgetApplicationData)
-   {
-      super(gadgetApplicationData);
-   }
+public class GadgetApplication extends Application<Gadget> {
+    public GadgetApplication(ApplicationData<Gadget> gadgetApplicationData) {
+        super(gadgetApplicationData);
+    }
 
-   public GadgetApplication(ApplicationType<Gadget> gadgetApplicationType, String storageId)
-   {
-      super(gadgetApplicationType, storageId);
-   }
+    public GadgetApplication(ApplicationType<Gadget> gadgetApplicationType, String storageId) {
+        super(gadgetApplicationType, storageId);
+    }
 
-   public GadgetApplication(ApplicationType<Gadget> gadgetApplicationType)
-   {
-      super(gadgetApplicationType);
-   }
+    public GadgetApplication(ApplicationType<Gadget> gadgetApplicationType) {
+        super(gadgetApplicationType);
+    }
 }

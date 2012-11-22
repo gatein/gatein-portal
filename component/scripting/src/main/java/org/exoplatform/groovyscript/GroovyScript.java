@@ -18,14 +18,15 @@
  */
 package org.exoplatform.groovyscript;
 
-import groovy.lang.Binding;
-import org.codehaus.groovy.runtime.InvokerHelper;
-import org.exoplatform.commons.utils.OutputStreamPrinter;
-
 import java.io.IOException;
 import java.io.Writer;
 import java.util.Locale;
 import java.util.Map;
+
+import org.codehaus.groovy.runtime.InvokerHelper;
+import org.exoplatform.commons.utils.OutputStreamPrinter;
+
+import groovy.lang.Binding;
 
 /**
  * A wrapper for a Groovy script and its meta data.
@@ -33,148 +34,117 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class GroovyScript
-{
+public class GroovyScript {
 
-   /** . */
-   private final String templateId;
+    /** . */
+    private final String templateId;
 
-   /** . */
-   private final String groovyText;
+    /** . */
+    private final String groovyText;
 
-   /** . */
-   private final Class<?> scriptClass;
+    /** . */
+    private final Class<?> scriptClass;
 
-   /** . */
-   private final Map<Integer, TextItem> lineTable;
+    /** . */
+    private final Map<Integer, TextItem> lineTable;
 
-   public GroovyScript(String templateId, String groovyText, Class<?> scriptClass, Map<Integer, TextItem> lineTable)
-   {
-      this.templateId = templateId;
-      this.groovyText = groovyText;
-      this.scriptClass = scriptClass;
-      this.lineTable = lineTable;
-   }
+    public GroovyScript(String templateId, String groovyText, Class<?> scriptClass, Map<Integer, TextItem> lineTable) {
+        this.templateId = templateId;
+        this.groovyText = groovyText;
+        this.scriptClass = scriptClass;
+        this.lineTable = lineTable;
+    }
 
-   public String getTemplateId()
-   {
-      return templateId;
-   }
+    public String getTemplateId() {
+        return templateId;
+    }
 
-   public String getGroovyText()
-   {
-      return groovyText;
-   }
+    public String getGroovyText() {
+        return groovyText;
+    }
 
-   public Class<?> getScriptClass()
-   {
-      return scriptClass;
-   }
+    public Class<?> getScriptClass() {
+        return scriptClass;
+    }
 
-   /**
-    * Renders the script with the provided context and locale to the specified writer.
-    *
-    * @param context the context
-    * @param writer the writer
-    * @param locale the locale
-    * @throws IOException
-    * @throws TemplateRuntimeException
-    */
-   public void render(
-      Map context,
-      Writer writer,
-      Locale locale) throws IOException, TemplateRuntimeException
-   {
-      Binding binding = context != null ? new Binding(context) : new Binding();
+    /**
+     * Renders the script with the provided context and locale to the specified writer.
+     *
+     * @param context the context
+     * @param writer the writer
+     * @param locale the locale
+     * @throws IOException
+     * @throws TemplateRuntimeException
+     */
+    public void render(Map context, Writer writer, Locale locale) throws IOException, TemplateRuntimeException {
+        Binding binding = context != null ? new Binding(context) : new Binding();
 
-      //
-      GroovyPrinter printer;
-      if (writer instanceof OutputStreamPrinter)
-      {
-         printer = new OutputStreamWriterGroovyPrinter((OutputStreamPrinter)writer);
-      }
-      else
-      {
-         printer = new WriterGroovyPrinter(writer);
-      }
+        //
+        GroovyPrinter printer;
+        if (writer instanceof OutputStreamPrinter) {
+            printer = new OutputStreamWriterGroovyPrinter((OutputStreamPrinter) writer);
+        } else {
+            printer = new WriterGroovyPrinter(writer);
+        }
 
-      //
-      printer.setLocale(locale);
+        //
+        printer.setLocale(locale);
 
-      //
-      BaseScript script = (BaseScript)InvokerHelper.createScript(scriptClass, binding);
-      script.printer = printer;
+        //
+        BaseScript script = (BaseScript) InvokerHelper.createScript(scriptClass, binding);
+        script.printer = printer;
 
-      //
-      try
-      {
-         script.run();
-      }
-      catch (Exception e)
-      {
-         if (e instanceof IOException)
-         {
-            throw (IOException)e;
-         }
-         else
-         {
+        //
+        try {
+            script.run();
+        } catch (Exception e) {
+            if (e instanceof IOException) {
+                throw (IOException) e;
+            } else {
+                throw buildRuntimeException(e);
+            }
+        } catch (Throwable e) {
+            if (e instanceof Error) {
+                throw ((Error) e);
+            }
             throw buildRuntimeException(e);
-         }
-      }
-      catch (Throwable e)
-      {
-         if (e instanceof Error)
-         {
-            throw ((Error)e);
-         }
-         throw buildRuntimeException(e);
-      }
+        }
 
-      //
-      script.flush();
-   }
+        //
+        script.flush();
+    }
 
-   private TemplateRuntimeException buildRuntimeException(Throwable t)
-   {
-      StackTraceElement[] trace = t.getStackTrace();
+    private TemplateRuntimeException buildRuntimeException(Throwable t) {
+        StackTraceElement[] trace = t.getStackTrace();
 
-      //
-      TextItem firstItem = null;
+        //
+        TextItem firstItem = null;
 
-      // Try to find the groovy script lines
-      for (int i = 0;i < trace.length;i++)
-      {
-         StackTraceElement element = trace[i];
-         if (element.getClassName().equals(scriptClass.getName()))
-         {
-            int lineNumber = element.getLineNumber();
-            TextItem item = lineTable.get(lineNumber);
-            int templateLineNumber;
-            if (item != null)
-            {
-               templateLineNumber = item.getPosition().getLine();
-               if (firstItem == null)
-               {
-                  firstItem = item;
-               }
+        // Try to find the groovy script lines
+        for (int i = 0; i < trace.length; i++) {
+            StackTraceElement element = trace[i];
+            if (element.getClassName().equals(scriptClass.getName())) {
+                int lineNumber = element.getLineNumber();
+                TextItem item = lineTable.get(lineNumber);
+                int templateLineNumber;
+                if (item != null) {
+                    templateLineNumber = item.getPosition().getLine();
+                    if (firstItem == null) {
+                        firstItem = item;
+                    }
+                } else {
+                    templateLineNumber = -1;
+                }
+                element = new StackTraceElement(element.getClassName(), element.getMethodName(), element.getFileName(),
+                        templateLineNumber);
+                trace[i] = element;
             }
-            else
-            {
-               templateLineNumber = -1;
-            }
-            element = new StackTraceElement(
-               element.getClassName(),
-               element.getMethodName(),
-               element.getFileName(),
-               templateLineNumber);
-            trace[i] = element;
-         }
-      }
+        }
 
-      //
-      t.setStackTrace(trace);
+        //
+        t.setStackTrace(trace);
 
-      //
-      return new TemplateRuntimeException(templateId, firstItem, t);
-   }
+        //
+        return new TemplateRuntimeException(templateId, firstItem, t);
+    }
 }

@@ -19,122 +19,103 @@
 
 package org.exoplatform.webui.config.metadata;
 
+import java.util.ArrayList;
+
 import org.exoplatform.webui.config.Event;
 import org.exoplatform.webui.config.EventInterceptor;
 import org.exoplatform.webui.config.InitParams;
 import org.exoplatform.webui.config.Validator;
 
-import java.util.ArrayList;
-
 /** Created by The eXo Platform SARL Author : Tuan Nguyen tuan08@users.sourceforge.net May 4, 2006 */
-public class ComponentMetaData
-{
+public class ComponentMetaData {
 
-   private String id;
+    private String id;
 
-   private String type;
+    private String type;
 
-   private String lifecycle;
+    private String lifecycle;
 
-   private String template;
+    private String template;
 
-   private String decorator;
+    private String decorator;
 
-   private InitParams initParams;
+    private InitParams initParams;
 
-   private ArrayList<Validator> validators;
+    private ArrayList<Validator> validators;
 
-   private ArrayList<Event> events;
+    private ArrayList<Event> events;
 
-   private ArrayList<EventInterceptor> eventInterceptors;
+    private ArrayList<EventInterceptor> eventInterceptors;
 
-   public String getId()
-   {
-      return id;
-   }
+    public String getId() {
+        return id;
+    }
 
-   public String getType()
-   {
-      return type;
-   }
+    public String getType() {
+        return type;
+    }
 
-   public String getLifecycle()
-   {
-      return lifecycle;
-   }
+    public String getLifecycle() {
+        return lifecycle;
+    }
 
-   public String getTemplate()
-   {
-      return template;
-   }
+    public String getTemplate() {
+        return template;
+    }
 
-   public String getDecorator()
-   {
-      return decorator;
-   }
+    public String getDecorator() {
+        return decorator;
+    }
 
-   public void setId(String id)
-   {
-      this.id = id;
-   }
+    public void setId(String id) {
+        this.id = id;
+    }
 
-   public void setType(String type)
-   {
-      this.type = type;
-   }
+    public void setType(String type) {
+        this.type = type;
+    }
 
-   public void setLifecycle(String lifecycle)
-   {
-      this.lifecycle = lifecycle;
-   }
+    public void setLifecycle(String lifecycle) {
+        this.lifecycle = lifecycle;
+    }
 
-   public void setTemplate(String template)
-   {
-      this.template = template;
-   }
+    public void setTemplate(String template) {
+        this.template = template;
+    }
 
-   public void setDecorator(String decorator)
-   {
-      this.decorator = decorator;
-   }
+    public void setDecorator(String decorator) {
+        this.decorator = decorator;
+    }
 
-   public InitParams getInitParams()
-   {
-      return initParams;
-   }
+    public InitParams getInitParams() {
+        return initParams;
+    }
 
-   public void setInitParams(InitParams initParams)
-   {
-      this.initParams = initParams;
-   }
+    public void setInitParams(InitParams initParams) {
+        this.initParams = initParams;
+    }
 
-   public ArrayList<Validator> getValidators()
-   {
-      return validators;
-   }
+    public ArrayList<Validator> getValidators() {
+        return validators;
+    }
 
-   public void setValidators(ArrayList<Validator> validators)
-   {
-      this.validators = validators;
-   }
+    public void setValidators(ArrayList<Validator> validators) {
+        this.validators = validators;
+    }
 
-   public ArrayList<Event> getEvents()
-   {
-      return events;
-   }
+    public ArrayList<Event> getEvents() {
+        return events;
+    }
 
-   public void setEvents(ArrayList<Event> events)
-   {
-      this.events = events;
-   }
+    public void setEvents(ArrayList<Event> events) {
+        this.events = events;
+    }
 
-   public ArrayList<EventInterceptor> getEventInterceptors()
-   {
-      return eventInterceptors;
-   }
+    public ArrayList<EventInterceptor> getEventInterceptors() {
+        return eventInterceptors;
+    }
 
-   public void setEventInterceptors(ArrayList<EventInterceptor> events)
-   {
-      eventInterceptors = events;
-   }
+    public void setEventInterceptors(ArrayList<EventInterceptor> events) {
+        eventInterceptors = events;
+    }
 }

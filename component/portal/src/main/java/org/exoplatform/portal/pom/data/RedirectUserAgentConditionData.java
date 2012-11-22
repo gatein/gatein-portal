@@ -31,42 +31,34 @@ import org.exoplatform.portal.config.model.UserAgentConditions;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class RedirectUserAgentConditionData extends ComponentData
-{
-   protected List<String> userAgentContains;
-   protected List<String> userAgentDoesNotContain;
-   public RedirectUserAgentConditionData(String storageId, String storageName)
-   {
-      super(storageId, storageName);
-   }
+public class RedirectUserAgentConditionData extends ComponentData {
+    protected List<String> userAgentContains;
+    protected List<String> userAgentDoesNotContain;
 
-   public List<String> getUserAgentContains()
-   {
-      if (userAgentContains == null)
-      {
-         userAgentContains = new ArrayList<String>();
-      }
-      return userAgentContains;
-   }
+    public RedirectUserAgentConditionData(String storageId, String storageName) {
+        super(storageId, storageName);
+    }
 
-   
-   public List<String> getUserAgentDoesNotContain()
-   {
-      if (userAgentDoesNotContain == null)
-      {
-         userAgentDoesNotContain = new ArrayList<String>();
-      }
-      return userAgentDoesNotContain;
-   }
+    public List<String> getUserAgentContains() {
+        if (userAgentContains == null) {
+            userAgentContains = new ArrayList<String>();
+        }
+        return userAgentContains;
+    }
 
-   public UserAgentConditions build()
-   {
-      UserAgentConditions userAgentCondition = new UserAgentConditions();
-      userAgentCondition.setStorageName(this.getStorageName());
-      userAgentCondition.setContains((ArrayList)this.userAgentContains);
-      userAgentCondition.setDoesNotContain((ArrayList)this.userAgentDoesNotContain);
-      return userAgentCondition;
-   }
+    public List<String> getUserAgentDoesNotContain() {
+        if (userAgentDoesNotContain == null) {
+            userAgentDoesNotContain = new ArrayList<String>();
+        }
+        return userAgentDoesNotContain;
+    }
+
+    public UserAgentConditions build() {
+        UserAgentConditions userAgentCondition = new UserAgentConditions();
+        userAgentCondition.setStorageName(this.getStorageName());
+        userAgentCondition.setContains((ArrayList) this.userAgentContains);
+        userAgentCondition.setDoesNotContain((ArrayList) this.userAgentDoesNotContain);
+        return userAgentCondition;
+    }
 
 }
-

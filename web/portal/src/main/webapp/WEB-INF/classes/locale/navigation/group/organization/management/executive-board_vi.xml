@@ -22,7 +22,7 @@
 
 <bundle>
   <organization>
-  	<title>Tổ chức</title>
+    <title>Tổ chức</title>
     <newstaff>Thêm nhân viên mới</newstaff>
     <management>Quản lý nhóm, thành viên</management>
   </organization>

@@ -32,60 +32,49 @@ import org.exoplatform.web.url.ResourceType;
 import org.exoplatform.web.url.URLFactory;
 import org.exoplatform.webui.core.UIApplication;
 
-public class StandaloneAppRequestContext extends PortalRequestContext
-{
-   public StandaloneAppRequestContext(StandaloneApplication app, ControllerContext controllerContext, String siteName, String requestPath)
-            throws Exception
-   {
-      super(app, controllerContext, SiteType.USER.name(), siteName, requestPath, null);    
-   }
+public class StandaloneAppRequestContext extends PortalRequestContext {
+    public StandaloneAppRequestContext(StandaloneApplication app, ControllerContext controllerContext, String siteName,
+            String requestPath) throws Exception {
+        super(app, controllerContext, SiteType.USER.name(), siteName, requestPath, null);
+    }
 
-   @Override
-   public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory)
-   {
-      StandaloneAppURLContext context = new StandaloneAppURLContext(getControllerContext());
-      U url = urlFactory.newURL(resourceType, context);
-      if (url != null)
-      {
-         url.setAjax(false);
-      }
-      return url;
-   }
+    @Override
+    public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory) {
+        StandaloneAppURLContext context = new StandaloneAppURLContext(getControllerContext());
+        U url = urlFactory.newURL(resourceType, context);
+        if (url != null) {
+            url.setAjax(false);
+        }
+        return url;
+    }
 
-   public String getStorageId()
-   {
-      return getNodePath();
-   }
+    public String getStorageId() {
+        return getNodePath();
+    }
 
-   public String getTitle() throws Exception
-   {
-      String title = null;
-      UIApplication uiApp = getUIApplication();
-      UIStandaloneAppContainer container = uiApp.getChild(UIStandaloneAppContainer.class);
-      if (container != null)
-      {
-         title = container.getCurrAppName();
-      }
+    public String getTitle() throws Exception {
+        String title = null;
+        UIApplication uiApp = getUIApplication();
+        UIStandaloneAppContainer container = uiApp.getChild(UIStandaloneAppContainer.class);
+        if (container != null) {
+            title = container.getCurrAppName();
+        }
 
-      if (title == null)
-      {
-         title = "";
-      }
-      return title;
-   }
+        if (title == null) {
+            title = "";
+        }
+        return title;
+    }
 
-   public Orientation getOrientation()
-   {
-      return ((UIStandaloneApplication)uiApplication_).getOrientation();
-   }
+    public Orientation getOrientation() {
+        return ((UIStandaloneApplication) uiApplication_).getOrientation();
+    }
 
-   public Locale getLocale()
-   {
-      return ((UIStandaloneApplication)uiApplication_).getLocale();
-   }
+    public Locale getLocale() {
+        return ((UIStandaloneApplication) uiApplication_).getLocale();
+    }
 
-   public String getPortalOwner()
-   {
-      return null;
-   }
+    public String getPortalOwner() {
+        return null;
+    }
 }

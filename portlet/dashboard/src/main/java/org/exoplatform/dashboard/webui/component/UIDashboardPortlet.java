@@ -19,6 +19,8 @@
 
 package org.exoplatform.dashboard.webui.component;
 
+import javax.portlet.PortletPreferences;
+
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
@@ -33,66 +35,54 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;
 
-import javax.portlet.PortletPreferences;
-
 @ComponentConfig(lifecycle = UIApplicationLifecycle.class, template = "app:/groovy/dashboard/webui/component/UIDashboardPortlet.gtmpl", events = {})
-public class UIDashboardPortlet extends UIPortletApplication implements DashboardParent
-{
-   public UIDashboardPortlet() throws Exception
-   {
-      PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
+public class UIDashboardPortlet extends UIPortletApplication implements DashboardParent {
+    public UIDashboardPortlet() throws Exception {
+        PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
 
-      UIDashboard dashboard = addChild(UIDashboard.class, null, null);
-      addChild(UIDashboardEditForm.class, null, null);
+        UIDashboard dashboard = addChild(UIDashboard.class, null, null);
+        addChild(UIDashboardEditForm.class, null, null);
 
-      PortletPreferences pref = context.getRequest().getPreferences();
-      String containerTemplate = pref.getValue("template", "three-columns");
-      dashboard.setContainerTemplate(containerTemplate);
+        PortletPreferences pref = context.getRequest().getPreferences();
+        String containerTemplate = pref.getValue("template", "three-columns");
+        dashboard.setContainerTemplate(containerTemplate);
 
-      String aggregatorId = pref.getValue("aggregatorId", "rssAggregator");
-      dashboard.setAggregatorId(aggregatorId);
-   }
+        String aggregatorId = pref.getValue("aggregatorId", "rssAggregator");
+        dashboard.setAggregatorId(aggregatorId);
+    }
 
-   public int getNumberOfCols()
-   {
-      UIDashboardContainer dbCont = getChild(UIDashboard.class).getChild(UIDashboardContainer.class);
-      return dbCont.getChild(UIContainer.class).getChildren().size();
-   }
+    public int getNumberOfCols() {
+        UIDashboardContainer dbCont = getChild(UIDashboard.class).getChild(UIDashboardContainer.class);
+        return dbCont.getChild(UIContainer.class).getChildren().size();
+    }
 
-   /**
-    * The implementation returns true if the current user has edit permission on the page owning the dashboard
-    * portlet. Later it will be implemented with a finer granilarity.
-    */
-   public boolean canEdit()
-   {
-      PortletRequestContext context = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
-      PortalRequestContext prc = (PortalRequestContext)context.getParentAppRequestContext();
-      UIPortalApplication portalApp = (UIPortalApplication)prc.getUIApplication();
-      UIPortal portal = portalApp.getCurrentSite();
+    /**
+     * The implementation returns true if the current user has edit permission on the page owning the dashboard portlet. Later
+     * it will be implemented with a finer granilarity.
+     */
+    public boolean canEdit() {
+        PortletRequestContext context = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+        PortalRequestContext prc = (PortalRequestContext) context.getParentAppRequestContext();
+        UIPortalApplication portalApp = (UIPortalApplication) prc.getUIApplication();
+        UIPortal portal = portalApp.getCurrentSite();
 
-      //
-      try
-      {
-         UserNode node = portal.getSelectedUserNode();
-         if (node != null)
-         {
-            UserPortalConfigService configService = portal.getApplicationComponent(UserPortalConfigService.class);
-            PageContext page = configService.getPageService().loadPage(node.getPageRef());
-            if (page != null)
-            {
-               UserACL userACL = portal.getApplicationComponent(UserACL.class);
-               return userACL.hasEditPermission(page);
+        //
+        try {
+            UserNode node = portal.getSelectedUserNode();
+            if (node != null) {
+                UserPortalConfigService configService = portal.getApplicationComponent(UserPortalConfigService.class);
+                PageContext page = configService.getPageService().loadPage(node.getPageRef());
+                if (page != null) {
+                    UserACL userACL = portal.getApplicationComponent(UserACL.class);
+                    return userACL.hasEditPermission(page);
+                }
             }
-         }
-      }
-      catch (Exception e)
-      {
-         log.error("Could not check dashboard edition" ,e);
-      }
+        } catch (Exception e) {
+            log.error("Could not check dashboard edition", e);
+        }
 
-
-      //
-      return false;
-   }
+        //
+        return false;
+    }
 
 }

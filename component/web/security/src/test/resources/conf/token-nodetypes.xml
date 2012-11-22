@@ -18,7 +18,8 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
 -->
-<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0">
+<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
+           xmlns:jcr="http://www.jcp.org/jcr/1.0">
 
   <nodeType name="tkn:tokencontainer" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
@@ -27,7 +28,7 @@
     </supertypes>
     <childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="tkn:tokenentry" autoCreated="false" mandatory="false"
-        onParentVersion="COPY" protected="false" sameNameSiblings="false">
+                           onParentVersion="COPY" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
           <requiredPrimaryType>tkn:tokenentry</requiredPrimaryType>
         </requiredPrimaryTypes>
@@ -41,13 +42,16 @@
       <supertype>mix:referenceable</supertype>
     </supertypes>
     <propertyDefinitions>
-      <propertyDefinition name="username" requiredType="String" autoCreated="false" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
+      <propertyDefinition name="username" requiredType="String" autoCreated="false" mandatory="true"
+                          onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
-      <propertyDefinition name="password" requiredType="String" autoCreated="false" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
+      <propertyDefinition name="password" requiredType="String" autoCreated="false" mandatory="true"
+                          onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
-      <propertyDefinition name="expiration" requiredType="Date" autoCreated="true" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
+      <propertyDefinition name="expiration" requiredType="Date" autoCreated="true" mandatory="true"
+                          onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
     </propertyDefinitions>

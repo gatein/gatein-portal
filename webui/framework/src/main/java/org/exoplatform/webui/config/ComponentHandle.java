@@ -21,32 +21,29 @@ package org.exoplatform.webui.config;
 
 import java.io.Serializable;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ComponentHandle implements Serializable
-{
+public class ComponentHandle implements Serializable {
 
-   /** The owner type of the component that may be null if no owner exists. */
-   private final Class<?> owner;
+    /** The owner type of the component that may be null if no owner exists. */
+    private final Class<?> owner;
 
-   /** The component key. */
-   private final String key;
+    /** The component key. */
+    private final String key;
 
-   public ComponentHandle(Class<?> owner, String key)
-   {
-      this.owner = owner;
-      this.key = key;
-   }
+    public ComponentHandle(Class<?> owner, String key) {
+        this.owner = owner;
+        this.key = key;
+    }
 
-   public Class<?> getOwner()
-   {
-      return owner;
-   }
+    public Class<?> getOwner() {
+        return owner;
+    }
 
-   public String getKey()
-   {
-      return key;
-   }
+    public String getKey() {
+        return key;
+    }
 }

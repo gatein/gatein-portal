@@ -22,14 +22,14 @@
 
 <bundle>
   <UISiteManagement>
-  	<action>
-  		<addNewPortal>Tạo Portal</addNewPortal>
-  	</action>
-  	<label>
-  		<editLayout>Sửa Layout</editLayout>
-  		<editNav>Sửa Navigation</editNav>
-  		<editPortalProp>Sửa thuộc tính Portal</editPortalProp>
-  		<deletePortal>Xóa Portal</deletePortal>
-  	</label>
+    <action>
+      <addNewPortal>Tạo Portal</addNewPortal>
+    </action>
+    <label>
+      <editLayout>Sửa Layout</editLayout>
+      <editNav>Sửa Navigation</editNav>
+      <editPortalProp>Sửa thuộc tính Portal</editPortalProp>
+      <deletePortal>Xóa Portal</deletePortal>
+    </label>
   </UISiteManagement>
 </bundle>

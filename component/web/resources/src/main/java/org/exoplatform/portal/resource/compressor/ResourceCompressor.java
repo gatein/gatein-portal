@@ -22,19 +22,17 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+
 /**
  * ResourceCompressor acts as a router of compression to compressor plugin
- * 
- * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
- * Aug 19, 2010
+ *
+ * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a> Aug 19, 2010
  */
 
-public interface ResourceCompressor
-{
-   public boolean isSupported(ResourceType resourceType);
-   
-   public void compress(Reader input, Writer output, ResourceType resourceType) throws ResourceCompressorException,
-         IOException;
+public interface ResourceCompressor {
+    boolean isSupported(ResourceType resourceType);
 
-   public String compress(String input, ResourceType resourceType) throws ResourceCompressorException, IOException;
+    void compress(Reader input, Writer output, ResourceType resourceType) throws ResourceCompressorException, IOException;
+
+    String compress(String input, ResourceType resourceType) throws ResourceCompressorException, IOException;
 }

@@ -19,32 +19,32 @@
 
 -->
 
-<messagebundle>  
+<messagebundle>
   <msg name="title">
-  	Quản lý dịch vụ
+    Quản lý dịch vụ
   </msg>
   <msg name="services">
-  	Dịch vụ
+    Dịch vụ
   </msg>
   <msg name="name">
-  	Tên
+    Tên
   </msg>
   <msg name="description">
     Mô tả
   </msg>
   <msg name="method">
-  	Phương thức
+    Phương thức
   </msg>
   <msg name="parameters">
-  	Tham số
+    Tham số
   </msg>
   <msg name="action">
-  	Thực thi
+    Thực thi
   </msg>
   <msg name="value">
-  	Giá trị
+    Giá trị
   </msg>
   <msg name="services_url">
-  	Địa chỉ dịch vụ
+    Địa chỉ dịch vụ
   </msg>
 </messagebundle>

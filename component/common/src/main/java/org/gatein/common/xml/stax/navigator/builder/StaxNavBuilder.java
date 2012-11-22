@@ -22,34 +22,34 @@
 
 package org.gatein.common.xml.stax.navigator.builder;
 
-import org.staxnav.Naming;
-import org.staxnav.StaxNavException;
-import org.staxnav.StaxNavigator;
+import java.io.InputStream;
+import java.io.Reader;
 
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.Source;
-import java.io.InputStream;
-import java.io.Reader;
+
+import org.staxnav.Naming;
+import org.staxnav.StaxNavException;
+import org.staxnav.StaxNavigator;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public interface StaxNavBuilder
-{
-   StaxNavBuilder withProperty(String name, Object value);
+public interface StaxNavBuilder {
+    StaxNavBuilder withProperty(String name, Object value);
 
-   StaxNavBuilder withPropertyIfSupported(String name, Object value);
+    StaxNavBuilder withPropertyIfSupported(String name, Object value);
 
-   StaxNavBuilder withInputStream(InputStream inputStream);
+    StaxNavBuilder withInputStream(InputStream inputStream);
 
-   StaxNavBuilder withInputStream(InputStream inputStream, String encoding);
+    StaxNavBuilder withInputStream(InputStream inputStream, String encoding);
 
-   StaxNavBuilder withReader(Reader reader);
+    StaxNavBuilder withReader(Reader reader);
 
-   StaxNavBuilder withSource(Source source);
+    StaxNavBuilder withSource(Source source);
 
-   StaxNavBuilder withXmlStreamReader(XMLStreamReader reader);
+    StaxNavBuilder withXmlStreamReader(XMLStreamReader reader);
 
-   <N> StaxNavigator<N> build(Naming<N> naming) throws StaxNavException, IllegalStateException;
+    <N> StaxNavigator<N> build(Naming<N> naming) throws StaxNavException, IllegalStateException;
 }

@@ -33,238 +33,207 @@ import org.exoplatform.webui.core.model.SelectItemOption;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
-import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.UIFormDateTimeInput;
 import org.exoplatform.webui.form.UIFormInput;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormInputWithActions;
+import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.UIFormRadioBoxInput;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
-import org.exoplatform.webui.form.UIFormInputWithActions.ActionData;
 import org.exoplatform.webui.form.ext.UIFormColorPicker;
 import org.exoplatform.webui.form.ext.UIFormComboBox;
+import org.exoplatform.webui.form.input.UICheckBoxInput;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
- * Created by The eXo Platform SAS Author : Nguyen Duc Khoi
- * khoi.nguyen@exoplatform.com Mar 12, 2010
+ * Created by The eXo Platform SAS Author : Nguyen Duc Khoi khoi.nguyen@exoplatform.com Mar 12, 2010
  */
 
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {
-   @EventConfig(listeners = UISampleUIForm.SearchUserActionListener.class),
-   @EventConfig(listeners = UISampleUIForm.SaveActionListener.class),
-   @EventConfig(listeners = UISampleUIForm.ResetActionListener.class)})
-public class UISampleUIForm extends UIForm
-{
-   private final static String[] ACTIONS = {"Save", "Reset"};
+        @EventConfig(listeners = UISampleUIForm.SearchUserActionListener.class),
+        @EventConfig(listeners = UISampleUIForm.SaveActionListener.class),
+        @EventConfig(listeners = UISampleUIForm.ResetActionListener.class) })
+public class UISampleUIForm extends UIForm {
+    private static final String[] ACTIONS = { "Save", "Reset" };
 
-   public static final String USERNAME = "userName";
+    public static final String USERNAME = "userName";
 
-   public static final String PASSWORD = "password";
+    public static final String PASSWORD = "password";
 
-   public static final String FAVORITE_COLOR = "favoriteColor";
+    public static final String FAVORITE_COLOR = "favoriteColor";
 
-   public static final String POSITION = "position";
+    public static final String POSITION = "position";
 
-   public static final String RECEIVE_EMAIL = "receiveEmail";
+    public static final String RECEIVE_EMAIL = "receiveEmail";
 
-   public static final String GENDER = "gender";
+    public static final String GENDER = "gender";
 
-   private static final String DATE_OF_BIRTH = "dateOfBirth";
+    private static final String DATE_OF_BIRTH = "dateOfBirth";
 
-   private static final String DESCRIPTION = "description";
-   
-   private static final String COMBOBOX = "ComboBox";
+    private static final String DESCRIPTION = "description";
 
-   private List<String> userNames = new ArrayList<String>();
+    private static final String COMBOBOX = "ComboBox";
 
-   public UISampleUIForm() throws Exception
-   {
-      addUIFormInput(makeUIFormInputWithActions());
-      setActions(ACTIONS);
-   }
+    private List<String> userNames = new ArrayList<String>();
 
-   private UIFormInputWithActions makeUIFormInputWithActions() throws Exception
-   {
-      UIFormInputWithActions inputSet = new UIFormInputWithActions();
-      addUIComponentToSet(inputSet);
-      
-      List<ActionData> searchUserAction = makeSearchUserActionData();
-      inputSet.setActionField(USERNAME, searchUserAction);
+    public UISampleUIForm() throws Exception {
+        addUIFormInput(makeUIFormInputWithActions());
+        setActions(ACTIONS);
+    }
 
-      return inputSet;
-   }
+    private UIFormInputWithActions makeUIFormInputWithActions() throws Exception {
+        UIFormInputWithActions inputSet = new UIFormInputWithActions();
+        addUIComponentToSet(inputSet);
 
-   private void addUIComponentToSet(UIFormInputWithActions inputSet) throws Exception
-   {
-      inputSet.addUIFormInput(new UIFormStringInput(USERNAME, null, null).addValidator(MandatoryValidator.class));
-      inputSet.addUIFormInput(new UIFormStringInput(PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE));
-      inputSet.addUIFormInput(new UIFormColorPicker(FAVORITE_COLOR, null, UIFormColorPicker.Colors.N_RED));
-      inputSet.addUIFormInput(new UIFormRadioBoxInput(GENDER, "Male", makeRadioOptions())
-         .addValidator(MandatoryValidator.class));
-      inputSet.addUIFormInput(new UIFormDateTimeInput(DATE_OF_BIRTH, null, new Date()));
-      inputSet.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, null, ""));
+        List<ActionData> searchUserAction = makeSearchUserActionData();
+        inputSet.setActionField(USERNAME, searchUserAction);
 
-      List<SelectItemOption<String>> selectItemOptions = makeSelectItemOptions();
-      inputSet.addUIFormInput(new UIFormSelectBox(POSITION, null, selectItemOptions));
-      inputSet.addUIFormInput(new UICheckBoxInput(RECEIVE_EMAIL, null, false));
-      
-      List<SelectItemOption<String>> comboBoxItemOptions = new ArrayList<SelectItemOption<String>>();
-      comboBoxItemOptions.add(new SelectItemOption<String>(("VI")));
-      comboBoxItemOptions.add(new SelectItemOption<String>(("UK")));
-      comboBoxItemOptions.add(new SelectItemOption<String>(("FR")));
-      inputSet.addUIFormInput(new UIFormComboBox(COMBOBOX, COMBOBOX, comboBoxItemOptions));
-   }
+        return inputSet;
+    }
 
-   private List<SelectItemOption<String>> makeRadioOptions()
-   {
-      List<SelectItemOption<String>> selectItemOptions = new ArrayList<SelectItemOption<String>>();
-      selectItemOptions.add(new SelectItemOption<String>("Male"));
-      selectItemOptions.add(new SelectItemOption<String>("Female"));
-      return selectItemOptions;
-   }
+    private void addUIComponentToSet(UIFormInputWithActions inputSet) throws Exception {
+        inputSet.addUIFormInput(new UIFormStringInput(USERNAME, null, null).addValidator(MandatoryValidator.class));
+        inputSet.addUIFormInput(new UIFormStringInput(PASSWORD, null, null).setType(UIFormStringInput.PASSWORD_TYPE));
+        inputSet.addUIFormInput(new UIFormColorPicker(FAVORITE_COLOR, null, UIFormColorPicker.Colors.N_RED));
+        inputSet.addUIFormInput(new UIFormRadioBoxInput(GENDER, "Male", makeRadioOptions())
+                .addValidator(MandatoryValidator.class));
+        inputSet.addUIFormInput(new UIFormDateTimeInput(DATE_OF_BIRTH, null, new Date()));
+        inputSet.addUIFormInput(new UIFormTextAreaInput(DESCRIPTION, null, ""));
 
-   private List<SelectItemOption<String>> makeSelectItemOptions()
-   {
-      List<SelectItemOption<String>> selectItemOptions = new ArrayList<SelectItemOption<String>>();
-      selectItemOptions.add(new SelectItemOption<String>("Boss"));
-      selectItemOptions.add(new SelectItemOption<String>("Employee"));
-      return selectItemOptions;
-   }
+        List<SelectItemOption<String>> selectItemOptions = makeSelectItemOptions();
+        inputSet.addUIFormInput(new UIFormSelectBox(POSITION, null, selectItemOptions));
+        inputSet.addUIFormInput(new UICheckBoxInput(RECEIVE_EMAIL, null, false));
 
-   private List<ActionData> makeSearchUserActionData()
-   {
-      List<ActionData> actions = new ArrayList<ActionData>();
-      ActionData searchUser = new ActionData();
-      searchUser.setActionListener("SearchUser");
-      searchUser.setActionType(ActionData.TYPE_ICON);
-      searchUser.setActionName("SearchUser");
-      searchUser.setCssIconClass("SearchIcon");
-      actions.add(searchUser);
-      return actions;
-   }
-   
-   public boolean isUserExist(String userName)
-   {
-      return userNames.contains(userName);
-   }
+        List<SelectItemOption<String>> comboBoxItemOptions = new ArrayList<SelectItemOption<String>>();
+        comboBoxItemOptions.add(new SelectItemOption<String>(("VI")));
+        comboBoxItemOptions.add(new SelectItemOption<String>(("UK")));
+        comboBoxItemOptions.add(new SelectItemOption<String>(("FR")));
+        inputSet.addUIFormInput(new UIFormComboBox(COMBOBOX, COMBOBOX, comboBoxItemOptions));
+    }
 
-   public void saveUser(String userName)
-   {
-      userNames.add(userName);
-   }
+    private List<SelectItemOption<String>> makeRadioOptions() {
+        List<SelectItemOption<String>> selectItemOptions = new ArrayList<SelectItemOption<String>>();
+        selectItemOptions.add(new SelectItemOption<String>("Male"));
+        selectItemOptions.add(new SelectItemOption<String>("Female"));
+        return selectItemOptions;
+    }
 
-   static public class SearchUserActionListener extends EventListener<UISampleUIForm>
-   {
+    private List<SelectItemOption<String>> makeSelectItemOptions() {
+        List<SelectItemOption<String>> selectItemOptions = new ArrayList<SelectItemOption<String>>();
+        selectItemOptions.add(new SelectItemOption<String>("Boss"));
+        selectItemOptions.add(new SelectItemOption<String>("Employee"));
+        return selectItemOptions;
+    }
 
-      @Override
-      public void execute(Event<UISampleUIForm> event) throws Exception
-      {
-         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-         UIApplication uiApp = context.getUIApplication();
+    private List<ActionData> makeSearchUserActionData() {
+        List<ActionData> actions = new ArrayList<ActionData>();
+        ActionData searchUser = new ActionData();
+        searchUser.setActionListener("SearchUser");
+        searchUser.setActionType(ActionData.TYPE_ICON);
+        searchUser.setActionName("SearchUser");
+        searchUser.setCssIconClass("SearchIcon");
+        actions.add(searchUser);
+        return actions;
+    }
 
-         UISampleUIForm uiForm = event.getSource();
-         String inputUserName = uiForm.getUIStringInput(USERNAME).getValue().trim();
-         String[] i18nParams = new String[]{inputUserName};
+    public boolean isUserExist(String userName) {
+        return userNames.contains(userName);
+    }
 
-         if (inputUserName.equals(""))
-         {
-            uiApp.addMessage(new ApplicationMessage("UISampleUIForm.msg.empty-input", null, ApplicationMessage.ERROR));
-         }
-         else if (uiForm.isUserExist(inputUserName))
-         {
-            uiApp.addMessage(new ApplicationMessage("UISampleUIForm.msg.user-exist", i18nParams,
-               ApplicationMessage.WARNING));
-         }
-         else
-         {
-            uiApp.addMessage(new ApplicationMessage("UISampleUIForm.msg.user-not-exist", i18nParams,
-               ApplicationMessage.INFO));
-         }
-      }
-   }
+    public void saveUser(String userName) {
+        userNames.add(userName);
+    }
 
-   static public class SaveActionListener extends EventListener<UISampleUIForm>
-   {
+    public static class SearchUserActionListener extends EventListener<UISampleUIForm> {
 
-      @Override
-      public void execute(Event<UISampleUIForm> event) throws Exception
-      {
-         WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-         UIApplication uiApp = context.getUIApplication();
+        @Override
+        public void execute(Event<UISampleUIForm> event) throws Exception {
+            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+            UIApplication uiApp = context.getUIApplication();
 
-         UISampleUIForm uiForm = event.getSource();
-         String inputUserName = uiForm.getUIStringInput(USERNAME).getValue();
-         String[] i18nParams = new String[]{inputUserName};
+            UISampleUIForm uiForm = event.getSource();
+            String inputUserName = uiForm.getUIStringInput(USERNAME).getValue().trim();
+            String[] i18nParams = new String[] { inputUserName };
 
-         if (uiForm.isUserExist(inputUserName))
-         {
-            uiApp.addMessage(new ApplicationMessage("UISampleUIForm.msg.user-exist", i18nParams,
-               ApplicationMessage.WARNING));
-         }
-         else
-         {
-            uiForm.saveUser(inputUserName);
-            uiApp.addMessage(new ApplicationMessage("UISampleUIForm.msg.user-saved", i18nParams,
-               ApplicationMessage.INFO));
-         }
-
-         String traceMsg = makeTraceMsg(event);
-         uiApp.addMessage(new ApplicationMessage(traceMsg, null, ApplicationMessage.INFO));
-      }
-
-      private String makeTraceMsg(Event<UISampleUIForm> event) throws Exception
-      {
-         UISampleUIForm uiForm = event.getSource();
-         String userName = uiForm.getUIStringInput(USERNAME).getValue();
-         String password = uiForm.getUIStringInput(PASSWORD).getValue();
-         boolean receiveEmail = uiForm.getUICheckBoxInput(RECEIVE_EMAIL).isChecked();
-         String favoriteColor = (String)uiForm.getUIInput(FAVORITE_COLOR).getValue();
-         String position = (String)uiForm.getUIInput(POSITION).getValue();
-         String gender = (String)uiForm.getUIInput(GENDER).getValue();
-
-         UIFormDateTimeInput dateInput = uiForm.getUIFormDateTimeInput(DATE_OF_BIRTH);
-         SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput.getDatePattern_());
-         Calendar calendar = dateInput.getCalendar();
-         String dateOfBirth = calendar == null ? null : dateFormat.format(calendar.getTime());
-         
-
-         StringBuilder strBuilder = new StringBuilder();
-         strBuilder.append(userName);
-         strBuilder.append("<br/>");
-         strBuilder.append(password);        
-         strBuilder.append("<br/>");
-         strBuilder.append(favoriteColor);
-         strBuilder.append("<br/>");
-         strBuilder.append(gender);
-         strBuilder.append("<br/>");
-         strBuilder.append(dateOfBirth);
-         strBuilder.append("<br/>");
-         strBuilder.append(position);                 
-         strBuilder.append("<br/>");
-         strBuilder.append(receiveEmail);
-         return strBuilder.toString();
-      }
-   }
-
-   static public class ResetActionListener extends EventListener<UISampleUIForm>
-   {
-
-      @SuppressWarnings("unchecked")
-      @Override
-      public void execute(Event<UISampleUIForm> event) throws Exception
-      {
-         UIFormInputSet inputSet = event.getSource().getChild(UIFormInputSet.class);
-         for (UIComponent child : inputSet.getChildren())
-         {
-            if (child instanceof UIFormColorPicker)
-            {
-               continue;
+            if (inputUserName.equals("")) {
+                uiApp.addMessage(new ApplicationMessage("UISampleUIForm.msg.empty-input", null, ApplicationMessage.ERROR));
+            } else if (uiForm.isUserExist(inputUserName)) {
+                uiApp.addMessage(new ApplicationMessage("UISampleUIForm.msg.user-exist", i18nParams, ApplicationMessage.WARNING));
+            } else {
+                uiApp.addMessage(new ApplicationMessage("UISampleUIForm.msg.user-not-exist", i18nParams,
+                        ApplicationMessage.INFO));
             }
-            ((UIFormInput)child).reset();
-         }
-      }
-   }  
+        }
+    }
+
+    public static class SaveActionListener extends EventListener<UISampleUIForm> {
+
+        @Override
+        public void execute(Event<UISampleUIForm> event) throws Exception {
+            WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+            UIApplication uiApp = context.getUIApplication();
+
+            UISampleUIForm uiForm = event.getSource();
+            String inputUserName = uiForm.getUIStringInput(USERNAME).getValue();
+            String[] i18nParams = new String[] { inputUserName };
+
+            if (uiForm.isUserExist(inputUserName)) {
+                uiApp.addMessage(new ApplicationMessage("UISampleUIForm.msg.user-exist", i18nParams, ApplicationMessage.WARNING));
+            } else {
+                uiForm.saveUser(inputUserName);
+                uiApp.addMessage(new ApplicationMessage("UISampleUIForm.msg.user-saved", i18nParams, ApplicationMessage.INFO));
+            }
+
+            String traceMsg = makeTraceMsg(event);
+            uiApp.addMessage(new ApplicationMessage(traceMsg, null, ApplicationMessage.INFO));
+        }
+
+        private String makeTraceMsg(Event<UISampleUIForm> event) throws Exception {
+            UISampleUIForm uiForm = event.getSource();
+            String userName = uiForm.getUIStringInput(USERNAME).getValue();
+            String password = uiForm.getUIStringInput(PASSWORD).getValue();
+            boolean receiveEmail = uiForm.getUICheckBoxInput(RECEIVE_EMAIL).isChecked();
+            String favoriteColor = (String) uiForm.getUIInput(FAVORITE_COLOR).getValue();
+            String position = (String) uiForm.getUIInput(POSITION).getValue();
+            String gender = (String) uiForm.getUIInput(GENDER).getValue();
+
+            UIFormDateTimeInput dateInput = uiForm.getUIFormDateTimeInput(DATE_OF_BIRTH);
+            SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput.getDatePattern_());
+            Calendar calendar = dateInput.getCalendar();
+            String dateOfBirth = calendar == null ? null : dateFormat.format(calendar.getTime());
+
+            StringBuilder strBuilder = new StringBuilder();
+            strBuilder.append(userName);
+            strBuilder.append("<br/>");
+            strBuilder.append(password);
+            strBuilder.append("<br/>");
+            strBuilder.append(favoriteColor);
+            strBuilder.append("<br/>");
+            strBuilder.append(gender);
+            strBuilder.append("<br/>");
+            strBuilder.append(dateOfBirth);
+            strBuilder.append("<br/>");
+            strBuilder.append(position);
+            strBuilder.append("<br/>");
+            strBuilder.append(receiveEmail);
+            return strBuilder.toString();
+        }
+    }
+
+    public static class ResetActionListener extends EventListener<UISampleUIForm> {
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public void execute(Event<UISampleUIForm> event) throws Exception {
+            UIFormInputSet inputSet = event.getSource().getChild(UIFormInputSet.class);
+            for (UIComponent child : inputSet.getChildren()) {
+                if (child instanceof UIFormColorPicker) {
+                    continue;
+                }
+                ((UIFormInput) child).reset();
+            }
+        }
+    }
 }

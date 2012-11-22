@@ -22,6 +22,18 @@
 
 package org.gatein.management.gadget.mop.exportimport.server;
 
+import static org.gatein.management.gadget.mop.exportimport.server.ContainerRequestHandler.doInRequest;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.exoplatform.container.ExoContainer;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
@@ -31,17 +43,6 @@ import org.gatein.management.api.controller.ManagedRequest;
 import org.gatein.management.api.controller.ManagedResponse;
 import org.gatein.management.api.controller.ManagementController;
 import org.gatein.management.api.operation.OperationNames;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import static org.gatein.management.gadget.mop.exportimport.server.ContainerRequestHandler.*;
 
 /**
  * {@code FileDownloadServlet}
@@ -53,76 +54,62 @@ import static org.gatein.management.gadget.mop.exportimport.server.ContainerRequ
  * @author <a href="mailto:nbenothm@redhat.com">Nabil Benothman</a>
  * @version 1.0
  */
-public class FileDownloadServlet extends HttpServlet
-{
+public class FileDownloadServlet extends HttpServlet {
 
-   private static final Logger log = LoggerFactory.getLogger(FileDownloadServlet.class);
-   private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
+    private static final Logger log = LoggerFactory.getLogger(FileDownloadServlet.class);
+    private static final SimpleDateFormat SDF = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss");
 
-   @Override
-   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-   {
-      String portalContainerName = request.getParameter("pc");
-      final String type = request.getParameter("ownerType");
-      final String name = request.getParameter("ownerId");
-      String safeName = name.replaceAll("/", "-");
-      if (safeName.startsWith("-"))
-      {
-         safeName = safeName.substring(1);
-      }
-      String filename = new StringBuilder(type).append("_").append(safeName).append("_").append(getTimestamp()).append(".zip").toString();
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String portalContainerName = request.getParameter("pc");
+        final String type = request.getParameter("ownerType");
+        final String name = request.getParameter("ownerId");
+        String safeName = name.replaceAll("/", "-");
+        if (safeName.startsWith("-")) {
+            safeName = safeName.substring(1);
+        }
+        String filename = new StringBuilder(type).append("_").append(safeName).append("_").append(getTimestamp())
+                .append(".zip").toString();
 
-      response.setContentType("application/octet-stream; charset=UTF-8");
-      response.setHeader("Content-disposition", "attachment; filename=\"" + filename + "\"");
+        response.setContentType("application/octet-stream; charset=UTF-8");
+        response.setHeader("Content-disposition", "attachment; filename=\"" + filename + "\"");
 
-      final OutputStream os = response.getOutputStream();
-      try
-      {
-         doInRequest(portalContainerName, new ContainerCallback<Void>()
-         {
+        final OutputStream os = response.getOutputStream();
+        try {
+            doInRequest(portalContainerName, new ContainerCallback<Void>() {
 
-            public Void doInContainer(ExoContainer container) throws Exception
-            {
-               ManagementController controller = getComponent(container, ManagementController.class);
-               PathAddress address = PathAddress.pathAddress("mop", type+"sites", name);
+                public Void doInContainer(ExoContainer container) throws Exception {
+                    ManagementController controller = getComponent(container, ManagementController.class);
+                    PathAddress address = PathAddress.pathAddress("mop", type + "sites", name);
 
-               ManagedRequest request = ManagedRequest.Factory.create(OperationNames.EXPORT_RESOURCE, address, ContentType.ZIP);
-               ManagedResponse response = controller.execute(request);
-               if (response.getOutcome().isSuccess())
-               {
-                  response.writeResult(os);
-               }
-               else
-               {
-                  throw new Exception(response.getOutcome().getFailureDescription());
-               }
+                    ManagedRequest request = ManagedRequest.Factory.create(OperationNames.EXPORT_RESOURCE, address,
+                            ContentType.ZIP);
+                    ManagedResponse response = controller.execute(request);
+                    if (response.getOutcome().isSuccess()) {
+                        response.writeResult(os);
+                    } else {
+                        throw new Exception(response.getOutcome().getFailureDescription());
+                    }
 
-               return null;
+                    return null;
+                }
+            });
+            os.flush();
+        } catch (Exception e) {
+            log.error("Error during download", e);
+        } finally {
+            if (os != null) {
+                os.close();
             }
-         });
-         os.flush();
-      }
-      catch (Exception e)
-      {
-         log.error("Error during download", e);
-      }
-      finally
-      {
-         if (os != null)
-         {
-            os.close();
-         }
-      }
-   }
+        }
+    }
 
-   @Override
-   protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
-   {
-      doGet(request, response);
-   }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
+    }
 
-   private String getTimestamp()
-   {
-      return SDF.format(new Date());
-   }
+    private String getTimestamp() {
+        return SDF.format(new Date());
+    }
 }

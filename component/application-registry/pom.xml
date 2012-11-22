@@ -19,17 +19,18 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.component</artifactId>
     <version>3.5.0.Final-SNAPSHOT</version>
-  </parent> 
+  </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.portal.component.application-registry</artifactId>
   <name>GateIn Portal Component Application Registry</name>
-  <packaging>jar</packaging> 
+  <packaging>jar</packaging>
 
   <dependencies>
     <dependency>
@@ -46,15 +47,15 @@
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.component.portal</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.gatein.shindig</groupId>
       <artifactId>shindig-gadgets</artifactId>
     </dependency>
 
     <dependency>
-       <groupId>org.chromattic</groupId>
-       <artifactId>chromattic.ext</artifactId>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.ext</artifactId>
     </dependency>
 
     <dependency>

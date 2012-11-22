@@ -18,14 +18,13 @@
  */
 package org.exoplatform.portal.application;
 
-import org.exoplatform.web.application.ApplicationFactory;
-
 import javax.servlet.ServletConfig;
+
+import org.exoplatform.web.application.ApplicationFactory;
 
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public interface StandaloneApplicationFactory extends ApplicationFactory<StandaloneApplication, ServletConfig>
-{
+public interface StandaloneApplicationFactory extends ApplicationFactory<StandaloneApplication, ServletConfig> {
 }

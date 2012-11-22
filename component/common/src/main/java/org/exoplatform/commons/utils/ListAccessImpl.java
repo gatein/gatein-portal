@@ -19,42 +19,38 @@
 
 package org.exoplatform.commons.utils;
 
-import org.gatein.common.util.ParameterValidation;
-
 import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.List;
+
+import org.gatein.common.util.ParameterValidation;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ListAccessImpl<E> implements ListAccess<E>, Serializable
-{
+public class ListAccessImpl<E> implements ListAccess<E>, Serializable {
 
-   /** . */
-   private final List<E> list;
+    /** . */
+    private final List<E> list;
 
-   /** . */
-   private final Class<E> elementType;
+    /** . */
+    private final Class<E> elementType;
 
-   public ListAccessImpl(Class<E> elementType, List<E> list)
-   {
-      ParameterValidation.throwIllegalArgExceptionIfNull(elementType, "element type");
-      ParameterValidation.throwIllegalArgExceptionIfNull(list, "elements");
-      this.elementType = elementType;
-      this.list = list;
-   }
+    public ListAccessImpl(Class<E> elementType, List<E> list) {
+        ParameterValidation.throwIllegalArgExceptionIfNull(elementType, "element type");
+        ParameterValidation.throwIllegalArgExceptionIfNull(list, "elements");
+        this.elementType = elementType;
+        this.list = list;
+    }
 
-   public E[] load(int index, int length) throws Exception, IllegalArgumentException
-   {
-      E[] array = (E[])Array.newInstance(elementType, length);
-      list.subList(index, index + length).toArray(array);
-      return array;
-   }
+    public E[] load(int index, int length) throws Exception {
+        E[] array = (E[]) Array.newInstance(elementType, length);
+        list.subList(index, index + length).toArray(array);
+        return array;
+    }
 
-   public int getSize() throws Exception
-   {
-      return list.size();
-   }
+    public int getSize() throws Exception {
+        return list.size();
+    }
 }

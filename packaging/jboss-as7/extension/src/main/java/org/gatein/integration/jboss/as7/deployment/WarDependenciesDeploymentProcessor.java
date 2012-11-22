@@ -31,67 +31,50 @@ import org.jboss.as.web.deployment.WarMetaData;
 import org.jboss.metadata.web.jboss.JBossWebMetaData;
 import org.jboss.msc.service.ServiceName;
 
-import java.lang.Override;
-import java.lang.String;
-
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class WarDependenciesDeploymentProcessor implements DeploymentUnitProcessor
-{
+public class WarDependenciesDeploymentProcessor implements DeploymentUnitProcessor {
 
-   private void processWarDeployment(DeploymentUnit du)
-   {
-      WarMetaData warMetaData = du.getAttachment(WarMetaData.ATTACHMENT_KEY);
-      if (warMetaData == null)
-         return;
-      final JBossWebMetaData metaData = warMetaData.getMergedJBossWebMetaData();
+    private void processWarDeployment(DeploymentUnit du) {
+        WarMetaData warMetaData = du.getAttachment(WarMetaData.ATTACHMENT_KEY);
+        if (warMetaData == null)
+            return;
+        final JBossWebMetaData metaData = warMetaData.getMergedJBossWebMetaData();
 
-      String pathName;
-      if (metaData.getContextRoot() == null)
-      {
-         pathName = "/" + du.getName().substring(0, du.getName().length() - 4);
-      }
-      else
-      {
-         pathName = metaData.getContextRoot();
-         if ("/".equals(pathName))
-         {
-            pathName = "";
-         }
-         else if (pathName.length() > 0 && pathName.charAt(0) != '/')
-         {
-            pathName = "/" + pathName;
-         }
-      }
+        String pathName;
+        if (metaData.getContextRoot() == null) {
+            pathName = "/" + du.getName().substring(0, du.getName().length() - 4);
+        } else {
+            pathName = metaData.getContextRoot();
+            if ("/".equals(pathName)) {
+                pathName = "";
+            } else if (pathName.length() > 0 && pathName.charAt(0) != '/') {
+                pathName = "/" + pathName;
+            }
+        }
 
-      GateInConfiguration config = du.getAttachment(GateInConfigurationKey.KEY);
-      ServiceName deploymentServiceName = WebSubsystemServices.deploymentServiceName("default-host", pathName);
+        GateInConfiguration config = du.getAttachment(GateInConfigurationKey.KEY);
+        ServiceName deploymentServiceName = WebSubsystemServices.deploymentServiceName("default-host", pathName);
 
-      config.addChildWar(deploymentServiceName);
-   }
+        config.addChildWar(deploymentServiceName);
+    }
 
-   @Override
-   public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
-   {
-      DeploymentUnit du = phaseContext.getDeploymentUnit();
-      DeploymentUnit parent = du.getParent();
+    @Override
+    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
+        DeploymentUnit du = phaseContext.getDeploymentUnit();
+        DeploymentUnit parent = du.getParent();
 
-      if (parent != null)
-      {
-         if (GateInConfiguration.isGateInArchive(parent))
-         {
+        if (parent != null) {
+            if (GateInConfiguration.isGateInArchive(parent)) {
+                processWarDeployment(du);
+            }
+        } else if (GateInConfiguration.isGateInArchive(du)) {
             processWarDeployment(du);
-         }
-      }
-      else if (GateInConfiguration.isGateInArchive(du))
-      {
-         processWarDeployment(du);
-      }
-   }
+        }
+    }
 
-   @Override
-   public void undeploy(DeploymentUnit context)
-   {
-   }
+    @Override
+    public void undeploy(DeploymentUnit context) {
+    }
 }

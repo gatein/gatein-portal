@@ -25,24 +25,20 @@ import org.exoplatform.management.spi.ManagedMethodParameterMetaData;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RestResourceMethodParameter
-{
+public class RestResourceMethodParameter {
 
-   /** . */
-   final ManagedMethodParameterMetaData metaData;
+    /** . */
+    final ManagedMethodParameterMetaData metaData;
 
-   public RestResourceMethodParameter(ManagedMethodParameterMetaData metaData)
-   {
-      this.metaData = metaData;
-   }
+    public RestResourceMethodParameter(ManagedMethodParameterMetaData metaData) {
+        this.metaData = metaData;
+    }
 
-   public String getName()
-   {
-      return metaData.getName();
-   }
+    public String getName() {
+        return metaData.getName();
+    }
 
-   public String getDescription()
-   {
-      return metaData.getDescription();
-   }
+    public String getDescription() {
+        return metaData.getDescription();
+    }
 }

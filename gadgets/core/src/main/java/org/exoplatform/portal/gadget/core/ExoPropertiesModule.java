@@ -18,69 +18,56 @@
  */
 package org.exoplatform.portal.gadget.core;
 
-import com.google.inject.CreationException;
-import com.google.inject.spi.Message;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.shindig.common.PropertiesModule;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.Properties;
 
+import org.apache.commons.io.IOUtils;
+import org.apache.shindig.common.PropertiesModule;
+
+import com.google.inject.CreationException;
+import com.google.inject.spi.Message;
+
 /**
  * @author <a href="kienna@exoplatform.com">Kien Nguyen</a>
  * @version $Revision$
  */
-public class ExoPropertiesModule extends PropertiesModule
-{
-   private final static String GTN_SHINDIG_PROPERTIES = "shindig.properties";
+public class ExoPropertiesModule extends PropertiesModule {
+    private static final String GTN_SHINDIG_PROPERTIES = "shindig.properties";
 
-   private final Properties properties;
+    private final Properties properties;
 
-   public ExoPropertiesModule()
-   {
-      super();
-      this.properties = readPropertyFile(GTN_SHINDIG_PROPERTIES);
-   }
+    public ExoPropertiesModule() {
+        super();
+        this.properties = readPropertyFile(GTN_SHINDIG_PROPERTIES);
+    }
 
-   protected Properties getProperties()
-   {
-      if (properties != null)
-      {
-         return properties;
-      }
-      else
-      {
-         return super.getProperties();
-      }
-   }
+    protected Properties getProperties() {
+        if (properties != null) {
+            return properties;
+        } else {
+            return super.getProperties();
+        }
+    }
 
-   private Properties readPropertyFile(String propertyFile)
-   {
-      Properties properties = null;
-      InputStream is = null;
-      try
-      {
-         GateInContainerConfigLoader currentLoader = GateInGuiceServletContextListener.getCurrentLoader();
-         is = currentLoader.loadResourceAsStream(propertyFile);
+    private Properties readPropertyFile(String propertyFile) {
+        Properties properties = null;
+        InputStream is = null;
+        try {
+            GateInContainerConfigLoader currentLoader = GateInGuiceServletContextListener.getCurrentLoader();
+            is = currentLoader.loadResourceAsStream(propertyFile);
 
-         if (is != null)
-         {
-            properties = new Properties();
-            properties.load(is);
-         }
-      }
-      catch (IOException e)
-      {
-         throw new CreationException(Arrays.asList(new Message("Unable to load properties: " + propertyFile)));
-      }
-      finally
-      {
-         IOUtils.closeQuietly(is);
-      }
+            if (is != null) {
+                properties = new Properties();
+                properties.load(is);
+            }
+        } catch (IOException e) {
+            throw new CreationException(Arrays.asList(new Message("Unable to load properties: " + propertyFile)));
+        } finally {
+            IOUtils.closeQuietly(is);
+        }
 
-      return properties;
-   }
+        return properties;
+    }
 }

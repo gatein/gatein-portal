@@ -26,31 +26,28 @@ package org.exoplatform.portal.mop.management.binding.xml;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public enum Namespace
-{
-   GATEIN_OBJECTS_1_1("http://www.gatein.org/xml/ns/gatein_objects_1_1"),
-   GATEIN_OBJECTS_1_2("http://www.gatein.org/xml/ns/gatein_objects_1_2"),
-   GATEIN_OBJECTS_1_3("http://www.gatein.org/xml/ns/gatein_objects_1_3");
+public enum Namespace {
+    GATEIN_OBJECTS_1_1("http://www.gatein.org/xml/ns/gatein_objects_1_1"), GATEIN_OBJECTS_1_2(
+            "http://www.gatein.org/xml/ns/gatein_objects_1_2"), GATEIN_OBJECTS_1_3(
+            "http://www.gatein.org/xml/ns/gatein_objects_1_3");
 
-   /**
-    * The current namespace version.
-    */
-   public static final Namespace CURRENT = GATEIN_OBJECTS_1_3;
+    /**
+     * The current namespace version.
+     */
+    public static final Namespace CURRENT = GATEIN_OBJECTS_1_3;
 
-   private final String name;
+    private final String name;
 
-   Namespace(final String name)
-   {
-      this.name = name;
-   }
+    Namespace(final String name) {
+        this.name = name;
+    }
 
-   /**
-    * Get the URI of this namespace.
-    *
-    * @return the URI
-    */
-   public String getUri()
-   {
-      return name;
-   }
+    /**
+     * Get the URI of this namespace.
+     *
+     * @return the URI
+     */
+    public String getUri() {
+        return name;
+    }
 }

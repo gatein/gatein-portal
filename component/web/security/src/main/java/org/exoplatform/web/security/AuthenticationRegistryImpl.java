@@ -24,103 +24,87 @@
 
 package org.exoplatform.web.security;
 
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
-import org.gatein.wci.security.Credentials;
-
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+import org.gatein.wci.security.Credentials;
+
 /**
- * Temporary registry for hold credentials (and potentially other attributes) during login process to avoid store them in session.
- * Registry is used only during authentication process and attributes of target client are cleared after successful authentication,
- *  
+ * Temporary registry for hold credentials (and potentially other attributes) during login process to avoid store them in
+ * session. Registry is used only during authentication process and attributes of target client are cleared after successful
+ * authentication,
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class AuthenticationRegistryImpl implements AuthenticationRegistry
-{
-   private static final Logger log = LoggerFactory.getLogger(AuthenticationRegistryImpl.class);
-   
-   // Key is ID of HTTP Session. Value is map with various attributes of single client (session),
-   // which will be used during authentication process.
-   private final ConcurrentMap<String, Map<String, Object>> registry = new ConcurrentHashMap<String, Map<String, Object>>();
+public class AuthenticationRegistryImpl implements AuthenticationRegistry {
+    private static final Logger log = LoggerFactory.getLogger(AuthenticationRegistryImpl.class);
 
+    // Key is ID of HTTP Session. Value is map with various attributes of single client (session),
+    // which will be used during authentication process.
+    private final ConcurrentMap<String, Map<String, Object>> registry = new ConcurrentHashMap<String, Map<String, Object>>();
 
-   public Credentials getCredentials(HttpServletRequest request)
-   {
-      String sessionId = getSessionId(request);
-      Map<String, Object> attributesOfClient = registry.get(sessionId);
+    public Credentials getCredentials(HttpServletRequest request) {
+        String sessionId = getSessionId(request);
+        Map<String, Object> attributesOfClient = registry.get(sessionId);
 
-      if (attributesOfClient == null)
-      {
-         return null;
-      }
+        if (attributesOfClient == null) {
+            return null;
+        }
 
-      return (Credentials)attributesOfClient.get(Credentials.CREDENTIALS);
-   }
+        return (Credentials) attributesOfClient.get(Credentials.CREDENTIALS);
+    }
 
+    public void setCredentials(HttpServletRequest request, Credentials credentials) {
+        String sessionId = getSessionId(request);
 
-   public void setCredentials(HttpServletRequest request, Credentials credentials)
-   {
-      String sessionId = getSessionId(request);
+        Map<String, Object> attributesOfClient = getAttributesOfClient(sessionId);
+        attributesOfClient.put(Credentials.CREDENTIALS, credentials);
+    }
 
-      Map<String, Object> attributesOfClient = getAttributesOfClient(sessionId);
-      attributesOfClient.put(Credentials.CREDENTIALS, credentials);
-   }
+    public Credentials removeCredentials(HttpServletRequest request) {
+        String sessionId = getSessionId(request);
 
+        Map<String, Object> attributesOfClient = getAttributesOfClient(sessionId);
 
-   public Credentials removeCredentials(HttpServletRequest request)
-   {
-      String sessionId = getSessionId(request);
+        Credentials credentials = (Credentials) attributesOfClient.remove(Credentials.CREDENTIALS);
 
-      Map<String, Object> attributesOfClient = getAttributesOfClient(sessionId);
+        // Clear map if no more attributes are here.
+        if (attributesOfClient.size() == 0) {
+            removeClient(sessionId);
+        }
 
-      Credentials credentials = (Credentials)attributesOfClient.remove(Credentials.CREDENTIALS);
+        return credentials;
+    }
 
-      // Clear map if no more attributes are here.
-      if (attributesOfClient.size() == 0)
-      {
-         removeClient(sessionId);
-      }
+    public void removeClient(String sessionId) {
+        registry.remove(sessionId);
 
-      return credentials;
-   }
+        if (log.isTraceEnabled()) {
+            log.trace("Entry cleared for session " + sessionId);
+        }
+    }
 
+    private Map<String, Object> getAttributesOfClient(String sessionId) {
+        Map<String, Object> attributes = registry.get(sessionId);
 
-   public void removeClient(String sessionId)
-   {
-      registry.remove(sessionId);
+        if (attributes == null) {
+            attributes = new ConcurrentHashMap<String, Object>();
+            registry.putIfAbsent(sessionId, attributes);
 
-      if (log.isTraceEnabled())
-      {
-         log.trace("Entry cleared for session " + sessionId);
-      }
-   }
+            if (log.isTraceEnabled()) {
+                log.trace("New entry created in AuthenticationRegistry for session " + sessionId);
+            }
+        }
 
+        return registry.get(sessionId);
+    }
 
-   private Map<String, Object> getAttributesOfClient(String sessionId)
-   {
-      Map<String, Object> attributes = registry.get(sessionId);
-
-      if (attributes == null)
-      {
-         attributes = new ConcurrentHashMap<String, Object>();
-         registry.putIfAbsent(sessionId, attributes);
-         
-         if (log.isTraceEnabled())
-         {
-            log.trace("New entry created in AuthenticationRegistry for session " + sessionId);
-         }
-      }
-
-      return registry.get(sessionId);
-   }
-
-
-   private String getSessionId(HttpServletRequest req)
-   {
-      return req.getSession().getId();      
-   }
+    private String getSessionId(HttpServletRequest req) {
+        return req.getSession().getId();
+    }
 }

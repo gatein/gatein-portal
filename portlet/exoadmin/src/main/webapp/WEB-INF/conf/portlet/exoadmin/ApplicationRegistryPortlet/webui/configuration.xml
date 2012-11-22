@@ -19,14 +19,15 @@
 
 -->
 
-<webui-configuration>  
+<webui-configuration>
   <annotation-classes>
-  </annotation-classes>  
-   
-  <application>     
-    <ui-component-root>org.exoplatform.applicationregistry.webui.component.UIApplicationRegistryPortlet</ui-component-root>    
+  </annotation-classes>
+
+  <application>
+    <ui-component-root>org.exoplatform.applicationregistry.webui.component.UIApplicationRegistryPortlet
+    </ui-component-root>
     <state-manager>org.exoplatform.webui.application.portlet.ParentAppStateManager</state-manager>
-    <application-lifecycle-listeners>       
+    <application-lifecycle-listeners>
     </application-lifecycle-listeners>
   </application>
 </webui-configuration>

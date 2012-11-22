@@ -19,18 +19,19 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
     <version>3.5.0.Final-SNAPSHOT</version>
     <relativePath>../../../pom.xml</relativePath>
-  </parent> 
+  </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.portal.sample.portal.config</artifactId>
   <name>GateIn Portal Sample Portal Configuration</name>
   <packaging>jar</packaging>
-  <url>http://www.exoplatform.org</url> 
+  <url>http://www.exoplatform.org</url>
   <description>GateIn Sample Portal Configuration</description>
 </project>

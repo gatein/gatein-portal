@@ -19,77 +19,62 @@
 
 package org.exoplatform.applicationregistry.webui;
 
+import java.util.Comparator;
+
 import org.exoplatform.application.gadget.Gadget;
 import org.exoplatform.application.registry.Application;
 import org.exoplatform.application.registry.ApplicationCategory;
 import org.gatein.common.i18n.LocalizedString;
 
-import java.util.Comparator;
-
 /** Created by The eXo Platform SAS Author : Pham Thanh Tung thanhtungty@gmail.com Sep 11, 2008 */
-public class Util
-{
+public class Util {
 
-   static public String getLocalizedStringValue(LocalizedString localizedString, String defaultValue)
-   {
-      if (localizedString == null || localizedString.getDefaultString() == null)
-      {
-         return defaultValue;
-      }
-      else
-      {
-         return localizedString.getDefaultString();
-      }
-   }
+    public static String getLocalizedStringValue(LocalizedString localizedString, String defaultValue) {
+        if (localizedString == null || localizedString.getDefaultString() == null) {
+            return defaultValue;
+        } else {
+            return localizedString.getDefaultString();
+        }
+    }
 
-   static public class CategoryComparator implements Comparator<ApplicationCategory>
-   {
+    public static class CategoryComparator implements Comparator<ApplicationCategory> {
 
-      public int compare(ApplicationCategory cate1, ApplicationCategory cate2)
-      {
-         return cate1.getDisplayName(true).compareToIgnoreCase(cate2.getDisplayName(true));
-      }
+        public int compare(ApplicationCategory cate1, ApplicationCategory cate2) {
+            return cate1.getDisplayName(true).compareToIgnoreCase(cate2.getDisplayName(true));
+        }
 
-   }
+    }
 
-   static public class ApplicationComparator implements Comparator<Application>
-   {
+    public static class ApplicationComparator implements Comparator<Application> {
 
-      public int compare(Application app1, Application app2)
-      {
-         String firstDisplayName = app1.getDisplayName();
-         if(firstDisplayName == null)
-         {
-            firstDisplayName = "";
-         }
-         String secondDisplayName = app2.getDisplayName();
-         if(secondDisplayName == null)
-         {
-            secondDisplayName = "";
-         }
-         return firstDisplayName.compareToIgnoreCase(secondDisplayName);
-      }
+        public int compare(Application app1, Application app2) {
+            String firstDisplayName = app1.getDisplayName();
+            if (firstDisplayName == null) {
+                firstDisplayName = "";
+            }
+            String secondDisplayName = app2.getDisplayName();
+            if (secondDisplayName == null) {
+                secondDisplayName = "";
+            }
+            return firstDisplayName.compareToIgnoreCase(secondDisplayName);
+        }
 
-   }
+    }
 
-   static public class GadgetComparator implements Comparator<Gadget>
-   {
+    public static class GadgetComparator implements Comparator<Gadget> {
 
-      public int compare(Gadget gadget1, Gadget gadget2)
-      {
-         String firstTitle = gadget1.getTitle();
-         if(firstTitle == null)
-         {
-            firstTitle = "";
-         }
-         String secondTitle = gadget2.getTitle();
-         if(secondTitle == null)
-         {
-            secondTitle = "";
-         }
-         return firstTitle.compareToIgnoreCase(secondTitle);
-      }
+        public int compare(Gadget gadget1, Gadget gadget2) {
+            String firstTitle = gadget1.getTitle();
+            if (firstTitle == null) {
+                firstTitle = "";
+            }
+            String secondTitle = gadget2.getTitle();
+            if (secondTitle == null) {
+                secondTitle = "";
+            }
+            return firstTitle.compareToIgnoreCase(secondTitle);
+        }
 
-   }
+    }
 
 }

@@ -19,12 +19,12 @@
 
 package org.exoplatform.commons.serialization.api.annotations;
 
-import org.exoplatform.commons.serialization.api.TypeConverter;
-
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+
+import org.exoplatform.commons.serialization.api.TypeConverter;
 
 /**
  * Declares a type to be converted.
@@ -34,12 +34,11 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Converted
-{
-   /**
-    * Specify the converter class.
-    *
-    * @return the converter class
-    */
-   Class<? extends TypeConverter<?, ?>> value();
+public @interface Converted {
+    /**
+     * Specify the converter class.
+     *
+     * @return the converter class
+     */
+    Class<? extends TypeConverter<?, ?>> value();
 }

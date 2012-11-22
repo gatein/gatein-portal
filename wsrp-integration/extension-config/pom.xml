@@ -21,20 +21,21 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   <modelVersion>4.0.0</modelVersion>
-   <parent>
-      <artifactId>gatein-wsrp-integration-parent</artifactId>
-      <groupId>org.gatein.integration</groupId>
-      <version>3.5.0.Final-SNAPSHOT</version>
-   </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <artifactId>gatein-wsrp-integration-parent</artifactId>
+    <groupId>org.gatein.integration</groupId>
+    <version>3.5.0.Final-SNAPSHOT</version>
+  </parent>
 
-   <artifactId>extension-config</artifactId>
-   <name>GateIn WSRP Integration extension config</name>
+  <artifactId>extension-config</artifactId>
+  <name>GateIn WSRP Integration extension config</name>
 
 
-   <build>
-      <finalName>extension-config</finalName>
-   </build>
+  <build>
+    <finalName>extension-config</finalName>
+  </build>
 
 </project>

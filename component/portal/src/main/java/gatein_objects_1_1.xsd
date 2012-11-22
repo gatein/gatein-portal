@@ -19,12 +19,12 @@
   -->
 
 <xs:schema
-   targetNamespace="http://www.gatein.org/xml/ns/gatein_objects_1_1"
-   xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_1"
-   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-   elementFormDefault="qualified"
-   attributeFormDefault="unqualified"
-   version="1.0">
+    targetNamespace="http://www.gatein.org/xml/ns/gatein_objects_1_1"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_1"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.0">
 
   <!-- A top page element -->
   <xs:element name="page" type="pageType"/>
@@ -164,7 +164,7 @@
       <xs:element name="show-application-state" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="show-application-mode" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
       <xs:element name="width" type="xs:string" minOccurs="0" maxOccurs="1"/>
- 	 	 	<xs:element name="height" type="xs:string" minOccurs="0" maxOccurs="1"/>
+      <xs:element name="height" type="xs:string" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
 

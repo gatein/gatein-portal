@@ -23,21 +23,21 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="GateIn_Selenium_tests">
 
-	<listeners>
-		<listener class-name="org.jboss.gatein.selenium.TestCaseFailListener" />
-	</listeners>
+  <listeners>
+    <listener class-name="org.jboss.gatein.selenium.TestCaseFailListener"/>
+  </listeners>
 
-	<test name="JiraTests">
-		<groups>
-			<run>
-				<include name="jira" />
-				<exclude name="broken" />
-			</run>
-		</groups>
-		<packages>
-			<package name="org.jboss.gatein.selenium.jira.*" />
-		</packages>
-	</test>
+  <test name="JiraTests">
+    <groups>
+      <run>
+        <include name="jira"/>
+        <exclude name="broken"/>
+      </run>
+    </groups>
+    <packages>
+      <package name="org.jboss.gatein.selenium.jira.*"/>
+    </packages>
+  </test>
 
-	
+
 </suite>

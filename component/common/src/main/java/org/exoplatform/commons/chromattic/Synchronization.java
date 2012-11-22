@@ -18,10 +18,12 @@
  */
 package org.exoplatform.commons.chromattic;
 
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+
 
 /**
  * A global notion of synchronization for all chromattic sessions and all JCR sessions.
@@ -29,100 +31,85 @@ import java.util.Map;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Synchronization
-{
+public class Synchronization {
 
-   /** The sessions mapped by workspace name. */
-   private final Map<String, Session> repositorySessions = new HashMap<String, Session>();
-   
-   /** . */
-   private final Map<String, SynchronizedContext> contexts = new HashMap<String, SynchronizedContext>();
+    /** The sessions mapped by workspace name. */
+    private final Map<String, Session> repositorySessions = new HashMap<String, Session>();
 
-   /** . */
-   private boolean saveOnClose = true;
+    /** . */
+    private final Map<String, SynchronizedContext> contexts = new HashMap<String, SynchronizedContext>();
 
-   /**
-    * Returns a specified global context by its name.
-    *
-    * @param name the global context name
-    * @return the global context or null if no such context exists
-    */
-   public SynchronizedContext getContext(String name)
-   {
-      if (name == null)
-      {
-         throw new NullPointerException();
-      }
-      return contexts.get(name);
-   }
+    /** . */
+    private boolean saveOnClose = true;
 
-   /**
-    * Opens a global context related to this synchronization object.
-    *
-    * @param lifeCycle the life cycle for the session
-    * @return the global context related to life cycle
-    * @throws IllegalStateException if a context is already created for the specified life cycle
-    */
-   public SynchronizedContext openContext(ChromatticLifeCycle lifeCycle) throws IllegalStateException
-   {
-      if (lifeCycle == null)
-      {
-         throw new NullPointerException();
-      }
-      String name = lifeCycle.getDomainName();
-      SynchronizedContext context = contexts.get(name);
-      if (context != null)
-      {
-         throw new IllegalStateException();
-      }
-      context = new SynchronizedContext(lifeCycle, this);
-      contexts.put(name, context);
-      lifeCycle.onOpenSession(context);
-      return context;
-   }
+    /**
+     * Returns a specified global context by its name.
+     *
+     * @param name the global context name
+     * @return the global context or null if no such context exists
+     */
+    public SynchronizedContext getContext(String name) {
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        return contexts.get(name);
+    }
 
-   public Session doLogin(SynchronizedContext ctx) throws RepositoryException
-   {
-      if (ctx == null)
-      {
-         throw new NullPointerException();
-      }
-      if (ctx.synchronization != this)
-      {
-         throw new IllegalArgumentException();
-      }
-      String workspaceName = ctx.lifeCycle.getWorkspaceName();
-      Session session = repositorySessions.get(workspaceName);
-      if (session == null)
-      {
-         session = ctx.openSession();
-         repositorySessions.put(workspaceName, session);
-      }
-      return session;
-   }
+    /**
+     * Opens a global context related to this synchronization object.
+     *
+     * @param lifeCycle the life cycle for the session
+     * @return the global context related to life cycle
+     * @throws IllegalStateException if a context is already created for the specified life cycle
+     */
+    public SynchronizedContext openContext(ChromatticLifeCycle lifeCycle) throws IllegalStateException {
+        if (lifeCycle == null) {
+            throw new NullPointerException();
+        }
+        String name = lifeCycle.getDomainName();
+        SynchronizedContext context = contexts.get(name);
+        if (context != null) {
+            throw new IllegalStateException();
+        }
+        context = new SynchronizedContext(lifeCycle, this);
+        contexts.put(name, context);
+        lifeCycle.onOpenSession(context);
+        return context;
+    }
 
-   public void close(boolean save)
-   {
-      // First save all global contexts (sessions)
-      for (SynchronizedContext context : contexts.values())
-      {
-         context.close(save);
-      }
+    public Session doLogin(SynchronizedContext ctx) throws RepositoryException {
+        if (ctx == null) {
+            throw new NullPointerException();
+        }
+        if (ctx.synchronization != this) {
+            throw new IllegalArgumentException();
+        }
+        String workspaceName = ctx.lifeCycle.getWorkspaceName();
+        Session session = repositorySessions.get(workspaceName);
+        if (session == null) {
+            session = ctx.openSession();
+            repositorySessions.put(workspaceName, session);
+        }
+        return session;
+    }
 
-      // Now close all JCR sessions
-      for (Session session : repositorySessions.values())
-      {
-         session.logout();
-      }
-   }
+    public void close(boolean save) {
+        // First save all global contexts (sessions)
+        for (SynchronizedContext context : contexts.values()) {
+            context.close(save);
+        }
 
-   public boolean getSaveOnClose()
-   {
-      return saveOnClose;
-   }
+        // Now close all JCR sessions
+        for (Session session : repositorySessions.values()) {
+            session.logout();
+        }
+    }
 
-   public void setSaveOnClose(boolean saveOnClose)
-   {
-      this.saveOnClose = saveOnClose;
-   }
+    public boolean getSaveOnClose() {
+        return saveOnClose;
+    }
+
+    public void setSaveOnClose(boolean saveOnClose) {
+        this.saveOnClose = saveOnClose;
+    }
 }

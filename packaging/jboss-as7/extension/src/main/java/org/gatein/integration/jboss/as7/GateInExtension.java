@@ -21,11 +21,11 @@
  */
 package org.gatein.integration.jboss.as7;
 
-
-import org.gatein.integration.jboss.as7.portal.PortalResourceRegistrar;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.DESCRIBE;
 
 import java.io.File;
 
+import org.gatein.integration.jboss.as7.portal.PortalResourceRegistrar;
 import org.jboss.as.controller.Extension;
 import org.jboss.as.controller.ExtensionContext;
 import org.jboss.as.controller.SubsystemRegistration;
@@ -42,100 +42,88 @@ import org.jboss.logging.Logger;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.msc.service.ServiceName;
 
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.*;
-
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class GateInExtension implements Extension
-{
-   private static final Logger log = Logger.getLogger("org.gatein");
+public class GateInExtension implements Extension {
+    private static final Logger log = Logger.getLogger("org.gatein");
 
-   /**
-    * The name space used for the {@code substystem} element
-    */
-   public static final String NAMESPACE = "urn:jboss:domain:gatein:1.0";
+    /**
+     * The name space used for the {@code substystem} element
+     */
+    public static final String NAMESPACE = "urn:jboss:domain:gatein:1.0";
 
-   public static final String SUBSYSTEM_NAME = "gatein";
+    public static final String SUBSYSTEM_NAME = "gatein";
 
-   protected static final String DEFAULT_PORTAL_NAME = "default";
+    protected static final String DEFAULT_PORTAL_NAME = "default";
 
-   private static final String RESOURCE_NAME = GateInExtension.class.getPackage().getName() + ".LocalDescriptions";
+    private static final String RESOURCE_NAME = GateInExtension.class.getPackage().getName() + ".LocalDescriptions";
 
-   static ResourceDescriptionResolver getResourceDescriptionResolver(final String keyPrefix)
-   {
-      return new StandardResourceDescriptionResolver(keyPrefix, RESOURCE_NAME, GateInExtension.class.getClassLoader(), true, false);
-   }
-   
-   public GateInExtension() 
-   {
-      String confDir = new File(System.getProperty("jboss.server.config.dir"), "gatein").getAbsolutePath();
-      if (!System.getProperties().containsKey("exo.conf.dir")) 
-      {
-          log.info("Setting 'exo.conf.dir'");
-         System.setProperty("exo.conf.dir", confDir);
-      }
-      if (!System.getProperties().containsKey("exo.conf.dir.name")) 
-      {
-          log.info("Setting 'exo.conf.dir.name'");
-         System.setProperty("exo.conf.dir.name", "gatein");
-      }
-      if (!System.getProperties().containsKey("gatein.conf.dir")) 
-      {
-          log.info("Setting 'gatein.conf.dir'");
-         System.setProperty("gatein.conf.dir", confDir);
-      }
-   }
+    static ResourceDescriptionResolver getResourceDescriptionResolver(final String keyPrefix) {
+        return new StandardResourceDescriptionResolver(keyPrefix, RESOURCE_NAME, GateInExtension.class.getClassLoader(), true,
+                false);
+    }
 
-   /**
-    * {@inheritDoc}
-    */
-   @Override
-   public void initialize(ExtensionContext context)
-   {
-      log.debug("Activating GateIn Extension");
-      final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, 1, 0);
-      final GateInConfiguration config = new GateInConfiguration();
-      final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(new GateInSubsystemDefinition(config));
-      registration.registerOperationHandler(DESCRIBE, GenericSubsystemDescribeHandler.INSTANCE, GenericSubsystemDescribeHandler.INSTANCE, false, OperationEntry.EntryType.PRIVATE);
+    public GateInExtension() {
+        String confDir = new File(System.getProperty("jboss.server.config.dir"), "gatein").getAbsolutePath();
+        if (!System.getProperties().containsKey("exo.conf.dir")) {
+            log.info("Setting 'exo.conf.dir'");
+            System.setProperty("exo.conf.dir", confDir);
+        }
+        if (!System.getProperties().containsKey("exo.conf.dir.name")) {
+            log.info("Setting 'exo.conf.dir.name'");
+            System.setProperty("exo.conf.dir.name", "gatein");
+        }
+        if (!System.getProperties().containsKey("gatein.conf.dir")) {
+            log.info("Setting 'gatein.conf.dir'");
+            System.setProperty("gatein.conf.dir", confDir);
+        }
+    }
 
-      registration.registerSubModel(new DeploymentArchiveDefinition(config));
-      registration.registerSubModel(new PortletWarDependencyDefinition(config));
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void initialize(ExtensionContext context) {
+        log.debug("Activating GateIn Extension");
+        final SubsystemRegistration subsystem = context.registerSubsystem(SUBSYSTEM_NAME, 1, 0);
+        final GateInConfiguration config = new GateInConfiguration();
+        final ManagementResourceRegistration registration = subsystem.registerSubsystemModel(new GateInSubsystemDefinition(
+                config));
+        registration.registerOperationHandler(DESCRIBE, GenericSubsystemDescribeHandler.INSTANCE,
+                GenericSubsystemDescribeHandler.INSTANCE, false, OperationEntry.EntryType.PRIVATE);
 
-      // Register portal resources
-      PortalResourceRegistrar.registerPortalResources(registration, context.isRuntimeOnlyRegistrationValid());
+        registration.registerSubModel(new DeploymentArchiveDefinition(config));
+        registration.registerSubModel(new PortletWarDependencyDefinition(config));
 
-      subsystem.registerXMLElementWriter(GateInSubsystemParser.getInstance());
-   }
+        // Register portal resources
+        PortalResourceRegistrar.registerPortalResources(registration, context.isRuntimeOnlyRegistrationValid());
 
-   /**
-    * {@inheritDoc}
-    */
-   @Override
-   public void initializeParsers(ExtensionParsingContext context)
-   {
-      context.setSubsystemXmlMapping(NAMESPACE, GateInSubsystemParser.getInstance());
-   }
+        subsystem.registerXMLElementWriter(GateInSubsystemParser.getInstance());
+    }
 
-   public static String skipModuleLoaderPrefix(String name)
-   {
-      if (name.startsWith(ServiceModuleLoader.MODULE_PREFIX))
-      {
-         return name.substring(ServiceModuleLoader.MODULE_PREFIX.length());
-      }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void initializeParsers(ExtensionParsingContext context) {
+        context.setSubsystemXmlMapping(NAMESPACE, GateInSubsystemParser.getInstance());
+    }
 
-      return name;
-   }
+    public static String skipModuleLoaderPrefix(String name) {
+        if (name.startsWith(ServiceModuleLoader.MODULE_PREFIX)) {
+            return name.substring(ServiceModuleLoader.MODULE_PREFIX.length());
+        }
 
-   public static ServiceName deploymentUnitName(ModuleIdentifier moduleId, Phase phase)
-   {
-      return ServiceName.of(Services.deploymentUnitName(
-         GateInExtension.skipModuleLoaderPrefix(moduleId.getName())), phase.name());
-   }
+        return name;
+    }
 
-   public static ServiceName deploymentUnitName(ModuleIdentifier moduleId, String... postfix)
-   {
-      return ServiceName.of(Services.deploymentUnitName(
-         GateInExtension.skipModuleLoaderPrefix(moduleId.getName())), postfix);
-   }
+    public static ServiceName deploymentUnitName(ModuleIdentifier moduleId, Phase phase) {
+        return ServiceName.of(Services.deploymentUnitName(GateInExtension.skipModuleLoaderPrefix(moduleId.getName())),
+                phase.name());
+    }
+
+    public static ServiceName deploymentUnitName(ModuleIdentifier moduleId, String... postfix) {
+        return ServiceName.of(Services.deploymentUnitName(GateInExtension.skipModuleLoaderPrefix(moduleId.getName())), postfix);
+    }
 }

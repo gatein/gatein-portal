@@ -25,6 +25,6 @@
   <portal-name>system</portal-name>
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
- 	<portal-layout>
+  <portal-layout>
   </portal-layout>
 </portal-config>

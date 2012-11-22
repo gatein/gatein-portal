@@ -14,6 +14,7 @@ detected.
 <Configure class="org.mortbay.jetty.webapp.WebAppContext">
 
   <Set name="contextPath">/eXoGadgetServer</Set>
-  <Set name="war"><SystemProperty name="jetty.home" default="."/>/webapps/eXoGadgetServer.war</Set>
+  <Set name="war"><SystemProperty name="jetty.home" default="."/>/webapps/eXoGadgetServer.war
+  </Set>
 
 </Configure>

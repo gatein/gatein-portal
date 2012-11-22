@@ -28,40 +28,34 @@ import org.gatein.mop.api.workspace.WorkspaceObject;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-abstract class DataCache
-{
+abstract class DataCache {
 
-   protected abstract void removeState(CacheKey key);
+    protected abstract void removeState(CacheKey key);
 
-   protected abstract Described.State getState(POMSession session, CacheKey key);
+    protected abstract Described.State getState(POMSession session, CacheKey key);
 
-   protected final CacheValue getValue(POMSession session, CacheKey key)
-   {
-      WorkspaceObject obj = session.findObjectById(key.id);
-      I18NAdapter able = obj.adapt(I18NAdapter.class);
-      Resolution<Described> res = able.resolveI18NMixin(Described.class, key.locale);
-      if (res != null)
-      {
-         Described.State state = res.getMixin().getState();
-         if (key.locale.equals(res.getLocale()))
-         {
-            CacheValue foo = new CacheValue(state);
-            putValue(key, foo);
-            return foo;
-         }
-         else
-         {
-            CacheValue origin = new CacheValue(state);
-            CacheKey originKey = new CacheKey(res.getLocale(), key.id);
-            putValue(originKey, origin);
-            CacheValue foo = new CacheValue(originKey, origin.serial, state);
-            putValue(key, foo);
-            return foo;
-         }
-      }
-      return null;
-   }
+    protected final CacheValue getValue(POMSession session, CacheKey key) {
+        WorkspaceObject obj = session.findObjectById(key.id);
+        I18NAdapter able = obj.adapt(I18NAdapter.class);
+        Resolution<Described> res = able.resolveI18NMixin(Described.class, key.locale);
+        if (res != null) {
+            Described.State state = res.getMixin().getState();
+            if (key.locale.equals(res.getLocale())) {
+                CacheValue foo = new CacheValue(state);
+                putValue(key, foo);
+                return foo;
+            } else {
+                CacheValue origin = new CacheValue(state);
+                CacheKey originKey = new CacheKey(res.getLocale(), key.id);
+                putValue(originKey, origin);
+                CacheValue foo = new CacheValue(originKey, origin.serial, state);
+                putValue(key, foo);
+                return foo;
+            }
+        }
+        return null;
+    }
 
-   protected abstract void putValue(CacheKey key, CacheValue value);
+    protected abstract void putValue(CacheKey key, CacheValue value);
 
 }

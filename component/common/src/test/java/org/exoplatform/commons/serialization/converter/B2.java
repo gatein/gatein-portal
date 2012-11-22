@@ -21,21 +21,19 @@ package org.exoplatform.commons.serialization.converter;
 
 import java.io.Serializable;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class B2 implements Serializable
-{
+public class B2 implements Serializable {
 
-   String state;
+    String state;
 
-   public B2()
-   {
-   }
+    public B2() {
+    }
 
-   public B2(String state)
-   {
-      this.state = state;
-   }
+    public B2(String state) {
+        this.state = state;
+    }
 }

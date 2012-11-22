@@ -2,7 +2,7 @@
 
 <!DOCTYPE struts-config PUBLIC
     "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN"
-   "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
+    "http://jakarta.apache.org/struts/dtds/struts-config_1_2.dtd">
 
 <struts-config>
 
@@ -26,11 +26,11 @@
 
   <action-mappings>
 
-	 <action path="/index" include="/index.jsp"/>
-	 <action path="/help" include="/help.jsp"/>
-     <action path="/error" include="/common/Error.jsp"/>
+    <action path="/index" include="/index.jsp"/>
+    <action path="/help" include="/help.jsp"/>
+    <action path="/error" include="/common/Error.jsp"/>
 
-			 
+
     <action path="/shop/index" type="org.apache.struts.beanaction.BeanAction"
             name="catalogBean" parameter="*" validate="false">
       <forward name="success" path="/catalog/Main.jsp"/>
@@ -102,7 +102,7 @@
 
     <action path="/shop/checkout" type="org.apache.struts.beanaction.BeanAction"
             name="orderBean" scope="session" parameter="newOrderForm"
-            validate="false" >
+            validate="false">
       <forward name="success" path="/cart/Checkout.jsp"/>
     </action>
 

@@ -25,5 +25,5 @@ package org.exoplatform.web.application;
  */
 public enum RequestFailure {
 
-   IO_FAILURE, CONCURRENCY_FAILURE
+    IO_FAILURE, CONCURRENCY_FAILURE
 }

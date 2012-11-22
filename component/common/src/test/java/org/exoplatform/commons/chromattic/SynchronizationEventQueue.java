@@ -18,38 +18,33 @@
  */
 package org.exoplatform.commons.chromattic;
 
-import junit.framework.Assert;
-
 import java.util.LinkedList;
+
+import junit.framework.Assert;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class SynchronizationEventQueue implements SynchronizationListener
-{
+public class SynchronizationEventQueue implements SynchronizationListener {
 
-   /** . */
-   private final LinkedList<SynchronizationEvent> queue = new LinkedList<SynchronizationEvent>();
+    /** . */
+    private final LinkedList<SynchronizationEvent> queue = new LinkedList<SynchronizationEvent>();
 
-   public void beforeSynchronization()
-   {
-      queue.add(SynchronizationEvent.BEFORE);
-   }
+    public void beforeSynchronization() {
+        queue.add(SynchronizationEvent.BEFORE);
+    }
 
-   public void afterSynchronization(SynchronizationStatus status)
-   {
-      queue.add(status == SynchronizationStatus.SAVED ? SynchronizationEvent.SAVED : SynchronizationEvent.DISCARDED);
-   }
+    public void afterSynchronization(SynchronizationStatus status) {
+        queue.add(status == SynchronizationStatus.SAVED ? SynchronizationEvent.SAVED : SynchronizationEvent.DISCARDED);
+    }
 
-   public void assertEmpty()
-   {
-      Assert.assertTrue(queue.isEmpty());
-   }
+    public void assertEmpty() {
+        Assert.assertTrue(queue.isEmpty());
+    }
 
-   public void assertEvent(SynchronizationEvent event)
-   {
-      Assert.assertTrue(queue.size() > 0);
-      Assert.assertEquals(event, queue.removeFirst());
-   }
+    public void assertEvent(SynchronizationEvent event) {
+        Assert.assertTrue(queue.size() > 0);
+        Assert.assertEquals(event, queue.removeFirst());
+    }
 }

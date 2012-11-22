@@ -24,73 +24,62 @@ package org.exoplatform.portal.mop.navigation;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class FederatingVisitor<N> implements Scope.Visitor
-{
+class FederatingVisitor<N> implements Scope.Visitor {
 
-   /** . */
-   private final Scope.Visitor visitor;
+    /** . */
+    private final Scope.Visitor visitor;
 
-   /** . */
-   private final NodeContext<N> federationRoot;
+    /** . */
+    private final NodeContext<N> federationRoot;
 
-   /** . */
-   private final int federationDepth;
+    /** . */
+    private final int federationDepth;
 
-   /** . */
-   private final Scope federatedScope;
+    /** . */
+    private final Scope federatedScope;
 
-   /** . */
-   private Scope.Visitor federated;
+    /** . */
+    private Scope.Visitor federated;
 
-   FederatingVisitor(Scope.Visitor visitor, NodeContext<N> federationRoot, Scope federatedScope)
-   {
-      this.visitor = visitor;
-      this.federationRoot = federationRoot;
-      this.federatedScope = federatedScope;
-      this.federated = null;
-      this.federationDepth = federationRoot.getDepth(federationRoot.tree.root);
-   }
+    FederatingVisitor(Scope.Visitor visitor, NodeContext<N> federationRoot, Scope federatedScope) {
+        this.visitor = visitor;
+        this.federationRoot = federationRoot;
+        this.federatedScope = federatedScope;
+        this.federated = null;
+        this.federationDepth = federationRoot.getDepth(federationRoot.tree.root);
+    }
 
-   public VisitMode enter(int depth, String id, String name, NodeState state)
-   {
-      if (federationRoot.handle.equals(id))
-      {
-         federated = federatedScope.get();
-      }
+    public VisitMode enter(int depth, String id, String name, NodeState state) {
+        if (federationRoot.handle.equals(id)) {
+            federated = federatedScope.get();
+        }
 
-      //
-      VisitMode visit;
-      if (federated != null)
-      {
-         visit = federated.enter(depth - federationDepth, id, name, state);
-      }
-      else
-      {
-         visit = VisitMode.NO_CHILDREN;
-      }
+        //
+        VisitMode visit;
+        if (federated != null) {
+            visit = federated.enter(depth - federationDepth, id, name, state);
+        } else {
+            visit = VisitMode.NO_CHILDREN;
+        }
 
-      // Override
-      VisitMode override = visitor.enter(depth, id, name, state);
-      if (override == VisitMode.ALL_CHILDREN)
-      {
-         visit = VisitMode.ALL_CHILDREN;
-      }
+        // Override
+        VisitMode override = visitor.enter(depth, id, name, state);
+        if (override == VisitMode.ALL_CHILDREN) {
+            visit = VisitMode.ALL_CHILDREN;
+        }
 
-      //
-      return visit;
-   }
+        //
+        return visit;
+    }
 
-   public void leave(int depth, String id, String name, NodeState state)
-   {
-      if (federationRoot.handle.equals(id))
-      {
-         federated = null;
-      }
+    public void leave(int depth, String id, String name, NodeState state) {
+        if (federationRoot.handle.equals(id)) {
+            federated = null;
+        }
 
-      //
-      if (federated != null)
-      {
-         federated.leave(depth - federationDepth, id, name, state);
-      }
-   }
+        //
+        if (federated != null) {
+            federated.leave(depth - federationDepth, id, name, state);
+        }
+    }
 }

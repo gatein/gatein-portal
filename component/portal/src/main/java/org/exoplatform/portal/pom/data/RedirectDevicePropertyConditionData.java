@@ -30,86 +30,71 @@ import org.exoplatform.portal.config.model.DevicePropertyCondition;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class RedirectDevicePropertyConditionData extends ComponentData
-{
+public class RedirectDevicePropertyConditionData extends ComponentData {
 
-   protected String propertyName;
-   protected Float lessThan;
-   protected Float greaterThan;
-   protected String equals;
-   protected Pattern matches;
+    protected String propertyName;
+    protected Float lessThan;
+    protected Float greaterThan;
+    protected String equals;
+    protected Pattern matches;
 
-   public RedirectDevicePropertyConditionData(String storageId, String storageName, String propertyName)
-   {
-      super(storageId, storageName);
-      this.propertyName = propertyName;
-   }
+    public RedirectDevicePropertyConditionData(String storageId, String storageName, String propertyName) {
+        super(storageId, storageName);
+        this.propertyName = propertyName;
+    }
 
-   public String getPropertyName()
-   {
-      return propertyName;
-   }
+    public String getPropertyName() {
+        return propertyName;
+    }
 
-   public void setPropertyName(String propertyName)
-   {
-      this.propertyName = propertyName;
-   }
+    public void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
+    }
 
-   public Float getLessThan()
-   {
-      return lessThan;
-   }
+    public Float getLessThan() {
+        return lessThan;
+    }
 
-   public void setLessThan(Float lessThan)
-   {
-      this.lessThan = lessThan;
-   }
+    public void setLessThan(Float lessThan) {
+        this.lessThan = lessThan;
+    }
 
-   public Float getGreaterThan()
-   {
-      return greaterThan;
-   }
+    public Float getGreaterThan() {
+        return greaterThan;
+    }
 
-   public void setGreaterThan(Float greaterThan)
-   {
-      this.greaterThan = greaterThan;
-   }
+    public void setGreaterThan(Float greaterThan) {
+        this.greaterThan = greaterThan;
+    }
 
-   public String getEquals()
-   {
-      return equals;
-   }
+    public String getEquals() {
+        return equals;
+    }
 
-   public void setEquals(String equals)
-   {
-      this.equals = equals;
-   }
+    public void setEquals(String equals) {
+        this.equals = equals;
+    }
 
-   public Pattern getMatches()
-   {
-      return matches;
-   }
+    public Pattern getMatches() {
+        return matches;
+    }
 
-   public void setMatches(Pattern matches)
-   {
-      this.matches = matches;
-   }
+    public void setMatches(Pattern matches) {
+        this.matches = matches;
+    }
 
-   public DevicePropertyCondition build()
-   {
-      DevicePropertyCondition devicePropertyCondition = new DevicePropertyCondition();
-      
-      devicePropertyCondition.setPropertyName(propertyName);
-      devicePropertyCondition.setEquals(equals);
-      devicePropertyCondition.setGreaterThan(greaterThan);
-      devicePropertyCondition.setLessThan(lessThan);
-      if (matches != null)
-      {
-         devicePropertyCondition.setMatches(matches.toString());
-      }
-      devicePropertyCondition.setStorageName(getStorageName());
-      
-      return devicePropertyCondition;
-   }
+    public DevicePropertyCondition build() {
+        DevicePropertyCondition devicePropertyCondition = new DevicePropertyCondition();
+
+        devicePropertyCondition.setPropertyName(propertyName);
+        devicePropertyCondition.setEquals(equals);
+        devicePropertyCondition.setGreaterThan(greaterThan);
+        devicePropertyCondition.setLessThan(lessThan);
+        if (matches != null) {
+            devicePropertyCondition.setMatches(matches.toString());
+        }
+        devicePropertyCondition.setStorageName(getStorageName());
+
+        return devicePropertyCondition;
+    }
 }
-

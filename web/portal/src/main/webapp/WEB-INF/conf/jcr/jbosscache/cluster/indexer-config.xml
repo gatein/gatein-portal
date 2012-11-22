@@ -18,15 +18,15 @@
   -->
 <jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
-   <locking useLockStriping="false" concurrencyLevel="64" lockParentForChildInsertRemove="false"
-      lockAcquisitionTimeout="20000" />
-  
-   <!-- Configure the TransactionManager -->
-   <transaction transactionManagerLookupClass="org.jboss.cache.transaction.JBossStandaloneJTAManagerLookup" />
+  <locking useLockStriping="false" concurrencyLevel="64" lockParentForChildInsertRemove="false"
+           lockAcquisitionTimeout="20000"/>
 
-   <clustering mode="replication" clusterName="${jboss.partition.name:DefaultPartition}-${jbosscache-cluster-name}">
-      <stateRetrieval timeout="20000" fetchInMemoryState="false" />
-      <jgroupsConfig configFile="jgroups/gatein-${gatein.default.jgroups.stack:udp}.xml" />
-      <sync />
-   </clustering>
+  <!-- Configure the TransactionManager -->
+  <transaction transactionManagerLookupClass="org.jboss.cache.transaction.JBossStandaloneJTAManagerLookup"/>
+
+  <clustering mode="replication" clusterName="${jboss.partition.name:DefaultPartition}-${jbosscache-cluster-name}">
+    <stateRetrieval timeout="20000" fetchInMemoryState="false"/>
+    <jgroupsConfig configFile="jgroups/gatein-${gatein.default.jgroups.stack:udp}.xml"/>
+    <sync/>
+  </clustering>
 </jbosscache>

@@ -18,10 +18,10 @@
  */
 package org.exoplatform.groovyscript;
 
+import java.io.IOException;
+
 import groovy.lang.Binding;
 import groovy.lang.Script;
-
-import java.io.IOException;
 
 /**
  * The internal base script of a Groovy script as seen by the Groovy world.
@@ -29,61 +29,47 @@ import java.io.IOException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class BaseScript extends Script
-{
+public abstract class BaseScript extends Script {
 
-   GroovyPrinter printer;
+    GroovyPrinter printer;
 
-   protected BaseScript()
-   {
-   }
+    protected BaseScript() {
+    }
 
-   protected BaseScript(Binding binding)
-   {
-      super(binding);
-   }
+    protected BaseScript(Binding binding) {
+        super(binding);
+    }
 
-   @Override
-   public Object getProperty(String property)
-   {
-      if ("out".equals(property))
-      {
-         return printer;
-      }
-      else
-      {
-         return super.getProperty(property);
-      }
-   }
+    @Override
+    public Object getProperty(String property) {
+        if ("out".equals(property)) {
+            return printer;
+        } else {
+            return super.getProperty(property);
+        }
+    }
 
-   @Override
-   public void println(Object o)
-   {
-      printer.println(o);
-   }
+    @Override
+    public void println(Object o) {
+        printer.println(o);
+    }
 
-   @Override
-   public void println()
-   {
-      printer.println();
-   }
+    @Override
+    public void println() {
+        printer.println();
+    }
 
-   @Override
-   public void print(Object o)
-   {
-      printer.print(o);
-   }
+    @Override
+    public void print(Object o) {
+        printer.print(o);
+    }
 
-   public void flush()
-   {
-      try
-      {
-         printer.flush();
-      }
-      catch (IOException e)
-      {
-         //TODO: need to check again
-         //      	e.printStackTrace();
-      }
-   }
+    public void flush() {
+        try {
+            printer.flush();
+        } catch (IOException e) {
+            // TODO: need to check again
+            // e.printStackTrace();
+        }
+    }
 }

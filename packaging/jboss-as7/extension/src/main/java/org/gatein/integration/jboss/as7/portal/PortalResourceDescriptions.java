@@ -22,92 +22,84 @@
 
 package org.gatein.integration.jboss.as7.portal;
 
+import static org.gatein.integration.jboss.as7.portal.PortalResourceConstants.APPLICATION;
+import static org.gatein.integration.jboss.as7.portal.PortalResourceConstants.SITE;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.*;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import org.gatein.integration.jboss.as7.GateInExtension;
 import org.jboss.as.controller.descriptions.common.GlobalDescriptions;
 import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.ModelType;
 
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import static org.gatein.integration.jboss.as7.portal.PortalResourceConstants.*;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.*;
-
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public class PortalResourceDescriptions
-{
-   private static final String RESOURCE_NAME = GateInExtension.class.getPackage().getName() + ".LocalDescriptions";
+public class PortalResourceDescriptions {
+    private static final String RESOURCE_NAME = GateInExtension.class.getPackage().getName() + ".LocalDescriptions";
 
-   static ModelNode getPortalReadResourceDescription(Locale locale)
-   {
-      ModelNode node = GlobalDescriptions.getReadResourceOperationDescription(locale);
-      node.get(REPLY_PROPERTIES, VALUE_TYPE).set(ModelType.OBJECT);
-      return node;
-   }
+    static ModelNode getPortalReadResourceDescription(Locale locale) {
+        ModelNode node = GlobalDescriptions.getReadResourceOperationDescription(locale);
+        node.get(REPLY_PROPERTIES, VALUE_TYPE).set(ModelType.OBJECT);
+        return node;
+    }
 
-   static ModelNode getPortalResourceDescription(Locale locale)
-   {
-      final ResourceBundle bundle = getResourceBundle(locale);
+    static ModelNode getPortalResourceDescription(Locale locale) {
+        final ResourceBundle bundle = getResourceBundle(locale);
 
-      final ModelNode node = new ModelNode();
-      node.get(DESCRIPTION).set(bundle.getString("portal"));
+        final ModelNode node = new ModelNode();
+        node.get(DESCRIPTION).set(bundle.getString("portal"));
 
-      node.get(ATTRIBUTES).setEmptyObject();
-      node.get(OPERATIONS).setEmptyObject();
+        node.get(ATTRIBUTES).setEmptyObject();
+        node.get(OPERATIONS).setEmptyObject();
 
-      node.get(CHILDREN, SITE, DESCRIPTION).set(bundle.getString("portal.sites"));
-      node.get(CHILDREN, SITE, MODEL_DESCRIPTION);
+        node.get(CHILDREN, SITE, DESCRIPTION).set(bundle.getString("portal.sites"));
+        node.get(CHILDREN, SITE, MODEL_DESCRIPTION);
 
-      node.get(CHILDREN, APPLICATION, DESCRIPTION).set(bundle.getString("portal.applications"));
-      node.get(CHILDREN, APPLICATION, MODEL_DESCRIPTION);
+        node.get(CHILDREN, APPLICATION, DESCRIPTION).set(bundle.getString("portal.applications"));
+        node.get(CHILDREN, APPLICATION, MODEL_DESCRIPTION);
 
-      return node;
-   }
+        return node;
+    }
 
-   static ModelNode getSiteResourceDescription(Locale locale)
-   {
-      final ResourceBundle bundle = getResourceBundle(locale);
+    static ModelNode getSiteResourceDescription(Locale locale) {
+        final ResourceBundle bundle = getResourceBundle(locale);
 
-      final ModelNode node = new ModelNode();
-      node.get(DESCRIPTION).set(bundle.getString("portal.site"));
+        final ModelNode node = new ModelNode();
+        node.get(DESCRIPTION).set(bundle.getString("portal.site"));
 
-      for (StatisticsMetricHandler.StatisticsMetric metric : StatisticsMetricHandler.StatisticsMetric.forType(SITE))
-      {
-         metric.definition.addResourceAttributeDescription(bundle, "portal.site.metrics", node);
-      }
+        for (StatisticsMetricHandler.StatisticsMetric metric : StatisticsMetricHandler.StatisticsMetric.forType(SITE)) {
+            metric.definition.addResourceAttributeDescription(bundle, "portal.site.metrics", node);
+        }
 
-      node.get(OPERATIONS).setEmptyObject();
-      node.get(CHILDREN).setEmptyObject();
+        node.get(OPERATIONS).setEmptyObject();
+        node.get(CHILDREN).setEmptyObject();
 
-      return node;
-   }
+        return node;
+    }
 
-   static ModelNode getApplicationResourceDescription(Locale locale)
-   {
-      final ResourceBundle bundle = getResourceBundle(locale);
+    static ModelNode getApplicationResourceDescription(Locale locale) {
+        final ResourceBundle bundle = getResourceBundle(locale);
 
-      final ModelNode node = new ModelNode();
-      node.get(DESCRIPTION).set(bundle.getString("portal.application"));
+        final ModelNode node = new ModelNode();
+        node.get(DESCRIPTION).set(bundle.getString("portal.application"));
 
-      for (StatisticsMetricHandler.StatisticsMetric metric : StatisticsMetricHandler.StatisticsMetric.forType(APPLICATION))
-      {
-         metric.definition.addResourceAttributeDescription(bundle, "portal.application.metrics", node);
-      }
+        for (StatisticsMetricHandler.StatisticsMetric metric : StatisticsMetricHandler.StatisticsMetric.forType(APPLICATION)) {
+            metric.definition.addResourceAttributeDescription(bundle, "portal.application.metrics", node);
+        }
 
-      node.get(OPERATIONS).setEmptyObject();
-      node.get(CHILDREN).setEmptyObject();
+        node.get(OPERATIONS).setEmptyObject();
+        node.get(CHILDREN).setEmptyObject();
 
-      return node;
-   }
+        return node;
+    }
 
-   protected static ResourceBundle getResourceBundle(Locale locale)
-   {
-      if (locale == null)
-      {
-         locale = Locale.getDefault();
-      }
-      return ResourceBundle.getBundle(RESOURCE_NAME, locale);
-   }
+    protected static ResourceBundle getResourceBundle(Locale locale) {
+        if (locale == null) {
+            locale = Locale.getDefault();
+        }
+        return ResourceBundle.getBundle(RESOURCE_NAME, locale);
+    }
 }

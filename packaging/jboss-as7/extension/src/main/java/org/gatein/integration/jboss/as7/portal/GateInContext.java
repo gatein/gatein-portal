@@ -26,20 +26,18 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public class GateInContext
-{
-   private final Set<String> portalNames = new CopyOnWriteArraySet<String>();
+public class GateInContext {
+    private final Set<String> portalNames = new CopyOnWriteArraySet<String>();
 
-   public Set<String> getPortalNames()
-   {
-      return Collections.unmodifiableSet(portalNames);
-   }
+    public Set<String> getPortalNames() {
+        return Collections.unmodifiableSet(portalNames);
+    }
 
-   void addPortalName(String name)
-   {
-      portalNames.add(name);
-   }
+    void addPortalName(String name) {
+        portalNames.add(name);
+    }
 }

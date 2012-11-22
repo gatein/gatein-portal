@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <?rename tofile="portal.war"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -208,80 +209,80 @@
 
     <!-- Reflext -->
     <dependency>
-       <groupId>org.reflext</groupId>
-       <artifactId>reflext.api</artifactId>
+      <groupId>org.reflext</groupId>
+      <artifactId>reflext.api</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.reflext</groupId>
-       <artifactId>reflext.core</artifactId>
+      <groupId>org.reflext</groupId>
+      <artifactId>reflext.core</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.reflext</groupId>
-       <artifactId>reflext.jlr</artifactId>
+      <groupId>org.reflext</groupId>
+      <artifactId>reflext.jlr</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.reflext</groupId>
-       <artifactId>reflext.spi</artifactId>
+      <groupId>org.reflext</groupId>
+      <artifactId>reflext.spi</artifactId>
     </dependency>
 
     <!-- Chromattic -->
     <dependency>
-       <groupId>org.chromattic</groupId>
-       <artifactId>chromattic.apt</artifactId>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.apt</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.chromattic</groupId>
-       <artifactId>chromattic.api</artifactId>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.api</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.chromattic</groupId>
-       <artifactId>chromattic.spi</artifactId>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.spi</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.chromattic</groupId>
-       <artifactId>chromattic.common</artifactId>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.common</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.chromattic</groupId>
-       <artifactId>chromattic.core</artifactId>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.core</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.chromattic</groupId>
-       <artifactId>chromattic.metamodel</artifactId>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.metamodel</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.chromattic</groupId>
-       <artifactId>chromattic.ext</artifactId>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.ext</artifactId>
     </dependency>
 
     <!-- Picket link -->
     <dependency>
-       <groupId>org.picketlink.idm</groupId>
-       <artifactId>picketlink-idm-api</artifactId>
+      <groupId>org.picketlink.idm</groupId>
+      <artifactId>picketlink-idm-api</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.picketlink.idm</groupId>
-       <artifactId>picketlink-idm-spi</artifactId>
+      <groupId>org.picketlink.idm</groupId>
+      <artifactId>picketlink-idm-spi</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.picketlink.idm</groupId>
-       <artifactId>picketlink-idm-cache</artifactId>
+      <groupId>org.picketlink.idm</groupId>
+      <artifactId>picketlink-idm-cache</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.picketlink.idm</groupId>
-       <artifactId>picketlink-idm-common</artifactId>
+      <groupId>org.picketlink.idm</groupId>
+      <artifactId>picketlink-idm-common</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.picketlink.idm</groupId>
-       <artifactId>picketlink-idm-core</artifactId>
+      <groupId>org.picketlink.idm</groupId>
+      <artifactId>picketlink-idm-core</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.picketlink.idm</groupId>
-       <artifactId>picketlink-idm-hibernate</artifactId>
+      <groupId>org.picketlink.idm</groupId>
+      <artifactId>picketlink-idm-hibernate</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.picketlink.idm</groupId>
-       <artifactId>picketlink-idm-ldap</artifactId>
+      <groupId>org.picketlink.idm</groupId>
+      <artifactId>picketlink-idm-ldap</artifactId>
     </dependency>
 
     <!-- Gatein common -->
@@ -362,34 +363,34 @@
 
     <!-- GateIn Captcha -->
     <dependency>
-       <groupId>org.gatein.captcha</groupId>
-       <artifactId>simplecaptcha</artifactId>
+      <groupId>org.gatein.captcha</groupId>
+      <artifactId>simplecaptcha</artifactId>
     </dependency>
 
     <!-- GateIn Shinding -->
     <dependency>
-       <groupId>org.gatein.shindig</groupId>
-       <artifactId>shindig-gadgets</artifactId>
+      <groupId>org.gatein.shindig</groupId>
+      <artifactId>shindig-gadgets</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.gatein.shindig</groupId>
-       <artifactId>shindig-features</artifactId>
+      <groupId>org.gatein.shindig</groupId>
+      <artifactId>shindig-features</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.gatein.shindig</groupId>
-       <artifactId>shindig-common</artifactId>
+      <groupId>org.gatein.shindig</groupId>
+      <artifactId>shindig-common</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.gatein.shindig</groupId>
-       <artifactId>shindig-social-api</artifactId>
+      <groupId>org.gatein.shindig</groupId>
+      <artifactId>shindig-social-api</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.apache.httpcomponents</groupId>
-       <artifactId>httpclient</artifactId>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.apache.httpcomponents</groupId>
-       <artifactId>httpcore</artifactId>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore</artifactId>
     </dependency>
 
     <!-- GateIn SSO -->
@@ -704,12 +705,12 @@
     <dependency>
       <groupId>de.odysseus.juel</groupId>
       <artifactId>juel-impl</artifactId>
-        <exclusions>
-          <exclusion>
-            <groupId>de.odysseus.juel</groupId>
-            <artifactId>juel-api</artifactId>
-          </exclusion>
-        </exclusions>
+      <exclusions>
+        <exclusion>
+          <groupId>de.odysseus.juel</groupId>
+          <artifactId>juel-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.apache.lucene</groupId>
@@ -796,8 +797,8 @@
       <artifactId>tika-parsers</artifactId>
     </dependency>
     <dependency>
-       <groupId>org.ccil.cowan.tagsoup</groupId>
-       <artifactId>tagsoup</artifactId>
+      <groupId>org.ccil.cowan.tagsoup</groupId>
+      <artifactId>tagsoup</artifactId>
     </dependency>
     <dependency>
       <groupId>com.google.javascript</groupId>
@@ -808,7 +809,7 @@
       <artifactId>mime-util</artifactId>
     </dependency>
 
- <!-- War files -->
+    <!-- War files -->
     <dependency>
       <?rename portal.war?>
       <groupId>org.gatein.portal</groupId>
@@ -863,14 +864,14 @@
       <artifactId>exo.portal.starter.war</artifactId>
       <type>war</type>
     </dependency>
-    
+
     <dependency>
       <?rename gatein-sample-skin.war?>
       <groupId>org.gatein.portal.examples.skins</groupId>
       <artifactId>gatein-sample-skin</artifactId>
       <type>war</type>
     </dependency>
-    
+
     <dependency>
       <?rename dashboard.war?>
       <groupId>org.gatein.portal</groupId>
@@ -879,10 +880,10 @@
     </dependency>
 
     <dependency>
-       <?rename redirect-portlet.war?>
-       <groupId>org.gatein.portal.portlet</groupId>
-       <artifactId>redirect</artifactId>
-       <type>war</type>
+      <?rename redirect-portlet.war?>
+      <groupId>org.gatein.portal.portlet</groupId>
+      <artifactId>redirect</artifactId>
+      <type>war</type>
     </dependency>
 
   </dependencies>
@@ -893,7 +894,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-antrun-plugin</artifactId>
-        <inherited>false</inherited> 
+        <inherited>false</inherited>
         <executions>
           <execution>
             <id>prepare-package</id>
@@ -904,24 +905,26 @@
             <configuration>
               <target>
                 <!-- Copy the dependencies -->
-                <dependencyfilesets />
-                <xslt basedir="${project.basedir}" destdir="${project.build.directory}" includes="pom.xml" extension=".xml" style="${project.basedir}/transform.xsl">
-                  <param name="lib.dir" expression="${project.build.directory}/tomcat/lib" />
-                  <param name="webapps.dir" expression="${project.build.directory}/tomcat/webapps" />
-                  <mapper type="glob" from="pom.xml" to="copy-dependencies.xml" />
+                <dependencyfilesets/>
+                <xslt basedir="${project.basedir}" destdir="${project.build.directory}" includes="pom.xml"
+                      extension=".xml" style="${project.basedir}/transform.xsl">
+                  <param name="lib.dir" expression="${project.build.directory}/tomcat/lib"/>
+                  <param name="webapps.dir" expression="${project.build.directory}/tomcat/webapps"/>
+                  <mapper type="glob" from="pom.xml" to="copy-dependencies.xml"/>
                 </xslt>
                 <ant antfile="${project.build.directory}/copy-dependencies.xml" inheritRefs="true">
-                  <target name="copy-dependencies" />
+                  <target name="copy-dependencies"/>
                 </ant>
 
                 <!-- Copy configuration -->
                 <copy todir="${project.build.directory}/tomcat">
-                  <fileset dir="${project.basedir}/src/main/resources/tomcat" />
+                  <fileset dir="${project.basedir}/src/main/resources/tomcat"/>
                 </copy>
 
                 <!-- Copy configuration -->
                 <copy tofile="${project.build.directory}/tomcat/gatein/conf/configuration.properties">
-                  <fileset dir="${project.basedir}/../../../component/common/src/main/java/conf" includes="configuration-tomcat.properties" />
+                  <fileset dir="${project.basedir}/../../../component/common/src/main/java/conf"
+                           includes="configuration-tomcat.properties"/>
                 </copy>
 
               </target>

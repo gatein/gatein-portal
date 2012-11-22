@@ -28,14 +28,12 @@ import org.exoplatform.component.test.ContainerScope;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.resources-configuration.xml")
-})
+@ConfiguredBy({ @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.resources-configuration.xml") })
 public abstract class AbstractResourceBundleTest extends AbstractKernelTest {
-   protected AbstractResourceBundleTest() {
-   }
+    protected AbstractResourceBundleTest() {
+    }
 
-   protected AbstractResourceBundleTest(String name) {
-      super(name);
-   }
+    protected AbstractResourceBundleTest(String name) {
+        super(name);
+    }
 }

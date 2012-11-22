@@ -20,37 +20,39 @@
 
 -->
 
-<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+               xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
-	<external-component-plugins>
-		<!-- The full qualified name of the ResourceBundleService -->
-		<target-component>org.exoplatform.services.resources.ResourceBundleService</target-component>
-		<component-plugin>
-			<!-- The name of the plugin -->
-			<name>Sample ResourceBundle Plugin</name>
-			<!-- The name of the method to call on the ResourceBundleService in order to register the ResourceBundles -->
-			<set-method>addResourceBundle</set-method>
-			<!-- The full qualified name of the BaseResourceBundlePlugin -->
-			<type>org.exoplatform.services.resources.impl.BaseResourceBundlePlugin</type>
-			<init-params>
-				<!--values-param>
-					<name>classpath.resources</name>
-					<description>The resources that start with the following package name should be load from file system</description>
-					<value>locale.portlet</value>
-				</values-param-->
-				<values-param>
-					<name>init.resources</name>
-					<description>Store the following resources into the db for the first launch </description>
-					<value>locale.portal.sample</value>
-				</values-param>
-				<values-param>
-					<name>portal.resource.names</name>
-					<description>The properties files of the portal , those file will be merged
-						into one ResoruceBundle properties </description>
-					<value>locale.portal.sample</value>
-				</values-param>
-			</init-params>
-		</component-plugin>
-	</external-component-plugins>
+  <external-component-plugins>
+    <!-- The full qualified name of the ResourceBundleService -->
+    <target-component>org.exoplatform.services.resources.ResourceBundleService</target-component>
+    <component-plugin>
+      <!-- The name of the plugin -->
+      <name>Sample ResourceBundle Plugin</name>
+      <!-- The name of the method to call on the ResourceBundleService in order to register the ResourceBundles -->
+      <set-method>addResourceBundle</set-method>
+      <!-- The full qualified name of the BaseResourceBundlePlugin -->
+      <type>org.exoplatform.services.resources.impl.BaseResourceBundlePlugin</type>
+      <init-params>
+        <!--values-param>
+            <name>classpath.resources</name>
+            <description>The resources that start with the following package name should be load from file system</description>
+            <value>locale.portlet</value>
+          </values-param-->
+        <values-param>
+          <name>init.resources</name>
+          <description>Store the following resources into the db for the first launch</description>
+          <value>locale.portal.sample</value>
+        </values-param>
+        <values-param>
+          <name>portal.resource.names</name>
+          <description>The properties files of the portal , those file will be merged
+            into one ResoruceBundle properties
+          </description>
+          <value>locale.portal.sample</value>
+        </values-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
 </configuration>

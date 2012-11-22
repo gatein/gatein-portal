@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -18,6 +18,14 @@
  */
 
 package org.exoplatform.portal.webui.portal;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.portlet.WindowState;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 
 import org.exoplatform.portal.account.UIAccountSetting;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -57,387 +65,319 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import javax.portlet.WindowState;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-
 @ComponentConfig(lifecycle = UIPortalLifecycle.class, template = "system:/groovy/portal/webui/portal/UIPortal.gtmpl", events = {
-   @EventConfig(listeners = ChangeApplicationListActionListener.class),
-   @EventConfig(listeners = MoveChildActionListener.class),
-   @EventConfig(listeners = UIPortal.LogoutActionListener.class),
-   @EventConfig(listeners = ShowLoginFormActionListener.class),
-   @EventConfig(listeners = ChangeLanguageActionListener.class),
-   @EventConfig(listeners = EditPortalPropertiesActionListener.class),
-   @EventConfig(listeners = ChangeSkinActionListener.class),
-   @EventConfig(listeners = RecoveryPasswordAndUsernameActionListener.class),
-   @EventConfig(listeners = UIPortal.AccountSettingsActionListener.class),
-   @EventConfig(listeners = UIPortalActionListener.PingActionListener.class)})
-public class UIPortal extends UIContainer
-{
-   private SiteKey siteKey;
+        @EventConfig(listeners = ChangeApplicationListActionListener.class),
+        @EventConfig(listeners = MoveChildActionListener.class), @EventConfig(listeners = UIPortal.LogoutActionListener.class),
+        @EventConfig(listeners = ShowLoginFormActionListener.class),
+        @EventConfig(listeners = ChangeLanguageActionListener.class),
+        @EventConfig(listeners = EditPortalPropertiesActionListener.class),
+        @EventConfig(listeners = ChangeSkinActionListener.class),
+        @EventConfig(listeners = RecoveryPasswordAndUsernameActionListener.class),
+        @EventConfig(listeners = UIPortal.AccountSettingsActionListener.class),
+        @EventConfig(listeners = UIPortalActionListener.PingActionListener.class) })
+public class UIPortal extends UIContainer {
+    private SiteKey siteKey;
 
-   private String locale;
-   
-   private String label;
-   
-   private String description;
+    private String locale;
 
-   private String editPermission;
+    private String label;
 
-   private String skin;
+    private String description;
 
-   private Properties properties;
+    private String editPermission;
 
-   private UserNode navPath;
+    private String skin;
 
-   private Map<String, UIPage> all_UIPages;
-   
-   private Map<String, String[]> publicParameters_ = new HashMap<String, String[]>();
+    private Properties properties;
 
-   private UIComponent maximizedUIComponent;
+    private UserNode navPath;
 
-   private ArrayList<PortalRedirect> portalRedirects;
+    private Map<String, UIPage> all_UIPages;
 
-   public SiteKey getSiteKey()
-   {
-      return siteKey;
-   }
-   
-   public void setSiteKey(SiteKey key)
-   {
-      siteKey = key;
-   }
-   
-   public String getLocale()
-   {
-      return locale;
-   }
+    private Map<String, String[]> publicParameters_ = new HashMap<String, String[]>();
 
-   public void setLocale(String s)
-   {
-      locale = s;
-   }
+    private UIComponent maximizedUIComponent;
 
-   public String getEditPermission()
-   {
-      return editPermission;
-   }
+    private ArrayList<PortalRedirect> portalRedirects;
 
-   public void setEditPermission(String editPermission)
-   {
-      this.editPermission = editPermission;
-   }
+    public SiteKey getSiteKey() {
+        return siteKey;
+    }
 
-   public String getSkin()
-   {
-      return skin;
-   }
+    public void setSiteKey(SiteKey key) {
+        siteKey = key;
+    }
 
-   public void setSkin(String s)
-   {
-      skin = s;
-   }
+    public String getLocale() {
+        return locale;
+    }
 
-   /**
-    * @deprecated Use {@link #getSiteType()} instead
-    * 
-    * @return
-    */
-   @Deprecated
-   public String getOwnerType()
-   {
-      return siteKey.getTypeName();
-   }
-   
-   public SiteType getSiteType()
-   {
-      return siteKey.getType();
-   }
+    public void setLocale(String s) {
+        locale = s;
+    }
 
-   public Map<String, String[]> getPublicParameters()
-   {
-      return publicParameters_;
-   }
+    public String getEditPermission() {
+        return editPermission;
+    }
 
-   public void setPublicParameters(Map<String, String[]> publicParams)
-   {
-      publicParameters_ = publicParams;
-   }
+    public void setEditPermission(String editPermission) {
+        this.editPermission = editPermission;
+    }
 
-   public UserNode getNavPath() throws Exception
-   {
-      if (navPath == null)
-      {
-         PortalRequestContext prc = Util.getPortalRequestContext();
-         navPath = prc.getUserPortalConfig().getUserPortal().getDefaultPath(null);
-      }
-      return navPath;
-   }
-   
-   public void setNavPath(UserNode nav)
-   {
-      this.navPath = nav;
-   }
-   
-   /**
-    * Return cached UIPage associated to the specified pageReference
-    * 
-    * @param pageReference key whose associated UIPage is to be returned
-    * @return the UIPage associated to the specified pageReference or null if not any
-    */
-   public UIPage getUIPage(String pageReference)
-   {
-      if(all_UIPages == null)
-      {
-         this.all_UIPages = new HashMap<String, UIPage>(5);
-         return null;
-      }
-      return this.all_UIPages.get(pageReference);
-   }
-   
-   public void setUIPage(String pageReference, UIPage uiPage)
-   {
-      if(this.all_UIPages == null)
-      {
-         this.all_UIPages = new HashMap<String, UIPage>(5);
-      }
-      this.all_UIPages.put(pageReference, uiPage);
-   }
-   
-   public void clearUIPage(String pageReference)
-   {
-      if (this.all_UIPages != null)
-         this.all_UIPages.remove(pageReference);
-   }
-   
-   public UserNavigation getUserNavigation() throws Exception
-   {
-      PortalRequestContext prc = Util.getPortalRequestContext();
-      return prc.getUserPortalConfig().getUserPortal().getNavigation(siteKey);
-   }
-   
-   /**
-    * Refresh the UIPage under UIPortal 
-    * 
-    * @throws Exception
-    */
-   public void refreshUIPage() throws Exception
-   {
-      UIPageBody uiPageBody = findFirstComponentOfType(UIPageBody.class);
-      if(uiPageBody == null)
-      {
-         return;
-      }
-      
-      if (uiPageBody.getMaximizedUIComponent() != null)
-      {
-         UIPortlet currentPortlet = (UIPortlet)uiPageBody.getMaximizedUIComponent();
-         currentPortlet.setCurrentWindowState(WindowState.NORMAL);
-         uiPageBody.setMaximizedUIComponent(null);
-      }
-      uiPageBody.setPageBody(getSelectedUserNode(), this);
-   }
-   
-   public UserNode getSelectedUserNode() throws Exception
-   {
-      return getNavPath();
-   }
+    public String getSkin() {
+        return skin;
+    }
 
-   public UIComponent getMaximizedUIComponent()
-   {
-      return maximizedUIComponent;
-   }
+    public void setSkin(String s) {
+        skin = s;
+    }
 
-   public void setMaximizedUIComponent(UIComponent maximizedReferenceComponent)
-   {
-      this.maximizedUIComponent = maximizedReferenceComponent;
-   }
+    /**
+     * @deprecated Use {@link #getSiteType()} instead
+     *
+     * @return
+     */
+    @Deprecated
+    public String getOwnerType() {
+        return siteKey.getTypeName();
+    }
 
-   public Properties getProperties()
-   {
-      return properties;
-   }
+    public SiteType getSiteType() {
+        return siteKey.getType();
+    }
 
-   public void setProperties(Properties props)
-   {
-      properties = props;
-   }
+    public Map<String, String[]> getPublicParameters() {
+        return publicParameters_;
+    }
 
-   public String getProperty(String name)
-   {
-      if (name == null)
-         throw new NullPointerException();
-      if (properties == null)
-         return null;
-      return properties.get(name);
-   }
+    public void setPublicParameters(Map<String, String[]> publicParams) {
+        publicParameters_ = publicParams;
+    }
 
-   public String getProperty(String name, String defaultValue)
-   {
-      String value = getProperty(name);
-      if (value == null)
-         value = defaultValue;
-      return value;
-   }
+    public UserNode getNavPath() {
+        if (navPath == null) {
+            PortalRequestContext prc = Util.getPortalRequestContext();
+            navPath = prc.getUserPortalConfig().getUserPortal().getDefaultPath(null);
+        }
+        return navPath;
+    }
 
-   public void setProperty(String name, String value)
-   {
-      if (name == null || properties == null)
-         throw new NullPointerException();
-      if (value == null)
-         properties.remove(name);
-      else
-         properties.setProperty(name, value);
-   }
+    public void setNavPath(UserNode nav) {
+        this.navPath = nav;
+    }
 
-   public void removeProperty(String name)
-   {
-      if (name == null || properties == null)
-         throw new NullPointerException();
-      properties.remove(name);
-   }
+    /**
+     * Return cached UIPage associated to the specified pageReference
+     *
+     * @param pageReference key whose associated UIPage is to be returned
+     * @return the UIPage associated to the specified pageReference or null if not any
+     */
+    public UIPage getUIPage(String pageReference) {
+        if (all_UIPages == null) {
+            this.all_UIPages = new HashMap<String, UIPage>(5);
+            return null;
+        }
+        return this.all_UIPages.get(pageReference);
+    }
 
-   public String getSessionAlive()
-   {
-      return getProperty(PortalProperties.SESSION_ALIVE, PortalProperties.SESSION_ON_DEMAND);
-   }
+    public void setUIPage(String pageReference, UIPage uiPage) {
+        if (this.all_UIPages == null) {
+            this.all_UIPages = new HashMap<String, UIPage>(5);
+        }
+        this.all_UIPages.put(pageReference, uiPage);
+    }
 
-   public void setSessionAlive(String type)
-   {
-      setProperty(PortalProperties.SESSION_ALIVE, type);
-   }
-   
-   public Boolean isShowInfobar()
-   {
-      String value = getProperty(PortalProperties.SHOW_PORTLET_INFO, "1");
-      if (Integer.parseInt(value) == 1)
-      {
-         return true;
-      }
-      return false;
-   }
+    public void clearUIPage(String pageReference) {
+        if (this.all_UIPages != null)
+            this.all_UIPages.remove(pageReference);
+    }
 
-   public void setShowInfobar(Boolean value)
-   {
-      if (value)
-      {
-         setProperty(PortalProperties.SHOW_PORTLET_INFO, "1");
-      }
-      else
-      {
-         setProperty(PortalProperties.SHOW_PORTLET_INFO, "0");
-      }
-   }
-   
-   public String getLabel()
-   {
-      return label;
-   }
+    public UserNavigation getUserNavigation() {
+        PortalRequestContext prc = Util.getPortalRequestContext();
+        return prc.getUserPortalConfig().getUserPortal().getNavigation(siteKey);
+    }
 
-   public void setLabel(String label)
-   {
-      this.label = label;
-   }
+    /**
+     * Refresh the UIPage under UIPortal
+     *
+     * @throws Exception
+     */
+    public void refreshUIPage() throws Exception {
+        UIPageBody uiPageBody = findFirstComponentOfType(UIPageBody.class);
+        if (uiPageBody == null) {
+            return;
+        }
 
-   public String getDescription()
-   {
-      return description;
-   }
+        if (uiPageBody.getMaximizedUIComponent() != null) {
+            UIPortlet currentPortlet = (UIPortlet) uiPageBody.getMaximizedUIComponent();
+            currentPortlet.setCurrentWindowState(WindowState.NORMAL);
+            uiPageBody.setMaximizedUIComponent(null);
+        }
+        uiPageBody.setPageBody(getSelectedUserNode(), this);
+    }
 
-   public void setDescription(String description)
-   {
-      this.description = description;
-   }
+    public UserNode getSelectedUserNode() throws Exception {
+        return getNavPath();
+    }
 
-   static public class LogoutActionListener extends EventListener<UIComponent>
-   {
-      public void execute(Event<UIComponent> event) throws Exception
-      {
-         PortalRequestContext prContext = Util.getPortalRequestContext();
-         HttpServletRequest req = prContext.getRequest();
-         
-         //Delete the token from JCR
-         String token = getTokenCookie(req);
-         if(token != null)
-         {
-            AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
-            tokenService.deleteToken(token);
-         }
+    public UIComponent getMaximizedUIComponent() {
+        return maximizedUIComponent;
+    }
 
-         String portalName = prContext.getPortalOwner();
-         NodeURL createURL =
-            prContext.createURL(NodeURL.TYPE);
-         createURL.setResource(new NavigationResource(SiteType.PORTAL, portalName, null));
-         
-         LogoutControl.wantLogout();
-         Cookie cookie = new Cookie(LoginServlet.COOKIE_NAME, "");
-         cookie.setPath(req.getContextPath());
-         cookie.setMaxAge(0);
-         prContext.getResponse().addCookie(cookie);
+    public void setMaximizedUIComponent(UIComponent maximizedReferenceComponent) {
+        this.maximizedUIComponent = maximizedReferenceComponent;
+    }
 
-         prContext.sendRedirect(createURL.toString());
-      }
-      
-      private String getTokenCookie(HttpServletRequest req)
-      {
-         Cookie[] cookies = req.getCookies();
-         if (cookies != null)
-         {
-            for (Cookie cookie : cookies)
-            {
-               if (LoginServlet.COOKIE_NAME.equals(cookie.getName()))
-               {
-                  return cookie.getValue();
-               }
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Properties props) {
+        properties = props;
+    }
+
+    public String getProperty(String name) {
+        if (name == null)
+            throw new NullPointerException();
+        if (properties == null)
+            return null;
+        return properties.get(name);
+    }
+
+    public String getProperty(String name, String defaultValue) {
+        String value = getProperty(name);
+        if (value == null)
+            value = defaultValue;
+        return value;
+    }
+
+    public void setProperty(String name, String value) {
+        if (name == null || properties == null)
+            throw new NullPointerException();
+        if (value == null)
+            properties.remove(name);
+        else
+            properties.setProperty(name, value);
+    }
+
+    public void removeProperty(String name) {
+        if (name == null || properties == null)
+            throw new NullPointerException();
+        properties.remove(name);
+    }
+
+    public String getSessionAlive() {
+        return getProperty(PortalProperties.SESSION_ALIVE, PortalProperties.SESSION_ON_DEMAND);
+    }
+
+    public void setSessionAlive(String type) {
+        setProperty(PortalProperties.SESSION_ALIVE, type);
+    }
+
+    public Boolean isShowInfobar() {
+        String value = getProperty(PortalProperties.SHOW_PORTLET_INFO, "1");
+        if (Integer.parseInt(value) == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public void setShowInfobar(Boolean value) {
+        if (value) {
+            setProperty(PortalProperties.SHOW_PORTLET_INFO, "1");
+        } else {
+            setProperty(PortalProperties.SHOW_PORTLET_INFO, "0");
+        }
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public static class LogoutActionListener extends EventListener<UIComponent> {
+        public void execute(Event<UIComponent> event) throws Exception {
+            PortalRequestContext prContext = Util.getPortalRequestContext();
+            HttpServletRequest req = prContext.getRequest();
+
+            // Delete the token from JCR
+            String token = getTokenCookie(req);
+            if (token != null) {
+                AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
+                tokenService.deleteToken(token);
             }
-         }
-         return null;
-      }
 
-   }
+            String portalName = prContext.getPortalOwner();
+            NodeURL createURL = prContext.createURL(NodeURL.TYPE);
+            createURL.setResource(new NavigationResource(SiteType.PORTAL, portalName, null));
 
-   public static class AccountSettingsActionListener extends EventListener<UIPortal>
-   {
-      public void execute(Event<UIPortal> event) throws Exception
-      {
-         UIPortal uiPortal = event.getSource();
-         UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
-         UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
+            LogoutControl.wantLogout();
+            Cookie cookie = new Cookie(LoginServlet.COOKIE_NAME, "");
+            cookie.setPath(req.getContextPath());
+            cookie.setMaxAge(0);
+            prContext.getResponse().addCookie(cookie);
 
-         //Modified by nguyenanhkien2a@gmail.com
-         //We should check account for existing
-         String username = Util.getPortalRequestContext().getRemoteUser();
-         OrganizationService service = uiPortal.getApplicationComponent(OrganizationService.class);
-         User useraccount = service.getUserHandler().findUserByName(username);
-         
-         if(useraccount != null)
-         {        
-            UIAccountSetting uiAccountForm = uiMaskWS.createUIComponent(UIAccountSetting.class, null, null);
-            uiMaskWS.setUIComponent(uiAccountForm);
-            uiMaskWS.setShow(true);
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);
-         }
-         else 
-         {
-            //Show message detail to user and then logout if user press ok button
-            JavascriptManager jsManager = Util.getPortalRequestContext().getJavascriptManager();
-            jsManager.require("SHARED/base").addScripts("if(confirm('" + 
-               Util.getPortalRequestContext().getApplicationResourceBundle().getString("UIAccountProfiles.msg.NotExistingAccount") + 
-               "')) {eXo.portal.logout();}");
-         }
-      }
-   }
+            prContext.sendRedirect(createURL.toString());
+        }
 
-   public void setRedirects(ArrayList<PortalRedirect> portalRedirects)
-   {
-      this.portalRedirects = portalRedirects;
-   }
-   
-   public ArrayList<PortalRedirect> getPortalRedirects()
-   {
-      return portalRedirects;
-   }
+        private String getTokenCookie(HttpServletRequest req) {
+            Cookie[] cookies = req.getCookies();
+            if (cookies != null) {
+                for (Cookie cookie : cookies) {
+                    if (LoginServlet.COOKIE_NAME.equals(cookie.getName())) {
+                        return cookie.getValue();
+                    }
+                }
+            }
+            return null;
+        }
+
+    }
+
+    public static class AccountSettingsActionListener extends EventListener<UIPortal> {
+        public void execute(Event<UIPortal> event) throws Exception {
+            UIPortal uiPortal = event.getSource();
+            UIPortalApplication uiApp = uiPortal.getAncestorOfType(UIPortalApplication.class);
+            UIMaskWorkspace uiMaskWS = uiApp.getChildById(UIPortalApplication.UI_MASK_WS_ID);
+
+            // Modified by nguyenanhkien2a@gmail.com
+            // We should check account for existing
+            String username = Util.getPortalRequestContext().getRemoteUser();
+            OrganizationService service = uiPortal.getApplicationComponent(OrganizationService.class);
+            User useraccount = service.getUserHandler().findUserByName(username);
+
+            if (useraccount != null) {
+                UIAccountSetting uiAccountForm = uiMaskWS.createUIComponent(UIAccountSetting.class, null, null);
+                uiMaskWS.setUIComponent(uiAccountForm);
+                uiMaskWS.setShow(true);
+                event.getRequestContext().addUIComponentToUpdateByAjax(uiMaskWS);
+            } else {
+                // Show message detail to user and then logout if user press ok button
+                JavascriptManager jsManager = Util.getPortalRequestContext().getJavascriptManager();
+                jsManager.require("SHARED/base").addScripts(
+                        "if(confirm('"
+                                + Util.getPortalRequestContext().getApplicationResourceBundle()
+                                        .getString("UIAccountProfiles.msg.NotExistingAccount") + "')) {eXo.portal.logout();}");
+            }
+        }
+    }
+
+    public void setRedirects(ArrayList<PortalRedirect> portalRedirects) {
+        this.portalRedirects = portalRedirects;
+    }
+
+    public ArrayList<PortalRedirect> getPortalRedirects() {
+        return portalRedirects;
+    }
 }

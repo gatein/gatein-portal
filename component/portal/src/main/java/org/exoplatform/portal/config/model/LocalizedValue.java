@@ -21,56 +21,48 @@ package org.exoplatform.portal.config.model;
 
 import java.util.Locale;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class LocalizedValue<V>
-{
+public class LocalizedValue<V> {
 
-   /** . */
-   private V value;
+    /** . */
+    private V value;
 
-   /** . */
-   private Locale lang;
+    /** . */
+    private Locale lang;
 
-   public LocalizedValue()
-   {
-   }
+    public LocalizedValue() {
+    }
 
-   public LocalizedValue(V value)
-   {
-      this.value = value;
-   }
+    public LocalizedValue(V value) {
+        this.value = value;
+    }
 
-   public LocalizedValue(V value, Locale lang)
-   {
-      this.value = value;
-      this.lang = lang;
-   }
+    public LocalizedValue(V value, Locale lang) {
+        this.value = value;
+        this.lang = lang;
+    }
 
-   public final V getValue()
-   {
-      return value;
-   }
+    public final V getValue() {
+        return value;
+    }
 
-   public final void setValue(V value)
-   {
-      this.value = value;
-   }
+    public final void setValue(V value) {
+        this.value = value;
+    }
 
-   public final Locale getLang()
-   {
-      return lang;
-   }
+    public final Locale getLang() {
+        return lang;
+    }
 
-   public final void setLang(Locale lang)
-   {
-      this.lang = lang;
-   }
+    public final void setLang(Locale lang) {
+        this.lang = lang;
+    }
 
-   @Override
-   public String toString()
-   {
-      return getClass().getSimpleName() + "[value=" + value + ",lang=" + lang + "]";
-   }
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[value=" + value + ",lang=" + lang + "]";
+    }
 }

@@ -19,7 +19,8 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
@@ -65,36 +66,36 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>${project.artifactId}</finalName>  
+    <finalName>${project.artifactId}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-ear-plugin</artifactId>
         <configuration>
-           <displayName>sample-portal</displayName>
-           <modules>
-             <jarModule>
-               <groupId>org.gatein.portal</groupId>
-               <artifactId>exo.portal.sample.portal.config</artifactId>
-               <includeInApplicationXml>true</includeInApplicationXml>
-             </jarModule>
-             <webModule>
-               <groupId>org.gatein.portal</groupId>
-               <artifactId>exo.portal.sample.portal.war</artifactId>
-               <bundleFileName>sample-portal.war</bundleFileName>
-               <contextRoot>sample-portal</contextRoot>
-             </webModule>
-             <webModule>
-               <groupId>org.gatein.portal</groupId>
-               <artifactId>exo.portal.sample.portal.rest-war</artifactId>
-               <bundleFileName>rest-sample-portal.war</bundleFileName>
-               <contextRoot>rest-sample-portal</contextRoot>
-             </webModule>
-             <jarModule>
-               <groupId>org.gatein.portal</groupId>
-               <artifactId>exo.portal.sample.portal.jar</artifactId>
-               <includeInApplicationXml>true</includeInApplicationXml>
-             </jarModule>
+          <displayName>sample-portal</displayName>
+          <modules>
+            <jarModule>
+              <groupId>org.gatein.portal</groupId>
+              <artifactId>exo.portal.sample.portal.config</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
+            <webModule>
+              <groupId>org.gatein.portal</groupId>
+              <artifactId>exo.portal.sample.portal.war</artifactId>
+              <bundleFileName>sample-portal.war</bundleFileName>
+              <contextRoot>sample-portal</contextRoot>
+            </webModule>
+            <webModule>
+              <groupId>org.gatein.portal</groupId>
+              <artifactId>exo.portal.sample.portal.rest-war</artifactId>
+              <bundleFileName>rest-sample-portal.war</bundleFileName>
+              <contextRoot>rest-sample-portal</contextRoot>
+            </webModule>
+            <jarModule>
+              <groupId>org.gatein.portal</groupId>
+              <artifactId>exo.portal.sample.portal.jar</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
           </modules>
         </configuration>
       </plugin>

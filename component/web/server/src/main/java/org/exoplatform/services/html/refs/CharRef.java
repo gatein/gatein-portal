@@ -21,56 +21,46 @@ package org.exoplatform.services.html.refs;
 
 import java.util.Comparator;
 
+
 /**
- * Author : Nhu Dinh Thuan
- *          nhudinhthuan@yahoo.com
- * May 8, 2006
+ * Author : Nhu Dinh Thuan nhudinhthuan@yahoo.com May 8, 2006
  */
-class CharRef
-{
+class CharRef {
 
-   static final Comparator<CharRef> comparator = new Comparator<CharRef>()
-   {
-      public int compare(CharRef o1, CharRef o2)
-      {
-         return o1.getName().compareTo(o2.getName());
-      }
-   };
+    static final Comparator<CharRef> comparator = new Comparator<CharRef>() {
+        public int compare(CharRef o1, CharRef o2) {
+            return o1.getName().compareTo(o2.getName());
+        }
+    };
 
-   private int value;
+    private int value;
 
-   private String name;
+    private String name;
 
-   CharRef(String n, int v)
-   {
-      name = n;
-      value = v;
-      if (name == null)
-         name = "";
-   }
+    CharRef(String n, int v) {
+        name = n;
+        value = v;
+        if (name == null)
+            name = "";
+    }
 
-   String getName()
-   {
-      return name;
-   }
+    String getName() {
+        return name;
+    }
 
-   void setName(String name)
-   {
-      this.name = name;
-   }
+    void setName(String name) {
+        this.name = name;
+    }
 
-   int getValue()
-   {
-      return value;
-   }
+    int getValue() {
+        return value;
+    }
 
-   void setValue(int value)
-   {
-      this.value = value;
-   }
+    void setValue(int value) {
+        this.value = value;
+    }
 
-   int compare(CharRef r)
-   {
-      return getName().compareTo(r.getName());
-   }
+    int compare(CharRef r) {
+        return getName().compareTo(r.getName());
+    }
 }

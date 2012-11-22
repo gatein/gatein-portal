@@ -19,39 +19,31 @@
 
 package org.exoplatform.commons.serialization.api.factory;
 
-import org.exoplatform.commons.serialization.api.factory.CreateException;
-import org.exoplatform.commons.serialization.api.factory.ObjectFactory;
-import org.exoplatform.commons.serialization.model.FieldModel;
-
 import java.util.Map;
+
+import org.exoplatform.commons.serialization.model.FieldModel;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class DefaultObjectFactory extends ObjectFactory<Object>
-{
-   @Override
-   public <S> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException
-   {
-      try
-      {
-         S instance = type.newInstance();
+public final class DefaultObjectFactory extends ObjectFactory<Object> {
+    @Override
+    public <S> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException {
+        try {
+            S instance = type.newInstance();
 
-         //
-         for (Map.Entry<FieldModel<? super S, ?>, ?> entry : state.entrySet())
-         {
-            FieldModel<?, ?> fieldModel = entry.getKey();
-            Object value = entry.getValue();
-            fieldModel.castAndSet(instance, value);
-         }
+            //
+            for (Map.Entry<FieldModel<? super S, ?>, ?> entry : state.entrySet()) {
+                FieldModel<?, ?> fieldModel = entry.getKey();
+                Object value = entry.getValue();
+                fieldModel.castAndSet(instance, value);
+            }
 
-         //
-         return instance;
-      }
-      catch (Exception e)
-      {
-         throw new CreateException(e);
-      }
-   }
+            //
+            return instance;
+        } catch (Exception e) {
+            throw new CreateException(e);
+        }
+    }
 }

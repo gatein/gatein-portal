@@ -21,41 +21,36 @@ package org.exoplatform.portal.mop.i18n;
 
 import java.util.Locale;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class Resolution<M>
-{
+public class Resolution<M> {
 
-   /** . */
-   private final Locale locale;
+    /** . */
+    private final Locale locale;
 
-   /** . */
-   private final M mixin;
+    /** . */
+    private final M mixin;
 
-   public Resolution(Locale locale, M mixin)
-   {
-      if (locale == null)
-      {
-         throw new NullPointerException("No null locale accepted");
-      }
-      if (mixin == null)
-      {
-         throw new NullPointerException("No null mixin accepted");
-      }
+    public Resolution(Locale locale, M mixin) {
+        if (locale == null) {
+            throw new NullPointerException("No null locale accepted");
+        }
+        if (mixin == null) {
+            throw new NullPointerException("No null mixin accepted");
+        }
 
-      //
-      this.locale = locale;
-      this.mixin = mixin;
-   }
+        //
+        this.locale = locale;
+        this.mixin = mixin;
+    }
 
-   public Locale getLocale()
-   {
-      return locale;
-   }
+    public Locale getLocale() {
+        return locale;
+    }
 
-   public M getMixin()
-   {
-      return mixin;
-   }
+    public M getMixin() {
+        return mixin;
+    }
 }

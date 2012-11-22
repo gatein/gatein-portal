@@ -21,6 +21,11 @@
  */
 package org.gatein.integration.jboss.as7;
 
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
+
+import java.util.List;
+
 import org.gatein.integration.jboss.as7.deployment.DeploymentScannerService;
 import org.gatein.integration.jboss.as7.deployment.GateInCleanupDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.GateInDependenciesDeploymentProcessor;
@@ -51,98 +56,98 @@ import org.jboss.dmr.ModelNode;
 import org.jboss.msc.service.ServiceBuilder;
 import org.jboss.msc.service.ServiceController;
 
-import java.util.List;
-
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP;
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
-
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler
-{
+public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler {
 
-   static final int STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT = 0x0B80;
-   static final int DEPENDENCIES_PORTLET_MODULE = 0x1100;
-   static final int DEPENDENCIES_PORTLET_BRIDGE_MODULE = 0x2300;
-   static final int STRUCTURE_WSRP = 0x2001;
-   static final int STRUCTURE_GATEIN = 0x2000;
-   static final int POST_MODULE_GATEIN_INIT = 0x2000;
-   static final int INSTALL_GATEIN_CHILD_WARS = 0x4000;
-   static final int INSTALL_GATEIN_START = 0x4000;
-   static final int MANIFEST_DEPENDENCIES_GATEIN = 0x4000;
-   static final int CLEANUP_ATTACHMENTS = 0x4000;
-   static final int GATEIN_TRANSACTIONS_FIX = 0x4000;
+    static final int STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT = 0x0B80;
+    static final int DEPENDENCIES_PORTLET_MODULE = 0x1100;
+    static final int DEPENDENCIES_PORTLET_BRIDGE_MODULE = 0x2300;
+    static final int STRUCTURE_WSRP = 0x2001;
+    static final int STRUCTURE_GATEIN = 0x2000;
+    static final int POST_MODULE_GATEIN_INIT = 0x2000;
+    static final int INSTALL_GATEIN_CHILD_WARS = 0x4000;
+    static final int INSTALL_GATEIN_START = 0x4000;
+    static final int MANIFEST_DEPENDENCIES_GATEIN = 0x4000;
+    static final int CLEANUP_ATTACHMENTS = 0x4000;
+    static final int GATEIN_TRANSACTIONS_FIX = 0x4000;
 
-   private GateInConfiguration config;
+    private GateInConfiguration config;
 
-   protected GateInSubsystemAdd(GateInConfiguration config)
-   {
-      this.config = config;
-   }
+    protected GateInSubsystemAdd(GateInConfiguration config) {
+        this.config = config;
+    }
 
-   protected void populateModel(final OperationContext context, final ModelNode operation, final Resource resource) throws  OperationFailedException
-   {
-      if (requiresRuntime(context)) {
-         final DeploymentScannerService scannerService = new DeploymentScannerService(config);
-         ModelNode op = scannerService.prepareDeploymentModel();
+    protected void populateModel(final OperationContext context, final ModelNode operation, final Resource resource)
+            throws OperationFailedException {
+        if (requiresRuntime(context)) {
+            final DeploymentScannerService scannerService = new DeploymentScannerService(config);
+            ModelNode op = scannerService.prepareDeploymentModel();
 
-         final ModelNode result = new ModelNode();
-         final PathAddress opPath = PathAddress.pathAddress(op.get(OP_ADDR));
-         final OperationStepHandler handler = context.getRootResourceRegistration().getOperationHandler(opPath, op.get(OP).asString());
-         context.addStep(result, op, handler, OperationContext.Stage.MODEL);
-      }
-   }
+            final ModelNode result = new ModelNode();
+            final PathAddress opPath = PathAddress.pathAddress(op.get(OP_ADDR));
+            final OperationStepHandler handler = context.getRootResourceRegistration().getOperationHandler(opPath,
+                    op.get(OP).asString());
+            context.addStep(result, op, handler, OperationContext.Stage.MODEL);
+        }
+    }
 
-   protected void populateModel(ModelNode operation, ModelNode model)
-   {
-      // DO NOTHING
-   }
+    protected void populateModel(ModelNode operation, ModelNode model) {
+        // DO NOTHING
+    }
 
-   protected void performBoottime(final OperationContext context, final ModelNode operation, final ModelNode model,
-                                  final ServiceVerificationHandler verificationHandler,
-                                  final List<ServiceController<?>> newControllers) throws OperationFailedException
-   {
-      context.addStep(new AbstractDeploymentChainStep()
-      {
-         protected void execute(DeploymentProcessorTarget processorTarget)
-         {
-            final SharedPortletTldsMetaDataBuilder tldsBuilder = new SharedPortletTldsMetaDataBuilder();
+    protected void performBoottime(final OperationContext context, final ModelNode operation, final ModelNode model,
+            final ServiceVerificationHandler verificationHandler, final List<ServiceController<?>> newControllers)
+            throws OperationFailedException {
+        context.addStep(new AbstractDeploymentChainStep() {
+            protected void execute(DeploymentProcessorTarget processorTarget) {
+                final SharedPortletTldsMetaDataBuilder tldsBuilder = new SharedPortletTldsMetaDataBuilder();
 
-            processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_GATEIN, new GateInStructureDeploymentProcessor(config));
-            processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_WSRP, new WSRPStructureDeploymentProcessor());
-            processorTarget.addDeploymentProcessor(Phase.PARSE, STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT, new PortletWarDeploymentInitializingProcessor(config));
-            processorTarget.addDeploymentProcessor(Phase.PARSE, MANIFEST_DEPENDENCIES_GATEIN, new GateInDependenciesDeploymentProcessor());
-            processorTarget.addDeploymentProcessor(Phase.PARSE, INSTALL_GATEIN_CHILD_WARS, new WarDependenciesDeploymentProcessor());
-            processorTarget.addDeploymentProcessor(Phase.PARSE, GATEIN_TRANSACTIONS_FIX, new GateInTransactionsFixProcessor());
+                processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_GATEIN,
+                        new GateInStructureDeploymentProcessor(config));
+                processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_WSRP, new WSRPStructureDeploymentProcessor());
+                processorTarget.addDeploymentProcessor(Phase.PARSE, STRUCTURE_PORTLET_WAR_DEPLOYMENT_INIT,
+                        new PortletWarDeploymentInitializingProcessor(config));
+                processorTarget.addDeploymentProcessor(Phase.PARSE, MANIFEST_DEPENDENCIES_GATEIN,
+                        new GateInDependenciesDeploymentProcessor());
+                processorTarget.addDeploymentProcessor(Phase.PARSE, INSTALL_GATEIN_CHILD_WARS,
+                        new WarDependenciesDeploymentProcessor());
+                processorTarget.addDeploymentProcessor(Phase.PARSE, GATEIN_TRANSACTIONS_FIX,
+                        new GateInTransactionsFixProcessor());
 
-            processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_PORTLET_MODULE, new PortletWarClassloadingDependencyProcessor(tldsBuilder.create()));
-            processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_PORTLET_BRIDGE_MODULE, new PortletBridgeDependencyProcessor());
+                processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_PORTLET_MODULE,
+                        new PortletWarClassloadingDependencyProcessor(tldsBuilder.create()));
+                processorTarget.addDeploymentProcessor(Phase.DEPENDENCIES, DEPENDENCIES_PORTLET_BRIDGE_MODULE,
+                        new PortletBridgeDependencyProcessor());
 
-            processorTarget.addDeploymentProcessor(Phase.POST_MODULE, POST_MODULE_GATEIN_INIT, new WSRPPostModuleDeploymentProcessor());
-            processorTarget.addDeploymentProcessor(Phase.POST_MODULE, POST_MODULE_GATEIN_INIT, new GateInInitDeploymentProcessor());
-            processorTarget.addDeploymentProcessor(Phase.INSTALL, INSTALL_GATEIN_START, new GateInStarterDeploymentProcessor());
-            processorTarget.addDeploymentProcessor(Phase.CLEANUP, CLEANUP_ATTACHMENTS, new GateInCleanupDeploymentProcessor());
-         }
-      }, OperationContext.Stage.RUNTIME);
-   }
+                processorTarget.addDeploymentProcessor(Phase.POST_MODULE, POST_MODULE_GATEIN_INIT,
+                        new WSRPPostModuleDeploymentProcessor());
+                processorTarget.addDeploymentProcessor(Phase.POST_MODULE, POST_MODULE_GATEIN_INIT,
+                        new GateInInitDeploymentProcessor());
+                processorTarget.addDeploymentProcessor(Phase.INSTALL, INSTALL_GATEIN_START,
+                        new GateInStarterDeploymentProcessor());
+                processorTarget.addDeploymentProcessor(Phase.CLEANUP, CLEANUP_ATTACHMENTS,
+                        new GateInCleanupDeploymentProcessor());
+            }
+        }, OperationContext.Stage.RUNTIME);
+    }
 
-   @Override
-   protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model,
-                                 ServiceVerificationHandler verificationHandler, List<ServiceController<?>> newControllers) throws OperationFailedException
-   {
-      super.performRuntime(context, operation, model, verificationHandler, newControllers);
+    @Override
+    protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model,
+            ServiceVerificationHandler verificationHandler, List<ServiceController<?>> newControllers)
+            throws OperationFailedException {
+        super.performRuntime(context, operation, model, verificationHandler, newControllers);
 
-      final GateInWCIService wciService = new GateInWCIService();
-      final ServiceBuilder<GateInWCIService> serviceBuilder = context.getServiceTarget().addService(GateInWCIService.NAME, wciService)
-         .addDependency(WebSubsystemServices.JBOSS_WEB, WebServer.class, wciService.getWebServer())
-         .addListener(verificationHandler)
-         .setInitialMode(ServiceController.Mode.ACTIVE);
-      newControllers.add(serviceBuilder.install());
-   }
+        final GateInWCIService wciService = new GateInWCIService();
+        final ServiceBuilder<GateInWCIService> serviceBuilder = context.getServiceTarget()
+                .addService(GateInWCIService.NAME, wciService)
+                .addDependency(WebSubsystemServices.JBOSS_WEB, WebServer.class, wciService.getWebServer())
+                .addListener(verificationHandler).setInitialMode(ServiceController.Mode.ACTIVE);
+        newControllers.add(serviceBuilder.install());
+    }
 
-   protected boolean requiresRuntimeVerification()
-   {
-      return false;
-   }
+    protected boolean requiresRuntimeVerification() {
+        return false;
+    }
 }

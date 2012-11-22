@@ -25,24 +25,20 @@ package org.exoplatform.management;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ValueWrapper<T>
-{
+public class ValueWrapper<T> {
 
-   public static <T> ValueWrapper<T> wrap(T value)
-   {
-      return new ValueWrapper<T>(value);
-   }
+    public static <T> ValueWrapper<T> wrap(T value) {
+        return new ValueWrapper<T>(value);
+    }
 
-   /** . */
-   private final T value;
+    /** . */
+    private final T value;
 
-   public ValueWrapper(T value)
-   {
-      this.value = value;
-   }
+    public ValueWrapper(T value) {
+        this.value = value;
+    }
 
-   public T getValue()
-   {
-      return value;
-   }
+    public T getValue() {
+        return value;
+    }
 }

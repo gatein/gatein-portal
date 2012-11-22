@@ -23,24 +23,19 @@ package org.exoplatform.web.controller.regexp;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class SyntaxException extends Exception
-{
-   public SyntaxException()
-   {
-   }
+public class SyntaxException extends Exception {
+    public SyntaxException() {
+    }
 
-   public SyntaxException(String s)
-   {
-      super(s);
-   }
+    public SyntaxException(String s) {
+        super(s);
+    }
 
-   public SyntaxException(String s, Throwable throwable)
-   {
-      super(s, throwable);
-   }
+    public SyntaxException(String s, Throwable throwable) {
+        super(s, throwable);
+    }
 
-   public SyntaxException(Throwable throwable)
-   {
-      super(throwable);
-   }
+    public SyntaxException(Throwable throwable) {
+        super(throwable);
+    }
 }

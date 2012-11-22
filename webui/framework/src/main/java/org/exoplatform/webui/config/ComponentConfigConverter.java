@@ -19,30 +19,27 @@
 
 package org.exoplatform.webui.config;
 
+import org.exoplatform.commons.serialization.api.TypeConverter;
 import org.exoplatform.webui.application.ConfigurationManager;
 import org.exoplatform.webui.application.WebuiApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.commons.serialization.api.TypeConverter;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ComponentConfigConverter extends TypeConverter<Component, ComponentHandle>
-{
+public class ComponentConfigConverter extends TypeConverter<Component, ComponentHandle> {
 
-   @Override
-   public ComponentHandle write(Component external) throws Exception
-   {
-      return external.handle;
-   }
+    @Override
+    public ComponentHandle write(Component external) throws Exception {
+        return external.handle;
+    }
 
-   @Override
-   public Component read(ComponentHandle internal) throws Exception
-   {
-      WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
-      WebuiApplication webuiApp = (WebuiApplication)context.getApplication();
-      ConfigurationManager configMgr = webuiApp.getConfigurationManager();
-      return configMgr.getComponentConfig(internal);
-   }
+    @Override
+    public Component read(ComponentHandle internal) throws Exception {
+        WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+        WebuiApplication webuiApp = (WebuiApplication) context.getApplication();
+        ConfigurationManager configMgr = webuiApp.getConfigurationManager();
+        return configMgr.getComponentConfig(internal);
+    }
 }

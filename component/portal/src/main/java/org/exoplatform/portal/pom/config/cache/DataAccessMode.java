@@ -22,9 +22,8 @@ package org.exoplatform.portal.pom.config.cache;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public enum DataAccessMode
-{
+public enum DataAccessMode {
 
-   CREATE, READ, WRITE, DESTROY
+    CREATE, READ, WRITE, DESTROY
 
 }

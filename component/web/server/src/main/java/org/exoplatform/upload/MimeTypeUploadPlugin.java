@@ -28,37 +28,34 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
 /**
- * Created by The eXo Platform SAS
- * Author : Nguyen Thanh Hai
- *          haint@exoplatform.com
- * Jun 29, 2011  
+ * Created by The eXo Platform SAS Author : Nguyen Thanh Hai haint@exoplatform.com Jun 29, 2011
  */
-public class MimeTypeUploadPlugin extends BaseComponentPlugin
-{
-   final private static Logger log = LoggerFactory.getLogger(MimeTypeUploadPlugin.class);
-   final private static String MIMETYPE_PATH = "mimetype-path" ;
-   final private static String DEFAULT_MIMETYPE = "mimetype-default";
-   
-   private Properties mimeTypes = new Properties();
-   private String mimetypeDefault ;
-   
-   public MimeTypeUploadPlugin(InitParams initParams, ConfigurationManager configurationService) throws Exception
-   {
-      ValueParam param = initParams.getValueParam(MIMETYPE_PATH) ;
-      URL filePath = configurationService.getURL(param.getValue());
-      URLConnection connection = filePath.openConnection() ;
-      mimeTypes.load(connection.getInputStream()) ;
-      
-      param = initParams.getValueParam(DEFAULT_MIMETYPE) ;
-      if(param != null) mimetypeDefault = param.getValue() ;
-   }
-   
-   public String getMimeType(String fileName) 
-   {
-      if(fileName.indexOf('.') == -1) return mimetypeDefault ;
-      String ext = fileName.substring(fileName.lastIndexOf('.') + 1);
-      String mimeType = mimeTypes.getProperty(ext.toLowerCase(), mimetypeDefault);
-      if (mimeType == null || mimeType.length() == 0) return null ;
-      return mimeType;
-   }
+public class MimeTypeUploadPlugin extends BaseComponentPlugin {
+    private static final Logger log = LoggerFactory.getLogger(MimeTypeUploadPlugin.class);
+    private static final String MIMETYPE_PATH = "mimetype-path";
+    private static final String DEFAULT_MIMETYPE = "mimetype-default";
+
+    private Properties mimeTypes = new Properties();
+    private String mimetypeDefault;
+
+    public MimeTypeUploadPlugin(InitParams initParams, ConfigurationManager configurationService) throws Exception {
+        ValueParam param = initParams.getValueParam(MIMETYPE_PATH);
+        URL filePath = configurationService.getURL(param.getValue());
+        URLConnection connection = filePath.openConnection();
+        mimeTypes.load(connection.getInputStream());
+
+        param = initParams.getValueParam(DEFAULT_MIMETYPE);
+        if (param != null)
+            mimetypeDefault = param.getValue();
+    }
+
+    public String getMimeType(String fileName) {
+        if (fileName.indexOf('.') == -1)
+            return mimetypeDefault;
+        String ext = fileName.substring(fileName.lastIndexOf('.') + 1);
+        String mimeType = mimeTypes.getProperty(ext.toLowerCase(), mimetypeDefault);
+        if (mimeType == null || mimeType.length() == 0)
+            return null;
+        return mimeType;
+    }
 }

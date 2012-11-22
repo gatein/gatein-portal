@@ -23,13 +23,12 @@ package org.exoplatform.commons.serialization.serial;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-enum SerializationStatus
-{
+enum SerializationStatus {
 
-   NONE,
+    NONE,
 
-   PARTIAL,
+    PARTIAL,
 
-   FULL
+    FULL
 
 }

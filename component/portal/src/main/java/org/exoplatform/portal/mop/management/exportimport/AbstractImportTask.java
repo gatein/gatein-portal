@@ -28,18 +28,15 @@ import org.exoplatform.portal.mop.SiteKey;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public abstract class AbstractImportTask<T> extends ImportTask<T>
-{
-   protected final SiteKey siteKey;
+public abstract class AbstractImportTask<T> extends ImportTask<T> {
+    protected final SiteKey siteKey;
 
-   public AbstractImportTask(T data, SiteKey siteKey)
-   {
-      super(data);
-      this.siteKey = siteKey;
-   }
+    public AbstractImportTask(T data, SiteKey siteKey) {
+        super(data);
+        this.siteKey = siteKey;
+    }
 
-   public SiteKey getSiteKey()
-   {
-      return siteKey;
-   }
+    public SiteKey getSiteKey() {
+        return siteKey;
+    }
 }

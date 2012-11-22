@@ -19,80 +19,72 @@
 
 package org.exoplatform.application.gadget;
 
+import java.io.IOException;
+import java.net.URL;
+
 import org.apache.shindig.gadgets.spec.ModulePrefs;
 import org.exoplatform.application.gadget.impl.GadgetDefinition;
 import org.exoplatform.application.gadget.impl.RemoteGadgetData;
 import org.gatein.common.net.URLTools;
-import java.io.IOException;
-import java.net.URL;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RemoteImporter extends GadgetImporter
-{
+public class RemoteImporter extends GadgetImporter {
 
-   public RemoteImporter(String name, String gadgetPath)
-   {
-      super(name, gadgetPath);
-   }
+    public RemoteImporter(String name, String gadgetPath) {
+        super(name, gadgetPath);
+    }
 
-   @Override
-   protected byte[] getGadgetBytes(String gadgetURI) throws IOException
-   {
-      URL url = new URL(gadgetURI);
-      return URLTools.getContent(url, 5000, 5000);
-   }
+    @Override
+    protected byte[] getGadgetBytes(String gadgetURI) throws IOException {
+        URL url = new URL(gadgetURI);
+        return URLTools.getContent(url, 5000, 5000);
+    }
 
-   @Override
-   protected String getGadgetURL() throws Exception
-   {
-      return getGadgetURI();
-   }
+    @Override
+    protected String getGadgetURL() {
+        return getGadgetURI();
+    }
 
-   @Override
-   protected void process(String gadgetURI, GadgetDefinition def) throws Exception
-   {
-      def.setLocal(false);
+    @Override
+    protected void process(String gadgetURI, GadgetDefinition def) throws Exception {
+        def.setLocal(false);
 
-      //
-      RemoteGadgetData data = (RemoteGadgetData)def.getData();
+        //
+        RemoteGadgetData data = (RemoteGadgetData) def.getData();
 
-      // Set remote URL
-      data.setURL(gadgetURI);
-   }
+        // Set remote URL
+        data.setURL(gadgetURI);
+    }
 
-   @Override
-   protected void processMetadata(ModulePrefs prefs, GadgetDefinition def) throws Exception
-   {
-      String gadgetName = def.getName();
-      String description = prefs.getDescription();
-      String thumbnail = prefs.getThumbnail().toString();
-      String title = getGadgetTitle(prefs, gadgetName);
-      String referenceURL = prefs.getTitleUrl().toString();
+    @Override
+    protected void processMetadata(ModulePrefs prefs, GadgetDefinition def) {
+        String gadgetName = def.getName();
+        String description = prefs.getDescription();
+        String thumbnail = prefs.getThumbnail().toString();
+        String title = getGadgetTitle(prefs, gadgetName);
+        String referenceURL = prefs.getTitleUrl().toString();
 
-      log.info("Importing gadget name=" + gadgetName + " description=" + description + " thumbnail=" + thumbnail + " title=" +
-         thumbnail + " title=" + title);
+        log.info("Importing gadget name=" + gadgetName + " description=" + description + " thumbnail=" + thumbnail + " title="
+                + thumbnail + " title=" + title);
 
-      def.setDescription(description);
-      def.setThumbnail(thumbnail);
-      def.setTitle(title);
-      def.setReferenceURL(referenceURL);
+        def.setDescription(description);
+        def.setThumbnail(thumbnail);
+        def.setTitle(title);
+        def.setReferenceURL(referenceURL);
 
-   }
+    }
 
-   private String getGadgetTitle(ModulePrefs prefs, String defaultValue)
-   {
-      String title = prefs.getDirectoryTitle();
-      if (title == null || title.trim().length() < 1)
-      {
-         title = prefs.getTitle();
-      }
-      if (title == null || title.trim().length() < 1)
-      {
-         return defaultValue;
-      }
-      return title;
-   }
+    private String getGadgetTitle(ModulePrefs prefs, String defaultValue) {
+        String title = prefs.getDirectoryTitle();
+        if (title == null || title.trim().length() < 1) {
+            title = prefs.getTitle();
+        }
+        if (title == null || title.trim().length() < 1) {
+            return defaultValue;
+        }
+        return title;
+    }
 }

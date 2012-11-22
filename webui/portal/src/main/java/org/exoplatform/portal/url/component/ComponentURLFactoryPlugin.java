@@ -19,9 +19,9 @@
 
 package org.exoplatform.portal.url.component;
 
-import org.exoplatform.web.url.URLFactoryPlugin;
 import org.exoplatform.web.url.ResourceType;
 import org.exoplatform.web.url.URLContext;
+import org.exoplatform.web.url.URLFactoryPlugin;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.url.ComponentURL;
 
@@ -29,18 +29,15 @@ import org.exoplatform.webui.url.ComponentURL;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ComponentURLFactoryPlugin extends URLFactoryPlugin<UIComponent, ComponentURL>
-{
+public class ComponentURLFactoryPlugin extends URLFactoryPlugin<UIComponent, ComponentURL> {
 
-   @Override
-   protected ResourceType<UIComponent, ComponentURL> getResourceType()
-   {
-      return ComponentURL.TYPE;
-   }
+    @Override
+    protected ResourceType<UIComponent, ComponentURL> getResourceType() {
+        return ComponentURL.TYPE;
+    }
 
-   @Override
-   protected ComponentURL newURL(URLContext context)
-   {
-      return new ComponentURL(context);
-   }
+    @Override
+    protected ComponentURL newURL(URLContext context) {
+        return new ComponentURL(context);
+    }
 }

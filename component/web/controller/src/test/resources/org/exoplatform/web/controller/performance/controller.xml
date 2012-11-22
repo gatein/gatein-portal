@@ -58,14 +58,14 @@
       </route-param>
     </route>
     <route path="/{gtn:sitename}/{gtn:path}">
-	  <route-param qname="gtn:handler">
-	    <value>legacy</value>
-	  </route-param>
-	  <path-param qname="gtn:path" encoding="preserve-path">
-	    <pattern>.*</pattern>
-	  </path-param>
-  	</route>
-  </route>    
+      <route-param qname="gtn:handler">
+        <value>legacy</value>
+      </route-param>
+      <path-param qname="gtn:path" encoding="preserve-path">
+        <pattern>.*</pattern>
+      </path-param>
+    </route>
+  </route>
 
   <route path="/{gtn:path}">
     <route-param qname="gtn:handler">
@@ -129,5 +129,5 @@
     <route-param qname="gtn:handler">
       <value>default</value>
     </route-param>
-  </route> 
+  </route>
 </controller>

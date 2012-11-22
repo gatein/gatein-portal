@@ -29,21 +29,17 @@ import org.exoplatform.portal.pom.spi.portlet.Portlet;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PortletApplication extends Application<Portlet>
-{
+public class PortletApplication extends Application<Portlet> {
 
-   public PortletApplication(ApplicationData<Portlet> preferencesApplicationData)
-   {
-      super(preferencesApplicationData);
-   }
+    public PortletApplication(ApplicationData<Portlet> preferencesApplicationData) {
+        super(preferencesApplicationData);
+    }
 
-   public PortletApplication(ApplicationType<Portlet> preferencesApplicationType, String storageId)
-   {
-      super(preferencesApplicationType, storageId);
-   }
+    public PortletApplication(ApplicationType<Portlet> preferencesApplicationType, String storageId) {
+        super(preferencesApplicationType, storageId);
+    }
 
-   public PortletApplication()
-   {
-      super(ApplicationType.PORTLET);
-   }
+    public PortletApplication() {
+        super(ApplicationType.PORTLET);
+    }
 }

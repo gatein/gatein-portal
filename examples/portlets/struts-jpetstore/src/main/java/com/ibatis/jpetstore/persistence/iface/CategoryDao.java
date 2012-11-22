@@ -1,13 +1,13 @@
 package com.ibatis.jpetstore.persistence.iface;
 
-import com.ibatis.jpetstore.domain.Category;
-
 import java.util.List;
+
+import com.ibatis.jpetstore.domain.Category;
 
 public interface CategoryDao {
 
-  List getCategoryList();
+    List getCategoryList();
 
-  Category getCategory(String categoryId);
+    Category getCategory(String categoryId);
 
 }

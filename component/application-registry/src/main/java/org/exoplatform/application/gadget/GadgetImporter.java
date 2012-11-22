@@ -19,81 +19,73 @@
 
 package org.exoplatform.application.gadget;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+
 import org.apache.shindig.common.uri.Uri;
 import org.apache.shindig.gadgets.spec.GadgetSpec;
 import org.apache.shindig.gadgets.spec.ModulePrefs;
 import org.exoplatform.application.gadget.impl.GadgetDefinition;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class GadgetImporter
-{
+public abstract class GadgetImporter {
 
-   /** . */
-   protected static final Logger log = LoggerFactory.getLogger(GadgetImporter.class);
+    /** . */
+    protected static final Logger log = LoggerFactory.getLogger(GadgetImporter.class);
 
-   /** The gadget name as seen by GateIn. */
-   private String gadgetName;
+    /** The gadget name as seen by GateIn. */
+    private String gadgetName;
 
-   /** The gadget uri. */
-   private String gadgetURI;
+    /** The gadget uri. */
+    private String gadgetURI;
 
-   protected GadgetImporter(
-      String gadgetName,
-      String gadgetURI)
-   {
-      this.gadgetName = gadgetName;
-      this.gadgetURI = gadgetURI;
-   }
+    protected GadgetImporter(String gadgetName, String gadgetURI) {
+        this.gadgetName = gadgetName;
+        this.gadgetURI = gadgetURI;
+    }
 
-   public String getGadgetName()
-   {
-      return gadgetName;
-   }
+    public String getGadgetName() {
+        return gadgetName;
+    }
 
-   public String getGadgetURI()
-   {
-      return gadgetURI;
-   }
+    public String getGadgetURI() {
+        return gadgetURI;
+    }
 
-   protected abstract byte[] getGadgetBytes(String gadgetURI) throws IOException;
+    protected abstract byte[] getGadgetBytes(String gadgetURI) throws IOException;
 
-   protected abstract String getGadgetURL() throws Exception;
+    protected abstract String getGadgetURL();
 
-   protected abstract void process(String gadgetURI, GadgetDefinition def) throws Exception;
+    protected abstract void process(String gadgetURI, GadgetDefinition def) throws Exception;
 
-   protected abstract void processMetadata(ModulePrefs prefs, GadgetDefinition def) throws Exception;
+    protected abstract void processMetadata(ModulePrefs prefs, GadgetDefinition def);
 
-   public void doImport(GadgetDefinition def) throws Exception
-   {
-      // Get bytes
-      byte[] bytes = getGadgetBytes(gadgetURI);
-      if (bytes == null)
-      {
-         log.error("Cannot import gadget " + gadgetURI + " because its data could not be found");
-         throw new IOException();
-      }
+    public void doImport(GadgetDefinition def) throws Exception {
+        // Get bytes
+        byte[] bytes = getGadgetBytes(gadgetURI);
+        if (bytes == null) {
+            log.error("Cannot import gadget " + gadgetURI + " because its data could not be found");
+            throw new IOException();
+        }
 
-      //
-      process(gadgetURI, def);
+        //
+        process(gadgetURI, def);
 
-      String encoding = EncodingDetector.detect(new ByteArrayInputStream(bytes));
-      String gadget = new String(bytes, encoding);
-      String gadgetURL = getGadgetURL();
-      GadgetSpec spec = new GadgetSpec(Uri.parse(gadgetURL), gadget);
-      ModulePrefs prefs = spec.getModulePrefs();
-      processMetadata(prefs, def);
-   }
+        String encoding = EncodingDetector.detect(new ByteArrayInputStream(bytes));
+        String gadget = new String(bytes, encoding);
+        String gadgetURL = getGadgetURL();
+        GadgetSpec spec = new GadgetSpec(Uri.parse(gadgetURL), gadget);
+        ModulePrefs prefs = spec.getModulePrefs();
+        processMetadata(prefs, def);
+    }
 
-   @Override
-   public String toString()
-   {
-      return getClass().getSimpleName() + "[name=" + getGadgetName() + ",path=" + getGadgetURI() + "]";
-   }
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[name=" + getGadgetName() + ",path=" + getGadgetURI() + "]";
+    }
 }

@@ -20,63 +20,60 @@
 package org.exoplatform.component.test.web;
 
 import static junit.framework.TestCase.*;
-import org.gatein.common.io.IOTools;
 
 import java.io.File;
 import java.net.URL;
 
+import org.gatein.common.io.IOTools;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ServletContextTestCase
-{
+public class ServletContextTestCase {
 
-   public void testFileGetResource() throws Exception
-   {
-      URL url = ServletContextTestCase.class.getClassLoader().getResource("org/exoplatform/component/test/web/");
-      assertNotNull(url);
-      File root = new File(url.toURI());
-      assertTrue(root.exists());
-      assertTrue(root.isDirectory());
+    public void testFileGetResource() throws Exception {
+        URL url = ServletContextTestCase.class.getClassLoader().getResource("org/exoplatform/component/test/web/");
+        assertNotNull(url);
+        File root = new File(url.toURI());
+        assertTrue(root.exists());
+        assertTrue(root.isDirectory());
 
-      //
-      ServletContextImpl servletContext = new ServletContextImpl(root, "/webapp", "webapp");
+        //
+        ServletContextImpl servletContext = new ServletContextImpl(root, "/webapp", "webapp");
 
-      //
-      URL fooURL = servletContext.getResource("/foo.txt");
-      assertNotNull(fooURL);
-      assertEquals("foo", new String(IOTools.getBytes(fooURL.openStream())));
+        //
+        URL fooURL = servletContext.getResource("/foo.txt");
+        assertNotNull(fooURL);
+        assertEquals("foo", new String(IOTools.getBytes(fooURL.openStream())));
 
-      //
-      URL barURL = servletContext.getResource("/folder/bar.txt");
-      assertNotNull(barURL);
-      assertEquals("bar", new String(IOTools.getBytes(barURL.openStream())));
+        //
+        URL barURL = servletContext.getResource("/folder/bar.txt");
+        assertNotNull(barURL);
+        assertEquals("bar", new String(IOTools.getBytes(barURL.openStream())));
 
-      //
-      assertEquals(null, servletContext.getResource("/bar.txt"));
-   }
+        //
+        assertEquals(null, servletContext.getResource("/bar.txt"));
+    }
 
-   public void testClassGetResource() throws Exception
-   {
-      ServletContextImpl servletContext = new ServletContextImpl(getClass(), "/webapp", "webapp");
+    public void testClassGetResource() throws Exception {
+        ServletContextImpl servletContext = new ServletContextImpl(getClass(), "/webapp", "webapp");
 
-      //
-      URL fooURL = servletContext.getResource("/foo.txt");
-      assertNotNull(fooURL);
-      assertEquals("foo", new String(IOTools.getBytes(fooURL.openStream())));
+        //
+        URL fooURL = servletContext.getResource("/foo.txt");
+        assertNotNull(fooURL);
+        assertEquals("foo", new String(IOTools.getBytes(fooURL.openStream())));
 
-      //
-      URL barURL = servletContext.getResource("/folder/bar.txt");
-      assertNotNull(barURL);
-      assertEquals("bar", new String(IOTools.getBytes(barURL.openStream())));
+        //
+        URL barURL = servletContext.getResource("/folder/bar.txt");
+        assertNotNull(barURL);
+        assertEquals("bar", new String(IOTools.getBytes(barURL.openStream())));
 
-      //
-      assertEquals(null, servletContext.getResource("/bar.txt"));
-   }
+        //
+        assertEquals(null, servletContext.getResource("/bar.txt"));
+    }
 
-   public void testContextPath() throws Exception
-   {
-      ServletContextImpl servletContext = new ServletContextImpl(getClass(), "/webapp", "webapp");
-      assertEquals("/webapp", servletContext.getContextPath());
-   }
+    public void testContextPath() {
+        ServletContextImpl servletContext = new ServletContextImpl(getClass(), "/webapp", "webapp");
+        assertEquals("/webapp", servletContext.getContextPath());
+    }
 }

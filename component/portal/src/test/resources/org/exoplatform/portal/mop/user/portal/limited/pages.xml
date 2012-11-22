@@ -25,21 +25,21 @@
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
 
-   <page>
-      <name>foo</name>
-      <access-permissions>*:/platform/administrators</access-permissions>
-      <edit-permission>*:/platform/administrators</edit-permission>
-   </page>
+  <page>
+    <name>foo</name>
+    <access-permissions>*:/platform/administrators</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+  </page>
 
-   <page>
-      <name>bar</name>
-      <access-permissions>*:/platform/users</access-permissions>
-      <edit-permission>*:/platform/administrators</edit-permission>
-   </page>
+  <page>
+    <name>bar</name>
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+  </page>
 
-   <page>
-      <name>bit</name>
-      <access-permissions>Everyone</access-permissions>
-      <edit-permission>*:/platform/administrators</edit-permission>
-   </page>
+  <page>
+    <name>bit</name>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+  </page>
 </page-set>

@@ -30,13 +30,13 @@
       <name>bar</name>
       <label>bar_label</label>
     </node>
-	  <node>
+    <node>
       <uri>foo</uri>
-	    <name>foo</name>
-	    <label xml:lang="en">foo_label_en</label>
+      <name>foo</name>
+      <label xml:lang="en">foo_label_en</label>
       <label>foo_label</label>
-	    <label xml:lang="fr">foo_label_fr</label>
-	  </node>
+      <label xml:lang="fr">foo_label_fr</label>
+    </node>
     <node>
       <uri>juu</uri>
       <name>juu</name>

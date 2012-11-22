@@ -20,28 +20,24 @@
 -->
 
 <object type="org.exoplatform.webui.form.UIFormInputIconSelector$IconSet">
-  <field  name="name"><string>24x24</string></field>
-  <field  name="categories">
+  <field name="name">
+    <string>24x24</string>
+  </field>
+  <field name="categories">
     <collection type="java.util.ArrayList">
       <value>
         <object type="org.exoplatform.webui.form.UIFormInputIconSelector$IconCategory">
-          <field  name="name"><string>misc</string></field>
-          <field  name="icons">
-            <collection type="java.util.ArrayList">
-              <value><string>SaveIcon24x24</string></value>
-              <value><string>CancelIcon24x24</string></value>
-            </collection>
+          <field name="name">
+            <string>misc</string>
           </field>
-        </object>
-      </value>
-      
-      <value>
-        <object type="org.exoplatform.webui.form.UIFormInputIconSelector$IconCategory">
-          <field  name="name"><string>offices</string></field>
-          <field  name="icons">
+          <field name="icons">
             <collection type="java.util.ArrayList">
-              <value><string>SaveIcon24x24</string></value>
-              <value><string>CancelIcon24x24</string></value>
+              <value>
+                <string>SaveIcon24x24</string>
+              </value>
+              <value>
+                <string>CancelIcon24x24</string>
+              </value>
             </collection>
           </field>
         </object>
@@ -49,11 +45,17 @@
 
       <value>
         <object type="org.exoplatform.webui.form.UIFormInputIconSelector$IconCategory">
-          <field  name="name"><string>navigation</string></field>
-          <field  name="icons">
+          <field name="name">
+            <string>offices</string>
+          </field>
+          <field name="icons">
             <collection type="java.util.ArrayList">
-              <value><string>SaveIcon24x24</string></value>
-              <value><string>CancelIcon24x24</string></value>
+              <value>
+                <string>SaveIcon24x24</string>
+              </value>
+              <value>
+                <string>CancelIcon24x24</string>
+              </value>
             </collection>
           </field>
         </object>
@@ -61,11 +63,17 @@
 
       <value>
         <object type="org.exoplatform.webui.form.UIFormInputIconSelector$IconCategory">
-          <field  name="name"><string>tool</string></field>
-          <field  name="icons">
+          <field name="name">
+            <string>navigation</string>
+          </field>
+          <field name="icons">
             <collection type="java.util.ArrayList">
-              <value><string>SaveIcon6x24</string></value>
-              <value><string>CancelIcon24x24</string></value>
+              <value>
+                <string>SaveIcon24x24</string>
+              </value>
+              <value>
+                <string>CancelIcon24x24</string>
+              </value>
             </collection>
           </field>
         </object>
@@ -73,16 +81,40 @@
 
       <value>
         <object type="org.exoplatform.webui.form.UIFormInputIconSelector$IconCategory">
-          <field  name="name"><string>user</string></field>
-          <field  name="icons">
+          <field name="name">
+            <string>tool</string>
+          </field>
+          <field name="icons">
             <collection type="java.util.ArrayList">
-              <value><string>SaveIcon6x24</string></value>
-              <value><string>CancelIcon24x24</string></value>
+              <value>
+                <string>SaveIcon6x24</string>
+              </value>
+              <value>
+                <string>CancelIcon24x24</string>
+              </value>
             </collection>
           </field>
         </object>
       </value>
-           
+
+      <value>
+        <object type="org.exoplatform.webui.form.UIFormInputIconSelector$IconCategory">
+          <field name="name">
+            <string>user</string>
+          </field>
+          <field name="icons">
+            <collection type="java.util.ArrayList">
+              <value>
+                <string>SaveIcon6x24</string>
+              </value>
+              <value>
+                <string>CancelIcon24x24</string>
+              </value>
+            </collection>
+          </field>
+        </object>
+      </value>
+
     </collection>
   </field>
 </object>

@@ -23,10 +23,10 @@
   -->
 
 <module xmlns="urn:jboss:module:1.0" name="org.picocontainer">
-    <resources>
-       <!-- Insert resources here -->
-    </resources>
+  <resources>
+    <!-- Insert resources here -->
+  </resources>
 
-    <dependencies>
-    </dependencies>
+  <dependencies>
+  </dependencies>
 </module>

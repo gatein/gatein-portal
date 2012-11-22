@@ -24,69 +24,57 @@ import org.exoplatform.portal.pom.config.Utils;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PageKey extends OwnerKey
-{
+public class PageKey extends OwnerKey {
 
-   /** . */
-   private final String name;
+    /** . */
+    private final String name;
 
-   public PageKey(String type, String id, String name)
-   {
-      super(type, id);
+    public PageKey(String type, String id, String name) {
+        super(type, id);
 
-      //
-      if (name == null)
-      {
-         throw new NullPointerException();
-      }
+        //
+        if (name == null) {
+            throw new NullPointerException();
+        }
 
-      //
-      this.name = name;
-   }
+        //
+        this.name = name;
+    }
 
-   public String getName()
-   {
-      return name;
-   }
+    public String getName() {
+        return name;
+    }
 
-   @Override
-   public int hashCode()
-   {
-      return super.hashCode() ^ name.hashCode();
-   }
+    @Override
+    public int hashCode() {
+        return super.hashCode() ^ name.hashCode();
+    }
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (obj == this)
-      {
-         return true;
-      }
-      if (obj instanceof PageKey)
-      {
-         PageKey that = (PageKey)obj;
-         return super.equals(that) &&name.equals(that.name);
-      }
-      return false;
-   }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof PageKey) {
+            PageKey that = (PageKey) obj;
+            return super.equals(that) && name.equals(that.name);
+        }
+        return false;
+    }
 
-   public static PageKey create(String compositeId)
-   {
-      if (compositeId == null)
-      {
-         throw new NullPointerException();
-      }
-      String[] components = Utils.split("::", compositeId);
-      if (components.length != 3)
-      {
-         throw new IllegalArgumentException("Wrong page id key format " + compositeId);
-      }
-      return new PageKey(components[0], components[1], components[2]);
-   }
+    public static PageKey create(String compositeId) {
+        if (compositeId == null) {
+            throw new NullPointerException();
+        }
+        String[] components = Utils.split("::", compositeId);
+        if (components.length != 3) {
+            throw new IllegalArgumentException("Wrong page id key format " + compositeId);
+        }
+        return new PageKey(components[0], components[1], components[2]);
+    }
 
-   @Override
-   public String toString()
-   {
-      return "PageKey[type=" + getType() + ",id=" + getId() + ",name=" + name + "]";
-   }
+    @Override
+    public String toString() {
+        return "PageKey[type=" + getType() + ",id=" + getId() + ",name=" + name + "]";
+    }
 }

@@ -19,11 +19,11 @@
 
 -->
 
-<messagebundle>  
+<messagebundle>
   <msg name="save">
-  	Save
+    Save
   </msg>
   <msg name="type_here">
-  	Type new task here
+    Type new task here
   </msg>
 </messagebundle>

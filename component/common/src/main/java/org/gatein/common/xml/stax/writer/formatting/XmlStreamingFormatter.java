@@ -26,13 +26,13 @@ import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public interface XmlStreamingFormatter extends XMLStreamConstants
-{
-   void before(XMLStreamWriter writer, int event) throws XMLStreamException;
+public interface XmlStreamingFormatter extends XMLStreamConstants {
+    void before(XMLStreamWriter writer, int event) throws XMLStreamException;
 
-   void after(XMLStreamWriter writer, int event) throws XMLStreamException;
+    void after(XMLStreamWriter writer, int event) throws XMLStreamException;
 }

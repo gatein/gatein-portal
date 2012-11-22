@@ -27,8 +27,7 @@ import org.jboss.as.server.deployment.AttachmentKey;
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class GateInConfigurationKey
-{
-   public static final AttachmentKey<GateInConfiguration> KEY = AttachmentKey.create(GateInConfiguration.class);
-   public static final GateInConfigurationKey INSTANCE = new GateInConfigurationKey();
+public class GateInConfigurationKey {
+    public static final AttachmentKey<GateInConfiguration> KEY = AttachmentKey.create(GateInConfiguration.class);
+    public static final GateInConfigurationKey INSTANCE = new GateInConfigurationKey();
 }

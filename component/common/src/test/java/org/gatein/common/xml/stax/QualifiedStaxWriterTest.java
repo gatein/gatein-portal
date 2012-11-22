@@ -22,28 +22,25 @@
 
 package org.gatein.common.xml.stax;
 
+import javax.xml.namespace.QName;
+
 import org.mockito.Mockito;
 import org.staxnav.Naming;
 
-import javax.xml.namespace.QName;
+public class QualifiedStaxWriterTest extends AbstractStaxWriterTest<QName> {
+    @Override
+    public Naming<QName> getNaming() {
+        return new Naming.Qualified();
+    }
 
-public class QualifiedStaxWriterTest extends AbstractStaxWriterTest<QName>
-{
-   @Override
-   public Naming<QName> getNaming()
-   {
-      return new Naming.Qualified();
-   }
+    public void testWriteQualifiedStartElement() throws Exception {
+        QName bar = new QName("uri", "pre", "bar");
 
-   public void testWriteQualifiedStartElement() throws Exception
-   {
-      QName bar = new QName("uri", "pre", "bar");
+        writer.writeStartElement(bar);
+        Mockito.verify(stream).writeStartElement(bar.getPrefix(), bar.getLocalPart(), bar.getNamespaceURI());
 
-      writer.writeStartElement(bar);
-      Mockito.verify(stream).writeStartElement(bar.getPrefix(), bar.getLocalPart(), bar.getNamespaceURI());
-
-      QName foobar = new QName("http://www.gatein.org/xml/ns/gatein_objects_1_0", "foobar");
-      writer.writeStartElement(foobar);
-      Mockito.verify(stream).writeStartElement(foobar.getNamespaceURI(), foobar.getLocalPart());
-   }
+        QName foobar = new QName("http://www.gatein.org/xml/ns/gatein_objects_1_0", "foobar");
+        writer.writeStartElement(foobar);
+        Mockito.verify(stream).writeStartElement(foobar.getNamespaceURI(), foobar.getLocalPart());
+    }
 }

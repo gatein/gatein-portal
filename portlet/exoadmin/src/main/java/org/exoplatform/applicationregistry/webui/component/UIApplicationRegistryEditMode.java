@@ -18,11 +18,14 @@
  */
 package org.exoplatform.applicationregistry.webui.component;
 
+import javax.portlet.PortletMode;
+import javax.portlet.PortletPreferences;
+
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIPortalApplication;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.lifecycle.UIFormLifecycle;
@@ -31,49 +34,39 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormCheckBoxInput;
 
-import javax.portlet.PortletMode;
-import javax.portlet.PortletPreferences;
-
 /**
  * @author <a href="mailto:truong.le@exoplatform.com">Truong Le</a>
  * @version $Id$
  *
  */
-@ComponentConfig(lifecycle = UIFormLifecycle.class, 
-                 template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", 
-                 events = {@EventConfig(listeners = UIApplicationRegistryEditMode.SaveActionListener.class)}
-                )
+@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = { @EventConfig(listeners = UIApplicationRegistryEditMode.SaveActionListener.class) })
 @Serialized
-public class UIApplicationRegistryEditMode extends UIForm
-{
-   public static final String SHOW_IMPORT = "showImport";
-   
-   public UIApplicationRegistryEditMode() throws Exception
-   {
-      PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
-      PortletPreferences pref = pcontext.getRequest().getPreferences();
-      boolean isShowImport = Boolean.parseBoolean(pref.getValue(SHOW_IMPORT,"true"));
-      addUIFormInput(new UIFormCheckBoxInput<Boolean>(SHOW_IMPORT, SHOW_IMPORT, isShowImport).setValue(isShowImport));
-   }
+public class UIApplicationRegistryEditMode extends UIForm {
+    public static final String SHOW_IMPORT = "showImport";
 
-   static public class SaveActionListener extends EventListener<UIApplicationRegistryEditMode>
-   {
+    public UIApplicationRegistryEditMode() {
+        PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+        PortletPreferences pref = pcontext.getRequest().getPreferences();
+        boolean isShowImport = Boolean.parseBoolean(pref.getValue(SHOW_IMPORT, "true"));
+        addUIFormInput(new UIFormCheckBoxInput<Boolean>(SHOW_IMPORT, SHOW_IMPORT, isShowImport).setValue(isShowImport));
+    }
 
-      @Override
-      public void execute(Event<UIApplicationRegistryEditMode> event) throws Exception
-      {
-         // TODO Auto-generated method stub
-         UIApplicationRegistryEditMode uiForm = event.getSource();
-         boolean isShowImport = uiForm.getUIFormCheckBoxInput(SHOW_IMPORT).isChecked();
-         PortletRequestContext pcontext = (PortletRequestContext)WebuiRequestContext.getCurrentInstance();
-         PortletPreferences pref = pcontext.getRequest().getPreferences();
-         pref.setValue(SHOW_IMPORT, Boolean.toString(isShowImport));
-         pref.store();
-         UIPortalApplication portalApp = Util.getUIPortalApplication();
-         if (portalApp.getModeState() == UIPortalApplication.NORMAL_MODE)
-            pcontext.setApplicationMode(PortletMode.VIEW);
-         
-      }
-      
-   }
+    public static class SaveActionListener extends EventListener<UIApplicationRegistryEditMode> {
+
+        @Override
+        public void execute(Event<UIApplicationRegistryEditMode> event) throws Exception {
+            // TODO Auto-generated method stub
+            UIApplicationRegistryEditMode uiForm = event.getSource();
+            boolean isShowImport = uiForm.getUIFormCheckBoxInput(SHOW_IMPORT).isChecked();
+            PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+            PortletPreferences pref = pcontext.getRequest().getPreferences();
+            pref.setValue(SHOW_IMPORT, Boolean.toString(isShowImport));
+            pref.store();
+            UIPortalApplication portalApp = Util.getUIPortalApplication();
+            if (portalApp.getModeState() == UIPortalApplication.NORMAL_MODE)
+                pcontext.setApplicationMode(PortletMode.VIEW);
+
+        }
+
+    }
 }

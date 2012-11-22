@@ -22,26 +22,27 @@
 package org.exoplatform.web.application;
 
 /**
- * Interface that extends {@link ApplicationLifecycle} with request phase methods that allow interception of
- * before/after ACTION phase, and before/after RENDER phase of request processing.
+ * Interface that extends {@link ApplicationLifecycle} with request phase methods that allow interception of before/after ACTION
+ * phase, and before/after RENDER phase of request processing.
  *
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public interface ApplicationRequestPhaseLifecycle<E extends RequestContext> extends ApplicationLifecycle<E>
-{
-   /**
-    * Perform any processing required at the beginning of {@link Phase#ACTION} or {@link Phase#RENDER} phase.
-    * @param app Application
-    * @param context current RequestContext
-    * @param phase starting phase
-    */
-   public void onStartRequestPhase(Application app, E context, Phase phase);
+public interface ApplicationRequestPhaseLifecycle<E extends RequestContext> extends ApplicationLifecycle<E> {
+    /**
+     * Perform any processing required at the beginning of {@link Phase#ACTION} or {@link Phase#RENDER} phase.
+     *
+     * @param app Application
+     * @param context current RequestContext
+     * @param phase starting phase
+     */
+    void onStartRequestPhase(Application app, E context, Phase phase);
 
-   /**
-    * Perform any processing required at the end of {@link Phase#ACTION} or {@link Phase#RENDER} phase.
-    * @param app Application
-    * @param context current RequestContext
-    * @param phase ending phase
-    */
-   public void onEndRequestPhase(Application app, E context, Phase phase);
+    /**
+     * Perform any processing required at the end of {@link Phase#ACTION} or {@link Phase#RENDER} phase.
+     *
+     * @param app Application
+     * @param context current RequestContext
+     * @param phase ending phase
+     */
+    void onEndRequestPhase(Application app, E context, Phase phase);
 }

@@ -21,8 +21,8 @@
 -->
 
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+               xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+               xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
     <key>org.exoplatform.services.naming.InitialContextInitializer</key>
@@ -31,7 +31,7 @@
       <properties-param>
         <name>default-properties</name>
         <description>Default initial context properties</description>
-        <property name="java.naming.factory.initial" value="org.exoplatform.services.naming.SimpleContextFactory" />
+        <property name="java.naming.factory.initial" value="org.exoplatform.services.naming.SimpleContextFactory"/>
       </properties-param>
     </init-params>
   </component>
@@ -67,7 +67,8 @@
           <name>ref-addresses</name>
           <description>ref-addresses</description>
           <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-          <property name="url" value="jdbc:mysql://10.37.129.4/jdbcjcr?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8"/>
+          <property name="url"
+                    value="jdbc:mysql://10.37.129.4/jdbcjcr?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8"/>
           <property name="username" value="root"/>
           <property name="password" value=""/>
         </properties-param>

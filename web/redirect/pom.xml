@@ -19,49 +19,50 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-   <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-   <parent>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.web</artifactId>
-      <version>3.5.0.Final-SNAPSHOT</version>
-   </parent>
+  <parent>
+    <groupId>org.gatein.portal</groupId>
+    <artifactId>exo.portal.web</artifactId>
+    <version>3.5.0.Final-SNAPSHOT</version>
+  </parent>
 
-   <groupId>org.gatein.web</groupId>
-   <artifactId>redirect</artifactId>
-   <packaging>jar</packaging>
+  <groupId>org.gatein.web</groupId>
+  <artifactId>redirect</artifactId>
+  <packaging>jar</packaging>
 
-   <name>GateIn Portal Device Detection and Redirection Component</name>
+  <name>GateIn Portal Device Detection and Redirection Component</name>
 
-   <dependencies>
-     <dependency>
-       <groupId>org.gatein.portal</groupId>    
-       <artifactId>exo.portal.component.common</artifactId>
-       <exclusions>
-         <exclusion>
-           <groupId>org.jboss.logging</groupId>
-           <artifactId>jboss-logging-spi</artifactId>
-         </exclusion>
-       </exclusions>
-     </dependency>
-     <dependency>
-       <groupId>org.gatein.portal</groupId>
-       <artifactId>exo.portal.webui.portal</artifactId>
-     </dependency>
-
+  <dependencies>
     <dependency>
-       <groupId>org.chromattic</groupId>
-       <artifactId>chromattic.core</artifactId>
-       <scope>test</scope>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.component.common</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>org.jboss.logging</groupId>
+          <artifactId>jboss-logging-spi</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.webui.portal</artifactId>
     </dependency>
 
-     <dependency>
-       <groupId>org.gatein.portal</groupId>
-       <artifactId>exo.portal.component.test.core</artifactId>
-       <scope>test</scope>
-     </dependency>
+    <dependency>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.core</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.component.test.core</artifactId>
+      <scope>test</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.gatein.portal</groupId>
@@ -76,6 +77,6 @@
       <scope>test</scope>
     </dependency>
 
-   </dependencies>
+  </dependencies>
 
 </project>

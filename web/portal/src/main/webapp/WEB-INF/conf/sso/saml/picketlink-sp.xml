@@ -21,16 +21,16 @@
 
   <Handlers xmlns="urn:picketlink:identity-federation:handler:config:2.1">
     <Handler
-        class="org.gatein.sso.agent.saml.PortalSAML2LogOutHandler" />
+        class="org.gatein.sso.agent.saml.PortalSAML2LogOutHandler"/>
     <Handler
-        class="org.picketlink.identity.federation.web.handlers.saml2.SAML2AuthenticationHandler" />
+        class="org.picketlink.identity.federation.web.handlers.saml2.SAML2AuthenticationHandler"/>
     <Handler
         class="org.picketlink.identity.federation.web.handlers.saml2.SAML2InResponseToVerificationHandler"/>
     <Handler
-        class="org.picketlink.identity.federation.web.handlers.saml2.RolesGenerationHandler" />
+        class="org.picketlink.identity.federation.web.handlers.saml2.RolesGenerationHandler"/>
     <Handler
-        class="org.picketlink.identity.federation.web.handlers.saml2.SAML2SignatureGenerationHandler" />
+        class="org.picketlink.identity.federation.web.handlers.saml2.SAML2SignatureGenerationHandler"/>
     <Handler
-        class="org.picketlink.identity.federation.web.handlers.saml2.SAML2SignatureValidationHandler" />
+        class="org.picketlink.identity.federation.web.handlers.saml2.SAML2SignatureValidationHandler"/>
   </Handlers>
 </PicketLink>

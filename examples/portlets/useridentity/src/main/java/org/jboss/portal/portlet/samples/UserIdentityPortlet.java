@@ -24,31 +24,25 @@ package org.jboss.portal.portlet.samples;
 
 import java.io.IOException;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import javax.portlet.UnavailableException;
 
-public class UserIdentityPortlet extends GenericPortlet
-{
-   
-   public void doView(RenderRequest request, RenderResponse rResponse) throws PortletException, IOException
-   {
-      rResponse.setContentType("text/html");
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/hello.jsp");
-      prd.include(request, rResponse);
-   }
 
-   protected void doHelp(RenderRequest rRequest, RenderResponse rResponse) throws PortletException, IOException,
-         UnavailableException
-   {
-      rResponse.setContentType("text/html");
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/help.jsp");
-      prd.include(rRequest, rResponse);
-   }
+public class UserIdentityPortlet extends GenericPortlet {
+
+    public void doView(RenderRequest request, RenderResponse rResponse) throws PortletException, IOException {
+        rResponse.setContentType("text/html");
+        PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/hello.jsp");
+        prd.include(request, rResponse);
+    }
+
+    protected void doHelp(RenderRequest rRequest, RenderResponse rResponse) throws PortletException, IOException {
+        rResponse.setContentType("text/html");
+        PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/help.jsp");
+        prd.include(rRequest, rResponse);
+    }
 
 }

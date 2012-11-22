@@ -21,10 +21,10 @@
 -->
 
 <configuration
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
-	
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+
   <external-component-plugins>
     <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
     <component-plugin>
@@ -34,7 +34,7 @@
       <init-params>
         <properties-param>
           <name>namespaces</name>
-          <property name="tkn" value="http://www.gatein.org/jcr/token/1.0/" />
+          <property name="tkn" value="http://www.gatein.org/jcr/token/1.0/"/>
         </properties-param>
       </init-params>
     </component-plugin>

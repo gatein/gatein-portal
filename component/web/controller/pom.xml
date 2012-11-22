@@ -17,19 +17,21 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.component.web</artifactId>
     <version>3.5.0.Final-SNAPSHOT</version>
-  </parent> 
+  </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.portal.component.web.controller</artifactId>
   <packaging>jar</packaging>
   <name>GateIn Portal Component Web Controller</name>
   <description>The GateIn web controller takes care of managing portal requests and delegate the processing to
-    the appropriate subsystem.</description>
+    the appropriate subsystem.
+  </description>
 
   <properties>
     <japex.runIterations>100000</japex.runIterations>
@@ -38,8 +40,8 @@
 
   <dependencies>
     <dependency>
-        <groupId>org.exoplatform.kernel</groupId>
-        <artifactId>exo.kernel.container</artifactId>
+      <groupId>org.exoplatform.kernel</groupId>
+      <artifactId>exo.kernel.container</artifactId>
     </dependency>
     <dependency>
       <groupId>org.gatein.portal</groupId>
@@ -47,27 +49,27 @@
     </dependency>
 
     <!-- Used only for pretty printing, need to find a better solution than this -->
-<!--
-    <dependency>
-      <groupId>net.java.dev.stax-utils</groupId>
-      <artifactId>stax-utils</artifactId>
-      <version>20060502</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.bea.xml</groupId>
-          <artifactId>jsr173-ri</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
--->
+    <!--
+        <dependency>
+          <groupId>net.java.dev.stax-utils</groupId>
+          <artifactId>stax-utils</artifactId>
+          <version>20060502</version>
+          <exclusions>
+            <exclusion>
+              <groupId>com.bea.xml</groupId>
+              <artifactId>jsr173-ri</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+    -->
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.component.test.core</artifactId>
       <scope>test</scope>
     </dependency>
     <dependency>
-       <groupId>org.staxnav</groupId>
-       <artifactId>staxnav.core</artifactId>
+      <groupId>org.staxnav</groupId>
+      <artifactId>staxnav.core</artifactId>
     </dependency>
 
     <dependency>
@@ -137,32 +139,38 @@
             <configuration>
               <japexConfig>
                 <testSuite xmlns="http://www.sun.com/japex/testSuite" name="ParsingPerformance">
-                  <param name="japex.namedClassPath" value="maven.test.classpath" />
-                  <param name="japex.resultUnit" value="ms" />
-                  <param name="japex.warmupIterations" value="10000" />
-                  <param name="japex.runIterations" value="${japex.runIterations}" />
-                  <param name="japex.numberOfThreads" value="${japex.numberOfThreads}" />
+                  <param name="japex.namedClassPath" value="maven.test.classpath"/>
+                  <param name="japex.resultUnit" value="ms"/>
+                  <param name="japex.warmupIterations" value="10000"/>
+                  <param name="japex.runIterations" value="${japex.runIterations}"/>
+                  <param name="japex.numberOfThreads" value="${japex.numberOfThreads}"/>
                   <driver name="JavaUtilRegex">
-                    <param name="japex.driverClass" value="org.exoplatform.web.controller.performance.ControllerRendererDriver" />
-                    <param name="description" value="Controller performance with the java.util.regex package" />
-                    <param name="regex" value="java" />
+                    <param name="japex.driverClass"
+                           value="org.exoplatform.web.controller.performance.ControllerRendererDriver"/>
+                    <param name="description" value="Controller performance with the java.util.regex package"/>
+                    <param name="regex" value="java"/>
                   </driver>
                   <driver name="JRegex">
-                    <param name="japex.driverClass" value="org.exoplatform.web.controller.performance.ControllerRendererDriver" />
-                    <param name="description" value="Controller performance with the jregex package" />
-                    <param name="regex" value="jregex" />
+                    <param name="japex.driverClass"
+                           value="org.exoplatform.web.controller.performance.ControllerRendererDriver"/>
+                    <param name="description" value="Controller performance with the jregex package"/>
+                    <param name="regex" value="jregex"/>
                   </driver>
                   <testCase name="classic">
-                    <param name="parameters" value="{ 'gtn:handler' : 'portal', 'gtn:sitetype' : 'portal' , 'gtn:sitename' : 'classic', 'gtn:path' : 'page' }" />
+                    <param name="parameters"
+                           value="{ 'gtn:handler' : 'portal', 'gtn:sitetype' : 'portal' , 'gtn:sitename' : 'classic', 'gtn:path' : 'page' }"/>
                   </testCase>
                   <testCase name="fr/classic">
-                    <param name="parameters" value="{ 'gtn:handler' : 'portal', 'gtn:lang' : 'fr', 'gtn:sitetype' : 'portal' , 'gtn:sitename' : 'classic', 'gtn:path' : 'page' }" />
+                    <param name="parameters"
+                           value="{ 'gtn:handler' : 'portal', 'gtn:lang' : 'fr', 'gtn:sitetype' : 'portal' , 'gtn:sitename' : 'classic', 'gtn:path' : 'page' }"/>
                   </testCase>
                   <testCase name="group">
-                    <param name="parameters" value="{ 'gtn:handler' : 'portal', 'gtn:sitetype' : 'group' , 'gtn:sitename' : '/platform/administrator', 'gtn:path' : 'page' }" />
+                    <param name="parameters"
+                           value="{ 'gtn:handler' : 'portal', 'gtn:sitetype' : 'group' , 'gtn:sitename' : '/platform/administrator', 'gtn:path' : 'page' }"/>
                   </testCase>
                   <testCase name="user">
-                    <param name="parameters" value="{ 'gtn:handler' : 'portal', 'gtn:sitetype' : 'user' , 'gtn:sitename' : 'root', 'gtn:path' : 'page' }" />
+                    <param name="parameters"
+                           value="{ 'gtn:handler' : 'portal', 'gtn:sitetype' : 'user' , 'gtn:sitename' : 'root', 'gtn:path' : 'page' }"/>
                   </testCase>
                 </testSuite>
               </japexConfig>

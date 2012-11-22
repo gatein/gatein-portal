@@ -28,19 +28,19 @@
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
   <edit-permission>*:/platform/administrators</edit-permission>
- 
+
   <portal-redirects>
     <portal-redirect>
       <redirect-site>redirectA</redirect-site>
       <name>Redirect Site A</name>
       <enabled>false</enabled>
       <conditions>
-         <condition>
-           <name>Accept All User Agent Strings</name>
-           <user-agent>
-             <contains>.*</contains>
-           </user-agent>
-         </condition>
+        <condition>
+          <name>Accept All User Agent Strings</name>
+          <user-agent>
+            <contains>.*</contains>
+          </user-agent>
+        </condition>
       </conditions>
     </portal-redirect>
   </portal-redirects>

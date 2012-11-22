@@ -19,13 +19,14 @@
 
 -->
 
-<Context path='/sample-portal' docBase='sample-portal' debug='0' reloadable='true' crossContext='true' privileged='true'>
+<Context path='/sample-portal' docBase='sample-portal' debug='0' reloadable='true' crossContext='true'
+         privileged='true'>
   <Realm className='org.apache.catalina.realm.JAASRealm'
          appName='gatein-domain-sample-portal'
          userClassNames='org.exoplatform.services.security.jaas.UserPrincipal'
          roleClassNames='org.exoplatform.services.security.jaas.RolePrincipal'
          debug='0' cache='false'/>
-	 <Valve
-       className='org.apache.catalina.authenticator.FormAuthenticator'
-       characterEncoding='UTF-8'/>
+  <Valve
+      className='org.apache.catalina.authenticator.FormAuthenticator'
+      characterEncoding='UTF-8'/>
 </Context>

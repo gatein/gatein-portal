@@ -26,9 +26,8 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
  * @version $Revision$
  */
 @Serialized
-public class C1
-{
+public class C1 {
 
-   String a = "a1";
+    String a = "a1";
 
 }

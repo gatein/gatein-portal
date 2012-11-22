@@ -18,50 +18,45 @@
  */
 package org.exoplatform.portal.config;
 
-import junit.framework.Assert;
-import org.exoplatform.services.listener.Event;
-import org.exoplatform.services.listener.Listener;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import junit.framework.Assert;
+
+import org.exoplatform.services.listener.Event;
+import org.exoplatform.services.listener.Listener;
+
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
-public class EventQueue extends Listener
-{
+public class EventQueue extends Listener {
 
-   /** . */
-   private final LinkedList<Event> events;
+    /** . */
+    private final LinkedList<Event> events;
 
-   public EventQueue()
-   {
-      this.events = new LinkedList<Event>();
-   }
+    public EventQueue() {
+        this.events = new LinkedList<Event>();
+    }
 
-   @Override
-   public void onEvent(Event event) throws Exception
-   {
-      events.add(event);
-   }
+    @Override
+    public void onEvent(Event event) throws Exception {
+        events.add(event);
+    }
 
-   public void assertSize(int expectedSize)
-   {
-      Assert.assertEquals("Was expecting events size to be " + expectedSize + " instead of " + toString(), expectedSize, events.size());
-   }
+    public void assertSize(int expectedSize) {
+        Assert.assertEquals("Was expecting events size to be " + expectedSize + " instead of " + toString(), expectedSize,
+                events.size());
+    }
 
-   public void clear()
-   {
-      events.clear();
-   }
+    public void clear() {
+        events.clear();
+    }
 
-   @Override
-   public String toString()
-   {
-      List<String> tmp = new ArrayList<String>(events.size());
-      for (Event event : events)
-      {
-         tmp.add("Event[name=" + event.getEventName() + ",data" + event.getData() + "]");
-      }
-      return tmp.toString();
-   }
+    @Override
+    public String toString() {
+        List<String> tmp = new ArrayList<String>(events.size());
+        for (Event event : events) {
+            tmp.add("Event[name=" + event.getEventName() + ",data" + event.getData() + "]");
+        }
+        return tmp.toString();
+    }
 }

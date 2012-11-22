@@ -19,81 +19,67 @@
 
 package org.exoplatform.commons.cache.future;
 
+import java.util.concurrent.Callable;
+
 import junit.framework.Assert;
 import junit.framework.TestCase;
-
-import java.util.concurrent.Callable;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class GetTestCase extends TestCase
-{
-   public void testGet()
-   {
-      FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(new StringLoader());
-      Assert.assertEquals("foo_value", futureCache.get(new Callable<String>()
-      {
-         public String call() throws Exception
-         {
-            return "foo_value";
-         }
-      }, "foo"));
-      Assert.assertEquals("foo_value", futureCache.data.get("foo"));
-   }
-
-   public void testNullValue()
-   {
-      FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(new StringLoader());
-      Assert.assertEquals(null, futureCache.get(new Callable<String>()
-      {
-         public String call() throws Exception
-         {
-            return null;
-         }
-      }, "foo"));
-      Assert.assertFalse(futureCache.data.containsKey("foo"));
-   }
-
-   public void testThrowException()
-   {
-      FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(new StringLoader());
-      Assert.assertEquals(null, futureCache.get(new Callable<String>()
-      {
-         public String call() throws Exception
-         {
-            throw new Exception("DON'T FREAK OUT");
-         }
-      }, "foo"));
-      Assert.assertFalse(futureCache.data.containsKey("foo"));
-   }
-
-   public void testReentrancy()
-   {
-      final FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(new StringLoader());
-      String res = futureCache.get(new Callable<String>()
-      {
-         public String call() throws Exception
-         {
-            try
-            {
-               futureCache.get(new Callable<String>()
-               {
-                  public String call() throws Exception
-                  {
-                     // Should not go there
-                     throw new AssertionError();
-                  }
-               }, "foo");
-               return "fail";
+public class GetTestCase extends TestCase {
+    public void testGet() {
+        FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(
+                new StringLoader());
+        Assert.assertEquals("foo_value", futureCache.get(new Callable<String>() {
+            public String call() throws Exception {
+                return "foo_value";
             }
-            catch (IllegalStateException expected)
-            {
-               return "pass";
+        }, "foo"));
+        Assert.assertEquals("foo_value", futureCache.data.get("foo"));
+    }
+
+    public void testNullValue() {
+        FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(
+                new StringLoader());
+        Assert.assertEquals(null, futureCache.get(new Callable<String>() {
+            public String call() throws Exception {
+                return null;
             }
-         }
-      }, "foo");
-      assertEquals("pass", res);
-   }
+        }, "foo"));
+        Assert.assertFalse(futureCache.data.containsKey("foo"));
+    }
+
+    public void testThrowException() {
+        FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(
+                new StringLoader());
+        Assert.assertEquals(null, futureCache.get(new Callable<String>() {
+            public String call() throws Exception {
+                throw new Exception("DON'T FREAK OUT");
+            }
+        }, "foo"));
+        Assert.assertFalse(futureCache.data.containsKey("foo"));
+    }
+
+    public void testReentrancy() {
+        final FutureMap<String, String, Callable<String>> futureCache = new FutureMap<String, String, Callable<String>>(
+                new StringLoader());
+        String res = futureCache.get(new Callable<String>() {
+            public String call() throws Exception {
+                try {
+                    futureCache.get(new Callable<String>() {
+                        public String call() throws Exception {
+                            // Should not go there
+                            throw new AssertionError();
+                        }
+                    }, "foo");
+                    return "fail";
+                } catch (IllegalStateException expected) {
+                    return "pass";
+                }
+            }
+        }, "foo");
+        assertEquals("pass", res);
+    }
 }

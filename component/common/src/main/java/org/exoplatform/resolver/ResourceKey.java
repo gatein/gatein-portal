@@ -21,52 +21,45 @@ package org.exoplatform.resolver;
 
 import java.io.Serializable;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ResourceKey implements Serializable
-{
+public class ResourceKey implements Serializable {
 
-   /** . */
-   private final int resolverId;
+    /** . */
+    private final int resolverId;
 
-   /** . */
-   private final String url;
+    /** . */
+    private final String url;
 
-   public ResourceKey(int resolverId, String url)
-   {
-      if (url == null)
-      {
-         throw new NullPointerException("no null URL accepted");
-      }
-      this.resolverId = resolverId;
-      this.url = url;
-   }
+    public ResourceKey(int resolverId, String url) {
+        if (url == null) {
+            throw new NullPointerException("no null URL accepted");
+        }
+        this.resolverId = resolverId;
+        this.url = url;
+    }
 
-   public String getURL()
-   {
-      return url;
-   }
+    public String getURL() {
+        return url;
+    }
 
-   @Override
-   public int hashCode()
-   {
-      return resolverId ^ url.hashCode();
-   }
+    @Override
+    public int hashCode() {
+        return resolverId ^ url.hashCode();
+    }
 
-   @Override
-   public boolean equals(Object o)
-   {
-      if (o == this)
-      {
-         return true;
-      }
-      if (o instanceof ResourceKey)
-      {
-         ResourceKey that = (ResourceKey)o;
-         return resolverId == that.resolverId && url.equals(that.url);
-      }
-      return false;
-   }
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+        if (o instanceof ResourceKey) {
+            ResourceKey that = (ResourceKey) o;
+            return resolverId == that.resolverId && url.equals(that.url);
+        }
+        return false;
+    }
 }

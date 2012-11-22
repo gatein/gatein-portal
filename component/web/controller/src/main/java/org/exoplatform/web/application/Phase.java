@@ -26,8 +26,6 @@ package org.exoplatform.web.application;
  *
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public enum Phase
-{
-   ACTION,
-   RENDER
+public enum Phase {
+    ACTION, RENDER
 }

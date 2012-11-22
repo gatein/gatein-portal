@@ -26,9 +26,8 @@ import org.jboss.as.server.deployment.AttachmentKey;
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class PortletWarKey
-{
+public class PortletWarKey {
 
-   public static final AttachmentKey<Boolean> INSTANCE = AttachmentKey.create(Boolean.class);
+    public static final AttachmentKey<Boolean> INSTANCE = AttachmentKey.create(Boolean.class);
 
 }

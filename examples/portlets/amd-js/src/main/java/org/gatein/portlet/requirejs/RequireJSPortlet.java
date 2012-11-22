@@ -18,25 +18,24 @@
  */
 package org.gatein.portlet.requirejs;
 
+import java.io.IOException;
+
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import java.io.IOException;
 
 /**
  * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
  * @version $Id$
  *
  */
-public class RequireJSPortlet extends GenericPortlet
-{
-   @Override
-   public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException
-   {
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/requirejs/jsp/requirejsPortlet.jsp");
-      prd.include(request, response);
-   }
+public class RequireJSPortlet extends GenericPortlet {
+    @Override
+    public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+        PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/requirejs/jsp/requirejsPortlet.jsp");
+        prd.include(request, response);
+    }
 }

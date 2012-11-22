@@ -21,40 +21,37 @@ package org.gatein.portal.controller.resource.script;
 
 import java.util.LinkedHashSet;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class ScriptFetch
-{
+class ScriptFetch {
 
-   /** . */
-   final ScriptResource resource;
+    /** . */
+    final ScriptResource resource;
 
-   /** . */
-   FetchMode mode;
+    /** . */
+    FetchMode mode;
 
-   /** . */
-   final LinkedHashSet<ScriptFetch> dependencies;
+    /** . */
+    final LinkedHashSet<ScriptFetch> dependencies;
 
-   /** . */
-   final LinkedHashSet<ScriptFetch> dependsOnMe;
+    /** . */
+    final LinkedHashSet<ScriptFetch> dependsOnMe;
 
-   ScriptFetch(ScriptResource resource, FetchMode mode)
-   {
-      this.resource = resource;
-      this.mode = mode;
-      this.dependencies = new LinkedHashSet<ScriptFetch>();
-      this.dependsOnMe = new LinkedHashSet<ScriptFetch>();
-   }
-   
-   void upgrade(FetchMode mode)
-   {
-      this.mode = mode;
+    ScriptFetch(ScriptResource resource, FetchMode mode) {
+        this.resource = resource;
+        this.mode = mode;
+        this.dependencies = new LinkedHashSet<ScriptFetch>();
+        this.dependsOnMe = new LinkedHashSet<ScriptFetch>();
+    }
 
-      //
-      for (ScriptFetch dependency : dependencies)
-      {
-         dependency.upgrade(mode);
-      }
-   }
+    void upgrade(FetchMode mode) {
+        this.mode = mode;
+
+        //
+        for (ScriptFetch dependency : dependencies) {
+            dependency.upgrade(mode);
+        }
+    }
 }

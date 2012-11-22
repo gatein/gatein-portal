@@ -23,24 +23,19 @@ package org.exoplatform.commons.serialization.api.factory;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class CreateException extends Exception
-{
-   public CreateException()
-   {
-   }
+public class CreateException extends Exception {
+    public CreateException() {
+    }
 
-   public CreateException(String message)
-   {
-      super(message);
-   }
+    public CreateException(String message) {
+        super(message);
+    }
 
-   public CreateException(String message, Throwable cause)
-   {
-      super(message, cause);
-   }
+    public CreateException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-   public CreateException(Throwable cause)
-   {
-      super(cause);
-   }
+    public CreateException(Throwable cause) {
+        super(cause);
+    }
 }

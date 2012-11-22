@@ -24,54 +24,45 @@ package org.gatein.integration.jboss.as7;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public enum Element
-{
-   // must be first
-   UNKNOWN(null),
-   DEPLOYMENT_ARCHIVES(Constants.DEPLOYMENT_ARCHIVES),
-   PORTLET_WAR_DEPENDENCIES(Constants.PORTLET_WAR_DEPENDENCIES),
-   ARCHIVE(Constants.ARCHIVE),
-   DEPENDENCY(Constants.DEPENDENCY);
+public enum Element {
+    // must be first
+    UNKNOWN(null), DEPLOYMENT_ARCHIVES(Constants.DEPLOYMENT_ARCHIVES), PORTLET_WAR_DEPENDENCIES(
+            Constants.PORTLET_WAR_DEPENDENCIES), ARCHIVE(Constants.ARCHIVE), DEPENDENCY(Constants.DEPENDENCY);
 
-   private final String name;
+    private final String name;
 
-   Element(final String name)
-   {
-      this.name = name;
-   }
+    Element(final String name) {
+        this.name = name;
+    }
 
-   /**
-    * Get the local name of this element.
-    *
-    * @return the local name
-    */
-   public String getLocalName()
-   {
-      return name;
-   }
+    /**
+     * Get the local name of this element.
+     *
+     * @return the local name
+     */
+    public String getLocalName() {
+        return name;
+    }
 
-   private static final Map<String, Element> MAP;
+    private static final Map<String, Element> MAP;
 
-   static
-   {
-      final Map<String, Element> map = new HashMap<String, Element>();
-      for (Element element : values())
-      {
-         final String name = element.getLocalName();
-         if (name != null)
-         {
-            map.put(name, element);
-         }
-      }
-      MAP = map;
-   }
+    static {
+        final Map<String, Element> map = new HashMap<String, Element>();
+        for (Element element : values()) {
+            final String name = element.getLocalName();
+            if (name != null) {
+                map.put(name, element);
+            }
+        }
+        MAP = map;
+    }
 
-   public static Element forName(String localName)
-   {
-      final Element element = MAP.get(localName);
-      return element == null ? UNKNOWN : element;
-   }
+    public static Element forName(String localName) {
+        final Element element = MAP.get(localName);
+        return element == null ? UNKNOWN : element;
+    }
 }

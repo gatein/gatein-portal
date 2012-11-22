@@ -23,12 +23,11 @@ import org.gatein.wci.security.Credentials;
 /**
  * A token.
  */
-public interface Token
-{
-   boolean isExpired();
+public interface Token {
+    boolean isExpired();
 
-   long getExpirationTimeMillis();
+    long getExpirationTimeMillis();
 
-   Credentials getPayload();
+    Credentials getPayload();
 
 }

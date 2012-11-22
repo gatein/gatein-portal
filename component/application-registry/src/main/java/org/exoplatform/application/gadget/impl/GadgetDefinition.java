@@ -18,8 +18,15 @@
  */
 package org.exoplatform.application.gadget.impl;
 
-import org.chromattic.api.annotations.*;
+import org.chromattic.api.annotations.Create;
+import org.chromattic.api.annotations.FormattedBy;
+import org.chromattic.api.annotations.MappedBy;
+import org.chromattic.api.annotations.Name;
+import org.chromattic.api.annotations.NamingPrefix;
+import org.chromattic.api.annotations.OneToOne;
+import org.chromattic.api.annotations.Owner;
 import org.chromattic.api.annotations.PrimaryType;
+import org.chromattic.api.annotations.Property;
 import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 import org.chromattic.ext.ntdef.NTFolder;
 
@@ -30,75 +37,67 @@ import org.chromattic.ext.ntdef.NTFolder;
 @PrimaryType(name = "app:gadgetdefinition")
 @FormattedBy(BaseEncodingObjectFormatter.class)
 @NamingPrefix("app")
-public abstract class GadgetDefinition
-{
+public abstract class GadgetDefinition {
 
-   @Name
-   public abstract String getName();
+    @Name
+    public abstract String getName();
 
-   @Property(name = "gtn:name")
-   public abstract String getTitle();
+    @Property(name = "gtn:name")
+    public abstract String getTitle();
 
-   public abstract void setTitle(String title);
+    public abstract void setTitle(String title);
 
-   @Property(name = "gtn:description")
-   public abstract String getDescription();
+    @Property(name = "gtn:description")
+    public abstract String getDescription();
 
-   public abstract void setDescription(String description);
+    public abstract void setDescription(String description);
 
-   @Property(name = "app:thumbnail")
-   public abstract String getThumbnail();
+    @Property(name = "app:thumbnail")
+    public abstract String getThumbnail();
 
-   public abstract void setThumbnail(String thumbnail);
+    public abstract void setThumbnail(String thumbnail);
 
-   @Property(name = "app:referenceurl")
-   public abstract String getReferenceURL();
+    @Property(name = "app:referenceurl")
+    public abstract String getReferenceURL();
 
-   public abstract void setReferenceURL(String referenceURL);
+    public abstract void setReferenceURL(String referenceURL);
 
-   @OneToOne
-   @Owner
-   @MappedBy("app:data")
-   public abstract GadgetData getData();
+    @OneToOne
+    @Owner
+    @MappedBy("app:data")
+    public abstract GadgetData getData();
 
-   public abstract void setData(GadgetData data);
+    public abstract void setData(GadgetData data);
 
-   @Create
-   protected abstract LocalGadgetData createLocalData();
+    @Create
+    protected abstract LocalGadgetData createLocalData();
 
-   @Create
-   protected abstract RemoteGadgetData createRemoteData();
+    @Create
+    protected abstract RemoteGadgetData createRemoteData();
 
-   @Create
-   protected abstract NTFolder createFolder();
+    @Create
+    protected abstract NTFolder createFolder();
 
-   public boolean isLocal()
-   {
-      GadgetData data = getData();
-      return data instanceof LocalGadgetData;
-   }
+    public boolean isLocal() {
+        GadgetData data = getData();
+        return data instanceof LocalGadgetData;
+    }
 
-   public void setLocal(boolean local)
-   {
-      GadgetData data = getData();
-      if (local)
-      {
-         if (data == null || data instanceof RemoteGadgetData)
-         {
-            LocalGadgetData localData = createLocalData();
-            setData(localData);
-            NTFolder resources = createFolder();
-            localData.setResources(resources);
-         }
-      }
-      else
-      {
-         if (data == null || data instanceof LocalGadgetData)
-         {
-            RemoteGadgetData localData = createRemoteData();
-            setData(localData);
-         }
-      }
-   }
+    public void setLocal(boolean local) {
+        GadgetData data = getData();
+        if (local) {
+            if (data == null || data instanceof RemoteGadgetData) {
+                LocalGadgetData localData = createLocalData();
+                setData(localData);
+                NTFolder resources = createFolder();
+                localData.setResources(resources);
+            }
+        } else {
+            if (data == null || data instanceof LocalGadgetData) {
+                RemoteGadgetData localData = createRemoteData();
+                setData(localData);
+            }
+        }
+    }
 
 }

@@ -51,7 +51,7 @@
             <contains>(?)phone</contains>
             <contains>(?i)tablet</contains>
           </user-agent>
-       </condition>
+        </condition>
       </conditions>
       <node-mapping>
         <use-node-name-matching>true</use-node-name-matching>
@@ -59,8 +59,8 @@
     </portal-redirect>
   </portal-redirects>
 
- 	<portal-layout>
-	  <portlet-application>
+  <portal-layout>
+    <portlet-application>
       <portlet>
         <application-ref>web</application-ref>
         <portlet-ref>BannerPortlet</portlet-ref>
@@ -73,10 +73,10 @@
         </preferences>
       </portlet>
       <access-permissions>Everyone</access-permissions>
-	    <show-info-bar>false</show-info-bar>
-	  </portlet-application>
+      <show-info-bar>false</show-info-bar>
+    </portlet-application>
 
-	  <portlet-application>
+    <portlet-application>
       <portlet>
         <application-ref>web</application-ref>
         <portlet-ref>NavigationPortlet</portlet-ref>
@@ -89,53 +89,53 @@
         </preferences>
       </portlet>
       <access-permissions>Everyone</access-permissions>
-	    <show-info-bar>false</show-info-bar>
-	  </portlet-application>
-		
-	  <portlet-application>
+      <show-info-bar>false</show-info-bar>
+    </portlet-application>
+
+    <portlet-application>
       <portlet>
         <application-ref>web</application-ref>
         <portlet-ref>BreadcumbsPortlet</portlet-ref>
-         <preferences>
-            <preference>
-               <name>useAJAX</name>
-               <value>false</value>
-               <read-only>false</read-only>
-            </preference>
-         </preferences>
+        <preferences>
+          <preference>
+            <name>useAJAX</name>
+            <value>false</value>
+            <read-only>false</read-only>
+          </preference>
+        </preferences>
       </portlet>
       <access-permissions>Everyone</access-permissions>
-	    <show-info-bar>false</show-info-bar>
-	  </portlet-application>
-	  
-	  <page-body> </page-body>
+      <show-info-bar>false</show-info-bar>
+    </portlet-application>
 
-     <portlet-application>
-       <portlet>
-         <application-ref>redirect-portlet</application-ref>
-         <portlet-ref>SiteRedirectPortlet</portlet-ref>
-       </portlet>
-       <access-permissions>Everyone</access-permissions>
-       <show-info-bar>false</show-info-bar>
-     </portlet-application>
-	 
- 
-     <portlet-application>
-       <portlet>
-         <application-ref>web</application-ref>
-         <portlet-ref>FooterPortlet</portlet-ref>
-         <preferences>
-           <preference>
-             <name>template</name>
-             <value>par:/groovy/groovy/webui/component/UIFooterPortlet.gtmpl</value>
-             <read-only>false</read-only>
-           </preference>
-         </preferences>
-       </portlet>
-       <access-permissions>Everyone</access-permissions>
-       <show-info-bar>false</show-info-bar>
-     </portlet-application>
+    <page-body></page-body>
+
+    <portlet-application>
+      <portlet>
+        <application-ref>redirect-portlet</application-ref>
+        <portlet-ref>SiteRedirectPortlet</portlet-ref>
+      </portlet>
+      <access-permissions>Everyone</access-permissions>
+      <show-info-bar>false</show-info-bar>
+    </portlet-application>
+
+
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>FooterPortlet</portlet-ref>
+        <preferences>
+          <preference>
+            <name>template</name>
+            <value>par:/groovy/groovy/webui/component/UIFooterPortlet.gtmpl</value>
+            <read-only>false</read-only>
+          </preference>
+        </preferences>
+      </portlet>
+      <access-permissions>Everyone</access-permissions>
+      <show-info-bar>false</show-info-bar>
+    </portlet-application>
 
   </portal-layout>
-  
+
 </portal-config>

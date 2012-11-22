@@ -25,35 +25,31 @@ package org.gatein.common.transaction;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+
 /**
  * Mock listener
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class CounterListener implements JTAUserTransactionLifecycleListener
-{
-   private AtomicInteger beforeBeginCounter = new AtomicInteger(0);
-   private AtomicInteger afterBeginCounter = new AtomicInteger(0);
+public class CounterListener implements JTAUserTransactionLifecycleListener {
+    private AtomicInteger beforeBeginCounter = new AtomicInteger(0);
+    private AtomicInteger afterBeginCounter = new AtomicInteger(0);
 
-   @Override
-   public void beforeBegin()
-   {
-      beforeBeginCounter.incrementAndGet();
-   }
+    @Override
+    public void beforeBegin() {
+        beforeBeginCounter.incrementAndGet();
+    }
 
-   @Override
-   public void afterBegin()
-   {
-      afterBeginCounter.incrementAndGet();
-   }
+    @Override
+    public void afterBegin() {
+        afterBeginCounter.incrementAndGet();
+    }
 
-   int getBeforeBeginCounter()
-   {
-      return beforeBeginCounter.get();
-   }
+    int getBeforeBeginCounter() {
+        return beforeBeginCounter.get();
+    }
 
-   int getAfterBeginCounter()
-   {
-      return afterBeginCounter.get();
-   }
+    int getAfterBeginCounter() {
+        return afterBeginCounter.get();
+    }
 }

@@ -30,14 +30,14 @@ import org.chromattic.api.annotations.Property;
  * @version $Revision$
  */
 @PrimaryType(name = "gtn:nodeMap")
-public abstract class NodeMap
-{
-   @Property (name="gtn:nodeMapOrigin")
-   public abstract String getOriginNode();
-   public abstract void setOriginNode(String originNode);
-   
-   @Property (name="gtn:nodeMapRedirect")
-   public abstract String getRedirectNode();
-   public abstract void setRedirectNode(String redirectNode);
-}
+public abstract class NodeMap {
+    @Property(name = "gtn:nodeMapOrigin")
+    public abstract String getOriginNode();
 
+    public abstract void setOriginNode(String originNode);
+
+    @Property(name = "gtn:nodeMapRedirect")
+    public abstract String getRedirectNode();
+
+    public abstract void setRedirectNode(String redirectNode);
+}

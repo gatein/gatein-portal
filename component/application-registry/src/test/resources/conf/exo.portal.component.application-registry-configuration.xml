@@ -21,14 +21,14 @@
 -->
 
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+               xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+               xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
     <key>org.exoplatform.application.registry.ApplicationRegistryService</key>
     <type>org.exoplatform.application.registry.impl.ApplicationRegistryServiceImpl</type>
   </component>
-  
+
   <component>
     <key>org.exoplatform.application.gadget.SourceStorage</key>
     <type>org.exoplatform.application.gadget.impl.SourceStorageImpl</type>
@@ -40,10 +40,10 @@
   </component>
 
   <component>
-     <key>org.exoplatform.application.gadget.GadgetDeployer</key>
-     <type>org.exoplatform.application.gadget.GadgetDeployer</type>
+    <key>org.exoplatform.application.gadget.GadgetDeployer</key>
+    <type>org.exoplatform.application.gadget.GadgetDeployer</type>
   </component>
-  
+
   <external-component-plugins>
     <target-component>org.exoplatform.commons.chromattic.ChromatticManager</target-component>
     <component-plugin>
@@ -77,32 +77,32 @@
   </external-component-plugins>
 
   <external-component-plugins>
- 		<target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
- 		<component-plugin>
- 		  <name>add.namespaces</name>
- 		  <set-method>addPlugin</set-method>
- 		  <type>org.exoplatform.services.jcr.impl.AddNamespacesPlugin</type>
- 		  <init-params>
- 		    <properties-param>
- 		      <name>namespaces</name>
-		      <property name="gtn" value="http://www.gatein.org/jcr/gatein/1.0/"/>
- 		      <property name="app" value="http://www.gatein.org/jcr/application-registry/1.0/"/>
- 		      </properties-param>
- 		  </init-params>
- 		</component-plugin>
- 		<component-plugin>
- 		  <name>add.nodeType</name>
- 		  <set-method>addPlugin</set-method>
- 		  <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
- 		  <init-params>
- 		    <values-param>
- 		      <name>autoCreatedInNewRepository</name>
- 		      <description>Node types configuration file</description>
-		      <value>jar:/conf/gatein-nodetypes.xml</value>
-		      <value>jar:/conf/application-nodetypes.xml</value>
- 		    </values-param>
- 		  </init-params>
- 		</component-plugin>
+    <target-component>org.exoplatform.services.jcr.RepositoryService</target-component>
+    <component-plugin>
+      <name>add.namespaces</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.jcr.impl.AddNamespacesPlugin</type>
+      <init-params>
+        <properties-param>
+          <name>namespaces</name>
+          <property name="gtn" value="http://www.gatein.org/jcr/gatein/1.0/"/>
+          <property name="app" value="http://www.gatein.org/jcr/application-registry/1.0/"/>
+        </properties-param>
+      </init-params>
+    </component-plugin>
+    <component-plugin>
+      <name>add.nodeType</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.jcr.impl.AddNodeTypePlugin</type>
+      <init-params>
+        <values-param>
+          <name>autoCreatedInNewRepository</name>
+          <description>Node types configuration file</description>
+          <value>jar:/conf/gatein-nodetypes.xml</value>
+          <value>jar:/conf/application-nodetypes.xml</value>
+        </values-param>
+      </init-params>
+    </component-plugin>
   </external-component-plugins>
 
   <external-component-plugins>
@@ -128,36 +128,36 @@
           <description>the path to the location that contains Page templates</description>
           <value>classpath:/portal/template/pages</value>
         </value-param>
-				<object-param>
+        <object-param>
           <name>site.templates.location</name>
           <description>description</description>
           <object type="org.exoplatform.portal.config.SiteConfigTemplates">
-						<field name="location">
+            <field name="location">
               <string>classpath:/portal</string>
             </field>
             <field name="portalTemplates">
               <collection type="java.util.HashSet">
-								<value>
+                <value>
                   <string>classic</string>
                 </value>
                 <value>
                   <string>test</string>
                 </value>
-							</collection>
+              </collection>
             </field>
             <field name="groupTemplates">
               <collection type="java.util.HashSet">
-								<value>
+                <value>
                   <string>group</string>
                 </value>
-							</collection>
+              </collection>
             </field>
             <field name="userTemplates">
               <collection type="java.util.HashSet">
                 <value>
                   <string>user</string>
                 </value>
-							</collection>
+              </collection>
             </field>
           </object>
         </object-param>
@@ -274,100 +274,174 @@
           <name>configuration</name>
           <description>description</description>
           <object type="org.exoplatform.services.organization.OrganizationConfig">
-            <field  name="membershipType">
+            <field name="membershipType">
               <collection type="java.util.ArrayList">
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
-                    <field  name="type"><string>member</string></field>
-                    <field  name="description"><string>member membership type</string></field>
+                    <field name="type">
+                      <string>member</string>
+                    </field>
+                    <field name="description">
+                      <string>member membership type</string>
+                    </field>
                   </object>
                 </value>
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
-                    <field  name="type"><string>MembershipType_1</string></field>
-                    <field  name="description"><string>MembershipType_1 membership type</string></field>
+                    <field name="type">
+                      <string>MembershipType_1</string>
+                    </field>
+                    <field name="description">
+                      <string>MembershipType_1 membership type</string>
+                    </field>
                   </object>
                 </value>
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$MembershipType">
-                    <field  name="type"><string>MembershipType_2</string></field>
-                    <field  name="description"><string>MembershipType_2 membership type</string></field>
+                    <field name="type">
+                      <string>MembershipType_2</string>
+                    </field>
+                    <field name="description">
+                      <string>MembershipType_2 membership type</string>
+                    </field>
                   </object>
                 </value>
               </collection>
             </field>
 
-            <field  name="group">
+            <field name="group">
               <collection type="java.util.ArrayList">
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
-                    <field  name="name"><string>platform</string></field>
-                    <field  name="parentId"><string></string></field>
-                    <field  name="description"><string>the /platform group</string></field>
-                    <field  name="label"><string>Platform</string></field>
+                    <field name="name">
+                      <string>platform</string>
+                    </field>
+                    <field name="parentId">
+                      <string></string>
+                    </field>
+                    <field name="description">
+                      <string>the /platform group</string>
+                    </field>
+                    <field name="label">
+                      <string>Platform</string>
+                    </field>
                   </object>
                 </value>
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
-                    <field  name="name"><string>users</string></field>
-                    <field  name="parentId"><string>/platform</string></field>
-                    <field  name="description"><string>the /platform/users group</string></field>
-                    <field  name="label"><string>Users</string></field>
+                    <field name="name">
+                      <string>users</string>
+                    </field>
+                    <field name="parentId">
+                      <string>/platform</string>
+                    </field>
+                    <field name="description">
+                      <string>the /platform/users group</string>
+                    </field>
+                    <field name="label">
+                      <string>Users</string>
+                    </field>
                   </object>
                 </value>
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
-                    <field  name="name"><string>Group1</string></field>
-                    <field  name="parentId"><string>/platform/users</string></field>
-                    <field  name="description"><string>the /platform/users/Group1 group</string></field>
-                    <field  name="label"><string>Group1</string></field>
+                    <field name="name">
+                      <string>Group1</string>
+                    </field>
+                    <field name="parentId">
+                      <string>/platform/users</string>
+                    </field>
+                    <field name="description">
+                      <string>the /platform/users/Group1 group</string>
+                    </field>
+                    <field name="label">
+                      <string>Group1</string>
+                    </field>
                   </object>
                 </value>
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$Group">
-                    <field  name="name"><string>Group2</string></field>
-                    <field  name="parentId"><string>/platform/users</string></field>
-                    <field  name="description"><string>the /platform/users/Group2 group</string></field>
-                    <field  name="label"><string>Group2</string></field>
+                    <field name="name">
+                      <string>Group2</string>
+                    </field>
+                    <field name="parentId">
+                      <string>/platform/users</string>
+                    </field>
+                    <field name="description">
+                      <string>the /platform/users/Group2 group</string>
+                    </field>
+                    <field name="label">
+                      <string>Group2</string>
+                    </field>
                   </object>
                 </value>
               </collection>
             </field>
 
-            <field  name="user">
+            <field name="user">
               <collection type="java.util.ArrayList">
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$User">
-                    <field  name="userName"><string>demo</string></field>
-                    <field  name="password"><string>gtn</string></field>
-                    <field  name="firstName"><string>Demo</string></field>
-                    <field  name="lastName"><string>gtn</string></field>
-                    <field  name="email"><string>demo@localhost</string></field>
-                    <field  name="groups">
+                    <field name="userName">
+                      <string>demo</string>
+                    </field>
+                    <field name="password">
+                      <string>gtn</string>
+                    </field>
+                    <field name="firstName">
+                      <string>Demo</string>
+                    </field>
+                    <field name="lastName">
+                      <string>gtn</string>
+                    </field>
+                    <field name="email">
+                      <string>demo@localhost</string>
+                    </field>
+                    <field name="groups">
                       <string>member:/platform/users</string>
                     </field>
                   </object>
                 </value>
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$User">
-                    <field  name="userName"><string>userName_1</string></field>
-                    <field  name="password"><string>default</string></field>
-                    <field  name="firstName"><string>default</string></field>
-                    <field  name="lastName"><string>default</string></field>
-                    <field  name="email"><string>exo@exoportal.org</string></field>
-                    <field  name="groups">
+                    <field name="userName">
+                      <string>userName_1</string>
+                    </field>
+                    <field name="password">
+                      <string>default</string>
+                    </field>
+                    <field name="firstName">
+                      <string>default</string>
+                    </field>
+                    <field name="lastName">
+                      <string>default</string>
+                    </field>
+                    <field name="email">
+                      <string>exo@exoportal.org</string>
+                    </field>
+                    <field name="groups">
                       <string>member:/platform/users</string>
                     </field>
                   </object>
                 </value>
                 <value>
                   <object type="org.exoplatform.services.organization.OrganizationConfig$User">
-                    <field  name="userName"><string>userName_2</string></field>
-                    <field  name="password"><string>default</string></field>
-                    <field  name="firstName"><string>default</string></field>
-                    <field  name="lastName"><string>default</string></field>
-                    <field  name="email"><string>exo@exoportal.org</string></field>
-                    <field  name="groups">
+                    <field name="userName">
+                      <string>userName_2</string>
+                    </field>
+                    <field name="password">
+                      <string>default</string>
+                    </field>
+                    <field name="firstName">
+                      <string>default</string>
+                    </field>
+                    <field name="lastName">
+                      <string>default</string>
+                    </field>
+                    <field name="email">
+                      <string>exo@exoportal.org</string>
+                    </field>
+                    <field name="groups">
                       <string>member:/platform/users</string>
                     </field>
                   </object>

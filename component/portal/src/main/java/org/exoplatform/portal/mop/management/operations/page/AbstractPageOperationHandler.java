@@ -34,16 +34,17 @@ import org.gatein.mop.api.workspace.Site;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public abstract class AbstractPageOperationHandler extends AbstractSiteOperationHandler
-{
-   @Override
-   protected void execute(OperationContext operationContext, ResultHandler resultHandler, Site site) throws ResourceNotFoundException, OperationException
-   {
-      Page pages = site.getRootPage().getChild("pages");
-      if (pages == null || pages.getChildren().isEmpty()) throw new ResourceNotFoundException("No pages found for site " + getSiteKey(site));
+public abstract class AbstractPageOperationHandler extends AbstractSiteOperationHandler {
+    @Override
+    protected void execute(OperationContext operationContext, ResultHandler resultHandler, Site site)
+            throws ResourceNotFoundException, OperationException {
+        Page pages = site.getRootPage().getChild("pages");
+        if (pages == null || pages.getChildren().isEmpty())
+            throw new ResourceNotFoundException("No pages found for site " + getSiteKey(site));
 
-      execute(operationContext, resultHandler, pages);
-   }
+        execute(operationContext, resultHandler, pages);
+    }
 
-   protected abstract void execute(OperationContext operationContext, ResultHandler resultHandler, Page page) throws ResourceNotFoundException, OperationException;
+    protected abstract void execute(OperationContext operationContext, ResultHandler resultHandler, Page page)
+            throws ResourceNotFoundException, OperationException;
 }

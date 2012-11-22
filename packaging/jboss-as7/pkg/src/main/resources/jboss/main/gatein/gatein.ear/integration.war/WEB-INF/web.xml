@@ -22,16 +22,16 @@
   -->
 
 <!DOCTYPE web-app PUBLIC
-   "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
-   "http://java.sun.com/dtd/web-app_2_3.dtd">
+    "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
-   <context-param>
-      <param-name>jboss.portal.mc.beans_resource_type</param-name>
-      <param-value>classloader</param-value>
-   </context-param>
-   <servlet>
-      <servlet-name>ContainerServlet</servlet-name>
-      <servlet-class>org.gatein.wci.jboss.JB7ContainerServlet</servlet-class>
-      <load-on-startup>1</load-on-startup>
-   </servlet>
+  <context-param>
+    <param-name>jboss.portal.mc.beans_resource_type</param-name>
+    <param-value>classloader</param-value>
+  </context-param>
+  <servlet>
+    <servlet-name>ContainerServlet</servlet-name>
+    <servlet-class>org.gatein.wci.jboss.JB7ContainerServlet</servlet-class>
+    <load-on-startup>1</load-on-startup>
+  </servlet>
 </web-app>

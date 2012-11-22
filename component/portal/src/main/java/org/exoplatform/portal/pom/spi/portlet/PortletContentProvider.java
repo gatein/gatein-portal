@@ -19,91 +19,71 @@
 
 package org.exoplatform.portal.pom.spi.portlet;
 
-import org.gatein.mop.spi.content.ContentProvider;
-import org.gatein.mop.spi.content.StateContainer;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.gatein.mop.spi.content.ContentProvider;
+import org.gatein.mop.spi.content.StateContainer;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PortletContentProvider implements ContentProvider<Portlet, PortletState>
-{
+public class PortletContentProvider implements ContentProvider<Portlet, PortletState> {
 
-   public PortletContentProvider()
-   {
-   }
+    public PortletContentProvider() {
+    }
 
-   public Portlet combine(List<Portlet> states)
-   {
-      Map<String, Preference> entries = new HashMap<String, Preference>();
+    public Portlet combine(List<Portlet> states) {
+        Map<String, Preference> entries = new HashMap<String, Preference>();
 
-      //
-      for (Portlet preferences : states)
-      {
-         for (Preference preference : preferences)
-         {
-            Preference previous = entries.get(preference.getName());
-            if (previous == null || !previous.isReadOnly())
-            {
-               entries.put(preference.getName(), preference);
+        //
+        for (Portlet preferences : states) {
+            for (Preference preference : preferences) {
+                Preference previous = entries.get(preference.getName());
+                if (previous == null || !previous.isReadOnly()) {
+                    entries.put(preference.getName(), preference);
+                }
             }
-         }
-      }
+        }
 
-      //
-      return new Portlet(entries);
-   }
+        //
+        return new Portlet(entries);
+    }
 
-   public void setState(StateContainer<PortletState> container, Portlet state)
-   {
-      PortletState prefs = container.getState();
+    public void setState(StateContainer<PortletState> container, Portlet state) {
+        PortletState prefs = container.getState();
 
-      //
-      if (prefs != null)
-      {
-         if (state == null)
-         {
-            container.setState(null);
-         }
-         else
-         {
-            prefs.setPayload(state);
-         }
-      }
-      else
-      {
-         if (state != null)
-         {
-            prefs = container.create();
-            prefs.setPayload(state);
-         }
-      }
-   }
+        //
+        if (prefs != null) {
+            if (state == null) {
+                container.setState(null);
+            } else {
+                prefs.setPayload(state);
+            }
+        } else {
+            if (state != null) {
+                prefs = container.create();
+                prefs.setPayload(state);
+            }
+        }
+    }
 
-   public Portlet getState(StateContainer<PortletState> container)
-   {
-      PortletState prefs = container.getState();
-      if (prefs != null)
-      {
-         return prefs.getPayload();
-      }
-      else
-      {
-         return null;
-      }
-   }
+    public Portlet getState(StateContainer<PortletState> container) {
+        PortletState prefs = container.getState();
+        if (prefs != null) {
+            return prefs.getPayload();
+        } else {
+            return null;
+        }
+    }
 
-   public Class<Portlet> getExternalType()
-   {
-      return Portlet.class;
-   }
+    public Class<Portlet> getExternalType() {
+        return Portlet.class;
+    }
 
-   public Class<PortletState> getInternalType()
-   {
-      return PortletState.class;
-   }
+    public Class<PortletState> getInternalType() {
+        return PortletState.class;
+    }
 }

@@ -23,54 +23,46 @@
 
 package org.exoplatform.services.organization.idm;
 
+import javax.transaction.Status;
+import javax.transaction.UserTransaction;
+
 import org.exoplatform.container.ExoContainerContext;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.transaction.JTAUserTransactionLifecycleService;
-
-import javax.transaction.Status;
-import javax.transaction.UserTransaction;
 
 /**
  * Abstract superclass for other DAO classes
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class AbstractDAOImpl
-{
-   protected final PicketLinkIDMService service_;
+public class AbstractDAOImpl {
+    protected final PicketLinkIDMService service_;
 
-   protected final PicketLinkIDMOrganizationServiceImpl orgService;
+    protected final PicketLinkIDMOrganizationServiceImpl orgService;
 
-   protected final Logger log = LoggerFactory.getLogger(getClass());
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
-   public AbstractDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService idmService)
-   {
-      service_ = idmService;
-      this.orgService = orgService;
-   }
+    public AbstractDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService idmService) {
+        service_ = idmService;
+        this.orgService = orgService;
+    }
 
-   public void handleException(String messageToLog, Exception e)
-   {
-      log.info(messageToLog, e);
+    public void handleException(String messageToLog, Exception e) {
+        log.info(messageToLog, e);
 
-      // Mark JTA transaction to rollback-only if JTA setup is enabled
-      if (orgService.getConfiguration().isUseJTA())
-      {
-         try
-         {
-            JTAUserTransactionLifecycleService transactionLfService = (JTAUserTransactionLifecycleService)ExoContainerContext.getCurrentContainer().
-                  getComponentInstanceOfType(JTAUserTransactionLifecycleService.class);
-            UserTransaction tx = transactionLfService.getUserTransaction();
-            if (tx.getStatus() == Status.STATUS_ACTIVE)
-            {
-               tx.setRollbackOnly();
+        // Mark JTA transaction to rollback-only if JTA setup is enabled
+        if (orgService.getConfiguration().isUseJTA()) {
+            try {
+                JTAUserTransactionLifecycleService transactionLfService = (JTAUserTransactionLifecycleService) ExoContainerContext
+                        .getCurrentContainer().getComponentInstanceOfType(JTAUserTransactionLifecycleService.class);
+                UserTransaction tx = transactionLfService.getUserTransaction();
+                if (tx.getStatus() == Status.STATUS_ACTIVE) {
+                    tx.setRollbackOnly();
+                }
+            } catch (Exception tre) {
+                log.warn("Unable to set Transaction status to be rollback only", tre);
             }
-         }
-         catch (Exception tre)
-         {
-            log.warn("Unable to set Transaction status to be rollback only", tre);
-         }
-      }
-   }
+        }
+    }
 }

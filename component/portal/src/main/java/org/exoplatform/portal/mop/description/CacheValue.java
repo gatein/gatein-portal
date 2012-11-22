@@ -19,40 +19,37 @@
 
 package org.exoplatform.portal.mop.description;
 
-import org.exoplatform.portal.mop.Described;
-
 import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicLong;
+
+import org.exoplatform.portal.mop.Described;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class CacheValue implements Serializable
-{
+public class CacheValue implements Serializable {
 
-   /** . */
-   private static final AtomicLong SEQUENCE = new AtomicLong();
+    /** . */
+    private static final AtomicLong SEQUENCE = new AtomicLong();
 
-   /** . */
-   final CacheKey origin;
+    /** . */
+    final CacheKey origin;
 
-   /** . */
-   final long serial;
+    /** . */
+    final long serial;
 
-   /** . */
-   final Described.State state;
+    /** . */
+    final Described.State state;
 
-   public CacheValue(CacheKey origin, long serial, Described.State state)
-   {
-      this.origin = origin;
-      this.serial = serial;
-      this.state = state;
-   }
+    public CacheValue(CacheKey origin, long serial, Described.State state) {
+        this.origin = origin;
+        this.serial = serial;
+        this.state = state;
+    }
 
-   public CacheValue(Described.State state)
-   {
-      this.origin = null;
-      this.serial = SEQUENCE.incrementAndGet();
-      this.state = state;
-   }
+    public CacheValue(Described.State state) {
+        this.origin = null;
+        this.serial = SEQUENCE.incrementAndGet();
+        this.state = state;
+    }
 }

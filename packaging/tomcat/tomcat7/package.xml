@@ -2,35 +2,36 @@
 
 <project name="package" xmlns:mvn="http://maven.apache.org/POM/4.0.0">
 
-   <target name="prepare" depends="prepare-server-dir,package">
-   </target>
+  <target name="prepare" depends="prepare-server-dir,package">
+  </target>
 
-   <target name="server-dir-check">
-      <available property="tomcat.dir.exists" type="dir" file="${tomcat.dir}" />
-   </target>
+  <target name="server-dir-check">
+    <available property="tomcat.dir.exists" type="dir" file="${tomcat.dir}"/>
+  </target>
 
-   <target name="server-exist-msg" depends="server-dir-check" if="tomcat.dir.exists">
-      <echo message="Tomcat directory exists already. Using existing one ..."/>
-   </target>
+  <target name="server-exist-msg" depends="server-dir-check" if="tomcat.dir.exists">
+    <echo message="Tomcat directory exists already. Using existing one ..."/>
+  </target>
 
-   <target name="prepare-server-dir" depends="server-dir-check,server-exist-msg" unless="tomcat.dir.exists">
-      <property name="tomcat.zip" value="${servers.dir}/${tomcat.archive.name}.zip" />
+  <target name="prepare-server-dir" depends="server-dir-check,server-exist-msg" unless="tomcat.dir.exists">
+    <property name="tomcat.zip" value="${servers.dir}/${tomcat.archive.name}.zip"/>
 
-      <!-- Autocreate servers.dir if necessary -->
-      <mkdir dir="${servers.dir}" />
+    <!-- Autocreate servers.dir if necessary -->
+    <mkdir dir="${servers.dir}"/>
 
-      <!-- Download Tomcat unless already downloaded -->
-      <ant antfile="${maven.project.basedir}/download-tomcat.xml">
-         <target name="download-tomcat" />
-         <property name="url" value="http://archive.apache.org/dist/tomcat/tomcat-7/v${version.apache.tomcat}/bin/${tomcat.archive.name}.zip" />
-         <property name="dest" value="${tomcat.zip}" />
-      </ant>
+    <!-- Download Tomcat unless already downloaded -->
+    <ant antfile="${maven.project.basedir}/download-tomcat.xml">
+      <target name="download-tomcat"/>
+      <property name="url"
+                value="http://archive.apache.org/dist/tomcat/tomcat-7/v${version.apache.tomcat}/bin/${tomcat.archive.name}.zip"/>
+      <property name="dest" value="${tomcat.zip}"/>
+    </ant>
 
-      <!-- Extract downloaded Tomcat to servers dir -->
-      <unzip src="${tomcat.zip}" dest="${servers.dir}" overwrite="false" />
-   </target>
+    <!-- Extract downloaded Tomcat to servers dir -->
+    <unzip src="${tomcat.zip}" dest="${servers.dir}" overwrite="false"/>
+  </target>
 
-   <target name="package">
+  <target name="package">
 
     <echo>Using Tomcat at: ${tomcat.dir}</echo>
 
@@ -64,16 +65,18 @@
     </copy>
 
     <!-- Extract common config from packaging.common artifact to gatein/conf -->
-    <unzip src="${org.gatein.portal:exo.portal.packaging.common:jar}" dest="${maven.project.build.directory}/tomcat/gatein/conf">
+    <unzip src="${org.gatein.portal:exo.portal.packaging.common:jar}"
+           dest="${maven.project.build.directory}/tomcat/gatein/conf">
       <patternset>
         <exclude name="META-INF/"/>
       </patternset>
     </unzip>
 
     <!-- Create portal.xml to fix issue GTNPORTAL-2651-->
-    <copy file="{maven.project.build.directory}/../../../../web/portal/src/main/webapp/META-INF/context.xml" tofile="${maven.project.build.directory}/tomcat/conf/Catalina/localhost/portal.xml"/>
+    <copy file="{maven.project.build.directory}/../../../../web/portal/src/main/webapp/META-INF/context.xml"
+          tofile="${maven.project.build.directory}/tomcat/conf/Catalina/localhost/portal.xml"/>
 
-     <!-- File permissions -->
+    <!-- File permissions -->
     <!-- Excluded due to ARG_MAX limitation on Mac OS X -->
     <!--chmod perm="0644" type="file" dir="${project.build.directory}/tomcat" excludes="**/*.sh"/-->
     <chmod perm="0755" type="file" dir="${maven.project.build.directory}/tomcat" includes="**/*.sh"/>

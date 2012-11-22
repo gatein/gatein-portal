@@ -19,6 +19,15 @@
 
 package org.exoplatform.portal.config;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+import java.util.Set;
+
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
@@ -46,551 +55,473 @@ import org.exoplatform.services.log.Log;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
 import org.picocontainer.Startable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
-import java.util.Set;
 
 /**
- * Created by The eXo Platform SAS Apr 19, 2007 This service is used to load the PortalConfig, Page config and
- * Navigation config for a given user.
+ * Created by The eXo Platform SAS Apr 19, 2007 This service is used to load the PortalConfig, Page config and Navigation config
+ * for a given user.
  */
-public class UserPortalConfigService implements Startable
-{
-   DataStorage storage_;
+public class UserPortalConfigService implements Startable {
+    DataStorage storage_;
 
-   UserACL userACL_;
+    UserACL userACL_;
 
-   OrganizationService orgService_;
+    OrganizationService orgService_;
 
-   private NewPortalConfigListener newPortalConfigListener_;
+    private NewPortalConfigListener newPortalConfigListener_;
 
-   /** . */
-   final NavigationService navService;
-   
-   /** . */
-   final DescriptionService descriptionService;
+    /** . */
+    final NavigationService navService;
 
-   /** . */
-   final PageService pageService;
+    /** . */
+    final DescriptionService descriptionService;
 
-   /** . */
-   boolean createUserPortal;
+    /** . */
+    final PageService pageService;
 
-   /** . */
-   boolean destroyUserPortal;
+    /** . */
+    boolean createUserPortal;
 
-   /** . */
-   private final ImportMode defaultImportMode;
+    /** . */
+    boolean destroyUserPortal;
 
-   private Log log = ExoLogger.getLogger("Portal:UserPortalConfigService");
+    /** . */
+    private final ImportMode defaultImportMode;
 
-   public UserPortalConfigService(
-      UserACL userACL,
-      DataStorage storage,
-      OrganizationService orgService,
-      NavigationService navService,
-      DescriptionService descriptionService,
-      PageService pageService,
-      InitParams params) throws Exception
-   {
+    private Log log = ExoLogger.getLogger("Portal:UserPortalConfigService");
 
-      //
-      ValueParam createUserPortalParam = params == null ? null : params.getValueParam("create.user.portal");
-      boolean createUserPortal = createUserPortalParam == null || createUserPortalParam.getValue().toLowerCase().trim().equals("true");
+    public UserPortalConfigService(UserACL userACL, DataStorage storage, OrganizationService orgService,
+            NavigationService navService, DescriptionService descriptionService, PageService pageService, InitParams params)
+            throws Exception {
 
-      //
-      ValueParam destroyUserPortalParam = params == null ? null : params.getValueParam("destroy.user.portal");
-      boolean destroyUserPortal = destroyUserPortalParam == null || destroyUserPortalParam.getValue().toLowerCase().trim().equals("true");
+        //
+        ValueParam createUserPortalParam = params == null ? null : params.getValueParam("create.user.portal");
+        boolean createUserPortal = createUserPortalParam == null
+                || createUserPortalParam.getValue().toLowerCase().trim().equals("true");
 
-      //
-      ValueParam defaultImportModeParam = params == null ? null : params.getValueParam("default.import.mode");
-      ImportMode defaultImportMode = defaultImportModeParam == null ? ImportMode.CONSERVE : ImportMode.valueOf(defaultImportModeParam.getValue().toUpperCase().trim());
+        //
+        ValueParam destroyUserPortalParam = params == null ? null : params.getValueParam("destroy.user.portal");
+        boolean destroyUserPortal = destroyUserPortalParam == null
+                || destroyUserPortalParam.getValue().toLowerCase().trim().equals("true");
 
-      //
-      this.storage_ = storage;
-      this.orgService_ = orgService;
-      this.userACL_ = userACL;
-      this.navService = navService;
-      this.pageService = pageService;
-      this.descriptionService = descriptionService;
-      this.createUserPortal = createUserPortal;
-      this.destroyUserPortal = destroyUserPortal;
-      this.defaultImportMode = defaultImportMode;
-   }
+        //
+        ValueParam defaultImportModeParam = params == null ? null : params.getValueParam("default.import.mode");
+        ImportMode defaultImportMode = defaultImportModeParam == null ? ImportMode.CONSERVE : ImportMode
+                .valueOf(defaultImportModeParam.getValue().toUpperCase().trim());
 
-   public PageService getPageService()
-   {
-      return pageService;
-   }
-   
-   public DataStorage getDataStorage()
-   {
-      return storage_;
-   }
+        //
+        this.storage_ = storage;
+        this.orgService_ = orgService;
+        this.userACL_ = userACL;
+        this.navService = navService;
+        this.pageService = pageService;
+        this.descriptionService = descriptionService;
+        this.createUserPortal = createUserPortal;
+        this.destroyUserPortal = destroyUserPortal;
+        this.defaultImportMode = defaultImportMode;
+    }
 
-   public ImportMode getDefaultImportMode()
-   {
-      return defaultImportMode;
-   }
+    public PageService getPageService() {
+        return pageService;
+    }
 
-   public boolean getCreateUserPortal()
-   {
-      return createUserPortal;
-   }
+    public DataStorage getDataStorage() {
+        return storage_;
+    }
 
-   public void setCreateUserPortal(boolean createUserPortal)
-   {
-      this.createUserPortal = createUserPortal;
-   }
+    public ImportMode getDefaultImportMode() {
+        return defaultImportMode;
+    }
 
-   public boolean getDestroyUserPortal()
-   {
-      return destroyUserPortal;
-   }
+    public boolean getCreateUserPortal() {
+        return createUserPortal;
+    }
 
-   public void setDestroyUserPortal(boolean destroyUserPortal)
-   {
-      this.destroyUserPortal = destroyUserPortal;
-   }
+    public void setCreateUserPortal(boolean createUserPortal) {
+        this.createUserPortal = createUserPortal;
+    }
 
-   /**
-    * Returns the navigation service associated with this service.
-    *
-    * @return the navigation service;
-    */
-   public NavigationService getNavigationService()
-   {
-      return navService;
-   }
+    public boolean getDestroyUserPortal() {
+        return destroyUserPortal;
+    }
 
-   public DescriptionService getDescriptionService()
-   {
-      return descriptionService;
-   }
+    public void setDestroyUserPortal(boolean destroyUserPortal) {
+        this.destroyUserPortal = destroyUserPortal;
+    }
 
-   public UserACL getUserACL()
-   {
-      return userACL_;
-   }
+    /**
+     * Returns the navigation service associated with this service.
+     *
+     * @return the navigation service;
+     */
+    public NavigationService getNavigationService() {
+        return navService;
+    }
 
-   public OrganizationService getOrganizationService()
-   {
-      return orgService_;
-   }
+    public DescriptionService getDescriptionService() {
+        return descriptionService;
+    }
 
-   /** Temporary until the {@link #getUserPortalConfig(String, String)} is removed. */
-   private static final UserPortalContext NULL_CONTEXT = new UserPortalContext()
-   {
-      public ResourceBundle getBundle(UserNavigation navigation)
-      {
-         return null;
-      }
-      public Locale getUserLocale()
-      {
-         return Locale.ENGLISH;
-      }
-   };
+    public UserACL getUserACL() {
+        return userACL_;
+    }
 
-   /**
-    * <p> Build and returns an instance of <tt>UserPortalConfig</tt>. </p>
-    * <p/>
-    * <p> To return a valid config, the current thread must be associated with an identity that will grant him access to
-    * the portal as returned by the {@link UserACL#hasPermission(org.exoplatform.portal.config.model.PortalConfig)}
-    * method. </p>
-    * <p/>
-    * <p> The navigation loaded on the <tt>UserPortalConfig<tt> object are obtained according to the specified user
-    * argument. The portal navigation is always loaded. If the specified user is null then the navigation of the guest
-    * group as configured by {@link org.exoplatform.portal.config.UserACL#getGuestsGroup()} is also loaded, otherwise
-    * the navigations are loaded according to the following rules:
-    * <p/>
-    * <ul> <li>The navigation corresponding to the user is loaded.</li> <li>When the user is root according to the value
-    * returned by {@link org.exoplatform.portal.config.UserACL#getSuperUser()} then the navigation of all groups are
-    * loaded.</li> <li>When the user is not root, then all its groups are added except the guest group as configued per
-    * {@link org.exoplatform.portal.config.UserACL#getGuestsGroup()}.</li> </ul>
-    * <p/>
-    * All the navigations are sorted using the value returned by {@link org.exoplatform.portal.config.model.PageNavigation#getPriority()}.
-    * </p>
-    *
-    * @param portalName the portal name
-    * @param accessUser the user name
-    * @return the config
-    * @throws Exception any exception
-    * @deprecated the method {@link #getUserPortalConfig(String, String, org.exoplatform.portal.mop.user.UserPortalContext)} should be used instead
-    */
-   @Deprecated
-   public UserPortalConfig getUserPortalConfig(String portalName, String accessUser) throws Exception
-   {
-      return getUserPortalConfig(portalName, accessUser, NULL_CONTEXT);
-   }
+    public OrganizationService getOrganizationService() {
+        return orgService_;
+    }
 
-   public UserPortalConfig getUserPortalConfig(String portalName, String accessUser, UserPortalContext userPortalContext) throws Exception
-   {
-      PortalConfig portal = storage_.getPortalConfig(portalName);
-      if (portal == null || !userACL_.hasPermission(portal))
-      {
-         return null;
-      }
+    /** Temporary until the {@link #getUserPortalConfig(String, String)} is removed. */
+    private static final UserPortalContext NULL_CONTEXT = new UserPortalContext() {
+        public ResourceBundle getBundle(UserNavigation navigation) {
+            return null;
+        }
 
+        public Locale getUserLocale() {
+            return Locale.ENGLISH;
+        }
+    };
 
-      return new UserPortalConfig(portal, this, portalName, accessUser, userPortalContext);
-   }
+    /**
+     * <p>
+     * Build and returns an instance of <tt>UserPortalConfig</tt>.
+     * </p>
+     * <p/>
+     * <p>
+     * To return a valid config, the current thread must be associated with an identity that will grant him access to the portal
+     * as returned by the {@link UserACL#hasPermission(org.exoplatform.portal.config.model.PortalConfig)} method.
+     * </p>
+     * <p/>
+     * <p>
+     * The navigation loaded on the <tt>UserPortalConfig<tt> object are obtained according to the specified user
+     * argument. The portal navigation is always loaded. If the specified user is null then the navigation of the guest
+     * group as configured by {@link org.exoplatform.portal.config.UserACL#getGuestsGroup()} is also loaded, otherwise
+     * the navigations are loaded according to the following rules:
+     * <p/>
+     * <ul> <li>The navigation corresponding to the user is loaded.</li> <li>When the user is root according to the value
+     * returned by {@link org.exoplatform.portal.config.UserACL#getSuperUser()} then the navigation of all groups are
+     * loaded.</li> <li>When the user is not root, then all its groups are added except the guest group as configued per
+     * {@link org.exoplatform.portal.config.UserACL#getGuestsGroup()}.</li> </ul>
+     * <p/>
+     * All the navigations are sorted using the value returned by {@link org.exoplatform.portal.config.model.PageNavigation#getPriority()}.
+     * </p>
+     *
+     * @param portalName the portal name
+     * @param accessUser the user name
+     * @return the config
+     * @throws Exception any exception
+     * @deprecated the method {@link #getUserPortalConfig(String, String, org.exoplatform.portal.mop.user.UserPortalContext)}
+     *             should be used instead
+     */
+    @Deprecated
+    public UserPortalConfig getUserPortalConfig(String portalName, String accessUser) throws Exception {
+        return getUserPortalConfig(portalName, accessUser, NULL_CONTEXT);
+    }
 
-   /**
-    * Compute and returns the list that the specified user can manage. If the user is root then all existing groups are
-    * returned otherwise the list is computed from the groups in which the user has a configured membership. The
-    * membership is configured from the value returned by {@link org.exoplatform.portal.config.UserACL#getMakableMT()}
-    *
-    * @param remoteUser the user to get the makable navigations
-    * @param withSite true if a site must exist 
-    * @return the list of groups
-    * @throws Exception any exception
-    */
-   public List<String> getMakableNavigations(String remoteUser, boolean withSite) throws Exception
-   {
-      Collection<Group> groups;
-      if (remoteUser.equals(userACL_.getSuperUser()))
-      {
-         groups = orgService_.getGroupHandler().getAllGroups();
-      }
-      else
-      {
-         groups = orgService_.getGroupHandler().findGroupByMembership(remoteUser, userACL_.getMakableMT());
-      }
+    public UserPortalConfig getUserPortalConfig(String portalName, String accessUser, UserPortalContext userPortalContext)
+            throws Exception {
+        PortalConfig portal = storage_.getPortalConfig(portalName);
+        if (portal == null || !userACL_.hasPermission(portal)) {
+            return null;
+        }
 
-      //
-      List<String> list = new ArrayList<String>();
-      if (groups != null)
-      {
-         Set<String> existingNames = null;
-         if (withSite)
-         {
-            existingNames = new HashSet<String>();
-            Query<PortalConfig> q = new Query<PortalConfig>("group", null, PortalConfig.class);
-            LazyPageList<PortalConfig> lpl = storage_.find(q);
-            for (PortalConfig groupSite : lpl.getAll())
-            {
-               existingNames.add(groupSite.getName());
+        return new UserPortalConfig(portal, this, portalName, accessUser, userPortalContext);
+    }
+
+    /**
+     * Compute and returns the list that the specified user can manage. If the user is root then all existing groups are
+     * returned otherwise the list is computed from the groups in which the user has a configured membership. The membership is
+     * configured from the value returned by {@link org.exoplatform.portal.config.UserACL#getMakableMT()}
+     *
+     * @param remoteUser the user to get the makable navigations
+     * @param withSite true if a site must exist
+     * @return the list of groups
+     * @throws Exception any exception
+     */
+    public List<String> getMakableNavigations(String remoteUser, boolean withSite) throws Exception {
+        Collection<Group> groups;
+        if (remoteUser.equals(userACL_.getSuperUser())) {
+            groups = orgService_.getGroupHandler().getAllGroups();
+        } else {
+            groups = orgService_.getGroupHandler().findGroupByMembership(remoteUser, userACL_.getMakableMT());
+        }
+
+        //
+        List<String> list = new ArrayList<String>();
+        if (groups != null) {
+            Set<String> existingNames = null;
+            if (withSite) {
+                existingNames = new HashSet<String>();
+                Query<PortalConfig> q = new Query<PortalConfig>("group", null, PortalConfig.class);
+                LazyPageList<PortalConfig> lpl = storage_.find(q);
+                for (PortalConfig groupSite : lpl.getAll()) {
+                    existingNames.add(groupSite.getName());
+                }
             }
-         }
 
-         //
-         for (Group group : groups)
-         {
-            String groupId = group.getId().trim();
-            if (existingNames == null || existingNames.contains(groupId))
-            {
-               list.add(groupId);
+            //
+            for (Group group : groups) {
+                String groupId = group.getId().trim();
+                if (existingNames == null || existingNames.contains(groupId)) {
+                    list.add(groupId);
+                }
             }
-         }
-      }
+        }
 
-      //
-      return list;
-   }
+        //
+        return list;
+    }
 
-   /**
-    * Create a user site for the specified user. It will perform the following:
-    * <ul>
-    * <li>create the user site by calling {@link #createUserPortalConfig(String, String, String)} which may create
-    * a site or not according to the default configuration</li>
-    * <li>if not site exists then it creates a site then it creates an empty site</li>
-    * <li>if not navigation exists for the user site then it creates an empty navigation</li>
-    * </ul>
-    *
-    * @param userName the user name
-    * @throws Exception a nasty exception
-    */
-   public void createUserSite(String userName) throws Exception 
-   {
-      // Create the portal from the template
-      createUserPortalConfig(PortalConfig.USER_TYPE, userName, "user");
+    /**
+     * Create a user site for the specified user. It will perform the following:
+     * <ul>
+     * <li>create the user site by calling {@link #createUserPortalConfig(String, String, String)} which may create a site or
+     * not according to the default configuration</li>
+     * <li>if not site exists then it creates a site then it creates an empty site</li>
+     * <li>if not navigation exists for the user site then it creates an empty navigation</li>
+     * </ul>
+     *
+     * @param userName the user name
+     * @throws Exception a nasty exception
+     */
+    public void createUserSite(String userName) throws Exception {
+        // Create the portal from the template
+        createUserPortalConfig(PortalConfig.USER_TYPE, userName, "user");
 
-      // Need to insert the corresponding user site if needed
-      PortalConfig cfg = storage_.getPortalConfig(PortalConfig.USER_TYPE, userName);
-      if (cfg == null)
-      {
-         cfg = new PortalConfig(PortalConfig.USER_TYPE);
-         cfg.setPortalLayout(new Container());
-         cfg.setName(userName);
-         storage_.create(cfg);
-      }
+        // Need to insert the corresponding user site if needed
+        PortalConfig cfg = storage_.getPortalConfig(PortalConfig.USER_TYPE, userName);
+        if (cfg == null) {
+            cfg = new PortalConfig(PortalConfig.USER_TYPE);
+            cfg.setPortalLayout(new Container());
+            cfg.setName(userName);
+            storage_.create(cfg);
+        }
 
-      // Create a blank navigation if needed
-      SiteKey key = SiteKey.user(userName);
-      NavigationContext nav = navService.loadNavigation(key);
-      if (nav == null)
-      {
-         nav = new NavigationContext(key, new NavigationState(5));
-         navService.saveNavigation(nav);
-      }
-   }
+        // Create a blank navigation if needed
+        SiteKey key = SiteKey.user(userName);
+        NavigationContext nav = navService.loadNavigation(key);
+        if (nav == null) {
+            nav = new NavigationContext(key, new NavigationState(5));
+            navService.saveNavigation(nav);
+        }
+    }
 
-   /**
-    * Create a group site for the specified group. It will perform the following:
-    * <ul>
-    * <li>create the group site by calling {@link #createUserPortalConfig(String, String, String)} which may create
-    * a site or not according to the default configuration</li>
-    * <li>if not site exists then it creates a site then it creates an empty site</li>
-    * </ul>
-    *
-    * @param groupId the group id
-    * @throws Exception a nasty exception
-    */
-   public void createGroupSite(String groupId) throws Exception
-   {
-      // Create the portal from the template
-      createUserPortalConfig(PortalConfig.GROUP_TYPE, groupId, "group");
+    /**
+     * Create a group site for the specified group. It will perform the following:
+     * <ul>
+     * <li>create the group site by calling {@link #createUserPortalConfig(String, String, String)} which may create a site or
+     * not according to the default configuration</li>
+     * <li>if not site exists then it creates a site then it creates an empty site</li>
+     * </ul>
+     *
+     * @param groupId the group id
+     * @throws Exception a nasty exception
+     */
+    public void createGroupSite(String groupId) throws Exception {
+        // Create the portal from the template
+        createUserPortalConfig(PortalConfig.GROUP_TYPE, groupId, "group");
 
-      // Need to insert the corresponding group site
-      PortalConfig cfg = storage_.getPortalConfig(PortalConfig.GROUP_TYPE, groupId);
-      if (cfg == null)
-      {
-         cfg = new PortalConfig(PortalConfig.GROUP_TYPE);
-         cfg.setPortalLayout(new Container());
-         cfg.setName(groupId);
-         storage_.create(cfg);
-      }
-   }
+        // Need to insert the corresponding group site
+        PortalConfig cfg = storage_.getPortalConfig(PortalConfig.GROUP_TYPE, groupId);
+        if (cfg == null) {
+            cfg = new PortalConfig(PortalConfig.GROUP_TYPE);
+            cfg.setPortalLayout(new Container());
+            cfg.setName(groupId);
+            storage_.create(cfg);
+        }
+    }
 
-   /**
-    * This method should create a the portal config, pages and navigation according to the template name.
-    *
-    * @param siteType the site type
-    * @param siteName the Site name
-    * @param template   the template to use
-    * @throws Exception any exception
-    */
-   public void createUserPortalConfig(String siteType, String siteName, String template) throws Exception
-   {
-      String templatePath = newPortalConfigListener_.getTemplateConfig(siteType, template);
+    /**
+     * This method should create a the portal config, pages and navigation according to the template name.
+     *
+     * @param siteType the site type
+     * @param siteName the Site name
+     * @param template the template to use
+     * @throws Exception any exception
+     */
+    public void createUserPortalConfig(String siteType, String siteName, String template) throws Exception {
+        String templatePath = newPortalConfigListener_.getTemplateConfig(siteType, template);
 
-      NewPortalConfig portalConfig = new NewPortalConfig(templatePath);
-      portalConfig.setTemplateName(template);
-      portalConfig.setOwnerType(siteType);
-      newPortalConfigListener_.createPortalConfig(portalConfig, siteName);
-      newPortalConfigListener_.createPage(portalConfig, siteName);
-      newPortalConfigListener_.createPageNavigation(portalConfig, siteName);
-   }
+        NewPortalConfig portalConfig = new NewPortalConfig(templatePath);
+        portalConfig.setTemplateName(template);
+        portalConfig.setOwnerType(siteType);
+        newPortalConfigListener_.createPortalConfig(portalConfig, siteName);
+        newPortalConfigListener_.createPage(portalConfig, siteName);
+        newPortalConfigListener_.createPageNavigation(portalConfig, siteName);
+    }
 
-   /**
-    * This method removes the PortalConfig, Page and PageNavigation that belong to the portal in the database.
-    *
-    * @param portalName the portal name
-    * @throws Exception any exception
-    */
-   public void removeUserPortalConfig(String portalName) throws Exception
-   {
-      removeUserPortalConfig(PortalConfig.PORTAL_TYPE, portalName);
-   }
+    /**
+     * This method removes the PortalConfig, Page and PageNavigation that belong to the portal in the database.
+     *
+     * @param portalName the portal name
+     * @throws Exception any exception
+     */
+    public void removeUserPortalConfig(String portalName) throws Exception {
+        removeUserPortalConfig(PortalConfig.PORTAL_TYPE, portalName);
+    }
 
-   /**
-    * This method removes the PortalConfig, Page and PageNavigation that belong to the portal in the database.
-    *
-    * @param ownerType the owner type
-    * @param ownerId   the portal name
-    * @throws Exception any exception
-    */
-   public void removeUserPortalConfig(String ownerType, String ownerId) throws Exception
-   {
-      PortalConfig config = storage_.getPortalConfig(ownerType, ownerId);
-      if (config != null)
-      {
-         storage_.remove(config);
-      }
-   }
+    /**
+     * This method removes the PortalConfig, Page and PageNavigation that belong to the portal in the database.
+     *
+     * @param ownerType the owner type
+     * @param ownerId the portal name
+     * @throws Exception any exception
+     */
+    public void removeUserPortalConfig(String ownerType, String ownerId) throws Exception {
+        PortalConfig config = storage_.getPortalConfig(ownerType, ownerId);
+        if (config != null) {
+            storage_.remove(config);
+        }
+    }
 
-   /**
-    * Use {@link PageService} to load metadata of specify page
-    * 
-    * @param pageRef the PageKey
-    * @return the PageContext
-    */
-   public PageContext getPage(PageKey pageRef)
-   {
-      if (pageRef == null)
-      {
-         return null;
-      }
+    /**
+     * Use {@link PageService} to load metadata of specify page
+     *
+     * @param pageRef the PageKey
+     * @return the PageContext
+     */
+    public PageContext getPage(PageKey pageRef) {
+        if (pageRef == null) {
+            return null;
+        }
 
-      PageContext page = pageService.loadPage(pageRef);
-      if(page == null || !userACL_.hasPermission(page))
-      {
-         return null;
-      }
-      return page;
-   }
+        PageContext page = pageService.loadPage(pageRef);
+        if (page == null || !userACL_.hasPermission(page)) {
+            return null;
+        }
+        return page;
+    }
 
-   /**
-    * Creates a page from an existing template.
-    *
-    * @param temp      the template name
-    * @param ownerType the new owner type
-    * @param ownerId   the new owner id
-    * @return the page
-    * @throws Exception any exception
-    */
-   public Page createPageTemplate(String temp, String ownerType, String ownerId) throws Exception
-   {
-      Page page = newPortalConfigListener_.createPageFromTemplate(ownerType, ownerId, temp);
-      updateOwnership(page, ownerType, ownerId);
-      return page;
-   }
+    /**
+     * Creates a page from an existing template.
+     *
+     * @param temp the template name
+     * @param ownerType the new owner type
+     * @param ownerId the new owner id
+     * @return the page
+     * @throws Exception any exception
+     */
+    public Page createPageTemplate(String temp, String ownerType, String ownerId) throws Exception {
+        Page page = newPortalConfigListener_.createPageFromTemplate(ownerType, ownerId, temp);
+        updateOwnership(page, ownerType, ownerId);
+        return page;
+    }
 
-   /**
-    * Returns the list of all portal site names.
-    *
-    * @return the list of all portal site names
-    * @throws Exception any exception
-    */
-   public List<String> getAllPortalNames() throws Exception
-   {
-      return getAllSiteNames(SiteType.PORTAL);
-   }
+    /**
+     * Returns the list of all portal site names.
+     *
+     * @return the list of all portal site names
+     * @throws Exception any exception
+     */
+    public List<String> getAllPortalNames() throws Exception {
+        return getAllSiteNames(SiteType.PORTAL);
+    }
 
-   /**
-    * Returns the list of all group site names.
-    *
-    * @return the list of all group site names
-    * @throws Exception any exception
-    */
-   public List<String> getAllGroupNames() throws Exception
-   {
-      return getAllSiteNames(SiteType.GROUP);
-   }
+    /**
+     * Returns the list of all group site names.
+     *
+     * @return the list of all group site names
+     * @throws Exception any exception
+     */
+    public List<String> getAllGroupNames() throws Exception {
+        return getAllSiteNames(SiteType.GROUP);
+    }
 
-   private List<String> getAllSiteNames(SiteType siteType) throws Exception
-   {
-      List<String> list;
-      switch (siteType)
-      {
-         case PORTAL:
-            list = storage_.getAllPortalNames();
-            break;
-         case GROUP:
-            list = storage_.getAllGroupNames();
-            break;
-         default:
-            throw new AssertionError();
-      }
-      for (Iterator<String> i = list.iterator();i.hasNext();)
-      {
-         String name = i.next();
-         PortalConfig config = storage_.getPortalConfig(siteType.getName(), name);
-         if (config == null || !userACL_.hasPermission(config))
-         {
-            i.remove();
-         }
-      }
-      return list;
-   }
-
-   /**
-    * Update the ownership recursively on the model graph.
-    *
-    * @param object    the model object graph root
-    * @param ownerType the new owner type
-    * @param ownerId   the new owner id
-    */
-   private void updateOwnership(ModelObject object, String ownerType, String ownerId)
-   {
-      if (object instanceof Container)
-      {
-         Container container = (Container)object;
-         if (container instanceof Page)
-         {
-            Page page = (Page)container;
-            page.setOwnerType(ownerType);
-            page.setOwnerId(ownerId);
-         }
-         for (ModelObject child : container.getChildren())
-         {
-            updateOwnership(child, ownerType, ownerId);
-         }
-      }
-      else if (object instanceof Application)
-      {
-         Application application = (Application)object;
-         TransientApplicationState applicationState = (TransientApplicationState)application.getState();
-         if (applicationState != null
-            && (applicationState.getOwnerType() == null || applicationState.getOwnerId() == null))
-         {
-            applicationState.setOwnerType(ownerType);
-            applicationState.setOwnerId(ownerId);
-         }
-      }
-   }
-
-   public void initListener(ComponentPlugin listener)
-   {
-      if (listener instanceof NewPortalConfigListener)
-      {
-         synchronized (this)
-         {
-            if (newPortalConfigListener_ == null)
-            {
-               this.newPortalConfigListener_ = (NewPortalConfigListener)listener;
+    private List<String> getAllSiteNames(SiteType siteType) throws Exception {
+        List<String> list;
+        switch (siteType) {
+            case PORTAL:
+                list = storage_.getAllPortalNames();
+                break;
+            case GROUP:
+                list = storage_.getAllGroupNames();
+                break;
+            default:
+                throw new AssertionError();
+        }
+        for (Iterator<String> i = list.iterator(); i.hasNext();) {
+            String name = i.next();
+            PortalConfig config = storage_.getPortalConfig(siteType.getName(), name);
+            if (config == null || !userACL_.hasPermission(config)) {
+                i.remove();
             }
-            else
-            {
-               newPortalConfigListener_.mergePlugin((NewPortalConfigListener)listener);
+        }
+        return list;
+    }
+
+    /**
+     * Update the ownership recursively on the model graph.
+     *
+     * @param object the model object graph root
+     * @param ownerType the new owner type
+     * @param ownerId the new owner id
+     */
+    private void updateOwnership(ModelObject object, String ownerType, String ownerId) {
+        if (object instanceof Container) {
+            Container container = (Container) object;
+            if (container instanceof Page) {
+                Page page = (Page) container;
+                page.setOwnerType(ownerType);
+                page.setOwnerId(ownerId);
             }
-         }
-      }
-   }
-
-   public void deleteListenerElements(ComponentPlugin listener)
-   {
-      if (listener instanceof NewPortalConfigListener)
-      {
-         synchronized (this)
-         {
-            if (newPortalConfigListener_ != null)
-            {
-               newPortalConfigListener_.deleteListenerElements((NewPortalConfigListener) listener);
+            for (ModelObject child : container.getChildren()) {
+                updateOwnership(child, ownerType, ownerId);
             }
-         }
-      }
-   }
+        } else if (object instanceof Application) {
+            Application application = (Application) object;
+            TransientApplicationState applicationState = (TransientApplicationState) application.getState();
+            if (applicationState != null && (applicationState.getOwnerType() == null || applicationState.getOwnerId() == null)) {
+                applicationState.setOwnerType(ownerType);
+                applicationState.setOwnerId(ownerId);
+            }
+        }
+    }
 
-   public void start()
-   {
-      try
-      {
-         if (newPortalConfigListener_ == null)
-         {
-            return;
-         }
+    public void initListener(ComponentPlugin listener) {
+        if (listener instanceof NewPortalConfigListener) {
+            synchronized (this) {
+                if (newPortalConfigListener_ == null) {
+                    this.newPortalConfigListener_ = (NewPortalConfigListener) listener;
+                } else {
+                    newPortalConfigListener_.mergePlugin((NewPortalConfigListener) listener);
+                }
+            }
+        }
+    }
 
-         //
-         newPortalConfigListener_.run();
-      }
-      catch (Exception e)
-      {
-         log.error("Could not import initial data", e);
-      }
-   }
+    public void deleteListenerElements(ComponentPlugin listener) {
+        if (listener instanceof NewPortalConfigListener) {
+            synchronized (this) {
+                if (newPortalConfigListener_ != null) {
+                    newPortalConfigListener_.deleteListenerElements((NewPortalConfigListener) listener);
+                }
+            }
+        }
+    }
 
-   public void stop()
-   {
-   }
+    public void start() {
+        try {
+            if (newPortalConfigListener_ == null) {
+                return;
+            }
 
-   public String getDefaultPortal()
-   {
-      return newPortalConfigListener_.getDefaultPortal();
-   }
+            //
+            newPortalConfigListener_.run();
+        } catch (Exception e) {
+            log.error("Could not import initial data", e);
+        }
+    }
 
-   public Set<String> getPortalTemplates()
-   {
-      return newPortalConfigListener_.getTemplateConfigs(PortalConfig.PORTAL_TYPE);
-   }
+    public void stop() {
+    }
 
-   public PortalConfig getPortalConfigFromTemplate(String templateName)
-   {
-      return newPortalConfigListener_.getPortalConfigFromTemplate(PortalConfig.PORTAL_TYPE, templateName);
-   }
+    public String getDefaultPortal() {
+        return newPortalConfigListener_.getDefaultPortal();
+    }
+
+    public Set<String> getPortalTemplates() {
+        return newPortalConfigListener_.getTemplateConfigs(PortalConfig.PORTAL_TYPE);
+    }
+
+    public PortalConfig getPortalConfigFromTemplate(String templateName) {
+        return newPortalConfigListener_.getPortalConfigFromTemplate(PortalConfig.PORTAL_TYPE, templateName);
+    }
 }

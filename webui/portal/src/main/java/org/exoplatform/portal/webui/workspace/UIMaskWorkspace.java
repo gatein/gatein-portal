@@ -25,107 +25,88 @@ import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIComponentDecorator;
 import org.exoplatform.webui.event.Event;
-import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.event.Event.Phase;
+import org.exoplatform.webui.event.EventListener;
 
 /** Created by The eXo Platform SAS Mar 13, 2007 */
-@ComponentConfig(id = "UIMaskWorkspace", template = "system:/groovy/portal/webui/workspace/UIMaskWorkspace.gtmpl",
-   events = @EventConfig(phase = Phase.DECODE, listeners = UIMaskWorkspace.CloseActionListener.class))
-public class UIMaskWorkspace extends UIComponentDecorator
-{
+@ComponentConfig(id = "UIMaskWorkspace", template = "system:/groovy/portal/webui/workspace/UIMaskWorkspace.gtmpl", events = @EventConfig(phase = Phase.DECODE, listeners = UIMaskWorkspace.CloseActionListener.class))
+public class UIMaskWorkspace extends UIComponentDecorator {
 
-   private int width_ = -1;
+    private int width_ = -1;
 
-   private int height_ = -1;
+    private int height_ = -1;
 
-   private boolean isShow = false;
+    private boolean isShow = false;
 
-   //TODO: Seems the isUpdated is never true
-   private boolean isUpdated = false;
+    // TODO: Seems the isUpdated is never true
+    private boolean isUpdated = false;
 
-   public int getWindowWidth()
-   {
-      return width_;
-   }
+    public int getWindowWidth() {
+        return width_;
+    }
 
-   public int getWindowHeight()
-   {
-      return height_;
-   }
+    public int getWindowHeight() {
+        return height_;
+    }
 
-   public void setWindowSize(int w, int h)
-   {
-      width_ = w;
-      height_ = h;
-   }
+    public void setWindowSize(int w, int h) {
+        width_ = w;
+        height_ = h;
+    }
 
-   public boolean isShow()
-   {
-      return isShow;
-   }
+    public boolean isShow() {
+        return isShow;
+    }
 
-   public void setShow(boolean bln)
-   {
-      this.isShow = bln;
-      if (bln == false)
-      {
-         isUpdated = false;
-      }
-   }
+    public void setShow(boolean bln) {
+        this.isShow = bln;
+        if (bln == false) {
+            isUpdated = false;
+        }
+    }
 
-   public boolean isUpdated()
-   {
-      return isUpdated;
-   }
+    public boolean isUpdated() {
+        return isUpdated;
+    }
 
-   public void setUpdated(boolean bln)
-   {
-//      this.isUpdated = bln;
-   }
+    public void setUpdated(boolean bln) {
+        // this.isUpdated = bln;
+    }
 
-   public <T extends UIComponent> T createUIComponent(Class<T> clazz, String configId, String id) throws Exception
-   {
-      T uicomponent = super.createUIComponent(clazz, configId, id);
-      setUIComponent(uicomponent);
-      return uicomponent;
-   }
+    public <T extends UIComponent> T createUIComponent(Class<T> clazz, String configId, String id) throws Exception {
+        T uicomponent = super.createUIComponent(clazz, configId, id);
+        setUIComponent(uicomponent);
+        return uicomponent;
+    }
 
-   public <T extends UIComponent> T createUIComponent(Class<T> clazz) throws Exception
-   {
-      return createUIComponent(clazz, null, null);
-   }
+    public <T extends UIComponent> T createUIComponent(Class<T> clazz) throws Exception {
+        return createUIComponent(clazz, null, null);
+    }
 
-   public UIComponent setUIComponent(UIComponent uicomponent)
-   {
-      UIComponent oldOne = super.setUIComponent(uicomponent);
-      setShow(uicomponent != null);
-      return oldOne;
-   }
+    public UIComponent setUIComponent(UIComponent uicomponent) {
+        UIComponent oldOne = super.setUIComponent(uicomponent);
+        setShow(uicomponent != null);
+        return oldOne;
+    }
 
-   static public class CloseActionListener extends EventListener<UIComponent>
-   {
-      public void execute(Event<UIComponent> event) throws Exception
-      {
-         UIMaskWorkspace uiMaskWorkspace = null;
-         UIComponent uiSource = event.getSource();
-         if (uiSource instanceof UIMaskWorkspace)
-         {
-            uiMaskWorkspace = (UIMaskWorkspace)uiSource;
-         }
-         else
-         {
-            uiMaskWorkspace = uiSource.getAncestorOfType(UIMaskWorkspace.class);
-         }
-         if (uiMaskWorkspace == null || !uiMaskWorkspace.isShow())
-         {
-            return;
-         }
-         uiMaskWorkspace.setUIComponent(null);
-         uiMaskWorkspace.setWindowSize(-1, -1);
-         WebuiRequestContext rContext = event.getRequestContext();
-         rContext.getJavascriptManager().require("SHARED/uiMaskWorkspace", "maskWS")
-            .addScripts("maskWS.hide('" + uiMaskWorkspace.getId() + "');");
-         rContext.addUIComponentToUpdateByAjax(uiMaskWorkspace);
-      }
-   }
+    public static class CloseActionListener extends EventListener<UIComponent> {
+        public void execute(Event<UIComponent> event) throws Exception {
+            UIMaskWorkspace uiMaskWorkspace = null;
+            UIComponent uiSource = event.getSource();
+            if (uiSource instanceof UIMaskWorkspace) {
+                uiMaskWorkspace = (UIMaskWorkspace) uiSource;
+            } else {
+                uiMaskWorkspace = uiSource.getAncestorOfType(UIMaskWorkspace.class);
+            }
+            if (uiMaskWorkspace == null || !uiMaskWorkspace.isShow()) {
+                return;
+            }
+            uiMaskWorkspace.setUIComponent(null);
+            uiMaskWorkspace.setWindowSize(-1, -1);
+            WebuiRequestContext rContext = event.getRequestContext();
+            rContext.getJavascriptManager().require("SHARED/uiMaskWorkspace", "maskWS")
+                    .addScripts("maskWS.hide('" + uiMaskWorkspace.getId() + "');");
+            rContext.addUIComponentToUpdateByAjax(uiMaskWorkspace);
+        }
+    }
 }

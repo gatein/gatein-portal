@@ -21,6 +21,10 @@
  */
 package org.gatein.integration.jboss.as7;
 
+import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
+
+import java.util.List;
+
 import org.jboss.as.controller.AbstractAddStepHandler;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
@@ -29,40 +33,34 @@ import org.jboss.dmr.ModelNode;
 import org.jboss.dmr.Property;
 import org.jboss.msc.service.ServiceController;
 
-import java.util.List;
-
-import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_ADDR;
-
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class PortletWarDependencyAdd extends AbstractAddStepHandler
-{
-   private GateInConfiguration config;
+public class PortletWarDependencyAdd extends AbstractAddStepHandler {
+    private GateInConfiguration config;
 
-   PortletWarDependencyAdd(GateInConfiguration config)
-   {
-      this.config = config;
-   }
+    PortletWarDependencyAdd(GateInConfiguration config) {
+        this.config = config;
+    }
 
-   @Override
-   protected void populateModel(ModelNode operation, ModelNode model) throws OperationFailedException
-   {
-      PortletWarDependencyDefinition.IMPORT_SERVICES.validateAndSet(operation, model);
-   }
+    @Override
+    protected void populateModel(ModelNode operation, ModelNode model) throws OperationFailedException {
+        PortletWarDependencyDefinition.IMPORT_SERVICES.validateAndSet(operation, model);
+    }
 
-   @Override
-   protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model, ServiceVerificationHandler verificationHandler, List<ServiceController<?>> newControllers) throws OperationFailedException
-   {
-      ModelNode addr = operation.get(OP_ADDR);
-      if (!addr.hasDefined(1))
-         throw new IllegalArgumentException("Invalid submodel address: " + addr);
+    @Override
+    protected void performRuntime(OperationContext context, ModelNode operation, ModelNode model,
+            ServiceVerificationHandler verificationHandler, List<ServiceController<?>> newControllers)
+            throws OperationFailedException {
+        ModelNode addr = operation.get(OP_ADDR);
+        if (!addr.hasDefined(1))
+            throw new IllegalArgumentException("Invalid submodel address: " + addr);
 
-      Property prop = addr.get(1).asProperty();
-      if (!Constants.PORTLET_WAR_DEPENDENCY.equals(prop.getName()))
-         throw new IllegalArgumentException("Invalid submodel address: " + addr);
+        Property prop = addr.get(1).asProperty();
+        if (!Constants.PORTLET_WAR_DEPENDENCY.equals(prop.getName()))
+            throw new IllegalArgumentException("Invalid submodel address: " + addr);
 
-      ModelNode importSvcs = operation.get(Constants.IMPORT_SERVICES);
-      config.addPortletWarDependency(prop.getValue().asString(), importSvcs.isDefined() && importSvcs.asBoolean());
-   }
+        ModelNode importSvcs = operation.get(Constants.IMPORT_SERVICES);
+        config.addPortletWarDependency(prop.getValue().asString(), importSvcs.isDefined() && importSvcs.asBoolean());
+    }
 }

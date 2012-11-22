@@ -18,49 +18,38 @@
  */
 package org.exoplatform.portal.resource.compressor;
 
-import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.portal.resource.compressor.BaseResourceCompressorPlugin;
-import org.exoplatform.portal.resource.compressor.ResourceCompressorException;
-import org.exoplatform.portal.resource.compressor.ResourceType;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
 
+import org.exoplatform.container.xml.InitParams;
+
 /**
  * A mock compressor plugin that just copy all characters from input to output
- * 
+ *
  * @author <a href="trong.tran@exoplatform.com">Trong Tran</a>
  * @version $Revision$
  */
 
-public class MockCompressorPlugin extends BaseResourceCompressorPlugin
-{
-   public MockCompressorPlugin(InitParams params)
-   {
-      super(params);
-   }
+public class MockCompressorPlugin extends BaseResourceCompressorPlugin {
+    public MockCompressorPlugin(InitParams params) {
+        super(params);
+    }
 
-   public ResourceType getResourceType()
-   {
-      return ResourceType.JAVASCRIPT;
-   }
+    public ResourceType getResourceType() {
+        return ResourceType.JAVASCRIPT;
+    }
 
-   public void compress(Reader input, Writer output) throws ResourceCompressorException
-   {
-      int c;
-      try
-      {
-         c = input.read();
-         while (c != -1)
-         {
-            output.write(c);
+    public void compress(Reader input, Writer output) throws ResourceCompressorException {
+        int c;
+        try {
             c = input.read();
-         }
-      }
-      catch (IOException e)
-      {
-         throw new ResourceCompressorException(e);
-      }
-   }
+            while (c != -1) {
+                output.write(c);
+                c = input.read();
+            }
+        } catch (IOException e) {
+            throw new ResourceCompressorException(e);
+        }
+    }
 }

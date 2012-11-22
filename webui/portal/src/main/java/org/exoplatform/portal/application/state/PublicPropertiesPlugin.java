@@ -18,6 +18,10 @@
  */
 package org.exoplatform.portal.application.state;
 
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNode;
@@ -26,85 +30,74 @@ import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.util.Util;
 
-import java.util.Map;
-
-import javax.xml.namespace.QName;
-
 /**
- * This plugin setup properties that are publicly supported, hence this is part of a public API
- * and once published its contract must not change whatsoever.
+ * This plugin setup properties that are publicly supported, hence this is part of a public API and once published its contract
+ * must not change whatsoever.
  *
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
  */
-public class PublicPropertiesPlugin extends AbstractContextualPropertyProviderPlugin
-{
+public class PublicPropertiesPlugin extends AbstractContextualPropertyProviderPlugin {
 
-   /** . */
-   private final QName navigationURIQName;
+    /** . */
+    private final QName navigationURIQName;
 
-   /** . */
-   private final QName pageNameQName;
+    /** . */
+    private final QName pageNameQName;
 
-   /** . */
-   private final QName siteTypeQName;
+    /** . */
+    private final QName siteTypeQName;
 
-   /** . */
-   private final QName siteNameQName;
+    /** . */
+    private final QName siteNameQName;
 
-   /** . */
-   private final QName windowShowInfoBarQName;
+    /** . */
+    private final QName windowShowInfoBarQName;
 
-   /** . */
-   private final QName windowHeight;
+    /** . */
+    private final QName windowHeight;
 
-   /** . */
-   private final QName windowWidth;
+    /** . */
+    private final QName windowWidth;
 
-   public PublicPropertiesPlugin(InitParams params) throws Exception
-   {
-      super(params);
+    public PublicPropertiesPlugin(InitParams params) throws Exception {
+        super(params);
 
-      //
-      this.navigationURIQName = new QName(namespaceURI, "navigation_uri");
-      this.pageNameQName = new QName(namespaceURI, "page_name");
-      this.siteTypeQName = new QName(namespaceURI, "site_type");
-      this.siteNameQName = new QName(namespaceURI, "site_name");
-      this.windowWidth = new QName(namespaceURI, "window_width");
-      this.windowHeight = new QName(namespaceURI, "window_height");
-      this.windowShowInfoBarQName = new QName(namespaceURI, "window_show_info_bar");
-   }
+        //
+        this.navigationURIQName = new QName(namespaceURI, "navigation_uri");
+        this.pageNameQName = new QName(namespaceURI, "page_name");
+        this.siteTypeQName = new QName(namespaceURI, "site_type");
+        this.siteNameQName = new QName(namespaceURI, "site_name");
+        this.windowWidth = new QName(namespaceURI, "window_width");
+        this.windowHeight = new QName(namespaceURI, "window_height");
+        this.windowShowInfoBarQName = new QName(namespaceURI, "window_show_info_bar");
+    }
 
-   @Override
-   public void getProperties(UIPortlet portletWindow, Map<QName, String[]> properties)
-   {
-      try
-      {
-         UIPortal currentSite = Util.getUIPortalApplication().getCurrentSite();
-         UserNode currentNode = currentSite.getSelectedUserNode();
-         
-         // Navigation related properties
-         addProperty(properties, navigationURIQName, currentNode.getURI());
+    @Override
+    public void getProperties(UIPortlet portletWindow, Map<QName, String[]> properties) {
+        try {
+            UIPortal currentSite = Util.getUIPortalApplication().getCurrentSite();
+            UserNode currentNode = currentSite.getSelectedUserNode();
 
-         // Page related properties
-         PageKey pageRef = currentNode.getPageRef();
-         UIPage currentPage = currentSite.getUIPage(pageRef != null ? pageRef.format() : null);
-         if(currentPage != null)
-         {
-            addProperty(properties, pageNameQName, currentPage.getTitle());
-         }
-         
-         // Site related properties
-         addProperty(properties, siteTypeQName, currentSite.getSiteType().getName());
-         addProperty(properties, siteNameQName, currentSite.getName());
+            // Navigation related properties
+            addProperty(properties, navigationURIQName, currentNode.getURI());
 
-         // Window related properties
-         addProperty(properties, windowShowInfoBarQName, Boolean.toString(portletWindow.getShowInfoBar()));
-         addProperty(properties, windowWidth, portletWindow.getWidth());
-         addProperty(properties, windowHeight, portletWindow.getHeight());
-      }
-      catch (Exception ex)
-      {
-         log.error("Could not obtain contextual properties for portlet " + portletWindow, ex);
-      }
-   }
+            // Page related properties
+            PageKey pageRef = currentNode.getPageRef();
+            UIPage currentPage = currentSite.getUIPage(pageRef != null ? pageRef.format() : null);
+            if (currentPage != null) {
+                addProperty(properties, pageNameQName, currentPage.getTitle());
+            }
+
+            // Site related properties
+            addProperty(properties, siteTypeQName, currentSite.getSiteType().getName());
+            addProperty(properties, siteNameQName, currentSite.getName());
+
+            // Window related properties
+            addProperty(properties, windowShowInfoBarQName, Boolean.toString(portletWindow.getShowInfoBar()));
+            addProperty(properties, windowWidth, portletWindow.getWidth());
+            addProperty(properties, windowHeight, portletWindow.getHeight());
+        } catch (Exception ex) {
+            log.error("Could not obtain contextual properties for portlet " + portletWindow, ex);
+        }
+    }
 }

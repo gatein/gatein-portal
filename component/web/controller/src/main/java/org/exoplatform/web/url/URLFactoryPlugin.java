@@ -21,30 +21,27 @@ package org.exoplatform.web.url;
 
 import org.exoplatform.container.component.BaseComponentPlugin;
 
-import java.util.Locale;
-
 /**
  * A plugin for adding an url factory to the {@link URLFactoryService}.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class URLFactoryPlugin<R, U extends PortalURL<R, U>> extends BaseComponentPlugin
-{
+public abstract class URLFactoryPlugin<R, U extends PortalURL<R, U>> extends BaseComponentPlugin {
 
-   /**
-    * Returns the resource type.
-    *
-    * @return the resource type
-    */
-   protected abstract ResourceType<R, U> getResourceType();
+    /**
+     * Returns the resource type.
+     *
+     * @return the resource type
+     */
+    protected abstract ResourceType<R, U> getResourceType();
 
-   /**
-    * Returns a new url instance.
-    *
-    * @param context the context
-    * @return a new url instance
-    */
-   protected abstract U newURL(URLContext context);
+    /**
+     * Returns a new url instance.
+     *
+     * @param context the context
+     * @return a new url instance
+     */
+    protected abstract U newURL(URLContext context);
 
 }

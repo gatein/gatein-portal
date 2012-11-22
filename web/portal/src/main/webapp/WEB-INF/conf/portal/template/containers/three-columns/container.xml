@@ -21,33 +21,34 @@
 -->
 
 <container xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3" template="classpath:groovy/dashboard/webui/component/UIColumnContainer.gtmpl">
-  	<container template="classpath:groovy/dashboard/webui/component/UIContainer.gtmpl">
-		 <!--
+           xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
+           xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3"
+           template="classpath:groovy/dashboard/webui/component/UIColumnContainer.gtmpl">
+  <container template="classpath:groovy/dashboard/webui/component/UIContainer.gtmpl">
+    <!--
+    <gadget-application>
+      <gadget>
+        <gadget-ref>Calendar</gadget-ref>
+    </gadget>
+    </gadget-application>
+    -->
+  </container>
+  <container template="classpath:groovy/dashboard/webui/component/UIContainer.gtmpl">
+    <!--
+   <gadget-application>
+     <gadget>
+       <gadget-ref>Calculator</gadget-ref>
+     </gadget>
+   </gadget-application>
+    -->
+  </container>
+  <container template="classpath:groovy/dashboard/webui/component/UIContainer.gtmpl">
+    <!--
        <gadget-application>
          <gadget>
-           <gadget-ref>Calendar</gadget-ref>
-		   </gadget>
+           <gadget-ref>rssAggregator</gadget-ref>
+         </gadget>
        </gadget-application>
-       -->
-  	</container>
- 	<container template="classpath:groovy/dashboard/webui/component/UIContainer.gtmpl">
-		<!--
-      <gadget-application>
-        <gadget>
-          <gadget-ref>Calculator</gadget-ref>
-        </gadget>
-      </gadget-application>
-       -->
- 	</container>
- 	<container template="classpath:groovy/dashboard/webui/component/UIContainer.gtmpl">
-		<!--
-      <gadget-application>
-        <gadget>
-          <gadget-ref>rssAggregator</gadget-ref>
-        </gadget>
-      </gadget-application>
-	   -->
- 	</container>
+      -->
+  </container>
 </container>

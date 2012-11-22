@@ -28,62 +28,62 @@
            attributeFormDefault="unqualified"
            version="1.0">
 
-   <!-- The gatein subsystem root element -->
-   <xs:element name="subsystem" type="gatein-rootType"/>
+  <!-- The gatein subsystem root element -->
+  <xs:element name="subsystem" type="gatein-rootType"/>
 
-   <!-- The gatein subsystem configuration -->
-   <xs:complexType name="gatein-rootType">
-      <xs:annotation>
-         <xs:documentation>
-            <![CDATA[
+  <!-- The gatein subsystem configuration -->
+  <xs:complexType name="gatein-rootType">
+    <xs:annotation>
+      <xs:documentation>
+        <![CDATA[
                     The gatein subsystem, used to configure gatein support
                 ]]>
-         </xs:documentation>
-      </xs:annotation>
+      </xs:documentation>
+    </xs:annotation>
 
-      <xs:sequence>
-         <xs:element minOccurs="0" maxOccurs="1" name="deployment-archives" type="deploymentArchivesType"/>
-         <xs:element minOccurs="0" maxOccurs="1" name="portlet-war-dependencies" type="portletWarDependenciesType"/>
-      </xs:sequence>
-   </xs:complexType>
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="1" name="deployment-archives" type="deploymentArchivesType"/>
+      <xs:element minOccurs="0" maxOccurs="1" name="portlet-war-dependencies" type="portletWarDependenciesType"/>
+    </xs:sequence>
+  </xs:complexType>
 
 
-   <xs:complexType name="deploymentArchivesType">
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-         <xs:element name="archive" type="archiveType">
-            <xs:annotation>
-               <xs:documentation>
-                  <![CDATA[
+  <xs:complexType name="deploymentArchivesType">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="archive" type="archiveType">
+        <xs:annotation>
+          <xs:documentation>
+            <![CDATA[
                   TODO: Description ...
                ]]>
-               </xs:documentation>
-            </xs:annotation>
-         </xs:element>
-      </xs:choice>
-   </xs:complexType>
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
 
-   <xs:complexType name="archiveType">
-      <xs:attribute name="name" use="required"/>
-      <xs:attribute name="main" type="xs:boolean" use="optional" default="false"/>
-   </xs:complexType>
+  <xs:complexType name="archiveType">
+    <xs:attribute name="name" use="required"/>
+    <xs:attribute name="main" type="xs:boolean" use="optional" default="false"/>
+  </xs:complexType>
 
-   <xs:complexType name="portletWarDependenciesType">
-      <xs:choice minOccurs="0" maxOccurs="unbounded">
-         <xs:element name="dependency" type="dependencyType">
-            <xs:annotation>
-               <xs:documentation>
-                  <![CDATA[
+  <xs:complexType name="portletWarDependenciesType">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="dependency" type="dependencyType">
+        <xs:annotation>
+          <xs:documentation>
+            <![CDATA[
                   TODO: Description ...
                ]]>
-               </xs:documentation>
-            </xs:annotation>
-         </xs:element>
-      </xs:choice>
-   </xs:complexType>
+          </xs:documentation>
+        </xs:annotation>
+      </xs:element>
+    </xs:choice>
+  </xs:complexType>
 
-   <xs:complexType name="dependencyType">
-      <xs:attribute name="name" use="required"/>
-      <xs:attribute name="import-services" type="xs:boolean" use="optional" default="false"/>
-   </xs:complexType>
+  <xs:complexType name="dependencyType">
+    <xs:attribute name="name" use="required"/>
+    <xs:attribute name="import-services" type="xs:boolean" use="optional" default="false"/>
+  </xs:complexType>
 
 </xs:schema>

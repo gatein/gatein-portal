@@ -20,49 +20,42 @@ package org.exoplatform.portal;
 
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.chromattic.Synchronization;
-import org.exoplatform.component.test.*;
+import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.container.PortalContainer;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class AbstractPortalTest extends AbstractKernelTest
-{
+public abstract class AbstractPortalTest extends AbstractKernelTest {
 
-   public AbstractPortalTest()
-   {
-   }
+    public AbstractPortalTest() {
+    }
 
-   public AbstractPortalTest(String name)
-   {
-      super(name);
-   }
+    public AbstractPortalTest(String name) {
+        super(name);
+    }
 
-   @Override
-   protected void end()
-   {
-      end(false);
-   }
+    @Override
+    protected void end() {
+        end(false);
+    }
 
-   protected void end(boolean save)
-   {
-      PortalContainer container = getContainer();
-      ChromatticManager manager = (ChromatticManager)container.getComponentInstanceOfType(ChromatticManager.class);
-      Synchronization synchronization = manager.getSynchronization();
-      synchronization.setSaveOnClose(save);
-      super.end();
-   }
+    protected void end(boolean save) {
+        PortalContainer container = getContainer();
+        ChromatticManager manager = (ChromatticManager) container.getComponentInstanceOfType(ChromatticManager.class);
+        Synchronization synchronization = manager.getSynchronization();
+        synchronization.setSaveOnClose(save);
+        super.end();
+    }
 
-   protected final void sync()
-   {
-      end();
-      begin();
-   }
+    protected final void sync() {
+        end();
+        begin();
+    }
 
-   protected final void sync(boolean save)
-   {
-      end(save);
-      begin();
-   }
+    protected final void sync(boolean save) {
+        end(save);
+        begin();
+    }
 }

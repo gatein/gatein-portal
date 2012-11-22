@@ -19,15 +19,12 @@
 
 package org.exoplatform.webui.core;
 
-
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class MockUIComponent extends UIComponent
-{
-   public MockUIComponent(String id)
-   {
-      setId(id);
-   }
+public class MockUIComponent extends UIComponent {
+    public MockUIComponent(String id) {
+        setId(id);
+    }
 }

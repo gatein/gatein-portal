@@ -23,30 +23,30 @@
   -->
 
 <page-set
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-   xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
 
-   <page>
-      <name>wsrpConfiguration</name>
+  <page>
+    <name>wsrpConfiguration</name>
+    <title>WSRP Admin</title>
+    <access-permissions>manager:/platform/administrators</access-permissions>
+    <edit-permission>manager:/platform/administrators</edit-permission>
+    <portlet-application>
+      <portlet>
+        <application-ref>wsrp-admin-gui</application-ref>
+        <portlet-ref>WSRPConfigurationPortlet</portlet-ref>
+      </portlet>
       <title>WSRP Admin</title>
       <access-permissions>manager:/platform/administrators</access-permissions>
-      <edit-permission>manager:/platform/administrators</edit-permission>
-      <portlet-application>
-         <portlet>
-            <application-ref>wsrp-admin-gui</application-ref>
-            <portlet-ref>WSRPConfigurationPortlet</portlet-ref>
-         </portlet>
-         <title>WSRP Admin</title>
-         <access-permissions>manager:/platform/administrators</access-permissions>
-         <show-info-bar>false</show-info-bar>
-      </portlet-application>
-      <!--<portlet-application>
-         <wsrp>selfv2./richFacesPortlet.richFacesPortlet</wsrp>
-         <title>RichFaces</title>
-         <access-permissions>manager:/platform/administrators</access-permissions>
-         <show-info-bar>true</show-info-bar>
-      </portlet-application>-->
-   </page>
+      <show-info-bar>false</show-info-bar>
+    </portlet-application>
+    <!--<portlet-application>
+       <wsrp>selfv2./richFacesPortlet.richFacesPortlet</wsrp>
+       <title>RichFaces</title>
+       <access-permissions>manager:/platform/administrators</access-permissions>
+       <show-info-bar>true</show-info-bar>
+    </portlet-application>-->
+  </page>
 
 </page-set>

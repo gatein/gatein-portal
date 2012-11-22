@@ -21,28 +21,24 @@ package org.exoplatform.portal.config.model;
 
 import java.util.Collection;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class I18NString extends I18NValue<String, LocalizedString>
-{
+public class I18NString extends I18NValue<String, LocalizedString> {
 
-   public static I18NString create()
-   {
-      return new I18NString();
-   }
+    public static I18NString create() {
+        return new I18NString();
+    }
 
-   public I18NString()
-   {
-   }
+    public I18NString() {
+    }
 
-   public I18NString(Collection<? extends LocalizedString> c)
-   {
-      super(c);
-   }
+    public I18NString(Collection<? extends LocalizedString> c) {
+        super(c);
+    }
 
-   public I18NString(LocalizedString... c)
-   {
-      super(c);
-   }
+    public I18NString(LocalizedString... c) {
+        super(c);
+    }
 }

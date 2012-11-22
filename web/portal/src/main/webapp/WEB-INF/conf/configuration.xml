@@ -21,47 +21,46 @@
 -->
 
 <configuration
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
-   <import>war:/conf/common/common-configuration.xml</import>
-   <import>war:/conf/common/resource-compressor-configuration.xml</import>
-   <import>war:/conf/common/portlet-container-configuration.xml</import>
-   <import>war:/conf/common/autologin-configuration.xml</import>
-   <import>war:/conf/common/remindpwd-configuration.xml</import>
-   <import>war:/conf/jcr/jcr-configuration.xml</import>
-   <import>war:/conf/jcr/jcr-datasource-configuration.xml</import>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+  <import>war:/conf/common/common-configuration.xml</import>
+  <import>war:/conf/common/resource-compressor-configuration.xml</import>
+  <import>war:/conf/common/portlet-container-configuration.xml</import>
+  <import>war:/conf/common/autologin-configuration.xml</import>
+  <import>war:/conf/common/remindpwd-configuration.xml</import>
+  <import>war:/conf/jcr/jcr-configuration.xml</import>
+  <import>war:/conf/jcr/jcr-datasource-configuration.xml</import>
 
 
+  <!--PicketLink IDM integration-->
+  <import>war:/conf/organization/idm-configuration.xml</import>
 
-   <!--PicketLink IDM integration-->
-   <import>war:/conf/organization/idm-configuration.xml</import>
+  <!--Former exo implementations-->
+  <!--<import>war:/conf/organization/exo/hibernate-configuration.xml</import>-->
+  <!-- <import>war:/conf/organization/exo/jdbc-configuration.xml</import> -->
+  <!--for organization service used active directory which is user lookup server -->
+  <!--
+     <import>war:/conf/organization/exoactivedirectory-configuration.xml</import>
+  -->
+  <!--for organization service used ldap server which is user lookup server -->
+  <!--
+    <import>war:/conf/ldap-configuration.xml</import>
+  -->
+  <!-- <import>war:/conf/security-configuration.xml</import> -->
+  <import>war:/conf/sso/security-sso-configuration.xml</import>
 
-   <!--Former exo implementations-->
-   <!--<import>war:/conf/organization/exo/hibernate-configuration.xml</import>-->
-   <!-- <import>war:/conf/organization/exo/jdbc-configuration.xml</import> -->
-   <!--for organization service used active directory which is user lookup server -->
-   <!--
-      <import>war:/conf/organization/exoactivedirectory-configuration.xml</import>
-   -->
-   <!--for organization service used ldap server which is user lookup server -->
-   <!--
-     <import>war:/conf/ldap-configuration.xml</import>
-   -->
-   <!-- <import>war:/conf/security-configuration.xml</import> -->
-   <import>war:/conf/sso/security-sso-configuration.xml</import>
+  <import>war:/conf/organization/organization-configuration.xml</import>
+  <import>war:/conf/mail/portal-mail-configuration.xml</import>
 
-   <import>war:/conf/organization/organization-configuration.xml</import>
-   <import>war:/conf/mail/portal-mail-configuration.xml</import>
+  <!-- Administration improvements -->
+  <import>war:/conf/admin/admin-configuration.xml</import>
 
-   <!-- Administration improvements -->
-   <import>war:/conf/admin/admin-configuration.xml</import>
-
-   <!-- Portal related services -->
-   <import>war:/conf/portal/portal-configuration.xml</import>
-   <import>war:/conf/portal/application-registry-configuration.xml</import>
-   <import>war:/conf/portal/controller-configuration.xml</import>
-   <import>war:/conf/portal/web-configuration.xml</import>
-   <import>war:/conf/portal/gadget-configuration.xml</import>
-   <import>war:/conf/portal/redirect-configuration.xml</import>
+  <!-- Portal related services -->
+  <import>war:/conf/portal/portal-configuration.xml</import>
+  <import>war:/conf/portal/application-registry-configuration.xml</import>
+  <import>war:/conf/portal/controller-configuration.xml</import>
+  <import>war:/conf/portal/web-configuration.xml</import>
+  <import>war:/conf/portal/gadget-configuration.xml</import>
+  <import>war:/conf/portal/redirect-configuration.xml</import>
 </configuration>

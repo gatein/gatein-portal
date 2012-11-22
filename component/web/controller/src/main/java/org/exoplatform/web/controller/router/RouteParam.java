@@ -26,40 +26,34 @@ import org.exoplatform.web.controller.metadata.RouteParamDescriptor;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class RouteParam extends Param
-{
+class RouteParam extends Param {
 
-   static RouteParam create(RouteParamDescriptor descriptor)
-   {
-      if (descriptor == null)
-      {
-         throw new NullPointerException("No null descriptor accepted");
-      }
+    static RouteParam create(RouteParamDescriptor descriptor) {
+        if (descriptor == null) {
+            throw new NullPointerException("No null descriptor accepted");
+        }
 
-      //
-      return new RouteParam(descriptor.getQualifiedName(), descriptor.getValue());
-   }
+        //
+        return new RouteParam(descriptor.getQualifiedName(), descriptor.getValue());
+    }
 
-   /** . */
-   final String value;
+    /** . */
+    final String value;
 
-   RouteParam(QualifiedName name, String value)
-   {
-      super(name);
+    RouteParam(QualifiedName name, String value) {
+        super(name);
 
-      //
-      if (value == null)
-      {
-         throw new NullPointerException("No null value accepted");
-      }
+        //
+        if (value == null) {
+            throw new NullPointerException("No null value accepted");
+        }
 
-      //
-      this.value = value;
-   }
+        //
+        this.value = value;
+    }
 
-   @Override
-   public String toString()
-   {
-      return "RouteParam[name=" + name + ",value=" + value + "]";
-   }
+    @Override
+    public String toString() {
+        return "RouteParam[name=" + name + ",value=" + value + "]";
+    }
 }

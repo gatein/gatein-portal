@@ -22,9 +22,8 @@
 
 package org.jboss.gatein.selenium;
 
-import org.apache.tools.ant.DefaultLogger;
-import org.apache.tools.ant.Project;
-import org.apache.tools.ant.ProjectHelper;
+import static org.jboss.gatein.selenium.build.BuildHelper.getMavenHome;
+import static org.jboss.gatein.selenium.common.CommonHelper.copyAndClose;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,168 +33,155 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
-import static org.jboss.gatein.selenium.build.BuildHelper.getMavenHome;
-import static org.jboss.gatein.selenium.common.CommonHelper.copyAndClose;
+import org.apache.tools.ant.DefaultLogger;
+import org.apache.tools.ant.Project;
+import org.apache.tools.ant.ProjectHelper;
 
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class AbstractSingleTestWithAnt extends AbstractSingleTest
-{
-   private String workDirRoot = "target/";
-   private String mavenProps = "project.properties";
-   private String mavenActiveProps = "active-profile.properties";
+public class AbstractSingleTestWithAnt extends AbstractSingleTest {
+    private String workDirRoot = "target/";
+    private String mavenProps = "project.properties";
+    private String mavenActiveProps = "active-profile.properties";
 
-   private boolean fileInited;
-   private File antBuildFile;
-   private Project project;
+    private boolean fileInited;
+    private File antBuildFile;
+    private Project project;
 
-   protected String getTestName()
-   {
-      String className = getClass().getName();
-      return className.substring(className.lastIndexOf('.') + 1);
-   }
+    protected String getTestName() {
+        String className = getClass().getName();
+        return className.substring(className.lastIndexOf('.') + 1);
+    }
 
-   protected Properties getActiveMavenProperties() throws IOException
-   {
-      Properties props = new Properties();
-      File propsFile = new File(workDirRoot, mavenProps);
-      if (!propsFile.isFile())
-      {
-         log.warn("File " + propsFile + " not found. Make sure you're using properties-maven-plugin in your pom.xml. Build may not work properly: " + getAntBuildFileName());
-      }
-      else
-      {
-         props.load(new FileInputStream(propsFile));
-      }
+    protected Properties getActiveMavenProperties() throws IOException {
+        Properties props = new Properties();
+        File propsFile = new File(workDirRoot, mavenProps);
+        if (!propsFile.isFile()) {
+            log.warn("File "
+                    + propsFile
+                    + " not found. Make sure you're using properties-maven-plugin in your pom.xml. Build may not work properly: "
+                    + getAntBuildFileName());
+        } else {
+            props.load(new FileInputStream(propsFile));
+        }
 
-      propsFile = new File(workDirRoot, mavenActiveProps);
-      if (!propsFile.isFile())
-      {
-         log.warn("File " + propsFile + " not found. Make sure you're using properties-maven-plugin in your pom.xml. Build may not work properly: " + getAntBuildFileName());
-      }
-      else
-      {
-         props.load(new FileInputStream(propsFile));
-      }
+        propsFile = new File(workDirRoot, mavenActiveProps);
+        if (!propsFile.isFile()) {
+            log.warn("File "
+                    + propsFile
+                    + " not found. Make sure you're using properties-maven-plugin in your pom.xml. Build may not work properly: "
+                    + getAntBuildFileName());
+        } else {
+            props.load(new FileInputStream(propsFile));
+        }
 
-      return props;
-   }
+        return props;
+    }
 
-   protected File getTestWorkDir()
-   {
-      return new File(workDirRoot, getTestName());
-   }
+    protected File getTestWorkDir() {
+        return new File(workDirRoot, getTestName());
+    }
 
-   protected String getAntBuildFileName()
-   {
-      return getTestName() + "-build.xml";
-   }
+    protected String getAntBuildFileName() {
+        return getTestName() + "-build.xml";
+    }
 
-   protected File findAntBuildFileForTest() throws IOException
-   {
-      if (fileInited)
-         return antBuildFile;
+    protected File findAntBuildFileForTest() throws IOException {
+        if (fileInited)
+            return antBuildFile;
 
-      fileInited = true;
-      String fileName = getAntBuildFileName();
-      InputStream is = getClass().getResourceAsStream(fileName);
+        fileInited = true;
+        String fileName = getAntBuildFileName();
+        InputStream is = getClass().getResourceAsStream(fileName);
 
-      if (is == null)
-         return null;
+        if (is == null)
+            return null;
 
-      File outDir = getTestWorkDir();
-      File outFile = new File(outDir, fileName);
-      outDir.mkdirs();
-      copyAndClose(is, new FileOutputStream(outFile));
+        File outDir = getTestWorkDir();
+        File outFile = new File(outDir, fileName);
+        outDir.mkdirs();
+        copyAndClose(is, new FileOutputStream(outFile));
 
-      antBuildFile = outFile;
-      return outFile;
-   }
+        antBuildFile = outFile;
+        return outFile;
+    }
 
-   protected boolean expectAntBuildFile() throws IOException
-   {
-      File buildFile = findAntBuildFileForTest();
+    protected boolean expectAntBuildFile() throws IOException {
+        File buildFile = findAntBuildFileForTest();
 
-      if (buildFile == null)
-      {
-         log.warn("Test specific ant build file not found: " + getAntBuildFileName() + ".");
-         return false;
-      }
-      return true;
-   }
+        if (buildFile == null) {
+            log.warn("Test specific ant build file not found: " + getAntBuildFileName() + ".");
+            return false;
+        }
+        return true;
+    }
 
-   protected Project prepareAntBuild() throws IOException
-   {
-      /*
-       * Example of how to embed ant:
-       * http://svn.apache.org/viewvc/maven/plugins/tags/maven-antrun-plugin-1.6/src/main/java/org/apache/maven/plugin/antrun/AntRunMojo.java?revision=1005612&view=markup
-       *
-       */
-      File mavenHome = getMavenHome();
-      if (mavenHome != null)
-         System.setProperty("maven.home", mavenHome.getAbsolutePath());
+    protected Project prepareAntBuild() throws IOException {
+        /*
+         * Example of how to embed ant:
+         * http://svn.apache.org/viewvc/maven/plugins/tags/maven-antrun-plugin-1.6/src/main/java/org
+         * /apache/maven/plugin/antrun/AntRunMojo.java?revision=1005612&view=markup
+         */
+        File mavenHome = getMavenHome();
+        if (mavenHome != null)
+            System.setProperty("maven.home", mavenHome.getAbsolutePath());
 
-      Project project = new Project();
-      File buildFile = findAntBuildFileForTest();
-      project.setUserProperty("ant.file", buildFile.getAbsolutePath());
+        Project project = new Project();
+        File buildFile = findAntBuildFileForTest();
+        project.setUserProperty("ant.file", buildFile.getAbsolutePath());
 
-      Properties props = getActiveMavenProperties();
-      for (Map.Entry ent: props.entrySet())
-      {
-         String key = (String) ent.getKey();
-         // build.xml properties override pom.xml properties
-         if (project.getProperty(key) == null)
-         {
-            project.setInheritedProperty(key, (String) ent.getValue());
-         }
-      }
+        Properties props = getActiveMavenProperties();
+        for (Map.Entry ent : props.entrySet()) {
+            String key = (String) ent.getKey();
+            // build.xml properties override pom.xml properties
+            if (project.getProperty(key) == null) {
+                project.setInheritedProperty(key, (String) ent.getValue());
+            }
+        }
 
-      project.init();
-      ProjectHelper.configureProject(project, buildFile);
-      
-      DefaultLogger antLogger = new DefaultLogger();
-      antLogger.setOutputPrintStream( System.out );
-      antLogger.setErrorPrintStream( System.err );
+        project.init();
+        ProjectHelper.configureProject(project, buildFile);
 
-      String loggingLevel = project.getProperty("ant.logging.level");
-      antLogger.setMessageOutputLevel(getAntDebugLevel(loggingLevel));
-      project.addBuildListener( antLogger );
+        DefaultLogger antLogger = new DefaultLogger();
+        antLogger.setOutputPrintStream(System.out);
+        antLogger.setErrorPrintStream(System.err);
 
-      this.project = project;
-      return project;
-   }
+        String loggingLevel = project.getProperty("ant.logging.level");
+        antLogger.setMessageOutputLevel(getAntDebugLevel(loggingLevel));
+        project.addBuildListener(antLogger);
 
-   protected int getAntDebugLevel(String loggingLevel)
-   {
-      loggingLevel = loggingLevel.toUpperCase();
-      if ("VERBOSE".equalsIgnoreCase(loggingLevel))
-         return Project.MSG_VERBOSE;
-      else if ("DEBUG".equals(loggingLevel))
-         return Project.MSG_DEBUG;
-      else if ("WARN".equals(loggingLevel))
-         return Project.MSG_WARN;
-      else if ("ERROR".equals(loggingLevel))
-         return Project.MSG_ERR;
-      else
-         return Project.MSG_INFO;
-   }
+        this.project = project;
+        return project;
+    }
 
-   protected void executeAntBuild()
-   {
-      if (project == null)
-         throw new RuntimeException("Project not initialized. Call prepareAntBuild() first.");
+    protected int getAntDebugLevel(String loggingLevel) {
+        loggingLevel = loggingLevel.toUpperCase();
+        if ("VERBOSE".equalsIgnoreCase(loggingLevel))
+            return Project.MSG_VERBOSE;
+        else if ("DEBUG".equals(loggingLevel))
+            return Project.MSG_DEBUG;
+        else if ("WARN".equals(loggingLevel))
+            return Project.MSG_WARN;
+        else if ("ERROR".equals(loggingLevel))
+            return Project.MSG_ERR;
+        else
+            return Project.MSG_INFO;
+    }
 
-      String target = project.getDefaultTarget();
-      if (target == null)
-         throw new RuntimeException("No default target specified in ant build file: " + antBuildFile);
+    protected void executeAntBuild() {
+        if (project == null)
+            throw new RuntimeException("Project not initialized. Call prepareAntBuild() first.");
 
-      project.executeTarget(target);
-   }
+        String target = project.getDefaultTarget();
+        if (target == null)
+            throw new RuntimeException("No default target specified in ant build file: " + antBuildFile);
 
-   protected void prepareAndExecuteAntBuild() throws IOException
-   {
-      prepareAntBuild();
-      executeAntBuild();
-   }
+        project.executeTarget(target);
+    }
+
+    protected void prepareAndExecuteAntBuild() throws IOException {
+        prepareAntBuild();
+        executeAntBuild();
+    }
 }

@@ -23,60 +23,49 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+
 /**
- * <p></p>Extends an {@link HashMap} to add convenient method for safely adding a fetch mode to a map.
- * The method {@link #add(Object, FetchMode)} will add the mode only if the new mode implies the previous
- * mode in the map.</p>
- * 
+ * <p>
+ * </p>
+ * Extends an {@link HashMap} to add convenient method for safely adding a fetch mode to a map. The method
+ * {@link #add(Object, FetchMode)} will add the mode only if the new mode implies the previous mode in the map.</p>
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class FetchMap<E> extends LinkedHashMap<E, FetchMode>
-{
+public class FetchMap<E> extends LinkedHashMap<E, FetchMode> {
 
-   public FetchMap()
-   {
-   }
+    public FetchMap() {
+    }
 
-   public FetchMap(Map<? extends E, ? extends FetchMode> m)
-   {
-      super(m);
-   }
+    public FetchMap(Map<? extends E, ? extends FetchMode> m) {
+        super(m);
+    }
 
-   public boolean add(E element, FetchMode mode) throws NullPointerException
-   {
-      if (element == null)
-      {
-         throw new NullPointerException("No null element accepted");
-      }
-      
-      //
-      FetchMode prev = get(element);
-      if (prev == null)
-      {
-         put(element, mode);
-         return true;
-      }
-      else if (mode != null && mode.compareTo(prev) >= 0)
-      {
-         put(element, mode);
-         return true;
-      }
-      else
-      {
-         return false;
-      }
-   }
+    public boolean add(E element, FetchMode mode) throws NullPointerException {
+        if (element == null) {
+            throw new NullPointerException("No null element accepted");
+        }
 
-   public boolean add(E element) throws NullPointerException
-   {
-      return add(element, null);
-   }
-      
-   public void addAll(Map<E, FetchMode> m) 
-   {
-      for (E elem : m.keySet())
-      {
-         add(elem, m.get(elem));
-      }
-   }
+        //
+        FetchMode prev = get(element);
+        if (prev == null) {
+            put(element, mode);
+            return true;
+        } else if (mode != null && mode.compareTo(prev) >= 0) {
+            put(element, mode);
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean add(E element) throws NullPointerException {
+        return add(element, null);
+    }
+
+    public void addAll(Map<E, FetchMode> m) {
+        for (E elem : m.keySet()) {
+            add(elem, m.get(elem));
+        }
+    }
 }

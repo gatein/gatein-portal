@@ -23,25 +23,21 @@ package org.exoplatform.commons.serialization.model.metadata;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class TypeMetaData
-{
+public abstract class TypeMetaData {
 
-   /** . */
-   protected final String name;
+    /** . */
+    protected final String name;
 
-   protected TypeMetaData(String name)
-   {
-      if (name == null)
-      {
-         throw new NullPointerException();
-      }
+    protected TypeMetaData(String name) {
+        if (name == null) {
+            throw new NullPointerException();
+        }
 
-      //
-      this.name = name;
-   }
+        //
+        this.name = name;
+    }
 
-   public String getName()
-   {
-      return name;
-   }
+    public String getName() {
+        return name;
+    }
 }

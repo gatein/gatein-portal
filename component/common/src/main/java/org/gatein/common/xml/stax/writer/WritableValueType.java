@@ -28,7 +28,6 @@ import org.staxnav.StaxNavException;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public interface WritableValueType<V>
-{
-   String format(V value) throws StaxNavException;
+public interface WritableValueType<V> {
+    String format(V value) throws StaxNavException;
 }

@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -38,149 +38,126 @@ import org.exoplatform.webui.core.UIComponentDecorator;
  * May 19, 2006
  */
 @ComponentConfig(template = "system:/groovy/portal/webui/page/UIPageBody.gtmpl")
-public class UIPageBody extends UIComponentDecorator
-{
+public class UIPageBody extends UIComponentDecorator {
 
-   private UIPortalComponent maximizedUIComponent;
+    private UIPortalComponent maximizedUIComponent;
 
-   private String storageId;
+    private String storageId;
 
-   public UIPageBody(PageBody model) throws Exception
-   {
-      setId("UIPageBody");
-   }
+    public UIPageBody(PageBody model) {
+        setId("UIPageBody");
+    }
 
-   public String getStorageId()
-   {
-      return storageId;
-   }
+    public String getStorageId() {
+        return storageId;
+    }
 
-   public void setStorageId(String storageId)
-   {
-      this.storageId = storageId;
-   }
+    public void setStorageId(String storageId) {
+        this.storageId = storageId;
+    }
 
-   public UIPageBody() throws Exception
-   {
-      setId("UIPageBody");
-   }
+    public UIPageBody() {
+        setId("UIPageBody");
+    }
 
-   public void init(PageBody model) throws Exception
-   {
-      setId("UIPageBody");
-   }
+    public void init(PageBody model) {
+        setId("UIPageBody");
+    }
 
-   public void setPageBody(UserNode pageNode, UIPortal uiPortal) throws Exception
-   {
-      WebuiRequestContext context = Util.getPortalRequestContext();
-      uiPortal.setMaximizedUIComponent(null);
-      
-      UIPage uiPage;
-      uiPage = getUIPage(pageNode, uiPortal, context);
-      if (uiPage == null)
-      {
-         setUIComponent(null);
-         return;
-      }
-      
-      if (uiPage.isShowMaxWindow())
-      {
-         uiPortal.setMaximizedUIComponent(uiPage);
-      }
-      else
-      {
-         UIComponent maximizedComponent = uiPortal.getMaximizedUIComponent();
-         if (maximizedComponent != null && maximizedComponent instanceof UIPage)
-         {
-            uiPortal.setMaximizedUIComponent(null);
-         }
-         maximizedComponent = this.getMaximizedUIComponent();
-         if (maximizedComponent != null && maximizedComponent instanceof UIPage)
-         {
-            this.setMaximizedUIComponent(null);
-         }
-      }
-      setUIComponent(uiPage);
-   }
+    public void setPageBody(UserNode pageNode, UIPortal uiPortal) throws Exception {
+        WebuiRequestContext context = Util.getPortalRequestContext();
+        uiPortal.setMaximizedUIComponent(null);
 
-   /**
-    * Return cached UIPage or a newly built UIPage
-    * 
-    * @param pageReference
-    * @param page
-    * @param uiPortal
-    * @return
-    */
-   private UIPage getUIPage(UserNode pageNode, UIPortal uiPortal, WebuiRequestContext context)
-      throws Exception
-   {
-      PageContext pageContext = null;
-      String pageReference = null;
-      ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
-      UserPortalConfigService userPortalConfigService =
-         (UserPortalConfigService)appContainer.getComponentInstanceOfType(UserPortalConfigService.class);
-      
-      
-      if (pageNode != null && pageNode.getPageRef() != null)
-      {
-         pageReference = pageNode.getPageRef().format();
-         pageContext = userPortalConfigService.getPage(pageNode.getPageRef());
-      }
+        UIPage uiPage;
+        uiPage = getUIPage(pageNode, uiPortal, context);
+        if (uiPage == null) {
+            setUIComponent(null);
+            return;
+        }
 
-      //The page has been deleted
-      if(pageContext == null)
-      {
-         //Clear the UIPage from cache in UIPortal
-         uiPortal.clearUIPage(pageReference);
-         return null;
-      }
-      
-      UIPage uiPage = uiPortal.getUIPage(pageReference);
-      if (uiPage != null)
-      {
-         return uiPage;
-      }
-                                                                                                  
-      UIPageFactory clazz =  UIPageFactory.getInstance(pageContext.getState().getFactoryId());
-      uiPage = clazz.createUIPage(context);
-      
-      Page page = userPortalConfigService.getDataStorage().getPage(pageReference);
-      pageContext.update(page);
-      PortalDataMapper.toUIPage(uiPage, page);
-      uiPortal.setUIPage(pageReference, uiPage);
+        if (uiPage.isShowMaxWindow()) {
+            uiPortal.setMaximizedUIComponent(uiPage);
+        } else {
+            UIComponent maximizedComponent = uiPortal.getMaximizedUIComponent();
+            if (maximizedComponent != null && maximizedComponent instanceof UIPage) {
+                uiPortal.setMaximizedUIComponent(null);
+            }
+            maximizedComponent = this.getMaximizedUIComponent();
+            if (maximizedComponent != null && maximizedComponent instanceof UIPage) {
+                this.setMaximizedUIComponent(null);
+            }
+        }
+        setUIComponent(uiPage);
+    }
 
-      return uiPage;
-   }
-   
-   public void processRender(WebuiRequestContext context) throws Exception
-   {
-      if (maximizedUIComponent != null && Util.getUIPortalApplication().getModeState() % 2 == 0)
-      {
-         maximizedUIComponent.processRender((WebuiRequestContext)WebuiRequestContext.getCurrentInstance());
-         return;
-      }
-      
-      super.processRender(context);
-   }
+    /**
+     * Return cached UIPage or a newly built UIPage
+     *
+     * @param pageReference
+     * @param page
+     * @param uiPortal
+     * @return
+     */
+    private UIPage getUIPage(UserNode pageNode, UIPortal uiPortal, WebuiRequestContext context) throws Exception {
+        PageContext pageContext = null;
+        String pageReference = null;
+        ExoContainer appContainer = context.getApplication().getApplicationServiceContainer();
+        UserPortalConfigService userPortalConfigService = (UserPortalConfigService) appContainer
+                .getComponentInstanceOfType(UserPortalConfigService.class);
 
-   /**
-    * Retrieve the UIApplication which is maximized to cover whole the PageBody
-    * 
-    * @return the maximized portlet
-    */
-   public UIPortalComponent getMaximizedUIComponent()
-   {
-      return maximizedUIComponent;
-   }
+        if (pageNode != null && pageNode.getPageRef() != null) {
+            pageReference = pageNode.getPageRef().format();
+            pageContext = userPortalConfigService.getPage(pageNode.getPageRef());
+        }
 
-   /**
-    * Store the portlet maximized into the current PageBody
-    * 
-    * @param uiMaximizedComponent the portlet to be stored in UIPageBody
-    */
-   public void setMaximizedUIComponent(UIPortalComponent uiMaximizedComponent)
-   {
-      this.maximizedUIComponent = uiMaximizedComponent;
-   }
+        // The page has been deleted
+        if (pageContext == null) {
+            // Clear the UIPage from cache in UIPortal
+            uiPortal.clearUIPage(pageReference);
+            return null;
+        }
+
+        UIPage uiPage = uiPortal.getUIPage(pageReference);
+        if (uiPage != null) {
+            return uiPage;
+        }
+
+        UIPageFactory clazz = UIPageFactory.getInstance(pageContext.getState().getFactoryId());
+        uiPage = clazz.createUIPage(context);
+
+        Page page = userPortalConfigService.getDataStorage().getPage(pageReference);
+        pageContext.update(page);
+        PortalDataMapper.toUIPage(uiPage, page);
+        uiPortal.setUIPage(pageReference, uiPage);
+
+        return uiPage;
+    }
+
+    public void processRender(WebuiRequestContext context) throws Exception {
+        if (maximizedUIComponent != null && Util.getUIPortalApplication().getModeState() % 2 == 0) {
+            maximizedUIComponent.processRender((WebuiRequestContext) WebuiRequestContext.getCurrentInstance());
+            return;
+        }
+
+        super.processRender(context);
+    }
+
+    /**
+     * Retrieve the UIApplication which is maximized to cover whole the PageBody
+     *
+     * @return the maximized portlet
+     */
+    public UIPortalComponent getMaximizedUIComponent() {
+        return maximizedUIComponent;
+    }
+
+    /**
+     * Store the portlet maximized into the current PageBody
+     *
+     * @param uiMaximizedComponent the portlet to be stored in UIPageBody
+     */
+    public void setMaximizedUIComponent(UIPortalComponent uiMaximizedComponent) {
+        this.maximizedUIComponent = uiMaximizedComponent;
+    }
 
 }

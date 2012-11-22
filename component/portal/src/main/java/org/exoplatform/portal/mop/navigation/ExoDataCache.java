@@ -19,6 +19,9 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import java.io.Serializable;
+import java.util.Collection;
+
 import org.exoplatform.commons.cache.future.FutureExoCache;
 import org.exoplatform.commons.cache.future.Loader;
 import org.exoplatform.commons.scope.ScopedKey;
@@ -27,77 +30,61 @@ import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 
-import java.io.Serializable;
-import java.util.Collection;
-
 /**
  * An implementation using the cache service.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ExoDataCache extends DataCache
-{
+public class ExoDataCache extends DataCache {
 
-   /** . */
-   protected ExoCache<ScopedKey<?>, Serializable> cache;
+    /** . */
+    protected ExoCache<ScopedKey<?>, Serializable> cache;
 
-   /** . */
-   protected FutureExoCache<ScopedKey<?>, Serializable, POMSession> objects;
+    /** . */
+    protected FutureExoCache<ScopedKey<?>, Serializable, POMSession> objects;
 
-   /** . */
-   private Loader<ScopedKey<?>, Serializable, POMSession> navigationLoader = new Loader<ScopedKey<?>, Serializable, POMSession>()
-   {
-      public Serializable retrieve(POMSession session, ScopedKey<?> scopedKey) throws Exception
-      {
-         Object key = scopedKey.getKey();
-         if (key instanceof SiteKey)
-         {
-            NavigationData data = loadNavigation(session, (SiteKey)key); 
-            return data == NavigationData.EMPTY ? null : data;
-         }
-         else
-         {
-            return loadNode(session, (String)key);
-         }
-      }
-   };
+    /** . */
+    private Loader<ScopedKey<?>, Serializable, POMSession> navigationLoader = new Loader<ScopedKey<?>, Serializable, POMSession>() {
+        public Serializable retrieve(POMSession session, ScopedKey<?> scopedKey) throws Exception {
+            Object key = scopedKey.getKey();
+            if (key instanceof SiteKey) {
+                NavigationData data = loadNavigation(session, (SiteKey) key);
+                return data == NavigationData.EMPTY ? null : data;
+            } else {
+                return loadNode(session, (String) key);
+            }
+        }
+    };
 
-   public ExoDataCache(CacheService cacheService)
-   {
-      this.cache = cacheService.getCacheInstance(NavigationService.class.getSimpleName());
-      this.objects = new FutureExoCache<ScopedKey<?>, Serializable, POMSession>(navigationLoader, cache);
-   }
+    public ExoDataCache(CacheService cacheService) {
+        this.cache = cacheService.getCacheInstance(NavigationService.class.getSimpleName());
+        this.objects = new FutureExoCache<ScopedKey<?>, Serializable, POMSession>(navigationLoader, cache);
+    }
 
-   @Override
-   protected void removeNodes(Collection<String> keys)
-   {
-      for (String key : keys)
-      {
-         cache.remove(ScopedKey.create(key));
-      }
-   }
+    @Override
+    protected void removeNodes(Collection<String> keys) {
+        for (String key : keys) {
+            cache.remove(ScopedKey.create(key));
+        }
+    }
 
-   @Override
-   protected NodeData getNode(POMSession session, String key)
-   {
-      return (NodeData)objects.get(session, ScopedKey.create(key));
-   }
+    @Override
+    protected NodeData getNode(POMSession session, String key) {
+        return (NodeData) objects.get(session, ScopedKey.create(key));
+    }
 
-   @Override
-   protected void removeNavigation(SiteKey key)
-   {
-      cache.remove(ScopedKey.create(key));
-   }
+    @Override
+    protected void removeNavigation(SiteKey key) {
+        cache.remove(ScopedKey.create(key));
+    }
 
-   @Override
-   protected NavigationData getNavigation(POMSession session, SiteKey key)
-   {
-      return (NavigationData)objects.get(session, ScopedKey.create(key));
-   }
+    @Override
+    protected NavigationData getNavigation(POMSession session, SiteKey key) {
+        return (NavigationData) objects.get(session, ScopedKey.create(key));
+    }
 
-   @Override
-   protected void clear()
-   {
-      cache.clearCache();
-   }
+    @Override
+    protected void clear() {
+        cache.clearCache();
+    }
 }

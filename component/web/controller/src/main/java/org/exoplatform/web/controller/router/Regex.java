@@ -19,136 +19,111 @@
 package org.exoplatform.web.controller.router;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
-public abstract class Regex
-{
+public abstract class Regex {
 
-   /** . */
-   public static final Match[] NO_MATCHES = new Match[0];
+    /** . */
+    public static final Match[] NO_MATCHES = new Match[0];
 
-   /** . */
-   public static final Match NULL_MATCH = new Match(-1, -1, null);
+    /** . */
+    public static final Match NULL_MATCH = new Match(-1, -1, null);
 
-   /** An index set by the router to do matcher reuse easily, the regex implementation should not care about it. */
-   int index = -1;
+    /** An index set by the router to do matcher reuse easily, the regex implementation should not care about it. */
+    int index = -1;
 
-   public abstract String getPattern();
+    public abstract String getPattern();
 
-   public abstract Matcher matcher();
+    public abstract Matcher matcher();
 
-   public abstract static class Matcher
-   {
+    public abstract static class Matcher {
 
-      public abstract boolean matches(CharSequence s);
+        public abstract boolean matches(CharSequence s);
 
-      public abstract Match[] find(CharSequence s);
+        public abstract Match[] find(CharSequence s);
 
-   }
+    }
 
-   public static class Match
-   {
+    public static class Match {
 
-      /** . */
-      private final int start;
+        /** . */
+        private final int start;
 
-      /** . */
-      private final int end;
+        /** . */
+        private final int end;
 
-      /** . */
-      private final String value;
+        /** . */
+        private final String value;
 
-      protected Match(int start, int end, String value)
-      {
-         this.start = start;
-         this.end = end;
-         this.value = value;
-      }
+        protected Match(int start, int end, String value) {
+            this.start = start;
+            this.end = end;
+            this.value = value;
+        }
 
-      public int getStart()
-      {
-         return start;
-      }
+        public int getStart() {
+            return start;
+        }
 
-      public int getEnd()
-      {
-         return end;
-      }
+        public int getEnd() {
+            return end;
+        }
 
-      public String getValue()
-      {
-         return value;
-      }
-   }
+        public String getValue() {
+            return value;
+        }
+    }
 
-   public static class Java extends Regex
-   {
+    public static class Java extends Regex {
 
-      /** . */
-      private final java.util.regex.Pattern pattern;
+        /** . */
+        private final java.util.regex.Pattern pattern;
 
-      public Java(String regex)
-      {
-         this.pattern = java.util.regex.Pattern.compile(regex);
-      }
+        public Java(String regex) {
+            this.pattern = java.util.regex.Pattern.compile(regex);
+        }
 
-      public Matcher matcher()
-      {
-         return new Matcher()
-         {
+        public Matcher matcher() {
+            return new Matcher() {
 
-            /** . */
-            private java.util.regex.Matcher impl;
+                /** . */
+                private java.util.regex.Matcher impl;
 
-            private java.util.regex.Matcher get(CharSequence s)
-            {
-               if (impl == null)
-               {
-                  impl = pattern.matcher(s);
-               }
-               else
-               {
-                  impl.reset(s);
-               }
-               return impl;
-            }
+                private java.util.regex.Matcher get(CharSequence s) {
+                    if (impl == null) {
+                        impl = pattern.matcher(s);
+                    } else {
+                        impl.reset(s);
+                    }
+                    return impl;
+                }
 
-            @Override
-            public boolean matches(CharSequence s)
-            {
-               return get(s).matches();
-            }
+                @Override
+                public boolean matches(CharSequence s) {
+                    return get(s).matches();
+                }
 
-            @Override
-            public Match[] find(CharSequence s)
-            {
-               java.util.regex.Matcher matcher = get(s);
-               if (matcher.find())
-               {
-                  Match[] matches = new Match[1 + matcher.groupCount()];
-                  for (int i = 0;i <= matcher.groupCount();i++)
-                  {
-                     if (matcher.group() != null)
-                     {
-                        matches[i] = new Match(matcher.start(i), matcher.end(i), matcher.group(i));
-                     }
-                     else
-                     {
-                        matches[i] = NULL_MATCH;
-                     }
-                  }
-                  return matches;
-               }
-               else
-               {
-                  return NO_MATCHES;
-               }
-            }
-         };
-      }
+                @Override
+                public Match[] find(CharSequence s) {
+                    java.util.regex.Matcher matcher = get(s);
+                    if (matcher.find()) {
+                        Match[] matches = new Match[1 + matcher.groupCount()];
+                        for (int i = 0; i <= matcher.groupCount(); i++) {
+                            if (matcher.group() != null) {
+                                matches[i] = new Match(matcher.start(i), matcher.end(i), matcher.group(i));
+                            } else {
+                                matches[i] = NULL_MATCH;
+                            }
+                        }
+                        return matches;
+                    } else {
+                        return NO_MATCHES;
+                    }
+                }
+            };
+        }
 
-      @Override
-      public String getPattern()
-      {
-         return pattern.pattern();
-      }
-   }
+        @Override
+        public String getPattern() {
+            return pattern.pattern();
+        }
+    }
 }

@@ -22,7 +22,6 @@
  ******************************************************************************/
 package org.exoplatform.portal.mop.redirects;
 
-
 import java.util.Map;
 
 import org.chromattic.api.annotations.Create;
@@ -34,12 +33,10 @@ import org.chromattic.api.annotations.OneToMany;
  * @version $Revision$
  */
 @MixinType(name = "gtn:redirectable")
-public abstract class Redirectable
-{
-   @OneToMany
-   public abstract Map<String, Redirect> getRedirects();
-   
-   @Create
-   public abstract Redirect createRedirect();
-}
+public abstract class Redirectable {
+    @OneToMany
+    public abstract Map<String, Redirect> getRedirects();
 
+    @Create
+    public abstract Redirect createRedirect();
+}

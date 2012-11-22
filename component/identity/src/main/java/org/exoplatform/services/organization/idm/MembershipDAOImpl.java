@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -18,23 +18,6 @@
  */
 
 package org.exoplatform.services.organization.idm;
-
-import org.exoplatform.commons.utils.ListAccess;
-import org.exoplatform.commons.utils.ListenerStack;
-import org.exoplatform.commons.utils.ListAccessImpl;
-import org.exoplatform.services.organization.Group;
-import org.exoplatform.services.organization.Membership;
-import org.exoplatform.services.organization.MembershipEventListener;
-import org.exoplatform.services.organization.MembershipHandler;
-import org.exoplatform.services.organization.MembershipType;
-import org.exoplatform.services.organization.User;
-import org.gatein.common.logging.LogLevel;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
-import org.picketlink.idm.api.IdentitySession;
-import org.picketlink.idm.api.Role;
-import org.picketlink.idm.api.RoleType;
-
 
 import java.util.Collection;
 import java.util.Collections;
@@ -45,1046 +28,754 @@ import java.util.Set;
 
 import javax.naming.InvalidNameException;
 
+import org.exoplatform.commons.utils.ListAccess;
+import org.exoplatform.commons.utils.ListAccessImpl;
+import org.exoplatform.commons.utils.ListenerStack;
+import org.exoplatform.services.organization.Group;
+import org.exoplatform.services.organization.Membership;
+import org.exoplatform.services.organization.MembershipEventListener;
+import org.exoplatform.services.organization.MembershipHandler;
+import org.exoplatform.services.organization.MembershipType;
+import org.exoplatform.services.organization.User;
+import org.gatein.common.logging.LogLevel;
+import org.picketlink.idm.api.IdentitySession;
+import org.picketlink.idm.api.Role;
+import org.picketlink.idm.api.RoleType;
+
 /*
  * @author <a href="mailto:boleslaw.dawidowicz at redhat.com">Boleslaw Dawidowicz</a>
  */
-public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHandler
-{
+public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHandler {
 
-   private List listeners_;
+    private List listeners_;
 
-   public MembershipDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService service)
-   {
-      super(orgService, service);
-      listeners_ = new ListenerStack(5);
-   }
+    public MembershipDAOImpl(PicketLinkIDMOrganizationServiceImpl orgService, PicketLinkIDMService service) {
+        super(orgService, service);
+        listeners_ = new ListenerStack(5);
+    }
 
-   public void addMembershipEventListener(MembershipEventListener listener)
-   {
-      if (listener == null)
-      {
-         throw new IllegalArgumentException("Listener cannot be null");
-      }
-      listeners_.add(listener);
-   }
+    public void addMembershipEventListener(MembershipEventListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Listener cannot be null");
+        }
+        listeners_.add(listener);
+    }
 
-   public void removeMembershipEventListener(MembershipEventListener listener)
-   {
-      if (listener == null)
-      {
-         throw new IllegalArgumentException("Listener cannot be null");
-      }
-      listeners_.remove(listener);
-   }
+    public void removeMembershipEventListener(MembershipEventListener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Listener cannot be null");
+        }
+        listeners_.remove(listener);
+    }
 
-   final public Membership createMembershipInstance()
-   {
-      return new MembershipImpl();
-   }
+    public final Membership createMembershipInstance() {
+        return new MembershipImpl();
+    }
 
-   public void createMembership(Membership m, boolean broadcast) throws Exception
-   {
+    public void createMembership(Membership m, boolean broadcast) throws Exception {
 
-      if (log.isTraceEnabled())
-      {
-         Tools.logMethodIn(
-            log,
-            LogLevel.TRACE,
-            "createMembership",
-            new Object[]{
-               "membership", m,
-               "broadcast", broadcast,
+        if (log.isTraceEnabled()) {
+            Tools.logMethodIn(log, LogLevel.TRACE, "createMembership",
+                    new Object[] { "membership", m, "broadcast", broadcast, });
+        }
+
+        if (broadcast) {
+            preSave(m, true);
+        }
+
+        saveMembership(m, false);
+
+        if (broadcast) {
+            postSave(m, true);
+        }
+
+    }
+
+    public void linkMembership(User user, Group g, MembershipType mt, boolean broadcast) throws Exception {
+        if (log.isTraceEnabled()) {
+            Tools.logMethodIn(log, LogLevel.TRACE, "linkMembership", new Object[] { "user", user, "group", g, "membershipType",
+                    mt, "broadcast", broadcast });
+        }
+
+        orgService.flush();
+
+        if (g == null) {
+            throw new InvalidNameException("Can not create membership record for " + user.getUserName()
+                    + " because group is null");
+        }
+
+        if (mt == null) {
+            throw new InvalidNameException("Can not create membership record for " + user.getUserName()
+                    + " because membership type is null");
+        }
+
+        if (orgService.getMembershipTypeHandler().findMembershipType(mt.getName()) == null) {
+            throw new InvalidNameException("MembershipType doesn't exist: " + mt.getName());
+        }
+
+        String plGroupName = getPLIDMGroupName(g.getGroupName());
+
+        String groupId = getIdentitySession().getPersistenceManager().createGroupKey(plGroupName,
+                orgService.getConfiguration().getGroupType(g.getParentId()));
+
+        if (isCreateMembership(mt.getName())) {
+            if (getIdentitySession().getRoleManager().getRoleType(mt.getName()) == null) {
+                getIdentitySession().getRoleManager().createRoleType(mt.getName());
             }
-         );
-      }
 
-      if (broadcast)
-      {
-         preSave(m, true);
-      }
-
-      saveMembership(m, false);
-
-      if (broadcast)
-      {
-         postSave(m, true);
-      }
-
-   }
-
-   public void linkMembership(User user, Group g, MembershipType mt, boolean broadcast) throws Exception
-   {
-      if (log.isTraceEnabled())
-      {
-         Tools.logMethodIn(
-            log,
-            LogLevel.TRACE,
-            "linkMembership",
-            new Object[]{
-               "user", user,
-               "group", g,
-               "membershipType", mt,
-               "broadcast", broadcast
+            if (getIdentitySession().getRoleManager().hasRole(user.getUserName(), groupId, mt.getName())) {
+                return;
             }
-         );
-      }
+        }
 
-      orgService.flush();
+        if (isAssociationMapped() && getAssociationMapping().equals(mt.getName())) {
+            getIdentitySession().getRelationshipManager().associateUserByKeys(groupId, user.getUserName());
+        }
 
-      if (g == null)
-      {
-         throw new InvalidNameException("Can not create membership record for " + user.getUserName()
-            + " because group is null");
-      }
+        MembershipImpl membership = new MembershipImpl();
+        membership.setMembershipType(mt.getName());
+        membership.setUserName(user.getUserName());
+        membership.setGroupId(g.getId());
 
-      if (mt == null)
-      {
-         throw new InvalidNameException("Can not create membership record for " + user.getUserName()
-            + " because membership type is null");
-      }
+        if (broadcast) {
+            preSave(membership, true);
+        }
 
-      if (orgService.getMembershipTypeHandler().findMembershipType(mt.getName()) == null)
-      {
-          throw new InvalidNameException("MembershipType doesn't exist: " + mt.getName());
-      }
+        getIdentitySession().getRoleManager().createRole(mt.getName(), user.getUserName(), groupId);
 
-      String plGroupName = getPLIDMGroupName(g.getGroupName());
+        if (broadcast) {
+            postSave(membership, true);
+        }
 
-      String groupId =
-            getIdentitySession().getPersistenceManager().
-               createGroupKey(plGroupName, orgService.getConfiguration().getGroupType(g.getParentId()));
+    }
 
+    public void saveMembership(Membership m, boolean broadcast) throws Exception {
+        if (log.isTraceEnabled()) {
+            Tools.logMethodIn(log, LogLevel.TRACE, "saveMembership", new Object[] { "membership", m, "broadcast", broadcast });
+        }
 
-      if (isCreateMembership(mt.getName()))
-      {
-         if (getIdentitySession().getRoleManager().getRoleType(mt.getName()) == null)
-         {
-            getIdentitySession().getRoleManager().createRoleType(mt.getName());
-         }
+        orgService.flush();
 
+        String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
 
-         if (getIdentitySession().getRoleManager().hasRole(user.getUserName(), groupId, mt.getName()))
-         {
+        String groupId = getIdentitySession().getPersistenceManager().createGroupKey(plGroupName,
+                getGroupTypeFromId(m.getGroupId()));
+
+        boolean hasRole = false;
+
+        try {
+            hasRole = getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType());
+        } catch (Exception e) {
+            // TODO:
+            handleException("Identity operation error: ", e);
+
+        }
+
+        if (hasRole) {
             return;
-         }
-      }
+        }
 
-      if (isAssociationMapped() && getAssociationMapping().equals(mt.getName()))
-      {
-         getIdentitySession().getRelationshipManager().associateUserByKeys(groupId, user.getUserName());
-      }
+        if (broadcast) {
+            preSave(m, false);
+        }
 
-      MembershipImpl membership = new MembershipImpl();
-      membership.setMembershipType(mt.getName());
-      membership.setUserName(user.getUserName());
-      membership.setGroupId(g.getId());
+        if (isCreateMembership(m.getMembershipType())) {
 
-      if (broadcast)
-      {
-         preSave(membership, true);
-      }
+            try {
+                getIdentitySession().getRoleManager().createRole(m.getMembershipType(), m.getUserName(), groupId);
+            } catch (Exception e) {
+                // TODO:
+                handleException("Identity operation error: ", e);
 
-      getIdentitySession().getRoleManager().createRole(mt.getName(), user.getUserName(), groupId);
-
-      if (broadcast)
-      {
-         postSave(membership, true);
-      }
-
-   }
-
-   public void saveMembership(Membership m, boolean broadcast) throws Exception
-   {
-      if (log.isTraceEnabled())
-      {
-         Tools.logMethodIn(
-            log,
-            LogLevel.TRACE,
-            "saveMembership",
-            new Object[]{
-               "membership", m,
-               "broadcast", broadcast
             }
-         );
-      }
+        }
+        if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType())) {
+            try {
+                getIdentitySession().getRelationshipManager().associateUserByKeys(groupId, m.getUserName());
+            } catch (Exception e) {
+                // TODO:
+                handleException("Identity operation error: ", e);
 
-      orgService.flush();
-
-      String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
-
-      String groupId =
-         getIdentitySession().getPersistenceManager().
-            createGroupKey(plGroupName, getGroupTypeFromId(m.getGroupId()));
-
-
-      boolean hasRole = false;
-
-
-      try
-      {
-         hasRole = getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType());
-      }
-      catch (Exception e)
-      {
-         //TODO:
-         handleException("Identity operation error: ", e);
-
-      }
-
-      if (hasRole)
-      {
-         return;
-      }
-
-      if (broadcast)
-      {
-         preSave(m, false);
-      }
-
-      if (isCreateMembership(m.getMembershipType()))
-      {
-
-         try
-         {
-            getIdentitySession().getRoleManager().createRole(m.getMembershipType(), m.getUserName(), groupId);
-         }
-         catch (Exception e)
-         {
-            //TODO:
-            handleException("Identity operation error: ", e);
-
-         }
-      }
-      if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()))
-      {
-         try
-         {
-            getIdentitySession().getRelationshipManager().associateUserByKeys(groupId, m.getUserName());
-         }
-         catch (Exception e)
-         {
-            //TODO:
-            handleException("Identity operation error: ", e);
-
-         }
-      }
-
-      if (broadcast)
-      {
-         postSave(m, false);
-      }
-   }
-
-   public Membership removeMembership(String id, boolean broadcast) throws Exception
-   {
-      if (log.isTraceEnabled())
-      {
-         Tools.logMethodIn(
-            log,
-            LogLevel.TRACE,
-            "removeMembership",
-            new Object[]{
-               "id", id,
-               "broadcast", broadcast
             }
-         );
-      }
+        }
 
-      orgService.flush();
+        if (broadcast) {
+            postSave(m, false);
+        }
+    }
 
-      Membership m = new MembershipImpl(id);
+    public Membership removeMembership(String id, boolean broadcast) throws Exception {
+        if (log.isTraceEnabled()) {
+            Tools.logMethodIn(log, LogLevel.TRACE, "removeMembership", new Object[] { "id", id, "broadcast", broadcast });
+        }
 
-      String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
+        orgService.flush();
 
-      String groupId =
-         getIdentitySession().getPersistenceManager().
-            createGroupKey(plGroupName, getGroupTypeFromId(m.getGroupId()));
+        Membership m = new MembershipImpl(id);
 
-      boolean hasRole = false;
+        String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
 
-      try
-      {
-         hasRole = getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType());
-      }
-      catch (Exception e)
-      {
-         //TODO:
-         handleException("Identity operation error: ", e);
+        String groupId = getIdentitySession().getPersistenceManager().createGroupKey(plGroupName,
+                getGroupTypeFromId(m.getGroupId()));
 
-      }
+        boolean hasRole = false;
 
-      boolean associated = false;
-
-      try
-      {
-         associated = getIdentitySession().getRelationshipManager().isAssociatedByKeys(groupId, m.getUserName());
-      }
-      catch (Exception e)
-      {
-         //TODO:
-         handleException("Identity operation error: ", e);
-      }
-
-      if (!hasRole &&
-          !(isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) && associated))
-      {
-         return m;
-      }
-
-      if (broadcast)
-      {
-         preDelete(m);
-      }
-
-      if (isCreateMembership(m.getMembershipType()))
-      {
-
-         try
-         {
-            getIdentitySession().getRoleManager().removeRole(m.getMembershipType(), m.getUserName(), groupId);
-         }
-         catch (Exception e)
-         {
-            //TODO:
+        try {
+            hasRole = getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType());
+        } catch (Exception e) {
+            // TODO:
             handleException("Identity operation error: ", e);
 
-         }
-      }
+        }
 
-      if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) && associated)
-      {
-         Set<String> keys = new HashSet<String>();
-         keys.add(m.getUserName());
-         try
-         {
-            getIdentitySession().getRelationshipManager().disassociateUsersByKeys(groupId, keys);
-         }
-         catch (Exception e)
-         {
-            //TODO:
+        boolean associated = false;
+
+        try {
+            associated = getIdentitySession().getRelationshipManager().isAssociatedByKeys(groupId, m.getUserName());
+        } catch (Exception e) {
+            // TODO:
             handleException("Identity operation error: ", e);
+        }
 
-         }
-      }
+        if (!hasRole && !(isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) && associated)) {
+            return m;
+        }
 
-      if (broadcast)
-      {
-         postDelete(m);
-      }
-      return m;
-   }
-
-   public Collection removeMembershipByUser(String userName, boolean broadcast) throws Exception
-   {
-
-      if (log.isTraceEnabled())
-      {
-         Tools.logMethodIn(
-            log,
-            LogLevel.TRACE,
-            "removeMembershipByUser",
-            new Object[]{
-               "userName", userName,
-               "broadcast", broadcast
-            }
-         );
-      }
-
-      orgService.flush();
-
-      Collection<Role> roles = new HashSet();
-
-      try
-      {
-         roles = getIdentitySession().getRoleManager().findRoles(userName, null);
-      }
-      catch (Exception e)
-      {
-         //TODO:
-         handleException("Identity operation error: ", e);
-
-      }
-
-      HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
-
-      for (Role role : roles)
-      {
-         MembershipImpl m = new MembershipImpl();
-         Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(role.getGroup());
-         m.setGroupId(g.getId());
-         m.setUserName(role.getUser().getId());
-         m.setMembershipType(role.getRoleType().getName());
-         memberships.add(m);
-
-         if (broadcast)
-         {
+        if (broadcast) {
             preDelete(m);
-         }
+        }
 
-         getIdentitySession().getRoleManager().removeRole(role);
+        if (isCreateMembership(m.getMembershipType())) {
 
-         if (broadcast)
-         {
+            try {
+                getIdentitySession().getRoleManager().removeRole(m.getMembershipType(), m.getUserName(), groupId);
+            } catch (Exception e) {
+                // TODO:
+                handleException("Identity operation error: ", e);
+
+            }
+        }
+
+        if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) && associated) {
+            Set<String> keys = new HashSet<String>();
+            keys.add(m.getUserName());
+            try {
+                getIdentitySession().getRelationshipManager().disassociateUsersByKeys(groupId, keys);
+            } catch (Exception e) {
+                // TODO:
+                handleException("Identity operation error: ", e);
+
+            }
+        }
+
+        if (broadcast) {
             postDelete(m);
-         }
+        }
+        return m;
+    }
 
-      }
+    public Collection removeMembershipByUser(String userName, boolean broadcast) throws Exception {
 
-      if (isAssociationMapped())
-      {
+        if (log.isTraceEnabled()) {
+            Tools.logMethodIn(log, LogLevel.TRACE, "removeMembershipByUser", new Object[] { "userName", userName, "broadcast",
+                    broadcast });
+        }
 
-         Collection<org.picketlink.idm.api.Group> groups = new HashSet();
+        orgService.flush();
 
-         try
-         {
-            groups = getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
-         }
-         catch (Exception e)
-         {
-            //TODO:
+        Collection<Role> roles = new HashSet();
+
+        try {
+            roles = getIdentitySession().getRoleManager().findRoles(userName, null);
+        } catch (Exception e) {
+            // TODO:
             handleException("Identity operation error: ", e);
 
-         }
+        }
 
-         Set<String> keys = new HashSet<String>();
-         keys.add(userName);
-         
-         for (org.picketlink.idm.api.Group group : groups)
-         {
-            try
-            {
-               getIdentitySession().getRelationshipManager().disassociateUsersByKeys(group.getKey(), keys);
-            }
-            catch (Exception e)
-            {
-               //TODO:
-               handleException("Identity operation error: ", e);
+        HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
-            }
-         }
-
-      }
-
-      //TODO: Exo UI has hardcoded casts to List
-      return new LinkedList(memberships);
-
-   }
-
-   public Membership findMembershipByUserGroupAndType(String userName, String groupId, String type) throws Exception
-   {
-
-      if (log.isTraceEnabled())
-      {
-         Tools.logMethodIn(
-            log,
-            LogLevel.TRACE,
-            "findMembershipByUserAndType",
-            new Object[]{
-               "userName", userName,
-               "groupId", groupId,
-               "type", type,
-            }
-         );
-      }
-
-      orgService.flush();
-
-      String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
-
-      String gid =
-         getIdentitySession().getPersistenceManager().
-            createGroupKey(plGroupName, getGroupTypeFromId(groupId));
-
-      boolean hasMembership = false;
-
-      boolean associated = false;
-
-      try
-      {
-         associated = getIdentitySession().getRelationshipManager().isAssociatedByKeys(gid, userName);
-      }
-      catch (Exception e)
-      {
-         //TODO:
-         handleException("Identity operation error: ", e);
-
-      }
-
-      if (isAssociationMapped() && getAssociationMapping().equals(type) && associated)
-      {
-         hasMembership = true;
-      }
-
-
-      Role role = null;
-
-      try
-      {
-         role = getIdentitySession().getRoleManager().getRole(type, userName, gid);
-      }
-      catch (Exception e)
-      {
-         //TODO:
-         handleException("Identity operation error: ", e);
-
-      }
-
-      if (role != null &&
-          (!isAssociationMapped() ||
-           !getAssociationMapping().equals(role.getRoleType()) ||
-           !ignoreMappedMembershipType())
-         )
-      {
-         hasMembership = true;
-      }
-
-      Membership result = null;
-
-      if (hasMembership)
-      {
-
-      
-         MembershipImpl m = new MembershipImpl();
-         m.setGroupId(groupId);
-         m.setUserName(userName);
-         m.setMembershipType(type);
-
-         result = m;
-      }
-
-      if (log.isTraceEnabled())
-      {
-        Tools.logMethodOut(
-            log,
-            LogLevel.TRACE,
-            "findMembershipByUserGroupAndType",
-            result
-         );
-      }
-
-      return result;
-   }
-
-   public Collection findMembershipsByUserAndGroup(String userName, String groupId) throws Exception
-   {
-      if (log.isTraceEnabled())
-      {
-         Tools.logMethodIn(
-            log,
-            LogLevel.TRACE,
-            "findMembershipByUserAndGroup",
-            new Object[]{
-               "userName", userName,
-               "groupId", groupId,
-            }
-         );
-      }
-
-      orgService.flush();
-
-      if (userName == null)
-      {
-         // julien fix : if user name is null, need to check if we do need to return a special group
-
-         if (log.isTraceEnabled())
-         {
-            Tools.logMethodOut(
-               log,
-               LogLevel.TRACE,
-               "findMembershipByUserAndGroup",
-               Collections.emptyList()
-            );
-      }
-
-         return Collections.emptyList();
-      }
-
-      String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
-
-      String gid =
-         getIdentitySession().getPersistenceManager().
-            createGroupKey(plGroupName, getGroupTypeFromId(groupId));
-
-      Collection<RoleType> roleTypes = new HashSet();
-
-      try
-      {
-         roleTypes = getIdentitySession().getRoleManager().findRoleTypes(userName, gid, null);
-      }
-      catch (Exception e)
-      {
-         //TODO:
-         handleException("Identity operation error: ", e);
-
-      }
-
-      HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
-
-      for (RoleType roleType : roleTypes)
-      {
-         if (isCreateMembership(roleType.getName()))
-         {
+        for (Role role : roles) {
             MembershipImpl m = new MembershipImpl();
-            m.setGroupId(groupId);
-            m.setUserName(userName);
-            m.setMembershipType(roleType.getName());
-            memberships.add(m);
-         }   
-      }
-
-      boolean associated = false;
-
-      try
-      {
-         associated = getIdentitySession().getRelationshipManager().isAssociatedByKeys(gid, userName);
-      }
-      catch (Exception e)
-      {
-         //TODO:
-         handleException("Identity operation error: ", e);
-
-      }
-
-      if (isAssociationMapped() && associated)
-      {
-         MembershipImpl m = new MembershipImpl();
-         m.setGroupId(groupId);
-         m.setUserName(userName);
-         m.setMembershipType(getAssociationMapping());
-         memberships.add(m);
-      }
-
-      //TODO: Exo UI has hardcoded casts to List
-      Collection result = new LinkedList(memberships);
-
-      if (log.isTraceEnabled())
-      {
-        Tools.logMethodOut(
-            log,
-            LogLevel.TRACE,
-            "findMembershipByUserAndGroup",
-            result
-         );
-      }
-
-      return result;
-   }
-
-   public Collection findMembershipsByUser(String userName) throws Exception
-   {
-      if (log.isTraceEnabled())
-      {
-         Tools.logMethodIn(
-            log,
-            LogLevel.TRACE,
-            "findMembershipsByUser",
-            new Object[]{
-               "userName", userName
-            }
-         );
-      }
-
-      orgService.flush();
-
-      Collection<Role> roles = new HashSet();
-
-      try
-      {
-         roles = getIdentitySession().getRoleManager().findRoles(userName, null);
-      }
-      catch (Exception e)
-      {
-         //TODO:
-         handleException("Identity operation error: ", e);
-
-      }
-
-      HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
-
-      for (Role role : roles)
-      {
-         if (isCreateMembership(role.getRoleType().getName()))
-         {
-            MembershipImpl m = new MembershipImpl();
-            Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(role.getGroup());
-            m.setGroupId(g.getId());
-            m.setUserName(role.getUser().getId());
-
-            // LDAP store may return raw membership type as role type
-            if(role.getRoleType().getName().equals("JBOSS_IDENTITY_MEMBERSHIP"))
-            {
-               m.setMembershipType(orgService.getConfiguration().getAssociationMembershipType());
-            }
-            else
-            {
-               m.setMembershipType(role.getRoleType().getName());
-            }
-
-            memberships.add(m);
-         }
-      }
-      
-      if (isAssociationMapped())
-      {
-
-         Collection<org.picketlink.idm.api.Group> groups = new HashSet();
-
-         try
-         {
-            groups = getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
-         }
-         catch (Exception e)
-         {
-            //TODO:
-            handleException("Identity operation error: ", e);
-
-         }
-
-         for (org.picketlink.idm.api.Group group : groups)
-         {
-            MembershipImpl m = new MembershipImpl();
-            Group g = ((GroupDAOImpl)orgService.getGroupHandler()).convertGroup(group);
-            m.setGroupId(g.getId());
-            m.setUserName(userName);
-            m.setMembershipType(getAssociationMapping());
-            memberships.add(m);
-         }
-                 
-      }
-
-
-      Collection result = new LinkedList(memberships);
-
-      if (log.isTraceEnabled())
-      {
-        Tools.logMethodOut(
-            log,
-            LogLevel.TRACE,
-            "findMembershipsByUser",
-            result
-         );
-      }
-
-      return result;
-   }
-   
-   public ListAccess<Membership> findAllMembershipsByUser(User user) throws Exception
-   {
-      org.picketlink.idm.api.User gtnUser = service_.getIdentitySession().getPersistenceManager().findUser(user.getUserName());
-      
-      if (gtnUser == null)
-      {
-         log.log(LogLevel.ERROR, "Internal ERROR. Cannot obtain user: " + user.getUserName());
-         return new ListAccessImpl(Membership.class, Collections.emptyList());
-      }
-      return new IDMMembershipListAccess(gtnUser);
-   }
-
-   public Collection findMembershipsByGroup(Group group) throws Exception
-   {
-      return findMembershipsByGroupId(group.getId());
-   }
-
-   public ListAccess<Membership> findAllMembershipsByGroup(Group group) throws Exception
-   {
-      String plGroupName = getPLIDMGroupName(getGroupNameFromId(group.getId()));
-      
-      String gid =
-         getIdentitySession().getPersistenceManager().
-            createGroupKey(plGroupName, getGroupTypeFromId(group.getId()));
-      
-      org.picketlink.idm.api.Group gtnGroup = service_.getIdentitySession().getPersistenceManager().findGroupByKey(gid);
-
-      if (gtnGroup == null)
-      {
-         log.log(LogLevel.ERROR, "Internal ERROR. Cannot obtain group: " + group.getId());
-         return new ListAccessImpl(Membership.class, Collections.emptyList());
-      }
-      return new IDMMembershipListAccess(gtnGroup);
-   }
-
-   public Collection findMembershipsByGroupId(String groupId) throws Exception
-   {
-      if (log.isTraceEnabled())
-      {
-         Tools.logMethodIn(
-            log,
-            LogLevel.TRACE,
-            "findMembershipsByGroup",
-            new Object[]{
-               "groupId", groupId
-            }
-         );
-      }
-
-      orgService.flush();
-
-      String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
-
-      String gid =
-         getIdentitySession().getPersistenceManager().createGroupKey(plGroupName,
-            getGroupTypeFromId(groupId));
-
-      Collection<Role> roles = new HashSet();
-
-      try
-      {
-         roles = getIdentitySession().getRoleManager().findRoles(gid, null);
-      }
-      catch (Exception e)
-      {
-         //TODO:
-         handleException("Identity operation error: ", e);
-
-      }
-
-      HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
-
-      Group g = orgService.getGroupHandler().findGroupById(groupId);
-
-      for (Role role : roles)
-      {
-         if (isCreateMembership(role.getRoleType().getName()))
-         {
-            MembershipImpl m = new MembershipImpl();
+            Group g = ((GroupDAOImpl) orgService.getGroupHandler()).convertGroup(role.getGroup());
             m.setGroupId(g.getId());
             m.setUserName(role.getUser().getId());
             m.setMembershipType(role.getRoleType().getName());
             memberships.add(m);
-         }
-      }
 
-      if (isAssociationMapped())
-      {
+            if (broadcast) {
+                preDelete(m);
+            }
 
-         Collection<org.picketlink.idm.api.User> users = new HashSet();
+            getIdentitySession().getRoleManager().removeRole(role);
 
-         try
-         {
-            users = getIdentitySession().getRelationshipManager().findAssociatedUsers(gid, false, null);
-         }
-         catch (Exception e)
-         {
-            //TODO:
+            if (broadcast) {
+                postDelete(m);
+            }
+
+        }
+
+        if (isAssociationMapped()) {
+
+            Collection<org.picketlink.idm.api.Group> groups = new HashSet();
+
+            try {
+                groups = getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
+            } catch (Exception e) {
+                // TODO:
+                handleException("Identity operation error: ", e);
+
+            }
+
+            Set<String> keys = new HashSet<String>();
+            keys.add(userName);
+
+            for (org.picketlink.idm.api.Group group : groups) {
+                try {
+                    getIdentitySession().getRelationshipManager().disassociateUsersByKeys(group.getKey(), keys);
+                } catch (Exception e) {
+                    // TODO:
+                    handleException("Identity operation error: ", e);
+
+                }
+            }
+
+        }
+
+        // TODO: Exo UI has hardcoded casts to List
+        return new LinkedList(memberships);
+
+    }
+
+    public Membership findMembershipByUserGroupAndType(String userName, String groupId, String type) throws Exception {
+
+        if (log.isTraceEnabled()) {
+            Tools.logMethodIn(log, LogLevel.TRACE, "findMembershipByUserAndType", new Object[] { "userName", userName,
+                    "groupId", groupId, "type", type, });
+        }
+
+        orgService.flush();
+
+        String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
+
+        String gid = getIdentitySession().getPersistenceManager().createGroupKey(plGroupName, getGroupTypeFromId(groupId));
+
+        boolean hasMembership = false;
+
+        boolean associated = false;
+
+        try {
+            associated = getIdentitySession().getRelationshipManager().isAssociatedByKeys(gid, userName);
+        } catch (Exception e) {
+            // TODO:
             handleException("Identity operation error: ", e);
 
-         }
+        }
 
-         for (org.picketlink.idm.api.User user : users)
-         {
+        if (isAssociationMapped() && getAssociationMapping().equals(type) && associated) {
+            hasMembership = true;
+        }
+
+        Role role = null;
+
+        try {
+            role = getIdentitySession().getRoleManager().getRole(type, userName, gid);
+        } catch (Exception e) {
+            // TODO:
+            handleException("Identity operation error: ", e);
+
+        }
+
+        if (role != null
+                && (!isAssociationMapped() || !getAssociationMapping().equals(role.getRoleType()) || !ignoreMappedMembershipType())) {
+            hasMembership = true;
+        }
+
+        Membership result = null;
+
+        if (hasMembership) {
+
             MembershipImpl m = new MembershipImpl();
             m.setGroupId(groupId);
-            m.setUserName(user.getId());
+            m.setUserName(userName);
+            m.setMembershipType(type);
+
+            result = m;
+        }
+
+        if (log.isTraceEnabled()) {
+            Tools.logMethodOut(log, LogLevel.TRACE, "findMembershipByUserGroupAndType", result);
+        }
+
+        return result;
+    }
+
+    public Collection findMembershipsByUserAndGroup(String userName, String groupId) throws Exception {
+        if (log.isTraceEnabled()) {
+            Tools.logMethodIn(log, LogLevel.TRACE, "findMembershipByUserAndGroup", new Object[] { "userName", userName,
+                    "groupId", groupId, });
+        }
+
+        orgService.flush();
+
+        if (userName == null) {
+            // julien fix : if user name is null, need to check if we do need to return a special group
+
+            if (log.isTraceEnabled()) {
+                Tools.logMethodOut(log, LogLevel.TRACE, "findMembershipByUserAndGroup", Collections.emptyList());
+            }
+
+            return Collections.emptyList();
+        }
+
+        String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
+
+        String gid = getIdentitySession().getPersistenceManager().createGroupKey(plGroupName, getGroupTypeFromId(groupId));
+
+        Collection<RoleType> roleTypes = new HashSet();
+
+        try {
+            roleTypes = getIdentitySession().getRoleManager().findRoleTypes(userName, gid, null);
+        } catch (Exception e) {
+            // TODO:
+            handleException("Identity operation error: ", e);
+
+        }
+
+        HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
+
+        for (RoleType roleType : roleTypes) {
+            if (isCreateMembership(roleType.getName())) {
+                MembershipImpl m = new MembershipImpl();
+                m.setGroupId(groupId);
+                m.setUserName(userName);
+                m.setMembershipType(roleType.getName());
+                memberships.add(m);
+            }
+        }
+
+        boolean associated = false;
+
+        try {
+            associated = getIdentitySession().getRelationshipManager().isAssociatedByKeys(gid, userName);
+        } catch (Exception e) {
+            // TODO:
+            handleException("Identity operation error: ", e);
+
+        }
+
+        if (isAssociationMapped() && associated) {
+            MembershipImpl m = new MembershipImpl();
+            m.setGroupId(groupId);
+            m.setUserName(userName);
             m.setMembershipType(getAssociationMapping());
             memberships.add(m);
-         }
+        }
 
-      }
+        // TODO: Exo UI has hardcoded casts to List
+        Collection result = new LinkedList(memberships);
 
-      //TODO: Exo UI has harcoded casts to List
-      List<MembershipImpl> results = new LinkedList<MembershipImpl>(memberships);
+        if (log.isTraceEnabled()) {
+            Tools.logMethodOut(log, LogLevel.TRACE, "findMembershipByUserAndGroup", result);
+        }
 
-      if (orgService.getConfiguration().isSortMemberships())
-      {
-         Collections.sort(results);
-      }
+        return result;
+    }
 
+    public Collection findMembershipsByUser(String userName) throws Exception {
+        if (log.isTraceEnabled()) {
+            Tools.logMethodIn(log, LogLevel.TRACE, "findMembershipsByUser", new Object[] { "userName", userName });
+        }
 
-      if (log.isTraceEnabled())
-      {
-        Tools.logMethodOut(
-            log,
-            LogLevel.TRACE,
-            "findMembershipsByGroupId",
-            results
-         );
-      }
+        orgService.flush();
 
-      return results;
-   }
+        Collection<Role> roles = new HashSet();
 
-   public Membership findMembership(String id) throws Exception
-   {
-      if (log.isTraceEnabled())
-      {
-         Tools.logMethodIn(
-            log,
-            LogLevel.TRACE,
-            "findMembership",
-            new Object[]{
-               "id", id
+        try {
+            roles = getIdentitySession().getRoleManager().findRoles(userName, null);
+        } catch (Exception e) {
+            // TODO:
+            handleException("Identity operation error: ", e);
+
+        }
+
+        HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
+
+        for (Role role : roles) {
+            if (isCreateMembership(role.getRoleType().getName())) {
+                MembershipImpl m = new MembershipImpl();
+                Group g = ((GroupDAOImpl) orgService.getGroupHandler()).convertGroup(role.getGroup());
+                m.setGroupId(g.getId());
+                m.setUserName(role.getUser().getId());
+
+                // LDAP store may return raw membership type as role type
+                if (role.getRoleType().getName().equals("JBOSS_IDENTITY_MEMBERSHIP")) {
+                    m.setMembershipType(orgService.getConfiguration().getAssociationMembershipType());
+                } else {
+                    m.setMembershipType(role.getRoleType().getName());
+                }
+
+                memberships.add(m);
             }
-         );
-      }
+        }
 
-      orgService.flush();
+        if (isAssociationMapped()) {
 
-      Membership m = new MembershipImpl(id);
+            Collection<org.picketlink.idm.api.Group> groups = new HashSet();
 
-      String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
+            try {
+                groups = getIdentitySession().getRelationshipManager().findAssociatedGroups(userName, null);
+            } catch (Exception e) {
+                // TODO:
+                handleException("Identity operation error: ", e);
 
-      String groupId =
-         getIdentitySession().getPersistenceManager().createGroupKey(plGroupName,
-            getGroupTypeFromId(m.getGroupId()));
-
-
-      try
-      {
-         if (isCreateMembership(m.getMembershipType()) &&
-             getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType()))
-         {
-            if (log.isTraceEnabled())
-            {
-               Tools.logMethodOut(
-                  log,
-                  LogLevel.TRACE,
-                  "findMembership",
-                  m
-               );
-            }
-            return m;
-         }
-      }
-      catch (Exception e)
-      {
-         //TODO:
-         handleException("Identity operation error: ", e);
-
-      }
-
-      try
-      {
-         if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType()) &&
-             getIdentitySession().getRelationshipManager().isAssociatedByKeys(groupId, m.getUserName()))
-         {
-            if (log.isTraceEnabled())
-            {
-               Tools.logMethodOut(
-                  log,
-                  LogLevel.TRACE,
-                  "findMembership",
-                  m
-               );
             }
 
-            return m;
-         }
-      }
-      catch (Exception e)
-      {
-         //TODO:
-         handleException("Identity operation error: ", e);
+            for (org.picketlink.idm.api.Group group : groups) {
+                MembershipImpl m = new MembershipImpl();
+                Group g = ((GroupDAOImpl) orgService.getGroupHandler()).convertGroup(group);
+                m.setGroupId(g.getId());
+                m.setUserName(userName);
+                m.setMembershipType(getAssociationMapping());
+                memberships.add(m);
+            }
 
-      }
+        }
 
-      if (log.isTraceEnabled())
-      {
-         Tools.logMethodOut(
-            log,
-            LogLevel.TRACE,
-            "findMembership",
-            null
-         );
-      }
+        Collection result = new LinkedList(memberships);
 
-      return null;
-   }
+        if (log.isTraceEnabled()) {
+            Tools.logMethodOut(log, LogLevel.TRACE, "findMembershipsByUser", result);
+        }
 
-   private void preSave(Membership membership, boolean isNew) throws Exception
-   {
-      for (int i = 0; i < listeners_.size(); i++)
-      {
-         MembershipEventListener listener = (MembershipEventListener)listeners_.get(i);
-         listener.preSave(membership, isNew);
-      }
-   }
+        return result;
+    }
 
-   private void postSave(Membership membership, boolean isNew) throws Exception
-   {
-      for (int i = 0; i < listeners_.size(); i++)
-      {
-         MembershipEventListener listener = (MembershipEventListener)listeners_.get(i);
-         listener.postSave(membership, isNew);
-      }
-   }
+    public ListAccess<Membership> findAllMembershipsByUser(User user) throws Exception {
+        org.picketlink.idm.api.User gtnUser = service_.getIdentitySession().getPersistenceManager()
+                .findUser(user.getUserName());
 
-   private void preDelete(Membership membership) throws Exception
-   {
-      for (int i = 0; i < listeners_.size(); i++)
-      {
-         MembershipEventListener listener = (MembershipEventListener)listeners_.get(i);
-         listener.preDelete(membership);
-      }
-   }
+        if (gtnUser == null) {
+            log.log(LogLevel.ERROR, "Internal ERROR. Cannot obtain user: " + user.getUserName());
+            return new ListAccessImpl(Membership.class, Collections.emptyList());
+        }
+        return new IDMMembershipListAccess(gtnUser);
+    }
 
-   private void postDelete(Membership membership) throws Exception
-   {
-      for (int i = 0; i < listeners_.size(); i++)
-      {
-         MembershipEventListener listener = (MembershipEventListener)listeners_.get(i);
-         listener.postDelete(membership);
-      }
-   }
+    public Collection findMembershipsByGroup(Group group) throws Exception {
+        return findMembershipsByGroupId(group.getId());
+    }
 
-   private IdentitySession getIdentitySession() throws Exception
-   {
-      return service_.getIdentitySession();
-   }
+    public ListAccess<Membership> findAllMembershipsByGroup(Group group) throws Exception {
+        String plGroupName = getPLIDMGroupName(getGroupNameFromId(group.getId()));
 
-   private String getGroupNameFromId(String groupId)
-   {
-      String[] ids = groupId.split("/");
+        String gid = getIdentitySession().getPersistenceManager()
+                .createGroupKey(plGroupName, getGroupTypeFromId(group.getId()));
 
-      return ids[ids.length - 1];
-   }
+        org.picketlink.idm.api.Group gtnGroup = service_.getIdentitySession().getPersistenceManager().findGroupByKey(gid);
 
-   private String getGroupTypeFromId(String groupId)
-   {
+        if (gtnGroup == null) {
+            log.log(LogLevel.ERROR, "Internal ERROR. Cannot obtain group: " + group.getId());
+            return new ListAccessImpl(Membership.class, Collections.emptyList());
+        }
+        return new IDMMembershipListAccess(gtnGroup);
+    }
 
-      String parentId = groupId.substring(0, groupId.lastIndexOf("/"));
+    public Collection findMembershipsByGroupId(String groupId) throws Exception {
+        if (log.isTraceEnabled()) {
+            Tools.logMethodIn(log, LogLevel.TRACE, "findMembershipsByGroup", new Object[] { "groupId", groupId });
+        }
 
-      return orgService.getConfiguration().getGroupType(parentId);
-   }
+        orgService.flush();
 
-   protected boolean isAssociationMapped()
-   {
-      String mapping = orgService.getConfiguration().getAssociationMembershipType();
+        String plGroupName = getPLIDMGroupName(getGroupNameFromId(groupId));
 
-      if (mapping != null && mapping.length() > 0)
-      {
-         return true;
-      }
-      return false;
-   }
+        String gid = getIdentitySession().getPersistenceManager().createGroupKey(plGroupName, getGroupTypeFromId(groupId));
 
-   protected String getAssociationMapping()
-   {
-      return orgService.getConfiguration().getAssociationMembershipType();
-   }
+        Collection<Role> roles = new HashSet();
 
-   protected boolean ignoreMappedMembershipType()
-   {
-      return orgService.getConfiguration().isIgnoreMappedMembershipType();
-   }
+        try {
+            roles = getIdentitySession().getRoleManager().findRoles(gid, null);
+        } catch (Exception e) {
+            // TODO:
+            handleException("Identity operation error: ", e);
 
-   protected boolean isCreateMembership(String typeName)
-   {
-      if (isAssociationMapped() &&
-          getAssociationMapping().equals(typeName) &&
-          ignoreMappedMembershipType())
-      {
-         return false;
-      }
-      return true;
-   }
+        }
 
-   public String getPLIDMGroupName(String gtnGroupName)
-   {
-      return orgService.getConfiguration().getPLIDMGroupName(gtnGroupName);
-   }
+        HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
-   public String getGtnGroupName(String plidmGroupName)
-   {
-      return orgService.getConfiguration().getGtnGroupName(plidmGroupName);
-   }
+        Group g = orgService.getGroupHandler().findGroupById(groupId);
+
+        for (Role role : roles) {
+            if (isCreateMembership(role.getRoleType().getName())) {
+                MembershipImpl m = new MembershipImpl();
+                m.setGroupId(g.getId());
+                m.setUserName(role.getUser().getId());
+                m.setMembershipType(role.getRoleType().getName());
+                memberships.add(m);
+            }
+        }
+
+        if (isAssociationMapped()) {
+
+            Collection<org.picketlink.idm.api.User> users = new HashSet();
+
+            try {
+                users = getIdentitySession().getRelationshipManager().findAssociatedUsers(gid, false, null);
+            } catch (Exception e) {
+                // TODO:
+                handleException("Identity operation error: ", e);
+
+            }
+
+            for (org.picketlink.idm.api.User user : users) {
+                MembershipImpl m = new MembershipImpl();
+                m.setGroupId(groupId);
+                m.setUserName(user.getId());
+                m.setMembershipType(getAssociationMapping());
+                memberships.add(m);
+            }
+
+        }
+
+        // TODO: Exo UI has harcoded casts to List
+        List<MembershipImpl> results = new LinkedList<MembershipImpl>(memberships);
+
+        if (orgService.getConfiguration().isSortMemberships()) {
+            Collections.sort(results);
+        }
+
+        if (log.isTraceEnabled()) {
+            Tools.logMethodOut(log, LogLevel.TRACE, "findMembershipsByGroupId", results);
+        }
+
+        return results;
+    }
+
+    public Membership findMembership(String id) throws Exception {
+        if (log.isTraceEnabled()) {
+            Tools.logMethodIn(log, LogLevel.TRACE, "findMembership", new Object[] { "id", id });
+        }
+
+        orgService.flush();
+
+        Membership m = new MembershipImpl(id);
+
+        String plGroupName = getPLIDMGroupName(getGroupNameFromId(m.getGroupId()));
+
+        String groupId = getIdentitySession().getPersistenceManager().createGroupKey(plGroupName,
+                getGroupTypeFromId(m.getGroupId()));
+
+        try {
+            if (isCreateMembership(m.getMembershipType())
+                    && getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType())) {
+                if (log.isTraceEnabled()) {
+                    Tools.logMethodOut(log, LogLevel.TRACE, "findMembership", m);
+                }
+                return m;
+            }
+        } catch (Exception e) {
+            // TODO:
+            handleException("Identity operation error: ", e);
+
+        }
+
+        try {
+            if (isAssociationMapped() && getAssociationMapping().equals(m.getMembershipType())
+                    && getIdentitySession().getRelationshipManager().isAssociatedByKeys(groupId, m.getUserName())) {
+                if (log.isTraceEnabled()) {
+                    Tools.logMethodOut(log, LogLevel.TRACE, "findMembership", m);
+                }
+
+                return m;
+            }
+        } catch (Exception e) {
+            // TODO:
+            handleException("Identity operation error: ", e);
+
+        }
+
+        if (log.isTraceEnabled()) {
+            Tools.logMethodOut(log, LogLevel.TRACE, "findMembership", null);
+        }
+
+        return null;
+    }
+
+    private void preSave(Membership membership, boolean isNew) throws Exception {
+        for (int i = 0; i < listeners_.size(); i++) {
+            MembershipEventListener listener = (MembershipEventListener) listeners_.get(i);
+            listener.preSave(membership, isNew);
+        }
+    }
+
+    private void postSave(Membership membership, boolean isNew) throws Exception {
+        for (int i = 0; i < listeners_.size(); i++) {
+            MembershipEventListener listener = (MembershipEventListener) listeners_.get(i);
+            listener.postSave(membership, isNew);
+        }
+    }
+
+    private void preDelete(Membership membership) throws Exception {
+        for (int i = 0; i < listeners_.size(); i++) {
+            MembershipEventListener listener = (MembershipEventListener) listeners_.get(i);
+            listener.preDelete(membership);
+        }
+    }
+
+    private void postDelete(Membership membership) throws Exception {
+        for (int i = 0; i < listeners_.size(); i++) {
+            MembershipEventListener listener = (MembershipEventListener) listeners_.get(i);
+            listener.postDelete(membership);
+        }
+    }
+
+    private IdentitySession getIdentitySession() throws Exception {
+        return service_.getIdentitySession();
+    }
+
+    private String getGroupNameFromId(String groupId) {
+        String[] ids = groupId.split("/");
+
+        return ids[ids.length - 1];
+    }
+
+    private String getGroupTypeFromId(String groupId) {
+
+        String parentId = groupId.substring(0, groupId.lastIndexOf("/"));
+
+        return orgService.getConfiguration().getGroupType(parentId);
+    }
+
+    protected boolean isAssociationMapped() {
+        String mapping = orgService.getConfiguration().getAssociationMembershipType();
+
+        if (mapping != null && mapping.length() > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    protected String getAssociationMapping() {
+        return orgService.getConfiguration().getAssociationMembershipType();
+    }
+
+    protected boolean ignoreMappedMembershipType() {
+        return orgService.getConfiguration().isIgnoreMappedMembershipType();
+    }
+
+    protected boolean isCreateMembership(String typeName) {
+        if (isAssociationMapped() && getAssociationMapping().equals(typeName) && ignoreMappedMembershipType()) {
+            return false;
+        }
+        return true;
+    }
+
+    public String getPLIDMGroupName(String gtnGroupName) {
+        return orgService.getConfiguration().getPLIDMGroupName(gtnGroupName);
+    }
+
+    public String getGtnGroupName(String plidmGroupName) {
+        return orgService.getConfiguration().getGtnGroupName(plidmGroupName);
+    }
 }

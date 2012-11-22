@@ -18,14 +18,20 @@
  */
 package org.exoplatform.application.registry.impl;
 
-import org.chromattic.api.annotations.*;
+import java.util.Date;
+import java.util.List;
+
+import org.chromattic.api.annotations.FormattedBy;
+import org.chromattic.api.annotations.Id;
+import org.chromattic.api.annotations.ManyToOne;
+import org.chromattic.api.annotations.Name;
+import org.chromattic.api.annotations.NamingPrefix;
+import org.chromattic.api.annotations.PrimaryType;
+import org.chromattic.api.annotations.Property;
 import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.Workspace;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -34,54 +40,48 @@ import java.util.List;
 @PrimaryType(name = "app:application")
 @FormattedBy(BaseEncodingObjectFormatter.class)
 @NamingPrefix("app")
-public abstract class ContentDefinition
-{
+public abstract class ContentDefinition {
 
-   @Id
-   public abstract String getId();
+    @Id
+    public abstract String getId();
 
-   @Name
-   public abstract String getName();
+    @Name
+    public abstract String getName();
 
-   @Property(name = "gtn:name")
-   public abstract String getDisplayName();
+    @Property(name = "gtn:name")
+    public abstract String getDisplayName();
 
-   public abstract void setDisplayName(String displayName);
+    public abstract void setDisplayName(String displayName);
 
-   @Property(name = "gtn:description")
-   public abstract String getDescription();
+    @Property(name = "gtn:description")
+    public abstract String getDescription();
 
-   public abstract void setDescription(String description);
+    public abstract void setDescription(String description);
 
-   @Property(name = "app:creationdate")
-   public abstract Date getCreationDate();
+    @Property(name = "app:creationdate")
+    public abstract Date getCreationDate();
 
-   public abstract void setCreationDate(Date date);
+    public abstract void setCreationDate(Date date);
 
-   @Property(name = "app:lastmodificationdate")
-   public abstract Date getLastModificationDate();
+    @Property(name = "app:lastmodificationdate")
+    public abstract Date getLastModificationDate();
 
-   public abstract void setLastModificationDate(Date date);
+    public abstract void setLastModificationDate(Date date);
 
-   @Property(name = "gtn:access-permissions")
-   public abstract List<String> getAccessPermissions();
+    @Property(name = "gtn:access-permissions")
+    public abstract List<String> getAccessPermissions();
 
-   public abstract void setAccessPermissions(List<String> accessPermissions);
+    public abstract void setAccessPermissions(List<String> accessPermissions);
 
-   @ManyToOne
-   public abstract CategoryDefinition getCategory();
+    @ManyToOne
+    public abstract CategoryDefinition getCategory();
 
-   public Customization getCustomization()
-   {
-      CategoryDefinition category = getCategory();
-      POMSession session = category.registry.mopManager.getSession();
-      Workspace workspace = session.getWorkspace();
-      String name = getName();
-      return workspace.getCustomizationContext().getCustomization(name);
-   }
-
-   
-
-   
+    public Customization getCustomization() {
+        CategoryDefinition category = getCategory();
+        POMSession session = category.registry.mopManager.getSession();
+        Workspace workspace = session.getWorkspace();
+        String name = getName();
+        return workspace.getCustomizationContext().getCustomization(name);
+    }
 
 }

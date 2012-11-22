@@ -19,12 +19,12 @@
 
 package org.exoplatform.web.controller.metadata;
 
-import org.exoplatform.web.controller.router.RegexFactory;
-import org.exoplatform.web.controller.router.RouterConfigException;
-import org.exoplatform.web.controller.router.Router;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.exoplatform.web.controller.router.RegexFactory;
+import org.exoplatform.web.controller.router.Router;
+import org.exoplatform.web.controller.router.RouterConfigException;
 
 /**
  * Describe a controller.
@@ -32,72 +32,60 @@ import java.util.List;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ControllerDescriptor
-{
+public class ControllerDescriptor {
 
-   /** . */
-   private final List<RouteDescriptor> routes;
+    /** . */
+    private final List<RouteDescriptor> routes;
 
-   /** . */
-   private char separatorEscape;
+    /** . */
+    private char separatorEscape;
 
-   public ControllerDescriptor()
-   {
-      this.routes = new ArrayList<RouteDescriptor>();
-      this.separatorEscape = '_';
-   }
+    public ControllerDescriptor() {
+        this.routes = new ArrayList<RouteDescriptor>();
+        this.separatorEscape = '_';
+    }
 
-   public ControllerDescriptor add(RouteDescriptor... routes)
-   {
-      if (routes == null)
-      {
-         throw new NullPointerException();
-      }
+    public ControllerDescriptor add(RouteDescriptor... routes) {
+        if (routes == null) {
+            throw new NullPointerException();
+        }
 
-      //
-      for (RouteDescriptor route : routes)
-      {
-         if (route == null)
-         {
-            throw new IllegalArgumentException();
-         }
+        //
+        for (RouteDescriptor route : routes) {
+            if (route == null) {
+                throw new IllegalArgumentException();
+            }
 
-         //
-         this.routes.add(route);
-      }
+            //
+            this.routes.add(route);
+        }
 
-      //
-      return this;
-   }
+        //
+        return this;
+    }
 
-   public ControllerDescriptor separatorEscapedBy(char c)
-   {
-      this.separatorEscape = c;
-      return this;
-   }
+    public ControllerDescriptor separatorEscapedBy(char c) {
+        this.separatorEscape = c;
+        return this;
+    }
 
-   public char getSeparatorEscape()
-   {
-      return separatorEscape;
-   }
+    public char getSeparatorEscape() {
+        return separatorEscape;
+    }
 
-   public void setSeparatorEscape(char separatorEscape)
-   {
-      this.separatorEscape = separatorEscape;
-   }
+    public void setSeparatorEscape(char separatorEscape) {
+        this.separatorEscape = separatorEscape;
+    }
 
-   public List<RouteDescriptor> getRoutes()
-   {
-      return routes;
-   }
+    public List<RouteDescriptor> getRoutes() {
+        return routes;
+    }
 
-   public Router build() throws RouterConfigException
-   {
-      return new Router(this);
-   }
+    public Router build() throws RouterConfigException {
+        return new Router(this);
+    }
 
-   public Router build(RegexFactory regexFactory) throws RouterConfigException
-   {
-      return new Router(this, regexFactory);
-   }
+    public Router build(RegexFactory regexFactory) throws RouterConfigException {
+        return new Router(this, regexFactory);
+    }
 }

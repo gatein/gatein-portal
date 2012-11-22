@@ -21,15 +21,15 @@
 -->
 
 <bundle>
-<platform>
-<users>
-<sitemap>خريطه الموقع</sitemap>
-<mylink>عناوين</mylink>
-<dashboard>لوحة القيادة</dashboard>
-<iframe> الإطار </iframe>
-<mylink>رابط  </mylink>
-<mylink-blog>رابط مدونة </mylink-blog>
-<!-- <mylink-fedora></mylink-fedora> -->
-</users>
-</platform>
+  <platform>
+    <users>
+      <sitemap>خريطه الموقع</sitemap>
+      <mylink>عناوين</mylink>
+      <dashboard>لوحة القيادة</dashboard>
+      <iframe>الإطار</iframe>
+      <mylink>رابط</mylink>
+      <mylink-blog>رابط مدونة</mylink-blog>
+      <!-- <mylink-fedora></mylink-fedora> -->
+    </users>
+  </platform>
 </bundle>

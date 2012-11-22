@@ -24,45 +24,40 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public class ByteArrayOutput implements BinaryOutput {
 
-   /** . */
-   private static final Charset UTF_8 = Charset.forName("UTF-8");
+    /** . */
+    private static final Charset UTF_8 = Charset.forName("UTF-8");
 
-   /** . */
-   private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    /** . */
+    private final ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-   public Charset getCharset()
-   {
-      return UTF_8;
-   }
+    public Charset getCharset() {
+        return UTF_8;
+    }
 
-   public void write(byte b) throws IOException
-   {
-      baos.write(b);
-   }
+    public void write(byte b) throws IOException {
+        baos.write(b);
+    }
 
-   public void write(byte[] bytes) throws IOException
-   {
-      baos.write(bytes);
-   }
+    public void write(byte[] bytes) throws IOException {
+        baos.write(bytes);
+    }
 
-   public void write(byte[] bytes, int off, int len) throws IOException
-   {
-      baos.write(bytes, off, len);
-   }
+    public void write(byte[] bytes, int off, int len) throws IOException {
+        baos.write(bytes, off, len);
+    }
 
-   public byte[] getBytes()
-   {
-      return baos.toByteArray();
-   }
+    public byte[] getBytes() {
+        return baos.toByteArray();
+    }
 
-   public String getString() throws UnsupportedEncodingException
-   {
-      return baos.toString(UTF_8.name());
-   }
+    public String getString() throws UnsupportedEncodingException {
+        return baos.toString(UTF_8.name());
+    }
 }

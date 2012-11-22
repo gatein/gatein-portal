@@ -18,29 +18,26 @@
  */
 package org.exoplatform.portal.gadget.core;
 
-import com.google.inject.Singleton;
-
-import com.google.inject.Inject;
-
 import org.apache.shindig.gadgets.http.BasicHttpFetcher;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 /**
- * The goal of Http Fetcher subclass is to overwrite the default timeout in BasicHttpFetcher 
- * which is quite short time to make a conversion if the server is slow.
- * 
+ * The goal of Http Fetcher subclass is to overwrite the default timeout in BasicHttpFetcher which is quite short time to make a
+ * conversion if the server is slow.
+ *
  * @author <a href="trong.tran@exoplatform.com">Trong Tran</a>
  * @version $Revision$
  */
 
 @Singleton
-public class ExoHttpFetcher extends BasicHttpFetcher
-{
-   private static final int DEFAULT_CONNECT_TIMEOUT_MS = 15000;
-   private static final int DEFAULT_MAX_OBJECT_SIZE = 1024 * 1024;
-   
-   @Inject
-   public ExoHttpFetcher()
-   {
-      super(DEFAULT_MAX_OBJECT_SIZE, DEFAULT_CONNECT_TIMEOUT_MS, DEFAULT_CONNECT_TIMEOUT_MS, null);
-   }
+public class ExoHttpFetcher extends BasicHttpFetcher {
+    private static final int DEFAULT_CONNECT_TIMEOUT_MS = 15000;
+    private static final int DEFAULT_MAX_OBJECT_SIZE = 1024 * 1024;
+
+    @Inject
+    public ExoHttpFetcher() {
+        super(DEFAULT_MAX_OBJECT_SIZE, DEFAULT_CONNECT_TIMEOUT_MS, DEFAULT_CONNECT_TIMEOUT_MS, null);
+    }
 }

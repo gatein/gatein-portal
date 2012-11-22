@@ -23,16 +23,14 @@ package org.exoplatform.commons.serialization.model;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public enum SerializationMode
-{
+public enum SerializationMode {
 
-   SERIALIZED,
+    SERIALIZED,
 
-   SERIALIZABLE,
+    SERIALIZABLE,
 
-   STATELESS,
+    STATELESS,
 
-   NONE
-
+    NONE
 
 }

@@ -29,26 +29,24 @@ import org.gatein.management.api.operation.model.ExportTask;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public abstract class AbstractExportTask implements ExportTask
-{
-   protected SiteKey siteKey;
+public abstract class AbstractExportTask implements ExportTask {
+    protected SiteKey siteKey;
 
-   protected AbstractExportTask(SiteKey siteKey)
-   {
-      this.siteKey = siteKey;
-   }
+    protected AbstractExportTask(SiteKey siteKey) {
+        this.siteKey = siteKey;
+    }
 
-   @Override
-   public String getEntry()
-   {
-      String siteType = siteKey.getTypeName();
+    @Override
+    public String getEntry() {
+        String siteType = siteKey.getTypeName();
 
-      String siteName = siteKey.getName();
-      if (siteName.charAt(0) == '/') siteName = siteName.substring(1, siteName.length());
+        String siteName = siteKey.getName();
+        if (siteName.charAt(0) == '/')
+            siteName = siteName.substring(1, siteName.length());
 
-      return new StringBuilder().
-         append(siteType).append("/").append(siteName).append("/").append(getXmlFileName()).toString();
-   }
+        return new StringBuilder().append(siteType).append("/").append(siteName).append("/").append(getXmlFileName())
+                .toString();
+    }
 
-   protected abstract String getXmlFileName();
+    protected abstract String getXmlFileName();
 }

@@ -22,22 +22,19 @@ package org.exoplatform.groovyscript;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TemplateCompilationException extends Exception
-{
+public class TemplateCompilationException extends Exception {
 
-   /** . */
-   private final String templateText;
+    /** . */
+    private final String templateText;
 
-   public TemplateCompilationException(Throwable cause, String templateText)
-   {
-      super(cause);
+    public TemplateCompilationException(Throwable cause, String templateText) {
+        super(cause);
 
-      //
-      this.templateText = templateText;
-   }
+        //
+        this.templateText = templateText;
+    }
 
-   public String getTemplateText()
-   {
-      return templateText;
-   }
+    public String getTemplateText() {
+        return templateText;
+    }
 }

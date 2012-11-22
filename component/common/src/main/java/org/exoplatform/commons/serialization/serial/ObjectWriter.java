@@ -19,226 +19,192 @@
 
 package org.exoplatform.commons.serialization.serial;
 
+import java.io.IOException;
+import java.io.InvalidObjectException;
+import java.io.NotSerializableException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.IdentityHashMap;
+
 import org.exoplatform.commons.serialization.SerializationContext;
 import org.exoplatform.commons.serialization.api.TypeConverter;
-import org.exoplatform.commons.serialization.model.*;
+import org.exoplatform.commons.serialization.model.ClassTypeModel;
+import org.exoplatform.commons.serialization.model.ConvertedTypeModel;
+import org.exoplatform.commons.serialization.model.FieldModel;
+import org.exoplatform.commons.serialization.model.SerializationMode;
+import org.exoplatform.commons.serialization.model.TypeModel;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-
-import java.io.*;
-import java.util.IdentityHashMap;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ObjectWriter extends ObjectOutputStream
-{
+public class ObjectWriter extends ObjectOutputStream {
 
-   /** . */
-   private static final Logger log = LoggerFactory.getLogger(ObjectWriter.class);
+    /** . */
+    private static final Logger log = LoggerFactory.getLogger(ObjectWriter.class);
 
-   /** . */
-   private final SerializationContext context;
+    /** . */
+    private final SerializationContext context;
 
-   /** . */
-   private final IdentityHashMap<Object, Integer> objectToId;
+    /** . */
+    private final IdentityHashMap<Object, Integer> objectToId;
 
-   public ObjectWriter(SerializationContext context, OutputStream out) throws IOException
-   {
-      super(out);
+    public ObjectWriter(SerializationContext context, OutputStream out) throws IOException {
+        super(out);
 
-      //
-      enableReplaceObject(true);
+        //
+        enableReplaceObject(true);
 
-      //
-      this.context = context;
-      this.objectToId = new IdentityHashMap<Object, Integer>();
-   }
+        //
+        this.context = context;
+        this.objectToId = new IdentityHashMap<Object, Integer>();
+    }
 
-   private int register(Object o)
-   {
-      int nextId = objectToId.size();
-      objectToId.put(o, nextId);
-      return nextId;
-   }
+    private int register(Object o) {
+        int nextId = objectToId.size();
+        objectToId.put(o, nextId);
+        return nextId;
+    }
 
-   private void write(Object obj, DataContainer output) throws IOException
-   {
-      Class objClass = obj.getClass();
-      TypeModel typeModel = context.getTypeDomain().getTypeModel(objClass);
+    private void write(Object obj, DataContainer output) throws IOException {
+        Class objClass = obj.getClass();
+        TypeModel typeModel = context.getTypeDomain().getTypeModel(objClass);
 
-      //
-      if (typeModel == null)
-      {
-         throw new NotSerializableException("Object " + obj + " does not have its type described");
-      }
+        //
+        if (typeModel == null) {
+            throw new NotSerializableException("Object " + obj + " does not have its type described");
+        }
 
-      //
-      if (typeModel instanceof ClassTypeModel)
-      {
-         // This is obviously unchecked because of the fact that Object.getClass() returns Class<?>
-         // need to find a work around for that
-         write((ClassTypeModel)typeModel, obj, output);
-      }
-      else
-      {
-         write((ConvertedTypeModel)typeModel, obj, output);
-      }
-   }
+        //
+        if (typeModel instanceof ClassTypeModel) {
+            // This is obviously unchecked because of the fact that Object.getClass() returns Class<?>
+            // need to find a work around for that
+            write((ClassTypeModel) typeModel, obj, output);
+        } else {
+            write((ConvertedTypeModel) typeModel, obj, output);
+        }
+    }
 
-   private <O, T> void write(ConvertedTypeModel<O, T> typeModel, O obj, DataContainer output) throws IOException
-   {
-      Class<? extends TypeConverter<O, T>> converterClass = typeModel.getConverterJavaType();
+    private <O, T> void write(ConvertedTypeModel<O, T> typeModel, O obj, DataContainer output) throws IOException {
+        Class<? extends TypeConverter<O, T>> converterClass = typeModel.getConverterJavaType();
 
-      //
-      TypeConverter<O, T> converter;
-      try
-      {
-         converter = converterClass.newInstance();
-      }
-      catch (Exception e)
-      {
-         throw new AssertionError(e);
-      }
+        //
+        TypeConverter<O, T> converter;
+        try {
+            converter = converterClass.newInstance();
+        } catch (Exception e) {
+            throw new AssertionError(e);
+        }
 
-      //
-      T target;
-      try
-      {
-         target = converter.write(obj);
-      }
-      catch (Exception e)
-      {
-         InvalidObjectException ioe = new InvalidObjectException("The object " + obj + " conversion threw an exception ");
-         ioe.initCause(e);
-         throw ioe;
-      }
-      if (target == null)
-      {
-         throw new InvalidObjectException("The object " + obj + " was converted to null by converter " + converter);
-      }
+        //
+        T target;
+        try {
+            target = converter.write(obj);
+        } catch (Exception e) {
+            InvalidObjectException ioe = new InvalidObjectException("The object " + obj + " conversion threw an exception ");
+            ioe.initCause(e);
+            throw ioe;
+        }
+        if (target == null) {
+            throw new InvalidObjectException("The object " + obj + " was converted to null by converter " + converter);
+        }
 
-      //
-      output.writeInt(DataKind.CONVERTED_OBJECT);
-      output.writeObject(typeModel.getJavaType());
-      write(target, output);
-   }
+        //
+        output.writeInt(DataKind.CONVERTED_OBJECT);
+        output.writeObject(typeModel.getJavaType());
+        write(target, output);
+    }
 
-   private <O> void write(ClassTypeModel<O> typeModel, O obj, DataContainer output) throws IOException
-   {
-      if (typeModel.getSerializationMode() == SerializationMode.SERIALIZED)
-      {
-         //
-         output.writeInt(DataKind.OBJECT);
-         output.writeInt(register(obj));
-         output.writeObject(typeModel.getJavaType());
+    private <O> void write(ClassTypeModel<O> typeModel, O obj, DataContainer output) throws IOException {
+        if (typeModel.getSerializationMode() == SerializationMode.SERIALIZED) {
+            //
+            output.writeInt(DataKind.OBJECT);
+            output.writeInt(register(obj));
+            output.writeObject(typeModel.getJavaType());
 
-         //
-         SerializationStatus status = SerializationStatus.NONE;
-         for (ClassTypeModel<? super O> currentTypeModel = typeModel;currentTypeModel != null;currentTypeModel = currentTypeModel.getSuperType())
-         {
-            if (currentTypeModel instanceof ClassTypeModel<?>)
-            {
-               for (FieldModel<?, ?> fieldModel : currentTypeModel.getFields())
-               {
-                  if (!fieldModel.isTransient())
-                  {
-//                     System.out.println("About to serialize field " + fieldModel + " of type " + currentTypeModel);
-                     Object fieldValue = fieldModel.get(obj);
-                     if (fieldValue == null)
-                     {
-                        output.writeObject(DataKind.NULL_VALUE);
-                     }
-                     else
-                     {
-                        Integer fieldValueId = objectToId.get(fieldValue);
-                        if (fieldValueId != null)
-                        {
-                           output.writeObject(DataKind.OBJECT_REF);
-                           output.writeInt(fieldValueId);
+            //
+            SerializationStatus status = SerializationStatus.NONE;
+            for (ClassTypeModel<? super O> currentTypeModel = typeModel; currentTypeModel != null; currentTypeModel = currentTypeModel
+                    .getSuperType()) {
+                if (currentTypeModel instanceof ClassTypeModel<?>) {
+                    for (FieldModel<?, ?> fieldModel : currentTypeModel.getFields()) {
+                        if (!fieldModel.isTransient()) {
+                            // System.out.println("About to serialize field " + fieldModel + " of type " + currentTypeModel);
+                            Object fieldValue = fieldModel.get(obj);
+                            if (fieldValue == null) {
+                                output.writeObject(DataKind.NULL_VALUE);
+                            } else {
+                                Integer fieldValueId = objectToId.get(fieldValue);
+                                if (fieldValueId != null) {
+                                    output.writeObject(DataKind.OBJECT_REF);
+                                    output.writeInt(fieldValueId);
+                                } else {
+                                    output.writeObject(DataKind.OBJECT);
+                                    output.writeObject(fieldValue);
+                                }
+                            }
                         }
-                        else
-                        {
-                           output.writeObject(DataKind.OBJECT);
-                           output.writeObject(fieldValue);
+                    }
+                    switch (status) {
+                        case NONE:
+                            status = SerializationStatus.FULL;
+                            break;
+                    }
+                } else {
+                    if (!currentTypeModel.getFields().isEmpty()) {
+                        switch (status) {
+                            case FULL:
+                                status = SerializationStatus.PARTIAL;
+                                break;
                         }
-                     }
-                  }
-               }
-               switch (status)
-               {
-                  case NONE:
-                     status = SerializationStatus.FULL;
-                     break;
-               }
+                    }
+                }
             }
-            else
-            {
-               if (!currentTypeModel.getFields().isEmpty())
-               {
-                  switch (status)
-                  {
-                     case FULL:
-                        status = SerializationStatus.PARTIAL;
-                        break;
-                  }
-               }
+
+            //
+            switch (status) {
+                case FULL:
+                    break;
+                case PARTIAL:
+                    log.debug("Partial serialization of object " + obj);
+                    break;
+                case NONE:
+                    throw new NotSerializableException("Type " + typeModel + " is not serializable");
             }
-         }
+        } else if (typeModel.getSerializationMode() == SerializationMode.SERIALIZABLE) {
+            output.writeInt(DataKind.SERIALIZED_OBJECT);
+            output.writeObject(obj);
+        } else {
+            throw new NotSerializableException("Type " + typeModel + " is not serializable");
+        }
+    }
 
-         //
-         switch (status)
-         {
-            case FULL:
-               break;
-            case PARTIAL:
-               log.debug("Partial serialization of object " + obj);
-               break;
-            case NONE:
-               throw new NotSerializableException("Type " + typeModel + " is not serializable");
-         }
-      }
-      else if (typeModel.getSerializationMode() == SerializationMode.SERIALIZABLE)
-      {
-         output.writeInt(DataKind.SERIALIZED_OBJECT);
-         output.writeObject(obj);
-      }
-      else
-      {
-         throw new NotSerializableException("Type " + typeModel + " is not serializable");
-      }
-   }
+    @Override
+    protected Object replaceObject(final Object obj) throws IOException {
+        if (obj == null) {
+            return null;
+        }
+        if (obj instanceof Serializable) {
+            return obj;
+        }
 
-   @Override
-   protected Object replaceObject(final Object obj) throws IOException
-   {
-      if (obj == null)
-      {
-         return null;
-      }
-      if (obj instanceof Serializable)
-      {
-         return obj;
-      }
+        //
+        DataContainer output = new DataContainer();
 
-      //
-      DataContainer output = new DataContainer();
+        //
+        Integer id = objectToId.get(obj);
+        if (id != null) {
+            output = new DataContainer();
+            output.writeInt(DataKind.OBJECT_REF);
+            output.writeObject(id);
+        } else {
+            write(obj, output);
+        }
 
-      //
-      Integer id = objectToId.get(obj);
-      if (id != null)
-      {
-         output = new DataContainer();
-         output.writeInt(DataKind.OBJECT_REF);
-         output.writeObject(id);
-      }
-      else
-      {
-         write(obj, output);
-      }
-
-      //
-      return output;
-   }
+        //
+        return output;
+    }
 }

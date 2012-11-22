@@ -22,6 +22,22 @@
 
 package org.exoplatform.portal.mop.management.binding.xml;
 
+import static org.gatein.common.xml.stax.navigator.Exceptions.*;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.createNavigator;
+import static org.gatein.common.xml.stax.navigator.StaxNavUtils.parseRequiredContent;
+import static org.gatein.common.xml.stax.writer.StaxWriterUtils.createWriter;
+import static org.gatein.common.xml.stax.writer.StaxWriterUtils.writeOptionalElement;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import javax.xml.XMLConstants;
+import javax.xml.namespace.QName;
+import javax.xml.stream.XMLStreamException;
+
 import org.exoplatform.portal.config.model.I18NString;
 import org.exoplatform.portal.config.model.LocalizedString;
 import org.exoplatform.portal.config.model.NavigationFragment;
@@ -36,270 +52,215 @@ import org.staxnav.StaxNavException;
 import org.staxnav.StaxNavigator;
 import org.staxnav.ValueType;
 
-import javax.xml.XMLConstants;
-import javax.xml.namespace.QName;
-import javax.xml.stream.XMLStreamException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import static org.gatein.common.xml.stax.navigator.Exceptions.*;
-import static org.gatein.common.xml.stax.navigator.StaxNavUtils.*;
-import static org.gatein.common.xml.stax.writer.StaxWriterUtils.*;
-
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class NavigationMarshaller implements Marshaller<PageNavigation>
-{
+public class NavigationMarshaller implements Marshaller<PageNavigation> {
 
-   @Override
-   public void marshal(PageNavigation navigation, OutputStream outputStream) throws BindingException
-   {
-      try
-      {
-         StaxWriter<Element> writer = createWriter(Element.class, outputStream);
-         marshalNavigation(writer, navigation);
-      }
-      catch (StaxNavException e)
-      {
-         throw new BindingException(e);
-      }
-      catch (XMLStreamException e)
-      {
-         throw new BindingException(e);
-      }
-   }
+    @Override
+    public void marshal(PageNavigation navigation, OutputStream outputStream) throws BindingException {
+        try {
+            StaxWriter<Element> writer = createWriter(Element.class, outputStream);
+            marshalNavigation(writer, navigation);
+        } catch (StaxNavException e) {
+            throw new BindingException(e);
+        } catch (XMLStreamException e) {
+            throw new BindingException(e);
+        }
+    }
 
-   @Override
-   public PageNavigation unmarshal(InputStream is) throws BindingException
-   {
-      try
-      {
-         StaxNavigator<Element> navigator = createNavigator(Element.class, Element.UNKNOWN, is);
-         return unmarshalNavigation(navigator);
-      }
-      catch (StaxNavException e)
-      {
-         throw new BindingException(e);
-      }
-   }
+    @Override
+    public PageNavigation unmarshal(InputStream is) throws BindingException {
+        try {
+            StaxNavigator<Element> navigator = createNavigator(Element.class, Element.UNKNOWN, is);
+            return unmarshalNavigation(navigator);
+        } catch (StaxNavException e) {
+            throw new BindingException(e);
+        }
+    }
 
-   private void marshalNavigation(StaxWriter<Element> writer, PageNavigation navigation) throws XMLStreamException
-   {
-      writer.writeStartElement(Element.NODE_NAVIGATION);
+    private void marshalNavigation(StaxWriter<Element> writer, PageNavigation navigation) throws XMLStreamException {
+        writer.writeStartElement(Element.NODE_NAVIGATION);
 
-      // Write gatein_objects xml namespace
-      Utils.writeGateinObjectsNamespace(writer);
+        // Write gatein_objects xml namespace
+        Utils.writeGateinObjectsNamespace(writer);
 
-      // Priority
-      writer.writeElement(Element.PRIORITY, WritableValueTypes.INTEGER, navigation.getPriority());
+        // Priority
+        writer.writeElement(Element.PRIORITY, WritableValueTypes.INTEGER, navigation.getPriority());
 
-      // Page nodes
-      ArrayList<NavigationFragment> fragments = navigation.getFragments();
-      for (NavigationFragment fragment : fragments)
-      {
-         writer.writeStartElement(Element.PAGE_NODES);
-         if (fragment.getParentURI() != null)
-         {
-            String parentUri = fragment.getParentURI();
-            writeOptionalElement(writer, Element.PARENT_URI, parentUri);
-         }
-
-         Collection<PageNode> nodes = fragment.getNodes();
-         if (nodes != null && !nodes.isEmpty())
-         {
-            for (PageNode node : nodes)
-            {
-               marshallNode(writer, node);
+        // Page nodes
+        ArrayList<NavigationFragment> fragments = navigation.getFragments();
+        for (NavigationFragment fragment : fragments) {
+            writer.writeStartElement(Element.PAGE_NODES);
+            if (fragment.getParentURI() != null) {
+                String parentUri = fragment.getParentURI();
+                writeOptionalElement(writer, Element.PARENT_URI, parentUri);
             }
-         }
-         writer.writeEndElement(); // End page-nodes
-      }
 
-      writer.writeEndElement(); // End node-navigation
-   }
-
-   public void marshallNode(StaxWriter<Element> writer, PageNode node) throws XMLStreamException
-   {
-      writer.writeStartElement(Element.NODE);
-      writer.writeElement(Element.NAME, node.getName());
-
-      if (node.getLabels() != null)
-      {
-         for (LocalizedString label : node.getLabels())
-         {
-            if (label.getValue() == null) continue;
-            
-            writer.writeStartElement(Element.LABEL);
-            if (label.getLang() != null)
-            {
-               String localeString = label.getLang().getLanguage();
-               if (localeString == null)
-               {
-                  throw new XMLStreamException("Language was null for locale " + label.getLang());
-               }
-               String country = label.getLang().getCountry();
-               if (country != null && country.length() > 0)
-               {
-                  localeString += "-" + country.toLowerCase();
-               }
-
-               writer.writeAttribute(new QName(XMLConstants.XML_NS_URI, "lang", XMLConstants.XML_NS_PREFIX), localeString);
+            Collection<PageNode> nodes = fragment.getNodes();
+            if (nodes != null && !nodes.isEmpty()) {
+                for (PageNode node : nodes) {
+                    marshallNode(writer, node);
+                }
             }
-            writer.writeContent(label.getValue()).writeEndElement();
-         }
-      }
+            writer.writeEndElement(); // End page-nodes
+        }
 
-      writeOptionalElement(writer, Element.ICON, node.getIcon());
+        writer.writeEndElement(); // End node-navigation
+    }
 
-      writeOptionalElement(writer, Element.START_PUBLICATION_DATE, WritableValueTypes.DATE_TIME, node.getStartPublicationDate());
-      writeOptionalElement(writer, Element.END_PUBLICATION_DATE, WritableValueTypes.DATE_TIME, node.getEndPublicationDate());
+    public void marshallNode(StaxWriter<Element> writer, PageNode node) throws XMLStreamException {
+        writer.writeStartElement(Element.NODE);
+        writer.writeElement(Element.NAME, node.getName());
 
-      String visibility = (node.getVisibility() == null) ? null : node.getVisibility().name();
-      writeOptionalElement(writer, Element.VISIBILITY, visibility);
-      writeOptionalElement(writer, Element.PAGE_REFERENCE, node.getPageReference());
+        if (node.getLabels() != null) {
+            for (LocalizedString label : node.getLabels()) {
+                if (label.getValue() == null)
+                    continue;
 
-      // Marshall children
-      List<PageNode> children = node.getNodes();
-      if (children != null && !children.isEmpty())
-      {
-         for (PageNode child : children)
-         {
-            marshallNode(writer, child);
-         }
-      }
+                writer.writeStartElement(Element.LABEL);
+                if (label.getLang() != null) {
+                    String localeString = label.getLang().getLanguage();
+                    if (localeString == null) {
+                        throw new XMLStreamException("Language was null for locale " + label.getLang());
+                    }
+                    String country = label.getLang().getCountry();
+                    if (country != null && country.length() > 0) {
+                        localeString += "-" + country.toLowerCase();
+                    }
 
-      writer.writeEndElement(); // End of node
-   }
-
-   private PageNavigation unmarshalNavigation(StaxNavigator<Element> navigator) throws StaxNavException
-   {
-      PageNavigation navigation = new PageNavigation();
-
-      if (navigator.getName() == Element.NODE_NAVIGATION)
-      {
-         Element next = navigator.child();
-         if (next != Element.PRIORITY)
-         {
-            throw expectedElement(navigator, Element.PRIORITY);
-         }
-         Integer priority = parseRequiredContent(navigator, ValueType.INTEGER);
-         navigation.setPriority(priority);
-
-         next = navigator.sibling();
-         if (next == Element.PAGE_NODES)
-         {
-            for (StaxNavigator<Element> fork: navigator.fork(Element.PAGE_NODES))
-            {
-               NavigationFragment fragment = new NavigationFragment();
-               navigation.addFragment(fragment);
-
-               next = fork.child();
-               if (next == Element.PARENT_URI)
-               {
-                  String parentUri = fork.getContent();
-                  if (parentUri == null)
-                  {
-                     parentUri = "";
-                  }
-                  else if (parentUri.charAt(0) == '/')
-                  {
-                     parentUri = parentUri.substring(1, parentUri.length());
-                  }
-                  fragment.setParentURI(parentUri);
-
-                  next = fork.sibling();
-               }
-
-               if (next == Element.NODE)
-               {
-                  ArrayList<PageNode> nodes = new ArrayList<PageNode>();
-                  for (StaxNavigator<Element> nodeFork : fork.fork(Element.NODE))
-                  {
-                     nodes.add(unmarshalNode(nodeFork));
-                  }
-                  fragment.setNodes(nodes);
-               }
-               else if (next != null)
-               {
-                  throw unknownElement(fork);
-               }
+                    writer.writeAttribute(new QName(XMLConstants.XML_NS_URI, "lang", XMLConstants.XML_NS_PREFIX), localeString);
+                }
+                writer.writeContent(label.getValue()).writeEndElement();
             }
-         }
-         else if (next != null)
-         {
-            throw expectedElement(navigator, Element.PAGE_NODES);
-         }
+        }
 
-         return navigation;
-      }
-      else
-      {
-         throw unknownElement(navigator);
-      }
-   }
+        writeOptionalElement(writer, Element.ICON, node.getIcon());
 
-   private PageNode unmarshalNode(StaxNavigator<Element> navigator) throws StaxNavException
-   {
-      PageNode node = new PageNode();
-      I18NString labels = new I18NString();
-      ArrayList<PageNode> children = new ArrayList<PageNode>();
+        writeOptionalElement(writer, Element.START_PUBLICATION_DATE, WritableValueTypes.DATE_TIME,
+                node.getStartPublicationDate());
+        writeOptionalElement(writer, Element.END_PUBLICATION_DATE, WritableValueTypes.DATE_TIME, node.getEndPublicationDate());
 
-      Element current = navigator.child();
-      while (current != null)
-      {
-         switch (navigator.getName())
-         {
-            case URI: // For backwards compatibility
-               current = navigator.sibling();
-               break;
-            case NAME:
-               node.setName(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case LABEL:
-               labels.add(Utils.parseLocalizedString(navigator));
-               current = navigator.sibling();
-               break;
-            case ICON:
-               node.setIcon(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case START_PUBLICATION_DATE:
-               node.setStartPublicationDate(navigator.parseContent(ValueType.DATE_TIME));
-               current = navigator.sibling();
-               break;
-            case END_PUBLICATION_DATE:
-               node.setEndPublicationDate(navigator.parseContent(ValueType.DATE_TIME));
-               current = navigator.sibling();
-               break;
-            case VISIBILITY:
-               node.setVisibility(navigator.parseContent(ValueType.get(Visibility.class)));
-               current = navigator.sibling();
-               break;
-            case PAGE_REFERENCE:
-               node.setPageReference(navigator.getContent());
-               current = navigator.sibling();
-               break;
-            case NODE:
-               PageNode child = unmarshalNode(navigator.fork());
-               children.add(child);
-               current = navigator.sibling();
-               break;
-            case UNKNOWN:
-               throw unknownElement(navigator);
-            default:
-               throw unexpectedElement(navigator);
-         }
-      }
+        String visibility = (node.getVisibility() == null) ? null : node.getVisibility().name();
+        writeOptionalElement(writer, Element.VISIBILITY, visibility);
+        writeOptionalElement(writer, Element.PAGE_REFERENCE, node.getPageReference());
 
-      node.setLabels(labels);
-      node.setChildren(children);
+        // Marshall children
+        List<PageNode> children = node.getNodes();
+        if (children != null && !children.isEmpty()) {
+            for (PageNode child : children) {
+                marshallNode(writer, child);
+            }
+        }
 
-      return node;
-   }
+        writer.writeEndElement(); // End of node
+    }
+
+    private PageNavigation unmarshalNavigation(StaxNavigator<Element> navigator) throws StaxNavException {
+        PageNavigation navigation = new PageNavigation();
+
+        if (navigator.getName() == Element.NODE_NAVIGATION) {
+            Element next = navigator.child();
+            if (next != Element.PRIORITY) {
+                throw expectedElement(navigator, Element.PRIORITY);
+            }
+            Integer priority = parseRequiredContent(navigator, ValueType.INTEGER);
+            navigation.setPriority(priority);
+
+            next = navigator.sibling();
+            if (next == Element.PAGE_NODES) {
+                for (StaxNavigator<Element> fork : navigator.fork(Element.PAGE_NODES)) {
+                    NavigationFragment fragment = new NavigationFragment();
+                    navigation.addFragment(fragment);
+
+                    next = fork.child();
+                    if (next == Element.PARENT_URI) {
+                        String parentUri = fork.getContent();
+                        if (parentUri == null) {
+                            parentUri = "";
+                        } else if (parentUri.charAt(0) == '/') {
+                            parentUri = parentUri.substring(1, parentUri.length());
+                        }
+                        fragment.setParentURI(parentUri);
+
+                        next = fork.sibling();
+                    }
+
+                    if (next == Element.NODE) {
+                        ArrayList<PageNode> nodes = new ArrayList<PageNode>();
+                        for (StaxNavigator<Element> nodeFork : fork.fork(Element.NODE)) {
+                            nodes.add(unmarshalNode(nodeFork));
+                        }
+                        fragment.setNodes(nodes);
+                    } else if (next != null) {
+                        throw unknownElement(fork);
+                    }
+                }
+            } else if (next != null) {
+                throw expectedElement(navigator, Element.PAGE_NODES);
+            }
+
+            return navigation;
+        } else {
+            throw unknownElement(navigator);
+        }
+    }
+
+    private PageNode unmarshalNode(StaxNavigator<Element> navigator) throws StaxNavException {
+        PageNode node = new PageNode();
+        I18NString labels = new I18NString();
+        ArrayList<PageNode> children = new ArrayList<PageNode>();
+
+        Element current = navigator.child();
+        while (current != null) {
+            switch (navigator.getName()) {
+                case URI: // For backwards compatibility
+                    current = navigator.sibling();
+                    break;
+                case NAME:
+                    node.setName(navigator.getContent());
+                    current = navigator.sibling();
+                    break;
+                case LABEL:
+                    labels.add(Utils.parseLocalizedString(navigator));
+                    current = navigator.sibling();
+                    break;
+                case ICON:
+                    node.setIcon(navigator.getContent());
+                    current = navigator.sibling();
+                    break;
+                case START_PUBLICATION_DATE:
+                    node.setStartPublicationDate(navigator.parseContent(ValueType.DATE_TIME));
+                    current = navigator.sibling();
+                    break;
+                case END_PUBLICATION_DATE:
+                    node.setEndPublicationDate(navigator.parseContent(ValueType.DATE_TIME));
+                    current = navigator.sibling();
+                    break;
+                case VISIBILITY:
+                    node.setVisibility(navigator.parseContent(ValueType.get(Visibility.class)));
+                    current = navigator.sibling();
+                    break;
+                case PAGE_REFERENCE:
+                    node.setPageReference(navigator.getContent());
+                    current = navigator.sibling();
+                    break;
+                case NODE:
+                    PageNode child = unmarshalNode(navigator.fork());
+                    children.add(child);
+                    current = navigator.sibling();
+                    break;
+                case UNKNOWN:
+                    throw unknownElement(navigator);
+                default:
+                    throw unexpectedElement(navigator);
+            }
+        }
+
+        node.setLabels(labels);
+        node.setChildren(children);
+
+        return node;
+    }
 }

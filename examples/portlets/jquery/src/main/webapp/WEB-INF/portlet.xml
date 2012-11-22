@@ -25,21 +25,21 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
              version="1.0">
 
-   <portlet>
-      <description xml:lang="EN">JQuery Sample Portlet</description>
-      <portlet-name>JQueryPortlet</portlet-name>
-      <display-name xml:lang="EN">JQuery Portlet</display-name>
-      <portlet-class>org.gatein.portal.samples.jquery.JQueryPortlet</portlet-class>
+  <portlet>
+    <description xml:lang="EN">JQuery Sample Portlet</description>
+    <portlet-name>JQueryPortlet</portlet-name>
+    <display-name xml:lang="EN">JQuery Portlet</display-name>
+    <portlet-class>org.gatein.portal.samples.jquery.JQueryPortlet</portlet-class>
 
-      <supports>
-         <mime-type>text/html</mime-type>
-      </supports>
+    <supports>
+      <mime-type>text/html</mime-type>
+    </supports>
 
-      <portlet-info>
-         <title>JQuery Portlet</title>
-         <short-title>JQuery Portlet</short-title>
-         <keywords>Sample</keywords>
-      </portlet-info>
-   </portlet>
+    <portlet-info>
+      <title>JQuery Portlet</title>
+      <short-title>JQuery Portlet</short-title>
+      <keywords>Sample</keywords>
+    </portlet-info>
+  </portlet>
 
 </portlet-app>

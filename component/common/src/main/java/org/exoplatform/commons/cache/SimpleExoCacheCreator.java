@@ -19,6 +19,8 @@
 
 package org.exoplatform.commons.cache;
 
+import java.io.Serializable;
+
 import org.exoplatform.services.cache.ExoCache;
 import org.exoplatform.services.cache.ExoCacheConfig;
 import org.exoplatform.services.cache.ExoCacheInitException;
@@ -26,33 +28,28 @@ import org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache;
 import org.exoplatform.services.cache.impl.jboss.ExoCacheCreator;
 import org.jboss.cache.Cache;
 
-import java.io.Serializable;
-
 /**
  * Gives more flexibility in GateIn cache usage.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class SimpleExoCacheCreator implements ExoCacheCreator
-{
-   public ExoCache<Serializable, Object> create(ExoCacheConfig config, Cache<Serializable, Object> jbossCache) throws ExoCacheInitException
-   {
-      ExoCache<Serializable, Object> simple = new ConcurrentFIFOExoCache<Serializable, Object>();
-      simple.setName(config.getName());
-      simple.setLabel(config.getLabel());
-      simple.setMaxSize(config.getMaxSize());
-      simple.setLiveTime(config.getLiveTime());
-      return simple;
-   }
+public class SimpleExoCacheCreator implements ExoCacheCreator {
+    public ExoCache<Serializable, Object> create(ExoCacheConfig config, Cache<Serializable, Object> jbossCache)
+            throws ExoCacheInitException {
+        ExoCache<Serializable, Object> simple = new ConcurrentFIFOExoCache<Serializable, Object>();
+        simple.setName(config.getName());
+        simple.setLabel(config.getLabel());
+        simple.setMaxSize(config.getMaxSize());
+        simple.setLiveTime(config.getLiveTime());
+        return simple;
+    }
 
-   public Class<? extends ExoCacheConfig> getExpectedConfigType()
-   {
-      return ExoCacheConfig.class;
-   }
+    public Class<? extends ExoCacheConfig> getExpectedConfigType() {
+        return ExoCacheConfig.class;
+    }
 
-   public String getExpectedImplementation()
-   {
-      return "simple";
-   }
+    public String getExpectedImplementation() {
+        return "simple";
+    }
 }

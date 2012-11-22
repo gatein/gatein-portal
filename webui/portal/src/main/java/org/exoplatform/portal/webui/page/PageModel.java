@@ -18,51 +18,45 @@
  */
 package org.exoplatform.portal.webui.page;
 
-import org.exoplatform.portal.mop.page.PageContext;
-
 import java.util.List;
+
+import org.exoplatform.portal.mop.page.PageContext;
 
 /**
  * @author <a href="mailto:haithanh0809@gmail.com">Hai Thanh Nguyen</a>
  * @version $Id$
  *
  */
-public class PageModel
-{
-   private final String pageId;
-   
-   private final String title;
-   
-   private final String[] accessPermissions;
-   
-   private final String editPermission;
-   
-   PageModel(PageContext context)
-   {
-      pageId = context.getKey().format();
-      title = context.getState().getDisplayName();
-      List<String> list = context.getState().getAccessPermissions();
-      accessPermissions = list.toArray(new String[list.size()]);
-      editPermission = context.getState().getEditPermission();
-   }
+public class PageModel {
+    private final String pageId;
 
-   public String getPageId()
-   {
-      return pageId;
-   }
+    private final String title;
 
-   public String getTitle()
-   {
-      return title;
-   }
+    private final String[] accessPermissions;
 
-   public String[] getAccessPermissions()
-   {
-      return accessPermissions;
-   }
+    private final String editPermission;
 
-   public String getEditPermission()
-   {
-      return editPermission;
-   }
+    PageModel(PageContext context) {
+        pageId = context.getKey().format();
+        title = context.getState().getDisplayName();
+        List<String> list = context.getState().getAccessPermissions();
+        accessPermissions = list.toArray(new String[list.size()]);
+        editPermission = context.getState().getEditPermission();
+    }
+
+    public String getPageId() {
+        return pageId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String[] getAccessPermissions() {
+        return accessPermissions;
+    }
+
+    public String getEditPermission() {
+        return editPermission;
+    }
 }

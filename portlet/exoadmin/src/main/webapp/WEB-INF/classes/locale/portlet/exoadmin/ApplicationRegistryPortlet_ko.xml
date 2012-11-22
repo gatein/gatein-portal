@@ -40,7 +40,7 @@
     <msg>
       <changeNotExist>데이터베이스에 더 이상 애플리케이션을 수정하여 저장할 수 없습니다.</changeNotExist>
     </msg>
-    <label />
+    <label/>
   </application>
   <gadget>
     <msg>
@@ -76,7 +76,7 @@
       <importAll>이 실행은 자동으로 카테고리를 생성하고 모든 포틀릿과 가젯을 가져옵니다.</importAll>
       <deleteCategory>이 카테고리와 하위의 모든 애플리케이션을 삭제하시겠습니까?</deleteCategory>
       <deleteApplication>이 애플리케이션을 삭제하시겠습니까?</deleteApplication>
-      <emptyCategory>이 카테고리에  애플리이션이 존재하지 않습니다. 애플리케이션을 추가하시려면 (+) 버튼을 클릭하십시오.</emptyCategory>
+      <emptyCategory>이 카테고리에 애플리이션이 존재하지 않습니다. 애플리케이션을 추가하시려면 (+) 버튼을 클릭하십시오.</emptyCategory>
       <noCategory>카테고리가 존재하지 않습니다. 카테고리 추가하시려면 "카테고리 추가"나 "자동 삽입" 버튼을 클릭하십시오.</noCategory>
       <deleteCategoryInUse>사용중인 카테고리를 삭제할 수 없습니다.</deleteCategoryInUse>
       <deleteApplicationInUse>사용중인 애플리케이션을 삭제할 수 없습니다.</deleteApplicationInUse>
@@ -84,17 +84,17 @@
       <applicationNoExist>이 애플리케이션이 데이터베이스에 더 이상 존재하지 않습니다</applicationNoExist>
     </msg>
   </UIOrganizer>
-  
+
   <!--
   ##org.exoplatform.applicationregistry.webui.component.UIApplicationRegistryEditMode
   -->
   <UIApplicationRegistryEditMode>
-  	<title>애플리케이션 삽입</title>
-  	<label>
-  		<showImport>표시 변경</showImport>
-  	</label>
+    <title>애플리케이션 삽입</title>
+    <label>
+      <showImport>표시 변경</showImport>
+    </label>
   </UIApplicationRegistryEditMode>
-  
+
   <!--
   ##org.exoplatform.applicationregistry.webui.component.UIApplicationInfo
   -->
@@ -229,8 +229,8 @@
       <reference>레퍼런스:</reference>
       <categories>카테고리:</categories>
       <categories>
-      	<guide>대시보드에서 사용하시려면 이 가젯을 카테고리에 추가하셔야 합니다.</guide>
-      	<clickHere>카테고리로 추가하시려면 여기를 클릭하십시오.</clickHere>
+        <guide>대시보드에서 사용하시려면 이 가젯을 카테고리에 추가하셔야 합니다.</guide>
+        <clickHere>카테고리로 추가하시려면 여기를 클릭하십시오.</clickHere>
       </categories>
     </label>
     <title>
@@ -279,10 +279,10 @@
       <membership>멤버십</membership>
     </header>
   </UIListPermissionSelector>
-	<UIListPermissionSelectorPopup>
-		<title>
-			<ListPermissionSelector>퍼미션 선택</ListPermissionSelector>
-		</title>
-	</UIListPermissionSelectorPopup>
+  <UIListPermissionSelectorPopup>
+    <title>
+      <ListPermissionSelector>퍼미션 선택</ListPermissionSelector>
+    </title>
+  </UIListPermissionSelectorPopup>
 </bundle>
 

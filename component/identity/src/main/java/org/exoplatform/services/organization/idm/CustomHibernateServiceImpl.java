@@ -23,6 +23,8 @@
 
 package org.exoplatform.services.organization.idm;
 
+import java.security.PrivilegedAction;
+
 import org.exoplatform.commons.utils.SecurityHelper;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.cache.CacheService;
@@ -30,88 +32,68 @@ import org.exoplatform.services.database.impl.HibernateServiceImpl;
 import org.hibernate.SessionFactory;
 import org.hibernate.SessionFactoryObserver;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.integrator.spi.Integrator;
 import org.hibernate.service.BootstrapServiceRegistry;
 import org.hibernate.service.BootstrapServiceRegistryBuilder;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
-import org.hibernate.service.classloading.internal.ClassLoaderServiceImpl;
-import org.hibernate.service.classloading.spi.ClassLoaderService;
-import org.hibernate.service.internal.BootstrapServiceRegistryImpl;
 import org.hibernate.service.internal.StandardServiceRegistryImpl;
-
-import java.security.PrivilegedAction;
-import java.util.LinkedHashSet;
 
 /**
  * Custom implementation of {@link org.exoplatform.services.database.HibernateService} compatible with Hibernate4
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class CustomHibernateServiceImpl extends HibernateServiceImpl
-{
-   private SessionFactory sessFactory;
+public class CustomHibernateServiceImpl extends HibernateServiceImpl {
+    private SessionFactory sessFactory;
 
-   public CustomHibernateServiceImpl(InitParams initParams, CacheService cacheService)
-   {
-      super(initParams, cacheService);
-   }
+    public CustomHibernateServiceImpl(InitParams initParams, CacheService cacheService) {
+        super(initParams, cacheService);
+    }
 
-   @Override
-   public SessionFactory getSessionFactory()
-   {
-      if (sessFactory == null)
-      {
-         sessFactory = SecurityHelper.doPrivilegedAction(new PrivilegedAction<SessionFactory>()
-         {
-            public SessionFactory run()
-            {
-               return buildSessionFactory();
+    @Override
+    public SessionFactory getSessionFactory() {
+        if (sessFactory == null) {
+            sessFactory = SecurityHelper.doPrivilegedAction(new PrivilegedAction<SessionFactory>() {
+                public SessionFactory run() {
+                    return buildSessionFactory();
+                }
+            });
+        }
+        return sessFactory;
+    }
+
+    // We need custom ClassloaderService, which is able to locate our UserTransactionJtaPlatform class from tccl.
+    // Default ClassLoaderServiceImpl is bootstrapped with no-arg constructor, so it uses only Hibernate Classloader
+    // TODO: Remove once https://issues.jboss.org/browse/HIBERNATE-137 will be fixed (likely whole class can be removed)
+    protected SessionFactory buildSessionFactory() {
+        Configuration conf = getHibernateConfiguration();
+
+        BootstrapServiceRegistry bootstrapRegistry = createHibernateBootstrapServiceRegistry();
+
+        final ServiceRegistry serviceRegistry = new ServiceRegistryBuilder(bootstrapRegistry).applySettings(
+                conf.getProperties()).buildServiceRegistry();
+        conf.setSessionFactoryObserver(new SessionFactoryObserver() {
+            @Override
+            public void sessionFactoryCreated(SessionFactory factory) {
             }
-         });
-      }
-      return sessFactory;
-   }
 
-   // We need custom ClassloaderService, which is able to locate our UserTransactionJtaPlatform class from tccl.
-   // Default ClassLoaderServiceImpl is bootstrapped with no-arg constructor, so it uses only Hibernate Classloader
-   // TODO: Remove once https://issues.jboss.org/browse/HIBERNATE-137 will be fixed (likely whole class can be removed)
-   protected SessionFactory buildSessionFactory()
-   {
-      Configuration conf = getHibernateConfiguration();
-
-      BootstrapServiceRegistry bootstrapRegistry = createHibernateBootstrapServiceRegistry();
-
-      final ServiceRegistry serviceRegistry =  new ServiceRegistryBuilder(bootstrapRegistry)
-            .applySettings(conf.getProperties())
-            .buildServiceRegistry();
-      conf.setSessionFactoryObserver(
-            new SessionFactoryObserver()
-            {
-               @Override
-               public void sessionFactoryCreated(SessionFactory factory)
-               {
-               }
-
-               @Override
-               public void sessionFactoryClosed(SessionFactory factory)
-               {
-                  ((StandardServiceRegistryImpl) serviceRegistry).destroy();
-               }
+            @Override
+            public void sessionFactoryClosed(SessionFactory factory) {
+                ((StandardServiceRegistryImpl) serviceRegistry).destroy();
             }
-      );
-      return conf.buildSessionFactory(serviceRegistry);
-   }
+        });
+        return conf.buildSessionFactory(serviceRegistry);
+    }
 
-   /**
-    * @return bootstrapServiceRegistry, which is using classloaderService, which is able to find classes from tccl,
-    * hibernate classloader and system classloader
-    */
-   protected BootstrapServiceRegistry createHibernateBootstrapServiceRegistry()
-   {
-      ClassLoader tccl = Thread.currentThread().getContextClassLoader();
-      ClassLoader hibernateCl = BootstrapServiceRegistry.class.getClassLoader();
-      return new BootstrapServiceRegistryBuilder().withApplicationClassLoader(tccl).withHibernateClassLoader(hibernateCl).build();
-   }
+    /**
+     * @return bootstrapServiceRegistry, which is using classloaderService, which is able to find classes from tccl, hibernate
+     *         classloader and system classloader
+     */
+    protected BootstrapServiceRegistry createHibernateBootstrapServiceRegistry() {
+        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+        ClassLoader hibernateCl = BootstrapServiceRegistry.class.getClassLoader();
+        return new BootstrapServiceRegistryBuilder().withApplicationClassLoader(tccl).withHibernateClassLoader(hibernateCl)
+                .build();
+    }
 
 }

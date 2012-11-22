@@ -24,34 +24,32 @@ package org.exoplatform.portal.mop.importer;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public enum ImportMode
-{
+public enum ImportMode {
 
-   /**
-    * Import data when it does not exist, otherwise do nothing.
-    */
-   CONSERVE(new ImportConfig(false, false, true)),
+    /**
+     * Import data when it does not exist, otherwise do nothing.
+     */
+    CONSERVE(new ImportConfig(false, false, true)),
 
-   /**
-    * Import data when it does not exist, otherwise performs a strategy that adds new data only.
-    */
-   INSERT(new ImportConfig(false, false, true)),
+    /**
+     * Import data when it does not exist, otherwise performs a strategy that adds new data only.
+     */
+    INSERT(new ImportConfig(false, false, true)),
 
-   /**
-    * Import data when it does not exist, update data when it exists.
-    */
-   MERGE(new ImportConfig(false, true, true)),
+    /**
+     * Import data when it does not exist, update data when it exists.
+     */
+    MERGE(new ImportConfig(false, true, true)),
 
-   /**
-    * Overwrite data whatsoever.
-    */
-   OVERWRITE(new ImportConfig(true, true, true));
+    /**
+     * Overwrite data whatsoever.
+     */
+    OVERWRITE(new ImportConfig(true, true, true));
 
-   /** . */
-   public final ImportConfig config;
+    /** . */
+    public final ImportConfig config;
 
-   ImportMode(ImportConfig config)
-   {
-      this.config = config;
-   }
+    ImportMode(ImportConfig config) {
+        this.config = config;
+    }
 }

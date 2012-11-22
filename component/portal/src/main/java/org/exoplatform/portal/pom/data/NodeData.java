@@ -18,130 +18,101 @@
  */
 package org.exoplatform.portal.pom.data;
 
-import org.exoplatform.portal.mop.Visibility;
-
 import java.util.Date;
 
+import org.exoplatform.portal.mop.Visibility;
+
 /**
-* @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
-* @version $Revision$
-*/
-public class NodeData extends ModelData
-{
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
+ * @version $Revision$
+ */
+public class NodeData extends ModelData {
 
-   /** . */
-   private final String uri;
+    /** . */
+    private final String uri;
 
-   /** . */
-   private final String label;
+    /** . */
+    private final String label;
 
-   /** . */
-   private final String icon;
+    /** . */
+    private final String icon;
 
-   /** . */
-   private final String name;
+    /** . */
+    private final String name;
 
-   /** . */
-   private final Date startPublicationDate;
+    /** . */
+    private final Date startPublicationDate;
 
-   /** . */
-   private final Date endPublicationDate;
+    /** . */
+    private final Date endPublicationDate;
 
-   /** . */
-   private final Visibility visibility;
+    /** . */
+    private final Visibility visibility;
 
-   /** . */
-   private final String pageReference;
+    /** . */
+    private final String pageReference;
 
-   /** . */
-   private final String[] children;
+    /** . */
+    private final String[] children;
 
-   public NodeData(
-      String uri,
-      String label,
-      String icon,
-      String name,
-      Date startPublicationDate,
-      Date endPublicationDate,
-      Visibility visibility,
-      String pageReference,
-      String[] children)
-   {
-      this(null, uri, label, icon, name, startPublicationDate, endPublicationDate, visibility, pageReference, children);
-   }
+    public NodeData(String uri, String label, String icon, String name, Date startPublicationDate, Date endPublicationDate,
+            Visibility visibility, String pageReference, String[] children) {
+        this(null, uri, label, icon, name, startPublicationDate, endPublicationDate, visibility, pageReference, children);
+    }
 
-   public NodeData(
-      String storageId,
-      String uri,
-      String label,
-      String icon,
-      String name,
-      Date startPublicationDate,
-      Date endPublicationDate,
-      Visibility visibility,
-      String pageReference,
-      String[] children)
-   {
-      super(storageId, null);
+    public NodeData(String storageId, String uri, String label, String icon, String name, Date startPublicationDate,
+            Date endPublicationDate, Visibility visibility, String pageReference, String[] children) {
+        super(storageId, null);
 
-      //
-      this.uri = uri;
-      this.label = label;
-      this.icon = icon;
-      this.name = name;
-      this.startPublicationDate = startPublicationDate;
-      this.endPublicationDate = endPublicationDate;
-      this.visibility = visibility;
-      this.pageReference = pageReference;
-      this.children =  children;
-   }
-   public String getURI()
-   {
-      return uri;
-   }
+        //
+        this.uri = uri;
+        this.label = label;
+        this.icon = icon;
+        this.name = name;
+        this.startPublicationDate = startPublicationDate;
+        this.endPublicationDate = endPublicationDate;
+        this.visibility = visibility;
+        this.pageReference = pageReference;
+        this.children = children;
+    }
 
-   public String getLabel()
-   {
-      return label;
-   }
+    public String getURI() {
+        return uri;
+    }
 
-   public String getIcon()
-   {
-      return icon;
-   }
+    public String getLabel() {
+        return label;
+    }
 
-   public String getName()
-   {
-      return name;
-   }
+    public String getIcon() {
+        return icon;
+    }
 
-   public Date getStartPublicationDate()
-   {
-      return startPublicationDate;
-   }
+    public String getName() {
+        return name;
+    }
 
-   public Date getEndPublicationDate()
-   {
-      return endPublicationDate;
-   }
+    public Date getStartPublicationDate() {
+        return startPublicationDate;
+    }
 
-   public Visibility getVisibility()
-   {
-      return visibility;
-   }
+    public Date getEndPublicationDate() {
+        return endPublicationDate;
+    }
 
-   public String getPageReference()
-   {
-      return pageReference;
-   }
+    public Visibility getVisibility() {
+        return visibility;
+    }
 
-   public int getChildrenCount()
-   {
-      return children.length;
-   }
+    public String getPageReference() {
+        return pageReference;
+    }
 
-   public String getChildRef(int index)
-   {
-      return children[index];
-   }
+    public int getChildrenCount() {
+        return children.length;
+    }
+
+    public String getChildRef(int index) {
+        return children[index];
+    }
 }

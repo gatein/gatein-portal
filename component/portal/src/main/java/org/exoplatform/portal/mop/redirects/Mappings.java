@@ -34,21 +34,21 @@ import org.chromattic.api.annotations.Property;
  * @version $Revision$
  */
 @PrimaryType(name = "gtn:redirectMappings")
-public abstract class Mappings
-{
+public abstract class Mappings {
 
-   @Property (name="gtn:redirectMappingUseNodeNameMatching")
-   public abstract Boolean getNodeNameMatching();
-   public abstract void setNodeNameMatching(Boolean useNodeNameMatching);
-   
-   @Property (name="gtn:redirectMappingsUnresolvedNodeMatching")
-   public abstract String getUnresolvedNodeMatching();
-   public abstract void setUnresolvedNodeMatching(String matching);
-   
-   @OneToMany
-   public abstract Map<String, NodeMap> getNodeMap();
-   
-   @Create
-   public abstract NodeMap createNode();
+    @Property(name = "gtn:redirectMappingUseNodeNameMatching")
+    public abstract Boolean getNodeNameMatching();
+
+    public abstract void setNodeNameMatching(Boolean useNodeNameMatching);
+
+    @Property(name = "gtn:redirectMappingsUnresolvedNodeMatching")
+    public abstract String getUnresolvedNodeMatching();
+
+    public abstract void setUnresolvedNodeMatching(String matching);
+
+    @OneToMany
+    public abstract Map<String, NodeMap> getNodeMap();
+
+    @Create
+    public abstract NodeMap createNode();
 }
-

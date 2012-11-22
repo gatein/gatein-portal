@@ -20,10 +20,10 @@
 -->
 
 <webui-configuration>
-  <application>     
-    <ui-component-root>org.exoplatform.toolbar.webui.component.UIAdminToolbarPortlet</ui-component-root>    
+  <application>
+    <ui-component-root>org.exoplatform.toolbar.webui.component.UIAdminToolbarPortlet</ui-component-root>
     <state-manager>org.exoplatform.webui.application.portlet.ParentAppStateManager</state-manager>
-    <application-lifecycle-listeners>       
+    <application-lifecycle-listeners>
     </application-lifecycle-listeners>
   </application>
 </webui-configuration>

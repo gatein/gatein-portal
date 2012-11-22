@@ -19,44 +19,43 @@
 
 package org.gatein.portal.samples.api;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Map;
+
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.Map;
+
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PRPPortlet extends GenericPortlet
-{
+public class PRPPortlet extends GenericPortlet {
 
-   @Override
-   protected void doView(RenderRequest req, RenderResponse resp) throws PortletException, IOException
-   {
-      resp.setContentType("text/html");
-      PrintWriter writer = resp.getWriter();
+    @Override
+    protected void doView(RenderRequest req, RenderResponse resp) throws PortletException, IOException {
+        resp.setContentType("text/html");
+        PrintWriter writer = resp.getWriter();
 
-      //
-      writer.println("Public Render Parameters<br/>");
-      writer.println("<table>");
-      for (Map.Entry<String, String[]> entry : req.getParameterMap().entrySet())
-      {
-         writer.print("<tr>");
-         writer.print("<td>");
-         writer.print(entry.getKey());
-         writer.print("</td>");
-         writer.print("<td>");
-         writer.print(entry.getValue()[0]);
-         writer.print("</td>");
-         writer.print("</tr>");
-      }
-      writer.println("</table>");
+        //
+        writer.println("Public Render Parameters<br/>");
+        writer.println("<table>");
+        for (Map.Entry<String, String[]> entry : req.getParameterMap().entrySet()) {
+            writer.print("<tr>");
+            writer.print("<td>");
+            writer.print(entry.getKey());
+            writer.print("</td>");
+            writer.print("<td>");
+            writer.print(entry.getValue()[0]);
+            writer.print("</td>");
+            writer.print("</tr>");
+        }
+        writer.println("</table>");
 
-      //
-      writer.close();
-   }
+        //
+        writer.close();
+    }
 }

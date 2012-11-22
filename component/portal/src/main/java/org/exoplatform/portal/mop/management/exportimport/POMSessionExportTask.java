@@ -29,13 +29,11 @@ import org.exoplatform.portal.pom.config.POMSession;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public abstract class POMSessionExportTask extends AbstractExportTask
-{
-   protected POMSession session;
+public abstract class POMSessionExportTask extends AbstractExportTask {
+    protected POMSession session;
 
-   public POMSessionExportTask(SiteKey siteKey, POMSession session)
-   {
-      super(siteKey);
-      this.session = session;
-   }
+    public POMSessionExportTask(SiteKey siteKey, POMSession session) {
+        super(siteKey);
+        this.session = session;
+    }
 }

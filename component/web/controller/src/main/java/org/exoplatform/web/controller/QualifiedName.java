@@ -22,194 +22,165 @@ package org.exoplatform.web.controller;
 import org.jboss.util.NullArgumentException;
 
 /**
- * <p>A qualified name that is a qualifier and a name. It can be seen as a simplified version of an XML QName
- * that retains only the prefix (qualifier) and the local name (name) and leaves out the namespace.</p>
+ * <p>
+ * A qualified name that is a qualifier and a name. It can be seen as a simplified version of an XML QName that retains only the
+ * prefix (qualifier) and the local name (name) and leaves out the namespace.
+ * </p>
  *
- * <p>Qualified names have a string representation that is equals to the concatenation of the qualifier
- * and name separated by a colon (:) character. When the </p>
+ * <p>
+ * Qualified names have a string representation that is equals to the concatenation of the qualifier and name separated by a
+ * colon (:) character. When the
+ * </p>
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class QualifiedName implements Comparable<QualifiedName>
-{
+public class QualifiedName implements Comparable<QualifiedName> {
 
-   /**
-    * Parse the string representation of a qname and returns a qualified name.
-    *
-    * @param qname the qname to parse
-    * @return the corresponding qualified name
-    * @throws NullArgumentException if the qname argument is null
-    * @throws IllegalArgumentException if the qname argument contains more than one colon character
-    */
-   public static QualifiedName parse(String qname) throws NullArgumentException, IllegalArgumentException
-   {
-      if (qname == null)
-      {
-         throw new NullPointerException("No null argument accepted");
-      }
-      if (qname.length() > 0)
-      {
-         int index = qname.indexOf(':');
-         if (index > -1)
-         {
-            return create(qname.substring(0, index), qname.substring(index + 1));
-         }
-      }
-      return create(qname);
-   }
+    /**
+     * Parse the string representation of a qname and returns a qualified name.
+     *
+     * @param qname the qname to parse
+     * @return the corresponding qualified name
+     * @throws NullArgumentException if the qname argument is null
+     * @throws IllegalArgumentException if the qname argument contains more than one colon character
+     */
+    public static QualifiedName parse(String qname) throws IllegalArgumentException {
+        if (qname == null) {
+            throw new NullPointerException("No null argument accepted");
+        }
+        if (qname.length() > 0) {
+            int index = qname.indexOf(':');
+            if (index > -1) {
+                return create(qname.substring(0, index), qname.substring(index + 1));
+            }
+        }
+        return create(qname);
+    }
 
-   /**
-    * Creates a qualified name.
-    *
-    * @param qualifier the qualifier
-    * @param name the name
-    * @return the qualified name
-    * @throws NullPointerException if any argument is null
-    * @throws IllegalArgumentException if any argument contains a colon character
-    */
-   public static QualifiedName create(String qualifier, String name) throws NullPointerException, IllegalArgumentException
-   {
-      return new QualifiedName(qualifier, name);
-   }
+    /**
+     * Creates a qualified name.
+     *
+     * @param qualifier the qualifier
+     * @param name the name
+     * @return the qualified name
+     * @throws NullPointerException if any argument is null
+     * @throws IllegalArgumentException if any argument contains a colon character
+     */
+    public static QualifiedName create(String qualifier, String name) throws NullPointerException, IllegalArgumentException {
+        return new QualifiedName(qualifier, name);
+    }
 
-   /**
-    * Creates a qualified name with an empty string qualifier.
-    *
-    * @param name the name
-    * @return the qualified name
-    * @throws NullPointerException if any argument is null
-    * @throws IllegalArgumentException if any argument contains a colon character
-    */
-   public static QualifiedName create(String name) throws NullPointerException, IllegalArgumentException
-   {
-      return new QualifiedName(name);
-   }
+    /**
+     * Creates a qualified name with an empty string qualifier.
+     *
+     * @param name the name
+     * @return the qualified name
+     * @throws NullPointerException if any argument is null
+     * @throws IllegalArgumentException if any argument contains a colon character
+     */
+    public static QualifiedName create(String name) throws NullPointerException, IllegalArgumentException {
+        return new QualifiedName(name);
+    }
 
-   /** The qualifier. */
-   private final String qualifier;
+    /** The qualifier. */
+    private final String qualifier;
 
-   /** The name. */
-   private final String name;
+    /** The name. */
+    private final String name;
 
-   /** The cached hash code. */
-   private int hashCode;
+    /** The cached hash code. */
+    private int hashCode;
 
-   private QualifiedName(String name) throws NullPointerException, IllegalArgumentException
-   {
-      this("", name);
-   }
+    private QualifiedName(String name) throws NullPointerException, IllegalArgumentException {
+        this("", name);
+    }
 
-   private QualifiedName(String qualifier, String name) throws NullPointerException, IllegalArgumentException
-   {
-      if (qualifier == null)
-      {
-         throw new NullPointerException("No null prefix accepted");
-      }
-      if (qualifier.indexOf(':') != -1)
-      {
-         throw new IllegalArgumentException("The name '" + qualifier + "' must not contain a colon character");
-      }
-      if (name == null)
-      {
-         throw new NullPointerException("No null prefix accepted");
-      }
-      if (name.indexOf(':') != -1)
-      {
-         throw new IllegalArgumentException("The name '" + name + "' must not contain a colon character");
-      }
+    private QualifiedName(String qualifier, String name) throws NullPointerException, IllegalArgumentException {
+        if (qualifier == null) {
+            throw new NullPointerException("No null prefix accepted");
+        }
+        if (qualifier.indexOf(':') != -1) {
+            throw new IllegalArgumentException("The name '" + qualifier + "' must not contain a colon character");
+        }
+        if (name == null) {
+            throw new NullPointerException("No null prefix accepted");
+        }
+        if (name.indexOf(':') != -1) {
+            throw new IllegalArgumentException("The name '" + name + "' must not contain a colon character");
+        }
 
-      //
-      this.qualifier = qualifier;
-      this.name = name;
-      this.hashCode = qualifier.hashCode() ^ name.hashCode();
-   }
+        //
+        this.qualifier = qualifier;
+        this.name = name;
+        this.hashCode = qualifier.hashCode() ^ name.hashCode();
+    }
 
-   /**
-    * Returns the qualifier.
-    *
-    * @return the qualifier
-    */
-   public String getQualifier()
-   {
-      return qualifier;
-   }
+    /**
+     * Returns the qualifier.
+     *
+     * @return the qualifier
+     */
+    public String getQualifier() {
+        return qualifier;
+    }
 
-   /**
-    * Returns the name.
-    *
-    * @return the name
-    */
-   public String getName()
-   {
-      return name;
-   }
+    /**
+     * Returns the name.
+     *
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
 
-   /**
-    * Returns the string representation.
-    *
-    * @return the string representation
-    */
-   public String getValue()
-   {
-      if (qualifier.isEmpty())
-      {
-         return name;
-      }
-      else
-      {
-         return qualifier + ":" + name;
-      }
-   }
+    /**
+     * Returns the string representation.
+     *
+     * @return the string representation
+     */
+    public String getValue() {
+        if (qualifier.isEmpty()) {
+            return name;
+        } else {
+            return qualifier + ":" + name;
+        }
+    }
 
-   @Override
-   public int hashCode()
-   {
-      return hashCode;
-   }
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (obj == this)
-      {
-         return true;
-      }
-      if (obj instanceof QualifiedName)
-      {
-         QualifiedName that = (QualifiedName)obj;
-         return qualifier.equals(that.qualifier) && name.equals(that.name);
-      }
-      return false;
-   }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof QualifiedName) {
+            QualifiedName that = (QualifiedName) obj;
+            return qualifier.equals(that.qualifier) && name.equals(that.name);
+        }
+        return false;
+    }
 
-   public int compareTo(QualifiedName o)
-   {
-      if (o == null)
-      {
-         throw new NullPointerException("No null argument accepted");
-      }
-      else if (o == this)
-      {
-         return 0;
-      }
-      else
-      {
-         int qualifierComparison = qualifier.compareTo(o.qualifier);
-         if (qualifierComparison == 0)
-         {
-            return name.compareTo(o.name);
-         }
-         else
-         {
-            return qualifierComparison;
-         }
-      }
-   }
+    public int compareTo(QualifiedName o) {
+        if (o == null) {
+            throw new NullPointerException("No null argument accepted");
+        } else if (o == this) {
+            return 0;
+        } else {
+            int qualifierComparison = qualifier.compareTo(o.qualifier);
+            if (qualifierComparison == 0) {
+                return name.compareTo(o.name);
+            } else {
+                return qualifierComparison;
+            }
+        }
+    }
 
-   @Override
-   public String toString()
-   {
-      return "QualifiedName[prefix=" + qualifier + ",name=" + name + "]";
-   }
+    @Override
+    public String toString() {
+        return "QualifiedName[prefix=" + qualifier + ",name=" + name + "]";
+    }
 }

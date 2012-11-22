@@ -26,10 +26,9 @@ import org.chromattic.api.annotations.WorkspaceName;
  * @version $Revision$
  */
 @PrimaryType(name = "nt:unstructured")
-public abstract class FooEntity
-{
+public abstract class FooEntity {
 
-   @WorkspaceName
-   public abstract String getWorkspace();
+    @WorkspaceName
+    public abstract String getWorkspace();
 
 }

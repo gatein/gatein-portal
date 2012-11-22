@@ -26,18 +26,14 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
  * @version $Revision$
  */
 @Serialized
-public class B
-{
-   public B()
-   {
-      this(true);
-   }
+public class B {
+    public B() {
+        this(true);
+    }
 
-   public B(boolean fail)
-   {
-      if (fail)
-      {
-         throw new RuntimeException();
-      }
-   }
+    public B(boolean fail) {
+        if (fail) {
+            throw new RuntimeException();
+        }
+    }
 }

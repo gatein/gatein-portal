@@ -19,6 +19,12 @@
 
 package org.exoplatform.portal.webui.application;
 
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.exoplatform.Constants;
 import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.portal.application.PortalRequestContext;
@@ -42,251 +48,201 @@ import org.gatein.pc.api.WindowState;
 import org.gatein.pc.api.cache.CacheLevel;
 import org.gatein.pc.portlet.impl.spi.AbstractPortletInvocationContext;
 
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class ExoPortletInvocationContext extends AbstractPortletInvocationContext
-{
+class ExoPortletInvocationContext extends AbstractPortletInvocationContext {
 
-   static final String INTERACTION_STATE_PARAM_NAME = "interactionstate";
-   static final String NAVIGATIONAL_STATE_PARAM_NAME = "navigationalstate";
-   static final String RESOURCE_STATE_PARAM_NAME = "resourcestate";
+    static final String INTERACTION_STATE_PARAM_NAME = "interactionstate";
+    static final String NAVIGATIONAL_STATE_PARAM_NAME = "navigationalstate";
+    static final String RESOURCE_STATE_PARAM_NAME = "resourcestate";
 
-   /** . */
-   private static final Logger log = LoggerFactory.getLogger(ExoPortletInvocationContext.class);
+    /** . */
+    private static final Logger log = LoggerFactory.getLogger(ExoPortletInvocationContext.class);
 
-   /** . */
-   private final HttpServletResponse response;
+    /** . */
+    private final HttpServletResponse response;
 
-   /** . */
-   private final HttpServletRequest request;
+    /** . */
+    private final HttpServletRequest request;
 
-   /** . */
-   private final PortalURL<UIComponent, ComponentURL> url;
+    /** . */
+    private final PortalURL<UIComponent, ComponentURL> url;
 
-   public ExoPortletInvocationContext(PortalRequestContext portalRequestContext, UIPortlet portlet)
-   {
-      super(MediaType.TEXT_HTML);
+    public ExoPortletInvocationContext(PortalRequestContext portalRequestContext, UIPortlet portlet) {
+        super(MediaType.TEXT_HTML);
 
-      //
-      ComponentURL url = portalRequestContext.createURL(ComponentURL.TYPE, portlet);
-      String path = portalRequestContext.getNodePath();
-      url.setPath(path);
+        //
+        ComponentURL url = portalRequestContext.createURL(ComponentURL.TYPE, portlet);
+        String path = portalRequestContext.getNodePath();
+        url.setPath(path);
 
-      //
-      this.request = portalRequestContext.getRequest();
-      this.response = portalRequestContext.getResponse();
-      this.url = url;
-   }
+        //
+        this.request = portalRequestContext.getRequest();
+        this.response = portalRequestContext.getResponse();
+        this.url = url;
+    }
 
-   @Override
-   public HttpServletRequest getClientRequest() throws IllegalStateException
-   {
-      return request;
-   }
+    @Override
+    public HttpServletRequest getClientRequest() throws IllegalStateException {
+        return request;
+    }
 
-   @Override
-   public HttpServletResponse getClientResponse() throws IllegalStateException
-   {
-      return response;
-   }
+    @Override
+    public HttpServletResponse getClientResponse() throws IllegalStateException {
+        return response;
+    }
 
-   public String encodeResourceURL(String url) throws IllegalArgumentException
-   {
-      return response.encodeURL(url);
-   }
+    public String encodeResourceURL(String url) throws IllegalArgumentException {
+        return response.encodeURL(url);
+    }
 
-   public String renderURL(ContainerURL containerURL, URLFormat format)
-   {
-/*
-      // todo: shouldn't we be using URLFormat to decide on the path to use at the beginning of the URL?
-      StringBuilder baseURL = new StringBuilder(this.portalRequestURI).append("?")
-         .append(PortalRequestContext.UI_COMPONENT_ID).append("=").append(this.portletId);
-*/
-      
-      //Reset query parameters
-      url.reset();
+    public String renderURL(ContainerURL containerURL, URLFormat format) {
+        /*
+         * // todo: shouldn't we be using URLFormat to decide on the path to use at the beginning of the URL? StringBuilder
+         * baseURL = new StringBuilder(this.portalRequestURI).append("?")
+         * .append(PortalRequestContext.UI_COMPONENT_ID).append("=").append(this.portletId);
+         */
 
-      String type;
-      if (containerURL instanceof RenderURL)
-      {
-         type = Constants.PORTAL_RENDER;
-      }
-      else if (containerURL instanceof ResourceURL)
-      {
-         type = Constants.PORTAL_SERVE_RESOURCE;
-      }
-      else if (containerURL instanceof ActionURL)
-      {
-         type = Constants.PORTAL_PROCESS_ACTION;
-      }
-      else
-      {
-         throw new Error("Unrecognized containerURL type");
-      }
+        // Reset query parameters
+        url.reset();
 
-      if (!type.equals(Constants.PORTAL_RENDER))
-      {
-         url.setQueryParameterValue(Constants.TYPE_PARAMETER, type);
-      }
+        String type;
+        if (containerURL instanceof RenderURL) {
+            type = Constants.PORTAL_RENDER;
+        } else if (containerURL instanceof ResourceURL) {
+            type = Constants.PORTAL_SERVE_RESOURCE;
+        } else if (containerURL instanceof ActionURL) {
+            type = Constants.PORTAL_PROCESS_ACTION;
+        } else {
+            throw new Error("Unrecognized containerURL type");
+        }
 
-      if (format != null && format.getWantSecure() != null)
-      {
-         url.setQueryParameterValue(Constants.SECURE_PARAMETER, format.getWantSecure().toString());
-      }
+        if (!type.equals(Constants.PORTAL_RENDER)) {
+            url.setQueryParameterValue(Constants.TYPE_PARAMETER, type);
+        }
 
-      if (containerURL instanceof ActionURL)
-      {
-         ActionURL actionURL = (ActionURL)containerURL;
+        if (format != null && format.getWantSecure() != null) {
+            url.setQueryParameterValue(Constants.SECURE_PARAMETER, format.getWantSecure().toString());
+        }
 
-         StateString state = actionURL.getInteractionState();
-         if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX))
-         {
-            url.setQueryParameterValue(INTERACTION_STATE_PARAM_NAME, state.getStringValue());
-         }
+        if (containerURL instanceof ActionURL) {
+            ActionURL actionURL = (ActionURL) containerURL;
 
-         state = actionURL.getNavigationalState();
-         if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX))
-         {
-            url.setQueryParameterValue(NAVIGATIONAL_STATE_PARAM_NAME, state.getStringValue());
-         }
-
-         WindowState windowState = actionURL.getWindowState();
-         if (windowState != null)
-         {
-            url.setQueryParameterValue(Constants.WINDOW_STATE_PARAMETER, windowState.toString());
-         }
-
-         Mode mode = actionURL.getMode();
-         if (mode != null)
-         {
-            url.setQueryParameterValue(Constants.PORTLET_MODE_PARAMETER, mode.toString());
-         }
-      }
-      else if (containerURL instanceof ResourceURL)
-      {
-         ResourceURL resourceURL = (ResourceURL)containerURL;
-
-         url.setQueryParameterValue(Constants.RESOURCE_ID_PARAMETER, resourceURL.getResourceId());
-
-         CacheLevel cachability = resourceURL.getCacheability();
-         if (cachability != null)
-         {
-            url.setQueryParameterValue(Constants.CACHELEVEL_PARAMETER, cachability.name());
-         }
-
-         StateString resourceState = resourceURL.getResourceState();
-         if (resourceState != null && !resourceState.getStringValue().equals(StateString.JBPNS_PREFIX))
-         {
-            url.setQueryParameterValue(RESOURCE_STATE_PARAM_NAME, resourceState.getStringValue());
-         }
-
-         resourceState = resourceURL.getNavigationalState();
-         if (resourceState != null && !resourceState.getStringValue().equals(StateString.JBPNS_PREFIX))
-         {
-            url.setQueryParameterValue(NAVIGATIONAL_STATE_PARAM_NAME, resourceState.getStringValue());
-         }
-
-         WindowState windowState = resourceURL.getWindowState();
-         if (windowState != null)
-         {
-            url.setQueryParameterValue(Constants.WINDOW_STATE_PARAMETER, windowState.toString());
-         }
-
-         Mode mode = resourceURL.getMode();
-         if (mode != null)
-         {
-            url.setQueryParameterValue(Constants.PORTLET_MODE_PARAMETER, mode.toString());
-         }
-      }
-      else
-      {
-         RenderURL renderURL = (RenderURL)containerURL;
-
-         WindowState windowState = renderURL.getWindowState();
-         if (windowState != null)//&& !windowState.equals(WindowState.NORMAL))
-         {
-            url.setQueryParameterValue(Constants.WINDOW_STATE_PARAMETER, windowState.toString());
-         }
-
-         Mode mode = renderURL.getMode();
-         if (mode != null)
-         {
-            url.setQueryParameterValue(Constants.PORTLET_MODE_PARAMETER, mode.toString());
-         }
-
-         Map<String, String[]> publicNSChanges = renderURL.getPublicNavigationalStateChanges();
-         if (ParameterValidation.existsAndIsNotEmpty(publicNSChanges))
-         {
-            for (String key : publicNSChanges.keySet())
-            {
-               String[] values = publicNSChanges.get(key);
-               if (values != null && values.length > 0)
-               {
-                  for (String value : values)
-                  {
-                     url.setQueryParameterValue(key, value);
-                  }
-               }
-               else
-               {
-                  url.setQueryParameterValue("removePP", key);
-               }
+            StateString state = actionURL.getInteractionState();
+            if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX)) {
+                url.setQueryParameterValue(INTERACTION_STATE_PARAM_NAME, state.getStringValue());
             }
-         }
 
-         StateString state = renderURL.getNavigationalState();
-         if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX))
-         {
-            url.setQueryParameterValue(NAVIGATIONAL_STATE_PARAM_NAME, state.getStringValue());
-         }
-      }
-
-      //
-      Map<String, String> props = containerURL.getProperties();
-      String lang = props.get("gtn:lang");
-      if (lang != null)
-      {
-         if (lang.length() == 0)
-         {
-            url.setLocale(null);
-         }
-         else
-         {
-            try
-            {
-               Locale locale = I18N.parseJavaIdentifier(lang);
-               url.setLocale(locale);
+            state = actionURL.getNavigationalState();
+            if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX)) {
+                url.setQueryParameterValue(NAVIGATIONAL_STATE_PARAM_NAME, state.getStringValue());
             }
-            catch (IllegalArgumentException e)
-            {
-               log.debug("Unparsable locale string: " + lang, e);
+
+            WindowState windowState = actionURL.getWindowState();
+            if (windowState != null) {
+                url.setQueryParameterValue(Constants.WINDOW_STATE_PARAMETER, windowState.toString());
             }
-         }
-      }
 
-      // Ajax support
-      url.setAjax("true".equals(props.get("gtn:ajax")));
+            Mode mode = actionURL.getMode();
+            if (mode != null) {
+                url.setQueryParameterValue(Constants.PORTLET_MODE_PARAMETER, mode.toString());
+            }
+        } else if (containerURL instanceof ResourceURL) {
+            ResourceURL resourceURL = (ResourceURL) containerURL;
 
-      // Confirm messsage
-      url.setConfirm(props.get("gtn:confirm"));
-      
-      //
-      String csrfCheck = props.get(PortletURLBuilder.CSRF_PROP);
-      url.setCSRFCheck(Boolean.parseBoolean(csrfCheck));
+            url.setQueryParameterValue(Constants.RESOURCE_ID_PARAMETER, resourceURL.getResourceId());
 
-      //
-      MimeType mimeType = Boolean.TRUE.equals(format.getWantEscapeXML()) ? MimeType.XHTML : MimeType.PLAIN;
-      url.setMimeType(mimeType);
+            CacheLevel cachability = resourceURL.getCacheability();
+            if (cachability != null) {
+                url.setQueryParameterValue(Constants.CACHELEVEL_PARAMETER, cachability.name());
+            }
 
-      //
-      return url.toString();
-   }
+            StateString resourceState = resourceURL.getResourceState();
+            if (resourceState != null && !resourceState.getStringValue().equals(StateString.JBPNS_PREFIX)) {
+                url.setQueryParameterValue(RESOURCE_STATE_PARAM_NAME, resourceState.getStringValue());
+            }
+
+            resourceState = resourceURL.getNavigationalState();
+            if (resourceState != null && !resourceState.getStringValue().equals(StateString.JBPNS_PREFIX)) {
+                url.setQueryParameterValue(NAVIGATIONAL_STATE_PARAM_NAME, resourceState.getStringValue());
+            }
+
+            WindowState windowState = resourceURL.getWindowState();
+            if (windowState != null) {
+                url.setQueryParameterValue(Constants.WINDOW_STATE_PARAMETER, windowState.toString());
+            }
+
+            Mode mode = resourceURL.getMode();
+            if (mode != null) {
+                url.setQueryParameterValue(Constants.PORTLET_MODE_PARAMETER, mode.toString());
+            }
+        } else {
+            RenderURL renderURL = (RenderURL) containerURL;
+
+            WindowState windowState = renderURL.getWindowState();
+            if (windowState != null)// && !windowState.equals(WindowState.NORMAL))
+            {
+                url.setQueryParameterValue(Constants.WINDOW_STATE_PARAMETER, windowState.toString());
+            }
+
+            Mode mode = renderURL.getMode();
+            if (mode != null) {
+                url.setQueryParameterValue(Constants.PORTLET_MODE_PARAMETER, mode.toString());
+            }
+
+            Map<String, String[]> publicNSChanges = renderURL.getPublicNavigationalStateChanges();
+            if (ParameterValidation.existsAndIsNotEmpty(publicNSChanges)) {
+                for (String key : publicNSChanges.keySet()) {
+                    String[] values = publicNSChanges.get(key);
+                    if (values != null && values.length > 0) {
+                        for (String value : values) {
+                            url.setQueryParameterValue(key, value);
+                        }
+                    } else {
+                        url.setQueryParameterValue("removePP", key);
+                    }
+                }
+            }
+
+            StateString state = renderURL.getNavigationalState();
+            if (state != null && !state.getStringValue().equals(StateString.JBPNS_PREFIX)) {
+                url.setQueryParameterValue(NAVIGATIONAL_STATE_PARAM_NAME, state.getStringValue());
+            }
+        }
+
+        //
+        Map<String, String> props = containerURL.getProperties();
+        String lang = props.get("gtn:lang");
+        if (lang != null) {
+            if (lang.length() == 0) {
+                url.setLocale(null);
+            } else {
+                try {
+                    Locale locale = I18N.parseJavaIdentifier(lang);
+                    url.setLocale(locale);
+                } catch (IllegalArgumentException e) {
+                    log.debug("Unparsable locale string: " + lang, e);
+                }
+            }
+        }
+
+        // Ajax support
+        url.setAjax("true".equals(props.get("gtn:ajax")));
+
+        // Confirm messsage
+        url.setConfirm(props.get("gtn:confirm"));
+
+        //
+        String csrfCheck = props.get(PortletURLBuilder.CSRF_PROP);
+        url.setCSRFCheck(Boolean.parseBoolean(csrfCheck));
+
+        //
+        MimeType mimeType = Boolean.TRUE.equals(format.getWantEscapeXML()) ? MimeType.XHTML : MimeType.PLAIN;
+        url.setMimeType(mimeType);
+
+        //
+        return url.toString();
+    }
 }

@@ -26,18 +26,15 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
  * @version $Revision$
  */
 @Serialized
-public class A2
-{
+public class A2 {
 
-   String state;
+    String state;
 
-   public A2()
-   {
-   }
+    public A2() {
+    }
 
-   public A2(String state)
-   {
+    public A2(String state) {
 
-      this.state = state;
-   }
+        this.state = state;
+    }
 }

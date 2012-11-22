@@ -22,8 +22,8 @@
 
 package org.exoplatform.portal.mop.management.binding.xml;
 
-import org.gatein.common.xml.stax.writer.WritableValueType;
 import org.exoplatform.portal.pom.config.Utils;
+import org.gatein.common.xml.stax.writer.WritableValueType;
 import org.staxnav.StaxNavException;
 import org.staxnav.ValueType;
 
@@ -31,35 +31,28 @@ import org.staxnav.ValueType;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class DelimitedValueType extends ValueType<String[]> implements WritableValueType<String[]>
-{
-   public static DelimitedValueType SEMI_COLON = new DelimitedValueType(";");
+public class DelimitedValueType extends ValueType<String[]> implements WritableValueType<String[]> {
+    public static DelimitedValueType SEMI_COLON = new DelimitedValueType(";");
 
-   private final String delimiter;
+    private final String delimiter;
 
-   public DelimitedValueType(String delimiter)
-   {
-      this.delimiter = delimiter;
-   }
+    public DelimitedValueType(String delimiter) {
+        this.delimiter = delimiter;
+    }
 
-   @Override
-   protected String[] parse(String s) throws Exception
-   {
-      return Utils.split(delimiter, s);
-   }
+    @Override
+    protected String[] parse(String s) throws Exception {
+        return Utils.split(delimiter, s);
+    }
 
-   @Override
-   public String format(String[] value) throws StaxNavException
-   {
-      String s = Utils.join(delimiter, value);
+    @Override
+    public String format(String[] value) throws StaxNavException {
+        String s = Utils.join(delimiter, value);
 
-      if (s != null && s.trim().length() == 0)
-      {
-         return null;
-      }
-      else
-      {
-         return s;
-      }
-   }
+        if (s != null && s.trim().length() == 0) {
+            return null;
+        } else {
+            return s;
+        }
+    }
 }

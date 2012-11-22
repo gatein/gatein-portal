@@ -36,9 +36,9 @@
         <portlet-ref>IFramePortlet</portlet-ref>
         <preferences>
           <preference>
-              <name>url</name>
-              <value>http://jboss.org/gatein</value>
-              <read-only>false</read-only>
+            <name>url</name>
+            <value>http://jboss.org/gatein</value>
+            <read-only>false</read-only>
           </preference>
         </preferences>
       </portlet>
@@ -49,7 +49,7 @@
       <show-application-mode>true</show-application-mode>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>mylink-fedora</name>
     <title>Fedora</title>
@@ -61,10 +61,10 @@
         <portlet-ref>IFramePortlet</portlet-ref>
         <preferences>
           <preference>
-              <name>url</name>
-              <value>http://www.fedoraproject.org</value>
-              <read-only>false</read-only>
-            </preference>
+            <name>url</name>
+            <value>http://www.fedoraproject.org</value>
+            <read-only>false</read-only>
+          </preference>
         </preferences>
       </portlet>
       <title>Fedora</title>
@@ -74,6 +74,6 @@
       <show-application-mode>true</show-application-mode>
     </portlet-application>
   </page>
-  
+
 </page-set>
 

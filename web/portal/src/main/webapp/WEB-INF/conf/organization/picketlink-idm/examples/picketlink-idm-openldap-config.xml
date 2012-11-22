@@ -207,8 +207,8 @@
                 <name>createEntryAttributeValues</name>
                 <value>objectClass=top</value>
                 <value>objectClass=inetOrgPerson</value>
-                <value>sn= </value>
-                <value>cn= </value>
+                <value>sn=</value>
+                <value>cn=</value>
               </option>
             </options>
           </identity-object-type>
@@ -370,9 +370,9 @@
     </identity-stores>
   </stores>
   <options>
-      <option>
-         <name>defaultTemplate</name>
-         <value>idm_realm</value>
-      </option>
+    <option>
+      <name>defaultTemplate</name>
+      <value>idm_realm</value>
+    </option>
   </options>
 </jboss-identity>

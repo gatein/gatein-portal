@@ -21,182 +21,182 @@
 -->
 
 <gatein-resources
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
-   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
 
 
-	<!-- OrganizationPortlet skins -->
+  <!-- OrganizationPortlet skins -->
 
-	<portlet-skin>
-		<application-name>exoadmin</application-name>
-		<portlet-name>OrganizationPortlet</portlet-name>
-		<skin-name>Default</skin-name>
-		<css-path>/skin/organization/webui/component/UIOrganizationPortlet/DefaultStylesheet.css</css-path>
-	</portlet-skin>
-		
-	<!-- AccountPortlet skins -->
+  <portlet-skin>
+    <application-name>exoadmin</application-name>
+    <portlet-name>OrganizationPortlet</portlet-name>
+    <skin-name>Default</skin-name>
+    <css-path>/skin/organization/webui/component/UIOrganizationPortlet/DefaultStylesheet.css</css-path>
+  </portlet-skin>
 
-	<portlet-skin>
-		<application-name>exoadmin</application-name>
-		<portlet-name>AccountPortlet</portlet-name>
-		<skin-name>Default</skin-name>
-		<css-path>/skin/account/webui/component/UIAccountPortlet/DefaultStylesheet.css</css-path>
-	</portlet-skin>
-			
-	<!-- ApplicationRegistryPortlet skins -->
+  <!-- AccountPortlet skins -->
 
-	<portlet-skin>
-		<application-name>exoadmin</application-name>
-		<portlet-name>ApplicationRegistryPortlet</portlet-name>
-		<skin-name>Default</skin-name>
-		<css-path>/skin/applicationregistry/webui/component/UIApplicationRegistryPortlet/DefaultStylesheet.css</css-path>
-	</portlet-skin>
-		
-		
-	<!-- AdminToolbarPortlet skins -->
+  <portlet-skin>
+    <application-name>exoadmin</application-name>
+    <portlet-name>AccountPortlet</portlet-name>
+    <skin-name>Default</skin-name>
+    <css-path>/skin/account/webui/component/UIAccountPortlet/DefaultStylesheet.css</css-path>
+  </portlet-skin>
 
-		
-	<!-- PortalNavigationPortlet skins -->
+  <!-- ApplicationRegistryPortlet skins -->
 
-	<portlet-skin>
-		<application-name>exoadmin</application-name>
-		<portlet-name>PortalNavigationPortlet</portlet-name>
-		<skin-name>Default</skin-name>
-		<css-path>/skin/navigation/webui/component/DefaultStylesheet.css</css-path>
-	</portlet-skin>
-	
-	<!-- GroupNavigationPortlet skins -->
+  <portlet-skin>
+    <application-name>exoadmin</application-name>
+    <portlet-name>ApplicationRegistryPortlet</portlet-name>
+    <skin-name>Default</skin-name>
+    <css-path>/skin/applicationregistry/webui/component/UIApplicationRegistryPortlet/DefaultStylesheet.css</css-path>
+  </portlet-skin>
 
-	<portlet-skin>
-		<application-name>exoadmin</application-name>
-		<portlet-name>GroupNavigationPortlet</portlet-name>
-		<skin-name>Default</skin-name>
-		<css-path>/skin/navigation/webui/component/DefaultStylesheet.css</css-path>
-	</portlet-skin>
-	
-	<!-- Register Portlet skins -->
-	
-	<portlet-skin>
-		<application-name>exoadmin</application-name>
-		<portlet-name>RegisterPortlet</portlet-name>
-		<skin-name>Default</skin-name>
-		<css-path>/skin/register/webui/component/DefaultStylesheet.css</css-path>
-	</portlet-skin>
 
-   <portlet>
-     <name>RegisterPortlet</name>
-     <module>
-       <depends>
-         <module>uiForm</module>
+  <!-- AdminToolbarPortlet skins -->
+
+
+  <!-- PortalNavigationPortlet skins -->
+
+  <portlet-skin>
+    <application-name>exoadmin</application-name>
+    <portlet-name>PortalNavigationPortlet</portlet-name>
+    <skin-name>Default</skin-name>
+    <css-path>/skin/navigation/webui/component/DefaultStylesheet.css</css-path>
+  </portlet-skin>
+
+  <!-- GroupNavigationPortlet skins -->
+
+  <portlet-skin>
+    <application-name>exoadmin</application-name>
+    <portlet-name>GroupNavigationPortlet</portlet-name>
+    <skin-name>Default</skin-name>
+    <css-path>/skin/navigation/webui/component/DefaultStylesheet.css</css-path>
+  </portlet-skin>
+
+  <!-- Register Portlet skins -->
+
+  <portlet-skin>
+    <application-name>exoadmin</application-name>
+    <portlet-name>RegisterPortlet</portlet-name>
+    <skin-name>Default</skin-name>
+    <css-path>/skin/register/webui/component/DefaultStylesheet.css</css-path>
+  </portlet-skin>
+
+  <portlet>
+    <name>RegisterPortlet</name>
+    <module>
+      <depends>
+        <module>uiForm</module>
       </depends>
-     </module>
-   </portlet>
+    </module>
+  </portlet>
 
-   <portlet>
-     <name>StarToolbarPortlet</name>
-     <module>
-       <depends>
-         <module>navigation</module>
-       </depends>
-     </module>
-   </portlet>
+  <portlet>
+    <name>StarToolbarPortlet</name>
+    <module>
+      <depends>
+        <module>navigation</module>
+      </depends>
+    </module>
+  </portlet>
 
-   <portlet>
-     <name>UserToolbarSitePortlet</name>
-     <module>
-       <depends>
-         <module>navigation</module>
-       </depends>
-     </module>
-   </portlet>
+  <portlet>
+    <name>UserToolbarSitePortlet</name>
+    <module>
+      <depends>
+        <module>navigation</module>
+      </depends>
+    </module>
+  </portlet>
 
-   <portlet>
-     <name>UserToolbarGroupPortlet</name>
-     <module>
-       <depends>
-         <module>navigation</module>
-       </depends>
-   </module>
-   </portlet>
+  <portlet>
+    <name>UserToolbarGroupPortlet</name>
+    <module>
+      <depends>
+        <module>navigation</module>
+      </depends>
+    </module>
+  </portlet>
 
-   <portlet>
-     <name>UserToolbarDashboardPortlet</name>
-     <module>
-       <depends>
-         <module>navigation</module>
-       </depends>
-     </module>
-   </portlet>
+  <portlet>
+    <name>UserToolbarDashboardPortlet</name>
+    <module>
+      <depends>
+        <module>navigation</module>
+      </depends>
+    </module>
+  </portlet>
 
-   <portlet>
-     <name>AdminToolbarPortlet</name>
-     <module>
-       <depends>
-         <module>navigation</module>
-       </depends>
-     </module>
-   </portlet>
+  <portlet>
+    <name>AdminToolbarPortlet</name>
+    <module>
+      <depends>
+        <module>navigation</module>
+      </depends>
+    </module>
+  </portlet>
 
-   <portlet>
-     <name>ApplicationRegistryPortlet</name>
-     <module>
-       <depends>
-         <module>uiForm</module>
-       </depends>
-     </module>
-   </portlet>
+  <portlet>
+    <name>ApplicationRegistryPortlet</name>
+    <module>
+      <depends>
+        <module>uiForm</module>
+      </depends>
+    </module>
+  </portlet>
 
-   <portlet>
-     <name>OrganizationPortlet</name>
-     <module>
-       <depends>
-         <module>uiForm</module>
-       </depends>
-     </module>
-   </portlet>
+  <portlet>
+    <name>OrganizationPortlet</name>
+    <module>
+      <depends>
+        <module>uiForm</module>
+      </depends>
+    </module>
+  </portlet>
 
-   <portlet>
-     <name>AccountPortlet</name>
-     <module>
-       <depends>
-         <module>uiForm</module>
-       </depends>
-     </module>
-   </portlet>
+  <portlet>
+    <name>AccountPortlet</name>
+    <module>
+      <depends>
+        <module>uiForm</module>
+      </depends>
+    </module>
+  </portlet>
 
-   <portlet>
-     <name>GroupNavigationPortlet</name>
-     <module>
-       <depends>
-         <module>webui-ext</module>
-       </depends>
-     </module>
-   </portlet>
+  <portlet>
+    <name>GroupNavigationPortlet</name>
+    <module>
+      <depends>
+        <module>webui-ext</module>
+      </depends>
+    </module>
+  </portlet>
 
-   <portlet>
-     <name>PortalNavigationPortlet</name>
-     <module>
-        <depends>
-         <module>webui-ext</module>
-       </depends>
-     </module>
-   </portlet>
+  <portlet>
+    <name>PortalNavigationPortlet</name>
+    <module>
+      <depends>
+        <module>webui-ext</module>
+      </depends>
+    </module>
+  </portlet>
 
-   <portlet>
-     <name>PageManagementPortlet</name>
-     <module>
-       <depends>
-         <module>portal</module>
-       </depends>
-       <depends>
-         <module>uiForm</module>
-       </depends>
-       <depends>
-         <module>webui-ext</module>
-       </depends>
-     </module>
-   </portlet>
+  <portlet>
+    <name>PageManagementPortlet</name>
+    <module>
+      <depends>
+        <module>portal</module>
+      </depends>
+      <depends>
+        <module>uiForm</module>
+      </depends>
+      <depends>
+        <module>webui-ext</module>
+      </depends>
+    </module>
+  </portlet>
 
 </gatein-resources>
 

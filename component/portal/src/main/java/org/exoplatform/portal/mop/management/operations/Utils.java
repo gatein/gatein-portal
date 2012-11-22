@@ -31,81 +31,65 @@ import org.gatein.mop.api.workspace.Site;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class Utils
-{
+public class Utils {
 
-   private Utils()
-   {
-   }
+    private Utils() {
+    }
 
-   public static ObjectType<Site> getObjectType(SiteType siteType)
-   {
-      switch (siteType)
-      {
-         case PORTAL:
-            return ObjectType.PORTAL_SITE;
-         case GROUP:
-            return ObjectType.GROUP_SITE;
-         case USER:
-            return ObjectType.USER_SITE;
-         default:
+    public static ObjectType<Site> getObjectType(SiteType siteType) {
+        switch (siteType) {
+            case PORTAL:
+                return ObjectType.PORTAL_SITE;
+            case GROUP:
+                return ObjectType.GROUP_SITE;
+            case USER:
+                return ObjectType.USER_SITE;
+            default:
+                return null;
+        }
+    }
+
+    public static SiteType getSiteType(ObjectType<? extends Site> objectType) {
+        if (ObjectType.PORTAL_SITE == objectType) {
+            return SiteType.PORTAL;
+        } else if (ObjectType.GROUP_SITE == objectType) {
+            return SiteType.GROUP;
+        } else if (ObjectType.USER_SITE == objectType) {
+            return SiteType.USER;
+        } else {
             return null;
-      }
-   }
+        }
+    }
 
-   public static SiteType getSiteType(ObjectType<? extends Site> objectType)
-   {
-      if (ObjectType.PORTAL_SITE == objectType)
-      {
-         return SiteType.PORTAL;
-      }
-      else if (ObjectType.GROUP_SITE == objectType)
-      {
-         return SiteType.GROUP;
-      }
-      else if (ObjectType.USER_SITE == objectType)
-      {
-         return SiteType.USER;
-      }
-      else
-      {
-         return null;
-      }
-   }
-
-   public static SiteType getSiteType(String siteType)
-   {
-      if (siteType == null) return null;
-
-      return SiteType.valueOf(siteType.toUpperCase());
-   }
-
-
-   public static SiteKey siteKey(String siteType, String siteName)
-   {
-      SiteType st = getSiteType(siteType);
-      return siteKey(st, siteName);
-   }
-
-   public static SiteKey siteKey(SiteType siteType, String siteName)
-   {
-      switch (siteType)
-      {
-         case PORTAL:
-            return SiteKey.portal(siteName);
-         case GROUP:
-            if (siteName.charAt(0) != '/') siteName = "/" + siteName;
-            return SiteKey.group(siteName);
-         case USER:
-            return SiteKey.user(siteName);
-         default:
+    public static SiteType getSiteType(String siteType) {
+        if (siteType == null)
             return null;
 
-      }
-   }
+        return SiteType.valueOf(siteType.toUpperCase());
+    }
 
-   public static SiteKey siteKey(Site site)
-   {
-      return siteKey(getSiteType(site.getObjectType()), site.getName());
-   }
+    public static SiteKey siteKey(String siteType, String siteName) {
+        SiteType st = getSiteType(siteType);
+        return siteKey(st, siteName);
+    }
+
+    public static SiteKey siteKey(SiteType siteType, String siteName) {
+        switch (siteType) {
+            case PORTAL:
+                return SiteKey.portal(siteName);
+            case GROUP:
+                if (siteName.charAt(0) != '/')
+                    siteName = "/" + siteName;
+                return SiteKey.group(siteName);
+            case USER:
+                return SiteKey.user(siteName);
+            default:
+                return null;
+
+        }
+    }
+
+    public static SiteKey siteKey(Site site) {
+        return siteKey(getSiteType(site.getObjectType()), site.getName());
+    }
 }

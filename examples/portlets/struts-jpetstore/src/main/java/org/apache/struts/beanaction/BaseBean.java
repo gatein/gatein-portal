@@ -1,10 +1,10 @@
 package org.apache.struts.beanaction;
 
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.validator.ValidatorActionForm;
-
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.validator.ValidatorActionForm;
 
 /**
  * All actions mapped through the BeanAction class should be mapped
@@ -25,7 +25,7 @@ import javax.servlet.http.HttpServletRequest;
  * <p/>
  * <p/>
  * <p/>
- * <i>Note:  Full error, message and internationalization support is not complete.</i>
+ * <i>Note: Full error, message and internationalization support is not complete.</i>
  * <p/>
  * <p/>
  * <p/>
@@ -35,30 +35,30 @@ import javax.servlet.http.HttpServletRequest;
  */
 public abstract class BaseBean extends ValidatorActionForm {
 
-  private ActionInterceptor interceptor;
+    private ActionInterceptor interceptor;
 
-  protected BaseBean() {
-    this.interceptor = new DefaultActionInterceptor();
-  }
+    protected BaseBean() {
+        this.interceptor = new DefaultActionInterceptor();
+    }
 
-  protected BaseBean(ActionInterceptor interceptor) {
-    this.interceptor = interceptor;
-  }
+    protected BaseBean(ActionInterceptor interceptor) {
+        this.interceptor = interceptor;
+    }
 
-  public final void reset(ActionMapping mapping, ServletRequest request) {
-    ActionContext.initCurrentContext((HttpServletRequest) request, null);
-    reset();
-  }
+    public final void reset(ActionMapping mapping, ServletRequest request) {
+        ActionContext.initCurrentContext((HttpServletRequest) request, null);
+        reset();
+    }
 
-  public final void reset(ActionMapping mapping, HttpServletRequest request) {
-    ActionContext.initCurrentContext((HttpServletRequest) request, null);
-    reset();
-  }
+    public final void reset(ActionMapping mapping, HttpServletRequest request) {
+        ActionContext.initCurrentContext((HttpServletRequest) request, null);
+        reset();
+    }
 
-  public void reset() {
-  }
+    public void reset() {
+    }
 
-  public ActionInterceptor getInterceptor() {
-    return interceptor;
-  }
+    public ActionInterceptor getInterceptor() {
+        return interceptor;
+    }
 }

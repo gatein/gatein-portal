@@ -37,194 +37,144 @@ import org.exoplatform.webui.form.UIFormMultiValueInputSet;
 import org.exoplatform.webui.form.validator.Validator;
 
 /** Author : Nhu Dinh Thuan nhudinhthuan@yahoo.com Jun 1, 2006 */
-public class UIFormLifecycle extends Lifecycle<UIForm>
-{
+public class UIFormLifecycle extends Lifecycle<UIForm> {
 
-   public void processDecode(UIForm uicomponent, WebuiRequestContext context) throws Exception
-   {
-      uicomponent.setSubmitAction(null);
-      processNormalRequest(uicomponent, context);
-      List<UIComponent> children = uicomponent.getChildren();
-      for (UIComponent uiChild : children)
-      {
-         uiChild.processDecode(context);
-      }
-      String action = uicomponent.getSubmitAction();
-      String subComponentId = context.getRequestParameter(UIForm.SUBCOMPONENT_ID);
-      if (subComponentId == null || subComponentId.trim().length() < 1)
-      {
-         Event<UIComponent> event = uicomponent.createEvent(action, Event.Phase.DECODE, context);
-         if (event != null)
-         {
+    public void processDecode(UIForm uicomponent, WebuiRequestContext context) throws Exception {
+        uicomponent.setSubmitAction(null);
+        processNormalRequest(uicomponent, context);
+        List<UIComponent> children = uicomponent.getChildren();
+        for (UIComponent uiChild : children) {
+            uiChild.processDecode(context);
+        }
+        String action = uicomponent.getSubmitAction();
+        String subComponentId = context.getRequestParameter(UIForm.SUBCOMPONENT_ID);
+        if (subComponentId == null || subComponentId.trim().length() < 1) {
+            Event<UIComponent> event = uicomponent.createEvent(action, Event.Phase.DECODE, context);
+            if (event != null) {
+                event.broadcast();
+            }
+            return;
+        }
+        UIComponent uiSubComponent = uicomponent.findComponentById(subComponentId);
+        Event<UIComponent> event = uiSubComponent.createEvent(action, Event.Phase.DECODE, context);
+        if (event == null) {
+            event = uicomponent.createEvent(action, Event.Phase.DECODE, context);
+        }
+        if (event != null) {
             event.broadcast();
-         }
-         return;
-      }
-      UIComponent uiSubComponent = uicomponent.findComponentById(subComponentId);
-      Event<UIComponent> event = uiSubComponent.createEvent(action, Event.Phase.DECODE, context);
-      if (event == null)
-      {
-         event = uicomponent.createEvent(action, Event.Phase.DECODE, context);
-      }
-      if (event != null)
-      {
-         event.broadcast();
-      }
-   }
+        }
+    }
 
-   public void processAction(UIForm uicomponent, WebuiRequestContext context) throws Exception
-   {
-      String action = context.getRequestParameter(UIForm.ACTION);
-      if (action == null)
-      {
-         action = uicomponent.getSubmitAction();
-      }
-      if (action == null)
-      {
-         return;
-      }
-      Event<UIComponent> event = uicomponent.createEvent(action, Event.Phase.PROCESS, context);
-      if (event == null)
-      {
-         event = uicomponent.<UIComponent>getParent().createEvent(action, Event.Phase.PROCESS, context);
-      }
-      if (event == null)
-      {
-         return;
-      }
-      UIApplication uiApp = uicomponent.getAncestorOfType(UIApplication.class);
-      List<UIComponent> children = uicomponent.getChildren();
-      validateChildren(children, uiApp, context);
+    public void processAction(UIForm uicomponent, WebuiRequestContext context) throws Exception {
+        String action = context.getRequestParameter(UIForm.ACTION);
+        if (action == null) {
+            action = uicomponent.getSubmitAction();
+        }
+        if (action == null) {
+            return;
+        }
+        Event<UIComponent> event = uicomponent.createEvent(action, Event.Phase.PROCESS, context);
+        if (event == null) {
+            event = uicomponent.<UIComponent> getParent().createEvent(action, Event.Phase.PROCESS, context);
+        }
+        if (event == null) {
+            return;
+        }
+        UIApplication uiApp = uicomponent.getAncestorOfType(UIApplication.class);
+        List<UIComponent> children = uicomponent.getChildren();
+        validateChildren(children, uiApp, context);
 
-      if (context.getProcessRender())
-      {
-         return;
-      }
-      event.broadcast();
-   }
+        if (context.getProcessRender()) {
+            return;
+        }
+        event.broadcast();
+    }
 
-   private void processNormalRequest(UIForm uiForm, WebuiRequestContext context) throws Exception
-   {
-      List<UIFormInputBase> inputs = new ArrayList<UIFormInputBase>();
-      uiForm.findComponentOfType(inputs, UIFormInputBase.class);
-      uiForm.setSubmitAction(context.getRequestParameter(UIForm.ACTION));
-      for (UIFormInputBase input : inputs)
-      {
-         if (!input.isValid())
-         {
-            continue;
-         }
-         String inputValue = context.getRequestParameter(input.getId());
-         if (inputValue == null || inputValue.trim().length() == 0)
-         {
-            inputValue = context.getRequestParameter(input.getName());
-         }
-         input.decode(inputValue, context);
-      }
-   }
+    private void processNormalRequest(UIForm uiForm, WebuiRequestContext context) throws Exception {
+        List<UIFormInputBase> inputs = new ArrayList<UIFormInputBase>();
+        uiForm.findComponentOfType(inputs, UIFormInputBase.class);
+        uiForm.setSubmitAction(context.getRequestParameter(UIForm.ACTION));
+        for (UIFormInputBase input : inputs) {
+            if (!input.isValid()) {
+                continue;
+            }
+            String inputValue = context.getRequestParameter(input.getId());
+            if (inputValue == null || inputValue.trim().length() == 0) {
+                inputValue = context.getRequestParameter(input.getName());
+            }
+            input.decode(inputValue, context);
+        }
+    }
 
-   @SuppressWarnings("unchecked")
-   private void validateChildren(List<UIComponent> children, UIApplication uiApp, WebuiRequestContext context)
-   {
-      for (UIComponent uiChild : children)
-      {
-         if (uiChild instanceof UIFormInputBase)
-         {
-            UIFormInputBase uiInput = (UIFormInputBase)uiChild;
-            if (!uiInput.isValid())
-            {
-               continue;
+    @SuppressWarnings("unchecked")
+    private void validateChildren(List<UIComponent> children, UIApplication uiApp, WebuiRequestContext context) {
+        for (UIComponent uiChild : children) {
+            if (uiChild instanceof UIFormInputBase) {
+                UIFormInputBase uiInput = (UIFormInputBase) uiChild;
+                if (!uiInput.isValid()) {
+                    continue;
+                }
+                List<Validator> validators = uiInput.getValidators();
+                if (validators == null) {
+                    continue;
+                }
+                try {
+                    for (Validator validator : validators) {
+                        validator.validate(uiInput);
+                    }
+                } catch (MessageException ex) {
+                    uiApp.addMessage(ex.getDetailMessage());
+                    context.setProcessRender(true);
+                } catch (Exception ex) {
+                    // TODO: This is a critical exception and should be handle in the UIApplication
+                    uiApp.addMessage(new ApplicationMessage(ex.getMessage(), null));
+                    context.setProcessRender(true);
+                }
+            } else if (uiChild instanceof UIFormInputSet) {
+                UIFormInputSet uiInputSet = (UIFormInputSet) uiChild;
+                validateChildren(uiInputSet.getChildren(), uiApp, context);
+            } else if (uiChild instanceof UIFormMultiValueInputSet) {
+                UIFormMultiValueInputSet uiInput = (UIFormMultiValueInputSet) uiChild;
+                List<Validator> validators = uiInput.getValidators();
+                if (validators == null) {
+                    continue;
+                }
+                try {
+                    for (Validator validator : validators) {
+                        List<UIComponent> uiInputChild = uiInput.getChildren();
+                        for (int i = 0; i < uiInputChild.size(); i++) {
+                            try {
+                                validator.validate((UIFormInput) uiInputChild.get(i));
+                            } catch (MessageException ex) {
+                                uiApp.addMessage(ex.getDetailMessage());
+                                context.setProcessRender(true);
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    // TODO: This is a critical exception and should be handle in the UIApplication
+                    uiApp.addMessage(new ApplicationMessage(ex.getMessage(), null));
+                    context.setProcessRender(true);
+                }
+            } else if (uiChild instanceof UIFormInputContainer) {
+                UIFormInputContainer uiInput = (UIFormInputContainer) uiChild;
+                List<Validator> validators = uiInput.getValidators();
+                if (validators == null) {
+                    continue;
+                }
+                try {
+                    for (Validator validator : validators) {
+                        validator.validate(uiInput);
+                    }
+                } catch (MessageException ex) {
+                    uiApp.addMessage(ex.getDetailMessage());
+                    context.setProcessRender(true);
+                } catch (Exception ex) {
+                    // TODO: This is a critical exception and should be handle in the UIApplication
+                    uiApp.addMessage(new ApplicationMessage(ex.getMessage(), null));
+                    context.setProcessRender(true);
+                }
             }
-            List<Validator> validators = uiInput.getValidators();
-            if (validators == null)
-            {
-               continue;
-            }
-            try
-            {
-               for (Validator validator : validators)
-               {
-                  validator.validate(uiInput);
-               }
-            }
-            catch (MessageException ex)
-            {
-               uiApp.addMessage(ex.getDetailMessage());
-               context.setProcessRender(true);
-            }
-            catch (Exception ex)
-            {
-               //TODO:  This is a  critical exception and should be handle  in the UIApplication
-               uiApp.addMessage(new ApplicationMessage(ex.getMessage(), null));
-               context.setProcessRender(true);
-            }
-         }
-         else if (uiChild instanceof UIFormInputSet)
-         {
-            UIFormInputSet uiInputSet = (UIFormInputSet)uiChild;
-            validateChildren(uiInputSet.getChildren(), uiApp, context);
-         }
-         else if (uiChild instanceof UIFormMultiValueInputSet)
-         {
-            UIFormMultiValueInputSet uiInput = (UIFormMultiValueInputSet)uiChild;
-            List<Validator> validators = uiInput.getValidators();
-            if (validators == null)
-            {
-               continue;
-            }
-            try
-            {
-               for (Validator validator : validators)
-               {
-                  List<UIComponent> uiInputChild = uiInput.getChildren();
-                  for (int i = 0; i < uiInputChild.size(); i++)
-                  {
-                     try
-                     {
-                        validator.validate((UIFormInput)uiInputChild.get(i));
-                     }
-                     catch (MessageException ex)
-                     {
-                        uiApp.addMessage(ex.getDetailMessage());
-                        context.setProcessRender(true);
-                     }
-                  }
-               }
-            }
-            catch (Exception ex)
-            {
-               //TODO:  This is a  critical exception and should be handle  in the UIApplication
-               uiApp.addMessage(new ApplicationMessage(ex.getMessage(), null));
-               context.setProcessRender(true);
-            }
-         }
-         else if (uiChild instanceof UIFormInputContainer)
-         {
-            UIFormInputContainer uiInput = (UIFormInputContainer)uiChild;
-            List<Validator> validators = uiInput.getValidators();
-            if (validators == null)
-            {
-               continue;
-            }
-            try
-            {
-               for (Validator validator : validators)
-               {
-                  validator.validate(uiInput);
-               }
-            }
-            catch (MessageException ex)
-            {
-               uiApp.addMessage(ex.getDetailMessage());
-               context.setProcessRender(true);
-            }
-            catch (Exception ex)
-            {
-               //TODO:  This is a  critical exception and should be handle  in the UIApplication
-               uiApp.addMessage(new ApplicationMessage(ex.getMessage(), null));
-               context.setProcessRender(true);
-            }
-         }
-      }
-   }
+        }
+    }
 }

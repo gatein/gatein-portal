@@ -25,17 +25,15 @@ import org.gatein.pc.portlet.impl.spi.AbstractWindowContext;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ExoWindowContext extends AbstractWindowContext
-{
+public class ExoWindowContext extends AbstractWindowContext {
 
-   /**
-    * Create a new window context.
-    *
-    * @param windowId the window id
-    * @throws NullPointerException thrown when the windowId parameter is null
-    */
-   public ExoWindowContext(String windowId) throws NullPointerException
-   {
-      super(windowId);
-   }
+    /**
+     * Create a new window context.
+     *
+     * @param windowId the window id
+     * @throws NullPointerException thrown when the windowId parameter is null
+     */
+    public ExoWindowContext(String windowId) throws NullPointerException {
+        super(windowId);
+    }
 }

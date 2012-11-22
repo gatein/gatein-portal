@@ -19,64 +19,58 @@
 
 package org.exoplatform.management.data;
 
+import java.lang.reflect.Method;
+
 import org.exoplatform.management.invocation.GetterInvoker;
 import org.exoplatform.management.invocation.MethodInvoker;
 import org.exoplatform.management.invocation.NoSuchMethodInvoker;
 import org.exoplatform.management.invocation.SetterInvoker;
 import org.exoplatform.management.spi.ManagedPropertyMetaData;
 
-import java.lang.reflect.Method;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RestResourceProperty
-{
+public class RestResourceProperty {
 
-   /** . */
-   final ManagedPropertyMetaData metaData;
+    /** . */
+    final ManagedPropertyMetaData metaData;
 
-   /** . */
-   private final MethodInvoker setterInvoker;
+    /** . */
+    private final MethodInvoker setterInvoker;
 
-   /** . */
-   private final MethodInvoker getterInvoker;
+    /** . */
+    private final MethodInvoker getterInvoker;
 
-   public RestResourceProperty(ManagedPropertyMetaData metaData)
-   {
-      Method getter = metaData.getGetter();
-      MethodInvoker getterInvoker = getter != null ? new GetterInvoker(getter) : new NoSuchMethodInvoker();
+    public RestResourceProperty(ManagedPropertyMetaData metaData) {
+        Method getter = metaData.getGetter();
+        MethodInvoker getterInvoker = getter != null ? new GetterInvoker(getter) : new NoSuchMethodInvoker();
 
-      //
-      Method setter = metaData.getSetter();
-      MethodInvoker setterInvoker = setter != null ? new SetterInvoker(setter) : new NoSuchMethodInvoker();
+        //
+        Method setter = metaData.getSetter();
+        MethodInvoker setterInvoker = setter != null ? new SetterInvoker(setter) : new NoSuchMethodInvoker();
 
-      //
-      this.metaData = metaData;
-      this.setterInvoker = setterInvoker;
-      this.getterInvoker = getterInvoker;
-   }
+        //
+        this.metaData = metaData;
+        this.setterInvoker = setterInvoker;
+        this.getterInvoker = getterInvoker;
+    }
 
-   public String getName()
-   {
-      return metaData.getName();
-   }
+    public String getName() {
+        return metaData.getName();
+    }
 
-   public String getDescription()
-   {
-      return metaData.getDescription();
-   }
+    public String getDescription() {
+        return metaData.getDescription();
+    }
 
-   // Internal *********************************************************************************************************
+    // Internal *********************************************************************************************************
 
-   MethodInvoker getSetterInvoker()
-   {
-      return setterInvoker;
-   }
+    MethodInvoker getSetterInvoker() {
+        return setterInvoker;
+    }
 
-   MethodInvoker getGetterInvoker()
-   {
-      return getterInvoker;
-   }
+    MethodInvoker getGetterInvoker() {
+        return getterInvoker;
+    }
 }

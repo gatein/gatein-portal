@@ -19,67 +19,59 @@
 
 package org.exoplatform.portal.mop;
 
-import org.exoplatform.portal.mop.SiteType;
-import org.gatein.mop.api.workspace.ObjectType;
-import org.gatein.mop.api.workspace.Site;
-
 import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.gatein.mop.api.workspace.ObjectType;
+import org.gatein.mop.api.workspace.Site;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Utils
-{
+public class Utils {
 
-   /** . */
-   public static final String[] EMPTY_STRING_ARRAY = new String[0];
+    /** . */
+    public static final String[] EMPTY_STRING_ARRAY = new String[0];
 
-   /** . */
-   private static final ComparableComparator INSTANCE = new ComparableComparator();
+    /** . */
+    private static final ComparableComparator INSTANCE = new ComparableComparator();
 
-   /** . */
-   private static final EnumMap<SiteType, ObjectType<Site>> a = new EnumMap<SiteType, ObjectType<Site>>(SiteType.class);
+    /** . */
+    private static final EnumMap<SiteType, ObjectType<Site>> a = new EnumMap<SiteType, ObjectType<Site>>(SiteType.class);
 
-   /** . */
-   private static final Map<ObjectType<Site>, SiteType> b = new HashMap<ObjectType<Site>, SiteType>(3);
+    /** . */
+    private static final Map<ObjectType<Site>, SiteType> b = new HashMap<ObjectType<Site>, SiteType>(3);
 
-   static
-   {
-      a.put(SiteType.PORTAL, ObjectType.PORTAL_SITE);
-      a.put(SiteType.GROUP, ObjectType.GROUP_SITE);
-      a.put(SiteType.USER, ObjectType.USER_SITE);
-      b.put(ObjectType.PORTAL_SITE, SiteType.PORTAL);
-      b.put(ObjectType.GROUP_SITE, SiteType.GROUP);
-      b.put(ObjectType.USER_SITE, SiteType.USER);
-   }
+    static {
+        a.put(SiteType.PORTAL, ObjectType.PORTAL_SITE);
+        a.put(SiteType.GROUP, ObjectType.GROUP_SITE);
+        a.put(SiteType.USER, ObjectType.USER_SITE);
+        b.put(ObjectType.PORTAL_SITE, SiteType.PORTAL);
+        b.put(ObjectType.GROUP_SITE, SiteType.GROUP);
+        b.put(ObjectType.USER_SITE, SiteType.USER);
+    }
 
-   public static ObjectType<Site> objectType(SiteType siteType)
-   {
-      return a.get(siteType);
-   }
+    public static ObjectType<Site> objectType(SiteType siteType) {
+        return a.get(siteType);
+    }
 
-   public static SiteType siteType(ObjectType objectType)
-   {
-      return b.get(objectType);
-   }
+    public static SiteType siteType(ObjectType objectType) {
+        return b.get(objectType);
+    }
 
-   public static <T extends Comparable<T>> Comparator<T> comparator()
-   {
-      // Not totally good but well... should we pass the class to the caller ?
-      @SuppressWarnings("unchecked")
-      ComparableComparator instance = INSTANCE;
-      return instance;
-   }
+    public static <T extends Comparable<T>> Comparator<T> comparator() {
+        // Not totally good but well... should we pass the class to the caller ?
+        @SuppressWarnings("unchecked")
+        ComparableComparator instance = INSTANCE;
+        return instance;
+    }
 
-   private static class ComparableComparator<T extends Comparable<T>> implements Comparator<T>
-   {
-      public int compare(T o1, T o2)
-      {
-         return o1.compareTo(o2);
-      }
-   }
+    private static class ComparableComparator<T extends Comparable<T>> implements Comparator<T> {
+        public int compare(T o1, T o2) {
+            return o1.compareTo(o2);
+        }
+    }
 }

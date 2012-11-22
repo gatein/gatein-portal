@@ -30,35 +30,27 @@ import org.gatein.common.transaction.JTAUserTransactionLifecycleListener;
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-class IDMTransactionSyncListener implements JTAUserTransactionLifecycleListener
-{
-   private PicketLinkIDMService idmService;
+class IDMTransactionSyncListener implements JTAUserTransactionLifecycleListener {
+    private PicketLinkIDMService idmService;
 
-   public IDMTransactionSyncListener(PicketLinkIDMService idmService)
-   {
-      this.idmService = idmService;
-   }
+    public IDMTransactionSyncListener(PicketLinkIDMService idmService) {
+        this.idmService = idmService;
+    }
 
-   @Override
-   public void beforeBegin()
-   {
-   }
+    @Override
+    public void beforeBegin() {
+    }
 
-   @Override
-   public void afterBegin()
-   {
-      try
-      {
-         // We need this as from Hibernate4 and with JTATransactionFactory, there is need to separately start IDM (Hibernate)
-         // transaction as well even if JTA transaction is started
-         if (!idmService.getIdentitySession().getTransaction().isActive())
-         {
-            idmService.getIdentitySession().beginTransaction();
-         }
-      }
-      catch (Exception e)
-      {
-         throw new RuntimeException(e);
-      }
-   }
+    @Override
+    public void afterBegin() {
+        try {
+            // We need this as from Hibernate4 and with JTATransactionFactory, there is need to separately start IDM (Hibernate)
+            // transaction as well even if JTA transaction is started
+            if (!idmService.getIdentitySession().getTransaction().isActive()) {
+                idmService.getIdentitySession().beginTransaction();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

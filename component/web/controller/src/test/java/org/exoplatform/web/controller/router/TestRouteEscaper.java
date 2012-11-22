@@ -19,51 +19,47 @@
 
 package org.exoplatform.web.controller.router;
 
-import org.exoplatform.component.test.BaseGateInTest;
-import org.exoplatform.web.controller.regexp.RERenderer;
-import org.exoplatform.web.controller.regexp.RENode;
-import org.exoplatform.web.controller.regexp.REParser;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.exoplatform.component.test.BaseGateInTest;
+import org.exoplatform.web.controller.regexp.RENode;
+import org.exoplatform.web.controller.regexp.REParser;
+import org.exoplatform.web.controller.regexp.RERenderer;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestRouteEscaper extends BaseGateInTest
-{
+public class TestRouteEscaper extends BaseGateInTest {
 
-   private void match(String pattern, String test, String expectedValue) throws Exception
-   {
-      REParser parser = new REParser(pattern);
-      RouteEscaper escaper = new RouteEscaper('/', '_');
-      RENode.Disjunction re = parser.parseDisjunction();
-      re.accept(escaper);
-      Pattern p = Pattern.compile(RERenderer.render(re, new StringBuilder()).toString());
-      Matcher matcher = p.matcher(test);
-      assertTrue(matcher.find());
-      assertEquals(expectedValue, matcher.group());
-   }
+    private void match(String pattern, String test, String expectedValue) throws Exception {
+        REParser parser = new REParser(pattern);
+        RouteEscaper escaper = new RouteEscaper('/', '_');
+        RENode.Disjunction re = parser.parseDisjunction();
+        re.accept(escaper);
+        Pattern p = Pattern.compile(RERenderer.render(re, new StringBuilder()).toString());
+        Matcher matcher = p.matcher(test);
+        assertTrue(matcher.find());
+        assertEquals(expectedValue, matcher.group());
+    }
 
-   public void testMatch() throws Exception
-   {
-      match(".*", "_", "_");
-      match(".*", "_/", "_");
-      match(".*", "_/_", "_");
-      match("/", "_/", "_");
-      match("/*", "_/_", "_");
-      match("[/a]*", "_a_/_", "_a_");
-      match("[,-1&&[^/]]*", "_/_", "");
-   }
+    public void testMatch() throws Exception {
+        match(".*", "_", "_");
+        match(".*", "_/", "_");
+        match(".*", "_/_", "_");
+        match("/", "_/", "_");
+        match("/*", "_/_", "_");
+        match("[/a]*", "_a_/_", "_a_");
+        match("[,-1&&[^/]]*", "_/_", "");
+    }
 
-   public void testGroup() throws Exception
-   {
-      match("(/)", "_", "_");
-      match("(?:/)", "_", "_");
-      match(".(?=/)", "a_", "a");
-      match("a(?!/)", "ab", "a");
-      match(".(?<=/)a", "ba_a", "_a");
-      match(".(?<!/)a", "_aba", "ba");
-   }
+    public void testGroup() throws Exception {
+        match("(/)", "_", "_");
+        match("(?:/)", "_", "_");
+        match(".(?=/)", "a_", "a");
+        match("a(?!/)", "ab", "a");
+        match(".(?<=/)a", "ba_a", "_a");
+        match(".(?<!/)a", "_aba", "ba");
+    }
 }

@@ -18,37 +18,39 @@
  */
 package org.exoplatform.component.test.jcr;
 
-import org.exoplatform.component.test.*;
+import static org.junit.Assert.assertNotNull;
+
+import javax.jcr.Session;
+
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.component.test.KernelLifeCycle;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.exoplatform.services.jcr.core.ManageableRepository;
-import static org.junit.Assert.*;
 import org.junit.ClassRule;
 import org.junit.Test;
-
-import javax.jcr.Session;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml")})
-public class BootstrapTestCase
-{
+@ConfiguredBy({ @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml") })
+public class BootstrapTestCase {
 
-   @ClassRule
-   public static KernelLifeCycle kernel = new KernelLifeCycle();
+    @ClassRule
+    public static KernelLifeCycle kernel = new KernelLifeCycle();
 
-   @Test
-   public void testWorkspace() throws Exception
-   {
-      PortalContainer container = PortalContainer.getInstance();
-      RepositoryService repos = (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
-      assertNotNull(repos);
-      ManageableRepository repo = repos.getDefaultRepository();
-      assertNotNull(repo);
-      Session session = repo.getSystemSession("portal-test");
-      assertNotNull(session);
-      session.logout();
-   }
+    @Test
+    public void testWorkspace() throws Exception {
+        PortalContainer container = PortalContainer.getInstance();
+        RepositoryService repos = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
+        assertNotNull(repos);
+        ManageableRepository repo = repos.getDefaultRepository();
+        assertNotNull(repo);
+        Session session = repo.getSystemSession("portal-test");
+        assertNotNull(session);
+        session.logout();
+    }
 }

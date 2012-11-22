@@ -20,7 +20,6 @@ package org.exoplatform.portal.application.state;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.namespace.QName;
@@ -34,44 +33,36 @@ import org.picocontainer.Startable;
  * @date
  */
 
-public class ContextualPropertyManagerImpl implements ContextualPropertyManager, Startable
-{
+public class ContextualPropertyManagerImpl implements ContextualPropertyManager, Startable {
 
-   private ArrayList<AbstractContextualPropertyProviderPlugin> propertyProviderPlugins;
-   
-   public ContextualPropertyManagerImpl() throws Exception
-   {
-      propertyProviderPlugins = new ArrayList<AbstractContextualPropertyProviderPlugin>();
-   }
-   
-   public Map<QName, String[]> getProperties(UIPortlet portletWindow)
-   {
-      Map<QName, String[]> whatPortletWindowSee = new HashMap<QName, String[]>();
+    private ArrayList<AbstractContextualPropertyProviderPlugin> propertyProviderPlugins;
 
-      // No need to use an iterator here
-      for (int i = 0;i < propertyProviderPlugins.size();i++)
-      {
-         AbstractContextualPropertyProviderPlugin plugin  = propertyProviderPlugins.get(i);
-         plugin.getProperties(portletWindow, whatPortletWindowSee);
-      }
+    public ContextualPropertyManagerImpl() throws Exception {
+        propertyProviderPlugins = new ArrayList<AbstractContextualPropertyProviderPlugin>();
+    }
 
-      //
-      return whatPortletWindowSee;
-   }
+    public Map<QName, String[]> getProperties(UIPortlet portletWindow) {
+        Map<QName, String[]> whatPortletWindowSee = new HashMap<QName, String[]>();
 
-   public void start()
-   {
-   }
+        // No need to use an iterator here
+        for (int i = 0; i < propertyProviderPlugins.size(); i++) {
+            AbstractContextualPropertyProviderPlugin plugin = propertyProviderPlugins.get(i);
+            plugin.getProperties(portletWindow, whatPortletWindowSee);
+        }
 
-   public void stop()
-   {
-   }
-   
-   public void addPlugin(ComponentPlugin plugin)
-   {
-      if(plugin instanceof AbstractContextualPropertyProviderPlugin)
-      {
-         propertyProviderPlugins.add((AbstractContextualPropertyProviderPlugin)plugin);
-      }
-   }
+        //
+        return whatPortletWindowSee;
+    }
+
+    public void start() {
+    }
+
+    public void stop() {
+    }
+
+    public void addPlugin(ComponentPlugin plugin) {
+        if (plugin instanceof AbstractContextualPropertyProviderPlugin) {
+            propertyProviderPlugins.add((AbstractContextualPropertyProviderPlugin) plugin);
+        }
+    }
 }

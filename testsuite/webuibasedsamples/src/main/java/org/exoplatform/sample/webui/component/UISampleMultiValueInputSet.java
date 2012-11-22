@@ -21,146 +21,122 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.UIFormTextAreaInput;
 import org.exoplatform.webui.form.UIFormUploadInput;
 import org.exoplatform.webui.form.ext.UIFormColorPicker;
-import org.exoplatform.webui.form.ext.UIFormColorPicker.Colors;
-import org.exoplatform.webui.form.ext.UIFormColorPicker.Colors.Color;
 
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {@EventConfig(listeners = UISampleMultiValueInputSet.SubmitActionListener.class)})
-public class UISampleMultiValueInputSet extends UIForm
-{
+@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = { @EventConfig(listeners = UISampleMultiValueInputSet.SubmitActionListener.class) })
+public class UISampleMultiValueInputSet extends UIForm {
 
-   public static final String MULTI_UPLOAD = "UploadInput";
+    public static final String MULTI_UPLOAD = "UploadInput";
 
-   public static final String MULTI_DATE = "DateTimeInput";
+    public static final String MULTI_DATE = "DateTimeInput";
 
-   public static final String MULTI_COLOR = "ColorInput";
+    public static final String MULTI_COLOR = "ColorInput";
 
-   public static final String MULTI_STRING = "StringInput";
+    public static final String MULTI_STRING = "StringInput";
 
-   public static final String MULTI_TEXTAREA = "TextAreaInput";
+    public static final String MULTI_TEXTAREA = "TextAreaInput";
 
-   public static final String[] ACTIONS = {"Submit"};
+    public static final String[] ACTIONS = { "Submit" };
 
-   public UISampleMultiValueInputSet() throws Exception
-   {
-      UIFormMultiValueInputSet uiFormMultiValueInputSet;
-      
-      // UIFormUploadInput
-      addUIFormInput(makeMultiValueInputSet(MULTI_UPLOAD, UIFormUploadInput.class, new Class[] {String.class, String.class, int.class}));
-      // UIFormDateTimeInput
-      addUIFormInput(makeMultiValueInputSet(MULTI_DATE, UIFormDateTimeInput.class));
+    public UISampleMultiValueInputSet() throws Exception {
+        UIFormMultiValueInputSet uiFormMultiValueInputSet;
 
-      // UIFormColorPicker
-      uiFormMultiValueInputSet = new UIFormMultiValueInputSet(MULTI_COLOR, MULTI_COLOR);
-      uiFormMultiValueInputSet.setType(UIFormColorPicker.class);
-      uiFormMultiValueInputSet.setConstructorParameterTypes(new Class[] {String.class, String.class, String.class});
-      uiFormMultiValueInputSet.setConstructorParameterValues(new Object[] {"ABC", "XYZ", null});
-      addUIFormInput(uiFormMultiValueInputSet);
+        // UIFormUploadInput
+        addUIFormInput(makeMultiValueInputSet(MULTI_UPLOAD, UIFormUploadInput.class, new Class[] { String.class, String.class,
+                int.class }));
+        // UIFormDateTimeInput
+        addUIFormInput(makeMultiValueInputSet(MULTI_DATE, UIFormDateTimeInput.class));
 
-      // UIFormStringInput
-      addUIFormInput(makeMultiValueInputSet(MULTI_STRING, UIFormStringInput.class));
+        // UIFormColorPicker
+        uiFormMultiValueInputSet = new UIFormMultiValueInputSet(MULTI_COLOR, MULTI_COLOR);
+        uiFormMultiValueInputSet.setType(UIFormColorPicker.class);
+        uiFormMultiValueInputSet.setConstructorParameterTypes(new Class[] { String.class, String.class, String.class });
+        uiFormMultiValueInputSet.setConstructorParameterValues(new Object[] { "ABC", "XYZ", null });
+        addUIFormInput(uiFormMultiValueInputSet);
 
-      // UIFormTextAreaInput
-      addUIFormInput(makeMultiValueInputSet(MULTI_TEXTAREA, UIFormTextAreaInput.class));
+        // UIFormStringInput
+        addUIFormInput(makeMultiValueInputSet(MULTI_STRING, UIFormStringInput.class));
 
-      setActions(ACTIONS);
-   }
+        // UIFormTextAreaInput
+        addUIFormInput(makeMultiValueInputSet(MULTI_TEXTAREA, UIFormTextAreaInput.class));
 
-   @SuppressWarnings("unchecked")
-   private UIFormInput makeMultiValueInputSet(String name, Class<? extends UIFormInputBase> type) throws Exception
-   {
-      UIFormMultiValueInputSet multiInput = new UIFormMultiValueInputSet(name, null);
-      multiInput.setType(type);
-      return multiInput;
-   }
-   
-   private UIFormInput makeMultiValueInputSetHasValue(String name, Class<? extends UIFormInputBase> type, Object[] parameterValues) throws Exception
-   {
-      UIFormMultiValueInputSet multiInput = new UIFormMultiValueInputSet(name, null);
-      multiInput.setType(type);
-      multiInput.setConstructorParameterTypes(new Class[] {String.class, String.class, String.class});
-      multiInput.setConstructorParameterValues(parameterValues);
-      return multiInput;
-   }
-   
-   private UIFormInput makeMultiValueInputSet(String name, Class<? extends UIFormInputBase> type, Class<?>... parameterTypes) throws Exception 
-   {
-      UIFormMultiValueInputSet multiInput = new UIFormMultiValueInputSet(name, null);
-      multiInput.setType(type);
-      multiInput.setConstructorParameterTypes(parameterTypes);
-      return multiInput;
-   }
+        setActions(ACTIONS);
+    }
 
-   static public class SubmitActionListener extends EventListener<UISampleMultiValueInputSet>
-   {
-      @Override
-      public void execute(Event<UISampleMultiValueInputSet> event) throws Exception
-      {
-         WebuiRequestContext rcontext = event.getRequestContext();
-         rcontext.getUIApplication().addMessage(makeMsg(event.getSource()));
-      }
+    @SuppressWarnings("unchecked")
+    private UIFormInput makeMultiValueInputSet(String name, Class<? extends UIFormInputBase> type) throws Exception {
+        UIFormMultiValueInputSet multiInput = new UIFormMultiValueInputSet(name, null);
+        multiInput.setType(type);
+        return multiInput;
+    }
 
-      @SuppressWarnings("unchecked")
-      private ApplicationMessage makeMsg(UISampleMultiValueInputSet uiForm)
-      {
-         StringBuilder msgBuild = new StringBuilder();
+    private UIFormInput makeMultiValueInputSetHasValue(String name, Class<? extends UIFormInputBase> type,
+            Object[] parameterValues) throws Exception {
+        UIFormMultiValueInputSet multiInput = new UIFormMultiValueInputSet(name, null);
+        multiInput.setType(type);
+        multiInput.setConstructorParameterTypes(new Class[] { String.class, String.class, String.class });
+        multiInput.setConstructorParameterValues(parameterValues);
+        return multiInput;
+    }
 
-         for (UIComponent child : uiForm.getChildren())
-         {
-            UIFormMultiValueInputSet multiInput = (UIFormMultiValueInputSet)child;
+    private UIFormInput makeMultiValueInputSet(String name, Class<? extends UIFormInputBase> type, Class<?>... parameterTypes)
+            throws Exception {
+        UIFormMultiValueInputSet multiInput = new UIFormMultiValueInputSet(name, null);
+        multiInput.setType(type);
+        multiInput.setConstructorParameterTypes(parameterTypes);
+        return multiInput;
+    }
 
-            if (multiInput.getUIFormInputBase().equals(UIFormUploadInput.class))
-            {
-               makeUploadInputMsg(multiInput, msgBuild);
+    public static class SubmitActionListener extends EventListener<UISampleMultiValueInputSet> {
+        @Override
+        public void execute(Event<UISampleMultiValueInputSet> event) throws Exception {
+            WebuiRequestContext rcontext = event.getRequestContext();
+            rcontext.getUIApplication().addMessage(makeMsg(event.getSource()));
+        }
+
+        @SuppressWarnings("unchecked")
+        private ApplicationMessage makeMsg(UISampleMultiValueInputSet uiForm) {
+            StringBuilder msgBuild = new StringBuilder();
+
+            for (UIComponent child : uiForm.getChildren()) {
+                UIFormMultiValueInputSet multiInput = (UIFormMultiValueInputSet) child;
+
+                if (multiInput.getUIFormInputBase().equals(UIFormUploadInput.class)) {
+                    makeUploadInputMsg(multiInput, msgBuild);
+                } else if (multiInput.getUIFormInputBase().equals(UIFormDateTimeInput.class)) {
+                    makeDateInputMsg(multiInput, msgBuild);
+                } else {
+                    for (UIComponent multiInputChild : multiInput.getChildren()) {
+                        msgBuild.append(" " + ((UIFormInputBase) multiInputChild).getValue());
+                    }
+                }
+                msgBuild.append("<br/>");
             }
-            else if (multiInput.getUIFormInputBase().equals(UIFormDateTimeInput.class))
-            {
-               makeDateInputMsg(multiInput, msgBuild);
-            }
-            else
-            {
-               for (UIComponent multiInputChild : multiInput.getChildren())
-               {
-                  msgBuild.append(" " + ((UIFormInputBase)multiInputChild).getValue());
-               }
-            }
-            msgBuild.append("<br/>");
-         }
 
-         return new ApplicationMessage(msgBuild.toString().replace(".", "*"), null);
-      }
+            return new ApplicationMessage(msgBuild.toString().replace(".", "*"), null);
+        }
 
-      private void makeDateInputMsg(UIFormMultiValueInputSet multiInput, StringBuilder msgBuild)
-      {
-         for (UIComponent multiInputChild : multiInput.getChildren())
-         {
-            UIFormDateTimeInput dateInput = (UIFormDateTimeInput)multiInputChild;
-            Calendar calendar = dateInput.getCalendar();
-            if (calendar != null)
-            {
-               SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput.getDatePattern_());
-               msgBuild.append(" " + dateFormat.format(dateInput.getCalendar().getTime()));
+        private void makeDateInputMsg(UIFormMultiValueInputSet multiInput, StringBuilder msgBuild) {
+            for (UIComponent multiInputChild : multiInput.getChildren()) {
+                UIFormDateTimeInput dateInput = (UIFormDateTimeInput) multiInputChild;
+                Calendar calendar = dateInput.getCalendar();
+                if (calendar != null) {
+                    SimpleDateFormat dateFormat = new SimpleDateFormat(dateInput.getDatePattern_());
+                    msgBuild.append(" " + dateFormat.format(dateInput.getCalendar().getTime()));
+                } else {
+                    msgBuild.append("null");
+                }
             }
-            else
-            {
-               msgBuild.append("null");
-            }
-         }
-      }
+        }
 
-      private void makeUploadInputMsg(UIFormMultiValueInputSet multiInput, StringBuilder msgBuild)
-      {
-         for (UIComponent multiInputChild : multiInput.getChildren())
-         {
-            UploadResource uploadResource = ((UIFormUploadInput)multiInputChild).getUploadResource();
-            if (uploadResource != null)
-            {
-               msgBuild.append(" " + uploadResource.getFileName());
+        private void makeUploadInputMsg(UIFormMultiValueInputSet multiInput, StringBuilder msgBuild) {
+            for (UIComponent multiInputChild : multiInput.getChildren()) {
+                UploadResource uploadResource = ((UIFormUploadInput) multiInputChild).getUploadResource();
+                if (uploadResource != null) {
+                    msgBuild.append(" " + uploadResource.getFileName());
+                } else {
+                    msgBuild.append("null");
+                }
             }
-            else
-            {
-               msgBuild.append("null");
-            }
-         }
-      }
-   }
+        }
+    }
 }

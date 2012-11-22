@@ -34,26 +34,19 @@ import org.jboss.dmr.ModelType;
 /**
  * @author Tomaz Cerar
  */
-public class DeploymentArchiveDefinition extends SimpleResourceDefinition
-{
-   protected static final SimpleAttributeDefinition MAIN =
-      new SimpleAttributeDefinitionBuilder(Constants.MAIN, ModelType.BOOLEAN, true)
-         .setAllowExpression(false)
-         .setDefaultValue(new ModelNode(false))
-         .setXmlName(Constants.MAIN)
-         .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES)
-         .build();
+public class DeploymentArchiveDefinition extends SimpleResourceDefinition {
+    protected static final SimpleAttributeDefinition MAIN = new SimpleAttributeDefinitionBuilder(Constants.MAIN,
+            ModelType.BOOLEAN, true).setAllowExpression(false).setDefaultValue(new ModelNode(false)).setXmlName(Constants.MAIN)
+            .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES).build();
 
-   DeploymentArchiveDefinition(GateInConfiguration config)
-   {
-      super(PathElement.pathElement(Constants.DEPLOYMENT_ARCHIVE),
-         GateInExtension.getResourceDescriptionResolver(Constants.DEPLOYMENT_ARCHIVE),
-         new DeploymentArchiveAdd(config), new ReloadRequiredRemoveStepHandler());
-   }
+    DeploymentArchiveDefinition(GateInConfiguration config) {
+        super(PathElement.pathElement(Constants.DEPLOYMENT_ARCHIVE), GateInExtension
+                .getResourceDescriptionResolver(Constants.DEPLOYMENT_ARCHIVE), new DeploymentArchiveAdd(config),
+                new ReloadRequiredRemoveStepHandler());
+    }
 
-   @Override
-   public void registerAttributes(ManagementResourceRegistration resourceRegistration)
-   {
-      resourceRegistration.registerReadOnlyAttribute(MAIN, null);
-   }
+    @Override
+    public void registerAttributes(ManagementResourceRegistration resourceRegistration) {
+        resourceRegistration.registerReadOnlyAttribute(MAIN, null);
+    }
 }

@@ -23,7 +23,7 @@
 <page-set
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">  
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
 
   <page>
     <name>homepage</name>
@@ -48,8 +48,8 @@
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
     </portlet-application>
-  </page>    
-    
+  </page>
+
   <page>
     <name>webexplorer</name>
     <title>Web Explorer</title>
@@ -64,6 +64,6 @@
       <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
     </portlet-application>
-  </page>  
+  </page>
 
 </page-set>

@@ -25,26 +25,26 @@
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gadgets_1_0"
     xmlns="http://www.gatein.org/xml/ns/gadgets_1_0">
 
-	<gadget name="Todo">
-		<path>/gadgets/Todo/Todo.xml</path>
-	</gadget>
-	
-	<gadget name="Calendar">
-		<path>/gadgets/Calendar/Calendar.xml</path>
-	</gadget>
-	
-	<gadget name="Calculator">
-		<path>/gadgets/Calculator/Calculator.xml</path>
-	</gadget>
-	
-	<gadget name="rssAggregator">
-		<path>/gadgets/rssAggregator/rssAggregator.xml</path>
-	</gadget>
+  <gadget name="Todo">
+    <path>/gadgets/Todo/Todo.xml</path>
+  </gadget>
+
+  <gadget name="Calendar">
+    <path>/gadgets/Calendar/Calendar.xml</path>
+  </gadget>
+
+  <gadget name="Calculator">
+    <path>/gadgets/Calculator/Calculator.xml</path>
+  </gadget>
+
+  <gadget name="rssAggregator">
+    <path>/gadgets/rssAggregator/rssAggregator.xml</path>
+  </gadget>
 
   <gadget name="Currency">
     <url>http://www.donalobrien.net/apps/google/currency.xml</url>
   </gadget>
-  
+
   <gadget name="ServicesManagement">
     <path>/gadgets/ServicesManagement/ServicesManagement.xml</path>
   </gadget>

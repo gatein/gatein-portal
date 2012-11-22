@@ -21,18 +21,18 @@
 -->
 
 <gatein-resources
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
-   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
 
-	<!-- GadgetPortlet skins -->
+  <!-- GadgetPortlet skins -->
 
-	<portlet-skin>
-		<application-name>dashboard</application-name>
-		<portlet-name>GadgetPortlet</portlet-name>
-		<skin-name>Default</skin-name>
-		<css-path>/skin/gadget/webui/component/UIGadgetPortlet/DefaultStylesheet.css</css-path>
-	</portlet-skin>
+  <portlet-skin>
+    <application-name>dashboard</application-name>
+    <portlet-name>GadgetPortlet</portlet-name>
+    <skin-name>Default</skin-name>
+    <css-path>/skin/gadget/webui/component/UIGadgetPortlet/DefaultStylesheet.css</css-path>
+  </portlet-skin>
 
   <portlet>
     <name>DashboardPortlet</name>
@@ -52,17 +52,17 @@
     </module>
   </portlet>
 
-   <portlet>
-      <name>TabbedDashboardPortlet</name>
-      <scripts>
-         <script>
-            <path>/javascript/eXo/webui/UITabbedDashboard.js</path>
-         </script>
-         <depends>
-            <scripts>bootstrap</scripts>
-         </depends>
-      </scripts>
-   </portlet>
+  <portlet>
+    <name>TabbedDashboardPortlet</name>
+    <scripts>
+      <script>
+        <path>/javascript/eXo/webui/UITabbedDashboard.js</path>
+      </script>
+      <depends>
+        <scripts>bootstrap</scripts>
+      </depends>
+    </scripts>
+  </portlet>
 
 </gatein-resources>
 

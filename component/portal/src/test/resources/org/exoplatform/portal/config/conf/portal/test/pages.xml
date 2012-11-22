@@ -23,7 +23,7 @@
 <page-set
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">  
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
 
 
   <page>
@@ -69,7 +69,7 @@
       <height>application_1_height</height>
     </portlet-application>
   </page>
-    
+
   <page>
     <name>test2</name>
   </page>

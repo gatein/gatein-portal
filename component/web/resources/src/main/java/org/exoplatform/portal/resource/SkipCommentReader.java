@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 
+
 /**
  *
  * A subclass of BufferedReader which skip the comment block
@@ -29,204 +30,170 @@ import java.io.Reader;
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
  * @date 6/27/11
  */
-public class SkipCommentReader extends BufferedReader
-{
+public class SkipCommentReader extends BufferedReader {
 
-   private final StringBuilder pushbackCache;
+    private final StringBuilder pushbackCache;
 
-   private final static int EOF = -1;
+    private static final int EOF = -1;
 
-   private State cursorState;
+    private State cursorState;
 
-   private CommentBlockHandler commentBlockHandler;
+    private CommentBlockHandler commentBlockHandler;
 
-   /* The number of next comming characters that won't be skipped even if they are in a comment block */
-   private int numberOfCommingEscapes;
+    /* The number of next comming characters that won't be skipped even if they are in a comment block */
+    private int numberOfCommingEscapes;
 
-   public SkipCommentReader(Reader reader)
-   {
-      this(reader, null);
-   }
+    public SkipCommentReader(Reader reader) {
+        this(reader, null);
+    }
 
-   public SkipCommentReader(Reader reader, CommentBlockHandler handler)
-   {
-      super(reader);
-      pushbackCache = new StringBuilder();
-      cursorState = State.ENCOUNTING_ORDINARY_CHARACTER;
-      this.commentBlockHandler = handler;
-   }
+    public SkipCommentReader(Reader reader, CommentBlockHandler handler) {
+        super(reader);
+        pushbackCache = new StringBuilder();
+        cursorState = State.ENCOUNTING_ORDINARY_CHARACTER;
+        this.commentBlockHandler = handler;
+    }
 
-   /**
-    * Recursive method that read a single character from underlying reader. Encountered comment block
-    * is escaped automatically.
-    *
-    * @return
-    * @throws IOException
-    */
-   public int readSingleCharacter() throws IOException
-   {
-      int readingChar = readLikePushbackReader();
-      if(readingChar == EOF)
-      {
-         return EOF;
-      }
+    /**
+     * Recursive method that read a single character from underlying reader. Encountered comment block is escaped automatically.
+     *
+     * @return
+     * @throws IOException
+     */
+    public int readSingleCharacter() throws IOException {
+        int readingChar = readLikePushbackReader();
+        if (readingChar == EOF) {
+            return EOF;
+        }
 
-      if(numberOfCommingEscapes > 0)
-      {
-         numberOfCommingEscapes--;
-         return readingChar;
-      }
-
-      switch (readingChar)
-      {
-         case '/':
-            int nextCharToRead = read();
-            if (nextCharToRead == '*')
-            {
-               this.cursorState = SkipCommentReader.State.ENCOUNTING_COMMENT_BLOCK_OPENING_TAG;
-               advanceToEscapeCommentBlock();
-               return readSingleCharacter();
-            }
-            else
-            {
-               this.cursorState = SkipCommentReader.State.ENCOUNTING_FORWARD_SLASH;
-               pushbackCache.append((char)nextCharToRead);
-               return '/';
-            }
-
-         case '*':
-            if (this.cursorState == SkipCommentReader.State.ENCOUNTING_FORWARD_SLASH)
-            {
-               this.cursorState = SkipCommentReader.State.ENCOUNTING_COMMENT_BLOCK_OPENING_TAG;
-               advanceToEscapeCommentBlock();
-               return readSingleCharacter();
-            }
-            else
-            {
-               this.cursorState = SkipCommentReader.State.ENCOUNTING_ASTERIK;
-               return '*';
-            }
-
-         default:
-            this.cursorState = SkipCommentReader.State.ENCOUNTING_ORDINARY_CHARACTER;
+        if (numberOfCommingEscapes > 0) {
+            numberOfCommingEscapes--;
             return readingChar;
-      }
+        }
 
-   }
+        switch (readingChar) {
+            case '/':
+                int nextCharToRead = read();
+                if (nextCharToRead == '*') {
+                    this.cursorState = SkipCommentReader.State.ENCOUNTING_COMMENT_BLOCK_OPENING_TAG;
+                    advanceToEscapeCommentBlock();
+                    return readSingleCharacter();
+                } else {
+                    this.cursorState = SkipCommentReader.State.ENCOUNTING_FORWARD_SLASH;
+                    pushbackCache.append((char) nextCharToRead);
+                    return '/';
+                }
 
-   /**
-    * Read from the pushback cache first, then underlying reader
-    */
-   private int readLikePushbackReader() throws IOException
-   {
-      if(pushbackCache.length() > 0)
-      {
-         int readingChar = pushbackCache.charAt(0);
-         pushbackCache.deleteCharAt(0);
-         return readingChar;
-      }
-      return read();
-   }
+            case '*':
+                if (this.cursorState == SkipCommentReader.State.ENCOUNTING_FORWARD_SLASH) {
+                    this.cursorState = SkipCommentReader.State.ENCOUNTING_COMMENT_BLOCK_OPENING_TAG;
+                    advanceToEscapeCommentBlock();
+                    return readSingleCharacter();
+                } else {
+                    this.cursorState = SkipCommentReader.State.ENCOUNTING_ASTERIK;
+                    return '*';
+                }
 
-   /**
-    * Advance in comment block until we reach a comment block closing tag
-    */
-   private void advanceToEscapeCommentBlock() throws IOException
-   {
-      if(cursorState != SkipCommentReader.State.ENCOUNTING_COMMENT_BLOCK_OPENING_TAG)
-      {
-         throw new IllegalStateException("This method should be invoked only if we are entering a comment block");
-      }
+            default:
+                this.cursorState = SkipCommentReader.State.ENCOUNTING_ORDINARY_CHARACTER;
+                return readingChar;
+        }
 
-      int readingChar = read();
-      StringBuilder commentBlock = new StringBuilder("/*");
+    }
 
-      LOOP:
-      while(readingChar != EOF)
-      {
-         commentBlock.append((char)readingChar);
-         if(readingChar == '/')
-         {
-            if(this.cursorState == SkipCommentReader.State.ENCOUNTING_ASTERIK)
-            {
-               this.cursorState = SkipCommentReader.State.ENCOUNTING_COMMENT_BLOCK_CLOSING_TAG;
-               break LOOP; //We 've just escaped the comment block
+    /**
+     * Read from the pushback cache first, then underlying reader
+     */
+    private int readLikePushbackReader() throws IOException {
+        if (pushbackCache.length() > 0) {
+            int readingChar = pushbackCache.charAt(0);
+            pushbackCache.deleteCharAt(0);
+            return readingChar;
+        }
+        return read();
+    }
+
+    /**
+     * Advance in comment block until we reach a comment block closing tag
+     */
+    private void advanceToEscapeCommentBlock() throws IOException {
+        if (cursorState != SkipCommentReader.State.ENCOUNTING_COMMENT_BLOCK_OPENING_TAG) {
+            throw new IllegalStateException("This method should be invoked only if we are entering a comment block");
+        }
+
+        int readingChar = read();
+        StringBuilder commentBlock = new StringBuilder("/*");
+
+        LOOP: while (readingChar != EOF) {
+            commentBlock.append((char) readingChar);
+            if (readingChar == '/') {
+                if (this.cursorState == SkipCommentReader.State.ENCOUNTING_ASTERIK) {
+                    this.cursorState = SkipCommentReader.State.ENCOUNTING_COMMENT_BLOCK_CLOSING_TAG;
+                    break LOOP; // We 've just escaped the comment block
+                } else {
+                    this.cursorState = SkipCommentReader.State.ENCOUNTING_FORWARD_SLASH;
+                }
+            } else {
+                this.cursorState = (readingChar == '*') ? SkipCommentReader.State.ENCOUNTING_ASTERIK
+                        : SkipCommentReader.State.ENCOUNTING_ORDINARY_CHARACTER;
             }
-            else
-            {
-               this.cursorState = SkipCommentReader.State.ENCOUNTING_FORWARD_SLASH;
+            readingChar = read();
+        }
+
+        if (commentBlockHandler != null) {
+            commentBlockHandler.handle(commentBlock, this);
+        }
+    }
+
+    @Override
+    public String readLine() throws IOException {
+        StringBuilder builder = new StringBuilder();
+        int nextChar = readSingleCharacter();
+        if (nextChar == EOF) {
+            return null;
+        }
+
+        while (nextChar != EOF) {
+            if (nextChar == '\n' || nextChar == '\r') {
+                break;
             }
-         }
-         else
-         {
-            this.cursorState = (readingChar == '*')? SkipCommentReader.State.ENCOUNTING_ASTERIK : SkipCommentReader.State.ENCOUNTING_ORDINARY_CHARACTER;
-         }
-         readingChar = read();
-      }
+            builder.append((char) nextChar);
+            nextChar = readSingleCharacter();
+        }
 
-      if(commentBlockHandler != null)
-      {
-         commentBlockHandler.handle(commentBlock, this);
-      }
-   }
+        return builder.toString().trim();
+    }
 
-   @Override
-   public String readLine() throws IOException
-   {
-      StringBuilder builder = new StringBuilder();
-      int nextChar = readSingleCharacter();
-      if(nextChar == EOF)
-      {
-         return null;
-      }
+    /**
+     * Used for JUnit tests
+     *
+     * @return
+     */
+    public State getCursorState() {
+        return this.cursorState;
+    }
 
-      while(nextChar != EOF)
-      {
-         if(nextChar == '\n' || nextChar == '\r')
-         {
-            break;
-         }
-         builder.append((char)nextChar);
-         nextChar = readSingleCharacter();
-      }
+    public void setCommentBlockHandler(CommentBlockHandler commentBlockHandler) {
+        this.commentBlockHandler = commentBlockHandler;
+    }
 
-      return builder.toString().trim();
-   }
+    public void setNumberOfCommingEscapes(int numberOfCommingEscapes) {
+        this.numberOfCommingEscapes = numberOfCommingEscapes;
+    }
 
-   /**
-    * Used for JUnit tests
-    * @return
-    */
-   public State getCursorState()
-   {
-      return this.cursorState;
-   }
+    public void pushback(CharSequence sequence) {
+        this.pushbackCache.append(sequence);
+    }
 
-   public void setCommentBlockHandler(CommentBlockHandler commentBlockHandler)
-   {
-      this.commentBlockHandler = commentBlockHandler;
-   }
+    public enum State {
+        ENCOUNTING_FORWARD_SLASH,
 
-   public void setNumberOfCommingEscapes(int numberOfCommingEscapes)
-   {
-      this.numberOfCommingEscapes = numberOfCommingEscapes;
-   }
+        ENCOUNTING_ASTERIK,
 
-   public void pushback(CharSequence sequence)
-   {
-      this.pushbackCache.append(sequence);
-   }
+        ENCOUNTING_COMMENT_BLOCK_OPENING_TAG,
 
-   public enum State
-   {
-      ENCOUNTING_FORWARD_SLASH,
+        ENCOUNTING_COMMENT_BLOCK_CLOSING_TAG,
 
-      ENCOUNTING_ASTERIK,
-
-      ENCOUNTING_COMMENT_BLOCK_OPENING_TAG,
-
-      ENCOUNTING_COMMENT_BLOCK_CLOSING_TAG,
-
-      ENCOUNTING_ORDINARY_CHARACTER
-   }
+        ENCOUNTING_ORDINARY_CHARACTER
+    }
 }

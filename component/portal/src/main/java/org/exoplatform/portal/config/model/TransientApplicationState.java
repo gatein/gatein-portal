@@ -25,77 +25,65 @@ package org.exoplatform.portal.config.model;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TransientApplicationState<S> extends ApplicationState<S>
-{
+public class TransientApplicationState<S> extends ApplicationState<S> {
 
-   /** The owner type. */
-   private String contentId;
+    /** The owner type. */
+    private String contentId;
 
-   /** The owner type. */
-   private String ownerType;
+    /** The owner type. */
+    private String ownerType;
 
-   /** The owner id. */
-   private String ownerId;
+    /** The owner id. */
+    private String ownerId;
 
-   /** The content state. */
-   private S contentState;
+    /** The content state. */
+    private S contentState;
 
-   public TransientApplicationState(String contentId)
-   {
-      this.contentId = contentId;
-   }
+    public TransientApplicationState(String contentId) {
+        this.contentId = contentId;
+    }
 
-   public TransientApplicationState(String contentId, S contentState)
-   {
-      this.contentId = contentId;
-      this.contentState = contentState;
-   }
+    public TransientApplicationState(String contentId, S contentState) {
+        this.contentId = contentId;
+        this.contentState = contentState;
+    }
 
-   public TransientApplicationState(String contentId, S contentState, String ownerType, String ownerId)
-   {
-      this.contentId = contentId;
-      this.contentState = contentState;
-      this.ownerType = ownerType;
-      this.ownerId = ownerId;
-   }
+    public TransientApplicationState(String contentId, S contentState, String ownerType, String ownerId) {
+        this.contentId = contentId;
+        this.contentState = contentState;
+        this.ownerType = ownerType;
+        this.ownerId = ownerId;
+    }
 
-   public TransientApplicationState()
-   {
-      this.contentState = null;
-   }
+    public TransientApplicationState() {
+        this.contentState = null;
+    }
 
-   public String getContentId()
-   {
-      return contentId;
-   }
+    public String getContentId() {
+        return contentId;
+    }
 
-   public S getContentState()
-   {
-      return contentState;
-   }
+    public S getContentState() {
+        return contentState;
+    }
 
-   public void setContentState(S contentState)
-   {
-      this.contentState = contentState;
-   }
+    public void setContentState(S contentState) {
+        this.contentState = contentState;
+    }
 
-   public String getOwnerType()
-   {
-      return ownerType;
-   }
+    public String getOwnerType() {
+        return ownerType;
+    }
 
-   public void setOwnerType(String ownerType)
-   {
-      this.ownerType = ownerType;
-   }
+    public void setOwnerType(String ownerType) {
+        this.ownerType = ownerType;
+    }
 
-   public String getOwnerId()
-   {
-      return ownerId;
-   }
+    public String getOwnerId() {
+        return ownerId;
+    }
 
-   public void setOwnerId(String ownerId)
-   {
-      this.ownerId = ownerId;
-   }
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
 }

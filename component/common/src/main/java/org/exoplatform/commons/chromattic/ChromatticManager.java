@@ -18,119 +18,106 @@
  */
 package org.exoplatform.commons.chromattic;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.exoplatform.services.jcr.RepositoryService;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ChromatticManager implements ComponentRequestLifecycle
-{
+public class ChromatticManager implements ComponentRequestLifecycle {
 
-   /** . */
-   final RepositoryService repositoryService;
+    /** . */
+    final RepositoryService repositoryService;
 
-   /** . */
-   Map<String, String> lifeCycleToWorkspaceMap;
+    /** . */
+    Map<String, String> lifeCycleToWorkspaceMap;
 
-   /** . */
-   Map<String, ChromatticLifeCycle> lifeCycles = new HashMap<String, ChromatticLifeCycle>();
+    /** . */
+    Map<String, ChromatticLifeCycle> lifeCycles = new HashMap<String, ChromatticLifeCycle>();
 
-   /** . */
-   private final ThreadLocal<Synchronization> currentSynchronization = new ThreadLocal<Synchronization>();
+    /** . */
+    private final ThreadLocal<Synchronization> currentSynchronization = new ThreadLocal<Synchronization>();
 
-   public ChromatticManager(RepositoryService repositoryService) throws Exception {
-      this.repositoryService = repositoryService;
-      this.lifeCycleToWorkspaceMap = new HashMap<String, String>();
-   }
+    public ChromatticManager(RepositoryService repositoryService) throws Exception {
+        this.repositoryService = repositoryService;
+        this.lifeCycleToWorkspaceMap = new HashMap<String, String>();
+    }
 
-   public ChromatticLifeCycle getLifeCycle(String lifeCycleName)
-   {
-      return lifeCycles.get(lifeCycleName);
-   }
+    public ChromatticLifeCycle getLifeCycle(String lifeCycleName) {
+        return lifeCycles.get(lifeCycleName);
+    }
 
-   // Called by kernel
-   public void addLifeCycle(ComponentPlugin plugin)
-   {
-      ChromatticLifeCycle lifeCycle = (ChromatticLifeCycle)plugin;
-      try
-      {
-         lifeCycle.manager = this;
-         lifeCycle.start();
-         lifeCycles.put(lifeCycle.getDomainName(), lifeCycle);
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-      }
-   }
+    // Called by kernel
+    public void addLifeCycle(ComponentPlugin plugin) {
+        ChromatticLifeCycle lifeCycle = (ChromatticLifeCycle) plugin;
+        try {
+            lifeCycle.manager = this;
+            lifeCycle.start();
+            lifeCycles.put(lifeCycle.getDomainName(), lifeCycle);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-   public Synchronization getSynchronization()
-   {
-      return currentSynchronization.get();
-   }
+    public Synchronization getSynchronization() {
+        return currentSynchronization.get();
+    }
 
-   /**
-    * Begins the demarcation of a request and associates the current thread of execution with
-    * a context that will provides access to the correct persistence context.
-    *
-    * @throws IllegalStateException if a request is already associated with this thread
-    */
-   public void beginRequest() throws IllegalStateException
-   {
-      if (currentSynchronization.get() != null)
-      {
-         throw new IllegalStateException("Request already started");
-      }
+    /**
+     * Begins the demarcation of a request and associates the current thread of execution with a context that will provides
+     * access to the correct persistence context.
+     *
+     * @throws IllegalStateException if a request is already associated with this thread
+     */
+    public void beginRequest() throws IllegalStateException {
+        if (currentSynchronization.get() != null) {
+            throw new IllegalStateException("Request already started");
+        }
 
-      //
-      Synchronization sync = new Synchronization();
+        //
+        Synchronization sync = new Synchronization();
 
-      //
-      currentSynchronization.set(sync);
-   }
+        //
+        currentSynchronization.set(sync);
+    }
 
-   /**
-    * Ends the demarcation of a request.
-    *
-    * @param save to save the state
-    * @throws IllegalStateException if no request was started previously
-    */
-   public void endRequest(boolean save) throws IllegalStateException
-   {
-      Synchronization sync = currentSynchronization.get();
+    /**
+     * Ends the demarcation of a request.
+     *
+     * @param save to save the state
+     * @throws IllegalStateException if no request was started previously
+     */
+    public void endRequest(boolean save) throws IllegalStateException {
+        Synchronization sync = currentSynchronization.get();
 
-      // We set null now so it will be properly closed in the PortalSessionLifeCycle logout method
-      currentSynchronization.set(null);
+        // We set null now so it will be properly closed in the PortalSessionLifeCycle logout method
+        currentSynchronization.set(null);
 
-      //
-      if (sync == null)
-      {
-         throw new IllegalStateException("Request not started");
-      }
+        //
+        if (sync == null) {
+            throw new IllegalStateException("Request not started");
+        }
 
-      // Properly close everything
-      sync.close(save);
+        // Properly close everything
+        sync.close(save);
 
-      //
-      currentSynchronization.set(null);
-   }
+        //
+        currentSynchronization.set(null);
+    }
 
-   public void startRequest(ExoContainer container)
-   {
-      beginRequest();
-   }
+    public void startRequest(ExoContainer container) {
+        beginRequest();
+    }
 
-   public void endRequest(ExoContainer container)
-   {
-      Synchronization sync = currentSynchronization.get();
-      boolean save = sync.getSaveOnClose();
-      endRequest(save);
-   }
+    public void endRequest(ExoContainer container) {
+        Synchronization sync = currentSynchronization.get();
+        boolean save = sync.getSaveOnClose();
+        endRequest(save);
+    }
 }

@@ -23,32 +23,32 @@
 <Module>
   <ModulePrefs title="Pankow Gadget">
 
-  <Require feature="oauth">
-    <Param name="service_name">
-      demo
-    </Param>
-    <Param name="access_url">
-      http://localhost:9090/oauth-provider/access_token
-    </Param>
-    <Param name="access_method">
-      GET
-    </Param>
+    <Require feature="oauth">
+      <Param name="service_name">
+        demo
+      </Param>
+      <Param name="access_url">
+        http://localhost:9090/oauth-provider/access_token
+      </Param>
+      <Param name="access_method">
+        GET
+      </Param>
 
-    <Param name="request_url">
-      http://localhost:9090/oauth-provider/request_token
-    </Param>
-    <Param name="request_method">
-      GET
-    </Param>
+      <Param name="request_url">
+        http://localhost:9090/oauth-provider/request_token
+      </Param>
+      <Param name="request_method">
+        GET
+      </Param>
 
-    <Param name="authorize_url">
-      http://localhost:9090/oauth-provider/authorize
-    </Param>
-  </Require>
+      <Param name="authorize_url">
+        http://localhost:9090/oauth-provider/authorize
+      </Param>
+    </Require>
 
   </ModulePrefs>
   <Content type="html">
-      <![CDATA[
+    <![CDATA[
 
     <style>
     #main {

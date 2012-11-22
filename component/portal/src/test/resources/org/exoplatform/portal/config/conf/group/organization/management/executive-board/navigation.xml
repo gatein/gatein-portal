@@ -21,31 +21,31 @@
 -->
 
 <node-navigation
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
   <priority>5</priority>
-  
+
   <page-nodes>
     <node>
       <uri>organization</uri>
       <name>organization</name>
       <label>#{organization.title}</label>
-      
+
       <node>
-	      <uri>organization/newStaff</uri>
-	      <name>newStaff</name>
-	      <label>#{organization.newstaff}</label>
-	      <page-reference>group::organization/management/executive-board::newStaff</page-reference>
-    	</node>
-    	
-    	<node>
-	      <uri>organization/management</uri>
-	      <name>management</name>
-	      <label>#{organization.management}</label>
-	      <page-reference>group::organization/management/executive-board::management</page-reference>
-    	</node>    	
+        <uri>organization/newStaff</uri>
+        <name>newStaff</name>
+        <label>#{organization.newstaff}</label>
+        <page-reference>group::organization/management/executive-board::newStaff</page-reference>
+      </node>
+
+      <node>
+        <uri>organization/management</uri>
+        <name>management</name>
+        <label>#{organization.management}</label>
+        <page-reference>group::organization/management/executive-board::management</page-reference>
+      </node>
     </node>
-            
-  </page-nodes>    
+
+  </page-nodes>
 </node-navigation>

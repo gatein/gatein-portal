@@ -111,9 +111,9 @@
     </identity-stores>
   </stores>
   <options>
-      <option>
-         <name>defaultTemplate</name>
-         <value>idm_realm</value>
-      </option>
+    <option>
+      <name>defaultTemplate</name>
+      <value>idm_realm</value>
+    </option>
   </options>
 </jboss-identity>

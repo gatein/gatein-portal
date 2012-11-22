@@ -11,7 +11,11 @@
     94105, USA.
   -->
 
-  <ModulePrefs height="230" author="LabPixies" author_email="labpixie.gadgets+weather+201101101@gmail.com" description="__MSG_description__" thumbnail="http://www.labpixies.com/campaigns/weather/images/thumbnail.jpg" screenshot="http://www.labpixies.com/campaigns/weather/images/screenshot.png" title="__MSG_gTitle__" title_url="http://www.labpixies.com">
+  <ModulePrefs height="230" author="LabPixies" author_email="labpixie.gadgets+weather+201101101@gmail.com"
+               description="__MSG_description__"
+               thumbnail="http://www.labpixies.com/campaigns/weather/images/thumbnail.jpg"
+               screenshot="http://www.labpixies.com/campaigns/weather/images/screenshot.png" title="__MSG_gTitle__"
+               title_url="http://www.labpixies.com">
 
     <Locale messages="http://www.labpixies.com/campaigns/weather/i20/all_all.xml"/>
 
@@ -69,7 +73,7 @@
   <UserPref name="tabs" datatype="hidden" default_value="{&quot;news&quot;:1,&quot;l0&quot;:1}"/>
 
   <Content type="html" view="home">
-<![CDATA[
+    <![CDATA[
 <title>Weather</title>
 
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
@@ -2129,7 +2133,7 @@ $lp(document).ready(function(){init();});
   </Content>
 
   <Content type="html" view="canvas">
-<![CDATA[
+    <![CDATA[
 <title>Weather</title>
 <!--[if IE 6]>
 <style type="text/css">
@@ -4298,7 +4302,7 @@ __MSG_friends_title__
   </Content>
 
   <Content type="html">
-  <![CDATA[
+    <![CDATA[
 <title>Weather</title>
 
 <style type="text/css">

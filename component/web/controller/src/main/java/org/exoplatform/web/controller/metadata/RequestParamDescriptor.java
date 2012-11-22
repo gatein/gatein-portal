@@ -28,143 +28,122 @@ import org.exoplatform.web.controller.router.ValueType;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RequestParamDescriptor extends ParamDescriptor
-{
+public class RequestParamDescriptor extends ParamDescriptor {
 
-   /** . */
-   private String name;
+    /** . */
+    private String name;
 
-   /** . */
-   private String value;
+    /** . */
+    private String value;
 
-   /** . */
-   private ValueType valueType;
+    /** . */
+    private ValueType valueType;
 
-   /** . */
-   private ControlMode controlMode;
+    /** . */
+    private ControlMode controlMode;
 
-   /** . */
-   private ValueMapping valueMapping;
+    /** . */
+    private ValueMapping valueMapping;
 
-   public RequestParamDescriptor(QualifiedName qualifiedName)
-   {
-      super(qualifiedName);
+    public RequestParamDescriptor(QualifiedName qualifiedName) {
+        super(qualifiedName);
 
-      //
-      this.value = null;
-      this.controlMode = ControlMode.OPTIONAL;
-      this.valueType = ValueType.LITERAL;
-      this.valueMapping = ValueMapping.CANONICAL;
-   }
+        //
+        this.value = null;
+        this.controlMode = ControlMode.OPTIONAL;
+        this.valueType = ValueType.LITERAL;
+        this.valueMapping = ValueMapping.CANONICAL;
+    }
 
-   public RequestParamDescriptor(String qualifiedName)
-   {
-      super(qualifiedName);
+    public RequestParamDescriptor(String qualifiedName) {
+        super(qualifiedName);
 
-      //
-      this.value = null;
-      this.controlMode = ControlMode.OPTIONAL;
-      this.valueType = ValueType.LITERAL;
-      this.valueMapping = ValueMapping.CANONICAL;
-   }
+        //
+        this.value = null;
+        this.controlMode = ControlMode.OPTIONAL;
+        this.valueType = ValueType.LITERAL;
+        this.valueMapping = ValueMapping.CANONICAL;
+    }
 
-   public RequestParamDescriptor named(String name)
-   {
-      this.name = name;
-      return this;
-   }
+    public RequestParamDescriptor named(String name) {
+        this.name = name;
+        return this;
+    }
 
-   public RequestParamDescriptor matchedByLiteral(String value)
-   {
-      this.value = value;
-      this.valueType = ValueType.LITERAL;
-      return this;
-   }
+    public RequestParamDescriptor matchedByLiteral(String value) {
+        this.value = value;
+        this.valueType = ValueType.LITERAL;
+        return this;
+    }
 
-   public RequestParamDescriptor matchedByPattern(String value)
-   {
-      this.value = value;
-      this.valueType = ValueType.PATTERN;
-      return this;
-   }
+    public RequestParamDescriptor matchedByPattern(String value) {
+        this.value = value;
+        this.valueType = ValueType.PATTERN;
+        return this;
+    }
 
-   public RequestParamDescriptor required()
-   {
-      this.controlMode = ControlMode.REQUIRED;
-      return this;
-   }
+    public RequestParamDescriptor required() {
+        this.controlMode = ControlMode.REQUIRED;
+        return this;
+    }
 
-   public RequestParamDescriptor optional()
-   {
-      this.controlMode = ControlMode.OPTIONAL;
-      return this;
-   }
+    public RequestParamDescriptor optional() {
+        this.controlMode = ControlMode.OPTIONAL;
+        return this;
+    }
 
-   public RequestParamDescriptor neverEmpty()
-   {
-      this.valueMapping = ValueMapping.NEVER_EMPTY;
-      return this;
-   }
+    public RequestParamDescriptor neverEmpty() {
+        this.valueMapping = ValueMapping.NEVER_EMPTY;
+        return this;
+    }
 
-   public RequestParamDescriptor neverNull()
-   {
-      this.valueMapping = ValueMapping.NEVER_NULL;
-      return this;
-   }
+    public RequestParamDescriptor neverNull() {
+        this.valueMapping = ValueMapping.NEVER_NULL;
+        return this;
+    }
 
-   public RequestParamDescriptor canonical()
-   {
-      this.valueMapping = ValueMapping.CANONICAL;
-      return this;
-   }
+    public RequestParamDescriptor canonical() {
+        this.valueMapping = ValueMapping.CANONICAL;
+        return this;
+    }
 
-   public String getName()
-   {
-      return name;
-   }
+    public String getName() {
+        return name;
+    }
 
-   public void setName(String name)
-   {
-      this.name = name;
-   }
+    public void setName(String name) {
+        this.name = name;
+    }
 
-   public String getValue()
-   {
-      return value;
-   }
+    public String getValue() {
+        return value;
+    }
 
-   public void setValue(String value)
-   {
-      this.value = value;
-   }
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-   public ValueType getValueType()
-   {
-      return valueType;
-   }
+    public ValueType getValueType() {
+        return valueType;
+    }
 
-   public void setValueType(ValueType valueType)
-   {
-      this.valueType = valueType;
-   }
+    public void setValueType(ValueType valueType) {
+        this.valueType = valueType;
+    }
 
-   public ControlMode getControlMode()
-   {
-      return controlMode;
-   }
+    public ControlMode getControlMode() {
+        return controlMode;
+    }
 
-   public void setControlMode(ControlMode controlMode)
-   {
-      this.controlMode = controlMode;
-   }
+    public void setControlMode(ControlMode controlMode) {
+        this.controlMode = controlMode;
+    }
 
-   public ValueMapping getValueMapping()
-   {
-      return valueMapping;
-   }
+    public ValueMapping getValueMapping() {
+        return valueMapping;
+    }
 
-   public void setValueMapping(ValueMapping valueMapping)
-   {
-      this.valueMapping = valueMapping;
-   }
+    public void setValueMapping(ValueMapping valueMapping) {
+        this.valueMapping = valueMapping;
+    }
 }

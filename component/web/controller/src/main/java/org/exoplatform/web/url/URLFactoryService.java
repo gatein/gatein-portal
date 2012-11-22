@@ -22,41 +22,36 @@ package org.exoplatform.web.url;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class URLFactoryService extends URLFactory
-{
+public class URLFactoryService extends URLFactory {
 
-   /** . */
-   private final Map<ResourceType<?,?>, URLFactoryPlugin> plugins;
+    /** . */
+    private final Map<ResourceType<?, ?>, URLFactoryPlugin> plugins;
 
-   public URLFactoryService()
-   {
-      this.plugins = new HashMap<ResourceType<?,?>, URLFactoryPlugin>();
-   }
+    public URLFactoryService() {
+        this.plugins = new HashMap<ResourceType<?, ?>, URLFactoryPlugin>();
+    }
 
-   @Override
-   public <R, U extends PortalURL<R, U>> U newURL(
-      ResourceType<R, U> resourceType,
-      URLContext context) throws NullPointerException
-   {
-      if (resourceType == null)
-      {
-         throw new NullPointerException("No null resource type accepted");
-      }
+    @Override
+    public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLContext context)
+            throws NullPointerException {
+        if (resourceType == null) {
+            throw new NullPointerException("No null resource type accepted");
+        }
 
-      // Can't really make that checked
-      @SuppressWarnings("unchecked")
-      URLFactoryPlugin<R, U> plugin = (URLFactoryPlugin<R,U>)plugins.get(resourceType);
+        // Can't really make that checked
+        @SuppressWarnings("unchecked")
+        URLFactoryPlugin<R, U> plugin = (URLFactoryPlugin<R, U>) plugins.get(resourceType);
 
-      //
-      return plugin != null ? plugin.newURL(context) : null;
-   }
+        //
+        return plugin != null ? plugin.newURL(context) : null;
+    }
 
-   public void addPlugin(URLFactoryPlugin plugin)
-   {
-      plugins.put(plugin.getResourceType(), plugin);
-   }
+    public void addPlugin(URLFactoryPlugin plugin) {
+        plugins.put(plugin.getResourceType(), plugin);
+    }
 }

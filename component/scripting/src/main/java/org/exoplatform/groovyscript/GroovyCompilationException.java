@@ -22,32 +22,25 @@ package org.exoplatform.groovyscript;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class GroovyCompilationException extends TemplateCompilationException
-{
+public class GroovyCompilationException extends TemplateCompilationException {
 
-   /** . */
-   private final String groovyText;
+    /** . */
+    private final String groovyText;
 
-   public GroovyCompilationException(Throwable cause, String templateText, String groovyText)
-   {
-      super(cause, templateText);
+    public GroovyCompilationException(Throwable cause, String templateText, String groovyText) {
+        super(cause, templateText);
 
-      //
-      this.groovyText = groovyText;
-   }
+        //
+        this.groovyText = groovyText;
+    }
 
-   public String getGroovyText()
-   {
-      return groovyText;
-   }
+    public String getGroovyText() {
+        return groovyText;
+    }
 
-   @Override
-   public String getMessage()
-   {
-      return "Groovy compilation exception\n" +
-         "template: " +
-         getTemplateText() + "\n" +
-         "compiled to Groovy: " +
-         getGroovyText() + "\n";
-   }
+    @Override
+    public String getMessage() {
+        return "Groovy compilation exception\n" + "template: " + getTemplateText() + "\n" + "compiled to Groovy: "
+                + getGroovyText() + "\n";
+    }
 }

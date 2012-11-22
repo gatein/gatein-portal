@@ -19,53 +19,54 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
- <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.gatein.portal.examples.skins</groupId>
     <artifactId>parent</artifactId>
     <version>3.5.0.Final-SNAPSHOT</version>
-  </parent> 
+  </parent>
 
   <artifactId>gatein-sample-skin</artifactId>
-  <packaging>war</packaging> 
+  <packaging>war</packaging>
   <name>GateIn Simple Deployable Skin</name>
-  <description />
+  <description/>
 
   <build>
     <finalName>gatein-sample-skin</finalName>
   </build>
- <reporting>  
-    <plugins>  
-       <!-- ... -->  
-       <plugin>  
-          <groupId>gr.abiss.mvn.plugins</groupId>  
-          <artifactId>maven-jstools-plugin</artifactId>  
-          <inherited>false</inherited>  
-          <configuration>  
-             <!-- the default is src/main/js -->  
-             <jsDir>src/main/webapp/javascript</jsDir>  
-             <!-- this is actually the default -->  
-             <includes>**/*.js</includes>  
-             <!-- maybe you need to exclude compressed JS files -->  
-             <excludes>**/*-compressed.js</excludes>  
-             <!-- this is actually the default -->  
-             <caseSensitive>true</caseSensitive>  
-             <!-- for more configuration properties, see the goals documentation -->  
-          </configuration>  
-          <reportSets>  
-             <reportSet>  
-                <reports>  
-                   <!-- include the desired reports -->  
-                   <report>jslint</report>  
-                   <report>jsdoc</report>  
-                </reports>  
-             </reportSet>  
-          </reportSets>  
-       </plugin>  
-       <!-- ... -->  
-    </plugins>  
- </reporting>
+  <reporting>
+    <plugins>
+      <!-- ... -->
+      <plugin>
+        <groupId>gr.abiss.mvn.plugins</groupId>
+        <artifactId>maven-jstools-plugin</artifactId>
+        <inherited>false</inherited>
+        <configuration>
+          <!-- the default is src/main/js -->
+          <jsDir>src/main/webapp/javascript</jsDir>
+          <!-- this is actually the default -->
+          <includes>**/*.js</includes>
+          <!-- maybe you need to exclude compressed JS files -->
+          <excludes>**/*-compressed.js</excludes>
+          <!-- this is actually the default -->
+          <caseSensitive>true</caseSensitive>
+          <!-- for more configuration properties, see the goals documentation -->
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <!-- include the desired reports -->
+              <report>jslint</report>
+              <report>jsdoc</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+      <!-- ... -->
+    </plugins>
+  </reporting>
 
 </project>

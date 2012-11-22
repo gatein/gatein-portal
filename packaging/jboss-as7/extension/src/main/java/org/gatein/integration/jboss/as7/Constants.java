@@ -24,23 +24,22 @@ package org.gatein.integration.jboss.as7;
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-interface Constants
-{
-   // xml parser constants
-   String DEPLOYMENT_ARCHIVES = "deployment-archives";
-   String PORTLET_WAR_DEPENDENCIES = "portlet-war-dependencies";
-   String ARCHIVE = "archive";
-   String DEPENDENCY = "dependency";
-   String MAIN = "main";
-   String IMPORT_SERVICES = "import-services";
+interface Constants {
+    // xml parser constants
+    String DEPLOYMENT_ARCHIVES = "deployment-archives";
+    String PORTLET_WAR_DEPENDENCIES = "portlet-war-dependencies";
+    String ARCHIVE = "archive";
+    String DEPENDENCY = "dependency";
+    String MAIN = "main";
+    String IMPORT_SERVICES = "import-services";
 
-   String PORTAL = "portal";
-    
-   // MDR operations constants 
-   String DEPLOYMENT_ARCHIVE = "deployment-archive";
-   String PORTLET_WAR_DEPENDENCY = "portlet-war-dependency";
-   String TRUE = "true";
+    String PORTAL = "portal";
 
-   String PATH = "path";
-   String RELATIVE_TO = "relative-to";
+    // MDR operations constants
+    String DEPLOYMENT_ARCHIVE = "deployment-archive";
+    String PORTLET_WAR_DEPENDENCY = "portlet-war-dependency";
+    String TRUE = "true";
+
+    String PATH = "path";
+    String RELATIVE_TO = "relative-to";
 }

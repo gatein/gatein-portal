@@ -24,34 +24,26 @@ import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.form.UIFormInput;
 
 /**
- * Created by The eXo Platform SARL
- * Author : dang.tung
- *          tungcnw@gmail.com
- * 14 March, 2006
+ * Created by The eXo Platform SARL Author : dang.tung tungcnw@gmail.com 14 March, 2006
  *
  * Validates whether the value is composed of letters, numbers or '_'
  */
 @Serialized
-public class ResourceValidator extends MultipleConditionsValidator
-{
-   @Override
-   protected void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput)
-   {
-      char firstChar = value.charAt(0);
-      if (!Character.isLetter(firstChar))
-      {
-         Object[] args = {label, uiInput.getBindingField()};
-         messages.addMessage("FirstCharacterNameValidator.msg", args);
-      }
-      for (int i = 0; i < value.length(); i++)
-      {
-         char c = value.charAt(i);
-         if (!Character.isLetter(c) && !Character.isDigit(c) && c != '_' && c != '-' && c != '.')
-         {
-            Object[] args = {label};
-            messages.addMessage("ResourceValidator.msg.Invalid-char", args);
-            break;
-         }
-      }
-   }
+public class ResourceValidator extends MultipleConditionsValidator {
+    @Override
+    protected void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput) {
+        char firstChar = value.charAt(0);
+        if (!Character.isLetter(firstChar)) {
+            Object[] args = { label, uiInput.getBindingField() };
+            messages.addMessage("FirstCharacterNameValidator.msg", args);
+        }
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            if (!Character.isLetter(c) && !Character.isDigit(c) && c != '_' && c != '-' && c != '.') {
+                Object[] args = { label };
+                messages.addMessage("ResourceValidator.msg.Invalid-char", args);
+                break;
+            }
+        }
+    }
 }

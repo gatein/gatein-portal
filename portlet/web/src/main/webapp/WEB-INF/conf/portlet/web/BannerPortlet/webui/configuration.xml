@@ -21,11 +21,11 @@
 
 <webui-configuration>
 
-  <application> 
+  <application>
     <ui-component-root>org.exoplatform.portal.webui.component.UIBannerPortlet</ui-component-root>
     <state-manager>org.exoplatform.webui.application.portlet.ParentAppStateManager</state-manager>
 
-    <application-lifecycle-listeners>       
+    <application-lifecycle-listeners>
     </application-lifecycle-listeners>
   </application>
 </webui-configuration>

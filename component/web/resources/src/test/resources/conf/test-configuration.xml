@@ -21,22 +21,22 @@
 -->
 
 <configuration
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
-   <component>
-      <key>org.exoplatform.portal.resource.SkinService</key>
-      <type>org.exoplatform.portal.resource.SkinService</type>
-   </component>
-   
-   <component>
-      <key>org.exoplatform.web.application.javascript.JavascriptConfigService</key>
-      <type>org.exoplatform.web.application.javascript.JavascriptConfigService</type>
-   </component>
+  <component>
+    <key>org.exoplatform.portal.resource.SkinService</key>
+    <type>org.exoplatform.portal.resource.SkinService</type>
+  </component>
 
-   <component>
-      <key>org.exoplatform.portal.resource.compressor.ResourceCompressor</key>
-      <type>org.exoplatform.portal.resource.compressor.impl.ResourceCompressorService</type>
-   </component>
+  <component>
+    <key>org.exoplatform.web.application.javascript.JavascriptConfigService</key>
+    <type>org.exoplatform.web.application.javascript.JavascriptConfigService</type>
+  </component>
+
+  <component>
+    <key>org.exoplatform.portal.resource.compressor.ResourceCompressor</key>
+    <type>org.exoplatform.portal.resource.compressor.impl.ResourceCompressorService</type>
+  </component>
 </configuration>

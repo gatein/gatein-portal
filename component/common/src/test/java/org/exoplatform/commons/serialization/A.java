@@ -28,8 +28,8 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
 @Serialized
 public class A {
 
-  String a;
-  int b;
-  boolean c;
+    String a;
+    int b;
+    boolean c;
 
 }

@@ -21,12 +21,12 @@
 -->
 
 <xs:schema
-   targetNamespace="http://www.gatein.org/xml/ns/gatein_objects_1_0"
-   xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_0"
-   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-   elementFormDefault="qualified"
-   attributeFormDefault="unqualified"
-   version="1.0">
+    targetNamespace="http://www.gatein.org/xml/ns/gatein_objects_1_0"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.0">
 
   <!-- A top page element -->
   <xs:element name="page" type="pageType"/>

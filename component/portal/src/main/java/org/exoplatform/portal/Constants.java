@@ -23,15 +23,14 @@ package org.exoplatform.portal;
  * @version $Revision$
  */
 
-public class Constants
-{
-   public static final String USER_LANGUAGE = "user.language";
-   
-   public static final String USER_SKIN = "user.skin";
+public class Constants {
+    public static final String USER_LANGUAGE = "user.language";
 
-   public static final String PORTAL_WINDOW_STATE = "portal:windowState";
+    public static final String USER_SKIN = "user.skin";
 
-   public static final String PORTAL_PORTLET_MODE = "portal:portletMode";
+    public static final String PORTAL_WINDOW_STATE = "portal:windowState";
 
-   public static final String QMARK = "?";
+    public static final String PORTAL_PORTLET_MODE = "portal:portletMode";
+
+    public static final String QMARK = "?";
 }

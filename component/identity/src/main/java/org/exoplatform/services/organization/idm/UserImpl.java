@@ -25,53 +25,45 @@ package org.exoplatform.services.organization.idm;
 
 import java.io.Serializable;
 
+
 /**
- * TODO: This is temporary implementation, which should be removed after https://issues.jboss.org/browse/EXOJCR-1780 will be fixed
- * and available in GateIn.
+ * TODO: This is temporary implementation, which should be removed after https://issues.jboss.org/browse/EXOJCR-1780 will be
+ * fixed and available in GateIn.
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class UserImpl extends org.exoplatform.services.organization.impl.UserImpl implements Serializable
-{
-   private String displayName;
+public class UserImpl extends org.exoplatform.services.organization.impl.UserImpl implements Serializable {
+    private String displayName;
 
-   public UserImpl()
-   {
-      super();
-   }
+    public UserImpl() {
+        super();
+    }
 
-   public UserImpl(String username)
-   {
-      super(username);
-   }
+    public UserImpl(String username) {
+        super(username);
+    }
 
-   @Override
-   public String getFullName()
-   {
-      return displayName != null ? displayName : getFirstName() + " " + getLastName();
-   }
+    @Override
+    public String getFullName() {
+        return displayName != null ? displayName : getFirstName() + " " + getLastName();
+    }
 
-   @Override
-   public void setFullName(String fullName)
-   {
-      this.displayName = fullName;
-   }
+    @Override
+    public void setFullName(String fullName) {
+        this.displayName = fullName;
+    }
 
-   @Override
-   public void setDisplayName(String displayName)
-   {    
-      if (displayName != null) 
-      {
-        this.displayName = displayName.trim().isEmpty() ? null : displayName;
-      } else 
-      {
-        this.displayName = displayName;
-      }
-   }
-   
-   @Override
-   public String getDisplayName()
-   {
-      return this.displayName;
-   }
+    @Override
+    public void setDisplayName(String displayName) {
+        if (displayName != null) {
+            this.displayName = displayName.trim().isEmpty() ? null : displayName;
+        } else {
+            this.displayName = displayName;
+        }
+    }
+
+    @Override
+    public String getDisplayName() {
+        return this.displayName;
+    }
 }

@@ -23,46 +23,41 @@
 
 package org.exoplatform.webui.form.validator;
 
+import java.io.Serializable;
+
 import org.exoplatform.web.application.CompoundApplicationMessage;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIFormInput;
 
-import java.io.Serializable;
-
 /** @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a> */
-public abstract class MultipleConditionsValidator extends AbstractValidator implements Serializable
-{
-   public void validate(UIFormInput uiInput) throws Exception
-   {
-      String value = trimmedValueOrNullIfBypassed((String)uiInput.getValue(), uiInput, exceptionOnMissingMandatory, trimValue);
-      if (value == null)
-      {
-         return;
-      }
+public abstract class MultipleConditionsValidator extends AbstractValidator implements Serializable {
+    public void validate(UIFormInput uiInput) throws Exception {
+        String value = trimmedValueOrNullIfBypassed((String) uiInput.getValue(), uiInput, exceptionOnMissingMandatory,
+                trimValue);
+        if (value == null) {
+            return;
+        }
 
-      String label = getLabelFor(uiInput);
+        String label = getLabelFor(uiInput);
 
-      CompoundApplicationMessage messages = new CompoundApplicationMessage();
+        CompoundApplicationMessage messages = new CompoundApplicationMessage();
 
-      validate(value, label, messages, uiInput);
+        validate(value, label, messages, uiInput);
 
-      if (!messages.isEmpty())
-      {
-         throw new MessageException(messages);
-      }
-   }
+        if (!messages.isEmpty()) {
+            throw new MessageException(messages);
+        }
+    }
 
-   protected abstract void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput);
+    protected abstract void validate(String value, String label, CompoundApplicationMessage messages, UIFormInput uiInput);
 
-   @Override
-   protected String getMessageLocalizationKey()
-   {
-      throw new UnsupportedOperationException("Unneeded by this implementation");
-   }
+    @Override
+    protected String getMessageLocalizationKey() {
+        throw new UnsupportedOperationException("Unneeded by this implementation");
+    }
 
-   @Override
-   protected boolean isValid(String value, UIFormInput uiInput)
-   {
-      throw new UnsupportedOperationException("Unneeded by this implementation");
-   }
+    @Override
+    protected boolean isValid(String value, UIFormInput uiInput) {
+        throw new UnsupportedOperationException("Unneeded by this implementation");
+    }
 }

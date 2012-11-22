@@ -21,9 +21,9 @@
 -->
 
 <configuration
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
     <type>org.exoplatform.web.filter.ExtensibleFilter</type>
@@ -35,51 +35,51 @@
   </component>
 
   <component>
-		<type>org.exoplatform.portal.application.ApplicationStatisticService</type>
+    <type>org.exoplatform.portal.application.ApplicationStatisticService</type>
   </component>
 
   <component>
-		<type>org.exoplatform.portal.application.PortalStatisticService</type>
+    <type>org.exoplatform.portal.application.PortalStatisticService</type>
   </component>
 
   <component>
-      <type>org.exoplatform.web.application.javascript.JavascriptConfigService</type>
+    <type>org.exoplatform.web.application.javascript.JavascriptConfigService</type>
   </component>
 
   <component>
-      <key>org.exoplatform.services.resources.LocalePolicy</key>
-      <type>org.exoplatform.portal.application.localization.DefaultLocalePolicyService</type>
+    <key>org.exoplatform.services.resources.LocalePolicy</key>
+    <type>org.exoplatform.portal.application.localization.DefaultLocalePolicyService</type>
   </component>
 
   <component>
-      <key>org.exoplatform.portal.application.state.ContextualPropertyManager</key>
-      <type>org.exoplatform.portal.application.state.ContextualPropertyManagerImpl</type>
-      <component-plugins>
-         <component-plugin>
-           <name>PublicPropertiesPlugin</name>
-           <set-method>addPlugin</set-method>
-           <type>org.exoplatform.portal.application.state.PublicPropertiesPlugin</type>
-           <init-params>
-             <value-param>
-               <name>namespaceURI</name>
-               <description>Namespace URI</description>
-               <value>http://www.gatein.org/xml/ns/prp_1_0</value>
-             </value-param>
-           </init-params>
-         </component-plugin>
-        <component-plugin>
-          <name>InternalPropertiesPlugin</name>
-          <set-method>addPlugin</set-method>
-          <type>org.exoplatform.portal.application.state.InternalPropertiesPlugin</type>
-          <init-params>
-            <value-param>
-              <name>namespaceURI</name>
-              <description>Namespace URI</description>
-              <value>http://www.gatein.org/xml/ns/internal_prp_1_0</value>
-            </value-param>
-          </init-params>
-        </component-plugin>
-      </component-plugins>
-   </component>
+    <key>org.exoplatform.portal.application.state.ContextualPropertyManager</key>
+    <type>org.exoplatform.portal.application.state.ContextualPropertyManagerImpl</type>
+    <component-plugins>
+      <component-plugin>
+        <name>PublicPropertiesPlugin</name>
+        <set-method>addPlugin</set-method>
+        <type>org.exoplatform.portal.application.state.PublicPropertiesPlugin</type>
+        <init-params>
+          <value-param>
+            <name>namespaceURI</name>
+            <description>Namespace URI</description>
+            <value>http://www.gatein.org/xml/ns/prp_1_0</value>
+          </value-param>
+        </init-params>
+      </component-plugin>
+      <component-plugin>
+        <name>InternalPropertiesPlugin</name>
+        <set-method>addPlugin</set-method>
+        <type>org.exoplatform.portal.application.state.InternalPropertiesPlugin</type>
+        <init-params>
+          <value-param>
+            <name>namespaceURI</name>
+            <description>Namespace URI</description>
+            <value>http://www.gatein.org/xml/ns/internal_prp_1_0</value>
+          </value-param>
+        </init-params>
+      </component-plugin>
+    </component-plugins>
+  </component>
 
 </configuration>

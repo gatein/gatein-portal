@@ -2,12 +2,12 @@
 
 <project name="download-jetty" xmlns:mvn="http://maven.apache.org/POM/4.0.0">
 
-   <target name="download-jetty">
+  <target name="download-jetty">
 
-      <!-- Fetch jetty .zip -->
-      <get dest="${dest}" skipexisting="true">
-         <url url="${url}"/>
-      </get>
+    <!-- Fetch jetty .zip -->
+    <get dest="${dest}" skipexisting="true">
+      <url url="${url}"/>
+    </get>
 
-   </target>
+  </target>
 </project>

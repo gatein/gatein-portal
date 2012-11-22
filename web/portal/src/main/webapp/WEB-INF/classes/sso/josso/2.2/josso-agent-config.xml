@@ -15,8 +15,12 @@
   </bean>
 
   <gen-svlt:agent name="josso-tomcat60-agent" sessionAccessMinInterval="1000">
-    <gatewayLoginUrl>${gatein.sso.server.url}/IDBUS/${gatein.sso.josso.identityApplianceId}/${gatein.sso.josso.partnerAppPoint}/JOSSO/SSO/REDIR</gatewayLoginUrl>
-    <gatewayLogoutUrl>${gatein.sso.server.url}/IDBUS/${gatein.sso.josso.identityApplianceId}/${gatein.sso.josso.partnerAppPoint}/JOSSO/SLO/REDIR</gatewayLogoutUrl>
+    <gatewayLoginUrl>
+      ${gatein.sso.server.url}/IDBUS/${gatein.sso.josso.identityApplianceId}/${gatein.sso.josso.partnerAppPoint}/JOSSO/SSO/REDIR
+    </gatewayLoginUrl>
+    <gatewayLogoutUrl>
+      ${gatein.sso.server.url}/IDBUS/${gatein.sso.josso.identityApplianceId}/${gatein.sso.josso.partnerAppPoint}/JOSSO/SLO/REDIR
+    </gatewayLogoutUrl>
 
     <gatewayServiceLocator>
 

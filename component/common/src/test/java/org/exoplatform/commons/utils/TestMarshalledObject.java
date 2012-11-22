@@ -23,50 +23,42 @@ import org.exoplatform.commons.serialization.MarshalledObject;
 import org.exoplatform.component.test.AbstractGateInTest;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
-public class TestMarshalledObject extends AbstractGateInTest
-{
+public class TestMarshalledObject extends AbstractGateInTest {
 
-   public void testSerialization()
-   {
-      String from = "foo";
-      MarshalledObject<String> marshalled = MarshalledObject.marshall(from);
-      String to = marshalled.unmarshall();
-      assertEquals(to, from);
-   }
+    public void testSerialization() {
+        String from = "foo";
+        MarshalledObject<String> marshalled = MarshalledObject.marshall(from);
+        String to = marshalled.unmarshall();
+        assertEquals(to, from);
+    }
 
-   public void testNPE()
-   {
-      try
-      {
-         MarshalledObject.marshall(null);
-         fail();
-      }
-      catch (NullPointerException e)
-      {
-      }
-   }
+    public void testNPE() {
+        try {
+            MarshalledObject.marshall(null);
+            fail();
+        } catch (NullPointerException e) {
+        }
+    }
 
-   public void testHashCode()
-   {
-      MarshalledObject<String> marshalled1 = MarshalledObject.marshall("foo");
-      assertEquals(marshalled1.hashCode(), marshalled1.hashCode());
-      MarshalledObject<String> marshalled2 = MarshalledObject.marshall("foo");
-      assertEquals(marshalled1.hashCode(), marshalled2.hashCode());
-      assertEquals(marshalled2.hashCode(), marshalled1.hashCode());
-      MarshalledObject<String> marshalled3 = MarshalledObject.marshall("bar");
-      assertNotSame(marshalled1.hashCode(), marshalled3.hashCode());
-      assertNotSame(marshalled3.hashCode(), marshalled1.hashCode());
-   }
+    public void testHashCode() {
+        MarshalledObject<String> marshalled1 = MarshalledObject.marshall("foo");
+        assertEquals(marshalled1.hashCode(), marshalled1.hashCode());
+        MarshalledObject<String> marshalled2 = MarshalledObject.marshall("foo");
+        assertEquals(marshalled1.hashCode(), marshalled2.hashCode());
+        assertEquals(marshalled2.hashCode(), marshalled1.hashCode());
+        MarshalledObject<String> marshalled3 = MarshalledObject.marshall("bar");
+        assertNotSame(marshalled1.hashCode(), marshalled3.hashCode());
+        assertNotSame(marshalled3.hashCode(), marshalled1.hashCode());
+    }
 
-   public void testEquals()
-   {
-      MarshalledObject<String> marshalled1 = MarshalledObject.marshall("foo");
-      assertTrue(marshalled1.equals(marshalled1));
-      MarshalledObject<String> marshalled2 = MarshalledObject.marshall("foo");
-      assertTrue(marshalled1.equals(marshalled2));
-      assertTrue(marshalled2.equals(marshalled1));
-      MarshalledObject<String> marshalled3 = MarshalledObject.marshall("bar");
-      assertFalse(marshalled1.equals(marshalled3));
-      assertFalse(marshalled3.equals(marshalled1));
-   }
+    public void testEquals() {
+        MarshalledObject<String> marshalled1 = MarshalledObject.marshall("foo");
+        assertTrue(marshalled1.equals(marshalled1));
+        MarshalledObject<String> marshalled2 = MarshalledObject.marshall("foo");
+        assertTrue(marshalled1.equals(marshalled2));
+        assertTrue(marshalled2.equals(marshalled1));
+        MarshalledObject<String> marshalled3 = MarshalledObject.marshall("bar");
+        assertFalse(marshalled1.equals(marshalled3));
+        assertFalse(marshalled3.equals(marshalled1));
+    }
 }

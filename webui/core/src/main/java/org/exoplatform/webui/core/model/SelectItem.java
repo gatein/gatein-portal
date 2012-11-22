@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -20,33 +20,29 @@
 package org.exoplatform.webui.core.model;
 
 /**
- * Abstract class SelectItem is held by UIFormSelectBox
- * This class is extended by SelectItemOption and SelectItemOptionGroup
+ * Abstract class SelectItem is held by UIFormSelectBox This class is extended by SelectItemOption and SelectItemOptionGroup
+ *
  * @author philippe
  *
  */
-public abstract class SelectItem
-{
-   /**
-    * The text that appears on the UI when the item is rendered
-    */
-   private String label_;
+public abstract class SelectItem {
+    /**
+     * The text that appears on the UI when the item is rendered
+     */
+    private String label_;
 
-   public SelectItem(String label)
-   {
-      this.label_ = label;
-   }
+    public SelectItem(String label) {
+        this.label_ = label;
+    }
 
-   public String getLabel()
-   {
-      return label_;
-   }
+    public String getLabel() {
+        return label_;
+    }
 
-   public void setLabel(String label)
-   {
-      this.label_ = label;
-   }
+    public void setLabel(String label) {
+        this.label_ = label;
+    }
 
-   //	public abstract void setSelectedValue(String value) ;
+    // public abstract void setSelectedValue(String value) ;
 
 }

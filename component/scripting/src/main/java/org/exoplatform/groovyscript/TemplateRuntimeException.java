@@ -24,60 +24,51 @@ package org.exoplatform.groovyscript;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TemplateRuntimeException extends Exception
-{
+public class TemplateRuntimeException extends Exception {
 
-   /** . */
-   private final String templateId;
+    /** . */
+    private final String templateId;
 
-   /** . */
-   private final TextItem textItem;
+    /** . */
+    private final TextItem textItem;
 
-   public TemplateRuntimeException(String templateId, TextItem textItem, String message, Throwable cause)
-   {
-      super(message, cause);
+    public TemplateRuntimeException(String templateId, TextItem textItem, String message, Throwable cause) {
+        super(message, cause);
 
-      //
-      this.templateId = templateId;
-      this.textItem = textItem;
-   }
+        //
+        this.templateId = templateId;
+        this.textItem = textItem;
+    }
 
-   public TemplateRuntimeException(String templateId, TextItem textItem, Throwable cause)
-   {
-      super(cause);
+    public TemplateRuntimeException(String templateId, TextItem textItem, Throwable cause) {
+        super(cause);
 
-      //
-      this.templateId = templateId;
-      this.textItem = textItem;
-   }
+        //
+        this.templateId = templateId;
+        this.textItem = textItem;
+    }
 
-   public TextItem getTextItem()
-   {
-      return textItem;
-   }
+    public TextItem getTextItem() {
+        return textItem;
+    }
 
-   public Integer getLineNumber()
-   {
-      return textItem != null ? textItem.getPosition().getLine() : null;
-   }
+    public Integer getLineNumber() {
+        return textItem != null ? textItem.getPosition().getLine() : null;
+    }
 
-   public String getText()
-   {
-      return textItem != null ? textItem.getData() : null;
-   }
+    public String getText() {
+        return textItem != null ? textItem.getData() : null;
+    }
 
-   @Override
-   public String getMessage()
-   {
-      StringBuilder sb = new StringBuilder("Groovy template exception");
-      if (textItem != null)
-      {
-         sb.append(" at ").append(textItem);
-      }
-      if (templateId != null)
-      {
-         sb.append(" for template ").append(templateId);
-      }
-      return sb.toString();
-   }
+    @Override
+    public String getMessage() {
+        StringBuilder sb = new StringBuilder("Groovy template exception");
+        if (textItem != null) {
+            sb.append(" at ").append(textItem);
+        }
+        if (templateId != null) {
+            sb.append(" for template ").append(templateId);
+        }
+        return sb.toString();
+    }
 }

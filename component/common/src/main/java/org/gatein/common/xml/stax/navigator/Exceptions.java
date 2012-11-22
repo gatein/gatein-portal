@@ -29,48 +29,40 @@ import org.staxnav.StaxNavigator;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class Exceptions
-{
-   public static <N> StaxNavException expectedElement(StaxNavigator<N> navigator, N expected)
-   {
-      return expectedElement(navigator, navigator.getNaming().getLocalPart(expected));
-   }
+public class Exceptions {
+    public static <N> StaxNavException expectedElement(StaxNavigator<N> navigator, N expected) {
+        return expectedElement(navigator, navigator.getNaming().getLocalPart(expected));
+    }
 
-   public static StaxNavException expectedElement(StaxNavigator navigator, String expected)
-   {
-      StringBuilder message = new StringBuilder().append("Expected '").append(expected)
-         .append("' but found '").append(navigator.getLocalName()).append("' instead.");
+    public static StaxNavException expectedElement(StaxNavigator navigator, String expected) {
+        StringBuilder message = new StringBuilder().append("Expected '").append(expected).append("' but found '")
+                .append(navigator.getLocalName()).append("' instead.");
 
-      return new StaxNavException(navigator.getLocation(), message.toString());
-   }
+        return new StaxNavException(navigator.getLocation(), message.toString());
+    }
 
-   public static StaxNavException unexpectedElement(StaxNavigator navigator)
-   {
-      return new StaxNavException(navigator.getLocation(), "Unexpected element '" + navigator.getLocalName() + "'");
-   }
+    public static StaxNavException unexpectedElement(StaxNavigator navigator) {
+        return new StaxNavException(navigator.getLocation(), "Unexpected element '" + navigator.getLocalName() + "'");
+    }
 
-   public static StaxNavException unknownElement(StaxNavigator navigator)
-   {
-      return new StaxNavException(navigator.getLocation(), "Unknown element '" + navigator.getLocalName() + "'");
-   }
+    public static StaxNavException unknownElement(StaxNavigator navigator) {
+        return new StaxNavException(navigator.getLocation(), "Unknown element '" + navigator.getLocalName() + "'");
+    }
 
-   public static StaxNavException invalidSequence(StaxNavigator navigator)
-   {
-      return new StaxNavException(navigator.getLocation(), "Element '" + navigator.getLocalName() + "' is out of sequence.");
-   }
+    public static StaxNavException invalidSequence(StaxNavigator navigator) {
+        return new StaxNavException(navigator.getLocation(), "Element '" + navigator.getLocalName() + "' is out of sequence.");
+    }
 
-   public static StaxNavException contentRequired(StaxNavigator navigator)
-   {
-      return new StaxNavException(navigator.getLocation(), "Content for element '" + navigator.getLocalName() + "' is required.");
-   }
+    public static StaxNavException contentRequired(StaxNavigator navigator) {
+        return new StaxNavException(navigator.getLocation(), "Content for element '" + navigator.getLocalName()
+                + "' is required.");
+    }
 
-   public static StaxNavException invalidParent(StaxNavigator navigator)
-   {
-      return new StaxNavException(navigator.getLocation(), "Invalid parent for element '" + navigator.getLocalName() + "'");
-   }
+    public static StaxNavException invalidParent(StaxNavigator navigator) {
+        return new StaxNavException(navigator.getLocation(), "Invalid parent for element '" + navigator.getLocalName() + "'");
+    }
 
-   public static StaxNavException unexpectedEndOfFile(StaxNavigator navigator)
-   {
-      return new StaxNavException(navigator.getLocation(), "Unexpected end of file.");
-   }
+    public static StaxNavException unexpectedEndOfFile(StaxNavigator navigator) {
+        return new StaxNavException(navigator.getLocation(), "Unexpected end of file.");
+    }
 }

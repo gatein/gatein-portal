@@ -23,28 +23,34 @@
   <annotation-classes>
     <class>org.exoplatform.webui.test.UIComponentAnnotation</class>
   </annotation-classes>
-  
+
   <!--
   <includes>
     <url>path</url>
   </includes>
   -->
-  
+
   <ui-component-config id="id">
     <type>UIExoComponent</type>
-    <lifecycle>lifecycle</lifecycle>    
+    <lifecycle>lifecycle</lifecycle>
     <template>..............................</template>
     <decorator>............................</decorator>
 
     <init-params>
-      <param><name>name</name><value>value</value></param>
+      <param>
+        <name>name</name>
+        <value>value</value>
+      </param>
     </init-params>
-    
+
     <validators>
       <validator>
         <type>class.name</type>
         <init-params>
-          <param><name>name</name><value>value</value></param>
+          <param>
+            <name>name</name>
+            <value>value</value>
+          </param>
         </init-params>
       </validator>
     </validators>
@@ -52,12 +58,15 @@
     <events>
       <event>
         <event-name>name</event-name>
-        <execution-phase>decode</execution-phase>    
+        <execution-phase>decode</execution-phase>
         <init-params>
-          <param><name>name</name><value>value</value></param>
+          <param>
+            <name>name</name>
+            <value>value</value>
+          </param>
         </init-params>
         <listener>class.type</listener>
-        <listener>class.type</listener>    
+        <listener>class.type</listener>
       </event>
 
       <event>
@@ -67,37 +76,46 @@
         <listener>class.type</listener>
       </event>
     </events>
-    
+
     <event-interceptors>
       <event-interceptor>
         <type>class.name</type>
         <init-params>
-          <param><name>name</name><value>value</value></param>
-        </init-params>        
+          <param>
+            <name>name</name>
+            <value>value</value>
+          </param>
+        </init-params>
         <interceptor>class.type</interceptor>
         <interceptor>class.type</interceptor>
-      </event-interceptor>      
-    </event-interceptors>    
+      </event-interceptor>
+    </event-interceptors>
   </ui-component-config>
 
-  <application>     
+  <application>
     <init-params>
-      <param><name>name</name><value>value</value></param>
+      <param>
+        <name>name</name>
+        <value>value</value>
+      </param>
     </init-params>
 
-    <ui-component-root>org.exoplatform.portal.component.UIPortalApplication</ui-component-root>    
-    <state-manager>org.exoplatform.webui.test.MockStateManager</state-manager>    
-    
-    <application-lifecycle-listeners>       
-      <listener>org.exoplatform.webui.application.MonitorApplicationLifecycle</listener>       
-    </application-lifecycle-listeners>     
+    <ui-component-root>org.exoplatform.portal.component.UIPortalApplication</ui-component-root>
+    <state-manager>org.exoplatform.webui.test.MockStateManager</state-manager>
+
+    <application-lifecycle-listeners>
+      <listener>org.exoplatform.webui.application.MonitorApplicationLifecycle</listener>
+    </application-lifecycle-listeners>
 
     <events>
       <event>
         <event-name>name</event-name>
-        <execution-phase>process</execution-phase> 
+        <execution-phase>process</execution-phase>
         <init-params>
-          <param><name>name</name><value>value</value></param>
+          <param>
+            <name>name</name>
+            <value>value</value>
+          </param>
         </init-params>
         <listener>class.type</listener>
         <listener>class.type</listener>

@@ -18,14 +18,13 @@
  */
 package org.exoplatform.webui.application.portlet;
 
-import org.exoplatform.web.application.ApplicationFactory;
-
 import javax.portlet.PortletConfig;
+
+import org.exoplatform.web.application.ApplicationFactory;
 
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public interface PortletApplicationFactory extends ApplicationFactory<PortletApplication, PortletConfig>
-{
+public interface PortletApplicationFactory extends ApplicationFactory<PortletApplication, PortletConfig> {
 }

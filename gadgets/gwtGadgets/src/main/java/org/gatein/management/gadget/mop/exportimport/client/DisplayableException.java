@@ -26,10 +26,8 @@ package org.gatein.management.gadget.mop.exportimport.client;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class DisplayableException extends Exception
-{
-   public DisplayableException(String message)
-   {
-      super(message);
-   }
+public class DisplayableException extends Exception {
+    public DisplayableException(String message) {
+        super(message);
+    }
 }

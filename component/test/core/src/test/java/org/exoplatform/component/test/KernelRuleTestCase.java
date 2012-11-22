@@ -23,25 +23,22 @@ import org.junit.ClassRule;
 import org.junit.Test;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
-@ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml")})
-public class KernelRuleTestCase
-{
+@ConfiguredBy({ @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml") })
+public class KernelRuleTestCase {
 
-   @ClassRule
-   public static KernelLifeCycle kernel = new KernelLifeCycle();
+    @ClassRule
+    public static KernelLifeCycle kernel = new KernelLifeCycle();
 
-   /** . */
-   private BootstrapTestCase delegate = new BootstrapTestCase();
+    /** . */
+    private BootstrapTestCase delegate = new BootstrapTestCase();
 
-   @Test
-   public void testRequestLifeCycle()
-   {
-      delegate.testRequestLifeCycle();
-   }
+    @Test
+    public void testRequestLifeCycle() {
+        delegate.testRequestLifeCycle();
+    }
 
-   @Test
-   public void testDataSource() throws Exception
-   {
-      delegate.testDataSource();
-   }
+    @Test
+    public void testDataSource() throws Exception {
+        delegate.testDataSource();
+    }
 }

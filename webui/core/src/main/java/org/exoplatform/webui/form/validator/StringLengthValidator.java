@@ -23,58 +23,47 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.form.UIFormInput;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Dang Van Minh
- * minhdv81@yahoo.com
- * Jun 7, 2006
+ * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 7, 2006
  * <p/>
  * Validates whether this value has a length between min and max
  */
 @Serialized
-public class StringLengthValidator extends AbstractValidator
-{
-   /** The minimum number of characters in this String */
-   private Integer min_ = 0;
+public class StringLengthValidator extends AbstractValidator {
+    /** The minimum number of characters in this String */
+    private Integer min_ = 0;
 
-   /** The maximum number of characters in this String */
-   private Integer max_ = 0;
+    /** The maximum number of characters in this String */
+    private Integer max_ = 0;
 
-   public StringLengthValidator()
-   {
-   }
+    public StringLengthValidator() {
+    }
 
-   public StringLengthValidator(Integer max)
-   {
-      max_ = max;
-   }
+    public StringLengthValidator(Integer max) {
+        max_ = max;
+    }
 
-   public StringLengthValidator(Integer min, Integer max)
-   {
-      min_ = min;
-      max_ = max;
-   }
+    public StringLengthValidator(Integer min, Integer max) {
+        min_ = min;
+        max_ = max;
+    }
 
-   @Override
-   protected String getMessageLocalizationKey()
-   {
-      return "StringLengthValidator.msg.length-invalid";
-   }
+    @Override
+    protected String getMessageLocalizationKey() {
+        return "StringLengthValidator.msg.length-invalid";
+    }
 
-   @Override
-   protected boolean isValid(String value, UIFormInput uiInput)
-   {
-      int length = getValue(value).length();
-      return min_ <= length && max_ >= length;
-   }
+    @Override
+    protected boolean isValid(String value, UIFormInput uiInput) {
+        int length = getValue(value).length();
+        return min_ <= length && max_ >= length;
+    }
 
-   protected String getValue(String value)
-   {
-      return value.trim();
-   }
+    protected String getValue(String value) {
+        return value.trim();
+    }
 
-   @Override
-   protected Object[] getMessageArgs(String value, UIFormInput uiInput) throws Exception
-   {
-      return new Object[]{getLabelFor(uiInput), min_.toString(), max_.toString()};
-   }
+    @Override
+    protected Object[] getMessageArgs(String value, UIFormInput uiInput) throws Exception {
+        return new Object[] { getLabelFor(uiInput), min_.toString(), max_.toString() };
+    }
 }

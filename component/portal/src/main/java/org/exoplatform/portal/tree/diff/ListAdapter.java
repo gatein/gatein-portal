@@ -21,6 +21,7 @@ package org.exoplatform.portal.tree.diff;
 
 import java.util.Iterator;
 
+
 /**
  * An adapter for a list of elements.
  *
@@ -28,22 +29,22 @@ import java.util.Iterator;
  */
 public interface ListAdapter<L, E> {
 
-   /**
-    * Returns the number of list elements.
-    *
-    * @param list the list
-    * @return the list size
-    */
-   int size(L list);
+    /**
+     * Returns the number of list elements.
+     *
+     * @param list the list
+     * @return the list size
+     */
+    int size(L list);
 
-   /**
-    * Returns an iterator over the list elements.
-    *
-    *
-    * @param list the list
-    * @param reverse the iteration direction
-    * @return the iterator
-    */
-   Iterator<E> iterator(L list, boolean reverse);
+    /**
+     * Returns an iterator over the list elements.
+     *
+     *
+     * @param list the list
+     * @param reverse the iteration direction
+     * @return the iterator
+     */
+    Iterator<E> iterator(L list, boolean reverse);
 
 }

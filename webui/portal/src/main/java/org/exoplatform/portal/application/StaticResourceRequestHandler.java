@@ -19,41 +19,37 @@
 
 package org.exoplatform.portal.application;
 
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.web.ControllerContext;
-import org.exoplatform.web.WebRequestHandler;
-
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.web.ControllerContext;
+import org.exoplatform.web.WebRequestHandler;
+
 /**
  * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
  */
-public class StaticResourceRequestHandler extends WebRequestHandler
-{
-   @Override
-   public String getHandlerName()
-   {
-      return "staticResource";
-   }
+public class StaticResourceRequestHandler extends WebRequestHandler {
+    @Override
+    public String getHandlerName() {
+        return "staticResource";
+    }
 
-   @Override
-   public boolean execute(ControllerContext context) throws Exception
-   {
-      context.getResponse().setHeader("Cache-Control", "max-age=2592000,s-maxage=2592000");
-      PortalContainer portalContainer = PortalContainer.getInstance();
-      ServletContext mergedContext = portalContainer.getPortalContext();
-      
-      HttpServletRequest req = context.getRequest();
-      HttpServletResponse res = context.getResponse();
-      mergedContext.getNamedDispatcher("default").forward(req, res);
-      return true;
-   }
+    @Override
+    public boolean execute(ControllerContext context) throws Exception {
+        context.getResponse().setHeader("Cache-Control", "max-age=2592000,s-maxage=2592000");
+        PortalContainer portalContainer = PortalContainer.getInstance();
+        ServletContext mergedContext = portalContainer.getPortalContext();
 
-   @Override
-   protected boolean getRequiresLifeCycle()
-   {
-      return false;
-   }
+        HttpServletRequest req = context.getRequest();
+        HttpServletResponse res = context.getResponse();
+        mergedContext.getNamedDispatcher("default").forward(req, res);
+        return true;
+    }
+
+    @Override
+    protected boolean getRequiresLifeCycle() {
+        return false;
+    }
 }

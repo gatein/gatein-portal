@@ -24,7 +24,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
-          
+
   <page>
     <name>newAccount</name>
     <title>New Account</title>
@@ -40,7 +40,7 @@
       <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>communityManagement</name>
     <title>Community Management</title>
@@ -53,10 +53,10 @@
       </portlet>
       <title>Community Management</title>
       <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>      
+      <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>registry</name>
     <title>Registry</title>
@@ -72,7 +72,7 @@
       <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>pageManagement</name>
     <title>Page Management</title>
@@ -88,5 +88,5 @@
       <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
-  
+
 </page-set>

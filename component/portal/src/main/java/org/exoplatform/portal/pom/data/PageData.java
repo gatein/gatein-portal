@@ -20,70 +20,50 @@ package org.exoplatform.portal.pom.data;
 
 import java.util.List;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PageData extends ContainerData
-{
+public class PageData extends ContainerData {
 
-   /** . */
-   private final PageKey key;
+    /** . */
+    private final PageKey key;
 
-   /** . */
-   private final String editPermission;
+    /** . */
+    private final String editPermission;
 
-   /** . */
-   private final boolean showMaxWindow;
+    /** . */
+    private final boolean showMaxWindow;
 
-   public PageData(
-      String storageId,
-      String id,
-      String name,
-      String icon,
-      String template,
-      String factoryId,
-      String title,
-      String description,
-      String width,
-      String height,
-      List<String> accessPermissions,
-      List<ComponentData> children,
-      String ownerType,
-      String ownerId,
-      String editPermission,
-      boolean showMaxWindow)
-   {
-      super(storageId, id, name, icon, template, factoryId, title, description, width, height, accessPermissions, children);
+    public PageData(String storageId, String id, String name, String icon, String template, String factoryId, String title,
+            String description, String width, String height, List<String> accessPermissions, List<ComponentData> children,
+            String ownerType, String ownerId, String editPermission, boolean showMaxWindow) {
+        super(storageId, id, name, icon, template, factoryId, title, description, width, height, accessPermissions, children);
 
-      //
-      this.key = new PageKey(ownerType, ownerId, name);
-      this.editPermission = editPermission;
-      this.showMaxWindow = showMaxWindow;
-   }
+        //
+        this.key = new PageKey(ownerType, ownerId, name);
+        this.editPermission = editPermission;
+        this.showMaxWindow = showMaxWindow;
+    }
 
-   public PageKey getKey()
-   {
-      return key;
-   }
+    public PageKey getKey() {
+        return key;
+    }
 
-   public String getOwnerType()
-   {
-      return key.getType();
-   }
+    public String getOwnerType() {
+        return key.getType();
+    }
 
-   public String getOwnerId()
-   {
-      return key.getId();
-   }
+    public String getOwnerId() {
+        return key.getId();
+    }
 
-   public String getEditPermission()
-   {
-      return editPermission;
-   }
+    public String getEditPermission() {
+        return editPermission;
+    }
 
-   public boolean isShowMaxWindow()
-   {
-      return showMaxWindow;
-   }
+    public boolean isShowMaxWindow() {
+        return showMaxWindow;
+    }
 }

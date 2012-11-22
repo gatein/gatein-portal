@@ -22,15 +22,15 @@
 
 <bundle>
   <UITabPaneDashboard>
-     <action>
-          <addNewDashboard>대시보드 추가</addNewDashboard>
-          <switchShowRange>범위 전환</switchShowRange>
-     </action>
-     <msg>
-          <deleteTab>정말 이 대시보드를 삭제하시겠습니까?</deleteTab>
-          <cannotDeleteLastTab>마지막 탭은 삭제할 수 없습니다.</cannotDeleteLastTab>
-          <wrongTabName>문자, 숫자, 밑줄(_), 하이픈(-)과 공백 문자만 허용됩니다.</wrongTabName>
-     </msg>
+    <action>
+      <addNewDashboard>대시보드 추가</addNewDashboard>
+      <switchShowRange>범위 전환</switchShowRange>
+    </action>
+    <msg>
+      <deleteTab>정말 이 대시보드를 삭제하시겠습니까?</deleteTab>
+      <cannotDeleteLastTab>마지막 탭은 삭제할 수 없습니다.</cannotDeleteLastTab>
+      <wrongTabName>문자, 숫자, 밑줄(_), 하이픈(-)과 공백 문자만 허용됩니다.</wrongTabName>
+    </msg>
   </UITabPaneDashboard>
 </bundle>
 

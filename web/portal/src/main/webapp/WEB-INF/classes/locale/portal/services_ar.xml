@@ -30,7 +30,7 @@
   -->
   <EmptyStringValidator>
     <msg>
-      <empty-input>	الميدان "(0)" المطلوب</empty-input>
+      <empty-input>الميدان "(0)" المطلوب</empty-input>
     </msg>
   </EmptyStringValidator>
   <!--
@@ -132,7 +132,7 @@
   -->
   <PermissionValidator>
     <msg>
-      <invalid-permission-input>/groupId:التصريح غير صالح، أسلوب التصريح  ينبغي أن يكون عضوية</invalid-permission-input>
+      <invalid-permission-input>/groupId:التصريح غير صالح، أسلوب التصريح ينبغي أن يكون عضوية</invalid-permission-input>
       <membership-group-not-found>لم يتم العثور على نوع العضوية أو على اسم المجموعة</membership-group-not-found>
     </msg>
   </PermissionValidator>
@@ -179,7 +179,7 @@
   #this exception is throw in GroupQueryHandler class
   -->
   <OrganizationService>
-    <unique-group-exception>اسم المجموعة "(0)"  موجود</unique-group-exception>
+    <unique-group-exception>اسم المجموعة "(0)" موجود</unique-group-exception>
   </OrganizationService>
   <!--
   #Throw in org.exoplatform.commons.utils.PageList, {0}=request page parameter, {1}=available pages parameter
@@ -193,8 +193,11 @@
   -->
   <MessageService>
     <account-not-found>"(لا يمكن العثور على الحساب "(0)" للمستخدم "(1</account-not-found>
-    <invalid-standalone-message-address> \ receiver#accountName:انت باستخدام نوع الحساب بذاته و عنوان "(0)" غير صالح. النظام ينتظرعنوان مع الشكل التالي</invalid-standalone-message-address>
-    <send-message-fail>{0} : \n\ Error لا يمكن إرسال الرسالة. تحقق من عنوان البريد الإلكتروني الخاص بك</send-message-fail>
+    <invalid-standalone-message-address>\ receiver#accountName:انت باستخدام نوع الحساب بذاته و عنوان "(0)" غير صالح.
+      النظام ينتظرعنوان مع الشكل التالي
+    </invalid-standalone-message-address>
+    <send-message-fail>{0} : \n\ Error لا يمكن إرسال الرسالة. تحقق من عنوان البريد الإلكتروني الخاص بك
+    </send-message-fail>
   </MessageService>
   <!--
   #Throw in exo.services.communication.message.impl.StandaloneProtocolPlugin. 

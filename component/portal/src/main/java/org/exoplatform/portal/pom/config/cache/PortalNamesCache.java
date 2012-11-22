@@ -19,6 +19,10 @@
 
 package org.exoplatform.portal.pom.config.cache;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.exoplatform.commons.utils.LazyPageList;
 import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.portal.pom.config.POMSession;
@@ -29,53 +33,39 @@ import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
 import org.exoplatform.portal.pom.config.tasks.SearchTask;
 import org.exoplatform.portal.pom.data.PortalKey;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PortalNamesCache extends TaskExecutionDecorator
-{
+public class PortalNamesCache extends TaskExecutionDecorator {
 
-   public PortalNamesCache(TaskExecutor next)
-   {
-      super(next);
-   }
+    public PortalNamesCache(TaskExecutor next) {
+        super(next);
+    }
 
-   @Override
-   public <V> V execute(POMSession session, POMTask<V> task) throws Exception
-   {
-      if (!session.isModified())
-      {
-         if (task instanceof SearchTask.FindSiteKey)
-         {
-            SearchTask.FindSiteKey find = (SearchTask.FindSiteKey)task;
-            List<PortalKey> data = (List<PortalKey>)session.getFromCache(find.getKey());
-            if (data == null)
-            {
-               V result = super.execute(session, task);
-               LazyPageList<PortalKey> list = (LazyPageList<PortalKey>)result;
-               session.putInCache(find.getKey(), Collections.unmodifiableList(new ArrayList<PortalKey>(list.getAll())));
-               return result;
+    @Override
+    public <V> V execute(POMSession session, POMTask<V> task) throws Exception {
+        if (!session.isModified()) {
+            if (task instanceof SearchTask.FindSiteKey) {
+                SearchTask.FindSiteKey find = (SearchTask.FindSiteKey) task;
+                List<PortalKey> data = (List<PortalKey>) session.getFromCache(find.getKey());
+                if (data == null) {
+                    V result = super.execute(session, task);
+                    LazyPageList<PortalKey> list = (LazyPageList<PortalKey>) result;
+                    session.putInCache(find.getKey(), Collections.unmodifiableList(new ArrayList<PortalKey>(list.getAll())));
+                    return result;
+                } else {
+                    return (V) new LazyPageList<PortalKey>(new ListAccessImpl<PortalKey>(PortalKey.class, data), 10);
+                }
+            } else if (task instanceof PortalConfigTask.Save || task instanceof PortalConfigTask.Remove) {
+                V result = super.execute(session, task);
+                session.scheduleForEviction(SearchTask.FindSiteKey.PORTAL_KEY);
+                session.scheduleForEviction(SearchTask.FindSiteKey.GROUP_KEY);
+                return result;
             }
-            else
-            {
-               return (V)new LazyPageList<PortalKey>(new ListAccessImpl<PortalKey>(PortalKey.class, data), 10);
-            }
-         }
-         else if (task instanceof PortalConfigTask.Save || task instanceof PortalConfigTask.Remove)
-         {
-            V result = super.execute(session, task);
-            session.scheduleForEviction(SearchTask.FindSiteKey.PORTAL_KEY);
-            session.scheduleForEviction(SearchTask.FindSiteKey.GROUP_KEY);
-            return result;
-         }
-      }
+        }
 
-      //
-      return super.execute(session, task);
-   }
+        //
+        return super.execute(session, task);
+    }
 }

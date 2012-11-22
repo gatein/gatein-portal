@@ -19,22 +19,22 @@
   -->
 
 <node-navigation
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
   <priority>1</priority>
 
   <page-nodes>
-	  <node>
-	    <uri>a</uri>
-	    <name>a</name>
-	    <label>A</label>
+    <node>
+      <uri>a</uri>
+      <name>a</name>
+      <label>A</label>
       <node>
         <uri>c</uri>
         <name>c</name>
         <label>C</label>
       </node>
-	  </node>
+    </node>
     <node>
       <uri>b</uri>
       <name>b</name>

@@ -29,43 +29,35 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
 /**
- * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
- * Aug 19, 2010
+ * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a> Aug 19, 2010
  */
 @Managed
 @ManagedDescription("A resource compressor plugin")
-@NameTemplate({@Property(key = "service", value = "resource"), @Property(key = "compressor", value = "{Name}")})
-public abstract class BaseResourceCompressorPlugin extends BaseComponentPlugin implements ResourceCompressorPlugin
-{
+@NameTemplate({ @Property(key = "service", value = "resource"), @Property(key = "compressor", value = "{Name}") })
+public abstract class BaseResourceCompressorPlugin extends BaseComponentPlugin implements ResourceCompressorPlugin {
 
-   private int priority;
-  
-   protected final Logger log = LoggerFactory.getLogger(getClass());
+    private int priority;
 
-   public BaseResourceCompressorPlugin(InitParams params)
-   {
-      ValueParam priorityParam = params.getValueParam("plugin.priority");
-      try
-      {
-         this.priority = Integer.parseInt(priorityParam.getValue());
-      }
-      catch (NumberFormatException NBFEx)
-      {
-         this.priority = -1;
-      }
-   }
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
-   @Managed
-   @ManagedDescription("The plugin priority")
-   public int getPriority()
-   {
-      return priority;
-   }
+    public BaseResourceCompressorPlugin(InitParams params) {
+        ValueParam priorityParam = params.getValueParam("plugin.priority");
+        try {
+            this.priority = Integer.parseInt(priorityParam.getValue());
+        } catch (NumberFormatException NBFEx) {
+            this.priority = -1;
+        }
+    }
 
-   @Managed
-   @ManagedDescription("The plugin type")
-   public String getType()
-   {
-      return getResourceType().name();
-   }
+    @Managed
+    @ManagedDescription("The plugin priority")
+    public int getPriority() {
+        return priority;
+    }
+
+    @Managed
+    @ManagedDescription("The plugin type")
+    public String getType() {
+        return getResourceType().name();
+    }
 }

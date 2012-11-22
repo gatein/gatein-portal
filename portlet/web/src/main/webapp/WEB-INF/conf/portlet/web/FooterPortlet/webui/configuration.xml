@@ -19,16 +19,16 @@
 
 -->
 
-<webui-configuration>    
+<webui-configuration>
   <ui-component-config id="UIFooterPortlet">
     <type>org.exoplatform.portal.webui.application.UIGroovyPortlet</type>
     <lifecycle>org.exoplatform.groovy.webui.component.lifecycle.UIGroovyPortletLifecycle</lifecycle>
   </ui-component-config>
-  
-  <application>     
+
+  <application>
     <ui-component-root>org.exoplatform.portal.webui.application.UIGroovyPortlet</ui-component-root>
     <state-manager>org.exoplatform.webui.application.portlet.ParentAppStateManager</state-manager>
-    <application-lifecycle-listeners>       
+    <application-lifecycle-listeners>
     </application-lifecycle-listeners>
   </application>
 </webui-configuration>

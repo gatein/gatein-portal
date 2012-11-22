@@ -26,8 +26,8 @@
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
   <priority>1</priority>
   <page-nodes>
-	  <node>
-	    <name>home</name>
+    <node>
+      <name>home</name>
       <label xml:lang="en">Home</label>
       <label xml:lang="cs">Domů</label>
       <label xml:lang="fr">Accueil</label>
@@ -45,8 +45,8 @@
       <label xml:lang="vi">Trang chủ</label>
       <label xml:lang="zh">主页</label>
       <label xml:lang="zh-TW">首頁</label>
-	    <page-reference>portal::mobile::homepage</page-reference>
-	  </node>   
+      <page-reference>portal::mobile::homepage</page-reference>
+    </node>
     <node>
       <name>sitemap</name>
       <label xml:lang="en">SiteMap</label>
@@ -68,8 +68,8 @@
       <visibility>DISPLAYED</visibility>
       <page-reference>portal::mobile::sitemap</page-reference>
     </node>
-	  <node>
-	    <name>groupnavigation</name>
+    <node>
+      <name>groupnavigation</name>
       <label xml:lang="en">Group Navigation</label>
       <label xml:lang="cs">Navigace skupin</label>
       <label xml:lang="fr">Group Navigation</label>
@@ -88,10 +88,10 @@
       <label xml:lang="zh">组导航</label>
       <label xml:lang="zh-TW">瀏覽群組</label>
       <visibility>SYSTEM</visibility>
-	    <page-reference>portal::mobile::groupnavigation</page-reference>
-	  </node>
-	  <node>
-	    <name>portalnavigation</name>
+      <page-reference>portal::mobile::groupnavigation</page-reference>
+    </node>
+    <node>
+      <name>portalnavigation</name>
       <label xml:lang="en">Portal Navigation</label>
       <label xml:lang="cs">Navigace portálu</label>
       <label xml:lang="fr">Portal Navigation</label>
@@ -110,10 +110,10 @@
       <label xml:lang="zh">门户导航</label>
       <label xml:lang="zh-TW">瀏覽入口網</label>
       <visibility>SYSTEM</visibility>
-	    <page-reference>portal::mobile::portalnavigation</page-reference>
-	  </node>
-	  <node>
-	    <name>register</name>
+      <page-reference>portal::mobile::portalnavigation</page-reference>
+    </node>
+    <node>
+      <name>register</name>
       <label xml:lang="en">Register</label>
       <label xml:lang="cs">Registrace</label>
       <label xml:lang="es">Registrarse</label>
@@ -128,14 +128,14 @@
       <label xml:lang="zh">注册</label>
       <label xml:lang="zh-TW">註冊</label>
       <visibility>SYSTEM</visibility>
-	    <page-reference>portal::mobile::register</page-reference>	    
-	  </node>
-	  
-	  <!-- NOT FOUND node -->
-	  <node>
-	    <name>notfound</name>
-	    <label>NotFound</label>
+      <page-reference>portal::mobile::register</page-reference>
+    </node>
+
+    <!-- NOT FOUND node -->
+    <node>
+      <name>notfound</name>
+      <label>NotFound</label>
       <visibility>SYSTEM</visibility>
-	  </node>
+    </node>
   </page-nodes>
 </node-navigation>

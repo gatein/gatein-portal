@@ -29,32 +29,26 @@ import org.exoplatform.webui.form.UIFormInput;
  * @author <a href="mailto:vrockai@redhat.com">Viliam Rockai</a>
  * @datOct 11, 2011
  *
- * Validates whether this value is a personal name. It's adding two 
- * more special characters beside letters and spaces. Those are "-"
- * (Jean-Claude) and "'" (O'Connor). See GTNPORTAL-2560.
+ *         Validates whether this value is a personal name. It's adding two more special characters beside letters and spaces.
+ *         Those are "-" (Jean-Claude) and "'" (O'Connor). See GTNPORTAL-2560.
  */
 @Serialized
-public class PersonalNameValidator extends AbstractValidator
-{
+public class PersonalNameValidator extends AbstractValidator {
 
-   @Override
-   protected String getMessageLocalizationKey()
-   {
-      return "PersonalNameValidator.msg.Invalid-char";
-   }
+    @Override
+    protected String getMessageLocalizationKey() {
+        return "PersonalNameValidator.msg.Invalid-char";
+    }
 
-   @Override
-   protected boolean isValid(String value, UIFormInput uiInput)
-   {
-      for (int i = 0; i < value.length(); i++)
-      {
-         char c = value.charAt(i);
-         if (Character.isLetter(c) || Character.isSpaceChar(c) || c == '\'' || c == '-')
-         {
-            continue;
-         }
-         return false;
-      }
-      return true;
-   }
+    @Override
+    protected boolean isValid(String value, UIFormInput uiInput) {
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            if (Character.isLetter(c) || Character.isSpaceChar(c) || c == '\'' || c == '-') {
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
 }

@@ -24,20 +24,20 @@ package org.exoplatform.portal.tree.diff;
  */
 public enum HierarchyChangeType {
 
-   ENTER,
+    ENTER,
 
-   KEEP,
+    KEEP,
 
-   ADDED,
+    ADDED,
 
-   REMOVED,
+    REMOVED,
 
-   MOVED_IN,
+    MOVED_IN,
 
-   MOVED_OUT,
+    MOVED_OUT,
 
-   LEAVE,
+    LEAVE,
 
-   ERROR
+    ERROR
 
 }

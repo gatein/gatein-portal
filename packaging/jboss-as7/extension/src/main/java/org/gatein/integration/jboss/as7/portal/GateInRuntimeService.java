@@ -22,11 +22,12 @@
 
 package org.gatein.integration.jboss.as7.portal;
 
+import java.util.List;
+
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
 import org.gatein.integration.jboss.as7.web.StartupService;
 import org.jboss.msc.service.Service;
-import org.jboss.msc.service.ServiceBuilder;
 import org.jboss.msc.service.ServiceController;
 import org.jboss.msc.service.ServiceName;
 import org.jboss.msc.service.ServiceTarget;
@@ -35,45 +36,35 @@ import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
 import org.picocontainer.ComponentAdapter;
 
-import java.util.List;
-
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public class GateInRuntimeService implements Service<GateInContext>
-{
-   public static final ServiceName SERVICE_NAME = ServiceName.of("org", "gatein", "portal");
+public class GateInRuntimeService implements Service<GateInContext> {
+    public static final ServiceName SERVICE_NAME = ServiceName.of("org", "gatein", "portal");
 
-   public static ServiceController<?> addService(ServiceTarget target)
-   {
-      return target.addService(SERVICE_NAME, new GateInRuntimeService())
-         .addDependency(StartupService.SERVICE_NAME)
-         .install();
-   }
+    public static ServiceController<?> addService(ServiceTarget target) {
+        return target.addService(SERVICE_NAME, new GateInRuntimeService()).addDependency(StartupService.SERVICE_NAME).install();
+    }
 
-   private GateInContext gateInContext = new GateInContext();
+    private GateInContext gateInContext = new GateInContext();
 
-   @Override
-   public void start(StartContext context) throws StartException
-   {
-      RootContainer root = RootContainer.getInstance();
-      @SuppressWarnings("unchecked")
-      List<ComponentAdapter> adapters = root.getComponentAdaptersOfType(PortalContainer.class);
-      for (ComponentAdapter adapter : adapters)
-      {
-         gateInContext.addPortalName((String) adapter.getComponentKey());
-      }
-   }
+    @Override
+    public void start(StartContext context) throws StartException {
+        RootContainer root = RootContainer.getInstance();
+        @SuppressWarnings("unchecked")
+        List<ComponentAdapter> adapters = root.getComponentAdaptersOfType(PortalContainer.class);
+        for (ComponentAdapter adapter : adapters) {
+            gateInContext.addPortalName((String) adapter.getComponentKey());
+        }
+    }
 
-   @Override
-   public void stop(StopContext context)
-   {
-      gateInContext = null;
-   }
+    @Override
+    public void stop(StopContext context) {
+        gateInContext = null;
+    }
 
-   @Override
-   public GateInContext getValue() throws IllegalStateException, IllegalArgumentException
-   {
-      return gateInContext;
-   }
+    @Override
+    public GateInContext getValue() throws IllegalStateException, IllegalArgumentException {
+        return gateInContext;
+    }
 }

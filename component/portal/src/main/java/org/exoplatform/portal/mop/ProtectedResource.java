@@ -19,10 +19,10 @@
 
 package org.exoplatform.portal.mop;
 
+import java.util.List;
+
 import org.chromattic.api.annotations.MixinType;
 import org.chromattic.api.annotations.Property;
-
-import java.util.List;
 
 /**
  * Describe an object that can be secured
@@ -31,17 +31,16 @@ import java.util.List;
  * @version $Revision$
  */
 @MixinType(name = "gtn:protectedresource")
-public abstract class ProtectedResource
-{
+public abstract class ProtectedResource {
 
-   @Property(name = "gtn:access-permissions")
-   public abstract List<String> getAccessPermissions();
+    @Property(name = "gtn:access-permissions")
+    public abstract List<String> getAccessPermissions();
 
-   public abstract void setAccessPermissions(List<String> accessPermissions);
+    public abstract void setAccessPermissions(List<String> accessPermissions);
 
-   @Property(name = "gtn:edit-permissions")
-   public abstract String getEditPermission();
+    @Property(name = "gtn:edit-permissions")
+    public abstract String getEditPermission();
 
-   public abstract void setEditPermission(String editPermission);
+    public abstract void setEditPermission(String editPermission);
 
 }

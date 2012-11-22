@@ -22,93 +22,81 @@
 
 package org.gatein.integration.jboss.as7.portal;
 
-import org.jboss.as.controller.OperationStepHandler;
-import org.jboss.as.controller.PathAddress;
-import org.jboss.as.controller.descriptions.DescriptionProvider;
-import org.jboss.as.controller.descriptions.common.CommonProviders;
-import org.jboss.as.controller.registry.AttributeAccess;
-import org.jboss.as.controller.registry.ManagementResourceRegistration;
-import org.jboss.as.controller.registry.OperationEntry;
-import org.jboss.dmr.ModelNode;
-
-import java.util.EnumSet;
-import java.util.Locale;
-
 import static org.gatein.integration.jboss.as7.portal.PortalResourceConstants.*;
 import static org.gatein.integration.jboss.as7.portal.PortalResourceDescriptions.*;
 import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.*;
 
+import java.util.EnumSet;
+import java.util.Locale;
+
+import org.jboss.as.controller.OperationStepHandler;
+import org.jboss.as.controller.PathAddress;
+import org.jboss.as.controller.descriptions.DescriptionProvider;
+import org.jboss.as.controller.descriptions.common.CommonProviders;
+import org.jboss.as.controller.registry.ManagementResourceRegistration;
+import org.jboss.as.controller.registry.OperationEntry;
+import org.jboss.dmr.ModelNode;
+
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public class PortalResourceRegistrar
-{
-   private PortalResourceRegistrar()
-   {
-   }
+public class PortalResourceRegistrar {
+    private PortalResourceRegistrar() {
+    }
 
-   // Register portal resources with the gatein subsystem.
-   public static void registerPortalResources(ManagementResourceRegistration subsystem, boolean isRuntimeOnlyRegistrationValid)
-   {
-      EnumSet<OperationEntry.Flag> runtimeOnly = EnumSet.of(OperationEntry.Flag.RUNTIME_ONLY);
+    // Register portal resources with the gatein subsystem.
+    public static void registerPortalResources(ManagementResourceRegistration subsystem, boolean isRuntimeOnlyRegistrationValid) {
+        EnumSet<OperationEntry.Flag> runtimeOnly = EnumSet.of(OperationEntry.Flag.RUNTIME_ONLY);
 
-      // Register all read operations that should have the child-type portal be populated with the currently installed portal containers and child resources.
-      OperationStepHandler handler = subsystem.getOperationHandler(PathAddress.EMPTY_ADDRESS, READ_RESOURCE_OPERATION);
-      subsystem.registerOperationHandler(READ_RESOURCE_OPERATION, new PortalReadOperationHandler(handler), new DescriptionProvider()
-      {
-         @Override
-         public ModelNode getModelDescription(Locale locale)
-         {
-            return getPortalReadResourceDescription(locale);
-         }
-      }, runtimeOnly);
+        // Register all read operations that should have the child-type portal be populated with the currently installed portal
+        // containers and child resources.
+        OperationStepHandler handler = subsystem.getOperationHandler(PathAddress.EMPTY_ADDRESS, READ_RESOURCE_OPERATION);
+        subsystem.registerOperationHandler(READ_RESOURCE_OPERATION, new PortalReadOperationHandler(handler),
+                new DescriptionProvider() {
+                    @Override
+                    public ModelNode getModelDescription(Locale locale) {
+                        return getPortalReadResourceDescription(locale);
+                    }
+                }, runtimeOnly);
 
-      handler = subsystem.getOperationHandler(PathAddress.EMPTY_ADDRESS, READ_CHILDREN_NAMES_OPERATION);
-      subsystem.registerOperationHandler(READ_CHILDREN_NAMES_OPERATION,
-         new PortalReadOperationHandler(handler), CommonProviders.READ_CHILDREN_NAMES_PROVIDER, runtimeOnly);
+        handler = subsystem.getOperationHandler(PathAddress.EMPTY_ADDRESS, READ_CHILDREN_NAMES_OPERATION);
+        subsystem.registerOperationHandler(READ_CHILDREN_NAMES_OPERATION, new PortalReadOperationHandler(handler),
+                CommonProviders.READ_CHILDREN_NAMES_PROVIDER, runtimeOnly);
 
-      handler = subsystem.getOperationHandler(PathAddress.EMPTY_ADDRESS, READ_CHILDREN_RESOURCES_OPERATION);
-      subsystem.registerOperationHandler(READ_CHILDREN_RESOURCES_OPERATION,
-         new PortalReadOperationHandler(handler), CommonProviders.READ_CHILDREN_RESOURCES_PROVIDER, runtimeOnly);
+        handler = subsystem.getOperationHandler(PathAddress.EMPTY_ADDRESS, READ_CHILDREN_RESOURCES_OPERATION);
+        subsystem.registerOperationHandler(READ_CHILDREN_RESOURCES_OPERATION, new PortalReadOperationHandler(handler),
+                CommonProviders.READ_CHILDREN_RESOURCES_PROVIDER, runtimeOnly);
 
-      // /subsystem=gatein/portal=*
-      ManagementResourceRegistration portal = subsystem.registerSubModel(PORTAL_PATH, new DescriptionProvider()
-      {
-         @Override
-         public ModelNode getModelDescription(Locale locale)
-         {
-            return getPortalResourceDescription(locale);
-         }
-      });
+        // /subsystem=gatein/portal=*
+        ManagementResourceRegistration portal = subsystem.registerSubModel(PORTAL_PATH, new DescriptionProvider() {
+            @Override
+            public ModelNode getModelDescription(Locale locale) {
+                return getPortalResourceDescription(locale);
+            }
+        });
 
-      // /subsystem=gatein/portal=*/site=*
-      ManagementResourceRegistration site = portal.registerSubModel(SITE_PATH, new DescriptionProvider()
-      {
-         @Override
-         public ModelNode getModelDescription(Locale locale)
-         {
-            return getSiteResourceDescription(locale);
-         }
-      });
+        // /subsystem=gatein/portal=*/site=*
+        ManagementResourceRegistration site = portal.registerSubModel(SITE_PATH, new DescriptionProvider() {
+            @Override
+            public ModelNode getModelDescription(Locale locale) {
+                return getSiteResourceDescription(locale);
+            }
+        });
 
-      if (isRuntimeOnlyRegistrationValid)
-      {
-         StatisticsMetricHandler.registerMetrics(SITE, site);
-      }
+        if (isRuntimeOnlyRegistrationValid) {
+            StatisticsMetricHandler.registerMetrics(SITE, site);
+        }
 
-      // /subsystem=gatein/portal=*/application=*
-      ManagementResourceRegistration application = portal.registerSubModel(APPLICATION_PATH, new DescriptionProvider()
-      {
-         @Override
-         public ModelNode getModelDescription(Locale locale)
-         {
-            return getApplicationResourceDescription(locale);
-         }
-      });
+        // /subsystem=gatein/portal=*/application=*
+        ManagementResourceRegistration application = portal.registerSubModel(APPLICATION_PATH, new DescriptionProvider() {
+            @Override
+            public ModelNode getModelDescription(Locale locale) {
+                return getApplicationResourceDescription(locale);
+            }
+        });
 
-      if (isRuntimeOnlyRegistrationValid)
-      {
-         StatisticsMetricHandler.registerMetrics(APPLICATION, application);
-      }
-   }
+        if (isRuntimeOnlyRegistrationValid) {
+            StatisticsMetricHandler.registerMetrics(APPLICATION, application);
+        }
+    }
 }

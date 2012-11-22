@@ -7,11 +7,9 @@ import org.gatein.management.api.RuntimeContext;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class RuntimeContextImpl implements RuntimeContext
-{
-   @Override
-   public <T> T getRuntimeComponent(Class<T> componentClass)
-   {
-      return componentClass.cast(PortalContainer.getInstance().getComponentInstanceOfType(componentClass));
-   }
+public class RuntimeContextImpl implements RuntimeContext {
+    @Override
+    public <T> T getRuntimeComponent(Class<T> componentClass) {
+        return componentClass.cast(PortalContainer.getInstance().getComponentInstanceOfType(componentClass));
+    }
 }

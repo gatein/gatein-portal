@@ -23,6 +23,11 @@
 
 package org.exoplatform.web.security;
 
+import java.lang.reflect.Method;
+
+import javax.security.auth.login.LoginException;
+import javax.servlet.http.HttpServletRequest;
+
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.services.log.ExoLogger;
 import org.exoplatform.services.log.Log;
@@ -32,228 +37,189 @@ import org.exoplatform.services.security.UsernameCredential;
 import org.exoplatform.services.security.jaas.AbstractLoginModule;
 import org.gatein.wci.security.Credentials;
 
-import javax.security.auth.login.LoginException;
-import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.Method;
-
 /**
- * A login module implementation that is used to handle reauthentication of client with same HTTP session on various cluster nodes.
- * After login of user on cluster node is attribute "authenticatedCredentials" added to HTTP session in method {@link #commit()}.
- * Other cluster nodes can than read these credentials in method {@link #login()}, and can reuse them to relogin.
- * 
+ * A login module implementation that is used to handle reauthentication of client with same HTTP session on various cluster
+ * nodes. After login of user on cluster node is attribute "authenticatedCredentials" added to HTTP session in method
+ * {@link #commit()}. Other cluster nodes can than read these credentials in method {@link #login()}, and can reuse them to
+ * relogin.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  *
- * @deprecated Cluster authentication is now handled by {@link org.exoplatform.web.login.PortalClusteredSSOSupportValve}
- * and this login module is no longer used. Likely will be removed in the future.
+ * @deprecated Cluster authentication is now handled by {@link org.exoplatform.web.login.PortalClusteredSSOSupportValve} and
+ *             this login module is no longer used. Likely will be removed in the future.
  */
-public class PortalLoginModule extends AbstractLoginModule
-{
+public class PortalLoginModule extends AbstractLoginModule {
 
-   /** Logger. */
-   private static final Log log = ExoLogger.getLogger(PortalLoginModule.class);
+    /** Logger. */
+    private static final Log log = ExoLogger.getLogger(PortalLoginModule.class);
 
-   /** JACC get context method. */
-   private static final Method getContextMethod;
+    /** JACC get context method. */
+    private static final Method getContextMethod;
 
-   static
-   {
-      Method getContext = null;
+    static {
+        Method getContext = null;
 
-      log.debug("About to configure PortalLoginModule");
-      try
-      {
-         Class<?> policyContextClass = Thread.currentThread().getContextClassLoader().loadClass("javax.security.jacc.PolicyContext");
-         getContext = policyContextClass.getDeclaredMethod("getContext", String.class);
-      }
-      catch (ClassNotFoundException ignore)
-      {
-         log.debug("JACC not found ignoring it", ignore);
-      }
-      catch (Exception e)
-      {
-         log.error("Could not obtain JACC get context method", e);
-      }
+        log.debug("About to configure PortalLoginModule");
+        try {
+            Class<?> policyContextClass = Thread.currentThread().getContextClassLoader()
+                    .loadClass("javax.security.jacc.PolicyContext");
+            getContext = policyContextClass.getDeclaredMethod("getContext", String.class);
+        } catch (ClassNotFoundException ignore) {
+            log.debug("JACC not found ignoring it", ignore);
+        } catch (Exception e) {
+            log.error("Could not obtain JACC get context method", e);
+        }
 
-      //
-      getContextMethod = getContext;
-   }
+        //
+        getContextMethod = getContext;
+    }
 
-   public static final String AUTHENTICATED_CREDENTIALS = "authenticatedCredentials";
+    public static final String AUTHENTICATED_CREDENTIALS = "authenticatedCredentials";
 
-   private static final String LOGIN_ON_DIFFERENT_NODE = "PortalLoginModule.loginOnDifferentNode";
+    private static final String LOGIN_ON_DIFFERENT_NODE = "PortalLoginModule.loginOnDifferentNode";
 
-   /**
-    * @see javax.security.auth.spi.LoginModule#login()
-    */
-   @SuppressWarnings("unchecked")
-   public boolean login() throws LoginException
-   {
-      if (getContextMethod != null)
-      {
-         Credentials authCredentials = null;
+    /**
+     * @see javax.security.auth.spi.LoginModule#login()
+     */
+    @SuppressWarnings("unchecked")
+    public boolean login() throws LoginException {
+        if (getContextMethod != null) {
+            Credentials authCredentials = null;
 
-         try
-         {
-            HttpServletRequest request = getCurrentHttpServletRequest();
+            try {
+                HttpServletRequest request = getCurrentHttpServletRequest();
 
-            // This can be the case with CLI login
-            if (request == null)
-            {
-               log.debug("Unable to find HTTPServletRequest.");
-               return false;
+                // This can be the case with CLI login
+                if (request == null) {
+                    log.debug("Unable to find HTTPServletRequest.");
+                    return false;
+                }
+
+                authCredentials = (Credentials) request.getSession().getAttribute(AUTHENTICATED_CREDENTIALS);
+
+                // If authenticated credentials were presented in HTTP session, it means that we were already logged on
+                // different cluster node
+                // with this HTTP session. We don't need to validate password again in this case (We don't have password anyway)
+                if (authCredentials != null) {
+                    Authenticator authenticator = (Authenticator) getContainer()
+                            .getComponentInstanceOfType(Authenticator.class);
+                    if (authenticator == null) {
+                        throw new LoginException("No Authenticator component found, check your configuration");
+                    }
+
+                    String username = authCredentials.getUsername();
+                    Identity identity = authenticator.createIdentity(username);
+
+                    sharedState.put("exo.security.identity", identity);
+                    sharedState.put("javax.security.auth.login.name", username);
+
+                    subject.getPublicCredentials().add(new UsernameCredential(username));
+
+                    // Add empty password to subject and remove password key, so that SharedStateLoginModule won't be processed
+                    subject.getPrivateCredentials().add("");
+                    sharedState.remove("javax.security.auth.login.password");
+
+                    // Add flag that we were logged with real password on different cluster node. Not on this node.
+                    sharedState.put(LOGIN_ON_DIFFERENT_NODE, true);
+                }
+            } catch (Exception e) {
+                log.error(this, e);
+                LoginException le = new LoginException(e.getMessage());
+                le.initCause(e);
+                throw le;
             }
+        }
+        return true;
+    }
 
-            authCredentials = (Credentials)request.getSession().getAttribute(AUTHENTICATED_CREDENTIALS);
+    /**
+     * @see javax.security.auth.spi.LoginModule#commit()
+     */
+    public boolean commit() throws LoginException {
+        // Add authenticated credentials to session only if we were logged on this host with "real" credentials
+        if (getContextMethod != null && isClusteredSSO() && sharedState.containsKey("javax.security.auth.login.name")
+                && sharedState.containsKey("javax.security.auth.login.password")
+                && sharedState.get(LOGIN_ON_DIFFERENT_NODE) == null) {
+            String uid = (String) sharedState.get("javax.security.auth.login.name");
 
-            // If authenticated credentials were presented in HTTP session, it means that we were already logged on different cluster node
-            // with this HTTP session. We don't need to validate password again in this case (We don't have password anyway)
-            if (authCredentials != null)
-            {
-               Authenticator authenticator = (Authenticator)getContainer().getComponentInstanceOfType(Authenticator.class);
-               if (authenticator == null)
-               {
-                  throw new LoginException("No Authenticator component found, check your configuration");
-               }
+            Credentials wc = new Credentials(uid, "");
 
-               String username = authCredentials.getUsername();
-               Identity identity = authenticator.createIdentity(username);
+            HttpServletRequest request = null;
+            try {
+                request = getCurrentHttpServletRequest();
 
-               sharedState.put("exo.security.identity", identity);
-               sharedState.put("javax.security.auth.login.name", username);
-
-               subject.getPublicCredentials().add(new UsernameCredential(username));
-
-               // Add empty password to subject and remove password key, so that SharedStateLoginModule won't be processed
-               subject.getPrivateCredentials().add("");
-               sharedState.remove("javax.security.auth.login.password");
-
-               // Add flag that we were logged with real password on different cluster node. Not on this node.
-               sharedState.put(LOGIN_ON_DIFFERENT_NODE, true);
+                // This can be the case with CLI login
+                if (request == null) {
+                    log.debug("Unable to find HTTPServletRequest.");
+                } else {
+                    request.getSession().setAttribute(AUTHENTICATED_CREDENTIALS, wc);
+                }
+            } catch (Exception e) {
+                log.error(this, e);
+                log.error("LoginModule error. Turn off session credentials checking with proper configuration option of "
+                        + "LoginModule set to false");
             }
-         }
-         catch(Exception e)
-         {
-            log.error(this, e);
-            LoginException le = new LoginException(e.getMessage());
-            le.initCause(e);
-            throw le;
-         }
-      }
-      return true;
-   }
+        }
+        return true;
+    }
 
-   /**
-    * @see javax.security.auth.spi.LoginModule#commit()
-    */
-   public boolean commit() throws LoginException
-   {
-      // Add authenticated credentials to session only if we were logged on this host with "real" credentials
-      if (getContextMethod != null &&
-         isClusteredSSO() &&
-         sharedState.containsKey("javax.security.auth.login.name") &&
-         sharedState.containsKey("javax.security.auth.login.password") &&
-         sharedState.get(LOGIN_ON_DIFFERENT_NODE) == null)
-      {
-         String uid = (String)sharedState.get("javax.security.auth.login.name");
+    /**
+     * @see javax.security.auth.spi.LoginModule#abort()
+     */
+    public boolean abort() throws LoginException {
+        HttpServletRequest request = getCurrentHttpServletRequest();
 
-         Credentials wc = new Credentials(uid, "");
+        if (request != null) {
+            handleCredentialsRemoving(request);
+        }
 
-         HttpServletRequest request = null;
-         try
-         {
-            request = getCurrentHttpServletRequest();
+        return true;
+    }
 
-            // This can be the case with CLI login
-            if (request == null)
-            {
-               log.debug("Unable to find HTTPServletRequest.");
+    /**
+     * @see javax.security.auth.spi.LoginModule#logout()
+     */
+    public boolean logout() throws LoginException {
+        return true;
+    }
+
+    @Override
+    protected Log getLogger() {
+        return log;
+    }
+
+    protected static boolean isClusteredSSO() {
+        return ExoContainer.getProfiles().contains("cluster");
+    }
+
+    /**
+     * Remove credentials of authenticated user from AuthenticationRegistry.
+     *
+     * @param request httpRequest
+     */
+    protected void handleCredentialsRemoving(HttpServletRequest request) {
+        try {
+            AuthenticationRegistry authenticationRegistry = (AuthenticationRegistry) getContainer().getComponentInstanceOfType(
+                    AuthenticationRegistry.class);
+            if (request != null) {
+                authenticationRegistry.removeCredentials(request);
             }
-            else
-            {
-               request.getSession().setAttribute(AUTHENTICATED_CREDENTIALS, wc);
+        } catch (Exception e) {
+            log.debug("Unable to remove credentials from credentialsRegistry.", e);
+        }
+    }
+
+    private HttpServletRequest getCurrentHttpServletRequest() {
+        HttpServletRequest request = null;
+        try {
+            if (getContextMethod != null) {
+                request = (HttpServletRequest) getContextMethod.invoke(null, "javax.servlet.http.HttpServletRequest");
             }
-         }
-         catch(Exception e)
-         {
-            log.error(this,e);
-            log.error("LoginModule error. Turn off session credentials checking with proper configuration option of " +
-               "LoginModule set to false");
-         }
-      }
-      return true;
-   }
+        } catch (Exception e) {
+            log.debug("Exception when trying to obtain HTTPServletRequest.", e);
+        }
 
-   /**
-    * @see javax.security.auth.spi.LoginModule#abort()
-    */
-   public boolean abort() throws LoginException
-   {
-      HttpServletRequest request = getCurrentHttpServletRequest();
-
-      if (request != null)
-      {
-         handleCredentialsRemoving(request);
-      }
-
-      return true;
-   }
-
-   /**
-    * @see javax.security.auth.spi.LoginModule#logout()
-    */
-   public boolean logout() throws LoginException
-   {
-      return true;
-   }
-
-   @Override
-   protected Log getLogger()
-   {
-      return log;
-   }
-
-   protected static boolean isClusteredSSO()
-   {
-      return ExoContainer.getProfiles().contains("cluster");
-   }
-
-   /**
-    * Remove credentials of authenticated user from AuthenticationRegistry.
-    *
-    * @param request httpRequest
-    */
-   protected void handleCredentialsRemoving(HttpServletRequest request)
-   {
-      try
-      {
-         AuthenticationRegistry authenticationRegistry = (AuthenticationRegistry)getContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
-         if (request != null)
-         {
-            authenticationRegistry.removeCredentials(request);
-         }
-      }
-      catch (Exception e)
-      {
-         log.debug("Unable to remove credentials from credentialsRegistry.", e);
-      }
-   }
-
-   private HttpServletRequest getCurrentHttpServletRequest()
-   {
-      HttpServletRequest request = null;
-      try
-      {
-         if (getContextMethod != null)
-         {
-            request = (HttpServletRequest)getContextMethod.invoke(null, "javax.servlet.http.HttpServletRequest");
-         }
-      }
-      catch (Exception e)
-      {
-         log.debug("Exception when trying to obtain HTTPServletRequest.", e);
-      }
-
-      return request;
-   }
+        return request;
+    }
 }

@@ -19,26 +19,23 @@
 
 package org.exoplatform.web.url.navigation;
 
-import org.exoplatform.web.url.URLFactoryPlugin;
 import org.exoplatform.web.url.ResourceType;
 import org.exoplatform.web.url.URLContext;
+import org.exoplatform.web.url.URLFactoryPlugin;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NodeURLFactoryPlugin extends URLFactoryPlugin<NavigationResource, NodeURL>
-{
+public class NodeURLFactoryPlugin extends URLFactoryPlugin<NavigationResource, NodeURL> {
 
-   @Override
-   protected ResourceType<NavigationResource, NodeURL> getResourceType()
-   {
-      return NodeURL.TYPE;
-   }
+    @Override
+    protected ResourceType<NavigationResource, NodeURL> getResourceType() {
+        return NodeURL.TYPE;
+    }
 
-   @Override
-   protected NodeURL newURL(URLContext context)
-   {
-      return new NodeURL(context);
-   }
+    @Override
+    protected NodeURL newURL(URLContext context) {
+        return new NodeURL(context);
+    }
 }

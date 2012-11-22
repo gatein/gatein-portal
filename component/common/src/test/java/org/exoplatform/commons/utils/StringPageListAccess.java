@@ -23,41 +23,34 @@ package org.exoplatform.commons.utils;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class StringPageListAccess extends PageListAccess<String, String[]>
-{
+public class StringPageListAccess extends PageListAccess<String, String[]> {
 
-   public StringPageListAccess(int pageSize, String... state)
-   {
-      super(state, pageSize);
-   }
+    public StringPageListAccess(int pageSize, String... state) {
+        super(state, pageSize);
+    }
 
-   @Override
-   protected ListAccess<String> create(String[] state)
-   {
-      return new ArrayListAccess(state);
-   }
+    @Override
+    protected ListAccess<String> create(String[] state) {
+        return new ArrayListAccess(state);
+    }
 
-   private static class ArrayListAccess implements ListAccess<String>
-   {
+    private static class ArrayListAccess implements ListAccess<String> {
 
-      /** . */
-      private final String[] values;
+        /** . */
+        private final String[] values;
 
-      private ArrayListAccess(String... values)
-      {
-         this.values = values;
-      }
+        private ArrayListAccess(String... values) {
+            this.values = values;
+        }
 
-      public String[] load(int index, int length) throws Exception, IllegalArgumentException
-      {
-         String[] batch = new String[length];
-         System.arraycopy(values, index, batch, 0, length);
-         return batch;
-      }
+        public String[] load(int index, int length) throws Exception {
+            String[] batch = new String[length];
+            System.arraycopy(values, index, batch, 0, length);
+            return batch;
+        }
 
-      public int getSize() throws Exception
-      {
-         return values.length;
-      }
-   }
+        public int getSize() throws Exception {
+            return values.length;
+        }
+    }
 }

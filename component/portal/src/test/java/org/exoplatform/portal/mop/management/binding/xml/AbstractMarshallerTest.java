@@ -22,7 +22,11 @@
 
 package org.exoplatform.portal.mop.management.binding.xml;
 
+import java.util.Arrays;
+import java.util.List;
+
 import junit.framework.TestCase;
+
 import org.exoplatform.portal.config.model.Application;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.Container;
@@ -33,134 +37,107 @@ import org.exoplatform.portal.pom.spi.gadget.Gadget;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
 
-import java.util.Arrays;
-import java.util.List;
-
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public abstract class AbstractMarshallerTest extends TestCase
-{
-   protected void compareComponents(List<ModelObject> expectedComponents, List<ModelObject> actualComponents)
-   {
-      assertEquals(expectedComponents.size(), actualComponents.size());
-      for (int i=0; i<expectedComponents.size(); i++)
-      {
-         ModelObject expected = expectedComponents.get(i);
-         ModelObject actual = actualComponents.get(i);
-         assertEquals(expected.getClass(), actual.getClass());
+public abstract class AbstractMarshallerTest extends TestCase {
+    protected void compareComponents(List<ModelObject> expectedComponents, List<ModelObject> actualComponents) {
+        assertEquals(expectedComponents.size(), actualComponents.size());
+        for (int i = 0; i < expectedComponents.size(); i++) {
+            ModelObject expected = expectedComponents.get(i);
+            ModelObject actual = actualComponents.get(i);
+            assertEquals(expected.getClass(), actual.getClass());
 
-         if (expected instanceof Application)
-         {
-            compareApplication((Application) expected, (Application) actual);
-         }
-         else if (expected instanceof PageBody)
-         {
-            assertTrue(actual instanceof PageBody);
-         }
-         else if (expected instanceof Container)
-         {
-            compareContainer((Container) expected, (Container) actual);
-         }
-      }
-   }
-
-   protected void compareContainer(Container expected, Container actual)
-   {
-      assertNull(actual.getStorageId());
-      assertNull(actual.getStorageName());
-      assertEquals(expected.getId(), actual.getId());
-      assertEquals(expected.getName(), actual.getName());
-      assertEquals(expected.getIcon(), actual.getIcon());
-      assertEquals(expected.getTemplate(), actual.getTemplate());
-      assertEquals(expected.getFactoryId(), actual.getFactoryId());
-      assertEquals(expected.getTitle(), actual.getTitle());
-      assertEquals(expected.getDescription(), actual.getDescription());
-      assertEquals(expected.getWidth(), actual.getWidth());
-      assertEquals(expected.getHeight(), actual.getHeight());
-      assertEquals(Arrays.asList(expected.getAccessPermissions()), Arrays.asList(actual.getAccessPermissions()));
-
-      compareComponents(expected.getChildren(), actual.getChildren());
-   }
-
-   protected void compareApplication(Application expected, Application actual)
-   {
-      assertNull(actual.getStorageId());
-      assertNull(actual.getStorageName());
-      assertEquals(expected.getType(), actual.getType());
-      if (expected.getState() == null)
-      {
-         assertNull(actual.getState());
-      }
-      else
-      {
-         assertNotNull(actual.getState());
-         compareApplicationState(expected.getState(), actual.getState());
-      }
-
-      assertNull(actual.getStorageId());
-      assertNull(actual.getStorageName());
-      assertNull(actual.getId());
-      assertEquals(expected.getTitle(), actual.getTitle());
-      assertEquals(expected.getIcon(), actual.getIcon());
-      assertEquals(expected.getDescription(), actual.getDescription());
-      assertEquals(expected.getShowInfoBar(), actual.getShowInfoBar());
-      assertEquals(expected.getShowApplicationState(), actual.getShowApplicationState());
-      assertEquals(expected.getShowApplicationMode(), actual.getShowApplicationMode());
-      assertEquals(expected.getTheme(), actual.getTheme());
-      assertEquals(expected.getWidth(), actual.getWidth());
-      assertEquals(expected.getHeight(), actual.getHeight());
-      assertEquals(expected.getProperties(), actual.getProperties());
-      assertEquals(Arrays.asList(expected.getAccessPermissions()), Arrays.asList(actual.getAccessPermissions()));
-   }
-
-   protected void compareApplicationState(ApplicationState expected, ApplicationState actual)
-   {
-      assertEquals(expected.getClass(), actual.getClass());
-      if (expected instanceof TransientApplicationState)
-      {
-         TransientApplicationState expectedTas = (TransientApplicationState) expected;
-         TransientApplicationState actualTas = (TransientApplicationState) actual;
-         assertEquals(expectedTas.getContentId(), actualTas.getContentId());
-         assertNull(actualTas.getOwnerType());
-         assertNull(actualTas.getOwnerId());
-         if (expectedTas.getContentState() == null)
-         {
-            assertNull(actualTas.getContentState());
-         }
-         else
-         {
-            assertEquals(expectedTas.getContentState().getClass(), actualTas.getContentState().getClass());
-            if (expectedTas.getContentState() instanceof Portlet)
-            {
-               comparePortlet((Portlet) expectedTas.getContentState(), (Portlet) actualTas.getContentState());
+            if (expected instanceof Application) {
+                compareApplication((Application) expected, (Application) actual);
+            } else if (expected instanceof PageBody) {
+                assertTrue(actual instanceof PageBody);
+            } else if (expected instanceof Container) {
+                compareContainer((Container) expected, (Container) actual);
             }
-            else if (expectedTas.getContentState() instanceof Gadget)
-            {
-               compareGadget((Gadget) expectedTas.getContentState(), (Gadget) actualTas.getContentState());
+        }
+    }
+
+    protected void compareContainer(Container expected, Container actual) {
+        assertNull(actual.getStorageId());
+        assertNull(actual.getStorageName());
+        assertEquals(expected.getId(), actual.getId());
+        assertEquals(expected.getName(), actual.getName());
+        assertEquals(expected.getIcon(), actual.getIcon());
+        assertEquals(expected.getTemplate(), actual.getTemplate());
+        assertEquals(expected.getFactoryId(), actual.getFactoryId());
+        assertEquals(expected.getTitle(), actual.getTitle());
+        assertEquals(expected.getDescription(), actual.getDescription());
+        assertEquals(expected.getWidth(), actual.getWidth());
+        assertEquals(expected.getHeight(), actual.getHeight());
+        assertEquals(Arrays.asList(expected.getAccessPermissions()), Arrays.asList(actual.getAccessPermissions()));
+
+        compareComponents(expected.getChildren(), actual.getChildren());
+    }
+
+    protected void compareApplication(Application expected, Application actual) {
+        assertNull(actual.getStorageId());
+        assertNull(actual.getStorageName());
+        assertEquals(expected.getType(), actual.getType());
+        if (expected.getState() == null) {
+            assertNull(actual.getState());
+        } else {
+            assertNotNull(actual.getState());
+            compareApplicationState(expected.getState(), actual.getState());
+        }
+
+        assertNull(actual.getStorageId());
+        assertNull(actual.getStorageName());
+        assertNull(actual.getId());
+        assertEquals(expected.getTitle(), actual.getTitle());
+        assertEquals(expected.getIcon(), actual.getIcon());
+        assertEquals(expected.getDescription(), actual.getDescription());
+        assertEquals(expected.getShowInfoBar(), actual.getShowInfoBar());
+        assertEquals(expected.getShowApplicationState(), actual.getShowApplicationState());
+        assertEquals(expected.getShowApplicationMode(), actual.getShowApplicationMode());
+        assertEquals(expected.getTheme(), actual.getTheme());
+        assertEquals(expected.getWidth(), actual.getWidth());
+        assertEquals(expected.getHeight(), actual.getHeight());
+        assertEquals(expected.getProperties(), actual.getProperties());
+        assertEquals(Arrays.asList(expected.getAccessPermissions()), Arrays.asList(actual.getAccessPermissions()));
+    }
+
+    protected void compareApplicationState(ApplicationState expected, ApplicationState actual) {
+        assertEquals(expected.getClass(), actual.getClass());
+        if (expected instanceof TransientApplicationState) {
+            TransientApplicationState expectedTas = (TransientApplicationState) expected;
+            TransientApplicationState actualTas = (TransientApplicationState) actual;
+            assertEquals(expectedTas.getContentId(), actualTas.getContentId());
+            assertNull(actualTas.getOwnerType());
+            assertNull(actualTas.getOwnerId());
+            if (expectedTas.getContentState() == null) {
+                assertNull(actualTas.getContentState());
+            } else {
+                assertEquals(expectedTas.getContentState().getClass(), actualTas.getContentState().getClass());
+                if (expectedTas.getContentState() instanceof Portlet) {
+                    comparePortlet((Portlet) expectedTas.getContentState(), (Portlet) actualTas.getContentState());
+                } else if (expectedTas.getContentState() instanceof Gadget) {
+                    compareGadget((Gadget) expectedTas.getContentState(), (Gadget) actualTas.getContentState());
+                }
             }
-         }
-      }
-   }
+        }
+    }
 
-   protected void comparePortlet(Portlet expected, Portlet actual)
-   {
-      for (Preference expectedPref : expected)
-      {
-         Preference actualPref = actual.getPreference(expectedPref.getName());
-         assertNotNull(actualPref);
-         assertEquals(expectedPref.getName(), actualPref.getName());
-         assertEquals(expectedPref.getValues(), actualPref.getValues());
-         assertEquals(expectedPref.isReadOnly(), actualPref.isReadOnly());
-      }
-   }
+    protected void comparePortlet(Portlet expected, Portlet actual) {
+        for (Preference expectedPref : expected) {
+            Preference actualPref = actual.getPreference(expectedPref.getName());
+            assertNotNull(actualPref);
+            assertEquals(expectedPref.getName(), actualPref.getName());
+            assertEquals(expectedPref.getValues(), actualPref.getValues());
+            assertEquals(expectedPref.isReadOnly(), actualPref.isReadOnly());
+        }
+    }
 
-   private void compareGadget(Gadget expected, Gadget actual)
-   {
-      assertNotNull(expected);
-      assertNotNull(actual);
-      // When gadget user prefs are supported in gatein_objects, uncomment.
-      //assertEquals(expected.getUserPref(), actual.getUserPref());
-   }
+    private void compareGadget(Gadget expected, Gadget actual) {
+        assertNotNull(expected);
+        assertNotNull(actual);
+        // When gadget user prefs are supported in gatein_objects, uncomment.
+        // assertEquals(expected.getUserPref(), actual.getUserPref());
+    }
 }

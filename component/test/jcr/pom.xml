@@ -17,7 +17,8 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <parent>
     <groupId>org.gatein.portal</groupId>
@@ -38,8 +39,8 @@
     </dependency>
 
     <dependency>
-       <groupId>commons-collections</groupId>
-       <artifactId>commons-collections</artifactId>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
     </dependency>
 
     <dependency>
@@ -52,12 +53,12 @@
       <artifactId>exo.core.component.organization.jdbc</artifactId>
     </dependency>
   </dependencies>
-  
+
   <build>
     <resources>
-       <resource>
-          <directory>src/main/resources</directory>
-       </resource>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
     </resources>
   </build>
 

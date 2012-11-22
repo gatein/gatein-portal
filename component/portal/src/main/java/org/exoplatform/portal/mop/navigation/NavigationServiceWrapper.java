@@ -19,12 +19,17 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import static org.exoplatform.portal.mop.Utils.siteType;
+
+import java.util.List;
+
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+
 import org.chromattic.api.UndeclaredRepositoryException;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteKey;
-
 import org.exoplatform.portal.mop.SiteType;
-import static org.exoplatform.portal.mop.Utils.*;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -36,170 +41,139 @@ import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.picocontainer.Startable;
 
-import java.util.List;
-import javax.jcr.RepositoryException;
-import javax.jcr.Session;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationServiceWrapper implements NavigationService, Startable
-{
+public class NavigationServiceWrapper implements NavigationService, Startable {
 
-   /** . */
-   private static final Logger log = LoggerFactory.getLogger(NavigationServiceWrapper.class);
+    /** . */
+    private static final Logger log = LoggerFactory.getLogger(NavigationServiceWrapper.class);
 
-   /** . */
-   private final NavigationServiceImpl service;
+    /** . */
+    private final NavigationServiceImpl service;
 
-   /** . */
-   private final ListenerService listenerService;
+    /** . */
+    private final ListenerService listenerService;
 
-   /** . */
-   private final POMSessionManager manager;
+    /** . */
+    private final POMSessionManager manager;
 
-   /** . */
-   private final RepositoryService repositoryService;
+    /** . */
+    private final RepositoryService repositoryService;
 
-   /** . */
-   private final InvalidationBridge bridge;
+    /** . */
+    private final InvalidationBridge bridge;
 
-   public NavigationServiceWrapper(
-      RepositoryService repositoryService,
-      POMSessionManager manager,
-      ListenerService listenerService)
-   {
-      SimpleDataCache cache = new SimpleDataCache();
+    public NavigationServiceWrapper(RepositoryService repositoryService, POMSessionManager manager,
+            ListenerService listenerService) {
+        SimpleDataCache cache = new SimpleDataCache();
 
-      //
-      this.repositoryService = repositoryService;
-      this.manager = manager;
-      this.service = new NavigationServiceImpl(manager, cache);
-      this.listenerService = listenerService;
-      this.bridge = new InvalidationBridge(cache);
-   }
+        //
+        this.repositoryService = repositoryService;
+        this.manager = manager;
+        this.service = new NavigationServiceImpl(manager, cache);
+        this.listenerService = listenerService;
+        this.bridge = new InvalidationBridge(cache);
+    }
 
-   public NavigationServiceWrapper(
-      RepositoryService repositoryService,
-      POMSessionManager manager,
-      ListenerService listenerService,
-      CacheService cacheService)
-   {
-      ExoDataCache cache = new ExoDataCache(cacheService);
+    public NavigationServiceWrapper(RepositoryService repositoryService, POMSessionManager manager,
+            ListenerService listenerService, CacheService cacheService) {
+        ExoDataCache cache = new ExoDataCache(cacheService);
 
-      //
-      this.repositoryService = repositoryService;
-      this.manager = manager;
-      this.service = new NavigationServiceImpl(manager, cache);
-      this.listenerService = listenerService;
-      this.bridge = new InvalidationBridge(cache);
-   }
+        //
+        this.repositoryService = repositoryService;
+        this.manager = manager;
+        this.service = new NavigationServiceImpl(manager, cache);
+        this.listenerService = listenerService;
+        this.bridge = new InvalidationBridge(cache);
+    }
 
-   public NavigationContext loadNavigation(SiteKey key)
-   {
-      return service.loadNavigation(key);
-   }
+    public NavigationContext loadNavigation(SiteKey key) {
+        return service.loadNavigation(key);
+    }
 
-   @Override
-   public List<NavigationContext> loadNavigations(SiteType type) throws NullPointerException, NavigationServiceException
-   {
-      return service.loadNavigations(type);
-   }
+    @Override
+    public List<NavigationContext> loadNavigations(SiteType type) throws NullPointerException, NavigationServiceException {
+        return service.loadNavigations(type);
+    }
 
-   public void saveNavigation(NavigationContext navigation) throws NullPointerException, NavigationServiceException
-   {
-      boolean created = navigation.data == null;
+    public void saveNavigation(NavigationContext navigation) throws NullPointerException, NavigationServiceException {
+        boolean created = navigation.data == null;
 
-      //
-      service.saveNavigation(navigation);
+        //
+        service.saveNavigation(navigation);
 
-      //
-      if (created)
-      {
-         notify(EventType.NAVIGATION_CREATED, navigation.key);
-      }
-      else
-      {
-         notify(EventType.NAVIGATION_UPDATED, navigation.key);
-      }
-   }
+        //
+        if (created) {
+            notify(EventType.NAVIGATION_CREATED, navigation.key);
+        } else {
+            notify(EventType.NAVIGATION_UPDATED, navigation.key);
+        }
+    }
 
-   public boolean destroyNavigation(NavigationContext navigation) throws NullPointerException, NavigationServiceException
-   {
-      boolean destroyed = service.destroyNavigation(navigation);
+    public boolean destroyNavigation(NavigationContext navigation) throws NullPointerException, NavigationServiceException {
+        boolean destroyed = service.destroyNavigation(navigation);
 
-      //
-      if (destroyed)
-      {
-         notify(EventType.NAVIGATION_DESTROYED, navigation.key);
-      }
+        //
+        if (destroyed) {
+            notify(EventType.NAVIGATION_DESTROYED, navigation.key);
+        }
 
-      //
-      return destroyed;
-   }
+        //
+        return destroyed;
+    }
 
-   public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope, NodeChangeListener<NodeContext<N>> listener)
-   {
-      return service.loadNode(model, navigation, scope, listener);
-   }
+    public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope,
+            NodeChangeListener<NodeContext<N>> listener) {
+        return service.loadNode(model, navigation, scope, listener);
+    }
 
-   public <N> void saveNode(NodeContext<N> context, NodeChangeListener<NodeContext<N>> listener) throws NavigationServiceException
-   {
-      service.saveNode(context, listener);
-      org.gatein.mop.api.workspace.Navigation nav = service.manager.getSession().findObjectById(ObjectType.NAVIGATION, context.data.id);
-      Site site = nav.getSite();
-      SiteKey key = new SiteKey(siteType(site.getObjectType()), site.getName());
-      notify(EventType.NAVIGATION_UPDATED, key);
-   }
+    public <N> void saveNode(NodeContext<N> context, NodeChangeListener<NodeContext<N>> listener)
+            throws NavigationServiceException {
+        service.saveNode(context, listener);
+        org.gatein.mop.api.workspace.Navigation nav = service.manager.getSession().findObjectById(ObjectType.NAVIGATION,
+                context.data.id);
+        Site site = nav.getSite();
+        SiteKey key = new SiteKey(siteType(site.getObjectType()), site.getName());
+        notify(EventType.NAVIGATION_UPDATED, key);
+    }
 
-   public <N> void updateNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException
-   {
-      service.updateNode(context, scope, listener);
-   }
+    public <N> void updateNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener)
+            throws NullPointerException, NavigationServiceException {
+        service.updateNode(context, scope, listener);
+    }
 
-   public <N> void rebaseNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException
-   {
-      service.rebaseNode(context, scope, listener);
-   }
+    public <N> void rebaseNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener)
+            throws NullPointerException, NavigationServiceException {
+        service.rebaseNode(context, scope, listener);
+    }
 
-   private void notify(String name, SiteKey key)
-   {
-      try
-      {
-         listenerService.broadcast(name, this, key);
-      }
-      catch (Exception e)
-      {
-         log.error("Error when delivering notification " + name + " for navigation " + key, e);
-      }
-   }
+    private void notify(String name, SiteKey key) {
+        try {
+            listenerService.broadcast(name, this, key);
+        } catch (Exception e) {
+            log.error("Error when delivering notification " + name + " for navigation " + key, e);
+        }
+    }
 
-   public void start()
-   {
-      Session session = null;
-      try
-      {
-         String workspaceName = manager.getLifeCycle().getWorkspaceName();
-         ManageableRepository repo = repositoryService.getCurrentRepository();
-         session = repo.getSystemSession(workspaceName);
-         bridge.start(session);
-      }
-      catch (RepositoryException e)
-      {
-         throw new UndeclaredRepositoryException(e);
-      }
-      finally
-      {
-         if (session != null)
-         {
-            session.logout();
-         }
-      }
-   }
+    public void start() {
+        Session session = null;
+        try {
+            String workspaceName = manager.getLifeCycle().getWorkspaceName();
+            ManageableRepository repo = repositoryService.getCurrentRepository();
+            session = repo.getSystemSession(workspaceName);
+            bridge.start(session);
+        } catch (RepositoryException e) {
+            throw new UndeclaredRepositoryException(e);
+        } finally {
+            if (session != null) {
+                session.logout();
+            }
+        }
+    }
 
-   public void stop()
-   {
-      bridge.stop();
-   }
+    public void stop() {
+        bridge.stop();
+    }
 }

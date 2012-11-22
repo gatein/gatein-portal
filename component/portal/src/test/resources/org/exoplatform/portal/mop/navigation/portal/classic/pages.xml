@@ -21,13 +21,13 @@
 <page-set
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">  
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
 
   <page>
-  	<name>homepage</name>
+    <name>homepage</name>
     <title>Home Page</title>
-	  <access-permissions>Everyone</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
         <application-ref>web</application-ref>
@@ -39,13 +39,13 @@
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
     </portlet-application>
-  </page>    
-    
+  </page>
+
   <page>
-  	<name>webexplorer</name>
+    <name>webexplorer</name>
     <title>Web Explorer</title>
-	  <access-permissions>*:/platform/users</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>    
+    <access-permissions>*:/platform/users</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
         <application-ref>web</application-ref>
@@ -55,6 +55,6 @@
       <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
     </portlet-application>
-  </page>  
+  </page>
 
 </page-set>

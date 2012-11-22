@@ -25,19 +25,16 @@ import org.exoplatform.container.component.ComponentRequestLifecycle;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class CustomService implements ComponentRequestLifecycle
-{
+public class CustomService implements ComponentRequestLifecycle {
 
-   /** . */
-   ExoContainer currentContainer;
+    /** . */
+    ExoContainer currentContainer;
 
-   public void startRequest(ExoContainer container)
-   {
-      currentContainer = container;
-   }
+    public void startRequest(ExoContainer container) {
+        currentContainer = container;
+    }
 
-   public void endRequest(ExoContainer container)
-   {
-      currentContainer = null;
-   }
+    public void endRequest(ExoContainer container) {
+        currentContainer = null;
+    }
 }

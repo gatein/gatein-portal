@@ -21,6 +21,14 @@
  */
 package org.gatein.integration.jboss.as7;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamReader;
+
 import org.jboss.metadata.parser.jsp.TldMetaDataParser;
 import org.jboss.metadata.parser.util.NoopXMLResolver;
 import org.jboss.metadata.web.spec.TldMetaData;
@@ -29,82 +37,57 @@ import org.jboss.modules.ModuleClassLoader;
 import org.jboss.modules.ModuleIdentifier;
 import org.jboss.modules.ModuleLoadException;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-class SharedPortletTldsMetaDataBuilder
-{
-   private static final String[] PORTLET_TLDS = {"portlet.tld", "portlet_2_0.tld"};
+class SharedPortletTldsMetaDataBuilder {
+    private static final String[] PORTLET_TLDS = { "portlet.tld", "portlet_2_0.tld" };
 
-   private final List<TldMetaData> tlds = new ArrayList<TldMetaData>();
+    private final List<TldMetaData> tlds = new ArrayList<TldMetaData>();
 
-   SharedPortletTldsMetaDataBuilder()
-   {
-      init();
-   }
+    SharedPortletTldsMetaDataBuilder() {
+        init();
+    }
 
-   private void init()
-   {
-      try
-      {
-         ModuleClassLoader jstl = Module.getModuleFromCallerModuleLoader(ModuleIdentifier.create("org.gatein.pc")).getClassLoader();
-         for (String tld : PORTLET_TLDS)
-         {
-            InputStream is = jstl.getResourceAsStream("META-INF/" + tld);
-            if (is != null)
-            {
-               TldMetaData tldMetaData = parseTLD(tld, is);
-               tlds.add(tldMetaData);
+    private void init() {
+        try {
+            ModuleClassLoader jstl = Module.getModuleFromCallerModuleLoader(ModuleIdentifier.create("org.gatein.pc"))
+                    .getClassLoader();
+            for (String tld : PORTLET_TLDS) {
+                InputStream is = jstl.getResourceAsStream("META-INF/" + tld);
+                if (is != null) {
+                    TldMetaData tldMetaData = parseTLD(tld, is);
+                    tlds.add(tldMetaData);
+                }
             }
-         }
-      }
-      catch (ModuleLoadException e)
-      {
-         // Ignore
-      }
-      catch (Exception e)
-      {
-         // Ignore
-      }
-   }
-
-   List<TldMetaData> create()
-   {
-      final List<TldMetaData> metadata = new ArrayList<TldMetaData>();
-      metadata.addAll(tlds);
-      return metadata;
-   }
-
-   private TldMetaData parseTLD(String tld, InputStream is) throws Exception
-   {
-      try
-      {
-         final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-         inputFactory.setXMLResolver(NoopXMLResolver.create());
-         XMLStreamReader xmlReader = inputFactory.createXMLStreamReader(is);
-         return TldMetaDataParser.parse(xmlReader);
-      }
-      finally
-      {
-         try
-         {
-            if (is != null)
-            {
-               is.close();
-            }
-         }
-         catch (IOException e)
-         {
+        } catch (ModuleLoadException e) {
             // Ignore
-         }
-      }
-   }
+        } catch (Exception e) {
+            // Ignore
+        }
+    }
+
+    List<TldMetaData> create() {
+        final List<TldMetaData> metadata = new ArrayList<TldMetaData>();
+        metadata.addAll(tlds);
+        return metadata;
+    }
+
+    private TldMetaData parseTLD(String tld, InputStream is) throws Exception {
+        try {
+            final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+            inputFactory.setXMLResolver(NoopXMLResolver.create());
+            XMLStreamReader xmlReader = inputFactory.createXMLStreamReader(is);
+            return TldMetaDataParser.parse(xmlReader);
+        } finally {
+            try {
+                if (is != null) {
+                    is.close();
+                }
+            } catch (IOException e) {
+                // Ignore
+            }
+        }
+    }
 
 }

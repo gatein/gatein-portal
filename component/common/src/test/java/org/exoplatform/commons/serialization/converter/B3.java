@@ -25,18 +25,15 @@ import org.exoplatform.commons.serialization.api.TypeConverter;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class B3 extends TypeConverter<B1, B2>
-{
+public class B3 extends TypeConverter<B1, B2> {
 
-   @Override
-   public B2 write(B1 input) throws Exception
-   {
-      return new B2(input.state);
-   }
+    @Override
+    public B2 write(B1 input) throws Exception {
+        return new B2(input.state);
+    }
 
-   @Override
-   public B1 read(B2 output) throws Exception
-   {
-      return new B1(output.state);
-   }
+    @Override
+    public B1 read(B2 output) throws Exception {
+        return new B1(output.state);
+    }
 }

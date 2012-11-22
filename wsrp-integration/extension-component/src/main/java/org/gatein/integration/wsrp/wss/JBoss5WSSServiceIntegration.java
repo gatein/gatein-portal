@@ -32,24 +32,19 @@ import org.wsrp.wss.jboss5.handlers.consumer.JBWSPortCustomizer;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class JBoss5WSSServiceIntegration implements Startable
-{
-   private final JBWSPortCustomizer JBWS_PORT_CUSTOMIZER = new JBWSPortCustomizer();
-   
-   public JBoss5WSSServiceIntegration(CredentialsAccessor credentialsAccessor)
-   {
-      CredentialsAccess.getInstance().setCredentialsAccessor(credentialsAccessor);
-   }
-   
-   public void start()
-   {
-      PortCustomizerRegistry.getInstance().register(JBWS_PORT_CUSTOMIZER);
-   }
+public class JBoss5WSSServiceIntegration implements Startable {
+    private final JBWSPortCustomizer JBWS_PORT_CUSTOMIZER = new JBWSPortCustomizer();
 
-   public void stop()
-   {
-      PortCustomizerRegistry.getInstance().unregister(JBWS_PORT_CUSTOMIZER);
-   }
+    public JBoss5WSSServiceIntegration(CredentialsAccessor credentialsAccessor) {
+        CredentialsAccess.getInstance().setCredentialsAccessor(credentialsAccessor);
+    }
+
+    public void start() {
+        PortCustomizerRegistry.getInstance().register(JBWS_PORT_CUSTOMIZER);
+    }
+
+    public void stop() {
+        PortCustomizerRegistry.getInstance().unregister(JBWS_PORT_CUSTOMIZER);
+    }
 
 }
-

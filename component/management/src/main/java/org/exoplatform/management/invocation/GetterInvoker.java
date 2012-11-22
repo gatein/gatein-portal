@@ -21,21 +21,19 @@ package org.exoplatform.management.invocation;
 
 import java.lang.reflect.Method;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class GetterInvoker extends SimpleMethodInvoker
-{
+public class GetterInvoker extends SimpleMethodInvoker {
 
-   public GetterInvoker(Method method)
-   {
-      super(method);
-   }
+    public GetterInvoker(Method method) {
+        super(method);
+    }
 
-   @Override
-   protected String getArgumentName(int index)
-   {
-      throw new IndexOutOfBoundsException();
-   }
+    @Override
+    protected String getArgumentName(int index) {
+        throw new IndexOutOfBoundsException();
+    }
 }

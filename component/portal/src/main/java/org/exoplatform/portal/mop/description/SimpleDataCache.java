@@ -19,59 +19,48 @@
 
 package org.exoplatform.portal.mop.description;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.exoplatform.commons.serialization.MarshalledObject;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.pom.config.POMSession;
 
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class SimpleDataCache extends DataCache
-{
+public class SimpleDataCache extends DataCache {
 
-   /** . */
-   private final ConcurrentHashMap<MarshalledObject<CacheKey>, MarshalledObject<CacheValue>> map;
+    /** . */
+    private final ConcurrentHashMap<MarshalledObject<CacheKey>, MarshalledObject<CacheValue>> map;
 
-   public SimpleDataCache()
-   {
-      this.map = new ConcurrentHashMap<MarshalledObject<CacheKey>, MarshalledObject<CacheValue>>();
-   }
+    public SimpleDataCache() {
+        this.map = new ConcurrentHashMap<MarshalledObject<CacheKey>, MarshalledObject<CacheValue>>();
+    }
 
-   @Override
-   protected Described.State getState(POMSession session, CacheKey key)
-   {
-      MarshalledObject<CacheKey> marshalledKey = MarshalledObject.marshall(key);
-      MarshalledObject<CacheValue> marshalledValue = map.get(marshalledKey);
-      if (marshalledValue == null)
-      {
-         CacheValue value = getValue(session, key);
-         if (value != null)
-         {
-            map.put(marshalledKey, MarshalledObject.marshall(value));
-            return value.state;
-         }
-         else
-         {
-            return null;
-         }
-      }
-      else
-      {
-         return marshalledValue.unmarshall().state;
-      }
-   }
+    @Override
+    protected Described.State getState(POMSession session, CacheKey key) {
+        MarshalledObject<CacheKey> marshalledKey = MarshalledObject.marshall(key);
+        MarshalledObject<CacheValue> marshalledValue = map.get(marshalledKey);
+        if (marshalledValue == null) {
+            CacheValue value = getValue(session, key);
+            if (value != null) {
+                map.put(marshalledKey, MarshalledObject.marshall(value));
+                return value.state;
+            } else {
+                return null;
+            }
+        } else {
+            return marshalledValue.unmarshall().state;
+        }
+    }
 
-   @Override
-   protected void removeState(CacheKey key)
-   {
-      map.remove(MarshalledObject.marshall(key));
-   }
+    @Override
+    protected void removeState(CacheKey key) {
+        map.remove(MarshalledObject.marshall(key));
+    }
 
-   @Override
-   protected void putValue(CacheKey key, CacheValue value)
-   {
-      map.put(MarshalledObject.marshall(key), MarshalledObject.marshall(value));
-   }
+    @Override
+    protected void putValue(CacheKey key, CacheValue value) {
+        map.put(MarshalledObject.marshall(key), MarshalledObject.marshall(value));
+    }
 }

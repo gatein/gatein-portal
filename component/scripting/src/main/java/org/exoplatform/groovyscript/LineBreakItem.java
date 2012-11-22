@@ -22,23 +22,19 @@ package org.exoplatform.groovyscript;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class LineBreakItem extends SectionItem
-{
+public class LineBreakItem extends SectionItem {
 
-   public LineBreakItem(Position pos)
-   {
-      super(pos);
-   }
+    public LineBreakItem(Position pos) {
+        super(pos);
+    }
 
-   @Override
-   public String toString()
-   {
-      return "LineBreak[position=" + getPosition() + "]";
-   }
+    @Override
+    public String toString() {
+        return "LineBreak[position=" + getPosition() + "]";
+    }
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      return obj == this || obj instanceof LineBreakItem;
-   }
+    @Override
+    public boolean equals(Object obj) {
+        return obj == this || obj instanceof LineBreakItem;
+    }
 }

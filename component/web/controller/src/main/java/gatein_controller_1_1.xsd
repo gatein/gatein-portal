@@ -19,14 +19,14 @@
   -->
 
 <xs:schema
-   targetNamespace="http://www.gatein.org/xml/ns/gatein_controller_1_1"
-   xmlns="http://www.gatein.org/xml/ns/gatein_controller_1_1"
-   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-   elementFormDefault="qualified"
-   attributeFormDefault="unqualified"
-   version="1.0">
+    targetNamespace="http://www.gatein.org/xml/ns/gatein_controller_1_1"
+    xmlns="http://www.gatein.org/xml/ns/gatein_controller_1_1"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.0">
 
-  <xs:element name="controller" type="controllerType" />
+  <xs:element name="controller" type="controllerType"/>
 
   <xs:complexType name="controllerType">
     <xs:sequence>
@@ -98,16 +98,16 @@
 
   <xs:simpleType name="valueMappingType">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="canonical" />
-      <xs:enumeration value="never-empty" />
-      <xs:enumeration value="never-null" />
+      <xs:enumeration value="canonical"/>
+      <xs:enumeration value="never-empty"/>
+      <xs:enumeration value="never-null"/>
     </xs:restriction>
   </xs:simpleType>
 
   <xs:simpleType name="controlModeType">
     <xs:restriction base="xs:string">
-      <xs:enumeration value="optional" />
-      <xs:enumeration value="required" />
+      <xs:enumeration value="optional"/>
+      <xs:enumeration value="required"/>
     </xs:restriction>
   </xs:simpleType>
 

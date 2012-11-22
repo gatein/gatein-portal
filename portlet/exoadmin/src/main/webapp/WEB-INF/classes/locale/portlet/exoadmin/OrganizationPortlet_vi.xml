@@ -107,7 +107,7 @@
   -->
   <UIMemberShipForm>
     <msg>
-      <membershipType-exist>Loại vai trò {0} đã  tồn tại</membershipType-exist>
+      <membershipType-exist>Loại vai trò {0} đã tồn tại</membershipType-exist>
     </msg>
   </UIMemberShipForm>
   <!--
@@ -222,7 +222,7 @@
           <postal>
             <name>#:</name>
             <city>#{word.city}:</city>
-            <stateprov> Bang/hạt:</stateprov>
+            <stateprov>Bang/hạt:</stateprov>
             <postalcode>Mã bưu điện:</postalcode>
             <country>#{word.country}:</country>
           </postal>
@@ -242,13 +242,13 @@
       </user>
       <option>
         <male>Nam</male>
-      	<female>Nữ</female>
-      	<en>Tiếng Anh</en>
-		<ma>Ma</ma>
-		<vi>Tiếng Việt</vi>
-		<ar>Tiếng Arab</ar>
-		<fr>Tiếng Pháp</fr>
-		<ru>Tiếng Nga</ru>
+        <female>Nữ</female>
+        <en>Tiếng Anh</en>
+        <ma>Ma</ma>
+        <vi>Tiếng Việt</vi>
+        <ar>Tiếng Arab</ar>
+        <fr>Tiếng Pháp</fr>
+        <ru>Tiếng Nga</ru>
       </option>
       <BusinessInfo>Thông tin doanh nghiệp</BusinessInfo>
     </label>
@@ -294,7 +294,7 @@
       </label>
     </tab>
     <label>
-      <UIUserInGroup />
+      <UIUserInGroup/>
     </label>
     <title>Thông tin nhóm</title>
   </UIGroupInfo>
@@ -317,7 +317,7 @@
     </action>
     <msg>
       <InUse>Bạn không thể xóa thành viên này vì nó đang sử dụng</InUse>
-      <DeleteMandatory>Bạn không thể xóa membership này vì nó là mandatory</DeleteMandatory>      
+      <DeleteMandatory>Bạn không thể xóa membership này vì nó là mandatory</DeleteMandatory>
     </msg>
   </UIMembershipList>
   <!--

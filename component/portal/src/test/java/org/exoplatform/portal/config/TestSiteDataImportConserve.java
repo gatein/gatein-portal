@@ -26,18 +26,15 @@ import org.exoplatform.portal.mop.importer.ImportMode;
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class TestSiteDataImportConserve extends AbstractSiteDataImportTest
-{
-   
-   @Override
-   protected ImportMode getMode()
-   {
-      return ImportMode.CONSERVE;
-   }
-   
-   @Override
-   protected void afterSecondBootWithOverride(PortalContainer container) throws Exception
-   {
-      afterSecondBoot(container);
-   }
+public class TestSiteDataImportConserve extends AbstractSiteDataImportTest {
+
+    @Override
+    protected ImportMode getMode() {
+        return ImportMode.CONSERVE;
+    }
+
+    @Override
+    protected void afterSecondBootWithOverride(PortalContainer container) throws Exception {
+        afterSecondBoot(container);
+    }
 }

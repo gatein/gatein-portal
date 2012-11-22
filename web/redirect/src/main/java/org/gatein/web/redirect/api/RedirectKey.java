@@ -24,84 +24,76 @@ package org.gatein.web.redirect.api;
 
 /**
  * Used to specify the type of redirect and the name of the redirect site.
- * 
+ *
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class RedirectKey
-{  
-   /**
-    * The type of redirect
-    */
-   protected RedirectType type;
-   
-   /**
-    * The name of the redirect site
-    */
-   protected String redirect;
+public class RedirectKey {
+    /**
+     * The type of redirect
+     */
+    protected RedirectType type;
 
-   /**
-    * 
-    * Create a RedirectKey with a specified RedirectType and redirect site name 
-    * 
-    * @param type The redirect type
-    * @param redirect The redirect site name
-    */
-   private RedirectKey(RedirectType type, String redirect)
-   {
-      this.type = type;
-      this.redirect = redirect;
-   }
+    /**
+     * The name of the redirect site
+     */
+    protected String redirect;
 
-   /**
-    * Creates a NOREDIRECT redirect key
-    * 
-    * @return The RedirectKey to not perform a redirect
-    */
-   public static RedirectKey noRedirect()
-   {
-      return new RedirectKey(RedirectType.NOREDIRECT, null);
-   }
+    /**
+     *
+     * Create a RedirectKey with a specified RedirectType and redirect site name
+     *
+     * @param type The redirect type
+     * @param redirect The redirect site name
+     */
+    private RedirectKey(RedirectType type, String redirect) {
+        this.type = type;
+        this.redirect = redirect;
+    }
 
-   /**
-    * Creates a REDIRECT key with a specified redirect site name
-    * 
-    * @param redirect The redirect site name
-    * @return The redirect key
-    */
-   public static RedirectKey redirect(String redirect)
-   {
-      return new RedirectKey(RedirectType.REDIRECT, redirect);
-   }
+    /**
+     * Creates a NOREDIRECT redirect key
+     *
+     * @return The RedirectKey to not perform a redirect
+     */
+    public static RedirectKey noRedirect() {
+        return new RedirectKey(RedirectType.NOREDIRECT, null);
+    }
 
-   /**
-    * Creates a NEEDDEVICEINFO redirect key
-    * 
-    * @return A NEEDDEVICEINFO redirect key
-    */
-   public static RedirectKey needDeviceInfo()
-   {
-      return new RedirectKey(RedirectType.NEEDDEVICEINFO, null);
-   }
+    /**
+     * Creates a REDIRECT key with a specified redirect site name
+     *
+     * @param redirect The redirect site name
+     * @return The redirect key
+     */
+    public static RedirectKey redirect(String redirect) {
+        return new RedirectKey(RedirectType.REDIRECT, redirect);
+    }
 
-   /**
-    * Returns the name of the redirect site
-    * 
-    * @return the name of the redirect site
-    */
-   public String getRedirect()
-   {
-      return this.redirect;
-   }
+    /**
+     * Creates a NEEDDEVICEINFO redirect key
+     *
+     * @return A NEEDDEVICEINFO redirect key
+     */
+    public static RedirectKey needDeviceInfo() {
+        return new RedirectKey(RedirectType.NEEDDEVICEINFO, null);
+    }
 
-   /**
-    * Returns the redirect type
-    * 
-    * @return The redirect type
-    */
-   public RedirectType getType()
-   {
-      return this.type;
-   }
+    /**
+     * Returns the name of the redirect site
+     *
+     * @return the name of the redirect site
+     */
+    public String getRedirect() {
+        return this.redirect;
+    }
+
+    /**
+     * Returns the redirect type
+     *
+     * @return The redirect type
+     */
+    public RedirectType getType() {
+        return this.type;
+    }
 }
-

@@ -27,78 +27,63 @@ import org.w3c.dom.NodeList;
  * @version $Revision$
  */
 
-public abstract class AbstractSkinModule 
-{
+public abstract class AbstractSkinModule {
 
-   protected String skinName;
-   protected String cssPath;
-   protected boolean overwrite;
-   protected String cssPriority;
+    protected String skinName;
+    protected String cssPath;
+    protected boolean overwrite;
+    protected String cssPriority;
 
-   public AbstractSkinModule(String name)
-   {
-      skinName = name;
-   }
+    public AbstractSkinModule(String name) {
+        skinName = name;
+    }
 
-   protected void bindingSkinName(Element element)
-   {
-      NodeList nodes = element.getElementsByTagName(SkinConfigParser.SKIN_NAME_TAG);
-      if (nodes == null || nodes.getLength() < 1)
-      {
-         return;
-      }
-      this.skinName = nodes.item(0).getFirstChild().getNodeValue();
-   }
-   
-   protected void bindingCSSPath(Element element)
-   {
-      NodeList nodes = element.getElementsByTagName(SkinConfigParser.CSS_PATH_TAG);
-      if (nodes == null || nodes.getLength() < 1)
-      {
-         return;
-      }
-      this.cssPath = nodes.item(0).getFirstChild().getNodeValue();
-   }
+    protected void bindingSkinName(Element element) {
+        NodeList nodes = element.getElementsByTagName(SkinConfigParser.SKIN_NAME_TAG);
+        if (nodes == null || nodes.getLength() < 1) {
+            return;
+        }
+        this.skinName = nodes.item(0).getFirstChild().getNodeValue();
+    }
 
-   protected void bindingOverwrite(Element element)
-   {
-      NodeList nodes = element.getElementsByTagName(SkinConfigParser.OVERWRITE);
-      if (nodes == null || nodes.getLength() < 1)
-      {
-         return;
-      }
-      String overwrite = nodes.item(0).getFirstChild().getNodeValue();
-      setOverwrite("true".equals(overwrite));
-   }
-   
-   protected void bindingCSSPriority(Element element)
-   {
-      NodeList nodes = element.getElementsByTagName(SkinConfigParser.CSS_PRIORITY_TAG);
-      if (nodes == null || nodes.getLength() < 1)
-      {
-         return;
-      }
-      this.cssPriority = nodes.item(0).getFirstChild().getNodeValue();
-   }
-   
-   public void setSkinName(String name)
-   {
-      this.skinName = name;
-   }
-   
+    protected void bindingCSSPath(Element element) {
+        NodeList nodes = element.getElementsByTagName(SkinConfigParser.CSS_PATH_TAG);
+        if (nodes == null || nodes.getLength() < 1) {
+            return;
+        }
+        this.cssPath = nodes.item(0).getFirstChild().getNodeValue();
+    }
 
-   public void setCSSPath(String _cssPath)
-   {
-      this.cssPath = _cssPath;
-   }
-   
-   public void setOverwrite(boolean _overwrite)
-   {
-      this.overwrite = _overwrite;
-   }
-   
-   public void setCSSPriority(String _cssPriority)
-   {
-      this.cssPriority = _cssPriority;
-   }
+    protected void bindingOverwrite(Element element) {
+        NodeList nodes = element.getElementsByTagName(SkinConfigParser.OVERWRITE);
+        if (nodes == null || nodes.getLength() < 1) {
+            return;
+        }
+        String overwrite = nodes.item(0).getFirstChild().getNodeValue();
+        setOverwrite("true".equals(overwrite));
+    }
+
+    protected void bindingCSSPriority(Element element) {
+        NodeList nodes = element.getElementsByTagName(SkinConfigParser.CSS_PRIORITY_TAG);
+        if (nodes == null || nodes.getLength() < 1) {
+            return;
+        }
+        this.cssPriority = nodes.item(0).getFirstChild().getNodeValue();
+    }
+
+    public void setSkinName(String name) {
+        this.skinName = name;
+    }
+
+    public void setCSSPath(String _cssPath) {
+        this.cssPath = _cssPath;
+    }
+
+    public void setOverwrite(boolean _overwrite) {
+        this.overwrite = _overwrite;
+    }
+
+    public void setCSSPriority(String _cssPriority) {
+        this.cssPriority = _cssPriority;
+    }
 }

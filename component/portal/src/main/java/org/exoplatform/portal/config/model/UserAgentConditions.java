@@ -30,41 +30,34 @@ import org.exoplatform.portal.pom.data.RedirectUserAgentConditionData;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class UserAgentConditions extends ModelObject
-{
-   protected ArrayList<String> contains;
-   protected ArrayList<String> doesNotContain;
-   
-   public ArrayList<String> getContains()
-   {
-      return contains;
-   }
-   
-   public void setContains(ArrayList<String> contains)
-   {
-      this.contains = contains;
-   }
-   
-   public ArrayList<String> getDoesNotContain()
-   {
-      return doesNotContain;
-   }
-   
-   public void setDoesNotContain(ArrayList<String> doesNotContain)
-   {
-      this.doesNotContain = doesNotContain;
-   }
-   
-   @Override
-   public RedirectUserAgentConditionData build()
-   {
-      RedirectUserAgentConditionData userAgentConditionData = new RedirectUserAgentConditionData(storageId, storageName);
-      
-      userAgentConditionData.getUserAgentContains().addAll(contains);
-      userAgentConditionData.getUserAgentDoesNotContain().addAll(doesNotContain);
-      
-      return userAgentConditionData;
-   }
+public class UserAgentConditions extends ModelObject {
+    protected ArrayList<String> contains;
+    protected ArrayList<String> doesNotContain;
+
+    public ArrayList<String> getContains() {
+        return contains;
+    }
+
+    public void setContains(ArrayList<String> contains) {
+        this.contains = contains;
+    }
+
+    public ArrayList<String> getDoesNotContain() {
+        return doesNotContain;
+    }
+
+    public void setDoesNotContain(ArrayList<String> doesNotContain) {
+        this.doesNotContain = doesNotContain;
+    }
+
+    @Override
+    public RedirectUserAgentConditionData build() {
+        RedirectUserAgentConditionData userAgentConditionData = new RedirectUserAgentConditionData(storageId, storageName);
+
+        userAgentConditionData.getUserAgentContains().addAll(contains);
+        userAgentConditionData.getUserAgentDoesNotContain().addAll(doesNotContain);
+
+        return userAgentConditionData;
+    }
 
 }
-

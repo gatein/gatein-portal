@@ -19,12 +19,12 @@
 
 -->
 
-﻿<?xml version="1.0" encoding="UTF-8"?>
+    ﻿<?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-	<my>
-		<!-- Key 1 -->
-		<key1>My Value In French with special characters such as éçàùƔ௵</key1>
-		<!-- Key 2 -->
-		<key2>My Value In French with special characters such as éçàùƔ௵</key2>
-	</my>
+  <my>
+    <!-- Key 1 -->
+    <key1>My Value In French with special characters such as éçàùƔ௵</key1>
+    <!-- Key 2 -->
+    <key2>My Value In French with special characters such as éçàùƔ௵</key2>
+  </my>
 </bundle>

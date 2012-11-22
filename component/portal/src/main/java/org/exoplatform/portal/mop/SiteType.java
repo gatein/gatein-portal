@@ -23,26 +23,22 @@ package org.exoplatform.portal.mop;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public enum SiteType
-{
+public enum SiteType {
 
-   PORTAL, GROUP, USER ;
+    PORTAL, GROUP, USER;
 
-   /** ; */
-   final String name;
+    /** ; */
+    final String name;
 
-   SiteType()
-   {
-      this.name = name().toLowerCase();
-   }
+    SiteType() {
+        this.name = name().toLowerCase();
+    }
 
-   public String getName()
-   {
-      return name;
-   }
+    public String getName() {
+        return name;
+    }
 
-   public SiteKey key(String name)
-   {
-      return new SiteKey(this, name);
-   }
+    public SiteKey key(String name) {
+        return new SiteKey(this, name);
+    }
 }

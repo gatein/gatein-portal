@@ -24,54 +24,47 @@ package org.jboss.gatein.selenium;
 
 import com.thoughtworks.selenium.Selenium;
 
-public class AbstractContextual
-{
+public class AbstractContextual {
 
-   protected static Selenium selenium;
-   protected static String timeout;
-   protected static int timeoutSecInt;
-   protected static String portalPath;
-   protected static String browser;
-   protected static boolean ieFlag;
+    protected static Selenium selenium;
+    protected static String timeout;
+    protected static int timeoutSecInt;
+    protected static String portalPath;
+    protected static String browser;
+    protected static boolean ieFlag;
 
-   private static boolean inited;
-   private static int savedTimeoutSecInt;
+    private static boolean inited;
+    private static int savedTimeoutSecInt;
 
-   private static SeleniumContext getSeleniumContext()
-   {
-      return AbstractTestCase.getCurrentSeleniumContext();
-   }
+    private static SeleniumContext getSeleniumContext() {
+        return AbstractTestCase.getCurrentSeleniumContext();
+    }
 
-   protected static void setUp()
-   {
-      if (inited)
-      {
-         return;
-      }
+    protected static void setUp() {
+        if (inited) {
+            return;
+        }
 
-      final SeleniumContext seleniumContext = getSeleniumContext();
-      selenium = seleniumContext.getSelenium();
-      timeout = seleniumContext.getTimeout();
-      timeoutSecInt = seleniumContext.getTimeoutSecInt();
-      portalPath = seleniumContext.getPortalPath();
-      browser = seleniumContext.getBrowser();
-      ieFlag = browser.contains("explore");
-      inited = true;
-   }
+        final SeleniumContext seleniumContext = getSeleniumContext();
+        selenium = seleniumContext.getSelenium();
+        timeout = seleniumContext.getTimeout();
+        timeoutSecInt = seleniumContext.getTimeoutSecInt();
+        portalPath = seleniumContext.getPortalPath();
+        browser = seleniumContext.getBrowser();
+        ieFlag = browser.contains("explore");
+        inited = true;
+    }
 
-   public static void setTemporaryTimeoutSecInt(int secs)
-   {
-      setUp();
+    public static void setTemporaryTimeoutSecInt(int secs) {
+        setUp();
 
-      savedTimeoutSecInt = timeoutSecInt;
-      if (secs > timeoutSecInt)
-      {
-         timeoutSecInt = secs;
-      }
-   }
+        savedTimeoutSecInt = timeoutSecInt;
+        if (secs > timeoutSecInt) {
+            timeoutSecInt = secs;
+        }
+    }
 
-   public static void restoreTimeoutSecInt()
-   {
-      timeoutSecInt = savedTimeoutSecInt;
-   }
+    public static void restoreTimeoutSecInt() {
+        timeoutSecInt = savedTimeoutSecInt;
+    }
 }

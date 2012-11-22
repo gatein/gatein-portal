@@ -19,9 +19,9 @@
   -->
 
 <portal-config
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
   <portal-name>classic</portal-name>
   <label>Classic</label>
   <description>This is classic portal for testing</description>
@@ -53,7 +53,7 @@
       <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
     </portlet-application>
-		
+
     <portlet-application>
       <portlet>
         <application-ref>web</application-ref>
@@ -62,9 +62,9 @@
       <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
     </portlet-application>
-	  
-    <page-body> </page-body>
-	  
+
+    <page-body></page-body>
+
     <portlet-application>
       <portlet>
         <application-ref>web</application-ref>
@@ -81,5 +81,5 @@
       <show-info-bar>false</show-info-bar>
     </portlet-application>
   </portal-layout>
-  
+
 </portal-config>

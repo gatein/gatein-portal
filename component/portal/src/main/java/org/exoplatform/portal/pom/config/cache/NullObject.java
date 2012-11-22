@@ -19,7 +19,12 @@
 
 package org.exoplatform.portal.pom.config.cache;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.ObjectStreamException;
+import java.io.Serializable;
+
 
 /**
  * A serializable object that is a private marker representing a null value.
@@ -27,35 +32,29 @@ import java.io.*;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NullObject implements Serializable
-{
+public class NullObject implements Serializable {
 
-   /** VM singleton. */
-   private static final NullObject instance = new NullObject();
+    /** VM singleton. */
+    private static final NullObject instance = new NullObject();
 
-   public static NullObject get()
-   {
-      return instance;
-   }
+    public static NullObject get() {
+        return instance;
+    }
 
-   private Object readResolve() throws ObjectStreamException
-   {
-      return instance;
-   }
+    private Object readResolve() throws ObjectStreamException {
+        return instance;
+    }
 
-   private void writeObject(ObjectOutputStream out) throws IOException
-   {
-      // Nothing to do
-   }
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        // Nothing to do
+    }
 
-   private void readObject(ObjectInputStream in) throws IOException
-   {
-      // Nothing to do
-   }
+    private void readObject(ObjectInputStream in) throws IOException {
+        // Nothing to do
+    }
 
-   @Override
-   public String toString()
-   {
-      return "NullObject[]";
-   }
+    @Override
+    public String toString() {
+        return "NullObject[]";
+    }
 }

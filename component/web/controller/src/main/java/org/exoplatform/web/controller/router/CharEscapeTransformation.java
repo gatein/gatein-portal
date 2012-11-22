@@ -42,45 +42,41 @@ import org.exoplatform.web.controller.regexp.REVisitor;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class CharEscapeTransformation extends REVisitor<MalformedRouteException>
-{
+class CharEscapeTransformation extends REVisitor<MalformedRouteException> {
 
-   /** . */
-   private final char src;
+    /** . */
+    private final char src;
 
-   /** . */
-   private final char dst;
+    /** . */
+    private final char dst;
 
-   public CharEscapeTransformation(char src, char dst)
-   {
-      this.src = src;
-      this.dst = dst;
-   }
+    public CharEscapeTransformation(char src, char dst) {
+        this.src = src;
+        this.dst = dst;
+    }
 
-   @Override
-   protected void visit(RENode.Char expr) throws MalformedRouteException
-   {
-      if (expr.getValue() == src)
-      {
-         expr.setValue(dst);
-      }
-   }
+    @Override
+    protected void visit(RENode.Char expr) throws MalformedRouteException {
+        if (expr.getValue() == src) {
+            expr.setValue(dst);
+        }
+    }
 
-   @Override
-   protected void visit(RENode.Any expr) throws MalformedRouteException
-   {
-      RENode.CharacterClass repl = new RENode.CharacterClass(new RENode.CharacterClassExpr.Not(new RENode.CharacterClassExpr.Char('/')));
-      repl.setQuantifier(expr.getQuantifier());
-      expr.replaceBy(repl);
-   }
+    @Override
+    protected void visit(RENode.Any expr) throws MalformedRouteException {
+        RENode.CharacterClass repl = new RENode.CharacterClass(new RENode.CharacterClassExpr.Not(
+                new RENode.CharacterClassExpr.Char('/')));
+        repl.setQuantifier(expr.getQuantifier());
+        expr.replaceBy(repl);
+    }
 
-   @Override
-   protected void visit(RENode.CharacterClass expr) throws MalformedRouteException
-   {
-      RENode.CharacterClassExpr ccExpr = expr.getExpr();
-      ccExpr = ccExpr.replace(src, dst);
-//         RENode.CharacterClassExpr.And ccRepl = new RENode.CharacterClassExpr.And(null, new RENode.CharacterClassExpr.Not(new RENode.CharacterClassExpr.Char('/')));
-//         ccExpr.replaceBy(ccRepl);
-//         ccRepl.setLeft(ccExpr);
-   }
+    @Override
+    protected void visit(RENode.CharacterClass expr) throws MalformedRouteException {
+        RENode.CharacterClassExpr ccExpr = expr.getExpr();
+        ccExpr = ccExpr.replace(src, dst);
+        // RENode.CharacterClassExpr.And ccRepl = new RENode.CharacterClassExpr.And(null, new RENode.CharacterClassExpr.Not(new
+        // RENode.CharacterClassExpr.Char('/')));
+        // ccExpr.replaceBy(ccRepl);
+        // ccRepl.setLeft(ccExpr);
+    }
 }

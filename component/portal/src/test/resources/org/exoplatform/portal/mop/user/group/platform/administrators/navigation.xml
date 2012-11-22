@@ -21,51 +21,51 @@
 -->
 
 <node-navigation
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
-	<priority>2</priority>
-  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
+  <priority>2</priority>
+
   <page-nodes>
     <node>
       <uri>administration</uri>
       <name>administration</name>
-      <label>#{administration.title}</label>     
-          
-			<node>
-				<uri>administration/registry</uri>
-				<name>registry</name>
-				<label>#{administration.application-registry}</label>
-				<page-reference>group::platform/administrators::registry</page-reference>
-			</node>
-	    
-	    <node>
-		    <uri>administration/newAccount</uri>
-		    <name>newAccount</name>
-		    <label>#{administration.newAccount}</label>
-		    <page-reference>group::platform/administrators::newAccount</page-reference>
-	    </node>
-	    
-	    <node>
-		    <uri>administration/communityManagement</uri>
-		    <name>communityManagement</name>
-		    <label>#{administration.community-management}</label>
-		    <page-reference>group::platform/administrators::communityManagement</page-reference>
-	    </node>
-	    
-	    <node>
-		    <uri>administration/pageManagement</uri>
-		    <name>i18n</name>
-		    <label>#{administration.pageManagement}</label>
-		    <page-reference>group::platform/administrators::pageManagement</page-reference>
-	    </node>
-	    
-	    <node>
-		    <uri>administration/console</uri>
-		    <name>console</name>
-		    <label>#{administration.console}</label>
-		    <page-reference>group::platform/administrators::console</page-reference>
-	    </node>
-    </node>                        
+      <label>#{administration.title}</label>
+
+      <node>
+        <uri>administration/registry</uri>
+        <name>registry</name>
+        <label>#{administration.application-registry}</label>
+        <page-reference>group::platform/administrators::registry</page-reference>
+      </node>
+
+      <node>
+        <uri>administration/newAccount</uri>
+        <name>newAccount</name>
+        <label>#{administration.newAccount}</label>
+        <page-reference>group::platform/administrators::newAccount</page-reference>
+      </node>
+
+      <node>
+        <uri>administration/communityManagement</uri>
+        <name>communityManagement</name>
+        <label>#{administration.community-management}</label>
+        <page-reference>group::platform/administrators::communityManagement</page-reference>
+      </node>
+
+      <node>
+        <uri>administration/pageManagement</uri>
+        <name>i18n</name>
+        <label>#{administration.pageManagement}</label>
+        <page-reference>group::platform/administrators::pageManagement</page-reference>
+      </node>
+
+      <node>
+        <uri>administration/console</uri>
+        <name>console</name>
+        <label>#{administration.console}</label>
+        <page-reference>group::platform/administrators::console</page-reference>
+      </node>
+    </node>
   </page-nodes>
 </node-navigation>

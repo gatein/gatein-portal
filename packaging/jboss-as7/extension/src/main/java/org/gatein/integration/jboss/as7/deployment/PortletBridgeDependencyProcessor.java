@@ -54,7 +54,7 @@ import org.jboss.modules.ResourceLoaders;
 public class PortletBridgeDependencyProcessor implements DeploymentUnitProcessor {
 
     private static final Logger log = Logger.getLogger(PortletBridgeDependencyProcessor.class);
-    
+
     private static final ModuleIdentifier COMMONS_FILEUPLOAD = ModuleIdentifier.create("org.apache.commons-fileupload");
     private static final ModuleIdentifier JSF_API = ModuleIdentifier.create("javax.faces.api");
     private static final ModuleIdentifier JSF_IMPL = ModuleIdentifier.create("com.sun.jsf-impl");

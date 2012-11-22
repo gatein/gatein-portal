@@ -28,18 +28,17 @@ package org.exoplatform.commons.cache.future;
  * @param <V> the value type parameter
  * @param <C> the context type parameter
  */
-public interface Loader<K, V, C>
-{
+public interface Loader<K, V, C> {
 
-   /**
-    * Retrieves the value from the key within the specified context. If the resource is not found then the value
-    * null must be returned.
-    *
-    * @param context the context
-    * @param key the key
-    * @return the value
-    * @throws Exception any exception that would prevent the value to be loaded
-    */
-   V retrieve(C context, K key) throws Exception;
+    /**
+     * Retrieves the value from the key within the specified context. If the resource is not found then the value null must be
+     * returned.
+     *
+     * @param context the context
+     * @param key the key
+     * @return the value
+     * @throws Exception any exception that would prevent the value to be loaded
+     */
+    V retrieve(C context, K key) throws Exception;
 
 }

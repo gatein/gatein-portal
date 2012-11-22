@@ -23,33 +23,25 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.form.UIFormInput;
 
 /**
- * Created by The eXo Platform SARL
- * Author : dang.tung
- *          tungcnw@gmail.com
- * Dec 12, 2007
+ * Created by The eXo Platform SARL Author : dang.tung tungcnw@gmail.com Dec 12, 2007
  */
 @Serialized
-public class SpecialCharacterValidator extends AbstractValidator
-{
+public class SpecialCharacterValidator extends AbstractValidator {
 
-   @Override
-   protected String getMessageLocalizationKey()
-   {
-      return "SpecialCharacterValidator.msg.Invalid-char";
-   }
+    @Override
+    protected String getMessageLocalizationKey() {
+        return "SpecialCharacterValidator.msg.Invalid-char";
+    }
 
-   @Override
-   protected boolean isValid(String value, UIFormInput uiInput)
-   {
-      for (int i = 0; i < value.length(); i++)
-      {
-         char c = value.charAt(i);
-         if (Character.isLetter(c) || Character.isDigit(c) || c == '_' || c == '-' || Character.isSpaceChar(c))
-         {
-            continue;
-         }
-         return false;
-      }
-      return true;
-   }
+    @Override
+    protected boolean isValid(String value, UIFormInput uiInput) {
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            if (Character.isLetter(c) || Character.isDigit(c) || c == '_' || c == '-' || Character.isSpaceChar(c)) {
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
 }

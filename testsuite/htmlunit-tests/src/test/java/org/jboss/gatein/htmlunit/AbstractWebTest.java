@@ -22,213 +22,187 @@
 
 package org.jboss.gatein.htmlunit;
 
-import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.html.HtmlElement;
-import org.jboss.gatein.htmlunit.common.WebHelper;
-
 import java.io.IOException;
 
+import org.jboss.gatein.htmlunit.common.WebHelper;
+
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.html.HtmlElement;
+
 /**
- * This class provides every thread of execution with a single instance of WebHelper
- * which represents a single session with the web application.
+ * This class provides every thread of execution with a single instance of WebHelper which represents a single session with the
+ * web application.
  *
- * By extending this class test code can be written as if the state exists at the test class instance level
- * (shared across concurrent method calls), when in fact every thread has it's own copy.
+ * By extending this class test code can be written as if the state exists at the test class instance level (shared across
+ * concurrent method calls), when in fact every thread has it's own copy.
  *
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public abstract class AbstractWebTest
-{
-   /** Thread specific WebHelper storage */
-   private static final ThreadLocal<WebHelper> tcl = new ThreadLocal<WebHelper>();
+public abstract class AbstractWebTest {
+    /** Thread specific WebHelper storage */
+    private static final ThreadLocal<WebHelper> tcl = new ThreadLocal<WebHelper>();
 
-   /**
-    * Get current WebHelper - lazy initialized if none yet exists.
-    *
-    * @return current WebHelper
-    */
-   protected WebHelper getWebHelper()
-   {
-      WebHelper ret = tcl.get();
-      if (ret == null)
-      {
-         tcl.set(new WebHelper());
-         ret = tcl.get();
-      }
-      return ret;
-   }
+    /**
+     * Get current WebHelper - lazy initialized if none yet exists.
+     *
+     * @return current WebHelper
+     */
+    protected WebHelper getWebHelper() {
+        WebHelper ret = tcl.get();
+        if (ret == null) {
+            tcl.set(new WebHelper());
+            ret = tcl.get();
+        }
+        return ret;
+    }
 
-   /**
-    * Get current WebClient
-    *
-    * @return current WebClient
-    */
-   protected WebClient getWebClient()
-   {
-      return getWebHelper().getWebClient();
-   }
+    /**
+     * Get current WebClient
+     *
+     * @return current WebClient
+     */
+    protected WebClient getWebClient() {
+        return getWebHelper().getWebClient();
+    }
 
-   /**
-    * @see WebHelper#openPortal(boolean)
-    */
-   protected void openPortal(boolean publicMode) throws IOException
-   {
-      getWebHelper().openPortal(publicMode);
-   }
+    /**
+     * @see WebHelper#openPortal(boolean)
+     */
+    protected void openPortal(boolean publicMode) throws IOException {
+        getWebHelper().openPortal(publicMode);
+    }
 
-   /**
-    * @see WebHelper#signInAsRoot()
-    */
-   protected void signInAsRoot()
-   {
-      getWebHelper().signInAsRoot();
-   }
+    /**
+     * @see WebHelper#signInAsRoot()
+     */
+    protected void signInAsRoot() {
+        getWebHelper().signInAsRoot();
+    }
 
-   /**
-    * @see WebHelper#signIn(String, String)
-    */
-   protected void signIn(String user, String pass)
-   {
-      getWebHelper().signIn(user, pass);
-   }
+    /**
+     * @see WebHelper#signIn(String, String)
+     */
+    protected void signIn(String user, String pass) {
+        getWebHelper().signIn(user, pass);
+    }
 
-   /**
-    * @see WebHelper#type(String, String)
-    */
-   protected void type(String field, String value)
-   {
-      getWebHelper().type(field, value);
-   }
+    /**
+     * @see WebHelper#type(String, String)
+     */
+    protected void type(String field, String value) {
+        getWebHelper().type(field, value);
+    }
 
-   /**
-    * @see WebHelper#click(String)
-    */
-   protected void click(String el)
-   {
-      getWebHelper().click(el);
-   }
+    /**
+     * @see WebHelper#click(String)
+     */
+    protected void click(String el) {
+        getWebHelper().click(el);
+    }
 
-   /**
-    * @see WebHelper#waitForElementPresent(String)
-    */
-   protected void waitForElementPresent(String el)
-   {
-      getWebHelper().waitForElementPresent(el);
-   }
+    /**
+     * @see WebHelper#waitForElementPresent(String)
+     */
+    protected void waitForElementPresent(String el) {
+        getWebHelper().waitForElementPresent(el);
+    }
 
-   /**
-    * @see WebHelper#isElementPresent(String)
-    */
-   protected boolean isElementPresent(String el)
-   {
-      return getWebHelper().isElementPresent(el);
-   }
+    /**
+     * @see WebHelper#isElementPresent(String)
+     */
+    protected boolean isElementPresent(String el) {
+        return getWebHelper().isElementPresent(el);
+    }
 
-   /**
-    * @see WebHelper#getElement(String)
-    */
-   protected HtmlElement getElement(String el)
-   {
-      return getWebHelper().getElement(el);
-   }
+    /**
+     * @see WebHelper#getElement(String)
+     */
+    protected HtmlElement getElement(String el) {
+        return getWebHelper().getElement(el);
+    }
 
-   /**
-    * @see WebHelper#waitForTextPresent(String ...)
-    */
-   protected String waitForTextPresent(String ... text)
-   {
-      return getWebHelper().waitForTextPresent(text);
-   }
+    /**
+     * @see WebHelper#waitForTextPresent(String ...)
+     */
+    protected String waitForTextPresent(String... text) {
+        return getWebHelper().waitForTextPresent(text);
+    }
 
-   /**
-    * @see WebHelper#waitForTextNotPresent(String)
-    */
-   protected void waitForTextNotPresent(String text)
-   {
-      getWebHelper().waitForTextNotPresent(text);
-   }
+    /**
+     * @see WebHelper#waitForTextNotPresent(String)
+     */
+    protected void waitForTextNotPresent(String text) {
+        getWebHelper().waitForTextNotPresent(text);
+    }
 
-   /**
-    * @see WebHelper#isTextPresent(String)
-    */
-   protected boolean isTextPresent(String text)
-   {
-      return getWebHelper().isTextPresent(text);
-   }
+    /**
+     * @see WebHelper#isTextPresent(String)
+     */
+    protected boolean isTextPresent(String text) {
+        return getWebHelper().isTextPresent(text);
+    }
 
-   /**
-    * @see WebHelper#shortPause
-    */
-   protected void shortPause()
-   {
-      getWebHelper().shortPause();
-   }
+    /**
+     * @see WebHelper#shortPause
+     */
+    protected void shortPause() {
+        getWebHelper().shortPause();
+    }
 
-   /**
-    * @see WebHelper#pause(long)
-    */
-   protected void pause(long millis)
-   {
-      WebHelper.pause(millis);
-   }
+    /**
+     * @see WebHelper#pause(long)
+     */
+    protected void pause(long millis) {
+        WebHelper.pause(millis);
+    }
 
-   /**
-    * @see WebHelper#dragAndDropToObject(String, String)
-    */
-   protected void dragAndDropToObject(String sourceEl, String targetEl)
-   {
-      getWebHelper().dragAndDropToObject(sourceEl, targetEl);
-   }
+    /**
+     * @see WebHelper#dragAndDropToObject(String, String)
+     */
+    protected void dragAndDropToObject(String sourceEl, String targetEl) {
+        getWebHelper().dragAndDropToObject(sourceEl, targetEl);
+    }
 
-   /**
-    * @see WebHelper#finishPageEdit
-    */
-   protected void finishPageEdit()
-   {
-      getWebHelper().finishPageEdit();
-   }
+    /**
+     * @see WebHelper#finishPageEdit
+     */
+    protected void finishPageEdit() {
+        getWebHelper().finishPageEdit();
+    }
 
-   /**
-    * @see WebHelper#addNewPageUpToFinish(String, String, String, String)
-    */
-   protected void addNewPageUpToFinish(String categoryTitle, String portletName, String pageName, String portletElementToDnD)
-   {
-      getWebHelper().addNewPageUpToFinish(categoryTitle, portletName, pageName, portletElementToDnD);
-   }
+    /**
+     * @see WebHelper#addNewPageUpToFinish(String, String, String, String)
+     */
+    protected void addNewPageUpToFinish(String categoryTitle, String portletName, String pageName, String portletElementToDnD) {
+        getWebHelper().addNewPageUpToFinish(categoryTitle, portletName, pageName, portletElementToDnD);
+    }
 
-   protected void goToPageManagement()
-   {
-      getWebHelper().goToPageManagement();
-   }
+    protected void goToPageManagement() {
+        getWebHelper().goToPageManagement();
+    }
 
-   protected void searchAndDeletePage(String testPage)
-   {
-      getWebHelper().searchAndDeletePage(testPage);
-   }
+    protected void searchAndDeletePage(String testPage) {
+        getWebHelper().searchAndDeletePage(testPage);
+    }
 
-   protected void goToSiteManagement()
-   {
-      getWebHelper().goToSiteManagement();
-   }
+    protected void goToSiteManagement() {
+        getWebHelper().goToSiteManagement();
+    }
 
-   protected void editNavigation(String portalContainer)
-   {
-      getWebHelper().editNavigation(portalContainer);
-   }
+    protected void editNavigation(String portalContainer) {
+        getWebHelper().editNavigation(portalContainer);
+    }
 
-   protected void deleteNode(String nodeLabel)
-   {
-      getWebHelper().deleteNode(nodeLabel);
-   }
+    protected void deleteNode(String nodeLabel) {
+        getWebHelper().deleteNode(nodeLabel);
+    }
 
-   protected void leavePageEdit()
-   {
-      getWebHelper().leavePageEdit();
-   }
+    protected void leavePageEdit() {
+        getWebHelper().leavePageEdit();
+    }
 
-   protected void finished()
-   {
-      if (getWebHelper().isDumpPageOnExit())
-         getWebHelper().dumpPage();
-   }
+    protected void finished() {
+        if (getWebHelper().isDumpPageOnExit())
+            getWebHelper().dumpPage();
+    }
 }

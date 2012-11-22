@@ -22,27 +22,24 @@ package org.gatein.portal.controller.resource;
 import java.util.Collections;
 import java.util.Set;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class Resource<R extends Resource<R>>
-{
+public class Resource<R extends Resource<R>> {
 
-   /** . */
-   protected final ResourceId id;
+    /** . */
+    protected final ResourceId id;
 
-   public Resource(ResourceId id)
-   {
-      this.id = id;
-   }
+    public Resource(ResourceId id) {
+        this.id = id;
+    }
 
-   public ResourceId getId()
-   {
-      return id;
-   }
+    public ResourceId getId() {
+        return id;
+    }
 
-   public Set<ResourceId> getDependencies()
-   {
-      return Collections.emptySet();
-   }
+    public Set<ResourceId> getDependencies() {
+        return Collections.emptySet();
+    }
 }

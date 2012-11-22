@@ -22,38 +22,28 @@ package org.exoplatform.portal.pom.config;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TaskExecutionDecorator implements TaskExecutor
-{
+public class TaskExecutionDecorator implements TaskExecutor {
 
-   /** . */
-   private final TaskExecutor next;
+    /** . */
+    private final TaskExecutor next;
 
-   public TaskExecutionDecorator(TaskExecutor next)
-   {
-      this.next = next;
-   }
+    public TaskExecutionDecorator(TaskExecutor next) {
+        this.next = next;
+    }
 
-   public <V> V execute(POMSession session, POMTask<V> task) throws Exception
-   {
-      return next.execute(session, task);
-   }
+    public <V> V execute(POMSession session, POMTask<V> task) throws Exception {
+        return next.execute(session, task);
+    }
 
-   public <E extends TaskExecutor> E getDecorator(Class<E> decoratorClass)
-   {
-      if (decoratorClass.isInstance(this))
-      {
-         return decoratorClass.cast(this);
-      }
-      else
-      {
-         if (next != null && next instanceof TaskExecutionDecorator)
-         {
-            return ((TaskExecutionDecorator)next).getDecorator(decoratorClass);
-         }
-         else
-         {
-            return null;
-         }
-      }
-   }
+    public <E extends TaskExecutor> E getDecorator(Class<E> decoratorClass) {
+        if (decoratorClass.isInstance(this)) {
+            return decoratorClass.cast(this);
+        } else {
+            if (next != null && next instanceof TaskExecutionDecorator) {
+                return ((TaskExecutionDecorator) next).getDecorator(decoratorClass);
+            } else {
+                return null;
+            }
+        }
+    }
 }

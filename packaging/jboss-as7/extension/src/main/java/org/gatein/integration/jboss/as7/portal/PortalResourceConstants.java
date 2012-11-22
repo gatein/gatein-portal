@@ -27,25 +27,23 @@ import org.jboss.as.controller.PathElement;
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public class PortalResourceConstants
-{
-   public static final String PORTAL = "portal";
-   public static final PathElement PORTAL_PATH = PathElement.pathElement(PORTAL);
+public class PortalResourceConstants {
+    public static final String PORTAL = "portal";
+    public static final PathElement PORTAL_PATH = PathElement.pathElement(PORTAL);
 
-   public static final String SITE = "site";
-   public static final PathElement SITE_PATH = PathElement.pathElement(SITE);
+    public static final String SITE = "site";
+    public static final PathElement SITE_PATH = PathElement.pathElement(SITE);
 
-   public static final String APPLICATION = "application";
-   public static final PathElement APPLICATION_PATH = PathElement.pathElement(APPLICATION);
+    public static final String APPLICATION = "application";
+    public static final PathElement APPLICATION_PATH = PathElement.pathElement(APPLICATION);
 
-   // statistics
-   static final String AVERAGE_TIME = "averageTime";
-   static final String MAX_TIME = "maxTime";
-   static final String MIN_TIME = "minTime";
-   static final String THROUGHPUT = "throughput";
-   static final String EXECUTION_COUNT = "executionCount";
+    // statistics
+    static final String AVERAGE_TIME = "averageTime";
+    static final String MAX_TIME = "maxTime";
+    static final String MIN_TIME = "minTime";
+    static final String THROUGHPUT = "throughput";
+    static final String EXECUTION_COUNT = "executionCount";
 
-   private PortalResourceConstants()
-   {
-   }
+    private PortalResourceConstants() {
+    }
 }

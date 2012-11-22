@@ -34,85 +34,66 @@ import org.json.JSONArray;
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class RequireJS
-{
-   Log log = ExoLogger.getLogger(RequireJS.class);
-   
-   Map<String, String> depends;
-   
-   Set<String> noAlias;
-   
-   StringBuilder scripts;
-   
-   public RequireJS()
-   {
-      depends = new LinkedHashMap<String, String>();
-      noAlias = new LinkedHashSet<String>();
-      scripts = new StringBuilder();
-   }
+public class RequireJS {
+    Log log = ExoLogger.getLogger(RequireJS.class);
 
-   public RequireJS require(String moduleId)
-   {
-      return require(moduleId, null);
-   }
+    Map<String, String> depends;
 
-   public RequireJS require(String moduleId, String alias)
-   {
-      if (moduleId == null || moduleId.isEmpty())
-      {
-         log.warn("The moduleId can not be NULL");
-      }
-      else
-      {
-         if (alias != null && !alias.trim().isEmpty())
-         {
-            alias = alias.trim();
-            if (depends.containsKey(alias))
-            {
-               if (!depends.get(alias).equals(moduleId))
-               {
-                  log.warn("There is already an alias named as {}", alias);
-               }
+    Set<String> noAlias;
+
+    StringBuilder scripts;
+
+    public RequireJS() {
+        depends = new LinkedHashMap<String, String>();
+        noAlias = new LinkedHashSet<String>();
+        scripts = new StringBuilder();
+    }
+
+    public RequireJS require(String moduleId) {
+        return require(moduleId, null);
+    }
+
+    public RequireJS require(String moduleId, String alias) {
+        if (moduleId == null || moduleId.isEmpty()) {
+            log.warn("The moduleId can not be NULL");
+        } else {
+            if (alias != null && !alias.trim().isEmpty()) {
+                alias = alias.trim();
+                if (depends.containsKey(alias)) {
+                    if (!depends.get(alias).equals(moduleId)) {
+                        log.warn("There is already an alias named as {}", alias);
+                    }
+                } else {
+                    depends.put(alias, moduleId);
+                }
+            } else {
+                log.debug("Adding requirejs module {} without alias", moduleId);
+                noAlias.add(moduleId);
             }
-            else
-            {
-               depends.put(alias, moduleId);
-            }         
-         }
-         else
-         {
-            log.debug("Adding requirejs module {} without alias", moduleId);
-            noAlias.add(moduleId);         
-         }
-      }      
-            
-      return this;
-   }
+        }
 
-   public RequireJS addScripts(String scripts)
-   {
-      this.scripts.append(scripts);
-      return this;
-   }
+        return this;
+    }
 
-   @Override
-   public String toString()
-   {
-      StringBuilder builder = new StringBuilder();
-      if (depends.size() > 0 || noAlias.size() > 0)
-      {
-         builder.append("window.require(");
-         List<String> tmp = new LinkedList<String>(depends.values());
-         noAlias.removeAll(depends.values());
-         tmp.addAll(noAlias);
-         builder.append(new JSONArray(tmp)).append(",");
-         builder.append("function(").append(StringUtils.join(depends.keySet(), ",")).append(") {").append('\n')
-            .append(this.scripts).append("});");
-      }
-      else
-      {
-         builder.append(this.scripts);
-      }
-      return builder.toString();
-   }
+    public RequireJS addScripts(String scripts) {
+        this.scripts.append(scripts);
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        if (depends.size() > 0 || noAlias.size() > 0) {
+            builder.append("window.require(");
+            List<String> tmp = new LinkedList<String>(depends.values());
+            noAlias.removeAll(depends.values());
+            tmp.addAll(noAlias);
+            builder.append(new JSONArray(tmp)).append(",");
+            builder.append("function(").append(StringUtils.join(depends.keySet(), ",")).append(") {").append('\n')
+                    .append(this.scripts).append("});");
+        } else {
+            builder.append(this.scripts);
+        }
+        return builder.toString();
+    }
 }

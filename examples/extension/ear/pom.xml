@@ -19,7 +19,8 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
@@ -59,29 +60,29 @@
     </dependency>
   </dependencies>
   <build>
-    <finalName>${project.artifactId}</finalName>  
+    <finalName>${project.artifactId}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-ear-plugin</artifactId>
         <configuration>
-           <modules>
-             <jarModule>
-               <groupId>org.gatein.portal</groupId>
-               <artifactId>exo.portal.sample.extension.config</artifactId>
-               <includeInApplicationXml>true</includeInApplicationXml>
-             </jarModule>
-             <webModule>
-               <groupId>org.gatein.portal</groupId>
-               <artifactId>exo.portal.sample.extension.war</artifactId>
-               <bundleFileName>sample-ext.war</bundleFileName>
-               <contextRoot>sample-ext</contextRoot>
-             </webModule>
-             <jarModule>
-               <groupId>org.gatein.portal</groupId>
-               <artifactId>exo.portal.sample.extension.jar</artifactId>
-               <includeInApplicationXml>true</includeInApplicationXml>
-             </jarModule>
+          <modules>
+            <jarModule>
+              <groupId>org.gatein.portal</groupId>
+              <artifactId>exo.portal.sample.extension.config</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
+            <webModule>
+              <groupId>org.gatein.portal</groupId>
+              <artifactId>exo.portal.sample.extension.war</artifactId>
+              <bundleFileName>sample-ext.war</bundleFileName>
+              <contextRoot>sample-ext</contextRoot>
+            </webModule>
+            <jarModule>
+              <groupId>org.gatein.portal</groupId>
+              <artifactId>exo.portal.sample.extension.jar</artifactId>
+              <includeInApplicationXml>true</includeInApplicationXml>
+            </jarModule>
           </modules>
         </configuration>
       </plugin>

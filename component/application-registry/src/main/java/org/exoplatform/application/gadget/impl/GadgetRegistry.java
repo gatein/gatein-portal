@@ -18,15 +18,15 @@
  */
 package org.exoplatform.application.gadget.impl;
 
+import java.util.Collection;
+import java.util.Map;
+
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.FormattedBy;
 import org.chromattic.api.annotations.NamingPrefix;
-import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.ext.format.BaseEncodingObjectFormatter;
-
-import java.util.Collection;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -35,43 +35,36 @@ import java.util.Map;
 @PrimaryType(name = "app:gadgetregistry")
 @FormattedBy(BaseEncodingObjectFormatter.class)
 @NamingPrefix("app")
-public abstract class GadgetRegistry
-{
+public abstract class GadgetRegistry {
 
-   @OneToMany
-   protected abstract Map<String, GadgetDefinition> getDefinitions();
+    @OneToMany
+    protected abstract Map<String, GadgetDefinition> getDefinitions();
 
-   @Create
-   protected abstract GadgetDefinition createGadget();
+    @Create
+    protected abstract GadgetDefinition createGadget();
 
-/*
-   @Create
-   protected abstract NTFolder createFolder();
-*/
+    /*
+     * @Create protected abstract NTFolder createFolder();
+     */
 
-   public Collection<GadgetDefinition> getGadgets()
-   {
-      return getDefinitions().values();
-   }
+    public Collection<GadgetDefinition> getGadgets() {
+        return getDefinitions().values();
+    }
 
-   public GadgetDefinition getGadget(String name)
-   {
-      return getDefinitions().get(name);
-   }
+    public GadgetDefinition getGadget(String name) {
+        return getDefinitions().get(name);
+    }
 
-   public GadgetDefinition addGadget(String name)
-   {
-      if (name == null)
-      {
-         throw new NullPointerException();
-      }
-      GadgetDefinition def = createGadget();
-      getDefinitions().put(name, def);
-      return def;
-   }
+    public GadgetDefinition addGadget(String name) {
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        GadgetDefinition def = createGadget();
+        getDefinitions().put(name, def);
+        return def;
+    }
 
-   public void removeGadget(String name)
-   {
-      getDefinitions().put(name, null);
-   }
+    public void removeGadget(String name) {
+        getDefinitions().put(name, null);
+    }
 }

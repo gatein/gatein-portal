@@ -20,89 +20,73 @@ package org.exoplatform.webui.binding;
 
 import java.io.Serializable;
 
-import org.exoplatform.services.organization.User;
 import org.exoplatform.webui.form.UIFormInputSet;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.MandatoryValidator;
 
 /**
  * @author <a href="mailto:haithanh0809@gmail.com">Hai Thanh Nguyen</a>
  * @version $Id$
  *
  */
-public class UIMockInputSet extends UIFormInputSet
-{
-   public UIMockInputSet() throws Exception 
-   {
-      super("UIMockInputSet");
-      addUIFormInput(new UIFormStringInput("value1", "value1", "value1"));
-      addUIFormInput(new UIFormStringInput("value2", "value2", "value2"));
-      addUIFormInput(new UIFormStringInput("value3", "value3", "value3"));
-   }
-   
-   public void setFieldValue(String fieldName, String value)
-   {
-      ((UIFormStringInput) getChildById(fieldName)).setValue(value);
-   }
-   
-   public void setReadonlyForField(String fieldName, boolean readonly)
-   {
-      ((UIFormStringInput) getChildById(fieldName)).setReadOnly(readonly);
-   }
-   
-   public void setDisableForField(String fieldName, boolean disabled)
-   {
-      ((UIFormStringInput) getChildById(fieldName)).setDisabled(disabled);
-   }
-   
-   public void binding(MockModel obj) throws Exception
-   {
-      if (obj == null)
-      {
-         return;
-      }
-      invokeSetBindingField(obj);
-   }
-   
-   public static class MockModel implements Serializable
-   {
+public class UIMockInputSet extends UIFormInputSet {
+    public UIMockInputSet() {
+        super("UIMockInputSet");
+        addUIFormInput(new UIFormStringInput("value1", "value1", "value1"));
+        addUIFormInput(new UIFormStringInput("value2", "value2", "value2"));
+        addUIFormInput(new UIFormStringInput("value3", "value3", "value3"));
+    }
 
-      private static final long serialVersionUID = 1L;
-      
-      private String value1;
-      
-      private String value2;
-      
-      private String value3;
+    public void setFieldValue(String fieldName, String value) {
+        ((UIFormStringInput) getChildById(fieldName)).setValue(value);
+    }
 
-      public String getValue1()
-      {
-         return value1;
-      }
+    public void setReadonlyForField(String fieldName, boolean readonly) {
+        ((UIFormStringInput) getChildById(fieldName)).setReadOnly(readonly);
+    }
 
-      public void setValue1(String value1)
-      {
-         this.value1 = value1;
-      }
+    public void setDisableForField(String fieldName, boolean disabled) {
+        ((UIFormStringInput) getChildById(fieldName)).setDisabled(disabled);
+    }
 
-      public String getValue2()
-      {
-         return value2;
-      }
+    public void binding(MockModel obj) throws Exception {
+        if (obj == null) {
+            return;
+        }
+        invokeSetBindingField(obj);
+    }
 
-      public void setValue2(String value2)
-      {
-         this.value2 = value2;
-      }
+    public static class MockModel implements Serializable {
 
-      public String getValue3()
-      {
-         return value3;
-      }
+        private static final long serialVersionUID = 1L;
 
-      public void setValue3(String value3)
-      {
-         this.value3 = value3;
-      }
-   }
+        private String value1;
+
+        private String value2;
+
+        private String value3;
+
+        public String getValue1() {
+            return value1;
+        }
+
+        public void setValue1(String value1) {
+            this.value1 = value1;
+        }
+
+        public String getValue2() {
+            return value2;
+        }
+
+        public void setValue2(String value2) {
+            this.value2 = value2;
+        }
+
+        public String getValue3() {
+            return value3;
+        }
+
+        public void setValue3(String value3) {
+            this.value3 = value3;
+        }
+    }
 }

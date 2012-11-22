@@ -22,45 +22,38 @@ package org.exoplatform.portal.config.model;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public enum Version
-{
+public enum Version {
 
-   UNKNOWN(null),
+    UNKNOWN(null),
 
-   V_1_0("http://www.gatein.org/xml/ns/gatein_objects_1_0"),
+    V_1_0("http://www.gatein.org/xml/ns/gatein_objects_1_0"),
 
-   V_1_1("http://www.gatein.org/xml/ns/gatein_objects_1_1"),
+    V_1_1("http://www.gatein.org/xml/ns/gatein_objects_1_1"),
 
-   V_1_2("http://www.gatein.org/xml/ns/gatein_objects_1_2"),
+    V_1_2("http://www.gatein.org/xml/ns/gatein_objects_1_2"),
 
-   V_1_3("http://www.gatein.org/xml/ns/gatein_objects_1_3");
-   
-   /** . */
-   private final String uri;
+    V_1_3("http://www.gatein.org/xml/ns/gatein_objects_1_3");
 
-   Version(String uri)
-   {
-      this.uri = uri;
-   }
+    /** . */
+    private final String uri;
 
-   public String getURI()
-   {
-      return uri;
-   }
+    Version(String uri) {
+        this.uri = uri;
+    }
 
-   public static Version forURI(String uri)
-   {
-      if (uri == null)
-      {
-         throw new NullPointerException();
-      }
-      for (Version version : values())
-      {
-         if (uri.equals(version.uri))
-         {
-            return version;
-         }
-      }
-      return null;
-   }
+    public String getURI() {
+        return uri;
+    }
+
+    public static Version forURI(String uri) {
+        if (uri == null) {
+            throw new NullPointerException();
+        }
+        for (Version version : values()) {
+            if (uri.equals(version.uri)) {
+                return version;
+            }
+        }
+        return null;
+    }
 }

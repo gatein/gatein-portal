@@ -32,52 +32,43 @@ import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
 
 /** @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a> */
-public class StartupService implements Service<StartupService>
-{
-   private Module module;
+public class StartupService implements Service<StartupService> {
+    private Module module;
 
-   public static final ServiceName SERVICE_NAME = ServiceName.of((ServiceName)null, "org", "gatein", "startup");
-   private static final Logger log = Logger.getLogger("org.gatein");
+    public static final ServiceName SERVICE_NAME = ServiceName.of((ServiceName) null, "org", "gatein", "startup");
+    private static final Logger log = Logger.getLogger("org.gatein");
 
-   @Override
-   public void start(StartContext context) throws StartException
-   {
-      ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
-      try
-      {
-         // set TCCL to this module's CL
-         Thread.currentThread().setContextClassLoader(module.getClassLoader());
+    @Override
+    public void start(StartContext context) throws StartException {
+        ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
+        try {
+            // set TCCL to this module's CL
+            Thread.currentThread().setContextClassLoader(module.getClassLoader());
 
-         // Trigger startup
-         RootContainer rootContainer = RootContainer.getInstance();
-         rootContainer.createPortalContainers();
-      }
-      finally
-      {
-         if (Thread.currentThread().getContextClassLoader() != oldCl)
-         {
-            Thread.currentThread().setContextClassLoader(oldCl);
-         }
+            // Trigger startup
+            RootContainer rootContainer = RootContainer.getInstance();
+            rootContainer.createPortalContainers();
+        } finally {
+            if (Thread.currentThread().getContextClassLoader() != oldCl) {
+                Thread.currentThread().setContextClassLoader(oldCl);
+            }
 
-         // Startup message
-         log.info(Version.prettyVersion + " started.");
-      }
-   }
+            // Startup message
+            log.info(Version.prettyVersion + " started.");
+        }
+    }
 
-   @Override
-   public void stop(StopContext context)
-   {
-      RootContainer.getInstance().stop();
-   }
+    @Override
+    public void stop(StopContext context) {
+        RootContainer.getInstance().stop();
+    }
 
-   @Override
-   public StartupService getValue() throws IllegalStateException, IllegalArgumentException
-   {
-      return this;
-   }
+    @Override
+    public StartupService getValue() throws IllegalStateException, IllegalArgumentException {
+        return this;
+    }
 
-   public void setGateInModule(Module module)
-   {
-      this.module = module;
-   }
+    public void setGateInModule(Module module) {
+        this.module = module;
+    }
 }

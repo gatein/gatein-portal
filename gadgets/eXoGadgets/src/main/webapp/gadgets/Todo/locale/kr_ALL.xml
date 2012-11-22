@@ -19,11 +19,11 @@
 
 -->
 
-<messagebundle>  
+<messagebundle>
   <msg name="save">
-  	저장
+    저장
   </msg>
   <msg name="type_here">
-  	새로운 태스크를 입력하십시오
+    새로운 태스크를 입력하십시오
   </msg>
 </messagebundle>

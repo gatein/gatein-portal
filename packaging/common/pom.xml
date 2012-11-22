@@ -19,16 +19,17 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   <parent>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.packaging</artifactId>
-      <version>3.5.0.Final-SNAPSHOT</version>
-   </parent>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <parent>
+    <groupId>org.gatein.portal</groupId>
+    <artifactId>exo.portal.packaging</artifactId>
+    <version>3.5.0.Final-SNAPSHOT</version>
+  </parent>
 
-   <modelVersion>4.0.0</modelVersion>
-   <artifactId>exo.portal.packaging.common</artifactId>
-   <packaging>jar</packaging>
-   <name>Common files used for packaging</name>
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>exo.portal.packaging.common</artifactId>
+  <packaging>jar</packaging>
+  <name>Common files used for packaging</name>
 
 </project>

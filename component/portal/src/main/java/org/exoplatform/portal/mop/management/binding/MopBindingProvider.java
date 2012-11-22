@@ -22,102 +22,89 @@
 
 package org.exoplatform.portal.mop.management.binding;
 
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.management.binding.xml.NavigationMarshaller;
 import org.exoplatform.portal.mop.management.binding.xml.PageMarshaller;
 import org.exoplatform.portal.mop.management.binding.xml.SiteLayoutMarshaller;
-import org.exoplatform.portal.pom.data.PortalData;
 import org.gatein.management.api.ContentType;
 import org.gatein.management.api.binding.BindingException;
 import org.gatein.management.api.binding.BindingProvider;
 import org.gatein.management.api.binding.Marshaller;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class MopBindingProvider implements BindingProvider
-{
-   public static final MopBindingProvider INSTANCE = new MopBindingProvider();
+public class MopBindingProvider implements BindingProvider {
+    public static final MopBindingProvider INSTANCE = new MopBindingProvider();
 
-   private MopBindingProvider(){}
+    private MopBindingProvider() {
+    }
 
-   @Override
-   public <T> Marshaller<T> getMarshaller(Class<T> type, ContentType contentType) throws BindingException
-   {
-      switch (contentType)
-      {
-         case XML:
-            return getXmlMarshaller(type);
-         case JSON:
-         case ZIP:
-         default:
-            return null;
-      }
-   }
+    @Override
+    public <T> Marshaller<T> getMarshaller(Class<T> type, ContentType contentType) throws BindingException {
+        switch (contentType) {
+            case XML:
+                return getXmlMarshaller(type);
+            case JSON:
+            case ZIP:
+            default:
+                return null;
+        }
+    }
 
-   @SuppressWarnings("unchecked")
-   private <T> Marshaller<T> getXmlMarshaller(Class<T> type)
-   {
-      if (Page.class.isAssignableFrom(type))
-      {
-         return (Marshaller<T>) XmlMarshallers.page_marshaller;
-      }
-      else if (Page.PageSet.class.isAssignableFrom(type))
-      {
-         return (Marshaller<T>) XmlMarshallers.pages_marshaller;
-      }
-      else if (PageNavigation.class.isAssignableFrom(type))
-      {
-         return (Marshaller<T>) XmlMarshallers.navigation_marshaller;
-      }
-      else if (PortalConfig.class.isAssignableFrom(type))
-      {
-         return (Marshaller<T>) XmlMarshallers.site_marshaller;
-      }
+    @SuppressWarnings("unchecked")
+    private <T> Marshaller<T> getXmlMarshaller(Class<T> type) {
+        if (Page.class.isAssignableFrom(type)) {
+            return (Marshaller<T>) XmlMarshallers.page_marshaller;
+        } else if (Page.PageSet.class.isAssignableFrom(type)) {
+            return (Marshaller<T>) XmlMarshallers.pages_marshaller;
+        } else if (PageNavigation.class.isAssignableFrom(type)) {
+            return (Marshaller<T>) XmlMarshallers.navigation_marshaller;
+        } else if (PortalConfig.class.isAssignableFrom(type)) {
+            return (Marshaller<T>) XmlMarshallers.site_marshaller;
+        }
 
-      return null;
-   }
+        return null;
+    }
 
-   private static class XmlMarshallers
-   {
+    private static class XmlMarshallers {
 
-      //------------------------------------ Page Marshallers ------------------------------------//
-      private static Marshaller<Page.PageSet> pages_marshaller = new PageMarshaller();
+        // ------------------------------------ Page Marshallers ------------------------------------//
+        private static Marshaller<Page.PageSet> pages_marshaller = new PageMarshaller();
 
-      private static Marshaller<Page> page_marshaller = new Marshaller<Page>()
-      {
-         @Override
-         public void marshal(Page page, OutputStream outputStream) throws BindingException
-         {
-            Page.PageSet pages = new Page.PageSet();
-            pages.setPages(new ArrayList<Page>(1));
-            pages.getPages().add(page);
+        private static Marshaller<Page> page_marshaller = new Marshaller<Page>() {
+            @Override
+            public void marshal(Page page, OutputStream outputStream) throws BindingException {
+                Page.PageSet pages = new Page.PageSet();
+                pages.setPages(new ArrayList<Page>(1));
+                pages.getPages().add(page);
 
-            XmlMarshallers.pages_marshaller.marshal(pages, outputStream);
-         }
+                XmlMarshallers.pages_marshaller.marshal(pages, outputStream);
+            }
 
-         @Override
-         public Page unmarshal(InputStream inputStream) throws BindingException
-         {
-            Page.PageSet pages = pages_marshaller.unmarshal(inputStream);
+            @Override
+            public Page unmarshal(InputStream inputStream) throws BindingException {
+                Page.PageSet pages = pages_marshaller.unmarshal(inputStream);
 
-            if (pages.getPages().isEmpty()) throw new BindingException("No page was unmarshalled.");
+                if (pages.getPages().isEmpty())
+                    throw new BindingException("No page was unmarshalled.");
 
-            if (pages.getPages().size() != 1) throw new BindingException("Multiple pages found.");
+                if (pages.getPages().size() != 1)
+                    throw new BindingException("Multiple pages found.");
 
-            return pages.getPages().get(0);
-         }
-      };
+                return pages.getPages().get(0);
+            }
+        };
 
-      private static Marshaller<PageNavigation> navigation_marshaller = new NavigationMarshaller();
+        private static Marshaller<PageNavigation> navigation_marshaller = new NavigationMarshaller();
 
-      private static Marshaller<PortalConfig> site_marshaller = new SiteLayoutMarshaller();
-   }
+        private static Marshaller<PortalConfig> site_marshaller = new SiteLayoutMarshaller();
+    }
 }

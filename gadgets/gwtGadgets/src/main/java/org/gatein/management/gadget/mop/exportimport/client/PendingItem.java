@@ -22,11 +22,11 @@
 
 package org.gatein.management.gadget.mop.exportimport.client;
 
+import java.io.Serializable;
+
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
-
-import java.io.Serializable;
 
 /**
  * {@code PendingItem}
@@ -38,52 +38,47 @@ import java.io.Serializable;
  * @author <a href="mailto:nbenothm@redhat.com">Nabil Benothman</a>
  * @version 1.0
  */
-public class PendingItem extends TreeItem implements Serializable
-{
+public class PendingItem extends TreeItem implements Serializable {
 
-   /**
+    /**
     *
     */
-   private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-   /**
-    * Create a new instance of {@code PendingItem}
-    */
-   public PendingItem()
-   {
-      super("Loading sub-tree...");
-      this.setStyleName("gwt-TreeItem-pending");
-   }
+    /**
+     * Create a new instance of {@code PendingItem}
+     */
+    public PendingItem() {
+        super("Loading sub-tree...");
+        this.setStyleName("gwt-TreeItem-pending");
+    }
 
-   /**
-    * Constructs a tree item with the given HTML.
-    *
-    * @param html the item's HTML
-    */
-   public PendingItem(String html)
-   {
-      this();
-   }
+    /**
+     * Constructs a tree item with the given HTML.
+     *
+     * @param html the item's HTML
+     */
+    public PendingItem(String html) {
+        this();
+    }
 
-   /**
-    * Constructs a tree item with the given HTML.
-    *
-    * @param html the item's HTML
-    */
-   public PendingItem(SafeHtml html)
-   {
-      super(html);
-      this.setText("Loading sub-tree...");
-   }
+    /**
+     * Constructs a tree item with the given HTML.
+     *
+     * @param html the item's HTML
+     */
+    public PendingItem(SafeHtml html) {
+        super(html);
+        this.setText("Loading sub-tree...");
+    }
 
-   /**
-    * Constructs a tree item with the given <code>Widget</code>.
-    *
-    * @param widget the item's widget
-    */
-   public PendingItem(Widget widget)
-   {
-      super(widget);
-      this.setText("Loading sub-tree...");
-   }
+    /**
+     * Constructs a tree item with the given <code>Widget</code>.
+     *
+     * @param widget the item's widget
+     */
+    public PendingItem(Widget widget) {
+        super(widget);
+        this.setText("Loading sub-tree...");
+    }
 }

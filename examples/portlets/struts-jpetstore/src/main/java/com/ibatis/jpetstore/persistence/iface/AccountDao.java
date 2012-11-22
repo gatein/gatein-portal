@@ -4,12 +4,12 @@ import com.ibatis.jpetstore.domain.Account;
 
 public interface AccountDao {
 
-  Account getAccount(String username);
+    Account getAccount(String username);
 
-  Account getAccount(String username, String password);
+    Account getAccount(String username, String password);
 
-  void insertAccount(Account account);
+    void insertAccount(Account account);
 
-  void updateAccount(Account account);
+    void updateAccount(Account account);
 
 }

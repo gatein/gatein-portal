@@ -19,11 +19,11 @@
 
 -->
 
-<messagebundle>  
+<messagebundle>
   <msg name="save">
-  	Speichern
+    Speichern
   </msg>
   <msg name="type_here">
-  	Hier neue Aufgabe eingeben
+    Hier neue Aufgabe eingeben
   </msg>
 </messagebundle>

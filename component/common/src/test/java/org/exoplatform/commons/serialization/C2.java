@@ -26,9 +26,8 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
  * @version $Revision$
  */
 @Serialized
-public class C2 extends C1
-{
+public class C2 extends C1 {
 
-   String a = "a2";
-   
+    String a = "a2";
+
 }

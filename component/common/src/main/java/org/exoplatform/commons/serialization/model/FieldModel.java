@@ -22,102 +22,82 @@ package org.exoplatform.commons.serialization.model;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class FieldModel<O, V>
-{
+public final class FieldModel<O, V> {
 
-   /** . */
-   private final TypeModel<O> owner;
+    /** . */
+    private final TypeModel<O> owner;
 
-   /** . */
-   private final Field field;
+    /** . */
+    private final Field field;
 
-   /** . */
-   private final TypeModel<V> type;
+    /** . */
+    private final TypeModel<V> type;
 
-   /** . */
-   private boolean _transient;
+    /** . */
+    private boolean _transient;
 
-   FieldModel(TypeModel<O> owner, Field field, TypeModel<V> type)
-   {
-      this.owner = owner;
-      this.field = field;
-      this.type = type;
-      this._transient = Modifier.isTransient(field.getModifiers());
-   }
+    FieldModel(TypeModel<O> owner, Field field, TypeModel<V> type) {
+        this.owner = owner;
+        this.field = field;
+        this.type = type;
+        this._transient = Modifier.isTransient(field.getModifiers());
+    }
 
-   public TypeModel<O> getOwner()
-   {
-      return owner;
-   }
+    public TypeModel<O> getOwner() {
+        return owner;
+    }
 
-   public String getName()
-   {
-      return field.getName();
-   }
+    public String getName() {
+        return field.getName();
+    }
 
-   public boolean isTransient()
-   {
-      return _transient;
-   }
+    public boolean isTransient() {
+        return _transient;
+    }
 
-   public TypeModel<V> getType()
-   {
-      return type;
-   }
+    public TypeModel<V> getType() {
+        return type;
+    }
 
-   public V get(Object o)
-   {
-      try
-      {
-         Object value = field.get(o);
-         if (value == null)
-         {
-            return null;
-         }
-         else
-         {
-            Class<V> valueType = type.getJavaType();
-            if (valueType.isInstance(value))
-            {
-               return valueType.cast(value);
+    public V get(Object o) {
+        try {
+            Object value = field.get(o);
+            if (value == null) {
+                return null;
+            } else {
+                Class<V> valueType = type.getJavaType();
+                if (valueType.isInstance(value)) {
+                    return valueType.cast(value);
+                } else {
+                    throw new ClassCastException("Cannot cast value " + value + " with type " + value.getClass().getName()
+                            + " to type " + valueType.getName());
+                }
             }
-            else
-            {
-               throw new ClassCastException("Cannot cast value " + value + " with type " + value.getClass().getName() + " to type " + valueType.getName());
-            }
-         }
-      }
-      catch (IllegalAccessException e)
-      {
-         throw new AssertionError(e);
-      }
-   }
+        } catch (IllegalAccessException e) {
+            throw new AssertionError(e);
+        }
+    }
 
-   public void castAndSet(Object o, Object value)
-   {
-      V v = type.getJavaType().cast(value);
-      set(o, v);
-   }
+    public void castAndSet(Object o, Object value) {
+        V v = type.getJavaType().cast(value);
+        set(o, v);
+    }
 
-   public void set(Object o, V value)
-   {
-      try
-      {
-         field.set(o, value);
-      }
-      catch (IllegalAccessException e)
-      {
-         throw new AssertionError(e);
-      }
-   }
+    public void set(Object o, V value) {
+        try {
+            field.set(o, value);
+        } catch (IllegalAccessException e) {
+            throw new AssertionError(e);
+        }
+    }
 
-   @Override
-   public String toString()
-   {
-      return "FieldModel[name=" + field.getName() + ",owner=" + owner + "]";
-   }
+    @Override
+    public String toString() {
+        return "FieldModel[name=" + field.getName() + ",owner=" + owner + "]";
+    }
 }

@@ -55,7 +55,8 @@
   -->
   <NumberFormatValidator>
     <msg>
-      <invalid-limitAccess>Bạn đã nhập giá trị {0} vào trường {1}, đó là một giá trị không hợp lệ\ giới hạn truy cập.</invalid-limitAccess>
+      <invalid-limitAccess>Bạn đã nhập giá trị {0} vào trường {1}, đó là một giá trị không hợp lệ\ giới hạn truy cập.
+      </invalid-limitAccess>
       <Invalid-input>Giá trị vừa nhập vào trường {0} không dúng định dạng số.</Invalid-input>
     </msg>
   </NumberFormatValidator>
@@ -72,7 +73,8 @@
   <IdentifierValidator>
     <msg>
       <empty-input>Giá trị trường "{0}" không thể rỗng.</empty-input>
-      <invalid-char>Trường {0} chỉ chấp nhận các ký tự là chữ cái, chữ số, và dấu gạch dưới, dấu gạch ngang.</invalid-char>
+      <invalid-char>Trường {0} chỉ chấp nhận các ký tự là chữ cái, chữ số, và dấu gạch dưới, dấu gạch ngang.
+      </invalid-char>
     </msg>
   </IdentifierValidator>
   <!--
@@ -88,7 +90,8 @@
   <NameValidator>
     <msg>
       <empty-input>Giá trị trường "{0}" không thể rỗng.</empty-input>
-      <invalid-char>Trường {0} chỉ chấp nhận các ký tự là chữ cái, chữ số, dấu chấm, dấu gạch ngang và dấu gạch dưới.</invalid-char>
+      <invalid-char>Trường {0} chỉ chấp nhận các ký tự là chữ cái, chữ số, dấu chấm, dấu gạch ngang và dấu gạch dưới.
+      </invalid-char>
     </msg>
   </NameValidator>
   <!--
@@ -120,7 +123,7 @@
   <ValidGroupValidator>
     <msg>
       <empty-input>Hãy nhập một giá trị vào trường {0}.</empty-input>
-      <invalid-group-id>Không tìm  thấy nhóm {0}.</invalid-group-id>
+      <invalid-group-id>Không tìm thấy nhóm {0}.</invalid-group-id>
     </msg>
   </ValidGroupValidator>
   <!--
@@ -133,7 +136,8 @@
   -->
   <PermissionValidator>
     <msg>
-      <invalid-permission-input>Phân quyền không hợp lệ, định dạng phân quyền nên là thành viên:/Nhóm.</invalid-permission-input>
+      <invalid-permission-input>Phân quyền không hợp lệ, định dạng phân quyền nên là thành viên:/Nhóm.
+      </invalid-permission-input>
       <membership-group-not-found>Kiểu thành viên hoặc tên nhóm không tìm thấy.</membership-group-not-found>
     </msg>
   </PermissionValidator>
@@ -146,7 +150,8 @@
   -->
   <CheckAdminOrOwnerRoleInterceptor>
     <msg>
-      <owner-or-admin-require>Bạn cần đăng nhập hoặc có vai trò quản trị để thực hiện được hoạt động '{0}'.</owner-or-admin-require>
+      <owner-or-admin-require>Bạn cần đăng nhập hoặc có vai trò quản trị để thực hiện được hoạt động '{0}'.
+      </owner-or-admin-require>
     </msg>
   </CheckAdminOrOwnerRoleInterceptor>
   <!--
@@ -186,7 +191,8 @@
   #Throw in org.exoplatform.commons.utils.PageList, {0}=request page parameter, {1}=available pages parameter
   -->
   <PageList>
-    <page-out-of-range>Bạn đang cố gắng để nhận được trang {0}, nhưng chỉ có những trang {1} tồn tại.</page-out-of-range>
+    <page-out-of-range>Bạn đang cố gắng để nhận được trang {0}, nhưng chỉ có những trang {1} tồn tại.
+    </page-out-of-range>
   </PageList>
   <!--
   #Throw in exo.services.communication.message.impl.MessageServiceImpl. 
@@ -194,7 +200,9 @@
   -->
   <MessageService>
     <account-not-found>Không tìm thấy tài khoản {0} cho người dùng {1}.</account-not-found>
-    <invalid-standalone-message-address>Bạn đang sử dụng kiểu tài khoản đơn lẻ và dấu "\" trong đinh dạng địa chỉ {0} là không hợp lệ. Định đạng đúng của địa chỉ là: \người nhận#Tên tài khoản</invalid-standalone-message-address>
+    <invalid-standalone-message-address>Bạn đang sử dụng kiểu tài khoản đơn lẻ và dấu "\" trong đinh dạng địa chỉ {0} là
+      không hợp lệ. Định đạng đúng của địa chỉ là: \người nhận#Tên tài khoản
+    </invalid-standalone-message-address>
     <send-message-fail>Không thể gửi thông báo.Kiểm tra địa chỉ e-mail\n\ Lỗi: {0}</send-message-fail>
   </MessageService>
   <!--

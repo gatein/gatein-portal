@@ -23,53 +23,45 @@ import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.user.UserNode;
 
 /**
- * A class that contains combination of a portal name and a page node
- * to determine the target URL
- * 
+ * A class that contains combination of a portal name and a page node to determine the target URL
+ *
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class NavigationResource
-{
+public class NavigationResource {
 
-   /** . */
-   private final SiteType siteType;
-   
-   /** . */
-   private final String siteName;
-   
-   /** . */
-   private final String nodeURI;
+    /** . */
+    private final SiteType siteType;
 
-   public NavigationResource(UserNode node)
-   {
-      this(node.getNavigation().getKey().getType(), node.getNavigation().getKey().getName(), node.getURI());
-   }
+    /** . */
+    private final String siteName;
 
-   public NavigationResource(SiteKey siteKey, String nodeURI)
-   {
-      this(siteKey.getType(), siteKey.getName(), nodeURI);
-   }
+    /** . */
+    private final String nodeURI;
 
-   public NavigationResource(SiteType siteType, String portalName, String nodeURI)
-   {
-      this.siteType = siteType;
-      this.siteName = portalName;
-      this.nodeURI = nodeURI;
-   }
+    public NavigationResource(UserNode node) {
+        this(node.getNavigation().getKey().getType(), node.getNavigation().getKey().getName(), node.getURI());
+    }
 
-   public SiteType getSiteType()
-   {
-      return siteType;
-   }
-   
-   public String getSiteName()
-   {
-      return siteName;
-   }
+    public NavigationResource(SiteKey siteKey, String nodeURI) {
+        this(siteKey.getType(), siteKey.getName(), nodeURI);
+    }
 
-   public String getNodeURI()
-   {
-      return nodeURI;
-   }
+    public NavigationResource(SiteType siteType, String portalName, String nodeURI) {
+        this.siteType = siteType;
+        this.siteName = portalName;
+        this.nodeURI = nodeURI;
+    }
+
+    public SiteType getSiteType() {
+        return siteType;
+    }
+
+    public String getSiteName() {
+        return siteName;
+    }
+
+    public String getNodeURI() {
+        return nodeURI;
+    }
 }

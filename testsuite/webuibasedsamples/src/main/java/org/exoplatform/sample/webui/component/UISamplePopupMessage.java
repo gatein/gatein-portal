@@ -10,21 +10,17 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-@ComponentConfig(template = "app:/groovy/webui/component/UISamplePopupMessage.gtmpl", events = {@EventConfig(listeners = UISamplePopupMessage.ShowPopupMessageActionListener.class)})
-public class UISamplePopupMessage extends UIContainer
-{
-   static public class ShowPopupMessageActionListener extends EventListener<UISamplePopupMessage>
-   {
+@ComponentConfig(template = "app:/groovy/webui/component/UISamplePopupMessage.gtmpl", events = { @EventConfig(listeners = UISamplePopupMessage.ShowPopupMessageActionListener.class) })
+public class UISamplePopupMessage extends UIContainer {
+    public static class ShowPopupMessageActionListener extends EventListener<UISamplePopupMessage> {
 
-      @Override
-      public void execute(Event<UISamplePopupMessage> event) throws Exception
-      {
-         int popupType = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID));
+        @Override
+        public void execute(Event<UISamplePopupMessage> event) throws Exception {
+            int popupType = Integer.parseInt(event.getRequestContext().getRequestParameter(OBJECTID));
 
-         UIApplication uiApp =
-            ((PortletRequestContext)WebuiRequestContext.getCurrentInstance()).getUIApplication();
-         uiApp.addMessage(new ApplicationMessage("Test Message", null, popupType));
-      }
+            UIApplication uiApp = ((PortletRequestContext) WebuiRequestContext.getCurrentInstance()).getUIApplication();
+            uiApp.addMessage(new ApplicationMessage("Test Message", null, popupType));
+        }
 
-   }
+    }
 }

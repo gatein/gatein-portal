@@ -28,46 +28,40 @@ import org.xml.sax.SAXParseException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ValidationReporter implements ErrorHandler
-{
+public class ValidationReporter implements ErrorHandler {
 
-   /** . */
-   private final String identifier;
+    /** . */
+    private final String identifier;
 
-   /** . */
-   private boolean valid;
+    /** . */
+    private boolean valid;
 
-   /** . */
-   private Logger log;
+    /** . */
+    private Logger log;
 
-   public ValidationReporter(Logger log, String identifier)
-   {
-      this.identifier = identifier;
-      this.log = log;
-      this.valid = true;
-   }
+    public ValidationReporter(Logger log, String identifier) {
+        this.identifier = identifier;
+        this.log = log;
+        this.valid = true;
+    }
 
-   public boolean isValid()
-   {
-      return valid;
-   }
+    public boolean isValid() {
+        return valid;
+    }
 
-   public void warning(SAXParseException exception) throws SAXException
-   {
-      log.warn(exception.getMessage(), exception);
-   }
+    public void warning(SAXParseException exception) throws SAXException {
+        log.warn(exception.getMessage(), exception);
+    }
 
-   public void error(SAXParseException exception) throws SAXException
-   {
-      log.error("Error in document " + identifier + "  at (" + exception.getLineNumber() + "," + exception.getColumnNumber()
-               + ") :" + exception.getMessage());
-      valid = false;
-   }
+    public void error(SAXParseException exception) throws SAXException {
+        log.error("Error in document " + identifier + "  at (" + exception.getLineNumber() + "," + exception.getColumnNumber()
+                + ") :" + exception.getMessage());
+        valid = false;
+    }
 
-   public void fatalError(SAXParseException exception) throws SAXException
-   {
-      log.error("Fatal error in document " + identifier + "  at (" + exception.getLineNumber() + "," + exception.getColumnNumber()
-         + ") :" + exception.getMessage());
-      valid = false;
-   }
+    public void fatalError(SAXParseException exception) throws SAXException {
+        log.error("Fatal error in document " + identifier + "  at (" + exception.getLineNumber() + ","
+                + exception.getColumnNumber() + ") :" + exception.getMessage());
+        valid = false;
+    }
 }

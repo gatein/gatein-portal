@@ -25,10 +25,6 @@ package org.exoplatform.portal.mop.management.operations.site;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
-import org.exoplatform.portal.pom.data.PortalData;
-import org.exoplatform.portal.pom.data.PortalKey;
 import org.gatein.management.api.exceptions.OperationException;
 import org.gatein.management.api.exceptions.ResourceNotFoundException;
 import org.gatein.management.api.operation.OperationContext;
@@ -39,22 +35,19 @@ import org.gatein.mop.api.workspace.Site;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class SiteLayoutReadConfigAsXml extends AbstractSiteOperationHandler
-{
-   @Override
-   protected void execute(OperationContext operationContext, ResultHandler resultHandler, Site site) throws ResourceNotFoundException, OperationException
-   {
-      DataStorage dataStorage = operationContext.getRuntimeContext().getRuntimeComponent(DataStorage.class);
-      SiteKey siteKey = getSiteKey(site);
+public class SiteLayoutReadConfigAsXml extends AbstractSiteOperationHandler {
+    @Override
+    protected void execute(OperationContext operationContext, ResultHandler resultHandler, Site site)
+            throws ResourceNotFoundException, OperationException {
+        DataStorage dataStorage = operationContext.getRuntimeContext().getRuntimeComponent(DataStorage.class);
+        SiteKey siteKey = getSiteKey(site);
 
-      try
-      {
-         PortalConfig portalConfig = dataStorage.getPortalConfig(siteKey.getTypeName(), siteKey.getName());
-         resultHandler.completed(portalConfig);
-      }
-      catch (Exception e)
-      {
-         throw new OperationException(operationContext.getOperationName(), "Could not retrieve site layout for site " + site, e);
-      }
-   }
+        try {
+            PortalConfig portalConfig = dataStorage.getPortalConfig(siteKey.getTypeName(), siteKey.getName());
+            resultHandler.completed(portalConfig);
+        } catch (Exception e) {
+            throw new OperationException(operationContext.getOperationName(),
+                    "Could not retrieve site layout for site " + site, e);
+        }
+    }
 }

@@ -25,30 +25,25 @@ import org.exoplatform.web.controller.QualifiedName;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class RouteParamDescriptor extends ParamDescriptor
-{
+public class RouteParamDescriptor extends ParamDescriptor {
 
-   /** . */
-   private String value;
+    /** . */
+    private String value;
 
-   public RouteParamDescriptor(QualifiedName qualifiedName)
-   {
-      super(qualifiedName);
-   }
+    public RouteParamDescriptor(QualifiedName qualifiedName) {
+        super(qualifiedName);
+    }
 
-   public RouteParamDescriptor(String qualifiedName)
-   {
-      super(qualifiedName);
-   }
+    public RouteParamDescriptor(String qualifiedName) {
+        super(qualifiedName);
+    }
 
-   public RouteParamDescriptor withValue(String value)
-   {
-      this.value = value;
-      return this;
-   }
+    public RouteParamDescriptor withValue(String value) {
+        this.value = value;
+        return this;
+    }
 
-   public String getValue()
-   {
-      return value;
-   }
+    public String getValue() {
+        return value;
+    }
 }

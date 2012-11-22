@@ -33,74 +33,66 @@ import org.gatein.portal.controller.resource.ResourceRequestHandler;
 /**
  * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
  */
-public class BaseScriptResource<R extends Resource<R>> extends Resource<R>
-{
+public class BaseScriptResource<R extends Resource<R>> extends Resource<R> {
 
-   /** . */
-   ScriptGraph graph;
+    /** . */
+    ScriptGraph graph;
 
-   /** . */
-   private final Map<QualifiedName, String> parameters;
+    /** . */
+    private final Map<QualifiedName, String> parameters;
 
-   /** . */
-   private final Map<Locale, Map<QualifiedName, String>> parametersMap;
+    /** . */
+    private final Map<Locale, Map<QualifiedName, String>> parametersMap;
 
-   /** . */
-   private final Map<QualifiedName, String> minParameters;
+    /** . */
+    private final Map<QualifiedName, String> minParameters;
 
-   /** . */
-   private final  Map<Locale, Map<QualifiedName, String>> minParametersMap;
+    /** . */
+    private final Map<Locale, Map<QualifiedName, String>> minParametersMap;
 
+    BaseScriptResource(ScriptGraph graph, ResourceId id) {
+        super(id);
 
-   BaseScriptResource(ScriptGraph graph, ResourceId id)
-   {
-      super(id);
+        //
+        Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
+        parameters.put(WebAppController.HANDLER_PARAM, "script");
+        parameters.put(ResourceRequestHandler.RESOURCE_QN, id.getName());
+        parameters.put(ResourceRequestHandler.SCOPE_QN, id.getScope().name());
+        parameters.put(ResourceRequestHandler.COMPRESS_QN, "");
+        parameters.put(ResourceRequestHandler.VERSION_QN, ResourceRequestHandler.VERSION);
+        parameters.put(ResourceRequestHandler.LANG_QN, "");
 
-      //
-      Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
-      parameters.put(WebAppController.HANDLER_PARAM, "script");
-      parameters.put(ResourceRequestHandler.RESOURCE_QN, id.getName());
-      parameters.put(ResourceRequestHandler.SCOPE_QN, id.getScope().name());
-      parameters.put(ResourceRequestHandler.COMPRESS_QN, "");
-      parameters.put(ResourceRequestHandler.VERSION_QN, ResourceRequestHandler.VERSION);
-      parameters.put(ResourceRequestHandler.LANG_QN, "");
+        //
+        Map<QualifiedName, String> minifiedParameters = new HashMap<QualifiedName, String>(parameters);
+        minifiedParameters.put(ResourceRequestHandler.COMPRESS_QN, "min");
 
-      //
-      Map<QualifiedName, String> minifiedParameters = new HashMap<QualifiedName, String>(parameters);
-      minifiedParameters.put(ResourceRequestHandler.COMPRESS_QN, "min");
+        //
+        this.parameters = parameters;
+        this.minParameters = minifiedParameters;
+        this.graph = graph;
+        this.parametersMap = new HashMap<Locale, Map<QualifiedName, String>>();
+        this.minParametersMap = new HashMap<Locale, Map<QualifiedName, String>>();
+    }
 
-      //
-      this.parameters = parameters;
-      this.minParameters = minifiedParameters;
-      this.graph = graph;
-      this.parametersMap = new HashMap<Locale, Map<QualifiedName, String>>();
-      this.minParametersMap = new HashMap<Locale, Map<QualifiedName, String>>();
-   }
+    public Map<QualifiedName, String> getParameters(boolean minified, Locale locale) {
+        Map<Locale, Map<QualifiedName, String>> map = minified ? minParametersMap : parametersMap;
+        for (Locale current = locale; current != null; current = I18N.getParent(current)) {
+            Map<QualifiedName, String> ret = map.get(locale);
+            if (ret != null) {
+                return ret;
+            }
+        }
+        return minified ? minParameters : parameters;
+    }
 
-   public Map<QualifiedName, String> getParameters(boolean minified, Locale locale)
-   {
-      Map<Locale, Map<QualifiedName, String>> map = minified ? minParametersMap : parametersMap;
-      for (Locale current = locale;current != null;current = I18N.getParent(current))
-      {
-         Map<QualifiedName, String> ret = map.get(locale);
-         if (ret != null)
-         {
-            return ret;
-         }
-      }
-      return minified ? minParameters : parameters;
-   }
-   
-   public void addSupportedLocale(Locale locale)
-   {
-      if (!parametersMap.containsKey(locale))
-      {
-         Map<QualifiedName, String> localizedParameters = new HashMap<QualifiedName, String>(parameters);
-         localizedParameters.put(ResourceRequestHandler.LANG_QN, I18N.toTagIdentifier(locale));
-         parametersMap.put(locale, localizedParameters);
-         Map<QualifiedName, String> localizedMinParameters = new HashMap<QualifiedName, String>(minParameters);
-         localizedMinParameters.put(ResourceRequestHandler.LANG_QN, I18N.toTagIdentifier(locale));
-         minParametersMap.put(locale, localizedMinParameters);
-      }
-   }
+    public void addSupportedLocale(Locale locale) {
+        if (!parametersMap.containsKey(locale)) {
+            Map<QualifiedName, String> localizedParameters = new HashMap<QualifiedName, String>(parameters);
+            localizedParameters.put(ResourceRequestHandler.LANG_QN, I18N.toTagIdentifier(locale));
+            parametersMap.put(locale, localizedParameters);
+            Map<QualifiedName, String> localizedMinParameters = new HashMap<QualifiedName, String>(minParameters);
+            localizedMinParameters.put(ResourceRequestHandler.LANG_QN, I18N.toTagIdentifier(locale));
+            minParametersMap.put(locale, localizedMinParameters);
+        }
+    }
 }

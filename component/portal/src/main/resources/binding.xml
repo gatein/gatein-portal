@@ -24,9 +24,9 @@
   <format type="java.lang.String[]"
           serializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.serializeStringArray"
           deserializer="org.exoplatform.portal.config.serialize.JibxArraySerialize.deserializeStringArray"/>
-          
-  <mapping class="org.exoplatform.portal.config.model.Properties" name="properties" 
-           marshaller="org.exoplatform.portal.config.serialize.JibxPropertiesMapper" 
+
+  <mapping class="org.exoplatform.portal.config.model.Properties" name="properties"
+           marshaller="org.exoplatform.portal.config.serialize.JibxPropertiesMapper"
            unmarshaller="org.exoplatform.portal.config.serialize.JibxPropertiesMapper"/>
 
   <mapping class="org.exoplatform.portal.config.model.LocalizedString"
@@ -34,7 +34,7 @@
            unmarshaller="org.exoplatform.portal.config.serialize.LocalizedValueMapper"
            marshaller="org.exoplatform.portal.config.serialize.LocalizedValueMapper">
   </mapping>
-  
+
   <mapping name="portlet-application"
            label="portlet-application"
            class="org.exoplatform.portal.config.serialize.PortletApplication"
@@ -54,7 +54,7 @@
 
   <mapping name="site-body" label="siteBody" class="org.exoplatform.portal.config.model.SiteBody">
   </mapping>
-  
+
   <mapping name="container" label="container" class="org.exoplatform.portal.config.model.Container">
     <value name="id" usage="optional" field="id" style="attribute"/>
     <value name="name" usage="optional" field="name"/>
@@ -65,7 +65,7 @@
     <value name="factory-id" field="factoryId" usage="optional"/>
     <value name="decorator" field="decorator" usage="optional" style="attribute"/>
     <value name="description" field="description" usage="optional"/>
-    <value name="width" usage="optional" field="width" style="attribute" />
+    <value name="width" usage="optional" field="width" style="attribute"/>
     <value name="height" usage="optional" field="height" style="attribute"/>
     <collection field="children" ordered="false">
       <structure map-as="org.exoplatform.portal.config.model.Container" usage="optional"/>
@@ -75,7 +75,7 @@
       <structure map-as="org.exoplatform.portal.config.serialize.GadgetApplication" usage="optional"/>
     </collection>
   </mapping>
-  
+
   <mapping name="page" label="page" class="org.exoplatform.portal.config.model.Page">
     <structure name="page-id" usage="optional"/>
     <structure name="owner-type" usage="optional"/>
@@ -93,8 +93,8 @@
       <structure map-as="org.exoplatform.portal.config.serialize.GadgetApplication" usage="optional"/>
     </collection>
   </mapping>
-  
-   <mapping name="node" label="node" class="org.exoplatform.portal.config.model.PageNode">
+
+  <mapping name="node" label="node" class="org.exoplatform.portal.config.model.PageNode">
     <value name="uri" get-method="getUri" set-method="setUri" usage="optional"/>
     <value name="name" field="name"/>
     <collection field="labels" ordered="false" factory="org.exoplatform.portal.config.model.I18NString.create">
@@ -104,36 +104,41 @@
     <value name="start-publication-date" field="startPublicationDate" usage="optional"/>
     <value name="end-publication-date" field="endPublicationDate" usage="optional"/>
     <value name="visibility" field="visibility" usage="optional" default="DISPLAYED"/>
-    <value name="page-reference" field="pageReference" usage="optional" 
-    	deserializer="org.exoplatform.portal.config.serialize.JibxStringSerialize.deserializeString"/>
-    <collection get-method="getNodes" set-method="setNodes" usage="optional" item-type="org.exoplatform.portal.config.model.PageNode"/>
+    <value name="page-reference" field="pageReference" usage="optional"
+           deserializer="org.exoplatform.portal.config.serialize.JibxStringSerialize.deserializeString"/>
+    <collection get-method="getNodes" set-method="setNodes" usage="optional"
+                item-type="org.exoplatform.portal.config.model.PageNode"/>
   </mapping>
-  
+
   <mapping name="portal-config" class="org.exoplatform.portal.config.model.PortalConfig" ordered="false">
     <value name="portal-name" field="name"/>
-    <value name="label" field="label" default="" />
-    <value name="description" field="description" default="" />
-    <value name="locale" field="locale" />
+    <value name="label" field="label" default=""/>
+    <value name="description" field="description" default=""/>
+    <value name="locale" field="locale"/>
     <value name="access-permissions" field="accessPermissions" usage="optional"/>
     <value name="edit-permission" field="editPermission" usage="optional"/>
     <value name="skin" field="skin" usage="optional"/>
     <structure field="properties" usage="optional"/>
     <structure name="portal-layout" using="container" field="portalLayout" usage="optional"/>
-    <collection name="portal-redirects" usage="optional" get-method="getPortalRedirects" set-method="setPortalRedirects" item-type="org.exoplatform.portal.config.model.PortalRedirect"/>
+    <collection name="portal-redirects" usage="optional" get-method="getPortalRedirects" set-method="setPortalRedirects"
+                item-type="org.exoplatform.portal.config.model.PortalRedirect"/>
   </mapping>
 
   <mapping name="portal-redirect" label="portal-redirect" class="org.exoplatform.portal.config.model.PortalRedirect">
     <value name="redirect-site" field="redirectSite"/>
     <value name="name" field="name"/>
     <value name="enabled" field="enabled"/>
-    <collection name="conditions" usage="optional" get-method="getConditions" set-method="setConditions" item-type="org.exoplatform.portal.config.model.RedirectCondition"/>
+    <collection name="conditions" usage="optional" get-method="getConditions" set-method="setConditions"
+                item-type="org.exoplatform.portal.config.model.RedirectCondition"/>
     <structure usage="optional" field="mappings"/>
   </mapping>
 
   <mapping name="condition" label="condition" class="org.exoplatform.portal.config.model.RedirectCondition">
     <value name="name" field="name"/>
     <structure usage="optional" field="userAgentConditions"/>
-    <collection name="device-properties" usage="optional" get-method="getDeviceProperties" set-method="setDeviceProperties" item-type="org.exoplatform.portal.config.model.DevicePropertyCondition"/>
+    <collection name="device-properties" usage="optional" get-method="getDeviceProperties"
+                set-method="setDeviceProperties"
+                item-type="org.exoplatform.portal.config.model.DevicePropertyCondition"/>
   </mapping>
 
   <mapping name="user-agent" label="user-agent" class="org.exoplatform.portal.config.model.UserAgentConditions">
@@ -145,7 +150,8 @@
     </collection>
   </mapping>
 
-  <mapping name="device-property" label="device-property" class="org.exoplatform.portal.config.model.DevicePropertyCondition">
+  <mapping name="device-property" label="device-property"
+           class="org.exoplatform.portal.config.model.DevicePropertyCondition">
     <value name="property-name" field="propertyName"/>
     <value name="greater-than" field="greaterThan" usage="optional"/>
     <value name="less-than" field="lessThan" usage="optional"/>
@@ -156,7 +162,8 @@
   <mapping name="node-mapping" label="node-mapping" class="org.exoplatform.portal.config.model.RedirectMappings">
     <value name="use-node-name-matching" field="useNodeNameMatching" usage="optional"/>
     <value name="unresolved-nodes" field="unresolvedNode" usage="optional"/>
-    <collection item-type="org.exoplatform.portal.config.model.NodeMap" get-method="getMappings" set-method="setMappings" usage="optional"/>
+    <collection item-type="org.exoplatform.portal.config.model.NodeMap" get-method="getMappings"
+                set-method="setMappings" usage="optional"/>
   </mapping>
 
   <mapping name="node-map" label="map" class="org.exoplatform.portal.config.model.NodeMap">
@@ -184,8 +191,8 @@
     </collection>
   </mapping>
 
-  <mapping class="org.exoplatform.portal.application.Preference"  name="preference" label="preference">
-    <value name="name"  field="name"/>
+  <mapping class="org.exoplatform.portal.application.Preference" name="preference" label="preference">
+    <value name="name" field="name"/>
     <collection field="values" item-type="java.lang.String" factory="org.jibx.runtime.Utility.arrayListFactory">
       <value name="value" style="element"/>
     </collection>

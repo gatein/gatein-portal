@@ -26,18 +26,17 @@ import org.exoplatform.container.xml.InitParams;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ApplicationRegistryChromatticLifeCycle extends ChromatticLifeCycle
-{
+public class ApplicationRegistryChromatticLifeCycle extends ChromatticLifeCycle {
 
-   /** . */
-   ApplicationRegistryServiceImpl registry;
+    /** . */
+    ApplicationRegistryServiceImpl registry;
 
-   public ApplicationRegistryChromatticLifeCycle(InitParams params) {
-      super(params);
-   }
+    public ApplicationRegistryChromatticLifeCycle(InitParams params) {
+        super(params);
+    }
 
-   @Override
-   protected void onOpenSession(SessionContext context) {
-      context.getSession().addEventListener(new Injector(registry));
-   }
+    @Override
+    protected void onOpenSession(SessionContext context) {
+        context.getSession().addEventListener(new Injector(registry));
+    }
 }

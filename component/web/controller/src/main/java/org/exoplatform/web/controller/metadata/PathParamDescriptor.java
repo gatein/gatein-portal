@@ -26,90 +26,76 @@ import org.exoplatform.web.controller.router.EncodingMode;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PathParamDescriptor extends ParamDescriptor
-{
+public class PathParamDescriptor extends ParamDescriptor {
 
-   /** . */
-   private String pattern;
+    /** . */
+    private String pattern;
 
-   /** . */
-   private EncodingMode encodingMode;
+    /** . */
+    private EncodingMode encodingMode;
 
-   /** . */
-   private boolean captureGroup;
+    /** . */
+    private boolean captureGroup;
 
-   public PathParamDescriptor(QualifiedName qualifiedName)
-   {
-      super(qualifiedName);
+    public PathParamDescriptor(QualifiedName qualifiedName) {
+        super(qualifiedName);
 
-      //
-      this.encodingMode = EncodingMode.FORM;
-      this.captureGroup = false;
-   }
+        //
+        this.encodingMode = EncodingMode.FORM;
+        this.captureGroup = false;
+    }
 
-   public PathParamDescriptor(String qualifiedName)
-   {
-      super(qualifiedName);
+    public PathParamDescriptor(String qualifiedName) {
+        super(qualifiedName);
 
-      //
-      this.encodingMode = EncodingMode.FORM;
-   }
+        //
+        this.encodingMode = EncodingMode.FORM;
+    }
 
-   public PathParamDescriptor matchedBy(String pattern)
-   {
-      this.pattern = pattern;
-      return this;
-   }
+    public PathParamDescriptor matchedBy(String pattern) {
+        this.pattern = pattern;
+        return this;
+    }
 
-   public PathParamDescriptor encodedBy(EncodingMode encodingMode)
-   {
-      this.encodingMode = encodingMode;
-      return this;
-   }
+    public PathParamDescriptor encodedBy(EncodingMode encodingMode) {
+        this.encodingMode = encodingMode;
+        return this;
+    }
 
-   public PathParamDescriptor captureGroup(boolean capture)
-   {
-      this.captureGroup = capture;
-      return this;
-   }
+    public PathParamDescriptor captureGroup(boolean capture) {
+        this.captureGroup = capture;
+        return this;
+    }
 
-   public PathParamDescriptor preservePath()
-   {
-      return encodedBy(EncodingMode.PRESERVE_PATH);
-   }
+    public PathParamDescriptor preservePath() {
+        return encodedBy(EncodingMode.PRESERVE_PATH);
+    }
 
-   public PathParamDescriptor form()
-   {
-      return encodedBy(EncodingMode.FORM);
-   }
+    public PathParamDescriptor form() {
+        return encodedBy(EncodingMode.FORM);
+    }
 
-   public String getPattern()
-   {
-      return pattern;
-   }
+    public String getPattern() {
+        return pattern;
+    }
 
-   public void setPattern(String pattern)
-   {
-      this.pattern = pattern;
-   }
+    public void setPattern(String pattern) {
+        this.pattern = pattern;
+    }
 
-   public EncodingMode getEncodingMode()
-   {
-      return encodingMode;
-   }
+    public EncodingMode getEncodingMode() {
+        return encodingMode;
+    }
 
-   public void setEncodingMode(EncodingMode encodingMode)
-   {
-      this.encodingMode = encodingMode;
-   }
+    public void setEncodingMode(EncodingMode encodingMode) {
+        this.encodingMode = encodingMode;
+    }
 
-   public boolean getCaptureGroup()
-   {
-      return captureGroup;
-   }
+    public boolean getCaptureGroup() {
+        return captureGroup;
+    }
 
-   public void setCaptureGroup(boolean captureGroup)
-   {
-      this.captureGroup = captureGroup;
-   }
+    public void setCaptureGroup(boolean captureGroup) {
+        this.captureGroup = captureGroup;
+    }
 }

@@ -27,25 +27,21 @@ import org.exoplatform.services.listener.Listener;
 import org.exoplatform.web.application.RequestContext;
 
 /**
- * This listener attempts to find the {@link UserPortal} associated with the current request
- * and invalidate it when the navigation service emits an event for a navigation modification.
+ * This listener attempts to find the {@link UserPortal} associated with the current request and invalidate it when the
+ * navigation service emits an event for a navigation modification.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class RefreshCurrentUserPortal extends Listener<NavigationService, SiteKey>
-{
+public class RefreshCurrentUserPortal extends Listener<NavigationService, SiteKey> {
 
-   @Override
-   public void onEvent(Event<NavigationService, SiteKey> event) throws Exception
-   {
-      RequestContext ctx = RequestContext.getCurrentInstance();
-      if (ctx != null)
-      {
-         UserPortal userPortal = ctx.getUserPortal();
-         if (userPortal != null)
-         {
-            userPortal.refresh();
-         }
-      }
-   }
+    @Override
+    public void onEvent(Event<NavigationService, SiteKey> event) throws Exception {
+        RequestContext ctx = RequestContext.getCurrentInstance();
+        if (ctx != null) {
+            UserPortal userPortal = ctx.getUserPortal();
+            if (userPortal != null) {
+                userPortal.refresh();
+            }
+        }
+    }
 }

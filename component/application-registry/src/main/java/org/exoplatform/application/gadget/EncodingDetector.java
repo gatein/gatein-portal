@@ -18,59 +18,54 @@
  */
 package org.exoplatform.application.gadget;
 
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
 import org.xml.sax.Locator;
 import org.xml.sax.SAXException;
 import org.xml.sax.ext.Locator2;
 import org.xml.sax.helpers.DefaultHandler;
-import java.io.IOException;
-import java.io.InputStream;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class EncodingDetector extends DefaultHandler
-{
+public class EncodingDetector extends DefaultHandler {
 
-   public static String detect(InputStream in) throws IOException, ParserConfigurationException, SAXException
-   {
-      EncodingDetector detector = new EncodingDetector();
-      SAXParserFactory factory = SAXParserFactory.newInstance();
-      //Set below feature to avoid loading external DTD - a buggy and slow action.
-      factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-      SAXParser parser = factory.newSAXParser();
-      parser.parse(in, detector);
-      return detector.encoding;
-   }
+    public static String detect(InputStream in) throws IOException, ParserConfigurationException, SAXException {
+        EncodingDetector detector = new EncodingDetector();
+        SAXParserFactory factory = SAXParserFactory.newInstance();
+        // Set below feature to avoid loading external DTD - a buggy and slow action.
+        factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+        SAXParser parser = factory.newSAXParser();
+        parser.parse(in, detector);
+        return detector.encoding;
+    }
 
-   /** . */
-   private Locator2 locator;
+    /** . */
+    private Locator2 locator;
 
-   /** Use UTF-8 if nothing provided. */
-   private String encoding = "UTF-8";
+    /** Use UTF-8 if nothing provided. */
+    private String encoding = "UTF-8";
 
-   private EncodingDetector()
-   {
-   }
+    private EncodingDetector() {
+    }
 
-   @Override
-   public void setDocumentLocator(Locator locator)
-   {
-      if (locator instanceof Locator2)
-      {
-         this.locator = (Locator2)locator;
-      }
-   }
+    @Override
+    public void setDocumentLocator(Locator locator) {
+        if (locator instanceof Locator2) {
+            this.locator = (Locator2) locator;
+        }
+    }
 
-   @Override
-   public void startDocument() throws SAXException
-   {
-      if (locator != null)
-      {
-         encoding = locator.getEncoding();
-      }
-   }
+    @Override
+    public void startDocument() throws SAXException {
+        if (locator != null) {
+            encoding = locator.getEncoding();
+        }
+    }
 }

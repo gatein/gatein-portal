@@ -23,13 +23,13 @@
   -->
 
 <module xmlns="urn:jboss:module:1.0" name="org.gatein.naming">
-    <resources>
-        <!-- Insert resources here -->
-    </resources>
+  <resources>
+    <!-- Insert resources here -->
+  </resources>
 
-    <dependencies>
-        <module name="javax.api"/>
-        <module name="org.jboss.threads"/>
-        <module name="org.jboss.logging"/>
-    </dependencies>
+  <dependencies>
+    <module name="javax.api"/>
+    <module name="org.jboss.threads"/>
+    <module name="org.jboss.logging"/>
+  </dependencies>
 </module>

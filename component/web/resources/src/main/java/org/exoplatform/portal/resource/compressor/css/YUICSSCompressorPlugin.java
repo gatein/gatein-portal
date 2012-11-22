@@ -18,43 +18,38 @@
  */
 package org.exoplatform.portal.resource.compressor.css;
 
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
 import org.exoplatform.portal.resource.compressor.BaseResourceCompressorPlugin;
 import org.exoplatform.portal.resource.compressor.ResourceCompressorException;
 import org.exoplatform.portal.resource.compressor.ResourceType;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-
 /**
  * @author <a href="trong.tran@exoplatform.com">Trong Tran</a>
  * @version $Revision$
  */
 
-public class YUICSSCompressorPlugin extends BaseResourceCompressorPlugin
-{
-   private int lineBreakPos = -1;
-   
-   public YUICSSCompressorPlugin(InitParams params) throws Exception
-   {
-      super(params);
-      ValueParam lineBreakPosParam = params.getValueParam("line.break.position");
-      if(lineBreakPosParam != null)
-      {
-         this.lineBreakPos = Integer.parseInt(lineBreakPosParam.getValue());
-      }
-   }
+public class YUICSSCompressorPlugin extends BaseResourceCompressorPlugin {
+    private int lineBreakPos = -1;
 
-   public ResourceType getResourceType()
-   {
-      return ResourceType.STYLESHEET;
-   }
+    public YUICSSCompressorPlugin(InitParams params) throws Exception {
+        super(params);
+        ValueParam lineBreakPosParam = params.getValueParam("line.break.position");
+        if (lineBreakPosParam != null) {
+            this.lineBreakPos = Integer.parseInt(lineBreakPosParam.getValue());
+        }
+    }
 
-   public void compress(Reader input, Writer output) throws ResourceCompressorException, IOException
-   {
-      YUICSSCompressor yuicssCompressor = new YUICSSCompressor(input);
-      yuicssCompressor.compress(output, lineBreakPos);
-   }
+    public ResourceType getResourceType() {
+        return ResourceType.STYLESHEET;
+    }
+
+    public void compress(Reader input, Writer output) throws ResourceCompressorException, IOException {
+        YUICSSCompressor yuicssCompressor = new YUICSSCompressor(input);
+        yuicssCompressor.compress(output, lineBreakPos);
+    }
 }

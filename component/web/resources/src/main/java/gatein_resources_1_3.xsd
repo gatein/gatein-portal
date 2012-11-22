@@ -30,30 +30,30 @@
   <xs:element name="gatein-resources" xmlns:gt="http://www.gatein.org/xml/ns/gatein_resources_1_3">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="portal-skin" type="portal-skin" />
-        <xs:element name="portlet-skin" type="portlet-skin" />
-        <xs:element name="window-style" type="window-style" />
-        <xs:element name="javascript" type="javascript" />
-        <xs:element name="resource-bundle" type="resource-bundle" />
-        <xs:element name="portlet" type="portlet" />
-        <xs:element name="portal" type="portal" />
-        <xs:element name="module" type="module" />
-        <xs:element name="scripts" type="scripts" />
+        <xs:element name="portal-skin" type="portal-skin"/>
+        <xs:element name="portlet-skin" type="portlet-skin"/>
+        <xs:element name="window-style" type="window-style"/>
+        <xs:element name="javascript" type="javascript"/>
+        <xs:element name="resource-bundle" type="resource-bundle"/>
+        <xs:element name="portlet" type="portlet"/>
+        <xs:element name="portal" type="portal"/>
+        <xs:element name="module" type="module"/>
+        <xs:element name="scripts" type="scripts"/>
       </xs:choice>
     </xs:complexType>
-    
+
     <xs:unique name="shared-js-uniqueness">
-		<xs:selector xpath="gt:module|gt:scripts"/>
-		<xs:field xpath="gt:name"/>
-	 </xs:unique>
+      <xs:selector xpath="gt:module|gt:scripts"/>
+      <xs:field xpath="gt:name"/>
+    </xs:unique>
     <xs:unique name="portlet-js-uniqueness">
-		<xs:selector xpath="gt:portlet"/>
-		<xs:field xpath="gt:name"/>
-	 </xs:unique>
-	 <xs:unique name="portal-js-uniqueness">
-		<xs:selector xpath="gt:portal"/>
-		<xs:field xpath="gt:name"/>
-	 </xs:unique>    	    
+      <xs:selector xpath="gt:portlet"/>
+      <xs:field xpath="gt:name"/>
+    </xs:unique>
+    <xs:unique name="portal-js-uniqueness">
+      <xs:selector xpath="gt:portal"/>
+      <xs:field xpath="gt:name"/>
+    </xs:unique>
   </xs:element>
 
   <!-- Declares a portal skin resource -->
@@ -137,7 +137,7 @@
   <xs:complexType name="resource-bundle">
   </xs:complexType>
 
-  <xs:complexType name="module">  
+  <xs:complexType name="module">
     <xs:sequence>
       <xs:element name="name" type="xs:string" minOccurs="1" maxOccurs="1"/>
       <xs:element name="as" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -150,7 +150,7 @@
         <xs:sequence>
           <xs:element name="url" type="url" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
-      </xs:choice>          
+      </xs:choice>
       <xs:element name="depends" type="module-dependency" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
@@ -238,7 +238,7 @@
       <xs:element name="resource" type="xs:string" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
-  
+
   <xs:complexType name="script">
     <xs:sequence>
       <xs:choice>
@@ -248,13 +248,13 @@
       <xs:element name="resource-bundle" type="xs:string" minOccurs="0" maxOccurs="1"/>
     </xs:sequence>
   </xs:complexType>
-  
+
   <xs:complexType name="adapter" mixed="true">
     <xs:sequence>
       <xs:element name="include" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
     </xs:sequence>
   </xs:complexType>
-  
+
   <xs:simpleType name="url">
     <xs:restriction base="xs:string">
       <xs:pattern value="http(s)?://([a-zA-Z0-9\-\.]+/)*([a-zA-Z0-9\-\.])+"/>

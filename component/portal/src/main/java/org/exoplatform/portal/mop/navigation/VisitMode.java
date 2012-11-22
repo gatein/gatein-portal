@@ -25,30 +25,27 @@ package org.exoplatform.portal.mop.navigation;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class VisitMode
-{
+public class VisitMode {
 
-   /**
-    * Include node but its children should be left appart.
-    */
-   public static final VisitMode NO_CHILDREN = new VisitMode("NO_CHILDREN");
+    /**
+     * Include node but its children should be left appart.
+     */
+    public static final VisitMode NO_CHILDREN = new VisitMode("NO_CHILDREN");
 
-   /**
-    * Include node and its children.
-    */
-   public static final VisitMode ALL_CHILDREN = new VisitMode("ALL_CHILDREN");
+    /**
+     * Include node and its children.
+     */
+    public static final VisitMode ALL_CHILDREN = new VisitMode("ALL_CHILDREN");
 
-   /** . */
-   private final String name;
+    /** . */
+    private final String name;
 
-   private VisitMode(String name)
-   {
-      this.name = name;
-   }
+    private VisitMode(String name) {
+        this.name = name;
+    }
 
-   @Override
-   public String toString()
-   {
-      return "VisitMode[" + name + "]";
-   }
+    @Override
+    public String toString() {
+        return "VisitMode[" + name + "]";
+    }
 }

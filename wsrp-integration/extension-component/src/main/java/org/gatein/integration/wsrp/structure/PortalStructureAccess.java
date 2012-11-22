@@ -23,24 +23,24 @@
 
 package org.gatein.integration.wsrp.structure;
 
+import java.util.Collection;
+
 import org.exoplatform.portal.mop.page.PageKey;
 import org.gatein.mop.api.workspace.Page;
 import org.gatein.mop.api.workspace.ui.UIWindow;
-
-import java.util.Collection;
 
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public interface PortalStructureAccess
-{
-   Collection<Page> getPages();
+public interface PortalStructureAccess {
+    Collection<Page> getPages();
 
-   UIWindow getWindowFrom(String uuid);
+    UIWindow getWindowFrom(String uuid);
 
-   void saveChangesTo(UIWindow window);
+    void saveChangesTo(UIWindow window);
 
-   Page getPageFrom(org.exoplatform.portal.config.model.Page portalPage);
-   Page getPageFrom(PageKey pageKey);
+    Page getPageFrom(org.exoplatform.portal.config.model.Page portalPage);
+
+    Page getPageFrom(PageKey pageKey);
 }

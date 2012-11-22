@@ -24,63 +24,53 @@ import org.gatein.portal.controller.resource.ResourceId;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class DependencyDescriptor
-{
+public class DependencyDescriptor {
 
-   /** . */
-   private final ResourceId resourceId;
-   
-   /** . */
-   private final String alias;
+    /** . */
+    private final ResourceId resourceId;
 
-   /** . */
-   private String pluginRS;
+    /** . */
+    private final String alias;
 
-   public DependencyDescriptor(ResourceId resourceId) throws NullPointerException
-   {
-      this(resourceId, null, null);
-   }
-   
-   public DependencyDescriptor(ResourceId resourceId, String alias, String pluginRS) throws NullPointerException
-   {
-      if (resourceId == null)
-      {
-         throw new NullPointerException("No null resource id accepted");
-      }
+    /** . */
+    private String pluginRS;
 
-      //
-      this.resourceId = resourceId;
-      this.alias = alias;
-      this.pluginRS = pluginRS;
-   }
+    public DependencyDescriptor(ResourceId resourceId) throws NullPointerException {
+        this(resourceId, null, null);
+    }
 
-   public ResourceId getResourceId()
-   {
-      return resourceId;
-   }
+    public DependencyDescriptor(ResourceId resourceId, String alias, String pluginRS) throws NullPointerException {
+        if (resourceId == null) {
+            throw new NullPointerException("No null resource id accepted");
+        }
 
-   public String getAlias()
-   {
-      return alias;
-   }
+        //
+        this.resourceId = resourceId;
+        this.alias = alias;
+        this.pluginRS = pluginRS;
+    }
 
-   public String getPluginResource()
-   {
-      return pluginRS;
-   }
-   
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (obj == this)
-      {
-         return true;
-      }
-      if (obj instanceof DependencyDescriptor)
-      {
-         DependencyDescriptor that = (DependencyDescriptor)obj;
-         return resourceId.equals(that.resourceId);
-      }
-      return false;
-   }
+    public ResourceId getResourceId() {
+        return resourceId;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public String getPluginResource() {
+        return pluginRS;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof DependencyDescriptor) {
+            DependencyDescriptor that = (DependencyDescriptor) obj;
+            return resourceId.equals(that.resourceId);
+        }
+        return false;
+    }
 }

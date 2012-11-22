@@ -22,294 +22,294 @@
 
 <project name="module-repository" basedir="." default="modules">
 
-    <property name="output.dir" value="target/${server.name}"/>
+  <property name="output.dir" value="target/${server.name}"/>
 
-    <import file="lib.xml"/>
+  <import file="lib.xml"/>
 
-    <target name="copy-files">
-        <copy todir="${output.dir}">
-            <fileset dir="src/main/resources">
-                <include name="bin/**"/>
-            </fileset>
-            <fileset dir="src/main/resources">
-                <include name="domain/**"/>
-            </fileset>
-            <fileset dir="src/main/resources">
-                <include name="standalone/**"/>
-            </fileset>
-        </copy>
-        <!--chmod perm="+x">
-            <fileset dir="${output.dir}/bin">
-                <include name="**/*.sh"/>
-            </fileset>
-        </chmod-->
-    </target>
+  <target name="copy-files">
+    <copy todir="${output.dir}">
+      <fileset dir="src/main/resources">
+        <include name="bin/**"/>
+      </fileset>
+      <fileset dir="src/main/resources">
+        <include name="domain/**"/>
+      </fileset>
+      <fileset dir="src/main/resources">
+        <include name="standalone/**"/>
+      </fileset>
+    </copy>
+    <!--chmod perm="+x">
+        <fileset dir="${output.dir}/bin">
+            <include name="**/*.sh"/>
+        </fileset>
+    </chmod-->
+  </target>
 
-    <target name="make-dirs">
-        <mkdir dir="${output.dir}/domain/content"/>
-        <mkdir dir="${output.dir}/standalone/lib/ext"/>
-        <mkdir dir="${output.dir}/domain/lib/ext"/>
-    </target>
+  <target name="make-dirs">
+    <mkdir dir="${output.dir}/domain/content"/>
+    <mkdir dir="${output.dir}/standalone/lib/ext"/>
+    <mkdir dir="${output.dir}/domain/lib/ext"/>
+  </target>
 
-    <target name="modules">
+  <target name="modules">
 
-        <!--copy file="${org.jboss.modules:jboss-modules:jar}" tofile="${output.dir}/jboss-modules.jar"/-->
+    <!--copy file="${org.jboss.modules:jboss-modules:jar}" tofile="${output.dir}/jboss-modules.jar"/-->
 
-        <!--
-          ~ Complete list of modules to assemble.
-          ~
-          ~ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-          ~ +++++++   KEEP THIS LIST ALPHABETICAL BY MODULE NAME!   +++++++
-          ~ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-          -->
-        <module-def name="org.gatein">
-            <maven-resource group="org.gatein.portal" artifact="jboss-as7-integration-extension" />
-        </module-def>
+    <!--
+    ~ Complete list of modules to assemble.
+    ~
+    ~ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    ~ +++++++   KEEP THIS LIST ALPHABETICAL BY MODULE NAME!   +++++++
+    ~ +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    -->
+    <module-def name="org.gatein">
+      <maven-resource group="org.gatein.portal" artifact="jboss-as7-integration-extension"/>
+    </module-def>
 
-        <module-def name="org.gatein.lib">
-           <!-- maven-resource group="javax.activation" artifact="activation" / -->
-           <maven-resource group="aopalliance" artifact="aopalliance" />
-           <maven-resource group="bouncycastle" artifact="bcmail-jdk14" />
-           <maven-resource group="bouncycastle" artifact="bcprov-jdk14" />
-           <maven-resource group="caja" artifact="caja" />
-           <maven-resource group="com.google.javascript" artifact="closure-compiler" />
-           <maven-resource group="commons-chain" artifact="commons-chain" />
-           <!--<maven-resource group="commons-codec" artifact="commons-codec" />-->
-           <maven-resource group="commons-dbcp" artifact="commons-dbcp" />
-           <maven-resource group="commons-digester" artifact="commons-digester" />
-           <maven-resource group="commons-httpclient" artifact="commons-httpclient" />
-           <maven-resource group="oswego-concurrent" artifact="concurrent" />
-           <maven-resource group="net.sf.ehcache" artifact="ehcache-core" />
-           <maven-resource group="org.ccil.cowan.tagsoup" artifact="tagsoup" />
-           <maven-resource group="org.exoplatform.core" artifact="exo.core.component.database" />
-           <maven-resource group="org.exoplatform.core" artifact="exo.core.component.document" />
-           <maven-resource group="org.exoplatform.core" artifact="exo.core.component.ldap" />
-           <maven-resource group="org.exoplatform.core" artifact="exo.core.component.organization.api" />
-           <maven-resource group="org.exoplatform.core" artifact="exo.core.component.organization.jdbc" />
-           <maven-resource group="org.exoplatform.core" artifact="exo.core.component.organization.ldap" />
-           <maven-resource group="org.exoplatform.core" artifact="exo.core.component.security.core" />
-           <maven-resource group="org.exoplatform.core" artifact="exo.core.component.xml-processing" />
-           <maven-resource group="org.exoplatform.jcr" artifact="exo.jcr.component.core" />
-           <maven-resource group="org.exoplatform.jcr" artifact="exo.jcr.component.ext" />
-           <maven-resource group="org.exoplatform.jcr" artifact="exo.jcr.component.ftp" />
-           <maven-resource group="org.exoplatform.jcr" artifact="exo.jcr.component.webdav" />
-           <maven-resource group="org.exoplatform.jcr" artifact="exo.jcr.framework.command" />
-           <maven-resource group="org.exoplatform.jcr" artifact="exo.jcr.framework.web" />
-           <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.commons" />
-           <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.cache" />
-           <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.command" />
-           <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.common" />
-           <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.ext.cache.impl.jboss.v3" />
-           <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.container" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.application-registry" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.common" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.identity" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.management" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.pc" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.portal" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.resources" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.scripting" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.api" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.controller" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.resources" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.security" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.server" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.gadgets-core" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.core" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.dashboard" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.eXo" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.framework" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.portal" />
-           <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.portlet" />
-           <maven-resource group="org.exoplatform.ws" artifact="exo.ws.commons" />
-           <maven-resource group="org.exoplatform.ws" artifact="exo.ws.frameworks.json" />
-           <maven-resource group="org.exoplatform.ws" artifact="exo.ws.frameworks.servlet" />
-           <maven-resource group="org.exoplatform.ws" artifact="exo.ws.rest.core" />
-           <maven-resource group="org.exoplatform.ws" artifact="exo.ws.rest.ext" />
-           <maven-resource group="com.jhlabs" artifact="filters" />
-           <maven-resource group="org.gatein.management" artifact="gatein-management-api" />
-           <maven-resource group="org.gatein.management" artifact="gatein-management-spi" />
-           <maven-resource group="org.gatein.management" artifact="gatein-management-core" />
-           <maven-resource group="org.gatein.management" artifact="gatein-management-rest" />
-           <maven-resource group="org.gatein.web" artifact="redirect" />
-           <maven-resource group="org.codehaus.groovy" artifact="groovy-all" />
-           <maven-resource group="com.google.inject" artifact="guice" />
-           <maven-resource group="com.google.inject.extensions" artifact="guice-jmx" />
-           <maven-resource group="com.google.inject.extensions" artifact="guice-multibindings" />
-           <maven-resource group="howl" artifact="howl-logger" />
-           <maven-resource group="org.htmlparser" artifact="htmlparser" />
-           <maven-resource group="com.ibm.icu" artifact="icu4j" />
-           <maven-resource group="org.infinispan" artifact="infinispan-tree" />
-           <maven-resource group="org.jboss.cache" artifact="jbosscache-core" />
-           <!--maven-resource group="org.jboss.jbossts" artifact="jbossjts" /-->
-           <maven-resource group="org.jgroups" artifact="jgroups" />
-           <maven-resource group="org.jibx" artifact="jibx-bind" />
-           <maven-resource group="org.jibx" artifact="jibx-run" />
-           <maven-resource group="rhino" artifact="js" />
-           <maven-resource group="org.jsecurity" artifact="jsecurity" />
-           <maven-resource group="caja" artifact="json_simple" />
-           <maven-resource group="org.json" artifact="json" />
-           <maven-resource group="de.odysseus.juel" artifact="juel-impl" />
-           <maven-resource group="org.apache.lucene" artifact="lucene-core" />
-           <maven-resource group="org.apache.lucene" artifact="lucene-memory" />
-           <maven-resource group="org.apache.lucene" artifact="lucene-spellchecker" />
-           <maven-resource group="eu.medsea.mimeutil" artifact="mime-util" />
-           <maven-resource group="org.gatein.mop" artifact="mop-api" />
-           <maven-resource group="org.gatein.mop" artifact="mop-core" />
-           <maven-resource group="org.gatein.mop" artifact="mop-spi" />
-           <maven-resource group="net.sourceforge.nekohtml" artifact="nekohtml" />
-           <maven-resource group="net.oauth.core" artifact="oauth" />
-           <maven-resource group="org.apache.pdfbox" artifact="pdfbox" />
-           <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-api" />
-           <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-cache" />
-           <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-common" />
-           <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-core" />
-           <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-hibernate" />
-           <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-ldap" />
-           <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-spi" />
-           <maven-resource group="org.apache.poi" artifact="poi" />
-           <maven-resource group="org.apache.poi" artifact="poi-ooxml" />
-           <maven-resource group="org.apache.poi" artifact="poi-scratchpad" />
-           <maven-resource group="rome" artifact="rome" />
-           <maven-resource group="rome" artifact="modules" />
-           <maven-resource group="org.apache.sanselan" artifact="sanselan" />
-           <maven-resource group="org.gatein.shindig" artifact="shindig-common" />
-           <maven-resource group="org.gatein.shindig" artifact="shindig-features" />
-           <maven-resource group="org.gatein.shindig" artifact="shindig-gadgets" />
-           <maven-resource group="org.gatein.shindig" artifact="shindig-social-api" />
-           <maven-resource group="org.gatein.captcha" artifact="simplecaptcha" />
-           <maven-resource group="org.apache.tika" artifact="tika-core" />
-           <maven-resource group="org.apache.tika" artifact="tika-parsers" />
-           <maven-resource group="com.googlecode.juniversalchardet" artifact="juniversalchardet" />
-           <maven-resource group="org.apache.ws.commons" artifact="ws-commons-util" />
-           <maven-resource group="com.experlog" artifact="xapool" />
-           <maven-resource group="org.apache.xmlbeans" artifact="xmlbeans" />
-           <maven-resource group="com.thoughtworks.xstream" artifact="xstream" />
-        </module-def>
+    <module-def name="org.gatein.lib">
+      <!-- maven-resource group="javax.activation" artifact="activation" / -->
+      <maven-resource group="aopalliance" artifact="aopalliance"/>
+      <maven-resource group="bouncycastle" artifact="bcmail-jdk14"/>
+      <maven-resource group="bouncycastle" artifact="bcprov-jdk14"/>
+      <maven-resource group="caja" artifact="caja"/>
+      <maven-resource group="com.google.javascript" artifact="closure-compiler"/>
+      <maven-resource group="commons-chain" artifact="commons-chain"/>
+      <!--<maven-resource group="commons-codec" artifact="commons-codec" />-->
+      <maven-resource group="commons-dbcp" artifact="commons-dbcp"/>
+      <maven-resource group="commons-digester" artifact="commons-digester"/>
+      <maven-resource group="commons-httpclient" artifact="commons-httpclient"/>
+      <maven-resource group="oswego-concurrent" artifact="concurrent"/>
+      <maven-resource group="net.sf.ehcache" artifact="ehcache-core"/>
+      <maven-resource group="org.ccil.cowan.tagsoup" artifact="tagsoup"/>
+      <maven-resource group="org.exoplatform.core" artifact="exo.core.component.database"/>
+      <maven-resource group="org.exoplatform.core" artifact="exo.core.component.document"/>
+      <maven-resource group="org.exoplatform.core" artifact="exo.core.component.ldap"/>
+      <maven-resource group="org.exoplatform.core" artifact="exo.core.component.organization.api"/>
+      <maven-resource group="org.exoplatform.core" artifact="exo.core.component.organization.jdbc"/>
+      <maven-resource group="org.exoplatform.core" artifact="exo.core.component.organization.ldap"/>
+      <maven-resource group="org.exoplatform.core" artifact="exo.core.component.security.core"/>
+      <maven-resource group="org.exoplatform.core" artifact="exo.core.component.xml-processing"/>
+      <maven-resource group="org.exoplatform.jcr" artifact="exo.jcr.component.core"/>
+      <maven-resource group="org.exoplatform.jcr" artifact="exo.jcr.component.ext"/>
+      <maven-resource group="org.exoplatform.jcr" artifact="exo.jcr.component.ftp"/>
+      <maven-resource group="org.exoplatform.jcr" artifact="exo.jcr.component.webdav"/>
+      <maven-resource group="org.exoplatform.jcr" artifact="exo.jcr.framework.command"/>
+      <maven-resource group="org.exoplatform.jcr" artifact="exo.jcr.framework.web"/>
+      <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.commons"/>
+      <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.cache"/>
+      <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.command"/>
+      <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.common"/>
+      <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.ext.cache.impl.jboss.v3"/>
+      <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.container"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.application-registry"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.common"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.identity"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.management"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.pc"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.portal"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.resources"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.scripting"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.api"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.controller"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.resources"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.security"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.server"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.gadgets-core"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.core"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.dashboard"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.eXo"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.framework"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.portal"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.webui.portlet"/>
+      <maven-resource group="org.exoplatform.ws" artifact="exo.ws.commons"/>
+      <maven-resource group="org.exoplatform.ws" artifact="exo.ws.frameworks.json"/>
+      <maven-resource group="org.exoplatform.ws" artifact="exo.ws.frameworks.servlet"/>
+      <maven-resource group="org.exoplatform.ws" artifact="exo.ws.rest.core"/>
+      <maven-resource group="org.exoplatform.ws" artifact="exo.ws.rest.ext"/>
+      <maven-resource group="com.jhlabs" artifact="filters"/>
+      <maven-resource group="org.gatein.management" artifact="gatein-management-api"/>
+      <maven-resource group="org.gatein.management" artifact="gatein-management-spi"/>
+      <maven-resource group="org.gatein.management" artifact="gatein-management-core"/>
+      <maven-resource group="org.gatein.management" artifact="gatein-management-rest"/>
+      <maven-resource group="org.gatein.web" artifact="redirect"/>
+      <maven-resource group="org.codehaus.groovy" artifact="groovy-all"/>
+      <maven-resource group="com.google.inject" artifact="guice"/>
+      <maven-resource group="com.google.inject.extensions" artifact="guice-jmx"/>
+      <maven-resource group="com.google.inject.extensions" artifact="guice-multibindings"/>
+      <maven-resource group="howl" artifact="howl-logger"/>
+      <maven-resource group="org.htmlparser" artifact="htmlparser"/>
+      <maven-resource group="com.ibm.icu" artifact="icu4j"/>
+      <maven-resource group="org.infinispan" artifact="infinispan-tree"/>
+      <maven-resource group="org.jboss.cache" artifact="jbosscache-core"/>
+      <!--maven-resource group="org.jboss.jbossts" artifact="jbossjts" /-->
+      <maven-resource group="org.jgroups" artifact="jgroups"/>
+      <maven-resource group="org.jibx" artifact="jibx-bind"/>
+      <maven-resource group="org.jibx" artifact="jibx-run"/>
+      <maven-resource group="rhino" artifact="js"/>
+      <maven-resource group="org.jsecurity" artifact="jsecurity"/>
+      <maven-resource group="caja" artifact="json_simple"/>
+      <maven-resource group="org.json" artifact="json"/>
+      <maven-resource group="de.odysseus.juel" artifact="juel-impl"/>
+      <maven-resource group="org.apache.lucene" artifact="lucene-core"/>
+      <maven-resource group="org.apache.lucene" artifact="lucene-memory"/>
+      <maven-resource group="org.apache.lucene" artifact="lucene-spellchecker"/>
+      <maven-resource group="eu.medsea.mimeutil" artifact="mime-util"/>
+      <maven-resource group="org.gatein.mop" artifact="mop-api"/>
+      <maven-resource group="org.gatein.mop" artifact="mop-core"/>
+      <maven-resource group="org.gatein.mop" artifact="mop-spi"/>
+      <maven-resource group="net.sourceforge.nekohtml" artifact="nekohtml"/>
+      <maven-resource group="net.oauth.core" artifact="oauth"/>
+      <maven-resource group="org.apache.pdfbox" artifact="pdfbox"/>
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-api"/>
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-cache"/>
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-common"/>
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-core"/>
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-hibernate"/>
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-ldap"/>
+      <maven-resource group="org.picketlink.idm" artifact="picketlink-idm-spi"/>
+      <maven-resource group="org.apache.poi" artifact="poi"/>
+      <maven-resource group="org.apache.poi" artifact="poi-ooxml"/>
+      <maven-resource group="org.apache.poi" artifact="poi-scratchpad"/>
+      <maven-resource group="rome" artifact="rome"/>
+      <maven-resource group="rome" artifact="modules"/>
+      <maven-resource group="org.apache.sanselan" artifact="sanselan"/>
+      <maven-resource group="org.gatein.shindig" artifact="shindig-common"/>
+      <maven-resource group="org.gatein.shindig" artifact="shindig-features"/>
+      <maven-resource group="org.gatein.shindig" artifact="shindig-gadgets"/>
+      <maven-resource group="org.gatein.shindig" artifact="shindig-social-api"/>
+      <maven-resource group="org.gatein.captcha" artifact="simplecaptcha"/>
+      <maven-resource group="org.apache.tika" artifact="tika-core"/>
+      <maven-resource group="org.apache.tika" artifact="tika-parsers"/>
+      <maven-resource group="com.googlecode.juniversalchardet" artifact="juniversalchardet"/>
+      <maven-resource group="org.apache.ws.commons" artifact="ws-commons-util"/>
+      <maven-resource group="com.experlog" artifact="xapool"/>
+      <maven-resource group="org.apache.xmlbeans" artifact="xmlbeans"/>
+      <maven-resource group="com.thoughtworks.xstream" artifact="xstream"/>
+    </module-def>
 
-       <module-def name="org.gatein.wci">
-           <maven-resource group="org.gatein.wci" artifact="wci-jboss7" />
-           <maven-resource group="org.gatein.wci" artifact="wci-wci" />
-       </module-def>
+    <module-def name="org.gatein.wci">
+      <maven-resource group="org.gatein.wci" artifact="wci-jboss7"/>
+      <maven-resource group="org.gatein.wci" artifact="wci-wci"/>
+    </module-def>
 
-       <module-def name="org.gatein.common">
-           <maven-resource group="org.gatein.common" artifact="common-common" />
-           <maven-resource group="org.gatein.common" artifact="common-logging" />
-       </module-def>
+    <module-def name="org.gatein.common">
+      <maven-resource group="org.gatein.common" artifact="common-common"/>
+      <maven-resource group="org.gatein.common" artifact="common-logging"/>
+    </module-def>
 
-       <module-def name="org.gatein.pc">
-           <maven-resource group="org.gatein.pc" artifact="pc-api" />
-           <maven-resource group="org.gatein.pc" artifact="pc-portlet" />
-           <maven-resource group="org.gatein.pc" artifact="pc-bridge" />
-           <maven-resource group="org.gatein.pc" artifact="pc-controller" />
-           <maven-resource group="org.gatein.pc" artifact="pc-federation" />
-       </module-def>
+    <module-def name="org.gatein.pc">
+      <maven-resource group="org.gatein.pc" artifact="pc-api"/>
+      <maven-resource group="org.gatein.pc" artifact="pc-portlet"/>
+      <maven-resource group="org.gatein.pc" artifact="pc-bridge"/>
+      <maven-resource group="org.gatein.pc" artifact="pc-controller"/>
+      <maven-resource group="org.gatein.pc" artifact="pc-federation"/>
+    </module-def>
 
-       <module-def name="org.gatein.naming">
-           <maven-resource group="org.gatein.naming" artifact="gatein-naming" />
-       </module-def>
+    <module-def name="org.gatein.naming">
+      <maven-resource group="org.gatein.naming" artifact="gatein-naming"/>
+    </module-def>
 
-       <module-def name="org.gatein.sso">
-           <maven-resource group="org.gatein.sso" artifact="sso-auth-callback" />
-           <maven-resource group="org.gatein.sso" artifact="sso-agent" />
-           <maven-resource group="org.gatein.sso" artifact="spnego" />
-           <maven-resource group="org.gatein.sso" artifact="sso-saml-plugin" />
-           <maven-resource group="org.gatein.sso" artifact="sso-integration" />
-           <maven-resource group="org.jasig.cas.client" artifact="cas-client-core" />
-       </module-def>
+    <module-def name="org.gatein.sso">
+      <maven-resource group="org.gatein.sso" artifact="sso-auth-callback"/>
+      <maven-resource group="org.gatein.sso" artifact="sso-agent"/>
+      <maven-resource group="org.gatein.sso" artifact="spnego"/>
+      <maven-resource group="org.gatein.sso" artifact="sso-saml-plugin"/>
+      <maven-resource group="org.gatein.sso" artifact="sso-integration"/>
+      <maven-resource group="org.jasig.cas.client" artifact="cas-client-core"/>
+    </module-def>
 
-       <module-def name="org.picocontainer">
-          <maven-resource group="picocontainer" artifact="picocontainer" />
-       </module-def>
+    <module-def name="org.picocontainer">
+      <maven-resource group="picocontainer" artifact="picocontainer"/>
+    </module-def>
 
-       <module-def name="org.chromattic">
-          <maven-resource group="org.chromattic" artifact="chromattic.api" />
-          <maven-resource group="org.chromattic" artifact="chromattic.apt" />
-          <maven-resource group="org.chromattic" artifact="chromattic.common" />
-          <maven-resource group="org.chromattic" artifact="chromattic.core" />
-          <maven-resource group="org.chromattic" artifact="chromattic.ext" />
-          <maven-resource group="org.chromattic" artifact="chromattic.metamodel" />
-          <maven-resource group="org.chromattic" artifact="chromattic.spi" />
-       </module-def>
+    <module-def name="org.chromattic">
+      <maven-resource group="org.chromattic" artifact="chromattic.api"/>
+      <maven-resource group="org.chromattic" artifact="chromattic.apt"/>
+      <maven-resource group="org.chromattic" artifact="chromattic.common"/>
+      <maven-resource group="org.chromattic" artifact="chromattic.core"/>
+      <maven-resource group="org.chromattic" artifact="chromattic.ext"/>
+      <maven-resource group="org.chromattic" artifact="chromattic.metamodel"/>
+      <maven-resource group="org.chromattic" artifact="chromattic.spi"/>
+    </module-def>
 
-       <module-def name="org.reflext">
-          <maven-resource group="org.reflext" artifact="reflext.api" />
-          <maven-resource group="org.reflext" artifact="reflext.apt" />
-          <maven-resource group="org.reflext" artifact="reflext.core" />
-          <maven-resource group="org.reflext" artifact="reflext.jlr" />
-          <maven-resource group="org.reflext" artifact="reflext.spi" />
-       </module-def>
+    <module-def name="org.reflext">
+      <maven-resource group="org.reflext" artifact="reflext.api"/>
+      <maven-resource group="org.reflext" artifact="reflext.apt"/>
+      <maven-resource group="org.reflext" artifact="reflext.core"/>
+      <maven-resource group="org.reflext" artifact="reflext.jlr"/>
+      <maven-resource group="org.reflext" artifact="reflext.spi"/>
+    </module-def>
 
-       <module-def name="org.jboss.portletbridge.api">
-           <maven-resource group="org.jboss.portletbridge" artifact="portletbridge-api" />
-       </module-def>
+    <module-def name="org.jboss.portletbridge.api">
+      <maven-resource group="org.jboss.portletbridge" artifact="portletbridge-api"/>
+    </module-def>
 
-        <module-def name="org.jboss.portletbridge.impl">
-            <maven-resource group="org.jboss.portletbridge" artifact="portletbridge-impl" />
-        </module-def>
+    <module-def name="org.jboss.portletbridge.impl">
+      <maven-resource group="org.jboss.portletbridge" artifact="portletbridge-impl"/>
+    </module-def>
 
-       <module-def name="org.staxnav">
-           <maven-resource group="org.staxnav" artifact="staxnav.core" />
-       </module-def>
+    <module-def name="org.staxnav">
+      <maven-resource group="org.staxnav" artifact="staxnav.core"/>
+    </module-def>
 
-       <module-def name="javax.portlet.api">
-           <maven-resource group="javax.portlet" artifact="portlet-api" />
-       </module-def>
+    <module-def name="javax.portlet.api">
+      <maven-resource group="javax.portlet" artifact="portlet-api"/>
+    </module-def>
 
-       <module-def name="javax.ccpp.api">
-           <maven-resource group="javax.ccpp" artifact="ccpp" />
-       </module-def>
+    <module-def name="javax.ccpp.api">
+      <maven-resource group="javax.ccpp" artifact="ccpp"/>
+    </module-def>
 
-       <module-def name="javax.jcr.api">
-           <maven-resource group="javax.jcr" artifact="jcr" />
-       </module-def>
+    <module-def name="javax.jcr.api">
+      <maven-resource group="javax.jcr" artifact="jcr"/>
+    </module-def>
 
-       <module-def name="org.apache.commons-fileupload">
-          <maven-resource group="commons-fileupload" artifact="commons-fileupload" />
-       </module-def>
+    <module-def name="org.apache.commons-fileupload">
+      <maven-resource group="commons-fileupload" artifact="commons-fileupload"/>
+    </module-def>
 
-       <module-def name="org.apache.portals-bridges-common">
-           <maven-resource group="org.apache.portals.bridges" artifact="portals-bridges-common" />
-       </module-def>
+    <module-def name="org.apache.portals-bridges-common">
+      <maven-resource group="org.apache.portals.bridges" artifact="portals-bridges-common"/>
+    </module-def>
 
-       <module-def name="org.gatein.wsrp">
-          <maven-resource group="org.gatein.wsrp" artifact="wsrp-common" />
-          <maven-resource group="org.gatein.wsrp" artifact="wsrp-consumer" />
-          <maven-resource group="org.gatein.wsrp" artifact="wsrp-integration-api" />
-          <maven-resource group="org.gatein.wsrp" artifact="wsrp-jcr-impl" />
-          <maven-resource group="org.gatein.wsrp" artifact="wsrp-producer-lib" />
-          <maven-resource group="org.gatein.wsrp" artifact="wsrp-wsrp1-ws" />
-          <maven-resource group="org.gatein.wsrp" artifact="wsrp-wsrp2-ws" />
-          <maven-resource group="org.gatein.wsrp" artifact="wsrp-wss" />
-       </module-def>
+    <module-def name="org.gatein.wsrp">
+      <maven-resource group="org.gatein.wsrp" artifact="wsrp-common"/>
+      <maven-resource group="org.gatein.wsrp" artifact="wsrp-consumer"/>
+      <maven-resource group="org.gatein.wsrp" artifact="wsrp-integration-api"/>
+      <maven-resource group="org.gatein.wsrp" artifact="wsrp-jcr-impl"/>
+      <maven-resource group="org.gatein.wsrp" artifact="wsrp-producer-lib"/>
+      <maven-resource group="org.gatein.wsrp" artifact="wsrp-wsrp1-ws"/>
+      <maven-resource group="org.gatein.wsrp" artifact="wsrp-wsrp2-ws"/>
+      <maven-resource group="org.gatein.wsrp" artifact="wsrp-wss"/>
+    </module-def>
 
-       <module-def name="org.gatein.wsrp.integration">
-          <maven-resource group="org.gatein.integration" artifact="extension-config" />
-          <maven-resource group="org.gatein.integration" artifact="extension-component" />
-          <maven-resource group="org.gatein.wsrp" artifact="wsrp-wss-jboss7" />
-          <maven-resource group="org.gatein.wsrp" artifact="wsrp-cxf-integration"/>
-       </module-def>
+    <module-def name="org.gatein.wsrp.integration">
+      <maven-resource group="org.gatein.integration" artifact="extension-config"/>
+      <maven-resource group="org.gatein.integration" artifact="extension-component"/>
+      <maven-resource group="org.gatein.wsrp" artifact="wsrp-wss-jboss7"/>
+      <maven-resource group="org.gatein.wsrp" artifact="wsrp-cxf-integration"/>
+    </module-def>
 
-       <module-def name="org.gatein.wsrp.catalog">
-          <maven-resource group="org.gatein.wsrp" artifact="wsrp-catalog" />
-       </module-def>
+    <module-def name="org.gatein.wsrp.catalog">
+      <maven-resource group="org.gatein.wsrp" artifact="wsrp-catalog"/>
+    </module-def>
 
-       <module-def name="org.apache.commons-httpclient" slot="gatein">
-          <maven-resource group="commons-httpclient" artifact="commons-httpclient" />
-       </module-def>
+    <module-def name="org.apache.commons-httpclient" slot="gatein">
+      <maven-resource group="commons-httpclient" artifact="commons-httpclient"/>
+    </module-def>
 
-       <module-def name="org.xmlpull" slot="main">
-          <maven-resource group="xpp3" artifact="xpp3" />
-       </module-def>
-    </target>
+    <module-def name="org.xmlpull" slot="main">
+      <maven-resource group="xpp3" artifact="xpp3"/>
+    </module-def>
+  </target>
 
-    <target name="clean-target">
-        <delete dir="${output.dir}"/>
-    </target>
+  <target name="clean-target">
+    <delete dir="${output.dir}"/>
+  </target>
 
-    <target name="clean" depends="clean-target">
-        <delete file="maven-ant-tasks.jar"/>
-    </target>
+  <target name="clean" depends="clean-target">
+    <delete file="maven-ant-tasks.jar"/>
+  </target>
 
-    <target name="all" depends="clean-target, modules, copy-files, make-dirs"/>
+  <target name="all" depends="clean-target, modules, copy-files, make-dirs"/>
 </project>

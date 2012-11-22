@@ -25,232 +25,226 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+
 /**
  * Data structure that holds the inputs for {@link LocalePolicy} pluggable policies mechanism.
  *
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class LocaleContextInfo
-{
-   private Set<Locale> supportedLocales;
-   private List<Locale> browserLocales;
-   private List<Locale> cookieLocales;
-   private Locale userProfileLocale;
-   private String remoteUser;
-   private Locale portalLocale;
-   private Locale sessionLocale;
-   private Locale requestLocale;
+public class LocaleContextInfo {
+    private Set<Locale> supportedLocales;
+    private List<Locale> browserLocales;
+    private List<Locale> cookieLocales;
+    private Locale userProfileLocale;
+    private String remoteUser;
+    private Locale portalLocale;
+    private Locale sessionLocale;
+    private Locale requestLocale;
 
-   /**
-    * Setter for supportedLocales
-    * @param supportedLocales locales supported by portal
-    */
-   public void setSupportedLocales(Set<Locale> supportedLocales)
-   {
-      this.supportedLocales = supportedLocales;
-   }
+    /**
+     * Setter for supportedLocales
+     *
+     * @param supportedLocales locales supported by portal
+     */
+    public void setSupportedLocales(Set<Locale> supportedLocales) {
+        this.supportedLocales = supportedLocales;
+    }
 
-   /**
-    * Getter for supportedLocales
-    * @return supportedLocales
-    */
-   public Set<Locale> getSupportedLocales()
-   {
-      return supportedLocales;
-   }
+    /**
+     * Getter for supportedLocales
+     *
+     * @return supportedLocales
+     */
+    public Set<Locale> getSupportedLocales() {
+        return supportedLocales;
+    }
 
-   /**
-    * Setter for browserLocales
-    * @param browserLocales list of locales as preferred by client's browser
-    */
-   public void setBrowserLocales(List<Locale> browserLocales)
-   {
-      this.browserLocales = browserLocales;
-   }
+    /**
+     * Setter for browserLocales
+     *
+     * @param browserLocales list of locales as preferred by client's browser
+     */
+    public void setBrowserLocales(List<Locale> browserLocales) {
+        this.browserLocales = browserLocales;
+    }
 
-   /**
-    * Getter for browserLocales
-    * @return browserLocales
-    */
-   public List<Locale> getBrowserLocales()
-   {
-      return browserLocales;
-   }
+    /**
+     * Getter for browserLocales
+     *
+     * @return browserLocales
+     */
+    public List<Locale> getBrowserLocales() {
+        return browserLocales;
+    }
 
-   /**
-    * Setter for cookieLocales
-    * @param cookieLocales locales stored in user's browser cookie
-    */
-   public void setCookieLocales(List<Locale> cookieLocales)
-   {
-      this.cookieLocales = cookieLocales;
-   }
+    /**
+     * Setter for cookieLocales
+     *
+     * @param cookieLocales locales stored in user's browser cookie
+     */
+    public void setCookieLocales(List<Locale> cookieLocales) {
+        this.cookieLocales = cookieLocales;
+    }
 
-   /**
-    * Getter for cookieLocales
-    * @return cookieLocales
-    */
-   public List<Locale> getCookieLocales()
-   {
-      return cookieLocales;
-   }
+    /**
+     * Getter for cookieLocales
+     *
+     * @return cookieLocales
+     */
+    public List<Locale> getCookieLocales() {
+        return cookieLocales;
+    }
 
-   /**
-    * Setter for userProfileLocale
-    * @param userProfileLocale locale loaded from user's profile
-    */
-   public void setUserProfileLocale(Locale userProfileLocale)
-   {
-      this.userProfileLocale = userProfileLocale;
-   }
+    /**
+     * Setter for userProfileLocale
+     *
+     * @param userProfileLocale locale loaded from user's profile
+     */
+    public void setUserProfileLocale(Locale userProfileLocale) {
+        this.userProfileLocale = userProfileLocale;
+    }
 
-   /**
-    * Getter for userProfileLocale
-    * @return userProfileLocale
-    */
-   public Locale getUserProfileLocale()
-   {
-      return userProfileLocale;
-   }
+    /**
+     * Getter for userProfileLocale
+     *
+     * @return userProfileLocale
+     */
+    public Locale getUserProfileLocale() {
+        return userProfileLocale;
+    }
 
-   /**
-    * Setter for remoteUser
-    * @param remoteUser username of the currently logged in user. Null for anonymous users.
-    */
-   public void setRemoteUser(String remoteUser)
-   {
-      this.remoteUser = remoteUser;
-   }
+    /**
+     * Setter for remoteUser
+     *
+     * @param remoteUser username of the currently logged in user. Null for anonymous users.
+     */
+    public void setRemoteUser(String remoteUser) {
+        this.remoteUser = remoteUser;
+    }
 
-   /**
-    * Getter for remoteUser
-    * @return remoteUser
-    */
-   public String getRemoteUser()
-   {
-      return remoteUser;
-   }
+    /**
+     * Getter for remoteUser
+     *
+     * @return remoteUser
+     */
+    public String getRemoteUser() {
+        return remoteUser;
+    }
 
-   /**
-    * Setter for portalLocale
-    * @param portalLocale default locale configured for the portal
-    */
-   public void setPortalLocale(Locale portalLocale)
-   {
-      this.portalLocale = portalLocale;
-   }
+    /**
+     * Setter for portalLocale
+     *
+     * @param portalLocale default locale configured for the portal
+     */
+    public void setPortalLocale(Locale portalLocale) {
+        this.portalLocale = portalLocale;
+    }
 
-   /**
-    * Getter for portalLocale
-    * @return portalLocale
-    */
-   public Locale getPortalLocale()
-   {
-      return portalLocale;
-   }
+    /**
+     * Getter for portalLocale
+     *
+     * @return portalLocale
+     */
+    public Locale getPortalLocale() {
+        return portalLocale;
+    }
 
-   /**
-    * Setter for sessionLocale
-    * @param locale Locale stored in current session
-    */
-   public void setSessionLocale(Locale locale)
-   {
-      this.sessionLocale = locale;
-   }
+    /**
+     * Setter for sessionLocale
+     *
+     * @param locale Locale stored in current session
+     */
+    public void setSessionLocale(Locale locale) {
+        this.sessionLocale = locale;
+    }
 
-   /**
-    * Getter for sessionLocale
-    * @return sessionLocale
-    */
-   public Locale getSessionLocale()
-   {
-      return sessionLocale;
-   }
-   
-   /**
-    * Getter for requestLocale
-    * @return requestLocale
-    */
-   public Locale getRequestLocale()
-   {
-      return requestLocale;
-   }
+    /**
+     * Getter for sessionLocale
+     *
+     * @return sessionLocale
+     */
+    public Locale getSessionLocale() {
+        return sessionLocale;
+    }
 
-   /**
-    * Setter for requestLocale
-    * @param requestLocale default locale configured for the request
-    */
-   public void setRequestLocale(Locale requestLocale)
-   {
-      this.requestLocale = requestLocale;
-   }
+    /**
+     * Getter for requestLocale
+     *
+     * @return requestLocale
+     */
+    public Locale getRequestLocale() {
+        return requestLocale;
+    }
 
-   /**
-    * Helper method that returns the locale only if it's supported by portal.
-    * Otherwise it returns null.
-    *
-    * @param locale locale to check
-    * @return original locale if supported, null otherwise
-    */
-   public Locale getLocaleIfSupported(Locale locale)
-   {
-      if (locale == null)
-         return null;
-      if (supportedLocales.contains(locale))
-         return locale;
-      return null;
-   }
+    /**
+     * Setter for requestLocale
+     *
+     * @param requestLocale default locale configured for the request
+     */
+    public void setRequestLocale(Locale requestLocale) {
+        this.requestLocale = requestLocale;
+    }
 
-   /**
-    * Helper method that returns the locale only if it's language is supported by portal.
-    * Otherwise it returns null.
-    *
-    * @param locale locale to check
-    * @return original locale if language is supported, null otherwise
-    */
-   public Locale getLocaleIfLangSupported(Locale locale)
-   {
-      if (locale == null)
-         return null;
-      if (supportedLocales.contains(locale))
-         return locale;
-
-      if ("".equals(locale.getCountry()) == false)
-      {
-         Locale loc = new Locale(locale.getLanguage());
-         if (supportedLocales.contains(loc))
-         {
-            // return original locale
+    /**
+     * Helper method that returns the locale only if it's supported by portal. Otherwise it returns null.
+     *
+     * @param locale locale to check
+     * @return original locale if supported, null otherwise
+     */
+    public Locale getLocaleIfSupported(Locale locale) {
+        if (locale == null)
+            return null;
+        if (supportedLocales.contains(locale))
             return locale;
-         }
-      }
-      return null;
-   }
+        return null;
+    }
 
-   /**
-    * Helper method to convert String representation of Locale into Locale object.
-    * @param portalLocaleName String representation of Locale
-    * @return locale
-    */
-   public static Locale getLocale(String portalLocaleName)
-   {
-      int pos = portalLocaleName.indexOf("_");
-      if (pos < 0)
-         return new Locale(portalLocaleName);
+    /**
+     * Helper method that returns the locale only if it's language is supported by portal. Otherwise it returns null.
+     *
+     * @param locale locale to check
+     * @return original locale if language is supported, null otherwise
+     */
+    public Locale getLocaleIfLangSupported(Locale locale) {
+        if (locale == null)
+            return null;
+        if (supportedLocales.contains(locale))
+            return locale;
 
-      return new Locale(portalLocaleName.substring(0, pos), portalLocaleName.substring(pos+1));
-   }
+        if ("".equals(locale.getCountry()) == false) {
+            Locale loc = new Locale(locale.getLanguage());
+            if (supportedLocales.contains(loc)) {
+                // return original locale
+                return locale;
+            }
+        }
+        return null;
+    }
 
-   /**
-    * Helper method to get a String representation of the Locale
-    * @param locale
-    * @return String representation of the locale
-    */
-   public static String getLocaleAsString(Locale locale)
-   {
-      if (locale.getCountry().length() == 0)
-         return locale.getLanguage();
+    /**
+     * Helper method to convert String representation of Locale into Locale object.
+     *
+     * @param portalLocaleName String representation of Locale
+     * @return locale
+     */
+    public static Locale getLocale(String portalLocaleName) {
+        int pos = portalLocaleName.indexOf("_");
+        if (pos < 0)
+            return new Locale(portalLocaleName);
 
-      return locale.getLanguage() + "_" + locale.getCountry();
-   }
+        return new Locale(portalLocaleName.substring(0, pos), portalLocaleName.substring(pos + 1));
+    }
+
+    /**
+     * Helper method to get a String representation of the Locale
+     *
+     * @param locale
+     * @return String representation of the locale
+     */
+    public static String getLocaleAsString(Locale locale) {
+        if (locale.getCountry().length() == 0)
+            return locale.getLanguage();
+
+        return locale.getLanguage() + "_" + locale.getCountry();
+    }
 }

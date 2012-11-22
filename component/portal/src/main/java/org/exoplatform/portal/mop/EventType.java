@@ -25,29 +25,27 @@ package org.exoplatform.portal.mop;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class EventType
-{
+public final class EventType {
 
-   private EventType()
-   {
-   }
+    private EventType() {
+    }
 
-   /** . */
-   public final static String NAVIGATION_CREATED = "org.exoplatform.portal.mop.navigation.navigation_created";
+    /** . */
+    public static final String NAVIGATION_CREATED = "org.exoplatform.portal.mop.navigation.navigation_created";
 
-   /** . */
-   public final static String NAVIGATION_DESTROYED = "org.exoplatform.portal.mop.navigation.navigation_destroyed";
+    /** . */
+    public static final String NAVIGATION_DESTROYED = "org.exoplatform.portal.mop.navigation.navigation_destroyed";
 
-   /** . */
-   public final static String NAVIGATION_UPDATED = "org.exoplatform.portal.mop.navigation.navigation_updated";
+    /** . */
+    public static final String NAVIGATION_UPDATED = "org.exoplatform.portal.mop.navigation.navigation_updated";
 
-   /** . */
-   public final static String PAGE_CREATED = "org.exoplatform.portal.mop.page.page_created";
+    /** . */
+    public static final String PAGE_CREATED = "org.exoplatform.portal.mop.page.page_created";
 
-   /** . */
-   public final static String PAGE_DESTROYED = "org.exoplatform.portal.mop.page.page_destroyed";
+    /** . */
+    public static final String PAGE_DESTROYED = "org.exoplatform.portal.mop.page.page_destroyed";
 
-   /** . */
-   public final static String PAGE_UPDATED = "org.exoplatform.portal.mop.page.page_updated";
+    /** . */
+    public static final String PAGE_UPDATED = "org.exoplatform.portal.mop.page.page_updated";
 
 }

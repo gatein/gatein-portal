@@ -22,144 +22,125 @@
 
 package org.jboss.gatein.selenium;
 
-import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.Selenium;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.log4testng.Logger;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public abstract class AbstractTestCase
-{
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
+import org.testng.log4testng.Logger;
 
-   public Selenium selenium;
+import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.Selenium;
 
-   public String speed = "100";
-   public String timeout = "30000";
-   public int timeoutSecInt = 30;
-   public String browser = "firefox";
-   public String host = "localhost";
-   public String hostPort = "8080";
-   public String host2 = "localhost";
-   public String host2Port = "8080";
-   public String seleniumPort = "6666";
-   public String portalPath = "/portal/public/classic";
-   public boolean ieFlag = false;
-   public String wsrpVersion = "v1";
+public abstract class AbstractTestCase {
 
-   protected Logger log = Logger.getLogger(getClass());
+    public Selenium selenium;
 
-   protected static Properties propsMes;
+    public String speed = "100";
+    public String timeout = "30000";
+    public int timeoutSecInt = 30;
+    public String browser = "firefox";
+    public String host = "localhost";
+    public String hostPort = "8080";
+    public String host2 = "localhost";
+    public String host2Port = "8080";
+    public String seleniumPort = "6666";
+    public String portalPath = "/portal/public/classic";
+    public boolean ieFlag = false;
+    public String wsrpVersion = "v1";
 
-   static
-   {
-      try
-      {
-         propsMes = getProperties("org/jboss/gatein/selenium/messages.properties");
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-      }
-   }
+    protected Logger log = Logger.getLogger(getClass());
 
-   protected static SeleniumContext currentSeleniumContext;
+    protected static Properties propsMes;
 
-   public static SeleniumContext getCurrentSeleniumContext()
-   {
-      return currentSeleniumContext;
-   }
+    static {
+        try {
+            propsMes = getProperties("org/jboss/gatein/selenium/messages.properties");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-   public void setInitialTestParameters()
-   {
-      setTimeout();
-      setSpeed();
-   }
+    protected static SeleniumContext currentSeleniumContext;
 
-   public void setTimeout()
-   {
-      selenium.setTimeout(timeout);
-   }
+    public static SeleniumContext getCurrentSeleniumContext() {
+        return currentSeleniumContext;
+    }
 
-   public void setSpeed()
-   {
-      selenium.setSpeed(speed);
-   }
+    public void setInitialTestParameters() {
+        setTimeout();
+        setSpeed();
+    }
 
-   @BeforeClass(alwaysRun = true)
-   public void setUp() throws Exception
-   {
-      initSystemProperties();
-      selenium = new DefaultSelenium("127.0.0.1", Integer.parseInt(seleniumPort), "*" + browser, "http://" + host + ":" + hostPort);
-      TestCaseFailListener.selenium = selenium;
-      selenium.start();
-      currentSeleniumContext = new SeleniumContext(selenium, timeout, portalPath, browser);
-      setInitialTestParameters(); // initialization of speed and timeout
-      selenium.windowMaximize(); // running tests in maximize window
-   }
+    public void setTimeout() {
+        selenium.setTimeout(timeout);
+    }
 
-   @AfterClass(alwaysRun = true)
-   public void tearDown() throws Exception
-   {
-      selenium.stop();
-      currentSeleniumContext = null;
-   }
+    public void setSpeed() {
+        selenium.setSpeed(speed);
+    }
 
-   public void initSystemProperties()
-   {
-      browser = System.getProperty("selenium.browser", browser);
-      timeout = System.getProperty("selenium.timeout", timeout);
-      timeoutSecInt = Integer.parseInt(timeout) / 1000;
-      speed = System.getProperty("selenium.speed", speed);
-      host = System.getProperty("selenium.host", host);
-      hostPort = System.getProperty("selenium.host.port", hostPort);
-      host2 = System.getProperty("selenium.host2", host2);
-      host2Port = System.getProperty("selenium.host2.port", host2Port);
-      seleniumPort = System.getProperty("selenium.port", seleniumPort);
-      portalPath = System.getProperty("portal.path", portalPath);
-      wsrpVersion = System.getProperty("wsrp.version", wsrpVersion);
-      ieFlag = browser.contains("iexplore");
-   }
+    @BeforeClass(alwaysRun = true)
+    public void setUp() throws Exception {
+        initSystemProperties();
+        selenium = new DefaultSelenium("127.0.0.1", Integer.parseInt(seleniumPort), "*" + browser, "http://" + host + ":"
+                + hostPort);
+        TestCaseFailListener.selenium = selenium;
+        selenium.start();
+        currentSeleniumContext = new SeleniumContext(selenium, timeout, portalPath, browser);
+        setInitialTestParameters(); // initialization of speed and timeout
+        selenium.windowMaximize(); // running tests in maximize window
+    }
 
-   public static String getMessage(String property)
-   {
-      return getProperty(propsMes, property, null);
-   }
+    @AfterClass(alwaysRun = true)
+    public void tearDown() throws Exception {
+        selenium.stop();
+        currentSeleniumContext = null;
+    }
 
-   public static String getMessage(String property, String subst)
-   {
-      return getProperty(propsMes, property, subst);
-   }
+    public void initSystemProperties() {
+        browser = System.getProperty("selenium.browser", browser);
+        timeout = System.getProperty("selenium.timeout", timeout);
+        timeoutSecInt = Integer.parseInt(timeout) / 1000;
+        speed = System.getProperty("selenium.speed", speed);
+        host = System.getProperty("selenium.host", host);
+        hostPort = System.getProperty("selenium.host.port", hostPort);
+        host2 = System.getProperty("selenium.host2", host2);
+        host2Port = System.getProperty("selenium.host2.port", host2Port);
+        seleniumPort = System.getProperty("selenium.port", seleniumPort);
+        portalPath = System.getProperty("portal.path", portalPath);
+        wsrpVersion = System.getProperty("wsrp.version", wsrpVersion);
+        ieFlag = browser.contains("iexplore");
+    }
 
-   private static String getProperty(Properties properties, String property,
-                                     String subst)
-   {
+    public static String getMessage(String property) {
+        return getProperty(propsMes, property, null);
+    }
 
-      if (subst == null || "".equals(subst))
-      {
-         subst = "Substitude not set";
-      }
+    public static String getMessage(String property, String subst) {
+        return getProperty(propsMes, property, subst);
+    }
 
-      if (properties == null)
-      {
-         return subst;
-      }
-      else
-      {
-         String message = properties.getProperty(property);
-         return message != null ? message : subst;
-      }
-   }
+    private static String getProperty(Properties properties, String property, String subst) {
 
-   private static Properties getProperties(String resource) throws IOException
-   {
-      ClassLoader cl = ClassLoader.getSystemClassLoader();
-      InputStream is = cl.getResourceAsStream(resource);
-      Properties props = new Properties();
-      props.load(is);
-      return props;
-   }
+        if (subst == null || "".equals(subst)) {
+            subst = "Substitude not set";
+        }
+
+        if (properties == null) {
+            return subst;
+        } else {
+            String message = properties.getProperty(property);
+            return message != null ? message : subst;
+        }
+    }
+
+    private static Properties getProperties(String resource) throws IOException {
+        ClassLoader cl = ClassLoader.getSystemClassLoader();
+        InputStream is = cl.getResourceAsStream(resource);
+        Properties props = new Properties();
+        props.load(is);
+        return props;
+    }
 }

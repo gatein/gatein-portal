@@ -25,8 +25,8 @@
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gadgets_1_0"
     xmlns="http://www.gatein.org/xml/ns/gadgets_1_0">
 
-	<gadget name="SiteExportImport">
-		<path>/exportimport/Application.gadget.xml</path>
-	</gadget>
+  <gadget name="SiteExportImport">
+    <path>/exportimport/Application.gadget.xml</path>
+  </gadget>
 
 </gadgets>

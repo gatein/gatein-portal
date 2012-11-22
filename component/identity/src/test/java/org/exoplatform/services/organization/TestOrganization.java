@@ -19,259 +19,229 @@
 
 package org.exoplatform.services.organization;
 
+import java.util.Collection;
+import java.util.List;
+
 import junit.framework.Assert;
+
 import org.exoplatform.commons.utils.PageList;
 import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.services.organization.GroupHandler;
-import org.exoplatform.services.organization.OrganizationService;
-import org.exoplatform.services.organization.User;
-import org.exoplatform.services.organization.UserHandler;
-
-import java.util.Collection;
-import java.util.List;
 
 /**
- * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov
- * 13, 2007
+ * Created by The eXo Platform SARL Author : Tung Pham thanhtungty@gmail.com Nov 13, 2007
  */
 @ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/services/organization/TestOrganization-configuration.xml")
-})
-public class TestOrganization extends AbstractKernelTest
-{
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/services/organization/TestOrganization-configuration.xml") })
+public class TestOrganization extends AbstractKernelTest {
 
-   private static final String GROUP_1 = "testOrganization_group1";
-   private static final String GROUP_2 = "testOrganization_group2";
-   private static final String GROUP_3 = "testOrganization_group3";
+    private static final String GROUP_1 = "testOrganization_group1";
+    private static final String GROUP_2 = "testOrganization_group2";
+    private static final String GROUP_3 = "testOrganization_group3";
 
-   private static final String USER_1 = "testOrganization_user1";
-   private static final String USER_2 = "testOrganization_user2";
-   private static final String USER_3 = "testOrganization_user3";
-   private static final String DEFAULT_PASSWORD = "defaultpassword";
-   private static final String DESCRIPTION = " Description";
+    private static final String USER_1 = "testOrganization_user1";
+    private static final String USER_2 = "testOrganization_user2";
+    private static final String USER_3 = "testOrganization_user3";
+    private static final String DEFAULT_PASSWORD = "defaultpassword";
+    private static final String DESCRIPTION = " Description";
 
-   private OrganizationService organizationService;
+    private OrganizationService organizationService;
 
-   @Override
-   protected void setUp() throws Exception
-   {
-      super.setUp();
-      begin();
-      PortalContainer container = getContainer();
-      organizationService = (OrganizationService)container.getComponentInstance(OrganizationService.class);
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        begin();
+        PortalContainer container = getContainer();
+        organizationService = (OrganizationService) container.getComponentInstance(OrganizationService.class);
 
-      createGroup(null, GROUP_1);
-      createGroup(GROUP_1, GROUP_2);
-      createGroup(GROUP_1, GROUP_3);
+        createGroup(null, GROUP_1);
+        createGroup(GROUP_1, GROUP_2);
+        createGroup(GROUP_1, GROUP_3);
 
-      createUser(USER_1, GROUP_1);
-      createUser(USER_2, GROUP_2);
-      createUser(USER_3, GROUP_1);
-   }
+        createUser(USER_1, GROUP_1);
+        createUser(USER_2, GROUP_2);
+        createUser(USER_3, GROUP_1);
+    }
 
-   @Override
-   protected void tearDown() throws Exception
-   {
-      deleteGroup(GROUP_1);
-      deleteGroup(GROUP_2);
-      deleteGroup(GROUP_3);
+    @Override
+    protected void tearDown() throws Exception {
+        deleteGroup(GROUP_1);
+        deleteGroup(GROUP_2);
+        deleteGroup(GROUP_3);
 
-      deleteUser(USER_1);
-      deleteUser(USER_2);
-      deleteUser(USER_3);
+        deleteUser(USER_1);
+        deleteUser(USER_2);
+        deleteUser(USER_3);
 
-      end();
-      super.tearDown();
-   }
+        end();
+        super.tearDown();
+    }
 
-   public void testFindGroupNotFound() throws Exception {
-      GroupHandler groupHander = organizationService.getGroupHandler();
-      Group group = groupHander.findGroupById(GROUP_1 + "NOTFOUND");
-      assertNull(group);
-   }
+    public void testFindGroupNotFound() throws Exception {
+        GroupHandler groupHander = organizationService.getGroupHandler();
+        Group group = groupHander.findGroupById(GROUP_1 + "NOTFOUND");
+        assertNull(group);
+    }
 
-   public void testFindGroupFromRoot() throws Exception
-   {
-      GroupHandler handler = organizationService.getGroupHandler();
-      Collection allGroups = handler.findGroups(null);
-      Assert.assertTrue(allGroups.size() > 0);
-   }
+    public void testFindGroupFromRoot() throws Exception {
+        GroupHandler handler = organizationService.getGroupHandler();
+        Collection allGroups = handler.findGroups(null);
+        Assert.assertTrue(allGroups.size() > 0);
+    }
 
-   public void testFindGroupById() throws Exception
-   {
-      GroupHandler groupHandler = organizationService.getGroupHandler();
-      Group group = groupHandler.findGroupById(GROUP_1);
-      assertNotNull(group);
-      assertEquals(GROUP_1, group.getGroupName());
-      assertEquals(GROUP_1 + DESCRIPTION, group.getDescription());
+    public void testFindGroupById() throws Exception {
+        GroupHandler groupHandler = organizationService.getGroupHandler();
+        Group group = groupHandler.findGroupById(GROUP_1);
+        assertNotNull(group);
+        assertEquals(GROUP_1, group.getGroupName());
+        assertEquals(GROUP_1 + DESCRIPTION, group.getDescription());
 
-      group = groupHandler.findGroupById(GROUP_3);
-      assertNotNull(group);
-      assertEquals(GROUP_3, group.getGroupName());
-   }
+        group = groupHandler.findGroupById(GROUP_3);
+        assertNotNull(group);
+        assertEquals(GROUP_3, group.getGroupName());
+    }
 
-   public void testFindGroupOfUser() {
-      GroupHandler groupHandler = organizationService.getGroupHandler();
-      try {
-         Collection<Group> groups = groupHandler.findGroupsOfUser(USER_1);
-         assertNotNull(groups);
-         assertTrue(groups.size() >= 1);
-      } catch (Exception e) {
-         fail();
-      }
-   }
+    public void testFindGroupOfUser() {
+        GroupHandler groupHandler = organizationService.getGroupHandler();
+        try {
+            Collection<Group> groups = groupHandler.findGroupsOfUser(USER_1);
+            assertNotNull(groups);
+            assertTrue(groups.size() >= 1);
+        } catch (Exception e) {
+            fail();
+        }
+    }
 
-   public void testFindUserByGroup() throws Exception
-   {
-      GroupHandler groupHandler = organizationService.getGroupHandler();
-      Group group = groupHandler.findGroupById(GROUP_1);
-      UserHandler uHandler = organizationService.getUserHandler();
-      PageList users = uHandler.findUsersByGroup("/platform/administrators");
-      Assert.assertTrue(users.getAvailable() > 0);
+    public void testFindUserByGroup() throws Exception {
+        GroupHandler groupHandler = organizationService.getGroupHandler();
+        Group group = groupHandler.findGroupById(GROUP_1);
+        UserHandler uHandler = organizationService.getUserHandler();
+        PageList users = uHandler.findUsersByGroup("/platform/administrators");
+        Assert.assertTrue(users.getAvailable() > 0);
 
-      List iterator = users.getAll();
-      for (Object test : iterator)
-      {
-         User a = (User)test;
-         System.out.println(a.getUserName());
-      }
-   }
+        List iterator = users.getAll();
+        for (Object test : iterator) {
+            User a = (User) test;
+            System.out.println(a.getUserName());
+        }
+    }
 
-   public void testChangePassword() throws Exception
-   {
-      UserHandler uHandler = organizationService.getUserHandler();
-      User user = uHandler.findUserByName("root");
-      Assert.assertNotNull(user);
-      Assert.assertTrue(uHandler.authenticate("root", "gtn"));
+    public void testChangePassword() throws Exception {
+        UserHandler uHandler = organizationService.getUserHandler();
+        User user = uHandler.findUserByName("root");
+        Assert.assertNotNull(user);
+        Assert.assertTrue(uHandler.authenticate("root", "gtn"));
 
-      // Test changing password
-      user.setPassword("newPassword");
-      uHandler.saveUser(user, false);
-      user = uHandler.findUserByName("root");
-      Assert.assertNotNull(user);
-      Assert.assertTrue(uHandler.authenticate("root", "newPassword"));
+        // Test changing password
+        user.setPassword("newPassword");
+        uHandler.saveUser(user, false);
+        user = uHandler.findUserByName("root");
+        Assert.assertNotNull(user);
+        Assert.assertTrue(uHandler.authenticate("root", "newPassword"));
 
-      // Reset to default password
-      user.setPassword("gtn");
-      uHandler.saveUser(user, false);
+        // Reset to default password
+        user.setPassword("gtn");
+        uHandler.saveUser(user, false);
 
-   }
+    }
 
-   public void testDisplayName() throws Exception
-   {
-      UserHandler uHandler = organizationService.getUserHandler();
-      User john = uHandler.findUserByName("john");
+    public void testDisplayName() throws Exception {
+        UserHandler uHandler = organizationService.getUserHandler();
+        User john = uHandler.findUserByName("john");
 
-      Assert.assertNotNull(john);
+        Assert.assertNotNull(john);
 
-      // Test that fullName is working correctly for "john"
-      Assert.assertEquals("John Anthony", john.getFullName());
-      john.setFullName("Johnny Something");
-      uHandler.saveUser(john, false);
-      john = uHandler.findUserByName("john");
-      Assert.assertEquals("Johnny Something", john.getFullName());
+        // Test that fullName is working correctly for "john"
+        Assert.assertEquals("John Anthony", john.getFullName());
+        john.setFullName("Johnny Something");
+        uHandler.saveUser(john, false);
+        john = uHandler.findUserByName("john");
+        Assert.assertEquals("Johnny Something", john.getFullName());
 
-      // Now delete fullName and assert that it's "firstName lastName"
-      john.setFullName(null);
-      uHandler.saveUser(john, false);
-      john = uHandler.findUserByName("john");
-      Assert.assertEquals("John Anthony", john.getFullName());
+        // Now delete fullName and assert that it's "firstName lastName"
+        john.setFullName(null);
+        uHandler.saveUser(john, false);
+        john = uHandler.findUserByName("john");
+        Assert.assertEquals("John Anthony", john.getFullName());
 
-//    TODO: GTNPORTAL-2358 uncomment once displayName will be available      
-//      // Test that "root" and "john" have displayName but demo not.
-//      Assert.assertEquals("Root Root", root.getDisplayName());
-//      Assert.assertEquals("john@localhost", john.getDisplayName());
-//      Assert.assertNull(demo.getDisplayName());
-//
-//      // Change displayName of john and test that it's changed
-//      john.setDisplayName("John Anthony");
-//      uHandler.saveUser(john, false);
-//      john = uHandler.findUserByName("john");
-//      Assert.assertEquals("John Anthony", john.getDisplayName());
-//
-//      // Assign displayName to demo and test that it's changed
-//      demo.setDisplayName("Demo Demo");
-//      uHandler.saveUser(demo, false);
-//      demo = uHandler.findUserByName("demo");
-//      Assert.assertEquals("Demo Demo", demo.getDisplayName());
-   }
+        // TODO: GTNPORTAL-2358 uncomment once displayName will be available
+        // // Test that "root" and "john" have displayName but demo not.
+        // Assert.assertEquals("Root Root", root.getDisplayName());
+        // Assert.assertEquals("john@localhost", john.getDisplayName());
+        // Assert.assertNull(demo.getDisplayName());
+        //
+        // // Change displayName of john and test that it's changed
+        // john.setDisplayName("John Anthony");
+        // uHandler.saveUser(john, false);
+        // john = uHandler.findUserByName("john");
+        // Assert.assertEquals("John Anthony", john.getDisplayName());
+        //
+        // // Assign displayName to demo and test that it's changed
+        // demo.setDisplayName("Demo Demo");
+        // uHandler.saveUser(demo, false);
+        // demo = uHandler.findUserByName("demo");
+        // Assert.assertEquals("Demo Demo", demo.getDisplayName());
+    }
 
-   private void createGroup(String parent, String name)
-   {
-      GroupHandler groupHandler = organizationService.getGroupHandler();
-      try
-      {
-         Group parentGroup = null;
-         if (parent != null)
-         {
-            parentGroup = groupHandler.findGroupById(parent);
-         }
-         Group newGroup = groupHandler.createGroupInstance();
-         newGroup.setGroupName(name);
-         newGroup.setDescription(name + DESCRIPTION);
-         newGroup.setLabel(name);
-         if (parentGroup != null)
-         {
-            groupHandler.addChild(parentGroup, newGroup, true);
-         }
-         groupHandler.saveGroup(newGroup, true);
-      }
+    private void createGroup(String parent, String name) {
+        GroupHandler groupHandler = organizationService.getGroupHandler();
+        try {
+            Group parentGroup = null;
+            if (parent != null) {
+                parentGroup = groupHandler.findGroupById(parent);
+            }
+            Group newGroup = groupHandler.createGroupInstance();
+            newGroup.setGroupName(name);
+            newGroup.setDescription(name + DESCRIPTION);
+            newGroup.setLabel(name);
+            if (parentGroup != null) {
+                groupHandler.addChild(parentGroup, newGroup, true);
+            }
+            groupHandler.saveGroup(newGroup, true);
+        }
 
-      catch (Exception e)
-      {
-         e.printStackTrace();
-         fail("Error on create group [" + name + "] " + e.getMessage());
-      }
-   }
-   private void deleteGroup(String name)
-   {
-      GroupHandler groupHandler = organizationService.getGroupHandler();
-      try
-      {
-         Group group = groupHandler.findGroupById(name);
-         groupHandler.removeGroup(group, true);
-      }
-      catch (Exception e)
-      {
-      }
-   }
+        catch (Exception e) {
+            e.printStackTrace();
+            fail("Error on create group [" + name + "] " + e.getMessage());
+        }
+    }
 
-   private void createUser(String username, String... groups)
-   {
-      UserHandler userHandler = organizationService.getUserHandler();
-      User user = userHandler.createUserInstance(username);
-      user.setPassword(DEFAULT_PASSWORD);
-      user.setFirstName("default");
-      user.setLastName("default");
-      user.setEmail("exo@exoportal.org");
-      user.setOrganizationId(groups[0]);
-      try
-      {
-         userHandler.createUser(user, true);
-      }
-      catch (Exception e)
-      {
-         e.printStackTrace();
-         fail("Error on create user: " + e.getMessage());
-      }
-   }
+    private void deleteGroup(String name) {
+        GroupHandler groupHandler = organizationService.getGroupHandler();
+        try {
+            Group group = groupHandler.findGroupById(name);
+            groupHandler.removeGroup(group, true);
+        } catch (Exception e) {
+        }
+    }
 
-   private void deleteUser(String username)
-   {
-      UserHandler userHandler = organizationService.getUserHandler();
-      try
-      {
-         userHandler.removeUser(username, true);
-      }
-      catch (Exception e)
-      {
+    private void createUser(String username, String... groups) {
+        UserHandler userHandler = organizationService.getUserHandler();
+        User user = userHandler.createUserInstance(username);
+        user.setPassword(DEFAULT_PASSWORD);
+        user.setFirstName("default");
+        user.setLastName("default");
+        user.setEmail("exo@exoportal.org");
+        user.setOrganizationId(groups[0]);
+        try {
+            userHandler.createUser(user, true);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail("Error on create user: " + e.getMessage());
+        }
+    }
 
-      }
-   }
+    private void deleteUser(String username) {
+        UserHandler userHandler = organizationService.getUserHandler();
+        try {
+            userHandler.removeUser(username, true);
+        } catch (Exception e) {
+
+        }
+    }
 }

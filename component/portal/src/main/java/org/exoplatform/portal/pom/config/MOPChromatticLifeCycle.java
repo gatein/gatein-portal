@@ -29,27 +29,23 @@ import org.exoplatform.portal.mop.i18n.Injector;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class MOPChromatticLifeCycle extends ChromatticLifeCycle
-{
+public class MOPChromatticLifeCycle extends ChromatticLifeCycle {
 
-   /** . */
-   POMSessionManager manager;
+    /** . */
+    POMSessionManager manager;
 
-   public MOPChromatticLifeCycle(InitParams params)
-   {
-      super(params);
-   }
+    public MOPChromatticLifeCycle(InitParams params) {
+        super(params);
+    }
 
-   @Override
-   protected void onOpenSession(SessionContext context)
-   {
-      POMSession session = new POMSession(manager, this, context);
-      context.getSession().addEventListener(new Injector(context.getSession()));
-      context.setAttachment("mopsession", session);
-   }
+    @Override
+    protected void onOpenSession(SessionContext context) {
+        POMSession session = new POMSession(manager, this, context);
+        context.getSession().addEventListener(new Injector(context.getSession()));
+        context.setAttachment("mopsession", session);
+    }
 
-   @Override
-   protected void onCloseSession(SessionContext context)
-   {
-   }
+    @Override
+    protected void onCloseSession(SessionContext context) {
+    }
 }

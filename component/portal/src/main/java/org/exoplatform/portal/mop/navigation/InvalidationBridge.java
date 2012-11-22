@@ -19,8 +19,6 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.mop.SiteType;
-
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 import javax.jcr.observation.Event;
@@ -28,96 +26,85 @@ import javax.jcr.observation.EventIterator;
 import javax.jcr.observation.EventListener;
 import javax.jcr.observation.ObservationManager;
 
+import org.exoplatform.portal.mop.SiteType;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class InvalidationBridge
-{
+class InvalidationBridge {
 
-   /** . */
-   private final DataCache cache;
+    /** . */
+    private final DataCache cache;
 
-   /** . */
-   private ObservationManager mgr;
+    /** . */
+    private ObservationManager mgr;
 
-   /** . */
-   private final EventListenerImpl portalBridge;
+    /** . */
+    private final EventListenerImpl portalBridge;
 
-   /** . */
-   private final EventListenerImpl groupBridge;
+    /** . */
+    private final EventListenerImpl groupBridge;
 
-   /** . */
-   private final EventListenerImpl userBridge;
+    /** . */
+    private final EventListenerImpl userBridge;
 
-   public InvalidationBridge(DataCache cache)
-   {
-      this.cache = cache;
-      this.portalBridge = new EventListenerImpl("mop:portalsites", SiteType.PORTAL);
-      this.groupBridge = new EventListenerImpl("mop:groupsites", SiteType.GROUP);
-      this.userBridge = new EventListenerImpl("mop:usersites", SiteType.USER);
-   }
+    public InvalidationBridge(DataCache cache) {
+        this.cache = cache;
+        this.portalBridge = new EventListenerImpl("mop:portalsites", SiteType.PORTAL);
+        this.groupBridge = new EventListenerImpl("mop:groupsites", SiteType.GROUP);
+        this.userBridge = new EventListenerImpl("mop:usersites", SiteType.USER);
+    }
 
-   void start(Session session) throws RepositoryException
-   {
-      mgr = session.getWorkspace().getObservationManager();
+    void start(Session session) throws RepositoryException {
+        mgr = session.getWorkspace().getObservationManager();
 
-      //
-      portalBridge.register(mgr);
-      groupBridge.register(mgr);
-      userBridge.register(mgr);
-   }
+        //
+        portalBridge.register(mgr);
+        groupBridge.register(mgr);
+        userBridge.register(mgr);
+    }
 
-   void stop()
-   {
-      portalBridge.unregister();
-      groupBridge.unregister();
-      userBridge.unregister();
-   }
+    void stop() {
+        portalBridge.unregister();
+        groupBridge.unregister();
+        userBridge.unregister();
+    }
 
-   private class EventListenerImpl implements EventListener
-   {
+    private class EventListenerImpl implements EventListener {
 
-      /** . */
-      private final String nodeType;
+        /** . */
+        private final String nodeType;
 
-      /** . */
-      private final SiteType type;
+        /** . */
+        private final SiteType type;
 
-      /** . */
-      private ObservationManager mgr;
+        /** . */
+        private ObservationManager mgr;
 
-      private EventListenerImpl(String nodeType, SiteType type)
-      {
-         this.nodeType = nodeType;
-         this.type = type;
-      }
+        private EventListenerImpl(String nodeType, SiteType type) {
+            this.nodeType = nodeType;
+            this.type = type;
+        }
 
-      void register(ObservationManager mgr) throws RepositoryException
-      {
-         mgr.addEventListener(this, Event.NODE_REMOVED, "/", true, null, new String[]{nodeType}, false);
+        void register(ObservationManager mgr) throws RepositoryException {
+            mgr.addEventListener(this, Event.NODE_REMOVED, "/", true, null, new String[] { nodeType }, false);
 
-         //
-         this.mgr = mgr;
-      }
+            //
+            this.mgr = mgr;
+        }
 
-      void unregister()
-      {
-         if (mgr != null)
-         {
-            try
-            {
-               mgr.removeEventListener(this);
+        void unregister() {
+            if (mgr != null) {
+                try {
+                    mgr.removeEventListener(this);
+                } catch (RepositoryException ignore) {
+                }
             }
-            catch (RepositoryException ignore)
-            {
-            }
-         }
-      }
+        }
 
-      public void onEvent(EventIterator events)
-      {
-         // We clear the cache when a site is removed in order to remove all the related navigations
-         cache.clear();
-      }
-   }
+        public void onEvent(EventIterator events) {
+            // We clear the cache when a site is removed in order to remove all the related navigations
+            cache.clear();
+        }
+    }
 }

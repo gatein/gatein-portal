@@ -14,6 +14,7 @@ detected.
 <Configure class="org.mortbay.jetty.webapp.WebAppContext">
 
   <Set name="contextPath">/rest</Set>
-  <Set name="war"><SystemProperty name="jetty.home" default="."/>/webapps/rest.war</Set>
+  <Set name="war"><SystemProperty name="jetty.home" default="."/>/webapps/rest.war
+  </Set>
 
 </Configure>

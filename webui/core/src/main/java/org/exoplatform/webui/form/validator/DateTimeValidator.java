@@ -19,64 +19,51 @@
 
 package org.exoplatform.webui.form.validator;
 
-import org.exoplatform.webui.form.UIFormDateTimeInput;
-import org.exoplatform.webui.form.UIFormInput;
-
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import org.exoplatform.webui.form.UIFormDateTimeInput;
+import org.exoplatform.webui.form.UIFormInput;
+
 /**
- * Created by The eXo Platform SARL
- * Author : Tran The Trong
- *          trongtt@gmail.com
- * May 15, 2007
+ * Created by The eXo Platform SARL Author : Tran The Trong trongtt@gmail.com May 15, 2007
  *
  * Validates whether a date is in a correct format
  */
 
-public class DateTimeValidator extends AbstractValidator implements Serializable
-{
-   @Override
-   protected String getMessageLocalizationKey()
-   {
-      return "DateTimeValidator.msg.Invalid-input";
-   }
+public class DateTimeValidator extends AbstractValidator implements Serializable {
+    @Override
+    protected String getMessageLocalizationKey() {
+        return "DateTimeValidator.msg.Invalid-input";
+    }
 
-   @Override
-   protected boolean isValid(String value, UIFormInput uiInput)
-   {
-      UIFormDateTimeInput uiDateInput = (UIFormDateTimeInput)uiInput;
-      SimpleDateFormat sdf = new SimpleDateFormat(uiDateInput.getDatePattern_().trim());
-      // Specify whether or not date/time parsing is to be lenient.
-      sdf.setLenient(false);
-      try
-      {
-         sdf.parse(value);
-         return true;
-      }
-      catch (ParseException e)
-      {
-         return false;
-      }
-   }
+    @Override
+    protected boolean isValid(String value, UIFormInput uiInput) {
+        UIFormDateTimeInput uiDateInput = (UIFormDateTimeInput) uiInput;
+        SimpleDateFormat sdf = new SimpleDateFormat(uiDateInput.getDatePattern_().trim());
+        // Specify whether or not date/time parsing is to be lenient.
+        sdf.setLenient(false);
+        try {
+            sdf.parse(value);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
 
-   @Override
-   protected String trimmedValueOrNullIfBypassed(String value, UIFormInput uiInput, boolean exceptionOnMissingMandatory, boolean trimValue) throws Exception
-   {
-      if(!(uiInput instanceof UIFormDateTimeInput))
-      {
-         return null;
-      }
-      else
-      {
-         return super.trimmedValueOrNullIfBypassed(value, uiInput, exceptionOnMissingMandatory, trimValue);
-      }
-   }
+    @Override
+    protected String trimmedValueOrNullIfBypassed(String value, UIFormInput uiInput, boolean exceptionOnMissingMandatory,
+            boolean trimValue) throws Exception {
+        if (!(uiInput instanceof UIFormDateTimeInput)) {
+            return null;
+        } else {
+            return super.trimmedValueOrNullIfBypassed(value, uiInput, exceptionOnMissingMandatory, trimValue);
+        }
+    }
 
-   @Override
-   protected Object[] getMessageArgs(String value, UIFormInput uiInput) throws Exception
-   {
-      return new Object[]{getLabelFor(uiInput), value};
-   }
+    @Override
+    protected Object[] getMessageArgs(String value, UIFormInput uiInput) throws Exception {
+        return new Object[] { getLabelFor(uiInput), value };
+    }
 }

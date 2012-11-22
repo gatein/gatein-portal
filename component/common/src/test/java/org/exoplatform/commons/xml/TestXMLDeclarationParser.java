@@ -26,60 +26,56 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.xml.sax.SAXException;
-
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-public class TestXMLDeclarationParser extends TestCase
-{
-   
-   private static Map<String, String> map(String... keyVal) {
-      Map<String, String> result = new HashMap<String, String>(4);
-      int i = 0;
-      while (i < keyVal.length) {
-         result.put(keyVal[i++], keyVal[i++]);
-      }
-      return result;
-   }
-   
-   public void testUnexpectedEndOfInput() throws SAXException, IOException {
-      assertFail("<?");
-      assertFail("<?xml");
-      assertFail("<?xml ");
-      assertFail("<?xml version");
-      assertFail("<?xml version=");
-      assertFail("<?xml version= ");
-      assertFail("<?xml version='");
-      assertFail("<?xml version='1.0'");
-      assertFail("<?xml version='1.0' ");
-      assertFail("<?xml version='1.0' encoding='UTF-8'?");
-   }
-   
-   private static void assertFail(String xml) throws IOException {
-      XMLDeclarationParser parser = new XMLDeclarationParser(xml);
-      try
-      {
-         parser.parse();
-         fail("XMLDeclarationParseException expected.");
-      }
-      catch (SAXException e)
-      {
-      }
-   }
-   
-   public void testParse() throws SAXException, IOException {
-      /* with apos */
-      XMLDeclarationParser parser = new XMLDeclarationParser("<?xml version='1.0' encoding='UTF-8'?>");
-      Assert.assertEquals(map("version", "1.0", "encoding", "UTF-8"), parser.parse());
-      
-      /* with quot */
-      parser = new XMLDeclarationParser("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-      Assert.assertEquals(map("version", "1.0", "encoding", "UTF-8"), parser.parse());
+import org.xml.sax.SAXException;
 
-      /* with some white space */
-      parser = new XMLDeclarationParser("<?xml    version =\n\"1.0\" \t\t encoding=\r\"UTF-8\" ?>");
-      Assert.assertEquals(map("version", "1.0", "encoding", "UTF-8"), parser.parse());
-      
-   }
+public class TestXMLDeclarationParser extends TestCase {
+
+    private static Map<String, String> map(String... keyVal) {
+        Map<String, String> result = new HashMap<String, String>(4);
+        int i = 0;
+        while (i < keyVal.length) {
+            result.put(keyVal[i++], keyVal[i++]);
+        }
+        return result;
+    }
+
+    public void testUnexpectedEndOfInput() throws SAXException, IOException {
+        assertFail("<?");
+        assertFail("<?xml");
+        assertFail("<?xml ");
+        assertFail("<?xml version");
+        assertFail("<?xml version=");
+        assertFail("<?xml version= ");
+        assertFail("<?xml version='");
+        assertFail("<?xml version='1.0'");
+        assertFail("<?xml version='1.0' ");
+        assertFail("<?xml version='1.0' encoding='UTF-8'?");
+    }
+
+    private static void assertFail(String xml) throws IOException {
+        XMLDeclarationParser parser = new XMLDeclarationParser(xml);
+        try {
+            parser.parse();
+            fail("XMLDeclarationParseException expected.");
+        } catch (SAXException e) {
+        }
+    }
+
+    public void testParse() throws SAXException, IOException {
+        /* with apos */
+        XMLDeclarationParser parser = new XMLDeclarationParser("<?xml version='1.0' encoding='UTF-8'?>");
+        Assert.assertEquals(map("version", "1.0", "encoding", "UTF-8"), parser.parse());
+
+        /* with quot */
+        parser = new XMLDeclarationParser("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        Assert.assertEquals(map("version", "1.0", "encoding", "UTF-8"), parser.parse());
+
+        /* with some white space */
+        parser = new XMLDeclarationParser("<?xml    version =\n\"1.0\" \t\t encoding=\r\"UTF-8\" ?>");
+        Assert.assertEquals(map("version", "1.0", "encoding", "UTF-8"), parser.parse());
+
+    }
 }

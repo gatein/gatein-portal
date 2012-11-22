@@ -27,27 +27,25 @@ package org.exoplatform.web.security.errorlogin;
  * If value is SERVER, then mail will be send after detection of 3 successive invalid login attempts from same remote server.<br>
  * If value is SESSION, then mail will be send after detection of 3 successive invalid login attempts from same HTTP session.<br>
  * etc.
- * 
- * 
+ *
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  * @version $Revision$
  */
-public enum InvalidLoginPolicy 
-{
-   /**
-    * SESSION is default and it means that login attempts are coming from same HTTP session.
-    */
-   SESSION, 
-   
-   /**
-    * SESSION_AND_USER is indicating login attempts of same user and from same HTTP session.
-    */
-   SESSION_AND_USER, 
-   
-   /**
-    * SERVER means login attempts from same remote server.
-    */
-   SERVER
+public enum InvalidLoginPolicy {
+    /**
+     * SESSION is default and it means that login attempts are coming from same HTTP session.
+     */
+    SESSION,
+
+    /**
+     * SESSION_AND_USER is indicating login attempts of same user and from same HTTP session.
+     */
+    SESSION_AND_USER,
+
+    /**
+     * SERVER means login attempts from same remote server.
+     */
+    SERVER
 
 }
-

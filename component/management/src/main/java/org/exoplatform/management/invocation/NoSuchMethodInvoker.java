@@ -23,14 +23,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NoSuchMethodInvoker implements MethodInvoker
-{
-   public Object invoke(Object o, Map<String, List<String>> argMap) throws IllegalAccessException, InvocationTargetException
-   {
-      throw new UnsupportedOperationException();
-   }
+public class NoSuchMethodInvoker implements MethodInvoker {
+    public Object invoke(Object o, Map<String, List<String>> argMap) throws IllegalAccessException, InvocationTargetException {
+        throw new UnsupportedOperationException();
+    }
 }

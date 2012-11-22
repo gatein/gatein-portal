@@ -22,23 +22,19 @@ package org.exoplatform.groovyscript;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class SectionItem
-{
+public abstract class SectionItem {
 
-   /** . */
-   private final Position pos;
+    /** . */
+    private final Position pos;
 
-   protected SectionItem(Position pos)
-   {
-      if (pos == null)
-      {
-         throw new NullPointerException("No null position accepted");
-      }
-      this.pos = pos;
-   }
+    protected SectionItem(Position pos) {
+        if (pos == null) {
+            throw new NullPointerException("No null position accepted");
+        }
+        this.pos = pos;
+    }
 
-   public Position getPosition()
-   {
-      return pos;
-   }
+    public Position getPosition() {
+        return pos;
+    }
 }

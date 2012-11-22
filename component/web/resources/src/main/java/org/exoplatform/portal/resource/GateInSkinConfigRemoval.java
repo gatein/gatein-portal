@@ -21,8 +21,6 @@ package org.exoplatform.portal.resource;
 import java.util.List;
 import java.util.Set;
 
-import javax.servlet.ServletContext;
-
 import org.gatein.wci.WebApp;
 import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
@@ -31,84 +29,67 @@ import org.gatein.wci.WebAppListener;
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
  * @version $Id$
- * 
+ *
  */
-public class GateInSkinConfigRemoval implements WebAppListener
-{
+public class GateInSkinConfigRemoval implements WebAppListener {
 
-   private SkinService service;
+    private SkinService service;
 
-   public GateInSkinConfigRemoval(SkinService _service)
-   {
-      this.service = _service;
-   }
+    public GateInSkinConfigRemoval(SkinService _service) {
+        this.service = _service;
+    }
 
-   public void onEvent(WebAppEvent event)
-   {
-      // TODO Auto-generated method stub
-      if (event instanceof WebAppLifeCycleEvent)
-      {
-         WebAppLifeCycleEvent waEvent = (WebAppLifeCycleEvent)event;
-         if (waEvent.getType() == WebAppLifeCycleEvent.REMOVED)
-         {
-            String webApp = event.getWebApp().getServletContext().getContextPath();
-            removeWebAppSkin(webApp);
-            removeContextAppSkin(event.getWebApp());
-         }
-      }
-   }
-
-   private void removeWebAppSkin(String webApp)
-   {
-      try
-      {
-         removePortalSkins(webApp);
-         removePortletSkins(webApp);
-         removeSkinName(webApp);
-
-         // Update the 'skinDependentManager'
-         SkinDependentManager.clearAssociatedSkins(webApp);
-      }
-      catch (Exception ex)
-      {
-         ex.printStackTrace();
-      }
-   }
-
-   private void removeContextAppSkin(WebApp webApp)
-   {
-      service.unregisterServletContext(webApp);
-   }
-
-   private void removePortalSkins(String webApp) throws Exception
-   {
-      List<SkinKey> portalSkins = SkinDependentManager.getPortalSkins(webApp);
-      service.remove(portalSkins);
-   }
-
-   private void removePortletSkins(String webApp) throws Exception
-   {
-      List<SkinKey> portletSkins = SkinDependentManager.getPortletSkins(webApp);
-      service.remove(portletSkins);
-   }
-
-   /**
-    * Remove skinName defined by the webApp, if no other webApps supports the
-    * skinName
-    */
-   private void removeSkinName(String webApp) throws Exception
-   {
-      Set<String> supportedSkins = SkinDependentManager.getSkinNames(webApp);
-      if (supportedSkins != null)
-      {
-         for (String skin : supportedSkins)
-         {
-            if (SkinDependentManager.skinNameIsRemovable(skin, webApp))
-            {
-               service.removeSupportedSkin(skin);
+    public void onEvent(WebAppEvent event) {
+        // TODO Auto-generated method stub
+        if (event instanceof WebAppLifeCycleEvent) {
+            WebAppLifeCycleEvent waEvent = (WebAppLifeCycleEvent) event;
+            if (waEvent.getType() == WebAppLifeCycleEvent.REMOVED) {
+                String webApp = event.getWebApp().getServletContext().getContextPath();
+                removeWebAppSkin(webApp);
+                removeContextAppSkin(event.getWebApp());
             }
-         }
-      }
-   }
+        }
+    }
+
+    private void removeWebAppSkin(String webApp) {
+        try {
+            removePortalSkins(webApp);
+            removePortletSkins(webApp);
+            removeSkinName(webApp);
+
+            // Update the 'skinDependentManager'
+            SkinDependentManager.clearAssociatedSkins(webApp);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    private void removeContextAppSkin(WebApp webApp) {
+        service.unregisterServletContext(webApp);
+    }
+
+    private void removePortalSkins(String webApp) throws Exception {
+        List<SkinKey> portalSkins = SkinDependentManager.getPortalSkins(webApp);
+        service.remove(portalSkins);
+    }
+
+    private void removePortletSkins(String webApp) throws Exception {
+        List<SkinKey> portletSkins = SkinDependentManager.getPortletSkins(webApp);
+        service.remove(portletSkins);
+    }
+
+    /**
+     * Remove skinName defined by the webApp, if no other webApps supports the skinName
+     */
+    private void removeSkinName(String webApp) throws Exception {
+        Set<String> supportedSkins = SkinDependentManager.getSkinNames(webApp);
+        if (supportedSkins != null) {
+            for (String skin : supportedSkins) {
+                if (SkinDependentManager.skinNameIsRemovable(skin, webApp)) {
+                    service.removeSupportedSkin(skin);
+                }
+            }
+        }
+    }
 
 }

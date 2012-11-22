@@ -18,6 +18,13 @@
  */
 package org.exoplatform.application.gadget;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Set;
+
+import javax.servlet.ServletContext;
+
 import org.apache.shindig.gadgets.spec.ModulePrefs;
 import org.chromattic.ext.ntdef.NTFolder;
 import org.chromattic.ext.ntdef.Resource;
@@ -26,188 +33,154 @@ import org.exoplatform.application.gadget.impl.LocalGadgetData;
 import org.gatein.common.io.IOTools;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Set;
-import javax.servlet.ServletContext;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ServletLocalImporter extends GadgetImporter
-{
+public class ServletLocalImporter extends GadgetImporter {
 
-   /** . */
-   private final Logger log = LoggerFactory.getLogger(ServletLocalImporter.class);
+    /** . */
+    private final Logger log = LoggerFactory.getLogger(ServletLocalImporter.class);
 
-   /** . */
-   private final ServletContext servletContext;
+    /** . */
+    private final ServletContext servletContext;
 
-   /** Used temporarily when importing resources. */
-   private NTFolder folder;
+    /** Used temporarily when importing resources. */
+    private NTFolder folder;
 
-   private GadgetRegistryService gadgetService;
+    private GadgetRegistryService gadgetService;
 
-   public ServletLocalImporter(
-      String name,
-      String gadgetPath,
-      ServletContext servletContext,
-      GadgetRegistryService gadgetRegistryService)
-   {
-      super(name, gadgetPath);
+    public ServletLocalImporter(String name, String gadgetPath, ServletContext servletContext,
+            GadgetRegistryService gadgetRegistryService) {
+        super(name, gadgetPath);
 
-      //
-      this.servletContext = servletContext;
-      this.gadgetService = gadgetRegistryService;
-   }
+        //
+        this.servletContext = servletContext;
+        this.gadgetService = gadgetRegistryService;
+    }
 
-   @Override
-   protected byte[] getGadgetBytes(String gadgetURI) throws IOException
-   {
-      return getContent(gadgetURI);
-   }
+    @Override
+    protected byte[] getGadgetBytes(String gadgetURI) throws IOException {
+        return getContent(gadgetURI);
+    }
 
-   @Override
-   protected String getGadgetURL() throws Exception
-   {
-      return gadgetService.getGadgetURL(getGadgetName());
-   }
+    @Override
+    protected String getGadgetURL() {
+        return gadgetService.getGadgetURL(getGadgetName());
+    }
 
-   @Override
-   protected void processMetadata(ModulePrefs prefs, GadgetDefinition def) throws Exception
-   {
-      //We store no metadata for local gadget
-   }
+    @Override
+    protected void processMetadata(ModulePrefs prefs, GadgetDefinition def) {
+        // We store no metadata for local gadget
+    }
 
-   @Override
-   protected void process(String gadgetPath, GadgetDefinition def) throws Exception
-   {
-      def.setLocal(true);
+    @Override
+    protected void process(String gadgetPath, GadgetDefinition def) throws Exception {
+        def.setLocal(true);
 
-      //
-      LocalGadgetData data = (LocalGadgetData)def.getData();
+        //
+        LocalGadgetData data = (LocalGadgetData) def.getData();
 
-      //
-      String fileName = getName(gadgetPath);
-      data.setFileName(fileName);
+        //
+        String fileName = getName(gadgetPath);
+        data.setFileName(fileName);
 
-      // Import resource
-      folder = data.getResources();
-      String folderPath = getParent(gadgetPath);
-      visitChildren(gadgetPath, folderPath);
-      folder = null;
-   }
+        // Import resource
+        folder = data.getResources();
+        String folderPath = getParent(gadgetPath);
+        visitChildren(gadgetPath, folderPath);
+        folder = null;
+    }
 
-   private void visit(String uri, String resourcePath) throws Exception
-   {
-      String name = getName(resourcePath);
-      if (isFile(resourcePath))
-      {
-         byte[] content = getContent(resourcePath);
-
-         //
-         if (content != null)
-         {
-            String mimeType = getMimeType(name);
+    private void visit(String uri, String resourcePath) throws Exception {
+        String name = getName(resourcePath);
+        if (isFile(resourcePath)) {
+            byte[] content = getContent(resourcePath);
 
             //
-            if (mimeType == null)
-            {
-               mimeType = "application/octet-stream";
+            if (content != null) {
+                String mimeType = getMimeType(name);
+
+                //
+                if (mimeType == null) {
+                    mimeType = "application/octet-stream";
+                }
+
+                // We can detect encoding for XML files
+                String encoding = null;
+                if ("application/xml".equals(mimeType)) {
+                    encoding = EncodingDetector.detect(new ByteArrayInputStream(content));
+                }
+
+                // Correct mime type for gadgets
+                if (resourcePath.equals(uri)) {
+                    mimeType = LocalGadgetData.GADGET_MIME_TYPE;
+                }
+
+                //
+                folder.createFile(name, new Resource(mimeType, encoding, content));
             }
+        } else {
+            folder = folder.createFolder(name);
+            visitChildren(uri, resourcePath);
+            folder = folder.getParent();
+        }
+    }
 
-            // We can detect encoding for XML files
-            String encoding = null;
-            if ("application/xml".equals(mimeType))
-            {
-               encoding = EncodingDetector.detect(new ByteArrayInputStream(content));
-            }
+    private void visitChildren(String gadgetURI, String folderPath) throws Exception {
+        for (String childPath : getChildren(folderPath)) {
+            visit(gadgetURI, childPath);
+        }
+    }
 
-            // Correct mime type for gadgets
-            if (resourcePath.equals(uri))
-            {
-               mimeType = LocalGadgetData.GADGET_MIME_TYPE;
-            }
+    private String getName(String resourcePath) {
+        // It's a directory, remove the trailing '/'
+        if (resourcePath.endsWith("/")) {
+            resourcePath = resourcePath.substring(0, resourcePath.length() - 1);
+        }
 
-            //
-            folder.createFile(name, new Resource(mimeType, encoding, content));
-         }
-      }
-      else
-      {
-         folder = folder.createFolder(name);
-         visitChildren(uri, resourcePath);
-         folder = folder.getParent();
-      }
-   }
+        // Get index of last '/'
+        int index = resourcePath.lastIndexOf('/');
 
-   private void visitChildren(String gadgetURI, String folderPath) throws Exception
-   {
-      for (String childPath : getChildren(folderPath))
-      {
-         visit(gadgetURI, childPath);
-      }
-   }
+        // Return name
+        return resourcePath.substring(index + 1);
+    }
 
-   private String getName(String resourcePath) throws IOException
-   {
-      // It's a directory, remove the trailing '/'
-      if (resourcePath.endsWith("/"))
-      {
-         resourcePath = resourcePath.substring(0, resourcePath.length() - 1);
-      }
+    private String getParent(String resourcePath) {
+        // It's a directory, remove the trailing '/'
+        if (resourcePath.endsWith("/")) {
+            resourcePath = resourcePath.substring(0, resourcePath.length() - 1);
+        }
 
-      // Get index of last '/'
-      int index = resourcePath.lastIndexOf('/');
+        // Get index of last '/'
+        int index = resourcePath.lastIndexOf('/');
 
-      // Return name
-      return resourcePath.substring(index + 1);
-   }
+        // Return the parent that ends with a '/'
+        return resourcePath.substring(0, index + 1);
+    }
 
-   private String getParent(String resourcePath) throws IOException
-   {
-      // It's a directory, remove the trailing '/'
-      if (resourcePath.endsWith("/"))
-      {
-         resourcePath = resourcePath.substring(0, resourcePath.length() - 1);
-      }
+    private byte[] getContent(String filePath) throws IOException {
+        InputStream in = servletContext.getResourceAsStream(filePath);
+        if (in == null) {
+            log.error("Could not obtain input stream for file " + filePath);
+            return null;
+        } else {
+            return IOTools.getBytes(in);
+        }
+    }
 
-      // Get index of last '/'
-      int index = resourcePath.lastIndexOf('/');
+    private Iterable<String> getChildren(String folderPath) {
+        @SuppressWarnings("unchecked")
+        Set<String> resourcePaths = servletContext.getResourcePaths(folderPath);
+        return resourcePaths;
+    }
 
-      // Return the parent that ends with a '/'
-      return resourcePath.substring(0, index + 1);
-   }
+    private boolean isFile(String resourcePath) {
+        return !resourcePath.endsWith("/");
+    }
 
-   private byte[] getContent(String filePath) throws IOException
-   {
-      InputStream in = servletContext.getResourceAsStream(filePath);
-      if (in == null)
-      {
-         log.error("Could not obtain input stream for file " + filePath);
-         return null;
-      }
-      else
-      {
-         return IOTools.getBytes(in);
-      }
-   }
-
-   private Iterable<String> getChildren(String folderPath) throws IOException
-   {
-      @SuppressWarnings("unchecked") Set<String> resourcePaths = servletContext.getResourcePaths(folderPath);
-      return resourcePaths;
-   }
-
-   private boolean isFile(String resourcePath) throws IOException
-   {
-      return !resourcePath.endsWith("/");
-   }
-
-   private String getMimeType(String fileName)
-   {
-      return servletContext.getMimeType(fileName);
-   }
+    private String getMimeType(String fileName) {
+        return servletContext.getMimeType(fileName);
+    }
 }

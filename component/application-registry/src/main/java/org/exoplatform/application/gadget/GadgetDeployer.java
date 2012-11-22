@@ -18,6 +18,13 @@
  */
 package org.exoplatform.application.gadget;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.ServletContext;
+
 import org.exoplatform.application.gadget.impl.GadgetRegistryServiceImpl;
 import org.exoplatform.commons.xml.DocumentSource;
 import org.exoplatform.commons.xml.XMLValidator;
@@ -37,130 +44,96 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import javax.servlet.ServletContext;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class GadgetDeployer implements WebAppListener, Startable
-{
+public class GadgetDeployer implements WebAppListener, Startable {
 
-   /** . */
-   private static final XMLValidator validator = new XMLValidator(GadgetDeployer.class, "http://www.gatein.org/xml/ns/gadgets_1_0", "gadgets_1_0.xsd");
+    /** . */
+    private static final XMLValidator validator = new XMLValidator(GadgetDeployer.class,
+            "http://www.gatein.org/xml/ns/gadgets_1_0", "gadgets_1_0.xsd");
 
-   /** . */
-   private final Logger log = LoggerFactory.getLogger(GadgetDeployer.class);
+    /** . */
+    private final Logger log = LoggerFactory.getLogger(GadgetDeployer.class);
 
-   /** . */
-   private GadgetRegistryServiceImpl gadgetRegistryService;
+    /** . */
+    private GadgetRegistryServiceImpl gadgetRegistryService;
 
-  /** . */
-   private ExoContainerContext context;
+    /** . */
+    private ExoContainerContext context;
 
-   public GadgetDeployer(ExoContainerContext context, GadgetRegistryService gadgetRegistryService)
-   {
-      this.context = context;
-      this.gadgetRegistryService = (GadgetRegistryServiceImpl)gadgetRegistryService;
-   }
+    public GadgetDeployer(ExoContainerContext context, GadgetRegistryService gadgetRegistryService) {
+        this.context = context;
+        this.gadgetRegistryService = (GadgetRegistryServiceImpl) gadgetRegistryService;
+    }
 
-   public void onEvent(WebAppEvent webAppEvent)
-   {
-      if (webAppEvent instanceof WebAppLifeCycleEvent)
-      {
-         WebAppLifeCycleEvent lfEvent = (WebAppLifeCycleEvent)webAppEvent;
-         if (lfEvent.getType() == WebAppLifeCycleEvent.ADDED)
-         {
-            WebApp webApp = webAppEvent.getWebApp();
-            ServletContext scontext = webApp.getServletContext();
-            try
-            {
-               final URL url = scontext.getResource("/WEB-INF/gadget.xml");
-               if (url != null)
-               {
-                  final RootContainer.PortalContainerPostInitTask task = new RootContainer.PortalContainerPostInitTask()
-                  {
-                     public void execute(ServletContext context, PortalContainer portalContainer)
-                     {
-                        handle(context, url);
-                     }
-                  };
-                  PortalContainer.addInitTask(scontext, task, context.getPortalContainerName());
-               }
+    public void onEvent(WebAppEvent webAppEvent) {
+        if (webAppEvent instanceof WebAppLifeCycleEvent) {
+            WebAppLifeCycleEvent lfEvent = (WebAppLifeCycleEvent) webAppEvent;
+            if (lfEvent.getType() == WebAppLifeCycleEvent.ADDED) {
+                WebApp webApp = webAppEvent.getWebApp();
+                ServletContext scontext = webApp.getServletContext();
+                try {
+                    final URL url = scontext.getResource("/WEB-INF/gadget.xml");
+                    if (url != null) {
+                        final RootContainer.PortalContainerPostInitTask task = new RootContainer.PortalContainerPostInitTask() {
+                            public void execute(ServletContext context, PortalContainer portalContainer) {
+                                handle(context, url);
+                            }
+                        };
+                        PortalContainer.addInitTask(scontext, task, context.getPortalContainerName());
+                    }
+                } catch (MalformedURLException e) {
+                    log.error("Could not read the content of the gadget file", e);
+                }
             }
-            catch (MalformedURLException e)
-            {
-               log.error("Could not read the content of the gadget file", e);
-            }
-         }
-      }
-   }
+        }
+    }
 
-   public void start()
-   {
-      ServletContainerFactory.getServletContainer().addWebAppListener(this);
-   }
+    public void start() {
+        ServletContainerFactory.getServletContainer().addWebAppListener(this);
+    }
 
-   public void stop()
-   {
-      ServletContainerFactory.getServletContainer().addWebAppListener(this);
-   }
+    public void stop() {
+        ServletContainerFactory.getServletContainer().addWebAppListener(this);
+    }
 
-   private void handle(ServletContext scontext, URL gadgetsURL)
-   {
-      try
-      {
-         List<GadgetImporter> importers = new ArrayList<GadgetImporter>();
-         Document docXML = validator.validate(DocumentSource.create(gadgetsURL));
-         NodeList nodeList = docXML.getElementsByTagName("gadget");
-         for (int i = 0; i < nodeList.getLength(); i++)
-         {
-            Element gadgetElement = (Element)nodeList.item(i);
-            String gadgetName = gadgetElement.getAttribute("name");
+    private void handle(ServletContext scontext, URL gadgetsURL) {
+        try {
+            List<GadgetImporter> importers = new ArrayList<GadgetImporter>();
+            Document docXML = validator.validate(DocumentSource.create(gadgetsURL));
+            NodeList nodeList = docXML.getElementsByTagName("gadget");
+            for (int i = 0; i < nodeList.getLength(); i++) {
+                Element gadgetElement = (Element) nodeList.item(i);
+                String gadgetName = gadgetElement.getAttribute("name");
 
-            //
-            log.debug("About to parse gadget " + gadgetName);
-            Element pathElt = XMLTools.getUniqueChild(gadgetElement, "path", false);
-            GadgetImporter importer = null;
-            if (pathElt != null)
-            {
-               String path = XMLTools.asString(pathElt, true);
-               importer = new ServletLocalImporter(
-                  gadgetName,
-                  path,
-                  scontext,
-                  gadgetRegistryService);
-            }
-            else
-            {
-               Element urlElt = XMLTools.getUniqueChild(gadgetElement, "url", false);
-               if (urlElt != null)
-               {
-                  String url = XMLTools.asString(urlElt, true);
-                  importer = new RemoteImporter(
-                     gadgetName,
-                     url);
-               }
+                //
+                log.debug("About to parse gadget " + gadgetName);
+                Element pathElt = XMLTools.getUniqueChild(gadgetElement, "path", false);
+                GadgetImporter importer = null;
+                if (pathElt != null) {
+                    String path = XMLTools.asString(pathElt, true);
+                    importer = new ServletLocalImporter(gadgetName, path, scontext, gadgetRegistryService);
+                } else {
+                    Element urlElt = XMLTools.getUniqueChild(gadgetElement, "url", false);
+                    if (urlElt != null) {
+                        String url = XMLTools.asString(urlElt, true);
+                        importer = new RemoteImporter(gadgetName, url);
+                    }
+                }
+
+                //
+                if (importer != null) {
+                    importers.add(importer);
+                    log.debug("Add gadget " + gadgetName + " to gadget imports");
+                }
             }
 
-            //
-            if (importer != null)
-            {
-               importers.add(importer);
-               log.debug("Add gadget " + gadgetName + " to gadget imports");
-            }
-         }
-
-         // Import everything
-         gadgetRegistryService.deploy(importers);
-      }
-      catch (Exception e)
-      {
-         log.error("Could not process gadget file " + gadgetsURL, e);
-      }
-   }
+            // Import everything
+            gadgetRegistryService.deploy(importers);
+        } catch (Exception e) {
+            log.error("Could not process gadget file " + gadgetsURL, e);
+        }
+    }
 }

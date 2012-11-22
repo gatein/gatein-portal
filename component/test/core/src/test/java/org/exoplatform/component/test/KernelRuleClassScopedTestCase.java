@@ -19,38 +19,33 @@
 
 package org.exoplatform.component.test;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertSame;
+
 import org.exoplatform.container.PortalContainer;
 import org.junit.ClassRule;
 import org.junit.Test;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
 @ConfiguredBy({})
-public class KernelRuleClassScopedTestCase
-{
+public class KernelRuleClassScopedTestCase {
 
-   @ClassRule
-   public static KernelLifeCycle kernel = new KernelLifeCycle();
+    @ClassRule
+    public static KernelLifeCycle kernel = new KernelLifeCycle();
 
-   /** . */
-   private PortalContainer container;
+    /** . */
+    private PortalContainer container;
 
-   @Test
-   public void testA()
-   {
-      if (container == null)
-      {
-         container = kernel.getContainer();
-      }
-      else
-      {
-         assertSame(container, kernel.getContainer());
-      }
-   }
+    @Test
+    public void testA() {
+        if (container == null) {
+            container = kernel.getContainer();
+        } else {
+            assertSame(container, kernel.getContainer());
+        }
+    }
 
-   @Test
-   public void testB() throws Exception
-   {
-      testA();
-   }
+    @Test
+    public void testB() throws Exception {
+        testA();
+    }
 }
