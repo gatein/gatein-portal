@@ -30,8 +30,9 @@ import java.util.Map;
  */
 public enum Element {
     // must be first
-    UNKNOWN(null), DEPLOYMENT_ARCHIVES(Constants.DEPLOYMENT_ARCHIVES), PORTLET_WAR_DEPENDENCIES(
-            Constants.PORTLET_WAR_DEPENDENCIES), ARCHIVE(Constants.ARCHIVE), DEPENDENCY(Constants.DEPENDENCY);
+    UNKNOWN(null),
+    PORTLET_WAR_DEPENDENCIES(Constants.PORTLET_WAR_DEPENDENCIES),
+    DEPENDENCY(Constants.DEPENDENCY);
 
     private final String name;
 

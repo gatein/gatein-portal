@@ -29,7 +29,9 @@ import java.util.Map;
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
 public enum Attribute {
-    UNKNOWN(null), NAME("name"), MAIN("main"), IMPORT_SERVICES(Constants.IMPORT_SERVICES);
+    UNKNOWN(null),
+    NAME("name"),
+    IMPORT_SERVICES(Constants.IMPORT_SERVICES);
 
     private final String name;
 

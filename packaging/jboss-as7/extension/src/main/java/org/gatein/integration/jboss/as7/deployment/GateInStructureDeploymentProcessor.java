@@ -98,10 +98,6 @@ public class GateInStructureDeploymentProcessor implements DeploymentUnitProcess
         DeploymentUnit du = phaseContext.getDeploymentUnit();
         DeploymentUnit parent = du.getParent();
         if (GateInConfiguration.isGateInArchive(parent)) {
-            // if (DeploymentTypeMarker.isType(DeploymentType.WAR, du))
-            // {
-            // config.getChildWars().add(WebSubsystemServices.JBOSS_WEB.append(du.getName()));
-            // }
             du.putAttachment(GateInConfigurationKey.KEY, config);
             config.addChildSubUnit(Services.deploymentUnitName(parent.getName(), du.getName()));
         }

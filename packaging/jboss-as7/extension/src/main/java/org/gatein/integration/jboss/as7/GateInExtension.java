@@ -55,8 +55,6 @@ public class GateInExtension implements Extension {
 
     public static final String SUBSYSTEM_NAME = "gatein";
 
-    protected static final String DEFAULT_PORTAL_NAME = "default";
-
     private static final String RESOURCE_NAME = GateInExtension.class.getPackage().getName() + ".LocalDescriptions";
 
     static ResourceDescriptionResolver getResourceDescriptionResolver(final String keyPrefix) {
@@ -93,7 +91,6 @@ public class GateInExtension implements Extension {
         registration.registerOperationHandler(DESCRIBE, GenericSubsystemDescribeHandler.INSTANCE,
                 GenericSubsystemDescribeHandler.INSTANCE, false, OperationEntry.EntryType.PRIVATE);
 
-        registration.registerSubModel(new DeploymentArchiveDefinition(config));
         registration.registerSubModel(new PortletWarDependencyDefinition(config));
 
         // Register portal resources

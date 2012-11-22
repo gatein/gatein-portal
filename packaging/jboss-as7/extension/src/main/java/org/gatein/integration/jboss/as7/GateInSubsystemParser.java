@@ -61,27 +61,11 @@ public class GateInSubsystemParser implements XMLStreamConstants, XMLElementRead
         context.startSubsystemElement(GateInExtension.NAMESPACE, false);
 
         ModelNode node = context.getModelNode();
-        if (node.hasDefined(Constants.DEPLOYMENT_ARCHIVE)) {
-            writeDeploymentArchives(writer, node.get(Constants.DEPLOYMENT_ARCHIVE));
-        }
+
         if (node.hasDefined(Constants.PORTLET_WAR_DEPENDENCY)) {
             writePortletWarDependencies(writer, node.get(Constants.PORTLET_WAR_DEPENDENCY));
         }
         writer.writeEndElement();
-    }
-
-    private void writeDeploymentArchives(XMLExtendedStreamWriter writer, ModelNode deployArchives) throws XMLStreamException {
-        if (deployArchives.isDefined() && deployArchives.asInt() > 0) {
-            writer.writeStartElement(Element.DEPLOYMENT_ARCHIVES.getLocalName());
-            for (Property archive : deployArchives.asPropertyList()) {
-                writer.writeStartElement(Element.ARCHIVE.getLocalName());
-                writer.writeAttribute(Attribute.NAME.getLocalName(), archive.getName());
-                ModelNode model = archive.getValue();
-                DeploymentArchiveDefinition.MAIN.marshallAsAttribute(model, false, writer);
-                writer.writeEndElement();
-            }
-            writer.writeEndElement();
-        }
     }
 
     private void writePortletWarDependencies(XMLExtendedStreamWriter writer, ModelNode warDependencies)
@@ -131,11 +115,6 @@ public class GateInSubsystemParser implements XMLStreamConstants, XMLElementRead
             if (GateInExtension.NAMESPACE.equals(reader.getNamespaceURI())) {
                 final Element element = Element.forName(reader.getLocalName());
                 switch (element) {
-                    case DEPLOYMENT_ARCHIVES: {
-                        parseDeploymentArchives(reader, address, list);
-                        hasArchives = true;
-                        break;
-                    }
                     case PORTLET_WAR_DEPENDENCIES: {
                         parsePortletWarDependencies(reader, address, list);
                         hasDependencies = true;
@@ -150,87 +129,8 @@ public class GateInSubsystemParser implements XMLStreamConstants, XMLElementRead
             }
         }
 
-        if (!hasArchives)
-            addDefaultDeploymentArchivesOperations(reader, address, list);
-
         if (!hasDependencies)
             addDefaultPortletWarDependencies(reader, address, list);
-    }
-
-    static void parseDeploymentArchives(XMLExtendedStreamReader reader, ModelNode parent, List<ModelNode> operations)
-            throws XMLStreamException {
-        // no attributes
-        requireNoAttributes(reader);
-
-        boolean gotArchives = false;
-
-        // elements
-        while (reader.hasNext() && reader.nextTag() != END_ELEMENT) {
-            final Element element = Element.forName(reader.getLocalName());
-            switch (element) {
-                case ARCHIVE: {
-                    parseArchive(reader, parent, operations);
-                    gotArchives = true;
-                    break;
-                }
-                default:
-                    throw unexpectedElement(reader);
-            }
-        }
-
-        if (!gotArchives)
-            addDefaultDeploymentArchivesOperations(reader, parent, operations);
-    }
-
-    private static void addDefaultDeploymentArchivesOperations(XMLExtendedStreamReader reader, ModelNode parent,
-            List<ModelNode> operations) throws XMLStreamException {
-        ModelNode model = new ModelNode();
-        DeploymentArchiveDefinition.MAIN.parseAndSetParameter(Constants.TRUE, model, reader);
-        addDeploymentArchiveOperation(parent, model, "gatein.ear", operations);
-    }
-
-    static void parseArchive(XMLExtendedStreamReader reader, ModelNode parent, List<ModelNode> operations)
-            throws XMLStreamException {
-        ModelNode model = new ModelNode();
-
-        final int count = reader.getAttributeCount();
-
-        String name = null;
-        for (int i = 0; i < count; i++) {
-            requireNoNamespaceAttribute(reader, i);
-            final String value = reader.getAttributeValue(i);
-            final Attribute attribute = Attribute.forName(reader.getAttributeLocalName(i));
-            switch (attribute) {
-                case NAME: {
-                    name = value;
-                    break;
-                }
-                case MAIN: {
-                    DeploymentArchiveDefinition.MAIN.parseAndSetParameter(value, model, reader);
-                    break;
-                }
-                default:
-                    throw unexpectedAttribute(reader, i);
-            }
-        }
-
-        if (name == null) {
-            throw new RuntimeException("Attribute '" + Attribute.NAME.getLocalName() + "' of '"
-                    + Element.ARCHIVE.getLocalName() + "' element can not be null!");
-        }
-
-        addDeploymentArchiveOperation(parent, model, name, operations);
-
-        requireNoContent(reader);
-    }
-
-    private static void addDeploymentArchiveOperation(ModelNode parent, ModelNode model, String name, List<ModelNode> operations) {
-        ModelNode address = parent.clone();
-        address.add(Constants.DEPLOYMENT_ARCHIVE, name);
-
-        model.get(OP).set(ADD);
-        model.get(OP_ADDR).set(address);
-        operations.add(model);
     }
 
     static void parsePortletWarDependencies(XMLExtendedStreamReader reader, ModelNode parent, List<ModelNode> operations)
