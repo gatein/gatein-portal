@@ -42,6 +42,7 @@ import org.exoplatform.services.listener.Event;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Page;
+import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.ui.UIComponent;
 import org.gatein.mop.api.workspace.ui.UIContainer;
 import org.gatein.mop.api.workspace.ui.UIWindow;
@@ -54,6 +55,7 @@ import org.mockito.stubbing.Answer;
  * @version $Revision$
  */
 public class MOPConsumerStructureProviderTestCase extends TestCase {
+    public static final String SITE_NAME = "site";
     private MOPConsumerStructureProvider provider;
     private PortalStructureAccess structureAccess;
     private Page page1;
@@ -61,11 +63,15 @@ public class MOPConsumerStructureProviderTestCase extends TestCase {
     public void testGetPageIdentifiers() {
         List<String> pageIdentifiers = provider.getPageIdentifiers();
         assertEquals(5, pageIdentifiers.size());
-        assertTrue(pageIdentifiers.contains("page1"));
-        assertTrue(pageIdentifiers.contains("page11"));
-        assertTrue(pageIdentifiers.contains("page12"));
-        assertTrue(pageIdentifiers.contains("page2"));
-        assertTrue(pageIdentifiers.contains("page21"));
+        assertTrue(pageIdentifiers.contains(getPageIdFor("page1")));
+        assertTrue(pageIdentifiers.contains(getPageIdFor("page11")));
+        assertTrue(pageIdentifiers.contains(getPageIdFor("page12")));
+        assertTrue(pageIdentifiers.contains(getPageIdFor("page2")));
+        assertTrue(pageIdentifiers.contains(getPageIdFor("page21")));
+    }
+
+    private String getPageIdFor(String pageName) {
+        return MOPConsumerStructureProvider.PageInfo.getPageIdFor(SITE_NAME, pageName);
     }
 
     public void testGetWindowIdentifiersForInexistingPage() {
@@ -88,7 +94,7 @@ public class MOPConsumerStructureProviderTestCase extends TestCase {
     public void testAssignPortletToWindow() {
         String newCustomizationId = "/app.new";
         String newWindowName = "portlet";
-        provider.assignPortletToWindow(PortletContext.createPortletContext(newCustomizationId), "window11", "page1",
+        provider.assignPortletToWindow(PortletContext.createPortletContext(newCustomizationId), "window11", getPageIdFor("page1"),
                 newWindowName);
         verify(structureAccess).getWindowFrom(getIdFor("window11"));
 
@@ -125,8 +131,8 @@ public class MOPConsumerStructureProviderTestCase extends TestCase {
 
         List<String> identifiers = provider.getPageIdentifiers();
         assertEquals(pageNumber + 2, identifiers.size());
-        assertTrue(identifiers.contains("foo"));
-        assertTrue(identifiers.contains("foo1"));
+        assertTrue(identifiers.contains(getPageIdFor("foo")));
+        assertTrue(identifiers.contains(getPageIdFor("foo1")));
 
         checkWindows("foo", "windowfoo1");
         checkWindows("foo1", "windowfoo11");
@@ -158,9 +164,9 @@ public class MOPConsumerStructureProviderTestCase extends TestCase {
         List<String> identifiers = provider.getPageIdentifiers();
         assertEquals(pageNumber - 1, identifiers.size());
         // deleting a page doesn't delete its children, see GTNPORTAL-1630
-        assertFalse(identifiers.contains(pageToRemove));
-        assertTrue(identifiers.contains("page11"));
-        assertTrue(identifiers.contains("page12"));
+        assertFalse(identifiers.contains(getPageIdFor(pageToRemove)));
+        assertTrue(identifiers.contains(getPageIdFor("page11")));
+        assertTrue(identifiers.contains(getPageIdFor("page12")));
     }
 
     public void testPageUpdatedEvent() throws Exception {
@@ -198,7 +204,7 @@ public class MOPConsumerStructureProviderTestCase extends TestCase {
     }
 
     private void checkWindows(final String pageName, String... windowNames) {
-        List<String> windows = provider.getWindowIdentifiersFor(pageName);
+        List<String> windows = provider.getWindowIdentifiersFor(getPageIdFor(pageName));
 
         if (windowNames != null) {
             assertEquals(windowNames.length, windows.size());
@@ -209,9 +215,12 @@ public class MOPConsumerStructureProviderTestCase extends TestCase {
     }
 
     private Page createPage(String name, String[] childrenPages, String[] windowNames) {
-        Page page = mock(Page.class);
+        Site site = mock(Site.class);
+        when(site.getName()).thenReturn(SITE_NAME);
 
+        Page page = mock(Page.class);
         when(page.getName()).thenReturn(createInternalNameFrom(name));
+        when(page.getSite()).thenReturn(site);
 
         // mock call to adapt
         Described described = mock(Described.class);

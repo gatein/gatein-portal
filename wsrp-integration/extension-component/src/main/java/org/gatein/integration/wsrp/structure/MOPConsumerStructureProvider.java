@@ -223,7 +223,7 @@ public class MOPConsumerStructureProvider extends Listener implements ConsumerSt
         }
     }
 
-    private static class PageInfo {
+    static class PageInfo {
         private final String uuid;
         private final Map<String, String> childrenWindows = new HashMap<String, String>();
 
@@ -246,9 +246,13 @@ public class MOPConsumerStructureProvider extends Listener implements ConsumerSt
             this.id = getPageIdFor(page);
         }
 
-        private static String getPageIdFor(Page page) {
+        static String getPageIdFor(Page page) {
             Described described = page.adapt(Described.class);
-            return page.getSite().getName() + " :: " + described.getName();
+            return getPageIdFor(page.getSite().getName(), described.getName());
+        }
+
+        static String getPageIdFor(String siteName, String pageName) {
+            return siteName + " :: " + pageName;
         }
 
         public String getUUID() {
