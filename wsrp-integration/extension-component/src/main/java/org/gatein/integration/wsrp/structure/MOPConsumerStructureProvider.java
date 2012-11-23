@@ -84,9 +84,8 @@ public class MOPConsumerStructureProvider extends Listener implements ConsumerSt
     }
 
     private void addPage(Page page) {
-        Described described = page.adapt(Described.class);
-        PageInfo pageInfo = new PageInfo(page.getObjectId(), described.getName(), page.getName());
-        pageInfos.put(pageInfo.getName(), pageInfo);
+        PageInfo pageInfo = new PageInfo(page);
+        pageInfos.put(pageInfo.getId(), pageInfo);
         UIContainer container = page.getRootComponent();
         processContainer(container, pageInfo);
 
@@ -205,17 +204,12 @@ public class MOPConsumerStructureProvider extends Listener implements ConsumerSt
     }
 
     private void removePage(Page page) {
-        Described described = page.adapt(Described.class);
-        String name = described.getName();
+        final String id = PageInfo.getPageIdFor(page);
 
-        removePage(name, page.getName());
-    }
-
-    private void removePage(String name, String internalName) {
-        PageInfo pageInfo = pageInfos.get(name);
-        if (pageInfo != null && internalName.equals(pageInfo.getInternalName())) {
+        PageInfo pageInfo = pageInfos.get(id);
+        if (pageInfo != null && page.getName().equals(pageInfo.getInternalName())) {
             // remove page info
-            pageInfos.remove(name);
+            pageInfos.remove(id);
         }
     }
 
@@ -236,13 +230,25 @@ public class MOPConsumerStructureProvider extends Listener implements ConsumerSt
         /** Name as provided by Described */
         private final String name;
 
+        /** Human readable identifier across sites as pages with the same name exist in different sites */
+        private final String id;
+
         /** Name as automatically generated */
         private final String internalName;
 
-        private PageInfo(String uuid, String name, String internalName) {
-            this.uuid = uuid;
-            this.name = name;
-            this.internalName = internalName;
+        private PageInfo(Page page) {
+            this.uuid = page.getObjectId();
+            this.internalName = page.getName();
+
+            Described described = page.adapt(Described.class);
+            this.name = described.getName();
+
+            this.id = getPageIdFor(page);
+        }
+
+        private static String getPageIdFor(Page page) {
+            Described described = page.adapt(Described.class);
+            return page.getSite().getName() + " :: " + described.getName();
         }
 
         public String getUUID() {
@@ -287,6 +293,10 @@ public class MOPConsumerStructureProvider extends Listener implements ConsumerSt
 
         public String getWindowUUID(String windowId) {
             return childrenWindows.get(windowId);
+        }
+
+        public String getId() {
+            return id;
         }
     }
 }
