@@ -298,15 +298,26 @@ public class UITabPaneDashboard extends UIContainer {
 
             UserNode renamedNode = parentNode.getChild(nodeName);
             renamedNode.setName(newNodeName);
-            renamedNode.setResolvedLabel(newNodeLabel);
 
-            if (renamedNode.getPageRef() != null) {
+            // Distinguish between "Extended label mode" and basic label mode.
+            // In "Extended label mode" node.getLabel() == null.
+            if (renamedNode.getLabel() != null) {
+                renamedNode.setLabel(newNodeLabel);
+            } else {
+                renamedNode.setResolvedLabel(newNodeLabel);
+            }
+
+            // Rename the page only in basic label mode.
+            // For "Extended label mode" use page editor.
+            if (renamedNode.getPageRef() != null && renamedNode.getLabel() != null) {
                 PageContext page = configService.getPageService().loadPage(renamedNode.getPageRef());
                 if (page != null) {
                     PageState state = page.getState();
                     String encodedLabel = HTMLEntityEncoder.getInstance().encode(newNodeLabel);
                     page.setState(state.builder().displayName(encodedLabel).build());
                     configService.getPageService().savePage(page);
+                    // Update UIPage cache on UIPortal.
+                    uiPortal.setUIPage(renamedNode.getPageRef().format(), null);
                 }
             }
 
