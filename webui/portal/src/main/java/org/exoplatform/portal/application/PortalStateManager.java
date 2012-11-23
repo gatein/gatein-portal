@@ -71,7 +71,7 @@ public class PortalStateManager extends StateManager {
         //
         if (uiapp == null) {
             ConfigurationManager cmanager = app.getConfigurationManager();
-            String uirootClass = cmanager.getApplication().getUIRootComponent();
+            String uirootClass = cmanager.getApplication().getUIRootComponent().trim();
             Class<? extends UIApplication> type = (Class<UIApplication>) Thread.currentThread().getContextClassLoader()
                     .loadClass(uirootClass);
             uiapp = app.createUIComponent(type, null, null, context);
