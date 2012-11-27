@@ -15,8 +15,6 @@ Prerequisites
 Build configuration
 ===================
 
-1) Profile configuration
-
 GateIn build uses a system property called 'gatein.dev' to configure the target server to use for packaging.
 
 When gatein.dev property is not set it will build *everything* in the project: development modules, the documentation,
@@ -31,10 +29,6 @@ The various values for gatein.dev are:
 - jbossas713 : JBoss AS 7.1.3.Final
 - jetty      : Jetty (unsupported at the moment)
 
-
-2) Database configuration
-
-By default the build uses a HSQLDB database. However, it is possible to use MySQL5 by using the 'mysql5' profile.
 
 
 Build instructions
