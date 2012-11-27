@@ -41,6 +41,7 @@
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
               <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/wsrp${container.name.suffix}"/>
+              <property name="db-tablename-suffix" value="WSRPSYS"/>
             </properties>
             <value-storages>
               <value-storage id="wsrp-system"

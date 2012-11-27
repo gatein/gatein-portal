@@ -114,6 +114,7 @@
               <property name="max-buffer-size" value="204800"/>
               <property name="swap-directory"
                         value="${gatein.jcr.data.dir}/swap/portal-system${container.name.suffix}"/>
+              <property name="db-tablename-suffix" value="PSYSTEM"/>
             </properties>
             <value-storages>
               <value-storage id="portal-system"
@@ -188,6 +189,7 @@
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
               <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/portal-work${container.name.suffix}"/>
+              <property name="db-tablename-suffix" value="PWORK"/>
             </properties>
             <value-storages>
               <value-storage id="portal-work"
