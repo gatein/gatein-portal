@@ -3,4 +3,4 @@ Archiver-Version: Plexus Archiver
 Created-By: Apache Maven
 Built-By: Marko
 Build-Jdk: 1.6.0_24
-Dependencies: org.gatein.pc,org.gatein.common,org.hibernate,org.jboss.security.negotiation,org.gatein.sso
+Dependencies: org.gatein.pc,org.gatein.common,org.hibernate,org.gatein.sso
