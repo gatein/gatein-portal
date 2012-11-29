@@ -91,7 +91,7 @@
 	width:auto;
 }
 
-.UIColumnContainer .ControlIcon {
+.ContainerMode .UIColumnContainer .ContainerControlIcon {
   float: right;/* orientation=lt */
   float: left;/* orientation=rt */
   width: 28px; 
@@ -100,7 +100,7 @@
   background: url('/eXoResources/skin/PortletThemes/background/DefaultTheme.png') no-repeat center;
 }
 
-.UIColumnContainer .ArrowDownIcon {
+.ContainerMode .UIColumnContainer .ContainerArrowDownIcon {
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	width: 22px; height: 16px; 

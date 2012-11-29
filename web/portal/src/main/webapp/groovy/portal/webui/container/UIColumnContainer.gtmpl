@@ -81,7 +81,7 @@
 										   rcontext.getJavascriptManager().require("SHARED/popupCategory", "popup")
 										   		  .addScripts("popup.init('" + uicomponent.id + "');");
 										%>
-											<div class="ControlIcon ArrowDownIcon" title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertColumn") %>">
+											<div class="ContainerControlIcon ContainerArrowDownIcon" title="<%= _ctx.appRes("UIColumnContainer.tooltip.insertColumn") %>">
 												<% /*Begin Popup Menu*/ %>
 												<div style="position: relative; width: 100%">
 													<div class="UIPopupCategory" style="display: none;">
