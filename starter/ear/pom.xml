@@ -19,12 +19,11 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
+    <version>3.5.0.Final</version>
     <relativePath>../../pom.xml</relativePath>
   </parent>
 
@@ -39,7 +38,7 @@
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.starter.war</artifactId>
-      <version>3.5.0.Final-SNAPSHOT</version>
+      <version>3.5.0.Final</version>
       <type>war</type>
     </dependency>
   </dependencies>

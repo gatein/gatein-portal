@@ -1,13 +1,12 @@
 <?xml version="1.0"?>
 <?rename tofile="portal.war"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.packaging.tomcat</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
+    <version>3.5.0.Final</version>
   </parent>
   <artifactId>exo.portal.packaging.tomcat.tomcat7</artifactId>
   <packaging>pom</packaging>
@@ -111,9 +110,9 @@
             <configuration>
               <target>
                 <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
-                  <target name="package"/>
-                  <property name="maven.project.basedir" value="${project.basedir}"/>
-                  <property name="maven.project.build.directory" value="${project.build.directory}"/>
+                  <target name="package" />
+                  <property name="maven.project.basedir" value="${project.basedir}" />
+                  <property name="maven.project.build.directory" value="${project.build.directory}" />
                 </ant>
               </target>
             </configuration>
@@ -171,9 +170,9 @@
                 <configuration>
                   <target>
                     <ant antfile="${project.basedir}/package.xml" inheritRefs="true">
-                      <target name="prepare"/>
-                      <property name="maven.project.basedir" value="${project.basedir}"/>
-                      <property name="maven.project.build.directory" value="${project.build.directory}"/>
+                      <target name="prepare" />
+                      <property name="maven.project.basedir" value="${project.basedir}" />
+                      <property name="maven.project.build.directory" value="${project.build.directory}" />
                     </ant>
                   </target>
                 </configuration>
@@ -200,8 +199,8 @@
                 </goals>
                 <configuration>
                   <target>
-                    <zip destfile="${project.build.directory}/tomcat7.zip" basedir="${project.build.directory}/tomcat"/>
-                    <attachartifact file="${project.build.directory}/tomcat7.zip" classifier="bundle" type="zip"/>
+                    <zip destfile="${project.build.directory}/tomcat7.zip" basedir="${project.build.directory}/tomcat" />
+                    <attachartifact file="${project.build.directory}/tomcat7.zip" classifier="bundle" type="zip" />
                   </target>
                 </configuration>
               </execution>

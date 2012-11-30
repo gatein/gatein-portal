@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.packaging.jboss7</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
+    <version>3.5.0.Final</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -1267,7 +1266,7 @@
             <configuration>
               <tasks>
                 <ant antfile="build.xml" inheritRefs="true">
-                  <target name="all"/>
+                  <target name="all" />
                 </ant>
               </tasks>
             </configuration>
