@@ -114,13 +114,9 @@ public class UIUserInGroup extends UIContainer {
         if (group == null) {
             pageList = EmptySerializablePageList.get();
         } else {
-            OrganizationService service = getApplicationComponent(OrganizationService.class);
-            MembershipHandler handler = service.getMembershipHandler();
-            ListAccess<?> list = handler.findAllMembershipsByGroup(group);
-            pageList = new FindMembershipByGroupPageList(group.getId(), list.getSize() > 10 ? list.getSize() : 10);
+            pageList = new FindMembershipByGroupPageList(group.getId(), 5);
         }
         UIGridUser uiGrid = getChild(UIGridUser.class);
-        pageList.setPageSize(5);
 
         UIPageIterator pageIterator = uiGrid.getUIPageIterator();
         /** We keep the currently selected page index **/
