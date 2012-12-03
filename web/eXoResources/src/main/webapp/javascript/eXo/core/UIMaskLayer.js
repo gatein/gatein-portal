@@ -302,9 +302,19 @@
 	    if ((top + object.offsetHeight) > topPos + $(window).height()) {
 	      top = topPos + browserHeight - object.offsetHeight;
 	    }
-	
-	    object.style.left = left + "px";
-	    object.style.top = top + "px";
+
+        if (left >= 0) {	
+	      object.style.left = left + "px";
+        }
+        else {
+           object.style.left = "0";
+        }
+        if (top >= 0) {
+	       object.style.top = top + "px";
+        }
+        else {
+           object.style.top = "0";
+        }
 	  },
 	  /**
 	   * Removes the mask layer from the DOM
