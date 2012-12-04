@@ -1,0 +1,62 @@
+#gtnResponsiveHeaderPortlet {
+	background-color: white; /*fallback*/
+	background: -webkit-linear-gradient(top, #FFFFFF, #EEEEEE);
+	background: -moz-linear-gradient(top, #FFFFFF, #EEEEEE);
+/* 	height: 4.6em; */
+	margin: 0;
+	padding: 0;
+}
+
+#grh_logo  {
+	background-image: url('../images/gatein_logo.svg');
+	line-height: 1em;
+	background-size: 2em;
+	background-repeat: no-repeat;
+	background-size: auto 3em;
+	height: 3em;
+	width: 12em;
+	background-position: 2em 0.8em;
+	padding: 0.8em 0 0.8em 2em;
+	float: left;
+}
+
+#grh_options {
+	float: right;
+	line-height: 3em;
+}
+
+#grh_options ul 
+{
+	list-style-type: none;
+	padding: 0;
+}
+
+#grh_options ul li {
+	display: inline;
+	padding: 1em;
+}
+
+#grh_options ul li a {
+	color: #565658;
+}
+
+#grh_options ul li a:HOVER {
+	color: #002559;
+}
+
+#grh_icon {
+	background-image: url('../images/preference.svg');
+	background-size: 2em;
+	background-repeat: no-repeat;
+	background-size: auto 3em;
+	height: 3em;
+	width: 3em;
+	background-position: 2em 0.8em;
+	padding: 0.8em 2em 0.8em 2em;
+	float: right;
+	display: none;
+}
+
+.grh_clear {
+	clear: both;
+}

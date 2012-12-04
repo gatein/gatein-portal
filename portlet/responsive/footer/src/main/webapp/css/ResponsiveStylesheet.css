@@ -1,0 +1,39 @@
+.gtnResponsiveFooterPortlet {
+	margin: 0;
+	padding: 0;
+}
+
+.gtnResponsiveFooterPortlet .gtn_CopyrightInfo {
+	float: left;
+	font-size: 0.8em;
+	color: #A7A7A7;
+}
+
+.gtnResponsiveFooterPortlet .gtn_CopyrightInfo a {
+	color: #666666;
+}
+
+.gtnResponsiveFooterPortlet .gtn_CopyrightInfo a:hover {
+	color: #285786;
+}
+
+.gtnResponsiveFooterPortlet .gtn_options {
+	float: right;
+	font-size: 1em;
+}
+
+.gtnResponsiveFooterPortlet .gtn_options ul {
+	margin: 0;
+	padding: 0;
+}
+
+.gtnResponsiveFooterPortlet .gtn_options li {
+	display: inline;
+	padding: 0 0.5em;
+}
+
+.gtnResponsiveFooterPortlet .gtn_options li select {
+	border: 0;
+	font-size: 1em;
+	background-color: transparent;
+}

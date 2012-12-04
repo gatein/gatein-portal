@@ -1,0 +1,99 @@
+.gtnResponsiveFeaturesPortlet {
+text-align: left;
+background: #FFF url(/responsive-features-portlet/css/../images/top-shadow.png) no-repeat left top;
+padding: 1em;
+
+}
+
+.gtnResponsiveFeaturesPortlet h1 {
+color: #000000;
+font-weight: normal;
+font-size: 1.75em;
+}
+
+.gtnResponsiveFeaturesPortlet h2 {
+font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+font-size: 1.25em;
+font-weight: normal;
+}
+
+.gtnResponsiveFeaturesPortlet div.feature {
+    width: 31%;
+    float: left;
+    padding-left: 1%;
+    padding-right: 1%;
+    padding-top: 9em;
+    background-color: #FFF;
+    background-repeat: no-repeat;
+    background-position: left top;
+    background-size: 100% auto;
+}
+
+#ssoFeature {
+background-image: url(/responsive-features-portlet/css/../images/feature-sso.png);
+}
+
+#nuiFeature {
+background-image: url(/responsive-features-portlet/css/../images/feature-ui.png);
+}
+
+#psFeature {
+background-image: url(/responsive-features-portlet/css/../images/feature-plugin.png);
+}
+
+#footer {
+    text-align: right;
+    clear: both;
+}
+
+@media only screen and (max-width: 50em) {
+.gtnResponsiveFeaturesPortlet div.feature {
+    float: none;
+    width: 60%;
+    background-size: 35% auto;
+    padding-top: 0;
+    padding-left: 35%;
+    padding-right: 5%;
+    height: 10em;
+}
+}
+
+@media only screen and (max-width: 30em) {
+.gtnResponsiveFeaturesPortlet div.feature {
+    float: none;
+    width: 90%;
+    background-size: 80% auto;
+    background-position: center 0;
+    padding-top: 30%;
+    padding-left: 5%;
+    padding-right: 5%;
+    height: 10em;
+}
+}
+
+@media only screen and (max-width: 30em) {
+.gtnResponsiveFeaturesPortlet {
+padding: 0.75em
+}
+.gtnResponsiveFeaturesPortlet h1 {
+font-size: 1.5em;
+}
+.gtnResponsiveFeaturesPortlet h2 {
+font-size: 1em;
+font-weight: bold;
+}
+}
+
+@media only screen and (max-width: 20em) {
+.gtnResponsiveFeaturesPortlet {
+padding: 0.5em
+}
+.gtnResponsiveFeaturesPortlet h1 {
+font-size: 1.2em;
+font-weight: bold;
+}
+.gtnResponsiveFeaturesPortlet h2 {
+font-size: 1em;
+font-weight: bold;
+}
+}
