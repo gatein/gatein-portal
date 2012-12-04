@@ -152,6 +152,18 @@
       <copy todir="${jbossas.target.dir}/gatein/extensions" preservelastmodified="true" overwrite="true">
          <fileset refid="org.gatein.portal:responsive-skin:war"/>
       </copy>
+      <copy todir="${jbossas.target.dir}/gatein/extensions" preservelastmodified="true" overwrite="true">
+         <fileset refid="org.gatein.portal:portlet.responsive.banner:war"/>
+      </copy>
+      <copy todir="${jbossas.target.dir}/gatein/extensions" preservelastmodified="true" overwrite="true">
+         <fileset refid="org.gatein.portal:portlet.responsive.features:war"/>
+      </copy>
+      <copy todir="${jbossas.target.dir}/gatein/extensions" preservelastmodified="true" overwrite="true">
+         <fileset refid="org.gatein.portal:portlet.responsive.footer:war"/>
+      </copy>
+      <copy todir="${jbossas.target.dir}/gatein/extensions" preservelastmodified="true" overwrite="true">
+         <fileset refid="org.gatein.portal:portlet.responsive.header:war"/>
+      </copy>
 
       <!-- Deployment archives overrides -->
       <!-- Copy bin, modules, configuration files -->

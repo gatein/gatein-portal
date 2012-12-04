@@ -119,6 +119,28 @@
          <artifactId>responsive-skin</artifactId>
          <type>war</type>
       </dependency>
+      <dependency>
+         <groupId>org.gatein.portal</groupId>
+         <artifactId>portlet.responsive.banner</artifactId>
+         <type>war</type>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.portal</groupId>
+         <artifactId>portlet.responsive.features</artifactId>
+         <type>war</type>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.portal</groupId>
+         <artifactId>portlet.responsive.footer</artifactId>
+         <type>war</type>
+      </dependency>
+      <dependency>
+         <groupId>org.gatein.portal</groupId>
+         <artifactId>portlet.responsive.header</artifactId>
+         <type>war</type>
+      </dependency>
+
+
 
       <!--         -->
       <!-- Samples -->

@@ -32,17 +32,28 @@
 	  <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
-        <application-ref>web</application-ref>
-        <portlet-ref>HomePagePortlet</portlet-ref>
+        <application-ref>responsive-banner-portlet</application-ref>
+        <portlet-ref>ResponsiveBannerPortlet</portlet-ref>
       </portlet>
-      <title>Home Page portlet</title>
+      <title>Banner portlet</title>
+      <access-permissions>Everyone</access-permissions>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </portlet-application>
+    <portlet-application>
+      <portlet>
+        <application-ref>responsive-features-portlet</application-ref>
+        <portlet-ref>ResponsiveFeaturesPortlet</portlet-ref>
+      </portlet>
+      <title>Features portlet</title>
       <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>false</show-application-state>
       <show-application-mode>false</show-application-mode>
     </portlet-application>
   </page>    
-    
+
   <page>
     <name>groupnavigation</name>
     <title>Group Navigation</title>
