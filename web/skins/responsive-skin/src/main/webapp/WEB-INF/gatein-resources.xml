@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
     Copyright (C) 2009 eXo Platform SAS.
@@ -18,28 +19,15 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
 -->
+<gatein-resources
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
-   <modelVersion>4.0.0</modelVersion>
-
-   <parent>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.parent</artifactId>
-      <version>3.5.0.Final-SNAPSHOT</version>
-   </parent>
-
-   <artifactId>exo.portal.web</artifactId>
-   <packaging>pom</packaging>
-
-   <name>GateIn Portal Web</name>
-
-   <modules>
-      <module>eXoResources</module>
-      <module>portal</module>
-      <module>rest</module>
-      <module>redirect</module>
-      <module>skins</module>
-   </modules>
-
-</project>
+	<portal-skin>
+		<skin-name>ResponsiveSkin</skin-name>
+		<css-path>/skin/Stylesheet.css</css-path>
+                <css-priority>10</css-priority>
+	</portal-skin>	
+	
+</gatein-resources>

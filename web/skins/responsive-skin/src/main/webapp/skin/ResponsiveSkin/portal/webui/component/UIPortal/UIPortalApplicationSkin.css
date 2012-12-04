@@ -1,0 +1,139 @@
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Ubuntu'), url(http://themes.googleusercontent.com/static/fonts/ubuntu/v4/_xyN3apAT_yRRDeqB3sPRg.woff) format('woff');
+}
+
+div {
+	padding: 0;
+	margin: 0;
+	outline: none;
+}
+
+table {
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	border-spacing: 0;
+	border-collapse: collapse;
+}
+
+th,td {
+	padding: 0;
+	margin: 0;
+	vertical-align: top;
+}
+
+img {
+	padding: 0;
+	margin: 0;
+	border: none;
+	vertical-align: middle;
+}
+
+form {
+	padding: 0;
+	margin: 0;
+}
+
+html {
+	margin: 0;
+	padding: 0;
+	*overflow-x: hidden;
+}
+
+body {
+	background: #EFEFEF url(images/uiportal-background.jpg) repeat left top;;
+	margin: 0;
+	padding: 0;
+	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+	overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: Ubuntu, sans-serif;
+}
+
+a {
+	text-decoration: none;
+	color: black;
+}
+
+.UIWorkingWorkspace {
+	max-width: 63.5625em; /*1017px;*/
+	min-width: 20em;
+	width: auto;
+	margin: auto;
+}
+
+.UIPageBody .BLPagebody {
+	display: none;
+}
+
+/*###############################################################################################*/
+.OverflowContainer {
+	overflow: hidden;
+	width: 100%;
+}
+
+.ClearFix:after {
+	content: "";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.ClearFix { !
+	display: inline-block; !
+	zoom: 1; !
+	display: block;
+}
+
+.InlineContainer {
+	overflow: hidden;
+}
+
+/*.AjaxLoadingMask {
+	width: 180px;
+	height: 110px;
+	background: white;
+	border: 1px solid #66667e;
+	padding: 1px;
+}
+
+.AjaxLoadingMask .LoadingContainer {
+	height: 108px;
+	background: #ffffff;
+	border: solid 1px #a8a9bb;
+}
+
+.AjaxLoadingMask .LoadingText {
+	text-align: center;
+	padding: 10px 0px 5px 0px;
+}
+
+.AjaxLoadingMask .LoadingProgressBar {
+	width: 32px;
+	height: 40px;
+	background:
+		url("/eXoResources/skin/DefaultSkin/background/LoadingProgress.gif")
+		no-repeat center;
+	margin: auto;
+	display: block;
+}
+
+.AjaxLoadingMask .UIAction .ActionButton {
+	float: none;
+}
+*/
+.FL {
+	float: left; /* orientation=lt */
+	float: right; /* orientation=rt */
+}
+
+.FR {
+	float: right; /* orientation=lt */
+	float: left; /* orientation=rt */
+}

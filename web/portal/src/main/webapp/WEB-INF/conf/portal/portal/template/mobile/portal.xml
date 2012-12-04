@@ -24,29 +24,16 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
-  <portal-name>mobile</portal-name>
-  <label>Mobile</label>
-  <description>GateIn default mobile portal</description>
+  <portal-name>@owner@</portal-name>
+  <label>Classic Portal</label>
+  <description>This is classic portal template</description>
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
   <edit-permission>*:/platform/administrators</edit-permission>
-  <skin>ResponsiveSkin</skin>
   <properties>
     <entry key="sessionAlive">onDemand</entry>
-    <entry key="showPortletInfo">0</entry>
   </properties>
-
-  <portal-redirects>
-    <portal-redirect>
-      <redirect-site>classic</redirect-site>
-      <name>Desktop</name>
-      <enabled>true</enabled>
-      <node-mapping>
-        <use-node-name-matching>true</use-node-name-matching>
-      </node-mapping>
-    </portal-redirect>
-  </portal-redirects>
-
+  
  	<portal-layout>
 	  <portlet-application>
       <portlet>
@@ -68,13 +55,6 @@
       <portlet>
         <application-ref>web</application-ref>
         <portlet-ref>NavigationPortlet</portlet-ref>
-        <preferences>
-          <preference>
-            <name>useAJAX</name>
-            <value>false</value>
-            <read-only>false</read-only>
-          </preference>
-        </preferences>
       </portlet>
       <access-permissions>Everyone</access-permissions>
 	    <show-info-bar>false</show-info-bar>

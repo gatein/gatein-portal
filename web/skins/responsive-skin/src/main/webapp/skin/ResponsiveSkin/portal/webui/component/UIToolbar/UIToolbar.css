@@ -1,0 +1,25 @@
+.UIToolbarContainer {
+}
+
+.UIToolbarContainer .NormalContainerBlock .ToolbarContainer {
+background: none;
+border: none;
+}
+
+
+/* Media Queries for Smaller Screened Devices*/
+@media only screen and (max-width: 40em) {
+
+.UIToolbarContainer .NormalContainerBlock .ToolbarContainer .NormalToolbarTab.UITab>a {
+    font-size: 0;
+}
+
+.UIToolbarContainer .NormalContainerBlock .ToolbarContainer .HighlightNavigationTab.UITab>a {
+    font-size: 0;
+}
+
+.UIToolbarContainer .UIUserInfoPortlet .Name>a {
+    font-size: 0;
+}
+
+}

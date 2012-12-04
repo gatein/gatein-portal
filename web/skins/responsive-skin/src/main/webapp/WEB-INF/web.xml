@@ -1,3 +1,5 @@
+<?xml version="1.0"?>
+
 <!--
 
     Copyright (C) 2009 eXo Platform SAS.
@@ -19,27 +21,20 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+            http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd"
+        version="2.4">
+        <display-name>gatein-responsive-skin</display-name>
+   <filter>
+    <filter-name>ResourceRequestFilter</filter-name>
+    <filter-class>org.exoplatform.portal.application.ResourceRequestFilter</filter-class>
+  </filter>
+  
+  	 <filter-mapping>
+	    <filter-name>ResourceRequestFilter</filter-name>
+	    <url-pattern>/*</url-pattern>
+	  </filter-mapping>
 
-   <modelVersion>4.0.0</modelVersion>
-
-   <parent>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.parent</artifactId>
-      <version>3.5.0.Final-SNAPSHOT</version>
-   </parent>
-
-   <artifactId>exo.portal.web</artifactId>
-   <packaging>pom</packaging>
-
-   <name>GateIn Portal Web</name>
-
-   <modules>
-      <module>eXoResources</module>
-      <module>portal</module>
-      <module>rest</module>
-      <module>redirect</module>
-      <module>skins</module>
-   </modules>
-
-</project>
+</web-app>

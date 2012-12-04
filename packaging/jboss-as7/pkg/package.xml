@@ -148,6 +148,10 @@
          <fileset refid="org.gatein.wsrp:wsrp-admin-gui:war"/>
       </unzip>
 
+      <!-- Mobile Specific Integrations -->
+      <copy todir="${jbossas.target.dir}/gatein/extensions" preservelastmodified="true" overwrite="true">
+         <fileset refid="org.gatein.portal:responsive-skin:war"/>
+      </copy>
 
       <!-- Deployment archives overrides -->
       <!-- Copy bin, modules, configuration files -->

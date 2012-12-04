@@ -1,0 +1,7 @@
+/* TODO: figure out how to only overwrite specifics from the DefaultSkin without having to copy it all over */
+/* TODO: rewrite the UIToolbarContainer stylesheet properly for the responsive skin */
+@import url(DefaultSkin/portal/webui/component/view/UIToolbarContainer/Stylesheet.css);
+
+@import url(ResponsiveSkin/portal/webui/component/UIPortal/UIPortalApplicationSkin.css);
+@import url(ResponsiveSkin/portal/webui/component/UIToolbar/UIToolbar.css);
+@import url(Portlet/Stylesheet.css);

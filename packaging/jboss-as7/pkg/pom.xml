@@ -111,6 +111,15 @@
          <version>${org.gatein.wsrp.version}</version>
       </dependency>
 
+      <!--          -->
+      <!--  Mobile  -->
+      <!--          -->
+      <dependency>
+         <groupId>org.gatein.portal</groupId>
+         <artifactId>responsive-skin</artifactId>
+         <type>war</type>
+      </dependency>
+
       <!--         -->
       <!-- Samples -->
       <!--         -->
