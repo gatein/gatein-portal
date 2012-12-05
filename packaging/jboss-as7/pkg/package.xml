@@ -196,5 +196,12 @@
       <!--chmod perm="0644" type="file" dir="${jbossas.target.dir}" excludes="**/*.sh"/-->
       <chmod perm="0755" type="file" dir="${jbossas.target.dir}" includes="**/*.sh"/>
 
+      <!-- TODO: delete this section!!! this is only added as a hack to get around the issue of having portlets wars in the extension directory crashing wsrp (and the portal) -->
+      <delete includeEmptyDirs="true" includeemptydirs="true">
+        <fileset dir="${jbossas.target.dir}/gatein/extensions/gatein-wsrp-integration.ear" includes="**/*"/>
+      </delete>
+      <delete dir="${jbossas.target.dir}/gatein/extensions/gatein-wsrp-integration.ear" includeemptydirs="true"/>
+      <!-- /TODO -->
+
   </target>
 </project>
