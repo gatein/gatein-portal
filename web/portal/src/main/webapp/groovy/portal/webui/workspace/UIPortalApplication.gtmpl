@@ -34,6 +34,11 @@
 	<head id="head">
 		<title><%=title%></title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+                <!-- TODO: remove this line here, it doesn't belong hardcoded in this template and should
+                           be added by the skin instead -->
+                <meta name="viewport" content="width=device-width"/>
+                <!-- /TODO -->
+
 		<%
 			if(metaInformation!= null) {
 				Iterator<String> keys = metaInformation.keySet().iterator();
