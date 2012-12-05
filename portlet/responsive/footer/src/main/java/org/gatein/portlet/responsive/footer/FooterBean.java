@@ -22,14 +22,66 @@
  ******************************************************************************/
 package org.gatein.portlet.responsive.footer;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.webui.util.Util;
+import org.exoplatform.services.resources.LocaleConfig;
+import org.exoplatform.services.resources.LocaleConfigService;
+import org.exoplatform.services.resources.ResourceBundleService;
+
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
 public class FooterBean
 {
+   LocaleConfigService localeService;
+   ResourceBundleService resourceBundleService;
+   
+   
    public FooterBean()
    {
+      localeService = (LocaleConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(LocaleConfigService.class);
+      resourceBundleService = (ResourceBundleService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ResourceBundleService.class);
+   }
+   
+   public Locale getCurrentLocale()
+   {
+      return Util.getPortalRequestContext().getLocale();
+   }
+   
+   public List<Locale> getLanguages()
+   {
+      Locale currentLocale = Util.getPortalRequestContext().getLocale();
+      
+      Collection<LocaleConfig> localeConfigs = localeService.getLocalConfigs();
+      
+      List<Locale> locales = new ArrayList<Locale>();
+      for (LocaleConfig localeConfig: localeConfigs)
+      {
+         locales.add(localeConfig.getLocale());
+      }
+      
+      Collections.sort(locales, new LocaleComparator());
+      return locales;
+   }
+
+   private class LocaleComparator implements Comparator<Locale>
+   {
+
+      @Override
+      public int compare(Locale firstLocale, Locale secondLocale)
+      {
+         return (firstLocale.getDisplayName(getCurrentLocale()).compareTo(secondLocale.getDisplayName(getCurrentLocale())));
+      }
+      
    }
 }
 

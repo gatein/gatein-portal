@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ page import="java.util.Locale" %>
+<%@ page import="java.util.List" %>
 <%@ page import="java.util.ResourceBundle" %>
 <portlet:defineObjects/>
 <jsp:useBean id="footer" class="org.gatein.portlet.responsive.footer.FooterBean"/>
@@ -7,6 +8,8 @@
 <%
 Locale locale = renderRequest.getLocale();
 ResourceBundle resourceBundle = portletConfig.getResourceBundle(locale);
+
+List<Locale> languages = footer.getLanguages();
 %>
 
 <div class="gtnResponsiveFooterPortlet">
@@ -21,11 +24,38 @@ ResourceBundle resourceBundle = portletConfig.getResourceBundle(locale);
       <li><a href="http://www.gatein.org">gatein.org</a></li>
       <li><a href="#"><%= resourceBundle.getString("contactUs") %></a></li>
       <li>
-        <select>
-          <option value="foo">Foo</option>
-          <option value="bar">Bar</option>
+        <select id="grf_languageSelect">
+          <% for (Locale language : languages)
+          {
+             String languageName = language.getDisplayLanguage(locale);
+             String languageNameinLanguage = language.getDisplayLanguage(language);
+             
+             if (language.getCountry() != null && !language.getCountry().isEmpty())
+             {
+                languageName += "(" + language.getDisplayCountry(locale) + ")";
+                languageNameinLanguage += "(" + language.getDisplayCountry(language) + ")";
+             }
+             
+             if (!language.equals(locale))
+             {
+             %>
+                 <option><%= languageName + " - " + languageNameinLanguage %></option>
+          <% }
+             else
+             { %>
+                 <option selected="selected"><%= languageName %></option>
+          <% }
+          }
+          %>
         </select>
       </li>
     </ul>
   </div>
 </div>
+
+<script type="text/javascript">
+
+   var GRHLanguageSelect = document.getElementById("grf_languageSelect");
+   GRHLanguageSelect.style.width = GRHLanguageSelect.options[GRHLanguageSelect.selectedIndex].text.length + "em";
+
+</script>

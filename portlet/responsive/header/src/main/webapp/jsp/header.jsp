@@ -16,7 +16,7 @@ String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) aj
 
 <div id="gtnResponsiveHeaderPortlet">
   <div id="grh_logo"></div>
-  <div id="grh_icon" onclick="toggleOptions()"></div>
+  <div id="grh_icon" onclick="toggleOptions()" class="hidden"></div>
   <div id="grh_options">
      <ul>
        <li><a onclick="<%= signinAction %>"><%= resourceBundle.getString("label.Signin") %></a></li>
@@ -38,11 +38,9 @@ String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) aj
 	var optionsWidth = GRHOptionsDiv.clientWidth;
 
 	var maxWidthForOptions = logoWidth + optionsWidth;
-
-
-// 	$(window).resize(function(){checkGRHSize();});
 	
-//     window.onresize = function(){checkGRHSize();};
+	var iconSelected = false;
+
 	checkGRHSize();
 	
 	function checkGRHSize()
@@ -50,23 +48,29 @@ String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) aj
 		var mainWidth = GRHMainDiv.clientWidth;
 
 		if ((mainWidth - maxWidthForOptions) < 0) {
-			GRHOptionsDiv.style.display="none";
-			GRHIconDiv.style.display="block";
+			GRHOptionsDiv.className="hidden";
+			GRHIconDiv.className="visible";
 		}
 		else
 		{
-			GRHOptionsDiv.style.display="block";
-			GRHIconDiv.style.display="none";
+			GRHOptionsDiv.className="visible";
+			GRHIconDiv.className="hidden";
 		}
 	}
 	
 
 	function toggleOptions()
 	{
-		if (GRHOptionsDiv.style.display == 'none') {
-			GRHOptionsDiv.style.display = 'block';
-		} else {
-			GRHOptionsDiv.style.display = 'none';
+		if (iconSelected == false)
+	{
+			iconSelected = true;
+			GRHIconDiv.className = "selected";
+			GRHOptionsDiv.className="selected";
+	}
+		else{
+			iconSelected = false;
+			GRHIconDiv.className = "normal";
+			GRHOptionsDiv.className = "hidden";
 		}
 	}
 </script>

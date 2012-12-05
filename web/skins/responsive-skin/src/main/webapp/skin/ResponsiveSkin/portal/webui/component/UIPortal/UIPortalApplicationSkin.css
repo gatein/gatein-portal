@@ -61,7 +61,8 @@ a {
 }
 
 .UIWorkingWorkspace {
-	max-width: 63.5625em; /*1017px;*/
+	/*max-width: 63.5625em;*/ /*1017px;*/
+	max-width: 62em;
 	min-width: 20em;
 	width: auto;
 	margin: auto;

@@ -773,7 +773,6 @@
             <groupId>org.chromattic</groupId>
             <artifactId>chromattic.apt</artifactId>
             <version>${version.chromattic}</version>
-            <scope>compile</scope>
             <exclusions>
               <exclusion>
                 <groupId>org.chromattic</groupId>

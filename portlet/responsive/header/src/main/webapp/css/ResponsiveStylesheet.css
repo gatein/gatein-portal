@@ -1,62 +1,79 @@
 #gtnResponsiveHeaderPortlet {
-	background-color: white; /*fallback*/
-	background: -webkit-linear-gradient(top, #FFFFFF, #EEEEEE);
-	background: -moz-linear-gradient(top, #FFFFFF, #EEEEEE);
-/* 	height: 4.6em; */
-	margin: 0;
-	padding: 0;
+margin: 0;
+padding: 0;
 }
 
 #grh_logo  {
-	background-image: url('../images/gatein_logo.svg');
-	line-height: 1em;
-	background-size: 2em;
-	background-repeat: no-repeat;
-	background-size: auto 3em;
-	height: 3em;
-	width: 12em;
-	background-position: 2em 0.8em;
-	padding: 0.8em 0 0.8em 2em;
-	float: left;
+background-image: url('/responsive-header-portlet/css/../images/gatein_logo.svg');
+line-height: 1em;
+background-size: 2em;
+background-repeat: no-repeat;
+background-size: auto 2.5em;
+height: 2.5em;
+width: 12em;
+background-position: 2em 0.8em;
+padding: 0.8em 0 0.8em 2em;
+float: left;
 }
 
 #grh_options {
-	float: right;
-	line-height: 3em;
+float: right;
+line-height: 2em;
 }
 
-#grh_options ul 
+#grh_options ul
 {
-	list-style-type: none;
-	padding: 0;
+list-style-type: none;
+padding: 0;
 }
 
 #grh_options ul li {
-	display: inline;
-	padding: 1em;
+display: inline;
+padding: 1em;
 }
 
 #grh_options ul li a {
-	color: #565658;
+color: #565658;
 }
 
 #grh_options ul li a:HOVER {
-	color: #002559;
+color: #002559;
 }
 
 #grh_icon {
-	background-image: url('../images/preference.svg');
-	background-size: 2em;
-	background-repeat: no-repeat;
-	background-size: auto 3em;
-	height: 3em;
-	width: 3em;
-	background-position: 2em 0.8em;
-	padding: 0.8em 2em 0.8em 2em;
-	float: right;
-	display: none;
+background-image: url('/responsive-header-portlet/css/../images/preference.svg');
+
+background-repeat: no-repeat;
+background-size: auto 2em;
+height: 2.5em;
+width: 2.5em;
+background-position: center;
+padding: 0.8em 1em 0.8em 1em;
+float: right;
+/*display: none; */
 }
 
 .grh_clear {
-	clear: both;
+clear: both;
+}
+
+#gtnResponsiveHeaderPortlet .selected {
+	background-color: #B2C6DB;
+}
+
+#gtnResponsiveHeaderPortlet .hidden {
+	display: none;
+}
+
+#gtnResponsiveHeader #grh_options.selected {
+	line-height: 2.5em;
+    height: 2.5em;
+}
+
+#gtnResponsiveHeader #grh_options.normal {
+	display: block;
+}
+
+#gtnResponsiveHeader #grh_icon.normal {
+	display: block;
 }
