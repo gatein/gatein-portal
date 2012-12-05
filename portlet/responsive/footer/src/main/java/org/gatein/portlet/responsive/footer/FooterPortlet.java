@@ -24,11 +24,17 @@ package org.gatein.portlet.responsive.footer;
 
 import java.io.IOException;
 
+import javax.portlet.ActionRequest;
+import javax.portlet.ActionResponse;
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.exoplatform.services.resources.LocaleConfigService;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
@@ -42,6 +48,19 @@ public class FooterPortlet extends GenericPortlet
    {
       PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/footer.jsp");
       prd.include(request, response);
+   }
+   
+   @Override
+   public void processAction(ActionRequest request, ActionResponse response) throws PortletException, IOException
+   {
+      // FIXME processAction
+      //super.processAction(request, response);
+      String language = (request.getParameter("languageSelect"));
+      
+      LocaleConfigService localeService = (LocaleConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(LocaleConfigService.class);
+      
+      PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
+      prc.setLocale(localeService.getLocaleConfig(language).getLocale());
    }
 
 }

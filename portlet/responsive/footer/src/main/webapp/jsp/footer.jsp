@@ -24,7 +24,10 @@ List<Locale> languages = footer.getLanguages();
       <li><a href="http://www.gatein.org">gatein.org</a></li>
       <li><a href="#"><%= resourceBundle.getString("contactUs") %></a></li>
       <li>
-        <select id="grf_languageSelect">
+        <portlet:actionURL var="setLanguageURL"/>
+        <form action="<%= setLanguageURL %>" method="POST" name="languageForm">
+        <select id="grf_languageSelect" name="languageSelect" onchange="document.languageForm.submit()">
+        
           <% for (Locale language : languages)
           {
              String languageName = language.getDisplayLanguage(locale);
@@ -39,15 +42,17 @@ List<Locale> languages = footer.getLanguages();
              if (!language.equals(locale))
              {
              %>
-                 <option><%= languageName + " - " + languageNameinLanguage %></option>
+                 <option value="<%= language.getLanguage() %>"><%= languageName + " - " + languageNameinLanguage %></option>
           <% }
              else
              { %>
-                 <option selected="selected"><%= languageName %></option>
+                 <option value="<%= language.getLanguage() %>" selected="selected"><%= languageName %></option>
           <% }
           }
           %>
         </select>
+<!--         <input type="submit" name="languageSelect"> -->
+        </form>
       </li>
     </ul>
   </div>
