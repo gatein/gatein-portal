@@ -32,11 +32,6 @@
   <name>GateIn Portal Component Portal Data</name>
 
   <dependencies>
-    <dependency>
-      <groupId>org.exoplatform.core</groupId>
-      <artifactId>exo.core.component.organization.jdbc</artifactId>
-      <scope>compile</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.exoplatform.jcr</groupId>
@@ -78,10 +73,6 @@
       <artifactId>gatein-management-spi</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.picketlink.idm</groupId>
-      <artifactId>picketlink-idm-core</artifactId>
-    </dependency>
 
     <dependency>
       <groupId>org.json</groupId>
@@ -100,11 +91,6 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.component.test.core</artifactId>
-      <scope>test</scope>
-    </dependency>
 
     <dependency>
       <groupId>org.gatein.portal</groupId>

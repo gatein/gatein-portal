@@ -35,28 +35,34 @@
     <dependency>
       <groupId>com.google.javascript</groupId>
       <artifactId>closure-compiler</artifactId>
+      <exclusions>
+         <exclusion>
+            <groupId>org.apache.ant</groupId>
+            <artifactId>ant</artifactId>
+         </exclusion>
+         <exclusion>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+         </exclusion>
+         <exclusion>
+            <groupId>args4j</groupId>
+            <artifactId>args4j</artifactId>
+         </exclusion>
+         <exclusion>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+         </exclusion>
+         <exclusion>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+         </exclusion>
+         <exclusion>
+            <groupId>com.googlecode.jarjar</groupId>
+            <artifactId>jarjar</artifactId>
+         </exclusion>
+      </exclusions>
     </dependency>
 
-    <dependency>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.component.common</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.component.resources</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.gatein.wci</groupId>
-      <artifactId>wci-wci</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.google.javascript</groupId>
-      <artifactId>closure-compiler</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.component.web.controller</artifactId>

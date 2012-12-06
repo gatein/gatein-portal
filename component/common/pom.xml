@@ -31,18 +31,12 @@
   <name>GateIn Portal Component Common</name>
   <dependencies>
 
-    <dependency>
-      <groupId>org.gatein.common</groupId>
-      <artifactId>common-logging</artifactId>
-    </dependency>
+
     <dependency>
       <groupId>org.gatein.common</groupId>
       <artifactId>common-common</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.exoplatform.kernel</groupId>
-      <artifactId>exo.kernel.commons</artifactId>
-    </dependency>
+
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.component.ext.cache.impl.jboss.v3</artifactId>

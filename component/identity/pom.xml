@@ -86,11 +86,7 @@
       <scope>test</scope>
     </dependency>
 
-    <dependency>
-      <groupId>javax.resource</groupId>
-      <artifactId>connector-api</artifactId>
-      <scope>test</scope>
-    </dependency>
+
 
   </dependencies>
 
