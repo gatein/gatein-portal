@@ -51,7 +51,7 @@ public class UIPermissionForm extends UIForm {
 
     public UIPermissionForm() throws Exception {
         UIListPermissionSelector selector = addChild(UIListPermissionSelector.class, null, "UIListPermissionSelector");
-        selector.configure("UIListPermissionSelector", "accessPermissions");
+        selector.configure(WebuiRequestContext.generateUUID(), "accessPermissions");
         setActions(new String[] {});
     }
 

@@ -220,7 +220,7 @@ public class UIPageForm extends UIFormTabPane {
                 || (!uiPage.getSiteKey().getType().equals(SiteType.USER) && getChildById("PermissionSetting") == null)) {
             uiPermissionSetting = createUIComponent(UIFormInputSet.class, "PermissionSetting", null);
             UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
-            uiListPermissionSelector.configure("UIListPermissionSelector", "accessPermissions");
+            uiListPermissionSelector.configure("PagePermissionSelector", "accessPermissions");
             uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
             uiPermissionSetting.addChild(uiListPermissionSelector);
             uiPermissionSetting.setSelectedComponent(uiListPermissionSelector.getId());
