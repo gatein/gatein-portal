@@ -24,6 +24,7 @@ import java.util.LinkedHashSet;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.portlet.PortletConfig;
 
@@ -207,5 +208,9 @@ public abstract class WebuiRequestContext extends RequestContext {
     public JavascriptManager getJavascriptManager() {
         // Yes nasty cast
         return ((WebuiRequestContext) getParentAppRequestContext()).getJavascriptManager();
+    }
+
+    public static String generateUUID() {
+        return "uniq-" + UUID.randomUUID().toString();
     }
 }

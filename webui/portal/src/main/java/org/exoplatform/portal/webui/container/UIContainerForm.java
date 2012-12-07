@@ -86,7 +86,7 @@ public class UIContainerForm extends UIFormTabPane {
         setSelectedTab(infoInputSet.getId());
 
         UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
-        uiListPermissionSelector.configure("UIListPermissionSelector", "accessPermissions");
+        uiListPermissionSelector.configure("ContainerPermissionSelector", "accessPermissions");
         uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
         UIFormInputSet uiPermissionSet = createUIComponent(UIFormInputSet.class, "UIContainerPermission", null);
         uiPermissionSet.addChild(uiListPermissionSelector);

@@ -119,7 +119,7 @@ public class UIPortletForm extends UIFormTabPane {
         addUIFormInput(uiThemeSelector);
 
         UIListPermissionSelector uiListPermissionSelector = createUIComponent(UIListPermissionSelector.class, null, null);
-        uiListPermissionSelector.configure("UIListPermissionSelector", "accessPermissions");
+        uiListPermissionSelector.configure("PortletPermissionSelector", "accessPermissions");
         uiListPermissionSelector.addValidator(EmptyIteratorValidator.class);
         UIFormInputSet uiPermissionSet = createUIComponent(UIFormInputSet.class, "PortletPermission", null);
         uiPermissionSet.addChild(uiListPermissionSelector);
