@@ -1,7 +1,11 @@
-/* TODO: figure out how to only overwrite specifics from the DefaultSkin without having to copy it all over */
-/* TODO: rewrite the UIToolbarContainer stylesheet properly for the responsive skin */
-@import url(DefaultSkin/portal/webui/component/view/UIToolbarContainer/Stylesheet.css);
+@import url(/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIToolbarContainer/Stylesheet.css);
+@import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/UIChangeLanguageForm/Stylesheet.css);
+@import url(/eXoResources/skin/DefaultSkin/webui/component/UIMaskWorkspace/Stylesheet.css);
 
 @import url(ResponsiveSkin/portal/webui/component/UIPortal/UIPortalApplicationSkin.css);
+@import url(ResponsiveSkin/portal/webui/component/UIWorkspace/UIWorkspace.css);
 @import url(ResponsiveSkin/portal/webui/component/UIToolbar/UIToolbar.css);
+@import url(ResponsiveSkin/portal/webui/component/UILoginForm/UILoginForm.css);
+@import url(ResponsiveSkin/portal/webui/component/UIChangeLanguageForm/UIChangeLanguageForm.css);
+@import url(ResponsiveSkin/portal/webui/component/UIMaskWorkspace/UIMaskWorkspace.css);
 @import url(Portlet/Stylesheet.css);

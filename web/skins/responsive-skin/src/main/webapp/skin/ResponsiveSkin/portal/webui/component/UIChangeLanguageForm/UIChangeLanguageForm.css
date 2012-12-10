@@ -1,0 +1,11 @@
+.UIChangeLanguageForm .UIItemSelector .RightColumnStyle .ItemDetailList .ItemDetail {
+    height: auto;
+}
+
+.UIChangeLanguageForm .UITabPane .TabPaneContent .UITabContentContainer {
+    border-top: 1px solid #d4d4d4;
+}
+
+.UIChangeLanguageForm .UIItemSelector .ItemDetailContainer {
+    padding: 0;
+}

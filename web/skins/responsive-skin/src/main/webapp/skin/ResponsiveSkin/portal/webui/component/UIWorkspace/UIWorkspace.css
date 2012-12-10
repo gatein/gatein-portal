@@ -1,0 +1,11 @@
+.UIMaskWorkspace {
+        max-width: 100%:
+}
+
+.MaskLayer {
+        background: black;
+        text-align: center;
+        position: absolute;
+        overflow: auto; /* Fix for FF2 */
+}
+

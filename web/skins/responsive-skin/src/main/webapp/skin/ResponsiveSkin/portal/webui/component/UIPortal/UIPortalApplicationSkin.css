@@ -48,7 +48,9 @@ body {
 	margin: 0;
 	padding: 0;
 	font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-	overflow-x: hidden;
+/*	overflow-x: hidden; */
+        max-width: 100%;
+        min-width: 20em;
 }
 
 h1, h2, h3, h4, h5, h6 {
