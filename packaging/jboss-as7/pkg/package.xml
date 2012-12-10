@@ -149,21 +149,21 @@
       </unzip>
 
       <!-- Mobile Specific Integrations -->
-      <copy todir="${jbossas.target.dir}/gatein/extensions" preservelastmodified="true" overwrite="true">
+      <unzip dest="${jbossas.target.dir}/gatein/extensions/gatein-responsive-skin.war" overwrite="true">
          <fileset refid="org.gatein.portal:responsive-skin:war"/>
-      </copy>
-      <copy todir="${jbossas.target.dir}/gatein/extensions" preservelastmodified="true" overwrite="true">
+      </unzip>
+      <unzip dest="${jbossas.target.dir}/gatein/extensions/responsive-banner-portlet.war" overwrite="true">
          <fileset refid="org.gatein.portal:portlet.responsive.banner:war"/>
-      </copy>
-      <copy todir="${jbossas.target.dir}/gatein/extensions" preservelastmodified="true" overwrite="true">
+      </unzip>
+      <unzip dest="${jbossas.target.dir}/gatein/extensions/responsive-features-portlet.war" overwrite="true">
          <fileset refid="org.gatein.portal:portlet.responsive.features:war"/>
-      </copy>
-      <copy todir="${jbossas.target.dir}/gatein/extensions" preservelastmodified="true" overwrite="true">
+      </unzip>
+      <unzip dest="${jbossas.target.dir}/gatein/extensions/responsive-footer-portlet.war" overwrite="true">
          <fileset refid="org.gatein.portal:portlet.responsive.footer:war"/>
-      </copy>
-      <copy todir="${jbossas.target.dir}/gatein/extensions" preservelastmodified="true" overwrite="true">
+      </unzip>
+      <unzip dest="${jbossas.target.dir}/gatein/extensions/responsive-header-portlet.war" overwrite="true">
          <fileset refid="org.gatein.portal:portlet.responsive.header:war"/>
-      </copy>
+      </unzip>
 
       <!-- Deployment archives overrides -->
       <!-- Copy bin, modules, configuration files -->
