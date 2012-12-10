@@ -32,20 +32,24 @@ import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.services.resources.LocaleConfigService;
-
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
 public class FooterPortlet extends GenericPortlet
 {
+   
+   FooterBean footerBean;
 
+   public FooterPortlet()
+   {
+      footerBean = new FooterBean();
+   }
+   
    @Override
    protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException
-   {
+   {  
+      request.setAttribute("footer", footerBean); //add the footerBean to the request
       PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/footer.jsp");
       prd.include(request, response);
    }
@@ -53,14 +57,23 @@ public class FooterPortlet extends GenericPortlet
    @Override
    public void processAction(ActionRequest request, ActionResponse response) throws PortletException, IOException
    {
-      // FIXME processAction
-      //super.processAction(request, response);
       String language = (request.getParameter("languageSelect"));
       
-      LocaleConfigService localeService = (LocaleConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(LocaleConfigService.class);
-      
-      PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
-      prc.setLocale(localeService.getLocaleConfig(language).getLocale());
+      if (language != null)
+      {
+         footerBean.setLanguage(language);
+         if (request.getRemoteUser() != null)
+         {
+            try
+            {
+               footerBean.setUserLanguage(request.getRemoteUser(), language);
+            }
+            catch (Exception e)
+            {
+               throw new PortletException("Error trying to update the user's language preference", e);
+            }
+         }
+      }
    }
 
 }

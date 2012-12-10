@@ -22,7 +22,7 @@
 		<ul>
 			<li><a onclick="<%=signinAction%>"><%=resourceBundle.getString("label.Signin")%></a></li>
 			<li><a href="<%=registerAction%>"><%=resourceBundle.getString("label.Register")%></a></li>
-			<li><a onclick="<%=changeLanguageAction%>"><%=resourceBundle.getString("label.ChangeLanguage")%></a></li>
+<%-- 			<li><a onclick="<%=changeLanguageAction%>"><%=resourceBundle.getString("label.ChangeLanguage")%></a></li> --%>
 		</ul>
 	</div>
 	<div class="grh_clear"></div>

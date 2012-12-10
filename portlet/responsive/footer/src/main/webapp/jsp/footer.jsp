@@ -3,7 +3,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ResourceBundle" %>
 <portlet:defineObjects/>
-<jsp:useBean id="footer" class="org.gatein.portlet.responsive.footer.FooterBean"/>
+<jsp:useBean id="footer" class="org.gatein.portlet.responsive.footer.FooterBean" scope="request"/>
 
 <%
 Locale locale = renderRequest.getLocale();
@@ -13,20 +13,13 @@ List<Locale> languages = footer.getLanguages();
 %>
 
 <div class="gtnResponsiveFooterPortlet">
-  <div class="gtn_CopyrightInfo"><%= resourceBundle.getString("copyrightText")%>
-     <a href="http://www.redhat.com/"><%= resourceBundle.getString("RedHatInc") %></a>
-     <%= resourceBundle.getString("and") %>
-     <a href="http://www.exoplatform.com/"><%= resourceBundle.getString("eXoPlatformSAS")%></a>
-  </div>
   
   <div class="gtn_options">
     <ul>
-      <li><a href="http://www.gatein.org">gatein.org</a></li>
-      <li><a href="#"><%= resourceBundle.getString("contactUs") %></a></li>
       <li>
         <portlet:actionURL var="setLanguageURL"/>
         <form action="<%= setLanguageURL %>" method="POST" name="languageForm">
-        <select id="grf_languageSelect" name="languageSelect" onchange="document.languageForm.submit()">
+        <select id="<portlet:namespace/>_languageSelect" name="languageSelect" onchange="document.languageForm.submit()"> 
         
           <% for (Locale language : languages)
           {
@@ -42,16 +35,15 @@ List<Locale> languages = footer.getLanguages();
              if (!language.equals(locale))
              {
              %>
-                 <option value="<%= language.getLanguage() %>"><%= languageName + " - " + languageNameinLanguage %></option>
+                 <option value="<%= language.getLanguage()%>"><%= languageName + "-" + languageNameinLanguage %></option>
           <% }
              else
              { %>
-                 <option value="<%= language.getLanguage() %>" selected="selected"><%= languageName %></option>
+                 <option value="<%= language.getLanguage()%>" selected="selected" class="selected"><%= languageName %></option>
           <% }
           }
           %>
         </select>
-<!--         <input type="submit" name="languageSelect"> -->
         </form>
       </li>
     </ul>
@@ -59,8 +51,6 @@ List<Locale> languages = footer.getLanguages();
 </div>
 
 <script type="text/javascript">
-
-   var GRHLanguageSelect = document.getElementById("grf_languageSelect");
-   GRHLanguageSelect.style.width = GRHLanguageSelect.options[GRHLanguageSelect.selectedIndex].text.length + "em";
-
+   var languageSelect = document.getElementById("<portlet:namespace/>_languageSelect");
+   languageSelect.style.width = languageSelect.options[languageSelect.selectedIndex].text.length + "em";
 </script>
