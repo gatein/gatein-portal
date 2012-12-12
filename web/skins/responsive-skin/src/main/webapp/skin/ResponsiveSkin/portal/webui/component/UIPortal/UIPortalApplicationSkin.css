@@ -74,6 +74,13 @@ a {
 	display: none;
 }
 
+.UIPageBody {
+        border-bottom: white 0.5em solid;
+        border-top: white 0.5em solid;
+        border-radius: 0.5em;
+        background-color: white;
+}
+
 /*###############################################################################################*/
 .OverflowContainer {
 	overflow: hidden;

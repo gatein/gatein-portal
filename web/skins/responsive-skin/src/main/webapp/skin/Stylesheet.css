@@ -1,6 +1,13 @@
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIToolbarContainer/Stylesheet.css);
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/UIChangeLanguageForm/Stylesheet.css);
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIMaskWorkspace/Stylesheet.css);
+@import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/UIPortalToolPanel/Stylesheet.css);
+@import url(/eXoResources/skin/DefaultSkin/webui/component/UIWizard/Stylesheet.css);
+/*@import url(/eXoResources/skin/DefaultSkin/webui/component/UIBarDecorator/UIAction/Stylesheet.css); */
+@import url(/eXoResources/skin/DefaultSkin/webui/component/UIPopup/UIPopupWindow/Stylesheet.css);
+@import url(/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIDashboard/Stylesheet.css);
+@import url(/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPortalComponent/Stylesheet.css);
+/*@import url(/eXoResources/skin/DefaultSkin/webui/component/Stylesheet.css);*/
 
 @import url(ResponsiveSkin/portal/webui/component/UIPortal/UIPortalApplicationSkin.css);
 @import url(ResponsiveSkin/portal/webui/component/UIWorkspace/UIWorkspace.css);
