@@ -44,6 +44,20 @@
     </init-params>
   </component>
 
+  <component>
+    <key>org.exoplatform.web.security.SimpleGeneratorCookieTokenService</key>
+    <type>org.exoplatform.web.security.SimpleGeneratorCookieTokenService</type>
+    <init-params>
+      <values-param>
+        <name>service.configuration</name>
+        <value>jcr-token</value>
+        <value>2</value>
+        <value>SECOND</value>
+        <value>autologin</value>
+      </values-param>
+    </init-params>
+  </component>
+
   <!-- TODO remove TransientTokenService service component -->
   <component>
     <key>org.exoplatform.web.security.security.TransientTokenService</key>

@@ -55,7 +55,7 @@ import org.picocontainer.Startable;
 @NameTemplate({ @Property(key = "service", value = "TokenStore"), @Property(key = "name", value = "{Name}") })
 public abstract class AbstractTokenService<T extends Token, K> implements Startable, TokenStore {
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractTokenService.class);
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
     protected static final String SERVICE_CONFIG = "service.configuration";
 
