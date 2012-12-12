@@ -1,42 +1,51 @@
 .gtnResponsiveFooterPortlet {
-	margin: 0;
-	padding: 0;
+margin: 0;
+padding: 0;
 }
 
-.gtnResponsiveFooterPortlet .gtn_CopyrightInfo {
-	float: left;
-	font-size: 0.8em;
-	color: #A7A7A7;
+.gtnResponsiveFooterPortlet .options {
+float: right;
 }
 
-.gtnResponsiveFooterPortlet .gtn_CopyrightInfo a {
-	color: #666666;
+.gtnResponsiveFooterPortlet .copyright {
+float: left;
+text-align: center;
+max-width:100%;
+padding: 1em;
+color: #888;
 }
 
-.gtnResponsiveFooterPortlet .gtn_CopyrightInfo a:hover {
-	color: #285786;
-}
-
-.gtnResponsiveFooterPortlet .gtn_options {
-	float: right;
-	font-size: 1em;
-}
-
-.gtnResponsiveFooterPortlet .gtn_options ul {
-	margin: 0;
-	padding: 0;
-}
-
-.gtnResponsiveFooterPortlet .gtn_options li {
+.gtnResponsiveFooterPortlet .copyright p {
 	display: inline;
-	padding: 0 0.5em;
 }
 
-.gtnResponsiveFooterPortlet .gtn_options li select {
-	border: 0;
-	font-size: 1em;
-	background-color: transparent;
-	apperance: none;
-	-webkit-appearance: none;
-	-moz-appearance: none;
+.gtnResponsiveFooterPortlet .clear {
+clear: both;
+}
+
+.gtnResponsiveFooterPortlet ol{
+list-style-type: none;
+padding: 0;
+}
+
+.gtnResponsiveFooterPortlet ol::after{
+content:"";
+clear:both;
+}
+
+.gtnResponsiveFooterPortlet ol li{
+display: inline;
+padding: 1em;
+}
+
+.gtnResponsiveFooterPortlet ol li.sitePreference{
+text-decoration: underline;
+}
+
+.gtnResponsiveFooterPortlet ol li.language{
+background-image: url('/responsive-footer-portlet/css/../images/uparrow.svg');
+background-size: 0.8em 0.8em;
+background-repeat: no-repeat;
+background-position: right center;
+margin-right: 0.8em;
 }

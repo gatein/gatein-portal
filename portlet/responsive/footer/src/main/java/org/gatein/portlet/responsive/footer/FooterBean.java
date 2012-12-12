@@ -28,8 +28,10 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.Constants;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.webui.util.Util;
@@ -39,6 +41,7 @@ import org.exoplatform.services.resources.LocaleConfig;
 import org.exoplatform.services.resources.LocaleConfigService;
 import org.exoplatform.services.resources.LocaleContextInfo;
 import org.exoplatform.services.resources.ResourceBundleService;
+import org.gatein.web.redirect.api.RedirectHandler;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
@@ -46,64 +49,93 @@ import org.exoplatform.services.resources.ResourceBundleService;
  */
 public class FooterBean
 {
-   LocaleConfigService localeService;
-   ResourceBundleService resourceBundleService;
-   OrganizationService organizationService;
+   protected RedirectHandler redirectHandler;
    
    public FooterBean()
    {
-      localeService = (LocaleConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(LocaleConfigService.class);
-      resourceBundleService = (ResourceBundleService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ResourceBundleService.class);
-      organizationService = (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+      redirectHandler = (RedirectHandler)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RedirectHandler.class);
    }
    
-   public Locale getCurrentLocale()
+   public List<RedirectLink> getAlternativeSites()
    {
-      return Util.getPortalRequestContext().getLocale();
-   }
-   
-   public List<Locale> getLanguages()
-   {  
-      Collection<LocaleConfig> localeConfigs = localeService.getLocalConfigs();
-      
-      List<Locale> locales = new ArrayList<Locale>();
-      for (LocaleConfig localeConfig: localeConfigs)
-      {
-         locales.add(localeConfig.getLocale());
-      }
-      
-      Collections.sort(locales, new LocaleComparator());
-      return locales;
-   }
+      PortalRequestContext prc = (PortalRequestContext)PortalRequestContext.getCurrentInstance();
 
-   private class LocaleComparator implements Comparator<Locale>
-   {
-      @Override
-      public int compare(Locale firstLocale, Locale secondLocale)
+      String siteName = ((PortalRequestContext)PortalRequestContext.getCurrentInstance()).getSiteName();
+
+      Map<String, String> redirects = redirectHandler.getAlternativeRedirects(siteName, prc.getRequestURI(), true);
+
+      List<RedirectLink> redirectLinks = new ArrayList<RedirectLink>();
+      if (redirects != null)
       {
-         return (firstLocale.getDisplayName(getCurrentLocale()).compareTo(secondLocale.getDisplayName(getCurrentLocale())));
-      }
-   }
-   
-   public void setUserLanguage(String username, String language) throws Exception
-   {
-      UserProfile userProfile = organizationService.getUserProfileHandler().findUserProfileByName(username);
-      if (userProfile != null && userProfile.getUserInfoMap() != null)
-      {
-         //Only save if user's locale has not been set
-         String currLocale = userProfile.getUserInfoMap().get(Constants.USER_LANGUAGE);
-         if (currLocale == null || currLocale.trim().equals(""))
+         for (String siteNames : redirects.keySet())
          {
-            userProfile.getUserInfoMap().put(Constants.USER_LANGUAGE, language);
-            organizationService.getUserProfileHandler().saveUserProfile(userProfile, false);
+            RedirectLink redirectLink = new RedirectLink(siteNames, redirects.get(siteNames));
+            redirectLinks.add(redirectLink);
          }
       }
+
+      return redirectLinks;
    }
+
    
-   public void setLanguage(String language)
-   {
-      PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
-      prc.setLocale(localeService.getLocaleConfig(language).getLocale());
-   }
+//   LocaleConfigService localeService;
+//   ResourceBundleService resourceBundleService;
+//   OrganizationService organizationService;
+//   
+//   public FooterBean()
+//   {
+//      localeService = (LocaleConfigService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(LocaleConfigService.class);
+//      resourceBundleService = (ResourceBundleService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(ResourceBundleService.class);
+//      organizationService = (OrganizationService)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(OrganizationService.class);
+//   }
+//   
+//   public Locale getCurrentLocale()
+//   {
+//      return Util.getPortalRequestContext().getLocale();
+//   }
+//   
+//   public List<Locale> getLanguages()
+//   {  
+//      Collection<LocaleConfig> localeConfigs = localeService.getLocalConfigs();
+//      
+//      List<Locale> locales = new ArrayList<Locale>();
+//      for (LocaleConfig localeConfig: localeConfigs)
+//      {
+//         locales.add(localeConfig.getLocale());
+//      }
+//      
+//      Collections.sort(locales, new LocaleComparator());
+//      return locales;
+//   }
+//
+//   private class LocaleComparator implements Comparator<Locale>
+//   {
+//      @Override
+//      public int compare(Locale firstLocale, Locale secondLocale)
+//      {
+//         return (firstLocale.getDisplayName(getCurrentLocale()).compareTo(secondLocale.getDisplayName(getCurrentLocale())));
+//      }
+//   }
+//   
+//   public void setUserLanguage(String username, String language) throws Exception
+//   {
+//      UserProfile userProfile = organizationService.getUserProfileHandler().findUserProfileByName(username);
+//      if (userProfile != null && userProfile.getUserInfoMap() != null)
+//      {
+//         //Only save if user's locale has not been set
+//         String currLocale = userProfile.getUserInfoMap().get(Constants.USER_LANGUAGE);
+//         if (currLocale == null || currLocale.trim().equals(""))
+//         {
+//            userProfile.getUserInfoMap().put(Constants.USER_LANGUAGE, language);
+//            organizationService.getUserProfileHandler().saveUserProfile(userProfile, false);
+//         }
+//      }
+//   }
+//   
+//   public void setLanguage(String language)
+//   {
+//      PortalRequestContext prc = PortalRequestContext.getCurrentInstance();
+//      prc.setLocale(localeService.getLocaleConfig(language).getLocale());
+//   }
 }
 

@@ -1,6 +1,6 @@
 /******************************************************************************
  * JBoss, a division of Red Hat                                               *
- * Copyright 2011, Red Hat Middleware, LLC, and individual                    *
+ * Copyright 2012, Red Hat Middleware, LLC, and individual                    *
  * contributors as indicated by the @authors tag. See the                     *
  * copyright.txt in the distribution for a full listing of                    *
  * individual contributors.                                                   *
@@ -22,59 +22,29 @@
  ******************************************************************************/
 package org.gatein.portlet.responsive.footer;
 
-import java.io.IOException;
-
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
-import javax.portlet.GenericPortlet;
-import javax.portlet.PortletException;
-import javax.portlet.PortletRequestDispatcher;
-import javax.portlet.RenderRequest;
-import javax.portlet.RenderResponse;
-
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class FooterPortlet extends GenericPortlet
+public class RedirectLink
 {
-   
-   FooterBean footerBean;
+   protected String redirectName;
+   protected String redirectURI;
 
-   public FooterPortlet()
+   public RedirectLink(String redirectName, String redirectURI)
    {
-      footerBean = new FooterBean();
+      this.redirectName = redirectName;
+      this.redirectURI = redirectURI;
    }
-   
-   @Override
-   protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException
-   {  
-      request.setAttribute("footer", footerBean); //add the footerBean to the request
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/footer.jsp");
-      prd.include(request, response);
-   }
-   
-//   @Override
-//   public void processAction(ActionRequest request, ActionResponse response) throws PortletException, IOException
-//   {
-//      String language = (request.getParameter("languageSelect"));
-//      
-//      if (language != null)
-//      {
-//         footerBean.setLanguage(language);
-//         if (request.getRemoteUser() != null)
-//         {
-//            try
-//            {
-//               footerBean.setUserLanguage(request.getRemoteUser(), language);
-//            }
-//            catch (Exception e)
-//            {
-//               throw new PortletException("Error trying to update the user's language preference", e);
-//            }
-//         }
-//      }
-//   }
 
+   public String getRedirectName()
+   {
+      return redirectName;
+   }
+
+   public String getRedirectURI()
+   {
+      return redirectURI;
+   }
 }
 

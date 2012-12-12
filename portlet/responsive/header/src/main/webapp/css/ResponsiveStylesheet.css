@@ -1,9 +1,9 @@
-#gtnResponsiveHeaderPortlet {
+.gtnResponsiveHeaderPortlet {
 margin: 0;
 padding: 0;
 }
 
-#grh_logo  {
+.gtnResponsiveHeaderPortlet .logo  {
 background-image: url('/responsive-header-portlet/css/../images/gatein_logo.svg');
 line-height: 1em;
 background-size: 2em;
@@ -14,33 +14,52 @@ width: 12em;
 background-position: 2em 0.8em;
 padding: 0.8em 0 0.8em 2em;
 float: left;
+cursor: pointer;
 }
 
-#grh_options {
+
+.gtnResponsiveHeaderPortlet .options {
 float: right;
 line-height: 2em;
 }
 
-#grh_options ul
+.gtnResponsiveHeaderPortlet .options.collapsed {
+display: none;
+}
+
+.gtnResponsiveHeaderPortlet .options.highlight {
+float:none;
+clear:both;
+text-align: right;
+}
+
+
+.gtnResponsiveHeaderPortlet .options ul
 {
 list-style-type: none;
-padding: 0;
+padding: 1em;
+margin: 0;
 }
 
-#grh_options ul li {
+.gtnResponsiveHeaderPortlet .options ul li {
 display: inline;
 padding: 1em;
+white-space: nowrap;
 }
 
-#grh_options ul li a {
+.gtnResponsiveHeaderPortlet .options ul li.singleline{
+display: block;
+}
+
+.gtnResponsiveHeaderPortlet .options ul li a {
 color: #565658;
 }
 
-#grh_options ul li a:HOVER {
+.gtnResponsiveHeaderPortlet .options ul li a:HOVER {
 color: #002559;
 }
 
-#grh_icon {
+.gtnResponsiveHeaderPortlet .icon {
 background-image: url('/responsive-header-portlet/css/../images/preference.svg');
 
 background-repeat: no-repeat;
@@ -53,27 +72,14 @@ float: right;
 /*display: none; */
 }
 
-.grh_clear {
+.gtnResponsiveHeaderPortlet .clear {
 clear: both;
 }
 
-#gtnResponsiveHeaderPortlet .selected {
+.gtnResponsiveHeaderPortlet .highlight {
 	background-color: #B2C6DB;
 }
 
-#gtnResponsiveHeaderPortlet .hidden {
+.gtnResponsiveHeaderPortlet .hidden {
 	display: none;
-}
-
-#gtnResponsiveHeader #grh_options.selected {
-	line-height: 2.5em;
-    height: 2.5em;
-}
-
-#gtnResponsiveHeader #grh_options.normal {
-	display: block;
-}
-
-#gtnResponsiveHeader #grh_icon.normal {
-	display: block;
 }

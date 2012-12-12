@@ -17,3 +17,4 @@ ResourceBundle resourceBundle = portletConfig.getResourceBundle(locale);
     <h2><%= resourceBundle.getString("madeBy") %> <a href="http://www.redhat.com/">Red Hat</a> + <a href="http://www.exoplatform.com/">eXo Platform SAS</a> + <a href="https://community.jboss.org/en/gatein/dev"><%= resourceBundle.getString("you") %></a></h2>
   </div>
 </div>
+<div class="gtnResponsiveBannerPortletShadow"></div>

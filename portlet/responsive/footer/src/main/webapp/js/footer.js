@@ -1,5 +1,3 @@
 (function($){
-
-//	$(window).resize(function(){checkGRHSize();});
-
+	$(window).resize(function(){checkFooterSize();});
 })(jQuery);

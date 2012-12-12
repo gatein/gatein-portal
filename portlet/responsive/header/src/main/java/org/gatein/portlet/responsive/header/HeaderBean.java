@@ -30,6 +30,7 @@ import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.security.sso.SSOHelper;
 import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.navigation.NavigationResource;
+import org.exoplatform.web.url.navigation.NodeURL;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
@@ -63,6 +64,13 @@ public class HeaderBean
       PortalRequestContext pContext = Util.getPortalRequestContext();
       NavigationResource resource = new NavigationResource(SiteType.PORTAL, pContext.getPortalOwner(), "register");
       return resource.getNodeURI();
+   }
+   
+   public String generateHomePageLink() throws Exception
+   {
+      PortalRequestContext pContext = Util.getPortalRequestContext();
+      NodeURL nodeURL = pContext.createURL(NodeURL.TYPE).setResource(new NavigationResource(SiteType.PORTAL, pContext.getPortalOwner(), null));
+      return nodeURL.toString();
    }
    
 }
