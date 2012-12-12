@@ -29,6 +29,7 @@ import org.exoplatform.commons.chromattic.ContextualTask;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.web.login.LoginServlet;
 import org.exoplatform.web.security.GateInToken;
 import org.gatein.wci.security.Credentials;
 
@@ -77,13 +78,21 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
         return new TokenTask<String>() {
             @Override
             protected String execute() {
-                String tokenId = nextTokenId();
-                long expirationTimeMillis = System.currentTimeMillis() + validityMillis;
-                GateInToken token = new GateInToken(expirationTimeMillis, credentials);
-                TokenContainer container = getTokenContainer();
+                String tokenId = null;
+                while (tokenId == null) {
+                    tokenId = nextTokenId();
+                    long expirationTimeMillis = System.currentTimeMillis() + validityMillis;
+                    GateInToken token = new GateInToken(expirationTimeMillis, credentials);
+                    TokenContainer container = getTokenContainer();
 
-                // Save the token, password is encoded thanks to the codec
-                container.encodeAndSaveToken(tokenId, token.getPayload(), new Date(expirationTimeMillis), codec);
+                    try {
+                        // Save the token, password is encoded thanks to the codec
+                        container.encodeAndSaveToken(tokenId, token.getPayload(), new Date(expirationTimeMillis), codec);
+                    } catch (TokenExistsException tee) {
+                        log.debug("Token " + tokenId + " already exists. Other token will be generated");
+                        tokenId = null;
+                    }
+                }
                 return tokenId;
             }
         }.executeWith(chromatticLifeCycle);

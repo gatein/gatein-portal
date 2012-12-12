@@ -63,7 +63,11 @@ public abstract class TokenContainer {
         }
     }
 
+    /**
+     * @deprecated method encodeAndSaveToken should be used instead
+     */
     public GateInToken saveToken(String tokenId, Credentials credentials, Date expirationTime) {
+        // TODO: Is this method really needed? We should remove it in the future...
         Map<String, TokenEntry> tokens = getTokens();
         TokenEntry entry = tokens.get(tokenId);
         if (entry == null) {
@@ -76,7 +80,7 @@ public abstract class TokenContainer {
         return entry.getToken();
     }
 
-    public GateInToken encodeAndSaveToken(String tokenId, Credentials credentials, Date expirationTime, AbstractCodec codec) {
+    public GateInToken encodeAndSaveToken(String tokenId, Credentials credentials, Date expirationTime, AbstractCodec codec) throws TokenExistsException {
         Map<String, TokenEntry> tokens = getTokens();
         TokenEntry entry = tokens.get(tokenId);
         if (entry == null) {
@@ -84,6 +88,8 @@ public abstract class TokenContainer {
             tokens.put(tokenId, entry);
             entry.setUserName(credentials.getUsername());
             entry.setPassword(codec.encode(credentials.getPassword()));
+        } else {
+            throw new TokenExistsException();
         }
         entry.setExpirationTime(expirationTime);
         return entry.getToken();
