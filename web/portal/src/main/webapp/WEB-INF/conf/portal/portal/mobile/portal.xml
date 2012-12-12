@@ -97,7 +97,7 @@
 	  </portlet-application> -->
 	  
 	  <page-body> </page-body>
-
+<!--
      <portlet-application>
        <portlet>
          <application-ref>redirect-portlet</application-ref>
@@ -106,7 +106,7 @@
        <access-permissions>Everyone</access-permissions>
        <show-info-bar>false</show-info-bar>
      </portlet-application>
-	 
+	--> 
  
      <portlet-application>
        <portlet>
