@@ -45,6 +45,7 @@ import org.exoplatform.web.application.RequestFailure;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.core.UIApplication;
+import org.gatein.common.text.EntityEncoder;
 
 /**
  * Created by The eXo Platform SAS Dec 9, 2006
@@ -123,6 +124,7 @@ public class PortalRequestHandler extends WebRequestHandler {
 
         //
         String requestPath = controllerContext.getParameter(REQUEST_PATH);
+        requestPath = EntityEncoder.FULL.encode(requestPath);
         String requestSiteType = controllerContext.getParameter(REQUEST_SITE_TYPE);
         String requestSiteName = controllerContext.getParameter(REQUEST_SITE_NAME);
 

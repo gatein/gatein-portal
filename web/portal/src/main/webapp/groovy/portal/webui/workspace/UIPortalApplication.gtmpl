@@ -77,7 +77,7 @@
 			eXo.env.portal.portalName = "<%=rcontext.getPortalOwner()%>" ;
       eXo.env.portal.containerName = "<%=PortalContainer.getInstance().getName()%>" ;
 			eXo.env.server.context = "<%=docBase%>" ;
-			eXo.env.server.portalBaseURL = "<%=rcontext.getRequest().getRequestURI()%>" ;
+			eXo.env.server.portalBaseURL = "<%=uicomponent.getBaseURL()%>" ;
 			eXo.env.server.portalURLTemplate = "<%=uicomponent.getPortalURLTemplate()%>" ;
 			eXo.env.client.skin = "$skin" ;
 			<% 
