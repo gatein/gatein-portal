@@ -1,0 +1,36 @@
+@media only screen and (max-width: 30em) {
+
+    .UIForm .HorizontalLayout {
+        padding: 0px;
+    }
+
+    .UIFormWithTitle {
+        width: 100%;
+    }
+
+    .UIFormGrid .FieldLabel {
+        display: inline;
+    }
+
+    .UIFormGrid .FieldComponent {
+        display: block;
+        width: 100%;
+    }
+
+    .UIFormGrid .FieldComponent, .UIForm .HorizontalLayout input {
+        font-size: 16px;
+    }
+
+    .UIForm .FieldComponent .FieldComponent input {
+        width:auto;
+    }
+
+    .UIAction {
+        padding: 8px 20px 8px 0
+    }
+
+    .UIPopupWindow {
+        width: 100%;
+    }
+
+}
