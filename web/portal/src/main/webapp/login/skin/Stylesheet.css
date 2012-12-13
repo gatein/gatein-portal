@@ -191,3 +191,57 @@
 .UILogin .LoginContent .LoginButton input[type="submit"]:hover {
  color: #058ee6;
 }
+
+@media only screen and (max-width: 60em) {
+
+    .UILogin .LoginContent .FieldContainer, .UILogin .LoginContent .LoginButton input[type="submit"] {
+        font-size:1.3em;
+    }
+
+    .UILogin {
+        margin: 7px auto 7px auto;
+    }
+
+    html{
+        display: table;
+        height: 100%;
+        width: 100%;
+    }
+
+    body {
+        position: relative;
+        display: table-cell;
+        vertical-align: middle;
+    }
+}
+
+@media only screen and (max-width: 415px) {
+
+    body {
+        margin:0px !important;
+        padding:0px !important;
+    }
+
+    .UILogin .LoginContent .FieldContainer, .UILogin .LoginContent .LoginButton input[type="submit"] {
+        font-size:1.4em;
+    }
+
+    .UILogin {
+        height: auto;
+        font-family: tahoma;
+        font-size: 11px;
+        margin: 0px;
+        padding:0px;
+        width: 100%;
+        background: url('../skin/images/LoginBackgroundMobile.png') no-repeat left -10px top -4px;
+        color: #3f3f3f;
+        min-width: 280px;
+    }
+
+    .UILogin .LoginContent .OverflowContainer {
+        width: auto;
+        overflow: hidden;
+        margin: 0px;
+        padding-top: 0px;
+    }
+}
