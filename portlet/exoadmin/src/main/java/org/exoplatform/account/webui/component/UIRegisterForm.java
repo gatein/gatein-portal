@@ -23,12 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import nl.captcha.Captcha;
+import org.exoplatform.portal.application.PortalRequestContext;
 
 import org.exoplatform.portal.registration.PostRegistrationService;
+import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.web.application.ApplicationMessage;
+import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -55,11 +58,12 @@ import org.exoplatform.webui.form.validator.Validator;
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {
    @EventConfig(listeners = UIRegisterForm.SubscribeActionListener.class),
    @EventConfig(listeners = UIRegisterForm.ResetActionListener.class, phase = Phase.DECODE),
+   @EventConfig(listeners = UIRegisterForm.CancelActionListener.class, phase = Phase.DECODE),
    @EventConfig(name = UIRegisterForm.CheckUsernameAvailability.LISTENER_NAME, listeners = UIRegisterForm.CheckUsernameAvailability.class, phase = Phase.DECODE)})
 public class UIRegisterForm extends UIForm
 {
 
-   private final static String[] ACTIONS = {"Subscribe", "Reset"};
+   private final static String[] ACTIONS = {"Subscribe", "Reset", "Cancel"};
    
    static final String ATTR_USER = "UIRegisterForm$User";
 
@@ -199,6 +203,17 @@ public class UIRegisterForm extends UIForm
       {
          UIRegisterForm registerForm = event.getSource();
          registerForm.resetInput();
+      }
+   }
+   
+   static public class CancelActionListener extends EventListener<UIRegisterForm>
+   {
+      @Override
+      public void execute(Event<UIRegisterForm> event) throws Exception
+      {
+          PortalRequestContext prContext = Util.getPortalRequestContext();
+          JavascriptManager jsManager = prContext.getJavascriptManager();
+          jsManager.addJavascript("history.go(-1);");
       }
    }
 }
