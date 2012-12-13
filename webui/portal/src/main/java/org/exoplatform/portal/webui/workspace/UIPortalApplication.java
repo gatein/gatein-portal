@@ -68,6 +68,7 @@ import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.web.application.javascript.JavascriptConfigParser;
 import org.exoplatform.web.application.javascript.JavascriptConfigService;
 import org.exoplatform.web.url.MimeType;
+import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -531,7 +532,7 @@ public class UIPortalApplication extends UIApplication {
             lastRequestNavData = requestNavData;
 
             StringBuilder js = new StringBuilder("eXo.env.server.portalBaseURL=\"");
-            js.append(pcontext.getRequestURI()).append("\";\n");
+            js.append(getBaseURL()).append("\";\n");
 
             String url = getPortalURLTemplate();
             js.append("eXo.env.server.portalURLTemplate=\"");
@@ -765,5 +766,11 @@ public class UIPortalApplication extends UIApplication {
         urlTemplate.setAction("{portal:action}");
 
         return URLDecoder.decode(urlTemplate.toString(), "UTF-8");
+    }
+
+    public String getBaseURL() {
+        PortalRequestContext pcontext = Util.getPortalRequestContext();
+        NodeURL nodeURL = pcontext.createURL(NodeURL.TYPE, new NavigationResource(pcontext.getSiteKey(), pcontext.getNodePath()));
+        return nodeURL.toString();
     }
 }
