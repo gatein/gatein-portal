@@ -42,6 +42,8 @@ import org.exoplatform.resolver.ResourceResolver;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
 import org.gatein.common.io.IOTools;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 import groovy.lang.Writable;
 import groovy.text.Template;
@@ -91,6 +93,9 @@ public class TemplateService {
     };
 
     private FutureCache<ResourceKey, GroovyTemplate, ResourceResolver> futureCache;
+
+    /** . */
+    private final Logger log = LoggerFactory.getLogger(TemplateService.class);
 
     public TemplateService(TemplateStatisticService statisticService, CacheService cservice) throws Exception {
         this.engine_ = new GroovyTemplateEngine();
@@ -164,7 +169,7 @@ public class TemplateService {
         try {
             templatesCache_.clearCache();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -182,7 +187,7 @@ public class TemplateService {
                 templatesCache_.remove(resolver.createResourceKey(name));
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -197,7 +202,7 @@ public class TemplateService {
             }
             return list.toArray(new String[list.size()]);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
             return null;
         }
     }

@@ -597,8 +597,7 @@ public class ApplicationRegistryServiceImpl implements ApplicationRegistryServic
                 }
                 save = true;
             } catch (Exception e) {
-                // log.error(e);
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             } finally {
                 // lifeCycle.closeContext(context, true);
                 manager.getSynchronization().setSaveOnClose(save);

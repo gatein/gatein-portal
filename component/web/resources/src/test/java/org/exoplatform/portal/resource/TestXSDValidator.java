@@ -19,6 +19,8 @@
 package org.exoplatform.portal.resource;
 
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -92,8 +94,11 @@ public class TestXSDValidator extends TestCase {
             }
         } catch (Exception ex) {
             if (!failureExpect) {
-                ex.printStackTrace();
-                fail();
+                StringWriter sw = new StringWriter();
+                PrintWriter out = new PrintWriter(sw);
+                ex.printStackTrace(out);
+                out.close();
+                fail(sw.toString());
             }
         } finally {
             IOTools.safeClose(in);

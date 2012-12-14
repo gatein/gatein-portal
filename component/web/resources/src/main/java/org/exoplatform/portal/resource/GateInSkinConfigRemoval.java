@@ -21,6 +21,8 @@ package org.exoplatform.portal.resource;
 import java.util.List;
 import java.util.Set;
 
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.WebApp;
 import org.gatein.wci.WebAppEvent;
 import org.gatein.wci.WebAppLifeCycleEvent;
@@ -32,6 +34,8 @@ import org.gatein.wci.WebAppListener;
  *
  */
 public class GateInSkinConfigRemoval implements WebAppListener {
+
+    private final Logger log = LoggerFactory.getLogger(GateInSkinConfigRemoval.class);
 
     private SkinService service;
 
@@ -59,8 +63,8 @@ public class GateInSkinConfigRemoval implements WebAppListener {
 
             // Update the 'skinDependentManager'
             SkinDependentManager.clearAssociatedSkins(webApp);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         }
     }
 

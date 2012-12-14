@@ -36,6 +36,8 @@ import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.gatein.common.io.IOTools;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.net.URLTools;
 
 /**
@@ -102,6 +104,9 @@ public class TestGadgetRegistryService extends AbstractApplicationRegistryTest {
     }
 
     class TestGadgetImporter extends GadgetImporter {
+        /** . */
+        private final Logger log = LoggerFactory.getLogger(TestGadgetImporter.class);
+
         private boolean local_;
 
         private ConfigurationManager configurationManager;
@@ -124,7 +129,7 @@ public class TestGadgetRegistryService extends AbstractApplicationRegistryTest {
                         return IOTools.getBytes(in);
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
             } else if (!local_) {
                 URL url;

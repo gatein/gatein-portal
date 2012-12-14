@@ -8,6 +8,8 @@ import javax.servlet.ServletContextEvent;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.shindig.common.servlet.GuiceServletContextListener;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  *
@@ -20,6 +22,8 @@ import org.apache.shindig.common.servlet.GuiceServletContextListener;
 public class GateInGuiceServletContextListener extends GuiceServletContextListener {
 
     private static ThreadLocal<GateInContainerConfigLoader> currentLoader = new ThreadLocal<GateInContainerConfigLoader>();
+
+    private final Logger log = LoggerFactory.getLogger(GateInGuiceServletContextListener.class);
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
@@ -61,8 +65,8 @@ public class GateInGuiceServletContextListener extends GuiceServletContextListen
         try {
             // Setup the Guice objects, the threadlocal loader is accessible for the moment
             super.contextInitialized(event);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         } finally {
             // Reset the threadlocal loader to null
             currentLoader.set(null);

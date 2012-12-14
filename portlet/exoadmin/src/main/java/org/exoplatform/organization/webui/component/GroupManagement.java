@@ -28,11 +28,16 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.services.organization.Group;
 import org.exoplatform.services.organization.OrganizationService;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * Created by The eXo Platform SAS Author : Huu-Dung Kieu kieuhdung@gmail.com 22 dec. 08
  */
 public class GroupManagement {
+
+    /** . */
+    private static final Logger log = LoggerFactory.getLogger(GroupManagement.class);
 
     public static OrganizationService getOrganizationService() {
         ExoContainer container = ExoContainerContext.getCurrentContainer();
@@ -159,7 +164,7 @@ public class GroupManagement {
             // finally, user must be manager of that group
             return ret;
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         return false;
     }

@@ -277,8 +277,8 @@ public class POMDataStorage implements ModelDataStorage {
             }
 
             return a;
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
             return null;
         }
     }

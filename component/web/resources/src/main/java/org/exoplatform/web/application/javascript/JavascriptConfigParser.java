@@ -129,8 +129,8 @@ public class JavascriptConfigParser {
             DocumentBuilder docBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document document = docBuilder.parse(is);
             return parseScripts(document);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
             return null;
         }
     }

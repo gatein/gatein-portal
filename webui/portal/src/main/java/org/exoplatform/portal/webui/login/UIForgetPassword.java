@@ -46,6 +46,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.EmailAddressValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.url.ComponentURL;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.security.Credentials;
 
 /**
@@ -66,6 +68,8 @@ public class UIForgetPassword extends UIForm {
     }
 
     public static class SendActionListener extends EventListener<UIForgetPassword> {
+        private final Logger log = LoggerFactory.getLogger(SendActionListener.class);
+
         public void execute(Event<UIForgetPassword> event) throws Exception {
             UIForgetPassword uiForm = event.getSource();
             UILogin uilogin = uiForm.getParent();
@@ -125,7 +129,7 @@ public class UIForgetPassword extends UIForm {
                         + res.getString(uiForm.getId() + ".mail.link");
                 footerMail = "\n\n\n" + res.getString(uiForm.getId() + ".mail.footer");
             } catch (MissingResourceException e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
             HttpServletRequest request = portalContext.getRequest();
             String host = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort();

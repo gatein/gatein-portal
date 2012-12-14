@@ -221,8 +221,8 @@ public class UIPortletLifecycle<S, C extends Serializable, I> extends Lifecycle<
             bcontext.put("portletContent", markup);
             try {
                 renderTemplate(uicomponent.getTemplate(), bcontext);
-            } catch (Throwable ex) {
-                ex.printStackTrace();
+            } catch (Throwable e) {
+                log.error(e.getMessage(), e);
             }
         }
     }

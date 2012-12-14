@@ -30,6 +30,7 @@ import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.controller.router.URIWriter;
 import org.exoplatform.web.url.MimeType;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.portal.controller.resource.ResourceRequestHandler;
 
 /**
@@ -120,7 +121,7 @@ class SimpleSkin implements SkinConfig {
                     //
                     return url.toString();
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LoggerFactory.getLogger(this.getClass()).error(e.getMessage(), e);
                     return null;
                 }
             }

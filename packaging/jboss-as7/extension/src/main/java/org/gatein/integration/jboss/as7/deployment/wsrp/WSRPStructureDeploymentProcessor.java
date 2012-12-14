@@ -96,7 +96,7 @@ public class WSRPStructureDeploymentProcessor implements DeploymentUnitProcessor
                 moduleSpecification.addResourceLoader(ResourceLoaderSpec.createResourceLoaderSpec(ResourceLoaders
                         .createJarResourceLoader("wsrp-catalog", jarFile)));
             } catch (Exception e) {
-                e.printStackTrace(); // To change body of catch statement use File | Settings | File Templates.
+                log.error(e.getMessage(), e);
             }
         }
     }

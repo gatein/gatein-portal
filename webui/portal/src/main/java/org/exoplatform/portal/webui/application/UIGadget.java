@@ -44,6 +44,8 @@ import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.exception.MessageException;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -75,6 +77,8 @@ public class UIGadget extends UIComponent {
     private JSONObject metadata_;
 
     private String url_;
+
+    private final Logger log = LoggerFactory.getLogger(UIGadget.class);
 
     public static final String PREF_KEY = "_pref_gadget_";
 
@@ -161,7 +165,7 @@ public class UIGadget extends UIComponent {
                 this.gadgetId = gadgetId;
                 this.state = state;
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         } else {
             this.gadgetId = null;

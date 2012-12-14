@@ -19,8 +19,6 @@ package org.exoplatform.sample.webui.component;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.services.log.ExoLogger;
-import org.exoplatform.services.log.Log;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
@@ -28,6 +26,8 @@ import org.exoplatform.webui.core.UIConfirmation;
 import org.exoplatform.webui.core.UIConfirmation.ActionConfirm;
 import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * Created by The eXo Platform SAS Author : Nguyen Duc Khoi khoi.nguyen@exoplatform.com Apr 28, 2010
@@ -35,7 +35,7 @@ import org.exoplatform.webui.core.lifecycle.UIContainerLifecycle;
 
 @ComponentConfig(lifecycle = UIContainerLifecycle.class)
 public class UISampleContent extends UIContainer {
-    private Log log_ = ExoLogger.getLogger(UISampleContent.class);
+    private Logger log = LoggerFactory.getLogger(UISampleContent.class);
 
     public static final int NODE_UIFORM = 0;
 
@@ -95,7 +95,7 @@ public class UISampleContent extends UIContainer {
                 showMultiValueInputSet();
                 break;
             default:
-                log_.error("not implement yet");
+                log.error("not implement yet");
         }
     }
 
@@ -150,14 +150,12 @@ public class UISampleContent extends UIContainer {
 
     @Override
     public <T extends UIComponent> T getChild(Class<T> clazz) {
-        // TODO Auto-generated method stub
         T uiComp = super.getChild(clazz);
         if (uiComp == null) {
             try {
                 uiComp = addChild(clazz, null, null);
             } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         }
         return uiComp;

@@ -813,22 +813,22 @@ public class UIPortlet<S, C extends Serializable> extends UIApplication {
 
                 try {
                     producedOfferedPortlet = portletInvoker.getPortlet(producerOfferedPortletContext);
-                } catch (Exception exp) {
+                } catch (Exception e) {
                     // Whenever couldn't invoke the portlet object, set the request portlet to null for the error tobe
                     // properly handled and displayed when the portlet is rendered
                     producedOfferedPortlet = null;
-                    exp.printStackTrace();
+                    log.error(e.getMessage(), e);
                 }
 
                 this.adapter = adapter;
                 this.producerOfferedPortletContext = producerOfferedPortletContext;
                 this.producedOfferedPortlet = producedOfferedPortlet;
                 this.applicationId = applicationId;
-            } catch (NoSuchDataException de) {
-                log.error(de.getMessage());
-                throw de;
+            } catch (NoSuchDataException e) {
+                log.error(e.getMessage());
+                throw e;
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error(e.getMessage(), e);
             }
         } else {
             this.adapter = null;

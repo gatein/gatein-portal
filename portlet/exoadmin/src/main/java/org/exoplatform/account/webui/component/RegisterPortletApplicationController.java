@@ -34,12 +34,17 @@ import nl.captcha.Captcha;
 import nl.captcha.servlet.CaptchaServletUtil;
 
 import org.exoplatform.webui.application.portlet.PortletApplicationController;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public class RegisterPortletApplicationController extends PortletApplicationController implements ResourceServingPortlet {
+
+    /** . */
+    private static final Logger log = LoggerFactory.getLogger(RegisterPortletApplicationController.class);
 
     private static final String PARAM_HEIGHT = "height";
 
@@ -83,7 +88,7 @@ public class RegisterPortletApplicationController extends PortletApplicationCont
         try {
             CaptchaServletUtil.writeImage(response.getPortletOutputStream(), bi);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 }

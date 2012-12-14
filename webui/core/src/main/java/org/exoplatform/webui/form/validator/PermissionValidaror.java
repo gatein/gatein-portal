@@ -26,6 +26,8 @@ import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.exception.MessageException;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * Created by The eXo Platform SARL Author : Nhu Dinh Thuan nhudinhthuan@exoplatform.com Apr 12, 2007
@@ -33,6 +35,8 @@ import org.exoplatform.webui.exception.MessageException;
  * Validates whether the current user is allowed to perform the current operation
  */
 public class PermissionValidaror {
+
+    private final Logger log = LoggerFactory.getLogger(PermissionValidaror.class);
 
     public void validate(UIComponent uicomponent, String permission) throws Exception {
         OrganizationService service = (OrganizationService) ExoContainerContext.getCurrentContainer()
@@ -52,7 +56,7 @@ public class PermissionValidaror {
             membershipType = service.getMembershipTypeHandler().findMembershipType(membership);
             group = service.getGroupHandler().findGroupById(groupId);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
         if (membership.equals("*")) {
             if (membershipType != null && group != null)

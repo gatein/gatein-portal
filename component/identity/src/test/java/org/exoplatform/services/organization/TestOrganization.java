@@ -19,6 +19,8 @@
 
 package org.exoplatform.services.organization;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.Collection;
 import java.util.List;
 
@@ -206,8 +208,7 @@ public class TestOrganization extends AbstractKernelTest {
         }
 
         catch (Exception e) {
-            e.printStackTrace();
-            fail("Error on create group [" + name + "] " + e.getMessage());
+            fail("Error on create group [" + name + "] " + e.getMessage(), e);
         }
     }
 
@@ -231,8 +232,11 @@ public class TestOrganization extends AbstractKernelTest {
         try {
             userHandler.createUser(user, true);
         } catch (Exception e) {
-            e.printStackTrace();
-            fail("Error on create user: " + e.getMessage());
+            StringWriter sw = new StringWriter();
+            PrintWriter out = new PrintWriter(sw);
+            e.printStackTrace(out);
+            out.close();
+            fail("Error on create user: " + sw.toString());
         }
     }
 
