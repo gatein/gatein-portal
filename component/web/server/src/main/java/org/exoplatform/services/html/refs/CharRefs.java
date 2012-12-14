@@ -43,10 +43,16 @@ package org.exoplatform.services.html.refs;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+
 
 final class CharRefs {
 
     boolean sorted = false;
+
+    /** . */
+    private final Logger log = LoggerFactory.getLogger(CharRefs.class);
 
     CharRef[] charRefs = {
 
@@ -347,8 +353,8 @@ final class CharRefs {
             if (idx < 0)
                 return null;
             return charRefs[idx];
-        } catch (Exception exp) {
-            exp.printStackTrace();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
             return null;
         }
     }

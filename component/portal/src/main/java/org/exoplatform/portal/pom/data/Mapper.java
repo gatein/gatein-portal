@@ -53,6 +53,8 @@ import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.services.jcr.util.Text;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
@@ -86,6 +88,9 @@ public class Mapper {
 
     /** . */
     private final POMSession session;
+
+    /** . */
+    private final Logger log = LoggerFactory.getLogger(Mapper.class);
 
     public Mapper(POMSession session) {
         this.session = session;
@@ -309,7 +314,7 @@ public class Mapper {
                 template.templatize(dst.getRootNavigation());
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 

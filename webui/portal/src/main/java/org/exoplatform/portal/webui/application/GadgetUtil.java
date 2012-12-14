@@ -37,6 +37,8 @@ import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.gadget.core.SecurityTokenGenerator;
 import org.exoplatform.portal.webui.util.Util;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,6 +46,9 @@ import org.json.JSONObject;
  * Created by The eXo Platform SAS Author : Pham Thanh Tung thanhtungty@gmail.com Oct 2, 2008
  */
 public class GadgetUtil {
+
+    private static final Logger log = LoggerFactory.getLogger(GadgetUtil.class);
+
     public static Gadget toGadget(String name, String path, boolean isLocal) throws Exception {
         Gadget gadget = new Gadget();
         gadget.setName(name);
@@ -93,8 +98,8 @@ public class GadgetUtil {
             // Get the response
             result = IOUtils.toString(conn.getInputStream(), "UTF-8");
             wr.close();
-        } catch (IOException ioexc) {
-            ioexc.printStackTrace();
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
             return "{}";
         }
         return result;
@@ -129,8 +134,8 @@ public class GadgetUtil {
             // Get the response
             result = IOUtils.toString(conn.getInputStream(), "UTF-8");
             wr.close();
-        } catch (IOException ioexc) {
-            ioexc.printStackTrace();
+        } catch (IOException e) {
+            log.error(e.getMessage(), e);
             return "{}";
         }
         return result;

@@ -164,10 +164,10 @@ public class ResourceRequestFilter extends AbstractFilter {
                         return;
                     } catch (InterruptedException e) {
                         // Find out what is relevant to do
-                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                     } catch (ExecutionException e) {
                         // Cleanup
-                        e.printStackTrace();
+                        log.error(e.getMessage(), e);
                         mirroredImageCache.remove(resource);
                     }
                 }

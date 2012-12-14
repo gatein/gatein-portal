@@ -257,23 +257,9 @@ public class JSMin {
     class UnterminatedRegExpLiteralException extends Exception {
     }
 
-    public static void main(String[] arg) {
-        try {
-            JSMin jsmin = new JSMin(new FileReader(arg[0]), new PrintWriter(System.out));
-            jsmin.jsmin();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (ArrayIndexOutOfBoundsException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (UnterminatedRegExpLiteralException e) {
-            e.printStackTrace();
-        } catch (UnterminatedCommentException e) {
-            e.printStackTrace();
-        } catch (UnterminatedStringLiteralException e) {
-            e.printStackTrace();
-        }
+    public static void main(String[] arg) throws IOException, UnterminatedRegExpLiteralException, UnterminatedCommentException, UnterminatedStringLiteralException {
+        JSMin jsmin = new JSMin(new FileReader(arg[0]), new PrintWriter(System.out));
+        jsmin.jsmin();
     }
 
 }

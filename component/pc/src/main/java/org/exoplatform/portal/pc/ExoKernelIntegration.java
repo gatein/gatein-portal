@@ -203,8 +203,7 @@ public class ExoKernelIntegration implements Startable, WebAppListener {
                 try {
                     portletApplicationRegistry.add(lifeCycleEvent.getWebApp().getServletContext());
                 } catch (DeploymentException e) {
-                    // Portlet deployment failed
-                    e.printStackTrace();
+                    log.error("Portlet deployment failed", e);
                 }
             } else if (type == WebAppLifeCycleEvent.REMOVED) {
                 portletApplicationRegistry.remove(lifeCycleEvent.getWebApp().getServletContext());

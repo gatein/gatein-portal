@@ -102,7 +102,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
             super.start();
 
         } catch (Exception e) {
-            e.printStackTrace(); // To change body of catch statement use File | Settings | File Templates.
+            log.error(e.getMessage(), e);
         } finally {
             RequestLifeCycle.end();
         }
@@ -141,7 +141,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -166,7 +166,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
             }
 
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
@@ -181,7 +181,7 @@ public class PicketLinkIDMOrganizationServiceImpl extends BaseOrganizationServic
                 idmService_.getIdentitySession().getTransaction().commit();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error(e.getMessage(), e);
         }
     }
 
