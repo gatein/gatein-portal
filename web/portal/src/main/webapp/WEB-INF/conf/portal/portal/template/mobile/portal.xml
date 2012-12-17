@@ -30,6 +30,7 @@
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
   <edit-permission>*:/platform/administrators</edit-permission>
+  <skin>ResponsiveSkin</skin>
   <properties>
     <entry key="sessionAlive">onDemand</entry>
   </properties>
