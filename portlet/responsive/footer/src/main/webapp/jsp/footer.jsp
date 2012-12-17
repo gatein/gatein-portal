@@ -30,6 +30,7 @@ String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) aj
 			   } %>
 			<li class="language">
 		    	 <a href="#" onclick="<%= changeLanguageAction %>"><%= locale.getDisplayLanguage(locale) %></a>
+                 <div class="downCaret"></div>
 			</li>
 		</ol>
 	</div>
@@ -56,7 +57,7 @@ String changeLanguageAction = "if(document.getElementById('UIMaskWorkspace')) aj
 	           copyright.style.whiteSpace="normal"; //set back to normal the white space
 	        }
 	 
-	        if (footer.clientWidth < footer.collapseWidth)
+	        if (footer.clientWidth <= footer.collapseWidth)
 	        {
 	                copyright.style.float="none";
 	                copyright.style.clear="both";

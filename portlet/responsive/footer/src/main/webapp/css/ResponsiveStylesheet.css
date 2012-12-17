@@ -1,6 +1,7 @@
 .gtnResponsiveFooterPortlet {
 margin: 0;
 padding: 0;
+font-size: 95%;
 }
 
 .gtnResponsiveFooterPortlet .options {
@@ -38,14 +39,10 @@ display: inline;
 padding: 1em;
 }
 
-.gtnResponsiveFooterPortlet ol li.sitePreference{
-text-decoration: underline;
-}
-
-.gtnResponsiveFooterPortlet ol li.language{
-background-image: url('/responsive-footer-portlet/css/../images/uparrow.svg');
-background-size: 0.8em 0.8em;
-background-repeat: no-repeat;
-background-position: right center;
-margin-right: 0.8em;
+.downCaret{
+border-width: 0.25em 0.25em 0.25em 0.25em;
+border-color: transparent transparent black;
+border-style: solid;
+display: inline-block;
+margin-bottom: 0.25em;
 }

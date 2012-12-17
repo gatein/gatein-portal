@@ -4,15 +4,14 @@ padding: 0;
 }
 
 .gtnResponsiveHeaderPortlet .logo  {
-background-image: url('/responsive-header-portlet/css/../images/gatein_logo.svg');
+background-image: url('../images/gatein_logo.svg');
 line-height: 1em;
-background-size: 2em;
 background-repeat: no-repeat;
 background-size: auto 2.5em;
 height: 2.5em;
 width: 12em;
-background-position: 2em 0.8em;
-padding: 0.8em 0 0.8em 2em;
+background-position: 1em 0.8em;
+padding: 0.8em 0 0.8em 1em;
 float: left;
 cursor: pointer;
 }
@@ -21,6 +20,7 @@ cursor: pointer;
 .gtnResponsiveHeaderPortlet .options {
 float: right;
 line-height: 2em;
+font-size: 95%;
 }
 
 .gtnResponsiveHeaderPortlet .options.collapsed {
@@ -47,20 +47,31 @@ padding: 1em;
 white-space: nowrap;
 }
 
+.gtnResponsiveHeaderPortlet .options ul li {
+background: url("../images/bullet-separator.png") no-repeat left center;
+}
+
+.gtnResponsiveHeaderPortlet .options ul li:first-child {
+background: none;
+}
+
+
 .gtnResponsiveHeaderPortlet .options ul li.singleline{
 display: block;
+background: none;
 }
 
 .gtnResponsiveHeaderPortlet .options ul li a {
-color: #565658;
+color: #1C5182;;
 }
 
 .gtnResponsiveHeaderPortlet .options ul li a:HOVER {
 color: #002559;
+text-decoration: underline;
 }
 
 .gtnResponsiveHeaderPortlet .icon {
-background-image: url('/responsive-header-portlet/css/../images/preference.svg');
+background-image: url('../images/preference.svg');
 
 background-repeat: no-repeat;
 background-size: auto 2em;
@@ -69,7 +80,6 @@ width: 2.5em;
 background-position: center;
 padding: 0.8em 1em 0.8em 1em;
 float: right;
-/*display: none; */
 }
 
 .gtnResponsiveHeaderPortlet .clear {

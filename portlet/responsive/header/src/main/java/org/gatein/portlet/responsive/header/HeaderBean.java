@@ -73,5 +73,17 @@ public class HeaderBean
       return nodeURL.toString();
    }
    
+   public String generateDashboardLink() throws Exception
+   {
+      PortalRequestContext pContext = Util.getPortalRequestContext();
+      NodeURL nodeURL = pContext.createURL(NodeURL.TYPE);
+      nodeURL.setResource(new NavigationResource(SiteType.USER, pContext.getRemoteUser(), null));
+      return nodeURL.toString();
+   }
+   
+   public String generateGroupPagesLink() 
+   {
+      return "#";
+   }
 }
 

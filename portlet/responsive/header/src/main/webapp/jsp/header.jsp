@@ -11,6 +11,7 @@
 
 			String signinAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));";
 			String registerLink = header.generateRegisterLink();
+			
 %>
 
 <div id="<portlet:namespace/>_gtnResponsiveHeaderPortlet" class="gtnResponsiveHeaderPortlet">
@@ -24,9 +25,12 @@
 			      <li><a href="<%=registerLink%>"><%=resourceBundle.getString("label.Register")%></a></li>
 	        <% } 
 	           else
-	           {%>
-	              <li><a href="#"><%= resourceBundle.getString("label.Dashboard")%></a></li>
-	              <li><a href="#"><%= resourceBundle.getString("label.GroupPages") %></a></li>
+	           {
+	              String dashboardLink = header.generateDashboardLink();
+	              String groupPagesLink = header.generateGroupPagesLink();
+	           %>
+	              <li><a href="<%= dashboardLink%>"><%= resourceBundle.getString("label.Dashboard")%></a></li>
+	              <li><a href="<%= groupPagesLink%>"><%= resourceBundle.getString("label.GroupPages") %></a></li>
 	              <li><a href="#" onclick="eXo.portal.logout();"><%=resourceBundle.getString("label.SignOut")%></a></li>
 	              <li><a href="#"><%= resourceBundle.getString("label.UserProfile") %></a></li>
 	        <% }%>		
@@ -81,7 +85,6 @@
     function checkOptionsSize()
     {
         var optionsDiv = document.getElementById("<portlet:namespace/>_options");
-
         if (optionsDiv.clientWidth != 0) //only perform the check if the options div is visible
         {
         if (typeof (optionsDiv.collapseWidth) === "undefined")
@@ -100,7 +103,6 @@
             {
               lis[i].className = lis[i].className + " singleline";
 	    }
-            //alert("Need to collapse Options Div to ONE entry per line");
         }
         else if ((optionsDiv.clientWidth >= optionsDiv.collapseWidth) && optionsDiv.collapsed)
         {
@@ -110,7 +112,6 @@
            {
               lis[i].className = lis[i].className.replace(" singleline", "");
            }
-           //alert("Need options div can be all on one line");
         }
         }
     }
@@ -126,6 +127,7 @@
     		unHighlightElement(iconDiv);
     		unHighlightElement(optionsDiv);
 	        collapseElement(optionsDiv);
+                checkOptionsSize();
     	}
     	else //need to toggle on
     	{
