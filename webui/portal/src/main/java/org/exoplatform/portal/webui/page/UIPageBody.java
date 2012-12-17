@@ -33,6 +33,8 @@ import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIComponentDecorator;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * May 19, 2006
@@ -43,6 +45,9 @@ public class UIPageBody extends UIComponentDecorator {
     private UIPortalComponent maximizedUIComponent;
 
     private String storageId;
+
+    /** . */
+    private final Logger log = LoggerFactory.getLogger(UIPageBody.class);
 
     public UIPageBody(PageBody model) {
         setId("UIPageBody");
@@ -122,13 +127,20 @@ public class UIPageBody extends UIComponentDecorator {
             return uiPage;
         }
 
-        UIPageFactory clazz = UIPageFactory.getInstance(pageContext.getState().getFactoryId());
-        uiPage = clazz.createUIPage(context);
+        try {
+            UIPageFactory clazz = UIPageFactory.getInstance(pageContext.getState().getFactoryId());
+            uiPage = clazz.createUIPage(context);
 
-        Page page = userPortalConfigService.getDataStorage().getPage(pageReference);
-        pageContext.update(page);
-        PortalDataMapper.toUIPage(uiPage, page);
-        uiPortal.setUIPage(pageReference, uiPage);
+            Page page = userPortalConfigService.getDataStorage().getPage(pageReference);
+            pageContext.update(page);
+            PortalDataMapper.toUIPage(uiPage, page);
+            uiPortal.setUIPage(pageReference, uiPage);
+        } catch (Exception e) {
+            if (log.isDebugEnabled()) {
+                log.debug("Could not handle page '" + pageContext.getKey().format() + "'.", e);
+            }
+            throw e;
+        }
 
         return uiPage;
     }
