@@ -80,18 +80,16 @@ public class NavigationImporter {
                     dst = null;
                 }
                 break;
-            case MERGE:
             case INSERT:
                 if (dst == null) {
                     dst = new NavigationContext(key, new NavigationState(src.getPriority()));
                     service.saveNavigation(dst);
                 }
                 break;
+            case MERGE:
             case OVERWRITE:
-                if (dst == null) {
-                    dst = new NavigationContext(key, new NavigationState(src.getPriority()));
-                    service.saveNavigation(dst);
-                }
+                dst = new NavigationContext(key, new NavigationState(src.getPriority()));
+                service.saveNavigation(dst);
                 break;
             default:
                 throw new AssertionError();
