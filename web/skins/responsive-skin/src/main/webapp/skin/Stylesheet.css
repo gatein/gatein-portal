@@ -8,14 +8,14 @@
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIDashboard/Stylesheet.css);
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIPortalComponent/Stylesheet.css);
 /*@import url(/eXoResources/skin/DefaultSkin/webui/component/Stylesheet.css);*/
-@import url(/eXoResources/skin/DefaultSkin/webui/component/UIForms/Stylesheet.css);
+/*@import url(/eXoResources/skin/DefaultSkin/webui/component/UIForms/Stylesheet.css);
 @import url(/eXoResources/skin/DefaultSkin/skinIcons/16x16/Stylesheet.css);
-
+*/
 @import url(ResponsiveSkin/portal/webui/component/UIPortal/UIPortalApplicationSkin.css);
 @import url(ResponsiveSkin/portal/webui/component/UIWorkspace/UIWorkspace.css);
 @import url(ResponsiveSkin/portal/webui/component/UIToolbar/UIToolbar.css);
 @import url(ResponsiveSkin/portal/webui/component/UILoginForm/UILoginForm.css);
 @import url(ResponsiveSkin/portal/webui/component/UIChangeLanguageForm/UIChangeLanguageForm.css);
 @import url(ResponsiveSkin/portal/webui/component/UIMaskWorkspace/UIMaskWorkspace.css);
-@import url(ResponsiveSkin/portal/webui/component/UIForms/Stylesheet.css);
+@import url(ResponsiveSkin/portal/webui/component/UIForms/UIForms.css);
 @import url(Portlet/Stylesheet.css);
