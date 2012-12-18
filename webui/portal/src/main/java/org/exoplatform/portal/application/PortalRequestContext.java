@@ -335,15 +335,16 @@ public class PortalRequestContext extends WebuiRequestContext {
                 //
                 if (page != null) {
                     title = page.getState().getDisplayName();
-                    return ExpressionUtil.getExpressionValue(this.getApplicationResourceBundle(), title);
-                } else {
-                    title = node.getResolvedLabel();
+                    String resolvedTitle = ExpressionUtil.getExpressionValue(this.getApplicationResourceBundle(), title);
+                    if (resolvedTitle != null) {
+                        return resolvedTitle;
+                    }
                 }
+                title = node.getResolvedLabel();
             }
         }
 
-        //
-        return title;
+        return title == null ? "" : title;
     }
 
     @Override
