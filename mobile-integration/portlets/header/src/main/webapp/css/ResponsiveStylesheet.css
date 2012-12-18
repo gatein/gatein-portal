@@ -93,3 +93,8 @@ clear: both;
 .gtnResponsiveHeaderPortlet .hidden {
 	display: none;
 }
+
+div.UIToolbarContainer{
+ display: none;
+}
+
