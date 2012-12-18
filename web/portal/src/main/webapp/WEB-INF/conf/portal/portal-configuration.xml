@@ -146,9 +146,6 @@
 	                <value>
 	                  <string>classic</string>
 	                </value>
-                        <value>
-                          <string>mobile</string>
-                        </value>
 		       </collection>
 	            </field>
 	            <field name="groupTemplates">
@@ -174,7 +171,6 @@
 	            <field  name="predefinedOwner">
 	              <collection type="java.util.HashSet">                
 	                <value><string>classic</string></value>
-                    <value><string>mobile</string></value> 
 	              </collection>
 	            </field>
 	            <field name="ownerType"><string>portal</string></field>

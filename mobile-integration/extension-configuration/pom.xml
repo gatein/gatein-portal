@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+
+   <parent>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>mobile-integration</artifactId>
+      <version>3.5.0.Final-SNAPSHOT</version>
+   </parent>
+
+   <groupId>org.gatein.portal</groupId>
+   <artifactId>mobile-extension-configuration</artifactId>
+   <packaging>war</packaging>
+   <name>GateIn Portal Mobile Integration Configuration WAR</name>
+   <description/>
+
+   <dependencies>
+   </dependencies>
+
+   <build>
+     <finalName>gatein-mobile-configuration</finalName>
+   </build>
+
+</project>

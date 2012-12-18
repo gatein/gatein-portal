@@ -3,8 +3,8 @@
  <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>org.gatein.portal.examples.skins</groupId>
-    <artifactId>parent</artifactId>
+    <groupId>org.gatein.portal</groupId>
+    <artifactId>mobile-integration</artifactId>
     <version>3.5.0.Final-SNAPSHOT</version>
   </parent> 
 

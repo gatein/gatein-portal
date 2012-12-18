@@ -132,9 +132,6 @@
       <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/web.war" >
          <fileset refid="org.gatein.portal:exo.portal.portlet.web:war"/>
       </copy>
-      <copy tofile="${jbossas.target.dir}/gatein/gatein.ear/redirect-portlet.war">
-         <fileset refid="org.gatein.portal.portlet:redirect:war"/>
-      </copy>
 
 
       <!-- WSRP integration -->
@@ -148,21 +145,9 @@
          <fileset refid="org.gatein.wsrp:wsrp-admin-gui:war"/>
       </unzip>
 
-      <!-- Mobile Specific Integrations -->
-      <unzip dest="${jbossas.target.dir}/gatein/extensions/gatein-responsive-skin.war" overwrite="true">
-         <fileset refid="org.gatein.portal:responsive-skin:war"/>
-      </unzip>
-      <unzip dest="${jbossas.target.dir}/gatein/extensions/responsive-banner-portlet.war" overwrite="true">
-         <fileset refid="org.gatein.portal:portlet.responsive.banner:war"/>
-      </unzip>
-      <unzip dest="${jbossas.target.dir}/gatein/extensions/responsive-features-portlet.war" overwrite="true">
-         <fileset refid="org.gatein.portal:portlet.responsive.features:war"/>
-      </unzip>
-      <unzip dest="${jbossas.target.dir}/gatein/extensions/responsive-footer-portlet.war" overwrite="true">
-         <fileset refid="org.gatein.portal:portlet.responsive.footer:war"/>
-      </unzip>
-      <unzip dest="${jbossas.target.dir}/gatein/extensions/responsive-header-portlet.war" overwrite="true">
-         <fileset refid="org.gatein.portal:portlet.responsive.header:war"/>
+      <!-- Mobile Integration -->
+      <unzip dest="${jbossas.target.dir}/gatein/extensions/gatein-mobile-integration.ear" overwrite="true">
+         <fileset refid="org.gatein.portal:mobile-extension-ear:ear"/>
       </unzip>
 
       <!-- Deployment archives overrides -->
@@ -195,13 +180,6 @@
       <!-- Excluded due to ARG_MAX limitation on Mac OS X -->
       <!--chmod perm="0644" type="file" dir="${jbossas.target.dir}" excludes="**/*.sh"/-->
       <chmod perm="0755" type="file" dir="${jbossas.target.dir}" includes="**/*.sh"/>
-
-      <!-- TODO: delete this section!!! this is only added as a hack to get around the issue of having portlets wars in the extension directory crashing wsrp (and the portal) -->
-      <delete includeEmptyDirs="true" includeemptydirs="true">
-        <fileset dir="${jbossas.target.dir}/gatein/extensions/gatein-wsrp-integration.ear" includes="**/*"/>
-      </delete>
-      <delete dir="${jbossas.target.dir}/gatein/extensions/gatein-wsrp-integration.ear" includeemptydirs="true"/>
-      <!-- /TODO -->
 
   </target>
 </project>

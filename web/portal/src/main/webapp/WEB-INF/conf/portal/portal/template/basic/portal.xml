@@ -73,16 +73,6 @@
 
      <portlet-application>
        <portlet>
-         <application-ref>redirect-portlet</application-ref>
-         <portlet-ref>SiteRedirectPortlet</portlet-ref>
-       </portlet>
-       <access-permissions>Everyone</access-permissions>
-       <show-info-bar>false</show-info-bar>
-     </portlet-application>
-	 
- 
-     <portlet-application>
-       <portlet>
          <application-ref>web</application-ref>
          <portlet-ref>FooterPortlet</portlet-ref>
          <preferences>

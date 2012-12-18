@@ -39,7 +39,6 @@
       <module>portal</module>
       <module>rest</module>
       <module>redirect</module>
-      <module>skins</module>
    </modules>
 
 </project>

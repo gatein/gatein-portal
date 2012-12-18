@@ -52,73 +52,18 @@
       <portlet>
         <application-ref>responsive-header-portlet</application-ref>
         <portlet-ref>ResponsiveHeaderPortlet</portlet-ref>
-<!--        <preferences>
-          <preference>
-            <name>template</name>
-            <value>par:/groovy/groovy/webui/component/UIBannerPortlet.gtmpl</value>
-            <read-only>false</read-only>
-          </preference>
-        </preferences> -->
       </portlet>
       <access-permissions>Everyone</access-permissions>
 	    <show-info-bar>false</show-info-bar>
 	  </portlet-application>
 
-<!--	  <portlet-application>
-      <portlet>
-        <application-ref>web</application-ref>
-        <portlet-ref>NavigationPortlet</portlet-ref>
-        <preferences>
-          <preference>
-            <name>useAJAX</name>
-            <value>false</value>
-            <read-only>false</read-only>
-          </preference>
-        </preferences>
-      </portlet>
-      <access-permissions>Everyone</access-permissions>
-	    <show-info-bar>false</show-info-bar>
-	  </portlet-application>
-		
-	  <portlet-application>
-      <portlet>
-        <application-ref>web</application-ref>
-        <portlet-ref>BreadcumbsPortlet</portlet-ref>
-         <preferences>
-            <preference>
-               <name>useAJAX</name>
-               <value>false</value>
-               <read-only>false</read-only>
-            </preference>
-         </preferences>
-      </portlet>
-      <access-permissions>Everyone</access-permissions>
-	    <show-info-bar>false</show-info-bar>
-	  </portlet-application> -->
 	  
 	  <page-body> </page-body>
-<!--
-     <portlet-application>
-       <portlet>
-         <application-ref>redirect-portlet</application-ref>
-         <portlet-ref>SiteRedirectPortlet</portlet-ref>
-       </portlet>
-       <access-permissions>Everyone</access-permissions>
-       <show-info-bar>false</show-info-bar>
-     </portlet-application>
-	--> 
  
      <portlet-application>
        <portlet>
          <application-ref>responsive-footer-portlet</application-ref>
          <portlet-ref>ResponsiveFooterPortlet</portlet-ref>
-<!--         <preferences>
-           <preference>
-             <name>template</name>
-             <value>par:/groovy/groovy/webui/component/UIFooterPortlet.gtmpl</value>
-             <read-only>false</read-only>
-           </preference>
-         </preferences> -->
        </portlet>
        <access-permissions>Everyone</access-permissions>
        <show-info-bar>false</show-info-bar>

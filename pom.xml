@@ -125,6 +125,7 @@
       <module>examples</module>
       <module>starter</module>
       <module>wsrp-integration</module>
+      <module>mobile-integration</module>
       <module>packaging</module>
       <module>testsuite</module>
    </modules>
@@ -739,7 +740,18 @@
             <version>${project.version}</version>
             <type>war</type>
         </dependency>
-
+        <dependency>
+            <groupId>org.gatein.portal</groupId>
+            <artifactId>mobile-extension-configuration</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.gatein.portal</groupId>
+            <artifactId>mobile-extension-ear</artifactId>
+            <version>${project.version}</version>
+            <type>ear</type>
+        </dependency>
 
         <!-- Reflext -->
         <dependency>
