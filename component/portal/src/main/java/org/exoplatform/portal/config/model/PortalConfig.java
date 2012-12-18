@@ -209,6 +209,10 @@ public class PortalConfig extends ModelObject
    
    public ArrayList<PortalRedirect> getPortalRedirects()
    {
+      if (portalRedirects == null)
+      {
+         portalRedirects = new ArrayList<PortalRedirect>();
+      }
       return portalRedirects;
    }
    

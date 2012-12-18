@@ -23,9 +23,7 @@
 package org.gatein.web.redirect.implementation;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.portal.config.DataStorage;
@@ -36,8 +34,8 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.web.redirect.Mapper;
 import org.gatein.web.redirect.Redirector;
-import org.gatein.web.redirect.api.SiteRedirectService;
 import org.gatein.web.redirect.api.RedirectKey;
+import org.gatein.web.redirect.api.SiteRedirectService;
 import org.picocontainer.Startable;
 
 /**
@@ -109,7 +107,7 @@ public class SiteRedirectServiceImpl implements SiteRedirectService, Startable
             }
             PortalConfig pConfig = dataStorage.getPortalConfig(origin);
 
-            if (pConfig == null)
+            if (pConfig == null || pConfig.getPortalRedirects() == null)
             {
                log.warn("No PortalConfig found for site : " + origin + ". Site redirection cannot be peformed.");
                return null;
