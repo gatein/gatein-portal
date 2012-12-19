@@ -38,7 +38,7 @@
               <property name="db-structure-type" value="${gatein.jcr.db-structure-type}"/>
               <property name="update-storage" value="true"/>
               <property name="max-buffer-size" value="204800"/>
-              <property name="swap-directory" value="${gatein.jcr.data.dir}/system${container.name.suffix}"/>
+              <property name="swap-directory" value="${gatein.jcr.data.dir}/swap/system${container.name.suffix}"/>
             </properties>
             <value-storages>
               <value-storage id="system"
