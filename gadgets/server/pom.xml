@@ -33,24 +33,7 @@
   <name>GateIn Portal eXo Gadgets Server</name>
 
   <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-war-plugin</artifactId>
-        <configuration>
-          <dependentWarExcludes>gadgets/**</dependentWarExcludes>
-          <dependentWarExcludes>WEB-INF/web**</dependentWarExcludes>
-        </configuration>
-      </plugin>
-    </plugins>
-    <testResources>
-      <testResource>
-        <directory>src/test/resources</directory>
-      </testResource>
-      <testResource>
-        <directory>src/main/webapp</directory>
-      </testResource>
-    </testResources>
+    <finalName>eXoGadgetServer</finalName>
   </build>
 
   <dependencies>

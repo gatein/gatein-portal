@@ -114,7 +114,8 @@ public class ExoOAuthModule extends OAuthModule {
 
         private void loadConsumers() {
             try {
-                String oauthConfigString = ResourceLoader.getContent(OAUTH_CONFIG);
+                GateInContainerConfigLoader currentLoader = GateInGuiceServletContextListener.getCurrentLoader();
+                String oauthConfigString = currentLoader.loadContentAsString(OAUTH_CONFIG, "UTF-8");
                 store.initFromConfigString(oauthConfigString);
             } catch (Throwable t) {
                 log.warn("Failed to initialize OAuth consumers from " + OAUTH_CONFIG, t);
