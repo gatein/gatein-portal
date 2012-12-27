@@ -220,7 +220,7 @@ public class RedirectRequestHandler extends WebRequestHandler implements Startab
     }
 
     protected Map<String, String> getDeviceProperties(HttpServletRequest request) {
-        Map<String, String> parameterMap = request.getParameterMap();
+        Map<String, String[]> parameterMap = request.getParameterMap();
         if (parameterMap != null) {
             Map<String, String> deviceProperties = new HashMap<String, String>();
 
