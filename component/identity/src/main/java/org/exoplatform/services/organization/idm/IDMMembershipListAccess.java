@@ -81,7 +81,7 @@ public class IDMMembershipListAccess implements ListAccess<Membership>, Serializ
         //
         int i = 0;
 
-        for (; i < roles.size(); i++) {
+        for (; i < length; i++) {
 
             Role role = roles.get(i);
 
