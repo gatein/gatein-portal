@@ -19,6 +19,13 @@
     <servlet-name>PortalServlet</servlet-name>
   </filter-mapping>
 
+  <!-- WCI integration for Tomcat7 -->
+  <servlet>
+    <servlet-name>ContainerServlet</servlet-name>
+    <servlet-class>org.gatein.wci.tomcat.TC7ContainerServlet</servlet-class>
+    <load-on-startup>0</load-on-startup>
+  </servlet>
+
   <!-- -->
   <servlet>
     <servlet-name>PortalServlet</servlet-name>

@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import juzu.Response;
 import juzu.View;
 import org.exoplatform.container.PortalContainer;
+import org.gatein.portal.portlet.PortletAppManager;
 
 /**
  * The controller for aggregation.
@@ -35,9 +36,13 @@ public class Aggregator {
     @Inject
     PortalContainer current;
 
+    @Inject
+    PortletAppManager manager;
+
     @View
     public Response.Render index() {
         System.out.println("Got portal container " + current);
+        System.out.println("Got app manager " + manager);
         return Response.render("<div class='gatein'>Hello GateIn<div>");
     }
 }
