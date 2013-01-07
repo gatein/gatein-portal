@@ -25,10 +25,13 @@ package org.gatein.portlet.responsive.header;
 import java.io.IOException;
 
 import javax.portlet.GenericPortlet;
+import javax.portlet.MimeResponse;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+
+import org.w3c.dom.Element;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
@@ -42,6 +45,16 @@ public class HeaderPortlet extends GenericPortlet
    {
       PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/header.jsp");
       prd.include(request, response);
+   }
+   
+   @Override
+   public void doHeaders(RenderRequest request, RenderResponse response)
+   {
+      Element viewportMeta = response.createElement("meta");
+      viewportMeta.setAttribute("name", "viewport");
+      viewportMeta.setAttribute("content", "initial-scale=1.0");
+      
+      response.addProperty(MimeResponse.MARKUP_HEAD_ELEMENT, viewportMeta);
    }
 
 }

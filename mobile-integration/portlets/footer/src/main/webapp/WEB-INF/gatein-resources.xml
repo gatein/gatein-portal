@@ -10,6 +10,12 @@
     <skin-name>ResponsiveSkin</skin-name>
     <css-path>/css/ResponsiveStylesheet.css</css-path>
   </portlet-skin>
+  <portlet-skin>
+    <application-name>responsive-footer-portlet</application-name>
+    <portlet-name>ResponsiveFooterPortlet</portlet-name>
+    <skin-name>Default</skin-name>
+    <css-path>/css/ClassicStylesheet.css</css-path>
+  </portlet-skin>
 
   <portlet>
     <name>ResponsiveFooterPortlet</name>
