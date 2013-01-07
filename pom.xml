@@ -1465,6 +1465,16 @@ memory option properties. This should be removed when we can just set the compil
         </plugins>
       </build>
     </profile>
+
+    <profile>
+      <id>portal</id>
+      <modules>
+        <module>build-config</module>
+        <module>component</module>
+        <module>portal</module>
+      </modules>
+    </profile>
+
   </profiles>
 
   <!-- To be removed and replaced by settings in user config -->
