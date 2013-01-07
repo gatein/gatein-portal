@@ -19,9 +19,9 @@
 
 package org.exoplatform.resolver;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,11 +74,16 @@ public class ServletResourceResolver extends ResourceResolver {
     }
 
     public boolean isModified(String url, long lastAccess) {
-        File file = new File(getRealPath(url));
-        if (log.isDebugEnabled())
-            log.debug(url + ": " + file.lastModified() + " " + lastAccess);
-        if (file.exists() && file.lastModified() > lastAccess) {
-            return true;
+        try {
+            URL uri = getResource(url);
+            URLConnection con = uri.openConnection();
+            if (log.isDebugEnabled())
+                log.debug(url + ": " + con.getLastModified() + " " + lastAccess);
+            if (con.getLastModified() > lastAccess) {
+                return true;
+            }
+        } catch (Exception e) {
+            return false;
         }
         return false;
     }
