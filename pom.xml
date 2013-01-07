@@ -742,6 +742,12 @@
         </dependency>
         <dependency>
             <groupId>org.gatein.portal</groupId>
+            <artifactId>portlet.responsive.navigation</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>org.gatein.portal</groupId>
             <artifactId>mobile-extension-configuration</artifactId>
             <version>${project.version}</version>
             <type>war</type>

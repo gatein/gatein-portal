@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<gatein-resources
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+        xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
+
+  <portlet-skin>
+    <application-name>responsive-navigation-portlet</application-name>
+    <portlet-name>ResponsiveNavigationPortlet</portlet-name>
+    <css-path>/css/ResponsiveStylesheet.css</css-path>
+  </portlet-skin>
+
+  <portlet>
+    <name>ResponsiveNavigationPortlet</name>
+    <module>
+      <script>
+        <name>navigation</name>
+        <path>/js/navigation.js</path>
+      </script>
+      <depends>
+        <module>jquery</module>
+        <as>jQuery</as>
+      </depends>
+    </module>
+  </portlet>
+
+</gatein-resources>
