@@ -33,7 +33,8 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageState;
@@ -93,7 +94,7 @@ public class UITabPaneDashboard extends UIContainer {
     public static final String PAGE_TEMPLATE = "dashboard";
 
     private final UserNodeFilterConfig filterConfig;
-    private static final Scope TAB_PANE_DASHBOARD_SCOPE = Scope.CHILDREN;
+    private static final Scope<NodeState> TAB_PANE_DASHBOARD_SCOPE = Scope.CHILDREN;
 
     public UITabPaneDashboard() {
         configService = getApplicationComponent(UserPortalConfigService.class);

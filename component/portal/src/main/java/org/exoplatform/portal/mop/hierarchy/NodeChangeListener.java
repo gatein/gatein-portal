@@ -17,7 +17,11 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop.hierarchy;
+
+import java.io.Serializable;
+
+import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 
 /**
  * A listener for node changes.
@@ -25,7 +29,7 @@ package org.exoplatform.portal.mop.navigation;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @param <N> the node generic type
  */
-public interface NodeChangeListener<N> {
+public interface NodeChangeListener<N, S extends Serializable> {
 
     /**
      * A node was added.
@@ -43,8 +47,9 @@ public interface NodeChangeListener<N> {
      * @param parent the parent node
      * @param previous the optional previous node
      * @param name the name of the created node
+     * @param state the sate of the created node
      */
-    void onCreate(N target, N parent, N previous, String name);
+    void onCreate(N target, N parent, N previous, String name, S state);
 
     /**
      * A node was removed.
@@ -77,7 +82,7 @@ public interface NodeChangeListener<N> {
      * @param target the updated node
      * @param state the new state
      */
-    void onUpdate(N target, NodeState state);
+    void onUpdate(N target, S state);
 
     /**
      * A node was moved.
@@ -94,12 +99,12 @@ public interface NodeChangeListener<N> {
      *
      * @param <N> the node generic type
      */
-    class Base<N> implements NodeChangeListener<N> {
+    class Base<N, S extends Serializable> implements NodeChangeListener<N, S> {
 
         public void onAdd(N target, N parent, N previous) {
         }
 
-        public void onCreate(N target, N parent, N previous, String name) throws NavigationServiceException {
+        public void onCreate(N target, N parent, N previous, String name, S state) throws NavigationServiceException {
         }
 
         public void onRemove(N target, N parent) {
@@ -111,7 +116,7 @@ public interface NodeChangeListener<N> {
         public void onRename(N target, N parent, String name) throws NavigationServiceException {
         }
 
-        public void onUpdate(N target, NodeState state) throws NavigationServiceException {
+        public void onUpdate(N target, S state) throws NavigationServiceException {
         }
 
         public void onMove(N target, N from, N to, N previous) throws NavigationServiceException {

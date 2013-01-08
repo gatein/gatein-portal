@@ -17,10 +17,12 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop.hierarchy;
 
 import java.util.Arrays;
 import java.util.List;
+
+import org.exoplatform.portal.mop.navigation.NodeState;
 
 
 /**
@@ -28,10 +30,10 @@ import java.util.List;
  */
 public class GenericScope {
 
-    public abstract static class Branch implements Scope {
+    public abstract static class Branch implements Scope<NodeState> {
 
         /** . */
-        private final Scope federated;
+        private final Scope<NodeState> federated;
 
         /**
          * Create a new branch scope.
@@ -39,7 +41,7 @@ public class GenericScope {
          * @param federated the federated scope
          * @throws NullPointerException if the federated scope is null
          */
-        public Branch(Scope federated) throws NullPointerException {
+        public Branch(Scope<NodeState> federated) throws NullPointerException {
             if (federated == null) {
                 throw new NullPointerException("no null federated scope accepted");
             }
@@ -65,16 +67,16 @@ public class GenericScope {
                 }
 
                 @Override
-                protected Scope.Visitor getFederated() {
+                protected Scope.Visitor<NodeState> getFederated() {
                     return federated.get();
                 }
             };
         }
 
-        public abstract static class Visitor implements Scope.Visitor {
+        public abstract static class Visitor implements Scope.Visitor<NodeState> {
 
             /** . */
-            private Scope.Visitor visitor;
+            private Scope.Visitor<NodeState> visitor;
 
             protected Visitor() {
                 this.visitor = null;
@@ -84,7 +86,7 @@ public class GenericScope {
 
             protected abstract String getName(int index);
 
-            protected abstract Scope.Visitor getFederated();
+            protected abstract Scope.Visitor<NodeState> getFederated();
 
             public VisitMode enter(int depth, String id, String name, NodeState state) {
                 int size = getSize();
@@ -98,7 +100,7 @@ public class GenericScope {
                     }
                 } else if (depth == size) {
                     if (depth == 0 || name.equals(getName(depth - 1))) {
-                        Scope.Visitor visitor = getFederated();
+                        Scope.Visitor<NodeState> visitor = getFederated();
                         VisitMode mode = visitor.enter(0, id, name, state);
                         if (mode == VisitMode.ALL_CHILDREN) {
                             this.visitor = visitor;
@@ -151,7 +153,7 @@ public class GenericScope {
      * @return the branch shape scope
      * @throws NullPointerException if any argument is null
      */
-    public static Scope branchShape(final List<String> path, Scope federated) throws NullPointerException {
+    public static Scope<NodeState> branchShape(final List<String> path, Scope<NodeState> federated) throws NullPointerException {
         if (path == null) {
             throw new NullPointerException("No null path accepted");
         }
@@ -168,7 +170,7 @@ public class GenericScope {
         };
     }
 
-    public static Scope branchShape(final String[] path, Scope federated) {
+    public static Scope<NodeState> branchShape(final String[] path, Scope<NodeState> federated) {
         return new Branch(federated) {
             @Override
             protected int getSize() {
@@ -182,11 +184,11 @@ public class GenericScope {
         };
     }
 
-    public static Scope branchShape(List<String> path) {
+    public static Scope<NodeState> branchShape(List<String> path) {
         return branchShape(path, Scope.CHILDREN);
     }
 
-    public static Scope branchShape(String[] path) {
+    public static Scope<NodeState> branchShape(String[] path) {
         return branchShape(Arrays.asList(path), Scope.CHILDREN);
     }
 
@@ -197,7 +199,7 @@ public class GenericScope {
     private static GenericScope.Tree[] PREDEFINED = { new Tree(0), new Tree(1), new Tree(2), new Tree(3), new Tree(4),
             new Tree(5), new Tree(6), new Tree(7), new Tree(8), new Tree(9) };
 
-    public static Scope treeShape(int height) {
+    public static Scope<NodeState> treeShape(int height) {
         if (height < 0) {
             return ALL;
         } else if (height < PREDEFINED.length) {
@@ -207,10 +209,10 @@ public class GenericScope {
         }
     }
 
-    public static class Tree implements Scope {
+    public static class Tree implements Scope<NodeState> {
 
         /** . */
-        private final Visitor visitor;
+        private final Visitor<NodeState> visitor;
 
         /**
          * Creates a new navigation scope. When the height is positive or zero, the tree will be pruned to the specified height,
@@ -219,7 +221,7 @@ public class GenericScope {
          * @param height the max height of the pruned tree
          */
         public Tree(final int height) {
-            this.visitor = new Visitor() {
+            this.visitor = new Visitor<NodeState>() {
                 public VisitMode enter(int depth, String id, String name, NodeState state) {
                     if (height < 0 || depth < height) {
                         return VisitMode.ALL_CHILDREN;
@@ -233,7 +235,7 @@ public class GenericScope {
             };
         }
 
-        public Visitor get() {
+        public Visitor<NodeState> get() {
             return visitor;
         }
     }

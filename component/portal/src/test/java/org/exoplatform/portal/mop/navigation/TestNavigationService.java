@@ -29,6 +29,10 @@ import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.hierarchy.Node;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.exoplatform.portal.mop.hierarchy.VisitMode;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
@@ -101,9 +105,9 @@ public class TestNavigationService extends AbstractTestNavigationService {
 
     public void testLoadCustomScope() throws Exception {
         NavigationContext nav = service.loadNavigation(SiteKey.portal("large"));
-        Node root = service.loadNode(Node.MODEL, nav, new Scope() {
-            public Visitor get() {
-                return new Visitor() {
+        Node root = service.loadNode(Node.MODEL, nav, new Scope<NodeState>() {
+            public Visitor<NodeState> get() {
+                return new Visitor<NodeState>() {
                     public VisitMode enter(int depth, String id, String name, NodeState state) {
                         boolean use = false;
                         switch (depth) {
@@ -143,7 +147,7 @@ public class TestNavigationService extends AbstractTestNavigationService {
         Node c = a.getChild("c");
         assertEquals("c", c.getName());
         assertSame(a, c.getParent());
-        service.updateNode(a.context, Scope.SINGLE, null);
+        service.updateNode(a.getContext(), Scope.SINGLE, null);
         assertNotNull(a.getChildren());
         assertEquals(1, a.getChildren().size());
         assertSame(c, a.getChild("c"));
@@ -172,10 +176,10 @@ public class TestNavigationService extends AbstractTestNavigationService {
         NavigationContext nav = service.loadNavigation(SiteKey.portal("test"));
         Node root = service.loadNode(Node.MODEL, nav, Scope.ALL, null).getNode();
         Node child1 = root.getChild("node_name");
-        assertEquals(0, child1.context.getDepth(child1.context));
-        assertEquals(1, child1.context.getDepth(root.context));
+        assertEquals(0, child1.getContext().getDepth(child1.getContext()));
+        assertEquals(1, child1.getContext().getDepth(root.getContext()));
         try {
-            root.context.getDepth(child1.context);
+            root.getContext().getDepth(child1.getContext());
             fail();
         } catch (IllegalArgumentException e) {
         }
@@ -478,7 +482,7 @@ public class TestNavigationService extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NodeContext<Node> rootCtx = service.loadNode(Node.MODEL, nav, Scope.SINGLE, null);
+        NodeContext<Node, NodeState> rootCtx = service.loadNode(Node.MODEL, nav, Scope.SINGLE, null);
         assertNull(rootCtx);
     }
 

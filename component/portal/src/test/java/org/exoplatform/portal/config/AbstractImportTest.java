@@ -30,10 +30,11 @@ import org.exoplatform.portal.mop.importer.Imported;
 import org.exoplatform.portal.mop.importer.Imported.Status;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.navigation.Node;
-import org.exoplatform.portal.mop.navigation.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeModel;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.Node;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeModel;
+import org.exoplatform.portal.mop.navigation.NodeState;
+import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.mop.api.workspace.Workspace;
 
@@ -48,15 +49,15 @@ public abstract class AbstractImportTest extends AbstractGateInTest {
 
     protected abstract String getConfig1();
 
-    protected abstract void afterOnePhaseBoot(NodeContext<?> root);
+    protected abstract void afterOnePhaseBoot(NodeContext<?, NodeState> root);
 
-    protected abstract void afterTwoPhasesBoot(NodeContext<?> root);
+    protected abstract void afterTwoPhasesBoot(NodeContext<?, NodeState> root);
 
-    protected abstract void afterTwoPhaseOverrideReboot(NodeContext<?> root);
+    protected abstract void afterTwoPhaseOverrideReboot(NodeContext<?, NodeState> root);
 
-    protected abstract void afterTwoPhaseNoOverrideReboot(NodeContext<?> root);
+    protected abstract void afterTwoPhaseNoOverrideReboot(NodeContext<?, NodeState> root);
 
-    protected abstract void afterTwoPhaseNoOverrideReconfigure(NodeContext<?> root);
+    protected abstract void afterTwoPhaseNoOverrideReconfigure(NodeContext<?, NodeState> root);
 
     public void testOnePhase() throws Exception {
         KernelBootstrap bootstrap = new KernelBootstrap();
@@ -80,7 +81,7 @@ public abstract class AbstractImportTest extends AbstractGateInTest {
         NavigationService service = (NavigationService) container.getComponentInstanceOfType(NavigationService.class);
         RequestLifeCycle.begin(container);
         NavigationContext nav = service.loadNavigation(SiteKey.portal("classic"));
-        NodeContext<?> root = service.loadNode(Node.MODEL, nav, Scope.ALL, null);
+        NodeContext<?, NodeState> root = service.loadNode(Node.MODEL, nav, Scope.ALL, null);
         afterOnePhaseBoot(root);
         RequestLifeCycle.end();
         bootstrap.dispose();
@@ -104,7 +105,7 @@ public abstract class AbstractImportTest extends AbstractGateInTest {
         NavigationService service = (NavigationService) container.getComponentInstanceOfType(NavigationService.class);
         RequestLifeCycle.begin(container);
         NavigationContext nav = service.loadNavigation(SiteKey.portal("classic"));
-        NodeContext<?> root = service.loadNode(Node.MODEL, nav, Scope.ALL, null);
+        NodeContext<?, NodeState> root = service.loadNode(Node.MODEL, nav, Scope.ALL, null);
         afterTwoPhasesBoot(root);
         RequestLifeCycle.end();
         bootstrap.dispose();
@@ -140,7 +141,7 @@ public abstract class AbstractImportTest extends AbstractGateInTest {
         NavigationService service = (NavigationService) container.getComponentInstanceOfType(NavigationService.class);
         RequestLifeCycle.begin(container);
         NavigationContext nav = service.loadNavigation(SiteKey.portal("classic"));
-        NodeContext<?> root = service.loadNode(Node.MODEL, nav, Scope.ALL, null);
+        NodeContext<?, NodeState> root = service.loadNode(Node.MODEL, nav, Scope.ALL, null);
         afterTwoPhasesBoot(root);
         RequestLifeCycle.end();
         bootstrap.dispose();

@@ -19,13 +19,12 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.exoplatform.commons.serialization.MarshalledObject;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.mop.hierarchy.NodeData;
 
 /**
  * A simple implementation for unit testing purpose.
@@ -38,26 +37,26 @@ public class SimpleDataCache extends DataCache {
     protected Map<MarshalledObject<SiteKey>, MarshalledObject<NavigationData>> navigations;
 
     /** . */
-    protected Map<MarshalledObject<String>, MarshalledObject<NodeData>> nodes;
+    protected Map<MarshalledObject<String>, MarshalledObject<NodeData<NodeState>>> nodes;
 
     public SimpleDataCache() {
         this.navigations = new ConcurrentHashMap<MarshalledObject<SiteKey>, MarshalledObject<NavigationData>>();
-        this.nodes = new ConcurrentHashMap<MarshalledObject<String>, MarshalledObject<NodeData>>();
+        this.nodes = new ConcurrentHashMap<MarshalledObject<String>, MarshalledObject<NodeData<NodeState>>>();
     }
 
     @Override
-    protected void removeNodes(Collection<String> keys) {
+    protected void removeNodes(Iterable<String> keys) {
         for (String key : keys) {
             nodes.remove(MarshalledObject.marshall(key));
         }
     }
 
     @Override
-    protected NodeData getNode(POMSession session, String key) {
+    protected NodeData<NodeState> getNode(String key) {
         MarshalledObject<String> marshalledKey = MarshalledObject.marshall(key);
-        MarshalledObject<NodeData> marshalledNode = nodes.get(marshalledKey);
+        MarshalledObject<NodeData<NodeState>> marshalledNode = nodes.get(marshalledKey);
         if (marshalledNode == null) {
-            NodeData node = loadNode(session, key);
+            NodeData<NodeState> node = persistence.loadNode(key);
             if (node != null) {
                 nodes.put(marshalledKey, MarshalledObject.marshall(node));
                 return node;
@@ -75,11 +74,11 @@ public class SimpleDataCache extends DataCache {
     }
 
     @Override
-    protected NavigationData getNavigation(POMSession session, SiteKey key) {
+    protected NavigationData getNavigation(SiteKey key) {
         MarshalledObject<SiteKey> marshalledKey = MarshalledObject.marshall(key);
         MarshalledObject<NavigationData> marshalledNavigation = navigations.get(marshalledKey);
         if (marshalledNavigation == null) {
-            NavigationData navigation = loadNavigation(session, key);
+            NavigationData navigation = persistence.loadNavigation(key);
             if (navigation != null) {
                 navigations.put(marshalledKey, MarshalledObject.marshall(navigation));
                 return navigation;

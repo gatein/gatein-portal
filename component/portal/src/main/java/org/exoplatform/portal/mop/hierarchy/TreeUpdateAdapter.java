@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,41 +17,41 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop.hierarchy;
+
+import java.io.Serializable;
+
+import org.exoplatform.portal.tree.diff.HierarchyAdapter;
 
 /**
- * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
+ * Adapter for the update operation.
+ *
+ * @param <N> the node generic type
  */
-public interface NodeModel<N> {
+abstract class TreeUpdateAdapter<N, S extends Serializable> implements HierarchyAdapter<String[], N, String> {
 
     /**
-     * A model based on itself.
-     */
-    NodeModel<NodeContext<?>> SELF_MODEL = new NodeModel<NodeContext<?>>() {
-        public NodeContext<NodeContext<?>> getContext(NodeContext<?> node) {
-            throw new UnsupportedOperationException();
-        }
-
-        public NodeContext<?> create(NodeContext<NodeContext<?>> context) {
-            return context;
-        }
-    };
-
-    /**
-     * Returns the context of a node.
+     * Returns the persistent data associated with the node or null if such data does not exist.
      *
      * @param node the node
-     * @return the node context
+     * @return the node data
      */
-    NodeContext<N> getContext(N node);
+    abstract NodeData<S> getData(N node);
 
     /**
-     * Create a node wrapping a context.
+     * Returns the transient state associated with the node.
      *
-     * @param context the node context
-     * @return the node instance
+     * @param node the node
+     * @return the transient state
      */
-    N create(NodeContext<N> context);
+    abstract S getState(N node);
+
+    /**
+     * Returns the transient name associated with the node.
+     *
+     * @param node the node
+     * @return the transient name
+     */
+    abstract String getName(N node);
 
 }

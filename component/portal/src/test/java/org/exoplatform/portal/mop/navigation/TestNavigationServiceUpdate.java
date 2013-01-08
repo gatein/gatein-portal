@@ -22,6 +22,11 @@ package org.exoplatform.portal.mop.navigation;
 import java.util.Iterator;
 
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.hierarchy.Node;
+import org.exoplatform.portal.mop.hierarchy.NodeChange;
+import org.exoplatform.portal.mop.hierarchy.NodeChangeQueue;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
@@ -46,8 +51,8 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
 
         //
         NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_no_op"));
-        NodeContext<Node> root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
-        Iterator<NodeChange<Node>> it = root.node.update(service, null);
+        NodeContext<Node, NodeState> root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
+        Iterator<NodeChange<Node, NodeState>> it = root.getNode().update(service, null);
         assertFalse(it.hasNext());
     }
 
@@ -64,9 +69,9 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
 
         //
-        assertFalse(root.context.hasChanges());
+        assertFalse(root.getContext().hasChanges());
         root.addChild("foo");
-        assertTrue(root.context.hasChanges());
+        assertTrue(root.getContext().hasChanges());
 
         //
         try {
@@ -75,12 +80,12 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         }
 
         //
-        assertTrue(root.context.hasChanges());
-        service.saveNode(root.context, null);
-        assertFalse(root.context.hasChanges());
+        assertTrue(root.getContext().hasChanges());
+        service.saveNode(root.getContext(), null);
+        assertFalse(root.getContext().hasChanges());
 
         //
-        Iterator<NodeChange<Node>> it = root.update(service, null);
+        Iterator<NodeChange<Node, NodeState>> it = root.update(service, null);
         assertFalse(it.hasNext());
     }
 
@@ -94,17 +99,17 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
 
         //
         NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_add_first"));
-        NodeContext<Node> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
+        NodeContext<Node, NodeState> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
         assertEquals(0, root1.getNodeSize());
         Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root2.addChild("a");
-        service.saveNode(root2.context, null);
+        service.saveNode(root2.getContext(), null);
 
         //
         sync(true);
 
         //
-        root1.node.update(service, null);
+        root1.getNode().update(service, null);
         assertEquals(1, root1.getNodeSize());
         Node a = root1.getNode(0);
         assertEquals("a", a.getName());
@@ -126,14 +131,14 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         assertEquals(1, root1.getSize());
         Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root2.addChild("b");
-        service.saveNode(root2.context, null);
+        service.saveNode(root2.getContext(), null);
 
         //
         sync(true);
 
         //
-        Iterator<NodeChange<Node>> changes = root1.update(service, null);
-        NodeChange.Added<Node> added = (NodeChange.Added<Node>) changes.next();
+        Iterator<NodeChange<Node, NodeState>> changes = root1.update(service, null);
+        NodeChange.Added<Node, NodeState> added = (NodeChange.Added<Node, NodeState>) changes.next();
         assertSame(root1, added.getParent());
         assertSame(root1.getChild("b"), added.getTarget());
         assertSame(a, added.getPrevious());
@@ -153,20 +158,20 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
 
         //
         NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_remove"));
-        NodeContext<Node> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
+        NodeContext<Node, NodeState> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
         assertEquals(1, root1.getNodeSize());
         Node a = root1.getNode("a");
         Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root2.removeChild("a");
-        service.saveNode(root2.context, null);
+        service.saveNode(root2.getContext(), null);
 
         //
         sync(true);
 
         //
-        Iterator<NodeChange<Node>> changes = root1.node.update(service, null);
-        NodeChange.Removed<Node> removed = (NodeChange.Removed<Node>) changes.next();
-        assertSame(root1.node, removed.getParent());
+        Iterator<NodeChange<Node, NodeState>> changes = root1.getNode().update(service, null);
+        NodeChange.Removed<Node, NodeState> removed = (NodeChange.Removed<Node, NodeState>) changes.next();
+        assertSame(root1.getNode(), removed.getParent());
         assertSame(a, removed.getTarget());
         assertFalse(changes.hasNext());
         assertEquals(0, root1.getNodeSize());
@@ -183,21 +188,21 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
 
         //
         NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_move"));
-        NodeContext<Node> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
+        NodeContext<Node, NodeState> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
         assertEquals(2, root1.getNodeSize());
         Node a = root1.getNode("a");
         Node b = a.getChild("b");
         Node c = root1.getNode("c");
         Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root2.getChild("c").addChild(root2.getChild("a").getChild("b"));
-        service.saveNode(root2.context, null);
+        service.saveNode(root2.getContext(), null);
 
         //
         sync(true);
 
         //
-        Iterator<NodeChange<Node>> changes = root1.node.update(service, null);
-        NodeChange.Moved<Node> moved = (NodeChange.Moved<Node>) changes.next();
+        Iterator<NodeChange<Node, NodeState>> changes = root1.getNode().update(service, null);
+        NodeChange.Moved<Node, NodeState> moved = (NodeChange.Moved<Node, NodeState>) changes.next();
         assertSame(a, moved.getFrom());
         assertSame(c, moved.getTo());
         assertSame(b, moved.getTarget());
@@ -220,7 +225,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root1.addChild("a").addChild("b");
         root1.addChild("c");
-        service.saveNode(root1.context, null);
+        service.saveNode(root1.getContext(), null);
 
         //
         sync(true);
@@ -235,14 +240,14 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root2.getChild("c").addChild(root2.getChild("a").getChild("b"));
         Node b2 = root2.getChild("a").addChild("b");
-        service.saveNode(root2.context, null);
+        service.saveNode(root2.getContext(), null);
 
         //
-        Iterator<NodeChange<Node>> changes = root1.update(service, null);
-        NodeChange.Added<Node> added = (NodeChange.Added<Node>) changes.next();
+        Iterator<NodeChange<Node, NodeState>> changes = root1.update(service, null);
+        NodeChange.Added<Node, NodeState> added = (NodeChange.Added<Node, NodeState>) changes.next();
         assertNull(added.getPrevious());
         assertSame(a, added.getParent());
-        NodeChange.Moved<Node> moved = (NodeChange.Moved<Node>) changes.next();
+        NodeChange.Moved<Node, NodeState> moved = (NodeChange.Moved<Node, NodeState>) changes.next();
         assertNull(moved.getPrevious());
         assertSame(a, moved.getFrom());
         assertSame(c, moved.getTo());
@@ -276,7 +281,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         b1.addChild("f");
         b1.addChild("g");
         b1.addChild("h");
-        service.saveNode(root1.context, null);
+        service.saveNode(root1.getContext(), null);
 
         //
         sync(true);
@@ -300,26 +305,26 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         b2.addChild(2, a2.getChild("d"));
         a2.addChild(1, "d");
         b2.removeChild("g");
-        service.saveNode(root2.context, null);
+        service.saveNode(root2.getContext(), null);
 
         //
         sync(true);
 
         //
-        Iterator<NodeChange<Node>> changes = root1.update(service, null);
-        NodeChange.Added<Node> added = (NodeChange.Added<Node>) changes.next();
+        Iterator<NodeChange<Node, NodeState>> changes = root1.update(service, null);
+        NodeChange.Added<Node, NodeState> added = (NodeChange.Added<Node, NodeState>) changes.next();
         assertSame(a1, added.getParent());
         assertEquals("d", added.getTarget().getName());
         assertSame(c1, added.getPrevious());
-        NodeChange.Removed<Node> removed1 = (NodeChange.Removed<Node>) changes.next();
+        NodeChange.Removed<Node, NodeState> removed1 = (NodeChange.Removed<Node, NodeState>) changes.next();
         assertSame(a1, removed1.getParent());
         assertSame(e1, removed1.getTarget());
-        NodeChange.Moved<Node> moved = (NodeChange.Moved<Node>) changes.next();
+        NodeChange.Moved<Node, NodeState> moved = (NodeChange.Moved<Node, NodeState>) changes.next();
         assertSame(a1, moved.getFrom());
         assertSame(b1, moved.getTo());
         assertSame(d1, moved.getTarget());
         assertSame(f1, moved.getPrevious());
-        NodeChange.Removed<Node> removed2 = (NodeChange.Removed<Node>) changes.next();
+        NodeChange.Removed<Node, NodeState> removed2 = (NodeChange.Removed<Node, NodeState>) changes.next();
         assertSame(b1, removed2.getParent());
         assertSame(g1, removed2.getTarget());
         assertFalse(changes.hasNext());
@@ -354,15 +359,15 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         root2.removeChild("foo");
         Node foo = root2.addChild("foo");
         foo.setState(new NodeState.Builder().label("foo2").build());
-        service.saveNode(root2.context, null);
+        service.saveNode(root2.getContext(), null);
         String foo2Id = foo.getId();
         sync(true);
 
         //
-        Iterator<NodeChange<Node>> changes = root1.update(service, null);
-        NodeChange.Added<Node> added = (NodeChange.Added<Node>) changes.next();
+        Iterator<NodeChange<Node, NodeState>> changes = root1.update(service, null);
+        NodeChange.Added<Node, NodeState> added = (NodeChange.Added<Node, NodeState>) changes.next();
         assertEquals(foo2Id, added.getTarget().getId());
-        NodeChange.Removed<Node> removed = (NodeChange.Removed<Node>) changes.next();
+        NodeChange.Removed<Node, NodeState> removed = (NodeChange.Removed<Node, NodeState>) changes.next();
         assertEquals(foo1Id, removed.getTarget().getId());
         assertFalse(changes.hasNext());
 
@@ -385,14 +390,14 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         //
         Node root2 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
         root2.getChild("foo").setName("bar");
-        service.saveNode(root2.context, null);
+        service.saveNode(root2.getContext(), null);
         sync(true);
 
         //
-        Iterator<NodeChange<Node>> it = root1.update(service, null);
+        Iterator<NodeChange<Node, NodeState>> it = root1.update(service, null);
         Node bar = root1.getChild(0);
         assertEquals("bar", bar.getName());
-        NodeChange.Renamed<Node> renamed = (NodeChange.Renamed<Node>) it.next();
+        NodeChange.Renamed<Node, NodeState> renamed = (NodeChange.Renamed<Node, NodeState>) it.next();
         assertEquals("bar", renamed.getName());
         assertSame(bar, renamed.getTarget());
     }
@@ -412,18 +417,18 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         //
         Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
         root.getChild("foo").setState(new NodeState.Builder().label("foo").build());
-        service.saveNode(root.context, null);
+        service.saveNode(root.getContext(), null);
         sync(true);
 
         //
-        Iterator<NodeChange<Node>> changes = root1.update(service, Scope.GRANDCHILDREN);
+        Iterator<NodeChange<Node, NodeState>> changes = root1.update(service, Scope.GRANDCHILDREN);
         Node foo = root1.getChild("foo");
         assertEquals("foo", foo.getState().getLabel());
-        NodeChange.Added<Node> added = (NodeChange.Added<Node>) changes.next();
+        NodeChange.Added<Node, NodeState> added = (NodeChange.Added<Node, NodeState>) changes.next();
         assertEquals("bar", added.getTarget().getName());
-        assertEquals(null, added.previous);
-        assertEquals("bar", added.target.getName());
-        NodeChange.Updated<Node> updated = (NodeChange.Updated<Node>) changes.next();
+        assertEquals(null, added.getPrevious());
+        assertEquals("bar", added.getTarget().getName());
+        NodeChange.Updated<Node, NodeState> updated = (NodeChange.Updated<Node, NodeState>) changes.next();
         assertSame(foo, updated.getTarget());
         assertEquals(new NodeState.Builder().label("foo").build(), updated.getState());
         assertFalse(changes.hasNext());
@@ -432,7 +437,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         changes = root2.update(service, null);
         foo = root2.getChild("foo");
         assertEquals("foo", foo.getState().getLabel());
-        updated = (NodeChange.Updated<Node>) changes.next();
+        updated = (NodeChange.Updated<Node, NodeState>) changes.next();
         assertSame(foo, updated.getTarget());
         assertEquals(new NodeState.Builder().label("foo").build(), updated.getState());
         assertFalse(changes.hasNext());
@@ -441,7 +446,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         changes = root3.update(service, null);
         foo = root3.getChild("foo");
         assertEquals("foo", foo.getState().getLabel());
-        updated = (NodeChange.Updated<Node>) changes.next();
+        updated = (NodeChange.Updated<Node, NodeState>) changes.next();
         assertSame(foo, updated.getTarget());
         assertEquals(new NodeState.Builder().label("foo").build(), updated.getState());
         assertFalse(changes.hasNext());
@@ -462,7 +467,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         //
         Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root1.getChild("foo").removeChild("bar");
-        service.saveNode(root1.context, null);
+        service.saveNode(root1.getContext(), null);
         sync(true);
 
         //
@@ -489,12 +494,12 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         //
         Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root1.getChild("foo").removeChild("bar");
-        service.saveNode(root1.context, null);
+        service.saveNode(root1.getContext(), null);
         sync(true);
 
         //
-        Iterator<NodeChange<Node>> changes = bar.update(service, Scope.CHILDREN);
-        NodeChange.Removed<Node> removed = (NodeChange.Removed<Node>) changes.next();
+        Iterator<NodeChange<Node, NodeState>> changes = bar.update(service, Scope.CHILDREN);
+        NodeChange.Removed<Node, NodeState> removed = (NodeChange.Removed<Node, NodeState>) changes.next();
         assertSame(bar, removed.getTarget());
         assertFalse(changes.hasNext());
     }
@@ -512,7 +517,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         Node root = service.loadNode(Node.MODEL, navigation, Scope.SINGLE, null).getNode();
 
         //
-        Iterator<NodeChange<Node>> changes = root.update(service, Scope.ALL);
+        Iterator<NodeChange<Node, NodeState>> changes = root.update(service, Scope.ALL);
 
         //
         Node foo = root.getChild(0);
@@ -523,11 +528,11 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         assertEquals("bar2", bar2.getName());
 
         //
-        NodeChange.Added<Node> added1 = (NodeChange.Added<Node>) changes.next();
+        NodeChange.Added<Node, NodeState> added1 = (NodeChange.Added<Node, NodeState>) changes.next();
         assertSame(foo, added1.getTarget());
-        NodeChange.Added<Node> added2 = (NodeChange.Added<Node>) changes.next();
+        NodeChange.Added<Node, NodeState> added2 = (NodeChange.Added<Node, NodeState>) changes.next();
         assertSame(bar1, added2.getTarget());
-        NodeChange.Added<Node> added3 = (NodeChange.Added<Node>) changes.next();
+        NodeChange.Added<Node, NodeState> added3 = (NodeChange.Added<Node, NodeState>) changes.next();
         assertSame(bar2, added3.getTarget());
         assertFalse(changes.hasNext());
     }
@@ -543,18 +548,18 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
         Node foo = root.getChild("foo");
         // If this line is commented, the test is passed
-        service.updateNode(foo.context, Scope.CHILDREN, null);
+        service.updateNode(foo.getContext(), Scope.CHILDREN, null);
         sync(true);
 
         // Browser 2: Change the "foo" node
         Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root1.getChild("foo").removeChild("bar");
-        service.saveNode(root1.context, null);
+        service.saveNode(root1.getContext(), null);
         sync(true);
 
         // Browser 1: Try to expand the "foo" node 2 times ---> NPE after the 2nd updateNode method
-        service.updateNode(foo.context, Scope.CHILDREN, null);
-        service.updateNode(foo.context, Scope.CHILDREN, null);
+        service.updateNode(foo.getContext(), Scope.CHILDREN, null);
+        service.updateNode(foo.getContext(), Scope.CHILDREN, null);
     }
 
     public void testMove2() throws Exception {
@@ -568,25 +573,25 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
 
         //
         NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_move2"));
-        NodeContext<Node> root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
+        NodeContext<Node, NodeState> root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
         Node a = root.getNode("a");
         Node b = a.getChild("b");
         Node c = root.getNode("c");
 
         // Browser 2 : move the node "b" from "a" to "c"
-        NodeContext<Node> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
+        NodeContext<Node, NodeState> root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null);
         root1.getNode("c").addChild(root1.getNode("a").getChild("b"));
-        service.saveNode(root1.getNode().context, null);
+        service.saveNode(root1.getNode().getContext(), null);
         //
         sync(true);
 
         // Browser 1: need NodeChange event to update UI
-        NodeChangeQueue<NodeContext<Node>> queue = new NodeChangeQueue<NodeContext<Node>>();
+        NodeChangeQueue<NodeContext<Node, NodeState>, NodeState> queue = new NodeChangeQueue<NodeContext<Node, NodeState>, NodeState>();
         // If update "root1" --> NodeChange.Moved --> ok
         // If update "b" --> NodeChange.Add --> ok
         // update "a" --> no NodeChange, we need an event here (NodeChange.Remove) so UI can be updated
-        service.updateNode(a.context, Scope.CHILDREN, queue);
-        Iterator<NodeChange<NodeContext<Node>>> changes = queue.iterator();
+        service.updateNode(a.getContext(), Scope.CHILDREN, queue);
+        Iterator<NodeChange<NodeContext<Node, NodeState>, NodeState>> changes = queue.iterator();
         assertTrue(changes.hasNext());
     }
 
@@ -601,27 +606,27 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
 
         //
         NavigationContext navigation = service.loadNavigation(SiteKey.portal("update_scope"));
-        Node root1 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).node;
+        Node root1 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
         Node a = root1.getChild("a");
         Node c = root1.getChild("c");
-        assertFalse(a.context.isExpanded());
-        assertFalse(c.context.isExpanded());
+        assertFalse(a.getContext().isExpanded());
+        assertFalse(c.getContext().isExpanded());
 
         //
-        Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).node;
+        Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root2.addChild("e");
-        service.saveNode(root2.context, null);
+        service.saveNode(root2.getContext(), null);
 
         //
         sync(true);
 
         //
-        service.updateNode(a.context, Scope.CHILDREN, null);
+        service.updateNode(a.getContext(), Scope.CHILDREN, null);
         assertSame(a, root1.getChild("a"));
         assertSame(c, root1.getChild("c"));
         assertNotNull(root1.getChild("e"));
-        assertTrue(a.context.isExpanded());
-        assertFalse(c.context.isExpanded());
+        assertTrue(a.getContext().isExpanded());
+        assertFalse(c.getContext().isExpanded());
         assertNotNull(a.getChild("b"));
     }
 
@@ -639,12 +644,12 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
         Node bar = root.getChild("bar");
 
         // Expand and change the "bar" node
-        service.updateNode(bar.context, Scope.CHILDREN, null);
+        service.updateNode(bar.getContext(), Scope.CHILDREN, null);
         bar.addChild("juu");
 
         // ---> IllegalArgumentException
         // Can't expand the "foo" node, even it doesn't have any pending changes
-        service.updateNode(foo.context, Scope.CHILDREN, null);
+        service.updateNode(foo.getContext(), Scope.CHILDREN, null);
     }
 
     public void testRemovedNavigation() throws Exception {
@@ -665,7 +670,7 @@ public class TestNavigationServiceUpdate extends AbstractTestNavigationService {
 
         //
         try {
-            service.updateNode(root.context, null, null);
+            service.updateNode(root.getContext(), null, null);
         } catch (NavigationServiceException e) {
             assertSame(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
         }

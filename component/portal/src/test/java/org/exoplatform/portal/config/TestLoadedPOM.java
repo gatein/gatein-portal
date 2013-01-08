@@ -34,9 +34,10 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.navigation.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeModel;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeModel;
+import org.exoplatform.portal.mop.navigation.NodeState;
+import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.POMSession;
@@ -91,8 +92,8 @@ public class TestLoadedPOM extends AbstractConfigTest {
         SiteKey key = SiteKey.group("/test/legacy");
         NavigationContext nav = navService.loadNavigation(key);
         assertNotNull(nav);
-        NodeContext<?> root = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
-        NodeContext<?> node = root.get(0);
+        NodeContext<?, NodeState> root = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
+        NodeContext<?, NodeState> node = root.get(0);
         assertEquals(SiteKey.group("/test/legacy").page("register"), node.getState().getPageRef());
 
         Page page = storage.getPage("group::/test/legacy::register");
@@ -105,8 +106,8 @@ public class TestLoadedPOM extends AbstractConfigTest {
         SiteKey key = SiteKey.group("/test/normalized");
         NavigationContext nav = navService.loadNavigation(key);
         assertNotNull(nav);
-        NodeContext<?> root = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
-        NodeContext<?> node = root.get(0);
+        NodeContext<?, NodeState> root = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
+        NodeContext<?, NodeState> node = root.get(0);
         assertEquals(SiteKey.group("/test/normalized").page("register"), node.getState().getPageRef());
 
         Page page = storage.getPage("group::/test/normalized::register");
@@ -124,11 +125,11 @@ public class TestLoadedPOM extends AbstractConfigTest {
         assertEquals(1, (int) nav.getState().getPriority());
 
         //
-        NodeContext<?> root = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
+        NodeContext<?, NodeState> root = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
         assertEquals(5, root.getNodeCount());
 
         //
-        NodeContext<?> nodeNavigation = root.get(0);
+        NodeContext<?, NodeState> nodeNavigation = root.get(0);
         assertEquals(0, nodeNavigation.getNodeCount());
         assertEquals("node_name", nodeNavigation.getName());
         assertEquals("node_label", nodeNavigation.getState().getLabel());

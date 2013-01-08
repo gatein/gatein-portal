@@ -24,6 +24,9 @@ import java.util.LinkedList;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.hierarchy.Node;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
@@ -112,7 +115,7 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
         navigation = navigationService.loadNavigation(SiteKey.portal("notification"));
         Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
         root.setState(new NodeState.Builder(root.getState()).label("foo").build());
-        navigationService.saveNode(root.context, null);
+        navigationService.saveNode(root.getContext(), null);
         assertEquals(0, createListener.events.size());
         assertEquals(1, updateListener.events.size());
         event = updateListener.events.removeFirst();
@@ -153,7 +156,7 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
         begin();
         NavigationContext nav = navigationService.loadNavigation(key);
         assertNotNull(nav);
-        NodeContext<Node> root = navigationService.loadNode(Node.MODEL, nav, Scope.ALL, null);
+        NodeContext<Node, NodeState> root = navigationService.loadNode(Node.MODEL, nav, Scope.ALL, null);
         assertNotNull(root);
         end(true);
 

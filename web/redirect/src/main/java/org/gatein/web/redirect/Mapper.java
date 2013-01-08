@@ -26,12 +26,12 @@ import java.util.Map;
 
 import org.exoplatform.portal.config.model.RedirectMappings;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.navigation.GenericScope;
+import org.exoplatform.portal.mop.hierarchy.GenericScope;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.navigation.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeModel;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeModel;
+import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 

@@ -24,8 +24,9 @@ import java.util.Locale;
 
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
-import org.exoplatform.portal.mop.navigation.NodeChangeListener;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
+import org.exoplatform.portal.mop.navigation.NodeState;
+import org.exoplatform.portal.mop.hierarchy.Scope;
 
 /**
  * The user portal establish the relationship between a user and the portal.
@@ -80,8 +81,8 @@ public interface UserPortal {
      * @throws UserPortalException any user portal exception
      * @throws NavigationServiceException any navigation service exception
      */
-    UserNode getNode(UserNavigation navigation, Scope scope, UserNodeFilterConfig filterConfig,
-            NodeChangeListener<UserNode> listener) throws NullPointerException, UserPortalException, NavigationServiceException;
+    UserNode getNode(UserNavigation navigation, Scope<NodeState> scope, UserNodeFilterConfig filterConfig,
+            NodeChangeListener<UserNode, NodeState> listener) throws NullPointerException, UserPortalException, NavigationServiceException;
 
     /**
      * Update the specified content with the most recent state.
@@ -94,7 +95,7 @@ public interface UserPortal {
      * @throws UserPortalException any user portal exception
      * @throws NavigationServiceException anything that would prevent the operation to succeed
      */
-    void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws NullPointerException,
+    void updateNode(UserNode node, Scope<NodeState> scope, NodeChangeListener<UserNode, NodeState> listener) throws NullPointerException,
             IllegalArgumentException, UserPortalException, NavigationServiceException;
 
     /**
@@ -107,7 +108,7 @@ public interface UserPortal {
      * @throws UserPortalException any user portal exception
      * @throws NavigationServiceException anything that would prevent the operation to succeed
      */
-    void rebaseNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws NullPointerException,
+    void rebaseNode(UserNode node, Scope<NodeState> scope, NodeChangeListener<UserNode, NodeState> listener) throws NullPointerException,
             UserPortalException, NavigationServiceException;
 
     /**
@@ -119,7 +120,7 @@ public interface UserPortal {
      * @throws UserPortalException any user portal exception
      * @throws NavigationServiceException anything that would prevent the operation to succeed
      */
-    void saveNode(UserNode node, NodeChangeListener<UserNode> listener) throws NullPointerException, UserPortalException,
+    void saveNode(UserNode node, NodeChangeListener<UserNode, NodeState> listener) throws NullPointerException, UserPortalException,
             NavigationServiceException;
 
     /**

@@ -48,9 +48,10 @@ import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationState;
-import org.exoplatform.portal.mop.navigation.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeModel;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeModel;
+import org.exoplatform.portal.mop.navigation.NodeState;
+import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
@@ -420,13 +421,12 @@ public class TestDataStorage extends AbstractConfigTest {
         // create a new page navigation and add node
         NavigationContext nav = new NavigationContext(SiteKey.portal("foo"), new NavigationState(0));
         navService.saveNavigation(nav);
-        NodeContext<?> node = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.CHILDREN, null);
-        NodeContext<?> test = node.add(null, "testPage");
-        test.setState(test.getState().builder().pageRef(page.getPageKey()).build());
+        NodeContext<?, NodeState> node = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.CHILDREN, null);
+        NodeContext<?, NodeState> test = node.add(null, "testPage", new NodeState.Builder().pageRef(page.getPageKey()).build());
         navService.saveNode(node, null);
 
         // get the page reference from the created page and check that it exists
-        NodeContext<?> pageNavigationWithPageReference = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.CHILDREN, null);
+        NodeContext<?, NodeState> pageNavigationWithPageReference = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.CHILDREN, null);
         assertNotNull("Expected page reference should not be null.", pageNavigationWithPageReference.get(0).getState()
                 .getPageRef());
 
@@ -435,7 +435,7 @@ public class TestDataStorage extends AbstractConfigTest {
         navService.saveNode(node, null);
 
         // check that setting the page reference to null actually removes the page reference
-        NodeContext<?> pageNavigationWithoutPageReference = navService
+        NodeContext<?, NodeState> pageNavigationWithoutPageReference = navService
                 .loadNode(NodeModel.SELF_MODEL, nav, Scope.CHILDREN, null);
         assertNull("Expected page reference should be null.", pageNavigationWithoutPageReference.get(0).getState().getPageRef());
     }

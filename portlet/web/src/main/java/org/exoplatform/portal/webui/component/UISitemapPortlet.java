@@ -27,8 +27,8 @@ import javax.portlet.PortletRequest;
 import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceURL;
 
-import org.exoplatform.portal.mop.navigation.GenericScope;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.GenericScope;
+import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.navigation.TreeNode;
 import org.exoplatform.portal.webui.navigation.UIPortalNavigation;

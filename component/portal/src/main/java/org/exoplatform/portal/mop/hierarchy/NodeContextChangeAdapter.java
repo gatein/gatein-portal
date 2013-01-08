@@ -17,60 +17,54 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop.hierarchy;
+
+import java.io.Serializable;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class NodeContextChangeAdapter<N> implements NodeChangeListener<NodeContext<N>> {
-
-    public static <N> NodeChangeListener<NodeContext<N>> safeWrap(NodeChangeListener<N> wrapped) {
-        if (wrapped == null) {
-            return null;
-        } else {
-            return new NodeContextChangeAdapter<N>(wrapped);
-        }
-    }
+class NodeContextChangeAdapter<N, S extends Serializable> implements NodeChangeListener<NodeContext<N, S>, S> {
 
     /** . */
-    private final NodeChangeListener<N> wrapped;
+    private final NodeChangeListener<N, S> wrapped;
 
-    public NodeContextChangeAdapter(NodeChangeListener<N> wrapped) {
+    public NodeContextChangeAdapter(NodeChangeListener<N, S> wrapped) {
         if (wrapped == null) {
             throw new NullPointerException();
         }
         this.wrapped = wrapped;
     }
 
-    public void onAdd(NodeContext<N> target, NodeContext<N> parent, NodeContext<N> previous) {
+    public void onAdd(NodeContext<N, S> target, NodeContext<N, S> parent, NodeContext<N, S> previous) {
         wrapped.onAdd(unwrap(target), unwrap(parent), unwrap(previous));
     }
 
-    public void onCreate(NodeContext<N> target, NodeContext<N> parent, NodeContext<N> previous, String name) {
-        wrapped.onCreate(unwrap(target), unwrap(parent), unwrap(previous), name);
+    public void onCreate(NodeContext<N, S> target, NodeContext<N, S> parent, NodeContext<N, S> previous, String name, S state) {
+        wrapped.onCreate(unwrap(target), unwrap(parent), unwrap(previous), name, state);
     }
 
-    public void onRemove(NodeContext<N> target, NodeContext<N> parent) {
+    public void onRemove(NodeContext<N, S> target, NodeContext<N, S> parent) {
         wrapped.onRemove(unwrap(target), unwrap(parent));
     }
 
-    public void onDestroy(NodeContext<N> target, NodeContext<N> parent) {
+    public void onDestroy(NodeContext<N, S> target, NodeContext<N, S> parent) {
         wrapped.onDestroy(unwrap(target), unwrap(parent));
     }
 
-    public void onRename(NodeContext<N> target, NodeContext<N> parent, String name) {
+    public void onRename(NodeContext<N, S> target, NodeContext<N, S> parent, String name) {
         wrapped.onRename(unwrap(target), unwrap(parent), name);
     }
 
-    public void onUpdate(NodeContext<N> target, NodeState state) {
+    public void onUpdate(NodeContext<N, S> target, S state) {
         wrapped.onUpdate(unwrap(target), state);
     }
 
-    public void onMove(NodeContext<N> target, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous) {
+    public void onMove(NodeContext<N, S> target, NodeContext<N, S> from, NodeContext<N, S> to, NodeContext<N, S> previous) {
         wrapped.onMove(unwrap(target), unwrap(from), unwrap(to), unwrap(previous));
     }
 
-    private N unwrap(NodeContext<N> context) {
+    private N unwrap(NodeContext<N, S> context) {
         return context != null ? context.getNode() : null;
     }
 }

@@ -17,14 +17,16 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop.hierarchy;
+
+import java.io.Serializable;
 
 /**
  * Describe a change applied to a node.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public abstract class NodeChange<N> {
+public abstract class NodeChange<N, S extends Serializable> {
 
     /** The target. */
     final N target;
@@ -45,20 +47,20 @@ public abstract class NodeChange<N> {
     /**
      * Dispatch the change to the proper listener method:
      * <ul>
-     * <li>{@link Created} dispatches to {@link NodeChangeListener#onCreate(Object, Object, Object, String)}</li>
+     * <li>{@link Created} dispatches to {@link NodeChangeListener#onCreate(N, N, N, String, S)}</li>
      * <li>{@link Added} dispatches to {@link NodeChangeListener#onAdd(Object, Object, Object)}</li>
      * <li>{@link Destroyed} dispatches to {@link NodeChangeListener#onDestroy(Object, Object)}</li>
      * <li>{@link Moved} dispatches to {@link NodeChangeListener#onMove(Object, Object, Object, Object)}</li>
      * <li>{@link Removed} dispatches to {@link NodeChangeListener#onRemove(Object, Object)}</li>
      * <li>{@link Renamed} dispatches to {@link NodeChangeListener#onRename(Object, Object, String)}</li>
-     * <li>{@link Updated} dispatches to {@link NodeChangeListener#onUpdate(Object, NodeState)}</li>
+     * <li>{@link Updated} dispatches to {@link NodeChangeListener#onUpdate(Object, S)}</li>
      * </ul>
      *
      * @param listener the listener
      */
-    protected abstract void dispatch(NodeChangeListener<N> listener);
+    protected abstract void dispatch(NodeChangeListener<N, S> listener);
 
-    public static final class Destroyed<N> extends NodeChange<N> {
+    public static final class Destroyed<N, S extends Serializable> extends NodeChange<N, S> {
 
         /** . */
         final N parent;
@@ -80,7 +82,7 @@ public abstract class NodeChange<N> {
         }
 
         @Override
-        protected void dispatch(NodeChangeListener<N> listener) {
+        protected void dispatch(NodeChangeListener<N, S> listener) {
             listener.onDestroy(target, parent);
         }
 
@@ -90,7 +92,7 @@ public abstract class NodeChange<N> {
         }
     }
 
-    public static final class Removed<N> extends NodeChange<N> {
+    public static final class Removed<N, S extends Serializable> extends NodeChange<N, S> {
 
         /** . */
         final N parent;
@@ -112,7 +114,7 @@ public abstract class NodeChange<N> {
         }
 
         @Override
-        protected void dispatch(NodeChangeListener<N> listener) {
+        protected void dispatch(NodeChangeListener<N, S> listener) {
             listener.onRemove(target, parent);
         }
 
@@ -122,7 +124,7 @@ public abstract class NodeChange<N> {
         }
     }
 
-    public static final class Created<N> extends NodeChange<N> {
+    public static final class Created<N, S extends Serializable> extends NodeChange<N, S> {
 
         /** . */
         final N parent;
@@ -133,7 +135,10 @@ public abstract class NodeChange<N> {
         /** . */
         final String name;
 
-        Created(N parent, N previous, N node, String name) throws NullPointerException {
+        /** . */
+        final S state;
+
+        Created(N parent, N previous, N node, String name, S state) throws NullPointerException {
             super(node);
 
             //
@@ -143,11 +148,15 @@ public abstract class NodeChange<N> {
             if (name == null) {
                 throw new NullPointerException("No null name accepted");
             }
+            if (state == null) {
+                throw new NullPointerException("No state provided");
+            }
 
             //
             this.parent = parent;
             this.previous = previous;
             this.name = name;
+            this.state = state;
         }
 
         public N getParent() {
@@ -162,9 +171,13 @@ public abstract class NodeChange<N> {
             return name;
         }
 
+        public S getState() {
+            return state;
+        }
+
         @Override
-        protected void dispatch(NodeChangeListener<N> listener) {
-            listener.onCreate(target, parent, previous, name);
+        protected void dispatch(NodeChangeListener<N, S> listener) {
+            listener.onCreate(target, parent, previous, name, state);
         }
 
         @Override
@@ -173,7 +186,7 @@ public abstract class NodeChange<N> {
         }
     }
 
-    public static final class Added<N> extends NodeChange<N> {
+    public static final class Added<N, S extends Serializable> extends NodeChange<N, S> {
 
         /** . */
         final N parent;
@@ -203,7 +216,7 @@ public abstract class NodeChange<N> {
         }
 
         @Override
-        protected void dispatch(NodeChangeListener<N> listener) {
+        protected void dispatch(NodeChangeListener<N, S> listener) {
             listener.onAdd(target, parent, previous);
         }
 
@@ -213,7 +226,7 @@ public abstract class NodeChange<N> {
         }
     }
 
-    public static final class Moved<N> extends NodeChange<N> {
+    public static final class Moved<N, S extends Serializable> extends NodeChange<N, S> {
 
         /** . */
         final N from;
@@ -255,7 +268,7 @@ public abstract class NodeChange<N> {
         }
 
         @Override
-        protected void dispatch(NodeChangeListener<N> listener) {
+        protected void dispatch(NodeChangeListener<N, S> listener) {
             listener.onMove(target, from, to, previous);
         }
 
@@ -265,7 +278,7 @@ public abstract class NodeChange<N> {
         }
     }
 
-    public static final class Renamed<N> extends NodeChange<N> {
+    public static final class Renamed<N, S extends Serializable> extends NodeChange<N, S> {
 
         /** . */
         final N parent;
@@ -298,7 +311,7 @@ public abstract class NodeChange<N> {
         }
 
         @Override
-        protected void dispatch(NodeChangeListener<N> listener) {
+        protected void dispatch(NodeChangeListener<N, S> listener) {
             listener.onRename(target, parent, name);
         }
 
@@ -308,24 +321,24 @@ public abstract class NodeChange<N> {
         }
     }
 
-    public static final class Updated<N> extends NodeChange<N> {
+    public static final class Updated<N, S extends Serializable> extends NodeChange<N, S> {
 
         /** . */
-        final NodeState state;
+        final S state;
 
-        public Updated(N node, NodeState state) {
+        public Updated(N node, S state) {
             super(node);
 
             //
             this.state = state;
         }
 
-        public NodeState getState() {
+        public S getState() {
             return state;
         }
 
         @Override
-        protected void dispatch(NodeChangeListener<N> listener) {
+        protected void dispatch(NodeChangeListener<N, S> listener) {
             listener.onUpdate(target, state);
         }
 

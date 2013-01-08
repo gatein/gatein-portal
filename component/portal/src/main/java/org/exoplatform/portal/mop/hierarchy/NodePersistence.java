@@ -17,39 +17,26 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop.hierarchy;
 
-import org.exoplatform.portal.tree.diff.HierarchyAdapter;
+import java.io.Serializable;
 
 /**
- * Adapter for the update operation.
- *
- * @param <N> the node generic type
+ * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-interface TreeUpdateAdapter<N> extends HierarchyAdapter<String[], N, String> {
+public interface NodePersistence<S extends Serializable> {
 
-    /**
-     * Returns the persistent data associated with the node or null if such data does not exist.
-     *
-     * @param node the node
-     * @return the node data
-     */
-    NodeData getData(N node);
+    NodeData<S> getNode(String nodeId);
 
-    /**
-     * Returns the transient state associated with the node.
-     *
-     * @param node the node
-     * @return the transient state
-     */
-    NodeState getState(N node);
+    NodeData<S>[] createNode(String parentId, String previousId, String name, S state);
 
-    /**
-     * Returns the transient name associated with the node.
-     *
-     * @param node the node
-     * @return the transient name
-     */
-    String getName(N node);
+    NodeData<S> destroyNode(String targetId);
 
+    NodeData<S> updateNode(String targetId, S state);
+
+    NodeData<S>[] moveNode(String targetId, String fromId, String toId, String previousId);
+
+    NodeData<S>[] rename(String targetId, String parentId, String name);
+
+    void close();
 }

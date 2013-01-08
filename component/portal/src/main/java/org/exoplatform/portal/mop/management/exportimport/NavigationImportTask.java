@@ -37,10 +37,10 @@ import org.exoplatform.portal.mop.importer.NavigationImporter;
 import org.exoplatform.portal.mop.management.operations.navigation.NavigationUtils;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.navigation.NodeChangeListener;
-import org.exoplatform.portal.mop.navigation.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeState;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
@@ -88,7 +88,7 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation> {
             };
         } else {
 
-            final List<NodeContext<NodeContext<?>>> snapshots = new ArrayList<NodeContext<NodeContext<?>>>(data.getFragments()
+                final List<NodeContext<NodeContext<?, NodeState>, NodeState>> snapshots = new ArrayList<NodeContext<NodeContext<?, NodeState>, NodeState>>(data.getFragments()
                     .size());
             for (NavigationFragment fragment : data.getFragments()) {
                 snapshots.add(NavigationUtils.loadNode(navigationService, navContext, fragment.getParentURI()));
@@ -104,7 +104,7 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation> {
                 public void rollback() throws Exception {
                     log.debug(getDescription());
 
-                    for (NodeContext<NodeContext<?>> snapshot : snapshots) {
+                    for (NodeContext<NodeContext<?, NodeState>, NodeState> snapshot : snapshots) {
                         RollbackChangeListener listener = new RollbackChangeListener();
                         navigationService.updateNode(snapshot, Scope.ALL, listener);
 
@@ -142,13 +142,13 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation> {
         void rollback() throws Exception;
     }
 
-    private static class RollbackChangeListener implements NodeChangeListener<NodeContext<NodeContext<?>>> {
+    private static class RollbackChangeListener implements NodeChangeListener<NodeContext<NodeContext<?, NodeState>, NodeState>, NodeState> {
         private List<RollbackTask> tasks = new ArrayList<RollbackTask>();
         private boolean errors;
 
         @Override
-        public void onAdd(final NodeContext<NodeContext<?>> target, final NodeContext<NodeContext<?>> parent,
-                NodeContext<NodeContext<?>> previous) {
+        public void onAdd(final NodeContext<NodeContext<?, NodeState>, NodeState> target, final NodeContext<NodeContext<?, NodeState>, NodeState> parent,
+                NodeContext<NodeContext<?, NodeState>, NodeState> previous) {
             tasks.add(new RollbackTask() {
                 @Override
                 public String getDescription() {
@@ -163,8 +163,8 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation> {
         }
 
         @Override
-        public void onCreate(final NodeContext<NodeContext<?>> target, final NodeContext<NodeContext<?>> parent,
-                final NodeContext<NodeContext<?>> previous, final String name) {
+        public void onCreate(final NodeContext<NodeContext<?, NodeState>, NodeState> target, final NodeContext<NodeContext<?, NodeState>, NodeState> parent,
+                             final NodeContext<NodeContext<?, NodeState>, NodeState> previous, final String name, NodeState state) {
             tasks.add(new RollbackTask() {
                 @Override
                 public String getDescription() {
@@ -179,7 +179,7 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation> {
         }
 
         @Override
-        public void onRemove(final NodeContext<NodeContext<?>> target, final NodeContext<NodeContext<?>> parent) {
+        public void onRemove(final NodeContext<NodeContext<?, NodeState>, NodeState> target, final NodeContext<NodeContext<?, NodeState>, NodeState> parent) {
             tasks.add(new RollbackTask() {
                 // Copy all state for rollback
                 private String name = target.getName();
@@ -194,15 +194,14 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation> {
 
                 @Override
                 public void rollback() throws Exception {
-                    NodeContext node = parent.add(index, name);
-                    node.setState(state);
+                    NodeContext node = parent.add(index, name, state);
                     node.setHidden(hidden);
                 }
             });
         }
 
         @Override
-        public void onDestroy(final NodeContext<NodeContext<?>> target, final NodeContext<NodeContext<?>> parent) {
+        public void onDestroy(final NodeContext<NodeContext<?, NodeState>, NodeState> target, final NodeContext<NodeContext<?, NodeState>, NodeState> parent) {
             tasks.add(new RollbackTask() {
                 @Override
                 public String getDescription() {
@@ -217,7 +216,7 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation> {
         }
 
         @Override
-        public void onRename(final NodeContext<NodeContext<?>> target, final NodeContext<NodeContext<?>> parent,
+        public void onRename(final NodeContext<NodeContext<?, NodeState>, NodeState> target, final NodeContext<NodeContext<?, NodeState>, NodeState> parent,
                 final String name) {
             tasks.add(new RollbackTask() {
                 // Copy previous name for rollback
@@ -236,7 +235,7 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation> {
         }
 
         @Override
-        public void onUpdate(final NodeContext<NodeContext<?>> target, final NodeState state) {
+        public void onUpdate(final NodeContext<NodeContext<?, NodeState>, NodeState> target, final NodeState state) {
             tasks.add(new RollbackTask() {
                 // Copy state for rollback
                 private NodeState targetState = target.getState();
@@ -254,8 +253,8 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation> {
         }
 
         @Override
-        public void onMove(final NodeContext<NodeContext<?>> target, final NodeContext<NodeContext<?>> from,
-                final NodeContext<NodeContext<?>> to, NodeContext<NodeContext<?>> previous) {
+        public void onMove(final NodeContext<NodeContext<?, NodeState>, NodeState> target, final NodeContext<NodeContext<?, NodeState>, NodeState> from,
+                final NodeContext<NodeContext<?, NodeState>, NodeState> to, NodeContext<NodeContext<?, NodeState>, NodeState> previous) {
             tasks.add(new RollbackTask() {
                 @Override
                 public String getDescription() {

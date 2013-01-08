@@ -23,16 +23,20 @@ import java.util.List;
 
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeModel;
+import org.exoplatform.portal.mop.hierarchy.Scope;
 
 /**
  * <p>
  * The navigation service takes care of managing the various portal navigations and their nodes. In order to manage an efficient
- * loading of the nodes, a {@link Scope} is used to describe the set of nodes that should be retrieved when a loading operation
+ * loading of the nodes, a {@link org.exoplatform.portal.mop.hierarchy.Scope} is used to describe the set of nodes that should be retrieved when a loading operation
  * is performed.
  * </p>
  *
  * <p>
- * The node operations does not provide a model per se, but instead use the {@link NodeModel} interface to plug an API model.
+ * The node operations does not provide a model per se, but instead use the {@link org.exoplatform.portal.mop.hierarchy.NodeModel} interface to plug an API model.
  * Various node operations are quite complex and any API in front of this service would need to perform a manual, error prone
  * and tedious synchronization. Instead the model interface allows the navigation service to operate directly on an existing
  * model.
@@ -99,8 +103,8 @@ public interface NavigationService {
      * @throws NullPointerException if any argument is null
      * @throws NavigationServiceException anything that would prevent the operation to succeed
      */
-    <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope,
-            NodeChangeListener<NodeContext<N>> listener) throws NullPointerException, NavigationServiceException;
+    <N> NodeContext<N, NodeState> loadNode(NodeModel<N, NodeState> model, NavigationContext navigation, Scope<NodeState> scope,
+            NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener) throws NullPointerException, NavigationServiceException;
 
     /**
      * <p>
@@ -114,7 +118,7 @@ public interface NavigationService {
      * @throws NullPointerException if the context argument is null
      * @throws NavigationServiceException anything that would prevent the operation to succeed
      */
-    <N> void saveNode(NodeContext<N> context, NodeChangeListener<NodeContext<N>> listener) throws NullPointerException,
+    <N> void saveNode(NodeContext<N, NodeState> context, NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener) throws NullPointerException,
             NavigationServiceException;
 
     /**
@@ -145,7 +149,7 @@ public interface NavigationService {
      * @throws NavigationServiceException anything that would prevent the operation to succeed
      * @throws IllegalArgumentException if the context argument has pending changes
      */
-    <N> void updateNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener)
+    <N> void updateNode(NodeContext<N, NodeState> context, Scope<NodeState> scope, NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener)
             throws NullPointerException, IllegalArgumentException, NavigationServiceException;
 
     /**
@@ -176,6 +180,6 @@ public interface NavigationService {
      * @throws NullPointerException if the context argument is null
      * @throws NavigationServiceException anything that would prevent the operation to succeed
      */
-    <N> void rebaseNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener)
+    <N> void rebaseNode(NodeContext<N, NodeState> context, Scope<NodeState> scope, NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener)
             throws NullPointerException, NavigationServiceException;
 }

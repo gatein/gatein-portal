@@ -35,7 +35,8 @@ import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.navigation.NavigationError;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.page.PageService;
@@ -102,8 +103,8 @@ public class UINavigationNodeSelector extends UIContainer {
 
     private Map<String, Map<Locale, State>> userNodeLabels;
 
-    private static final Scope DEFAULT_SCOPE = Scope.GRANDCHILDREN;
-    private Scope navigationScope = DEFAULT_SCOPE;
+    private static final Scope<NodeState> DEFAULT_SCOPE = Scope.GRANDCHILDREN;
+    private Scope<NodeState> navigationScope = DEFAULT_SCOPE;
 
     public UINavigationNodeSelector() throws Exception {
         UIRightClickPopupMenu rightClickPopup = addChild(UIRightClickPopupMenu.class, "UINavigationNodeSelectorPopupMenu", null)
@@ -196,7 +197,7 @@ public class UINavigationNodeSelector extends UIContainer {
         return node;
     }
 
-    public TreeNode rebaseNode(TreeNode treeNode, Scope scope) {
+    public TreeNode rebaseNode(TreeNode treeNode, Scope<NodeState> scope) {
         if (treeNode == null || treeNode.getNode() == null) {
             return null;
         }
@@ -272,11 +273,11 @@ public class UINavigationNodeSelector extends UIContainer {
         return getRootNode().findNode(nodeID);
     }
 
-    public void setScope(Scope scope) {
+    public void setScope(Scope<NodeState> scope) {
         this.navigationScope = scope;
     }
 
-    public Scope getScope() {
+    public Scope<NodeState> getScope() {
         return this.navigationScope;
     }
 
@@ -296,7 +297,7 @@ public class UINavigationNodeSelector extends UIContainer {
             return rebaseNode(node, selector.getScope(), selector);
         }
 
-        protected TreeNode rebaseNode(TreeNode node, Scope scope, UINavigationNodeSelector selector) throws Exception {
+        protected TreeNode rebaseNode(TreeNode node, Scope<NodeState> scope, UINavigationNodeSelector selector) throws Exception {
             WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
             TreeNode rebased = selector.rebaseNode(node, scope);
             if (rebased == null) {

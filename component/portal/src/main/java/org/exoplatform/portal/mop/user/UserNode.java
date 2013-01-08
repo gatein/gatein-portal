@@ -29,7 +29,7 @@ import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.description.DescriptionService;
-import org.exoplatform.portal.mop.navigation.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.page.PageKey;
 
@@ -45,7 +45,7 @@ public class UserNode {
     final UserNodeContext owner;
 
     /** . */
-    final NodeContext<UserNode> context;
+    final NodeContext<UserNode, NodeState> context;
 
     /** . */
     String resolvedLabel;
@@ -56,7 +56,7 @@ public class UserNode {
     /** . */
     String uri;
 
-    UserNode(UserNodeContext owner, NodeContext<UserNode> context) {
+    UserNode(UserNodeContext owner, NodeContext<UserNode, NodeState> context) {
         this.owner = owner;
         this.context = context;
         this.resolvedLabel = null;
@@ -283,7 +283,7 @@ public class UserNode {
     }
 
     public UserNode addChild(String childName) {
-        return context.add(null, childName).getNode();
+        return context.add(null, childName, NodeState.INITIAL).getNode();
     }
 
     public boolean removeChild(String childName) {

@@ -9,7 +9,7 @@ import java.util.Map;
 import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.exoplatform.portal.mop.Described.State;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.NodeChangeListener;
+import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNavigation;
@@ -22,7 +22,7 @@ import org.exoplatform.portal.webui.util.Util;
  * @author <a href="mailto:trong.tran@exoplatform.com">Trong Tran</a>
  * @version $Revision$
  */
-public class TreeNode implements NodeChangeListener<UserNode> {
+public class TreeNode implements NodeChangeListener<UserNode, NodeState> {
     private Map<String, TreeNode> caches;
 
     private UserNavigation nav;
@@ -291,7 +291,7 @@ public class TreeNode implements NodeChangeListener<UserNode> {
     }
 
     @Override
-    public void onCreate(UserNode target, UserNode parent, UserNode previous, String name) {
+    public void onCreate(UserNode target, UserNode parent, UserNode previous, String name, NodeState state) {
     }
 
     @Override

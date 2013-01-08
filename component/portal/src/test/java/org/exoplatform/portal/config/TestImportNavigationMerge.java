@@ -20,7 +20,8 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.portal.mop.importer.ImportMode;
-import org.exoplatform.portal.mop.navigation.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.navigation.NodeState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -33,42 +34,42 @@ public class TestImportNavigationMerge extends AbstractImportNavigationTest {
     }
 
     @Override
-    protected final void afterOnePhaseBoot(NodeContext<?> root) {
+    protected final void afterOnePhaseBoot(NodeContext<?, NodeState> root) {
         assertState(root);
     }
 
     @Override
-    protected final void afterTwoPhasesBoot(NodeContext<?> root) {
+    protected final void afterTwoPhasesBoot(NodeContext<?, NodeState> root) {
         assertEquals(2, root.getNodeCount());
         assertNotNull(root.get("foo"));
         assertNotNull(root.get("daa"));
     }
 
     @Override
-    protected final void afterTwoPhaseOverrideReboot(NodeContext<?> root) {
+    protected final void afterTwoPhaseOverrideReboot(NodeContext<?, NodeState> root) {
         assertState(root);
     }
 
     @Override
-    protected final void afterTwoPhaseNoOverrideReconfigure(NodeContext<?> root) {
+    protected final void afterTwoPhaseNoOverrideReconfigure(NodeContext<?, NodeState> root) {
         assertState(root);
     }
 
-    protected void assertState(NodeContext<?> root) {
+    protected void assertState(NodeContext<?, NodeState> root) {
         assertEquals(3, root.getNodeCount());
-        NodeContext<?> foo = root.get("foo");
+        NodeContext<?, NodeState> foo = root.get("foo");
         assertNotNull(foo);
         assertEquals("foo_icon_2", foo.getState().getIcon());
         assertEquals(1, foo.getNodeCount());
-        NodeContext<?> juu = foo.get("juu");
+        NodeContext<?, NodeState> juu = foo.get("juu");
         assertNotNull(juu);
         assertEquals("juu_icon", juu.getState().getIcon());
         assertEquals(0, juu.getNodeCount());
-        NodeContext<?> bar = root.get("bar");
+        NodeContext<?, NodeState> bar = root.get("bar");
         assertNotNull(bar);
         assertEquals("bar_icon", bar.getState().getIcon());
         assertEquals(0, bar.getNodeCount());
-        NodeContext<?> daa = root.get("daa");
+        NodeContext<?, NodeState> daa = root.get("daa");
         assertNotNull(daa);
         assertEquals("daa_icon", daa.getState().getIcon());
         assertEquals(0, daa.getNodeCount());

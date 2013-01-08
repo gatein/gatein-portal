@@ -39,7 +39,8 @@ import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.page.UISiteBody;
@@ -90,7 +91,7 @@ public class UISiteManagement extends UIContainer {
     private UINavigationManagement naviManager;
 
     // set navigationScope to GrandChildren for default value
-    private Scope navigationScope = Scope.GRANDCHILDREN;
+    private Scope<NodeState> navigationScope = Scope.GRANDCHILDREN;
 
     public UISiteManagement() throws Exception {
         UIPopupWindow editNavigation = addChild(UIPopupWindow.class, null, null);
@@ -171,11 +172,11 @@ public class UISiteManagement extends UIContainer {
 
     }
 
-    public void setScope(Scope scope) {
+    public void setScope(Scope<NodeState> scope) {
         this.navigationScope = scope;
     }
 
-    public Scope getScope() {
+    public Scope<NodeState> getScope() {
         return this.navigationScope;
     }
 

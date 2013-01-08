@@ -30,6 +30,10 @@ import org.chromattic.api.UndeclaredRepositoryException;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeModel;
+import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -124,27 +128,27 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
         return destroyed;
     }
 
-    public <N> NodeContext<N> loadNode(NodeModel<N> model, NavigationContext navigation, Scope scope,
-            NodeChangeListener<NodeContext<N>> listener) {
+    public <N> NodeContext<N, NodeState> loadNode(NodeModel<N, NodeState> model, NavigationContext navigation, Scope<NodeState> scope,
+            NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener) {
         return service.loadNode(model, navigation, scope, listener);
     }
 
-    public <N> void saveNode(NodeContext<N> context, NodeChangeListener<NodeContext<N>> listener)
+    public <N> void saveNode(NodeContext<N, NodeState> context, NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener)
             throws NavigationServiceException {
         service.saveNode(context, listener);
-        org.gatein.mop.api.workspace.Navigation nav = service.manager.getSession().findObjectById(ObjectType.NAVIGATION,
-                context.data.id);
+        org.gatein.mop.api.workspace.Navigation nav = manager.getSession().findObjectById(ObjectType.NAVIGATION,
+                context.getId());
         Site site = nav.getSite();
         SiteKey key = new SiteKey(siteType(site.getObjectType()), site.getName());
         notify(EventType.NAVIGATION_UPDATED, key);
     }
 
-    public <N> void updateNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener)
+    public <N> void updateNode(NodeContext<N, NodeState> context, Scope<NodeState> scope, NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener)
             throws NullPointerException, NavigationServiceException {
         service.updateNode(context, scope, listener);
     }
 
-    public <N> void rebaseNode(NodeContext<N> context, Scope scope, NodeChangeListener<NodeContext<N>> listener)
+    public <N> void rebaseNode(NodeContext<N, NodeState> context, Scope<NodeState> scope, NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener)
             throws NullPointerException, NavigationServiceException {
         service.rebaseNode(context, scope, listener);
     }

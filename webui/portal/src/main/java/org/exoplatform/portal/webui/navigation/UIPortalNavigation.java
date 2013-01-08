@@ -25,9 +25,10 @@ import java.util.List;
 
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.NodeChange;
-import org.exoplatform.portal.mop.navigation.NodeChangeQueue;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.NodeChange;
+import org.exoplatform.portal.mop.hierarchy.NodeChangeQueue;
+import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -57,7 +58,7 @@ public class UIPortalNavigation extends UIComponent {
 
     private final UserNodeFilterConfig NAVIGATION_FILTER_CONFIG;
 
-    private Scope navigationScope;
+    private Scope<NodeState> navigationScope;
 
     private Log log = ExoLogger.getExoLogger(UIPortalNavigation.class);
 
@@ -176,11 +177,11 @@ public class UIPortalNavigation extends UIComponent {
             return null;
         }
         UserPortal userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
-        NodeChangeQueue<UserNode> queue = new NodeChangeQueue<UserNode>();
+        NodeChangeQueue<UserNode, NodeState> queue = new NodeChangeQueue<UserNode, NodeState>();
         userPortal.updateNode(node, navigationScope, queue);
-        for (NodeChange<UserNode> change : queue) {
+        for (NodeChange<UserNode, NodeState> change : queue) {
             if (change instanceof NodeChange.Removed) {
-                UserNode deletedNode = ((NodeChange.Removed<UserNode>) change).getTarget();
+                UserNode deletedNode = ((NodeChange.Removed<UserNode, NodeState>) change).getTarget();
                 if (hasRelationship(deletedNode, node)) {
                     // Node has been deleted
                     return null;
@@ -260,7 +261,7 @@ public class UIPortalNavigation extends UIComponent {
         return null;
     }
 
-    public void setScope(Scope scope) {
+    public void setScope(Scope<NodeState> scope) {
         this.navigationScope = scope;
     }
 

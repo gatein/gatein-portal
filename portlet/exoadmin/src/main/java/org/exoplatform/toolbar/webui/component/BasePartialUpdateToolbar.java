@@ -30,10 +30,11 @@ import javax.portlet.ResourceURL;
 
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.navigation.GenericScope;
-import org.exoplatform.portal.mop.navigation.NodeChange;
-import org.exoplatform.portal.mop.navigation.NodeChangeQueue;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.GenericScope;
+import org.exoplatform.portal.mop.hierarchy.NodeChange;
+import org.exoplatform.portal.mop.hierarchy.NodeChangeQueue;
+import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -55,7 +56,7 @@ import org.json.JSONObject;
 public abstract class BasePartialUpdateToolbar extends UIPortletApplication {
 
     protected UserNodeFilterConfig toolbarFilterConfig;
-    protected Scope toolbarScope;
+    protected Scope<NodeState> toolbarScope;
     protected static final int DEFAULT_LEVEL = 2;
 
     public BasePartialUpdateToolbar() throws Exception {
@@ -117,11 +118,11 @@ public abstract class BasePartialUpdateToolbar extends UIPortletApplication {
             return null;
         }
 
-        NodeChangeQueue<UserNode> queue = new NodeChangeQueue<UserNode>();
+        NodeChangeQueue<UserNode, NodeState> queue = new NodeChangeQueue<UserNode, NodeState>();
         getUserPortal().updateNode(userNode, toolbarScope, queue);
-        for (NodeChange<UserNode> change : queue) {
+        for (NodeChange<UserNode, NodeState> change : queue) {
             if (change instanceof NodeChange.Removed) {
-                UserNode deletedNode = ((NodeChange.Removed<UserNode>) change).getTarget();
+                UserNode deletedNode = ((NodeChange.Removed<UserNode, NodeState>) change).getTarget();
                 if (hasRelationship(deletedNode, userNode)) {
                     return null;
                 }

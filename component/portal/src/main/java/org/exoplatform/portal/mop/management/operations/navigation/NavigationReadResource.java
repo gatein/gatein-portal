@@ -6,7 +6,8 @@ import java.util.Set;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.navigation.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.gatein.management.api.exceptions.ResourceNotFoundException;
 import org.gatein.management.api.operation.OperationContext;
 import org.gatein.management.api.operation.ResultHandler;
@@ -28,7 +29,7 @@ public class NavigationReadResource extends AbstractNavigationOperationHandler {
 
         Set<String> children = new LinkedHashSet<String>();
 
-        NodeContext<NodeContext<?>> node = NavigationUtils.loadNode(navigationService, navigation, navUri);
+        NodeContext<NodeContext<?, NodeState>, NodeState> node = NavigationUtils.loadNode(navigationService, navigation, navUri);
         if (node == null) {
             throw new ResourceNotFoundException("Navigation node not found for navigation uri '" + navUri + "'");
         }

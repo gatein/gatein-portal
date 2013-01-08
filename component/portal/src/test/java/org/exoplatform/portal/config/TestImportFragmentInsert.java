@@ -20,7 +20,8 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.portal.mop.importer.ImportMode;
-import org.exoplatform.portal.mop.navigation.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.navigation.NodeState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -33,18 +34,18 @@ public class TestImportFragmentInsert extends AbstractImportFragmentTest {
     }
 
     @Override
-    protected final void afterOnePhaseBoot(NodeContext<?> root) {
+    protected final void afterOnePhaseBoot(NodeContext<?, NodeState> root) {
         assertState(root);
     }
 
     @Override
-    protected void assertState(NodeContext<?> root) {
+    protected void assertState(NodeContext<?, NodeState> root) {
         assertEquals(1, root.getNodeSize());
-        NodeContext<?> foo = root.get("foo");
+        NodeContext<?, NodeState> foo = root.get("foo");
         assertNotNull(foo);
         assertEquals("foo_icon", foo.getState().getIcon());
         assertEquals(1, foo.getNodeSize());
-        NodeContext<?> bar = foo.get("bar");
+        NodeContext<?, NodeState> bar = foo.get("bar");
         assertNotNull(bar);
         assertEquals("bar_icon", bar.getState().getIcon());
         assertEquals(0, bar.getNodeSize());

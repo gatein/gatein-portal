@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop.hierarchy;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -26,6 +26,9 @@ import java.util.Iterator;
 import java.util.List;
 
 import junit.framework.Assert;
+import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.mop.navigation.NavigationServiceException;
+import org.exoplatform.portal.mop.navigation.NodeState;
 
 /**
  * Represents a navigation node.
@@ -36,20 +39,20 @@ import junit.framework.Assert;
 public class Node {
 
     /** . */
-    public static final NodeModel<Node> MODEL = new NodeModel<Node>() {
-        public NodeContext<Node> getContext(Node node) {
+    public static final NodeModel<Node, NodeState> MODEL = new NodeModel<Node, NodeState>() {
+        public NodeContext<Node, NodeState> getContext(Node node) {
             return node.context;
         }
 
-        public Node create(NodeContext<Node> context) {
+        public Node create(NodeContext<Node, NodeState> context) {
             return new Node(context);
         }
     };
 
     /** . */
-    final NodeContext<Node> context;
+    final NodeContext<Node, NodeState> context;
 
-    Node(NodeContext<Node> context) {
+    Node(NodeContext<Node, NodeState> context) {
         this.context = context;
     }
 
@@ -69,7 +72,7 @@ public class Node {
         context.setName(name);
     }
 
-    public NodeContext getContext() {
+    public NodeContext<Node, NodeState> getContext() {
         return context;
     }
 
@@ -106,11 +109,11 @@ public class Node {
     }
 
     public Node addChild(String childName) {
-        return context.add(null, childName).node;
+        return context.add(null, childName, NodeState.INITIAL).node;
     }
 
     public Node addChild(int index, String childName) {
-        return context.add(index, childName).node;
+        return context.add(index, childName, NodeState.INITIAL).node;
     }
 
     public boolean removeChild(String childName) {
@@ -133,20 +136,20 @@ public class Node {
         return context.isHidden();
     }
 
-    public void filter(NodeFilter filter) {
+    public void filter(NodeFilter<NodeState> filter) {
         context.filter(filter);
     }
 
     public void assertConsistent() {
         if (context.isExpanded()) {
             List<String> a = new ArrayList<String>();
-            for (NodeContext<Node> b = context.getFirst(); b != null; b = b.getNext()) {
+            for (NodeContext<Node, NodeState> b = context.getFirst(); b != null; b = b.getNext()) {
                 Assert.assertNotNull(b.data);
                 a.add(b.data.getId());
             }
             List<String> b = Arrays.asList(context.data.children);
             Assert.assertEquals(a, b);
-            for (NodeContext<Node> c = context.getFirst(); c != null; c = c.getNext()) {
+            for (NodeContext<Node, NodeState> c = context.getFirst(); c != null; c = c.getNext()) {
                 c.getNode().assertConsistent();
             }
         }
@@ -169,13 +172,13 @@ public class Node {
 
         //
         List<Node> nodes1 = new ArrayList<Node>();
-        for (NodeContext<Node> current = context.getFirst(); current != null; current = current.getNext()) {
+        for (NodeContext<Node, NodeState> current = context.getFirst(); current != null; current = current.getNext()) {
             nodes1.add(current.getNode());
         }
 
         //
         List<Node> nodes2 = new ArrayList<Node>();
-        for (NodeContext<Node> current = node.context.getFirst(); current != null; current = current.getNext()) {
+        for (NodeContext<Node, NodeState> current = node.context.getFirst(); current != null; current = current.getNext()) {
             nodes2.add(current.getNode());
         }
 
@@ -189,21 +192,21 @@ public class Node {
         }
     }
 
-    public Iterator<NodeChange<Node>> update(NavigationService service, Scope scope) throws NavigationServiceException {
-        NodeChangeQueue<Node> queue = new NodeChangeQueue<Node>();
-        service.updateNode(context, scope, new NodeContextChangeAdapter<Node>(queue));
+    public Iterator<NodeChange<Node, NodeState>> update(NavigationService service, Scope<NodeState> scope) throws NavigationServiceException {
+        NodeChangeQueue<Node, NodeState> queue = new NodeChangeQueue<Node, NodeState>();
+        service.updateNode(context, scope, new NodeContextChangeAdapter<Node, NodeState>(queue));
         return queue.iterator();
     }
 
-    public Iterator<NodeChange<Node>> rebase(NavigationService service, Scope scope) throws NavigationServiceException {
-        NodeChangeQueue<Node> queue = new NodeChangeQueue<Node>();
-        service.rebaseNode(context, scope, new NodeContextChangeAdapter<Node>(queue));
+    public Iterator<NodeChange<Node, NodeState>> rebase(NavigationService service, Scope<NodeState> scope) throws NavigationServiceException {
+        NodeChangeQueue<Node, NodeState> queue = new NodeChangeQueue<Node, NodeState>();
+        service.rebaseNode(context, scope, new NodeContextChangeAdapter<Node, NodeState>(queue));
         return queue.iterator();
     }
 
-    public Iterator<NodeChange<Node>> save(NavigationService service) throws NavigationServiceException {
-        NodeChangeQueue<Node> queue = new NodeChangeQueue<Node>();
-        service.saveNode(context, new NodeContextChangeAdapter<Node>(queue));
+    public Iterator<NodeChange<Node, NodeState>> save(NavigationService service) throws NavigationServiceException {
+        NodeChangeQueue<Node, NodeState> queue = new NodeChangeQueue<Node, NodeState>();
+        service.saveNode(context, new NodeContextChangeAdapter<Node, NodeState>(queue));
         return queue.iterator();
     }
 

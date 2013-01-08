@@ -17,7 +17,9 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop.hierarchy;
+
+import java.io.Serializable;
 
 import org.exoplatform.portal.mop.Utils;
 import org.exoplatform.portal.tree.diff.Adapters;
@@ -29,26 +31,26 @@ import org.exoplatform.portal.tree.diff.HierarchyDiff;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class TreeUpdate<N1, N2> {
+class TreeUpdate<N1, N2, S extends Serializable> {
 
-    static <N1, N2> void perform(TreeContext<N1> src, HierarchyAdapter<String[], NodeContext<N1>, String> srcAdatper, N2 dst,
-            TreeUpdateAdapter<N2> updateAdapter, NodeChangeListener<NodeContext<N1>> listener, Scope.Visitor visitor) {
+    static <N1, N2, S extends Serializable> void perform(TreeContext<N1, S> src, HierarchyAdapter<String[], NodeContext<N1, S>, String> srcAdatper, N2 dst,
+            TreeUpdateAdapter<N2, S> updateAdapter, NodeChangeListener<NodeContext<N1, S>, S> listener, Scope.Visitor<S> visitor) {
 
-        TreeUpdate<N1, N2> update = new TreeUpdate<N1, N2>(src, srcAdatper, dst, updateAdapter, listener, visitor);
+        TreeUpdate<N1, N2, S> update = new TreeUpdate<N1, N2, S>(src, srcAdatper, dst, updateAdapter, listener, visitor);
 
         //
         update.perform();
     }
 
-    private TreeUpdate(TreeContext<N1> src, HierarchyAdapter<String[], NodeContext<N1>, String> srcAdatper, N2 dst,
-            TreeUpdateAdapter<N2> updateAdapter, NodeChangeListener<NodeContext<N1>> listener, Scope.Visitor visitor) {
+    private TreeUpdate(TreeContext<N1, S> src, HierarchyAdapter<String[], NodeContext<N1, S>, String> srcAdatper, N2 dst,
+            TreeUpdateAdapter<N2, S> updateAdapter, NodeChangeListener<NodeContext<N1, S>, S> listener, Scope.Visitor<S> visitor) {
 
         // We create the diff object
-        HierarchyDiff<String[], NodeContext<N1>, String[], N2, String> diff = HierarchyDiff.create(Adapters.<String> list(),
+        HierarchyDiff<String[], NodeContext<N1, S>, String[], N2, String> diff = HierarchyDiff.create(Adapters.<String> list(),
                 srcAdatper, Adapters.<String> list(), updateAdapter, Utils.<String> comparator());
 
         // We obtain the iterator
-        HierarchyChangeIterator<String[], NodeContext<N1>, String[], N2, String> it = diff.iterator(src.root, dst);
+        HierarchyChangeIterator<String[], NodeContext<N1, S>, String[], N2, String> it = diff.iterator(src.root, dst);
 
         //
         this.it = it;
@@ -60,22 +62,22 @@ class TreeUpdate<N1, N2> {
     }
 
     /** . */
-    private final HierarchyChangeIterator<String[], NodeContext<N1>, String[], N2, String> it;
+    private final HierarchyChangeIterator<String[], NodeContext<N1, S>, String[], N2, String> it;
 
     /** . */
-    private final TreeUpdateAdapter<N2> updateAdapter;
+    private final TreeUpdateAdapter<N2, S> updateAdapter;
 
     /** . */
-    private final Scope.Visitor visitor;
+    private final Scope.Visitor<S> visitor;
 
     /** . */
     private int depth;
 
     /** . */
-    private NodeContext<N1> last;
+    private NodeContext<N1, S> last;
 
     /** . */
-    private NodeChangeListener<NodeContext<N1>> listener;
+    private NodeChangeListener<NodeContext<N1, S>, S> listener;
 
     private void perform() {
 
@@ -86,10 +88,10 @@ class TreeUpdate<N1, N2> {
         perform(it.getSource());
     }
 
-    private void perform(NodeContext<N1> parent) {
+    private void perform(NodeContext<N1, S> parent) {
         // Compute visit
         final N2 d = it.getDestination();
-        final NodeData data = updateAdapter.getData(d);
+        final NodeData<S> data = updateAdapter.getData(d);
 
         //
         final VisitMode visit;
@@ -131,9 +133,9 @@ class TreeUpdate<N1, N2> {
                         it.next();
 
                         //
-                        NodeContext<N1> previous;
-                        NodeContext<N1> added;
-                        NodeData addedData = updateAdapter.getData(it.getDestination());
+                        NodeContext<N1, S> previous;
+                        NodeContext<N1, S> added;
+                        NodeData<S> addedData = updateAdapter.getData(it.getDestination());
                         if (last == null || last.getParent() != parent) {
                             previous = null;
                             added = parent.insertAt(0, addedData);
@@ -154,10 +156,10 @@ class TreeUpdate<N1, N2> {
                         it.next();
 
                         //
-                        NodeContext<N1> to = parent;
-                        NodeContext<N1> moved = it.getSource();
-                        NodeContext<N1> from = moved.getParent();
-                        NodeContext<N1> previous;
+                        NodeContext<N1, S> to = parent;
+                        NodeContext<N1, S> moved = it.getSource();
+                        NodeContext<N1, S> from = moved.getParent();
+                        NodeContext<N1, S> previous;
                         if (last == null || last.getParent() != parent) {
                             previous = null;
                             to.insertAt(0, moved);
@@ -176,8 +178,8 @@ class TreeUpdate<N1, N2> {
                     } else if (change == HierarchyChangeType.MOVED_OUT) {
                         // Do nothing
                     } else if (change == HierarchyChangeType.REMOVED) {
-                        NodeContext<N1> removed = it.getSource();
-                        NodeContext<N1> removedParent = removed.getParent();
+                        NodeContext<N1, S> removed = it.getSource();
+                        NodeContext<N1, S> removedParent = removed.getParent();
 
                         //
                         removed.remove();

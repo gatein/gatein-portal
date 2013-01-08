@@ -19,8 +19,8 @@
 
 package org.exoplatform.portal.mop.user;
 
-import org.exoplatform.portal.mop.navigation.NodeChangeListener;
-import org.exoplatform.portal.mop.navigation.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeState;
 
 /**
@@ -29,42 +29,42 @@ import org.exoplatform.portal.mop.navigation.NodeState;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class UserNodeListener implements NodeChangeListener<NodeContext<UserNode>> {
+class UserNodeListener implements NodeChangeListener<NodeContext<UserNode, NodeState>, NodeState> {
 
     /** . */
-    private NodeChangeListener<UserNode> next;
+    private NodeChangeListener<UserNode, NodeState> next;
 
-    UserNodeListener(NodeChangeListener<UserNode> next) {
+    UserNodeListener(NodeChangeListener<UserNode, NodeState> next) {
         if (next != null) {
             this.next = next;
         }
     }
 
-    public void onAdd(NodeContext<UserNode> target, NodeContext<UserNode> parent, NodeContext<UserNode> previous) {
+    public void onAdd(NodeContext<UserNode, NodeState> target, NodeContext<UserNode, NodeState> parent, NodeContext<UserNode, NodeState> previous) {
         if (next != null) {
             next.onAdd(unwrap(target), unwrap(parent), unwrap(previous));
         }
     }
 
-    public void onCreate(NodeContext<UserNode> target, NodeContext<UserNode> parent, NodeContext<UserNode> previous, String name) {
+    public void onCreate(NodeContext<UserNode, NodeState> target, NodeContext<UserNode, NodeState> parent, NodeContext<UserNode, NodeState> previous, String name, NodeState state) {
         if (next != null) {
-            next.onCreate(unwrap(target), unwrap(parent), unwrap(previous), name);
+            next.onCreate(unwrap(target), unwrap(parent), unwrap(previous), name, state);
         }
     }
 
-    public void onRemove(NodeContext<UserNode> target, NodeContext<UserNode> parent) {
+    public void onRemove(NodeContext<UserNode, NodeState> target, NodeContext<UserNode, NodeState> parent) {
         if (next != null) {
             next.onRemove(unwrap(target), unwrap(parent));
         }
     }
 
-    public void onDestroy(NodeContext<UserNode> target, NodeContext<UserNode> parent) {
+    public void onDestroy(NodeContext<UserNode, NodeState> target, NodeContext<UserNode, NodeState> parent) {
         if (next != null) {
             next.onDestroy(unwrap(target), unwrap(parent));
         }
     }
 
-    public void onRename(NodeContext<UserNode> target, NodeContext<UserNode> parent, String name) {
+    public void onRename(NodeContext<UserNode, NodeState> target, NodeContext<UserNode, NodeState> parent, String name) {
         UserNode unwrappedTarget = unwrap(target);
         unwrappedTarget.resolvedLabel = null;
         unwrappedTarget.encodedResolvedLabel = null;
@@ -74,7 +74,7 @@ class UserNodeListener implements NodeChangeListener<NodeContext<UserNode>> {
         }
     }
 
-    public void onUpdate(NodeContext<UserNode> target, NodeState state) {
+    public void onUpdate(NodeContext<UserNode, NodeState> target, NodeState state) {
         UserNode unwrappedTarget = unwrap(target);
         unwrappedTarget.resolvedLabel = null;
         unwrappedTarget.encodedResolvedLabel = null;
@@ -83,8 +83,8 @@ class UserNodeListener implements NodeChangeListener<NodeContext<UserNode>> {
         }
     }
 
-    public void onMove(NodeContext<UserNode> target, NodeContext<UserNode> from, NodeContext<UserNode> to,
-            NodeContext<UserNode> previous) {
+    public void onMove(NodeContext<UserNode, NodeState> target, NodeContext<UserNode, NodeState> from, NodeContext<UserNode, NodeState> to,
+            NodeContext<UserNode, NodeState> previous) {
         UserNode unwrappedTarget = unwrap(target);
         unwrappedTarget.uri = null;
         if (next != null) {
@@ -92,7 +92,7 @@ class UserNodeListener implements NodeChangeListener<NodeContext<UserNode>> {
         }
     }
 
-    private UserNode unwrap(NodeContext<UserNode> context) {
+    private UserNode unwrap(NodeContext<UserNode, NodeState> context) {
         return context != null ? context.getNode() : null;
     }
 }

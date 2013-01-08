@@ -17,7 +17,11 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop.hierarchy;
+
+import java.io.Serializable;
+
+import org.exoplatform.portal.mop.navigation.NodeState;
 
 /**
  * <p>
@@ -33,34 +37,34 @@ package org.exoplatform.portal.mop.navigation;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface Scope {
+public interface Scope<S extends Serializable> {
 
     /**
      * The node without its children.
      */
-    Scope SINGLE = GenericScope.treeShape(0);
+    Scope<NodeState> SINGLE = GenericScope.treeShape(0);
 
     /**
      * A node and its chidren.
      */
-    Scope CHILDREN = GenericScope.treeShape(1);
+    Scope<NodeState> CHILDREN = GenericScope.treeShape(1);
 
     /**
      * A node, its chidren and grandchildren.
      */
-    Scope GRANDCHILDREN = GenericScope.treeShape(2);
+    Scope<NodeState> GRANDCHILDREN = GenericScope.treeShape(2);
 
     /**
      * The entire hierarchy, to use with care.
      */
-    Scope ALL = GenericScope.treeShape(-1);
+    Scope<NodeState> ALL = GenericScope.treeShape(-1);
 
-    Visitor get();
+    Visitor<S> get();
 
     /**
      * A scope visitor responsible for determining the loading of a node.
      */
-    interface Visitor {
+    interface Visitor<S extends Serializable> {
         /**
          * Signals a node is ented and returns the visit mode for that node.
          *
@@ -70,7 +74,7 @@ public interface Scope {
          * @param state the node state
          * @return the visit mode
          */
-        VisitMode enter(int depth, String id, String name, NodeState state);
+        VisitMode enter(int depth, String id, String name, S state);
 
         /**
          * Signals a node is left.
@@ -80,6 +84,6 @@ public interface Scope {
          * @param name the node name
          * @param state the node state
          */
-        void leave(int depth, String id, String name, NodeState state);
+        void leave(int depth, String id, String name, S state);
     }
 }

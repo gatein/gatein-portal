@@ -17,8 +17,9 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop.hierarchy;
 
+import java.io.Serializable;
 import java.util.AbstractCollection;
 import java.util.Collection;
 import java.util.Iterator;
@@ -29,10 +30,10 @@ import org.exoplatform.portal.tree.list.ListTree;
 /**
  * The context of a node.
  */
-public final class NodeContext<N> extends ListTree<NodeContext<N>> {
+public final class NodeContext<N, S extends Serializable> extends ListTree<NodeContext<N, S>> {
 
     /** The owner tree. */
-    final TreeContext<N> tree;
+    final TreeContext<N, S> tree;
 
     /** The related model node. */
     final N node;
@@ -41,13 +42,13 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
     String handle;
 
     /** A data snapshot. */
-    NodeData data;
+    NodeData<S> data;
 
     /** The new name if any. */
     String name;
 
     /** The new state if any. */
-    NodeState state;
+    S state;
 
     /** Whether or not this node is hidden. */
     private boolean hidden;
@@ -58,7 +59,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
     /** The expension value. */
     private boolean expanded;
 
-    NodeContext(NodeModel<N> model, NodeData data) {
+    NodeContext(NodeModel<N, S> model, NodeData<S> data) {
         if (data == null) {
             throw new NullPointerException();
         }
@@ -66,7 +67,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         //
         this.handle = data.id;
         this.name = null;
-        this.tree = new TreeContext<N>(model, this);
+        this.tree = new TreeContext<N, S>(model, this);
         this.node = tree.model.create(this);
         this.data = data;
         this.state = null;
@@ -75,7 +76,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         this.expanded = false;
     }
 
-    private NodeContext(TreeContext<N> tree, NodeData data) {
+    private NodeContext(TreeContext<N, S> tree, NodeData<S> data) {
         if (data == null) {
             throw new NullPointerException();
         }
@@ -92,7 +93,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         this.expanded = false;
     }
 
-    NodeContext(TreeContext<N> tree, String handle, String name, NodeState state, boolean expanded) {
+    NodeContext(TreeContext<N, S> tree, String handle, String name, S state, boolean expanded) {
         if (handle == null) {
             throw new NullPointerException();
         }
@@ -142,6 +143,10 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         return data != null ? data.getId() : null;
     }
 
+    public NodeData<S> getData() {
+        return data;
+    }
+
     /**
      * Returns the context index among its parent.
      *
@@ -149,7 +154,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
      */
     public int getIndex() {
         int count = 0;
-        for (NodeContext<N> node = getPrevious(); node != null; node = node.getPrevious()) {
+        for (NodeContext<N, S> node = getPrevious(); node != null; node = node.getPrevious()) {
             count++;
         }
         return count;
@@ -183,7 +188,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
      */
     public void setHidden(boolean hidden) {
         if (this.hidden != hidden) {
-            NodeContext<N> parent = getParent();
+            NodeContext<N, S> parent = getParent();
             if (parent != null) {
                 if (hidden) {
                     parent.hiddenCount++;
@@ -195,7 +200,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         }
     }
 
-    public NodeState getState() {
+    public S getState() {
         if (state != null) {
             return state;
         } else {
@@ -209,13 +214,13 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
      * @param state the new state
      * @throws NullPointerException if the state is null
      */
-    public void setState(NodeState state) throws NullPointerException {
+    public void setState(S state) throws NullPointerException {
         if (state == null) {
             throw new NullPointerException("No null state accepted");
         }
 
         //
-        tree.addChange(new NodeChange.Updated<NodeContext<N>>(this, state));
+        tree.addChange(new NodeChange.Updated<NodeContext<N, S>, S>(this, state));
     }
 
     public String getName() {
@@ -231,11 +236,11 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
      * @throws IllegalArgumentException if the parent already have a child with the specified name
      */
     public void setName(String name) throws NullPointerException, IllegalStateException, IllegalArgumentException {
-        NodeContext<N> parent = getParent();
+        NodeContext<N, S> parent = getParent();
         if (parent == null) {
             throw new IllegalStateException("Cannot rename a node when its parent is not visible");
         } else {
-            NodeContext<N> blah = parent.get(name);
+            NodeContext<N, S> blah = parent.get(name);
             if (blah != null) {
                 if (blah == this) {
                     // We do nothing
@@ -243,7 +248,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
                     throw new IllegalArgumentException("the node " + name + " already exist");
                 }
             } else {
-                tree.addChange(new NodeChange.Renamed<NodeContext<N>>(getParent(), this, name));
+                tree.addChange(new NodeChange.Renamed<NodeContext<N, S>, S>(getParent(), this, name));
             }
         }
     }
@@ -253,11 +258,11 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
      *
      * @param filter the filter to apply
      */
-    public void filter(NodeFilter filter) {
+    public void filter(NodeFilter<S> filter) {
 
         setHidden(!accept(filter));
         if (expanded) {
-            for (NodeContext<N> node = getFirst(); node != null; node = node.getNext()) {
+            for (NodeContext<N, S> node = getFirst(); node != null; node = node.getNext()) {
                 node.filter(filter);
             }
         }
@@ -269,7 +274,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
      * @param filter the filter to apply
      * @return true if the filter accepts this node
      */
-    public boolean accept(NodeFilter filter) {
+    public boolean accept(NodeFilter<S> filter) {
         return filter.accept(getDepth(), getId(), getName(), getState());
     }
 
@@ -281,12 +286,12 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
      * @throws IllegalArgumentException if the ancestor argument is not an ancestor
      * @throws NullPointerException if the ancestor argument is null
      */
-    public int getDepth(NodeContext<N> ancestor) throws IllegalArgumentException, NullPointerException {
+    public int getDepth(NodeContext<N, S> ancestor) throws IllegalArgumentException, NullPointerException {
         if (ancestor == null) {
             throw new NullPointerException();
         }
         int depth = 0;
-        for (NodeContext<N> current = this; current != null; current = current.getParent()) {
+        for (NodeContext<N, S> current = this; current != null; current = current.getParent()) {
             if (current == ancestor) {
                 return depth;
             } else {
@@ -296,18 +301,18 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         throw new IllegalArgumentException("Context " + ancestor + " is not an ancestor of " + this);
     }
 
-    public NodeContext<N> getDescendant(String handle) throws NullPointerException {
+    public NodeContext<N, S> getDescendant(String handle) throws NullPointerException {
         if (handle == null) {
             throw new NullPointerException();
         }
 
         //
-        NodeContext<N> found = null;
+        NodeContext<N, S> found = null;
         if (this.handle.equals(handle)) {
             found = this;
         } else {
             if (expanded) {
-                for (NodeContext<N> current = getFirst(); current != null; current = current.getNext()) {
+                for (NodeContext<N, S> current = getFirst(); current != null; current = current.getNext()) {
                     found = current.getDescendant(handle);
                     if (found != null) {
                         break;
@@ -318,7 +323,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         return found;
     }
 
-    public NodeContext<N> get(String name) throws NullPointerException, IllegalStateException {
+    public NodeContext<N, S> get(String name) throws NullPointerException, IllegalStateException {
         if (name == null) {
             throw new NullPointerException();
         }
@@ -327,7 +332,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         }
 
         //
-        for (NodeContext<N> node = getFirst(); node != null; node = node.getNext()) {
+        for (NodeContext<N, S> node = getFirst(); node != null; node = node.getNext()) {
             if (node.getName().equals(name)) {
                 return node;
             }
@@ -341,21 +346,26 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
      * Add a child node at the specified index with the specified name. If the index argument is null then the node is added at
      * the last position among the children otherwise the node is added at the specified index.
      *
+     *
      * @param index the index
      * @param name the node name
+     * @param state the node state
      * @return the created node
      * @throws NullPointerException if the model or the name is null
      * @throws IndexOutOfBoundsException if the index is negative or greater than the children size
      * @throws IllegalStateException if the children relationship does not exist
      */
-    public NodeContext<N> add(Integer index, String name) throws NullPointerException, IndexOutOfBoundsException,
+    public NodeContext<N, S> add(Integer index, String name, S state) throws NullPointerException, IndexOutOfBoundsException,
             IllegalStateException {
         if (name == null) {
             throw new NullPointerException("No null name accepted");
         }
+        if (state == null) {
+            throw new NullPointerException("No null state accepted");
+        }
 
         //
-        NodeContext<N> nodeContext = new NodeContext<N>(tree, "" + tree.sequence++, name, NodeState.INITIAL, true);
+        NodeContext<N, S> nodeContext = new NodeContext<N, S>(tree, "" + tree.sequence++, name, state, true);
         _add(index, nodeContext);
         return nodeContext;
     }
@@ -370,7 +380,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
      * @throws IndexOutOfBoundsException if the index is negative or greater than the children size
      * @throws IllegalStateException if the children relationship does not exist
      */
-    public void add(Integer index, NodeContext<N> context) throws NullPointerException, IndexOutOfBoundsException,
+    public void add(Integer index, NodeContext<N, S> context) throws NullPointerException, IndexOutOfBoundsException,
             IllegalStateException {
         if (context == null) {
             throw new NullPointerException("No null context argument accepted");
@@ -380,46 +390,46 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         _add(index, context);
     }
 
-    public NodeContext<N> insertLast(NodeData data) {
+    public NodeContext<N, S> insertLast(NodeData<S> data) {
         if (data == null) {
             throw new NullPointerException("No null data argument accepted");
         }
 
         //
-        NodeContext<N> context = new NodeContext<N>(tree, data);
+        NodeContext<N, S> context = new NodeContext<N, S>(tree, data);
         insertLast(context);
         return context;
     }
 
-    public NodeContext<N> insertAt(Integer index, NodeData data) {
+    public NodeContext<N, S> insertAt(Integer index, NodeData<S> data) {
         if (data == null) {
             throw new NullPointerException("No null data argument accepted");
         }
 
         //
-        NodeContext<N> context = new NodeContext<N>(tree, data);
+        NodeContext<N, S> context = new NodeContext<N, S>(tree, data);
         insertAt(index, context);
         return context;
     }
 
-    public NodeContext<N> insertAfter(NodeData data) {
+    public NodeContext<N, S> insertAfter(NodeData<S> data) {
         if (data == null) {
             throw new NullPointerException("No null data argument accepted");
         }
 
         //
-        NodeContext<N> context = new NodeContext<N>(tree, data);
+        NodeContext<N, S> context = new NodeContext<N, S>(tree, data);
         insertAfter(context);
         return context;
     }
 
-    private void _add(final Integer index, NodeContext<N> child) {
-        NodeContext<N> previousParent = child.getParent();
+    private void _add(final Integer index, NodeContext<N, S> child) {
+        NodeContext<N, S> previousParent = child.getParent();
 
         //
-        NodeContext<N> previous;
+        NodeContext<N, S> previous;
         if (index == null) {
-            NodeContext<N> before = getLast();
+            NodeContext<N, S> before = getLast();
             while (before != null && before.isHidden()) {
                 before = before.getPrevious();
             }
@@ -433,7 +443,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         } else if (index == 0) {
             previous = null;
         } else {
-            NodeContext<N> before = getFirst();
+            NodeContext<N, S> before = getFirst();
             if (before == null) {
                 throw new IndexOutOfBoundsException("Index " + index + " is greater than 0");
             }
@@ -449,10 +459,10 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
 
         //
         if (previousParent != null) {
-            tree.addChange(new NodeChange.Moved<NodeContext<N>>(previousParent, this, previous, child));
+            tree.addChange(new NodeChange.Moved<NodeContext<N, S>, S>(previousParent, this, previous, child));
         } else {
             // The name should never be null as it's a newly created node
-            tree.addChange(new NodeChange.Created<NodeContext<N>>(this, previous, child, child.name));
+            tree.addChange(new NodeChange.Created<NodeContext<N, S>, S>(this, previous, child, child.name, child.state));
         }
     }
 
@@ -489,12 +499,12 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
     }
 
     public N getParentNode() {
-        NodeContext<N> parent = getParent();
+        NodeContext<N, S> parent = getParent();
         return parent != null ? parent.node : null;
     }
 
     public N getNode(String name) throws NullPointerException {
-        NodeContext<N> child = get(name);
+        NodeContext<N, S> child = get(name);
         return child != null && !child.hidden ? child.node : null;
     }
 
@@ -505,7 +515,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         if (!expanded) {
             throw new IllegalStateException("No children relationship");
         }
-        NodeContext<N> context = getFirst();
+        NodeContext<N, S> context = getFirst();
         while (context != null && (context.hidden || index-- > 0)) {
             context = context.getNext();
         }
@@ -517,13 +527,13 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
     }
 
     public N getDescendantNode(String handle) throws NullPointerException {
-        NodeContext<N> descendant = getDescendant(handle);
+        NodeContext<N, S> descendant = getDescendant(handle);
         return descendant != null && !descendant.hidden ? descendant.node : null;
     }
 
     public Iterator<N> iterator() {
         return new Iterator<N>() {
-            NodeContext<N> next = getFirst();
+            NodeContext<N, S> next = getFirst();
             {
                 while (next != null && next.isHidden()) {
                     next = next.getNext();
@@ -536,7 +546,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
 
             public N next() {
                 if (next != null) {
-                    NodeContext<N> tmp = next;
+                    NodeContext<N, S> tmp = next;
                     do {
                         next = next.getNext();
                     } while (next != null && next.isHidden());
@@ -584,7 +594,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
      * @throws IllegalStateException if the children relationship does not exist
      */
     public boolean removeNode(String name) throws NullPointerException, IllegalArgumentException, IllegalStateException {
-        NodeContext<N> node = get(name);
+        NodeContext<N, S> node = get(name);
         if (node == null) {
             throw new IllegalArgumentException("Cannot remove non existent " + name + " child");
         }
@@ -603,7 +613,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         if (hidden) {
             return false;
         } else {
-            tree.addChange(new NodeChange.Destroyed<NodeContext<N>>(getParent(), this));
+            tree.addChange(new NodeChange.Destroyed<NodeContext<N, S>, S>(getParent(), this));
 
             //
             return true;
@@ -612,27 +622,27 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
 
     // Callbacks
 
-    protected void beforeRemove(NodeContext<N> context) {
+    protected void beforeRemove(NodeContext<N, S> context) {
         if (!expanded) {
             throw new IllegalStateException();
         }
     }
 
-    protected void beforeInsert(NodeContext<N> context) {
+    protected void beforeInsert(NodeContext<N, S> context) {
         if (!expanded) {
             throw new IllegalStateException("No children relationship");
         }
 
         //
         if (!tree.editMode) {
-            NodeContext<N> existing = get(context.getName());
+            NodeContext<N, S> existing = get(context.getName());
             if (existing != null && existing != context) {
                 throw new IllegalArgumentException("Tree " + context.getName() + " already in the map");
             }
         }
     }
 
-    protected void afterInsert(NodeContext<N> context) {
+    protected void afterInsert(NodeContext<N, S> context) {
         super.afterInsert(context);
 
         //
@@ -641,7 +651,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         }
     }
 
-    protected void afterRemove(NodeContext<N> context) {
+    protected void afterRemove(NodeContext<N, S> context) {
         if (context.hidden) {
             hiddenCount--;
         }
@@ -665,7 +675,7 @@ public final class NodeContext<N> extends ListTree<NodeContext<N>> {
         sb.append("NodeContext[id=").append(getId()).append(",name=").append(getName());
         if (expanded && depth > 0) {
             sb.append(",children={");
-            for (NodeContext<N> current = getFirst(); current != null; current = current.getNext()) {
+            for (NodeContext<N, S> current = getFirst(); current != null; current = current.getNext()) {
                 if (current.getPrevious() != null) {
                     sb.append(',');
                 }

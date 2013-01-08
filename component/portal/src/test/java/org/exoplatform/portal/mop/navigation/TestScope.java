@@ -21,6 +21,9 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.hierarchy.GenericScope;
+import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.exoplatform.portal.mop.hierarchy.VisitMode;
 import org.exoplatform.portal.mop.page.PageKey;
 
 /**
@@ -33,8 +36,8 @@ public class TestScope extends AbstractGateInTest {
         NodeState nodeState = new NodeState("", null, -1, -1, Visibility.DISPLAYED, PageKey.parse("portal::classic::home"));
 
         //
-        Scope scope0 = GenericScope.branchShape(new String[0], Scope.CHILDREN);
-        Scope.Visitor visitor0 = scope0.get();
+        Scope<NodeState> scope0 = GenericScope.branchShape(new String[0], Scope.CHILDREN);
+        Scope.Visitor<NodeState> visitor0 = scope0.get();
         assertEquals(VisitMode.ALL_CHILDREN, visitor0.enter(0, "0", "", nodeState));
         assertEquals(VisitMode.NO_CHILDREN, visitor0.enter(1, "1", "a", nodeState));
 
@@ -44,8 +47,8 @@ public class TestScope extends AbstractGateInTest {
         assertEquals(VisitMode.NO_CHILDREN, visitor0.enter(0, "0", "", nodeState));
 
         //
-        Scope scope1 = GenericScope.branchShape(new String[] { "a" }, Scope.CHILDREN);
-        Scope.Visitor visitor1 = scope1.get();
+        Scope<NodeState> scope1 = GenericScope.branchShape(new String[] { "a" }, Scope.CHILDREN);
+        Scope.Visitor<NodeState> visitor1 = scope1.get();
         assertEquals(VisitMode.ALL_CHILDREN, visitor1.enter(0, "0", "", nodeState));
         assertEquals(VisitMode.ALL_CHILDREN, visitor1.enter(1, "1", "a", nodeState));
         assertEquals(VisitMode.NO_CHILDREN, visitor1.enter(1, "2", "b", nodeState));
@@ -58,8 +61,8 @@ public class TestScope extends AbstractGateInTest {
         assertEquals(VisitMode.NO_CHILDREN, visitor1.enter(1, "2", "b", nodeState));
 
         //
-        Scope scope2 = GenericScope.branchShape(new String[] { "a", "c" }, Scope.SINGLE);
-        Scope.Visitor visitor2 = scope2.get();
+        Scope<NodeState> scope2 = GenericScope.branchShape(new String[] { "a", "c" }, Scope.SINGLE);
+        Scope.Visitor<NodeState> visitor2 = scope2.get();
         assertEquals(VisitMode.ALL_CHILDREN, visitor2.enter(0, "0", "", nodeState));
         assertEquals(VisitMode.ALL_CHILDREN, visitor2.enter(1, "1", "a", nodeState));
         assertEquals(VisitMode.NO_CHILDREN, visitor2.enter(1, "2", "b", nodeState));

@@ -29,9 +29,10 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.AbstractTestNavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationState;
-import org.exoplatform.portal.mop.navigation.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeModel;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeModel;
+import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.core.api.MOPService;
 
@@ -49,7 +50,7 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
         NavigationContext ctx = new NavigationContext(SiteKey.portal("remove_orphan"), new NavigationState(1));
         service.saveNavigation(ctx);
         NodeContext root = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null);
-        root.add(0, "foo").add(0, "bar");
+        root.add(0, "foo", NodeState.INITIAL).add(0, "bar", NodeState.INITIAL);
         service.saveNode(root, null);
 
         //
@@ -72,7 +73,7 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
         NavigationContext ctx = new NavigationContext(SiteKey.portal("create_missing_path"), new NavigationState(1));
         service.saveNavigation(ctx);
         NodeContext root = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null);
-        root.add(0, "foo").add(0, "bar");
+        root.add(0, "foo", NodeState.INITIAL).add(0, "bar", NodeState.INITIAL);
         service.saveNode(root, null);
 
         //

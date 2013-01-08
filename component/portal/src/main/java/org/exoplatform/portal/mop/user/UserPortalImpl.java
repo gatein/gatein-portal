@@ -30,14 +30,14 @@ import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.navigation.GenericScope;
+import org.exoplatform.portal.mop.hierarchy.GenericScope;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationServiceException;
-import org.exoplatform.portal.mop.navigation.NodeChangeListener;
-import org.exoplatform.portal.mop.navigation.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeState;
-import org.exoplatform.portal.mop.navigation.Scope;
-import org.exoplatform.portal.mop.navigation.VisitMode;
+import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.exoplatform.portal.mop.hierarchy.VisitMode;
 import org.exoplatform.services.organization.Group;
 
 /**
@@ -174,10 +174,10 @@ public class UserPortalImpl implements UserPortal {
         navigations = null;
     }
 
-    public UserNode getNode(UserNavigation userNavigation, Scope scope, UserNodeFilterConfig filterConfig,
-            NodeChangeListener<UserNode> listener) throws NullPointerException, UserPortalException, NavigationServiceException {
+    public UserNode getNode(UserNavigation userNavigation, Scope<NodeState> scope, UserNodeFilterConfig filterConfig,
+            NodeChangeListener<UserNode, NodeState> listener) throws NullPointerException, UserPortalException, NavigationServiceException {
         UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
-        NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, userNavigation.navigation, scope,
+        NodeContext<UserNode, NodeState> nodeContext = service.getNavigationService().loadNode(context, userNavigation.navigation, scope,
                 new UserNodeListener(listener));
         if (nodeContext != null) {
             return nodeContext.getNode().filter();
@@ -186,7 +186,7 @@ public class UserPortalImpl implements UserPortal {
         }
     }
 
-    public void updateNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws NullPointerException,
+    public void updateNode(UserNode node, Scope<NodeState> scope, NodeChangeListener<UserNode, NodeState> listener) throws NullPointerException,
             IllegalArgumentException, UserPortalException, NavigationServiceException {
         if (node == null) {
             throw new NullPointerException("No null node accepted");
@@ -195,7 +195,7 @@ public class UserPortalImpl implements UserPortal {
         node.filter();
     }
 
-    public void rebaseNode(UserNode node, Scope scope, NodeChangeListener<UserNode> listener) throws NullPointerException,
+    public void rebaseNode(UserNode node, Scope<NodeState> scope, NodeChangeListener<UserNode, NodeState> listener) throws NullPointerException,
             IllegalArgumentException, UserPortalException, NavigationServiceException {
         if (node == null) {
             throw new NullPointerException("No null node accepted");
@@ -204,7 +204,7 @@ public class UserPortalImpl implements UserPortal {
         node.filter();
     }
 
-    public void saveNode(UserNode node, NodeChangeListener<UserNode> listener) throws NullPointerException,
+    public void saveNode(UserNode node, NodeChangeListener<UserNode, NodeState> listener) throws NullPointerException,
             UserPortalException, NavigationServiceException {
         if (node == null) {
             throw new NullPointerException("No null node accepted");
@@ -216,7 +216,7 @@ public class UserPortalImpl implements UserPortal {
     /**
      * Note : the scope implementation is not stateless but we don't care in this case.
      */
-    private class MatchingScope extends GenericScope.Branch.Visitor implements Scope {
+    private class MatchingScope extends GenericScope.Branch.Visitor implements Scope<NodeState> {
         final UserNavigation userNavigation;
         final UserNodeFilterConfig filterConfig;
         final String[] match;
@@ -230,7 +230,7 @@ public class UserPortalImpl implements UserPortal {
             this.match = match;
         }
 
-        public Visitor get() {
+        public Visitor<NodeState> get() {
             return this;
         }
 
@@ -245,13 +245,13 @@ public class UserPortalImpl implements UserPortal {
         }
 
         @Override
-        protected Visitor getFederated() {
+        protected Visitor<NodeState> getFederated() {
             return Scope.CHILDREN.get();
         }
 
         void resolve() throws NavigationServiceException {
             UserNodeContext context = new UserNodeContext(userNavigation, filterConfig);
-            NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, userNavigation.navigation,
+            NodeContext<UserNode, NodeState> nodeContext = service.getNavigationService().loadNode(context, userNavigation.navigation,
                     this, null);
             if (score > 0) {
                 userNode = nodeContext.getNode().filter().find(id);
@@ -290,7 +290,7 @@ public class UserPortalImpl implements UserPortal {
         NavigationContext navigation = userNavigation.navigation;
         if (navigation.getState() != null) {
             UserNodeContext context = new UserNodeContext(userNavigation, null);
-            NodeContext<UserNode> nodeContext = service.getNavigationService().loadNode(context, navigation, Scope.CHILDREN,
+            NodeContext<UserNode, NodeState> nodeContext = service.getNavigationService().loadNode(context, navigation, Scope.CHILDREN,
                     null);
             if (nodeContext != null) {
                 UserNode root = nodeContext.getNode();

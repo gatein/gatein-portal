@@ -34,10 +34,11 @@ import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.navigation.AbstractTestNavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
-import org.exoplatform.portal.mop.navigation.Node;
-import org.exoplatform.portal.mop.navigation.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeModel;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.Node;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeModel;
+import org.exoplatform.portal.mop.navigation.NodeState;
+import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.gatein.common.util.Tools;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.core.api.MOPService;
@@ -98,8 +99,8 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
 
         //
         NavigationContext ctx = service.loadNavigation(SiteKey.portal("insert_navigation"));
-        NodeContext<?> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
-        NodeContext<?> a = node.get("a");
+        NodeContext<?, NodeState> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
+        NodeContext<?, NodeState> a = node.get("a");
         assertNotNull(a);
         assertEquals("a", a.getName());
         assertEquals("a", a.getState().getLabel());
@@ -125,8 +126,8 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
 
         //
         NavigationContext ctx = service.loadNavigation(SiteKey.portal("insert_fragment"));
-        NodeContext<?> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
-        NodeContext<?> a = node.get("a");
+        NodeContext<?, NodeState> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
+        NodeContext<?, NodeState> a = node.get("a");
         assertNotNull(a);
         assertEquals("a", a.getName());
         assertEquals("a", a.getState().getLabel());
@@ -253,7 +254,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
 
         //
         NavigationContext ctx = service.loadNavigation(SiteKey.portal("order"));
-        NodeContext<?> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
+        NodeContext<?, NodeState> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
         assertEquals(3, node.getNodeCount());
         assertEquals("a", node.get(0).getName());
         assertEquals("b", node.get(1).getName());
@@ -311,10 +312,10 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
 
         //
         NavigationContext ctx = service.loadNavigation(SiteKey.portal("extended_label"));
-        NodeContext<?> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
+        NodeContext<?, NodeState> node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
 
         // The fully explicit case
-        NodeContext<?> a = (NodeContext<?>) node.getNode("a");
+        NodeContext<?, NodeState> a = (NodeContext<?, NodeState>) node.getNode("a");
         Map<Locale, Described.State> aDesc = descriptionService.getDescriptions(a.getId());
         assertNotNull(aDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), aDesc.keySet());
@@ -323,7 +324,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         assertNull(a.getState().getLabel());
 
         // No explicit language means to use the portal locale
-        NodeContext<?> b = (NodeContext<?>) node.getNode("b");
+        NodeContext<?, NodeState> b = (NodeContext<?, NodeState>) node.getNode("b");
         Map<Locale, Described.State> bDesc = descriptionService.getDescriptions(b.getId());
         assertNotNull(bDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), bDesc.keySet());
@@ -332,7 +333,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         assertNull(b.getState().getLabel());
 
         // The simple use case : one single label without the xml:lang attribute
-        NodeContext<?> c = (NodeContext<?>) node.getNode("c");
+        NodeContext<?, NodeState> c = (NodeContext<?, NodeState>) node.getNode("c");
         Map<Locale, Described.State> cDesc = descriptionService.getDescriptions(c.getId());
         assertNull(cDesc);
         assertEquals("c_en", c.getState().getLabel());
@@ -356,7 +357,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
 
         // The fully explicit case
-        a = (NodeContext<?>) node.getNode("a");
+        a = (NodeContext<?, NodeState>) node.getNode("a");
         aDesc = descriptionService.getDescriptions(a.getId());
         assertNotNull(aDesc);
         assertEquals(Tools.toSet(Locale.ITALIAN, Locale.GERMAN), aDesc.keySet());
@@ -365,7 +366,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         assertNull(a.getState().getLabel());
 
         // No explicit language means to use the portal locale
-        b = (NodeContext<?>) node.getNode("b");
+        b = (NodeContext<?, NodeState>) node.getNode("b");
         bDesc = descriptionService.getDescriptions(b.getId());
         assertNotNull(bDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.ITALIAN), bDesc.keySet());
@@ -374,7 +375,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         assertNull(b.getState().getLabel());
 
         // The simple use case : one single label without the xml:lang attribute
-        c = (NodeContext<?>) node.getNode("c");
+        c = (NodeContext<?, NodeState>) node.getNode("c");
         cDesc = descriptionService.getDescriptions(c.getId());
         assertNull(cDesc);
         assertEquals("foo_c_en", c.getState().getLabel());
@@ -400,7 +401,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         node = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null).getNode();
 
         // The fully explicit case
-        a = (NodeContext<?>) node.getNode("a");
+        a = (NodeContext<?, NodeState>) node.getNode("a");
         aDesc = descriptionService.getDescriptions(a.getId());
         assertNotNull(aDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), aDesc.keySet());
@@ -409,7 +410,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         assertNull(a.getState().getLabel());
 
         // No explicit language means to use the portal locale
-        b = (NodeContext<?>) node.getNode("b");
+        b = (NodeContext<?, NodeState>) node.getNode("b");
         bDesc = descriptionService.getDescriptions(b.getId());
         assertNotNull(bDesc);
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), bDesc.keySet());
@@ -418,7 +419,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         assertNull(b.getState().getLabel());
 
         // The simple use case : one single label without the xml:lang attribute
-        c = (NodeContext<?>) node.getNode("c");
+        c = (NodeContext<?, NodeState>) node.getNode("c");
         cDesc = descriptionService.getDescriptions(c.getId());
         assertNull(cDesc);
         assertEquals("bar_c_en", c.getState().getLabel());
@@ -444,19 +445,19 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
 
         //
         NavigationContext ctx = service.loadNavigation(SiteKey.portal("full_navigation"));
-        NodeContext<NodeContext<?>> root = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null);
+        NodeContext<NodeContext<?, NodeState>, NodeState> root = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null);
         assertEquals(3, root.getNodeSize());
-        Iterator<NodeContext<?>> i = root.iterator();
-        NodeContext<?> a = i.next();
+        Iterator<NodeContext<?, NodeState>> i = root.iterator();
+        NodeContext<?, NodeState> a = i.next();
         assertEquals("a", a.getName());
         assertEquals(1, a.getNodeSize());
-        NodeContext<?> d = a.get("d");
+        NodeContext<?, NodeState> d = a.get("d");
         assertNotNull(d);
         assertEquals(0, d.getNodeSize());
-        NodeContext<?> b = i.next();
+        NodeContext<?, NodeState> b = i.next();
         assertEquals("b", b.getName());
         assertEquals(0, b.getNodeSize());
-        NodeContext<?> c = i.next();
+        NodeContext<?, NodeState> c = i.next();
         assertEquals("c", c.getName());
         assertEquals(0, c.getNodeSize());
         assertFalse(i.hasNext());

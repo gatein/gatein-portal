@@ -21,10 +21,11 @@ package org.exoplatform.portal.webui.navigation;
 
 import java.util.Iterator;
 
-import org.exoplatform.portal.mop.navigation.GenericScope;
-import org.exoplatform.portal.mop.navigation.NodeChange;
-import org.exoplatform.portal.mop.navigation.NodeChangeQueue;
-import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.hierarchy.GenericScope;
+import org.exoplatform.portal.mop.hierarchy.NodeChange;
+import org.exoplatform.portal.mop.hierarchy.NodeChangeQueue;
+import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
@@ -96,7 +97,7 @@ public class UIPageNodeSelector extends UIContainer {
             return null;
         }
 
-        NodeChangeQueue<UserNode> queue = new NodeChangeQueue<UserNode>();
+        NodeChangeQueue<UserNode, NodeState> queue = new NodeChangeQueue<UserNode, NodeState>();
         if (node.getParent() != null) {
             // The node may be resolved by UserPortal#resolvePath and this will filter all sibling nodes
             // We need to update from parent to make sure all sibling nodes can be retrieved
@@ -105,9 +106,9 @@ public class UIPageNodeSelector extends UIContainer {
             userPortal.updateNode(node, Scope.GRANDCHILDREN, queue);
         }
 
-        for (NodeChange<UserNode> change : queue) {
+        for (NodeChange<UserNode, NodeState> change : queue) {
             if (change instanceof NodeChange.Removed) {
-                UserNode deletedNode = ((NodeChange.Removed<UserNode>) change).getTarget();
+                UserNode deletedNode = ((NodeChange.Removed<UserNode, NodeState>) change).getTarget();
                 if (findUserNodeByURI(deletedNode, node.getURI()) != null) {
                     return null;
                 }

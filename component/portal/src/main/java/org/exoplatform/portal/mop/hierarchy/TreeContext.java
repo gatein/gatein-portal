@@ -17,14 +17,17 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop.hierarchy;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+
+import org.exoplatform.portal.mop.navigation.NavigationServiceException;
 
 
 /**
@@ -44,13 +47,13 @@ import java.util.Map;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>> {
+class TreeContext<N, S extends Serializable> implements Scope.Visitor<S>, NodeChangeListener<NodeContext<N, S>, S> {
 
     /** . */
-    private NodeChangeQueue<NodeContext<N>> changes;
+    private NodeChangeQueue<NodeContext<N, S>, S> changes;
 
     /** . */
-    final NodeModel<N> model;
+    final NodeModel<N, S> model;
 
     /** . */
     boolean editMode;
@@ -59,21 +62,21 @@ class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>
     int sequence;
 
     /** . */
-    final NodeContext<N> root;
+    final NodeContext<N, S> root;
 
-    TreeContext(NodeModel<N> model, NodeContext<N> root) {
+    TreeContext(NodeModel<N, S> model, NodeContext<N, S> root) {
         this.model = model;
         this.editMode = false;
         this.sequence = 0;
         this.root = root;
     }
 
-    public NodeChangeQueue<NodeContext<N>> getChanges() {
+    public NodeChangeQueue<NodeContext<N, S>, S> getChanges() {
         return changes;
     }
 
     // Improve that method if we can
-    Scope.Visitor origin() {
+    Scope.Visitor<S> origin() {
 
         final Map<String, Boolean> map = new HashMap<String, Boolean>();
 
@@ -82,45 +85,45 @@ class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>
 
         //
         if (changes != null) {
-            ListIterator<NodeChange<NodeContext<N>>> it = changes.listIterator(changes.size());
+            ListIterator<NodeChange<NodeContext<N, S>, S>> it = changes.listIterator(changes.size());
             while (it.hasPrevious()) {
-                NodeChange<NodeContext<N>> change = it.previous();
-                if (change instanceof NodeChange.Created<?>) {
-                    NodeChange.Created<NodeContext<N>> created = (NodeChange.Created<NodeContext<N>>) change;
+                NodeChange<NodeContext<N, S>, S> change = it.previous();
+                if (change instanceof NodeChange.Created<?, ?>) {
+                    NodeChange.Created<NodeContext<N, S>, S> created = (NodeChange.Created<NodeContext<N, S>, S>) change;
                     map.remove(created.target.handle);
-                } else if (change instanceof NodeChange.Destroyed<?>) {
-                    NodeChange.Destroyed<NodeContext<N>> destroyed = (NodeChange.Destroyed<NodeContext<N>>) change;
+                } else if (change instanceof NodeChange.Destroyed<?, ?>) {
+                    NodeChange.Destroyed<NodeContext<N, S>, S> destroyed = (NodeChange.Destroyed<NodeContext<N, S>, S>) change;
                     map.put(destroyed.target.handle, Boolean.TRUE);
                 }
             }
         }
 
         //
-        return new Scope.Visitor() {
-            public VisitMode enter(int depth, String id, String name, NodeState state) {
+        return new Scope.Visitor<S>() {
+            public VisitMode enter(int depth, String id, String name, S state) {
                 return map.containsKey(id) ? VisitMode.ALL_CHILDREN : VisitMode.NO_CHILDREN;
             }
 
-            public void leave(int depth, String id, String name, NodeState state) {
+            public void leave(int depth, String id, String name, S state) {
             }
         };
     }
 
-    private void populate(Map<String, Boolean> map, NodeContext<N> ctx) {
+    private void populate(Map<String, Boolean> map, NodeContext<N, S> ctx) {
         if (ctx.isExpanded()) {
             map.put(ctx.handle, Boolean.TRUE);
-            for (NodeContext<N> current = ctx.getFirst(); current != null; current = current.getNext()) {
+            for (NodeContext<N, S> current = ctx.getFirst(); current != null; current = current.getNext()) {
                 populate(map, current);
             }
         }
     }
 
-    void addChange(NodeChange<NodeContext<N>> change) {
+    void addChange(NodeChange<NodeContext<N, S>, S> change) {
         if (editMode) {
             throw new AssertionError();
         }
         if (changes == null) {
-            changes = new NodeChangeQueue<NodeContext<N>>();
+            changes = new NodeChangeQueue<NodeContext<N, S>, S>();
         }
 
         //
@@ -130,28 +133,28 @@ class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>
         }
 
         // Perform state modification here
-        if (change instanceof NodeChange.Renamed<?>) {
-            NodeChange.Renamed<NodeContext<N>> renamed = (NodeChange.Renamed<NodeContext<N>>) change;
+        if (change instanceof NodeChange.Renamed<?, ?>) {
+            NodeChange.Renamed<NodeContext<N, S>, S> renamed = (NodeChange.Renamed<NodeContext<N, S>, S>) change;
             renamed.target.name = renamed.name;
-        } else if (change instanceof NodeChange.Created<?>) {
-            NodeChange.Created<NodeContext<N>> added = (NodeChange.Created<NodeContext<N>>) change;
+        } else if (change instanceof NodeChange.Created<?, ?>) {
+            NodeChange.Created<NodeContext<N, S>, S> added = (NodeChange.Created<NodeContext<N, S>, S>) change;
             if (added.previous != null) {
                 added.previous.insertAfter(added.target);
             } else {
                 added.parent.insertAt(0, added.target);
             }
-        } else if (change instanceof NodeChange.Moved<?>) {
-            NodeChange.Moved<NodeContext<N>> moved = (NodeChange.Moved<NodeContext<N>>) change;
+        } else if (change instanceof NodeChange.Moved<?, ?>) {
+            NodeChange.Moved<NodeContext<N, S>, S> moved = (NodeChange.Moved<NodeContext<N, S>, S>) change;
             if (moved.previous != null) {
                 moved.previous.insertAfter(moved.target);
             } else {
                 moved.to.insertAt(0, moved.target);
             }
-        } else if (change instanceof NodeChange.Destroyed<?>) {
-            NodeChange.Destroyed<NodeContext<N>> removed = (NodeChange.Destroyed<NodeContext<N>>) change;
+        } else if (change instanceof NodeChange.Destroyed<?, ?>) {
+            NodeChange.Destroyed<NodeContext<N, S>, S> removed = (NodeChange.Destroyed<NodeContext<N, S>, S>) change;
             removed.target.remove();
-        } else if (change instanceof NodeChange.Updated<?>) {
-            NodeChange.Updated<NodeContext<N>> updated = (NodeChange.Updated<NodeContext<N>>) change;
+        } else if (change instanceof NodeChange.Updated<?, ?>) {
+            NodeChange.Updated<NodeContext<N, S>, S> updated = (NodeChange.Updated<NodeContext<N, S>, S>) change;
             updated.target.state = updated.state;
         }
 
@@ -163,7 +166,7 @@ class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>
         return changes != null && changes.size() > 0;
     }
 
-    List<NodeChange<NodeContext<N>>> peekChanges() {
+    List<NodeChange<NodeContext<N, S>, S>> peekChanges() {
         if (hasChanges()) {
             return changes;
         } else {
@@ -171,9 +174,9 @@ class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>
         }
     }
 
-    List<NodeChange<NodeContext<N>>> popChanges() {
+    List<NodeChange<NodeContext<N, S>, S>> popChanges() {
         if (hasChanges()) {
-            LinkedList<NodeChange<NodeContext<N>>> tmp = changes;
+            LinkedList<NodeChange<NodeContext<N, S>, S>> tmp = changes;
             changes = null;
             return tmp;
         } else {
@@ -181,18 +184,18 @@ class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>
         }
     }
 
-    NodeContext<N> getNode(String handle) {
+    NodeContext<N, S> getNode(String handle) {
         return root.getDescendant(handle);
     }
 
-    NodeContext<N> create(String handle, String name, NodeState state) {
-        return new NodeContext<N>(this, handle, name, state, true);
+    NodeContext<N, S> create(String handle, String name, S state) {
+        return new NodeContext<N, S>(this, handle, name, state, true);
     }
 
     // Scope.Visitor implementation -------------------------------------------------------------------------------------
 
-    public VisitMode enter(int depth, String id, String name, NodeState state) {
-        NodeContext<N> descendant = root.getDescendant(id);
+    public VisitMode enter(int depth, String id, String name, S state) {
+        NodeContext<N, S> descendant = root.getDescendant(id);
         if (descendant != null) {
             return descendant.isExpanded() ? VisitMode.ALL_CHILDREN : VisitMode.NO_CHILDREN;
         } else {
@@ -200,38 +203,38 @@ class TreeContext<N> implements Scope.Visitor, NodeChangeListener<NodeContext<N>
         }
     }
 
-    public void leave(int depth, String id, String name, NodeState state) {
+    public void leave(int depth, String id, String name, S state) {
     }
 
     //
 
-    public void onCreate(NodeContext<N> target, NodeContext<N> parent, NodeContext<N> previous, String name)
+    public void onCreate(NodeContext<N, S> target, NodeContext<N, S> parent, NodeContext<N, S> previous, String name, S state)
             throws NavigationServiceException {
-        addChange(new NodeChange.Created<NodeContext<N>>(parent, previous, target, name));
+        addChange(new NodeChange.Created<NodeContext<N, S>, S>(parent, previous, target, name, state));
     }
 
-    public void onDestroy(NodeContext<N> target, NodeContext<N> parent) {
-        addChange(new NodeChange.Destroyed<NodeContext<N>>(parent, target));
+    public void onDestroy(NodeContext<N, S> target, NodeContext<N, S> parent) {
+        addChange(new NodeChange.Destroyed<NodeContext<N, S>, S>(parent, target));
     }
 
-    public void onRename(NodeContext<N> target, NodeContext<N> parent, String name) throws NavigationServiceException {
-        addChange(new NodeChange.Renamed<NodeContext<N>>(parent, target, name));
+    public void onRename(NodeContext<N, S> target, NodeContext<N, S> parent, String name) throws NavigationServiceException {
+        addChange(new NodeChange.Renamed<NodeContext<N, S>, S>(parent, target, name));
     }
 
-    public void onUpdate(NodeContext<N> target, NodeState state) throws NavigationServiceException {
-        addChange(new NodeChange.Updated<NodeContext<N>>(target, state));
+    public void onUpdate(NodeContext<N, S> target, S state) throws NavigationServiceException {
+        addChange(new NodeChange.Updated<NodeContext<N, S>, S>(target, state));
     }
 
-    public void onMove(NodeContext<N> target, NodeContext<N> from, NodeContext<N> to, NodeContext<N> previous)
+    public void onMove(NodeContext<N, S> target, NodeContext<N, S> from, NodeContext<N, S> to, NodeContext<N, S> previous)
             throws NavigationServiceException {
-        addChange(new NodeChange.Moved<NodeContext<N>>(from, to, previous, target));
+        addChange(new NodeChange.Moved<NodeContext<N, S>, S>(from, to, previous, target));
     }
 
-    public void onAdd(NodeContext<N> target, NodeContext<N> parent, NodeContext<N> previous) {
+    public void onAdd(NodeContext<N, S> target, NodeContext<N, S> parent, NodeContext<N, S> previous) {
         throw new UnsupportedOperationException();
     }
 
-    public void onRemove(NodeContext<N> target, NodeContext<N> parent) {
+    public void onRemove(NodeContext<N, S> target, NodeContext<N, S> parent) {
         throw new UnsupportedOperationException();
     }
 }

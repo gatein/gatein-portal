@@ -19,13 +19,14 @@
 
 package org.exoplatform.portal.mop.user;
 
-import org.exoplatform.portal.mop.navigation.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeModel;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeModel;
+import org.exoplatform.portal.mop.navigation.NodeState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class UserNodeContext implements NodeModel<UserNode> {
+class UserNodeContext implements NodeModel<UserNode, NodeState> {
 
     /** The related navigation. */
     final UserNavigation navigation;
@@ -41,11 +42,11 @@ class UserNodeContext implements NodeModel<UserNode> {
         this.navigation = navigation;
     }
 
-    public NodeContext<UserNode> getContext(UserNode node) {
+    public NodeContext<UserNode, NodeState> getContext(UserNode node) {
         return node.context;
     }
 
-    public UserNode create(NodeContext<UserNode> context) {
+    public UserNode create(NodeContext<UserNode, NodeState> context) {
         return new UserNode(this, context);
     }
 

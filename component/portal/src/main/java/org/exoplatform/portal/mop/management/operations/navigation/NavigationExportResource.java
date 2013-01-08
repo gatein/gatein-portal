@@ -30,7 +30,8 @@ import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.management.exportimport.NavigationExportTask;
 import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.navigation.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.gatein.management.api.ContentType;
 import org.gatein.management.api.PathTemplateFilter;
 import org.gatein.management.api.binding.BindingProvider;
@@ -75,7 +76,7 @@ public class NavigationExportResource extends AbstractNavigationOperationHandler
             NavigationKey navigationKey = new NavigationKey(siteKey, navUri);
 
             // Find navigation first
-            NodeContext<?> context = NavigationUtils.loadNode(navigationService, navigationService.loadNavigation(siteKey),
+            NodeContext<?, NodeState> context = NavigationUtils.loadNode(navigationService, navigationService.loadNavigation(siteKey),
                     navigationKey.getNavUri());
             if (context == null)
                 throw new ResourceNotFoundException("Navigation node not found for navigation uri '" + navUri + "'");

@@ -17,31 +17,33 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop.hierarchy;
+
+import java.io.Serializable;
 
 /**
  * A visitor implementation that federates a scope along with a federation root.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class FederatingVisitor<N> implements Scope.Visitor {
+class FederatingVisitor<N, S extends Serializable> implements Scope.Visitor<S> {
 
     /** . */
-    private final Scope.Visitor visitor;
+    private final Scope.Visitor<S> visitor;
 
     /** . */
-    private final NodeContext<N> federationRoot;
+    private final NodeContext<N, S> federationRoot;
 
     /** . */
     private final int federationDepth;
 
     /** . */
-    private final Scope federatedScope;
+    private final Scope<S> federatedScope;
 
     /** . */
-    private Scope.Visitor federated;
+    private Scope.Visitor<S> federated;
 
-    FederatingVisitor(Scope.Visitor visitor, NodeContext<N> federationRoot, Scope federatedScope) {
+    FederatingVisitor(Scope.Visitor<S> visitor, NodeContext<N, S> federationRoot, Scope<S> federatedScope) {
         this.visitor = visitor;
         this.federationRoot = federationRoot;
         this.federatedScope = federatedScope;
@@ -49,7 +51,7 @@ class FederatingVisitor<N> implements Scope.Visitor {
         this.federationDepth = federationRoot.getDepth(federationRoot.tree.root);
     }
 
-    public VisitMode enter(int depth, String id, String name, NodeState state) {
+    public VisitMode enter(int depth, String id, String name, S state) {
         if (federationRoot.handle.equals(id)) {
             federated = federatedScope.get();
         }
@@ -72,7 +74,7 @@ class FederatingVisitor<N> implements Scope.Visitor {
         return visit;
     }
 
-    public void leave(int depth, String id, String name, NodeState state) {
+    public void leave(int depth, String id, String name, S state) {
         if (federationRoot.handle.equals(id)) {
             federated = null;
         }

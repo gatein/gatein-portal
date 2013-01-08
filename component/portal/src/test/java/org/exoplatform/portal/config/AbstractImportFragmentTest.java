@@ -19,7 +19,8 @@
 
 package org.exoplatform.portal.config;
 
-import org.exoplatform.portal.mop.navigation.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.navigation.NodeState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -36,33 +37,33 @@ public abstract class AbstractImportFragmentTest extends AbstractImportTest {
         return "fragment2";
     }
 
-    protected abstract void assertState(NodeContext<?> root);
+    protected abstract void assertState(NodeContext<?, NodeState> root);
 
     @Override
-    protected final void afterTwoPhasesBoot(NodeContext<?> root) {
+    protected final void afterTwoPhasesBoot(NodeContext<?, NodeState> root) {
         assertEquals(1, root.getNodeSize());
-        NodeContext<?> foo = root.get("foo");
+        NodeContext<?, NodeState> foo = root.get("foo");
         assertNotNull(foo);
         assertEquals("foo_icon", foo.getState().getIcon());
         assertEquals(0, foo.getNodeSize());
     }
 
     @Override
-    protected final void afterTwoPhaseNoOverrideReboot(NodeContext<?> root) {
+    protected final void afterTwoPhaseNoOverrideReboot(NodeContext<?, NodeState> root) {
         assertEquals(1, root.getNodeSize());
-        NodeContext<?> foo = root.get("foo");
+        NodeContext<?, NodeState> foo = root.get("foo");
         assertNotNull(foo);
         assertEquals("foo_icon", foo.getState().getIcon());
         assertEquals(0, foo.getNodeSize());
     }
 
     @Override
-    protected final void afterTwoPhaseOverrideReboot(NodeContext<?> root) {
+    protected final void afterTwoPhaseOverrideReboot(NodeContext<?, NodeState> root) {
         assertState(root);
     }
 
     @Override
-    protected final void afterTwoPhaseNoOverrideReconfigure(NodeContext<?> root) {
+    protected final void afterTwoPhaseNoOverrideReconfigure(NodeContext<?, NodeState> root) {
         assertState(root);
     }
 }

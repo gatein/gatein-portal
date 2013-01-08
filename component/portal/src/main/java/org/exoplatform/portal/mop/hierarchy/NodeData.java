@@ -17,26 +17,12 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop.hierarchy;
 
 import java.io.Serializable;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.NoSuchElementException;
-
-import org.exoplatform.portal.mop.Described;
-import org.exoplatform.portal.mop.Utils;
-import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.Visible;
-import org.exoplatform.portal.mop.page.PageKey;
-import org.exoplatform.portal.pom.data.MappedAttributes;
-import org.gatein.mop.api.Attributes;
-import org.gatein.mop.api.workspace.Navigation;
-import org.gatein.mop.api.workspace.Site;
-import org.gatein.mop.api.workspace.link.Link;
-import org.gatein.mop.api.workspace.link.PageLink;
 
 /**
  * An immutable node data class.
@@ -44,7 +30,7 @@ import org.gatein.mop.api.workspace.link.PageLink;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class NodeData implements Serializable {
+public class NodeData<S extends Serializable> implements Serializable {
 
     /** . */
     final String parentId;
@@ -56,92 +42,24 @@ class NodeData implements Serializable {
     final String name;
 
     /** . */
-    final NodeState state;
+    final S state;
 
     /** . */
     final String[] children;
 
-    NodeData(Navigation navigation) {
-        String[] children;
-        List<Navigation> _children = navigation.getChildren();
-        if (_children == null) {
-            children = Utils.EMPTY_STRING_ARRAY;
-        } else {
-            children = new String[_children.size()];
-            int index = 0;
-            for (Navigation child : _children) {
-                children[index++] = child.getObjectId();
-            }
-        }
-
-        //
-        String label = null;
-        if (navigation.isAdapted(Described.class)) {
-            Described described = navigation.adapt(Described.class);
-            label = described.getName();
-        }
-
-        //
-        Visibility visibility = Visibility.DISPLAYED;
-        Date startPublicationDate = null;
-        Date endPublicationDate = null;
-        if (navigation.isAdapted(Visible.class)) {
-            Visible visible = navigation.adapt(Visible.class);
-            visibility = visible.getVisibility();
-            startPublicationDate = visible.getStartPublicationDate();
-            endPublicationDate = visible.getEndPublicationDate();
-        }
-
-        //
-        PageKey pageRef = null;
-        Link link = navigation.getLink();
-        if (link instanceof PageLink) {
-            PageLink pageLink = (PageLink) link;
-            org.gatein.mop.api.workspace.Page target = pageLink.getPage();
-            if (target != null) {
-                Site site = target.getSite();
-                pageRef = Utils.siteType(site.getObjectType()).key(site.getName()).page(target.getName());
-            }
-        }
-
-        //
-        Attributes attrs = navigation.getAttributes();
-
-        //
-        NodeState state = new NodeState(label, attrs.getValue(MappedAttributes.ICON),
-                startPublicationDate != null ? startPublicationDate.getTime() : -1,
-                endPublicationDate != null ? endPublicationDate.getTime() : -1, visibility, pageRef);
-
-        //
-        String parentId;
-        Navigation parent = navigation.getParent();
-        if (parent != null) {
-            parentId = parent.getObjectId();
-        } else {
-            parentId = null;
-        }
-
-        //
-        this.parentId = parentId;
-        this.id = navigation.getObjectId();
-        this.name = navigation.getName();
-        this.state = state;
-        this.children = children;
-    }
-
-    NodeData(NodeContext<?> context) {
+    NodeData(NodeContext<?, S> context) {
         int size = 0;
-        for (NodeContext<?> current = context.getFirst(); current != null; current = current.getNext()) {
+        for (NodeContext<?, S> current = context.getFirst(); current != null; current = current.getNext()) {
             size++;
         }
         String[] children = new String[size];
-        for (NodeContext<?> current = context.getFirst(); current != null; current = current.getNext()) {
+        for (NodeContext<?, S> current = context.getFirst(); current != null; current = current.getNext()) {
             children[children.length - size--] = current.handle;
         }
         String parentId = context.getParent() != null ? context.getParent().handle : null;
         String id = context.handle;
         String name = context.getName();
-        NodeState state = context.getState();
+        S state = context.getState();
 
         //
         this.parentId = parentId;
@@ -151,7 +69,7 @@ class NodeData implements Serializable {
         this.children = children;
     }
 
-    NodeData(String parentId, String id, String name, NodeState state, String[] children) {
+    public NodeData(String parentId, String id, String name, S state, String[] children) {
         this.parentId = parentId;
         this.id = id;
         this.name = name;
@@ -211,7 +129,7 @@ class NodeData implements Serializable {
         return name;
     }
 
-    public NodeState getState() {
+    public S getState() {
         return state;
     }
 
