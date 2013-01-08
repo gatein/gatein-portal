@@ -47,7 +47,7 @@
 
     <clustering mode="replication">
       <stateTransfer timeout="60000" fetchInMemoryState="true"/>
-      <sync replTimeout="20000"/>
+      <async />
     </clustering>
 
     <!-- JTA configuration. transactionManagerLookupClass will be configured programmatically to be:
