@@ -36,54 +36,44 @@ import org.exoplatform.web.url.navigation.NodeURL;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class HeaderBean
-{
-   private final SSOHelper ssoHelper;
-   
-   public HeaderBean()
-   {
-      ssoHelper = (SSOHelper)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SSOHelper.class);
-   }
+public class HeaderBean {
+    private final SSOHelper ssoHelper;
 
-   public String generateLoginLink(String defaultAction)
-   {  
-      if (ssoHelper != null)
-      {
-         PortalRequestContext pContext = Util.getPortalRequestContext();
-         String ssoRedirectURL = pContext.getRequest().getContextPath() + ssoHelper.getSSORedirectURLSuffix();
-         return ssoRedirectURL;
-      }
-      else
-      {
-         return defaultAction;
-      }
-   }
-   
-   public String generateRegisterLink()
-   {
-      PortalRequestContext pContext = Util.getPortalRequestContext();
-      NavigationResource resource = new NavigationResource(SiteType.PORTAL, pContext.getPortalOwner(), "register");
-      return resource.getNodeURI();
-   }
-   
-   public String generateHomePageLink() throws Exception
-   {
-      PortalRequestContext pContext = Util.getPortalRequestContext();
-      NodeURL nodeURL = pContext.createURL(NodeURL.TYPE).setResource(new NavigationResource(SiteType.PORTAL, pContext.getPortalOwner(), null));
-      return nodeURL.toString();
-   }
-   
-   public String generateDashboardLink() throws Exception
-   {
-      PortalRequestContext pContext = Util.getPortalRequestContext();
-      NodeURL nodeURL = pContext.createURL(NodeURL.TYPE);
-      nodeURL.setResource(new NavigationResource(SiteType.USER, pContext.getRemoteUser(), null));
-      return nodeURL.toString();
-   }
-   
-   public String generateGroupPagesLink() 
-   {
-      return "#";
-   }
+    public HeaderBean() {
+        ssoHelper = (SSOHelper) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SSOHelper.class);
+    }
+
+    public String generateLoginLink(String defaultAction) {
+        if (ssoHelper != null) {
+            PortalRequestContext pContext = Util.getPortalRequestContext();
+            String ssoRedirectURL = pContext.getRequest().getContextPath() + ssoHelper.getSSORedirectURLSuffix();
+            return ssoRedirectURL;
+        } else {
+            return defaultAction;
+        }
+    }
+
+    public String generateRegisterLink() {
+        PortalRequestContext pContext = Util.getPortalRequestContext();
+        NavigationResource resource = new NavigationResource(SiteType.PORTAL, pContext.getPortalOwner(), "register");
+        return resource.getNodeURI();
+    }
+
+    public String generateHomePageLink() throws Exception {
+        PortalRequestContext pContext = Util.getPortalRequestContext();
+        NodeURL nodeURL = pContext.createURL(NodeURL.TYPE).setResource(
+                new NavigationResource(SiteType.PORTAL, pContext.getPortalOwner(), null));
+        return nodeURL.toString();
+    }
+
+    public String generateDashboardLink() throws Exception {
+        PortalRequestContext pContext = Util.getPortalRequestContext();
+        NodeURL nodeURL = pContext.createURL(NodeURL.TYPE);
+        nodeURL.setResource(new NavigationResource(SiteType.USER, pContext.getRemoteUser(), null));
+        return nodeURL.toString();
+    }
+
+    public String generateGroupPagesLink() {
+        return "#";
+    }
 }
-

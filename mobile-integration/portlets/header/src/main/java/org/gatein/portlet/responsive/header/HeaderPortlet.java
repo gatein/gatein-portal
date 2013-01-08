@@ -37,25 +37,21 @@ import org.w3c.dom.Element;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class HeaderPortlet extends GenericPortlet
-{
+public class HeaderPortlet extends GenericPortlet {
 
-   @Override
-   protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException
-   {
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/header.jsp");
-      prd.include(request, response);
-   }
-   
-   @Override
-   public void doHeaders(RenderRequest request, RenderResponse response)
-   {
-      Element viewportMeta = response.createElement("meta");
-      viewportMeta.setAttribute("name", "viewport");
-      viewportMeta.setAttribute("content", "initial-scale=1.0");
-      
-      response.addProperty(MimeResponse.MARKUP_HEAD_ELEMENT, viewportMeta);
-   }
+    @Override
+    protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+        PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/header.jsp");
+        prd.include(request, response);
+    }
+
+    @Override
+    public void doHeaders(RenderRequest request, RenderResponse response) {
+        Element viewportMeta = response.createElement("meta");
+        viewportMeta.setAttribute("name", "viewport");
+        viewportMeta.setAttribute("content", "initial-scale=1.0");
+
+        response.addProperty(MimeResponse.MARKUP_HEAD_ELEMENT, viewportMeta);
+    }
 
 }
-

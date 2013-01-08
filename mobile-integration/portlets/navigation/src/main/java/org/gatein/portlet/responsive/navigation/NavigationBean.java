@@ -31,35 +31,30 @@ import java.util.List;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class NavigationBean
-{
-   //PortalRequest portalRequest;
+public class NavigationBean {
+    // PortalRequest portalRequest;
 
-   public NavigationBean()
-   {
-      //this.portalRequest = PortalRequest.getInstance();
-   }
-   
-   public String getCurrentNode()
-   {
-      return "Home";
-   }
-   
-   public List<Node> getNodes() throws URISyntaxException
-   {
-      List<Node> nodes = new ArrayList<Node>();
-      
-      Node homeNode = new Node("Home", new URI("http://localhost:8080/portal/mobile/home"));
-      Node siteMapNode = new Node("SiteMap", new URI("http://localhost:8080/portal/mobile/sitemap"));
-      Node test = new Node("Title", null);
-      Node testChild = new Node("entry", new URI("http://localhost:8080/portal/mobile/title/entry"));
-      test.getChildren().add(testChild);
-      
-      nodes.add(homeNode);
-      nodes.add(siteMapNode);
-      nodes.add(test);
+    public NavigationBean() {
+        // this.portalRequest = PortalRequest.getInstance();
+    }
 
-      return nodes;
-   }
+    public String getCurrentNode() {
+        return "Home";
+    }
+
+    public List<Node> getNodes() throws URISyntaxException {
+        List<Node> nodes = new ArrayList<Node>();
+
+        Node homeNode = new Node("Home", new URI("http://localhost:8080/portal/mobile/home"));
+        Node siteMapNode = new Node("SiteMap", new URI("http://localhost:8080/portal/mobile/sitemap"));
+        Node test = new Node("Title", null);
+        Node testChild = new Node("entry", new URI("http://localhost:8080/portal/mobile/title/entry"));
+        test.getChildren().add(testChild);
+
+        nodes.add(homeNode);
+        nodes.add(siteMapNode);
+        nodes.add(test);
+
+        return nodes;
+    }
 }
-

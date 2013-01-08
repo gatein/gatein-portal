@@ -34,23 +34,19 @@ import javax.portlet.RenderResponse;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class NavigationPortlet extends GenericPortlet
-{
-   
-   NavigationBean navigationBean;
-   
-   public NavigationPortlet()
-   {
-      this.navigationBean = new NavigationBean();
-   }
+public class NavigationPortlet extends GenericPortlet {
 
-   @Override
-   protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException
-   {
-      request.setAttribute("navigation", navigationBean);
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/navigation.jsp");
-      prd.include(request, response);
-   }
+    NavigationBean navigationBean;
+
+    public NavigationPortlet() {
+        this.navigationBean = new NavigationBean();
+    }
+
+    @Override
+    protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+        request.setAttribute("navigation", navigationBean);
+        PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/navigation.jsp");
+        prd.include(request, response);
+    }
 
 }
-

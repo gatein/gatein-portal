@@ -34,15 +34,12 @@ import javax.portlet.RenderResponse;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class BannerPortlet extends GenericPortlet
-{
+public class BannerPortlet extends GenericPortlet {
 
-   @Override
-   protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException
-   {
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/banner.jsp");
-      prd.include(request, response);
-   }
+    @Override
+    protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+        PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/banner.jsp");
+        prd.include(request, response);
+    }
 
 }
-

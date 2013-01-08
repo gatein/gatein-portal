@@ -26,10 +26,9 @@ package org.gatein.portlet.responsive.banner;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class BannerBean
-{
-   public BannerBean()
-   {
-   }
-}
+public class BannerBean {
 
+    public BannerBean() {
+    }
+
+}

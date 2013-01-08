@@ -26,10 +26,7 @@ package org.gatein.portlet.responsive.features;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class FeaturesBean
-{
-   public FeaturesBean()
-   {
-   }
+public class FeaturesBean {
+    public FeaturesBean() {
+    }
 }
-

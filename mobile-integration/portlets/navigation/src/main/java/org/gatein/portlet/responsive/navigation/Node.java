@@ -30,50 +30,38 @@ import java.util.List;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class Node
-{
-   private URI uri;
-   private String name;
-   private List<Node> children;
-   
-   public Node(String name, URI uri)
-   {
-      this.name = name;
-      this.uri = uri;
-   }
-   
-   public String getName()
-   {
-      return name;
-   }
-   
-   public String getURI()
-   {
-      if (uri != null)
-      {
-         return uri.toString();
-      }
-      else
-      {
-         return null;
-      }
-   }
-   
-   public void setChildren(List<Node> children)
-   {
-      if (children != null)
-      {
-         this.children = children;
-      }
-   }
-   
-   public List<Node> getChildren()
-   {
-      if (children == null)
-      {
-         children = new ArrayList<Node>();
-      }
-      return children;
-   }
-}
+public class Node {
+    private URI uri;
+    private String name;
+    private List<Node> children;
 
+    public Node(String name, URI uri) {
+        this.name = name;
+        this.uri = uri;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getURI() {
+        if (uri != null) {
+            return uri.toString();
+        } else {
+            return null;
+        }
+    }
+
+    public void setChildren(List<Node> children) {
+        if (children != null) {
+            this.children = children;
+        }
+    }
+
+    public List<Node> getChildren() {
+        if (children == null) {
+            children = new ArrayList<Node>();
+        }
+        return children;
+    }
+}

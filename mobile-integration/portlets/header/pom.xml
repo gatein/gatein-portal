@@ -2,14 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
    <modelVersion>4.0.0</modelVersion>
 
-   <!--
-      the parent isn't required, you can drop it if you add a groupId
-      and version
-   -->
    <parent>
       <groupId>org.gatein.portal</groupId>
       <artifactId>responsive-portlets</artifactId>
-      <version>3.5.0.Final-SNAPSHOT</version>
+      <version>3.6.0.MO1-SNAPSHOT</version>
    </parent>
 
 

@@ -36,45 +36,41 @@ import javax.portlet.RenderResponse;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class FooterPortlet extends GenericPortlet
-{
-   
-   FooterBean footerBean;
+public class FooterPortlet extends GenericPortlet {
 
-   public FooterPortlet()
-   {
-      footerBean = new FooterBean();
-   }
-   
-   @Override
-   protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException
-   {  
-      request.setAttribute("footer", footerBean); //add the footerBean to the request
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/footer.jsp");
-      prd.include(request, response);
-   }
-   
-//   @Override
-//   public void processAction(ActionRequest request, ActionResponse response) throws PortletException, IOException
-//   {
-//      String language = (request.getParameter("languageSelect"));
-//      
-//      if (language != null)
-//      {
-//         footerBean.setLanguage(language);
-//         if (request.getRemoteUser() != null)
-//         {
-//            try
-//            {
-//               footerBean.setUserLanguage(request.getRemoteUser(), language);
-//            }
-//            catch (Exception e)
-//            {
-//               throw new PortletException("Error trying to update the user's language preference", e);
-//            }
-//         }
-//      }
-//   }
+    FooterBean footerBean;
+
+    public FooterPortlet() {
+        footerBean = new FooterBean();
+    }
+
+    @Override
+    protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+        request.setAttribute("footer", footerBean); // add the footerBean to the request
+        PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/footer.jsp");
+        prd.include(request, response);
+    }
+
+    // @Override
+    // public void processAction(ActionRequest request, ActionResponse response) throws PortletException, IOException
+    // {
+    // String language = (request.getParameter("languageSelect"));
+    //
+    // if (language != null)
+    // {
+    // footerBean.setLanguage(language);
+    // if (request.getRemoteUser() != null)
+    // {
+    // try
+    // {
+    // footerBean.setUserLanguage(request.getRemoteUser(), language);
+    // }
+    // catch (Exception e)
+    // {
+    // throw new PortletException("Error trying to update the user's language preference", e);
+    // }
+    // }
+    // }
+    // }
 
 }
-
