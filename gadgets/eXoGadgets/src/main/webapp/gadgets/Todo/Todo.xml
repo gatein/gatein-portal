@@ -29,22 +29,22 @@
  *
 -->
 <Module>
-	<ModulePrefs author="eXoPlatform"
-		title="Todo"
-		directory_title="Todo"
-		title_url="http://www.exoplatform.org"
-		description="ToDo Gadget, easily manage and track your daily to-do list."
-		thumbnail="images/Todo.gif"
-		height="235">
-		<Locale messages="locale/ALL_ALL.xml" />
-		<Locale lang="ar" messages="locale/ar_ALL.xml" language_direction="rtl"/>
-		<Locale lang="fr" messages="locale/fr_ALL.xml" />
-		<Locale lang="vi" messages="locale/vi_ALL.xml" />
-		<Require feature="setprefs"/>
-	</ModulePrefs>
-	<UserPref name="todoList" datatype="list"/>
-	<Content type="html">
-	<![CDATA[
+  <ModulePrefs author="eXoPlatform"
+               title="Todo"
+               directory_title="Todo"
+               title_url="http://www.exoplatform.org"
+               description="ToDo Gadget, easily manage and track your daily to-do list."
+               thumbnail="images/Todo.gif"
+               height="235">
+    <Locale messages="locale/ALL_ALL.xml"/>
+    <Locale lang="ar" messages="locale/ar_ALL.xml" language_direction="rtl"/>
+    <Locale lang="fr" messages="locale/fr_ALL.xml"/>
+    <Locale lang="vi" messages="locale/vi_ALL.xml"/>
+    <Require feature="setprefs"/>
+  </ModulePrefs>
+  <UserPref name="todoList" datatype="list"/>
+  <Content type="html">
+    <![CDATA[
 		<style type="text/css">
 
 			body {
@@ -238,5 +238,5 @@
 			</div>
 		</div>
 	]]>
-	</Content>
+  </Content>
 </Module>

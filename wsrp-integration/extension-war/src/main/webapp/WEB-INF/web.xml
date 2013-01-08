@@ -27,12 +27,12 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          id="WebApp_ID" version="2.5">
 
-   <display-name>gatein-wsrp-integration</display-name>
+  <display-name>gatein-wsrp-integration</display-name>
 
-   <!-- ================================================================== -->
-   <!--           LISTENER                                                 -->
-   <!-- ================================================================== -->
-   <listener>
-      <listener-class>org.exoplatform.container.web.PortalContainerConfigOwner</listener-class>
-   </listener>
+  <!-- ================================================================== -->
+  <!--           LISTENER                                                 -->
+  <!-- ================================================================== -->
+  <listener>
+    <listener-class>org.exoplatform.container.web.PortalContainerConfigOwner</listener-class>
+  </listener>
 </web-app>

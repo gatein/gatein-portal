@@ -20,45 +20,39 @@
 package org.exoplatform.component.test;
 
 import static junit.framework.Assert.*;
+
 import org.exoplatform.container.PortalContainer;
 import org.junit.Rule;
 import org.junit.Test;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
-public class KernelRuleTestScopedTestCase
-{
+public class KernelRuleTestScopedTestCase {
 
-   @Rule
-   public KernelLifeCycle kernel = new KernelLifeCycle();
+    @Rule
+    public KernelLifeCycle kernel = new KernelLifeCycle();
 
-   /** . */
-   private PortalContainer container;
+    /** . */
+    private PortalContainer container;
 
-   @ConfiguredBy({})
-   @Test
-   public void testA()
-   {
-      test();
-      assertNull(kernel.getContainer().getComponentInstance(CustomService.class));
-   }
+    @ConfiguredBy({})
+    @Test
+    public void testA() {
+        test();
+        assertNull(kernel.getContainer().getComponentInstance(CustomService.class));
+    }
 
-   @ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml")})
-   @Test
-   public void testB() throws Exception
-   {
-      test();
-      assertNotNull(kernel.getContainer().getComponentInstance(CustomService.class));
-   }
+    @ConfiguredBy({ @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml") })
+    @Test
+    public void testB() throws Exception {
+        test();
+        assertNotNull(kernel.getContainer().getComponentInstance(CustomService.class));
+    }
 
-   private void test()
-   {
-      if (container == null)
-      {
-         container = kernel.getContainer();
-      }
-      else
-      {
-         assertNotSame(container, kernel.getContainer());
-      }
-   }
+    private void test() {
+        if (container == null) {
+            container = kernel.getContainer();
+        } else {
+            assertNotSame(container, kernel.getContainer());
+        }
+    }
 }

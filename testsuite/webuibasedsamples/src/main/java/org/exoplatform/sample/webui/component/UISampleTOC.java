@@ -23,30 +23,23 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 /**
- * Created by The eXo Platform SAS Author : Nguyen Duc Khoi
- * khoi.nguyen@exoplatform.com Mar 12, 2010
+ * Created by The eXo Platform SAS Author : Nguyen Duc Khoi khoi.nguyen@exoplatform.com Mar 12, 2010
  */
 
-@ComponentConfig(template = "app:/groovy/webui/component/UISampleTOC.gtmpl", events = {@EventConfig(listeners = UISampleTOC.ClickNodeActionListener.class)})
-public class UISampleTOC extends UIContainer
-{
+@ComponentConfig(template = "app:/groovy/webui/component/UISampleTOC.gtmpl", events = { @EventConfig(listeners = UISampleTOC.ClickNodeActionListener.class) })
+public class UISampleTOC extends UIContainer {
 
-   public static class ClickNodeActionListener extends EventListener<UISampleTOC>
-   {
-      @Override
-      public void execute(Event<UISampleTOC> event) throws Exception
-      {
-         int nodeType = -1;
-         try
-         {
-            nodeType = Integer.valueOf(event.getRequestContext().getRequestParameter(OBJECTID));
-         }
-         catch (Exception ex)
-         {
-         }
+    public static class ClickNodeActionListener extends EventListener<UISampleTOC> {
+        @Override
+        public void execute(Event<UISampleTOC> event) throws Exception {
+            int nodeType = -1;
+            try {
+                nodeType = Integer.valueOf(event.getRequestContext().getRequestParameter(OBJECTID));
+            } catch (Exception ex) {
+            }
 
-         ((UISamplePortlet)event.getSource().getParent()).showUIComponent(nodeType);
-      }
-   }
+            ((UISamplePortlet) event.getSource().getParent()).showUIComponent(nodeType);
+        }
+    }
 
 }

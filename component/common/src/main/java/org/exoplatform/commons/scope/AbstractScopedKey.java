@@ -21,80 +21,71 @@ package org.exoplatform.commons.scope;
 
 import java.io.Serializable;
 
+
 /**
  * The abstract scoped key should be subclasses to create scoped key.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class AbstractScopedKey implements Serializable
-{
+public abstract class AbstractScopedKey implements Serializable {
 
-   /** . */
-   private final String scope;
+    /** . */
+    private final String scope;
 
-   protected AbstractScopedKey()
-   {
-      String scope = ScopeManager.getCurrentScope();
-      if (scope == null)
-      {
-         scope = "";
-      }
+    protected AbstractScopedKey() {
+        String scope = ScopeManager.getCurrentScope();
+        if (scope == null) {
+            scope = "";
+        }
 
-      //
-      this.scope = scope;
-   }
+        //
+        this.scope = scope;
+    }
 
-   protected AbstractScopedKey(String scope) throws NullPointerException
-   {
-      if (scope == null)
-      {
-         throw new NullPointerException();
-      }
+    protected AbstractScopedKey(String scope) throws NullPointerException {
+        if (scope == null) {
+            throw new NullPointerException();
+        }
 
-      //
-      this.scope = scope;
-   }
+        //
+        this.scope = scope;
+    }
 
-   public final String getScope()
-   {
-      return scope;
-   }
+    public final String getScope() {
+        return scope;
+    }
 
-   /**
-    * Returns the scope value hashCode.
-    *
-    * @return the hash code
-    */
-   @Override
-   public int hashCode()
-   {
-      return scope.hashCode();
-   }
+    /**
+     * Returns the scope value hashCode.
+     *
+     * @return the hash code
+     */
+    @Override
+    public int hashCode() {
+        return scope.hashCode();
+    }
 
-   /**
-    * Returns true when:
-    * <ul>
-    *    <li>the obj argument has the same reference than this object</li>
-    *    <li>or the obj has class equality (<code>getClass().equals(obj.getClass())</code>) and scope equality</li>
-    * </ul>
-    *
-    * Subclasses should override this method and call the super method to ensure that the objects are of the same
-    * class and have the same scope. When this method returns true, the obj argument can be safely casted to
-    * the same sub class for performing more state equality checks.
-    */
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (obj == this)
-      {
-         return true;
-      }
-      if (obj instanceof AbstractScopedKey)
-      {
-         AbstractScopedKey that = (AbstractScopedKey)obj;
-         return getClass().equals(that.getClass()) && scope.equals(that.scope);
-      }
-      return false;
-   }
+    /**
+     * Returns true when:
+     * <ul>
+     * <li>the obj argument has the same reference than this object</li>
+     * <li>or the obj has class equality (<code>getClass().equals(obj.getClass())</code>) and scope equality</li>
+     * </ul>
+     *
+     * Subclasses should override this method and call the super method to ensure that the objects are of the same class and
+     * have the same scope. When this method returns true, the obj argument can be safely casted to the same sub class for
+     * performing more state equality checks.
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof AbstractScopedKey) {
+            AbstractScopedKey that = (AbstractScopedKey) obj;
+            return getClass().equals(that.getClass()) && scope.equals(that.scope);
+        }
+        return false;
+    }
 }

@@ -23,25 +23,25 @@
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
 
-   <page>
-      <name>homepage</name>
-      <title>Home Page</title>
+  <page>
+    <name>homepage</name>
+    <title>Home Page</title>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <portlet-application>
+      <portlet>
+        <application-ref>site1</application-ref>
+        <portlet-ref>home</portlet-ref>
+        <preferences>
+          <preference>
+            <name>foo</name>
+            <value>foo_value</value>
+          </preference>
+        </preferences>
+      </portlet>
       <access-permissions>Everyone</access-permissions>
-      <edit-permission>*:/platform/administrators</edit-permission>
-      <portlet-application>
-         <portlet>
-            <application-ref>site1</application-ref>
-            <portlet-ref>home</portlet-ref>
-            <preferences>
-              <preference>
-                <name>foo</name>
-                <value>foo_value</value>
-              </preference>
-            </preferences>
-         </portlet>
-         <access-permissions>Everyone</access-permissions>
-         <show-info-bar>true</show-info-bar>
-      </portlet-application>
-   </page>
+      <show-info-bar>true</show-info-bar>
+    </portlet-application>
+  </page>
 
 </page-set>

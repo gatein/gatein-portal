@@ -26,62 +26,48 @@ import junit.framework.TestCase;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class BaseGateInTest extends TestCase
-{
+public class BaseGateInTest extends TestCase {
 
-   public BaseGateInTest()
-   {
-   }
+    public BaseGateInTest() {
+    }
 
-   public BaseGateInTest(String name)
-   {
-      super(name);
-   }
+    public BaseGateInTest(String name) {
+        super(name);
+    }
 
-   public static <T> T assertInstanceOf(Object o, Class<T> expectedType)
-   {
-      if (expectedType != null)
-      {
-         if (expectedType.isInstance(o))
-         {
-            fail();
+    public static <T> T assertInstanceOf(Object o, Class<T> expectedType) {
+        if (expectedType != null) {
+            if (expectedType.isInstance(o)) {
+                fail();
+                return null;
+            } else {
+                return expectedType.cast(o);
+            }
+        } else {
+            fail("Need an expected type");
             return null;
-         }
-         else
-         {
-            return expectedType.cast(o);
-         }
-      }
-      else
-      {
-         fail("Need an expected type");
-         return null;
-      }
-   }
+        }
+    }
 
-   public static void fail(String msg, Throwable t)
-   {
-      throw failure(msg, t);
-   }
+    public static void fail(String msg, Throwable t) {
+        throw failure(msg, t);
+    }
 
-   public static void fail(Throwable t)
-   {
-      AssertionFailedError afe = new AssertionFailedError();
-      afe.initCause(t);
-      throw afe;
-   }
+    public static void fail(Throwable t) {
+        AssertionFailedError afe = new AssertionFailedError();
+        afe.initCause(t);
+        throw afe;
+    }
 
-   public static Error failure(Throwable t)
-   {
-      AssertionFailedError afe = new AssertionFailedError();
-      afe.initCause(t);
-      return afe;
-   }
+    public static Error failure(Throwable t) {
+        AssertionFailedError afe = new AssertionFailedError();
+        afe.initCause(t);
+        return afe;
+    }
 
-   public static Error failure(String msg, Throwable t)
-   {
-      AssertionFailedError afe = new AssertionFailedError(msg);
-      afe.initCause(t);
-      return afe;
-   }
+    public static Error failure(String msg, Throwable t) {
+        AssertionFailedError afe = new AssertionFailedError(msg);
+        afe.initCause(t);
+        return afe;
+    }
 }

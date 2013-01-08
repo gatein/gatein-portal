@@ -25,34 +25,33 @@ package org.gatein.common.transaction;
 
 import javax.transaction.UserTransaction;
 
+
 /**
  * Service provides methods for managing lifecycle of JTA transaction
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface JTAUserTransactionLifecycleService
-{
+public interface JTAUserTransactionLifecycleService {
 
-   /**
-    * @return instance of UserTransaction
-    */
-   public UserTransaction getUserTransaction();
+    /**
+     * @return instance of UserTransaction
+     */
+    UserTransaction getUserTransaction();
 
+    /**
+     * Commit or Rollback JTA transaction according to it's current status
+     */
+    void finishJTATransaction();
 
-   /**
-    * Commit or Rollback JTA transaction according to it's current status
-    */
-   public void finishJTATransaction();
+    /**
+     * Starts JTA transaction if not already started
+     */
+    void beginJTATransaction();
 
-
-   /**
-    * Starts JTA transaction if not already started
-    */
-   public void beginJTATransaction();
-
-   /**
-    * Register listener to perform some operations during transaction lifecycle
-    * @param listener to be registered
-    */
-   public void registerListener(JTAUserTransactionLifecycleListener listener);
+    /**
+     * Register listener to perform some operations during transaction lifecycle
+     *
+     * @param listener to be registered
+     */
+    void registerListener(JTAUserTransactionLifecycleListener listener);
 }

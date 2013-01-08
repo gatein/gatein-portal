@@ -18,6 +18,8 @@
  */
 package org.exoplatform.web.security.security;
 
+import java.util.Date;
+
 import org.chromattic.api.annotations.Destroy;
 import org.chromattic.api.annotations.Name;
 import org.chromattic.api.annotations.PrimaryType;
@@ -25,42 +27,36 @@ import org.chromattic.api.annotations.Property;
 import org.exoplatform.web.security.GateInToken;
 import org.gatein.wci.security.Credentials;
 
-import java.util.Date;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 @PrimaryType(name = "tkn:tokenentry")
-public abstract class TokenEntry
-{
+public abstract class TokenEntry {
 
-   @Name
-   public abstract String getId();
+    @Name
+    public abstract String getId();
 
-   @Property(name = "username")
-   public abstract String getUserName();
+    @Property(name = "username")
+    public abstract String getUserName();
 
-   public abstract void setUserName(String userName);
+    public abstract void setUserName(String userName);
 
-   @Property(name = "password")
-   public abstract String getPassword();
+    @Property(name = "password")
+    public abstract String getPassword();
 
-   public abstract void setPassword(String password);
+    public abstract void setPassword(String password);
 
-   @Property(name = "expiration")
-   public abstract Date getExpirationTime();
+    @Property(name = "expiration")
+    public abstract Date getExpirationTime();
 
-   public abstract void setExpirationTime(Date expirationTime);
+    public abstract void setExpirationTime(Date expirationTime);
 
-   @Destroy
-   public abstract void remove();
+    @Destroy
+    public abstract void remove();
 
-   public GateInToken getToken()
-   {
-      return new GateInToken(
-         getExpirationTime().getTime(),
-         new Credentials(getUserName(), getPassword()));
-   }
+    public GateInToken getToken() {
+        return new GateInToken(getExpirationTime().getTime(), new Credentials(getUserName(), getPassword()));
+    }
 
 }

@@ -19,11 +19,15 @@
 
 package org.exoplatform.portal.application.replication;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 import org.exoplatform.commons.serialization.SerializationContext;
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.core.UIApplication;
-
-import java.io.*;
 
 /**
  * The state of an application.
@@ -31,107 +35,89 @@ import java.io.*;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ApplicationState implements Serializable
-{
+public class ApplicationState implements Serializable {
 
-   /** . */
-   private UIApplication application;
+    /** . */
+    private UIApplication application;
 
-   /** . */
-   private byte[] serialization;
+    /** . */
+    private byte[] serialization;
 
-   /** . */
-   private String userName;
+    /** . */
+    private String userName;
 
-   public ApplicationState(UIApplication application, String userName)
-   {
-      if (application == null)
-      {
-         throw new NullPointerException();
-      }
-      this.application = application;
-      this.userName = userName;
-   }
+    public ApplicationState(UIApplication application, String userName) {
+        if (application == null) {
+            throw new NullPointerException();
+        }
+        this.application = application;
+        this.userName = userName;
+    }
 
-   public String getUserName()
-   {
-      return userName;
-   }
+    public String getUserName() {
+        return userName;
+    }
 
-   public UIApplication getApplication() throws IOException, ClassNotFoundException
-   {
-      if (serialization != null)
-      {
-         SerializationContext serializationContext = SerializationContextSingleton.getInstance();
-         byte[] bytes = serialization;
-         serialization = null;
-         application = (UIApplication)serializationContext.read(bytes);
-      }
-      return application;
-   }
+    public UIApplication getApplication() throws IOException, ClassNotFoundException {
+        if (serialization != null) {
+            SerializationContext serializationContext = SerializationContextSingleton.getInstance();
+            byte[] bytes = serialization;
+            serialization = null;
+            application = (UIApplication) serializationContext.read(bytes);
+        }
+        return application;
+    }
 
-   private void writeObject(ObjectOutputStream oos) throws IOException
-   {
-      oos.putFields();
-      oos.writeFields();
+    private void writeObject(ObjectOutputStream oos) throws IOException {
+        oos.putFields();
+        oos.writeFields();
 
-      if (userName != null)
-      {
-         oos.writeBoolean(true);
-         oos.writeUTF(userName);
-      }
-      else
-      {
-         oos.writeBoolean(false);
-      }
+        if (userName != null) {
+            oos.writeBoolean(true);
+            oos.writeUTF(userName);
+        } else {
+            oos.writeBoolean(false);
+        }
 
-      //
-      if (application != null && application.getClass().getAnnotation(Serialized.class) != null)
-      {
-         oos.writeBoolean(true);
+        //
+        if (application != null && application.getClass().getAnnotation(Serialized.class) != null) {
+            oos.writeBoolean(true);
 
-         //
-         SerializationContext serializationContext = SerializationContextSingleton.getInstance();
+            //
+            SerializationContext serializationContext = SerializationContextSingleton.getInstance();
 
-         //
-         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-         serializationContext.write(application, baos);
-         baos.close();
+            //
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            serializationContext.write(application, baos);
+            baos.close();
 
-         //
-         byte[] bytes = baos.toByteArray();
-         oos.writeInt(bytes.length);
-         oos.write(bytes);
-      }
-      else
-      {
-         oos.writeBoolean(false);
-      }
-   }
+            //
+            byte[] bytes = baos.toByteArray();
+            oos.writeInt(bytes.length);
+            oos.write(bytes);
+        } else {
+            oos.writeBoolean(false);
+        }
+    }
 
-   private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException
-   {
-      ois.readFields();
+    private void readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+        ois.readFields();
 
-      if (ois.readBoolean())
-      {
-         userName = ois.readUTF();
-      }
+        if (ois.readBoolean()) {
+            userName = ois.readUTF();
+        }
 
-      //
-      if (ois.readBoolean())
-      {
-         int size = ois.readInt();
-         byte[] bytes = new byte[size];
-         ois.readFully(bytes);
-         serialization = bytes;
-      }
-      else
-      {
-         serialization = null;
-      }
+        //
+        if (ois.readBoolean()) {
+            int size = ois.readInt();
+            byte[] bytes = new byte[size];
+            ois.readFully(bytes);
+            serialization = bytes;
+        } else {
+            serialization = null;
+        }
 
-      //
-      application = null;
-   }
+        //
+        application = null;
+    }
 }

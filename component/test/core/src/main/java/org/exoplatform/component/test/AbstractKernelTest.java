@@ -19,101 +19,86 @@
 
 package org.exoplatform.component.test;
 
-import junit.framework.TestSuite;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.RequestLifeCycle;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
+import junit.framework.TestSuite;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.RequestLifeCycle;
+
 /**
- * An abstract test that takes care of running the unit tests with the semantic described by the
- * {#link GateInTestClassLoader}.
- * 
+ * An abstract test that takes care of running the unit tests with the semantic described by the {#link GateInTestClassLoader}.
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class AbstractKernelTest extends AbstractGateInTest
-{
+public class AbstractKernelTest extends AbstractGateInTest {
 
-   /** . */
-   private static KernelBootstrap bootstrap;
+    /** . */
+    private static KernelBootstrap bootstrap;
 
-   /** . */
-   private static final Map<Class<?>, AtomicLong> counters = new HashMap<Class<?>, AtomicLong>();
+    /** . */
+    private static final Map<Class<?>, AtomicLong> counters = new HashMap<Class<?>, AtomicLong>();
 
-   protected AbstractKernelTest()
-   {
-      super();
-   }
+    protected AbstractKernelTest() {
+        super();
+    }
 
-   protected AbstractKernelTest(String name)
-   {
-      super(name);
-   }
+    protected AbstractKernelTest(String name) {
+        super(name);
+    }
 
-   public PortalContainer getContainer()
-   {
-      return bootstrap != null ? bootstrap.getContainer() : null;
-   }
+    public PortalContainer getContainer() {
+        return bootstrap != null ? bootstrap.getContainer() : null;
+    }
 
-   protected void begin()
-   {
-      RequestLifeCycle.begin(getContainer());
-   }
+    protected void begin() {
+        RequestLifeCycle.begin(getContainer());
+    }
 
-   protected void end()
-   {
-      RequestLifeCycle.end();
-   }
+    protected void end() {
+        RequestLifeCycle.end();
+    }
 
-   @Override
-   protected void beforeRunBare() throws Exception
-   {
-      Class<?> key = getClass();
+    @Override
+    protected void beforeRunBare() {
+        Class<?> key = getClass();
 
-      //
-      if (!counters.containsKey(key))
-      {
-         counters.put(key, new AtomicLong(new TestSuite(getClass()).testCount()));
+        //
+        if (!counters.containsKey(key)) {
+            counters.put(key, new AtomicLong(new TestSuite(getClass()).testCount()));
 
-         //
-         bootstrap = new KernelBootstrap(Thread.currentThread().getContextClassLoader());
+            //
+            bootstrap = new KernelBootstrap(Thread.currentThread().getContextClassLoader());
 
-         // Configure ourselves
-         bootstrap.addConfiguration(getClass());
+            // Configure ourselves
+            bootstrap.addConfiguration(getClass());
 
-         //
-         bootstrap.boot();
-      }
+            //
+            bootstrap.boot();
+        }
 
-      //
-//      List<Throwable> failures = new ArrayList<Throwable>();
-   }
+        //
+        // List<Throwable> failures = new ArrayList<Throwable>();
+    }
 
-   @Override
-   protected void afterRunBare()
-   {
-      Class<?> key = getClass();
+    @Override
+    protected void afterRunBare() {
+        Class<?> key = getClass();
 
-      //
-      if (counters.get(key).decrementAndGet() == 0)
-      {
-         bootstrap.dispose();
+        //
+        if (counters.get(key).decrementAndGet() == 0) {
+            bootstrap.dispose();
 
-         //
-         bootstrap = null;
-      }
+            //
+            bootstrap = null;
+        }
 
-/*
-      if (failures.size() > 0)
-      {
-         Throwable failure = failures.get(0);
-         AssertionFailedError afe = new AssertionFailedError();
-         afe.initCause(failure);
-         throw afe;
-      }
-*/
-   }
+        /*
+         * if (failures.size() > 0) { Throwable failure = failures.get(0); AssertionFailedError afe = new
+         * AssertionFailedError(); afe.initCause(failure); throw afe; }
+         */
+    }
 }

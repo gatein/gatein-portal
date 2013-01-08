@@ -26,21 +26,20 @@ import org.exoplatform.web.controller.QualifiedName;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public interface Names
-{
+public interface Names {
 
-   QualifiedName Q_A = QualifiedName.parse("q:a");
-   QualifiedName A = QualifiedName.parse("a");
-   QualifiedName B = QualifiedName.parse("b");
-   QualifiedName P = QualifiedName.parse("p");
-   QualifiedName FOO = QualifiedName.parse("foo");
-   QualifiedName BAR = QualifiedName.parse("bar");
-   QualifiedName JUU = QualifiedName.parse("juu");
-   QualifiedName GTN_HANDLER = QualifiedName.parse("gtn:handler");
-   QualifiedName GTN_LANG = QualifiedName.parse("gtn:lang");
-   QualifiedName GTN_SITENAME = QualifiedName.parse("gtn:sitename");
-   QualifiedName GTN_SITETYPE = QualifiedName.parse("gtn:sitetype");
-   QualifiedName GTN_ACCESS = QualifiedName.parse("gtn:access");
-   QualifiedName GTN_PATH = QualifiedName.parse("gtn:path");
-   QualifiedName GTN_MIN = QualifiedName.parse("gtn:min");
+    QualifiedName Q_A = QualifiedName.parse("q:a");
+    QualifiedName A = QualifiedName.parse("a");
+    QualifiedName B = QualifiedName.parse("b");
+    QualifiedName P = QualifiedName.parse("p");
+    QualifiedName FOO = QualifiedName.parse("foo");
+    QualifiedName BAR = QualifiedName.parse("bar");
+    QualifiedName JUU = QualifiedName.parse("juu");
+    QualifiedName GTN_HANDLER = QualifiedName.parse("gtn:handler");
+    QualifiedName GTN_LANG = QualifiedName.parse("gtn:lang");
+    QualifiedName GTN_SITENAME = QualifiedName.parse("gtn:sitename");
+    QualifiedName GTN_SITETYPE = QualifiedName.parse("gtn:sitetype");
+    QualifiedName GTN_ACCESS = QualifiedName.parse("gtn:access");
+    QualifiedName GTN_PATH = QualifiedName.parse("gtn:path");
+    QualifiedName GTN_MIN = QualifiedName.parse("gtn:min");
 }

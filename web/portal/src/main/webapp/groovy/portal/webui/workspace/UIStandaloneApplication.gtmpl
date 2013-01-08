@@ -8,7 +8,8 @@
 	import org.exoplatform.portal.webui.portal.UIPortal ;
 	import org.exoplatform.portal.config.model.PortalProperties ;
 	import org.json.JSONArray;
-		
+	import org.exoplatform.container.PortalContainer;
+
 	def rcontext = _ctx.getRequestContext() ;
 	String docBase =	rcontext.getRequestContextPath() ;	
 	String skin = uicomponent.getSkin();
@@ -73,6 +74,7 @@
 			else
 			{%>eXo.env.portal.accessMode = "private" ;<%}%>
 			eXo.env.portal.portalName = "<%=rcontext.getPortalOwner()%>" ;
+			eXo.env.portal.containerName = "<%=PortalContainer.getInstance().getName()%>" ;
 			eXo.env.server.context = "<%=docBase%>" ;
 			eXo.env.server.portalBaseURL = "<%=rcontext.getRequest().getRequestURI()%>" ;
 			eXo.env.server.portalURLTemplate = "<%=uicomponent.getPortalURLTemplate()%>" ;

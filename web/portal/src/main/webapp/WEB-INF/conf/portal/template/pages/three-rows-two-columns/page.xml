@@ -27,9 +27,9 @@
   <name></name>
   <container template='system:/groovy/portal/webui/container/UITableColumnContainer.gtmpl'>
     <access-permissions>Everyone</access-permissions>
-  	<container template='system:/groovy/portal/webui/container/UIContainer.gtmpl'>
-  	  <access-permissions>Everyone</access-permissions>
-  	</container>
+    <container template='system:/groovy/portal/webui/container/UIContainer.gtmpl'>
+      <access-permissions>Everyone</access-permissions>
+    </container>
     <container template='system:/groovy/portal/webui/container/UIContainer.gtmpl'>
       <access-permissions>Everyone</access-permissions>
     </container>

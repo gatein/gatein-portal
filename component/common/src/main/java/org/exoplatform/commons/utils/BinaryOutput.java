@@ -21,19 +21,19 @@ package org.exoplatform.commons.utils;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface BinaryOutput
-{
+public interface BinaryOutput {
 
-   Charset getCharset();
+    Charset getCharset();
 
-   void write(byte b) throws IOException;
+    void write(byte b) throws IOException;
 
-   void write(byte[] bytes) throws IOException;
+    void write(byte[] bytes) throws IOException;
 
-   void write(byte[] bytes, int off, int len) throws IOException;
+    void write(byte[] bytes, int off, int len) throws IOException;
 
 }

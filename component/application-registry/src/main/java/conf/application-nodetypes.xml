@@ -18,7 +18,8 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
 -->
-<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0">
+<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
+           xmlns:jcr="http://www.jcp.org/jcr/1.0">
 
   <nodeType name="app:gadgetregistry" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
     <supertypes>
@@ -27,7 +28,7 @@
     </supertypes>
     <childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="app:gadgetdefinition" autoCreated="false" mandatory="false"
-        onParentVersion="COPY" protected="false" sameNameSiblings="false">
+                           onParentVersion="COPY" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
           <requiredPrimaryType>app:gadgetdefinition</requiredPrimaryType>
         </requiredPrimaryTypes>
@@ -42,16 +43,18 @@
       <supertype>gtn:described</supertype>
     </supertypes>
     <propertyDefinitions>
-      <propertyDefinition name="app:thumbnail" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+      <propertyDefinition name="app:thumbnail" requiredType="String" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
-      <propertyDefinition name="app:referenceurl" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+      <propertyDefinition name="app:referenceurl" requiredType="String" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
     </propertyDefinitions>
     <childNodeDefinitions>
       <childNodeDefinition name="app:data" defaultPrimaryType="app:gadgetdata" autoCreated="false" mandatory="true"
-        onParentVersion="COPY" protected="false" sameNameSiblings="false">
+                           onParentVersion="COPY" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
           <requiredPrimaryType>app:gadgetdata</requiredPrimaryType>
         </requiredPrimaryTypes>
@@ -71,13 +74,14 @@
       <supertype>app:gadgetdata</supertype>
     </supertypes>
     <propertyDefinitions>
-      <propertyDefinition name="app:filename" requiredType="String" autoCreated="false" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
+      <propertyDefinition name="app:filename" requiredType="String" autoCreated="false" mandatory="true"
+                          onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
     </propertyDefinitions>
     <childNodeDefinitions>
       <childNodeDefinition name="app:resources" defaultPrimaryType="nt:folder" autoCreated="false" mandatory="true"
-        onParentVersion="COPY" protected="false" sameNameSiblings="false">
+                           onParentVersion="COPY" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
           <requiredPrimaryType>nt:folder</requiredPrimaryType>
         </requiredPrimaryTypes>
@@ -90,7 +94,8 @@
       <supertype>app:gadgetdata</supertype>
     </supertypes>
     <propertyDefinitions>
-      <propertyDefinition name="app:url" requiredType="String" autoCreated="false" mandatory="true" onParentVersion="COPY" protected="false" multiple="false">
+      <propertyDefinition name="app:url" requiredType="String" autoCreated="false" mandatory="true"
+                          onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
     </propertyDefinitions>
@@ -103,7 +108,7 @@
     </supertypes>
     <childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="app:category" autoCreated="false" mandatory="false"
-        onParentVersion="COPY" protected="false" sameNameSiblings="false">
+                           onParentVersion="COPY" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
           <requiredPrimaryType>app:category</requiredPrimaryType>
         </requiredPrimaryTypes>
@@ -119,16 +124,18 @@
       <supertype>gtn:described</supertype>
     </supertypes>
     <propertyDefinitions>
-      <propertyDefinition name="app:creationdate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+      <propertyDefinition name="app:creationdate" requiredType="Date" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
-      <propertyDefinition name="app:lastmodificationdate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
+      <propertyDefinition name="app:lastmodificationdate" requiredType="Date" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="false">
         <valueConstraints/>
       </propertyDefinition>
     </propertyDefinitions>
     <childNodeDefinitions>
       <childNodeDefinition name="*" defaultPrimaryType="app:application" autoCreated="false" mandatory="false"
-        onParentVersion="COPY" protected="false" sameNameSiblings="false">
+                           onParentVersion="COPY" protected="false" sameNameSiblings="false">
         <requiredPrimaryTypes>
           <requiredPrimaryType>app:application</requiredPrimaryType>
         </requiredPrimaryTypes>
@@ -143,14 +150,16 @@
       <supertype>gtn:protectedresource</supertype>
       <supertype>gtn:described</supertype>
     </supertypes>
-      <propertyDefinitions>
-        <propertyDefinition name="app:creationdate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-          <valueConstraints/>
-        </propertyDefinition>
-        <propertyDefinition name="app:lastmodificationdate" requiredType="Date" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-          <valueConstraints/>
-        </propertyDefinition>
-      </propertyDefinitions>
+    <propertyDefinitions>
+      <propertyDefinition name="app:creationdate" requiredType="Date" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="app:lastmodificationdate" requiredType="Date" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
   </nodeType>
 
 </nodeTypes>

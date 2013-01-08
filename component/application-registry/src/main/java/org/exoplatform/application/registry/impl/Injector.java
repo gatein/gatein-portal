@@ -24,42 +24,33 @@ import org.chromattic.api.event.LifeCycleListener;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Injector implements LifeCycleListener
-{
+public class Injector implements LifeCycleListener {
 
-   /** . */
-   private final ApplicationRegistryServiceImpl registry;
+    /** . */
+    private final ApplicationRegistryServiceImpl registry;
 
-   public Injector(ApplicationRegistryServiceImpl registry)
-   {
-      this.registry = registry;
-   }
+    public Injector(ApplicationRegistryServiceImpl registry) {
+        this.registry = registry;
+    }
 
-   public void created(Object o)
-   {
-   }
+    public void created(Object o) {
+    }
 
-   public void loaded(String id, String path, String name, Object o)
-   {
-      if (o instanceof CategoryDefinition)
-      {
-         ((CategoryDefinition)o).registry = registry;
-      }
-   }
+    public void loaded(String id, String path, String name, Object o) {
+        if (o instanceof CategoryDefinition) {
+            ((CategoryDefinition) o).registry = registry;
+        }
+    }
 
-   public void added(String id, String path, String name, Object o)
-   {
-      if (o instanceof CategoryDefinition)
-      {
-         ((CategoryDefinition)o).registry = registry;
-      }
-   }
+    public void added(String id, String path, String name, Object o) {
+        if (o instanceof CategoryDefinition) {
+            ((CategoryDefinition) o).registry = registry;
+        }
+    }
 
-   public void removed(String id, String path, String name, Object o)
-   {
-      if (o instanceof CategoryDefinition)
-      {
-         ((CategoryDefinition)o).registry = null;
-      }
-   }
+    public void removed(String id, String path, String name, Object o) {
+        if (o instanceof CategoryDefinition) {
+            ((CategoryDefinition) o).registry = null;
+        }
+    }
 }

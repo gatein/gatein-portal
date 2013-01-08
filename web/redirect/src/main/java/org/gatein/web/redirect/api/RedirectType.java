@@ -24,52 +24,44 @@ package org.gatein.web.redirect.api;
 
 /**
  * There can be three different types of redirects:
- * 
+ *
  * REDIRECT means we should perform the redirect
- * 
+ *
  * NOREDIRECT means we should not perform the redirect
- * 
+ *
  * NEEDDEVICEINFO means we could potentially perform a redirect if we had more information about the browser
- * 
+ *
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public enum RedirectType
-{
-   /**
-    * Perform the redirect
-    */
-   REDIRECT
-   {
-      @Override
-      public String toString()
-      {
-         return "gtn.web.redirect";
-      }
-   }, 
-   
-   /**
-    * Do not perform a redirect
-    */
-   NOREDIRECT
-   {
-      @Override
-      public String toString()
-      {
-         return "gtn.web.no-redirect";
-      }
-   },
-   
-   /**
-    * We could potential perform a redirect, but we need more information about the browser first
-    */
-   NEEDDEVICEINFO
-   {
-      @Override
-      public String toString()
-      {
-         return "gtn.web.need-device-info";
-      }
-   };
-}
+public enum RedirectType {
+    /**
+     * Perform the redirect
+     */
+    REDIRECT {
+        @Override
+        public String toString() {
+            return "gtn.web.redirect";
+        }
+    },
 
+    /**
+     * Do not perform a redirect
+     */
+    NOREDIRECT {
+        @Override
+        public String toString() {
+            return "gtn.web.no-redirect";
+        }
+    },
+
+    /**
+     * We could potential perform a redirect, but we need more information about the browser first
+     */
+    NEEDDEVICEINFO {
+        @Override
+        public String toString() {
+            return "gtn.web.need-device-info";
+        }
+    };
+}

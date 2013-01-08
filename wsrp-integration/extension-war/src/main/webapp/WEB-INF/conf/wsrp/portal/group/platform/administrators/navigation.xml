@@ -23,25 +23,25 @@
   -->
 
 <node-navigation
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-   xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
-   <priority>2</priority>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
+  <priority>2</priority>
 
-   <page-nodes>
-      <!-- TODO: enable when the extension mechanism can handle child nodes properly -->
-      <!--    <node>
-     <uri>administration</uri>
-     <name>administration</name>
-     <label>#{administration.title}</label> -->
-      <node>
-         <!-- <uri>administration/wsrpConfiguration</uri> -->
-         <uri>wsrpConfiguration</uri>
-         <name>wsrpConfiguration</name>
-         <!-- TODO: add a proper i18n label here -->
-         <label>WSRP</label>
-         <page-reference>group::/platform/administrators::wsrpConfiguration</page-reference>
-      </node>
-      <!--    </node> -->
-   </page-nodes>
+  <page-nodes>
+    <!-- TODO: enable when the extension mechanism can handle child nodes properly -->
+    <!--    <node>
+   <uri>administration</uri>
+   <name>administration</name>
+   <label>#{administration.title}</label> -->
+    <node>
+      <!-- <uri>administration/wsrpConfiguration</uri> -->
+      <uri>wsrpConfiguration</uri>
+      <name>wsrpConfiguration</name>
+      <!-- TODO: add a proper i18n label here -->
+      <label>WSRP</label>
+      <page-reference>group::/platform/administrators::wsrpConfiguration</page-reference>
+    </node>
+    <!--    </node> -->
+  </page-nodes>
 </node-navigation>

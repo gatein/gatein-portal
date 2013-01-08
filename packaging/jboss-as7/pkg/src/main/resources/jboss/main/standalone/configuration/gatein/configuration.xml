@@ -5,87 +5,88 @@
  Public License for more details. You should have received a copy of the GNU Lesser General Public License along with this software; if not, write to the Free Software
  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA, or see the FSF site: http://www.fsf.org. -->
 
-<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
-    
-    <component>
-        <!-- The full qualified name of the PortalContainerConfig -->
-        <type>org.exoplatform.container.definition.PortalContainerConfig</type>
-        <component-plugins>
-            <component-plugin>
-                <!-- The name of the plugin -->
-                <name>Add PortalContainer Definitions</name>
-                <!-- The name of the method to call on the PortalContainerConfig in order to register the PortalContainerDefinitions -->
-                <set-method>registerPlugin</set-method>
-                <!-- The full qualified name of the PortalContainerDefinitionPlugin -->
-                <type>org.exoplatform.container.definition.PortalContainerDefinitionPlugin</type>
-                <init-params>
-                    <object-param>
-                        <name>portal</name>
-                        <object type="org.exoplatform.container.definition.PortalContainerDefinition">
-                            <!-- The name of the portal container -->
-                            <field name="name">
-                                <string>portal</string>
-                            </field>
-                            <!-- The name of the context name of the rest web application -->
-                            <field name="restContextName">
-                                <string>rest</string>
-                            </field>
-                            <!-- The name of the realm -->
-                            <field name="realmName">
-                                <string>gatein-domain</string>
-                            </field>
-                        </object>
-                    </object-param>
-                </init-params>
-            </component-plugin>
-        </component-plugins>
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+               xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+
+  <component>
+    <!-- The full qualified name of the PortalContainerConfig -->
+    <type>org.exoplatform.container.definition.PortalContainerConfig</type>
+    <component-plugins>
+      <component-plugin>
+        <!-- The name of the plugin -->
+        <name>Add PortalContainer Definitions</name>
+        <!-- The name of the method to call on the PortalContainerConfig in order to register the PortalContainerDefinitions -->
+        <set-method>registerPlugin</set-method>
+        <!-- The full qualified name of the PortalContainerDefinitionPlugin -->
+        <type>org.exoplatform.container.definition.PortalContainerDefinitionPlugin</type>
         <init-params>
-            <!-- The default portal container definition -->
-            <!-- It cans be used to avoid duplicating configuration -->
-            <object-param>
-                <name>default.portal.definition</name>
-                <object type="org.exoplatform.container.definition.PortalContainerDefinition">
-                    <!-- The path to the external properties file -->
-                    <field name="externalSettingsPath">
-                        <string>configuration.properties</string>
-                    </field>
-                    <field name="dependencies">
-                        <collection type="java.util.ArrayList">
-                            <value>
-                                <string>eXoResources</string>
-                            </value>
-                            <value>
-                                <string>portal</string>
-                            </value>
-                            <value>
-                                <string>dashboard</string>
-                            </value>
-                            <value>
-                                <string>exoadmin</string>
-                            </value>
-                            <value>
-                                <string>eXoGadgets</string>
-                            </value>
-                            <value>
-                                <string>gwtGadgets</string>
-                            </value>
-                            <value>
-                                <string>eXoGadgetServer</string>
-                            </value>
-                            <value>
-                                <string>rest</string>
-                            </value>
-                            <value>
-                                <string>wsrp-producer</string>
-                            </value>
-                            <value>
-                                <string>web</string>
-                            </value>
-                        </collection>
-                    </field>
-                </object>
-            </object-param>
+          <object-param>
+            <name>portal</name>
+            <object type="org.exoplatform.container.definition.PortalContainerDefinition">
+              <!-- The name of the portal container -->
+              <field name="name">
+                <string>portal</string>
+              </field>
+              <!-- The name of the context name of the rest web application -->
+              <field name="restContextName">
+                <string>rest</string>
+              </field>
+              <!-- The name of the realm -->
+              <field name="realmName">
+                <string>gatein-domain</string>
+              </field>
+            </object>
+          </object-param>
         </init-params>
-    </component>
+      </component-plugin>
+    </component-plugins>
+    <init-params>
+      <!-- The default portal container definition -->
+      <!-- It cans be used to avoid duplicating configuration -->
+      <object-param>
+        <name>default.portal.definition</name>
+        <object type="org.exoplatform.container.definition.PortalContainerDefinition">
+          <!-- The path to the external properties file -->
+          <field name="externalSettingsPath">
+            <string>configuration.properties</string>
+          </field>
+          <field name="dependencies">
+            <collection type="java.util.ArrayList">
+              <value>
+                <string>eXoResources</string>
+              </value>
+              <value>
+                <string>portal</string>
+              </value>
+              <value>
+                <string>dashboard</string>
+              </value>
+              <value>
+                <string>exoadmin</string>
+              </value>
+              <value>
+                <string>eXoGadgets</string>
+              </value>
+              <value>
+                <string>gwtGadgets</string>
+              </value>
+              <value>
+                <string>eXoGadgetServer</string>
+              </value>
+              <value>
+                <string>rest</string>
+              </value>
+              <value>
+                <string>wsrp-producer</string>
+              </value>
+              <value>
+                <string>web</string>
+              </value>
+            </collection>
+          </field>
+        </object>
+      </object-param>
+    </init-params>
+  </component>
 </configuration>

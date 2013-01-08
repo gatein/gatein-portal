@@ -28,44 +28,37 @@ import org.exoplatform.portal.pom.data.ModelData;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class NodeMap extends ModelObject
-{
+public class NodeMap extends ModelObject {
 
-   protected String originNode;
-   protected String redirectNode;
-   
-   public NodeMap(){}
-   
-   public NodeMap(String originNode, String redirectNode)
-   {
-      this.originNode = originNode;
-      this.redirectNode = redirectNode;
-   }
-   
-   public ModelData build()
-   {
-      return null;
-   }
+    protected String originNode;
+    protected String redirectNode;
 
-   public String getOriginNode()
-   {
-      return originNode;
-   }
+    public NodeMap() {
+    }
 
-   public void setOriginNode(String originNode)
-   {
-      this.originNode = originNode;
-   }
+    public NodeMap(String originNode, String redirectNode) {
+        this.originNode = originNode;
+        this.redirectNode = redirectNode;
+    }
 
-   public String getRedirectNode()
-   {
-      return redirectNode;
-   }
+    public ModelData build() {
+        return null;
+    }
 
-   public void setRedirectNode(String redirectNode)
-   {
-      this.redirectNode = redirectNode;
-   }
+    public String getOriginNode() {
+        return originNode;
+    }
+
+    public void setOriginNode(String originNode) {
+        this.originNode = originNode;
+    }
+
+    public String getRedirectNode() {
+        return redirectNode;
+    }
+
+    public void setRedirectNode(String redirectNode) {
+        this.redirectNode = redirectNode;
+    }
 
 }
-

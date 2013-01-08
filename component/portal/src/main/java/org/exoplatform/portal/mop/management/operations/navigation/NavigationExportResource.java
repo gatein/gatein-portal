@@ -22,6 +22,9 @@
 
 package org.exoplatform.portal.mop.management.operations.navigation;
 
+import java.text.ParseException;
+import java.util.List;
+
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
@@ -40,55 +43,50 @@ import org.gatein.management.api.operation.model.ExportResourceModel;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.Site;
 
-import java.text.ParseException;
-import java.util.List;
-
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class NavigationExportResource extends AbstractNavigationOperationHandler
-{
-   private static final FilteredNavigationExportResource filtered = new FilteredNavigationExportResource();
+public class NavigationExportResource extends AbstractNavigationOperationHandler {
+    private static final FilteredNavigationExportResource filtered = new FilteredNavigationExportResource();
 
-   @Override
-   protected void execute(OperationContext operationContext, ResultHandler resultHandler, Navigation navigation) throws ResourceNotFoundException, OperationException
-   {
-      List<String> filterAttributes = operationContext.getAttributes().getValues("filter");
-      PathTemplateFilter filter;
-      try
-      {
-         filter = PathTemplateFilter.parse(filterAttributes);
-      }
-      catch (ParseException e)
-      {
-         throw new OperationException(operationContext.getOperationName(), "Could not parse filter attributes.", e);
-      }
+    @Override
+    protected void execute(OperationContext operationContext, ResultHandler resultHandler, Navigation navigation)
+            throws ResourceNotFoundException, OperationException {
+        List<String> filterAttributes = operationContext.getAttributes().getValues("filter");
+        PathTemplateFilter filter;
+        try {
+            filter = PathTemplateFilter.parse(filterAttributes);
+        } catch (ParseException e) {
+            throw new OperationException(operationContext.getOperationName(), "Could not parse filter attributes.", e);
+        }
 
-      if (filter.hasPathTemplate("nav-uri"))
-      {
-         filtered.execute(operationContext, resultHandler, filter);
-      }
-      else
-      {
-         Site site = navigation.getSite();
-         String navUri = operationContext.getAddress().resolvePathTemplate("nav-uri");
-         SiteKey siteKey = getSiteKey(site);
+        if (filter.hasPathTemplate("nav-uri")) {
+            filtered.execute(operationContext, resultHandler, filter);
+        } else {
+            Site site = navigation.getSite();
+            String navUri = operationContext.getAddress().resolvePathTemplate("nav-uri");
+            SiteKey siteKey = getSiteKey(site);
 
-         DescriptionService descriptionService = operationContext.getRuntimeContext().getRuntimeComponent(DescriptionService.class);
-         NavigationService navigationService = operationContext.getRuntimeContext().getRuntimeComponent(NavigationService.class);
-         NavigationKey navigationKey = new NavigationKey(siteKey, navUri);
+            DescriptionService descriptionService = operationContext.getRuntimeContext().getRuntimeComponent(
+                    DescriptionService.class);
+            NavigationService navigationService = operationContext.getRuntimeContext().getRuntimeComponent(
+                    NavigationService.class);
+            NavigationKey navigationKey = new NavigationKey(siteKey, navUri);
 
-         // Find navigation first
-         NodeContext<?> context = NavigationUtils.loadNode(navigationService, navigationService.loadNavigation(siteKey), navigationKey.getNavUri());
-         if (context == null) throw new ResourceNotFoundException("Navigation node not found for navigation uri '" + navUri +"'");
+            // Find navigation first
+            NodeContext<?> context = NavigationUtils.loadNode(navigationService, navigationService.loadNavigation(siteKey),
+                    navigationKey.getNavUri());
+            if (context == null)
+                throw new ResourceNotFoundException("Navigation node not found for navigation uri '" + navUri + "'");
 
-         BindingProvider bindingProvider = operationContext.getBindingProvider();
-         Marshaller<PageNavigation> marshaller = bindingProvider.getMarshaller(PageNavigation.class, ContentType.XML);
+            BindingProvider bindingProvider = operationContext.getBindingProvider();
+            Marshaller<PageNavigation> marshaller = bindingProvider.getMarshaller(PageNavigation.class, ContentType.XML);
 
-         NavigationExportTask exportTask = new NavigationExportTask(navigationKey, navigationService, descriptionService, marshaller);
+            NavigationExportTask exportTask = new NavigationExportTask(navigationKey, navigationService, descriptionService,
+                    marshaller);
 
-         resultHandler.completed(new ExportResourceModel(exportTask));
-      }
-   }
+            resultHandler.completed(new ExportResourceModel(exportTask));
+        }
+    }
 }

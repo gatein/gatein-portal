@@ -19,13 +19,10 @@
 
 package org.exoplatform.management;
 
-import org.exoplatform.management.data.RestResource;
-import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.management.rest.annotations.RESTEndpoint;
-import org.exoplatform.management.spi.ManagedResource;
-import org.exoplatform.management.spi.ManagementProvider;
-import org.exoplatform.portal.config.UserACL;
-import org.exoplatform.services.rest.resource.ResourceContainer;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -33,90 +30,84 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.management.data.RestResource;
+import org.exoplatform.management.rest.annotations.RESTEndpoint;
+import org.exoplatform.management.spi.ManagedResource;
+import org.exoplatform.management.spi.ManagementProvider;
+import org.exoplatform.portal.config.UserACL;
+import org.exoplatform.services.rest.resource.ResourceContainer;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 @Path("management")
-public class RestManagementProvider implements ResourceContainer, ManagementProvider
-{
+public class RestManagementProvider implements ResourceContainer, ManagementProvider {
 
-   /** . */
-   private final ExoContainerContext context;
+    /** . */
+    private final ExoContainerContext context;
 
-   /** . */
-   private final Map<ResourceKey, RestResource> resourceMap = new HashMap<ResourceKey, RestResource>();
+    /** . */
+    private final Map<ResourceKey, RestResource> resourceMap = new HashMap<ResourceKey, RestResource>();
 
-   /** . */
-   private final UserACL acl;
+    /** . */
+    private final UserACL acl;
 
-   public RestManagementProvider(ExoContainerContext context, UserACL acl)
-   {
-      this.context = context;
-      this.acl = acl;
-   }
+    public RestManagementProvider(ExoContainerContext context, UserACL acl) {
+        this.context = context;
+        this.acl = acl;
+    }
 
-   @GET
-   @Produces(MediaType.APPLICATION_JSON)
-   public Object list()
-   {
-      // Apply security here
-      if (!acl.hasPermission("*:/platform/administrators"))
-      {
-         return Response.status(Response.Status.FORBIDDEN);
-      }
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Object list() {
+        // Apply security here
+        if (!acl.hasPermission("*:/platform/administrators")) {
+            return Response.status(Response.Status.FORBIDDEN);
+        }
 
-      //
-      List<String> list = new ArrayList<String>();
-      for (RestResource mr : resourceMap.values())
-      {
-         list.add(mr.getName());
-      }
-      return ValueWrapper.wrap(list);
-   }
+        //
+        List<String> list = new ArrayList<String>();
+        for (RestResource mr : resourceMap.values()) {
+            list.add(mr.getName());
+        }
+        return ValueWrapper.wrap(list);
+    }
 
-   @Path("{resource}")
-   public Object dispatch(@PathParam("resource") String resourceName)
-   {
-      // Apply security here
-      if (!acl.hasPermission("*:/platform/administrators"))
-      {
-         return Response.status(Response.Status.FORBIDDEN);
-      }
+    @Path("{resource}")
+    public Object dispatch(@PathParam("resource") String resourceName) {
+        // Apply security here
+        if (!acl.hasPermission("*:/platform/administrators")) {
+            return Response.status(Response.Status.FORBIDDEN);
+        }
 
-      //
-      return resourceMap.get(new ResourceKey(resourceName));
-   }
+        //
+        return resourceMap.get(new ResourceKey(resourceName));
+    }
 
-   // ManagementProvider implementation ******************************************************************************** 
+    // ManagementProvider implementation ********************************************************************************
 
-   public Object manage(ManagedResource managedResource)
-   {
-      Object resource = managedResource.getResource();
+    public Object manage(ManagedResource managedResource) {
+        Object resource = managedResource.getResource();
 
-      //
-      RESTEndpoint annotation = resource.getClass().getAnnotation(RESTEndpoint.class);
+        //
+        RESTEndpoint annotation = resource.getClass().getAnnotation(RESTEndpoint.class);
 
-      //
-      if (annotation != null)
-      {
-         String name = annotation.path();
-         ResourceKey key = new ResourceKey(name);
-         resourceMap.put(key, new RestResource(name, managedResource));
-         return key;
-      }
+        //
+        if (annotation != null) {
+            String name = annotation.path();
+            ResourceKey key = new ResourceKey(name);
+            resourceMap.put(key, new RestResource(name, managedResource));
+            return key;
+        }
 
-      //
-      return null;
-   }
+        //
+        return null;
+    }
 
-   public void unmanage(Object key)
-   {
-      resourceMap.remove(key);
-   }
+    public void unmanage(Object key) {
+        resourceMap.remove(key);
+    }
 }

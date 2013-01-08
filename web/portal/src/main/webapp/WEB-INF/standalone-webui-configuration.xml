@@ -19,8 +19,8 @@
 
 -->
 
-<webui-configuration>  
-  <application>     
+<webui-configuration>
+  <application>
     <init-params>
       <param>
         <name>application.resource.bundle</name>
@@ -28,15 +28,15 @@
       </param>
     </init-params>
 
-    <ui-component-root>org.exoplatform.portal.webui.workspace.UIStandaloneApplication</ui-component-root>    
+    <ui-component-root>org.exoplatform.portal.webui.workspace.UIStandaloneApplication</ui-component-root>
     <state-manager>org.exoplatform.portal.application.StandaloneAppStateManager</state-manager>
 
-    <application-lifecycle-listeners>       
+    <application-lifecycle-listeners>
       <listener>org.exoplatform.portal.application.PortalLogoutLifecycle</listener>
       <listener>org.exoplatform.portal.application.PortalStatisticLifecycle</listener>
       <listener>org.exoplatform.portal.application.PortalApplicationLifecycle</listener>
       <listener>org.exoplatform.webui.application.MonitorApplicationLifecycle</listener>
-      <!--<listener>org.exoplatform.portal.application.localization.LocalizationLifecycle</listener>-->       
+      <!--<listener>org.exoplatform.portal.application.localization.LocalizationLifecycle</listener>-->
     </application-lifecycle-listeners>
 
     <events>

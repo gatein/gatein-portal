@@ -19,72 +19,62 @@
 
 package org.exoplatform.portal.mop.user;
 
-import junit.framework.TestCase;
-
 import java.util.Arrays;
+
+import junit.framework.TestCase;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestParsePath extends TestCase
-{
+public class TestParsePath extends TestCase {
 
-   public void testFoo()
-   {
-      assertPath("a", "a");
-      assertPath("a/", "a");
-      assertPath("a//", "a");
-      assertPath("a/b", "a", "b");
-      assertPath("a/b/", "a", "b");
-      assertPath("a/b//", "a", "b");
-      assertPath("a//b", "a", "", "b");
-      assertPath("a//b/", "a", "", "b");
-      assertPath("a//b//", "a", "", "b");
-      assertPath("/", (String[])null);
-      assertPath("//");
-      assertPath("///");
-      assertPath("/a", "a");
-      assertPath("//a", "", "a");
-      assertPath("/a/", "a");
-      assertPath("/a//", "a");
-      assertPath("/a////", "a");
-   }
+    public void testFoo() {
+        assertPath("a", "a");
+        assertPath("a/", "a");
+        assertPath("a//", "a");
+        assertPath("a/b", "a", "b");
+        assertPath("a/b/", "a", "b");
+        assertPath("a/b//", "a", "b");
+        assertPath("a//b", "a", "", "b");
+        assertPath("a//b/", "a", "", "b");
+        assertPath("a//b//", "a", "", "b");
+        assertPath("/", (String[]) null);
+        assertPath("//");
+        assertPath("///");
+        assertPath("/a", "a");
+        assertPath("//a", "", "a");
+        assertPath("/a/", "a");
+        assertPath("/a//", "a");
+        assertPath("/a////", "a");
+    }
 
-   private void assertPath(String path, String... expected)
-   {
-      // Previous behavior
-      assertEquals(expected, legacy(path));
-      assertEquals(expected, Utils.parsePath(path));
-   }
+    private void assertPath(String path, String... expected) {
+        // Previous behavior
+        assertEquals(expected, legacy(path));
+        assertEquals(expected, Utils.parsePath(path));
+    }
 
-   private void assertEquals(String[] expected, String[] actual)
-   {
-      if (actual == null)
-      {
-         assertNull(expected);
-      }
-      else
-      {
-         assertNotNull(expected);
-         assertEquals(Arrays.asList(expected), Arrays.asList(actual));
-      }
-   }
+    private void assertEquals(String[] expected, String[] actual) {
+        if (actual == null) {
+            assertNull(expected);
+        } else {
+            assertNotNull(expected);
+            assertEquals(Arrays.asList(expected), Arrays.asList(actual));
+        }
+    }
 
-   private String[] legacy(String path)
-   {
-      //  Remove any leading /
-      if (path.length() > 0 && path.charAt(0) == '/')
-      {
-         path = path.substring(1);
-      }
+    private String[] legacy(String path) {
+        // Remove any leading /
+        if (path.length() > 0 && path.charAt(0) == '/') {
+            path = path.substring(1);
+        }
 
-      // Find the first navigation available or return null
-      if (path.length() == 0)
-      {
-         return null;
-      }
+        // Find the first navigation available or return null
+        if (path.length() == 0) {
+            return null;
+        }
 
-      // Split into segments
-      return path.split("/");
-   }
+        // Split into segments
+        return path.split("/");
+    }
 }

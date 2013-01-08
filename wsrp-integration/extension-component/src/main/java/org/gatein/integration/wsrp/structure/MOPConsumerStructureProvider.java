@@ -23,12 +23,19 @@
 
 package org.gatein.integration.wsrp.structure;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.EventType;
-import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
-import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
@@ -44,292 +51,256 @@ import org.gatein.pc.api.PortletStateType;
 import org.gatein.pc.api.StatefulPortletContext;
 import org.gatein.wsrp.api.context.ConsumerStructureProvider;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class MOPConsumerStructureProvider extends Listener implements ConsumerStructureProvider
-{
-   private final PortalStructureAccess structureAccess;
-   private Map<String, PageInfo> pageInfos;
-   private boolean pagesHaveBeenInitialized;
+public class MOPConsumerStructureProvider extends Listener implements ConsumerStructureProvider {
+    private final PortalStructureAccess structureAccess;
+    private Map<String, PageInfo> pageInfos;
+    private boolean pagesHaveBeenInitialized;
 
-   public MOPConsumerStructureProvider(PortalStructureAccess structureAccess)
-   {
-      ParameterValidation.throwIllegalArgExceptionIfNull(structureAccess, "PortalStructureAccess");
+    public MOPConsumerStructureProvider(PortalStructureAccess structureAccess) {
+        ParameterValidation.throwIllegalArgExceptionIfNull(structureAccess, "PortalStructureAccess");
 
-      this.structureAccess = structureAccess;
-      pageInfos = new HashMap<String, PageInfo>();
-   }
+        this.structureAccess = structureAccess;
+        pageInfos = new HashMap<String, PageInfo>();
+    }
 
-   public List<String> getPageIdentifiers()
-   {
-      if (!pagesHaveBeenInitialized)
-      {
-         // initialize page information
-         Collection<Page> pages = structureAccess.getPages();
-         for (Page page : pages)
-         {
-            addPage(page);
-         }
-
-         pagesHaveBeenInitialized = true;
-      }
-
-      LinkedList<String> identifiers = new LinkedList<String>(pageInfos.keySet());
-      Collections.sort(identifiers);
-      return identifiers;
-   }
-
-   private void addPage(Page page)
-   {
-      Described described = page.adapt(Described.class);
-      PageInfo pageInfo = new PageInfo(page.getObjectId(), described.getName(), page.getName());
-      pageInfos.put(pageInfo.getName(), pageInfo);
-      UIContainer container = page.getRootComponent();
-      processContainer(container, pageInfo);
-
-      Collection<Page> children = page.getChildren();
-      if (ParameterValidation.existsAndIsNotEmpty(children))
-      {
-         for (Page child : children)
-         {
-            addPage(child);
-         }
-      }
-   }
-
-   public List<String> getWindowIdentifiersFor(String pageId)
-   {
-      PageInfo pageInfo = pageInfos.get(pageId);
-      if (pageInfo == null)
-      {
-         throw new IllegalArgumentException("Page '" + pageId + "' does not exist.");
-      }
-
-      return pageInfo.getChildrenWindows();
-   }
-
-   private void processContainer(UIContainer container, PageInfo pageInfo)
-   {
-      if (container != null)
-      {
-         List<UIComponent> components = container.getComponents();
-         for (UIComponent component : components)
-         {
-            ObjectType<? extends UIComponent> type = component.getObjectType();
-            if (ObjectType.WINDOW.equals(type))
-            {
-               Described described = component.adapt(Described.class);
-               String name = described.getName();
-               if(name == null)
-               {
-                  name = described.getDescription();
-               }
-
-               pageInfo.addWindow(name, component.getObjectId());
+    public List<String> getPageIdentifiers() {
+        if (!pagesHaveBeenInitialized) {
+            // initialize page information
+            Collection<Page> pages = structureAccess.getPages();
+            for (Page page : pages) {
+                addPage(page);
             }
-            else if (ObjectType.CONTAINER.equals(type))
-            {
-               processContainer((UIContainer)component, pageInfo);
+
+            pagesHaveBeenInitialized = true;
+        }
+
+        LinkedList<String> identifiers = new LinkedList<String>(pageInfos.keySet());
+        Collections.sort(identifiers);
+        return identifiers;
+    }
+
+    private void addPage(Page page) {
+        PageInfo pageInfo = new PageInfo(page);
+        pageInfos.put(pageInfo.getId(), pageInfo);
+        UIContainer container = page.getRootComponent();
+        processContainer(container, pageInfo);
+
+        Collection<Page> children = page.getChildren();
+        if (ParameterValidation.existsAndIsNotEmpty(children)) {
+            for (Page child : children) {
+                addPage(child);
             }
-            else
-            {
-               // ignore
+        }
+    }
+
+    public List<String> getWindowIdentifiersFor(String pageId) {
+        PageInfo pageInfo = pageInfos.get(pageId);
+        if (pageInfo == null) {
+            throw new IllegalArgumentException("Page '" + pageId + "' does not exist.");
+        }
+
+        return pageInfo.getChildrenWindows();
+    }
+
+    private void processContainer(UIContainer container, PageInfo pageInfo) {
+        if (container != null) {
+            List<UIComponent> components = container.getComponents();
+            for (UIComponent component : components) {
+                ObjectType<? extends UIComponent> type = component.getObjectType();
+                if (ObjectType.WINDOW.equals(type)) {
+                    Described described = component.adapt(Described.class);
+                    String name = described.getName();
+                    if (name == null) {
+                        name = described.getDescription();
+                    }
+
+                    pageInfo.addWindow(name, component.getObjectId());
+                } else if (ObjectType.CONTAINER.equals(type)) {
+                    processContainer((UIContainer) component, pageInfo);
+                } else {
+                    // ignore
+                }
             }
-         }
-      }
-   }
+        }
+    }
 
-   public void assignPortletToWindow(PortletContext portletContext, String windowId, String pageId, String exportedPortletHandle)
-   {
-      PageInfo pageInfo = pageInfos.get(pageId);
-      String uuid = pageInfo.getWindowUUID(windowId);
-      ParameterValidation.throwIllegalArgExceptionIfNull(uuid, "UUID for " + windowId);
+    public void assignPortletToWindow(PortletContext portletContext, String windowId, String pageId,
+            String exportedPortletHandle) {
+        PageInfo pageInfo = pageInfos.get(pageId);
+        String uuid = pageInfo.getWindowUUID(windowId);
+        ParameterValidation.throwIllegalArgExceptionIfNull(uuid, "UUID for " + windowId);
 
-      // get the window
-      UIWindow window = structureAccess.getWindowFrom(uuid);
+        // get the window
+        UIWindow window = structureAccess.getWindowFrom(uuid);
 
-      // construct the new customization state
-      WSRP wsrp = new WSRP();
-      String portletId = portletContext.getId();
-      wsrp.setPortletId(portletId);
-      if (portletContext instanceof StatefulPortletContext)
-      {
-         StatefulPortletContext context = (StatefulPortletContext)portletContext;
-         if (PortletStateType.OPAQUE.equals(context.getType()))
-         {
-            wsrp.setState((byte[])context.getState());
-         }
-         else
-         {
-            throw new IllegalArgumentException("Don't know how to deal with state: " + context.getState());
-         }
-      }
-
-      // destroy existing customization as otherwise re-customizing will fail
-      Customization<?> customization = window.getCustomization();
-      customization.destroy();
-
-      // and re-customize
-      window.customize(WSRP.CONTENT_TYPE, portletId, wsrp);
-
-      // Change the window's name so that it's less confusing to users
-      Described described = window.adapt(Described.class);
-      String newName = exportedPortletHandle + " (remote)";
-      described.setName(newName); // should be the same as ApplicationRegistryService.REMOTE_DISPLAY_NAME_SUFFIX
-
-      // update window mappings
-      pageInfo.updateWindowName(windowId, newName);
-
-      structureAccess.saveChangesTo(window);
-   }
-
-   @Override
-   public void onEvent(Event event) throws Exception
-   {
-      String eventName = event.getEventName();
-
-      // get the MOP page from the event data
-      final Object eventData = event.getData();
-      final Page page;
-      PageKey pageKey = null;
-      if (eventData instanceof PageKey)
-      {
-         pageKey = (PageKey)eventData;
-         page = structureAccess.getPageFrom(pageKey);
-      }
-      else
-      {
-         org.exoplatform.portal.config.model.Page portalPage = (org.exoplatform.portal.config.model.Page)eventData;
-         page = structureAccess.getPageFrom(portalPage);
-      }
-
-      if (pageKey != null && page == null && EventType.PAGE_DESTROYED.equals(eventName))
-      {
-         // if we try to remove a page, when we get this event, the page has already been removed from JCR
-         // so we need to work around that fact by retrieving the corresponding PageInfo from the portal page title
-         // which should match the Described name and check that it matches the internal name before removing it
-         final PageService pageService = (PageService) event.getSource();
-         final PageContext pageContext = pageService.loadPage(pageKey);
-         removePage(pageContext.getState().getDisplayName(), pageKey.getName());
-
-         return;
-      }
-
-      if (page != null)
-      {
-         if (EventType.PAGE_CREATED.equals(eventName))
-         {
-            // add information for new page
-            addPage(page);
-         }
-         else if (EventType.PAGE_UPDATED.equals(eventName) || DataStorage.PAGE_UPDATED.equals(eventName))
-         {
-            removePage(page);
-            addPage(page);
-         }
-      }
-   }
-
-   private void removePage(Page page)
-   {
-      Described described = page.adapt(Described.class);
-      String name = described.getName();
-
-      removePage(name, page.getName());
-   }
-
-   private void removePage(String name, String internalName)
-   {
-      PageInfo pageInfo = pageInfos.get(name);
-      if (pageInfo != null && internalName.equals(pageInfo.getInternalName()))
-      {
-         // remove page info
-         pageInfos.remove(name);
-      }
-   }
-
-   private static class PageInfo
-   {
-      private final String uuid;
-      private final Map<String, String> childrenWindows = new HashMap<String, String>();
-
-      /** Name as provided by Described */
-      private final String name;
-
-      /** Name as automatically generated */
-      private final String internalName;
-
-      private PageInfo(String uuid, String name, String internalName)
-      {
-         this.uuid = uuid;
-         this.name = name;
-         this.internalName = internalName;
-      }
-
-      public String getUUID()
-      {
-         return uuid;
-      }
-
-      public String getInternalName()
-      {
-         return internalName;
-      }
-
-      public List<String> getChildrenWindows()
-      {
-         return new ArrayList<String>(childrenWindows.keySet());
-      }
-
-      public void addWindow(String windowName, String uuid)
-      {
-         // if we don't have a window name, use the UUID
-         if (ParameterValidation.isNullOrEmpty(windowName))
-         {
-            windowName = uuid;
-         }
-
-         // add suffix in case we have several windows with the same name in the page
-         if (childrenWindows.containsKey(windowName))
-         {
-            if (windowName.endsWith("|"))
-            {
-               windowName += "|";
+        // construct the new customization state
+        WSRP wsrp = new WSRP();
+        String portletId = portletContext.getId();
+        wsrp.setPortletId(portletId);
+        if (portletContext instanceof StatefulPortletContext) {
+            StatefulPortletContext context = (StatefulPortletContext) portletContext;
+            if (PortletStateType.OPAQUE.equals(context.getType())) {
+                wsrp.setState((byte[]) context.getState());
+            } else {
+                throw new IllegalArgumentException("Don't know how to deal with state: " + context.getState());
             }
-            else
-            {
-               windowName += windowName + " |";
+        }
+
+        // destroy existing customization as otherwise re-customizing will fail
+        Customization<?> customization = window.getCustomization();
+        customization.destroy();
+
+        // and re-customize
+        window.customize(WSRP.CONTENT_TYPE, portletId, wsrp);
+
+        // Change the window's name so that it's less confusing to users
+        Described described = window.adapt(Described.class);
+        String newName = exportedPortletHandle + " (remote)";
+        described.setName(newName); // should be the same as ApplicationRegistryService.REMOTE_DISPLAY_NAME_SUFFIX
+
+        // update window mappings
+        pageInfo.updateWindowName(windowId, newName);
+
+        structureAccess.saveChangesTo(window);
+    }
+
+    @Override
+    public void onEvent(Event event) throws Exception {
+        String eventName = event.getEventName();
+
+        // get the MOP page from the event data
+        final Object eventData = event.getData();
+        final Page page;
+        PageKey pageKey = null;
+        if (eventData instanceof PageKey) {
+            pageKey = (PageKey) eventData;
+            page = structureAccess.getPageFrom(pageKey);
+        } else {
+            org.exoplatform.portal.config.model.Page portalPage = (org.exoplatform.portal.config.model.Page) eventData;
+            page = structureAccess.getPageFrom(portalPage);
+        }
+
+        if (pageKey != null && page == null && EventType.PAGE_DESTROYED.equals(eventName)) {
+            // if we try to remove a page, when we get this event, the page has already been removed from JCR
+            // so we need to work around that fact by retrieving the corresponding PageInfo from the portal page title
+            // which should match the Described name and check that it matches the internal name before removing it
+            removePageByInternalName(pageKey.getName());
+            return;
+        }
+
+        if (page != null) {
+            if (EventType.PAGE_CREATED.equals(eventName)) {
+                // add information for new page
+                addPage(page);
+            } else if (EventType.PAGE_UPDATED.equals(eventName) || DataStorage.PAGE_UPDATED.equals(eventName)) {
+                removePage(page);
+                addPage(page);
             }
-         }
+        }
+    }
 
-         childrenWindows.put(windowName, uuid);
-      }
+    private void removePage(Page page) {
+        final String id = PageInfo.getPageIdFor(page);
 
-      public void updateWindowName(String oldWindowName, String newWindowName)
-      {
-         String windowUUID = getWindowUUID(oldWindowName);
-         childrenWindows.remove(oldWindowName);
-         childrenWindows.put(newWindowName, windowUUID);
-      }
+        PageInfo pageInfo = pageInfos.get(id);
+        if (pageInfo != null && page.getName().equals(pageInfo.getInternalName())) {
+            // remove page info
+            pageInfos.remove(id);
+        }
+    }
 
-      public String getName()
-      {
-         return name;
-      }
+    private void removePageByInternalName(String internalName) {
+        Iterator<PageInfo> itr = pageInfos.values().iterator();
+        while (itr.hasNext()) {
+            if (itr.next().getInternalName().equals(internalName)) {
+                itr.remove();
+                return;
+            }
+        }
+    }
 
-      public String getWindowUUID(String windowId)
-      {
-         return childrenWindows.get(windowId);
-      }
-   }
+    static class PageInfo {
+        private final String uuid;
+        private final Map<String, String> childrenWindows = new HashMap<String, String>();
+
+        /** Name as provided by Described */
+        private final String name;
+
+        /** Human readable identifier across sites as pages with the same name exist in different sites */
+        private final String id;
+
+        /** Name as automatically generated */
+        private final String internalName;
+
+        private PageInfo(Page page) {
+            this.uuid = page.getObjectId();
+            this.internalName = page.getName();
+
+            Described described = page.adapt(Described.class);
+            this.name = described.getName();
+
+            this.id = getPageIdFor(page);
+        }
+
+        static String getPageIdFor(Page page) {
+            Described described = page.adapt(Described.class);
+            return getPageIdFor(page.getSite().getName(), described.getName());
+        }
+
+        static String getPageIdFor(String siteName, String pageName) {
+            return siteName + " :: " + pageName;
+        }
+
+        public String getUUID() {
+            return uuid;
+        }
+
+        public String getInternalName() {
+            return internalName;
+        }
+
+        public List<String> getChildrenWindows() {
+            return new ArrayList<String>(childrenWindows.keySet());
+        }
+
+        public void addWindow(String windowName, String uuid) {
+            // if we don't have a window name, use the UUID
+            if (ParameterValidation.isNullOrEmpty(windowName)) {
+                windowName = uuid;
+            }
+
+            // add suffix in case we have several windows with the same name in the page
+            if (childrenWindows.containsKey(windowName)) {
+                if (windowName.endsWith("|")) {
+                    windowName += "|";
+                } else {
+                    windowName += windowName + " |";
+                }
+            }
+
+            childrenWindows.put(windowName, uuid);
+        }
+
+        public void updateWindowName(String oldWindowName, String newWindowName) {
+            String windowUUID = getWindowUUID(oldWindowName);
+            childrenWindows.remove(oldWindowName);
+            childrenWindows.put(newWindowName, windowUUID);
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public String getWindowUUID(String windowId) {
+            return childrenWindows.get(windowId);
+        }
+
+        public String getId() {
+            return id;
+        }
+    }
 }

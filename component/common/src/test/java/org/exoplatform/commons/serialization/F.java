@@ -19,21 +19,20 @@
 
 package org.exoplatform.commons.serialization;
 
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 @Serialized
-public class F
-{
+public class F {
 
-   List<F> children = new ArrayList<F>();
+    List<F> children = new ArrayList<F>();
 
-   F parent;
+    F parent;
 
 }

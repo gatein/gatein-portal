@@ -24,39 +24,36 @@ package org.exoplatform.account.webui.component;
 
 import java.util.Calendar;
 
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.form.UIFormStringInput;
-
 import javax.portlet.RenderResponse;
 import javax.portlet.ResourceURL;
+
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.form.UIFormStringInput;
 
 /**
  * @author <a href="mailto:theute@redhat.com">Thomas Heute</a>
  * @version $Revision$
  */
-public class UICaptcha extends UIFormStringInput
-{
+public class UICaptcha extends UIFormStringInput {
 
-   public UICaptcha(String name, String bindingExpression, String value)
-   {
-      super(name, bindingExpression, value);
-   }
+    public UICaptcha(String name, String bindingExpression, String value) {
+        super(name, bindingExpression, value);
+    }
 
-   public void processRender(WebuiRequestContext context) throws Exception
-   {
+    public void processRender(WebuiRequestContext context) throws Exception {
 
-      RenderResponse resp =  context.getResponse();
+        RenderResponse resp = context.getResponse();
 
-      //
-      ResourceURL url = resp.createResourceURL();
+        //
+        ResourceURL url = resp.createResourceURL();
 
-      // context.getPortalContextPath() + "/captcha?v=" +  Calendar.getInstance().getTimeInMillis()
+        // context.getPortalContextPath() + "/captcha?v=" + Calendar.getInstance().getTimeInMillis()
 
-      String random = "&v=" + Calendar.getInstance().getTimeInMillis();
+        String random = "&v=" + Calendar.getInstance().getTimeInMillis();
 
-      context.getWriter().write("<div id='" + getId() + "'><img src=\"" + url.toString()  + random + "\" /><br/>");
-      super.processRender(context);
-      context.getWriter().write("</div>");
-   }
+        context.getWriter().write("<div id='" + getId() + "'><img src=\"" + url.toString() + random + "\" /><br/>");
+        super.processRender(context);
+        context.getWriter().write("</div>");
+    }
 
 }

@@ -23,21 +23,19 @@ package org.exoplatform.web.controller.router;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class SegmentRoute extends Route
-{
+class SegmentRoute extends Route {
 
-   /** . */
-   final String name;
+    /** . */
+    final String name;
 
-   /** . */
-   final String encodedName;
+    /** . */
+    final String encodedName;
 
-   SegmentRoute(Router router, String name)
-   {
-      super(router);
+    SegmentRoute(Router router, String name) {
+        super(router);
 
-      //
-      this.name = name;
-      this.encodedName = PercentEncoding.PATH_SEGMENT.encode(name);
-   }
+        //
+        this.name = name;
+        this.encodedName = PercentEncoding.PATH_SEGMENT.encode(name);
+    }
 }

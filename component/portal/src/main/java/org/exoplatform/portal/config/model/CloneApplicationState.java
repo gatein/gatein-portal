@@ -22,19 +22,16 @@ package org.exoplatform.portal.config.model;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class CloneApplicationState<S> extends ApplicationState<S>
-{
+public class CloneApplicationState<S> extends ApplicationState<S> {
 
-   /** . */
-   private final String storageId;
+    /** . */
+    private final String storageId;
 
-   public CloneApplicationState(String storageId)
-   {
-      this.storageId = storageId;
-   }
+    public CloneApplicationState(String storageId) {
+        this.storageId = storageId;
+    }
 
-   public String getStorageId()
-   {
-      return storageId;
-   }
+    public String getStorageId() {
+        return storageId;
+    }
 }

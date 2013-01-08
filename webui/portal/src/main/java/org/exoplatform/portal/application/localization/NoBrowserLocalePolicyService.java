@@ -21,27 +21,25 @@
  */
 package org.exoplatform.portal.application.localization;
 
-import org.exoplatform.services.resources.LocaleContextInfo;
-
 import java.util.Locale;
+
+import org.exoplatform.services.resources.LocaleContextInfo;
 
 /**
  * This implementation of {@link org.exoplatform.services.resources.LocalePolicy} disregards client browser language preference.
- * Localization will therefore not be affected by different OS or browser language settings. 
+ * Localization will therefore not be affected by different OS or browser language settings.
  *
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class NoBrowserLocalePolicyService extends DefaultLocalePolicyService
-{
-   /**
-    * Override super method with no-op.
-    *
-    * @param context locale context info available to implementations in order to determine appropriate Locale
-    * @return null
-    */
-   @Override
-   protected Locale getLocaleConfigFromBrowser(LocaleContextInfo context)
-   {
-      return null;
-   }
+public class NoBrowserLocalePolicyService extends DefaultLocalePolicyService {
+    /**
+     * Override super method with no-op.
+     *
+     * @param context locale context info available to implementations in order to determine appropriate Locale
+     * @return null
+     */
+    @Override
+    protected Locale getLocaleConfigFromBrowser(LocaleContextInfo context) {
+        return null;
+    }
 }

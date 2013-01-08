@@ -19,9 +19,9 @@
 
 package org.exoplatform.commons.serialization.api.factory;
 
-import org.exoplatform.commons.serialization.model.FieldModel;
-
 import java.util.Map;
+
+import org.exoplatform.commons.serialization.model.FieldModel;
 
 /**
  * A factory that creates instance of a type.
@@ -30,19 +30,18 @@ import java.util.Map;
  * @version $Revision$
  * @param <B> the paraemter type of the base type
  */
-public abstract class ObjectFactory<B>
-{
+public abstract class ObjectFactory<B> {
 
-   /**
-    * Instantiate an object based on the provided type. The implementor should take care of
-    * configuring the state of the returned objet with the provided state map argument.
-    *
-    * @param type the type
-    * @param state the state
-    * @param <S> the parameter type of the sub type of the base type
-    * @return the S instance
-    * @throws CreateException anything wrong that happened during instance creation
-    */
-   public abstract <S extends B> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException;
+    /**
+     * Instantiate an object based on the provided type. The implementor should take care of configuring the state of the
+     * returned objet with the provided state map argument.
+     *
+     * @param type the type
+     * @param state the state
+     * @param <S> the parameter type of the sub type of the base type
+     * @return the S instance
+     * @throws CreateException anything wrong that happened during instance creation
+     */
+    public abstract <S extends B> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException;
 
 }

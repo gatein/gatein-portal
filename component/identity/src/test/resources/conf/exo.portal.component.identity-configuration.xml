@@ -23,113 +23,123 @@
                xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
 
-   <component>
-     <key>org.exoplatform.services.organization.idm.PicketLinkIDMCacheService</key>
-     <type>org.exoplatform.services.organization.idm.PicketLinkIDMCacheService</type>
-   </component>
+  <component>
+    <key>org.exoplatform.services.organization.idm.PicketLinkIDMCacheService</key>
+    <type>org.exoplatform.services.organization.idm.PicketLinkIDMCacheService</type>
+  </component>
 
-   <component>
-      <key>org.gatein.common.transaction.JTAUserTransactionLifecycleService</key>
-      <type>org.gatein.common.transaction.JTAUserTransactionLifecycleServiceImpl</type>
-   </component>
+  <component>
+    <key>org.gatein.common.transaction.JTAUserTransactionLifecycleService</key>
+    <type>org.gatein.common.transaction.JTAUserTransactionLifecycleServiceImpl</type>
+  </component>
 
-   <component>
-      <key>org.jboss.cache.transaction.TransactionManagerLookup</key>
-      <type>org.jboss.cache.transaction.JBossStandaloneJTAManagerLookup</type>
-   </component>
+  <component>
+    <key>org.jboss.cache.transaction.TransactionManagerLookup</key>
+    <type>org.jboss.cache.transaction.JBossStandaloneJTAManagerLookup</type>
+  </component>
 
-   <component>
-      <key>org.exoplatform.services.transaction.TransactionService</key>
-      <type>org.exoplatform.services.transaction.jbosscache.JBossTransactionsService</type>
+  <component>
+    <key>org.exoplatform.services.transaction.TransactionService</key>
+    <type>org.exoplatform.services.transaction.jbosscache.JBossTransactionsService</type>
+    <init-params>
+      <value-param>
+        <name>timeout</name>
+        <value>300</value>
+      </value-param>
+    </init-params>
+  </component>
+
+  <component>
+    <key>org.exoplatform.services.organization.idm.PicketLinkIDMService</key>
+    <type>org.exoplatform.services.organization.idm.PicketLinkIDMServiceImpl</type>
+    <init-params>
+      <value-param>
+        <name>config</name>
+        <value>jar:/conf/exo.portal.component.identity-picketlink-idm-config.xml</value>
+      </value-param>
+    </init-params>
+  </component>
+
+  <component>
+    <key>org.exoplatform.services.organization.OrganizationService</key>
+    <type>org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl</type>
+  </component>
+
+  <component>
+    <key>org.exoplatform.services.cache.CacheService</key>
+    <jmx-name>cache:type=CacheService</jmx-name>
+    <type>org.exoplatform.services.cache.impl.CacheServiceImpl</type>
+    <init-params>
+      <object-param>
+        <name>cache.config.default</name>
+        <description>The default cache configuration</description>
+        <object type="org.exoplatform.services.cache.ExoCacheConfig">
+          <field name="name">
+            <string>default</string>
+          </field>
+          <field name="maxSize">
+            <int>300</int>
+          </field>
+          <field name="liveTime">
+            <long>60</long>
+          </field>
+          <field name="distributed">
+            <boolean>false</boolean>
+          </field>
+          <field name="implementation">
+            <string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string>
+          </field>
+        </object>
+      </object-param>
+    </init-params>
+  </component>
+
+  <component>
+    <key>org.exoplatform.services.database.HibernateService</key>
+    <jmx-name>database:type=HibernateService</jmx-name>
+    <type>org.exoplatform.services.database.impl.HibernateServiceImpl</type>
+    <init-params>
+      <properties-param>
+        <name>hibernate.properties</name>
+        <description>Default Hibernate Service</description>
+        <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+        <property name="hibernate.show_sql" value="false"/>
+        <property name="hibernate.current_session_context_class" value="thread"/>
+        <property name="hibernate.cache.use_second_level_cache" value="false"/>
+        <property name="hibernate.cache.use_query_cache" value="false"/>
+        <property name="hibernate.connection.datasource" value="jdbcidm"/>
+        <property name="hibernate.c3p0.min_size" value="5"/>
+        <property name="hibernate.c3p0.max_size" value="20"/>
+        <property name="hibernate.c3p0.timeout" value="1800"/>
+        <property name="hibernate.c3p0.max_statements" value="50"/>
+      </properties-param>
+    </init-params>
+  </component>
+
+  <external-component-plugins>
+    <target-component>org.exoplatform.services.database.HibernateService</target-component>
+    <component-plugin>
+      <name>add.hibernate.mapping</name>
+      <set-method>addPlugin</set-method>
+      <type>org.exoplatform.services.database.impl.AddHibernateMappingPlugin</type>
       <init-params>
-         <value-param>
-            <name>timeout</name>
-            <value>300</value>
-         </value-param>
+        <values-param>
+          <name>hibernate.mapping</name>
+          <value>conf/mappings/HibernateRealm.hbm.xml</value>
+          <value>conf/mappings/HibernateIdentityObjectCredentialBinaryValue.hbm.xml</value>
+          <value>conf/mappings/HibernateIdentityObjectAttributeBinaryValue.hbm.xml</value>
+          <value>conf/mappings/HibernateIdentityObject.hbm.xml</value>
+          <value>conf/mappings/HibernateIdentityObjectCredential.hbm.xml</value>
+          <value>conf/mappings/HibernateIdentityObjectCredentialType.hbm.xml</value>
+          <value>conf/mappings/HibernateIdentityObjectAttribute.hbm.xml</value>
+          <value>conf/mappings/HibernateIdentityObjectType.hbm.xml</value>
+          <value>conf/mappings/HibernateIdentityObjectRelationship.hbm.xml</value>
+          <value>conf/mappings/HibernateIdentityObjectRelationshipType.hbm.xml</value>
+          <value>conf/mappings/HibernateIdentityObjectRelationshipName.hbm.xml</value>
+        </values-param>
       </init-params>
-   </component>
-
-   <component>
-      <key>org.exoplatform.services.organization.idm.PicketLinkIDMService</key>
-      <type>org.exoplatform.services.organization.idm.PicketLinkIDMServiceImpl</type>
-      <init-params>
-         <value-param>
-            <name>config</name>
-            <value>jar:/conf/exo.portal.component.identity-picketlink-idm-config.xml</value>
-         </value-param>
-      </init-params>
-   </component>
-
-   <component>
-      <key>org.exoplatform.services.organization.OrganizationService</key>
-      <type>org.exoplatform.services.organization.idm.PicketLinkIDMOrganizationServiceImpl</type>
-   </component>
-
-   <component>
-      <key>org.exoplatform.services.cache.CacheService</key>
-      <jmx-name>cache:type=CacheService</jmx-name>
-      <type>org.exoplatform.services.cache.impl.CacheServiceImpl</type>
-      <init-params>
-         <object-param>
-            <name>cache.config.default</name>
-            <description>The default cache configuration</description>
-            <object type="org.exoplatform.services.cache.ExoCacheConfig">
-               <field name="name"><string>default</string></field>
-               <field name="maxSize"><int>300</int></field>
-               <field name="liveTime"><long>60</long></field>
-               <field name="distributed"><boolean>false</boolean></field>
-               <field name="implementation"><string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string></field>
-            </object>
-         </object-param>
-      </init-params>
-   </component>
-
-   <component>
-      <key>org.exoplatform.services.database.HibernateService</key>
-      <jmx-name>database:type=HibernateService</jmx-name>
-      <type>org.exoplatform.services.database.impl.HibernateServiceImpl</type>
-      <init-params>
-         <properties-param>
-            <name>hibernate.properties</name>
-            <description>Default Hibernate Service</description>
-            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
-            <property name="hibernate.show_sql" value="false"/>
-            <property name="hibernate.current_session_context_class" value="thread"/>
-            <property name="hibernate.cache.use_second_level_cache" value="false"/>
-            <property name="hibernate.cache.use_query_cache" value="false"/>
-            <property name="hibernate.connection.datasource" value="jdbcidm"/>
-            <property name="hibernate.c3p0.min_size" value="5"/>
-            <property name="hibernate.c3p0.max_size" value="20"/>
-            <property name="hibernate.c3p0.timeout" value="1800"/>
-            <property name="hibernate.c3p0.max_statements" value="50"/>
-         </properties-param>
-      </init-params>
-   </component>
-
-   <external-component-plugins>
-      <target-component>org.exoplatform.services.database.HibernateService</target-component>
-      <component-plugin>
-         <name>add.hibernate.mapping</name>
-         <set-method>addPlugin</set-method>
-         <type>org.exoplatform.services.database.impl.AddHibernateMappingPlugin</type>
-         <init-params>
-            <values-param>
-               <name>hibernate.mapping</name>
-               <value>conf/mappings/HibernateRealm.hbm.xml</value>
-               <value>conf/mappings/HibernateIdentityObjectCredentialBinaryValue.hbm.xml</value>
-               <value>conf/mappings/HibernateIdentityObjectAttributeBinaryValue.hbm.xml</value>
-               <value>conf/mappings/HibernateIdentityObject.hbm.xml</value>
-               <value>conf/mappings/HibernateIdentityObjectCredential.hbm.xml</value>
-               <value>conf/mappings/HibernateIdentityObjectCredentialType.hbm.xml</value>
-               <value>conf/mappings/HibernateIdentityObjectAttribute.hbm.xml</value>
-               <value>conf/mappings/HibernateIdentityObjectType.hbm.xml</value>
-               <value>conf/mappings/HibernateIdentityObjectRelationship.hbm.xml</value>
-               <value>conf/mappings/HibernateIdentityObjectRelationshipType.hbm.xml</value>
-               <value>conf/mappings/HibernateIdentityObjectRelationshipName.hbm.xml</value>
-            </values-param>
-         </init-params>
-      </component-plugin>
-   </external-component-plugins>
+    </component-plugin>
+  </external-component-plugins>
 
   <external-component-plugins>
     <target-component>org.exoplatform.services.naming.InitialContextInitializer</target-component>
@@ -162,7 +172,8 @@
           <name>ref-addresses</name>
           <description>ref-addresses</description>
           <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-          <property name="url" value="jdbc:mysql://10.37.129.4/jdbcidm?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8"/>
+          <property name="url"
+                    value="jdbc:mysql://10.37.129.4/jdbcidm?createDatabaseIfNotExist=true&amp;useUnicode=true&amp;characterEncoding=utf-8"/>
           <property name="username" value="root"/>
           <property name="password" value=""/>
         </properties-param>

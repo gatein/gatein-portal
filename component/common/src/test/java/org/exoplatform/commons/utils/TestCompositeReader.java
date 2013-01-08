@@ -19,99 +19,86 @@
 
 package org.exoplatform.commons.utils;
 
-import org.exoplatform.component.test.AbstractGateInTest;
-import org.gatein.common.io.IOTools;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 
+import org.exoplatform.component.test.AbstractGateInTest;
+import org.gatein.common.io.IOTools;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestCompositeReader extends AbstractGateInTest
-{
-   
-   private static class MyReader extends StringReader
-   {
-      
-      boolean closed = false;
-      
-      private MyReader(String s)
-      {
-         super(s);
-      }
+public class TestCompositeReader extends AbstractGateInTest {
 
-      @Override
-      public void close()
-      {
-         closed = true;
-         super.close();
-      }
-   }
+    private static class MyReader extends StringReader {
 
-   public void testMono()
-   {
-      MyReader r = new MyReader("foo");
-      CompositeReader reader = new CompositeReader(r);
-      assertEquals(reader, "foo");
-      assertTrue(r.closed);
-   }
+        boolean closed = false;
 
-   public void testPair()
-   {
-      MyReader r1 = new MyReader("foo");
-      MyReader r2 = new MyReader("bar");
-      CompositeReader reader = new CompositeReader(r1, r2);
-      assertEquals(reader, "foobar");
-      assertTrue(r1.closed);
-      assertTrue(r2.closed);
-   }
+        private MyReader(String s) {
+            super(s);
+        }
 
-   public void testEmpty()
-   {
-      MyReader r1 = new MyReader("");
-      MyReader r2 = new MyReader("bar");
-      CompositeReader reader = new CompositeReader(r1, r2);
-      assertEquals(reader, "bar");
+        @Override
+        public void close() {
+            closed = true;
+            super.close();
+        }
+    }
 
-      r1 = new MyReader("foo");
-      r2 = new MyReader("");
-      reader = new CompositeReader(r1, r2);
-      assertEquals(reader, "foo");
-   }
-   
-   public void testClose() throws IOException
-   {
-      MyReader r1 = new MyReader("foo");
-      MyReader r2 = new MyReader("bar");
-      MyReader r3 = new MyReader("juu");
-      CompositeReader reader = new CompositeReader(r1, r2, r3);
-      reader.read(new char[4], 0, 4);
-      assertTrue(r1.closed);
-      assertFalse(r2.closed);
-      assertFalse(r3.closed);
-      reader.close();
-      assertTrue(r1.closed);
-      assertTrue(r2.closed);
-      assertTrue(r3.closed);
-   }
+    public void testMono() {
+        MyReader r = new MyReader("foo");
+        CompositeReader reader = new CompositeReader(r);
+        assertEquals(reader, "foo");
+        assertTrue(r.closed);
+    }
 
-   private void assertEquals(Reader reader, String expected)
-   {
-      try
-      {
-         StringWriter writer = new StringWriter();
-         IOTools.copy(reader, writer);
-         String test = writer.toString();
-         assertEquals(expected, test);
-      }
-      catch (IOException e)
-      {
-         fail(e);
-      }
-   }
+    public void testPair() {
+        MyReader r1 = new MyReader("foo");
+        MyReader r2 = new MyReader("bar");
+        CompositeReader reader = new CompositeReader(r1, r2);
+        assertEquals(reader, "foobar");
+        assertTrue(r1.closed);
+        assertTrue(r2.closed);
+    }
 
+    public void testEmpty() {
+        MyReader r1 = new MyReader("");
+        MyReader r2 = new MyReader("bar");
+        CompositeReader reader = new CompositeReader(r1, r2);
+        assertEquals(reader, "bar");
+
+        r1 = new MyReader("foo");
+        r2 = new MyReader("");
+        reader = new CompositeReader(r1, r2);
+        assertEquals(reader, "foo");
+    }
+
+    public void testClose() throws IOException {
+        MyReader r1 = new MyReader("foo");
+        MyReader r2 = new MyReader("bar");
+        MyReader r3 = new MyReader("juu");
+        CompositeReader reader = new CompositeReader(r1, r2, r3);
+        reader.read(new char[4], 0, 4);
+        assertTrue(r1.closed);
+        assertFalse(r2.closed);
+        assertFalse(r3.closed);
+        reader.close();
+        assertTrue(r1.closed);
+        assertTrue(r2.closed);
+        assertTrue(r3.closed);
+    }
+
+    private void assertEquals(Reader reader, String expected) {
+        try {
+            StringWriter writer = new StringWriter();
+            IOTools.copy(reader, writer);
+            String test = writer.toString();
+            assertEquals(expected, test);
+        } catch (IOException e) {
+            fail(e);
+        }
+    }
 
 }

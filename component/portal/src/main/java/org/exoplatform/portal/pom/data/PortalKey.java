@@ -24,31 +24,25 @@ import org.exoplatform.portal.pom.config.Utils;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PortalKey extends OwnerKey
-{
+public class PortalKey extends OwnerKey {
 
-   public PortalKey(String type, String id)
-   {
-      super(type, id);
-   }
+    public PortalKey(String type, String id) {
+        super(type, id);
+    }
 
-   public static PortalKey create(String compositeId)
-   {
-      if (compositeId == null)
-      {
-         throw new NullPointerException();
-      }
-      String[] components = Utils.split("::", compositeId);
-      if (components.length != 2)
-      {
-         throw new IllegalArgumentException("Wrong navigation id key format " + compositeId);
-      }
-      return new PortalKey(components[0], components[1]);
-   }
+    public static PortalKey create(String compositeId) {
+        if (compositeId == null) {
+            throw new NullPointerException();
+        }
+        String[] components = Utils.split("::", compositeId);
+        if (components.length != 2) {
+            throw new IllegalArgumentException("Wrong navigation id key format " + compositeId);
+        }
+        return new PortalKey(components[0], components[1]);
+    }
 
-   @Override
-   public String toString()
-   {
-      return "PortalKey[type=" + getType() + ",id=" + getId() + "]";
-   }
+    @Override
+    public String toString() {
+        return "PortalKey[type=" + getType() + ",id=" + getId() + "]";
+    }
 }

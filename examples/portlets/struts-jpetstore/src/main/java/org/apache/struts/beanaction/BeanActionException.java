@@ -14,19 +14,19 @@ package org.apache.struts.beanaction;
  * @author Clinton Begin
  */
 public class BeanActionException extends RuntimeException {
-  public BeanActionException() {
-    super();
-  }
+    public BeanActionException() {
+        super();
+    }
 
-  public BeanActionException(String string) {
-    super(string);
-  }
+    public BeanActionException(String string) {
+        super(string);
+    }
 
-  public BeanActionException(Throwable throwable) {
-    super(throwable);
-  }
+    public BeanActionException(Throwable throwable) {
+        super(throwable);
+    }
 
-  public BeanActionException(String string, Throwable throwable) {
-    super(string, throwable);
-  }
+    public BeanActionException(String string, Throwable throwable) {
+        super(string, throwable);
+    }
 }

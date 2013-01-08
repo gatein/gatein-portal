@@ -23,44 +23,35 @@ package org.exoplatform.commons.chromattic;
  * @version $Revision$
  * @param <V> the return type value
  */
-public abstract class ContextualTask<V>
-{
+public abstract class ContextualTask<V> {
 
-   /**
-    * Executes a task within a context from the specified life cycle. If an existing context already exists
-    * then this context is used otherwise a context is managed for the duration of the {@link #execute(SessionContext)}
-    * method.
-    *
-    * @param lifeCycle the life cycle
-    * @return a value
-    */
-   public final V executeWith(ChromatticLifeCycle lifeCycle)
-   {
-      SessionContext context = lifeCycle.getContext(true);
-      if (context == null)
-      {
-         context = lifeCycle.openContext();
-         try
-         {
+    /**
+     * Executes a task within a context from the specified life cycle. If an existing context already exists then this context
+     * is used otherwise a context is managed for the duration of the {@link #execute(SessionContext)} method.
+     *
+     * @param lifeCycle the life cycle
+     * @return a value
+     */
+    public final V executeWith(ChromatticLifeCycle lifeCycle) {
+        SessionContext context = lifeCycle.getContext(true);
+        if (context == null) {
+            context = lifeCycle.openContext();
+            try {
+                return execute(context);
+            } finally {
+                lifeCycle.closeContext(true);
+            }
+        } else {
             return execute(context);
-         }
-         finally
-         {
-            lifeCycle.closeContext(true);
-         }
-      }
-      else
-      {
-         return execute(context);
-      }
-   }
+        }
+    }
 
-   /**
-    * Implementor must provide the task logic here.
-    *
-    * @param context the context
-    * @return a value
-    */
-   protected abstract V execute(SessionContext context);
+    /**
+     * Implementor must provide the task logic here.
+     *
+     * @param context the context
+     * @return a value
+     */
+    protected abstract V execute(SessionContext context);
 
 }

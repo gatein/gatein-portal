@@ -53,12 +53,12 @@
     <filter-name>ProxyServletFilter</filter-name>
     <filter-class>org.exoplatform.portal.gadget.core.ProxyServletFilter</filter-class>
   </filter>
-    
+
   <filter>
     <filter-name>hostFilter</filter-name>
     <filter-class>org.apache.shindig.common.servlet.HostFilter</filter-class>
   </filter>
-  
+
   <filter-mapping>
     <filter-name>hostFilter</filter-name>
     <url-pattern>/gadgets/ifr</url-pattern>
@@ -68,7 +68,7 @@
     <url-pattern>/rpc/*</url-pattern>
     <url-pattern>/rest/*</url-pattern>
   </filter-mapping>
-  
+
   <filter-mapping>
     <filter-name>authFilter</filter-name>
     <url-pattern>/gadgets/ifr</url-pattern>
@@ -95,7 +95,7 @@
   </filter-mapping>
 
   <listener>
-     <listener-class>org.exoplatform.portal.gadget.core.GateInGuiceServletContextListener</listener-class>
+    <listener-class>org.exoplatform.portal.gadget.core.GateInGuiceServletContextListener</listener-class>
   </listener>
 
   <!-- Render a Gadget -->
@@ -185,7 +185,7 @@
     <url-pattern>/gadgets/proxy/*</url-pattern>
   </servlet-mapping>
 
-   <servlet-mapping>
+  <servlet-mapping>
     <servlet-name>makeRequest</servlet-name>
     <url-pattern>/gadgets/makeRequest</url-pattern>
   </servlet-mapping>

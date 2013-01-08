@@ -21,181 +21,181 @@
 -->
 
 <gatein-resources
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
-   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
 
-   <portal-skin>
-      <skin-name>Default</skin-name>
-      <skin-module>Highlight</skin-module>
-      <css-path>/highlight/highlight.css</css-path>
-   </portal-skin>
+  <portal-skin>
+    <skin-name>Default</skin-name>
+    <skin-module>Highlight</skin-module>
+    <css-path>/highlight/highlight.css</css-path>
+  </portal-skin>
 
-   <portlet-skin>
-      <application-name>amd-js</application-name>
-      <portlet-name>RequireJSPortlet</portlet-name>
-      <skin-name>Default</skin-name>
-      <css-path>/requirejs/skin/RequireJSPortlet/DefaultStylesheet.css</css-path>
-   </portlet-skin>
+  <portlet-skin>
+    <application-name>amd-js</application-name>
+    <portlet-name>RequireJSPortlet</portlet-name>
+    <skin-name>Default</skin-name>
+    <css-path>/requirejs/skin/RequireJSPortlet/DefaultStylesheet.css</css-path>
+  </portlet-skin>
 
-   <portlet>
-     <name>RequireJSPortlet</name>
-     <module>
-       <script>
-         <path>/requirejs/js/requirejsPortlet.js</path>
-       </script>
-       <depends>
-       	<module>jquery</module>
-       	<as>jquery</as>
-       </depends>
-       <depends>
-       	<module>highlight</module>
-       </depends>
-       <depends>
-         <module>mustache</module>
-         <as>mustache</as>
-       </depends>
-       <depends>
-         <module>text</module>
-         <as>text</as>
-         <resource>/amd-js/requirejs/jsp/hello.mustache</resource>
-       </depends>
-     </module>
-   </portlet>
-   
-   <portlet>
-     <name>CommonJSPortlet</name>
-     <module>
-       <script>
-         <path>/commonjs/starter.js</path>
-       </script>
-       <depends>
-         <module>require</module>
-       </depends>
-       <depends>
-         <module>jquery</module>
-       </depends>
-       <depends>
-         <module>increment</module>
-       </depends>
-     </module>
-   </portlet>
-   
-   <portlet>
-     <name>JQueryPluginPortlet</name>
-     <module>
-       <script>
-         <path>/jqueryPlugin/jqueryPluginPortlet.js</path>
-       </script>
-       <depends>
-         <module>jquery</module>
-         <as>$</as>
-       </depends>
-       <depends>
-       	<module>jquery-plugin</module>
-       </depends>
-       <depends>
-       	<module>highlight</module>
-       </depends>
-     </module>
-   </portlet>
-   
-   <module>
-      <name>math</name>
+  <portlet>
+    <name>RequireJSPortlet</name>
+    <module>
       <script>
-        <adapter>
-        	define(["require", "exports"], function(require, exports) {
-         	<include>/commonjs/math.js</include>        		
-        	});
-        </adapter>
-       </script>
-      <depends>
-        <module>require</module>
-      </depends>
-      <depends>
-        <module>exports</module>
-      </depends>
-   </module>
-
-   <module>
-      <name>increment</name>
-      <script>
-        <adapter>
-        	define(["require", "exports", "math"], function(require, exports) {
-         	<include>/commonjs/increment.js</include>        		
-        	});
-        </adapter>
-      </script>
-      <depends>
-        <module>require</module>
-      </depends>
-      <depends>
-        <module>exports</module>
-      </depends>
-      <depends>
-        <module>math</module>
-      </depends>
-   </module>
-  
-   <module>
-      <name>text</name>     
-      <script>
-        <path>/requirejs/js/plugins/text.js</path>
-      </script>
-      <depends>
-      	<module>module</module>
-      </depends>
-   </module>
-   
-   <module>
-      <name>mustache</name>     
-      <script>
-      	<adapter>
-        	define(["require", "exports", "module"], function(require, exports, module) {
-         	<include>/requirejs/js/plugins/mustache.js</include>        		
-        	});
-        </adapter>
-      </script>
-      <depends>
-        <module>require</module>
-      </depends>
-      <depends>
-        <module>exports</module>
-      </depends>
-      <depends>
-        <module>module</module>
-      </depends>
-   </module>
-   
-   <module>
-      <name>sample1</name>     
-      <script>
-         <path>/sample1/script.js</path>
-      </script>
-   </module>
-
-   <module>
-      <name>jquery-plugin</name>     
-      <as>jqPlugin</as>
-      <script>
-         <path>/jqueryPlugin/jquery-plugin.js</path>
+        <path>/requirejs/js/requirejsPortlet.js</path>
       </script>
       <depends>
         <module>jquery</module>
-        <as>jQuery</as>
+        <as>jquery</as>
       </depends>
-   </module>
+      <depends>
+        <module>highlight</module>
+      </depends>
+      <depends>
+        <module>mustache</module>
+        <as>mustache</as>
+      </depends>
+      <depends>
+        <module>text</module>
+        <as>text</as>
+        <resource>/amd-js/requirejs/jsp/hello.mustache</resource>
+      </depends>
+    </module>
+  </portlet>
 
-   <module>
-      <name>highlight</name>     
+  <portlet>
+    <name>CommonJSPortlet</name>
+    <module>
       <script>
-         <path>/highlight/highlight.js</path>
+        <path>/commonjs/starter.js</path>
+      </script>
+      <depends>
+        <module>require</module>
+      </depends>
+      <depends>
+        <module>jquery</module>
+      </depends>
+      <depends>
+        <module>increment</module>
+      </depends>
+    </module>
+  </portlet>
+
+  <portlet>
+    <name>JQueryPluginPortlet</name>
+    <module>
+      <script>
+        <path>/jqueryPlugin/jqueryPluginPortlet.js</path>
       </script>
       <depends>
         <module>jquery</module>
-        <as>jQuery</as>
+        <as>$</as>
       </depends>
-   </module>   
+      <depends>
+        <module>jquery-plugin</module>
+      </depends>
+      <depends>
+        <module>highlight</module>
+      </depends>
+    </module>
+  </portlet>
+
+  <module>
+    <name>math</name>
+    <script>
+      <adapter>
+        define(["require", "exports"], function(require, exports) {
+        <include>/commonjs/math.js</include>
+        });
+      </adapter>
+    </script>
+    <depends>
+      <module>require</module>
+    </depends>
+    <depends>
+      <module>exports</module>
+    </depends>
+  </module>
+
+  <module>
+    <name>increment</name>
+    <script>
+      <adapter>
+        define(["require", "exports", "math"], function(require, exports) {
+        <include>/commonjs/increment.js</include>
+        });
+      </adapter>
+    </script>
+    <depends>
+      <module>require</module>
+    </depends>
+    <depends>
+      <module>exports</module>
+    </depends>
+    <depends>
+      <module>math</module>
+    </depends>
+  </module>
+
+  <module>
+    <name>text</name>
+    <script>
+      <path>/requirejs/js/plugins/text.js</path>
+    </script>
+    <depends>
+      <module>module</module>
+    </depends>
+  </module>
+
+  <module>
+    <name>mustache</name>
+    <script>
+      <adapter>
+        define(["require", "exports", "module"], function(require, exports, module) {
+        <include>/requirejs/js/plugins/mustache.js</include>
+        });
+      </adapter>
+    </script>
+    <depends>
+      <module>require</module>
+    </depends>
+    <depends>
+      <module>exports</module>
+    </depends>
+    <depends>
+      <module>module</module>
+    </depends>
+  </module>
+
+  <module>
+    <name>sample1</name>
+    <script>
+      <path>/sample1/script.js</path>
+    </script>
+  </module>
+
+  <module>
+    <name>jquery-plugin</name>
+    <as>jqPlugin</as>
+    <script>
+      <path>/jqueryPlugin/jquery-plugin.js</path>
+    </script>
+    <depends>
+      <module>jquery</module>
+      <as>jQuery</as>
+    </depends>
+  </module>
+
+  <module>
+    <name>highlight</name>
+    <script>
+      <path>/highlight/highlight.js</path>
+    </script>
+    <depends>
+      <module>jquery</module>
+      <as>jQuery</as>
+    </depends>
+  </module>
 
 </gatein-resources>
 

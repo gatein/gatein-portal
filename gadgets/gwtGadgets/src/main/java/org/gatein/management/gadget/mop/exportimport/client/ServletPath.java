@@ -26,14 +26,13 @@ package org.gatein.management.gadget.mop.exportimport.client;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-class ServletPath
-{
-   private static final String SERVLET_CONTEXT = "/gwtGadgets";
+class ServletPath {
+    private static final String SERVLET_CONTEXT = "/gwtGadgets";
 
-   private ServletPath(){}
+    private ServletPath() {
+    }
 
-   static String path(String path)
-   {
-      return SERVLET_CONTEXT + path;
-   }
+    static String path(String path) {
+        return SERVLET_CONTEXT + path;
+    }
 }

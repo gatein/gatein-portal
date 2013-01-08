@@ -23,38 +23,35 @@ package org.exoplatform.portal.mop.navigation;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface NodeModel<N>
-{
+public interface NodeModel<N> {
 
-   /**
-    * A model based on itself.
-    */
-   NodeModel<NodeContext<?>> SELF_MODEL = new NodeModel<NodeContext<?>>()
-   {
-      public NodeContext<NodeContext<?>> getContext(NodeContext<?> node)
-      {
-         throw new UnsupportedOperationException();
-      }
-      public NodeContext<?> create(NodeContext<NodeContext<?>> context)
-      {
-         return context;
-      }
-   };
+    /**
+     * A model based on itself.
+     */
+    NodeModel<NodeContext<?>> SELF_MODEL = new NodeModel<NodeContext<?>>() {
+        public NodeContext<NodeContext<?>> getContext(NodeContext<?> node) {
+            throw new UnsupportedOperationException();
+        }
 
-   /**
-    * Returns the context of a node.
-    *
-    * @param node the node
-    * @return the node context
-    */
-   NodeContext<N> getContext(N node);
+        public NodeContext<?> create(NodeContext<NodeContext<?>> context) {
+            return context;
+        }
+    };
 
-   /**
-    * Create a node wrapping a context.
-    *
-    * @param context the node context
-    * @return the node instance
-    */
-   N create(NodeContext<N> context);
+    /**
+     * Returns the context of a node.
+     *
+     * @param node the node
+     * @return the node context
+     */
+    NodeContext<N> getContext(N node);
+
+    /**
+     * Create a node wrapping a context.
+     *
+     * @param context the node context
+     * @return the node instance
+     */
+    N create(NodeContext<N> context);
 
 }

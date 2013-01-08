@@ -21,32 +21,28 @@ package org.exoplatform.web.controller.performance;
 
 import java.io.IOException;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NullAppendable implements Appendable
-{
+public class NullAppendable implements Appendable {
 
-   /** . */
-   public static final NullAppendable INSTANCE = new NullAppendable();
+    /** . */
+    public static final NullAppendable INSTANCE = new NullAppendable();
 
-   private NullAppendable()
-   {
-   }
+    private NullAppendable() {
+    }
 
-   public Appendable append(CharSequence csq) throws IOException
-   {
-      return this;
-   }
+    public Appendable append(CharSequence csq) throws IOException {
+        return this;
+    }
 
-   public Appendable append(CharSequence csq, int start, int end) throws IOException
-   {
-      return this;
-   }
+    public Appendable append(CharSequence csq, int start, int end) throws IOException {
+        return this;
+    }
 
-   public Appendable append(char c) throws IOException
-   {
-      return this;
-   }
+    public Appendable append(char c) throws IOException {
+        return this;
+    }
 }

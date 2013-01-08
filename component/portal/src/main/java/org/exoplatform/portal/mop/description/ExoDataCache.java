@@ -29,55 +29,46 @@ import org.exoplatform.services.cache.ExoCache;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ExoDataCache extends DataCache
-{
+public class ExoDataCache extends DataCache {
 
-   /** . */
-   protected ExoCache<CacheKey, CacheValue> cache;
+    /** . */
+    protected ExoCache<CacheKey, CacheValue> cache;
 
-   /** . */
-   protected FutureExoCache<CacheKey, CacheValue, POMSession> values;
+    /** . */
+    protected FutureExoCache<CacheKey, CacheValue, POMSession> values;
 
-   /** . */
-   private Loader<CacheKey, CacheValue, POMSession> valueLoader = new Loader<CacheKey, CacheValue, POMSession>()
-   {
-      public CacheValue retrieve(POMSession session, CacheKey key) throws Exception
-      {
-         return getValue(session, key);
-      }
-   };
+    /** . */
+    private Loader<CacheKey, CacheValue, POMSession> valueLoader = new Loader<CacheKey, CacheValue, POMSession>() {
+        public CacheValue retrieve(POMSession session, CacheKey key) throws Exception {
+            return getValue(session, key);
+        }
+    };
 
-   public ExoDataCache(CacheService cacheService)
-   {
-      this.cache = cacheService.getCacheInstance(DescriptionService.class.getSimpleName());
-      this.values = new FutureExoCache<CacheKey, CacheValue, POMSession>(valueLoader, cache)
-      {
-         @Override
-         protected void put(CacheKey key, CacheValue entry)
-         {
-            // Do nothing on purpose
-            // as data in inserted with the putValue method
-            // during the getValue method
-         }
-      };
-   }
+    public ExoDataCache(CacheService cacheService) {
+        this.cache = cacheService.getCacheInstance(DescriptionService.class.getSimpleName());
+        this.values = new FutureExoCache<CacheKey, CacheValue, POMSession>(valueLoader, cache) {
+            @Override
+            protected void put(CacheKey key, CacheValue entry) {
+                // Do nothing on purpose
+                // as data in inserted with the putValue method
+                // during the getValue method
+            }
+        };
+    }
 
-   @Override
-   protected void removeState(CacheKey key)
-   {
-      cache.remove(key);
-   }
+    @Override
+    protected void removeState(CacheKey key) {
+        cache.remove(key);
+    }
 
-   @Override
-   protected Described.State getState(POMSession session, CacheKey key)
-   {
-      CacheValue value = values.get(session, key);
-      return value != null ? value.state : null;
-   }
+    @Override
+    protected Described.State getState(POMSession session, CacheKey key) {
+        CacheValue value = values.get(session, key);
+        return value != null ? value.state : null;
+    }
 
-   @Override
-   protected void putValue(CacheKey key, CacheValue value)
-   {
-      cache.put(key, value);
-   }
+    @Override
+    protected void putValue(CacheKey key, CacheValue value) {
+        cache.put(key, value);
+    }
 }

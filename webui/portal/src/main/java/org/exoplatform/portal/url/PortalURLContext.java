@@ -19,12 +19,12 @@
 
 package org.exoplatform.portal.url;
 
-import javax.servlet.http.HttpServletRequest;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.portal.application.PortalRequestHandler;
@@ -41,187 +41,151 @@ import org.gatein.common.io.UndeclaredIOException;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class PortalURLContext implements URLContext
-{
+public class PortalURLContext implements URLContext {
 
-   /** . */
-   private final ControllerContext controllerContext;
+    /** . */
+    private final ControllerContext controllerContext;
 
-   /** . */
-   private final SiteKey siteKey;
+    /** . */
+    private final SiteKey siteKey;
 
-   /** . */
-   private URIWriter writer;
+    /** . */
+    private URIWriter writer;
 
-   /** . */
-   private StringBuilder buffer;
+    /** . */
+    private StringBuilder buffer;
 
-   public PortalURLContext(
-      ControllerContext controllerContext,
-      SiteKey siteKey)
-   {
-      if (controllerContext == null)
-      {
-         throw new NullPointerException("No null controller context");
-      }
+    public PortalURLContext(ControllerContext controllerContext, SiteKey siteKey) {
+        if (controllerContext == null) {
+            throw new NullPointerException("No null controller context");
+        }
 
-      //
-      this.controllerContext = controllerContext;
-      this.siteKey = siteKey;
-      this.writer = null;
-      this.buffer = null;
-   }
+        //
+        this.controllerContext = controllerContext;
+        this.siteKey = siteKey;
+        this.writer = null;
+        this.buffer = null;
+    }
 
-   public <R, U extends PortalURL<R, U>> String render(U url)
-   {
-      try
-      {
-         return _render(url);
-      }
-      catch (IOException e)
-      {
-         throw new UndeclaredIOException(e);
-      }
-   }
+    public <R, U extends PortalURL<R, U>> String render(U url) {
+        try {
+            return _render(url);
+        } catch (IOException e) {
+            throw new UndeclaredIOException(e);
+        }
+    }
 
-   private <R, U extends PortalURL<R, U>> String _render(U url) throws IOException
-   {
-      if (url.getResource() == null)
-      {
-         throw new IllegalStateException("No resource set on portal URL");
-      }
+    private <R, U extends PortalURL<R, U>> String _render(U url) throws IOException {
+        if (url.getResource() == null) {
+            throw new IllegalStateException("No resource set on portal URL");
+        }
 
-      //
-      if (writer == null)
-      {
-         writer = new URIWriter(buffer = new StringBuilder());
-      }
-      else
-      {
-         buffer.setLength(0);
-         writer.reset(buffer);
-      }
+        //
+        if (writer == null) {
+            writer = new URIWriter(buffer = new StringBuilder());
+        } else {
+            buffer.setLength(0);
+            writer.reset(buffer);
+        }
 
-      //
-      HttpServletRequest req = controllerContext.getRequest();
-      if (url.getSchemeUse())
-      {
-         buffer.append(req.getScheme());
-         buffer.append("://");
-      }
-      if (url.getAuthorityUse())
-      {
-         buffer.append(req.getServerName());
-         int port = req.getServerPort();
-         if (port != 80)
-         {
-            buffer.append(':').append(port);
-         }
-      }
-
-      //
-      writer.setMimeType(url.getMimeType());
-
-      //
-      String confirm = url.getConfirm();
-      boolean hasConfirm = confirm != null && confirm.length() > 0;
-
-      //
-      boolean ajax = url.getAjax() != null && url.getAjax();
-      if (ajax)
-      {
-         writer.append("javascript:");
-         if (hasConfirm)
-         {
-            writer.append("if(confirm('");
-            writer.append(confirm.replaceAll("'", "\\\\'"));
-            writer.append("'))");
-         }
-         writer.append("ajaxGet('");
-      }
-      else
-      {
-         if (hasConfirm)
-         {
-            writer.append("javascript:");
-            writer.append("if(confirm('");
-            writer.append(confirm.replaceAll("'", "\\\\'"));
-            writer.append("'))");
-            writer.append("window.location=\'");
-         }
-      }
-
-      //
-      Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
-      parameters.put(WebAppController.HANDLER_PARAM, "portal");
-      parameters.put(PortalRequestHandler.REQUEST_SITE_TYPE, siteKey.getTypeName());
-      parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, siteKey.getName());
-
-      //
-      String lang = "";
-      Locale locale = url.getLocale();
-      if (locale != null && locale.getLanguage().length() > 0)
-      {
-         lang = I18N.toTagIdentifier(locale);
-      }
-      parameters.put(PortalRequestHandler.LANG, lang);
-
-      //
-      for (QualifiedName parameterName : url.getParameterNames())
-      {
-         String parameterValue = url.getParameterValue(parameterName);
-         if (parameterValue != null)
-         {
-            parameters.put(parameterName, parameterValue);
-         }
-      }
-
-      // Render url via controller
-      controllerContext.renderURL(parameters, writer);
-
-      // Now append generic query parameters
-      Map<String, String[]> queryParameters = url.getQueryParameters();
-      if (queryParameters != null)
-      {
-         for (Map.Entry<String, String[]> entry : queryParameters.entrySet())
-         {
-            for (String value : entry.getValue())
-            {
-               writer.appendQueryParameter(entry.getKey(), value);
+        //
+        HttpServletRequest req = controllerContext.getRequest();
+        if (url.getSchemeUse()) {
+            buffer.append(req.getScheme());
+            buffer.append("://");
+        }
+        if (url.getAuthorityUse()) {
+            buffer.append(req.getServerName());
+            int port = req.getServerPort();
+            if (port != 80) {
+                buffer.append(':').append(port);
             }
-         }
-      }
-      
-      //CSRF token
-      if (url.isCSRFCheck())
-      {
-         String token;
-         try
-         {
-            token = CSRFTokenUtil.getToken();
-            writer.appendQueryParameter(CSRFTokenUtil.CSRF_TOKEN, token);
-         }
-         catch (Exception e)
-         {            
-            throw new IllegalStateException("Can't add csrf token to url", e);
-         }
-      }
+        }
 
-      //
-      if (ajax)
-      {
-         writer.appendQueryParameter("ajaxRequest", "true");
-         writer.append("')");
-      }
-      else
-      {
-         if (hasConfirm)
-         {
-            writer.append("\'");
-         }
-      }
+        //
+        writer.setMimeType(url.getMimeType());
 
-      //
-      return buffer.toString();
-   }
+        //
+        String confirm = url.getConfirm();
+        boolean hasConfirm = confirm != null && confirm.length() > 0;
+
+        //
+        boolean ajax = url.getAjax() != null && url.getAjax();
+        if (ajax) {
+            writer.append("javascript:");
+            if (hasConfirm) {
+                writer.append("if(confirm('");
+                writer.append(confirm.replaceAll("'", "\\\\'"));
+                writer.append("'))");
+            }
+            writer.append("ajaxGet('");
+        } else {
+            if (hasConfirm) {
+                writer.append("javascript:");
+                writer.append("if(confirm('");
+                writer.append(confirm.replaceAll("'", "\\\\'"));
+                writer.append("'))");
+                writer.append("window.location=\'");
+            }
+        }
+
+        //
+        Map<QualifiedName, String> parameters = new HashMap<QualifiedName, String>();
+        parameters.put(WebAppController.HANDLER_PARAM, "portal");
+        parameters.put(PortalRequestHandler.REQUEST_SITE_TYPE, siteKey.getTypeName());
+        parameters.put(PortalRequestHandler.REQUEST_SITE_NAME, siteKey.getName());
+
+        //
+        String lang = "";
+        Locale locale = url.getLocale();
+        if (locale != null && locale.getLanguage().length() > 0) {
+            lang = I18N.toTagIdentifier(locale);
+        }
+        parameters.put(PortalRequestHandler.LANG, lang);
+
+        //
+        for (QualifiedName parameterName : url.getParameterNames()) {
+            String parameterValue = url.getParameterValue(parameterName);
+            if (parameterValue != null) {
+                parameters.put(parameterName, parameterValue);
+            }
+        }
+
+        // Render url via controller
+        controllerContext.renderURL(parameters, writer);
+
+        // Now append generic query parameters
+        Map<String, String[]> queryParameters = url.getQueryParameters();
+        if (queryParameters != null) {
+            for (Map.Entry<String, String[]> entry : queryParameters.entrySet()) {
+                for (String value : entry.getValue()) {
+                    writer.appendQueryParameter(entry.getKey(), value);
+                }
+            }
+        }
+
+        // CSRF token
+        if (url.isCSRFCheck()) {
+            String token;
+            try {
+                token = CSRFTokenUtil.getToken();
+                writer.appendQueryParameter(CSRFTokenUtil.CSRF_TOKEN, token);
+            } catch (Exception e) {
+                throw new IllegalStateException("Can't add csrf token to url", e);
+            }
+        }
+
+        //
+        if (ajax) {
+            writer.appendQueryParameter("ajaxRequest", "true");
+            writer.append("')");
+        } else {
+            if (hasConfirm) {
+                writer.append("\'");
+            }
+        }
+
+        //
+        return buffer.toString();
+    }
 }

@@ -21,29 +21,29 @@
 -->
 
 <gatein-resources
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
-   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
   <!-- Dupicate resourceID SHARED/Foo -->
   <module>
     <name>Foo</name>
-     <script>
-       <path>foo.js</path>
-     </script>     
+    <script>
+      <path>foo.js</path>
+    </script>
   </module>
-  
+
   <scripts>
-   <name>Foo</name>
+    <name>Foo</name>
     <script>
       <path>foo.js</path>
     </script>
   </scripts>
-  
+
   <module>
-   <name>Foo</name>
+    <name>Foo</name>
     <script>
       <path>foo.js</path>
     </script>
-  </module> 
+  </module>
 </gatein-resources>
 

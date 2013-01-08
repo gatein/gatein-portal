@@ -22,45 +22,37 @@
 
 package org.jboss.gatein.selenium.build;
 
-import org.apache.tools.ant.taskdefs.Execute;
-
 import java.io.File;
 import java.util.List;
 
-public class BuildHelper
-{
+import org.apache.tools.ant.taskdefs.Execute;
 
-   public static File getMavenHome()
-   {
+public class BuildHelper {
 
-      String mavenHome = null;
+    public static File getMavenHome() {
 
-      List<String> env = Execute.getProcEnvironment();
-      for (String var : env)
-      {
-         if (var.startsWith("M2_HOME="))
-         {
-            mavenHome = var.substring("M2_HOME=".length());
-            break;
-         }
-      }
+        String mavenHome = null;
 
-      if (mavenHome != null)
-      {
-         File mFile = new File(mavenHome);
-         if (!mFile.isDirectory())
-         {
-            mavenHome = System.getProperty("maven.home");
-            if (mavenHome != null)
-            {
-               mFile = new File(mavenHome);
+        List<String> env = Execute.getProcEnvironment();
+        for (String var : env) {
+            if (var.startsWith("M2_HOME=")) {
+                mavenHome = var.substring("M2_HOME=".length());
+                break;
             }
-         }
-         if (mFile.isDirectory())
-         {
-            return mFile;
-         }
-      }
-      return null;
-   }
+        }
+
+        if (mavenHome != null) {
+            File mFile = new File(mavenHome);
+            if (!mFile.isDirectory()) {
+                mavenHome = System.getProperty("maven.home");
+                if (mavenHome != null) {
+                    mFile = new File(mavenHome);
+                }
+            }
+            if (mFile.isDirectory()) {
+                return mFile;
+            }
+        }
+        return null;
+    }
 }

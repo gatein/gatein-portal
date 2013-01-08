@@ -19,157 +19,131 @@
 
 package org.exoplatform.commons.cache.future;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.Callable;
+
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
-import org.gatein.common.util.Tools;
 
-import java.util.*;
-import java.util.concurrent.Callable;
+import org.gatein.common.util.Tools;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ConcurrentGetWhenPutTestCase extends TestCase
-{
+public class ConcurrentGetWhenPutTestCase extends TestCase {
 
-   /** . */
-   private AssertionFailedError failure;
+    /** . */
+    private AssertionFailedError failure;
 
-   /** . */
-   private List<String> events = Collections.synchronizedList(new LinkedList<String>());
+    /** . */
+    private List<String> events = Collections.synchronizedList(new LinkedList<String>());
 
-   FutureCache<String, String, Callable<String>> futureCache = new FutureCache<String, String, Callable<String>>(new StringLoader()) {
+    FutureCache<String, String, Callable<String>> futureCache = new FutureCache<String, String, Callable<String>>(
+            new StringLoader()) {
 
-
-      @Override
-      protected String get(String key)
-      {
-         if (key == key1)
-         {
-            if (Thread.currentThread() != thread1)
-            {
-               failure = new AssertionFailedError();
+        @Override
+        protected String get(String key) {
+            if (key == key1) {
+                if (Thread.currentThread() != thread1) {
+                    failure = new AssertionFailedError();
+                }
+                events.add("get/key1");
+            } else if (key == key2) {
+                if (Thread.currentThread() != thread2) {
+                    failure = new AssertionFailedError();
+                }
+                events.add("get/key2");
+            } else {
+                failure = new AssertionFailedError();
             }
-            events.add("get/key1");
-         }
-         else if (key == key2)
-         {
-            if (Thread.currentThread() != thread2)
-            {
-               failure = new AssertionFailedError();
+            return null;
+        }
+
+        @Override
+        protected void put(String key, String value) {
+            if (key == key1) {
+                if (Thread.currentThread() == thread1) {
+                    events.add("begin_put/key1/" + value);
+
+                    //
+                    thread2.start();
+
+                    //
+                    while (thread2.getState() != Thread.State.WAITING) {
+                        // Wait until thread 2 is blocked
+                    }
+
+                    //
+                    events.add("end_put/key1");
+                } else {
+                    failure = new AssertionFailedError();
+                }
+            } else {
+                failure = new AssertionFailedError();
             }
-            events.add("get/key2");
-         }
-         else
-         {
-            failure = new AssertionFailedError();
-         }
-         return null;
-      }
+        }
+    };
 
-      @Override
-      protected void put(String key, String value)
-      {
-         if (key == key1)
-         {
-            if (Thread.currentThread() == thread1)
-            {
-               events.add("begin_put/key1/" + value);
+    /** . */
+    private final String key1 = new String("foo");
 
-               //
-               thread2.start();
+    /** . */
+    private final String key2 = new String("foo");
 
-               //
-               while (thread2.getState() != Thread.State.WAITING)
-               {
-                  // Wait until thread 2 is blocked
-               }
+    Thread thread1 = new Thread() {
+        @Override
+        public void run() {
+            String v = futureCache.get(new Callable<String>() {
+                public String call() throws Exception {
+                    events.add("call/key1");
+                    return "foo_value_1";
+                }
+            }, key1);
+            events.add("retrieved/key1/" + v);
+        }
+    };
 
-               //
-               events.add("end_put/key1");
-            }
-            else
-            {
-               failure = new AssertionFailedError();
-            }
-         }
-         else
-         {
-            failure = new AssertionFailedError();
-         }
-      }
-   };
+    Thread thread2 = new Thread() {
+        @Override
+        public void run() {
+            String v = futureCache.get(new Callable<String>() {
+                public String call() throws Exception {
+                    failure = new AssertionFailedError();
+                    return "foo_value_2";
+                }
+            }, key2);
+            events.add("retrieved/key2/" + v);
+        }
+    };
 
-   /** . */
-   private final String key1 = new String("foo");
+    public void testMain() throws Exception {
+        thread1.start();
 
-   /** . */
-   private final String key2 = new String("foo");
+        //
+        thread1.join();
+        thread2.join();
 
-   Thread thread1 = new Thread()
-   {
-      @Override
-      public void run()
-      {
-         String v = futureCache.get(new Callable<String>()
-         {
-            public String call() throws Exception
-            {
-               events.add("call/key1");
-               return "foo_value_1";
-            }
-         }, key1);
-         events.add("retrieved/key1/" + v);
-      }
-   };
+        //
+        if (failure != null) {
+            throw failure;
+        }
 
-   Thread thread2 = new Thread()
-   {
-      @Override
-      public void run()
-      {
-         String v = futureCache.get(new Callable<String>()
-         {
-            public String call() throws Exception
-            {
-               failure = new AssertionFailedError();
-               return "foo_value_2";
-            }
-         }, key2);
-         events.add("retrieved/key2/" + v);
-      }
-   };
+        //
+        List<String> expectedEvents = Arrays.asList("get/key1", "call/key1", "begin_put/key1/foo_value_1", "get/key2",
+                "end_put/key1");
 
-   public void testMain() throws Exception
-   {
-      thread1.start();
+        //
+        assertEquals(expectedEvents, events.subList(0, expectedEvents.size()));
 
-      //
-      thread1.join();
-      thread2.join();
-
-      //
-      if (failure != null)
-      {
-         throw failure;
-      }
-
-      //
-      List<String> expectedEvents = Arrays.asList(
-         "get/key1",
-         "call/key1",
-         "begin_put/key1/foo_value_1",
-         "get/key2",
-         "end_put/key1"
-      );
-
-      //
-      assertEquals(expectedEvents, events.subList(0, expectedEvents.size()));
-
-      //
-      Set<String> expectedEndEvents = Tools.toSet("retrieved/key1/foo_value_1", "retrieved/key2/foo_value_1");
-      assertEquals(expectedEndEvents, new HashSet<String>(events.subList(expectedEvents.size(), events.size())));
-   }
+        //
+        Set<String> expectedEndEvents = Tools.toSet("retrieved/key1/foo_value_1", "retrieved/key2/foo_value_1");
+        assertEquals(expectedEndEvents, new HashSet<String>(events.subList(expectedEvents.size(), events.size())));
+    }
 
 }

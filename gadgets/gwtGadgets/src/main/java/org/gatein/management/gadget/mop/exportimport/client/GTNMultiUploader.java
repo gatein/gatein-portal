@@ -23,6 +23,7 @@
 package org.gatein.management.gadget.mop.exportimport.client;
 
 import com.google.gwt.uibinder.client.UiConstructor;
+
 import gwtupload.client.IFileInput;
 import gwtupload.client.IFileInput.FileInputType;
 import gwtupload.client.IUploadStatus;
@@ -33,107 +34,85 @@ import gwtupload.client.Uploader;
 /**
  * {@code GTNMultiUploader}
  * <p>
- * Implementation of an uploader panel that is able to handle several uploads.
- * This uploader allows to upload multiple files asynchronously using <i>Ajax</i>
- * This version of multi file uploader allows to enable/disable the automatic upload, i.e
- * the upload starts right after selecting file. The default version does not allow
- * this feature and upload is automatic by default.
+ * Implementation of an uploader panel that is able to handle several uploads. This uploader allows to upload multiple files
+ * asynchronously using <i>Ajax</i> This version of multi file uploader allows to enable/disable the automatic upload, i.e the
+ * upload starts right after selecting file. The default version does not allow this feature and upload is automatic by default.
  * </p>
  * Created on Feb 17, 2011, 6:47:18 PM
  *
  * @author <a href="mailto:nbenothm@redhat.com">Nabil Benothman</a>
  * @version 1.0
  */
-public class GTNMultiUploader extends MultiUploader
-{
+public class GTNMultiUploader extends MultiUploader {
 
-   private boolean automaticUpload;
+    private boolean automaticUpload;
 
-   /**
-    * Create a new instance of {@code GTNMultiUploader}
-    * Initialize widget components and layout elements.
-    * Uses the default status widget and the standard input file.
-    */
-   public GTNMultiUploader()
-   {
-      super();
-   }
+    /**
+     * Create a new instance of {@code GTNMultiUploader} Initialize widget components and layout elements. Uses the default
+     * status widget and the standard input file.
+     */
+    public GTNMultiUploader() {
+        super();
+    }
 
-   /**
-    * Create a new instance of {@code GTNMultiUploader}
-    * Initialize widget components and layout elements.
-    * Uses the default status widget.
-    *
-    * @param type
-    *   file input to use
-    */
-   @UiConstructor
-   public GTNMultiUploader(FileInputType type)
-   {
-      super(type);
-   }
+    /**
+     * Create a new instance of {@code GTNMultiUploader} Initialize widget components and layout elements. Uses the default
+     * status widget.
+     *
+     * @param type file input to use
+     */
+    @UiConstructor
+    public GTNMultiUploader(FileInputType type) {
+        super(type);
+    }
 
-   /**
-    * Create a new instance of {@code GTNMultiUploader}
-    * Initialize widget components and layout elements.
-    *
-    * @param type
-    *   file input to use
-    * @param status
-    *   Customized status widget to use
-    */
-   public GTNMultiUploader(FileInputType type, IUploadStatus status)
-   {
-      super(type, status);
-   }
+    /**
+     * Create a new instance of {@code GTNMultiUploader} Initialize widget components and layout elements.
+     *
+     * @param type file input to use
+     * @param status Customized status widget to use
+     */
+    public GTNMultiUploader(FileInputType type, IUploadStatus status) {
+        super(type, status);
+    }
 
-   /**
-    * Create a new instance of {@code GTNMultiUploader}
-    * Initialize widget components and layout elements.
-    *
-    * @param status
-    *   Customized status widget to use
-    */
-   public GTNMultiUploader(IUploadStatus status)
-   {
-      super(status);
-   }
+    /**
+     * Create a new instance of {@code GTNMultiUploader} Initialize widget components and layout elements.
+     *
+     * @param status Customized status widget to use
+     */
+    public GTNMultiUploader(IUploadStatus status) {
+        super(status);
+    }
 
-   /**
-    * Create a new instance of {@code GTNMultiUploader}
-    * This is the constructor for customized multi-uploaders.
-    *
-    * @param status
-    *   Customized status widget to use
-    * @param fileInput
-    *   Customized file input
-    */
-   public GTNMultiUploader(IUploadStatus status, IFileInput fileInput)
-   {
-      super(status, fileInput);
-   }
+    /**
+     * Create a new instance of {@code GTNMultiUploader} This is the constructor for customized multi-uploaders.
+     *
+     * @param status Customized status widget to use
+     * @param fileInput Customized file input
+     */
+    public GTNMultiUploader(IUploadStatus status, IFileInput fileInput) {
+        super(status, fileInput);
+    }
 
-   @Override
-   protected IUploader getUploaderInstance()
-   {
-      Uploader uploader = (Uploader) super.getUploaderInstance();
-      uploader.setAutoSubmit(automaticUpload);
-      return uploader;
-   }
+    @Override
+    protected IUploader getUploaderInstance() {
+        Uploader uploader = (Uploader) super.getUploaderInstance();
+        uploader.setAutoSubmit(automaticUpload);
+        return uploader;
+    }
 
-   /**
-    * @return the automaticUpload
-    */
-   public boolean isAutomaticUpload()
-   {
-      return automaticUpload;
-   }
+    /**
+     * @return the automaticUpload
+     */
+    public boolean isAutomaticUpload() {
+        return automaticUpload;
+    }
 
-   /**
-    * @param automaticUpload the automaticUpload to set
-    */
-   public void setAutomaticUpload(boolean automaticUpload)
-   {
-      this.automaticUpload = automaticUpload;
-   }
+    /**
+     * @param automaticUpload the automaticUpload to set
+     */
+    public void setAutomaticUpload(boolean automaticUpload) {
+        this.automaticUpload = automaticUpload;
+    }
 }

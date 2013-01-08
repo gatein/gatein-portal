@@ -24,62 +24,52 @@ import junit.framework.TestCase;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestBitStack extends TestCase
-{
+public class TestBitStack extends TestCase {
 
-   public void testSimple()
-   {
-      BitStack bs = new BitStack();
-      assertEquals(0, bs.getDepth());
-      bs.init(2);
-      bs.push();
-      assertEquals(1, bs.getDepth());
-      bs.set(1);
-      assertFalse(bs.isEmpty());
-      bs.push();
-      assertEquals(2, bs.getDepth());
-      bs.set(0);
-      assertTrue(bs.isEmpty());
-      bs.pop();
-      assertEquals(1, bs.getDepth());
-      assertFalse(bs.isEmpty());
-      bs.pop();
-      assertEquals(0, bs.getDepth());
-   }
+    public void testSimple() {
+        BitStack bs = new BitStack();
+        assertEquals(0, bs.getDepth());
+        bs.init(2);
+        bs.push();
+        assertEquals(1, bs.getDepth());
+        bs.set(1);
+        assertFalse(bs.isEmpty());
+        bs.push();
+        assertEquals(2, bs.getDepth());
+        bs.set(0);
+        assertTrue(bs.isEmpty());
+        bs.pop();
+        assertEquals(1, bs.getDepth());
+        assertFalse(bs.isEmpty());
+        bs.pop();
+        assertEquals(0, bs.getDepth());
+    }
 
-   public void testReuse()
-   {
-      BitStack bs = new BitStack();
-      bs.init(2);
-      bs.push();
-      bs.set(0);
-      bs.push();
-      bs.set(1);
-      assertTrue(bs.isEmpty());
-      bs.pop();
-      bs.push();
-      assertFalse(bs.isEmpty());
-   }
+    public void testReuse() {
+        BitStack bs = new BitStack();
+        bs.init(2);
+        bs.push();
+        bs.set(0);
+        bs.push();
+        bs.set(1);
+        assertTrue(bs.isEmpty());
+        bs.pop();
+        bs.push();
+        assertFalse(bs.isEmpty());
+    }
 
-   public void testState()
-   {
-      BitStack bs = new BitStack();
-      try
-      {
-         bs.set(0);
-         fail();
-      }
-      catch (IllegalStateException e)
-      {
-      }
-      try
-      {
-         bs.pop();
-         fail();
-      }
-      catch (IllegalStateException e)
-      {
-      }
-   }
+    public void testState() {
+        BitStack bs = new BitStack();
+        try {
+            bs.set(0);
+            fail();
+        } catch (IllegalStateException e) {
+        }
+        try {
+            bs.pop();
+            fail();
+        } catch (IllegalStateException e) {
+        }
+    }
 
 }

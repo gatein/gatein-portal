@@ -21,8 +21,8 @@
  */
 package org.gatein.integration.jboss.as7.deployment;
 
-import org.gatein.integration.jboss.as7.GateInExtension;
 import org.gatein.integration.jboss.as7.GateInConfiguration;
+import org.gatein.integration.jboss.as7.GateInExtension;
 import org.gatein.integration.jboss.as7.web.InitService;
 import org.jboss.as.server.deployment.Attachments;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
@@ -36,50 +36,44 @@ import org.jboss.msc.service.ServiceBuilder;
 import org.jboss.msc.service.ServiceName;
 import org.jboss.msc.service.ServiceTarget;
 
-
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class GateInInitDeploymentProcessor implements DeploymentUnitProcessor
-{
-   private final Logger log = Logger.getLogger(GateInInitDeploymentProcessor.class);
+public class GateInInitDeploymentProcessor implements DeploymentUnitProcessor {
+    private final Logger log = Logger.getLogger(GateInInitDeploymentProcessor.class);
 
-   @Override
-   public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
-   {
-      final DeploymentUnit du = phaseContext.getDeploymentUnit();
+    @Override
+    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
+        final DeploymentUnit du = phaseContext.getDeploymentUnit();
 
-      if (GateInConfiguration.isGateInArchive(du))
-      {
-         log.info("Module is on GateIn Extension modules list");
-         final GateInConfiguration config = du.getAttachment(GateInConfigurationKey.KEY);
+        if (GateInConfiguration.isGateInArchive(du)) {
+            log.info("Module is on GateIn Extension modules list");
+            final GateInConfiguration config = du.getAttachment(GateInConfigurationKey.KEY);
 
-         final ServiceName initSvcName = GateInExtension.deploymentUnitName(config.getGateInEarModule(), "gatein", "init");
-         final ServiceTarget target = phaseContext.getServiceTarget();
+            final ServiceName initSvcName = GateInExtension.deploymentUnitName(config.getGateInEarModule(), "gatein", "init");
+            final ServiceTarget target = phaseContext.getServiceTarget();
 
-         if (du.getAttachment(GateInEarKey.KEY) != null)
-         {
-            // Install InitService with dependency on all the deployment modules reaching POST_MODULE
-            // TODO: we are starting up InitService before child modules (jboss.deployment.subunit.*) have gone through POST_MODULE
-            final ServiceBuilder<InitService> builder = target.addService(initSvcName, new InitService(config))
-                  .addDependency(GateInExtension.deploymentUnitName(config.getGateInEarModule(), Phase.POST_MODULE));
+            if (du.getAttachment(GateInEarKey.KEY) != null) {
+                // Install InitService with dependency on all the deployment modules reaching POST_MODULE
+                // TODO: we are starting up InitService before child modules (jboss.deployment.subunit.*) have gone through
+                // POST_MODULE
+                final ServiceBuilder<InitService> builder = target.addService(initSvcName, new InitService(config))
+                        .addDependency(GateInExtension.deploymentUnitName(config.getGateInEarModule(), Phase.POST_MODULE));
 
-            for (ModuleIdentifier module : config.getGateInExtModules())
-            {
-               builder.addDependency(GateInExtension.deploymentUnitName(module, Phase.POST_MODULE));
+                for (ModuleIdentifier module : config.getGateInExtModules()) {
+                    builder.addDependency(GateInExtension.deploymentUnitName(module, Phase.POST_MODULE));
+                }
+                builder.install();
+                log.info("Installed " + initSvcName);
             }
-            builder.install();
-            log.info("Installed " + initSvcName);
-         }
-         // all gatein deployment modules use InitService as barrier on POST_MODULE to ensure
-         // they are all available on the classpath when init time resource loading takes place
-         phaseContext.addToAttachmentList(Attachments.NEXT_PHASE_DEPS, initSvcName);
-         log.info("Added NEXT_PHASE_DEP on " + initSvcName);
-      }
-   }
+            // all gatein deployment modules use InitService as barrier on POST_MODULE to ensure
+            // they are all available on the classpath when init time resource loading takes place
+            phaseContext.addToAttachmentList(Attachments.NEXT_PHASE_DEPS, initSvcName);
+            log.info("Added NEXT_PHASE_DEP on " + initSvcName);
+        }
+    }
 
-   @Override
-   public void undeploy(DeploymentUnit context)
-   {
-   }
+    @Override
+    public void undeploy(DeploymentUnit context) {
+    }
 }

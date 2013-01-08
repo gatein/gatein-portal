@@ -23,14 +23,14 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.webui</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
+    <version>3.6.0.MO1-SNAPSHOT</version>
   </parent>
-  
+
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.portal.webui.portlet</artifactId>
   <packaging>jar</packaging>
   <name>GateIn Portal WebUI Portlet</name>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.gatein.portal</groupId>

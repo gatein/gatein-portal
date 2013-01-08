@@ -29,191 +29,157 @@ import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.ComponentConfigs;
 import org.exoplatform.webui.config.annotation.EventConfig;
 import org.exoplatform.webui.core.UIContainer;
-import org.exoplatform.webui.core.UIPopupMessages;
 import org.exoplatform.webui.core.UIPopupWindow;
-import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
-@ComponentConfigs({@ComponentConfig(template = "classpath:groovy/dashboard/webui/component/UIDashboard.gtmpl", events = {
-   @EventConfig(listeners = UIDashboardContainer.MoveGadgetActionListener.class),
-   @EventConfig(listeners = UIDashboardContainer.AddNewGadgetActionListener.class),
-   @EventConfig(listeners = UIDashboard.SetShowSelectContainerActionListener.class),
-   @EventConfig(listeners = UIDashboardContainer.DeleteGadgetActionListener.class),
-   @EventConfig(listeners = UIDashboard.MinimizeGadgetActionListener.class),
-   @EventConfig(listeners = UIDashboard.MaximizeGadgetActionListener.class)})})
-public class UIDashboard extends UIContainer
-{
+@ComponentConfigs({ @ComponentConfig(template = "classpath:groovy/dashboard/webui/component/UIDashboard.gtmpl", events = {
+        @EventConfig(listeners = UIDashboardContainer.MoveGadgetActionListener.class),
+        @EventConfig(listeners = UIDashboardContainer.AddNewGadgetActionListener.class),
+        @EventConfig(listeners = UIDashboard.SetShowSelectContainerActionListener.class),
+        @EventConfig(listeners = UIDashboardContainer.DeleteGadgetActionListener.class),
+        @EventConfig(listeners = UIDashboard.MinimizeGadgetActionListener.class),
+        @EventConfig(listeners = UIDashboard.MaximizeGadgetActionListener.class) }) })
+public class UIDashboard extends UIContainer {
 
-   public static String GADGET_POPUP_ID = "UIAddGadgetPopup";
+    public static String GADGET_POPUP_ID = "UIAddGadgetPopup";
 
-   public static String APP_NOT_EXIST = "APP_NOT_EXIT";
-   
-   private boolean isShowSelectPopup = false;
+    public static String APP_NOT_EXIST = "APP_NOT_EXIT";
 
-   private String aggregatorId;
+    private boolean isShowSelectPopup = false;
 
-   private UIGadget maximizedGadget;   
+    private String aggregatorId;
 
-   public UIDashboard() throws Exception
-   {
-      UIPopupWindow popup = addChild(UIPopupWindow.class, null, GADGET_POPUP_ID + "-" + hashCode());
-      popup.setUIComponent(createUIComponent(UIDashboardSelectContainer.class, null, null));
-      addChild(UIDashboardContainer.class, null, null);
-   }
+    private UIGadget maximizedGadget;
 
-   @Override
-   public void processRender(WebuiRequestContext context) throws Exception
-   {
-      UIGadget uiGadget = this.getMaximizedGadget();      
-      if (uiGadget != null) 
-      {         
-         if (context.getAttribute(APP_NOT_EXIST) != null || 
-                  context.getAttribute(UIGadget.SAVE_PREF_FAIL) != null) 
-         {
-            this.setMaximizedGadget(null);
-         }         
-      }
-      
-      super.processRender(context);
-   }
+    public UIDashboard() throws Exception {
+        UIPopupWindow popup = addChild(UIPopupWindow.class, null, GADGET_POPUP_ID + "-" + hashCode());
+        popup.setUIComponent(createUIComponent(UIDashboardSelectContainer.class, null, null));
+        addChild(UIDashboardContainer.class, null, null);
+    }
 
-   public void setColumns(int num) throws Exception
-   {
-      getChild(UIDashboardContainer.class).setColumns(num);
-   }
-
-   public void setContainerTemplate(String template)
-   {
-      getChild(UIDashboardContainer.class).setContainerTemplate(template);
-   }
-
-   public boolean canEdit()
-   {
-      DashboardParent parent = (DashboardParent)getParent();
-      return parent.canEdit();
-   }
-
-   public boolean isShowSelectPopup()
-   {
-      return isShowSelectPopup;
-   }
-
-   public void setShowSelectPopup(final boolean value)
-   {
-      this.isShowSelectPopup = value;
-      getChild(UIPopupWindow.class).setShow(value);
-   }
-
-   public String getAggregatorId()
-   {
-      return aggregatorId;
-   }
-
-   public void setAggregatorId(String aggregatorId)
-   {
-      this.aggregatorId = aggregatorId;
-   }
-
-   public UIGadget getMaximizedGadget()
-   {
-      return maximizedGadget;
-   }
-
-   public void setMaximizedGadget(UIGadget gadget)
-   {
-      maximizedGadget = gadget;
-   }
-
-   public static class SetShowSelectContainerActionListener extends EventListener<UIDashboard>
-   {
-      public final void execute(final Event<UIDashboard> event) throws Exception
-      {
-         UIDashboard uiDashboard = (UIDashboard)event.getSource();
-         if (!uiDashboard.canEdit())
-         {
-            return;
-         }
-         PortletRequestContext pcontext = (PortletRequestContext)event.getRequestContext();
-         boolean isShow = Boolean.parseBoolean(pcontext.getRequestParameter("isShow"));
-         uiDashboard.setShowSelectPopup(isShow);
-         String windowId = uiDashboard.getChild(UIDashboardContainer.class).getWindowId();
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiDashboard.getChild(UIPopupWindow.class));
-         if (isShow)
-         {
-            event.getRequestContext().getJavascriptManager().require("SHARED/dashboard", "dashboard")
-               .addScripts("dashboard.UIDashboard.onLoad('" + windowId + "'," + uiDashboard.canEdit() + ");");
-         }
-      }
-   }
-
-   public static class MinimizeGadgetActionListener extends EventListener<UIDashboard>
-   {
-      public final void execute(final Event<UIDashboard> event) throws Exception
-      {
-         WebuiRequestContext context = event.getRequestContext();
-         UIDashboard uiDashboard = event.getSource();
-         String objectId = context.getRequestParameter(OBJECTID);
-         String minimized = context.getRequestParameter("minimized");
-
-         UIDashboardContainer uiDashboardCont = uiDashboard.getChild(UIDashboardContainer.class);
-         UIGadget uiGadget = uiDashboard.getChild(UIDashboardContainer.class).getUIGadget(objectId);
-         if (uiGadget.isLossData())
-         {
-            UIPortalApplication uiApp = Util.getUIPortalApplication();
-            uiApp.addMessage(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null));
-            context.setAttribute(APP_NOT_EXIST, true);
-            context.addUIComponentToUpdateByAjax(uiDashboard);
-         }
-         else
-         {
-            uiGadget.getProperties().setProperty("minimized", minimized);
-            uiDashboardCont.save();
-            if (context.getAttribute(UIDashboardContainer.SAVE_FAIL) != null)
-            {
-               return;
+    @Override
+    public void processRender(WebuiRequestContext context) throws Exception {
+        UIGadget uiGadget = this.getMaximizedGadget();
+        if (uiGadget != null) {
+            if (context.getAttribute(APP_NOT_EXIST) != null || context.getAttribute(UIGadget.SAVE_PREF_FAIL) != null) {
+                this.setMaximizedGadget(null);
             }
-            Util.getPortalRequestContext().setResponseComplete(true);
-         }
-      }
-   }
+        }
 
-   public static class MaximizeGadgetActionListener extends EventListener<UIDashboard>
-   {
-      public final void execute(final Event<UIDashboard> event) throws Exception
-      {
-         WebuiRequestContext context = event.getRequestContext();
-         UIDashboard uiDashboard = event.getSource();
-         String objectId = context.getRequestParameter(OBJECTID);
-         String maximize = context.getRequestParameter("maximize");
-         UIDashboardContainer uiDashboardCont = uiDashboard.getChild(UIDashboardContainer.class);
-         UIGadget uiGadget = uiDashboardCont.getUIGadget(objectId);
-         if (uiGadget == null || uiGadget.isLossData())
-         {
-            UIPortalApplication uiApp = Util.getUIPortalApplication();
-            uiApp.addMessage(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null));
-            context.setAttribute(APP_NOT_EXIST, true);
-            context.addUIComponentToUpdateByAjax(uiDashboard);
-            return;
-         }
+        super.processRender(context);
+    }
 
-         // TODO nguyenanhkien2a@gmail.comá
-         // We need to expand unminimized state of uiGadget to view all body of
-         // gadget, not just a title with no content
-         uiGadget.getProperties().setProperty("minimized", "false");
-         uiDashboardCont.save();
+    public void setColumns(int num) throws Exception {
+        getChild(UIDashboardContainer.class).setColumns(num);
+    }
 
-         if (maximize.equals("maximize")
-            && context.getAttribute(UIDashboardContainer.SAVE_FAIL) == null)
-         {
-            uiGadget.setView(UIGadget.CANVAS_VIEW);
-            uiDashboard.setMaximizedGadget(uiGadget);
-         }
-         else
-         {
-            uiGadget.setView(UIGadget.HOME_VIEW);
-            uiDashboard.setMaximizedGadget(null);
-         }
-      }
-   }
+    public void setContainerTemplate(String template) {
+        getChild(UIDashboardContainer.class).setContainerTemplate(template);
+    }
+
+    public boolean canEdit() {
+        DashboardParent parent = (DashboardParent) getParent();
+        return parent.canEdit();
+    }
+
+    public boolean isShowSelectPopup() {
+        return isShowSelectPopup;
+    }
+
+    public void setShowSelectPopup(final boolean value) {
+        this.isShowSelectPopup = value;
+        getChild(UIPopupWindow.class).setShow(value);
+    }
+
+    public String getAggregatorId() {
+        return aggregatorId;
+    }
+
+    public void setAggregatorId(String aggregatorId) {
+        this.aggregatorId = aggregatorId;
+    }
+
+    public UIGadget getMaximizedGadget() {
+        return maximizedGadget;
+    }
+
+    public void setMaximizedGadget(UIGadget gadget) {
+        maximizedGadget = gadget;
+    }
+
+    public static class SetShowSelectContainerActionListener extends EventListener<UIDashboard> {
+        public final void execute(final Event<UIDashboard> event) throws Exception {
+            UIDashboard uiDashboard = (UIDashboard) event.getSource();
+            if (!uiDashboard.canEdit()) {
+                return;
+            }
+            PortletRequestContext pcontext = (PortletRequestContext) event.getRequestContext();
+            boolean isShow = Boolean.parseBoolean(pcontext.getRequestParameter("isShow"));
+            uiDashboard.setShowSelectPopup(isShow);
+            String windowId = uiDashboard.getChild(UIDashboardContainer.class).getWindowId();
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiDashboard.getChild(UIPopupWindow.class));
+            if (isShow) {
+                event.getRequestContext().getJavascriptManager().require("SHARED/dashboard", "dashboard")
+                        .addScripts("dashboard.UIDashboard.onLoad('" + windowId + "'," + uiDashboard.canEdit() + ");");
+            }
+        }
+    }
+
+    public static class MinimizeGadgetActionListener extends EventListener<UIDashboard> {
+        public final void execute(final Event<UIDashboard> event) throws Exception {
+            WebuiRequestContext context = event.getRequestContext();
+            UIDashboard uiDashboard = event.getSource();
+            String objectId = context.getRequestParameter(OBJECTID);
+            String minimized = context.getRequestParameter("minimized");
+
+            UIDashboardContainer uiDashboardCont = uiDashboard.getChild(UIDashboardContainer.class);
+            UIGadget uiGadget = uiDashboard.getChild(UIDashboardContainer.class).getUIGadget(objectId);
+            if (uiGadget.isLossData()) {
+                UIPortalApplication uiApp = Util.getUIPortalApplication();
+                uiApp.addMessage(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null));
+                context.setAttribute(APP_NOT_EXIST, true);
+                context.addUIComponentToUpdateByAjax(uiDashboard);
+            } else {
+                uiGadget.getProperties().setProperty("minimized", minimized);
+                uiDashboardCont.save();
+                if (context.getAttribute(UIDashboardContainer.SAVE_FAIL) != null) {
+                    return;
+                }
+                Util.getPortalRequestContext().setResponseComplete(true);
+            }
+        }
+    }
+
+    public static class MaximizeGadgetActionListener extends EventListener<UIDashboard> {
+        public final void execute(final Event<UIDashboard> event) throws Exception {
+            WebuiRequestContext context = event.getRequestContext();
+            UIDashboard uiDashboard = event.getSource();
+            String objectId = context.getRequestParameter(OBJECTID);
+            String maximize = context.getRequestParameter("maximize");
+            UIDashboardContainer uiDashboardCont = uiDashboard.getChild(UIDashboardContainer.class);
+            UIGadget uiGadget = uiDashboardCont.getUIGadget(objectId);
+            if (uiGadget == null || uiGadget.isLossData()) {
+                UIPortalApplication uiApp = Util.getUIPortalApplication();
+                uiApp.addMessage(new ApplicationMessage("UIDashboard.msg.ApplicationNotExisted", null));
+                context.setAttribute(APP_NOT_EXIST, true);
+                context.addUIComponentToUpdateByAjax(uiDashboard);
+                return;
+            }
+
+            // TODO nguyenanhkien2a@gmail.comá
+            // We need to expand unminimized state of uiGadget to view all body of
+            // gadget, not just a title with no content
+            uiGadget.getProperties().setProperty("minimized", "false");
+            uiDashboardCont.save();
+
+            if (maximize.equals("maximize") && context.getAttribute(UIDashboardContainer.SAVE_FAIL) == null) {
+                uiGadget.setView(UIGadget.CANVAS_VIEW);
+                uiDashboard.setMaximizedGadget(uiGadget);
+            } else {
+                uiGadget.setView(UIGadget.HOME_VIEW);
+                uiDashboard.setMaximizedGadget(null);
+            }
+        }
+    }
 }

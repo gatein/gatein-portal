@@ -22,30 +22,29 @@ package org.exoplatform.web.controller.router;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public enum ValueMapping
-{
+public enum ValueMapping {
 
-   /**
-    * <ul>
-    *    <li>Any value is canonically mapped.</li>
-    * </ul>
-    */
-   CANONICAL,
+    /**
+     * <ul>
+     * <li>Any value is canonically mapped.</li>
+     * </ul>
+     */
+    CANONICAL,
 
-   /**
-    * <ul>
-    *    <li>An empty value is considered as a null value.</li>
-    *    <li>Other values are mapped canonically.</li>
-    * </ul>
-    */
-   NEVER_EMPTY,
+    /**
+     * <ul>
+     * <li>An empty value is considered as a null value.</li>
+     * <li>Other values are mapped canonically.</li>
+     * </ul>
+     */
+    NEVER_EMPTY,
 
-   /**
-    * <ul>
-    *    <li>A null value is considered as an empty value.</li>
-    *    <li>Other values are mapped canonically.</li>
-    * </ul>
-    */
-   NEVER_NULL
+    /**
+     * <ul>
+     * <li>A null value is considered as an empty value.</li>
+     * <li>Other values are mapped canonically.</li>
+     * </ul>
+     */
+    NEVER_NULL
 
 }

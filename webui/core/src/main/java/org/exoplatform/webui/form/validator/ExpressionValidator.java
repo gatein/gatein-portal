@@ -19,73 +19,59 @@
 
 package org.exoplatform.webui.form.validator;
 
-import org.exoplatform.commons.serialization.api.annotations.Serialized;
-import org.exoplatform.webui.form.UIFormInput;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.exoplatform.commons.serialization.api.annotations.Serialized;
+import org.exoplatform.webui.form.UIFormInput;
+
 /**
- * Created by The eXo Platform SARL
- * Author : Le Bien Thuy
- *          lebienthuy@gmail.com
- * Oct 10, 2007
+ * Created by The eXo Platform SARL Author : Le Bien Thuy lebienthuy@gmail.com Oct 10, 2007
  *
  * Validates whether this value matches one regular expression.
  */
 @Serialized
-public class ExpressionValidator extends AbstractValidator
-{
-   private String regexp;
-   private transient Matcher matcher;
+public class ExpressionValidator extends AbstractValidator {
+    private String regexp;
+    private transient Matcher matcher;
 
-   private String key_;
+    private String key_;
 
-   // For @Serialized needs
-   public ExpressionValidator()
-   {
-   }
+    // For @Serialized needs
+    public ExpressionValidator() {
+    }
 
-   public ExpressionValidator(final String regex)
-   {
-      this(regex, "ExpressionValidator.msg.value-invalid");
-   }
+    public ExpressionValidator(final String regex) {
+        this(regex, "ExpressionValidator.msg.value-invalid");
+    }
 
-   public ExpressionValidator(final String regex, final String key)
-   {
-      this.regexp = regex;
-      key_ = key;
-   }
+    public ExpressionValidator(final String regex, final String key) {
+        this.regexp = regex;
+        key_ = key;
+    }
 
-   private Matcher getMatcherFor(String input)
-   {
-      if(matcher == null)
-      {
-         matcher = Pattern.compile(regexp).matcher(input);
-      }
-      else
-      {
-         matcher.reset(input);
-      }
+    private Matcher getMatcherFor(String input) {
+        if (matcher == null) {
+            matcher = Pattern.compile(regexp).matcher(input);
+        } else {
+            matcher.reset(input);
+        }
 
-      return matcher;
-   }
+        return matcher;
+    }
 
-   @Override
-   protected String getMessageLocalizationKey()
-   {
-      return key_;
-   }
+    @Override
+    protected String getMessageLocalizationKey() {
+        return key_;
+    }
 
-   @Override
-   protected boolean isValid(String value, UIFormInput uiInput)
-   {
-      return getMatcherFor(value).matches();
-   }
+    @Override
+    protected boolean isValid(String value, UIFormInput uiInput) {
+        return getMatcherFor(value).matches();
+    }
 
-   @Override
-   protected Object[] getMessageArgs(String value, UIFormInput uiInput) throws Exception
-   {
-      return new Object[]{getLabelFor(uiInput), matcher.pattern().toString()};
-   }
+    @Override
+    protected Object[] getMessageArgs(String value, UIFormInput uiInput) throws Exception {
+        return new Object[] { getLabelFor(uiInput), matcher.pattern().toString() };
+    }
 }

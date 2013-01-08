@@ -26,69 +26,49 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestContentRegistry extends AbstractConfigTest
-{
+public class TestContentRegistry extends AbstractConfigTest {
 
-   /** . */
-   private DataStorage storage;
+    /** . */
+    private DataStorage storage;
 
-   /** . */
-   private POMSessionManager mgr;
+    /** . */
+    private POMSessionManager mgr;
 
-   /** . */
-   private POMSession session;
+    /** . */
+    private POMSession session;
 
-   public void setUp() throws Exception
-   {
-      super.setUp();
-      begin();
-      PortalContainer container = PortalContainer.getInstance();
-      storage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-      session = mgr.openSession();
-   }
+    public void setUp() throws Exception {
+        super.setUp();
+        begin();
+        PortalContainer container = PortalContainer.getInstance();
+        storage = (DataStorage) container.getComponentInstanceOfType(DataStorage.class);
+        mgr = (POMSessionManager) container.getComponentInstanceOfType(POMSessionManager.class);
+        session = mgr.openSession();
+    }
 
-   protected void tearDown() throws Exception
-   {
-      session.close(false);
-      end();
-      super.tearDown();
-   }
+    protected void tearDown() throws Exception {
+        session.close(false);
+        end();
+        super.tearDown();
+    }
 
-   public void testFoo()
-   {
-      // Make junit happy
-   }
+    public void testFoo() {
+        // Make junit happy
+    }
 
-/*
-   public void testGetContentRegistry()
-   {
-      POMSession session = mgr.getSession();
-      ContentRegistry registry = session.getContentRegistry();
-      assertNotNull(registry);
-   }
-
-   public void testCreateCategory()
-   {
-      POMSession session = mgr.getSession();
-      ContentRegistry registry = session.getContentRegistry();
-      CategoryDefinition category = registry.createCategory("foo");
-      assertNotNull(category);
-      assertSame(category, registry.getCategory("foo"));
-   }
-
-   public void testCreateContent()
-   {
-      POMSession session = mgr.getSession();
-      ContentRegistry registry = session.getContentRegistry();
-      CategoryDefinition category = registry.createCategory("foo");
-      ContentDefinition content = category.createContent("bar", Portlet.CONTENT_TYPE, "myportlet");
-      assertNotNull(content);
-
-      // Test that we do have a customization shared at the workspace level
-      Workspace workspace = session.getWorkspace();
-      assertNotNull(workspace.getCustomization("bar"));
-   }
-
-*/
+    /*
+     * public void testGetContentRegistry() { POMSession session = mgr.getSession(); ContentRegistry registry =
+     * session.getContentRegistry(); assertNotNull(registry); }
+     *
+     * public void testCreateCategory() { POMSession session = mgr.getSession(); ContentRegistry registry =
+     * session.getContentRegistry(); CategoryDefinition category = registry.createCategory("foo"); assertNotNull(category);
+     * assertSame(category, registry.getCategory("foo")); }
+     *
+     * public void testCreateContent() { POMSession session = mgr.getSession(); ContentRegistry registry =
+     * session.getContentRegistry(); CategoryDefinition category = registry.createCategory("foo"); ContentDefinition content =
+     * category.createContent("bar", Portlet.CONTENT_TYPE, "myportlet"); assertNotNull(content);
+     *
+     * // Test that we do have a customization shared at the workspace level Workspace workspace = session.getWorkspace();
+     * assertNotNull(workspace.getCustomization("bar")); }
+     */
 }

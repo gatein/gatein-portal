@@ -18,25 +18,24 @@
  */
 package org.gatein.portlet.mvc;
 
+import java.io.IOException;
+
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
-import java.io.IOException;
 
 /**
  * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
  * @version $Id$
  *
  */
-public class TodoPortlet extends GenericPortlet
-{
-   @Override
-   public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException
-   {
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/todos/todo.html");
-      prd.include(request, response);
-   }
+public class TodoPortlet extends GenericPortlet {
+    @Override
+    public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+        PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/todos/todo.html");
+        prd.include(request, response);
+    }
 }

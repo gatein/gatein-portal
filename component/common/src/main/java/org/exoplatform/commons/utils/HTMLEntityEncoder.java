@@ -18,205 +18,179 @@
  */
 package org.exoplatform.commons.utils;
 
+import java.io.StringWriter;
+import java.io.Writer;
+
 import org.gatein.common.io.WriterCharWriter;
 import org.gatein.common.text.CharWriter;
 import org.gatein.common.text.EncodingException;
 import org.gatein.common.text.EntityEncoder;
 import org.gatein.common.util.ParameterValidation;
 
-import java.io.StringWriter;
-import java.io.Writer;
-
 /**
  * This encoder provides a few methods to encode the String to its HTML entity representation.
- * 
+ *
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class HTMLEntityEncoder extends EntityEncoder
-{
-   private static volatile HTMLEntityEncoder singletonInstance;
+public class HTMLEntityEncoder extends EntityEncoder {
+    private static volatile HTMLEntityEncoder singletonInstance;
 
-   public static HTMLEntityEncoder getInstance()
-   {
-      if (singletonInstance == null)
-      {
-         synchronized (HTMLEntityEncoder.class)
-         {
-            if (singletonInstance == null)
-            {
-               singletonInstance = new HTMLEntityEncoder();
+    public static HTMLEntityEncoder getInstance() {
+        if (singletonInstance == null) {
+            synchronized (HTMLEntityEncoder.class) {
+                if (singletonInstance == null) {
+                    singletonInstance = new HTMLEntityEncoder();
+                }
             }
-         }
-      }
-      return singletonInstance;
-   }
-   
-   /** . */
-   private final String[] hexToEntity = buildHexEntityNumberArray();
+        }
+        return singletonInstance;
+    }
 
-   /**
-    * Character set that are immune from encoding in HTML
-    */
-   private static final char[] IMMUNE_HTML = { ',', '.', '-', '_', ' ' };
-   
-   /**
-    * Character set that are immune from encoding in HTML Attribute
-    */
-   private static final char[] IMMUNE_HTMLATTR = { ',', '.', '-', '_' };
+    /** . */
+    private final String[] hexToEntity = buildHexEntityNumberArray();
 
-   /**
-    * Encode data for use in HTML
-    * 
-    * @param input the string to encode for HTML
-    * @return input encoded for HTML
-    */
-   public String encodeHTML(String input)
-   {
-      return encode(input, IMMUNE_HTML);
-   }
+    /**
+     * Character set that are immune from encoding in HTML
+     */
+    private static final char[] IMMUNE_HTML = { ',', '.', '-', '_', ' ' };
 
-   /**
-    * Encode data for use in HTML attributes.
-    * 
-    * @param input the string to encode for a HTML attribute
-    * @return input encoded for use as value of a HTML attribute
-    */
-   public String encodeHTMLAttribute(String input)
-   {
-      return encode(input, IMMUNE_HTMLATTR);
-   }
+    /**
+     * Character set that are immune from encoding in HTML Attribute
+     */
+    private static final char[] IMMUNE_HTMLATTR = { ',', '.', '-', '_' };
 
-   @Override
-   public void safeEncode(char[] chars, int off, int len, CharWriter writer) throws EncodingException
-   {
-      safeEncode(chars, off, len, writer, IMMUNE_HTML);
-   }
-   
-   /**
-    * @param chars the array to encode
-    * @param off the offset in the chars array
-    * @param len the length of chars to encode
-    * @param writer the writer to use
-    * @param immune the characters array are immune from encoding
-    * @throws EncodingException
-    */
-   private void safeEncode(char[] chars, int off, int len, CharWriter writer, char[] immune) throws EncodingException
-   {
+    /**
+     * Encode data for use in HTML
+     *
+     * @param input the string to encode for HTML
+     * @return input encoded for HTML
+     */
+    public String encodeHTML(String input) {
+        return encode(input, IMMUNE_HTML);
+    }
 
-      // The index of the last copied char
-      int previous = off;
+    /**
+     * Encode data for use in HTML attributes.
+     *
+     * @param input the string to encode for a HTML attribute
+     * @return input encoded for use as value of a HTML attribute
+     */
+    public String encodeHTMLAttribute(String input) {
+        return encode(input, IMMUNE_HTMLATTR);
+    }
 
-      //
-      int to = off + len;
+    @Override
+    public void safeEncode(char[] chars, int off, int len, CharWriter writer) throws EncodingException {
+        safeEncode(chars, off, len, writer, IMMUNE_HTML);
+    }
 
-      // Perform lookup char by char
-      for (int current = off; current < to; current++)
-      {
-         char c = chars[current];
+    /**
+     * @param chars the array to encode
+     * @param off the offset in the chars array
+     * @param len the length of chars to encode
+     * @param writer the writer to use
+     * @param immune the characters array are immune from encoding
+     * @throws EncodingException
+     */
+    private void safeEncode(char[] chars, int off, int len, CharWriter writer, char[] immune) throws EncodingException {
 
-         // Lookup
-         if (isImmutable(immune, c))
-         {
-            continue;
-         }
+        // The index of the last copied char
+        int previous = off;
 
-         String replacement;
+        //
+        int to = off + len;
 
-         String hex;
+        // Perform lookup char by char
+        for (int current = off; current < to; current++) {
+            char c = chars[current];
 
-         // Do we have a replacement
-         if ((replacement = lookupEntityName(c)) != null)
-         {
-            // We lazy create the result
+            // Lookup
+            if (isImmutable(immune, c)) {
+                continue;
+            }
 
-            // Append the previous chars if any
-            writer.append(chars, previous, current - previous);
+            String replacement;
 
-            // Append the replaced entity
-            writer.append('&').append(replacement).append(';');
+            String hex;
 
-            // Update the previous pointer
-            previous = current + 1;
-         }
-         else if ((hex = lookupHexEntityNumber(c)) != null)
-         {
-            // We lazy create the result
+            // Do we have a replacement
+            if ((replacement = lookupEntityName(c)) != null) {
+                // We lazy create the result
 
-            // Append the previous chars if any
-            writer.append(chars, previous, current - previous);
+                // Append the previous chars if any
+                writer.append(chars, previous, current - previous);
 
-            // Append the replaced entity
-            writer.append("&#x").append(hex).append(';');
+                // Append the replaced entity
+                writer.append('&').append(replacement).append(';');
 
-            // Update the previous pointer
-            previous = current + 1;
-         }
-      }
+                // Update the previous pointer
+                previous = current + 1;
+            } else if ((hex = lookupHexEntityNumber(c)) != null) {
+                // We lazy create the result
 
-      //
-      writer.append(chars, previous, chars.length - previous);
-   }
+                // Append the previous chars if any
+                writer.append(chars, previous, current - previous);
 
-   public final String lookupEntityName(char c)
-   {
-      return lookup(c);
-   }
+                // Append the replaced entity
+                writer.append("&#x").append(hex).append(';');
 
-   public final String lookupHexEntityNumber(char c)
-   {
-      if (c < 0xFF)
-      {
-         return hexToEntity[c];
-      }
+                // Update the previous pointer
+                previous = current + 1;
+            }
+        }
 
-      return Integer.toHexString(c);
-   }
+        //
+        writer.append(chars, previous, chars.length - previous);
+    }
 
-   private boolean isImmutable(char[] array, char c)
-   {
-      for (char ch : array)
-      {
-         if (c == ch)
-         {
-            return true;
-         }
-      }
-      return false;
-   }
+    public final String lookupEntityName(char c) {
+        return lookup(c);
+    }
 
-   private String encode(String input, char[] immutable)
-   {
-      ParameterValidation.throwIllegalArgExceptionIfNull(input, "String");
+    public final String lookupHexEntityNumber(char c) {
+        if (c < 0xFF) {
+            return hexToEntity[c];
+        }
 
-      Writer sw = new StringWriter();
-      CharWriter charWriter = new WriterCharWriter(sw);
-      safeEncode(input.toCharArray(), 0, input.length(), charWriter, immutable);
-      return sw.toString();
-   }
+        return Integer.toHexString(c);
+    }
 
-   /**
-    * Build an array to store the hex string for characters to be encoded.
-    * If the character shouldn't be encoded, then store null.
-    * 
-    * @return An array containing characters in hex string that are to be encoded.
-    */
-   private String[] buildHexEntityNumberArray()
-   {
-      String[] array = new String[256];
-      
-      for (char c = 0; c < 0xFF; c++)
-      {
-         if (c >= 0x30 && c <= 0x39 || c >= 0x41 && c <= 0x5A || c >= 0x61 && c <= 0x7A)
-         {
-            array[c] = null;
-         }
-         else
-         {
-            array[c] = Integer.toHexString(c);
-         }
-      }
-      
-      return array;
-   }
+    private boolean isImmutable(char[] array, char c) {
+        for (char ch : array) {
+            if (c == ch) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private String encode(String input, char[] immutable) {
+        ParameterValidation.throwIllegalArgExceptionIfNull(input, "String");
+
+        Writer sw = new StringWriter();
+        CharWriter charWriter = new WriterCharWriter(sw);
+        safeEncode(input.toCharArray(), 0, input.length(), charWriter, immutable);
+        return sw.toString();
+    }
+
+    /**
+     * Build an array to store the hex string for characters to be encoded. If the character shouldn't be encoded, then store
+     * null.
+     *
+     * @return An array containing characters in hex string that are to be encoded.
+     */
+    private String[] buildHexEntityNumberArray() {
+        String[] array = new String[256];
+
+        for (char c = 0; c < 0xFF; c++) {
+            if (c >= 0x30 && c <= 0x39 || c >= 0x41 && c <= 0x5A || c >= 0x61 && c <= 0x7A) {
+                array[c] = null;
+            } else {
+                array[c] = Integer.toHexString(c);
+            }
+        }
+
+        return array;
+    }
 }

@@ -28,15 +28,14 @@ import org.exoplatform.portal.mop.importer.ImportMode;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public abstract class ImportTask<T>
-{
-   protected final T data;
-   protected ImportTask(T data)
-   {
-      this.data = data;
-   }
+public abstract class ImportTask<T> {
+    protected final T data;
 
-   public abstract void importData(ImportMode importMode) throws Exception;
+    protected ImportTask(T data) {
+        this.data = data;
+    }
 
-   public abstract void rollback() throws Exception;
+    public abstract void importData(ImportMode importMode) throws Exception;
+
+    public abstract void rollback() throws Exception;
 }

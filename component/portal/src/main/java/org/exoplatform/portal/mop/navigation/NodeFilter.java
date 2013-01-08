@@ -20,24 +20,22 @@
 package org.exoplatform.portal.mop.navigation;
 
 /**
- * A filter for nodes, filtering occurs after node retrieval and is applied once nodes
- * are loaded.
+ * A filter for nodes, filtering occurs after node retrieval and is applied once nodes are loaded.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface NodeFilter
-{
+public interface NodeFilter {
 
-   /**
-    * Returns a value indicating whether or not the node should be visible or not in the user interface.
-    *
-    * @param depth the node depth
-    * @param id the node id
-    * @param name the node name
-    * @param state the node state
-    * @return the accept value
-    */
-   boolean accept(int depth, String id, String name, NodeState state);
+    /**
+     * Returns a value indicating whether or not the node should be visible or not in the user interface.
+     *
+     * @param depth the node depth
+     * @param id the node id
+     * @param name the node name
+     * @param state the node state
+     * @return the accept value
+     */
+    boolean accept(int depth, String id, String name, NodeState state);
 
 }

@@ -26,69 +26,69 @@
 <deployments xmlns="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0"
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0 http://www.gatein.org/xml/ns/gatein_wsrp_consumer_1_0.xsd">
-   <deployment>
-      <wsrp-producer id="selfv1" expiration-cache="500" ws-timeout="50000">
-         <endpoint-wsdl-url>http://localhost:8080/wsrp-producer/v1/MarkupService?wsdl</endpoint-wsdl-url>
-         <registration-data/>
-      </wsrp-producer>
-   </deployment>
-   <deployment>
-      <wsrp-producer id="selfv2" expiration-cache="500" ws-timeout="50000">
-         <endpoint-wsdl-url>http://localhost:8080/wsrp-producer/v2/MarkupService?wsdl</endpoint-wsdl-url>
-         <registration-data/>
-      </wsrp-producer>
-   </deployment>
-   <!--<deployment>
-      <wsrp-producer id="NetUnity" expiration-cache="300">
-         <endpoint-wsdl-url>http://wsrp.netunitysoftware.com/WSRPTestService/WSRPTestService.asmx?Operation=WSDL</endpoint-wsdl-url>
-         <registration-data/>
-      </wsrp-producer>
-   </deployment>-->
-   <!--<deployment>
-      <wsrp-producer id="NetUnityV2" expiration-cache="300">
-         <endpoint-wsdl-url>http://www.netunitysoftware.com/wsrp2interop/WsrpProducer.asmx?Operation=WSDL&WsrpVersion=Two</endpoint-wsdl-url>
-         <registration-data/>
-      </wsrp-producer>
-   </deployment>
-   <deployment>
-      <wsrp-producer id="NetUnityV1" expiration-cache="300">
-         <endpoint-wsdl-url>http://www.netunitysoftware.com/wsrp2interop/WsrpProducer.asmx?Operation=WSDL&WsrpVersion=One</endpoint-wsdl-url>
-         <registration-data/>
-      </wsrp-producer>
-   </deployment>-->
-   <!--<deployment>
-      <wsrp-producer id="vignette" expiration-cache="300">
-         <endpoint-wsdl-url>http://wsrpdemo.vignette.com:8080/producer/wsdl</endpoint-wsdl-url>
-         <registration-data>
-            <property>
-               <name>com.vignette.wsrp.registration.username</name>
-               <lang>en</lang>
-               <value>test</value>
-            </property>
-            <property>
-               <name>com.vignette.wsrp.registration.password</name>
-               <lang>en</lang>
-               <value>test</value>
-            </property>
-         </registration-data>
-      </wsrp-producer>
-   </deployment>-->
-   <!--<deployment>
-      <wsrp-producer id="bea" expiration-cache="300">
-         <endpoint-wsdl-url>http://wsrp.bea.com:7001/producer/producer?WSDL</endpoint-wsdl-url>
-         <registration-data>
-            <property>
-               <name>{urn:bea:wlp:prop:reg:registration}consumerRole</name>
-               <lang>en</lang>
-               <value>insider</value>
-            </property>
-         </registration-data>
-      </wsrp-producer>
-   </deployment>-->
-   <!--<deployment>
-      <wsrp-producer id="oracle" expiration-cache="300">
-         <endpoint-wsdl-url>http://portalstandards.oracle.com/portletapp/portlets?WSDL</endpoint-wsdl-url>
-         <registration-data/>
-      </wsrp-producer>
-   </deployment>-->
+  <deployment>
+    <wsrp-producer id="selfv1" expiration-cache="500" ws-timeout="50000">
+      <endpoint-wsdl-url>http://localhost:8080/wsrp-producer/v1/MarkupService?wsdl</endpoint-wsdl-url>
+      <registration-data/>
+    </wsrp-producer>
+  </deployment>
+  <deployment>
+    <wsrp-producer id="selfv2" expiration-cache="500" ws-timeout="50000">
+      <endpoint-wsdl-url>http://localhost:8080/wsrp-producer/v2/MarkupService?wsdl</endpoint-wsdl-url>
+      <registration-data/>
+    </wsrp-producer>
+  </deployment>
+  <!--<deployment>
+     <wsrp-producer id="NetUnity" expiration-cache="300">
+        <endpoint-wsdl-url>http://wsrp.netunitysoftware.com/WSRPTestService/WSRPTestService.asmx?Operation=WSDL</endpoint-wsdl-url>
+        <registration-data/>
+     </wsrp-producer>
+  </deployment>-->
+  <!--<deployment>
+     <wsrp-producer id="NetUnityV2" expiration-cache="300">
+        <endpoint-wsdl-url>http://www.netunitysoftware.com/wsrp2interop/WsrpProducer.asmx?Operation=WSDL&WsrpVersion=Two</endpoint-wsdl-url>
+        <registration-data/>
+     </wsrp-producer>
+  </deployment>
+  <deployment>
+     <wsrp-producer id="NetUnityV1" expiration-cache="300">
+        <endpoint-wsdl-url>http://www.netunitysoftware.com/wsrp2interop/WsrpProducer.asmx?Operation=WSDL&WsrpVersion=One</endpoint-wsdl-url>
+        <registration-data/>
+     </wsrp-producer>
+  </deployment>-->
+  <!--<deployment>
+     <wsrp-producer id="vignette" expiration-cache="300">
+        <endpoint-wsdl-url>http://wsrpdemo.vignette.com:8080/producer/wsdl</endpoint-wsdl-url>
+        <registration-data>
+           <property>
+              <name>com.vignette.wsrp.registration.username</name>
+              <lang>en</lang>
+              <value>test</value>
+           </property>
+           <property>
+              <name>com.vignette.wsrp.registration.password</name>
+              <lang>en</lang>
+              <value>test</value>
+           </property>
+        </registration-data>
+     </wsrp-producer>
+  </deployment>-->
+  <!--<deployment>
+     <wsrp-producer id="bea" expiration-cache="300">
+        <endpoint-wsdl-url>http://wsrp.bea.com:7001/producer/producer?WSDL</endpoint-wsdl-url>
+        <registration-data>
+           <property>
+              <name>{urn:bea:wlp:prop:reg:registration}consumerRole</name>
+              <lang>en</lang>
+              <value>insider</value>
+           </property>
+        </registration-data>
+     </wsrp-producer>
+  </deployment>-->
+  <!--<deployment>
+     <wsrp-producer id="oracle" expiration-cache="300">
+        <endpoint-wsdl-url>http://portalstandards.oracle.com/portletapp/portlets?WSDL</endpoint-wsdl-url>
+        <registration-data/>
+     </wsrp-producer>
+  </deployment>-->
 </deployments>

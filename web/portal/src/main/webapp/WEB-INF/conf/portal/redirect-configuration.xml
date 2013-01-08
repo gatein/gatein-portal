@@ -21,9 +21,9 @@
 -->
 
 <configuration
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
     <key>org.gatein.web.redirect.api.SiteRedirectService</key>
@@ -32,6 +32,6 @@
   <component>
     <key>org.gatein.web.redirect.api.RedirectHandler</key>
     <type>org.gatein.web.redirect.implementation.RedirectHandlerImpl</type>
-  </component> 
+  </component>
 
 </configuration>

@@ -23,20 +23,20 @@
   -->
 
 <module xmlns="urn:jboss:module:1.0" name="org.gatein.pc">
-    <resources>
-        <!-- Insert resources here -->
-    </resources>
+  <resources>
+    <!-- Insert resources here -->
+  </resources>
 
-    <dependencies>
-       <module name="javax.api" />
-       <module name="javax.xml.bind.api" />
-       <module name="org.gatein.wci" />
-       <module name="org.gatein.common" />
-       <module name="org.staxnav" />
-       <module name="javax.servlet.api" />
-       <module name="javax.servlet.jsp.api" />
-       <module name="javax.portlet.api" />
-       <module name="javax.ccpp.api" />
-       <module name="org.apache.portals-bridges-common" />
-    </dependencies>
+  <dependencies>
+    <module name="javax.api"/>
+    <module name="javax.xml.bind.api"/>
+    <module name="org.gatein.wci"/>
+    <module name="org.gatein.common"/>
+    <module name="org.staxnav"/>
+    <module name="javax.servlet.api"/>
+    <module name="javax.servlet.jsp.api"/>
+    <module name="javax.portlet.api"/>
+    <module name="javax.ccpp.api"/>
+    <module name="org.apache.portals-bridges-common"/>
+  </dependencies>
 </module>

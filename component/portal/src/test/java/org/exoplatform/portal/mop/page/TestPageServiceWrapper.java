@@ -1,5 +1,9 @@
 package org.exoplatform.portal.mop.page;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
@@ -15,140 +19,124 @@ import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.mop.api.workspace.ObjectType;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
-
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
 @ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/portal/mop/page/configuration.xml")
-})
-public class TestPageServiceWrapper extends AbstractMOPTest
-{
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/portal/mop/page/configuration.xml") })
+public class TestPageServiceWrapper extends AbstractMOPTest {
 
-   /** . */
-   private ListenerService listenerService;
+    /** . */
+    private ListenerService listenerService;
 
-   /** . */
-   private POMSessionManager mgr;
+    /** . */
+    private POMSessionManager mgr;
 
-   /** . */
-   protected PageService serviceWrapper;
+    /** . */
+    protected PageService serviceWrapper;
 
-   @Override
-   protected void setUp() throws Exception
-   {
-      PortalContainer container = getContainer();
+    @Override
+    protected void setUp() throws Exception {
+        PortalContainer container = getContainer();
 
-      //
-      serviceWrapper = (PageService)container.getComponentInstanceOfType(PageService.class);
-      listenerService = (ListenerService)container.getComponentInstanceOfType(ListenerService.class);
-      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
+        //
+        serviceWrapper = (PageService) container.getComponentInstanceOfType(PageService.class);
+        listenerService = (ListenerService) container.getComponentInstanceOfType(ListenerService.class);
+        mgr = (POMSessionManager) container.getComponentInstanceOfType(POMSessionManager.class);
 
-      //
-      super.setUp();
-   }
+        //
+        super.setUp();
+    }
 
-   public void testInitialization()
-   {
-      PageContext page = serviceWrapper.loadPage(SiteKey.portal("classic").page("homepage"));
-      assertNotNull(page);
-      
-      PageState state = page.getState();
-      assertEquals("Home Page", state.getDisplayName());
-      assertEquals(Arrays.asList("Everyone"), state.getAccessPermissions());
-      assertEquals("*:/platform/administrators", state.getEditPermission());
-      assertNull(state.getFactoryId());
-      assertFalse(state.getShowMaxWindow());
-   }
+    public void testInitialization() {
+        PageContext page = serviceWrapper.loadPage(SiteKey.portal("classic").page("homepage"));
+        assertNotNull(page);
 
-   public void testNotification()
-   {
-      class ListenerImpl extends Listener<PageService, PageKey>
-      {
+        PageState state = page.getState();
+        assertEquals("Home Page", state.getDisplayName());
+        assertEquals(Arrays.asList("Everyone"), state.getAccessPermissions());
+        assertEquals("*:/platform/administrators", state.getEditPermission());
+        assertNull(state.getFactoryId());
+        assertFalse(state.getShowMaxWindow());
+    }
 
-         /** . */
-         private final LinkedList<Event> events = new LinkedList<Event>();
+    public void testNotification() {
+        class ListenerImpl extends Listener<PageService, PageKey> {
 
-         @Override
-         public void onEvent(Event event) throws Exception
-         {
-            events.addLast(event);
-         }
-      }
+            /** . */
+            private final LinkedList<Event> events = new LinkedList<Event>();
 
-      //
-      ListenerImpl createListener = new ListenerImpl();
-      ListenerImpl updateListener = new ListenerImpl();
-      ListenerImpl destroyListener = new ListenerImpl();
+            @Override
+            public void onEvent(Event event) throws Exception {
+                events.addLast(event);
+            }
+        }
 
-      //
-      listenerService.addListener(EventType.PAGE_CREATED, createListener);
-      listenerService.addListener(EventType.PAGE_UPDATED, updateListener);
-      listenerService.addListener(EventType.PAGE_DESTROYED, destroyListener);
+        //
+        ListenerImpl createListener = new ListenerImpl();
+        ListenerImpl updateListener = new ListenerImpl();
+        ListenerImpl destroyListener = new ListenerImpl();
 
-      //
-      mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "notification").getRootPage().addChild("pages");
-      sync(true);
+        //
+        listenerService.addListener(EventType.PAGE_CREATED, createListener);
+        listenerService.addListener(EventType.PAGE_UPDATED, updateListener);
+        listenerService.addListener(EventType.PAGE_DESTROYED, destroyListener);
 
-      //
-      PageKey key = SiteKey.portal("notification").page("home");
+        //
+        mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "notification").getRootPage()
+                .addChild("pages");
+        sync(true);
 
-      // Create
-      PageContext page = new PageContext(key, new PageState(
-         "home",
-         "description",
-         true,
-         null,
-         Collections.singletonList("foo"),
-         "bar"
-      ));
-      assertTrue(serviceWrapper.savePage(page));
-      assertEquals(1, createListener.events.size());
-      assertEquals(0, updateListener.events.size());
-      assertEquals(0, destroyListener.events.size());
+        //
+        PageKey key = SiteKey.portal("notification").page("home");
 
-      // Update
-      page.setState(new PageState("home2", "description2", false, null, Collections.singletonList("foo"), "bar"));
-      assertFalse(serviceWrapper.savePage(page));
-      assertEquals(1, createListener.events.size());
-      assertEquals(1, updateListener.events.size());
-      assertEquals(0, destroyListener.events.size());
+        // Create
+        PageContext page = new PageContext(key, new PageState("home", "description", true, null,
+                Collections.singletonList("foo"), "bar"));
+        assertTrue(serviceWrapper.savePage(page));
+        assertEquals(1, createListener.events.size());
+        assertEquals(0, updateListener.events.size());
+        assertEquals(0, destroyListener.events.size());
 
-      // Destroy
-      page.setState(new PageState("home2", "description2", false, null, Collections.singletonList("foo"), "bar"));
-      assertTrue(serviceWrapper.destroyPage(key));
-      assertEquals(1, createListener.events.size());
-      assertEquals(1, updateListener.events.size());
-      assertEquals(1, destroyListener.events.size());
-   }
+        // Update
+        page.setState(new PageState("home2", "description2", false, null, Collections.singletonList("foo"), "bar"));
+        assertFalse(serviceWrapper.savePage(page));
+        assertEquals(1, createListener.events.size());
+        assertEquals(1, updateListener.events.size());
+        assertEquals(0, destroyListener.events.size());
 
-   public void testDataStorageSynchronization() throws Exception
-   {
-      // Create a page *foo*
-      mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "datastorage_sync").getRootPage().addChild("pages").addChild("foo");
-      sync(true);
+        // Destroy
+        page.setState(new PageState("home2", "description2", false, null, Collections.singletonList("foo"), "bar"));
+        assertTrue(serviceWrapper.destroyPage(key));
+        assertEquals(1, createListener.events.size());
+        assertEquals(1, updateListener.events.size());
+        assertEquals(1, destroyListener.events.size());
+    }
 
-      PageKey fooKey = SiteKey.portal("datastorage_sync").page("foo");
+    public void testDataStorageSynchronization() throws Exception {
+        // Create a page *foo*
+        mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "datastorage_sync").getRootPage()
+                .addChild("pages").addChild("foo");
+        sync(true);
 
-      // Check the existence of the page and its layout
-      DataStorage storage = (DataStorage)getContainer().getComponentInstanceOfType(DataStorage.class);
-      Page page = storage.getPage(fooKey.format());
-      assertNotNull(page);
-      assertEquals("foo", page.getName());
-      assertEquals(Collections.EMPTY_LIST, page.getChildren());
-      assertNotNull(serviceWrapper.loadPage(fooKey));
+        PageKey fooKey = SiteKey.portal("datastorage_sync").page("foo");
 
-      // Delete page
-      assertTrue(serviceWrapper.destroyPage(fooKey));
-      assertNull(storage.getPage(fooKey.format()));
-      assertNull(serviceWrapper.loadPage(fooKey));
-      sync(true);
+        // Check the existence of the page and its layout
+        DataStorage storage = (DataStorage) getContainer().getComponentInstanceOfType(DataStorage.class);
+        Page page = storage.getPage(fooKey.format());
+        assertNotNull(page);
+        assertEquals("foo", page.getName());
+        assertEquals(Collections.EMPTY_LIST, page.getChildren());
+        assertNotNull(serviceWrapper.loadPage(fooKey));
 
-      // Check for subsequence actions
-      assertNull(storage.getPage(fooKey.format()));
-   }
+        // Delete page
+        assertTrue(serviceWrapper.destroyPage(fooKey));
+        assertNull(storage.getPage(fooKey.format()));
+        assertNull(serviceWrapper.loadPage(fooKey));
+        sync(true);
+
+        // Check for subsequence actions
+        assertNull(storage.getPage(fooKey.format()));
+    }
 }

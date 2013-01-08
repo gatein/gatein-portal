@@ -25,7 +25,6 @@ package org.exoplatform.web.security.errorlogin;
 import java.io.IOException;
 
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -35,35 +34,32 @@ import org.exoplatform.container.web.AbstractFilter;
 
 /**
  * Filter should be called to detect invalid login attempt to portal.
- * 
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  * @version $Revision$
  */
-public class ErrorLoginFilter extends AbstractFilter
-{
-   @Override
-   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
-         ServletException
-   {
-      HttpServletRequest httpRequest = (HttpServletRequest)request;
-      
-      // Get informations about user
-      String clientIPAddress = request.getRemoteAddr();
-      String sessionID = httpRequest.getSession().getId();
-      String username = httpRequest.getParameter("j_username");
-      
-      // Call InvalidLoginService, which can perform some actions (aka send mail to portal administrator)
-      InvalidLoginAttemptsService invalidLoginService = (InvalidLoginAttemptsService)getContainer().getComponentInstanceOfType(InvalidLoginAttemptsService.class);
-      invalidLoginService.badLoginAttempt(sessionID, username, clientIPAddress);
-      
-      // Continue with request
-      chain.doFilter(request, response);
-   }
-   
-   @Override
-   public void destroy()
-   {            
-   }   
-   
-}
+public class ErrorLoginFilter extends AbstractFilter {
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+            ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
 
+        // Get informations about user
+        String clientIPAddress = request.getRemoteAddr();
+        String sessionID = httpRequest.getSession().getId();
+        String username = httpRequest.getParameter("j_username");
+
+        // Call InvalidLoginService, which can perform some actions (aka send mail to portal administrator)
+        InvalidLoginAttemptsService invalidLoginService = (InvalidLoginAttemptsService) getContainer()
+                .getComponentInstanceOfType(InvalidLoginAttemptsService.class);
+        invalidLoginService.badLoginAttempt(sessionID, username, clientIPAddress);
+
+        // Continue with request
+        chain.doFilter(request, response);
+    }
+
+    @Override
+    public void destroy() {
+    }
+
+}

@@ -30,7 +30,6 @@ Known Issues
 ============
 
 - JBoss AS 7 versions 7.1.1.Final, and 7.1.3.Final are supported at the moment
-- Exception occurs, and is ignored when logging out (EXOJCR-1619)
 
 
 

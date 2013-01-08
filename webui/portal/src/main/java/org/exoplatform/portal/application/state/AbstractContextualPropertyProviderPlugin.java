@@ -31,27 +31,23 @@ import org.gatein.common.logging.LoggerFactory;
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
  */
-public abstract class AbstractContextualPropertyProviderPlugin extends BaseComponentPlugin
-{
-   
-   /** . */
-   protected final Logger log = LoggerFactory.getLogger(getClass());
+public abstract class AbstractContextualPropertyProviderPlugin extends BaseComponentPlugin {
 
-   /** . */
-   protected final String namespaceURI;
+    /** . */
+    protected final Logger log = LoggerFactory.getLogger(getClass());
 
-   protected AbstractContextualPropertyProviderPlugin(InitParams params)
-   {
-      this.namespaceURI = params.getValueParam("namespaceURI").getValue();
-   }
+    /** . */
+    protected final String namespaceURI;
 
-   public abstract void getProperties(UIPortlet portletWindow, Map<QName, String[]> properties);
+    protected AbstractContextualPropertyProviderPlugin(InitParams params) {
+        this.namespaceURI = params.getValueParam("namespaceURI").getValue();
+    }
 
-   protected final void addProperty(Map<QName, String[]> map, QName qname, String value)
-   {
-      if (value != null)
-      {
-         map.put(qname, new String[]{value});
-      }
-   }
+    public abstract void getProperties(UIPortlet portletWindow, Map<QName, String[]> properties);
+
+    protected final void addProperty(Map<QName, String[]> map, QName qname, String value) {
+        if (value != null) {
+            map.put(qname, new String[] { value });
+        }
+    }
 }

@@ -6,7 +6,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.packaging.tomcat</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
+    <version>3.6.0.MO1-SNAPSHOT</version>
   </parent>
   <artifactId>exo.portal.packaging.tomcat.tomcat7</artifactId>
   <packaging>pom</packaging>
@@ -38,48 +38,51 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-enforcer-plugin</artifactId>
         <executions>
-           <execution>
-              <id>check-servers-dir-specified</id>
-              <goals>
-                 <goal>enforce</goal>
-              </goals>
-              <configuration>
-                 <rules>
-                    <requireProperty>
-                       <property>servers.dir</property>
-                       <message>"
-You need to specify 'servers.dir' directory where you store your application servers (-Dservers.dir=PATH).
-"
-                       </message>
-                    </requireProperty>
-                 </rules>
-              </configuration>
-           </execution>
+          <execution>
+            <id>check-servers-dir-specified</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireProperty>
+                  <property>servers.dir</property>
+                  <message>"
+                    You need to specify 'servers.dir' directory where you store your application servers
+                    (-Dservers.dir=PATH).
+                    "
+                  </message>
+                </requireProperty>
+              </rules>
+            </configuration>
+          </execution>
 
-           <execution>
-              <id>check-server-dir-exists</id>
-              <goals>
-                 <goal>enforce</goal>
-              </goals>
-              <configuration>
-                 <rules>
-                    <requireFilesExist>
-                       <files>
-                          <file>${servers.dir}/${server.name}/</file>
-                       </files>
-                       <message>"
-The following Tomcat directory doesn't exist {servers.dir}/{server.name}:
-${servers.dir}/${server.name}
+          <execution>
+            <id>check-server-dir-exists</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <requireFilesExist>
+                  <files>
+                    <file>${servers.dir}/${server.name}/</file>
+                  </files>
+                  <message>"
+                    The following Tomcat directory doesn't exist {servers.dir}/{server.name}:
+                    ${servers.dir}/${server.name}
 
-Make Tomcat instance available at that location, or use -Dservers.dir=PATH to point to the correct location of servers directory
-and/or -Dserver.name=NAME (alternatively use -Dtomcat7.name=NAME) to point to the correct directory under the servers directory.
-You can also use -Ddownload to automatically provide Tomcat instance.
-"
-                       </message>
-                    </requireFilesExist>
-                 </rules>
-              </configuration>
-           </execution>
+                    Make Tomcat instance available at that location, or use -Dservers.dir=PATH to point to the correct
+                    location of servers directory
+                    and/or -Dserver.name=NAME (alternatively use -Dtomcat7.name=NAME) to point to the correct directory
+                    under the servers directory.
+                    You can also use -Ddownload to automatically provide Tomcat instance.
+                    "
+                  </message>
+                </requireFilesExist>
+              </rules>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
       <plugin>
@@ -149,7 +152,7 @@ You can also use -Ddownload to automatically provide Tomcat instance.
             <artifactId>maven-enforcer-plugin</artifactId>
             <executions>
               <execution>
-                 <id>check-server-dir-exists</id>
+                <id>check-server-dir-exists</id>
                 <phase>none</phase>
               </execution>
             </executions>

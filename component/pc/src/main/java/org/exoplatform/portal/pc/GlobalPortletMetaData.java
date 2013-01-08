@@ -18,125 +18,112 @@
  */
 package org.exoplatform.portal.pc;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import org.gatein.pc.portlet.impl.deployment.staxnav.PortletApplicationMetaDataBuilder;
 import org.gatein.pc.portlet.impl.metadata.PortletApplication10MetaData;
 import org.gatein.pc.portlet.impl.metadata.PortletApplication20MetaData;
 import org.gatein.pc.portlet.impl.metadata.filter.FilterMappingMetaData;
 import org.gatein.pc.portlet.impl.metadata.filter.FilterMetaData;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
  * @date 3/31/11
  */
-public class GlobalPortletMetaData
-{
-   private PortletApplication10MetaData wrappedMetaData;
+public class GlobalPortletMetaData {
+    private PortletApplication10MetaData wrappedMetaData;
 
-   public GlobalPortletMetaData(PortletApplication10MetaData _wrappedMetaData)
-   {
-      this.wrappedMetaData = _wrappedMetaData;
-   }
+    public GlobalPortletMetaData(PortletApplication10MetaData _wrappedMetaData) {
+        this.wrappedMetaData = _wrappedMetaData;
+    }
 
-   public PortletApplication10MetaData mergeTo(PortletApplication10MetaData tobeMergedMetaData)
-   {
-      if(wrappedMetaData.getCustomPortletModes() != null)
-      {
-         tobeMergedMetaData.getCustomPortletModes().putAll(wrappedMetaData.getCustomPortletModes());
-      }
+    public PortletApplication10MetaData mergeTo(PortletApplication10MetaData tobeMergedMetaData) {
+        if (wrappedMetaData.getCustomPortletModes() != null) {
+            tobeMergedMetaData.getCustomPortletModes().putAll(wrappedMetaData.getCustomPortletModes());
+        }
 
-      if(wrappedMetaData.getCustomWindowStates() != null)
-      {
-         tobeMergedMetaData.getCustomWindowStates().putAll(wrappedMetaData.getCustomWindowStates());
-      }
+        if (wrappedMetaData.getCustomWindowStates() != null) {
+            tobeMergedMetaData.getCustomWindowStates().putAll(wrappedMetaData.getCustomWindowStates());
+        }
 
-      if(tobeMergedMetaData instanceof PortletApplication20MetaData && wrappedMetaData instanceof PortletApplication20MetaData)
-      {
-         return merge20MetData((PortletApplication20MetaData)wrappedMetaData, (PortletApplication20MetaData)tobeMergedMetaData);
-      }
+        if (tobeMergedMetaData instanceof PortletApplication20MetaData
+                && wrappedMetaData instanceof PortletApplication20MetaData) {
+            return merge20MetData((PortletApplication20MetaData) wrappedMetaData,
+                    (PortletApplication20MetaData) tobeMergedMetaData);
+        }
 
-      return tobeMergedMetaData;
+        return tobeMergedMetaData;
 
-   }
+    }
 
-   public PortletApplication10MetaData merge20MetData(PortletApplication20MetaData globalMetaData, PortletApplication20MetaData tobeMergedMetaData)
-   {
-      mergeFilterMetaData(globalMetaData, tobeMergedMetaData);
-      mergeFilterMapping(globalMetaData, tobeMergedMetaData);
-      mergePublicRenderParameters(globalMetaData, tobeMergedMetaData);
+    public PortletApplication10MetaData merge20MetData(PortletApplication20MetaData globalMetaData,
+            PortletApplication20MetaData tobeMergedMetaData) {
+        mergeFilterMetaData(globalMetaData, tobeMergedMetaData);
+        mergeFilterMapping(globalMetaData, tobeMergedMetaData);
+        mergePublicRenderParameters(globalMetaData, tobeMergedMetaData);
 
-      return tobeMergedMetaData;
-   }
+        return tobeMergedMetaData;
+    }
 
-   private void mergeFilterMetaData(PortletApplication20MetaData globalMetaData, PortletApplication20MetaData tobeMergedMetaData)
-   {
-      Map<String, FilterMetaData> globalFilters = globalMetaData.getFilters();
-      Map<String, FilterMetaData> applicationFilters = tobeMergedMetaData.getFilters();
+    private void mergeFilterMetaData(PortletApplication20MetaData globalMetaData,
+            PortletApplication20MetaData tobeMergedMetaData) {
+        Map<String, FilterMetaData> globalFilters = globalMetaData.getFilters();
+        Map<String, FilterMetaData> applicationFilters = tobeMergedMetaData.getFilters();
 
-      if(globalFilters != null)
-      {
-         if(applicationFilters == null)
-         {
-            tobeMergedMetaData.setFilters(globalFilters);
+        if (globalFilters != null) {
+            if (applicationFilters == null) {
+                tobeMergedMetaData.setFilters(globalFilters);
+                return;
+            }
+
+            applicationFilters.putAll(globalFilters);
+            tobeMergedMetaData.setFilters(applicationFilters);
+        }
+    }
+
+    private void mergeFilterMapping(PortletApplication20MetaData globalMetaData, PortletApplication20MetaData tobeMergedMetaData) {
+        List<FilterMappingMetaData> applicationFilterMappings = tobeMergedMetaData.getFilterMapping();
+        if (applicationFilterMappings == null) {
+            applicationFilterMappings = new ArrayList<FilterMappingMetaData>(3);
+        }
+
+        Map<String, FilterMetaData> globalFilters = globalMetaData.getFilters();
+        if (globalFilters == null) {
             return;
-         }
+        } else {
+            // TODO: Ensure there is no duplicated filter mapping
+            for (String filterName : globalFilters.keySet()) {
+                FilterMappingMetaData filterMapping = new FilterMappingMetaData();
+                filterMapping.setName(filterName);
 
-         applicationFilters.putAll(globalFilters);
-         tobeMergedMetaData.setFilters(applicationFilters);
-      }
-   }
+                // TODO: Use this list, examine if there is a bug in PC on the instantiation of filter mappings
+                // List<String> portletsApplyingThisGlobalFilter =
+                // findPortletsApplyingGlobalFilter(globalFilters.get(filterName), tobeMergedMetaData);
 
+                List<String> portletsApplyingThisGlobalFilter = new ArrayList<String>(3);
+                portletsApplyingThisGlobalFilter.add("*");
+                filterMapping.setPortletNames(portletsApplyingThisGlobalFilter);
+                applicationFilterMappings.add(filterMapping);
+            }
 
-   private void mergeFilterMapping(PortletApplication20MetaData globalMetaData, PortletApplication20MetaData tobeMergedMetaData)
-   {
-      List<FilterMappingMetaData> applicationFilterMappings = tobeMergedMetaData.getFilterMapping();
-      if(applicationFilterMappings == null)
-      {
-         applicationFilterMappings = new ArrayList<FilterMappingMetaData>(3);
-      }
+            tobeMergedMetaData.setFilterMapping(applicationFilterMappings);
+        }
 
-      Map<String, FilterMetaData> globalFilters = globalMetaData.getFilters();
-      if(globalFilters == null)
-      {
-         return;
-      }
-      else
-      {
-         //TODO: Ensure there is no duplicated filter mapping
-         for(String filterName : globalFilters.keySet())
-         {
-            FilterMappingMetaData filterMapping = new FilterMappingMetaData();
-            filterMapping.setName(filterName);
+    }
 
-            //TODO: Use this list, examine if there is a bug in PC on the instantiation of filter mappings
-            //List<String> portletsApplyingThisGlobalFilter = findPortletsApplyingGlobalFilter(globalFilters.get(filterName), tobeMergedMetaData);
+    private void mergePublicRenderParameters(PortletApplication20MetaData globalMetaData,
+            PortletApplication20MetaData tobeMergedMetaData) {
+        // TODO: Wait for the spec of merging public render parameters
+    }
 
-            List<String> portletsApplyingThisGlobalFilter = new ArrayList<String>(3);
-            portletsApplyingThisGlobalFilter.add("*");
-            filterMapping.setPortletNames(portletsApplyingThisGlobalFilter);
-            applicationFilterMappings.add(filterMapping);
-         }
+    /** . */
+    private static final PortletApplicationMetaDataBuilder builder = new PortletApplicationMetaDataBuilder();
 
-         tobeMergedMetaData.setFilterMapping(applicationFilterMappings);
-      }
-
-   }
-
-   private void mergePublicRenderParameters(PortletApplication20MetaData globalMetaData, PortletApplication20MetaData tobeMergedMetaData)
-   {
-     //TODO: Wait for the spec of merging public render parameters
-   }
-
-   /** . */
-   private static final PortletApplicationMetaDataBuilder builder = new PortletApplicationMetaDataBuilder();
-
-   public static GlobalPortletMetaData unmarshalling(InputStream in) throws Exception
-   {
-      PortletApplication10MetaData application10MetaData = builder.build(in);
-      return new GlobalPortletMetaData(application10MetaData);
-   }
+    public static GlobalPortletMetaData unmarshalling(InputStream in) throws Exception {
+        PortletApplication10MetaData application10MetaData = builder.build(in);
+        return new GlobalPortletMetaData(application10MetaData);
+    }
 }

@@ -32,70 +32,56 @@ import org.exoplatform.portal.config.model.RedirectCondition;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class RedirectConditionData extends ComponentData
-{
+public class RedirectConditionData extends ComponentData {
 
-   protected String redirectName;
-   protected RedirectUserAgentConditionData userAgentConditionData;
-   protected List<RedirectDevicePropertyConditionData> devicePropertyConditionData;
-   
-   public RedirectConditionData(String storageId, String storageName, String redirectName)
-   {
-      super(storageId, null);
-      this.redirectName = redirectName;
-   }
+    protected String redirectName;
+    protected RedirectUserAgentConditionData userAgentConditionData;
+    protected List<RedirectDevicePropertyConditionData> devicePropertyConditionData;
 
-   public String getRedirectName()
-   {
-      return redirectName;
-   }
+    public RedirectConditionData(String storageId, String storageName, String redirectName) {
+        super(storageId, null);
+        this.redirectName = redirectName;
+    }
 
-   public void setRedirectName(String redirectName)
-   {
-      this.redirectName = redirectName;
-   }
+    public String getRedirectName() {
+        return redirectName;
+    }
 
-   public RedirectUserAgentConditionData getUserAgentConditionData()
-   {
-      return userAgentConditionData;
-   }
+    public void setRedirectName(String redirectName) {
+        this.redirectName = redirectName;
+    }
 
-   public void setUserAgentConditionData(RedirectUserAgentConditionData userAgentConditionData)
-   {
-      this.userAgentConditionData = userAgentConditionData;
-   }
+    public RedirectUserAgentConditionData getUserAgentConditionData() {
+        return userAgentConditionData;
+    }
 
-   public List<RedirectDevicePropertyConditionData> getDevicePropertyConditionData()
-   {
-      if (devicePropertyConditionData == null)
-      {
-         devicePropertyConditionData = new ArrayList<RedirectDevicePropertyConditionData>();
-      }
-      return devicePropertyConditionData;
-   }
-   
-   public RedirectCondition build()
-   {
-      RedirectCondition redirectCondition = new RedirectCondition();
-      redirectCondition.setName(redirectName);
-      redirectCondition.setStorageName(getStorageName());
-      
-      if (devicePropertyConditionData != null)
-      {
-         ArrayList<DevicePropertyCondition> devicePropertyConditions = new ArrayList<DevicePropertyCondition>();
-         for (RedirectDevicePropertyConditionData conditionData : devicePropertyConditionData)
-         {   
-            devicePropertyConditions.add(conditionData.build());
-         }
-         redirectCondition.setDeviceProperties(devicePropertyConditions);
-      }
-      
-      
-      if (userAgentConditionData != null)
-      {
-         redirectCondition.setUserAgentConditions(userAgentConditionData.build());
-      }
-      return redirectCondition;
-   }
+    public void setUserAgentConditionData(RedirectUserAgentConditionData userAgentConditionData) {
+        this.userAgentConditionData = userAgentConditionData;
+    }
+
+    public List<RedirectDevicePropertyConditionData> getDevicePropertyConditionData() {
+        if (devicePropertyConditionData == null) {
+            devicePropertyConditionData = new ArrayList<RedirectDevicePropertyConditionData>();
+        }
+        return devicePropertyConditionData;
+    }
+
+    public RedirectCondition build() {
+        RedirectCondition redirectCondition = new RedirectCondition();
+        redirectCondition.setName(redirectName);
+        redirectCondition.setStorageName(getStorageName());
+
+        if (devicePropertyConditionData != null) {
+            ArrayList<DevicePropertyCondition> devicePropertyConditions = new ArrayList<DevicePropertyCondition>();
+            for (RedirectDevicePropertyConditionData conditionData : devicePropertyConditionData) {
+                devicePropertyConditions.add(conditionData.build());
+            }
+            redirectCondition.setDeviceProperties(devicePropertyConditions);
+        }
+
+        if (userAgentConditionData != null) {
+            redirectCondition.setUserAgentConditions(userAgentConditionData.build());
+        }
+        return redirectCondition;
+    }
 }
-

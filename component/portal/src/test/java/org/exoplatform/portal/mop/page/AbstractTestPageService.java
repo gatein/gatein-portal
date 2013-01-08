@@ -14,47 +14,42 @@ import org.exoplatform.services.jcr.RepositoryService;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
 @ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-mop-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/portal/mop/page/configuration.xml")
-})
-public class AbstractTestPageService extends AbstractMOPTest
-{
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-mop-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/portal/mop/page/configuration.xml") })
+public class AbstractTestPageService extends AbstractMOPTest {
 
-   /** . */
-   static final SiteKey CLASSIC = SiteKey.portal("classic");
+    /** . */
+    static final SiteKey CLASSIC = SiteKey.portal("classic");
 
-   /** . */
-   static final PageKey CLASSIC_HOMEPAGE = CLASSIC.page("homepage");
+    /** . */
+    static final PageKey CLASSIC_HOMEPAGE = CLASSIC.page("homepage");
 
-   /** . */
-   static final PageKey CLASSIC_FOO = CLASSIC.page("foo");
+    /** . */
+    static final PageKey CLASSIC_FOO = CLASSIC.page("foo");
 
-   /** . */
-   protected POMSessionManager mgr;
+    /** . */
+    protected POMSessionManager mgr;
 
-   /** . */
-   protected PageServiceImpl service;
+    /** . */
+    protected PageServiceImpl service;
 
-   /** . */
-   protected DataStorage dataStorage;
+    /** . */
+    protected DataStorage dataStorage;
 
-   @Override
-   protected void setUp() throws Exception
-   {
-      PortalContainer container = PortalContainer.getInstance();
-      mgr = new POMSessionManager(
-         (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class),
-         (ChromatticManager)container.getComponentInstanceOfType(ChromatticManager.class),
-         (CacheService)container.getComponentInstanceOfType(CacheService.class)
-      );
-      mgr.start();
+    @Override
+    protected void setUp() throws Exception {
+        PortalContainer container = PortalContainer.getInstance();
+        mgr = new POMSessionManager((RepositoryService) container.getComponentInstanceOfType(RepositoryService.class),
+                (ChromatticManager) container.getComponentInstanceOfType(ChromatticManager.class),
+                (CacheService) container.getComponentInstanceOfType(CacheService.class));
+        mgr.start();
 
-      //
-      service = new PageServiceImpl(mgr);
+        //
+        service = new PageServiceImpl(mgr);
 
-      //
-      super.setUp();
-   }
+        //
+        super.setUp();
+    }
 }

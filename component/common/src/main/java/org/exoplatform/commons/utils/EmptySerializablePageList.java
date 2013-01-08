@@ -21,48 +21,42 @@ package org.exoplatform.commons.utils;
 
 import java.io.Serializable;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class EmptySerializablePageList<E> extends AbstractSerializablePageList<E> implements Serializable
-{
+public class EmptySerializablePageList<E> extends AbstractSerializablePageList<E> implements Serializable {
 
-   /** . */
-   private static final EmptySerializablePageList instance = new EmptySerializablePageList();
+    /** . */
+    private static final EmptySerializablePageList instance = new EmptySerializablePageList();
 
-   /** . */
-   private transient final ListAccess<E> listAccess = new ListAccess<E>()
-   {
-      public E[] load(int index, int length) throws Exception, IllegalArgumentException
-      {
-         throw new UnsupportedOperationException("Should not be called");
-      }
-      public int getSize() throws Exception
-      {
-         return 0;
-      }
-   };
+    /** . */
+    private final transient ListAccess<E> listAccess = new ListAccess<E>() {
+        public E[] load(int index, int length) throws Exception {
+            throw new UnsupportedOperationException("Should not be called");
+        }
 
-   public EmptySerializablePageList()
-   {
-      super(10);
-   }
+        public int getSize() throws Exception {
+            return 0;
+        }
+    };
 
-   @Override
-   protected ListAccess<E> connect() throws Exception
-   {
-      return listAccess;
-   }
+    public EmptySerializablePageList() {
+        super(10);
+    }
 
-   public static <E> PageList<E> get()
-   {
-      // Cast OK
-      return (PageList<E>)instance;
-   }
+    @Override
+    protected ListAccess<E> connect() throws Exception {
+        return listAccess;
+    }
 
-   private Object readResolve()
-   {
-      return instance;
-   }
+    public static <E> PageList<E> get() {
+        // Cast OK
+        return (PageList<E>) instance;
+    }
+
+    private Object readResolve() {
+        return instance;
+    }
 }

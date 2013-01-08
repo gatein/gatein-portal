@@ -25,97 +25,81 @@ import org.exoplatform.portal.mop.SiteKey;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationContext
-{
+public class NavigationContext {
 
-   /** . */
-   final SiteKey key;
+    /** . */
+    final SiteKey key;
 
-   /** . */
-   NavigationState state;
+    /** . */
+    NavigationState state;
 
-   /** . */
-   NavigationData data;
+    /** . */
+    NavigationData data;
 
-   NavigationContext(NavigationData data)
-   {
-      if (data == null)
-      {
-         throw new NullPointerException();
-      }
+    NavigationContext(NavigationData data) {
+        if (data == null) {
+            throw new NullPointerException();
+        }
 
-      //
-      this.key = data.key;
-      this.data = data;
-   }
+        //
+        this.key = data.key;
+        this.data = data;
+    }
 
-   public NavigationContext(SiteKey key, NavigationState state)
-   {
-      if (key == null)
-      {
-         throw new NullPointerException();
-      }
-      if (state == null)
-      {
-         throw new NullPointerException();
-      }
+    public NavigationContext(SiteKey key, NavigationState state) {
+        if (key == null) {
+            throw new NullPointerException();
+        }
+        if (state == null) {
+            throw new NullPointerException();
+        }
 
-      //
-      this.key = key;
-      this.state = state;
-   }
+        //
+        this.key = key;
+        this.state = state;
+    }
 
-   /**
-    * Returns the navigation key.
-    *
-    * @return the navigation key
-    */
-   public SiteKey getKey()
-   {
-      return data.key;
-   }
+    /**
+     * Returns the navigation key.
+     *
+     * @return the navigation key
+     */
+    public SiteKey getKey() {
+        return data.key;
+    }
 
-   /**
-    * Returns the navigation state.
-    *
-    * @return the navigation state
-    */
-   public NavigationState getState()
-   {
-      if (state != null)
-      {
-         return state;
-      }
-      else if (data != null)
-      {
-         return data.state;
-      }
-      else
-      {
-         return null;
-      }
-   }
+    /**
+     * Returns the navigation state.
+     *
+     * @return the navigation state
+     */
+    public NavigationState getState() {
+        if (state != null) {
+            return state;
+        } else if (data != null) {
+            return data.state;
+        } else {
+            return null;
+        }
+    }
 
-   /**
-    * Updates the navigation state the behavior is not the same wether or not the navigation is persistent:
-    * <ul>
-    *    <li>When the navigation is persistent, any state is allowed:
-    *    <li>A non null state overrides the current persistent state.</li>
-    *    <li>The null state means to reset the state to the persistent state.</li>
-    *    </li>
-    *    <li>When the navigation is transient, only a non null state is allowed as it will be used for creation
-    *    purpose.</li>
-    * </ul>
-    *
-    * @param state the new state
-    * @throws IllegalStateException when the state is cleared and the navigation is not persistent
-    */
-   public void setState(NavigationState state) throws IllegalStateException
-   {
-      if (data == null && state == null)
-      {
-         throw new IllegalStateException("Cannot clear state on a transient navigation");
-      }
-      this.state = state;
-   }
+    /**
+     * Updates the navigation state the behavior is not the same wether or not the navigation is persistent:
+     * <ul>
+     * <li>When the navigation is persistent, any state is allowed:
+     * <li>A non null state overrides the current persistent state.</li>
+     * <li>The null state means to reset the state to the persistent state.</li>
+     * </li>
+     * <li>When the navigation is transient, only a non null state is allowed as it will be used for creation purpose.</li>
+     * </ul>
+     *
+     * @param state the new state
+     * @throws IllegalStateException when the state is cleared and the navigation is not persistent
+     */
+    public void setState(NavigationState state) throws IllegalStateException {
+        if (data == null && state == null) {
+            throw new IllegalStateException("Cannot clear state on a transient navigation");
+        }
+        this.state = state;
+    }
 }

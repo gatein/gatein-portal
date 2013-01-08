@@ -17,19 +17,13 @@
 package org.exoplatform.portal.config.serialize;
 
 /**
- * Created by The eXo Platform SAS
- * Author : Vu Viet Phuong
- *          phuong_vu@exoplatform.com
- * Sep 29, 2010  
+ * Created by The eXo Platform SAS Author : Vu Viet Phuong phuong_vu@exoplatform.com Sep 29, 2010
  */
-public class JibxStringSerialize
-{
-   public static String deserializeString(String untrimmed) 
-   { 
-      if (untrimmed == null) 
-      {
-         return null;         
-      }
-      return untrimmed.trim(); 
-   } 
+public class JibxStringSerialize {
+    public static String deserializeString(String untrimmed) {
+        if (untrimmed == null) {
+            return null;
+        }
+        return untrimmed.trim();
+    }
 }

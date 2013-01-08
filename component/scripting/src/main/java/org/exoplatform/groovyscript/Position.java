@@ -22,59 +22,49 @@ package org.exoplatform.groovyscript;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Position
-{
+public class Position {
 
-   /** . */
-   private final int col;
+    /** . */
+    private final int col;
 
-   /** . */
-   private final int line;
+    /** . */
+    private final int line;
 
-   public Position(int col, int line)
-   {
-      if (col < 0)
-      {
-         throw new IllegalArgumentException();
-      }
-      if (line < 0)
-      {
-         throw new IllegalArgumentException();
-      }
-      
-      //
-      this.col = col;
-      this.line = line;
-   }
+    public Position(int col, int line) {
+        if (col < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (line < 0) {
+            throw new IllegalArgumentException();
+        }
 
-   public int getCol()
-   {
-      return col;
-   }
+        //
+        this.col = col;
+        this.line = line;
+    }
 
-   public int getLine()
-   {
-      return line;
-   }
+    public int getCol() {
+        return col;
+    }
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (obj == this)
-      {
-         return true;
-      }
-      if (obj instanceof Position)
-      {
-         Position that = (Position)obj;
-         return col == that.col && line == that.line;
-      }
-      return false;
-   }
+    public int getLine() {
+        return line;
+    }
 
-   @Override
-   public String toString()
-   {
-      return "Position[col=" + col + ",line=" + line + "]";
-   }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof Position) {
+            Position that = (Position) obj;
+            return col == that.col && line == that.line;
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "Position[col=" + col + ",line=" + line + "]";
+    }
 }

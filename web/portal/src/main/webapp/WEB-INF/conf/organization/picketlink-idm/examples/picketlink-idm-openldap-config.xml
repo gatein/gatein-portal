@@ -35,6 +35,14 @@
           <name>cache.providerRegistryName</name>
           <value>apiCacheProvider</value>
         </option>
+        <option>
+          <name>credentialEncoder.class</name>
+          <value>org.picketlink.idm.impl.credential.HashingEncoder</value>
+        </option>
+        <option>
+          <name>credentialEncoder.hashAlgorithm</name>
+          <value>MD5</value>
+        </option>
       </options>
     </realm>
     <realm>
@@ -51,6 +59,14 @@
         <option>
           <name>cache.providerRegistryName</name>
           <value>apiCacheProvider</value>
+        </option>
+        <option>
+          <name>credentialEncoder.class</name>
+          <value>org.picketlink.idm.impl.credential.HashingEncoder</value>
+        </option>
+        <option>
+          <name>credentialEncoder.hashAlgorithm</name>
+          <value>MD5</value>
         </option>
       </options>
     </realm>
@@ -207,8 +223,8 @@
                 <name>createEntryAttributeValues</name>
                 <value>objectClass=top</value>
                 <value>objectClass=inetOrgPerson</value>
-                <value>sn= </value>
-                <value>cn= </value>
+                <value>sn=</value>
+                <value>cn=</value>
               </option>
             </options>
           </identity-object-type>
@@ -370,9 +386,9 @@
     </identity-stores>
   </stores>
   <options>
-      <option>
-         <name>defaultTemplate</name>
-         <value>idm_realm</value>
-      </option>
+    <option>
+      <name>defaultTemplate</name>
+      <value>idm_realm</value>
+    </option>
   </options>
 </jboss-identity>

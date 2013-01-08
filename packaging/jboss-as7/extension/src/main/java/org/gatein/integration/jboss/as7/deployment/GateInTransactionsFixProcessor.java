@@ -23,6 +23,8 @@
 
 package org.gatein.integration.jboss.as7.deployment;
 
+import java.util.List;
+
 import org.gatein.integration.jboss.as7.GateInConfiguration;
 import org.jboss.as.server.deployment.DeploymentPhaseContext;
 import org.jboss.as.server.deployment.DeploymentUnit;
@@ -31,37 +33,30 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 import org.jboss.as.server.deployment.SetupAction;
 import org.jboss.as.txn.deployment.TransactionRollbackSetupAction;
 
-import java.util.List;
-
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class GateInTransactionsFixProcessor implements DeploymentUnitProcessor
-{
-   @Override
-   public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
-   {
-      final DeploymentUnit du = phaseContext.getDeploymentUnit();
+public class GateInTransactionsFixProcessor implements DeploymentUnitProcessor {
+    @Override
+    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
+        final DeploymentUnit du = phaseContext.getDeploymentUnit();
 
-      if (GateInConfiguration.isGateInOrPortletArchive(du))
-      {
-         final List<SetupAction> setupActions = du.getAttachmentList(org.jboss.as.ee.component.Attachments.WEB_SETUP_ACTIONS);
+        if (GateInConfiguration.isGateInOrPortletArchive(du)) {
+            final List<SetupAction> setupActions = du
+                    .getAttachmentList(org.jboss.as.ee.component.Attachments.WEB_SETUP_ACTIONS);
 
-         int i=0;
-         for (SetupAction a: setupActions)
-         {
-            if (a instanceof TransactionRollbackSetupAction)
-            {
-               setupActions.remove(i);
-               break;
+            int i = 0;
+            for (SetupAction a : setupActions) {
+                if (a instanceof TransactionRollbackSetupAction) {
+                    setupActions.remove(i);
+                    break;
+                }
+                i++;
             }
-            i++;
-         }
-      }
-   }
+        }
+    }
 
-   @Override
-   public void undeploy(DeploymentUnit context)
-   {
-   }
+    @Override
+    public void undeploy(DeploymentUnit context) {
+    }
 }

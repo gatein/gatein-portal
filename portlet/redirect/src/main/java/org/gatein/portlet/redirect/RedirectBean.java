@@ -35,35 +35,30 @@ import org.gatein.web.redirect.api.RedirectHandler;
  * @author <a href="mailto:theute@jboss.org">Thomas Heute</a>
  * @version $Revision$
  */
-public class RedirectBean
-{
-   protected RedirectHandler redirectHandler;
-   
-   public RedirectBean()
-   {
-      redirectHandler = (RedirectHandler)ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(RedirectHandler.class);
-   }
-   
-   public List<RedirectLink> getAlternativeSites()
-   {
-      PortalRequestContext prc = (PortalRequestContext)PortalRequestContext.getCurrentInstance();
-      
-      String siteName = ((PortalRequestContext)PortalRequestContext.getCurrentInstance()).getSiteName();
-      String portalName = PortalContainer.getCurrentPortalContainerName();
-      
-      Map<String, String> redirects = redirectHandler.getAlternativeRedirects(siteName, prc.getRequestURI(), true);
-      
-      List<RedirectLink> redirectLinks = new ArrayList<RedirectLink>();
-      if (redirects != null)
-      {
-         for (String siteNames : redirects.keySet())
-         {
-            RedirectLink redirectLink = new RedirectLink(siteNames, redirects.get(siteNames));
-            redirectLinks.add(redirectLink);
-         }
-      }
-  
-      return redirectLinks;
-   }
-}
+public class RedirectBean {
+    protected RedirectHandler redirectHandler;
 
+    public RedirectBean() {
+        redirectHandler = (RedirectHandler) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
+                RedirectHandler.class);
+    }
+
+    public List<RedirectLink> getAlternativeSites() {
+        PortalRequestContext prc = (PortalRequestContext) PortalRequestContext.getCurrentInstance();
+
+        String siteName = ((PortalRequestContext) PortalRequestContext.getCurrentInstance()).getSiteName();
+        String portalName = PortalContainer.getCurrentPortalContainerName();
+
+        Map<String, String> redirects = redirectHandler.getAlternativeRedirects(siteName, prc.getRequestURI(), true);
+
+        List<RedirectLink> redirectLinks = new ArrayList<RedirectLink>();
+        if (redirects != null) {
+            for (String siteNames : redirects.keySet()) {
+                RedirectLink redirectLink = new RedirectLink(siteNames, redirects.get(siteNames));
+                redirectLinks.add(redirectLink);
+            }
+        }
+
+        return redirectLinks;
+    }
+}

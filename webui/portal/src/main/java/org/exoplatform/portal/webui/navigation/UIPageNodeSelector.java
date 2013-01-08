@@ -35,171 +35,135 @@ import org.exoplatform.webui.core.UIContainer;
 import org.exoplatform.webui.core.UIRightClickPopupMenu;
 import org.exoplatform.webui.core.UITree;
 
-@ComponentConfig(
-   template = "system:/groovy/portal/webui/navigation/UIPageNodeSelector.gtmpl"
-)
-public class UIPageNodeSelector extends UIContainer
-{
-   private UserNode rootNode;
-   
-   private UserNode selectedNode;
-   
-   private UserPortal userPortal;
+@ComponentConfig(template = "system:/groovy/portal/webui/navigation/UIPageNodeSelector.gtmpl")
+public class UIPageNodeSelector extends UIContainer {
+    private UserNode rootNode;
 
-   public UIPageNodeSelector() throws Exception
-   {
-      UITree uiTree = addChild(UITree.class, null, "TreePageSelector");
-      uiTree.setIcon("DefaultPageIcon");
-      uiTree.setSelectedIcon("DefaultPageIcon");
-      uiTree.setBeanIdField("URI");
-      uiTree.setBeanLabelField("encodedResolvedLabel");
-      uiTree.setBeanIconField("icon");
-      uiTree.setBeanChildCountField("childrenCount");
+    private UserNode selectedNode;
 
-      userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();      
-   }  
-   
-   public void configure(UserNode node) throws Exception
-   {
-      if (node == null)
-      {
-         throw new IllegalArgumentException("node can't be null");
-      }
-      
-      this.rootNode = node;
-      while (rootNode.getParent() != null)
-      {
-         this.rootNode = rootNode.getParent();
-      }
-      setSelectedNode(node);
-   }
-   
-   private void setSelectedNode(UserNode node) throws Exception
-   {
-      //If node is root node, and it's been deleted --> throw NavigationServiceException
-      node = updateNode(node);
-      
-      //If node has been deleted --> select root node
-      if(node == null)
-      {
-         configure(getRootNode());
-      }
-      else
-      {
-         UITree tree = getChild(UITree.class);
-         tree.setSelected(node);
-         UserNode parent = node.getParent();
-         if (parent != null)
-         {        
-            tree.setChildren(node.getChildren());
-            tree.setSibbling(parent.getChildren());
-            tree.setParentSelected(parent);
-         }
-         else
-         {
-            tree.setChildren(null);
-            tree.setSibbling(node.getChildren());
-            tree.setParentSelected(node);
-         }
-         selectedNode = node;         
-      }
-   }
-   
-   private UserNode updateNode(UserNode node) throws Exception
-   {
-      if (node == null) 
-      {
-         return null;
-      }      
-      
-      NodeChangeQueue<UserNode> queue = new NodeChangeQueue<UserNode>();
-      if (node.getParent() != null)
-      {
-         //The node may be resolved by UserPortal#resolvePath and this will filter all sibling nodes
-         //We need to update from parent to make sure all sibling nodes can be retrieved
-         userPortal.updateNode(node.getParent(), GenericScope.treeShape(3), queue);         
-      }
-      else
-      {
-         userPortal.updateNode(node, Scope.GRANDCHILDREN, queue);
-      }
-      
-      for (NodeChange<UserNode> change : queue)
-      {
-         if (change instanceof NodeChange.Removed)
-         {
-            UserNode deletedNode = ((NodeChange.Removed<UserNode>)change).getTarget();
-            if (findUserNodeByURI(deletedNode, node.getURI()) != null)
-            {
-               return null;
+    private UserPortal userPortal;
+
+    public UIPageNodeSelector() throws Exception {
+        UITree uiTree = addChild(UITree.class, null, "TreePageSelector");
+        uiTree.setIcon("DefaultPageIcon");
+        uiTree.setSelectedIcon("DefaultPageIcon");
+        uiTree.setBeanIdField("URI");
+        uiTree.setBeanLabelField("encodedResolvedLabel");
+        uiTree.setBeanIconField("icon");
+        uiTree.setBeanChildCountField("childrenCount");
+
+        userPortal = Util.getPortalRequestContext().getUserPortalConfig().getUserPortal();
+    }
+
+    public void configure(UserNode node) throws Exception {
+        if (node == null) {
+            throw new IllegalArgumentException("node can't be null");
+        }
+
+        this.rootNode = node;
+        while (rootNode.getParent() != null) {
+            this.rootNode = rootNode.getParent();
+        }
+        setSelectedNode(node);
+    }
+
+    private void setSelectedNode(UserNode node) throws Exception {
+        // If node is root node, and it's been deleted --> throw NavigationServiceException
+        node = updateNode(node);
+
+        // If node has been deleted --> select root node
+        if (node == null) {
+            configure(getRootNode());
+        } else {
+            UITree tree = getChild(UITree.class);
+            tree.setSelected(node);
+            UserNode parent = node.getParent();
+            if (parent != null) {
+                tree.setChildren(node.getChildren());
+                tree.setSibbling(parent.getChildren());
+                tree.setParentSelected(parent);
+            } else {
+                tree.setChildren(null);
+                tree.setSibbling(node.getChildren());
+                tree.setParentSelected(node);
             }
-         }
-      }
-      
-      return node;
-   }
-   
-   public void setSelectedURI(String uri) throws Exception
-   {
-      if (selectedNode == null)
-      {
-         throw new IllegalStateException("selectedNode is null, configure method must be called first");
-      }
-      
-      UserNode node;
-      if (selectedNode.getParent() != null)
-      {
-         node = findUserNodeByURI(selectedNode.getParent(), uri);
-      }
-      else
-      {
-         node = findUserNodeByURI(selectedNode, uri);
-      }
-      setSelectedNode(node);
-   }
-   
-   private UserNode findUserNodeByURI(UserNode rootNode, String uri)
-   {
-      if (rootNode.getURI().equals(uri))
-      {
-         return rootNode;
-      }
-      Iterator<UserNode> iterator = rootNode.getChildren().iterator();
-      while (iterator.hasNext())
-      {
-         UserNode next = iterator.next();
-         UserNode node = findUserNodeByURI(next, uri);
-         if (node == null)
-         {
-            continue;
-         }
-         return node;
-      }
-      return null;
-   }
+            selectedNode = node;
+        }
+    }
 
-   public void processRender(WebuiRequestContext context) throws Exception
-   {
-      UIRightClickPopupMenu uiPopupMenu = getChild(UIRightClickPopupMenu.class);
-      if (uiPopupMenu != null)
-      {
-         uiPopupMenu.setRendered(true);
-      }
-      super.processRender(context);
-   }
-   
-   private UserNode getRootNode()
-   {
-      return this.rootNode;
-   }
-   
-   public UserNode getSelectedNode()
-   {
-      return selectedNode;
-   }
+    private UserNode updateNode(UserNode node) {
+        if (node == null) {
+            return null;
+        }
 
-   public UserNavigation getNavigation()
-   {
-      return selectedNode.getNavigation();
-   }   
+        NodeChangeQueue<UserNode> queue = new NodeChangeQueue<UserNode>();
+        if (node.getParent() != null) {
+            // The node may be resolved by UserPortal#resolvePath and this will filter all sibling nodes
+            // We need to update from parent to make sure all sibling nodes can be retrieved
+            userPortal.updateNode(node.getParent(), GenericScope.treeShape(3), queue);
+        } else {
+            userPortal.updateNode(node, Scope.GRANDCHILDREN, queue);
+        }
+
+        for (NodeChange<UserNode> change : queue) {
+            if (change instanceof NodeChange.Removed) {
+                UserNode deletedNode = ((NodeChange.Removed<UserNode>) change).getTarget();
+                if (findUserNodeByURI(deletedNode, node.getURI()) != null) {
+                    return null;
+                }
+            }
+        }
+
+        return node;
+    }
+
+    public void setSelectedURI(String uri) throws Exception {
+        if (selectedNode == null) {
+            throw new IllegalStateException("selectedNode is null, configure method must be called first");
+        }
+
+        UserNode node;
+        if (selectedNode.getParent() != null) {
+            node = findUserNodeByURI(selectedNode.getParent(), uri);
+        } else {
+            node = findUserNodeByURI(selectedNode, uri);
+        }
+        setSelectedNode(node);
+    }
+
+    private UserNode findUserNodeByURI(UserNode rootNode, String uri) {
+        if (rootNode.getURI().equals(uri)) {
+            return rootNode;
+        }
+        Iterator<UserNode> iterator = rootNode.getChildren().iterator();
+        while (iterator.hasNext()) {
+            UserNode next = iterator.next();
+            UserNode node = findUserNodeByURI(next, uri);
+            if (node == null) {
+                continue;
+            }
+            return node;
+        }
+        return null;
+    }
+
+    public void processRender(WebuiRequestContext context) throws Exception {
+        UIRightClickPopupMenu uiPopupMenu = getChild(UIRightClickPopupMenu.class);
+        if (uiPopupMenu != null) {
+            uiPopupMenu.setRendered(true);
+        }
+        super.processRender(context);
+    }
+
+    private UserNode getRootNode() {
+        return this.rootNode;
+    }
+
+    public UserNode getSelectedNode() {
+        return selectedNode;
+    }
+
+    public UserNavigation getNavigation() {
+        return selectedNode.getNavigation();
+    }
 }

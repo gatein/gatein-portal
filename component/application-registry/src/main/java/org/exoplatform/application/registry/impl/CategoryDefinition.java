@@ -18,22 +18,22 @@
  */
 package org.exoplatform.application.registry.impl;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.FormattedBy;
 import org.chromattic.api.annotations.Name;
 import org.chromattic.api.annotations.NamingPrefix;
-import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.OneToMany;
+import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.gatein.mop.api.content.ContentType;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.Workspace;
-
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -42,107 +42,94 @@ import java.util.Map;
 @PrimaryType(name = "app:category")
 @FormattedBy(BaseEncodingObjectFormatter.class)
 @NamingPrefix("app")
-public abstract class CategoryDefinition
-{
+public abstract class CategoryDefinition {
 
-   /** The injected workspace. */
-   public ApplicationRegistryServiceImpl registry;
+    /** The injected workspace. */
+    public ApplicationRegistryServiceImpl registry;
 
-   @Name
-   public abstract String getName();
+    @Name
+    public abstract String getName();
 
-   @Property(name = "gtn:name")
-   public abstract String getDisplayName();
+    @Property(name = "gtn:name")
+    public abstract String getDisplayName();
 
-   public abstract void setDisplayName(String displayName);
+    public abstract void setDisplayName(String displayName);
 
-   @Property(name = "gtn:description")
-   public abstract String getDescription();
+    @Property(name = "gtn:description")
+    public abstract String getDescription();
 
-   public abstract void setDescription(String description);
+    public abstract void setDescription(String description);
 
-   @Property(name = "app:creationdate")
-   public abstract Date getCreationDate();
+    @Property(name = "app:creationdate")
+    public abstract Date getCreationDate();
 
-   public abstract void setCreationDate(Date date);
+    public abstract void setCreationDate(Date date);
 
-   @Property(name = "app:lastmodificationdate")
-   public abstract Date getLastModificationDate();
+    @Property(name = "app:lastmodificationdate")
+    public abstract Date getLastModificationDate();
 
-   public abstract void setLastModificationDate(Date date);
+    public abstract void setLastModificationDate(Date date);
 
-   @Property(name = "gtn:access-permissions")
-   public abstract List<String> getAccessPermissions();
+    @Property(name = "gtn:access-permissions")
+    public abstract List<String> getAccessPermissions();
 
-   public abstract void setAccessPermissions(List<String> accessPermissions);
+    public abstract void setAccessPermissions(List<String> accessPermissions);
 
-   @OneToMany
-   public abstract List<ContentDefinition> getContentList();
+    @OneToMany
+    public abstract List<ContentDefinition> getContentList();
 
-   @OneToMany
-   public abstract Map<String, ContentDefinition> getContentMap();
+    @OneToMany
+    public abstract Map<String, ContentDefinition> getContentMap();
 
-   @Create
-   public abstract ContentDefinition create();
+    @Create
+    public abstract ContentDefinition create();
 
-   /**
-    * Create a content definition for the target content.
-    *
-    * @param definitionName the definition name
-    * @param contentType the target content type
-    * @param contentId the target content id
-    * @return the content definion
-    */
-   public ContentDefinition createContent(
-      String definitionName,
-      ContentType<?> contentType,
-      String contentId)
-   {
-      if (definitionName == null)
-      {
-         throw new NullPointerException("No null definition name accepted");
-      }
-      if (contentType  == null)
-      {
-         throw new NullPointerException("No null content type accepted");
-      }
-      if (contentId  == null)
-      {
-         throw new NullPointerException("No null content id accepted");
-      }
+    /**
+     * Create a content definition for the target content.
+     *
+     * @param definitionName the definition name
+     * @param contentType the target content type
+     * @param contentId the target content id
+     * @return the content definion
+     */
+    public ContentDefinition createContent(String definitionName, ContentType<?> contentType, String contentId) {
+        if (definitionName == null) {
+            throw new NullPointerException("No null definition name accepted");
+        }
+        if (contentType == null) {
+            throw new NullPointerException("No null content type accepted");
+        }
+        if (contentId == null) {
+            throw new NullPointerException("No null content id accepted");
+        }
 
-      //
-      POMSession session = registry.mopManager.getSession();
+        //
+        POMSession session = registry.mopManager.getSession();
 
-      //
-      Workspace workspace = session.getWorkspace();
+        //
+        Workspace workspace = session.getWorkspace();
 
-      //
-      Customization customization = workspace.getCustomizationContext().getCustomization(definitionName);
+        //
+        Customization customization = workspace.getCustomizationContext().getCustomization(definitionName);
 
-      //
-      if (customization == null)
-      {
-         workspace.getCustomizationContext().customize(definitionName, contentType, contentId, null);
-      }
-      else if (customization.getContentId().equals(contentId))
-      {
-         // Do nothing here
-      }
-      else
-      {
-         throw new IllegalArgumentException("Cannot create a content with a content id " + contentId + 
-            " with an existing different content id " + customization.getContentId());
-      }
+        //
+        if (customization == null) {
+            workspace.getCustomizationContext().customize(definitionName, contentType, contentId, null);
+        } else if (customization.getContentId().equals(contentId)) {
+            // Do nothing here
+        } else {
+            throw new IllegalArgumentException("Cannot create a content with a content id " + contentId
+                    + " with an existing different content id " + customization.getContentId());
+        }
 
-      //
-      ContentDefinition content = create();
+        //
+        ContentDefinition content = create();
 
-      //
-      Map<String, ContentDefinition> contents = getContentMap();
-      contents.put(definitionName, content);
+        //
+        Map<String, ContentDefinition> contents = getContentMap();
+        contents.put(definitionName, content);
 
-      //
-      return content;
-   }
+        //
+        return content;
+    }
 }

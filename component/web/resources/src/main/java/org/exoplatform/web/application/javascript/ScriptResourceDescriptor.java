@@ -19,83 +19,74 @@
 
 package org.exoplatform.web.application.javascript;
 
-import org.gatein.portal.controller.resource.ResourceId;
-import org.gatein.portal.controller.resource.script.FetchMode;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import org.gatein.portal.controller.resource.ResourceId;
+import org.gatein.portal.controller.resource.script.FetchMode;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ScriptResourceDescriptor
-{
+public class ScriptResourceDescriptor {
 
-   /** . */
-   final ResourceId id;
-   
-   /** . */
-   final String group;
-   
-   /** . */
-   final String alias;
+    /** . */
+    final ResourceId id;
 
-   /** . */
-   final List<Locale> supportedLocales;
-   
-   /** . */
-   final List<Javascript> modules;
+    /** . */
+    final String group;
 
-   /** . */
-   final List<DependencyDescriptor> dependencies;
+    /** . */
+    final String alias;
 
-   /** . */
-   FetchMode fetchMode;
+    /** . */
+    final List<Locale> supportedLocales;
 
-   public ScriptResourceDescriptor(ResourceId id, FetchMode fetchMode)
-   {
-      this(id, fetchMode, null, null);
-   }
-   
-   public ScriptResourceDescriptor(ResourceId id, FetchMode fetchMode, String alias, String group)
-   {
-      this.id = id;
-      this.modules = new ArrayList<Javascript>();
-      this.dependencies = new ArrayList<DependencyDescriptor>();
-      this.supportedLocales = new ArrayList<Locale>();
-      this.fetchMode = fetchMode;
-      this.alias = alias;
-      this.group = group;
-   }
+    /** . */
+    final List<Javascript> modules;
 
-   public ResourceId getId()
-   {
-      return id;
-   }
+    /** . */
+    final List<DependencyDescriptor> dependencies;
 
-   public List<Locale> getSupportedLocales()
-   {
-      return supportedLocales;
-   }
+    /** . */
+    FetchMode fetchMode;
 
-   public List<Javascript> getModules()
-   {
-      return modules;
-   }
+    public ScriptResourceDescriptor(ResourceId id, FetchMode fetchMode) {
+        this(id, fetchMode, null, null);
+    }
 
-   public List<DependencyDescriptor> getDependencies()
-   {
-      return dependencies;
-   }
+    public ScriptResourceDescriptor(ResourceId id, FetchMode fetchMode, String alias, String group) {
+        this.id = id;
+        this.modules = new ArrayList<Javascript>();
+        this.dependencies = new ArrayList<DependencyDescriptor>();
+        this.supportedLocales = new ArrayList<Locale>();
+        this.fetchMode = fetchMode;
+        this.alias = alias;
+        this.group = group;
+    }
 
-   public String getAlias()
-   {
-      return alias;
-   }
-   
-   public String getGroup()
-   {
-      return group;
-   }
+    public ResourceId getId() {
+        return id;
+    }
+
+    public List<Locale> getSupportedLocales() {
+        return supportedLocales;
+    }
+
+    public List<Javascript> getModules() {
+        return modules;
+    }
+
+    public List<DependencyDescriptor> getDependencies() {
+        return dependencies;
+    }
+
+    public String getAlias() {
+        return alias;
+    }
+
+    public String getGroup() {
+        return group;
+    }
 }

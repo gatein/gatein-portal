@@ -28,7 +28,7 @@
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
   <edit-permission>*:/platform/administrators</edit-permission>
- 
+
   <portal-redirects>
     <portal-redirect>
       <redirect-site>redirectA</redirect-site>
@@ -36,26 +36,26 @@
       <enabled>true</enabled>
       <node-mapping>
         <use-node-name-matching>true</use-node-name-matching>
-          <node-map>
-            <origin-node>foo</origin-node>
-            <redirect-node>bar</redirect-node>
-          </node-map>
-          <node-map>
-            <origin-node>hello/world</origin-node>
-            <redirect-node>redirect/hello/world</redirect-node>
-          </node-map>
-          <node-map>
-            <origin-node>/</origin-node>
-            <redirect-node>redirect_root</redirect-node>
-          </node-map>
-          <node-map>
-            <origin-node>root</origin-node>
-            <redirect-node>/</redirect-node>
-          </node-map>
-          <node-map>
-            <origin-node>ABC/123/XYZ</origin-node>
-            <redirect-node>123</redirect-node>
-          </node-map>
+        <node-map>
+          <origin-node>foo</origin-node>
+          <redirect-node>bar</redirect-node>
+        </node-map>
+        <node-map>
+          <origin-node>hello/world</origin-node>
+          <redirect-node>redirect/hello/world</redirect-node>
+        </node-map>
+        <node-map>
+          <origin-node>/</origin-node>
+          <redirect-node>redirect_root</redirect-node>
+        </node-map>
+        <node-map>
+          <origin-node>root</origin-node>
+          <redirect-node>/</redirect-node>
+        </node-map>
+        <node-map>
+          <origin-node>ABC/123/XYZ</origin-node>
+          <redirect-node>123</redirect-node>
+        </node-map>
       </node-mapping>
     </portal-redirect>
     <portal-redirect>
@@ -64,26 +64,26 @@
       <enabled>true</enabled>
       <node-mapping>
         <use-node-name-matching>false</use-node-name-matching>
-          <node-map>
-            <origin-node>foo</origin-node>
-            <redirect-node>bar</redirect-node>
-          </node-map>
-          <node-map>
-            <origin-node>hello/world</origin-node>
-            <redirect-node>redirect/hello/world</redirect-node>
-          </node-map>
-          <node-map>
-            <origin-node>/</origin-node>
-            <redirect-node>redirect_root</redirect-node>
-          </node-map>
-          <node-map>
-            <origin-node>root</origin-node>
-            <redirect-node>/</redirect-node>
-          </node-map>
-          <node-map>
-            <origin-node>ABC/123/XYZ</origin-node>
-            <redirect-node>123</redirect-node>
-          </node-map>
+        <node-map>
+          <origin-node>foo</origin-node>
+          <redirect-node>bar</redirect-node>
+        </node-map>
+        <node-map>
+          <origin-node>hello/world</origin-node>
+          <redirect-node>redirect/hello/world</redirect-node>
+        </node-map>
+        <node-map>
+          <origin-node>/</origin-node>
+          <redirect-node>redirect_root</redirect-node>
+        </node-map>
+        <node-map>
+          <origin-node>root</origin-node>
+          <redirect-node>/</redirect-node>
+        </node-map>
+        <node-map>
+          <origin-node>ABC/123/XYZ</origin-node>
+          <redirect-node>123</redirect-node>
+        </node-map>
       </node-mapping>
     </portal-redirect>
     <portal-redirect>
@@ -94,13 +94,13 @@
         <use-node-name-matching>true</use-node-name-matching>
         <unresolved-nodes>REDIRECT</unresolved-nodes>
         <node-map>
-            <origin-node>foo</origin-node>
-            <redirect-node>bar</redirect-node>
+          <origin-node>foo</origin-node>
+          <redirect-node>bar</redirect-node>
         </node-map>
         <node-map>
-            <origin-node>hello/world</origin-node>
-            <redirect-node>redirect/hello/world</redirect-node>
-          </node-map>
+          <origin-node>hello/world</origin-node>
+          <redirect-node>redirect/hello/world</redirect-node>
+        </node-map>
       </node-mapping>
     </portal-redirect>
     <portal-redirect>

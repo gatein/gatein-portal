@@ -18,24 +18,23 @@
  */
 package org.exoplatform.groovyscript;
 
-import org.exoplatform.component.test.AbstractGateInTest;
-
 import java.io.IOException;
+
+import org.exoplatform.component.test.AbstractGateInTest;
 
 /**
  * @author <a href="mailto:trong.tran@exoplatform.com">Trong Tran</a>
  * @version $Revision$
  */
-public class TestGroovyTemplateEngine extends AbstractGateInTest
-{
-   public void testFileName() throws IOException, TemplateCompilationException
-   {
-      
-      GroovyTemplateEngine engine_ = new GroovyTemplateEngine();
-      try {
-         GroovyTemplate template = engine_.createTemplate("/path/to/file-lt.gtmpl", "file-lt.gtmpl", "content of the file.gtmpl");
-      } catch (GroovyCompilationException e) {
-         fail("Creating GroovyTemplate is failed ");
-      }
-   }
+public class TestGroovyTemplateEngine extends AbstractGateInTest {
+    public void testFileName() throws IOException, TemplateCompilationException {
+
+        GroovyTemplateEngine engine_ = new GroovyTemplateEngine();
+        try {
+            GroovyTemplate template = engine_.createTemplate("/path/to/file-lt.gtmpl", "file-lt.gtmpl",
+                    "content of the file.gtmpl");
+        } catch (GroovyCompilationException e) {
+            fail("Creating GroovyTemplate is failed ");
+        }
+    }
 }

@@ -23,28 +23,28 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.portlet</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
-  </parent> 
+    <version>3.6.0.MO1-SNAPSHOT</version>
+  </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.portal.portlet.exoadmin</artifactId>
   <packaging>war</packaging>
   <name>GateIn Portal Portlet eXoAdmin</name>
-  
+
   <dependencies>
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.webui.portal</artifactId>
       <scope>provided</scope>
-    </dependency>   
-    
+    </dependency>
+
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.webui.eXo</artifactId>
       <scope>provided</scope>
     </dependency>
-  </dependencies> 
-  
+  </dependencies>
+
   <build>
     <finalName>exoadmin</finalName>
   </build>

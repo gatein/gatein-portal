@@ -26,8 +26,7 @@ import org.jboss.as.server.deployment.AttachmentKey;
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class GateInEarKey
-{
-   public static final AttachmentKey<GateInEarKey> KEY = AttachmentKey.create(GateInEarKey.class);
-   public static final GateInEarKey INSTANCE = new GateInEarKey();
+public class GateInEarKey {
+    public static final AttachmentKey<GateInEarKey> KEY = AttachmentKey.create(GateInEarKey.class);
+    public static final GateInEarKey INSTANCE = new GateInEarKey();
 }

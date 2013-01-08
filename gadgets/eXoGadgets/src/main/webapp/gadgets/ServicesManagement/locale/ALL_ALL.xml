@@ -19,15 +19,15 @@
 
 -->
 
-<messagebundle>  
+<messagebundle>
   <msg name="title">
-  	Services Management
+    Services Management
   </msg>
   <msg name="services">
-  	Services
+    Services
   </msg>
   <msg name="name">
-  	Name
+    Name
   </msg>
   <msg name="description">
     Description
@@ -36,33 +36,33 @@
     No description
   </msg>
   <msg name="method">
-  	Method
+    Method
   </msg>
   <msg name="parameters">
-  	Parameters
+    Parameters
   </msg>
   <msg name="action">
-  	Action
+    Action
   </msg>
   <msg name="value">
-  	Value
+    Value
   </msg>
   <msg name="services_url">
-  	Services URL
+    Services URL
   </msg>
   <msg name="failManage">
-  	Temporary can't manage services from other host until we support OAuth
+    Temporary can't manage services from other host until we support OAuth
   </msg>
   <msg name="noServices">
-  	No service's available or you don't have enough permission
+    No service's available or you don't have enough permission
   </msg>
   <msg name="noMethod">
-  	No method
+    No method
   </msg>
   <msg name="noProperty">
-  	No property
+    No property
   </msg>
   <msg name="badURL">
-  	Error while retrieving data, please check your URL preference
+    Error while retrieving data, please check your URL preference
   </msg>
 </messagebundle>

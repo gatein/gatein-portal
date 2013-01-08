@@ -27,48 +27,42 @@ import org.gatein.portal.controller.resource.ResourceId;
 /**
  * @author <a href="mailto:phuong.vu@exoplatform.com">Vu Viet Phuong</a>
  */
-public class ScriptGroup extends BaseScriptResource<ScriptGroup>
-{
-   final Set<ResourceId> scripts;
-   final String contextPath;
+public class ScriptGroup extends BaseScriptResource<ScriptGroup> {
+    final Set<ResourceId> scripts;
+    final String contextPath;
 
-   ScriptGroup(ScriptGraph graph, ResourceId id, String contextPath)
-   {
-      super(graph, id);
+    ScriptGroup(ScriptGraph graph, ResourceId id, String contextPath) {
+        super(graph, id);
 
-      //
-      this.scripts = new HashSet<ResourceId>();
-      this.contextPath = contextPath;
-   }
-   
-   void addDependency(ResourceId id)
-   {
-      scripts.add(id);
-   }
+        //
+        this.scripts = new HashSet<ResourceId>();
+        this.contextPath = contextPath;
+    }
 
-   @Override
-   public Set<ResourceId> getDependencies()
-   {
-      return scripts;
-   }
+    void addDependency(ResourceId id) {
+        scripts.add(id);
+    }
 
-   @Override
-   public int hashCode()
-   {
-      return getId().hashCode();
-   }
+    @Override
+    public Set<ResourceId> getDependencies() {
+        return scripts;
+    }
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (this == obj)
-         return true;
-      if (obj == null)
-         return false;
-      if (getClass() != obj.getClass())
-         return false;
-      ScriptGroup other = (ScriptGroup)obj;
-      return getId().equals(other.getId());
-   }   
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ScriptGroup other = (ScriptGroup) obj;
+        return getId().equals(other.getId());
+    }
 
 }

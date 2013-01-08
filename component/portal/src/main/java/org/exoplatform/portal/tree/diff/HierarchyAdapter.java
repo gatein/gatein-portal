@@ -24,10 +24,10 @@ package org.exoplatform.portal.tree.diff;
  */
 public interface HierarchyAdapter<L, N, H> {
 
-   H getHandle(N node);
+    H getHandle(N node);
 
-   L getChildren(N node);
+    L getChildren(N node);
 
-   N getDescendant(N node, H handle);
+    N getDescendant(N node, H handle);
 
 }

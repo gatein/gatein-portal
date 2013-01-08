@@ -36,9 +36,9 @@
         <portlet-ref>IFramePortlet</portlet-ref>
         <preferences>
           <preference>
-              <name>url</name>
-              <value>http://jboss.org/gatein</value>
-              <read-only>false</read-only>
+            <name>url</name>
+            <value>http://jboss.org/gatein</value>
+            <read-only>false</read-only>
           </preference>
         </preferences>
       </portlet>
@@ -49,10 +49,10 @@
       <show-application-mode>true</show-application-mode>
     </portlet-application>
   </page>
-  
+
   <page>
-    <name>mylink-google</name>
-    <title>Google</title>
+    <name>mylink-fedora</name>
+    <title>Fedora</title>
     <access-permissions>*:/platform/users</access-permissions>
     <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
@@ -61,44 +61,19 @@
         <portlet-ref>IFramePortlet</portlet-ref>
         <preferences>
           <preference>
-              <name>url</name>
-              <value>http://www.google.com</value>
-              <read-only>false</read-only>
-            </preference>
+            <name>url</name>
+            <value>http://www.fedoraproject.org</value>
+            <read-only>false</read-only>
+          </preference>
         </preferences>
       </portlet>
-      <title>Google</title>
+      <title>Fedora</title>
       <access-permissions>*:/platform/users</access-permissions>
       <show-info-bar>false</show-info-bar>
       <show-application-state>true</show-application-state>
       <show-application-mode>true</show-application-mode>
     </portlet-application>
   </page>
-  
-  <page>
-    <name>mylink-facebook</name>
-    <title>FaceBook</title>
-    <access-permissions>*:/platform/users</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>
-    <portlet-application>
-      <portlet>
-        <application-ref>web</application-ref>
-        <portlet-ref>IFramePortlet</portlet-ref>
-        <preferences>
-          <preference>
-              <name>url</name>
-              <value>http://www.facebook.com</value>
-              <read-only>false</read-only>
-            </preference>
-        </preferences>
-      </portlet>
-      <title>FaceBook</title>
-      <access-permissions>*:/platform/users</access-permissions>
-      <show-info-bar>false</show-info-bar>
-      <show-application-state>true</show-application-state>
-      <show-application-mode>true</show-application-mode>
-    </portlet-application>
-  </page>
-  
+
 </page-set>
 

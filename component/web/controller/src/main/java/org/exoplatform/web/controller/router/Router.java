@@ -19,21 +19,18 @@
 
 package org.exoplatform.web.controller.router;
 
-import org.exoplatform.web.controller.QualifiedName;
-import org.exoplatform.web.controller.metadata.RouteDescriptor;
-import org.exoplatform.web.controller.metadata.ControllerDescriptor;
-import org.exoplatform.web.url.MimeType;
-import org.gatein.common.io.UndeclaredIOException;
-import org.gatein.common.util.Tools;
-
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
+
+import org.exoplatform.web.controller.QualifiedName;
+import org.exoplatform.web.controller.metadata.ControllerDescriptor;
+import org.exoplatform.web.controller.metadata.RouteDescriptor;
+import org.exoplatform.web.url.MimeType;
+import org.gatein.common.io.UndeclaredIOException;
+import org.gatein.common.util.Tools;
 
 /**
  * The router takes care of mapping a request to a a map.
@@ -41,158 +38,134 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Router
-{
+public class Router {
 
-   /** . */
-   private static final BitSet escapeSet;
+    /** . */
+    private static final BitSet escapeSet;
 
-   static
-   {
-      // A subset of the path literals
-      BitSet bs = new BitSet();
-      bs.set('_');
-      bs.set('.');
-      bs.set('-');
-      bs.set('~');
-      bs.set('!');
-      bs.set('$');
-      bs.set('&');
-      bs.set('+');
-      bs.set(':');
-      bs.set('@');
+    static {
+        // A subset of the path literals
+        BitSet bs = new BitSet();
+        bs.set('_');
+        bs.set('.');
+        bs.set('-');
+        bs.set('~');
+        bs.set('!');
+        bs.set('$');
+        bs.set('&');
+        bs.set('+');
+        bs.set(':');
+        bs.set('@');
 
-      //
-      escapeSet = bs;
-   }
+        //
+        escapeSet = bs;
+    }
 
-   /** . */
-   private final RegexFactory regexFactory;
+    /** . */
+    private final RegexFactory regexFactory;
 
-   /** The root route. */
-   final Route root;
+    /** The root route. */
+    final Route root;
 
-   /** The slash escape char. */
-   final char separatorEscape;
+    /** The slash escape char. */
+    final char separatorEscape;
 
-   /** . */
-   final char separatorEscapeNible1;
+    /** . */
+    final char separatorEscapeNible1;
 
-   /** . */
-   final char separatorEscapeNible2;
+    /** . */
+    final char separatorEscapeNible2;
 
-   /** . */
-   private Regex[] regexes;
+    /** . */
+    private Regex[] regexes;
 
-   public Router(ControllerDescriptor metaData) throws RouterConfigException
-   {
-      this(metaData, RegexFactory.JAVA);
-   }
+    public Router(ControllerDescriptor metaData) throws RouterConfigException {
+        this(metaData, RegexFactory.JAVA);
+    }
 
-   public Router(ControllerDescriptor metaData, RegexFactory regexFactory) throws RouterConfigException
-   {
-      char separtorEscape = metaData.getSeparatorEscape();
+    public Router(ControllerDescriptor metaData, RegexFactory regexFactory) throws RouterConfigException {
+        char separtorEscape = metaData.getSeparatorEscape();
 
-      //
-      int i = separtorEscape & ~0x7F;
-      if (i > 0 || !escapeSet.get(separtorEscape))
-      {
-         throw new RouterConfigException("Char " + (int)separtorEscape + " cannot be used a separator escape");
-      }
+        //
+        int i = separtorEscape & ~0x7F;
+        if (i > 0 || !escapeSet.get(separtorEscape)) {
+            throw new RouterConfigException("Char " + (int) separtorEscape + " cannot be used a separator escape");
+        }
 
-      //
-      String s = Integer.toString(separtorEscape, 16).toUpperCase();
-      separatorEscapeNible1 = s.charAt(0);
-      separatorEscapeNible2 = s.charAt(1);
+        //
+        String s = Integer.toString(separtorEscape, 16).toUpperCase();
+        separatorEscapeNible1 = s.charAt(0);
+        separatorEscapeNible2 = s.charAt(1);
 
-      //
-      this.regexFactory = regexFactory;
-      this.root = new Route(this);
-      this.separatorEscape = separtorEscape;
-      this.regexes = new Regex[0];
+        //
+        this.regexFactory = regexFactory;
+        this.root = new Route(this);
+        this.separatorEscape = separtorEscape;
+        this.regexes = new Regex[0];
 
-      //
-      for (RouteDescriptor routeMetaData : metaData.getRoutes())
-      {
-         root.append(routeMetaData);
-      }
-   }
+        //
+        for (RouteDescriptor routeMetaData : metaData.getRoutes()) {
+            root.append(routeMetaData);
+        }
+    }
 
-   Regex compile(String pattern)
-   {
-      for (Regex regex : regexes)
-      {
-         if (regex.getPattern().equals(pattern))
-         {
-            return regex;
-         }
-      }
-      Regex regex = regexFactory.compile(pattern);
-      regex.index = regexes.length;
-      regexes = Tools.appendTo(regexes, regex);
-      return regex;
-   }
+    Regex compile(String pattern) {
+        for (Regex regex : regexes) {
+            if (regex.getPattern().equals(pattern)) {
+                return regex;
+            }
+        }
+        Regex regex = regexFactory.compile(pattern);
+        regex.index = regexes.length;
+        regexes = Tools.appendTo(regexes, regex);
+        return regex;
+    }
 
-   public void render(Map<QualifiedName, String> parameters, URIWriter writer) throws IOException
-   {
-      render(new RenderContext(parameters), writer);
-   }
+    public void render(Map<QualifiedName, String> parameters, URIWriter writer) throws IOException {
+        render(new RenderContext(parameters), writer);
+    }
 
-   public String render(Map<QualifiedName, String> parameters)
-   {
-      return render(new RenderContext(parameters));
-   }
+    public String render(Map<QualifiedName, String> parameters) {
+        return render(new RenderContext(parameters));
+    }
 
-   public void render(RenderContext context, URIWriter writer) throws IOException
-   {
-      if (context.matchers == null)
-      {
-         context.matchers = new Regex.Matcher[regexes.length];
-      }
-      root.render(context, writer);
-   }
+    public void render(RenderContext context, URIWriter writer) throws IOException {
+        if (context.matchers == null) {
+            context.matchers = new Regex.Matcher[regexes.length];
+        }
+        root.render(context, writer);
+    }
 
-   public String render(RenderContext context)
-   {
-      try
-      {
-         StringBuilder sb = new StringBuilder();
-         URIWriter renderContext = new URIWriter(sb, MimeType.PLAIN);
-         render(context, renderContext);
-         return sb.toString();
-      }
-      catch (IOException e)
-      {
-         throw new UndeclaredIOException(e);
-      }
-   }
+    public String render(RenderContext context) {
+        try {
+            StringBuilder sb = new StringBuilder();
+            URIWriter renderContext = new URIWriter(sb, MimeType.PLAIN);
+            render(context, renderContext);
+            return sb.toString();
+        } catch (IOException e) {
+            throw new UndeclaredIOException(e);
+        }
+    }
 
-   public Map<QualifiedName, String> route(String path) throws IOException
-   {
-      return route(path, Collections.<String, String[]>emptyMap());
-   }
+    public Map<QualifiedName, String> route(String path) {
+        return route(path, Collections.<String, String[]> emptyMap());
+    }
 
-   public Map<QualifiedName, String> route(String path, Map<String, String[]> queryParams)
-   {
-      Iterator<Map<QualifiedName, String>> matcher = matcher(path, queryParams);
-      if (matcher.hasNext())
-      {
-         return matcher.next();
-      }
-      else
-      {
-         return null;
-      }
-   }
+    public Map<QualifiedName, String> route(String path, Map<String, String[]> queryParams) {
+        Iterator<Map<QualifiedName, String>> matcher = matcher(path, queryParams);
+        if (matcher.hasNext()) {
+            return matcher.next();
+        } else {
+            return null;
+        }
+    }
 
-   public Iterator<Map<QualifiedName, String>> matcher(String path, Map<String, String[]> queryParams)
-   {
-      return root.route(path, queryParams);
-   }
+    public Iterator<Map<QualifiedName, String>> matcher(String path, Map<String, String[]> queryParams) {
+        return root.route(path, queryParams);
+    }
 
-   @Override
-   public String toString()
-   {
-      return "Router[" + root.toString() + "]";
-   }
+    @Override
+    public String toString() {
+        return "Router[" + root.toString() + "]";
+    }
 }

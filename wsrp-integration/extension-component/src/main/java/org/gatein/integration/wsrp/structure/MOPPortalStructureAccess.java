@@ -23,6 +23,10 @@
 
 package org.gatein.integration.wsrp.structure;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.page.PageKey;
@@ -35,89 +39,75 @@ import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Workspace;
 import org.gatein.mop.api.workspace.ui.UIWindow;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class MOPPortalStructureAccess implements PortalStructureAccess
-{
-   private static final String PAGES_CHILD_NAME = "pages";
-   private final POMSessionManager pomManager;
+public class MOPPortalStructureAccess implements PortalStructureAccess {
+    private static final String PAGES_CHILD_NAME = "pages";
+    private final POMSessionManager pomManager;
 
-   public MOPPortalStructureAccess(POMSessionManager pomManager)
-   {
-      this.pomManager = pomManager;
-   }
+    public MOPPortalStructureAccess(POMSessionManager pomManager) {
+        this.pomManager = pomManager;
+    }
 
-   public Collection<Page> getPages()
-   {
-      POMSession session = pomManager.getSession();
-      Workspace workspace = session.getWorkspace();
-      Collection<Site> sites = workspace.getSites(ObjectType.PORTAL_SITE);
+    public Collection<Page> getPages() {
+        POMSession session = pomManager.getSession();
+        Workspace workspace = session.getWorkspace();
+        Collection<Site> sites = workspace.getSites(ObjectType.PORTAL_SITE);
 
-      List<Page> pages = new ArrayList<Page>(sites.size() * 10);
+        List<Page> pages = new ArrayList<Page>(sites.size() * 10);
 
-      for (Site site : sites)
-      {
-         Page pagesRoot = getPagesFrom(site);
-         if (pagesRoot != null)
-         {
-            Collection<Page> children = pagesRoot.getChildren();
-            for (Page child : children)
-            {
-               pages.add(child);
+        for (Site site : sites) {
+            Page pagesRoot = getPagesFrom(site);
+            if (pagesRoot != null) {
+                Collection<Page> children = pagesRoot.getChildren();
+                for (Page child : children) {
+                    pages.add(child);
+                }
             }
-         }
-      }
+        }
 
-      return pages;
-   }
+        return pages;
+    }
 
-   public UIWindow getWindowFrom(String uuid)
-   {
-      POMSession session = pomManager.getSession();
-      return session.findObjectById(ObjectType.WINDOW, uuid);
-   }
+    public UIWindow getWindowFrom(String uuid) {
+        POMSession session = pomManager.getSession();
+        return session.findObjectById(ObjectType.WINDOW, uuid);
+    }
 
-   public void saveChangesTo(UIWindow window)
-   {
-      POMSession session = pomManager.getSession();
+    public void saveChangesTo(UIWindow window) {
+        POMSession session = pomManager.getSession();
 
-      // mark page for cache invalidation otherwise DataCache will use the previous customization id when trying to set
-      // the portlet state in UIPortlet.setState and will not find it resulting in an error
-      Page page = window.getPage();
-      session.scheduleForEviction(new org.exoplatform.portal.pom.data.PageKey("portal", page.getSite().getName(), page.getName()));
+        // mark page for cache invalidation otherwise DataCache will use the previous customization id when trying to set
+        // the portlet state in UIPortlet.setState and will not find it resulting in an error
+        Page page = window.getPage();
+        session.scheduleForEviction(new org.exoplatform.portal.pom.data.PageKey("portal", page.getSite().getName(), page
+                .getName()));
 
-      // save
-      session.save();
-   }
+        // save
+        session.save();
+    }
 
-   public Page getPageFrom(org.exoplatform.portal.config.model.Page portalPage)
-   {
-      POMSession session = pomManager.getSession();
-      Site site = session.getWorkspace().getSite(Mapper.parseSiteType(portalPage.getOwnerType()), portalPage.getOwnerId());
-      return getPagesFrom(site).getChild(portalPage.getName());
-   }
+    public Page getPageFrom(org.exoplatform.portal.config.model.Page portalPage) {
+        POMSession session = pomManager.getSession();
+        Site site = session.getWorkspace().getSite(Mapper.parseSiteType(portalPage.getOwnerType()), portalPage.getOwnerId());
+        return getPagesFrom(site).getChild(portalPage.getName());
+    }
 
-   public Page getPageFrom(PageKey pageKey)
-   {
-      POMSession session = pomManager.getSession();
-      final SiteKey siteKey = pageKey.getSite();
-      final SiteType siteType = siteKey.getType();
-      final String siteName = siteKey.getName();
-      Site site = session.getWorkspace().getSite(Mapper.parseSiteType(siteType.getName()), siteName);
-      return getPagesFrom(site).getChild(pageKey.getName());
-   }
+    public Page getPageFrom(PageKey pageKey) {
+        POMSession session = pomManager.getSession();
+        final SiteKey siteKey = pageKey.getSite();
+        final SiteType siteType = siteKey.getType();
+        final String siteName = siteKey.getName();
+        Site site = session.getWorkspace().getSite(Mapper.parseSiteType(siteType.getName()), siteName);
+        return getPagesFrom(site).getChild(pageKey.getName());
+    }
 
-   private Page getPagesFrom(Site site)
-   {
-      // a site contains a root page with templates and pages
-      // more info at http://code.google.com/p/chromattic/wiki/MOPUseCases
+    private Page getPagesFrom(Site site) {
+        // a site contains a root page with templates and pages
+        // more info at http://code.google.com/p/chromattic/wiki/MOPUseCases
 
-      return site.getRootPage().getChild(PAGES_CHILD_NAME);
-   }
+        return site.getRootPage().getChild(PAGES_CHILD_NAME);
+    }
 }

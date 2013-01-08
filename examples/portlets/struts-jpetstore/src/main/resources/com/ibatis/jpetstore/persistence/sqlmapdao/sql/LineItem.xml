@@ -9,11 +9,11 @@
 
   <select id="getLineItemsByOrderId" resultClass="lineItem" parameterClass="int">
     SELECT
-      ORDERID,
-      LINENUM AS lineNumber,
-      ITEMID,
-      QUANTITY,
-      UNITPRICE
+    ORDERID,
+    LINENUM AS lineNumber,
+    ITEMID,
+    QUANTITY,
+    UNITPRICE
     FROM LINEITEM
     WHERE ORDERID = #orderId#
   </select>

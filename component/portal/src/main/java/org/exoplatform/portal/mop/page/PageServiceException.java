@@ -23,44 +23,38 @@ package org.exoplatform.portal.mop.page;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PageServiceException extends RuntimeException
-{
+public class PageServiceException extends RuntimeException {
 
-   /** . */
-   private final PageError error;
+    /** . */
+    private final PageError error;
 
-   public PageServiceException(PageError error)
-   {
-      super(error.toString());
-      this.error = error;
-   }
+    public PageServiceException(PageError error) {
+        super(error.toString());
+        this.error = error;
+    }
 
-   public PageServiceException(PageError error, String message)
-   {
-      super(message);
+    public PageServiceException(PageError error, String message) {
+        super(message);
 
-      //
-      this.error = error;
-   }
+        //
+        this.error = error;
+    }
 
-   public PageServiceException(PageError error, String message, Throwable cause)
-   {
-      super(message, cause);
+    public PageServiceException(PageError error, String message, Throwable cause) {
+        super(message, cause);
 
-      //
-      this.error = error;
-   }
+        //
+        this.error = error;
+    }
 
-   public PageServiceException(PageError error, Throwable cause)
-   {
-      super(cause);
+    public PageServiceException(PageError error, Throwable cause) {
+        super(cause);
 
-      //
-      this.error = error;
-   }
+        //
+        this.error = error;
+    }
 
-   public PageError getError()
-   {
-      return error;
-   }
+    public PageError getError() {
+        return error;
+    }
 }

@@ -23,12 +23,12 @@
   -->
 
 <module xmlns="urn:jboss:module:1.0" name="org.reflext">
-    <resources>
-       <!-- Insert resources here -->
-    </resources>
+  <resources>
+    <!-- Insert resources here -->
+  </resources>
 
-    <dependencies>
-        <module name="javax.api" />
-        <module name="org.slf4j" />
-    </dependencies>
+  <dependencies>
+    <module name="javax.api"/>
+    <module name="org.slf4j"/>
+  </dependencies>
 </module>

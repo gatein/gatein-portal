@@ -21,63 +21,58 @@ package org.exoplatform.portal.mop;
 
 import java.util.Iterator;
 
+
 /**
  * A query result.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public final class QueryResult<T> implements Iterable<T>
-{
+public final class QueryResult<T> implements Iterable<T> {
 
-   /** The result first item offset. */
-   private final int from;
+    /** The result first item offset. */
+    private final int from;
 
-   /** The result item size. */
-   private final int size;
+    /** The result item size. */
+    private final int size;
 
-   /** The items. */
-   private final Iterable<T> items;
+    /** The items. */
+    private final Iterable<T> items;
 
-   public QueryResult(int from, int size, Iterable<T> items)
-   {
-      this.from = from;
-      this.items = items;
-      this.size = size;
-   }
+    public QueryResult(int from, int size, Iterable<T> items) {
+        this.from = from;
+        this.items = items;
+        this.size = size;
+    }
 
-   /**
-    * Returns the index of the first item in the result.
-    *
-    * @return the first index
-    */
-   public int getFrom()
-   {
-      return from;
-   }
+    /**
+     * Returns the index of the first item in the result.
+     *
+     * @return the first index
+     */
+    public int getFrom() {
+        return from;
+    }
 
-   /**
-    * Returns the number of items returned.
-    *
-    * @return the number of items
-    */
-   public int getSize()
-   {
-      return size;
-   }
+    /**
+     * Returns the number of items returned.
+     *
+     * @return the number of items
+     */
+    public int getSize() {
+        return size;
+    }
 
-   /**
-    * Returns the index of the item following the last item in the result.
-    *
-    * @return the last index
-    */
-   public int getTo()
-   {
-      return from + size;
-   }
+    /**
+     * Returns the index of the item following the last item in the result.
+     *
+     * @return the last index
+     */
+    public int getTo() {
+        return from + size;
+    }
 
-   @Override
-   public Iterator<T> iterator()
-   {
-      return items.iterator();
-   }
+    @Override
+    public Iterator<T> iterator() {
+        return items.iterator();
+    }
 }

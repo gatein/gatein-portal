@@ -54,7 +54,8 @@
   -->
   <NumberFormatValidator>
     <msg>
-      <invalid-limitAccess>Hai inserito "{0}" nel campo {1}, l'accesso a questo campo \u00E8 limitato</invalid-limitAccess>
+      <invalid-limitAccess>Hai inserito "{0}" nel campo {1}, l'accesso a questo campo \u00E8 limitato
+      </invalid-limitAccess>
       <Invalid-input>Il valore inserito nel campo {0}, dovresti inserire un numero</Invalid-input>
     </msg>
   </NumberFormatValidator>
@@ -71,7 +72,8 @@
   <IdentifierValidator>
     <msg>
       <empty-input>Il campo "{0}" non pu\u00F2 essere vuoto</empty-input>
-      <invalid-char>Sono permessi soltanto caratteri alfabetici, numerici, trattino e underscore per il campo {0}</invalid-char>
+      <invalid-char>Sono permessi soltanto caratteri alfabetici, numerici, trattino e underscore per il campo {0}
+      </invalid-char>
     </msg>
   </IdentifierValidator>
   <!--
@@ -87,7 +89,9 @@
   <NameValidator>
     <msg>
       <empty-input>Il campo "{0}" non pu\u00F2 essere vuoto</empty-input>
-      <invalid-char>Sono permessi soltanto caratteri alfabetici, numerici, punto, trattino e underscore per il campo {0}</invalid-char>
+      <invalid-char>Sono permessi soltanto caratteri alfabetici, numerici, punto, trattino e underscore per il campo
+        {0}
+      </invalid-char>
     </msg>
   </NameValidator>
   <!--
@@ -132,7 +136,8 @@
   -->
   <PermissionValidator>
     <msg>
-      <invalid-permission-input>Permesso non valido, il formato del permesso dovrebbe essere membership:/groupId.</invalid-permission-input>
+      <invalid-permission-input>Permesso non valido, il formato del permesso dovrebbe essere membership:/groupId.
+      </invalid-permission-input>
       <membership-group-not-found>Tipo di Membership o nome del Gruppo non trovato.</membership-group-not-found>
     </msg>
   </PermissionValidator>
@@ -145,7 +150,8 @@
   -->
   <CheckAdminOrOwnerRoleInterceptor>
     <msg>
-      <owner-or-admin-require>Hai bisogno di loggarti e di avere il ruolo di admin per eseguire l'operazione '{0}'</owner-or-admin-require>
+      <owner-or-admin-require>Hai bisogno di loggarti e di avere il ruolo di admin per eseguire l'operazione '{0}'
+      </owner-or-admin-require>
     </msg>
   </CheckAdminOrOwnerRoleInterceptor>
   <!--
@@ -185,7 +191,8 @@
   #Throw in org.exoplatform.commons.utils.PageList, {0}=request page parameter, {1}=available pages parameter
   -->
   <PageList>
-    <page-out-of-range>Stai provando ad aprire la pagina {0}, ma ci sono soltanto {1} pagine disponibili</page-out-of-range>
+    <page-out-of-range>Stai provando ad aprire la pagina {0}, ma ci sono soltanto {1} pagine disponibili
+    </page-out-of-range>
   </PageList>
   <!--
   #Throw in exo.services.communication.message.impl.MessageServiceImpl. 
@@ -193,7 +200,9 @@
   -->
   <MessageService>
     <account-not-found>Non posso trovare l'account {0} per l'utente {1}</account-not-found>
-    <invalid-standalone-message-address>Stai usando l'account standalone con \ l'indirizzo {0} non \u00E8 valido.  Il sistema si aspetta un indirizzo con il seguente formato: \ ricevente#nomeAccount</invalid-standalone-message-address>
+    <invalid-standalone-message-address>Stai usando l'account standalone con \ l'indirizzo {0} non \u00E8 valido. Il
+      sistema si aspetta un indirizzo con il seguente formato: \ ricevente#nomeAccount
+    </invalid-standalone-message-address>
     <send-message-fail>Non posso mandare il messaggio. Verifica l'indirizzo email \n\ Errore: {0}</send-message-fail>
   </MessageService>
   <!--
@@ -214,7 +223,8 @@
   -->
   <Searcher>
     <msg>
-      <search-expression-error><![CDATA[C'\u00E8 un errore nell'espressione inserita.<br />{0}]]></search-expression-error>
+      <search-expression-error>
+        <![CDATA[C'\u00E8 un errore nell'espressione inserita.<br />{0}]]></search-expression-error>
     </msg>
   </Searcher>
 </bundle>

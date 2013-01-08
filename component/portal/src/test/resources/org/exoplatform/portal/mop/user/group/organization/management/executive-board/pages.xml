@@ -24,7 +24,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
-    
+
   <page>
     <name>newStaff</name>
     <title>New Staff</title>
@@ -36,11 +36,11 @@
         <portlet-ref>AccountPortlet</portlet-ref>
       </portlet>
       <title>New Staff</title>
-	  	<show-info-bar>true</show-info-bar>
-	  	<show-application-state>true</show-application-state>
+      <show-info-bar>true</show-info-bar>
+      <show-application-state>true</show-application-state>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>management</name>
     <title>Organization Management</title>
@@ -55,5 +55,5 @@
       <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
     </portlet-application>
-  </page> 
+  </page>
 </page-set>

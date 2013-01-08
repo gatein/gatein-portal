@@ -25,32 +25,28 @@ import org.exoplatform.portal.mop.navigation.NodeContext;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestImportFragmentOverwrite extends AbstractImportFragmentTest
-{
+public class TestImportFragmentOverwrite extends AbstractImportFragmentTest {
 
-   @Override
-   protected ImportMode getMode()
-   {
-      return ImportMode.OVERWRITE;
-   }
+    @Override
+    protected ImportMode getMode() {
+        return ImportMode.OVERWRITE;
+    }
 
-   @Override
-   protected final void afterOnePhaseBoot(NodeContext<?> root)
-   {
-      assertState(root);
-   }
+    @Override
+    protected final void afterOnePhaseBoot(NodeContext<?> root) {
+        assertState(root);
+    }
 
-   @Override
-   protected void assertState(NodeContext<?> root)
-   {
-      assertEquals(1, root.getNodeSize());
-      NodeContext<?> foo = root.get("foo");
-      assertNotNull(foo);
-      assertEquals("foo_icon", foo.getState().getIcon());
-      assertEquals(1, foo.getNodeSize());
-      NodeContext<?> bar = foo.get("bar");
-      assertNotNull(bar);
-      assertEquals("bar_icon", bar.getState().getIcon());
-      assertEquals(0, bar.getNodeSize());
-   }
+    @Override
+    protected void assertState(NodeContext<?> root) {
+        assertEquals(1, root.getNodeSize());
+        NodeContext<?> foo = root.get("foo");
+        assertNotNull(foo);
+        assertEquals("foo_icon", foo.getState().getIcon());
+        assertEquals(1, foo.getNodeSize());
+        NodeContext<?> bar = foo.get("bar");
+        assertNotNull(bar);
+        assertEquals("bar_icon", bar.getState().getIcon());
+        assertEquals(0, bar.getNodeSize());
+    }
 }

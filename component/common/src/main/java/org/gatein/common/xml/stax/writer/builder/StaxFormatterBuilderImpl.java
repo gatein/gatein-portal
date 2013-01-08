@@ -22,7 +22,6 @@
 
 package org.gatein.common.xml.stax.writer.builder;
 
-
 import org.gatein.common.xml.stax.writer.formatting.SimpleFormatter;
 import org.gatein.common.xml.stax.writer.formatting.XmlStreamingFormatter;
 
@@ -30,36 +29,34 @@ import org.gatein.common.xml.stax.writer.formatting.XmlStreamingFormatter;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class StaxFormatterBuilderImpl implements StaxFormatterBuilder
-{
-   private Character indentCharacter;
-   private Integer indentSize;
-   private String newline;
+public class StaxFormatterBuilderImpl implements StaxFormatterBuilder {
+    private Character indentCharacter;
+    private Integer indentSize;
+    private String newline;
 
-   public StaxFormatterBuilder withIndentCharacter(char indentCharacter)
-   {
-      this.indentCharacter = indentCharacter;
-      return this;
-   }
+    public StaxFormatterBuilder withIndentCharacter(char indentCharacter) {
+        this.indentCharacter = indentCharacter;
+        return this;
+    }
 
-   public StaxFormatterBuilder ofIndentSize(int indentSize)
-   {
-      this.indentSize = indentSize;
-      return this;
-   }
+    public StaxFormatterBuilder ofIndentSize(int indentSize) {
+        this.indentSize = indentSize;
+        return this;
+    }
 
-   public StaxFormatterBuilder withNewline(String newline)
-   {
-      this.newline = newline;
-      return this;
-   }
+    public StaxFormatterBuilder withNewline(String newline) {
+        this.newline = newline;
+        return this;
+    }
 
-   public XmlStreamingFormatter build()
-   {
-      if (indentCharacter == null) throw new IllegalStateException("indent character is required value for this builder.");
-      if (indentSize == null) throw new IllegalArgumentException("indent size is a required value for this builder.");
-      if (newline == null) throw new IllegalArgumentException("newline is a required value for this builder.");
+    public XmlStreamingFormatter build() {
+        if (indentCharacter == null)
+            throw new IllegalStateException("indent character is required value for this builder.");
+        if (indentSize == null)
+            throw new IllegalArgumentException("indent size is a required value for this builder.");
+        if (newline == null)
+            throw new IllegalArgumentException("newline is a required value for this builder.");
 
-      return new SimpleFormatter(indentCharacter, indentSize, newline);
-   }
+        return new SimpleFormatter(indentCharacter, indentSize, newline);
+    }
 }

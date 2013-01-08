@@ -22,17 +22,16 @@ package org.exoplatform.component.test;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public enum ContainerScope
-{
+public enum ContainerScope {
 
-   /**
-    * The root container scope.
-    */
-   ROOT,
+    /**
+     * The root container scope.
+     */
+    ROOT,
 
-   /**
-    * The portal container scope.
-    */
-   PORTAL
+    /**
+     * The portal container scope.
+     */
+    PORTAL
 
 }

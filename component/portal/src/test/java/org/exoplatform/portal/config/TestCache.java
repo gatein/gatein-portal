@@ -31,71 +31,68 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestCache extends AbstractConfigTest
-{
+public class TestCache extends AbstractConfigTest {
 
-   /** . */
-   private DataStorage storage_;
-   
-   /** . */
-   private PageService pageService;
+    /** . */
+    private DataStorage storage_;
 
-   /** . */
-   private POMSessionManager mgr;
+    /** . */
+    private PageService pageService;
 
-   /** . */
-   private POMSession session;
+    /** . */
+    private POMSessionManager mgr;
 
-   public void setUp() throws Exception
-   {
-      super.setUp();
-      PortalContainer container = getContainer();
-      storage_ = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
-      pageService = (PageService)container.getComponentInstanceOfType(PageService.class);
-      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-   }
+    /** . */
+    private POMSession session;
 
-   public void testGetPageFromRemovedPortal() throws Exception
-   {
-      // Create what we need for the test
-      begin();
-      session = mgr.openSession();
-      PortalConfig portalConfig = new PortalConfig("portal", "testGetPageFromRemovedPortal");
-      storage_.create(portalConfig);
-      pageService.savePage(new PageContext(PageKey.parse("portal::testGetPageFromRemovedPortal::home"), null));
-      end(true);
+    public void setUp() throws Exception {
+        super.setUp();
+        PortalContainer container = getContainer();
+        storage_ = (DataStorage) container.getComponentInstanceOfType(DataStorage.class);
+        pageService = (PageService) container.getComponentInstanceOfType(PageService.class);
+        mgr = (POMSessionManager) container.getComponentInstanceOfType(POMSessionManager.class);
+    }
 
-      // Clear cache
-      mgr.clearCache();
+    public void testGetPageFromRemovedPortal() throws Exception {
+        // Create what we need for the test
+        begin();
+        session = mgr.openSession();
+        PortalConfig portalConfig = new PortalConfig("portal", "testGetPageFromRemovedPortal");
+        storage_.create(portalConfig);
+        pageService.savePage(new PageContext(PageKey.parse("portal::testGetPageFromRemovedPortal::home"), null));
+        end(true);
 
-      // The first transaction
-      begin();
-      session = mgr.openSession();
+        // Clear cache
+        mgr.clearCache();
 
-      // Get page from JCR and it should be stored in cache
-      Page page = storage_.getPage("portal::testGetPageFromRemovedPortal::home");
-      assertNotNull(page);
+        // The first transaction
+        begin();
+        session = mgr.openSession();
 
-      // Now remove the portal
-      PortalConfig portal = storage_.getPortalConfig("portal", "testGetPageFromRemovedPortal");
-      storage_.remove(portal);
+        // Get page from JCR and it should be stored in cache
+        Page page = storage_.getPage("portal::testGetPageFromRemovedPortal::home");
+        assertNotNull(page);
 
-      // Terminate the first transaction
-      end(true);
+        // Now remove the portal
+        PortalConfig portal = storage_.getPortalConfig("portal", "testGetPageFromRemovedPortal");
+        storage_.remove(portal);
 
-      // The second transaction
-      begin();
-      session = mgr.openSession();
+        // Terminate the first transaction
+        end(true);
 
-      // The portal should be null
-      portal = storage_.getPortalConfig("portal", "testGetPageFromRemovedPortal");
-      assertNull(portal);
+        // The second transaction
+        begin();
+        session = mgr.openSession();
 
-      // The portal home page should also be null
-      page = storage_.getPage("portal::testGetPageFromRemovedPortal::home");
-      assertNull(page);
+        // The portal should be null
+        portal = storage_.getPortalConfig("portal", "testGetPageFromRemovedPortal");
+        assertNull(portal);
 
-      // End second transaction
-      end(true);
-   }
+        // The portal home page should also be null
+        page = storage_.getPage("portal::testGetPageFromRemovedPortal::home");
+        assertNull(page);
+
+        // End second transaction
+        end(true);
+    }
 }

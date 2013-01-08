@@ -21,10 +21,10 @@
 -->
 
 <bundle>
-	<my>
-		<!-- Key 2 -->
-		<key2>Il Mio Nuovo Valore In Italiano v2</key2>
-		<!-- Key 3 -->
-		<key3>Il Mio Nuovo Valore In Italiano v2</key3>
-	</my>
+  <my>
+    <!-- Key 2 -->
+    <key2>Il Mio Nuovo Valore In Italiano v2</key2>
+    <!-- Key 3 -->
+    <key3>Il Mio Nuovo Valore In Italiano v2</key3>
+  </my>
 </bundle>

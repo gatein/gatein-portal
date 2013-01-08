@@ -26,17 +26,14 @@ import org.exoplatform.commons.serialization.api.annotations.Converted;
  * @version $Revision$
  */
 @Converted(A3.class)
-public class A1
-{
+public class A1 {
 
-   String state;
+    String state;
 
-   public A1()
-   {
-   }
+    public A1() {
+    }
 
-   public A1(String state)
-   {
-      this.state = state;
-   }
+    public A1(String state) {
+        this.state = state;
+    }
 }

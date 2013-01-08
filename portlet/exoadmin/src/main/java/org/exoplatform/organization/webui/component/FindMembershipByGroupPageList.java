@@ -20,7 +20,6 @@
 package org.exoplatform.organization.webui.component;
 
 import org.exoplatform.commons.utils.ListAccess;
-import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.commons.utils.PageListAccess;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.PortalContainer;
@@ -29,27 +28,22 @@ import org.exoplatform.services.organization.Membership;
 import org.exoplatform.services.organization.MembershipHandler;
 import org.exoplatform.services.organization.OrganizationService;
 
-import java.util.List;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class FindMembershipByGroupPageList extends PageListAccess<Membership, String>
-{
+public class FindMembershipByGroupPageList extends PageListAccess<Membership, String> {
 
-   public FindMembershipByGroupPageList(String groupId, int pageSize)
-   {
-      super(groupId, pageSize);
-   }
+    public FindMembershipByGroupPageList(String groupId, int pageSize) {
+        super(groupId, pageSize);
+    }
 
-   @Override
-   protected ListAccess<Membership> create(String state) throws Exception
-   {
-      ExoContainer container = PortalContainer.getInstance();
-      OrganizationService service = (OrganizationService)container.getComponentInstance(OrganizationService.class);
-      MembershipHandler handler = service.getMembershipHandler();
-      Group group = service.getGroupHandler().findGroupById(state);
-      return handler.findAllMembershipsByGroup(group);
-   }
+    @Override
+    protected ListAccess<Membership> create(String state) throws Exception {
+        ExoContainer container = PortalContainer.getInstance();
+        OrganizationService service = (OrganizationService) container.getComponentInstance(OrganizationService.class);
+        MembershipHandler handler = service.getMembershipHandler();
+        Group group = service.getGroupHandler().findGroupById(state);
+        return handler.findAllMembershipsByGroup(group);
+    }
 }

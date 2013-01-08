@@ -25,35 +25,28 @@ import org.exoplatform.commons.serialization.api.TypeConverter;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ConvertedTypeModel<O, T> extends TypeModel<O>
-{
+public class ConvertedTypeModel<O, T> extends TypeModel<O> {
 
-   /** . */
-   private final TypeModel<T> targetType;
+    /** . */
+    private final TypeModel<T> targetType;
 
-   /** . */
-   private final Class<? extends TypeConverter<O, T>> converterJavaType;
+    /** . */
+    private final Class<? extends TypeConverter<O, T>> converterJavaType;
 
-   ConvertedTypeModel(
-      Class<O> javaType,
-      TypeModel<? super O> superType,
-      TypeModel<T> targetType,
-      Class<? extends TypeConverter<O, T>> converterJavaType)
-   {
-      super(javaType, superType);
+    ConvertedTypeModel(Class<O> javaType, TypeModel<? super O> superType, TypeModel<T> targetType,
+            Class<? extends TypeConverter<O, T>> converterJavaType) {
+        super(javaType, superType);
 
-      //
-      this.targetType = targetType;
-      this.converterJavaType = converterJavaType;
-   }
+        //
+        this.targetType = targetType;
+        this.converterJavaType = converterJavaType;
+    }
 
-   public TypeModel<T> getTargetType()
-   {
-      return targetType;
-   }
+    public TypeModel<T> getTargetType() {
+        return targetType;
+    }
 
-   public Class<? extends TypeConverter<O, T>> getConverterJavaType()
-   {
-      return converterJavaType;
-   }
+    public Class<? extends TypeConverter<O, T>> getConverterJavaType() {
+        return converterJavaType;
+    }
 }

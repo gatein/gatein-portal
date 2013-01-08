@@ -29,77 +29,67 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
 /**
- * This service contains actions, which should be performed after successful registration of new user (Sending mail, 
- * Activating of user, which is disabled by default etc.)<br>
- * 
+ * This service contains actions, which should be performed after successful registration of new user (Sending mail, Activating
+ * of user, which is disabled by default etc.)<br>
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  * @version $Revision$
  */
-public class PostRegistrationService
-{
-   private final String mailFrom;
-   private final String mailTo;
-   private final String mailSubject;
-   private final String mailMessage;
-   private final MailService mailService;
-   private final Boolean sendMailEnabled; // If false, then mails won't be send.
-   private static final Logger log = LoggerFactory.getLogger(PostRegistrationService.class);
-   
-   
-   public PostRegistrationService(InitParams params, MailService mailService)
-   {
-      this.mailService = mailService;
-      this.sendMailEnabled = Boolean.valueOf(params.getValueParam("sendMailAfterRegistration").getValue());
-      this.mailFrom = params.getValueParam("mailFrom").getValue();
-      this.mailTo = params.getValueParam("mailTo").getValue();
-      this.mailSubject = params.getValueParam("mailSubject").getValue();
-      this.mailMessage = params.getValueParam("mailMessage").getValue();
-   }
-   
-   /**
-    * This method can be used to send mail to administrator after successful registration of new user.
-    * 
-    * @param user which just register himself to portal.
-    */
-   public void sendMailAfterSuccessfulRegistration(User user)
-   {
-      // return if sending mails disabled in configuration.
-      if (!sendMailEnabled)
-      {
-         log.debug("Sending of mails disabled. Mail won't be send about creating of user " + user.getUserName());
-         return;
-      }
-      
-      try
-      {
-         String subject = replaceTokens(mailSubject, user);
-         String message = replaceTokens(mailMessage, user);
-         
-         log.debug("Sending mail about the creating of user " + user.getUserName());
-         mailService.sendMessage(mailFrom, mailTo, subject, message);
-      }
-      catch (Exception e)
-      {
-         log.error("Error when sending mail to admin after registration of user " + user.getUserName(), e);
-      }
-   }
-   
-   /**
-    * Replace tokens in message with real values of user. This can be used to inform administrator 
-    * about attributes of concrete user.
-    * 
-    * @param param
-    * @param user
-    * @return
-    */
-   private String replaceTokens(String param, User user)
-   {
-      String result = param.replaceAll("\\$\\{user.userName\\}", user.getUserName());
-      result = result.replaceAll("\\$\\{user.firstName\\}", user.getFirstName());
-      result = result.replaceAll("\\$\\{user.lastName\\}", user.getLastName());
-      result = result.replaceAll("\\$\\{user.email\\}", user.getEmail());
-      return result;
-   }      
+public class PostRegistrationService {
+    private final String mailFrom;
+    private final String mailTo;
+    private final String mailSubject;
+    private final String mailMessage;
+    private final MailService mailService;
+    private final Boolean sendMailEnabled; // If false, then mails won't be send.
+    private static final Logger log = LoggerFactory.getLogger(PostRegistrationService.class);
+
+    public PostRegistrationService(InitParams params, MailService mailService) {
+        this.mailService = mailService;
+        this.sendMailEnabled = Boolean.valueOf(params.getValueParam("sendMailAfterRegistration").getValue());
+        this.mailFrom = params.getValueParam("mailFrom").getValue();
+        this.mailTo = params.getValueParam("mailTo").getValue();
+        this.mailSubject = params.getValueParam("mailSubject").getValue();
+        this.mailMessage = params.getValueParam("mailMessage").getValue();
+    }
+
+    /**
+     * This method can be used to send mail to administrator after successful registration of new user.
+     *
+     * @param user which just register himself to portal.
+     */
+    public void sendMailAfterSuccessfulRegistration(User user) {
+        // return if sending mails disabled in configuration.
+        if (!sendMailEnabled) {
+            log.debug("Sending of mails disabled. Mail won't be send about creating of user " + user.getUserName());
+            return;
+        }
+
+        try {
+            String subject = replaceTokens(mailSubject, user);
+            String message = replaceTokens(mailMessage, user);
+
+            log.debug("Sending mail about the creating of user " + user.getUserName());
+            mailService.sendMessage(mailFrom, mailTo, subject, message);
+        } catch (Exception e) {
+            log.error("Error when sending mail to admin after registration of user " + user.getUserName(), e);
+        }
+    }
+
+    /**
+     * Replace tokens in message with real values of user. This can be used to inform administrator about attributes of concrete
+     * user.
+     *
+     * @param param
+     * @param user
+     * @return
+     */
+    private String replaceTokens(String param, User user) {
+        String result = param.replaceAll("\\$\\{user.userName\\}", user.getUserName());
+        result = result.replaceAll("\\$\\{user.firstName\\}", user.getFirstName());
+        result = result.replaceAll("\\$\\{user.lastName\\}", user.getLastName());
+        result = result.replaceAll("\\$\\{user.email\\}", user.getEmail());
+        return result;
+    }
 
 }
-

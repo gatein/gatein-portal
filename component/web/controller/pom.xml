@@ -17,19 +17,20 @@
   ~ 02110-1301 USA, or see the FSF site: http://www.fsf.org.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"> 
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.component.web</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
-  </parent> 
+    <version>3.6.0.MO1-SNAPSHOT</version>
+  </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.portal.component.web.controller</artifactId>
   <packaging>jar</packaging>
   <name>GateIn Portal Component Web Controller</name>
   <description>The GateIn web controller takes care of managing portal requests and delegate the processing to
-    the appropriate subsystem.</description>
+    the appropriate subsystem.
+  </description>
 
   <properties>
     <japex.runIterations>100000</japex.runIterations>
@@ -37,37 +38,30 @@
   </properties>
 
   <dependencies>
-    <dependency>
-        <groupId>org.exoplatform.kernel</groupId>
-        <artifactId>exo.kernel.container</artifactId>
-    </dependency>
+
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.component.portal</artifactId>
     </dependency>
 
     <!-- Used only for pretty printing, need to find a better solution than this -->
-<!--
+    <!--
+        <dependency>
+          <groupId>net.java.dev.stax-utils</groupId>
+          <artifactId>stax-utils</artifactId>
+          <version>20060502</version>
+          <exclusions>
+            <exclusion>
+              <groupId>com.bea.xml</groupId>
+              <artifactId>jsr173-ri</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+    -->
+
     <dependency>
-      <groupId>net.java.dev.stax-utils</groupId>
-      <artifactId>stax-utils</artifactId>
-      <version>20060502</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.bea.xml</groupId>
-          <artifactId>jsr173-ri</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
--->
-    <dependency>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.component.test.core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-       <groupId>org.staxnav</groupId>
-       <artifactId>staxnav.core</artifactId>
+      <groupId>org.staxnav</groupId>
+      <artifactId>staxnav.core</artifactId>
     </dependency>
 
     <dependency>
@@ -109,6 +103,18 @@
         <exclusion>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-simple</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>jfree</groupId>
+          <artifactId>jfreechart</artifactId>	
+        </exclusion>
+        <exclusion>
+          <groupId>jfree</groupId>
+          <artifactId>jcommon</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.ant</groupId>
+          <artifactId>ant</artifactId>
         </exclusion>
       </exclusions>
     </dependency>

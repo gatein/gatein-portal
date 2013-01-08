@@ -19,8 +19,6 @@
 
 package org.exoplatform.commons.utils;
 
-import org.gatein.common.io.IOTools;
-
 import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,146 +27,116 @@ import java.lang.reflect.UndeclaredThrowableException;
 import java.util.Collections;
 import java.util.Set;
 
+import org.gatein.common.io.IOTools;
+
 /**
- * A class that contains utility method that make the caller not worry much about the unexpectable expected such as
- * argument nullity or the control flow due to exceptions.
+ * A class that contains utility method that make the caller not worry much about the unexpectable expected such as argument
+ * nullity or the control flow due to exceptions.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class Safe
-{
+public class Safe {
 
-   private Safe()
-   {
-   }
+    private Safe() {
+    }
 
-   /**
-    * Return true if both objects are null or both are non null and the equals method of one object returns true when it
-    * is invoked with the other object as argument.
-    *
-    * @param o1 the first object
-    * @param o2 the second object
-    * @return true if string are safely equal
-    */
-   public static boolean equals(Object o1, Object o2)
-   {
-      if (o1 == null)
-      {
-         return o2 == null;
-      }
-      else
-      {
-         return o2 != null && o1.equals(o2);
-      }
-   }
+    /**
+     * Return true if both objects are null or both are non null and the equals method of one object returns true when it is
+     * invoked with the other object as argument.
+     *
+     * @param o1 the first object
+     * @param o2 the second object
+     * @return true if string are safely equal
+     */
+    public static boolean equals(Object o1, Object o2) {
+        if (o1 == null) {
+            return o2 == null;
+        } else {
+            return o2 != null && o1.equals(o2);
+        }
+    }
 
-   /**
-    * Close a closable object. The provided object may be null or thrown an IOException or a runtime exception during
-    * the invocation of the close method without changing the control flow of the method caller. If the closeable was
-    * succesfully closed the method returns true.
-    *
-    * @param closeable the closeable
-    * @return true if the object was closed
-    */
-   public static boolean close(Closeable closeable)
-   {
-      if (closeable != null)
-      {
-         try
-         {
-            closeable.close();
-            return true;
-         }
-         catch (IOException ignore)
-         {
-         }
-         catch (RuntimeException ignore)
-         {
-         }
-      }
-      return false;
-   }
+    /**
+     * Close a closable object. The provided object may be null or thrown an IOException or a runtime exception during the
+     * invocation of the close method without changing the control flow of the method caller. If the closeable was succesfully
+     * closed the method returns true.
+     *
+     * @param closeable the closeable
+     * @return true if the object was closed
+     */
+    public static boolean close(Closeable closeable) {
+        if (closeable != null) {
+            try {
+                closeable.close();
+                return true;
+            } catch (IOException ignore) {
+            } catch (RuntimeException ignore) {
+            }
+        }
+        return false;
+    }
 
-   public static byte[] getBytes(InputStream is)
-   {
-      byte[] bytes;
+    public static byte[] getBytes(InputStream is) {
+        byte[] bytes;
 
-      if (is == null)
-      {
-         return null;
-      }
+        if (is == null) {
+            return null;
+        }
 
-      try
-      {
-         bytes = IOTools.getBytes(is);
-         return bytes;
-      }
-      catch (IOException ignore)
-      {
-         // todo: should log
-         return null;
-      }
-      finally
-      {
-         IOTools.safeClose(is);
-      }
-   }
+        try {
+            bytes = IOTools.getBytes(is);
+            return bytes;
+        } catch (IOException ignore) {
+            // todo: should log
+            return null;
+        } finally {
+            IOTools.safeClose(is);
+        }
+    }
 
-   /**
-    * Wrap the set so that it is unmodifiable when it is not null, otherwise returns null.
-    *
-    * @todo it would be nice to avoid to rewrap unmodifiable set (not sure it is non proprietary possible)
-    * @param set the set to wrap
-    * @param <E> the set generic element type
-    * @return the unmodifiable set
-    */
-   public static <E> Set<E> unmodifiableSet(Set<E> set)
-   {
-      if (set == null)
-      {
-         return null;
-      }
-      else
-      {
-         return Collections.unmodifiableSet(set);
-      }
-   }
+    /**
+     * Wrap the set so that it is unmodifiable when it is not null, otherwise returns null.
+     *
+     * @todo it would be nice to avoid to rewrap unmodifiable set (not sure it is non proprietary possible)
+     * @param set the set to wrap
+     * @param <E> the set generic element type
+     * @return the unmodifiable set
+     */
+    public static <E> Set<E> unmodifiableSet(Set<E> set) {
+        if (set == null) {
+            return null;
+        } else {
+            return Collections.unmodifiableSet(set);
+        }
+    }
 
-   // THIS CODE IS TEMPORARY
+    // THIS CODE IS TEMPORARY
 
-   /** . */
-   private static final Field listAccessField;
+    /** . */
+    private static final Field listAccessField;
 
-   static
-   {
-      try
-      {
-         listAccessField = LazyList.class.getDeclaredField("listAccess");
-         listAccessField.setAccessible(true);
-      }
-      catch (NoSuchFieldException e)
-      {
-         throw new Error(e);
-      }
-   }
+    static {
+        try {
+            listAccessField = LazyList.class.getDeclaredField("listAccess");
+            listAccessField.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            throw new Error(e);
+        }
+    }
 
-   public static <E> ListAccess<E> unwrap(PageList<E> pageList)
-   {
-      LazyPageList<E> lazyPageList = (LazyPageList<E>)pageList;
+    public static <E> ListAccess<E> unwrap(PageList<E> pageList) {
+        LazyPageList<E> lazyPageList = (LazyPageList<E>) pageList;
 
-      //
-      try
-      {
-         // Get LazyList first
-         LazyList<E> lazyList = (LazyList<E>)lazyPageList.getAll();
+        //
+        try {
+            // Get LazyList first
+            LazyList<E> lazyList = (LazyList<E>) lazyPageList.getAll();
 
-         // Now get list access
-         return (ListAccess<E>)listAccessField.get(lazyList);
-      }
-      catch (Exception e)
-      {
-         throw new UndeclaredThrowableException(e);
-      }
-   }
+            // Now get list access
+            return (ListAccess<E>) listAccessField.get(lazyList);
+        } catch (Exception e) {
+            throw new UndeclaredThrowableException(e);
+        }
+    }
 }

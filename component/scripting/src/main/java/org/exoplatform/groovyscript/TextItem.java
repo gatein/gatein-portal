@@ -22,49 +22,41 @@ package org.exoplatform.groovyscript;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TextItem extends SectionItem
-{
+public class TextItem extends SectionItem {
 
-   /** . */
-   private final String data;
+    /** . */
+    private final String data;
 
-   public TextItem(Position pos, String data)
-   {
-      super(pos);
+    public TextItem(Position pos, String data) {
+        super(pos);
 
-      //
-      if (data == null)
-      {
-         throw new NullPointerException();
-      }
+        //
+        if (data == null) {
+            throw new NullPointerException();
+        }
 
-      //
-      this.data = data;
-   }
+        //
+        this.data = data;
+    }
 
-   public String getData()
-   {
-      return data;
-   }
+    public String getData() {
+        return data;
+    }
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (obj == this)
-      {
-         return true;
-      }
-      if (obj instanceof TextItem)
-      {
-         TextItem that = (TextItem)obj;
-         return data.equals(that.data);
-      }
-      return false;
-   }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof TextItem) {
+            TextItem that = (TextItem) obj;
+            return data.equals(that.data);
+        }
+        return false;
+    }
 
-   @Override
-   public String toString()
-   {
-      return "DataText[pos=" + getPosition() + ",data=" + data + "]";
-   }
+    @Override
+    public String toString() {
+        return "DataText[pos=" + getPosition() + ",data=" + data + "]";
+    }
 }

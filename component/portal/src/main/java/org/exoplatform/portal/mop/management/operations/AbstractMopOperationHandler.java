@@ -40,49 +40,46 @@ import org.gatein.mop.api.workspace.Workspace;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public abstract class AbstractMopOperationHandler implements OperationHandler
-{
-   @Override
-   public final void execute(OperationContext operationContext, ResultHandler resultHandler) throws ResourceNotFoundException, OperationException
-   {
-      String operationName = operationContext.getOperationName();
-      PathAddress address = operationContext.getAddress();
+public abstract class AbstractMopOperationHandler implements OperationHandler {
+    @Override
+    public final void execute(OperationContext operationContext, ResultHandler resultHandler) throws ResourceNotFoundException,
+            OperationException {
+        String operationName = operationContext.getOperationName();
+        PathAddress address = operationContext.getAddress();
 
-      String siteType = address.resolvePathTemplate("site-type");
-      if (siteType == null) throw new OperationException(operationName, "Site type was not specified.");
+        String siteType = address.resolvePathTemplate("site-type");
+        if (siteType == null)
+            throw new OperationException(operationName, "Site type was not specified.");
 
-      ObjectType<Site> objectType = Utils.getObjectType(Utils.getSiteType(siteType));
-      if (objectType == null)
-      {
-         throw new ResourceNotFoundException("No site type found for " + siteType);
-      }
+        ObjectType<Site> objectType = Utils.getObjectType(Utils.getSiteType(siteType));
+        if (objectType == null) {
+            throw new ResourceNotFoundException("No site type found for " + siteType);
+        }
 
-      POMSessionManager mgr = operationContext.getRuntimeContext().getRuntimeComponent(POMSessionManager.class);
-      POMSession session = mgr.getSession();
-      if (session == null) throw new OperationException(operationName, "MOP session was null");
+        POMSessionManager mgr = operationContext.getRuntimeContext().getRuntimeComponent(POMSessionManager.class);
+        POMSession session = mgr.getSession();
+        if (session == null)
+            throw new OperationException(operationName, "MOP session was null");
 
-      Workspace workspace = session.getWorkspace();
-      if (workspace == null) throw new OperationException(operationName, "MOP workspace was null");
+        Workspace workspace = session.getWorkspace();
+        if (workspace == null)
+            throw new OperationException(operationName, "MOP workspace was null");
 
-      execute(operationContext, resultHandler, workspace, objectType);
-   }
+        execute(operationContext, resultHandler, workspace, objectType);
+    }
 
-   protected abstract void execute(OperationContext operationContext, ResultHandler resultHandler,
-                                   Workspace workspace, ObjectType<Site> siteType) throws ResourceNotFoundException, OperationException;
+    protected abstract void execute(OperationContext operationContext, ResultHandler resultHandler, Workspace workspace,
+            ObjectType<Site> siteType) throws ResourceNotFoundException, OperationException;
 
+    protected SiteType getSiteType(ObjectType<? extends Site> objectType) {
+        return Utils.getSiteType(objectType);
+    }
 
-   protected SiteType getSiteType(ObjectType<? extends Site> objectType)
-   {
-      return Utils.getSiteType(objectType);
-   }
+    protected SiteKey getSiteKey(ObjectType<? extends Site> objectType, String name) {
+        return Utils.siteKey(Utils.getSiteType(objectType), name);
+    }
 
-   protected SiteKey getSiteKey(ObjectType<? extends Site> objectType, String name)
-   {
-      return Utils.siteKey(Utils.getSiteType(objectType), name);
-   }
-
-   protected SiteKey getSiteKey(Site site)
-   {
-      return getSiteKey(site.getObjectType(), site.getName());
-   }
+    protected SiteKey getSiteKey(Site site) {
+        return getSiteKey(site.getObjectType(), site.getName());
+    }
 }

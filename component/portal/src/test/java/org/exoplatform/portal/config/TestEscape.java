@@ -26,16 +26,14 @@ import org.exoplatform.portal.pom.config.Utils;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestEscape extends AbstractGateInTest
-{
+public class TestEscape extends AbstractGateInTest {
 
-   public void testQueryEscape()
-   {
-      assertEquals("\\%", Utils.queryEscape("%"));
-      assertEquals("''", Utils.queryEscape("'"));
-      assertEquals("\\\"", Utils.queryEscape("\""));
-      assertEquals("\\_", Utils.queryEscape("_"));
-      assertEquals("\\\\", Utils.queryEscape("\\"));
-   }
+    public void testQueryEscape() {
+        assertEquals("\\%", Utils.queryEscape("%"));
+        assertEquals("''", Utils.queryEscape("'"));
+        assertEquals("\\\"", Utils.queryEscape("\""));
+        assertEquals("\\_", Utils.queryEscape("_"));
+        assertEquals("\\\\", Utils.queryEscape("\\"));
+    }
 
 }

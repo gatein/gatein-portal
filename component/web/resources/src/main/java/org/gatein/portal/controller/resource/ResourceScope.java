@@ -22,19 +22,17 @@ package org.gatein.portal.controller.resource;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public enum ResourceScope
-{
+public enum ResourceScope {
 
-   SHARED, PORTAL, PORTLET, GROUP;
+    SHARED, PORTAL, PORTLET, GROUP;
 
-   /**
-    * Returns a new <code>ResourceId</code> scoped with this enum instance.
-    *
-    * @param name the name to wrap
-    * @return a new resource id
-    */
-   public ResourceId create(String name)
-   {
-      return new ResourceId(this, name);
-   }
+    /**
+     * Returns a new <code>ResourceId</code> scoped with this enum instance.
+     *
+     * @param name the name to wrap
+     * @return a new resource id
+     */
+    public ResourceId create(String name) {
+        return new ResourceId(this, name);
+    }
 }

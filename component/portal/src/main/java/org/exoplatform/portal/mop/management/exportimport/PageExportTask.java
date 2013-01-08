@@ -22,6 +22,12 @@
 
 package org.exoplatform.portal.mop.management.exportimport;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.SiteKey;
@@ -31,68 +37,52 @@ import org.exoplatform.portal.mop.page.PageService;
 import org.gatein.management.api.binding.Marshaller;
 import org.gatein.management.api.operation.model.ExportTask;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class PageExportTask extends AbstractExportTask implements ExportTask
-{
-   public static final String FILE = "pages.xml";
+public class PageExportTask extends AbstractExportTask implements ExportTask {
+    public static final String FILE = "pages.xml";
 
-   private final DataStorage dataStorage;
-   private final PageService pageService;
-   private final Marshaller<Page.PageSet> marshaller;
-   private final List<String> pageNames;
+    private final DataStorage dataStorage;
+    private final PageService pageService;
+    private final Marshaller<Page.PageSet> marshaller;
+    private final List<String> pageNames;
 
-   public PageExportTask(SiteKey siteKey, DataStorage dataStorage, PageService pageService, Marshaller<Page.PageSet> marshaller)
-   {
-      super(siteKey);
-      this.dataStorage = dataStorage;
-      this.pageService = pageService;
-      this.marshaller = marshaller;
-      pageNames = new ArrayList<String>();
-   }
+    public PageExportTask(SiteKey siteKey, DataStorage dataStorage, PageService pageService, Marshaller<Page.PageSet> marshaller) {
+        super(siteKey);
+        this.dataStorage = dataStorage;
+        this.pageService = pageService;
+        this.marshaller = marshaller;
+        pageNames = new ArrayList<String>();
+    }
 
-   @Override
-   public void export(OutputStream outputStream) throws IOException
-   {
-      Page.PageSet pages = new Page.PageSet();
-      pages.setPages(new ArrayList<Page>(pageNames.size()));
-      for (String pageName : pageNames)
-      {
-         try
-         {
-            PageKey pageKey = new PageKey(siteKey, pageName);
-            pages.getPages().add(PageUtils.getPage(dataStorage, pageService, pageKey));
-         }
-         catch (Exception e)
-         {
-            throw new IOException("Could not retrieve page name " + pageName + " for site " + siteKey, e);
-         }
-      }
+    @Override
+    public void export(OutputStream outputStream) throws IOException {
+        Page.PageSet pages = new Page.PageSet();
+        pages.setPages(new ArrayList<Page>(pageNames.size()));
+        for (String pageName : pageNames) {
+            try {
+                PageKey pageKey = new PageKey(siteKey, pageName);
+                pages.getPages().add(PageUtils.getPage(dataStorage, pageService, pageKey));
+            } catch (Exception e) {
+                throw new IOException("Could not retrieve page name " + pageName + " for site " + siteKey, e);
+            }
+        }
 
-      marshaller.marshal(pages, outputStream);
-   }
+        marshaller.marshal(pages, outputStream);
+    }
 
-   @Override
-   protected String getXmlFileName()
-   {
-      return FILE;
-   }
+    @Override
+    protected String getXmlFileName() {
+        return FILE;
+    }
 
-   public void addPageName(String pageName)
-   {
-      pageNames.add(pageName);
-   }
+    public void addPageName(String pageName) {
+        pageNames.add(pageName);
+    }
 
-   public List<String> getPageNames()
-   {
-      return Collections.unmodifiableList(pageNames);
-   }
+    public List<String> getPageNames() {
+        return Collections.unmodifiableList(pageNames);
+    }
 }

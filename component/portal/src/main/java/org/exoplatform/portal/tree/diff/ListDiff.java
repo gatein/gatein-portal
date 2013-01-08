@@ -21,39 +21,40 @@ package org.exoplatform.portal.tree.diff;
 
 import java.util.Comparator;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class ListDiff<L1, L2, E> {
 
-   /** . */
-   final Comparator<E> comparator;
+    /** . */
+    final Comparator<E> comparator;
 
-   /** . */
-   final ListAdapter<L1, E> adapter1;
+    /** . */
+    final ListAdapter<L1, E> adapter1;
 
-   /** . */
-   final ListAdapter<L2, E> adapter2;
+    /** . */
+    final ListAdapter<L2, E> adapter2;
 
-   public ListDiff(ListAdapter<L1, E> adapter1, ListAdapter<L2, E> adapter2, Comparator<E> comparator) {
-      this.adapter1 = adapter1;
-      this.adapter2 = adapter2;
-      this.comparator = comparator;
-   }
+    public ListDiff(ListAdapter<L1, E> adapter1, ListAdapter<L2, E> adapter2, Comparator<E> comparator) {
+        this.adapter1 = adapter1;
+        this.adapter2 = adapter2;
+        this.comparator = comparator;
+    }
 
-   public ListDiff(ListAdapter<L1, E> adapter1, ListAdapter<L2, E> adapter2) {
-      this(adapter1, adapter2, null);
-   }
+    public ListDiff(ListAdapter<L1, E> adapter1, ListAdapter<L2, E> adapter2) {
+        this(adapter1, adapter2, null);
+    }
 
-   boolean equals(E e1, E e2) {
-      if (comparator == null) {
-         return e1.equals(e2);
-      } else {
-         return comparator.compare(e1, e2) == 0;
-      }
-   }
+    boolean equals(E e1, E e2) {
+        if (comparator == null) {
+            return e1.equals(e2);
+        } else {
+            return comparator.compare(e1, e2) == 0;
+        }
+    }
 
-   public final ListChangeIterator<L1, L2, E> iterator(L1 elements1, L2 elements2) {
-      return new ListChangeIterator<L1, L2, E>(this, elements1, elements2);
-   }
+    public final ListChangeIterator<L1, L2, E> iterator(L1 elements1, L2 elements2) {
+        return new ListChangeIterator<L1, L2, E>(this, elements1, elements2);
+    }
 }

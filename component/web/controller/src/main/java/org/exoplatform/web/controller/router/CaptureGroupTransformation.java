@@ -19,125 +19,96 @@
 
 package org.exoplatform.web.controller.router;
 
+import java.util.LinkedList;
+
 import org.exoplatform.web.controller.regexp.GroupType;
 import org.exoplatform.web.controller.regexp.RENode;
 import org.exoplatform.web.controller.regexp.REVisitor;
-
-import java.util.LinkedList;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class CaptureGroupTransformation extends REVisitor<RuntimeException>
-{
+class CaptureGroupTransformation extends REVisitor<RuntimeException> {
 
-   /** . */
-   private int depth;
+    /** . */
+    private int depth;
 
-   /** Top level group per disjunction. */
-   private LinkedList<RENode.Group> groups;
+    /** Top level group per disjunction. */
+    private LinkedList<RENode.Group> groups;
 
-   CaptureGroupTransformation()
-   {
-      this.depth = 0;
-      this.groups = new LinkedList<RENode.Group>();
-   }
+    CaptureGroupTransformation() {
+        this.depth = 0;
+        this.groups = new LinkedList<RENode.Group>();
+    }
 
-   @Override
-   protected void visit(RENode.Disjunction disjunction) throws RuntimeException
-   {
-      if (disjunction.hasAlternative())
-      {
-         RENode.Alternative alternative = disjunction.getAlternative();
-         if (alternative != null)
-         {
-            alternative.accept(this);
+    @Override
+    protected void visit(RENode.Disjunction disjunction) throws RuntimeException {
+        if (disjunction.hasAlternative()) {
+            RENode.Alternative alternative = disjunction.getAlternative();
+            if (alternative != null) {
+                alternative.accept(this);
 
-            //
-            if (depth == 0)
-            {
-               if (groups.size() == 1 && groups.get(0).getQuantifier() == null)
-               {
-                  // Do nothing
-               }
-               else
-               {
-                  // We make all the top level groups non capturing
-                  for (RENode.Group group : groups)
-                  {
-                     group.setType(GroupType.NON_CAPTURING_GROUP);
-                  }
+                //
+                if (depth == 0) {
+                    if (groups.size() == 1 && groups.get(0).getQuantifier() == null) {
+                        // Do nothing
+                    } else {
+                        // We make all the top level groups non capturing
+                        for (RENode.Group group : groups) {
+                            group.setType(GroupType.NON_CAPTURING_GROUP);
+                        }
 
-                  // We add a capturing group for the disjunction
-                  RENode.Disjunction disjunction1 = new RENode.Disjunction((RENode.Alternative)null);
-                  RENode.Group group = new RENode.Group(disjunction1, GroupType.CAPTURING_GROUP);
-                  RENode.Alternative alternative1 = new RENode.Alternative(group);
-                  alternative.replaceBy(alternative1);
-                  disjunction1.setAlternative(alternative);
-               }
+                        // We add a capturing group for the disjunction
+                        RENode.Disjunction disjunction1 = new RENode.Disjunction((RENode.Alternative) null);
+                        RENode.Group group = new RENode.Group(disjunction1, GroupType.CAPTURING_GROUP);
+                        RENode.Alternative alternative1 = new RENode.Alternative(group);
+                        alternative.replaceBy(alternative1);
+                        disjunction1.setAlternative(alternative);
+                    }
 
-               //
-               groups.clear();
+                    //
+                    groups.clear();
+                }
+            } else {
+                if (depth == 0) {
+                    disjunction.setAlternative(new RENode.Alternative(new RENode.Group(new RENode.Disjunction(),
+                            GroupType.CAPTURING_GROUP)));
+                }
             }
-         }
-         else
-         {
-            if (depth == 0)
-            {
-               disjunction.setAlternative(
-                  new RENode.Alternative(
-                     new RENode.Group(
-                        new RENode.Disjunction(), GroupType.CAPTURING_GROUP)));
+        }
+
+        //
+        if (disjunction.hasNext()) {
+            RENode.Disjunction next = disjunction.getNext();
+            if (next != null) {
+                next.accept(this);
+            } else {
+                if (depth == 0) {
+                    disjunction.setNext(new RENode.Disjunction(new RENode.Alternative(new RENode.Group(
+                            new RENode.Disjunction(), GroupType.CAPTURING_GROUP))));
+                }
             }
-         }
-      }
+        }
+    }
 
-      //
-      if (disjunction.hasNext())
-      {
-         RENode.Disjunction next = disjunction.getNext();
-         if (next != null)
-         {
-            next.accept(this);
-         }
-         else
-         {
-            if (depth == 0)
-            {
-               disjunction.setNext(
-                  new RENode.Disjunction(
-                     new RENode.Alternative(
-                        new RENode.Group(
-                           new RENode.Disjunction(), GroupType.CAPTURING_GROUP))));
+    @Override
+    protected void visit(RENode.Group expr) throws RuntimeException {
+        if (depth == 0) {
+            // We collect all capturing top level capturing groups
+            if (expr.getType() == GroupType.CAPTURING_GROUP) {
+                groups.add(expr);
             }
-         }
-      }
-   }
+        } else {
+            // We make nested capturing group as non capturing
+            if (expr.getType() == GroupType.CAPTURING_GROUP) {
+                expr.setType(GroupType.NON_CAPTURING_GROUP);
+            }
+        }
 
-   @Override
-   protected void visit(RENode.Group expr) throws RuntimeException
-   {
-      if (depth == 0)
-      {
-         // We collect all capturing top level capturing groups
-         if (expr.getType() == GroupType.CAPTURING_GROUP)
-         {
-            groups.add(expr);
-         }
-      }
-      else
-      {
-         // We make nested capturing group as non capturing
-         if (expr.getType() == GroupType.CAPTURING_GROUP)
-         {
-            expr.setType(GroupType.NON_CAPTURING_GROUP);
-         }
-      }
-
-      //
-      depth++;
-      super.visit(expr);
-      depth--;
-   }
+        //
+        depth++;
+        super.visit(expr);
+        depth--;
+    }
 }

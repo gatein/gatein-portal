@@ -19,32 +19,31 @@
 
 package org.exoplatform.portal.mop;
 
+import java.util.Date;
+
 import org.chromattic.api.annotations.MixinType;
 import org.chromattic.api.annotations.Property;
-
-import java.util.Date;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 @MixinType(name = "gtn:visible")
-public abstract class Visible
-{
+public abstract class Visible {
 
-   @Property(name = "gtn:startpublicationdate")
-   public abstract Date getStartPublicationDate();
+    @Property(name = "gtn:startpublicationdate")
+    public abstract Date getStartPublicationDate();
 
-   public abstract void setStartPublicationDate(Date date);
+    public abstract void setStartPublicationDate(Date date);
 
-   @Property(name = "gtn:endpublicationdate")
-   public abstract Date getEndPublicationDate();
+    @Property(name = "gtn:endpublicationdate")
+    public abstract Date getEndPublicationDate();
 
-   public abstract void setEndPublicationDate(Date date);
+    public abstract void setEndPublicationDate(Date date);
 
-   @Property(name = "gtn:visibility")
-   public abstract Visibility getVisibility();
+    @Property(name = "gtn:visibility")
+    public abstract Visibility getVisibility();
 
-   public abstract void setVisibility(Visibility visibility);
+    public abstract void setVisibility(Visibility visibility);
 
 }

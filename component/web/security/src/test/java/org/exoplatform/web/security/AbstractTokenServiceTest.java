@@ -18,10 +18,6 @@
  */
 package org.exoplatform.web.security;
 
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-
 import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.web.security.security.AbstractTokenService;
 
@@ -31,15 +27,14 @@ import org.exoplatform.web.security.security.AbstractTokenService;
  *
  */
 
-public abstract class AbstractTokenServiceTest<S extends AbstractTokenService> extends AbstractKernelTest
-{
-   protected S service;
-   
-   public abstract void testGetToken() throws Exception;
-   
-   public abstract void testGetAllToken() throws Exception;
+public abstract class AbstractTokenServiceTest<S extends AbstractTokenService> extends AbstractKernelTest {
+    protected S service;
 
-   public abstract void testSize() throws Exception;
-   
-   public abstract void testDeleteToken() throws Exception;
+    public abstract void testGetToken() throws Exception;
+
+    public abstract void testGetAllToken() throws Exception;
+
+    public abstract void testSize() throws Exception;
+
+    public abstract void testDeleteToken() throws Exception;
 }

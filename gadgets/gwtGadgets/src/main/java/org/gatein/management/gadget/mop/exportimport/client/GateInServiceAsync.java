@@ -22,9 +22,9 @@
 
 package org.gatein.management.gadget.mop.exportimport.client;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
-
 import java.util.List;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
 
 /**
  * {@code GateInServiceAsync}
@@ -34,23 +34,22 @@ import java.util.List;
  * @author <a href="mailto:nbenothm@redhat.com">Nabil Benothman</a>
  * @version 1.0
  */
-public interface GateInServiceAsync
-{
+public interface GateInServiceAsync {
 
-   /**
-    * Update the Tree item asynchronously
-    *
-    * @param portalContainerName name of portal container
-    * @param item                The item to be updated
-    * @param asyncCallback       asynchronous callback
-    */
-   public void updateItem(String portalContainerName, TreeNode item, AsyncCallback<TreeNode> asyncCallback);
+    /**
+     * Update the Tree item asynchronously
+     *
+     * @param portalContainerName name of portal container
+     * @param item The item to be updated
+     * @param asyncCallback asynchronous callback
+     */
+    void updateItem(String portalContainerName, TreeNode item, AsyncCallback<TreeNode> asyncCallback);
 
-   /**
-    * Retrieve asynchronously the list of root nodes
-    *
-    * @param portalContainerName The portal container name
-    * @param asyncCallback       asynchronous callback
-    */
-   public void getRootNodes(String portalContainerName, AsyncCallback<List<TreeNode>> asyncCallback);
+    /**
+     * Retrieve asynchronously the list of root nodes
+     *
+     * @param portalContainerName The portal container name
+     * @param asyncCallback asynchronous callback
+     */
+    void getRootNodes(String portalContainerName, AsyncCallback<List<TreeNode>> asyncCallback);
 }

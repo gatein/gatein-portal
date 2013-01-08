@@ -20,35 +20,31 @@
 package org.exoplatform.commons.serialization.converter;
 
 import junit.framework.AssertionFailedError;
+
 import org.exoplatform.commons.serialization.api.TypeConverter;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class A3 extends TypeConverter<A1, A2>
-{
+public class A3 extends TypeConverter<A1, A2> {
 
-   /** . */
-   public static TypeConverter<A1, A2> delegate;
+    /** . */
+    public static TypeConverter<A1, A2> delegate;
 
-   @Override
-   public A2 write(A1 input) throws Exception
-   {
-      if (delegate == null)
-      {
-         throw new AssertionFailedError();
-      }
-      return delegate.write(input);
-   }
+    @Override
+    public A2 write(A1 input) throws Exception {
+        if (delegate == null) {
+            throw new AssertionFailedError();
+        }
+        return delegate.write(input);
+    }
 
-   @Override
-   public A1 read(A2 output) throws Exception
-   {
-      if (delegate == null)
-      {
-         throw new AssertionFailedError();
-      }
-      return delegate.read(output);
-   }
+    @Override
+    public A1 read(A2 output) throws Exception {
+        if (delegate == null) {
+            throw new AssertionFailedError();
+        }
+        return delegate.read(output);
+    }
 }

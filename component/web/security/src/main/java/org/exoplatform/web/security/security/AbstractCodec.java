@@ -22,21 +22,18 @@ import org.exoplatform.container.component.BaseComponentPlugin;
 
 /**
  * Abstract codec used to encode/decode password stored/loaded on/from token entry
- * 
- * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
- * Nov 19, 2010
+ *
+ * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a> Nov 19, 2010
  */
 
-public abstract class AbstractCodec extends BaseComponentPlugin
-{
+public abstract class AbstractCodec extends BaseComponentPlugin {
 
-   public String getName()
-   {
-      return this.getClass().toString();
-   }
-   
-   public abstract String encode(String plainInput);
-   
-   public abstract String decode(String encodedInput);
-   
+    public String getName() {
+        return this.getClass().toString();
+    }
+
+    public abstract String encode(String plainInput);
+
+    public abstract String decode(String encodedInput);
+
 }

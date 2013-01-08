@@ -22,9 +22,8 @@ package org.exoplatform.portal.pom.config;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface TaskExecutor
-{
+public interface TaskExecutor {
 
-   <V> V execute(POMSession session, POMTask<V> task) throws Exception;
+    <V> V execute(POMSession session, POMTask<V> task) throws Exception;
 
 }

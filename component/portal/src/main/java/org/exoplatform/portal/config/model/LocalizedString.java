@@ -21,23 +21,20 @@ package org.exoplatform.portal.config.model;
 
 import java.util.Locale;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class LocalizedString extends LocalizedValue<String>
-{
+public class LocalizedString extends LocalizedValue<String> {
 
-   public LocalizedString()
-   {
-   }
+    public LocalizedString() {
+    }
 
-   public LocalizedString(String value)
-   {
-      super(value);
-   }
+    public LocalizedString(String value) {
+        super(value);
+    }
 
-   public LocalizedString(String value, Locale lang)
-   {
-      super(value, lang);
-   }
+    public LocalizedString(String value, Locale lang) {
+        super(value, lang);
+    }
 }

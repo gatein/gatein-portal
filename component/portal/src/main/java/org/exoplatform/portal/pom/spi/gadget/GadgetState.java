@@ -28,11 +28,10 @@ import org.gatein.mop.core.api.workspace.content.AbstractCustomizationState;
  * @version $Revision$
  */
 @PrimaryType(name = "mop:gadget")
-public abstract class GadgetState extends AbstractCustomizationState
-{
-   @Property(name = "mop:prefs")
-   public abstract String getUserPrefs();
+public abstract class GadgetState extends AbstractCustomizationState {
+    @Property(name = "mop:prefs")
+    public abstract String getUserPrefs();
 
-   public abstract void setUserPrefs(String userPrefs);
+    public abstract void setUserPrefs(String userPrefs);
 
 }

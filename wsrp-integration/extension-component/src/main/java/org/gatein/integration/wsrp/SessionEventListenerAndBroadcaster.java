@@ -23,6 +23,12 @@
 
 package org.gatein.integration.wsrp;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpSessionEvent;
+
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
@@ -30,80 +36,61 @@ import org.gatein.wsrp.api.session.SessionEvent;
 import org.gatein.wsrp.api.session.SessionEventBroadcaster;
 import org.gatein.wsrp.api.session.SessionEventListener;
 
-import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class SessionEventListenerAndBroadcaster extends Listener<PortalContainer, HttpSessionEvent> implements SessionEventBroadcaster
-{
-   private Map<String, SessionEventListener> listeners = new ConcurrentHashMap<String, SessionEventListener>();
-   private static final String SESSION_CREATED = "org.exoplatform.web.GenericHttpListener.sessionCreated";
-   private static final String SESSION_DESTROYED = "org.exoplatform.web.GenericHttpListener.sessionDestroyed";
+public class SessionEventListenerAndBroadcaster extends Listener<PortalContainer, HttpSessionEvent> implements
+        SessionEventBroadcaster {
+    private Map<String, SessionEventListener> listeners = new ConcurrentHashMap<String, SessionEventListener>();
+    private static final String SESSION_CREATED = "org.exoplatform.web.GenericHttpListener.sessionCreated";
+    private static final String SESSION_DESTROYED = "org.exoplatform.web.GenericHttpListener.sessionDestroyed";
 
-   public void registerListener(String listenerId, SessionEventListener listener)
-   {
-      listeners.put(listenerId, listener);
-   }
+    public void registerListener(String listenerId, SessionEventListener listener) {
+        listeners.put(listenerId, listener);
+    }
 
-   public void unregisterListener(String listenerId)
-   {
-      listeners.remove(listenerId);
-   }
+    public void unregisterListener(String listenerId) {
+        listeners.remove(listenerId);
+    }
 
-   public void notifyListenersOf(SessionEvent event)
-   {
-      for (SessionEventListener listener : listeners.values())
-      {
-         listener.onSessionEvent(event);
-      }
-   }
+    public void notifyListenersOf(SessionEvent event) {
+        for (SessionEventListener listener : listeners.values()) {
+            listener.onSessionEvent(event);
+        }
+    }
 
-   @Override
-   public void onEvent(Event<PortalContainer, HttpSessionEvent> event) throws Exception
-   {
-      String eventName = event.getEventName();
-      SessionEvent.SessionEventType eventType;
-      if (SESSION_CREATED.equals(eventName))
-      {
-         eventType = SessionEvent.SessionEventType.SESSION_CREATED;
-      }
-      else if (SESSION_DESTROYED.equals(eventName))
-      {
-         eventType = SessionEvent.SessionEventType.SESSION_DESTROYED;
-      }
-      else
-      {
-         // do nothing
-         return;
-      }
+    @Override
+    public void onEvent(Event<PortalContainer, HttpSessionEvent> event) throws Exception {
+        String eventName = event.getEventName();
+        SessionEvent.SessionEventType eventType;
+        if (SESSION_CREATED.equals(eventName)) {
+            eventType = SessionEvent.SessionEventType.SESSION_CREATED;
+        } else if (SESSION_DESTROYED.equals(eventName)) {
+            eventType = SessionEvent.SessionEventType.SESSION_DESTROYED;
+        } else {
+            // do nothing
+            return;
+        }
 
-      notifyListenersOf(new SimpleSessionEvent(eventType, event.getData().getSession()));
-   }
+        notifyListenersOf(new SimpleSessionEvent(eventType, event.getData().getSession()));
+    }
 
-   private static class SimpleSessionEvent implements SessionEvent
-   {
-      private SessionEventType eventType;
-      private HttpSession session;
+    private static class SimpleSessionEvent implements SessionEvent {
+        private SessionEventType eventType;
+        private HttpSession session;
 
-      private SimpleSessionEvent(SessionEventType eventType, HttpSession session)
-      {
-         this.eventType = eventType;
-         this.session = session;
-      }
+        private SimpleSessionEvent(SessionEventType eventType, HttpSession session) {
+            this.eventType = eventType;
+            this.session = session;
+        }
 
-      public SessionEventType getType()
-      {
-         return eventType;
-      }
+        public SessionEventType getType() {
+            return eventType;
+        }
 
-      public HttpSession getSession()
-      {
-         return session;
-      }
-   }
+        public HttpSession getSession() {
+            return session;
+        }
+    }
 }

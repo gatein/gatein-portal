@@ -25,55 +25,47 @@ import org.exoplatform.component.test.BaseGateInTest;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestRegExpAnalyser extends BaseGateInTest
-{
+public class TestRegExpAnalyser extends BaseGateInTest {
 
-   private void assertAnalyse(String expectedPattern, String pattern)
-   {
-      try
-      {
-         RENode.Disjunction disjunction = new REParser(pattern).parseDisjunction();
-         assertEquals(expectedPattern, RERenderer.render(disjunction, new StringBuilder()).toString());
-      }
-      catch (Exception e)
-      {
-         fail(e);
-      }
-   }
+    private void assertAnalyse(String expectedPattern, String pattern) {
+        try {
+            RENode.Disjunction disjunction = new REParser(pattern).parseDisjunction();
+            assertEquals(expectedPattern, RERenderer.render(disjunction, new StringBuilder()).toString());
+        } catch (Exception e) {
+            fail(e);
+        }
+    }
 
-   public void testCharacterClass()
-   {
-      assertAnalyse("[a]", "[a]");
-      assertAnalyse("[ab]", "[ab]");
-      assertAnalyse("[ab]", "[a[b]]");
-      assertAnalyse("[abc]", "[abc]");
-      assertAnalyse("[abc]", "[[a]bc]");
-      assertAnalyse("[abc]", "[a[b]c]");
-      assertAnalyse("[abc]", "[ab[c]]");
-      assertAnalyse("[abc]", "[[ab]c]");
-      assertAnalyse("[abc]", "[a[bc]]");
-      assertAnalyse("[abc]", "[[abc]]");
-      assertAnalyse("[^a]", "[^a]");
-   }
+    public void testCharacterClass() {
+        assertAnalyse("[a]", "[a]");
+        assertAnalyse("[ab]", "[ab]");
+        assertAnalyse("[ab]", "[a[b]]");
+        assertAnalyse("[abc]", "[abc]");
+        assertAnalyse("[abc]", "[[a]bc]");
+        assertAnalyse("[abc]", "[a[b]c]");
+        assertAnalyse("[abc]", "[ab[c]]");
+        assertAnalyse("[abc]", "[[ab]c]");
+        assertAnalyse("[abc]", "[a[bc]]");
+        assertAnalyse("[abc]", "[[abc]]");
+        assertAnalyse("[^a]", "[^a]");
+    }
 
-   public void testGroupContainer()
-   {
-      assertAnalyse("(a)", "(a)");
-      assertAnalyse("(a(?:b))", "(a(?:b))");
-      assertAnalyse("(?:a(b))", "(?:a(b))");
-      assertAnalyse("(a)(?:b)", "(a)(?:b)");
-      assertAnalyse("(a(b))", "(a(b))");
-      assertAnalyse("(a)(b)", "(a)(b)");
+    public void testGroupContainer() {
+        assertAnalyse("(a)", "(a)");
+        assertAnalyse("(a(?:b))", "(a(?:b))");
+        assertAnalyse("(?:a(b))", "(?:a(b))");
+        assertAnalyse("(a)(?:b)", "(a)(?:b)");
+        assertAnalyse("(a(b))", "(a(b))");
+        assertAnalyse("(a)(b)", "(a)(b)");
 
-      //
-      assertAnalyse("(?=a)", "(?=a)");
-      assertAnalyse("(?!a)", "(?!a)");
-      assertAnalyse("(?<=a)", "(?<=a)");
-      assertAnalyse("(?<!a)", "(?<!a)");
-   }
+        //
+        assertAnalyse("(?=a)", "(?=a)");
+        assertAnalyse("(?!a)", "(?!a)");
+        assertAnalyse("(?<=a)", "(?<=a)");
+        assertAnalyse("(?<!a)", "(?<!a)");
+    }
 
-   public void testBilto()
-   {
-      assertAnalyse("[a]+", "[a]+");
-   }
+    public void testBilto() {
+        assertAnalyse("[a]+", "[a]+");
+    }
 }

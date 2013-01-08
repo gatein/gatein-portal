@@ -25,34 +25,29 @@ import org.exoplatform.commons.serialization.api.TypeConverter;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ConvertedTypeMetaData extends TypeMetaData
-{
+public class ConvertedTypeMetaData extends TypeMetaData {
 
-   /** . */
-   private final Class<? extends TypeConverter<?, ?>> converterClass;
+    /** . */
+    private final Class<? extends TypeConverter<?, ?>> converterClass;
 
-   public ConvertedTypeMetaData(String name, Class<? extends TypeConverter<?, ?>> converterClass)
-   {
-      super(name);
+    public ConvertedTypeMetaData(String name, Class<? extends TypeConverter<?, ?>> converterClass) {
+        super(name);
 
-      //
-      if (converterClass == null)
-      {
-         throw new NullPointerException();
-      }
+        //
+        if (converterClass == null) {
+            throw new NullPointerException();
+        }
 
-      //
-      this.converterClass = converterClass;
-   }
+        //
+        this.converterClass = converterClass;
+    }
 
-   public Class<? extends TypeConverter<?, ?>> getConverterClass()
-   {
-      return converterClass;
-   }
+    public Class<? extends TypeConverter<?, ?>> getConverterClass() {
+        return converterClass;
+    }
 
-   @Override
-   public String toString()
-   {
-      return "ConvertedTypeMetaData[name=" + name + ",converterClass=" + converterClass + "]";
-   }
+    @Override
+    public String toString() {
+        return "ConvertedTypeMetaData[name=" + name + ",converterClass=" + converterClass + "]";
+    }
 }

@@ -22,26 +22,19 @@ package org.gatein.portal.controller.resource.script;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public enum FetchMode
-{
+public enum FetchMode {
 
-   ON_LOAD,
+    ON_LOAD,
 
-   IMMEDIATE;
+    IMMEDIATE;
 
-   public static FetchMode decode(String value)
-   {
-      if ("immediate".equals(value))
-      {
-         return FetchMode.IMMEDIATE;
-      }
-      else if ("on-load".equals(value))
-      {
-         return FetchMode.ON_LOAD;
-      }
-      else
-      {
-         return null;
-      }
-   }
+    public static FetchMode decode(String value) {
+        if ("immediate".equals(value)) {
+            return FetchMode.IMMEDIATE;
+        } else if ("on-load".equals(value)) {
+            return FetchMode.ON_LOAD;
+        } else {
+            return null;
+        }
+    }
 }

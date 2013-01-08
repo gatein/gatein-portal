@@ -23,30 +23,25 @@ import org.exoplatform.webui.form.UIFormInput;
  * @author <a href="mailto:haint@exoplatform.com">Nguyen Thanh Hai</a>
  * @datOct 11, 2011
  *
- * Validates whether this value is composed of letters or spaces
+ *         Validates whether this value is composed of letters or spaces
  */
 @Serialized
-public class NaturalLanguageValidator extends AbstractValidator
-{
+public class NaturalLanguageValidator extends AbstractValidator {
 
-   @Override
-   protected String getMessageLocalizationKey()
-   {
-      return "NaturalLanguageValidator.msg.Invalid-char";
-   }
+    @Override
+    protected String getMessageLocalizationKey() {
+        return "NaturalLanguageValidator.msg.Invalid-char";
+    }
 
-   @Override
-   protected boolean isValid(String value, UIFormInput uiInput)
-   {
-      for (int i = 0; i < value.length(); i++)
-      {
-         char c = value.charAt(i);
-         if (Character.isLetter(c) || Character.isSpaceChar(c))
-         {
-            continue;
-         }
-         return false;
-      }
-      return true;
-   }
+    @Override
+    protected boolean isValid(String value, UIFormInput uiInput) {
+        for (int i = 0; i < value.length(); i++) {
+            char c = value.charAt(i);
+            if (Character.isLetter(c) || Character.isSpaceChar(c)) {
+                continue;
+            }
+            return false;
+        }
+        return true;
+    }
 }

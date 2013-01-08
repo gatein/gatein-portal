@@ -2,70 +2,61 @@ package org.exoplatform.sample.webui.component.bean;
 
 import java.util.Date;
 
-public  class User
-{
-   private String userName;
 
-   private String password;
+public class User {
+    private String userName;
 
-   private String favoriteColor;
+    private String password;
 
-   private String position;
+    private String favoriteColor;
 
-   private boolean receiveEmail;
+    private String position;
 
-   private String gender;
+    private boolean receiveEmail;
 
-   private Date dateOfBirth;
+    private String gender;
 
-   private String description;
+    private Date dateOfBirth;
 
-   public User(String userName, String favoriteColor, String position, Date dateOfBirth)
-   {
-      super();
-      this.userName = userName;
-      this.favoriteColor = favoriteColor;
-      this.position = position;
-      this.dateOfBirth = dateOfBirth;
-   }
+    private String description;
 
-   public String getUserName()
-   {
-      return userName;
-   }
+    public User(String userName, String favoriteColor, String position, Date dateOfBirth) {
+        super();
+        this.userName = userName;
+        this.favoriteColor = favoriteColor;
+        this.position = position;
+        this.dateOfBirth = dateOfBirth;
+    }
 
-   public void setUserName(String userName)
-   {
-      this.userName = userName;
-   }
+    public String getUserName() {
+        return userName;
+    }
 
-   public String getFavoriteColor()
-   {
-      return favoriteColor;
-   }
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
 
-   public void setFavoriteColor(String favoriteColor)
-   {
-      this.favoriteColor = favoriteColor;
-   }
+    public String getFavoriteColor() {
+        return favoriteColor;
+    }
 
-   public String getPosition()
-   {
-      return position;
-   }
+    public void setFavoriteColor(String favoriteColor) {
+        this.favoriteColor = favoriteColor;
+    }
 
-   public void setPosition(String position)
-   {
-      this.position = position;
-   }
+    public String getPosition() {
+        return position;
+    }
 
-   public Date getDateOfBirth()
-   {
-      return dateOfBirth;
-   }
+    public void setPosition(String position) {
+        this.position = position;
+    }
 
-   public void setDateOfBirth(Date dateOfBirth)
-   {
-      this.dateOfBirth = dateOfBirth;
-   }
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 }

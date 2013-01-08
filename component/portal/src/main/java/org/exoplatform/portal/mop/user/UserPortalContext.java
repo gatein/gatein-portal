@@ -22,28 +22,28 @@ package org.exoplatform.portal.mop.user;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+
 /**
  * The context of a user within its portal.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface UserPortalContext
-{
+public interface UserPortalContext {
 
-   /**
-    * Provide an opportunity to use a resource bundle for a specified navigation. It no such bundle can be found then null
-    * can be returned.
-    *
-    * @param navigation the navigation that will be localized
-    * @return the resource bundle to use
-    */
-   ResourceBundle getBundle(UserNavigation navigation);
+    /**
+     * Provide an opportunity to use a resource bundle for a specified navigation. It no such bundle can be found then null can
+     * be returned.
+     *
+     * @param navigation the navigation that will be localized
+     * @return the resource bundle to use
+     */
+    ResourceBundle getBundle(UserNavigation navigation);
 
-   /**
-    * Returns the user locale.
-    *
-    * @return the user locale
-    */
-   Locale getUserLocale();
+    /**
+     * Returns the user locale.
+     *
+     * @return the user locale
+     */
+    Locale getUserLocale();
 }

@@ -30,19 +30,17 @@ import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class RedirectPortlet extends GenericPortlet
-{
+public class RedirectPortlet extends GenericPortlet {
 
-   @Override
-   protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException
-   {
-      PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/redirect.jsp");
-      prd.include(request, response);
-   }
+    @Override
+    protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+        PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/redirect.jsp");
+        prd.include(request, response);
+    }
 
 }
-

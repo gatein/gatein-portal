@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.component</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
+    <version>3.6.0.MO1-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -33,20 +33,9 @@
   <description>Internationalization and localization resources</description>
 
   <dependencies>
-    <dependency>
-      <groupId>org.exoplatform.kernel</groupId>
-      <artifactId>exo.kernel.container</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.exoplatform.kernel</groupId>
-      <artifactId>exo.kernel.component.cache</artifactId>
-    </dependency>
+   
 
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
+    
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.component.common</artifactId>

@@ -24,17 +24,16 @@ package org.exoplatform.web.url;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public interface URLContext
-{
+public interface URLContext {
 
-   /**
-    * Renders the url.
-    *
-    * @param url the url to render
-    * @param <R> the url resource type
-    * @param <U> the url generic type
-    * @return the rendered url
-    */
-   <R, U extends PortalURL<R, U>> String render(U url);
+    /**
+     * Renders the url.
+     *
+     * @param url the url to render
+     * @param <R> the url resource type
+     * @param <U> the url generic type
+     * @return the rendered url
+     */
+    <R, U extends PortalURL<R, U>> String render(U url);
 
 }

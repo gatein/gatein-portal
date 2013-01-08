@@ -23,102 +23,84 @@
 
 package org.gatein.common.classloader;
 
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
-
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
 
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
+
 /**
- * {@link ClassLoader}, which delegates work to list of delegates (Delegating classloaders), which are provided from constructor.
- * Order of delegates is important (First has biggest priority)
+ * {@link ClassLoader}, which delegates work to list of delegates (Delegating classloaders), which are provided from
+ * constructor. Order of delegates is important (First has biggest priority)
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class DelegatingClassLoader extends ClassLoader
-{
-   private final List<ClassLoader> delegates;
-   private static final Logger log = LoggerFactory.getLogger(DelegatingClassLoader.class);
+public class DelegatingClassLoader extends ClassLoader {
+    private final List<ClassLoader> delegates;
+    private static final Logger log = LoggerFactory.getLogger(DelegatingClassLoader.class);
 
-   public DelegatingClassLoader(ClassLoader... delegates)
-   {
-      super(Thread.currentThread().getContextClassLoader());
+    public DelegatingClassLoader(ClassLoader... delegates) {
+        super(Thread.currentThread().getContextClassLoader());
 
-      if (delegates == null || delegates.length == 0)
-      {
-         throw new IllegalArgumentException("Some delegating classloaders needs to be provided");
-      }
+        if (delegates == null || delegates.length == 0) {
+            throw new IllegalArgumentException("Some delegating classloaders needs to be provided");
+        }
 
-      this.delegates = Arrays.asList(delegates);
-   }
+        this.delegates = Arrays.asList(delegates);
+    }
 
-   @Override
-   public Class<?> loadClass(String name) throws ClassNotFoundException
-   {
-      Class cl;
+    @Override
+    public Class<?> loadClass(String name) throws ClassNotFoundException {
+        Class cl;
 
-      for (ClassLoader delegate : delegates)
-      {
-         try
-         {
-            cl = delegate.loadClass(name);
-            if (cl != null)
-            {
-               return cl;
+        for (ClassLoader delegate : delegates) {
+            try {
+                cl = delegate.loadClass(name);
+                if (cl != null) {
+                    return cl;
+                }
+            } catch (ClassNotFoundException ignore) {
             }
-         }
-         catch (ClassNotFoundException ignore)
-         {
-         }
 
-         if (log.isTraceEnabled())
-         {
-            log.trace("Class " + name + " not found with classloader: " + delegate + ". Trying other delegates");
-         }
-      }
+            if (log.isTraceEnabled()) {
+                log.trace("Class " + name + " not found with classloader: " + delegate + ". Trying other delegates");
+            }
+        }
 
-      throw new ClassNotFoundException("Class " + name + " not found with any of delegates " + delegates);
-   }
+        throw new ClassNotFoundException("Class " + name + " not found with any of delegates " + delegates);
+    }
 
-   @Override
-   public InputStream getResourceAsStream(String name)
-   {
-      for (ClassLoader delegate : delegates)
-      {
-         InputStream is = delegate.getResourceAsStream(name);
-         if (is != null)
-         {
-            return is;
-         }
+    @Override
+    public InputStream getResourceAsStream(String name) {
+        for (ClassLoader delegate : delegates) {
+            InputStream is = delegate.getResourceAsStream(name);
+            if (is != null) {
+                return is;
+            }
 
-         if (log.isTraceEnabled())
-         {
-            log.trace("Resource " + name + " not found with classloader: " + delegate + ". Trying other delegates");
-         }
-      }
+            if (log.isTraceEnabled()) {
+                log.trace("Resource " + name + " not found with classloader: " + delegate + ". Trying other delegates");
+            }
+        }
 
-      return null;
-   }
+        return null;
+    }
 
-   @Override
-   public URL getResource(String name)
-   {
-      for (ClassLoader delegate : delegates)
-      {
-         URL url = delegate.getResource(name);
-         if (url != null)
-         {
-            return url;
-         }
+    @Override
+    public URL getResource(String name) {
+        for (ClassLoader delegate : delegates) {
+            URL url = delegate.getResource(name);
+            if (url != null) {
+                return url;
+            }
 
-         if (log.isTraceEnabled())
-         {
-            log.trace("URL " + name + " not found with classloader: " + delegate + ". Trying other delegates");
-         }
-      }
+            if (log.isTraceEnabled()) {
+                log.trace("URL " + name + " not found with classloader: " + delegate + ". Trying other delegates");
+            }
+        }
 
-      return null;
-   }
+        return null;
+    }
 }

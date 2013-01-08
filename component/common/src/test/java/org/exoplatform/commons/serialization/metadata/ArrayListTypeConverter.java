@@ -19,25 +19,23 @@
 
 package org.exoplatform.commons.serialization.metadata;
 
-import org.exoplatform.commons.serialization.api.TypeConverter;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
+
+import org.exoplatform.commons.serialization.api.TypeConverter;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ArrayListTypeConverter extends TypeConverter<ArrayList, LinkedList>
-{
-   @Override
-   public LinkedList write(ArrayList input) throws Exception
-   {
-      throw new UnsupportedOperationException();
-   }
-   @Override
-   public ArrayList read(LinkedList output) throws Exception
-   {
-      throw new UnsupportedOperationException();
-   }
+public class ArrayListTypeConverter extends TypeConverter<ArrayList, LinkedList> {
+    @Override
+    public LinkedList write(ArrayList input) throws Exception {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public ArrayList read(LinkedList output) throws Exception {
+        throw new UnsupportedOperationException();
+    }
 }

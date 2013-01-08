@@ -24,6 +24,6 @@
 <!-- This context file is specific to JBoss AS. Tomcat specific file is in META-INF/context.xml -->
 <Context>
 
-  <Valve className="org.exoplatform.web.login.PortalClusteredSSOSupportValve" />
+  <Valve className="org.exoplatform.web.login.PortalClusteredSSOSupportValve"/>
 
 </Context>

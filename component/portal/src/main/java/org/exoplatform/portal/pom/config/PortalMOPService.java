@@ -32,28 +32,24 @@ import org.gatein.mop.core.api.content.ContentManagerRegistry;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PortalMOPService extends MOPService
-{
+public class PortalMOPService extends MOPService {
 
-   /** . */
-   private final Chromattic chromattic;
+    /** . */
+    private final Chromattic chromattic;
 
-   public PortalMOPService(Chromattic chromattic)
-   {
-      this.chromattic = chromattic;
-   }
+    public PortalMOPService(Chromattic chromattic) {
+        this.chromattic = chromattic;
+    }
 
-   @Override
-   protected Chromattic getChromattic()
-   {
-      return chromattic;
-   }
+    @Override
+    protected Chromattic getChromattic() {
+        return chromattic;
+    }
 
-   @Override
-   protected void configure(ContentManagerRegistry registry)
-   {
-      registry.register(Portlet.CONTENT_TYPE, new PortletContentProvider());
-      registry.register(Gadget.CONTENT_TYPE, new GadgetContentProvider());
-      registry.register(WSRP.CONTENT_TYPE, new WSRPContentProvider());
-   }
+    @Override
+    protected void configure(ContentManagerRegistry registry) {
+        registry.register(Portlet.CONTENT_TYPE, new PortletContentProvider());
+        registry.register(Gadget.CONTENT_TYPE, new GadgetContentProvider());
+        registry.register(WSRP.CONTENT_TYPE, new WSRPContentProvider());
+    }
 }

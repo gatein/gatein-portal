@@ -19,91 +19,76 @@
 
 package org.exoplatform.web.controller.router;
 
-import org.exoplatform.web.url.MimeType;
-
-import javax.servlet.http.HttpUtils;
 import java.io.IOException;
 import java.util.Map;
+
+import javax.servlet.http.HttpUtils;
+
+import org.exoplatform.web.url.MimeType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class URIHelper implements Appendable
-{
+public class URIHelper implements Appendable {
 
-   /** . */
-   private StringBuilder sb;
+    /** . */
+    private StringBuilder sb;
 
-   /** . */
-   final URIWriter writer;
+    /** . */
+    final URIWriter writer;
 
-   public URIHelper()
-   {
-      this(new StringBuilder());
-   }
+    public URIHelper() {
+        this(new StringBuilder());
+    }
 
-   public URIHelper(StringBuilder sb)
-   {
-      this.sb = sb;
-      this.writer = new URIWriter(this, MimeType.PLAIN);
-   }
+    public URIHelper(StringBuilder sb) {
+        this.sb = sb;
+        this.writer = new URIWriter(this, MimeType.PLAIN);
+    }
 
-   public String getPath()
-   {
-      if (sb != null)
-      {
-         int index = sb.indexOf("?");
-         if (index != -1)
-         {
-            return sb.substring(0, index);
-         }
-         else
-         {
-            return sb.toString();
-         }
-      }
-      return null;
-   }
+    public String getPath() {
+        if (sb != null) {
+            int index = sb.indexOf("?");
+            if (index != -1) {
+                return sb.substring(0, index);
+            } else {
+                return sb.toString();
+            }
+        }
+        return null;
+    }
 
-   public Map<String, String[]> getQueryParams()
-   {
-      if (sb != null)
-      {
-         int index = sb.indexOf("?");
-         if (index != -1)
-         {
-            String query = sb.substring(index + 1);
-            return HttpUtils.parseQueryString(query);
-         }
-      }
-      return null;
-   }
+    public Map<String, String[]> getQueryParams() {
+        if (sb != null) {
+            int index = sb.indexOf("?");
+            if (index != -1) {
+                String query = sb.substring(index + 1);
+                return HttpUtils.parseQueryString(query);
+            }
+        }
+        return null;
+    }
 
-   public void reset()
-   {
-      if (sb != null)
-      {
-         sb.setLength(0);
-      }
-      writer.reset(sb);
-   }
+    public void reset() {
+        if (sb != null) {
+            sb.setLength(0);
+        }
+        writer.reset(sb);
+    }
 
-   public Appendable append(CharSequence csq) throws IOException
-   {
-      sb.append(csq);
-      return this;
-   }
+    public Appendable append(CharSequence csq) throws IOException {
+        sb.append(csq);
+        return this;
+    }
 
-   public Appendable append(CharSequence csq, int start, int end) throws IOException
-   {
-      sb.append(csq, start, end);
-      return this;
-   }
+    public Appendable append(CharSequence csq, int start, int end) throws IOException {
+        sb.append(csq, start, end);
+        return this;
+    }
 
-   public Appendable append(char c) throws IOException
-   {
-      sb.append(c);
-      return this;
-   }
+    public Appendable append(char c) throws IOException {
+        sb.append(c);
+        return this;
+    }
 }

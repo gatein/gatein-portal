@@ -23,54 +23,45 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class DocumentSource
-{
+public abstract class DocumentSource {
 
-   /** Some kind of identifier for error reporting. */
-   private String identifier;
+    /** Some kind of identifier for error reporting. */
+    private String identifier;
 
-   private DocumentSource(String identifier)
-   {
-      if (identifier == null)
-      {
-         throw new NullPointerException("An identifier must be provided");
-      }
-      this.identifier = identifier;
-   }
+    private DocumentSource(String identifier) {
+        if (identifier == null) {
+            throw new NullPointerException("An identifier must be provided");
+        }
+        this.identifier = identifier;
+    }
 
-   public String getIdentifier()
-   {
-      return identifier;
-   }
+    public String getIdentifier() {
+        return identifier;
+    }
 
-   public abstract InputStream getStream() throws IOException;
+    public abstract InputStream getStream() throws IOException;
 
-   public static DocumentSource create(String identifier, final InputStream in)
-   {
-      return new DocumentSource(identifier)
-      {
-         @Override
-         public InputStream getStream() throws IOException
-         {
-            return in;
-         }
-      };
-   }
+    public static DocumentSource create(String identifier, final InputStream in) {
+        return new DocumentSource(identifier) {
+            @Override
+            public InputStream getStream() throws IOException {
+                return in;
+            }
+        };
+    }
 
-   public static DocumentSource create(final URL url)
-   {
-      return new DocumentSource(url.toString())
-      {
-         @Override
-         public InputStream getStream() throws IOException
-         {
-            return url.openStream();
-         }
-      };
-   }
-   
+    public static DocumentSource create(final URL url) {
+        return new DocumentSource(url.toString()) {
+            @Override
+            public InputStream getStream() throws IOException {
+                return url.openStream();
+            }
+        };
+    }
+
 }

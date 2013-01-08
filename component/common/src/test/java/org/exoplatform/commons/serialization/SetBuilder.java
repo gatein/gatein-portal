@@ -22,25 +22,26 @@ package org.exoplatform.commons.serialization;
 import java.util.HashSet;
 import java.util.Set;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public class SetBuilder<E> {
 
-  private final HashSet<E> map = new HashSet<E>();
+    private final HashSet<E> map = new HashSet<E>();
 
-  public static <E> SetBuilder<E> create(E element) {
-    return new SetBuilder<E>().with(element);
-  }
+    public static <E> SetBuilder<E> create(E element) {
+        return new SetBuilder<E>().with(element);
+    }
 
-  public SetBuilder<E> with(E element) {
-    map.add(element);
-    return this;
-  }
+    public SetBuilder<E> with(E element) {
+        map.add(element);
+        return this;
+    }
 
-  public Set<E> build(E element) {
-    map.add(element);
-    return map;
-  }
+    public Set<E> build(E element) {
+        map.add(element);
+        return map;
+    }
 }

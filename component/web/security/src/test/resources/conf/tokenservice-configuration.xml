@@ -21,9 +21,9 @@
 -->
 
 <configuration
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
     <key>org.exoplatform.commons.chromattic.ChromatticManager</key>
@@ -33,6 +33,20 @@
   <component>
     <key>org.exoplatform.web.security.security.CookieTokenService</key>
     <type>org.exoplatform.web.security.security.CookieTokenService</type>
+    <init-params>
+      <values-param>
+        <name>service.configuration</name>
+        <value>jcr-token</value>
+        <value>2</value>
+        <value>SECOND</value>
+        <value>autologin</value>
+      </values-param>
+    </init-params>
+  </component>
+
+  <component>
+    <key>org.exoplatform.web.security.SimpleGeneratorCookieTokenService</key>
+    <type>org.exoplatform.web.security.SimpleGeneratorCookieTokenService</type>
     <init-params>
       <values-param>
         <name>service.configuration</name>
@@ -105,5 +119,5 @@
       </init-params>
     </component-plugin>
   </external-component-plugins>
-		
+
 </configuration>

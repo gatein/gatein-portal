@@ -22,7 +22,6 @@
  ******************************************************************************/
 package org.exoplatform.portal.mop.redirects;
 
-
 import org.chromattic.api.annotations.PrimaryType;
 import org.chromattic.api.annotations.Property;
 
@@ -31,32 +30,30 @@ import org.chromattic.api.annotations.Property;
  * @version $Revision$
  */
 @PrimaryType(name = "gtn:redirectDeviceProperty")
-public abstract class DeviceProperty
-{
-   @Property (name="gtn:redirectDevicePropertyName")
-   public abstract String getName();
-   
-   public abstract void setName(String name);
-   
-   @Property (name="gtn:redirectDevicePropertyGreaterThan")
-   public abstract Float getGreaterThan();
-   
-   public abstract void setGreaterThan(Float greaterThan);
-   
-   @Property (name="gtn:redirectDevicePropertyLessThan")
-   public abstract Float getLessThan();
-   
-   public abstract void setLessThan(Float lessThan);
-   
-   @Property (name="gtn:redirectDevicePropertyEquals")
-   public abstract String getEquals();
-   
-   public abstract void setEquals(String equals);
-   
-   @Property (name="gtn:redirectDevicePropertyPattern")
-   public abstract String getPattern();
-   
-   public abstract void setPattern(String pattern);
+public abstract class DeviceProperty {
+    @Property(name = "gtn:redirectDevicePropertyName")
+    public abstract String getName();
+
+    public abstract void setName(String name);
+
+    @Property(name = "gtn:redirectDevicePropertyGreaterThan")
+    public abstract Float getGreaterThan();
+
+    public abstract void setGreaterThan(Float greaterThan);
+
+    @Property(name = "gtn:redirectDevicePropertyLessThan")
+    public abstract Float getLessThan();
+
+    public abstract void setLessThan(Float lessThan);
+
+    @Property(name = "gtn:redirectDevicePropertyEquals")
+    public abstract String getEquals();
+
+    public abstract void setEquals(String equals);
+
+    @Property(name = "gtn:redirectDevicePropertyPattern")
+    public abstract String getPattern();
+
+    public abstract void setPattern(String pattern);
 
 }
-

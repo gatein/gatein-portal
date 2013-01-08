@@ -17,7 +17,6 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-
 package org.exoplatform.services.organization;
 
 import org.exoplatform.component.test.AbstractKernelTest;
@@ -28,34 +27,33 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.services.database.HibernateService;
 import org.exoplatform.services.organization.impl.UserImpl;
 
-@ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml")})
-public class TestBootstrap extends AbstractKernelTest
-{
+@ConfiguredBy({ @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml") })
+public class TestBootstrap extends AbstractKernelTest {
 
-   public void testWorkspace() throws Exception
-   {
-      PortalContainer container = PortalContainer.getInstance();
-      HibernateService hibernate = (HibernateService)container.getComponentInstanceOfType(HibernateService.class);
-      assertNotNull(hibernate);
-      OrganizationService organization = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
-      assertNotNull(organization);
-   }
+    public void testWorkspace() throws Exception {
+        PortalContainer container = PortalContainer.getInstance();
+        HibernateService hibernate = (HibernateService) container.getComponentInstanceOfType(HibernateService.class);
+        assertNotNull(hibernate);
+        OrganizationService organization = (OrganizationService) container
+                .getComponentInstanceOfType(OrganizationService.class);
+        assertNotNull(organization);
+    }
 
-   public void testBasicOperation() throws Exception
-   {
-      PortalContainer container = PortalContainer.getInstance();
-      OrganizationService organization = (OrganizationService)container.getComponentInstanceOfType(OrganizationService.class);
-      assertNotNull(organization);
+    public void testBasicOperation() throws Exception {
+        PortalContainer container = PortalContainer.getInstance();
+        OrganizationService organization = (OrganizationService) container
+                .getComponentInstanceOfType(OrganizationService.class);
+        assertNotNull(organization);
 
-      begin();
-      User test = new UserImpl("testUser");
-      organization.getUserHandler().createUser(test, false);
+        begin();
+        User test = new UserImpl("testUser");
+        organization.getUserHandler().createUser(test, false);
 
-      test = organization.getUserHandler().findUserByName("toto");
-      assertNull(test);
-      test = organization.getUserHandler().findUserByName("testUser");
-      assertNotNull(test);
-      end();
-   }
+        test = organization.getUserHandler().findUserByName("toto");
+        assertNull(test);
+        test = organization.getUserHandler().findUserByName("testUser");
+        assertNotNull(test);
+        end();
+    }
 
 }

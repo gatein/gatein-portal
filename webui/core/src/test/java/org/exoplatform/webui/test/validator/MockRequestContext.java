@@ -32,96 +32,80 @@ import org.exoplatform.webui.core.UIComponent;
  *
  * @datSep 28, 2011
  */
-public class MockRequestContext extends WebuiRequestContext
-{
-   private Locale locale;
+public class MockRequestContext extends WebuiRequestContext {
+    private Locale locale;
 
-   public MockRequestContext(Locale locale) 
-   {
-      super(null);
-      this.locale = locale;
-   }
-   
-   public Locale getLocale()
-   {
-      return locale;
-   }
+    public MockRequestContext(Locale locale) {
+        super(null);
+        this.locale = locale;
+    }
 
-   @Override
-   public URLBuilder<UIComponent> getURLBuilder()
-   {
-      return null;
-   }
+    public Locale getLocale() {
+        return locale;
+    }
 
-   @Override
-   public String getRequestContextPath()
-   {
-      return null;
-   }
+    @Override
+    public URLBuilder<UIComponent> getURLBuilder() {
+        return null;
+    }
 
-   @Override
-   public String getPortalContextPath()
-   {
-      return null;
-   }
+    @Override
+    public String getRequestContextPath() {
+        return null;
+    }
 
-   @Override
-   public <T> T getRequest() throws Exception
-   {
-      return null;
-   }
+    @Override
+    public String getPortalContextPath() {
+        return null;
+    }
 
-   @Override
-   public <T> T getResponse() throws Exception
-   {
-      return null;
-   }
+    @Override
+    public <T> T getRequest() {
+        return null;
+    }
 
-   @Override
-   public void sendRedirect(String url) throws Exception
-   {
-      
-   }
+    @Override
+    public <T> T getResponse() {
+        return null;
+    }
 
-   @Override
-   public URLFactory getURLFactory()
-   {
-      return null;
-   }
+    @Override
+    public void sendRedirect(String url) throws Exception {
 
-   @Override
-   public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory)
-   {
-      return null;
-   }
+    }
 
-   @Override
-   public Orientation getOrientation()
-   {
-      return null;
-   }
+    @Override
+    public URLFactory getURLFactory() {
+        return null;
+    }
 
-   @Override
-   public String getRequestParameter(String name)
-   {
-      return null;
-   }
+    @Override
+    public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory) {
+        return null;
+    }
 
-   @Override
-   public String[] getRequestParameterValues(String name)
-   {
-      return null;
-   }
+    @Override
+    public Orientation getOrientation() {
+        return null;
+    }
 
-   @Override
-   public boolean useAjax()
-   {
-      return false;
-   }
+    @Override
+    public String getRequestParameter(String name) {
+        return null;
+    }
 
-   @Override
-   public UserPortal getUserPortal()
-   {
-      return null;
-   }
+    @Override
+    public String[] getRequestParameterValues(String name) {
+        return null;
+    }
+
+    @Override
+    public boolean useAjax() {
+        return false;
+    }
+
+    @Override
+    public UserPortal getUserPortal() {
+        return null;
+    }
 }

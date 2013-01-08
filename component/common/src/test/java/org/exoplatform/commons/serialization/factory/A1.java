@@ -19,31 +19,26 @@
 
 package org.exoplatform.commons.serialization.factory;
 
-import org.exoplatform.commons.serialization.api.factory.ObjectFactory;
-import org.exoplatform.commons.serialization.api.factory.CreateException;
-import org.exoplatform.commons.serialization.model.FieldModel;
-
 import java.util.Map;
+
+import org.exoplatform.commons.serialization.api.factory.CreateException;
+import org.exoplatform.commons.serialization.api.factory.ObjectFactory;
+import org.exoplatform.commons.serialization.model.FieldModel;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class A1 extends ObjectFactory<A2>
-{
+public class A1 extends ObjectFactory<A2> {
 
-   static A2 instance = new A2();
+    static A2 instance = new A2();
 
-   @Override
-   public <S extends A2> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException
-   {
-      if (type == A2.class)
-      {
-         return type.cast(instance);
-      }
-      else
-      {
-         throw new CreateException();
-      }
-   }
+    @Override
+    public <S extends A2> S create(Class<S> type, Map<FieldModel<? super S, ?>, ?> state) throws CreateException {
+        if (type == A2.class) {
+            return type.cast(instance);
+        } else {
+            throw new CreateException();
+        }
+    }
 }

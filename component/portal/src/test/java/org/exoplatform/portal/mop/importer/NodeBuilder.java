@@ -19,26 +19,22 @@
 
 package org.exoplatform.portal.mop.importer;
 
-import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class NodeBuilder extends Builder<NodeBuilder>
-{
-   public NodeBuilder(String ownerId)
-   {
-      super(ownerId);
-   }
+public class NodeBuilder extends Builder<NodeBuilder> {
+    public NodeBuilder(String ownerId) {
+        super(ownerId);
+    }
 
-   @Override
-   public PageNode build()
-   {
-      PageNode node = new PageNode();
-      node.setName(value);
-      node.setLabel(value);
-      node.setChildren(buildNodes());
-      return node;
-   }
+    @Override
+    public PageNode build() {
+        PageNode node = new PageNode();
+        node.setName(value);
+        node.setLabel(value);
+        node.setChildren(buildNodes());
+        return node;
+    }
 }

@@ -49,7 +49,7 @@ import org.gatein.common.logging.LoggerFactory;
  * Helper valve for supporting JBoss clustered SSO Valve. Re-authentication is not initiated by JBoss as it is not aware that
  * the resources require authentication. This valve forces re-authentication when a single-sign-on identify is present in the
  * session and there is no principal authenticated for the request.
- * 
+ *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  * @author <a href="mailto:sthorger@redhat.com">Stian Thorgersen</a>
  */
@@ -96,7 +96,7 @@ public class PortalClusteredSSOSupportValve extends ValveBase implements Lifecyc
 
         for (Container parent = container.getParent(); parent != null; parent = parent.getParent()) {
             if (parent instanceof Pipeline) {
-                Valve valves[] = ((Pipeline) parent).getValves();
+                Valve[] valves = ((Pipeline) parent).getValves();
                 for (int i = 0; i < valves.length; i++) {
                     if (valves[i] instanceof SingleSignOn) {
                         SingleSignOn sso = (SingleSignOn) valves[i];

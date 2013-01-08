@@ -56,7 +56,7 @@
       <show-info-bar>false</show-info-bar>
     </portlet-application>
 
-    <page-body> </page-body>
+    <page-body></page-body>
 
     <portlet-application>
       <portlet>

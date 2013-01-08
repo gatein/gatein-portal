@@ -22,100 +22,101 @@
 
 <project default="deploy" basedir="." xmlns:artifact="antlib:org.apache.maven.artifact.ant">
 
-   <path id="maven-ant-tasks.classpath"
-         path="${localRepository}/org/apache/maven/maven-ant-tasks/2.1.1/maven-ant-tasks-2.1.1.jar"/>
-   <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
-            uri="antlib:org.apache.maven.artifact.ant"
-            classpathref="maven-ant-tasks.classpath"/>
+  <path id="maven-ant-tasks.classpath"
+        path="${localRepository}/org/apache/maven/maven-ant-tasks/2.1.1/maven-ant-tasks-2.1.1.jar"/>
+  <typedef resource="org/apache/maven/artifact/ant/antlib.xml"
+           uri="antlib:org.apache.maven.artifact.ant"
+           classpathref="maven-ant-tasks.classpath"/>
 
-   <property name="scm.url" value="scm:svn:http://anonsvn.jboss.org/repos/portletbridge/tags/2.1.0.CR1/examples" />
+  <property name="scm.url" value="scm:svn:http://anonsvn.jboss.org/repos/portletbridge/tags/2.1.0.CR1/examples"/>
 
-   <property name="deploy.dir" value="${container.config.deploy}" />
-   <dirname property="antfile.dir" file="${ant.file}"/>
-   <property name="testRoot.dir" value="${antfile.dir}" />
-   <property name="checkout.dir" value="${testRoot.dir}/checkout" />
+  <property name="deploy.dir" value="${container.config.deploy}"/>
+  <dirname property="antfile.dir" file="${ant.file}"/>
+  <property name="testRoot.dir" value="${antfile.dir}"/>
+  <property name="checkout.dir" value="${testRoot.dir}/checkout"/>
 
-   <property name="bookingEar.dir" value="${testRoot.dir}/bookingEar" />
-   <property name="bookingEar.name" value="seamEAR.ear" />
+  <property name="bookingEar.dir" value="${testRoot.dir}/bookingEar"/>
+  <property name="bookingEar.name" value="seamEAR.ear"/>
 
-   <property name="bookingEar.location" value="${bookingEar.dir}/${bookingEar.name}" />
-   <property name="bookingEar.deploy.location" value="${deploy.dir}/${bookingEar.name}" />
+  <property name="bookingEar.location" value="${bookingEar.dir}/${bookingEar.name}"/>
+  <property name="bookingEar.deploy.location" value="${deploy.dir}/${bookingEar.name}"/>
 
-   <property name="bookingEar.groupId" value="org.jboss.portletbridge.examples.seam.booking" />
-   <property name="bookingEar.artifactId" value="seamBooking-ear" />
-   <property name="bookingEar.version" value="2.1.0.CR1" />
-   <property name="bookingEar.artifact" value="${bookingEar.artifactId}-${bookingEar.version}.ear" />
+  <property name="bookingEar.groupId" value="org.jboss.portletbridge.examples.seam.booking"/>
+  <property name="bookingEar.artifactId" value="seamBooking-ear"/>
+  <property name="bookingEar.version" value="2.1.0.CR1"/>
+  <property name="bookingEar.artifact" value="${bookingEar.artifactId}-${bookingEar.version}.ear"/>
 
-   <property name="bookingEar.repo.group.path" value="org/jboss/portletbridge/examples/seam/booking" />
-   <property name="bookingEar.repo.path" value="${bookingEar.repo.group.path}/${bookingEar.artifactId}/${bookingEar.version}/${bookingEar.artifact}" />
+  <property name="bookingEar.repo.group.path" value="org/jboss/portletbridge/examples/seam/booking"/>
+  <property name="bookingEar.repo.path"
+            value="${bookingEar.repo.group.path}/${bookingEar.artifactId}/${bookingEar.version}/${bookingEar.artifact}"/>
 
 
-   <macrodef name="check-ear-available">
-      <attribute name="property" />
-      <sequential>
-         <!-- check if ear artifact exists in local repository -->
-         <copy tofile="${bookingEar.location}" file="${localRepository}/${bookingEar.repo.path}"
-               preservelastmodified="true" failonerror="false" />
-         <available file="${bookingEar.location}" property="@{property}"/>
-      </sequential>
-   </macrodef>
+  <macrodef name="check-ear-available">
+    <attribute name="property"/>
+    <sequential>
+      <!-- check if ear artifact exists in local repository -->
+      <copy tofile="${bookingEar.location}" file="${localRepository}/${bookingEar.repo.path}"
+            preservelastmodified="true" failonerror="false"/>
+      <available file="${bookingEar.location}" property="@{property}"/>
+    </sequential>
+  </macrodef>
 
-   <macrodef name="check-uptodate">
-      <attribute name="property" />
-      <sequential>
-         <!-- if ear artifact exists in deploy, check if it’s up-to-date -->
-         <uptodate srcfile="${bookingEar.location}"
-             targetfile="${bookingEar.deploy.location}" property="@{property}"/>
-      </sequential>
-   </macrodef>
+  <macrodef name="check-uptodate">
+    <attribute name="property"/>
+    <sequential>
+      <!-- if ear artifact exists in deploy, check if it’s up-to-date -->
+      <uptodate srcfile="${bookingEar.location}"
+                targetfile="${bookingEar.deploy.location}" property="@{property}"/>
+    </sequential>
+  </macrodef>
 
-   <target name="init">
-      <mkdir dir="${bookingEar.dir}"/>
-      <available file="${bookingEar.deploy.location}" property="build.not.required"/>
-   </target>
+  <target name="init">
+    <mkdir dir="${bookingEar.dir}"/>
+    <available file="${bookingEar.deploy.location}" property="build.not.required"/>
+  </target>
 
-   <target name="check-ear-exists-before" unless="build.not.required" depends="init">
-      <check-ear-available property="bookingEar.present"/>
-   </target>
+  <target name="check-ear-exists-before" unless="build.not.required" depends="init">
+    <check-ear-available property="bookingEar.present"/>
+  </target>
 
-   <target name="check-uptodate-before" if="bookingEar.present" depends="check-ear-exists-before">
-      <check-uptodate property="bookingEar.uptodate"/>
-   </target>
+  <target name="check-uptodate-before" if="bookingEar.present" depends="check-ear-exists-before">
+    <check-uptodate property="bookingEar.uptodate"/>
+  </target>
 
-   <target name="check-ear-exists-after">
-      <check-ear-available property="bookingEar.present"/>
-   </target>
+  <target name="check-ear-exists-after">
+    <check-ear-available property="bookingEar.present"/>
+  </target>
 
-   <target name="check-uptodate-after" if="bookingEar.present" depends="check-ear-exists-after">
-      <check-uptodate property="bookingEar.uptodate"/>
-   </target>
+  <target name="check-uptodate-after" if="bookingEar.present" depends="check-ear-exists-after">
+    <check-uptodate property="bookingEar.uptodate"/>
+  </target>
 
-   <target name="check-build-required" depends="check-uptodate-before">
-      <condition property="build.not.required">
-         <and>
-            <not>
-               <isset property="build.not.required"/>
-            </not>
-            <isset property="bookingEar.present"/>
-         </and>
-      </condition>
-   </target>
+  <target name="check-build-required" depends="check-uptodate-before">
+    <condition property="build.not.required">
+      <and>
+        <not>
+          <isset property="build.not.required"/>
+        </not>
+        <isset property="bookingEar.present"/>
+      </and>
+    </condition>
+  </target>
 
-   <target name="ensure-ear" unless="build.not.required" depends="check-build-required">
-      <!-- if ear artifact doesn’t exist or is not up-to-date - download and build/install the examples -->
-      <artifact:mvn mavenHome="${maven.home}">
-         <arg value="scm:bootstrap"/>
-         <arg value="-DconnectionUrl=${scm.url}"/>
-         <arg value="-Dbasedir=${testRoot.dir}"/>
-         <arg value="-DcheckoutDirectory=${checkout.dir}"/>
-         <arg value="-Dgoals=install -Dmaven.repo.local=${localRepository}"/>
-      </artifact:mvn>
-   </target>
+  <target name="ensure-ear" unless="build.not.required" depends="check-build-required">
+    <!-- if ear artifact doesn’t exist or is not up-to-date - download and build/install the examples -->
+    <artifact:mvn mavenHome="${maven.home}">
+      <arg value="scm:bootstrap"/>
+      <arg value="-DconnectionUrl=${scm.url}"/>
+      <arg value="-Dbasedir=${testRoot.dir}"/>
+      <arg value="-DcheckoutDirectory=${checkout.dir}"/>
+      <arg value="-Dgoals=install -Dmaven.repo.local=${localRepository}"/>
+    </artifact:mvn>
+  </target>
 
-   <target name="deploy" if="bookingEar.present" unless="bookingEar.uptodate"
-           depends="ensure-ear,check-uptodate-after">
+  <target name="deploy" if="bookingEar.present" unless="bookingEar.uptodate"
+          depends="ensure-ear,check-uptodate-after">
 
-      <copy file="${bookingEar.location}" tofile="${bookingEar.deploy.location}" preservelastmodified="true"/>
-   </target>
+    <copy file="${bookingEar.location}" tofile="${bookingEar.deploy.location}" preservelastmodified="true"/>
+  </target>
 
 </project>

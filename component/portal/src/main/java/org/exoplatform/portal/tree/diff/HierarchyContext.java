@@ -24,41 +24,42 @@ package org.exoplatform.portal.tree.diff;
  */
 public class HierarchyContext<L, N, H> {
 
-   /** . */
-   final ListAdapter<L, H> listAdapter;
+    /** . */
+    final ListAdapter<L, H> listAdapter;
 
-   /** . */
-   final HierarchyAdapter<L, N, H> hierarchyAdapter;
+    /** . */
+    final HierarchyAdapter<L, N, H> hierarchyAdapter;
 
-   /** . */
-   final N root;
+    /** . */
+    final N root;
 
-   public HierarchyContext(ListAdapter<L, H> listAdapter, HierarchyAdapter<L, N, H> hierarchyAdapter, N root) throws NullPointerException {
-      if (listAdapter == null) {
-         throw new NullPointerException();
-      }
-      if (hierarchyAdapter == null) {
-         throw new NullPointerException();
-      }
-      if (root == null) {
-         throw new NullPointerException();
-      }
+    public HierarchyContext(ListAdapter<L, H> listAdapter, HierarchyAdapter<L, N, H> hierarchyAdapter, N root)
+            throws NullPointerException {
+        if (listAdapter == null) {
+            throw new NullPointerException();
+        }
+        if (hierarchyAdapter == null) {
+            throw new NullPointerException();
+        }
+        if (root == null) {
+            throw new NullPointerException();
+        }
 
-      //
-      this.listAdapter = listAdapter;
-      this.hierarchyAdapter = hierarchyAdapter;
-      this.root = root;
-   }
+        //
+        this.listAdapter = listAdapter;
+        this.hierarchyAdapter = hierarchyAdapter;
+        this.root = root;
+    }
 
-   public HierarchyAdapter<L, N, H> getHierarchyAdapter() {
-      return hierarchyAdapter;
-   }
+    public HierarchyAdapter<L, N, H> getHierarchyAdapter() {
+        return hierarchyAdapter;
+    }
 
-   public N getRoot() {
-      return root;
-   }
+    public N getRoot() {
+        return root;
+    }
 
-   public N findByHandle(H handle) {
-      return hierarchyAdapter.getDescendant(root, handle);
-   }
+    public N findByHandle(H handle) {
+        return hierarchyAdapter.getDescendant(root, handle);
+    }
 }

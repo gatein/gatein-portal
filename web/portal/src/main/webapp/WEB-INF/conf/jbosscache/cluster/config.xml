@@ -21,7 +21,7 @@
 
   <!-- The cluster name should be changed by the kernel cache configuration -->
   <clustering mode="replication" clusterName="${jboss.partition.name:DefaultPartition}-gatein">
-    <jgroupsConfig configFile="jgroups/gatein-${gatein.default.jgroups.stack:udp}.xml" />
+    <jgroupsConfig configFile="jgroups/gatein-${gatein.default.jgroups.stack:udp}.xml"/>
   </clustering>
 
 </jbosscache>

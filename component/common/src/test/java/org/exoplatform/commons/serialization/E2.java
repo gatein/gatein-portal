@@ -26,10 +26,9 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
  * @version $Revision$
  */
 @Serialized
-public class E2 extends E1
-{
+public class E2 extends E1 {
 
-   E1 left;
-   E1 right;
+    E1 left;
+    E1 right;
 
 }

@@ -20,21 +20,21 @@
 <jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
   <locking useLockStriping="false" concurrencyLevel="64" lockParentForChildInsertRemove="false"
-    lockAcquisitionTimeout="20000" />
+           lockAcquisitionTimeout="20000"/>
 
   <clustering mode="replication" clusterName="${jboss.partition.name:DefaultPartition}-${jbosscache-cluster-name}">
-    <stateRetrieval timeout="20000" fetchInMemoryState="false" />
-    <jgroupsConfig configFile="jgroups/gatein-${gatein.default.jgroups.stack:udp}.xml" />
-    <sync />
+    <stateRetrieval timeout="20000" fetchInMemoryState="false"/>
+    <jgroupsConfig configFile="jgroups/gatein-${gatein.default.jgroups.stack:udp}.xml"/>
+    <sync/>
   </clustering>
 
-   <!-- Eviction configuration -->
-   <eviction wakeUpInterval="5000">
-      <default algorithmClass="org.jboss.cache.eviction.LRUAlgorithm"
-               actionPolicyClass="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.ParentNodeEvictionActionPolicy"
-               eventQueueSize="1000000">
-         <property name="maxNodes" value="10000"/>
-         <property name="timeToLive" value="60000"/>
-      </default>
-   </eviction>
+  <!-- Eviction configuration -->
+  <eviction wakeUpInterval="5000">
+    <default algorithmClass="org.jboss.cache.eviction.LRUAlgorithm"
+             actionPolicyClass="org.exoplatform.services.jcr.impl.dataflow.persistent.jbosscache.ParentNodeEvictionActionPolicy"
+             eventQueueSize="1000000">
+      <property name="maxNodes" value="10000"/>
+      <property name="timeToLive" value="60000"/>
+    </default>
+  </eviction>
 </jbosscache>

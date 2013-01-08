@@ -23,8 +23,10 @@
 package org.jboss.gatein.selenium.jira;
 
 import static org.jboss.gatein.selenium.common.CommonHelper.*;
-import static org.jboss.gatein.selenium.navigation.NavigationHelper.*;
-import static org.jboss.gatein.selenium.page.PageHelper.*;
+import static org.jboss.gatein.selenium.navigation.NavigationHelper.deleteNode;
+import static org.jboss.gatein.selenium.navigation.NavigationHelper.editNavigation;
+import static org.jboss.gatein.selenium.page.PageHelper.addNewPageWithEditor;
+import static org.jboss.gatein.selenium.page.PageHelper.searchAndDeletePage;
 
 import org.jboss.gatein.selenium.AbstractContextual;
 import org.jboss.gatein.selenium.AbstractSingleTestWithAnt;
@@ -34,175 +36,136 @@ import org.testng.annotations.Test;
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class Test_GTNPORTAL_1257_SeamSessionOutlivesTheGateInSession extends AbstractSingleTestWithAnt
-{
+public class Test_GTNPORTAL_1257_SeamSessionOutlivesTheGateInSession extends AbstractSingleTestWithAnt {
 
-   @BeforeTest(alwaysRun = true)
-   public void deploySeamBooking() throws Exception
-   {
+    @BeforeTest(alwaysRun = true)
+    public void deploySeamBooking() throws Exception {
 
-      if (!expectAntBuildFile())
-      {
-         log.warn("JBoss Portlet Bridge Seam Booking example may not be available");
-         return;
-      }
-
-      prepareAndExecuteAntBuild();
-   }
-
-   @Test(groups = {"GateIn", "jira"})
-   public void testGTNPORTAL_1257_SeamSessionOutlivesTheGateInSession() throws Throwable
-   {
-      performTest();
-   }
-
-   @Override
-   protected void mainTest() throws Throwable
-   {
-      try
-      {
-         AbstractContextual.setTemporaryTimeoutSecInt(60);        // give it at least one minute
-         openPortal(true);
-      }
-      finally
-      {
-         AbstractContextual.restoreTimeoutSecInt();
-      }
-
-      signInAsRoot();
-
-      goToApplicationRegistry();
-
-      installPortlet();
-
-      goToPage("Home");
-
-      try
-      {
-         AbstractContextual.setTemporaryTimeoutSecInt(60);        // give it at least one minute
-         addNewPageWithEditor(null, "TestPage", "TestPage", "portalBookingDemo", "seamBookingPortlet",
-               "//div[@id='portalBookingDemo/seamBookingPortlet']");
-      }
-      catch (Throwable th)
-      {
-         try
-         {
-            leavePageEdit();
-         }
-         catch (Exception ex)
-         {
-            log.warn("IGNORED: ", ex);
-         }
-         throw th;
-      }
-      finally
-      {
-         AbstractContextual.restoreTimeoutSecInt();
-      }
-
-      waitForTextPresent("Search Hotels");
-
-      verifyTextPresent("Welcome, root");
-
-      signOut();
-
-      signInAsMary();
-
-      goToPage("TestPage");
-
-      waitForTextPresent("Search Hotels");
-      verifyTextPresent("Welcome, mary");
-
-   }
-
-   private void leavePageEdit()
-   {
-      // we could have an error window popped up
-      String closeButton = "//div[@class='ExoMessageDecorator' and //div[@class='TabsContainer']//div[@class='SelectedTab']]//div[@class='CloseButton']";
-      click(closeButton);
-
-      // also we may have to abort
-      String abortButton = "//table[@class='ActionContainer']//div[contains(@onclick, 'action=Abort')]//a[text()='Abort']";
-      click(abortButton);
-   }
-
-   private void installPortlet() throws Throwable
-   {
-      // try several times - to give dependency deployment some time
-      Throwable ex = null;
-      for (int i = 0; i < 3; i++)
-      {
-         importApplications();
-         try
-         {
-            verifyPortletInstalled("portalBookingDemo", "seamBookingPortlet");
+        if (!expectAntBuildFile()) {
+            log.warn("JBoss Portlet Bridge Seam Booking example may not be available");
             return;
-         }
-         catch (Throwable th)
-         {
-            ex = th;
-         }
-      }
-      throw ex;
-   }
+        }
 
-   @Override
-   protected void exception(Throwable ex)
-   {
-      log.error("Exception during test: ", ex);
-   }
+        prepareAndExecuteAntBuild();
+    }
 
-   @Override
-   protected void cleanup()
-   {
-      System.out.println("\n== Cleanup ==");
+    @Test(groups = { "GateIn", "jira" })
+    public void testGTNPORTAL_1257_SeamSessionOutlivesTheGateInSession() throws Throwable {
+        performTest();
+    }
 
-      try
-      {
-         signOut();
-      }
-      catch (Throwable e)
-      {
-         log.warn("IGNORED: Failed to sign out: ", e);
-      }
+    @Override
+    protected void mainTest() throws Throwable {
+        try {
+            AbstractContextual.setTemporaryTimeoutSecInt(60); // give it at least one minute
+            openPortal(true);
+        } finally {
+            AbstractContextual.restoreTimeoutSecInt();
+        }
 
-      try
-      {
-         signInAsRoot();
-      }
-      catch (Throwable e)
-      {
-         log.warn("IGNORED: Failed to sign in as root: ", e);
-      }
+        signInAsRoot();
 
-      try
-      {
-         goToPageManagement();
-         searchAndDeletePage("TestPage");
-      }
-      catch (Throwable e)
-      {
-         log.warn("IGNORED: Failed to delete testPage: ", e);
-      }
+        goToApplicationRegistry();
 
-      try
-      {
-         goToSiteManagement();
-         editNavigation("classic");
-         deleteNode("TestPage");
-      }
-      catch (Throwable e)
-      {
-         log.warn("IGNORED: Failed to remove TestPage from navigation: ", e);
-      }
+        installPortlet();
 
-      try
-      {
-         signOut();
-      }
-      catch (Throwable e)
-      {
-         log.warn("IGNORED: Failed to sign out: ", e);
-      }
-   }
+        goToPage("Home");
+
+        try {
+            AbstractContextual.setTemporaryTimeoutSecInt(60); // give it at least one minute
+            addNewPageWithEditor(null, "TestPage", "TestPage", "portalBookingDemo", "seamBookingPortlet",
+                    "//div[@id='portalBookingDemo/seamBookingPortlet']");
+        } catch (Throwable th) {
+            try {
+                leavePageEdit();
+            } catch (Exception ex) {
+                log.warn("IGNORED: ", ex);
+            }
+            throw th;
+        } finally {
+            AbstractContextual.restoreTimeoutSecInt();
+        }
+
+        waitForTextPresent("Search Hotels");
+
+        verifyTextPresent("Welcome, root");
+
+        signOut();
+
+        signInAsMary();
+
+        goToPage("TestPage");
+
+        waitForTextPresent("Search Hotels");
+        verifyTextPresent("Welcome, mary");
+
+    }
+
+    private void leavePageEdit() {
+        // we could have an error window popped up
+        String closeButton = "//div[@class='ExoMessageDecorator' and //div[@class='TabsContainer']//div[@class='SelectedTab']]//div[@class='CloseButton']";
+        click(closeButton);
+
+        // also we may have to abort
+        String abortButton = "//table[@class='ActionContainer']//div[contains(@onclick, 'action=Abort')]//a[text()='Abort']";
+        click(abortButton);
+    }
+
+    private void installPortlet() throws Throwable {
+        // try several times - to give dependency deployment some time
+        Throwable ex = null;
+        for (int i = 0; i < 3; i++) {
+            importApplications();
+            try {
+                verifyPortletInstalled("portalBookingDemo", "seamBookingPortlet");
+                return;
+            } catch (Throwable th) {
+                ex = th;
+            }
+        }
+        throw ex;
+    }
+
+    @Override
+    protected void exception(Throwable ex) {
+        log.error("Exception during test: ", ex);
+    }
+
+    @Override
+    protected void cleanup() {
+        System.out.println("\n== Cleanup ==");
+
+        try {
+            signOut();
+        } catch (Throwable e) {
+            log.warn("IGNORED: Failed to sign out: ", e);
+        }
+
+        try {
+            signInAsRoot();
+        } catch (Throwable e) {
+            log.warn("IGNORED: Failed to sign in as root: ", e);
+        }
+
+        try {
+            goToPageManagement();
+            searchAndDeletePage("TestPage");
+        } catch (Throwable e) {
+            log.warn("IGNORED: Failed to delete testPage: ", e);
+        }
+
+        try {
+            goToSiteManagement();
+            editNavigation("classic");
+            deleteNode("TestPage");
+        } catch (Throwable e) {
+            log.warn("IGNORED: Failed to remove TestPage from navigation: ", e);
+        }
+
+        try {
+            signOut();
+        } catch (Throwable e) {
+            log.warn("IGNORED: Failed to sign out: ", e);
+        }
+    }
 }

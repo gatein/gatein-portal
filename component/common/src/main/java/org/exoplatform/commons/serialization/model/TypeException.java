@@ -23,24 +23,19 @@ package org.exoplatform.commons.serialization.model;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TypeException extends RuntimeException
-{
-   public TypeException()
-   {
-   }
+public class TypeException extends RuntimeException {
+    public TypeException() {
+    }
 
-   public TypeException(String message)
-   {
-      super(message);
-   }
+    public TypeException(String message) {
+        super(message);
+    }
 
-   public TypeException(String message, Throwable cause)
-   {
-      super(message, cause);
-   }
+    public TypeException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-   public TypeException(Throwable cause)
-   {
-      super(cause);
-   }
+    public TypeException(Throwable cause) {
+        super(cause);
+    }
 }

@@ -25,16 +25,14 @@ import org.exoplatform.commons.serialization.api.TypeConverter;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ThreadTypeConverter extends TypeConverter<Thread, String>
-{
-   @Override
-   public String write(Thread input) throws Exception
-   {
-      throw new UnsupportedOperationException();
-   }
-   @Override
-   public Thread read(String output) throws Exception
-   {
-      throw new UnsupportedOperationException();
-   }
+public class ThreadTypeConverter extends TypeConverter<Thread, String> {
+    @Override
+    public String write(Thread input) throws Exception {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public Thread read(String output) throws Exception {
+        throw new UnsupportedOperationException();
+    }
 }

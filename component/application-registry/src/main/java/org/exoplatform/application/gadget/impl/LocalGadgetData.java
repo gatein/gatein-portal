@@ -18,6 +18,10 @@
  */
 package org.exoplatform.application.gadget.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.util.Date;
+
 import org.apache.shindig.common.uri.Uri;
 import org.apache.shindig.gadgets.spec.GadgetSpec;
 import org.apache.shindig.gadgets.spec.ModulePrefs;
@@ -35,10 +39,6 @@ import org.chromattic.ext.ntdef.NTFile;
 import org.chromattic.ext.ntdef.NTFolder;
 import org.chromattic.ext.ntdef.Resource;
 import org.exoplatform.commons.xml.XMLDeclarationParser;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.util.Date;
-
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -47,94 +47,85 @@ import java.util.Date;
 @PrimaryType(name = "app:localgadgetdata")
 @FormattedBy(BaseEncodingObjectFormatter.class)
 @NamingPrefix("app")
-public abstract class LocalGadgetData extends GadgetData
-{
+public abstract class LocalGadgetData extends GadgetData {
 
-   /** Mime type for gadgets. */
-   public static final String GADGET_MIME_TYPE = "application/x-google-gadget";
+    /** Mime type for gadgets. */
+    public static final String GADGET_MIME_TYPE = "application/x-google-gadget";
 
-   @ManyToOne
-   public abstract GadgetDefinition getDefinition();
+    @ManyToOne
+    public abstract GadgetDefinition getDefinition();
 
-   @Property(name = "app:filename")
-   public abstract String getFileName();
+    @Property(name = "app:filename")
+    public abstract String getFileName();
 
-   public abstract void setFileName(String fileName);
+    public abstract void setFileName(String fileName);
 
-   @OneToOne
-   @Owner
-   @MappedBy("app:resources")
-   public abstract NTFolder getResources();
+    @OneToOne
+    @Owner
+    @MappedBy("app:resources")
+    public abstract NTFolder getResources();
 
-   protected abstract void setResources(NTFolder resources);
+    protected abstract void setResources(NTFolder resources);
 
-   @Path
-   public abstract String getPath();
+    @Path
+    public abstract String getPath();
 
-   private NTFile getGadgetContent()
-   {
-      String fileName = getFileName();
-      NTFolder resources = getResources();
-      return resources.getFile(fileName);
-   }
+    private NTFile getGadgetContent() {
+        String fileName = getFileName();
+        NTFolder resources = getResources();
+        return resources.getFile(fileName);
+    }
 
-   public void setSource(String gadgetXML) throws Exception
-   {
-      // Get the definition
-      GadgetDefinition def = getDefinition();
+    public void setSource(String gadgetXML) throws Exception {
+        // Get the definition
+        GadgetDefinition def = getDefinition();
 
-      // Get the related content
-      GadgetSpec spec = new GadgetSpec(Uri.parse("http://www.gatein.org"), gadgetXML);
-      ModulePrefs prefs = spec.getModulePrefs();
+        // Get the related content
+        GadgetSpec spec = new GadgetSpec(Uri.parse("http://www.gatein.org"), gadgetXML);
+        ModulePrefs prefs = spec.getModulePrefs();
 
-      // detect the encoding declared in the XML source
-      // note that we do not need to detect the encoding of gadgetXML because 
-      // it is a String and not a stream 
-      String encoding = new XMLDeclarationParser(gadgetXML).parse().get(XMLDeclarationParser.ENCODING);
-      if (encoding == null || !Charset.isSupported(encoding))
-      {
-         throw new UnsupportedEncodingException(encoding);
-      }
-      // get the bytes in the declared encoding
-      byte[] bytes = gadgetXML.getBytes(encoding);
+        // detect the encoding declared in the XML source
+        // note that we do not need to detect the encoding of gadgetXML because
+        // it is a String and not a stream
+        String encoding = new XMLDeclarationParser(gadgetXML).parse().get(XMLDeclarationParser.ENCODING);
+        if (encoding == null || !Charset.isSupported(encoding)) {
+            throw new UnsupportedEncodingException(encoding);
+        }
+        // get the bytes in the declared encoding
+        byte[] bytes = gadgetXML.getBytes(encoding);
 
-      // Update def
-      def.setDescription(prefs.getDescription());
-      def.setThumbnail(prefs.getThumbnail().toString()); // Do something better than that
-      def.setTitle(prefs.getTitle());
-      def.setReferenceURL(prefs.getTitleUrl().toString());
+        // Update def
+        def.setDescription(prefs.getDescription());
+        def.setThumbnail(prefs.getThumbnail().toString()); // Do something better than that
+        def.setTitle(prefs.getTitle());
+        def.setReferenceURL(prefs.getTitleUrl().toString());
 
-      // Update content
-      NTFile content = getGadgetContent();
-      content.setContentResource(new Resource(GADGET_MIME_TYPE, encoding, bytes));
-   }
+        // Update content
+        NTFile content = getGadgetContent();
+        content.setContentResource(new Resource(GADGET_MIME_TYPE, encoding, bytes));
+    }
 
-   public String getSource() throws Exception
-   {
-      NTFile content = getGadgetContent();
-      Resource res = content.getContentResource();
-      String encoding = res.getEncoding();
-      byte[] bytes = res.getData();
-      return new String(bytes, encoding);
-   }
+    public String getSource() throws Exception {
+        NTFile content = getGadgetContent();
+        Resource res = content.getContentResource();
+        String encoding = res.getEncoding();
+        byte[] bytes = res.getData();
+        return new String(bytes, encoding);
+    }
 
-   public Date getLastModified()
-   {
-      NTFile content = getGadgetContent();
-      return content.getLastModified();
-   }
+    public Date getLastModified() {
+        NTFile content = getGadgetContent();
+        return content.getLastModified();
+    }
 
-   private String getGadgetTitle(ModulePrefs prefs, String defaultValue)
-   {
-      String title = prefs.getDirectoryTitle();
-      if (title == null || title.trim().length() < 1)
-      {
-         title = prefs.getTitle();
-      }
-      if (title == null || title.trim().length() < 1)
-      {
-         return defaultValue;
-      }
-      return title;
-   }
+    private String getGadgetTitle(ModulePrefs prefs, String defaultValue) {
+        String title = prefs.getDirectoryTitle();
+        if (title == null || title.trim().length() < 1) {
+            title = prefs.getTitle();
+        }
+        if (title == null || title.trim().length() < 1) {
+            return defaultValue;
+        }
+        return title;
+    }
 }

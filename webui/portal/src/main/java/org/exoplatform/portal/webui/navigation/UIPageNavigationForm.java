@@ -19,6 +19,12 @@
 
 package org.exoplatform.portal.webui.navigation;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.portlet.ActionResponse;
+import javax.xml.namespace.QName;
+
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
@@ -42,11 +48,6 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.portlet.ActionResponse;
-import javax.xml.namespace.QName;
 
 /*
  * Created by The eXo Platform SAS
@@ -55,141 +56,123 @@ import javax.xml.namespace.QName;
  * June 11, 2009
  */
 @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {
-   @EventConfig(listeners = UIPageNavigationForm.SaveActionListener.class),
-   @EventConfig(listeners = UIPageNavigationForm.CloseActionListener.class, phase = Phase.DECODE, name = "ClosePopup")})
-public class UIPageNavigationForm extends UIForm
-{
+        @EventConfig(listeners = UIPageNavigationForm.SaveActionListener.class),
+        @EventConfig(listeners = UIPageNavigationForm.CloseActionListener.class, phase = Phase.DECODE, name = "ClosePopup") })
+public class UIPageNavigationForm extends UIForm {
 
-   private UserNavigation userNav;
+    private UserNavigation userNav;
 
-   private String ownerId;
+    private String ownerId;
 
-   private String ownerType;
+    private String ownerType;
 
-   private String priority;
+    private String priority;
 
-   public UIPageNavigationForm() throws Exception
-   {
+    public UIPageNavigationForm() {
 
-   }
+    }
 
-   public void addFormInput() throws Exception
-   {
-      List<SelectItemOption<String>> priorties = new ArrayList<SelectItemOption<String>>();
-      for (int i = 1; i < 11; i++)
-      {
-         priorties.add(new SelectItemOption<String>(String.valueOf(i), String.valueOf(i)));
-      }
-      addUIFormInput(new UIFormStringInput("ownerType", "ownerType", getOwnerType()).setReadOnly(true))
-         .addUIFormInput(new UIFormStringInput("ownerId", "ownerId", ownerId).setReadOnly(true)).addUIFormInput(
-            new UIFormSelectBox("priority", null, priorties).setValue(getPriority()));
-   }
+    public void addFormInput() {
+        List<SelectItemOption<String>> priorties = new ArrayList<SelectItemOption<String>>();
+        for (int i = 1; i < 11; i++) {
+            priorties.add(new SelectItemOption<String>(String.valueOf(i), String.valueOf(i)));
+        }
+        addUIFormInput(new UIFormStringInput("ownerType", "ownerType", getOwnerType()).setReadOnly(true)).addUIFormInput(
+                new UIFormStringInput("ownerId", "ownerId", ownerId).setReadOnly(true)).addUIFormInput(
+                new UIFormSelectBox("priority", null, priorties).setValue(getPriority()));
+    }
 
-   public void setValues(UserNavigation userNavigation) throws Exception
-   {
-      setUserNav(userNavigation);
-      invokeGetBindingBean(userNavigation);
-      removeChildById("ownerId");
-      UIFormStringInput ownerId = new UIFormStringInput("ownerId", "ownerId", userNavigation.getKey().getName());
-      ownerId.setReadOnly(true);
-      ownerId.setParent(this);
-      getChildren().add(1, ownerId);
-      UIFormSelectBox uiSelectBox = findComponentById("priority");
-      uiSelectBox.setValue(String.valueOf(userNavigation.getPriority()));
-   }
+    public void setValues(UserNavigation userNavigation) throws Exception {
+        setUserNav(userNavigation);
+        invokeGetBindingBean(userNavigation);
+        removeChildById("ownerId");
+        UIFormStringInput ownerId = new UIFormStringInput("ownerId", "ownerId", userNavigation.getKey().getName());
+        ownerId.setReadOnly(true);
+        ownerId.setParent(this);
+        getChildren().add(1, ownerId);
+        UIFormSelectBox uiSelectBox = findComponentById("priority");
+        uiSelectBox.setValue(String.valueOf(userNavigation.getPriority()));
+    }
 
-   public void setOwnerId(String ownerId)
-   {
-      this.ownerId = ownerId;
-   }
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
 
-   public String getOwnerId()
-   {
-      return ownerId;
-   }
+    public String getOwnerId() {
+        return ownerId;
+    }
 
-   public void setOwnerType(String ownerType)
-   {
-      this.ownerType = ownerType;
-   }
+    public void setOwnerType(String ownerType) {
+        this.ownerType = ownerType;
+    }
 
-   public String getOwnerType()
-   {
-      return ownerType;
-   }
+    public String getOwnerType() {
+        return ownerType;
+    }
 
-   public void setPriority(String priority)
-   {
-      this.priority = priority;
-   }
+    public void setPriority(String priority) {
+        this.priority = priority;
+    }
 
-   public String getPriority()
-   {
-      return priority;
-   }
+    public String getPriority() {
+        return priority;
+    }
 
-   public void setUserNav(UserNavigation pageNav_)
-   {
-      this.userNav = pageNav_;
-   }
+    public void setUserNav(UserNavigation pageNav_) {
+        this.userNav = pageNav_;
+    }
 
-   public UserNavigation getUserNav()
-   {
-      return userNav;
-   }
+    public UserNavigation getUserNav() {
+        return userNav;
+    }
 
-   static public class SaveActionListener extends EventListener<UIPageNavigationForm>
-   {
-      public void execute(Event<UIPageNavigationForm> event) throws Exception
-      {
-         UIPageNavigationForm uiForm = event.getSource();
-         UserNavigation userNav = uiForm.getUserNav();
+    public static class SaveActionListener extends EventListener<UIPageNavigationForm> {
+        public void execute(Event<UIPageNavigationForm> event) throws Exception {
+            UIPageNavigationForm uiForm = event.getSource();
+            UserNavigation userNav = uiForm.getUserNav();
 
-         // Check existed
-         PortalRequestContext prContext = Util.getPortalRequestContext();
-         UserPortal userPortal = prContext.getUserPortalConfig().getUserPortal();
+            // Check existed
+            PortalRequestContext prContext = Util.getPortalRequestContext();
+            UserPortal userPortal = prContext.getUserPortalConfig().getUserPortal();
 
-         userNav = userPortal.getNavigation(userNav.getKey());
+            userNav = userPortal.getNavigation(userNav.getKey());
 
-         if (userNav == null)
-         {
-            UIPortalApplication uiPortalApp = (UIPortalApplication)prContext.getUIApplication();
-            uiPortalApp.addMessage(new ApplicationMessage("UINavigationManagement.msg.NavigationNotExistAnymore", null));
-            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-            prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
-            prContext.setFullRender(true);
+            if (userNav == null) {
+                UIPortalApplication uiPortalApp = (UIPortalApplication) prContext.getUIApplication();
+                uiPortalApp.addMessage(new ApplicationMessage("UINavigationManagement.msg.NavigationNotExistAnymore", null));
+                UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+                prContext.addUIComponentToUpdateByAjax(uiWorkingWS);
+                prContext.setFullRender(true);
+                UIPopupWindow uiPopup = uiForm.getParent();
+                uiPopup.setShow(false);
+                return;
+            }
+
+            UIFormSelectBox uiSelectBox = uiForm.findComponentById("priority");
+            int priority = Integer.parseInt(uiSelectBox.getValue());
+
+            // update navigation
+            NavigationService service = uiForm.getApplicationComponent(NavigationService.class);
+            NavigationContext ctx = service.loadNavigation(userNav.getKey());
+            ctx.setState(new NavigationState(priority));
+            service.saveNavigation(ctx);
+
             UIPopupWindow uiPopup = uiForm.getParent();
-            uiPopup.setShow(false);            
-            return;
-         }
+            uiPopup.setShow(false);
+            UIComponent opener = uiPopup.getParent();
 
-         UIFormSelectBox uiSelectBox = uiForm.findComponentById("priority");
-         int priority = Integer.parseInt(uiSelectBox.getValue());
+            ActionResponse response = event.getRequestContext().getResponse();
+            response.setEvent(new QName("NavigationChange"), null);
 
-         // update navigation
-         NavigationService service = uiForm.getApplicationComponent(NavigationService.class);
-         NavigationContext ctx = service.loadNavigation(userNav.getKey());
-         ctx.setState(new NavigationState(priority));
-         service.saveNavigation(ctx);
+            WebuiRequestContext pcontext = event.getRequestContext();
+            pcontext.addUIComponentToUpdateByAjax(opener);
+        }
+    }
 
-         UIPopupWindow uiPopup = uiForm.getParent();
-         uiPopup.setShow(false);
-         UIComponent opener = uiPopup.getParent();
-         
-         ActionResponse response = event.getRequestContext().getResponse();
-         response.setEvent(new QName("NavigationChange"), null);     
-
-         WebuiRequestContext pcontext = event.getRequestContext();
-         pcontext.addUIComponentToUpdateByAjax(opener);
-      }
-   }
-
-   static public class CloseActionListener extends EventListener<UIPageNavigationForm>
-   {
-      public void execute(Event<UIPageNavigationForm> event) throws Exception
-      {
-         UIPageNavigationForm uiForm = event.getSource();
-         uiForm.<UIComponent> getParent().broadcast(event, Phase.ANY);
-      }
-   }
+    public static class CloseActionListener extends EventListener<UIPageNavigationForm> {
+        public void execute(Event<UIPageNavigationForm> event) throws Exception {
+            UIPageNavigationForm uiForm = event.getSource();
+            uiForm.<UIComponent> getParent().broadcast(event, Phase.ANY);
+        }
+    }
 }

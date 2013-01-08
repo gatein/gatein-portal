@@ -23,39 +23,33 @@ package org.exoplatform.commons.serialization.model;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class TypeModel<O>
-{
+public abstract class TypeModel<O> {
 
-   /** . */
-   private final Class<O> javaType;
+    /** . */
+    private final Class<O> javaType;
 
-   /** . */
-   private final TypeModel<? super O> superType;
+    /** . */
+    private final TypeModel<? super O> superType;
 
-   TypeModel(Class<O> javaType, TypeModel<? super O> superType)
-   {
-      this.javaType = javaType;
-      this.superType = superType;
-   }
+    TypeModel(Class<O> javaType, TypeModel<? super O> superType) {
+        this.javaType = javaType;
+        this.superType = superType;
+    }
 
-   public String getName()
-   {
-      return javaType.getName();
-   }
+    public String getName() {
+        return javaType.getName();
+    }
 
-   public Class<O> getJavaType()
-   {
-      return javaType;
-   }
+    public Class<O> getJavaType() {
+        return javaType;
+    }
 
-   public TypeModel<? super O> getSuperType()
-   {
-      return superType;
-   }
+    public TypeModel<? super O> getSuperType() {
+        return superType;
+    }
 
-   @Override
-   public String toString()
-   {
-      return "TypeModel[name=" + javaType.getName() + "]";
-   }
+    @Override
+    public String toString() {
+        return "TypeModel[name=" + javaType.getName() + "]";
+    }
 }

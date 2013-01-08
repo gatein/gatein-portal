@@ -19,81 +19,71 @@
 
 package org.exoplatform.commons.utils;
 
-import junit.framework.TestCase;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Queue;
 
+import junit.framework.TestCase;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestQueues extends TestCase
-{
-   public void testLIFO()
-   {
-      Queue<String> lifo = Queues.lifo();
-      assertEquals(0, lifo.size());
-      assertTrue(lifo.add("a"));
-      assertEquals(1, lifo.size());
-      assertTrue(lifo.add("b"));
-      assertEquals(2, lifo.size());
-      assertTrue(lifo.add("c"));
-      assertEquals(3, lifo.size());
-      Iterator<String> it = lifo.iterator();
-      assertEquals("c", it.next());
-      assertEquals("b", it.next());
-      assertEquals("a", it.next());
-      assertFalse(it.hasNext());
-      assertEquals("c", lifo.peek());
-      assertEquals(3, lifo.size());
-      assertEquals("c", lifo.poll());
-      assertEquals(2, lifo.size());
-      assertEquals("b", lifo.poll());
-      assertEquals(1, lifo.size());
-      assertEquals("a", lifo.poll());
-      assertEquals(0, lifo.size());
-      assertEquals(null, lifo.poll());
-      assertEquals(null, lifo.peek());
-      assertEquals(0, lifo.size());
-      assertEquals(null, lifo.poll());
-      assertEquals(null, lifo.peek());
-      assertEquals(0, lifo.size());
-   }
+public class TestQueues extends TestCase {
+    public void testLIFO() {
+        Queue<String> lifo = Queues.lifo();
+        assertEquals(0, lifo.size());
+        assertTrue(lifo.add("a"));
+        assertEquals(1, lifo.size());
+        assertTrue(lifo.add("b"));
+        assertEquals(2, lifo.size());
+        assertTrue(lifo.add("c"));
+        assertEquals(3, lifo.size());
+        Iterator<String> it = lifo.iterator();
+        assertEquals("c", it.next());
+        assertEquals("b", it.next());
+        assertEquals("a", it.next());
+        assertFalse(it.hasNext());
+        assertEquals("c", lifo.peek());
+        assertEquals(3, lifo.size());
+        assertEquals("c", lifo.poll());
+        assertEquals(2, lifo.size());
+        assertEquals("b", lifo.poll());
+        assertEquals(1, lifo.size());
+        assertEquals("a", lifo.poll());
+        assertEquals(0, lifo.size());
+        assertEquals(null, lifo.poll());
+        assertEquals(null, lifo.peek());
+        assertEquals(0, lifo.size());
+        assertEquals(null, lifo.poll());
+        assertEquals(null, lifo.peek());
+        assertEquals(0, lifo.size());
+    }
 
-   public void testLIFOResize()
-   {
-      Queue<String> lifo = Queues.lifo(0);
-      assertEquals(0, lifo.size());
-      lifo.add("a");
-      assertEquals(1, lifo.size());
-      assertEquals("a", lifo.peek());
-      assertEquals("a", lifo.poll());
-      assertEquals(0, lifo.size());
-   }
+    public void testLIFOResize() {
+        Queue<String> lifo = Queues.lifo(0);
+        assertEquals(0, lifo.size());
+        lifo.add("a");
+        assertEquals(1, lifo.size());
+        assertEquals("a", lifo.peek());
+        assertEquals("a", lifo.poll());
+        assertEquals(0, lifo.size());
+    }
 
-   public void testEmpty()
-   {
-      Queue<String> lifo = Queues.empty();
-      assertFalse(lifo.offer(""));
-      try
-      {
-         lifo.add("");
-         fail();
-      }
-      catch (IllegalStateException ignore)
-      {
-      }
-      assertEquals(0, lifo.size());
-      assertNull(lifo.peek());
-      assertNull(lifo.poll());
-      try
-      {
-         lifo.element();
-         fail();
-      }
-      catch (NoSuchElementException ignore)
-      {
-      }
-   }
+    public void testEmpty() {
+        Queue<String> lifo = Queues.empty();
+        assertFalse(lifo.offer(""));
+        try {
+            lifo.add("");
+            fail();
+        } catch (IllegalStateException ignore) {
+        }
+        assertEquals(0, lifo.size());
+        assertNull(lifo.peek());
+        assertNull(lifo.poll());
+        try {
+            lifo.element();
+            fail();
+        } catch (NoSuchElementException ignore) {
+        }
+    }
 }

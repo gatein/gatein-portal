@@ -19,30 +19,30 @@
 
 package org.exoplatform.commons.utils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class StatelessPageList<E> extends AbstractSerializablePageList<E> implements Serializable
-{
-   protected StatelessPageList(int pageSize)
-   {
-      super(pageSize);
-   }
+public abstract class StatelessPageList<E> extends AbstractSerializablePageList<E> implements Serializable {
+    protected StatelessPageList(int pageSize) {
+        super(pageSize);
+    }
 
-   protected abstract ListAccess<E> connect() throws Exception;
+    protected abstract ListAccess<E> connect() throws Exception;
 
-   // Serialization
+    // Serialization
 
-   private void writeObject(ObjectOutputStream out) throws IOException
-   {
-      super.writeState(out);
-   }
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        super.writeState(out);
+    }
 
-   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
-   {
-      super.readState(in);
-   }
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        super.readState(in);
+    }
 }

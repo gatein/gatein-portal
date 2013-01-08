@@ -31,21 +31,16 @@ import org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform;
 // We need fallback to "java:jboss/UserTransaction" because "java:comp/UserTransaction" is not available
 // during eXo kernel boot in AS7 environment.
 // TODO: Remove class once https://issues.jboss.org/browse/HIBERNATE-137 will be fixed
-public class UserTransactionJtaPlatform extends JBossAppServerJtaPlatform
-{
-   // Should always work with AS7 even during GateIn(exo kernel) boot from MSC thread
-   public static final String JBOSS_CTX_UT_NAME = "java:jboss/UserTransaction";
+public class UserTransactionJtaPlatform extends JBossAppServerJtaPlatform {
+    // Should always work with AS7 even during GateIn(exo kernel) boot from MSC thread
+    public static final String JBOSS_CTX_UT_NAME = "java:jboss/UserTransaction";
 
-   @Override
-   protected UserTransaction locateUserTransaction()
-   {
-      try
-      {
-         return (UserTransaction) jndiService().locate(UT_NAME);
-      }
-      catch(JndiException jndiException)
-      {
-         return (UserTransaction) jndiService().locate(JBOSS_CTX_UT_NAME);
-      }
-   }
+    @Override
+    protected UserTransaction locateUserTransaction() {
+        try {
+            return (UserTransaction) jndiService().locate(UT_NAME);
+        } catch (JndiException jndiException) {
+            return (UserTransaction) jndiService().locate(JBOSS_CTX_UT_NAME);
+        }
+    }
 }

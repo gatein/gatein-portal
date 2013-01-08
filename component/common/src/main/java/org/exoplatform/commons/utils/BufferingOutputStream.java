@@ -21,128 +21,112 @@ package org.exoplatform.commons.utils;
 import java.io.IOException;
 import java.io.OutputStream;
 
+
 /**
- * A stream that maintains a buffer and flush it on a delegate output stream when it is
- * filled. Unlike {@link java.io.BufferedOutputStream} this class is not synchronized. 
+ * A stream that maintains a buffer and flush it on a delegate output stream when it is filled. Unlike
+ * {@link java.io.BufferedOutputStream} this class is not synchronized.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class BufferingOutputStream extends OutputStream
-{
+public class BufferingOutputStream extends OutputStream {
 
-   /** . */
-   private final OutputStream out;
+    /** . */
+    private final OutputStream out;
 
-   /** . */
-   private byte[] buffer;
+    /** . */
+    private byte[] buffer;
 
-   /** . */
-   private boolean open;
+    /** . */
+    private boolean open;
 
-   /** . */
-   private int offset;
+    /** . */
+    private int offset;
 
-   /** . */
-   private final int size;
+    /** . */
+    private final int size;
 
-   public BufferingOutputStream(OutputStream out, int bufferSize)
-   {
-      if (out == null)
-      {
-         throw new NullPointerException("No null output stream");
-      }
-      if (bufferSize < 1)
-      {
-         throw new IllegalArgumentException("No buffer size under 1");
-      }
-      this.out = out;
-      this.buffer = new byte[bufferSize];
-      this.size = bufferSize;
-      this.open = true;
-   }
+    public BufferingOutputStream(OutputStream out, int bufferSize) {
+        if (out == null) {
+            throw new NullPointerException("No null output stream");
+        }
+        if (bufferSize < 1) {
+            throw new IllegalArgumentException("No buffer size under 1");
+        }
+        this.out = out;
+        this.buffer = new byte[bufferSize];
+        this.size = bufferSize;
+        this.open = true;
+    }
 
-   @Override
-   public void write(int b) throws IOException
-   {
-      if (!open)
-      {
-         throw new IOException("closed");
-      }
-      if (offset >= size)
-      {
-         out.write(buffer);
-         offset = 0;
-      }
-      buffer[offset++] = (byte)b;
-   }
+    @Override
+    public void write(int b) throws IOException {
+        if (!open) {
+            throw new IOException("closed");
+        }
+        if (offset >= size) {
+            out.write(buffer);
+            offset = 0;
+        }
+        buffer[offset++] = (byte) b;
+    }
 
-   @Override
-   public void write(byte[] b, int off, int len) throws IOException
-   {
-      if (!open)
-      {
-         throw new IOException("closed");
-      }
+    @Override
+    public void write(byte[] b, int off, int len) throws IOException {
+        if (!open) {
+            throw new IOException("closed");
+        }
 
-      //
-      if (offset + len >= size)
-      {
-         // Clear the buffer
-         out.write(buffer, 0, offset);
-         offset = 0;
+        //
+        if (offset + len >= size) {
+            // Clear the buffer
+            out.write(buffer, 0, offset);
+            offset = 0;
 
-         // While the data length is greater than the the buffer size
-         // write directly to the wire
-         while (len >= size)
-         {
-            out.write(b, off, size);
-            off += size;
-            len -= size;
-         }
-      }
+            // While the data length is greater than the the buffer size
+            // write directly to the wire
+            while (len >= size) {
+                out.write(b, off, size);
+                off += size;
+                len -= size;
+            }
+        }
 
-      //
-      System.arraycopy(b, off, buffer, offset, len);
-      offset += len;
-   }
+        //
+        System.arraycopy(b, off, buffer, offset, len);
+        offset += len;
+    }
 
-   @Override
-   public void flush() throws IOException
-   {
-      if (!open)
-      {
-         throw new IOException("closed");
-      }
+    @Override
+    public void flush() throws IOException {
+        if (!open) {
+            throw new IOException("closed");
+        }
 
-      //
-      if (offset > 0)
-      {
-         out.write(buffer, 0, offset);
-         offset = 0;
-      }
+        //
+        if (offset > 0) {
+            out.write(buffer, 0, offset);
+            offset = 0;
+        }
 
-      //
-      out.flush();
-   }
+        //
+        out.flush();
+    }
 
-   @Override
-   public void close() throws IOException
-   {
-      if (!open)
-      {
-         throw new IOException("closed");
-      }
+    @Override
+    public void close() throws IOException {
+        if (!open) {
+            throw new IOException("closed");
+        }
 
-      //
-      if (offset > 0)
-      {
-         out.write(buffer, 0, offset);
-         offset = 0;
-      }
+        //
+        if (offset > 0) {
+            out.write(buffer, 0, offset);
+            offset = 0;
+        }
 
-      //
-      open = false;
-      out.close();
-   }
+        //
+        open = false;
+        out.close();
+    }
 }

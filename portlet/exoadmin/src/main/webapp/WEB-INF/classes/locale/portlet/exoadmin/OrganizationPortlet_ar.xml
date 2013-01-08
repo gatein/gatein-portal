@@ -28,7 +28,7 @@
     <label>
       <userManagement>ادارة المستخدمين</userManagement>
       <groupManagement>إدارة الفرق</groupManagement>
-      <membershipManagement>إدارة العضوية </membershipManagement>
+      <membershipManagement>إدارة العضوية</membershipManagement>
     </label>
   </UIOrganizationPortlet>
   <!--
@@ -47,7 +47,7 @@
     </action>
     <msg>
       <SameName>هذه العضوية موجودة ، الرجاء إدخال واحدة أخرى</SameName>
-	  <MembershipNotExist> عضوية {0} ليست موجودة أو قد تم حذفه. </MembershipNotExist>
+      <MembershipNotExist>عضوية {0} ليست موجودة أو قد تم حذفه.</MembershipNotExist>
     </msg>
   </UIMembershipTypeForm>
   <!--
@@ -63,7 +63,7 @@
       <Cancel>الغاء</Cancel>
     </action>
     <msg>
-      <membership-delete>!ا يمكن  الحفظ: إزالة عضوية</membership-delete>
+      <membership-delete>!ا يمكن الحفظ: إزالة عضوية</membership-delete>
       <membership-exist>!نوع العضوية موجود ، من فضلك ادخل واحد آخر</membership-exist>
     </msg>
   </UIGroupEditMembershipForm>
@@ -177,7 +177,7 @@
       <changePassword>:تغيير كلمة السر</changePassword>
       <newPassword>:كلمة السر جديدة</newPassword>
       <confirmPassword>:تأكيد كلمة السر</confirmPassword>
-      <Profile>تعريفة المستخدم </Profile>
+      <Profile>تعريفة المستخدم</Profile>
       <userName>#{word.userName}:</userName>
       <password>:كلمة السر</password>
       <Confirmpassword>:تأكيد كلمة السر</Confirmpassword>
@@ -242,14 +242,14 @@
         </business-info>
       </user>
       <option>
-      	<male>ذكر</male>
-      	<female>أنثى</female>      	
-      	<en>الإنجليزية</en>
-		<ma>Ma</ma>
-		<vi>Vietnamese</vi>
-		<ar>العربية</ar>
-		<fr>الفرنسية</fr>
-		<ru>الروسية</ru>
+        <male>ذكر</male>
+        <female>أنثى</female>
+        <en>الإنجليزية</en>
+        <ma>Ma</ma>
+        <vi>Vietnamese</vi>
+        <ar>العربية</ar>
+        <fr>الفرنسية</fr>
+        <ru>الروسية</ru>
       </option>
       <BusinessInfo>معلومات العمل</BusinessInfo>
     </label>
@@ -295,7 +295,7 @@
       </label>
     </tab>
     <label>
-      <UIUserInGroup />
+      <UIUserInGroup/>
     </label>
     <title>معلومات المجموعة</title>
   </UIGroupInfo>
@@ -318,7 +318,7 @@
     </action>
     <msg>
       <InUse>لا يمكنك حذف هذه العضوية لأنها في الاستخدام</InUse>
-      <DeleteMandatory>لا يمكنك حذف هذه العضوية لأنه إلزامية</DeleteMandatory>      
+      <DeleteMandatory>لا يمكنك حذف هذه العضوية لأنه إلزامية</DeleteMandatory>
     </msg>
   </UIMembershipList>
   <!--
@@ -374,14 +374,14 @@
       <Remove>محو</Remove>
     </action>
     <label>
-      <navigation>تصفح </navigation>
+      <navigation>تصفح</navigation>
       <description>الوصف</description>
       <membership>العضوية</membership>
       <priority>الأولوية</priority>
     </label>
     <tab>
       <label>
-        <SharedNavigation>تحديد التصفح المشترك </SharedNavigation>
+        <SharedNavigation>تحديد التصفح المشترك</SharedNavigation>
         <Permission>اختيار التصريح</Permission>
       </label>
     </tab>

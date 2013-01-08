@@ -18,231 +18,203 @@
  */
 package org.exoplatform.commons.chromattic;
 
-import org.chromattic.api.Chromattic;
-import org.chromattic.api.ChromatticSession;
-import org.exoplatform.component.test.*;
-import org.exoplatform.container.PortalContainer;
-
 import javax.jcr.Session;
 import javax.jcr.Workspace;
+
+import org.chromattic.api.Chromattic;
+import org.chromattic.api.ChromatticSession;
+import org.exoplatform.component.test.AbstractKernelTest;
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.container.PortalContainer;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 @ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/commons/chromattic/configuration.xml")
-})
-public class ChromatticIntegrationTestCase extends AbstractKernelTest
-{
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/commons/chromattic/configuration.xml") })
+public class ChromatticIntegrationTestCase extends AbstractKernelTest {
 
-   /** . */
-   private ChromatticLifeCycle test1LF;
+    /** . */
+    private ChromatticLifeCycle test1LF;
 
-   /** . */
-   private ChromatticLifeCycle test2LF;
+    /** . */
+    private ChromatticLifeCycle test2LF;
 
-   /** . */
-   private ChromatticManager chromatticManager;
+    /** . */
+    private ChromatticManager chromatticManager;
 
-   public ChromatticIntegrationTestCase()
-   {
-   }
+    public ChromatticIntegrationTestCase() {
+    }
 
-   @Override
-   protected void setUp() throws Exception
-   {
-      PortalContainer container = PortalContainer.getInstance();
-      chromatticManager = (ChromatticManager)container.getComponent(ChromatticManager.class);
-      test1LF = chromatticManager.getLifeCycle("test1");
-      test2LF = chromatticManager.getLifeCycle("test2");
-   }
+    @Override
+    protected void setUp() throws Exception {
+        PortalContainer container = PortalContainer.getInstance();
+        chromatticManager = (ChromatticManager) container.getComponent(ChromatticManager.class);
+        test1LF = chromatticManager.getLifeCycle("test1");
+        test2LF = chromatticManager.getLifeCycle("test2");
+    }
 
-   public void testConfiguratorInitialized() throws Exception
-   {
-      assertNotNull(test1LF);
-      assertEquals("portal-test", test1LF.getWorkspaceName());
-      assertNotNull(test1LF.getChromattic());
-      assertSame(chromatticManager, test1LF.getManager());
-   }
+    public void testConfiguratorInitialized() throws Exception {
+        assertNotNull(test1LF);
+        assertEquals("portal-test", test1LF.getWorkspaceName());
+        assertNotNull(test1LF.getChromattic());
+        assertSame(chromatticManager, test1LF.getManager());
+    }
 
-   public void testCannotInitiateMoreThanOneRequest()
-   {
-      chromatticManager.beginRequest();
+    public void testCannotInitiateMoreThanOneRequest() {
+        chromatticManager.beginRequest();
 
-      //
-      try
-      {
-         chromatticManager.beginRequest();
-         fail();
-      }
-      catch (IllegalStateException e)
-      {
-      }
+        //
+        try {
+            chromatticManager.beginRequest();
+            fail();
+        } catch (IllegalStateException e) {
+        }
 
-      //
-      chromatticManager.endRequest(false);
-   }
+        //
+        chromatticManager.endRequest(false);
+    }
 
-   public void testCannotEndNonExistingRequest()
-   {
-      try
-      {
-         chromatticManager.endRequest(false);
-         fail();
-      }
-      catch (IllegalStateException e)
-      {
-      }
-   }
+    public void testCannotEndNonExistingRequest() {
+        try {
+            chromatticManager.endRequest(false);
+            fail();
+        } catch (IllegalStateException e) {
+        }
+    }
 
+    public void testWrapperFailsWhenNoGlobalRequest() throws Exception {
+        try {
+            test1LF.getChromattic().openSession();
+            fail();
+        } catch (IllegalStateException e) {
+        }
+    }
 
-   public void testWrapperFailsWhenNoGlobalRequest() throws Exception
-   {
-      try
-      {
-         test1LF.getChromattic().openSession();
-         fail();
-      }
-      catch (IllegalStateException e)
-      {
-      }
-   }
+    public void testLocalRequest() throws Exception {
+        Session jcrSession;
 
-   public void testLocalRequest() throws Exception
-   {
-      Session jcrSession;
+        //
+        SessionContext context = test1LF.openContext();
+        try {
+            ChromatticSession session = test1LF.getChromattic().openSession();
+            FooEntity foo = session.create(FooEntity.class);
+            assertEquals("portal-test", foo.getWorkspace());
+            jcrSession = session.getJCRSession();
+            assertTrue(jcrSession.isLive());
+            Workspace workspace = jcrSession.getWorkspace();
+            assertEquals("portal-test", workspace.getName());
 
-      //
-      SessionContext context = test1LF.openContext();
-      try
-      {
-         ChromatticSession session = test1LF.getChromattic().openSession();
-         FooEntity foo = session.create(FooEntity.class);
-         assertEquals("portal-test", foo.getWorkspace());
-         jcrSession = session.getJCRSession();
-         assertTrue(jcrSession.isLive());
-         Workspace workspace = jcrSession.getWorkspace();
-         assertEquals("portal-test", workspace.getName());
+            session.close();
+            assertTrue(jcrSession.isLive());
+        } finally {
+            test1LF.closeContext(false);
+        }
 
-         session.close();
-         assertTrue(jcrSession.isLive());
-      }
-      finally
-      {
-         test1LF.closeContext(false);
-      }
+        // Assert JCR session was properly closed
+        assertFalse(jcrSession.isLive());
+    }
 
-      // Assert JCR session was properly closed
-      assertFalse(jcrSession.isLive());
-   }
+    public void testLocalRequestNoSessionAccess() {
+        SessionContext context = test1LF.openContext();
+        test1LF.closeContext(false);
+    }
 
-   public void testLocalRequestNoSessionAccess()
-   {
-      SessionContext context = test1LF.openContext();
-      test1LF.closeContext(false);
-   }
+    public void testGlobalSession() throws Exception {
+        Session jcrSession;
 
-   public void testGlobalSession() throws Exception
-   {
-      Session jcrSession;
+        //
+        SynchronizationEventQueue queue = new SynchronizationEventQueue();
 
-      //
-      SynchronizationEventQueue queue = new SynchronizationEventQueue();
+        //
+        chromatticManager.beginRequest();
+        try {
+            Chromattic chromattic = test1LF.getChromattic();
 
-      //
-      chromatticManager.beginRequest();
-      try
-      {
-         Chromattic chromattic = test1LF.getChromattic();
+            // No context should be open
+            assertNull(test1LF.getContext(true));
 
-         // No context should be open
-         assertNull(test1LF.getContext(true));
+            // Opens a session with the provided Chromattic
+            ChromatticSession session = chromattic.openSession();
 
-         // Opens a session with the provided Chromattic
-         ChromatticSession session = chromattic.openSession();
+            // Now we should have a context
+            SessionContext context = test1LF.getContext(true);
+            assertNotNull(context);
 
-         // Now we should have a context
-         SessionContext context = test1LF.getContext(true);
-         assertNotNull(context);
+            // Register synchronzation with event queue
+            context.addSynchronizationListener(queue);
 
-         // Register synchronzation with event queue
-         context.addSynchronizationListener(queue);
+            // Check how chromattic see the session
+            FooEntity foo = session.create(FooEntity.class);
+            assertEquals("portal-test", foo.getWorkspace());
 
-         // Check how chromattic see the session
-         FooEntity foo = session.create(FooEntity.class);
-         assertEquals("portal-test", foo.getWorkspace());
+            // Check related JCR session
+            jcrSession = session.getJCRSession();
+            assertTrue(jcrSession.isLive());
+            Workspace workspace = jcrSession.getWorkspace();
+            assertEquals("portal-test", workspace.getName());
 
-         // Check related JCR session
-         jcrSession = session.getJCRSession();
-         assertTrue(jcrSession.isLive());
-         Workspace workspace = jcrSession.getWorkspace();
-         assertEquals("portal-test", workspace.getName());
+            // Closing chromattic session should not close the underlying JCR session
+            session.close();
+            assertTrue(jcrSession.isLive());
 
-         // Closing chromattic session should not close the underlying JCR session
-         session.close();
-         assertTrue(jcrSession.isLive());
+            // Queue should be empty up to here
+            queue.assertEmpty();
+        } finally {
+            chromatticManager.endRequest(false);
+        }
 
-         // Queue should be empty up to here
-         queue.assertEmpty();
-      }
-      finally
-      {
-         chromatticManager.endRequest(false);
-      }
+        //
+        queue.assertEvent(SynchronizationEvent.BEFORE);
+        queue.assertEvent(SynchronizationEvent.DISCARDED);
 
-      // 
-      queue.assertEvent(SynchronizationEvent.BEFORE);
-      queue.assertEvent(SynchronizationEvent.DISCARDED);
+        // Assert JCR session was properly closed
+        assertFalse(jcrSession.isLive());
+    }
 
-      // Assert JCR session was properly closed
-      assertFalse(jcrSession.isLive());
-   }
+    public void testGlobalSessionContext() throws Exception {
+        chromatticManager.beginRequest();
+        try {
+            SessionContext context = test1LF.getContext(true);
+            assertNull(context);
 
-   public void testGlobalSessionContext() throws Exception
-   {
-      chromatticManager.beginRequest();
-      try
-      {
-         SessionContext context = test1LF.getContext(true);
-         assertNull(context);
+            //
+            context = test1LF.getContext(false);
+            assertNotNull(context);
+        } finally {
+            chromatticManager.endRequest(false);
+        }
+    }
 
-         //
-         context = test1LF.getContext(false);
-         assertNotNull(context);
-      }
-      finally
-      {
-         chromatticManager.endRequest(false);
-      }
-   }
+    public void testPersistence() throws Exception {
 
-   public void testPersistence() throws Exception {
+        chromatticManager.beginRequest();
+        ChromatticSession session = test1LF.getChromattic().openSession();
+        FooEntity foo = session.create(FooEntity.class);
+        String fooId = session.persist(foo, "testPersistence");
+        session.save();
+        chromatticManager.endRequest(true);
 
-      chromatticManager.beginRequest();
-      ChromatticSession session = test1LF.getChromattic().openSession();
-      FooEntity foo = session.create(FooEntity.class);
-      String fooId = session.persist(foo, "testPersistence");
-      session.save();
-      chromatticManager.endRequest(true);
+        chromatticManager.beginRequest();
+        session = test1LF.getChromattic().openSession();
+        foo = session.findById(FooEntity.class, fooId);
+        session.close();
+        chromatticManager.endRequest(false);
 
-      chromatticManager.beginRequest();
-      session = test1LF.getChromattic().openSession();
-      foo = session.findById(FooEntity.class, fooId);
-      session.close();
-      chromatticManager.endRequest(false);
+        assertNotNull(foo);
+    }
 
-      assertNotNull(foo);
-   }
-
-   public void testTwoLifeCycleWithSameRepository() {
-      chromatticManager.beginRequest();
-      SessionContext ctx1 = test1LF.openContext();
-      Session session1 = ctx1.getSession().getJCRSession();
-      SessionContext ctx2 = test2LF.openContext();
-      Session session2 = ctx2.getSession().getJCRSession();
-      assertSame(session1, session2);
-      chromatticManager.endRequest(false);
-   }
+    public void testTwoLifeCycleWithSameRepository() {
+        chromatticManager.beginRequest();
+        SessionContext ctx1 = test1LF.openContext();
+        Session session1 = ctx1.getSession().getJCRSession();
+        SessionContext ctx2 = test2LF.openContext();
+        Session session2 = ctx2.getSession().getJCRSession();
+        assertSame(session1, session2);
+        chromatticManager.endRequest(false);
+    }
 }

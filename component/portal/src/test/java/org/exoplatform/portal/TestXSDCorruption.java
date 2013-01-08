@@ -19,48 +19,42 @@
 
 package org.exoplatform.portal;
 
+import java.io.InputStream;
+
 import junit.framework.TestCase;
 
 import org.gatein.common.io.IOTools;
-
-import java.io.InputStream;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestXSDCorruption extends TestCase
-{
+public class TestXSDCorruption extends TestCase {
 
-   private void assertHash(String expected, String resourcePath) throws Exception
-   {
-      InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath);
-      assertNotNull(in);
-      byte[] bytes = IOTools.getBytes(in);
-      java.security.MessageDigest digester = java.security.MessageDigest.getInstance("MD5");
-      digester.update(bytes);
-      StringBuilder sb = new StringBuilder();
-      for (byte b : digester.digest())
-      {
-         String hex = Integer.toHexString(b);
-         if (hex.length() == 1)
-         {
-            sb.append('0');
-            sb.append(hex.charAt(0));
-         }
-         else
-         {
-            sb.append(hex.substring(hex.length() - 2));
-         }
-      }
-      assertEquals(expected, sb.toString());
-   }
+    private void assertHash(String expected, String resourcePath) throws Exception {
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath);
+        assertNotNull(in);
+        byte[] bytes = IOTools.getBytes(in);
+        java.security.MessageDigest digester = java.security.MessageDigest.getInstance("MD5");
+        digester.update(bytes);
+        StringBuilder sb = new StringBuilder();
+        for (byte b : digester.digest()) {
+            String hex = Integer.toHexString(b);
+            if (hex.length() == 1) {
+                sb.append('0');
+                sb.append(hex.charAt(0));
+            } else {
+                sb.append(hex.substring(hex.length() - 2));
+            }
+        }
+        assertEquals(expected, sb.toString());
+    }
 
-   public void testGateInObjects1_x() throws Exception
-   {
-      assertHash("d0591b0a022a0c2929e1aed8979857cd", "gatein_objects_1_0.xsd");
-      assertHash("99ae24c9bbfe1b59e066756a29ab6c79", "gatein_objects_1_1.xsd");
-      assertHash("b0e79a35641cccf49c8796a99a5a91a3", "gatein_objects_1_2.xsd");
-      assertHash("2778db542084455317f53d4a4132cdc6", "gatein_objects_1_3.xsd");
-   }
+    public void testGateInObjects1_x() throws Exception {
+        assertHash("4d9910ede9174952cc7b6ab1724004fc", "gatein_objects_1_0.xsd");
+        assertHash("84f12eedf716ceda613b4eaf5e53b8b7", "gatein_objects_1_1.xsd");
+        assertHash("a1c6ff34609376a873baa2a2f5513a69", "gatein_objects_1_1_1.xsd");
+        assertHash("52a0042722b55085bb0c61996c137699", "gatein_objects_1_2.xsd");
+        assertHash("949559e6559207a6c5effabb9367f3d1", "gatein_objects_1_3.xsd");
+    }
 }

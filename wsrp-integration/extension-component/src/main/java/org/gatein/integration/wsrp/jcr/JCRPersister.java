@@ -42,203 +42,137 @@ import org.gatein.wsrp.jcr.BaseChromatticPersister;
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class JCRPersister extends BaseChromatticPersister
-{
-   public JCRPersister(ExoContainer container, String workspaceName)
-   {
-      super(workspaceName);
-   }
+public class JCRPersister extends BaseChromatticPersister {
+    public JCRPersister(ExoContainer container, String workspaceName) {
+        super(workspaceName);
+    }
 
-   @Override
-   protected void setBuilderOptions(ChromatticBuilder builder)
-   {
-      if (PORTLET_STATES_WORKSPACE_NAME.equals(workspaceName))
-      {
-         builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, PortletStatesSessionLifeCycle.class.getName());
-      }
-      else if (WSRP_WORKSPACE_NAME.equals(workspaceName))
-      {
-         builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, WSRPSessionLifeCycle.class.getName());
-      }
-      else
-      {
-         throw new IllegalArgumentException("Unknown workspace name: '" + workspaceName + "'");
-      }
-   }
+    @Override
+    protected void setBuilderOptions(ChromatticBuilder builder) {
+        if (PORTLET_STATES_WORKSPACE_NAME.equals(workspaceName)) {
+            builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, PortletStatesSessionLifeCycle.class.getName());
+        } else if (WSRP_WORKSPACE_NAME.equals(workspaceName)) {
+            builder.setOptionValue(ChromatticBuilder.SESSION_LIFECYCLE_CLASSNAME, WSRPSessionLifeCycle.class.getName());
+        } else {
+            throw new IllegalArgumentException("Unknown workspace name: '" + workspaceName + "'");
+        }
+    }
 
-   public static class WSRPSessionLifeCycle implements SessionLifeCycle
-   {
-      private ManageableRepository repository;
-      private ThreadLocal<SessionProvider> provider = new ThreadLocal<SessionProvider>();
+    public abstract static class AbstractSessionLifeCycle implements SessionLifeCycle {
+        private ManageableRepository repository;
+        private ThreadLocal<SessionProvider> provider = new ThreadLocal<SessionProvider>();
 
-      public WSRPSessionLifeCycle()
-      {
-         try
-         {
-            ExoContainer container = ExoContainerContext.getCurrentContainer();
-            RepositoryService repoService = (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
-            repository = repoService.getRepository(REPOSITORY_NAME);
-         }
-         catch (Exception e)
-         {
-            throw new RuntimeException(e);
-         }
-      }
+        public AbstractSessionLifeCycle() {
+            try {
+                ExoContainer container = ExoContainerContext.getCurrentContainer();
+                RepositoryService repoService = (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class);
+                repository = repoService.getRepository(REPOSITORY_NAME);
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
 
-      public Session login() throws RepositoryException
-      {
-         SessionProvider sessionProvider = provider.get();
-         if (sessionProvider == null)
-         {
-            sessionProvider =  SessionProvider.createSystemProvider();
-            provider.set(sessionProvider);
-         }
-         
-         Session session = sessionProvider.getSession(WSRP_WORKSPACE_NAME, repository);
-         return session;
-      }
+        public Session login() throws RepositoryException {
+            SessionProvider sessionProvider = provider.get();
+            if (sessionProvider == null) {
+                sessionProvider = SessionProvider.createSystemProvider();
+                provider.set(sessionProvider);
+            }
 
-      public Session login(String s) throws RepositoryException
-      {
-         throw new UnsupportedOperationException();
-      }
+            return sessionProvider.getSession(getWorkspaceName(), repository);
+        }
 
-      public Session login(Credentials credentials, String s) throws RepositoryException
-      {
-         throw new UnsupportedOperationException();
-      }
+        protected abstract String getWorkspaceName();
 
-      public Session login(Credentials credentials) throws RepositoryException
-      {
-         throw new UnsupportedOperationException();
-      }
+        public Session login(String s) throws RepositoryException {
+            throw new UnsupportedOperationException();
+        }
 
-      public void save(Session session) throws RepositoryException
-      {
-         session.save();
-      }
+        public Session login(Credentials credentials, String s) throws RepositoryException {
+            throw new UnsupportedOperationException();
+        }
 
-      public void close(Session session)
-      {
-         session.logout();
-      }
-   }
+        public Session login(Credentials credentials) throws RepositoryException {
+            throw new UnsupportedOperationException();
+        }
 
-   public static class PortletStatesSessionLifeCycle implements SessionLifeCycle
-   {
-      private ManageableRepository repository;
-      private SessionProvider provider;
+        public void save(Session session) throws RepositoryException {
+            session.save();
+        }
 
-      public PortletStatesSessionLifeCycle()
-      {
-         try
-         {
-            ExoContainer container = ExoContainerContext.getCurrentContainer();
-            RepositoryService repoService = (RepositoryService)container.getComponentInstanceOfType(RepositoryService.class);
-            repository = repoService.getRepository(REPOSITORY_NAME);
-         }
-         catch (Exception e)
-         {
-            throw new RuntimeException(e);
-         }
+        public void close(Session session) {
+            session.logout();
+        }
+    }
 
-         provider = SessionProvider.createSystemProvider();
-      }
+    public static class WSRPSessionLifeCycle extends AbstractSessionLifeCycle {
+        @Override
+        protected String getWorkspaceName() {
+            return WSRP_WORKSPACE_NAME;
+        }
+    }
 
-      public Session login() throws RepositoryException
-      {
-         return provider.getSession(PORTLET_STATES_WORKSPACE_NAME, repository);
-      }
+    public static class PortletStatesSessionLifeCycle extends AbstractSessionLifeCycle {
+        @Override
+        protected String getWorkspaceName() {
+            return PORTLET_STATES_WORKSPACE_NAME;
+        }
+    }
 
-      public Session login(String s) throws RepositoryException
-      {
-         throw new UnsupportedOperationException();
-      }
+    public static class QNameFormatter implements ObjectFormatter {
+        private static final String OPEN_BRACE_REPLACEMENT = "-__";
+        private static final String CLOSE_BRACE_REPLACEMENT = "__-";
+        private static final String COLON_REPLACEMENT = "_-_";
+        private static final String CLOSE_BRACE = "}";
+        private static final String OPEN_BRACE = "{";
+        private static final String COLON = ":";
 
-      public Session login(Credentials credentials, String s) throws RepositoryException
-      {
-         throw new UnsupportedOperationException();
-      }
+        public String decodeNodeName(FormatterContext formatterContext, String s) {
+            return decode(s);
+        }
 
-      public Session login(Credentials credentials) throws RepositoryException
-      {
-         throw new UnsupportedOperationException();
-      }
+        public String encodeNodeName(FormatterContext formatterContext, String s) {
+            return encode(s);
+        }
 
-      public void save(Session session) throws RepositoryException
-      {
-         session.save();
-      }
+        public String decodePropertyName(FormatterContext formatterContext, String s) {
+            return decode(s);
+        }
 
-      public void close(Session session)
-      {
-         session.logout();
-      }
-   }
+        public String encodePropertyName(FormatterContext formatterContext, String s) {
+            return encode(s);
+        }
 
-   public static class QNameFormatter implements ObjectFormatter
-   {
-      private static final String OPEN_BRACE_REPLACEMENT = "-__";
-      private static final String CLOSE_BRACE_REPLACEMENT = "__-";
-      private static final String COLON_REPLACEMENT = "_-_";
-      private static final String CLOSE_BRACE = "}";
-      private static final String OPEN_BRACE = "{";
-      private static final String COLON = ":";
+        public static String decode(String s) {
+            return s.replace(CLOSE_BRACE_REPLACEMENT, CLOSE_BRACE).replace(OPEN_BRACE_REPLACEMENT, OPEN_BRACE)
+                    .replace(COLON_REPLACEMENT, COLON);
+        }
 
-      public String decodeNodeName(FormatterContext formatterContext, String s)
-      {
-         return decode(s);
-      }
+        public static String encode(String s) {
+            return s.replace(OPEN_BRACE, OPEN_BRACE_REPLACEMENT).replace(CLOSE_BRACE, CLOSE_BRACE_REPLACEMENT)
+                    .replace(COLON, COLON_REPLACEMENT);
+        }
+    }
 
-      public String encodeNodeName(FormatterContext formatterContext, String s)
-      {
-         return encode(s);
-      }
+    public static class PortletNameFormatter implements ObjectFormatter {
+        public static final String SLASH_REPLACEMENT = "-_-";
+        private static final String SLASH = "/";
 
-      public String decodePropertyName(FormatterContext formatterContext, String s)
-      {
-         return decode(s);
-      }
+        public String decodeNodeName(FormatterContext formatterContext, String s) {
+            return decode(s);
+        }
 
-      public String encodePropertyName(FormatterContext formatterContext, String s)
-      {
-         return encode(s);
-      }
+        public static String decode(String s) {
+            return s.replace(SLASH_REPLACEMENT, SLASH);
+        }
 
-      public static String decode(String s)
-      {
-         return s.replace(CLOSE_BRACE_REPLACEMENT, CLOSE_BRACE).replace(OPEN_BRACE_REPLACEMENT, OPEN_BRACE).replace(COLON_REPLACEMENT, COLON);
-      }
+        public String encodeNodeName(FormatterContext formatterContext, String s) throws IllegalArgumentException,
+                NullPointerException {
+            return encode(s);
+        }
 
-      public static String encode(String s)
-      {
-         return s.replace(OPEN_BRACE, OPEN_BRACE_REPLACEMENT).replace(CLOSE_BRACE, CLOSE_BRACE_REPLACEMENT).replace(COLON, COLON_REPLACEMENT);
-      }
-   }
-
-   public static class PortletNameFormatter implements ObjectFormatter
-   {
-      public static final String SLASH_REPLACEMENT = "-_-";
-      private static final String SLASH = "/";
-
-      public String decodeNodeName(FormatterContext formatterContext, String s)
-      {
-         return decode(s);
-      }
-
-      public static String decode(String s)
-      {
-         return s.replace(SLASH_REPLACEMENT, SLASH);
-      }
-
-      public String encodeNodeName(FormatterContext formatterContext, String s) throws IllegalArgumentException, NullPointerException
-      {
-         return encode(s);
-      }
-
-      public static String encode(String s)
-      {
-         return s.replace(SLASH, SLASH_REPLACEMENT);
-      }
-   }
+        public static String encode(String s) {
+            return s.replace(SLASH, SLASH_REPLACEMENT);
+        }
+    }
 }

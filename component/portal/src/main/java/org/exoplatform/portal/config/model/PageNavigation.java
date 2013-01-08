@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -21,86 +21,73 @@ package org.exoplatform.portal.config.model;
 
 import java.util.ArrayList;
 
-public class PageNavigation
-{
 
-   /** . */
-   private String ownerType;
+public class PageNavigation {
 
-   /** . */
-   private String ownerId;
+    /** . */
+    private String ownerType;
 
-   /** . */
-   private int priority = 1;
+    /** . */
+    private String ownerId;
 
-   /** . */
-   private ArrayList<NavigationFragment> fragments;
+    /** . */
+    private int priority = 1;
 
-   public PageNavigation()
-   {
-      this(null, null);
-   }
+    /** . */
+    private ArrayList<NavigationFragment> fragments;
 
-   public PageNavigation(String ownerType, String ownerId)
-   {
-      this.ownerType = ownerType;
-      this.ownerId = ownerId;
-      this.fragments = new ArrayList<NavigationFragment>();
-   }
+    public PageNavigation() {
+        this(null, null);
+    }
 
-   public String getOwnerId()
-   {
-      return ownerId;
-   }
+    public PageNavigation(String ownerType, String ownerId) {
+        this.ownerType = ownerType;
+        this.ownerId = ownerId;
+        this.fragments = new ArrayList<NavigationFragment>();
+    }
 
-   public void setOwnerId(String ownerId)
-   {
-      this.ownerId = ownerId;
-   }
+    public String getOwnerId() {
+        return ownerId;
+    }
 
-   public String getOwnerType()
-   {
-      return ownerType;
-   }
+    public void setOwnerId(String ownerId) {
+        this.ownerId = ownerId;
+    }
 
-   public void setOwnerType(String ownerType)
-   {
-      this.ownerType = ownerType;
-   }
+    public String getOwnerType() {
+        return ownerType;
+    }
 
-   public int getPriority()
-   {
-      return priority;
-   }
+    public void setOwnerType(String ownerType) {
+        this.ownerType = ownerType;
+    }
 
-   public void setPriority(int i)
-   {
-      priority = i;
-   }
+    public int getPriority() {
+        return priority;
+    }
 
-   public ArrayList<NavigationFragment> getFragments()
-   {
-      return fragments;
-   }
+    public void setPriority(int i) {
+        priority = i;
+    }
 
-   public NavigationFragment getFragment()
-   {
-      return fragments != null && fragments.size() > 0 ? fragments.get(0) : null;
-   }
+    public ArrayList<NavigationFragment> getFragments() {
+        return fragments;
+    }
 
-   public PageNavigation addFragment(NavigationFragment fragment)
-   {
-      if (fragments == null)
-      {
-         fragments = new ArrayList<NavigationFragment>();
-      }
-      fragments.add(fragment);
-      return this;
-   }
+    public NavigationFragment getFragment() {
+        return fragments != null && fragments.size() > 0 ? fragments.get(0) : null;
+    }
 
-   @Override
-   public String toString()
-   {
-      return "PageNavigation[ownerType=" + ownerType + ",ownerId=" + ownerId + "]";
-   }
+    public PageNavigation addFragment(NavigationFragment fragment) {
+        if (fragments == null) {
+            fragments = new ArrayList<NavigationFragment>();
+        }
+        fragments.add(fragment);
+        return this;
+    }
+
+    @Override
+    public String toString() {
+        return "PageNavigation[ownerType=" + ownerType + ",ownerId=" + ownerId + "]";
+    }
 }

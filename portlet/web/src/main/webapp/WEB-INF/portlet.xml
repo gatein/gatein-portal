@@ -25,20 +25,22 @@
              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd"> 
  -->
- 
- <portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" version="1.0">
 
-   <portlet>
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd"
+             version="1.0">
+
+  <portlet>
     <description xml:lang="EN">Logo Portlet</description>
     <portlet-name>LogoPortlet</portlet-name>
     <display-name xml:lang="EN">Logo Portlet</display-name>
-    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
-    
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+
     <init-param>
       <name>webui.configuration</name>
       <value>/WEB-INF/conf/portlet/web/LogoPortlet/webui/configuration.xml</value>
-    </init-param>    
+    </init-param>
 
     <expiration-cache>0</expiration-cache>
     <supports>
@@ -53,18 +55,18 @@
       <keywords>System</keywords>
     </portlet-info>
   </portlet>
- 
- 
+
+
   <portlet>
     <description xml:lang="EN">Banner Portlet</description>
     <portlet-name>BannerPortlet</portlet-name>
     <display-name xml:lang="EN">Banner Portlet</display-name>
-    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
-    
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+
     <init-param>
       <name>webui.configuration</name>
       <value>/WEB-INF/conf/portlet/web/BannerPortlet/webui/configuration.xml</value>
-    </init-param>    
+    </init-param>
 
     <expiration-cache>0</expiration-cache>
     <supports>
@@ -76,8 +78,8 @@
       <title>Banner Portlet</title>
       <short-title>Banner Portlet</short-title>
       <keywords>System</keywords>
-    </portlet-info>    
-    
+    </portlet-info>
+
     <portlet-preferences>
       <preference>
         <name>template</name>
@@ -85,19 +87,19 @@
         <read-only>false</read-only>
       </preference>
     </portlet-preferences>
-    
+
   </portlet>
-  
+
   <portlet>
     <description xml:lang="EN">Footer Portlet</description>
     <portlet-name>FooterPortlet</portlet-name>
     <display-name xml:lang="EN">Footer Portlet</display-name>
-    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
-    
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+
     <init-param>
       <name>webui.configuration</name>
       <value>/WEB-INF/conf/portlet/web/FooterPortlet/webui/configuration.xml</value>
-    </init-param>    
+    </init-param>
 
     <expiration-cache>0</expiration-cache>
     <supports>
@@ -109,8 +111,8 @@
       <title>Footer Portlet</title>
       <short-title>Footer Portlet</short-title>
       <keywords>System</keywords>
-    </portlet-info>    
-    
+    </portlet-info>
+
     <portlet-preferences>
       <preference>
         <name>template</name>
@@ -118,29 +120,29 @@
         <read-only>false</read-only>
       </preference>
     </portlet-preferences>
-    
+
   </portlet>
-  
+
   <portlet>
     <description xml:lang="EN">Breadcumbs Portlet</description>
     <portlet-name>BreadcumbsPortlet</portlet-name>
     <display-name xml:lang="EN">Breadcumbs Portlet</display-name>
-    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
-    
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+
     <init-param>
       <name>webui.configuration</name>
       <value>/WEB-INF/conf/portlet/web/BreadcumbsPortlet/webui/configuration.xml</value>
-    </init-param>    
+    </init-param>
 
     <expiration-cache>0</expiration-cache>
-    
+
     <supports>
       <mime-type>text/html</mime-type>
       <portlet-mode>help</portlet-mode>
     </supports>
-    
+
     <supported-locale>en</supported-locale>
-    
+
     <resource-bundle>locale.portlet.web.BreadcumbsPortlet</resource-bundle>
 
     <portlet-info>
@@ -148,31 +150,31 @@
       <short-title>Breadcumbs Portlet</short-title>
       <keywords>System</keywords>
     </portlet-info>
-    
+
     <portlet-preferences>
-       <preference>
-		<name>useAJAX</name>
-		<value>false</value>
-		<read-only>false</read-only>
+      <preference>
+        <name>useAJAX</name>
+        <value>false</value>
+        <read-only>false</read-only>
       </preference>
-       <preference>
+      <preference>
         <name>template</name>
         <value>app:/groovy/portal/webui/component/UIBreadcumbsPortlet.gtmpl</value>
         <read-only>false</read-only>
       </preference>
     </portlet-preferences>
-  </portlet> 
-  
+  </portlet>
+
   <portlet>
     <description xml:lang="EN">Navigation Portlet</description>
     <portlet-name>NavigationPortlet</portlet-name>
     <display-name xml:lang="EN">Navigation Portlet</display-name>
-    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
-    
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+
     <init-param>
       <name>webui.configuration</name>
       <value>/WEB-INF/conf/portlet/web/NavigationPortlet/webui/configuration.xml</value>
-    </init-param>    
+    </init-param>
 
     <expiration-cache>0</expiration-cache>
     <supports>
@@ -203,17 +205,17 @@
       </preference>
     </portlet-preferences>
   </portlet>
-  
+
   <portlet>
     <description xml:lang="EN">SiteMap Portlet</description>
     <portlet-name>SiteMapPortlet</portlet-name>
     <display-name xml:lang="EN">Site Map Portlet</display-name>
-    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
-    
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+
     <init-param>
       <name>webui.configuration</name>
       <value>/WEB-INF/conf/portlet/web/SitemapPortlet/webui/configuration.xml</value>
-    </init-param>    
+    </init-param>
 
     <expiration-cache>0</expiration-cache>
     <supports>
@@ -222,28 +224,28 @@
     </supports>
     <supported-locale>en</supported-locale>
     <resource-bundle>locale.portlet.web.GroovyPortlet</resource-bundle>
-    
+
     <portlet-info>
       <title>Site map Portlet</title>
       <short-title>Site map Portlet</short-title>
       <keywords>Navigation</keywords>
-    </portlet-info>     
-    
+    </portlet-info>
+
     <portlet-preferences>
-    	<preference>
-    		<name>useAJAX</name>
-    		<value>false</value>
-    		<read-only>false</read-only>
-    	</preference>
-    	<preference>
-	        <name>template</name>
-	        <value>system:/groovy/webui/core/UISitemapTree.gtmpl</value>
-	        <read-only>false</read-only>
-        </preference>
-        <preference>
-          <name>level</name>
-          <value>2</value>
-        </preference>
+      <preference>
+        <name>useAJAX</name>
+        <value>false</value>
+        <read-only>false</read-only>
+      </preference>
+      <preference>
+        <name>template</name>
+        <value>system:/groovy/webui/core/UISitemapTree.gtmpl</value>
+        <read-only>false</read-only>
+      </preference>
+      <preference>
+        <name>level</name>
+        <value>2</value>
+      </preference>
     </portlet-preferences>
   </portlet>
 
@@ -251,12 +253,12 @@
     <description xml:lang="EN">IFrame Portlet</description>
     <portlet-name>IFramePortlet</portlet-name>
     <display-name xml:lang="EN">IFrame Portlet</display-name>
-    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
-    
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+
     <init-param>
       <name>webui.configuration</name>
       <value>/WEB-INF/conf/portlet/web/IFramePortlet/webui/configuration.xml</value>
-    </init-param>    
+    </init-param>
 
     <expiration-cache>0</expiration-cache>
     <supports>
@@ -269,8 +271,8 @@
       <title>IFrame Portlet</title>
       <short-title>IFrame Portlet</short-title>
       <keywords>Integration</keywords>
-    </portlet-info>    
-    
+    </portlet-info>
+
     <portlet-preferences>
       <preference>
         <name>url</name>
@@ -279,17 +281,17 @@
       </preference>
     </portlet-preferences>
   </portlet>
-  
+
   <portlet>
     <description xml:lang="EN">HomePage Portlet</description>
     <portlet-name>HomePagePortlet</portlet-name>
     <display-name xml:lang="EN">HomePage Portlet</display-name>
-    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>    
-    
+    <portlet-class>org.exoplatform.webui.application.portlet.PortletApplicationController</portlet-class>
+
     <init-param>
       <name>webui.configuration</name>
       <value>/WEB-INF/conf/portlet/web/HomePagePortlet/webui/configuration.xml</value>
-    </init-param>    
+    </init-param>
 
     <expiration-cache>0</expiration-cache>
     <supports>
@@ -298,12 +300,12 @@
     </supports>
     <supported-locale>en</supported-locale>
     <resource-bundle>locale.portlet.web.GroovyPortlet</resource-bundle>
-    
+
     <portlet-info>
       <title>HomePage Portlet</title>
       <short-title>HomePage Portlet</short-title>
       <keywords>System</keywords>
-    </portlet-info>     
+    </portlet-info>
 
     <portlet-preferences>
       <preference>
@@ -312,7 +314,7 @@
         <read-only>false</read-only>
       </preference>
     </portlet-preferences>
-    
+
   </portlet>
 
 </portlet-app>

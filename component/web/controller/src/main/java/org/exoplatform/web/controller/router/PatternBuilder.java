@@ -25,79 +25,63 @@ import org.exoplatform.web.controller.regexp.Literal;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class PatternBuilder
-{
+class PatternBuilder {
 
-   /** . */
-   private final StringBuilder buffer = new StringBuilder();
+    /** . */
+    private final StringBuilder buffer = new StringBuilder();
 
-   /** . */
-   PatternBuilder()
-   {
-   }
+    /** . */
+    PatternBuilder() {
+    }
 
-   public PatternBuilder expr(CharSequence s)
-   {
-      if (s == null)
-      {
-         throw new NullPointerException("No null expression allowed");
-      }
-      buffer.append(s);
-      return this;
-   }
+    public PatternBuilder expr(CharSequence s) {
+        if (s == null) {
+            throw new NullPointerException("No null expression allowed");
+        }
+        buffer.append(s);
+        return this;
+    }
 
-   public PatternBuilder expr(char s)
-   {
-      buffer.append(s);
-      return this;
-   }
+    public PatternBuilder expr(char s) {
+        buffer.append(s);
+        return this;
+    }
 
-   public PatternBuilder litteral(String s, int from, int to)
-   {
-      if (from < 0)
-      {
-         throw new IllegalArgumentException("No negative from argument");
-      }
-      if (to > s.length())
-      {
-         throw new IllegalArgumentException("No to argument greater than the string length");
-      }
-      if (from > to)
-      {
-         throw new IllegalArgumentException("The to argument cannot be greater than the from argument");
-      }
-      if (from < to)
-      {
-         for (int i = from;i < to;i++)
-         {
-            char c = s.charAt(i);
-            if (Literal.isEscaped(c))
-            {
-               buffer.append('\\');
+    public PatternBuilder litteral(String s, int from, int to) {
+        if (from < 0) {
+            throw new IllegalArgumentException("No negative from argument");
+        }
+        if (to > s.length()) {
+            throw new IllegalArgumentException("No to argument greater than the string length");
+        }
+        if (from > to) {
+            throw new IllegalArgumentException("The to argument cannot be greater than the from argument");
+        }
+        if (from < to) {
+            for (int i = from; i < to; i++) {
+                char c = s.charAt(i);
+                if (Literal.isEscaped(c)) {
+                    buffer.append('\\');
+                }
+                buffer.append(c);
             }
-            buffer.append(c);
-         }
-      }
-      return this;
-   }
+        }
+        return this;
+    }
 
-   public PatternBuilder literal(String s, int from)
-   {
-      return litteral(s, from, s.length());
-   }
+    public PatternBuilder literal(String s, int from) {
+        return litteral(s, from, s.length());
+    }
 
-   public PatternBuilder literal(String s)
-   {
-      return litteral(s, 0, s.length());
-   }
+    public PatternBuilder literal(String s) {
+        return litteral(s, 0, s.length());
+    }
 
-   public PatternBuilder literal(char c)
-   {
-      return literal(Character.toString(c));
-   }
+    public PatternBuilder literal(char c) {
+        return literal(Character.toString(c));
+    }
 
-   public String build()
-   {
-      return buffer.toString();
-   }
+    public String build() {
+        return buffer.toString();
+    }
 }

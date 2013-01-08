@@ -22,12 +22,12 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
-		 		
+
   <page>
-  	<name>register</name>
+    <name>register</name>
     <title>TestTitle</title>
-	  <access-permissions>*:/platform/normalized/legacy</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>    
+    <access-permissions>*:/platform/normalized/legacy</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
         <application-ref>exoadmin</application-ref>
@@ -42,9 +42,9 @@
       </portlet>
       <title>New Account</title>
       <access-permissions>Everyone</access-permissions>
-      <show-info-bar>false</show-info-bar>      
+      <show-info-bar>false</show-info-bar>
     </portlet-application>
-  </page>          
-    
+  </page>
+
 </page-set>
 

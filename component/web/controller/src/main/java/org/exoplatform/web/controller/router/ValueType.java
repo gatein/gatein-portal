@@ -22,9 +22,8 @@ package org.exoplatform.web.controller.router;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public enum ValueType
-{
+public enum ValueType {
 
-   PATTERN, LITERAL
+    PATTERN, LITERAL
 
 }

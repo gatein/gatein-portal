@@ -24,105 +24,87 @@ package org.exoplatform.portal.mop.user;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class Utils
-{
+class Utils {
 
-   /**
-    * Parse the path with the following algorithm:
-    *
-    * <ul>
-    *    <li>The one char <code>/</code> string returns the null array</li>
-    *    <li>Any leading <code>/<code> char is ommited</li>
-    *    <li>Any trailing </code>/</code> chars are ommited</li>
-    *    <li>All the substrings obtained by slicing the remaining string by the <code>/</code> char are returned
-    *    as an array, even the empty strings</li>
-    * </ul>
-    *
-    * <p>Note that this is a reimplementation of a previous method that was using regex splitting, this reimplementation
-    * was done in order to minimize the created object count in mind and attempt to create the minimum required.</p>
-    *
-    * @param path the path
-    * @return the parse result
-    * @throws NullPointerException if the path argument is null
-    */
-   static String[] parsePath(String path) throws NullPointerException
-   {
-      // Where we start
-      final int start = 0 < path.length() && path.charAt(0) == '/' ? 1 : 0;
+    /**
+     * Parse the path with the following algorithm:
+     *
+     * <ul>
+     * <li>The one char <code>/</code> string returns the null array</li>
+     * <li>Any leading <code>/<code> char is ommited</li>
+     * <li>Any trailing </code>/</code> chars are ommited</li>
+     * <li>All the substrings obtained by slicing the remaining string by the <code>/</code> char are returned as an array, even
+     * the empty strings</li>
+     * </ul>
+     *
+     * <p>
+     * Note that this is a reimplementation of a previous method that was using regex splitting, this reimplementation was done
+     * in order to minimize the created object count in mind and attempt to create the minimum required.
+     * </p>
+     *
+     * @param path the path
+     * @return the parse result
+     * @throws NullPointerException if the path argument is null
+     */
+    static String[] parsePath(String path) throws NullPointerException {
+        // Where we start
+        final int start = 0 < path.length() && path.charAt(0) == '/' ? 1 : 0;
 
-      //
-      if (start == path.length())
-      {
-         return null;
-      }
+        //
+        if (start == path.length()) {
+            return null;
+        }
 
-      // Where we end
-      int end = path.length();
-      while (end > start && path.charAt(end - 1) == '/')
-      {
-         end--;
-      }
+        // Where we end
+        int end = path.length();
+        while (end > start && path.charAt(end - 1) == '/') {
+            end--;
+        }
 
-
-      // Count the number of slash
-      int count = 0;
-      int i = start;
-      while (true)
-      {
-         int pos = path.indexOf('/', i);
-         if (pos == -1)
-         {
-            pos = end;
-         }
-         if (pos == end)
-         {
-            if (pos > i)
-            {
-               count++;
+        // Count the number of slash
+        int count = 0;
+        int i = start;
+        while (true) {
+            int pos = path.indexOf('/', i);
+            if (pos == -1) {
+                pos = end;
             }
-            break;
-         }
-         else
-         {
-            count++;
-            i = pos + 1;
-         }
-      }
+            if (pos == end) {
+                if (pos > i) {
+                    count++;
+                }
+                break;
+            } else {
+                count++;
+                i = pos + 1;
+            }
+        }
 
-      // Now fill the array
-      String[] names = new String[count];
-      i = start;
-      int index = 0;
-      while (true)
-      {
-         int pos = path.indexOf('/', i);
-         if (pos == -1)
-         {
-            pos = end;
-         }
-         if (pos == end)
-         {
-            if (pos > i)
-            {
-               names[index] = path.substring(i, end);
+        // Now fill the array
+        String[] names = new String[count];
+        i = start;
+        int index = 0;
+        while (true) {
+            int pos = path.indexOf('/', i);
+            if (pos == -1) {
+                pos = end;
             }
-            break;
-         }
-         else
-         {
-            if (i < pos)
-            {
-               names[index++] = path.substring(i, pos);
+            if (pos == end) {
+                if (pos > i) {
+                    names[index] = path.substring(i, end);
+                }
+                break;
+            } else {
+                if (i < pos) {
+                    names[index++] = path.substring(i, pos);
+                } else {
+                    names[index++] = "";
+                }
+                i = pos + 1;
             }
-            else
-            {
-               names[index++] = "";
-            }
-            i = pos + 1;
-         }
-      }
+        }
 
-      //
-      return names;
-   }
+        //
+        return names;
+    }
 }

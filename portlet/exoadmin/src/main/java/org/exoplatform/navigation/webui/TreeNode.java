@@ -1,5 +1,11 @@
 package org.exoplatform.navigation.webui;
 
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.exoplatform.portal.mop.Described.State;
 import org.exoplatform.portal.mop.Visibility;
@@ -10,390 +16,315 @@ import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.util.Util;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 /**
  * A wrapper class of {@link UserNode} for manipulation in WebUI part
- * 
+ *
  * @author <a href="mailto:trong.tran@exoplatform.com">Trong Tran</a>
  * @version $Revision$
  */
-public class TreeNode implements NodeChangeListener<UserNode>
-{
-   private Map<String, TreeNode> caches;
+public class TreeNode implements NodeChangeListener<UserNode> {
+    private Map<String, TreeNode> caches;
 
-   private UserNavigation nav;
+    private UserNavigation nav;
 
-   private UserNode node;
+    private UserNode node;
 
-   private TreeNode rootNode;
+    private TreeNode rootNode;
 
-   private boolean deleteNode = false;
+    private boolean deleteNode = false;
 
-   private boolean cloneNode = false;
+    private boolean cloneNode = false;
 
-   private String id;
+    private String id;
 
-   private List<TreeNode> children;
-   
-   private Map<Locale, State> i18nizedLabels;
+    private List<TreeNode> children;
 
-   public TreeNode(UserNavigation nav, UserNode node)
-   {
-      this(nav, node, null);
-      this.rootNode = this;
-      this.caches = new HashMap<String, TreeNode>();
-      addToCached(this);
-   }
+    private Map<Locale, State> i18nizedLabels;
 
-   private TreeNode(UserNavigation nav, UserNode node, TreeNode rootNode)
-   {
-      this.rootNode = rootNode;
-      this.nav = nav;
-      this.node = node;
-   }
-   
-   public List<TreeNode> getChildren()
-   {
-      if (children == null)
-      {
-         children = new LinkedList<TreeNode>();
-         for (UserNode child : node.getChildren())
-         {
-            String key = child.getId() == null ? String.valueOf(child.hashCode()) : child.getId();
-            TreeNode node = findNode(key);
-            if (node == null)
-            {
-               throw new IllegalStateException("Can' find node " + child.getURI() + " in the cache");
+    public TreeNode(UserNavigation nav, UserNode node) {
+        this(nav, node, null);
+        this.rootNode = this;
+        this.caches = new HashMap<String, TreeNode>();
+        addToCached(this);
+    }
+
+    private TreeNode(UserNavigation nav, UserNode node, TreeNode rootNode) {
+        this.rootNode = rootNode;
+        this.nav = nav;
+        this.node = node;
+    }
+
+    public List<TreeNode> getChildren() {
+        if (children == null) {
+            children = new LinkedList<TreeNode>();
+            for (UserNode child : node.getChildren()) {
+                String key = child.getId() == null ? String.valueOf(child.hashCode()) : child.getId();
+                TreeNode node = findNode(key);
+                if (node == null) {
+                    throw new IllegalStateException("Can' find node " + child.getURI() + " in the cache");
+                }
+                children.add(node);
             }
-            children.add(node);
-         }
-      }
-      return children;
-   }
+        }
+        return children;
+    }
 
-   public TreeNode getChild(String name)
-   {
-      UserNode child = node.getChild(name);
-      if (child == null)
-      {
-         return null;
-      }
-      return findNode(child.getId() == null ? String.valueOf(child.hashCode()) : child.getId());
-   }
+    public TreeNode getChild(String name) {
+        UserNode child = node.getChild(name);
+        if (child == null) {
+            return null;
+        }
+        return findNode(child.getId() == null ? String.valueOf(child.hashCode()) : child.getId());
+    }
 
-   public boolean removeChild(TreeNode child)
-   {
-      children = null;
-      if (child == null)
-      {
-         return false;
-      }
-      removeFromCached(child); 
-      return node.removeChild(child.getName());
-   }
+    public boolean removeChild(TreeNode child) {
+        children = null;
+        if (child == null) {
+            return false;
+        }
+        removeFromCached(child);
+        return node.removeChild(child.getName());
+    }
 
-   public TreeNode getParent()
-   {
-      UserNode parent = node.getParent();
-      if (parent == null)
-         return null;
+    public TreeNode getParent() {
+        UserNode parent = node.getParent();
+        if (parent == null)
+            return null;
 
-      return findNode(parent.getId() == null ? String.valueOf(parent.hashCode()) : parent.getId());
-   }
+        return findNode(parent.getId() == null ? String.valueOf(parent.hashCode()) : parent.getId());
+    }
 
-   public TreeNode getChild(int childIndex) throws IndexOutOfBoundsException
-   {
-      UserNode child = node.getChild(childIndex);
-      if (child == null)
-      {
-         return null;
-      }
-      return findNode(child.getId() == null ? String.valueOf(child.hashCode()) : child.getId());
-   }
+    public TreeNode getChild(int childIndex) throws IndexOutOfBoundsException {
+        UserNode child = node.getChild(childIndex);
+        if (child == null) {
+            return null;
+        }
+        return findNode(child.getId() == null ? String.valueOf(child.hashCode()) : child.getId());
+    }
 
-   public TreeNode addChild(String childName)
-   {
-      children = null;
-      UserNode child = node.addChild(childName);
-      return addToCached(new TreeNode(nav, child, this.rootNode));
-   }
+    public TreeNode addChild(String childName) {
+        children = null;
+        UserNode child = node.addChild(childName);
+        return addToCached(new TreeNode(nav, child, this.rootNode));
+    }
 
-   public void addChild(TreeNode child)
-   {
-      TreeNode oldParent = child.getParent();
-      if (oldParent != null)
-      {
-         oldParent.children = null;
-      }
-      children = null; 
-      this.node.addChild(child.getNode());
-   }
-   
-   public void addChild(int index, TreeNode child)
-   {
-      TreeNode oldParent = child.getParent();
-      if (oldParent != null)
-      {
-         oldParent.children = null;
-      }
-      children = null;
-      node.addChild(index, child.getNode());
-   }
+    public void addChild(TreeNode child) {
+        TreeNode oldParent = child.getParent();
+        if (oldParent != null) {
+            oldParent.children = null;
+        }
+        children = null;
+        this.node.addChild(child.getNode());
+    }
 
-   public TreeNode findNode(String nodeID)
-   {
-      return this.rootNode.caches.get(nodeID);
-   }
+    public void addChild(int index, TreeNode child) {
+        TreeNode oldParent = child.getParent();
+        if (oldParent != null) {
+            oldParent.children = null;
+        }
+        children = null;
+        node.addChild(index, child.getNode());
+    }
 
-   public UserNode getNode()
-   {
-      return node;
-   }
+    public TreeNode findNode(String nodeID) {
+        return this.rootNode.caches.get(nodeID);
+    }
 
-   public UserNavigation getPageNavigation()
-   {
-      return nav;
-   }
+    public UserNode getNode() {
+        return node;
+    }
 
-   public boolean isDeleteNode()
-   {
-      return deleteNode;
-   }
+    public UserNavigation getPageNavigation() {
+        return nav;
+    }
 
-   public void setDeleteNode(boolean deleteNode)
-   {
-      this.deleteNode = deleteNode;
-   }
+    public boolean isDeleteNode() {
+        return deleteNode;
+    }
 
-   public boolean isCloneNode()
-   {
-      return cloneNode;
-   }
+    public void setDeleteNode(boolean deleteNode) {
+        this.deleteNode = deleteNode;
+    }
 
-   public void setCloneNode(boolean b)
-   {
-      cloneNode = b;
-   }
+    public boolean isCloneNode() {
+        return cloneNode;
+    }
 
-   public String getPageRef()
-   {
-      return node.getPageRef() != null ? node.getPageRef().format() : null;
-   }
+    public void setCloneNode(boolean b) {
+        cloneNode = b;
+    }
 
-   public String getId()
-   {
-      if (this.id == null)
-      {
-         this.id = node.getId() == null ? String.valueOf(node.hashCode()) : node.getId();
-      }
-      return this.id;
-   }
+    public String getPageRef() {
+        return node.getPageRef() != null ? node.getPageRef().format() : null;
+    }
 
-   public String getURI()
-   {
-      return node.getURI();
-   }
+    public String getId() {
+        if (this.id == null) {
+            this.id = node.getId() == null ? String.valueOf(node.hashCode()) : node.getId();
+        }
+        return this.id;
+    }
 
-   public String getIcon()
-   {
-      return node.getIcon();
-   }
+    public String getURI() {
+        return node.getURI();
+    }
 
-   public void setIcon(String icon)
-   {
-      node.setIcon(icon);
-   }
+    public String getIcon() {
+        return node.getIcon();
+    }
 
-   public String getEncodedResolvedLabel()
-   {
-      if (getLabel() == null)
-      {
-         if (i18nizedLabels != null)
-         {
-            Locale locale = Util.getPortalRequestContext().getLocale();
-            for (Locale key  : i18nizedLabels.keySet())
-            {
-               if (key.equals(locale))
-               {
-                  String label = i18nizedLabels.get(key).getName();
-                  if (label == null || label.trim().length() == 0)
-                  {
-                     return node.getName();
-                  }
+    public void setIcon(String icon) {
+        node.setIcon(icon);
+    }
 
-                  return HTMLEntityEncoder.getInstance().encode(label);
-               }
+    public String getEncodedResolvedLabel() {
+        if (getLabel() == null) {
+            if (i18nizedLabels != null) {
+                Locale locale = Util.getPortalRequestContext().getLocale();
+                for (Locale key : i18nizedLabels.keySet()) {
+                    if (key.equals(locale)) {
+                        String label = i18nizedLabels.get(key).getName();
+                        if (label == null || label.trim().length() == 0) {
+                            return node.getName();
+                        }
+
+                        return HTMLEntityEncoder.getInstance().encode(label);
+                    }
+                }
             }
-         }
-      }
-      String encodedLabel = node.getEncodedResolvedLabel();
-      return encodedLabel == null ? "" : encodedLabel;
-   }
+        }
+        String encodedLabel = node.getEncodedResolvedLabel();
+        return encodedLabel == null ? "" : encodedLabel;
+    }
 
-   public String getName()
-   {
-      return node.getName();
-   }
+    public String getName() {
+        return node.getName();
+    }
 
-   public void setName(String name)
-   {
-      node.setName(name);
-   }
+    public void setName(String name) {
+        node.setName(name);
+    }
 
-   public String getLabel()
-   {
-      return node.getLabel();
-   }
+    public String getLabel() {
+        return node.getLabel();
+    }
 
-   public void setLabel(String label)
-   {
-      node.setLabel(label);
-   }
+    public void setLabel(String label) {
+        node.setLabel(label);
+    }
 
-   public Visibility getVisibility()
-   {
-      return node.getVisibility();
-   }
+    public Visibility getVisibility() {
+        return node.getVisibility();
+    }
 
-   public void setVisibility(Visibility visibility)
-   {
-      node.setVisibility(visibility);
-   }
+    public void setVisibility(Visibility visibility) {
+        node.setVisibility(visibility);
+    }
 
-   public long getStartPublicationTime()
-   {
-      return node.getStartPublicationTime();
-   }
+    public long getStartPublicationTime() {
+        return node.getStartPublicationTime();
+    }
 
-   public void setStartPublicationTime(long startPublicationTime)
-   {
-      node.setStartPublicationTime(startPublicationTime);
-   }
+    public void setStartPublicationTime(long startPublicationTime) {
+        node.setStartPublicationTime(startPublicationTime);
+    }
 
-   public long getEndPublicationTime()
-   {
-      return node.getEndPublicationTime();
-   }
+    public long getEndPublicationTime() {
+        return node.getEndPublicationTime();
+    }
 
-   public void setEndPublicationTime(long endPublicationTime)
-   {
-      node.setEndPublicationTime(endPublicationTime);
-   }
+    public void setEndPublicationTime(long endPublicationTime) {
+        node.setEndPublicationTime(endPublicationTime);
+    }
 
-   public void setPageRef(String pageRef)
-   {
-      node.setPageRef(pageRef != null ? PageKey.parse(pageRef) : null);
-   }
+    public void setPageRef(String pageRef) {
+        node.setPageRef(pageRef != null ? PageKey.parse(pageRef) : null);
+    }
 
-   public String getResolvedLabel()
-   {
-      String resolvedLabel = node.getResolvedLabel();
-      return resolvedLabel == null ? "" : resolvedLabel;
-   }
+    public String getResolvedLabel() {
+        String resolvedLabel = node.getResolvedLabel();
+        return resolvedLabel == null ? "" : resolvedLabel;
+    }
 
-   public boolean hasChildrenRelationship()
-   {
-      return node.hasChildrenRelationship();
-   }
+    public boolean hasChildrenRelationship() {
+        return node.hasChildrenRelationship();
+    }
 
-   public int getChildrenCount()
-   {
-      return node.getChildrenCount();
-   }
+    public int getChildrenCount() {
+        return node.getChildrenCount();
+    }
 
-   private TreeNode addToCached(TreeNode node)
-   {
-      if (node == null)
-      {
-         return null;
-      }
+    private TreeNode addToCached(TreeNode node) {
+        if (node == null) {
+            return null;
+        }
 
-      if (findNode(node.getId()) != null)
-      {
-         return node;
-      }
-      
-      this.rootNode.caches.put(node.getId(), node);
-      for (UserNode child : node.getNode().getChildren())
-      {
-         addToCached(new TreeNode(nav, child, this.rootNode));
-      }
-      return node;
-   }
+        if (findNode(node.getId()) != null) {
+            return node;
+        }
 
-   private TreeNode removeFromCached(TreeNode node)
-   {
-      if (node == null)
-      {
-         return null;
-      }
+        this.rootNode.caches.put(node.getId(), node);
+        for (UserNode child : node.getNode().getChildren()) {
+            addToCached(new TreeNode(nav, child, this.rootNode));
+        }
+        return node;
+    }
 
-      this.rootNode.caches.remove(node.getId());
-      if (node.hasChildrenRelationship())
-      {
-         for (TreeNode child : node.getChildren())
-         {
-            removeFromCached(child);
-         }
-      }
-      return node;
-   }
+    private TreeNode removeFromCached(TreeNode node) {
+        if (node == null) {
+            return null;
+        }
 
-   @Override
-   public void onAdd(UserNode target, UserNode parent, UserNode previous)
-   {
-      addToCached(new TreeNode(this.nav, target, this.rootNode));
-      findNode(parent.getId()).children = null;
-   }
+        this.rootNode.caches.remove(node.getId());
+        if (node.hasChildrenRelationship()) {
+            for (TreeNode child : node.getChildren()) {
+                removeFromCached(child);
+            }
+        }
+        return node;
+    }
 
-   @Override
-   public void onCreate(UserNode target, UserNode parent, UserNode previous, String name)
-   {
-   }
+    @Override
+    public void onAdd(UserNode target, UserNode parent, UserNode previous) {
+        addToCached(new TreeNode(this.nav, target, this.rootNode));
+        findNode(parent.getId()).children = null;
+    }
 
-   @Override
-   public void onRemove(UserNode target, UserNode parent)
-   {
-      removeFromCached(findNode(target.getId()));
-      findNode(parent.getId()).children = null;
-   }
+    @Override
+    public void onCreate(UserNode target, UserNode parent, UserNode previous, String name) {
+    }
 
-   @Override
-   public void onDestroy(UserNode target, UserNode parent)
-   {
-   }
+    @Override
+    public void onRemove(UserNode target, UserNode parent) {
+        removeFromCached(findNode(target.getId()));
+        findNode(parent.getId()).children = null;
+    }
 
-   @Override
-   public void onRename(UserNode target, UserNode parent, String name)
-   {
-   }
+    @Override
+    public void onDestroy(UserNode target, UserNode parent) {
+    }
 
-   @Override
-   public void onUpdate(UserNode target, NodeState state)
-   {
-   }
+    @Override
+    public void onRename(UserNode target, UserNode parent, String name) {
+    }
 
-   @Override
-   public void onMove(UserNode target, UserNode from, UserNode to, UserNode previous)
-   {
-      TreeNode fromTreeNode = findNode(from.getId());
-      TreeNode toTreeNode = findNode(to.getId());
-      fromTreeNode.children = null;
-      toTreeNode.children = null;
-   }
+    @Override
+    public void onUpdate(UserNode target, NodeState state) {
+    }
 
-   public void setI18nizedLabels(Map<Locale, State> labels)
-   {
-      this.i18nizedLabels = labels;
-   }
+    @Override
+    public void onMove(UserNode target, UserNode from, UserNode to, UserNode previous) {
+        TreeNode fromTreeNode = findNode(from.getId());
+        TreeNode toTreeNode = findNode(to.getId());
+        fromTreeNode.children = null;
+        toTreeNode.children = null;
+    }
 
-   public Map<Locale, State> getI18nizedLabels()
-   {
-      return i18nizedLabels;
-   }
+    public void setI18nizedLabels(Map<Locale, State> labels) {
+        this.i18nizedLabels = labels;
+    }
+
+    public Map<Locale, State> getI18nizedLabels() {
+        return i18nizedLabels;
+    }
 }

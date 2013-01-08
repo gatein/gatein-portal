@@ -33,23 +33,20 @@ import org.exoplatform.services.organization.OrganizationService;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class FindMembershipTypesPageList extends StatelessPageList<MembershipType>
-{
+public class FindMembershipTypesPageList extends StatelessPageList<MembershipType> {
 
-   public FindMembershipTypesPageList(int pageSize)
-   {
-      super(pageSize);
-   }
+    public FindMembershipTypesPageList(int pageSize) {
+        super(pageSize);
+    }
 
-   @Override
-   protected ListAccess<MembershipType> connect() throws Exception
-   {
-      ExoContainer container = PortalContainer.getInstance();
-      OrganizationService service = (OrganizationService)container.getComponentInstance(OrganizationService.class);
-      List<MembershipType> memberships = (List<MembershipType>)service.getMembershipTypeHandler().findMembershipTypes();
-      
-      return new ListAccessImpl<MembershipType>(MembershipType.class, memberships);
+    @Override
+    protected ListAccess<MembershipType> connect() throws Exception {
+        ExoContainer container = PortalContainer.getInstance();
+        OrganizationService service = (OrganizationService) container.getComponentInstance(OrganizationService.class);
+        List<MembershipType> memberships = (List<MembershipType>) service.getMembershipTypeHandler().findMembershipTypes();
 
-   }
+        return new ListAccessImpl<MembershipType>(MembershipType.class, memberships);
+
+    }
 
 }

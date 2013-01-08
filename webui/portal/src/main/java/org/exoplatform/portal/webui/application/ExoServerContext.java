@@ -19,48 +19,38 @@
 
 package org.exoplatform.portal.webui.application;
 
-import org.gatein.pc.portlet.impl.spi.AbstractServerContext;
-import org.gatein.wci.RequestDispatchCallback;
-import org.gatein.wci.ServletContainer;
-import org.gatein.wci.ServletContainerFactory;
+import java.io.IOException;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+
+import org.gatein.pc.portlet.impl.spi.AbstractServerContext;
+import org.gatein.wci.RequestDispatchCallback;
+import org.gatein.wci.ServletContainer;
+import org.gatein.wci.ServletContainerFactory;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
-public class ExoServerContext extends AbstractServerContext
-{
+public class ExoServerContext extends AbstractServerContext {
 
-   public ExoServerContext(HttpServletRequest clientRequest, HttpServletResponse clientResponse)
-   {
-      super(clientRequest, clientResponse);
-   }
+    public ExoServerContext(HttpServletRequest clientRequest, HttpServletResponse clientResponse) {
+        super(clientRequest, clientResponse);
+    }
 
-   @Override
-   public void dispatch(
-      ServletContext target,
-      HttpServletRequest request,
-      HttpServletResponse response,
-      final Callable callable) throws Exception
-   {
-      ServletContainer container = ServletContainerFactory.getServletContainer();
-      container.include(target, request, response, new RequestDispatchCallback()
-      {
-         @Override
-         public Object doCallback(
-            ServletContext dispatchedServletContext,
-            HttpServletRequest dispatchedRequest,
-            HttpServletResponse dispatchedResponse,
-            Object handback) throws ServletException, IOException
-         {
-            callable.call(dispatchedServletContext, dispatchedRequest, dispatchedResponse);
+    @Override
+    public void dispatch(ServletContext target, HttpServletRequest request, HttpServletResponse response,
+            final Callable callable) throws Exception {
+        ServletContainer container = ServletContainerFactory.getServletContainer();
+        container.include(target, request, response, new RequestDispatchCallback() {
+            @Override
+            public Object doCallback(ServletContext dispatchedServletContext, HttpServletRequest dispatchedRequest,
+                    HttpServletResponse dispatchedResponse, Object handback) throws ServletException, IOException {
+                callable.call(dispatchedServletContext, dispatchedRequest, dispatchedResponse);
 
-            // We don't use return value anymore
-            return null;
-         }
-      }, null);
-   }
+                // We don't use return value anymore
+                return null;
+            }
+        }, null);
+    }
 }

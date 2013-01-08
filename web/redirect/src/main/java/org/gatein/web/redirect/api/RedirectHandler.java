@@ -24,23 +24,22 @@ package org.gatein.web.redirect.api;
 
 import java.util.Map;
 
+
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public interface RedirectHandler
-{
-   /**
-    * Returns a map of the names of the redirect sites and a corresponding URL to use to perform a switch to the
-    * alternative site.
-    * 
-    * If persist is set to true, on subsequent access to the site, the redirect will be automatically performed.
-    * If persist is set to false, no redirect will occur when the user access the site on subsequent requests. 
-    * 
-    * @param URI The URI of the current page
-    * @param persist True if we want to persist the site preference
-    * @return A map containing the name of the alternative site and the url to use to redirect to that site
-    */
-   public Map<String, String> getAlternativeRedirects(String siteName, String URI, boolean persist);
+public interface RedirectHandler {
+    /**
+     * Returns a map of the names of the redirect sites and a corresponding URL to use to perform a switch to the alternative
+     * site.
+     *
+     * If persist is set to true, on subsequent access to the site, the redirect will be automatically performed. If persist is
+     * set to false, no redirect will occur when the user access the site on subsequent requests.
+     *
+     * @param URI The URI of the current page
+     * @param persist True if we want to persist the site preference
+     * @return A map containing the name of the alternative site and the url to use to redirect to that site
+     */
+    Map<String, String> getAlternativeRedirects(String siteName, String URI, boolean persist);
 }
-

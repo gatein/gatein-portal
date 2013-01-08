@@ -25,17 +25,17 @@ package org.exoplatform.web.url;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class URLFactory
-{
+public abstract class URLFactory {
 
-   /**
-    * Creates a new url or return null if the resource type cannot be resolved to an url.
-    *
-    * @param resourceType the resource type
-    * @param context the context
-    * @return the url
-    * @throws NullPointerException if the resource type or the context is null
-    */
-   public abstract <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLContext context) throws NullPointerException;
+    /**
+     * Creates a new url or return null if the resource type cannot be resolved to an url.
+     *
+     * @param resourceType the resource type
+     * @param context the context
+     * @return the url
+     * @throws NullPointerException if the resource type or the context is null
+     */
+    public abstract <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLContext context)
+            throws NullPointerException;
 
 }

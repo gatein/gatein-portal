@@ -19,55 +19,52 @@
 
 package org.exoplatform.commons.utils;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class PageListAccess<E, S> extends AbstractSerializablePageList<E> implements Serializable
-{
+public abstract class PageListAccess<E, S> extends AbstractSerializablePageList<E> implements Serializable {
 
-   /** The state that recreates the list. */
-   private S state;
+    /** The state that recreates the list. */
+    private S state;
 
-   protected PageListAccess(S state, int pageSize)
-   {
-      super(pageSize);
+    protected PageListAccess(S state, int pageSize) {
+        super(pageSize);
 
-      //
-      if (state == null)
-      {
-         throw new NullPointerException();
-      }
-      if (pageSize < 0)
-      {
-         throw new IllegalArgumentException();
-      }
+        //
+        if (state == null) {
+            throw new NullPointerException();
+        }
+        if (pageSize < 0) {
+            throw new IllegalArgumentException();
+        }
 
-      //
-      this.state = state;
-   }
+        //
+        this.state = state;
+    }
 
-   @Override
-   protected final ListAccess<E> connect() throws Exception
-   {
-      return create(state);
-   }
+    @Override
+    protected final ListAccess<E> connect() throws Exception {
+        return create(state);
+    }
 
-   protected abstract ListAccess<E> create(S state) throws Exception;
-   
-   // Serialization
+    protected abstract ListAccess<E> create(S state) throws Exception;
 
-   private void writeObject(ObjectOutputStream out) throws IOException
-   {
-      super.writeState(out);
-      out.writeObject(state);
-   }
+    // Serialization
 
-   private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException
-   {
-      super.readState(in);
-      state = (S)in.readObject();
-   }
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        super.writeState(out);
+        out.writeObject(state);
+    }
+
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        super.readState(in);
+        state = (S) in.readObject();
+    }
 }

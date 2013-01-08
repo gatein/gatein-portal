@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.web</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
+    <version>3.6.0.MO1-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
@@ -40,20 +40,20 @@
   </dependencies>
 
   <build>
-  <finalName>rest</finalName>
+    <finalName>rest</finalName>
     <plugins>
       <plugin>
-           <artifactId>maven-war-plugin</artifactId>
-           <configuration>
-             <!-- This is broken in maven-war-plugin 2.0, works in 2.0.1 -->
-             <warSourceExcludes>WEB-INF/lib/*.jar</warSourceExcludes>
-             <archive>
-               <manifest>
-                 <addClasspath>false</addClasspath>
-                 <classpathPrefix>lib/</classpathPrefix>
-               </manifest>
-             </archive>
-           </configuration>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <!-- This is broken in maven-war-plugin 2.0, works in 2.0.1 -->
+          <warSourceExcludes>WEB-INF/lib/*.jar</warSourceExcludes>
+          <archive>
+            <manifest>
+              <addClasspath>false</addClasspath>
+              <classpathPrefix>lib/</classpathPrefix>
+            </manifest>
+          </archive>
+        </configuration>
       </plugin>
     </plugins>
   </build>

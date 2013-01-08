@@ -19,41 +19,39 @@
 
 package org.exoplatform.portal.application.state;
 
+import java.util.Map;
+
+import javax.xml.namespace.QName;
+
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.webui.application.UIPortlet;
 
-import javax.xml.namespace.QName;
-import java.util.Map;
-
 /**
- * This plugins setup properties that are NOT publicly supported, however it is recommanded to not change anything
- * but there are no guarantees that it won't change.
+ * This plugins setup properties that are NOT publicly supported, however it is recommanded to not change anything but there are
+ * no guarantees that it won't change.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class InternalPropertiesPlugin extends AbstractContextualPropertyProviderPlugin
-{
+public class InternalPropertiesPlugin extends AbstractContextualPropertyProviderPlugin {
 
-   /** . */
-   private final QName storageIdQName;
+    /** . */
+    private final QName storageIdQName;
 
-   /** . */
-   private final QName storageNameQName;
+    /** . */
+    private final QName storageNameQName;
 
-   public InternalPropertiesPlugin(InitParams params)
-   {
-      super(params);
+    public InternalPropertiesPlugin(InitParams params) {
+        super(params);
 
-      //
-      this.storageIdQName = new QName(namespaceURI, "storage_id");
-      this.storageNameQName = new QName(namespaceURI, "storage_name");
-   }
+        //
+        this.storageIdQName = new QName(namespaceURI, "storage_id");
+        this.storageNameQName = new QName(namespaceURI, "storage_name");
+    }
 
-   @Override
-   public void getProperties(UIPortlet portletWindow, Map<QName, String[]> properties)
-   {
-      addProperty(properties, storageIdQName, portletWindow.getStorageId());
-      addProperty(properties, storageNameQName, portletWindow.getStorageName());
-   }
+    @Override
+    public void getProperties(UIPortlet portletWindow, Map<QName, String[]> properties) {
+        addProperty(properties, storageIdQName, portletWindow.getStorageId());
+        addProperty(properties, storageNameQName, portletWindow.getStorageName());
+    }
 }

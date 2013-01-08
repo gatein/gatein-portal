@@ -23,13 +23,12 @@ package org.exoplatform.commons.serialization.serial;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class DataKind
-{
+class DataKind {
 
-   public static final int OBJECT = 0;
-   public static final int NULL_VALUE = 1;
-   public static final int OBJECT_REF = 2;
-   public static final int CONVERTED_OBJECT = 3;
-   public static final int SERIALIZED_OBJECT = 4;
+    public static final int OBJECT = 0;
+    public static final int NULL_VALUE = 1;
+    public static final int OBJECT_REF = 2;
+    public static final int CONVERTED_OBJECT = 3;
+    public static final int SERIALIZED_OBJECT = 4;
 
 }

@@ -22,104 +22,89 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TemplateSection
-{
+public class TemplateSection {
 
-   /** . */
-   private final SectionType type;
+    /** . */
+    private final SectionType type;
 
-   /** . */
-   private final List<SectionItem> items;
+    /** . */
+    private final List<SectionItem> items;
 
-   public TemplateSection(SectionType type, String text)
-   {
-      this(type, text, 0, 0);
-   }
+    public TemplateSection(SectionType type, String text) {
+        this(type, text, 0, 0);
+    }
 
-   public TemplateSection(SectionType type, String text, Position pos)
-   {
-      this(type, text, pos.getCol(), pos.getLine());
-   }
+    public TemplateSection(SectionType type, String text, Position pos) {
+        this(type, text, pos.getCol(), pos.getLine());
+    }
 
-   public TemplateSection(SectionType type, String text, int colNumber, int lineNumber)
-   {
-      if (type == null)
-      {
-         throw new NullPointerException();
-      }
-      if (text == null)
-      {
-         throw new NullPointerException();
-      }
+    public TemplateSection(SectionType type, String text, int colNumber, int lineNumber) {
+        if (type == null) {
+            throw new NullPointerException();
+        }
+        if (text == null) {
+            throw new NullPointerException();
+        }
 
-      // Now we process the line breaks
-      ArrayList<SectionItem> sections = new ArrayList<SectionItem>();
+        // Now we process the line breaks
+        ArrayList<SectionItem> sections = new ArrayList<SectionItem>();
 
-      //
-      int from = 0;
-      while (true)
-      {
-         int to = text.indexOf('\n', from);
-
-         //
-         if (to != -1)
-         {
-            String chunk = text.substring(from, to);
-            sections.add(new TextItem(new Position(colNumber, lineNumber), chunk));
+        //
+        int from = 0;
+        while (true) {
+            int to = text.indexOf('\n', from);
 
             //
-            sections.add(new LineBreakItem(new Position(colNumber + (to - from), lineNumber)));
+            if (to != -1) {
+                String chunk = text.substring(from, to);
+                sections.add(new TextItem(new Position(colNumber, lineNumber), chunk));
 
-            //
-            from = to + 1;
-            lineNumber++;
-            colNumber = 1;
-         }
-         else
-         {
-            String chunk = text.substring(from);
-            sections.add(new TextItem(new Position(colNumber, lineNumber), chunk));
-            break;
-         }
-      }
+                //
+                sections.add(new LineBreakItem(new Position(colNumber + (to - from), lineNumber)));
 
-      //
-      this.type = type;
-      this.items = Collections.unmodifiableList(sections);
-   }
+                //
+                from = to + 1;
+                lineNumber++;
+                colNumber = 1;
+            } else {
+                String chunk = text.substring(from);
+                sections.add(new TextItem(new Position(colNumber, lineNumber), chunk));
+                break;
+            }
+        }
 
-   public SectionType getType()
-   {
-      return type;
-   }
+        //
+        this.type = type;
+        this.items = Collections.unmodifiableList(sections);
+    }
 
-   public List<SectionItem> getItems()
-   {
-      return items;
-   }
+    public SectionType getType() {
+        return type;
+    }
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (obj == this)
-      {
-         return true;
-      }
-      if (obj instanceof TemplateSection)
-      {
-         TemplateSection that = (TemplateSection)obj;
-         return type == that.type && items.equals(that.items);
-      }
-      return false;
-   }
+    public List<SectionItem> getItems() {
+        return items;
+    }
 
-   @Override
-   public String toString()
-   {
-      return "TextSection[type=" + type + ",text=" + items + "]";
-   }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof TemplateSection) {
+            TemplateSection that = (TemplateSection) obj;
+            return type == that.type && items.equals(that.items);
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return "TextSection[type=" + type + ",text=" + items + "]";
+    }
 }

@@ -28,20 +28,16 @@ import org.exoplatform.portal.AbstractPortalTest;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 @ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/portal/config/conf/configuration.xml")
-})
-public abstract class AbstractConfigTest extends AbstractPortalTest
-{
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/portal/config/conf/configuration.xml") })
+public abstract class AbstractConfigTest extends AbstractPortalTest {
 
-   protected AbstractConfigTest()
-   {
-   }
+    protected AbstractConfigTest() {
+    }
 
-   protected AbstractConfigTest(String name)
-   {
-      super(name);
-   }
+    protected AbstractConfigTest(String name) {
+        super(name);
+    }
 }

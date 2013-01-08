@@ -33,39 +33,36 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 @ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/portal/mop/navigation/configuration.xml")
-})
-public abstract class AbstractTestNavigationService extends AbstractMOPTest
-{
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/portal/mop/navigation/configuration.xml") })
+public abstract class AbstractTestNavigationService extends AbstractMOPTest {
 
-   /** . */
-   protected POMSessionManager mgr;
+    /** . */
+    protected POMSessionManager mgr;
 
-   /** . */
-   protected NavigationServiceImpl service;
+    /** . */
+    protected NavigationServiceImpl service;
 
-   /** . */
-   protected DataStorage dataStorage;
+    /** . */
+    protected DataStorage dataStorage;
 
-   /** . */
-   protected DescriptionService descriptionService;
+    /** . */
+    protected DescriptionService descriptionService;
 
-   @Override
-   protected void setUp() throws Exception
-   {
-      PortalContainer container = PortalContainer.getInstance();
-      mgr = (POMSessionManager)container.getComponentInstanceOfType(POMSessionManager.class);
-      service = new NavigationServiceImpl(mgr);
-      descriptionService = new DescriptionServiceImpl(mgr);
-      dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
+    @Override
+    protected void setUp() throws Exception {
+        PortalContainer container = PortalContainer.getInstance();
+        mgr = (POMSessionManager) container.getComponentInstanceOfType(POMSessionManager.class);
+        service = new NavigationServiceImpl(mgr);
+        descriptionService = new DescriptionServiceImpl(mgr);
+        dataStorage = (DataStorage) container.getComponentInstanceOfType(DataStorage.class);
 
-      // Clear the cache for each test
-      service.clearCache();
+        // Clear the cache for each test
+        service.clearCache();
 
-      //
-      super.setUp();
-   }
+        //
+        super.setUp();
+    }
 }

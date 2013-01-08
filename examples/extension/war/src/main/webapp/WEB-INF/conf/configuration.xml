@@ -20,10 +20,11 @@
 
 -->
 
-<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-	xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
-	<import>war:/conf/sample-ext/common/common-configuration.xml</import>
-	<import>war:/conf/sample-ext/jcr/jcr-configuration.xml</import>
-	<import>war:/conf/sample-ext/portal/portal-configuration.xml</import>
-	<import>war:/conf/sample-ext/web/web-inf-extension-configuration.xml</import>
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+               xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+  <import>war:/conf/sample-ext/common/common-configuration.xml</import>
+  <import>war:/conf/sample-ext/jcr/jcr-configuration.xml</import>
+  <import>war:/conf/sample-ext/portal/portal-configuration.xml</import>
+  <import>war:/conf/sample-ext/web/web-inf-extension-configuration.xml</import>
 </configuration>

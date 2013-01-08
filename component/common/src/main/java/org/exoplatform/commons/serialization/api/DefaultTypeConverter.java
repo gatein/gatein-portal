@@ -19,23 +19,18 @@
 
 package org.exoplatform.commons.serialization.api;
 
-import org.exoplatform.commons.serialization.api.TypeConverter;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class DefaultTypeConverter<O> extends TypeConverter<O, O>
-{
-   @Override
-   public O write(O input) throws Exception
-   {
-      return input;
-   }
+public class DefaultTypeConverter<O> extends TypeConverter<O, O> {
+    @Override
+    public O write(O input) throws Exception {
+        return input;
+    }
 
-   @Override
-   public O read(O output) throws Exception
-   {
-      return output;
-   }
+    @Override
+    public O read(O output) throws Exception {
+        return output;
+    }
 }

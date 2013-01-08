@@ -19,163 +19,164 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
 -->
-<gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
-   xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
+<gatein-resources xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+                  xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
 
-   <portal-skin>
-      <skin-name>TestSkin</skin-name>
-      <css-path>/skin/core/Stylesheet.css</css-path>
-      <css-priority>0</css-priority>
-   </portal-skin>
+  <portal-skin>
+    <skin-name>TestSkin</skin-name>
+    <css-path>/skin/core/Stylesheet.css</css-path>
+    <css-priority>0</css-priority>
+  </portal-skin>
 
-   <portal-skin>
-      <skin-name>TestSkin</skin-name>
-      <skin-module>Module1</skin-module>
-      <css-path>/skin/module1/Stylesheet.css</css-path>
-   </portal-skin>
+  <portal-skin>
+    <skin-name>TestSkin</skin-name>
+    <skin-module>Module1</skin-module>
+    <css-path>/skin/module1/Stylesheet.css</css-path>
+  </portal-skin>
 
-   <portal-skin>
-      <skin-name>TestSkin</skin-name>
-      <skin-module>Module2</skin-module>
-      <css-path>/skin/module2/Stylesheet.css</css-path>
-      <css-priority>1</css-priority>
-   </portal-skin>
+  <portal-skin>
+    <skin-name>TestSkin</skin-name>
+    <skin-module>Module2</skin-module>
+    <css-path>/skin/module2/Stylesheet.css</css-path>
+    <css-priority>1</css-priority>
+  </portal-skin>
 
-   <portal-skin>
-      <skin-name>TestSkin</skin-name>
-      <skin-module>Module3</skin-module>
-      <css-path>/skin/module3/Stylesheet.css</css-path>
-      <css-priority>1</css-priority>
-   </portal-skin>
+  <portal-skin>
+    <skin-name>TestSkin</skin-name>
+    <skin-module>Module3</skin-module>
+    <css-path>/skin/module3/Stylesheet.css</css-path>
+    <css-priority>1</css-priority>
+  </portal-skin>
 
-   <portlet-skin>
-      <application-name>mockwebapp</application-name>
-      <portlet-name>FirstPortlet</portlet-name>
-      <skin-name>TestSkin</skin-name>
-      <css-path>/skin/FirstPortlet.css</css-path>
-   </portlet-skin>
+  <portlet-skin>
+    <application-name>mockwebapp</application-name>
+    <portlet-name>FirstPortlet</portlet-name>
+    <skin-name>TestSkin</skin-name>
+    <css-path>/skin/FirstPortlet.css</css-path>
+  </portlet-skin>
 
-   <portlet-skin>
-      <application-name>mockwebapp</application-name>
-      <portlet-name>SecondPortlet</portlet-name>
-      <skin-name>TestSkin</skin-name>
-      <css-path>/skin/SecondPortlet.css</css-path>
-   </portlet-skin>
+  <portlet-skin>
+    <application-name>mockwebapp</application-name>
+    <portlet-name>SecondPortlet</portlet-name>
+    <skin-name>TestSkin</skin-name>
+    <css-path>/skin/SecondPortlet.css</css-path>
+  </portlet-skin>
 
-   <!-- Simple window style -->
-   <window-style>
-      <style-name>Simple</style-name>
-      <style-theme>
-         <theme-name>SimpleBlue</theme-name>
-      </style-theme>
-      <style-theme>
-         <theme-name>SimpleViolet</theme-name>
-      </style-theme>
-   </window-style>
+  <!-- Simple window style -->
+  <window-style>
+    <style-name>Simple</style-name>
+    <style-theme>
+      <theme-name>SimpleBlue</theme-name>
+    </style-theme>
+    <style-theme>
+      <theme-name>SimpleViolet</theme-name>
+    </style-theme>
+  </window-style>
 
-   <!-- VistaStyle window style -->
-   <window-style>
-      <style-name>VistaStyle</style-name>
-      <style-theme>
-         <theme-name>VistaTheme</theme-name>
-      </style-theme>
-   </window-style>
-	
-   <scripts>
-      <name>script1</name>
-      <script>
-         <path>/js/script1.js</path>
-      </script>
-   </scripts>
-      
-   <scripts>
-      <name>script2</name>
-      <script>
-         <path>/js/script2.js</path>
-      </script>      
-      <depends>
-          <scripts>script1</scripts>
-      </depends>
-   </scripts>
+  <!-- VistaStyle window style -->
+  <window-style>
+    <style-name>VistaStyle</style-name>
+    <style-theme>
+      <theme-name>VistaTheme</theme-name>
+    </style-theme>
+  </window-style>
 
-   <module>
-      <name>module1</name>           
-      <as>m1</as> 
-      <load-group>fooGroup</load-group>
-      <script>
-         <path>/js/module1.js</path>
-      </script>      
-   </module>
-   
-   <module>
-      <name>module2</name>     
-      <load-group>fooGroup</load-group>
-      <script>
-         <path>/js/module2.js</path>
-      </script>
-      <depends>
-          <module>module1</module>
-          <as>mod1</as>
-      </depends>
-   </module>
-   
-   <module>
-   	<name>commonjs</name>
-   	<script>
-   		<path>/js/common.js</path>
-   	</script>
-   	<depends>
-      	<module>require</module>
-		</depends>
-      <depends>
-      	<module>exports</module>
-      </depends>
-      <depends>
-      	<module>module</module>
-      </depends>
-   </module>
-   
-   <module>
-      <name>pluginTest</name>           
-      <script>
-         <path>/js/pluginTest.js</path>
-      </script>      
-      <depends>
-      	<module>text</module>
-      	<as>text</as>
-      	<resource>/path/to/file.js</resource>
-      </depends>
-      <depends>
-      	<module>text</module>
-      	<as>text</as>
-      	<resource>/path/to/file2.js</resource>
-      </depends>
-   </module>
-   
-   <module>
-      <name>text</name>           
-      <script>
-         <path>/js/text.js</path>
-      </script>      
-   </module>
-   
-   <module>
-      <name>remote1</name>
-      <url>http://js/remote1.js</url>       
-   </module>
-   
-   <module>
-      <name>remote2</name>
-      <url>http://js/remote2.js</url>
-      <depends>
-          <module>remote1</module>
-      </depends>       
-   </module>
-   
-   <module>
-      <name>normalize_test</name>     
-      <script>
-         <path>/js/normalize_test.js</path>
-      </script>
-   </module>
+  <scripts>
+    <name>script1</name>
+    <script>
+      <path>/js/script1.js</path>
+    </script>
+  </scripts>
+
+  <scripts>
+    <name>script2</name>
+    <script>
+      <path>/js/script2.js</path>
+    </script>
+    <depends>
+      <scripts>script1</scripts>
+    </depends>
+  </scripts>
+
+  <module>
+    <name>module1</name>
+    <as>m1</as>
+    <load-group>fooGroup</load-group>
+    <script>
+      <path>/js/module1.js</path>
+    </script>
+  </module>
+
+  <module>
+    <name>module2</name>
+    <load-group>fooGroup</load-group>
+    <script>
+      <path>/js/module2.js</path>
+    </script>
+    <depends>
+      <module>module1</module>
+      <as>mod1</as>
+    </depends>
+  </module>
+
+  <module>
+    <name>commonjs</name>
+    <script>
+      <path>/js/common.js</path>
+    </script>
+    <depends>
+      <module>require</module>
+    </depends>
+    <depends>
+      <module>exports</module>
+    </depends>
+    <depends>
+      <module>module</module>
+    </depends>
+  </module>
+
+  <module>
+    <name>pluginTest</name>
+    <script>
+      <path>/js/pluginTest.js</path>
+    </script>
+    <depends>
+      <module>text</module>
+      <as>text</as>
+      <resource>/path/to/file.js</resource>
+    </depends>
+    <depends>
+      <module>text</module>
+      <as>text</as>
+      <resource>/path/to/file2.js</resource>
+    </depends>
+  </module>
+
+  <module>
+    <name>text</name>
+    <script>
+      <path>/js/text.js</path>
+    </script>
+  </module>
+
+  <module>
+    <name>remote1</name>
+    <url>http://js/remote1.js</url>
+  </module>
+
+  <module>
+    <name>remote2</name>
+    <url>http://js/remote2.js</url>
+    <depends>
+      <module>remote1</module>
+    </depends>
+  </module>
+
+  <module>
+    <name>normalize_test</name>
+    <script>
+      <path>/js/normalize_test.js</path>
+    </script>
+  </module>
 </gatein-resources>

@@ -19,95 +19,76 @@
 
 package org.exoplatform.commons.utils;
 
-import org.gatein.common.io.IOTools;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.util.Iterator;
+
+import org.gatein.common.io.IOTools;
 import org.gatein.common.util.Tools;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class CompositeReader extends Reader
-{
+public class CompositeReader extends Reader {
 
-   /** . */
-   private Iterator<Reader> compounds;
+    /** . */
+    private Iterator<Reader> compounds;
 
-   /** . */
-   private Reader current;
+    /** . */
+    private Reader current;
 
-   public CompositeReader(Reader... compounds) throws NullPointerException
-   {
-      this(Tools.iterator(compounds));
-   }
-   
-   public CompositeReader(Iterable<Reader> compounds) throws NullPointerException
-   {
-      this(compounds.iterator());
-   }
+    public CompositeReader(Reader... compounds) throws NullPointerException {
+        this(Tools.iterator(compounds));
+    }
 
-   public CompositeReader(Iterator<Reader> compounds) throws NullPointerException
-   {
-      this.compounds = compounds;
-      this.current = null;
-   }
+    public CompositeReader(Iterable<Reader> compounds) throws NullPointerException {
+        this(compounds.iterator());
+    }
 
-   @Override
-   public int read(char[] cbuf, int off, int len) throws IOException
-   {
-      int read = 0;
-      while (len > 0)
-      {
-         if (current == null)
-         {
-            if (compounds.hasNext())
-            {
-               current = compounds.next();
+    public CompositeReader(Iterator<Reader> compounds) throws NullPointerException {
+        this.compounds = compounds;
+        this.current = null;
+    }
+
+    @Override
+    public int read(char[] cbuf, int off, int len) throws IOException {
+        int read = 0;
+        while (len > 0) {
+            if (current == null) {
+                if (compounds.hasNext()) {
+                    current = compounds.next();
+                } else {
+                    if (read == 0) {
+                        // Otherwise it would loop for ever
+                        read = -1;
+                    }
+                    break;
+                }
+            } else {
+                int tmp = current.read(cbuf, off, len);
+                if (tmp == -1) {
+                    Reader reader = current;
+                    current = null;
+                    reader.close();
+                } else {
+                    off += tmp;
+                    len -= tmp;
+                    read += tmp;
+                }
             }
-            else
-            {
-               if (read == 0)
-               {
-                  // Otherwise it would loop for ever
-                  read = -1;
-               }
-               break;
-            }
-         }
-         else
-         {
-            int tmp = current.read(cbuf, off, len);
-            if (tmp == -1)
-            {
-               Reader reader = current;
-               current = null;
-               reader.close();
-            }
-            else
-            {
-               off += tmp;
-               len -= tmp;
-               read += tmp;
-            }
-         }
-      }
-      return read;
-   }
+        }
+        return read;
+    }
 
-   @Override
-   public void close() throws IOException
-   {
-      if (current != null)
-      {
-         IOTools.safeClose(current);
-         current = null;
-      }
-      while (compounds.hasNext())
-      {
-         IOTools.safeClose(compounds.next());
-      }
-      compounds = null;
-   }
+    @Override
+    public void close() throws IOException {
+        if (current != null) {
+            IOTools.safeClose(current);
+            current = null;
+        }
+        while (compounds.hasNext()) {
+            IOTools.safeClose(compounds.next());
+        }
+        compounds = null;
+    }
 }

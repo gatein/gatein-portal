@@ -23,157 +23,124 @@
 
 package org.gatein.common.transaction;
 
-import org.exoplatform.services.transaction.TransactionService;
-import org.gatein.common.logging.Logger;
-import org.gatein.common.logging.LoggerFactory;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.transaction.Status;
 import javax.transaction.UserTransaction;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+
+import org.exoplatform.services.transaction.TransactionService;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 
 /**
  * Base implementation of {@link JTAUserTransactionLifecycleService} .
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class JTAUserTransactionLifecycleServiceImpl implements JTAUserTransactionLifecycleService
-{
-   private static final Logger log = LoggerFactory.getLogger( JTAUserTransactionLifecycleServiceImpl.class);
+public class JTAUserTransactionLifecycleServiceImpl implements JTAUserTransactionLifecycleService {
+    private static final Logger log = LoggerFactory.getLogger(JTAUserTransactionLifecycleServiceImpl.class);
 
-   private UserTransaction userTransaction;
+    private UserTransaction userTransaction;
 
-   private TransactionService transactionService;
+    private TransactionService transactionService;
 
-   // For now, we have one listener instance for all transactions
-   private List<JTAUserTransactionLifecycleListener> listeners = new LinkedList<JTAUserTransactionLifecycleListener>();
+    // For now, we have one listener instance for all transactions
+    private List<JTAUserTransactionLifecycleListener> listeners = new LinkedList<JTAUserTransactionLifecycleListener>();
 
-   public JTAUserTransactionLifecycleServiceImpl(TransactionService transactionService)
-   {
-      this.transactionService = transactionService;
-   }
+    public JTAUserTransactionLifecycleServiceImpl(TransactionService transactionService) {
+        this.transactionService = transactionService;
+    }
 
-   /**
-    * {@inheritDoc}
-    */
-   public void beginJTATransaction()
-   {
-      UserTransaction tx = getUserTransaction();
+    /**
+     * {@inheritDoc}
+     */
+    public void beginJTATransaction() {
+        UserTransaction tx = getUserTransaction();
 
-      try
-      {
-         if (tx.getStatus() == Status.STATUS_NO_TRANSACTION)
-         {
-            executeListenersBeforeBegin();
-            tx.begin();
-            executeListenersAfterBegin();
-         }
-         else
-         {
-            log.warn("UserTransaction not started as it's in state " + tx.getStatus());
-         }
-      }
-      catch (Exception e)
-      {
-         throw new RuntimeException(e);
-      }
-   }
-
-
-   /**
-    * {@inheritDoc}
-    */
-   public void finishJTATransaction()
-   {
-      UserTransaction tx = getUserTransaction();
-
-      try
-      {
-         int txStatus = tx.getStatus();
-         if (txStatus == Status.STATUS_NO_TRANSACTION)
-         {
-            log.warn("UserTransaction can't be finished as it wasn't started");
-         }
-         else if (txStatus == Status.STATUS_MARKED_ROLLBACK || txStatus == Status.STATUS_ROLLEDBACK || txStatus == Status.STATUS_ROLLING_BACK)
-         {
-            log.warn("Going to rollback UserTransaction as it's status is " + txStatus);
-            tx.rollback();
-         }
-         else
-         {
-            tx.commit();
-         }
-      }
-      catch (Exception se)
-      {
-         throw new RuntimeException(se);
-      }
-   }
-
-
-   /**
-    * Obtain {@link UserTransaction} via JNDI call or via {@link TransactionService} if that fails
-    *
-    * @return transaction
-    */
-   public UserTransaction getUserTransaction()
-   {
-      // It's fine to reuse same instance of UserTransaction as UserTransaction is singleton in JBoss and most other AS.
-      // And new InitialContext().lookup("java:comp/UserTransaction") is quite expensive operation
-      if (userTransaction == null)
-      {
-         synchronized (this)
-         {
-            if (userTransaction == null)
-            {
-               try
-               {
-                  userTransaction = (UserTransaction)new InitialContext().lookup("java:comp/UserTransaction");
-               }
-               catch (NamingException ne)
-               {
-                  log.debug("UserTransaction not found via JNDI. Trying TransactionService");
-                  userTransaction = transactionService.getUserTransaction();
-               }
+        try {
+            if (tx.getStatus() == Status.STATUS_NO_TRANSACTION) {
+                executeListenersBeforeBegin();
+                tx.begin();
+                executeListenersAfterBegin();
+            } else {
+                log.warn("UserTransaction not started as it's in state " + tx.getStatus());
             }
-         }
-      }
-      return userTransaction;
-   }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-   /**
-    * {@inheritDoc}
-    */
-   public void registerListener(JTAUserTransactionLifecycleListener listener)
-   {
-      log.info("Registered listener " + listener);
-      listeners.add(listener);
-   }
+    /**
+     * {@inheritDoc}
+     */
+    public void finishJTATransaction() {
+        UserTransaction tx = getUserTransaction();
 
-   protected void executeListenersBeforeBegin()
-   {
-      for (JTAUserTransactionLifecycleListener listener : listeners)
-      {
-         if (log.isTraceEnabled())
-         {
-            log.trace("Execute listener " + listener + " before begin of JTA transaction");
-         }
-         listener.beforeBegin();
-      }
-   }
+        try {
+            int txStatus = tx.getStatus();
+            if (txStatus == Status.STATUS_NO_TRANSACTION) {
+                log.warn("UserTransaction can't be finished as it wasn't started");
+            } else if (txStatus == Status.STATUS_MARKED_ROLLBACK || txStatus == Status.STATUS_ROLLEDBACK
+                    || txStatus == Status.STATUS_ROLLING_BACK) {
+                log.warn("Going to rollback UserTransaction as it's status is " + txStatus);
+                tx.rollback();
+            } else {
+                tx.commit();
+            }
+        } catch (Exception se) {
+            throw new RuntimeException(se);
+        }
+    }
 
-   protected void executeListenersAfterBegin()
-   {
-      for (JTAUserTransactionLifecycleListener listener : listeners)
-      {
-         if (log.isTraceEnabled())
-         {
-            log.trace("Execute listener " + listener + " after begin of JTA transaction");
-         }
-         listener.afterBegin();
-      }
-   }
+    /**
+     * Obtain {@link UserTransaction} via JNDI call or via {@link TransactionService} if that fails
+     *
+     * @return transaction
+     */
+    public UserTransaction getUserTransaction() {
+        // It's fine to reuse same instance of UserTransaction as UserTransaction is singleton in JBoss and most other AS.
+        // And new InitialContext().lookup("java:comp/UserTransaction") is quite expensive operation
+        if (userTransaction == null) {
+            synchronized (this) {
+                if (userTransaction == null) {
+                    try {
+                        userTransaction = (UserTransaction) new InitialContext().lookup("java:comp/UserTransaction");
+                    } catch (NamingException ne) {
+                        log.debug("UserTransaction not found via JNDI. Trying TransactionService");
+                        userTransaction = transactionService.getUserTransaction();
+                    }
+                }
+            }
+        }
+        return userTransaction;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void registerListener(JTAUserTransactionLifecycleListener listener) {
+        log.info("Registered listener " + listener);
+        listeners.add(listener);
+    }
+
+    protected void executeListenersBeforeBegin() {
+        for (JTAUserTransactionLifecycleListener listener : listeners) {
+            if (log.isTraceEnabled()) {
+                log.trace("Execute listener " + listener + " before begin of JTA transaction");
+            }
+            listener.beforeBegin();
+        }
+    }
+
+    protected void executeListenersAfterBegin() {
+        for (JTAUserTransactionLifecycleListener listener : listeners) {
+            if (log.isTraceEnabled()) {
+                log.trace("Execute listener " + listener + " after begin of JTA transaction");
+            }
+            listener.afterBegin();
+        }
+    }
 }

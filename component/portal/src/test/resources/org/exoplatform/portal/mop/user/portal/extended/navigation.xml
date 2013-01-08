@@ -24,11 +24,11 @@
     xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
   <priority>1</priority>
   <page-nodes>
-	  <node>
+    <node>
       <uri>foo</uri>
-	    <name>foo</name>
-	    <label>foo_label</label>
-	  </node>
+      <name>foo</name>
+      <label>foo_label</label>
+    </node>
     <node>
       <uri>bar</uri>
       <name>bar</name>

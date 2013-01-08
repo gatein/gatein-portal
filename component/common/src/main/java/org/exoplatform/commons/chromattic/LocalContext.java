@@ -21,46 +21,38 @@ package org.exoplatform.commons.chromattic;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+
 /**
  * A local context that is managed by a thread local owned by a chromattic life cycle instance.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class LocalContext extends AbstractContext 
-{
+class LocalContext extends AbstractContext {
 
-   /** The related JCR session. */
-   private Session jcrSession;
+    /** The related JCR session. */
+    private Session jcrSession;
 
-   public LocalContext(ChromatticLifeCycle configurator)
-   {
-      super(configurator);
-   }
+    public LocalContext(ChromatticLifeCycle configurator) {
+        super(configurator);
+    }
 
-   public Session doLogin() throws RepositoryException
-   {
-      if (jcrSession != null)
-      {
-         throw new IllegalStateException("Already logged in");
-      }
-      jcrSession = openSession();
-      return jcrSession;
-   }
+    public Session doLogin() throws RepositoryException {
+        if (jcrSession != null) {
+            throw new IllegalStateException("Already logged in");
+        }
+        jcrSession = openSession();
+        return jcrSession;
+    }
 
-   @Override
-   public void close(boolean save)
-   {
-      try
-      {
-         super.close(save);
-      }
-      finally
-      {
-         if (jcrSession != null)
-         {
-            jcrSession.logout();
-         }
-      }
-   }
+    @Override
+    public void close(boolean save) {
+        try {
+            super.close(save);
+        } finally {
+            if (jcrSession != null) {
+                jcrSession.logout();
+            }
+        }
+    }
 }

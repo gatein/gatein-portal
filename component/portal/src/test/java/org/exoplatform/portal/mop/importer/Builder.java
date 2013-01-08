@@ -19,80 +19,67 @@
 
 package org.exoplatform.portal.mop.importer;
 
-import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.config.model.PageNodeContainer;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import org.exoplatform.portal.config.model.PageNode;
+import org.exoplatform.portal.config.model.PageNodeContainer;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public abstract class Builder<B extends Builder<B>>
-{
+public abstract class Builder<B extends Builder<B>> {
 
-   /** . */
-   protected final String value;
+    /** . */
+    protected final String value;
 
-   /** . */
-   protected final List<NodeBuilder> nodes;
+    /** . */
+    protected final List<NodeBuilder> nodes;
 
-   protected Builder(String value)
-   {
-      this.value = value;
-      this.nodes = new ArrayList<NodeBuilder>();
-   }
+    protected Builder(String value) {
+        this.value = value;
+        this.nodes = new ArrayList<NodeBuilder>();
+    }
 
-   public static NodeBuilder node(String name)
-   {
-      return new NodeBuilder(name);
-   }
+    public static NodeBuilder node(String name) {
+        return new NodeBuilder(name);
+    }
 
-   public static FragmentBuilder fragment(String... path)
-   {
-      StringBuilder sb = new StringBuilder();
-      for (String name : path)
-      {
-         if (sb.length() > 0)
-         {
-            sb.append('/');
-         }
-         sb.append(name);
-      }
-      return new FragmentBuilder(sb.toString());
-   }
+    public static FragmentBuilder fragment(String... path) {
+        StringBuilder sb = new StringBuilder();
+        for (String name : path) {
+            if (sb.length() > 0) {
+                sb.append('/');
+            }
+            sb.append(name);
+        }
+        return new FragmentBuilder(sb.toString());
+    }
 
-   public B add(NodeBuilder... nodes)
-   {
-      for (NodeBuilder node : nodes)
-      {
-         this.nodes.add(node);
-      }
-      return (B)this;
-   }
+    public B add(NodeBuilder... nodes) {
+        for (NodeBuilder node : nodes) {
+            this.nodes.add(node);
+        }
+        return (B) this;
+    }
 
-   public Builder get(String value)
-   {
-      for (Builder node : nodes)
-      {
-         if (node.value.equals(value))
-         {
-            return node;
-         }
-      }
-      return null;
-   }
+    public Builder get(String value) {
+        for (Builder node : nodes) {
+            if (node.value.equals(value)) {
+                return node;
+            }
+        }
+        return null;
+    }
 
-   protected final ArrayList<PageNode> buildNodes()
-   {
-      ArrayList<PageNode> nodes = new ArrayList<PageNode>();
-      for (NodeBuilder node : this.nodes)
-      {
-         nodes.add(node.build());
-      }
-      return nodes;
-   }
+    protected final ArrayList<PageNode> buildNodes() {
+        ArrayList<PageNode> nodes = new ArrayList<PageNode>();
+        for (NodeBuilder node : this.nodes) {
+            nodes.add(node.build());
+        }
+        return nodes;
+    }
 
-   public abstract PageNodeContainer build();
+    public abstract PageNodeContainer build();
 
 }

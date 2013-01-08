@@ -21,9 +21,9 @@
 -->
 
 <gatein-resources
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
-   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
   <!-- Dupicate resourceID PORTAL/classic -->
   <portal>
     <name>classic</name>
@@ -33,7 +33,7 @@
       </script>
     </module>
   </portal>
-	
+
   <portal>
     <name>classic</name>
     <module>

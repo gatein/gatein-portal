@@ -23,92 +23,82 @@
 
 package org.exoplatform.webui.form.validator;
 
+import java.io.Serializable;
+
 import org.exoplatform.web.application.ApplicationMessage;
 import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.exception.MessageException;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormInput;
 
-import java.io.Serializable;
-
 /** @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a> */
-public abstract class AbstractValidator implements Validator, Serializable
-{
-   protected boolean exceptionOnMissingMandatory = false;
-   protected boolean trimValue = false;
+public abstract class AbstractValidator implements Validator, Serializable {
+    protected boolean exceptionOnMissingMandatory = false;
+    protected boolean trimValue = false;
 
-   protected String getLabelFor(UIFormInput uiInput) throws Exception
-   {
-      UIComponent uiComponent = (UIComponent)uiInput;
-      UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
-      String label = uiInput.getName();
-      if (uiForm != null)
-      {
-         label = uiForm.getLabel(label);
-      }
+    protected String getLabelFor(UIFormInput uiInput) throws Exception {
+        UIComponent uiComponent = (UIComponent) uiInput;
+        UIForm uiForm = uiComponent.getAncestorOfType(UIForm.class);
+        String label = uiInput.getName();
+        if (uiForm != null) {
+            label = uiForm.getLabel(label);
+        }
 
-      label = label.trim();
-      
-      // remove trailing ':' if there is one
-      int index = label.indexOf(':');
-      if(index != -1)
-      {
-         label = label.substring(0, index);
-      }
-      return label.trim();
-   }
+        label = label.trim();
 
-   public void validate(UIFormInput uiInput) throws Exception
-   {
-      String value = trimmedValueOrNullIfBypassed((String)uiInput.getValue(), uiInput, exceptionOnMissingMandatory, trimValue);
-      if (value == null)
-      {
-         return;
-      }
+        // remove trailing ':' if there is one
+        int index = label.indexOf(':');
+        if (index != -1) {
+            label = label.substring(0, index);
+        }
+        return label.trim();
+    }
 
-      if (!isValid(value, uiInput))
-      {
-         throw createMessageException(value, uiInput);
-      }
-   }
+    public void validate(UIFormInput uiInput) throws Exception {
+        String value = trimmedValueOrNullIfBypassed((String) uiInput.getValue(), uiInput, exceptionOnMissingMandatory,
+                trimValue);
+        if (value == null) {
+            return;
+        }
 
-   protected MessageException createMessageException(String value, UIFormInput uiInput) throws Exception
-   {
-      return createMessageException(value, uiInput, getMessageLocalizationKey());
-   }
-   
-   protected MessageException createMessageException(String value, UIFormInput uiInput, String localizationKey) throws Exception
-   {
-      return new MessageException(new ApplicationMessage(localizationKey, getMessageArgs(value, uiInput), ApplicationMessage.WARNING));
-   }
+        if (!isValid(value, uiInput)) {
+            throw createMessageException(value, uiInput);
+        }
+    }
 
-   protected Object[] getMessageArgs(String value, UIFormInput uiInput) throws Exception
-   {
-      return new Object[]{getLabelFor(uiInput)};
-   }
+    protected MessageException createMessageException(String value, UIFormInput uiInput) throws Exception {
+        return createMessageException(value, uiInput, getMessageLocalizationKey());
+    }
 
-   protected abstract String getMessageLocalizationKey();
+    protected MessageException createMessageException(String value, UIFormInput uiInput, String localizationKey)
+            throws Exception {
+        return new MessageException(new ApplicationMessage(localizationKey, getMessageArgs(value, uiInput),
+                ApplicationMessage.WARNING));
+    }
 
-   protected abstract boolean isValid(String value, UIFormInput uiInput);
+    protected Object[] getMessageArgs(String value, UIFormInput uiInput) throws Exception {
+        return new Object[] { getLabelFor(uiInput) };
+    }
 
-   protected String trimmedValueOrNullIfBypassed(String value, UIFormInput uiInput, boolean exceptionOnMissingMandatory, boolean trimValue) throws Exception
-   {
-      if (value != null)
-      {
-         String tmp = value.trim();
-         if(trimValue)
-         {
-            value = tmp;
-         }
+    protected abstract String getMessageLocalizationKey();
 
-         value = tmp.isEmpty() ? null : value;
-      }
+    protected abstract boolean isValid(String value, UIFormInput uiInput);
 
-      if(exceptionOnMissingMandatory && value == null)
-      {
-         throw createMessageException(value, uiInput, "EmptyFieldValidator.msg.empty-input");
-      }
+    protected String trimmedValueOrNullIfBypassed(String value, UIFormInput uiInput, boolean exceptionOnMissingMandatory,
+            boolean trimValue) throws Exception {
+        if (value != null) {
+            String tmp = value.trim();
+            if (trimValue) {
+                value = tmp;
+            }
 
-      return value;
-   }
+            value = tmp.isEmpty() ? null : value;
+        }
+
+        if (exceptionOnMissingMandatory && value == null) {
+            throw createMessageException(value, uiInput, "EmptyFieldValidator.msg.empty-input");
+        }
+
+        return value;
+    }
 }

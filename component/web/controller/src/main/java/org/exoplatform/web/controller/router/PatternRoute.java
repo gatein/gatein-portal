@@ -21,50 +21,43 @@ package org.exoplatform.web.controller.router;
 
 import java.util.List;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class PatternRoute extends Route
-{
+class PatternRoute extends Route {
 
-   /** . */
-   final Regex pattern;
+    /** . */
+    final Regex pattern;
 
-   /** . */
-   final PathParam[] params;
+    /** . */
+    final PathParam[] params;
 
-   /** . */
-   final String[] chunks;
+    /** . */
+    final String[] chunks;
 
-   /** The encoded chunks (so we don't reencode them later). */
-   final String[] encodedChunks;
+    /** The encoded chunks (so we don't reencode them later). */
+    final String[] encodedChunks;
 
-   PatternRoute(
-      Router router,
-      Regex pattern,
-      List<PathParam> params,
-      List<String> chunks)
-   {
-      super(router);
+    PatternRoute(Router router, Regex pattern, List<PathParam> params, List<String> chunks) {
+        super(router);
 
-      //
-      if (chunks.size() != params.size() + 1)
-      {
-         throw new AssertionError("Was expecting chunk size " + chunks.size() + " to be equals to " + params.size() + 1);
-      }
+        //
+        if (chunks.size() != params.size() + 1) {
+            throw new AssertionError("Was expecting chunk size " + chunks.size() + " to be equals to " + params.size() + 1);
+        }
 
-      //
-      String[] encodedChunks = new String[chunks.size()];
-      for (int i = 0;i < chunks.size();i++)
-      {
-         encodedChunks[i] = PercentEncoding.PATH_SEGMENT.encode(chunks.get(i));
-      }
+        //
+        String[] encodedChunks = new String[chunks.size()];
+        for (int i = 0; i < chunks.size(); i++) {
+            encodedChunks[i] = PercentEncoding.PATH_SEGMENT.encode(chunks.get(i));
+        }
 
-      //
-      this.pattern = pattern;
-      this.params = params.toArray(new PathParam[params.size()]);
-      this.chunks = chunks.toArray(new String[chunks.size()]);
-      this.encodedChunks = encodedChunks;
-   }
+        //
+        this.pattern = pattern;
+        this.params = params.toArray(new PathParam[params.size()]);
+        this.chunks = chunks.toArray(new String[chunks.size()]);
+        this.encodedChunks = encodedChunks;
+    }
 }

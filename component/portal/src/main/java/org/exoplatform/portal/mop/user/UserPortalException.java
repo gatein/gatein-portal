@@ -22,25 +22,20 @@ package org.exoplatform.portal.mop.user;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class UserPortalException extends RuntimeException
-{
+public class UserPortalException extends RuntimeException {
 
-   public UserPortalException()
-   {
-   }
+    public UserPortalException() {
+    }
 
-   public UserPortalException(String message)
-   {
-      super(message);
-   }
+    public UserPortalException(String message) {
+        super(message);
+    }
 
-   public UserPortalException(String message, Throwable cause)
-   {
-      super(message, cause);
-   }
+    public UserPortalException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
-   public UserPortalException(Throwable cause)
-   {
-      super(cause);
-   }
+    public UserPortalException(Throwable cause) {
+        super(cause);
+    }
 }

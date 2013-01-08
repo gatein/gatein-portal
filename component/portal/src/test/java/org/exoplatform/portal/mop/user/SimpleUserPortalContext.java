@@ -19,45 +19,40 @@
 
 package org.exoplatform.portal.mop.user;
 
-import org.exoplatform.portal.mop.SiteKey;
-
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+
+import org.exoplatform.portal.mop.SiteKey;
 
 /**
  * A simple implementation for unit tests.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class SimpleUserPortalContext implements UserPortalContext
-{
+public class SimpleUserPortalContext implements UserPortalContext {
 
-   /** . */
-   private final Map<SiteKey, ResourceBundle> bundles;
+    /** . */
+    private final Map<SiteKey, ResourceBundle> bundles;
 
-   /** . */
-   private final Locale locale;
+    /** . */
+    private final Locale locale;
 
-   public SimpleUserPortalContext(Locale locale)
-   {
-      this.locale = locale;
-      this.bundles = new HashMap<SiteKey, ResourceBundle>();
-   }
+    public SimpleUserPortalContext(Locale locale) {
+        this.locale = locale;
+        this.bundles = new HashMap<SiteKey, ResourceBundle>();
+    }
 
-   void add(SiteKey key, ResourceBundle bundle)
-   {
-      bundles.put(key, bundle);
-   }
+    void add(SiteKey key, ResourceBundle bundle) {
+        bundles.put(key, bundle);
+    }
 
-   public ResourceBundle getBundle(UserNavigation navigation)
-   {
-      return bundles.get(navigation.getKey());
-   }
+    public ResourceBundle getBundle(UserNavigation navigation) {
+        return bundles.get(navigation.getKey());
+    }
 
-   public Locale getUserLocale()
-   {
-      return locale;
-   }
+    public Locale getUserLocale() {
+        return locale;
+    }
 }

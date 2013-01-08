@@ -31,12 +31,11 @@ import org.chromattic.ext.format.BaseEncodingObjectFormatter;
 @PrimaryType(name = "app:remotegadgetdata")
 @FormattedBy(BaseEncodingObjectFormatter.class)
 @NamingPrefix("app")
-public abstract class RemoteGadgetData extends GadgetData
-{
+public abstract class RemoteGadgetData extends GadgetData {
 
-   @Property(name = "app:url")
-   public abstract String getURL();
+    @Property(name = "app:url")
+    public abstract String getURL();
 
-   public abstract void setURL(String url);
+    public abstract void setURL(String url);
 
 }

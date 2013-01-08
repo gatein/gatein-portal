@@ -23,28 +23,24 @@ package org.exoplatform.commons.serialization.model.metadata;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ClassTypeMetaData extends TypeMetaData
-{
+public class ClassTypeMetaData extends TypeMetaData {
 
-   /** . */
-   private final boolean serialized;
+    /** . */
+    private final boolean serialized;
 
-   public ClassTypeMetaData(String name, boolean serialized)
-   {
-      super(name);
+    public ClassTypeMetaData(String name, boolean serialized) {
+        super(name);
 
-      //
-      this.serialized = serialized;
-   }
+        //
+        this.serialized = serialized;
+    }
 
-   public boolean isSerialized()
-   {
-      return serialized;
-   }
+    public boolean isSerialized() {
+        return serialized;
+    }
 
-   @Override
-   public String toString()
-   {
-      return "ClassTypeMetaData[name=" + name + ",serialized=" + serialized  + "]";
-   }
+    @Override
+    public String toString() {
+        return "ClassTypeMetaData[name=" + name + ",serialized=" + serialized + "]";
+    }
 }

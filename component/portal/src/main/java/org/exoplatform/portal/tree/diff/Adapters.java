@@ -22,60 +22,50 @@ package org.exoplatform.portal.tree.diff;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class Adapters
-{
+public class Adapters {
 
-   /** . */
-   private static final ArrayAdapter ARRAY_INSTANCE = new ArrayAdapter();
+    /** . */
+    private static final ArrayAdapter ARRAY_INSTANCE = new ArrayAdapter();
 
-   public static <E> ListAdapter<E[], E> list()
-   {
-      @SuppressWarnings("unchecked")
-      ListAdapter<E[], E> adapter = (ListAdapter<E[], E>)ARRAY_INSTANCE;
-      return adapter;
-   }
+    public static <E> ListAdapter<E[], E> list() {
+        @SuppressWarnings("unchecked")
+        ListAdapter<E[], E> adapter = (ListAdapter<E[], E>) ARRAY_INSTANCE;
+        return adapter;
+    }
 
-   private static class ArrayAdapter<E> implements ListAdapter<E[], E>
-   {
-      public int size(E[] list)
-      {
-         return list.length;
-      }
+    private static class ArrayAdapter<E> implements ListAdapter<E[], E> {
+        public int size(E[] list) {
+            return list.length;
+        }
 
-      public Iterator<E> iterator(final E[] list, final boolean reverse)
-      {
-         return new Iterator<E>()
-         {
-            /** . */
-            int count = 0;
+        public Iterator<E> iterator(final E[] list, final boolean reverse) {
+            return new Iterator<E>() {
+                /** . */
+                int count = 0;
 
-            public boolean hasNext()
-            {
-               return count < list.length;
-            }
+                public boolean hasNext() {
+                    return count < list.length;
+                }
 
-            public E next()
-            {
-               if (!hasNext())
-               {
-                  throw new NoSuchElementException();
-               }
-               int index = count++;
-               if (reverse)
-               {
-                  index = list.length - index - 1;
-               }
-               return list[index];
-            }
+                public E next() {
+                    if (!hasNext()) {
+                        throw new NoSuchElementException();
+                    }
+                    int index = count++;
+                    if (reverse) {
+                        index = list.length - index - 1;
+                    }
+                    return list[index];
+                }
 
-            public void remove()
-            {
-               throw new UnsupportedOperationException();
-            }
-         };
-      }
-   }
+                public void remove() {
+                    throw new UnsupportedOperationException();
+                }
+            };
+        }
+    }
 }

@@ -22,32 +22,32 @@
   -->
 
 <page-set xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3"
-                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3">
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3">
 
-   <page>
-      <name>homepage</name>
-      <title>Home Page</title>
+  <page>
+    <name>homepage</name>
+    <title>Home Page</title>
+    <access-permissions>Everyone</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <portlet-application>
+      <portlet>
+        <application-ref>web</application-ref>
+        <portlet-ref>HomePagePortlet</portlet-ref>
+        <preferences>
+          <preference>
+            <name>template</name>
+            <value>system:/templates/groovy/webui/component/UIHomePagePortlet.gtmpl</value>
+            <read-only>false</read-only>
+          </preference>
+        </preferences>
+      </portlet>
+      <title>Home Page portlet</title>
       <access-permissions>Everyone</access-permissions>
-      <edit-permission>*:/platform/administrators</edit-permission>
-      <portlet-application>
-         <portlet>
-            <application-ref>web</application-ref>
-            <portlet-ref>HomePagePortlet</portlet-ref>
-            <preferences>
-               <preference>
-                  <name>template</name>
-                  <value>system:/templates/groovy/webui/component/UIHomePagePortlet.gtmpl</value>
-                  <read-only>false</read-only>
-               </preference>
-            </preferences>
-         </portlet>
-         <title>Home Page portlet</title>
-         <access-permissions>Everyone</access-permissions>
-         <show-info-bar>false</show-info-bar>
-         <show-application-state>false</show-application-state>
-         <show-application-mode>false</show-application-mode>
-      </portlet-application>
-   </page>
+      <show-info-bar>false</show-info-bar>
+      <show-application-state>false</show-application-state>
+      <show-application-mode>false</show-application-mode>
+    </portlet-application>
+  </page>
 
 </page-set>

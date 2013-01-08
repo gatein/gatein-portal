@@ -22,33 +22,32 @@ package org.exoplatform.web.controller.regexp;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-enum Kind
-{
+enum Kind {
 
-   BEGIN,
+    BEGIN,
 
-   END,
+    END,
 
-   ANY,
+    ANY,
 
-   HYPHEN,
+    HYPHEN,
 
-   OR,
+    OR,
 
-   LITERAL,
+    LITERAL,
 
-   GROUP_OPEN,
+    GROUP_OPEN,
 
-   GROUP_CLOSE,
+    GROUP_CLOSE,
 
-   QUANTIFIER,
+    QUANTIFIER,
 
-   QUANTIFIER_MODE,
+    QUANTIFIER_MODE,
 
-   CC_OPEN,
+    CC_OPEN,
 
-   CC_CLOSE,
+    CC_CLOSE,
 
-   CC_AND
+    CC_AND
 
 }

@@ -19,41 +19,31 @@
 
 package org.exoplatform.web.controller.router;
 
-import org.exoplatform.web.controller.QualifiedName;
+import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 import java.util.Collections;
 
-import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestRoutePriority extends AbstractTestController
-{
+public class TestRoutePriority extends AbstractTestController {
 
-   public void testExactMatchingAfterWildcard() throws Exception
-   {
+    public void testExactMatchingAfterWildcard() throws Exception {
 
-      Router router = router().
-         add(route("/{foo}")).
-         add(route("/foo").with(routeParam("foo").withValue("b"))).
-         build();
+        Router router = router().add(route("/{foo}")).add(route("/foo").with(routeParam("foo").withValue("b"))).build();
 
-      assertEquals(Collections.singletonMap(Names.FOO, "foo"), router.route("/foo"));
-      assertEquals("/foo", router.render(Collections.singletonMap(Names.FOO, "foo")));
-      assertEquals("/b", router.render(Collections.singletonMap(Names.FOO, "b")));
-   }
+        assertEquals(Collections.singletonMap(Names.FOO, "foo"), router.route("/foo"));
+        assertEquals("/foo", router.render(Collections.singletonMap(Names.FOO, "foo")));
+        assertEquals("/b", router.render(Collections.singletonMap(Names.FOO, "b")));
+    }
 
-   public void testExactMatchingBeforeWildcard() throws Exception
-   {
+    public void testExactMatchingBeforeWildcard() throws Exception {
 
-      Router router = router().
-         add(route("/foo").with(routeParam("foo").withValue("b"))).
-         add(route("/{foo}")).
-         build();
+        Router router = router().add(route("/foo").with(routeParam("foo").withValue("b"))).add(route("/{foo}")).build();
 
-      assertEquals(Collections.singletonMap(Names.FOO, "b"), router.route("/foo"));
-      assertEquals("/foo", router.render(Collections.singletonMap(Names.FOO, "b")));
-      assertEquals("/foo", router.render(Collections.singletonMap(Names.FOO, "foo")));
-   }
+        assertEquals(Collections.singletonMap(Names.FOO, "b"), router.route("/foo"));
+        assertEquals("/foo", router.render(Collections.singletonMap(Names.FOO, "b")));
+        assertEquals("/foo", router.render(Collections.singletonMap(Names.FOO, "foo")));
+    }
 }

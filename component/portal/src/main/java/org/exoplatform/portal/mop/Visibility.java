@@ -23,27 +23,26 @@ package org.exoplatform.portal.mop;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public enum Visibility
-{
+public enum Visibility {
 
-   /**
-    * The object is displayed.
-    */
-   DISPLAYED,
+    /**
+     * The object is displayed.
+     */
+    DISPLAYED,
 
-   /**
-    * The object is hidden.
-    */
-   HIDDEN,
+    /**
+     * The object is hidden.
+     */
+    HIDDEN,
 
-   /**
-    * The object visibility is defined by the validity in a related time range.
-    */
-   TEMPORAL,
+    /**
+     * The object visibility is defined by the validity in a related time range.
+     */
+    TEMPORAL,
 
-   /**
-    * The object visibility is system.
-    */
-   SYSTEM
+    /**
+     * The object visibility is system.
+     */
+    SYSTEM
 
 }

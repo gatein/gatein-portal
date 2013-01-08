@@ -24,31 +24,25 @@ import org.exoplatform.portal.pom.config.Utils;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationKey extends OwnerKey
-{
+public class NavigationKey extends OwnerKey {
 
-   public NavigationKey(String type, String id)
-   {
-      super(type, id);
-   }
+    public NavigationKey(String type, String id) {
+        super(type, id);
+    }
 
-   public static NavigationKey create(String compositeId)
-   {
-      if (compositeId == null)
-      {
-         throw new NullPointerException();
-      }
-      String[] components = Utils.split("::", compositeId);
-      if (components.length != 2)
-      {
-         throw new IllegalArgumentException("Wrong navigation id key format " + compositeId);
-      }
-      return new NavigationKey(components[0], components[1]);
-   }
+    public static NavigationKey create(String compositeId) {
+        if (compositeId == null) {
+            throw new NullPointerException();
+        }
+        String[] components = Utils.split("::", compositeId);
+        if (components.length != 2) {
+            throw new IllegalArgumentException("Wrong navigation id key format " + compositeId);
+        }
+        return new NavigationKey(components[0], components[1]);
+    }
 
-   @Override
-   public String toString()
-   {
-      return "NavigationKey[type=" + getType() + ",id=" + getId() + "]";
-   }
+    @Override
+    public String toString() {
+        return "NavigationKey[type=" + getType() + ",id=" + getId() + "]";
+    }
 }

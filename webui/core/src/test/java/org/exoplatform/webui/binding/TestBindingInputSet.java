@@ -28,44 +28,39 @@ import org.exoplatform.webui.form.UIFormStringInput;
  * @version $Id$
  *
  */
-public class TestBindingInputSet extends TestCase
-{
-   public void testBindingWithReadonly() 
-   {
-      try
-      {
-         UIMockInputSet input = new UIMockInputSet();
-         MockModel model = new MockModel();
-         assertEquals(((UIFormStringInput) input.getChildById("value1")).getValue(), "value1");
-         assertEquals(((UIFormStringInput) input.getChildById("value1")).isReadOnly(), false);
-         
-         input.binding(model);
-         assertEquals(model.getValue1(), "value1");
-         assertEquals(model.getValue2(), "value2");
-         assertEquals(model.getValue3(), "value3");
-         
-         input.setFieldValue("value1", "value1-0");
-         
-         input.setFieldValue("value2", "value2-0");
-         input.setReadonlyForField("value2", true);
-         
-         input.setFieldValue("value3", "value3-0");
-         input.setDisableForField("value3", true);
-         
-         assertEquals(((UIFormStringInput) input.getChildById("value1")).getValue(), "value1-0");
-         assertEquals(((UIFormStringInput) input.getChildById("value2")).getValue(), "value2-0");
-         assertEquals(((UIFormStringInput) input.getChildById("value3")).getValue(), "value3-0");
-         
-         model = new MockModel();
-         input.binding(model);
-         
-         assertEquals(model.getValue1(), "value1-0");
-         assertNull(model.getValue2());
-         assertNull(model.getValue3());
-      }
-      catch (Exception e)
-      {
-         throw new RuntimeException(e);
-      }
-   }
+public class TestBindingInputSet extends TestCase {
+    public void testBindingWithReadonly() {
+        try {
+            UIMockInputSet input = new UIMockInputSet();
+            MockModel model = new MockModel();
+            assertEquals(((UIFormStringInput) input.getChildById("value1")).getValue(), "value1");
+            assertEquals(((UIFormStringInput) input.getChildById("value1")).isReadOnly(), false);
+
+            input.binding(model);
+            assertEquals(model.getValue1(), "value1");
+            assertEquals(model.getValue2(), "value2");
+            assertEquals(model.getValue3(), "value3");
+
+            input.setFieldValue("value1", "value1-0");
+
+            input.setFieldValue("value2", "value2-0");
+            input.setReadonlyForField("value2", true);
+
+            input.setFieldValue("value3", "value3-0");
+            input.setDisableForField("value3", true);
+
+            assertEquals(((UIFormStringInput) input.getChildById("value1")).getValue(), "value1-0");
+            assertEquals(((UIFormStringInput) input.getChildById("value2")).getValue(), "value2-0");
+            assertEquals(((UIFormStringInput) input.getChildById("value3")).getValue(), "value3-0");
+
+            model = new MockModel();
+            input.binding(model);
+
+            assertEquals(model.getValue1(), "value1-0");
+            assertNull(model.getValue2());
+            assertNull(model.getValue3());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

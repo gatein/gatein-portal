@@ -22,19 +22,16 @@ package org.exoplatform.portal.config.model;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class NavigationFragment extends PageNodeContainer
-{
+public class NavigationFragment extends PageNodeContainer {
 
-   /** . */
-   private String parentURI;
+    /** . */
+    private String parentURI;
 
-   public String getParentURI()
-   {
-      return parentURI;
-   }
+    public String getParentURI() {
+        return parentURI;
+    }
 
-   public void setParentURI(String parentURI)
-   {
-      this.parentURI = parentURI;
-   }
+    public void setParentURI(String parentURI) {
+        this.parentURI = parentURI;
+    }
 }

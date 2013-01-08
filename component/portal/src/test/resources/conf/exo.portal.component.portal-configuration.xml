@@ -21,8 +21,8 @@
 -->
 
 <configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd http://www.exoplatform.org/xml/ns/kernel_1_2.xsd"
-  xmlns="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd">
+               xsi:schemaLocation="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd http://www.exoplatform.org/xml/ns/kernel_1_2.xsd"
+               xmlns="http://www.exoplatform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
     <key>org.exoplatform.commons.scope.ScopeManager</key>
@@ -30,31 +30,41 @@
   </component>
 
   <component>
-  	<key>org.exoplatform.services.cache.CacheService</key>
+    <key>org.exoplatform.services.cache.CacheService</key>
     <jmx-name>cache:type=CacheService</jmx-name>
-  	<type>org.exoplatform.services.cache.impl.CacheServiceImpl</type>
-  	<init-params>
+    <type>org.exoplatform.services.cache.impl.CacheServiceImpl</type>
+    <init-params>
       <object-param>
         <name>cache.config.default</name>
         <object type="org.exoplatform.services.cache.ExoCacheConfig">
-          <field name="name"><string>default</string></field>
-          <field name="maxSize"><int>30000</int></field>
-          <field name="liveTime"><long>60000</long></field>
-          <field name="distributed"><boolean>false</boolean></field>
-          <field name="implementation"><string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string></field>
+          <field name="name">
+            <string>default</string>
+          </field>
+          <field name="maxSize">
+            <int>30000</int>
+          </field>
+          <field name="liveTime">
+            <long>60000</long>
+          </field>
+          <field name="distributed">
+            <boolean>false</boolean>
+          </field>
+          <field name="implementation">
+            <string>org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache</string>
+          </field>
         </object>
       </object-param>
     </init-params>
   </component>
 
   <component>
-     <key>org.exoplatform.services.security.Authenticator</key>
-     <type>org.exoplatform.services.organization.auth.OrganizationAuthenticatorImpl</type>
+    <key>org.exoplatform.services.security.Authenticator</key>
+    <type>org.exoplatform.services.organization.auth.OrganizationAuthenticatorImpl</type>
   </component>
 
   <component>
-     <key>org.exoplatform.services.listener.ListenerService</key>
-     <type>org.exoplatform.services.listener.ListenerService</type>
+    <key>org.exoplatform.services.listener.ListenerService</key>
+    <type>org.exoplatform.services.listener.ListenerService</type>
   </component>
 
   <component>
@@ -73,13 +83,13 @@
   </component>
 
   <component>
-     <key>org.exoplatform.services.jcr.ext.distribution.DataDistributionManager</key>
-     <type>org.exoplatform.services.jcr.ext.distribution.impl.DataDistributionManagerImpl</type>
+    <key>org.exoplatform.services.jcr.ext.distribution.DataDistributionManager</key>
+    <type>org.exoplatform.services.jcr.ext.distribution.impl.DataDistributionManagerImpl</type>
   </component>
 
   <component>
-     <key>org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator</key>
-     <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NodeHierarchyCreatorImpl</type>
+    <key>org.exoplatform.services.jcr.ext.hierarchy.NodeHierarchyCreator</key>
+    <type>org.exoplatform.services.jcr.ext.hierarchy.impl.NodeHierarchyCreatorImpl</type>
   </component>
 
   <component>
@@ -137,22 +147,34 @@
         <object-param>
           <name>configuration</name>
           <object type="org.exoplatform.services.organization.impl.NewUserConfig">
-            <field  name="group">
+            <field name="group">
               <collection type="java.util.ArrayList">
                 <value>
                   <object type="org.exoplatform.services.organization.impl.NewUserConfig$JoinGroup">
-                    <field  name="groupId"><string>/platform/users</string></field>
-                    <field  name="membership"><string>member</string></field>
+                    <field name="groupId">
+                      <string>/platform/users</string>
+                    </field>
+                    <field name="membership">
+                      <string>member</string>
+                    </field>
                   </object>
                 </value>
               </collection>
             </field>
-            <field  name="ignoredUser">
+            <field name="ignoredUser">
               <collection type="java.util.HashSet">
-                <value><string>root</string></value>
-                <value><string>john</string></value>
-                <value><string>mary</string></value>
-                <value><string>demo</string></value>
+                <value>
+                  <string>root</string>
+                </value>
+                <value>
+                  <string>john</string>
+                </value>
+                <value>
+                  <string>mary</string>
+                </value>
+                <value>
+                  <string>demo</string>
+                </value>
               </collection>
             </field>
           </object>

@@ -24,6 +24,14 @@
 
 package org.exoplatform.web.login;
 
+import java.io.IOException;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+
 import org.exoplatform.container.web.AbstractFilter;
 import org.exoplatform.services.security.ConversationState;
 import org.exoplatform.web.security.AuthenticationRegistry;
@@ -31,58 +39,47 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.wci.security.Credentials;
 
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-
 /**
- * Filter is used to update {@link ConversationState} with necessary attributes after login of user.
- * It needs to be configured in filter chain after {@link org.exoplatform.services.security.web.SetCurrentIdentityFilter} !!!
+ * Filter is used to update {@link ConversationState} with necessary attributes after login of user. It needs to be configured
+ * in filter chain after {@link org.exoplatform.services.security.web.SetCurrentIdentityFilter} !!!
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class ConversationStateUpdateFilter extends AbstractFilter
-{
-   private static final Logger log = LoggerFactory.getLogger(ConversationStateUpdateFilter.class);
+public class ConversationStateUpdateFilter extends AbstractFilter {
+    private static final Logger log = LoggerFactory.getLogger(ConversationStateUpdateFilter.class);
 
-   @Override
-   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-   {
-      HttpServletRequest hreq = (HttpServletRequest)request;
-      AuthenticationRegistry authRegistry = (AuthenticationRegistry)getContainer().getComponentInstanceOfType(AuthenticationRegistry.class);
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+            ServletException {
+        HttpServletRequest hreq = (HttpServletRequest) request;
+        AuthenticationRegistry authRegistry = (AuthenticationRegistry) getContainer().getComponentInstanceOfType(
+                AuthenticationRegistry.class);
 
-      // This should happen during first request of authenticated user. We need to bind credentials to ConversationState
-      // and unregister them from authenticationRegistry
-      if (hreq.getRemoteUser() != null && authRegistry.getCredentials(hreq) != null)
-      {
-         Credentials credentials = authRegistry.removeCredentials(hreq);
-         bindCredentialsToConversationState(credentials);
-      }
+        // This should happen during first request of authenticated user. We need to bind credentials to ConversationState
+        // and unregister them from authenticationRegistry
+        if (hreq.getRemoteUser() != null && authRegistry.getCredentials(hreq) != null) {
+            Credentials credentials = authRegistry.removeCredentials(hreq);
+            bindCredentialsToConversationState(credentials);
+        }
 
-      // Continue with filter chain
-      chain.doFilter(request, response);
-   }
+        // Continue with filter chain
+        chain.doFilter(request, response);
+    }
 
-   @Override
-   public void destroy()
-   {
-   }
+    @Override
+    public void destroy() {
+    }
 
-   /**
-    * Add credentials to {@link ConversationState}.
-    *
-    * @param credentials
-    */
-   protected void bindCredentialsToConversationState(Credentials credentials)
-   {
-      ConversationState currentConversationState = ConversationState.getCurrent();
-      if (currentConversationState != null && credentials != null)
-      {
-         log.debug("Binding credentials to conversationState for user " + credentials.getUsername());
-         currentConversationState.setAttribute(Credentials.CREDENTIALS, credentials);
-      }
-   }
+    /**
+     * Add credentials to {@link ConversationState}.
+     *
+     * @param credentials
+     */
+    protected void bindCredentialsToConversationState(Credentials credentials) {
+        ConversationState currentConversationState = ConversationState.getCurrent();
+        if (currentConversationState != null && credentials != null) {
+            log.debug("Binding credentials to conversationState for user " + credentials.getUsername());
+            currentConversationState.setAttribute(Credentials.CREDENTIALS, credentials);
+        }
+    }
 }

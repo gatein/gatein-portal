@@ -19,18 +19,15 @@
 
 package org.exoplatform.commons.cache.future;
 
-import org.exoplatform.commons.cache.future.Loader;
-
 import java.util.concurrent.Callable;
+
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class StringLoader implements Loader<String, String, Callable<String>>
-{
-   public String retrieve(Callable<String> context, String key) throws Exception
-   {
-      return context.call();
-   }
+public class StringLoader implements Loader<String, String, Callable<String>> {
+    public String retrieve(Callable<String> context, String key) throws Exception {
+        return context.call();
+    }
 }

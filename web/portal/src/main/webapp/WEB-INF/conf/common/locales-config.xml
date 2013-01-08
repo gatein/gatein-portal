@@ -85,7 +85,7 @@
     <input-encoding>UTF-8</input-encoding>
     <description>Default configuration for the vietnam locale</description>
   </locale-config>
-  
+
   <locale-config>
     <locale>ko</locale>
     <output-encoding>UTF-8</output-encoding>
@@ -133,7 +133,7 @@
     <output-encoding>UTF-8</output-encoding>
     <input-encoding>UTF-8</input-encoding>
     <description>Default configuration for the german locale</description>
-  </locale-config> 
+  </locale-config>
 
   <locale-config>
     <locale>pt_BR</locale>
@@ -148,5 +148,5 @@
     <input-encoding>UTF-8</input-encoding>
     <description>Default configuration for czech locale</description>
   </locale-config>
-  
+
 </locales-config>

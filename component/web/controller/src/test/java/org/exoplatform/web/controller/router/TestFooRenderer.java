@@ -19,90 +19,76 @@
 
 package org.exoplatform.web.controller.router;
 
+import java.util.List;
+
 import junit.framework.TestCase;
+
 import org.exoplatform.web.controller.regexp.RENode;
 import org.exoplatform.web.controller.regexp.REParser;
-
-import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestFooRenderer extends TestCase
-{
-   
-   private static void assertSatisfied(String expression, String... expected) throws Exception
-   {
-      RENode root = new REParser(expression).parse();
-      List<ValueResolverFactory.Alternative> alternatives = new ValueResolverFactory().foo(root);
-      assertEquals(expected.length, alternatives.size());
-      for (int i = 0;i < expected.length;i++)
-      {
-         assertEquals(expected[i], alternatives.get(i).getResolvingExpression().toString());
-      }
-   }
+public class TestFooRenderer extends TestCase {
 
-   public void testDisjunction() throws Exception
-   {
-      assertSatisfied("a|b", "a", "b");
-   }
+    private static void assertSatisfied(String expression, String... expected) throws Exception {
+        RENode root = new REParser(expression).parse();
+        List<ValueResolverFactory.Alternative> alternatives = new ValueResolverFactory().foo(root);
+        assertEquals(expected.length, alternatives.size());
+        for (int i = 0; i < expected.length; i++) {
+            assertEquals(expected[i], alternatives.get(i).getResolvingExpression().toString());
+        }
+    }
 
-   public void testAlternative() throws Exception
-   {
-      assertSatisfied("ab", "ab");
-   }
+    public void testDisjunction() throws Exception {
+        assertSatisfied("a|b", "a", "b");
+    }
 
-   public void testCharacterClassRange() throws Exception
-   {
-      assertSatisfied("[b-c]", "b");
-   }
-   public void testCharacterClassOr() throws Exception
-   {
-      assertSatisfied("[bc]", "b");
-   }
+    public void testAlternative() throws Exception {
+        assertSatisfied("ab", "ab");
+    }
 
-   public void testCharacterClassAnd() throws Exception
-   {
-      assertSatisfied("[b&&b]", "b");
-   }
+    public void testCharacterClassRange() throws Exception {
+        assertSatisfied("[b-c]", "b");
+    }
 
-   public void testQuantifier() throws Exception
-   {
-      assertSatisfied("b{2,3}", "bb");
-   }
+    public void testCharacterClassOr() throws Exception {
+        assertSatisfied("[bc]", "b");
+    }
 
-   public void testCharacterClassNegateChar() throws Exception
-   {
-      assertSatisfied("[^a]", " ");
-   }
+    public void testCharacterClassAnd() throws Exception {
+        assertSatisfied("[b&&b]", "b");
+    }
 
-   public void testCharacterClassNegateOr() throws Exception
-   {
-      assertSatisfied("[^ !]", "\"");
-   }
+    public void testQuantifier() throws Exception {
+        assertSatisfied("b{2,3}", "bb");
+    }
 
-   public void testCharacterClassNegateAnd() throws Exception
-   {
-      assertSatisfied("[^a&&b]", " ");
-   }
+    public void testCharacterClassNegateChar() throws Exception {
+        assertSatisfied("[^a]", " ");
+    }
 
-   public void testAny() throws Exception
-   {
-      assertSatisfied(".", "a");
-   }
+    public void testCharacterClassNegateOr() throws Exception {
+        assertSatisfied("[^ !]", "\"");
+    }
 
-   public void testNonCapturingGroup() throws Exception
-   {
-      assertSatisfied("(?:a|b)", "a");
-   }
+    public void testCharacterClassNegateAnd() throws Exception {
+        assertSatisfied("[^a&&b]", " ");
+    }
 
-   public void testGroup() throws Exception
-   {
-      assertSatisfied("(a|b)", "(a|b)");
-   }
+    public void testAny() throws Exception {
+        assertSatisfied(".", "a");
+    }
 
-   public void testComplex() throws Exception
-   {
-      assertSatisfied("[a-z&&f-t&&p-q]", "p");
-   }
+    public void testNonCapturingGroup() throws Exception {
+        assertSatisfied("(?:a|b)", "a");
+    }
+
+    public void testGroup() throws Exception {
+        assertSatisfied("(a|b)", "(a|b)");
+    }
+
+    public void testComplex() throws Exception {
+        assertSatisfied("[a-z&&f-t&&p-q]", "p");
+    }
 }

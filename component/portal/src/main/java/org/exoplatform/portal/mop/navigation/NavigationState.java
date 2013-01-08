@@ -21,30 +21,28 @@ package org.exoplatform.portal.mop.navigation;
 
 import java.io.Serializable;
 
+
 /**
  * An immutable navigation state class.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NavigationState implements Serializable
-{
+public class NavigationState implements Serializable {
 
-   /** . */
-   private final Integer priority;
+    /** . */
+    private final Integer priority;
 
-   public NavigationState(Integer priority)
-   {
-      this.priority = priority;
-   }
+    public NavigationState(Integer priority) {
+        this.priority = priority;
+    }
 
-   /**
-    * Returns the navigation priority.
-    *
-    * @return the navigation priority
-    */
-   public Integer getPriority()
-   {
-      return priority;
-   }
+    /**
+     * Returns the navigation priority.
+     *
+     * @return the navigation priority
+     */
+    public Integer getPriority() {
+        return priority;
+    }
 }

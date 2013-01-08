@@ -32,24 +32,21 @@ import org.gatein.wsrp.wss.credentials.CredentialsAccessor;
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public class ConversationStateCredentialsAccessor implements CredentialsAccessor
-{
+public class ConversationStateCredentialsAccessor implements CredentialsAccessor {
 
-   private static final Logger log = LoggerFactory.getLogger(ConversationStateCredentialsAccessor.class);
+    private static final Logger log = LoggerFactory.getLogger(ConversationStateCredentialsAccessor.class);
 
-   /**
-    * Reading credentials from @{link ConversationState} of current user.
-    *
-    * @return credentials
-    */
-   @Override
-   public Credentials getCredentials()
-   {
-      if (ConversationState.getCurrent() == null)
-      {
-         log.warn("Cannot find Credentials because ConversationState not set.");
-         return null;
-      }
-      return (Credentials)ConversationState.getCurrent().getAttribute(Credentials.CREDENTIALS);
-   }
+    /**
+     * Reading credentials from @{link ConversationState} of current user.
+     *
+     * @return credentials
+     */
+    @Override
+    public Credentials getCredentials() {
+        if (ConversationState.getCurrent() == null) {
+            log.warn("Cannot find Credentials because ConversationState not set.");
+            return null;
+        }
+        return (Credentials) ConversationState.getCurrent().getAttribute(Credentials.CREDENTIALS);
+    }
 }

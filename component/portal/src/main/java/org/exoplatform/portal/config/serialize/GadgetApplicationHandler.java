@@ -26,14 +26,11 @@ package org.exoplatform.portal.config.serialize;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class GadgetApplicationHandler extends AbstractApplicationHandler
-{
-   public GadgetApplicationHandler()
-   {
-   }
+public class GadgetApplicationHandler extends AbstractApplicationHandler {
+    public GadgetApplicationHandler() {
+    }
 
-   public GadgetApplicationHandler(String m_uri, int m_index, String m_name)
-   {
-      super(m_uri, m_index, m_name);
-   }
+    public GadgetApplicationHandler(String m_uri, int m_index, String m_name) {
+        super(m_uri, m_index, m_name);
+    }
 }

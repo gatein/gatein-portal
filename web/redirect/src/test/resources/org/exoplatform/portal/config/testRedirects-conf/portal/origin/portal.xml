@@ -28,5 +28,5 @@
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
   <edit-permission>*:/platform/administrators</edit-permission>
- 
+
 </portal-config>

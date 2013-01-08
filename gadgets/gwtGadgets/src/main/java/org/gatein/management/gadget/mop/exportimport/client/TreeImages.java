@@ -33,15 +33,14 @@ import com.google.gwt.user.client.ui.Tree;
  * @author <a href="mailto:nbenothm@redhat.com">Nabil Benothman</a>
  * @version 1.0
  */
-public interface TreeImages extends Tree.Resources
-{
+public interface TreeImages extends Tree.Resources {
 
-   /**
-    * Use noimage.png, which is a blank 1x1 image.
-    */
-   @Source("../public/images/cogwheel.png")
-   ImageResource treeLeaf();
+    /**
+     * Use noimage.png, which is a blank 1x1 image.
+     */
+    @Source("../public/images/cogwheel.png")
+    ImageResource treeLeaf();
 
-   @Source("../public/images/home-icon.jpg")
-   ImageResource treeRoot();
+    @Source("../public/images/home-icon.jpg")
+    ImageResource treeRoot();
 }

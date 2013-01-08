@@ -24,7 +24,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
+    <version>3.6.0.MO1-SNAPSHOT</version>
   </parent>
 
   <artifactId>exo.portal.gadgets</artifactId>
@@ -32,9 +32,9 @@
   <packaging>pom</packaging>
 
   <modules>
-	<module>core</module>
-	<module>server</module>
-	<module>eXoGadgets</module>
-   <module>gwtGadgets</module>
+    <module>core</module>
+    <module>server</module>
+    <module>eXoGadgets</module>
+    <module>gwtGadgets</module>
   </modules>
 </project>

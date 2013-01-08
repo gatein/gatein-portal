@@ -29,23 +29,19 @@ import org.jboss.as.server.deployment.DeploymentUnitProcessor;
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public class GateInCleanupDeploymentProcessor implements DeploymentUnitProcessor
-{
-   @Override
-   public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException
-   {
-      final DeploymentUnit du = phaseContext.getDeploymentUnit();
-      Object config = du.removeAttachment(GateInConfigurationKey.KEY);
-      if (config != null)
-      {
-         du.removeAttachment(PortletWarKey.INSTANCE);
-         du.removeAttachment(GateInEarKey.KEY);
-         du.removeAttachment(GateInExtKey.KEY);
-      }
-   }
+public class GateInCleanupDeploymentProcessor implements DeploymentUnitProcessor {
+    @Override
+    public void deploy(DeploymentPhaseContext phaseContext) throws DeploymentUnitProcessingException {
+        final DeploymentUnit du = phaseContext.getDeploymentUnit();
+        Object config = du.removeAttachment(GateInConfigurationKey.KEY);
+        if (config != null) {
+            du.removeAttachment(PortletWarKey.INSTANCE);
+            du.removeAttachment(GateInEarKey.KEY);
+            du.removeAttachment(GateInExtKey.KEY);
+        }
+    }
 
-   @Override
-   public void undeploy(DeploymentUnit context)
-   {
-   }
+    @Override
+    public void undeploy(DeploymentUnit context) {
+    }
 }

@@ -22,49 +22,37 @@
  ******************************************************************************/
 package org.exoplatform.webui.form.validator;
 
-import java.io.Serializable;
-
 import org.exoplatform.web.application.CompoundApplicationMessage;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class NumberRangeValidator extends NumberFormatValidator
-{
-   private int min;
-   private int max;
-   
-   public NumberRangeValidator(int min, int max)
-   {
-      this.min = min;
-      this.max = max;
-   }
-   
-   @Override
-   protected String getMessageLocalizationKey()
-   {
-      return "NumberRangeValidator.msg.Invalid-number";
-   }
+public class NumberRangeValidator extends NumberFormatValidator {
+    private int min;
+    private int max;
 
-   @Override
-   protected Integer validateInteger(String value, String label, CompoundApplicationMessage messages)
-   {
-      Integer integer = super.validateInteger(value, label, messages);
-      
-      if (integer == null)
-      {
-         return null;
-      }
-      else if (integer < min || integer > max)
-      {
-         messages.addMessage(getMessageLocalizationKey(), new Object[]{label, min, max});
-         return null;
-      }
-      else
-      {
-         return integer;
-      }
-   }
+    public NumberRangeValidator(int min, int max) {
+        this.min = min;
+        this.max = max;
+    }
+
+    @Override
+    protected String getMessageLocalizationKey() {
+        return "NumberRangeValidator.msg.Invalid-number";
+    }
+
+    @Override
+    protected Integer validateInteger(String value, String label, CompoundApplicationMessage messages) {
+        Integer integer = super.validateInteger(value, label, messages);
+
+        if (integer == null) {
+            return null;
+        } else if (integer < min || integer > max) {
+            messages.addMessage(getMessageLocalizationKey(), new Object[] { label, min, max });
+            return null;
+        } else {
+            return integer;
+        }
+    }
 }
-

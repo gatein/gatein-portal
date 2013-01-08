@@ -19,11 +19,11 @@
 
 -->
 
-<webui-configuration>  
-  <application>     
-    <ui-component-root>org.exoplatform.dashboard.webui.component.UITabbedDashboardPortlet</ui-component-root>    
+<webui-configuration>
+  <application>
+    <ui-component-root>org.exoplatform.dashboard.webui.component.UITabbedDashboardPortlet</ui-component-root>
     <state-manager>org.exoplatform.webui.application.portlet.ParentAppStateManager</state-manager>
-    <application-lifecycle-listeners>       
+    <application-lifecycle-listeners>
     </application-lifecycle-listeners>
-  </application>   
+  </application>
 </webui-configuration>

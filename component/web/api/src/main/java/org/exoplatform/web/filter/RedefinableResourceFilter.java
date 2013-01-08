@@ -29,31 +29,29 @@ import org.exoplatform.container.PortalContainer;
 
 /**
  * A filter enables resource overriding via extension mechanism.
- * 
- * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
- * Sep 8, 2010
+ *
+ * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a> Sep 8, 2010
  */
 
 public class RedefinableResourceFilter implements Filter {
 
-	@Override
-	public void doFilter(ServletRequest request, ServletResponse response,
-			FilterChain chain) throws IOException, ServletException {
-		
-		HttpServletRequest upcastedRequest = (HttpServletRequest)request;
-		
-		PortalContainer portalContainer = PortalContainer.getInstance();
-		ServletContext mergedContext = portalContainer.getPortalContext();
-		
-		String path = upcastedRequest.getRequestURI();
-		String ctx = upcastedRequest.getContextPath();
-		
-		if(ctx != null && ctx.length() > 0 && path.startsWith(ctx))
-		{
-			path = path.substring(ctx.length());
-		}
+    @Override
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+            ServletException {
 
-		mergedContext.getRequestDispatcher(path).include(request, response);
-	}
+        HttpServletRequest upcastedRequest = (HttpServletRequest) request;
+
+        PortalContainer portalContainer = PortalContainer.getInstance();
+        ServletContext mergedContext = portalContainer.getPortalContext();
+
+        String path = upcastedRequest.getRequestURI();
+        String ctx = upcastedRequest.getContextPath();
+
+        if (ctx != null && ctx.length() > 0 && path.startsWith(ctx)) {
+            path = path.substring(ctx.length());
+        }
+
+        mergedContext.getRequestDispatcher(path).include(request, response);
+    }
 
 }

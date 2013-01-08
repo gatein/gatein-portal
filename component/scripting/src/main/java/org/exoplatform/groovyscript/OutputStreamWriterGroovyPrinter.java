@@ -18,86 +18,73 @@
  */
 package org.exoplatform.groovyscript;
 
-import org.exoplatform.commons.utils.BinaryOutput;
-import org.exoplatform.commons.utils.OutputStreamPrinter;
-import org.exoplatform.commons.utils.Text;
-
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.charset.Charset;
+
+import org.exoplatform.commons.utils.BinaryOutput;
+import org.exoplatform.commons.utils.OutputStreamPrinter;
+import org.exoplatform.commons.utils.Text;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class OutputStreamWriterGroovyPrinter extends GroovyPrinter implements BinaryOutput
-{
+public class OutputStreamWriterGroovyPrinter extends GroovyPrinter implements BinaryOutput {
 
-   /** . */
-   private final OutputStreamPrinter out;
+    /** . */
+    private final OutputStreamPrinter out;
 
-   public OutputStreamWriterGroovyPrinter(OutputStreamPrinter out)
-   {
-      if (out == null)
-      {
-         throw new NullPointerException();
-      }
-      this.out = out;
-   }
+    public OutputStreamWriterGroovyPrinter(OutputStreamPrinter out) {
+        if (out == null) {
+            throw new NullPointerException();
+        }
+        this.out = out;
+    }
 
-   @Override
-   protected Writer getWriter()
-   {
-      return out;
-   }
+    @Override
+    protected Writer getWriter() {
+        return out;
+    }
 
-   @Override
-   protected void write(char c) throws IOException
-   {
-      out.write(c);
-   }
+    @Override
+    protected void write(char c) throws IOException {
+        out.write(c);
+    }
 
-   @Override
-   protected void write(String s) throws IOException
-   {
-      out.write(s);
-   }
+    @Override
+    protected void write(String s) throws IOException {
+        out.write(s);
+    }
 
-   @Override
-   protected void write(Text text) throws IOException
-   {
-      text.writeTo(out);
-   }
+    @Override
+    protected void write(Text text) throws IOException {
+        text.writeTo(out);
+    }
 
-   @Override
-   public void flush() throws IOException
-   {
-      out.flush();
-   }
+    @Override
+    public void flush() throws IOException {
+        out.flush();
+    }
 
-   @Override
-   public void close() throws IOException
-   {
-      out.close();
-   }
+    @Override
+    public void close() throws IOException {
+        out.close();
+    }
 
-   public Charset getCharset()
-   {
-      return out.getCharset();
-   }
+    public Charset getCharset() {
+        return out.getCharset();
+    }
 
-   public void write(byte[] bytes) throws IOException
-   {
-      out.write(bytes);
-   }
+    public void write(byte[] bytes) throws IOException {
+        out.write(bytes);
+    }
 
-   public void write(byte[] bytes, int off, int len) throws IOException
-   {
-      out.write(bytes, off, len);
-   }
+    public void write(byte[] bytes, int off, int len) throws IOException {
+        out.write(bytes, off, len);
+    }
 
-   public void write(byte b) throws IOException
-   {
-      out.write(b);
-   }
+    public void write(byte b) throws IOException {
+        out.write(b);
+    }
 }

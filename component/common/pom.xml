@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.component</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
+    <version>3.6.0.MO1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.portal.component.common</artifactId>
@@ -32,17 +32,14 @@
   <dependencies>
 
     <dependency>
-      <groupId>org.gatein.common</groupId>
-      <artifactId>common-logging</artifactId>
+      <groupId>javax.portlet</groupId>
+      <artifactId>portlet-api</artifactId>
     </dependency>
     <dependency>
       <groupId>org.gatein.common</groupId>
       <artifactId>common-common</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.exoplatform.kernel</groupId>
-      <artifactId>exo.kernel.commons</artifactId>
-    </dependency>
+
     <dependency>
       <groupId>org.exoplatform.kernel</groupId>
       <artifactId>exo.kernel.component.ext.cache.impl.jboss.v3</artifactId>
@@ -101,9 +98,9 @@
       <scope>test</scope>
     </dependency>
     <dependency>
-       <groupId>org.chromattic</groupId>
-       <artifactId>chromattic.apt</artifactId>
-       <scope>test</scope>
+      <groupId>org.chromattic</groupId>
+      <artifactId>chromattic.apt</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 

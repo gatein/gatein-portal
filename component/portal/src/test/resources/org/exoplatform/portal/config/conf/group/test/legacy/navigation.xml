@@ -19,19 +19,19 @@
   -->
 
 <node-navigation
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
-	<priority>9</priority>
-  
-  <page-nodes>  		  	  
-	  <node>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
+  <priority>9</priority>
+
+  <page-nodes>
+    <node>
       <uri>register</uri>
       <name>register</name>
       <label>#{platform.guests.register}</label>
       <page-reference>group::test/legacy::register</page-reference>
     </node>
-    
-   </page-nodes>
-  
+
+  </page-nodes>
+
 </node-navigation>

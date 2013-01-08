@@ -19,66 +19,58 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import java.io.Serializable;
+
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.workspace.Navigation;
-
-import java.io.Serializable;
 
 /**
  * An immutable navigation data class.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class NavigationData implements Serializable
-{
+public class NavigationData implements Serializable {
 
-   /** Useful. */
-   static final NavigationData EMPTY = new NavigationData();
+    /** Useful. */
+    static final NavigationData EMPTY = new NavigationData();
 
-   /** . */
-   final SiteKey key;
+    /** . */
+    final SiteKey key;
 
-   /** . */
-   final NavigationState state;
+    /** . */
+    final NavigationState state;
 
-   /** . */
-   final String rootId;
+    /** . */
+    final String rootId;
 
-   private NavigationData()
-   {
-      this.key = null;
-      this.state = null;
-      this.rootId = null;
-   }
+    private NavigationData() {
+        this.key = null;
+        this.state = null;
+        this.rootId = null;
+    }
 
-   NavigationData(SiteKey key, Navigation node)
-   {
-      String rootId = node.getObjectId();
-      NavigationState state = new NavigationState(node.getAttributes().getValue(MappedAttributes.PRIORITY, 1));
+    NavigationData(SiteKey key, Navigation node) {
+        String rootId = node.getObjectId();
+        NavigationState state = new NavigationState(node.getAttributes().getValue(MappedAttributes.PRIORITY, 1));
 
-      //
-      this.key = key;
-      this.state = state;
-      this.rootId = rootId;
-   }
+        //
+        this.key = key;
+        this.state = state;
+        this.rootId = rootId;
+    }
 
-   NavigationData(SiteKey key, NavigationState state, String rootId)
-   {
-      this.key = key;
-      this.state = state;
-      this.rootId = rootId;
-   }
+    NavigationData(SiteKey key, NavigationState state, String rootId) {
+        this.key = key;
+        this.state = state;
+        this.rootId = rootId;
+    }
 
-   protected Object readResolve()
-   {
-      if (key == null && state == null && rootId == null)
-      {
-         return EMPTY;
-      }
-      else
-      {
-         return this;
-      }
-   }
+    protected Object readResolve() {
+        if (key == null && state == null && rootId == null) {
+            return EMPTY;
+        } else {
+            return this;
+        }
+    }
 }

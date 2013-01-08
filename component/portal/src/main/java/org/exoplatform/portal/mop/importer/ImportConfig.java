@@ -22,42 +22,37 @@ package org.exoplatform.portal.mop.importer;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ImportConfig
-{
+public class ImportConfig {
 
-   /** . */
-   final boolean destroyOrphan;
+    /** . */
+    final boolean destroyOrphan;
 
-   /** . */
-   final boolean updatedSame;
+    /** . */
+    final boolean updatedSame;
 
-   /** . */
-   final boolean createMissing;
+    /** . */
+    final boolean createMissing;
 
-   public ImportConfig(boolean destroyOrphan, boolean updatedSame, boolean createMissing)
-   {
-      this.destroyOrphan = destroyOrphan;
-      this.updatedSame = updatedSame;
-      this.createMissing = createMissing;
-   }
+    public ImportConfig(boolean destroyOrphan, boolean updatedSame, boolean createMissing) {
+        this.destroyOrphan = destroyOrphan;
+        this.updatedSame = updatedSame;
+        this.createMissing = createMissing;
+    }
 
-   /**
-    * Returns true when an orphan node should be destroyed.
-    *
-    * @return the destroy orphan value
-    */
-   public boolean getDestroyOrphan()
-   {
-      return destroyOrphan;
-   }
+    /**
+     * Returns true when an orphan node should be destroyed.
+     *
+     * @return the destroy orphan value
+     */
+    public boolean getDestroyOrphan() {
+        return destroyOrphan;
+    }
 
-   public boolean getUpdatedSame()
-   {
-      return updatedSame;
-   }
+    public boolean getUpdatedSame() {
+        return updatedSame;
+    }
 
-   public boolean getCreateMissing()
-   {
-      return createMissing;
-   }
+    public boolean getCreateMissing() {
+        return createMissing;
+    }
 }

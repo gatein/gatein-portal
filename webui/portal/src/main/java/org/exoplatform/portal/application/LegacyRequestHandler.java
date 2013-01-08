@@ -19,6 +19,13 @@
 
 package org.exoplatform.portal.application;
 
+import java.util.Enumeration;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.mop.SiteKey;
@@ -35,106 +42,88 @@ import org.exoplatform.web.url.URLFactoryService;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
 
-import java.util.Enumeration;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 /**
- * This handler resolves legacy request and redirect them to the new URL computed dynamically against the
- * routing table.
+ * This handler resolves legacy request and redirect them to the new URL computed dynamically against the routing table.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class LegacyRequestHandler extends WebRequestHandler
-{
+public class LegacyRequestHandler extends WebRequestHandler {
 
-   /** . */
-   private final URLFactoryService urlFactory;
+    /** . */
+    private final URLFactoryService urlFactory;
 
-   /** . */
-   private final UserPortalConfigService userPortalService;
-   
-   /** . */
-   private final UserPortalContext userPortalContext = new UserPortalContext()
-   {
-      public ResourceBundle getBundle(UserNavigation navigation)
-      {
-         return null;
-      }
+    /** . */
+    private final UserPortalConfigService userPortalService;
 
-      public Locale getUserLocale()
-      {
-         return Locale.ENGLISH;
-      }
-   };
+    /** . */
+    private final UserPortalContext userPortalContext = new UserPortalContext() {
+        public ResourceBundle getBundle(UserNavigation navigation) {
+            return null;
+        }
 
-   public LegacyRequestHandler(URLFactoryService urlFactory, UserPortalConfigService userPortalService)
-   {
-      this.urlFactory = urlFactory;
-      this.userPortalService = userPortalService;
-   }
+        public Locale getUserLocale() {
+            return Locale.ENGLISH;
+        }
+    };
 
-   @Override
-   public String getHandlerName()
-   {
-      return "legacy";
-   }
+    public LegacyRequestHandler(URLFactoryService urlFactory, UserPortalConfigService userPortalService) {
+        this.urlFactory = urlFactory;
+        this.userPortalService = userPortalService;
+    }
 
-   @Override
-   public boolean execute(ControllerContext context) throws Exception
-   {
-      String requestSiteName = context.getParameter(PortalRequestHandler.REQUEST_SITE_NAME);
-      String requestPath = context.getParameter(PortalRequestHandler.REQUEST_PATH);
-      
-      SiteKey siteKey = SiteKey.portal(requestSiteName);
-      String uri = requestPath;
+    @Override
+    public String getHandlerName() {
+        return "legacy";
+    }
 
-      // Resolve the user node if node path is indicated
-      if (!requestPath.equals(""))
-      {
-         UserPortalConfig cfg = userPortalService.getUserPortalConfig(requestSiteName, context.getRequest().getRemoteUser(), userPortalContext);
-         if (cfg != null)
-         {
-            UserPortal userPortal = cfg.getUserPortal();
-            UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder().withAuthMode(UserNodeFilterConfig.AUTH_READ);
-            UserNode userNode = userPortal.resolvePath(builder.build(), requestPath);
+    @Override
+    public boolean execute(ControllerContext context) throws Exception {
+        String requestSiteName = context.getParameter(PortalRequestHandler.REQUEST_SITE_NAME);
+        String requestPath = context.getParameter(PortalRequestHandler.REQUEST_PATH);
 
-            if (userNode != null)
-            {
-               siteKey = userNode.getNavigation().getKey();
-               uri = userNode.getURI();
+        SiteKey siteKey = SiteKey.portal(requestSiteName);
+        String uri = requestPath;
+
+        // Resolve the user node if node path is indicated
+        if (!requestPath.equals("")) {
+            UserPortalConfig cfg = userPortalService.getUserPortalConfig(requestSiteName, context.getRequest().getRemoteUser(),
+                    userPortalContext);
+            if (cfg != null) {
+                UserPortal userPortal = cfg.getUserPortal();
+                UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder().withAuthMode(
+                        UserNodeFilterConfig.AUTH_READ);
+                UserNode userNode = userPortal.resolvePath(builder.build(), requestPath);
+
+                if (userNode != null) {
+                    siteKey = userNode.getNavigation().getKey();
+                    uri = userNode.getURI();
+                }
             }
-         }
-      }
+        }
 
-      //
-      PortalURLContext urlContext = new PortalURLContext(context, siteKey);
-      NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
+        //
+        PortalURLContext urlContext = new PortalURLContext(context, siteKey);
+        NodeURL url = urlFactory.newURL(NodeURL.TYPE, urlContext);
 
-      url.setResource(new NavigationResource(siteKey.getType(), siteKey.getName(), uri));
-      url.setMimeType(MimeType.PLAIN);
+        url.setResource(new NavigationResource(siteKey.getType(), siteKey.getName(), uri));
+        url.setMimeType(MimeType.PLAIN);
 
-      HttpServletRequest request = context.getRequest();
-      Enumeration paraNames = request.getParameterNames();
-      while (paraNames.hasMoreElements())
-      {
-         String parameter = paraNames.nextElement().toString();
-         url.setQueryParameterValues(parameter, request.getParameterValues(parameter));
-      }
+        HttpServletRequest request = context.getRequest();
+        Enumeration paraNames = request.getParameterNames();
+        while (paraNames.hasMoreElements()) {
+            String parameter = paraNames.nextElement().toString();
+            url.setQueryParameterValues(parameter, request.getParameterValues(parameter));
+        }
 
-      String s = url.toString();
+        String s = url.toString();
 
-      HttpServletResponse resp = context.getResponse();
-      resp.sendRedirect(resp.encodeRedirectURL(s));
-      return true;
-   }
+        HttpServletResponse resp = context.getResponse();
+        resp.sendRedirect(resp.encodeRedirectURL(s));
+        return true;
+    }
 
-   @Override
-   protected boolean getRequiresLifeCycle()
-   {
-      return true;
-   }
+    @Override
+    protected boolean getRequiresLifeCycle() {
+        return true;
+    }
 }

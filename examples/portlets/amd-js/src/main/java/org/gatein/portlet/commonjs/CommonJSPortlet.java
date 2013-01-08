@@ -19,22 +19,22 @@
 package org.gatein.portlet.commonjs;
 
 import java.io.IOException;
+
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+
 /**
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
  * @date 8/30/12
  */
-public class CommonJSPortlet extends GenericPortlet
-{
-   @Override
-   protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException
-   {
-      PortletRequestDispatcher dispatcher = getPortletContext().getRequestDispatcher("/commonjs/commonjs.jsp");
-      dispatcher.include(request, response);
-   }
+public class CommonJSPortlet extends GenericPortlet {
+    @Override
+    protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+        PortletRequestDispatcher dispatcher = getPortletContext().getRequestDispatcher("/commonjs/commonjs.jsp");
+        dispatcher.include(request, response);
+    }
 }

@@ -19,53 +19,46 @@
 
 package org.exoplatform.portal.mop.description;
 
-import org.exoplatform.commons.scope.AbstractScopedKey;
-
 import java.io.Serializable;
 import java.util.Locale;
+
+import org.exoplatform.commons.scope.AbstractScopedKey;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public final class CacheKey extends AbstractScopedKey implements Serializable
-{
+public final class CacheKey extends AbstractScopedKey implements Serializable {
 
-   /** . */
-   final Locale locale;
+    /** . */
+    final Locale locale;
 
-   /** . */
-   final String id;
+    /** . */
+    final String id;
 
-   public CacheKey(Locale locale, String id)
-   {
-      if (locale == null)
-      {
-         throw new NullPointerException();
-      }
-      if (id == null)
-      {
-         throw new NullPointerException();
-      }
+    public CacheKey(Locale locale, String id) {
+        if (locale == null) {
+            throw new NullPointerException();
+        }
+        if (id == null) {
+            throw new NullPointerException();
+        }
 
-      //
-      this.locale = locale;
-      this.id = id;
-   }
+        //
+        this.locale = locale;
+        this.id = id;
+    }
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (super.equals(obj))
-      {
-         CacheKey that = (CacheKey)obj;
-         return locale.equals(that.locale) && id.equals(that.id);
-      }
-      return false;
-   }
+    @Override
+    public boolean equals(Object obj) {
+        if (super.equals(obj)) {
+            CacheKey that = (CacheKey) obj;
+            return locale.equals(that.locale) && id.equals(that.id);
+        }
+        return false;
+    }
 
-   @Override
-   public int hashCode()
-   {
-      return super.hashCode() ^ locale.hashCode() ^ id.hashCode();
-   }
+    @Override
+    public int hashCode() {
+        return super.hashCode() ^ locale.hashCode() ^ id.hashCode();
+    }
 }

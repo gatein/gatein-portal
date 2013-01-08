@@ -18,57 +18,48 @@
  */
 package org.exoplatform.portal.config;
 
-import org.exoplatform.portal.config.model.PortalConfig;
-
 import java.util.Set;
+
+import org.exoplatform.portal.config.model.PortalConfig;
 
 /**
  * @author <a href="trong.tran@exoplatform.com">Trong Tran</a>
  * @version $Revision$
  */
 
-public class SiteConfigTemplates
-{
-   private String location;
-   
-   private Set<String> portalTemplates;
-   
-   private Set<String> groupTemplates;
-   
-   private Set<String> userTemplates;
-   
-   /**
-    * @return the location
-    */
-   public String getLocation()
-   {
-      return location;
-   }
+public class SiteConfigTemplates {
+    private String location;
 
-   /**
-    * @param location the locationPath to set
-    */
-   public void setLocation(String locationPath)
-   {
-      this.location = locationPath;
-   }
+    private Set<String> portalTemplates;
 
-   /**
-    * @return the type
-    */
-   public Set<String> getTemplates(String type)
-   {
-      if (type.equals(PortalConfig.PORTAL_TYPE))
-      {
-         return portalTemplates;
-      }
-      else if (type.equals(PortalConfig.GROUP_TYPE))
-      {
-         return groupTemplates;
-      }
-      else
-      {
-         return userTemplates;
-      }
-   }
+    private Set<String> groupTemplates;
+
+    private Set<String> userTemplates;
+
+    /**
+     * @return the location
+     */
+    public String getLocation() {
+        return location;
+    }
+
+    /**
+     * @param location the locationPath to set
+     */
+    public void setLocation(String locationPath) {
+        this.location = locationPath;
+    }
+
+    /**
+     * @return the type
+     */
+    public Set<String> getTemplates(String type) {
+        if (type.equals(PortalConfig.PORTAL_TYPE)) {
+            return portalTemplates;
+        } else if (type.equals(PortalConfig.GROUP_TYPE)) {
+            return groupTemplates;
+        } else {
+            return userTemplates;
+        }
+    }
 }

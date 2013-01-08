@@ -23,80 +23,59 @@ import org.exoplatform.web.controller.regexp.GroupType;
 import org.exoplatform.web.controller.regexp.RENode;
 import org.exoplatform.web.controller.regexp.REVisitor;
 
-import java.util.LinkedList;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class NonCaptureGroupTransformation extends REVisitor<RuntimeException>
-{
+class NonCaptureGroupTransformation extends REVisitor<RuntimeException> {
 
-   NonCaptureGroupTransformation()
-   {
-   }
+    NonCaptureGroupTransformation() {
+    }
 
-   @Override
-   protected void visit(RENode.Disjunction disjunction) throws RuntimeException
-   {
-      super.visit(disjunction);
-      
-      // Wrap the content of the top disjunction with a capturing group 
-      if (disjunction.getParent() == null)
-      {
-         if (disjunction.hasAlternative())
-         {
-            RENode.Alternative alternative = disjunction.getAlternative();
-            disjunction.clearAlternative();
-            if (disjunction.hasNext())
-            {
-               RENode.Disjunction next = disjunction.getNext();
-               disjunction.clearNext();
-               RENode.Alternative group = new RENode.Alternative(
-                  new RENode.Group(
-                     new RENode.Disjunction(alternative, next), GroupType.CAPTURING_GROUP));
-               disjunction.setAlternative(group);
-            }
-            else
-            {
-               RENode.Alternative group = new RENode.Alternative(
-                  new RENode.Group(
-                     new RENode.Disjunction(alternative), GroupType.CAPTURING_GROUP));
-               disjunction.setAlternative(group);
-            }
-         }
-         else
-         {
-            if (disjunction.hasNext())
-            {
-               RENode.Disjunction next = disjunction.getNext();
-               disjunction.clearNext();
-               RENode.Alternative group = new RENode.Alternative(
-                  new RENode.Group(
-                     new RENode.Disjunction(next), GroupType.CAPTURING_GROUP));
-               disjunction.setAlternative(group);
-            }
-            else
-            {
-               RENode.Alternative group = new RENode.Alternative(
-                  new RENode.Group(
-                     new RENode.Disjunction(), GroupType.CAPTURING_GROUP));
-               disjunction.setAlternative(group);
-            }
-         }
-      }
-   }
+    @Override
+    protected void visit(RENode.Disjunction disjunction) throws RuntimeException {
+        super.visit(disjunction);
 
-   @Override
-   protected void visit(RENode.Group expr) throws RuntimeException
-   {
-      // We make any capturing group as non capturing
-      if (expr.getType() == GroupType.CAPTURING_GROUP)
-      {
-         expr.setType(GroupType.NON_CAPTURING_GROUP);
-      }
+        // Wrap the content of the top disjunction with a capturing group
+        if (disjunction.getParent() == null) {
+            if (disjunction.hasAlternative()) {
+                RENode.Alternative alternative = disjunction.getAlternative();
+                disjunction.clearAlternative();
+                if (disjunction.hasNext()) {
+                    RENode.Disjunction next = disjunction.getNext();
+                    disjunction.clearNext();
+                    RENode.Alternative group = new RENode.Alternative(new RENode.Group(
+                            new RENode.Disjunction(alternative, next), GroupType.CAPTURING_GROUP));
+                    disjunction.setAlternative(group);
+                } else {
+                    RENode.Alternative group = new RENode.Alternative(new RENode.Group(new RENode.Disjunction(alternative),
+                            GroupType.CAPTURING_GROUP));
+                    disjunction.setAlternative(group);
+                }
+            } else {
+                if (disjunction.hasNext()) {
+                    RENode.Disjunction next = disjunction.getNext();
+                    disjunction.clearNext();
+                    RENode.Alternative group = new RENode.Alternative(new RENode.Group(new RENode.Disjunction(next),
+                            GroupType.CAPTURING_GROUP));
+                    disjunction.setAlternative(group);
+                } else {
+                    RENode.Alternative group = new RENode.Alternative(new RENode.Group(new RENode.Disjunction(),
+                            GroupType.CAPTURING_GROUP));
+                    disjunction.setAlternative(group);
+                }
+            }
+        }
+    }
 
-      //
-      super.visit(expr);
-   }
+    @Override
+    protected void visit(RENode.Group expr) throws RuntimeException {
+        // We make any capturing group as non capturing
+        if (expr.getType() == GroupType.CAPTURING_GROUP) {
+            expr.setType(GroupType.NON_CAPTURING_GROUP);
+        }
+
+        //
+        super.visit(expr);
+    }
 }

@@ -39,16 +39,16 @@ import org.gatein.mop.api.workspace.Site;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class SiteLayoutExportResource extends AbstractSiteOperationHandler
-{
-   @Override
-   protected void execute(OperationContext operationContext, ResultHandler resultHandler, Site site) throws ResourceNotFoundException, OperationException
-   {
-      BindingProvider bindingProvider = operationContext.getBindingProvider();
-      DataStorage dataStorage = operationContext.getRuntimeContext().getRuntimeComponent(DataStorage.class);
+public class SiteLayoutExportResource extends AbstractSiteOperationHandler {
+    @Override
+    protected void execute(OperationContext operationContext, ResultHandler resultHandler, Site site)
+            throws ResourceNotFoundException, OperationException {
+        BindingProvider bindingProvider = operationContext.getBindingProvider();
+        DataStorage dataStorage = operationContext.getRuntimeContext().getRuntimeComponent(DataStorage.class);
 
-      SiteKey siteKey = getSiteKey(site);
+        SiteKey siteKey = getSiteKey(site);
 
-      resultHandler.completed(new ExportResourceModel(new SiteLayoutExportTask(siteKey, dataStorage, bindingProvider.getMarshaller(PortalConfig.class, ContentType.XML))));
-   }
+        resultHandler.completed(new ExportResourceModel(new SiteLayoutExportTask(siteKey, dataStorage, bindingProvider
+                .getMarshaller(PortalConfig.class, ContentType.XML))));
+    }
 }

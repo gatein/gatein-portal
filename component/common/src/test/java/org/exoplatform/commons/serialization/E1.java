@@ -26,6 +26,5 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
  * @version $Revision$
  */
 @Serialized
-public class E1
-{
+public class E1 {
 }

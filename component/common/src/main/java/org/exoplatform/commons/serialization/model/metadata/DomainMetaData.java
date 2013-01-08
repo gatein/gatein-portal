@@ -19,88 +19,72 @@
 
 package org.exoplatform.commons.serialization.model.metadata;
 
-import org.exoplatform.commons.serialization.api.TypeConverter;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import org.exoplatform.commons.serialization.api.TypeConverter;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class DomainMetaData
-{
+public class DomainMetaData {
 
-   /** . */
-   private final Map<String, TypeMetaData> state;
+    /** . */
+    private final Map<String, TypeMetaData> state;
 
-   public DomainMetaData(DomainMetaData domainMetaData)
-   {
-      if (domainMetaData == null)
-      {
-         throw new NullPointerException();
-      }
+    public DomainMetaData(DomainMetaData domainMetaData) {
+        if (domainMetaData == null) {
+            throw new NullPointerException();
+        }
 
-      //
-      this.state = new HashMap<String, TypeMetaData>(domainMetaData.state);
-   }
+        //
+        this.state = new HashMap<String, TypeMetaData>(domainMetaData.state);
+    }
 
-   public DomainMetaData()
-   {
-      this.state = new HashMap<String, TypeMetaData>();
-   }
+    public DomainMetaData() {
+        this.state = new HashMap<String, TypeMetaData>();
+    }
 
-   public TypeMetaData getTypeMetaData(Class clazz)
-   {
-      if (clazz == null)
-      {
-         throw new NullPointerException();
-      }
-      return state.get(clazz.getName());
-   }
+    public TypeMetaData getTypeMetaData(Class clazz) {
+        if (clazz == null) {
+            throw new NullPointerException();
+        }
+        return state.get(clazz.getName());
+    }
 
-   public TypeMetaData getTypeMetaData(String name)
-   {
-      if (name == null)
-      {
-         throw new NullPointerException();
-      }
-      return state.get(name);
-   }
+    public TypeMetaData getTypeMetaData(String name) {
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        return state.get(name);
+    }
 
-   public void addConvertedType(Class<?> clazz, Class<? extends TypeConverter<?, ?>> converterClass)
-   {
-      if (clazz == null)
-      {
-         throw new NullPointerException();
-      }
-      state.put(clazz.getName(), new ConvertedTypeMetaData(clazz.getName(), converterClass));
-   }
+    public void addConvertedType(Class<?> clazz, Class<? extends TypeConverter<?, ?>> converterClass) {
+        if (clazz == null) {
+            throw new NullPointerException();
+        }
+        state.put(clazz.getName(), new ConvertedTypeMetaData(clazz.getName(), converterClass));
+    }
 
-   public void addClassType(Class<?>  clazz, boolean serialized)
-   {
-      if (clazz == null)
-      {
-         throw new NullPointerException();
-      }
-      state.put(clazz.getName(), new ClassTypeMetaData(clazz.getName(), serialized));
-   }
+    public void addClassType(Class<?> clazz, boolean serialized) {
+        if (clazz == null) {
+            throw new NullPointerException();
+        }
+        state.put(clazz.getName(), new ClassTypeMetaData(clazz.getName(), serialized));
+    }
 
-   public void addConvertedType(String name, Class<? extends TypeConverter<?, ?>> converterClass)
-   {
-      if (name == null)
-      {
-         throw new NullPointerException();
-      }
-      state.put(name, new ConvertedTypeMetaData(name, converterClass));
-   }
+    public void addConvertedType(String name, Class<? extends TypeConverter<?, ?>> converterClass) {
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        state.put(name, new ConvertedTypeMetaData(name, converterClass));
+    }
 
-   public void addClassType(String name, boolean serialized)
-   {
-      if (name == null)
-      {
-         throw new NullPointerException();
-      }
-      state.put(name, new ClassTypeMetaData(name, serialized));
-   }
+    public void addClassType(String name, boolean serialized) {
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        state.put(name, new ClassTypeMetaData(name, serialized));
+    }
 }

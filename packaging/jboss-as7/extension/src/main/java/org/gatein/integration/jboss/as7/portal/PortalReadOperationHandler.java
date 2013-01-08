@@ -22,6 +22,8 @@
 
 package org.gatein.integration.jboss.as7.portal;
 
+import static org.gatein.integration.jboss.as7.portal.PortalResourceConstants.PORTAL;
+
 import org.gatein.integration.jboss.as7.portal.resources.PortalRuntimeResource;
 import org.jboss.as.controller.OperationContext;
 import org.jboss.as.controller.OperationFailedException;
@@ -32,58 +34,48 @@ import org.jboss.as.controller.registry.Resource;
 import org.jboss.dmr.ModelNode;
 import org.jboss.msc.service.ServiceController;
 
-import static org.gatein.integration.jboss.as7.portal.PortalResourceConstants.*;
-
 /**
  * Responsible for ensuring custom resource has been added prior to reading the gatein subsystem.
  *
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public class PortalReadOperationHandler implements OperationStepHandler
-{
-   private final OperationStepHandler delegate;
+public class PortalReadOperationHandler implements OperationStepHandler {
+    private final OperationStepHandler delegate;
 
-   public PortalReadOperationHandler(OperationStepHandler delegate)
-   {
-      this.delegate = delegate;
-   }
+    public PortalReadOperationHandler(OperationStepHandler delegate) {
+        this.delegate = delegate;
+    }
 
-   @Override
-   public void execute(OperationContext context, ModelNode operation) throws OperationFailedException
-   {
-      final Resource resource = context.readResource(PathAddress.EMPTY_ADDRESS);
+    @Override
+    public void execute(OperationContext context, ModelNode operation) throws OperationFailedException {
+        final Resource resource = context.readResource(PathAddress.EMPTY_ADDRESS);
 
-      // This step will ensure that we have added our custom PortalRuntimeResource before any read operation has happened.
-      context.addStep(new OperationStepHandler()
-      {
-         @Override
-         public void execute(OperationContext context, ModelNode operation) throws OperationFailedException
-         {
-            if (!resource.hasChildren(PORTAL))
-            {
-               synchronized (resource)
-               {
-                  if (!resource.hasChildren(PORTAL))
-                  {
-                     ServiceController<?> controller = context.getServiceRegistry(false).getService(GateInRuntimeService.SERVICE_NAME);
-                     if (controller != null)
-                     {
-                        GateInContext gateInContext = (GateInContext) controller.getValue();
-                        for (String name : gateInContext.getPortalNames())
-                        {
-                           PathElement pathElement = PathElement.pathElement(PORTAL, name);
-                           context.addResource(PathAddress.pathAddress(pathElement), new PortalRuntimeResource(pathElement));
+        // This step will ensure that we have added our custom PortalRuntimeResource before any read operation has happened.
+        context.addStep(new OperationStepHandler() {
+            @Override
+            public void execute(OperationContext context, ModelNode operation) throws OperationFailedException {
+                if (!resource.hasChildren(PORTAL)) {
+                    synchronized (resource) {
+                        if (!resource.hasChildren(PORTAL)) {
+                            ServiceController<?> controller = context.getServiceRegistry(false).getService(
+                                    GateInRuntimeService.SERVICE_NAME);
+                            if (controller != null) {
+                                GateInContext gateInContext = (GateInContext) controller.getValue();
+                                for (String name : gateInContext.getPortalNames()) {
+                                    PathElement pathElement = PathElement.pathElement(PORTAL, name);
+                                    context.addResource(PathAddress.pathAddress(pathElement), new PortalRuntimeResource(
+                                            pathElement));
+                                }
+                            }
                         }
-                     }
-                  }
-               }
+                    }
+                }
+                context.completeStep();
             }
-            context.completeStep();
-         }
-      }, OperationContext.Stage.MODEL);
+        }, OperationContext.Stage.MODEL);
 
-      context.addStep(delegate, OperationContext.Stage.RUNTIME);
+        context.addStep(delegate, OperationContext.Stage.RUNTIME);
 
-      context.completeStep();
-   }
+        context.completeStep();
+    }
 }

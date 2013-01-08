@@ -18,10 +18,11 @@
  */
 package org.exoplatform.portal.resource;
 
-import org.exoplatform.commons.utils.BinaryOutput;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+
+import org.exoplatform.commons.utils.BinaryOutput;
 
 /**
  * A simple ResourceRenderer used in JUnit tests of SkinService
@@ -29,45 +30,36 @@ import java.nio.charset.Charset;
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
  * @date 6/29/11
  */
-public class MockResourceRenderer implements ResourceRenderer
-{
+public class MockResourceRenderer implements ResourceRenderer {
 
-   private final BinaryOutput output;
+    private final BinaryOutput output;
 
-   private final static Charset UTF_8 = Charset.forName("UTF-8");
+    private static final Charset UTF_8 = Charset.forName("UTF-8");
 
-   public MockResourceRenderer(final OutputStream out)
-   {
-      this.output = new BinaryOutput()
-      {
-         public Charset getCharset()
-         {
-            return UTF_8;
-         }
+    public MockResourceRenderer(final OutputStream out) {
+        this.output = new BinaryOutput() {
+            public Charset getCharset() {
+                return UTF_8;
+            }
 
-         public void write(byte b) throws IOException
-         {
-            out.write(b);
-         }
+            public void write(byte b) throws IOException {
+                out.write(b);
+            }
 
-         public void write(byte[] bytes) throws IOException
-         {
-            out.write(bytes);
-         }
+            public void write(byte[] bytes) throws IOException {
+                out.write(bytes);
+            }
 
-         public void write(byte[] bytes, int off, int len) throws IOException
-         {
-            out.write(bytes, off, len);
-         }
-      };
-   }
+            public void write(byte[] bytes, int off, int len) throws IOException {
+                out.write(bytes, off, len);
+            }
+        };
+    }
 
-   public BinaryOutput getOutput() throws IOException
-   {
-      return output;
-   }
+    public BinaryOutput getOutput() {
+        return output;
+    }
 
-   public void setExpiration(long seconds)
-   {
-   }
+    public void setExpiration(long seconds) {
+    }
 }

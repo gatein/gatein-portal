@@ -34,261 +34,219 @@ import org.gatein.portal.controller.resource.ResourceId;
 import org.gatein.portal.controller.resource.script.Module.Local.Content;
 
 /**
- * <p></p>
- * 
- * <p></p>This class implements the {@link Comparable} interface, however the natural ordering provided here
- * is not consistent with equals, therefore this class should not be used as a key in a {@link java.util.TreeMap}
- * for instance.</p>
- * 
+ * <p>
+ * </p>
+ *
+ * <p>
+ * </p>
+ * This class implements the {@link Comparable} interface, however the natural ordering provided here is not consistent with
+ * equals, therefore this class should not be used as a key in a {@link java.util.TreeMap} for instance.</p>
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ScriptResource extends BaseScriptResource<ScriptResource> implements Comparable<ScriptResource>
-{
-   /** . */
-   private final List<Module> modules;
+public class ScriptResource extends BaseScriptResource<ScriptResource> implements Comparable<ScriptResource> {
+    /** . */
+    private final List<Module> modules;
 
-   /** . */
-   final HashMap<ResourceId, Set<DepInfo>> dependencies;
+    /** . */
+    final HashMap<ResourceId, Set<DepInfo>> dependencies;
 
-   /** . */
-   final HashSet<ResourceId> closure;
+    /** . */
+    final HashSet<ResourceId> closure;
 
-   /** . */
-   FetchMode fetchMode;
-   
-   /** . */
-   final String alias;
-   
-   /** . */
-   final ScriptGroup group;
+    /** . */
+    FetchMode fetchMode;
 
-   ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode)
-   {
-      this(graph, id, fetchMode, null, null);
-   }
+    /** . */
+    final String alias;
 
-   ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode, String alias, ScriptGroup group)
-   {
-      super(graph, id);
+    /** . */
+    final ScriptGroup group;
 
-      this.modules = new ArrayList<Module>();
-      this.closure = new HashSet<ResourceId>();
-      this.dependencies = new LinkedHashMap<ResourceId, Set<DepInfo>>();
-      this.fetchMode = fetchMode;
-      
-      if (alias == null)
-      {
-         String resName = id.getName();
-         alias = resName.substring(resName.lastIndexOf("/") + 1);         
-      }
-      this.alias = alias;
-      this.group = group;
-   }
-   
-   public boolean isEmpty()
-   {
-      return modules.isEmpty();
-   }
+    ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode) {
+        this(graph, id, fetchMode, null, null);
+    }
 
-   public FetchMode getFetchMode()
-   {
-      return fetchMode;
-   }
+    ScriptResource(ScriptGraph graph, ResourceId id, FetchMode fetchMode, String alias, ScriptGroup group) {
+        super(graph, id);
 
-   public void addDependency(ResourceId dependencyId)
-   {
-      addDependency(dependencyId, null, null);
-   }
+        this.modules = new ArrayList<Module>();
+        this.closure = new HashSet<ResourceId>();
+        this.dependencies = new LinkedHashMap<ResourceId, Set<DepInfo>>();
+        this.fetchMode = fetchMode;
 
-   public void addDependency(ResourceId dependencyId, String alias, String pluginRS)
-   {
-      ScriptResource dependency = graph.getResource(dependencyId);
+        if (alias == null) {
+            String resName = id.getName();
+            alias = resName.substring(resName.lastIndexOf("/") + 1);
+        }
+        this.alias = alias;
+        this.group = group;
+    }
 
-      if (dependency != null)
-      {
-         if (!fetchMode.equals(dependency.getFetchMode()))
-         {
-            throw new IllegalStateException("ScriptResource " + id + " can't depend on " + dependency.getId() + ". They have difference fetchMode");
-         }
-         else if (dependency.closure.contains(id))
-         {
-            // Detect cycle
-            throw new IllegalStateException("Going to create a cycle");            
-         }
-      }
+    public boolean isEmpty() {
+        return modules.isEmpty();
+    }
 
-      // That is important to make closure independent from building order of graph nodes.
-      if(dependency != null)
-      {
-         closure.addAll(dependency.getClosure());
-      }
-      
-      //Update the source's closure
-      closure.add(dependencyId);
-      
-      // Update any entry that points to the source
-      for (Map<String, ScriptResource> resources : graph.resources.values())
-      {
-         for (ScriptResource resource : resources.values())
-         {
-            if (resource.closure.contains(id))
-            {
-               resource.closure.addAll(closure);
+    public FetchMode getFetchMode() {
+        return fetchMode;
+    }
+
+    public void addDependency(ResourceId dependencyId) {
+        addDependency(dependencyId, null, null);
+    }
+
+    public void addDependency(ResourceId dependencyId, String alias, String pluginRS) {
+        ScriptResource dependency = graph.getResource(dependencyId);
+
+        if (dependency != null) {
+            if (!fetchMode.equals(dependency.getFetchMode())) {
+                throw new IllegalStateException("ScriptResource " + id + " can't depend on " + dependency.getId()
+                        + ". They have difference fetchMode");
+            } else if (dependency.closure.contains(id)) {
+                // Detect cycle
+                throw new IllegalStateException("Going to create a cycle");
             }
-         }
-      }                
-      
-      //
-      Set<DepInfo> infos = dependencies.get(dependencyId);
-      if (infos == null)
-      {
-         dependencies.put(dependencyId, infos = new LinkedHashSet<DepInfo>());
-      }
-      infos.add(new DepInfo(alias, pluginRS));
-   }
-   
-   public Set<ResourceId> getClosure()
-   {
-      return closure;
-   }
+        }
 
-   public Module.Local addLocalModule(String contextPath, String path, String resourceBundle, int priority)
-   {
-      return addLocalModule(contextPath, new Content[] {new Content(path)}, resourceBundle, priority);
-   }
-   
-   public Module.Local addLocalModule(String contextPath, Content[] contents, String resourceBundle, int priority)
-   {
-      Module.Local module = new Module.Local(this, contextPath, contents, resourceBundle, priority);
-      modules.add(module);
-      return module;
-   }
+        // That is important to make closure independent from building order of graph nodes.
+        if (dependency != null) {
+            closure.addAll(dependency.getClosure());
+        }
 
-   public Module.Remote addRemoteModule(String contextPath, String path, int priority)
-   {
-      Module.Remote module = new Module.Remote(this, contextPath, path, priority);
-      modules.add(module);
-      return module;
-   }
+        // Update the source's closure
+        closure.add(dependencyId);
 
-   @Override
-   public void addSupportedLocale(Locale locale)
-   {
-      super.addSupportedLocale(locale);
-      if (group != null)
-      {
-         group.addSupportedLocale(locale);
-      }
-   }
+        // Update any entry that points to the source
+        for (Map<String, ScriptResource> resources : graph.resources.values()) {
+            for (ScriptResource resource : resources.values()) {
+                if (resource.closure.contains(id)) {
+                    resource.closure.addAll(closure);
+                }
+            }
+        }
 
-   public List<Module> removeModuleByContextPath(String contextPath)
-   {
-      ArrayList<Module> removed = new ArrayList<Module>();
-      for (Iterator<Module> i = modules.iterator();i.hasNext();)
-      {
-         Module module = i.next();
-         if (module.getContextPath().equals(contextPath))
-         {
-            removed.add(module);
-            i.remove();
-         }
-      }
-      return removed;
-   }
+        //
+        Set<DepInfo> infos = dependencies.get(dependencyId);
+        if (infos == null) {
+            dependencies.put(dependencyId, infos = new LinkedHashSet<DepInfo>());
+        }
+        infos.add(new DepInfo(alias, pluginRS));
+    }
 
-   public List<Module> getModules()
-   {
-      return modules;
-   }
+    public Set<ResourceId> getClosure() {
+        return closure;
+    }
 
-   public int compareTo(ScriptResource o)
-   {
-      if (closure.contains(o.id))
-      {
-         return 1;
-      }
-      else if (o.closure.contains(id))
-      {
-         return -1;
-      }
-      else
-      {
-         return 0;
-      }
-   }
-   
-   @Override
-   public Set<ResourceId> getDependencies()
-   {
-      return dependencies.keySet();
-   }
-   
-   public Set<DepInfo> getDepInfo(ResourceId id)
-   {
-      return dependencies.get(id);
-   }   
+    public Module.Local addLocalModule(String contextPath, String path, String resourceBundle, int priority) {
+        return addLocalModule(contextPath, new Content[] { new Content(path) }, resourceBundle, priority);
+    }
 
-   /**
-    * If no alias was set, return the last part of the resource name
-    * If resourceID is null, return null
-    */
-   public String getAlias()
-   {
-      return alias;
-   }   
+    public Module.Local addLocalModule(String contextPath, Content[] contents, String resourceBundle, int priority) {
+        Module.Local module = new Module.Local(this, contextPath, contents, resourceBundle, priority);
+        modules.add(module);
+        return module;
+    }
 
-   @Override
-   public String toString()
-   {
-      return "ScriptResource[id=" + id + "]";
-   }
+    public Module.Remote addRemoteModule(String contextPath, String path, int priority) {
+        Module.Remote module = new Module.Remote(this, contextPath, path, priority);
+        modules.add(module);
+        return module;
+    }
 
-   public ScriptGroup getGroup()
-   {
-      return group;
-   }
-   
-   public class DepInfo 
-   {
-      final String alias;
-      final String pluginRS;
-      
-      DepInfo(String alias, String pluginRS)
-      {
-         this.alias = alias;
-         this.pluginRS = pluginRS;
-      }
+    @Override
+    public void addSupportedLocale(Locale locale) {
+        super.addSupportedLocale(locale);
+        if (group != null) {
+            group.addSupportedLocale(locale);
+        }
+    }
 
-      public String getAlias()
-      {
-         return alias;
-      }
+    public List<Module> removeModuleByContextPath(String contextPath) {
+        ArrayList<Module> removed = new ArrayList<Module>();
+        for (Iterator<Module> i = modules.iterator(); i.hasNext();) {
+            Module module = i.next();
+            if (module.getContextPath().equals(contextPath)) {
+                removed.add(module);
+                i.remove();
+            }
+        }
+        return removed;
+    }
 
-      public String getPluginRS()
-      {
-         return pluginRS;
-      }
+    public List<Module> getModules() {
+        return modules;
+    }
 
-      @Override
-      public int hashCode()
-      {
-         final int prime = 31;
-         int result = 1;
-         result = prime * result + ((alias == null) ? 0 : alias.hashCode());
-         result = prime * result + ((pluginRS == null) ? 0 : pluginRS.hashCode());
-         return result;
-      }
+    public int compareTo(ScriptResource o) {
+        if (closure.contains(o.id)) {
+            return 1;
+        } else if (o.closure.contains(id)) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
 
-      @Override
-      public boolean equals(Object obj)
-      {
-         if (this == obj)
-            return true;
-         if (obj == null || !(obj instanceof DepInfo))
-            return false;
-         DepInfo other = (DepInfo)obj;
-         return ((alias == other.alias || alias != null && alias.equals(other.alias)) && 
-            (pluginRS == other.pluginRS || pluginRS != null && pluginRS.equals(other.pluginRS)));
-      }   
-   }
+    @Override
+    public Set<ResourceId> getDependencies() {
+        return dependencies.keySet();
+    }
+
+    public Set<DepInfo> getDepInfo(ResourceId id) {
+        return dependencies.get(id);
+    }
+
+    /**
+     * If no alias was set, return the last part of the resource name If resourceID is null, return null
+     */
+    public String getAlias() {
+        return alias;
+    }
+
+    @Override
+    public String toString() {
+        return "ScriptResource[id=" + id + "]";
+    }
+
+    public ScriptGroup getGroup() {
+        return group;
+    }
+
+    public class DepInfo {
+        final String alias;
+        final String pluginRS;
+
+        DepInfo(String alias, String pluginRS) {
+            this.alias = alias;
+            this.pluginRS = pluginRS;
+        }
+
+        public String getAlias() {
+            return alias;
+        }
+
+        public String getPluginRS() {
+            return pluginRS;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((alias == null) ? 0 : alias.hashCode());
+            result = prime * result + ((pluginRS == null) ? 0 : pluginRS.hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null || !(obj instanceof DepInfo))
+                return false;
+            DepInfo other = (DepInfo) obj;
+            return ((alias == other.alias || alias != null && alias.equals(other.alias)) && (pluginRS == other.pluginRS || pluginRS != null
+                    && pluginRS.equals(other.pluginRS)));
+        }
+    }
 }

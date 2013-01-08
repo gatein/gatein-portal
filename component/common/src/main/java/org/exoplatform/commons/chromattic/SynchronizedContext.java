@@ -21,28 +21,26 @@ package org.exoplatform.commons.chromattic;
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
 
+
 /**
  * The synchronized context is associated with a {@link org.exoplatform.commons.chromattic.Synchronization} object.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class SynchronizedContext extends AbstractContext
-{
+class SynchronizedContext extends AbstractContext {
 
-   /** The related synchronization when it is not null. */
-   final Synchronization synchronization;
+    /** The related synchronization when it is not null. */
+    final Synchronization synchronization;
 
-   public SynchronizedContext(ChromatticLifeCycle configurator, Synchronization synchronization)
-   {
-      super(configurator);
+    public SynchronizedContext(ChromatticLifeCycle configurator, Synchronization synchronization) {
+        super(configurator);
 
-      //
-      this.synchronization = synchronization;
-   }
+        //
+        this.synchronization = synchronization;
+    }
 
-   public Session doLogin() throws RepositoryException
-   {
-      return synchronization.doLogin(this);
-   }
+    public Session doLogin() throws RepositoryException {
+        return synchronization.doLogin(this);
+    }
 }

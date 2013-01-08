@@ -25,32 +25,25 @@ package org.jboss.gatein.selenium;
 /**
  * @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a>
  */
-public abstract class AbstractSingleTest extends AbstractTestCase
-{
+public abstract class AbstractSingleTest extends AbstractTestCase {
 
-   protected void performTest() throws Throwable
-   {
-      try
-      {
-         mainTest();
-      }
-      catch (Throwable ex)
-      {
-         exception(ex);
-         throw ex;
-      }
-      finally
-      {
-         cleanup();
-      }
-   }
+    protected void performTest() throws Throwable {
+        try {
+            mainTest();
+        } catch (Throwable ex) {
+            exception(ex);
+            throw ex;
+        } finally {
+            cleanup();
+        }
+    }
 
-   protected void mainTest() throws Throwable
-   {}
+    protected void mainTest() throws Throwable {
+    }
 
-   protected void cleanup()
-   {}
+    protected void cleanup() {
+    }
 
-   protected void exception(Throwable ex)
-   {}
+    protected void exception(Throwable ex) {
+    }
 }

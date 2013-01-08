@@ -23,60 +23,52 @@ package org.exoplatform.web.controller.regexp;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public enum GroupType
-{
+public enum GroupType {
 
-   CAPTURING_GROUP("(", ")"),
+    CAPTURING_GROUP("(", ")"),
 
-   NON_CAPTURING_GROUP("(?:", ")"),
+    NON_CAPTURING_GROUP("(?:", ")"),
 
-   POSITIVE_LOOKAHEAD("(?=", ")"),
+    POSITIVE_LOOKAHEAD("(?=", ")"),
 
-   NEGATIVE_LOOKAHEAD("(?!", ")"),
+    NEGATIVE_LOOKAHEAD("(?!", ")"),
 
-   POSITIVE_LOOKBEHIND("(?<=", ")"),
+    POSITIVE_LOOKBEHIND("(?<=", ")"),
 
-   NEGATIVE_LOOKBEHIND("(?<!", ")");
+    NEGATIVE_LOOKBEHIND("(?<!", ")");
 
-   /** . */
-   private static final GroupType[] ALL = values();
+    /** . */
+    private static final GroupType[] ALL = values();
 
-   public static GroupType forPrefix(String s)
-   {
-      if (s == null)
-      {
-         throw new NullPointerException("No null prefix accepted");
-      }
-      // No need for a fast lookup, iteration on array will do well
-      for (GroupType type : ALL)
-      {
-         if (type.open.equals(s))
-         {
-            return type;
-         }
-      }
-      return null;
-   }
+    public static GroupType forPrefix(String s) {
+        if (s == null) {
+            throw new NullPointerException("No null prefix accepted");
+        }
+        // No need for a fast lookup, iteration on array will do well
+        for (GroupType type : ALL) {
+            if (type.open.equals(s)) {
+                return type;
+            }
+        }
+        return null;
+    }
 
-   /** . */
-   private final String open;
+    /** . */
+    private final String open;
 
-   /** . */
-   private final String close;
+    /** . */
+    private final String close;
 
-   GroupType(String open, String close)
-   {
-      this.open = open;
-      this.close = close;
-   }
+    GroupType(String open, String close) {
+        this.open = open;
+        this.close = close;
+    }
 
-   public String getOpen()
-   {
-      return open;
-   }
+    public String getOpen() {
+        return open;
+    }
 
-   public String getClose()
-   {
-      return close;
-   }
+    public String getClose() {
+        return close;
+    }
 }

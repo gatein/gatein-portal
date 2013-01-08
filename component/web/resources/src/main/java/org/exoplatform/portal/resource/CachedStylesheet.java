@@ -19,68 +19,61 @@
 
 package org.exoplatform.portal.resource;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.lang.reflect.UndeclaredThrowableException;
+
 import org.exoplatform.commons.utils.BinaryOutput;
 import org.exoplatform.commons.utils.CharsetCharEncoder;
 import org.exoplatform.commons.utils.CharsetTextEncoder;
 import org.exoplatform.commons.utils.TableCharEncoder;
 import org.exoplatform.commons.utils.TextEncoder;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.lang.reflect.UndeclaredThrowableException;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class CachedStylesheet
-{
+public class CachedStylesheet {
 
-   /** The optimized encoder. */
-   private static final TextEncoder encoder = new CharsetTextEncoder(new TableCharEncoder(CharsetCharEncoder.getUTF8()));
+    /** The optimized encoder. */
+    private static final TextEncoder encoder = new CharsetTextEncoder(new TableCharEncoder(CharsetCharEncoder.getUTF8()));
 
-   /** . */
-   private final String text;
+    /** . */
+    private final String text;
 
-   /** . */
-   private final byte[] bytes;
-   
-   private long lastModified;
+    /** . */
+    private final byte[] bytes;
 
-   public CachedStylesheet(String text)
-   {
-      // Compute encoded bytes
-      byte[] bytes;
-      try
-      {
-         ByteArrayOutputStream baos = new ByteArrayOutputStream(text.length() * 2);
-         encoder.encode(text, 0, text.length(), baos);
-         baos.flush();
-         bytes = baos.toByteArray();
-      } catch (IOException e)
-      {
-         throw new UndeclaredThrowableException(e, "That should not happen");
-      }
+    private long lastModified;
 
-      //
-      this.text = text;
-      this.bytes = bytes;
-      //  Remove miliseconds because string of date retrieve from Http header doesn't have miliseconds 
-      lastModified = (System.currentTimeMillis() / 1000) * 1000;
-   }
+    public CachedStylesheet(String text) {
+        // Compute encoded bytes
+        byte[] bytes;
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream(text.length() * 2);
+            encoder.encode(text, 0, text.length(), baos);
+            baos.flush();
+            bytes = baos.toByteArray();
+        } catch (IOException e) {
+            throw new UndeclaredThrowableException(e, "That should not happen");
+        }
 
-   public String getText()
-   {
-      return text;
-   }   
+        //
+        this.text = text;
+        this.bytes = bytes;
+        // Remove miliseconds because string of date retrieve from Http header doesn't have miliseconds
+        lastModified = (System.currentTimeMillis() / 1000) * 1000;
+    }
 
-   public long getLastModified()
-   {
-      return lastModified;
-   }
+    public String getText() {
+        return text;
+    }
 
-   public void writeTo(BinaryOutput output) throws IOException
-   {
-      output.write(bytes);
-   }
+    public long getLastModified() {
+        return lastModified;
+    }
+
+    public void writeTo(BinaryOutput output) throws IOException {
+        output.write(bytes);
+    }
 }

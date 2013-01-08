@@ -24,20 +24,17 @@ import org.exoplatform.web.controller.QualifiedName;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class Param
-{
+class Param {
 
-   /** . */
-   final QualifiedName name;
+    /** . */
+    final QualifiedName name;
 
-   Param(QualifiedName name)
-   {
-      if (name == null)
-      {
-         throw new NullPointerException("No null name accepted");
-      }
+    Param(QualifiedName name) {
+        if (name == null) {
+            throw new NullPointerException("No null name accepted");
+        }
 
-      //
-      this.name = name;
-   }
+        //
+        this.name = name;
+    }
 }

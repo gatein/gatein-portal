@@ -21,35 +21,32 @@ package org.exoplatform.commons.utils;
 
 import java.util.List;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class SerializablePageList<E> extends StatelessPageList<E>
-{
+public class SerializablePageList<E> extends StatelessPageList<E> {
 
-   /** . */
-   private final ListAccess<E> listAccess;
+    /** . */
+    private final ListAccess<E> listAccess;
 
-   public SerializablePageList(ListAccess<E> listAccess, int pageSize)
-   {
-      super(pageSize);
+    public SerializablePageList(ListAccess<E> listAccess, int pageSize) {
+        super(pageSize);
 
-      //
-      this.listAccess = listAccess;
-   }
+        //
+        this.listAccess = listAccess;
+    }
 
-   public SerializablePageList(Class<E> serializableType, List<E> list, int pageSize)
-   {
-      super(pageSize);
+    public SerializablePageList(Class<E> serializableType, List<E> list, int pageSize) {
+        super(pageSize);
 
-      //
-      this.listAccess = new ListAccessImpl<E>(serializableType, list);
-   }
+        //
+        this.listAccess = new ListAccessImpl<E>(serializableType, list);
+    }
 
-   @Override
-   protected ListAccess<E> connect() throws Exception
-   {
-      return listAccess;
-   }
+    @Override
+    protected ListAccess<E> connect() throws Exception {
+        return listAccess;
+    }
 }

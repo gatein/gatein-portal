@@ -24,46 +24,39 @@ package org.jboss.gatein.selenium;
 
 import com.thoughtworks.selenium.Selenium;
 
-public class SeleniumContext
-{
+public class SeleniumContext {
 
-   public Selenium getSelenium()
-   {
-      return selenium;
-   }
+    public Selenium getSelenium() {
+        return selenium;
+    }
 
-   public String getTimeout()
-   {
-      return timeout;
-   }
+    public String getTimeout() {
+        return timeout;
+    }
 
-   public int getTimeoutSecInt()
-   {
-      return timeoutSecInt;
-   }
+    public int getTimeoutSecInt() {
+        return timeoutSecInt;
+    }
 
-   public String getPortalPath()
-   {
-      return portalPath;
-   }
+    public String getPortalPath() {
+        return portalPath;
+    }
 
-   public String getBrowser()
-   {
-      return browser;
-   }
+    public String getBrowser() {
+        return browser;
+    }
 
-   private Selenium selenium;
-   private String timeout;
-   private int timeoutSecInt;
-   private String portalPath;
-   private String browser;
+    private Selenium selenium;
+    private String timeout;
+    private int timeoutSecInt;
+    private String portalPath;
+    private String browser;
 
-   public SeleniumContext(Selenium selenium, String timeout, String portalPath, String browser)
-   {
-      this.selenium = selenium;
-      this.timeout = timeout;
-      this.timeoutSecInt = Integer.parseInt(timeout) / 1000;
-      this.portalPath = portalPath;
-      this.browser = browser;
-   }
+    public SeleniumContext(Selenium selenium, String timeout, String portalPath, String browser) {
+        this.selenium = selenium;
+        this.timeout = timeout;
+        this.timeoutSecInt = Integer.parseInt(timeout) / 1000;
+        this.portalPath = portalPath;
+        this.browser = browser;
+    }
 }

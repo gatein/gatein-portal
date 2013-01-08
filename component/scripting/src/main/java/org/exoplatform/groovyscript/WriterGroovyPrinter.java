@@ -18,63 +18,54 @@
  */
 package org.exoplatform.groovyscript;
 
-import org.exoplatform.commons.utils.Text;
-
 import java.io.IOException;
 import java.io.Writer;
+
+import org.exoplatform.commons.utils.Text;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class WriterGroovyPrinter extends GroovyPrinter
-{
+public class WriterGroovyPrinter extends GroovyPrinter {
 
-   /** . */
-   private Writer writer;
+    /** . */
+    private Writer writer;
 
-   public WriterGroovyPrinter(Writer writer)
-   {
-      if (writer == null)
-      {
-         throw new NullPointerException();
-      }
-      this.writer = writer;
-   }
+    public WriterGroovyPrinter(Writer writer) {
+        if (writer == null) {
+            throw new NullPointerException();
+        }
+        this.writer = writer;
+    }
 
-   @Override
-   protected Writer getWriter()
-   {
-      return writer;
-   }
+    @Override
+    protected Writer getWriter() {
+        return writer;
+    }
 
-   @Override
-   protected void write(char c) throws IOException
-   {
-      writer.write(c);
-   }
+    @Override
+    protected void write(char c) throws IOException {
+        writer.write(c);
+    }
 
-   @Override
-   protected void write(String s) throws IOException
-   {
-      writer.write(s);
-   }
+    @Override
+    protected void write(String s) throws IOException {
+        writer.write(s);
+    }
 
-   @Override
-   protected void write(Text text) throws IOException
-   {
-      text.writeTo(writer);
-   }
+    @Override
+    protected void write(Text text) throws IOException {
+        text.writeTo(writer);
+    }
 
-   @Override
-   public void flush() throws IOException
-   {
-      writer.flush();
-   }
+    @Override
+    public void flush() throws IOException {
+        writer.flush();
+    }
 
-   @Override
-   public void close() throws IOException 
-   {
-      writer.close();
-   }
+    @Override
+    public void close() throws IOException {
+        writer.close();
+    }
 }

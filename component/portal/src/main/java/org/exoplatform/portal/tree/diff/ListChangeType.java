@@ -24,10 +24,10 @@ package org.exoplatform.portal.tree.diff;
  */
 public enum ListChangeType {
 
-   REMOVE,
+    REMOVE,
 
-   SAME,
+    SAME,
 
-   ADD
+    ADD
 
 }

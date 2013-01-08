@@ -21,28 +21,23 @@ package org.exoplatform.management.invocation;
 
 import java.lang.reflect.Method;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class SetterInvoker extends SimpleMethodInvoker
-{
+public class SetterInvoker extends SimpleMethodInvoker {
 
-   public SetterInvoker(Method method)
-   {
-      super(method);
-   }
+    public SetterInvoker(Method method) {
+        super(method);
+    }
 
-   @Override
-   protected String getArgumentName(int index)
-   {
-      if (index == 0)
-      {
-         return "value";
-      }
-      else
-      {
-         throw new IndexOutOfBoundsException();
-      }
-   }
+    @Override
+    protected String getArgumentName(int index) {
+        if (index == 0) {
+            return "value";
+        } else {
+            throw new IndexOutOfBoundsException();
+        }
+    }
 }

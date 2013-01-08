@@ -9,36 +9,30 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 @ComponentConfigs({
-   @ComponentConfig(template = "app:/groovy/webui/component/UISampleRightClickPopupMenu.gtmpl"),
-   @ComponentConfig(id = "UISamplePopupMenu", type = UIRightClickPopupMenu.class, template = "system:/groovy/webui/core/UIRightClickPopupMenu.gtmpl", events = {
-      @EventConfig(listeners = UISampleRightClickPopupMenu.SayHelloActionListener.class),
-      @EventConfig(listeners = UISampleRightClickPopupMenu.SayGoodByeActionListener.class)})})
-public class UISampleRightClickPopupMenu extends UIContainer
-{
+        @ComponentConfig(template = "app:/groovy/webui/component/UISampleRightClickPopupMenu.gtmpl"),
+        @ComponentConfig(id = "UISamplePopupMenu", type = UIRightClickPopupMenu.class, template = "system:/groovy/webui/core/UIRightClickPopupMenu.gtmpl", events = {
+                @EventConfig(listeners = UISampleRightClickPopupMenu.SayHelloActionListener.class),
+                @EventConfig(listeners = UISampleRightClickPopupMenu.SayGoodByeActionListener.class) }) })
+public class UISampleRightClickPopupMenu extends UIContainer {
 
-   public UISampleRightClickPopupMenu() throws Exception
-   {
-      UIRightClickPopupMenu popup = addChild(UIRightClickPopupMenu.class, "UISamplePopupMenu", null).setRendered(true);
-      popup.setActions(new String[]{"SayHello", "SayGoodBye"});
-   }
+    public UISampleRightClickPopupMenu() throws Exception {
+        UIRightClickPopupMenu popup = addChild(UIRightClickPopupMenu.class, "UISamplePopupMenu", null).setRendered(true);
+        popup.setActions(new String[] { "SayHello", "SayGoodBye" });
+    }
 
-   static public class SayHelloActionListener extends EventListener<UISampleRightClickPopupMenu>
-   {
+    public static class SayHelloActionListener extends EventListener<UISampleRightClickPopupMenu> {
 
-      @Override
-      public void execute(Event<UISampleRightClickPopupMenu> event) throws Exception
-      {
-         System.out.println("Hello " + event.getRequestContext().getRequestParameter(OBJECTID));
-      }
-   }
+        @Override
+        public void execute(Event<UISampleRightClickPopupMenu> event) throws Exception {
+            System.out.println("Hello " + event.getRequestContext().getRequestParameter(OBJECTID));
+        }
+    }
 
-   static public class SayGoodByeActionListener extends EventListener<UISampleRightClickPopupMenu>
-   {
+    public static class SayGoodByeActionListener extends EventListener<UISampleRightClickPopupMenu> {
 
-      @Override
-      public void execute(Event<UISampleRightClickPopupMenu> event) throws Exception
-      {
-         System.out.println("GoodBye " + event.getRequestContext().getRequestParameter(OBJECTID));
-      }
-   }
+        @Override
+        public void execute(Event<UISampleRightClickPopupMenu> event) throws Exception {
+            System.out.println("GoodBye " + event.getRequestContext().getRequestParameter(OBJECTID));
+        }
+    }
 }

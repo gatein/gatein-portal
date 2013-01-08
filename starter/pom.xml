@@ -24,7 +24,7 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
+    <version>3.6.0.MO1-SNAPSHOT</version>
   </parent>
 
   <artifactId>exo.portal.starter.root</artifactId>
@@ -33,7 +33,7 @@
   <description>GateIn Portal Starter Root Pom</description>
 
   <modules>
-	<module>war</module>
-	<module>ear</module>
+    <module>war</module>
+    <module>ear</module>
   </modules>
 </project>

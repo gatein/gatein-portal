@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -56,159 +56,132 @@ import org.exoplatform.webui.event.EventListener;
  * Created by The eXo Platform SAS
  * Author : tam.nguyen
  *          tamndrok@gmail.com
- * May 28, 2009  
+ * May 28, 2009
  */
 @ComponentConfigs({
-   @ComponentConfig(template = "system:/groovy/portal/webui/navigation/UIAddGroupNavigation.gtmpl", events = {
-      @EventConfig(listeners = UIMaskWorkspace.CloseActionListener.class),
-      @EventConfig(listeners = UIAddGroupNavigation.AddNavigationActionListener.class)}),
-   @ComponentConfig(id = "UIAddGroupNavigationGrid", type = UIRepeater.class, template = "system:/groovy/portal/webui/navigation/UIGroupGrid.gtmpl")})
-public class UIAddGroupNavigation extends UIContainer
-{
+        @ComponentConfig(template = "system:/groovy/portal/webui/navigation/UIAddGroupNavigation.gtmpl", events = {
+                @EventConfig(listeners = UIMaskWorkspace.CloseActionListener.class),
+                @EventConfig(listeners = UIAddGroupNavigation.AddNavigationActionListener.class) }),
+        @ComponentConfig(id = "UIAddGroupNavigationGrid", type = UIRepeater.class, template = "system:/groovy/portal/webui/navigation/UIGroupGrid.gtmpl") })
+public class UIAddGroupNavigation extends UIContainer {
 
-   public UIAddGroupNavigation() throws Exception
-   {
-      UIVirtualList virtualList = addChild(UIVirtualList.class, null, "AddGroupNavList");
-      UIRepeater repeater = createUIComponent(UIRepeater.class, "UIAddGroupNavigationGrid", null);
-      virtualList.setUIComponent(repeater);
-      addChild(UIPopupWindow.class, null, "EditGroup");
-   }
+    public UIAddGroupNavigation() throws Exception {
+        UIVirtualList virtualList = addChild(UIVirtualList.class, null, "AddGroupNavList");
+        UIRepeater repeater = createUIComponent(UIRepeater.class, "UIAddGroupNavigationGrid", null);
+        virtualList.setUIComponent(repeater);
+        addChild(UIPopupWindow.class, null, "EditGroup");
+    }
 
-   public void loadGroups() throws Exception
-   {
+    public void loadGroups() throws Exception {
 
-      PortalRequestContext pContext = Util.getPortalRequestContext();
-      UserPortalConfigService dataService = getApplicationComponent(UserPortalConfigService.class);
-      UserACL userACL = getApplicationComponent(UserACL.class);
-      OrganizationService orgService = getApplicationComponent(OrganizationService.class);
-      final List<String> listGroup = new ArrayList<String>();;
-      // get all group that user has permission
-      if (userACL.isUserInGroup(userACL.getAdminGroups()) && !userACL.getSuperUser().equals(pContext.getRemoteUser()))
-      {
-         Collection<?> temp = orgService.getGroupHandler().findGroupsOfUser(pContext.getRemoteUser());
-         if (temp != null)
-         {
-            for (Object group : temp)
-            {
-               Group m = (Group)group;
-               String groupId = m.getId().trim();
-               listGroup.add(groupId);
+        PortalRequestContext pContext = Util.getPortalRequestContext();
+        UserPortalConfigService dataService = getApplicationComponent(UserPortalConfigService.class);
+        UserACL userACL = getApplicationComponent(UserACL.class);
+        OrganizationService orgService = getApplicationComponent(OrganizationService.class);
+        final List<String> listGroup = new ArrayList<String>();
+
+        // get all group that user has permission
+        if (userACL.isUserInGroup(userACL.getAdminGroups()) && !userACL.getSuperUser().equals(pContext.getRemoteUser())) {
+            Collection<?> temp = orgService.getGroupHandler().findGroupsOfUser(pContext.getRemoteUser());
+            if (temp != null) {
+                for (Object group : temp) {
+                    Group m = (Group) group;
+                    String groupId = m.getId().trim();
+                    listGroup.add(groupId);
+                }
             }
-         }
-      }
-      else
-      {
-         listGroup.addAll(dataService.getMakableNavigations(pContext.getRemoteUser(), false));
-      }
+        } else {
+            listGroup.addAll(dataService.getMakableNavigations(pContext.getRemoteUser(), false));
+        }
 
-      //Filter all groups having navigation
-      NavigationService navigationService = getApplicationComponent(NavigationService.class);
-      List<String> groupsHavingNavigation = new ArrayList<String>();
-      for(String groupName : listGroup)
-      {
-         NavigationContext navigation = navigationService.loadNavigation(SiteKey.group(groupName));
-         if(navigation != null && navigation.getState() != null)
-         {
-            groupsHavingNavigation.add(groupName);
-         }
-      }
-      listGroup.removeAll(groupsHavingNavigation);
-
-      UIVirtualList virtualList = getChild(UIVirtualList.class);
-      final int pageSize = 6;
-      Iterator<List<?>> source = new Iterator<List<?>>()
-      {
-         int currentIndex = 0;
-         
-         @Override
-         public boolean hasNext()
-         {
-            return currentIndex < listGroup.size();
-         }
-
-         @Override
-         public List<String> next()
-         {
-            if(hasNext()) 
-            {
-               List<String> list = new ArrayList<String>(pageSize);
-               for(int i = currentIndex; i < currentIndex + pageSize; i++)
-               {
-                  if(i < listGroup.size())
-                  {
-                     list.add(listGroup.get(i));
-                  }
-                  else
-                  {
-                     break;
-                  }
-               }
-               
-               //
-               currentIndex += pageSize;
-               return list;
+        // Filter all groups having navigation
+        NavigationService navigationService = getApplicationComponent(NavigationService.class);
+        List<String> groupsHavingNavigation = new ArrayList<String>();
+        for (String groupName : listGroup) {
+            NavigationContext navigation = navigationService.loadNavigation(SiteKey.group(groupName));
+            if (navigation != null && navigation.getState() != null) {
+                groupsHavingNavigation.add(groupName);
             }
-            else
-            {
-               throw new NoSuchElementException();
-            }
-         }
+        }
+        listGroup.removeAll(groupsHavingNavigation);
 
-         @Override
-         public void remove()
-         {
-            throw new UnsupportedOperationException();
-         }
-      };
-      virtualList.dataBind(source);
-   }
+        UIVirtualList virtualList = getChild(UIVirtualList.class);
+        final int pageSize = 6;
+        Iterator<List<?>> source = new Iterator<List<?>>() {
+            int currentIndex = 0;
 
-   static public class AddNavigationActionListener extends EventListener<UIAddGroupNavigation>
-   {
-      public void execute(Event<UIAddGroupNavigation> event) throws Exception
-      {
-         WebuiRequestContext ctx = event.getRequestContext();
-         UIAddGroupNavigation uicomp = event.getSource();
-
-         // get navigation id
-         String ownerId = event.getRequestContext().getRequestParameter(OBJECTID);
-         ownerId = URLDecoder.decode(ownerId);
-
-         UIPortalApplication uiPortalApp = Util.getUIPortal().getAncestorOfType(UIPortalApplication.class);
-
-         // ensure this navigation does not exist
-         NavigationService navigationService = uicomp.getApplicationComponent(NavigationService.class);
-         NavigationContext navigation = navigationService.loadNavigation(SiteKey.group(ownerId));
-         if (navigation != null && navigation.getState() != null)
-         {
-            uiPortalApp.addMessage(new ApplicationMessage("UIPageNavigationForm.msg.existPageNavigation",
-               new String[]{ownerId}));
-         }
-         else
-         {
-            // Create portal config of the group when it does not exist
-            DataStorage dataService = uicomp.getApplicationComponent(DataStorage.class);
-            if (dataService.getPortalConfig("group", ownerId) == null)
-            {
-               UserPortalConfigService configService = uicomp.getApplicationComponent(UserPortalConfigService.class);
-               configService.createGroupSite(ownerId);
+            @Override
+            public boolean hasNext() {
+                return currentIndex < listGroup.size();
             }
 
-            // create navigation for group
-            SiteKey key = SiteKey.group(ownerId);
-            NavigationContext existing  = navigationService.loadNavigation(key);
-            if (existing == null)
-            {
-               navigationService.saveNavigation(new NavigationContext(key, new NavigationState(0)));
+            @Override
+            public List<String> next() {
+                if (hasNext()) {
+                    List<String> list = new ArrayList<String>(pageSize);
+                    for (int i = currentIndex; i < currentIndex + pageSize; i++) {
+                        if (i < listGroup.size()) {
+                            list.add(listGroup.get(i));
+                        } else {
+                            break;
+                        }
+                    }
+
+                    //
+                    currentIndex += pageSize;
+                    return list;
+                } else {
+                    throw new NoSuchElementException();
+                }
             }
-         }
 
-         //Update group navigation list
-         ctx.addUIComponentToUpdateByAjax(uicomp);
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+        virtualList.dataBind(source);
+    }
 
-         UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChild(UIWorkingWorkspace.class);
-         uiWorkingWS.updatePortletsByName("GroupNavigationPortlet");
-         uiWorkingWS.updatePortletsByName("UserToolbarGroupPortlet");
-      }
-   }
+    public static class AddNavigationActionListener extends EventListener<UIAddGroupNavigation> {
+        public void execute(Event<UIAddGroupNavigation> event) throws Exception {
+            WebuiRequestContext ctx = event.getRequestContext();
+            UIAddGroupNavigation uicomp = event.getSource();
+
+            // get navigation id
+            String ownerId = event.getRequestContext().getRequestParameter(OBJECTID);
+            ownerId = URLDecoder.decode(ownerId);
+
+            UIPortalApplication uiPortalApp = Util.getUIPortal().getAncestorOfType(UIPortalApplication.class);
+
+            // ensure this navigation does not exist
+            NavigationService navigationService = uicomp.getApplicationComponent(NavigationService.class);
+            NavigationContext navigation = navigationService.loadNavigation(SiteKey.group(ownerId));
+            if (navigation != null && navigation.getState() != null) {
+                uiPortalApp.addMessage(new ApplicationMessage("UIPageNavigationForm.msg.existPageNavigation",
+                        new String[] { ownerId }));
+            } else {
+                // Create portal config of the group when it does not exist
+                DataStorage dataService = uicomp.getApplicationComponent(DataStorage.class);
+                if (dataService.getPortalConfig("group", ownerId) == null) {
+                    UserPortalConfigService configService = uicomp.getApplicationComponent(UserPortalConfigService.class);
+                    configService.createGroupSite(ownerId);
+                }
+
+                // create navigation for group
+                SiteKey key = SiteKey.group(ownerId);
+                NavigationContext existing = navigationService.loadNavigation(key);
+                if (existing == null) {
+                    navigationService.saveNavigation(new NavigationContext(key, new NavigationState(0)));
+                }
+            }
+
+            // Update group navigation list
+            ctx.addUIComponentToUpdateByAjax(uicomp);
+
+            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChild(UIWorkingWorkspace.class);
+            uiWorkingWS.updatePortletsByName("GroupNavigationPortlet");
+            uiWorkingWS.updatePortletsByName("UserToolbarGroupPortlet");
+        }
+    }
 }

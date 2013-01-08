@@ -21,32 +21,29 @@ package org.exoplatform.web.application.javascript;
 
 import java.util.Date;
 
+
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class CachedJavascript
-{
-   /** . */
-   private final String text;
+public class CachedJavascript {
+    /** . */
+    private final String text;
 
-   private long lastModified;
+    private long lastModified;
 
-   public CachedJavascript(String text)
-   {
-      this.text = text;
-      
-      // Remove miliseconds because string of date retrieve from Http header doesn't have miliseconds 
-      lastModified = (new Date().getTime() / 1000) * 1000;
-   }
+    public CachedJavascript(String text) {
+        this.text = text;
 
-   public String getText()
-   {
-      return text;
-   }   
+        // Remove miliseconds because string of date retrieve from Http header doesn't have miliseconds
+        lastModified = (new Date().getTime() / 1000) * 1000;
+    }
 
-   public long getLastModified()
-   {
-      return lastModified;
-   }
+    public String getText() {
+        return text;
+    }
+
+    public long getLastModified() {
+        return lastModified;
+    }
 }

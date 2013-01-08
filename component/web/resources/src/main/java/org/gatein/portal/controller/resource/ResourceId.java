@@ -21,76 +21,66 @@ package org.gatein.portal.controller.resource;
 
 import java.io.Serializable;
 
+
 /**
  * Identify a resource.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class ResourceId implements Serializable
-{
+public class ResourceId implements Serializable {
 
-   /** . */
-   private final ResourceScope scope;
-   
-   /** . */
-   private final String name;
-   
-   /** . */
-   private boolean isFullId;
+    /** . */
+    private final ResourceScope scope;
 
-   public ResourceId(ResourceScope scope, String name)
-   {
-      this(scope, name, true);
-   }
-   
-   public ResourceId(ResourceScope scope, String name, boolean isFullId)
-   {
-      this.scope = scope;
-      this.name = name;
-      this.isFullId = isFullId;
-   }
+    /** . */
+    private final String name;
 
-   public ResourceScope getScope()
-   {
-      return scope;
-   }
+    /** . */
+    private boolean isFullId;
 
-   public String getName()
-   {
-      return name;
-   }
+    public ResourceId(ResourceScope scope, String name) {
+        this(scope, name, true);
+    }
 
-   public void setFullId(boolean isFullId)
-   {
-      this.isFullId = isFullId;
-   }
-   
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (obj == this)
-      {
-         return true;
-      }
-      if (obj instanceof ResourceId)
-      {
-         ResourceId that = (ResourceId)obj;
-         return scope == that.scope && name.equals(that.name);
-      }
-      return false;
-   }
+    public ResourceId(ResourceScope scope, String name, boolean isFullId) {
+        this.scope = scope;
+        this.name = name;
+        this.isFullId = isFullId;
+    }
 
-   @Override
-   public int hashCode()
-   {
-      return scope.hashCode() ^ name.hashCode();
-   }
+    public ResourceScope getScope() {
+        return scope;
+    }
 
-   @Override
-   public String toString()
-   {
-      if (!isFullId)
-         return name;
-      return scope + "/" + name;
-   }
+    public String getName() {
+        return name;
+    }
+
+    public void setFullId(boolean isFullId) {
+        this.isFullId = isFullId;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof ResourceId) {
+            ResourceId that = (ResourceId) obj;
+            return scope == that.scope && name.equals(that.name);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return scope.hashCode() ^ name.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        if (!isFullId)
+            return name;
+        return scope + "/" + name;
+    }
 }

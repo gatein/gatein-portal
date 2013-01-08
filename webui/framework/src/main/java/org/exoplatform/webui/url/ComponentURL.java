@@ -19,6 +19,9 @@
 
 package org.exoplatform.webui.url;
 
+import java.util.Collections;
+import java.util.Set;
+
 import org.exoplatform.web.controller.QualifiedName;
 import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.ResourceType;
@@ -26,101 +29,84 @@ import org.exoplatform.web.url.URLContext;
 import org.exoplatform.webui.core.UIComponent;
 import org.gatein.common.util.Tools;
 
-import java.util.Collections;
-import java.util.Set;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ComponentURL extends PortalURL<UIComponent, ComponentURL>
-{
-   public static final String PORTAL_COMPONENT_ID = "portal:componentId";
+public class ComponentURL extends PortalURL<UIComponent, ComponentURL> {
+    public static final String PORTAL_COMPONENT_ID = "portal:componentId";
 
-   public static final String PORTAL_COMPONENT_ACTION = "portal:action";
+    public static final String PORTAL_COMPONENT_ACTION = "portal:action";
 
-   /** . */
-   public static final ResourceType<UIComponent, ComponentURL> TYPE = new ResourceType<UIComponent, ComponentURL>() {};
+    /** . */
+    public static final ResourceType<UIComponent, ComponentURL> TYPE = new ResourceType<UIComponent, ComponentURL>() {
+    };
 
-   /** . */
-   public static final QualifiedName PATH = QualifiedName.create("gtn", "path");
+    /** . */
+    public static final QualifiedName PATH = QualifiedName.create("gtn", "path");
 
-   /** . */
-   private static final Set<QualifiedName> NAMES = Collections.unmodifiableSet(Tools.toSet(PATH));
+    /** . */
+    private static final Set<QualifiedName> NAMES = Collections.unmodifiableSet(Tools.toSet(PATH));
 
-   /** . */
-   private UIComponent resource;
+    /** . */
+    private UIComponent resource;
 
-   /** . */
-   private String action;
+    /** . */
+    private String action;
 
-   /** . */
-   private String path;
+    /** . */
+    private String path;
 
-   public ComponentURL(URLContext context) throws NullPointerException
-   {
-      super(context);
-   }
+    public ComponentURL(URLContext context) throws NullPointerException {
+        super(context);
+    }
 
-   public UIComponent getResource()
-   {
-      return resource;
-   }
+    public UIComponent getResource() {
+        return resource;
+    }
 
-   public ComponentURL setResource(UIComponent resource)
-   {
-      this.resource = resource;
+    public ComponentURL setResource(UIComponent resource) {
+        this.resource = resource;
 
-      if (resource != null)
-      {
-         setQueryParameterValue(PORTAL_COMPONENT_ID, resource.getId());
-      }
+        if (resource != null) {
+            setQueryParameterValue(PORTAL_COMPONENT_ID, resource.getId());
+        }
 
-      return this;
-   }
+        return this;
+    }
 
-   public void reset()
-   {
-      super.reset();
-      
-      //
-      if (resource != null)
-      {
-         setQueryParameterValue(PORTAL_COMPONENT_ID, resource.getId());
-      }
-      setQueryParameterValue(PORTAL_COMPONENT_ACTION, action);
-   }
-   
-   public Set<QualifiedName> getParameterNames()
-   {
-      return NAMES;
-   }
+    public void reset() {
+        super.reset();
 
-   public String getParameterValue(QualifiedName parameterName)
-   {
-      if (PATH.equals(parameterName))
-      {
-         return path;
-      }
-      else
-      {
-         return null;
-      }
-   }
+        //
+        if (resource != null) {
+            setQueryParameterValue(PORTAL_COMPONENT_ID, resource.getId());
+        }
+        setQueryParameterValue(PORTAL_COMPONENT_ACTION, action);
+    }
 
-   public void setAction(String action)
-   {
-      this.action = action;
-      setQueryParameterValue(PORTAL_COMPONENT_ACTION, action);
-   }
+    public Set<QualifiedName> getParameterNames() {
+        return NAMES;
+    }
 
-   public String getPath()
-   {
-      return path;
-   }
+    public String getParameterValue(QualifiedName parameterName) {
+        if (PATH.equals(parameterName)) {
+            return path;
+        } else {
+            return null;
+        }
+    }
 
-   public void setPath(String path)
-   {
-      this.path = path;
-   }
+    public void setAction(String action) {
+        this.action = action;
+        setQueryParameterValue(PORTAL_COMPONENT_ACTION, action);
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
 }

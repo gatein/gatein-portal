@@ -18,55 +18,50 @@
  */
 package org.exoplatform.commons.chromattic;
 
+import javax.jcr.Credentials;
+
 import org.chromattic.api.Chromattic;
 import org.chromattic.api.ChromatticSession;
 
-import javax.jcr.Credentials;
-
 /**
- * <p>A specific implementation of the {@link org.chromattic.api.Chromattic} interface that delegates
- * the obtention of a session to the managed system.</p>
+ * <p>
+ * A specific implementation of the {@link org.chromattic.api.Chromattic} interface that delegates the obtention of a session to
+ * the managed system.
+ * </p>
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-class ChromatticImpl implements Chromattic
-{
+class ChromatticImpl implements Chromattic {
 
-   /** . */
-   private final ChromatticLifeCycle configurator;
+    /** . */
+    private final ChromatticLifeCycle configurator;
 
-   public ChromatticImpl(ChromatticLifeCycle configurator)
-   {
-      this.configurator = configurator;
-   }
+    public ChromatticImpl(ChromatticLifeCycle configurator) {
+        this.configurator = configurator;
+    }
 
-   public ChromatticSession openSession()
-   {
-      SessionContext sessionContext = configurator.getContext(false);
+    public ChromatticSession openSession() {
+        SessionContext sessionContext = configurator.getContext(false);
 
-      //
-      if (sessionContext == null)
-      {
-         sessionContext = configurator.openSynchronizedContext();
-      }
+        //
+        if (sessionContext == null) {
+            sessionContext = configurator.openSynchronizedContext();
+        }
 
-      //
-      return sessionContext.getSession();
-   }
+        //
+        return sessionContext.getSession();
+    }
 
-   public ChromatticSession openSession(String workspace)
-   {
-      throw new UnsupportedOperationException();
-   }
+    public ChromatticSession openSession(String workspace) {
+        throw new UnsupportedOperationException();
+    }
 
-   public ChromatticSession openSession(Credentials credentials, String workspace)
-   {
-      throw new UnsupportedOperationException();
-   }
+    public ChromatticSession openSession(Credentials credentials, String workspace) {
+        throw new UnsupportedOperationException();
+    }
 
-   public ChromatticSession openSession(Credentials credentials)
-   {
-      throw new UnsupportedOperationException();
-   }
+    public ChromatticSession openSession(Credentials credentials) {
+        throw new UnsupportedOperationException();
+    }
 }

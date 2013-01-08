@@ -27,6 +27,5 @@ package org.exoplatform.web.url;
  * @param <R> the resource parameter type
  * @param <U> the url parameter type
  */
-public abstract class ResourceType<R, U extends PortalURL<R, U>>
-{
+public abstract class ResourceType<R, U extends PortalURL<R, U>> {
 }

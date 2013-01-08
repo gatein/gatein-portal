@@ -22,28 +22,24 @@ package org.exoplatform.portal.config.model;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class UnmarshalledObject<T>
-{
+public class UnmarshalledObject<T> {
 
-   /** . */
-   private final Version version;
+    /** . */
+    private final Version version;
 
-   /** . */
-   private final T object;
+    /** . */
+    private final T object;
 
-   public UnmarshalledObject(Version version, T object)
-   {
-      this.version = version;
-      this.object = object;
-   }
+    public UnmarshalledObject(Version version, T object) {
+        this.version = version;
+        this.object = object;
+    }
 
-   public Version getVersion()
-   {
-      return version;
-   }
+    public Version getVersion() {
+        return version;
+    }
 
-   public T getObject()
-   {
-      return object;
-   }
+    public T getObject() {
+        return object;
+    }
 }

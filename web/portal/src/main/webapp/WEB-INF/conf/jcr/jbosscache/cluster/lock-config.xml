@@ -19,20 +19,22 @@
 
 <jbosscache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="urn:jboss:jbosscache-core:config:3.1">
 
-  <locking useLockStriping="false" concurrencyLevel="64" lockParentForChildInsertRemove="false" lockAcquisitionTimeout="20000" />
+  <locking useLockStriping="false" concurrencyLevel="64" lockParentForChildInsertRemove="false"
+           lockAcquisitionTimeout="20000"/>
 
   <clustering mode="replication" clusterName="${jboss.partition.name:DefaultPartition}-${jbosscache-cluster-name}">
-    <stateRetrieval timeout="20000" fetchInMemoryState="false" />
-    <jgroupsConfig configFile="jgroups/gatein-${gatein.default.jgroups.stack:udp}.xml" />
-    <sync />
+    <stateRetrieval timeout="20000" fetchInMemoryState="false"/>
+    <jgroupsConfig configFile="jgroups/gatein-${gatein.default.jgroups.stack:udp}.xml"/>
+    <sync/>
   </clustering>
 
   <loaders passivation="false" shared="true">
     <preload>
-      <node fqn="/" />
+      <node fqn="/"/>
     </preload>
-    <loader class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.JDBCCacheLoader" async="false" fetchPersistentState="false"
-      ignoreModifications="false" purgeOnStartup="false">
+    <loader class="org.exoplatform.services.jcr.impl.core.lock.jbosscache.JDBCCacheLoader" async="false"
+            fetchPersistentState="false"
+            ignoreModifications="false" purgeOnStartup="false">
       <properties>
         cache.jdbc.table.name=${jbosscache-cl-cache.jdbc.table.name}
         cache.jdbc.table.create=${jbosscache-cl-cache.jdbc.table.create}

@@ -22,41 +22,36 @@
 
 package org.jboss.gatein.selenium;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 import org.apache.commons.lang.StringUtils;
 import org.testng.IAnnotationTransformer;
 import org.testng.annotations.ITestAnnotation;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
+public class TestMethodSelector implements IAnnotationTransformer {
 
-public class TestMethodSelector implements IAnnotationTransformer
-{
+    /**
+     * Disables the test methods which doesn't match the given method name.
+     */
+    @SuppressWarnings("unchecked")
+    public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod) {
+        String[] selectedMethods = System.getProperty("method", "*").split(",");
 
-   /**
-    * Disables the test methods which doesn't match the given method name.
-    */
-   @SuppressWarnings("unchecked")
-   public void transform(ITestAnnotation annotation, Class testClass, Constructor testConstructor, Method testMethod)
-   {
-      String[] selectedMethods = System.getProperty("method", "*").split(",");
+        String methodName = testMethod.getDeclaringClass().getCanonicalName() + "." + testMethod.getName();
+        boolean match = false;
 
-      String methodName = testMethod.getDeclaringClass().getCanonicalName() + "." + testMethod.getName();
-      boolean match = false;
+        for (String selectedMethod : selectedMethods) {
 
-      for (String selectedMethod : selectedMethods)
-      {
+            selectedMethod = StringUtils.replace(selectedMethod, "*", ".*");
 
-         selectedMethod = StringUtils.replace(selectedMethod, "*", ".*");
+            if (methodName.matches(selectedMethod)) {
+                match = true;
+                break;
+            }
+        }
 
-         if (methodName.matches(selectedMethod))
-         {
-            match = true;
-            break;
-         }
-      }
+        annotation.setEnabled(match);
 
-      annotation.setEnabled(match);
-
-   }
+    }
 }

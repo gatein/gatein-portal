@@ -21,18 +21,18 @@
 -->
 
 <Module>
-<ModulePrefs title="RSS Reader" title_url="http://www.exoplatform.com" directory_title="RSS Reader" 
-	description="RSS Reader"
-	thumbnail="images/rssAggregator.png"
-	height="229">
-<Require feature="dynamic-height" />
-<Require feature="setprefs"/>
-<Require feature="settitle"/>
-<Locale lang="ar" language_direction="rtl"/>
-</ModulePrefs>
-	<UserPref name="rssurl" display_name="FEED URL" default_value="http://feeds.feedburner.com/gatein" required="true" />
-	<UserPref name="num_entries" display_name="# of Items (1-100)" default_value="10"/>
-<Content type="html"><![CDATA[
+  <ModulePrefs title="RSS Reader" title_url="http://www.exoplatform.com" directory_title="RSS Reader"
+               description="RSS Reader"
+               thumbnail="images/rssAggregator.png"
+               height="229">
+    <Require feature="dynamic-height"/>
+    <Require feature="setprefs"/>
+    <Require feature="settitle"/>
+    <Locale lang="ar" language_direction="rtl"/>
+  </ModulePrefs>
+  <UserPref name="rssurl" display_name="FEED URL" default_value="http://feeds.feedburner.com/gatein" required="true"/>
+  <UserPref name="num_entries" display_name="# of Items (1-100)" default_value="10"/>
+  <Content type="html"><![CDATA[
 <link rel="stylesheet" type="text/css" href="style.css"></link>
 
 <script type="text/javascript" src="script.js"></script>
@@ -57,5 +57,5 @@
 </script>
 
 ]]>
-</Content>
+  </Content>
 </Module>

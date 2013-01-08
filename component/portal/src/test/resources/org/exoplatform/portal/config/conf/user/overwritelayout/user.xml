@@ -19,25 +19,25 @@
   -->
 
 <portal-config
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
   <portal-name>root</portal-name>
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
   <edit-permission>*:/platform/administrators</edit-permission>
 
- 	<portal-layout>
-	  <page-body> </page-body>
+  <portal-layout>
+    <page-body></page-body>
 
-	  <portlet-application>
+    <portlet-application>
       <portlet>
         <application-ref>overwrite_application_ref</application-ref>
         <portlet-ref>overwrite_portlet_ref</portlet-ref>
       </portlet>
-	  <access-permissions>Everyone</access-permissions>
+      <access-permissions>Everyone</access-permissions>
       <show-info-bar>true</show-info-bar>
-	  </portlet-application>
+    </portlet-application>
   </portal-layout>
 
 </portal-config>

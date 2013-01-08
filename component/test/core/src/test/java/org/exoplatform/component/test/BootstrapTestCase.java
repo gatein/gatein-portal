@@ -19,84 +19,76 @@
 
 package org.exoplatform.component.test;
 
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.container.component.RequestLifeCycle;
-import org.exoplatform.services.naming.InitialContextInitializer;
-
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
+
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.container.component.RequestLifeCycle;
+import org.exoplatform.services.naming.InitialContextInitializer;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-@ConfiguredBy({@ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml")})
-public class BootstrapTestCase extends AbstractKernelTest
-{
+@ConfiguredBy({ @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/test-configuration.xml") })
+public class BootstrapTestCase extends AbstractKernelTest {
 
-   /** . */
-   private String previousTmpDirPath = null;
+    /** . */
+    private String previousTmpDirPath = null;
 
-   public void testRequestLifeCycle()
-   {
-      PortalContainer container = PortalContainer.getInstance();
-      CustomService testService = (CustomService)container.getComponentInstanceOfType(CustomService.class);
-      assertNull(testService.currentContainer);
-      RequestLifeCycle.begin(container);
-      assertNotNull(testService);
-      assertSame(container, testService.currentContainer);
-      RequestLifeCycle.end();
-      assertNull(testService.currentContainer);
-   }
+    public void testRequestLifeCycle() {
+        PortalContainer container = PortalContainer.getInstance();
+        CustomService testService = (CustomService) container.getComponentInstanceOfType(CustomService.class);
+        assertNull(testService.currentContainer);
+        RequestLifeCycle.begin(container);
+        assertNotNull(testService);
+        assertSame(container, testService.currentContainer);
+        RequestLifeCycle.end();
+        assertNull(testService.currentContainer);
+    }
 
-   public void testDataSource() throws Exception
-   {
-      PortalContainer container = PortalContainer.getInstance();
-      container.getComponentInstanceOfType(InitialContextInitializer.class);
-      DataSource ds = (DataSource)new InitialContext().lookup("jdbcexo");
-      assertNotNull(ds);
-      Connection conn = ds.getConnection();
-      DatabaseMetaData databaseMD = conn.getMetaData();
-      String db = databaseMD.getDatabaseProductName() + " " + databaseMD.getDatabaseProductVersion() + "." +
-         databaseMD.getDatabaseMajorVersion() + "." +  databaseMD.getDatabaseMinorVersion();
-      String driver = databaseMD.getDriverName() + " " + databaseMD.getDriverVersion() + "." +
-         databaseMD.getDriverMajorVersion() + "." +  databaseMD.getDriverMinorVersion();
-      log.info("Using database " + db + " with driver " + driver);
-      conn.close();
-   }
+    public void testDataSource() throws Exception {
+        PortalContainer container = PortalContainer.getInstance();
+        container.getComponentInstanceOfType(InitialContextInitializer.class);
+        DataSource ds = (DataSource) new InitialContext().lookup("jdbcexo");
+        assertNotNull(ds);
+        Connection conn = ds.getConnection();
+        DatabaseMetaData databaseMD = conn.getMetaData();
+        String db = databaseMD.getDatabaseProductName() + " " + databaseMD.getDatabaseProductVersion() + "."
+                + databaseMD.getDatabaseMajorVersion() + "." + databaseMD.getDatabaseMinorVersion();
+        String driver = databaseMD.getDriverName() + " " + databaseMD.getDriverVersion() + "."
+                + databaseMD.getDriverMajorVersion() + "." + databaseMD.getDriverMinorVersion();
+        log.info("Using database " + db + " with driver " + driver);
+        conn.close();
+    }
 
-   public void testTmpDir1() throws Exception
-   {
-      ensureTmpDir();
-   }
+    public void testTmpDir1() throws Exception {
+        ensureTmpDir();
+    }
 
-   public void testTmpDir2() throws Exception
-   {
-      ensureTmpDir();
-   }
+    public void testTmpDir2() throws Exception {
+        ensureTmpDir();
+    }
 
-   private void ensureTmpDir() throws Exception
-   {
-      String tmpDirPath = System.getProperty("gatein.test.tmp.dir");
-      assertNotNull(tmpDirPath);
+    private void ensureTmpDir() {
+        String tmpDirPath = System.getProperty("gatein.test.tmp.dir");
+        assertNotNull(tmpDirPath);
 
-      //
-      if (previousTmpDirPath != null)
-      {
-         assertEquals(previousTmpDirPath, tmpDirPath);
-      }
-      else
-      {
-         previousTmpDirPath = tmpDirPath;
-      }
+        //
+        if (previousTmpDirPath != null) {
+            assertEquals(previousTmpDirPath, tmpDirPath);
+        } else {
+            previousTmpDirPath = tmpDirPath;
+        }
 
-      //
-      File f = new File(tmpDirPath);
-      assertTrue(f.exists());
-      assertTrue(f.isDirectory());
-      assertTrue(f.canWrite());
-   }
+        //
+        File f = new File(tmpDirPath);
+        assertTrue(f.exists());
+        assertTrue(f.isDirectory());
+        assertTrue(f.canWrite());
+    }
 }

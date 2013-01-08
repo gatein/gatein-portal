@@ -34,26 +34,19 @@ import org.jboss.dmr.ModelType;
 /**
  * @author Tomaz Cerar
  */
-public class PortletWarDependencyDefinition extends SimpleResourceDefinition
-{
-   protected static final SimpleAttributeDefinition IMPORT_SERVICES =
-      new SimpleAttributeDefinitionBuilder(Constants.IMPORT_SERVICES, ModelType.BOOLEAN, true)
-         .setAllowExpression(false)
-         .setDefaultValue(new ModelNode(false))
-         .setXmlName(Constants.IMPORT_SERVICES)
-         .setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES)
-         .build();
+public class PortletWarDependencyDefinition extends SimpleResourceDefinition {
+    protected static final SimpleAttributeDefinition IMPORT_SERVICES = new SimpleAttributeDefinitionBuilder(
+            Constants.IMPORT_SERVICES, ModelType.BOOLEAN, true).setAllowExpression(false).setDefaultValue(new ModelNode(false))
+            .setXmlName(Constants.IMPORT_SERVICES).setFlags(AttributeAccess.Flag.RESTART_ALL_SERVICES).build();
 
-   PortletWarDependencyDefinition(GateInConfiguration config)
-   {
-      super(PathElement.pathElement(Constants.PORTLET_WAR_DEPENDENCY), GateInExtension.getResourceDescriptionResolver(Constants.PORTLET_WAR_DEPENDENCY),
-         new PortletWarDependencyAdd(config), new ReloadRequiredRemoveStepHandler()
-      );
-   }
+    PortletWarDependencyDefinition(GateInConfiguration config) {
+        super(PathElement.pathElement(Constants.PORTLET_WAR_DEPENDENCY), GateInExtension
+                .getResourceDescriptionResolver(Constants.PORTLET_WAR_DEPENDENCY), new PortletWarDependencyAdd(config),
+                new ReloadRequiredRemoveStepHandler());
+    }
 
-   @Override
-   public void registerAttributes(ManagementResourceRegistration resourceRegistration)
-   {
-      resourceRegistration.registerReadOnlyAttribute(IMPORT_SERVICES, null);
-   }
+    @Override
+    public void registerAttributes(ManagementResourceRegistration resourceRegistration) {
+        resourceRegistration.registerReadOnlyAttribute(IMPORT_SERVICES, null);
+    }
 }

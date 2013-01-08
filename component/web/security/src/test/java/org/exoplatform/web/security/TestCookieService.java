@@ -31,60 +31,52 @@ import org.gatein.wci.security.Credentials;
  *
  */
 
-@ConfiguredBy({
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/tokenservice-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
-   @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/jcr-configuration.xml")
-})
-public class TestCookieService extends AbstractTokenServiceTest<CookieTokenService>
-{
-   protected void setUp() throws Exception 
-   {
-      PortalContainer container = getContainer();
-      service = (CookieTokenService)container.getComponentInstanceOfType(CookieTokenService.class);
-      Thread.sleep(1000); //for enough time initial database
-   }
-   
-   @Override
-   public void testGetToken() throws Exception
-   {
-      String tokenId = service.createToken(new Credentials("root", "gtn"));
-      assertEquals(service.getValidityTime(), 2);
-      
-      GateInToken token = service.getToken(tokenId);
-      assertEquals(token.getPayload().getUsername(), "root");
-      assertEquals(token.getPayload().getPassword(), "gtn");
-      service.deleteToken(tokenId);
-   }
+@ConfiguredBy({ @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/tokenservice-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/jcr-configuration.xml") })
+public class TestCookieService extends AbstractTokenServiceTest<CookieTokenService> {
+    protected void setUp() throws Exception {
+        PortalContainer container = getContainer();
+        service = (CookieTokenService) container.getComponentInstanceOfType(CookieTokenService.class);
+        Thread.sleep(1000); // for enough time initial database
+    }
 
-   @Override
-   public void testGetAllToken() throws Exception
-   {
-      String token1 = service.createToken(new Credentials("root", "gtn"));
-      String token2 = service.createToken(new Credentials("root1", "gtn1"));
-      String[] tokens = service .getAllTokens();
-      assertEquals(tokens.length, 2);
-      assertSame(token1, tokens[0]);
-      assertSame(token2, tokens[1]);
-      service.deleteToken(token1);
-      service.deleteToken(token2);
-   }
-   
-   @Override
-   public void testSize() throws Exception
-   {
-      String token = service.createToken(new Credentials("root", "gtn"));
-      assertEquals(service.size(), 1);
-      service.deleteToken(token);
-   }
-   
-   @Override
-   public void testDeleteToken() throws Exception
-   {
-      String tokenId = service.createToken(new Credentials("root", "gtn"));
-      assertNotSame(service.getToken(tokenId), service.deleteToken(tokenId));
-      assertNull(service.getToken(tokenId));
-      assertEquals(service.size(), 0);
-      service.deleteToken(tokenId);
-   }
+    @Override
+    public void testGetToken() throws Exception {
+        String tokenId = service.createToken(new Credentials("root", "gtn"));
+        assertEquals(service.getValidityTime(), 2);
+
+        GateInToken token = service.getToken(tokenId);
+        assertEquals(token.getPayload().getUsername(), "root");
+        assertEquals(token.getPayload().getPassword(), "gtn");
+        service.deleteToken(tokenId);
+    }
+
+    @Override
+    public void testGetAllToken() throws Exception {
+        String token1 = service.createToken(new Credentials("root", "gtn"));
+        String token2 = service.createToken(new Credentials("root1", "gtn1"));
+        String[] tokens = service.getAllTokens();
+        assertEquals(tokens.length, 2);
+        assertSame(token1, tokens[0]);
+        assertSame(token2, tokens[1]);
+        service.deleteToken(token1);
+        service.deleteToken(token2);
+    }
+
+    @Override
+    public void testSize() throws Exception {
+        String token = service.createToken(new Credentials("root", "gtn"));
+        assertEquals(service.size(), 1);
+        service.deleteToken(token);
+    }
+
+    @Override
+    public void testDeleteToken() throws Exception {
+        String tokenId = service.createToken(new Credentials("root", "gtn"));
+        assertNotSame(service.getToken(tokenId), service.deleteToken(tokenId));
+        assertNull(service.getToken(tokenId));
+        assertEquals(service.size(), 0);
+        service.deleteToken(tokenId);
+    }
 }

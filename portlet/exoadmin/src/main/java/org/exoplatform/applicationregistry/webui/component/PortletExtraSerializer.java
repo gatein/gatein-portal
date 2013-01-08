@@ -19,33 +19,30 @@
 
 package org.exoplatform.applicationregistry.webui.component;
 
+import org.exoplatform.commons.serialization.api.TypeConverter;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.commons.serialization.api.TypeConverter;
 import org.gatein.pc.api.Portlet;
 import org.gatein.pc.api.PortletContext;
-import org.gatein.pc.api.PortletInvoker;
 import org.gatein.pc.federation.FederatingPortletInvoker;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PortletExtraSerializer extends TypeConverter<UIPortletManagement.PortletExtra, PortletContext>
-{
+public class PortletExtraSerializer extends TypeConverter<UIPortletManagement.PortletExtra, PortletContext> {
 
-   @Override
-   public PortletContext write(UIPortletManagement.PortletExtra input)
-   {
-      return input.context;
-   }
+    @Override
+    public PortletContext write(UIPortletManagement.PortletExtra input) {
+        return input.context;
+    }
 
-   @Override
-   public UIPortletManagement.PortletExtra read(PortletContext output) throws Exception
-   {
-      ExoContainer manager = ExoContainerContext.getCurrentContainer();
-      FederatingPortletInvoker portletInvoker = (FederatingPortletInvoker)manager.getComponentInstance(FederatingPortletInvoker.class);
-      Portlet portlet = portletInvoker.getPortlet(output);
-      return new UIPortletManagement.PortletExtra(portlet);
-   }
+    @Override
+    public UIPortletManagement.PortletExtra read(PortletContext output) throws Exception {
+        ExoContainer manager = ExoContainerContext.getCurrentContainer();
+        FederatingPortletInvoker portletInvoker = (FederatingPortletInvoker) manager
+                .getComponentInstance(FederatingPortletInvoker.class);
+        Portlet portlet = portletInvoker.getPortlet(output);
+        return new UIPortletManagement.PortletExtra(portlet);
+    }
 }

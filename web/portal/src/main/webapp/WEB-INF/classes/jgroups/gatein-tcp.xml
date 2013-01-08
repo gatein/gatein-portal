@@ -73,7 +73,7 @@
   -->
   <MERGE2 max_interval="100000" min_interval="20000"/>
   <FD_SOCK start_port="${gatein.jgroups.tcp.fd_sock_port:58600}"/>
-  <FD timeout="6000" max_tries="5" />
+  <FD timeout="6000" max_tries="5"/>
   <VERIFY_SUSPECT timeout="1500"/>
   <BARRIER/>
   <pbcast.NAKACK use_mcast_xmit="false" gc_lag="0"

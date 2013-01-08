@@ -19,12 +19,11 @@
 package org.exoplatform.portal.resource.compressor;
 
 /**
- * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
- * Aug 19, 2010
+ * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a> Aug 19, 2010
  */
 
 public enum ResourceType {
 
-   JAVASCRIPT, STYLESHEET;
-   
+    JAVASCRIPT, STYLESHEET;
+
 }

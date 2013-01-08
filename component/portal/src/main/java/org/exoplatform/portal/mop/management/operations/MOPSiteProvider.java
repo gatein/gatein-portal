@@ -30,7 +30,6 @@ import org.gatein.mop.api.workspace.Site;
  *
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public interface MOPSiteProvider
-{
-   Site getSite(SiteKey siteKey);
+public interface MOPSiteProvider {
+    Site getSite(SiteKey siteKey);
 }

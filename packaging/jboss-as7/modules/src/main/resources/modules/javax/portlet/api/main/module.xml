@@ -23,12 +23,12 @@
   -->
 
 <module xmlns="urn:jboss:module:1.0" name="javax.portlet.api">
-    <resources>
-        <!-- Insert resources here -->
-    </resources>
+  <resources>
+    <!-- Insert resources here -->
+  </resources>
 
-    <dependencies>
-       <module name="javax.servlet.api" />
-       <module name="javax.api"/>
-    </dependencies>
+  <dependencies>
+    <module name="javax.servlet.api"/>
+    <module name="javax.api"/>
+  </dependencies>
 </module>

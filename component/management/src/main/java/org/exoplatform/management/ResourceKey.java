@@ -23,39 +23,32 @@ package org.exoplatform.management;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public final class ResourceKey
-{
+public final class ResourceKey {
 
-   /** . */
-   private final String name;
+    /** . */
+    private final String name;
 
-   public ResourceKey(String name)
-   {
-      if (name == null)
-      {
-         throw new NullPointerException();
-      }
-      this.name = name;
-   }
+    public ResourceKey(String name) {
+        if (name == null) {
+            throw new NullPointerException();
+        }
+        this.name = name;
+    }
 
-   @Override
-   public int hashCode()
-   {
-      return name.hashCode();
-   }
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
 
-   @Override
-   public boolean equals(Object obj)
-   {
-      if (obj == this)
-      {
-         return true;
-      }
-      if (obj instanceof ResourceKey)
-      {
-         ResourceKey that = (ResourceKey)obj;
-         return name.equals(that.name);
-      }
-      return false;
-   }
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj instanceof ResourceKey) {
+            ResourceKey that = (ResourceKey) obj;
+            return name.equals(that.name);
+        }
+        return false;
+    }
 }

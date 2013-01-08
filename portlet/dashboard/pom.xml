@@ -20,24 +20,24 @@
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<parent>
-		<groupId>org.gatein.portal</groupId>
-		<artifactId>exo.portal.portlet</artifactId>
-		<version>3.5.0.Final-SNAPSHOT</version>
-	</parent>
-	
-	<modelVersion>4.0.0</modelVersion>
-	<artifactId>exo.portal.portlet.dashboard</artifactId>
-	<packaging>war</packaging>
-	<name>GateIn Portal Portlet Dashboard</name>
-  
+  <parent>
+    <groupId>org.gatein.portal</groupId>
+    <artifactId>exo.portal.portlet</artifactId>
+    <version>3.6.0.MO1-SNAPSHOT</version>
+  </parent>
+
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>exo.portal.portlet.dashboard</artifactId>
+  <packaging>war</packaging>
+  <name>GateIn Portal Portlet Dashboard</name>
+
   <dependencies>
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.webui.portal</artifactId>
       <scope>provided</scope>
-    </dependency>   
-    
+    </dependency>
+
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.webui.eXo</artifactId>
@@ -48,8 +48,8 @@
       <artifactId>exo.portal.webui.dashboard</artifactId>
       <scope>provided</scope>
     </dependency>
-  </dependencies> 
-  
+  </dependencies>
+
   <build>
     <finalName>dashboard</finalName>
   </build>
@@ -60,7 +60,7 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <configuration>
-			<suppressionsLocation>${basedir}/src/main/resources/suppressions.xml</suppressionsLocation>
+          <suppressionsLocation>${basedir}/src/main/resources/suppressions.xml</suppressionsLocation>
         </configuration>
       </plugin>
     </plugins>

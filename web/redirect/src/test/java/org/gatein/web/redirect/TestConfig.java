@@ -22,65 +22,55 @@
  ******************************************************************************/
 package org.gatein.web.redirect;
 
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.component.test.KernelBootstrap;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.config.model.RedirectMappings;
 import org.exoplatform.portal.mop.importer.ImportMode;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public abstract class TestConfig extends AbstractGateInTest
-{
+public abstract class TestConfig extends AbstractGateInTest {
 
-   private Set<String> sysProperties = new HashSet<String>();
-   
-   protected KernelBootstrap bootstrap;
-   
-   public PortalContainer getContainer(String configurationFile, String origin)
-   {
-      if (bootstrap == null)
-      {
-         bootstrap = new KernelBootstrap();
-         bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
-         bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
-         bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
-         bootstrap.addConfiguration(ContainerScope.PORTAL, configurationFile);
+    private Set<String> sysProperties = new HashSet<String>();
 
-         setSystemProperty("override.origin", "false");
-         setSystemProperty("import.mode.origin", ImportMode.OVERWRITE.toString());
-         setSystemProperty("import.portal.origin", origin);
+    protected KernelBootstrap bootstrap;
 
-         //
-         bootstrap.boot();
-      }
-      return bootstrap.getContainer();
-   }
-   
-   protected void setSystemProperty(String key, String value)
-   {
-      sysProperties.add(key);
-      System.setProperty(key, value);
-   }
-   
-   @Override
-   protected void tearDown() throws Exception
-   {
-      super.tearDown();
-      for (String key : sysProperties)
-      {
-         System.clearProperty(key);
-      }
-      sysProperties.clear();
-      bootstrap.dispose();
-   }
+    public PortalContainer getContainer(String configurationFile, String origin) {
+        if (bootstrap == null) {
+            bootstrap = new KernelBootstrap();
+            bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.test.jcr-configuration.xml");
+            bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.identity-configuration.xml");
+            bootstrap.addConfiguration(ContainerScope.PORTAL, "conf/exo.portal.component.portal-configuration.xml");
+            bootstrap.addConfiguration(ContainerScope.PORTAL, configurationFile);
+
+            setSystemProperty("override.origin", "false");
+            setSystemProperty("import.mode.origin", ImportMode.OVERWRITE.toString());
+            setSystemProperty("import.portal.origin", origin);
+
+            //
+            bootstrap.boot();
+        }
+        return bootstrap.getContainer();
+    }
+
+    protected void setSystemProperty(String key, String value) {
+        sysProperties.add(key);
+        System.setProperty(key, value);
+    }
+
+    @Override
+    protected void tearDown() throws Exception {
+        super.tearDown();
+        for (String key : sysProperties) {
+            System.clearProperty(key);
+        }
+        sysProperties.clear();
+        bootstrap.dispose();
+    }
 }
-

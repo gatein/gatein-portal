@@ -22,25 +22,26 @@ package org.exoplatform.commons.serialization;
 import java.util.HashMap;
 import java.util.Map;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
 public class MapBuilder<K, V> {
 
-  private final HashMap<K, V> map = new HashMap<K,V>();
+    private final HashMap<K, V> map = new HashMap<K, V>();
 
-  public static <K, V> MapBuilder<K, V> create(K key, V value) {
-    return new MapBuilder<K,V>().with(key, value);
-  }
+    public static <K, V> MapBuilder<K, V> create(K key, V value) {
+        return new MapBuilder<K, V>().with(key, value);
+    }
 
-  public MapBuilder<K, V> with(K key, V value) {
-    map.put(key, value);
-    return this;
-  }
+    public MapBuilder<K, V> with(K key, V value) {
+        map.put(key, value);
+        return this;
+    }
 
-  public Map<K, V> build(K key, V value) {
-    map.put(key, value);
-    return map;
-  }
+    public Map<K, V> build(K key, V value) {
+        map.put(key, value);
+        return map;
+    }
 }

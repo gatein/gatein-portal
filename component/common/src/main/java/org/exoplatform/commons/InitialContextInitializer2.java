@@ -19,50 +19,45 @@
 
 package org.exoplatform.commons;
 
+import java.io.FileNotFoundException;
+
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.xml.stream.XMLStreamException;
+
 import org.exoplatform.container.component.ComponentPlugin;
 import org.exoplatform.container.configuration.ConfigurationException;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.services.naming.BindReferencePlugin;
 import org.exoplatform.services.naming.InitialContextInitializer;
 
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.xml.stream.XMLStreamException;
-import java.io.FileNotFoundException;
-
 /**
- * This code should be moved in the core, for now it is here as it is needed here.
- * It extends the {@link org.exoplatform.services.naming.InitialContextInitializer} to override the
- * {@link #addPlugin(org.exoplatform.container.component.ComponentPlugin)} method and perform no binding
- * if there is an existing binding before. 
+ * This code should be moved in the core, for now it is here as it is needed here. It extends the
+ * {@link org.exoplatform.services.naming.InitialContextInitializer} to override the
+ * {@link #addPlugin(org.exoplatform.container.component.ComponentPlugin)} method and perform no binding if there is an existing
+ * binding before.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class InitialContextInitializer2 extends InitialContextInitializer
-{
+public class InitialContextInitializer2 extends InitialContextInitializer {
 
-   public InitialContextInitializer2(InitParams params) throws NamingException, ConfigurationException, FileNotFoundException, XMLStreamException
-   {
-      super(params);
-   }
+    public InitialContextInitializer2(InitParams params) throws NamingException, ConfigurationException, FileNotFoundException,
+            XMLStreamException {
+        super(params);
+    }
 
-   @Override
-   public void addPlugin(ComponentPlugin plugin)
-   {
-      if (plugin instanceof BindReferencePlugin)
-      {
-         BindReferencePlugin brplugin = (BindReferencePlugin)plugin;
-         InitialContext initialContext = getInitialContext();
-         try
-         {
-            initialContext.lookup(brplugin.getBindName());
-            // If we reach this step it means that something is already bound
-         }
-         catch (NamingException e)
-         {
-            super.addPlugin(plugin);
-         }
-      }
-   }
+    @Override
+    public void addPlugin(ComponentPlugin plugin) {
+        if (plugin instanceof BindReferencePlugin) {
+            BindReferencePlugin brplugin = (BindReferencePlugin) plugin;
+            InitialContext initialContext = getInitialContext();
+            try {
+                initialContext.lookup(brplugin.getBindName());
+                // If we reach this step it means that something is already bound
+            } catch (NamingException e) {
+                super.addPlugin(plugin);
+            }
+        }
+    }
 }

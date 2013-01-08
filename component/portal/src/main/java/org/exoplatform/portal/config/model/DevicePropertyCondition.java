@@ -30,80 +30,67 @@ import org.exoplatform.portal.pom.data.RedirectDevicePropertyConditionData;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class DevicePropertyCondition extends ModelObject
-{
+public class DevicePropertyCondition extends ModelObject {
 
-   protected String propertyName;
-   protected Float greaterThan;
-   protected Float lessThan;
-   protected String equals;
-   protected String matches;
+    protected String propertyName;
+    protected Float greaterThan;
+    protected Float lessThan;
+    protected String equals;
+    protected String matches;
 
-   public String getPropertyName()
-   {
-      return propertyName;
-   }
+    public String getPropertyName() {
+        return propertyName;
+    }
 
-   public void setPropertyName(String propertyName)
-   {
-      this.propertyName = propertyName;
-   }
+    public void setPropertyName(String propertyName) {
+        this.propertyName = propertyName;
+    }
 
-   public Float getGreaterThan()
-   {
-      return greaterThan;
-   }
+    public Float getGreaterThan() {
+        return greaterThan;
+    }
 
-   public void setGreaterThan(Float greaterThan)
-   {
-      this.greaterThan = greaterThan;
-   }
+    public void setGreaterThan(Float greaterThan) {
+        this.greaterThan = greaterThan;
+    }
 
-   public Float getLessThan()
-   {
-      return lessThan;
-   }
+    public Float getLessThan() {
+        return lessThan;
+    }
 
-   public void setLessThan(Float lessThan)
-   {
-      this.lessThan = lessThan;
-   }
+    public void setLessThan(Float lessThan) {
+        this.lessThan = lessThan;
+    }
 
-   public String getEquals()
-   {
-      return equals;
-   }
+    public String getEquals() {
+        return equals;
+    }
 
-   public void setEquals(String equals)
-   {
-      this.equals = equals;
-   }
+    public void setEquals(String equals) {
+        this.equals = equals;
+    }
 
-   public String getMatches()
-   {
-      return matches;
-   }
+    public String getMatches() {
+        return matches;
+    }
 
-   public void setMatches(String matches)
-   {
-      this.matches = matches;
-   }
+    public void setMatches(String matches) {
+        this.matches = matches;
+    }
 
-   @Override
-   public RedirectDevicePropertyConditionData build()
-   {
-      RedirectDevicePropertyConditionData conditionData = new RedirectDevicePropertyConditionData(this.storageId, this.storageName, propertyName);
-      
-      conditionData.setGreaterThan(greaterThan);
-      conditionData.setLessThan(lessThan);
-      conditionData.setEquals(equals);
-      
-      if (matches != null)
-      {
-         conditionData.setMatches(Pattern.compile(matches));
-      }
-      
-      return conditionData;
-   }
+    @Override
+    public RedirectDevicePropertyConditionData build() {
+        RedirectDevicePropertyConditionData conditionData = new RedirectDevicePropertyConditionData(this.storageId,
+                this.storageName, propertyName);
+
+        conditionData.setGreaterThan(greaterThan);
+        conditionData.setLessThan(lessThan);
+        conditionData.setEquals(equals);
+
+        if (matches != null) {
+            conditionData.setMatches(Pattern.compile(matches));
+        }
+
+        return conditionData;
+    }
 }
-

@@ -25,31 +25,28 @@ import junit.framework.TestCase;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestPatternBuilder extends TestCase
-{
+public class TestPatternBuilder extends TestCase {
 
-   public void testEscapeReservedChar() throws Exception
-   {
-      assertLiteral('^');
-      assertLiteral('*');
-      assertLiteral('$');
-      assertLiteral('[');
-      assertLiteral(']');
-      assertLiteral('.');
-      assertLiteral('|');
-      assertLiteral('+');
-      assertLiteral('(');
-      assertLiteral(')');
-      assertLiteral('?');
-   }
+    public void testEscapeReservedChar() throws Exception {
+        assertLiteral('^');
+        assertLiteral('*');
+        assertLiteral('$');
+        assertLiteral('[');
+        assertLiteral(']');
+        assertLiteral('.');
+        assertLiteral('|');
+        assertLiteral('+');
+        assertLiteral('(');
+        assertLiteral(')');
+        assertLiteral('?');
+    }
 
-   private void assertLiteral(char c)
-   {
-      PatternBuilder pb = new PatternBuilder();
-      pb.expr("^");
-      pb.literal(c);
-      pb.expr("$");
-      Regex pattern = RegexFactory.JAVA.compile(pb.build());
-      assertTrue(pattern.matcher().matches(Character.toString(c)));
-   }
+    private void assertLiteral(char c) {
+        PatternBuilder pb = new PatternBuilder();
+        pb.expr("^");
+        pb.literal(c);
+        pb.expr("$");
+        Regex pattern = RegexFactory.JAVA.compile(pb.build());
+        assertTrue(pattern.matcher().matches(Character.toString(c)));
+    }
 }

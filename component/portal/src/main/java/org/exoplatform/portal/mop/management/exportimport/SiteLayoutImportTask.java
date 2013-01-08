@@ -32,77 +32,59 @@ import org.exoplatform.portal.mop.management.operations.page.PageUtils;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class SiteLayoutImportTask extends AbstractImportTask<PortalConfig>
-{
-   private final DataStorage dataStorage;
-   private PortalConfig rollbackDelete;
-   private PortalConfig rollbackSave;
+public class SiteLayoutImportTask extends AbstractImportTask<PortalConfig> {
+    private final DataStorage dataStorage;
+    private PortalConfig rollbackDelete;
+    private PortalConfig rollbackSave;
 
-   public SiteLayoutImportTask(PortalConfig data, SiteKey siteKey, DataStorage dataStorage)
-   {
-      super(data, siteKey);
-      this.dataStorage = dataStorage;
-   }
+    public SiteLayoutImportTask(PortalConfig data, SiteKey siteKey, DataStorage dataStorage) {
+        super(data, siteKey);
+        this.dataStorage = dataStorage;
+    }
 
-   @Override
-   public void importData(ImportMode importMode) throws Exception
-   {
-      PortalConfig dst = dataStorage.getPortalConfig(siteKey.getTypeName(), siteKey.getName());
+    @Override
+    public void importData(ImportMode importMode) throws Exception {
+        PortalConfig dst = dataStorage.getPortalConfig(siteKey.getTypeName(), siteKey.getName());
 
-      switch (importMode)
-      {
-         // Really doesn't make sense to "merge" site layout data.  Really two modes, conserve (keep) and overwrite.
-         case CONSERVE:
-            if (dst == null)
-            {
-               dst = data;
-               rollbackDelete = data;
+        switch (importMode) {
+        // Really doesn't make sense to "merge" site layout data. Really two modes, conserve (keep) and overwrite.
+            case CONSERVE:
+                if (dst == null) {
+                    dst = data;
+                    rollbackDelete = data;
+                } else {
+                    dst = null;
+                }
+                break;
+            case INSERT:
+            case MERGE:
+            case OVERWRITE:
+                if (dst == null) {
+                    rollbackDelete = data;
+                } else {
+                    rollbackSave = PageUtils.copy(dst);
+                }
+                dst = data;
+                break;
+        }
+
+        if (dst != null) {
+            if (rollbackDelete == null) {
+                dataStorage.save(dst);
+            } else {
+                dataStorage.create(dst);
             }
-            else
-            {
-               dst = null;
-            }
-            break;
-         case INSERT:
-         case MERGE:
-         case OVERWRITE:
-            if (dst == null)
-            {
-               rollbackDelete = data;
-            }
-            else
-            {
-               rollbackSave = PageUtils.copy(dst);
-            }
-            dst = data;
-            break;
-      }
+            dataStorage.save();
+        }
+    }
 
-      if (dst != null)
-      {
-         if (rollbackDelete == null)
-         {
-            dataStorage.save(dst);
-         }
-         else
-         {
-            dataStorage.create(dst);
-         }
-         dataStorage.save();
-      }
-   }
-
-   @Override
-   public void rollback() throws Exception
-   {
-      if (rollbackDelete != null)
-      {
-         dataStorage.remove(rollbackDelete);
-      }
-      else if (rollbackSave != null)
-      {
-         dataStorage.save(rollbackSave);
-         dataStorage.save();
-      }
-   }
+    @Override
+    public void rollback() throws Exception {
+        if (rollbackDelete != null) {
+            dataStorage.remove(rollbackDelete);
+        } else if (rollbackSave != null) {
+            dataStorage.save(rollbackSave);
+            dataStorage.save();
+        }
+    }
 }

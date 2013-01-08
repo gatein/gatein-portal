@@ -42,7 +42,7 @@
       <show-application-state>true</show-application-state>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>management</name>
     <title>Organization Management</title>
@@ -57,5 +57,5 @@
       <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
     </portlet-application>
-  </page> 
+  </page>
 </page-set>

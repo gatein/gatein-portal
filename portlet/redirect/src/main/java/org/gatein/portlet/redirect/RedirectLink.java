@@ -26,26 +26,21 @@ package org.gatein.portlet.redirect;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class RedirectLink
-{
-   protected String redirectName;
-   protected String redirectURI;
-   
-   public RedirectLink(String redirectName, String redirectURI)
-   {
-      this.redirectName = redirectName;
-      this.redirectURI = redirectURI;
-   }
-   
-   public String getRedirectName()
-   {
-      return redirectName;
-   }
+public class RedirectLink {
+    protected String redirectName;
+    protected String redirectURI;
 
-   public String getRedirectURI()
-   {
-      return redirectURI;
-   }   
-   
+    public RedirectLink(String redirectName, String redirectURI) {
+        this.redirectName = redirectName;
+        this.redirectURI = redirectURI;
+    }
+
+    public String getRedirectName() {
+        return redirectName;
+    }
+
+    public String getRedirectURI() {
+        return redirectURI;
+    }
+
 }
-

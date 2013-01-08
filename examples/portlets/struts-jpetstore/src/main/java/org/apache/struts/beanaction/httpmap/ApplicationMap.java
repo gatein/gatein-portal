@@ -1,8 +1,10 @@
 package org.apache.struts.beanaction.httpmap;
 
+import java.util.Enumeration;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Enumeration;
+
 
 /**
  * Map to wrap application scope attributes.
@@ -14,25 +16,25 @@ import java.util.Enumeration;
  * @author Clinton Begin
  */
 public class ApplicationMap extends BaseHttpMap {
-  private ServletContext context;
+    private ServletContext context;
 
-  public ApplicationMap(HttpServletRequest request) {
-    context = request.getSession().getServletContext();
-  }
+    public ApplicationMap(HttpServletRequest request) {
+        context = request.getSession().getServletContext();
+    }
 
-  protected Enumeration getNames() {
-    return context.getAttributeNames();
-  }
+    protected Enumeration getNames() {
+        return context.getAttributeNames();
+    }
 
-  protected Object getValue(Object key) {
-    return context.getAttribute(String.valueOf(key));
-  }
+    protected Object getValue(Object key) {
+        return context.getAttribute(String.valueOf(key));
+    }
 
-  protected void putValue(Object key, Object value) {
-    context.setAttribute(String.valueOf(key), value);
-  }
+    protected void putValue(Object key, Object value) {
+        context.setAttribute(String.valueOf(key), value);
+    }
 
-  protected void removeValue(Object key) {
-    context.removeAttribute(String.valueOf(key));
-  }
+    protected void removeValue(Object key) {
+        context.removeAttribute(String.valueOf(key));
+    }
 }

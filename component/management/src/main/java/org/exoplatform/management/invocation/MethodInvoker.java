@@ -23,13 +23,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface MethodInvoker
-{
+public interface MethodInvoker {
 
-   Object invoke(Object o, Map<String, List<String>> argMap) throws IllegalAccessException, InvocationTargetException;
+    Object invoke(Object o, Map<String, List<String>> argMap) throws IllegalAccessException, InvocationTargetException;
 
 }

@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -26,49 +26,38 @@ import org.exoplatform.webui.core.UIComponent;
 import org.exoplatform.webui.core.UIComponentDecorator;
 
 /**
- * Created by The eXo Platform SARL
- * Author : Dang Van Minh
- *          minhdv81@yahoo.com
- * Jun 12, 2006
+ * Created by The eXo Platform SARL Author : Dang Van Minh minhdv81@yahoo.com Jun 12, 2006
  */
 @ComponentConfig(template = "system:/groovy/portal/webui/workspace/UIPortalToolPanel.gtmpl")
-public class UIPortalToolPanel extends UIComponentDecorator
-{
-   private boolean showMaskLayer = false;
+public class UIPortalToolPanel extends UIComponentDecorator {
+    private boolean showMaskLayer = false;
 
-   public UIPortalToolPanel() throws Exception
-   {
-   }
+    public UIPortalToolPanel() {
+    }
 
-   public <T extends UIComponent> void setWorkingComponent(Class<T> clazz, String id) throws Exception
-   {
-      UIComponent component = createUIComponent(clazz, null, id);
-      setUIComponent(component);
-   }
+    public <T extends UIComponent> void setWorkingComponent(Class<T> clazz, String id) throws Exception {
+        UIComponent component = createUIComponent(clazz, null, id);
+        setUIComponent(component);
+    }
 
-   public void setWorkingComponent(UIComponent component)
-   {
-      setUIComponent(component);
-   }
+    public void setWorkingComponent(UIComponent component) {
+        setUIComponent(component);
+    }
 
-   public void processRender(WebuiRequestContext context) throws Exception
-   {
-      JavascriptManager jsmanager = context.getJavascriptManager();
+    public void processRender(WebuiRequestContext context) throws Exception {
+        JavascriptManager jsmanager = context.getJavascriptManager();
 
-      super.processRender(context);
-      if (showMaskLayer)
-      {
-         jsmanager.require("SHARED/UIMaskLayer", "mask").addScripts("mask.createMask('UIPortalToolPanel', null, 10) ;");
-      }
-   }
+        super.processRender(context);
+        if (showMaskLayer) {
+            jsmanager.require("SHARED/UIMaskLayer", "mask").addScripts("mask.createMask('UIPortalToolPanel', null, 10) ;");
+        }
+    }
 
-   public boolean isShowMaskLayer()
-   {
-      return showMaskLayer;
-   }
+    public boolean isShowMaskLayer() {
+        return showMaskLayer;
+    }
 
-   public void setShowMaskLayer(boolean showMaskLayer)
-   {
-      this.showMaskLayer = showMaskLayer;
-   }
+    public void setShowMaskLayer(boolean showMaskLayer) {
+        this.showMaskLayer = showMaskLayer;
+    }
 }

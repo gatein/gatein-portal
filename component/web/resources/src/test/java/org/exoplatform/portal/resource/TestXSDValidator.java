@@ -18,99 +18,91 @@
  */
 package org.exoplatform.portal.resource;
 
-import junit.framework.TestCase;
-import org.gatein.common.io.IOTools;
-import org.xml.sax.SAXException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import junit.framework.TestCase;
+
+import org.gatein.common.io.IOTools;
+import org.xml.sax.SAXException;
+
 /**
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
  * @date 5/23/12
  */
-public class TestXSDValidator extends TestCase
-{
-   private final static Validator VALIDATOR;
+public class TestXSDValidator extends TestCase {
+    private static final Validator VALIDATOR;
 
-   private final static ClassLoader CTX_LOADER;
+    private static final ClassLoader CTX_LOADER;
 
-   private final static Map<String, Boolean> testScenarios = new HashMap<String, Boolean>();
+    private static final Map<String, Boolean> testScenarios = new HashMap<String, Boolean>();
 
-   static
-   {
-      CTX_LOADER = Thread.currentThread().getContextClassLoader();
-      URL xsdFile = CTX_LOADER.getResource("gatein_resources_1_3.xsd");
-      VALIDATOR = createXSDValidator(xsdFile);
+    static {
+        CTX_LOADER = Thread.currentThread().getContextClassLoader();
+        URL xsdFile = CTX_LOADER.getResource("gatein_resources_1_3.xsd");
+        VALIDATOR = createXSDValidator(xsdFile);
 
-      testScenarios.put("f0.xml", false);
-      testScenarios.put("f1.xml", false);
-      testScenarios.put("f2.xml", true);
-      testScenarios.put("f3.xml", true);
-      testScenarios.put("f4.xml", true);
-      testScenarios.put("f5.xml", false);
-      testScenarios.put("f6.xml", false);
-      testScenarios.put("f7.xml", true);
-      testScenarios.put("f8.xml", true);
-      testScenarios.put("f9.xml", false);
-      testScenarios.put("differScopes.xml", false);
-      testScenarios.put("duplicateShared.xml", true);
-      testScenarios.put("duplicatePortal.xml", true);
-      testScenarios.put("duplicatePortlet.xml", true);
-   }
+        testScenarios.put("f0.xml", false);
+        testScenarios.put("f1.xml", false);
+        testScenarios.put("f2.xml", true);
+        testScenarios.put("f3.xml", true);
+        testScenarios.put("f4.xml", true);
+        testScenarios.put("f5.xml", false);
+        testScenarios.put("f6.xml", false);
+        testScenarios.put("f7.xml", true);
+        testScenarios.put("f8.xml", true);
+        testScenarios.put("f9.xml", false);
+        testScenarios.put("differScopes.xml", false);
+        testScenarios.put("duplicateShared.xml", true);
+        testScenarios.put("duplicatePortal.xml", true);
+        testScenarios.put("duplicatePortlet.xml", true);
+    }
 
-   public static Validator createXSDValidator(URL xsdFile)
-   {
-      SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-      try
-      {
-         //Set the feature XMLSchemaFactory.SCHEMA_FULL_CHECKING to false to turn off "Unique Particle Attribution" validation
-         factory.setFeature("http://apache.org/xml/features/validation/schema-full-checking", false);
-         return factory.newSchema(xsdFile).newValidator();
-      }
-      catch (SAXException ex)
-      {
-         throw new RuntimeException(ex);
-      }
-   }
+    public static Validator createXSDValidator(URL xsdFile) {
+        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+        try {
+            // Set the feature XMLSchemaFactory.SCHEMA_FULL_CHECKING to false to turn off "Unique Particle Attribution"
+            // validation
+            factory.setFeature("http://apache.org/xml/features/validation/schema-full-checking", false);
+            return factory.newSchema(xsdFile).newValidator();
+        } catch (SAXException ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
-   public void testXSDValidation()
-   {
-      for(Map.Entry<String, Boolean> testScene : testScenarios.entrySet())
-      {
-         validateDocument(testScene.getKey(), testScene.getValue());
-      }
-   }
+    public void testXSDValidation() {
+        for (Map.Entry<String, Boolean> testScene : testScenarios.entrySet()) {
+            validateDocument(testScene.getKey(), testScene.getValue());
+        }
+    }
 
-   private void validateDocument(String fileName, boolean failureExpect)
-   {
-      InputStream in = CTX_LOADER.getResourceAsStream("validator/" + fileName);
-      try
-      {
-         VALIDATOR.validate(new StreamSource(in));
-         if(failureExpect)
-         {
-            fail();
-         }
-      }
-      catch(Exception ex)
-      {
-         if(!failureExpect)
-         {
-            ex.printStackTrace();
-            fail();
-         }
-      }
-      finally
-      {
-         IOTools.safeClose(in);
-         VALIDATOR.reset();
-      }
-   }
+    private void validateDocument(String fileName, boolean failureExpect) {
+        InputStream in = CTX_LOADER.getResourceAsStream("validator/" + fileName);
+        try {
+            VALIDATOR.validate(new StreamSource(in));
+            if (failureExpect) {
+                fail();
+            }
+        } catch (Exception ex) {
+            if (!failureExpect) {
+                StringWriter sw = new StringWriter();
+                PrintWriter out = new PrintWriter(sw);
+                ex.printStackTrace(out);
+                out.close();
+                fail(sw.toString());
+            }
+        } finally {
+            IOTools.safeClose(in);
+            VALIDATOR.reset();
+        }
+    }
 }
-

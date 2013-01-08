@@ -19,27 +19,26 @@
 package org.gatein.portal.samples.jquery;
 
 import java.io.IOException;
+
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+
 /**
  * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
  * @date 5/31/12
  */
-public class JQueryPortlet extends GenericPortlet
-{
-   @Override
-   public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException
-   {
-      String view = request.getParameter("view");
-      if(view == null || !view.endsWith(".jsp"))
-      {
-         view = "index.jsp";
-      }
-      PortletRequestDispatcher dispatcher = getPortletContext().getRequestDispatcher("/jsp/views/" + view);
-      dispatcher.forward(request, response);
-   }
+public class JQueryPortlet extends GenericPortlet {
+    @Override
+    public void render(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+        String view = request.getParameter("view");
+        if (view == null || !view.endsWith(".jsp")) {
+            view = "index.jsp";
+        }
+        PortletRequestDispatcher dispatcher = getPortletContext().getRequestDispatcher("/jsp/views/" + view);
+        dispatcher.forward(request, response);
+    }
 }

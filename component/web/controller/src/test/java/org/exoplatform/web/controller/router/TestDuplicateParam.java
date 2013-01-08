@@ -24,240 +24,156 @@ import static org.exoplatform.web.controller.metadata.DescriptorBuilder.*;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestDuplicateParam extends AbstractTestController
-{
+public class TestDuplicateParam extends AbstractTestController {
 
-   public void testPathParamDuplicatesRequestParam() throws Exception
-   {
-      try
-      {
-         router().add(
-            route("/").with(requestParam("foo").named("a")).
-               sub(route("/{foo}"))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
+    public void testPathParamDuplicatesRequestParam() throws Exception {
+        try {
+            router().add(route("/").with(requestParam("foo").named("a")).sub(route("/{foo}"))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
 
-      //
-      try
-      {
-         router().add(
-            route("/").with(requestParam("foo").named("a")).
-               sub(route("/bar").sub(route("/{foo}")))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
-   }
+        //
+        try {
+            router().add(route("/").with(requestParam("foo").named("a")).sub(route("/bar").sub(route("/{foo}")))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
+    }
 
-   public void testPathParamDuplicatesRouteParam() throws Exception
-   {
-      try
-      {
-         router().add(
-            route("/").with(routeParam("foo").withValue("bar")).
-               sub(route("/{foo}"))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
+    public void testPathParamDuplicatesRouteParam() throws Exception {
+        try {
+            router().add(route("/").with(routeParam("foo").withValue("bar")).sub(route("/{foo}"))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
 
-      //
-      try
-      {
-         router().add(
-            route("/").with(routeParam("foo").withValue("bar")).
-               sub(route("/bar").sub(route("/{foo}")))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
-   }
+        //
+        try {
+            router().add(route("/").with(routeParam("foo").withValue("bar")).sub(route("/bar").sub(route("/{foo}")))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
+    }
 
-   public void testPathParamDuplicatesPathParam() throws Exception
-   {
-      try
-      {
-         router().add(
-            route("/{foo}").
-               sub(route("/{foo}"))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
+    public void testPathParamDuplicatesPathParam() throws Exception {
+        try {
+            router().add(route("/{foo}").sub(route("/{foo}"))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
 
-      //
-      try
-      {
-         router().add(
-            route("/{foo}").
-               sub(route("/bar").sub(route("/{foo}")))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
-   }
+        //
+        try {
+            router().add(route("/{foo}").sub(route("/bar").sub(route("/{foo}")))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
+    }
 
-   public void testRequestParamDuplicatesRequestParam() throws Exception
-   {
-      try
-      {
-         router().add(
-            route("/").with(requestParam("foo").named("a")).
-               sub(route("/bar").with(routeParam("foo").withValue("b")))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
+    public void testRequestParamDuplicatesRequestParam() throws Exception {
+        try {
+            router().add(
+                    route("/").with(requestParam("foo").named("a")).sub(route("/bar").with(routeParam("foo").withValue("b"))))
+                    .build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
 
-      //
-      try
-      {
-         router().add(
-            route("/").with(requestParam("foo").named("a")).
-               sub(route("/bar").sub(route("/foo").with(routeParam("foo").withValue("b"))))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
-   }
+        //
+        try {
+            router().add(
+                    route("/").with(requestParam("foo").named("a")).sub(
+                            route("/bar").sub(route("/foo").with(routeParam("foo").withValue("b"))))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
+    }
 
-   public void testRequestParamDuplicatesRouteParam() throws Exception
-   {
-      try
-      {
-         router().add(
-            route("/").with(routeParam("foo").withValue("bar")).
-               sub(route("/bar").with(routeParam("foo").withValue("b")))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
+    public void testRequestParamDuplicatesRouteParam() throws Exception {
+        try {
+            router().add(
+                    route("/").with(routeParam("foo").withValue("bar")).sub(
+                            route("/bar").with(routeParam("foo").withValue("b")))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
 
-      //
-      try
-      {
-         router().add(
-            route("/").with(routeParam("foo").withValue("bar")).
-               sub(route("/bar").sub(route("/foo").with(routeParam("foo").withValue("b"))))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
-   }
+        //
+        try {
+            router().add(
+                    route("/").with(routeParam("foo").withValue("bar")).sub(
+                            route("/bar").sub(route("/foo").with(routeParam("foo").withValue("b"))))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
+    }
 
-   public void testRequestParamDuplicatesPathParam() throws Exception
-   {
-      try
-      {
-         router().add(
-            route("/{foo}").
-               sub(route("/bar").with(routeParam("foo").withValue("b")))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
+    public void testRequestParamDuplicatesPathParam() throws Exception {
+        try {
+            router().add(route("/{foo}").sub(route("/bar").with(routeParam("foo").withValue("b")))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
 
-      //
-      try
-      {
-         router().add(
-            route("/{foo}").
-               sub(route("/bar").sub(route("/foo").with(routeParam("foo").withValue("b"))))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
-   }
+        //
+        try {
+            router().add(route("/{foo}").sub(route("/bar").sub(route("/foo").with(routeParam("foo").withValue("b"))))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
+    }
 
-   public void testRouteParamDuplicatesRequestParam() throws Exception
-   {
-      try
-      {
-         router().add(
-            route("/").with(requestParam("foo").named("a")).
-               sub(route("/bar").with(routeParam("foo").withValue("b")))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
+    public void testRouteParamDuplicatesRequestParam() throws Exception {
+        try {
+            router().add(
+                    route("/").with(requestParam("foo").named("a")).sub(route("/bar").with(routeParam("foo").withValue("b"))))
+                    .build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
 
-      //
-      try
-      {
-         router().add(
-            route("/").with(requestParam("foo").named("a")).
-               sub(route("/bar").sub(route("/foo").with(routeParam("foo").withValue("b"))))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
-   }
+        //
+        try {
+            router().add(
+                    route("/").with(requestParam("foo").named("a")).sub(
+                            route("/bar").sub(route("/foo").with(routeParam("foo").withValue("b"))))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
+    }
 
-   public void testRouteParamDuplicatesRouteParam() throws Exception
-   {
-      try
-      {
-         router().add(
-            route("/").with(routeParam("foo").withValue("bar")).
-               sub(route("/bar").with(routeParam("foo").withValue("b")))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
+    public void testRouteParamDuplicatesRouteParam() throws Exception {
+        try {
+            router().add(
+                    route("/").with(routeParam("foo").withValue("bar")).sub(
+                            route("/bar").with(routeParam("foo").withValue("b")))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
 
-      //
-      try
-      {
-         router().add(
-            route("/").with(routeParam("foo").withValue("bar")).
-               sub(route("/bar").sub(route("/foo").with(routeParam("foo").withValue("b"))))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
-   }
+        //
+        try {
+            router().add(
+                    route("/").with(routeParam("foo").withValue("bar")).sub(
+                            route("/bar").sub(route("/foo").with(routeParam("foo").withValue("b"))))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
+    }
 
-   public void testRouteParamDuplicatesPathParam() throws Exception
-   {
-      try
-      {
-         router().add(
-            route("/{foo}").
-               sub(route("/bar").with(routeParam("foo").withValue("b")))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
+    public void testRouteParamDuplicatesPathParam() throws Exception {
+        try {
+            router().add(route("/{foo}").sub(route("/bar").with(routeParam("foo").withValue("b")))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
 
-      //
-      try
-      {
-         router().add(
-            route("/{foo}").
-               sub(route("/bar").sub(route("/foo").with(routeParam("foo").withValue("b"))))).build();
-         fail();
-      }
-      catch (MalformedRouteException e)
-      {
-      }
-   }
+        //
+        try {
+            router().add(route("/{foo}").sub(route("/bar").sub(route("/foo").with(routeParam("foo").withValue("b"))))).build();
+            fail();
+        } catch (MalformedRouteException e) {
+        }
+    }
 }

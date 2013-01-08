@@ -22,9 +22,9 @@
 
 package org.gatein.management.gadget.mop.exportimport.client;
 
-import com.google.gwt.user.client.rpc.RemoteService;
-
 import java.util.List;
+
+import com.google.gwt.user.client.rpc.RemoteService;
 
 /**
  * {@code GateInService}
@@ -34,25 +34,24 @@ import java.util.List;
  * @author <a href="mailto:nbenothm@redhat.com">Nabil Benothman</a>
  * @version 1.0
  */
-public interface GateInService extends RemoteService
-{
+public interface GateInService extends RemoteService {
 
-   /**
-    * Update the Tree item asynchronously
-    *
-    * @param containerName name of portal container
-    * @param item          The item to be updated
-    * @return the updated tree node
-    * @throws DisplayableException
-    */
-   public TreeNode updateItem(String containerName, TreeNode item) throws Exception;
+    /**
+     * Update the Tree item asynchronously
+     *
+     * @param containerName name of portal container
+     * @param item The item to be updated
+     * @return the updated tree node
+     * @throws DisplayableException
+     */
+    TreeNode updateItem(String containerName, TreeNode item);
 
-   /**
-    * Retrieve asynchronously the list of root nodes
-    *
-    * @param containerName The portal container name
-    * @return The list of the root nodes
-    * @throws DisplayableException
-    */
-   public List<TreeNode> getRootNodes(String containerName) throws Exception;
+    /**
+     * Retrieve asynchronously the list of root nodes
+     *
+     * @param containerName The portal container name
+     * @return The list of the root nodes
+     * @throws DisplayableException
+     */
+    List<TreeNode> getRootNodes(String containerName) throws Exception;
 }

@@ -19,6 +19,11 @@
 
 package org.exoplatform.portal.mop.user;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.commons.utils.HTMLEntityEncoder;
 import org.exoplatform.portal.mop.Described;
@@ -28,333 +33,273 @@ import org.exoplatform.portal.mop.navigation.NodeContext;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.page.PageKey;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Locale;
-import java.util.ResourceBundle;
-
 /**
  * A navigation node as seen by a user.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class UserNode
-{
+public class UserNode {
 
-   /** . */
-   final UserNodeContext owner;
+    /** . */
+    final UserNodeContext owner;
 
-   /** . */
-   final NodeContext<UserNode> context;
+    /** . */
+    final NodeContext<UserNode> context;
 
-   /** . */
-   String resolvedLabel;
+    /** . */
+    String resolvedLabel;
 
-   /** . */
-   String encodedResolvedLabel;
+    /** . */
+    String encodedResolvedLabel;
 
-   /** . */
-   String uri;
+    /** . */
+    String uri;
 
-   UserNode(UserNodeContext owner, NodeContext<UserNode> context)
-   {
-      this.owner = owner;
-      this.context = context;
-      this.resolvedLabel = null;
-      this.encodedResolvedLabel = null;
-      this.uri = null;
-   }
+    UserNode(UserNodeContext owner, NodeContext<UserNode> context) {
+        this.owner = owner;
+        this.context = context;
+        this.resolvedLabel = null;
+        this.encodedResolvedLabel = null;
+        this.uri = null;
+    }
 
-   public UserNavigation getNavigation()
-   {
-      return owner.navigation;
-   }
+    public UserNavigation getNavigation() {
+        return owner.navigation;
+    }
 
-   public String getId()
-   {
-      return context.getId();
-   }
+    public String getId() {
+        return context.getId();
+    }
 
-   UserNode filter()
-   {
-      owner.filter(this);
-      return this;
-   }
+    UserNode filter() {
+        owner.filter(this);
+        return this;
+    }
 
-   public String getName()
-   {
-      return context.getName();
-   }
+    public String getName() {
+        return context.getName();
+    }
 
-   public void setName(String name)
-   {
-      context.setName(name);
+    public void setName(String name) {
+        context.setName(name);
 
-      //
-      this.uri = null;
-      this.resolvedLabel = null;
-      this.encodedResolvedLabel = null;
-   }
+        //
+        this.uri = null;
+        this.resolvedLabel = null;
+        this.encodedResolvedLabel = null;
+    }
 
-   public String getURI()
-   {
-      if (uri == null)
-      {
-         uri = buildURI().toString();
-      }
-      return uri;
-   }
+    public String getURI() {
+        if (uri == null) {
+            uri = buildURI().toString();
+        }
+        return uri;
+    }
 
-   private StringBuilder buildURI()
-   {
-      UserNode parent = context.getParentNode();
-      if (parent != null)
-      {
-         StringBuilder builder = parent.buildURI();
-         if (builder.length() > 0)
-         {
-            builder.append('/');
-         }
-         return builder.append(context.getName());
-      }
-      else
-      {
-         return new StringBuilder();
-      }
-   }
-
-   public String getLabel()
-   {
-      return context.getState().getLabel();
-   }
-
-   public void setLabel(String label)
-   {
-      context.setState(new NodeState.Builder(context.getState()).label(label).build());
-
-      //
-      this.resolvedLabel = null;
-      this.encodedResolvedLabel = null;
-   }
-
-   public String getIcon()
-   {
-      return context.getState().getIcon();
-   }
-
-   public void setIcon(String icon)
-   {
-      context.setState(new NodeState.Builder(context.getState()).icon(icon).build());
-   }
-
-   public long getStartPublicationTime()
-   {
-      return context.getState().getStartPublicationTime();
-   }
-
-   public void setStartPublicationTime(long startPublicationTime)
-   {
-      context.setState(new NodeState.Builder(context.getState()).startPublicationTime(startPublicationTime).build());
-   }
-
-   public long getEndPublicationTime()
-   {
-      return context.getState().getEndPublicationTime();
-   }
-
-   public void setEndPublicationTime(long endPublicationTime)
-   {
-      context.setState(new NodeState.Builder(context.getState()).endPublicationTime(endPublicationTime).build());
-   }
-
-   public Visibility getVisibility()
-   {
-      return context.getState().getVisibility();
-   }
-
-   public void setVisibility(Visibility visibility)
-   {
-      context.setState(new NodeState.Builder(context.getState()).visibility(visibility).build());
-   }
-
-   public PageKey getPageRef()
-   {
-      return context.getState().getPageRef();
-   }
-
-   public void setPageRef(PageKey pageRef)
-   {
-      context.setState(new NodeState.Builder(context.getState()).pageRef(pageRef).build());
-   }
-
-   public String getResolvedLabel()
-   {
-      if (resolvedLabel == null)
-      {
-         String resolvedLabel = null;
-
-         //
-         String id = context.getId();
-
-         //
-         if (context.getState().getLabel() != null)
-         {
-            ResourceBundle bundle = owner.navigation.getBundle();
-            resolvedLabel = ExpressionUtil.getExpressionValue(bundle, context.getState().getLabel());
-         }
-         else if (id != null)
-         {
-            Locale userLocale = owner.navigation.portal.context.getUserLocale();
-            Locale portalLocale = owner.navigation.portal.getLocale();
-            DescriptionService descriptionService = owner.navigation.portal.service.getDescriptionService();
-            Described.State description = descriptionService.resolveDescription(id, portalLocale, userLocale);
-            if (description != null)
-            {
-               resolvedLabel = description.getName();
+    private StringBuilder buildURI() {
+        UserNode parent = context.getParentNode();
+        if (parent != null) {
+            StringBuilder builder = parent.buildURI();
+            if (builder.length() > 0) {
+                builder.append('/');
             }
-         }
+            return builder.append(context.getName());
+        } else {
+            return new StringBuilder();
+        }
+    }
 
-         //
-         if (resolvedLabel == null)
-         {
-            resolvedLabel = getName();
-         }
+    public String getLabel() {
+        return context.getState().getLabel();
+    }
 
-         //
-         this.resolvedLabel = resolvedLabel;
-      }
-      return resolvedLabel;
-   }
-   
-   public void setResolvedLabel(String label){
-      String id = context.getId();      
-      Locale userLocale = owner.navigation.portal.context.getUserLocale();      
-      DescriptionService descriptionService = owner.navigation.portal.service.getDescriptionService();
-      
-      Described.State description = new Described.State(label, null);
-            
-      descriptionService.setDescription(id, userLocale, description);
-      this.resolvedLabel = label;
-   }
+    public void setLabel(String label) {
+        context.setState(new NodeState.Builder(context.getState()).label(label).build());
 
-   public String getEncodedResolvedLabel()
-   {
-      if (encodedResolvedLabel == null)
-      {
-         encodedResolvedLabel = HTMLEntityEncoder.getInstance().encode(getResolvedLabel());
-      }
-      return encodedResolvedLabel;
-   }
+        //
+        this.resolvedLabel = null;
+        this.encodedResolvedLabel = null;
+    }
 
-   public UserNode getParent()
-   {
-      return context.getParentNode();
-   }
+    public String getIcon() {
+        return context.getState().getIcon();
+    }
 
-   /**
-    * Returns true if the children relationship determined.
-    *
-    * @return ture if node has children
-    */
-   public boolean hasChildrenRelationship()
-   {
-      return context.isExpanded();
-   }
+    public void setIcon(String icon) {
+        context.setState(new NodeState.Builder(context.getState()).icon(icon).build());
+    }
 
-   /**
-    * Returns the number of children.
-    *
-    * @return the number of children
-    */
-   public int getChildrenCount()
-   {
-      return context.getNodeCount();
-   }
+    public long getStartPublicationTime() {
+        return context.getState().getStartPublicationTime();
+    }
 
-   public int getChildrenSize()
-   {
-      return context.getNodeSize();
-   }
+    public void setStartPublicationTime(long startPublicationTime) {
+        context.setState(new NodeState.Builder(context.getState()).startPublicationTime(startPublicationTime).build());
+    }
 
-   public Collection<UserNode> getChildren()
-   {
-      return context.isExpanded() ? context.getNodes() : Collections.<UserNode>emptyList();
-   }
+    public long getEndPublicationTime() {
+        return context.getState().getEndPublicationTime();
+    }
 
-   /**
-    * Returns a child by its name or null if the child does not exist or the children relationship has not been loaded.
-    *
-    * @param childName the child name
-    * @return the corresponding user node
-    * @throws NullPointerException if the child name is null
-    */
-   public UserNode getChild(String childName) throws NullPointerException
-   {
-      if (context.isExpanded())
-      {
-         return context.getNode(childName);
-      }
-      else
-      {
-         return null;
-      }
-   }
+    public void setEndPublicationTime(long endPublicationTime) {
+        context.setState(new NodeState.Builder(context.getState()).endPublicationTime(endPublicationTime).build());
+    }
 
-   /**
-    * Returns a child by its index or null if the children relationship has not been loaded.
-    *
-    * @param childIndex the child index
-    * @return the corresponding user node
-    * @throws IndexOutOfBoundsException if the children relationship is loaded and the index is outside of its bounds
-    */
-   public UserNode getChild(int childIndex) throws IndexOutOfBoundsException
-   {
-      if (context.isExpanded())
-      {
-         return context.getNode(childIndex);
-      }
-      else
-      {
-         return null;
-      }
-   }
+    public Visibility getVisibility() {
+        return context.getState().getVisibility();
+    }
 
-   public void addChild(UserNode child)
-   {
-      context.add(null, child.context);
-      child.uri = null;
-   }
+    public void setVisibility(Visibility visibility) {
+        context.setState(new NodeState.Builder(context.getState()).visibility(visibility).build());
+    }
 
-   public void addChild(int index, UserNode child)
-   {
-      context.add(index, child.context);
-      child.uri = null;
-   }
+    public PageKey getPageRef() {
+        return context.getState().getPageRef();
+    }
 
-   public UserNode addChild(String childName)
-   {
-      return context.add(null, childName).getNode();
-   }
+    public void setPageRef(PageKey pageRef) {
+        context.setState(new NodeState.Builder(context.getState()).pageRef(pageRef).build());
+    }
 
-   public boolean removeChild(String childName)
-   {
-      return context.removeNode(childName);
-   }
+    public String getResolvedLabel() {
+        if (resolvedLabel == null) {
+            String resolvedLabel = null;
 
-   // Keep this internal for now
-   UserNode find(String nodeId)
-   {
-      return context.getDescendantNode(nodeId);
-   }
+            //
+            String id = context.getId();
 
-   public String toString()
-   {
-      return toString(1);
-   }
+            //
+            if (context.getState().getLabel() != null) {
+                ResourceBundle bundle = owner.navigation.getBundle();
+                resolvedLabel = ExpressionUtil.getExpressionValue(bundle, context.getState().getLabel());
+            } else if (id != null) {
+                Locale userLocale = owner.navigation.portal.context.getUserLocale();
+                Locale portalLocale = owner.navigation.portal.getLocale();
+                DescriptionService descriptionService = owner.navigation.portal.service.getDescriptionService();
+                Described.State description = descriptionService.resolveDescription(id, portalLocale, userLocale);
+                if (description != null) {
+                    resolvedLabel = description.getName();
+                }
+            }
 
-   public String toString(int depth)
-   {
-      return context.toString(depth, new StringBuilder("UserNode[")).append("]").toString();
-   }
+            //
+            if (resolvedLabel == null) {
+                resolvedLabel = getName();
+            }
+
+            //
+            this.resolvedLabel = resolvedLabel;
+        }
+        return resolvedLabel;
+    }
+
+    public void setResolvedLabel(String label) {
+        String id = context.getId();
+        Locale userLocale = owner.navigation.portal.context.getUserLocale();
+        DescriptionService descriptionService = owner.navigation.portal.service.getDescriptionService();
+
+        Described.State description = new Described.State(label, null);
+
+        descriptionService.setDescription(id, userLocale, description);
+        this.resolvedLabel = label;
+    }
+
+    public String getEncodedResolvedLabel() {
+        if (encodedResolvedLabel == null) {
+            encodedResolvedLabel = HTMLEntityEncoder.getInstance().encode(getResolvedLabel());
+        }
+        return encodedResolvedLabel;
+    }
+
+    public UserNode getParent() {
+        return context.getParentNode();
+    }
+
+    /**
+     * Returns true if the children relationship determined.
+     *
+     * @return ture if node has children
+     */
+    public boolean hasChildrenRelationship() {
+        return context.isExpanded();
+    }
+
+    /**
+     * Returns the number of children.
+     *
+     * @return the number of children
+     */
+    public int getChildrenCount() {
+        return context.getNodeCount();
+    }
+
+    public int getChildrenSize() {
+        return context.getNodeSize();
+    }
+
+    public Collection<UserNode> getChildren() {
+        return context.isExpanded() ? context.getNodes() : Collections.<UserNode> emptyList();
+    }
+
+    /**
+     * Returns a child by its name or null if the child does not exist or the children relationship has not been loaded.
+     *
+     * @param childName the child name
+     * @return the corresponding user node
+     * @throws NullPointerException if the child name is null
+     */
+    public UserNode getChild(String childName) throws NullPointerException {
+        if (context.isExpanded()) {
+            return context.getNode(childName);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns a child by its index or null if the children relationship has not been loaded.
+     *
+     * @param childIndex the child index
+     * @return the corresponding user node
+     * @throws IndexOutOfBoundsException if the children relationship is loaded and the index is outside of its bounds
+     */
+    public UserNode getChild(int childIndex) throws IndexOutOfBoundsException {
+        if (context.isExpanded()) {
+            return context.getNode(childIndex);
+        } else {
+            return null;
+        }
+    }
+
+    public void addChild(UserNode child) {
+        context.add(null, child.context);
+        child.uri = null;
+    }
+
+    public void addChild(int index, UserNode child) {
+        context.add(index, child.context);
+        child.uri = null;
+    }
+
+    public UserNode addChild(String childName) {
+        return context.add(null, childName).getNode();
+    }
+
+    public boolean removeChild(String childName) {
+        return context.removeNode(childName);
+    }
+
+    // Keep this internal for now
+    UserNode find(String nodeId) {
+        return context.getDescendantNode(nodeId);
+    }
+
+    public String toString() {
+        return toString(1);
+    }
+
+    public String toString(int depth) {
+        return context.toString(depth, new StringBuilder("UserNode[")).append("]").toString();
+    }
 }

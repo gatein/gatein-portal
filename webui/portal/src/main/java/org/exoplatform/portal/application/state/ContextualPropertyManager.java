@@ -27,15 +27,14 @@ import org.exoplatform.portal.webui.application.UIPortlet;
 /**
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
  */
-public interface ContextualPropertyManager
-{
+public interface ContextualPropertyManager {
 
-   /**
-    * Returns a map of qualified names and string values for contextual properties of the portlet.
-    *
-    * @param portletWindow the portlet
-    * @return the contextual properties
-    */
-   public Map<QName, String[]> getProperties(UIPortlet portletWindow);
+    /**
+     * Returns a map of qualified names and string values for contextual properties of the portlet.
+     *
+     * @param portletWindow the portlet
+     * @return the contextual properties
+     */
+    Map<QName, String[]> getProperties(UIPortlet portletWindow);
 
 }

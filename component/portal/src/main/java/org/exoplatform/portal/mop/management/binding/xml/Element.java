@@ -22,84 +22,42 @@
 
 package org.exoplatform.portal.mop.management.binding.xml;
 
-
 import org.staxnav.EnumElement;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public enum Element implements EnumElement<Element>
-{
-   // Navigation Elements
-   UNKNOWN(null),
-   NODE_NAVIGATION("node-navigation"),
-   PRIORITY("priority"),
-   PAGE_NODES("page-nodes"),
-   NODE("node"),
-   @Deprecated
-   URI("uri"),
-   PARENT_URI("parent-uri"),
-   LABEL("label"),
-   START_PUBLICATION_DATE("start-publication-date"),
-   END_PUBLICATION_DATE("end-publication-date"),
-   VISIBILITY("visibility"),
-   PAGE_REFERENCE("page-reference"),
+public enum Element implements EnumElement<Element> {
+    // Navigation Elements
+    UNKNOWN(null), NODE_NAVIGATION("node-navigation"), PRIORITY("priority"), PAGE_NODES("page-nodes"), NODE("node"), @Deprecated
+    URI("uri"), PARENT_URI("parent-uri"), LABEL("label"), START_PUBLICATION_DATE("start-publication-date"), END_PUBLICATION_DATE(
+            "end-publication-date"), VISIBILITY("visibility"), PAGE_REFERENCE("page-reference"),
 
-   // Page elements
-   PAGE_SET("page-set"),
-   PAGE("page"),
-   NAME("name"),
-   SHOW_MAX_WINDOW("show-max-window"),
+    // Page elements
+    PAGE_SET("page-set"), PAGE("page"), NAME("name"), SHOW_MAX_WINDOW("show-max-window"),
 
-   // Portal config elements
-   PORTAL_CONFIG("portal-config"),
-   PORTAL_NAME("portal-name"),
-   LOCALE("locale"),
-   SKIN("skin"),
-   PROPERTIES("properties"),
-   PROPERTIES_ENTRY("entry"),
-   PORTAL_LAYOUT("portal-layout"),
+    // Portal config elements
+    PORTAL_CONFIG("portal-config"), PORTAL_NAME("portal-name"), LOCALE("locale"), SKIN("skin"), PROPERTIES("properties"), PROPERTIES_ENTRY(
+            "entry"), PORTAL_LAYOUT("portal-layout"),
 
-   // Common elements
-   TITLE("title"),
-   DESCRIPTION("description"),
-   FACTORY_ID("factory-id"),
-   ACCESS_PERMISSIONS("access-permissions"),
-   EDIT_PERMISSION("edit-permission"),
-   PORTLET_APPLICATION("portlet-application"),
-   GADGET_APPLICATION("gadget-application"),
-   CONTAINER("container"),
-   PAGE_BODY("page-body"),
-   APPLICATION_REF("application-ref"),
-   PORTLET_REF("portlet-ref"),
-   PORTLET("portlet"),
-   GADGET_REF("gadget-ref"),
-   GADGET("gadget"),
-   WSRP("wsrp"),
-   THEME("theme"),
-   SHOW_INFO_BAR("show-info-bar"),
-   SHOW_APPLICATION_STATE("show-application-state"),
-   SHOW_APPLICATION_MODE("show-application-mode"),
-   ICON("icon"),
-   WIDTH("width"),
-   HEIGHT("height"),
-   PREFERENCES("preferences"),
-   PREFERENCE("preference"),
-   PREFERENCE_VALUE("value"),
-   PREFERENCE_READONLY("read-only")
-   ;
+    // Common elements
+    TITLE("title"), DESCRIPTION("description"), FACTORY_ID("factory-id"), ACCESS_PERMISSIONS("access-permissions"), EDIT_PERMISSION(
+            "edit-permission"), PORTLET_APPLICATION("portlet-application"), GADGET_APPLICATION("gadget-application"), CONTAINER(
+            "container"), PAGE_BODY("page-body"), APPLICATION_REF("application-ref"), PORTLET_REF("portlet-ref"), PORTLET(
+            "portlet"), GADGET_REF("gadget-ref"), GADGET("gadget"), WSRP("wsrp"), THEME("theme"), SHOW_INFO_BAR("show-info-bar"), SHOW_APPLICATION_STATE(
+            "show-application-state"), SHOW_APPLICATION_MODE("show-application-mode"), ICON("icon"), WIDTH("width"), HEIGHT(
+            "height"), PREFERENCES("preferences"), PREFERENCE("preference"), PREFERENCE_VALUE("value"), PREFERENCE_READONLY(
+            "read-only");
 
-   private final String name;
+    private final String name;
 
-   Element(String name)
-   {
-      this.name = name;
-   }
+    Element(String name) {
+        this.name = name;
+    }
 
-   @Override
-   public String getLocalName()
-   {
-      return name;
-   }
+    @Override
+    public String getLocalName() {
+        return name;
+    }
 }

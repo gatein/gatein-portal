@@ -18,42 +18,34 @@
  */
 package org.exoplatform.portal.resource.compressor.impl;
 
+import java.io.Reader;
+import java.io.Writer;
+
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.resource.compressor.BaseResourceCompressorPlugin;
 import org.exoplatform.portal.resource.compressor.ResourceCompressorException;
 import org.exoplatform.portal.resource.compressor.ResourceType;
 import org.exoplatform.web.application.javascript.JSMin;
 
-import java.io.Reader;
-import java.io.Writer;
-
 /**
- * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
- * Aug 19, 2010
+ * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a> Aug 19, 2010
  */
 
-public class JSMinCompressorPlugin extends BaseResourceCompressorPlugin
-{
+public class JSMinCompressorPlugin extends BaseResourceCompressorPlugin {
 
-   public JSMinCompressorPlugin(InitParams params) throws Exception
-   {
-      super(params);
-   }
+    public JSMinCompressorPlugin(InitParams params) throws Exception {
+        super(params);
+    }
 
-   public ResourceType getResourceType()
-   {
-      return ResourceType.JAVASCRIPT;
-   }
+    public ResourceType getResourceType() {
+        return ResourceType.JAVASCRIPT;
+    }
 
-   public void compress(Reader input, Writer output) throws ResourceCompressorException
-   {
-      try
-      {
-         new JSMin(input, output).jsmin();
-      }
-      catch (Exception ex)
-      {
-         throw new ResourceCompressorException(ex);
-      }
-   }
+    public void compress(Reader input, Writer output) throws ResourceCompressorException {
+        try {
+            new JSMin(input, output).jsmin();
+        } catch (Exception ex) {
+            throw new ResourceCompressorException(ex);
+        }
+    }
 }

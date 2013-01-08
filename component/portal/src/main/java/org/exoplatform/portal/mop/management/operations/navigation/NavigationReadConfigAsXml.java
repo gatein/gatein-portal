@@ -36,24 +36,25 @@ import org.gatein.mop.api.workspace.Site;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class NavigationReadConfigAsXml extends AbstractNavigationOperationHandler
-{
-   @Override
-   protected void execute(OperationContext operationContext, ResultHandler resultHandler, Navigation defaultNavigation)
-   {
-      String navUri = operationContext.getAddress().resolvePathTemplate("nav-uri");
+public class NavigationReadConfigAsXml extends AbstractNavigationOperationHandler {
+    @Override
+    protected void execute(OperationContext operationContext, ResultHandler resultHandler, Navigation defaultNavigation) {
+        String navUri = operationContext.getAddress().resolvePathTemplate("nav-uri");
 
-      Site site = defaultNavigation.getSite();
-      SiteKey siteKey = getSiteKey(site);
+        Site site = defaultNavigation.getSite();
+        SiteKey siteKey = getSiteKey(site);
 
-      //TODO: If there's any benefit in creating our own node model to use with navigation service, lets do it
+        // TODO: If there's any benefit in creating our own node model to use with navigation service, lets do it
 
-      DescriptionService descriptionService = operationContext.getRuntimeContext().getRuntimeComponent(DescriptionService.class);
-      NavigationService navigationService = operationContext.getRuntimeContext().getRuntimeComponent(NavigationService.class);
+        DescriptionService descriptionService = operationContext.getRuntimeContext().getRuntimeComponent(
+                DescriptionService.class);
+        NavigationService navigationService = operationContext.getRuntimeContext().getRuntimeComponent(NavigationService.class);
 
-      PageNavigation pageNavigation = NavigationUtils.loadPageNavigation(new NavigationKey(siteKey, navUri), navigationService, descriptionService);
-      if (pageNavigation == null) throw new ResourceNotFoundException("Navigation node not found for navigation uri '" + navUri +"'");
+        PageNavigation pageNavigation = NavigationUtils.loadPageNavigation(new NavigationKey(siteKey, navUri),
+                navigationService, descriptionService);
+        if (pageNavigation == null)
+            throw new ResourceNotFoundException("Navigation node not found for navigation uri '" + navUri + "'");
 
-      resultHandler.completed(pageNavigation);
-   }
+        resultHandler.completed(pageNavigation);
+    }
 }

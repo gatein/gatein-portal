@@ -22,22 +22,19 @@ package org.exoplatform.portal.pom.data;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class BodyData extends ComponentData
-{
+public class BodyData extends ComponentData {
 
-   /** . */
-   private final BodyType type;
+    /** . */
+    private final BodyType type;
 
-   public BodyData(String storageId, BodyType type)
-   {
-      super(storageId, null);
+    public BodyData(String storageId, BodyType type) {
+        super(storageId, null);
 
-      //
-      this.type = type;
-   }
+        //
+        this.type = type;
+    }
 
-   public BodyType getType()
-   {
-      return type;
-   }
+    public BodyType getType() {
+        return type;
+    }
 }

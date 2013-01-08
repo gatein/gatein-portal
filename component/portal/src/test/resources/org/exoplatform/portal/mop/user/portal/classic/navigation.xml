@@ -19,25 +19,25 @@
   -->
 
 <node-navigation
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
-  xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gatein_objects_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_objects_1_3">
   <priority>1</priority>
 
   <page-nodes>
-	  <node>
-	    <uri>home</uri>
-	    <name>home</name>
-	    <label>#{portal.classic.home}</label>
-	    <page-reference>
-	       portal::classic::homepage 
-	    </page-reference>	    
-	  </node>    
-	  <node>
-	    <uri>webexplorer</uri>
-	    <name>webexplorer</name>
-	    <label>#{portal.classic.webexplorer}</label>
-	    <page-reference>portal::classic::webexplorer</page-reference>	    
-	  </node>
+    <node>
+      <uri>home</uri>
+      <name>home</name>
+      <label>#{portal.classic.home}</label>
+      <page-reference>
+        portal::classic::homepage
+      </page-reference>
+    </node>
+    <node>
+      <uri>webexplorer</uri>
+      <name>webexplorer</name>
+      <label>#{portal.classic.webexplorer}</label>
+      <page-reference>portal::classic::webexplorer</page-reference>
+    </node>
   </page-nodes>
 </node-navigation>

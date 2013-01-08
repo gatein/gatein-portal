@@ -22,10 +22,8 @@ package org.exoplatform.groovyscript;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class GroovyTemplateEngine
-{
-   public GroovyTemplate createTemplate(String id, String name, String text) throws TemplateCompilationException
-   {
-      return new GroovyTemplate(id, name, text);
-   }
+public class GroovyTemplateEngine {
+    public GroovyTemplate createTemplate(String id, String name, String text) throws TemplateCompilationException {
+        return new GroovyTemplate(id, name, text);
+    }
 }

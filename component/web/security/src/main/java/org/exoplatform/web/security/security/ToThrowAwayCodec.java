@@ -19,23 +19,19 @@
 package org.exoplatform.web.security.security;
 
 /**
- * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a>
- * Nov 19, 2010
+ * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a> Nov 19, 2010
  */
 
-public class ToThrowAwayCodec extends AbstractCodec
-{
+public class ToThrowAwayCodec extends AbstractCodec {
 
-   @Override
-   public String decode(String encodedInput)
-   {
-      return encodedInput;
-   }
+    @Override
+    public String decode(String encodedInput) {
+        return encodedInput;
+    }
 
-   @Override
-   public String encode(String plainInput)
-   {
-      return plainInput;
-   }
+    @Override
+    public String encode(String plainInput) {
+        return plainInput;
+    }
 
 }

@@ -19,6 +19,8 @@
 
 package org.exoplatform.web.controller.router;
 
+import java.io.IOException;
+
 import org.exoplatform.component.test.BaseGateInTest;
 import org.exoplatform.web.controller.regexp.RENode;
 import org.exoplatform.web.controller.regexp.REParser;
@@ -26,55 +28,48 @@ import org.exoplatform.web.controller.regexp.RERenderer;
 import org.exoplatform.web.controller.regexp.REVisitor;
 import org.exoplatform.web.controller.regexp.SyntaxException;
 
-import java.io.IOException;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestGroupTransformation extends BaseGateInTest
-{
+public class TestGroupTransformation extends BaseGateInTest {
 
-   public void testCapturing() throws SyntaxException, IOException
-   {
-      assertCapturing("a", "(a)");
-      assertCapturing("(a)", "(a)");
-      assertCapturing("a(b)c", "a(b)c");
-      assertCapturing("(a)?", "((?:a)?)");
-      assertCapturing("a|b", "(a)|(b)");
-      assertCapturing("(a)|b", "(a)|(b)");
-      assertCapturing("(a|b)", "(a|b)");
-      assertCapturing("(a)(b)", "((?:a)(?:b))");
-      assertCapturing("(a)|", "(a)|()");
-      assertCapturing("|(a)", "()|(a)");
-      assertCapturing("|", "()|()");
-   }
-   
-   public void testNonCapturing() throws SyntaxException, IOException
-   {
-      assertNonCapturing("a", "(a)");
-      assertNonCapturing("(a)", "((?:a))");
-      assertNonCapturing("a(b)c", "(a(?:b)c)");
-      assertNonCapturing("(a)|b", "((?:a)|b)");
-   }
+    public void testCapturing() throws SyntaxException, IOException {
+        assertCapturing("a", "(a)");
+        assertCapturing("(a)", "(a)");
+        assertCapturing("a(b)c", "a(b)c");
+        assertCapturing("(a)?", "((?:a)?)");
+        assertCapturing("a|b", "(a)|(b)");
+        assertCapturing("(a)|b", "(a)|(b)");
+        assertCapturing("(a|b)", "(a|b)");
+        assertCapturing("(a)(b)", "((?:a)(?:b))");
+        assertCapturing("(a)|", "(a)|()");
+        assertCapturing("|(a)", "()|(a)");
+        assertCapturing("|", "()|()");
+    }
 
-   private void assertNonCapturing(String test, String expected) throws SyntaxException, IOException
-   {
-      assertTransform(test, expected, false);
-   }
+    public void testNonCapturing() throws SyntaxException, IOException {
+        assertNonCapturing("a", "(a)");
+        assertNonCapturing("(a)", "((?:a))");
+        assertNonCapturing("a(b)c", "(a(?:b)c)");
+        assertNonCapturing("(a)|b", "((?:a)|b)");
+    }
 
-   private void assertCapturing(String test, String expected) throws SyntaxException, IOException
-   {
-      assertTransform(test, expected, true);
-   }
+    private void assertNonCapturing(String test, String expected) throws SyntaxException, IOException {
+        assertTransform(test, expected, false);
+    }
 
-   private void assertTransform(String test, String expected, boolean capturing) throws SyntaxException, IOException
-   {
-      RENode node = new REParser(test).parse();
-      REVisitor<RuntimeException> transformer = capturing ? new CaptureGroupTransformation() : new NonCaptureGroupTransformation();
-      node.accept(transformer);
-      StringBuilder sb = new StringBuilder();
-      RERenderer renderer = new RERenderer(sb);
-      node.accept(renderer);
-      assertEquals(expected, sb.toString());
-   }
+    private void assertCapturing(String test, String expected) throws SyntaxException, IOException {
+        assertTransform(test, expected, true);
+    }
+
+    private void assertTransform(String test, String expected, boolean capturing) throws SyntaxException, IOException {
+        RENode node = new REParser(test).parse();
+        REVisitor<RuntimeException> transformer = capturing ? new CaptureGroupTransformation()
+                : new NonCaptureGroupTransformation();
+        node.accept(transformer);
+        StringBuilder sb = new StringBuilder();
+        RERenderer renderer = new RERenderer(sb);
+        node.accept(renderer);
+        assertEquals(expected, sb.toString());
+    }
 }

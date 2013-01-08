@@ -28,19 +28,19 @@
   <page>
     <name>sitemap</name>
     <title>Site Map</title>
-	  <access-permissions>*:/platform/guests</access-permissions>
-	  <edit-permission>*:/platform/administrators</edit-permission>
-	  <portlet-application>
+    <access-permissions>*:/platform/guests</access-permissions>
+    <edit-permission>*:/platform/administrators</edit-permission>
+    <portlet-application>
       <portlet>
         <application-ref>web</application-ref>
         <portlet-ref>SiteMapPortlet</portlet-ref>
       </portlet>
       <title>SiteMap</title>
       <access-permissions>*:/platform/guests</access-permissions>
-      <show-info-bar>false</show-info-bar>      
+      <show-info-bar>false</show-info-bar>
     </portlet-application>
   </page>
-  
+
   <page>
     <name>link</name>
     <title>Link</title>
@@ -65,6 +65,6 @@
       <show-application-mode>true</show-application-mode>
     </portlet-application>
   </page>
-      
+
 </page-set>
 

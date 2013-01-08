@@ -27,19 +27,19 @@ package org.gatein.common.transaction;
  * Listener for perform some actions at the specified point of JTA transaction lifecycle.<br />
  * Transaction lifecycle needs to be managed through {@link JTAUserTransactionLifecycleService} to have listeners executed.<br />
  *
- * For now, we have shared instance of one registered listener for all transactions, so listener implementations need to be thread-safe
+ * For now, we have shared instance of one registered listener for all transactions, so listener implementations need to be
+ * thread-safe
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface JTAUserTransactionLifecycleListener
-{
-   /**
-    * Callback method to be executed before start of JTA transaction
-    */
-   public void beforeBegin();
+public interface JTAUserTransactionLifecycleListener {
+    /**
+     * Callback method to be executed before start of JTA transaction
+     */
+    void beforeBegin();
 
-   /**
-    * Callback method to be executed after start of JTA transaction
-    */
-   public void afterBegin();
+    /**
+     * Callback method to be executed after start of JTA transaction
+     */
+    void afterBegin();
 }

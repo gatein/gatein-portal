@@ -20,33 +20,32 @@
 package org.exoplatform.commons.serialization.api;
 
 /**
- * A type converter that performs a bidirectional conversion between an external
- * type and an internal type. The converter only assure conversion of non null values.
+ * A type converter that performs a bidirectional conversion between an external type and an internal type. The converter only
+ * assure conversion of non null values.
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  * @param <E> the type parameter of the external type
  * @param <I> the type parameter of the internal type
  */
-public abstract class TypeConverter<E, I>
-{
+public abstract class TypeConverter<E, I> {
 
-   /**
-    * Converts an external value to an internal value.
-    *
-    * @param external the external value
-    * @return the the internal value
-    * @throws Exception any conversion exception
-    */
-   public abstract I write(E external) throws Exception;
+    /**
+     * Converts an external value to an internal value.
+     *
+     * @param external the external value
+     * @return the the internal value
+     * @throws Exception any conversion exception
+     */
+    public abstract I write(E external) throws Exception;
 
-   /**
-    * Converts an internal value to an external value.
-    *
-    * @param internal the internal value
-    * @return the external value
-    * @throws Exception any conversion exception
-    */
-   public abstract E read(I internal) throws Exception;
+    /**
+     * Converts an internal value to an external value.
+     *
+     * @param internal the internal value
+     * @return the external value
+     * @throws Exception any conversion exception
+     */
+    public abstract E read(I internal) throws Exception;
 
 }

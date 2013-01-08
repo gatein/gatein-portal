@@ -22,39 +22,34 @@
 
 package org.gatein.integration.jboss.as7.portal.resources;
 
-import org.jboss.as.controller.PathElement;
-
 import java.util.Collections;
 import java.util.Set;
+
+import org.jboss.as.controller.PathElement;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public class ApplicationRuntimeResource extends AbstractPortalResource
-{
-   private final String applicationName;
+public class ApplicationRuntimeResource extends AbstractPortalResource {
+    private final String applicationName;
 
-   protected ApplicationRuntimeResource(PathElement pathElement, String portalContainerName)
-   {
-      super(pathElement, portalContainerName);
-      this.applicationName = pathElement.getValue();
-   }
+    protected ApplicationRuntimeResource(PathElement pathElement, String portalContainerName) {
+        super(pathElement, portalContainerName);
+        this.applicationName = pathElement.getValue();
+    }
 
-   @Override
-   protected Set<String> getChildrenNames()
-   {
-      return Collections.emptySet();
-   }
+    @Override
+    protected Set<String> getChildrenNames() {
+        return Collections.emptySet();
+    }
 
-   @Override
-   protected ResourceEntry getChildEntry(String name)
-   {
-      return null;
-   }
+    @Override
+    protected ResourceEntry getChildEntry(String name) {
+        return null;
+    }
 
-   @Override
-   public Set<String> getChildTypes()
-   {
-      return Collections.emptySet();
-   }
+    @Override
+    public Set<String> getChildTypes() {
+        return Collections.emptySet();
+    }
 }

@@ -21,12 +21,12 @@
 -->
 
 <bundle>
-	<my>
-		<!-- Key 1 -->
-		<key1>My Default Value In English</key1>
-		<!-- Key 2 -->
-		<key2>My Default Value In English</key2>
-		<!-- Key 3 -->
-		<key3>My Default Value In English</key3>
-	</my>
+  <my>
+    <!-- Key 1 -->
+    <key1>My Default Value In English</key1>
+    <!-- Key 2 -->
+    <key2>My Default Value In English</key2>
+    <!-- Key 3 -->
+    <key3>My Default Value In English</key3>
+  </my>
 </bundle>

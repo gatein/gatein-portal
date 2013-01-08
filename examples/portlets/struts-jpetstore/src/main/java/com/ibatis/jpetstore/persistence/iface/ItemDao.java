@@ -6,12 +6,12 @@ import com.ibatis.jpetstore.domain.Order;
 
 public interface ItemDao {
 
-  void updateAllQuantitiesFromOrder(Order order);
+    void updateAllQuantitiesFromOrder(Order order);
 
-  boolean isItemInStock(String itemId);
+    boolean isItemInStock(String itemId);
 
-  PaginatedList getItemListByProduct(String productId);
+    PaginatedList getItemListByProduct(String productId);
 
-  Item getItem(String itemId);
+    Item getItem(String itemId);
 
 }

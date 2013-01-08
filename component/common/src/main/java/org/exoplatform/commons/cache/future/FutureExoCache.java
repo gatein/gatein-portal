@@ -19,47 +19,41 @@
 
 package org.exoplatform.commons.cache.future;
 
-import org.exoplatform.services.cache.ExoCache;
-
 import java.io.Serializable;
+
+import org.exoplatform.services.cache.ExoCache;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class FutureExoCache<K extends Serializable, V, C> extends FutureCache<K, V, C>
-{
+public class FutureExoCache<K extends Serializable, V, C> extends FutureCache<K, V, C> {
 
-   /** . */
-   private final ExoCache<K, V> cache;
+    /** . */
+    private final ExoCache<K, V> cache;
 
-   public FutureExoCache(Loader<K, V, C> loader, ExoCache<K, V> cache)
-   {
-      super(loader);
+    public FutureExoCache(Loader<K, V, C> loader, ExoCache<K, V> cache) {
+        super(loader);
 
-      //
-      this.cache = cache;
-   }
+        //
+        this.cache = cache;
+    }
 
-   public void clear()
-   {
-      cache.clearCache();
-   }
+    public void clear() {
+        cache.clearCache();
+    }
 
-   public void remove(K key)
-   {
-      cache.remove(key);
-   }
+    public void remove(K key) {
+        cache.remove(key);
+    }
 
-   @Override
-   protected V get(K key)
-   {
-      return cache.get(key);
-   }
+    @Override
+    protected V get(K key) {
+        return cache.get(key);
+    }
 
-   @Override
-   protected void put(K key, V entry)
-   {
-      cache.put(key, entry);
-   }
+    @Override
+    protected void put(K key, V entry) {
+        cache.put(key, entry);
+    }
 }

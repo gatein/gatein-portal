@@ -25,11 +25,11 @@
 <producer-configuration xmlns="http://www.gatein.org/xml/ns/gatein_wsrp_producer_1_0"
                         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                         xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_wsrp_producer_1_0 http://www.gatein.org/xml/ns/gatein_wsrp_producer_1_0.xsd">
-   <registration-configuration fullServiceDescriptionRequiresRegistration="true">
-      <registration-property-validator>org.gatein.registration.policies.DefaultRegistrationPropertyValidator
-      </registration-property-validator>
-   </registration-configuration>
+  <registration-configuration fullServiceDescriptionRequiresRegistration="true">
+    <registration-property-validator>org.gatein.registration.policies.DefaultRegistrationPropertyValidator
+    </registration-property-validator>
+  </registration-configuration>
 </producer-configuration>
 
-   <!-- Configuration without registration -->
-   <!--<producer-configuration/>-->
+    <!-- Configuration without registration -->
+    <!--<producer-configuration/>-->

@@ -22,52 +22,47 @@ package org.exoplatform.web.controller.router;
 import junit.framework.TestCase;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
-public class RegexTestCase extends TestCase
-{
+public class RegexTestCase extends TestCase {
 
-   public void testLiteral()
-   {
-      Regex regex = JRegexFactory.INSTANCE.compile("abc");
-      Regex.Match[] matches = regex.matcher().find("abc");
-      assertEquals(1, matches.length);
-      assertEquals(0, matches[0].getStart());
-      assertEquals(3, matches[0].getEnd());
-      assertEquals("abc", matches[0].getValue());
-   }
+    public void testLiteral() {
+        Regex regex = JRegexFactory.INSTANCE.compile("abc");
+        Regex.Match[] matches = regex.matcher().find("abc");
+        assertEquals(1, matches.length);
+        assertEquals(0, matches[0].getStart());
+        assertEquals(3, matches[0].getEnd());
+        assertEquals("abc", matches[0].getValue());
+    }
 
-   public void testSimpleGroup1()
-   {
-      Regex regex = JRegexFactory.INSTANCE.compile("(abc)");
-      Regex.Match[] matches = regex.matcher().find("abc");
-      assertEquals(2, matches.length);
-      assertEquals(0, matches[0].getStart());
-      assertEquals(3, matches[0].getEnd());
-      assertEquals("abc", matches[0].getValue());
-      assertEquals(0, matches[1].getStart());
-      assertEquals(3, matches[1].getEnd());
-      assertEquals("abc", matches[1].getValue());
-   }
+    public void testSimpleGroup1() {
+        Regex regex = JRegexFactory.INSTANCE.compile("(abc)");
+        Regex.Match[] matches = regex.matcher().find("abc");
+        assertEquals(2, matches.length);
+        assertEquals(0, matches[0].getStart());
+        assertEquals(3, matches[0].getEnd());
+        assertEquals("abc", matches[0].getValue());
+        assertEquals(0, matches[1].getStart());
+        assertEquals(3, matches[1].getEnd());
+        assertEquals("abc", matches[1].getValue());
+    }
 
-   public void testSimpleGroup2()
-   {
-      Regex regex = JRegexFactory.INSTANCE.compile("a(b)c");
-      Regex.Match[] matches = regex.matcher().find("abc");
-      assertEquals(2, matches.length);
-      assertEquals(0, matches[0].getStart());
-      assertEquals(3, matches[0].getEnd());
-      assertEquals("abc", matches[0].getValue());
-      assertEquals(1, matches[1].getStart());
-      assertEquals(2, matches[1].getEnd());
-      assertEquals("b", matches[1].getValue());
-   }
+    public void testSimpleGroup2() {
+        Regex regex = JRegexFactory.INSTANCE.compile("a(b)c");
+        Regex.Match[] matches = regex.matcher().find("abc");
+        assertEquals(2, matches.length);
+        assertEquals(0, matches[0].getStart());
+        assertEquals(3, matches[0].getEnd());
+        assertEquals("abc", matches[0].getValue());
+        assertEquals(1, matches[1].getStart());
+        assertEquals(2, matches[1].getEnd());
+        assertEquals("b", matches[1].getValue());
+    }
 
-   public void testNonCapturingGroup()
-   {
-      Regex regex = JRegexFactory.INSTANCE.compile("a(?:b)c");
-      Regex.Match[] matches = regex.matcher().find("abc");
-      assertEquals(1, matches.length);
-      assertEquals(0, matches[0].getStart());
-      assertEquals(3, matches[0].getEnd());
-      assertEquals("abc", matches[0].getValue());
-   }
+    public void testNonCapturingGroup() {
+        Regex regex = JRegexFactory.INSTANCE.compile("a(?:b)c");
+        Regex.Match[] matches = regex.matcher().find("abc");
+        assertEquals(1, matches.length);
+        assertEquals(0, matches[0].getStart());
+        assertEquals(3, matches[0].getEnd());
+        assertEquals("abc", matches[0].getValue());
+    }
 }

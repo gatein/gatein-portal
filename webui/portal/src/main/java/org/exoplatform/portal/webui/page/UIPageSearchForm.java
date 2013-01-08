@@ -18,6 +18,8 @@
  */
 package org.exoplatform.portal.webui.page;
 
+import java.util.List;
+
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.config.annotation.EventConfig;
@@ -31,50 +33,42 @@ import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.ExpressionValidator;
 
-import java.util.List;
-
 /**
  * @author <a href="kienna@exoplatform.com">Kien Nguyen</a>
  * @version $Revision$
  */
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/portal/webui/page/UIPageSearchForm.gtmpl", 
-                  events = @EventConfig(listeners = UIPageSearchForm.QuickSearchActionListener.class))
+@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/portal/webui/page/UIPageSearchForm.gtmpl", events = @EventConfig(listeners = UIPageSearchForm.QuickSearchActionListener.class))
 @Serialized
-public class UIPageSearchForm extends UIForm
-{
-   /**
-    * The name of the quick search set
-    */
-   final static public String QUICK_SEARCH_SET = "QuickSearchSet";
+public class UIPageSearchForm extends UIForm {
+    /**
+     * The name of the quick search set
+     */
+    public static final String QUICK_SEARCH_SET = "QuickSearchSet";
 
-   public UIPageSearchForm() throws Exception
-   {
-      UIFormInputSet uiQuickSearchSet = new UIFormInputSet(QUICK_SEARCH_SET);
-      uiQuickSearchSet.addUIFormInput(new UIFormStringInput("pageTitle", "pageTitle", null));
-      uiQuickSearchSet.addUIFormInput(new UIFormStringInput("siteName", "siteName", null).addValidator(ExpressionValidator.class, "[^\\'\"]*", "UISearchForm.msg.empty"));
-      uiQuickSearchSet.addUIFormInput(new UIFormSelectBox("searchOption", null, null));
-      addChild(uiQuickSearchSet);
-   }
+    public UIPageSearchForm() throws Exception {
+        UIFormInputSet uiQuickSearchSet = new UIFormInputSet(QUICK_SEARCH_SET);
+        uiQuickSearchSet.addUIFormInput(new UIFormStringInput("pageTitle", "pageTitle", null));
+        uiQuickSearchSet.addUIFormInput(new UIFormStringInput("siteName", "siteName", null).addValidator(
+                ExpressionValidator.class, "[^\\'\"]*", "UISearchForm.msg.empty"));
+        uiQuickSearchSet.addUIFormInput(new UIFormSelectBox("searchOption", null, null));
+        addChild(uiQuickSearchSet);
+    }
 
-   public void setOptions(List<SelectItemOption<String>> options)
-   {
-      UIFormSelectBox uiSelect = (UIFormSelectBox)getQuickSearchInputSet().getChild(2);
-      uiSelect.setOptions(options);
-   }
+    public void setOptions(List<SelectItemOption<String>> options) {
+        UIFormSelectBox uiSelect = (UIFormSelectBox) getQuickSearchInputSet().getChild(2);
+        uiSelect.setOptions(options);
+    }
 
-   public UIFormInputSet getQuickSearchInputSet()
-   {
-      return (UIFormInputSet)getChild(0);
-   }
+    public UIFormInputSet getQuickSearchInputSet() {
+        return (UIFormInputSet) getChild(0);
+    }
 
-   static public class QuickSearchActionListener extends EventListener<UIPageSearchForm>
-   {
-      public void execute(Event<UIPageSearchForm> event) throws Exception
-      {
-         UIPageSearchForm uiForm = event.getSource();
-         UIPageBrowser uiSearch = uiForm.getParent();
-         uiSearch.quickSearch(uiForm.getQuickSearchInputSet());
-         event.getRequestContext().addUIComponentToUpdateByAjax(uiSearch);
-      }
-   }
+    public static class QuickSearchActionListener extends EventListener<UIPageSearchForm> {
+        public void execute(Event<UIPageSearchForm> event) throws Exception {
+            UIPageSearchForm uiForm = event.getSource();
+            UIPageBrowser uiSearch = uiForm.getParent();
+            uiSearch.quickSearch(uiForm.getQuickSearchInputSet());
+            event.getRequestContext().addUIComponentToUpdateByAjax(uiSearch);
+        }
+    }
 }

@@ -19,12 +19,12 @@
   -->
 
 <xs:schema
-   targetNamespace="http://www.gatein.org/xml/ns/gadgets_1_0"
-   xmlns="http://www.gatein.org/xml/ns/gadgets_1_0"
-   xmlns:xs="http://www.w3.org/2001/XMLSchema"
-   elementFormDefault="qualified"
-   attributeFormDefault="unqualified"
-   version="1.0">
+    targetNamespace="http://www.gatein.org/xml/ns/gadgets_1_0"
+    xmlns="http://www.gatein.org/xml/ns/gadgets_1_0"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified"
+    version="1.0">
 
   <xs:element name="gadgets" type="gadgets"/>
 

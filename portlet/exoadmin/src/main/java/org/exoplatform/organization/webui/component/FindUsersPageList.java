@@ -33,18 +33,15 @@ import org.exoplatform.services.organization.User;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class FindUsersPageList extends PageListAccess<User, Query>
-{
-   public FindUsersPageList(Query state, int pageSize)
-   {
-      super(state, pageSize);
-   }
+public class FindUsersPageList extends PageListAccess<User, Query> {
+    public FindUsersPageList(Query state, int pageSize) {
+        super(state, pageSize);
+    }
 
-   protected ListAccess<User> create(Query state) throws Exception
-   {
-      ExoContainer container = PortalContainer.getInstance();
-      OrganizationService service = (OrganizationService)container.getComponentInstance(OrganizationService.class);
-      PageList<User> pageList = service.getUserHandler().findUsers(state);
-      return Safe.unwrap(pageList);
-   }
+    protected ListAccess<User> create(Query state) throws Exception {
+        ExoContainer container = PortalContainer.getInstance();
+        OrganizationService service = (OrganizationService) container.getComponentInstance(OrganizationService.class);
+        PageList<User> pageList = service.getUserHandler().findUsers(state);
+        return Safe.unwrap(pageList);
+    }
 }

@@ -21,126 +21,103 @@ package org.exoplatform.portal.pom.data;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class PortalData extends ModelData
-{
+public class PortalData extends ModelData {
 
-   /** . */
-   private final PortalKey key;
+    /** . */
+    private final PortalKey key;
 
-   /** . */
-   private final String locale;
+    /** . */
+    private final String locale;
 
-   /** . */
-   private final List<String> accessPermissions;
+    /** . */
+    private final List<String> accessPermissions;
 
-   /** . */
-   private final String editPermission;
+    /** . */
+    private final String editPermission;
 
-   /** . */
-   private final Map<String, String> properties;
+    /** . */
+    private final Map<String, String> properties;
 
-   /** . */
-   private final String skin;
+    /** . */
+    private final String skin;
 
-   /** . */
-   private final ContainerData portalLayout;
-   
-   private final String label;
-   
-   private final String description;
-   
-   private final List<RedirectData> redirects;
-   
-   public PortalData(
-      String storageId,
-      String name,
-      String type,
-      String locale,
-      String label,
-      String description,
-      List<String> accessPermissions,
-      String editPermission,
-      Map<String, String> properties,
-      String skin,
-      ContainerData portalLayout,
-      List<RedirectData> redirects)
-   {
-      super(storageId, null);
+    /** . */
+    private final ContainerData portalLayout;
 
-      //
-      this.key = new PortalKey(type, name);
-      this.locale = locale;
-      this.label = label;
-      this.description = description;
-      this.accessPermissions = accessPermissions;
-      this.editPermission = editPermission;
-      this.properties = properties;
-      this.skin = skin;
-      this.portalLayout = portalLayout;
-      this.redirects = redirects;
-   }
+    private final String label;
 
-   public PortalKey getKey()
-   {
-      return key;
-   }
+    private final String description;
 
-   public String getName()
-   {
-      return key.getId();
-   }
+    private final List<RedirectData> redirects;
 
-   public String getType()
-   {
-      return key.getType();
-   }
+    public PortalData(String storageId, String name, String type, String locale, String label, String description,
+            List<String> accessPermissions, String editPermission, Map<String, String> properties, String skin,
+            ContainerData portalLayout, List<RedirectData> redirects) {
+        super(storageId, null);
 
-   public String getLocale()
-   {
-      return locale;
-   }
+        //
+        this.key = new PortalKey(type, name);
+        this.locale = locale;
+        this.label = label;
+        this.description = description;
+        this.accessPermissions = accessPermissions;
+        this.editPermission = editPermission;
+        this.properties = properties;
+        this.skin = skin;
+        this.portalLayout = portalLayout;
+        this.redirects = redirects;
+    }
 
-   public List<String> getAccessPermissions()
-   {
-      return accessPermissions;
-   }
+    public PortalKey getKey() {
+        return key;
+    }
 
-   public String getEditPermission()
-   {
-      return editPermission;
-   }
+    public String getName() {
+        return key.getId();
+    }
 
-   public Map<String, String> getProperties()
-   {
-      return properties;
-   }
+    public String getType() {
+        return key.getType();
+    }
 
-   public String getSkin()
-   {
-      return skin;
-   }
+    public String getLocale() {
+        return locale;
+    }
 
-   public ContainerData getPortalLayout()
-   {
-      return portalLayout;
-   }
+    public List<String> getAccessPermissions() {
+        return accessPermissions;
+    }
 
-   public List<RedirectData> getRedirects()
-   {
-      return redirects;
-   }
-   
-   public String getDescription()
-   {
-      return description;
-   }
+    public String getEditPermission() {
+        return editPermission;
+    }
 
-   public String getLabel()
-   {
-      return label;
-   }
+    public Map<String, String> getProperties() {
+        return properties;
+    }
+
+    public String getSkin() {
+        return skin;
+    }
+
+    public ContainerData getPortalLayout() {
+        return portalLayout;
+    }
+
+    public List<RedirectData> getRedirects() {
+        return redirects;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getLabel() {
+        return label;
+    }
 }

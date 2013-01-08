@@ -21,143 +21,143 @@
 -->
 
 <gatein-resources
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   	xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
-   	xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
-   
-   <portlet-skin>
-      <application-name>todomvc</application-name>
-      <portlet-name>TodoPortlet</portlet-name>
-      <skin-name>Default</skin-name>
-      <css-path>/todos/DefaultStylesheet.css</css-path>
-   </portlet-skin>
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_resources_1_3 http://www.gatein.org/xml/ns/gatein_resources_1_3"
+    xmlns="http://www.gatein.org/xml/ns/gatein_resources_1_3">
 
-   <portlet>
-     <name>TodoPortlet</name>
-     <module>
-       <script>
-         <path>/todos/todo.js</path>
-       </script>
-       <depends>
-       	<module>todomodel</module>
-       </depends>
-       <depends>
-         <module>todoview</module>
-       </depends>
-       <depends>
-       	<module>backbone</module>
-       </depends>
-       <depends>
-       	<module>jquery</module>
-       </depends>
-     </module>
-   </portlet>      
+  <portlet-skin>
+    <application-name>todomvc</application-name>
+    <portlet-name>TodoPortlet</portlet-name>
+    <skin-name>Default</skin-name>
+    <css-path>/todos/DefaultStylesheet.css</css-path>
+  </portlet-skin>
 
-	<module>
-      <name>todoview</name>     
+  <portlet>
+    <name>TodoPortlet</name>
+    <module>
       <script>
-        <path>/todos/view.js</path>         	
-      </script>      
-      <depends>
-       	<module>backbone</module>
-       </depends>
-       <depends>
-         <module>underscore</module>
-       </depends>
-       <depends>
-         <module>jquery</module>
-       </depends>
-   </module>
-   
-   <module>
-      <name>todomodel</name>     
-      <script>
-        <path>/todos/model.js</path>         	
-      </script>      
-      <depends>
-       	<module>backbone</module>
-       </depends>
-       <depends>
-         <module>underscore</module>
-       </depends>
-       <depends>
-         <module>localStorage</module>
-       </depends>
-   </module>
-
-	<!-- Vendor library -->
-   <module>
-      <name>json2</name>    
-      <as>JSON</as> 
-      <script>
-         <adapter>
-         (function() {         	
-         	<include>/todos/vendor/json2.js</include>         	
-         	return this.JSON;
-         })();
-         </adapter>
-      </script>
-   </module>
-   
-   <module>
-      <name>underscore</name>     
-      <as>_</as>
-      <script>
-        <path>/todos/vendor/underscore.js</path>         	
-      </script>      
-      <depends>
-      	<module>require</module>      	
-      </depends>
-      <depends>
-      	<module>exports</module>      	
-      </depends>
-      <depends>
-      	<module>module</module>      	
-      </depends>
-   </module>
-   
-   <module>
-      <name>backbone</name>     
-      <as>Backbone</as>
-      <script>
-         <adapter>
-         (function() {         	
-         	<include>/todos/vendor/backbone.js</include>         	
-         }).call({jQuery: $});
-         </adapter>
+        <path>/todos/todo.js</path>
       </script>
       <depends>
-      	<module>require</module>      	
+        <module>todomodel</module>
       </depends>
       <depends>
-      	<module>exports</module>      	
+        <module>todoview</module>
       </depends>
       <depends>
-      	<module>underscore</module>
-      	<as>underscore</as>
+        <module>backbone</module>
       </depends>
       <depends>
-      	<module>json2</module>
+        <module>jquery</module>
       </depends>
-      <depends>
-      	<module>jquery</module>
-      </depends>
-   </module>
-   
-   <module>
-      <name>localStorage</name>     
-      <script>
-         <path>/todos/vendor/backbone-localstorage.js</path>         	
-      </script>
-      <depends>
-      	<module>underscore</module>
-      </depends>
-      <depends>
-      	<module>backbone</module>
-      </depends>
-      <depends>
-      	<module>json2</module>
-      </depends>
-   </module>
+    </module>
+  </portlet>
+
+  <module>
+    <name>todoview</name>
+    <script>
+      <path>/todos/view.js</path>
+    </script>
+    <depends>
+      <module>backbone</module>
+    </depends>
+    <depends>
+      <module>underscore</module>
+    </depends>
+    <depends>
+      <module>jquery</module>
+    </depends>
+  </module>
+
+  <module>
+    <name>todomodel</name>
+    <script>
+      <path>/todos/model.js</path>
+    </script>
+    <depends>
+      <module>backbone</module>
+    </depends>
+    <depends>
+      <module>underscore</module>
+    </depends>
+    <depends>
+      <module>localStorage</module>
+    </depends>
+  </module>
+
+  <!-- Vendor library -->
+  <module>
+    <name>json2</name>
+    <as>JSON</as>
+    <script>
+      <adapter>
+        (function() {
+        <include>/todos/vendor/json2.js</include>
+        return this.JSON;
+        })();
+      </adapter>
+    </script>
+  </module>
+
+  <module>
+    <name>underscore</name>
+    <as>_</as>
+    <script>
+      <path>/todos/vendor/underscore.js</path>
+    </script>
+    <depends>
+      <module>require</module>
+    </depends>
+    <depends>
+      <module>exports</module>
+    </depends>
+    <depends>
+      <module>module</module>
+    </depends>
+  </module>
+
+  <module>
+    <name>backbone</name>
+    <as>Backbone</as>
+    <script>
+      <adapter>
+        (function() {
+        <include>/todos/vendor/backbone.js</include>
+        }).call({jQuery: $});
+      </adapter>
+    </script>
+    <depends>
+      <module>require</module>
+    </depends>
+    <depends>
+      <module>exports</module>
+    </depends>
+    <depends>
+      <module>underscore</module>
+      <as>underscore</as>
+    </depends>
+    <depends>
+      <module>json2</module>
+    </depends>
+    <depends>
+      <module>jquery</module>
+    </depends>
+  </module>
+
+  <module>
+    <name>localStorage</name>
+    <script>
+      <path>/todos/vendor/backbone-localstorage.js</path>
+    </script>
+    <depends>
+      <module>underscore</module>
+    </depends>
+    <depends>
+      <module>backbone</module>
+    </depends>
+    <depends>
+      <module>json2</module>
+    </depends>
+  </module>
 
 </gatein-resources>

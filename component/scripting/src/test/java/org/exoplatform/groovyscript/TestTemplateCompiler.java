@@ -18,27 +18,25 @@
  */
 package org.exoplatform.groovyscript;
 
-import org.exoplatform.component.test.AbstractGateInTest;
-
 import java.io.IOException;
+
+import org.exoplatform.component.test.AbstractGateInTest;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestTemplateCompiler extends AbstractGateInTest
-{
+public class TestTemplateCompiler extends AbstractGateInTest {
 
-   /** . */
-//   private final TemplateCompiler compiler = new TemplateCompiler();
+    /** . */
+    // private final TemplateCompiler compiler = new TemplateCompiler();
 
-   public void testFoo() throws IOException
-   {
-//      assertEquals("", compiler.compile(""));
-//      assertEquals("out.print(\"a\");", compiler.compile("a"));
-//      assertEquals("out.print(\"a\n\");\nout.print(\"b\");", compiler.compile("a\nb"));
-//      assertEquals("", compiler.compile("<%%>"));
-//      assertEquals("a", compiler.compile("<%a%>"));
-//      assertEquals("a\nb", compiler.compile("<%a\nb%>"));
-   }
+    public void testFoo() throws IOException {
+        // assertEquals("", compiler.compile(""));
+        // assertEquals("out.print(\"a\");", compiler.compile("a"));
+        // assertEquals("out.print(\"a\n\");\nout.print(\"b\");", compiler.compile("a\nb"));
+        // assertEquals("", compiler.compile("<%%>"));
+        // assertEquals("a", compiler.compile("<%a%>"));
+        // assertEquals("a\nb", compiler.compile("<%a\nb%>"));
+    }
 }

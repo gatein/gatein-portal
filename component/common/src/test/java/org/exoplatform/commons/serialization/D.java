@@ -26,10 +26,9 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
  * @version $Revision$
  */
 @Serialized
-public class D
-{
+public class D {
 
-   static String a = "a";
-   String b = "b";
+    static String a = "a";
+    String b = "b";
 
 }

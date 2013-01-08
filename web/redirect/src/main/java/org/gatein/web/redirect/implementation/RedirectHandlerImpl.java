@@ -23,7 +23,6 @@
 package org.gatein.web.redirect.implementation;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.gatein.web.redirect.RedirectRequestHandler;
@@ -35,62 +34,50 @@ import org.picocontainer.Startable;
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
-public class RedirectHandlerImpl implements RedirectHandler, Startable
-{
-   SiteRedirectService siteRedirectService;
-   
-   public RedirectHandlerImpl(SiteRedirectService siteRedirectService)
-   {
-      this.siteRedirectService = siteRedirectService;
-   }
-   
-   @Override
-   public Map<String, String> getAlternativeRedirects(String siteName, String URI, boolean setPreference)
-   {
-      Map<String, String> redirectNames = siteRedirectService.getAlternativeSites(siteName);
-      
-      Map<String, String> redirects = new LinkedHashMap<String, String>(); //use LinkedHashMap to keep the List order intact
-      for (String redirectName: redirectNames.keySet())
-      {
-         String redirectURI = createRedirectURI(redirectNames.get(redirectName), URI);
-         redirects.put(redirectName, redirectURI);
-      }
-      
-      return redirects;
-   }
-   
-   protected String createRedirectURI(String redirectSite, String URI)
-   {
-      String redirectURI = URI;
-      
-      if (redirectURI.contains("&"))
-      {
-         redirectURI += "?";
-      }
-      else
-      {
-         if (redirectURI.endsWith("/"))
-         {
-            redirectURI = redirectURI.substring(0, redirectURI.length() - 1);
-         }
-         redirectURI += "?";
-      }
-      
-      redirectURI += RedirectRequestHandler.REDIRECT_FLAG + "=" + redirectSite;
-      
-      return redirectURI;
-   }
-   
-   @Override
-   public void start()
-   {
-      // only needed because exo kernel requires this method (really its the underlying picocontianer that needs it)
-   }
+public class RedirectHandlerImpl implements RedirectHandler, Startable {
+    SiteRedirectService siteRedirectService;
 
-   @Override
-   public void stop()
-   {
-      // only needed because exo kernel requires this method (really its the underlying picocontianer that needs it)
-   }
+    public RedirectHandlerImpl(SiteRedirectService siteRedirectService) {
+        this.siteRedirectService = siteRedirectService;
+    }
+
+    @Override
+    public Map<String, String> getAlternativeRedirects(String siteName, String URI, boolean setPreference) {
+        Map<String, String> redirectNames = siteRedirectService.getAlternativeSites(siteName);
+
+        Map<String, String> redirects = new LinkedHashMap<String, String>(); // use LinkedHashMap to keep the List order intact
+        for (String redirectName : redirectNames.keySet()) {
+            String redirectURI = createRedirectURI(redirectNames.get(redirectName), URI);
+            redirects.put(redirectName, redirectURI);
+        }
+
+        return redirects;
+    }
+
+    protected String createRedirectURI(String redirectSite, String URI) {
+        String redirectURI = URI;
+
+        if (redirectURI.contains("&")) {
+            redirectURI += "?";
+        } else {
+            if (redirectURI.endsWith("/")) {
+                redirectURI = redirectURI.substring(0, redirectURI.length() - 1);
+            }
+            redirectURI += "?";
+        }
+
+        redirectURI += RedirectRequestHandler.REDIRECT_FLAG + "=" + redirectSite;
+
+        return redirectURI;
+    }
+
+    @Override
+    public void start() {
+        // only needed because exo kernel requires this method (really its the underlying picocontianer that needs it)
+    }
+
+    @Override
+    public void stop() {
+        // only needed because exo kernel requires this method (really its the underlying picocontianer that needs it)
+    }
 }
-

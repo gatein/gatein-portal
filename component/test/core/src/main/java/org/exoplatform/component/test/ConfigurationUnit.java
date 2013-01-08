@@ -23,6 +23,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+
 /**
  * Describe a configuration unit that targets a container scoped by the {@link org.exoplatform.component.test.ContainerScope}
  * type. The path value is the absolute path that will be used to retrieve the configuration file via the
@@ -33,20 +34,19 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ConfigurationUnit
-{
-   /**
-    * The container scope.
-    *
-    * @return the container scope
-    */
-   ContainerScope scope();
+public @interface ConfigurationUnit {
+    /**
+     * The container scope.
+     *
+     * @return the container scope
+     */
+    ContainerScope scope();
 
-   /**
-    * The configuration path.
-    *
-    * @return the configuration path
-    */
-   String path();
+    /**
+     * The configuration path.
+     *
+     * @return the configuration path
+     */
+    String path();
 
 }

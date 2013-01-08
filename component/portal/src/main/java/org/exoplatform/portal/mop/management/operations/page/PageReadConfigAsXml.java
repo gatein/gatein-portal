@@ -36,55 +36,40 @@ import org.gatein.management.api.operation.ResultHandler;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class PageReadConfigAsXml extends AbstractPageOperationHandler
-{
-   @Override
-   protected void execute(OperationContext operationContext, ResultHandler resultHandler, org.gatein.mop.api.workspace.Page rootPage)  throws ResourceNotFoundException, OperationException
-   {
-      String operationName = operationContext.getOperationName();
-      SiteKey siteKey = getSiteKey(rootPage.getSite());
-      DataStorage dataStorage = operationContext.getRuntimeContext().getRuntimeComponent(DataStorage.class);
-      PageService pageService = operationContext.getRuntimeContext().getRuntimeComponent(PageService.class);
+public class PageReadConfigAsXml extends AbstractPageOperationHandler {
+    @Override
+    protected void execute(OperationContext operationContext, ResultHandler resultHandler,
+            org.gatein.mop.api.workspace.Page rootPage) throws ResourceNotFoundException, OperationException {
+        String operationName = operationContext.getOperationName();
+        SiteKey siteKey = getSiteKey(rootPage.getSite());
+        DataStorage dataStorage = operationContext.getRuntimeContext().getRuntimeComponent(DataStorage.class);
+        PageService pageService = operationContext.getRuntimeContext().getRuntimeComponent(PageService.class);
 
-      String pageName = operationContext.getAddress().resolvePathTemplate("page-name");
-      if (pageName == null) // retrieve pages
-      {
-         try
-         {
-            resultHandler.completed(PageUtils.getAllPages(dataStorage, pageService, siteKey));
-         }
-         catch (Exception e)
-         {
-            throw new OperationException(operationName, "Could not retrieve pages for site " + siteKey);
-         }
-      }
-      else
-      {
-         PageKey key = new PageKey(siteKey, pageName);
-         try
-         {
-            Page page = PageUtils.getPage(dataStorage, pageService, key);
-            if (page == null)
-            {
-               throw new ResourceNotFoundException("No page found for " + key);
+        String pageName = operationContext.getAddress().resolvePathTemplate("page-name");
+
+        // retrieve pages
+        if (pageName == null) {
+            try {
+                resultHandler.completed(PageUtils.getAllPages(dataStorage, pageService, siteKey));
+            } catch (Exception e) {
+                throw new OperationException(operationName, "Could not retrieve pages for site " + siteKey);
             }
-            else
-            {
-               resultHandler.completed(page);
+        } else {
+            PageKey key = new PageKey(siteKey, pageName);
+            try {
+                Page page = PageUtils.getPage(dataStorage, pageService, key);
+                if (page == null) {
+                    throw new ResourceNotFoundException("No page found for " + key);
+                } else {
+                    resultHandler.completed(page);
+                }
+            } catch (ResourceNotFoundException e) {
+                throw e;
+            } catch (OperationException e) {
+                throw e;
+            } catch (Exception e) {
+                throw new OperationException(operationName, "Operation failed getting page for " + key, e);
             }
-         }
-         catch (ResourceNotFoundException e)
-         {
-            throw e;
-         }
-         catch (OperationException e)
-         {
-            throw e;
-         }
-         catch (Exception e)
-         {
-            throw new OperationException(operationName, "Operation failed getting page for " + key, e);
-         }
-      }
-   }
+        }
+    }
 }

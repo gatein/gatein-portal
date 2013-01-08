@@ -19,69 +19,53 @@
 
 package org.exoplatform.portal.pom.spi.gadget;
 
+import java.util.List;
+
 import org.gatein.mop.spi.content.ContentProvider;
 import org.gatein.mop.spi.content.StateContainer;
-
-import java.util.List;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class GadgetContentProvider implements ContentProvider<Gadget, GadgetState>
-{
+public class GadgetContentProvider implements ContentProvider<Gadget, GadgetState> {
 
-   public Gadget combine(List<Gadget> states)
-   {
-      throw new UnsupportedOperationException();
-   }
+    public Gadget combine(List<Gadget> states) {
+        throw new UnsupportedOperationException();
+    }
 
-   public void setState(StateContainer<GadgetState> container, Gadget state)
-   {
-      GadgetState prefs = container.getState();
-      if (prefs != null)
-      {
-         if (state == null)
-         {
-            container.setState(null);
-         }
-         else
-         {
-            prefs.setUserPrefs(state.getUserPref());
-         }
-      }
-      else
-      {
-         if (state != null)
-         {
-            prefs = container.create();
-            prefs.setUserPrefs(state.getUserPref());
-         }
-      }
-   }
+    public void setState(StateContainer<GadgetState> container, Gadget state) {
+        GadgetState prefs = container.getState();
+        if (prefs != null) {
+            if (state == null) {
+                container.setState(null);
+            } else {
+                prefs.setUserPrefs(state.getUserPref());
+            }
+        } else {
+            if (state != null) {
+                prefs = container.create();
+                prefs.setUserPrefs(state.getUserPref());
+            }
+        }
+    }
 
-   public Gadget getState(StateContainer<GadgetState> container)
-   {
-      GadgetState prefs = container.getState();
-      if (prefs != null)
-      {
-         Gadget gadget = new Gadget();
-         gadget.setUserPref(prefs.getUserPrefs());
-         return gadget;
-      }
-      else
-      {
-         return null;
-      }
-   }
+    public Gadget getState(StateContainer<GadgetState> container) {
+        GadgetState prefs = container.getState();
+        if (prefs != null) {
+            Gadget gadget = new Gadget();
+            gadget.setUserPref(prefs.getUserPrefs());
+            return gadget;
+        } else {
+            return null;
+        }
+    }
 
-   public Class<Gadget> getExternalType()
-   {
-      return Gadget.class;
-   }
+    public Class<Gadget> getExternalType() {
+        return Gadget.class;
+    }
 
-   public Class<GadgetState> getInternalType()
-   {
-      return GadgetState.class;
-   }
+    public Class<GadgetState> getInternalType() {
+        return GadgetState.class;
+    }
 }

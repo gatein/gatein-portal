@@ -23,7 +23,13 @@
 
 package org.gatein.integration.wsrp.structure;
 
+import static org.mockito.Mockito.*;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.TestCase;
+
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.EventType;
@@ -36,6 +42,7 @@ import org.exoplatform.services.listener.Event;
 import org.gatein.mop.api.content.Customization;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Page;
+import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.ui.UIComponent;
 import org.gatein.mop.api.workspace.ui.UIContainer;
 import org.gatein.mop.api.workspace.ui.UIWindow;
@@ -43,276 +50,256 @@ import org.gatein.pc.api.PortletContext;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static org.mockito.Mockito.*;
-
 /**
  * @author <a href="mailto:chris.laprun@jboss.com">Chris Laprun</a>
  * @version $Revision$
  */
-public class MOPConsumerStructureProviderTestCase extends TestCase
-{
-   private MOPConsumerStructureProvider provider;
-   private PortalStructureAccess structureAccess;
-   private Page page1;
+public class MOPConsumerStructureProviderTestCase extends TestCase {
+    public static final String SITE_NAME = "site";
+    private MOPConsumerStructureProvider provider;
+    private PortalStructureAccess structureAccess;
+    private Page page1;
 
-   public void testGetPageIdentifiers()
-   {
-      List<String> pageIdentifiers = provider.getPageIdentifiers();
-      assertEquals(5, pageIdentifiers.size());
-      assertTrue(pageIdentifiers.contains("page1"));
-      assertTrue(pageIdentifiers.contains("page11"));
-      assertTrue(pageIdentifiers.contains("page12"));
-      assertTrue(pageIdentifiers.contains("page2"));
-      assertTrue(pageIdentifiers.contains("page21"));
-   }
+    public void testGetPageIdentifiers() {
+        List<String> pageIdentifiers = provider.getPageIdentifiers();
+        assertEquals(5, pageIdentifiers.size());
+        assertTrue(pageIdentifiers.contains(getPageIdFor("page1")));
+        assertTrue(pageIdentifiers.contains(getPageIdFor("page11")));
+        assertTrue(pageIdentifiers.contains(getPageIdFor("page12")));
+        assertTrue(pageIdentifiers.contains(getPageIdFor("page2")));
+        assertTrue(pageIdentifiers.contains(getPageIdFor("page21")));
+    }
 
-   public void testGetWindowIdentifiersForInexistingPage()
-   {
-      try
-      {
-         provider.getWindowIdentifiersFor("inexisting");
-         fail("Cannot retrieve windows for an inexistent page");
-      }
-      catch (IllegalArgumentException e)
-      {
-         // expected
-      }
-   }
+    private String getPageIdFor(String pageName) {
+        return MOPConsumerStructureProvider.PageInfo.getPageIdFor(SITE_NAME, pageName);
+    }
 
-   public void testGetWindowIdentifiersFor()
-   {
-      checkWindows("page1", "window11", "window12");
-      checkWindows("page2");
-      checkWindows("page11", "window111", "window112");
-      checkWindows("page12", "window121");
-      checkWindows("page21", "window211");
-   }
+    public void testGetWindowIdentifiersForInexistingPage() {
+        try {
+            provider.getWindowIdentifiersFor("inexisting");
+            fail("Cannot retrieve windows for an inexistent page");
+        } catch (IllegalArgumentException e) {
+            // expected
+        }
+    }
 
-   public void testAssignPortletToWindow()
-   {
-      String newCustomizationId = "/app.new";
-      String newWindowName = "portlet";
-      provider.assignPortletToWindow(PortletContext.createPortletContext(newCustomizationId), "window11", "page1", newWindowName);
-      verify(structureAccess).getWindowFrom(getIdFor("window11"));
+    public void testGetWindowIdentifiersFor() {
+        checkWindows("page1", "window11", "window12");
+        checkWindows("page2");
+        checkWindows("page11", "window111", "window112");
+        checkWindows("page12", "window121");
+        checkWindows("page21", "window211");
+    }
 
-      UIWindow window11 = structureAccess.getWindowFrom(getIdFor("window11"));
-      verify(structureAccess).saveChangesTo(window11);
+    public void testAssignPortletToWindow() {
+        String newCustomizationId = "/app.new";
+        String newWindowName = "portlet";
+        provider.assignPortletToWindow(PortletContext.createPortletContext(newCustomizationId), "window11", getPageIdFor("page1"),
+                newWindowName);
+        verify(structureAccess).getWindowFrom(getIdFor("window11"));
 
-      Described described = window11.adapt(Described.class);
-      verify(described).setName(newWindowName + " (remote)");
+        UIWindow window11 = structureAccess.getWindowFrom(getIdFor("window11"));
+        verify(structureAccess).saveChangesTo(window11);
 
-      WSRP state = new WSRP();
-      state.setPortletId(newCustomizationId);
-      verify(window11).customize(WSRP.CONTENT_TYPE, newCustomizationId, state);
+        Described described = window11.adapt(Described.class);
+        verify(described).setName(newWindowName + " (remote)");
 
-      Customization<?> customization = window11.getCustomization();
-      assertEquals(WSRP.CONTENT_TYPE, customization.getType());
-   }
+        WSRP state = new WSRP();
+        state.setPortletId(newCustomizationId);
+        verify(window11).customize(WSRP.CONTENT_TYPE, newCustomizationId, state);
 
-   public void testPageCreationEvent() throws Exception
-   {
-      Page foo = createPage("foo", new String[]{"foo1"}, new String[]{"windowfoo1"});
-      Page foo1 = foo.getChild("foo1");
-      addWindows(foo1, "windowfoo11");
-      org.exoplatform.portal.config.model.Page portalPage = mock(org.exoplatform.portal.config.model.Page.class);
-      PageKey pageKey = mock(PageKey.class);
-      when(structureAccess.getPageFrom(portalPage)).thenReturn(foo);
-      when(structureAccess.getPageFrom(pageKey)).thenReturn(foo);
+        Customization<?> customization = window11.getCustomization();
+        assertEquals(WSRP.CONTENT_TYPE, customization.getType());
+    }
 
-      int pageNumber = provider.getPageIdentifiers().size();
+    public void testPageCreationEvent() throws Exception {
+        Page foo = createPage("foo", new String[] { "foo1" }, new String[] { "windowfoo1" });
+        Page foo1 = foo.getChild("foo1");
+        addWindows(foo1, "windowfoo11");
+        org.exoplatform.portal.config.model.Page portalPage = mock(org.exoplatform.portal.config.model.Page.class);
+        PageKey pageKey = mock(PageKey.class);
+        when(structureAccess.getPageFrom(portalPage)).thenReturn(foo);
+        when(structureAccess.getPageFrom(pageKey)).thenReturn(foo);
 
-      // when a page is created, the events being sent are now EventType.PAGE_CREATED and DataStorage.PAGE_UPDATED in that order
-      provider.onEvent(new Event<PageService, PageKey>(EventType.PAGE_CREATED, null, pageKey));
-      provider.onEvent(new Event<DataStorage, org.exoplatform.portal.config.model.Page>(DataStorage.PAGE_UPDATED, null, portalPage));
+        int pageNumber = provider.getPageIdentifiers().size();
 
-      List<String> identifiers = provider.getPageIdentifiers();
-      assertEquals(pageNumber + 2, identifiers.size());
-      assertTrue(identifiers.contains("foo"));
-      assertTrue(identifiers.contains("foo1"));
+        // when a page is created, the events being sent are now EventType.PAGE_CREATED and DataStorage.PAGE_UPDATED in that
+        // order
+        provider.onEvent(new Event<PageService, PageKey>(EventType.PAGE_CREATED, null, pageKey));
+        provider.onEvent(new Event<DataStorage, org.exoplatform.portal.config.model.Page>(DataStorage.PAGE_UPDATED, null,
+                portalPage));
 
-      checkWindows("foo", "windowfoo1");
-      checkWindows("foo1", "windowfoo11");
+        List<String> identifiers = provider.getPageIdentifiers();
+        assertEquals(pageNumber + 2, identifiers.size());
+        assertTrue(identifiers.contains(getPageIdFor("foo")));
+        assertTrue(identifiers.contains(getPageIdFor("foo1")));
 
-      assertEquals(foo1.getRootComponent().get("windowfoo11"), structureAccess.getWindowFrom(getIdFor("windowfoo11")));
-   }
+        checkWindows("foo", "windowfoo1");
+        checkWindows("foo1", "windowfoo11");
 
-   public void testPageDeletionEvent() throws Exception
-   {
-      String pageToRemove = "page1";
+        assertEquals(foo1.getRootComponent().get("windowfoo11"), structureAccess.getWindowFrom(getIdFor("windowfoo11")));
+    }
 
-      // mocking internal behavior
-      PageKey pageKey = mock(PageKey.class);
-      when(pageKey.getName()).thenReturn(createInternalNameFrom(pageToRemove));
-      PageState pageState = mock(PageState.class);
-      when(pageState.getDisplayName()).thenReturn(pageToRemove);
-      PageContext pageContext = mock(PageContext.class);
-      when(pageContext.getState()).thenReturn(pageState);
-      PageService pageService = mock(PageService.class);
-      when(pageService.loadPage(pageKey)).thenReturn(pageContext);
+    public void testPageDeletionEvent() throws Exception {
+        String pageToRemove = "page1";
 
-      // on delete, we actually get the event after the page has been removed from JCR so we don't have an actual page
-      when(structureAccess.getPageFrom(pageKey)).thenReturn(null);
+        // mocking internal behavior
+        PageKey pageKey = mock(PageKey.class);
+        when(pageKey.getName()).thenReturn(createInternalNameFrom(pageToRemove));
+        PageState pageState = mock(PageState.class);
+        when(pageState.getDisplayName()).thenReturn(pageToRemove);
+        PageContext pageContext = mock(PageContext.class);
+        when(pageContext.getState()).thenReturn(pageState);
+        PageService pageService = mock(PageService.class);
+        when(pageService.loadPage(pageKey)).thenReturn(pageContext);
 
-      int pageNumber = provider.getPageIdentifiers().size();
+        // on delete, we actually get the event after the page has been removed from JCR so we don't have an actual page
+        when(structureAccess.getPageFrom(pageKey)).thenReturn(null);
 
-      // when a page is deleted the event being sent is now EventType.PAGE_DESTROYED
-      provider.onEvent(new Event<PageService, PageKey>(EventType.PAGE_DESTROYED, pageService, pageKey));
+        int pageNumber = provider.getPageIdentifiers().size();
 
-      List<String> identifiers = provider.getPageIdentifiers();
-      assertEquals(pageNumber - 1, identifiers.size());
-      // deleting a page doesn't delete its children, see GTNPORTAL-1630
-      assertFalse(identifiers.contains(pageToRemove));
-      assertTrue(identifiers.contains("page11"));
-      assertTrue(identifiers.contains("page12"));
-   }
+        // when a page is deleted the event being sent is now EventType.PAGE_DESTROYED
+        provider.onEvent(new Event<PageService, PageKey>(EventType.PAGE_DESTROYED, pageService, pageKey));
 
-   public void testPageUpdatedEvent() throws Exception
-   {
-      // todo!
-   }
+        List<String> identifiers = provider.getPageIdentifiers();
+        assertEquals(pageNumber - 1, identifiers.size());
+        // deleting a page doesn't delete its children, see GTNPORTAL-1630
+        assertFalse(identifiers.contains(getPageIdFor(pageToRemove)));
+        assertTrue(identifiers.contains(getPageIdFor("page11")));
+        assertTrue(identifiers.contains(getPageIdFor("page12")));
+    }
 
-   @Override
-   protected void setUp() throws Exception
-   {
-      structureAccess = mock(PortalStructureAccess.class);
+    public void testPageUpdatedEvent() throws Exception {
+        // todo!
+    }
 
-      page1 = createPage("page1", new String[]{"page11", "page12"}, new String[]{"window11", "window12"});
-      Page page2 = createPage("page2", new String[]{"page21"}, null);
+    @Override
+    protected void setUp() throws Exception {
+        structureAccess = mock(PortalStructureAccess.class);
 
-      Page page11 = page1.getChild("page11");
-      addWindows(page11, "window111", "window112");
+        page1 = createPage("page1", new String[] { "page11", "page12" }, new String[] { "window11", "window12" });
+        Page page2 = createPage("page2", new String[] { "page21" }, null);
 
-      Page page12 = page1.getChild("page12");
-      addWindows(page12, "window121");
+        Page page11 = page1.getChild("page11");
+        addWindows(page11, "window111", "window112");
 
-      Page page21 = page2.getChild("page21");
-      addWindows(page21, "window211");
+        Page page12 = page1.getChild("page12");
+        addWindows(page12, "window121");
 
-      ArrayList<Page> pages = new ArrayList<Page>();
-      pages.add(page1);
-      pages.add(page11);
-      pages.add(page12);
-      pages.add(page2);
-      pages.add(page21);
-      when(structureAccess.getPages()).thenReturn(pages);
+        Page page21 = page2.getChild("page21");
+        addWindows(page21, "window211");
 
-      provider = new MOPConsumerStructureProvider(structureAccess);
+        ArrayList<Page> pages = new ArrayList<Page>();
+        pages.add(page1);
+        pages.add(page11);
+        pages.add(page12);
+        pages.add(page2);
+        pages.add(page21);
+        when(structureAccess.getPages()).thenReturn(pages);
 
-      // needed to initialize state
-      provider.getPageIdentifiers();
-   }
+        provider = new MOPConsumerStructureProvider(structureAccess);
 
-   private void checkWindows(final String pageName, String... windowNames)
-   {
-      List<String> windows = provider.getWindowIdentifiersFor(pageName);
+        // needed to initialize state
+        provider.getPageIdentifiers();
+    }
 
-      if (windowNames != null)
-      {
-         assertEquals(windowNames.length, windows.size());
-         for (String windowName : windowNames)
-         {
-            assertTrue(windows.contains(windowName));
-         }
-      }
-   }
+    private void checkWindows(final String pageName, String... windowNames) {
+        List<String> windows = provider.getWindowIdentifiersFor(getPageIdFor(pageName));
 
-   private Page createPage(String name, String[] childrenPages, String[] windowNames)
-   {
-      Page page = mock(Page.class);
+        if (windowNames != null) {
+            assertEquals(windowNames.length, windows.size());
+            for (String windowName : windowNames) {
+                assertTrue(windows.contains(windowName));
+            }
+        }
+    }
 
-      when(page.getName()).thenReturn(createInternalNameFrom(name));
+    private Page createPage(String name, String[] childrenPages, String[] windowNames) {
+        Site site = mock(Site.class);
+        when(site.getName()).thenReturn(SITE_NAME);
 
-      // mock call to adapt
-      Described described = mock(Described.class);
-      when(described.getName()).thenReturn(name);
+        Page page = mock(Page.class);
+        when(page.getName()).thenReturn(createInternalNameFrom(name));
+        when(page.getSite()).thenReturn(site);
 
-      when(page.adapt(Described.class)).thenReturn(described);
+        // mock call to adapt
+        Described described = mock(Described.class);
+        when(described.getName()).thenReturn(name);
 
-      if (childrenPages != null)
-      {
-         List<Page> children = new ArrayList<Page>(childrenPages.length);
-         for (String pageId : childrenPages)
-         {
-            Page childPage = createPage(pageId, null, null);
-            when(page.getChild(pageId)).thenReturn(childPage);
-            children.add(childPage);
-         }
+        when(page.adapt(Described.class)).thenReturn(described);
 
-         when(page.getChildren()).thenReturn(children);
-      }
+        if (childrenPages != null) {
+            List<Page> children = new ArrayList<Page>(childrenPages.length);
+            for (String pageId : childrenPages) {
+                Page childPage = createPage(pageId, null, null);
+                when(page.getChild(pageId)).thenReturn(childPage);
+                children.add(childPage);
+            }
 
-      addWindows(page, windowNames);
+            when(page.getChildren()).thenReturn(children);
+        }
 
-      return page;
-   }
+        addWindows(page, windowNames);
 
-   private String createInternalNameFrom(String name)
-   {
-      return name + "internal";
-   }
+        return page;
+    }
 
-   private void addWindows(Page page, String... windowNames)
-   {
-      if (windowNames != null)
-      {
-         // mock page container
-         UIContainer root = mock(UIContainer.class);
-         when(page.getRootComponent()).thenReturn(root);
+    private String createInternalNameFrom(String name) {
+        return name + "internal";
+    }
 
-         // for each provided window name, create a mock UIWindow...
-         List<UIComponent> children = new ArrayList<UIComponent>(windowNames.length);
-         for (String windowName : windowNames)
-         {
-            UIWindow window = mock(UIWindow.class);
-            when(window.getName()).thenThrow(new RuntimeException("Window.getName returns the internal name, not the human readable one"));
-            when(window.getObjectId()).thenReturn(getIdFor(windowName));
+    private void addWindows(Page page, String... windowNames) {
+        if (windowNames != null) {
+            // mock page container
+            UIContainer root = mock(UIContainer.class);
+            when(page.getRootComponent()).thenReturn(root);
 
-            // need to use thenAnswer instead of thenReturn here because it doesn't play well with generics
-            when(window.getObjectType()).thenAnswer(new Answer<Object>()
-            {
-               public Object answer(InvocationOnMock invocationOnMock) throws Throwable
-               {
-                  return ObjectType.WINDOW;
-               }
-            });
+            // for each provided window name, create a mock UIWindow...
+            List<UIComponent> children = new ArrayList<UIComponent>(windowNames.length);
+            for (String windowName : windowNames) {
+                UIWindow window = mock(UIWindow.class);
+                when(window.getName()).thenThrow(
+                        new RuntimeException("Window.getName returns the internal name, not the human readable one"));
+                when(window.getObjectId()).thenReturn(getIdFor(windowName));
 
-            // mock call to adapt
-            Described described = mock(Described.class);
-            when(described.getName()).thenReturn(windowName);
+                // need to use thenAnswer instead of thenReturn here because it doesn't play well with generics
+                when(window.getObjectType()).thenAnswer(new Answer<Object>() {
+                    public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+                        return ObjectType.WINDOW;
+                    }
+                });
 
-            when(window.adapt(Described.class)).thenReturn(described);
+                // mock call to adapt
+                Described described = mock(Described.class);
+                when(described.getName()).thenReturn(windowName);
 
-            // mock Customization
-            final Customization<WSRP> customization = mock(Customization.class);
-            when(customization.getType()).thenReturn(WSRP.CONTENT_TYPE);
-            when(window.getCustomization()).thenAnswer(new Answer<Object>()
-            {
-               public Object answer(InvocationOnMock invocationOnMock) throws Throwable
-               {
-                  return customization;
-               }
-            });
+                when(window.adapt(Described.class)).thenReturn(described);
 
-            // add it to the list of windows for this page
-            children.add(window);
+                // mock Customization
+                final Customization<WSRP> customization = mock(Customization.class);
+                when(customization.getType()).thenReturn(WSRP.CONTENT_TYPE);
+                when(window.getCustomization()).thenAnswer(new Answer<Object>() {
+                    public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+                        return customization;
+                    }
+                });
 
-            // make sure that we return the window when we ask for it from its uuid
-            when(structureAccess.getWindowFrom(getIdFor(windowName))).thenReturn(window);
+                // add it to the list of windows for this page
+                children.add(window);
 
-            // make sure that we return the window if we ask the root component for it
-            when(root.get(windowName)).thenReturn(window);
-         }
+                // make sure that we return the window when we ask for it from its uuid
+                when(structureAccess.getWindowFrom(getIdFor(windowName))).thenReturn(window);
 
-         // the container should return the list of windows when asked for its components
-         when(root.getComponents()).thenReturn(children);
-      }
-   }
+                // make sure that we return the window if we ask the root component for it
+                when(root.get(windowName)).thenReturn(window);
+            }
 
-   private String getIdFor(String windowName)
-   {
-      return windowName + "Id";
-   }
+            // the container should return the list of windows when asked for its components
+            when(root.getComponents()).thenReturn(children);
+        }
+    }
+
+    private String getIdFor(String windowName) {
+        return windowName + "Id";
+    }
 }

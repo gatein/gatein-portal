@@ -21,68 +21,68 @@
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
-   <modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-   <parent>
-      <groupId>org.gatein.portal</groupId>
-      <artifactId>exo.portal.parent</artifactId>
-      <version>3.5.0.Final-SNAPSHOT</version>
-   </parent>
+  <parent>
+    <groupId>org.gatein.portal</groupId>
+    <artifactId>exo.portal.parent</artifactId>
+    <version>3.6.0.MO1-SNAPSHOT</version>
+  </parent>
 
-   <artifactId>exo.portal.sample</artifactId>
-   <packaging>pom</packaging>
+  <artifactId>exo.portal.sample</artifactId>
+  <packaging>pom</packaging>
 
-   <name>GateIn Portal Sample</name>
+  <name>GateIn Portal Sample</name>
 
-   <modules>
-     <module>skins</module>
-   </modules>
+  <modules>
+    <module>skins</module>
+  </modules>
 
-   <profiles>
-     <profile>
-       <id>pkg-all</id>
-       <activation>
-         <property>
-           <name>!gatein.dev</name>
-         </property>
-       </activation>
-       <modules>
-         <module>extension</module>
-         <module>portal</module>
-         <module>portlets</module>
-         <module>skins</module>
-       </modules>
-     </profile>
-      <profile>
-         <id>pkg-jbossas711</id>
-         <activation>
-            <property>
-               <name>gatein.dev</name>
-               <value>jbossas711</value>
-            </property>
-         </activation>
-         <modules>
-            <module>extension</module>
-            <module>portal</module>
-            <module>portlets</module>
-            <module>skins</module>
-         </modules>
-      </profile>
-      <profile>
-         <id>pkg-jbossas713</id>
-         <activation>
-            <property>
-               <name>gatein.dev</name>
-               <value>jbossas713</value>
-            </property>
-         </activation>
-         <modules>
-            <module>extension</module>
-            <module>portal</module>
-            <module>portlets</module>
-            <module>skins</module>
-         </modules>
-      </profile>
-   </profiles>
+  <profiles>
+    <profile>
+      <id>pkg-all</id>
+      <activation>
+        <property>
+          <name>!gatein.dev</name>
+        </property>
+      </activation>
+      <modules>
+        <module>extension</module>
+        <module>portal</module>
+        <module>portlets</module>
+        <module>skins</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>pkg-jbossas711</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>jbossas711</value>
+        </property>
+      </activation>
+      <modules>
+        <module>extension</module>
+        <module>portal</module>
+        <module>portlets</module>
+        <module>skins</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>pkg-jbossas713</id>
+      <activation>
+        <property>
+          <name>gatein.dev</name>
+          <value>jbossas713</value>
+        </property>
+      </activation>
+      <modules>
+        <module>extension</module>
+        <module>portal</module>
+        <module>portlets</module>
+        <module>skins</module>
+      </modules>
+    </profile>
+  </profiles>
 
 </project>

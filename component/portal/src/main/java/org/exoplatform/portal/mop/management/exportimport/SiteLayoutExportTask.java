@@ -22,6 +22,11 @@
 
 package org.exoplatform.portal.mop.management.exportimport;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
@@ -29,71 +34,51 @@ import org.exoplatform.portal.mop.SiteType;
 import org.gatein.management.api.binding.Marshaller;
 import org.gatein.management.api.operation.model.ExportTask;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.HashSet;
-import java.util.Set;
-
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class SiteLayoutExportTask extends AbstractExportTask implements ExportTask
-{
-   public static final Set<String> FILES;
-   static
-   {
-      HashSet<String> tmp = new HashSet<String>(3);
-      tmp.add("portal.xml");
-      tmp.add("group.xml");
-      tmp.add("user.xml");
-      FILES = tmp;
-   }
+public class SiteLayoutExportTask extends AbstractExportTask implements ExportTask {
+    public static final Set<String> FILES;
+    static {
+        HashSet<String> tmp = new HashSet<String>(3);
+        tmp.add("portal.xml");
+        tmp.add("group.xml");
+        tmp.add("user.xml");
+        FILES = tmp;
+    }
 
-   private final DataStorage dataStorage;
-   private final Marshaller<PortalConfig> marshaller;
+    private final DataStorage dataStorage;
+    private final Marshaller<PortalConfig> marshaller;
 
-   public SiteLayoutExportTask(SiteKey siteKey, DataStorage dataStorage, Marshaller<PortalConfig> marshaller)
-   {
-      super(siteKey);
-      this.dataStorage = dataStorage;
-      this.marshaller = marshaller;
-   }
+    public SiteLayoutExportTask(SiteKey siteKey, DataStorage dataStorage, Marshaller<PortalConfig> marshaller) {
+        super(siteKey);
+        this.dataStorage = dataStorage;
+        this.marshaller = marshaller;
+    }
 
-   @Override
-   protected String getXmlFileName()
-   {
-      if (siteKey.getType() == SiteType.PORTAL)
-      {
-         return "portal.xml";
-      }
-      else if (siteKey.getType() == SiteType.GROUP)
-      {
-         return "group.xml";
-      }
-      else if (siteKey.getType() == SiteType.USER)
-      {
-         return "user.xml";
-      }
-      else
-      {
-         throw new RuntimeException("Unknown site type " + siteKey.getType());
-      }
-   }
+    @Override
+    protected String getXmlFileName() {
+        if (siteKey.getType() == SiteType.PORTAL) {
+            return "portal.xml";
+        } else if (siteKey.getType() == SiteType.GROUP) {
+            return "group.xml";
+        } else if (siteKey.getType() == SiteType.USER) {
+            return "user.xml";
+        } else {
+            throw new RuntimeException("Unknown site type " + siteKey.getType());
+        }
+    }
 
-   @Override
-   public void export(OutputStream outputStream) throws IOException
-   {
-      PortalConfig portalConfig;
-      try
-      {
-         portalConfig = dataStorage.getPortalConfig(siteKey.getTypeName(), siteKey.getName());
-      }
-      catch (Exception e)
-      {
-         throw new IOException("Could not retrieve site " + siteKey, e);
-      }
+    @Override
+    public void export(OutputStream outputStream) throws IOException {
+        PortalConfig portalConfig;
+        try {
+            portalConfig = dataStorage.getPortalConfig(siteKey.getTypeName(), siteKey.getName());
+        } catch (Exception e) {
+            throw new IOException("Could not retrieve site " + siteKey, e);
+        }
 
-      marshaller.marshal(portalConfig, outputStream);
-   }
+        marshaller.marshal(portalConfig, outputStream);
+    }
 }

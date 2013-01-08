@@ -35,53 +35,44 @@ import org.jboss.msc.service.StartException;
 import org.jboss.msc.service.StopContext;
 
 /** @author <a href="mailto:mstrukel@redhat.com">Marko Strukelj</a> */
-public class InitService implements Service<InitService>
-{
+public class InitService implements Service<InitService> {
 
-   private GateInConfiguration config;
+    private GateInConfiguration config;
 
-   public InitService(GateInConfiguration config)
-   {
-      this.config = config;
-   }
+    public InitService(GateInConfiguration config) {
+        this.config = config;
+    }
 
-   @Override
-   public void start(StartContext context) throws StartException
-   {
-      System.out.println("InitService START");
-      ServiceController<?> svc = context.getController().getServiceContainer()
-         .getRequiredService(ServiceModuleLoader.moduleServiceName(config.getGateInEarModule()));
+    @Override
+    public void start(StartContext context) throws StartException {
+        System.out.println("InitService START");
+        ServiceController<?> svc = context.getController().getServiceContainer()
+                .getRequiredService(ServiceModuleLoader.moduleServiceName(config.getGateInEarModule()));
 
-      ModuleLoadService modService = (ModuleLoadService)svc.getService();
-      Module module = modService.getValue();
+        ModuleLoadService modService = (ModuleLoadService) svc.getService();
+        Module module = modService.getValue();
 
-      ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
-      try
-      {
-         // set TCCL to this module's CL
-         Thread.currentThread().setContextClassLoader(module.getClassLoader());
-         final RootContainer rootContainer = RootContainer.getInstance();
+        ClassLoader oldCl = Thread.currentThread().getContextClassLoader();
+        try {
+            // set TCCL to this module's CL
+            Thread.currentThread().setContextClassLoader(module.getClassLoader());
+            final RootContainer rootContainer = RootContainer.getInstance();
 
-         // register WSRP plugins service so that it's available when the WSRP service starts
-         rootContainer.registerComponentInstance(AS7Plugins.class, WSRPPostModuleDeploymentProcessor.plugins);
-      }
-      finally
-      {
-         if (Thread.currentThread().getContextClassLoader() != oldCl)
-         {
-            Thread.currentThread().setContextClassLoader(oldCl);
-         }
-      }
-   }
+            // register WSRP plugins service so that it's available when the WSRP service starts
+            rootContainer.registerComponentInstance(AS7Plugins.class, WSRPPostModuleDeploymentProcessor.plugins);
+        } finally {
+            if (Thread.currentThread().getContextClassLoader() != oldCl) {
+                Thread.currentThread().setContextClassLoader(oldCl);
+            }
+        }
+    }
 
-   @Override
-   public void stop(StopContext context)
-   {
-   }
+    @Override
+    public void stop(StopContext context) {
+    }
 
-   @Override
-   public InitService getValue() throws IllegalStateException, IllegalArgumentException
-   {
-      return null;
-   }
+    @Override
+    public InitService getValue() throws IllegalStateException, IllegalArgumentException {
+        return null;
+    }
 }

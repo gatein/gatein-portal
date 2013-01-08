@@ -23,19 +23,18 @@ package org.exoplatform.portal.resource;
 import java.io.Reader;
 import java.io.Serializable;
 
+
 /**
  * Fork of commons-io 1.4 org.apache.commons.io.input.CharSequenceReader
  *
- * {@link Reader} implementation that can read from String, StringBuffer,
- * StringBuilder or CharBuffer.
+ * {@link Reader} implementation that can read from String, StringBuffer, StringBuilder or CharBuffer.
  * <p>
  * <strong>Note:</strong> Supports {@link #mark(int)} and {@link #reset()}.
  *
  * @version $Revision$ $Date$
  * @since Commons IO 1.4
  */
-public class CharSequenceReader extends Reader implements Serializable
-{
+public class CharSequenceReader extends Reader implements Serializable {
 
     private final CharSequence charSequence;
     private int idx;
@@ -79,8 +78,7 @@ public class CharSequenceReader extends Reader implements Serializable
     /**
      * Read a single character.
      *
-     * @return the next character from the character sequence
-     * or -1 if the end has been reached.
+     * @return the next character from the character sequence or -1 if the end has been reached.
      */
     public int read() {
         if (idx >= charSequence.length()) {
@@ -96,8 +94,7 @@ public class CharSequenceReader extends Reader implements Serializable
      * @param array The array to store the characters in
      * @param offset The starting position in the array to store
      * @param length The maximum number of characters to read
-     * @return The number of characters read or -1 if there are
-     * no more
+     * @return The number of characters read or -1 if there are no more
      */
     public int read(char[] array, int offset, int length) {
         if (idx >= charSequence.length()) {
@@ -107,8 +104,7 @@ public class CharSequenceReader extends Reader implements Serializable
             throw new NullPointerException("Character array is missing");
         }
         if (length < 0 || (offset + length) > array.length) {
-            throw new IndexOutOfBoundsException("Array Size=" + array.length +
-                    ", offset=" + offset + ", length=" + length);
+            throw new IndexOutOfBoundsException("Array Size=" + array.length + ", offset=" + offset + ", length=" + length);
         }
         int count = 0;
         for (int i = 0; i < length; i++) {
@@ -116,15 +112,14 @@ public class CharSequenceReader extends Reader implements Serializable
             if (c == -1) {
                 return count;
             }
-            array[offset + i] = (char)c;
+            array[offset + i] = (char) c;
             count++;
         }
         return count;
     }
 
     /**
-     * Reset the reader to the last marked position (or the beginning if
-     * mark has not been called).
+     * Reset the reader to the last marked position (or the beginning if mark has not been called).
      */
     public void reset() {
         idx = mark;
@@ -138,21 +133,19 @@ public class CharSequenceReader extends Reader implements Serializable
      */
     public long skip(long n) {
         if (n < 0) {
-            throw new IllegalArgumentException(
-                    "Number of characters to skip is less than zero: " + n);
+            throw new IllegalArgumentException("Number of characters to skip is less than zero: " + n);
         }
         if (idx >= charSequence.length()) {
             return -1;
         }
-        int dest = (int)Math.min(charSequence.length(), (idx + n));
+        int dest = (int) Math.min(charSequence.length(), (idx + n));
         int count = dest - idx;
         idx = dest;
         return count;
     }
 
     /**
-     * Return a String representation of the underlying
-     * character sequence.
+     * Return a String representation of the underlying character sequence.
      *
      * @return The contents of the character sequence
      */

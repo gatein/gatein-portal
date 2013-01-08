@@ -19,46 +19,41 @@
 
 package org.exoplatform.portal.resource;
 
-import junit.framework.TestCase;
-import org.gatein.common.io.IOTools;
-
 import java.io.InputStream;
+
+import junit.framework.TestCase;
+
+import org.gatein.common.io.IOTools;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestXSDCorruption extends TestCase
-{
+public class TestXSDCorruption extends TestCase {
 
-   private void assertHash(String expected, String resourcePath) throws Exception
-   {
-      InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath);
-      assertNotNull(in);
-      byte[] bytes = IOTools.getBytes(in);
-      java.security.MessageDigest digester = java.security.MessageDigest.getInstance("MD5");
-      digester.update(bytes);
-      StringBuilder sb = new StringBuilder();
-      for (byte b : digester.digest())
-      {
-         String hex = Integer.toHexString(b);
-         if (hex.length() == 1)
-         {
-            sb.append('0');
-            sb.append(hex.charAt(0));
-         }
-         else
-         {
-            sb.append(hex.substring(hex.length() - 2));
-         }
-      }
-      assertEquals(expected, sb.toString());
-   }
+    private void assertHash(String expected, String resourcePath) throws Exception {
+        InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(resourcePath);
+        assertNotNull(in);
+        byte[] bytes = IOTools.getBytes(in);
+        java.security.MessageDigest digester = java.security.MessageDigest.getInstance("MD5");
+        digester.update(bytes);
+        StringBuilder sb = new StringBuilder();
+        for (byte b : digester.digest()) {
+            String hex = Integer.toHexString(b);
+            if (hex.length() == 1) {
+                sb.append('0');
+                sb.append(hex.charAt(0));
+            } else {
+                sb.append(hex.substring(hex.length() - 2));
+            }
+        }
+        assertEquals(expected, sb.toString());
+    }
 
-   public void testGateInResources1_x() throws Exception
-   {
-      assertHash("c68ea6831c3d24a242f63abd2db261a6", "gatein_resources_1_0.xsd");
-      assertHash("c55b7e0dc8ae23e2d34430b38260cd96", "gatein_resources_1_1.xsd");
-      assertHash("56f2ed48327fed8ea506be982ef53730", "gatein_resources_1_2.xsd");
-   }
+    public void testGateInResources1_x() throws Exception {
+        assertHash("a5df21458f0bea86789f5bfb264ee099", "gatein_resources_1_0.xsd");
+        assertHash("f5e48fdbfd1631ab0278a097447a3892", "gatein_resources_1_1.xsd");
+        assertHash("7925f1cd0a91dcb6a95f8dcb87973792", "gatein_resources_1_2.xsd");
+        assertHash("5a8602c916aee90249d7e5b8885de56e", "gatein_resources_1_3.xsd");
+    }
 }

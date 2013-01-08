@@ -37,38 +37,36 @@ import org.chromattic.api.annotations.Property;
  * @version $Revision$
  */
 @PrimaryType(name = "gtn:redirect")
-public abstract class Redirect
-{
+public abstract class Redirect {
 
-   @Property (name="gtn:redirectsite")
-   public abstract String getSite();
-   
-   public abstract void setSite(String site);
-   
-   @Property (name="gtn:redirectname")
-   public abstract String getName();
-   
-   public abstract void setName(String redirectName);
-   
-   @Property (name="gtn:redirectEnabled")
-   public abstract boolean getEnabled();
-   
-   public abstract void setEnabled(boolean enable);
-   
-   @OneToMany
-   public abstract Map<String, Condition> getConditions();
-   
-   @Create
-   public abstract Condition createCondition();
-   
-   @OneToOne
-   @Owner
-   @MappedBy("gtn:redirectMappings")
-   public abstract Mappings getMapping();
-   
-   @Create
-   public abstract Mappings createMapping();
-   
-   public abstract void setMapping(Mappings mapping);
+    @Property(name = "gtn:redirectsite")
+    public abstract String getSite();
+
+    public abstract void setSite(String site);
+
+    @Property(name = "gtn:redirectname")
+    public abstract String getName();
+
+    public abstract void setName(String redirectName);
+
+    @Property(name = "gtn:redirectEnabled")
+    public abstract boolean getEnabled();
+
+    public abstract void setEnabled(boolean enable);
+
+    @OneToMany
+    public abstract Map<String, Condition> getConditions();
+
+    @Create
+    public abstract Condition createCondition();
+
+    @OneToOne
+    @Owner
+    @MappedBy("gtn:redirectMappings")
+    public abstract Mappings getMapping();
+
+    @Create
+    public abstract Mappings createMapping();
+
+    public abstract void setMapping(Mappings mapping);
 }
-

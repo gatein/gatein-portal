@@ -25,43 +25,36 @@ import org.exoplatform.portal.mop.navigation.NodeModel;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class UserNodeContext implements NodeModel<UserNode>
-{
+class UserNodeContext implements NodeModel<UserNode> {
 
-   /** The related navigation. */
-   final UserNavigation navigation;
+    /** The related navigation. */
+    final UserNavigation navigation;
 
-   /** . */
-   final UserNodeFilterConfig filterConfig;
+    /** . */
+    final UserNodeFilterConfig filterConfig;
 
-   /** . */
-   private UserNodeFilter filter;
+    /** . */
+    private UserNodeFilter filter;
 
-   UserNodeContext(UserNavigation navigation, UserNodeFilterConfig filterConfig)
-   {
-      this.filterConfig = filterConfig;
-      this.navigation = navigation;
-   }
+    UserNodeContext(UserNavigation navigation, UserNodeFilterConfig filterConfig) {
+        this.filterConfig = filterConfig;
+        this.navigation = navigation;
+    }
 
-   public NodeContext<UserNode> getContext(UserNode node)
-   {
-      return node.context;
-   }
+    public NodeContext<UserNode> getContext(UserNode node) {
+        return node.context;
+    }
 
-   public UserNode create(NodeContext<UserNode> context)
-   {
-      return new UserNode(this, context);
-   }
+    public UserNode create(NodeContext<UserNode> context) {
+        return new UserNode(this, context);
+    }
 
-   void filter(UserNode userNode)
-   {
-      if (filterConfig != null)
-      {
-         if (filter == null)
-         {
-            filter = new UserNodeFilter(navigation.portal, filterConfig);
-         }
-         userNode.context.filter(filter);
-      }
-   }
+    void filter(UserNode userNode) {
+        if (filterConfig != null) {
+            if (filter == null) {
+                filter = new UserNodeFilter(navigation.portal, filterConfig);
+            }
+            userNode.context.filter(filter);
+        }
+    }
 }

@@ -26,10 +26,9 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
  * @version $Revision$
  */
 @Serialized
-public class G
-{
+public class G {
 
-   String a;
-   transient Thread b;
+    String a;
+    transient Thread b;
 
 }

@@ -59,171 +59,155 @@ import org.picocontainer.Startable;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ExoKernelIntegration implements Startable, WebAppListener
-{
+public class ExoKernelIntegration implements Startable, WebAppListener {
 
-   /** . */
-   protected PortletApplicationDeployer portletApplicationRegistry;
+    /** . */
+    protected PortletApplicationDeployer portletApplicationRegistry;
 
-   /** Exo Context */
-   private final ExoContainer container;
+    /** Exo Context */
+    private final ExoContainer container;
 
-   /** DO NOT REMOVE ME, OTHERWISE YOU'LL BREAK THINGS. */
-   private final ResourceBundleService resourceBundleService;
+    /** DO NOT REMOVE ME, OTHERWISE YOU'LL BREAK THINGS. */
+    private final ResourceBundleService resourceBundleService;
 
-   /** . */
-   private Logger log = LoggerFactory.getLogger(ExoKernelIntegration.class);
+    /** . */
+    private Logger log = LoggerFactory.getLogger(ExoKernelIntegration.class);
 
-   /**
-    * We enforce the dependency with the ResourceBundleService since it must be stared before the
-    * <code>portletApplicationRegistry</code>
-    *
-    * @param context the exo container context
-    * @param resourceBundleService the resource bundle service that is here for the sake of creating a dependency
-    */
-   public ExoKernelIntegration(ExoContainerContext context, ResourceBundleService resourceBundleService)
-   {
-      this.container = context.getContainer();
-      this.resourceBundleService = resourceBundleService;
-   }
+    /**
+     * We enforce the dependency with the ResourceBundleService since it must be stared before the
+     * <code>portletApplicationRegistry</code>
+     *
+     * @param context the exo container context
+     * @param resourceBundleService the resource bundle service that is here for the sake of creating a dependency
+     */
+    public ExoKernelIntegration(ExoContainerContext context, ResourceBundleService resourceBundleService) {
+        this.container = context.getContainer();
+        this.resourceBundleService = resourceBundleService;
+    }
 
-   public void start()
-   {
+    public void start() {
 
-      /* 
-       * Dirty fix for GTNPORTAL-2700
-       * 
-       * A real fix should somehow retain a reference to producerPortletInvoker (and thus also 
-       * transitive references to all its successor Invokers) which is now done only in the first 
-       * invocation of this start() method. In other words federatingPortletInvoker should be 
-       * able to keep one local Invoker per portal and not only one for all portals as it is now.
-       */
-      container.registerComponentInstance(PortletConfigRegistry.class, new PortletConfigRegistry());
+        /*
+         * Dirty fix for GTNPORTAL-2700
+         *
+         * A real fix should somehow retain a reference to producerPortletInvoker (and thus also transitive references to all
+         * its successor Invokers) which is now done only in the first invocation of this start() method. In other words
+         * federatingPortletInvoker should be able to keep one local Invoker per portal and not only one for all portals as it
+         * is now.
+         */
+        container.registerComponentInstance(PortletConfigRegistry.class, new PortletConfigRegistry());
 
-      // The portlet container invoker used by producer to dispatch to portlets
-      ContainerPortletInvoker containerPortletInvoker = new ContainerPortletInvoker();
+        // The portlet container invoker used by producer to dispatch to portlets
+        ContainerPortletInvoker containerPortletInvoker = new ContainerPortletInvoker();
 
-      // The portlet application deployer
-      portletApplicationRegistry = new ExoPortletApplicationDeployer();
-      portletApplicationRegistry.setContainerPortletInvoker(containerPortletInvoker);
+        // The portlet application deployer
+        portletApplicationRegistry = new ExoPortletApplicationDeployer();
+        portletApplicationRegistry.setContainerPortletInvoker(containerPortletInvoker);
 
-      // activate schema validation for portlet.xml if needed
-      String validation = PropertyManager.getProperty("gatein.portlet.validation");
-      boolean validated = validation == null || "true".equals(validation.trim().toLowerCase());
-      log.debug("portlet xml validation is " + (validated ? "enabled" : " disabled"));
-      portletApplicationRegistry.setSchemaValidated(validated);
+        // activate schema validation for portlet.xml if needed
+        String validation = PropertyManager.getProperty("gatein.portlet.validation");
+        boolean validated = validation == null || "true".equals(validation.trim().toLowerCase());
+        log.debug("portlet xml validation is " + (validated ? "enabled" : " disabled"));
+        portletApplicationRegistry.setSchemaValidated(validated);
 
-      //Container Stack
-      ContainerPortletDispatcher portletContainerDispatcher = new ContainerPortletDispatcher();
-      
-      // Check if we already have a federating portlet invoker
-      final ExoContainer topContainer = ExoContainerContext.getTopContainer();
-      FederatingPortletInvoker federatingPortletInvoker = (FederatingPortletInvoker)topContainer.getComponentInstanceOfType(FederatingPortletInvoker.class);
-      if (federatingPortletInvoker == null)
-      {
-         federatingPortletInvoker = new FederatingPortletInvokerService();
-         topContainer.registerComponentInstance(FederatingPortletInvoker.class, federatingPortletInvoker);
-      }
+        // Container Stack
+        ContainerPortletDispatcher portletContainerDispatcher = new ContainerPortletDispatcher();
 
-      EventPayloadInterceptor eventPayloadInterceptor = new EventPayloadInterceptor();
-      eventPayloadInterceptor.setNext(portletContainerDispatcher);
-      RequestAttributeConversationInterceptor requestAttributeConversationInterceptor =
-         new RequestAttributeConversationInterceptor();
-      requestAttributeConversationInterceptor.setNext(eventPayloadInterceptor);
-      CCPPInterceptor ccppInterceptor = new CCPPInterceptor();
-      ccppInterceptor.setNext(requestAttributeConversationInterceptor);
-      BridgeInterceptor bridgepInterceptor = new BridgeInterceptor();
-      bridgepInterceptor.setNext(ccppInterceptor);
-      ProducerCacheInterceptor producerCacheInterceptor = new ProducerCacheInterceptor();
-      producerCacheInterceptor.setNext(bridgepInterceptor);
-      SessionInvalidatorInterceptor sessionInvalidatorInterceptor = new SessionInvalidatorInterceptor();
-      sessionInvalidatorInterceptor.setNext(producerCacheInterceptor);
-      ContextDispatcherInterceptor contextDispatcherInterceptor = new ContextDispatcherInterceptor();
-      contextDispatcherInterceptor.setNext(sessionInvalidatorInterceptor);
-      SecureTransportInterceptor secureTransportInterceptor = new SecureTransportInterceptor();
-      secureTransportInterceptor.setNext(contextDispatcherInterceptor);
-      ValveInterceptor valveInterceptor = new ValveInterceptor();
-      valveInterceptor.setPortletApplicationRegistry(portletApplicationRegistry);
-      valveInterceptor.setNext(secureTransportInterceptor);
+        // Check if we already have a federating portlet invoker
+        final ExoContainer topContainer = ExoContainerContext.getTopContainer();
+        FederatingPortletInvoker federatingPortletInvoker = (FederatingPortletInvoker) topContainer
+                .getComponentInstanceOfType(FederatingPortletInvoker.class);
+        if (federatingPortletInvoker == null) {
+            federatingPortletInvoker = new FederatingPortletInvokerService();
+            topContainer.registerComponentInstance(FederatingPortletInvoker.class, federatingPortletInvoker);
+        }
 
-      // The portlet container invoker continued
-      containerPortletInvoker.setNext(valveInterceptor);
+        EventPayloadInterceptor eventPayloadInterceptor = new EventPayloadInterceptor();
+        eventPayloadInterceptor.setNext(portletContainerDispatcher);
+        RequestAttributeConversationInterceptor requestAttributeConversationInterceptor = new RequestAttributeConversationInterceptor();
+        requestAttributeConversationInterceptor.setNext(eventPayloadInterceptor);
+        CCPPInterceptor ccppInterceptor = new CCPPInterceptor();
+        ccppInterceptor.setNext(requestAttributeConversationInterceptor);
+        BridgeInterceptor bridgepInterceptor = new BridgeInterceptor();
+        bridgepInterceptor.setNext(ccppInterceptor);
+        ProducerCacheInterceptor producerCacheInterceptor = new ProducerCacheInterceptor();
+        producerCacheInterceptor.setNext(bridgepInterceptor);
+        SessionInvalidatorInterceptor sessionInvalidatorInterceptor = new SessionInvalidatorInterceptor();
+        sessionInvalidatorInterceptor.setNext(producerCacheInterceptor);
+        ContextDispatcherInterceptor contextDispatcherInterceptor = new ContextDispatcherInterceptor();
+        contextDispatcherInterceptor.setNext(sessionInvalidatorInterceptor);
+        SecureTransportInterceptor secureTransportInterceptor = new SecureTransportInterceptor();
+        secureTransportInterceptor.setNext(contextDispatcherInterceptor);
+        ValveInterceptor valveInterceptor = new ValveInterceptor();
+        valveInterceptor.setPortletApplicationRegistry(portletApplicationRegistry);
+        valveInterceptor.setNext(secureTransportInterceptor);
 
-      // register container invoker so that WSRP can use it, WSRP uses its own ProducerPortletInvoker
-      container.registerComponentInstance(ContainerPortletInvoker.class, containerPortletInvoker);
+        // The portlet container invoker continued
+        containerPortletInvoker.setNext(valveInterceptor);
 
-      // The producer persistence manager
-      PortletStatePersistenceManagerService producerPersistenceManager = new PortletStatePersistenceManagerService();
+        // register container invoker so that WSRP can use it, WSRP uses its own ProducerPortletInvoker
+        container.registerComponentInstance(ContainerPortletInvoker.class, containerPortletInvoker);
 
-      // The producer state management policy
-      StateManagementPolicyService producerStateManagementPolicy = new StateManagementPolicyService();
-      producerStateManagementPolicy.setPersistLocally(false);
+        // The producer persistence manager
+        PortletStatePersistenceManagerService producerPersistenceManager = new PortletStatePersistenceManagerService();
 
-      // The producer state converter
-      StateConverter producerStateConverter = new ExoStateConverter();
+        // The producer state management policy
+        StateManagementPolicyService producerStateManagementPolicy = new StateManagementPolicyService();
+        producerStateManagementPolicy.setPersistLocally(false);
 
-      // The producer portlet invoker
-      ProducerPortletInvoker producerPortletInvoker = new ProducerPortletInvoker();
-      producerPortletInvoker.setNext(containerPortletInvoker);
-      producerPortletInvoker.setPersistenceManager(producerPersistenceManager);
-      producerPortletInvoker.setStateManagementPolicy(producerStateManagementPolicy);
-      producerPortletInvoker.setStateConverter(producerStateConverter);
+        // The producer state converter
+        StateConverter producerStateConverter = new ExoStateConverter();
 
-      // register the producer portlet invoker if it hasn't been already
-      if(!federatingPortletInvoker.isResolved(PortletInvoker.LOCAL_PORTLET_INVOKER_ID))
-      {
-         federatingPortletInvoker.registerInvoker(PortletInvoker.LOCAL_PORTLET_INVOKER_ID, producerPortletInvoker);
-      }
+        // The producer portlet invoker
+        ProducerPortletInvoker producerPortletInvoker = new ProducerPortletInvoker();
+        producerPortletInvoker.setNext(containerPortletInvoker);
+        producerPortletInvoker.setPersistenceManager(producerPersistenceManager);
+        producerPortletInvoker.setStateManagementPolicy(producerStateManagementPolicy);
+        producerPortletInvoker.setStateConverter(producerStateConverter);
 
-      // The consumer portlet invoker
-      PortletCustomizationInterceptor portletCustomizationInterceptor = new PortletCustomizationInterceptor();
-      portletCustomizationInterceptor.setNext(federatingPortletInvoker);
-      ConsumerCacheInterceptor consumerCacheInterceptor = new ConsumerCacheInterceptor();
-      consumerCacheInterceptor.setNext(portletCustomizationInterceptor);
-      PortletInvokerInterceptor consumerPortletInvoker = new PortletInvokerInterceptor();
-      consumerPortletInvoker.setNext(consumerCacheInterceptor);
+        // register the producer portlet invoker if it hasn't been already
+        if (!federatingPortletInvoker.isResolved(PortletInvoker.LOCAL_PORTLET_INVOKER_ID)) {
+            federatingPortletInvoker.registerInvoker(PortletInvoker.LOCAL_PORTLET_INVOKER_ID, producerPortletInvoker);
+        }
 
-      // register federating portlet and consumerPortletInvoker invoker with container
-      container.registerComponentInstance(PortletInvoker.class, consumerPortletInvoker);
-      container.registerComponentInstance(FederatingPortletInvoker.class, federatingPortletInvoker);
+        // The consumer portlet invoker
+        PortletCustomizationInterceptor portletCustomizationInterceptor = new PortletCustomizationInterceptor();
+        portletCustomizationInterceptor.setNext(federatingPortletInvoker);
+        ConsumerCacheInterceptor consumerCacheInterceptor = new ConsumerCacheInterceptor();
+        consumerCacheInterceptor.setNext(portletCustomizationInterceptor);
+        PortletInvokerInterceptor consumerPortletInvoker = new PortletInvokerInterceptor();
+        consumerPortletInvoker.setNext(consumerCacheInterceptor);
 
-      //
-      ServletContainerFactory.getServletContainer().addWebAppListener(this);
-   }
+        // register federating portlet and consumerPortletInvoker invoker with container
+        container.registerComponentInstance(PortletInvoker.class, consumerPortletInvoker);
+        container.registerComponentInstance(FederatingPortletInvoker.class, federatingPortletInvoker);
 
-   public void stop()
-   {
-      ServletContainerFactory.getServletContainer().removeWebAppListener(this);
-   }
+        //
+        ServletContainerFactory.getServletContainer().addWebAppListener(this);
+    }
 
-   public PortletApplicationDeployer getPortletApplicationRegistry()
-   {
-      return portletApplicationRegistry;
-   }
+    public void stop() {
+        ServletContainerFactory.getServletContainer().removeWebAppListener(this);
+    }
 
-   @Override
-   public void onEvent(WebAppEvent event)
-   {
-      if (event instanceof WebAppLifeCycleEvent)
-      {
-         WebAppLifeCycleEvent lifeCycleEvent = (WebAppLifeCycleEvent)event;
-         int type = lifeCycleEvent.getType();
-         if (type == WebAppLifeCycleEvent.ADDED)
-         {
-            try
-            {
-               portletApplicationRegistry.add(lifeCycleEvent.getWebApp().getServletContext());
+    public PortletApplicationDeployer getPortletApplicationRegistry() {
+        return portletApplicationRegistry;
+    }
+
+    @Override
+    public void onEvent(WebAppEvent event) {
+        if (event instanceof WebAppLifeCycleEvent) {
+            WebAppLifeCycleEvent lifeCycleEvent = (WebAppLifeCycleEvent) event;
+            int type = lifeCycleEvent.getType();
+            if (type == WebAppLifeCycleEvent.ADDED) {
+                try {
+                    portletApplicationRegistry.add(lifeCycleEvent.getWebApp().getServletContext());
+                } catch (DeploymentException e) {
+                    log.error("Portlet deployment failed", e);
+                }
+            } else if (type == WebAppLifeCycleEvent.REMOVED) {
+                portletApplicationRegistry.remove(lifeCycleEvent.getWebApp().getServletContext());
             }
-            catch (DeploymentException e)
-            {
-               // Portlet deployment failed
-               e.printStackTrace();
-            }
-         }
-         else if (type == WebAppLifeCycleEvent.REMOVED)
-         {
-            portletApplicationRegistry.remove(lifeCycleEvent.getWebApp().getServletContext());
-         }
-      }
-   }
+        }
+    }
 }

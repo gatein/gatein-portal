@@ -19,6 +19,10 @@
 
 package org.exoplatform.portal.config.serialize;
 
+import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.exoplatform.portal.config.model.LocalizedString;
 import org.jibx.runtime.IAliasable;
 import org.jibx.runtime.IMarshaller;
@@ -29,98 +33,78 @@ import org.jibx.runtime.JiBXException;
 import org.jibx.runtime.JiBXParseException;
 import org.jibx.runtime.impl.UnmarshallingContext;
 
-import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class LocalizedValueMapper implements IUnmarshaller, IAliasable, IMarshaller
-{
+public class LocalizedValueMapper implements IUnmarshaller, IAliasable, IMarshaller {
 
-   /** . */
-   private String marshalURI;
+    /** . */
+    private String marshalURI;
 
-   /** . */
-   private String marshallName;
+    /** . */
+    private String marshallName;
 
-   /** . */
-   private int marshallIndex;
+    /** . */
+    private int marshallIndex;
 
-   public LocalizedValueMapper(String uri, int index, String name)
-   {
-      this.marshalURI = uri;
-      this.marshallName = name;
-      this.marshallIndex = index;
-   }
+    public LocalizedValueMapper(String uri, int index, String name) {
+        this.marshalURI = uri;
+        this.marshallName = name;
+        this.marshallIndex = index;
+    }
 
-   public LocalizedValueMapper()
-   {
-      this.marshalURI = null;
-      this.marshallName = "label";
-      this.marshallIndex = 0;
-   }
+    public LocalizedValueMapper() {
+        this.marshalURI = null;
+        this.marshallName = "label";
+        this.marshallIndex = 0;
+    }
 
-   public boolean isPresent(IUnmarshallingContext ctx) throws JiBXException
-   {
-      return ctx.isAt(marshalURI, marshallName);
-   }
+    public boolean isPresent(IUnmarshallingContext ctx) throws JiBXException {
+        return ctx.isAt(marshalURI, marshallName);
+    }
 
-   private static final Pattern RFC1766_PATTERN = Pattern.compile("^([a-zA-Z]{2})(?:-([a-zA-Z]{2}))?$");
+    private static final Pattern RFC1766_PATTERN = Pattern.compile("^([a-zA-Z]{2})(?:-([a-zA-Z]{2}))?$");
 
-   public Object unmarshal(Object o, IUnmarshallingContext ictx) throws JiBXException
-   {
-      UnmarshallingContext ctx = (UnmarshallingContext)ictx;
-      if (!ctx.isAt(marshalURI, marshallName))
-      {
-         ctx.throwStartTagNameError(marshalURI, marshallName);
-      }
-      int count = ctx.getAttributeCount();
-      Locale lang = null;
-      for (int i = 0;i < count;i++)
-      {
-         String attrName = ctx.getAttributeName(i);
-         if (attrName.equals("xml:lang"))
-         {
-            String attrValue= ctx.getAttributeValue(i).trim();
-            Matcher matcher = RFC1766_PATTERN.matcher(attrValue);
-            if (matcher.matches())
-            {
-               String langISO = matcher.group(1);
-               String countryISO = matcher.group(2);
-               if (countryISO == null)
-               {
-                  lang = new Locale(langISO.toLowerCase());
-               }
-               else
-               {
-                  lang = new Locale(langISO.toLowerCase(), countryISO.toLowerCase());
-               }
+    public Object unmarshal(Object o, IUnmarshallingContext ictx) throws JiBXException {
+        UnmarshallingContext ctx = (UnmarshallingContext) ictx;
+        if (!ctx.isAt(marshalURI, marshallName)) {
+            ctx.throwStartTagNameError(marshalURI, marshallName);
+        }
+        int count = ctx.getAttributeCount();
+        Locale lang = null;
+        for (int i = 0; i < count; i++) {
+            String attrName = ctx.getAttributeName(i);
+            if (attrName.equals("xml:lang")) {
+                String attrValue = ctx.getAttributeValue(i).trim();
+                Matcher matcher = RFC1766_PATTERN.matcher(attrValue);
+                if (matcher.matches()) {
+                    String langISO = matcher.group(1);
+                    String countryISO = matcher.group(2);
+                    if (countryISO == null) {
+                        lang = new Locale(langISO.toLowerCase());
+                    } else {
+                        lang = new Locale(langISO.toLowerCase(), countryISO.toLowerCase());
+                    }
+                } else {
+                    throw new JiBXParseException("The attribute xml:lang " + attrValue
+                            + " does not represent a valid language as defined by RFC 1766", attrValue);
+                }
+                break;
             }
-            else
-            {
-               throw new JiBXParseException("The attribute xml:lang " + attrValue + " does not represent a valid language as defined by RFC 1766", attrValue);
-            }
-            break;
-         }
-      }
-      ctx.parsePastStartTag(marshalURI, marshallName);
-      String value = ctx.getText();
-      ctx.parsePastEndTag(marshalURI, marshallName);
-      return new LocalizedString(value, lang);
-   }
+        }
+        ctx.parsePastStartTag(marshalURI, marshallName);
+        String value = ctx.getText();
+        ctx.parsePastEndTag(marshalURI, marshallName);
+        return new LocalizedString(value, lang);
+    }
 
-   //
+    //
 
+    public boolean isExtension(String s) {
+        throw new UnsupportedOperationException();
+    }
 
-   public boolean isExtension(String s)
-   {
-      throw new UnsupportedOperationException();
-   }
-
-   public void marshal(Object o, IMarshallingContext iMarshallingContext) throws JiBXException
-   {
-      throw new UnsupportedOperationException();
-   }
+    public void marshal(Object o, IMarshallingContext iMarshallingContext) throws JiBXException {
+        throw new UnsupportedOperationException();
+    }
 }

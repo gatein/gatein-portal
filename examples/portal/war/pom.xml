@@ -23,17 +23,17 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
+    <version>3.6.0.MO1-SNAPSHOT</version>
     <relativePath>../../../pom.xml</relativePath>
-  </parent> 
-	
+  </parent>
+
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.portal.sample.portal.war</artifactId>
   <packaging>war</packaging>
   <name>GateIn Portal Sample Portal War</name>
   <url>http://www.exoplatform.org</url>
   <description>GateIn Sample Portal War</description>
-  
+
   <build>
     <finalName>sample-portal</finalName>
   </build>

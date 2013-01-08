@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -19,77 +19,67 @@
 
 package org.exoplatform.webui.test;
 
-import org.exoplatform.container.ExoContainer;
-import org.exoplatform.resolver.ApplicationResourceResolver;
-import org.exoplatform.resolver.MockResourceResolver;
-import org.exoplatform.webui.application.WebuiApplication;
-
 import java.net.URL;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-public class MockApplication extends WebuiApplication
-{
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.resolver.ApplicationResourceResolver;
+import org.exoplatform.resolver.MockResourceResolver;
+import org.exoplatform.webui.application.WebuiApplication;
 
-   private Map<String, String> initParams_;
+public class MockApplication extends WebuiApplication {
 
-   private ResourceBundle appRes_;
+    private Map<String, String> initParams_;
 
-   public MockApplication(Map<String, String> initParams, Map<String, URL> resources, ResourceBundle appRes)
-   {
-      initParams_ = initParams;
-      appRes_ = appRes;
-      ApplicationResourceResolver resolver = new ApplicationResourceResolver();
-      resolver.addResourceResolver(new MockResourceResolver(resources));
-      setResourceResolver(resolver);
-   }
+    private ResourceBundle appRes_;
 
-   public String getApplicationId()
-   {
-      return "MockApplication";
-   }
+    public MockApplication(Map<String, String> initParams, Map<String, URL> resources, ResourceBundle appRes) {
+        initParams_ = initParams;
+        appRes_ = appRes;
+        ApplicationResourceResolver resolver = new ApplicationResourceResolver();
+        resolver.addResourceResolver(new MockResourceResolver(resources));
+        setResourceResolver(resolver);
+    }
 
-   public String getApplicationName()
-   {
-      return "MockApplication";
-   }
+    public String getApplicationId() {
+        return "MockApplication";
+    }
 
-   @SuppressWarnings("unused")
-   public ResourceBundle getResourceBundle(Locale locale) throws Exception
-   {
-      return appRes_;
-   }
+    public String getApplicationName() {
+        return "MockApplication";
+    }
 
-   @SuppressWarnings("unused")
-   public ResourceBundle getOwnerResourceBundle(String username, Locale locale) throws Exception
-   {
-      return null;
-   }
+    @SuppressWarnings("unused")
+    public ResourceBundle getResourceBundle(Locale locale) {
+        return appRes_;
+    }
 
-   public String getApplicationInitParam(String name)
-   {
-      return initParams_.get(name);
-   }
+    @SuppressWarnings("unused")
+    public ResourceBundle getOwnerResourceBundle(String username, Locale locale) {
+        return null;
+    }
 
-   @Override
-   public ExoContainer getApplicationServiceContainer()
-   {
-      // TODO Auto-generated method stub
-      return null;
-   }
+    public String getApplicationInitParam(String name) {
+        return initParams_.get(name);
+    }
 
-   @Override
-   public String getApplicationGroup()
-   {
-      // TODO Auto-generated method stub
-      return null;
-   }
+    @Override
+    public ExoContainer getApplicationServiceContainer() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
-   @Override
-   public String getApplicationType()
-   {
-      // TODO Auto-generated method stub
-      return null;
-   }
+    @Override
+    public String getApplicationGroup() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getApplicationType() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

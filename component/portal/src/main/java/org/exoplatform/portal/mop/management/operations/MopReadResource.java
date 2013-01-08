@@ -22,29 +22,27 @@
 
 package org.exoplatform.portal.mop.management.operations;
 
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 import org.gatein.management.api.exceptions.OperationException;
-import org.gatein.management.api.operation.model.ReadResourceModel;
 import org.gatein.management.api.operation.OperationContext;
 import org.gatein.management.api.operation.OperationHandler;
 import org.gatein.management.api.operation.ResultHandler;
-
-import java.util.LinkedHashSet;
-import java.util.Set;
+import org.gatein.management.api.operation.model.ReadResourceModel;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class MopReadResource implements OperationHandler
-{
-   @Override
-   public void execute(OperationContext operationContext, ResultHandler resultHandler) throws OperationException
-   {
-      Set<String> children = new LinkedHashSet<String>(3);
-      children.add("portalsites");
-      children.add("groupsites");
-      children.add("usersites");
+public class MopReadResource implements OperationHandler {
+    @Override
+    public void execute(OperationContext operationContext, ResultHandler resultHandler) throws OperationException {
+        Set<String> children = new LinkedHashSet<String>(3);
+        children.add("portalsites");
+        children.add("groupsites");
+        children.add("usersites");
 
-      resultHandler.completed(new ReadResourceModel("Available site types.", children));
-   }
+        resultHandler.completed(new ReadResourceModel("Available site types.", children));
+    }
 }

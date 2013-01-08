@@ -19,32 +19,32 @@
 
 -->
 
-<messagebundle>  
+<messagebundle>
   <msg name="title">
-  	La gestion des services
+    La gestion des services
   </msg>
   <msg name="services">
-  	Services
+    Services
   </msg>
   <msg name="name">
-  	Nom
+    Nom
   </msg>
   <msg name="description">
     Description
   </msg>
   <msg name="method">
-  	Méthode
+    Méthode
   </msg>
   <msg name="parameters">
-  	Paramètres
+    Paramètres
   </msg>
   <msg name="action">
-  	Action
+    Action
   </msg>
   <msg name="value">
-  	Valeur
+    Valeur
   </msg>
   <msg name="services_url">
-  	Services URL
+    Services URL
   </msg>
 </messagebundle>

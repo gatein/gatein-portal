@@ -21,23 +21,23 @@
 -->
 
 <configuration
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-  xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
-  
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+
   <component>
     <key>org.exoplatform.commons.chromattic.ChromatticManager</key>
     <type>org.exoplatform.commons.chromattic.ChromatticManager</type>
   </component>
 
   <component>
-		<type>org.exoplatform.portal.gadget.core.GadgetTokenInfoService</type>
-		<init-params>
-  		<values-param>
+    <type>org.exoplatform.portal.gadget.core.GadgetTokenInfoService</type>
+    <init-params>
+      <values-param>
         <name>service.configuration</name>
         <value>gadget-token</value>
         <value>2</value>
-      	<value>SECOND</value>
+        <value>SECOND</value>
       </values-param>
     </init-params>
   </component>

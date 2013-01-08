@@ -24,52 +24,45 @@ import org.exoplatform.portal.mop.navigation.NodeContext;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public abstract class AbstractImportFragmentTest extends AbstractImportTest
-{
+public abstract class AbstractImportFragmentTest extends AbstractImportTest {
 
-   @Override
-   protected final String getConfig1()
-   {
-      return "fragment1";
-   }
+    @Override
+    protected final String getConfig1() {
+        return "fragment1";
+    }
 
-   @Override
-   protected final String getConfig2()
-   {
-      return "fragment2";
-   }
+    @Override
+    protected final String getConfig2() {
+        return "fragment2";
+    }
 
-   protected abstract void assertState(NodeContext<?> root);
+    protected abstract void assertState(NodeContext<?> root);
 
-   @Override
-   protected final void afterTwoPhasesBoot(NodeContext<?> root)
-   {
-      assertEquals(1, root.getNodeSize());
-      NodeContext<?> foo = root.get("foo");
-      assertNotNull(foo);
-      assertEquals("foo_icon", foo.getState().getIcon());
-      assertEquals(0, foo.getNodeSize());
-   }
+    @Override
+    protected final void afterTwoPhasesBoot(NodeContext<?> root) {
+        assertEquals(1, root.getNodeSize());
+        NodeContext<?> foo = root.get("foo");
+        assertNotNull(foo);
+        assertEquals("foo_icon", foo.getState().getIcon());
+        assertEquals(0, foo.getNodeSize());
+    }
 
-   @Override
-   protected final void afterTwoPhaseNoOverrideReboot(NodeContext<?> root)
-   {
-      assertEquals(1, root.getNodeSize());
-      NodeContext<?> foo = root.get("foo");
-      assertNotNull(foo);
-      assertEquals("foo_icon", foo.getState().getIcon());
-      assertEquals(0, foo.getNodeSize());
-   }
+    @Override
+    protected final void afterTwoPhaseNoOverrideReboot(NodeContext<?> root) {
+        assertEquals(1, root.getNodeSize());
+        NodeContext<?> foo = root.get("foo");
+        assertNotNull(foo);
+        assertEquals("foo_icon", foo.getState().getIcon());
+        assertEquals(0, foo.getNodeSize());
+    }
 
-   @Override
-   protected final void afterTwoPhaseOverrideReboot(NodeContext<?> root)
-   {
-      assertState(root);
-   }
+    @Override
+    protected final void afterTwoPhaseOverrideReboot(NodeContext<?> root) {
+        assertState(root);
+    }
 
-   @Override
-   protected final void afterTwoPhaseNoOverrideReconfigure(NodeContext<?> root)
-   {
-      assertState(root);
-   }
+    @Override
+    protected final void afterTwoPhaseNoOverrideReconfigure(NodeContext<?> root) {
+        assertState(root);
+    }
 }

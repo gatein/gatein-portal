@@ -31,7 +31,7 @@
       <pattern>.*</pattern>
     </path-param>
   </route>
-  
+
   <route path="/upload">
     <route-param qname="gtn:handler">
       <value>upload</value>
@@ -67,13 +67,13 @@
       </route-param>
     </route>
     <route path="/{gtn:sitename}/{gtn:path}">
-	  <route-param qname="gtn:handler">
-	    <value>legacy</value>
-	  </route-param>
-	  <path-param qname="gtn:path" encoding="preserve-path">
-	    <pattern>.*</pattern>
-	  </path-param>
-  	</route>
+      <route-param qname="gtn:handler">
+        <value>legacy</value>
+      </route-param>
+      <path-param qname="gtn:path" encoding="preserve-path">
+        <pattern>.*</pattern>
+      </path-param>
+    </route>
   </route>
 
   <!-- Skin handler -->
@@ -90,9 +90,9 @@
     <path-param qname="gtn:orientation" capture-group="true">
       <pattern>-(lt)|-(rt)|</pattern>
     </path-param>
-	  <path-param qname="gtn:resource" encoding="preserve-path">
+    <path-param qname="gtn:resource" encoding="preserve-path">
       <pattern>.+?</pattern>
-	  </path-param>
+    </path-param>
   </route>
 
   <!-- Static resource handler needs to be before the portal handler -->
@@ -202,5 +202,5 @@
     <route-param qname="gtn:handler">
       <value>default</value>
     </route-param>
-  </route> 
+  </route>
 </controller>

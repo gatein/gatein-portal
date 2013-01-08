@@ -21,9 +21,9 @@
 -->
 
 <configuration
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
-   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+    xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
     <key>org.exoplatform.web.security.security.CookieTokenService</key>
@@ -43,12 +43,12 @@
     <key>org.exoplatform.web.security.security.TicketConfiguration</key>
     <type>org.exoplatform.web.security.security.TicketConfiguration</type>
     <init-params>
-    		<values-param>
-          <name>service.configuration</name>
-          <value>wci-ticket</value>
-          <value>1</value>
-        	<value>MINUTE</value>
-        </values-param>
+      <values-param>
+        <name>service.configuration</name>
+        <value>wci-ticket</value>
+        <value>1</value>
+        <value>MINUTE</value>
+      </values-param>
     </init-params>
   </component>
 

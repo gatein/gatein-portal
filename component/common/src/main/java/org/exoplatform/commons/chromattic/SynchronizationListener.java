@@ -19,24 +19,25 @@
 package org.exoplatform.commons.chromattic;
 
 /**
- * <p>Useful for being aware of the synchronization.</p>
+ * <p>
+ * Useful for being aware of the synchronization.
+ * </p>
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public interface SynchronizationListener
-{
+public interface SynchronizationListener {
 
-   /**
-    * Before synchronization occurs.
-    */
-   void beforeSynchronization();
+    /**
+     * Before synchronization occurs.
+     */
+    void beforeSynchronization();
 
-   /**
-    * Once synchronization occured.
-    *
-    * @param status the status of the synchronization
-    */
-   void afterSynchronization(SynchronizationStatus status);
+    /**
+     * Once synchronization occured.
+     *
+     * @param status the status of the synchronization
+     */
+    void afterSynchronization(SynchronizationStatus status);
 
 }

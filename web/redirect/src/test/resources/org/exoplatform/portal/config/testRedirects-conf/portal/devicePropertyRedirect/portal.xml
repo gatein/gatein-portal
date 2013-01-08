@@ -28,25 +28,25 @@
   <locale>en</locale>
   <access-permissions>Everyone</access-permissions>
   <edit-permission>*:/platform/administrators</edit-permission>
- 
+
   <portal-redirects>
     <portal-redirect>
       <redirect-site>redirectA</redirect-site>
       <name>Redirect Site A</name>
       <enabled>true</enabled>
       <conditions>
-         <condition>
-           <name>condition A</name>
-           <user-agent>
-             <contains>.*</contains>
-           </user-agent>
-           <device-properties>
-              <device-property>
-                <property-name>foo</property-name>
-                <equals>bar</equals>
-              </device-property>
-           </device-properties>
-         </condition>
+        <condition>
+          <name>condition A</name>
+          <user-agent>
+            <contains>.*</contains>
+          </user-agent>
+          <device-properties>
+            <device-property>
+              <property-name>foo</property-name>
+              <equals>bar</equals>
+            </device-property>
+          </device-properties>
+        </condition>
       </conditions>
     </portal-redirect>
     <portal-redirect>
@@ -54,19 +54,19 @@
       <name>Redirect Site B</name>
       <enabled>true</enabled>
       <conditions>
-         <condition>
-           <name>condition A</name>
-           <user-agent>
-             <contains>.*</contains>
-           </user-agent>
-           <device-properties>
-              <device-property>
-                <property-name>number</property-name>
-                <greater-than>10</greater-than>
-                <less-than>25.0</less-than>
-              </device-property>
-           </device-properties>
-         </condition>
+        <condition>
+          <name>condition A</name>
+          <user-agent>
+            <contains>.*</contains>
+          </user-agent>
+          <device-properties>
+            <device-property>
+              <property-name>number</property-name>
+              <greater-than>10</greater-than>
+              <less-than>25.0</less-than>
+            </device-property>
+          </device-properties>
+        </condition>
       </conditions>
     </portal-redirect>
     <portal-redirect>
@@ -74,18 +74,18 @@
       <name>Redirect Site C</name>
       <enabled>true</enabled>
       <conditions>
-         <condition>
-           <name>condition A</name>
-           <user-agent>
-             <contains>.*</contains>
-           </user-agent>
-           <device-properties>
-              <device-property>
-                <property-name>hello</property-name>
-                <matches>(?i)world</matches>
-              </device-property>
-           </device-properties>
-         </condition>
+        <condition>
+          <name>condition A</name>
+          <user-agent>
+            <contains>.*</contains>
+          </user-agent>
+          <device-properties>
+            <device-property>
+              <property-name>hello</property-name>
+              <matches>(?i)world</matches>
+            </device-property>
+          </device-properties>
+        </condition>
       </conditions>
     </portal-redirect>
     <portal-redirect>
@@ -93,18 +93,18 @@
       <name>Redirect Site D</name>
       <enabled>true</enabled>
       <conditions>
-         <condition>
-           <name>condition A</name>
-           <user-agent>
-             <contains>.*</contains>
-           </user-agent>
-           <device-properties>
-              <device-property>
-                <property-name>123</property-name>
-                <equals>(?i)ABC</equals>
-              </device-property>
-           </device-properties>
-         </condition>
+        <condition>
+          <name>condition A</name>
+          <user-agent>
+            <contains>.*</contains>
+          </user-agent>
+          <device-properties>
+            <device-property>
+              <property-name>123</property-name>
+              <equals>(?i)ABC</equals>
+            </device-property>
+          </device-properties>
+        </condition>
       </conditions>
     </portal-redirect>
   </portal-redirects>

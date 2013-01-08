@@ -19,7 +19,6 @@
 package org.exoplatform.portal.gadget.core;
 
 import com.google.inject.AbstractModule;
-
 import com.google.inject.multibindings.Multibinder;
 import com.google.inject.name.Names;
 
@@ -27,12 +26,11 @@ import com.google.inject.name.Names;
  * @author <a href="kienna@exoplatform.com">Kien Nguyen</a>
  * @version $Revision$
  */
-public class ExtraFeatureModule extends AbstractModule
-{
-   @Override
-   protected void configure()
-   {
-      Multibinder<String> featureBinder = Multibinder.newSetBinder(binder(), String.class, Names.named("org.apache.shindig.features-extended")); 
-      featureBinder.addBinding().toInstance("res://gatein-features/features.txt");
-   }
+public class ExtraFeatureModule extends AbstractModule {
+    @Override
+    protected void configure() {
+        Multibinder<String> featureBinder = Multibinder.newSetBinder(binder(), String.class,
+                Names.named("org.apache.shindig.features-extended"));
+        featureBinder.addBinding().toInstance("res://gatein-features/features.txt");
+    }
 }

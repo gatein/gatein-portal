@@ -34,107 +34,93 @@ import org.exoplatform.webui.event.Event;
 import org.exoplatform.webui.event.EventListener;
 
 /** Created by The eXo Platform SAS Mar 21, 2007 */
-public abstract class UIPageWizard extends UIWizard
-{
+public abstract class UIPageWizard extends UIWizard {
 
-   protected UIPopupWindow uiHelpWindow;
+    protected UIPopupWindow uiHelpWindow;
 
-   private int numberStep_;
+    private int numberStep_;
 
-   private boolean showWelcome = true;
+    private boolean showWelcome = true;
 
-   private boolean showActions = true;
+    private boolean showActions = true;
 
-   public UIPageWizard() throws Exception
-   {
-      uiHelpWindow = createUIComponent(UIPopupWindow.class, null, null);
-      uiHelpWindow.setWindowSize(300, 200);
-      uiHelpWindow.setShow(false);
-      uiHelpWindow.setId("UIPageWizardHelp");
-   }
+    public UIPageWizard() throws Exception {
+        uiHelpWindow = createUIComponent(UIPopupWindow.class, null, null);
+        uiHelpWindow.setWindowSize(300, 200);
+        uiHelpWindow.setShow(false);
+        uiHelpWindow.setId("UIPageWizardHelp");
+    }
 
-   public void setNumberSteps(int s)
-   {
-      numberStep_ = s;
-   }
+    public void setNumberSteps(int s) {
+        numberStep_ = s;
+    }
 
-   public int getNumberSteps()
-   {
-      return numberStep_;
-   }
+    public int getNumberSteps() {
+        return numberStep_;
+    }
 
-   public boolean isShowActions()
-   {
-      return showActions;
-   }
+    public boolean isShowActions() {
+        return showActions;
+    }
 
-   public void setShowActions(boolean showActions)
-   {
-      this.showActions = showActions;
-   }
+    public void setShowActions(boolean showActions) {
+        this.showActions = showActions;
+    }
 
-   public void processRender(WebuiRequestContext context) throws Exception
-   {
-      super.processRender(context);
-      uiHelpWindow.processRender(context);
-   }
+    public void processRender(WebuiRequestContext context) throws Exception {
+        super.processRender(context);
+        uiHelpWindow.processRender(context);
+    }
 
-   public boolean isShowWelcomeComponent()
-   {
-      return showWelcome;
-   }
+    public boolean isShowWelcomeComponent() {
+        return showWelcome;
+    }
 
-   public void setShowWelcomeComponent(boolean value)
-   {
-      showWelcome = value;
-   }
+    public void setShowWelcomeComponent(boolean value) {
+        showWelcome = value;
+    }
 
-   public UIPopupWindow getHelpWindow()
-   {
-      return uiHelpWindow;
-   }
+    public UIPopupWindow getHelpWindow() {
+        return uiHelpWindow;
+    }
 
-   protected void updateUIPortal(Event<? extends UIPageWizard> event) throws Exception
-   {
-      PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
+    protected void updateUIPortal(Event<? extends UIPageWizard> event) {
+        PortalRequestContext pcontext = (PortalRequestContext) event.getRequestContext();
 
-      UIPortal uiPortal = Util.getUIPortal();
-      uiPortal.setRenderSibling(UIPortal.class);
-      pcontext.ignoreAJAXUpdateOnPortlets(true);
-   }
+        UIPortal uiPortal = Util.getUIPortal();
+        uiPortal.setRenderSibling(UIPortal.class);
+        pcontext.ignoreAJAXUpdateOnPortlets(true);
+    }
 
-   void updateWizardComponent()
-   {
-      UIPortalApplication uiPortalApp = getAncestorOfType(UIPortalApplication.class);
-      PortalRequestContext pcontext = Util.getPortalRequestContext();
+    void updateWizardComponent() {
+        UIPortalApplication uiPortalApp = getAncestorOfType(UIPortalApplication.class);
+        PortalRequestContext pcontext = Util.getPortalRequestContext();
 
-      UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-      pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
+        UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+        pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
 
-      pcontext.ignoreAJAXUpdateOnPortlets(true);
-   }
+        pcontext.ignoreAJAXUpdateOnPortlets(true);
+    }
 
-   static public class AbortActionListener extends EventListener<UIPageWizard>
-   {
-      public void execute(Event<UIPageWizard> event) throws Exception
-      {
-         UIPortalApplication uiPortalApp = event.getSource().getAncestorOfType(UIPortalApplication.class);
-         uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
-         PortalRequestContext pcontext = (PortalRequestContext)event.getRequestContext();
+    public static class AbortActionListener extends EventListener<UIPageWizard> {
+        public void execute(Event<UIPageWizard> event) throws Exception {
+            UIPortalApplication uiPortalApp = event.getSource().getAncestorOfType(UIPortalApplication.class);
+            uiPortalApp.setModeState(UIPortalApplication.NORMAL_MODE);
+            PortalRequestContext pcontext = (PortalRequestContext) event.getRequestContext();
 
-         UIPortal uiPortal = Util.getUIPortal();
-         uiPortal.setRenderSibling(UIPortal.class);
-         pcontext.ignoreAJAXUpdateOnPortlets(true);
+            UIPortal uiPortal = Util.getUIPortal();
+            uiPortal.setRenderSibling(UIPortal.class);
+            pcontext.ignoreAJAXUpdateOnPortlets(true);
 
-         UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
-         uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
-         uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
-         UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
-         toolPanel.setUIComponent(null);
-         pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
-         JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
-         jsManager.require("SHARED/portal", "portal")
-            .addScripts("eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
-      }
-   }
+            UIWorkingWorkspace uiWorkingWS = uiPortalApp.getChildById(UIPortalApplication.UI_WORKING_WS_ID);
+            uiWorkingWS.findFirstComponentOfType(UIPortalComposer.class).setRendered(false);
+            uiWorkingWS.setRenderedChild(UIPortalApplication.UI_VIEWING_WS_ID);
+            UIPortalToolPanel toolPanel = uiWorkingWS.findFirstComponentOfType(UIPortalToolPanel.class);
+            toolPanel.setUIComponent(null);
+            pcontext.addUIComponentToUpdateByAjax(uiWorkingWS);
+            JavascriptManager jsManager = event.getRequestContext().getJavascriptManager();
+            jsManager.require("SHARED/portal", "portal").addScripts(
+                    "eXo.portal.portalMode=" + UIPortalApplication.NORMAL_MODE + ";");
+        }
+    }
 }

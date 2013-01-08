@@ -19,183 +19,155 @@
 
 package org.exoplatform.commons.serialization.converter;
 
+import java.io.InvalidObjectException;
+
 import junit.framework.AssertionFailedError;
+
 import org.exoplatform.commons.serialization.SerializationContext;
 import org.exoplatform.commons.serialization.api.TypeConverter;
 import org.exoplatform.commons.serialization.model.TypeDomain;
 import org.exoplatform.component.test.AbstractGateInTest;
 
-import java.io.InvalidObjectException;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestConverter extends AbstractGateInTest
-{
+public class TestConverter extends AbstractGateInTest {
 
-   public void testConvertSerializedType() throws Exception
-   {
-      TypeDomain domain = new TypeDomain();
-      domain.addTypeModel(A1.class);
-      A1 a = new A1("foo");
+    public void testConvertSerializedType() throws Exception {
+        TypeDomain domain = new TypeDomain();
+        domain.addTypeModel(A1.class);
+        A1 a = new A1("foo");
 
-      //
-      A3.delegate = new TypeConverter<A1, A2>()
-      {
-         @Override
-         public A2 write(A1 input) throws Exception
-         {
-            return new A2(input.state);
-         }
-         @Override
-         public A1 read(A2 output) throws Exception
-         {
-            return new A1(output.state);
-         }
-      };
-      SerializationContext context = new SerializationContext(domain);
-      a = context.clone(a);
-      assertEquals("foo", a.state);
-   }
+        //
+        A3.delegate = new TypeConverter<A1, A2>() {
+            @Override
+            public A2 write(A1 input) throws Exception {
+                return new A2(input.state);
+            }
 
-   public void testConvertSerializableType() throws Exception
-   {
-      TypeDomain domain = new TypeDomain();
-      domain.addTypeModel(B1.class);
-      B1 b = new B1("foo");
+            @Override
+            public A1 read(A2 output) throws Exception {
+                return new A1(output.state);
+            }
+        };
+        SerializationContext context = new SerializationContext(domain);
+        a = context.clone(a);
+        assertEquals("foo", a.state);
+    }
 
-      //
-      SerializationContext context = new SerializationContext(domain);
-      b = context.clone(b);
-      assertEquals("foo", b.state);
-   }
+    public void testConvertSerializableType() throws Exception {
+        TypeDomain domain = new TypeDomain();
+        domain.addTypeModel(B1.class);
+        B1 b = new B1("foo");
 
-   public void testConverterWriteThrowsException() throws Exception
-   {
-      TypeDomain domain = new TypeDomain();
-      domain.addTypeModel(A1.class);
-      A1 a = new A1("foo");
+        //
+        SerializationContext context = new SerializationContext(domain);
+        b = context.clone(b);
+        assertEquals("foo", b.state);
+    }
 
-      //
-      final Exception e = new Exception();
-      A3.delegate = new TypeConverter<A1, A2>()
-      {
-         @Override
-         public A2 write(A1 input) throws Exception
-         {
-            throw e;
-         }
-         @Override
-         public A1 read(A2 output) throws Exception
-         {
-            throw new AssertionFailedError();
-         }
-      };
-      SerializationContext context = new SerializationContext(domain);
-      try
-      {
-         a = context.clone(a);
-         fail();
-      }
-      catch (InvalidObjectException ioe)
-      {
-         assertSame(e, ioe.getCause());
-      }
-   }
+    public void testConverterWriteThrowsException() throws Exception {
+        TypeDomain domain = new TypeDomain();
+        domain.addTypeModel(A1.class);
+        A1 a = new A1("foo");
 
-   public void testConverterWriteReturnsNull() throws Exception
-   {
-      TypeDomain domain = new TypeDomain();
-      domain.addTypeModel(A1.class);
-      A1 a = new A1("foo");
+        //
+        final Exception e = new Exception();
+        A3.delegate = new TypeConverter<A1, A2>() {
+            @Override
+            public A2 write(A1 input) throws Exception {
+                throw e;
+            }
 
-      //
-      A3.delegate = new TypeConverter<A1, A2>()
-      {
-         @Override
-         public A2 write(A1 input) throws Exception
-         {
-            return null;
-         }
-         @Override
-         public A1 read(A2 output) throws Exception
-         {
-            throw new AssertionFailedError();
-         }
-      };
-      SerializationContext context = new SerializationContext(domain);
-      try
-      {
-         a = context.clone(a);
-         fail();
-      }
-      catch (InvalidObjectException e)
-      {
-      }
-   }
+            @Override
+            public A1 read(A2 output) throws Exception {
+                throw new AssertionFailedError();
+            }
+        };
+        SerializationContext context = new SerializationContext(domain);
+        try {
+            a = context.clone(a);
+            fail();
+        } catch (InvalidObjectException ioe) {
+            assertSame(e, ioe.getCause());
+        }
+    }
 
-   public void testConverterReadReturnsNull() throws Exception
-   {
-      TypeDomain domain = new TypeDomain();
-      domain.addTypeModel(A1.class);
-      A1 a = new A1("foo");
+    public void testConverterWriteReturnsNull() throws Exception {
+        TypeDomain domain = new TypeDomain();
+        domain.addTypeModel(A1.class);
+        A1 a = new A1("foo");
 
-      //
-      A3.delegate = new TypeConverter<A1, A2>()
-      {
-         @Override
-         public A2 write(A1 input) throws Exception
-         {
-            return new A2(input.state);
-         }
-         @Override
-         public A1 read(A2 output) throws Exception
-         {
-            return null;
-         }
-      };
-      SerializationContext context = new SerializationContext(domain);
-      try
-      {
-         a = context.clone(a);
-         fail();
-      }
-      catch (InvalidObjectException e)
-      {
-      }
-   }
+        //
+        A3.delegate = new TypeConverter<A1, A2>() {
+            @Override
+            public A2 write(A1 input) throws Exception {
+                return null;
+            }
 
-   public void testConverterReadThrowsException() throws Exception
-   {
-      TypeDomain domain = new TypeDomain();
-      domain.addTypeModel(A1.class);
-      A1 a = new A1("foo");
+            @Override
+            public A1 read(A2 output) throws Exception {
+                throw new AssertionFailedError();
+            }
+        };
+        SerializationContext context = new SerializationContext(domain);
+        try {
+            a = context.clone(a);
+            fail();
+        } catch (InvalidObjectException e) {
+        }
+    }
 
-      //
-      final Exception e = new Exception();
-      A3.delegate = new TypeConverter<A1, A2>()
-      {
-         @Override
-         public A2 write(A1 input) throws Exception
-         {
-            return new A2(input.state);
-         }
-         @Override
-         public A1 read(A2 output) throws Exception
-         {
-            throw e;
-         }
-      };
-      SerializationContext context = new SerializationContext(domain);
-      try
-      {
-         a = context.clone(a);
-         fail();
-      }
-      catch (InvalidObjectException ioe)
-      {
-         assertSame(e, ioe.getCause());
-      }
-   }
+    public void testConverterReadReturnsNull() throws Exception {
+        TypeDomain domain = new TypeDomain();
+        domain.addTypeModel(A1.class);
+        A1 a = new A1("foo");
+
+        //
+        A3.delegate = new TypeConverter<A1, A2>() {
+            @Override
+            public A2 write(A1 input) throws Exception {
+                return new A2(input.state);
+            }
+
+            @Override
+            public A1 read(A2 output) throws Exception {
+                return null;
+            }
+        };
+        SerializationContext context = new SerializationContext(domain);
+        try {
+            a = context.clone(a);
+            fail();
+        } catch (InvalidObjectException e) {
+        }
+    }
+
+    public void testConverterReadThrowsException() throws Exception {
+        TypeDomain domain = new TypeDomain();
+        domain.addTypeModel(A1.class);
+        A1 a = new A1("foo");
+
+        //
+        final Exception e = new Exception();
+        A3.delegate = new TypeConverter<A1, A2>() {
+            @Override
+            public A2 write(A1 input) throws Exception {
+                return new A2(input.state);
+            }
+
+            @Override
+            public A1 read(A2 output) throws Exception {
+                throw e;
+            }
+        };
+        SerializationContext context = new SerializationContext(domain);
+        try {
+            a = context.clone(a);
+            fail();
+        } catch (InvalidObjectException ioe) {
+            assertSame(e, ioe.getCause());
+        }
+    }
 }

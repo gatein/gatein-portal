@@ -37,24 +37,26 @@ import org.gatein.mop.api.workspace.Workspace;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public abstract class AbstractSiteOperationHandler extends AbstractMopOperationHandler
-{
-   @Override
-   protected final void execute(OperationContext operationContext, ResultHandler resultHandler, Workspace workspace, ObjectType<Site> siteType) throws ResourceNotFoundException, OperationException
-   {
-      String operationName = operationContext.getOperationName();
-      PathAddress address = operationContext.getAddress();
+public abstract class AbstractSiteOperationHandler extends AbstractMopOperationHandler {
+    @Override
+    protected final void execute(OperationContext operationContext, ResultHandler resultHandler, Workspace workspace,
+            ObjectType<Site> siteType) throws ResourceNotFoundException, OperationException {
+        String operationName = operationContext.getOperationName();
+        PathAddress address = operationContext.getAddress();
 
-      String siteName = address.resolvePathTemplate("site-name");
-      if (siteName == null) throw new OperationException(operationName, "No site name specified.");
+        String siteName = address.resolvePathTemplate("site-name");
+        if (siteName == null)
+            throw new OperationException(operationName, "No site name specified.");
 
-      SiteKey siteKey = getSiteKey(siteType, siteName);
+        SiteKey siteKey = getSiteKey(siteType, siteName);
 
-      Site site = workspace.getSite(siteType, siteKey.getName());
-      if (site == null) throw new ResourceNotFoundException("No site found for site " + siteKey);
+        Site site = workspace.getSite(siteType, siteKey.getName());
+        if (site == null)
+            throw new ResourceNotFoundException("No site found for site " + siteKey);
 
-      execute(operationContext, resultHandler, site);
-   }
+        execute(operationContext, resultHandler, site);
+    }
 
-   protected abstract void execute(OperationContext operationContext, ResultHandler resultHandler, Site site) throws ResourceNotFoundException, OperationException;
+    protected abstract void execute(OperationContext operationContext, ResultHandler resultHandler, Site site)
+            throws ResourceNotFoundException, OperationException;
 }

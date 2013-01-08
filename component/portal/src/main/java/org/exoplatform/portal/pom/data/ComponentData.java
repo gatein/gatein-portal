@@ -22,11 +22,9 @@ package org.exoplatform.portal.pom.data;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class ComponentData extends ModelData
-{
+public abstract class ComponentData extends ModelData {
 
-   public ComponentData(String storageId, String storageName)
-   {
-      super(storageId, storageName);
-   }
+    public ComponentData(String storageId, String storageName) {
+        super(storageId, storageName);
+    }
 }

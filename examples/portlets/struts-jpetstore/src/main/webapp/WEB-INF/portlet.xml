@@ -18,11 +18,13 @@ limitations under the License.
   $Id: portlet.xml 545676 2007-06-09 00:52:56Z ate $
 -->
 <portlet-app id="jpetstore"
-    xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd" version="1.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">    
+             xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd" version="1.0"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_1_0.xsd">
   <portlet id="JPetStorePortlet">
-    <description>The JPetstore Portlet runs the JPetstore Struts application inside of a portlet. This is a good demo of how to develop Struts portlets.</description>      
+    <description>The JPetstore Portlet runs the JPetstore Struts application inside of a portlet. This is a good demo of
+      how to develop Struts portlets.
+    </description>
     <portlet-name>JPetstore</portlet-name>
     <display-name>JPetstore Portlet</display-name>
     <portlet-class>org.apache.portals.bridges.struts.StrutsPortlet</portlet-class>
@@ -41,7 +43,7 @@ limitations under the License.
     <init-param>
       <name>HelpPage</name>
       <value>/help.shtml</value>
-    </init-param>      
+    </init-param>
     <expiration-cache>-1</expiration-cache>
     <supports>
       <mime-type>text/html</mime-type>

@@ -19,6 +19,14 @@
 
 package org.exoplatform.portal.mop.importer;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
 import org.exoplatform.portal.config.model.I18NString;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PageNodeContainer;
@@ -38,363 +46,278 @@ import org.exoplatform.portal.tree.diff.ListChangeIterator;
 import org.exoplatform.portal.tree.diff.ListChangeType;
 import org.exoplatform.portal.tree.diff.ListDiff;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class NavigationFragmentImporter
-{
+public class NavigationFragmentImporter {
 
-   private static final ListAdapter<PageNodeContainer, String> PAGE_NODE_CONTAINER_ADAPTER = new ListAdapter<PageNodeContainer, String>()
-   {
-      public int size(PageNodeContainer list)
-      {
-         List<PageNode> nodes = list.getNodes();
-         if (nodes == null)
-         {
-            return 0;
-         }
-         else
-         {
-            return nodes.size();
-         }
-      }
+    private static final ListAdapter<PageNodeContainer, String> PAGE_NODE_CONTAINER_ADAPTER = new ListAdapter<PageNodeContainer, String>() {
+        public int size(PageNodeContainer list) {
+            List<PageNode> nodes = list.getNodes();
+            if (nodes == null) {
+                return 0;
+            } else {
+                return nodes.size();
+            }
+        }
 
-      public Iterator<String> iterator(PageNodeContainer list, boolean reverse)
-      {
-         List<PageNode> nodes = list.getNodes();
-         if (nodes == null)
-         {
-            return Collections.<String>emptyList().iterator();
-         }
-         else {
-            String[] names = new String[nodes.size()];
+        public Iterator<String> iterator(PageNodeContainer list, boolean reverse) {
+            List<PageNode> nodes = list.getNodes();
+            if (nodes == null) {
+                return Collections.<String> emptyList().iterator();
+            } else {
+                String[] names = new String[nodes.size()];
+                int index = 0;
+                for (PageNode child : nodes) {
+                    names[index++] = child.getName();
+                }
+                return Adapters.<String> list().iterator(names, reverse);
+            }
+        }
+    };
+
+    private static final ListAdapter<NodeContext<?>, String> NODE_ADAPTER = new ListAdapter<NodeContext<?>, String>() {
+        public int size(NodeContext<?> list) {
+            return list.getNodeCount();
+        }
+
+        public Iterator<String> iterator(NodeContext<?> list, boolean reverse) {
+            int size = list.getNodeCount();
+            String[] names = new String[size];
             int index = 0;
-            for (PageNode child : nodes)
-            {
-               names[index++] = child.getName();
+            for (NodeContext<?> child = list.getFirst(); child != null; child = child.getNext()) {
+                names[index++] = child.getName();
             }
-            return Adapters.<String>list().iterator(names, reverse);
-         }
-      }
-   };
+            return Adapters.<String> list().iterator(names, reverse);
+        }
+    };
 
-   private static final ListAdapter<NodeContext<?>, String> NODE_ADAPTER = new ListAdapter<NodeContext<?>, String>()
-   {
-      public int size(NodeContext<?> list)
-      {
-         return list.getNodeCount();
-      }
+    /** . */
+    private final String[] path;
 
-      public Iterator<String> iterator(NodeContext<?> list, boolean reverse)
-      {
-         int size = list.getNodeCount();
-         String[] names = new String[size];
-         int index = 0;
-         for (NodeContext<?> child = list.getFirst();child != null;child = child.getNext())
-         {
-            names[index++] = child.getName();
-         }
-         return Adapters.<String>list().iterator(names, reverse);
-      }
-   };
+    /** . */
+    private final NavigationService navigationService;
 
-   /** . */
-   private final String[] path;
-   
-   /** . */
-   private final NavigationService navigationService;
-   
-   /** . */
-   private final SiteKey navigationKey;
+    /** . */
+    private final SiteKey navigationKey;
 
-   /** . */
-   private final Locale portalLocale;
+    /** . */
+    private final Locale portalLocale;
 
-   /** . */
-   private final DescriptionService descriptionService;
+    /** . */
+    private final DescriptionService descriptionService;
 
-   /** . */
-   private final PageNodeContainer src;
+    /** . */
+    private final PageNodeContainer src;
 
-   /** . */
-   private final ImportConfig config;
+    /** . */
+    private final ImportConfig config;
 
-   public NavigationFragmentImporter(
-      String[] path,
-      NavigationService navigationService,
-      SiteKey navigationKey,
-      Locale portalLocale,
-      DescriptionService descriptionService,
-      PageNodeContainer src,
-      ImportConfig config)
-   {
-      this.path = path;
-      this.navigationService = navigationService;
-      this.navigationKey = navigationKey;
-      this.portalLocale = portalLocale;
-      this.descriptionService = descriptionService;
-      this.src = src;
-      this.config = config;
-   }
+    public NavigationFragmentImporter(String[] path, NavigationService navigationService, SiteKey navigationKey,
+            Locale portalLocale, DescriptionService descriptionService, PageNodeContainer src, ImportConfig config) {
+        this.path = path;
+        this.navigationService = navigationService;
+        this.navigationKey = navigationKey;
+        this.portalLocale = portalLocale;
+        this.descriptionService = descriptionService;
+        this.src = src;
+        this.config = config;
+    }
 
-   public ImportConfig getConfig()
-   {
-      return config;
-   }
+    public ImportConfig getConfig() {
+        return config;
+    }
 
-   public NodeContext<?> perform()
-   {
-      NavigationContext navigationCtx = navigationService.loadNavigation(navigationKey);
+    public NodeContext<?> perform() {
+        NavigationContext navigationCtx = navigationService.loadNavigation(navigationKey);
 
-      //
-      if (navigationCtx != null)
-      {
-         NodeContext root = navigationService.loadNode(NodeModel.SELF_MODEL, navigationCtx, GenericScope.branchShape(path), null);
+        //
+        if (navigationCtx != null) {
+            NodeContext root = navigationService.loadNode(NodeModel.SELF_MODEL, navigationCtx, GenericScope.branchShape(path),
+                    null);
 
-         //
-         NodeContext from = root;
-         for (String name : path)
-         {
-            NodeContext a = from.get(name);
-            if (a != null)
-            {
-               from = a;
+            //
+            NodeContext from = root;
+            for (String name : path) {
+                NodeContext a = from.get(name);
+                if (a != null) {
+                    from = a;
+                } else {
+                    from = from.add(null, name);
+                }
             }
-            else
-            {
-               from = from.add(null, name);
+
+            // Collect labels
+            Map<NodeContext<?>, Map<Locale, Described.State>> labelMap = new HashMap<NodeContext<?>, Map<Locale, Described.State>>();
+
+            // Perform save
+            perform(src, from, labelMap);
+
+            // Save the node
+            navigationService.saveNode(root, null);
+
+            //
+            for (Map.Entry<NodeContext<?>, Map<Locale, Described.State>> entry : labelMap.entrySet()) {
+                String id = entry.getKey().getId();
+                descriptionService.setDescriptions(id, entry.getValue());
             }
-         }
 
-         // Collect labels
-         Map<NodeContext<?>, Map<Locale, Described.State>> labelMap = new HashMap<NodeContext<?>, Map<Locale, Described.State>>();
+            //
+            return from;
+        } else {
+            return null;
+        }
+    }
 
-         // Perform save
-         perform(src, from, labelMap);
+    private void perform(PageNodeContainer src, final NodeContext<?> dst,
+            final Map<NodeContext<?>, Map<Locale, Described.State>> labelMap) {
+        navigationService.rebaseNode(dst, Scope.CHILDREN, null);
 
-         // Save the node
-         navigationService.saveNode(root, null);
+        //
+        ListDiff<PageNodeContainer, NodeContext<?>, String> diff = new ListDiff<PageNodeContainer, NodeContext<?>, String>(
+                PAGE_NODE_CONTAINER_ADAPTER, NODE_ADAPTER);
 
-         //
-         for (Map.Entry<NodeContext<?>, Map<Locale, Described.State>> entry : labelMap.entrySet())
-         {
-            String id = entry.getKey().getId();
-            descriptionService.setDescriptions(id, entry.getValue());
-         }
+        //
+        List<PageNode> srcChildren = src.getNodes();
+        ListChangeIterator<PageNodeContainer, NodeContext<?>, String> it = diff.iterator(src, dst);
 
-         //
-         return from;
-      }
-      else
-      {
-         return null;
-      }
-   }
-   
-   private void perform(PageNodeContainer src, final NodeContext<?> dst, final Map<NodeContext<?>, Map<Locale, Described.State>> labelMap)
-   {
-      navigationService.rebaseNode(dst, Scope.CHILDREN, null);
+        class Change {
+            final ListChangeType type;
+            final String name;
+            final int index1;
+            final int index2;
 
-      //
-      ListDiff<PageNodeContainer, NodeContext<?>, String> diff = new ListDiff<PageNodeContainer,NodeContext<?>, String>(
-         PAGE_NODE_CONTAINER_ADAPTER,
-         NODE_ADAPTER
-         );
+            Change(ListChangeType type, String name, int index1, int index2) {
+                this.type = type;
+                this.name = name;
+                this.index1 = index1;
+                this.index2 = index2;
+            }
+        }
 
-      //
-      List<PageNode> srcChildren = src.getNodes();
-      ListChangeIterator<PageNodeContainer, NodeContext<?>, String> it = diff.iterator(src, dst);
+        // Buffer the changes in a list
+        LinkedList<Change> foo = new LinkedList<Change>();
+        while (it.hasNext()) {
+            ListChangeType type = it.next();
+            foo.add(new Change(type, it.getElement(), it.getIndex1(), it.getIndex2()));
+        }
 
-      class Change
-      {
-         final ListChangeType type;
-         final String name;
-         final int index1;
-         final int index2;
+        // The last encountered child
+        NodeContext<?> previousChild = null;
 
-         Change(ListChangeType type, String name, int index1, int index2)
-         {
-            this.type = type;
-            this.name = name;
-            this.index1 = index1;
-            this.index2 = index2;
-         }
-      }
+        // Replay the changes and apply them
+        for (Change change : foo) {
+            PageNode srcChild = src.getNode(change.name);
+            NodeContext<?> dstChild = dst.get(change.name);
 
-      // Buffer the changes in a list
-      LinkedList<Change> foo = new LinkedList<Change>();
-      while (it.hasNext())
-      {
-         ListChangeType type = it.next();
-         foo.add(new Change(type, it.getElement(), it.getIndex1(), it.getIndex2()));
-      }
+            //
+            switch (change.type) {
+                case SAME:
+                    // Perform recursively
+                    perform(srcChild, dstChild, labelMap);
 
-      // The last encountered child
-      NodeContext<?> previousChild = null;
+                    //
+                    if (config.updatedSame) {
+                        update(srcChild, dstChild, labelMap);
+                    }
 
-      // Replay the changes and apply them
-      for (Change change : foo)
-      {
-         PageNode srcChild = src.getNode(change.name);
-         NodeContext<?> dstChild = dst.get(change.name);
+                    //
+                    previousChild = dstChild;
+                    break;
+                case REMOVE:
+                    if (dst.getNode(change.name) != null) {
+                    } else {
+                        if (config.createMissing) {
+                            previousChild = add(srcChild, previousChild, dst, labelMap);
+                        }
+                    }
+                    break;
+                case ADD:
+                    if (src.getNode(change.name) != null) {
+                        if (config.updatedSame) {
+                            update(srcChild, dstChild, labelMap);
+                        }
+                        previousChild = dstChild;
+                    } else {
+                        if (config.destroyOrphan) {
+                            dstChild.removeNode();
+                        } else {
+                            previousChild = dstChild;
+                        }
+                    }
+                    break;
+            }
+        }
+    }
 
-         //
-         switch (change.type)
-         {
-            case SAME:
-               // Perform recursively
-               perform(srcChild, dstChild, labelMap);
+    private NodeContext<?> add(PageNode target, NodeContext<?> previous, NodeContext<?> parent,
+            Map<NodeContext<?>, Map<Locale, Described.State>> labelMap) {
+        I18NString labels = target.getLabels();
 
-               //
-               if (config.updatedSame)
-               {
-                  update(srcChild, dstChild, labelMap);
-               }
+        //
+        Map<Locale, Described.State> description;
+        if (labels.isSimple()) {
+            description = null;
+        } else if (labels.isEmpty()) {
+            description = null;
+        } else {
+            description = new HashMap<Locale, Described.State>();
+            for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet()) {
+                description.put(entry.getKey(), new Described.State(entry.getValue(), null));
+            }
+        }
 
-               //
-               previousChild = dstChild;
-               break;
-            case REMOVE:
-               if (dst.getNode(change.name) != null)
-               {
-               }
-               else
-               {
-                  if (config.createMissing)
-                  {
-                     previousChild = add(srcChild, previousChild, dst, labelMap);
-                  }
-               }
-               break;
-            case ADD:
-               if (src.getNode(change.name) != null)
-               {
-                  if (config.updatedSame)
-                  {
-                     update(srcChild, dstChild, labelMap);
-                  }
-                  previousChild = dstChild;
-               }
-               else
-               {
-                  if (config.destroyOrphan)
-                  {
-                     dstChild.removeNode();
-                  }
-                  else
-                  {
-                     previousChild = dstChild;
-                  }
-               }
-               break;
-         }
-      }
-   }
+        //
+        String name = target.getName();
+        int index;
+        if (previous != null) {
+            index = parent.get((previous).getName()).getIndex() + 1;
+        } else {
+            index = 0;
+        }
+        NodeContext<?> child = parent.add(index, name);
+        NodeState state = target.getState();
+        child.setState(state);
 
-   private NodeContext<?> add(
-      PageNode target,
-      NodeContext<?> previous,
-      NodeContext<?> parent,
-      Map<NodeContext<?>, Map<Locale, Described.State>> labelMap)
-   {
-      I18NString labels = target.getLabels();
+        //
+        if (description != null) {
+            labelMap.put(child, description);
+        }
 
-      //
-      Map<Locale, Described.State> description;
-      if (labels.isSimple())
-      {
-         description = null;
-      }
-      else if (labels.isEmpty())
-      {
-         description = null;
-      }
-      else
-      {
-         description = new HashMap<Locale, Described.State>();
-         for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet())
-         {
-            description.put(entry.getKey(), new Described.State(entry.getValue(), null));
-         }
-      }
+        // We recurse to create the descendants
+        List<PageNode> targetChildren = target.getNodes();
+        if (targetChildren != null) {
+            NodeContext<?> targetPrevious = null;
+            for (PageNode targetChild : targetChildren) {
+                targetPrevious = add(targetChild, targetPrevious, child, labelMap);
+            }
+        }
 
-      //
-      String name = target.getName();
-      int index;
-      if (previous != null)
-      {
-         index = parent.get((previous).getName()).getIndex() + 1;
-      }
-      else
-      {
-         index = 0;
-      }
-      NodeContext<?> child = parent.add(index, name);
-      NodeState state = target.getState();
-      child.setState(state);
+        //
+        return child;
+    }
 
-      //
-      if (description != null)
-      {
-         labelMap.put(child, description);
-      }
+    private void update(PageNode src, NodeContext<?> target, Map<NodeContext<?>, Map<Locale, Described.State>> labelMap) {
+        target.setState(src.getState());
 
-      // We recurse to create the descendants
-      List<PageNode> targetChildren = target.getNodes();
-      if (targetChildren != null)
-      {
-         NodeContext<?> targetPrevious = null;
-         for (PageNode targetChild : targetChildren)
-         {
-            targetPrevious = add(targetChild, targetPrevious, child, labelMap);
-         }
-      }
+        // Update extended labels if necessary
+        I18NString labels = src.getLabels();
+        Map<Locale, Described.State> description;
+        if (labels.isSimple()) {
+            description = null;
+        } else if (labels.isEmpty()) {
+            description = null;
+        } else {
+            description = new HashMap<Locale, Described.State>();
+            for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet()) {
+                description.put(entry.getKey(), new Described.State(entry.getValue(), null));
+            }
+        }
 
-      //
-      return child;
-   }
-
-   private void update(PageNode src, NodeContext<?> target,
-                       Map<NodeContext<?>, Map<Locale, Described.State>> labelMap)
-   {
-      target.setState(src.getState());
-
-      // Update extended labels if necessary
-      I18NString labels = src.getLabels();
-      Map<Locale, Described.State> description;
-      if (labels.isSimple())
-      {
-         description = null;
-      }
-      else if (labels.isEmpty())
-      {
-         description = null;
-      }
-      else
-      {
-         description = new HashMap<Locale, Described.State>();
-         for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet())
-         {
-            description.put(entry.getKey(), new Described.State(entry.getValue(), null));
-         }
-      }
-
-      if (description != null)
-      {
-         labelMap.put(target, description);
-      }
-      else
-      {
-         labelMap.put(target, Collections.<Locale, Described.State>emptyMap());
-      }
-   }
+        if (description != null) {
+            labelMap.put(target, description);
+        } else {
+            labelMap.put(target, Collections.<Locale, Described.State> emptyMap());
+        }
+    }
 }

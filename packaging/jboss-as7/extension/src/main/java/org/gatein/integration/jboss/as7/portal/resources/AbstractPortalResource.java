@@ -29,18 +29,15 @@ import org.jboss.logging.Logger;
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-public abstract class AbstractPortalResource extends AbstractRuntimeResource
-{
-   protected final PortalContext portalContext;
+public abstract class AbstractPortalResource extends AbstractRuntimeResource {
+    protected final PortalContext portalContext;
 
-   protected AbstractPortalResource(PathElement pathElement, String portalContainerName)
-   {
-      super(pathElement);
-      this.portalContext = new PortalContext(portalContainerName);
-   }
+    protected AbstractPortalResource(PathElement pathElement, String portalContainerName) {
+        super(pathElement);
+        this.portalContext = new PortalContext(portalContainerName);
+    }
 
-   protected Logger getLogger()
-   {
-      return PortalContext.getLog();
-   }
+    protected Logger getLogger() {
+        return PortalContext.getLog();
+    }
 }

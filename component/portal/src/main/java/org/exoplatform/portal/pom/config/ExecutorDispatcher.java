@@ -25,39 +25,31 @@ import org.exoplatform.services.log.Log;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class ExecutorDispatcher implements TaskExecutor
-{
+public class ExecutorDispatcher implements TaskExecutor {
 
-   /** . */
-   private final Log log = ExoLogger.getLogger(getClass());
+    /** . */
+    private final Log log = ExoLogger.getLogger(getClass());
 
-   /** . */
-   private static final String[] padding = {"    ", "   ", "  ", " "};
+    /** . */
+    private static final String[] padding = { "    ", "   ", "  ", " " };
 
-   public <V> V execute(POMSession session, POMTask<V> task) throws Exception
-   {
-      if (log.isDebugEnabled())
-      {
-         String s = task.toString();
-         log.debug("Executing " + s + "");
-         long t0 = System.currentTimeMillis();
-         V v = session.execute(task);
-         long t1 = System.currentTimeMillis();
-         String t = "" + (t1 - t0);
-         if (t.length() < 4)
-         {
-            t = padding[t.length()] + t;
-            log.debug("Executed [" + t + "] " + s + "");
-         }
-         else
-         {
-            log.debug("Executed in " + t + " " + s + "");
-         }
-         return v;
-      }
-      else
-      {
-         return session.execute(task);
-      }
-   }
+    public <V> V execute(POMSession session, POMTask<V> task) throws Exception {
+        if (log.isDebugEnabled()) {
+            String s = task.toString();
+            log.debug("Executing " + s + "");
+            long t0 = System.currentTimeMillis();
+            V v = session.execute(task);
+            long t1 = System.currentTimeMillis();
+            String t = "" + (t1 - t0);
+            if (t.length() < 4) {
+                t = padding[t.length()] + t;
+                log.debug("Executed [" + t + "] " + s + "");
+            } else {
+                log.debug("Executed in " + t + " " + s + "");
+            }
+            return v;
+        } else {
+            return session.execute(task);
+        }
+    }
 }

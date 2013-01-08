@@ -26,63 +26,52 @@ import org.exoplatform.portal.config.model.PortalConfig;
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
-public class PortalConfigImporter
-{
-   /** . */
-   private final PortalConfig src;
+public class PortalConfigImporter {
+    /** . */
+    private final PortalConfig src;
 
-   /** . */
-   private final DataStorage service;
+    /** . */
+    private final DataStorage service;
 
-   /** . */
-   private final ImportMode mode;
+    /** . */
+    private final ImportMode mode;
 
-   public PortalConfigImporter(ImportMode importMode, PortalConfig portal, DataStorage dataStorage_)
-   {
-      this.mode = importMode;
-      this.src = portal;
-      this.service = dataStorage_;
-   }
+    public PortalConfigImporter(ImportMode importMode, PortalConfig portal, DataStorage dataStorage_) {
+        this.mode = importMode;
+        this.src = portal;
+        this.service = dataStorage_;
+    }
 
-   public void perform() throws Exception
-   {
-      PortalConfig existingPortalConfig = service.getPortalConfig(src.getType(), src.getName());
-      PortalConfig dst = null;
+    public void perform() throws Exception {
+        PortalConfig existingPortalConfig = service.getPortalConfig(src.getType(), src.getName());
+        PortalConfig dst = null;
 
-      //
-      switch (mode)
-      {
-         case CONSERVE:
-            dst = null;
-            break;
-         case INSERT:
-            if (existingPortalConfig == null)
-            {
-               dst = src;
+        //
+        switch (mode) {
+            case CONSERVE:
+                dst = null;
+                break;
+            case INSERT:
+                if (existingPortalConfig == null) {
+                    dst = src;
+                } else {
+                    dst = null;
+                }
+                break;
+            case MERGE:
+            case OVERWRITE:
+                dst = src;
+                break;
+            default:
+                throw new AssertionError();
+        }
+
+        if (dst != null) {
+            if (existingPortalConfig == null) {
+                service.create(dst);
+            } else {
+                service.save(dst);
             }
-            else
-            {
-               dst = null;
-            }
-            break;
-         case MERGE:
-         case OVERWRITE:
-            dst = src;
-            break;
-         default:
-            throw new AssertionError();
-      }
-      
-      if (dst != null)
-      {
-         if (existingPortalConfig == null)
-         {
-            service.create(dst);
-         }
-         else
-         {
-            service.save(dst);
-         }
-      }
-   }
+        }
+    }
 }

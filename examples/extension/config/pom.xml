@@ -23,14 +23,14 @@
   <parent>
     <groupId>org.gatein.portal</groupId>
     <artifactId>exo.portal.parent</artifactId>
-    <version>3.5.0.Final-SNAPSHOT</version>
+    <version>3.6.0.MO1-SNAPSHOT</version>
     <relativePath>../../../pom.xml</relativePath>
-  </parent> 
+  </parent>
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>exo.portal.sample.extension.config</artifactId>
   <name>GateIn Portal Sample Extension Configuration</name>
   <packaging>jar</packaging>
-  <url>http://www.exoplatform.org</url> 
+  <url>http://www.exoplatform.org</url>
   <description>GateIn Sample Extension Configuration</description>
 </project>

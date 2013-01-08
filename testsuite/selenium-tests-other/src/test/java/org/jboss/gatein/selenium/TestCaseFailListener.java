@@ -22,22 +22,21 @@
 
 package org.jboss.gatein.selenium;
 
-import com.thoughtworks.selenium.Selenium;
-import com.thoughtworks.selenium.SeleniumException;
-import org.testng.ITestResult;
-import org.testng.TestListenerAdapter;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import org.testng.ITestResult;
+import org.testng.TestListenerAdapter;
+
+import com.thoughtworks.selenium.Selenium;
+import com.thoughtworks.selenium.SeleniumException;
+
 /**
- * The listener interface for receiving AbstractTestCase events.
- * The class that is interested in processing a AbstractTestCase
- * event implements this interface, and the object created
- * with that class is registered with a component using the
- * component's <code>addTestCaseFailListener<code> method. When
+ * The listener interface for receiving AbstractTestCase events. The class that is interested in processing a AbstractTestCase
+ * event implements this interface, and the object created with that class is registered with a component using the component's
+ * <code>addTestCaseFailListener<code> method. When
  * the AbstractTestCase event occurs, that object's appropriate
  * method is invoked. <br/>
  * TestCaseFailListener is responsible for decoding most of the parameters which are passed to selenium tests.
@@ -62,107 +61,86 @@ import java.io.PrintWriter;
  * </tr>
  * </table>
  */
-public class TestCaseFailListener extends TestListenerAdapter
-{
+public class TestCaseFailListener extends TestListenerAdapter {
 
-   public static Selenium selenium;
-   protected static int count;
-   protected static boolean screenshot = false;
-   protected static boolean htmlSource = false;
-   protected static String outputDir = "";
+    public static Selenium selenium;
+    protected static int count;
+    protected static boolean screenshot = false;
+    protected static boolean htmlSource = false;
+    protected static String outputDir = "";
 
-   static
-   {
-      String ss = System.getProperty("screenshot");
-      if ("true".equals(ss))
-      {
-         screenshot = true;
-      }
+    static {
+        String ss = System.getProperty("screenshot");
+        if ("true".equals(ss)) {
+            screenshot = true;
+        }
 
-      String sh = System.getProperty("html-src");
-      if ("true".equals(sh))
-      {
-         htmlSource = true;
-      }
+        String sh = System.getProperty("html-src");
+        if ("true".equals(sh)) {
+            htmlSource = true;
+        }
 
-      String so = System.getProperty("output-dir");
-      if (so != null)
-      {
-         outputDir = so;
-      }
-   }
+        String so = System.getProperty("output-dir");
+        if (so != null) {
+            outputDir = so;
+        }
+    }
 
-   /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
+     *
      * @see org.testng.TestListenerAdapter#onTestFailure(org.testng.ITestResult)
      */
 
-   @Override
-   public void onTestFailure(ITestResult tr)
-   {
+    @Override
+    public void onTestFailure(ITestResult tr) {
 
-      String name = outputDir + "/" + "F_" + tr.getName() + "-" + count;
+        String name = outputDir + "/" + "F_" + tr.getName() + "-" + count;
 
-      if (screenshot)
-      {
-         try
-         {
-            selenium.windowMaximize();
-            waitFor(5000);
-            selenium.captureScreenshot(name + ".jpg");
-         }
-         catch (SeleniumException e2)
-         {
-            e2.printStackTrace();
-         }
-      }
+        if (screenshot) {
+            try {
+                selenium.windowMaximize();
+                waitFor(5000);
+                selenium.captureScreenshot(name + ".jpg");
+            } catch (SeleniumException e2) {
+                e2.printStackTrace();
+            }
+        }
 
-      if (htmlSource)
-      {
-         try
-         {
-            PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(name + ".html")));
-            out.println(selenium.getHtmlSource());
-            out.close();
-         }
-         catch (IOException e1)
-         {
-            e1.printStackTrace();
-         }
-      }
-      count++;
-   }
+        if (htmlSource) {
+            try {
+                PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(name + ".html")));
+                out.println(selenium.getHtmlSource());
+                out.close();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+        }
+        count++;
+    }
 
-   /**
-    * Waits for specified time in ms. Used mostly in AJAX based tests.
-    *
-    * @param time the time (in ms) to be waited for.
-    */
-   public void waitFor(long time)
-   {
-      try
-      {
-         Thread.sleep(time);
-      }
-      catch (InterruptedException e)
-      {
-         e.printStackTrace();
-      }
-   }
-
-   public static void captureScreenshot(String testName)
-   {
-      String name = outputDir + "/" + "F_" + testName;
-      if (screenshot)
-      {
-         try
-         {
-            selenium.captureScreenshot(name + ".jpg");
-         }
-         catch (SeleniumException e)
-         {
+    /**
+     * Waits for specified time in ms. Used mostly in AJAX based tests.
+     *
+     * @param time the time (in ms) to be waited for.
+     */
+    public void waitFor(long time) {
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
             e.printStackTrace();
-         }
-      }
-	}
+        }
+    }
+
+    public static void captureScreenshot(String testName) {
+        String name = outputDir + "/" + "F_" + testName;
+        if (screenshot) {
+            try {
+                selenium.captureScreenshot(name + ".jpg");
+            } catch (SeleniumException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
 }

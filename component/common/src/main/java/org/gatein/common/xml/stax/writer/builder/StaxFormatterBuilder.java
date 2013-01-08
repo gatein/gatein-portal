@@ -22,20 +22,18 @@
 
 package org.gatein.common.xml.stax.writer.builder;
 
-
 import org.gatein.common.xml.stax.writer.formatting.XmlStreamingFormatter;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public interface StaxFormatterBuilder
-{
-   StaxFormatterBuilder withIndentCharacter(char indentCharacter);
+public interface StaxFormatterBuilder {
+    StaxFormatterBuilder withIndentCharacter(char indentCharacter);
 
-   StaxFormatterBuilder ofIndentSize(int indentSize);
+    StaxFormatterBuilder ofIndentSize(int indentSize);
 
-   StaxFormatterBuilder withNewline(String newline);
+    StaxFormatterBuilder withNewline(String newline);
 
-   XmlStreamingFormatter build() throws IllegalStateException;
+    XmlStreamingFormatter build() throws IllegalStateException;
 }

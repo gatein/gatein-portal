@@ -19,19 +19,6 @@
 
 package org.exoplatform.webui.application.portlet;
 
-import org.exoplatform.commons.utils.WriterPrinter;
-import org.exoplatform.portal.mop.user.UserPortal;
-import org.exoplatform.services.resources.Orientation;
-import org.exoplatform.web.application.RequestContext;
-import org.exoplatform.web.application.URLBuilder;
-import org.exoplatform.web.url.URLFactory;
-import org.exoplatform.web.url.ResourceType;
-import org.exoplatform.web.url.PortalURL;
-import org.exoplatform.webui.application.WebuiApplication;
-import org.exoplatform.webui.application.WebuiRequestContext;
-import org.exoplatform.webui.core.UIApplication;
-import org.exoplatform.webui.core.UIComponent;
-
 import java.io.Writer;
 
 import javax.portlet.ActionResponse;
@@ -42,218 +29,196 @@ import javax.portlet.PortletRequest;
 import javax.portlet.PortletResponse;
 import javax.portlet.StateAwareResponse;
 
+import org.exoplatform.commons.utils.WriterPrinter;
+import org.exoplatform.portal.mop.user.UserPortal;
+import org.exoplatform.services.resources.Orientation;
+import org.exoplatform.web.application.RequestContext;
+import org.exoplatform.web.application.URLBuilder;
+import org.exoplatform.web.url.PortalURL;
+import org.exoplatform.web.url.ResourceType;
+import org.exoplatform.web.url.URLFactory;
+import org.exoplatform.webui.application.WebuiApplication;
+import org.exoplatform.webui.application.WebuiRequestContext;
+import org.exoplatform.webui.core.UIApplication;
+import org.exoplatform.webui.core.UIComponent;
+
 /**
- * todo (julien) : there is an issue here (small) as the PRC seems to be stored in http session
- * and keep a pointer on request and response object.
+ * todo (julien) : there is an issue here (small) as the PRC seems to be stored in http session and keep a pointer on request
+ * and response object.
  *
  * The request context of a portlet
  *
  */
-public class PortletRequestContext extends WebuiRequestContext
-{
-   /**
-    * Portlet Window ID
-    */
-   private String windowId_;
+public class PortletRequestContext extends WebuiRequestContext {
+    /**
+     * Portlet Window ID
+     */
+    private String windowId_;
 
-   /**
-    * The request
-    */
-   private PortletRequest request_;
+    /**
+     * The request
+     */
+    private PortletRequest request_;
 
-   /**
-    * The response
-    */
-   private PortletResponse response_;
+    /**
+     * The response
+     */
+    private PortletResponse response_;
 
-   private Writer writer_;
+    private Writer writer_;
 
-   private boolean hasProcessAction_ = false;
+    private boolean hasProcessAction_ = false;
 
-   /** . */
-   private PortletURLBuilder urlBuilder;
+    /** . */
+    private PortletURLBuilder urlBuilder;
 
-   public PortletRequestContext(RequestContext parentAppRequestContext, WebuiApplication app, Writer writer, PortletRequest req, PortletResponse res)
-   {
-      super(parentAppRequestContext, app);
-      init(writer, req, res);
-      setSessionId(req.getPortletSession(true).getId());
-   }
+    public PortletRequestContext(RequestContext parentAppRequestContext, WebuiApplication app, Writer writer,
+            PortletRequest req, PortletResponse res) {
+        super(parentAppRequestContext, app);
+        init(writer, req, res);
+        setSessionId(req.getPortletSession(true).getId());
+    }
 
-   @Override
-   public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory)
-   {
-      return parentAppRequestContext_.newURL(resourceType, urlFactory);
-   }
+    @Override
+    public <R, U extends PortalURL<R, U>> U newURL(ResourceType<R, U> resourceType, URLFactory urlFactory) {
+        return parentAppRequestContext_.newURL(resourceType, urlFactory);
+    }
 
-   public void init(Writer writer, PortletRequest req, PortletResponse res)
-   {
-      request_ = req;
-      response_ = res;
-      writer_ = new WriterPrinter(writer);
-      windowId_ = req.getWindowID();
+    public void init(Writer writer, PortletRequest req, PortletResponse res) {
+        request_ = req;
+        response_ = res;
+        writer_ = new WriterPrinter(writer);
+        windowId_ = req.getWindowID();
 
-      //
-      if (res instanceof MimeResponse)
-      {
-         this.urlBuilder = new PortletURLBuilder(((MimeResponse)res).createActionURL());
-      }
-      else
-      {
-         this.urlBuilder = null;
-      }
-   }
+        //
+        if (res instanceof MimeResponse) {
+            this.urlBuilder = new PortletURLBuilder(((MimeResponse) res).createActionURL());
+        } else {
+            this.urlBuilder = null;
+        }
+    }
 
-   public void setUIApplication(UIApplication uiApplication) throws Exception
-   {
-      uiApplication_ = uiApplication;
-      appRes_ = findApplicationResourceBundle();
-   }
+    public void setUIApplication(UIApplication uiApplication) throws Exception {
+        uiApplication_ = uiApplication;
+        appRes_ = findApplicationResourceBundle();
+    }
 
-   final public String getRequestParameter(String name)
-   {
-      return request_.getParameter(name);
-   }
+    public final String getRequestParameter(String name) {
+        return request_.getParameter(name);
+    }
 
-   final public String[] getRequestParameterValues(String name)
-   {
-      return request_.getParameterValues(name);
-   }
+    public final String[] getRequestParameterValues(String name) {
+        return request_.getParameterValues(name);
+    }
 
-   public Orientation getOrientation()
-   {
-      return parentAppRequestContext_.getOrientation();
-   }
+    public Orientation getOrientation() {
+        return parentAppRequestContext_.getOrientation();
+    }
 
-   public String getRequestContextPath()
-   {
-      return request_.getContextPath();
-   }
+    public String getRequestContextPath() {
+        return request_.getContextPath();
+    }
 
-   @Override
-   public String getPortalContextPath()
-   {
-      if (parentAppRequestContext_ instanceof WebuiRequestContext)
-      {
-         return ((WebuiRequestContext)parentAppRequestContext_).getPortalContextPath();
-      }
-      else
-      {
-         return null;
-      }
-   }
+    @Override
+    public String getPortalContextPath() {
+        if (parentAppRequestContext_ instanceof WebuiRequestContext) {
+            return ((WebuiRequestContext) parentAppRequestContext_).getPortalContextPath();
+        } else {
+            return null;
+        }
+    }
 
-   @SuppressWarnings("unchecked")
-   public PortletRequest getRequest()
-   {
-      return request_;
-   }
+    @SuppressWarnings("unchecked")
+    public PortletRequest getRequest() {
+        return request_;
+    }
 
-   @SuppressWarnings("unchecked")
-   public PortletResponse getResponse()
-   {
-      return response_;
-   }
+    @SuppressWarnings("unchecked")
+    public PortletResponse getResponse() {
+        return response_;
+    }
 
-   @Override
-   public URLFactory getURLFactory()
-   {
-      return parentAppRequestContext_.getURLFactory();
-   }
+    @Override
+    public URLFactory getURLFactory() {
+        return parentAppRequestContext_.getURLFactory();
+    }
 
-   public String getRemoteUser()
-   {
-      return parentAppRequestContext_.getRemoteUser();
-   }
+    public String getRemoteUser() {
+        return parentAppRequestContext_.getRemoteUser();
+    }
 
-   final public boolean isUserInRole(String roleUser)
-   {
-      return request_.isUserInRole(roleUser);
-   }
+    public final boolean isUserInRole(String roleUser) {
+        return request_.isUserInRole(roleUser);
+    }
 
-   public PortletMode getApplicationMode()
-   {
-      return request_.getPortletMode();
-   }
+    public PortletMode getApplicationMode() {
+        return request_.getPortletMode();
+    }
 
-   public void setApplicationMode(PortletMode mode) throws PortletModeException
-   {
-      if (response_ instanceof StateAwareResponse)
-      {
-         StateAwareResponse res = (StateAwareResponse)response_;
-         res.setPortletMode(mode);
-      }
-      else
-      {
-         throw new PortletModeException(
-            "The portlet don't support to set a portlet mode by current runtime environment", mode);
-      }
-   }
+    public void setApplicationMode(PortletMode mode) throws PortletModeException {
+        if (response_ instanceof StateAwareResponse) {
+            StateAwareResponse res = (StateAwareResponse) response_;
+            res.setPortletMode(mode);
+        } else {
+            throw new PortletModeException("The portlet don't support to set a portlet mode by current runtime environment",
+                    mode);
+        }
+    }
 
-   public Writer getWriter() throws Exception
-   {
-      return writer_;
-   }
-   
-   public void setWriter(Writer writer)
-   {
-	   this.writer_ = writer;
-   }
+    public Writer getWriter() throws Exception {
+        return writer_;
+    }
 
-   final public boolean useAjax()
-   {
-      return getParentAppRequestContext().useAjax();
-   }
+    public void setWriter(Writer writer) {
+        this.writer_ = writer;
+    }
 
-   public void sendRedirect(String url) throws Exception
-   {
-      setResponseComplete(true);
-      if (response_ instanceof ActionResponse)
-         ((ActionResponse)response_).sendRedirect(url);
-   }
+    public final boolean useAjax() {
+        return getParentAppRequestContext().useAjax();
+    }
 
-   @Override
-   public UserPortal getUserPortal()
-   {
-      return getParentAppRequestContext().getUserPortal();
-   }
+    public void sendRedirect(String url) throws Exception {
+        setResponseComplete(true);
+        if (response_ instanceof ActionResponse)
+            ((ActionResponse) response_).sendRedirect(url);
+    }
 
-   public boolean hasProcessAction()
-   {
-      return hasProcessAction_;
-   }
+    @Override
+    public UserPortal getUserPortal() {
+        return getParentAppRequestContext().getUserPortal();
+    }
 
-   public void setProcessAction(boolean b)
-   {
-      hasProcessAction_ = b;
-   }
+    public boolean hasProcessAction() {
+        return hasProcessAction_;
+    }
 
-   public URLBuilder<UIComponent> getURLBuilder()
-   {
-      if (urlBuilder == null)
-      {
-         throw new IllegalStateException("Cannot create portlet URL during action/event phase");
-      }
-      return urlBuilder;
-   }
+    public void setProcessAction(boolean b) {
+        hasProcessAction_ = b;
+    }
 
-   /**
-    * Puts the component to update inside the parent request context
-    * 
-    * Here it will be the PortalRequestHandler and hence it will be responsible of
-    * making the distinction between 3rd parties portlets (that need a full portlet fragment refresh)
-    *  and our portlets that also allow some UIComponent within the portlet to be refreshed
-    */
-   //  public void addUIComponentToUpdateByAjax(UIComponent uicomponent) {   
-   //	((WebuiRequestContext)getParentAppRequestContext()).addUIComponentToUpdateByAjax(uicomponent);
-   //  }  
-   //  
-   //  public List<UIComponent>  getUIComponentToUpdateByAjax() {  
-   //	return ((WebuiRequestContext)getParentAppRequestContext()).getUIComponentToUpdateByAjax() ;
-   //  }
+    public URLBuilder<UIComponent> getURLBuilder() {
+        if (urlBuilder == null) {
+            throw new IllegalStateException("Cannot create portlet URL during action/event phase");
+        }
+        return urlBuilder;
+    }
 
-   public String getWindowId()
-   {
-      return windowId_;
-   }
+    /**
+     * Puts the component to update inside the parent request context
+     *
+     * Here it will be the PortalRequestHandler and hence it will be responsible of making the distinction between 3rd parties
+     * portlets (that need a full portlet fragment refresh) and our portlets that also allow some UIComponent within the portlet
+     * to be refreshed
+     */
+    // public void addUIComponentToUpdateByAjax(UIComponent uicomponent) {
+    // ((WebuiRequestContext)getParentAppRequestContext()).addUIComponentToUpdateByAjax(uicomponent);
+    // }
+    //
+    // public List<UIComponent> getUIComponentToUpdateByAjax() {
+    // return ((WebuiRequestContext)getParentAppRequestContext()).getUIComponentToUpdateByAjax() ;
+    // }
+
+    public String getWindowId() {
+        return windowId_;
+    }
 }

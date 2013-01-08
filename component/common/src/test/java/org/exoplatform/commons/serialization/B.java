@@ -26,17 +26,14 @@ import org.exoplatform.commons.serialization.api.annotations.Serialized;
  * @version $Revision$
  */
 @Serialized
-public class B
-{
+public class B {
 
-   B ref;
+    B ref;
 
-   public B(B ref)
-   {
-      this.ref = ref;
-   }
+    public B(B ref) {
+        this.ref = ref;
+    }
 
-   public B()
-   {
-   }
+    public B() {
+    }
 }

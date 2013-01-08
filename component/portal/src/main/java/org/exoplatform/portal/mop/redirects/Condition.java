@@ -35,29 +35,27 @@ import org.chromattic.api.annotations.Property;
  * @version $Revision$
  */
 @PrimaryType(name = "gtn:redirectCondition")
-public abstract class Condition
-{
+public abstract class Condition {
 
-   @Property (name="gtn:redirectConditionName")
-   public abstract String getName();
-   
-   public abstract void setName(String redirectName);
-   
-   @Property (name="gtn:redirectConditionUASContains")
-   public abstract List<String> getUserAgentContains();
-   
-   public abstract void setUserAgentContains(List<String> userAgentContains);
-   
-   @Property (name="gtn:redirectConditionUASDoesNotContain")
-   public abstract List<String> getUserAgentDoesNotContain();
-   
-   public abstract void setUserAgentDoesNotContain(List<String> userAgentDoesNotContain);
-   
-   @OneToMany
-   public abstract Map<String, DeviceProperty> getDeviceProperties();
-   
-   @Create
-   public abstract DeviceProperty createDeviceProperty();
+    @Property(name = "gtn:redirectConditionName")
+    public abstract String getName();
+
+    public abstract void setName(String redirectName);
+
+    @Property(name = "gtn:redirectConditionUASContains")
+    public abstract List<String> getUserAgentContains();
+
+    public abstract void setUserAgentContains(List<String> userAgentContains);
+
+    @Property(name = "gtn:redirectConditionUASDoesNotContain")
+    public abstract List<String> getUserAgentDoesNotContain();
+
+    public abstract void setUserAgentDoesNotContain(List<String> userAgentDoesNotContain);
+
+    @OneToMany
+    public abstract Map<String, DeviceProperty> getDeviceProperties();
+
+    @Create
+    public abstract DeviceProperty createDeviceProperty();
 
 }
-

@@ -19,69 +19,61 @@
 
 package org.exoplatform.component.test.web;
 
-import org.gatein.common.NotYetImplemented;
-import org.gatein.wci.WebApp;
-
-import javax.servlet.ServletContext;
 import java.io.IOException;
 import java.io.InputStream;
+
+import javax.servlet.ServletContext;
+
+import org.gatein.common.NotYetImplemented;
+import org.gatein.wci.WebApp;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class WebAppImpl implements WebApp
-{
+public class WebAppImpl implements WebApp {
 
-   /** . */
-   private final ServletContext servletContext;
+    /** . */
+    private final ServletContext servletContext;
 
-   /** . */
-   private final ClassLoader loader;
+    /** . */
+    private final ClassLoader loader;
 
-   public WebAppImpl(ServletContext servletContext, ClassLoader loader) throws NullPointerException
-   {
-      if (servletContext == null)
-      {
-         throw new NullPointerException("No null servlet context allowed");
-      }
-      if (loader == null)
-      {
-         throw new NullPointerException("No null loader accepted");
-      }
-      
-      //
-      this.servletContext = servletContext;
-      this.loader = loader;
-   }
+    public WebAppImpl(ServletContext servletContext, ClassLoader loader) throws NullPointerException {
+        if (servletContext == null) {
+            throw new NullPointerException("No null servlet context allowed");
+        }
+        if (loader == null) {
+            throw new NullPointerException("No null loader accepted");
+        }
 
-   public WebAppImpl(Class<?> base, String path, String name)
-   {
-      this.servletContext = new ServletContextImpl(base, path, name);
-      this.loader = base.getClassLoader();
-   }
+        //
+        this.servletContext = servletContext;
+        this.loader = loader;
+    }
 
-   public ServletContext getServletContext()
-   {
-      return servletContext;  
-   }
+    public WebAppImpl(Class<?> base, String path, String name) {
+        this.servletContext = new ServletContextImpl(base, path, name);
+        this.loader = base.getClassLoader();
+    }
 
-   public ClassLoader getClassLoader()
-   {
-      return loader;
-   }
+    public ServletContext getServletContext() {
+        return servletContext;
+    }
 
-   public String getContextPath()
-   {
-      return servletContext.getContextPath();
-   }
+    public ClassLoader getClassLoader() {
+        return loader;
+    }
 
-   public boolean importFile(String parentDirRelativePath, String name, InputStream source, boolean overwrite) throws IOException
-   {
-      throw new NotYetImplemented();
-   }
+    public String getContextPath() {
+        return servletContext.getContextPath();
+    }
 
-   public boolean invalidateSession(String sessId)
-   {
-      throw new NotYetImplemented();
-   }
+    public boolean importFile(String parentDirRelativePath, String name, InputStream source, boolean overwrite)
+            throws IOException {
+        throw new NotYetImplemented();
+    }
+
+    public boolean invalidateSession(String sessId) {
+        throw new NotYetImplemented();
+    }
 }

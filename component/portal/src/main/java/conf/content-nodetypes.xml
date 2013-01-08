@@ -18,63 +18,70 @@
     02110-1301 USA, or see the FSF site: http://www.fsf.org.
 
 -->
-<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0" xmlns:jcr="http://www.jcp.org/jcr/1.0">
+<nodeTypes xmlns:nt="http://www.jcp.org/jcr/nt/1.0" xmlns:mix="http://www.jcp.org/jcr/mix/1.0"
+           xmlns:jcr="http://www.jcp.org/jcr/1.0">
 
-    <nodeType name="mop:portletpreferences" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-      <supertypes>
-        <supertype>mop:customizationstate</supertype>
-      </supertypes>
-      <childNodeDefinitions>
-        <childNodeDefinition name="*" defaultPrimaryType="mop:portletpreference" autoCreated="false" mandatory="false"
-          onParentVersion="COPY" protected="false" sameNameSiblings="false">
-          <requiredPrimaryTypes>
-            <requiredPrimaryType>mop:portletpreference</requiredPrimaryType>
-          </requiredPrimaryTypes>
-        </childNodeDefinition>
-      </childNodeDefinitions>
-    </nodeType>
+  <nodeType name="mop:portletpreferences" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+    <supertypes>
+      <supertype>mop:customizationstate</supertype>
+    </supertypes>
+    <childNodeDefinitions>
+      <childNodeDefinition name="*" defaultPrimaryType="mop:portletpreference" autoCreated="false" mandatory="false"
+                           onParentVersion="COPY" protected="false" sameNameSiblings="false">
+        <requiredPrimaryTypes>
+          <requiredPrimaryType>mop:portletpreference</requiredPrimaryType>
+        </requiredPrimaryTypes>
+      </childNodeDefinition>
+    </childNodeDefinitions>
+  </nodeType>
 
-    <nodeType name="mop:portletpreference" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-      <supertypes>
-        <supertype>nt:base</supertype>
-        <supertype>mix:referenceable</supertype>
-      </supertypes>
-      <propertyDefinitions>
-        <propertyDefinition name="mop:value" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="true">
-          <valueConstraints/>
-        </propertyDefinition>
-        <propertyDefinition name="mop:readonly" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-          <valueConstraints/>
-        </propertyDefinition>
-      </propertyDefinitions>
-    </nodeType>
+  <nodeType name="mop:portletpreference" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+    <supertypes>
+      <supertype>nt:base</supertype>
+      <supertype>mix:referenceable</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="mop:value" requiredType="String" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="true">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="mop:readonly" requiredType="Boolean" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
+  </nodeType>
 
-    <nodeType name="mop:gadget" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-      <supertypes>
-        <supertype>mop:customizationstate</supertype>
-      </supertypes>
-      <propertyDefinitions>
-        <propertyDefinition name="mop:prefs" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-          <valueConstraints/>
-        </propertyDefinition>
-      </propertyDefinitions>
-    </nodeType>
+  <nodeType name="mop:gadget" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+    <supertypes>
+      <supertype>mop:customizationstate</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="mop:prefs" requiredType="String" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
+  </nodeType>
 
-    <nodeType name="mop:wsrpstate" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
-       <supertypes>
-          <supertype>mop:customizationstate</supertype>
-       </supertypes>
-       <propertyDefinitions>
-          <propertyDefinition name="mop:portletid" requiredType="String" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-             <valueConstraints/>
-          </propertyDefinition>
-          <propertyDefinition name="mop:state" requiredType="Binary" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-             <valueConstraints/>
-          </propertyDefinition>
-          <propertyDefinition name="mop:cloned" requiredType="Boolean" autoCreated="false" mandatory="false" onParentVersion="COPY" protected="false" multiple="false">
-             <valueConstraints/>
-          </propertyDefinition>
-       </propertyDefinitions>
-    </nodeType>
+  <nodeType name="mop:wsrpstate" isMixin="false" hasOrderableChildNodes="false" primaryItemName="">
+    <supertypes>
+      <supertype>mop:customizationstate</supertype>
+    </supertypes>
+    <propertyDefinitions>
+      <propertyDefinition name="mop:portletid" requiredType="String" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="mop:state" requiredType="Binary" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+      <propertyDefinition name="mop:cloned" requiredType="Boolean" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
+  </nodeType>
 
 </nodeTypes>

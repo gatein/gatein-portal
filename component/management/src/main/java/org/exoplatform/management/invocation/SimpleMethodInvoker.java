@@ -24,59 +24,48 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public abstract class SimpleMethodInvoker implements MethodInvoker
-{
+public abstract class SimpleMethodInvoker implements MethodInvoker {
 
-   /** The method we invoke. */
-   private final Method method;
+    /** The method we invoke. */
+    private final Method method;
 
-   public SimpleMethodInvoker(Method method)
-   {
-      if (method == null)
-      {
-         throw new NullPointerException();
-      }
+    public SimpleMethodInvoker(Method method) {
+        if (method == null) {
+            throw new NullPointerException();
+        }
 
-      //
-      this.method = method;
-   }
+        //
+        this.method = method;
+    }
 
-   public Object invoke(Object o, Map<String, List<String>> argMap) throws IllegalAccessException, InvocationTargetException
-   {
-      Class[] paramTypes = method.getParameterTypes();
-      Object[] args = new Object[paramTypes.length];
-      for (int i = 0;i < paramTypes.length;i++)
-      {
-         String argName = getArgumentName(i);
-         List<String> argValues = argMap.get(argName);
-         Class paramType = paramTypes[i];
-         Object arg;
-         if (paramType.isPrimitive())
-         {
-            throw new UnsupportedOperationException("Todo " + paramType);
-         }
-         else if (paramType.isArray())
-         {
-            throw new UnsupportedOperationException("Todo " + paramType);
-         }
-         else if (paramType == String.class)
-         {
-            arg = (argValues != null && argValues.size() > 0) ? argValues.get(0) : null;
-         }
-         else
-         {
-            throw new UnsupportedOperationException("Todo " + paramType);
-         }
-         args[i] = arg;
-      }
+    public Object invoke(Object o, Map<String, List<String>> argMap) throws IllegalAccessException, InvocationTargetException {
+        Class[] paramTypes = method.getParameterTypes();
+        Object[] args = new Object[paramTypes.length];
+        for (int i = 0; i < paramTypes.length; i++) {
+            String argName = getArgumentName(i);
+            List<String> argValues = argMap.get(argName);
+            Class paramType = paramTypes[i];
+            Object arg;
+            if (paramType.isPrimitive()) {
+                throw new UnsupportedOperationException("Todo " + paramType);
+            } else if (paramType.isArray()) {
+                throw new UnsupportedOperationException("Todo " + paramType);
+            } else if (paramType == String.class) {
+                arg = (argValues != null && argValues.size() > 0) ? argValues.get(0) : null;
+            } else {
+                throw new UnsupportedOperationException("Todo " + paramType);
+            }
+            args[i] = arg;
+        }
 
-      //
-      return method.invoke(o, args);
-   }
+        //
+        return method.invoke(o, args);
+    }
 
-   protected abstract String getArgumentName(int index);
+    protected abstract String getArgumentName(int index);
 }

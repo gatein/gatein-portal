@@ -491,8 +491,6 @@ inherits(gadgets.IfrGadget, gadgets.Gadget);
 
 gadgets.IfrGadget.prototype.GADGET_IFRAME_PREFIX_ = 'remote_iframe_';
 
-gadgets.IfrGadget.prototype.CONTAINER = 'default';
-
 gadgets.IfrGadget.prototype.cssClassGadget = 'gadgets-gadget';
 gadgets.IfrGadget.prototype.cssClassTitleBar = 'gadgets-gadget-title-bar';
 gadgets.IfrGadget.prototype.cssClassTitle = 'gadgets-gadget-title';
@@ -553,7 +551,7 @@ gadgets.IfrGadget.prototype.getUserPrefsDialogId = function() {
 
 gadgets.IfrGadget.prototype.getIframeUrl = function() {
   return this.serverBase_ + (this.serverBase_.charAt(this.serverBase_.length) == '/' ? "" : "/") + 'ifr?' +
-      'container=' + this.CONTAINER +
+      'container=' + gadgets.container.name_ +
       '&mid=' +  this.id +
       '&nocache=' + this.nocache +
       '&country=' + gadgets.container.country_ +
@@ -800,6 +798,7 @@ gadgets.IfrGadget.prototype.setNoCache = function(value) {
  * @constructor
  */
 gadgets.Container = function() {
+  this.name_ = "default";
   this.gadgets_ = {};
   this.parentUrl_ = document.location.href + '://' + document.location.host;
   this.country_ = 'ALL';
@@ -829,6 +828,10 @@ gadgets.Container.prototype.gadgetService = new gadgets.GadgetService();
 
 gadgets.Container.prototype.layoutManager =
     new gadgets.StaticLayoutManager();
+
+gadgets.Container.prototype.setName = function(name) {
+  this.name_ = name;
+};
 
 gadgets.Container.prototype.setParentUrl = function(url) {
   this.parentUrl_ = url;
