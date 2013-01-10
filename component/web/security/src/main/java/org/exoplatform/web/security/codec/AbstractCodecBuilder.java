@@ -1,9 +1,5 @@
 /*
- * JBoss, a division of Red Hat
- * Copyright 2012, Red Hat Middleware, LLC, and individual
- * contributors as indicated by the @authors tag. See the
- * copyright.txt in the distribution for a full listing of
- * individual contributors.
+ * Copyright (C) 2012 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -20,18 +16,14 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
+package org.exoplatform.web.security.codec;
 
-package org.exoplatform.web.security.security;
+import java.util.Map;
 
 /**
- * Exception is thrown if there is attempt to create token with ID, which already exists in the token container
- *
- * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
+ * @author <a href="hoang281283@gmail.com">Minh Hoang TO</a>
+ * @date 6/15/12
  */
-public class TokenExistsException extends Exception {
-
-    /**
-     *
-     */
-    private static final long serialVersionUID = 5478055118857538487L;
+public abstract class AbstractCodecBuilder {
+    public abstract AbstractCodec build(Map<String, String> config);
 }

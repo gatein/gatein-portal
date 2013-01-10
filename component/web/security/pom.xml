@@ -55,6 +55,10 @@
       <artifactId>exo.portal.component.web.controller</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.gatein.common</groupId>
+      <artifactId>common-common</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.chromattic</groupId>
       <artifactId>chromattic.apt</artifactId>
       <scope>compile</scope>

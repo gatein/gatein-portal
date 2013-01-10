@@ -30,9 +30,9 @@ import org.gatein.wci.security.Credentials;
  * @author <a href="mailto:alain.defrance@exoplatform.com">Alain Defrance</a>
  * @version $Revision$
  */
-public class TicketConfiguration extends AbstractTokenService<GateInToken, String> {
+public class TicketConfiguration extends PlainTokenService<GateInToken, String> {
 
-    public TicketConfiguration(InitParams initParams) {
+    public TicketConfiguration(InitParams initParams) throws TokenServiceInitializationException {
         super(initParams);
     }
 

@@ -58,6 +58,11 @@ import org.gatein.wci.security.Credentials;
  */
 public class LoginServlet extends AbstractHttpServlet {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = -1330051083735349589L;
+
     /** . */
     private static final int UNAUTHENTICATED = 0;
 
@@ -145,11 +150,12 @@ public class LoginServlet extends AbstractHttpServlet {
                     String rememberme = req.getParameter("rememberme");
                     if ("true".equals(rememberme)) {
                         // Create token for credentials
-                        AbstractTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
+                        CookieTokenService tokenService = AbstractTokenService.getInstance(CookieTokenService.class);
                         String cookieToken = tokenService.createToken(credentials);
-
-                        log.debug("Found a remember me request parameter, created a persistent token " + cookieToken
-                                + " for it and set it up " + "in the next response");
+                        if (log.isDebugEnabled()) {
+                            log.debug("Found a remember me request parameter, created a persistent token " + cookieToken
+                                    + " for it and set it up " + "in the next response");
+                        }
                         Cookie cookie = new Cookie(COOKIE_NAME, cookieToken);
                         cookie.setPath(req.getContextPath());
                         cookie.setMaxAge((int) tokenService.getValidityTime());

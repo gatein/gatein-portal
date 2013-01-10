@@ -23,6 +23,10 @@
 
 package org.exoplatform.web.security;
 
+import java.io.File;
+import java.net.URL;
+
+import org.exoplatform.commons.utils.PropertyManager;
 import org.exoplatform.component.test.AbstractKernelTest;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
@@ -39,6 +43,17 @@ import org.gatein.wci.security.Credentials;
 public class TestSimpleGeneratorService extends AbstractKernelTest {
     private SimpleGeneratorCookieTokenService service;
 
+    protected void beforeRunBare() {
+        String foundGateInConfDir = PropertyManager.getProperty("gatein.conf.dir");
+        if (foundGateInConfDir == null || foundGateInConfDir.length() == 0) {
+            /* A way to get the conf directory path */
+            URL tokenserviceConfUrl = Thread.currentThread().getContextClassLoader().getResource("conf/tokenservice-configuration.xml");
+            File confDir = new File(tokenserviceConfUrl.getPath()).getParentFile();
+            PropertyManager.setProperty("gatein.conf.dir", confDir.getAbsolutePath());
+        }
+        super.beforeRunBare();
+    }
+
     protected void setUp() throws Exception {
         PortalContainer container = getContainer();
         service = (SimpleGeneratorCookieTokenService) container.getComponentInstanceOfType(SimpleGeneratorCookieTokenService.class);
@@ -50,20 +65,20 @@ public class TestSimpleGeneratorService extends AbstractKernelTest {
      */
     public void testDuplicatedTokenGeneration() throws Exception {
         String token1 = service.createToken(new Credentials("root1", "gtn1"));
-        assertEquals(token1, "rememberme0");
+        assertEquals("random0.rememberme0", token1);
         assertEquals(service.getCounter(), 1);
 
         String token2 = service.createToken(new Credentials("root2", "gtn2"));
-        assertEquals(token2, "rememberme1");
+        assertEquals("random1.rememberme1", token2);
         assertEquals(service.getCounter(), 2);
 
-        String token3 = service.createToken(new Credentials("root3", "gtn3"));
-        assertEquals(token3, "rememberme2");
+        String token3 = service.createToken(new Credentials("-root3", "gtn3"));
+        assertEquals("random2.rememberme2", token3);
         // Counter should be 4 now due to duplicated token generation
         assertEquals(service.getCounter(), 4);
 
-        assertEquals(service.getToken(token1).getPayload().getUsername(), "root1");
-        assertEquals(service.getToken(token2).getPayload().getUsername(), "root2");
-        assertEquals(service.getToken(token3).getPayload().getUsername(), "root3");
+        assertEquals("root1", service.getToken(token1).getPayload().getUsername());
+        assertEquals("root2", service.getToken(token2).getPayload().getUsername());
+        assertEquals("-root3", service.getToken(token3).getPayload().getUsername());
     }
 }

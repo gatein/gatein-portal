@@ -57,4 +57,17 @@
     </propertyDefinitions>
   </nodeType>
 
+  <!--
+      hashedtoken is done as mixin to stay backwards compatible.
+      Adding the hashedtoken directly to tkn:tokenentry would make tkn:tokenentry
+      incompatible with existing databases.
+  -->
+  <nodeType name="tkn:hashedtoken" isMixin="true" hasOrderableChildNodes="false" primaryItemName="">
+    <propertyDefinitions>
+      <propertyDefinition name="hashedtoken" requiredType="String" autoCreated="false" mandatory="false"
+                          onParentVersion="COPY" protected="false" multiple="false">
+        <valueConstraints/>
+      </propertyDefinition>
+    </propertyDefinitions>
+  </nodeType>
 </nodeTypes>

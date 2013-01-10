@@ -16,19 +16,33 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.web.security.security;
+package org.exoplatform.web.security.codec;
 
 /**
+ * Does not do any transformations, simply returns the input in both {@link #decode(String)} and {@link #encode(String)}.
+ *
+ * This class was renamed. The original name was ToThrowAwayCodec.
+ *
  * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a> Nov 19, 2010
  */
 
-public class ToThrowAwayCodec extends AbstractCodec {
+public class NoCodec extends AbstractCodec {
 
+    /**
+     * Returns {@code encodedInput}, does no decoding.
+     *
+     * @see org.exoplatform.web.security.codec.AbstractCodec#decode(java.lang.String)
+     */
     @Override
     public String decode(String encodedInput) {
         return encodedInput;
     }
 
+    /**
+     * Returns {@code plainInput}, does no encoding.
+     *
+     * @see org.exoplatform.web.security.codec.AbstractCodec#encode(java.lang.String)
+     */
     @Override
     public String encode(String plainInput) {
         return plainInput;

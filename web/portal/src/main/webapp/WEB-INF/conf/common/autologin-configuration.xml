@@ -71,6 +71,7 @@
           <name>entities</name>
           <value>org.exoplatform.web.security.security.TokenContainer</value>
           <value>org.exoplatform.web.security.security.TokenEntry</value>
+          <value>org.exoplatform.web.security.security.HashedToken</value>
         </values-param>
       </init-params>
     </component-plugin>
