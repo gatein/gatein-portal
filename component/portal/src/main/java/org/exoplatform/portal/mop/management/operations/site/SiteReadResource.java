@@ -59,7 +59,7 @@ public class SiteReadResource extends AbstractSiteOperationHandler {
             pageOrNav = true;
         }
 
-        if (pageOrNav) {
+        if (site.getObjectType() != ObjectType.GROUP_SITE || pageOrNav) {
             if (site.getObjectType() == ObjectType.PORTAL_SITE) {
                 children.add("portal");
             } else if (site.getObjectType() == ObjectType.GROUP_SITE) {
