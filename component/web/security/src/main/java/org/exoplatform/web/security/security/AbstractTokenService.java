@@ -19,8 +19,8 @@
 
 package org.exoplatform.web.security.security;
 
+import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -38,6 +38,8 @@ import org.exoplatform.web.security.Token;
 import org.exoplatform.web.security.TokenStore;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
+import org.gatein.common.util.Base64;
+import org.gatein.common.util.Base64.EncodingOption;
 import org.gatein.wci.security.Credentials;
 import org.picocontainer.Startable;
 
@@ -61,30 +63,45 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
 
     protected static final int DELAY_TIME = 600;
 
-    protected final Random random = new Random();
+    /**
+     * See {@link #tokenByteLength}. 8 bytes (64 bits) would be enough, but we want to get padding-less Byte64 representation, so we take
+     * the next greater number divisible by 3 which is 9. 9 bytes is equal to 72 bits.
+     */
+    public static final int DEFAULT_TOKEN_BYTE_LENGTH = 9;
+
+    /**
+     * The number of random bits generared by {@link #nextRandom()}. Use values divisible by 3 to produce random strings
+     * consisting only of {@code 0-9}, {@code a-z}, {@code A-Z}, {@code -} and {@code _}, i.e. URL safe Byte64 without padding.
+     * If a value not divisible by 3 is used the random strings will contain {@code *} in addition to the named characters.
+     */
+    protected final int tokenByteLength;
 
     protected String name;
 
     protected long validityMillis;
 
+    protected final SecureRandom random;
+
     private ScheduledExecutorService executor;
 
     @SuppressWarnings("unchecked")
-    public AbstractTokenService(InitParams initParams) {
+    public AbstractTokenService(InitParams initParams) throws TokenServiceInitializationException {
         List<String> params = initParams.getValuesParam(SERVICE_CONFIG).getValues();
         this.name = params.get(0);
         long configValue = new Long(params.get(1));
         this.validityMillis = TimeoutEnum.valueOf(params.get(2)).toMilisecond(configValue);
+
+        this.tokenByteLength = DEFAULT_TOKEN_BYTE_LENGTH;
+        this.random = new AutoReseedRandom();
     }
 
     public void start() {
         // start a thread, garbage expired cookie token every [DELAY_TIME]
-        final AbstractTokenService service = this;
         executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleWithFixedDelay(new Runnable() {
             public void run() {
                 try {
-                    service.cleanExpiredTokens();
+                    AbstractTokenService.this.cleanExpiredTokens();
                 } catch (Throwable t) {
                     log.warn("Failed to clean expired tokens", t);
                 }
@@ -97,7 +114,7 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
         executor.shutdown();
     }
 
-    public static <T extends AbstractTokenService> T getInstance(Class<T> classType) {
+    public static <T extends AbstractTokenService<?, ?>> T getInstance(Class<T> classType) {
         PortalContainer container = PortalContainer.getInstance();
         return classType.cast(container.getComponentInstanceOfType(classType));
     }
@@ -135,15 +152,7 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
     @Managed
     @ManagedDescription("Clean all tokens are expired")
     @Impact(ImpactType.IDEMPOTENT_WRITE)
-    public void cleanExpiredTokens() {
-        K[] ids = getAllTokens();
-        for (K id : ids) {
-            T token = getToken(id);
-            if (token != null && token.isExpired()) {
-                deleteToken(id);
-            }
-        }
-    }
+    public abstract void cleanExpiredTokens();
 
     @Managed
     @ManagedDescription("Get time for token expiration in seconds")
@@ -166,8 +175,6 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
     public abstract T getToken(K id);
 
     public abstract T deleteToken(K id);
-
-    public abstract K[] getAllTokens();
 
     /**
      * Decode a key from its string representation.
@@ -198,6 +205,13 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
     }
 
     protected String nextTokenId() {
-        return LoginServlet.COOKIE_NAME + random.nextInt();
+        return LoginServlet.COOKIE_NAME + nextRandom();
     }
+
+    protected String nextRandom() {
+        byte[] randomBytes = new byte[tokenByteLength];
+        random.nextBytes(randomBytes);
+        return Base64.encodeBytes(randomBytes, EncodingOption.USEURLSAFEENCODING);
+    }
+
 }

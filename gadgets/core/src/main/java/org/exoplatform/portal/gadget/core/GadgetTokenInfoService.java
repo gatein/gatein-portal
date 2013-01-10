@@ -31,14 +31,15 @@ import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.commons.chromattic.ContextualTask;
 import org.exoplatform.commons.chromattic.SessionContext;
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.web.security.security.AbstractTokenService;
+import org.exoplatform.web.security.security.PlainTokenService;
+import org.exoplatform.web.security.security.TokenServiceInitializationException;
 import org.gatein.wci.security.Credentials;
 
-public class GadgetTokenInfoService extends AbstractTokenService<GadgetToken, BasicOAuthStoreTokenIndex> {
+public class GadgetTokenInfoService extends PlainTokenService<GadgetToken, BasicOAuthStoreTokenIndex> {
 
     private ChromatticLifeCycle chromatticLifeCycle;
 
-    public GadgetTokenInfoService(InitParams initParams, ChromatticManager chromatticManager) {
+    public GadgetTokenInfoService(InitParams initParams, ChromatticManager chromatticManager) throws TokenServiceInitializationException {
         super(initParams);
         chromatticLifeCycle = chromatticManager.getLifeCycle("gadgettokens");
     }
@@ -103,7 +104,6 @@ public class GadgetTokenInfoService extends AbstractTokenService<GadgetToken, Ba
     }
 
     public String createToken(Credentials credentials) throws IllegalArgumentException, NullPointerException {
-        // TODO Auto-generated method stub
         return null;
     }
 

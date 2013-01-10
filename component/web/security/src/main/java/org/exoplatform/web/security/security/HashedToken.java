@@ -1,9 +1,8 @@
 /*
- * JBoss, a division of Red Hat
- * Copyright 2012, Red Hat Middleware, LLC, and individual
- * contributors as indicated by the @authors tag. See the
- * copyright.txt in the distribution for a full listing of
- * individual contributors.
+ * JBoss, Home of Professional Open Source.
+ * Copyright 2012, Red Hat, Inc., and individual contributors
+ * as indicated by the @author tags. See the copyright.txt file in the
+ * distribution for a full listing of individual contributors.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -23,15 +22,22 @@
 
 package org.exoplatform.web.security.security;
 
-/**
- * Exception is thrown if there is attempt to create token with ID, which already exists in the token container
- *
- * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
- */
-public class TokenExistsException extends Exception {
+import org.chromattic.api.annotations.MixinType;
+import org.chromattic.api.annotations.Property;
 
-    /**
-     *
-     */
-    private static final long serialVersionUID = 5478055118857538487L;
+/**
+ * HashedToken is done as mixin to stay backwards compatible. Adding the hashedtoken directly to {@link TokenEntry} would make
+ * {@link TokenEntry} incompatible with existing databases.
+ *
+ * @author <a href="mailto:ppalaga@redhat.com">Peter Palaga</a>
+ *
+ */
+@MixinType(name = "tkn:hashedtoken")
+public abstract class HashedToken {
+
+    @Property(name = "hashedtoken")
+    public abstract String getHashedToken();
+
+    public abstract void setHashedToken(String hashedToken);
+
 }

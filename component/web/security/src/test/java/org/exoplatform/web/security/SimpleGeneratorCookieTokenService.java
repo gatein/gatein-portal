@@ -25,6 +25,9 @@ package org.exoplatform.web.security;
 
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.xml.InitParams;
+import org.exoplatform.container.xml.ObjectParameter;
+import org.exoplatform.web.security.hash.NoSaltedHashService;
+import org.exoplatform.web.security.security.TokenServiceInitializationException;
 import org.exoplatform.web.security.security.CookieTokenService;
 
 /**
@@ -35,15 +38,40 @@ import org.exoplatform.web.security.security.CookieTokenService;
 public class SimpleGeneratorCookieTokenService extends CookieTokenService {
 
     private int counter = 0;
+    private int noRandom = 0;
 
-    public SimpleGeneratorCookieTokenService(InitParams initParams, ChromatticManager chromatticManager) {
-        super(initParams, chromatticManager);
+    public SimpleGeneratorCookieTokenService(InitParams initParams, ChromatticManager chromatticManager)
+            throws TokenServiceInitializationException {
+        super(replaceHashService(initParams), chromatticManager);
+    }
+
+    /**
+     * @param initParams
+     * @return
+     */
+    private static InitParams replaceHashService(InitParams initParams) {
+        ObjectParameter hashParam = new ObjectParameter();
+        hashParam.setName(CookieTokenService.HASH_SERVICE_INIT_PARAM);
+        hashParam.setObject(new NoSaltedHashService());
+        initParams.addParameter(hashParam );
+        return initParams;
     }
 
     @Override
     protected String nextTokenId() {
         counter++;
         return "rememberme" + counter / 2;
+    }
+
+
+
+    /* (non-Javadoc)
+     * @see org.exoplatform.web.security.security.AbstractTokenService#nextRandom()
+     */
+    @Override
+    protected String nextRandom() {
+        noRandom++;
+        return "random"+ String.valueOf(noRandom/2);
     }
 
     int getCounter() {
