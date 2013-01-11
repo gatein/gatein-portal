@@ -101,7 +101,7 @@ public class UIPageNodeSelector extends UIContainer {
         if (node.getParent() != null) {
             // The node may be resolved by UserPortal#resolvePath and this will filter all sibling nodes
             // We need to update from parent to make sure all sibling nodes can be retrieved
-            userPortal.updateNode(node.getParent(), GenericScope.treeShape(3), queue);
+            userPortal.updateNode(node.getParent(), GenericScope.<NodeState>treeShape(3), queue);
         } else {
             userPortal.updateNode(node, Scope.GRANDCHILDREN, queue);
         }

@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop.hierarchy;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -199,20 +200,20 @@ public class GenericScope {
     private static GenericScope.Tree[] PREDEFINED = { new Tree(0), new Tree(1), new Tree(2), new Tree(3), new Tree(4),
             new Tree(5), new Tree(6), new Tree(7), new Tree(8), new Tree(9) };
 
-    public static Scope<NodeState> treeShape(int height) {
+    public static <S extends Serializable> Scope<S> treeShape(int height) {
         if (height < 0) {
             return ALL;
         } else if (height < PREDEFINED.length) {
             return PREDEFINED[height];
         } else {
-            return new Tree(height);
+            return new Tree<S>(height);
         }
     }
 
-    public static class Tree implements Scope<NodeState> {
+    public static class Tree<S extends Serializable> implements Scope<S> {
 
         /** . */
-        private final Visitor<NodeState> visitor;
+        private final Visitor<S> visitor;
 
         /**
          * Creates a new navigation scope. When the height is positive or zero, the tree will be pruned to the specified height,
@@ -221,8 +222,8 @@ public class GenericScope {
          * @param height the max height of the pruned tree
          */
         public Tree(final int height) {
-            this.visitor = new Visitor<NodeState>() {
-                public VisitMode enter(int depth, String id, String name, NodeState state) {
+            this.visitor = new Visitor<S>() {
+                public VisitMode enter(int depth, String id, String name, S state) {
                     if (height < 0 || depth < height) {
                         return VisitMode.ALL_CHILDREN;
                     } else {
@@ -230,12 +231,12 @@ public class GenericScope {
                     }
                 }
 
-                public void leave(int depth, String id, String name, NodeState state) {
+                public void leave(int depth, String id, String name, S state) {
                 }
             };
         }
 
-        public Visitor<NodeState> get() {
+        public Visitor<S> get() {
             return visitor;
         }
     }

@@ -29,6 +29,7 @@ import javax.portlet.ResourceURL;
 
 import org.exoplatform.portal.mop.hierarchy.GenericScope;
 import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.navigation.UIPortalNavigation;
 import org.exoplatform.portal.webui.util.Util;
@@ -71,7 +72,7 @@ public class UINavigationPortlet extends UIPortletApplication {
         if (level <= 0) {
             portalNavigation.setScope(Scope.ALL);
         } else {
-            portalNavigation.setScope(GenericScope.treeShape(level));
+            portalNavigation.setScope(GenericScope.<NodeState>treeShape(level));
         }
     }
 
