@@ -67,7 +67,7 @@
     <value name="description" field="description" usage="optional"/>
     <value name="width" usage="optional" field="width" style="attribute"/>
     <value name="height" usage="optional" field="height" style="attribute"/>
-    <collection field="children" ordered="false">
+    <collection field="children" ordered="false" factory="org.jibx.runtime.Utility.arrayListFactory">
       <structure map-as="org.exoplatform.portal.config.model.Container" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.model.PageBody" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.model.SiteBody" usage="optional"/>
@@ -86,7 +86,7 @@
     <value name="access-permissions" field="accessPermissions" usage="optional"/>
     <value name="edit-permission" field="editPermission" usage="optional"/>
     <value name="show-max-window" field="showMaxWindow" usage="optional"/>
-    <collection field="children" ordered="false">
+    <collection field="children" ordered="false" factory="org.jibx.runtime.Utility.arrayListFactory">
       <structure map-as="org.exoplatform.portal.config.model.Container" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.model.PageBody" usage="optional"/>
       <structure map-as="org.exoplatform.portal.config.serialize.PortletApplication" usage="optional"/>

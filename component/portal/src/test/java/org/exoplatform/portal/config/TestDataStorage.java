@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.config;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
@@ -566,7 +565,7 @@ public class TestDataStorage extends AbstractConfigTest {
         //
         Application<Portlet> portlet = (Application<Portlet>) srcPage.getChildren().get(0);
         portlet.setDescription("NewPortlet");
-        ArrayList<ModelObject> modelObject = srcPage.getChildren();
+        List<ModelObject> modelObject = srcPage.getChildren();
         modelObject.set(0, portlet);
         srcPage.setChildren(modelObject);
         storage_.save(srcPage);

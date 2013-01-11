@@ -56,7 +56,7 @@ public class Container extends ModelObject {
 
     protected String[] accessPermissions;
 
-    protected ArrayList<ModelObject> children;
+    protected List<ModelObject> children;
 
     public Container() {
         children = new ArrayList<ModelObject>();
@@ -116,11 +116,11 @@ public class Container extends ModelObject {
         this.icon = icon;
     }
 
-    public ArrayList<ModelObject> getChildren() {
+    public List<ModelObject> getChildren() {
         return children;
     }
 
-    public void setChildren(ArrayList<ModelObject> children) {
+    public void setChildren(List<ModelObject> children) {
         this.children = children;
     }
 

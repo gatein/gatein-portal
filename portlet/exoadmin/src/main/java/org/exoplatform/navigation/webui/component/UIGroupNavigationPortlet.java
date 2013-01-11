@@ -24,6 +24,7 @@ import javax.portlet.PortletRequest;
 
 import org.exoplatform.portal.mop.hierarchy.GenericScope;
 import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
@@ -49,7 +50,7 @@ public class UIGroupNavigationPortlet extends UIPortletApplication {
         if (level <= 0) {
             groupNavigationManagement.setScope(Scope.ALL);
         } else {
-            groupNavigationManagement.setScope(GenericScope.treeShape(level));
+            groupNavigationManagement.setScope(GenericScope.<NodeState>treeShape(level));
         }
     }
 }

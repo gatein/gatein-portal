@@ -200,7 +200,7 @@ public class PageUtils {
         container.setWidth(existing.getWidth());
     }
 
-    private static ArrayList<ModelObject> copyChildren(ArrayList<ModelObject> existing) {
+    private static ArrayList<ModelObject> copyChildren(List<ModelObject> existing) {
         if (existing == null)
             return null;
         ArrayList<ModelObject> children = new ArrayList<ModelObject>(existing.size());
