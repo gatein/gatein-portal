@@ -34,4 +34,16 @@ public class CloneApplicationState<S> extends ApplicationState<S> {
     public String getStorageId() {
         return storageId;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        } else if (o instanceof CloneApplicationState) {
+            CloneApplicationState that = (CloneApplicationState) o;
+            return storageId.equals(that.storageId);
+        } else {
+            return false;
+        }
+    }
 }

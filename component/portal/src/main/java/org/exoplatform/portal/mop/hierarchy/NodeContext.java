@@ -68,12 +68,14 @@ public final class NodeContext<N, S extends Serializable> extends ListTree<NodeC
         this.handle = data.id;
         this.name = null;
         this.tree = new TreeContext<N, S>(model, this);
-        this.node = tree.model.create(this);
         this.data = data;
         this.state = null;
         this.hidden = false;
         this.hiddenCount = 0;
         this.expanded = false;
+
+        // Doing it last as it could access some state of this context
+        this.node = tree.model.create(this);
     }
 
     private NodeContext(TreeContext<N, S> tree, NodeData<S> data) {
@@ -85,12 +87,14 @@ public final class NodeContext<N, S extends Serializable> extends ListTree<NodeC
         this.handle = data.id;
         this.name = null;
         this.tree = tree;
-        this.node = tree.model.create(this);
         this.data = data;
         this.state = null;
         this.hidden = false;
         this.hiddenCount = 0;
         this.expanded = false;
+
+        // Doing it last as it could access some state of this context
+        this.node = tree.model.create(this);
     }
 
     NodeContext(TreeContext<N, S> tree, String handle, String name, S state, boolean expanded) {
@@ -108,12 +112,14 @@ public final class NodeContext<N, S extends Serializable> extends ListTree<NodeC
         this.handle = handle;
         this.name = name;
         this.tree = tree;
-        this.node = tree.model.create(this);
         this.data = null;
         this.state = state;
         this.hidden = false;
         this.hiddenCount = 0;
         this.expanded = expanded;
+
+        // Doing it last as it could access some state of this context
+        this.node = tree.model.create(this);
     }
 
     /**
@@ -143,8 +149,13 @@ public final class NodeContext<N, S extends Serializable> extends ListTree<NodeC
         return data != null ? data.getId() : null;
     }
 
-    public NodeData<S> getData() {
-        return data;
+    /**
+     * Returns the context handle.
+     *
+     * @return the handle
+     */
+    public String getHandle() {
+        return handle;
     }
 
     /**
@@ -303,7 +314,7 @@ public final class NodeContext<N, S extends Serializable> extends ListTree<NodeC
 
     public NodeContext<N, S> getDescendant(String handle) throws NullPointerException {
         if (handle == null) {
-            throw new NullPointerException();
+            throw new NullPointerException("No null handle accepted");
         }
 
         //
@@ -418,7 +429,7 @@ public final class NodeContext<N, S extends Serializable> extends ListTree<NodeC
         _add(index, context);
     }
 
-    public NodeContext<N, S> insertLast(NodeData<S> data) {
+    NodeContext<N, S> insertLast(NodeData<S> data) {
         if (data == null) {
             throw new NullPointerException("No null data argument accepted");
         }
@@ -429,7 +440,7 @@ public final class NodeContext<N, S extends Serializable> extends ListTree<NodeC
         return context;
     }
 
-    public NodeContext<N, S> insertAt(Integer index, NodeData<S> data) {
+    NodeContext<N, S> insertAt(Integer index, NodeData<S> data) {
         if (data == null) {
             throw new NullPointerException("No null data argument accepted");
         }
@@ -440,7 +451,7 @@ public final class NodeContext<N, S extends Serializable> extends ListTree<NodeC
         return context;
     }
 
-    public NodeContext<N, S> insertAfter(NodeData<S> data) {
+     NodeContext<N, S> insertAfter(NodeData<S> data) {
         if (data == null) {
             throw new NullPointerException("No null data argument accepted");
         }

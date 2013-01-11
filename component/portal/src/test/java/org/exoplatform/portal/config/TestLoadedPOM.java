@@ -35,7 +35,6 @@ import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.hierarchy.NodeModel;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.exoplatform.portal.mop.page.PageContext;

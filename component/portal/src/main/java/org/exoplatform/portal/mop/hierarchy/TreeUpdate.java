@@ -46,8 +46,8 @@ class TreeUpdate<N1, N2, S extends Serializable> {
             TreeUpdateAdapter<N2, S> updateAdapter, NodeChangeListener<NodeContext<N1, S>, S> listener, Scope.Visitor<S> visitor) {
 
         // We create the diff object
-        HierarchyDiff<String[], NodeContext<N1, S>, String[], N2, String> diff = HierarchyDiff.create(Adapters.<String> list(),
-                srcAdatper, Adapters.<String> list(), updateAdapter, Utils.<String> comparator());
+        HierarchyDiff<String[], NodeContext<N1, S>, String[], N2, String> diff = HierarchyDiff.create(Adapters.<String>array(),
+                srcAdatper, Adapters.<String>array(), updateAdapter, Utils.<String> comparator());
 
         // We obtain the iterator
         HierarchyChangeIterator<String[], NodeContext<N1, S>, String[], N2, String> it = diff.iterator(src.root, dst);

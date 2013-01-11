@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2012 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,30 +17,25 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.hierarchy;
+package org.exoplatform.portal.mop.layout;
 
-import java.io.Serializable;
+import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeModel;
+import org.exoplatform.portal.mop.navigation.NavigationServiceException;
+import org.exoplatform.portal.mop.navigation.NodeState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-public interface NodeModel<N, S extends Serializable> {
+public interface LayoutService {
 
-    /**
-     * Returns the context of a node.
-     *
-     * @param node the node
-     * @return the node context
-     */
-    NodeContext<N, S> getContext(N node);
+    <N> NodeContext<N, ElementState> loadElement(
+            NodeModel<N, ElementState> model,
+            String layoutId,
+            NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener);
 
-    /**
-     * Create a node wrapping a context.
-     *
-     * @param context the node context
-     * @return the node instance
-     */
-    N create(NodeContext<N, S> context);
-
+    <N> void saveElement(
+            NodeContext<N, ElementState> context,
+            NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException;
 }

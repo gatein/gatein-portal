@@ -30,4 +30,7 @@ import java.io.Serializable;
  * @param <S> the content state type
  */
 public abstract class ApplicationState<S> implements Serializable {
+
+    public abstract boolean equals(Object o);
+
 }

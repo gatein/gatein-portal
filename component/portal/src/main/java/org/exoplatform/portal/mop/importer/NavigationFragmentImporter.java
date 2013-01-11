@@ -70,7 +70,7 @@ public class NavigationFragmentImporter {
                 for (PageNode child : nodes) {
                     names[index++] = child.getName();
                 }
-                return Adapters.<String> list().iterator(names, reverse);
+                return Adapters.<String>array().iterator(names, reverse);
             }
         }
     };
@@ -87,7 +87,7 @@ public class NavigationFragmentImporter {
             for (NodeContext<?, NodeState> child = list.getFirst(); child != null; child = child.getNext()) {
                 names[index++] = child.getName();
             }
-            return Adapters.<String> list().iterator(names, reverse);
+            return Adapters.<String>array().iterator(names, reverse);
         }
     };
 

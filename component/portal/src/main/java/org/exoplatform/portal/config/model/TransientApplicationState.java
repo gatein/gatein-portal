@@ -19,6 +19,8 @@
 
 package org.exoplatform.portal.config.model;
 
+import org.exoplatform.commons.utils.Safe;
+
 /**
  * The transient state of an application when it has not yet been stored in the database.
  *
@@ -85,5 +87,20 @@ public class TransientApplicationState<S> extends ApplicationState<S> {
 
     public void setOwnerId(String ownerId) {
         this.ownerId = ownerId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        } else if (o instanceof TransientApplicationState) {
+            TransientApplicationState that = (TransientApplicationState) o;
+            return Safe.equals(contentId, that.contentId) &&
+                    Safe.equals(ownerType, that.ownerType) &&
+                    Safe.equals(ownerId, that.ownerId) &&
+                    Safe.equals(contentState, that.contentState);
+        } else {
+            return false;
+        }
     }
 }

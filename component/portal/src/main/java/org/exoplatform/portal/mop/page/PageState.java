@@ -40,7 +40,7 @@ public class PageState implements Serializable {
     /** . */
     final List<String> accessPermissions;
 
-    public PageState(Page page) {
+    PageState(Page page) {
 
         Attributes attrs = page.getAttributes();
         Described described = page.adapt(Described.class);

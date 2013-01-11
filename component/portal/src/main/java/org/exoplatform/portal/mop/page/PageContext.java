@@ -36,6 +36,15 @@ public class PageContext {
     }
 
     /**
+     * Returns the layout id or null if the page is not persistent.
+     *
+     * @return the layout id
+     */
+    public String getLayoutId() {
+        return data != null ? data.id : null;
+    }
+
+    /**
      * Returns the navigation state.
      *
      * @return the navigation state

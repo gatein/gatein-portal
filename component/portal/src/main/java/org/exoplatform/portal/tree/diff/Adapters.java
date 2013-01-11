@@ -20,6 +20,8 @@
 package org.exoplatform.portal.tree.diff;
 
 import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 
@@ -31,9 +33,18 @@ public class Adapters {
     /** . */
     private static final ArrayAdapter ARRAY_INSTANCE = new ArrayAdapter();
 
-    public static <E> ListAdapter<E[], E> list() {
+    /** . */
+    private static final JavaUtilListAdapter LIST_INSTANCE = new JavaUtilListAdapter();
+
+    public static <E> ListAdapter<E[], E> array() {
         @SuppressWarnings("unchecked")
         ListAdapter<E[], E> adapter = (ListAdapter<E[], E>) ARRAY_INSTANCE;
+        return adapter;
+    }
+
+    public static <E> ListAdapter<List<E>, E> list() {
+        @SuppressWarnings("unchecked")
+        ListAdapter<List<E>, E> adapter = (ListAdapter<List<E>, E>) LIST_INSTANCE;
         return adapter;
     }
 
@@ -66,6 +77,36 @@ public class Adapters {
                     throw new UnsupportedOperationException();
                 }
             };
+        }
+    }
+
+    private static class JavaUtilListAdapter<E> implements ListAdapter<List<E>, E> {
+        @Override
+        public int size(List<E> list) {
+            return list.size();
+        }
+
+        @Override
+        public Iterator<E> iterator(List<E> list, boolean reverse) {
+            if (reverse) {
+                final ListIterator<E> i = list.listIterator(list.size());
+                return new Iterator<E>() {
+                    @Override
+                    public boolean hasNext() {
+                        return i.hasPrevious();
+                    }
+                    @Override
+                    public E next() {
+                        return i.previous();
+                    }
+                    @Override
+                    public void remove() {
+                        throw new UnsupportedOperationException();
+                    }
+                };
+            } else {
+                return list.iterator();
+            }
         }
     }
 }
