@@ -88,7 +88,7 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation> {
             };
         } else {
 
-                final List<NodeContext<NodeContext<?, NodeState>, NodeState>> snapshots = new ArrayList<NodeContext<NodeContext<?, NodeState>, NodeState>>(data.getFragments()
+                final List<NodeContext<?, NodeState>> snapshots = new ArrayList<NodeContext<?, NodeState>>(data.getFragments()
                     .size());
             for (NavigationFragment fragment : data.getFragments()) {
                 snapshots.add(NavigationUtils.loadNode(navigationService, navContext, fragment.getParentURI()));
@@ -104,7 +104,7 @@ public class NavigationImportTask extends AbstractImportTask<PageNavigation> {
                 public void rollback() throws Exception {
                     log.debug(getDescription());
 
-                    for (NodeContext<NodeContext<?, NodeState>, NodeState> snapshot : snapshots) {
+                    for (NodeContext snapshot : snapshots) {
                         RollbackChangeListener listener = new RollbackChangeListener();
                         navigationService.updateNode(snapshot, Scope.ALL, listener);
 

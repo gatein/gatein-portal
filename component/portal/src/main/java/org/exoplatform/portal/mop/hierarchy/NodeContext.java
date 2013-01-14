@@ -30,7 +30,7 @@ import org.exoplatform.portal.tree.list.ListTree;
 /**
  * The context of a node.
  */
-public final class NodeContext<N, S extends Serializable> extends ListTree<NodeContext<N, S>> {
+public final class NodeContext<N, S extends Serializable> extends ListTree<NodeContext<N, S>> implements Iterable<NodeContext<N, S>> {
 
     /** The owner tree. */
     final TreeContext<N, S> tree;
@@ -342,6 +342,34 @@ public final class NodeContext<N, S extends Serializable> extends ListTree<NodeC
         return null;
     }
 
+    @Override
+    public Iterator<NodeContext<N, S>> iterator() {
+        return new Iterator<NodeContext<N, S>>() {
+
+            NodeContext<N, S> current = getFirst();
+
+            @Override
+            public boolean hasNext() {
+                return current != null;
+            }
+
+            @Override
+            public NodeContext<N, S> next() {
+                if (current == null) {
+                    throw new NoSuchElementException();
+                }
+                NodeContext<N, S> next = current;
+                current = next.getNext();
+                return next;
+            }
+
+            @Override
+            public void remove() {
+                throw new UnsupportedOperationException();
+            }
+        };
+    }
+
     /**
      * Add a child node at the specified index with the specified name. If the index argument is null then the node is added at
      * the last position among the children otherwise the node is added at the specified index.
@@ -531,36 +559,6 @@ public final class NodeContext<N, S extends Serializable> extends ListTree<NodeC
         return descendant != null && !descendant.hidden ? descendant.node : null;
     }
 
-    public Iterator<N> iterator() {
-        return new Iterator<N>() {
-            NodeContext<N, S> next = getFirst();
-            {
-                while (next != null && next.isHidden()) {
-                    next = next.getNext();
-                }
-            }
-
-            public boolean hasNext() {
-                return next != null;
-            }
-
-            public N next() {
-                if (next != null) {
-                    NodeContext<N, S> tmp = next;
-                    do {
-                        next = next.getNext();
-                    } while (next != null && next.isHidden());
-                    return tmp.getNode();
-                } else {
-                    throw new NoSuchElementException();
-                }
-            }
-
-            public void remove() {
-                throw new UnsupportedOperationException();
-            }
-        };
-    }
 
     /** . */
     private Collection<N> nodes;
@@ -570,9 +568,35 @@ public final class NodeContext<N, S extends Serializable> extends ListTree<NodeC
             if (nodes == null) {
                 nodes = new AbstractCollection<N>() {
                     public Iterator<N> iterator() {
-                        return NodeContext.this.iterator();
-                    }
+                        return new Iterator<N>() {
+                            NodeContext<N, S> next = getFirst();
+                            {
+                                while (next != null && next.isHidden()) {
+                                    next = next.getNext();
+                                }
+                            }
 
+                            public boolean hasNext() {
+                                return next != null;
+                            }
+
+                            public N next() {
+                                if (next != null) {
+                                    NodeContext<N, S> tmp = next;
+                                    do {
+                                        next = next.getNext();
+                                    } while (next != null && next.isHidden());
+                                    return tmp.getNode();
+                                } else {
+                                    throw new NoSuchElementException();
+                                }
+                            }
+
+                            public void remove() {
+                                throw new UnsupportedOperationException();
+                            }
+                        };
+                    }
                     public int size() {
                         return getNodeCount();
                     }

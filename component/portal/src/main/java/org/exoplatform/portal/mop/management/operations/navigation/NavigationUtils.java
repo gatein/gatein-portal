@@ -57,7 +57,7 @@ public class NavigationUtils {
         if (navigation == null)
             return null;
 
-        NodeContext<NodeContext<?, NodeState>, NodeState> node = loadNode(navigationService, navigation, key.getNavUri());
+        NodeContext<?, NodeState> node = loadNode(navigationService, navigation, key.getNavUri());
         if (node == null)
             return null;
 
@@ -68,14 +68,20 @@ public class NavigationUtils {
         }
     }
 
-    public static NodeContext<NodeContext<?, NodeState>, NodeState> loadNode(NavigationService navigationService, NavigationContext navigation,
+    public static NodeContext<?, NodeState> loadNode(NavigationService navigationService, NavigationContext navigation,
+            String navUri) {
+        return loadNode_(navigationService, navigation, navUri);
+    }
+
+
+    public static NodeContext<?, NodeState> loadNode_(NavigationService navigationService, NavigationContext navigation,
             String navUri) {
         if (navigation == null)
             return null;
-
+        NodeModel<?, NodeState> model = NodeState.model();
         if (navUri != null) {
             String[] path = trim(navUri.split("/"));
-            NodeContext<NodeContext<?, NodeState>, NodeState> node = navigationService.loadNode(NodeModel.SELF_MODEL, navigation,
+            NodeContext<?, NodeState> node = navigationService.loadNode(model, navigation,
                     GenericScope.branchShape(path, Scope.ALL), null);
             for (String name : path) {
                 node = node.get(name);
@@ -85,21 +91,21 @@ public class NavigationUtils {
 
             return node;
         } else {
-            return navigationService.loadNode(NodeModel.SELF_MODEL, navigation, Scope.ALL, null);
+            return navigationService.loadNode(model, navigation, Scope.ALL, null);
         }
     }
 
     public static PageNavigation createPageNavigation(DescriptionService service, NavigationContext navigation,
-            NodeContext<NodeContext<?, NodeState>, NodeState> node) {
+            NodeContext<?, NodeState> node) {
         PageNavigation pageNavigation = new PageNavigation();
         pageNavigation.setPriority(navigation.getState().getPriority());
         pageNavigation.setOwnerType(navigation.getKey().getTypeName());
         pageNavigation.setOwnerId(navigation.getKey().getName());
 
         ArrayList<PageNode> children = new ArrayList<PageNode>(node.getNodeCount());
-        for (NodeContext<?, NodeState> child : node.getNodes()) {
+        for (Object child : node.getNodes()) {
             @SuppressWarnings("unchecked")
-            NodeContext<NodeContext<?, NodeState>, NodeState> childNode = (NodeContext<NodeContext<?, NodeState>, NodeState>) child;
+            NodeContext<?, NodeState> childNode = (NodeContext<?, NodeState>) child;
             children.add(createPageNode(service, childNode));
         }
 
@@ -111,7 +117,7 @@ public class NavigationUtils {
     }
 
     private static PageNavigation createFragmentedPageNavigation(DescriptionService service, NavigationContext navigation,
-            NodeContext<NodeContext<?, NodeState>, NodeState> node) {
+            NodeContext<?, NodeState> node) {
         PageNavigation pageNavigation = new PageNavigation();
         pageNavigation.setPriority(navigation.getState().getPriority());
         pageNavigation.setOwnerType(navigation.getKey().getTypeName());
@@ -131,7 +137,7 @@ public class NavigationUtils {
         return pageNavigation;
     }
 
-    private static void getPath(NodeContext<NodeContext<?, NodeState>, NodeState> node, StringBuilder parentUri) {
+    private static void getPath(NodeContext<?, NodeState> node, StringBuilder parentUri) {
         if (node == null)
             return;
         if (node.getParent() == null)
@@ -141,7 +147,7 @@ public class NavigationUtils {
         getPath(node.getParent(), parentUri);
     }
 
-    private static PageNode createPageNode(DescriptionService service, NodeContext<NodeContext<?, NodeState>, NodeState> node) {
+    private static PageNode createPageNode(DescriptionService service, NodeContext<?, NodeState> node) {
         PageNode pageNode = new PageNode();
         pageNode.setName(node.getName());
 
@@ -175,10 +181,8 @@ public class NavigationUtils {
 
         if (node.getNodes() != null) {
             ArrayList<PageNode> children = new ArrayList<PageNode>(node.getNodeCount());
-            for (NodeContext<?, NodeState> child : node.getNodes()) {
-                @SuppressWarnings("unchecked")
-                NodeContext<NodeContext<?, NodeState>, NodeState> childNode = (NodeContext<NodeContext<?, NodeState>, NodeState>) child;
-                children.add(createPageNode(service, childNode));
+            for (NodeContext<?, NodeState> child : node) {
+                children.add(createPageNode(service, child));
             }
 
             pageNode.setChildren(children);

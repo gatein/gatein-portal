@@ -49,7 +49,7 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
         //
         NavigationContext ctx = new NavigationContext(SiteKey.portal("remove_orphan"), new NavigationState(1));
         service.saveNavigation(ctx);
-        NodeContext root = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null);
+        NodeContext root = service.loadNode(NodeState.model(), ctx, Scope.ALL, null);
         root.add(0, "foo", NodeState.INITIAL).add(0, "bar", NodeState.INITIAL);
         service.saveNode(root, null);
 
@@ -72,7 +72,7 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
         //
         NavigationContext ctx = new NavigationContext(SiteKey.portal("create_missing_path"), new NavigationState(1));
         service.saveNavigation(ctx);
-        NodeContext root = service.loadNode(NodeModel.SELF_MODEL, ctx, Scope.ALL, null);
+        NodeContext root = service.loadNode(NodeState.model(), ctx, Scope.ALL, null);
         root.add(0, "foo", NodeState.INITIAL).add(0, "bar", NodeState.INITIAL);
         service.saveNode(root, null);
 

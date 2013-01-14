@@ -32,6 +32,7 @@ import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.hierarchy.NodeModel;
 import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.exoplatform.portal.mop.navigation.NodeState;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
@@ -118,7 +119,7 @@ public class Mapper {
         }
 
         String[] path = requestPath.split("/");
-        NodeContext nodeContext = navService.loadNode(NodeModel.SELF_MODEL, navContext,
+        NodeContext<?, NodeState> nodeContext = navService.loadNode(NodeState.model(), navContext,
                 GenericScope.branchShape(path, Scope.ALL), null);
 
         boolean found = true;

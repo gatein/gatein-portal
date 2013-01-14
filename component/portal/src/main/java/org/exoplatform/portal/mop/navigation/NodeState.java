@@ -24,6 +24,8 @@ import java.util.Date;
 
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.hierarchy.NodeModel;
 import org.exoplatform.portal.mop.page.PageKey;
 
 /**
@@ -33,6 +35,35 @@ import org.exoplatform.portal.mop.page.PageKey;
  * @version $Revision$
  */
 public final class NodeState implements Serializable {
+
+    public static NodeModel<?, NodeState> model() {
+        return new NodeModel<Object, NodeState>() {
+            @Override
+            public NodeContext<Object, NodeState> getContext(Object node) {
+                return (NodeContext<Object, NodeState>)node;
+            }
+
+            @Override
+            public Object create(NodeContext<Object, NodeState> context) {
+                return context.getNode();
+            }
+        };
+    }
+
+/*
+    public static <N extends NodeContext<N, NodeState>> NodeModel<N, NodeState> model() {
+        return new NodeModel<N, NodeState>() {
+            @Override
+            public NodeContext<N, NodeState> getContext(N node) {
+                return node;
+            }
+            @Override
+            public N create(NodeContext<N, NodeState> context) {
+                return context.getNode();
+            }
+        };
+    }
+*/
 
     /** . */
     public static final NodeState INITIAL = new NodeState.Builder().build();

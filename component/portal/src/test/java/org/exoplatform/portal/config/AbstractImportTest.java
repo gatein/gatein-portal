@@ -32,7 +32,6 @@ import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.hierarchy.Node;
 import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.hierarchy.NodeModel;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -117,7 +116,7 @@ public abstract class AbstractImportTest extends AbstractGateInTest {
         service = (NavigationService) container.getComponentInstanceOfType(NavigationService.class);
         RequestLifeCycle.begin(container);
         nav = service.loadNavigation(SiteKey.portal("classic"));
-        root = service.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
+        root = service.loadNode(NodeState.model(), nav, Scope.ALL, null);
         afterTwoPhaseOverrideReboot(root);
         RequestLifeCycle.end();
         bootstrap.dispose();
@@ -154,7 +153,7 @@ public abstract class AbstractImportTest extends AbstractGateInTest {
         POMSessionManager mgr = (POMSessionManager) container.getComponentInstanceOfType(POMSessionManager.class);
         RequestLifeCycle.begin(container);
         nav = service.loadNavigation(SiteKey.portal("classic"));
-        root = service.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
+        root = service.loadNode(NodeState.model(), nav, Scope.ALL, null);
         afterTwoPhaseNoOverrideReboot(root);
         Workspace workspace = mgr.getSession().getWorkspace();
         assertTrue(workspace.isAdapted(Imported.class));
@@ -169,7 +168,7 @@ public abstract class AbstractImportTest extends AbstractGateInTest {
         service = (NavigationService) container.getComponentInstanceOfType(NavigationService.class);
         RequestLifeCycle.begin(container);
         nav = service.loadNavigation(SiteKey.portal("classic"));
-        root = service.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
+        root = service.loadNode(NodeState.model(), nav, Scope.ALL, null);
         afterTwoPhaseNoOverrideReconfigure(root);
         RequestLifeCycle.end();
         bootstrap.dispose();

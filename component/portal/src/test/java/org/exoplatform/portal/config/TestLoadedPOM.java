@@ -92,7 +92,7 @@ public class TestLoadedPOM extends AbstractConfigTest {
         SiteKey key = SiteKey.group("/test/legacy");
         NavigationContext nav = navService.loadNavigation(key);
         assertNotNull(nav);
-        NodeContext<?, NodeState> root = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
+        NodeContext<?, NodeState> root = navService.loadNode(NodeState.model(), nav, Scope.ALL, null);
         NodeContext<?, NodeState> node = root.get(0);
         assertEquals(SiteKey.group("/test/legacy").page("register"), node.getState().getPageRef());
 
@@ -106,7 +106,7 @@ public class TestLoadedPOM extends AbstractConfigTest {
         SiteKey key = SiteKey.group("/test/normalized");
         NavigationContext nav = navService.loadNavigation(key);
         assertNotNull(nav);
-        NodeContext<?, NodeState> root = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
+        NodeContext<?, NodeState> root = navService.loadNode(NodeState.model(), nav, Scope.ALL, null);
         NodeContext<?, NodeState> node = root.get(0);
         assertEquals(SiteKey.group("/test/normalized").page("register"), node.getState().getPageRef());
 
@@ -125,7 +125,7 @@ public class TestLoadedPOM extends AbstractConfigTest {
         assertEquals(1, (int) nav.getState().getPriority());
 
         //
-        NodeContext<?, NodeState> root = navService.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
+        NodeContext<?, NodeState> root = navService.loadNode(NodeState.model(), nav, Scope.ALL, null);
         assertEquals(5, root.getNodeCount());
 
         //

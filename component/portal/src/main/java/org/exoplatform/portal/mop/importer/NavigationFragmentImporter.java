@@ -37,7 +37,6 @@ import org.exoplatform.portal.mop.hierarchy.GenericScope;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.hierarchy.NodeModel;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.exoplatform.portal.tree.diff.Adapters;
@@ -133,13 +132,13 @@ public class NavigationFragmentImporter {
 
         //
         if (navigationCtx != null) {
-            NodeContext root = navigationService.loadNode(NodeModel.SELF_MODEL, navigationCtx, GenericScope.branchShape(path),
+            NodeContext<?, NodeState> root = navigationService.loadNode(NodeState.model(), navigationCtx, GenericScope.branchShape(path),
                     null);
 
             //
-            NodeContext from = root;
+            NodeContext<?, NodeState> from = root;
             for (String name : path) {
-                NodeContext a = from.get(name);
+                NodeContext<?, NodeState> a = from.get(name);
                 if (a != null) {
                     from = a;
                 } else {

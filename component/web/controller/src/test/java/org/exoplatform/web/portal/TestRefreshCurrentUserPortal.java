@@ -33,7 +33,6 @@ import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.hierarchy.NodeModel;
 import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.user.SimpleUserPortalContext;
@@ -144,7 +143,7 @@ public class TestRefreshCurrentUserPortal extends AbstractPortalTest {
         navs = userPortal.getNavigations();
         assertEquals(2, navs.size());
         RequestContext.setCurrentInstance(requestContext);
-        NodeContext root = ns.loadNode(NodeModel.SELF_MODEL, nav, Scope.ALL, null);
+        NodeContext<?, NodeState> root = ns.loadNode(NodeState.model(), nav, Scope.ALL, null);
         root.add(null, "foo", NodeState.INITIAL);
         ns.saveNode(root, null);
         navs = userPortal.getNavigations();

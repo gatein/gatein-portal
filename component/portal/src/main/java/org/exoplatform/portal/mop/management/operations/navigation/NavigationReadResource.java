@@ -29,12 +29,12 @@ public class NavigationReadResource extends AbstractNavigationOperationHandler {
 
         Set<String> children = new LinkedHashSet<String>();
 
-        NodeContext<NodeContext<?, NodeState>, NodeState> node = NavigationUtils.loadNode(navigationService, navigation, navUri);
+        NodeContext<?, NodeState> node = NavigationUtils.loadNode(navigationService, navigation, navUri);
         if (node == null) {
             throw new ResourceNotFoundException("Navigation node not found for navigation uri '" + navUri + "'");
         }
 
-        for (NodeContext child : node.getNodes()) {
+        for (NodeContext<?, NodeState> child : node) {
             children.add(child.getName());
         }
 
