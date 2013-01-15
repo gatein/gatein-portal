@@ -280,8 +280,12 @@ public class POMDataStorage implements ModelDataStorage {
     }
 
     private ContainerData loadLayout(String layoutId, BodyType bodyType) {
-        NodeContext<?, ElementState> layout = layoutService.loadElement(ElementState.model(), layoutId, null);
-        return (ContainerData)create(layout, bodyType);
+        NodeContext<?, ElementState> layout = layoutService.loadLayout(ElementState.model(), layoutId, null);
+        if (layout != null) {
+            return (ContainerData)create(layout, bodyType);
+        } else {
+            return null;
+        }
     }
 
     private ComponentData create(NodeContext<?, ElementState> context, BodyType bodyType) {
@@ -485,7 +489,7 @@ public class POMDataStorage implements ModelDataStorage {
         );
 
         //
-        NodeContext<?, ElementState> ret = layoutService.loadElement(ElementState.model(), container.getStorageId(), null);
+        NodeContext<?, ElementState> ret = layoutService.loadLayout(ElementState.model(), container.getStorageId(), null);
 
         //
         HierarchyChangeIterator<List<String>, NodeContext<?, ElementState>, List<ComponentData>, ComponentData, String> i = diff.iterator(ret, container);
@@ -555,7 +559,7 @@ public class POMDataStorage implements ModelDataStorage {
         }
 
         // Save element
-        layoutService.saveElement(ret, null);
+        layoutService.saveLayout(ret, null);
     }
 
     public List<ModelChange> save(PageData page) throws Exception {

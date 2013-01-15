@@ -62,7 +62,7 @@ public class LayoutServiceImpl implements LayoutService {
     }
 
     @Override
-    public <N> NodeContext<N, ElementState> loadElement(NodeModel<N, ElementState> model, String layoutId, NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) {
+    public <N> NodeContext<N, ElementState> loadLayout(NodeModel<N, ElementState> model, String layoutId, NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) {
         if (model == null) {
             throw new NullPointerException("No nullmodel accepted");
         }
@@ -73,11 +73,17 @@ public class LayoutServiceImpl implements LayoutService {
         //
         POMSession session = manager.getSession();
         UIContainer root = session.findObjectById(ObjectType.CONTAINER, layoutId);
-        return nodeManager.loadNode(model, root.getObjectId(), ALL, listener);
+
+        //
+        if (root == null) {
+            return null;
+        } else {
+            return nodeManager.loadNode(model, root.getObjectId(), ALL, listener);
+        }
     }
 
     @Override
-    public <N> void saveElement(NodeContext<N, ElementState> context, NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException {
+    public <N> void saveLayout(NodeContext<N, ElementState> context, NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException {
         nodeManager.saveNode(context, listener);
     }
 }

@@ -22,20 +22,29 @@ package org.exoplatform.portal.mop.layout;
 import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
 import org.exoplatform.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.hierarchy.NodeModel;
-import org.exoplatform.portal.mop.navigation.NavigationServiceException;
-import org.exoplatform.portal.mop.navigation.NodeState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public interface LayoutService {
 
-    <N> NodeContext<N, ElementState> loadElement(
+    /**
+     * Return the layout for the specified layout id or null if the layout does not exist
+     *
+     * @param model the model
+     * @param layoutId the layout id
+     * @param listener an optional listener
+     * @param <N> the generic type
+     * @return the layout
+     * @throws NullPointerException if the model or layoutId argument are null
+     * @throws LayoutServiceException anything that would prevent to load the layout
+     */
+    <N> NodeContext<N, ElementState> loadLayout(
             NodeModel<N, ElementState> model,
             String layoutId,
-            NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener);
+            NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException, LayoutServiceException;
 
-    <N> void saveElement(
+    <N> void saveLayout(
             NodeContext<N, ElementState> context,
-            NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException;
+            NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException, LayoutServiceException;
 }
