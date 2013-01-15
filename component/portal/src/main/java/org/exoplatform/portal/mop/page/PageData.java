@@ -24,12 +24,16 @@ class PageData implements Serializable {
     final String id;
 
     /** . */
+    final String layoutId;
+
+    /** . */
     final PageState state;
 
     private PageData() {
         this.key = null;
         this.id = null;
         this.state = null;
+        this.layoutId = null;
     }
 
     PageData(Page page) {
@@ -39,6 +43,7 @@ class PageData implements Serializable {
         this.key = new SiteKey(Utils.siteType(site.getObjectType()), site.getName()).page(page.getName());
         this.id = page.getObjectId();
         this.state = new PageState(page);
+        this.layoutId = page.getRootComponent().getObjectId();
     }
 
     protected Object readResolve() {

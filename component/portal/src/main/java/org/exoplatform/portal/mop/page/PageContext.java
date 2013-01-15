@@ -41,7 +41,7 @@ public class PageContext {
      * @return the layout id
      */
     public String getLayoutId() {
-        return data != null ? data.id : null;
+        return data != null ? data.layoutId : null;
     }
 
     /**

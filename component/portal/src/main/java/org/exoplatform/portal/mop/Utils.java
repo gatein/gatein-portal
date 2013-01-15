@@ -24,6 +24,7 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.exoplatform.portal.pom.data.PortalKey;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 
@@ -60,6 +61,18 @@ public class Utils {
 
     public static SiteType siteType(ObjectType objectType) {
         return b.get(objectType);
+    }
+
+    public static SiteKey create(PortalKey key) {
+        if ("portal".equals(key.getType())) {
+            return SiteKey.portal(key.getId());
+        } else if ("group".equals(key.getType())) {
+            return SiteKey.group(key.getId());
+        } else if ("user".equals(key.getType())) {
+            return SiteKey.user(key.getId());
+        } else {
+            throw new IllegalArgumentException("Invalid portal key " + key);
+        }
     }
 
     public static <T extends Comparable<T>> Comparator<T> comparator() {

@@ -35,6 +35,7 @@ import javax.transaction.Status;
 import org.chromattic.api.ChromatticSession;
 import org.exoplatform.commons.utils.IOUtil;
 import org.exoplatform.commons.utils.LazyPageList;
+import org.exoplatform.commons.utils.ListAccessImpl;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.configuration.ConfigurationManager;
 import org.exoplatform.portal.application.PortletPreferences;
@@ -50,7 +51,9 @@ import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.QueryResult;
 import org.exoplatform.portal.mop.SiteKey;
+import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.layout.ElementState;
 import org.exoplatform.portal.mop.layout.LayoutService;
@@ -58,12 +61,15 @@ import org.exoplatform.portal.mop.layout.LayoutServiceImpl;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.page.PageState;
+import org.exoplatform.portal.mop.site.SiteContext;
+import org.exoplatform.portal.mop.site.SiteService;
+import org.exoplatform.portal.mop.site.SiteServiceImpl;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
-import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
 import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.SearchTask;
 import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.BodyData;
+import org.exoplatform.portal.pom.data.BodyType;
 import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.ContainerData;
 import org.exoplatform.portal.pom.data.DashboardData;
@@ -75,6 +81,7 @@ import org.exoplatform.portal.pom.data.PageData;
 import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
+import org.exoplatform.portal.pom.data.RedirectData;
 import org.exoplatform.portal.tree.diff.HierarchyAdapter;
 import org.exoplatform.portal.tree.diff.HierarchyChangeIterator;
 import org.exoplatform.portal.tree.diff.HierarchyChangeType;
@@ -115,6 +122,12 @@ public class POMDataStorage implements ModelDataStorage {
     /** . */
     private final ListenerService listenerService;
 
+    /** . */
+    private final LayoutService layoutService;
+
+    /** . */
+    private final SiteService siteService ;
+
     public POMDataStorage(final POMSessionManager pomMgr, ConfigurationManager confManager,
             JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService, ListenerService listenerService) {
 
@@ -135,22 +148,105 @@ public class POMDataStorage implements ModelDataStorage {
         this.confManager_ = confManager;
         this.jtaUserTransactionLifecycleService = jtaUserTransactionLifecycleService;
         this.listenerService = listenerService;
+        this.layoutService = new LayoutServiceImpl(pomMgr);
+        this.siteService = new SiteServiceImpl(pomMgr);
     }
 
     public PortalData getPortalConfig(PortalKey key) throws Exception {
-        return pomMgr.execute(new PortalConfigTask.Load(key));
+
+        SiteKey siteKey = org.exoplatform.portal.mop.Utils.create(key);
+        SiteContext context = siteService.loadSite(siteKey);
+        if (context != null) {
+            ContainerData container = loadLayout(context.getLayoutId(), BodyType.PAGE);
+            return new PortalData(
+                    context.getId(),
+                    context.getKey().getName(),
+                    context.getKey().getType().name().toLowerCase(),
+                    context.getState().getLocale(),
+                    context.getState().getLabel(),
+                    context.getState().getDescription(),
+                    context.getState().getAccessPermissions(),
+                    context.getState().getEditPermission(),
+                    context.getState().getProperties(),
+                    context.getState().getSkin(),
+                    container,
+                    new ArrayList<RedirectData>()
+            );
+        } else {
+            return null;
+        }
     }
 
     public void create(PortalData config) throws Exception {
-        pomMgr.execute(new PortalConfigTask.Save(config, false));
+        SiteKey key = org.exoplatform.portal.mop.Utils.create(config.getKey());
+        SiteContext site = siteService.loadSite(key);
+        if (site != null) {
+            throw new IllegalArgumentException("Cannot create portal " + config.getName() + " that already exist");
+        }
+
+        // Save site
+        site = new SiteContext(key, config.toState());
+        siteService.saveSite(site);
+
+        // Add layout id so it can be saved
+        ContainerData layout = config.getPortalLayout();
+        layout = new ContainerData(
+                site.getLayoutId(),
+                layout.getId(),
+                layout.getName(),
+                layout.getIcon(),
+                layout.getTemplate(),
+                layout.getFactoryId(),
+                layout.getTitle(),
+                layout.getDescription(),
+                layout.getWidth(),
+                layout.getHeight(),
+                layout.getAccessPermissions(),
+                layout.getChildren()
+        );
+
+
+        // Save layout
+        save(layout);
     }
 
     public void save(PortalData config) throws Exception {
-        pomMgr.execute(new PortalConfigTask.Save(config, true));
+        SiteKey key = org.exoplatform.portal.mop.Utils.create(config.getKey());
+        SiteContext site = siteService.loadSite(key);
+        if (site == null) {
+            throw new IllegalArgumentException("Cannot save portal " + config.getName() + " that does not exist");
+        }
+
+        // Save intrinsic state
+        site.setState(config.toState());
+        siteService.saveSite(site);
+
+        // Add layout id so it can be saved
+        ContainerData layout = config.getPortalLayout();
+        layout = new ContainerData(
+                site.getLayoutId(),
+                layout.getId(),
+                layout.getName(),
+                layout.getIcon(),
+                layout.getTemplate(),
+                layout.getFactoryId(),
+                layout.getTitle(),
+                layout.getDescription(),
+                layout.getWidth(),
+                layout.getHeight(),
+                layout.getAccessPermissions(),
+                layout.getChildren()
+        );
+
+        // Save layout
+        save(layout);
     }
 
     public void remove(PortalData config) throws Exception {
-        pomMgr.execute(new PortalConfigTask.Remove(config.getKey()));
+        SiteKey key = org.exoplatform.portal.mop.Utils.create(config.getKey());
+        if (!siteService.destroySite(key)) {
+            throw new NoSuchDataException("Could not remove non existing portal " + key);
+        }
     }
 
     public PageData getPage(PageKey key) throws Exception {
@@ -160,9 +256,7 @@ public class POMDataStorage implements ModelDataStorage {
                 key.getName()
         ));
         if (context != null) {
-            LayoutService layoutService = new LayoutServiceImpl(pomMgr);
-            NodeContext<?, ElementState> ret = layoutService.loadElement(ElementState.model(), context.getLayoutId(), null);
-            ContainerData container = (ContainerData)create(ret);
+            ContainerData container = loadLayout(context.getLayoutId(), BodyType.PAGE);
             return new PageData(
                     context.getLayoutId(),
                     null,
@@ -185,13 +279,18 @@ public class POMDataStorage implements ModelDataStorage {
         }
     }
 
-    private ComponentData create(NodeContext<?, ElementState> context) {
+    private ContainerData loadLayout(String layoutId, BodyType bodyType) {
+        NodeContext<?, ElementState> layout = layoutService.loadElement(ElementState.model(), layoutId, null);
+        return (ContainerData)create(layout, bodyType);
+    }
+
+    private ComponentData create(NodeContext<?, ElementState> context, BodyType bodyType) {
         ElementState state = context.getState();
         if (state instanceof ElementState.Container) {
             ElementState.Container container = (ElementState.Container) state;
             ArrayList<ComponentData> children = new ArrayList<ComponentData>();
             for (NodeContext<?, ElementState> child : context) {
-                children.add(create(child));
+                children.add(create(child, bodyType));
             }
             return new ContainerData(
                     context.getId(),
@@ -227,14 +326,15 @@ public class POMDataStorage implements ModelDataStorage {
                     window.properties,
                     window.accessPermissions
             );
+        } else if (state instanceof ElementState.Body) {
+            return new BodyData(context.getId(), bodyType);
         } else  {
             throw new UnsupportedOperationException("todo : " + state.getClass().getName());
         }
     }
 
-    public List<ModelChange> save(PageData page) throws Exception {
+    private void save(ContainerData container) throws Exception {
 
-        //
         class PageHierarchyAdapter implements HierarchyAdapter<List<ComponentData>, ComponentData, String>, ListAdapter<List<ComponentData>, String> {
 
             /** . */
@@ -373,51 +473,6 @@ public class POMDataStorage implements ModelDataStorage {
             }
         }
 
-        // Build layout context
-        PageService pageService = (PageService) PortalContainer.getComponent(PageService.class);
-        org.exoplatform.portal.mop.page.PageKey key = new org.exoplatform.portal.mop.page.PageKey(new SiteKey(page.getKey().getType(), page.getKey().getId()), page.getKey().getName());
-        PageContext context = pageService.loadPage(key);
-
-        //
-        if (context == null) {
-            context = new PageContext(key, new PageState(
-                    page.getName(),
-                    page.getDescription(),
-                    page.isShowMaxWindow(),
-                    page.getFactoryId(),
-                    page.getAccessPermissions(),
-                    page.getEditPermission()
-            ));
-            pageService.savePage(context);
-        }
-
-        //
-        LayoutService layoutService = new LayoutServiceImpl(pomMgr);
-        NodeContext<?, ElementState> ret = layoutService.loadElement(ElementState.model(), context.getLayoutId(), null);
-
-        // Need to use the context ID
-        page = new PageData(
-                ret.getId(),
-                page.getId(),
-                page.getName(),
-                page.getIcon(),
-                page.getTemplate(),
-                page.getFactoryId(),
-                page.getTitle(),
-                page.getDescription(),
-                page.getWidth(),
-                page.getHeight(),
-                page.getAccessPermissions(),
-                page.getChildren(),
-                page.getOwnerType(),
-                page.getOwnerId(),
-                page.getEditPermission(),
-                false
-        );
-
-        //
-        ContainerData container = (ContainerData) fix(page);
-
         //
         PageHierarchyAdapter context1 = new PageHierarchyAdapter(container);
         NodeContextHierarchyAdapter context2 = new NodeContextHierarchyAdapter();
@@ -428,6 +483,9 @@ public class POMDataStorage implements ModelDataStorage {
                 context1,
                 c
         );
+
+        //
+        NodeContext<?, ElementState> ret = layoutService.loadElement(ElementState.model(), container.getStorageId(), null);
 
         //
         HierarchyChangeIterator<List<String>, NodeContext<?, ElementState>, List<ComponentData>, ComponentData, String> i = diff.iterator(ret, container);
@@ -498,31 +556,48 @@ public class POMDataStorage implements ModelDataStorage {
 
         // Save element
         layoutService.saveElement(ret, null);
+    }
+
+    public List<ModelChange> save(PageData page) throws Exception {
+
+        // Build layout context
+        PageService pageService = (PageService) PortalContainer.getComponent(PageService.class);
+        org.exoplatform.portal.mop.page.PageKey key = new org.exoplatform.portal.mop.page.PageKey(new SiteKey(page.getKey().getType(), page.getKey().getId()), page.getKey().getName());
+        PageContext context = pageService.loadPage(key);
+
+        //
+        if (context == null) {
+            context = new PageContext(key, new PageState(
+                    page.getName(),
+                    page.getDescription(),
+                    page.isShowMaxWindow(),
+                    page.getFactoryId(),
+                    page.getAccessPermissions(),
+                    page.getEditPermission()
+            ));
+            pageService.savePage(context);
+        }
+
+        // Need to use the context ID
+        ContainerData container = new ContainerData(
+                context.getLayoutId(),
+                page.getId(),
+                page.getName(),
+                page.getIcon(),
+                page.getTemplate(),
+                page.getFactoryId(),
+                page.getTitle(),
+                page.getDescription(),
+                page.getWidth(),
+                page.getHeight(),
+                page.getAccessPermissions(),
+                page.getChildren());
+
+        //
+        save(container);
 
         //
         return Collections.emptyList();
-    }
-
-    private ComponentData fix(ComponentData component) {
-        if (component instanceof PageData) {
-            PageData page = (PageData) component;
-            return new ContainerData(
-                    page.getStorageId(),
-                    page.getId(),
-                    page.getName(),
-                    page.getIcon(),
-                    page.getTemplate(),
-                    page.getFactoryId(),
-                    page.getTitle(),
-                    page.getDescription(),
-                    page.getWidth(),
-                    page.getHeight(),
-                    page.getAccessPermissions(),
-                    page.getChildren()
-            );
-        } else {
-            throw new UnsupportedOperationException();
-        }
     }
 
     private ElementState create(ComponentData data) {
@@ -631,9 +706,19 @@ public class POMDataStorage implements ModelDataStorage {
         } else if (PortalData.class.equals(type)) {
             return (LazyPageList<T>) pomMgr.execute(new SearchTask.FindSite((Query<PortalData>) q));
         } else if (PortalKey.class.equals(type) && "portal".equals(q.getOwnerType())) {
-            return (LazyPageList<T>) pomMgr.execute(new SearchTask.FindSiteKey((Query<PortalKey>) q));
+            QueryResult<SiteKey> keys = siteService.findSites(SiteType.PORTAL);
+            ArrayList ret = new ArrayList(keys.getSize());
+            for (SiteKey key : keys) {
+                ret.add(new PortalKey(key));
+            }
+            return new LazyPageList(new ListAccessImpl(PortalKey.class, ret), 10);
         } else if (PortalKey.class.equals(type) && "group".equals(q.getOwnerType())) {
-            return (LazyPageList<T>) pomMgr.execute(new SearchTask.FindSiteKey((Query<PortalKey>) q));
+            QueryResult<SiteKey> keys = siteService.findSites(SiteType.GROUP);
+            ArrayList ret = new ArrayList(keys.getSize());
+            for (SiteKey key : keys) {
+                ret.add(new PortalKey(key));
+            }
+            return new LazyPageList(new ListAccessImpl(PortalKey.class, ret), 10);
         } else {
             throw new UnsupportedOperationException("Could not perform search on query " + q);
         }

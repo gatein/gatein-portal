@@ -30,7 +30,7 @@ public interface PageService {
      *
      * @param page the page
      *
-     * @return true if the page is not already existed, otherwise return false.
+     * @return true if the page does not already exist otherwise false.
      *
      * @throws NullPointerException if the key is null
      * @throws PageServiceException anything that would prevent the operation to succeed

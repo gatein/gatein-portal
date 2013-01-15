@@ -21,6 +21,9 @@ package org.exoplatform.portal.pom.data;
 import java.util.List;
 import java.util.Map;
 
+import org.exoplatform.portal.mop.site.SiteState;
+import org.gatein.common.util.Tools;
+
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -119,5 +122,17 @@ public class PortalData extends ModelData {
 
     public String getLabel() {
         return label;
+    }
+
+    public SiteState toState() {
+        return new SiteState(
+                locale,
+                label,
+                description,
+                accessPermissions,
+                editPermission,
+                properties,
+                skin
+        );
     }
 }

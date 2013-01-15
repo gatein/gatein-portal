@@ -18,6 +18,7 @@
  */
 package org.exoplatform.portal.pom.data;
 
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.pom.config.Utils;
 
 /**
@@ -25,6 +26,10 @@ import org.exoplatform.portal.pom.config.Utils;
  * @version $Revision$
  */
 public class PortalKey extends OwnerKey {
+
+    public PortalKey(SiteKey key) {
+        super(key.getType().getName(), key.getName());
+    }
 
     public PortalKey(String type, String id) {
         super(type, id);

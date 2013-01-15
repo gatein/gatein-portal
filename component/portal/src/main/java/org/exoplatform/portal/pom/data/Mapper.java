@@ -947,7 +947,7 @@ public class Mapper {
         saveChildren(dashboard, dst);
     }
 
-    private static void load(Attributes src, Map<String, String> dst, Set<String> blackList) {
+    public static void load(Attributes src, Map<String, String> dst, Set<String> blackList) {
         for (String name : src.getKeys()) {
             if (!blackList.contains(name) && !propertiesBlackList.contains(name)) {
                 Object value = src.getObject(name);

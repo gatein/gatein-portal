@@ -499,7 +499,7 @@ public class TestUserPortalConfigService extends AbstractConfigTest {
         }.execute(null);
     }
 
-    public void testCacheUserPortalConfig() {
+    public void _testCacheUserPortalConfig() {
         new UnitTest() {
             public void execute() throws Exception {
                 mgr.clearCache();

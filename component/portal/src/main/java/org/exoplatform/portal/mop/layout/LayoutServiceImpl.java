@@ -30,7 +30,6 @@ import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.mop.api.workspace.ObjectType;
-import org.gatein.mop.api.workspace.Page;
 import org.gatein.mop.api.workspace.ui.UIContainer;
 
 /**
@@ -64,14 +63,17 @@ public class LayoutServiceImpl implements LayoutService {
 
     @Override
     public <N> NodeContext<N, ElementState> loadElement(NodeModel<N, ElementState> model, String layoutId, NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) {
-        POMSession session = manager.getSession();
-        Page page = session.findObjectById(ObjectType.PAGE, layoutId);
-        if (page == null) {
-            return null;
-        } else {
-            UIContainer root = page.getRootComponent();
-            return nodeManager.loadNode(model, root.getObjectId(), ALL, listener);
+        if (model == null) {
+            throw new NullPointerException("No nullmodel accepted");
         }
+        if (layoutId == null) {
+            throw new NullPointerException("No null layout id accepted");
+        }
+
+        //
+        POMSession session = manager.getSession();
+        UIContainer root = session.findObjectById(ObjectType.CONTAINER, layoutId);
+        return nodeManager.loadNode(model, root.getObjectId(), ALL, listener);
     }
 
     @Override
