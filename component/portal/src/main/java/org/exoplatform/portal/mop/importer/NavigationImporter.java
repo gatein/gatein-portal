@@ -117,7 +117,7 @@ public class NavigationImporter {
                     }
 
                     //
-                    NavigationFragmentImporter fragmentImporter = new NavigationFragmentImporter(path.toArray(new String[path
+                    NavigationNodeImporter fragmentImporter = new NavigationNodeImporter(path.toArray(new String[path
                             .size()]), service, dst.getKey(), portalLocale, descriptionService, fragment, mode.config);
 
                     //

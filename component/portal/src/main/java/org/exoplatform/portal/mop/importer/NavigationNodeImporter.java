@@ -48,7 +48,7 @@ import org.exoplatform.portal.tree.diff.ListDiff;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class NavigationFragmentImporter {
+public class NavigationNodeImporter {
 
     private static final ListAdapter<PageNodeContainer, String> PAGE_NODE_CONTAINER_ADAPTER = new ListAdapter<PageNodeContainer, String>() {
         public int size(PageNodeContainer list) {
@@ -112,8 +112,8 @@ public class NavigationFragmentImporter {
     /** . */
     private final ImportConfig config;
 
-    public NavigationFragmentImporter(String[] path, NavigationService navigationService, SiteKey navigationKey,
-            Locale portalLocale, DescriptionService descriptionService, PageNodeContainer src, ImportConfig config) {
+    public NavigationNodeImporter(String[] path, NavigationService navigationService, SiteKey navigationKey,
+                                  Locale portalLocale, DescriptionService descriptionService, PageNodeContainer src, ImportConfig config) {
         this.path = path;
         this.navigationService = navigationService;
         this.navigationKey = navigationKey;

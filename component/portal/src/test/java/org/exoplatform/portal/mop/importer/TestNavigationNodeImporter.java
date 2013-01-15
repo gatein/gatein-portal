@@ -30,7 +30,6 @@ import org.exoplatform.portal.mop.navigation.AbstractTestNavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.hierarchy.NodeModel;
 import org.exoplatform.portal.mop.hierarchy.Scope;
 import org.exoplatform.portal.mop.navigation.NodeState;
 import org.gatein.mop.api.workspace.ObjectType;
@@ -39,7 +38,7 @@ import org.gatein.mop.core.api.MOPService;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestNavigationFragmentImporter extends AbstractTestNavigationService {
+public class TestNavigationNodeImporter extends AbstractTestNavigationService {
 
     public void testRemoveOrphan() {
         MOPService mop = mgr.getPOMService();
@@ -57,7 +56,7 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
         NavigationFragment imported = fragment("foo").build();
 
         //
-        NavigationFragmentImporter importer = new NavigationFragmentImporter(new String[0], service,
+        NavigationNodeImporter importer = new NavigationNodeImporter(new String[0], service,
                 SiteKey.portal("remove_orphan"), Locale.ENGLISH, descriptionService, imported, new ImportConfig(true, false,
                         false));
         NodeContext node = importer.perform();
@@ -80,7 +79,7 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
         NavigationFragment imported = fragment("foo").add(node("juu")).build();
 
         //
-        NavigationFragmentImporter importer = new NavigationFragmentImporter(new String[] { "foo", "bar" }, service,
+        NavigationNodeImporter importer = new NavigationNodeImporter(new String[] { "foo", "bar" }, service,
                 SiteKey.portal("create_missing_path"), Locale.ENGLISH, descriptionService, imported, ImportMode.INSERT.config);
         NodeContext node = importer.perform();
         assertNotNull(node);
@@ -88,7 +87,7 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
         assertNotNull(node.get("juu"));
 
         //
-        importer = new NavigationFragmentImporter(new String[] { "foo", "bar", "daa" }, service,
+        importer = new NavigationNodeImporter(new String[] { "foo", "bar", "daa" }, service,
                 SiteKey.portal("create_missing_path"), Locale.ENGLISH, descriptionService, imported, ImportMode.INSERT.config);
         node = importer.perform();
         assertNotNull(node);
@@ -96,7 +95,7 @@ public class TestNavigationFragmentImporter extends AbstractTestNavigationServic
         assertNotNull(node.get("juu"));
 
         //
-        importer = new NavigationFragmentImporter(new String[] { "foo" }, service, SiteKey.portal("create_missing_path"),
+        importer = new NavigationNodeImporter(new String[] { "foo" }, service, SiteKey.portal("create_missing_path"),
                 Locale.ENGLISH, descriptionService, imported, ImportMode.INSERT.config);
         node = importer.perform();
         assertEquals("foo", node.getName());
