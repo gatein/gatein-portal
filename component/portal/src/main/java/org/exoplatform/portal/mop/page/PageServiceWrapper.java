@@ -2,8 +2,13 @@ package org.exoplatform.portal.mop.page;
 
 import java.util.List;
 
+import javax.jcr.RepositoryException;
+import javax.jcr.Session;
+import javax.jcr.observation.EventIterator;
 import javax.transaction.Status;
 
+import org.chromattic.api.UndeclaredRepositoryException;
+import org.exoplatform.commons.cache.InvalidationBridge;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.QueryResult;
@@ -12,10 +17,13 @@ import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.services.jcr.RepositoryService;
+import org.exoplatform.services.jcr.core.ManageableRepository;
 import org.exoplatform.services.listener.ListenerService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.common.transaction.JTAUserTransactionLifecycleService;
+import org.picocontainer.Startable;
 
 /**
  * <p>
@@ -33,10 +41,13 @@ import org.gatein.common.transaction.JTAUserTransactionLifecycleService;
  *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class PageServiceWrapper implements PageService {
+public class PageServiceWrapper implements PageService, Startable {
 
     /** . */
     private static final Logger log = LoggerFactory.getLogger(PageServiceWrapper.class);
+
+    /** . */
+    private final RepositoryService repositoryService;
 
     /** . */
     private final PageServiceImpl service;
@@ -47,16 +58,28 @@ public class PageServiceWrapper implements PageService {
     /** . */
     private final ListenerService listenerService;
 
-    public PageServiceWrapper(POMSessionManager manager, ListenerService listenerService) {
-        this.service = new PageServiceImpl(manager);
-        this.manager = manager;
-        this.listenerService = listenerService;
+    /** . */
+    private final InvalidationBridge bridge;
+
+    public PageServiceWrapper(RepositoryService repositoryService, POMSessionManager manager, ListenerService listenerService) {
+        this(repositoryService, manager, listenerService, new SimpleDataCache());
     }
 
-    public PageServiceWrapper(POMSessionManager manager, ListenerService listenerService, CacheService cacheService) {
-        this.service = new PageServiceImpl(manager, new ExoDataCache(cacheService));
+    public PageServiceWrapper(RepositoryService repositoryService, POMSessionManager manager, ListenerService listenerService, CacheService cacheService) {
+        this(repositoryService, manager, listenerService, new ExoDataCache(cacheService));
+    }
+
+    public PageServiceWrapper(RepositoryService repositoryService, POMSessionManager manager, ListenerService listenerService, final DataCache cache) {
+        this.repositoryService = repositoryService;
+        this.service = new PageServiceImpl(manager, cache);
         this.manager = manager;
         this.listenerService = listenerService;
+        this.bridge = new InvalidationBridge() {
+            @Override
+            public void onEvent(EventIterator events) {
+                cache.clear();
+            }
+        };
     }
 
     @Override
@@ -135,5 +158,25 @@ public class PageServiceWrapper implements PageService {
         } catch (Exception e) {
             log.error("Error when delivering notification " + name + " for page " + key, e);
         }
+    }
+
+    public void start() {
+        Session session = null;
+        try {
+            String workspaceName = manager.getLifeCycle().getWorkspaceName();
+            ManageableRepository repo = repositoryService.getCurrentRepository();
+            session = repo.getSystemSession(workspaceName);
+            bridge.start(session);
+        } catch (RepositoryException e) {
+            throw new UndeclaredRepositoryException(e);
+        } finally {
+            if (session != null) {
+                session.logout();
+            }
+        }
+    }
+
+    public void stop() {
+        bridge.stop();
     }
 }

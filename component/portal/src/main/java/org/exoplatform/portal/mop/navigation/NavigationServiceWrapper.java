@@ -25,8 +25,10 @@ import java.util.List;
 
 import javax.jcr.RepositoryException;
 import javax.jcr.Session;
+import javax.jcr.observation.EventIterator;
 
 import org.chromattic.api.UndeclaredRepositoryException;
+import org.exoplatform.commons.cache.InvalidationBridge;
 import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
@@ -71,26 +73,26 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
 
     public NavigationServiceWrapper(RepositoryService repositoryService, POMSessionManager manager,
             ListenerService listenerService) {
-        SimpleDataCache cache = new SimpleDataCache();
-
-        //
-        this.repositoryService = repositoryService;
-        this.manager = manager;
-        this.service = new NavigationServiceImpl(manager, cache);
-        this.listenerService = listenerService;
-        this.bridge = new InvalidationBridge(cache);
+        this(repositoryService, manager, listenerService, new SimpleDataCache());
     }
 
     public NavigationServiceWrapper(RepositoryService repositoryService, POMSessionManager manager,
             ListenerService listenerService, CacheService cacheService) {
-        ExoDataCache cache = new ExoDataCache(cacheService);
+        this(repositoryService, manager, listenerService, new ExoDataCache(cacheService));
+    }
 
-        //
+    public NavigationServiceWrapper(RepositoryService repositoryService, POMSessionManager manager,
+                                    ListenerService listenerService, final DataCache cache) {
         this.repositoryService = repositoryService;
         this.manager = manager;
         this.service = new NavigationServiceImpl(manager, cache);
         this.listenerService = listenerService;
-        this.bridge = new InvalidationBridge(cache);
+        this.bridge = new InvalidationBridge() {
+            @Override
+            public void onEvent(EventIterator events) {
+                cache.clear();
+            }
+        };
     }
 
     public NavigationContext loadNavigation(SiteKey key) {
