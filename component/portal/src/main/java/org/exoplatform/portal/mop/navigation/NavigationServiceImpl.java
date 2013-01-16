@@ -19,7 +19,6 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,9 +30,7 @@ import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
 import org.exoplatform.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.hierarchy.NodeManager;
 import org.exoplatform.portal.mop.hierarchy.NodeModel;
-import org.exoplatform.portal.mop.hierarchy.NodePersistence;
 import org.exoplatform.portal.mop.hierarchy.Scope;
-import org.exoplatform.portal.pom.config.POMSessionManager;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -42,38 +39,19 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
 public class NavigationServiceImpl implements NavigationService {
 
     /** . */
-    private final DataCache dataCache;
-
-    /** . */
     private final NodeManager<NodeState> manager;
 
     /** . */
-    private final Provider<NavigationPersistence> persistenceProvider;
+    private final Provider<NavigationPersistence> persistenceFactory;
 
-    public NavigationServiceImpl(POMSessionManager manager) throws NullPointerException {
-        this(manager, new SimpleDataCache());
-    }
-
-    public NavigationServiceImpl(final POMSessionManager manager, final DataCache dataCache) throws NullPointerException {
-        if (manager == null) {
-            throw new NullPointerException("No null pom session manager allowed");
-        }
-        if (dataCache == null) {
-            throw new NullPointerException("No null data cache allowed");
+    public NavigationServiceImpl(Provider<NavigationPersistence> persistenceFactory) throws NullPointerException {
+        if (persistenceFactory == null) {
+            throw new NullPointerException("No null persistence factory allowed");
         }
 
         //
-        Provider<NavigationPersistence> persistenceProvider = new Provider<NavigationPersistence>() {
-            @Override
-            public NavigationPersistence get() {
-                return new NavigationPersistence(manager.getSession(), dataCache);
-            }
-        };
-
-        //
-        this.dataCache = dataCache;
-        this.manager = new NodeManager<NodeState>(persistenceProvider);
-        this.persistenceProvider = persistenceProvider;
+        this.persistenceFactory = persistenceFactory;
+        this.manager = new NodeManager<NodeState>(persistenceFactory);
     }
 
     public NavigationContext loadNavigation(SiteKey key) {
@@ -82,7 +60,7 @@ public class NavigationServiceImpl implements NavigationService {
         }
 
         //
-        NavigationPersistence persistence = persistenceProvider.get();
+        NavigationPersistence persistence = persistenceFactory.get();
         NavigationData data = persistence.getNavigationData(key);
         return data != null && data != NavigationData.EMPTY ? new NavigationContext(data) : null;
     }
@@ -92,7 +70,7 @@ public class NavigationServiceImpl implements NavigationService {
         if (type == null) {
             throw new NullPointerException();
         }
-        NavigationPersistence persistence = persistenceProvider.get();
+        NavigationPersistence persistence = persistenceFactory.get();
         List<NavigationContext> navigations = new LinkedList<NavigationContext>();
         for (NavigationData data : persistence.loadNavigations(type)) {
             navigations.add(new NavigationContext(data));
@@ -106,17 +84,17 @@ public class NavigationServiceImpl implements NavigationService {
         }
 
         //
-        NavigationPersistence persistence = persistenceProvider.get();
+        NavigationPersistence persistence = persistenceFactory.get();
+        try {
+            // Save
+            persistence.saveNavigation(navigation.key, navigation.state);
 
-        //
-        persistence.saveNavigation(navigation.key, navigation.state);
-
-        //
-        dataCache.removeNavigation(navigation.key);
-
-        // Update state
-        navigation.data = persistence.getNavigationData(navigation.key);
-        navigation.state = null;
+            // Update state
+            navigation.data = persistence.getNavigationData(navigation.key);
+            navigation.state = null;
+        } finally {
+            persistence.close();
+        }
     }
 
     public boolean destroyNavigation(NavigationContext navigation) throws NullPointerException, NavigationServiceException {
@@ -128,24 +106,16 @@ public class NavigationServiceImpl implements NavigationService {
         }
 
         //
-        NavigationPersistence persistence = persistenceProvider.get();
-
-        //
-        if (persistence.destroyNavigation(navigation.key)) {
-            // Invalidate cache
-            dataCache.removeNavigation(navigation.key);
-            String rootId = navigation.data.rootId;
-            if (rootId != null) {
-                dataCache.removeNodes(Collections.singleton(rootId));
+        NavigationPersistence persistence = persistenceFactory.get();
+        try {
+            if (persistence.destroyNavigation(navigation.data)) {
+                navigation.data = null;
+                return true;
+            } else {
+                return false;
             }
-
-            // Update state
-            navigation.data = null;
-
-            //
-            return true;
-        } else {
-            return false;
+        } finally {
+            persistence.close();
         }
     }
 
@@ -185,6 +155,6 @@ public class NavigationServiceImpl implements NavigationService {
 
 
     public void clearCache() {
-        dataCache.clear();
+        persistenceFactory.get().clear();
     }
 }

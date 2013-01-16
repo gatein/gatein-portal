@@ -453,7 +453,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
         sync(true);
 
         //
-        root = new NavigationServiceImpl(mgr).loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        root = new NavigationServiceImpl(new MopPersistenceFactory(mgr)).loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         for (Node child : root.getChildren()) {
             System.out.println("child : " + child.getId());
         }

@@ -20,6 +20,7 @@
 package org.exoplatform.portal.mop.navigation;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -101,12 +102,13 @@ class NavigationPersistence implements NodePersistence<NodeState> {
             Integer priority = state.getPriority();
             defaultNode.getAttributes().setValue(MappedAttributes.PRIORITY, priority);
         }
+        cache.removeNavigation(key);
     }
 
-    boolean destroyNavigation(SiteKey key) {
-        ObjectType<Site> objectType = objectType(key.getType());
+    boolean destroyNavigation(NavigationData data) {
+        ObjectType<Site> objectType = objectType(data.key.getType());
         Workspace workspace = session.getWorkspace();
-        Site site = workspace.getSite(objectType, key.getName());
+        Site site = workspace.getSite(objectType, data.key.getName());
         if (site == null) {
             throw new NavigationServiceException(NavigationError.NAVIGATION_NO_SITE);
         }
@@ -114,6 +116,11 @@ class NavigationPersistence implements NodePersistence<NodeState> {
         Navigation defaultNode = rootNode.getChild("default");
         if (defaultNode != null) {
             defaultNode.destroy();
+            cache.removeNavigation(data.key);
+            String rootId = data.rootId;
+            if (rootId != null) {
+                cache.removeNodes(Collections.singleton(rootId));
+            }
             return true;
         } else {
             return false;
@@ -321,5 +328,9 @@ class NavigationPersistence implements NodePersistence<NodeState> {
         if (toEvict.size() > 0) {
             cache.removeNodes(toEvict);
         }
+    }
+
+    public void clear() {
+        cache.clear();
     }
 }

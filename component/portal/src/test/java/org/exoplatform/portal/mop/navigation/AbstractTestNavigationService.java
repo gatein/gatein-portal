@@ -55,7 +55,7 @@ public abstract class AbstractTestNavigationService extends AbstractMOPTest {
     protected void setUp() throws Exception {
         PortalContainer container = PortalContainer.getInstance();
         mgr = (POMSessionManager) container.getComponentInstanceOfType(POMSessionManager.class);
-        service = new NavigationServiceImpl(mgr);
+        service = new NavigationServiceImpl(new MopPersistenceFactory(mgr));
         descriptionService = new DescriptionServiceImpl(mgr);
         dataStorage = (DataStorage) container.getComponentInstanceOfType(DataStorage.class);
 

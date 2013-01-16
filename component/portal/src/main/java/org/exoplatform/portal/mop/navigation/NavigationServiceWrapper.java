@@ -63,13 +63,13 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
     private final ListenerService listenerService;
 
     /** . */
-    private final POMSessionManager manager;
-
-    /** . */
     private final RepositoryService repositoryService;
 
     /** . */
     private final InvalidationBridge bridge;
+
+    /** . */
+    private final MopPersistenceFactory persistenceFactory;
 
     public NavigationServiceWrapper(RepositoryService repositoryService, POMSessionManager manager,
             ListenerService listenerService) {
@@ -81,16 +81,19 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
         this(repositoryService, manager, listenerService, new ExoDataCache(cacheService));
     }
 
-    public NavigationServiceWrapper(RepositoryService repositoryService, POMSessionManager manager,
-                                    ListenerService listenerService, final DataCache cache) {
+    public NavigationServiceWrapper(
+            RepositoryService repositoryService,
+            final POMSessionManager manager,
+            ListenerService listenerService,
+            DataCache cache) {
         this.repositoryService = repositoryService;
-        this.manager = manager;
-        this.service = new NavigationServiceImpl(manager, cache);
+        this.persistenceFactory = new MopPersistenceFactory(manager, cache);
+        this.service = new NavigationServiceImpl(persistenceFactory);
         this.listenerService = listenerService;
         this.bridge = new InvalidationBridge() {
             @Override
             public void onEvent(EventIterator events) {
-                cache.clear();
+                persistenceFactory.cache.clear();
             }
         };
     }
@@ -138,7 +141,7 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
     public <N> void saveNode(NodeContext<N, NodeState> context, NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener)
             throws NavigationServiceException {
         service.saveNode(context, listener);
-        org.gatein.mop.api.workspace.Navigation nav = manager.getSession().findObjectById(ObjectType.NAVIGATION,
+        org.gatein.mop.api.workspace.Navigation nav = persistenceFactory.manager.getSession().findObjectById(ObjectType.NAVIGATION,
                 context.getId());
         Site site = nav.getSite();
         SiteKey key = new SiteKey(siteType(site.getObjectType()), site.getName());
@@ -166,7 +169,7 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
     public void start() {
         Session session = null;
         try {
-            String workspaceName = manager.getLifeCycle().getWorkspaceName();
+            String workspaceName = persistenceFactory.manager.getLifeCycle().getWorkspaceName();
             ManageableRepository repo = repositoryService.getCurrentRepository();
             session = repo.getSystemSession(workspaceName);
             bridge.start(session);
