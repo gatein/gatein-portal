@@ -45,6 +45,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.UnmarshalledObject;
+import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.importer.Imported;
@@ -56,6 +57,7 @@ import org.exoplatform.portal.mop.layout.LayoutService;
 import org.exoplatform.portal.mop.layout.LayoutServiceImpl;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.page.PageService;
+import org.exoplatform.portal.mop.site.SiteContext;
 import org.exoplatform.portal.mop.site.SiteService;
 import org.exoplatform.portal.mop.site.SiteServiceImpl;
 import org.exoplatform.portal.pom.config.POMSession;
@@ -76,9 +78,6 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
 
     /** . */
     private ConfigurationManager cmanager_;
-
-    /** . */
-    private DataStorage dataStorage_;
 
     /** . */
     private PageService pageService_;
@@ -130,12 +129,11 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
 
     private boolean isFirstStartup = false;
 
-    public NewPortalConfigListener(UserPortalConfigService owner, POMSessionManager pomMgr, DataStorage dataStorage,
+    public NewPortalConfigListener(UserPortalConfigService owner, POMSessionManager pomMgr,
             PageService pageService, ConfigurationManager cmanager, InitParams params, NavigationService navigationService,
             DescriptionService descriptionService) throws Exception {
         owner_ = owner;
         cmanager_ = cmanager;
-        dataStorage_ = dataStorage;
         pageService_ = pageService;
         navigationService_ = navigationService;
         descriptionService_ = descriptionService;
@@ -210,7 +208,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
                 imported.setCreationDate(new Date());
 
                 // for legacy checking
-                if (dataStorage_.getPortalConfig(defaultPortal) != null) {
+                if (siteService.loadSite(SiteKey.portal(defaultPortal)) != null) {
                     perform = false;
                     imported.setStatus(Status.DONE.status());
                 } else {
@@ -463,7 +461,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
         PortalConfig pConfig;
         if (obj == null) {
             String fixedName = fixOwnerName(type, owner);
-            if (dataStorage_.getPortalConfig(type, fixedName) != null) {
+            if (siteService.loadSite(new SiteKey(type, fixedName)) != null) {
                 return true;
             } else {
                 pConfig = new PortalConfig(type, fixedName);
@@ -516,9 +514,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
 
         //
         Locale locale;
-        PortalConfig portalConfig = dataStorage_.getPortalConfig(config.getOwnerType(), owner);
-        if (portalConfig != null && portalConfig.getLocale() != null) {
-            locale = new Locale(portalConfig.getLocale());
+        SiteContext portalConfig = siteService.loadSite(new SiteKey(config.getOwnerType(), owner));
+        if (portalConfig != null && portalConfig.getState().getLocale() != null) {
+            locale = new Locale(portalConfig.getState().getLocale());
         } else {
             locale = Locale.ENGLISH;
         }
