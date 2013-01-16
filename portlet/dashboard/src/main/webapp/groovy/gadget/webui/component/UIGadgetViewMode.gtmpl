@@ -21,7 +21,7 @@
 	  	def requireJS = jsmanager.require("SHARED/gadget", "gadget").addScripts("gadget.UIGadget.createGadget('$url','$id', $metadata, $userPref, 'canvas', '$hostName', " + (isDebug ? 1 : 0) + ", " + (noCache ? 1 : 0) + ");");
 	  	
 	  	if(UIPortlet.getCurrentUIPortlet().getHeight() == null && uicomponent.getParent().isFillUpFreeSpace()) {
-	  	 requireJS.addScripts("gadget.UIGadget.resizeFullHeight('$id')");
+	  	 requireJS.addScripts("gadget.UIGadget.resizeFullHeight('$id');");
 	  	}
   	}
 %>
