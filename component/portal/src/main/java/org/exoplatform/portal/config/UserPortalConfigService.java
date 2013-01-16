@@ -40,7 +40,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
-import org.exoplatform.portal.mop.description.DescriptionService;
+import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.navigation.NavigationContext;
 import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.navigation.NavigationState;

@@ -30,10 +30,10 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.mop.Described;
+import org.gatein.portal.mop.description.DescriptionState;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
-import org.exoplatform.portal.mop.description.DescriptionService;
+import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.navigation.NavigationServiceException;
 import org.gatein.portal.mop.page.PageContext;
 import org.gatein.portal.mop.page.PageKey;
@@ -122,7 +122,7 @@ public class UIPageCreationWizard extends UIPageWizard {
         userPortal.saveNode(selectedNode, null);
 
         DescriptionService descriptionService = getApplicationComponent(DescriptionService.class);
-        Map<Locale, Described.State> descriptions = new HashMap<Locale, Described.State>();
+        Map<Locale, DescriptionState> descriptions = new HashMap<Locale, DescriptionState>();
         Map<String, String> cachedLabels = uiPageInfo.getCachedLabels();
 
         for (String strLocale : cachedLabels.keySet()) {
@@ -138,7 +138,7 @@ public class UIPageCreationWizard extends UIPageWizard {
                 locale = new Locale(strLocale);
             }
 
-            descriptions.put(locale, new Described.State(cachedLabels.get(strLocale), null));
+            descriptions.put(locale, new DescriptionState(cachedLabels.get(strLocale), null));
         }
 
         descriptionService.setDescriptions(createdNode.getId(), descriptions);

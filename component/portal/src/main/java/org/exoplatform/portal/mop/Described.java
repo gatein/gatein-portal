@@ -19,11 +19,9 @@
 
 package org.exoplatform.portal.mop;
 
-import java.io.Serializable;
-
 import org.chromattic.api.annotations.MixinType;
 import org.chromattic.api.annotations.Property;
-import org.exoplatform.commons.utils.Safe;
+import org.gatein.portal.mop.description.DescriptionState;
 
 /**
  * Something having a human readable name and a description. The semantic of the name is to be human readable, it can be
@@ -70,10 +68,10 @@ public abstract class Described {
      *
      * @return the state
      */
-    public State getState() {
+    public DescriptionState getState() {
         String name = getName();
         String description = getDescription();
-        return new State(name, description);
+        return new DescriptionState(name, description);
     }
 
     /**
@@ -82,7 +80,7 @@ public abstract class Described {
      * @param state the new state
      * @throws NullPointerException if the new state is null
      */
-    public void setState(State state) throws NullPointerException {
+    public void setState(DescriptionState state) throws NullPointerException {
         if (state == null) {
             throw new NullPointerException("No null state accepted");
         }
@@ -92,45 +90,4 @@ public abstract class Described {
         setDescription(state.getDescription());
     }
 
-    /**
-     * The composite state of the {@code Described} mixin.
-     */
-    public static class State implements Serializable {
-
-        /** . */
-        private final String name;
-
-        /** . */
-        private final String description;
-
-        public State(String name, String description) {
-            this.name = name;
-            this.description = description;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) {
-                return true;
-            }
-            if (obj instanceof State) {
-                State that = (State) obj;
-                return Safe.equals(name, that.name) && Safe.equals(description, that.description);
-            }
-            return false;
-        }
-
-        @Override
-        public String toString() {
-            return "Description[name=" + name + ",description=" + description + "]";
-        }
-    }
 }

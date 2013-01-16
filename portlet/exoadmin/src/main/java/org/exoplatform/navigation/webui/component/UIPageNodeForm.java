@@ -42,7 +42,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.mop.Described;
+import org.gatein.portal.mop.description.DescriptionState;
 import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.gatein.portal.mop.page.PageContext;
@@ -105,7 +105,7 @@ public class UIPageNodeForm extends UIFormTabPane {
 
     private static final String VISIBLE = "visible";
 
-    private Map<String, Described.State> cachedLabels;
+    private Map<String, DescriptionState> cachedLabels;
 
     private String selectedLocale;
 
@@ -172,7 +172,7 @@ public class UIPageNodeForm extends UIFormTabPane {
     public void setValues(TreeNode pageNode) throws Exception {
         pageNode_ = pageNode;
         selectedLocale = getUIFormSelectBox(LANGUAGES).getValue();
-        cachedLabels = new HashMap<String, Described.State>();
+        cachedLabels = new HashMap<String, DescriptionState>();
         if (pageNode == null) {
             getUIStringInput("name").setReadOnly(false);
             getChild(UIFormInputIconSelector.class).setSelectedIcon("Default");
@@ -268,7 +268,7 @@ public class UIPageNodeForm extends UIFormTabPane {
             icon = "Default";
         getChild(UIFormInputIconSelector.class).setSelectedIcon(icon);
         getUIStringInput(LABEL).setValue(pageNode.getLabel());
-        Map<Locale, Described.State> i18nizedLabels = pageNode.getI18nizedLabels();
+        Map<Locale, DescriptionState> i18nizedLabels = pageNode.getI18nizedLabels();
         if (i18nizedLabels != null) {
             for (Locale key : i18nizedLabels.keySet()) {
                 String locale = key.getCountry() != "" ? key.getLanguage() + "_" + key.getCountry() : key.getLanguage();
@@ -337,9 +337,9 @@ public class UIPageNodeForm extends UIFormTabPane {
             node.setEndPublicationTime(date == null ? -1 : date.getTime());
         }
 
-        cachedLabels.put(getUIFormSelectBox(LANGUAGES).getValue(), new Described.State(getUIStringInput(I18N_LABEL).getValue(),
+        cachedLabels.put(getUIFormSelectBox(LANGUAGES).getValue(), new DescriptionState(getUIStringInput(I18N_LABEL).getValue(),
                 null));
-        Map<Locale, Described.State> labels = new HashMap<Locale, Described.State>(cachedLabels.size());
+        Map<Locale, DescriptionState> labels = new HashMap<Locale, DescriptionState>(cachedLabels.size());
         getUIFormSelectBox(LANGUAGES).getValue();
         for (String strLocale : cachedLabels.keySet()) {
             Locale locale;
@@ -554,7 +554,7 @@ public class UIPageNodeForm extends UIFormTabPane {
     }
 
     private void updateCachedLabels(String locale, String label) {
-        cachedLabels.put(locale, new Described.State(label, null));
+        cachedLabels.put(locale, new DescriptionState(label, null));
     }
 
     public void setSelectedLocale(String selectedLocale) {

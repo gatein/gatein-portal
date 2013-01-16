@@ -7,7 +7,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.exoplatform.commons.utils.HTMLEntityEncoder;
-import org.exoplatform.portal.mop.Described.State;
+import org.gatein.portal.mop.description.DescriptionState;
 import org.exoplatform.portal.mop.Visibility;
 import org.gatein.portal.mop.hierarchy.NodeChangeListener;
 import org.gatein.portal.mop.navigation.NodeState;
@@ -39,7 +39,7 @@ public class TreeNode implements NodeChangeListener<UserNode, NodeState> {
 
     private List<TreeNode> children;
 
-    private Map<Locale, State> i18nizedLabels;
+    private Map<Locale, DescriptionState> i18nizedLabels;
 
     public TreeNode(UserNavigation nav, UserNode node) {
         this(nav, node, null);
@@ -320,11 +320,11 @@ public class TreeNode implements NodeChangeListener<UserNode, NodeState> {
         toTreeNode.children = null;
     }
 
-    public void setI18nizedLabels(Map<Locale, State> labels) {
+    public void setI18nizedLabels(Map<Locale, DescriptionState> labels) {
         this.i18nizedLabels = labels;
     }
 
-    public Map<Locale, State> getI18nizedLabels() {
+    public Map<Locale, DescriptionState> getI18nizedLabels() {
         return i18nizedLabels;
     }
 }

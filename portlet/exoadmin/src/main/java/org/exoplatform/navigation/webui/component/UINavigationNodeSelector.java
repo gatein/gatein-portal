@@ -29,10 +29,10 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.mop.Described.State;
+import org.gatein.portal.mop.description.DescriptionState;
 import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.description.DescriptionService;
+import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.navigation.NavigationError;
 import org.gatein.portal.mop.navigation.NavigationServiceException;
 import org.gatein.portal.mop.hierarchy.Scope;
@@ -101,7 +101,7 @@ public class UINavigationNodeSelector extends UIContainer {
 
     private UserNodeFilterConfig filterConfig;
 
-    private Map<String, Map<Locale, State>> userNodeLabels;
+    private Map<String, Map<Locale, DescriptionState>> userNodeLabels;
 
     private static final Scope<NodeState> DEFAULT_SCOPE = Scope.GRANDCHILDREN;
     private Scope<NodeState> navigationScope = DEFAULT_SCOPE;
@@ -124,14 +124,14 @@ public class UINavigationNodeSelector extends UIContainer {
                 "CutNode", "DeleteNode", "MoveUp", "MoveDown" });
         uiTree.setUIRightClickPopupMenu(uiPopupMenu);
 
-        userNodeLabels = new HashMap<String, Map<Locale, State>>();
+        userNodeLabels = new HashMap<String, Map<Locale, DescriptionState>>();
     }
 
-    public void setUserNodeLabels(Map<String, Map<Locale, State>> labels) {
+    public void setUserNodeLabels(Map<String, Map<Locale, DescriptionState>> labels) {
         this.userNodeLabels = labels;
     }
 
-    public Map<String, Map<Locale, State>> getUserNodeLabels() {
+    public Map<String, Map<Locale, DescriptionState>> getUserNodeLabels() {
         return this.userNodeLabels;
     }
 
@@ -218,12 +218,12 @@ public class UINavigationNodeSelector extends UIContainer {
         try {
             userPortal.saveNode(getRootNode().getNode(), getRootNode());
             DescriptionService descriptionService = getApplicationComponent(DescriptionService.class);
-            Map<String, Map<Locale, State>> i18nizedLabels = this.userNodeLabels;
+            Map<String, Map<Locale, DescriptionState>> i18nizedLabels = this.userNodeLabels;
 
             for (String treeNodeId : i18nizedLabels.keySet()) {
                 TreeNode node = findNode(treeNodeId);
                 if (node != null) {
-                    Map<Locale, State> labels = i18nizedLabels.get(treeNodeId);
+                    Map<Locale, DescriptionState> labels = i18nizedLabels.get(treeNodeId);
                     if (labels != null && labels.size() > 0) {
                         descriptionService.setDescriptions(node.getNode().getId(), labels);
                     }
@@ -284,7 +284,7 @@ public class UINavigationNodeSelector extends UIContainer {
     private void invokeI18NizedLabels(TreeNode node) {
         DescriptionService descriptionService = this.getApplicationComponent(DescriptionService.class);
         try {
-            Map<Locale, State> labels = descriptionService.getDescriptions(node.getId());
+            Map<Locale, DescriptionState> labels = descriptionService.getDescriptions(node.getId());
             node.setI18nizedLabels(labels);
         } catch (NullPointerException npe) {
             // set label list is null if Described mixin has been removed or not exists.

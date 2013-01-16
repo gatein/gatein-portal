@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 eXo Platform SAS.
+ * Copyright (C) 2012 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,39 +17,24 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.description;
+package org.gatein.portal.mop.description;
 
-import java.io.Serializable;
-import java.util.concurrent.atomic.AtomicLong;
-
-import org.gatein.portal.mop.description.DescriptionState;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class CacheValue implements Serializable {
+public interface DescriptionPersistence {
+    DescriptionState resolveDescription(String id, Locale locale) throws NullPointerException;
 
-    /** . */
-    private static final AtomicLong SEQUENCE = new AtomicLong();
+    DescriptionState getDescription(String id, Locale locale);
 
-    /** . */
-    final CacheKey origin;
+    void setDescription(String id, Locale locale, DescriptionState description);
 
-    /** . */
-    final long serial;
+    void setDescription(String id, DescriptionState description);
 
-    /** . */
-    final DescriptionState state;
+    Map<Locale, DescriptionState> getDescriptions(String id);
 
-    public CacheValue(CacheKey origin, long serial, DescriptionState state) {
-        this.origin = origin;
-        this.serial = serial;
-        this.state = state;
-    }
-
-    public CacheValue(DescriptionState state) {
-        this.origin = null;
-        this.serial = SEQUENCE.incrementAndGet();
-        this.state = state;
-    }
+    void setDescriptions(String id, Map<Locale, DescriptionState> descriptions);
 }

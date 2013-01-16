@@ -33,8 +33,8 @@ import org.exoplatform.portal.config.model.LocalizedString;
 import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.mop.Described;
-import org.exoplatform.portal.mop.description.DescriptionService;
+import org.gatein.portal.mop.description.DescriptionState;
+import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.hierarchy.GenericScope;
 import org.gatein.portal.mop.navigation.NavigationContext;
 import org.gatein.portal.mop.navigation.NavigationService;
@@ -152,10 +152,10 @@ public class NavigationUtils {
         pageNode.setName(node.getName());
 
         if (node.getState().getLabel() == null) {
-            Map<Locale, Described.State> descriptions = service.getDescriptions(node.getId());
+            Map<Locale, DescriptionState> descriptions = service.getDescriptions(node.getId());
             if (descriptions != null && !descriptions.isEmpty()) {
                 I18NString labels = new I18NString();
-                for (Map.Entry<Locale, Described.State> entry : descriptions.entrySet()) {
+                for (Map.Entry<Locale, DescriptionState> entry : descriptions.entrySet()) {
                     labels.add(new LocalizedString(entry.getValue().getName(), entry.getKey()));
                 }
 

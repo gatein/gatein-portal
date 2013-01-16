@@ -30,6 +30,10 @@ import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.AbstractPortalTest;
 import org.exoplatform.portal.mop.Described;
+import org.gatein.portal.mop.description.DescriptionPersistence;
+import org.gatein.portal.mop.description.DescriptionService;
+import org.gatein.portal.mop.description.DescriptionServiceImpl;
+import org.gatein.portal.mop.description.DescriptionState;
 import org.exoplatform.portal.mop.i18n.I18Nized;
 import org.exoplatform.portal.mop.navigation.MopPersistenceFactory;
 import org.gatein.portal.mop.navigation.NavigationServiceImpl;
@@ -53,6 +57,9 @@ public class TestDescriptionService extends AbstractPortalTest {
     protected POMSessionManager mgr;
 
     /** . */
+    protected DescriptionPersistence persistence;
+
+    /** . */
     protected NavigationServiceImpl service;
 
     @Override
@@ -63,6 +70,7 @@ public class TestDescriptionService extends AbstractPortalTest {
         PortalContainer container = PortalContainer.getInstance();
         mgr = (POMSessionManager) container.getComponentInstanceOfType(POMSessionManager.class);
         service = new NavigationServiceImpl(new MopPersistenceFactory(mgr));
+        persistence = new MopPersistence(mgr, new SimpleDataCache());
         // dataStorage = (DataStorage)container.getComponentInstanceOfType(DataStorage.class);
 
         // Clear the cache for each test
@@ -79,7 +87,7 @@ public class TestDescriptionService extends AbstractPortalTest {
     }
 
     public void testResolveNoDescription() throws Exception {
-        DescriptionService svc = new DescriptionServiceImpl(mgr);
+        DescriptionService svc = new DescriptionServiceImpl(persistence);
         MOPService mop = mgr.getPOMService();
         Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
         Navigation nav = portal.getRootNavigation().addChild("default");
@@ -90,7 +98,7 @@ public class TestDescriptionService extends AbstractPortalTest {
     }
 
     public void testResolveDefaultDescription() throws Exception {
-        DescriptionService svc = new DescriptionServiceImpl(mgr);
+        DescriptionService svc = new DescriptionServiceImpl(persistence);
         MOPService mop = mgr.getPOMService();
         Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
         Navigation nav = portal.getRootNavigation().addChild("default");
@@ -103,7 +111,7 @@ public class TestDescriptionService extends AbstractPortalTest {
     }
 
     public void testResolveLocalizedDescription() throws Exception {
-        DescriptionService svc = new DescriptionServiceImpl(mgr);
+        DescriptionService svc = new DescriptionServiceImpl(persistence);
         MOPService mop = mgr.getPOMService();
         Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
         Navigation nav = portal.getRootNavigation().addChild("default");
@@ -117,16 +125,16 @@ public class TestDescriptionService extends AbstractPortalTest {
         //
         assertEquals(null, svc.resolveDescription(id, null, Locale.GERMAN));
         assertEquals(null, svc.resolveDescription(id, null, new Locale("", "GB")));
-        assertEquals(new Described.State("name_en", null), svc.resolveDescription(id, Locale.ENGLISH, Locale.GERMAN));
-        assertEquals(new Described.State("name_en_GB", null), svc.resolveDescription(id, Locale.UK, Locale.GERMAN));
-        assertEquals(new Described.State("name_en", null), svc.resolveDescription(id, Locale.US, Locale.GERMAN));
-        assertEquals(new Described.State("name_en", null), svc.resolveDescription(id, null, Locale.ENGLISH));
-        assertEquals(new Described.State("name_en", null), svc.resolveDescription(id, null, Locale.US));
-        assertEquals(new Described.State("name_en_GB", null), svc.resolveDescription(id, null, Locale.UK));
+        assertEquals(new DescriptionState("name_en", null), svc.resolveDescription(id, Locale.ENGLISH, Locale.GERMAN));
+        assertEquals(new DescriptionState("name_en_GB", null), svc.resolveDescription(id, Locale.UK, Locale.GERMAN));
+        assertEquals(new DescriptionState("name_en", null), svc.resolveDescription(id, Locale.US, Locale.GERMAN));
+        assertEquals(new DescriptionState("name_en", null), svc.resolveDescription(id, null, Locale.ENGLISH));
+        assertEquals(new DescriptionState("name_en", null), svc.resolveDescription(id, null, Locale.US));
+        assertEquals(new DescriptionState("name_en_GB", null), svc.resolveDescription(id, null, Locale.UK));
     }
 
     public void testResolveDescription() throws Exception {
-        DescriptionService svc = new DescriptionServiceImpl(mgr);
+        DescriptionService svc = new DescriptionServiceImpl(persistence);
         MOPService mop = mgr.getPOMService();
         Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
         Navigation nav = portal.getRootNavigation().addChild("default");
@@ -141,16 +149,16 @@ public class TestDescriptionService extends AbstractPortalTest {
 
         //
         assertEquals(null, svc.resolveDescription(id, null, Locale.GERMAN));
-        assertEquals(new Described.State("name_en", null), svc.resolveDescription(id, Locale.ENGLISH, Locale.GERMAN));
-        assertEquals(new Described.State("name_en_GB", null), svc.resolveDescription(id, Locale.UK, Locale.GERMAN));
-        assertEquals(new Described.State("name_en", null), svc.resolveDescription(id, Locale.US, Locale.GERMAN));
-        assertEquals(new Described.State("name_en", null), svc.resolveDescription(id, null, Locale.ENGLISH));
-        assertEquals(new Described.State("name_en", null), svc.resolveDescription(id, null, Locale.US));
-        assertEquals(new Described.State("name_en_GB", null), svc.resolveDescription(id, null, Locale.UK));
+        assertEquals(new DescriptionState("name_en", null), svc.resolveDescription(id, Locale.ENGLISH, Locale.GERMAN));
+        assertEquals(new DescriptionState("name_en_GB", null), svc.resolveDescription(id, Locale.UK, Locale.GERMAN));
+        assertEquals(new DescriptionState("name_en", null), svc.resolveDescription(id, Locale.US, Locale.GERMAN));
+        assertEquals(new DescriptionState("name_en", null), svc.resolveDescription(id, null, Locale.ENGLISH));
+        assertEquals(new DescriptionState("name_en", null), svc.resolveDescription(id, null, Locale.US));
+        assertEquals(new DescriptionState("name_en_GB", null), svc.resolveDescription(id, null, Locale.UK));
     }
 
     public void testGetDefaultDescription() throws Exception {
-        DescriptionService svc = new DescriptionServiceImpl(mgr);
+        DescriptionService svc = new DescriptionServiceImpl(persistence);
         MOPService mop = mgr.getPOMService();
         Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
         Navigation nav = portal.getRootNavigation().addChild("default");
@@ -159,11 +167,11 @@ public class TestDescriptionService extends AbstractPortalTest {
         described.setName("foo_name");
 
         //
-        assertEquals(new Described.State("foo_name", null), svc.getDescription(id));
+        assertEquals(new DescriptionState("foo_name", null), svc.getDescription(id));
     }
 
     public void testSetDefaultDescription() throws Exception {
-        DescriptionService svc = new DescriptionServiceImpl(mgr);
+        DescriptionService svc = new DescriptionServiceImpl(persistence);
         MOPService mop = mgr.getPOMService();
         Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
         Navigation nav = portal.getRootNavigation().addChild("default");
@@ -173,7 +181,7 @@ public class TestDescriptionService extends AbstractPortalTest {
         assertNull(svc.getDescription(id));
 
         //
-        svc.setDescription(id, new Described.State("foo_name", null));
+        svc.setDescription(id, new DescriptionState("foo_name", null));
 
         //
         assertTrue(nav.isAdapted(Described.class));
@@ -182,7 +190,7 @@ public class TestDescriptionService extends AbstractPortalTest {
     }
 
     public void testRemoveDefaultDescription() throws Exception {
-        DescriptionService svc = new DescriptionServiceImpl(mgr);
+        DescriptionService svc = new DescriptionServiceImpl(persistence);
         MOPService mop = mgr.getPOMService();
         Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
         Navigation nav = portal.getRootNavigation().addChild("default");
@@ -195,13 +203,13 @@ public class TestDescriptionService extends AbstractPortalTest {
     }
 
     public void testSetLocalizedDescription() throws Exception {
-        DescriptionService svc = new DescriptionServiceImpl(mgr);
+        DescriptionService svc = new DescriptionServiceImpl(persistence);
         MOPService mop = mgr.getPOMService();
         Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
         Navigation nav = portal.getRootNavigation().addChild("default");
 
         //
-        svc.setDescription(nav.getObjectId(), Locale.ENGLISH, new Described.State("foo_english", null));
+        svc.setDescription(nav.getObjectId(), Locale.ENGLISH, new DescriptionState("foo_english", null));
 
         //
         assertTrue(nav.isAdapted(I18Nized.class));
@@ -212,28 +220,28 @@ public class TestDescriptionService extends AbstractPortalTest {
     }
 
     public void testSetInvalidLocaleDescription() throws Exception {
-        DescriptionService svc = new DescriptionServiceImpl(mgr);
+        DescriptionService svc = new DescriptionServiceImpl(persistence);
         MOPService mop = mgr.getPOMService();
         Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
         Navigation nav = portal.getRootNavigation().addChild("default");
 
         //
         try {
-            svc.setDescription(nav.getObjectId(), new Locale("", "GB"), new Described.State("foo_invalid", null));
+            svc.setDescription(nav.getObjectId(), new Locale("", "GB"), new DescriptionState("foo_invalid", null));
             fail();
         } catch (IllegalArgumentException e) {
         }
 
         //
         try {
-            svc.setDescription(nav.getObjectId(), new Locale("en", "GB", "variant"), new Described.State("foo_invalid", null));
+            svc.setDescription(nav.getObjectId(), new Locale("en", "GB", "variant"), new DescriptionState("foo_invalid", null));
             fail();
         } catch (IllegalArgumentException e) {
         }
     }
 
     public void testAddLocalizedDescription() throws Exception {
-        DescriptionService svc = new DescriptionServiceImpl(mgr);
+        DescriptionService svc = new DescriptionServiceImpl(persistence);
         MOPService mop = mgr.getPOMService();
         Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
         Navigation nav = portal.getRootNavigation().addChild("default");
@@ -242,7 +250,7 @@ public class TestDescriptionService extends AbstractPortalTest {
         desc.setName("add_english");
 
         //
-        svc.setDescription(nav.getObjectId(), Locale.FRENCH, new Described.State("add_french", null));
+        svc.setDescription(nav.getObjectId(), Locale.FRENCH, new DescriptionState("add_french", null));
 
         //
         assertTrue(nav.isAdapted(I18Nized.class));
@@ -256,7 +264,7 @@ public class TestDescriptionService extends AbstractPortalTest {
     }
 
     public void testGetDescriptions() throws Exception {
-        DescriptionService svc = new DescriptionServiceImpl(mgr);
+        DescriptionService svc = new DescriptionServiceImpl(persistence);
         MOPService mop = mgr.getPOMService();
         Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
         Navigation nav = portal.getRootNavigation().addChild("default");
@@ -272,14 +280,14 @@ public class TestDescriptionService extends AbstractPortalTest {
         described.setName("foo_french");
 
         //
-        Map<Locale, Described.State> description = svc.getDescriptions(nav.getObjectId());
+        Map<Locale, DescriptionState> description = svc.getDescriptions(nav.getObjectId());
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), description.keySet());
-        assertEquals(new Described.State("foo_english", null), description.get(Locale.ENGLISH));
-        assertEquals(new Described.State("foo_french", null), description.get(Locale.FRENCH));
+        assertEquals(new DescriptionState("foo_english", null), description.get(Locale.ENGLISH));
+        assertEquals(new DescriptionState("foo_french", null), description.get(Locale.FRENCH));
     }
 
     public void testSetDescriptions() throws Exception {
-        DescriptionService svc = new DescriptionServiceImpl(mgr);
+        DescriptionService svc = new DescriptionServiceImpl(persistence);
         MOPService mop = mgr.getPOMService();
         Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
         Navigation nav = portal.getRootNavigation().addChild("default");
@@ -288,30 +296,30 @@ public class TestDescriptionService extends AbstractPortalTest {
         assertNull(svc.getDescriptions(nav.getObjectId()));
 
         //
-        Map<Locale, Described.State> description = new HashMap<Locale, Described.State>();
-        description.put(Locale.ENGLISH, new Described.State("bar_english", null));
-        description.put(Locale.FRENCH, new Described.State("bar_french", null));
+        Map<Locale, DescriptionState> description = new HashMap<Locale, DescriptionState>();
+        description.put(Locale.ENGLISH, new DescriptionState("bar_english", null));
+        description.put(Locale.FRENCH, new DescriptionState("bar_french", null));
         svc.setDescriptions(nav.getObjectId(), description);
 
         //
         description = svc.getDescriptions(nav.getObjectId());
         assertEquals(Tools.toSet(Locale.ENGLISH, Locale.FRENCH), description.keySet());
-        assertEquals(new Described.State("bar_english", null), description.get(Locale.ENGLISH));
-        assertEquals(new Described.State("bar_french", null), description.get(Locale.FRENCH));
+        assertEquals(new DescriptionState("bar_english", null), description.get(Locale.ENGLISH));
+        assertEquals(new DescriptionState("bar_french", null), description.get(Locale.FRENCH));
 
         //
-        description = new HashMap<Locale, Described.State>();
-        description.put(Locale.ENGLISH, new Described.State("bar_english_2", null));
+        description = new HashMap<Locale, DescriptionState>();
+        description.put(Locale.ENGLISH, new DescriptionState("bar_english_2", null));
         svc.setDescriptions(nav.getObjectId(), description);
 
         //
         description = svc.getDescriptions(nav.getObjectId());
         assertEquals(Tools.toSet(Locale.ENGLISH), description.keySet());
-        assertEquals(new Described.State("bar_english_2", null), description.get(Locale.ENGLISH));
+        assertEquals(new DescriptionState("bar_english_2", null), description.get(Locale.ENGLISH));
     }
 
     public void testSetInvalidLocaleDescriptions() throws Exception {
-        DescriptionService svc = new DescriptionServiceImpl(mgr);
+        DescriptionService svc = new DescriptionServiceImpl(persistence);
         MOPService mop = mgr.getPOMService();
         Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "foo");
         Navigation nav = portal.getRootNavigation().addChild("default");
@@ -319,13 +327,13 @@ public class TestDescriptionService extends AbstractPortalTest {
         //
         try {
             svc.setDescriptions(nav.getObjectId(),
-                    Collections.singletonMap(new Locale("", "GB"), new Described.State("bar_invalid", null)));
+                    Collections.singletonMap(new Locale("", "GB"), new DescriptionState("bar_invalid", null)));
             fail();
         } catch (IllegalArgumentException e) {
         }
         try {
             svc.setDescriptions(nav.getObjectId(),
-                    Collections.singletonMap(new Locale("en", "GB", "variant"), new Described.State("bar_invalid", null)));
+                    Collections.singletonMap(new Locale("en", "GB", "variant"), new DescriptionState("bar_invalid", null)));
             fail();
         } catch (IllegalArgumentException e) {
         }

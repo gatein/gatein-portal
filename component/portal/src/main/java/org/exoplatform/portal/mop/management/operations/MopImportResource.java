@@ -34,7 +34,7 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.gatein.portal.mop.site.SiteKey;
-import org.exoplatform.portal.mop.description.DescriptionService;
+import org.gatein.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.management.exportimport.NavigationExportTask;
 import org.exoplatform.portal.mop.management.exportimport.NavigationImportTask;

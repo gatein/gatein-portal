@@ -26,9 +26,9 @@ import java.util.ResourceBundle;
 
 import org.exoplatform.commons.utils.ExpressionUtil;
 import org.exoplatform.commons.utils.HTMLEntityEncoder;
-import org.exoplatform.portal.mop.Described;
+import org.gatein.portal.mop.description.DescriptionState;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.description.DescriptionService;
+import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.page.PageKey;
@@ -177,7 +177,7 @@ public class UserNode {
                 Locale userLocale = owner.navigation.portal.context.getUserLocale();
                 Locale portalLocale = owner.navigation.portal.getLocale();
                 DescriptionService descriptionService = owner.navigation.portal.service.getDescriptionService();
-                Described.State description = descriptionService.resolveDescription(id, portalLocale, userLocale);
+                DescriptionState description = descriptionService.resolveDescription(id, portalLocale, userLocale);
                 if (description != null) {
                     resolvedLabel = description.getName();
                 }
@@ -199,7 +199,7 @@ public class UserNode {
         Locale userLocale = owner.navigation.portal.context.getUserLocale();
         DescriptionService descriptionService = owner.navigation.portal.service.getDescriptionService();
 
-        Described.State description = new Described.State(label, null);
+        DescriptionState description = new DescriptionState(label, null);
 
         descriptionService.setDescription(id, userLocale, description);
         this.resolvedLabel = label;

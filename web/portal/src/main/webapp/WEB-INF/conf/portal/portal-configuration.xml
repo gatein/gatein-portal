@@ -102,8 +102,12 @@
     <type>org.exoplatform.portal.mop.page.PageServiceWrapper</type>
   </component>
   <component>
-    <key>org.exoplatform.portal.mop.description.DescriptionService</key>
-    <type>org.exoplatform.portal.mop.description.DescriptionServiceImpl</type>
+    <key>org.gatein.portal.mop.description.DescriptionPersistence</key>
+    <type>org.exoplatform.portal.mop.description.MopPersistence</type>
+  </component>
+  <component>
+    <key>org.gatein.portal.mop.description.DescriptionService</key>
+    <type>org.gatein.portal.mop.description.DescriptionServiceImpl</type>
   </component>
 
   <component>

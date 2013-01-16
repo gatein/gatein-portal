@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 eXo Platform SAS.
+ * Copyright (C) 2012 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -30,11 +30,13 @@ import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 import org.gatein.mop.api.workspace.WorkspaceObject;
+import org.gatein.portal.mop.description.DescriptionPersistence;
+import org.gatein.portal.mop.description.DescriptionState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class DescriptionServiceImpl implements DescriptionService {
+public class MopPersistence implements DescriptionPersistence {
 
     /** . */
     private final POMSessionManager manager;
@@ -42,65 +44,37 @@ public class DescriptionServiceImpl implements DescriptionService {
     /** . */
     private DataCache cache;
 
-    public DescriptionServiceImpl(POMSessionManager manager) {
-        this(manager, new SimpleDataCache());
-    }
-
-    public DescriptionServiceImpl(POMSessionManager manager, DataCache cache) {
+    public MopPersistence(POMSessionManager manager, DataCache cache) {
         this.manager = manager;
         this.cache = cache;
     }
 
-    public DescriptionServiceImpl(POMSessionManager manager, CacheService cacheService) {
+    public MopPersistence(POMSessionManager manager, CacheService cacheService) {
         this(manager, new ExoDataCache(cacheService));
     }
 
-    public Described.State resolveDescription(String id, Locale locale) throws NullPointerException {
-        return resolveDescription(id, null, locale);
-    }
-
-    public Described.State resolveDescription(String id, Locale locale2, Locale locale1) throws NullPointerException {
-        if (id == null) {
-            throw new NullPointerException("No null id accepted");
-        }
-        if (locale1 == null) {
-            throw new NullPointerException("No null locale accepted");
-        }
-
-        //
+    @Override
+    public DescriptionState resolveDescription(String id, Locale locale) throws NullPointerException {
         POMSession session = manager.getSession();
-        Described.State state = resolveDescription(session, id, locale1);
-        if (state == null && locale2 != null) {
-            state = resolveDescription(session, id, locale2);
-        }
-        return state;
-    }
-
-    private Described.State resolveDescription(POMSession session, String id, Locale locale) throws NullPointerException {
         return cache.getState(session, new CacheKey(locale, id));
     }
 
-    public Described.State getDescription(String id, Locale locale) {
-        if (id == null) {
-            throw new NullPointerException("No null id accepted");
-        }
-        if (locale == null) {
-            throw new NullPointerException("No null locale accepted");
-        }
+    @Override
+    public DescriptionState getDescription(String id, Locale locale) {
         POMSession session = manager.getSession();
         WorkspaceObject obj = session.findObjectById(id);
         I18NAdapter able = obj.adapt(I18NAdapter.class);
-        Described desc = able.getI18NMixin(Described.class, locale, false);
+        Described desc;
+        if (locale != null) {
+            desc = able.getI18NMixin(Described.class, locale, false);
+        } else {
+            desc = able.getMixin(Described.class, false);
+        }
         return desc != null ? desc.getState() : null;
     }
 
-    public void setDescription(String id, Locale locale, Described.State description) {
-        if (id == null) {
-            throw new NullPointerException("No null id accepted");
-        }
-        if (locale == null) {
-            throw new NullPointerException("No null locale accepted");
-        }
+    @Override
+    public void setDescription(String id, Locale locale, DescriptionState description) {
         POMSession session = manager.getSession();
         WorkspaceObject obj = session.findObjectById(id);
         I18NAdapter able = obj.adapt(I18NAdapter.class);
@@ -109,18 +83,8 @@ public class DescriptionServiceImpl implements DescriptionService {
         desc.setState(description);
     }
 
-    public Described.State getDescription(String id) {
-        if (id == null) {
-            throw new NullPointerException("No null id accepted");
-        }
-        POMSession session = manager.getSession();
-        WorkspaceObject obj = session.findObjectById(id);
-        I18NAdapter able = obj.adapt(I18NAdapter.class);
-        Described desc = able.getMixin(Described.class, false);
-        return desc != null ? desc.getState() : null;
-    }
-
-    public void setDescription(String id, Described.State description) {
+    @Override
+    public void setDescription(String id, DescriptionState description) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
@@ -135,17 +99,15 @@ public class DescriptionServiceImpl implements DescriptionService {
         }
     }
 
-    public Map<Locale, Described.State> getDescriptions(String id) {
-        if (id == null) {
-            throw new NullPointerException("No null id accepted");
-        }
+    @Override
+    public Map<Locale, DescriptionState> getDescriptions(String id) {
         POMSession session = manager.getSession();
         WorkspaceObject obj = session.findObjectById(id);
         I18NAdapter able = obj.adapt(I18NAdapter.class);
         Map<Locale, Described> mixins = able.getI18NMixin(Described.class);
-        Map<Locale, Described.State> names = null;
+        Map<Locale, DescriptionState> names = null;
         if (mixins != null) {
-            names = new HashMap<Locale, Described.State>(mixins.size());
+            names = new HashMap<Locale, DescriptionState>(mixins.size());
             for (Map.Entry<Locale, Described> entry : mixins.entrySet()) {
                 names.put(entry.getKey(), entry.getValue().getState());
             }
@@ -153,7 +115,8 @@ public class DescriptionServiceImpl implements DescriptionService {
         return names;
     }
 
-    public void setDescriptions(String id, Map<Locale, Described.State> descriptions) {
+    @Override
+    public void setDescriptions(String id, Map<Locale, DescriptionState> descriptions) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
@@ -167,7 +130,7 @@ public class DescriptionServiceImpl implements DescriptionService {
 
         // Interface specifies it allows a null description map
         if (descriptions != null) {
-            for (Map.Entry<Locale, Described.State> entry : descriptions.entrySet()) {
+            for (Map.Entry<Locale, DescriptionState> entry : descriptions.entrySet()) {
                 Described described = able.addI18NMixin(Described.class, entry.getKey());
                 described.setState(entry.getValue());
             }

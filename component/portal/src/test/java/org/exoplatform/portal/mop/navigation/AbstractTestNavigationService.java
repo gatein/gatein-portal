@@ -25,9 +25,11 @@ import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.AbstractMOPTest;
-import org.exoplatform.portal.mop.description.DescriptionService;
-import org.exoplatform.portal.mop.description.DescriptionServiceImpl;
+import org.exoplatform.portal.mop.description.MopPersistence;
+import org.exoplatform.portal.mop.description.SimpleDataCache;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.gatein.portal.mop.description.DescriptionService;
+import org.gatein.portal.mop.description.DescriptionServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationServiceImpl;
 
 /**
@@ -57,7 +59,7 @@ public abstract class AbstractTestNavigationService extends AbstractMOPTest {
         PortalContainer container = PortalContainer.getInstance();
         mgr = (POMSessionManager) container.getComponentInstanceOfType(POMSessionManager.class);
         service = new NavigationServiceImpl(new MopPersistenceFactory(mgr));
-        descriptionService = new DescriptionServiceImpl(mgr);
+        descriptionService = new DescriptionServiceImpl(new MopPersistence(mgr, new SimpleDataCache()));
         dataStorage = (DataStorage) container.getComponentInstanceOfType(DataStorage.class);
 
         // Clear the cache for each test

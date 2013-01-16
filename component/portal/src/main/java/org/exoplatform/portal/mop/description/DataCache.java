@@ -20,6 +20,7 @@
 package org.exoplatform.portal.mop.description;
 
 import org.exoplatform.portal.mop.Described;
+import org.gatein.portal.mop.description.DescriptionState;
 import org.exoplatform.portal.mop.i18n.I18NAdapter;
 import org.exoplatform.portal.mop.i18n.Resolution;
 import org.exoplatform.portal.pom.config.POMSession;
@@ -32,14 +33,14 @@ abstract class DataCache {
 
     protected abstract void removeState(CacheKey key);
 
-    protected abstract Described.State getState(POMSession session, CacheKey key);
+    protected abstract DescriptionState getState(POMSession session, CacheKey key);
 
     protected final CacheValue getValue(POMSession session, CacheKey key) {
         WorkspaceObject obj = session.findObjectById(key.id);
         I18NAdapter able = obj.adapt(I18NAdapter.class);
         Resolution<Described> res = able.resolveI18NMixin(Described.class, key.locale);
         if (res != null) {
-            Described.State state = res.getMixin().getState();
+            DescriptionState state = res.getMixin().getState();
             if (key.locale.equals(res.getLocale())) {
                 CacheValue foo = new CacheValue(state);
                 putValue(key, foo);

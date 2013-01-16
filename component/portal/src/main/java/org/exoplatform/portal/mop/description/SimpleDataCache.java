@@ -22,7 +22,7 @@ package org.exoplatform.portal.mop.description;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.exoplatform.commons.serialization.MarshalledObject;
-import org.exoplatform.portal.mop.Described;
+import org.gatein.portal.mop.description.DescriptionState;
 import org.exoplatform.portal.pom.config.POMSession;
 
 /**
@@ -38,7 +38,7 @@ public class SimpleDataCache extends DataCache {
     }
 
     @Override
-    protected Described.State getState(POMSession session, CacheKey key) {
+    protected DescriptionState getState(POMSession session, CacheKey key) {
         MarshalledObject<CacheKey> marshalledKey = MarshalledObject.marshall(key);
         MarshalledObject<CacheValue> marshalledValue = map.get(marshalledKey);
         if (marshalledValue == null) {

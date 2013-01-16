@@ -30,9 +30,9 @@ import java.util.Map;
 import org.exoplatform.portal.config.model.I18NString;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PageNodeContainer;
-import org.exoplatform.portal.mop.Described;
+import org.gatein.portal.mop.description.DescriptionState;
 import org.gatein.portal.mop.site.SiteKey;
-import org.exoplatform.portal.mop.description.DescriptionService;
+import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.hierarchy.GenericScope;
 import org.gatein.portal.mop.navigation.NavigationContext;
 import org.gatein.portal.mop.navigation.NavigationService;
@@ -147,7 +147,7 @@ public class NavigationNodeImporter {
             }
 
             // Collect labels
-            Map<NodeContext<?, NodeState>, Map<Locale, Described.State>> labelMap = new HashMap<NodeContext<?, NodeState>, Map<Locale, Described.State>>();
+            Map<NodeContext<?, NodeState>, Map<Locale, DescriptionState>> labelMap = new HashMap<NodeContext<?, NodeState>, Map<Locale, DescriptionState>>();
 
             // Perform save
             perform(src, from, labelMap);
@@ -156,7 +156,7 @@ public class NavigationNodeImporter {
             navigationService.saveNode(root, null);
 
             //
-            for (Map.Entry<NodeContext<?, NodeState>, Map<Locale, Described.State>> entry : labelMap.entrySet()) {
+            for (Map.Entry<NodeContext<?, NodeState>, Map<Locale, DescriptionState>> entry : labelMap.entrySet()) {
                 String id = entry.getKey().getId();
                 descriptionService.setDescriptions(id, entry.getValue());
             }
@@ -169,7 +169,7 @@ public class NavigationNodeImporter {
     }
 
     private void perform(PageNodeContainer src, final NodeContext<?, NodeState> dst,
-            final Map<NodeContext<?, NodeState>, Map<Locale, Described.State>> labelMap) {
+            final Map<NodeContext<?, NodeState>, Map<Locale, DescriptionState>> labelMap) {
         navigationService.rebaseNode(dst, Scope.CHILDREN, null);
 
         //
@@ -250,19 +250,19 @@ public class NavigationNodeImporter {
     }
 
     private NodeContext<?, NodeState> add(PageNode target, NodeContext<?, NodeState> previous, NodeContext<?, NodeState> parent,
-            Map<NodeContext<?, NodeState>, Map<Locale, Described.State>> labelMap) {
+            Map<NodeContext<?, NodeState>, Map<Locale, DescriptionState>> labelMap) {
         I18NString labels = target.getLabels();
 
         //
-        Map<Locale, Described.State> description;
+        Map<Locale, DescriptionState> description;
         if (labels.isSimple()) {
             description = null;
         } else if (labels.isEmpty()) {
             description = null;
         } else {
-            description = new HashMap<Locale, Described.State>();
+            description = new HashMap<Locale, DescriptionState>();
             for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet()) {
-                description.put(entry.getKey(), new Described.State(entry.getValue(), null));
+                description.put(entry.getKey(), new DescriptionState(entry.getValue(), null));
             }
         }
 
@@ -294,27 +294,27 @@ public class NavigationNodeImporter {
         return child;
     }
 
-    private void update(PageNode src, NodeContext<?, NodeState> target, Map<NodeContext<?, NodeState>, Map<Locale, Described.State>> labelMap) {
+    private void update(PageNode src, NodeContext<?, NodeState> target, Map<NodeContext<?, NodeState>, Map<Locale, DescriptionState>> labelMap) {
         target.setState(src.getState());
 
         // Update extended labels if necessary
         I18NString labels = src.getLabels();
-        Map<Locale, Described.State> description;
+        Map<Locale, DescriptionState> description;
         if (labels.isSimple()) {
             description = null;
         } else if (labels.isEmpty()) {
             description = null;
         } else {
-            description = new HashMap<Locale, Described.State>();
+            description = new HashMap<Locale, DescriptionState>();
             for (Map.Entry<Locale, String> entry : labels.getExtended(portalLocale).entrySet()) {
-                description.put(entry.getKey(), new Described.State(entry.getValue(), null));
+                description.put(entry.getKey(), new DescriptionState(entry.getValue(), null));
             }
         }
 
         if (description != null) {
             labelMap.put(target, description);
         } else {
-            labelMap.put(target, Collections.<Locale, Described.State> emptyMap());
+            labelMap.put(target, Collections.<Locale, DescriptionState> emptyMap());
         }
     }
 }
