@@ -52,6 +52,8 @@ import org.exoplatform.portal.mop.importer.Imported.Status;
 import org.exoplatform.portal.mop.importer.NavigationImporter;
 import org.exoplatform.portal.mop.importer.PageImporter;
 import org.exoplatform.portal.mop.importer.PortalConfigImporter;
+import org.exoplatform.portal.mop.layout.LayoutService;
+import org.exoplatform.portal.mop.layout.LayoutServiceImpl;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.POMSession;
@@ -116,6 +118,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
     /** . */
     private DescriptionService descriptionService_;
 
+    /** . */
+    private LayoutService layoutService;
+
     final Set<String> createdOwners = new HashSet<String>();
 
     private boolean isFirstStartup = false;
@@ -129,6 +134,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
         pageService_ = pageService;
         navigationService_ = navigationService;
         descriptionService_ = descriptionService;
+        layoutService = new LayoutServiceImpl(pomMgr);
 
         ValueParam valueParam = params.getValueParam("page.templates.location");
         if (valueParam != null)
@@ -482,8 +488,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
             RequestLifeCycle.begin(PortalContainer.getInstance());
             try { //
                 ImportMode importMode = getRightMode(config.getImportMode());
-
-                PageImporter importer = new PageImporter(importMode, page, dataStorage_, pageService_);
+                PageImporter importer = new PageImporter(importMode, page, layoutService, pageService_);
                 importer.perform();
             } finally {
                 RequestLifeCycle.end();

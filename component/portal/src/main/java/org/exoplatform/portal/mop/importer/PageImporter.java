@@ -21,22 +21,29 @@ package org.exoplatform.portal.mop.importer;
 
 import java.util.Arrays;
 
-import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Page;
+import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.exoplatform.portal.mop.layout.ElementState;
+import org.exoplatform.portal.mop.layout.LayoutService;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.page.PageState;
+import org.exoplatform.portal.pom.data.ComponentData;
+import org.exoplatform.portal.pom.data.ContainerAdapter;
+import org.exoplatform.portal.pom.data.ContainerData;
+import org.exoplatform.portal.pom.data.PageData;
 
 /**
  * @author <a href="trongtt@gmail.com">Trong Tran</a>
  * @version $Revision$
  */
 public class PageImporter {
+
     /** . */
     private final Page src;
 
     /** . */
-    private final DataStorage service;
+    private final LayoutService layoutService;
 
     /** . */
     private final PageService pageService;
@@ -44,10 +51,10 @@ public class PageImporter {
     /** . */
     private final ImportMode mode;
 
-    public PageImporter(ImportMode importMode, Page page, DataStorage dataStorage_, PageService pageService) {
+    public PageImporter(ImportMode importMode, Page page, LayoutService layoutService, PageService pageService) {
         this.mode = importMode;
         this.src = page;
-        this.service = dataStorage_;
+        this.layoutService = layoutService;
         this.pageService = pageService;
     }
 
@@ -80,8 +87,36 @@ public class PageImporter {
                     dst.getAccessPermissions() != null ? Arrays.asList(dst.getAccessPermissions()) : null,
                     dst.getEditPermission());
 
-            pageService.savePage(new PageContext(src.getPageKey(), dstState));
-            service.save(dst);
+            //
+            PageContext page = new PageContext(src.getPageKey(), dstState);
+
+            // First save page as an object
+            pageService.savePage(page);
+
+            // We cheat a bit with this cast
+            // but well it's easier to do this way
+            NodeContext<ComponentData, ElementState> context = (NodeContext<ComponentData, ElementState>) layoutService.loadLayout(ElementState.model(), page.getLayoutId(), null);
+
+            //
+            PageData data = src.build();
+
+            //
+            ContainerData container = new ContainerData(
+                    page.getLayoutId(),
+                    data.getId(),
+                    data.getName(),
+                    data.getIcon(),
+                    data.getTemplate(),
+                    data.getFactoryId(),
+                    data.getTitle(),
+                    data.getDescription(),
+                    data.getWidth(),
+                    data.getHeight(),
+                    data.getAccessPermissions(),
+                    data.getChildren());
+
+            // Then save page layout
+            layoutService.saveLayout(new ContainerAdapter(container), container, context, null);
         }
     }
 }

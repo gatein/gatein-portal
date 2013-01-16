@@ -23,8 +23,6 @@ import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
@@ -52,7 +50,6 @@ import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.QueryResult;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.hierarchy.NodeAdapter;
 import org.exoplatform.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.layout.ElementState;
 import org.exoplatform.portal.mop.layout.LayoutService;
@@ -70,6 +67,7 @@ import org.exoplatform.portal.pom.data.ApplicationData;
 import org.exoplatform.portal.pom.data.BodyData;
 import org.exoplatform.portal.pom.data.BodyType;
 import org.exoplatform.portal.pom.data.ComponentData;
+import org.exoplatform.portal.pom.data.ContainerAdapter;
 import org.exoplatform.portal.pom.data.ContainerData;
 import org.exoplatform.portal.pom.data.DashboardData;
 import org.exoplatform.portal.pom.data.Mapper;
@@ -333,113 +331,12 @@ public class POMDataStorage implements ModelDataStorage {
 
     private void save(ContainerData container) throws Exception {
 
-        class PageHierarchyAdapter implements NodeAdapter<List<ComponentData>, ComponentData, ElementState> {
-
-            /** . */
-            final ContainerData page;
-
-            final IdentityHashMap<ComponentData, String> handles = new IdentityHashMap<ComponentData, String>();
-
-            PageHierarchyAdapter(ContainerData page) {
-                this.page = page;
-            }
-
-            @Override
-            public String getHandle(ComponentData node) {
-                String handle = node.getStorageId();
-                if (handle == null) {
-                    handle = handles.get(node);
-                    if (handle == null) {
-                        handles.put(node, handle = UUID.randomUUID().toString());
-                    }
-                }
-                return handle;
-            }
-            @Override
-            public List<ComponentData> getChildren(ComponentData node) {
-                if (node instanceof ContainerData) {
-                    return ((ContainerData)node).getChildren();
-                } else {
-                    return Collections.emptyList();
-                }
-            }
-            @Override
-            public ComponentData getDescendant(ComponentData node, String handle) {
-                String h = getHandle(node);
-                if (h.equals(handle)) {
-                    return node;
-                } else if (node instanceof ContainerData) {
-                    ContainerData container = (ContainerData) node;
-                    for (ComponentData child : container.getChildren()) {
-                        ComponentData descendant = getDescendant(child, handle);
-                        if (descendant != null) {
-                            return descendant;
-                        }
-                    }
-                    return null;
-                } else {
-                    return null;
-                }
-            }
-            @Override
-            public int size(List<ComponentData> list) {
-                return list.size();
-            }
-            @Override
-            public Iterator<String> iterator(List<ComponentData> list, boolean reverse) {
-                ArrayList<String> ret = new ArrayList<String>();
-                for (ComponentData c : list) {
-                    ret.add(getHandle(c));
-                }
-                if (reverse) {
-                    Collections.reverse(ret);
-                }
-                return ret.iterator();
-            }
-            public ContainerData getParent(ComponentData node) {
-                return getParent(page, node);
-            }
-            private ContainerData getParent(ContainerData container, ComponentData node) {
-                for (ComponentData child : container.getChildren()) {
-                    if (child == node) {
-                        return container;
-                    } else if (child instanceof ContainerData) {
-                        ContainerData parent = getParent((ContainerData) child, node);
-                        if (parent != null) {
-                            return parent;
-                        }
-                    }
-                }
-                return null;
-            }
-
-            @Override
-            public ElementState getState(ComponentData node) {
-                return create(node);
-            }
-
-            @Override
-            public ComponentData getPrevious(ComponentData parent, ComponentData node) {
-                ContainerData container = (ContainerData) parent;
-                int index = container.getChildren().indexOf(node);
-                return index > 0 ? container.getChildren().get(index - 1) : null;
-            }
-
-            @Override
-            public void setHandle(ComponentData node, String handle) {
-                handles.put(node, handle);
-            }
-        }
-
-        //
-        PageHierarchyAdapter adapter = new PageHierarchyAdapter(container);
-
         // We cheat a bit with this cast
         // but well it's easier to do this way
         NodeContext<ComponentData, ElementState> ret = (NodeContext<ComponentData, ElementState>) layoutService.loadLayout(ElementState.model(), container.getStorageId(), null);
 
         // Save element
-        layoutService.saveLayout(adapter, container, ret, null);
+        layoutService.saveLayout(new ContainerAdapter(container), container, ret, null);
     }
 
     public List<ModelChange> save(PageData page) throws Exception {
@@ -483,47 +380,6 @@ public class POMDataStorage implements ModelDataStorage {
         //
         return Collections.emptyList();
     }
-
-    private ElementState create(ComponentData data) {
-        if (data instanceof ApplicationData) {
-            ApplicationData application = (ApplicationData) data;
-            return new ElementState.Window(
-                    application.getType(),
-                    application.getState(),
-                    application.getTitle(),
-                    application.getIcon(),
-                    application.getDescription(),
-                    application.isShowInfoBar(),
-                    application.isShowApplicationState(),
-                    application.isShowApplicationMode(),
-                    application.getTheme(),
-                    application.getWidth(),
-                    application.getHeight(),
-                    application.getProperties(),
-                    application.getAccessPermissions()
-            );
-        } else if (data instanceof BodyData) {
-            return new ElementState.Body();
-        } else if (data instanceof ContainerData) {
-            ContainerData container = (ContainerData) data;
-            return new ElementState.Container(
-                    container.getId(),
-                    container.getName(),
-                    container.getIcon(),
-                    container.getTemplate(),
-                    container.getFactoryId(),
-                    container.getTitle(),
-                    container.getDescription(),
-                    container.getWidth(),
-                    container.getHeight(),
-                    container.getAccessPermissions(),
-                    container instanceof DashboardData
-            );
-        } else {
-            throw new UnsupportedOperationException();
-        }
-    }
-
 
     public <S> String getId(ApplicationState<S> state) throws Exception {
         String contentId;
