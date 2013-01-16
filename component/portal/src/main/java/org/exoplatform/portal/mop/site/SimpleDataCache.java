@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.exoplatform.commons.serialization.MarshalledObject;
+import org.gatein.portal.mop.site.SiteData;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.pom.config.POMSession;

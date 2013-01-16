@@ -20,8 +20,20 @@
 package org.exoplatform.portal.mop.site;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.mop.ProtectedResource;
+import org.exoplatform.portal.pom.data.MappedAttributes;
+import org.exoplatform.portal.pom.data.Mapper;
+import org.gatein.mop.api.Attributes;
+import org.gatein.mop.api.workspace.Templatized;
+import org.gatein.portal.mop.site.SiteData;
 import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SiteState;
 import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.Utils;
 import org.exoplatform.portal.pom.config.POMSession;
@@ -63,7 +75,33 @@ abstract class DataCache {
         ObjectType<Site> objectType = Utils.objectType(key.getType());
         Site site = workspace.getSite(objectType, key.getName());
         if (site != null) {
-            return new SiteData(site);
+            Attributes attrs = site.getAttributes();
+            List<String> accessPermissions = Collections.emptyList();
+            String editPermission = null;
+            if (site.isAdapted(ProtectedResource.class)) {
+                ProtectedResource pr = site.adapt(ProtectedResource.class);
+                accessPermissions = pr.getAccessPermissions();
+                editPermission = pr.getEditPermission();
+            }
+            Described described = site.adapt(Described.class);
+            Map<String, String> properties = new HashMap<String, String>();
+            Mapper.load(attrs, properties, MopPersistence.portalPropertiesBlackList);
+            Templatized templatized = site.getRootNavigation().getTemplatized();
+            org.gatein.mop.api.workspace.Page layout = templatized.getTemplate();
+            SiteState state = new SiteState(
+                    attrs.getValue(MappedAttributes.LOCALE),
+                    described.getName(),
+                    described.getDescription(),
+                    accessPermissions,
+                    editPermission,
+                    properties,
+                    attrs.getValue(MappedAttributes.SKIN)
+            );
+            return new SiteData(
+                    key,
+                    site.getObjectId(),
+                    layout.getRootComponent().getObjectId(),
+                    state);
         } else {
             return SiteData.EMPTY;
         }

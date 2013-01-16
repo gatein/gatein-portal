@@ -45,6 +45,8 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.UnmarshalledObject;
+import org.exoplatform.portal.mop.site.MopPersistence;
+import org.exoplatform.portal.mop.site.SimpleDataCache;
 import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.importer.ImportMode;
@@ -57,9 +59,9 @@ import org.exoplatform.portal.mop.layout.LayoutService;
 import org.exoplatform.portal.mop.layout.LayoutServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.page.PageService;
-import org.exoplatform.portal.mop.site.SiteContext;
-import org.exoplatform.portal.mop.site.SiteService;
-import org.exoplatform.portal.mop.site.SiteServiceImpl;
+import org.gatein.portal.mop.site.SiteContext;
+import org.gatein.portal.mop.site.SiteService;
+import org.gatein.portal.mop.site.SiteServiceImpl;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.common.logging.Logger;
@@ -137,7 +139,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
         navigationService_ = navigationService;
         descriptionService_ = descriptionService;
         layoutService = new LayoutServiceImpl(pomMgr);
-        siteService = new SiteServiceImpl(pomMgr);
+        siteService = new SiteServiceImpl(new MopPersistence(pomMgr, new SimpleDataCache()));
 
         //
         ValueParam defaultImportModeParam = params == null ? null : params.getValueParam("default.import.mode");

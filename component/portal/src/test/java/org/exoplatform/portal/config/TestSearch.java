@@ -21,7 +21,7 @@ package org.exoplatform.portal.config;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.mop.QueryResult;
+import org.gatein.portal.mop.QueryResult;
 import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageService;

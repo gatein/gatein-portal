@@ -17,31 +17,18 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.site;
+package org.gatein.portal.mop.site;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.exoplatform.commons.utils.Safe;
-import org.exoplatform.portal.mop.Described;
-import org.exoplatform.portal.mop.ProtectedResource;
-import org.exoplatform.portal.pom.data.MappedAttributes;
-import org.exoplatform.portal.pom.data.Mapper;
-import org.gatein.mop.api.Attributes;
-import org.gatein.mop.api.workspace.Site;
-import org.gatein.mop.core.util.Tools;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class SiteState implements Serializable {
-
-    /** . */
-    static final Set<String> portalPropertiesBlackList = Tools.set(MappedAttributes.LOCALE.getName(), MappedAttributes.SKIN.getName());
 
     /** . */
     final String locale;
@@ -81,31 +68,6 @@ public class SiteState implements Serializable {
         this.editPermission = editPermission;
         this.properties = properties;
         this.skin = skin;
-    }
-
-    public SiteState(Site site) {
-
-        //
-        Attributes attrs = site.getAttributes();
-        List<String> accessPermissions = Collections.emptyList();
-        String editPermission = null;
-        if (site.isAdapted(ProtectedResource.class)) {
-            ProtectedResource pr = site.adapt(ProtectedResource.class);
-            accessPermissions = pr.getAccessPermissions();
-            editPermission = pr.getEditPermission();
-        }
-        Described described = site.adapt(Described.class);
-        Map<String, String> properties = new HashMap<String, String>();
-        Mapper.load(attrs, properties, portalPropertiesBlackList);
-
-        //
-        this.locale = attrs.getValue(MappedAttributes.LOCALE);
-        this.label = described.getName();
-        this.description = described.getDescription();
-        this.accessPermissions = accessPermissions;
-        this.editPermission = editPermission;
-        this.properties = properties;
-        this.skin = attrs.getValue(MappedAttributes.SKIN);
     }
 
     public String getLocale() {

@@ -47,7 +47,9 @@ import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.EventType;
-import org.exoplatform.portal.mop.QueryResult;
+import org.gatein.portal.mop.QueryResult;
+import org.exoplatform.portal.mop.site.MopPersistence;
+import org.exoplatform.portal.mop.site.SimpleDataCache;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 import org.gatein.portal.mop.hierarchy.NodeContext;
@@ -57,9 +59,9 @@ import org.exoplatform.portal.mop.layout.LayoutServiceImpl;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.page.PageState;
-import org.exoplatform.portal.mop.site.SiteContext;
-import org.exoplatform.portal.mop.site.SiteService;
-import org.exoplatform.portal.mop.site.SiteServiceImpl;
+import org.gatein.portal.mop.site.SiteContext;
+import org.gatein.portal.mop.site.SiteService;
+import org.gatein.portal.mop.site.SiteServiceImpl;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
 import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.SearchTask;
@@ -141,7 +143,7 @@ public class POMDataStorage implements ModelDataStorage {
         this.jtaUserTransactionLifecycleService = jtaUserTransactionLifecycleService;
         this.listenerService = listenerService;
         this.layoutService = new LayoutServiceImpl(pomMgr);
-        this.siteService = new SiteServiceImpl(pomMgr);
+        this.siteService = new SiteServiceImpl(new MopPersistence(pomMgr, new SimpleDataCache()));
     }
 
     public PortalData getPortalConfig(PortalKey key) throws Exception {

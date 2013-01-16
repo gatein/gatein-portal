@@ -21,8 +21,7 @@ package org.exoplatform.portal.pom.data;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.portal.mop.site.SiteState;
-import org.gatein.common.util.Tools;
+import org.gatein.portal.mop.site.SiteState;
 
 
 /**

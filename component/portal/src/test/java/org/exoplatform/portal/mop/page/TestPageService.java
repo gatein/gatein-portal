@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.ProtectedResource;
-import org.exoplatform.portal.mop.QueryResult;
+import org.gatein.portal.mop.QueryResult;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.pom.data.MappedAttributes;

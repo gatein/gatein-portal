@@ -17,9 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.site;
-
-import org.gatein.portal.mop.site.SiteKey;
+package org.gatein.portal.mop.site;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

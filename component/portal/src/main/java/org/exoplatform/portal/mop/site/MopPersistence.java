@@ -21,12 +21,10 @@ package org.exoplatform.portal.mop.site;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Set;
 
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.ProtectedResource;
-import org.exoplatform.portal.mop.QueryResult;
-import org.gatein.portal.mop.site.SiteKey;
-import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.Utils;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -39,61 +37,45 @@ import org.gatein.mop.api.workspace.Page;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.api.workspace.Templatized;
 import org.gatein.mop.api.workspace.Workspace;
+import org.gatein.mop.core.util.Tools;
+import org.gatein.portal.mop.site.SiteData;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SitePersistence;
+import org.gatein.portal.mop.site.SiteState;
+import org.gatein.portal.mop.site.SiteType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class SiteServiceImpl implements SiteService {
+public class MopPersistence implements SitePersistence {
+
+    /** . */
+    static final Set<String> portalPropertiesBlackList = Tools.set(MappedAttributes.LOCALE.getName(), MappedAttributes.SKIN.getName());
 
     /** . */
     final POMSessionManager manager;
 
     /** . */
-    private final DataCache dataCache;
+    final DataCache dataCache;
 
-    public SiteServiceImpl(POMSessionManager manager) {
-        this(manager, new SimpleDataCache());
-    }
-
-    public SiteServiceImpl(POMSessionManager manager, DataCache dataCache) throws NullPointerException {
-        if (manager == null) {
-            throw new NullPointerException("No null pom session manager allowed");
-        }
-        if (dataCache == null) {
-            throw new NullPointerException("No null data cache allowed");
-        }
+    public MopPersistence(POMSessionManager manager, DataCache dataCache) {
         this.manager = manager;
         this.dataCache = dataCache;
     }
 
-    @Override
-    public SiteContext loadSite(SiteKey key) throws NullPointerException, SiteServiceException {
-        if (key == null) {
-            throw new NullPointerException();
-        }
-
-        //
+    public SiteData loadSite(SiteKey key) {
         POMSession session = manager.getSession();
-        SiteData data = dataCache.getSiteData(session, key);
-        return data != null && data != SiteData.EMPTY ? new SiteContext(data) : null;
+        return dataCache.getSiteData(session, key);
     }
 
-    @Override
-    public boolean saveSite(SiteContext context) throws NullPointerException, SiteServiceException {
-        if (context == null) {
-            throw new NullPointerException();
-        }
-
-        //
+    public boolean saveSite(SiteKey key, SiteState state) {
         POMSession session = manager.getSession();
-        ObjectType<Site> objectType = Utils.objectType(context.key.getType());
+        ObjectType<Site> objectType = Utils.objectType(key.getType());
         Workspace workspace = session.getWorkspace();
-        Site site = workspace.getSite(objectType, context.key.getName());
-
-        //
+        Site site = workspace.getSite(objectType, key.getName());
         boolean created;
         if (site == null) {
-            site = workspace.addSite(Utils.objectType(context.key.getType()), context.key.getName());
+            site = workspace.addSite(Utils.objectType(key.getType()), key.getName());
             Page root = site.getRootPage();
             root.addChild("pages");
             Page templates = root.addChild("templates");
@@ -109,52 +91,30 @@ public class SiteServiceImpl implements SiteService {
         } else {
             created = false;
         }
-
-        //
-        SiteState state = context.state;
         if (state != null) {
-            //
             Attributes attrs = site.getAttributes();
             attrs.setValue(MappedAttributes.LOCALE, state.getLocale());
             attrs.setValue(MappedAttributes.SKIN, state.getSkin());
             if (state.getProperties() != null) {
-                Mapper.save(state.getProperties(), attrs, SiteState.portalPropertiesBlackList);
+                Mapper.save(state.getProperties(), attrs, portalPropertiesBlackList);
             }
-
             ProtectedResource pr = site.adapt(ProtectedResource.class);
             pr.setAccessPermissions(state.getAccessPermissions());
             pr.setEditPermission(state.getEditPermission());
-
             Described described = site.adapt(Described.class);
             described.setName(state.getLabel());
             described.setDescription(state.getDescription());
         }
-
-        //
-        dataCache.removeSite(session, context.key);
-        dataCache.removeSites(session, context.key.getType());
-
-        // Update state
-        context.data = dataCache.getSiteData(session, context.key);
-        context.state = null;
-
-        //
+        dataCache.removeSite(session, key);
+        dataCache.removeSites(session, key.getType());
         return created;
     }
 
-    @Override
-    public boolean destroySite(SiteKey key) throws NullPointerException, SiteServiceException {
-        if (key == null) {
-            throw new NullPointerException("No null page argument");
-        }
-
-        //
-        POMSession session = manager.getSession();
+    public boolean destroySite(SiteKey key) {
         ObjectType<Site> objectType = Utils.objectType(key.getType());
+        POMSession session = manager.getSession();
         Workspace workspace = session.getWorkspace();
         Site site = workspace.getSite(objectType, key.getName());
-
-        //
         if (site != null) {
             site.destroy();
             dataCache.removeSite(session, key);
@@ -165,29 +125,18 @@ public class SiteServiceImpl implements SiteService {
         }
     }
 
-    @Override
-    public QueryResult<SiteKey> findSites(SiteType siteType) throws SiteServiceException {
-        if (siteType == null) {
-            throw new NullPointerException("No null site type accepted");
-        }
-        if (siteType == SiteType.USER) {
-            throw new IllegalArgumentException("No site type user accepted");
-        }
-
-        //
+    public Collection<SiteKey> findSites(SiteType type) {
         POMSession session = manager.getSession();
-        ArrayList<SiteKey> keys = dataCache.getSites(session, siteType);
+        ArrayList<SiteKey> keys = dataCache.getSites(session, type);
         if (keys == null) {
             Workspace workspace = session.getWorkspace();
-            Collection<Site> sites = workspace.getSites(Utils.objectType(siteType));
+            Collection<Site> sites = workspace.getSites(Utils.objectType(type));
             keys = new ArrayList<SiteKey>(sites.size());
             for (Site site : sites) {
-                keys.add(new SiteKey(siteType, site.getName()));
+                keys.add(new SiteKey(type, site.getName()));
             }
-            dataCache.putSites(session, siteType, keys);
+            dataCache.putSites(session, type, keys);
         }
-
-        //
-        return new QueryResult<SiteKey>(0, keys.size(), keys);
+        return keys;
     }
 }

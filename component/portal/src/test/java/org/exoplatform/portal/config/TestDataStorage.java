@@ -41,7 +41,7 @@ import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.EventType;
-import org.exoplatform.portal.mop.QueryResult;
+import org.gatein.portal.mop.QueryResult;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 import org.gatein.portal.mop.navigation.NavigationContext;

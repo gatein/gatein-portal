@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop;
+package org.gatein.portal.mop;
 
 import java.util.Iterator;
 

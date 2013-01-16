@@ -11,7 +11,7 @@ import org.chromattic.api.UndeclaredRepositoryException;
 import org.exoplatform.commons.cache.InvalidationBridge;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.EventType;
-import org.exoplatform.portal.mop.QueryResult;
+import org.gatein.portal.mop.QueryResult;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.pom.config.POMSession;

@@ -17,10 +17,49 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.site;
+package org.gatein.portal.mop.site;
+
+import java.io.Serializable;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class SiteServiceException extends RuntimeException {
+public class SiteData implements Serializable {
+
+    /** Useful. */
+    public static final SiteData EMPTY = new SiteData();
+
+    /** . */
+    public final SiteKey key;
+
+    /** . */
+    public final String id;
+
+    /** . */
+    public final String layoutId;
+
+    /** . */
+    public final SiteState state;
+
+    private SiteData() {
+        this.key = null;
+        this.id = null;
+        this.state = null;
+        this.layoutId = null;
+    }
+
+    public SiteData(SiteKey key, String id, String layoutId, SiteState state) {
+        this.key = key;
+        this.id = id;
+        this.layoutId = layoutId;
+        this.state = state;
+    }
+
+    protected Object readResolve() {
+        if (key == null && state == null && id == null) {
+            return EMPTY;
+        } else {
+            return this;
+        }
+    }
 }
