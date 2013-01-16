@@ -34,7 +34,7 @@ import org.exoplatform.portal.mop.Utils;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.Visible;
 import org.gatein.portal.mop.hierarchy.NodeData;
-import org.exoplatform.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageKey;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.Attributes;

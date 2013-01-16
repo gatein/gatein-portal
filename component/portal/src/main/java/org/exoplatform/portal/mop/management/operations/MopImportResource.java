@@ -43,7 +43,7 @@ import org.exoplatform.portal.mop.management.exportimport.PageImportTask;
 import org.exoplatform.portal.mop.management.exportimport.SiteLayoutExportTask;
 import org.exoplatform.portal.mop.management.exportimport.SiteLayoutImportTask;
 import org.gatein.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.page.PageService;
+import org.gatein.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.common.logging.Logger;

@@ -31,9 +31,9 @@ import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.management.operations.MOPSiteProvider;
 import org.exoplatform.portal.mop.management.operations.page.PageUtils;
-import org.exoplatform.portal.mop.page.PageContext;
-import org.exoplatform.portal.mop.page.PageKey;
-import org.exoplatform.portal.mop.page.PageService;
+import org.gatein.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageService;
 import org.gatein.mop.api.workspace.Site;
 
 /**
@@ -112,8 +112,7 @@ public class PageImportTask extends AbstractImportTask<Page.PageSet> {
                             rollbackDeletes.getPages().add(src);
                         } else {
                             PageContext pageContext = pageService.loadPage(pageKey);
-                            Page existing = dataStorage.getPage(pageKey.format());
-                            pageContext.update(existing);
+                            Page existing = dataStorage.getPage(pageKey.format()).updateFrom(pageContext);
                             rollbackSaves.getPages().add(PageUtils.copy(existing));
                         }
                     }

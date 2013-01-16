@@ -6,6 +6,9 @@ import org.exoplatform.commons.scope.ScopedKey;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
+import org.gatein.portal.mop.page.PageData;
+import org.gatein.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageService;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
 public class ExoDataCache extends DataCache {

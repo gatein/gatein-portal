@@ -31,7 +31,7 @@ import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.navigation.NodeState;
-import org.exoplatform.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageKey;
 
 /**
  * A navigation node as seen by a user.

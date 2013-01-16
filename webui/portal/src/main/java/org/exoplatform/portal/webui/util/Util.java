@@ -25,8 +25,8 @@ import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageNode;
-import org.exoplatform.portal.mop.page.PageContext;
-import org.exoplatform.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageKey;
 import org.exoplatform.portal.webui.container.UIContainer;
 import org.exoplatform.portal.webui.page.UIPage;
 import org.exoplatform.portal.webui.page.UIPageFactory;
@@ -129,8 +129,7 @@ public class Util {
     public static UIPage toUIPage(String pageRef, UIComponent uiParent) throws Exception {
         UserPortalConfigService configService = uiParent.getApplicationComponent(UserPortalConfigService.class);
         PageContext pageContext = configService.getPage(PageKey.parse(pageRef));
-        Page page = configService.getDataStorage().getPage(pageRef);
-        pageContext.update(page);
+        Page page = configService.getDataStorage().getPage(pageRef).updateFrom(pageContext);
         return toUIPage(page, uiParent);
     }
 

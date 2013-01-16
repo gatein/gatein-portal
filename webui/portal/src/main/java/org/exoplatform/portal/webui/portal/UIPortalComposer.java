@@ -37,10 +37,10 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalProperties;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
-import org.exoplatform.portal.mop.page.PageContext;
-import org.exoplatform.portal.mop.page.PageKey;
-import org.exoplatform.portal.mop.page.PageService;
-import org.exoplatform.portal.mop.page.PageState;
+import org.gatein.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageService;
+import org.gatein.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.resource.SkinService;
 import org.exoplatform.portal.webui.application.UIPortlet;
@@ -676,7 +676,7 @@ public class UIPortalComposer extends UIContainer {
             uiPage.getChildren().clear();
             page = dataService.getPage(page.getPageId());
             PageContext pageContext = configService.getPage(PageKey.parse(page.getPageId()));
-            pageContext.update(page);
+            page.updateFrom(pageContext);
             PortalDataMapper.toUIPage(uiPage, page);
 
             // Update UIPage cache on UIPortal

@@ -1,4 +1,4 @@
-package org.exoplatform.portal.mop.page;
+package org.gatein.portal.mop.page;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -54,10 +54,10 @@ public class PageKey implements Serializable {
     }
 
     /** . */
-    final SiteKey site;
+    public final SiteKey site;
 
     /** . */
-    final String name;
+    public final String name;
 
     /** . */
     private String ref;

@@ -35,7 +35,7 @@ import java.util.Map;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.EventType;
-import org.exoplatform.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageKey;
 import org.exoplatform.portal.pom.spi.wsrp.WSRP;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;

@@ -20,7 +20,7 @@ package org.exoplatform.portal.webui.page;
 
 import java.util.List;
 
-import org.exoplatform.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageContext;
 
 /**
  * @author <a href="mailto:haithanh0809@gmail.com">Hai Thanh Nguyen</a>

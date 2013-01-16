@@ -7,6 +7,10 @@ import java.util.List;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.ProtectedResource;
 import org.gatein.portal.mop.QueryResult;
+import org.gatein.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageError;
+import org.gatein.portal.mop.page.PageServiceException;
+import org.gatein.portal.mop.page.PageState;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.pom.data.MappedAttributes;
@@ -44,11 +48,11 @@ public class TestPageService extends AbstractTestPageService {
         sync(true);
 
         //
-        service.clearCache();
+        service.clear();
         PageContext page = service.loadPage(site.page("foo"));
         assertNotNull(page);
-        assertNull(page.state);
-        assertNotNull(page.data);
+        assertNull(page.getState(true));
+        assertNotNull(page.getData());
         PageState state = page.getState();
         assertEquals("foo_name", state.getDisplayName());
         assertEquals("foo_description", state.getDescription());
@@ -99,7 +103,7 @@ public class TestPageService extends AbstractTestPageService {
         sync(true);
 
         //
-        service.clearCache();
+        service.clear();
 
         List<PageContext> pages = service.loadPages(site);
         assertNotNull(pages);
@@ -108,8 +112,8 @@ public class TestPageService extends AbstractTestPageService {
         Iterator<PageContext> iterator = pages.iterator();
         PageContext page = iterator.next();
         assertNotNull(page);
-        assertNull(page.state);
-        assertNotNull(page.data);
+        assertNull(page.getState(true));
+        assertNotNull(page.getData());
         PageState state = page.getState();
         assertEquals("foo_name", state.getDisplayName());
         assertEquals("foo_description", state.getDescription());
@@ -120,8 +124,8 @@ public class TestPageService extends AbstractTestPageService {
 
         page = iterator.next();
         assertNotNull(page);
-        assertNull(page.state);
-        assertNotNull(page.data);
+        assertNull(page.getState(true));
+        assertNotNull(page.getData());
         state = page.getState();
         assertEquals("bar_name", state.getDisplayName());
         assertEquals("bar_description", state.getDescription());
@@ -267,8 +271,8 @@ public class TestPageService extends AbstractTestPageService {
         //
         PageContext bar = service.clone(site.page("foo"), site.page("bar"));
         assertNotNull(bar);
-        assertNull(bar.state);
-        assertNotNull(bar.data);
+        assertNull(bar.getState(true));
+        assertNotNull(bar.getData());
         PageState state = bar.getState();
         assertEquals("foo_name", state.getDisplayName());
         assertEquals("foo_description", state.getDescription());

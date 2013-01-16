@@ -117,7 +117,7 @@
   </component>
 
   <component>
-    <key>org.exoplatform.portal.mop.page.PageService</key>
+    <key>org.gatein.portal.mop.page.PageService</key>
     <type>org.exoplatform.portal.mop.page.PageServiceWrapper</type>
   </component>
 

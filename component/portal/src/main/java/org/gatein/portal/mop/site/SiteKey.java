@@ -22,7 +22,7 @@ package org.gatein.portal.mop.site;
 import java.io.Serializable;
 
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageKey;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

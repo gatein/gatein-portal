@@ -58,7 +58,7 @@ import org.exoplatform.portal.mop.importer.SiteImporter;
 import org.exoplatform.portal.mop.layout.LayoutService;
 import org.exoplatform.portal.mop.layout.LayoutServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.page.PageService;
+import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteContext;
 import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.mop.site.SiteServiceImpl;

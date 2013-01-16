@@ -2,6 +2,7 @@ package org.exoplatform.portal.mop.page;
 
 import junit.framework.TestCase;
 
+import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.site.SiteType;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */

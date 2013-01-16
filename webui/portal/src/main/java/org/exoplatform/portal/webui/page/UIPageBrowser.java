@@ -38,10 +38,10 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.hierarchy.Scope;
-import org.exoplatform.portal.mop.page.PageContext;
-import org.exoplatform.portal.mop.page.PageKey;
-import org.exoplatform.portal.mop.page.PageService;
-import org.exoplatform.portal.mop.page.PageState;
+import org.gatein.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageService;
+import org.gatein.portal.mop.page.PageState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserPortal;
@@ -338,8 +338,7 @@ public class UIPageBrowser extends UIContainer {
             // Need this code to override editpage action in extension project
             UIPageFactory clazz = UIPageFactory.getInstance(pageContext.getState().getFactoryId());
             UIPage uipage = clazz.createUIPage(null);
-            Page page = service.getDataStorage().getPage(id);
-            pageContext.update(page);
+            Page page = service.getDataStorage().getPage(id).updateFrom(pageContext);
             uipage.switchToEditMode(page);
         }
     }

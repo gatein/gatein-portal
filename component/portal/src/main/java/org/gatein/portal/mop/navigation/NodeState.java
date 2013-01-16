@@ -26,7 +26,7 @@ import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.mop.Visibility;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeModel;
-import org.exoplatform.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageKey;
 
 /**
  * An immutable node state class.

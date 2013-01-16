@@ -7,6 +7,8 @@ import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.AbstractMOPTest;
+import org.gatein.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageServiceImpl;
 import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
@@ -47,7 +49,7 @@ public class AbstractTestPageService extends AbstractMOPTest {
         mgr.start();
 
         //
-        service = new PageServiceImpl(mgr);
+        service = new PageServiceImpl(new MopPersistence(mgr, new SimpleDataCache()));
 
         //
         super.setUp();

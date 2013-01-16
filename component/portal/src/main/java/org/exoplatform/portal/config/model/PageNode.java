@@ -25,7 +25,7 @@ import java.util.List;
 
 import org.exoplatform.portal.mop.Visibility;
 import org.gatein.portal.mop.navigation.NodeState;
-import org.exoplatform.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageKey;
 
 public class PageNode extends PageNodeContainer {
 

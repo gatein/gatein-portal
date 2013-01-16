@@ -1,3 +1,22 @@
+/*
+ * Copyright (C) 2012 eXo Platform SAS.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package org.exoplatform.portal.mop.page;
 
 import java.util.ArrayList;
@@ -7,9 +26,6 @@ import java.util.List;
 
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.ProtectedResource;
-import org.gatein.portal.mop.QueryResult;
-import org.gatein.portal.mop.site.SiteKey;
-import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.Utils;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
@@ -25,13 +41,19 @@ import org.gatein.mop.api.workspace.WorkspaceCustomizationContext;
 import org.gatein.mop.api.workspace.ui.UIComponent;
 import org.gatein.mop.api.workspace.ui.UIContainer;
 import org.gatein.mop.api.workspace.ui.UIWindow;
+import org.gatein.portal.mop.page.PageData;
+import org.gatein.portal.mop.page.PageError;
+import org.gatein.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PagePersistence;
+import org.gatein.portal.mop.page.PageServiceException;
+import org.gatein.portal.mop.page.PageState;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SiteType;
 
 /**
- * This class implements the {@link PageService} business methods.
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class PageServiceImpl implements PageService {
+public class MopPersistence implements PagePersistence {
 
     /** . */
     final POMSessionManager manager;
@@ -39,163 +61,65 @@ public class PageServiceImpl implements PageService {
     /** . */
     private final DataCache dataCache;
 
-    /**
-     * Create an instance that uses a simple data cache, such instance should be used for testing purposes.
-     *
-     * @param manager the mop session manager
-     * @throws NullPointerException if the manager argument is null
-     */
-    public PageServiceImpl(POMSessionManager manager) throws NullPointerException {
-        this(manager, new SimpleDataCache());
-    }
-
-    /**
-     * Create an instance that will use a specified data cache instance.
-     *
-     * @param manager the mop session manager
-     * @param dataCache the data cache
-     * @throws NullPointerException if any argument is null
-     */
-    public PageServiceImpl(POMSessionManager manager, DataCache dataCache) throws NullPointerException {
-        if (manager == null) {
-            throw new NullPointerException("No null pom session manager allowed");
-        }
-        if (dataCache == null) {
-            throw new NullPointerException("No null data cache allowed");
-        }
+    public MopPersistence(POMSessionManager manager, DataCache dataCache) {
         this.manager = manager;
         this.dataCache = dataCache;
     }
 
     @Override
-    public PageContext loadPage(PageKey key) {
-        if (key == null) {
-            throw new NullPointerException();
-        }
-
-        //
+    public PageData loadPage(PageKey key) {
         POMSession session = manager.getSession();
-        PageData data = dataCache.getPageData(session, key);
-        return data != null && data != PageData.EMPTY ? new PageContext(data) : null;
-    }
-
-    /**
-     * <p>
-     * Load all the pages of a specific site. Note that this method can potentially raise performance issues if the number of
-     * pages is very large and should be used with cautions. That's the motiviation for not having this method on the
-     * {@link PageService} interface.
-     * </p>
-     *
-     * @param siteKey the site key
-     * @return the list of pages
-     * @throws NullPointerException if the site key argument is null
-     * @throws PageServiceException anything that would prevent the operation to succeed
-     */
-    public List<PageContext> loadPages(SiteKey siteKey) throws NullPointerException, PageServiceException {
-        if (siteKey == null) {
-            throw new NullPointerException("No null site key accepted");
-        }
-
-        //
-        POMSession session = manager.getSession();
-        ObjectType<Site> objectType = Utils.objectType(siteKey.getType());
-        Workspace workspace = session.getWorkspace();
-        Site site = workspace.getSite(objectType, siteKey.getName());
-
-        //
-        if (site == null) {
-            throw new PageServiceException(PageError.NO_SITE);
-        }
-
-        //
-        org.gatein.mop.api.workspace.Page root = site.getRootPage();
-        Collection<org.gatein.mop.api.workspace.Page> pages = root.getChild("pages").getChildren();
-        List<PageContext> list = new ArrayList<PageContext>(pages.size());
-        for (Page page : pages) {
-            list.add(loadPage(new PageKey(siteKey, page.getName())));
-        }
-
-        return list;
+        return dataCache.getPageData(session, key);
     }
 
     @Override
-    public boolean savePage(PageContext page) {
-        if (page == null) {
-            throw new NullPointerException();
-        }
-
-        //
+    public boolean savePage(PageKey key, PageState state) {
         POMSession session = manager.getSession();
-        ObjectType<Site> objectType = Utils.objectType(page.key.getSite().getType());
+        SiteKey siteKey = key.getSite();
+        ObjectType<Site> objectType = Utils.objectType(siteKey.getType());
         Workspace workspace = session.getWorkspace();
-        Site site = workspace.getSite(objectType, page.key.getSite().getName());
-
-        //
+        Site site = workspace.getSite(objectType, siteKey.getName());
         if (site == null) {
             throw new PageServiceException(PageError.NO_SITE);
         }
-
-        //
         org.gatein.mop.api.workspace.Page root = site.getRootPage();
         org.gatein.mop.api.workspace.Page pages = root.getChild("pages");
-        org.gatein.mop.api.workspace.Page dst = pages.getChild(page.key.getName());
-
-        //
+        org.gatein.mop.api.workspace.Page dst = pages.getChild(key.getName());
         boolean created;
         if (dst == null) {
-            dst = pages.addChild(page.key.getName());
+            dst = pages.addChild(key.getName());
             created = true;
         } else {
             created = false;
         }
-
-        //
-        PageState state = page.state;
         if (state != null) {
             ProtectedResource pr = dst.adapt(ProtectedResource.class);
-            pr.setAccessPermissions(page.state.accessPermissions);
-            pr.setEditPermission(page.state.editPermission);
+            pr.setAccessPermissions(state.getAccessPermissions());
+            pr.setEditPermission(state.getEditPermission());
 
             //
             Described described = dst.adapt(Described.class);
-            described.setName(page.state.displayName);
-            described.setDescription(page.state.description);
+            described.setName(state.getDisplayName());
+            described.setDescription(state.getDescription());
 
             //
             Attributes attrs = dst.getAttributes();
-            attrs.setValue(MappedAttributes.FACTORY_ID, page.state.factoryId);
-            attrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, page.state.showMaxWindow);
+            attrs.setValue(MappedAttributes.FACTORY_ID, state.getFactoryId());
+            attrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, state.getShowMaxWindow());
         }
-
-        //
-        dataCache.removePage(session, page.key);
-
-        // Update state
-        page.data = dataCache.getPageData(session, page.key);
-        page.state = null;
-
-        //
+        dataCache.removePage(session, key);
         return created;
     }
 
     @Override
     public boolean destroyPage(PageKey key) {
-        if (key == null) {
-            throw new NullPointerException("No null page argument");
-        }
-
-        //
         POMSession session = manager.getSession();
         ObjectType<Site> objectType = Utils.objectType(key.getSite().getType());
         Workspace workspace = session.getWorkspace();
         Site site = workspace.getSite(objectType, key.getSite().getName());
-
-        //
         if (site == null) {
             throw new PageServiceException(PageError.NO_SITE);
         }
-
-        //
         org.gatein.mop.api.workspace.Page root = site.getRootPage();
         org.gatein.mop.api.workspace.Page pages = root.getChild("pages");
         org.gatein.mop.api.workspace.Page page = pages.getChild(key.getName());
@@ -209,7 +133,7 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public PageContext clone(PageKey src, PageKey dst) {
+    public PageData clonePage(PageKey src, PageKey dst) {
         POMSession session = manager.getSession();
         Workspace workspace = session.getWorkspace();
 
@@ -278,7 +202,7 @@ public class PageServiceImpl implements PageService {
         dataCache.removePage(session, dst);
 
         //
-        return new PageContext(new PageData(dstPage));
+        return DataCache.create(dstPage);
     }
 
     private void copy(Page srcPage, Page dstPage, UIContainer src, UIContainer dst) {
@@ -349,24 +273,53 @@ public class PageServiceImpl implements PageService {
     }
 
     @Override
-    public QueryResult<PageContext> findPages(int from, int to, SiteType siteType, String siteName, String pageName,
+    public List<PageKey> findPageKeys(SiteKey siteKey) {
+        POMSession session = manager.getSession();
+        ObjectType<Site> objectType = Utils.objectType(siteKey.getType());
+        Workspace workspace = session.getWorkspace();
+        Site site = workspace.getSite(objectType, siteKey.getName());
+        if (site == null) {
+            throw new PageServiceException(PageError.NO_SITE);
+        }
+        org.gatein.mop.api.workspace.Page root = site.getRootPage();
+        Collection<Page> pages = root.getChild("pages").getChildren();
+        List<PageKey> list = new ArrayList<PageKey>(pages.size());
+        for (Page page : pages) {
+            list.add(new PageKey(siteKey, page.getName()));
+        }
+        return list;
+    }
+
+    @Override
+    public Collection<PageData> findPages(
+            int from,
+            int to,
+            SiteType siteType,
+            String siteName,
+            String pageName,
             String pageTitle) {
         POMSession session = manager.getSession();
-        org.chromattic.api.query.QueryResult<Page> a = session.findObjects(ObjectType.PAGE, Utils.objectType(siteType),
-                siteName, pageTitle, from, to);
+        org.chromattic.api.query.QueryResult<Page> a = session.findObjects(
+                ObjectType.PAGE,
+                Utils.objectType(siteType),
+                siteName,
+                pageTitle,
+                from,
+                to);
         int size = a.size();
-        PageContext[] array = new PageContext[size];
+        PageData[] array = new PageData[size];
         int ptr = 0;
         while (a.hasNext()) {
             Page page = a.next();
-            PageData data = new PageData(page);
+            PageData data = DataCache.create(page);
             dataCache.putPage(data);
-            array[ptr++] = new PageContext(data);
+            array[ptr++] = data;
         }
-        return new QueryResult<PageContext>(from, size, Arrays.asList(array));
+        return Arrays.asList(array);
     }
 
-    public void clearCache() {
+    @Override
+    public void clear() {
         dataCache.clear();
     }
 }

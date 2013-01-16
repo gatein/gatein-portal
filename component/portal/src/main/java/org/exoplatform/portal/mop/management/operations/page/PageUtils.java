@@ -20,12 +20,12 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.Properties;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.gatein.portal.mop.site.SiteKey;
-import org.exoplatform.portal.mop.page.PageContext;
-import org.exoplatform.portal.mop.page.PageKey;
-import org.exoplatform.portal.mop.page.PageService;
-import org.exoplatform.portal.mop.page.PageServiceImpl;
+import org.gatein.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageService;
+import org.gatein.portal.mop.page.PageServiceImpl;
 import org.exoplatform.portal.mop.page.PageServiceWrapper;
-import org.exoplatform.portal.mop.page.PageState;
+import org.gatein.portal.mop.page.PageState;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
@@ -42,8 +42,7 @@ public class PageUtils {
 
         // PageService does not support the entire page at the moment, so we must grab the page from legacy service
         // and update it with data page service does support.
-        Page page = dataStorage.getPage(pageKey.format());
-        pageContext.update(page);
+        Page page = dataStorage.getPage(pageKey.format()).updateFrom(pageContext);
 
         return page;
     }
@@ -63,8 +62,7 @@ public class PageUtils {
 
         ArrayList<Page> pageList = new ArrayList<Page>(pageContextList.size());
         for (PageContext pageContext : pageContextList) {
-            Page page = dataStorage.getPage(pageContext.getKey().format());
-            pageContext.update(page);
+            Page page = dataStorage.getPage(pageContext.getKey().format()).updateFrom(pageContext);
             pageList.add(page);
         }
 

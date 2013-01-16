@@ -1,18 +1,11 @@
-package org.exoplatform.portal.mop.page;
+package org.gatein.portal.mop.page;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import org.exoplatform.commons.utils.Safe;
-import org.exoplatform.portal.mop.Described;
-import org.exoplatform.portal.mop.ProtectedResource;
-import org.exoplatform.portal.pom.config.Utils;
-import org.exoplatform.portal.pom.data.MappedAttributes;
-import org.gatein.mop.api.Attributes;
-import org.gatein.mop.api.workspace.Page;
 
 /**
  * An immutable page state class, modifying an existing state should use the {@link Builder} builder class to rebuild a new
@@ -39,29 +32,6 @@ public class PageState implements Serializable {
 
     /** . */
     final List<String> accessPermissions;
-
-    PageState(Page page) {
-
-        Attributes attrs = page.getAttributes();
-        Described described = page.adapt(Described.class);
-
-        //
-        List<String> accessPermissions = Collections.emptyList();
-        String editPermission = null;
-        if (page.isAdapted(ProtectedResource.class)) {
-            ProtectedResource pr = page.adapt(ProtectedResource.class);
-            accessPermissions = pr.getAccessPermissions();
-            editPermission = pr.getEditPermission();
-        }
-
-        //
-        this.factoryId = attrs.getValue(MappedAttributes.FACTORY_ID);
-        this.displayName = described.getName();
-        this.description = described.getDescription();
-        this.accessPermissions = Utils.safeImmutableList(accessPermissions);
-        this.editPermission = editPermission;
-        this.showMaxWindow = attrs.getValue(MappedAttributes.SHOW_MAX_WINDOW, false);
-    }
 
     public PageState(String displayName, String description, boolean showMaxWindow, String factoryId,
             List<String> accessPermissions, String editPermission) {

@@ -12,6 +12,11 @@ import org.exoplatform.commons.cache.InvalidationBridge;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.EventType;
 import org.gatein.portal.mop.QueryResult;
+import org.gatein.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageService;
+import org.gatein.portal.mop.page.PageServiceException;
+import org.gatein.portal.mop.page.PageServiceImpl;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.pom.config.POMSession;
@@ -27,7 +32,7 @@ import org.picocontainer.Startable;
 
 /**
  * <p>
- * A wrapper for the {@link PageServiceImpl}, the wrappers takes care of integrating the implementation with the GateIn runtime.
+ * A wrapper for the {@link org.gatein.portal.mop.page.PageServiceImpl}, the wrappers takes care of integrating the implementation with the GateIn runtime.
  * </p>
  *
  * <p>
@@ -71,7 +76,7 @@ public class PageServiceWrapper implements PageService, Startable {
 
     public PageServiceWrapper(RepositoryService repositoryService, POMSessionManager manager, ListenerService listenerService, final DataCache cache) {
         this.repositoryService = repositoryService;
-        this.service = new PageServiceImpl(manager, cache);
+        this.service = new PageServiceImpl(new MopPersistence(manager, cache));
         this.manager = manager;
         this.listenerService = listenerService;
         this.bridge = new InvalidationBridge() {
@@ -97,9 +102,9 @@ public class PageServiceWrapper implements PageService, Startable {
 
         //
         if (created) {
-            notify(EventType.PAGE_CREATED, page.key);
+            notify(EventType.PAGE_CREATED, page.getKey());
         } else {
-            notify(EventType.PAGE_UPDATED, page.key);
+            notify(EventType.PAGE_UPDATED, page.getKey());
         }
 
         //

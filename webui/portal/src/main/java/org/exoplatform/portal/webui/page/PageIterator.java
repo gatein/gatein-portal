@@ -26,8 +26,8 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.PortalContainer;
 import org.gatein.portal.mop.QueryResult;
 import org.gatein.portal.mop.site.SiteType;
-import org.exoplatform.portal.mop.page.PageContext;
-import org.exoplatform.portal.mop.page.PageService;
+import org.gatein.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageService;
 
 /**
  * @author <a href="mailto:haithanh0809@gmail.com">Hai Thanh Nguyen</a>
@@ -60,10 +60,9 @@ public class PageIterator implements Iterator<List<?>> {
     public boolean hasNext() {
         if (hasNext && currentIndex == 0) {
             ExoContainer container = PortalContainer.getInstance();
-            PageService pageService = (PageService) container.getComponentInstance(PageService.class);
-            QueryResult<PageContext> result = pageService.findPages(0, 1, SiteType.valueOf(ownerType.toUpperCase()), ownerId,
-                    name, title);
-
+            PageService pageService = (PageService) container.getComponentInstanceOfType(PageService.class);
+            SiteType siteType = SiteType.valueOf(ownerType.toUpperCase());
+            QueryResult<PageContext> result = pageService.findPages(0, 1, siteType, ownerId, name, title);
             hasNext = result.getSize() > 0;
         }
 
@@ -77,7 +76,7 @@ public class PageIterator implements Iterator<List<?>> {
      */
     public List<PageModel> next() {
         ExoContainer container = PortalContainer.getInstance();
-        PageService pageService = (PageService) container.getComponentInstance(PageService.class);
+        PageService pageService = (PageService) container.getComponentInstanceOfType(PageService.class);
         QueryResult<PageContext> result = pageService.findPages(currentIndex, pageSize + 1,
                 SiteType.valueOf(ownerType.toUpperCase()), ownerId, name, title);
 

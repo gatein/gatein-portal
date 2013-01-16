@@ -23,7 +23,7 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 
 import org.exoplatform.container.xml.InitParams;
-import org.exoplatform.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageKey;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.application.UIPortlet;
 import org.exoplatform.portal.webui.page.UIPage;

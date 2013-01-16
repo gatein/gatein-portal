@@ -56,9 +56,9 @@ import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.layout.ElementState;
 import org.exoplatform.portal.mop.layout.LayoutService;
 import org.exoplatform.portal.mop.layout.LayoutServiceImpl;
-import org.exoplatform.portal.mop.page.PageContext;
-import org.exoplatform.portal.mop.page.PageService;
-import org.exoplatform.portal.mop.page.PageState;
+import org.gatein.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageService;
+import org.gatein.portal.mop.page.PageState;
 import org.gatein.portal.mop.site.SiteContext;
 import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.mop.site.SiteServiceImpl;
@@ -126,10 +126,10 @@ public class POMDataStorage implements ModelDataStorage {
             JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService, ListenerService listenerService) {
 
         // Invalidation bridge : listen for PageService events and invalidate the DataStorage cache
-        Listener<?, org.exoplatform.portal.mop.page.PageKey> invalidator = new Listener<Object, org.exoplatform.portal.mop.page.PageKey>() {
+        Listener<?, org.gatein.portal.mop.page.PageKey> invalidator = new Listener<Object, org.gatein.portal.mop.page.PageKey>() {
             @Override
-            public void onEvent(Event<Object, org.exoplatform.portal.mop.page.PageKey> event) throws Exception {
-                org.exoplatform.portal.mop.page.PageKey key = event.getData();
+            public void onEvent(Event<Object, org.gatein.portal.mop.page.PageKey> event) throws Exception {
+                org.gatein.portal.mop.page.PageKey key = event.getData();
                 PageKey adaptedKey = new PageKey(key.getSite().getTypeName(), key.getSite().getName(), key.getName());
                 pomMgr.getSession().scheduleForEviction(adaptedKey);
             }
@@ -245,7 +245,7 @@ public class POMDataStorage implements ModelDataStorage {
 
     public PageData getPage(PageKey key) throws Exception {
         PageService pageService = (PageService) PortalContainer.getComponent(PageService.class);
-        PageContext context = pageService.loadPage(new org.exoplatform.portal.mop.page.PageKey(
+        PageContext context = pageService.loadPage(new org.gatein.portal.mop.page.PageKey(
                 new SiteKey(key.getType(), key.getId()),
                 key.getName()
         ));
@@ -345,7 +345,7 @@ public class POMDataStorage implements ModelDataStorage {
 
         // Build layout context
         PageService pageService = (PageService) PortalContainer.getComponent(PageService.class);
-        org.exoplatform.portal.mop.page.PageKey key = new org.exoplatform.portal.mop.page.PageKey(new SiteKey(page.getKey().getType(), page.getKey().getId()), page.getKey().getName());
+        org.gatein.portal.mop.page.PageKey key = new org.gatein.portal.mop.page.PageKey(new SiteKey(page.getKey().getType(), page.getKey().getId()), page.getKey().getName());
         PageContext context = pageService.loadPage(key);
 
         //

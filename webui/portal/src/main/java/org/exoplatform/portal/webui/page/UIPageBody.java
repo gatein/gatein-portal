@@ -23,7 +23,7 @@ import org.exoplatform.container.ExoContainer;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PageBody;
-import org.exoplatform.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.portal.UIPortal;
 import org.exoplatform.portal.webui.portal.UIPortalComponent;
@@ -131,8 +131,7 @@ public class UIPageBody extends UIComponentDecorator {
             UIPageFactory clazz = UIPageFactory.getInstance(pageContext.getState().getFactoryId());
             uiPage = clazz.createUIPage(context);
 
-            Page page = userPortalConfigService.getDataStorage().getPage(pageReference);
-            pageContext.update(page);
+            Page page = userPortalConfigService.getDataStorage().getPage(pageReference).updateFrom(pageContext);
             PortalDataMapper.toUIPage(uiPage, page);
             uiPortal.setUIPage(pageReference, uiPage);
         } catch (Exception e) {

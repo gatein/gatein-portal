@@ -22,10 +22,12 @@ package org.exoplatform.portal.config.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.exoplatform.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageKey;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.data.ComponentData;
 import org.exoplatform.portal.pom.data.PageData;
+import org.gatein.portal.mop.page.PageState;
 
 /**
  * May 13, 2004
@@ -161,6 +163,21 @@ public class Page extends Container {
         public void setPages(ArrayList<Page> list) {
             pages = list;
         }
+    }
+
+    public Page updateFrom(PageContext context) {
+        if (context == null) {
+            throw new NullPointerException();
+        }
+        PageState state = context.getState();
+        setTitle(state.getDisplayName());
+        setDescription(state.getDescription());
+        setFactoryId(state.getFactoryId());
+        setShowMaxWindow(state.getShowMaxWindow());
+        setAccessPermissions(state.getAccessPermissions() != null ? state.getAccessPermissions()
+                .toArray(new String[state.getAccessPermissions().size()]) : null);
+        setEditPermission(state.getEditPermission());
+        return this;
     }
 
     @Override

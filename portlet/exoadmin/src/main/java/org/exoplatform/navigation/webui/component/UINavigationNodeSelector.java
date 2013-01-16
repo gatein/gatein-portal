@@ -37,9 +37,9 @@ import org.gatein.portal.mop.navigation.NavigationError;
 import org.gatein.portal.mop.navigation.NavigationServiceException;
 import org.gatein.portal.mop.hierarchy.Scope;
 import org.gatein.portal.mop.navigation.NodeState;
-import org.exoplatform.portal.mop.page.PageContext;
-import org.exoplatform.portal.mop.page.PageKey;
-import org.exoplatform.portal.mop.page.PageService;
+import org.gatein.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageService;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
@@ -448,8 +448,7 @@ public class UINavigationNodeSelector extends UIContainer {
                 if (pageContext.getState().getDisplayName() == null)
                     pageContext.getState().builder().displayName(node.getLabel());
 
-                Page page = userService.getDataStorage().getPage(pageId);
-                pageContext.update(page);
+                Page page = userService.getDataStorage().getPage(pageId).updateFrom(pageContext);
 
                 // convert Page to UIPage
                 PortalDataMapper.toUIPage(uiPage, page);

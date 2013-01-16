@@ -1,6 +1,4 @@
-package org.exoplatform.portal.mop.page;
-
-import org.exoplatform.portal.config.model.Page;
+package org.gatein.portal.mop.page;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
 public class PageContext {
@@ -50,13 +48,21 @@ public class PageContext {
      * @return the navigation state
      */
     public PageState getState() {
-        if (state != null) {
+        return getState(false);
+    }
+
+    public PageState getState(boolean update) {
+        if (update || state != null) {
             return state;
         } else if (data != null) {
             return data.state;
         } else {
             return null;
         }
+    }
+
+    public PageData getData() {
+        return data;
     }
 
     /**
@@ -77,18 +83,5 @@ public class PageContext {
             throw new IllegalStateException("Cannot clear state on a transient page");
         }
         this.state = state;
-    }
-
-    public void update(Page page) throws NullPointerException {
-        if (page == null) {
-            throw new NullPointerException();
-        }
-        page.setTitle(getState().displayName);
-        page.setDescription(getState().description);
-        page.setFactoryId(getState().factoryId);
-        page.setShowMaxWindow(getState().showMaxWindow);
-        page.setAccessPermissions(getState().accessPermissions != null ? getState().accessPermissions
-                .toArray(new String[getState().accessPermissions.size()]) : null);
-        page.setEditPermission(getState().editPermission);
     }
 }

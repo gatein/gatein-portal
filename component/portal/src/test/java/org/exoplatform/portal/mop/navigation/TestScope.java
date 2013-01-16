@@ -24,7 +24,7 @@ import org.exoplatform.portal.mop.Visibility;
 import org.gatein.portal.mop.hierarchy.GenericScope;
 import org.gatein.portal.mop.hierarchy.Scope;
 import org.gatein.portal.mop.hierarchy.VisitMode;
-import org.exoplatform.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.navigation.NodeState;
 
 /**

@@ -32,7 +32,7 @@ import org.exoplatform.portal.config.model.Dashboard;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.page.PageService;
+import org.gatein.portal.mop.page.PageService;
 import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.data.ModelChange;
 
@@ -103,14 +103,14 @@ public interface DataStorage {
 
     /**
      * @deprecated replaced by
-     *             {@link PageService#clone(org.exoplatform.portal.mop.page.PageKey, org.exoplatform.portal.mop.page.PageKey)}
+     *             {@link PageService#clone(org.gatein.portal.mop.page.PageKey, org.gatein.portal.mop.page.PageKey)}
      *
      */
     @Deprecated
     Page clonePage(String pageId, String clonedOwnerType, String clonedOwnerId, String clonedName);
 
     /**
-     * @deprecated replaced by {@link PageService#destroyPage(org.exoplatform.portal.mop.page.PageKey)}
+     * @deprecated replaced by {@link PageService#destroyPage(org.gatein.portal.mop.page.PageKey)}
      */
     @Deprecated
     void remove(Page page);
@@ -119,7 +119,7 @@ public interface DataStorage {
      * This method should create or udate the given page object <br />
      * Then broasdcast PAGE_CREATED event
      *
-     * @deprecated This is replaced by {@link PageService#savePage(org.exoplatform.portal.mop.page.PageContext)}
+     * @deprecated This is replaced by {@link PageService#savePage(org.gatein.portal.mop.page.PageContext)}
      *
      * @param page
      * @throws Exception

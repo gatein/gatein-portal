@@ -23,8 +23,8 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.mop.Visibility;
 import org.gatein.portal.mop.hierarchy.NodeFilter;
 import org.gatein.portal.mop.navigation.NodeState;
-import org.exoplatform.portal.mop.page.PageContext;
-import org.exoplatform.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PageContext;
+import org.gatein.portal.mop.page.PageKey;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

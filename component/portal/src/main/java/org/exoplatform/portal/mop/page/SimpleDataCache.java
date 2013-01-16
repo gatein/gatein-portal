@@ -5,6 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.exoplatform.commons.serialization.MarshalledObject;
 import org.exoplatform.portal.pom.config.POMSession;
+import org.gatein.portal.mop.page.PageData;
+import org.gatein.portal.mop.page.PageKey;
 
 /**
  * A simple implementation for unit testing purpose.

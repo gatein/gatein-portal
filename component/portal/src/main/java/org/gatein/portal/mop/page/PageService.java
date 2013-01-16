@@ -1,4 +1,4 @@
-package org.exoplatform.portal.mop.page;
+package org.gatein.portal.mop.page;
 
 import org.gatein.portal.mop.QueryResult;
 import org.gatein.portal.mop.site.SiteType;

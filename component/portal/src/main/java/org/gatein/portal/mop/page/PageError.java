@@ -1,4 +1,4 @@
-package org.exoplatform.portal.mop.page;
+package org.gatein.portal.mop.page;
 
 /**
  * Error codes for page service.
