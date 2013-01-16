@@ -46,7 +46,7 @@ public class NodeManager<S extends Serializable> {
             NodeChangeListener<NodeContext<N, S>, S> listener) {
         NodePersistence<S> persistence = persistenceProvider.get();
         try {
-            NodeData<S> data = persistence.getNode(nodeId);
+            NodeData<S> data = persistence.loadNode(nodeId);
             if (data != null) {
                 NodeContext<N, S> context = new NodeContext<N, S>(model, data);
                 updateNode(context, scope, listener);
@@ -107,7 +107,7 @@ public class NodeManager<S extends Serializable> {
         }
         NodePersistence<S> persistence = persistenceProvider.get();
         try {
-            NodeData<S> data = persistence.getNode(tree.root.data.id);
+            NodeData<S> data = persistence.loadNode(tree.root.data.id);
             if (data == null) {
                 throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
             }
@@ -148,7 +148,7 @@ public class NodeManager<S extends Serializable> {
             Scope.Visitor<S> visitor) throws NavigationServiceException {
         NodePersistence<S> persistence = persistenceProvider.get();
         try {
-            NodeData<S> data = persistence.getNode(tree.root.getId());
+            NodeData<S> data = persistence.loadNode(tree.root.getId());
             if (data == null) {
                 throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
             }
@@ -184,7 +184,7 @@ public class NodeManager<S extends Serializable> {
         NodePersistence<S> persistence = persistenceProvider.get();
 
         try {
-            NodeData<S> data = persistence.getNode(tree.root.data.id);
+            NodeData<S> data = persistence.loadNode(tree.root.data.id);
             if (data == null) {
                 throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
             }

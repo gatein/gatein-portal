@@ -58,7 +58,7 @@ public class SimpleDataCache extends DataCache {
         MarshalledObject<String> marshalledKey = MarshalledObject.marshall(key);
         MarshalledObject<NodeData<NodeState>> marshalledNode = nodes.get(marshalledKey);
         if (marshalledNode == null) {
-            NodeData<NodeState> node = persistence.loadNode(key);
+            NodeData<NodeState> node = persistence.loadNodeData(key);
             if (node != null) {
                 nodes.put(marshalledKey, MarshalledObject.marshall(node));
                 return node;

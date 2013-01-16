@@ -32,7 +32,7 @@ public interface NavigationPersistence extends NodePersistence<NodeState> {
 
     List<NavigationData> loadNavigations(SiteType type);
 
-    NavigationData getNavigationData(SiteKey key);
+    NavigationData loadNavigationData(SiteKey key);
 
     void saveNavigation(SiteKey key, NavigationState state);
 

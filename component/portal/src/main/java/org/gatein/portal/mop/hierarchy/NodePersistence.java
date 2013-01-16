@@ -26,7 +26,7 @@ import java.io.Serializable;
  */
 public interface NodePersistence<S extends Serializable> {
 
-    NodeData<S> getNode(String nodeId);
+    NodeData<S> loadNode(String nodeId);
 
     NodeData<S>[] createNode(String parentId, String previousId, String name, S state);
 
@@ -36,7 +36,7 @@ public interface NodePersistence<S extends Serializable> {
 
     NodeData<S>[] moveNode(String targetId, String fromId, String toId, String previousId);
 
-    NodeData<S>[] rename(String targetId, String parentId, String name);
+    NodeData<S>[] renameNode(String targetId, String parentId, String name);
 
     void close();
 }

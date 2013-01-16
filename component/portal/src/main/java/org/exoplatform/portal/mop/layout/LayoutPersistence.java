@@ -71,7 +71,7 @@ class LayoutPersistence implements NodePersistence<ElementState> {
     }
 
     @Override
-    public NodeData<ElementState> getNode(String nodeId) {
+    public NodeData<ElementState> loadNode(String nodeId) {
         UIComponent component = session.findObjectById(ObjectType.COMPONENT, nodeId);
         return create(component);
     }
@@ -297,7 +297,7 @@ class LayoutPersistence implements NodePersistence<ElementState> {
     }
 
     @Override
-    public NodeData<ElementState>[] rename(String targetId, String parentId, String name) {
+    public NodeData<ElementState>[] renameNode(String targetId, String parentId, String name) {
         throw new UnsupportedOperationException("Does not make sense for now so should not be called");
     }
 

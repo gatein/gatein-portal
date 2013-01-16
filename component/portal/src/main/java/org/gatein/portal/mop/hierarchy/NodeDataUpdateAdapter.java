@@ -46,14 +46,14 @@ class NodeDataUpdateAdapter<S extends Serializable> extends TreeUpdateAdapter<No
     }
 
     public NodeData<S> getDescendant(NodeData<S> node, String handle) {
-        NodeData<S> data = persistence.getNode(handle);
+        NodeData<S> data = persistence.loadNode(handle);
         NodeData<S> current = data;
         while (current != null) {
             if (node.id.equals(current.id)) {
                 return data;
             } else {
                 if (current.parentId != null) {
-                    current = persistence.getNode(current.parentId);
+                    current = persistence.loadNode(current.parentId);
                 } else {
                     current = null;
                 }

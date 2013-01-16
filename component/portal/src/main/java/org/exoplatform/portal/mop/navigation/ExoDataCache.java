@@ -53,7 +53,7 @@ public class ExoDataCache extends DataCache {
                 NavigationData data = persistence.loadNavigation((SiteKey) key);
                 return data == NavigationData.EMPTY ? null : data;
             } else {
-                return persistence.loadNode((String) key);
+                return persistence.loadNodeData((String) key);
             }
         }
     };

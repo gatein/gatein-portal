@@ -122,7 +122,7 @@ class NodePersister<N, S extends Serializable> extends NodeChangeListener.Base<N
 
     public void onRename(NodeContext<N, S> target, NodeContext<N, S> parent, String name) throws NavigationServiceException {
 
-        NodeData<S>[] result = persistence.rename(target.data.id, parent.data.id, name);
+        NodeData<S>[] result = persistence.renameNode(target.data.id, parent.data.id, name);
 
         //
         target.data = result[0];

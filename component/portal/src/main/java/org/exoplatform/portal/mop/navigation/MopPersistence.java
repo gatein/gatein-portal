@@ -139,17 +139,17 @@ class MopPersistence implements NavigationPersistence {
         }
     }
 
-    public NodeData<NodeState> getNode(String nodeId) {
+    public NodeData<NodeState> loadNode(String nodeId) {
         NodeData<NodeState> data;
         if (session.isModified()) {
-            data = loadNode(nodeId);
+            data = loadNodeData(nodeId);
         } else {
             data = cache.getNode(nodeId);
         }
         return data;
     }
 
-    public NavigationData getNavigationData(SiteKey key) {
+    public NavigationData loadNavigationData(SiteKey key) {
         NavigationData data;
         if (session.isModified()) {
             data = loadNavigation(key);
@@ -161,7 +161,7 @@ class MopPersistence implements NavigationPersistence {
         return data;
     }
 
-    NodeData<NodeState> loadNode(String nodeId) {
+    NodeData<NodeState> loadNodeData(String nodeId) {
         Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
         if (navigation != null) {
             return create(navigation);
@@ -326,7 +326,7 @@ class MopPersistence implements NavigationPersistence {
         return new NodeData[]{create(target),create(from),create(to)};
     }
 
-    public NodeData<NodeState>[] rename(String targetId, String parentId, String name) {
+    public NodeData<NodeState>[] renameNode(String targetId, String parentId, String name) {
         Navigation target = session.findObjectById(ObjectType.NAVIGATION, targetId);
         Navigation parent = session.findObjectById(ObjectType.NAVIGATION, parentId);
         target.setName(name);

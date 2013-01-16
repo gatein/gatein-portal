@@ -61,7 +61,7 @@ public class NavigationServiceImpl implements NavigationService {
 
         //
         NavigationPersistence persistence = persistenceFactory.get();
-        NavigationData data = persistence.getNavigationData(key);
+        NavigationData data = persistence.loadNavigationData(key);
         return data != null && data != NavigationData.EMPTY ? new NavigationContext(data) : null;
     }
 
@@ -90,7 +90,7 @@ public class NavigationServiceImpl implements NavigationService {
             persistence.saveNavigation(navigation.key, navigation.state);
 
             // Update state
-            navigation.data = persistence.getNavigationData(navigation.key);
+            navigation.data = persistence.loadNavigationData(navigation.key);
             navigation.state = null;
         } finally {
             persistence.close();
