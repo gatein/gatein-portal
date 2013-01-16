@@ -74,9 +74,6 @@ import org.jibx.runtime.JiBXException;
 public class NewPortalConfigListener extends BaseComponentPlugin {
 
     /** . */
-    private final UserPortalConfigService owner_;
-
-    /** . */
     private ConfigurationManager cmanager_;
 
     /** . */
@@ -125,20 +122,27 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
     /** . */
     private SiteService siteService;
 
+    /** . */
+    private final ImportMode defaultImportMode;
+
     final Set<String> createdOwners = new HashSet<String>();
 
     private boolean isFirstStartup = false;
 
-    public NewPortalConfigListener(UserPortalConfigService owner, POMSessionManager pomMgr,
+    public NewPortalConfigListener(POMSessionManager pomMgr,
             PageService pageService, ConfigurationManager cmanager, InitParams params, NavigationService navigationService,
             DescriptionService descriptionService) throws Exception {
-        owner_ = owner;
         cmanager_ = cmanager;
         pageService_ = pageService;
         navigationService_ = navigationService;
         descriptionService_ = descriptionService;
         layoutService = new LayoutServiceImpl(pomMgr);
         siteService = new SiteServiceImpl(pomMgr);
+
+        //
+        ValueParam defaultImportModeParam = params == null ? null : params.getValueParam("default.import.mode");
+        defaultImportMode = defaultImportModeParam == null ? ImportMode.CONSERVE : ImportMode
+                .valueOf(defaultImportModeParam.getValue().toUpperCase().trim());
 
         ValueParam valueParam = params.getValueParam("page.templates.location");
         if (valueParam != null)
@@ -750,7 +754,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
         if (mode != null) {
             importMode = ImportMode.valueOf(mode.trim().toUpperCase());
         } else {
-            importMode = owner_.getDefaultImportMode();
+            importMode = defaultImportMode;
         }
 
         if (isFirstStartup && (importMode == ImportMode.CONSERVE || importMode == ImportMode.INSERT)) {

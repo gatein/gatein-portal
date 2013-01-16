@@ -31,6 +31,10 @@
       <priority>1</priority>
       <init-params>
         <value-param>
+          <name>default.import.mode</name>
+          <value>merge</value>
+        </value-param>
+        <value-param>
           <name>default.portal</name>
           <value>origin</value>
         </value-param>

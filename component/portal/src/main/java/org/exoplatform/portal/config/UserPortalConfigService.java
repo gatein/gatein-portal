@@ -41,7 +41,6 @@ import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.description.DescriptionService;
-import org.exoplatform.portal.mop.importer.ImportMode;
 import org.exoplatform.portal.mop.navigation.NavigationContext;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.navigation.NavigationState;
@@ -84,9 +83,6 @@ public class UserPortalConfigService implements Startable {
     /** . */
     boolean destroyUserPortal;
 
-    /** . */
-    private final ImportMode defaultImportMode;
-
     private Log log = ExoLogger.getLogger("Portal:UserPortalConfigService");
 
     public UserPortalConfigService(UserACL userACL, DataStorage storage, OrganizationService orgService,
@@ -104,11 +100,6 @@ public class UserPortalConfigService implements Startable {
                 || destroyUserPortalParam.getValue().toLowerCase().trim().equals("true");
 
         //
-        ValueParam defaultImportModeParam = params == null ? null : params.getValueParam("default.import.mode");
-        ImportMode defaultImportMode = defaultImportModeParam == null ? ImportMode.CONSERVE : ImportMode
-                .valueOf(defaultImportModeParam.getValue().toUpperCase().trim());
-
-        //
         this.storage_ = storage;
         this.orgService_ = orgService;
         this.userACL_ = userACL;
@@ -117,7 +108,6 @@ public class UserPortalConfigService implements Startable {
         this.descriptionService = descriptionService;
         this.createUserPortal = createUserPortal;
         this.destroyUserPortal = destroyUserPortal;
-        this.defaultImportMode = defaultImportMode;
     }
 
     public PageService getPageService() {
@@ -126,10 +116,6 @@ public class UserPortalConfigService implements Startable {
 
     public DataStorage getDataStorage() {
         return storage_;
-    }
-
-    public ImportMode getDefaultImportMode() {
-        return defaultImportMode;
     }
 
     public boolean getCreateUserPortal() {

@@ -30,6 +30,10 @@
       <type>org.exoplatform.portal.config.NewPortalConfigListener</type>
       <init-params>
         <value-param>
+          <name>default.import.mode</name>
+          <value>merge</value>
+        </value-param>
+        <value-param>
           <name>default.portal</name>
           <value>classic</value>
         </value-param>
