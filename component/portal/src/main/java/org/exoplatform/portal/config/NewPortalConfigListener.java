@@ -51,11 +51,13 @@ import org.exoplatform.portal.mop.importer.Imported;
 import org.exoplatform.portal.mop.importer.Imported.Status;
 import org.exoplatform.portal.mop.importer.NavigationImporter;
 import org.exoplatform.portal.mop.importer.PageImporter;
-import org.exoplatform.portal.mop.importer.PortalConfigImporter;
+import org.exoplatform.portal.mop.importer.SiteImporter;
 import org.exoplatform.portal.mop.layout.LayoutService;
 import org.exoplatform.portal.mop.layout.LayoutServiceImpl;
 import org.exoplatform.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.page.PageService;
+import org.exoplatform.portal.mop.site.SiteService;
+import org.exoplatform.portal.mop.site.SiteServiceImpl;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.common.logging.Logger;
@@ -121,6 +123,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
     /** . */
     private LayoutService layoutService;
 
+    /** . */
+    private SiteService siteService;
+
     final Set<String> createdOwners = new HashSet<String>();
 
     private boolean isFirstStartup = false;
@@ -135,6 +140,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
         navigationService_ = navigationService;
         descriptionService_ = descriptionService;
         layoutService = new LayoutServiceImpl(pomMgr);
+        siteService = new SiteServiceImpl(pomMgr);
 
         ValueParam valueParam = params.getValueParam("page.templates.location");
         if (valueParam != null)
@@ -468,7 +474,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
 
         ImportMode importMode = getRightMode(config.getImportMode());
 
-        PortalConfigImporter portalImporter = new PortalConfigImporter(importMode, pConfig, dataStorage_);
+        SiteImporter portalImporter = new SiteImporter(importMode, pConfig, siteService, layoutService);
         try {
             portalImporter.perform();
             return true;
