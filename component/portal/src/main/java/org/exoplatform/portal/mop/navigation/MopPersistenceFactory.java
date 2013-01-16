@@ -22,11 +22,12 @@ package org.exoplatform.portal.mop.navigation;
 import javax.inject.Provider;
 
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.gatein.portal.mop.navigation.NavigationPersistence;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class MopPersistenceFactory implements Provider<NavigationPersistence> {
+public class MopPersistenceFactory implements Provider<MopPersistence> {
 
     /** . */
     final POMSessionManager manager;
@@ -44,7 +45,7 @@ public class MopPersistenceFactory implements Provider<NavigationPersistence> {
     }
 
     @Override
-    public NavigationPersistence get() {
-        return new NavigationPersistence(manager.getSession(), cache);
+    public MopPersistence get() {
+        return new MopPersistence(manager.getSession(), cache);
     }
 }

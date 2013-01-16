@@ -2,7 +2,7 @@ package org.exoplatform.portal.mop.page;
 
 import junit.framework.TestCase;
 
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteType;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
 public class TestPageKey extends TestCase {

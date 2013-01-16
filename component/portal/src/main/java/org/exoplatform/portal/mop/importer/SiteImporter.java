@@ -20,8 +20,8 @@
 package org.exoplatform.portal.mop.importer;
 
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.layout.ElementState;
 import org.exoplatform.portal.mop.layout.LayoutService;
 import org.exoplatform.portal.mop.site.SiteContext;

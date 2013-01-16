@@ -30,12 +30,12 @@ import javax.jcr.observation.EventIterator;
 import org.chromattic.api.UndeclaredRepositoryException;
 import org.exoplatform.commons.cache.InvalidationBridge;
 import org.exoplatform.portal.mop.EventType;
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
-import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.hierarchy.NodeModel;
-import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SiteType;
+import org.gatein.portal.mop.hierarchy.NodeChangeListener;
+import org.gatein.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.hierarchy.NodeModel;
+import org.gatein.portal.mop.hierarchy.Scope;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
@@ -45,6 +45,11 @@ import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
+import org.gatein.portal.mop.navigation.NavigationContext;
+import org.gatein.portal.mop.navigation.NavigationService;
+import org.gatein.portal.mop.navigation.NavigationServiceException;
+import org.gatein.portal.mop.navigation.NavigationServiceImpl;
+import org.gatein.portal.mop.navigation.NodeState;
 import org.picocontainer.Startable;
 
 /**
@@ -108,16 +113,16 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
     }
 
     public void saveNavigation(NavigationContext navigation) throws NullPointerException, NavigationServiceException {
-        boolean created = navigation.data == null;
+        boolean created = !navigation.isPersistent();
 
         //
         service.saveNavigation(navigation);
 
         //
         if (created) {
-            notify(EventType.NAVIGATION_CREATED, navigation.key);
+            notify(EventType.NAVIGATION_CREATED, navigation.getKey());
         } else {
-            notify(EventType.NAVIGATION_UPDATED, navigation.key);
+            notify(EventType.NAVIGATION_UPDATED, navigation.getKey());
         }
     }
 
@@ -126,7 +131,7 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
 
         //
         if (destroyed) {
-            notify(EventType.NAVIGATION_DESTROYED, navigation.key);
+            notify(EventType.NAVIGATION_DESTROYED, navigation.getKey());
         }
 
         //

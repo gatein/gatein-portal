@@ -22,7 +22,7 @@ package org.exoplatform.portal.mop.importer;
 import java.util.Arrays;
 
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.layout.ElementState;
 import org.exoplatform.portal.mop.layout.LayoutService;
 import org.exoplatform.portal.mop.page.PageContext;

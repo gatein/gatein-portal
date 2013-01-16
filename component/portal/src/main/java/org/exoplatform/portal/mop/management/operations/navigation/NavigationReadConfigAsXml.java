@@ -23,9 +23,9 @@
 package org.exoplatform.portal.mop.management.operations.navigation;
 
 import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
-import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.management.api.exceptions.ResourceNotFoundException;
 import org.gatein.management.api.operation.OperationContext;
 import org.gatein.management.api.operation.ResultHandler;

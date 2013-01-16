@@ -7,7 +7,7 @@ import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.AbstractMOPTest;
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;

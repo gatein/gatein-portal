@@ -29,12 +29,12 @@ import javax.portlet.ResourceRequest;
 import javax.portlet.ResourceURL;
 
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.hierarchy.GenericScope;
-import org.exoplatform.portal.mop.hierarchy.NodeChange;
-import org.exoplatform.portal.mop.hierarchy.NodeChangeQueue;
-import org.exoplatform.portal.mop.hierarchy.Scope;
-import org.exoplatform.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.hierarchy.GenericScope;
+import org.gatein.portal.mop.hierarchy.NodeChange;
+import org.gatein.portal.mop.hierarchy.NodeChangeQueue;
+import org.gatein.portal.mop.hierarchy.Scope;
+import org.gatein.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;

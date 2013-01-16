@@ -25,13 +25,13 @@ import static org.exoplatform.portal.mop.importer.Builder.node;
 import java.util.Locale;
 
 import org.exoplatform.portal.config.model.NavigationFragment;
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.navigation.AbstractTestNavigationService;
-import org.exoplatform.portal.mop.navigation.NavigationContext;
-import org.exoplatform.portal.mop.navigation.NavigationState;
-import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.hierarchy.Scope;
-import org.exoplatform.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.navigation.NavigationContext;
+import org.gatein.portal.mop.navigation.NavigationState;
+import org.gatein.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.hierarchy.Scope;
+import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.core.api.MOPService;
 

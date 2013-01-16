@@ -20,7 +20,7 @@
 package org.exoplatform.portal.application;
 
 import org.exoplatform.container.ExoContainer;
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.web.application.Application;

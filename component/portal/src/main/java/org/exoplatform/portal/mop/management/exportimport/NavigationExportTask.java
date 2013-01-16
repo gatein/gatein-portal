@@ -26,11 +26,11 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.management.operations.navigation.NavigationKey;
 import org.exoplatform.portal.mop.management.operations.navigation.NavigationUtils;
-import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.management.api.binding.Marshaller;
 
 /**

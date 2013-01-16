@@ -18,8 +18,8 @@
  */
 package org.exoplatform.web.url.navigation;
 
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.user.UserNode;
 
 /**

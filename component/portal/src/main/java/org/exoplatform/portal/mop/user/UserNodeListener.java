@@ -19,9 +19,9 @@
 
 package org.exoplatform.portal.mop.user;
 
-import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
-import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.hierarchy.NodeChangeListener;
+import org.gatein.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.navigation.NodeState;
 
 /**
  * This listener takes care of invalidating the cached state of the UserNode listener when it is updated against the navigation

@@ -27,7 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.ValueParam;
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.web.redirect.api.RedirectKey;
 import org.gatein.web.redirect.api.RedirectType;
 

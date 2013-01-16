@@ -26,9 +26,9 @@ import javax.portlet.ActionResponse;
 import javax.xml.namespace.QName;
 
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.mop.navigation.NavigationContext;
-import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.navigation.NavigationState;
+import org.gatein.portal.mop.navigation.NavigationContext;
+import org.gatein.portal.mop.navigation.NavigationService;
+import org.gatein.portal.mop.navigation.NavigationState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;

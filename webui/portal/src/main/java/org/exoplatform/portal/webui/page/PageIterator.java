@@ -25,7 +25,7 @@ import java.util.List;
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.QueryResult;
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageService;
 

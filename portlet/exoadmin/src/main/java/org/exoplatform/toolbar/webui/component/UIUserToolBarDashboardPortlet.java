@@ -21,7 +21,7 @@ package org.exoplatform.toolbar.webui.component;
 
 import javax.portlet.EventRequest;
 
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;

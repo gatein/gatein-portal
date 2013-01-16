@@ -43,7 +43,7 @@ import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.config.model.ModelObject;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.Described;
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;

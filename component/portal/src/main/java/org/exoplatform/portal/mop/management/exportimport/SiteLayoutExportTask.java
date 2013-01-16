@@ -29,8 +29,8 @@ import java.util.Set;
 
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SiteType;
 import org.gatein.management.api.binding.Marshaller;
 import org.gatein.management.api.operation.model.ExportTask;
 

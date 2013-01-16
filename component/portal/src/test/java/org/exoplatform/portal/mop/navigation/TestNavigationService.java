@@ -26,18 +26,20 @@ import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 
 import org.exoplatform.portal.mop.Described;
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.hierarchy.Node;
-import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.hierarchy.Scope;
-import org.exoplatform.portal.mop.hierarchy.VisitMode;
+import org.gatein.portal.mop.hierarchy.Node;
+import org.gatein.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.hierarchy.Scope;
+import org.gatein.portal.mop.hierarchy.VisitMode;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
+import org.gatein.portal.mop.navigation.NavigationContext;
+import org.gatein.portal.mop.navigation.NodeState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

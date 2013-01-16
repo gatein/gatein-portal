@@ -22,7 +22,7 @@
 
 package org.exoplatform.portal.mop.management.exportimport;
 
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>

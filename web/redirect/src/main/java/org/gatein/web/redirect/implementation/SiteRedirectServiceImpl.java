@@ -29,7 +29,7 @@ import java.util.Map;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.PortalRedirect;
-import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.web.redirect.Mapper;

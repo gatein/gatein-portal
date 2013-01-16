@@ -22,7 +22,7 @@
 
 package org.exoplatform.portal.mop.management.operations.site;
 
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.management.operations.AbstractMopOperationHandler;
 import org.gatein.management.api.PathAddress;
 import org.gatein.management.api.exceptions.OperationException;

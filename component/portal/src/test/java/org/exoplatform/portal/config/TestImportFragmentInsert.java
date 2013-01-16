@@ -20,8 +20,8 @@
 package org.exoplatform.portal.config;
 
 import org.exoplatform.portal.mop.importer.ImportMode;
-import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.navigation.NodeState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

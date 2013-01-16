@@ -21,8 +21,8 @@ package org.exoplatform.portal.mop.site;
 
 import java.util.ArrayList;
 
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.Utils;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.gatein.mop.api.workspace.ObjectType;

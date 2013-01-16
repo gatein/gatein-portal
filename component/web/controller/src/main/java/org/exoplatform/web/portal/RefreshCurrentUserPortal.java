@@ -19,8 +19,8 @@
 
 package org.exoplatform.web.portal;
 
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.navigation.NavigationService;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;

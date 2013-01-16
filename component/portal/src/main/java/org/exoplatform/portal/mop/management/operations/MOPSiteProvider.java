@@ -22,7 +22,7 @@
 
 package org.exoplatform.portal.mop.management.operations;
 
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.mop.api.workspace.Site;
 
 /**

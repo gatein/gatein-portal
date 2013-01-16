@@ -28,16 +28,16 @@ import java.util.Locale;
 
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
-import org.exoplatform.portal.mop.hierarchy.GenericScope;
-import org.exoplatform.portal.mop.navigation.NavigationContext;
-import org.exoplatform.portal.mop.navigation.NavigationServiceException;
-import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
-import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeState;
-import org.exoplatform.portal.mop.hierarchy.Scope;
-import org.exoplatform.portal.mop.hierarchy.VisitMode;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SiteType;
+import org.gatein.portal.mop.hierarchy.GenericScope;
+import org.gatein.portal.mop.navigation.NavigationContext;
+import org.gatein.portal.mop.navigation.NavigationServiceException;
+import org.gatein.portal.mop.hierarchy.NodeChangeListener;
+import org.gatein.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.hierarchy.Scope;
+import org.gatein.portal.mop.hierarchy.VisitMode;
 import org.exoplatform.services.organization.Group;
 
 /**

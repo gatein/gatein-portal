@@ -19,8 +19,10 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.hierarchy.NodeData;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.hierarchy.NodeData;
+import org.gatein.portal.mop.navigation.NavigationData;
+import org.gatein.portal.mop.navigation.NodeState;
 
 /**
  * todo : see if it makes sense to use a bloom filter for not found site black list
@@ -30,7 +32,7 @@ import org.exoplatform.portal.mop.hierarchy.NodeData;
 abstract class DataCache {
 
     /** . */
-    NavigationPersistence persistence;
+    MopPersistence persistence;
 
     protected abstract void removeNodes(Iterable<String> keys);
 

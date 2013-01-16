@@ -23,8 +23,10 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.exoplatform.commons.serialization.MarshalledObject;
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.hierarchy.NodeData;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.hierarchy.NodeData;
+import org.gatein.portal.mop.navigation.NavigationData;
+import org.gatein.portal.mop.navigation.NodeState;
 
 /**
  * A simple implementation for unit testing purpose.

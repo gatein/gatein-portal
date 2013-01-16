@@ -21,8 +21,8 @@ package org.exoplatform.portal.mop.user;
 
 import java.util.ResourceBundle;
 
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.navigation.NavigationContext;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.navigation.NavigationContext;
 import org.gatein.common.util.EmptyResourceBundle;
 
 /**

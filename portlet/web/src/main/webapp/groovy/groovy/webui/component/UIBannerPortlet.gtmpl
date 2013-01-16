@@ -3,7 +3,7 @@
 	import org.exoplatform.portal.webui.util.Util;
 	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.web.url.navigation.NavigationResource;
-	import org.exoplatform.portal.mop.SiteType;
+	import org.gatein.portal.mop.site.SiteType;
 
 	def prContext = _ctx.getRequestContext().getParentAppRequestContext();	
 	String signInAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));" ;

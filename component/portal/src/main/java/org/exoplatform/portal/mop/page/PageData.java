@@ -2,7 +2,7 @@ package org.exoplatform.portal.mop.page;
 
 import java.io.Serializable;
 
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.Utils;
 import org.gatein.mop.api.workspace.Page;
 import org.gatein.mop.api.workspace.Site;

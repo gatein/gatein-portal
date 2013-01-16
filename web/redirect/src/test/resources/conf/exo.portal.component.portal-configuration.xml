@@ -117,7 +117,7 @@
   </component>
 
   <component>
-    <key>org.exoplatform.portal.mop.navigation.NavigationService</key>
+    <key>org.gatein.portal.mop.navigation.NavigationService</key>
     <type>org.exoplatform.portal.mop.navigation.NavigationServiceWrapper</type>
   </component>
 

@@ -1,7 +1,7 @@
 package org.exoplatform.portal.mop.page;
 
 import org.exoplatform.portal.mop.QueryResult;
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteType;
 
 /**
  * <p>

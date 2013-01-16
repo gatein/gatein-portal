@@ -23,8 +23,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.hierarchy.NodeModel;
+import org.gatein.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.hierarchy.NodeModel;
 import org.exoplatform.portal.mop.layout.ElementState;
 
 /**

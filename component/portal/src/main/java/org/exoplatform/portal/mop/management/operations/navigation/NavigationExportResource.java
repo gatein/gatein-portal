@@ -26,12 +26,12 @@ import java.text.ParseException;
 import java.util.List;
 
 import org.exoplatform.portal.config.model.PageNavigation;
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.management.exportimport.NavigationExportTask;
-import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.navigation.NavigationService;
+import org.gatein.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.management.api.ContentType;
 import org.gatein.management.api.PathTemplateFilter;
 import org.gatein.management.api.binding.BindingProvider;

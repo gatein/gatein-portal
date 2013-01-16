@@ -22,8 +22,8 @@ package org.exoplatform.portal.application;
 import javax.servlet.http.HttpServletResponse;
 
 import org.exoplatform.portal.config.UserPortalConfigService;
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.url.PortalURLContext;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebRequestHandler;

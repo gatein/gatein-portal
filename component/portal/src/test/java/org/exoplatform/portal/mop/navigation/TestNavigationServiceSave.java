@@ -24,15 +24,21 @@ import java.util.Iterator;
 import javax.jcr.NodeIterator;
 import javax.jcr.Session;
 
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.hierarchy.Node;
-import org.exoplatform.portal.mop.hierarchy.NodeChange;
-import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.gatein.portal.mop.hierarchy.Node;
+import org.gatein.portal.mop.hierarchy.NodeChange;
+import org.gatein.portal.mop.hierarchy.Scope;
 import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.Site;
 import org.gatein.mop.core.api.MOPService;
+import org.gatein.portal.mop.navigation.NavigationContext;
+import org.gatein.portal.mop.navigation.NavigationError;
+import org.gatein.portal.mop.navigation.NavigationServiceException;
+import org.gatein.portal.mop.navigation.NavigationServiceImpl;
+import org.gatein.portal.mop.navigation.NavigationState;
+import org.gatein.portal.mop.navigation.NodeState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -60,19 +66,19 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
 
         //
         nav = new NavigationContext(SiteKey.portal("save_navigation"), new NavigationState(5));
-        assertNull(nav.data);
-        assertNotNull(nav.state);
+        assertNull(nav.getData());
+        assertNotNull(nav.getState());
         service.saveNavigation(nav);
-        assertNotNull(nav.data);
-        assertNull(nav.state);
+        assertNotNull(nav.getData());
+        assertNull(nav.getState(true));
 
         //
         nav.setState(new NavigationState(5));
         service.saveNavigation(nav);
         nav = service.loadNavigation(SiteKey.portal("save_navigation"));
-        assertNull(nav.state);
-        assertNotNull(nav.data.state);
-        assertEquals(5, nav.data.state.getPriority().intValue());
+        assertNull(nav.getState(true));
+        assertNotNull(nav.getData().state);
+        assertEquals(5, nav.getData().state.getPriority().intValue());
 
         //
         sync(true);
@@ -81,10 +87,10 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
         nav = service.loadNavigation(SiteKey.portal("save_navigation"));
         assertNotNull(nav);
         assertEquals(SiteKey.portal("save_navigation"), nav.getKey());
-        NavigationState state = nav.data.state;
+        NavigationState state = nav.getData().state;
         Integer p = state.getPriority();
         assertEquals(5, (int) p);
-        assertNotNull(nav.data.rootId);
+        assertNotNull(nav.getData().rootId);
     }
 
     public void testDestroyNavigation() throws Exception {
@@ -108,8 +114,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
 
         //
         assertTrue(service.destroyNavigation(nav));
-        assertNull(nav.state);
-        assertNull(nav.data);
+        assertNull(nav.getState());
+        assertNull(nav.getData());
 
         //
         try {

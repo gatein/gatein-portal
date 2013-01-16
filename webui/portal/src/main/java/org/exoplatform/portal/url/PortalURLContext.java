@@ -28,7 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.exoplatform.commons.utils.I18N;
 import org.exoplatform.portal.application.PortalRequestHandler;
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.web.ControllerContext;
 import org.exoplatform.web.WebAppController;
 import org.exoplatform.web.controller.QualifiedName;

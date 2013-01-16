@@ -23,12 +23,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.hierarchy.NodeChange;
-import org.exoplatform.portal.mop.hierarchy.NodeChangeQueue;
-import org.exoplatform.portal.mop.hierarchy.Scope;
-import org.exoplatform.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.hierarchy.NodeChange;
+import org.gatein.portal.mop.hierarchy.NodeChangeQueue;
+import org.gatein.portal.mop.hierarchy.Scope;
+import org.gatein.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.user.UserNavigation;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.mop.user.UserNodeFilterConfig;

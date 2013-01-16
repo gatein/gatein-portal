@@ -12,7 +12,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.mop.AbstractMOPTest;
 import org.exoplatform.portal.mop.EventType;
-import org.exoplatform.portal.mop.SiteKey;
+import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;

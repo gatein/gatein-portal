@@ -28,6 +28,7 @@ import org.exoplatform.portal.mop.AbstractMOPTest;
 import org.exoplatform.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.description.DescriptionServiceImpl;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.gatein.portal.mop.navigation.NavigationServiceImpl;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

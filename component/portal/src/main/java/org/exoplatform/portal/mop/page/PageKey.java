@@ -3,8 +3,8 @@ package org.exoplatform.portal.mop.page;
 import java.io.Serializable;
 import java.util.HashMap;
 
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SiteType;
 
 /**
  * The immutable key for a page.

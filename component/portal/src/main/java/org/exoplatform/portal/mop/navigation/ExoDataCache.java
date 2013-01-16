@@ -24,10 +24,13 @@ import java.io.Serializable;
 import org.exoplatform.commons.cache.future.FutureExoCache;
 import org.exoplatform.commons.cache.future.Loader;
 import org.exoplatform.commons.scope.ScopedKey;
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.hierarchy.NodeData;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.hierarchy.NodeData;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.cache.ExoCache;
+import org.gatein.portal.mop.navigation.NavigationData;
+import org.gatein.portal.mop.navigation.NavigationService;
+import org.gatein.portal.mop.navigation.NodeState;
 
 /**
  * An implementation using the cache service.

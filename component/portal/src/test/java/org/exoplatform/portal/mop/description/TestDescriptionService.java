@@ -32,7 +32,7 @@ import org.exoplatform.portal.AbstractPortalTest;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.i18n.I18Nized;
 import org.exoplatform.portal.mop.navigation.MopPersistenceFactory;
-import org.exoplatform.portal.mop.navigation.NavigationServiceImpl;
+import org.gatein.portal.mop.navigation.NavigationServiceImpl;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.common.util.Tools;
 import org.gatein.mop.api.workspace.Navigation;

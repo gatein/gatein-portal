@@ -33,9 +33,9 @@ import java.util.ResourceBundle;
 
 import org.exoplatform.container.ExoContainer;
 import org.exoplatform.container.ExoContainerContext;
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.navigation.NavigationServiceException;
+import org.gatein.portal.mop.navigation.NavigationServiceException;
 import org.exoplatform.portal.mop.user.UserNode;
 import org.exoplatform.portal.webui.navigation.UIPageNodeSelector;
 import org.exoplatform.portal.webui.util.Util;

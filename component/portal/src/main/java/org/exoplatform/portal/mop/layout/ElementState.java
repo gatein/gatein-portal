@@ -26,8 +26,8 @@ import java.util.Map;
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
-import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.hierarchy.NodeModel;
+import org.gatein.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.hierarchy.NodeModel;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.api.workspace.ui.UIComponent;
 

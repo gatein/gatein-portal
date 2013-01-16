@@ -19,12 +19,12 @@
 
 package org.exoplatform.portal.mop.navigation;
 
-import java.util.Arrays;
-
 import org.exoplatform.component.test.AbstractGateInTest;
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.hierarchy.NodeData;
+import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.common.io.IOTools;
+import org.gatein.portal.mop.navigation.NavigationData;
+import org.gatein.portal.mop.navigation.NavigationState;
+import org.gatein.portal.mop.navigation.NodeState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

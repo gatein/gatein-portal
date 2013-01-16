@@ -21,7 +21,7 @@ package org.exoplatform.portal.application;
 
 import java.util.Locale;
 
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.url.StandaloneAppURLContext;
 import org.exoplatform.portal.webui.application.UIStandaloneAppContainer;
 import org.exoplatform.portal.webui.workspace.UIStandaloneApplication;

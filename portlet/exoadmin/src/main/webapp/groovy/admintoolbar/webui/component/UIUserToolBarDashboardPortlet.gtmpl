@@ -10,7 +10,7 @@
 	import org.exoplatform.web.url.PortalURL;
 	import org.exoplatform.web.url.navigation.NavigationResource;
 	import org.exoplatform.portal.config.model.PortalConfig;
-	import org.exoplatform.portal.mop.SiteType;
+	import org.gatein.portal.mop.site.SiteType;
 	
 	def rcontext = _ctx.getRequestContext() ;
 	JavascriptManager jsmanager = rcontext.getJavascriptManager();

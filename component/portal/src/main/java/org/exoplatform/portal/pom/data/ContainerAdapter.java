@@ -26,7 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
-import org.exoplatform.portal.mop.hierarchy.NodeAdapter;
+import org.gatein.portal.mop.hierarchy.NodeAdapter;
 import org.exoplatform.portal.mop.layout.ElementState;
 
 /**

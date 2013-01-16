@@ -21,10 +21,11 @@ package org.exoplatform.portal.mop.navigation;
 
 import org.exoplatform.component.test.AbstractGateInTest;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.hierarchy.GenericScope;
-import org.exoplatform.portal.mop.hierarchy.Scope;
-import org.exoplatform.portal.mop.hierarchy.VisitMode;
+import org.gatein.portal.mop.hierarchy.GenericScope;
+import org.gatein.portal.mop.hierarchy.Scope;
+import org.gatein.portal.mop.hierarchy.VisitMode;
 import org.exoplatform.portal.mop.page.PageKey;
+import org.gatein.portal.mop.navigation.NodeState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.exoplatform.portal.mop.SiteType;
+import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.RedirectConditionData;

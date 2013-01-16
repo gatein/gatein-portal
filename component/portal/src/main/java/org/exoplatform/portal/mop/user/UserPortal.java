@@ -22,11 +22,11 @@ package org.exoplatform.portal.mop.user;
 import java.util.List;
 import java.util.Locale;
 
-import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.navigation.NavigationServiceException;
-import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
-import org.exoplatform.portal.mop.navigation.NodeState;
-import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.navigation.NavigationServiceException;
+import org.gatein.portal.mop.hierarchy.NodeChangeListener;
+import org.gatein.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.hierarchy.Scope;
 
 /**
  * The user portal establish the relationship between a user and the portal.

@@ -21,8 +21,8 @@ package org.exoplatform.portal.mop.user;
 
 import org.exoplatform.portal.config.UserACL;
 import org.exoplatform.portal.mop.Visibility;
-import org.exoplatform.portal.mop.hierarchy.NodeFilter;
-import org.exoplatform.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.hierarchy.NodeFilter;
+import org.gatein.portal.mop.navigation.NodeState;
 import org.exoplatform.portal.mop.page.PageContext;
 import org.exoplatform.portal.mop.page.PageKey;
 

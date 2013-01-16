@@ -35,13 +35,13 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.description.DescriptionService;
-import org.exoplatform.portal.mop.hierarchy.GenericScope;
-import org.exoplatform.portal.mop.navigation.NavigationContext;
-import org.exoplatform.portal.mop.navigation.NavigationService;
-import org.exoplatform.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.hierarchy.NodeModel;
-import org.exoplatform.portal.mop.navigation.NodeState;
-import org.exoplatform.portal.mop.hierarchy.Scope;
+import org.gatein.portal.mop.hierarchy.GenericScope;
+import org.gatein.portal.mop.navigation.NavigationContext;
+import org.gatein.portal.mop.navigation.NavigationService;
+import org.gatein.portal.mop.hierarchy.NodeContext;
+import org.gatein.portal.mop.hierarchy.NodeModel;
+import org.gatein.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.hierarchy.Scope;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
