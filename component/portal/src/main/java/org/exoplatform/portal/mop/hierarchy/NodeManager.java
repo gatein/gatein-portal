@@ -59,6 +59,11 @@ public class NodeManager<S extends Serializable> {
         }
     }
 
+    public <L, N> void diff(NodeAdapter<L, N, S> adapter, N node, NodeContext<N, S> context) {
+        TreeDiff<L, N, S> diff = new TreeDiff<L, N, S>(node, context, adapter);
+        diff.perform();
+    }
+
     public <N> void updateNode(
             NodeContext<N, S> root,
             Scope<S> scope,

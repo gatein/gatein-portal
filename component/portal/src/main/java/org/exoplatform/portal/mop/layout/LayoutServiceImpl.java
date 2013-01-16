@@ -22,6 +22,7 @@ package org.exoplatform.portal.mop.layout;
 import javax.inject.Provider;
 
 import org.exoplatform.portal.mop.hierarchy.GenericScope;
+import org.exoplatform.portal.mop.hierarchy.NodeAdapter;
 import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
 import org.exoplatform.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.hierarchy.NodeManager;
@@ -59,6 +60,16 @@ public class LayoutServiceImpl implements LayoutService {
         //
         this.manager = manager;
         this.nodeManager = new NodeManager<ElementState>(persistenceProvider);
+    }
+
+    @Override
+    public <L, N> void saveLayout(NodeAdapter<L, N, ElementState> adapter, N node, NodeContext<N, ElementState> context, NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) {
+
+        // Make a diff
+        nodeManager.diff(adapter, node, context);
+
+        // Perform save
+        nodeManager.saveNode(context, listener);
     }
 
     @Override

@@ -25,9 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.UUID;
 
 import javax.transaction.Status;
@@ -54,6 +52,7 @@ import org.exoplatform.portal.mop.EventType;
 import org.exoplatform.portal.mop.QueryResult;
 import org.exoplatform.portal.mop.SiteKey;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.hierarchy.NodeAdapter;
 import org.exoplatform.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.layout.ElementState;
 import org.exoplatform.portal.mop.layout.LayoutService;
@@ -82,11 +81,6 @@ import org.exoplatform.portal.pom.data.PageKey;
 import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.data.PortalKey;
 import org.exoplatform.portal.pom.data.RedirectData;
-import org.exoplatform.portal.tree.diff.HierarchyAdapter;
-import org.exoplatform.portal.tree.diff.HierarchyChangeIterator;
-import org.exoplatform.portal.tree.diff.HierarchyChangeType;
-import org.exoplatform.portal.tree.diff.HierarchyDiff;
-import org.exoplatform.portal.tree.diff.ListAdapter;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
@@ -339,7 +333,7 @@ public class POMDataStorage implements ModelDataStorage {
 
     private void save(ContainerData container) throws Exception {
 
-        class PageHierarchyAdapter implements HierarchyAdapter<List<ComponentData>, ComponentData, String>, ListAdapter<List<ComponentData>, String> {
+        class PageHierarchyAdapter implements NodeAdapter<List<ComponentData>, ComponentData, ElementState> {
 
             /** . */
             final ContainerData page;
@@ -418,148 +412,34 @@ public class POMDataStorage implements ModelDataStorage {
                 }
                 return null;
             }
-        }
-
-        Comparator<String> c = new Comparator<String>() {
-            @Override
-            public int compare(String o1, String o2) {
-                return o1.compareTo(o2);
-            }
-        };
-
-        class NodeContextHierarchyAdapter implements HierarchyAdapter<List<String>, NodeContext<?, ElementState>, String>, ListAdapter<List<String>, String> {
 
             @Override
-            public String getHandle(NodeContext<?, ElementState> node) {
-                return node.getId();
+            public ElementState getState(ComponentData node) {
+                return create(node);
             }
 
             @Override
-            public List<String> getChildren(NodeContext<?, ElementState> node) {
-                ArrayList<String> ret = new ArrayList<String>(node.getSize());
-                for (NodeContext<?, ElementState> child : node) {
-                    ret.add(child.getId());
-                }
-                return ret;
+            public ComponentData getPrevious(ComponentData parent, ComponentData node) {
+                ContainerData container = (ContainerData) parent;
+                int index = container.getChildren().indexOf(node);
+                return index > 0 ? container.getChildren().get(index - 1) : null;
             }
 
             @Override
-            public NodeContext<?, ElementState> getDescendant(NodeContext<?, ElementState> node, String handle) {
-                return node.getDescendant(handle);
-            }
-
-            @Override
-            public int size(List<String> list) {
-                return list.size();
-            }
-
-            @Override
-            public Iterator<String> iterator(List<String> list, boolean reverse) {
-                if (reverse) {
-                    final ListIterator<String> i = list.listIterator(list.size());
-                    return new Iterator<String>() {
-                        @Override
-                        public boolean hasNext() {
-                            return i.hasPrevious();
-                        }
-                        @Override
-                        public String next() {
-                            return i.previous();
-                        }
-                        @Override
-                        public void remove() {
-                            throw new UnsupportedOperationException();
-                        }
-                    };
-                } else {
-                    return list.iterator();
-                }
+            public void setHandle(ComponentData node, String handle) {
+                handles.put(node, handle);
             }
         }
 
         //
-        PageHierarchyAdapter context1 = new PageHierarchyAdapter(container);
-        NodeContextHierarchyAdapter context2 = new NodeContextHierarchyAdapter();
-        HierarchyDiff<List<String>, NodeContext<?, ElementState>, List<ComponentData>, ComponentData, String> diff = HierarchyDiff.create(
-                context2,
-                context2,
-                context1,
-                context1,
-                c
-        );
+        PageHierarchyAdapter adapter = new PageHierarchyAdapter(container);
 
-        //
-        NodeContext<?, ElementState> ret = layoutService.loadLayout(ElementState.model(), container.getStorageId(), null);
-
-        //
-        HierarchyChangeIterator<List<String>, NodeContext<?, ElementState>, List<ComponentData>, ComponentData, String> i = diff.iterator(ret, container);
-        LinkedList<NodeContext<?, ElementState>> previousStack = new LinkedList<NodeContext<?, ElementState>>();
-        LinkedList<NodeContext<?, ElementState>> parentStack = new LinkedList<NodeContext<?, ElementState>>();
-        while (i.hasNext()) {
-            HierarchyChangeType type = i.next();
-            switch (type) {
-                case ADDED: {
-                    ElementState state = create(i.getDestination());
-                    NodeContext<?, ElementState> parent = parentStack.peekLast();
-                    NodeContext<?, ElementState> previous = previousStack.peekLast();
-                    NodeContext<?, ElementState> added;
-                    String name = UUID.randomUUID().toString();
-                    if (previous != null) {
-                        added = parent.add(previous.getIndex() + 1, name, state);
-                    } else {
-                        added = parent.add(0, name, state);
-                    }
-                    context1.handles.put(i.getDestination(), added.getHandle());
-                    previousStack.set(previousStack.size() - 1, added);
-                    break;
-                }
-                case REMOVED:
-                    i.getSource().removeNode();
-                    break;
-                case MOVED_OUT:
-                    break;
-                case MOVED_IN: {
-                    NodeContext moved = i.getSource();
-                    ComponentData cd = i.getDestination();
-                    ContainerData parent = context1.getParent(cd);
-                    String handle = context1.getHandle(parent);
-                    NodeContext<?, ElementState> parent2 = ret.getDescendant(handle);
-                    int index = parent.getChildren().indexOf(cd);
-                    if (index > 0) {
-                        ComponentData pre = index > 0 ? parent.getChildren().get(index - 1) : null;
-                        String preHandle = context1.getHandle(pre);
-                        NodeContext foo = ret.getDescendant(preHandle);
-                        parent2.add(foo.getIndex() + 1, moved);
-                    } else {
-                        parent2.add(0, moved);
-                    }
-                    previousStack.set(previousStack.size() - 1, moved);
-                    break;
-                }
-                case KEEP:
-                    i.getSource().setState(create(i.getDestination()));
-                    previousStack.set(previousStack.size() - 1, i.getSource());
-                    break;
-                case ENTER:
-                    NodeContext<?, ElementState> parent = i.getSource();
-                    if (parent == null) {
-                        // This is a trick : if the parent is null -> a node was added
-                        // and this node should/must be the previous node
-                        parentStack.addLast(previousStack.peekLast());
-                    } else {
-                        parentStack.addLast(parent);
-                    }
-                    previousStack.addLast(null);
-                    break;
-                case LEAVE:
-                    parentStack.removeLast();
-                    previousStack.removeLast();
-                    break;
-            }
-        }
+        // We cheat a bit with this cast
+        // but well it's easier to do this way
+        NodeContext<ComponentData, ElementState> ret = (NodeContext<ComponentData, ElementState>) layoutService.loadLayout(ElementState.model(), container.getStorageId(), null);
 
         // Save element
-        layoutService.saveLayout(ret, null);
+        layoutService.saveLayout(adapter, container, ret, null);
     }
 
     public List<ModelChange> save(PageData page) throws Exception {

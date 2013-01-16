@@ -19,6 +19,7 @@
 
 package org.exoplatform.portal.mop.layout;
 
+import org.exoplatform.portal.mop.hierarchy.NodeAdapter;
 import org.exoplatform.portal.mop.hierarchy.NodeChangeListener;
 import org.exoplatform.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.hierarchy.NodeModel;
@@ -47,4 +48,6 @@ public interface LayoutService {
     <N> void saveLayout(
             NodeContext<N, ElementState> context,
             NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener) throws NullPointerException, LayoutServiceException;
+
+    <L, N> void saveLayout(NodeAdapter<L, N, ElementState> adapter, N node, NodeContext<N, ElementState> context, NodeChangeListener<NodeContext<N, ElementState>, ElementState> listener);
 }
