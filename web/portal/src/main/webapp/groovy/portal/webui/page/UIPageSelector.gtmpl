@@ -1,5 +1,5 @@
 <%	 
-	import org.exoplatform.portal.mop.page.PageContext; 
+	import org.gatein.portal.mop.page.PageContext;
 	import org.exoplatform.webui.core.UIPopupWindow;
 	import org.exoplatform.webui.form.UIForm; 
 	import org.exoplatform.webui.form.UIFormInputSet;
