@@ -46,7 +46,7 @@ import org.exoplatform.webui.event.EventListener;
 import org.exoplatform.webui.form.UIForm;
 import org.exoplatform.webui.form.UIFormSelectBox;
 import org.exoplatform.webui.form.UIFormStringInput;
-import org.exoplatform.webui.form.validator.UserConfigurableValidator;
+import org.exoplatform.webui.form.validator.MandatoryValidator;
 import org.exoplatform.webui.organization.account.UIUserSelector;
 
 /**
@@ -75,8 +75,7 @@ public class UIGroupMembershipForm extends UIForm {
          * .addValidator(ExpressionValidator.class, "^\\p{L}[\\p{L}\\d._\\-\\s*,\\s*]+$",
          * "UIGroupMembershipForm.msg.Invalid-char"));
          */
-        addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).addValidator(UserConfigurableValidator.class,
-                UserConfigurableValidator.GROUPMEMBERSHIP, UserConfigurableValidator.GROUP_MEMBERSHIP_LOCALIZATION_KEY));
+        addUIFormInput(new UIFormStringInput(USER_NAME, USER_NAME, null).addValidator(MandatoryValidator.class));
         addUIFormInput(new UIFormSelectBox("membership", "membership", listOption).setSize(1));
         UIPopupWindow searchUserPopup = addChild(UIPopupWindow.class, "SearchUser", "SearchUser");
         searchUserPopup.setWindowSize(640, 0);
