@@ -16,63 +16,9 @@ float: left;
 cursor: pointer;
 }
 
-
-.gtnResponsiveHeaderPortlet .options {
-float: right;
-line-height: 2em;
-font-size: 95%;
-}
-
-.gtnResponsiveHeaderPortlet .options.collapsed {
-display: none;
-}
-
-.gtnResponsiveHeaderPortlet .options.highlight {
-float:none;
-clear:both;
-text-align: right;
-}
-
-
-.gtnResponsiveHeaderPortlet .options ul
-{
-list-style-type: none;
-padding: 1em;
-margin: 0;
-}
-
-.gtnResponsiveHeaderPortlet .options ul li {
-display: inline;
-padding: 1em;
-white-space: nowrap;
-}
-
-.gtnResponsiveHeaderPortlet .options ul li {
-background: url("../images/bullet-separator.png") no-repeat left center;
-}
-
-.gtnResponsiveHeaderPortlet .options ul li:first-child {
-background: none;
-}
-
-
-.gtnResponsiveHeaderPortlet .options ul li.singleline{
-display: block;
-background: none;
-}
-
-.gtnResponsiveHeaderPortlet .options ul li a {
-color: #1C5182;;
-}
-
-.gtnResponsiveHeaderPortlet .options ul li a:HOVER {
-color: #002559;
-text-decoration: underline;
-}
-
-.gtnResponsiveHeaderPortlet .icon {
+/* The default CSS for the button. */
+.gtnResponsiveHeaderPortlet .userpreferencebutton {
 background-image: url('../images/preference.svg');
-
 background-repeat: no-repeat;
 background-size: auto 2em;
 height: 2.5em;
@@ -80,20 +26,157 @@ width: 2.5em;
 background-position: center;
 padding: 0.8em 1em 0.8em 1em;
 float: right;
+display: inline;
 }
 
-.gtnResponsiveHeaderPortlet .clear {
-clear: both;
+.gtnResponsiveHeaderPortlet .topmenu>li {
+background: url("../images/bullet-separator.png") no-repeat left center;
+margin: 1em;
+white-space: nowrap;
 }
 
-.gtnResponsiveHeaderPortlet .highlight {
-	background-color: #B2C6DB;
+.gtnResponsiveHeaderPortlet .topmenu>li:first-child {
+background: none;
 }
 
-.gtnResponsiveHeaderPortlet .hidden {
+.gtnResponsiveHeaderPortlet .submenu>li {
+margin: 1em;
+}
+
+.gtnResponsiveHeaderPortlet .icon {
+	display: inline;
+	float: left;
+}
+
+.gtnResponsiveHeaderPortlet .options {
+	display:inline;
+	float: right;
+	text-align: right;
+}
+
+.gtnResponsiveHeaderPortlet .options>ol>li {
+	display: inline;
+	/*padding: 0 1em;*/
+}
+
+.gtnResponsiveHeaderPortlet .options.collapsed {
+	width: 100%;
+}
+
+.gtnResponsiveHeaderPortlet .options.collapsed ol li {
+	display: block;
+	padding: 0;
+}
+
+.gtnResponsiveHeaderPortlet .collapseButton {
+	display: inline;
+	float: right;
+}
+
+.gtnResponsiveHeaderPortlet .collapsibleRow.expanded>.collapseButton{
 	display: none;
 }
 
+.gtnResponsiveHeaderPortlet .collapsibleRow.collapsed>.collapsibleContent:not(.display){
+	display: none;
+}
+
+.gtnResponsiveHeaderPortlet .collapsed>.collapsibleContent.display {
+	background-color: #CCC;
+}
+
+.gtnResponsiveHeaderPortlet .collapseButton.enabled {
+	background-color: #BBB;
+}
+
+.gtnResponsiveHeaderPortlet .clear {
+	clear: both;
+	width: 0;
+}
+
+.gtnResponsiveHeaderPortlet .submenu {
+	background-color: #EEE;
+	list-style-type: none;
+	padding: 0;
+	position: absolute;
+	z-index: 40;
+	white-space: nowrap;
+}
+
+.gtnResponsiveHeaderPortlet .submenu .submenu
+{
+	position: relative;
+}
+
+.gtnResponsiveHeaderPortlet .menuelement.collapsed .submenu {
+	display: none;
+}
+
+
+.gtnResponsiveHeaderPortlet .options.collapsed .submenu
+{
+	position: static;
+	width: 100%;
+}
+
+.gtnResponsiveHeaderPortlet .submenu ol li {
+	margin: 0 0 0 0;
+	padding: 0 0 0 0;
+	text-indent: 1em;
+	display: block;
+}
+
+/* On browser which support :not this works very nicely when using a mouse. Unfortunately, iOS does not support it */
+/* .gtnResponsiveHeaderPortlet .menuelement.close:not(:hover)>.submenu { */
+/* 	display:none; */
+/* } */
+
+.gtnResponsiveHeaderPortlet .menuelement.close>.submenu {
+	display:none;
+}
+
+.gtnResponsiveHeaderPortlet .menucategory {
+	display:inline;
+}
+
+.gtnResponsiveHeaderPortlet .menuelement.open {
+    background-color: #CCC;
+}
+
+.gtnResponsiveHeaderPortlet .menuelement.open .submenu {
+    background-color: #EEE;
+}
+
+.gtnResponsiveHeaderPortlet .menuarrow {
+	border-width: 0.25em;
+	border-color: transparent;
+	border-style: solid;
+	display: inline-block;
+	cursor: pointer;
+}
+
+.gtnResponsiveHeaderPortlet .topmenu .menuelement.close .menuarrow {
+	border-color: black transparent transparent;
+	margin-top: 0.25em;
+}
+
+.gtnResponsiveHeaderPortlet .topmenu .menuelement.open .menuarrow {
+	border-color: transparent transparent black;
+	margin-bottom: 0.25em;
+}
+
+.gtnResponsiveHeaderPortlet .submenu .menuelement.close .menuarrow {
+	border-color: transparent transparent transparent black;
+	margin-top: 0.25em;
+}
+
+.gtnResponsiveHeaderPortlet .submenu .menuelement.open .menuarrow {
+	border-color: black transparent transparent;
+	margin-bottom: 0.125em;
+}
+
+/* Do not display the UIToolbarContainer at the top of the page when using the responsive header portlet */
+/* TODO: find a way to disable the sharedlayout on a portal */
 div.UIToolbarContainer{
  display: none;
 }

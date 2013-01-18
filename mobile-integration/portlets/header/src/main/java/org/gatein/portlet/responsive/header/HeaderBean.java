@@ -22,21 +22,39 @@
  ******************************************************************************/
 package org.gatein.portlet.responsive.header;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.PortalURLBuilder;
 import org.exoplatform.portal.mop.SiteType;
+import org.exoplatform.portal.mop.Visibility;
+import org.exoplatform.portal.mop.navigation.Scope;
+import org.exoplatform.portal.mop.user.UserNavigation;
+import org.exoplatform.portal.mop.user.UserNode;
+import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
+import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.security.sso.SSOHelper;
 import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
+import org.exoplatform.webui.organization.OrganizationUtils;
+
+import com.sun.syndication.feed.module.mediarss.types.Hash;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
 public class HeaderBean {
+    
+    private static final String GROUP_NAVIGATION_NODE = "groupnavigation";
+    
     private final SSOHelper ssoHelper;
 
     public HeaderBean() {
@@ -74,6 +92,84 @@ public class HeaderBean {
     }
 
     public String generateGroupPagesLink() {
-        return "#";
+        PortalRequestContext pContext = Util.getPortalRequestContext();
+        NodeURL nodeURL = pContext.createURL(NodeURL.TYPE);
+        nodeURL.setResource(new NavigationResource(SiteType.PORTAL, pContext.getPortalOwner(), GROUP_NAVIGATION_NODE));
+        return nodeURL.toString();
+    }
+    
+    public Map<String, List<Node>> getGroupNodes() throws Exception {
+        
+        Map<String, List<Node>> navNodes = new HashMap<String, List<Node>>();
+        
+        PortalRequestContext pContext = Util.getPortalRequestContext();
+        UserPortal userPortal = pContext.getUserPortal();
+
+        List<UserNavigation> groupNavigations = getGroupNavigations(userPortal);
+        
+        for (UserNavigation groupNavigation: groupNavigations)
+        {
+            String groupName = OrganizationUtils.getGroupLabel(groupNavigation.getKey().getName());
+            
+            UserNode userNode = userPortal.getNode(groupNavigation, Scope.ALL, getFilter(), null);
+            List<Node> nodes = new ArrayList<Node>();
+            for (UserNode childnode: userNode.getChildren())
+            {
+                Node node = getNode(childnode);
+                nodes.add(node);
+            }
+            
+            navNodes.put(groupName, nodes);
+        }
+        
+        return navNodes;
+    }
+    
+    public Node getNode(UserNode userNode) {
+        Node node;
+        if (userNode.getPageRef() != null)
+        {
+            NodeURL nodeURL = Util.getPortalRequestContext().createURL(NodeURL.TYPE);
+            nodeURL.setResource(new NavigationResource(userNode));
+            node = new Node(userNode.getName(), nodeURL.toString());
+        }
+        else
+        {
+            node = new Node(userNode.getName(), null);
+        }
+        
+        List<Node> children = new ArrayList<Node>();
+        for (UserNode childNode: userNode.getChildren())
+        {
+            children.add(getNode(childNode));
+        }
+        node.setChildren(children);
+        
+        return node;
+    }
+    
+    protected List<UserNavigation> getGroupNavigations(UserPortal userPortal)
+    {
+        List<UserNavigation> userNavigations = userPortal.getNavigations();
+
+        //TODO: Can we not just access the Group Navigations directly?
+        List<UserNavigation> groupNavigations = new ArrayList<UserNavigation>();
+        for (UserNavigation userNavigation: userNavigations)
+        {
+            if (userNavigation.getKey().getType().equals(SiteType.GROUP))
+            {
+                groupNavigations.add(userNavigation);
+            }
+        }
+        
+        return groupNavigations;
+    }
+    
+    protected UserNodeFilterConfig getFilter()
+    {
+        UserNodeFilterConfig.Builder builder = UserNodeFilterConfig.builder();
+        builder.withReadWriteCheck().withVisibility(Visibility.DISPLAYED, Visibility.TEMPORAL);
+        builder.withTemporalCheck();
+        return builder.build();
     }
 }
