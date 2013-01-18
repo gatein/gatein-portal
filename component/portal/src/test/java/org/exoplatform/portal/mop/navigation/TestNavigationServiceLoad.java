@@ -45,7 +45,7 @@ import org.gatein.portal.mop.navigation.NodeState;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestNavigationService extends AbstractTestNavigationService {
+public class TestNavigationServiceLoad extends AbstractTestNavigationService {
 
     public void testNonExistingSite() throws Exception {
         assertNull(service.loadNavigation(SiteKey.portal("non_existing")));
