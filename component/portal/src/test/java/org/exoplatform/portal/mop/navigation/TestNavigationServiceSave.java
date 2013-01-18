@@ -1419,7 +1419,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
         sync(true);
 
         //
-        assertFalse(isSessionModified());
+        assertSessionNotModified();
 
         //
         try {
@@ -1430,7 +1430,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
         }
 
         //
-        assertFalse(isSessionModified());
+        assertSessionNotModified();
     }
 
     public void testRebase() throws Exception {

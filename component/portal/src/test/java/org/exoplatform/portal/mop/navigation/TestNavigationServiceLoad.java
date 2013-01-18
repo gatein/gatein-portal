@@ -61,7 +61,6 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         NavigationContext nav = service.loadNavigation(SiteKey.portal("load_single_scope"));
         Node root = service.loadNode(Node.MODEL, nav, Scope.SINGLE, null).getNode();
         assertNull(root.getChildren());
-        assertEquals("default", root.getName());
         try {
             root.getChild(0);
             fail();
@@ -94,7 +93,6 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         //
         NavigationContext nav = service.loadNavigation(SiteKey.portal("load_children_scope"));
         Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
-        assertEquals("default", root.getName());
         Iterator<? extends Node> i = root.getChildren().iterator();
         assertTrue(i.hasNext());
         Node home = i.next();
@@ -134,7 +132,7 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
                         boolean use = false;
                         switch (depth) {
                             case 0:
-                                use = "default".equals(name);
+                                use = true;
                                 break;
                             case 1:
                                 use = "b".equals(name);

@@ -27,6 +27,8 @@ import org.exoplatform.portal.mop.description.*;
 import org.exoplatform.portal.mop.description.SimpleDataCache;
 import org.exoplatform.portal.pom.config.POMDataStorage;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.gatein.portal.impl.mop.ram.RamPersistence;
+import org.gatein.portal.impl.mop.ram.Tx;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.description.DescriptionServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationPersistence;
@@ -49,6 +51,14 @@ public abstract class PersistenceContext {
     public abstract NavigationPersistence getNavigationPersistence();
 
     public abstract SitePersistence getSitePersistence();
+
+    public abstract void begin();
+
+    public abstract void end(boolean save);
+
+    public abstract boolean assertSessionNotModified();
+
+    public abstract boolean assertSessionModified();
 
     public static class JCR extends PersistenceContext {
 
@@ -105,8 +115,92 @@ public abstract class PersistenceContext {
             return sitePersistence;
         }
 
+        @Override
         public boolean isSessionModified() {
             return mgr.getSession().isModified();
+        }
+
+        @Override
+        public void begin() {
+        }
+
+        @Override
+        public void end(boolean save) {
+        }
+
+        @Override
+        public boolean assertSessionNotModified() {
+            return !mgr.getSession().isModified();
+        }
+
+        @Override
+        public boolean assertSessionModified() {
+            return mgr.getSession().isModified();
+        }
+    }
+
+    public static class Ram extends PersistenceContext {
+
+        /** . */
+        NavigationServiceImpl navigationService;
+
+        /** . */
+        RamPersistence persistence;
+
+        @Override
+        void setUp() {
+            persistence = new RamPersistence();
+            navigationService = new NavigationServiceImpl(new Provider<NavigationPersistence>() {
+                @Override
+                public NavigationPersistence get() {
+                    return persistence;
+                }
+            });
+        }
+
+        @Override
+        public void begin() {
+            Tx.begin();
+        }
+
+        @Override
+        public void end(boolean save) {
+            Tx.end(save);
+        }
+
+        @Override
+        public boolean isSessionModified() {
+            return true;
+        }
+
+        @Override
+        public NavigationServiceImpl getNavitationService() {
+            return navigationService;
+        }
+
+        @Override
+        public DescriptionService getDescriptionService() {
+            return null;
+        }
+
+        @Override
+        public NavigationPersistence getNavigationPersistence() {
+            return persistence;
+        }
+
+        @Override
+        public SitePersistence getSitePersistence() {
+            return persistence;
+        }
+
+        @Override
+        public boolean assertSessionNotModified() {
+            return true;
+        }
+
+        @Override
+        public boolean assertSessionModified() {
+            return true;
         }
     }
 }

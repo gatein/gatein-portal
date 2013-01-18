@@ -73,6 +73,18 @@ public abstract class AbstractTestNavigationService extends AbstractMOPTest {
         super.setUp();
     }
 
+    @Override
+    protected void begin() {
+        super.begin();
+        context.begin();
+    }
+
+    @Override
+    protected void end(boolean save) {
+        context.end(save);
+        super.end(save);
+    }
+
     protected final NavigationPersistence getNavigationPersistence() {
         return context.getNavigationPersistence();
     }
@@ -127,5 +139,13 @@ public abstract class AbstractTestNavigationService extends AbstractMOPTest {
 
     protected final boolean isSessionModified() {
         return context.isSessionModified();
+    }
+
+    protected final void assertSessionNotModified() {
+        assertTrue(context.assertSessionNotModified());
+    }
+
+    protected final void assertSessionModified() {
+        assertTrue(context.assertSessionModified());
     }
 }
