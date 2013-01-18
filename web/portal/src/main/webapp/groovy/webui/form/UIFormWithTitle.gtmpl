@@ -1,6 +1,10 @@
 <% 
 	import org.exoplatform.webui.form.UIFormInputBase;
+	import org.exoplatform.web.application.JavascriptManager;
 	
+	def rcontext = _ctx.getRequestContext();
+  	JavascriptManager jsManager = rcontext.getJavascriptManager();
+  	jsManager.require("SHARED/uiForm");
 	String fieldName; %>
 <div class="UIFormWithTitle $uicomponent.id" onkeypress="javascript:SubmitAction.call(this, event);">
 	<div class="TitleBar"><%=_ctx.appRes(uicomponent.getName() + ".title")%></div>
