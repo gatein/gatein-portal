@@ -62,6 +62,40 @@ public class ListTree<T extends ListTree<T>> {
         this.size = 0;
     }
 
+    public T clone() throws CloneNotSupportedException {
+
+        @SuppressWarnings("unchecked")
+        T clone = (T) super.clone();
+        clone.parent = null;
+        clone.previous = null;
+        clone.next = null;
+
+        clone.foo(head);
+
+        return clone;
+
+    }
+
+    private T foo(T current) throws CloneNotSupportedException {
+        if (current != null) {
+            T clone = current.clone();
+            clone.parent = (T)this;
+            if (current.previous == null) {
+                head = clone;
+            }
+            if (current.next == null) {
+                tail = clone;
+            } else {
+                clone.next = foo(current.next);
+                clone.next.previous = clone;
+            }
+            return clone;
+        } else {
+            return null;
+        }
+    }
+
+
     /**
      * Returns the depth.
      *

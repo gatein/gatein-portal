@@ -33,13 +33,27 @@ import junit.framework.TestCase;
  */
 public class TestListTree extends TestCase {
 
-    public static class IntegerTree extends ListTree<IntegerTree> {
+    public static class IntegerTree extends ListTree<IntegerTree> implements Cloneable {
 
         /** . */
-        private final int value;
+        final int value;
 
         public IntegerTree(int value) {
             this.value = value;
+        }
+
+        @Override
+        public IntegerTree clone() {
+            try {
+                return super.clone();
+            } catch (CloneNotSupportedException e) {
+                throw new AssertionError(e);
+            }
+        }
+
+        @Override
+        public String toString() {
+            return "IntegerTree[value=" + value + "]";
         }
     }
 
@@ -584,5 +598,43 @@ public class TestListTree extends TestCase {
             fail();
         } catch (IllegalStateException ignore) {
         }
+    }
+
+    public void testClone() {
+        IntegerTree b1 = tree("b", 1);
+        IntegerTree c1 = tree("c", 2);
+        IntegerTree d1 = tree("d", 3);
+        IntegerTree a1 = tree("a", 0, b1, c1, d1);
+
+        IntegerTree a2 = a1.clone();
+        IntegerTree b2 = a2.getFirst();
+        IntegerTree c2 = b2.getNext();
+        IntegerTree d2 = c2.getNext();
+
+        //
+        assertEquals(0, a2.value);
+        assertEquals(1, b2.value);
+        assertEquals(2, c2.value);
+        assertEquals(3, d2.value);
+
+        //
+        assertSame(null, a2.getParent());
+        assertSame(b2, a2.getFirst());
+        assertSame(d2, a2.getLast());
+
+        //
+        assertSame(a2, b2.getParent());
+        assertSame(null, b2.getPrevious());
+        assertSame(c2, b2.getNext());
+
+        //
+        assertSame(a2, c2.getParent());
+        assertSame(b2, c2.getPrevious());
+        assertSame(d2, c2.getNext());
+
+        //
+        assertSame(a2, d2.getParent());
+        assertSame(c2, d2.getPrevious());
+        assertSame(null, d2.getNext());
     }
 }
