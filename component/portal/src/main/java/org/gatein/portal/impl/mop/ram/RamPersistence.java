@@ -611,9 +611,11 @@ public class RamPersistence {
             if (descriptions != null) {
                 current.remove(descriptions);
             }
-            descriptions = current.addChild(id, "descriptions", "not-yet-used");
-            for (Map.Entry<Locale, DescriptionState> state : states.entrySet()) {
-                current.addChild(descriptions, state.getKey().toString(), state.getValue());
+            if (states.size() > 0) {
+                descriptions = current.addChild(id, "descriptions", "not-yet-used");
+                for (Map.Entry<Locale, DescriptionState> state : states.entrySet()) {
+                    current.addChild(descriptions, state.getKey().toString(), state.getValue());
+                }
             }
         }
     };
