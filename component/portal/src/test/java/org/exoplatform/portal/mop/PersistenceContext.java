@@ -178,6 +178,9 @@ public abstract class PersistenceContext {
         NavigationServiceImpl navigationService;
 
         /** . */
+        PageServiceImpl pageService;
+
+        /** . */
         RamPersistence persistence;
 
         @Override
@@ -189,6 +192,7 @@ public abstract class PersistenceContext {
                     return persistence;
                 }
             });
+            pageService = new PageServiceImpl(persistence.getPagePersistence());
         }
 
         @Override
@@ -218,12 +222,12 @@ public abstract class PersistenceContext {
 
         @Override
         public PageServiceImpl getPageService() {
-            return null;
+            return pageService;
         }
 
         @Override
         public PagePersistence getPagePersistence() {
-            return null;
+            return persistence.getPagePersistence();
         }
 
         @Override
