@@ -204,7 +204,7 @@ public abstract class PersistenceContext {
             navigationService = new NavigationServiceImpl(new Provider<NavigationPersistence>() {
                 @Override
                 public NavigationPersistence get() {
-                    return persistence;
+                    return persistence.getNavigationPersistence();
                 }
             });
             pageService = new PageServiceImpl(persistence.getPagePersistence());
@@ -253,12 +253,12 @@ public abstract class PersistenceContext {
 
         @Override
         public NavigationPersistence getNavigationPersistence() {
-            return persistence;
+            return persistence.getNavigationPersistence();
         }
 
         @Override
         public SitePersistence getSitePersistence() {
-            return persistence;
+            return persistence.getSitePersistence();
         }
 
         @Override
