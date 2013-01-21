@@ -217,12 +217,7 @@ public class RamPersistence implements SitePersistence, NavigationPersistence {
     public NodeData<NodeState>[] createNode(String parentId, String previousId, String name, NodeState state) {
         Tx tx = Tx.associate(store);
         Store current = tx.getContext();
-        String nodeId;
-        if (previousId == null) {
-            nodeId = current.addChild(parentId, name, state);
-        } else {
-            nodeId = current.addSibling(previousId, name, state);
-        }
+        String nodeId = current.addChild(parentId, previousId, name, state);
         return new NodeData[]{
                 getNode(current, parentId),
                 getNode(current, nodeId)

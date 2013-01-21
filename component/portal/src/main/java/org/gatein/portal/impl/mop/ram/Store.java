@@ -162,7 +162,16 @@ public class Store {
             NoSuchElementException,
             IllegalStateException,
             IllegalArgumentException {
-        return addChild(parentId, name, null, state);
+        if (origin == null) {
+            throw new IllegalStateException("No previous");
+        }
+        NodeImpl parent = peek(parentId);
+        if (parent == null) {
+            throw new NoSuchElementException();
+        }
+        int size = parent.children.size();
+        NodeImpl previous = size == 0 ? null : peek(parent.children.get(size - 1));
+        return addChild(parent, previous, name, state).id;
     }
 
     /**
@@ -170,17 +179,17 @@ public class Store {
      * as the first child.
      *
      * @param parentId the parent identifier
+     * @param previousId the previous identifier
      * @param name the child name
-     * @param index the child index
      * @param state the child state
      * @return the child identifier
      * @throws NullPointerException if the <code>parentId</code>, the <code>name</code> or the <code>state</code> argument are null
      * @throws NoSuchElementException if the parent does not exist
      * @throws IllegalStateException if the store is not writable
-     * @throws IllegalArgumentException if the name already exist among the children
+     * @throws IllegalArgumentException if the name already exist among the children or if the previous is not a child of the parent
      * @throws IndexOutOfBoundsException if the index is not valid
      */
-    public final String addChild(String parentId, String name, Integer index, Serializable state) throws
+    public final String addChild(String parentId, String previousId, String name, Serializable state) throws
             NullPointerException,
             NoSuchElementException,
             IllegalStateException,
@@ -189,12 +198,25 @@ public class Store {
         if (origin == null) {
             throw new IllegalStateException("No previous");
         }
+        NodeImpl parent = peek(parentId);
+        if (parent == null) {
+            throw new NoSuchElementException("Parent does not exist");
+        }
+        NodeImpl previous;
+        if (previousId != null) {
+            previous = peek(previousId);
+            if (previous == null) {
+                throw new NoSuchElementException("Previous does not exist");
+            }
+        } else {
+            previous = null;
+        }
+        return addChild(parent, previous, name, state).id;
+    }
+
+    private NodeImpl addChild(NodeImpl parent, NodeImpl previous, String name, Serializable state) {
         if (state == null) {
             throw new NullPointerException();
-        }
-        NodeImpl parent = get(parentId);
-        if (parent == null) {
-            throw new NoSuchElementException();
         }
         for (int i = parent.children.size() - 1;i >= 0;i--) {
             String childId = parent.children.get(i);
@@ -203,16 +225,22 @@ public class Store {
                 throw new IllegalArgumentException("Duplicate child name " + name);
             }
         }
-        if (index == null) {
-            index = parent.children.size();
+        int index;
+        if (previous != null) {
+            if ((index = parent.children.indexOf(previous.id) + 1) == 0) {
+                throw new IllegalArgumentException("Previous is not a child of the parent");
+            }
+        } else {
+            index = 0;
         }
         if (index < 0 || index > parent.children.size()) {
             throw new IndexOutOfBoundsException("Index value " + index + " does not belong to [0," + parent.children.size() + "]");
         }
+        parent = get(parent.id);
         NodeImpl child = new NodeImpl(parent.id, name, state);
         nodes.put(child.id, child);
         parent.children.add(index, child.id);
-        return child.id;
+        return child;
     }
 
     /**
@@ -247,8 +275,7 @@ public class Store {
             throw new IllegalArgumentException("Cannot add a sibling to the root element");
         }
         NodeImpl parent = peek(parentId);
-        int index = parent.children.indexOf(previousId);
-        return addChild(parentId, name, index + 1, state);
+        return addChild(parent, previous, name, state).id;
     }
 
     /**
@@ -335,6 +362,42 @@ public class Store {
         int index = previousId != null ? nextParent.children.indexOf(previousId) + 1: 0;
         nextParent.children.add(index, nodeId);
         nodes.put(nodeId, new NodeImpl(parentId, node));
+    }
+
+    public final String clone(String nodeId, String parentId, String name) {
+        if (origin == null) {
+            throw new IllegalStateException("No writable");
+        }
+        if (nodeId == null) {
+            throw new NullPointerException("No null node id accepted");
+        }
+        if (parentId == null) {
+            throw new NullPointerException("No null parent id accepted");
+        }
+        NodeImpl parent = peek(parentId);
+        if (parent == null) {
+            throw new IllegalArgumentException("The parent does not exist");
+        }
+        NodeImpl node = peek(nodeId);
+        if (node == null) {
+            throw new NoSuchElementException("The node does not exist");
+        }
+        for (NodeImpl current = parent;current.parentId != null;current = peek(current.parentId)) {
+            if (current.id.equals(nodeId)) {
+                throw new IllegalArgumentException("The parent cannot be part of the cloned subtree");
+            }
+        }
+        return clone(node, parent, null, name).id;
+    }
+
+    private NodeImpl clone(NodeImpl node, NodeImpl parent, NodeImpl previous, String name) {
+        NodeImpl clone = addChild(parent, previous, name, node.state);
+        NodeImpl previousChild = null;
+        for (String childId : node.children) {
+            NodeImpl child = peek(childId);
+            previousChild = clone(child, clone, previousChild, child.name);
+        }
+        return clone;
     }
 
 

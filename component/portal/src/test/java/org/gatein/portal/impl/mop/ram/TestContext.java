@@ -20,6 +20,7 @@
 package org.gatein.portal.impl.mop.ram;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -330,5 +331,49 @@ public class TestContext extends TestCase {
         next.merge();
         curr.assertChildOf(root, "a", a);
         Assert.assertEquals(Arrays.asList(b, a, c), curr.getChildren(root));
+    }
+
+    public void testClone() {
+        TestedContext curr = new TestedContext();
+        String root = curr.getRoot();
+
+        //
+        TestedContext next = curr.open();
+        String a1 = next.addChild(root, "a1", "a1");
+        String b1 = next.addChild(a1, "b", "b");
+        String c1 = next.addChild(a1, "c", "c");
+        String d1 = next.addChild(b1, "d", "d");
+        next.merge();
+
+        //
+        String a2 = next.clone(a1, root, "a2");
+        while (true) {
+            next.assertChildOf(root, "a2", a2);
+            List<String> a2Children = next.getChildren(a2);
+            assertEquals(2, a2Children.size());
+            String b2 = a2Children.get(0);
+            Node b2Node = next.getNode(b2);
+            List<String> b2Children = next.getChildren(b2);
+            assertEquals("b", b2Node.getName());
+            assertEquals("b", b2Node.getState());
+            assertEquals(1, b2Children.size());
+            String d2 = b2Children.get(0);
+            Node d2Node = next.getNode(d2);
+            assertEquals("d", d2Node.getName());
+            assertEquals("d", d2Node.getState());
+            assertEquals(Collections.<String>emptyList(), next.getChildren(d2));
+            String c2 = a2Children.get(1);
+            Node c2Node = next.getNode(c2);
+            List<String> c2Children = next.getChildren(c2);
+            assertEquals(0, c2Children.size());
+            assertEquals("c", c2Node.getName());
+            assertEquals("c", c2Node.getState());
+            if (next != curr) {
+                next.merge();
+                next = curr;
+            } else {
+                break;
+            }
+        }
     }
 }
