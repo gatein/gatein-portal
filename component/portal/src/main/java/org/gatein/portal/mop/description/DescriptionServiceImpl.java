@@ -31,6 +31,11 @@ public class DescriptionServiceImpl implements DescriptionService {
     private final DescriptionPersistence persistence;
 
     public DescriptionServiceImpl(DescriptionPersistence persistence) {
+        if (persistence == null) {
+            throw new NullPointerException("No null persistence allowed");
+        }
+
+        //
         this.persistence = persistence;
     }
 

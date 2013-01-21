@@ -31,6 +31,7 @@ import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.gatein.portal.impl.mop.ram.RamPersistence;
 import org.gatein.portal.impl.mop.ram.Tx;
+import org.gatein.portal.mop.description.DescriptionPersistence;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.description.DescriptionServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationPersistence;
@@ -51,6 +52,8 @@ public abstract class PersistenceContext {
     public abstract NavigationServiceImpl getNavigationService();
 
     public abstract DescriptionService getDescriptionService();
+
+    public abstract DescriptionPersistence getDescriptionPersistence();
 
     public abstract PageServiceImpl getPageService();
 
@@ -91,6 +94,9 @@ public abstract class PersistenceContext {
         /** . */
         private SitePersistence sitePersistence;
 
+        /** . */
+        private org.exoplatform.portal.mop.description.MopPersistence descriptionPersistence;
+
         @Override
         void setUp() {
             PortalContainer container = PortalContainer.getInstance();
@@ -105,7 +111,8 @@ public abstract class PersistenceContext {
             //
             navigationPersistenceFactory = new MopPersistenceFactory(mgr);
             navigationService = new NavigationServiceImpl(navigationPersistenceFactory);
-            descriptionService = new DescriptionServiceImpl(new org.exoplatform.portal.mop.description.MopPersistence(mgr, new SimpleDataCache()));
+            descriptionPersistence = new org.exoplatform.portal.mop.description.MopPersistence(mgr, new SimpleDataCache());
+            descriptionService = new DescriptionServiceImpl(descriptionPersistence);
             sitePersistence = new MopPersistence(mgr, new org.exoplatform.portal.mop.site.SimpleDataCache());
             pagePersistence = new org.exoplatform.portal.mop.page.MopPersistence(mgr, new org.exoplatform.portal.mop.page.SimpleDataCache());
             pageService = new PageServiceImpl(pagePersistence);
@@ -126,6 +133,11 @@ public abstract class PersistenceContext {
         @Override
         public PagePersistence getPagePersistence() {
             return pagePersistence;
+        }
+
+        @Override
+        public DescriptionPersistence getDescriptionPersistence() {
+            return descriptionPersistence;
         }
 
         @Override
@@ -217,6 +229,11 @@ public abstract class PersistenceContext {
 
         @Override
         public DescriptionService getDescriptionService() {
+            return null;
+        }
+
+        @Override
+        public DescriptionPersistence getDescriptionPersistence() {
             return null;
         }
 

@@ -106,9 +106,13 @@ public abstract class AbstractMopServiceTest extends AbstractMopTest {
     }
 
     protected final SiteData createSite(SiteType type, String siteName) {
+        return createSite(type, siteName, new SiteState("fr", "", "", Arrays.<String>asList(), "", Collections.<String, String>emptyMap(), ""));
+    }
+
+    protected final SiteData createSite(SiteType type, String siteName, SiteState state) {
         SitePersistence sitePersistence = getSitePersistence();
         SiteKey key = type.key(siteName);
-        sitePersistence.saveSite(key, new SiteState("fr", "", "", Arrays.<String>asList(), "", Collections.<String, String>emptyMap(), ""));
+        sitePersistence.saveSite(key, state);
         return sitePersistence.loadSite(key);
     }
 
