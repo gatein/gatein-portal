@@ -195,6 +195,9 @@ public abstract class PersistenceContext {
         /** . */
         RamPersistence persistence;
 
+        /** . */
+        DescriptionServiceImpl descriptionService;
+
         @Override
         void setUp() {
             persistence = new RamPersistence();
@@ -205,6 +208,7 @@ public abstract class PersistenceContext {
                 }
             });
             pageService = new PageServiceImpl(persistence.getPagePersistence());
+            descriptionService = new DescriptionServiceImpl(persistence.getDescriptionPersistence());
         }
 
         @Override
@@ -229,12 +233,12 @@ public abstract class PersistenceContext {
 
         @Override
         public DescriptionService getDescriptionService() {
-            return null;
+            return descriptionService;
         }
 
         @Override
         public DescriptionPersistence getDescriptionPersistence() {
-            return null;
+            return persistence.getDescriptionPersistence();
         }
 
         @Override
