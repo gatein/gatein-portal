@@ -17,22 +17,26 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop;
 
 import javax.inject.Provider;
 
+import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.config.DataStorage;
-import org.exoplatform.portal.mop.description.*;
 import org.exoplatform.portal.mop.description.SimpleDataCache;
-import org.exoplatform.portal.pom.config.POMDataStorage;
+import org.exoplatform.portal.mop.navigation.MopPersistenceFactory;
+import org.exoplatform.portal.mop.site.MopPersistence;
 import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.gatein.portal.impl.mop.ram.RamPersistence;
 import org.gatein.portal.impl.mop.ram.Tx;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.description.DescriptionServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationPersistence;
 import org.gatein.portal.mop.navigation.NavigationServiceImpl;
+import org.gatein.portal.mop.page.PagePersistence;
+import org.gatein.portal.mop.page.PageServiceImpl;
 import org.gatein.portal.mop.site.SitePersistence;
 
 /**
@@ -44,11 +48,15 @@ public abstract class PersistenceContext {
 
     public abstract boolean isSessionModified();
 
-    public abstract NavigationServiceImpl getNavitationService();
+    public abstract NavigationServiceImpl getNavigationService();
 
     public abstract DescriptionService getDescriptionService();
 
+    public abstract PageServiceImpl getPageService();
+
     public abstract NavigationPersistence getNavigationPersistence();
+
+    public abstract PagePersistence getPagePersistence();
 
     public abstract SitePersistence getSitePersistence();
 
@@ -63,19 +71,22 @@ public abstract class PersistenceContext {
     public static class JCR extends PersistenceContext {
 
         /** . */
-        private NavigationServiceImpl service;
+        private MopPersistenceFactory navigationPersistenceFactory;
+
+        /** . */
+        private NavigationServiceImpl navigationService;
+
+        /** . */
+        private PageServiceImpl pageService;
+
+        /** . */
+        private PagePersistence pagePersistence;
 
         /** . */
         private POMSessionManager mgr;
 
         /** . */
-        private DataStorage dataStorage;
-
-        /** . */
         private DescriptionService descriptionService;
-
-        /** . */
-        private Provider<? extends NavigationPersistence> navigationPersistence;
 
         /** . */
         private SitePersistence sitePersistence;
@@ -83,21 +94,43 @@ public abstract class PersistenceContext {
         @Override
         void setUp() {
             PortalContainer container = PortalContainer.getInstance();
-            POMDataStorage pds = (POMDataStorage) container.getComponentInstanceOfType(POMDataStorage.class);
-            mgr = (POMSessionManager) container.getComponentInstanceOfType(POMSessionManager.class);
-            service = new NavigationServiceImpl(new MopPersistenceFactory(mgr));
+
+            //
+            mgr = new POMSessionManager(
+                    (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class),
+                    (ChromatticManager) container.getComponentInstanceOfType(ChromatticManager.class),
+                    (CacheService) container.getComponentInstanceOfType(CacheService.class));
+            mgr.start();
+
+            //
+            navigationPersistenceFactory = new MopPersistenceFactory(mgr);
+            navigationService = new NavigationServiceImpl(navigationPersistenceFactory);
             descriptionService = new DescriptionServiceImpl(new org.exoplatform.portal.mop.description.MopPersistence(mgr, new SimpleDataCache()));
-            dataStorage = (DataStorage) container.getComponentInstanceOfType(DataStorage.class);
-            navigationPersistence = service.getPersistenceFactory();
-            sitePersistence = pds.getSitePersistence();
+            sitePersistence = new MopPersistence(mgr, new org.exoplatform.portal.mop.site.SimpleDataCache());
+            pagePersistence = new org.exoplatform.portal.mop.page.MopPersistence(mgr, new org.exoplatform.portal.mop.page.SimpleDataCache());
+            pageService = new PageServiceImpl(pagePersistence);
 
             // Clear the cache for each test
-            service.clearCache();
+            navigationService.clearCache();
+        }
+
+        public POMSessionManager getManager() {
+            return mgr;
         }
 
         @Override
-        public NavigationServiceImpl getNavitationService() {
-            return service;
+        public PageServiceImpl getPageService() {
+            return pageService;
+        }
+
+        @Override
+        public PagePersistence getPagePersistence() {
+            return pagePersistence;
+        }
+
+        @Override
+        public NavigationServiceImpl getNavigationService() {
+            return navigationService;
         }
 
         @Override
@@ -107,7 +140,7 @@ public abstract class PersistenceContext {
 
         @Override
         public NavigationPersistence getNavigationPersistence() {
-            return navigationPersistence.get();
+            return navigationPersistenceFactory.get();
         }
 
         @Override
@@ -174,12 +207,22 @@ public abstract class PersistenceContext {
         }
 
         @Override
-        public NavigationServiceImpl getNavitationService() {
+        public NavigationServiceImpl getNavigationService() {
             return navigationService;
         }
 
         @Override
         public DescriptionService getDescriptionService() {
+            return null;
+        }
+
+        @Override
+        public PageServiceImpl getPageService() {
+            return null;
+        }
+
+        @Override
+        public PagePersistence getPagePersistence() {
             return null;
         }
 

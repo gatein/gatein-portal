@@ -36,6 +36,11 @@ public class MopPersistenceFactory implements Provider<MopPersistence> {
     final DataCache cache;
 
     public MopPersistenceFactory(POMSessionManager manager, DataCache cache) {
+        if (manager == null) {
+            throw new NullPointerException("No null manager accepted");
+        }
+
+        //
         this.manager = manager;
         this.cache = cache;
     }

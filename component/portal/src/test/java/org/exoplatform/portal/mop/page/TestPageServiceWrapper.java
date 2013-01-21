@@ -10,7 +10,7 @@ import org.exoplatform.component.test.ContainerScope;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.model.Page;
-import org.exoplatform.portal.mop.AbstractMOPTest;
+import org.exoplatform.portal.mop.AbstractMopTest;
 import org.exoplatform.portal.mop.EventType;
 import org.gatein.portal.mop.page.PageContext;
 import org.gatein.portal.mop.page.PageKey;
@@ -29,7 +29,7 @@ import org.gatein.mop.api.workspace.ObjectType;
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml"),
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/portal/mop/page/configuration.xml") })
-public class TestPageServiceWrapper extends AbstractMOPTest {
+public class TestPageServiceWrapper extends AbstractMopTest {
 
     /** . */
     private ListenerService listenerService;

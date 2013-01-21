@@ -22,6 +22,7 @@ package org.exoplatform.portal.mop.navigation;
 import java.util.Iterator;
 import java.util.List;
 
+import org.exoplatform.portal.mop.AbstractMopServiceTest;
 import org.gatein.common.util.MapBuilder;
 import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.site.SiteKey;
@@ -37,16 +38,16 @@ import org.gatein.portal.mop.navigation.NodeState;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestNavigationServiceLoad extends AbstractTestNavigationService {
+public class TestNavigationServiceLoad extends AbstractMopServiceTest {
 
     public void testNonExistingSite() throws Exception {
-        assertNull(service.loadNavigation(SiteKey.portal("non_existing")));
+        assertNull(navigationService.loadNavigation(SiteKey.portal("non_existing")));
     }
 
     // Do not execute this test case for the moment as it depends on
     // execution order of test cases, that explains failure in JDK 1.7
     public void _testLoadNavigations() {
-        List<NavigationContext> navCtxs = service.loadNavigations(SiteType.PORTAL);
+        List<NavigationContext> navCtxs = navigationService.loadNavigations(SiteType.PORTAL);
         assertEquals(3, navCtxs.size());
     }
 
@@ -58,8 +59,8 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext nav = service.loadNavigation(SiteKey.portal("load_single_scope"));
-        Node root = service.loadNode(Node.MODEL, nav, Scope.SINGLE, null).getNode();
+        NavigationContext nav = navigationService.loadNavigation(SiteKey.portal("load_single_scope"));
+        Node root = navigationService.loadNode(Node.MODEL, nav, Scope.SINGLE, null).getNode();
         assertNull(root.getChildren());
         try {
             root.getChild(0);
@@ -91,8 +92,8 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext nav = service.loadNavigation(SiteKey.portal("load_children_scope"));
-        Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        NavigationContext nav = navigationService.loadNavigation(SiteKey.portal("load_children_scope"));
+        Node root = navigationService.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         Iterator<? extends Node> i = root.getChildren().iterator();
         assertTrue(i.hasNext());
         Node home = i.next();
@@ -124,8 +125,8 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext nav = service.loadNavigation(SiteKey.portal("load_custom_scope"));
-        Node root = service.loadNode(Node.MODEL, nav, new Scope<NodeState>() {
+        NavigationContext nav = navigationService.loadNavigation(SiteKey.portal("load_custom_scope"));
+        Node root = navigationService.loadNode(Node.MODEL, nav, new Scope<NodeState>() {
             public Visitor<NodeState> get() {
                 return new Visitor<NodeState>() {
                     public VisitMode enter(int depth, String id, String name, NodeState state) {
@@ -162,18 +163,18 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext nav = service.loadNavigation(SiteKey.portal("update_node"));
-        Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        NavigationContext nav = navigationService.loadNavigation(SiteKey.portal("update_node"));
+        Node root = navigationService.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         Node a = root.getChild("a");
         assertNotNull(a);
         assertNull(a.getChildren());
-        a.update(service, Scope.CHILDREN);
+        a.update(navigationService, Scope.CHILDREN);
         assertNotNull(a.getChildren());
         assertEquals(1, a.getChildren().size());
         Node c = a.getChild("c");
         assertEquals("c", c.getName());
         assertSame(a, c.getParent());
-        service.updateNode(a.getContext(), Scope.SINGLE, null);
+        navigationService.updateNode(a.getContext(), Scope.SINGLE, null);
         assertNotNull(a.getChildren());
         assertEquals(1, a.getChildren().size());
         assertSame(c, a.getChild("c"));
@@ -205,8 +206,8 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext nav = service.loadNavigation(SiteKey.portal("state"));
-        Node root = service.loadNode(Node.MODEL, nav, Scope.ALL, null).getNode();
+        NavigationContext nav = navigationService.loadNavigation(SiteKey.portal("state"));
+        Node root = navigationService.loadNode(Node.MODEL, nav, Scope.ALL, null).getNode();
         assertEquals(5, root.getNodeCount());
         Node child1 = root.getChild("node_name");
         assertEquals("node_name", child1.getName());
@@ -232,8 +233,8 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext nav = service.loadNavigation(SiteKey.portal("depth"));
-        Node root = service.loadNode(Node.MODEL, nav, Scope.ALL, null).getNode();
+        NavigationContext nav = navigationService.loadNavigation(SiteKey.portal("depth"));
+        Node root = navigationService.loadNode(Node.MODEL, nav, Scope.ALL, null).getNode();
         Node child1 = root.getChild("node_name");
         assertEquals(0, child1.getContext().getDepth(child1.getContext()));
         assertEquals(1, child1.getContext().getDepth(root.getContext()));
@@ -252,7 +253,7 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext nav = service.loadNavigation(SiteKey.portal("hidden_node"));
+        NavigationContext nav = navigationService.loadNavigation(SiteKey.portal("hidden_node"));
 
         //
         Node root;
@@ -261,7 +262,7 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         Node c;
 
         //
-        root = service.loadNode(Node.MODEL, nav, Scope.GRANDCHILDREN, null).getNode();
+        root = navigationService.loadNode(Node.MODEL, nav, Scope.GRANDCHILDREN, null).getNode();
         a = root.getChild("a");
         b = root.getChild("b");
         a.setHidden(true);
@@ -281,7 +282,7 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         }
 
         //
-        root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        root = navigationService.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         a = root.getChild("a");
         b = root.getChild("b");
         c = root.getChild("c");
@@ -295,7 +296,7 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         }
 
         //
-        root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        root = navigationService.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         a = root.getChild("a");
         b = root.getChild("b");
         c = root.getChild("c");
@@ -317,10 +318,10 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext nav = service.loadNavigation(SiteKey.portal("hidden_insert_1"));
+        NavigationContext nav = navigationService.loadNavigation(SiteKey.portal("hidden_insert_1"));
 
         //
-        Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        Node root = navigationService.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         Node a = root.getChild("a");
         a.setHidden(true);
         Node b = root.addChild("b");
@@ -333,7 +334,7 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         assertSame(a, it.next());
 
         //
-        root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        root = navigationService.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         a = root.getChild("a");
         a.setHidden(true);
         b = root.addChild(0, "b");
@@ -354,10 +355,10 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext nav = service.loadNavigation(SiteKey.portal("hidden_insert_2"));
+        NavigationContext nav = navigationService.loadNavigation(SiteKey.portal("hidden_insert_2"));
 
         //
-        Node root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        Node root = navigationService.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         Node a = root.getChild("a");
         Node b = root.getChild("b");
         b.setHidden(true);
@@ -374,7 +375,7 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         assertSame(b, it.next());
 
         //
-        root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        root = navigationService.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         a = root.getChild("a");
         b = root.getChild("b");
         b.setHidden(true);
@@ -391,7 +392,7 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         assertSame(b, it.next());
 
         //
-        root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        root = navigationService.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         a = root.getChild("a");
         b = root.getChild("b");
         b.setHidden(true);
@@ -416,14 +417,14 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext nav = service.loadNavigation(SiteKey.portal("hidden_insert_3"));
+        NavigationContext nav = navigationService.loadNavigation(SiteKey.portal("hidden_insert_3"));
 
         //
         Node root, a, b, c, d;
         Iterator<Node> it;
 
         //
-        root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        root = navigationService.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         a = root.getChild("a");
         b = root.getChild("b");
         c = root.getChild("c");
@@ -443,7 +444,7 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         assertSame(c, it.next());
 
         //
-        root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        root = navigationService.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         a = root.getChild("a");
         b = root.getChild("b");
         c = root.getChild("c");
@@ -463,7 +464,7 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         assertSame(c, it.next());
 
         //
-        root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        root = navigationService.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         a = root.getChild("a");
         b = root.getChild("b");
         c = root.getChild("c");
@@ -483,7 +484,7 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         assertSame(d, it.next());
 
         //
-        root = service.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+        root = navigationService.loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         a = root.getChild("a");
         b = root.getChild("b");
         c = root.getChild("c");
@@ -778,16 +779,16 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("count"));
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("count"));
         Node root;
 
         //
-        root = service.loadNode(Node.MODEL, navigation, Scope.SINGLE, null).getNode();
+        root = navigationService.loadNode(Node.MODEL, navigation, Scope.SINGLE, null).getNode();
         assertEquals(0, root.getNodeCount());
         // assertEquals(-1, root.getSize());
 
         //
-        root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
+        root = navigationService.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
         assertEquals(0, root.getNodeCount());
         assertEquals(0, root.getSize());
         Node a = root.addChild("a");
@@ -806,8 +807,8 @@ public class TestNavigationServiceLoad extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("insert_duplicate"));
-        Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("insert_duplicate"));
+        Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
         try {
             root.addChild("a");
             fail();

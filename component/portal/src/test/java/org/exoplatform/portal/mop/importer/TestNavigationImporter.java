@@ -30,24 +30,21 @@ import org.exoplatform.portal.config.model.I18NString;
 import org.exoplatform.portal.config.model.LocalizedString;
 import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.mop.AbstractMopServiceTest;
 import org.gatein.portal.mop.description.DescriptionState;
-import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.site.SiteKey;
-import org.exoplatform.portal.mop.navigation.AbstractTestNavigationService;
 import org.gatein.portal.mop.navigation.NavigationContext;
 import org.gatein.portal.mop.hierarchy.Node;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.hierarchy.Scope;
 import org.gatein.common.util.Tools;
-import org.gatein.mop.api.workspace.ObjectType;
-import org.gatein.mop.core.api.MOPService;
 import org.gatein.portal.mop.site.SiteType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestNavigationImporter extends AbstractTestNavigationService {
+public class TestNavigationImporter extends AbstractMopServiceTest {
 
     public void testInsertCreateNavigation() {
         testCreate(ImportMode.INSERT);
@@ -69,14 +66,14 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         sync(true);
 
         //
-        assertNull(service.loadNavigation(SiteKey.portal(name)));
+        assertNull(navigationService.loadNavigation(SiteKey.portal(name)));
         PageNavigation src = new PageNavigation("portal", name);
         src.setPriority(2);
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, mode, src, service, descriptionService);
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, mode, src, navigationService, descriptionService);
         importer.perform();
 
         //
-        NavigationContext ctx = service.loadNavigation(SiteKey.portal(name));
+        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal(name));
         assertEquals(2, (int) ctx.getState().getPriority());
     }
 
@@ -85,20 +82,20 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         sync(true);
 
         //
-        assertNull(service.loadNavigation(SiteKey.portal("insert_navigation")));
+        assertNull(navigationService.loadNavigation(SiteKey.portal("insert_navigation")));
 
         //
         FragmentBuilder builder = fragment().add(node("a"));
 
         //
         PageNavigation src = new PageNavigation("portal", "insert_navigation").addFragment(builder.build());
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, service,
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, navigationService,
                 descriptionService);
         importer.perform();
 
         //
-        NavigationContext ctx = service.loadNavigation(SiteKey.portal("insert_navigation"));
-        NodeContext<?, NodeState> node = service.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal("insert_navigation"));
+        NodeContext<?, NodeState> node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
         NodeContext<?, NodeState> a = node.get("a");
         assertNotNull(a);
         assertEquals("a", a.getName());
@@ -111,20 +108,20 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         sync(true);
 
         //
-        assertNull(service.loadNavigation(SiteKey.portal("insert_fragment")));
+        assertNull(navigationService.loadNavigation(SiteKey.portal("insert_fragment")));
 
         //
         FragmentBuilder builder = fragment().add(node("a").add(node("b")));
 
         //
         PageNavigation src = new PageNavigation("portal", "insert_fragment").addFragment(builder.build());
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, service,
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, navigationService,
                 descriptionService);
         importer.perform();
 
         //
-        NavigationContext ctx = service.loadNavigation(SiteKey.portal("insert_fragment"));
-        NodeContext<?, NodeState> node = service.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal("insert_fragment"));
+        NodeContext<?, NodeState> node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
         NodeContext<?, NodeState> a = node.get("a");
         assertNotNull(a);
         assertEquals("a", a.getName());
@@ -152,20 +149,20 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         sync(true);
 
         //
-        assertNull(service.loadNavigation(SiteKey.portal(name)));
+        assertNull(navigationService.loadNavigation(SiteKey.portal(name)));
 
         //
         FragmentBuilder builder = fragment().add(node("a").add(node("b")));
 
         //
         PageNavigation src = new PageNavigation("portal", name).addFragment(builder.build());
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.CONSERVE, src, service,
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.CONSERVE, src, navigationService,
                 descriptionService);
         importer.perform();
 
         //
-        NavigationContext ctx = service.loadNavigation(SiteKey.portal(name));
-        Node node = service.loadNode(Node.MODEL, ctx, Scope.ALL, null).getNode();
+        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal(name));
+        Node node = navigationService.loadNode(Node.MODEL, ctx, Scope.ALL, null).getNode();
         Node a = node.getChild("a");
         assertNotNull(a);
         assertEquals("a", a.getName());
@@ -178,12 +175,12 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         //
         builder = fragment().add(node("a").add(node("d"))).add(node("c"));
         src = new PageNavigation("portal", name).addFragment(builder.build());
-        importer = new NavigationImporter(Locale.ENGLISH, importMode, src, service, descriptionService);
+        importer = new NavigationImporter(Locale.ENGLISH, importMode, src, navigationService, descriptionService);
         importer.perform();
 
         //
-        ctx = service.loadNavigation(SiteKey.portal(name));
-        node = service.loadNode(Node.MODEL, ctx, Scope.ALL, null).getNode();
+        ctx = navigationService.loadNavigation(SiteKey.portal(name));
+        node = navigationService.loadNode(Node.MODEL, ctx, Scope.ALL, null).getNode();
         switch (importMode) {
             case INSERT: {
                 assertEquals(2, node.getNodeCount());
@@ -239,18 +236,18 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         sync(true);
 
         //
-        assertNull(service.loadNavigation(SiteKey.portal("order")));
+        assertNull(navigationService.loadNavigation(SiteKey.portal("order")));
 
         //
         PageNavigation src = new PageNavigation("portal", "order").addFragment(fragment().add(node("a"), node("b"), node("c"))
                 .build());
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, service,
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, navigationService,
                 descriptionService);
         importer.perform();
 
         //
-        NavigationContext ctx = service.loadNavigation(SiteKey.portal("order"));
-        NodeContext<?, NodeState> node = service.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal("order"));
+        NodeContext<?, NodeState> node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
         assertEquals(3, node.getNodeCount());
         assertEquals("a", node.get(0).getName());
         assertEquals("b", node.get(1).getName());
@@ -258,11 +255,11 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
 
         //
         src.getFragment().getNodes().add(0, node("d").build());
-        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, service, descriptionService);
+        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, navigationService, descriptionService);
         importer.perform();
 
         //
-        node = service.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
         assertEquals(4, node.getNodeCount());
         assertEquals("d", node.get(0).getName());
         assertEquals("a", node.get(1).getName());
@@ -271,11 +268,11 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
 
         //
         src.getFragment().getNodes().add(node("e").build());
-        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, service, descriptionService);
+        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, navigationService, descriptionService);
         importer.perform();
 
         //
-        node = service.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
         assertEquals(5, node.getNodeCount());
         assertEquals("d", node.get(0).getName());
         assertEquals("a", node.get(1).getName());
@@ -289,7 +286,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         sync(true);
 
         //
-        assertNull(service.loadNavigation(SiteKey.portal("extended_label")));
+        assertNull(navigationService.loadNavigation(SiteKey.portal("extended_label")));
 
         //
         PageNavigation src = new PageNavigation("portal", "extended_label").addFragment(fragment().add(node("a"), node("b"),
@@ -301,13 +298,13 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
                 .setLabels(new I18NString(new LocalizedString("b_en"), new LocalizedString("b_fr", Locale.FRENCH)));
         fragment.getNode("c").setLabels(new I18NString(new LocalizedString("c_en")));
         src.setOwnerId("extended_label");
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.OVERWRITE, src, service,
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.OVERWRITE, src, navigationService,
                 descriptionService);
         importer.perform();
 
         //
-        NavigationContext ctx = service.loadNavigation(SiteKey.portal("extended_label"));
-        NodeContext<?, NodeState> node = service.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal("extended_label"));
+        NodeContext<?, NodeState> node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
 
         // The fully explicit case
         NodeContext<?, NodeState> a = node.get("a");
@@ -344,12 +341,12 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         fragment.getNode("c").setLabels(new I18NString(new LocalizedString("foo_c_en")));
         src.setOwnerId("extended_label");
 
-        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, service, descriptionService);
+        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.MERGE, src, navigationService, descriptionService);
         importer.perform();
 
         //
-        ctx = service.loadNavigation(SiteKey.portal("extended_label"));
-        node = service.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        ctx = navigationService.loadNavigation(SiteKey.portal("extended_label"));
+        node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
 
         // The fully explicit case
         a = node.get("a");
@@ -388,12 +385,12 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         fragment.getNode("c").setLabels(new I18NString(new LocalizedString("bar_c_en")));
         src.setOwnerId("extended_label");
 
-        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.OVERWRITE, src, service, descriptionService);
+        importer = new NavigationImporter(Locale.ENGLISH, ImportMode.OVERWRITE, src, navigationService, descriptionService);
         importer.perform();
 
         //
-        ctx = service.loadNavigation(SiteKey.portal("extended_label"));
-        node = service.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        ctx = navigationService.loadNavigation(SiteKey.portal("extended_label"));
+        node = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
 
         // The fully explicit case
         a = node.get("a");
@@ -425,7 +422,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         sync(true);
 
         //
-        assertNull(service.loadNavigation(SiteKey.portal("full_navigation")));
+        assertNull(navigationService.loadNavigation(SiteKey.portal("full_navigation")));
 
         //
         PageNavigation src = new PageNavigation("portal", "full_navigation").addFragment(fragment().add(node("a")).build());
@@ -433,13 +430,13 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         src.addFragment(fragment("a").add(node("d")).build());
 
         //
-        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, service,
+        NavigationImporter importer = new NavigationImporter(Locale.ENGLISH, ImportMode.INSERT, src, navigationService,
                 descriptionService);
         importer.perform();
 
         //
-        NavigationContext ctx = service.loadNavigation(SiteKey.portal("full_navigation"));
-        NodeContext<?, NodeState> root = service.loadNode(NodeState.model(), ctx, Scope.ALL, null);
+        NavigationContext ctx = navigationService.loadNavigation(SiteKey.portal("full_navigation"));
+        NodeContext<?, NodeState> root = navigationService.loadNode(NodeState.model(), ctx, Scope.ALL, null);
         assertEquals(3, root.getNodeSize());
         Iterator<? extends NodeContext<?, NodeState>> i = root.iterator();
         NodeContext<?, NodeState> a = i.next();

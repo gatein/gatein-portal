@@ -54,12 +54,6 @@ public class NavigationServiceImpl implements NavigationService {
         this.manager = new NodeManager<NodeState>(persistenceFactory);
     }
 
-    // For unit testing purpose
-    // remove public when package moved
-    public Provider<? extends NavigationPersistence> getPersistenceFactory() {
-        return persistenceFactory;
-    }
-
     public NavigationContext loadNavigation(SiteKey key) {
         if (key == null) {
             throw new NullPointerException();

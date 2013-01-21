@@ -69,7 +69,8 @@ public class MopPersistence implements PagePersistence {
     @Override
     public PageData loadPage(PageKey key) {
         POMSession session = manager.getSession();
-        return dataCache.getPageData(session, key);
+        PageData data = dataCache.getPageData(session, key);
+        return data == PageData.EMPTY ? null : data;
     }
 
     @Override

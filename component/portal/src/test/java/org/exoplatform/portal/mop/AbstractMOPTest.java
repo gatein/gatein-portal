@@ -3,7 +3,7 @@ package org.exoplatform.portal.mop;
 import org.exoplatform.portal.AbstractPortalTest;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
-public abstract class AbstractMOPTest extends AbstractPortalTest {
+public abstract class AbstractMopTest extends AbstractPortalTest {
 
     @Override
     protected void setUp() throws Exception {

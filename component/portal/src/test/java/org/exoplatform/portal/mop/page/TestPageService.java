@@ -1,59 +1,74 @@
+/*
+ * Copyright (C) 2012 eXo Platform SAS.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package org.exoplatform.portal.mop.page;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
-import org.exoplatform.portal.mop.Described;
-import org.exoplatform.portal.mop.ProtectedResource;
+import org.exoplatform.portal.mop.AbstractMopServiceTest;
 import org.gatein.portal.mop.QueryResult;
 import org.gatein.portal.mop.page.PageContext;
 import org.gatein.portal.mop.page.PageError;
+import org.gatein.portal.mop.page.PageKey;
 import org.gatein.portal.mop.page.PageServiceException;
 import org.gatein.portal.mop.page.PageState;
+import org.gatein.portal.mop.site.SiteData;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
-import org.exoplatform.portal.pom.data.MappedAttributes;
-import org.gatein.mop.api.Attributes;
-import org.gatein.mop.api.workspace.ObjectType;
-import org.gatein.mop.api.workspace.Page;
 
 /** @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a> */
-public class TestPageService extends AbstractTestPageService {
+public class TestPageService extends AbstractMopServiceTest {
+
+    /** . */
+    static final SiteKey CLASSIC = SiteKey.portal("classic");
+
+    /** . */
+    static final PageKey CLASSIC_FOO = CLASSIC.page("foo");
 
     public void testLoad() {
-        mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "load_page").getRootPage()
-                .addChild("pages");
+        SiteData site = createSite(SiteType.PORTAL, "load_page");
         sync(true);
-
-        //
-        SiteKey site = SiteKey.portal("load_page");
 
         // Read twice (to load and check and the get from cache and check)
-        assertNull(service.loadPage(site.page("foo")));
-        assertNull(service.loadPage(site.page("foo")));
+        assertNull(pageService.loadPage(site.key.page("foo")));
+        assertNull(pageService.loadPage(site.key.page("foo")));
 
         //
-        Page foo = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "load_page").getRootPage()
-                .getChild("pages").addChild("foo");
-        Described fooDescribed = foo.adapt(Described.class);
-        fooDescribed.setName("foo_name");
-        fooDescribed.setDescription("foo_description");
-        ProtectedResource fooResource = foo.adapt(ProtectedResource.class);
-        fooResource.setAccessPermissions(Arrays.asList("foo_access_permission"));
-        fooResource.setEditPermission("foo_edit_permission");
-        Attributes fooAttrs = foo.getAttributes();
-        fooAttrs.setValue(MappedAttributes.FACTORY_ID, "foo_factory_id");
-        fooAttrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, true);
+        PageState state = new PageState(
+                "foo_name",
+                "foo_description",
+                true,
+                "foo_factory_id",
+                Arrays.asList("foo_access_permission"),
+                "foo_edit_permission");
+        createPage(site, "foo", state);
         sync(true);
 
         //
-        service.clear();
-        PageContext page = service.loadPage(site.page("foo"));
+        pageService.clear();
+        PageContext page = pageService.loadPage(site.key.page("foo"));
         assertNotNull(page);
         assertNull(page.getState(true));
         assertNotNull(page.getData());
-        PageState state = page.getState();
+        state = page.getState();
         assertEquals("foo_name", state.getDisplayName());
         assertEquals("foo_description", state.getDescription());
         assertEquals(Arrays.asList("foo_access_permission"), state.getAccessPermissions());
@@ -63,49 +78,37 @@ public class TestPageService extends AbstractTestPageService {
     }
 
     public void testLoadPages() {
-        mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "load_pages").getRootPage()
-                .addChild("pages");
+        SiteData site = createSite(SiteType.PORTAL, "load_pages");
         sync(true);
-
-        //
-        SiteKey site = SiteKey.portal("load_pages");
 
         // Read twice (to load and check and the get from cache and check)
-        assertNotNull(service.loadPages(site));
-        assertNotNull(service.loadPages(site));
-        assertEquals(0, service.loadPages(site).size());
+        assertNotNull(pageService.loadPages(site.key));
+        assertNotNull(pageService.loadPages(site.key));
+        assertEquals(0, pageService.loadPages(site.key).size());
 
         //
-        Page foo = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "load_pages").getRootPage()
-                .getChild("pages").addChild("foo");
-        Described fooDescribed = foo.adapt(Described.class);
-        fooDescribed.setName("foo_name");
-        fooDescribed.setDescription("foo_description");
-        ProtectedResource fooResource = foo.adapt(ProtectedResource.class);
-        fooResource.setAccessPermissions(Arrays.asList("foo_access_permission"));
-        fooResource.setEditPermission("foo_edit_permission");
-        Attributes fooAttrs = foo.getAttributes();
-        fooAttrs.setValue(MappedAttributes.FACTORY_ID, "foo_factory_id");
-        fooAttrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, true);
-
-        Page bar = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "load_pages").getRootPage()
-                .getChild("pages").addChild("bar");
-        Described barDescribed = bar.adapt(Described.class);
-        barDescribed.setName("bar_name");
-        barDescribed.setDescription("bar_description");
-        ProtectedResource barResource = bar.adapt(ProtectedResource.class);
-        barResource.setAccessPermissions(Arrays.asList("bar_access_permission"));
-        barResource.setEditPermission("bar_edit_permission");
-        Attributes barAttrs = bar.getAttributes();
-        barAttrs.setValue(MappedAttributes.FACTORY_ID, "bar_factory_id");
-        barAttrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, true);
-
+        PageState fooState = new PageState(
+                "foo_name",
+                "foo_description",
+                true,
+                "foo_factory_id",
+                Arrays.asList("foo_access_permission"),
+                "foo_edit_permission");
+        createPage(site, "foo", fooState);
+        PageState barState = new PageState(
+                "bar_name",
+                "bar_description",
+                true,
+                "bar_factory_id",
+                Arrays.asList("bar_access_permission"),
+                "bar_edit_permission");
+        createPage(site, "bar", barState);
         sync(true);
 
         //
-        service.clear();
+        pageService.clear();
 
-        List<PageContext> pages = service.loadPages(site);
+        List<PageContext> pages = pageService.loadPages(site.key);
         assertNotNull(pages);
         assertEquals(2, pages.size());
 
@@ -136,144 +139,121 @@ public class TestPageService extends AbstractTestPageService {
     }
 
     public void testCreate() {
-        mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "create_page").getRootPage()
-                .addChild("pages");
+        createSite(SiteType.PORTAL, "create_page");
         sync(true);
 
         //
         SiteKey site = SiteKey.portal("create_page");
 
         //
-        PageContext page = new PageContext(site.page("foo"), new PageState("foo_name", "foo_description", true,
+        PageContext pageCtx = new PageContext(site.page("foo"), new PageState("foo_name", "foo_description", true,
                 "foo_factory_id", Arrays.asList("foo_access_permission"), "foo_edit_permission"));
-        assertTrue(service.savePage(page));
+        assertTrue(pageService.savePage(pageCtx));
         sync(true);
 
         //
-        Page foo = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "create_page").getRootPage()
-                .getChild("pages").getChild("foo");
-        assertNotNull(foo);
-        Described fooDescribed = foo.adapt(Described.class);
-        assertEquals("foo_name", fooDescribed.getName());
-        assertEquals("foo_description", fooDescribed.getDescription());
-        ProtectedResource fooResource = foo.adapt(ProtectedResource.class);
-        assertEquals(Arrays.asList("foo_access_permission"), fooResource.getAccessPermissions());
-        assertEquals("foo_edit_permission", fooResource.getEditPermission());
-        Attributes fooAttrs = foo.getAttributes();
-        assertEquals("foo_factory_id", fooAttrs.getValue(MappedAttributes.FACTORY_ID));
-        assertEquals(Boolean.TRUE, fooAttrs.getValue(MappedAttributes.SHOW_MAX_WINDOW));
+        PageState state = getPage(site.page("foo")).state;
+        assertEquals("foo_name", state.getDisplayName());
+        assertEquals("foo_description", state.getDescription());
+        assertEquals(Arrays.asList("foo_access_permission"), state.getAccessPermissions());
+        assertEquals("foo_edit_permission", state.getEditPermission());
+        assertEquals("foo_factory_id", state.getFactoryId());
+        assertEquals(true, state.getShowMaxWindow());
     }
 
     public void testUpdate() {
-        Page foo = mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "update_page").getRootPage()
-                .addChild("pages").addChild("foo");
-        Described fooDescribed = foo.adapt(Described.class);
-        fooDescribed.setName("foo_name");
-        fooDescribed.setDescription("foo_description");
-        ProtectedResource fooResource = foo.adapt(ProtectedResource.class);
-        fooResource.setAccessPermissions(Arrays.asList("foo_access_permission"));
-        fooResource.setEditPermission("foo_edit_permission");
-        Attributes fooAttrs = foo.getAttributes();
-        fooAttrs.setValue(MappedAttributes.FACTORY_ID, "foo_factory_id");
-        fooAttrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, true);
+        SiteData site = createSite(SiteType.PORTAL, "update_page");
+        PageState state = new PageState(
+                "foo_name",
+                "foo_description",
+                true,
+                "foo_factory_id",
+                Arrays.asList("foo_access_permission"),
+                "foo_edit_permission");
+        createPage(site, "foo", state);
         sync(true);
 
         //
-        SiteKey site = SiteKey.portal("update_page");
-
-        //
-        PageContext page = new PageContext(site.page("foo"), new PageState("foo_name_2", "foo_description_2", false,
+        PageContext pageCtx = new PageContext(site.key.page("foo"), new PageState("foo_name_2", "foo_description_2", false,
                 "foo_factory_id_2", Arrays.asList("foo_access_permission_2", "foo_2_access_permission_2"),
                 "foo_edit_permission_2"));
-        assertFalse(service.savePage(page));
+        assertFalse(pageService.savePage(pageCtx));
         sync(true);
 
         //
-        foo = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "update_page").getRootPage()
-                .getChild("pages").getChild("foo");
-        assertNotNull(foo);
-        fooDescribed = foo.adapt(Described.class);
-        assertEquals("foo_name_2", fooDescribed.getName());
-        assertEquals("foo_description_2", fooDescribed.getDescription());
-        fooResource = foo.adapt(ProtectedResource.class);
-        assertEquals(Arrays.asList("foo_access_permission_2", "foo_2_access_permission_2"), fooResource.getAccessPermissions());
-        assertEquals("foo_edit_permission_2", fooResource.getEditPermission());
-        fooAttrs = foo.getAttributes();
-        assertEquals("foo_factory_id_2", fooAttrs.getValue(MappedAttributes.FACTORY_ID));
-        assertEquals(Boolean.FALSE, fooAttrs.getValue(MappedAttributes.SHOW_MAX_WINDOW));
+        state = getPage(site.key, "foo").state;
+        assertEquals("foo_name_2", state.getDisplayName());
+        assertEquals("foo_description_2", state.getDescription());
+        assertEquals(Arrays.asList("foo_access_permission_2", "foo_2_access_permission_2"), state.getAccessPermissions());
+        assertEquals("foo_edit_permission_2", state.getEditPermission());
+        assertEquals("foo_factory_id_2", state.getFactoryId());
+        assertEquals(false, state.getShowMaxWindow());
     }
 
     public void testDestroy() {
-        mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "destroy_page").getRootPage()
-                .addChild("pages");
+        SiteData site = createSite(SiteType.PORTAL, "destroy_page");
         sync(true);
 
         //
-        SiteKey site = SiteKey.portal("destroy_page");
+        PageKey pageKey = site.key.page("foo");
+        assertFalse(pageService.destroyPage(pageKey));
 
         //
-        assertFalse(service.destroyPage(site.page("foo")));
-
-        //
-        Page foo = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "destroy_page").getRootPage()
-                .getChild("pages").addChild("foo");
-        Described fooDescribed = foo.adapt(Described.class);
-        fooDescribed.setName("foo_name");
-        fooDescribed.setDescription("foo_description");
-        ProtectedResource fooResource = foo.adapt(ProtectedResource.class);
-        fooResource.setAccessPermissions(Arrays.asList("foo_access_permission"));
-        fooResource.setEditPermission("foo_edit_permission");
-        Attributes fooAttrs = foo.getAttributes();
-        fooAttrs.setValue(MappedAttributes.FACTORY_ID, "foo_factory_id");
-        fooAttrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, true);
+        PageState state = new PageState(
+                "foo_name",
+                "foo_description",
+                true,
+                "foo_factory_id",
+                Arrays.asList("foo_access_permission"),
+                "foo_edit_permission");
+        createPage(site, "foo", state);
         sync(true);
 
         //
-        assertTrue(service.destroyPage(site.page("foo")));
-        assertNull(service.loadPage(CLASSIC_FOO));
+        assertTrue(pageService.destroyPage(pageKey));
+        assertNull(pageService.loadPage(CLASSIC_FOO));
         sync(true);
 
         //
-        foo = mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "destroy_page").getRootPage()
-                .getChild("pages").getChild("foo");
-        assertNull(foo);
+        assertNull(getPage(pageKey));
     }
 
     public void testFind() throws Exception {
-        Page pages = mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "find_pages").getRootPage()
-                .addChild("pages");
-        pages.addChild("foo");
-        pages.addChild("bar");
+        SiteData site = createSite(SiteType.PORTAL, "find_pages");
+        PageState state = new PageState(
+                "name",
+                "description",
+                true,
+                "factory_id",
+                Arrays.asList("access_permission"),
+                "edit_permission");
+        createPage(site, "foo", state);
+        createPage(site, "bar", state);
         sync(true);
 
         //
-        QueryResult<PageContext> result = service.findPages(0, 10, SiteType.PORTAL, "find_pages", null, null);
+        QueryResult<PageContext> result = pageService.findPages(0, 10, SiteType.PORTAL, "find_pages", null, null);
         assertEquals(2, result.getSize());
     }
 
     public void testClone() throws Exception {
-        Page foo = mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "clone_page").getRootPage()
-                .addChild("pages").addChild("foo");
-        Described fooDescribed = foo.adapt(Described.class);
-        fooDescribed.setName("foo_name");
-        fooDescribed.setDescription("foo_description");
-        ProtectedResource fooResource = foo.adapt(ProtectedResource.class);
-        fooResource.setAccessPermissions(Arrays.asList("foo_access_permission"));
-        fooResource.setEditPermission("foo_edit_permission");
-        Attributes fooAttrs = foo.getAttributes();
-        fooAttrs.setValue(MappedAttributes.FACTORY_ID, "foo_factory_id");
-        fooAttrs.setValue(MappedAttributes.SHOW_MAX_WINDOW, true);
+        SiteData site = createSite(SiteType.PORTAL, "clone_page");
+        PageState state = new PageState(
+                "foo_name",
+                "foo_description",
+                true,
+                "foo_factory_id",
+                Arrays.asList("foo_access_permission"),
+                "foo_edit_permission");
+        createPage(site, "foo", state);
         sync(true);
 
         //
-        SiteKey site = SiteKey.portal("clone_page");
-
-        //
-        PageContext bar = service.clone(site.page("foo"), site.page("bar"));
+        PageContext bar = pageService.clone(site.key.page("foo"), site.key.page("bar"));
         assertNotNull(bar);
         assertNull(bar.getState(true));
         assertNotNull(bar.getData());
-        PageState state = bar.getState();
+        state = bar.getState();
         assertEquals("foo_name", state.getDisplayName());
         assertEquals("foo_description", state.getDescription());
         assertEquals(Arrays.asList("foo_access_permission"), state.getAccessPermissions());
@@ -342,14 +322,14 @@ public class TestPageService extends AbstractTestPageService {
     }
 
     public void testLoadWithoutSite() {
-        assertNull(service.loadPage(SiteKey.portal("foo").page("homepage")));
+        assertNull(pageService.loadPage(SiteKey.portal("foo").page("homepage")));
     }
 
     public void testCreateWithoutSite() {
         PageContext page = new PageContext(SiteKey.portal("foo").page("homepage"), new PageState("foo", "Foo", false,
                 "factory-id", Arrays.asList("*:/platform/administrators"), "Everyone"));
         try {
-            service.savePage(page);
+            pageService.savePage(page);
             fail();
         } catch (PageServiceException e) {
             assertEquals(PageError.NO_SITE, e.getError());
@@ -358,7 +338,7 @@ public class TestPageService extends AbstractTestPageService {
 
     public void testDestroyWithoutSite() {
         try {
-            service.destroyPage(SiteKey.portal("foo").page("homepage"));
+            pageService.destroyPage(SiteKey.portal("foo").page("homepage"));
             fail();
         } catch (PageServiceException e) {
             assertEquals(PageError.NO_SITE, e.getError());

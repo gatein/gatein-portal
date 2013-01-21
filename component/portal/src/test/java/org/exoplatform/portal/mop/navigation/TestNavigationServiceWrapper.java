@@ -22,7 +22,12 @@ package org.exoplatform.portal.mop.navigation;
 import java.util.LinkedList;
 
 import org.exoplatform.container.PortalContainer;
+import org.exoplatform.portal.mop.AbstractMopServiceTest;
 import org.exoplatform.portal.mop.EventType;
+import org.exoplatform.portal.mop.PersistenceContext;
+import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.services.cache.CacheService;
+import org.exoplatform.services.jcr.RepositoryService;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.hierarchy.Node;
 import org.gatein.portal.mop.hierarchy.NodeContext;
@@ -42,24 +47,27 @@ import org.gatein.portal.mop.site.SiteType;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class TestNavigationServiceWrapper extends AbstractTestNavigationService {
+public class TestNavigationServiceWrapper extends AbstractMopServiceTest {
 
     /** . */
-    private NavigationService navigationService;
+    private NavigationService wrapper;
 
     /** . */
     private ListenerService listenerService;
 
     @Override
     protected void setUp() throws Exception {
-        PortalContainer container = getContainer();
-
-        //
-        listenerService = (ListenerService) container.getComponentInstanceOfType(ListenerService.class);
-        navigationService = (NavigationService) container.getComponentInstanceOfType(NavigationService.class);
-
-        //
         super.setUp();
+
+        //
+        PortalContainer container = getContainer();
+        POMSessionManager mgr = ((PersistenceContext.JCR) context).getManager();
+        listenerService = new ListenerService(container.getContext());
+        wrapper = new NavigationServiceWrapper(
+                (RepositoryService) container.getComponentInstanceOfType(RepositoryService.class),
+                mgr,
+                listenerService,
+                (CacheService) container.getComponentInstanceOfType(CacheService.class));
     }
 
     public void testNotification() throws NavigationServiceException {
@@ -90,12 +98,12 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
 
         // Create
         NavigationContext navigation = new NavigationContext(SiteKey.portal("notification"), new NavigationState(3));
-        navigationService.saveNavigation(navigation);
+        wrapper.saveNavigation(navigation);
         assertEquals(1, createListener.events.size());
         Event event = createListener.events.removeFirst();
         assertEquals(SiteKey.portal("notification"), event.getData());
         assertEquals(EventType.NAVIGATION_CREATED, event.getEventName());
-        assertSame(navigationService, event.getSource());
+        assertSame(wrapper, event.getSource());
         assertEquals(0, updateListener.events.size());
         assertEquals(0, destroyListener.events.size());
 
@@ -103,37 +111,37 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
 
         // Update
         navigation.setState(new NavigationState(1));
-        navigationService.saveNavigation(navigation);
+        wrapper.saveNavigation(navigation);
         assertEquals(0, createListener.events.size());
         assertEquals(1, updateListener.events.size());
         event = updateListener.events.removeFirst();
         assertEquals(SiteKey.portal("notification"), event.getData());
         assertEquals(EventType.NAVIGATION_UPDATED, event.getEventName());
-        assertSame(navigationService, event.getSource());
+        assertSame(wrapper, event.getSource());
         assertEquals(0, destroyListener.events.size());
 
         // Update
-        navigation = navigationService.loadNavigation(SiteKey.portal("notification"));
-        Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
+        navigation = wrapper.loadNavigation(SiteKey.portal("notification"));
+        Node root = wrapper.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
         root.setState(new NodeState.Builder(root.getState()).label("foo").build());
-        navigationService.saveNode(root.getContext(), null);
+        wrapper.saveNode(root.getContext(), null);
         assertEquals(0, createListener.events.size());
         assertEquals(1, updateListener.events.size());
         event = updateListener.events.removeFirst();
         assertEquals(SiteKey.portal("notification"), event.getData());
         assertEquals(EventType.NAVIGATION_UPDATED, event.getEventName());
-        assertSame(navigationService, event.getSource());
+        assertSame(wrapper, event.getSource());
         assertEquals(0, destroyListener.events.size());
 
         // Destroy
-        navigationService.destroyNavigation(navigation);
+        wrapper.destroyNavigation(navigation);
         assertEquals(0, createListener.events.size());
         assertEquals(0, updateListener.events.size());
         assertEquals(1, destroyListener.events.size());
         event = destroyListener.events.removeFirst();
         assertEquals(SiteKey.portal("notification"), event.getData());
         assertEquals(EventType.NAVIGATION_DESTROYED, event.getEventName());
-        assertSame(navigationService, event.getSource());
+        assertSame(wrapper, event.getSource());
 
         //
         end();
@@ -149,14 +157,14 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
 
         //
         begin();
-        navigationService.saveNavigation(new NavigationContext(key, new NavigationState(0)));
+        wrapper.saveNavigation(new NavigationContext(key, new NavigationState(0)));
         end(true);
 
         //
         begin();
-        NavigationContext nav = navigationService.loadNavigation(key);
+        NavigationContext nav = wrapper.loadNavigation(key);
         assertNotNull(nav);
-        NodeContext<Node, NodeState> root = navigationService.loadNode(Node.MODEL, nav, Scope.ALL, null);
+        NodeContext<Node, NodeState> root = wrapper.loadNode(Node.MODEL, nav, Scope.ALL, null);
         assertNotNull(root);
         end(true);
 
@@ -167,9 +175,9 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
 
         //
         begin();
-        assertNull(navigationService.loadNavigation(key));
+        assertNull(wrapper.loadNavigation(key));
         try {
-            navigationService.rebaseNode(root, null, null);
+            wrapper.rebaseNode(root, null, null);
             fail();
         } catch (NavigationServiceException e) {
             assertEquals(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
@@ -179,7 +187,7 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
 
     public void testCachingInMultiThreading() throws InterruptedException {
         final SiteKey foo = SiteKey.portal("test_caching_in_multi_threading");
-        assertNull(navigationService.loadNavigation(foo));
+        assertNull(wrapper.loadNavigation(foo));
 
         //
         createSite(SiteType.PORTAL, "test_caching_in_multi_threading");
@@ -187,7 +195,7 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
         sync(true);
 
         //
-        navigationService.saveNavigation(new NavigationContext(foo, new NavigationState(0)));
+        wrapper.saveNavigation(new NavigationContext(foo, new NavigationState(0)));
 
         // Start a new thread to work with navigations in parallels
         Thread t = new Thread(new Runnable() {
@@ -196,7 +204,7 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
                 begin();
                 // Loading the foo navigation and update into the cache if any
                 assertFalse(isSessionModified());
-                assertNull(navigationService.loadNavigation(foo));
+                assertNull(wrapper.loadNavigation(foo));
                 end(true);
             }
         });
@@ -205,12 +213,12 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
 
         // It loads directly from DB
         assertTrue(isSessionModified());
-        assertNotNull(navigationService.loadNavigation(foo));
+        assertNotNull(wrapper.loadNavigation(foo));
 
         sync(true);
 
         // It will load from Cache first if any
         assertFalse(isSessionModified());
-        assertNotNull(navigationService.loadNavigation(foo));
+        assertNotNull(wrapper.loadNavigation(foo));
     }
 }

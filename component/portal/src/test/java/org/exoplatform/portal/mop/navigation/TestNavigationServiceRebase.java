@@ -21,6 +21,7 @@ package org.exoplatform.portal.mop.navigation;
 
 import java.util.Iterator;
 
+import org.exoplatform.portal.mop.AbstractMopServiceTest;
 import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.hierarchy.Node;
@@ -35,7 +36,7 @@ import org.gatein.portal.mop.site.SiteType;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class TestNavigationServiceRebase extends AbstractTestNavigationService {
+public class TestNavigationServiceRebase extends AbstractMopServiceTest {
 
     public void testRebase1() throws Exception {
         NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase1"));
@@ -45,20 +46,20 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase1"));
-        Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("rebase1"));
+        Node root1 = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         Node a = root1.getChild("a");
         Node d = root1.getChild("d");
         Node b = root1.addChild(1, "b");
 
         //
-        Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        Node root2 = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         Node c2 = root2.addChild(1, "c");
-        service.saveNode(root2.getContext(), null);
+        navigationService.saveNode(root2.getContext(), null);
         sync(true);
 
         //
-        service.rebaseNode(root1.getContext(), null, null);
+        navigationService.rebaseNode(root1.getContext(), null, null);
         assertEquals(4, root1.getNodeCount());
         assertSame(a, root1.getChild(0));
         assertSame(b, root1.getChild(1));
@@ -77,20 +78,20 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase2"));
-        Node root1 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("rebase2"));
+        Node root1 = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         Node a = root1.getChild("a");
         Node b = root1.getChild("b");
         Node c = a.addChild("c");
 
         //
-        Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        Node root2 = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root2.getChild("b").addChild(root2.getChild("a"));
-        service.saveNode(root2.getContext(), null);
+        navigationService.saveNode(root2.getContext(), null);
         sync(true);
 
         //
-        service.rebaseNode(root1.getContext(), null, null);
+        navigationService.rebaseNode(root1.getContext(), null, null);
         assertEquals(null, root1.getChild("a"));
         assertSame(b, root1.getChild("b"));
         assertEquals(root1, b.getParent());
@@ -110,19 +111,19 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase3"));
-        Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("rebase3"));
+        Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root.getChild("a").addChild("foo");
 
         //
-        Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        Node root2 = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root2.removeChild("a");
-        service.saveNode(root2.getContext(), null);
+        navigationService.saveNode(root2.getContext(), null);
         sync(true);
 
         //
         try {
-            service.rebaseNode(root.getContext(), null, null);
+            navigationService.rebaseNode(root.getContext(), null, null);
             fail();
         } catch (NavigationServiceException e) {
             assertEquals(NavigationError.ADD_CONCURRENTLY_REMOVED_PARENT_NODE, e.getError());
@@ -142,13 +143,13 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase4"));
-        Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("rebase4"));
+        Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root.addChild(root.getChild("a").getChild("b"));
         root.removeChild("a");
 
         //
-        service.rebaseNode(root.getContext(), null, null);
+        navigationService.rebaseNode(root.getContext(), null, null);
     }
 
     public void testRebaseAddDuplicate() throws Exception {
@@ -158,19 +159,19 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_add_duplicate"));
-        Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("rebase_add_duplicate"));
+        Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root.addChild("a");
 
         //
-        Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        Node root2 = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root2.addChild("a");
-        service.saveNode(root2.getContext(), null);
+        navigationService.saveNode(root2.getContext(), null);
         sync(true);
 
         //
         try {
-            service.rebaseNode(root.getContext(), null, null);
+            navigationService.rebaseNode(root.getContext(), null, null);
             fail();
         } catch (NavigationServiceException e) {
             assertEquals(NavigationError.ADD_CONCURRENTLY_ADDED_NODE, e.getError());
@@ -186,19 +187,19 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_move_duplicate"));
-        Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("rebase_move_duplicate"));
+        Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root.addChild(root.getChild("a").getChild("b"));
 
         //
-        Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        Node root2 = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root2.addChild("b");
-        service.saveNode(root2.getContext(), null);
+        navigationService.saveNode(root2.getContext(), null);
         sync(true);
 
         //
         try {
-            service.rebaseNode(root.getContext(), null, null);
+            navigationService.rebaseNode(root.getContext(), null, null);
             fail();
         } catch (NavigationServiceException e) {
             assertEquals(NavigationError.MOVE_CONCURRENTLY_DUPLICATE_NAME, e.getError());
@@ -214,19 +215,19 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_rename_duplicate"));
-        Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("rebase_rename_duplicate"));
+        Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root.getChild("a").setName("b");
 
         //
-        Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        Node root2 = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root2.addChild("b");
-        service.saveNode(root2.getContext(), null);
+        navigationService.saveNode(root2.getContext(), null);
         sync(true);
 
         //
         try {
-            service.rebaseNode(root.getContext(), null, null);
+            navigationService.rebaseNode(root.getContext(), null, null);
             fail();
         } catch (NavigationServiceException e) {
             assertEquals(NavigationError.RENAME_CONCURRENTLY_DUPLICATE_NAME, e.getError());
@@ -241,19 +242,19 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_federation"));
-        Node root1 = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("rebase_federation"));
+        Node root1 = navigationService.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
         final Node a = root1.getChild("a");
         final Node c = root1.addChild("c");
 
         //
-        Node root2 = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        Node root2 = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
         root2.addChild("d").addChild("e");
-        service.saveNode(root2.getContext(), null);
+        navigationService.saveNode(root2.getContext(), null);
         sync(true);
 
         //
-        Iterator<NodeChange<Node, NodeState>> changes = a.rebase(service, Scope.CHILDREN);
+        Iterator<NodeChange<Node, NodeState>> changes = a.rebase(navigationService, Scope.CHILDREN);
         Iterator<Node> children = root1.getChildren().iterator();
         assertSame(a, children.next());
         assertSame(c, children.next());
@@ -284,13 +285,13 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_transient_parent"));
-        Node root = service.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("rebase_transient_parent"));
+        Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.CHILDREN, null).getNode();
         Node a = root.addChild("a");
         Node b = root.addChild("b"); // It is only failed if we add more than one transient node
 
         //
-        service.rebaseNode(a.getContext(), Scope.CHILDREN, null);
+        navigationService.rebaseNode(a.getContext(), Scope.CHILDREN, null);
     }
 
     public void testRemovedNavigation() throws Exception {
@@ -300,16 +301,16 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_removed_navigation"));
-        Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
-        service.destroyNavigation(navigation);
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("rebase_removed_navigation"));
+        Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        navigationService.destroyNavigation(navigation);
 
         //
         sync(true);
 
         //
         try {
-            service.rebaseNode(root.getContext(), null, null);
+            navigationService.rebaseNode(root.getContext(), null, null);
         } catch (NavigationServiceException e) {
             assertSame(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE, e.getError());
         }
@@ -323,8 +324,8 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_state"));
-        Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("rebase_state"));
+        Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
 
         NodeState state = new NodeState.Builder().label("foo").build();
         root.getChild("a").setState(state);
@@ -334,7 +335,7 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        Iterator<NodeChange<Node, NodeState>> changes = root.rebase(service, null);
+        Iterator<NodeChange<Node, NodeState>> changes = root.rebase(navigationService, null);
         assertFalse(changes.hasNext());
         assertSame(state, root.getChild("a").getState());
     }
@@ -347,8 +348,8 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        NavigationContext navigation = service.loadNavigation(SiteKey.portal("rebase_name"));
-        Node root = service.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
+        NavigationContext navigation = navigationService.loadNavigation(SiteKey.portal("rebase_name"));
+        Node root = navigationService.loadNode(Node.MODEL, navigation, Scope.ALL, null).getNode();
 
         Node a = root.getChild("a");
         a.setName("b");
@@ -358,7 +359,7 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
         sync(true);
 
         //
-        Iterator<NodeChange<Node, NodeState>> changes = root.rebase(service, null);
+        Iterator<NodeChange<Node, NodeState>> changes = root.rebase(navigationService, null);
         assertFalse(changes.hasNext());
         assertSame("b", a.getName());
     }

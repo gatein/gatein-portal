@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.exoplatform.portal.mop;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -27,7 +27,6 @@ import java.util.Map;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
-import org.exoplatform.portal.mop.AbstractMOPTest;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.navigation.NavigationData;
@@ -35,6 +34,11 @@ import org.gatein.portal.mop.navigation.NavigationPersistence;
 import org.gatein.portal.mop.navigation.NavigationServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationState;
 import org.gatein.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.page.PageData;
+import org.gatein.portal.mop.page.PageKey;
+import org.gatein.portal.mop.page.PagePersistence;
+import org.gatein.portal.mop.page.PageServiceImpl;
+import org.gatein.portal.mop.page.PageState;
 import org.gatein.portal.mop.site.SiteData;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SitePersistence;
@@ -47,18 +51,21 @@ import org.gatein.portal.mop.site.SiteType;
 @ConfiguredBy({
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
-        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml")
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-mop-configuration.xml")
 })
-public abstract class AbstractTestNavigationService extends AbstractMOPTest {
+public abstract class AbstractMopServiceTest extends AbstractMopTest {
 
     /** . */
-    protected NavigationServiceImpl service;
+    protected PageServiceImpl pageService;
+
+    /** . */
+    protected NavigationServiceImpl navigationService;
 
     /** . */
     protected DescriptionService descriptionService;
 
     /** . */
-    private PersistenceContext context;
+    protected PersistenceContext context;
 
     protected PersistenceContext createPersistenceContext() {
         return new PersistenceContext.JCR();
@@ -68,8 +75,9 @@ public abstract class AbstractTestNavigationService extends AbstractMOPTest {
     protected void setUp() throws Exception {
         context = createPersistenceContext();
         context.setUp();
-        service = context.getNavitationService();
+        navigationService = context.getNavigationService();
         descriptionService = context.getDescriptionService();
+        pageService = context.getPageService();
         super.setUp();
     }
 
@@ -91,6 +99,10 @@ public abstract class AbstractTestNavigationService extends AbstractMOPTest {
 
     protected final SitePersistence getSitePersistence() {
         return context.getSitePersistence();
+    }
+
+    protected final PagePersistence getPagePersistence() {
+        return context.getPagePersistence();
     }
 
     protected final SiteData createSite(SiteType type, String siteName) {
@@ -123,6 +135,22 @@ public abstract class AbstractTestNavigationService extends AbstractMOPTest {
             previous = created[i].id;
         }
         return created;
+    }
+
+    protected final PageData createPage(SiteData data, String name, PageState state) {
+        PagePersistence pagePersistence = getPagePersistence();
+        PageKey key = data.key.page(name);
+        pagePersistence.savePage(key, state);
+        return pagePersistence.loadPage(key);
+    }
+
+    protected PageData getPage(SiteKey site, String name) {
+        return getPage(site.page(name));
+    }
+
+    protected PageData getPage(PageKey key) {
+        PagePersistence pagePersistence = getPagePersistence();
+        return pagePersistence.loadPage(key);
     }
 
     protected final Map<String, NodeData> createNodeChild(NodeData parent, Map<String, NodeState> nodes) {
