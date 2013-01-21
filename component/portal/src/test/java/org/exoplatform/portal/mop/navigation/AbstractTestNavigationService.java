@@ -19,18 +19,27 @@
 
 package org.exoplatform.portal.mop.navigation;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
-import org.exoplatform.container.PortalContainer;
-import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.mop.AbstractMOPTest;
-import org.exoplatform.portal.mop.description.MopPersistence;
-import org.exoplatform.portal.mop.description.SimpleDataCache;
-import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.portal.mop.description.DescriptionService;
-import org.gatein.portal.mop.description.DescriptionServiceImpl;
+import org.gatein.portal.mop.hierarchy.NodeData;
+import org.gatein.portal.mop.navigation.NavigationData;
+import org.gatein.portal.mop.navigation.NavigationPersistence;
 import org.gatein.portal.mop.navigation.NavigationServiceImpl;
+import org.gatein.portal.mop.navigation.NavigationState;
+import org.gatein.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.site.SiteData;
+import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SitePersistence;
+import org.gatein.portal.mop.site.SiteState;
+import org.gatein.portal.mop.site.SiteType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -38,34 +47,85 @@ import org.gatein.portal.mop.navigation.NavigationServiceImpl;
 @ConfiguredBy({
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
-        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml"),
-        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "org/exoplatform/portal/mop/navigation/configuration.xml") })
+        @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-configuration.xml")
+})
 public abstract class AbstractTestNavigationService extends AbstractMOPTest {
-
-    /** . */
-    protected POMSessionManager mgr;
 
     /** . */
     protected NavigationServiceImpl service;
 
     /** . */
-    protected DataStorage dataStorage;
+    protected DescriptionService descriptionService;
 
     /** . */
-    protected DescriptionService descriptionService;
+    private PersistenceContext context;
+
+    protected PersistenceContext createPersistenceContext() {
+        return new PersistenceContext.JCR();
+    }
 
     @Override
     protected void setUp() throws Exception {
-        PortalContainer container = PortalContainer.getInstance();
-        mgr = (POMSessionManager) container.getComponentInstanceOfType(POMSessionManager.class);
-        service = new NavigationServiceImpl(new MopPersistenceFactory(mgr));
-        descriptionService = new DescriptionServiceImpl(new MopPersistence(mgr, new SimpleDataCache()));
-        dataStorage = (DataStorage) container.getComponentInstanceOfType(DataStorage.class);
-
-        // Clear the cache for each test
-        service.clearCache();
-
-        //
+        context = createPersistenceContext();
+        context.setUp();
+        service = context.getNavitationService();
+        descriptionService = context.getDescriptionService();
         super.setUp();
+    }
+
+    protected final NavigationPersistence getNavigationPersistence() {
+        return context.getNavigationPersistence();
+    }
+
+    protected final SitePersistence getSitePersistence() {
+        return context.getSitePersistence();
+    }
+
+    protected final SiteData createSite(SiteType type, String siteName) {
+        SitePersistence sitePersistence = getSitePersistence();
+        SiteKey key = type.key(siteName);
+        sitePersistence.saveSite(key, new SiteState("fr", "", "", Arrays.<String>asList(), "", Collections.<String, String>emptyMap(), ""));
+        return sitePersistence.loadSite(key);
+    }
+
+    protected final boolean destroySite(SiteType type, String siteName) {
+        SitePersistence sitePersistence = getSitePersistence();
+        SiteKey key = type.key(siteName);
+        return sitePersistence.destroySite(key);
+    }
+
+    protected final NodeData createNavigatation(SiteData data) {
+        NavigationPersistence navigationPersistence = getNavigationPersistence();
+        navigationPersistence.saveNavigation(data.key, new NavigationState(0));
+        NavigationData navigation = navigationPersistence.loadNavigationData(data.key);
+        return navigationPersistence.loadNode(navigation.rootId);
+    }
+
+    protected final NodeData[] createNodeChild(NodeData parent, String... names) {
+        NavigationPersistence navigationPersistence = getNavigationPersistence();
+        String previous = parent.getLastChild();
+        NodeData[] created = new NodeData[names.length];
+        for (int i = 0;i < names.length;i++) {
+            NodeData<NodeState> child = navigationPersistence.createNode(parent.id, previous, names[i], NodeState.INITIAL)[1];
+            created[i] = child;
+            previous = created[i].id;
+        }
+        return created;
+    }
+
+    protected final Map<String, NodeData> createNodeChild(NodeData parent, Map<String, NodeState> nodes) {
+        NavigationPersistence navigationPersistence = getNavigationPersistence();
+        String previous = parent.getLastChild();
+        LinkedHashMap<String, NodeData> created = new LinkedHashMap<String, NodeData>(nodes.size());
+        for (Map.Entry<String, NodeState> node : nodes.entrySet()) {
+            NodeData<NodeState> child = navigationPersistence.createNode(parent.id, previous, node.getKey(), node.getValue())[1];
+            created.put(node.getKey(), child);
+            previous = child.id;
+        }
+        return created;
+    }
+
+    protected final boolean isSessionModified() {
+        return context.isSessionModified();
     }
 }

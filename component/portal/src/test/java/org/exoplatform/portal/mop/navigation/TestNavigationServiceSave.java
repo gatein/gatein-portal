@@ -21,24 +21,18 @@ package org.exoplatform.portal.mop.navigation;
 
 import java.util.Iterator;
 
-import javax.jcr.NodeIterator;
-import javax.jcr.Session;
-
+import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.gatein.portal.mop.hierarchy.Node;
 import org.gatein.portal.mop.hierarchy.NodeChange;
 import org.gatein.portal.mop.hierarchy.Scope;
-import org.gatein.mop.api.workspace.Navigation;
-import org.gatein.mop.api.workspace.ObjectType;
-import org.gatein.mop.api.workspace.Site;
-import org.gatein.mop.core.api.MOPService;
 import org.gatein.portal.mop.navigation.NavigationContext;
 import org.gatein.portal.mop.navigation.NavigationError;
 import org.gatein.portal.mop.navigation.NavigationServiceException;
-import org.gatein.portal.mop.navigation.NavigationServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationState;
 import org.gatein.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.site.SiteType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -55,7 +49,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
         assertNull(nav);
 
         //
-        mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_navigation");
+        createSite(SiteType.PORTAL, "save_navigation");
 
         //
         sync(true);
@@ -98,8 +92,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
         assertNull(nav);
 
         //
-        mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "destroy_navigation").getRootNavigation()
-                .addChild("default").addChild("a");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "destroy_navigation"));
+        createNodeChild(node, "a");
 
         //
         sync(true);
@@ -136,9 +130,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testAddChild() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "add_child");
-        portal.getRootNavigation().addChild("default");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "add_child"));
 
         //
         sync(true);
@@ -193,9 +185,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testRemoveChild() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_child");
-        portal.getRootNavigation().addChild("default").addChild("foo");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "remove_child"));
+        createNodeChild(node, "foo");
 
         //
         sync(true);
@@ -243,9 +234,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testRemoveTransientChild() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_transient_child");
-        portal.getRootNavigation().addChild("default");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "remove_transient_child"));
 
         //
         sync(true);
@@ -279,11 +268,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testRename() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rename");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a");
-        def.addChild("b");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rename"));
+        createNodeChild(node, "a", "b");
 
         //
         sync(true);
@@ -335,12 +321,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testReorderChild() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "reorder_child");
-        Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-        rootNavigation.addChild("foo");
-        rootNavigation.addChild("bar");
-        rootNavigation.addChild("juu");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "reorder_child"));
+        createNodeChild(node, "foo", "bar", "juu");
 
         //
         sync(true);
@@ -428,12 +410,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void _testReorderChild2() {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "reorder_child_2");
-        Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-        rootNavigation.addChild("foo");
-        rootNavigation.addChild("bar");
-        rootNavigation.addChild("juu");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "reorder_child_2"));
+        createNodeChild(node, "foo", "bar", "juu");
 
         //
         sync(true);
@@ -459,7 +437,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
         sync(true);
 
         //
-        root = new NavigationServiceImpl(new MopPersistenceFactory(mgr)).loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
+//        root = new NavigationServiceImpl(new MopPersistenceFactory(mgr)).loadNode(Node.MODEL, nav, Scope.CHILDREN, null).getNode();
         for (Node child : root.getChildren()) {
             System.out.println("child : " + child.getId());
         }
@@ -474,88 +452,9 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
         assertEquals("daa", tab3.getName());
     }
 
-    public void _testWeirdBug() {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "reorder_child_2");
-        Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-        rootNavigation.addChild("foo");
-        rootNavigation.addChild("bar");
-        rootNavigation.addChild("juu");
-
-        //
-        sync(true);
-
-        //
-        portal = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "reorder_child_2");
-        rootNavigation = portal.getRootNavigation().getChild("default");
-        rootNavigation.getChild("bar").destroy();
-
-        //
-        sync(true);
-
-        //
-        portal = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "reorder_child_2");
-        rootNavigation = portal.getRootNavigation().getChild("default");
-        rootNavigation.addChild("daa");
-
-        //
-        sync(true);
-
-        //
-        portal = mop.getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "reorder_child_2");
-        rootNavigation = portal.getRootNavigation().getChild("default");
-        Navigation daa = rootNavigation.getChildren().get(2);
-        assertEquals("daa", daa.getName());
-    }
-
-    public void _testWeirdBug2() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Session session = mop.getModel().getSession().getJCRSession();
-        javax.jcr.Node container = session.getRootNode().getNode("mop:workspace/mop:portalsites")
-                .addNode("mop:reorder_child_2").getNode("mop:rootnavigation/mop:children").addNode("mop:default")
-                .getNode("mop:children");
-        container.addNode("mop:foo");
-        container.addNode("mop:bar");
-        container.addNode("mop:juu");
-
-        //
-        sync(true);
-
-        //
-        session = mop.getModel().getSession().getJCRSession();
-        container = session.getRootNode().getNode(
-                "mop:workspace/mop:portalsites/mop:reorder_child_2/mop:rootnavigation/mop:children/mop:default/mop:children");
-        container.getNode("mop:bar").remove();
-
-        //
-        sync(true);
-
-        //
-        session = mop.getModel().getSession().getJCRSession();
-        container = session.getRootNode().getNode(
-                "mop:workspace/mop:portalsites/mop:reorder_child_2/mop:rootnavigation/mop:children/mop:default/mop:children");
-        container.addNode("mop:daa");
-        container.orderBefore("mop:daa", null);
-
-        //
-        sync(true);
-
-        //
-        container = session.getRootNode().getNode(
-                "mop:workspace/mop:portalsites/mop:reorder_child_2/mop:rootnavigation/mop:children/mop:default/mop:children");
-        NodeIterator it = container.getNodes();
-        assertEquals("mop:foo", it.nextNode().getName());
-        assertEquals("mop:juu", it.nextNode().getName());
-        assertEquals("mop:daa", it.nextNode().getName());
-        assertFalse(it.hasNext());
-    }
-
     public void testMoveChild() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_child");
-        Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-        rootNavigation.addChild("foo").addChild("juu");
-        rootNavigation.addChild("bar");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "move_child"));
+        createNodeChild(createNodeChild(node, "foo", "bar")[0], "juu");
 
         //
         sync(true);
@@ -589,12 +488,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testMoveAfter1() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_move_after_1");
-        Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-        rootNavigation.addChild("a");
-        rootNavigation.addChild("b");
-        rootNavigation.addChild("c");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "save_move_after_1"));
+        createNodeChild(node, "a", "b", "c");
 
         //
         sync(true);
@@ -631,12 +526,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testMoveAfter2() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_move_after_2");
-        Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-        rootNavigation.addChild("a");
-        rootNavigation.addChild("b");
-        rootNavigation.addChild("c");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "save_move_after_2"));
+        createNodeChild(node, "a", "b", "c");
 
         //
         sync(true);
@@ -673,10 +564,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testRenameNode() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rename_node");
-        Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-        rootNavigation.addChild("foo");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rename_node"));
+        createNodeChild(node, "foo");
 
         //
         sync(true);
@@ -735,14 +624,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testSaveChildren() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_children");
-        Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-        rootNavigation.addChild("1");
-        rootNavigation.addChild("2");
-        rootNavigation.addChild("3");
-        rootNavigation.addChild("4");
-        rootNavigation.addChild("5");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "save_children"));
+        createNodeChild(node, "1", "2", "3", "4", "5");
 
         //
         sync(true);
@@ -782,10 +665,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testSaveRecursive() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_recursive");
-        Navigation rootNavigation = portal.getRootNavigation().addChild("default");
-        rootNavigation.addChild("foo");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "save_recursive"));
+        createNodeChild(node, "foo");
 
         //
         sync(true);
@@ -817,9 +698,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testSaveState() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_state");
-        portal.getRootNavigation().addChild("default");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "save_state"));
 
         //
         sync(true);
@@ -854,9 +733,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void _testSaveStateOverwrite() {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_state_overwrite");
-        portal.getRootNavigation().addChild("default");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "save_state_overwrite"));
 
         //
         sync(true);
@@ -884,9 +761,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testRecreateNode() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "recreate_node");
-        portal.getRootNavigation().addChild("default").addChild("foo");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "recreate_node"));
+        createNodeChild(node, "foo");
 
         //
         sync(true);
@@ -915,10 +791,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testMoveToAdded() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_to_added");
-        Navigation nav = portal.getRootNavigation().addChild("default");
-        nav.addChild("a").addChild("b");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "move_to_added"));
+        createNodeChild(createNodeChild(node, "a")[0], "b");
 
         //
         sync(true);
@@ -953,11 +827,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testMoveFromRemoved() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "moved_from_removed");
-        Navigation nav = portal.getRootNavigation().addChild("default");
-        nav.addChild("a").addChild("c");
-        nav.addChild("b");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "moved_from_removed"));
+        createNodeChild(createNodeChild(node, "a", "b")[0], "c");
 
         //
         sync(true);
@@ -992,9 +863,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testRemoveAdded() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_added");
-        portal.getRootNavigation().addChild("default");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "remove_added"));
 
         //
         sync(true);
@@ -1018,9 +887,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testTransitiveRemoveTransient() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "transitive_remove_transient");
-        portal.getRootNavigation().addChild("default");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "transitive_remove_transient"));
 
         //
         sync(true);
@@ -1044,9 +911,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testRenameCreatedNode() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_rename_created");
-        portal.getRootNavigation().addChild("default");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "save_rename_created"));
 
         //
         sync(true);
@@ -1061,9 +926,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentAddToRemoved() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "add_to_removed");
-        portal.getRootNavigation().addChild("default").addChild("a");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "add_to_removed"));
+        createNodeChild(node, "a");
 
         //
         sync(true);
@@ -1091,12 +955,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentMerge() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_merge");
-        Navigation nav = portal.getRootNavigation().addChild("default");
-        nav.addChild("a");
-        nav.addChild("b");
-        nav.addChild("c");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "save_merge"));
+        createNodeChild(node, "a", "b", "c");
 
         //
         sync(true);
@@ -1127,9 +987,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentRemoveRemoved() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_removed");
-        portal.getRootNavigation().addChild("default").addChild("a");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "remove_removed"));
+        createNodeChild(node, "a");
 
         //
         sync(true);
@@ -1155,9 +1014,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentMoveRemoved() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_removed");
-        portal.getRootNavigation().addChild("default").addChild("a").addChild("b");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "move_removed"));
+        createNodeChild(createNodeChild(node, "a")[0], "b");
 
         //
         sync(true);
@@ -1185,10 +1043,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentMoveToRemoved() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_to_removed");
-        portal.getRootNavigation().addChild("default").addChild("a");
-        portal.getRootNavigation().getChild("default").addChild("b");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "move_to_removed"));
+        createNodeChild(node, "a", "b");
 
         //
         sync(true);
@@ -1216,11 +1072,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentMoveMoved() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "move_moved");
-        portal.getRootNavigation().addChild("default").addChild("a");
-        portal.getRootNavigation().getChild("default").addChild("b");
-        portal.getRootNavigation().getChild("default").addChild("c");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "move_moved"));
+        createNodeChild(node, "a", "b", "c");
 
         //
         sync(true);
@@ -1248,9 +1101,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentAddDuplicate() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_add_duplicate");
-        portal.getRootNavigation().addChild("default");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "concurrent_add_duplicate"));
 
         //
         sync(true);
@@ -1278,9 +1129,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentAddAfterRemoved() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_add_after_removed");
-        portal.getRootNavigation().addChild("default").addChild("a");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "concurrent_add_after_removed"));
+        createNodeChild(node, "a");
 
         //
         sync(true);
@@ -1308,11 +1158,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentMoveAfterRemoved() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_move_after_removed");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a").addChild("b");
-        def.addChild("c");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "concurrent_move_after_removed"));
+        createNodeChild(createNodeChild(node, "a", "c")[0], "b");
 
         //
         sync(true);
@@ -1340,10 +1187,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentMoveFromRemoved() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_move_from_removed");
-        portal.getRootNavigation().addChild("default").addChild("a").addChild("b");
-        portal.getRootNavigation().getChild("default").addChild("c");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "concurrent_move_from_removed"));
+        createNodeChild(createNodeChild(node, "a", "c")[0], "b");
 
         //
         sync(true);
@@ -1371,9 +1216,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentRenameRemoved() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_rename_removed");
-        portal.getRootNavigation().addChild("default").addChild("a");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "concurrent_rename_removed"));
+        createNodeChild(node, "a");
 
         //
         sync(true);
@@ -1401,9 +1245,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentDuplicateRename() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_duplicate_rename");
-        portal.getRootNavigation().addChild("default").addChild("a");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "concurrent_duplicate_rename"));
+        createNodeChild(node, "a");
 
         //
         sync(true);
@@ -1431,9 +1274,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testSavePhantomNode() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "concurrent_save");
-        portal.getRootNavigation().addChild("default");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "concurrent_save"));
 
         //
         sync(true);
@@ -1472,9 +1313,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentRemovalDoesNotPreventSave() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "removal_does_not_prevent_save");
-        portal.getRootNavigation().addChild("default").addChild("a");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "removal_does_not_prevent_save"));
+        createNodeChild(node, "a");
 
         //
         sync(true);
@@ -1494,10 +1334,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testConcurrentRename() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_concurrent_rename");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "save_concurrent_rename"));
+        createNodeChild(node, "a");
 
         //
         sync(true);
@@ -1520,9 +1358,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testRemovedNavigation() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_removed_navigation");
-        portal.getRootNavigation().addChild("default");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "save_removed_navigation"));
 
         //
         sync(true);
@@ -1545,9 +1381,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testPendingChangesBypassCache() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "pending_changes_bypass_cache");
-        portal.getRootNavigation().addChild("default");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "pending_changes_bypass_cache"));
 
         //
         sync(true);
@@ -1564,11 +1398,8 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
     }
 
     public void testAtomic() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_atomic");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a");
-        def.addChild("b");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "save_atomic"));
+        createNodeChild(node, "a", "b");
 
         //
         sync(true);
@@ -1588,7 +1419,7 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
         sync(true);
 
         //
-        assertFalse(mgr.getSession().isModified());
+        assertFalse(isSessionModified());
 
         //
         try {
@@ -1599,14 +1430,12 @@ public class TestNavigationServiceSave extends AbstractTestNavigationService {
         }
 
         //
-        assertFalse(mgr.getSession().isModified());
+        assertFalse(isSessionModified());
     }
 
     public void testRebase() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "save_rebase");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "save_rebase"));
+        createNodeChild(node, "a");
 
         //
         sync(true);

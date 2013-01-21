@@ -31,6 +31,7 @@ import org.exoplatform.portal.config.model.LocalizedString;
 import org.exoplatform.portal.config.model.NavigationFragment;
 import org.exoplatform.portal.config.model.PageNavigation;
 import org.gatein.portal.mop.description.DescriptionState;
+import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.navigation.AbstractTestNavigationService;
 import org.gatein.portal.mop.navigation.NavigationContext;
@@ -41,6 +42,7 @@ import org.gatein.portal.mop.hierarchy.Scope;
 import org.gatein.common.util.Tools;
 import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.mop.core.api.MOPService;
+import org.gatein.portal.mop.site.SiteType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -63,8 +65,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         String name = mode.name() + "_create";
 
         //
-        MOPService mop = mgr.getPOMService();
-        mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, name);
+        createSite(SiteType.PORTAL, name);
         sync(true);
 
         //
@@ -80,8 +81,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
     }
 
     public void testInsertNavigation() {
-        MOPService mop = mgr.getPOMService();
-        mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "insert_navigation");
+        createSite(SiteType.PORTAL, "insert_navigation");
         sync(true);
 
         //
@@ -107,8 +107,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
     }
 
     public void testInsertFragment() {
-        MOPService mop = mgr.getPOMService();
-        mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "insert_fragment");
+        createSite(SiteType.PORTAL, "insert_fragment");
         sync(true);
 
         //
@@ -149,8 +148,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
         String name = importMode.name() + "_merge";
 
         //
-        MOPService mop = mgr.getPOMService();
-        mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, name);
+        createSite(SiteType.PORTAL, name);
         sync(true);
 
         //
@@ -237,8 +235,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
     }
 
     public void testOrder() {
-        MOPService mop = mgr.getPOMService();
-        mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "order");
+        createSite(SiteType.PORTAL, "order");
         sync(true);
 
         //
@@ -288,8 +285,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
     }
 
     public void testExtendedLabel() {
-        MOPService mop = mgr.getPOMService();
-        mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "extended_label");
+        createSite(SiteType.PORTAL, "extended_label");
         sync(true);
 
         //
@@ -425,8 +421,7 @@ public class TestNavigationImporter extends AbstractTestNavigationService {
     }
 
     public void testFullNavigation() {
-        MOPService mop = mgr.getPOMService();
-        mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "full_navigation");
+        createSite(SiteType.PORTAL, "full_navigation");
         sync(true);
 
         //

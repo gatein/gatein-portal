@@ -27,17 +27,16 @@ import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.hierarchy.Node;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.Scope;
-import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.listener.Event;
 import org.exoplatform.services.listener.Listener;
 import org.exoplatform.services.listener.ListenerService;
-import org.gatein.mop.api.workspace.ObjectType;
 import org.gatein.portal.mop.navigation.NavigationContext;
 import org.gatein.portal.mop.navigation.NavigationError;
 import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.navigation.NavigationServiceException;
 import org.gatein.portal.mop.navigation.NavigationState;
 import org.gatein.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.site.SiteType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -51,9 +50,6 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
     /** . */
     private ListenerService listenerService;
 
-    /** . */
-    private POMSessionManager mgr;
-
     @Override
     protected void setUp() throws Exception {
         PortalContainer container = getContainer();
@@ -61,7 +57,6 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
         //
         listenerService = (ListenerService) container.getComponentInstanceOfType(ListenerService.class);
         navigationService = (NavigationService) container.getComponentInstanceOfType(NavigationService.class);
-        mgr = (POMSessionManager) container.getComponentInstanceOfType(POMSessionManager.class);
 
         //
         super.setUp();
@@ -91,7 +86,7 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
 
         //
         begin();
-        mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "notification");
+        createSite(SiteType.PORTAL, "notification");
 
         // Create
         NavigationContext navigation = new NavigationContext(SiteKey.portal("notification"), new NavigationState(3));
@@ -149,8 +144,7 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
 
         //
         begin();
-        mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "wrapper_cache_invalidation")
-                .getRootNavigation().addChild("default");
+        createNavigatation(createSite(SiteType.PORTAL, "wrapper_cache_invalidation"));
         end(true);
 
         //
@@ -168,7 +162,7 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
 
         //
         begin();
-        mgr.getPOMService().getModel().getWorkspace().getSite(ObjectType.PORTAL_SITE, "wrapper_cache_invalidation").destroy();
+        assertTrue(destroySite(SiteType.PORTAL, "wrapper_cache_invalidation"));
         end(true);
 
         //
@@ -186,11 +180,13 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
     public void testCachingInMultiThreading() throws InterruptedException {
         final SiteKey foo = SiteKey.portal("test_caching_in_multi_threading");
         assertNull(navigationService.loadNavigation(foo));
-        mgr.getPOMService().getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "test_caching_in_multi_threading");
-        assertTrue(mgr.getSession().isModified());
 
+        //
+        createSite(SiteType.PORTAL, "test_caching_in_multi_threading");
+        assertTrue(isSessionModified());
         sync(true);
 
+        //
         navigationService.saveNavigation(new NavigationContext(foo, new NavigationState(0)));
 
         // Start a new thread to work with navigations in parallels
@@ -199,7 +195,7 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
             public void run() {
                 begin();
                 // Loading the foo navigation and update into the cache if any
-                assertFalse(mgr.getSession().isModified());
+                assertFalse(isSessionModified());
                 assertNull(navigationService.loadNavigation(foo));
                 end(true);
             }
@@ -208,13 +204,13 @@ public class TestNavigationServiceWrapper extends AbstractTestNavigationService 
         t.join();
 
         // It loads directly from DB
-        assertTrue(mgr.getSession().isModified());
+        assertTrue(isSessionModified());
         assertNotNull(navigationService.loadNavigation(foo));
 
         sync(true);
 
         // It will load from Cache first if any
-        assertFalse(mgr.getSession().isModified());
+        assertFalse(isSessionModified());
         assertNotNull(navigationService.loadNavigation(foo));
     }
 }

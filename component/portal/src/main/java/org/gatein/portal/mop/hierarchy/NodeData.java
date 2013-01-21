@@ -133,6 +133,10 @@ public class NodeData<S extends Serializable> implements Serializable {
         return state;
     }
 
+    public String getLastChild() {
+        return children.length > 0 ? children[children.length - 1] : null;
+    }
+
     @Override
     public String toString() {
         return "NodeData[id=" + id + ",name=" + name + ",state=" + state + ",children=" + Arrays.asList(children) + "]";

@@ -51,6 +51,7 @@ import org.gatein.portal.mop.QueryResult;
 import org.exoplatform.portal.mop.site.MopPersistence;
 import org.exoplatform.portal.mop.site.SimpleDataCache;
 import org.gatein.portal.mop.site.SiteKey;
+import org.gatein.portal.mop.site.SitePersistence;
 import org.gatein.portal.mop.site.SiteType;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.exoplatform.portal.mop.layout.ElementState;
@@ -122,6 +123,9 @@ public class POMDataStorage implements ModelDataStorage {
     /** . */
     private final SiteService siteService ;
 
+    /** . */
+    private final MopPersistence sitePersistence;
+
     public POMDataStorage(final POMSessionManager pomMgr, ConfigurationManager confManager,
             JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService, ListenerService listenerService) {
 
@@ -143,7 +147,12 @@ public class POMDataStorage implements ModelDataStorage {
         this.jtaUserTransactionLifecycleService = jtaUserTransactionLifecycleService;
         this.listenerService = listenerService;
         this.layoutService = new LayoutServiceImpl(pomMgr);
-        this.siteService = new SiteServiceImpl(new MopPersistence(pomMgr, new SimpleDataCache()));
+        this.sitePersistence = new MopPersistence(pomMgr, new SimpleDataCache());
+        this.siteService = new SiteServiceImpl(sitePersistence);
+    }
+
+    public SitePersistence getSitePersistence() {
+        return sitePersistence;
     }
 
     public PortalData getPortalConfig(PortalKey key) throws Exception {

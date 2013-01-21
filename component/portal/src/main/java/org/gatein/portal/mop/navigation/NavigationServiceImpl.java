@@ -42,7 +42,7 @@ public class NavigationServiceImpl implements NavigationService {
     private final NodeManager<NodeState> manager;
 
     /** . */
-    private final Provider<? extends NavigationPersistence> persistenceFactory;
+    final Provider<? extends NavigationPersistence> persistenceFactory;
 
     public NavigationServiceImpl(Provider<? extends NavigationPersistence> persistenceFactory) throws NullPointerException {
         if (persistenceFactory == null) {
@@ -52,6 +52,12 @@ public class NavigationServiceImpl implements NavigationService {
         //
         this.persistenceFactory = persistenceFactory;
         this.manager = new NodeManager<NodeState>(persistenceFactory);
+    }
+
+    // For unit testing purpose
+    // remove public when package moved
+    public Provider<? extends NavigationPersistence> getPersistenceFactory() {
+        return persistenceFactory;
     }
 
     public NavigationContext loadNavigation(SiteKey key) {

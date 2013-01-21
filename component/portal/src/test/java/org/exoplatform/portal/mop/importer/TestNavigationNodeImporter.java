@@ -32,8 +32,7 @@ import org.gatein.portal.mop.navigation.NavigationState;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.Scope;
 import org.gatein.portal.mop.navigation.NodeState;
-import org.gatein.mop.api.workspace.ObjectType;
-import org.gatein.mop.core.api.MOPService;
+import org.gatein.portal.mop.site.SiteType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -41,8 +40,7 @@ import org.gatein.mop.core.api.MOPService;
 public class TestNavigationNodeImporter extends AbstractTestNavigationService {
 
     public void testRemoveOrphan() {
-        MOPService mop = mgr.getPOMService();
-        mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "remove_orphan");
+        createSite(SiteType.PORTAL, "remove_orphan");
         sync(true);
 
         //
@@ -64,8 +62,7 @@ public class TestNavigationNodeImporter extends AbstractTestNavigationService {
     }
 
     public void testCreateMissingPath() {
-        MOPService mop = mgr.getPOMService();
-        mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "create_missing_path");
+        createSite(SiteType.PORTAL, "create_missing_path");
         sync(true);
 
         //

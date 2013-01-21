@@ -21,18 +21,16 @@ package org.exoplatform.portal.mop.navigation;
 
 import java.util.Iterator;
 
+import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.hierarchy.Node;
 import org.gatein.portal.mop.hierarchy.NodeChange;
 import org.gatein.portal.mop.hierarchy.Scope;
-import org.gatein.mop.api.workspace.Navigation;
-import org.gatein.mop.api.workspace.ObjectType;
-import org.gatein.mop.api.workspace.Site;
-import org.gatein.mop.core.api.MOPService;
 import org.gatein.portal.mop.navigation.NavigationContext;
 import org.gatein.portal.mop.navigation.NavigationError;
 import org.gatein.portal.mop.navigation.NavigationServiceException;
 import org.gatein.portal.mop.navigation.NodeState;
+import org.gatein.portal.mop.site.SiteType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -40,11 +38,8 @@ import org.gatein.portal.mop.navigation.NodeState;
 public class TestNavigationServiceRebase extends AbstractTestNavigationService {
 
     public void testRebase1() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase1");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a");
-        def.addChild("d");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase1"));
+        createNodeChild(node, "a", "d");
 
         //
         sync(true);
@@ -75,11 +70,8 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
     }
 
     public void testRebase2() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase2");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a");
-        def.addChild("b");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase2"));
+        createNodeChild(node, "a", "b");
 
         //
         sync(true);
@@ -109,13 +101,12 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
     }
 
     public void testRebase3() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase3");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a");
-        def.addChild("b");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase3"));
+        createNodeChild(node, "a", "b");
 
         //
+        sync(true);
+
         sync(true);
 
         //
@@ -144,10 +135,8 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
      * state. Indeed the move / destroy operations would fail otherwise as the move operation would not find its source.
      */
     public void testRebase4() {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase4");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a").addChild("b");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase4"));
+        createNodeChild(createNodeChild(node, "a")[0], "b");
 
         //
         sync(true);
@@ -163,9 +152,7 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
     }
 
     public void testRebaseAddDuplicate() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_add_duplicate");
-        Navigation def = portal.getRootNavigation().addChild("default");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase_add_duplicate"));
 
         //
         sync(true);
@@ -192,10 +179,8 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
     }
 
     public void testRebaseMoveDuplicate() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_move_duplicate");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a").addChild("b");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase_move_duplicate"));
+        createNodeChild(createNodeChild(node, "a")[0], "b");
 
         //
         sync(true);
@@ -222,10 +207,8 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
     }
 
     public void testRebaseRenameDuplicate() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_rename_duplicate");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase_rename_duplicate"));
+        createNodeChild(node, "a");
 
         //
         sync(true);
@@ -251,10 +234,8 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
     }
 
     public void testFederation() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_federation");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a").addChild("b");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase_federation"));
+        createNodeChild(createNodeChild(node, "a")[0], "b");
 
         //
         sync(true);
@@ -297,9 +278,7 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
     }
 
     public void testTransientParent() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_transient_parent");
-        portal.getRootNavigation().addChild("default");
+        createNavigatation(createSite(SiteType.PORTAL, "rebase_transient_parent"));
 
         //
         sync(true);
@@ -315,9 +294,7 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
     }
 
     public void testRemovedNavigation() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_removed_navigation");
-        portal.getRootNavigation().addChild("default");
+        createNavigatation(createSite(SiteType.PORTAL, "rebase_removed_navigation"));
 
         //
         sync(true);
@@ -339,10 +316,8 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
     }
 
     public void testStateRebase() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_state");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase_state"));
+        createNodeChild(node, "a");
 
         //
         sync(true);
@@ -365,10 +340,8 @@ public class TestNavigationServiceRebase extends AbstractTestNavigationService {
     }
 
     public void testNameRebase() throws Exception {
-        MOPService mop = mgr.getPOMService();
-        Site portal = mop.getModel().getWorkspace().addSite(ObjectType.PORTAL_SITE, "rebase_name");
-        Navigation def = portal.getRootNavigation().addChild("default");
-        def.addChild("a");
+        NodeData node = createNavigatation(createSite(SiteType.PORTAL, "rebase_name"));
+        createNodeChild(node, "a");
 
         //
         sync(true);
