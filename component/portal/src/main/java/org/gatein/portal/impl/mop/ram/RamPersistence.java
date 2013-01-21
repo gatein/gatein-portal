@@ -206,7 +206,8 @@ public class RamPersistence {
                 current.update(navigation, state);
             } else {
                 navigation = current.addChild(site, "navigation", state);
-                current.addChild(navigation, "root", NodeState.INITIAL);
+                String node = current.addChild(navigation, "root", NodeState.INITIAL);
+                current.addChild(node, "children", "not-yet-used");
             }
         }
 
@@ -243,12 +244,13 @@ public class RamPersistence {
             }
         }
 
-
         @Override
         public NodeData<NodeState>[] createNode(String parentId, String previousId, String name, NodeState state) {
             Tx tx = Tx.associate(store);
             Store current = tx.getContext();
-            String nodeId = current.addChild(parentId, previousId, name, state);
+            String container = current.getChild(parentId, "children");
+            String nodeId = current.addChild(container, previousId, name, state);
+            current.addChild(nodeId, null, "children", "not-yet-used");
             return new NodeData[]{
                     getNode(current, parentId),
                     getNode(current, nodeId)
@@ -259,7 +261,8 @@ public class RamPersistence {
         public NodeData<NodeState> destroyNode(String targetId) {
             Tx tx = Tx.associate(store);
             Store current = tx.getContext();
-            String parent = current.remove(targetId);
+            String container = current.remove(targetId);
+            String parent = current.getParent(container);
             return getNode(current, parent);
         }
 
@@ -275,7 +278,8 @@ public class RamPersistence {
         public NodeData<NodeState>[] moveNode(String targetId, String fromId, String toId, String previousId) {
             Tx tx = Tx.associate(store);
             Store current = tx.getContext();
-            current.move(targetId, toId, previousId);
+            String toContainer = current.getChild(toId, "children");
+            current.move(targetId, toContainer, previousId);
             return new NodeData[]{
                     getNode(current, targetId),
                     getNode(current, fromId),
@@ -288,7 +292,8 @@ public class RamPersistence {
             Tx tx = Tx.associate(store);
             Store current = tx.getContext();
             current.rename(targetId, name);
-            String parent = current.getParent(targetId);
+            String container = current.getParent(targetId);
+            String parent = current.getParent(container);
             return new NodeData[]{
                     getNode(current, targetId),
                     getNode(current, parent)
@@ -302,8 +307,14 @@ public class RamPersistence {
         private NodeData<NodeState> getNode(Store current, String nodeId) {
             String parent = current.getParent(nodeId);
             Node entry = current.getNode(parent);
-            String parentId = entry.getState() instanceof NodeState ? parent : null;
-            List<String> children = current.getChildren(nodeId);
+            String parentId;
+            if (entry.getState() instanceof NavigationState) {
+                parentId = null;
+            } else {
+                parentId = current.getParent(parent);
+            }
+            String container = current.getChild(nodeId, "children");
+            List<String> children = current.getChildren(container);
             Node thisE = current.getNode(nodeId);
             return new NodeData<NodeState>(
                     parentId,
