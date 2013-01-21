@@ -74,7 +74,8 @@ public class RamPersistence implements SitePersistence, NavigationPersistence {
         String site = current.getChild(type, key.getName());
         if (site != null) {
             Node entry = current.getNode(site);
-            return (SiteData)entry.getState();
+            String layout = current.getChild(site, "layout");
+            return new SiteData(key, site, layout, (SiteState)entry.getState());
         } else {
             return null;
         }
@@ -88,14 +89,14 @@ public class RamPersistence implements SitePersistence, NavigationPersistence {
         String type = current.getChild(root, key.getTypeName());
         String site = current.getChild(type, key.getName());
         if (site == null) {
-            site = current.addChild(type, key.getName(), "");
-            current.update(site, new SiteData(key, site, UUID.randomUUID().toString(), state));
+            site = current.addChild(type, key.getName(), state);
             current.addChild(site, "pages", "");
+            current.addChild(site, "layout", "");
             return true;
         } else {
             Node entry = current.getNode(site);
             SiteData data = (SiteData)entry;
-            current.update(data.id, new SiteData(key, data.id, data.layoutId, state));
+            current.update(data.id, state);
             return false;
         }
     }
