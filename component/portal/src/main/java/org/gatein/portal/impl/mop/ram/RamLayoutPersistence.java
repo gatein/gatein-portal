@@ -19,6 +19,7 @@
 
 package org.gatein.portal.impl.mop.ram;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.gatein.portal.mop.hierarchy.NodeData;
@@ -30,6 +31,20 @@ import org.gatein.portal.mop.layout.LayoutPersistence;
 */
 public class RamLayoutPersistence implements LayoutPersistence {
 
+    /** . */
+    static final ElementState.Container INITIAL = new ElementState.Container(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            Collections.<String>emptyList(),
+            false
+    );
     /** . */
     private Store store;
 

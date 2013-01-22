@@ -28,6 +28,8 @@ import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.layout.Element;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.layout.LayoutService;
+import org.gatein.portal.mop.page.PageData;
+import org.gatein.portal.mop.page.PageState;
 import org.gatein.portal.mop.site.SiteData;
 import org.gatein.portal.mop.site.SiteType;
 
@@ -47,15 +49,25 @@ public class TestLayout extends AbstractMopServiceTest {
         this.layoutService = context.getLayoutService();
     }
 
+    public void testSite() {
+        SiteData site = createSite(SiteType.PORTAL, "test_layout_site");
+        createElements(site, Element.portlet("app/foo").title("foo"), Element.portlet("app/bar").title("bar"));
+        testAll(site.layoutId);
+    }
+
+    public void testPage() {
+        PageData page = createPage(createSite(SiteType.PORTAL, "test_layout_page"), "page", new PageState.Builder().build());
+        createElements(page, Element.portlet("app/foo").title("foo"), Element.portlet("app/bar").title("bar"));
+        testAll(page.layoutId);
+    }
+
     /**
      * One single test now that do multiple things : shorcut
      */
-    public void testAll() {
-        SiteData site = createSite(SiteType.PORTAL, "test_layout");
-        createElements(site, Element.portlet("app/foo").title("foo"), Element.portlet("app/bar").title("bar"));
+    private void testAll(String layoutId) {
 
         //
-        NodeContext<Element, ElementState> context = layoutService.loadLayout(Element.MODEL, site.layoutId, null);
+        NodeContext<Element, ElementState> context = layoutService.loadLayout(Element.MODEL, layoutId, null);
         assertEquals(2, context.getNodeSize());
         Element foo = context.getNode(0);
         Element bar = context.getNode(1);
@@ -63,7 +75,7 @@ public class TestLayout extends AbstractMopServiceTest {
         assertEquals("bar", ((ElementState.Window) bar.getState()).title);
 
         // Add a new portlet in the background
-        createElements(site, Element.portlet("app/juu").title("juu"));
+        createElements(layoutId, Element.portlet("app/juu").title("juu"));
 
         // Save with no changes but we get the concurrent change
         layoutService.saveLayout(context, null);
@@ -87,7 +99,7 @@ public class TestLayout extends AbstractMopServiceTest {
         assertEquals("bar", ((ElementState.Window) bar.getState()).title);
 
         //
-        NodeData<ElementState> root = getElement(site);
+        NodeData<ElementState> root = getElement(layoutId);
         assertEquals(Arrays.asList(context.get(0).getId(), context.get(1).getId(), context.get(2).getId()), Tools.list(root.iterator()));
 
         // Test update
@@ -102,7 +114,7 @@ public class TestLayout extends AbstractMopServiceTest {
         layoutService.saveLayout(context, null);
 
         //
-        root = getElement(site);
+        root = getElement(layoutId);
         assertEquals(Arrays.asList(context.get(0).getId(), context.get(1).getId()), Tools.list(root.iterator()));
     }
 }

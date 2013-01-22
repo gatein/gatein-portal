@@ -171,16 +171,32 @@ public abstract class AbstractMopServiceTest extends AbstractMopTest {
         return created;
     }
 
-    protected final NodeData<ElementState>[] createElements(SiteData site, ElementState.Builder<?>... elements) {
+    protected final NodeData<ElementState>[] createElements(String layoutId, ElementState.Builder<?>... elements) {
         NodePersistence<ElementState> persistence = context.getLayoutPersistence();
-        NodeData<ElementState> root = persistence.loadNode(site.layoutId);
+        NodeData<ElementState> root = persistence.loadNode(layoutId);
         return createElements(root, elements);
     }
 
-    protected final NodeData<ElementState>[] createElements(SiteData site, ElementState... elements) {
+    protected final NodeData<ElementState>[] createElements(String layoutId, ElementState... elements) {
         NodePersistence<ElementState> persistence = context.getLayoutPersistence();
-        NodeData<ElementState> root = persistence.loadNode(site.layoutId);
+        NodeData<ElementState> root = persistence.loadNode(layoutId);
         return createElements(root, elements);
+    }
+
+    protected final NodeData<ElementState>[] createElements(SiteData site, ElementState.Builder<?>... elements) {
+        return createElements(site.layoutId, elements);
+    }
+
+    protected final NodeData<ElementState>[] createElements(SiteData site, ElementState... elements) {
+        return createElements(site.layoutId, elements);
+    }
+
+    protected final NodeData<ElementState>[] createElements(PageData page, ElementState.Builder<?>... elements) {
+        return createElements(page.layoutId, elements);
+    }
+
+    protected final NodeData<ElementState>[] createElements(PageData page, ElementState... elements) {
+        return createElements(page.layoutId, elements);
     }
 
     protected final NodeData<ElementState>[] createElements(NodeData<ElementState> parent, ElementState.Builder<?>... elements) {

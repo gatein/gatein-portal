@@ -37,21 +37,6 @@ import org.gatein.portal.mop.site.SiteType;
 public class RamSitePersistence implements SitePersistence {
 
     /** . */
-    private static final ElementState.Container INITIAL = new ElementState.Container(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            Collections.<String>emptyList(),
-            false
-    );
-
-    /** . */
     private Store store;
 
     public RamSitePersistence(RamPersistence store) {
@@ -84,7 +69,7 @@ public class RamSitePersistence implements SitePersistence {
         if (site == null) {
             site = current.addChild(type, key.getName(), state);
             current.addChild(site, "pages", "");
-            current.addChild(site, "layout", INITIAL);
+            current.addChild(site, "layout", RamLayoutPersistence.INITIAL);
             return true;
         } else {
             Node entry = current.getNode(site);

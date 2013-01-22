@@ -83,7 +83,7 @@ public class RamPagePersistence implements PagePersistence {
                 return false;
             } else {
                 page = current.addChild(pages, key.getName(), state);
-                current.addChild(page, "layout", "");
+                current.addChild(page, "layout", RamLayoutPersistence.INITIAL);
                 return true;
             }
         } else {
