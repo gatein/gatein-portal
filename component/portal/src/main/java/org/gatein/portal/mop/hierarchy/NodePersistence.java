@@ -38,5 +38,5 @@ public interface NodePersistence<S extends Serializable> {
 
     NodeData<S>[] renameNode(String targetId, String parentId, String name);
 
-    void close();
+    void flush();
 }

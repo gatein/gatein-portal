@@ -74,7 +74,7 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
     private final InvalidationBridge bridge;
 
     /** . */
-    private final MopPersistenceFactory persistenceFactory;
+    private final MopPersistence persistence;
 
     public NavigationServiceWrapper(RepositoryService repositoryService, POMSessionManager manager,
             ListenerService listenerService) {
@@ -92,13 +92,13 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
             ListenerService listenerService,
             DataCache cache) {
         this.repositoryService = repositoryService;
-        this.persistenceFactory = new MopPersistenceFactory(manager, cache);
-        this.service = new NavigationServiceImpl(persistenceFactory);
+        this.persistence = new MopPersistence(manager, cache);
+        this.service = new NavigationServiceImpl(persistence);
         this.listenerService = listenerService;
         this.bridge = new InvalidationBridge() {
             @Override
             public void onEvent(EventIterator events) {
-                persistenceFactory.cache.clear();
+                persistence.clear();
             }
         };
     }
@@ -146,7 +146,7 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
     public <N> void saveNode(NodeContext<N, NodeState> context, NodeChangeListener<NodeContext<N, NodeState>, NodeState> listener)
             throws NavigationServiceException {
         service.saveNode(context, listener);
-        org.gatein.mop.api.workspace.Navigation nav = persistenceFactory.manager.getSession().findObjectById(ObjectType.NAVIGATION,
+        org.gatein.mop.api.workspace.Navigation nav = persistence.mgr.getSession().findObjectById(ObjectType.NAVIGATION,
                 context.getId());
         Site site = nav.getSite();
         SiteKey key = new SiteKey(siteType(site.getObjectType()), site.getName());
@@ -174,7 +174,7 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
     public void start() {
         Session session = null;
         try {
-            String workspaceName = persistenceFactory.manager.getLifeCycle().getWorkspaceName();
+            String workspaceName = persistence.mgr.getLifeCycle().getWorkspaceName();
             ManageableRepository repo = repositoryService.getCurrentRepository();
             session = repo.getSystemSession(workspaceName);
             bridge.start(session);

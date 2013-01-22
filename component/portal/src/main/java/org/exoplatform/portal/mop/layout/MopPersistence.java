@@ -32,9 +32,10 @@ import org.exoplatform.portal.config.model.PersistentApplicationState;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.ProtectedResource;
+import org.exoplatform.portal.pom.config.POMSession;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.hierarchy.NodePersistence;
-import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.Attributes;
@@ -47,11 +48,12 @@ import org.gatein.mop.api.workspace.ui.UIContainer;
 import org.gatein.mop.api.workspace.ui.UIWindow;
 import org.gatein.mop.core.util.Tools;
 import org.gatein.portal.mop.layout.ElementState;
+import org.gatein.portal.mop.layout.LayoutPersistence;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class MopPersistence implements NodePersistence<ElementState> {
+public class MopPersistence implements LayoutPersistence {
 
     /** . */
     private static final Set<String> propertiesBlackList = Tools.set("jcr:uuid", "jcr:primaryType");
@@ -65,14 +67,15 @@ public class MopPersistence implements NodePersistence<ElementState> {
     final String[] EMPTY_STRING = new String[0];
 
     /** . */
-    final POMSession session;
+    final POMSessionManager mgr;
 
-    public MopPersistence(POMSession session) {
-        this.session = session;
+    public MopPersistence(POMSessionManager mgr) {
+        this.mgr = mgr;
     }
 
     @Override
     public NodeData<ElementState> loadNode(String nodeId) {
+        POMSession session = mgr.getSession();
         UIComponent component = session.findObjectById(ObjectType.COMPONENT, nodeId);
         return create(component);
     }
@@ -175,6 +178,7 @@ public class MopPersistence implements NodePersistence<ElementState> {
 
     @Override
     public NodeData<ElementState>[] createNode(String parentId, String previousId, String name, ElementState state) {
+        POMSession session = mgr.getSession();
         UIContainer parent = session.findObjectById(ObjectType.CONTAINER, parentId);
         UIComponent added;
         if (previousId != null) {
@@ -193,6 +197,7 @@ public class MopPersistence implements NodePersistence<ElementState> {
 
     @Override
     public NodeData<ElementState> destroyNode(String targetId) {
+        POMSession session = mgr.getSession();
         UIComponent component = session.findObjectById(ObjectType.COMPONENT, targetId);
         UIContainer parent = component.getParent();
         parent.getComponents().remove(component);
@@ -200,6 +205,7 @@ public class MopPersistence implements NodePersistence<ElementState> {
     }
 
     private void updateNode(UIComponent component, ElementState state) {
+        POMSession session = mgr.getSession();
         if (component instanceof UIContainer) {
             UIContainer container = (UIContainer) component;
             ElementState.Container containerState = (ElementState.Container) state;
@@ -288,6 +294,7 @@ public class MopPersistence implements NodePersistence<ElementState> {
 
     @Override
     public NodeData<ElementState> updateNode(String targetId, ElementState state) {
+        POMSession session = mgr.getSession();
         UIComponent target = session.findObjectById(ObjectType.COMPONENT, targetId);
         updateNode(target, state);
         return create(target);
@@ -295,6 +302,7 @@ public class MopPersistence implements NodePersistence<ElementState> {
 
     @Override
     public NodeData<ElementState>[] moveNode(String targetId, String fromId, String toId, String previousId) {
+        POMSession session = mgr.getSession();
         UIComponent moved = session.findObjectById(ObjectType.COMPONENT, targetId);
         UIContainer from = session.findObjectById(ObjectType.CONTAINER, fromId);
         UIContainer to = session.findObjectById(ObjectType.CONTAINER, toId);
@@ -315,7 +323,7 @@ public class MopPersistence implements NodePersistence<ElementState> {
     }
 
     @Override
-    public void close() {
+    public void flush() {
     }
 
     private static void load(Attributes src, Map<String, String> dst, Set<String> blackList) {

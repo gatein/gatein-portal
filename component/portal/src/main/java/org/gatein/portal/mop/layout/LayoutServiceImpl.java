@@ -19,15 +19,12 @@
 
 package org.gatein.portal.mop.layout;
 
-import javax.inject.Provider;
-
 import org.gatein.portal.mop.hierarchy.GenericScope;
 import org.gatein.portal.mop.hierarchy.NodeAdapter;
 import org.gatein.portal.mop.hierarchy.NodeChangeListener;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeManager;
 import org.gatein.portal.mop.hierarchy.NodeModel;
-import org.gatein.portal.mop.hierarchy.NodePersistence;
 import org.gatein.portal.mop.hierarchy.Scope;
 
 /**
@@ -41,7 +38,7 @@ public class LayoutServiceImpl implements LayoutService {
     /** . */
     private final NodeManager<ElementState> nodeManager;
 
-    public LayoutServiceImpl(Provider<? extends NodePersistence<ElementState>> persistence) {
+    public LayoutServiceImpl(LayoutPersistence persistence) {
         if (persistence == null) {
             throw new NullPointerException("No null persistence provided");
         }

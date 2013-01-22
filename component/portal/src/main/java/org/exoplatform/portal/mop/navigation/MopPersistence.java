@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.exoplatform.portal.mop.Described;
+import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 import org.exoplatform.portal.mop.Utils;
@@ -35,7 +36,6 @@ import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.Visible;
 import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.page.PageKey;
-import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.Attributes;
 import org.gatein.mop.api.workspace.Navigation;
@@ -56,30 +56,42 @@ import static org.exoplatform.portal.mop.Utils.objectType;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class MopPersistence implements NavigationPersistence {
+public class MopPersistence implements NavigationPersistence {
 
     /** . */
-    private POMSession session;
+    final  POMSessionManager mgr;
 
     /** . */
     DataCache cache;
 
     /** The handles to evict. */
-    final Set<String> toEvict;
+    final ThreadLocal<Set<String>> toEvict;
 
-    MopPersistence(POMSession session, DataCache cache) {
+    public MopPersistence(POMSessionManager mgr) {
+        this(mgr, new SimpleDataCache());
+    }
+
+    public MopPersistence(POMSessionManager mgr, DataCache cache) {
+        if (mgr == null) {
+            throw new NullPointerException("No null manager accepted");
+        }
 
         cache.persistence = this;
 
         //
-        this.session = session;
+        this.mgr = mgr;
         this.cache = cache;
-        this.toEvict = new HashSet<String>();
+        this.toEvict = new ThreadLocal<Set<String>>() {
+            @Override
+            protected Set<String> initialValue() {
+                return new HashSet<String>();
+            }
+        };
     }
 
     public List<NavigationData> loadNavigations(SiteType type) {
         ObjectType<Site> objectType = objectType(type);
-        Collection<Site> sites = session.getWorkspace().getSites(objectType);
+        Collection<Site> sites = mgr.getSession().getWorkspace().getSites(objectType);
         List<NavigationData> navigations = new LinkedList<NavigationData>();
         for (Site site : sites) {
             Navigation navigation = site.getRootNavigation().getChild("default");
@@ -100,7 +112,7 @@ class MopPersistence implements NavigationPersistence {
 
     public void saveNavigation(SiteKey key, NavigationState state) {
         ObjectType<Site> objectType = objectType(key.getType());
-        Workspace workspace = session.getWorkspace();
+        Workspace workspace = mgr.getSession().getWorkspace();
         Site site = workspace.getSite(objectType, key.getName());
         if (site == null) {
             throw new NavigationServiceException(NavigationError.NAVIGATION_NO_SITE);
@@ -119,7 +131,7 @@ class MopPersistence implements NavigationPersistence {
 
     public boolean destroyNavigation(NavigationData data) {
         ObjectType<Site> objectType = objectType(data.key.getType());
-        Workspace workspace = session.getWorkspace();
+        Workspace workspace = mgr.getSession().getWorkspace();
         Site site = workspace.getSite(objectType, data.key.getName());
         if (site == null) {
             throw new NavigationServiceException(NavigationError.NAVIGATION_NO_SITE);
@@ -141,7 +153,7 @@ class MopPersistence implements NavigationPersistence {
 
     public NodeData<NodeState> loadNode(String nodeId) {
         NodeData<NodeState> data;
-        if (session.isModified()) {
+        if (mgr.getSession().isModified()) {
             data = loadNodeData(nodeId);
         } else {
             data = cache.getNode(nodeId);
@@ -151,7 +163,7 @@ class MopPersistence implements NavigationPersistence {
 
     public NavigationData loadNavigationData(SiteKey key) {
         NavigationData data;
-        if (session.isModified()) {
+        if (mgr.getSession().isModified()) {
             data = loadNavigation(key);
         } else {
             data = cache.getNavigation(key);
@@ -162,7 +174,7 @@ class MopPersistence implements NavigationPersistence {
     }
 
     NodeData<NodeState> loadNodeData(String nodeId) {
-        Navigation navigation = session.findObjectById(ObjectType.NAVIGATION, nodeId);
+        Navigation navigation = mgr.getSession().findObjectById(ObjectType.NAVIGATION, nodeId);
         if (navigation != null) {
             return create(navigation);
         } else {
@@ -241,7 +253,7 @@ class MopPersistence implements NavigationPersistence {
     }
 
     protected final NavigationData loadNavigation(SiteKey key) {
-        Workspace workspace = session.getWorkspace();
+        Workspace workspace = mgr.getSession().getWorkspace();
         ObjectType<Site> objectType = objectType(key.getType());
         Site site = workspace.getSite(objectType, key.getName());
         if (site != null) {
@@ -257,31 +269,32 @@ class MopPersistence implements NavigationPersistence {
     }
 
     public NodeData<NodeState>[] createNode(String parentId, String previousId, String name, NodeState state) {
-        Navigation parent = session.findObjectById(ObjectType.NAVIGATION, parentId);
+        Navigation parent = mgr.getSession().findObjectById(ObjectType.NAVIGATION, parentId);
         int index = 0;
         if (previousId != null) {
-            Navigation previous = session.findObjectById(ObjectType.NAVIGATION, previousId);
+            Navigation previous = mgr.getSession().findObjectById(ObjectType.NAVIGATION, previousId);
             index = previous.getIndex() + 1;
         }
         Navigation target = parent.addChild(index, name);
         set(state, target);
-        toEvict.add(parentId);
+        toEvict.get().add(parentId);
         return new NodeData[]{create(parent),create(target)};
     }
 
     public NodeData<NodeState> destroyNode(String targetId) {
-        Navigation target = session.findObjectById(ObjectType.NAVIGATION, targetId);
+        Navigation target = mgr.getSession().findObjectById(ObjectType.NAVIGATION, targetId);
         Navigation parent = target.getParent();
         target.destroy();
-        toEvict.add(targetId);
-        toEvict.add(parent.getObjectId());
+        Set<String> set = toEvict.get();
+        set.add(targetId);
+        set.add(parent.getObjectId());
         return create(parent);
     }
 
     public NodeData<NodeState> updateNode(String targetId, NodeState state) {
-        Navigation target = session.findObjectById(ObjectType.NAVIGATION, targetId);
+        Navigation target = mgr.getSession().findObjectById(ObjectType.NAVIGATION, targetId);
         set(state, target);
-        toEvict.add(targetId);
+        toEvict.get().add(targetId);
         return create(target);
     }
 
@@ -309,36 +322,43 @@ class MopPersistence implements NavigationPersistence {
     }
 
     public NodeData<NodeState>[] moveNode(String targetId, String fromId, String toId, String previousId) {
-        Navigation target = session.findObjectById(ObjectType.NAVIGATION, targetId);
-        Navigation from = session.findObjectById(ObjectType.NAVIGATION, fromId);
-        Navigation to = session.findObjectById(ObjectType.NAVIGATION, toId);
+        Navigation target = mgr.getSession().findObjectById(ObjectType.NAVIGATION, targetId);
+        Navigation from = mgr.getSession().findObjectById(ObjectType.NAVIGATION, fromId);
+        Navigation to = mgr.getSession().findObjectById(ObjectType.NAVIGATION, toId);
         int index;
         if (previousId != null) {
-            Navigation previousNav = session.findObjectById(ObjectType.NAVIGATION, previousId);
+            Navigation previousNav = mgr.getSession().findObjectById(ObjectType.NAVIGATION, previousId);
             index = previousNav.getIndex() + 1;
         } else {
             index = 0;
         }
         to.getChildren().add(index, target);
-        toEvict.add(targetId);
-        toEvict.add(fromId);
-        toEvict.add(toId);
+        Set<String> set = toEvict.get();
+        set.add(targetId);
+        set.add(fromId);
+        set.add(toId);
         return new NodeData[]{create(target),create(from),create(to)};
     }
 
     public NodeData<NodeState>[] renameNode(String targetId, String parentId, String name) {
-        Navigation target = session.findObjectById(ObjectType.NAVIGATION, targetId);
-        Navigation parent = session.findObjectById(ObjectType.NAVIGATION, parentId);
+        Navigation target = mgr.getSession().findObjectById(ObjectType.NAVIGATION, targetId);
+        Navigation parent = mgr.getSession().findObjectById(ObjectType.NAVIGATION, parentId);
         target.setName(name);
-        toEvict.add(targetId);
-        toEvict.add(parentId);
+        Set<String> set = toEvict.get();
+        set.add(targetId);
+        set.add(parentId);
         return new NodeData[]{create(target),create(parent)};
     }
 
     @Override
-    public void close() {
-        if (toEvict.size() > 0) {
-            cache.removeNodes(toEvict);
+    public void flush() {
+        if (toEvict.get().size() > 0) {
+            Set<String> set = toEvict.get();
+            try {
+                cache.removeNodes(set);
+            } finally {
+                set.clear();
+            }
         }
     }
 

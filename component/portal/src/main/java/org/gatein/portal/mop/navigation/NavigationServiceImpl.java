@@ -42,16 +42,16 @@ public class NavigationServiceImpl implements NavigationService {
     private final NodeManager<NodeState> manager;
 
     /** . */
-    final Provider<? extends NavigationPersistence> persistenceFactory;
+    final NavigationPersistence persistence;
 
-    public NavigationServiceImpl(Provider<? extends NavigationPersistence> persistenceFactory) throws NullPointerException {
-        if (persistenceFactory == null) {
+    public NavigationServiceImpl(NavigationPersistence persistence) throws NullPointerException {
+        if (persistence == null) {
             throw new NullPointerException("No null persistence factory allowed");
         }
 
         //
-        this.persistenceFactory = persistenceFactory;
-        this.manager = new NodeManager<NodeState>(persistenceFactory);
+        this.persistence = persistence;
+        this.manager = new NodeManager<NodeState>(persistence);
     }
 
     public NavigationContext loadNavigation(SiteKey key) {
@@ -60,7 +60,6 @@ public class NavigationServiceImpl implements NavigationService {
         }
 
         //
-        NavigationPersistence persistence = persistenceFactory.get();
         NavigationData data = persistence.loadNavigationData(key);
         return data != null && data != NavigationData.EMPTY ? new NavigationContext(data) : null;
     }
@@ -70,7 +69,6 @@ public class NavigationServiceImpl implements NavigationService {
         if (type == null) {
             throw new NullPointerException();
         }
-        NavigationPersistence persistence = persistenceFactory.get();
         List<NavigationContext> navigations = new LinkedList<NavigationContext>();
         for (NavigationData data : persistence.loadNavigations(type)) {
             navigations.add(new NavigationContext(data));
@@ -84,7 +82,6 @@ public class NavigationServiceImpl implements NavigationService {
         }
 
         //
-        NavigationPersistence persistence = persistenceFactory.get();
         try {
             // Save
             persistence.saveNavigation(navigation.key, navigation.state);
@@ -93,7 +90,7 @@ public class NavigationServiceImpl implements NavigationService {
             navigation.data = persistence.loadNavigationData(navigation.key);
             navigation.state = null;
         } finally {
-            persistence.close();
+            persistence.flush();
         }
     }
 
@@ -106,7 +103,6 @@ public class NavigationServiceImpl implements NavigationService {
         }
 
         //
-        NavigationPersistence persistence = persistenceFactory.get();
         try {
             if (persistence.destroyNavigation(navigation.data)) {
                 navigation.data = null;
@@ -115,7 +111,7 @@ public class NavigationServiceImpl implements NavigationService {
                 return false;
             }
         } finally {
-            persistence.close();
+            persistence.flush();
         }
     }
 
@@ -154,6 +150,6 @@ public class NavigationServiceImpl implements NavigationService {
     }
 
     public void clearCache() {
-        persistenceFactory.get().clear();
+        persistence.clear();
     }
 }

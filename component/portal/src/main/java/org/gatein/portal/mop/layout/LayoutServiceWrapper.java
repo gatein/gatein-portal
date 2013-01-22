@@ -38,12 +38,7 @@ public class LayoutServiceWrapper implements LayoutService {
     private LayoutServiceImpl service;
 
     public LayoutServiceWrapper(final POMSessionManager mgr) {
-        this.service = new LayoutServiceImpl(new Provider<NodePersistence<ElementState>>() {
-            @Override
-            public NodePersistence<ElementState> get() {
-                return new MopPersistence(mgr.getSession());
-            }
-        });
+        this.service = new LayoutServiceImpl(new MopPersistence(mgr));
     }
 
     @Override

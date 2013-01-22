@@ -17,40 +17,12 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.navigation;
+package org.gatein.portal.mop.layout;
 
-import javax.inject.Provider;
-
-import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.gatein.portal.mop.navigation.NavigationPersistence;
+import org.gatein.portal.mop.hierarchy.NodePersistence;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class MopPersistenceFactory implements Provider<MopPersistence> {
-
-    /** . */
-    final POMSessionManager manager;
-
-    /** . */
-    final DataCache cache;
-
-    public MopPersistenceFactory(POMSessionManager manager, DataCache cache) {
-        if (manager == null) {
-            throw new NullPointerException("No null manager accepted");
-        }
-
-        //
-        this.manager = manager;
-        this.cache = cache;
-    }
-
-    public MopPersistenceFactory(POMSessionManager manager) {
-        this(manager, new SimpleDataCache());
-    }
-
-    @Override
-    public MopPersistence get() {
-        return new MopPersistence(manager.getSession(), cache);
-    }
+public interface LayoutPersistence extends NodePersistence<ElementState> {
 }

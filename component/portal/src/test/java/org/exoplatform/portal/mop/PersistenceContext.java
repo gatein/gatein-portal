@@ -19,23 +19,24 @@
 
 package org.exoplatform.portal.mop;
 
-import javax.inject.Provider;
-
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.description.SimpleDataCache;
-import org.exoplatform.portal.mop.navigation.MopPersistenceFactory;
 import org.exoplatform.portal.mop.site.MopPersistence;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
+import org.gatein.portal.impl.mop.ram.RamDescriptionPersistence;
+import org.gatein.portal.impl.mop.ram.RamLayoutPersistence;
+import org.gatein.portal.impl.mop.ram.RamNavigationPersistence;
+import org.gatein.portal.impl.mop.ram.RamPagePersistence;
 import org.gatein.portal.impl.mop.ram.RamPersistence;
+import org.gatein.portal.impl.mop.ram.RamSitePersistence;
 import org.gatein.portal.impl.mop.ram.Tx;
 import org.gatein.portal.mop.description.DescriptionPersistence;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.description.DescriptionServiceImpl;
-import org.gatein.portal.mop.hierarchy.NodePersistence;
-import org.gatein.portal.mop.layout.ElementState;
+import org.gatein.portal.mop.layout.LayoutPersistence;
 import org.gatein.portal.mop.layout.LayoutService;
 import org.gatein.portal.mop.layout.LayoutServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationPersistence;
@@ -69,7 +70,7 @@ public abstract class PersistenceContext {
 
     public abstract SitePersistence getSitePersistence();
 
-    public abstract NodePersistence<ElementState> getLayoutPersistence();
+    public abstract LayoutPersistence getLayoutPersistence();
 
     public abstract void begin();
 
@@ -82,7 +83,7 @@ public abstract class PersistenceContext {
     public static class JCR extends PersistenceContext {
 
         /** . */
-        private MopPersistenceFactory navigationPersistenceFactory;
+        private org.exoplatform.portal.mop.navigation.MopPersistence navigationPersistenceFactory;
 
         /** . */
         private NavigationServiceImpl navigationService;
@@ -106,7 +107,7 @@ public abstract class PersistenceContext {
         private SitePersistence sitePersistence;
 
         /** . */
-        private Provider<? extends NodePersistence<ElementState>> layoutPersistence;
+        private LayoutPersistence layoutPersistence;
 
         /** . */
         private org.exoplatform.portal.mop.description.MopPersistence descriptionPersistence;
@@ -123,19 +124,14 @@ public abstract class PersistenceContext {
             mgr.start();
 
             //
-            navigationPersistenceFactory = new MopPersistenceFactory(mgr);
+            navigationPersistenceFactory = new org.exoplatform.portal.mop.navigation.MopPersistence(mgr);
             navigationService = new NavigationServiceImpl(navigationPersistenceFactory);
             descriptionPersistence = new org.exoplatform.portal.mop.description.MopPersistence(mgr, new SimpleDataCache());
             descriptionService = new DescriptionServiceImpl(descriptionPersistence);
             sitePersistence = new MopPersistence(mgr, new org.exoplatform.portal.mop.site.SimpleDataCache());
             pagePersistence = new org.exoplatform.portal.mop.page.MopPersistence(mgr, new org.exoplatform.portal.mop.page.SimpleDataCache());
             pageService = new PageServiceImpl(pagePersistence);
-            layoutPersistence = new Provider<NodePersistence<ElementState>>() {
-                @Override
-                public NodePersistence<ElementState> get() {
-                    return new org.exoplatform.portal.mop.layout.MopPersistence(mgr.getSession());
-                }
-            };
+            layoutPersistence = new org.exoplatform.portal.mop.layout.MopPersistence(mgr);
             layoutService = new LayoutServiceImpl(layoutPersistence);
 
             // Clear the cache for each test
@@ -178,7 +174,7 @@ public abstract class PersistenceContext {
 
         @Override
         public NavigationPersistence getNavigationPersistence() {
-            return navigationPersistenceFactory.get();
+            return navigationPersistenceFactory;
         }
 
         @Override
@@ -187,8 +183,8 @@ public abstract class PersistenceContext {
         }
 
         @Override
-        public NodePersistence<ElementState> getLayoutPersistence() {
-            return layoutPersistence.get();
+        public LayoutPersistence getLayoutPersistence() {
+            return layoutPersistence;
         }
 
         @Override
@@ -232,20 +228,33 @@ public abstract class PersistenceContext {
         /** . */
         LayoutServiceImpl layoutService;
 
+        /** . */
+        LayoutPersistence layoutPersistence;
+
+        /** . */
+        RamDescriptionPersistence descriptionPersistence;
+
+        /** . */
+        RamPagePersistence pagePersistence;
+
+        /** . */
+        RamSitePersistence sitePersistence;
+
+        /** . */
+        RamNavigationPersistence navigationPersistence;
+
         @Override
         void setUp() {
             persistence = new RamPersistence();
-            navigationService = new NavigationServiceImpl(new Provider<NavigationPersistence>() {
-                @Override
-                public NavigationPersistence get() { return persistence.getNavigationPersistence();
-                }
-            });
-            pageService = new PageServiceImpl(persistence.getPagePersistence());
-            descriptionService = new DescriptionServiceImpl(persistence.getDescriptionPersistence());
-            layoutService = new LayoutServiceImpl(new Provider<NodePersistence<ElementState>>() {
-                @Override
-                public NodePersistence<ElementState> get() { return persistence.getLayoutPersistence(); }
-            });
+            navigationPersistence = new RamNavigationPersistence(persistence);
+            navigationService = new NavigationServiceImpl(navigationPersistence);
+            pagePersistence = new RamPagePersistence(persistence);
+            pageService = new PageServiceImpl(pagePersistence);
+            descriptionPersistence = new RamDescriptionPersistence(persistence);
+            descriptionService = new DescriptionServiceImpl(descriptionPersistence);
+            layoutPersistence = new RamLayoutPersistence(persistence);
+            layoutService = new LayoutServiceImpl(layoutPersistence);
+            sitePersistence = new RamSitePersistence(persistence);
         }
 
         @Override
@@ -269,8 +278,8 @@ public abstract class PersistenceContext {
         }
 
         @Override
-        public NodePersistence<ElementState> getLayoutPersistence() {
-            return persistence.getLayoutPersistence();
+        public LayoutPersistence getLayoutPersistence() {
+            return new RamLayoutPersistence(persistence);
         }
 
         @Override
@@ -285,7 +294,7 @@ public abstract class PersistenceContext {
 
         @Override
         public DescriptionPersistence getDescriptionPersistence() {
-            return persistence.getDescriptionPersistence();
+            return descriptionPersistence;
         }
 
         @Override
@@ -295,17 +304,17 @@ public abstract class PersistenceContext {
 
         @Override
         public PagePersistence getPagePersistence() {
-            return persistence.getPagePersistence();
+            return pagePersistence;
         }
 
         @Override
         public NavigationPersistence getNavigationPersistence() {
-            return persistence.getNavigationPersistence();
+            return navigationPersistence;
         }
 
         @Override
         public SitePersistence getSitePersistence() {
-            return persistence.getSitePersistence();
+            return sitePersistence;
         }
 
         @Override

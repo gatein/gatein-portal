@@ -22,8 +22,6 @@ package org.gatein.portal.mop.hierarchy;
 import java.io.Serializable;
 import java.util.Map;
 
-import javax.inject.Provider;
-
 import org.gatein.portal.mop.navigation.NavigationError;
 import org.gatein.portal.mop.navigation.NavigationServiceException;
 
@@ -33,10 +31,10 @@ import org.gatein.portal.mop.navigation.NavigationServiceException;
 public class NodeManager<S extends Serializable> {
 
     /** . */
-    private final Provider<? extends NodePersistence<S>> persistenceProvider;
+    private final NodePersistence<S> persistence;
 
-    public NodeManager(Provider<? extends NodePersistence<S>> persistenceProvider) {
-        this.persistenceProvider = persistenceProvider;
+    public NodeManager(NodePersistence<S> persistence) {
+        this.persistence = persistence;
     }
 
     public <N> NodeContext<N, S> loadNode(
@@ -44,7 +42,6 @@ public class NodeManager<S extends Serializable> {
             String nodeId,
             Scope<S> scope,
             NodeChangeListener<NodeContext<N, S>, S> listener) {
-        NodePersistence<S> persistence = persistenceProvider.get();
         try {
             NodeData<S> data = persistence.loadNode(nodeId);
             if (data != null) {
@@ -55,7 +52,7 @@ public class NodeManager<S extends Serializable> {
                 return null;
             }
         } finally {
-            persistence.close();
+            persistence.flush();
         }
     }
 
@@ -105,7 +102,6 @@ public class NodeManager<S extends Serializable> {
         if (tree.hasChanges()) {
             throw new IllegalArgumentException("For now we don't accept to update a context that has pending changes");
         }
-        NodePersistence<S> persistence = persistenceProvider.get();
         try {
             NodeData<S> data = persistence.loadNode(tree.root.data.id);
             if (data == null) {
@@ -125,7 +121,7 @@ public class NodeManager<S extends Serializable> {
                 tree.editMode = false;
             }
         } finally {
-            persistence.close();
+            persistence.flush();
         }
     }
 
@@ -146,7 +142,6 @@ public class NodeManager<S extends Serializable> {
     private <N> TreeContext<N, S> rebase(
             TreeContext<N, S> tree,
             Scope.Visitor<S> visitor) throws NavigationServiceException {
-        NodePersistence<S> persistence = persistenceProvider.get();
         try {
             NodeData<S> data = persistence.loadNode(tree.root.getId());
             if (data == null) {
@@ -174,14 +169,12 @@ public class NodeManager<S extends Serializable> {
             //
             return rebased;
         } finally {
-            persistence.close();
+            persistence.flush();
         }
     }
 
     private <N> void saveTree(TreeContext<N, S> tree, NodeChangeListener<NodeContext<N, S>, S> listener) throws NullPointerException,
             NavigationServiceException {
-
-        NodePersistence<S> persistence = persistenceProvider.get();
 
         try {
             NodeData<S> data = persistence.loadNode(tree.root.data.id);
@@ -223,7 +216,7 @@ public class NodeManager<S extends Serializable> {
             TreeUpdate.perform(tree, NodeContextUpdateAdapter.<N, S> create(), rebased.root, NodeContextUpdateAdapter.<N, S> create(),
                     listener, rebased);
         } finally {
-            persistence.close();
+            persistence.flush();
         }
     }
 }
