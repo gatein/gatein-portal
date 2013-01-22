@@ -116,6 +116,15 @@ public class PageState implements Serializable {
         /** . */
         private List<String> accessPermissions;
 
+        public Builder() {
+            this(null,
+                    false,
+                    null,
+                    null,
+                    null,
+                    new ArrayList<String>());
+        }
+
         private Builder(String editPermission, boolean showMaxWindow, String factoryId, String displayName, String description,
                 List<String> accessPermissions) {
             this.editPermission = editPermission;

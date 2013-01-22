@@ -75,6 +75,10 @@ public class POMSessionManager implements Startable {
         this.executor = new DataCache(new ExecutorDispatcher());
     }
 
+    public RepositoryService getRepositoryService() {
+        return repositoryService;
+    }
+
     public ChromatticLifeCycle getLifeCycle() {
         return configurator;
     }
