@@ -22,8 +22,6 @@ package org.exoplatform.portal.config;
 import java.util.Date;
 import java.util.Set;
 
-import javax.inject.Provider;
-
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.component.RequestLifeCycle;
@@ -33,16 +31,14 @@ import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.importer.Importer;
 import org.exoplatform.portal.mop.site.SimpleDataCache;
-import org.exoplatform.portal.mop.layout.MopPersistence;
+import org.gatein.portal.mop.layout.LayoutService;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.importer.Imported;
 import org.exoplatform.portal.mop.importer.Imported.Status;
-import org.gatein.portal.mop.layout.LayoutServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteService;
-import org.gatein.portal.mop.site.SiteServiceImpl;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.mop.api.workspace.Workspace;
@@ -67,12 +63,14 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
             PageService pageService,
             ConfigurationManager cmanager,
             InitParams params,
+            LayoutService layoutService,
+            SiteService siteService,
             NavigationService navigationService,
             DescriptionService descriptionService) throws Exception {
 
 
         //
-        this.siteService = new SiteServiceImpl(new org.exoplatform.portal.mop.site.MopPersistence(pomMgr, new SimpleDataCache()));
+        this.siteService = siteService;
         this.pomMgr = pomMgr;
         this.importer = new Importer(
                 pageService,
@@ -80,12 +78,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
                 params,
                 navigationService,
                 descriptionService,
-                new LayoutServiceImpl(new Provider<MopPersistence>() {
-                    @Override
-                    public MopPersistence get() {
-                        return new MopPersistence(pomMgr.getSession());
-                    }
-                }),
+                layoutService,
                 siteService);
     }
 

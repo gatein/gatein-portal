@@ -28,7 +28,6 @@ import org.exoplatform.portal.mop.Described;
 import org.exoplatform.portal.mop.i18n.I18NAdapter;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.exoplatform.services.cache.CacheService;
 import org.gatein.mop.api.workspace.WorkspaceObject;
 import org.gatein.portal.mop.description.DescriptionPersistence;
 import org.gatein.portal.mop.description.DescriptionState;
@@ -47,10 +46,6 @@ public class MopPersistence implements DescriptionPersistence {
     public MopPersistence(POMSessionManager manager, DataCache cache) {
         this.manager = manager;
         this.cache = cache;
-    }
-
-    public MopPersistence(POMSessionManager manager, CacheService cacheService) {
-        this(manager, new ExoDataCache(cacheService));
     }
 
     @Override

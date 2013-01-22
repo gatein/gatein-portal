@@ -26,7 +26,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
-import javax.inject.Provider;
 import javax.transaction.Status;
 
 import org.chromattic.api.ChromatticSession;
@@ -49,21 +48,16 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.TransientApplicationState;
 import org.exoplatform.portal.mop.EventType;
 import org.gatein.portal.mop.QueryResult;
-import org.exoplatform.portal.mop.site.SimpleDataCache;
-import org.exoplatform.portal.mop.layout.MopPersistence;
 import org.gatein.portal.mop.site.SiteKey;
-import org.gatein.portal.mop.site.SitePersistence;
 import org.gatein.portal.mop.site.SiteType;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.layout.LayoutService;
-import org.gatein.portal.mop.layout.LayoutServiceImpl;
 import org.gatein.portal.mop.page.PageContext;
 import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.page.PageState;
 import org.gatein.portal.mop.site.SiteContext;
 import org.gatein.portal.mop.site.SiteService;
-import org.gatein.portal.mop.site.SiteServiceImpl;
 import org.exoplatform.portal.pom.config.tasks.DashboardTask;
 import org.exoplatform.portal.pom.config.tasks.PreferencesTask;
 import org.exoplatform.portal.pom.config.tasks.SearchTask;
@@ -125,10 +119,16 @@ public class POMDataStorage implements ModelDataStorage {
     private final SiteService siteService ;
 
     /** . */
-    private final org.exoplatform.portal.mop.site.MopPersistence sitePersistence;
+    private final PageService pageService;
 
-    public POMDataStorage(final POMSessionManager pomMgr, ConfigurationManager confManager,
-            JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService, ListenerService listenerService) {
+    public POMDataStorage(
+            final POMSessionManager pomMgr,
+            ConfigurationManager confManager,
+            LayoutService layoutService,
+            SiteService siteService,
+            PageService pageService,
+            JTAUserTransactionLifecycleService jtaUserTransactionLifecycleService,
+            ListenerService listenerService) {
 
         // Invalidation bridge : listen for PageService events and invalidate the DataStorage cache
         Listener<?, org.gatein.portal.mop.page.PageKey> invalidator = new Listener<Object, org.gatein.portal.mop.page.PageKey>() {
@@ -147,18 +147,9 @@ public class POMDataStorage implements ModelDataStorage {
         this.confManager_ = confManager;
         this.jtaUserTransactionLifecycleService = jtaUserTransactionLifecycleService;
         this.listenerService = listenerService;
-        this.layoutService = new LayoutServiceImpl(new Provider<MopPersistence>() {
-            @Override
-            public MopPersistence get() {
-                return new MopPersistence(pomMgr.getSession());
-            }
-        });
-        this.sitePersistence = new org.exoplatform.portal.mop.site.MopPersistence(pomMgr, new SimpleDataCache());
-        this.siteService = new SiteServiceImpl(sitePersistence);
-    }
-
-    public SitePersistence getSitePersistence() {
-        return sitePersistence;
+        this.siteService = siteService;
+        this.layoutService = layoutService;
+        this.pageService = pageService;
     }
 
     public PortalData getPortalConfig(PortalKey key) throws Exception {
@@ -259,7 +250,6 @@ public class POMDataStorage implements ModelDataStorage {
     }
 
     public PageData getPage(PageKey key) throws Exception {
-        PageService pageService = (PageService) PortalContainer.getComponent(PageService.class);
         PageContext context = pageService.loadPage(new org.gatein.portal.mop.page.PageKey(
                 new SiteKey(key.getType(), key.getId()),
                 key.getName()
@@ -359,7 +349,6 @@ public class POMDataStorage implements ModelDataStorage {
     public List<ModelChange> save(PageData page) throws Exception {
 
         // Build layout context
-        PageService pageService = (PageService) PortalContainer.getComponent(PageService.class);
         org.gatein.portal.mop.page.PageKey key = new org.gatein.portal.mop.page.PageKey(new SiteKey(page.getKey().getType(), page.getKey().getId()), page.getKey().getName());
         PageContext context = pageService.loadPage(key);
 
