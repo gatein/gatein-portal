@@ -99,7 +99,6 @@ public class HeaderBean {
     }
     
     public Map<String, List<Node>> getGroupNodes() throws Exception {
-        
         Map<String, List<Node>> navNodes = new HashMap<String, List<Node>>();
         
         PortalRequestContext pContext = Util.getPortalRequestContext();
@@ -121,7 +120,6 @@ public class HeaderBean {
             
             navNodes.put(groupName, nodes);
         }
-        
         return navNodes;
     }
     

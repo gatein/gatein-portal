@@ -17,18 +17,11 @@
     <css-path>/css/ClassicStylesheet.css</css-path>
   </portlet-skin>
 
+ <!-- TODO: figure out how to properly setup shared modules and use the collapsible one here -->
   <portlet>
     <name>ResponsiveFooterPortlet</name>
     <module>
-      <script>
-        <name>footer</name>
-        <path>/js/footer.js</path>
-      </script>
-      <depends>
-        <module>jquery</module>
-        <as>jQuery</as>
-      </depends>
     </module>
   </portlet>
-
+-->
 </gatein-resources>

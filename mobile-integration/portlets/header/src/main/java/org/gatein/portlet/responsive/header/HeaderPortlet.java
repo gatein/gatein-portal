@@ -39,8 +39,16 @@ import org.w3c.dom.Element;
  */
 public class HeaderPortlet extends GenericPortlet {
 
+    HeaderBean headerBean;
+    
+    public HeaderPortlet()
+    {
+        headerBean = new HeaderBean();
+    }
+    
     @Override
     protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+        request.setAttribute("headerbean", headerBean);
         PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/header.jsp");
         prd.include(request, response);
     }
@@ -53,5 +61,4 @@ public class HeaderPortlet extends GenericPortlet {
 
         response.addProperty(MimeResponse.MARKUP_HEAD_ELEMENT, viewportMeta);
     }
-
 }

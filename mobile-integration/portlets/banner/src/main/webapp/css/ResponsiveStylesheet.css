@@ -1,19 +1,12 @@
 .gtnResponsiveBannerPortlet {
     text-align: center;
-    background: #003971 url(../images/welcome-masthead-bg.jpg) repeat-x left top;
+    background: #003971 url(../images/banner-masthead-bg.jpg) repeat-x left top;
     padding: 1em;
     background-size: auto 100%;
     border-radius: 0.5em 0.5em 0 0;
     
     top: -0.5em; /*move the portlet up 0.5 em which covers the default UIPage rounded border */
     position: relative;
-}
-
-.gtnResponsiveBannerPortletShadow{
-  background: transparent url(/responsive-features-portlet/css/../images/top-shadow.png) no-repeat center top;
-  position: relative;
-  top: -0.5em; /*move the portlet up 0.5 em which covers the default UIPage rounded border */
-  height: 0.5em;
 }
 
 .gtnResponsiveBannerPortlet h1 {
@@ -25,13 +18,20 @@
 
 .gtnResponsiveBannerPortlet h2 {
   color: #B2C6DB;
-  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 1.5em;
   font-weight: normal;
 }
 
-.gtnResponsiveBannerPortlet h2 a, .gtnResponsiveBannerPortlet h2 a:hover {
+.gtnResponsiveBannerPortlet h2 a,
+.gtnResponsiveBannerPortlet h2 a:hover {
 	color: #F6AD3C;
+}
+
+.gtnResponsiveBannerPortlet h2 a:hover {
+    background-color: rgba(178, 198, 219, 0.075);
+    border-radius: 0.1875em;
+    text-decoration: none;
 }
 
 /* Media Queries for Smaller Screened Devices*/
@@ -63,4 +63,12 @@
 	.gtnResponsiveBannerPortlet h2 {
 		font-size: 1em;
 	}
+}
+
+
+.gtnResponsiveBannerPortletShadow{
+  background: transparent url(../images/banner-shadow.png) no-repeat center top;
+  position: relative;
+  top: -0.5em; /*move the portlet up 0.5 em which covers the default UIPage rounded border */
+  height: 0.5em;
 }

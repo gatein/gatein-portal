@@ -1,31 +1,33 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
-<%@ page import="java.util.Locale" %>
-<%@ page import="java.util.ResourceBundle" %>
-<portlet:defineObjects/>
-<jsp:useBean id="features" class="org.gatein.portlet.responsive.features.FeaturesBean"/>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
-<%
-Locale locale = renderRequest.getLocale();
-ResourceBundle resourceBundle = portletConfig.getResourceBundle(locale);
-%>
+<portlet:defineObjects/>
+
+<%-- The resourceBundle used to retrieve locale string values --%>
+<c:set var="resourceBundle" value="${portletConfig.getResourceBundle(renderRequest.locale)}"/>
 
 <div class="gtnResponsiveFeaturesPortlet">
-  <div id="title">
-    <h1><%= resourceBundle.getString("whyUseGatein") %></h1>
+  <div class="title">
+    <h1>${resourceBundle.getString("whyUseGatein")}</h1>
   </div>
-  <div id="ssoFeature" class="feature">
-    <h2><%= resourceBundle.getString("sso.label") %></h2>
-    <p><%= resourceBundle.getString("sso.text") %></p>
+  <div class="feature ssoFeature">
+    <img alt="${resourceBundle.getString('sso.alttext')}" src="${renderRequest.contextPath}/images/feature-sso.svg">
+    <h2>${resourceBundle.getString("sso.label")}</h2>
+    <p>${resourceBundle.getString("sso.text")}</p>
   </div>
-  <div id="nuiFeature" class="feature">
-    <h2><%= resourceBundle.getString("nui.label") %></h2>
-    <p><%= resourceBundle.getString("nui.text") %></p>
+  <div class="separator"/></div>
+  <div class="feature nuiFeature">
+   <img alt="${resourceBundle.getString('nui.alttext')}" src="${renderRequest.contextPath}/images/feature-ui.svg">
+   <h2>${resourceBundle.getString("nui.label")}</h2>
+    <p>${resourceBundle.getString("nui.text")}</p>
   </div>
-  <div id="psFeature" class="feature">
-    <h2><%= resourceBundle.getString("ps.label") %></h2>
-    <p><%= resourceBundle.getString("ps.text") %></p>
+  <div class="separator"></div>
+  <div class="feature psFeature">
+    <img alt="${resourceBundle.getString('ps.alttext')}" src="${renderRequest.contextPath}/images/feature-plugin.svg">
+    <h2>${resourceBundle.getString("ps.label")}</h2>
+    <p>${resourceBundle.getString("ps.text")}</p>
   </div>
-  <div id="footer">
-   <a href="http://www.gatein.org/"><%= resourceBundle.getString("browseFeaturesPages") %></a>
+  <div class="footer">
+   <a href="http://www.gatein.org/">${resourceBundle.getString("browseFeaturesPages")}</a>
   </div>
 </div>

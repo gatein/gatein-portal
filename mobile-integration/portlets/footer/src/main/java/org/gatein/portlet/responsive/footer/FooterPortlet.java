@@ -23,14 +23,17 @@
 package org.gatein.portlet.responsive.footer;
 
 import java.io.IOException;
+import java.util.Map;
 
-import javax.portlet.ActionRequest;
-import javax.portlet.ActionResponse;
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
 import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+
+import org.exoplatform.container.ExoContainerContext;
+import org.exoplatform.portal.application.PortalRequestContext;
+import org.gatein.web.redirect.api.RedirectHandler;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
@@ -38,39 +41,26 @@ import javax.portlet.RenderResponse;
  */
 public class FooterPortlet extends GenericPortlet {
 
-    FooterBean footerBean;
+    protected RedirectHandler redirectHandler;
 
     public FooterPortlet() {
-        footerBean = new FooterBean();
+        redirectHandler = (RedirectHandler) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(
+                RedirectHandler.class);
     }
 
     @Override
     protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-        request.setAttribute("footer", footerBean); // add the footerBean to the request
+        request.setAttribute("alternativeSites", getAlternativeSites());
         PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/footer.jsp");
         prd.include(request, response);
     }
+    
+    protected Map<String, String> getAlternativeSites()
+    {
+        PortalRequestContext prc = (PortalRequestContext) PortalRequestContext.getCurrentInstance();
 
-    // @Override
-    // public void processAction(ActionRequest request, ActionResponse response) throws PortletException, IOException
-    // {
-    // String language = (request.getParameter("languageSelect"));
-    //
-    // if (language != null)
-    // {
-    // footerBean.setLanguage(language);
-    // if (request.getRemoteUser() != null)
-    // {
-    // try
-    // {
-    // footerBean.setUserLanguage(request.getRemoteUser(), language);
-    // }
-    // catch (Exception e)
-    // {
-    // throw new PortletException("Error trying to update the user's language preference", e);
-    // }
-    // }
-    // }
-    // }
+        String siteName = ((PortalRequestContext) PortalRequestContext.getCurrentInstance()).getSiteName();
 
+        return redirectHandler.getAlternativeRedirects(siteName, prc.getRequestURI(), true);
+    }
 }

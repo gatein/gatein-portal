@@ -22,7 +22,6 @@
  ******************************************************************************/
 package org.gatein.portlet.responsive.header;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 

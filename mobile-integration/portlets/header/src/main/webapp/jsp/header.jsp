@@ -1,98 +1,75 @@
-<%@page import="java.util.List"%>
-<%@page import="org.gatein.portlet.responsive.header.Node"%>
-<%@page import="java.util.Map"%>
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
-<%@ page import="java.util.Locale"%>
-<%@ page import="java.util.ResourceBundle"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
 <portlet:defineObjects />
-<jsp:useBean id="header" class="org.gatein.portlet.responsive.header.HeaderBean" />
 
-<%
-   Locale locale = renderRequest.getLocale();
-			ResourceBundle resourceBundle = portletConfig
-					.getResourceBundle(locale);
+<%-- The resourceBundle used to retrieve locale string values --%>
+<c:set var="resourceBundle" value="${portletConfig.getResourceBundle(renderRequest.locale)}"/>
 
-			String signinAction = "if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));";
-			String registerLink = header.generateRegisterLink();
-%>
+<%-- The action to perform to bring up the webui signin modal --%>
+<c:set var="SIGN_IN_ACTION" value="if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));"/>
+<%-- The action to perform to log out the current user --%>
+<c:set var="SIGN_OUT_ACTION" value="eXo.portal.logout();"/>
 
-<%!String generateNodeTree(Node node)
-{
-        String markup = "<li class=\"menuelement\">";
+<%-- Link to the registration page --%>
+<c:set var="registerLink" value="${headerbean.generateRegisterLink()}"/>
 
-        if (node.getURI() != null) {
-            markup += "<a href=\"" + node.getURI() + "\">" + node.getName() + "</a>";
-        } else {
-            markup += "<div class=\"menucategory\">";
-            markup += node.getName();
-            markup += "<div class=\"menuarrow\">";
-            markup += "</div>";
-            markup += "</div>";
-        }
+<%-- Link to the home page --%>
+<c:set var="homePageLink" value="${headerbean.generateHomePageLink()}"/>
 
-        if (node.getChildren() != null && !node.getChildren().isEmpty()) {
-            markup += "<ol class=\"submenu\">";
-            for (Node child : node.getChildren()) {
-                markup += generateNodeTree(child);
-            }
-            markup += "</ol>";
-        }
-        markup += "</li>";
+<%-- Link to the dashboard --%>
+<c:set var="dashboardLink" value="${headerbean.generateDashboardLink()}"/>
 
-        return markup;
-    }%>
+<%-- Link to the groupPages --%>
+<c:set var="groupPagesLink" value="${headerbean.generateGroupPagesLink()}"/>
 
 <div id="<portlet:namespace/>_gtnResponsiveHeaderPortlet" class="gtnResponsiveHeaderPortlet">
     <div class="collapsibleRow">
-	<div id="<portlet:namespace/>_logo" class="logo" onclick="window.location = '<%= header.generateHomePageLink()%>';"></div>
+	<div id="<portlet:namespace/>_logo" class="logo" onclick="window.location = '${homePageLink}';"></div>
 	<div id="<portlet:namespace/>_icon" class="userpreferencebutton collapseButton" data-target="#<portlet:namespace/>_options" data-action="toggleCSS" data-target-class="display" data-self-class="enabled"></div>
 	<div id="<portlet:namespace/>_options" class="options collapsibleContent collapsibleRow">
 		<ol class="topmenu">
-		    <% if (renderRequest.getRemoteUser() == null) 
-		       {%>
-			      <li class="menuelement">
-			      	<a href="#" onclick="<%=signinAction%>"><%=resourceBundle.getString("label.SignIn")%></a>
+		    <c:choose>
+		    <c:when test="${renderRequest.getRemoteUser() eq null}">
+		     <li class="menuelement">
+			      	<a href="#" onclick="${SIGN_IN_ACTION}">${resourceBundle.getString("label.SignIn")}</a>
 			      </li>
 			      <li class="menuelement">
-			      	<a href="<%=registerLink%>"><%=resourceBundle.getString("label.Register")%></a>
+			      	<a href="${registerLink}">${resourceBundle.getString("label.Register")}</a>
 			      </li>
-	        <% } 
-	           else
-	           {
-	              String dashboardLink = header.generateDashboardLink();
-	              String groupPagesLink = header.generateGroupPagesLink();
-	           %>
-	              <li class="menuelement">
-	              	<a href="<%= dashboardLink%>"><%= resourceBundle.getString("label.Dashboard")%></a>
+		    </c:when>
+		    <c:otherwise>
+		     <li class="menuelement">
+	              	<a href="${dashboardLink}">${resourceBundle.getString("label.Dashboard")}</a>
               	  </li>
 	              <li class="menuelement">
-	              	<a href="<%= groupPagesLink%>"><%= resourceBundle.getString("label.GroupPages") %></a>
+	              	<a href="${groupPagesLink}">${resourceBundle.getString("label.GroupPages")}</a>
 	              	<div class="menuarrow"></div>
+	              	      	
 	              <ol class="submenu">
-	              <% Map<String, List<Node>> groupNodes = header.getGroupNodes();
-          			 for (String groupName : groupNodes.keySet()) { %>
-          			 <li>
-				     <ol class="submenu">
-					 <li class="menuelement">
-					     <div class="menucategory"><%=groupName%>'s Pages
-					     <div class="menuarrow"/>
-					     </div>
-					     </div>
-					     <ol class="submenu">
-							<%
- 						    for (Node node : groupNodes.get(groupName)) {
-							%>
-							<%=generateNodeTree(node)%> 
-							<%
- 							    }
-							%>
- 						</ol></li>
-				</ol></li> <%
-     } %>   </ol>
+	                <c:forEach var="groupNode" items="${headerbean.getGroupNodes()}">
+	                    <li>
+	                      <ol class="submenu">
+                                <li class="menuelement">
+	                        <div class="menucategory">${groupNode.key}'s Pages
+	                          <div class="menuarrow"></div>
+	                        </div>
+	                        <ol class="submenu">
+	                        	<c:forEach var="groupnode" items="${groupNode.value}">
+	                        	  <c:set var="node" value="${groupnode}" scope="request"/>
+	                        	  <jsp:include page="node.jsp"/>
+	                        	</c:forEach>
+	                        </ol>
+                              </li>
+	                      </ol>
+	                    </li>
+	                </c:forEach>
+				  </ol>
                  </li>
-	              <li><a href="#" onclick="eXo.portal.logout();"><%=resourceBundle.getString("label.SignOut")%></a></li>
-	              <li><a href="#"><%= resourceBundle.getString("label.UserProfile") %></a></li>
-	        <% }%>		
+	              <li><a href="#" onclick="${SIGN_OUT_ACTION}">${resourceBundle.getString("label.SignOut")}</a></li>
+	              <li><a href="#">${resourceBundle.getString("label.UserProfile")}</a></li>		
+	        </c:otherwise>
+	        </c:choose>
 		</ol>
 	</div>
 	</div>

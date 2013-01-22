@@ -31,7 +31,7 @@ display: inline;
 
 .gtnResponsiveHeaderPortlet .topmenu>li {
 background: url("../images/bullet-separator.png") no-repeat left center;
-margin: 1em;
+padding: 1em;
 white-space: nowrap;
 }
 

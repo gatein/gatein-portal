@@ -10,18 +10,4 @@
     <css-path>/css/ResponsiveStylesheet.css</css-path>
   </portlet-skin>
 
-  <portlet>
-    <name>ResponsiveFeaturesPortlet</name>
-    <module>
-      <script>
-        <name>features</name>
-        <path>/js/features.js</path>
-      </script>
-      <depends>
-        <module>jquery</module>
-        <as>jQuery</as>
-      </depends>
-    </module>
-  </portlet>
-
 </gatein-resources>

@@ -1,19 +1,32 @@
 .gtnResponsiveFooterPortlet {
-margin: 0;
-padding: 0;
-font-size: 95%;
+	margin: 0;
+	padding: 0;
+	font-size: 95%;
+}
+
+.gtnResponsiveFooterPortlet a {
+    color: #666;
+}
+
+.gtnResponsiveFooterPortlet a:hover {
+    color: #005580;
+    text-decoration: underline;
 }
 
 .gtnResponsiveFooterPortlet .options {
-float: right;
+	float: right;
 }
 
 .gtnResponsiveFooterPortlet .copyright {
-float: left;
-text-align: center;
-max-width:100%;
-padding: 1em;
-color: #888;
+	float: left;
+	text-align: center;
+	max-width:100%;
+	padding: 1em;
+}
+
+.gtnResponsiveFooterPortlet .collapsibleRow.collapsed .copyright {
+float: none;
+clear: both;
 }
 
 .gtnResponsiveFooterPortlet .copyright p {
@@ -21,28 +34,28 @@ color: #888;
 }
 
 .gtnResponsiveFooterPortlet .clear {
-clear: both;
+	clear: both;
 }
 
-.gtnResponsiveFooterPortlet ol{
-list-style-type: none;
-padding: 0;
+.gtnResponsiveFooterPortlet ul{
+	list-style-type: none;
+	padding: 0;
 }
 
-.gtnResponsiveFooterPortlet ol::after{
-content:"";
-clear:both;
+.gtnResponsiveFooterPortlet ul li {
+    display: inline;
+    padding: 1em;
+    background: url(../images/bullet-separator.png) no-repeat left center;
 }
 
-.gtnResponsiveFooterPortlet ol li{
-display: inline;
-padding: 1em;
+.gtnResponsiveFooterPortlet ul li:first-child {
+    background: none;
 }
 
-.downCaret{
-border-width: 0.25em 0.25em 0.25em 0.25em;
-border-color: transparent transparent black;
-border-style: solid;
-display: inline-block;
-margin-bottom: 0.25em;
+.gtnResponsiveFooterPortlet .downCaret{
+	border-width: 0.25em;
+	border-color: transparent transparent #666;
+	border-style: solid;
+	display: inline-block;
+	margin-bottom: 0.25em;
 }
