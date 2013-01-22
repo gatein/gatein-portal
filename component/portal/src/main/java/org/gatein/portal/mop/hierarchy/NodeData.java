@@ -30,7 +30,7 @@ import java.util.NoSuchElementException;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class NodeData<S extends Serializable> implements Serializable {
+public class NodeData<S extends Serializable> implements Serializable, Iterable<String> {
 
     /** . */
     public final String parentId;
@@ -75,6 +75,10 @@ public class NodeData<S extends Serializable> implements Serializable {
         this.name = name;
         this.state = state;
         this.children = children;
+    }
+
+    public Iterator<String> iterator() {
+        return iterator(false);
     }
 
     public Iterator<String> iterator(boolean reverse) {

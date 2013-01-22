@@ -20,12 +20,15 @@
 package org.gatein.portal.mop.layout;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.exoplatform.commons.utils.Safe;
 import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
+import org.exoplatform.portal.pom.config.Utils;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeModel;
 
@@ -34,6 +37,10 @@ import org.gatein.portal.mop.hierarchy.NodeModel;
  */
 public abstract class ElementState implements Serializable {
 
+    /** . */
+    public static final String[] EMPTY_STRINGS = new String[0];
+
+    /** . */
     public static NodeModel<?, ElementState> model() {
         return new NodeModel<Object, ElementState>() {
             @Override
@@ -52,6 +59,12 @@ public abstract class ElementState implements Serializable {
     }
 
     public abstract boolean equals(Object o);
+
+    public abstract static class Builder<E extends ElementState> {
+
+        public abstract E build();
+
+    }
 
     public static class Window<S> extends ElementState {
 
@@ -140,6 +153,191 @@ public abstract class ElementState implements Serializable {
                     Safe.equals(properties, that.properties) &&
                     Safe.equals(accessPermissions, that.accessPermissions);
         }
+
+        public WindowBuilder builder() {
+            HashMap<String, String> properties = this.properties != null ? new HashMap<String, String>(this.properties) : new HashMap<String, String>();
+            String[] accessPermissions;
+            if (this.accessPermissions == null) {
+                accessPermissions = EMPTY_STRINGS;
+            } else {
+                accessPermissions = this.accessPermissions.toArray(new String[this.accessPermissions.size()]);
+            }
+            return new WindowBuilder(
+                    type,
+                    state,
+                    title,
+                    icon,
+                    description,
+                    showInfoBar,
+                    showApplicationState,
+                    showApplicationMode,
+                    theme,
+                    width,
+                    height,
+                    properties,
+                    accessPermissions
+            );
+        }
+    }
+
+    public static class WindowBuilder extends Builder<Window> {
+
+        /** . */
+        private ApplicationType type;
+
+        /** . */
+        private ApplicationState state;
+
+        /** . */
+        private String title;
+
+        /** . */
+        private String icon;
+
+        /** . */
+        private String description;
+
+        /** . */
+        private boolean showInfoBar;
+
+        /** . */
+        private boolean showApplicationState;
+
+        /** . */
+        private boolean showApplicationMode;
+
+        /** . */
+        private String theme;
+
+        /** . */
+        private String width;
+
+        /** . */
+        private String height;
+
+        /** . */
+        private Map<String, String> properties;
+
+        /** . */
+        private String[] accessPermissions;
+
+        public WindowBuilder(
+                ApplicationType type,
+                ApplicationState state,
+                String title,
+                String icon,
+                String description,
+                boolean showInfoBar,
+                boolean showApplicationState,
+                boolean showApplicationMode,
+                String theme,
+                String width,
+                String height,
+                Map<String, String> properties,
+                String[] accessPermissions) {
+            this.type = type;
+            this.state = state;
+            this.title = title;
+            this.icon = icon;
+            this.description = description;
+            this.showInfoBar = showInfoBar;
+            this.showApplicationState = showApplicationState;
+            this.showApplicationMode = showApplicationMode;
+            this.theme = theme;
+            this.width = width;
+            this.height = height;
+            this.properties = properties;
+            this.accessPermissions = accessPermissions;
+        }
+
+        public WindowBuilder type(ApplicationType<?> type) {
+            this.type = type;
+            return this;
+        }
+
+        public WindowBuilder state(ApplicationState<?> state) {
+            this.state = state;
+            return this;
+        }
+
+        public WindowBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public WindowBuilder icon(String icon) {
+            this.icon = icon;
+            return this;
+        }
+
+        public WindowBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public WindowBuilder showInfoBar(boolean showInfoBar) {
+            this.showInfoBar = showInfoBar;
+            return this;
+        }
+
+        public WindowBuilder showApplicationState(boolean showApplicationState) {
+            this.showApplicationState = showApplicationState;
+            return this;
+        }
+
+        public WindowBuilder showApplicationMode(boolean showApplicationMode) {
+            this.showApplicationMode = showApplicationMode;
+            return this;
+        }
+
+        public WindowBuilder theme(String theme) {
+            this.theme = theme;
+            return this;
+        }
+
+        public WindowBuilder width(String width) {
+            this.width = width;
+            return this;
+        }
+
+        public WindowBuilder height(String height) {
+            this.height = height;
+            return this;
+        }
+
+        public WindowBuilder properties(Map<String, String> properties) {
+            this.properties = properties;
+            return this;
+        }
+
+        public WindowBuilder property(String name, String value) {
+            properties.put(name, value);
+            return this;
+        }
+
+        public WindowBuilder accessPermissions(String... accessPermissions) {
+            this.accessPermissions = accessPermissions;
+            return this;
+        }
+
+        // Autocast (remove me please later)
+        public Window build() {
+            return new Window(
+                    type,
+                    state,
+                    title,
+                    icon,
+                    description,
+                    showInfoBar,
+                    showApplicationState,
+                    showApplicationMode,
+                    theme,
+                    width,
+                    height,
+                    Collections.unmodifiableMap(new HashMap<String, String>(properties)),
+                    Utils.safeImmutableList(accessPermissions)
+            );
+        }
     }
 
     public static class Body extends ElementState {
@@ -148,6 +346,20 @@ public abstract class ElementState implements Serializable {
         public boolean equals(Object o) {
             Body that = (Body) o;
             return true;
+        }
+
+        public BodyBuilder builder() {
+            return new BodyBuilder();
+        }
+    }
+
+    public static class BodyBuilder extends Builder<Body> {
+
+        public BodyBuilder() {
+        }
+
+        public Body build() {
+            return new Body();
         }
     }
 
@@ -226,6 +438,149 @@ public abstract class ElementState implements Serializable {
                     Safe.equals(accessPermissions, that.accessPermissions) &&
                     Safe.equals(dashboard, that.dashboard);
         }
+
+        public ContainerBuilder builder() {
+            return new ContainerBuilder(
+                    id,
+                    name,
+                    icon,
+                    template,
+                    factoryId,
+                    title,
+                    description,
+                    width,
+                    height,
+                    accessPermissions.toArray(new String[accessPermissions.size()]),
+                    dashboard
+            );
+        }
+
     }
 
+    public static class ContainerBuilder extends Builder<Container> {
+
+        /** . */
+        private String id;
+
+        /** . */
+        private String name;
+
+        /** . */
+        private String icon;
+
+        /** . */
+        private String template;
+
+        /** . */
+        private String factoryId;
+
+        /** . */
+        private String title;
+
+        /** . */
+        private String description;
+
+        /** . */
+        private String width;
+
+        /** . */
+        private String height;
+
+        /** . */
+        private String[] accessPermissions;
+
+        /** . */
+        private boolean dashboard;
+
+        public ContainerBuilder(
+                String id,
+                String name,
+                String icon,
+                String template,
+                String factoryId,
+                String title,
+                String description,
+                String width,
+                String height,
+                String[] accessPermissions,
+                boolean dashboard) {
+            this.id = id;
+            this.name = name;
+            this.icon = icon;
+            this.template = template;
+            this.factoryId = factoryId;
+            this.title = title;
+            this.description = description;
+            this.width = width;
+            this.height = height;
+            this.accessPermissions = accessPermissions;
+            this.dashboard = dashboard;
+        }
+
+        public ContainerBuilder id(String id) {
+            this.id = id;
+            return this;
+        }
+
+        public ContainerBuilder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public ContainerBuilder icon(String icon) {
+            this.icon = icon;
+            return this;
+        }
+
+        public ContainerBuilder template(String template) {
+            this.template = template;
+            return this;
+        }
+
+        public ContainerBuilder factoryId(String factoryId) {
+            this.factoryId = factoryId;
+            return this;
+        }
+
+        public ContainerBuilder title(String title) {
+            this.title = title;
+            return this;
+        }
+
+        public ContainerBuilder description(String description) {
+            this.description = description;
+            return this;
+        }
+
+        public ContainerBuilder width(String width) {
+            this.width = width;
+            return this;
+        }
+
+        public ContainerBuilder height(String height) {
+            this.height = height;
+            return this;
+        }
+
+        public ContainerBuilder accessPermissions(String... accessPermissions) {
+            this.accessPermissions = accessPermissions;
+            return this;
+        }
+
+        public Container build() {
+            return new Container(
+                    id,
+                    name,
+                    icon,
+                    template,
+                    factoryId,
+                    title,
+                    description,
+                    width,
+                    height,
+                    Utils.safeImmutableList(accessPermissions),
+                    dashboard
+            );
+        }
+    }
 }

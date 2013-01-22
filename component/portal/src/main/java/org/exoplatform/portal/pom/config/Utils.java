@@ -87,7 +87,8 @@ public class Utils {
             E e = list[0];
             return Collections.singletonList(e);
         } else {
-            List<E> copy = Arrays.asList(list);
+            List<E> copy = new ArrayList<E>(list.length);
+            Collections.addAll(copy, list);
             return Collections.unmodifiableList(copy);
         }
     }

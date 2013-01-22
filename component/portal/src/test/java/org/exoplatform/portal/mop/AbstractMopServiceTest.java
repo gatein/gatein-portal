@@ -23,12 +23,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.hierarchy.NodeData;
+import org.gatein.portal.mop.hierarchy.NodePersistence;
+import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.navigation.NavigationData;
 import org.gatein.portal.mop.navigation.NavigationPersistence;
 import org.gatein.portal.mop.navigation.NavigationServiceImpl;
@@ -157,7 +160,7 @@ public abstract class AbstractMopServiceTest extends AbstractMopTest {
         return pagePersistence.loadPage(key);
     }
 
-    protected final Map<String, NodeData> createNodeChild(NodeData parent, Map<String, NodeState> nodes) {
+    protected final Map<String, NodeData> createNodes(NodeData parent, Map<String, NodeState> nodes) {
         NavigationPersistence navigationPersistence = getNavigationPersistence();
         String previous = parent.getLastChild();
         LinkedHashMap<String, NodeData> created = new LinkedHashMap<String, NodeData>(nodes.size());
@@ -167,6 +170,54 @@ public abstract class AbstractMopServiceTest extends AbstractMopTest {
             previous = child.id;
         }
         return created;
+    }
+
+    protected final NodeData<ElementState>[] createElements(SiteData site, ElementState.Builder<?>... elements) {
+        NodePersistence<ElementState> persistence = context.getLayoutPersistence();
+        NodeData<ElementState> root = persistence.loadNode(site.layoutId);
+        return createElements(root, elements);
+    }
+
+    protected final NodeData<ElementState>[] createElements(SiteData site, ElementState... elements) {
+        NodePersistence<ElementState> persistence = context.getLayoutPersistence();
+        NodeData<ElementState> root = persistence.loadNode(site.layoutId);
+        return createElements(root, elements);
+    }
+
+    protected final NodeData<ElementState>[] createElements(NodeData<ElementState> parent, ElementState.Builder<?>... elements) {
+        ElementState[] states = new ElementState[elements.length];
+        for (int i = 0;i < elements.length;i++) {
+            states[i] = elements[i].build();
+        }
+        return createElements(parent, states);
+    }
+
+    protected final NodeData<ElementState>[] createElements(NodeData<ElementState> parent, ElementState... elements) {
+        NodePersistence<ElementState> persistence = context.getLayoutPersistence();
+        String previous = parent.getLastChild();
+        NodeData<ElementState>[] created = new NodeData[elements.length];
+        for (int i = 0;i < elements.length;i++) {
+            ElementState element = elements[i];
+            NodeData<ElementState> child = persistence.createNode(parent.id, previous, UUID.randomUUID().toString(), element)[1];
+            created[i] = child;
+            previous = child.id;
+        }
+        return created;
+    }
+
+    public final NodeData<ElementState> getElement(SiteData site) {
+        NodePersistence<ElementState> persistence = context.getLayoutPersistence();
+        return persistence.loadNode(site.layoutId);
+    }
+
+    public final NodeData<ElementState> getElement(NodeData<ElementState> element) {
+        NodePersistence<ElementState> persistence = context.getLayoutPersistence();
+        return persistence.loadNode(element.id);
+    }
+
+    public final NodeData<ElementState> getElement(String parentId) {
+        NodePersistence<ElementState> persistence = context.getLayoutPersistence();
+        return persistence.loadNode(parentId);
     }
 
     protected final boolean isSessionModified() {

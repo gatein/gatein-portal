@@ -34,6 +34,10 @@ import org.gatein.portal.impl.mop.ram.Tx;
 import org.gatein.portal.mop.description.DescriptionPersistence;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.description.DescriptionServiceImpl;
+import org.gatein.portal.mop.hierarchy.NodePersistence;
+import org.gatein.portal.mop.layout.ElementState;
+import org.gatein.portal.mop.layout.LayoutService;
+import org.gatein.portal.mop.layout.LayoutServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationPersistence;
 import org.gatein.portal.mop.navigation.NavigationServiceImpl;
 import org.gatein.portal.mop.page.PagePersistence;
@@ -53,15 +57,19 @@ public abstract class PersistenceContext {
 
     public abstract DescriptionService getDescriptionService();
 
-    public abstract DescriptionPersistence getDescriptionPersistence();
-
     public abstract PageServiceImpl getPageService();
 
+    public abstract LayoutService getLayoutService();
+
     public abstract NavigationPersistence getNavigationPersistence();
+
+    public abstract DescriptionPersistence getDescriptionPersistence();
 
     public abstract PagePersistence getPagePersistence();
 
     public abstract SitePersistence getSitePersistence();
+
+    public abstract NodePersistence<ElementState> getLayoutPersistence();
 
     public abstract void begin();
 
@@ -86,6 +94,9 @@ public abstract class PersistenceContext {
         private PagePersistence pagePersistence;
 
         /** . */
+        private LayoutService layoutService;
+
+        /** . */
         private POMSessionManager mgr;
 
         /** . */
@@ -93,6 +104,9 @@ public abstract class PersistenceContext {
 
         /** . */
         private SitePersistence sitePersistence;
+
+        /** . */
+        private Provider<? extends NodePersistence<ElementState>> layoutPersistence;
 
         /** . */
         private org.exoplatform.portal.mop.description.MopPersistence descriptionPersistence;
@@ -116,6 +130,13 @@ public abstract class PersistenceContext {
             sitePersistence = new MopPersistence(mgr, new org.exoplatform.portal.mop.site.SimpleDataCache());
             pagePersistence = new org.exoplatform.portal.mop.page.MopPersistence(mgr, new org.exoplatform.portal.mop.page.SimpleDataCache());
             pageService = new PageServiceImpl(pagePersistence);
+            layoutPersistence = new Provider<NodePersistence<ElementState>>() {
+                @Override
+                public NodePersistence<ElementState> get() {
+                    return new org.exoplatform.portal.mop.layout.MopPersistence(mgr.getSession());
+                }
+            };
+            layoutService = new LayoutServiceImpl(layoutPersistence);
 
             // Clear the cache for each test
             navigationService.clearCache();
@@ -151,6 +172,11 @@ public abstract class PersistenceContext {
         }
 
         @Override
+        public LayoutService getLayoutService() {
+            return layoutService;
+        }
+
+        @Override
         public NavigationPersistence getNavigationPersistence() {
             return navigationPersistenceFactory.get();
         }
@@ -158,6 +184,11 @@ public abstract class PersistenceContext {
         @Override
         public SitePersistence getSitePersistence() {
             return sitePersistence;
+        }
+
+        @Override
+        public NodePersistence<ElementState> getLayoutPersistence() {
+            return layoutPersistence.get();
         }
 
         @Override
@@ -229,6 +260,16 @@ public abstract class PersistenceContext {
         @Override
         public NavigationServiceImpl getNavigationService() {
             return navigationService;
+        }
+
+        @Override
+        public NodePersistence<ElementState> getLayoutPersistence() {
+            return null;
+        }
+
+        @Override
+        public LayoutService getLayoutService() {
+            return null;
         }
 
         @Override

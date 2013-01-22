@@ -183,7 +183,7 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
 
     public void testState() throws Exception {
         NodeData node = createNavigatation(createSite(SiteType.PORTAL, "state"));
-        createNodeChild(node, MapBuilder.<String, NodeState>linkedHashMap().
+        createNodes(node, MapBuilder.<String, NodeState>linkedHashMap().
                 put("node_name", NodeState.INITIAL.
                         builder().
                         pageRef(SiteKey.portal("state").page("test1")).
@@ -225,7 +225,7 @@ public class TestNavigationServiceLoad extends AbstractMopServiceTest {
 
     public void testDepth() throws Exception {
         NodeData node = createNavigatation(createSite(SiteType.PORTAL, "depth"));
-        createNodeChild(node, MapBuilder.<String, NodeState>linkedHashMap().
+        createNodes(node, MapBuilder.<String, NodeState>linkedHashMap().
                 put("node_name", NodeState.INITIAL).
                 get());
 
