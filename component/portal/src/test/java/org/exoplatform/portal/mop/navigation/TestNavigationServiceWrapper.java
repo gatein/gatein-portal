@@ -29,7 +29,7 @@ import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
 import org.gatein.portal.mop.site.SiteKey;
-import org.gatein.portal.mop.hierarchy.Node;
+import org.gatein.portal.mop.navigation.Node;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.Scope;
 import org.exoplatform.services.listener.Event;

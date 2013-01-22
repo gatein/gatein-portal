@@ -24,7 +24,7 @@ import java.util.Iterator;
 import org.exoplatform.portal.mop.AbstractMopServiceTest;
 import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.site.SiteKey;
-import org.gatein.portal.mop.hierarchy.Node;
+import org.gatein.portal.mop.navigation.Node;
 import org.gatein.portal.mop.hierarchy.NodeChange;
 import org.gatein.portal.mop.hierarchy.Scope;
 import org.gatein.portal.mop.navigation.NavigationContext;

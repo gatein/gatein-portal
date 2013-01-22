@@ -30,7 +30,7 @@ import org.exoplatform.portal.mop.importer.Imported;
 import org.exoplatform.portal.mop.importer.Imported.Status;
 import org.gatein.portal.mop.navigation.NavigationContext;
 import org.gatein.portal.mop.navigation.NavigationService;
-import org.gatein.portal.mop.hierarchy.Node;
+import org.gatein.portal.mop.navigation.Node;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.hierarchy.Scope;

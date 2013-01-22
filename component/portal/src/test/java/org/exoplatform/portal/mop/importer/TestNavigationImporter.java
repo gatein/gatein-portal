@@ -34,7 +34,7 @@ import org.exoplatform.portal.mop.AbstractMopServiceTest;
 import org.gatein.portal.mop.description.DescriptionState;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.navigation.NavigationContext;
-import org.gatein.portal.mop.hierarchy.Node;
+import org.gatein.portal.mop.navigation.Node;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.hierarchy.Scope;

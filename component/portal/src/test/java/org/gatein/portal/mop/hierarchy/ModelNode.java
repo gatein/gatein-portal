@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2010 eXo Platform SAS.
+ * Copyright (C) 2012 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -19,40 +19,23 @@
 
 package org.gatein.portal.mop.hierarchy;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import junit.framework.Assert;
-import org.gatein.portal.mop.navigation.NavigationService;
-import org.gatein.portal.mop.navigation.NavigationServiceException;
-import org.gatein.portal.mop.navigation.NodeState;
 
 /**
- * Represents a navigation node.
- *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
- * @version $Revision$
  */
-public class Node {
+public class ModelNode<M extends ModelNode<M, S>, S extends Serializable> {
 
     /** . */
-    public static final NodeModel<Node, NodeState> MODEL = new NodeModel<Node, NodeState>() {
-        public NodeContext<Node, NodeState> getContext(Node node) {
-            return node.context;
-        }
+    protected final NodeContext<M, S> context;
 
-        public Node create(NodeContext<Node, NodeState> context) {
-            return new Node(context);
-        }
-    };
-
-    /** . */
-    final NodeContext<Node, NodeState> context;
-
-    Node(NodeContext<Node, NodeState> context) {
+    public ModelNode(NodeContext<M, S> context) {
         this.context = context;
     }
 
@@ -72,48 +55,48 @@ public class Node {
         context.setName(name);
     }
 
-    public NodeContext<Node, NodeState> getContext() {
+    public NodeContext<M, S> getContext() {
         return context;
     }
 
-    public NodeState getState() {
+    public S getState() {
         return context.getState();
     }
 
-    public void setState(NodeState state) {
+    public void setState(S state) {
         context.setState(state);
     }
 
-    public Node getParent() {
+    public M getParent() {
         return context.getParentNode();
     }
 
-    public Collection<Node> getChildren() {
+    public Collection<M> getChildren() {
         return context.getNodes();
     }
 
-    public Node getChild(String childName) {
+    public M getChild(String childName) {
         return context.getNode(childName);
     }
 
-    public Node getChild(int childIndex) {
+    public M getChild(int childIndex) {
         return context.getNode(childIndex);
     }
 
-    public void addChild(Node child) {
+    public void addChild(M child) {
         context.add(null, child.context);
     }
 
-    public void addChild(int index, Node child) {
+    public void addChild(int index, M child) {
         context.add(index, child.context);
     }
 
-    public Node addChild(String childName) {
-        return context.add(null, childName, NodeState.INITIAL).getNode();
+    public M addChild(String childName, S state) {
+        return context.add(null, childName, state).getNode();
     }
 
-    public Node addChild(int index, String childName) {
-        return context.add(index, childName, NodeState.INITIAL).getNode();
+    public M addChild(int index, String childName, S state) {
+        return context.add(index, childName, state).getNode();
     }
 
     public boolean removeChild(String childName) {
@@ -136,26 +119,26 @@ public class Node {
         return context.isHidden();
     }
 
-    public void filter(NodeFilter<NodeState> filter) {
+    public void filter(NodeFilter<S> filter) {
         context.filter(filter);
     }
 
     public void assertConsistent() {
         if (context.isExpanded()) {
             List<String> a = new ArrayList<String>();
-            for (NodeContext<Node, NodeState> b = context.getFirst(); b != null; b = b.getNext()) {
-                Assert.assertNotNull(b.data);
-                a.add(b.data.getId());
+            for (NodeContext<M, S> b = context.getFirst(); b != null; b = b.getNext()) {
+                Assert.assertNotNull(b.getData());
+                a.add(b.getId());
             }
             List<String> b = Arrays.asList(context.data.children);
             Assert.assertEquals(a, b);
-            for (NodeContext<Node, NodeState> c = context.getFirst(); c != null; c = c.getNext()) {
+            for (NodeContext<M, S> c = context.getFirst(); c != null; c = c.getNext()) {
                 c.getNode().assertConsistent();
             }
         }
     }
 
-    public void assertEquals(Node node) {
+    public void assertEquals(M node) {
 
         // First check state
         if (context.data != null) {
@@ -170,14 +153,14 @@ public class Node {
         }
 
         //
-        List<Node> nodes1 = new ArrayList<Node>();
-        for (NodeContext<Node, NodeState> current = context.getFirst(); current != null; current = current.getNext()) {
+        List<M> nodes1 = new ArrayList<M>();
+        for (NodeContext<M, S> current = context.getFirst(); current != null; current = current.getNext()) {
             nodes1.add(current.getNode());
         }
 
         //
-        List<Node> nodes2 = new ArrayList<Node>();
-        for (NodeContext<Node, NodeState> current = node.context.getFirst(); current != null; current = current.getNext()) {
+        List<M> nodes2 = new ArrayList<M>();
+        for (NodeContext<M, S> current = node.context.getFirst(); current != null; current = current.getNext()) {
             nodes2.add(current.getNode());
         }
 
@@ -189,24 +172,6 @@ public class Node {
         for (int i = 0; i < nodes1.size(); i++) {
             nodes1.get(i).assertEquals(nodes2.get(i));
         }
-    }
-
-    public Iterator<NodeChange<Node, NodeState>> update(NavigationService service, Scope<NodeState> scope) throws NavigationServiceException {
-        NodeChangeQueue<Node, NodeState> queue = new NodeChangeQueue<Node, NodeState>();
-        service.updateNode(context, scope, new NodeContextChangeAdapter<Node, NodeState>(queue));
-        return queue.iterator();
-    }
-
-    public Iterator<NodeChange<Node, NodeState>> rebase(NavigationService service, Scope<NodeState> scope) throws NavigationServiceException {
-        NodeChangeQueue<Node, NodeState> queue = new NodeChangeQueue<Node, NodeState>();
-        service.rebaseNode(context, scope, new NodeContextChangeAdapter<Node, NodeState>(queue));
-        return queue.iterator();
-    }
-
-    public Iterator<NodeChange<Node, NodeState>> save(NavigationService service) throws NavigationServiceException {
-        NodeChangeQueue<Node, NodeState> queue = new NodeChangeQueue<Node, NodeState>();
-        service.saveNode(context, new NodeContextChangeAdapter<Node, NodeState>(queue));
-        return queue.iterator();
     }
 
     @Override

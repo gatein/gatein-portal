@@ -24,7 +24,7 @@ import java.io.Serializable;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class NodeContextChangeAdapter<N, S extends Serializable> implements NodeChangeListener<NodeContext<N, S>, S> {
+public class NodeContextChangeAdapter<N, S extends Serializable> implements NodeChangeListener<NodeContext<N, S>, S> {
 
     /** . */
     private final NodeChangeListener<N, S> wrapped;
