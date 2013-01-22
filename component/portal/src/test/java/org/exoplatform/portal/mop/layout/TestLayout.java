@@ -50,7 +50,7 @@ public class TestLayout extends AbstractMopServiceTest {
     /**
      * One single test now that do multiple things : shorcut
      */
-    public void testFoo() {
+    public void testAll() {
         SiteData site = createSite(SiteType.PORTAL, "test_layout");
         createElements(site, Element.portlet("app/foo").title("foo"), Element.portlet("app/bar").title("bar"));
 
@@ -75,7 +75,7 @@ public class TestLayout extends AbstractMopServiceTest {
         assertEquals("bar", ((ElementState.Window) bar.getState()).title);
         assertEquals("juu", ((ElementState.Window) juu.getState()).title);
 
-        // Change order
+        // Test move
         context.add(1, context.get(2));
         layoutService.saveLayout(context, null);
         assertEquals(3, context.getNodeSize());
@@ -90,5 +90,19 @@ public class TestLayout extends AbstractMopServiceTest {
         NodeData<ElementState> root = getElement(site);
         assertEquals(Arrays.asList(context.get(0).getId(), context.get(1).getId(), context.get(2).getId()), Tools.list(root.iterator()));
 
+        // Test update
+        context.getNode(0).setState(((ElementState.WindowBuilder)context.getNode(0).getState().builder()).description("foodesc").build());
+        layoutService.saveLayout(context, null);
+
+        //
+        assertEquals("foodesc", ((ElementState.Window)getElement(context.getNode(0).getId()).getState()).description);
+
+        // Test destroy
+        assertTrue(context.get(0).removeNode());
+        layoutService.saveLayout(context, null);
+
+        //
+        root = getElement(site);
+        assertEquals(Arrays.asList(context.get(0).getId(), context.get(1).getId()), Tools.list(root.iterator()));
     }
 }

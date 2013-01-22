@@ -60,6 +60,8 @@ public abstract class ElementState implements Serializable {
 
     public abstract boolean equals(Object o);
 
+    public abstract Builder<? extends ElementState> builder();
+
     public abstract static class Builder<E extends ElementState> {
 
         public abstract E build();

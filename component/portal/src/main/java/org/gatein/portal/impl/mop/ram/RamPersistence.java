@@ -31,6 +31,8 @@ import org.exoplatform.commons.utils.I18N;
 import org.gatein.portal.mop.description.DescriptionPersistence;
 import org.gatein.portal.mop.description.DescriptionState;
 import org.gatein.portal.mop.hierarchy.NodeData;
+import org.gatein.portal.mop.hierarchy.NodePersistence;
+import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.navigation.NavigationData;
 import org.gatein.portal.mop.navigation.NavigationPersistence;
 import org.gatein.portal.mop.navigation.NavigationState;
@@ -51,6 +53,21 @@ import org.gatein.portal.mop.site.SiteType;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class RamPersistence {
+
+    /** . */
+    private static final ElementState.Container INITIAL = new ElementState.Container(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            Collections.<String>emptyList(),
+            false
+    );
 
     /** . */
     private final Store store = new Store();
@@ -78,6 +95,10 @@ public class RamPersistence {
 
     public SitePersistence getSitePersistence() {
         return site;
+    }
+
+    public NodePersistence<ElementState> getLayoutPersistence() {
+        return layout;
     }
 
     private final SitePersistence site = new SitePersistence() {
@@ -108,7 +129,7 @@ public class RamPersistence {
             if (site == null) {
                 site = current.addChild(type, key.getName(), state);
                 current.addChild(site, "pages", "");
-                current.addChild(site, "layout", "");
+                current.addChild(site, "layout", INITIAL);
                 return true;
             } else {
                 Node entry = current.getNode(site);
@@ -486,6 +507,82 @@ public class RamPersistence {
 
         @Override
         public void clear() {
+            // Nothing to do
+        }
+    };
+
+    /** . */
+    private NodePersistence<ElementState> layout = new NodePersistence<ElementState>() {
+
+        private NodeData<ElementState> getNode(Store current, String nodeId) {
+            String parent = current.getParent(nodeId);
+            Node parentNode = current.getNode(parent);
+            String parentId = parentNode.getState() instanceof ElementState ? parent : null;
+            List<String> children = current.getChildren(nodeId);
+            Node element = current.getNode(nodeId);
+            return new NodeData<ElementState>(
+                    parentId,
+                    nodeId,
+                    element.getName(),
+                    (ElementState)element.getState(),
+                    children.toArray(new String[children.size()]));
+        }
+
+        @Override
+        public NodeData<ElementState> loadNode(String nodeId) {
+            Tx tx = Tx.associate(store);
+            Store current = tx.getContext();
+            return getNode(current, nodeId);
+        }
+
+        @Override
+        public NodeData<ElementState>[] createNode(String parentId, String previousId, String name, ElementState state) {
+            Tx tx = Tx.associate(store);
+            Store current = tx.getContext();
+            String added = current.addChild(parentId, previousId, name, state);
+            return new NodeData[]{
+                    getNode(current, parentId),
+                    getNode(current, added),
+            };
+        }
+
+        @Override
+        public NodeData<ElementState> destroyNode(String targetId) {
+            Tx tx = Tx.associate(store);
+            Store current = tx.getContext();
+            String parent = current.getParent(targetId);
+            current.remove(targetId);
+            return getNode(current, parent);
+        }
+
+        @Override
+        public NodeData<ElementState> updateNode(String targetId, ElementState state) {
+            Tx tx = Tx.associate(store);
+            Store current = tx.getContext();
+            current.update(targetId, state);
+            return getNode(current, targetId);
+        }
+
+        @Override
+        public NodeData<ElementState>[] moveNode(String targetId, String fromId, String toId, String previousId) {
+            Tx tx = Tx.associate(store);
+            Store current = tx.getContext();
+            current.move(targetId, toId, previousId);
+            return new NodeData[] {
+                    getNode(current, targetId),
+                    getNode(current, fromId),
+                    getNode(current, toId)
+            };
+        }
+
+        @Override
+        public NodeData<ElementState>[] renameNode(String targetId, String parentId, String name) {
+            // We  don't support it as it's not necessary (yet)
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void close() {
             // Nothing to do
         }
     };

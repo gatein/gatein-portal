@@ -229,17 +229,23 @@ public abstract class PersistenceContext {
         /** . */
         DescriptionServiceImpl descriptionService;
 
+        /** . */
+        LayoutServiceImpl layoutService;
+
         @Override
         void setUp() {
             persistence = new RamPersistence();
             navigationService = new NavigationServiceImpl(new Provider<NavigationPersistence>() {
                 @Override
-                public NavigationPersistence get() {
-                    return persistence.getNavigationPersistence();
+                public NavigationPersistence get() { return persistence.getNavigationPersistence();
                 }
             });
             pageService = new PageServiceImpl(persistence.getPagePersistence());
             descriptionService = new DescriptionServiceImpl(persistence.getDescriptionPersistence());
+            layoutService = new LayoutServiceImpl(new Provider<NodePersistence<ElementState>>() {
+                @Override
+                public NodePersistence<ElementState> get() { return persistence.getLayoutPersistence(); }
+            });
         }
 
         @Override
@@ -264,12 +270,12 @@ public abstract class PersistenceContext {
 
         @Override
         public NodePersistence<ElementState> getLayoutPersistence() {
-            return null;
+            return persistence.getLayoutPersistence();
         }
 
         @Override
         public LayoutService getLayoutService() {
-            return null;
+            return layoutService;
         }
 
         @Override
