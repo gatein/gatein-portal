@@ -22,6 +22,8 @@ package org.exoplatform.portal.config;
 import java.util.Date;
 import java.util.Set;
 
+import javax.inject.Provider;
+
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.component.BaseComponentPlugin;
 import org.exoplatform.container.component.RequestLifeCycle;
@@ -30,13 +32,13 @@ import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.config.model.Page;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.importer.Importer;
-import org.exoplatform.portal.mop.site.MopPersistence;
 import org.exoplatform.portal.mop.site.SimpleDataCache;
+import org.exoplatform.portal.mop.layout.MopPersistence;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.exoplatform.portal.mop.importer.Imported;
 import org.exoplatform.portal.mop.importer.Imported.Status;
-import org.exoplatform.portal.mop.layout.LayoutServiceImpl;
+import org.gatein.portal.mop.layout.LayoutServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationService;
 import org.gatein.portal.mop.page.PageService;
 import org.gatein.portal.mop.site.SiteService;
@@ -61,7 +63,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
     final Importer importer;
 
     public NewPortalConfigListener(
-            POMSessionManager pomMgr,
+            final POMSessionManager pomMgr,
             PageService pageService,
             ConfigurationManager cmanager,
             InitParams params,
@@ -70,7 +72,7 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
 
 
         //
-        this.siteService = new SiteServiceImpl(new MopPersistence(pomMgr, new SimpleDataCache()));
+        this.siteService = new SiteServiceImpl(new org.exoplatform.portal.mop.site.MopPersistence(pomMgr, new SimpleDataCache()));
         this.pomMgr = pomMgr;
         this.importer = new Importer(
                 pageService,
@@ -78,7 +80,12 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
                 params,
                 navigationService,
                 descriptionService,
-                new LayoutServiceImpl(pomMgr),
+                new LayoutServiceImpl(new Provider<MopPersistence>() {
+                    @Override
+                    public MopPersistence get() {
+                        return new MopPersistence(pomMgr.getSession());
+                    }
+                }),
                 siteService);
     }
 

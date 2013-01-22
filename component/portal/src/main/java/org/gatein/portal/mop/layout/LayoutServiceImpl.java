@@ -17,10 +17,11 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.layout;
+package org.gatein.portal.mop.layout;
 
 import javax.inject.Provider;
 
+import org.exoplatform.portal.mop.layout.MopPersistence;
 import org.gatein.portal.mop.hierarchy.GenericScope;
 import org.gatein.portal.mop.hierarchy.NodeAdapter;
 import org.gatein.portal.mop.hierarchy.NodeChangeListener;
@@ -28,10 +29,6 @@ import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeManager;
 import org.gatein.portal.mop.hierarchy.NodeModel;
 import org.gatein.portal.mop.hierarchy.Scope;
-import org.exoplatform.portal.pom.config.POMSession;
-import org.exoplatform.portal.pom.config.POMSessionManager;
-import org.gatein.mop.api.workspace.ObjectType;
-import org.gatein.mop.api.workspace.ui.UIContainer;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -42,24 +39,15 @@ public class LayoutServiceImpl implements LayoutService {
     private final Scope<ElementState> ALL = GenericScope.treeShape(-1);
 
     /** . */
-    private final POMSessionManager manager;
-
-    /** . */
     private final NodeManager<ElementState> nodeManager;
 
-    public LayoutServiceImpl(final POMSessionManager manager) {
+    public LayoutServiceImpl(Provider<? extends MopPersistence> persistence) {
+        if (persistence == null) {
+            throw new NullPointerException("No null persistence provided");
+        }
 
         //
-        Provider<LayoutPersistence> persistenceProvider = new Provider<LayoutPersistence>() {
-            @Override
-            public LayoutPersistence get() {
-                return new LayoutPersistence(manager.getSession());
-            }
-        };
-
-        //
-        this.manager = manager;
-        this.nodeManager = new NodeManager<ElementState>(persistenceProvider);
+        this.nodeManager = new NodeManager<ElementState>(persistence);
     }
 
     @Override
@@ -82,15 +70,7 @@ public class LayoutServiceImpl implements LayoutService {
         }
 
         //
-        POMSession session = manager.getSession();
-        UIContainer root = session.findObjectById(ObjectType.CONTAINER, layoutId);
-
-        //
-        if (root == null) {
-            return null;
-        } else {
-            return nodeManager.loadNode(model, root.getObjectId(), ALL, listener);
-        }
+        return nodeManager.loadNode(model, layoutId, ALL, listener);
     }
 
     @Override

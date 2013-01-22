@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 eXo Platform SAS.
+ * Copyright (C) 2012 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -22,8 +22,8 @@ package org.exoplatform.portal.mop.importer;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.hierarchy.NodeContext;
-import org.exoplatform.portal.mop.layout.ElementState;
-import org.exoplatform.portal.mop.layout.LayoutService;
+import org.gatein.portal.mop.layout.ElementState;
+import org.gatein.portal.mop.layout.LayoutService;
 import org.gatein.portal.mop.site.SiteContext;
 import org.gatein.portal.mop.site.SiteService;
 import org.exoplatform.portal.pom.data.ComponentData;

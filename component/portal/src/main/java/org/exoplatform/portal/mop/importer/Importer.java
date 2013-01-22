@@ -46,7 +46,7 @@ import org.exoplatform.portal.config.model.PageNavigation;
 import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.UnmarshalledObject;
-import org.exoplatform.portal.mop.layout.LayoutService;
+import org.gatein.portal.mop.layout.LayoutService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 import org.gatein.portal.mop.description.DescriptionService;

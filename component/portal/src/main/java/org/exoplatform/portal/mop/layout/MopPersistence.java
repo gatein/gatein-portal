@@ -46,11 +46,12 @@ import org.gatein.mop.api.workspace.ui.UIComponent;
 import org.gatein.mop.api.workspace.ui.UIContainer;
 import org.gatein.mop.api.workspace.ui.UIWindow;
 import org.gatein.mop.core.util.Tools;
+import org.gatein.portal.mop.layout.ElementState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-class LayoutPersistence implements NodePersistence<ElementState> {
+public class MopPersistence implements NodePersistence<ElementState> {
 
     /** . */
     private static final Set<String> propertiesBlackList = Tools.set("jcr:uuid", "jcr:primaryType");
@@ -66,7 +67,7 @@ class LayoutPersistence implements NodePersistence<ElementState> {
     /** . */
     final POMSession session;
 
-    LayoutPersistence(POMSession session) {
+    public MopPersistence(POMSession session) {
         this.session = session;
     }
 
@@ -160,6 +161,18 @@ class LayoutPersistence implements NodePersistence<ElementState> {
         return new NodeData<ElementState>(parentId, component.getObjectId(), component.getName(), state, children);
     }
 
+    private ObjectType typeOf(ElementState state) {
+        if (state instanceof ElementState.Body) {
+            return ObjectType.BODY;
+        } else if (state instanceof ElementState.Container) {
+            return ObjectType.CONTAINER;
+        } else if (state instanceof ElementState.Window) {
+            return ObjectType.WINDOW;
+        } else {
+            throw new AssertionError("Should not be here");
+        }
+    }
+
     @Override
     public NodeData<ElementState>[] createNode(String parentId, String previousId, String name, ElementState state) {
         UIContainer parent = session.findObjectById(ObjectType.CONTAINER, parentId);
@@ -167,9 +180,9 @@ class LayoutPersistence implements NodePersistence<ElementState> {
         if (previousId != null) {
             UIComponent previous = session.findObjectById(ObjectType.COMPONENT, previousId);
             int index = parent.getComponents().indexOf(previous);
-            added = parent.add(index + 1, state.getType(), name);
+            added = parent.add(index + 1, typeOf(state), name);
         } else {
-            added = parent.add(0, state.getType(), name);
+            added = parent.add(0, typeOf(state), name);
         }
         updateNode(added, state);
         return new NodeData[]{

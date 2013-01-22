@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.layout;
+package org.gatein.portal.mop.layout;
 
 import org.gatein.portal.mop.hierarchy.NodeAdapter;
 import org.gatein.portal.mop.hierarchy.NodeChangeListener;

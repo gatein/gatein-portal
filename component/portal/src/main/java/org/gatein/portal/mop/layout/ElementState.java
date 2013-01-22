@@ -17,7 +17,7 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.layout;
+package org.gatein.portal.mop.layout;
 
 import java.io.Serializable;
 import java.util.List;
@@ -28,8 +28,6 @@ import org.exoplatform.portal.config.model.ApplicationState;
 import org.exoplatform.portal.config.model.ApplicationType;
 import org.gatein.portal.mop.hierarchy.NodeContext;
 import org.gatein.portal.mop.hierarchy.NodeModel;
-import org.gatein.mop.api.workspace.ObjectType;
-import org.gatein.mop.api.workspace.ui.UIComponent;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -52,8 +50,6 @@ public abstract class ElementState implements Serializable {
 
     private ElementState() {
     }
-
-    abstract ObjectType<? extends UIComponent> getType();
 
     public abstract boolean equals(Object o);
 
@@ -128,11 +124,6 @@ public abstract class ElementState implements Serializable {
         }
 
         @Override
-        ObjectType<? extends UIComponent> getType() {
-            return ObjectType.WINDOW;
-        }
-
-        @Override
         public boolean equals(Object o) {
             ElementState.Window that = (Window)o;
             return Safe.equals(type, that.type) &&
@@ -152,10 +143,6 @@ public abstract class ElementState implements Serializable {
     }
 
     public static class Body extends ElementState {
-        @Override
-        ObjectType<? extends UIComponent> getType() {
-            return ObjectType.BODY;
-        }
 
         @Override
         public boolean equals(Object o) {
@@ -222,11 +209,6 @@ public abstract class ElementState implements Serializable {
             this.height = height;
             this.accessPermissions = accessPermissions;
             this.dashboard = dashboard;
-        }
-
-        @Override
-        ObjectType<? extends UIComponent> getType() {
-            return ObjectType.CONTAINER;
         }
 
         @Override

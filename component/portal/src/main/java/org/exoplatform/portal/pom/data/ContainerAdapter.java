@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.gatein.portal.mop.hierarchy.NodeAdapter;
-import org.exoplatform.portal.mop.layout.ElementState;
+import org.gatein.portal.mop.layout.ElementState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
