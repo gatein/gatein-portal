@@ -19,12 +19,18 @@
 
 package org.gatein.portal.impl.mop.ram;
 
+import java.io.IOException;
+import java.util.List;
+
+import org.exoplatform.container.ExoContainer;
+import org.exoplatform.container.component.ComponentRequestLifecycle;
 import org.gatein.portal.mop.site.SiteType;
+import org.json.JSONObject;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class RamPersistence {
+public class RamPersistence implements ComponentRequestLifecycle {
 
     /** . */
     final Store store = new Store();
@@ -36,5 +42,41 @@ public class RamPersistence {
         init.addChild(root, SiteType.GROUP.getName(), SiteType.GROUP);
         init.addChild(root, SiteType.USER.getName(), SiteType.USER);
         init.merge();
+    }
+
+    @Override
+    public void startRequest(ExoContainer container) {
+        Tx.begin();
+    }
+
+    @Override
+    public void endRequest(ExoContainer container) {
+        Tx.end(true);
+    }
+
+    public void dump(Appendable appendable) throws IOException {
+        dump("", store.getRoot(), appendable);
+    }
+
+    private void dump(String tab, String parent, Appendable appendable) throws IOException {
+        Node node = store.getNode(parent);
+        appendable.append(tab).append("{\n");
+        appendable.append(tab).append("  id      : ").append(JSONObject.quote(parent)).append(",\n");
+        appendable.append(tab).append("  name    : ").append(JSONObject.quote(node.getName())).append(",\n");
+        appendable.append(tab).append("  state   : ").append(JSONObject.quote(node.getState().toString())).append(",\n");
+        List<String> children = store.getChildren(parent);
+        if (children.size() > 0) {
+            appendable.append(tab).append("  children: [");
+            String tab2 = tab + "  ";
+            for (int i = 0;i < children.size();i++) {
+                appendable.append("\n");
+                dump(tab2, children.get(i), appendable);
+                if (i < children.size() - 1) {
+                    appendable.append(",");
+                }
+            }
+            appendable.append("\n").append(tab).append("  ]\n");
+        }
+        appendable.append(tab).append("}");
     }
 }

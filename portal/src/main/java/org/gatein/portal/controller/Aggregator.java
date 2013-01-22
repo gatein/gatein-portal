@@ -19,11 +19,15 @@
 
 package org.gatein.portal.controller;
 
+import java.io.IOException;
+
 import javax.inject.Inject;
 
 import juzu.Response;
 import juzu.View;
 import org.exoplatform.container.PortalContainer;
+import org.gatein.portal.impl.mop.ram.RamPersistence;
+import org.gatein.portal.mop.site.SiteService;
 import org.gatein.portal.portlet.PortletAppManager;
 
 /**
@@ -39,10 +43,14 @@ public class Aggregator {
     @Inject
     PortletAppManager manager;
 
+    @Inject
+    RamPersistence persistence;
+
     @View
-    public Response.Render index() {
-        System.out.println("Got portal container " + current);
-        System.out.println("Got app manager " + manager);
+    public Response.Render index() throws IOException {
+        System.out.println("Portal container " + current);
+        System.out.println("Persistence " + persistence);
+        persistence.dump(System.out);
         return Response.render("<div class='gatein'>Hello GateIn<div>");
     }
 }

@@ -78,10 +78,23 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- -->
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.component.portal</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>org.gatein.wci</groupId>
       <artifactId>wci-tomcat7</artifactId>
       <scope>provided</scope>
+    </dependency>
+
+    <!-- Needed for now because it contains log4j configuration -->
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.component.test.core</artifactId>
+      <scope>test</scope>
     </dependency>
 
     <dependency>

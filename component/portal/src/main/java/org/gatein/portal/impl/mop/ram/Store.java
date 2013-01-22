@@ -496,7 +496,7 @@ public class Store {
             this.id = UUID.randomUUID().toString();
             this.name = "";
             this.children = new ArrayList<String>();
-            this.state = null;
+            this.state = "";
         }
 
         public NodeImpl(String parentId, String name, Serializable state) {

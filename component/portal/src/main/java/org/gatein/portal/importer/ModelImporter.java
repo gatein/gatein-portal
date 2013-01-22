@@ -17,10 +17,9 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.portal.mop;
+package org.gatein.portal.importer;
 
 import org.exoplatform.container.configuration.ConfigurationManager;
-import org.exoplatform.container.configuration.ConfigurationManagerImpl;
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.portal.mop.importer.Importer;
 import org.gatein.common.logging.Logger;
@@ -85,22 +84,26 @@ public class ModelImporter implements Startable {
     @Override
     public void start() {
 
-        try {
-            Importer importer = new Importer(
-                    pageService,
-                    configManager,
-                    initParams,
-                    navigationService,
-                    descriptionService,
-                    layoutService,
-                    siteService
-            );
+        if (initParams != null) {
+            try {
+                Importer importer = new Importer(
+                        pageService,
+                        configManager,
+                        initParams,
+                        navigationService,
+                        descriptionService,
+                        layoutService,
+                        siteService
+                );
 
-            //
-            importer.run();
+                //
+                importer.run();
 
-        } catch (Exception e) {
-            logger.error("Could not import model", e);
+            } catch (Exception e) {
+                logger.error("Could not import model", e);
+            }
+        } else {
+            logger.debug("No init params found");
         }
 
     }

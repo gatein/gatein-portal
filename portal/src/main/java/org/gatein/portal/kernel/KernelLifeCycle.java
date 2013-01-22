@@ -29,9 +29,11 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletResponse;
 
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.container.RootContainer;
+import org.exoplatform.container.component.RequestLifeCycle;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -61,20 +63,36 @@ public class KernelLifeCycle implements Filter {
         RootContainer root = RootContainer.getInstance();
         root.addInitTask(filterConfig.getServletContext(), task);
         root.registerPortalContainer(filterConfig.getServletContext());
+
+        //
+        PortalContainer container = this.container.get();
+        if (container == null) {
+            throw new ServletException("Container could not be created");
+        } else if (!container.isStarted()) {
+            throw new ServletException("Container could not be started");
+        }
+
     }
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
-        current.set(container.get());
+        PortalContainer c = container.get();
+        current.set(c);
         try {
+            RequestLifeCycle.begin(c);
             chain.doFilter(req,  resp);
         } finally {
-            current.set(null);
+            try {
+                RequestLifeCycle.end();
+            } finally {
+                // Do it anyway
+                current.set(null);
+            }
         }
     }
 
     @Override
     public void destroy() {
-        // Should we dispose the kernel ?
+        container.get().dispose();
     }
 }
