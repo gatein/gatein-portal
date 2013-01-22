@@ -30,6 +30,8 @@ import java.util.UUID;
 /**
  * An in memory lighweight and fast tree store used for the ram persistence.
  *
+ * Todo : add failure detection in merge
+ *
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
 public class Store {
