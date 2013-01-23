@@ -43,7 +43,7 @@ public class HeaderPortlet extends GenericPortlet {
     
     public HeaderPortlet()
     {
-        headerBean = new HeaderBean(this);
+        headerBean = new HeaderBean();
     }
     
     @Override

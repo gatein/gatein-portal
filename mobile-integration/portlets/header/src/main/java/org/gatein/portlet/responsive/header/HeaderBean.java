@@ -60,10 +60,7 @@ public class HeaderBean {
     
     private final SSOHelper ssoHelper;
     
-    private final HeaderPortlet portlet;
-
-    public HeaderBean(HeaderPortlet headerPortlet) {
-        this.portlet = headerPortlet;
+    public HeaderBean() {
         ssoHelper = (SSOHelper) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SSOHelper.class);
     }
 
@@ -115,8 +112,7 @@ public class HeaderBean {
         for (UserNavigation groupNavigation: groupNavigations)
         {
             String groupName = OrganizationUtils.getGroupLabel(groupNavigation.getKey().getName());
-            String groupTitleFormat = this.portlet.getPortletConfig().getResourceBundle(pContext.getLocale()).getString("label.GroupPageTitleFormat");
-            String groupTitle = groupName;//groupTitleFormat.replace("{0}", groupName);
+            String groupTitle = groupName;
             
             UserNode userNode = userPortal.getNode(groupNavigation, Scope.ALL, getFilter(), null);
             List<Node> nodes = new ArrayList<Node>();
