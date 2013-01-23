@@ -29,13 +29,13 @@ import org.exoplatform.portal.mop.i18n.I18NAdapter;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.mop.api.workspace.WorkspaceObject;
-import org.gatein.portal.mop.description.DescriptionPersistence;
+import org.gatein.portal.mop.description.DescriptionStore;
 import org.gatein.portal.mop.description.DescriptionState;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class MopPersistence implements DescriptionPersistence {
+public class MopStore implements DescriptionStore {
 
     /** . */
     private final POMSessionManager manager;
@@ -43,7 +43,7 @@ public class MopPersistence implements DescriptionPersistence {
     /** . */
     private DataCache cache;
 
-    public MopPersistence(POMSessionManager manager, DataCache cache) {
+    public MopStore(POMSessionManager manager, DataCache cache) {
         this.manager = manager;
         this.cache = cache;
     }

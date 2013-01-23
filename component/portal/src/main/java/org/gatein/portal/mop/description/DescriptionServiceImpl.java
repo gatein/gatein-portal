@@ -28,15 +28,15 @@ import java.util.Map;
 public class DescriptionServiceImpl implements DescriptionService {
 
     /** . */
-    private final DescriptionPersistence persistence;
+    private final DescriptionStore store;
 
-    public DescriptionServiceImpl(DescriptionPersistence persistence) {
-        if (persistence == null) {
+    public DescriptionServiceImpl(DescriptionStore store) {
+        if (store == null) {
             throw new NullPointerException("No null persistence allowed");
         }
 
         //
-        this.persistence = persistence;
+        this.store = store;
     }
 
     public DescriptionState resolveDescription(String id, Locale locale) throws NullPointerException {
@@ -52,9 +52,9 @@ public class DescriptionServiceImpl implements DescriptionService {
         }
 
         //
-        DescriptionState state = persistence.resolveDescription(id, locale1);
+        DescriptionState state = store.resolveDescription(id, locale1);
         if (state == null && locale2 != null) {
-            state = persistence.resolveDescription(id, locale2);
+            state = store.resolveDescription(id, locale2);
         }
         return state;
     }
@@ -66,14 +66,14 @@ public class DescriptionServiceImpl implements DescriptionService {
         if (locale == null) {
             throw new NullPointerException("No null locale accepted");
         }
-        return persistence.getDescription(id, locale);
+        return store.getDescription(id, locale);
     }
 
     public DescriptionState getDescription(String id) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
-        return persistence.getDescription(id, null);
+        return store.getDescription(id, null);
     }
 
     public void setDescription(String id, Locale locale, DescriptionState description) {
@@ -83,27 +83,27 @@ public class DescriptionServiceImpl implements DescriptionService {
         if (locale == null) {
             throw new NullPointerException("No null locale accepted");
         }
-        persistence.setDescription(id, locale, description);
+        store.setDescription(id, locale, description);
     }
 
     public void setDescription(String id, DescriptionState description) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
-        persistence.setDescription(id, description);
+        store.setDescription(id, description);
     }
 
     public Map<Locale, DescriptionState> getDescriptions(String id) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
-        return persistence.getDescriptions(id);
+        return store.getDescriptions(id);
     }
 
     public void setDescriptions(String id, Map<Locale, DescriptionState> descriptions) {
         if (id == null) {
             throw new NullPointerException("No null id accepted");
         }
-        persistence.setDescriptions(id, descriptions);
+        store.setDescriptions(id, descriptions);
     }
 }

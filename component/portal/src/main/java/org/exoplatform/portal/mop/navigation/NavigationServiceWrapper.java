@@ -74,7 +74,7 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
     private final InvalidationBridge bridge;
 
     /** . */
-    private final MopPersistence persistence;
+    private final MopStore persistence;
 
     public NavigationServiceWrapper(RepositoryService repositoryService, POMSessionManager manager,
             ListenerService listenerService) {
@@ -92,7 +92,7 @@ public class NavigationServiceWrapper implements NavigationService, Startable {
             ListenerService listenerService,
             DataCache cache) {
         this.repositoryService = repositoryService;
-        this.persistence = new MopPersistence(manager, cache);
+        this.persistence = new MopStore(manager, cache);
         this.service = new NavigationServiceImpl(persistence);
         this.listenerService = listenerService;
         this.bridge = new InvalidationBridge() {

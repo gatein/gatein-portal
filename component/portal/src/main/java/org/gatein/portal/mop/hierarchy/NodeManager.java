@@ -31,10 +31,10 @@ import org.gatein.portal.mop.navigation.NavigationServiceException;
 public class NodeManager<S extends Serializable> {
 
     /** . */
-    private final NodePersistence<S> persistence;
+    private final NodeStore<S> store;
 
-    public NodeManager(NodePersistence<S> persistence) {
-        this.persistence = persistence;
+    public NodeManager(NodeStore<S> store) {
+        this.store = store;
     }
 
     public <N> NodeContext<N, S> loadNode(
@@ -43,7 +43,7 @@ public class NodeManager<S extends Serializable> {
             Scope<S> scope,
             NodeChangeListener<NodeContext<N, S>, S> listener) {
         try {
-            NodeData<S> data = persistence.loadNode(nodeId);
+            NodeData<S> data = store.loadNode(nodeId);
             if (data != null) {
                 NodeContext<N, S> context = new NodeContext<N, S>(model, data);
                 updateNode(context, scope, listener);
@@ -52,7 +52,7 @@ public class NodeManager<S extends Serializable> {
                 return null;
             }
         } finally {
-            persistence.flush();
+            store.flush();
         }
     }
 
@@ -103,7 +103,7 @@ public class NodeManager<S extends Serializable> {
             throw new IllegalArgumentException("For now we don't accept to update a context that has pending changes");
         }
         try {
-            NodeData<S> data = persistence.loadNode(tree.root.data.id);
+            NodeData<S> data = store.loadNode(tree.root.data.id);
             if (data == null) {
                 throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
             }
@@ -115,13 +115,13 @@ public class NodeManager<S extends Serializable> {
             try {
 
                 TreeUpdate.perform(tree, NodeContextUpdateAdapter.<N, S> create(), data,
-                        NodeDataUpdateAdapter.create(persistence), listener, visitor);
+                        NodeDataUpdateAdapter.create(store), listener, visitor);
             } finally {
                 // Disable edit mode
                 tree.editMode = false;
             }
         } finally {
-            persistence.flush();
+            store.flush();
         }
     }
 
@@ -143,7 +143,7 @@ public class NodeManager<S extends Serializable> {
             TreeContext<N, S> tree,
             Scope.Visitor<S> visitor) throws NavigationServiceException {
         try {
-            NodeData<S> data = persistence.loadNode(tree.root.getId());
+            NodeData<S> data = store.loadNode(tree.root.getId());
             if (data == null) {
                 throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
             }
@@ -153,7 +153,7 @@ public class NodeManager<S extends Serializable> {
 
             //
             TreeUpdate.perform(rebased, NodeContextUpdateAdapter.<N, S> create(), data,
-                    NodeDataUpdateAdapter.create(persistence), null, visitor);
+                    NodeDataUpdateAdapter.create(store), null, visitor);
 
             //
             NodeChangeQueue<NodeContext<N, S>, S> changes = tree.getChanges();
@@ -169,7 +169,7 @@ public class NodeManager<S extends Serializable> {
             //
             return rebased;
         } finally {
-            persistence.flush();
+            store.flush();
         }
     }
 
@@ -177,7 +177,7 @@ public class NodeManager<S extends Serializable> {
             NavigationServiceException {
 
         try {
-            NodeData<S> data = persistence.loadNode(tree.root.data.id);
+            NodeData<S> data = store.loadNode(tree.root.data.id);
             if (data == null) {
                 throw new NavigationServiceException(NavigationError.UPDATE_CONCURRENTLY_REMOVED_NODE);
             }
@@ -186,7 +186,7 @@ public class NodeManager<S extends Serializable> {
             TreeContext<N, S> rebased = rebase(tree, tree.origin());
 
             //
-            NodePersister<N, S> persister = new NodePersister<N, S>(persistence);
+            NodePersister<N, S> persister = new NodePersister<N, S>(store);
 
             //
             NodeChangeQueue<NodeContext<N, S>, S> changes = rebased.getChanges();
@@ -216,7 +216,7 @@ public class NodeManager<S extends Serializable> {
             TreeUpdate.perform(tree, NodeContextUpdateAdapter.<N, S> create(), rebased.root, NodeContextUpdateAdapter.<N, S> create(),
                     listener, rebased);
         } finally {
-            persistence.flush();
+            store.flush();
         }
     }
 }

@@ -40,14 +40,14 @@ import org.gatein.mop.api.workspace.Workspace;
 import org.gatein.mop.core.util.Tools;
 import org.gatein.portal.mop.site.SiteData;
 import org.gatein.portal.mop.site.SiteKey;
-import org.gatein.portal.mop.site.SitePersistence;
+import org.gatein.portal.mop.site.SiteStore;
 import org.gatein.portal.mop.site.SiteState;
 import org.gatein.portal.mop.site.SiteType;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class MopPersistence implements SitePersistence {
+public class MopStore implements SiteStore {
 
     /** . */
     static final Set<String> portalPropertiesBlackList = Tools.set(MappedAttributes.LOCALE.getName(), MappedAttributes.SKIN.getName());
@@ -58,7 +58,7 @@ public class MopPersistence implements SitePersistence {
     /** . */
     final DataCache dataCache;
 
-    public MopPersistence(POMSessionManager manager, DataCache dataCache) {
+    public MopStore(POMSessionManager manager, DataCache dataCache) {
         this.manager = manager;
         this.dataCache = dataCache;
     }

@@ -76,7 +76,7 @@ public class PageServiceWrapper implements PageService, Startable {
 
     public PageServiceWrapper(RepositoryService repositoryService, POMSessionManager manager, ListenerService listenerService, final DataCache cache) {
         this.repositoryService = repositoryService;
-        this.service = new PageServiceImpl(new MopPersistence(manager, cache));
+        this.service = new PageServiceImpl(new MopStore(manager, cache));
         this.manager = manager;
         this.listenerService = listenerService;
         this.bridge = new InvalidationBridge() {

@@ -85,7 +85,7 @@ abstract class DataCache {
             }
             Described described = site.adapt(Described.class);
             Map<String, String> properties = new HashMap<String, String>();
-            Mapper.load(attrs, properties, MopPersistence.portalPropertiesBlackList);
+            Mapper.load(attrs, properties, MopStore.portalPropertiesBlackList);
             Templatized templatized = site.getRootNavigation().getTemplatized();
             org.gatein.mop.api.workspace.Page layout = templatized.getTemplate();
             SiteState state = new SiteState(

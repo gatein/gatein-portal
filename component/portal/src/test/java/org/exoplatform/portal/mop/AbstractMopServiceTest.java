@@ -30,21 +30,21 @@ import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.hierarchy.NodeData;
-import org.gatein.portal.mop.hierarchy.NodePersistence;
+import org.gatein.portal.mop.hierarchy.NodeStore;
 import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.navigation.NavigationData;
-import org.gatein.portal.mop.navigation.NavigationPersistence;
+import org.gatein.portal.mop.navigation.NavigationStore;
 import org.gatein.portal.mop.navigation.NavigationServiceImpl;
 import org.gatein.portal.mop.navigation.NavigationState;
 import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.page.PageData;
 import org.gatein.portal.mop.page.PageKey;
-import org.gatein.portal.mop.page.PagePersistence;
+import org.gatein.portal.mop.page.PageStore;
 import org.gatein.portal.mop.page.PageServiceImpl;
 import org.gatein.portal.mop.page.PageState;
 import org.gatein.portal.mop.site.SiteData;
 import org.gatein.portal.mop.site.SiteKey;
-import org.gatein.portal.mop.site.SitePersistence;
+import org.gatein.portal.mop.site.SiteStore;
 import org.gatein.portal.mop.site.SiteState;
 import org.gatein.portal.mop.site.SiteType;
 
@@ -55,7 +55,7 @@ import org.gatein.portal.mop.site.SiteType;
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.portal-mop-configuration.xml")
 })
-public abstract class AbstractMopServiceTest extends AbstractMopTest {
+public abstract class AbstractMopServiceTest extends AbstractMOPTest {
 
     /** . */
     protected PageServiceImpl pageService;
@@ -95,16 +95,16 @@ public abstract class AbstractMopServiceTest extends AbstractMopTest {
         super.end(save);
     }
 
-    protected final NavigationPersistence getNavigationPersistence() {
+    protected final NavigationStore getNavigationPersistence() {
         return context.getNavigationPersistence();
     }
 
-    protected final SitePersistence getSitePersistence() {
-        return context.getSitePersistence();
+    protected final SiteStore getSitePersistence() {
+        return context.getSiteStore();
     }
 
-    protected final PagePersistence getPagePersistence() {
-        return context.getPagePersistence();
+    protected final PageStore getPagePersistence() {
+        return context.getPageStore();
     }
 
     protected final SiteData createSite(SiteType type, String siteName) {
@@ -112,27 +112,27 @@ public abstract class AbstractMopServiceTest extends AbstractMopTest {
     }
 
     protected final SiteData createSite(SiteType type, String siteName, SiteState state) {
-        SitePersistence sitePersistence = getSitePersistence();
+        SiteStore siteStore = getSitePersistence();
         SiteKey key = type.key(siteName);
-        sitePersistence.saveSite(key, state);
-        return sitePersistence.loadSite(key);
+        siteStore.saveSite(key, state);
+        return siteStore.loadSite(key);
     }
 
     protected final boolean destroySite(SiteType type, String siteName) {
-        SitePersistence sitePersistence = getSitePersistence();
+        SiteStore siteStore = getSitePersistence();
         SiteKey key = type.key(siteName);
-        return sitePersistence.destroySite(key);
+        return siteStore.destroySite(key);
     }
 
     protected final NodeData createNavigatation(SiteData data) {
-        NavigationPersistence navigationPersistence = getNavigationPersistence();
+        NavigationStore navigationPersistence = getNavigationPersistence();
         navigationPersistence.saveNavigation(data.key, new NavigationState(0));
         NavigationData navigation = navigationPersistence.loadNavigationData(data.key);
         return navigationPersistence.loadNode(navigation.rootId);
     }
 
     protected final NodeData[] createNodeChild(NodeData parent, String... names) {
-        NavigationPersistence navigationPersistence = getNavigationPersistence();
+        NavigationStore navigationPersistence = getNavigationPersistence();
         String previous = parent.getLastChild();
         NodeData[] created = new NodeData[names.length];
         for (int i = 0;i < names.length;i++) {
@@ -144,10 +144,10 @@ public abstract class AbstractMopServiceTest extends AbstractMopTest {
     }
 
     protected final PageData createPage(SiteData data, String name, PageState state) {
-        PagePersistence pagePersistence = getPagePersistence();
+        PageStore pageStore = getPagePersistence();
         PageKey key = data.key.page(name);
-        pagePersistence.savePage(key, state);
-        return pagePersistence.loadPage(key);
+        pageStore.savePage(key, state);
+        return pageStore.loadPage(key);
     }
 
     protected PageData getPage(SiteKey site, String name) {
@@ -155,12 +155,12 @@ public abstract class AbstractMopServiceTest extends AbstractMopTest {
     }
 
     protected PageData getPage(PageKey key) {
-        PagePersistence pagePersistence = getPagePersistence();
-        return pagePersistence.loadPage(key);
+        PageStore pageStore = getPagePersistence();
+        return pageStore.loadPage(key);
     }
 
     protected final Map<String, NodeData> createNodes(NodeData parent, Map<String, NodeState> nodes) {
-        NavigationPersistence navigationPersistence = getNavigationPersistence();
+        NavigationStore navigationPersistence = getNavigationPersistence();
         String previous = parent.getLastChild();
         LinkedHashMap<String, NodeData> created = new LinkedHashMap<String, NodeData>(nodes.size());
         for (Map.Entry<String, NodeState> node : nodes.entrySet()) {
@@ -172,13 +172,13 @@ public abstract class AbstractMopServiceTest extends AbstractMopTest {
     }
 
     protected final NodeData<ElementState>[] createElements(String layoutId, ElementState.Builder<?>... elements) {
-        NodePersistence<ElementState> persistence = context.getLayoutPersistence();
+        NodeStore<ElementState> persistence = context.getLayoutStore();
         NodeData<ElementState> root = persistence.loadNode(layoutId);
         return createElements(root, elements);
     }
 
     protected final NodeData<ElementState>[] createElements(String layoutId, ElementState... elements) {
-        NodePersistence<ElementState> persistence = context.getLayoutPersistence();
+        NodeStore<ElementState> persistence = context.getLayoutStore();
         NodeData<ElementState> root = persistence.loadNode(layoutId);
         return createElements(root, elements);
     }
@@ -208,7 +208,7 @@ public abstract class AbstractMopServiceTest extends AbstractMopTest {
     }
 
     protected final NodeData<ElementState>[] createElements(NodeData<ElementState> parent, ElementState... elements) {
-        NodePersistence<ElementState> persistence = context.getLayoutPersistence();
+        NodeStore<ElementState> persistence = context.getLayoutStore();
         String previous = parent.getLastChild();
         NodeData<ElementState>[] created = new NodeData[elements.length];
         for (int i = 0;i < elements.length;i++) {
@@ -221,17 +221,17 @@ public abstract class AbstractMopServiceTest extends AbstractMopTest {
     }
 
     public final NodeData<ElementState> getElement(SiteData site) {
-        NodePersistence<ElementState> persistence = context.getLayoutPersistence();
+        NodeStore<ElementState> persistence = context.getLayoutStore();
         return persistence.loadNode(site.layoutId);
     }
 
     public final NodeData<ElementState> getElement(NodeData<ElementState> element) {
-        NodePersistence<ElementState> persistence = context.getLayoutPersistence();
+        NodeStore<ElementState> persistence = context.getLayoutStore();
         return persistence.loadNode(element.id);
     }
 
     public final NodeData<ElementState> getElement(String parentId) {
-        NodePersistence<ElementState> persistence = context.getLayoutPersistence();
+        NodeStore<ElementState> persistence = context.getLayoutStore();
         return persistence.loadNode(parentId);
     }
 

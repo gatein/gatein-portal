@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 eXo Platform SAS.
+ * Copyright (C) 2012 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,26 +17,24 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.portal.mop.hierarchy;
+package org.gatein.portal.mop.description;
 
-import java.io.Serializable;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public interface NodePersistence<S extends Serializable> {
+public interface DescriptionStore {
+    DescriptionState resolveDescription(String id, Locale locale) throws NullPointerException;
 
-    NodeData<S> loadNode(String nodeId);
+    DescriptionState getDescription(String id, Locale locale);
 
-    NodeData<S>[] createNode(String parentId, String previousId, String name, S state);
+    void setDescription(String id, Locale locale, DescriptionState description);
 
-    NodeData<S> destroyNode(String targetId);
+    void setDescription(String id, DescriptionState description);
 
-    NodeData<S> updateNode(String targetId, S state);
+    Map<Locale, DescriptionState> getDescriptions(String id);
 
-    NodeData<S>[] moveNode(String targetId, String fromId, String toId, String previousId);
-
-    NodeData<S>[] renameNode(String targetId, String parentId, String name);
-
-    void flush();
+    void setDescriptions(String id, Map<Locale, DescriptionState> descriptions);
 }

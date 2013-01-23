@@ -26,8 +26,7 @@ import javax.inject.Inject;
 import juzu.Response;
 import juzu.View;
 import org.exoplatform.container.PortalContainer;
-import org.gatein.portal.impl.mop.ram.RamPersistence;
-import org.gatein.portal.mop.site.SiteService;
+import org.gatein.portal.impl.mop.ram.RamStore;
 import org.gatein.portal.portlet.PortletAppManager;
 
 /**
@@ -44,7 +43,7 @@ public class Aggregator {
     PortletAppManager manager;
 
     @Inject
-    RamPersistence persistence;
+    RamStore persistence;
 
     @View
     public Response.Render index() throws IOException {

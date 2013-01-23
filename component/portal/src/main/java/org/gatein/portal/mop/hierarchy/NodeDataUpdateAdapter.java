@@ -26,14 +26,14 @@ import java.io.Serializable;
 */
 class NodeDataUpdateAdapter<S extends Serializable> extends TreeUpdateAdapter<NodeData<S>, S> {
 
-    static <S extends Serializable> NodeDataUpdateAdapter<S> create(NodePersistence<S> persistence) {
+    static <S extends Serializable> NodeDataUpdateAdapter<S> create(NodeStore<S> persistence) {
         return new NodeDataUpdateAdapter<S>(persistence);
     }
 
     /** . */
-    private final NodePersistence<S> persistence;
+    private final NodeStore<S> persistence;
 
-    NodeDataUpdateAdapter(NodePersistence<S> persistence) {
+    NodeDataUpdateAdapter(NodeStore<S> persistence) {
         this.persistence = persistence;
     }
 

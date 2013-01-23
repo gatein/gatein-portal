@@ -22,28 +22,28 @@ package org.exoplatform.portal.mop;
 import org.exoplatform.commons.chromattic.ChromatticManager;
 import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.mop.description.SimpleDataCache;
-import org.exoplatform.portal.mop.site.MopPersistence;
+import org.exoplatform.portal.mop.site.MopStore;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 import org.exoplatform.services.jcr.RepositoryService;
-import org.gatein.portal.impl.mop.ram.RamDescriptionPersistence;
-import org.gatein.portal.impl.mop.ram.RamLayoutPersistence;
-import org.gatein.portal.impl.mop.ram.RamNavigationPersistence;
-import org.gatein.portal.impl.mop.ram.RamPagePersistence;
-import org.gatein.portal.impl.mop.ram.RamPersistence;
-import org.gatein.portal.impl.mop.ram.RamSitePersistence;
+import org.gatein.portal.impl.mop.ram.RamDescriptionStore;
+import org.gatein.portal.impl.mop.ram.RamLayoutStore;
+import org.gatein.portal.impl.mop.ram.RamNavigationStore;
+import org.gatein.portal.impl.mop.ram.RamPageStore;
+import org.gatein.portal.impl.mop.ram.RamStore;
+import org.gatein.portal.impl.mop.ram.RamSiteStore;
 import org.gatein.portal.impl.mop.ram.Tx;
-import org.gatein.portal.mop.description.DescriptionPersistence;
+import org.gatein.portal.mop.description.DescriptionStore;
 import org.gatein.portal.mop.description.DescriptionService;
 import org.gatein.portal.mop.description.DescriptionServiceImpl;
-import org.gatein.portal.mop.layout.LayoutPersistence;
+import org.gatein.portal.mop.layout.LayoutStore;
 import org.gatein.portal.mop.layout.LayoutService;
 import org.gatein.portal.mop.layout.LayoutServiceImpl;
-import org.gatein.portal.mop.navigation.NavigationPersistence;
+import org.gatein.portal.mop.navigation.NavigationStore;
 import org.gatein.portal.mop.navigation.NavigationServiceImpl;
-import org.gatein.portal.mop.page.PagePersistence;
+import org.gatein.portal.mop.page.PageStore;
 import org.gatein.portal.mop.page.PageServiceImpl;
-import org.gatein.portal.mop.site.SitePersistence;
+import org.gatein.portal.mop.site.SiteStore;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
@@ -62,15 +62,15 @@ public abstract class PersistenceContext {
 
     public abstract LayoutService getLayoutService();
 
-    public abstract NavigationPersistence getNavigationPersistence();
+    public abstract NavigationStore getNavigationPersistence();
 
-    public abstract DescriptionPersistence getDescriptionPersistence();
+    public abstract DescriptionStore getDescriptionPersistence();
 
-    public abstract PagePersistence getPagePersistence();
+    public abstract PageStore getPageStore();
 
-    public abstract SitePersistence getSitePersistence();
+    public abstract SiteStore getSiteStore();
 
-    public abstract LayoutPersistence getLayoutPersistence();
+    public abstract LayoutStore getLayoutStore();
 
     public abstract void begin();
 
@@ -83,7 +83,7 @@ public abstract class PersistenceContext {
     public static class JCR extends PersistenceContext {
 
         /** . */
-        private org.exoplatform.portal.mop.navigation.MopPersistence navigationPersistenceFactory;
+        private org.exoplatform.portal.mop.navigation.MopStore navigationPersistenceFactory;
 
         /** . */
         private NavigationServiceImpl navigationService;
@@ -92,7 +92,7 @@ public abstract class PersistenceContext {
         private PageServiceImpl pageService;
 
         /** . */
-        private PagePersistence pagePersistence;
+        private PageStore pageStore;
 
         /** . */
         private LayoutService layoutService;
@@ -104,13 +104,13 @@ public abstract class PersistenceContext {
         private DescriptionService descriptionService;
 
         /** . */
-        private SitePersistence sitePersistence;
+        private SiteStore siteStore;
 
         /** . */
-        private LayoutPersistence layoutPersistence;
+        private LayoutStore layoutStore;
 
         /** . */
-        private org.exoplatform.portal.mop.description.MopPersistence descriptionPersistence;
+        private org.exoplatform.portal.mop.description.MopStore descriptionPersistence;
 
         @Override
         void setUp() {
@@ -124,15 +124,15 @@ public abstract class PersistenceContext {
             mgr.start();
 
             //
-            navigationPersistenceFactory = new org.exoplatform.portal.mop.navigation.MopPersistence(mgr);
+            navigationPersistenceFactory = new org.exoplatform.portal.mop.navigation.MopStore(mgr);
             navigationService = new NavigationServiceImpl(navigationPersistenceFactory);
-            descriptionPersistence = new org.exoplatform.portal.mop.description.MopPersistence(mgr, new SimpleDataCache());
+            descriptionPersistence = new org.exoplatform.portal.mop.description.MopStore(mgr, new SimpleDataCache());
             descriptionService = new DescriptionServiceImpl(descriptionPersistence);
-            sitePersistence = new MopPersistence(mgr, new org.exoplatform.portal.mop.site.SimpleDataCache());
-            pagePersistence = new org.exoplatform.portal.mop.page.MopPersistence(mgr, new org.exoplatform.portal.mop.page.SimpleDataCache());
-            pageService = new PageServiceImpl(pagePersistence);
-            layoutPersistence = new org.exoplatform.portal.mop.layout.MopPersistence(mgr);
-            layoutService = new LayoutServiceImpl(layoutPersistence);
+            siteStore = new MopStore(mgr, new org.exoplatform.portal.mop.site.SimpleDataCache());
+            pageStore = new org.exoplatform.portal.mop.page.MopStore(mgr, new org.exoplatform.portal.mop.page.SimpleDataCache());
+            pageService = new PageServiceImpl(pageStore);
+            layoutStore = new org.exoplatform.portal.mop.layout.MopStore(mgr);
+            layoutService = new LayoutServiceImpl(layoutStore);
 
             // Clear the cache for each test
             navigationService.clearCache();
@@ -148,12 +148,12 @@ public abstract class PersistenceContext {
         }
 
         @Override
-        public PagePersistence getPagePersistence() {
-            return pagePersistence;
+        public PageStore getPageStore() {
+            return pageStore;
         }
 
         @Override
-        public DescriptionPersistence getDescriptionPersistence() {
+        public DescriptionStore getDescriptionPersistence() {
             return descriptionPersistence;
         }
 
@@ -173,18 +173,18 @@ public abstract class PersistenceContext {
         }
 
         @Override
-        public NavigationPersistence getNavigationPersistence() {
+        public NavigationStore getNavigationPersistence() {
             return navigationPersistenceFactory;
         }
 
         @Override
-        public SitePersistence getSitePersistence() {
-            return sitePersistence;
+        public SiteStore getSiteStore() {
+            return siteStore;
         }
 
         @Override
-        public LayoutPersistence getLayoutPersistence() {
-            return layoutPersistence;
+        public LayoutStore getLayoutStore() {
+            return layoutStore;
         }
 
         @Override
@@ -220,7 +220,7 @@ public abstract class PersistenceContext {
         PageServiceImpl pageService;
 
         /** . */
-        RamPersistence persistence;
+        RamStore persistence;
 
         /** . */
         DescriptionServiceImpl descriptionService;
@@ -229,32 +229,32 @@ public abstract class PersistenceContext {
         LayoutServiceImpl layoutService;
 
         /** . */
-        LayoutPersistence layoutPersistence;
+        LayoutStore layoutStore;
 
         /** . */
-        RamDescriptionPersistence descriptionPersistence;
+        RamDescriptionStore descriptionPersistence;
 
         /** . */
-        RamPagePersistence pagePersistence;
+        RamPageStore pagePersistence;
 
         /** . */
-        RamSitePersistence sitePersistence;
+        RamSiteStore sitePersistence;
 
         /** . */
-        RamNavigationPersistence navigationPersistence;
+        RamNavigationStore navigationPersistence;
 
         @Override
         void setUp() {
-            persistence = new RamPersistence();
-            navigationPersistence = new RamNavigationPersistence(persistence);
+            persistence = new RamStore();
+            navigationPersistence = new RamNavigationStore(persistence);
             navigationService = new NavigationServiceImpl(navigationPersistence);
-            pagePersistence = new RamPagePersistence(persistence);
+            pagePersistence = new RamPageStore(persistence);
             pageService = new PageServiceImpl(pagePersistence);
-            descriptionPersistence = new RamDescriptionPersistence(persistence);
+            descriptionPersistence = new RamDescriptionStore(persistence);
             descriptionService = new DescriptionServiceImpl(descriptionPersistence);
-            layoutPersistence = new RamLayoutPersistence(persistence);
-            layoutService = new LayoutServiceImpl(layoutPersistence);
-            sitePersistence = new RamSitePersistence(persistence);
+            layoutStore = new RamLayoutStore(persistence);
+            layoutService = new LayoutServiceImpl(layoutStore);
+            sitePersistence = new RamSiteStore(persistence);
         }
 
         @Override
@@ -278,8 +278,8 @@ public abstract class PersistenceContext {
         }
 
         @Override
-        public LayoutPersistence getLayoutPersistence() {
-            return new RamLayoutPersistence(persistence);
+        public LayoutStore getLayoutStore() {
+            return new RamLayoutStore(persistence);
         }
 
         @Override
@@ -293,7 +293,7 @@ public abstract class PersistenceContext {
         }
 
         @Override
-        public DescriptionPersistence getDescriptionPersistence() {
+        public DescriptionStore getDescriptionPersistence() {
             return descriptionPersistence;
         }
 
@@ -303,17 +303,17 @@ public abstract class PersistenceContext {
         }
 
         @Override
-        public PagePersistence getPagePersistence() {
+        public PageStore getPageStore() {
             return pagePersistence;
         }
 
         @Override
-        public NavigationPersistence getNavigationPersistence() {
+        public NavigationStore getNavigationPersistence() {
             return navigationPersistence;
         }
 
         @Override
-        public SitePersistence getSitePersistence() {
+        public SiteStore getSiteStore() {
             return sitePersistence;
         }
 

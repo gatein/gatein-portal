@@ -21,25 +21,23 @@ package org.gatein.portal.impl.mop.ram;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
-import org.gatein.portal.mop.layout.ElementState;
 import org.gatein.portal.mop.site.SiteData;
 import org.gatein.portal.mop.site.SiteKey;
-import org.gatein.portal.mop.site.SitePersistence;
+import org.gatein.portal.mop.site.SiteStore;
 import org.gatein.portal.mop.site.SiteState;
 import org.gatein.portal.mop.site.SiteType;
 
 /**
 * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
 */
-public class RamSitePersistence implements SitePersistence {
+public class RamSiteStore implements SiteStore {
 
     /** . */
     private Store store;
 
-    public RamSitePersistence(RamPersistence store) {
+    public RamSiteStore(RamStore store) {
         this.store = store.store;
     }
 
@@ -69,7 +67,7 @@ public class RamSitePersistence implements SitePersistence {
         if (site == null) {
             site = current.addChild(type, key.getName(), state);
             current.addChild(site, "pages", "");
-            current.addChild(site, "layout", RamLayoutPersistence.INITIAL);
+            current.addChild(site, "layout", RamLayoutStore.INITIAL);
             return true;
         } else {
             Node entry = current.getNode(site);

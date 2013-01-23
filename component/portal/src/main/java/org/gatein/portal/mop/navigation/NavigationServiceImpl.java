@@ -22,8 +22,6 @@ package org.gatein.portal.mop.navigation;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.inject.Provider;
-
 import org.gatein.portal.mop.site.SiteKey;
 import org.gatein.portal.mop.site.SiteType;
 import org.gatein.portal.mop.hierarchy.NodeChangeListener;
@@ -42,16 +40,16 @@ public class NavigationServiceImpl implements NavigationService {
     private final NodeManager<NodeState> manager;
 
     /** . */
-    final NavigationPersistence persistence;
+    final NavigationStore store;
 
-    public NavigationServiceImpl(NavigationPersistence persistence) throws NullPointerException {
-        if (persistence == null) {
+    public NavigationServiceImpl(NavigationStore store) throws NullPointerException {
+        if (store == null) {
             throw new NullPointerException("No null persistence factory allowed");
         }
 
         //
-        this.persistence = persistence;
-        this.manager = new NodeManager<NodeState>(persistence);
+        this.store = store;
+        this.manager = new NodeManager<NodeState>(store);
     }
 
     public NavigationContext loadNavigation(SiteKey key) {
@@ -60,7 +58,7 @@ public class NavigationServiceImpl implements NavigationService {
         }
 
         //
-        NavigationData data = persistence.loadNavigationData(key);
+        NavigationData data = store.loadNavigationData(key);
         return data != null && data != NavigationData.EMPTY ? new NavigationContext(data) : null;
     }
 
@@ -70,7 +68,7 @@ public class NavigationServiceImpl implements NavigationService {
             throw new NullPointerException();
         }
         List<NavigationContext> navigations = new LinkedList<NavigationContext>();
-        for (NavigationData data : persistence.loadNavigations(type)) {
+        for (NavigationData data : store.loadNavigations(type)) {
             navigations.add(new NavigationContext(data));
         }
         return navigations;
@@ -84,13 +82,13 @@ public class NavigationServiceImpl implements NavigationService {
         //
         try {
             // Save
-            persistence.saveNavigation(navigation.key, navigation.state);
+            store.saveNavigation(navigation.key, navigation.state);
 
             // Update state
-            navigation.data = persistence.loadNavigationData(navigation.key);
+            navigation.data = store.loadNavigationData(navigation.key);
             navigation.state = null;
         } finally {
-            persistence.flush();
+            store.flush();
         }
     }
 
@@ -104,14 +102,14 @@ public class NavigationServiceImpl implements NavigationService {
 
         //
         try {
-            if (persistence.destroyNavigation(navigation.data)) {
+            if (store.destroyNavigation(navigation.data)) {
                 navigation.data = null;
                 return true;
             } else {
                 return false;
             }
         } finally {
-            persistence.flush();
+            store.flush();
         }
     }
 
@@ -150,6 +148,6 @@ public class NavigationServiceImpl implements NavigationService {
     }
 
     public void clearCache() {
-        persistence.clear();
+        store.clear();
     }
 }

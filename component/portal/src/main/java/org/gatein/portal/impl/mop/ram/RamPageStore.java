@@ -27,7 +27,7 @@ import java.util.List;
 import org.gatein.portal.mop.page.PageData;
 import org.gatein.portal.mop.page.PageError;
 import org.gatein.portal.mop.page.PageKey;
-import org.gatein.portal.mop.page.PagePersistence;
+import org.gatein.portal.mop.page.PageStore;
 import org.gatein.portal.mop.page.PageServiceException;
 import org.gatein.portal.mop.page.PageState;
 import org.gatein.portal.mop.site.SiteKey;
@@ -36,12 +36,12 @@ import org.gatein.portal.mop.site.SiteType;
 /**
 * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
 */
-public class RamPagePersistence implements PagePersistence {
+public class RamPageStore implements PageStore {
 
     /** . */
     private Store store;
 
-    public RamPagePersistence(RamPersistence persistence) {
+    public RamPageStore(RamStore persistence) {
         this.store = persistence.store;
     }
 
@@ -83,7 +83,7 @@ public class RamPagePersistence implements PagePersistence {
                 return false;
             } else {
                 page = current.addChild(pages, key.getName(), state);
-                current.addChild(page, "layout", RamLayoutPersistence.INITIAL);
+                current.addChild(page, "layout", RamLayoutStore.INITIAL);
                 return true;
             }
         } else {

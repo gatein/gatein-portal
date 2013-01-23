@@ -25,7 +25,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.exoplatform.portal.mop.AbstractMopServiceTest;
-import org.gatein.portal.mop.description.DescriptionPersistence;
+import org.gatein.portal.mop.description.DescriptionStore;
 import org.gatein.portal.mop.description.DescriptionState;
 import org.gatein.common.util.Tools;
 import org.gatein.portal.mop.navigation.NodeState;
@@ -37,7 +37,7 @@ import org.gatein.portal.mop.site.SiteType;
 public class TestDescriptionService extends AbstractMopServiceTest {
 
     /** . */
-    protected DescriptionPersistence persistence;
+    protected DescriptionStore persistence;
 
     @Override
     protected void setUp() throws Exception {

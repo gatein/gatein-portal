@@ -46,7 +46,7 @@ import org.gatein.mop.api.workspace.link.Link;
 import org.gatein.mop.api.workspace.link.PageLink;
 import org.gatein.portal.mop.navigation.NavigationData;
 import org.gatein.portal.mop.navigation.NavigationError;
-import org.gatein.portal.mop.navigation.NavigationPersistence;
+import org.gatein.portal.mop.navigation.NavigationStore;
 import org.gatein.portal.mop.navigation.NavigationServiceException;
 import org.gatein.portal.mop.navigation.NavigationState;
 import org.gatein.portal.mop.navigation.NodeState;
@@ -56,7 +56,7 @@ import static org.exoplatform.portal.mop.Utils.objectType;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class MopPersistence implements NavigationPersistence {
+public class MopStore implements NavigationStore {
 
     /** . */
     final  POMSessionManager mgr;
@@ -67,11 +67,11 @@ public class MopPersistence implements NavigationPersistence {
     /** The handles to evict. */
     final ThreadLocal<Set<String>> toEvict;
 
-    public MopPersistence(POMSessionManager mgr) {
+    public MopStore(POMSessionManager mgr) {
         this(mgr, new SimpleDataCache());
     }
 
-    public MopPersistence(POMSessionManager mgr, DataCache cache) {
+    public MopStore(POMSessionManager mgr, DataCache cache) {
         if (mgr == null) {
             throw new NullPointerException("No null manager accepted");
         }

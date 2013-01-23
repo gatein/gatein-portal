@@ -28,7 +28,7 @@ import org.gatein.portal.mop.site.SiteType;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public interface PagePersistence {
+public interface PageStore {
 
     PageData loadPage(PageKey key);
 

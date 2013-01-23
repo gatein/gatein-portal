@@ -44,7 +44,7 @@ import org.gatein.mop.api.workspace.ui.UIWindow;
 import org.gatein.portal.mop.page.PageData;
 import org.gatein.portal.mop.page.PageError;
 import org.gatein.portal.mop.page.PageKey;
-import org.gatein.portal.mop.page.PagePersistence;
+import org.gatein.portal.mop.page.PageStore;
 import org.gatein.portal.mop.page.PageServiceException;
 import org.gatein.portal.mop.page.PageState;
 import org.gatein.portal.mop.site.SiteKey;
@@ -53,7 +53,7 @@ import org.gatein.portal.mop.site.SiteType;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class MopPersistence implements PagePersistence {
+public class MopStore implements PageStore {
 
     /** . */
     final POMSessionManager manager;
@@ -61,7 +61,7 @@ public class MopPersistence implements PagePersistence {
     /** . */
     private final DataCache dataCache;
 
-    public MopPersistence(POMSessionManager manager, DataCache dataCache) {
+    public MopStore(POMSessionManager manager, DataCache dataCache) {
         this.manager = manager;
         this.dataCache = dataCache;
     }

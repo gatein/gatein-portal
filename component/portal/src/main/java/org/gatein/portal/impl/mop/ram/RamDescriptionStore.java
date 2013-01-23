@@ -24,19 +24,19 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.exoplatform.commons.utils.I18N;
-import org.gatein.portal.mop.description.DescriptionPersistence;
+import org.gatein.portal.mop.description.DescriptionStore;
 import org.gatein.portal.mop.description.DescriptionState;
 import org.gatein.portal.mop.navigation.NodeState;
 
 /**
 * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
 */
-public class RamDescriptionPersistence implements DescriptionPersistence {
+public class RamDescriptionStore implements DescriptionStore {
 
     /** . */
     private Store store;
 
-    public RamDescriptionPersistence(RamPersistence persistence) {
+    public RamDescriptionStore(RamStore persistence) {
         this.store = persistence.store;
     }
 

@@ -29,10 +29,10 @@ import org.gatein.portal.mop.QueryResult;
 public class SiteServiceImpl implements SiteService {
 
     /** . */
-    final SitePersistence persistence;
+    final SiteStore store;
 
-    public SiteServiceImpl(SitePersistence persistence) {
-        this.persistence = persistence;
+    public SiteServiceImpl(SiteStore store) {
+        this.store = store;
     }
 
     @Override
@@ -42,7 +42,7 @@ public class SiteServiceImpl implements SiteService {
         }
 
         //
-        SiteData data = persistence.loadSite(key);
+        SiteData data = store.loadSite(key);
         return data != null && data != SiteData.EMPTY ? new SiteContext(data) : null;
     }
 
@@ -53,8 +53,8 @@ public class SiteServiceImpl implements SiteService {
         }
 
         //
-        boolean created = persistence.saveSite(context.key, context.state);
-        context.data = persistence.loadSite(context.key);
+        boolean created = store.saveSite(context.key, context.state);
+        context.data = store.loadSite(context.key);
         context.state = null;
         return created;
     }
@@ -66,7 +66,7 @@ public class SiteServiceImpl implements SiteService {
         }
 
         //
-        return persistence.destroySite(key);
+        return store.destroySite(key);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class SiteServiceImpl implements SiteService {
         }
 
         //
-        Collection<SiteKey> sites = persistence.findSites(siteType);
+        Collection<SiteKey> sites = store.findSites(siteType);
         return new QueryResult<SiteKey>(0, sites.size(), sites);
     }
 }

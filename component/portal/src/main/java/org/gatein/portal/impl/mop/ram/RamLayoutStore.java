@@ -24,12 +24,12 @@ import java.util.List;
 
 import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.layout.ElementState;
-import org.gatein.portal.mop.layout.LayoutPersistence;
+import org.gatein.portal.mop.layout.LayoutStore;
 
 /**
 * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
 */
-public class RamLayoutPersistence implements LayoutPersistence {
+public class RamLayoutStore implements LayoutStore {
 
     /** . */
     static final ElementState.Container INITIAL = new ElementState.Container(
@@ -48,7 +48,7 @@ public class RamLayoutPersistence implements LayoutPersistence {
     /** . */
     private Store store;
 
-    public RamLayoutPersistence(RamPersistence persistence) {
+    public RamLayoutStore(RamStore persistence) {
         this.store = persistence.store;
     }
 

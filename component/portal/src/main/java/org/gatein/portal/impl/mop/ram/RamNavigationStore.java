@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.gatein.portal.mop.hierarchy.NodeData;
 import org.gatein.portal.mop.navigation.NavigationData;
-import org.gatein.portal.mop.navigation.NavigationPersistence;
+import org.gatein.portal.mop.navigation.NavigationStore;
 import org.gatein.portal.mop.navigation.NavigationState;
 import org.gatein.portal.mop.navigation.NodeState;
 import org.gatein.portal.mop.site.SiteKey;
@@ -33,12 +33,12 @@ import org.gatein.portal.mop.site.SiteType;
 /**
 * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
 */
-public class RamNavigationPersistence implements NavigationPersistence {
+public class RamNavigationStore implements NavigationStore {
 
     /** . */
     private Store store;
 
-    public RamNavigationPersistence(RamPersistence persistence) {
+    public RamNavigationStore(RamStore persistence) {
         this.store = persistence.store;
     }
 

@@ -11,34 +11,34 @@
 
   <!-- -->
   <component>
-    <type>org.gatein.portal.impl.mop.ram.RamPersistence</type>
+    <type>org.gatein.portal.impl.mop.ram.RamStore</type>
   </component>
   <component>
-    <type>org.gatein.portal.impl.mop.ram.RamSitePersistence</type>
+    <type>org.gatein.portal.impl.mop.ram.RamSiteStore</type>
   </component>
   <component>
     <type>org.gatein.portal.mop.site.SiteServiceImpl</type>
   </component>
   <component>
-    <type>org.gatein.portal.impl.mop.ram.RamLayoutPersistence</type>
+    <type>org.gatein.portal.impl.mop.ram.RamLayoutStore</type>
   </component>
   <component>
     <type>org.gatein.portal.mop.layout.LayoutServiceImpl</type>
   </component>
   <component>
-    <type>org.gatein.portal.impl.mop.ram.RamDescriptionPersistence</type>
+    <type>org.gatein.portal.impl.mop.ram.RamDescriptionStore</type>
   </component>
   <component>
     <type>org.gatein.portal.mop.description.DescriptionServiceImpl</type>
   </component>
   <component>
-    <type>org.gatein.portal.impl.mop.ram.RamNavigationPersistence</type>
+    <type>org.gatein.portal.impl.mop.ram.RamNavigationStore</type>
   </component>
   <component>
     <type>org.gatein.portal.mop.navigation.NavigationServiceImpl</type>
   </component>
   <component>
-    <type>org.gatein.portal.impl.mop.ram.RamPagePersistence</type>
+    <type>org.gatein.portal.impl.mop.ram.RamPageStore</type>
   </component>
   <component>
     <type>org.gatein.portal.mop.page.PageServiceImpl</type>

@@ -23,7 +23,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import org.exoplatform.portal.mop.description.ExoDataCache;
-import org.exoplatform.portal.mop.description.MopPersistence;
+import org.exoplatform.portal.mop.description.MopStore;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.exoplatform.services.cache.CacheService;
 
@@ -36,7 +36,7 @@ public class DescriptionServiceWrapper implements DescriptionService {
     private final DescriptionServiceImpl service;
 
     public DescriptionServiceWrapper(POMSessionManager manager, CacheService cacheService) {
-        this.service = new DescriptionServiceImpl(new MopPersistence(manager, new ExoDataCache(cacheService)));
+        this.service = new DescriptionServiceImpl(new MopStore(manager, new ExoDataCache(cacheService)));
     }
 
     @Override

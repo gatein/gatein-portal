@@ -16,19 +16,19 @@ import org.gatein.portal.mop.site.SiteType;
 public class PageServiceImpl implements PageService {
 
     /** . */
-    private final PagePersistence persistence;
+    private final PageStore store;
 
     /**
      * Create an instance that uses the provided persistence.
      *
-     * @param persistence the persistence
+     * @param store the persistence
      * @throws NullPointerException if the persistence argument is null
      */
-    public PageServiceImpl(PagePersistence persistence) throws NullPointerException {
-        if (persistence == null) {
+    public PageServiceImpl(PageStore store) throws NullPointerException {
+        if (store == null) {
             throw new NullPointerException("No null persistence allowed");
         }
-        this.persistence = persistence;
+        this.store = store;
     }
 
     @Override
@@ -38,7 +38,7 @@ public class PageServiceImpl implements PageService {
         }
 
         //
-        PageData data = persistence.loadPage(key);
+        PageData data = store.loadPage(key);
         return data != null && data != PageData.EMPTY ? new PageContext(data) : null;
     }
 
@@ -60,7 +60,7 @@ public class PageServiceImpl implements PageService {
         }
 
         //
-        List<PageKey> keys = persistence.findPageKeys(siteKey);
+        List<PageKey> keys = store.findPageKeys(siteKey);
         List<PageContext> list = new ArrayList<PageContext>(keys.size());
         for (PageKey key : keys) {
             list.add(loadPage(key));
@@ -75,8 +75,8 @@ public class PageServiceImpl implements PageService {
         }
 
         //
-        boolean created = persistence.savePage(page.key, page.state);
-        page.data = persistence.loadPage(page.key);
+        boolean created = store.savePage(page.key, page.state);
+        page.data = store.loadPage(page.key);
         page.state = null;
         return created;
     }
@@ -88,7 +88,7 @@ public class PageServiceImpl implements PageService {
         }
 
         //
-        return persistence.destroyPage(key);
+        return store.destroyPage(key);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class PageServiceImpl implements PageService {
         }
 
         //
-        PageData clone = persistence.clonePage(src, dst);
+        PageData clone = store.clonePage(src, dst);
         return new PageContext(clone);
     }
 
@@ -114,7 +114,7 @@ public class PageServiceImpl implements PageService {
             String siteName,
             String pageName,
             String pageTitle) {
-        Collection<PageData> dataSet = persistence.findPages(from, to, siteType, siteName, pageName, pageTitle);
+        Collection<PageData> dataSet = store.findPages(from, to, siteType, siteName, pageName, pageTitle);
         ArrayList<PageContext> pages = new ArrayList<PageContext>(dataSet.size());
         for (PageData data : dataSet) {
             pages.add(new PageContext(data));
@@ -123,6 +123,6 @@ public class PageServiceImpl implements PageService {
     }
 
     public void clear() {
-        persistence.clear();
+        store.clear();
     }
 }

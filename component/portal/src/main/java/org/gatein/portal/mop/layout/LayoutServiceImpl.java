@@ -38,7 +38,7 @@ public class LayoutServiceImpl implements LayoutService {
     /** . */
     private final NodeManager<ElementState> nodeManager;
 
-    public LayoutServiceImpl(LayoutPersistence persistence) {
+    public LayoutServiceImpl(LayoutStore persistence) {
         if (persistence == null) {
             throw new NullPointerException("No null persistence provided");
         }

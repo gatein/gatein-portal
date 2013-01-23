@@ -19,7 +19,7 @@
 
 package org.gatein.portal.mop.site;
 
-import org.exoplatform.portal.mop.site.MopPersistence;
+import org.exoplatform.portal.mop.site.MopStore;
 import org.exoplatform.portal.mop.site.SimpleDataCache;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.portal.mop.QueryResult;
@@ -33,7 +33,7 @@ public class SiteServiceWrapper implements SiteService {
     private final SiteServiceImpl service;
 
     public SiteServiceWrapper(POMSessionManager manager) {
-        this.service = new SiteServiceImpl(new MopPersistence(manager, new SimpleDataCache()));
+        this.service = new SiteServiceImpl(new MopStore(manager, new SimpleDataCache()));
     }
 
     @Override

@@ -32,7 +32,7 @@ import org.gatein.portal.mop.navigation.NodeState;
 abstract class DataCache {
 
     /** . */
-    MopPersistence persistence;
+    MopStore persistence;
 
     protected abstract void removeNodes(Iterable<String> keys);
 

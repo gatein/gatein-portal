@@ -39,9 +39,9 @@ class NodePersister<N, S extends Serializable> extends NodeChangeListener.Base<N
     final Set<String> toUpdate;
 
     /** . */
-    private final NodePersistence<S> persistence;
+    private final NodeStore<S> persistence;
 
-    NodePersister(NodePersistence<S> persistence) {
+    NodePersister(NodeStore<S> persistence) {
         this.persistence = persistence;
         this.toPersist = new HashMap<String, String>();
         this.toUpdate = new HashSet<String>();

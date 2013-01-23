@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 eXo Platform SAS.
+ * Copyright (C) 2011 eXo Platform SAS.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -17,20 +17,26 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.portal.mop.site;
+package org.gatein.portal.mop.hierarchy;
 
-import java.util.Collection;
+import java.io.Serializable;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public interface SitePersistence {
+public interface NodeStore<S extends Serializable> {
 
-    SiteData loadSite(SiteKey key);
+    NodeData<S> loadNode(String nodeId);
 
-    boolean saveSite(SiteKey key, SiteState state);
+    NodeData<S>[] createNode(String parentId, String previousId, String name, S state);
 
-    boolean destroySite(SiteKey key);
+    NodeData<S> destroyNode(String targetId);
 
-    Collection<SiteKey> findSites(SiteType type);
+    NodeData<S> updateNode(String targetId, S state);
+
+    NodeData<S>[] moveNode(String targetId, String fromId, String toId, String previousId);
+
+    NodeData<S>[] renameNode(String targetId, String parentId, String name);
+
+    void flush();
 }

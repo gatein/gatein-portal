@@ -40,7 +40,7 @@ import org.exoplatform.portal.config.DataStorage;
 import org.exoplatform.portal.config.UserPortalConfig;
 import org.exoplatform.portal.config.UserPortalConfigService;
 import org.exoplatform.portal.config.model.PortalConfig;
-import org.exoplatform.portal.mop.navigation.MopPersistence;
+import org.exoplatform.portal.mop.navigation.MopStore;
 import org.gatein.portal.mop.site.SiteKey;
 import org.exoplatform.portal.mop.Visibility;
 import org.gatein.portal.mop.navigation.NavigationContext;
@@ -207,7 +207,7 @@ public class TestUserPortal extends AbstractPortalTest {
                 UserPortal portal = userPortalCfg.getUserPortal();
 
                 //
-                NavigationServiceImpl service = new NavigationServiceImpl(new MopPersistence(mgr));
+                NavigationServiceImpl service = new NavigationServiceImpl(new MopStore(mgr));
                 SiteKey navKey = SiteKey.group("/organization/management");
                 NavigationContext nav = new NavigationContext(navKey, new NavigationState(1));
 

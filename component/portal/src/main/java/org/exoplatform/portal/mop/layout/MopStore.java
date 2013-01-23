@@ -35,7 +35,6 @@ import org.exoplatform.portal.mop.ProtectedResource;
 import org.exoplatform.portal.pom.config.POMSession;
 import org.exoplatform.portal.pom.config.POMSessionManager;
 import org.gatein.portal.mop.hierarchy.NodeData;
-import org.gatein.portal.mop.hierarchy.NodePersistence;
 import org.exoplatform.portal.pom.config.Utils;
 import org.exoplatform.portal.pom.data.MappedAttributes;
 import org.gatein.mop.api.Attributes;
@@ -48,12 +47,12 @@ import org.gatein.mop.api.workspace.ui.UIContainer;
 import org.gatein.mop.api.workspace.ui.UIWindow;
 import org.gatein.mop.core.util.Tools;
 import org.gatein.portal.mop.layout.ElementState;
-import org.gatein.portal.mop.layout.LayoutPersistence;
+import org.gatein.portal.mop.layout.LayoutStore;
 
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class MopPersistence implements LayoutPersistence {
+public class MopStore implements LayoutStore {
 
     /** . */
     private static final Set<String> propertiesBlackList = Tools.set("jcr:uuid", "jcr:primaryType");
@@ -69,7 +68,7 @@ public class MopPersistence implements LayoutPersistence {
     /** . */
     final POMSessionManager mgr;
 
-    public MopPersistence(POMSessionManager mgr) {
+    public MopStore(POMSessionManager mgr) {
         this.mgr = mgr;
     }
 

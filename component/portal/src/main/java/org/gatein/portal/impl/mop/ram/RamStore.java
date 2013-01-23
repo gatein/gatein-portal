@@ -30,12 +30,12 @@ import org.json.JSONObject;
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  */
-public class RamPersistence implements ComponentRequestLifecycle {
+public class RamStore implements ComponentRequestLifecycle {
 
     /** . */
     final Store store = new Store();
 
-    public RamPersistence() {
+    public RamStore() {
         Store init = store.open();
         String root = init.getRoot();
         init.addChild(root, SiteType.PORTAL.getName(), SiteType.PORTAL);
