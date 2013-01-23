@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <portlet:defineObjects/>
 
@@ -18,7 +19,9 @@
     <ul>
       <c:forEach var="alternativeSites" items="${alternativeSites}">
         <li class="alternativeSite">
-          <a href="${alternativeSites.value}">${alternativeSites.key}</a>
+          <%-- TODO: should the replacement function go in the bean instead? The beans currently don't have access to the portlet's resource bundle ... --%>
+          <c:set var="alternativeSiteTitle" value="${fn:replace(resourceBundle.getString('alterntaiveSiteTitle'), '{siteName}', alternativeSites.key)}"/>
+          <a href="${alternativeSites.value}">${alternativeSiteTitle}</a>
         </li>
       </c:forEach>
       <li class="language">

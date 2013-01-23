@@ -28,6 +28,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.portlet.Portlet;
+import javax.portlet.PortletConfig;
+
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.PortalURLBuilder;
@@ -56,8 +59,11 @@ public class HeaderBean {
     private static final String GROUP_NAVIGATION_NODE = "groupnavigation";
     
     private final SSOHelper ssoHelper;
+    
+    private final HeaderPortlet portlet;
 
-    public HeaderBean() {
+    public HeaderBean(HeaderPortlet headerPortlet) {
+        this.portlet = headerPortlet;
         ssoHelper = (SSOHelper) ExoContainerContext.getCurrentContainer().getComponentInstanceOfType(SSOHelper.class);
     }
 
@@ -109,6 +115,8 @@ public class HeaderBean {
         for (UserNavigation groupNavigation: groupNavigations)
         {
             String groupName = OrganizationUtils.getGroupLabel(groupNavigation.getKey().getName());
+            String groupTitleFormat = this.portlet.getPortletConfig().getResourceBundle(pContext.getLocale()).getString("label.GroupPageTitleFormat");
+            String groupTitle = groupName;//groupTitleFormat.replace("{0}", groupName);
             
             UserNode userNode = userPortal.getNode(groupNavigation, Scope.ALL, getFilter(), null);
             List<Node> nodes = new ArrayList<Node>();
@@ -118,7 +126,7 @@ public class HeaderBean {
                 nodes.add(node);
             }
             
-            navNodes.put(groupName, nodes);
+            navNodes.put(groupTitle, nodes);
         }
         return navNodes;
     }
@@ -129,11 +137,12 @@ public class HeaderBean {
         {
             NodeURL nodeURL = Util.getPortalRequestContext().createURL(NodeURL.TYPE);
             nodeURL.setResource(new NavigationResource(userNode));
-            node = new Node(userNode.getName(), nodeURL.toString());
+            
+            node = new Node(userNode.getEncodedResolvedLabel(), nodeURL.toString());
         }
         else
         {
-            node = new Node(userNode.getName(), null);
+            node = new Node(userNode.getEncodedResolvedLabel(), null);
         }
         
         List<Node> children = new ArrayList<Node>();

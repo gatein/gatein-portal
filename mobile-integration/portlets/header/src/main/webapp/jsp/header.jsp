@@ -1,5 +1,6 @@
 <%@ taglib uri="http://java.sun.com/portlet_2_0" prefix="portlet"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <portlet:defineObjects />
 
@@ -51,7 +52,9 @@
 	                    <li>
 	                      <ol class="submenu">
                                 <li class="menuelement">
-	                        <div class="menucategory">${groupNode.key}'s Pages
+                                <%-- Having to specify the replace here may not be the best option. TODO: will defining this in the headerbean work out better? Bean does not current have access to the portlet's resource bundle...--%>
+                                <c:set var="groupNodeTitle" value="${fn:replace(resourceBundle.getString('label.GroupPageTitleFormat'), '{groupName}', groupNode.key)}"/>
+	                        <div class="menucategory">${groupNodeTitle}
 	                          <div class="menuarrow"></div>
 	                        </div>
 	                        <ol class="submenu">
