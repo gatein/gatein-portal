@@ -36,14 +36,6 @@
   <portlet>
     <name>ResponsiveHeaderPortlet</name>
     <module>
-<!--       <script> -->
-<!--         <name>header</name> -->
-<!--         <path>/js/header.js</path> -->
-<!--       </script> -->
-<!--       <depends> -->
-<!--         <module>jquery</module> -->
-<!--         <as>jQuery</as> -->
-<!--       </depends> -->
       <depends>
           <module>org_gatein_responsive_collapsiblecontainer</module>
       </depends>

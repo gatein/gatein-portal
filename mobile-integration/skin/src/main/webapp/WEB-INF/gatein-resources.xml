@@ -29,5 +29,11 @@
 		<css-path>/skin/Stylesheet.css</css-path>
                 <css-priority>10</css-priority>
 	</portal-skin>	
-	
+
+        <portlet-skin>
+                <application-name>web</application-name>
+                <portlet-name>FooterPortlet</portlet-name>
+                <skin-name>ResponsiveSkin</skin-name>
+                <css-path>/skin/ResponsiveSkin/portlet/webui/UIFooterPortlet/UIFooterPortlet.css</css-path>
+        </portlet-skin>
 </gatein-resources>

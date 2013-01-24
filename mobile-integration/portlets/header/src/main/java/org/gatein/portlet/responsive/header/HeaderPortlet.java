@@ -40,12 +40,11 @@ import org.w3c.dom.Element;
 public class HeaderPortlet extends GenericPortlet {
 
     HeaderBean headerBean;
-    
-    public HeaderPortlet()
-    {
+
+    public HeaderPortlet() {
         headerBean = new HeaderBean();
     }
-    
+
     @Override
     protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
         request.setAttribute("headerbean", headerBean);

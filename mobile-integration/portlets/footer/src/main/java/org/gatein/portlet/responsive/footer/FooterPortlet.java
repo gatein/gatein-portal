@@ -54,9 +54,8 @@ public class FooterPortlet extends GenericPortlet {
         PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/footer.jsp");
         prd.include(request, response);
     }
-    
-    protected Map<String, String> getAlternativeSites()
-    {
+
+    protected Map<String, String> getAlternativeSites() {
         PortalRequestContext prc = (PortalRequestContext) PortalRequestContext.getCurrentInstance();
 
         String siteName = ((PortalRequestContext) PortalRequestContext.getCurrentInstance()).getSiteName();

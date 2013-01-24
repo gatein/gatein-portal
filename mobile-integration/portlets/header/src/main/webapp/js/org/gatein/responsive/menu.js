@@ -17,8 +17,6 @@ $(document).ready(function()
 			$(this).addClass("close");
 		}
 		
-		console.log("intialstate: " + initialstate);
-		
 		if (initialstate == "open")
 		{
 			$(this).children(".menuarrow").toggle(function(){closeMenu(menuelement);}, function(){openMenu(menuelement);});

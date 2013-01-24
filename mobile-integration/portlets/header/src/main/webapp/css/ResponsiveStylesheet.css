@@ -9,7 +9,7 @@ line-height: 1em;
 background-repeat: no-repeat;
 background-size: auto 2.5em;
 height: 2.5em;
-width: 12em;
+width: 10em;
 background-position: 1em 0.8em;
 padding: 0.8em 0 0.8em 1em;
 float: left;
@@ -49,6 +49,7 @@ margin: 1em;
 }
 
 .gtnResponsiveHeaderPortlet .options {
+        font-size: 95%;
 	display:inline;
 	float: right;
 	text-align: right;
@@ -57,6 +58,16 @@ margin: 1em;
 .gtnResponsiveHeaderPortlet .options>ol>li {
 	display: inline;
 	/*padding: 0 1em;*/
+}
+
+.gtnResponsiveHeaderPortlet .options a {
+        color: #1C5182;
+        text-decoration: none;
+}
+
+.gtnResponsiveHeaderPortlet .options a:hover {
+        color: #002559;
+        text-decoration: underline;
 }
 
 .gtnResponsiveHeaderPortlet .options.collapsed {
@@ -153,6 +164,11 @@ margin: 1em;
 	border-style: solid;
 	display: inline-block;
 	cursor: pointer;
+}
+
+/* TODO: figure out if there is a better way to handle this, its a pain that it doesn't inherit padding 0 from the parent */
+.gtnResponsiveHeaderPortlet ol.topmenu {
+	padding: 0;
 }
 
 .gtnResponsiveHeaderPortlet .topmenu .menuelement.close .menuarrow {

@@ -26,13 +26,14 @@
 							}
 						});
 					}
-
-
-					//TODO: do we really need to add this here? Or can we force this to be set originally in the css?
-					var originalWhiteSpace = $(this).css("white-space");
-					$(this).css("white-space", "nowrap");
-					cWidth += $(this).outerWidth();
-					$(this).css("white-space", originalWhiteSpace);
+					else
+                                        {
+						//TODO: do we really need to add this here? Or can we force this to be set originally in the css?
+						var originalWhiteSpace = $(this).css("white-space");
+						$(this).css("white-space", "nowrap");
+						cWidth += $(this).outerWidth();
+						$(this).css("white-space", originalWhiteSpace);
+					}
 				});
 
 				var object = {"element" : this, "cWidth" : cWidth};
@@ -53,12 +54,10 @@
 			{
 				var collapsibleElement = collapsibleElements[i]["element"];
 				var cWidth = collapsibleElements[i]["cWidth"];
-				console.log($(collapsibleElement).outerWidth() + " < " + cWidth + " : " + ($(collapsibleElement).outerWidth() < cWidth));
 				if ($(collapsibleElement).outerWidth() < cWidth)
 				{
 					$(collapsibleElement).toggleClass("collapsed", true);
 					$(collapsibleElement).toggleClass("expanded", false);
-					console.log("Need to collapse : " + i + " : " + $(collapsibleElement));
 				}
 				else 
 				{
