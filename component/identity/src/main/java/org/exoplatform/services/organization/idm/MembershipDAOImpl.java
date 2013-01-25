@@ -118,7 +118,7 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
         String groupId = getIdentitySession().getPersistenceManager().createGroupKey(plGroupName,
                 orgService.getConfiguration().getGroupType(g.getParentId()));
 
-        if (isCreateMembership(mt.getName())) {
+        if (isCreateMembership(mt.getName(), g.getId())) {
             if (getIdentitySession().getRoleManager().getRoleType(mt.getName()) == null) {
                 getIdentitySession().getRoleManager().createRoleType(mt.getName());
             }
@@ -141,7 +141,9 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
             preSave(membership, true);
         }
 
-        getIdentitySession().getRoleManager().createRole(mt.getName(), user.getUserName(), groupId);
+        if (isCreateMembership(mt.getName(), g.getId())) {
+            getIdentitySession().getRoleManager().createRole(mt.getName(), user.getUserName(), groupId);
+        }
 
         if (broadcast) {
             postSave(membership, true);
@@ -179,7 +181,7 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
             preSave(m, false);
         }
 
-        if (isCreateMembership(m.getMembershipType())) {
+        if (isCreateMembership(m.getMembershipType(), m.getGroupId())) {
 
             try {
                 getIdentitySession().getRoleManager().createRole(m.getMembershipType(), m.getUserName(), groupId);
@@ -245,7 +247,7 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
             preDelete(m);
         }
 
-        if (isCreateMembership(m.getMembershipType())) {
+        if (isCreateMembership(m.getMembershipType(), m.getGroupId())) {
 
             try {
                 getIdentitySession().getRoleManager().removeRole(m.getMembershipType(), m.getUserName(), groupId);
@@ -387,7 +389,7 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
         }
 
         if (role != null
-                && (!isAssociationMapped() || !getAssociationMapping().equals(role.getRoleType()) || !ignoreMappedMembershipType())) {
+                && (!isAssociationMapped() || !getAssociationMapping().equals(role.getRoleType()) || !ignoreMappedMembershipType(groupId))) {
             hasMembership = true;
         }
 
@@ -445,7 +447,7 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
         HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
         for (RoleType roleType : roleTypes) {
-            if (isCreateMembership(roleType.getName())) {
+            if (isCreateMembership(roleType.getName(), groupId)) {
                 MembershipImpl m = new MembershipImpl();
                 m.setGroupId(groupId);
                 m.setUserName(userName);
@@ -502,9 +504,9 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
         HashSet<MembershipImpl> memberships = new HashSet<MembershipImpl>();
 
         for (Role role : roles) {
-            if (isCreateMembership(role.getRoleType().getName())) {
+            Group g = ((GroupDAOImpl) orgService.getGroupHandler()).convertGroup(role.getGroup());
+            if (isCreateMembership(role.getRoleType().getName(), g.getId())) {
                 MembershipImpl m = new MembershipImpl();
-                Group g = ((GroupDAOImpl) orgService.getGroupHandler()).convertGroup(role.getGroup());
                 m.setGroupId(g.getId());
                 m.setUserName(role.getUser().getId());
 
@@ -559,7 +561,7 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
             log.log(LogLevel.ERROR, "Internal ERROR. Cannot obtain user: " + user.getUserName());
             return new ListAccessImpl(Membership.class, Collections.emptyList());
         }
-        return new IDMMembershipListAccess(gtnUser);
+        return new IDMMembershipListAccess(gtnUser, !orgService.getConfiguration().isSkipPaginationInMembershipQuery());
     }
 
     public Collection findMembershipsByGroup(Group group) throws Exception {
@@ -578,7 +580,7 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
             log.log(LogLevel.ERROR, "Internal ERROR. Cannot obtain group: " + group.getId());
             return new ListAccessImpl(Membership.class, Collections.emptyList());
         }
-        return new IDMMembershipListAccess(gtnGroup);
+        return new IDMMembershipListAccess(gtnGroup, !orgService.getConfiguration().isSkipPaginationInMembershipQuery());
     }
 
     public Collection findMembershipsByGroupId(String groupId) throws Exception {
@@ -607,7 +609,7 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
         Group g = orgService.getGroupHandler().findGroupById(groupId);
 
         for (Role role : roles) {
-            if (isCreateMembership(role.getRoleType().getName())) {
+            if (isCreateMembership(role.getRoleType().getName(), g.getId())) {
                 MembershipImpl m = new MembershipImpl();
                 m.setGroupId(g.getId());
                 m.setUserName(role.getUser().getId());
@@ -667,7 +669,7 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
                 getGroupTypeFromId(m.getGroupId()));
 
         try {
-            if (isCreateMembership(m.getMembershipType())
+            if (isCreateMembership(m.getMembershipType(), m.getGroupId())
                     && getIdentitySession().getRoleManager().hasRole(m.getUserName(), groupId, m.getMembershipType())) {
                 if (log.isTraceEnabled()) {
                     Tools.logMethodOut(log, LogLevel.TRACE, "findMembership", m);
@@ -760,12 +762,12 @@ public class MembershipDAOImpl extends AbstractDAOImpl implements MembershipHand
         return orgService.getConfiguration().getAssociationMembershipType();
     }
 
-    protected boolean ignoreMappedMembershipType() {
-        return orgService.getConfiguration().isIgnoreMappedMembershipType();
+    protected boolean ignoreMappedMembershipType(String groupId) {
+        return orgService.getConfiguration().isIgnoreMappedMembershipTypeForGroup(groupId);
     }
 
-    protected boolean isCreateMembership(String typeName) {
-        if (isAssociationMapped() && getAssociationMapping().equals(typeName) && ignoreMappedMembershipType()) {
+    protected boolean isCreateMembership(String typeName, String groupId) {
+        if (isAssociationMapped() && getAssociationMapping().equals(typeName) && ignoreMappedMembershipType(groupId)) {
             return false;
         }
         return true;
