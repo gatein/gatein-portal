@@ -18,6 +18,7 @@
         <module>skin</module>
         <module>portlets</module>
         <module>extension-configuration</module>
+        <module>extension-login-war</module>
         <module>extension-ear</module>
     </modules>
 

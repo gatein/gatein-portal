@@ -23,6 +23,13 @@
             <version>${project.version}</version>
             <type>war</type>
         </dependency>
+     <!-- The mobile login page -->
+        <dependency>
+            <groupId>org.gatein.portal</groupId>
+            <artifactId>mobile-extension-login</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
      <!-- The mobile portlets -->
         <dependency>
             <groupId>org.gatein.portal</groupId>
@@ -75,6 +82,13 @@
                             <artifactId>responsive-skin</artifactId>
                             <contextRoot>/gatein-responsive-skin</contextRoot>
                             <bundleFileName>gatein-responsive-skin.war</bundleFileName>
+                            <unpack>true</unpack>
+                        </webModule>
+                        <webModule>
+                            <groupId>org.gatein.portal</groupId>
+                            <artifactId>mobile-extension-login</artifactId>
+                            <contextRoot>/gatein-mobile-login</contextRoot>
+                            <bundleFileName>gatein-mobile-login.war</bundleFileName>
                             <unpack>true</unpack>
                         </webModule>
                         <webModule>
