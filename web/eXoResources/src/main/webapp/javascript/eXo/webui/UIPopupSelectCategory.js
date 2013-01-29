@@ -25,7 +25,7 @@
 		  if (typeof parent == "string") {
 			  parent = $("#" + parentId);
 		  }
-		  $(parent).find(".UIPopupCategory").closest(".ControlIcon, .EditIcon").off("click").on("click", function(event) {
+		  $(parent).find(".UIPopupCategory").closest(".ContainerControlIcon, .ControlIcon, .EditIcon").off("click").on("click", function(event) {
 			  eXo.webui.UIPopupSelectCategory.show(this, event);
 		  });
 		  return false;
