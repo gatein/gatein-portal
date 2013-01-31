@@ -25,7 +25,7 @@
 
   <groupId>org.gatein.portal</groupId>
   <artifactId>portal-testsuite-htmlunit-tests</artifactId>
-  <version>3.5.2.Final</version>
+  <version>3.5.0.Final</version>
   <packaging>jar</packaging>
   <name>HTMLUnit Tests for GateIn</name>
   <description>HTMLUnit Tests for GateIn</description>
