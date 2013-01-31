@@ -23,17 +23,12 @@
 package org.gatein.portlet.responsive.header;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.portlet.Portlet;
-import javax.portlet.PortletConfig;
-
 import org.exoplatform.container.ExoContainerContext;
 import org.exoplatform.portal.application.PortalRequestContext;
-import org.exoplatform.portal.application.PortalURLBuilder;
 import org.exoplatform.portal.mop.SiteType;
 import org.exoplatform.portal.mop.Visibility;
 import org.exoplatform.portal.mop.navigation.Scope;
@@ -43,12 +38,9 @@ import org.exoplatform.portal.mop.user.UserNodeFilterConfig;
 import org.exoplatform.portal.mop.user.UserPortal;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.web.security.sso.SSOHelper;
-import org.exoplatform.web.url.PortalURL;
 import org.exoplatform.web.url.navigation.NavigationResource;
 import org.exoplatform.web.url.navigation.NodeURL;
 import org.exoplatform.webui.organization.OrganizationUtils;
-
-import com.sun.syndication.feed.module.mediarss.types.Hash;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>

@@ -1,3 +1,4 @@
+/*Imported Stylesheets from the DefaultSkin*/
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/view/UIToolbarContainer/Stylesheet.css);
 @import url(/eXoResources/skin/DefaultSkin/portal/webui/component/customization/UIChangeLanguageForm/Stylesheet.css);
 @import url(/eXoResources/skin/DefaultSkin/webui/component/UIMaskWorkspace/Stylesheet.css);
@@ -11,6 +12,8 @@
 /*@import url(/eXoResources/skin/DefaultSkin/webui/component/UIForms/Stylesheet.css);
 @import url(/eXoResources/skin/DefaultSkin/skinIcons/16x16/Stylesheet.css);
 */
+
+/*Overwritten WebUI Components*/
 @import url(ResponsiveSkin/portal/webui/component/UIPortal/UIPortalApplicationSkin.css);
 @import url(ResponsiveSkin/portal/webui/component/UIWorkspace/UIWorkspace.css);
 @import url(ResponsiveSkin/portal/webui/component/UIToolbar/UIToolbar.css);
@@ -18,4 +21,10 @@
 @import url(ResponsiveSkin/portal/webui/component/UIChangeLanguageForm/UIChangeLanguageForm.css);
 @import url(ResponsiveSkin/portal/webui/component/UIMaskWorkspace/UIMaskWorkspace.css);
 @import url(ResponsiveSkin/portal/webui/component/UIForms/UIForms.css);
+@import url(ResponsiveSkin/portal/webui/component/UIAction/UIAction.css);
+@import url(ResponsiveSkin/portal/webui/component/UIFormTabPane/UIFormTabPane.css);
+@import url(ResponsiveSkin/portal/webui/component/UIFormWithTitle/UIFormWithTitle.css);
+@import url(ResponsiveSkin/portal/webui/component/UITab/UITab.css);
+@import url(ResponsiveSkin/portal/webui/component/UIDashboard/UIDashboard.css);
+
 @import url(Portlet/Stylesheet.css);

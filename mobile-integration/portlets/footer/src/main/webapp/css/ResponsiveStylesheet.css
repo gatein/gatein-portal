@@ -1,7 +1,30 @@
+/******************************************************************************
+ * JBoss, a division of Red Hat                                               *
+ * Copyright 2013, Red Hat Middleware, LLC, and individual                    *
+ * contributors as indicated by the @authors tag. See the                     *
+ * copyright.txt in the distribution for a full listing of                    *
+ * individual contributors.                                                   *
+ *                                                                            *
+ * This is free software; you can redistribute it and/or modify it            *
+ * under the terms of the GNU Lesser General Public License as                *
+ * published by the Free Software Foundation; either version 2.1 of           *
+ * the License, or (at your option) any later version.                        *
+ *                                                                            *
+ * This software is distributed in the hope that it will be useful,           *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of             *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU           *
+ * Lesser General Public License for more details.                            *
+ *                                                                            *
+ * You should have received a copy of the GNU Lesser General Public           *
+ * License along with this software; if not, write to the Free                *
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA         *
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.                   *
+ ******************************************************************************/
+ 
 .gtnResponsiveFooterPortlet {
-	margin: 0;
-	padding: 0;
-	font-size: 95%;
+    margin: 0;
+    padding: 0;
+    font-size: 95%;
 }
 
 .gtnResponsiveFooterPortlet a {
@@ -14,32 +37,32 @@
 }
 
 .gtnResponsiveFooterPortlet .options {
-	float: right;
+    float: right;
 }
 
 .gtnResponsiveFooterPortlet .copyright {
-	float: left;
-	text-align: center;
-	max-width:100%;
-	padding: 1em;
+    float: left;
+    text-align: center;
+    max-width: 100%;
+    padding: 1em;
 }
 
 .gtnResponsiveFooterPortlet .collapsibleRow.collapsed .copyright {
-float: none;
-clear: both;
+    float: none;
+    clear: both;
 }
 
 .gtnResponsiveFooterPortlet .copyright p {
-	display: inline;
+    display: inline;
 }
 
 .gtnResponsiveFooterPortlet .clear {
-	clear: both;
+    clear: both;
 }
 
-.gtnResponsiveFooterPortlet ul{
-	list-style-type: none;
-	padding: 0;
+.gtnResponsiveFooterPortlet ul {
+    list-style-type: none;
+    padding: 0;
 }
 
 .gtnResponsiveFooterPortlet ul li {
@@ -52,10 +75,10 @@ clear: both;
     background: none;
 }
 
-.gtnResponsiveFooterPortlet .downCaret{
-	border-width: 0.25em;
-	border-color: transparent transparent #666;
-	border-style: solid;
-	display: inline-block;
-	margin-bottom: 0.25em;
+.gtnResponsiveFooterPortlet .downCaret {
+    border-width: 0.25em;
+    border-color: transparent transparent #666;
+    border-style: solid;
+    display: inline-block;
+    margin-bottom: 0.25em;
 }

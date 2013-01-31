@@ -11,6 +11,8 @@
 <c:set var="SIGN_IN_ACTION" value="if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ShowLoginForm', true));"/>
 <%-- The action to perform to log out the current user --%>
 <c:set var="SIGN_OUT_ACTION" value="eXo.portal.logout();"/>
+<%-- The action to bring up the user profile modal --%>
+<c:set var="USER_PROFILE_ACTION" value="javascript:if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'AccountSettings', true));"/>
 
 <%-- Link to the registration page --%>
 <c:set var="registerLink" value="${headerbean.generateRegisterLink()}"/>
@@ -70,7 +72,7 @@
 				  </ol>
                  </li>
 	              <li><a href="#" onclick="${SIGN_OUT_ACTION}">${resourceBundle.getString("label.SignOut")}</a></li>
-	              <li><a href="#">${resourceBundle.getString("label.UserProfile")}</a></li>		
+	              <li><a href="#" onclick="${USER_PROFILE_ACTION}">${resourceBundle.getString("label.UserProfile")}</a></li>		
 	        </c:otherwise>
 	        </c:choose>
 		</ol>

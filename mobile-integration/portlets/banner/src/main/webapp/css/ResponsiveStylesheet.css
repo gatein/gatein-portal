@@ -4,9 +4,8 @@
     padding: 1em;
     background-size: auto 100%;
     border-radius: 0.5em 0.5em 0 0;
-    
-    top: -0.5em; /*move the portlet up 0.5 em which covers the default UIPage rounded border */
-    position: relative;
+
+    margin: -0.25em -0.25em 0 -0.25em; /* To cover up the border when placed on a page.*/    
 }
 
 .gtnResponsiveBannerPortlet h1 {
@@ -65,10 +64,9 @@
 	}
 }
 
-
 .gtnResponsiveBannerPortletShadow{
   background: transparent url(../images/banner-shadow.png) no-repeat center top;
-  position: relative;
-  top: -0.5em; /*move the portlet up 0.5 em which covers the default UIPage rounded border */
   height: 0.5em;
+  margin-left: -0.25em;
+  margin-right: -0.25em;
 }

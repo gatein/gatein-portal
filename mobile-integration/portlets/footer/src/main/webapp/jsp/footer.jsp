@@ -7,7 +7,7 @@
 <%-- Action to change the language--%>
 <c:set var="CHANGE_LANGUAGE_ACTION" value="if(document.getElementById('UIMaskWorkspace')) ajaxGet(eXo.env.server.createPortalURL('UIPortal', 'ChangeLanguage', true));"/>
 <%-- The current language name in the current locale --%>
-<c:set var="localeDisplayLanguage" value="${renderRequest.getLocale().getDisplayLanguage()}"/>
+<c:set var="localeDisplayLanguage" value="${renderRequest.getLocale().getDisplayLanguage(renderRequest.getLocale())}"/>
 <%-- The resourceBundle used to retrieve locale string values --%>
 <c:set var="resourceBundle" value="${portletConfig.getResourceBundle(renderRequest.locale)}"/>
 <%-- Map of alternativeSite url and names --%>

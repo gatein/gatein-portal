@@ -1,11 +1,11 @@
 .UIMaskWorkspace {
-        max-width: 100%:
+    max-width: 100%:
 }
 
 .MaskLayer {
-        background: black;
-        text-align: center;
-        position: absolute;
-        overflow: auto; /* Fix for FF2 */
+    background: black;
+    text-align: center;
+    position: absolute;
+    overflow: auto; /* Fix for FF2 */
+    opacity: 0.8!important; /*NOTE: the webui javascript libraires need to stop setting the opacity manually and use css instead */
 }
-

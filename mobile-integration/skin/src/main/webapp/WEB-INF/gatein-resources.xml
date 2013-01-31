@@ -36,4 +36,12 @@
                 <skin-name>ResponsiveSkin</skin-name>
                 <css-path>/skin/ResponsiveSkin/portlet/webui/UIFooterPortlet/UIFooterPortlet.css</css-path>
         </portlet-skin>
+
+          <portlet-skin>
+    <application-name>web</application-name>
+    <portlet-name>NavigationPortlet</portlet-name>
+    <skin-name>Default</skin-name>
+    <css-path>/skin/ResponsiveSkin/portlet/webui/UINavigationPortlet/UINavigationPortlet.css</css-path>
+  </portlet-skin>
+
 </gatein-resources>
