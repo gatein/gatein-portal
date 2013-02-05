@@ -30,6 +30,7 @@ import javax.xml.transform.Result;
 
 import org.gatein.common.xml.stax.writer.StaxWriter;
 import org.gatein.common.xml.stax.writer.formatting.XmlStreamingFormatter;
+import org.staxnav.EnumElement;
 import org.staxnav.Naming;
 import org.staxnav.StaxNavException;
 
@@ -59,4 +60,7 @@ public interface StaxWriterBuilder {
     StaxWriterBuilder withXmlStreamWriter(XMLStreamWriter writer);
 
     <N> StaxWriter<N> build(Naming<N> naming) throws StaxNavException, IllegalStateException;
+
+    <E extends Enum<E> & EnumElement<E>> StaxWriter<E> build(Class<E> enumeratedType) throws StaxNavException,
+            IllegalStateException;
 }

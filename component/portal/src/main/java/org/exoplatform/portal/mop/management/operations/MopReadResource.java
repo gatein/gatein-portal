@@ -35,9 +35,9 @@ import org.gatein.management.api.operation.model.ReadResourceModel;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class MopReadResource implements OperationHandler {
+public class MopReadResource extends SecureOperationHandler implements OperationHandler {
     @Override
-    public void execute(OperationContext operationContext, ResultHandler resultHandler) throws OperationException {
+    public void doExecute(OperationContext operationContext, ResultHandler resultHandler) throws OperationException {
         Set<String> children = new LinkedHashSet<String>(3);
         children.add("portalsites");
         children.add("groupsites");

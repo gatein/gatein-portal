@@ -44,6 +44,10 @@
   </component>
 
   <component>
+    <type>org.gatein.management.runtime.ExternalContextImpl</type>
+  </component>
+
+  <component>
     <type>org.gatein.management.runtime.ManagementBootstrap</type>
   </component>
 

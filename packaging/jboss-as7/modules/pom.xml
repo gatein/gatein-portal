@@ -564,6 +564,12 @@
       <artifactId>staxnav.core</artifactId>
     </dependency>
 
+    <!-- GateIn API -->
+    <dependency>
+      <groupId>org.gatein.api</groupId>
+      <artifactId>gatein-api</artifactId>
+    </dependency>
+
     <!-- Gatein common -->
     <dependency>
       <groupId>org.gatein.common</groupId>
@@ -649,6 +655,10 @@
     <dependency>
       <groupId>org.gatein.management</groupId>
       <artifactId>gatein-management-rest</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-dmr</artifactId>
     </dependency>
 
 
@@ -754,6 +764,10 @@
     </dependency>
 
     <!-- GateIn -->
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.component.api</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.component.application-registry</artifactId>
@@ -1135,6 +1149,7 @@
       <groupId>rome</groupId>
       <artifactId>rome</artifactId>
     </dependency>
+
     <dependency>
       <groupId>org.apache.sanselan</groupId>
       <artifactId>sanselan</artifactId>

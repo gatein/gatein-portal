@@ -43,6 +43,7 @@
     <org.exoplatform.jcr.version>1.15.1-CP01</org.exoplatform.jcr.version>
     <org.shindig.version>2.0.2.Final-gatein-4</org.shindig.version>
     <nl.captcha.simplecaptcha.version>1.1.1.Final-gatein-3</nl.captcha.simplecaptcha.version>
+    <org.gatein.api.version>1.0.0.Alpha01</org.gatein.api.version>
     <org.gatein.common.version>2.1.0.Final</org.gatein.common.version>
     <org.gatein.wci.version>2.3.0.Final</org.gatein.wci.version>
     <org.gatein.pc.version>2.4.0.Final</org.gatein.pc.version>
@@ -50,7 +51,7 @@
     <org.picketlink.idm>1.4.1.Final</org.picketlink.idm>
     <org.gatein.wsrp.version>2.2.2.Final</org.gatein.wsrp.version>
     <org.gatein.mop.version>1.2.0.Final</org.gatein.mop.version>
-    <org.gatein.mgmt.version>1.1.0.Final</org.gatein.mgmt.version>
+    <org.gatein.mgmt.version>2.0.0-Alpha2</org.gatein.mgmt.version>
     <org.slf4j.version>1.6.1</org.slf4j.version>
     <commons-pool.version>1.5.5</commons-pool.version>
     <rhino.version>1.6R5</rhino.version>
@@ -310,6 +311,11 @@
         <version>${org.gatein.common.version}</version>
       </dependency>
       <dependency>
+        <groupId>org.gatein.api</groupId>
+        <artifactId>gatein-api</artifactId>
+        <version>${org.gatein.api.version}</version>
+      </dependency>
+      <dependency>
         <groupId>org.gatein.common</groupId>
         <artifactId>common-common</artifactId>
         <version>${org.gatein.common.version}</version>
@@ -396,6 +402,12 @@
         <artifactId>gatein-management-rest</artifactId>
         <version>${org.gatein.mgmt.version}</version>
       </dependency>
+      <!-- GateIn Mgmt uses jboss-dmr for model impl -->
+      <dependency>
+        <groupId>org.jboss</groupId>
+        <artifactId>jboss-dmr</artifactId>
+        <version>1.1.1.Final</version>
+      </dependency>
       <!-- WSRP -->
       <dependency>
         <groupId>org.gatein.wsrp</groupId>
@@ -480,6 +492,11 @@
       <!-- GateIn -->
       <dependency>
         <groupId>org.gatein.portal</groupId>
+        <artifactId>exo.portal.component.api</artifactId>
+        <version>3.6.0.MO1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.common</artifactId>
         <version>3.6.0.MO1-SNAPSHOT</version>
       </dependency>
@@ -544,6 +561,12 @@
         <groupId>org.gatein.portal</groupId>
         <artifactId>exo.portal.component.resources</artifactId>
         <version>3.6.0.MO1-SNAPSHOT</version>
+      </dependency>
+      <dependency>
+        <groupId>org.gatein.portal</groupId>
+        <artifactId>exo.portal.component.resources</artifactId>
+        <version>3.6.0.MO1-SNAPSHOT</version>
+        <type>test-jar</type>
       </dependency>
       <dependency>
         <groupId>org.gatein.portal</groupId>

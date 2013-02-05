@@ -194,7 +194,7 @@ public class NavigationMarshallerTest extends TestCase {
         NavigationMarshaller marshaller = new NavigationMarshaller();
         PageNavigation expected = newPageNavigation("", "", 123,
                 new ArrayList<PageNode>(Collections.singletonList(expectedNode)));
-        marshaller.marshal(expected, baos);
+        marshaller.marshal(expected, baos, false);
 
         PageNavigation actual = marshaller.unmarshal(new ByteArrayInputStream(baos.toByteArray()));
 

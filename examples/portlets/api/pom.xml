@@ -35,5 +35,10 @@
       <artifactId>portlet-api</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.gatein.api</groupId>
+      <artifactId>gatein-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 </project>

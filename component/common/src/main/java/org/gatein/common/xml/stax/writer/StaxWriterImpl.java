@@ -61,7 +61,7 @@ public class StaxWriterImpl<N> implements StaxWriter<N>, XMLStreamConstants {
         this.naming = naming;
         this.writer = writer;
         if (formatter == null)
-            formatter = new NoOpFormatter();
+            formatter = NoOpFormatter.INSTANCE;
 
         this.formatter = formatter;
         elementStack.push(new RootElement(writer, formatter, encoding, version));

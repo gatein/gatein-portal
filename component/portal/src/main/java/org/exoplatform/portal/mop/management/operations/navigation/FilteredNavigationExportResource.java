@@ -36,6 +36,7 @@ import org.gatein.management.api.binding.BindingProvider;
 import org.gatein.management.api.binding.Marshaller;
 import org.gatein.management.api.exceptions.OperationException;
 import org.gatein.management.api.exceptions.ResourceNotFoundException;
+import org.gatein.management.api.model.Model;
 import org.gatein.management.api.operation.OperationContext;
 import org.gatein.management.api.operation.OperationContextDelegate;
 import org.gatein.management.api.operation.OperationHandler;
@@ -82,8 +83,7 @@ public class FilteredNavigationExportResource {
         };
 
         try {
-            executeHandlers(resource, operationContext, address, OperationNames.READ_CONFIG_AS_XML, stepResultHandler, filter,
-                    true);
+            executeHandlers(resource, operationContext, address, OperationNames.READ_CONFIG, stepResultHandler, filter, true);
             List<PageNavigation> results = stepResultHandler.getResults();
             if (results.isEmpty()) {
                 resultHandler.completed(new ExportResourceModel(Collections.<ExportTask> emptyList()));

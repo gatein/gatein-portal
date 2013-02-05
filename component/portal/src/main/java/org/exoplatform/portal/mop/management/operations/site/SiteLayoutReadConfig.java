@@ -20,41 +20,38 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.portal.mop.management.operations.navigation;
+package org.exoplatform.portal.mop.management.operations.site;
 
-import org.exoplatform.portal.config.model.PageNavigation;
+import org.exoplatform.portal.config.DataStorage;
+import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.SiteKey;
-import org.exoplatform.portal.mop.description.DescriptionService;
-import org.exoplatform.portal.mop.navigation.NavigationService;
+import org.exoplatform.portal.pom.config.POMSessionManager;
+import org.exoplatform.portal.pom.config.tasks.PortalConfigTask;
+import org.exoplatform.portal.pom.data.PortalData;
+import org.exoplatform.portal.pom.data.PortalKey;
+import org.gatein.management.api.exceptions.OperationException;
 import org.gatein.management.api.exceptions.ResourceNotFoundException;
 import org.gatein.management.api.operation.OperationContext;
 import org.gatein.management.api.operation.ResultHandler;
-import org.gatein.mop.api.workspace.Navigation;
 import org.gatein.mop.api.workspace.Site;
 
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class NavigationReadConfigAsXml extends AbstractNavigationOperationHandler {
+public class SiteLayoutReadConfig extends AbstractSiteOperationHandler {
     @Override
-    protected void execute(OperationContext operationContext, ResultHandler resultHandler, Navigation defaultNavigation) {
-        String navUri = operationContext.getAddress().resolvePathTemplate("nav-uri");
-
-        Site site = defaultNavigation.getSite();
+    protected void execute(OperationContext operationContext, ResultHandler resultHandler, Site site)
+            throws ResourceNotFoundException, OperationException {
+        DataStorage dataStorage = operationContext.getRuntimeContext().getRuntimeComponent(DataStorage.class);
         SiteKey siteKey = getSiteKey(site);
 
-        // TODO: If there's any benefit in creating our own node model to use with navigation service, lets do it
-
-        DescriptionService descriptionService = operationContext.getRuntimeContext().getRuntimeComponent(
-                DescriptionService.class);
-        NavigationService navigationService = operationContext.getRuntimeContext().getRuntimeComponent(NavigationService.class);
-
-        PageNavigation pageNavigation = NavigationUtils.loadPageNavigation(new NavigationKey(siteKey, navUri),
-                navigationService, descriptionService);
-        if (pageNavigation == null)
-            throw new ResourceNotFoundException("Navigation node not found for navigation uri '" + navUri + "'");
-
-        resultHandler.completed(pageNavigation);
+        try {
+            PortalConfig portalConfig = dataStorage.getPortalConfig(siteKey.getTypeName(), siteKey.getName());
+            resultHandler.completed(portalConfig);
+        } catch (Exception e) {
+            throw new OperationException(operationContext.getOperationName(),
+                    "Could not retrieve site layout for site " + site, e);
+        }
     }
 }

@@ -40,9 +40,9 @@ import org.gatein.mop.api.workspace.Workspace;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public abstract class AbstractMopOperationHandler implements OperationHandler {
+public abstract class AbstractMopOperationHandler extends SecureOperationHandler implements OperationHandler {
     @Override
-    public final void execute(OperationContext operationContext, ResultHandler resultHandler) throws ResourceNotFoundException,
+    public final void doExecute(OperationContext operationContext, ResultHandler resultHandler) throws ResourceNotFoundException,
             OperationException {
         String operationName = operationContext.getOperationName();
         PathAddress address = operationContext.getAddress();

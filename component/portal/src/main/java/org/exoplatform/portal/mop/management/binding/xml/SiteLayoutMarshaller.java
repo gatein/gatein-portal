@@ -25,7 +25,7 @@ package org.exoplatform.portal.mop.management.binding.xml;
 import static org.gatein.common.xml.stax.navigator.Exceptions.*;
 import static org.gatein.common.xml.stax.navigator.StaxNavUtils.getRequiredAttribute;
 import static org.gatein.common.xml.stax.navigator.StaxNavUtils.getRequiredContent;
-import static org.gatein.common.xml.stax.writer.StaxWriterUtils.createWriter;
+import static org.gatein.common.xml.stax.writer.StaxWriterUtils.buildDefaultWriter;
 import static org.gatein.common.xml.stax.writer.StaxWriterUtils.writeOptionalElement;
 
 import java.io.InputStream;
@@ -42,6 +42,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.config.model.Properties;
 import org.gatein.common.xml.stax.navigator.StaxNavUtils;
 import org.gatein.common.xml.stax.writer.StaxWriter;
+import org.gatein.common.xml.stax.writer.builder.StaxWriterBuilder;
 import org.gatein.management.api.binding.BindingException;
 import org.staxnav.Axis;
 import org.staxnav.StaxNavException;
@@ -53,9 +54,14 @@ import org.staxnav.StaxNavigator;
  */
 public class SiteLayoutMarshaller extends AbstractMarshaller<PortalConfig> {
     @Override
-    public void marshal(PortalConfig object, OutputStream outputStream) throws BindingException {
+    public void marshal(PortalConfig object, OutputStream outputStream, boolean pretty) throws BindingException {
         try {
-            StaxWriter<Element> writer = createWriter(Element.class, outputStream);
+            StaxWriterBuilder builder = buildDefaultWriter(outputStream);
+            if (!pretty) {
+                builder.withFormatting(null);
+            }
+
+            StaxWriter<Element> writer = builder.build(Element.class);
 
             // root element
             writer.writeStartElement(Element.PORTAL_CONFIG);
