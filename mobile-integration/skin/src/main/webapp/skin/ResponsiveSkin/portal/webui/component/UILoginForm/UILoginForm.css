@@ -1,10 +1,19 @@
-.UILogin .LoginDecoratorBackground {
-    padding-top: 0.9375em;
+.UILogin .UIForm {
+    padding-top: 1em;
 }
 
 .UILogin .UIFormGrid {
     width: 80%;
 }
+
+.UILogin .UIForgetPasswordWizard .UIFormGrid {
+width: 90%
+}
+
+.UILogin .FieldComponent.portlet-input-field input[type="text"]{
+width: 90%;
+}
+
 .UILogin .SigninTitle {
     font-family: Ubuntu, sans-serif;
     font-size: 1.5em;
@@ -26,7 +35,8 @@
 }
 
 .UILogin input.UserName,
-.UILogin input.Password {
+.UILogin input.Password,
+.UILogin input[type="text"] {
     border: 1px solid #ccc;
     width: 100%;
     height: 1.4285714285714em;
@@ -41,7 +51,8 @@
 }
 
 .UILogin input.UserName:focus,
-.UILogin input.Password:focus {
+.UILogin input.Password:focus,
+.UILogin input:focus {
     border-color: rgba(82, 168, 236, 0.8);
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset, 0 0 8px rgba(82, 168, 236, 0.6);
     outline: 0 none;
@@ -135,3 +146,4 @@ margin: 0;
 }
 
 }
+

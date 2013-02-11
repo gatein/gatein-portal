@@ -21,10 +21,16 @@
 <c:set var="homePageLink" value="${headerbean.generateHomePageLink()}"/>
 
 <%-- Link to the dashboard --%>
+<c:set var="useDashboardLink" value="${renderRequest.getPreferences().getValue('enable.dashboard.link', false)}"/>
+<c:if test="${useDashboardLink.equals('true')}">
 <c:set var="dashboardLink" value="${headerbean.generateDashboardLink()}"/>
+</c:if>
 
 <%-- Link to the groupPages --%>
+<c:set var="useGroupPagesLink" value="${renderRequest.getPreferences().getValue('enable.grouppages.link', false)}"/>
+<c:if test="${useGroupPagesLink.equals('true')}">
 <c:set var="groupPagesLink" value="${headerbean.generateGroupPagesLink()}"/>
+</c:if>
 
 <div id="<portlet:namespace/>_gtnResponsiveHeaderPortlet" class="gtnResponsiveHeaderPortlet">
     <div class="collapsibleRow">
@@ -42,9 +48,12 @@
 			      </li>
 		    </c:when>
 		    <c:otherwise>
+                     <c:if test="${useDashboardLink.equals('true')}">
 		     <li class="menuelement">
 	              	<a href="${dashboardLink}">${resourceBundle.getString("label.Dashboard")}</a>
               	  </li>
+                     </c:if>
+                     <c:if test="${useGroupPagesLink.equals('true')}">
 	              <li class="menuelement">
 	              	<a href="${groupPagesLink}">${resourceBundle.getString("label.GroupPages")}</a>
 	              	<div class="menuarrow"></div>
@@ -71,6 +80,7 @@
 	                </c:forEach>
 				  </ol>
                  </li>
+                 </c:if>
 	              <li><a href="#" onclick="${SIGN_OUT_ACTION}">${resourceBundle.getString("label.SignOut")}</a></li>
 	              <li><a href="#" onclick="${USER_PROFILE_ACTION}">${resourceBundle.getString("label.UserProfile")}</a></li>		
 	        </c:otherwise>

@@ -37,11 +37,13 @@
 }
 
 .gtnResponsiveFooterPortlet .options {
-    float: right;
+    float: left; /* orientation=rt */
+    float: right; /* orientation=lt */
 }
 
 .gtnResponsiveFooterPortlet .copyright {
-    float: left;
+    float: right; /* orientation=rt */
+    float: left; /* orientation=lt */
     text-align: center;
     max-width: 100%;
     padding: 1em;
@@ -68,7 +70,8 @@
 .gtnResponsiveFooterPortlet ul li {
     display: inline;
     padding: 1em;
-    background: url(../images/bullet-separator.png) no-repeat left center;
+    background: url(../images/bullet-separator.png) no-repeat right center; /* orientation=rt */
+    background: url(../images/bullet-separator.png) no-repeat left center; /* orientation=lt */
 }
 
 .gtnResponsiveFooterPortlet ul li:first-child {

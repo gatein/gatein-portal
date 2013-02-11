@@ -3,9 +3,12 @@
 }
 
 .MaskLayer {
-    background: black;
+    background: rgba(0,0,0,0.8);
     text-align: center;
-    position: absolute;
     overflow: auto; /* Fix for FF2 */
-    opacity: 0.8!important; /*NOTE: the webui javascript libraires need to stop setting the opacity manually and use css instead */
+    opacity: 1!important; /*NOTE: the webui javascript libraires need to stop setting the opacity manually and use css instead */
+    position: fixed!important;
+    width: 100%!important;
+    height: 100%!important;
+    top:0!important;
 }

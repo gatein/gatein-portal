@@ -4,7 +4,8 @@ padding: 0;
 }
 
 .gtnResponsiveHeaderPortlet .logo  {
-background-image: url('../images/gatein_logo.svg');
+background-image: url('../images/gatein_logo_ltr.svg'); /* orientation=rt */
+background-image: url('../images/gatein_logo.svg'); /* orientation=lt */
 line-height: 1em;
 background-repeat: no-repeat;
 background-size: auto 2.5em;
@@ -12,7 +13,8 @@ height: 2.5em;
 width: 10em;
 background-position: 1em 0.8em;
 padding: 0.8em 0 0.8em 1em;
-float: left;
+float: right; /* orientation=rt */
+float: left; /* orientation=lt */
 cursor: pointer;
 }
 
@@ -25,12 +27,14 @@ height: 2.5em;
 width: 2.5em;
 background-position: center;
 padding: 0.8em 1em 0.8em 1em;
-float: right;
+float: left; /* orientation=rt */
+float: right; /* orientation=lt */
 display: inline;
 }
 
 .gtnResponsiveHeaderPortlet .topmenu>li {
-background: url("../images/bullet-separator.png") no-repeat left center;
+background: url("../images/bullet-separator.png") no-repeat right center; /* orientation=rt */
+background: url("../images/bullet-separator.png") no-repeat left center; /* orientation=lt */
 padding: 1em;
 white-space: nowrap;
 }
@@ -45,14 +49,17 @@ margin: 1em;
 
 .gtnResponsiveHeaderPortlet .icon {
 	display: inline;
-	float: left;
+	float: right; /* orientation=rt */
+	float: left; /* orientation=lt */
 }
 
 .gtnResponsiveHeaderPortlet .options {
         font-size: 95%;
 	display:inline;
-	float: right;
-	text-align: right;
+	float: left; /* orientation=rt */
+	float: right; /* orientation=lt */
+	text-align: left; /* orientation=rt */
+	text-align: right; /* orientation=lt */
 }
 
 .gtnResponsiveHeaderPortlet .options>ol>li {
@@ -81,7 +88,8 @@ margin: 1em;
 
 .gtnResponsiveHeaderPortlet .collapseButton {
 	display: inline;
-	float: right;
+	float: left; /* orientation=rt */
+	float: right; /* orientation=lt */
 }
 
 .gtnResponsiveHeaderPortlet .collapsibleRow.expanded>.collapseButton{

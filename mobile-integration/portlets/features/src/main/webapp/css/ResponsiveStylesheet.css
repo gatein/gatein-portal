@@ -1,6 +1,7 @@
 .gtnResponsiveFeaturesPortlet {
-text-align: left;
-padding: 1em;
+    text-align: right; /* orientation=rt */
+    text-align: left; /* orientation=lt */
+    padding: 1em;
 }
 
 .gtnResponsiveFeaturesPortlet h1 {
@@ -25,7 +26,8 @@ color: #666;
 
 .gtnResponsiveFeaturesPortlet .feature {
     width: 31%;
-    float: left;
+    float: right; /* orientation=rt */
+    float: left; /* orientation=lt */
     padding-left: 1%;
     padding-right: 1%;
 }
@@ -37,7 +39,8 @@ color: #666;
 }
 
 .gtnResponsiveFeaturesPortlet .footer {
-    text-align: right;
+    text-align: left; /* orientation=rt */
+    text-align: right; /* orientation=lt */
     clear: both;
     padding-top: 1em;
 }
@@ -63,7 +66,8 @@ color: #666;
 }
 
 .gtnResponsiveFeaturesPortlet .feature img {
-float:left;
+    float:right; /* orientation=rt */
+float:left; /* orientation=lt */
 width: 40%;
 }
 

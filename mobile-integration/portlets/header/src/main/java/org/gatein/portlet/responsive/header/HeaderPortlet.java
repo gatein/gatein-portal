@@ -41,6 +41,8 @@ public class HeaderPortlet extends GenericPortlet {
 
     HeaderBean headerBean;
 
+    private static String META_VIEWPORT_CONTENT_PREFERENCE_NAME = "meta.viewport.content";
+
     public HeaderPortlet() {
         headerBean = new HeaderBean();
     }
@@ -54,10 +56,12 @@ public class HeaderPortlet extends GenericPortlet {
 
     @Override
     public void doHeaders(RenderRequest request, RenderResponse response) {
-        Element viewportMeta = response.createElement("meta");
-        viewportMeta.setAttribute("name", "viewport");
-        viewportMeta.setAttribute("content", "initial-scale=1.0");
-
-        response.addProperty(MimeResponse.MARKUP_HEAD_ELEMENT, viewportMeta);
+        String viewportContent = request.getPreferences().getValue(META_VIEWPORT_CONTENT_PREFERENCE_NAME, null);
+        if (viewportContent != null) {
+            Element viewportMeta = response.createElement("meta");
+            viewportMeta.setAttribute("name", "viewport");
+            viewportMeta.setAttribute("content", viewportContent);
+            response.addProperty(MimeResponse.MARKUP_HEAD_ELEMENT, viewportMeta);
+        }
     }
 }

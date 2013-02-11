@@ -20,7 +20,7 @@
       <c:forEach var="alternativeSites" items="${alternativeSites}">
         <li class="alternativeSite">
           <%-- TODO: should the replacement function go in the bean instead? The beans currently don't have access to the portlet's resource bundle ... --%>
-          <c:set var="alternativeSiteTitle" value="${fn:replace(resourceBundle.getString('alterntaiveSiteTitle'), '{siteName}', alternativeSites.key)}"/>
+          <c:set var="alternativeSiteTitle" value="${fn:replace(resourceBundle.getString('alternativeSiteTitle'), '{siteName}', alternativeSites.key)}"/>
           <a href="${alternativeSites.value}">${alternativeSiteTitle}</a>
         </li>
       </c:forEach>
@@ -36,4 +36,5 @@
   </div>
   </div>
   <div class="clear"/>
+</div>
 </div>

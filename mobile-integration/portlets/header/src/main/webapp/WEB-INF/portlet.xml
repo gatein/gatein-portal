@@ -21,5 +21,19 @@
          <short-title>Header Portlet</short-title>
          <keywords>System</keywords>
       </portlet-info>
+      <portlet-preferences>
+        <preference>
+          <name>meta.viewport.content</name>
+          <value>initial-scale=1.0</value>
+        </preference>
+        <preference>
+          <name>enable.dashboard.link</name>
+          <value>false</value>
+        </preference>
+        <preference>
+          <name>enable.grouppages.link</name>
+          <value>false</value>
+        </preference>
+      </portlet-preferences>
    </portlet>
 </portlet-app>
