@@ -28,6 +28,7 @@ import org.gatein.api.Portal;
 import org.gatein.api.page.Page;
 import org.gatein.api.page.PageId;
 import org.gatein.api.page.PageQuery;
+import org.gatein.api.security.Permission;
 import org.gatein.api.site.SiteId;
 import org.gatein.management.api.PathAddress;
 import org.gatein.management.api.annotations.Managed;
@@ -40,6 +41,7 @@ import org.gatein.management.api.model.ModelList;
 import org.gatein.management.api.model.ModelObject;
 import org.gatein.management.api.model.ModelProvider;
 import org.gatein.management.api.model.ModelReference;
+import org.gatein.management.api.model.ModelString;
 import org.gatein.management.api.operation.OperationNames;
 
 import java.util.List;
@@ -55,20 +57,21 @@ public class PageManagementResource {
     private final Portal portal;
     private final ModelProvider modelProvider;
     private final SiteId siteId;
+    private final PageQuery pagesQuery;
 
     public PageManagementResource(Portal portal, ModelProvider modelProvider, SiteId siteId) {
         this.portal = portal;
         this.modelProvider = modelProvider;
         this.siteId = siteId;
+        this.pagesQuery = new PageQuery.Builder().withSiteId(siteId).build();
     }
 
     @Managed(description = "Retrieves all pages for given site")
     public ModelList getPages(@ManagedContext PathAddress address) {
-        // Populate model
-        ModelList list = modelProvider.newModel(ModelList.class);
-        populateModel(portal.findPages(new PageQuery.Builder().withSiteId(siteId).build()), list, address);
+        List<Page> pages = portal.findPages(pagesQuery);
 
-        return list;
+        // Populate model
+        return populateModel(pages, modelProvider.newModel(ModelList.class), address);
     }
 
     @Managed("{page-name}")
@@ -80,10 +83,7 @@ public class PageManagementResource {
         }
 
         // Populate model
-        ModelObject model = modelProvider.newModel(ModelObject.class);
-        populateModel(page, model);
-
-        return model;
+        return populateModel(page, modelProvider.newModel(ModelObject.class));
     }
 
     @Managed("{page-name}")
@@ -103,8 +103,9 @@ public class PageManagementResource {
     @Managed("{page-name}")
     @ManagedRole("administrators")
     @ManagedOperation(name = OperationNames.ADD_RESOURCE, description = "Adds the given page to the portal")
-    public ModelObject addPage(@MappedPath("page-name") String name, @MappedAttribute("displayName") String displayName) {
+    public ModelObject addPage(@MappedPath("page-name") String name) {
 
+        // Create the page
         PageId pageId = new PageId(siteId, name);
         Page page;
         try {
@@ -114,23 +115,64 @@ public class PageManagementResource {
         } catch (EntityNotFoundException e) {
             throw alreadyExists("Cannot add page", siteId);
         }
-        page.setDisplayName(displayName);
+
+        // Save the page
         portal.savePage(page);
 
-        ModelObject model = modelProvider.newModel(ModelObject.class);
-        populateModel(page, model);
-
-        return model;
+        // Retrieve page from api and populate model
+        return populateModel(portal.getPage(pageId), modelProvider.newModel(ModelObject.class));
     }
 
     @Managed("{page-name}")
     @ManagedRole("administrators")
     @ManagedOperation(name = OperationNames.UPDATE_RESOURCE, description = "Updates a page of the portal")
-    public ModelObject addPage(@MappedPath("page-name") String name, @ManagedContext ModelObject pageModel) {
-        throw new UnsupportedOperationException();
+    public ModelObject updatePage(@MappedPath("page-name") String name, @ManagedContext ModelObject pageModel) {
+        // Retrieve page from api, ensuring it exists
+        PageId pageId = new PageId(siteId, name);
+        Page page = portal.getPage(pageId);
+        if (page == null) {
+            throw notFound("Could not update page", pageId);
+        }
+        boolean changed = false;
+
+        // Update displayName
+        if (pageModel.has("displayName")) {
+            ModelString displayNameModel = get(pageModel, ModelString.class, "displayName");
+            page.setDisplayName(displayNameModel.getValue());
+            changed = true;
+        }
+
+        // Update description
+        if (pageModel.has("description")) {
+            ModelString descModel = get(pageModel, ModelString.class, "description");
+            page.setDescription(descModel.getValue());
+            changed = true;
+        }
+
+        // Update access-permissions
+        if (pageModel.has("access-permissions")) {
+            Permission permission = getPermission(pageModel, false, "access-permissions");
+            page.setAccessPermission(permission);
+            changed = true;
+        }
+
+        // Update edit-permissions
+        if (pageModel.has("edit-permissions")) {
+            Permission permission = getPermission(pageModel, true, "access-permissions");
+            page.setEditPermission(permission);
+            changed = true;
+        }
+
+        // Save changes
+        if (changed) {
+            portal.savePage(page);
+        }
+
+        // Retrieve page from api and populate model
+        return populateModel(portal.getPage(pageId), modelProvider.newModel(ModelObject.class));
     }
 
-    private void populateModel(List<Page> pages, ModelList list, PathAddress address) {
+    private ModelList populateModel(List<Page> pages, ModelList list, PathAddress address) {
         for (Page page : pages) {
             if (Utils.hasPermission(page.getAccessPermission())) {
                 ModelReference pageRef = list.add().asValue(ModelReference.class);
@@ -140,12 +182,17 @@ public class PageManagementResource {
                 pageRef.set(address.append(page.getName()));
             }
         }
+
+        return list;
     }
 
-    private void populateModel(Page page, ModelObject model) {
+    private ModelObject populateModel(Page page, ModelObject model) {
         model.set("name", page.getName());
         model.set("displayName", page.getDisplayName());
+        model.set("description", page.getDescription());
         populate("access-permissions", page.getAccessPermission(), model);
         populate("edit-permissions", page.getEditPermission(), model);
+
+        return model;
     }
 }
