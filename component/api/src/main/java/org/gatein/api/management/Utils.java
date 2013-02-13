@@ -28,7 +28,6 @@ import org.gatein.api.PortalRequest;
 import org.gatein.api.common.i18n.Localized;
 import org.gatein.api.common.i18n.LocalizedString;
 import org.gatein.api.internal.StringJoiner;
-import org.gatein.api.navigation.Navigation;
 import org.gatein.api.navigation.NodePath;
 import org.gatein.api.page.Page;
 import org.gatein.api.page.PageId;
@@ -40,6 +39,7 @@ import org.gatein.api.site.SiteId;
 import org.gatein.management.api.exceptions.InvalidDataException;
 import org.gatein.management.api.exceptions.NotAuthorizedException;
 import org.gatein.management.api.exceptions.ResourceExistsException;
+import org.gatein.management.api.exceptions.ResourceNotFoundException;
 import org.gatein.management.api.model.Model;
 import org.gatein.management.api.model.ModelBoolean;
 import org.gatein.management.api.model.ModelList;
@@ -284,15 +284,15 @@ class Utils {
         return new ResourceExistsException(message + ". Node " + nodePath + " already exists for site " + id);
     }
 
-    public static ResourceExistsException notFound(String message, SiteId id) {
-        return new ResourceExistsException(message + ". Site " + id + " does not exist.");
+    public static ResourceNotFoundException notFound(String message, SiteId id) {
+        return new ResourceNotFoundException(message + ". Site " + id + " does not exist.");
     }
 
-    public static ResourceExistsException notFound(String message, PageId id) {
-        return new ResourceExistsException(message + ". Page " + id.getPageName() + " does not exist for site " + id.getSiteId());
+    public static ResourceNotFoundException notFound(String message, PageId id) {
+        return new ResourceNotFoundException(message + ". Page " + id.getPageName() + " does not exist for site " + id.getSiteId());
     }
 
-    public static ResourceExistsException notFound(String message, SiteId id, NodePath nodePath) {
-        return new ResourceExistsException(message + ". Node " + nodePath + " does not exist for site " + id);
+    public static ResourceNotFoundException notFound(String message, SiteId id, NodePath nodePath) {
+        return new ResourceNotFoundException(message + ". Node " + nodePath + " does not exist for site " + id);
     }
 }
