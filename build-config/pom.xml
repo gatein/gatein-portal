@@ -30,7 +30,7 @@
     <version>9</version>
   </parent>
 
-  <groupId>org.gatein</groupId>
+  <groupId>org.gatein.portal</groupId>
   <artifactId>gatein-portal-build-config</artifactId>
   <name>GateIn Portal: Build Configuration</name>
   <version>3.5.3.Final-SNAPSHOT</version>
