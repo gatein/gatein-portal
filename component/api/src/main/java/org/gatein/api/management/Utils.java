@@ -94,7 +94,7 @@ class Utils {
         }
         String country = locale.getCountry();
         if (country != null && country.length() > 0) {
-            localeString += "-" + country.toLowerCase();
+            localeString += "-" + country.toUpperCase();
         }
 
         model.set(fieldName, localeString);
@@ -200,7 +200,11 @@ class Utils {
         String string = get(model, ModelString.class, names).getValue();
         if (string != null) {
             try {
-                return LocaleUtils.toLocale(string);
+                char[] lang = string.toCharArray();
+                if (lang.length > 2 && lang[2] == '-') {
+                    lang[2] = '_';
+                }
+                return LocaleUtils.toLocale(new String(lang));
             } catch (IllegalArgumentException e) {
                 throw invalidValue(string, names);
             }
