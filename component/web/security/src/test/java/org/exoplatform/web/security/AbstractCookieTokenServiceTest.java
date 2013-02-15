@@ -21,25 +21,28 @@ package org.exoplatform.web.security;
 import org.exoplatform.component.test.ConfigurationUnit;
 import org.exoplatform.component.test.ConfiguredBy;
 import org.exoplatform.component.test.ContainerScope;
-import org.exoplatform.container.PortalContainer;
 import org.exoplatform.web.security.security.CookieTokenService;
 import org.gatein.wci.security.Credentials;
 
 /**
+ *
  * @author <a href="mailto:haithanh0809@gmail.com">Hai Thanh Nguyen</a>
- * @version $Id$
  *
  */
 
 @ConfiguredBy({ @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/tokenservice-configuration.xml"),
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.test.jcr-configuration.xml"),
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/jcr-configuration.xml") })
-public class TestCookieService extends AbstractTokenServiceTest<CookieTokenService> {
+public abstract class AbstractCookieTokenServiceTest extends AbstractTokenServiceTest<CookieTokenService> {
     protected void setUp() throws Exception {
-        PortalContainer container = getContainer();
-        service = (CookieTokenService) container.getComponentInstanceOfType(CookieTokenService.class);
+        service = createService();
         Thread.sleep(1000); // for enough time initial database
     }
+
+    /**
+     * @return
+     */
+    protected abstract CookieTokenService createService();
 
     @Override
     public void testGetToken() throws Exception {
@@ -54,14 +57,7 @@ public class TestCookieService extends AbstractTokenServiceTest<CookieTokenServi
 
     @Override
     public void testGetAllToken() throws Exception {
-        String token1 = service.createToken(new Credentials("root", "gtn"));
-        String token2 = service.createToken(new Credentials("root1", "gtn1"));
-        String[] tokens = service.getAllTokens();
-        assertEquals(tokens.length, 2);
-        assertSame(token1, tokens[0]);
-        assertSame(token2, tokens[1]);
-        service.deleteToken(token1);
-        service.deleteToken(token2);
+        /* Do nothing there is no CookieTokenService.getAllTokens(); */
     }
 
     @Override
@@ -79,4 +75,18 @@ public class TestCookieService extends AbstractTokenServiceTest<CookieTokenServi
         assertEquals(service.size(), 0);
         service.deleteToken(tokenId);
     }
+
+    @Override
+    public void testCleanExpiredTokens() throws Exception {
+        assertEquals(service.getValidityTime(), 2);
+        service.createToken(new Credentials("user1", "gtn"));
+        Thread.sleep(1000);
+        service.createToken(new Credentials("user2", "gtn"));
+        assertEquals(service.size(), 2);
+        Thread.sleep(1500);
+        service.cleanExpiredTokens();
+        /* Here we should be cca 2.5 seconds after the creation of user1, so it should have been cleaned as expred already */
+        assertEquals(service.size(), 1);
+    }
+
 }

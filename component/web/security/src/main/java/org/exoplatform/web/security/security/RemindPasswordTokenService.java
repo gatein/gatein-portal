@@ -31,12 +31,13 @@ import org.exoplatform.container.xml.InitParams;
  */
 public class RemindPasswordTokenService extends CookieTokenService {
 
-    public RemindPasswordTokenService(InitParams initParams, ChromatticManager chromatticManager) {
+    public RemindPasswordTokenService(InitParams initParams, ChromatticManager chromatticManager)
+            throws TokenServiceInitializationException {
         super(initParams, chromatticManager);
     }
 
     @Override
     protected String nextTokenId() {
-        return "" + random.nextInt();
+        return nextRandom();
     }
 }

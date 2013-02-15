@@ -292,6 +292,12 @@
       <artifactId>picketlink-idm-ldap</artifactId>
     </dependency>
 
+    <!-- GateIn API -->
+    <dependency>
+      <groupId>org.gatein.api</groupId>
+      <artifactId>gatein-api</artifactId>
+    </dependency>
+
     <!-- Gatein common -->
     <dependency>
       <groupId>org.gatein.common</groupId>
@@ -365,6 +371,10 @@
       <groupId>org.gatein.management</groupId>
       <artifactId>gatein-management-rest</artifactId>
     </dependency>
+    <dependency>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-dmr</artifactId>
+    </dependency>
 
     <!-- Staxnav -->
     <dependency>
@@ -431,6 +441,10 @@
     </dependency>
 
     <!-- GateIn -->
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.component.api</artifactId>
+    </dependency>
     <dependency>
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.component.application-registry</artifactId>

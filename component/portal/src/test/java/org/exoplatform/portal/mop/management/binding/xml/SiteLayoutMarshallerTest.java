@@ -49,6 +49,8 @@ import org.exoplatform.portal.pom.data.PortalData;
 import org.exoplatform.portal.pom.spi.portlet.Portlet;
 import org.exoplatform.portal.pom.spi.portlet.Preference;
 
+import static junit.framework.Assert.*;
+
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
@@ -188,7 +190,7 @@ public class SiteLayoutMarshallerTest extends AbstractMarshallerTest {
         PortalConfig expected = new PortalConfig(expectedData);
 
         SiteLayoutMarshaller marshaller = new SiteLayoutMarshaller();
-        marshaller.marshal(expected, baos);
+        marshaller.marshal(expected, baos, false);
 
         // System.out.println(baos.toString());
 

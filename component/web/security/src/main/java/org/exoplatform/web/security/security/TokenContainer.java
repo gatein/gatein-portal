@@ -18,10 +18,11 @@
  */
 package org.exoplatform.web.security.security;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import org.chromattic.api.ChromatticSession;
 import org.chromattic.api.annotations.Create;
 import org.chromattic.api.annotations.OneToMany;
 import org.chromattic.api.annotations.PrimaryType;
@@ -39,11 +40,8 @@ public abstract class TokenContainer {
     protected abstract TokenEntry createToken();
 
     @OneToMany
-    protected abstract Map<String, TokenEntry> getTokens();
+    public abstract Map<String, TokenEntry> getTokens();
 
-    public Collection<TokenEntry> getAllTokens() {
-        return getTokens().values();
-    }
 
     public GateInToken getToken(String tokenId) {
         Map<String, TokenEntry> tokens = getTokens();
@@ -63,51 +61,62 @@ public abstract class TokenContainer {
         }
     }
 
-    /**
-     * @deprecated method encodeAndSaveToken should be used instead
-     */
-    public GateInToken saveToken(String tokenId, Credentials credentials, Date expirationTime) {
-        // TODO: Is this method really needed? We should remove it in the future...
+    public void saveToken(ChromatticSession session, String id, String hashedToken, Credentials credentials, Date expirationTime) throws TokenExistsException {
         Map<String, TokenEntry> tokens = getTokens();
-        TokenEntry entry = tokens.get(tokenId);
-        if (entry == null) {
-            entry = createToken();
-            tokens.put(tokenId, entry);
-            entry.setUserName(credentials.getUsername());
-            entry.setPassword(credentials.getPassword());
-        }
-        entry.setExpirationTime(expirationTime);
-        return entry.getToken();
-    }
-
-    public GateInToken encodeAndSaveToken(String tokenId, Credentials credentials, Date expirationTime, AbstractCodec codec) throws TokenExistsException {
-        Map<String, TokenEntry> tokens = getTokens();
-        TokenEntry entry = tokens.get(tokenId);
-        if (entry == null) {
-            entry = createToken();
-            tokens.put(tokenId, entry);
-            entry.setUserName(credentials.getUsername());
-            entry.setPassword(codec.encode(credentials.getPassword()));
-        } else {
+        if (tokens.containsKey(id)) {
             throw new TokenExistsException();
         }
+        TokenEntry entry = createToken();
+        tokens.put(id, entry);
+        entry.setUserName(credentials.getUsername());
+        entry.setPassword(credentials.getPassword());
         entry.setExpirationTime(expirationTime);
-        return entry.getToken();
+
+        HashedToken hashedTokenMixin = session.create(HashedToken.class);
+        session.setEmbedded(entry, HashedToken.class, hashedTokenMixin);
+        hashedTokenMixin.setHashedToken(hashedToken);
     }
 
-    public GateInToken getTokenAndDecode(String tokenId, AbstractCodec codec) {
+    public void cleanExpiredTokens() {
         Map<String, TokenEntry> tokens = getTokens();
-        TokenEntry entry = tokens.get(tokenId);
-        if (entry != null) {
-            GateInToken gateInToken = entry.getToken();
-            Credentials payload = gateInToken.getPayload();
-
-            // Return a cloned GateInToken
-            return new GateInToken(gateInToken.getExpirationTimeMillis(), new Credentials(payload.getUsername(),
-                    codec.decode(payload.getPassword())));
-
+        if (tokens != null) {
+            for (TokenEntry en : tokens.values()) {
+                GateInToken token = en.getToken();
+                if (token.isExpired()) {
+                    en.remove();
+                }
+            }
         }
-        return null;
     }
+
+    /**
+     * Removes all tokens in preGateIn-3.5.1 format, i.e. those ones starting with {@code "rememberme"}.
+     */
+    public void cleanLegacyTokens() {
+        Map<String, TokenEntry> tokens = getTokens();
+        if (tokens != null) {
+            for (Entry<String, TokenEntry> en : tokens.entrySet()) {
+                String token = en.getKey();
+                if (token.startsWith("rememberme")) {
+                    en.getValue().remove();
+                }
+            }
+        }
+    }
+
+    /**
+     * @return
+     */
+    public int size() {
+        Map<String, TokenEntry> tokens = getTokens();
+        return tokens != null ? tokens.size() : 0;
+    }
+
+    public void removeAll() {
+        for (TokenEntry en : getTokens().values()) {
+            en.remove();
+        }
+    }
+
 
 }

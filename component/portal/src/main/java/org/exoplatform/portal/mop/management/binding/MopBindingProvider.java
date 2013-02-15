@@ -32,6 +32,7 @@ import org.exoplatform.portal.config.model.PortalConfig;
 import org.exoplatform.portal.mop.management.binding.xml.NavigationMarshaller;
 import org.exoplatform.portal.mop.management.binding.xml.PageMarshaller;
 import org.exoplatform.portal.mop.management.binding.xml.SiteLayoutMarshaller;
+import org.exoplatform.portal.pom.data.PortalData;
 import org.gatein.management.api.ContentType;
 import org.gatein.management.api.binding.BindingException;
 import org.gatein.management.api.binding.BindingProvider;
@@ -81,12 +82,12 @@ public class MopBindingProvider implements BindingProvider {
 
         private static Marshaller<Page> page_marshaller = new Marshaller<Page>() {
             @Override
-            public void marshal(Page page, OutputStream outputStream) throws BindingException {
+            public void marshal(Page page, OutputStream outputStream, boolean pretty) throws BindingException {
                 Page.PageSet pages = new Page.PageSet();
                 pages.setPages(new ArrayList<Page>(1));
                 pages.getPages().add(page);
 
-                XmlMarshallers.pages_marshaller.marshal(pages, outputStream);
+                XmlMarshallers.pages_marshaller.marshal(pages, outputStream, pretty);
             }
 
             @Override

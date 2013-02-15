@@ -30,6 +30,7 @@
     <type>org.exoplatform.commons.chromattic.ChromatticManager</type>
   </component>
 
+  <!-- Default CookieTokenService with salted hashing -->
   <component>
     <key>org.exoplatform.web.security.security.CookieTokenService</key>
     <type>org.exoplatform.web.security.security.CookieTokenService</type>
@@ -44,6 +45,26 @@
     </init-params>
   </component>
 
+  <!-- CookieTokenService storing plain text tokens -->
+  <component>
+    <key>org.exoplatform.web.security.security.PlainCookieTokenService</key>
+    <type>org.exoplatform.web.security.security.CookieTokenService</type>
+    <init-params>
+      <values-param>
+        <name>service.configuration</name>
+        <value>jcr-token</value>
+        <value>2</value>
+        <value>SECOND</value>
+        <value>autologin</value>
+      </values-param>
+      <object-param>
+        <name>hash.service</name>
+        <description>description</description>
+        <object type="org.exoplatform.web.security.hash.NoSaltedHashService" />
+      </object-param>
+    </init-params>
+  </component>
+
   <component>
     <key>org.exoplatform.web.security.SimpleGeneratorCookieTokenService</key>
     <type>org.exoplatform.web.security.SimpleGeneratorCookieTokenService</type>
@@ -51,8 +72,8 @@
       <values-param>
         <name>service.configuration</name>
         <value>jcr-token</value>
-        <value>2</value>
-        <value>SECOND</value>
+        <value>24</value>
+        <value>HOUR</value>
         <value>autologin</value>
       </values-param>
     </init-params>
@@ -91,6 +112,7 @@
           <name>entities</name>
           <value>org.exoplatform.web.security.security.TokenContainer</value>
           <value>org.exoplatform.web.security.security.TokenEntry</value>
+          <value>org.exoplatform.web.security.security.HashedToken</value>
         </values-param>
       </init-params>
     </component-plugin>
@@ -115,6 +137,7 @@
           <name>entities</name>
           <value>org.exoplatform.web.security.security.TokenContainer</value>
           <value>org.exoplatform.web.security.security.TokenEntry</value>
+          <value>org.exoplatform.web.security.security.HashedToken</value>
         </values-param>
       </init-params>
     </component-plugin>

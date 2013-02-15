@@ -1,16 +1,16 @@
 /**
  * Copyright (C) 2009 eXo Platform SAS.
- * 
+ *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation; either version 2.1 of
  * the License, or (at your option) any later version.
- * 
+ *
  * This software is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this software; if not, write to the Free
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
@@ -60,7 +60,7 @@
 	float: left; /* orientation=lt */
 	float: right; /* orientation=rt */
 	background: url('background/TabSelector.gif') no-repeat left -91px;
-	height: 29px;	
+	height: 29px;
 	width: 2px;
 	line-height: 29px;
 	margin-top: 2px;
@@ -95,6 +95,16 @@
 	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/IconEditPermission-rt.gif) no-repeat right; /* orientation=rt */
 }
 
+.UITabSelector .FlatTabStyle .PortalPermissionSelector24x24Icon {
+	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/IconAccessPermission.gif) no-repeat left; /* orientation=lt */
+	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/IconAccessPermission-rt.gif) no-repeat right; /* orientation=rt */
+}
+
+.UITabSelector .FlatTabStyle .PagePermissionSelector24x24Icon {
+	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/IconAccessPermission.gif) no-repeat left; /* orientation=lt */
+	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/IconAccessPermission-rt.gif) no-repeat right; /* orientation=rt */
+}
+
 .UITabSelector .FlatTabStyle .UIListPermissionSelector24x24Icon {
 	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/IconAccessPermission.gif) no-repeat left; /* orientation=lt */
 	background: url(/eXoResources/skin/DefaultSkin/skinIcons/24x24/icons/IconAccessPermission-rt.gif) no-repeat right; /* orientation=rt */
@@ -106,11 +116,11 @@
 	line-height: 28px;
 	margin: 0px;
 	font-weight: bold;
-	color: gray; 
+	color: gray;
 }
 
 .UITabSelector .FlatTabStyle	a.Title:hover {
-	color: #058ee6; 
+	color: #058ee6;
 }
 
 /*

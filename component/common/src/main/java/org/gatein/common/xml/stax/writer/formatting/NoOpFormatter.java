@@ -25,12 +25,16 @@ package org.gatein.common.xml.stax.writer.formatting;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-
 /**
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
 public class NoOpFormatter implements XmlStreamingFormatter {
+    public static XmlStreamingFormatter INSTANCE = new NoOpFormatter();
+
+    private NoOpFormatter() {
+    }
+
     @Override
     public void before(XMLStreamWriter writer, int event) throws XMLStreamException {
         // No-op

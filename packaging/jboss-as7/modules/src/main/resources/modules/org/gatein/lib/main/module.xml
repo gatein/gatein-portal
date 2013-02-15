@@ -99,5 +99,6 @@
     </module>
 
     <module name="org.jboss.as.web"/>
+    <module name="org.jboss.dmr"/>
   </dependencies>
 </module>

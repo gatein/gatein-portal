@@ -234,7 +234,7 @@
                 <name>createEntryAttributeValues</name>
                 <value>objectClass=top</value>
                 <value>objectClass=inetOrgPerson</value>
-                <value>sn=</value>
+                <value>sn= </value>
                 <value>userAccountControl=514</value>
               </option>
               <option>

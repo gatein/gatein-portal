@@ -26,13 +26,13 @@ import org.exoplatform.portal.mop.management.binding.MopBindingProvider;
 import org.exoplatform.portal.mop.management.operations.MopImportResource;
 import org.exoplatform.portal.mop.management.operations.MopReadResource;
 import org.exoplatform.portal.mop.management.operations.navigation.NavigationExportResource;
-import org.exoplatform.portal.mop.management.operations.navigation.NavigationReadConfigAsXml;
+import org.exoplatform.portal.mop.management.operations.navigation.NavigationReadConfig;
 import org.exoplatform.portal.mop.management.operations.navigation.NavigationReadResource;
 import org.exoplatform.portal.mop.management.operations.page.PageExportResource;
-import org.exoplatform.portal.mop.management.operations.page.PageReadConfigAsXml;
+import org.exoplatform.portal.mop.management.operations.page.PageReadConfig;
 import org.exoplatform.portal.mop.management.operations.page.PageReadResource;
 import org.exoplatform.portal.mop.management.operations.site.SiteLayoutExportResource;
-import org.exoplatform.portal.mop.management.operations.site.SiteLayoutReadConfigAsXml;
+import org.exoplatform.portal.mop.management.operations.site.SiteLayoutReadConfig;
 import org.exoplatform.portal.mop.management.operations.site.SiteLayoutReadResource;
 import org.exoplatform.portal.mop.management.operations.site.SiteReadResource;
 import org.exoplatform.portal.mop.management.operations.site.SiteTypeReadResource;
@@ -89,7 +89,7 @@ public class MopManagementExtension implements ManagementExtension {
                 description("Management resource responsible for handling management operations for a site's layout."));
         siteLayout.registerOperationHandler(OperationNames.READ_RESOURCE, new SiteLayoutReadResource(),
                 description("The site layout resource."));
-        siteLayout.registerOperationHandler(OperationNames.READ_CONFIG_AS_XML, new SiteLayoutReadConfigAsXml(),
+        siteLayout.registerOperationHandler(OperationNames.READ_CONFIG, new SiteLayoutReadConfig(),
                 description("Reads site layout data for a specific site as configuration xml."));
         siteLayout.registerOperationHandler(OperationNames.EXPORT_RESOURCE, new SiteLayoutExportResource(),
                 description("Exports site layout configuration xml as a zip file."));
@@ -103,7 +103,7 @@ public class MopManagementExtension implements ManagementExtension {
         // Pages management operations
         pages.registerOperationHandler(OperationNames.READ_RESOURCE, new PageReadResource(),
                 description("Lists available pages at a specified address."), true);
-        pages.registerOperationHandler(OperationNames.READ_CONFIG_AS_XML, new PageReadConfigAsXml(),
+        pages.registerOperationHandler(OperationNames.READ_CONFIG, new PageReadConfig(),
                 description("Reads pages as configuration xml at a specified address."), true);
         pages.registerOperationHandler(OperationNames.EXPORT_RESOURCE, new PageExportResource(),
                 description("Exports pages configuration xml as a zip file."), true);
@@ -120,7 +120,7 @@ public class MopManagementExtension implements ManagementExtension {
         // Navigation management operations
         navigation.registerOperationHandler(OperationNames.READ_RESOURCE, new NavigationReadResource(),
                 description("Available navigation nodes at the specified address."), true);
-        navigation.registerOperationHandler(OperationNames.READ_CONFIG_AS_XML, new NavigationReadConfigAsXml(),
+        navigation.registerOperationHandler(OperationNames.READ_CONFIG, new NavigationReadConfig(),
                 description("Reads navigation as configuration xml at a specified address."), true);
         navigation.registerOperationHandler(OperationNames.EXPORT_RESOURCE, new NavigationExportResource(),
                 description("Exports navigation configuration xml as a zip file."), true);

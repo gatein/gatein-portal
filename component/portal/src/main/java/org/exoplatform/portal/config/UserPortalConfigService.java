@@ -517,6 +517,15 @@ public class UserPortalConfigService implements Startable {
         return newPortalConfigListener_.getDefaultPortal();
     }
 
+    /**
+     * Returns the default portal template to be used when creating a site
+     *
+     * @return the default portal template name
+     */
+    public String getDefaultPortalTemplate() {
+        return newPortalConfigListener_.getDefaultPortalTemplate();
+    }
+
     public Set<String> getPortalTemplates() {
         return newPortalConfigListener_.getTemplateConfigs(PortalConfig.PORTAL_TYPE);
     }

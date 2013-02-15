@@ -86,7 +86,7 @@ public class FileDownloadServlet extends HttpServlet {
                             ContentType.ZIP);
                     ManagedResponse response = controller.execute(request);
                     if (response.getOutcome().isSuccess()) {
-                        response.writeResult(os);
+                        response.writeResult(os, true);
                     } else {
                         throw new Exception(response.getOutcome().getFailureDescription());
                     }
