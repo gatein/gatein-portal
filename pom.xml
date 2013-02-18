@@ -1323,7 +1323,7 @@ memory option properties. This should be removed when we can just set the compil
           </configuration>
           <dependencies>
             <dependency>
-              <groupId>org.gatein</groupId>
+              <groupId>org.gatein.portal</groupId>
               <artifactId>gatein-portal-build-config</artifactId>
               <version>${project.version}</version>
             </dependency>
