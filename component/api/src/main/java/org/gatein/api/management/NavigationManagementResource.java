@@ -143,7 +143,7 @@ public class NavigationManagementResource {
         String name = nodePath.getLastSegment();
 
         if (parent.hasChild(name)) {
-            throw new OperationException(OperationNames.ADD_RESOURCE, "Node already exists for " + nodePath);
+            throw alreadyExists("Cannot add node", navigation.getSiteId(), nodePath);
         }
 
         // Add child and save
@@ -299,16 +299,15 @@ public class NavigationManagementResource {
         }
 
         //TODO: Support adding and not just overwriting. i.e. one locale/value pair is added to rest.
-        // Update displayName(s)
-        if (nodeModel.has("displayName")) {
-            if (nodeModel.has("displayNames")) {
-                throw invalidData("Cannot define both displayName and displayNames");
-            }
-            String displayName = get(nodeModel, ModelString.class, "displayName").getValue();
-            node.setDisplayName(displayName);
-        } else if (nodeModel.has("displayNames")) {
+        if (nodeModel.has("displayNames")) {
             LocalizedString displayName = getDisplayNames(nodeModel);
             node.setDisplayNames(displayName);
+        } else if (nodeModel.has("displayName")) {
+            String displayName = get(nodeModel, ModelString.class, "displayName").getValue();
+            if (displayName == null) {
+                throw invalidValue(null, "displayName");
+            }
+            node.setDisplayName(displayName);
         }
     }
 

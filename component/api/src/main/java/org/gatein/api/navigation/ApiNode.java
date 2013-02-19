@@ -325,6 +325,7 @@ public class ApiNode implements Node {
 
     @Override
     public void setDisplayName(String displayName) {
+        Parameters.requireNonNull(displayName, "displayName");
         setDisplayNames(new LocalizedString(displayName));
     }
 
