@@ -23,7 +23,7 @@
 package org.exoplatform.portal.pom.data;
 
 import java.util.List;
-
+import java.util.ArrayList;
 
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
@@ -71,6 +71,9 @@ public class RedirectData extends ComponentData {
     }
 
     public List<RedirectConditionData> getConditions() {
+        if (conditions == null){
+            conditions = new ArrayList<RedirectConditionData>();
+        }
         return conditions;
     }
 

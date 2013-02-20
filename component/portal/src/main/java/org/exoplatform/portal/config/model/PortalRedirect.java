@@ -64,6 +64,9 @@ public class PortalRedirect extends ModelObject {
     }
 
     public ArrayList<RedirectCondition> getConditions() {
+        if (conditions == null){
+            conditions = new ArrayList<RedirectCondition>();
+        }
         return conditions;
     }
 
@@ -87,16 +90,13 @@ public class PortalRedirect extends ModelObject {
     }
 
     protected ArrayList<RedirectConditionData> buildRedirectConditionData(ArrayList<RedirectCondition> redirectConditions) {
+        ArrayList<RedirectConditionData> redirectConditionsData = new ArrayList<RedirectConditionData>();
         if (redirectConditions != null) {
-            ArrayList<RedirectConditionData> redirectConditionsData = new ArrayList<RedirectConditionData>();
             for (RedirectCondition redirectCondition : redirectConditions) {
                 redirectConditionsData.add(redirectCondition.build());
             }
-
-            return redirectConditionsData;
-        } else {
-            return null;
         }
+        return redirectConditionsData;
     }
 
     protected RedirectMappingsData buildRedirectMappingsData(RedirectMappings mappings) {
