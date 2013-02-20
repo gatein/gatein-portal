@@ -245,8 +245,9 @@ public class GroupDAOImpl extends AbstractDAOImpl implements GroupHandler {
         MembershipDAOImpl mmm = (MembershipDAOImpl) orgService.getMembershipHandler();
 
         for (org.picketlink.idm.api.Role role : allRoles) {
-            if (mmm.isCreateMembership(role.getRoleType().getName())) {
-                exoGroups.add(convertGroup(role.getGroup()));
+            Group exoGroup = convertGroup(role.getGroup());
+            if (mmm.isCreateMembership(role.getRoleType().getName(), exoGroup.getId())) {
+                exoGroups.add(exoGroup);
             }
         }
 

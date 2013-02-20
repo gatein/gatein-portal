@@ -28,11 +28,11 @@ import org.gatein.wci.security.Credentials;
 /**
  * Created by The eXo Platform SAS Author : liem.nguyen ncliam@gmail.com Jun 5, 2009
  */
-public class TransientTokenService extends AbstractTokenService<GateInToken, String> {
+public class TransientTokenService extends PlainTokenService<GateInToken, String> {
 
     protected final ConcurrentHashMap<String, GateInToken> tokens = new ConcurrentHashMap<String, GateInToken>();
 
-    public TransientTokenService(InitParams initParams) {
+    public TransientTokenService(InitParams initParams) throws TokenServiceInitializationException {
         super(initParams);
     }
 

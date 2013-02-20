@@ -29,4 +29,9 @@ package org.exoplatform.web.security.security;
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class TokenExistsException extends Exception {
+
+    /**
+     *
+     */
+    private static final long serialVersionUID = 5478055118857538487L;
 }

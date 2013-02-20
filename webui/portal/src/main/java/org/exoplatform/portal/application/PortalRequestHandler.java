@@ -162,6 +162,8 @@ public class PortalRequestHandler extends WebRequestHandler {
     @SuppressWarnings("unchecked")
     protected void processRequest(PortalRequestContext context, PortalApplication app) throws Exception {
         WebuiRequestContext.setCurrentInstance(context);
+        PortalRequestImpl.createInstance(context);
+
         UIApplication uiApp = app.getStateManager().restoreUIRootComponent(context);
 
         List<ApplicationLifecycle> lifecycles = app.getApplicationLifecycle();
@@ -213,6 +215,7 @@ public class PortalRequestHandler extends WebRequestHandler {
             } catch (Exception exception) {
                 log.error("Error while ending request on all ApplicationLifecycle", exception);
             }
+            PortalRequestImpl.clearInstance();
             WebuiRequestContext.setCurrentInstance(null);
         }
     }

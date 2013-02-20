@@ -79,6 +79,6 @@ public class SiteLayoutExportTask extends AbstractExportTask implements ExportTa
             throw new IOException("Could not retrieve site " + siteKey, e);
         }
 
-        marshaller.marshal(portalConfig, outputStream);
+        marshaller.marshal(portalConfig, outputStream, true);
     }
 }

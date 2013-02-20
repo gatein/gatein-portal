@@ -1,5 +1,8 @@
 /*
- * Copyright (C) 2009 eXo Platform SAS.
+ * JBoss, Home of Professional Open Source.
+ * Copyright 2012, Red Hat, Inc., and individual contributors
+ * as indicated by the @author tags. See the copyright.txt file in the
+ * distribution for a full listing of individual contributors.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -16,24 +19,22 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.exoplatform.web.security.security;
 
-import org.exoplatform.container.component.BaseComponentPlugin;
+package org.gatein.api.management;
+
+import org.gatein.management.spi.ExtensionContext;
+import org.gatein.management.spi.ManagementExtension;
 
 /**
- * Abstract codec used to encode/decode password stored/loaded on/from token entry
- *
- * @author <a href="mailto:hoang281283@gmail.com">Minh Hoang TO</a> Nov 19, 2010
+ * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  */
-
-public abstract class AbstractCodec extends BaseComponentPlugin {
-
-    public String getName() {
-        return this.getClass().toString();
+public class GateInApiManagementExtension implements ManagementExtension {
+    @Override
+    public void initialize(ExtensionContext context) {
+        context.registerManagedComponent(GateInApiManagementResource.class);
     }
 
-    public abstract String encode(String plainInput);
-
-    public abstract String decode(String encodedInput);
-
+    @Override
+    public void destroy() {
+    }
 }

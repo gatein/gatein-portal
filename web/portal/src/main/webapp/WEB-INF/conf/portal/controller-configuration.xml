@@ -70,6 +70,11 @@
         <set-method>addPlugin</set-method>
         <type>org.exoplatform.portal.url.component.ComponentURLFactoryPlugin</type>
       </component-plugin>
+      <component-plugin>
+        <name>navigation.urlfactory.plugin</name>
+        <set-method>addPlugin</set-method>
+        <type>org.exoplatform.web.url.simple.SimpleURLFactoryPlugin</type>
+      </component-plugin>
     </component-plugins>
   </component>
 

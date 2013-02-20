@@ -64,14 +64,14 @@ import org.gatein.mop.api.workspace.Workspace;
  * @author <a href="mailto:nscavell@redhat.com">Nick Scavelli</a>
  * @version $Revision$
  */
-public class MopImportResource implements OperationHandler {
+public class MopImportResource extends SecureOperationHandler implements OperationHandler {
     private static final Logger log = LoggerFactory.getLogger(MopImportResource.class);
 
     // TODO: Would like to see the step operations be handled by mgmt core.
 
     // TODO: Clean this up when we have time
     @Override
-    public void execute(final OperationContext operationContext, ResultHandler resultHandler) throws ResourceNotFoundException,
+    public void doExecute(final OperationContext operationContext, ResultHandler resultHandler) throws ResourceNotFoundException,
             OperationException {
         final String operationName = operationContext.getOperationName();
 

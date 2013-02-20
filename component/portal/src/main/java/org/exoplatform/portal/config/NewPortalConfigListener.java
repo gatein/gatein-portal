@@ -97,6 +97,9 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
     private boolean defaultPortalSpecified = false;
 
     /** . */
+    private String defaultPortalTemplate;
+
+    /** . */
     private boolean isUseTryCatch;
 
     /**
@@ -143,6 +146,12 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
             defaultPortal = "classic";
         } else {
             defaultPortalSpecified = true;
+        }
+
+        // I guess we'll use the term 'portal' to mean site as to be consistent with defaultPortal
+        valueParam = params.getValueParam("default.portal.template");
+        if (valueParam != null) {
+            defaultPortalTemplate = valueParam.getValue().trim();
         }
 
         configs = params.getObjectParamValues(NewPortalConfig.class);
@@ -303,6 +312,10 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
         return defaultPortal;
     }
 
+    String getDefaultPortalTemplate() {
+        return defaultPortalTemplate;
+    }
+
     /**
      * Returns a specified new portal config. The returned object can be safely modified by as it is a copy of the original
      * object.
@@ -332,6 +345,10 @@ public class NewPortalConfigListener extends BaseComponentPlugin {
         // doesn't set it, it wont override the parent's set value.
         if (other.defaultPortalSpecified) {
             this.defaultPortal = other.defaultPortal;
+        }
+
+        if (other.defaultPortalTemplate != null && other.defaultPortalTemplate.length() > 0) {
+            this.defaultPortalTemplate = other.defaultPortalTemplate;
         }
 
         if (configs == null) {

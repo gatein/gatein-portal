@@ -35,6 +35,7 @@
     <module name="javax.xml.ws.api"/>
     <module name="javax.jcr.api"/>
     <module name="javax.wsdl4j.api"/>
+    <module name="javax.mail.api"/>
     <module name="org.slf4j"/>
     <module name="org.gatein.pc"/>
     <module name="org.gatein.common"/>

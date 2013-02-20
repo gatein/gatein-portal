@@ -25,7 +25,7 @@ package org.exoplatform.portal.mop.management.binding.xml;
 import static org.gatein.common.xml.stax.navigator.Exceptions.*;
 import static org.gatein.common.xml.stax.navigator.StaxNavUtils.createNavigator;
 import static org.gatein.common.xml.stax.navigator.StaxNavUtils.parseRequiredContent;
-import static org.gatein.common.xml.stax.writer.StaxWriterUtils.createWriter;
+import static org.gatein.common.xml.stax.writer.StaxWriterUtils.buildDefaultWriter;
 import static org.gatein.common.xml.stax.writer.StaxWriterUtils.writeOptionalElement;
 
 import java.io.InputStream;
@@ -46,6 +46,7 @@ import org.exoplatform.portal.config.model.PageNode;
 import org.exoplatform.portal.mop.Visibility;
 import org.gatein.common.xml.stax.writer.StaxWriter;
 import org.gatein.common.xml.stax.writer.WritableValueTypes;
+import org.gatein.common.xml.stax.writer.builder.StaxWriterBuilder;
 import org.gatein.management.api.binding.BindingException;
 import org.gatein.management.api.binding.Marshaller;
 import org.staxnav.StaxNavException;
@@ -59,9 +60,14 @@ import org.staxnav.ValueType;
 public class NavigationMarshaller implements Marshaller<PageNavigation> {
 
     @Override
-    public void marshal(PageNavigation navigation, OutputStream outputStream) throws BindingException {
+    public void marshal(PageNavigation navigation, OutputStream outputStream, boolean pretty) throws BindingException {
         try {
-            StaxWriter<Element> writer = createWriter(Element.class, outputStream);
+            StaxWriterBuilder builder = buildDefaultWriter(outputStream);
+            if (!pretty) {
+                builder.withFormatting(null);
+            }
+
+            StaxWriter<Element> writer = builder.build(Element.class);
             marshalNavigation(writer, navigation);
         } catch (StaxNavException e) {
             throw new BindingException(e);

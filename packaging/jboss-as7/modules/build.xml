@@ -101,6 +101,7 @@
       <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.common"/>
       <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.component.ext.cache.impl.jboss.v3"/>
       <maven-resource group="org.exoplatform.kernel" artifact="exo.kernel.container"/>
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.api" />
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.application-registry"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.common"/>
       <maven-resource group="org.gatein.portal" artifact="exo.portal.component.identity"/>
@@ -127,6 +128,7 @@
       <maven-resource group="org.exoplatform.ws" artifact="exo.ws.rest.core"/>
       <maven-resource group="org.exoplatform.ws" artifact="exo.ws.rest.ext"/>
       <maven-resource group="com.jhlabs" artifact="filters"/>
+      <maven-resource group="org.gatein.api" artifact="gatein-api" />
       <maven-resource group="org.gatein.management" artifact="gatein-management-api"/>
       <maven-resource group="org.gatein.management" artifact="gatein-management-spi"/>
       <maven-resource group="org.gatein.management" artifact="gatein-management-core"/>

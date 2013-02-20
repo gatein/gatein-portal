@@ -137,15 +137,13 @@ public class StaxWriterUtils {
         writer.writeEndElement();
     }
 
-    private static StaxWriterBuilder buildDefaultWriter() {
+    public static StaxWriterBuilder buildDefaultWriter() {
         return buildWriter().withEncoding("UTF-8").withVersion("1.0")
                 .withPropertyIfSupported("com.ctc.wstx.outputEscapeCr", Boolean.FALSE).withFormatting(createFormatter());
     }
 
-    private static StaxWriterBuilder buildDefaultWriter(OutputStream outputStream) {
-        return buildWriter().withEncoding("UTF-8").withVersion("1.0")
-                .withPropertyIfSupported("com.ctc.wstx.outputEscapeCr", Boolean.FALSE).withFormatting(createFormatter())
-                .withOutputStream(outputStream, "UTF-8");
+    public static StaxWriterBuilder buildDefaultWriter(OutputStream outputStream) {
+        return buildDefaultWriter().withOutputStream(outputStream, "UTF-8");
     }
 
     private static final int DEFAULT_INDENT_SIZE = 3;

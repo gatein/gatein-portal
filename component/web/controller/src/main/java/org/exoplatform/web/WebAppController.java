@@ -263,6 +263,10 @@ public class WebAppController {
         }
     }
 
+    public Router getRouter() {
+        return routerRef.get();
+    }
+
     /**
      * <p>
      * This is the first method - in the GateIn portal - reached by incoming HTTP request, it acts like a servlet service()

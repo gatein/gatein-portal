@@ -29,6 +29,7 @@ import org.exoplatform.container.PortalContainer;
 import org.exoplatform.portal.gadget.core.GadgetToken;
 import org.exoplatform.portal.gadget.core.GadgetTokenInfoService;
 import org.exoplatform.web.security.AbstractTokenServiceTest;
+import org.gatein.wci.security.Credentials;
 
 /**
  * @author <a href="mailto:haithanh0809@gmail.com">Hai Thanh Nguyen</a>
@@ -125,4 +126,37 @@ public class TestGadgetTokenInfoService extends AbstractTokenServiceTest<GadgetT
         assertEquals(token.getTokenSecret(), "tokenSecret0");
         clearAllTokens();
     }
+
+    public void testCleanExpiredTokens() throws Exception {
+        assertEquals(service.getValidityTime(), 2);
+
+        int i = 0;
+        TokenInfo tokenInfo = new TokenInfo("accessToken" + i, "tokenSecret" + i, "sessionHandle" + i, 1);
+        BasicOAuthStoreTokenIndex tokenIndex = new BasicOAuthStoreTokenIndex();
+        tokenIndex.setGadgetUri("http://localhost:9090/gadgets" + i);
+        tokenIndex.setServiceName("gadgets" + i);
+        tokenIndex.setTokenName("gadgetToken" + i);
+        tokenIndex.setUserId("root" + i);
+        service.createToken(tokenIndex, tokenInfo);
+
+        Thread.sleep(1000);
+        i++;
+        tokenInfo = new TokenInfo("accessToken" + i, "tokenSecret" + i, "sessionHandle" + i, 1);
+        tokenIndex = new BasicOAuthStoreTokenIndex();
+        tokenIndex.setGadgetUri("http://localhost:9090/gadgets" + i);
+        tokenIndex.setServiceName("gadgets" + i);
+        tokenIndex.setTokenName("gadgetToken" + i);
+        tokenIndex.setUserId("root" + i);
+        service.createToken(tokenIndex, tokenInfo);
+
+        assertEquals(service.size(), 2);
+        Thread.sleep(1500);
+        service.cleanExpiredTokens();
+        /*
+         * one of the two tokens should have been cleaned at this point, i.e. cca 2.5 seconds after the creation of the first
+         * one
+         */
+        assertEquals(service.size(), 1);
+    }
+
 }

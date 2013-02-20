@@ -63,4 +63,5 @@
   <import>war:/conf/portal/web-configuration.xml</import>
   <import>war:/conf/portal/gadget-configuration.xml</import>
   <import>war:/conf/portal/redirect-configuration.xml</import>
+  <import>war:/conf/api/api-configuration.xml</import>
 </configuration>
