@@ -164,8 +164,8 @@
 	  breakStream : null,
 	  
 	  init : function() {
-		  $(window).resize(this.managerResize);
-		  $(window).scroll(this.onScroll);
+		  window.onresize =  this.managerResize;
+		  window.onscroll =  this.onScroll ;
 	
 		  this.detectBrowser();
 	  },
@@ -313,7 +313,7 @@
 		managerResize : function() {
 		  var browser = eXo.core.Browser;
 		  var jWin = $(window);
-		  if((browser.currheight != jWin.height()) || (browser.currwidth != jWin.width())) {
+		  if(browser.currheight != jWin.height()) {
 		    clearTimeout(browser.breakStream) ;
 		    browser.breakStream = setTimeout(browser.onResize, 100) ;
 		  }

@@ -68,7 +68,7 @@
 	        uiMaskLayer.blockContainer = document
 	            .getElementById("UIPortalApplication");
 	        uiMaskLayer.object = maskWorkpace;
-	        uiMaskLayer.scrollCallback();
+	        uiMaskLayer.setPosition();
 	      } catch (e) {
 	      }
 	    }
