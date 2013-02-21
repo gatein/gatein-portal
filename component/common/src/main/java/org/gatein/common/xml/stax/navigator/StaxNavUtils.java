@@ -32,6 +32,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLInputFactory;
 
 import org.gatein.common.xml.stax.navigator.builder.StaxNavBuilder;
 import org.gatein.common.xml.stax.navigator.builder.StaxNavBuilderImpl;
@@ -158,7 +159,9 @@ public class StaxNavUtils {
     }
 
     private static StaxNavBuilder buildDefaultNavigator() {
-        return new StaxNavBuilderImpl();
+        return new StaxNavBuilderImpl()
+                // Do not support external entities in XML documents.
+                .withProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
     }
 
     private StaxNavUtils() {
