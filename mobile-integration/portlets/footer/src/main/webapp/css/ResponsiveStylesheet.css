@@ -49,6 +49,15 @@
     padding: 1em;
 }
 
+.gtnResponsiveFooterPortlet .collapsibleRow {
+    white-space: nowrap;
+}
+
+.gtnResponsiveFooterPortlet .collapsibleRow.collapsed,
+.gtnResponsiveFooterPortlet .collapsibleRow.expanded {
+    white-space: inherit;
+}
+
 .gtnResponsiveFooterPortlet .collapsibleRow.collapsed .copyright {
     float: none;
     clear: both;

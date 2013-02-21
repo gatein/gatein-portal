@@ -28,11 +28,7 @@
 					}
 					else
                                         {
-						//TODO: do we really need to add this here? Or can we force this to be set originally in the css?
-						var originalWhiteSpace = $(this).css("white-space");
-						$(this).css("white-space", "nowrap");
-						cWidth += $(this).outerWidth();
-						$(this).css("white-space", originalWhiteSpace);
+						cWidth += $(this)[0].scrollWidth; //use scroll width incase the content is rendered outside of the current screen (especially since this should be white-space nowrap)
 					}
 				});
 

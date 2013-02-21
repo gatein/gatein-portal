@@ -87,13 +87,23 @@ margin: 1em;
 }
 
 .gtnResponsiveHeaderPortlet .collapseButton {
-	display: inline;
+	display: none;
 	float: left; /* orientation=rt */
 	float: right; /* orientation=lt */
 }
 
-.gtnResponsiveHeaderPortlet .collapsibleRow.expanded>.collapseButton{
-	display: none;
+.gtnResponsiveHeaderPortlet .collapsibleRow {
+    white-space: nowrap;
+}
+
+.gtnResponsiveHeaderPortlet .collapsibleRow.collapsed,
+.gtnResponsiveHeaderPortlet .collapsibleRow.expanded {
+    white-space: inherit;
+}
+
+
+.gtnResponsiveHeaderPortlet .collapsibleRow.collapsed>.collapseButton {
+        display: inline;
 }
 
 .gtnResponsiveHeaderPortlet .collapsibleRow.collapsed>.collapsibleContent:not(.display){
