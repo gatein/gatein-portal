@@ -54,6 +54,11 @@
       <artifactId>exo.kernel.container</artifactId>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.exoplatform.core</groupId>
+      <artifactId>exo.core.component.security.core</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!-- GWT Dependencies -->
     <dependency>
       <groupId>com.google.gwt</groupId>

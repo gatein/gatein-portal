@@ -45,6 +45,32 @@
     <param-value>50</param-value>
   </context-param>
 
+  <!-- Important to ensure secure access to the gadget -->
+  <filter>
+    <filter-name>IdentityFilter</filter-name>
+    <filter-class>org.gatein.management.gadget.mop.exportimport.server.IdentityFilter</filter-class>
+    <!-- Allows users with the specific role to access the gadget -->
+    <init-param>
+      <param-name>role</param-name>
+      <param-value>administrators</param-value>
+    </init-param>
+    <!-- Uncomment to allow members of the following group access to gadget. -->
+    <!--<init-param>
+      <param-name>group</param-name>
+      <param-value>/platform/administrators</param-value>
+    </init-param>-->
+    <!-- Uncomment to allow a specific user access to gadget. -->
+    <!--<init-param>
+      <param-name>user</param-name>
+      <param-value>root</param-value>
+    </init-param>-->
+  </filter>
+
+  <filter-mapping>
+    <filter-name>IdentityFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
   <!-- GateIn service servlet -->
   <servlet>
     <servlet-name>gtnService</servlet-name>
