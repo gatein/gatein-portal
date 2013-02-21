@@ -26,6 +26,7 @@ import static org.jboss.as.controller.descriptions.ModelDescriptionConstants.OP_
 
 import java.util.List;
 
+import org.gatein.integration.jboss.as7.deployment.GateInWarStructureDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.DeploymentScannerService;
 import org.gatein.integration.jboss.as7.deployment.GateInCleanupDeploymentProcessor;
 import org.gatein.integration.jboss.as7.deployment.GateInDependenciesDeploymentProcessor;
@@ -104,6 +105,8 @@ public class GateInSubsystemAdd extends AbstractBoottimeAddStepHandler {
             protected void execute(DeploymentProcessorTarget processorTarget) {
                 final SharedPortletTldsMetaDataBuilder tldsBuilder = new SharedPortletTldsMetaDataBuilder();
 
+                processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_GATEIN,
+                        new GateInWarStructureDeploymentProcessor());
                 processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_GATEIN,
                         new GateInStructureDeploymentProcessor(config));
                 processorTarget.addDeploymentProcessor(Phase.STRUCTURE, STRUCTURE_WSRP, new WSRPStructureDeploymentProcessor());
