@@ -23,30 +23,45 @@
 package org.gatein.portlet.responsive.navigation;
 
 import java.io.IOException;
-
+import java.util.List;
 import javax.portlet.GenericPortlet;
 import javax.portlet.PortletException;
-import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
+import javax.portlet.PortletRequestDispatcher;
+import org.gatein.api.PortalRequest;
+import org.gatein.api.navigation.Navigation;
+import org.gatein.api.navigation.Node;
+import org.gatein.api.navigation.NodePath;
+import org.gatein.api.navigation.Nodes;
 
 /**
- * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
+ * @author <a href="mailto:vrockai@redhat.com">Viliam Rockai</a>
  * @version $Revision$
  */
 public class NavigationPortlet extends GenericPortlet {
 
-    NavigationBean navigationBean;
-
-    public NavigationPortlet() {
-        this.navigationBean = new NavigationBean();
-    }
+    NavigationNodeBean navigationRootNodeBean;
 
     @Override
     protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
-        request.setAttribute("navigation", navigationBean);
+
+        PortalRequest portalRequest = PortalRequest.getInstance();
+
+        Navigation navigation = portalRequest.getNavigation();
+        Node rootNode = navigation.getRootNode(Nodes.ALL);
+
+        navigationRootNodeBean = new NavigationNodeBean(rootNode);
+
+        /* Setting the 1st node to be active when accesing the root node "/" */
+        List<NavigationNodeBean> rootNodeChildrenList = navigationRootNodeBean.getChildren();
+
+        if (!rootNodeChildrenList.isEmpty() && portalRequest.getNodePath().equals(NodePath.root())){
+            navigationRootNodeBean.setFirstActive();
+        }
+
+        request.setAttribute("navigationRootNode", navigationRootNodeBean);
         PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/navigation.jsp");
         prd.include(request, response);
     }
-
 }

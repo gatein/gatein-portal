@@ -8,7 +8,6 @@
       <version>3.6.0.MO1-SNAPSHOT</version>
    </parent>
 
-
    <groupId>org.gatein.portal</groupId>
    <artifactId>portlet.responsive.navigation</artifactId>
    <packaging>war</packaging>
@@ -39,22 +38,9 @@
       <dependency>
          <groupId>org.gatein.api</groupId>
          <artifactId>gatein-api</artifactId>
-         <version>1.0.0.Alpha01-SNAPSHOT</version>
          <scope>provided</scope>
       </dependency>
 
-      <!-- ExoKernel Integration to retrieve Service -->
-<!--      <dependency>
-        <groupId>org.exoplatform.kernel</groupId>
-        <artifactId>exo.kernel.commons</artifactId>
-        <scope>provided</scope>
-      </dependency>
-
-      <dependency>
-        <groupId>org.exoplatform.kernel</groupId>
-        <artifactId>exo.kernel.component.common</artifactId>
-        <scope>provided</scope>
-      </dependency> -->
    </dependencies>
 
    <repositories>
