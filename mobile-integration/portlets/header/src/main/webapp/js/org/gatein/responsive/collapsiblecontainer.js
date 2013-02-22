@@ -1,68 +1,72 @@
 (function($){
 
 
-	$(document).ready(function()
-			{
-		var collapsibleElements = [];
+    $(document).ready(function() {
 
-		$(".collapsibleRow").each(function(){
+        var collapsibleElements = [];
+        
+        //setup the collapse button
+        $(".collapseButton").each(function(){
 
-			if (!$(this).cWidth) 
-			{
-				var cWidth = 0;
-				$(this).children().each(function() {
+            $(this).click(function(){
+                if ($(this).data("target") && $(this).data("target-class") && $(this).data("action") == "toggleCSS")
+                {
+                    $($(this).data("target")).toggleClass($(this).data("target-class"));
+                }
 
-					if ($(this).hasClass('collapseButton'))
-					{
-						$(this).click(function(){
-							if ($(this).data("target") && $(this).data("target-class") && $(this).data("action") == "toggleCSS")
-							{
-								$($(this).data("target")).toggleClass($(this).data("target-class"));
-							}
-							
-							if ($(this).data("self-class") && $(this).data("action") == "toggleCSS")
-							{
-								$(this).toggleClass($(this).data("self-class"));
-							}
-						});
-					}
-					else
-                                        {
-						cWidth += $(this)[0].scrollWidth; //use scroll width incase the content is rendered outside of the current screen (especially since this should be white-space nowrap)
-					}
-				});
+                if ($(this).data("self-class") && $(this).data("action") == "toggleCSS")
+                {
+                    $(this).toggleClass($(this).data("self-class"));
+                }
+            });
 
-				var object = {"element" : this, "cWidth" : cWidth};
+        });
 
-				collapsibleElements.push(object);
-			}
+        
+        
+        calculateCollapse();
+        $(window).resize(checkCollapse);     
+        $(window).on("orientationchange", calculateCollapse);
 
-		});
 
-		//check the size right now
-		checkSize();
-		//make sure its check whenever the screen is resized
-		$(window).resize(checkSize);
+        function calculateCollapse(){
+            $(".collapsibleRow").each(function(){
+                $(this).toggleClass("collapsed", false);
+                $(this).toggleClass("expanded", false);
+                var collapseWidth = 0;
+                $(this).children().each(function() {
 
-		function checkSize()
-		{
-			for (var i = 0; i < collapsibleElements.length; i++)
-			{
-				var collapsibleElement = collapsibleElements[i]["element"];
-				var cWidth = collapsibleElements[i]["cWidth"];
-				if ($(collapsibleElement).outerWidth() < cWidth)
-				{
-					$(collapsibleElement).toggleClass("collapsed", true);
-					$(collapsibleElement).toggleClass("expanded", false);
-				}
-				else 
-				{
-					$(collapsibleElement).toggleClass("collapsed", false);
-					$(collapsibleElement).toggleClass("expanded", true);
-				}
-			}
-		}
+                    if (!$(this).hasClass('collapseButton'))
+                    {
+                        collapseWidth += $(this)[0].scrollWidth; //use scroll width in case the content is rendered outside of the current screen (especially since this should be white-space nowrap)
+                    }
+                });
 
-			});
+                collapsibleElements.push({"element" : this, "collapseWidth" : collapseWidth});
+
+            });
+            checkCollapse();
+        }
+        
+        
+        function checkCollapse()
+        {
+            for (var i = 0; i < collapsibleElements.length; i++)
+            {
+                var collapsibleElement = collapsibleElements[i]["element"];
+                var collapseWidth = collapsibleElements[i]["collapseWidth"];
+                if ($(collapsibleElement).outerWidth() < collapseWidth)
+                {
+                    $(collapsibleElement).toggleClass("collapsed", true);
+                    $(collapsibleElement).toggleClass("expanded", false);
+                }
+                else 
+                {
+                    $(collapsibleElement).toggleClass("collapsed", false);
+                    $(collapsibleElement).toggleClass("expanded", true);
+                }
+            }
+        }
+    });
 
 })(jQuery);

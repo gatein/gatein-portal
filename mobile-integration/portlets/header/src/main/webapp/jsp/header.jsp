@@ -36,8 +36,8 @@
     <div class="collapsibleRow">
 	<div id="<portlet:namespace/>_logo" class="logo" onclick="window.location = '${homePageLink}';"></div>
 	<div id="<portlet:namespace/>_icon" class="userpreferencebutton collapseButton" data-target="#<portlet:namespace/>_options" data-action="toggleCSS" data-target-class="display" data-self-class="enabled"></div>
-	<div id="<portlet:namespace/>_options" class="options collapsibleContent collapsibleRow">
-		<ol class="topmenu">
+	<div id="<portlet:namespace/>_options" class="options collapsibleContent">
+		<ol class="topmenu collapsibleRow">
 		    <c:choose>
 		    <c:when test="${renderRequest.getRemoteUser() eq null}">
 		     <li class="menuelement">

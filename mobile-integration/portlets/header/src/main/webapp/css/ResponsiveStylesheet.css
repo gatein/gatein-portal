@@ -77,11 +77,11 @@ margin: 1em;
         text-decoration: underline;
 }
 
-.gtnResponsiveHeaderPortlet .options.collapsed {
+.gtnResponsiveHeaderPortlet .options .topmenu.collapsed {
 	width: 100%;
 }
 
-.gtnResponsiveHeaderPortlet .options.collapsed ol li {
+.gtnResponsiveHeaderPortlet .options .topmenu.collapsed ol li {
 	display: block;
 	padding: 0;
 }
@@ -142,7 +142,7 @@ margin: 1em;
 }
 
 
-.gtnResponsiveHeaderPortlet .options.collapsed .submenu
+.gtnResponsiveHeaderPortlet .options .topmenu.collapsed .submenu
 {
 	position: static;
 	width: 100%;
