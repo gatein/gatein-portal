@@ -1,5 +1,10 @@
 (function($){
+    $(".gtnResponsiveNavigationPortlet .topmenu").dropdownmenu();
 
-	$(window).resize(function(){checkGRHSize();});
-
+    $(".gtnResponsiveNavigationPortlet .collapsibleToggle").click( function(){
+        visibleClass = "visible-element";
+        $(this).toggleClass(visibleClass);
+        $(".gtnResponsiveNavigationPortlet .topmenu").toggleClass(visibleClass);
+    });
+    
 })(jQuery);
