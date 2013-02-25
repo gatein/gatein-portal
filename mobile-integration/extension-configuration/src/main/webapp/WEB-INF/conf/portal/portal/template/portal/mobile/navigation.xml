@@ -34,11 +34,11 @@
       <page-reference>portal::@owner@::homepage</page-reference>
     </node>
     <node>
-      <uri>sitemap</uri>
-      <name>sitemap</name>
-      <label>SiteMap</label>
+      <uri>features</uri>
+      <name>features</name>
+      <label>Features</label>
       <visibility>DISPLAYED</visibility>
-      <page-reference>portal::@owner@::sitemap</page-reference>
+      <page-reference>portal::@owner@::features</page-reference>
     </node>
     <node>
       <uri>groupnavigation</uri>

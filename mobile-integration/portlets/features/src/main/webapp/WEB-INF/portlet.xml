@@ -21,5 +21,16 @@
          <short-title>Features Portlet</short-title>
          <keywords>System</keywords>
       </portlet-info>
+      <portlet-preferences>
+        <preference>
+          <name>features.title</name>
+          <value>gateinFeatures</value>
+        </preference>
+        <preference>
+          <name>features.list</name>
+          <value>sso, nui, ps</value>
+        </preference>
+      </portlet-preferences>
    </portlet>
+
 </portlet-app>

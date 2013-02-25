@@ -30,16 +30,42 @@ import javax.portlet.PortletRequestDispatcher;
 import javax.portlet.RenderRequest;
 import javax.portlet.RenderResponse;
 
+import org.gatein.api.PortalRequest;
+import org.gatein.api.navigation.Node;
+import org.gatein.api.navigation.NodePath;
+
 /**
  * @author <a href="mailto:mwringe@redhat.com">Matt Wringe</a>
  * @version $Revision$
  */
 public class FeaturesPortlet extends GenericPortlet {
 
+    public static final String FEATURE_PAGE_ATTRIBUTE = "featureLink";
+
     @Override
     protected void doView(RenderRequest request, RenderResponse response) throws PortletException, IOException {
+        String featureLink = null;
+        if (request.getPreferences().getValue("features.node", null) != null) {
+            String featurePageName = request.getPreferences().getValue("features.node", null);
+            featureLink = generateFeaturePageLink(featurePageName);
+        }
+
+        if (featureLink != null) {
+            request.setAttribute(FEATURE_PAGE_ATTRIBUTE, featureLink);
+        }
+
         PortletRequestDispatcher prd = getPortletContext().getRequestDispatcher("/jsp/features.jsp");
         prd.include(request, response);
+    }
+
+    protected String generateFeaturePageLink(String featurePageName) {
+        if (featurePageName != null) {
+            Node featureNode = PortalRequest.getInstance().getNavigation().getNode(NodePath.fromString(featurePageName));
+            if (featureNode != null) {
+                return featureNode.getURI();
+            }
+        }
+        return null;
     }
 
 }

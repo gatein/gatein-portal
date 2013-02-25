@@ -45,6 +45,16 @@
       <portlet>
         <application-ref>responsive-features-portlet</application-ref>
         <portlet-ref>ResponsiveFeaturesPortlet</portlet-ref>
+        <preferences>
+          <preference>
+            <name>features.title</name>
+            <value>whyUseGatein</value>
+          </preference>
+          <preference>
+            <name>features.node</name>
+            <value>/features</value>
+          </preference>
+        </preferences>
       </portlet>
       <title>Features portlet</title>
       <access-permissions>Everyone</access-permissions>
@@ -102,23 +112,26 @@
     </portlet-application>
   </page>
   <page>
-    <name>sitemap</name>
-    <title>Site Map</title>
-    <access-permissions>Everyone</access-permissions>
-    <edit-permission>*:/platform/administrators</edit-permission>
+    <name>features</name>
+    <title>GateIn Features</title>
+	  <access-permissions>Everyone</access-permissions>
+	  <edit-permission>*:/platform/administrators</edit-permission>
     <portlet-application>
       <portlet>
-        <application-ref>web</application-ref>
-        <portlet-ref>SiteMapPortlet</portlet-ref>
+        <application-ref>responsive-features-portlet</application-ref>
+        <portlet-ref>ResponsiveFeaturesPortlet</portlet-ref>
         <preferences>
           <preference>
-            <name>useAJAX</name>
-            <value>false</value>
-            <read-only>false</read-only>
+            <name>features.title</name>
+            <value>gateinFeatures</value>
+          </preference>
+          <preference>
+            <name>features.list</name>
+            <value>sso, ugm, ps, pb, asd, wsrp</value>
           </preference>
         </preferences>
       </portlet>
-      <title>SiteMap</title>
+      <title>GateIn Features</title>
       <access-permissions>Everyone</access-permissions>
       <show-info-bar>false</show-info-bar>
     </portlet-application>

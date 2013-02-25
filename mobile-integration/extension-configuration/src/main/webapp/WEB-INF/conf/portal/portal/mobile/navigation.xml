@@ -48,25 +48,10 @@
       <page-reference>portal::mobile::homepage</page-reference>
     </node>
     <node>
-      <name>sitemap</name>
-      <label xml:lang="en">SiteMap</label>
-      <label xml:lang="cs">Mapa stránek</label>
-      <label xml:lang="fr">SiteMap</label>
-      <label xml:lang="es">Mapa del Sitio</label>
-      <label xml:lang="de">Seitenübersicht</label>
-      <label xml:lang="it">Mappa del Sito</label>
-      <label xml:lang="nl">Sitemap</label>
-      <label xml:lang="pt-BR">Mapa do Site</label>
-      <label xml:lang="ja">サイトマップ</label>
-      <label xml:lang="ne">साईटम्याप</label>
-      <label xml:lang="ru">SiteMap</label>
-      <label xml:lang="ar">خريطة الموقع</label>
-      <label xml:lang="ko">사이트맵</label>
-      <label xml:lang="vi">Sơ đồ</label>
-      <label xml:lang="zh">网站地图</label>
-      <label xml:lang="zh-TW">網站導覽</label>
+      <name>features</name>
+      <label xml:lang="en">GateIn Features</label>
       <visibility>DISPLAYED</visibility>
-      <page-reference>portal::mobile::sitemap</page-reference>
+      <page-reference>portal::mobile::features</page-reference>
     </node>
     <node>
       <name>groupnavigation</name>
