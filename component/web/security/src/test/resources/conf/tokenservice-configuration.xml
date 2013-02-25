@@ -30,6 +30,11 @@
     <type>org.exoplatform.commons.chromattic.ChromatticManager</type>
   </component>
 
+  <component>
+    <key>org.exoplatform.web.security.security.SecureRandomService</key>
+    <type>org.exoplatform.web.security.security.SecureRandomService</type>
+  </component>
+
   <!-- Default CookieTokenService with salted hashing -->
   <component>
     <key>org.exoplatform.web.security.security.CookieTokenService</key>
