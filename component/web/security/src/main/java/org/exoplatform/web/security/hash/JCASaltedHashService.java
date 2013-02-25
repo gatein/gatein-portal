@@ -31,6 +31,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 
+import org.exoplatform.container.PortalContainer;
+import org.exoplatform.web.security.security.SecureRandomService;
 import org.gatein.common.logging.Logger;
 import org.gatein.common.logging.LoggerFactory;
 
@@ -114,9 +116,11 @@ public class JCASaltedHashService implements SaltedHashService {
      * @see org.exoplatform.web.security.hash.SaltedHashService#getSaltedHash(java.lang.String, java.security.SecureRandom)
      */
     @Override
-    public String getSaltedHash(String password, SecureRandom random) throws SaltedHashException {
+    public String getSaltedHash(String password) throws SaltedHashException {
         try {
             byte[] salt = new byte[saltByteLength];
+            PortalContainer container = PortalContainer.getInstance();
+            SecureRandom random = ((SecureRandomService) container.getComponentInstanceOfType(SecureRandomService.class)).getSecureRandom();
             random.nextBytes(salt);
             SaltedHash saltedHash = new SaltedHash(algorithm, iterationCount, salt, hash(this.algorithm, password, salt,
                     iterationCount, hashByteLength));

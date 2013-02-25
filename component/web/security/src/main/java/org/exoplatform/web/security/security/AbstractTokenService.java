@@ -64,8 +64,8 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
     protected static final int DELAY_TIME = 600;
 
     /**
-     * See {@link #tokenByteLength}. 8 bytes (64 bits) would be enough, but we want to get padding-less Byte64 representation, so we take
-     * the next greater number divisible by 3 which is 9. 9 bytes is equal to 72 bits.
+     * See {@link #tokenByteLength}. 8 bytes (64 bits) would be enough, but we want to get padding-less Byte64 representation,
+     * so we take the next greater number divisible by 3 which is 9. 9 bytes is equal to 72 bits.
      */
     public static final int DEFAULT_TOKEN_BYTE_LENGTH = 9;
 
@@ -80,8 +80,6 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
 
     protected long validityMillis;
 
-    protected final SecureRandom random;
-
     private ScheduledExecutorService executor;
 
     @SuppressWarnings("unchecked")
@@ -90,12 +88,11 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
         this.name = params.get(0);
         long configValue = new Long(params.get(1));
         this.validityMillis = TimeoutEnum.valueOf(params.get(2)).toMilisecond(configValue);
-
         this.tokenByteLength = DEFAULT_TOKEN_BYTE_LENGTH;
-        this.random = new AutoReseedRandom();
     }
 
     public void start() {
+
         // start a thread, garbage expired cookie token every [DELAY_TIME]
         executor = Executors.newSingleThreadScheduledExecutor();
         executor.scheduleWithFixedDelay(new Runnable() {
@@ -210,6 +207,8 @@ public abstract class AbstractTokenService<T extends Token, K> implements Starta
 
     protected String nextRandom() {
         byte[] randomBytes = new byte[tokenByteLength];
+        PortalContainer container = PortalContainer.getInstance();
+        SecureRandom random = ((SecureRandomService) container.getComponentInstanceOfType(SecureRandomService.class)).getSecureRandom();
         random.nextBytes(randomBytes);
         return Base64.encodeBytes(randomBytes, EncodingOption.USEURLSAFEENCODING);
     }

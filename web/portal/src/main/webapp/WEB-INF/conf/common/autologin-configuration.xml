@@ -26,6 +26,11 @@
     xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
+    <key>org.exoplatform.web.security.security.SecureRandomService</key>
+    <type>org.exoplatform.web.security.security.SecureRandomService</type>
+  </component>
+
+  <component>
     <key>org.exoplatform.web.security.security.CookieTokenService</key>
     <type>org.exoplatform.web.security.security.CookieTokenService</type>
     <init-params>

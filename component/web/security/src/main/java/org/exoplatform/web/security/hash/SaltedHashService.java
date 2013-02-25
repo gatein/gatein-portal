@@ -22,7 +22,6 @@
 
 package org.exoplatform.web.security.hash;
 
-import java.security.SecureRandom;
 
 /**
  * Interface for creating salted hashes from plaintext passwords and for validating passwords against stored salted hashes.
@@ -36,7 +35,7 @@ public interface SaltedHashService {
      *
      * @throws SaltedHashException
      */
-    String getSaltedHash(String password, SecureRandom random) throws SaltedHashException;
+    String getSaltedHash(String password) throws SaltedHashException;
 
     /**
      * Checks whether given plaintext {@code password} corresponds to the given {@code saltedHash}.
