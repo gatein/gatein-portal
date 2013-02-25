@@ -104,7 +104,7 @@
 	
 	      var offsetParent = maskLayer.offsetParent();
 	      var offset = offsetParent.offset();
-	      if (offsetParent && offsetParent.length && offset.left != 0
+	      if (offsetParent.length && offset.left != 0
 	          && offsetParent.top != 0) {
 	        maskLayer.width(offsetParent[0].offsetWidth);
 	        maskLayer.height(offsetParent[0].offsetHeight);
@@ -228,7 +228,7 @@
 	    if (maskLayer) {
 	      var offsetParent = maskLayer.offsetParent;
 	      var offset = $(offsetParent).offset();
-	      if (offsetParent && offset && (offset.left != 0 || offset.top != 0)) {
+	      if (offsetParent && (offset.left != 0 || offset.top != 0)) {
 	        maskLayer = document.getElementById("subMaskLayer");
 	        if (!maskLayer)
 	          return;

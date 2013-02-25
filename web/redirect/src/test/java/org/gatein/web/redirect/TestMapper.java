@@ -58,6 +58,8 @@ public class TestMapper extends TestConfig {
         atestSiteG();
         atestSiteH();
         atestSiteI();
+        atestEmptyRedirects();
+        atestNoRedirects();
     }
 
     public void atestSiteA() {
@@ -367,6 +369,35 @@ public class TestMapper extends TestConfig {
         assertEquals("", redirectPath);
         redirectPath = redirectService.getRedirectPath("origin", redirectName, "this/node/does/not/exist");
         assertEquals("", redirectPath);
+
+        RequestLifeCycle.end();
+    }
+
+    public void atestNoRedirects() {
+        PortalContainer container = getContainer();
+        RequestLifeCycle.begin(container);
+        SiteRedirectService redirectService = (SiteRedirectService) container
+                .getComponentInstanceOfType(SiteRedirectService.class);
+        assertNotNull(redirectService);
+        
+        assertNull(redirectService.getRedirectPath("noredirects", "foo", null));
+        assertNull(redirectService.getRedirectPath("noredirects", "foo", ""));
+        assertNull(redirectService.getRedirectPath("noredirects", "foo", "/"));
+        assertNull(redirectService.getRedirectPath("noredirects", "foo", "bar"));
+        RequestLifeCycle.end();
+    }
+
+    public void atestEmptyRedirects() {
+        PortalContainer container = getContainer();
+        RequestLifeCycle.begin(container);
+        SiteRedirectService redirectService = (SiteRedirectService) container
+                .getComponentInstanceOfType(SiteRedirectService.class);
+        assertNotNull(redirectService);
+
+        assertNull(redirectService.getRedirectPath("emptyredirects", "foo", null));
+        assertNull(redirectService.getRedirectPath("emptyredirects", "foo", ""));
+        assertNull(redirectService.getRedirectPath("emptyredirects", "foo", "/"));
+        assertNull(redirectService.getRedirectPath("emptyredirects", "foo", "bar"));
 
         RequestLifeCycle.end();
     }

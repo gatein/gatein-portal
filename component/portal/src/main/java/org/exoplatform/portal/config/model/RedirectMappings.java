@@ -66,7 +66,7 @@ public class RedirectMappings extends ModelObject {
             }
             return map;
         } else {
-            return null;
+            return new HashMap<String, String>();
         }
     }
 

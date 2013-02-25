@@ -39,6 +39,9 @@ public class RedirectCondition extends ModelObject {
     protected ArrayList<DevicePropertyCondition> devicePropertyConditions;
 
     public ArrayList<DevicePropertyCondition> getDeviceProperties() {
+        if (devicePropertyConditions == null) {
+            devicePropertyConditions = new ArrayList<DevicePropertyCondition>();
+        }
         return devicePropertyConditions;
     }
 

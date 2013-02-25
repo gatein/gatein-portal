@@ -54,6 +54,14 @@ public class Navigation18NResolver {
 
     private ResourceBundle getResourceBundle() {
         Locale userLocale = getUserLocale();
+        // Use site locale
+        if (userLocale == null) {
+            userLocale = siteLocale;
+        }
+        // If site locale is null for some reason, just use default system locale
+        if (userLocale == null) {
+            userLocale = Locale.getDefault();
+        }
         SiteKey siteKey = Util.from(siteId);
 
         return bundleManager.getNavigationResourceBundle(userLocale.getLanguage(), siteKey.getTypeName(), siteKey.getName());

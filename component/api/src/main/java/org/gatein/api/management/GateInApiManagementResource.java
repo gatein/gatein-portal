@@ -137,29 +137,29 @@ public class GateInApiManagementResource {
     @Managed("/sites/{site-name}")
     @ManagedRole("administrators")
     @ManagedOperation(name = OperationNames.REMOVE_RESOURCE, description = "Removes the given site")
-    public void removeSite(@MappedPath("site-name") String siteName) {
+    public void removeSite(@MappedPath("site-name") String siteName, @ManagedContext OperationContext context) {
         SiteId id = new SiteId(siteName);
-        _removeSite(id);
+        _removeSite(id, context);
     }
 
     @Managed("/sites/{site-name}")
     @ManagedRole("administrators")
     @ManagedOperation(name = OperationNames.UPDATE_RESOURCE, description = "Updates a given site")
-    public ModelObject updateSite(@MappedPath("site-name") String siteName, @ManagedContext ModelObject siteModel, @ManagedContext PathAddress address) {
+    public ModelObject updateSite(@MappedPath("site-name") String siteName, @ManagedContext ModelObject siteModel, @ManagedContext OperationContext context) {
         SiteId id = new SiteId(siteName);
-        return _updateSite(id, siteModel, address);
+        return _updateSite(id, siteModel, context);
     }
 
     @Managed("/sites/{site-name}/pages")
-    public PageManagementResource getPages(@MappedPath("site-name") String siteName) {
+    public PageManagementResource getPages(@MappedPath("site-name") String siteName, @ManagedContext OperationContext context) {
         SiteId id = new SiteId(siteName);
-        return pagesResource(id);
+        return pagesResource(id, context);
     }
 
     @Managed("/sites/{site-name}/navigation")
-    public NavigationManagementResource getNavigation(@MappedPath("site-name") String siteName) {
+    public NavigationManagementResource getNavigation(@MappedPath("site-name") String siteName, @ManagedContext OperationContext context) {
         SiteId id = new SiteId(siteName);
-        return navigationResource(id);
+        return navigationResource(id, context);
     }
 
     // --------------------------------------------- Group Sites (Spaces) ----------------------------------------------//
@@ -185,29 +185,29 @@ public class GateInApiManagementResource {
     @Managed("/spaces/{group-name: .*}")
     @ManagedRole("administrators")
     @ManagedOperation(name = OperationNames.REMOVE_RESOURCE, description = "Removes the given space")
-    public void removeSpace(@MappedPath("group-name") String groupName) {
+    public void removeSpace(@MappedPath("group-name") String groupName, @ManagedContext OperationContext context) {
         SiteId id = new SiteId(new Group(groupName));
-        _removeSite(id);
+        _removeSite(id, context);
     }
 
     @Managed("/spaces/{group-name: .*}")
     @ManagedRole("administrators")
     @ManagedOperation(name = OperationNames.UPDATE_RESOURCE, description = "Updates a given space")
-    public ModelObject updateSpace(@MappedPath("group-name") String groupName, @ManagedContext ModelObject siteModel, @ManagedContext PathAddress address) {
+    public ModelObject updateSpace(@MappedPath("group-name") String groupName, @ManagedContext ModelObject siteModel, @ManagedContext OperationContext context) {
         SiteId id = new SiteId(new Group(groupName));
-        return _updateSite(id, siteModel, address);
+        return _updateSite(id, siteModel, context);
     }
 
     @Managed("/spaces/{group-name: .*}/pages")
-    public PageManagementResource getSpacePages(@MappedPath("group-name") String groupName) {
+    public PageManagementResource getSpacePages(@MappedPath("group-name") String groupName, @ManagedContext OperationContext context) {
         SiteId id = new SiteId(new Group(groupName));
-        return pagesResource(id);
+        return pagesResource(id, context);
     }
 
     @Managed("/spaces/{group-name: .*}/navigation")
-    public NavigationManagementResource getSpaceNavigation(@MappedPath("group-name") String groupName) {
+    public NavigationManagementResource getSpaceNavigation(@MappedPath("group-name") String groupName, @ManagedContext OperationContext context) {
         SiteId id = new SiteId(new Group(groupName));
-        return navigationResource(id);
+        return navigationResource(id, context);
     }
 
     // -------------------------------------------- User Sites (Dashboard) ---------------------------------------------//
@@ -233,32 +233,33 @@ public class GateInApiManagementResource {
     @Managed("/dashboards/{user-name}")
     @ManagedRole("administrators")
     @ManagedOperation(name = OperationNames.REMOVE_RESOURCE, description = "Removes the given dashboard")
-    public void removeDashboard(@MappedPath("user-name") String userName) {
+    public void removeDashboard(@MappedPath("user-name") String userName, @ManagedContext OperationContext context) {
         SiteId id = new SiteId(new User(userName));
-        _removeSite(id);
+        _removeSite(id, context);
     }
 
     @Managed("/dashboards/{user-name}")
     @ManagedRole("administrators")
     @ManagedOperation(name = OperationNames.UPDATE_RESOURCE, description = "Updates a given space")
-    public ModelObject updateDashboard(@MappedPath("user-name") String userName, @ManagedContext ModelObject siteModel, @ManagedContext PathAddress address) {
+    public ModelObject updateDashboard(@MappedPath("user-name") String userName, @ManagedContext ModelObject siteModel, @ManagedContext OperationContext context) {
         SiteId id = new SiteId(new User(userName));
-        return _updateSite(id, siteModel, address);
+        return _updateSite(id, siteModel, context);
     }
 
     @Managed("/dashboards/{user-name}/pages")
-    public PageManagementResource getDashboardPages(@MappedPath("user-name") String userName) {
+    public PageManagementResource getDashboardPages(@MappedPath("user-name") String userName, @ManagedContext OperationContext context) {
         SiteId id = new SiteId(new User(userName));
-        return pagesResource(id);
+        return pagesResource(id, context);
     }
 
     @Managed("/dashboards/{user-name}/navigation")
-    public NavigationManagementResource getDashboardNavigation(@MappedPath("user-name") String userName) {
+    public NavigationManagementResource getDashboardNavigation(@MappedPath("user-name") String userName, @ManagedContext OperationContext context) {
         SiteId id = new SiteId(new User(userName));
-        return navigationResource(id);
+        return navigationResource(id, context);
     }
 
-    private NavigationManagementResource navigationResource(SiteId siteId) {
+    private NavigationManagementResource navigationResource(SiteId siteId, OperationContext context) {
+        requireSite(siteId, context);
         Navigation navigation = portal.getNavigation(siteId);
         if (navigation == null) {
             throw new ResourceNotFoundException("Navigation does not exist for site " + siteId);
@@ -267,30 +268,21 @@ public class GateInApiManagementResource {
         return new NavigationManagementResource(navigation, modelProvider);
     }
 
-    private PageManagementResource pagesResource(SiteId siteId) {
-        requireSite(siteId);
+    private PageManagementResource pagesResource(SiteId siteId, OperationContext context) {
+        requireSite(siteId, context);
         return new PageManagementResource(portal, modelProvider, siteId);
     }
 
     private ModelList _getSites(SiteQuery query, PathAddress address) {
         List<Site> sites = portal.findSites(query);
-        ModelList list = modelProvider.newModel(ModelList.class);
-        populateModel(sites, list, address);
-
-        return list;
+        return populateModel(sites, modelProvider.newModel(ModelList.class), address);
     }
 
     private ModelObject _getSite(SiteId id, OperationContext context) {
-        Site site = requireSite(id);
-
-        // Verify current user has access to site
-        verifyAccess(site, context);
+        Site site = requireSite(id, context);
 
         // Populate site model
-        ModelObject siteModel = modelProvider.newModel(ModelObject.class);
-        populateModel(site, siteModel, context.getAddress());
-
-        return siteModel;
+        return populateModel(site, modelProvider.newModel(ModelObject.class), context.getAddress());
     }
 
     private ModelObject _addSite(PathAddress address, SiteId siteId, String template) {
@@ -307,14 +299,11 @@ public class GateInApiManagementResource {
         portal.saveSite(site);
 
         // Populate model
-        ModelObject siteModel = modelProvider.newModel(ModelObject.class);
-        populateModel(site, siteModel, address);
-
-        return siteModel;
+        return populateModel(site, modelProvider.newModel(ModelObject.class), address);
     }
 
-    private void _removeSite(SiteId id) {
-        requireSite(id);
+    private void _removeSite(SiteId id, OperationContext context) {
+        requireSite(id, context);
         try {
             boolean removed = portal.removeSite(id);
             if (!removed) throw new RuntimeException("Could not remove site + " + id + " for unknown reasons.");
@@ -323,8 +312,8 @@ public class GateInApiManagementResource {
         }
     }
 
-    private ModelObject _updateSite(SiteId id, ModelObject siteModel, PathAddress address) {
-        Site site = requireSite(id);
+    private ModelObject _updateSite(SiteId id, ModelObject siteModel, OperationContext context) {
+        Site site = requireSite(id, context);
 
         if (siteModel.has("displayName")) {
             String displayName = get(siteModel, ModelString.class, "displayName").getValue();
@@ -373,20 +362,20 @@ public class GateInApiManagementResource {
 
         portal.saveSite(site);
 
-        ModelObject updatedSiteModel = modelProvider.newModel(ModelObject.class);
-        populateModel(site, updatedSiteModel, address);
-
-        return updatedSiteModel;
+        return populateModel(site, modelProvider.newModel(ModelObject.class), context.getAddress());
     }
 
-    private Site requireSite(SiteId id) {
+    private Site requireSite(SiteId id, OperationContext context) {
         Site site = portal.getSite(id);
         if (site == null) throw new ResourceNotFoundException("Site not found for " + id);
+
+        // Verify current user has access to site
+        verifyAccess(site, context);
 
         return site;
     }
 
-    private void populateModel(Site site, ModelObject siteModel, PathAddress address) {
+    private ModelObject populateModel(Site site, ModelObject siteModel, PathAddress address) {
         // Site fields
         siteModel.set("name", site.getId().getName());
         siteModel.set("type", site.getId().getType().name().toLowerCase());
@@ -411,9 +400,11 @@ public class GateInApiManagementResource {
         // Navigation
         ModelReference navigationRef = siteModel.get("navigation", ModelReference.class);
         navigationRef.set(address.append("navigation"));
+
+        return siteModel;
     }
 
-    private void populateModel(List<Site> sites, ModelList list, PathAddress address) {
+    private ModelList populateModel(List<Site> sites, ModelList list, PathAddress address) {
         for (Site site : sites) {
             if (hasPermission(site.getAccessPermission())) {
                 ModelReference siteRef = list.add().asValue(ModelReference.class);
@@ -422,6 +413,8 @@ public class GateInApiManagementResource {
                 siteRef.set(address.append(site.getName()));
             }
         }
+
+        return list;
     }
 
     private User getUser(ManagedUser managedUser) {

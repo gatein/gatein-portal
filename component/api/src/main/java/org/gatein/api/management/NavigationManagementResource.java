@@ -336,15 +336,9 @@ public class NavigationManagementResource {
                 ModelString langModel = get(displayNameModel, ModelString.class, "lang");
                 String lang = langModel.getValue();
                 if (lang == null) {
-                    // Have to hard code the field for now to support array
                     throw invalidValue(lang, "displayNames[" + i + "].lang");
                 }
-                Locale locale;
-                try {
-                    locale = LocaleUtils.toLocale(lang);
-                } catch (IllegalArgumentException e) {
-                    throw invalidValue(lang, "displayNames["+i+"].lang");
-                }
+                Locale locale = getLocale(displayNameModel, "lang");
                 if (displayName == null) {
                     displayName = new LocalizedString(locale, value);
                 } else {
