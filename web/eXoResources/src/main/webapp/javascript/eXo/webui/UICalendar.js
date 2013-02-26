@@ -146,9 +146,9 @@
 	      testDate = testDate.replace("ss", secondValue);
 	
 	      if (re.test(testDate)) {
-	        this.selectedDate.setDate(dateValue);
+	    	this.selectedDate.setFullYear(yearValue);
 	        this.selectedDate.setMonth(monthValue);
-	        this.selectedDate.setFullYear(yearValue);
+	        this.selectedDate.setDate(dateValue);
 	        this.selectedDate.setHours(hoursValue);
 	        this.selectedDate.setMinutes(minutesValue);
 	        this.selectedDate.setSeconds(secondValue);
