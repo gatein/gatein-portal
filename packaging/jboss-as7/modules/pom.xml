@@ -769,6 +769,16 @@
       <artifactId>picketlink-jbas7</artifactId>
     </dependency>
 
+    <!-- GateIn OAuth -->
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.component.web.oauth</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.picketlink</groupId>
+      <artifactId>picketlink-social</artifactId>
+    </dependency>
+
     <!-- GateIn -->
     <dependency>
       <groupId>org.gatein.portal</groupId>

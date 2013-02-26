@@ -17,21 +17,18 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.account.webui.component;
+package org.exoplatform.portal.webui.register;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import nl.captcha.Captcha;
 
-import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.registration.PostRegistrationService;
-import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.services.organization.OrganizationService;
 import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserHandler;
 import org.exoplatform.web.application.ApplicationMessage;
-import org.exoplatform.web.application.JavascriptManager;
 import org.exoplatform.webui.application.WebuiRequestContext;
 import org.exoplatform.webui.application.portlet.PortletRequestContext;
 import org.exoplatform.webui.config.annotation.ComponentConfig;

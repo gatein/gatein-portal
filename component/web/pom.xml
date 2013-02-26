@@ -38,5 +38,6 @@
     <module>resources</module>
     <module>api</module>
     <module>security-jboss</module>
+    <module>oauth</module>
   </modules>
 </project>

@@ -322,6 +322,11 @@
       <maven-resource group="org.gatein.naming" artifact="gatein-naming"/>
     </module-def>
 
+    <module-def name="org.gatein.oauth">
+      <maven-resource group="org.gatein.portal" artifact="exo.portal.component.web.oauth"/>
+      <maven-resource group="org.picketlink" artifact="picketlink-social"/>
+    </module-def>
+
     <module-def name="org.gatein.sso">
       <maven-resource group="org.gatein.sso" artifact="sso-auth-callback"/>
       <maven-resource group="org.gatein.sso" artifact="sso-agent"/>

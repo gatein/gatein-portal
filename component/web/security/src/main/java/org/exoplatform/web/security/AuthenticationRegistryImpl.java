@@ -36,7 +36,7 @@ import org.gatein.wci.security.Credentials;
 
 /**
  * Temporary registry for hold credentials (and potentially other attributes) during login process to avoid store them in
- * session. Registry is used only during authentication process and attributes of target client are cleared after successful
+ * session. Registry is used only during authentication process and attributes of target client are cleared usually after successful
  * authentication,
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
@@ -48,39 +48,22 @@ public class AuthenticationRegistryImpl implements AuthenticationRegistry {
     // which will be used during authentication process.
     private final ConcurrentMap<String, Map<String, Object>> registry = new ConcurrentHashMap<String, Map<String, Object>>();
 
+    @Override
     public Credentials getCredentials(HttpServletRequest request) {
-        String sessionId = getSessionId(request);
-        Map<String, Object> attributesOfClient = registry.get(sessionId);
-
-        if (attributesOfClient == null) {
-            return null;
-        }
-
-        return (Credentials) attributesOfClient.get(Credentials.CREDENTIALS);
+        return (Credentials) getAttributeOfClient(request, Credentials.CREDENTIALS);
     }
 
+    @Override
     public void setCredentials(HttpServletRequest request, Credentials credentials) {
-        String sessionId = getSessionId(request);
-
-        Map<String, Object> attributesOfClient = getAttributesOfClient(sessionId);
-        attributesOfClient.put(Credentials.CREDENTIALS, credentials);
+        setAttributeOfClient(request, Credentials.CREDENTIALS, credentials);
     }
 
+    @Override
     public Credentials removeCredentials(HttpServletRequest request) {
-        String sessionId = getSessionId(request);
-
-        Map<String, Object> attributesOfClient = getAttributesOfClient(sessionId);
-
-        Credentials credentials = (Credentials) attributesOfClient.remove(Credentials.CREDENTIALS);
-
-        // Clear map if no more attributes are here.
-        if (attributesOfClient.size() == 0) {
-            removeClient(sessionId);
-        }
-
-        return credentials;
+        return (Credentials)removeAttributeOfClient(request, Credentials.CREDENTIALS);
     }
 
+    @Override
     public void removeClient(String sessionId) {
         registry.remove(sessionId);
 
@@ -89,7 +72,43 @@ public class AuthenticationRegistryImpl implements AuthenticationRegistry {
         }
     }
 
-    private Map<String, Object> getAttributesOfClient(String sessionId) {
+    @Override
+    public void setAttributeOfClient(HttpServletRequest request, String attributeName, Object attributeValue) {
+        String sessionId = getSessionId(request);
+
+        Map<String, Object> attributesOfClient = getAllAttributesOfClient(sessionId);
+        attributesOfClient.put(attributeName, attributeValue);
+    }
+
+    @Override
+    public Object getAttributeOfClient(HttpServletRequest request, String attributeName) {
+        String sessionId = getSessionId(request);
+        Map<String, Object> attributesOfClient = registry.get(sessionId);
+
+        if (attributesOfClient == null) {
+            return null;
+        }
+
+        return attributesOfClient.get(attributeName);
+    }
+
+    @Override
+    public Object removeAttributeOfClient(HttpServletRequest request, String attributeName) {
+        String sessionId = getSessionId(request);
+
+        Map<String, Object> attributesOfClient = getAllAttributesOfClient(sessionId);
+
+        Object removedAttribute = attributesOfClient.remove(attributeName);
+
+        // Clear map if no more attributes are here.
+        if (attributesOfClient.size() == 0) {
+            removeClient(sessionId);
+        }
+
+        return removedAttribute;
+    }
+
+    private Map<String, Object> getAllAttributesOfClient(String sessionId) {
         Map<String, Object> attributes = registry.get(sessionId);
 
         if (attributes == null) {

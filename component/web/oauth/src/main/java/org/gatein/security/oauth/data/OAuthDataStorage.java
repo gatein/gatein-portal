@@ -1,6 +1,6 @@
 /*
  * JBoss, a division of Red Hat
- * Copyright 2012, Red Hat Middleware, LLC, and individual
+ * Copyright 2013, Red Hat Middleware, LLC, and individual
  * contributors as indicated by the @authors tag. See the
  * copyright.txt in the distribution for a full listing of
  * individual contributors.
@@ -21,32 +21,26 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.exoplatform.web.security;
+package org.gatein.security.oauth.data;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.gatein.wci.security.Credentials;
+import org.exoplatform.services.organization.User;
 
 /**
- * Temporary registry for hold credentials (and potentially other attributes) during login process.
- *
- *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface AuthenticationRegistry {
+public interface OAuthDataStorage {
 
-    Credentials getCredentials(HttpServletRequest request);
+    User findUserByFacebookUsername(String facebookUsername);
 
-    void setCredentials(HttpServletRequest request, Credentials credentials);
+    User findUserByGoogleUsername(String googleUsername);
 
-    Credentials removeCredentials(HttpServletRequest request);
+    User findUserByOAuthProviderUsername(String oauthProviderUsernameAttrName, String oauthProviderUsername);
 
-    void removeClient(String sessionId);
+    void saveFacebookAccessToken(String username, String accessToken);
 
-    void setAttributeOfClient(HttpServletRequest request, String attributeName, Object attributeValue);
+    void saveGoogleAccessToken(String username, String accessToken);
 
-    Object getAttributeOfClient(HttpServletRequest request, String attributeName);
+    String getFacebookAccessToken(String username);
 
-    Object removeAttributeOfClient(HttpServletRequest request, String attributeName);
-
+    String getGoogleAccessToken(String username);
 }

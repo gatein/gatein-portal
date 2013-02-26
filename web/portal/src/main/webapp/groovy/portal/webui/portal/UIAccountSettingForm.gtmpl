@@ -45,6 +45,20 @@
 									</div>							
 	
 									<div class="LineSeparator"><span></span></div>
+
+									<div class="UITab">
+										<div class="NormalTab">
+											<div class="LeftTab">
+												<div class="RightTab">
+													<div class="MiddleTab">
+														<a class="Icon Social"><%=_ctx.appRes("UIAccountSetting.tab.label.UIAccountSocial")%></a>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+
+									<div class="LineSeparator"><span></span></div>
 									
 								</div>
 							</div>

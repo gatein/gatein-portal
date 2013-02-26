@@ -1,5 +1,5 @@
 <%	
-	import org.exoplatform.account.webui.component.UIRegisterEditMode;
+	import org.exoplatform.portal.webui.register.UIRegisterEditMode;
 	import javax.portlet.PortletMode ;
 %>
 <%

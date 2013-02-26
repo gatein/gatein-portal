@@ -19,6 +19,8 @@
 
 package org.exoplatform.account.webui.component;
 
+import org.exoplatform.portal.webui.register.UIRegisterEditMode;
+import org.exoplatform.portal.webui.register.UIRegisterForm;
 import org.exoplatform.webui.config.annotation.ComponentConfig;
 import org.exoplatform.webui.core.UIPortletApplication;
 import org.exoplatform.webui.core.lifecycle.UIApplicationLifecycle;

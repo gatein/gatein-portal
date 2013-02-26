@@ -41,5 +41,11 @@
       <groupId>org.gatein.portal</groupId>
       <artifactId>exo.portal.component.application-registry</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.gatein.portal</groupId>
+      <artifactId>exo.portal.component.web.oauth</artifactId>
+    </dependency>
+
   </dependencies>
 </project>
