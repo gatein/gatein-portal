@@ -92,6 +92,24 @@ margin: 1em;
 	float: right; /* orientation=lt */
 }
 
+.gtnResponsiveHeaderPortlet .collapseButton:after {
+content: "";
+border: 0.3em transparent solid;
+border-top-color: #666;
+position: absolute;
+right: 0.3em;
+top: 2em;
+}
+
+.gtnResponsiveHeaderPortlet .collapseButton.enabled:after {
+content: "";
+border: 0.3em transparent solid;
+border-bottom-color: #666;
+position: absolute;
+right: 0.3em;
+top: 1.6em;
+}
+
 .gtnResponsiveHeaderPortlet .collapsibleRow {
     white-space: nowrap;
 }
@@ -111,11 +129,11 @@ margin: 1em;
 }
 
 .gtnResponsiveHeaderPortlet .collapsed>.collapsibleContent.display {
-	background-color: #CCC;
+        background-color: rgba(0,0,0,0.07);
 }
 
 .gtnResponsiveHeaderPortlet .collapseButton.enabled {
-	background-color: #BBB;
+        background-color: rgba(0,0,0,0.07);
 }
 
 .gtnResponsiveHeaderPortlet .clear {
