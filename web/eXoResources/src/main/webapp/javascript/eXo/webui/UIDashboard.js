@@ -140,7 +140,7 @@
 	
 	    var gadgetContainer = portletFrag.find("div.GadgetContainer").eq(0);
 
-	    var gadgetPopup = jqDragObj.closest("div[id^=UIAddGadgetPopup]");
+	    var gadgetPopup = portletFrag.find("div[id^=UIAddGadgetPopup]");
 	
 	    common.DragDrop.init(dragItem, dragObj);
 	
