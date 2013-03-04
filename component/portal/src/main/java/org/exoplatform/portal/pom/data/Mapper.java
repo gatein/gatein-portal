@@ -329,13 +329,26 @@ public class Mapper {
                     .setUserAgentDoesNotContain(redirectConditionData.getUserAgentConditionData().getUserAgentDoesNotContain());
         }
 
-        if (redirectConditionData.getDevicePropertyConditionData() != null) {
+        // if the device property conditions is empty and there are currently no stored device properties, then skip
+        // otherwise we need to either remove or add device properties
+        if (redirectConditionData.getDevicePropertyConditionData() != null || !condition.getDeviceProperties().isEmpty()) {
+            // A list of stored redirect names which have not been found in the current RedirectConditionData list.
+            //
+            // This is because during a save we receive a list of RedirectData, and we need to keep track if an existing
+            // stored redirect has been deleted or not.
+            Set<String> notFoundProperties = new HashSet<String>(condition.getDeviceProperties().keySet());
+
             for (RedirectDevicePropertyConditionData propertyConditionData : redirectConditionData
                     .getDevicePropertyConditionData()) {
+
                 DeviceProperty deviceProperty = condition.getDeviceProperties().get(propertyConditionData.getPropertyName());
+                // if not found, then create it
                 if (deviceProperty == null) {
                     deviceProperty = condition.createDeviceProperty();
                     condition.getDeviceProperties().put(propertyConditionData.getPropertyName(), deviceProperty);
+                } else {
+                    // if found, remove from the nonFound list
+                    notFoundProperties.remove(propertyConditionData.getPropertyName());
                 }
 
                 deviceProperty.setName(propertyConditionData.getPropertyName());
@@ -356,6 +369,11 @@ public class Mapper {
                     deviceProperty.setPattern(propertyConditionData.getMatches().toString());
                 }
             }
+
+            // remove all the device conditions which were not in the RedirectConditionData list
+            for (String devicePropertyName : notFoundProperties) {
+                condition.getDeviceProperties().remove(devicePropertyName);
+            }
         }
     }
 
@@ -363,17 +381,32 @@ public class Mapper {
         mappings.setNodeNameMatching(mappingsData.isUseNodeNameMatching());
         mappings.setUnresolvedNodeMatching(mappingsData.getUnresolvedNode());
 
-        if (!mappingsData.getMappings().isEmpty()) {
+        // if the mappings conditions is empty and there are currently no stored mappings, then skip
+        // otherwise we need to either remove or add mappings
+        if (!mappingsData.getMappings().isEmpty() || !mappings.getNodeMap().isEmpty()) {
+
+            // A list of stored node mappings which have not been found in the current RedirectMappingsData list.
+            //
+            // This is because during a save we receive a list of nodes from RedirectMappingsData, and we need to keep track
+            // if an existing stored redirect node has been deleted or not.
+            Set<String> notFoundNodeMappings = new HashSet<String>(mappings.getNodeMap().keySet());
+
             for (String key : mappingsData.getMappings().keySet()) {
                 NodeMap nodeMap = mappings.getNodeMap().get(Text.escapeIllegalJcrChars(key));
                 if (nodeMap == null) {
                     nodeMap = mappings.createNode();
                     mappings.getNodeMap().put(Text.escapeIllegalJcrChars(key), nodeMap);
+                } else {
+                    notFoundNodeMappings.remove(Text.escapeIllegalJcrChars(key));
                 }
                 nodeMap.setOriginNode(key);
                 nodeMap.setRedirectNode(mappingsData.getMappings().get(key));
             }
-            // mappings.setRedirectMap((HashMap)mappingsData.getMappings());
+
+            // remove all the device conditions which were not in the RedirectConditionData list
+            for (String nodeName : notFoundNodeMappings) {
+                mappings.getNodeMap().remove(nodeName);
+            }
         }
     }
 
