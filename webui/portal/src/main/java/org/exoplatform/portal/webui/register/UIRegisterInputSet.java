@@ -60,7 +60,7 @@ public class UIRegisterInputSet extends UIFormInputWithActions {
 
     private boolean captchaInputAvailability;
 
-    public UIRegisterInputSet(String name) throws Exception {
+    public UIRegisterInputSet(String name, boolean skipCaptcha) throws Exception {
         super(name);
 
         /*
@@ -87,9 +87,15 @@ public class UIRegisterInputSet extends UIFormInputWithActions {
         addUIFormInput(new UIFormStringInput(EMAIL_ADDRESS, EMAIL_ADDRESS, null).addValidator(MandatoryValidator.class)
                 .addValidator(UserConfigurableValidator.class, UserConfigurableValidator.EMAIL));
 
-        PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
-        PortletPreferences pref = pcontext.getRequest().getPreferences();
-        boolean useCaptcha = Boolean.parseBoolean(pref.getValue(UIRegisterEditMode.USE_CAPTCHA, "true"));
+        // Never use captcha if skipCaptcha is true. Otherwise read value from portlet property
+        boolean useCaptcha;
+        if (skipCaptcha) {
+            useCaptcha = false;
+        } else {
+            PortletRequestContext pcontext = (PortletRequestContext) WebuiRequestContext.getCurrentInstance();
+            PortletPreferences pref = pcontext.getRequest().getPreferences();
+            useCaptcha = Boolean.parseBoolean(pref.getValue(UIRegisterEditMode.USE_CAPTCHA, "true"));
+        }
 
         if (useCaptcha) {
             addUIFormInput(new UICaptcha(CAPTCHA, CAPTCHA, null).addValidator(MandatoryValidator.class).addValidator(

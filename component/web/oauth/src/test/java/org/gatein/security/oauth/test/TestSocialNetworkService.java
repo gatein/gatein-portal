@@ -35,9 +35,10 @@ import org.exoplatform.services.organization.User;
 import org.exoplatform.services.organization.UserProfile;
 import org.exoplatform.services.organization.impl.UserImpl;
 import org.gatein.common.exception.GateInExceptionConstants;
-import org.gatein.security.oauth.data.OAuthDataStorage;
+import org.gatein.security.oauth.data.SocialNetworkService;
 import org.gatein.common.exception.GateInException;
 import org.gatein.security.oauth.utils.OAuthConstants;
+import org.gatein.security.oauth.generic.OAuthProviderType;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
@@ -45,16 +46,16 @@ import org.gatein.security.oauth.utils.OAuthConstants;
 @ConfiguredBy({
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.identity-configuration.xml"),
         @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/exo.portal.component.web.oauth-configuration.xml") })
-public class TestOAuthDataStorage extends AbstractKernelTest {
+public class TestSocialNetworkService extends AbstractKernelTest {
 
     private OrganizationService orgService;
-    private OAuthDataStorage oauthDataStorage;
+    private SocialNetworkService socialNetworkService;
 
     @Override
     protected void setUp() throws Exception {
         PortalContainer portalContainer = PortalContainer.getInstance();
         orgService = (OrganizationService) portalContainer.getComponentInstanceOfType(OrganizationService.class);
-        oauthDataStorage = (OAuthDataStorage) portalContainer.getComponentInstanceOfType(OAuthDataStorage.class);
+        socialNetworkService = (SocialNetworkService) portalContainer.getComponentInstanceOfType(SocialNetworkService.class);
         begin();
     }
 
@@ -82,26 +83,28 @@ public class TestOAuthDataStorage extends AbstractKernelTest {
         orgService.getUserProfileHandler().saveUserProfile(userProfile2, true);
 
         // Find user by facebook and google username
-        User foundUser = oauthDataStorage.findUserByFacebookUsername("joseph.doyle");
+        User foundUser = socialNetworkService.findUserByOAuthProviderUsername(OAuthProviderType.FACEBOOK, "joseph.doyle");
         assertNotNull(foundUser);
         assertEquals(foundUser.getUserName(), user1.getUserName());
 
-        User foundUser2 = oauthDataStorage.findUserByFacebookUsername("john.doyle");
+        User foundUser2 = socialNetworkService.findUserByOAuthProviderUsername(OAuthProviderType.FACEBOOK, "john.doyle");
         assertNotNull(foundUser2);
         assertEquals(foundUser2.getUserName(), user2.getUserName());
 
-        User foundUser3 = oauthDataStorage.findUserByGoogleUsername("john.something");
+        User foundUser3 = socialNetworkService.findUserByOAuthProviderUsername(OAuthProviderType.GOOGLE, "john.something");
         assertNotNull(foundUser3);
         assertEquals(foundUser3.getUserName(), user2.getUserName());
 
-        // Try to change facebook username for user1
-        userProfile1.setAttribute(OAuthConstants.PROFILE_FACEBOOK_USERNAME, "joseph.doyle.changed");
-        orgService.getUserProfileHandler().saveUserProfile(userProfile1, true);
+        // Try to change facebook username for user1 with socialNetworkService
+        socialNetworkService.updateOAuthInfo(OAuthProviderType.FACEBOOK, user1.getUserName(), "joseph.doyle.changed", "someToken");
+
+        User foundUser4 = socialNetworkService.findUserByOAuthProviderUsername(OAuthProviderType.FACEBOOK, "joseph.doyle.changed");
+        assertNotNull(foundUser4);
+        assertEquals(foundUser4.getUserName(), user1.getUserName());
 
         try {
             // This should fail because of duplicated facebook username
-            userProfile2.setAttribute(OAuthConstants.PROFILE_FACEBOOK_USERNAME, "joseph.doyle.changed");
-            orgService.getUserProfileHandler().saveUserProfile(userProfile2, true);
+            socialNetworkService.updateOAuthInfo(OAuthProviderType.FACEBOOK, user2.getUserName(), "joseph.doyle.changed", "someToken");
 
             fail("Exception should occur because of duplicated facebook username");
         } catch (GateInException gtnOauthException) {
@@ -119,14 +122,14 @@ public class TestOAuthDataStorage extends AbstractKernelTest {
         orgService.getUserHandler().createUser(user1, false);
         orgService.getUserHandler().createUser(user2, false);
 
-        oauthDataStorage.saveFacebookAccessToken(user1.getUserName(), "aaa123");
-        oauthDataStorage.saveFacebookAccessToken(user2.getUserName(), "bbb456");
-        oauthDataStorage.saveGoogleAccessToken(user1.getUserName(), "ccc789");
+        socialNetworkService.updateOAuthAccessToken(OAuthProviderType.FACEBOOK, user1.getUserName(), "aaa123");
+        socialNetworkService.updateOAuthAccessToken(OAuthProviderType.FACEBOOK, user2.getUserName(), "bbb456");
+        socialNetworkService.updateOAuthAccessToken(OAuthProviderType.GOOGLE, user1.getUserName(), "ccc789");
 
-        assertEquals("aaa123", oauthDataStorage.getFacebookAccessToken(user1.getUserName()));
-        assertEquals("bbb456", oauthDataStorage.getFacebookAccessToken(user2.getUserName()));
-        assertEquals("ccc789", oauthDataStorage.getGoogleAccessToken(user1.getUserName()));
-        assertNull(oauthDataStorage.getGoogleAccessToken(user2.getUserName()));
+        assertEquals("aaa123", socialNetworkService.getOAuthAccessToken(OAuthProviderType.FACEBOOK, user1.getUserName()));
+        assertEquals("bbb456", socialNetworkService.getOAuthAccessToken(OAuthProviderType.FACEBOOK, user2.getUserName()));
+        assertEquals("ccc789", socialNetworkService.getOAuthAccessToken(OAuthProviderType.GOOGLE, user1.getUserName()));
+        assertNull(socialNetworkService.getOAuthAccessToken(OAuthProviderType.GOOGLE, user2.getUserName()));
 
         // TODO: Verify that accessTokens are encoded by directly access them through userProfiles
     }

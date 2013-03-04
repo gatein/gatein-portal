@@ -63,8 +63,24 @@ public class OAuthConstants {
     public static final String PROFILE_GOOGLE_ACCESS_TOKEN = "user.social-info.google.accessToken";
 
 
-    // Session attributes
+    // Session (or AuthenticationRegistry) attributes
 
-    public static final String SESSION_ATTRIBUTE_AUTHENTICATED_PRINCIPAL = "authenticatedPrincipal";
+    public static final String ATTRIBUTE_AUTHENTICATED_OAUTH_PRINCIPAL = "_authenticatedOAuthPrincipal";
+
+    public static final String ATTRIBUTE_AUTHENTICATED_PORTAL_USER = "_authenticatedPortalUser";
+
+    public static final String ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT = "_urlToRedirectAfterLinkSocialAccount";
+
+    public static final String ATTRIBUTE_SOCIAL_NETWORK_PROVIDER_TO_UNLINK = "_socialNetworkProviderToUnlink";
+
+    public static final String ATTRIBUTE_LINKED_OAUTH_PROVIDER_USERNAME_ATTR_NAME = "_linkedOAuthProviderUsernameAttrName";
+
+    public static final String ATTRIBUTE_EXCEPTION_AFTER_FAILED_LINK = "_oauthExceptionAfterFailedLink";
+
+    // URL
+
+    public static final String FACEBOOK_AUTHENTICATION_URL_PATH = "/facebookAuth";
+
+    public static final String GOOGLE_AUTHENTICATION_URL_PATH = "/googleAuth";
 
 }

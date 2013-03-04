@@ -1,0 +1,14 @@
+<%
+  import org.exoplatform.web.application.JavascriptManager;
+  import org.gatein.portal.controller.resource.ResourceScope;
+
+  def rcontext = _ctx.getRequestContext();
+  JavascriptManager jsManager = rcontext.getJavascriptManager();
+  jsManager.require("SHARED/portalControl", "portalControl").addScripts("portalControl.UIHorizontalTabs.init('$uicomponent.id');");
+%>
+
+<div class="UIRegisterOAuthForm" id="<%=uicomponent.getId();%>">
+<%
+    uicomponent.renderChildren();
+%>
+</div>

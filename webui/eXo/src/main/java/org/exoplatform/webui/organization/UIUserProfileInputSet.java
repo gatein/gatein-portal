@@ -241,10 +241,7 @@ public class UIUserProfileInputSet extends UIFormInputSet {
         } catch (GateInException gtnOauthException) {
             // Show warning message if user with this facebookUsername (or googleUsername) already exists
             if (gtnOauthException.getExceptionCode() == GateInExceptionConstants.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME) {
-                Object[] args = convertOAuthExceptionAttributes(context, "UIUserInfo.label.", gtnOauthException.getExceptionAttributes());
-                ApplicationMessage appMessage = new ApplicationMessage("UIUserProfileInputSet.msg.oauth-username-exists", args, ApplicationMessage.WARNING);
-                appMessage.setArgsLocalized(false);
-                uiApp.addMessage(appMessage);
+                addOAuthExceptionMessage(context, gtnOauthException, uiApp);
                 return false;
             } else {
                 throw gtnOauthException;
@@ -284,6 +281,13 @@ public class UIUserProfileInputSet extends UIFormInputSet {
         public int compare(SelectItemOption item0, SelectItemOption item1) {
             return item0.getLabel().compareToIgnoreCase(item1.getLabel());
         }
+    }
+
+    public static final void addOAuthExceptionMessage(WebuiRequestContext context, GateInException gtnOauthException, UIApplication uiApp) {
+        Object[] args = convertOAuthExceptionAttributes(context, "UIAccountSocial.label.", gtnOauthException.getExceptionAttributes());
+        ApplicationMessage appMessage = new ApplicationMessage("UIUserProfileInputSet.msg.oauth-username-exists", args, ApplicationMessage.WARNING);
+        appMessage.setArgsLocalized(false);
+        uiApp.addMessage(appMessage);
     }
 
     public static Object[] convertOAuthExceptionAttributes(WebuiRequestContext context, String messageKeyPrefix, Map<String, Object> exceptionAttribs) {

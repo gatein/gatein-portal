@@ -36,10 +36,6 @@ public class OAuthHelper {
     private final boolean facebookAuthenticationEnabled;
     private final boolean googleAuthenticationEnabled;
 
-    // TODO: Configurable
-    private final String facebookAuthenticationUrlSuffix = "/facebookAuth";
-    private final String googleAuthenticationUrlSuffix = "/googleAuth";;
-
     private static final Logger log = LoggerFactory.getLogger(OAuthHelper.class);
 
     public OAuthHelper(InitParams params) {
@@ -65,10 +61,10 @@ public class OAuthHelper {
     }
 
     public String getFacebookAuthenticationUrl(String contextPath) {
-        return contextPath + this.facebookAuthenticationUrlSuffix;
+        return contextPath + OAuthConstants.FACEBOOK_AUTHENTICATION_URL_PATH;
     }
 
     public String getGoogleAuthenticationUrl(String contextPath) {
-        return contextPath + this.googleAuthenticationUrlSuffix;
+        return contextPath + OAuthConstants.GOOGLE_AUTHENTICATION_URL_PATH;
     }
 }

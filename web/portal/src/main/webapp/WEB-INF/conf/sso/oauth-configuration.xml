@@ -42,8 +42,32 @@
   </component>
 
   <component>
-    <key>org.gatein.security.oauth.data.OAuthDataStorage</key>
-    <type>org.gatein.security.oauth.data.OAuthDataStorageImpl</type>
+    <key>org.gatein.security.oauth.data.SocialNetworkService</key>
+    <type>org.gatein.security.oauth.data.SocialNetworkServiceImpl</type>
+  </component>
+
+  <component>
+    <key>org.gatein.security.oauth.facebook.GateInFacebookProcessor</key>
+    <type>org.gatein.security.oauth.facebook.GateInFacebookProcessorImpl</type>
+    <init-params>
+      <value-param>
+        <name>appid</name>
+        <value>${gatein.oauth.facebook.appid}</value>
+      </value-param>
+      <value-param>
+        <name>appsecret</name>
+        <value>${gatein.oauth.facebook.appsecret}</value>
+      </value-param>
+      <!-- URL to redirect from Facebook during Facebook OAuth authentication -->
+      <value-param>
+        <name>redirectUrl</name>
+        <value>${gatein.oauth.facebook.redirecturl}</value>
+      </value-param>
+      <value-param>
+        <name>scope</name>
+        <value>${gatein.oauth.facebook.scope}</value>
+      </value-param>
+    </init-params>
   </component>
 
   <external-component-plugins>
@@ -52,13 +76,6 @@
       <name>UniqueOAuthProviderUsernameListener</name>
       <set-method>addListenerPlugin</set-method>
       <type>org.gatein.security.oauth.data.UniqueOAuthProviderUsernameListener</type>
-      <init-params>
-        <values-param>
-          <name>oauthProviderUsernameAttrNames</name>
-          <value>user.social-info.facebook.userName</value>
-          <value>user.social-info.google.userName</value>
-        </values-param>
-      </init-params>
     </component-plugin>
   </external-component-plugins>
 
@@ -81,27 +98,61 @@
           <name>filterMapping</name>
           <value>/facebookAuth</value>
         </value-param>
-        <!-- URL to redirect after finish whole Facebook authentication process -->
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.sso.integration.SSOFilterIntegrator</target-component>
+    <component-plugin>
+      <name>OAuthIntegrationFilter</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.sso.integration.SSOFilterIntegratorPlugin</type>
+      <init-params>
+        <value-param>
+          <name>filterClass</name>
+          <value>org.gatein.security.oauth.generic.OAuthAuthenticationFilter</value>
+        </value-param>
+        <value-param>
+          <name>enabled</name>
+          <value>${gatein.oauth.facebook.enabled:true}</value>
+        </value-param>
+        <value-param>
+          <name>filterMapping</name>
+          <value>/*</value>
+        </value-param>
+        <!-- URL to redirect after finish OAuth authentication process. It's used if registration of new GateIn user is needed -->
+        <value-param>
+          <name>registrationUrl</name>
+          <value>/@@portal.container.name@@/</value>
+        </value-param>
+        <!-- URL to redirect after finish OAuth authentication process. It's used if registration of new GateIn user is not needed because user is already registered -->
         <value-param>
           <name>loginUrl</name>
           <value>/@@portal.container.name@@/dologin</value>
         </value-param>
+      </init-params>
+    </component-plugin>
+  </external-component-plugins>
+
+  <external-component-plugins>
+    <target-component>org.gatein.sso.integration.SSOFilterIntegrator</target-component>
+    <component-plugin>
+      <name>OAuthLinkAccountFilter</name>
+      <set-method>addPlugin</set-method>
+      <type>org.gatein.sso.integration.SSOFilterIntegratorPlugin</type>
+      <init-params>
         <value-param>
-          <name>appid</name>
-          <value>${gatein.oauth.facebook.appid}</value>
+          <name>filterClass</name>
+          <value>org.gatein.security.oauth.generic.OAuthLinkAccountFilter</value>
         </value-param>
         <value-param>
-          <name>appsecret</name>
-          <value>${gatein.oauth.facebook.appsecret}</value>
-        </value-param>
-        <!-- URL to redirect from Facebook during Facebook OAuth authentication -->
-        <value-param>
-          <name>redirectUrl</name>
-          <value>${gatein.oauth.facebook.redirecturl}</value>
+          <name>enabled</name>
+          <value>${gatein.oauth.facebook.enabled:true}</value>
         </value-param>
         <value-param>
-          <name>scope</name>
-          <value>${gatein.oauth.facebook.scope}</value>
+          <name>filterMapping</name>
+          <value>/*</value>
         </value-param>
       </init-params>
     </component-plugin>

@@ -23,6 +23,12 @@
 
 package org.exoplatform.portal.account;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.exoplatform.portal.application.PortalRequestContext;
 import org.exoplatform.portal.application.UserProfileLifecycle;
 import org.exoplatform.portal.webui.util.Util;
 import org.exoplatform.portal.webui.workspace.UIWorkingWorkspace;
@@ -45,6 +51,8 @@ import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.organization.UIUserProfileInputSet;
 import org.gatein.common.exception.GateInException;
 import org.gatein.common.exception.GateInExceptionConstants;
+import org.gatein.common.logging.Logger;
+import org.gatein.common.logging.LoggerFactory;
 import org.gatein.security.oauth.utils.OAuthConstants;
 
 /**
@@ -52,16 +60,29 @@ import org.gatein.security.oauth.utils.OAuthConstants;
  *
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIForm.gtmpl",
-        events = { @EventConfig(listeners = UIAccountSocial.SaveActionListener.class, csrfCheck = true),
-                   @EventConfig(listeners = UIAccountSocial.ResetActionListener.class, phase = Event.Phase.DECODE) })
+@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/portal/webui/portal/UIAccountSocial.gtmpl",
+                 events    = { @EventConfig(listeners = UIAccountSocial.UnlinkSocialAccountActionListener.class) })
 public class UIAccountSocial extends UIForm {
 
-    public UIAccountSocial() throws Exception {
-        OAuthUsernames oauthUsernames = getOauthUsernamesFromBackend();
+    private static final Logger log = LoggerFactory.getLogger(UIAccountSocial.class);
 
-        addUIFormInput(new UIFormStringInput(OAuthConstants.PROFILE_FACEBOOK_USERNAME, OAuthConstants.PROFILE_FACEBOOK_USERNAME, oauthUsernames.facebookUsername));
-        addUIFormInput(new UIFormStringInput(OAuthConstants.PROFILE_GOOGLE_USERNAME, OAuthConstants.PROFILE_GOOGLE_USERNAME, oauthUsernames.googleUsername));
+    public UIAccountSocial() throws Exception {
+        addReadOnlyInput(OAuthConstants.PROFILE_FACEBOOK_USERNAME, OAuthConstants.PROFILE_FACEBOOK_USERNAME);
+        addReadOnlyInput(OAuthConstants.PROFILE_GOOGLE_USERNAME, OAuthConstants.PROFILE_GOOGLE_USERNAME);
+
+        updateUIFields();
+    }
+
+    @Override
+    public void processRender(WebuiRequestContext context) throws Exception {
+        updateUIFields();
+        super.processRender(context);
+    }
+
+    private void updateUIFields() {
+        OAuthUsernames oauthUsernames = getOauthUsernamesFromBackend();
+        getUIStringInput(OAuthConstants.PROFILE_FACEBOOK_USERNAME).setValue(oauthUsernames.facebookUsername);
+        getUIStringInput(OAuthConstants.PROFILE_GOOGLE_USERNAME).setValue(oauthUsernames.googleUsername);
     }
 
     private OAuthUsernames getOauthUsernamesFromBackend() {
@@ -77,24 +98,41 @@ public class UIAccountSocial extends UIForm {
         return new OAuthUsernames(facebookUsername, googleUsername);
     }
 
-    public static class ResetActionListener extends EventListener<UIAccountSocial> {
-        public void execute(Event<UIAccountSocial> event) throws Exception {
-            UIAccountSocial uiForm = event.getSource();
+    private void addReadOnlyInput(String name, String bindingExpression) {
+        UIFormStringInput uiInput = new UIFormStringInput(name, null);
+        uiInput.setReadOnly(true);
+        addUIFormInput(uiInput);
+    }
 
-            OAuthUsernames oauthUsernames = uiForm.getOauthUsernamesFromBackend();
-            uiForm.getUIStringInput(OAuthConstants.PROFILE_FACEBOOK_USERNAME).setValue(oauthUsernames.facebookUsername);
-            uiForm.getUIStringInput(OAuthConstants.PROFILE_GOOGLE_USERNAME).setValue(oauthUsernames.googleUsername);
+    public void saveURLAfterLinkSocialAccount() {
+        PortalRequestContext prContext = Util.getPortalRequestContext();
+        HttpSession session = prContext.getRequest().getSession();
+        session.setAttribute(OAuthConstants.ATTRIBUTE_URL_TO_REDIRECT_AFTER_LINK_SOCIAL_ACCOUNT, prContext.getRequestURI());
+    }
 
-            event.getRequestContext().addUIComponentToUpdateByAjax(uiForm);
+    public String getLinkSocialAccountURL(String fieldName) {
+        String reqContextPath = Util.getPortalRequestContext().getRequestContextPath();
+        if (OAuthConstants.PROFILE_FACEBOOK_USERNAME.equals(fieldName)) {
+             return reqContextPath + OAuthConstants.FACEBOOK_AUTHENTICATION_URL_PATH;
+        } else if (OAuthConstants.PROFILE_GOOGLE_USERNAME.equals(fieldName)) {
+            return reqContextPath + OAuthConstants.GOOGLE_AUTHENTICATION_URL_PATH;
+        } else {
+            throw new IllegalArgumentException("Unknown argument " + fieldName);
         }
     }
 
-    public static class SaveActionListener extends EventListener<UIAccountSocial> {
+    public void saveFieldNameForSocialAccountUnlink(String fieldName) {
+        ConversationState.getCurrent().setAttribute(OAuthConstants.ATTRIBUTE_SOCIAL_NETWORK_PROVIDER_TO_UNLINK, fieldName);
+    }
+
+    public static class UnlinkSocialAccountActionListener extends EventListener<UIAccountSocial> {
+
         public void execute(Event<UIAccountSocial> event) throws Exception {
             UIAccountSocial uiForm = event.getSource();
 
             OrganizationService service = uiForm.getApplicationComponent(OrganizationService.class);
             WebuiRequestContext context = WebuiRequestContext.getCurrentInstance();
+            PortalRequestContext prContext = Util.getPortalRequestContext();
             UIApplication uiApp = context.getUIApplication();
 
             ConversationState state = ConversationState.getCurrent();
@@ -102,27 +140,27 @@ public class UIAccountSocial extends UIForm {
             User user = service.getUserHandler().findUserByName(userName);
 
             if (user != null) {
-                UserProfile userProfile = (UserProfile)Util.getPortalRequestContext().getAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME);
-                userProfile.setAttribute(OAuthConstants.PROFILE_FACEBOOK_USERNAME, uiForm.getUIStringInput(OAuthConstants.PROFILE_FACEBOOK_USERNAME).getValue());
-                userProfile.setAttribute(OAuthConstants.PROFILE_GOOGLE_USERNAME, uiForm.getUIStringInput(OAuthConstants.PROFILE_GOOGLE_USERNAME).getValue());
+                UserProfile userProfile = (UserProfile)prContext.getAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME);
+                String socialAccountFieldToUnlink = (String)ConversationState.getCurrent().getAttribute(OAuthConstants.ATTRIBUTE_SOCIAL_NETWORK_PROVIDER_TO_UNLINK);
 
-                try {
-                    service.getUserProfileHandler().saveUserProfile(userProfile, true);
-                    uiApp.addMessage(new ApplicationMessage("UIAccountSocial.msg.successful-update", null));
-                } catch (GateInException gtnOauthException) {
-                    // Show warning message if user with this facebookUsername (or googleUsername) already exists
-                    if (gtnOauthException.getExceptionCode() == GateInExceptionConstants.EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME) {
-                        Object[] args = UIUserProfileInputSet.convertOAuthExceptionAttributes(Util.getPortalRequestContext(), "UIAccountSocial.label.", gtnOauthException.getExceptionAttributes());
-                        ApplicationMessage appMessage = new ApplicationMessage("UIUserProfileInputSet.msg.oauth-username-exists", args, ApplicationMessage.WARNING);
-                        appMessage.setArgsLocalized(false);
-                        uiApp.addMessage(appMessage);
-                        return;
-                    } else {
-                        throw gtnOauthException;
-                    }
+                if (socialAccountFieldToUnlink != null) {
+                    userProfile.setAttribute(socialAccountFieldToUnlink, null);
+                } else {
+                    log.warn("Social account field to unlink not found");
                 }
 
-                Util.getPortalRequestContext().setAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME, userProfile);
+                service.getUserProfileHandler().saveUserProfile(userProfile, true);
+
+                Map<String, Object> map = new HashMap<String, Object>();
+                map.put(GateInExceptionConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME_ATTRIBUTE_NAME, socialAccountFieldToUnlink);
+                map.put(GateInExceptionConstants.EXCEPTION_OAUTH_PROVIDER_USERNAME, userName);
+                Object[] args = UIUserProfileInputSet.convertOAuthExceptionAttributes(context, "UIAccountSocial.label.", map);
+                uiApp.addMessage(new ApplicationMessage("UIAccountSocial.msg.successful-unlink", args));
+
+                prContext.setAttribute(UserProfileLifecycle.USER_PROFILE_ATTRIBUTE_NAME, userProfile);
+                uiForm.updateUIFields();
+                prContext.addUIComponentToUpdateByAjax(uiForm);
+
                 UIWorkingWorkspace uiWorkingWS = Util.getUIPortalApplication().getChild(UIWorkingWorkspace.class);
                 uiWorkingWS.updatePortletsByName("UserInfoPortlet");
                 uiWorkingWS.updatePortletsByName("OrganizationPortlet");

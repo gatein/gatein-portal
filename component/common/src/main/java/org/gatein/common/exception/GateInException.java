@@ -31,6 +31,7 @@ import java.util.Map;
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
 public class GateInException extends RuntimeException {
+    static final long serialVersionUID = -7034897190745768339L;
 
     // Specify error code
     private final int exceptionCode;

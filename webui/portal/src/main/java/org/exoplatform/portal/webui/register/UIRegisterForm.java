@@ -54,11 +54,20 @@ import org.gatein.common.logging.LoggerFactory;
  *
  */
 
-@ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {
+@ComponentConfigs({
+    @ComponentConfig(lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {
         @EventConfig(listeners = UIRegisterForm.SubscribeActionListener.class),
         @EventConfig(listeners = UIRegisterForm.ResetActionListener.class, phase = Phase.DECODE),
         @EventConfig(listeners = UIRegisterForm.CancelActionListener.class, phase = Phase.DECODE),
-        @EventConfig(name = UIRegisterForm.CheckUsernameAvailability.LISTENER_NAME, listeners = UIRegisterForm.CheckUsernameAvailability.class, phase = Phase.DECODE) })
+        @EventConfig(name = UIRegisterForm.CheckUsernameAvailability.LISTENER_NAME, listeners = UIRegisterForm.CheckUsernameAvailability.class, phase = Phase.DECODE) },
+        initParams = { @ParamConfig(name=UIRegisterForm.SKIP_CAPTCHA_PARAM_NAME, value="false") }),
+    @ComponentConfig(id = UIRegisterOAuth.REGISTER_FORM_CONFIG_ID, lifecycle = UIFormLifecycle.class, template = "system:/groovy/webui/form/UIFormWithTitle.gtmpl", events = {
+        @EventConfig(listeners = UIRegisterOAuth.SubscribeOAuthActionListener.class),
+        @EventConfig(listeners = UIRegisterOAuth.ResetActionListener.class, phase = Phase.DECODE),
+        @EventConfig(listeners = UIRegisterOAuth.CancelActionListener.class, phase = Phase.DECODE),
+        @EventConfig(name = UIRegisterForm.CheckUsernameAvailability.LISTENER_NAME, listeners = UIRegisterForm.CheckUsernameAvailability.class, phase = Phase.DECODE) },
+        initParams = { @ParamConfig(name=UIRegisterForm.SKIP_CAPTCHA_PARAM_NAME, value="true") })
+})
 public class UIRegisterForm extends UIForm {
 
     private static final String[] ACTIONS = { "Subscribe", "Reset", "Cancel" };
@@ -66,7 +75,11 @@ public class UIRegisterForm extends UIForm {
     static final String ATTR_USER = "UIRegisterForm$User";
 
     public UIRegisterForm() throws Exception {
-        UIFormInputWithActions registerInput = new UIRegisterInputSet("RegisterInputSet");
+        String skipCaptchaParam = params.getParam(SKIP_CAPTCHA_PARAM_NAME).getValue();
+        boolean skipCaptcha = Boolean.parseBoolean(skipCaptchaParam);
+
+        UIFormInputWithActions registerInput = new UIRegisterInputSet("RegisterInputSet", skipCaptcha);
+
         // Set actions on registerInput 's User Name field
         List<ActionData> fieldActions = new ArrayList<ActionData>();
         ActionData checkAvailable = new ActionData();

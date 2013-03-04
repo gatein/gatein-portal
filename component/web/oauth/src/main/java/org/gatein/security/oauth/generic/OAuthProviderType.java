@@ -21,26 +21,30 @@
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
-package org.gatein.security.oauth.data;
+package org.gatein.security.oauth.generic;
 
-import org.exoplatform.services.organization.User;
+import org.gatein.security.oauth.utils.OAuthConstants;
 
 /**
  * @author <a href="mailto:mposolda@redhat.com">Marek Posolda</a>
  */
-public interface OAuthDataStorage {
+public enum OAuthProviderType {
+    FACEBOOK(OAuthConstants.PROFILE_FACEBOOK_USERNAME, OAuthConstants.PROFILE_FACEBOOK_ACCESS_TOKEN),
+    GOOGLE(OAuthConstants.PROFILE_GOOGLE_USERNAME, OAuthConstants.PROFILE_GOOGLE_ACCESS_TOKEN);
 
-    User findUserByFacebookUsername(String facebookUsername);
+    private final String userNameAttrName;
+    private final String accessTokenAttrName;
 
-    User findUserByGoogleUsername(String googleUsername);
+    OAuthProviderType(String userNameAttrName, String accessTokenAttrName) {
+        this.userNameAttrName = userNameAttrName;
+        this.accessTokenAttrName = accessTokenAttrName;
+    }
 
-    User findUserByOAuthProviderUsername(String oauthProviderUsernameAttrName, String oauthProviderUsername);
+    public String getUserNameAttrName() {
+        return userNameAttrName;
+    }
 
-    void saveFacebookAccessToken(String username, String accessToken);
-
-    void saveGoogleAccessToken(String username, String accessToken);
-
-    String getFacebookAccessToken(String username);
-
-    String getGoogleAccessToken(String username);
+    public String getAccessTokenAttrName() {
+        return accessTokenAttrName;
+    }
 }

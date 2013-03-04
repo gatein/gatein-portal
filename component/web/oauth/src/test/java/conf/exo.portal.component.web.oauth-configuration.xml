@@ -26,8 +26,8 @@
                xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
   <component>
-    <key>org.gatein.security.oauth.data.OAuthDataStorage</key>
-    <type>org.gatein.security.oauth.data.OAuthDataStorageImpl</type>
+    <key>org.gatein.security.oauth.data.SocialNetworkService</key>
+    <type>org.gatein.security.oauth.data.SocialNetworkServiceImpl</type>
   </component>
 
   <external-component-plugins>
@@ -36,13 +36,6 @@
       <name>UniqueOAuthProviderUsernameListener</name>
       <set-method>addListenerPlugin</set-method>
       <type>org.gatein.security.oauth.data.UniqueOAuthProviderUsernameListener</type>
-      <init-params>
-        <values-param>
-          <name>oauthProviderUsernameAttrNames</name>
-          <value>user.social-info.facebook.userName</value>
-          <value>user.social-info.google.userName</value>
-        </values-param>
-      </init-params>
     </component-plugin>
   </external-component-plugins>
 

@@ -31,9 +31,14 @@ public class GateInExceptionConstants {
     // Exception codes
 
     /**
-     * Unspecified GateIn+OAuth error
+     * Unspecified GateIn error
      */
     public static final int EXCEPTION_CODE_UNSPECIFIED = 0;
+
+    /**
+     * Unspecified GateIn+OAuth error
+     */
+    public static final int EXCEPTION_CODE_OAUTH_UNSPECIFIED = 10;
 
     /**
      * This error could happen during saving of user into GateIn identity database.
@@ -42,7 +47,7 @@ public class GateInExceptionConstants {
      *
      * For example: We want to save user 'john' with facebookUsername 'john.doyle' but we already have user 'johny2' with same facebookUsername 'john.doyle'
      */
-    public static final int EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME = 10;
+    public static final int EXCEPTION_CODE_DUPLICATE_OAUTH_PROVIDER_USERNAME = 20;
 
 
     // Key of exception attributes

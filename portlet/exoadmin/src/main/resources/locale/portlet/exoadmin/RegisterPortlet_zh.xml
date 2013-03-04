@@ -1,20 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bundle>
-  <UIRegisterForm>
-    <registerWithSuccess>
-      <message>您已成功注册一个新帐户！</message>
-    </registerWithSuccess>
-    <title>注册新帐户</title>
-    <label>
-      <action>
-        <CheckUsernameAvailability>查询用户</CheckUsernameAvailability>
-      </action>
-      <username>用户名</username>
-      <password>密码</password>
-      <confirmPassword>确认密码</confirmPassword>
-      <firstName>名</firstName>
-      <lastName>姓</lastName>
-      <emailAddress>电子邮件</emailAddress>
-    </label>
-  </UIRegisterForm>
+  <!-- UIRegisterForm properties moved to webui_*.xml bundle -->
 </bundle>
