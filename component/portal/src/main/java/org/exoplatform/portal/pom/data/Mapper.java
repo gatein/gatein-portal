@@ -24,6 +24,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -246,14 +247,24 @@ public class Mapper {
             Map<String, Redirect> redirects = redirectable.getRedirects();
 
             List<RedirectData> redirectsData = src.getRedirects();
+
             if (redirectsData != null) {
+
+                // A list of stored redirect names which have not been found in the current RedirectData list.
+                //
+                // This is because during a save we receive a list of RedirectData, and we need to keep track if an existing
+                // stored redirect has been deleted or not.
+                Set<String> notFoundRedirects = new HashSet<String>(redirects.keySet());
                 for (RedirectData redirectData : redirectsData) {
                     Redirect redirect;
+                    // if the redirect doesn't current exist, then create it
                     if (!redirects.containsKey(redirectData.getRedirectName())) {
                         redirect = redirectable.createRedirect();
                         redirectable.getRedirects().put(redirectData.getRedirectName(), redirect);
                     } else {
+                    // otherwise retrieve the redirect and remove it from the list of non-found redirects
                         redirect = redirects.get(redirectData.getRedirectName());
+                        notFoundRedirects.remove(redirectData.getRedirectName());
                     }
 
                     redirect.setName(redirectData.getRedirectName());
@@ -281,6 +292,11 @@ public class Mapper {
                         }
                         buildMappings(redirectData.getMappings(), mappings);
                     }
+                }
+
+                //remove all the Redirects which were not in the RedirectData list
+                for (String redirectName : notFoundRedirects) {
+                    redirects.remove(redirectName);
                 }
             }
 
