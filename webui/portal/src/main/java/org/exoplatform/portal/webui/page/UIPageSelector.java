@@ -47,6 +47,7 @@ import org.exoplatform.webui.form.UIFormPopupWindow;
 import org.exoplatform.webui.form.UIFormStringInput;
 import org.exoplatform.webui.form.validator.IdentifierValidator;
 import org.exoplatform.webui.form.validator.MandatoryValidator;
+import org.exoplatform.webui.form.validator.NotHTMLTagValidator;
 import org.exoplatform.webui.form.validator.StringLengthValidator;
 
 /**
@@ -75,7 +76,7 @@ public class UIPageSelector extends UIFormInputContainer<String> {
                 .addValidator(StringLengthValidator.class, 3, 30).addValidator(IdentifierValidator.class)
                 .addValidator(MandatoryValidator.class));
         uiInputSet.addChild(new UIFormStringInput("pageTitle", "pageTitle", null).addValidator(StringLengthValidator.class, 3,
-                120));
+                120).addValidator(NotHTMLTagValidator.class));
 
         addChild(uiInputSet);
     }
