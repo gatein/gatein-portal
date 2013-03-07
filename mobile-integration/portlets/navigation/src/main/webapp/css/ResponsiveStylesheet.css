@@ -31,11 +31,11 @@
     display: inline;
 }
 
-.gtnResponsiveNavigationPortlet .collapsibleToggle:not  (.visible-element  ) >.show {
+.gtnResponsiveNavigationPortlet .collapsibleToggle:not(.visible-element)>.show {
     display: inline;
 }
 
-.gtnResponsiveNavigationPortlet .collapsibleToggle:not  (.visible-element  ) >.hide {
+.gtnResponsiveNavigationPortlet .collapsibleToggle:not(.visible-element)>.hide {
     display: none;
 }
 
@@ -140,7 +140,7 @@
     top: 0;
 }
 
-.gtnResponsiveNavigationPortlet li:not  (.multilevel  ) >a.menuhandler>i {
+.gtnResponsiveNavigationPortlet li:not(.multilevel)>a.menuhandler>i {
     position: absolute;
     right: 0.62em;
 }
@@ -197,34 +197,14 @@
         margin-right: 0;
         padding-left: 0;
     }
+
     .gtnResponsiveNavigationPortlet .topmenu .submenu {
         margin-left: 0;
     }
-    .gtnResponsiveNavigationPortlet
-     
-    .topmenu
-    >
-    .multilevel
-    >
-    .submenu
-    :not
-     
-    (
-    .inverse
-     
-    )
-    {
-    right
-    :
-     
-    0;
-    left
-    :
-     
-    auto
-    ;
-    
-    
+
+    .gtnResponsiveNavigationPortlet .topmenu>.multilevel>.submenu:not(.inverse)) {
+    right: 0;
+    left: auto;
 }
 
 .gtnResponsiveNavigationPortlet .submenu .submenu {
@@ -306,7 +286,7 @@
 }
 
 /* left arrow */
-.gtnResponsiveNavigationPortlet .submenu>li:not  (.close  ) >a.menuhandler>i {
+.gtnResponsiveNavigationPortlet .submenu>li:not(.close)>a.menuhandler>i {
     border-top: 0.25em solid transparent;
     border-left: 0.25em solid transparent;
     border-bottom: 0.25em solid transparent;
@@ -323,7 +303,7 @@
 }
 
 /* Hover close - left arrow */
-.gtnResponsiveNavigationPortlet .submenu li:not  (.close  ) >a.menuhandler:hover>i {
+.gtnResponsiveNavigationPortlet .submenu li:not(.close)>a.menuhandler:hover>i {
     border-top: 0.25em solid transparent;
     border-left: 0.25em solid transparent;
     border-right: 0.25em solid white;
@@ -389,7 +369,7 @@
     top: -0.4375em;
 }
 
-.gtnResponsiveNavigationPortlet .topmenu>li:not  (.multilevel  ) >.submenu:after,.gtnResponsiveNavigationPortlet .topmenu>li.multilevel>.submenu.inverse:after
+.gtnResponsiveNavigationPortlet .topmenu>li:not(.multilevel)>.submenu:after,.gtnResponsiveNavigationPortlet .topmenu>li.multilevel>.submenu.inverse:after
     {
     border-bottom: 0.375em solid #FFF;
     border-left: 0.375em solid transparent;
@@ -399,7 +379,7 @@
     top: -0.375em;
 }
 
-.gtnResponsiveNavigationPortlet .topmenu>li:not  (.multilevel  ) >.submenu:before,.gtnResponsiveNavigationPortlet .topmenu>li.multilevel>.submenu.inverse:before
+.gtnResponsiveNavigationPortlet .topmenu>li:not(.multilevel)>.submenu:before,.gtnResponsiveNavigationPortlet .topmenu>li.multilevel>.submenu.inverse:before
     {
     border-bottom: 0.4375em solid rgba(0, 0, 0, 0.2);
     border-left: 0.4375em solid transparent;
@@ -413,11 +393,11 @@
     margin-left: 0.25em;
 }
 
-.gtnResponsiveNavigationPortlet li:not  (.multilevel  ) >a.menuhandler>i {
+.gtnResponsiveNavigationPortlet li:not(.multilevel)>a.menuhandler>i {
     position: static;
 }
 
-.gtnResponsiveNavigationPortlet .submenu li:not  (.multilevel  ) >a.menuhandler>i {
+.gtnResponsiveNavigationPortlet .submenu li:not(.multilevel)>a.menuhandler>i {
     position: absolute;
     bottom: auto;
 }
