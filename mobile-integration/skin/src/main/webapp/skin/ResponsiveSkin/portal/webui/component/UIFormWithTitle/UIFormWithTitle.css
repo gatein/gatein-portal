@@ -28,4 +28,7 @@
     padding-bottom: 0.41666666666667em;
     border-bottom: 1px solid #eee;
     display: block;
+    line-height: inherit;
+    color: inherit;
+    font-weight: inherit;
 }

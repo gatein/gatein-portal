@@ -9,3 +9,19 @@
   max-height: 100%;
 }
 
+.UIPopupMessages {
+-webkit-overflow-scrolling: touch;
+}
+
+@media only screen and (max-height: 30em) 
+{
+
+.UIPopupWindow {
+   height: 100%;
+}
+
+.UIPopupWindow .PopupContent {
+   height: auto !important;
+}
+
+}

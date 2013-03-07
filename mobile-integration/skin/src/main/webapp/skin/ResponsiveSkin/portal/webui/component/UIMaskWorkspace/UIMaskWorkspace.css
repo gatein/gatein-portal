@@ -37,6 +37,7 @@ display: inline-block;
 vertical-align: middle;
 width: 35em;
 overflow:auto;
+-webkit-overflow-scrolling: touch;
 max-height:100%;
 max-width:100%;
 text-align: left;
@@ -54,4 +55,11 @@ padding: 0;
     width: 100%;
 }
 
+}
+
+@media screen and (max-height: 30em)
+{
+.UIMaskWorkspace .UITabContent {
+    height: auto;
+}
 }

@@ -8,6 +8,7 @@
 body {
 	background: #EFEFEF url(images/uiportal-background.jpg) repeat left top;;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-size: 100%;
 	margin: 0;
 }
 
@@ -24,6 +25,7 @@ a {
 	max-width: 73.125em;
 	width: 95%;
 	margin: 0 auto;
+        background: none;
 }
 
 .UIPageBody {

@@ -103,6 +103,7 @@ padding-left: 1.5em;
 
 .UILogin .UIForm td:nth-child(2)
 {
+    padding: 0;
     text-align: center;
 }
 

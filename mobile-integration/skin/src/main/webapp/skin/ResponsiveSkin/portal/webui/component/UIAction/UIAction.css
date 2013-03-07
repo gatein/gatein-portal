@@ -26,7 +26,6 @@
     border-top: 1px solid #DDDDDD;
     box-shadow: 0 1px 0 #FFFFFF inset;
     margin-bottom: 0;
-    margin-top: 2.5em;
     padding: 0.875em 0.9375em 0.9375em;
     text-align: right;
 }
@@ -46,6 +45,11 @@
     padding: 0.28571428571429em 0.85714285714286em;
     display: inline-block;
 }    
+
+.UIAction .ActionButton.LightBlueStyle,
+.UIAction .ActionButton.DarkGrayButton {
+    background: inherit;
+}
 
 .UIAction .ActionButton:hover
 {

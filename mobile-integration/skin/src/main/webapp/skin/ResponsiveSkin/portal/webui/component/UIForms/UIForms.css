@@ -51,10 +51,11 @@
         width: 100%;
     }
 
-
-.UIForm .UIAction a {
+.UIAction .ActionButton,
+.UIAction .ActionButton a,
+.UIAction a.ActionButton {
    display: block;
-   padding: 1em;
+   padding: 0.5em;
    float: none;
    clear: both;
    margin: 1em;

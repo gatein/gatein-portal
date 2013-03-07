@@ -24,14 +24,15 @@
 background-color: whiteSmoke;
 box-shadow: 0 1px 0 white inset;
 border-bottom: 1px solid #DDD;
-padding:1em 0.2em 0;
 }
 
 .UITabPane .UIHorizontalTabs div{
     display:inline-block;
 }
 
-.UITab .SelectedTab, .UITab .NormalTab {
+.UITab .SelectedTab,
+.UITab .NormalTab,
+.UITab .DisabledTab {
     border-radius: 0.25em 0.25em 0 0;
     padding: 0.5em 1em 0.25em;
     border: solid thin #333;
@@ -59,16 +60,80 @@ padding:1em 0.2em 0;
     color: #333;
 }
 
-@media only screen and (max-width: 30em) {
-.UITabPane .UIHorizontalTabs div {
-    display: block;
+.UITab .DisabledTab {
+   color: grey;
+} 
+
+.UIPopupMessages .UIHorizontalTabs,
+.UIPopupMessages .UIHorizontalTabs .TabsContainer {
+  height: auto;
 }
 
+.UIHorizontalTabs .MessageTabDialog .SelectedTab .RightTab,
+.UIHorizontalTabs .MessageTabDialog .SelectedTab .LeftTab,
+.UIHorizontalTabs .MessageTabDialog .SelectedTab .MiddleTab,
+.UIHorizontalTabs .CenterHorizontalTabs
+{
+  background: none;
+}
 
-.UITab .SelectedTab, .UITab .NormalTab {
+.UIPopupMessages {
+-webkit-overflow-scrolling: touch;
+}
+
+.UITabContentContainer {
+  clear: both
+}
+
+@media only screen and (max-width: 30em) {
+
+.UITabPane .TabPaneContent {
+    padding: 0;
+}
+
+.UIHorizontalTabs .UITab {
+    float: none;
+}
+
+.UITabPane .UIHorizontalTabs div {
+    display: block;
+    height: auto;
+}
+
+.UIPopupMessages .UIHorizontalTabs .TabsContainer,
+.UIPopupMessages .UIHorizontalTabs {
+    height: auto;
+}
+
+.UITab .SelectedTab, 
+.UITab .NormalTab,
+.UITab .DisabledTab{
     border-radius: 0.25em;
     border: solid thin #333;
     margin: 0.25em;
+    padding-left: 2em;
+}
+
+.UITab .SelectedTab {
+    background-image: url(ok-square.svg);
+    background-repeat: no-repeat;
+    background-position: 0.5em 0.5em;
+}
+
+.UITab .NormalTab,
+.UITab .DisabledTab {
+    background-image: url(square.svg);
+    background-repeat: no-repeat;
+    background-position: 0.5em 0.5em;
+}
+
+.UIHorizontalTabs .MessageTabDialog {
+    float:none;
+}
+
+.UIPopupMessages ul {
+   height: auto;
+   
 }
 
 }
