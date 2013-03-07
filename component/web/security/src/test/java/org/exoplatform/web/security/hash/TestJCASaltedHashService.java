@@ -24,16 +24,23 @@ package org.exoplatform.web.security.hash;
 
 import static org.junit.Assert.assertTrue;
 
+import org.exoplatform.component.test.AbstractKernelTest;
+import org.exoplatform.component.test.ConfigurationUnit;
+import org.exoplatform.component.test.ConfiguredBy;
+import org.exoplatform.component.test.ContainerScope;
+import org.exoplatform.container.PortalContainer;
 import org.exoplatform.web.security.hash.SaltedHashException;
 import org.exoplatform.web.security.hash.SaltedHashService;
 import org.exoplatform.web.security.security.AutoReseedRandom;
+import org.exoplatform.web.security.security.SecureRandomService;
 import org.junit.Test;
 
 /**
  * @author <a href="mailto:ppalaga@redhat.com">Peter Palaga</a>
  *
  */
-public class TestJCASaltedHashService {
+@ConfiguredBy({ @ConfigurationUnit(scope = ContainerScope.PORTAL, path = "conf/secure-random-service-configuration.xml")})
+public class TestJCASaltedHashService extends AbstractKernelTest {
 
     private static final String[] PASSWORDS = new String[] { "qwertzui", "123 asas", "\t\ndsdsds",
             "\u013E\u0161\u010D\u0165\u017E\u00FD\u00E1\u00ED\u00E9\u00FA\u00E4\u00F4", "2YMj5qZ3", "8BtRheTb", "jGHQJtzy",
@@ -49,14 +56,13 @@ public class TestJCASaltedHashService {
             "TeqwLWMW", "wM4N8sSF", "9aU2unTB", "zdyJqZDX", "N7Q67gjE", "wCAqzZ6k", "WAvPAKY6", "kknz9DJu", "LjThRSGU",
             "pPwNSs56", "k7NXSwCC", "xUHNjFgn", "D8J8XWbK", "NfPBZLfU", "ZjpgMxEw", "63vtR97V" };
 
-    @Test
     public void test() throws InterruptedException, SaltedHashException {
         SaltedHashService sh = new JCASaltedHashService();
-        AutoReseedRandom random = new AutoReseedRandom(AutoReseedRandom.DEFAULT_RANDOM_ALGORITHM,
-                AutoReseedRandom.DEFAULT_SEED_LENGTH, 500);
+//        AutoReseedRandom random = new AutoReseedRandom(AutoReseedRandom.DEFAULT_RANDOM_ALGORITHM, AutoReseedRandom.DEFAULT_RANDOM_ALGORITHM_PROVIDER,
+//                AutoReseedRandom.DEFAULT_SEED_LENGTH, 500);
         for (String password : PASSWORDS) {
             // System.out.println(password);
-            String saltedHash = sh.getSaltedHash(password, random);
+            String saltedHash = sh.getSaltedHash(password);
             // System.out.println("h="+saltedHash);
             assertTrue(sh.validate(password, saltedHash));
         }

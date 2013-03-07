@@ -19,19 +19,22 @@
 
 package org.exoplatform.download;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.exoplatform.container.xml.InitParams;
 import org.exoplatform.container.xml.PortalContainerInfo;
+import org.exoplatform.services.cache.ExoCache;
+import org.exoplatform.services.cache.concurrent.ConcurrentFIFOExoCache;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
- * Created by The eXo Platform SARL Author : Tuan Nguyen tuan08@users.sourceforge.net Dec 26, 2005
+ * Created by The eXo Platform SARL
+ * Author : Tuan Nguyen
+ *          tuan08@users.sourceforge.net
+ * Dec 26, 2005
  */
 public class DownloadService {
 
-    private Cache downloadResources_;
+    private final ExoCache<String, DownloadResource> downloadResources_;
 
     private Map<String, DownloadResource> defaultResources_;
 
@@ -41,7 +44,8 @@ public class DownloadService {
 
     public DownloadService(PortalContainerInfo pinfo, InitParams params) throws Exception {
         int maxSize = Integer.parseInt(params.getValueParam("download.resource.cache.size").getValue());
-        downloadResources_ = new Cache(maxSize);
+        downloadResources_ = new ConcurrentFIFOExoCache<String, DownloadResource>(maxSize);
+
         defaultResources_ = new HashMap<String, DownloadResource>();
         pinfo_ = pinfo;
     }
@@ -52,8 +56,9 @@ public class DownloadService {
 
     public String addDownloadResource(DownloadResource resource) {
         String id = Integer.toString(resource.hashCode());
-        if (resource.getDownloadType() != null)
+        if (resource.getDownloadType() != null) {
             id = resource.getDownloadType() + ":/" + id;
+        }
         downloadResources_.put(id, resource);
         return id;
     }
@@ -76,18 +81,7 @@ public class DownloadService {
         return "/" + pinfo_.getContainerName() + "/" + DOWNLOAD_HANDLER_PATH + "?" + "resourceId=" + id;
     }
 
-    @SuppressWarnings("serial")
-    static class Cache extends LinkedHashMap<String, DownloadResource> {
-
-        int maxSize_ = 100;
-
-        public Cache(int maxSize) {
-            maxSize_ = maxSize;
-        }
-
-        @SuppressWarnings("unused")
-        protected boolean removeEldestEntry(Map.Entry<String, DownloadResource> eldest) {
-            return size() > maxSize_;
-        }
+    public ExoCache<String, DownloadResource> getCache() {
+        return downloadResources_;
     }
 }

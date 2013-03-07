@@ -241,7 +241,7 @@ public class PageServiceImpl implements PageService {
         }
 
         //
-        org.gatein.mop.api.workspace.Page dstRoot = srcSite.getRootPage();
+        org.gatein.mop.api.workspace.Page dstRoot = dstSite.getRootPage();
         org.gatein.mop.api.workspace.Page dstPages = dstRoot.getChild("pages");
         if (dstPages.getChild(dst.getName()) != null) {
             throw new PageServiceException(PageError.CLONE_DST_ALREADY_EXIST, "Could not clone page " + dst.name

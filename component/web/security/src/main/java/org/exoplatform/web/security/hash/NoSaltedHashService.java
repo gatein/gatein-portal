@@ -49,7 +49,7 @@ public class NoSaltedHashService implements SaltedHashService {
      * @see org.exoplatform.web.security.hash.SaltedHashService#getSaltedHash(java.lang.String, java.security.SecureRandom)
      */
     @Override
-    public String getSaltedHash(String password, SecureRandom random) throws SaltedHashException {
+    public String getSaltedHash(String password) throws SaltedHashException {
         return password;
     }
 

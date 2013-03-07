@@ -4,6 +4,7 @@
   import org.exoplatform.webui.form.UIForm;
   import java.text.DateFormat;
   import java.text.SimpleDateFormat;
+  import org.exoplatform.commons.utils.HTMLEntityEncoder;
 
   String[] beanFields =  uicomponent.getBeanFields() ;  
   String[] beanActions =  uicomponent.getBeanActions() ;  
@@ -57,7 +58,10 @@
 		              cssClass = "Datetime" ;
 		              fieldValue = dateFormat.format(fieldValue);
 		            } 
-		            else cssClass = "Text" ;
+		            else { 
+		        	  cssClass = "Text" ;
+		        	  fieldValue = HTMLEntityEncoder.getInstance().encode(fieldValue.toString());
+		    	    }
 		          } else {
 		            fieldValue = "";
 		          }

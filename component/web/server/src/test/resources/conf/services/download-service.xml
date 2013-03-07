@@ -20,28 +20,20 @@
 
 -->
 
-<gadgets
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.gatein.org/xml/ns/gatein_objects_1_3 http://www.gatein.org/xml/ns/gadgets_1_0"
-    xmlns="http://www.gatein.org/xml/ns/gadgets_1_0">
+<configuration
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd http://www.exoplaform.org/xml/ns/kernel_1_2.xsd"
+   xmlns="http://www.exoplaform.org/xml/ns/kernel_1_2.xsd">
 
-  <gadget name="Todo">
-    <path>/gadgets/Todo/Todo.xml</path>
-  </gadget>
+  <component>
+     <type>org.exoplatform.download.DownloadService</type>
+     <init-params>
+        <value-param>
+           <name>download.resource.cache.size</name>
+           <description>Maximun number of the download can be in the cache</description>
+           <value>10</value>
+        </value-param>
+     </init-params>
+  </component>
 
-  <gadget name="Calendar">
-    <path>/gadgets/Calendar/Calendar.xml</path>
-  </gadget>
-
-  <gadget name="Calculator">
-    <path>/gadgets/Calculator/Calculator.xml</path>
-  </gadget>
-
-  <gadget name="rssAggregator">
-    <path>/gadgets/rssAggregator/rssAggregator.xml</path>
-  </gadget>
-
-  <gadget name="ServicesManagement">
-    <path>/gadgets/ServicesManagement/ServicesManagement.xml</path>
-  </gadget>
-</gadgets>
+</configuration>

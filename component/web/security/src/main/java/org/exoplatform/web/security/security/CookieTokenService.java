@@ -143,7 +143,6 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
         } else {
             saltedHashService = (SaltedHashService) hashServiceParam.getObject();
         }
-
         initCodec();
     }
 
@@ -372,7 +371,7 @@ public class CookieTokenService extends AbstractTokenService<GateInToken, String
     private String hashToken(String tokenId) {
         if (saltedHashService != null) {
             try {
-                return saltedHashService.getSaltedHash(tokenId, random);
+                return saltedHashService.getSaltedHash(tokenId);
             } catch (Exception e) {
                 throw new RuntimeException(e);
             }

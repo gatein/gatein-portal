@@ -23,6 +23,7 @@
 package org.exoplatform.web.security.security;
 
 import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
 import java.security.SecureRandom;
 
 import org.gatein.common.logging.Logger;
@@ -52,6 +53,11 @@ public class AutoReseedRandom extends SecureRandom implements Runnable {
     public static final String DEFAULT_RANDOM_ALGORITHM = "SHA1PRNG";
 
     /**
+     * Default random algorithm provider {@value #DEFAULT_RANDOM_ALGORITHM_PROVIDER}.
+     */
+    public static final String DEFAULT_RANDOM_ALGORITHM_PROVIDER = null;
+
+    /**
      * Default seed length {@value #DEFAULT_SEED_LENGTH}.
      */
     public static final int DEFAULT_SEED_LENGTH = 32;
@@ -75,20 +81,40 @@ public class AutoReseedRandom extends SecureRandom implements Runnable {
 
     private final Logger log = LoggerFactory.getLogger(AutoReseedRandom.class);
 
+    /**
+     * See {@link SecureRandom#getInstance(String, String)}.
+     */
     private final String algorithm;
 
+    /**
+     * See {@link SecureRandom#getInstance(String, String)}. {@link #DEFAULT_RANDOM_ALGORITHM_PROVIDER} (
+     * {@value #DEFAULT_RANDOM_ALGORITHM_PROVIDER}) is used in the default constructor. You may want to consider using
+     * {@code "NativePRNG"} on some platforms if you require stronger cryptography.
+     */
+    private final String algorithmProvider;
+
+    /**
+     * Number of Bytes, see {@link SecureRandom#generateSeed(int)}.
+     */
     private final int seedLength;
 
     public AutoReseedRandom() {
-        this(DEFAULT_RANDOM_ALGORITHM, DEFAULT_SEED_LENGTH, DEFAULT_RESEEDING_PERIOD);
+        this(DEFAULT_RANDOM_ALGORITHM, DEFAULT_RANDOM_ALGORITHM_PROVIDER, DEFAULT_SEED_LENGTH, DEFAULT_RESEEDING_PERIOD);
     }
 
     /**
-     * @param reseedingPeriod
+     * @param algorithm See {@link SecureRandom#getInstance(String, String)}.
+     * @param algorithmProvider See {@link SecureRandom#getInstance(String, String)}. In most cases you will want to use
+     *        {@link #DEFAULT_RANDOM_ALGORITHM_PROVIDER} ({@value #DEFAULT_RANDOM_ALGORITHM_PROVIDER}) which will lead to using
+     *        {@link SecureRandom#getInstance(String)} instead of {@link SecureRandom#getInstance(String, String)}. You may want
+     *        to consider using {@code "NativePRNG"}, {@code "SUN"} or other providers if you have special requirements.
+     * @param seedLength number of Bytes, see {@link SecureRandom#generateSeed(int)}.
+     * @param reseedingPeriod Time in milliseconds after which the {@link #delegate} gets reseeded by {@link #resetRandom()}
      */
-    public AutoReseedRandom(String algorithm, int seedLength, long reseedingPeriod) {
+    public AutoReseedRandom(String algorithm, String algorithmProvider, int seedLength, long reseedingPeriod) {
         super();
         this.algorithm = algorithm;
+        this.algorithmProvider = algorithmProvider;
         this.seedLength = seedLength;
         this.reseedingPeriod = reseedingPeriod;
         nextReseed = System.currentTimeMillis() + reseedingPeriod;
@@ -122,13 +148,33 @@ public class AutoReseedRandom extends SecureRandom implements Runnable {
     private void resetRandom() {
         SecureRandom newRandom = null;
         try {
-            newRandom = SecureRandom.getInstance(algorithm);
+            if (algorithmProvider == null) {
+                newRandom = SecureRandom.getInstance(algorithm);
+            } else {
+                newRandom = SecureRandom.getInstance(algorithm, algorithmProvider);
+            }
+
             /* ensure the SecureRandom gets seeded */
+            long before = log.isDebugEnabled() ? 0 : System.currentTimeMillis();
             newRandom.setSeed(newRandom.generateSeed(seedLength));
+            if (log.isDebugEnabled()) {
+                long now = System.currentTimeMillis();
+                log.debug("secureRandom.setSeed took " + ((now - before) / 1000.0) +" seconds.");
+            }
             delegate = newRandom;
         } catch (NoSuchAlgorithmException e) {
-            /* Assume that SHA1PRNG is always available. */
             throw new RuntimeException(e);
+        } catch (NoSuchProviderException e) {
+            log.info("Falling back to default random algorithm provider because '" + algorithmProvider + "' is not available.", e);
+            /* use the default provider */
+            try {
+                newRandom = SecureRandom.getInstance(algorithm);
+                /* ensure the SecureRandom gets seeded */
+                newRandom.setSeed(newRandom.generateSeed(seedLength));
+                delegate = newRandom;
+            } catch (NoSuchAlgorithmException e1) {
+                throw new RuntimeException(e);
+            }
         }
     }
 

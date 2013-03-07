@@ -3,6 +3,7 @@
 	import org.exoplatform.webui.core.UIPopupWindow;
 	import org.exoplatform.webui.form.UIForm; 
 	import org.exoplatform.webui.form.UIFormInputSet;
+	import org.exoplatform.commons.utils.HTMLEntityEncoder;
 
 
 	PageContext page	= uicomponent.getPage();		
@@ -17,6 +18,7 @@
 		if (name == null) name = ""; 
 		if (title == null) title = ""; 
 		if(title.length() > 30) title = title.substring(0,29) + "..."; 
+		title = HTMLEntityEncoder.getInstance().encode(title);
 	}
 	
 	 
