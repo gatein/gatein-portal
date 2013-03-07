@@ -21,6 +21,9 @@ package org.exoplatform.webui.organization;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.exoplatform.commons.serialization.api.annotations.Serialized;
@@ -82,13 +85,23 @@ public class UIGroupMembershipSelector extends UIContainer {
             tree.setSibbling((List) sibblingsGroup);
         }
 
-        Collection<?> collection = service.getMembershipTypeHandler().findMembershipTypes();
-        listMemberhip = new ArrayList<String>(5);
-        for (Object obj : collection) {
-            listMemberhip.add(((MembershipType) obj).getName());
+        List<MembershipType> memberships = (List<MembershipType>) service.getMembershipTypeHandler().findMembershipTypes();
+        Collections.sort(memberships, new Comparator<MembershipType>() {
+            @Override
+            public int compare(MembershipType o1, MembershipType o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+        listMemberhip = new LinkedList<String>();
+        boolean containWildcard = false;
+        for (MembershipType mt : memberships) {
+            listMemberhip.add(mt.getName());
+            if ("*".equals(mt.getName())) {
+                containWildcard = true;
+            }
         }
-        if (!listMemberhip.contains("*")) {
-            listMemberhip.add("*");
+        if (!containWildcard) {
+            ((LinkedList) listMemberhip).addFirst("*");
         }
 
         super.processRender(context);
